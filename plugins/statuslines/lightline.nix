@@ -2,26 +2,96 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.lightline;
+  helpers = import ../helpers.nix { inherit lib; };
 in {
   options = {
     programs.nixvim.plugins.lightline = {
       enable = mkEnableOption "Enable lightline";
 
       colorscheme = mkOption {
-        type = types.str;
+        type = with types; nullOr str;
         default = config.programs.nixvim.colorscheme;
         description = "The colorscheme to use for lightline. Defaults to .colorscheme.";
         example = "gruvbox";
       };
+
+      componentFunction = mkOption {
+        default = null;
+        type = with types; nullOr (attrsOf str);
+        description = ''
+          A list of function component definitions.
+
+          You should define the functions themselves in <para>extraConfig</para>
+        '';
+        example = ''
+          programs.nixvim.plugins.lightline = {
+            enable = true;
+            componentFunction = {
+              readonly = "LightlineReadonly";
+            };
+
+            extraConfig = '''
+              function! LightlineReadonly()
+                return &readonly && &filetype !=# 'help' ? 'RO' : '''
+              endfunction
+            ''';
+          };
+        '';
+      };
+
+      component = mkOption {
+        default = null;
+        type = with types; nullOr (attrsOf str);
+        description = "Lightline component definitions. Uses 'statusline' syntax. Consult :h 'statusline' for a list of what's available.";
+      };
+
+      active = mkOption {
+        default = null;
+        type = types.nullOr (types.submodule {
+          options = let
+            listType = with types; nullOr (listOf (listOf str));
+          in {
+            left = mkOption {
+              type = listType;
+              description = "List of components that will show up on the left side of the bar";
+              default = null;
+            };
+
+            right = mkOption {
+              type = listType;
+              description = "List of components that will show up on the right side of the bar";
+              default = null;
+            };
+          };
+        });
+      };
+
+      modeMap = mkOption {
+        type = with types; nullOr (attrsOf str);
+        description = "Mode name mappings";
+        default = null;
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra configuration for this plugin";
+      };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = let
+    configString = helpers.toVimDict {
+      inherit (cfg) colorscheme active component componentFunction modeMap;
+    };
+  in mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.lightline-vim ];
       extraConfigVim = ''
         """ lightline {{{
-        let g:lightline = { 'colorscheme': '${cfg.colorscheme}' }
+        let g:lightline = ${configString}
+
+        ${cfg.extraConfig}
         """ }}}
       '';
     };
