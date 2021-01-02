@@ -35,7 +35,7 @@ in
 
       extraPlugins = mkOption {
         type = with types; listOf (either package pluginWithConfigType);
-        default = [ ];
+        default = [];
         description = "List of vim plugins to install.";
       };
 
