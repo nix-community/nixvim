@@ -10,7 +10,7 @@
       # Equivalent to nnoremap ; :
       ";" = ":";
       # Equivalent to nmap <silent> <buffer> <leader>gg <cmd>Man<CR>
-      "<leader>gg" = { silent = true; buffer = true; remap = false; action = "<cmd>Man<CR>"
+      "<leader>gg" = { silent = true; remap = false; action = "<cmd>Man<CR>"
       # Etc...
     };
 
@@ -25,12 +25,12 @@
     options = {
       tabstop = 4;
       shiftwidth = 4;
-      noexpandtab = true;
+      expandtab = false;
 
       mouse = "a";
 
       # etc...
-    }
+    };
 
     # Of course, we can still use comfy vimscript:
     extraConfigVim = builtins.readFile ./init.vim;

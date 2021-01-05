@@ -37,6 +37,8 @@
 
             options.number = true;
 
+            maps.normalVisualOp."ç" = ":";
+
             plugins.airline = {
               enable = true;
               powerline = true;

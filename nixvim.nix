@@ -22,6 +22,55 @@ let
     };
   };
 
+  mapOption = types.oneOf [ types.str (types.submodule {
+    silent = mkOption {
+      type = types.bool;
+      description = "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
+      default = false;
+    };
+
+    nowait = mkOption {
+      type = types.bool;
+      description = "Whether to wait for extra input on ambiguous mappings. Equivalent to adding <nowait> to a map.";
+      default = false;
+    };
+
+    script = mkOption {
+      type = types.bool;
+      description = "Equivalent to adding <script> to a map.";
+      default = false;
+    };
+
+    expr = mkOption {
+      type = types.bool;
+      description = "Means that the action is actually an expression. Equivalent to adding <expr> to a map.";
+      default = false;
+    };
+
+    unique = mkOption {
+      type = types.bool;
+      description = "Whether to fail if the map is already defined. Equivalent to adding <unique> to a map.";
+      default = false;
+    };
+
+    noremap = mkOption {
+      type = types.bool;
+      description = "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
+      default = true;
+    };
+
+    action = mkOption {
+      type = types.str;
+      description = "The action to execute.";
+    };
+  }) ];
+
+  mapOptions = mode: mkOption {
+    description = "Mappings for ${mode} mode";
+    type = types.attrsOf mapOption;
+    default = {};
+  };
+  
   helpers = import ./plugins/helpers.nix { lib = lib; };
 in
 {
@@ -74,6 +123,41 @@ in
         default = {};
         description = "Global variables";
       };
+
+      maps = mkOption {
+        type = types.submodule {
+          options = {
+            normal = mapOptions "normal";
+            insert = mapOptions "insert";
+            select = mapOptions "select";
+            visual = mapOptions "visual and select";
+            terminal = mapOptions "terminal";
+            normalVisualOp = mapOptions "normal, visual, select and operator-pending (same as plain 'map')";
+
+            visualOnly = mapOptions "visual only";
+            operator = mapOptions "operator-pending";
+            insertCommand = mapOptions "insert and command-line";
+            lang = mapOptions "insert, command-line and lang-arg";
+            command = mapOptions "command-line";
+          };
+        };
+        default = {};
+        description = ''
+          Custom keybindings for any mode.
+
+          For plain maps (e.g. just 'map' or 'remap') use maps.normalVisualOp.
+        '';
+
+        example = ''
+          maps = {
+            normalVisualOp.";" = ":"; # Same as noremap ; :
+            normal."<leader>m" = {
+              silent = true;
+              action = "<cmd>make<CR>";
+            }; # Same as nnoremap <leader>m <silent> <cmd>make<CR>
+          };
+        '';
+      };
     };
   };
 
@@ -95,6 +179,20 @@ in
     wrappedNeovim = pkgs.wrapNeovimUnstable cfg.package (neovimConfig // {
       wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs;
     });
+
+    mappings =
+      (helpers.genMaps ""  cfg.maps.normalVisualOp) ++
+      (helpers.genMaps "n" cfg.maps.normal) ++
+      (helpers.genMaps "i" cfg.maps.insert) ++
+      (helpers.genMaps "v" cfg.maps.visual) ++
+      (helpers.genMaps "x" cfg.maps.visualOnly) ++
+      (helpers.genMaps "s" cfg.maps.select) ++
+      (helpers.genMaps "t" cfg.maps.terminal) ++
+      (helpers.genMaps "o" cfg.maps.operator) ++
+      (helpers.genMaps "l" cfg.maps.lang) ++
+      (helpers.genMaps "!" cfg.maps.insertCommand) ++
+      (helpers.genMaps "c" cfg.maps.command);
+
   in mkIf cfg.enable {
     environment.systemPackages = [ wrappedNeovim ];
     programs.nixvim = {
@@ -104,7 +202,6 @@ in
           ${cfg.extraConfigLua}
           EOF
         '' + cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
-
           colorscheme ${cfg.colorscheme}
         '');
         packages.nixvim = {
@@ -141,6 +238,14 @@ in
           else
             vim.cmd("set " .. k .. "=" .. tostring(v))
           end
+        end
+        -- }}}
+      '' + optionalString (mappings != []) ''
+        -- Set up keybinds {{{
+        local __nixvim_binds = ${helpers.toLuaObject mappings}
+
+        for i, map in ipairs(__nixvim_binds) do
+          vim.api.nvim_set_keymap(map.mode, map.key, map.action, map.config)
         end
         -- }}}
       '';
