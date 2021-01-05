@@ -21,6 +21,8 @@ let
       };
     };
   };
+
+  helpers = import ./plugins/helpers.nix { lib = lib; };
 in
 {
   options = {
@@ -60,6 +62,18 @@ in
         type = types.attrsOf types.anything;
         default = { };
       };
+
+      options = mkOption {
+        type = types.attrsOf types.anything;
+        default = { };
+        description = "The configuration options, e.g. line numbers";
+      };
+
+      globals = mkOption {
+        type = types.attrsOf types.anything;
+        default = {};
+        description = "Global variables";
+      };
     };
   };
 
@@ -85,7 +99,11 @@ in
     environment.systemPackages = [ wrappedNeovim ];
     programs.nixvim = {
       configure = {
-        customRC = cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
+        customRC = ''
+          lua <<EOF
+          ${cfg.extraConfigLua}
+          EOF
+        '' + cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
 
           colorscheme ${cfg.colorscheme}
         '');
@@ -98,6 +116,34 @@ in
               cfg.extraPlugins);
         };
       };
+
+      extraConfigLua = optionalString (cfg.globals != {}) ''
+        -- Set up globals {{{
+        local __nixvim_globals = ${helpers.toLuaObject cfg.globals}
+
+        for k,v in pairs(__nixvim_globals) do
+          vim.g[k] = v
+        end
+        -- }}}
+      '' + optionalString (cfg.options != {}) ''
+        -- Set up options {{{
+        local __nixvim_options = ${helpers.toLuaObject cfg.options}
+
+        for k,v in pairs(__nixvim_options) do
+          -- Here we use the set command because, as of right now, neovim has
+          -- no equivalent using the lua API. You have to sort through the
+          -- options and know which options are local to what
+          if type(v) == "boolean" then
+            local no
+            if v then no = "" else no = "no" end
+
+            vim.cmd("set " .. no .. k)
+          else
+            vim.cmd("set " .. k .. "=" .. tostring(v))
+          end
+        end
+        -- }}}
+      '';
     };
 
     environment.etc."xdg/nvim/sysinit.vim".text = neovimConfig.neovimRcContent;

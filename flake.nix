@@ -35,7 +35,12 @@
             package = pkgs.neovim-nightly;
             colorschemes.gruvbox.enable = true;
 
-            plugins.lightline.enable = true;
+            options.number = true;
+
+            plugins.airline = {
+              enable = true;
+              powerline = true;
+            };
           };
         })
       ];

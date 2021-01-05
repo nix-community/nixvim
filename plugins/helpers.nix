@@ -12,7 +12,7 @@ rec {
       "{" + (concatStringsSep ","
         (mapAttrsToList
           (n: v: "[${toLuaObject n}] = " + (toLuaObject v))
-        args)) + "}"
+        (filterAttrs (n: v: !isNull v || v == {}) args))) + "}"
     else if builtins.isList args then
       "{" + concatMapStringsSep "," toLuaObject args + "}"
     else if builtins.isString args then

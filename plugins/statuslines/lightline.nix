@@ -71,29 +71,17 @@ in {
         description = "Mode name mappings";
         default = null;
       };
-
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Extra configuration for this plugin";
-      };
     };
   };
 
   config = let
-    configString = helpers.toVimDict {
+    configAttrs = {
       inherit (cfg) colorscheme active component componentFunction modeMap;
     };
   in mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.lightline-vim ];
-      extraConfigVim = ''
-        """ lightline {{{
-        let g:lightline = ${configString}
-
-        ${cfg.extraConfig}
-        """ }}}
-      '';
+      globals.lightline = configAttrs;
     };
   };
 }
