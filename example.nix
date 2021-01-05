@@ -1,4 +1,4 @@
-{...}:
+{ pkgs, ... }:
 {
   programs.nixvim = {
     # This just enables NixVim. 
@@ -18,8 +18,7 @@
     leader = ",";
 
     # We can create maps for every mode!
-    # There is .normal, .insert, .visual and .operator
-    # These are aliased to .n, .i, .v and .o
+    # There is .normal, .insert, .visual, .operator, etc!
 
     # We can also set options:
     options = {
