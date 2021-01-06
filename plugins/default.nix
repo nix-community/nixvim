@@ -1,7 +1,10 @@
 {
   imports = [
+    ./colorschemes/gruvbox.nix
+
     ./statuslines/lightline.nix
     ./statuslines/airline.nix
-    ./colorschemes/gruvbox.nix
+
+    ./git/gitgutter.nix
   ];
 }
