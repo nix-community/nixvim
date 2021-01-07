@@ -43,6 +43,8 @@
               enable = true;
               powerline = true;
             };
+
+            plugins.gitgutter.enable = true;
           };
         })
       ];

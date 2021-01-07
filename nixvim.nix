@@ -107,6 +107,13 @@ in
         description = "Extra contents for init.vim";
       };
 
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = "[ pkgs.shfmt ]";
+        description = "Extra packages to be made available to neovim";
+      };
+
       configure = mkOption {
         type = types.attrsOf types.anything;
         default = { };
@@ -176,8 +183,12 @@ in
       withRuby = false;
     };
 
+    extraWrapperArgs = optionalString (cfg.extraPackages != [])
+      ''--prefix PATH : "${makeBinPath cfg.extraPackages}"'';
+
     wrappedNeovim = pkgs.wrapNeovimUnstable cfg.package (neovimConfig // {
-      wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs;
+      wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " "
+        + extraWrapperArgs;
     });
 
     mappings =
