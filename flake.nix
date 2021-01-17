@@ -33,7 +33,10 @@
           programs.nixvim = {
             enable = true;
             package = pkgs.neovim-nightly;
-            colorschemes.gruvbox.enable = true;
+            colorschemes.gruvbox = {
+              enable = true;
+              italics = true;
+            };
 
             options.number = true;
 
