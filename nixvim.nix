@@ -1,3 +1,4 @@
+homeManager:
 { pkgs, lib, config, ... }:
 with lib;
 let
@@ -191,6 +192,60 @@ in
         + extraWrapperArgs;
     });
 
+    configure = {
+      customRC = ''
+        lua <<EOF
+        ${cfg.extraConfigLua}
+        EOF
+      '' + cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
+        colorscheme ${cfg.colorscheme}
+      '');
+      packages.nixvim = {
+        start = filter (f: f != null) (map (x:
+          if x ? plugin && x.optional == true then null else (x.plugin or x))
+          cfg.extraPlugins);
+        opt = filter (f: f!= null)
+          (map (x: if x ? plugin && x.optional == true then x.plugin else null)
+            cfg.extraPlugins);
+      };
+    };
+
+    extraConfigLua = optionalString (cfg.globals != {}) ''
+      -- Set up globals {{{
+      local __nixvim_globals = ${helpers.toLuaObject cfg.globals}
+
+      for k,v in pairs(__nixvim_globals) do
+        vim.g[k] = v
+      end
+      -- }}}
+    '' + optionalString (cfg.options != {}) ''
+      -- Set up options {{{
+      local __nixvim_options = ${helpers.toLuaObject cfg.options}
+
+      for k,v in pairs(__nixvim_options) do
+        -- Here we use the set command because, as of right now, neovim has
+        -- no equivalent using the lua API. You have to sort through the
+        -- options and know which options are local to what
+        if type(v) == "boolean" then
+          local no
+          if v then no = "" else no = "no" end
+
+          vim.cmd("set " .. no .. k)
+        else
+          vim.cmd("set " .. k .. "=" .. tostring(v))
+        end
+      end
+      -- }}}
+    '' + optionalString (mappings != []) ''
+      -- Set up keybinds {{{
+      local __nixvim_binds = ${helpers.toLuaObject mappings}
+
+      for i, map in ipairs(__nixvim_binds) do
+        vim.api.nvim_set_keymap(map.mode, map.key, map.action, map.config)
+      end
+      -- }}}
+    '';
+
     mappings =
       (helpers.genMaps ""  cfg.maps.normalVisualOp) ++
       (helpers.genMaps "n" cfg.maps.normal) ++
@@ -204,64 +259,23 @@ in
       (helpers.genMaps "!" cfg.maps.insertCommand) ++
       (helpers.genMaps "c" cfg.maps.command);
 
-  in mkIf cfg.enable {
+  in mkIf cfg.enable (if (!homeManager) then {
     environment.systemPackages = [ wrappedNeovim ];
     programs.nixvim = {
-      configure = {
-        customRC = ''
-          lua <<EOF
-          ${cfg.extraConfigLua}
-          EOF
-        '' + cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
-          colorscheme ${cfg.colorscheme}
-        '');
-        packages.nixvim = {
-          start = filter (f: f != null) (map (x:
-            if x ? plugin && x.optional == true then null else (x.plugin or x))
-            cfg.extraPlugins);
-          opt = filter (f: f!= null)
-            (map (x: if x ? plugin && x.optional == true then x.plugin else null)
-              cfg.extraPlugins);
-        };
-      };
+      configure = configure;
 
-      extraConfigLua = optionalString (cfg.globals != {}) ''
-        -- Set up globals {{{
-        local __nixvim_globals = ${helpers.toLuaObject cfg.globals}
-
-        for k,v in pairs(__nixvim_globals) do
-          vim.g[k] = v
-        end
-        -- }}}
-      '' + optionalString (cfg.options != {}) ''
-        -- Set up options {{{
-        local __nixvim_options = ${helpers.toLuaObject cfg.options}
-
-        for k,v in pairs(__nixvim_options) do
-          -- Here we use the set command because, as of right now, neovim has
-          -- no equivalent using the lua API. You have to sort through the
-          -- options and know which options are local to what
-          if type(v) == "boolean" then
-            local no
-            if v then no = "" else no = "no" end
-
-            vim.cmd("set " .. no .. k)
-          else
-            vim.cmd("set " .. k .. "=" .. tostring(v))
-          end
-        end
-        -- }}}
-      '' + optionalString (mappings != []) ''
-        -- Set up keybinds {{{
-        local __nixvim_binds = ${helpers.toLuaObject mappings}
-
-        for i, map in ipairs(__nixvim_binds) do
-          vim.api.nvim_set_keymap(map.mode, map.key, map.action, map.config)
-        end
-        -- }}}
-      '';
+      extraConfigLua = extraConfigLua;
     };
 
     environment.etc."xdg/nvim/sysinit.vim".text = neovimConfig.neovimRcContent;
-  };
+  } else {
+    programs.nixvim.extraConfigLua = extraConfigLua;
+    programs.neovim = {
+      enable = true;
+      package = cfg.package;
+      extraPackages = cfg.extraPackages;
+
+      configure = configure;
+    };
+  });
 }
