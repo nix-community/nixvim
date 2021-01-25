@@ -274,7 +274,6 @@ in
       enable = true;
       package = cfg.package;
       extraPackages = cfg.extraPackages;
-
       configure = configure;
     };
   });
