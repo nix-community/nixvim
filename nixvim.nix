@@ -236,7 +236,7 @@ in
           for i,opt in ipairs(v) do
             val = val .. tostring(opt)
             if i ~= #v then
-              val .. ","
+              val = val .. ","
             end
           end
           vim.cmd("set " .. k .. "=" .. val)
