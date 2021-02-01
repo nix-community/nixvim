@@ -13,6 +13,6 @@ in
   config = mkIf cfg.enable {
     programs.nixvim.extraPackages = [ pkgs.rnix-lsp ];
 
-    programs.nixvim.lsp.plugins.enabledServers = [ "rnix" ];
+    programs.nixvim.plugins.lsp.enabledServers = [ "rnix" ];
   };
 }
