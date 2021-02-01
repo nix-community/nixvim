@@ -87,7 +87,7 @@ in
 
       extraPlugins = mkOption {
         type = with types; listOf (either package pluginWithConfigType);
-        default = [];
+        default = [ ];
         description = "List of vim plugins to install.";
       };
 
@@ -110,7 +110,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = "[ pkgs.shfmt ]";
         description = "Extra packages to be made available to neovim";
       };
@@ -128,7 +128,7 @@ in
 
       globals = mkOption {
         type = types.attrsOf types.anything;
-        default = {};
+        default = { };
         description = "Global variables";
       };
 
@@ -149,7 +149,7 @@ in
             command = mapOptions "command-line";
           };
         };
-        default = {};
+        default = { };
         description = ''
           Custom keybindings for any mode.
 

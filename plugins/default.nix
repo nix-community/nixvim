@@ -6,5 +6,7 @@
     ./statuslines/airline.nix
 
     ./git/gitgutter.nix
+
+    ./nvim-lsp
   ];
 }
