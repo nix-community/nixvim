@@ -54,6 +54,8 @@
               enable = true;
               servers.clangd.enable = true;
             };
+
+            plugins.treesitter.enable = true;
           };
         })
       ];

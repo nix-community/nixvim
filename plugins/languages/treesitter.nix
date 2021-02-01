@@ -30,19 +30,16 @@ in
       incrementalSelection = let
         keymap = default: mkOption {
           type = types.str;
-          default = default;
+          inherit default;
         };
-      in mkOption {
-        type = types.nullOr (types.submodule {
-          enable = mkEnableOption "Incremental selection based on the named nodes from the grammar";
-          keymaps = {
-            initSelection = keymap "gnn";
-            nodeIncremental = keymap "grn";
-            scopeIncremental = keymap "grc";
-            nodeDecremental = keymap "grm";
-          };
-        });
-        default = null;
+      in {
+        enable = mkEnableOption "Incremental selection based on the named nodes from the grammar";
+        keymaps = {
+          initSelection = keymap "gnn";
+          nodeIncremental = keymap "grn";
+          scopeIncremental = keymap "grc";
+          nodeDecremental = keymap "grm";
+        };
       };
 
       indent = mkEnableOption "Enable tree-sitter based indentation";
@@ -60,17 +57,17 @@ in
         custom_captures = mkIf (cfg.customCaptures != {}) cfg.customCaptures;
       };
 
-      incremental_selection = mkIf cfg.incrementalSelection.enable {
-        enable = true;
-        keymaps = {
-          init_selection = cfg.incrementalSelection.keymaps.initSelection;
-          node_incremental = cfg.incrementalSelection.keymaps.nodeIncremental;
-          scope_incremental = cfg.incrementalSelection.keymaps.scopeIncremental;
-          node_decremental = cfg.incrementalSelection.keymaps.nodeDecremental;
-        };
-      };
+      # incremental_selection = mkIf cfg.incrementalSelection.enable {
+      #   enable = true;
+      #   keymaps = {
+      #     init_selection = cfg.incrementalSelection.keymaps.initSelection;
+      #     node_incremental = cfg.incrementalSelection.keymaps.nodeIncremental;
+      #     scope_incremental = cfg.incrementalSelection.keymaps.scopeIncremental;
+      #     node_decremental = cfg.incrementalSelection.keymaps.nodeDecremental;
+      #   };
+      # };
 
-      indent = mkIf cfg.indent.enable {
+      indent = mkIf cfg.indent {
         enable = true;
       };
 
