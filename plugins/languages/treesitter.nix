@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  cfg = programs.nixvim.plugins.treesitter;
+  cfg = config.programs.nixvim.plugins.treesitter;
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
