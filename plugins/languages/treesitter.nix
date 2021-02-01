@@ -89,5 +89,5 @@ in
         foldexpr = "nvim_treesitter#foldexpr()";
       };
     };
-  }
+  };
 }
