@@ -7,6 +7,8 @@
 
     ./git/gitgutter.nix
 
+    ./languages/treesitter.nix
+
     ./nvim-lsp
   ];
 }
