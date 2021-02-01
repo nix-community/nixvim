@@ -34,7 +34,7 @@ in
         };
       in mkOption {
         type = types.nullOr (types.submodule {
-          enable = mkEnableOption = "Incremental selection based on the named nodes from the grammar";
+          enable = mkEnableOption "Incremental selection based on the named nodes from the grammar";
           keymaps = {
             initSelection = keymap "gnn";
             nodeIncremental = keymap "grn";
