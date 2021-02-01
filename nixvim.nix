@@ -231,6 +231,15 @@ in
           if v then no = "" else no = "no" end
 
           vim.cmd("set " .. no .. k)
+        elseif type(v) == "table" then
+          local val = ""
+          for i,opt in ipairs(v) do
+            val = val .. tostring(opt)
+            if i ~= #v then
+              val .. ","
+            end
+          end
+          vim.cmd("set " .. k .. "=" .. val)
         else
           vim.cmd("set " .. k .. "=" .. tostring(v))
         end
