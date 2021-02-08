@@ -80,8 +80,8 @@ in
       enable = mkEnableOption "enable NixVim";
 
       package = mkOption {
-        type = types.package;
-        default = pkgs.neovim;
+        type = types.nullOr types.package;
+        default = null;
         description = "The package to use for neovim.";
       };
 
@@ -186,8 +186,10 @@ in
 
     extraWrapperArgs = optionalString (cfg.extraPackages != [])
       ''--prefix PATH : "${makeBinPath cfg.extraPackages}"'';
+    
+    package = if (cfg.package != null) then cfg.package else pkgs.neovim;
 
-    wrappedNeovim = pkgs.wrapNeovimUnstable cfg.package (neovimConfig // {
+    wrappedNeovim = pkgs.wrapNeovimUnstable package (neovimConfig // {
       wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " "
         + extraWrapperArgs;
     });
@@ -281,7 +283,7 @@ in
     programs.nixvim.extraConfigLua = extraConfigLua;
     programs.neovim = {
       enable = true;
-      package = cfg.package;
+      package = mkIf (cfg.package != null) cfg.package;
       extraPackages = cfg.extraPackages;
       configure = configure;
     };
