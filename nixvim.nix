@@ -1,4 +1,4 @@
-homeManager:
+{ nixos ? false, nixOnDroid ? false, homeManager ? false }:
 { pkgs, lib, config, ... }:
 with lib;
 let
@@ -270,7 +270,7 @@ in
       (helpers.genMaps "!" cfg.maps.insertCommand) ++
       (helpers.genMaps "c" cfg.maps.command);
 
-  in mkIf cfg.enable (if (!homeManager) then {
+  in mkIf cfg.enable (if nixos then {
     environment.systemPackages = [ wrappedNeovim ];
     programs.nixvim = {
       configure = configure;
@@ -279,7 +279,7 @@ in
     };
 
     environment.etc."xdg/nvim/sysinit.vim".text = neovimConfig.neovimRcContent;
-  } else {
+  } else (if homeManager then {
     programs.nixvim.extraConfigLua = extraConfigLua;
     programs.neovim = {
       enable = true;
@@ -287,5 +287,14 @@ in
       extraPackages = cfg.extraPackages;
       configure = configure;
     };
-  });
+  } else {
+    environment.packages = [ wrappedNeovim ];
+    programs.nixvim = {
+      configure = configure;
+
+      extraConfigLua = extraConfigLua;
+    };
+
+    environment.etc."xdg/nvim/sysinit.vim".text = neovimConfig.neovimRcContent;
+  }));
 }

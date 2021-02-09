@@ -9,8 +9,9 @@
       inputs.neovim-nightly.overlay
     ];
 
-    nixosModules.nixvim = import ./nixvim.nix false;
-    homeManagerModules.nixvim = import ./nixvim.nix true;
+    nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
+    homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
+    nixOnDroidModules.nixvim = import ./nixvim.nix { nixOnDroid = true; };
 
     # This is a simple container for testing
     nixosConfigurations.container = nixpkgs.lib.nixosSystem {
