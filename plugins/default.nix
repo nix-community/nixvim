@@ -9,6 +9,7 @@
     ./git/gitgutter.nix
 
     ./utils/undotree.nix
+    ./utils/commentary.nix
 
     ./languages/treesitter.nix
 

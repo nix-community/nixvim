@@ -51,6 +51,7 @@
 
             plugins.undotree.enable = true;
             plugins.gitgutter.enable = true;
+            plugins.commentary.enable = true;
 
             plugins.lsp = {
               enable = true;
