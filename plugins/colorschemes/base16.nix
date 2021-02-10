@@ -2,18 +2,40 @@
 with lib;
 let
   cfg = config.programs.nixvim.colorschemes.base16;
-  colors = types.enum [ "bg" "red" "green" "yellow" "blue" "purple" "aqua" "gray" "fg" "bg0_h" "bg0" "bg1" "bg2" "bg3" "bg4" "gray" "orange" "bg0_s" "fg0" "fg1" "fg2" "fg3" "fg4" ];
+  themes = import ./base16-list.nix;
 in {
   options = {
     programs.nixvim.colorschemes.base16 = {
       enable = mkEnableOption "Enable base16";
+
+      useTruecolor = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to use truecolor for the colorschemes. If set to false, you'll need to set up base16 in your shell.";
+      };
+
+      colorscheme = mkOption {
+        type = types.enum themes;
+        description = "The base16 colorscheme to use";
+      };
+
+      setUpBar = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to install the matching plugin for your statusbar. This does nothing as of yet, waiting for upstream support.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
     programs.nixvim = {
-      colorscheme = "base16-default-dark";
+      colorscheme = "base16-${cfg.colorscheme}";
       extraPlugins = [ pkgs.vimPlugins.base16-vim ];
+
+      plugins.airline.theme = mkIf (cfg.setUpBar) "base16";
+      plugins.lightline.colorscheme = null;
+
+      options.termguicolors = mkIf cfg.useTruecolor true;
     };
   };
 }

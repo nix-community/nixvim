@@ -75,13 +75,13 @@ in {
   };
 
   config = let
-    configAttrs = {
+    configAttrs = filterAttrs (_: v: v != null) {
       inherit (cfg) colorscheme active component componentFunction modeMap;
     };
   in mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.lightline-vim ];
-      globals.lightline = configAttrs;
+      globals.lightline = mkIf (configAttrs != {}) configAttrs;
     };
   };
 }

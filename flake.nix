@@ -35,9 +35,9 @@
           programs.nixvim = {
             enable = true;
             package = pkgs.neovim-nightly;
-            colorschemes.gruvbox = {
+            colorschemes.base16 = {
               enable = true;
-              italics = true;
+              colorscheme = "ocean";
             };
 
             options.number = true;
