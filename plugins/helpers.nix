@@ -51,4 +51,11 @@ rec {
       key = key;
       mode = mode;
     }) normalized);
+
+  # Creates an option with a nullable type that defaults to null.
+  nullOrOption = type: desc: lib.mkOption {
+    type = lib.types.nullOr type;
+    default = null;
+    description = desc;
+  };
 }
