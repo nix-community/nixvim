@@ -49,6 +49,7 @@
               powerline = true;
             };
 
+            plugins.undotree.enable = true;
             plugins.gitgutter.enable = true;
 
             plugins.lsp = {

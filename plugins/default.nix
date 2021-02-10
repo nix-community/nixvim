@@ -8,6 +8,8 @@
 
     ./git/gitgutter.nix
 
+    ./utils/undotree.nix
+
     ./languages/treesitter.nix
 
     ./nvim-lsp
