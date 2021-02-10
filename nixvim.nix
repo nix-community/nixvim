@@ -116,18 +116,18 @@ in
       };
 
       configure = mkOption {
-        type = types.attrs;
+        type = types.attrsOf types.anything;
         default = { };
       };
 
       options = mkOption {
-        type = types.attrs;
+        type = types.attrsOf types.anything;
         default = { };
         description = "The configuration options, e.g. line numbers";
       };
 
       globals = mkOption {
-        type = types.attrs;
+        type = types.attrsOf types.anything;
         default = { };
         description = "Global variables";
       };
