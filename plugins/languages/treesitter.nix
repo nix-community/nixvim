@@ -52,24 +52,24 @@ in
     tsOptions = {
       highlight = {
         enable = cfg.enable;
-        disable = mkIf (cfg.disabledLanguages != []) cfg.disabledLanguages;
+        disable = if (cfg.disabledLanguages != []) then cfg.disabledLanguages else null;
 
-        custom_captures = mkIf (cfg.customCaptures != {}) cfg.customCaptures;
+        custom_captures = if (cfg.customCaptures != {}) then cfg.customCaptures else null;
       };
 
-      # incremental_selection = mkIf cfg.incrementalSelection.enable {
-      #   enable = true;
-      #   keymaps = {
-      #     init_selection = cfg.incrementalSelection.keymaps.initSelection;
-      #     node_incremental = cfg.incrementalSelection.keymaps.nodeIncremental;
-      #     scope_incremental = cfg.incrementalSelection.keymaps.scopeIncremental;
-      #     node_decremental = cfg.incrementalSelection.keymaps.nodeDecremental;
-      #   };
-      # };
-
-      indent = mkIf cfg.indent {
+      incremental_selection = if cfg.incrementalSelection.enable then {
         enable = true;
-      };
+        keymaps = {
+          init_selection = cfg.incrementalSelection.keymaps.initSelection;
+          node_incremental = cfg.incrementalSelection.keymaps.nodeIncremental;
+          scope_incremental = cfg.incrementalSelection.keymaps.scopeIncremental;
+          node_decremental = cfg.incrementalSelection.keymaps.nodeDecremental;
+        };
+      } else null;
+
+      indent = if cfg.indent then {
+        enable = true;
+      } else null;
 
       ensure_installed = cfg.ensureInstalled;
     };
