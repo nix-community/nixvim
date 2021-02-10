@@ -35,9 +35,8 @@
           programs.nixvim = {
             enable = true;
             package = pkgs.neovim-nightly;
-            colorschemes.base16 = {
+            colorschemes.gruvbox = {
               enable = true;
-              colorscheme = "ocean";
             };
 
             options.number = true;
@@ -57,6 +56,13 @@
               enable = true;
               servers.clangd.enable = true;
             };
+
+            globals = {
+              vimsyn_embed = "l";
+              mapleader = " ";
+            };
+
+            plugins.lspsaga.enable = true;
 
             plugins.treesitter.enable = true;
           };

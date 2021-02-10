@@ -14,5 +14,6 @@
     ./languages/treesitter.nix
 
     ./nvim-lsp
+    ./nvim-lsp/lspsaga.nix
   ];
 }
