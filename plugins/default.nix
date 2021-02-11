@@ -11,6 +11,7 @@
     ./utils/undotree.nix
     ./utils/commentary.nix
     ./utils/startify.nix
+    ./utils/goyo.nix
 
     ./languages/treesitter.nix
 

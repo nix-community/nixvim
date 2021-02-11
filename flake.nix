@@ -55,6 +55,10 @@
               enable = true;
               useUnicode = true;
             };
+            plugins.goyo = {
+              enable = true;
+              showLineNumbers = true;
+            };
 
             plugins.lsp = {
               enable = true;
