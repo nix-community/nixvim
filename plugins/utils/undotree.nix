@@ -11,7 +11,7 @@ in {
       windowLayout = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = "Window layour for undotree. Check https://github.com/mbbill/undotree/blob/master/plugin/undotree.vim#L29 for reference";
+        description = "Window layout for undotree. Check https://github.com/mbbill/undotree/blob/master/plugin/undotree.vim#L29 for reference";
       };
 
       shortIndicators = mkOption {

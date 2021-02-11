@@ -5,4 +5,4 @@ set -e
 sudo nixos-container destroy nvim-test
 sudo nixos-container create nvim-test --flake .
 
-.tmp/sw/bin/nvim -u .tmp/etc/xdg/nvim/sysinit.vim .tmp/etc/xdg/nvim/sysinit.vim
+.tmp/sw/bin/nvim -u .tmp/etc/xdg/nvim/sysinit.vim $@

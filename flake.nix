@@ -51,6 +51,10 @@
             plugins.undotree.enable = true;
             plugins.gitgutter.enable = true;
             plugins.commentary.enable = true;
+            plugins.startify = {
+              enable = true;
+              useUnicode = true;
+            };
 
             plugins.lsp = {
               enable = true;

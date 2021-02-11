@@ -53,9 +53,48 @@ rec {
     }) normalized);
 
   # Creates an option with a nullable type that defaults to null.
-  nullOrOption = type: desc: lib.mkOption {
+  mkNullOrOption = type: desc: lib.mkOption {
     type = lib.types.nullOr type;
     default = null;
     description = desc;
+  };
+
+  mkPlugin = { config, lib, ... }: {
+    name,
+    description,
+    extraPlugins ? [],
+    options ? {},
+    ...
+  }: let
+    cfg = config.programs.nixvim.plugins.${name};
+    # TODO support nested options!
+    pluginOptions = mapAttrs (k: v: v.option) options;
+    globals = mapAttrs' (name: opt: {
+      name = opt.global;
+      value = if cfg.${name} != null then opt.value cfg.${name} else null;
+    }) options;
+  in {
+    options.programs.nixvim.plugins.${name} = {
+      enable = mkEnableOption description;
+    } // pluginOptions;
+
+    config.programs.nixvim = mkIf cfg.enable {
+      inherit extraPlugins globals;
+    };
+  };
+
+  globalVal = val: if builtins.isBool val then
+    (if val == false then 0 else 1)
+  else val;
+
+  mkDefaultOpt = { type, global, description ? null, example ? null, value ? v: toLuaObject (globalVal v), ... }: {
+    option = mkOption {
+      type = types.nullOr type;
+      default = null;
+      description = description;
+      example = example;
+    };
+
+    inherit value global;
   };
 }

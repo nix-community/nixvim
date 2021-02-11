@@ -10,6 +10,7 @@
 
     ./utils/undotree.nix
     ./utils/commentary.nix
+    ./utils/startify.nix
 
     ./languages/treesitter.nix
 
