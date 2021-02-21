@@ -12,6 +12,7 @@
     ./utils/commentary.nix
     ./utils/startify.nix
     ./utils/goyo.nix
+    ./utils/endwise.nix
 
     ./languages/treesitter.nix
 
