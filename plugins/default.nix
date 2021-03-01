@@ -15,6 +15,7 @@
     ./utils/endwise.nix
 
     ./languages/treesitter.nix
+    ./languages/nix.nix
 
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
