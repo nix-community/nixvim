@@ -14,6 +14,7 @@
     ./utils/goyo.nix
     ./utils/endwise.nix
     ./utils/telescope.nix
+    ./utils/nvim-autopairs.nix
 
     ./languages/treesitter.nix
     ./languages/nix.nix

@@ -77,6 +77,10 @@
               };
             };
 
+            plugins.nvim-autopairs = {
+              enable = true;
+            };
+
             globals = {
               vimsyn_embed = "l";
               mapleader = " ";

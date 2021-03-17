@@ -152,10 +152,11 @@ in
       hint_sign = notNull cfg.signs.hint;
       infor_sign = notNull cfg.signs.info;
 
-      error_header = notNull cfg.headers.error;
-      warn_header = notNull cfg.headers.warning;
-      hint_header = notNull cfg.headers.hint;
-      infor_header = notNull cfg.headers.info;
+      # TODO Fix this!
+      # error_header = notNull cfg.headers.error;
+      # warn_header = notNull cfg.headers.warning;
+      # hint_header = notNull cfg.headers.hint;
+      # infor_header = notNull cfg.headers.info;
 
       max_diag_msg_width = notNull cfg.maxDialogWidth;
 

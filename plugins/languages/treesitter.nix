@@ -17,7 +17,8 @@ in
 
       disabledLanguages = mkOption {
         type = types.listOf types.str;
-        default = [];
+        # Nix is out of date right now! Try not to use it :D
+        default = [ "nix" ];
         description = "A list of languages to disable";
       };
 
