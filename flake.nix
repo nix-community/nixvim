@@ -39,7 +39,12 @@
               enable = true;
             };
 
+            extraPlugins = [
+              pkgs.vimPlugins.vim-nix
+            ];
+
             options.number = true;
+            options.mouse = "a";
 
             maps.normalVisualOp."ç" = ":";
 
@@ -63,6 +68,13 @@
             plugins.lsp = {
               enable = true;
               servers.clangd.enable = true;
+            };
+
+            plugins.telescope = {
+              enable = true;
+              extensions = {
+                frecency.enable = true;
+              };
             };
 
             globals = {

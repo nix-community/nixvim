@@ -13,6 +13,7 @@
     ./utils/startify.nix
     ./utils/goyo.nix
     ./utils/endwise.nix
+    ./utils/telescope.nix
 
     ./languages/treesitter.nix
     ./languages/nix.nix
