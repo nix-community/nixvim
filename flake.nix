@@ -35,7 +35,7 @@
           programs.nixvim = {
             enable = true;
             package = pkgs.neovim-nightly;
-            colorschemes.gruvbox = {
+            colorschemes.onedark = {
               enable = true;
             };
 
