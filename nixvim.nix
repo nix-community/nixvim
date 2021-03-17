@@ -195,13 +195,14 @@ in
     });
 
     configure = {
-      customRC = ''
+      customRC = cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
+        colorscheme ${cfg.colorscheme}
+      '') + ''
         lua <<EOF
         ${cfg.extraConfigLua}
         EOF
-      '' + cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
-        colorscheme ${cfg.colorscheme}
-      '');
+      '';
+
       packages.nixvim = {
         start = filter (f: f != null) (map (x:
           if x ? plugin && x.optional == true then null else (x.plugin or x))

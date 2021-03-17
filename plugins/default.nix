@@ -2,6 +2,7 @@
   imports = [
     ./colorschemes/gruvbox.nix
     ./colorschemes/onedark.nix
+    ./colorschemes/one.nix
     ./colorschemes/base16.nix
 
     ./statuslines/lightline.nix
