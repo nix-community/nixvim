@@ -7,6 +7,7 @@
     ./statuslines/airline.nix
 
     ./git/gitgutter.nix
+    ./git/fugitive.nix
 
     ./utils/undotree.nix
     ./utils/commentary.nix

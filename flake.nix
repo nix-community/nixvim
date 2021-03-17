@@ -55,6 +55,7 @@
 
             plugins.undotree.enable = true;
             plugins.gitgutter.enable = true;
+            plugins.fugitive.enable = true;
             plugins.commentary.enable = true;
             plugins.startify = {
               enable = true;
