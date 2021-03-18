@@ -90,6 +90,7 @@
             plugins.lspsaga.enable = true;
 
             plugins.treesitter.enable = true;
+            plugins.ledger.enable = true;
           };
         })
       ];
