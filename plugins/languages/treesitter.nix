@@ -17,8 +17,7 @@ in
 
       disabledLanguages = mkOption {
         type = types.listOf types.str;
-        # Nix is out of date right now! Try not to use it :D
-        default = [ "nix" ];
+        default = [];
         description = "A list of languages to disable";
       };
 
@@ -76,11 +75,17 @@ in
     };
   in mkIf cfg.enable {
     programs.nixvim = {
-      extraPlugins = [ pkgs.vimPlugins.nvim-treesitter ];
-
-      extraConfigLua = ''
-        require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
-      '';
+      plugins.packer = {
+        enable = true;
+        plugins = [{
+          name = "nvim-treesitter/nvim-treesitter";
+          run = ":TSUpdate";
+          config = helpers.mkRaw ''function()
+            require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
+          end'';
+        }];
+      };
+      extraPackages = [ pkgs.tree-sitter ];
 
       options = mkIf cfg.folding {
         foldmethod = "expr";

@@ -5,6 +5,8 @@
     ./colorschemes/one.nix
     ./colorschemes/base16.nix
 
+    ./pluginmanagers/packer.nix
+
     ./statuslines/lightline.nix
     ./statuslines/airline.nix
 

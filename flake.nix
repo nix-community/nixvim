@@ -43,8 +43,18 @@
               pkgs.vimPlugins.vim-nix
             ];
 
-            options.number = true;
-            options.mouse = "a";
+            options = {
+              number = true;
+              mouse = "a";
+              tabstop = 2;
+              shiftwidth = 2;
+              expandtab = true;
+              smarttab = true;
+              autoindent = true;
+              cindent = true;
+              linebreak = true;
+              hidden = true;
+            };
 
             maps.normalVisualOp."ç" = ":";
 

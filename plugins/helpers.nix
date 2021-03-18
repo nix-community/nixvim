@@ -9,10 +9,15 @@ rec {
   # lua equivalents!
   toLuaObject = args:
     if builtins.isAttrs args then
-      "{" + (concatStringsSep ","
-        (mapAttrsToList
-          (n: v: "[${toLuaObject n}] = " + (toLuaObject v))
-        (filterAttrs (n: v: !isNull v || v == {}) args))) + "}"
+      if hasAttr "__raw" args then
+        args.__raw
+      else
+        "{" + (concatStringsSep ","
+          (mapAttrsToList
+          (n: v: if head (stringToCharacters n) == "@" then
+              toLuaObject v
+            else "[${toLuaObject n}] = " + (toLuaObject v))
+          (filterAttrs (n: v: !isNull v || v == {}) args))) + "}"
     else if builtins.isList args then
       "{" + concatMapStringsSep "," toLuaObject args + "}"
     else if builtins.isString args then
@@ -97,4 +102,6 @@ rec {
 
     inherit value global;
   };
+
+  mkRaw = r: { __raw = r; };
 }
