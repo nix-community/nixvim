@@ -177,11 +177,6 @@ in
     neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
       configure = cfg.configure;
       plugins = cfg.extraPlugins;
-
-      withPython2 = false;
-      withPython3 = false;
-      withNodeJs = false;
-      withRuby = false;
     };
 
     extraWrapperArgs = optionalString (cfg.extraPackages != [])
