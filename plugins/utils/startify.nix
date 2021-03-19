@@ -57,7 +57,7 @@ mkPlugin args {
       global = "startify_files_number";
       type = types.int;
     };
-    
+
     updateOldFiles = mkDefaultOpt {
       description = "Update v:oldfiles on-the-fly, so that :Startify is always up-to-date";
       global = "startify_update_oldfiles";

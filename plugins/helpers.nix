@@ -92,7 +92,7 @@ rec {
     (if val == false then 0 else 1)
   else val;
 
-  mkDefaultOpt = { type, global, description ? null, example ? null, default ? null, value ? v: toLuaObject (globalVal v), ... }: {
+  mkDefaultOpt = { type, global, description ? null, example ? null, default ? null, value ? v: (globalVal v), ... }: {
     option = mkOption {
       type = types.nullOr type;
       default = default;
