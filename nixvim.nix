@@ -287,7 +287,7 @@ in
       package = mkIf (cfg.package != null) cfg.package;
       extraPackages = cfg.extraPackages;
       extraConfig = configure.customRC;
-      plugins = configure.packages.opt ++ configure.packages.start;
+      plugins = cfg.extraPlugins;
     };
   } else {
     environment.packages = [ wrappedNeovim ];
