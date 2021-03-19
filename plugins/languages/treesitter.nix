@@ -85,7 +85,7 @@ in
           end'';
         }];
       };
-      extraPackages = [ pkgs.tree-sitter ];
+      extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 
       options = mkIf cfg.folding {
         foldmethod = "expr";
