@@ -17,7 +17,7 @@ rec {
           (n: v: if head (stringToCharacters n) == "@" then
               toLuaObject v
             else "[${toLuaObject n}] = " + (toLuaObject v))
-          (filterAttrs (n: v: !isNull v || v == {}) args))) + "}"
+          (filterAttrs (n: v: !isNull v && toLuaObject v != "{}") args))) + "}"
     else if builtins.isList args then
       "{" + concatMapStringsSep "," toLuaObject args + "}"
     else if builtins.isString args then
