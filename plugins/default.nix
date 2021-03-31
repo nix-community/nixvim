@@ -20,6 +20,7 @@
     ./utils/endwise.nix
     ./utils/telescope.nix
     ./utils/nvim-autopairs.nix
+    ./utils/barbar.nix
 
     ./languages/treesitter.nix
     ./languages/nix.nix
