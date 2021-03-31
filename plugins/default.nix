@@ -24,6 +24,7 @@
 
     ./languages/treesitter.nix
     ./languages/nix.nix
+    ./languages/zig.nix
     ./languages/ledger.nix
 
     ./nvim-lsp
