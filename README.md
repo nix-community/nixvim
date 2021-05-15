@@ -1,4 +1,15 @@
 # NixVim - A Neovim configuration system for nix
+## Development paused
+After using NixVim for a while, I've paused development on it. I think it's the
+wrong way to go about things. It was a good experiment, but all it did was stop
+me from progressing further in my own configuration because I'd have to get
+those changes onto NixVim first. It also isn't suited for a lot of
+configuration options, and honestly gets beat by using something like Fennel
+for configuration.
+
+So, for now, consider development paused. I might pick it back up in the
+future, but not until I can figure out a better way to do things.
+
 ## What is it?
 NixVim is a [Neovim](https://neovim.io) distribution built around
 [Nix](https://nixos.org) modules. It is distributed as a Nix flake, and
