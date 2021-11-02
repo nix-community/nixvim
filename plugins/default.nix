@@ -10,6 +10,7 @@
 
     ./statuslines/lightline.nix
     ./statuslines/airline.nix
+    ./statuslines/lualine.nix
 
     ./git/gitgutter.nix
     ./git/fugitive.nix
