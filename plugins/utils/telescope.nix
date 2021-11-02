@@ -25,7 +25,7 @@ in
   config = let
     extensionPlugins = with cfg.extensions; with pkgs.vimPlugins;
     (optional frecency.enable telescope-frecency-nvim) ++
-    (optional frecency.enable sql-nvim);
+    (optional frecency.enable sqlite-lua);
 
     extensionPackages = with cfg.extensions; with pkgs;
     (optional frecency.enable sqlite);
