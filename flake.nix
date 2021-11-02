@@ -1,13 +1,11 @@
 {
   description = "A neovim configuration system for NixOS";
 
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
-  inputs.neovim-nightly.url = github:nix-community/neovim-nightly-overlay;
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
 
   outputs = { self, nixpkgs, ... }@inputs: rec {
-    overlays = [
-      inputs.neovim-nightly.overlay
-    ];
+    overlays = [ inputs.neovim-nightly.overlay ];
 
     nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
     homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
@@ -26,22 +24,16 @@
             password = "";
           };
 
-          imports = [
-            nixosModules.nixvim
-          ];
+          imports = [ nixosModules.nixvim ];
 
           nixpkgs.overlays = [ inputs.neovim-nightly.overlay ];
 
           programs.nixvim = {
             enable = true;
             package = pkgs.neovim-nightly;
-            colorschemes.onedark = {
-              enable = true;
-            };
+            colorschemes.tokyonight = { enable = true; };
 
-            extraPlugins = [
-              pkgs.vimPlugins.vim-nix
-            ];
+            extraPlugins = [ pkgs.vimPlugins.vim-nix ];
 
             options = {
               number = true;
@@ -58,9 +50,8 @@
 
             maps.normalVisualOp."ç" = ":";
 
-            plugins.airline = {
+            plugins.lualine = {
               enable = true;
-              powerline = true;
             };
 
             plugins.undotree.enable = true;
@@ -83,14 +74,10 @@
 
             plugins.telescope = {
               enable = true;
-              extensions = {
-                frecency.enable = true;
-              };
+              extensions = { frecency.enable = true; };
             };
 
-            plugins.nvim-autopairs = {
-              enable = true;
-            };
+            plugins.nvim-autopairs = { enable = true; };
 
             globals = {
               vimsyn_embed = "l";

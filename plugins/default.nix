@@ -4,11 +4,13 @@
     ./colorschemes/onedark.nix
     ./colorschemes/one.nix
     ./colorschemes/base16.nix
+    ./colorschemes/tokyonight.nix
 
     ./pluginmanagers/packer.nix
 
     ./statuslines/lightline.nix
     ./statuslines/airline.nix
+    ./statuslines/lualine.nix
 
     ./git/gitgutter.nix
     ./git/fugitive.nix
