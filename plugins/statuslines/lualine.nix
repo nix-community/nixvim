@@ -46,35 +46,30 @@ let
 in {
   options = {
     programs.nixvim.plugins.lualine = {
-      enable = mkEnableOption "Enable airline";
+      enable = mkEnableOption "Enable lualine";
 
-      options = mkOption {
-        type = types.submodule {
-          options = {
-            theme = mkOption {
-              default = "auto";
-              type = types.str;
-              description = "The theme to use for lualine-nvim.";
-            };
-            section_separators = separators;
-            component_separators = separators;
-            disabled_filestypes = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-              example = ''[ "lua" ]'';
-              description = "filetypes to disable lualine on";
-            };
-            always_divide_middle = mkOption {
-              type = types.bool;
-              default = true;
-              description =
-                "When true left_sections (a,b,c) can't take over entire statusline";
-            };
-          };
-        };
-        default = { };
-        description = "Options for lualine";
+      theme = mkOption {
+        default = "auto";
+        type = types.str;
+        description = "The theme to use for lualine-nvim.";
       };
+
+      sectionSeparators = separators;
+      componentSeparators = separators;
+
+      disabledFilestypes = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = ''[ "lua" ]'';
+        description = "filetypes to disable lualine on";
+      };
+
+      alwaysDivideMiddle = mkOption {
+        type = types.bool;
+        default = true;
+        description = "When true, left_sections (a,b,c) can't take over entire statusline";
+      };
+
       sections = mkOption {
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
@@ -87,8 +82,10 @@ in {
             lualine_z = component_options "location";
           };
         }));
+
         default = { };
       };
+
       tabline = mkOption {
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
@@ -111,19 +108,24 @@ in {
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = let
+    setupOptions = {
+      options = {
+        theme = cfg.theme;
+        section_separators = cfg.sectionSeparators;
+        component_separators = cfg.componentSeparators;
+        disabled_filestypes = cfg.disabledFilestypes;
+        always_divide_middle = cfg.alwaysDivideMiddle;
+      };
+
+      sections = cfg.sections;
+      tabline = cfg.tabline;
+      extensions = cfg.extensions;
+    };
+  in mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.lualine-nvim ];
-      extraConfigLua = ''require("lualine").setup{''
-        + optionalString (cfg.options != { }) ''
-          options = ${helpers.toLuaObject cfg.options};
-        '' + optionalString (cfg.sections != { }) ''
-          sections = ${helpers.toLuaObject cfg.sections};
-        '' + optionalString (!isNull cfg.tabline) ''
-          tabline = ${helpers.toLuaObject cfg.tabline};
-        '' + optionalString (cfg.extensions != [ ]) ''
-          extensions = ${helpers.toLuaObject cfg.extensions};
-        '' + "}";
+      extraConfigLua = ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
     };
   };
 }

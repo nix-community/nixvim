@@ -31,7 +31,7 @@
           programs.nixvim = {
             enable = true;
             package = pkgs.neovim-nightly;
-            colorschemes.onedark = { enable = true; };
+            colorschemes.tokyonight = { enable = true; };
 
             extraPlugins = [ pkgs.vimPlugins.vim-nix ];
 
@@ -50,9 +50,8 @@
 
             maps.normalVisualOp."ç" = ":";
 
-            plugins.airline = {
+            plugins.lualine = {
               enable = true;
-              powerline = true;
             };
 
             plugins.undotree.enable = true;
