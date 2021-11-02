@@ -4,6 +4,7 @@
     ./colorschemes/onedark.nix
     ./colorschemes/one.nix
     ./colorschemes/base16.nix
+    ./colorschemes/tokyonight.nix
 
     ./pluginmanagers/packer.nix
 
