@@ -57,7 +57,7 @@ in {
       sectionSeparators = separators;
       componentSeparators = separators;
 
-      disabledFilestypes = mkOption {
+      disabledFiletypes = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = ''[ "lua" ]'';
@@ -67,7 +67,8 @@ in {
       alwaysDivideMiddle = mkOption {
         type = types.bool;
         default = true;
-        description = "When true, left_sections (a,b,c) can't take over entire statusline";
+        description =
+          "When true, left_sections (a,b,c) can't take over entire statusline";
       };
 
       sections = mkOption {
@@ -114,7 +115,7 @@ in {
         theme = cfg.theme;
         section_separators = cfg.sectionSeparators;
         component_separators = cfg.componentSeparators;
-        disabled_filestypes = cfg.disabledFilestypes;
+        disabled_filetypes = cfg.disabledFiletypes;
         always_divide_middle = cfg.alwaysDivideMiddle;
       };
 
@@ -125,7 +126,8 @@ in {
   in mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.lualine-nvim ];
-      extraConfigLua = ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
+      extraConfigLua =
+        ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
     };
   };
 }
