@@ -15,7 +15,7 @@ in {
       terminalColors = mkEnableOption
         "Configure the colors used when opening a :terminal in Neovim";
       italicComments = mkEnableOption "Make comments italic";
-      italicKeywods = mkEnableOption "Make keywords italic";
+      italicKeywords = mkEnableOption "Make keywords italic";
       italicFunctions = mkEnableOption "Make functions italic";
       italicVariables = mkEnableOption "Make variables and identifiers italic";
       transparent =
@@ -42,7 +42,7 @@ in {
         tokyonight_terminal_colors = mkIf (!cfg.terminalColors) 0;
 
         tokyonight_italic_comments = mkIf (!cfg.italicComments) 0;
-        tokyonight_italic_keywords = mkIf (!cfg.italicKeywods) 0;
+        tokyonight_italic_keywords = mkIf (!cfg.italicKeywords) 0;
         tokyonight_italic_functions = mkIf (cfg.italicFunctions) 1;
         tokyonight_italic_variables = mkIf (cfg.italicVariables) 1;
 
