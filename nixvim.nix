@@ -24,45 +24,47 @@ let
   };
 
   mapOption = types.oneOf [ types.str (types.submodule {
-    silent = mkOption {
-      type = types.bool;
-      description = "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
-      default = false;
-    };
+    options = {
+      silent = mkOption {
+        type = types.bool;
+        description = "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
+        default = false;
+      };
 
-    nowait = mkOption {
-      type = types.bool;
-      description = "Whether to wait for extra input on ambiguous mappings. Equivalent to adding <nowait> to a map.";
-      default = false;
-    };
+      nowait = mkOption {
+        type = types.bool;
+        description = "Whether to wait for extra input on ambiguous mappings. Equivalent to adding <nowait> to a map.";
+        default = false;
+      };
 
-    script = mkOption {
-      type = types.bool;
-      description = "Equivalent to adding <script> to a map.";
-      default = false;
-    };
+      script = mkOption {
+        type = types.bool;
+        description = "Equivalent to adding <script> to a map.";
+        default = false;
+      };
 
-    expr = mkOption {
-      type = types.bool;
-      description = "Means that the action is actually an expression. Equivalent to adding <expr> to a map.";
-      default = false;
-    };
+      expr = mkOption {
+        type = types.bool;
+        description = "Means that the action is actually an expression. Equivalent to adding <expr> to a map.";
+        default = false;
+      };
 
-    unique = mkOption {
-      type = types.bool;
-      description = "Whether to fail if the map is already defined. Equivalent to adding <unique> to a map.";
-      default = false;
-    };
+      unique = mkOption {
+        type = types.bool;
+        description = "Whether to fail if the map is already defined. Equivalent to adding <unique> to a map.";
+        default = false;
+      };
 
-    noremap = mkOption {
-      type = types.bool;
-      description = "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
-      default = true;
-    };
+      noremap = mkOption {
+        type = types.bool;
+        description = "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
+        default = true;
+      };
 
-    action = mkOption {
-      type = types.str;
-      description = "The action to execute.";
+      action = mkOption {
+        type = types.str;
+        description = "The action to execute.";
+      };
     };
   }) ];
 
@@ -221,26 +223,7 @@ in
       local __nixvim_options = ${helpers.toLuaObject cfg.options}
 
       for k,v in pairs(__nixvim_options) do
-        -- Here we use the set command because, as of right now, neovim has
-        -- no equivalent using the lua API. You have to sort through the
-        -- options and know which options are local to what
-        if type(v) == "boolean" then
-          local no
-          if v then no = "" else no = "no" end
-
-          vim.cmd("set " .. no .. k)
-        elseif type(v) == "table" then
-          local val = ""
-          for i,opt in ipairs(v) do
-            val = val .. tostring(opt)
-            if i ~= #v then
-              val = val .. ","
-            end
-          end
-          vim.cmd("set " .. k .. "=" .. val)
-        else
-          vim.cmd("set " .. k .. "=" .. tostring(v))
-        end
+        vim.o[k] = v
       end
       -- }}}
     '' + optionalString (mappings != []) ''

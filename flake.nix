@@ -49,6 +49,10 @@
             };
 
             maps.normalVisualOp."ç" = ":";
+            maps.normal."<leader>m" = {
+              silent = true;
+              action = "<cmd>make<CR>";
+            };
 
             plugins.lualine = {
               enable = true;
