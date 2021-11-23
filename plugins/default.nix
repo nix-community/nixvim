@@ -24,6 +24,7 @@
     ./utils/startify.nix
     ./utils/goyo.nix
     ./utils/endwise.nix
+    ./utils/easyescape.nix
     ./utils/telescope.nix
     ./utils/nvim-autopairs.nix
     ./utils/barbar.nix
