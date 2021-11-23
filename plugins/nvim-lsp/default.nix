@@ -9,6 +9,7 @@ in
     ./clangd.nix
     ./rust-analyzer.nix
     ./rnix-lsp.nix
+    ./pyright.nix
   ];
 
   options = {
