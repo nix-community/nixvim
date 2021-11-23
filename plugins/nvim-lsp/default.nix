@@ -38,6 +38,12 @@ in
         description = "A lua function to be run when a new LSP buffer is attached. The argument `client` is provided.";
         default = "";
       };
+
+      capabilities = mkOption {
+        type = types.lines;
+        description = "A lua function defining the capabilities of a new LSP buffer.";
+        default = "";
+      };
     };
   };
 
@@ -52,11 +58,15 @@ in
         local __lspOnAttach = function(client)
           ${cfg.onAttach}
         end
+        local __lspCapabilities = function
+          ${cfg.capabilities}
+        end
 
         for i,server in ipairs(__lspServers) do
           if type(server) == "string" then
             require('lspconfig')[server].setup {
               on_attach = __lspOnAttach
+              capabilities = __lspCapabilities
             }
           else
             require('lspconfig')[server.name].setup(server.extraOptions)
