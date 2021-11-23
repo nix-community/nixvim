@@ -3,6 +3,24 @@ with lib;
 let
   cfg = config.programs.nixvim.plugins.bufferline;
   helpers = import ../helpers.nix { inherit lib; };
+
+  highlight = mkOption {
+    type = types.nullOr (types.submodule ({ ... }: {
+      options = {
+        guifg = mkOption {
+          type = types.nullOr types.str;
+          description = "foreground color";
+          default = null;
+        };
+        guibg = mkOption {
+          type = types.nullOr types.str;
+          description = "background color";
+          default = null;
+        };
+      };
+    }));
+    default = null;
+  };
 in
 {
   options = {
@@ -37,24 +55,30 @@ in
         type = types.str;
         description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
         this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
+        default = "▎";
       };
       bufferCloseIcon = mkOption {
         type = types.str;
         description = "The close icon for each buffer.";
+        default = "";
       };
       modifiedIcon = mkOption {
         type = types.str;
         description = "The icon indicating a buffer was modified.";
+        default = "●";
       };
       closeIcon = mkOption {
         type = types.str;
         description = "The close icon.";
+        default = "";
       };
       leftTruncMarker = mkOption {
         type = types.str;
+        default = "";
       };
       rightTruncMarker = mkOption {
         type = types.str;
+        default = "";
       };
       nameFormatter = mkOption {
         type = types.lines;
@@ -114,6 +138,7 @@ in
       };
       separatorStyle = mkOption {
         type = types.enum [ "slant" "thick" "thin" ];
+        default = "slant";
       };
       enforceRegularTabs = mkOption {
         type = types.bool;
@@ -125,6 +150,72 @@ in
       };
       sortBy = mkOption {
         type = types.enum [ "id" "extension" "relative_directory" "directory" "tabs" ];
+        default = "id";
+      };
+      highlights = mkOption {
+        type = types.submodule {
+          options = {
+            fill = highlight;
+            background = highlight;
+
+            tab = highlight;
+            tabSelected = highlight;
+            tabClose = highlight;
+
+            closeButton = highlight;
+            closeButtonVisible = highlight;
+            closeButtonSelected = highlight;
+
+            bufferVisible = highlight;
+            bufferSelected = highlight;
+
+            diagnostic = highlight;
+            diagnosticVisible = highlight;
+            diagnosticSelected = highlight;
+
+            info = highlight;
+            infoVisible = highlight;
+            infoSelected = highlight;
+
+            infoDiagnostic = highlight;
+            infoDiagnosticVisible = highlight;
+            infoDiagnosticSelected = highlight;
+
+            warning = highlight;
+            warningVisible = highlight;
+            warningSelected = highlight;
+
+            warningDiagnostic = highlight;
+            warningDiagnosticVisible = highlight;
+            warningDiagnosticSelected = highlight;
+
+            error = highlight;
+            errorVisible = highlight;
+            errorSelected = highlight;
+
+            errorDiagnostic = highlight;
+            errorDiagnosticVisible = highlight;
+            errorDiagnosticSelected = highlight;
+
+            modified = highlight;
+            modifiedVisible = highlight;
+            modifiedSelected = highlight;
+
+            duplicate = highlight;
+            duplicateVisible = highlight;
+            duplicateSelected = highlight;
+
+            separator = highlight;
+            separatorVisible = highlight;
+            separatorSelected = highlight;
+
+            indicatorSelected = highlight;
+
+            pick = highlight;
+            pickVisible = highlight;
+            pickSelected = highlight;
+          };
+        };
       };
     };
   };
@@ -161,6 +252,67 @@ in
         always_show_bufferline = cfg.alwaysShowBufferline;
         sort_by = cfg.sortBy;
       };
+      highlights = with cfg.highlights; {
+        fill = fill;
+        background = background;
+
+        tab = tab;
+        tab_selected = tabSelected;
+        tab_close = tabClose;
+        close_button = closeButton;
+        close_button_visible = closeButtonVisible;
+        close_button_selected = closeButtonSelected;
+
+        buffer_visible = bufferVisible;
+        buffer_selected = bufferSelected;
+
+        diagnostic = diagnostic;
+        diagnostic_visible = diagnosticVisible;
+        diagnostic_selected = diagnosticSelected;
+
+        info = info;
+        info_visible = infoVisible;
+        info_selected = infoSelected;
+
+        info_diagnostic = infoDiagnostic;
+        info_diagnostic_visible = infoDiagnosticVisible;
+        info_diagnostic_selected = infoDiagnosticSelected;
+
+        warning = warning;
+        warning_visible = warningVisible;
+        warning_selected = warningSelected;
+
+        warning_diagnostic = warningDiagnostic;
+        warning_diagnostic_visible = warningDiagnosticVisible;
+        warning_diagnostic_selected = warningDiagnosticSelected;
+
+        error = error;
+        error_visible = errorVisible;
+        error_selected = errorSelected;
+
+        error_dagnostic = errorDiagnostic;
+        error_diagnostic_visible = errorDiagnosticVisible;
+        error_diagnostic_selected = errorDiagnosticSelected;
+
+        modified = modified;
+        modified_visible = modifiedVisible;
+        modified_selected = modifiedSelected;
+
+        duplicate = duplicate;
+        duplicate_visible = duplicateVisible;
+        duplicate_selected = duplicateSelected;
+
+        separator = separator;
+        separator_visible = separatorVisible;
+        separator_selected = separatorSelected;
+
+        indicator_selected = indicatorSelected;
+
+        pick = pick;
+        pick_visible = pickVisible;
+        pick_selected = pickSelected;
+
+      };
     };
     in mkIf cfg.enable {
     programs.nixvim = {
@@ -170,7 +322,7 @@ in
       ];
       options.termguicolors = true;
       extraConfigLua = ''
-        require('bufferline').setup{${helpers.toLuaObject setupOptions}}
+        require('bufferline').setup${helpers.toLuaObject setupOptions}
       '';
     };
   };
