@@ -1,5 +1,7 @@
 {
   imports = [
+    ./bufferlines/bufferline.nix
+
     ./colorschemes/gruvbox.nix
     ./colorschemes/onedark.nix
     ./colorschemes/one.nix
