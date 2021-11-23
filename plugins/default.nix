@@ -19,6 +19,7 @@
 
     ./utils/undotree.nix
     ./utils/commentary.nix
+    ./utils/comment-nvim.nix
     ./utils/startify.nix
     ./utils/goyo.nix
     ./utils/endwise.nix
