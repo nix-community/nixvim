@@ -9,14 +9,14 @@ in
     programs.nixvim.plugins.comment-nvim = {
       enable = mkEnableOption "Enable comment-nvim";
       padding = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         description = "Add a space b/w comment and the line";
-        default = true;
+        default = null;
       };
       sticky = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         description = "Whether the cursor should stay at its position";
-        default = true;
+        default = null;
       };
       ignore = mkOption {
         type = types.nullOr types.str;
@@ -24,7 +24,7 @@ in
         default = null;
       };
       toggler = mkOption {
-        type = types.submodule {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             line = mkOption {
               type = types.str;
@@ -37,12 +37,12 @@ in
               default = "gbc";
             };
           };
-        };
+        }));
         description = "LHS of toggle mappings in NORMAL + VISUAL mode";
-        default = {};
+        default = null;
       };
       opleader = mkOption {
-        type = types.submodule {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             line = mkOption {
               type = types.str;
@@ -55,12 +55,12 @@ in
               default = "gb";
             };
           };
-        };
+        }));
         description = "LHS of operator-pending mappings in NORMAL + VISUAL mode";
-        default = {};
+        default = null;
       };
       mappings = mkOption {
-        type = types.submodule {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             basic = mkOption {
               type = types.bool;
@@ -80,9 +80,9 @@ in
               default = false;
             };
           };
-        };
+        }));
         description = "Create basic (operator-pending) and extended mappings for NORMAL + VISUAL mode";
-        default = {};
+        default = null;
       };
     };
   };
