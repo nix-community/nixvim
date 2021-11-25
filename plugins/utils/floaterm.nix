@@ -9,57 +9,57 @@ in
     programs.nixvim.plugins.floaterm = {
       enable = mkEnableOption "Enable floaterm";
       shell = mkOption {
-        type = types.str;
-        default = "&shell";
+        type = types.nullOr types.str;
+        default = null;
       };
       title = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = "Show floaterm info at the top left corner of the floaterm window.";
-        default = "floaterm: $1/$2";
+        default = null;
       };
       winType = mkOption {
-        type = types.enum [ "float" "split" "vsplit" ];
-        default = "float";
+        type = types.nullOr (types.enum [ "float" "split" "vsplit" ]);
+        default = null;
       };
       winWidth = mkOption {
-        type = types.float;
+        type = types.nullOr types.float;
         description = "number of columns relative to &columns.";
-        default = 0.6;
+        default = null;
       };
       winHeight = mkOption {
-        type = types.float;
+        type = types.nullOr types.float;
         description = "number of lines relative to &lines.";
-        default = 0.6;
+        default = null;
       };
       borderChars = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = "8 characters of the floating window border (top, right, bottom, left, topleft, topright, botright, botleft)";
-        default = "─│─│┌┐┘└";
+        default = null;
       };
       rootMarkers = mkOption {
-        type = types.listOf types.str;
+        type = types.nullOr (types.listOf types.str);
         description = "Markers used to detect the project root directory for --cwd=<root>";
-        default = [ ".project" ".git" ".hg" ".svn" ".root" ];
+        default = null;
       };
       opener = mkOption {
-        type = types.enum [ "edit" "split" "vsplit" "tabe" "drop" ];
+        type = types.nullOr (types.enum [ "edit" "split" "vsplit" "tabe" "drop" ]);
         description = "Command used for opening a file in the outside nvim from within :terminal";
-        default = "split";
+        default = null;
       };
       autoClose = mkOption {
-        type = types.enum [ 0 1 2 ];
+        type = types.nullOr (types.enum [ 0 1 2 ]);
         description = "Whether to close floaterm window once the job gets finished.";
-        default = 0;
+        default = null;
       };
       autoHide = mkOption {
-        type = types.enum [ 0 1 2 ];
+        type = types.nullOr (types.enum [ 0 1 2 ]);
         description = "Whether to hide previous floaterm before switching to or opening another one.";
-        default = 1;
+        default = null;
       };
       autoInsert = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         description = "Whether to enter Terminal-mode after opening a floaterm.";
-        default = true;
+        default = null;
       };
     };
   };
@@ -69,17 +69,17 @@ in
         vim-floaterm
       ];
       globals = {
-        floaterm_shell = cfg.shell;
-        floaterm_title = cfg.title;
-        floaterm_wintype = cfg.winType;
-        floaterm_width = cfg.winWidth;
-        floaterm_height = cfg.winHeight;
-        floaterm_borderchars = cfg.borderChars;
-        floaterm_rootmarkers = cfg.rootMarkers;
-        floaterm_opener = cfg.opener;
-        floaterm_autoclose = cfg.autoClose;
-        floaterm_autohide = cfg.autoHide;
-        floaterm_autoInsert = cfg.autoInsert;
+        floaterm_shell = mkIf (!isNull cfg.shell) cfg.shell;
+        floaterm_title = mkIf (!isNull cfg.title) cfg.title;
+        floaterm_wintype = mkIf (!isNull cfg.winType) cfg.winType;
+        floaterm_width = mkIf (!isNull cfg.winWidth) cfg.winWidth;
+        floaterm_height = mkIf (!isNull cfg.winHeight) cfg.winHeight;
+        floaterm_borderchars = mkIf (!isNull cfg.borderChars) cfg.borderChars;
+        floaterm_rootmarkers = mkIf (!isNull cfg.rootMarkers) cfg.rootMarkers;
+        floaterm_opener = mkIf (!isNull cfg.opener) cfg.opener;
+        floaterm_autoclose = mkIf (!isNull cfg.autoClose) cfg.autoClose;
+        floaterm_autohide = mkIf (!isNull cfg.autoHide) cfg.autoHide;
+        floaterm_autoInsert = mkIf (!isNull cfg.autoInsert) cfg.autoInsert;
       };
     };
   };
