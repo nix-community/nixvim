@@ -2,14 +2,10 @@
   description = "A neovim configuration system for NixOS";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
 
   outputs = { self, nixpkgs, ... }@inputs: rec {
-    overlays = [ inputs.neovim-nightly.overlay ];
-
     nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
     homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
-    nixOnDroidModules.nixvim = import ./nixvim.nix { nixOnDroid = true; };
 
     # This is a simple container for testing
     nixosConfigurations.container = nixpkgs.lib.nixosSystem {
@@ -26,11 +22,9 @@
 
           imports = [ nixosModules.nixvim ];
 
-          nixpkgs.overlays = [ inputs.neovim-nightly.overlay ];
-
           programs.nixvim = {
             enable = true;
-            package = pkgs.neovim-nightly;
+            package = pkgs.neovim;
             colorschemes.tokyonight = { enable = true; };
 
             extraPlugins = [ pkgs.vimPlugins.vim-nix ];
