@@ -4,7 +4,7 @@ let
   cfg = config.programs.nixvim.plugins.lualine;
   helpers = import ../helpers.nix { lib = lib; };
   separators = mkOption {
-    type = types.submodule {
+    type = types.nullOr (types.submodule {
       options = {
         left = mkOption {
           default = " ";
@@ -17,12 +17,12 @@ let
           description = "right separator";
         };
       };
-    };
-    default = { };
+    });
+    default = null;
   };
   component_options = mode:
     mkOption {
-      type = types.submodule {
+      type = types.nullOr (types.submodule {
         options = {
           mode = mkOption {
             type = types.str;
@@ -40,8 +40,8 @@ let
           };
           separator = separators;
         };
-      };
-      default = { };
+      });
+      default = null;
     };
 in {
   options = {
@@ -49,8 +49,8 @@ in {
       enable = mkEnableOption "Enable lualine";
 
       theme = mkOption {
-        default = "auto";
-        type = types.str;
+        default = null;
+        type = types.nullOr types.str;
         description = "The theme to use for lualine-nvim.";
       };
 
@@ -58,15 +58,15 @@ in {
       componentSeparators = separators;
 
       disabledFiletypes = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
+        type = types.nullOr (types.listOf types.str);
+        default = null;
         example = ''[ "lua" ]'';
         description = "filetypes to disable lualine on";
       };
 
       alwaysDivideMiddle = mkOption {
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = null;
         description =
           "When true, left_sections (a,b,c) can't take over entire statusline";
       };
@@ -84,7 +84,7 @@ in {
           };
         }));
 
-        default = { };
+        default = null;
       };
 
       tabline = mkOption {
@@ -102,8 +102,8 @@ in {
         default = null;
       };
       extensions = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
+        type = types.nullOr (types.listOf types.str);
+        default = null;
         example = ''[ "fzf" ]'';
         description = "list of enabled extensions";
       };
