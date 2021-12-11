@@ -57,6 +57,7 @@ in {
   config = mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ (pkgs.vimPlugins.packer-nvim.overrideAttrs (_: { pname = "packer.nvim"; })) ];
+      extraPackages = [ pkgs.git ];
 
       extraConfigLua = let
         plugins = map (plugin: if isAttrs plugin then
