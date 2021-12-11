@@ -75,16 +75,11 @@ in
     };
   in mkIf cfg.enable {
     programs.nixvim = {
-      plugins.packer = {
-        enable = true;
-        plugins = [{
-          name = "nvim-treesitter/nvim-treesitter";
-          run = ":TSUpdate";
-          config = helpers.mkRaw ''function()
-            require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
-          end'';
-        }];
-      };
+      extraConfigLua = ''
+        require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
+      '';
+
+      extraPlugins = [ pkgs.vimPlugins.nvim-treesitter ];
       extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 
       options = mkIf cfg.folding {
