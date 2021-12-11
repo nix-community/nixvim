@@ -28,6 +28,7 @@
     ./utils/telescope.nix
     ./utils/nvim-autopairs.nix
     ./utils/barbar.nix
+    ./utils/intellitab.nix
 
     ./languages/treesitter.nix
     ./languages/nix.nix
