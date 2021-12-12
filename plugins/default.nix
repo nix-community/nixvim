@@ -30,6 +30,7 @@
     ./utils/nvim-autopairs.nix
     ./utils/intellitab.nix
     ./utils/specs.nix
+    ./utils/mark-radar.nix
 
     ./languages/treesitter.nix
     ./languages/nix.nix
