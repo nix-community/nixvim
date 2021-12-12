@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.comment-nvim;
-  helpers = import ../helpers.nix { inherit lib; };
+  defs = import ../plugin-defs.nix { inherit pkgs; };
 in
 {
   options = {
@@ -13,12 +13,9 @@ in
 
   config = mkIf cfg.enable {
     programs.nixvim = {
-      maps.insert."<Tab>" = "<CMD>lua require([[intellitab]]).indent()<CR>";
-      plugins.packer = {
-        enable = true;
-        plugins = [ "pta2002/intellitab.nvim" ];
-      };
+      extraPlugins = [ defs.intellitab-nvim ];
 
+      maps.insert."<Tab>" = "<CMD>lua require([[intellitab]]).indent()<CR>";
       plugins.treesitter = {
         indent = true;
       };
