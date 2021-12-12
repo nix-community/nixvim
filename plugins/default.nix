@@ -1,6 +1,7 @@
 {
   imports = [
     ./bufferlines/bufferline.nix
+    ./bufferlines/barbar.nix
 
     ./colorschemes/gruvbox.nix
     ./colorschemes/onedark.nix
@@ -27,7 +28,6 @@
     ./utils/easyescape.nix
     ./utils/telescope.nix
     ./utils/nvim-autopairs.nix
-    ./utils/barbar.nix
     ./utils/intellitab.nix
 
     ./languages/treesitter.nix
