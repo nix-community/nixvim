@@ -31,6 +31,7 @@
     ./utils/intellitab.nix
     ./utils/specs.nix
     ./utils/mark-radar.nix
+    ./utils/notify.nix
 
     ./languages/treesitter.nix
     ./languages/nix.nix
