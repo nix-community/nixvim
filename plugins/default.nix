@@ -26,7 +26,6 @@
     ./utils/goyo.nix
     ./utils/endwise.nix
     ./utils/easyescape.nix
-    ./utils/telescope.nix
     ./utils/nvim-autopairs.nix
     ./utils/intellitab.nix
     ./utils/specs.nix
@@ -40,5 +39,7 @@
 
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
+
+    ./telescope
   ];
 }
