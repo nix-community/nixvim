@@ -5,6 +5,10 @@ let
   helpers = (import ../helpers.nix { inherit lib; });
 in
 {
+  imports = [
+    ./frecency.nix
+  ];
+
   # TODO:add support for aditional filetypes. This requires autocommands!
 
   options.programs.nixvim.plugins.telescope = {
