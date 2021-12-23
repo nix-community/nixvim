@@ -7,6 +7,7 @@ in
 {
   imports = [
     ./frecency.nix
+    ./fzf-native.nix
   ];
 
   # TODO:add support for aditional filetypes. This requires autocommands!
