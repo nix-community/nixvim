@@ -25,6 +25,12 @@ in
       description = "A list of enabled extensions. Don't use this directly";
       default = [];
     };
+
+    extensionConfig = mkOption {
+      type = types.attrsOf types.anything;
+      description = "Configuration for the extensions. Don't use this directly";
+      default = {};
+    };
   };
 
   config = mkIf cfg.enable {
@@ -44,7 +50,9 @@ in
       extraConfigLua = ''
         local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
 
-        require('telescope').setup{}
+        require('telescope').setup{
+          extensions = ${helpers.toLuaObject cfg.extensionConfig}
+        }
 
         for i, extension in ipairs(__telescopeExtensions) do
           require('telescope').load_extension(extension)
