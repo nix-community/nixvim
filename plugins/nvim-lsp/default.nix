@@ -59,14 +59,11 @@ in
         local __lspOnAttach = function(client)
           ${cfg.onAttach}
         end
-        local __lspCapabilities = function()
-        end
 
         for i,server in ipairs(__lspServers) do
           if type(server) == "string" then
             require('lspconfig')[server].setup {
-              on_attach = __lspOnAttach,
-              capabilities = __lspCapabilities,
+              on_attach = __lspOnAttach
             }
           else
             require('lspconfig')[server.name].setup(server.extraOptions)
