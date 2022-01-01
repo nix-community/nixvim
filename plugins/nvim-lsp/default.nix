@@ -60,7 +60,6 @@ in
           ${cfg.onAttach}
         end
         local __lspCapabilities = function()
-          ${cfg.capabilities}
         end
 
         for i,server in ipairs(__lspServers) do
