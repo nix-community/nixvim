@@ -153,6 +153,7 @@ in
         default = null;
       };
       highlights = mkOption {
+        default = null;
         type = types.nullOr (types.submodule ({...}: {
           options = {
             fill = highlight;
@@ -252,7 +253,7 @@ in
         always_show_bufferline = cfg.alwaysShowBufferline;
         sort_by = cfg.sortBy;
       };
-      highlights = with cfg.highlights; {
+      highlights = if builtins.isNull cfg.highlights then null else with cfg.highlights; {
         fill = fill;
         background = background;
 
