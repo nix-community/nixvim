@@ -49,7 +49,7 @@ in {
       enable = mkEnableOption "Enable lualine";
 
       theme = mkOption {
-        default = null;
+        default = config.programs.nixvim.colorscheme;
         type = types.nullOr types.str;
         description = "The theme to use for lualine-nvim.";
       };
