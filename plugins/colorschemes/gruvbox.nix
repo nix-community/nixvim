@@ -113,7 +113,7 @@ in {
   config = mkIf cfg.enable {
     programs.nixvim = {
       colorscheme = "gruvbox";
-      extraPlugins = [ pkgs.vimPlugins.gruvbox ];
+      extraPlugins = [ pkgs.vimPlugins.gruvbox-nvim ];
 
       globals = {
         gruvbox_bold = mkIf (!cfg.bold) 0;
