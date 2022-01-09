@@ -43,6 +43,7 @@
     ./utils/nvim-tree.nix
     ./utils/specs.nix
     ./utils/startify.nix
+    ./utils/surround.nix
     ./utils/undotree.nix
   ];
 }
