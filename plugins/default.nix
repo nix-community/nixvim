@@ -9,6 +9,8 @@
     ./colorschemes/onedark.nix
     ./colorschemes/tokyonight.nix
 
+    ./completion/coq.nix
+
     ./git/fugitive.nix
     ./git/gitgutter.nix
 

@@ -23,4 +23,65 @@
       sha256 = "1y3l2c7h8czhw0b5m25iyjdyy0p4nqk4a3bxv583m72hn4ac8rz9";
     };
   };
+  coq-nvim = pkgs.vimUtils.buildVimPlugin rec {
+    pname = "coq-nvim";
+    version = "2699492a1b8716c59ade7130dc354e53944b6a7f";
+    src = pkgs.fetchFromGitHub {
+      owner = "ms-jpq";
+      repo = "coq_nvim";
+      rev = version;
+      sha256 = "sha256-tjniIWe1V4vGuao5no+3YB9WtiNaMehEjffJyNpFgd8=";
+    };
+
+    passthru.python3Dependencies = ps: [
+      ps.pynvim
+      ps.pyyaml
+      (ps.buildPythonPackage rec {
+        pname = "pynvim_pp";
+        version = "01dc0f58d4e71a98c388e1f37bda3d1357089fa2";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "ms-jpq";
+          repo = "pynvim_pp";
+          rev = version;
+          sha256 = "sha256-/m4Paw6AvDzTMWWCWpPnrdI4gsjIDSJPvGCMV7ufbEA=";
+        };
+
+        propagatedBuildInputs = [ pkgs.python3Packages.pynvim ];
+      })
+      (ps.buildPythonPackage rec {
+        pname = "std2";
+        version = "48bb39b69ed631ef64eed6123443484133fd20fc";
+
+        doCheck = false;
+
+        src = pkgs.fetchFromGitHub {
+          owner = "ms-jpq";
+          repo = "std2";
+          rev = version;
+          sha256 = "sha256-nMwNAq15zyf9ORhFGo0sawQukOygYoVWtT7jH68MIkI=";
+        };
+      })
+    ];
+
+    # We need some patches so it stops complaining about not being in a venv
+    postPatch = ''
+      substituteInPlace coq/consts.py \
+        --replace "VARS = TOP_LEVEL / \".vars\"" "VARS = Path.home() / \".cache/home/vars\"";
+      substituteInPlace coq/__main__.py \
+        --replace "_IN_VENV = _RT_PY == _EXEC_PATH" "_IN_VENV = True"
+    '';
+  };
+
+  coq-artifacts = pkgs.vimUtils.buildVimPlugin rec {
+    pname = "coq.artifacts";
+    version = "495429564e481cafeb044456da32c10cb631f948";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "ms-jpq";
+      repo = "coq.artifacts";
+      rev = version;
+      sha256 = "sha256-AtkG2XRVZgvJzH2iLr7UT/U1+LXxenvNckdapnJV+8A=";
+    };
+  };
 }
