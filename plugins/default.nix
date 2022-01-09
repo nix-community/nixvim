@@ -1,45 +1,46 @@
 {
   imports = [
-    ./bufferlines/bufferline.nix
     ./bufferlines/barbar.nix
+    ./bufferlines/bufferline.nix
 
-    ./colorschemes/gruvbox.nix
-    ./colorschemes/onedark.nix
-    ./colorschemes/one.nix
     ./colorschemes/base16.nix
+    ./colorschemes/gruvbox.nix
+    ./colorschemes/one.nix
+    ./colorschemes/onedark.nix
     ./colorschemes/tokyonight.nix
 
-    ./pluginmanagers/packer.nix
-
-    ./statuslines/lightline.nix
-    ./statuslines/airline.nix
-    ./statuslines/lualine.nix
-
-    ./git/gitgutter.nix
     ./git/fugitive.nix
+    ./git/gitgutter.nix
 
-    ./utils/undotree.nix
-    ./utils/commentary.nix
-    ./utils/comment-nvim.nix
-    ./utils/floaterm.nix
-    ./utils/startify.nix
-    ./utils/goyo.nix
-    ./utils/endwise.nix
-    ./utils/easyescape.nix
-    ./utils/nvim-autopairs.nix
-    ./utils/intellitab.nix
-    ./utils/specs.nix
-    ./utils/mark-radar.nix
-    ./utils/notify.nix
-
-    ./languages/treesitter.nix
-    ./languages/nix.nix
-    ./languages/zig.nix
     ./languages/ledger.nix
+    ./languages/nix.nix
+    ./languages/treesitter.nix
+    ./languages/zig.nix
 
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
 
+    ./pluginmanagers/packer.nix
+
+    ./statuslines/airline.nix
+    ./statuslines/lightline.nix
+    ./statuslines/lualine.nix
+
     ./telescope
+
+    ./utils/comment-nvim.nix
+    ./utils/commentary.nix
+    ./utils/easyescape.nix
+    ./utils/endwise.nix
+    ./utils/floaterm.nix
+    ./utils/goyo.nix
+    ./utils/intellitab.nix
+    ./utils/mark-radar.nix
+    ./utils/notify.nix
+    ./utils/nvim-autopairs.nix
+    ./utils/nvim-tree.nix
+    ./utils/specs.nix
+    ./utils/startify.nix
+    ./utils/undotree.nix
   ];
 }
