@@ -65,6 +65,12 @@ let
         type = types.str;
         description = "The action to execute.";
       };
+
+      description = mkOption {
+        type = types.nullOr types.str;
+        description = "A textual description of this keybind, to be shown in which-key, if you have it.";
+        default = null;
+      };
     };
   }) ];
 
