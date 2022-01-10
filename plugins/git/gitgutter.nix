@@ -91,7 +91,7 @@ in {
       };
 
       grep = mkOption {
-        type = types.nullOr (types.oneOf [ types.submodule {
+        type = types.nullOr (types.oneOf [ (types.submodule {
           options = {
             command = mkOption {
               type = types.str;
@@ -103,7 +103,7 @@ in {
               description = "The package of the grep alternative to use";
             };
           };
-        } types.str]);
+        }) types.str]);
         default = null;
         description = "A non-standard grep to use instead of the default";
       };

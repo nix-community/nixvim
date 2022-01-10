@@ -1,5 +1,5 @@
 { nixos ? false, nixOnDroid ? false, homeManager ? false }:
-{ pkgs, lib, config, ... }:
+{ pkgs , lib, config, ... }:
 with lib;
 let
   cfg = config.programs.nixvim;
@@ -100,8 +100,9 @@ in
       };
 
       colorscheme = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = "The name of the colorscheme";
+        default = null;
       };
 
       extraConfigLua = mkOption {
@@ -126,6 +127,7 @@ in
       configure = mkOption {
         type = types.attrsOf types.anything;
         default = { };
+        description = "Internal option";
       };
 
       options = mkOption {
@@ -257,7 +259,7 @@ in
 
   in mkIf cfg.enable (if nixos then {
     environment.systemPackages = [ wrappedNeovim ];
-    programs.nixvim = {
+    programs.neovim = {
       configure = configure;
 
       extraConfigLua = extraConfigLua;
@@ -273,14 +275,5 @@ in
       extraConfig = configure.customRC;
       plugins = cfg.extraPlugins;
     };
-  } else {
-    environment.packages = [ wrappedNeovim ];
-    programs.nixvim = {
-      configure = configure;
-
-      extraConfigLua = extraConfigLua;
-    };
-
-    environment.etc."xdg/nvim/sysinit.vim".text = neovimConfig.neovimRcContent;
-  }));
+  } else {}));
 }

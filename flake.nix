@@ -3,7 +3,15 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, nixpkgs, ... }@inputs: rec {
+  inputs.nmdSrc.url = "gitlab:rycee/nmd";
+  inputs.nmdSrc.flake = false;
+
+  outputs = { self, nixpkgs, nmdSrc, ... }@inputs: rec {
+    packages."x86_64-linux".docs = import ./docs {
+      pkgs = import nixpkgs { system = "x86_64-linux"; };
+      lib = nixpkgs.lib;
+    };
+
     nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
     homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
 

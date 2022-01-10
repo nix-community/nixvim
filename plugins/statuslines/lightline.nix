@@ -21,7 +21,7 @@ in {
         description = ''
           A list of function component definitions.
 
-          You should define the functions themselves in <para>extraConfig</para>
+          You should define the functions themselves in extraConfig
         '';
         example = ''
           programs.nixvim.plugins.lightline = {

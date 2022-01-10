@@ -30,12 +30,14 @@ in {
       sections = mkOption {
         default = null;
         type = with types; nullOr (submodule {
-          a = sectionOption;
-          b = sectionOption;
-          c = sectionOption;
-          x = sectionOption;
-          y = sectionOption;
-          z = sectionOption;
+          options = {
+            a = sectionOption;
+            b = sectionOption;
+            c = sectionOption;
+            x = sectionOption;
+            y = sectionOption;
+            z = sectionOption;
+          };
         });
       };
 

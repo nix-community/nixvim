@@ -64,8 +64,7 @@ in
           options = {
             basic = mkOption {
               type = types.bool;
-              description = "operator-pending mapping. Includes 'gcc', 'gcb', 'gc[count]{motion}' 
-              and 'gb[count]{motion}'";
+              description = "operator-pending mapping. Includes 'gcc', 'gcb', 'gc[count]{motion}' and 'gb[count]{motion}'";
               default = true;
             };
             extra = mkOption {
@@ -75,8 +74,7 @@ in
             };
             extended = mkOption {
               type = types.bool;
-              description = "extended mapping. Includes 'g>', 'g<', 'g>[count]{motion}' and 
-              'g<[count]{motion}'";
+              description = "extended mapping. Includes 'g&gt;', 'g&lt;', 'g&gt;[count]{motion}' and 'g&lt;[count]{motion}'";
               default = false;
             };
           };

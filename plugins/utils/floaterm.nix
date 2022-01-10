@@ -23,12 +23,12 @@ in
       };
       winWidth = mkOption {
         type = types.nullOr types.float;
-        description = "number of columns relative to &columns.";
+        description = "number of columns relative to &amp;columns.";
         default = null;
       };
       winHeight = mkOption {
         type = types.nullOr types.float;
-        description = "number of lines relative to &lines.";
+        description = "number of lines relative to &amp;lines.";
         default = null;
       };
       borderChars = mkOption {
@@ -38,7 +38,7 @@ in
       };
       rootMarkers = mkOption {
         type = types.nullOr (types.listOf types.str);
-        description = "Markers used to detect the project root directory for --cwd=<root>";
+        description = "Markers used to detect the project root directory for --cwd=&lt;root&gt;";
         default = null;
       };
       opener = mkOption {
