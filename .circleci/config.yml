@@ -17,7 +17,7 @@ jobs:
           name: "Build docs"
           command: "nix build '.#docs' --show-trace"
       - store_artifacts:
-          path: "result/share/doc/nixvim/"
+          path: "result/share/doc/"
           destination: "nixvim-docs"
 
 # Invoke jobs via workflows
