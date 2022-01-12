@@ -1,4 +1,6 @@
-{ pkgs, lib, ... }:
+{ pkgs ? import <nixpkgs> {}
+, lib ? import <nixpkgs/lib>
+, ... }:
 let
   nmdSrc = pkgs.fetchFromGitLab {
     name = "nmd";
@@ -40,9 +42,6 @@ let
     <toc>
       <d:tocentry xmlns:d="http://docbook.org/ns/docbook" linkend="book-home-manager-manual"><?dbhtml filename="index.html"?>
         <d:tocentry linkend="ch-options"><?dbhtml filename="options.html"?></d:tocentry>
-        <d:tocentry linkend="ch-nixos-options"><?dbhtml filename="nixos-options.html"?></d:tocentry>
-        <d:tocentry linkend="ch-nix-darwin-options"><?dbhtml filename="nix-darwin-options.html"?></d:tocentry>
-        <d:tocentry linkend="ch-tools"><?dbhtml filename="tools.html"?></d:tocentry>
         <d:tocentry linkend="ch-release-notes"><?dbhtml filename="release-notes.html"?></d:tocentry>
       </d:tocentry>
       </toc>

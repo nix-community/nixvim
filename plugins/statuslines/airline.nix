@@ -28,6 +28,7 @@ in {
       };
 
       sections = mkOption {
+        description = "Statusbar sections";
         default = null;
         type = with types; nullOr (submodule {
           options = {
