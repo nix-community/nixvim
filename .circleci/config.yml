@@ -1,0 +1,53 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  build-docs:
+    docker:
+      - image: nixpkgs/nix-flakes
+    steps:
+      - run:
+          name: Disable Sandbox
+          command: mkdir -p ~/.config/nix/; echo 'sandbox = false' >> ~/.config/nix/nix.conf;
+      - checkout
+      - run:
+          name: "Build docs"
+          command: "nix build '.#docs' --show-trace"
+      - persist_to_workspace:
+          root: "result/share/"
+          paths: [ doc ]
+  docs-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            git config user.email "ci-build@pta2002.com"
+            git config user.name "ci-build"
+      - add_ssh_keys:
+          fingerprints:
+            - ef:e9:c6:bf:56:b5:58:f9:3b:b7:e0:bf:ca:b9:d7:75
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist doc --message "[skip ci] Docs update"
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  build-docs-workflow:
+    jobs:
+      - build-docs
+      - docs-deploy:
+          requires:
+            - build-docs
+          filters:
+            branches:
+              only: main
