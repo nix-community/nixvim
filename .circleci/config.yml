@@ -16,9 +16,25 @@ jobs:
       - run:
           name: "Build docs"
           command: "nix build '.#docs' --show-trace"
-      - store_artifacts:
-          path: "result/share/doc/"
-          destination: "nixvim-docs"
+      - persist_to_workspace:
+          root: "result/share/"
+          paths: [ doc ]
+  docs-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: doc
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            git config user.email "ci-build@pta2002.com"
+            git config user.name "ci-build"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist doc
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -26,3 +42,6 @@ workflows:
   build-docs-workflow:
     jobs:
       - build-docs
+      - docs-deploy:
+          requires:
+            - build-docs
