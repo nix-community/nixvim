@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: "Build docs"
-          command: "nix build '.#docs'"
+          command: "nix build '.#docs' --show-trace"
       - store_artifacts:
           path: "result"
 
