@@ -5,7 +5,7 @@ let
 in
 {
   options = {
-    programs.nixvim.plugins.lsp.server.zls = {
+    programs.nixvim.plugins.lsp.servers.zls = {
       enable = mkEnableOption "Enable zls, LSP support for Zig";
     };
   };
