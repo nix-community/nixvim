@@ -10,6 +10,7 @@ in
     ./rust-analyzer.nix
     ./rnix-lsp.nix
     ./pyright.nix
+    ./zls.nix
   ];
 
   options = {
