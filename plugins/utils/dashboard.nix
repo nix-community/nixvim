@@ -28,13 +28,13 @@ in
 
       header = mkOption {
         description = "Header text";
-        type = with types; nullOr (either str (listOf str));
+        type = with types; nullOr (listOf str);
         default = null;
       };
 
       footer = mkOption {
         description = "Footer text";
-        type = with types; nullOr (either str (listOf str));
+        type = with types; nullOr (listOf str);
         default = null;
       };
 
