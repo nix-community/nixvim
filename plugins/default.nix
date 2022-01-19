@@ -13,6 +13,7 @@
 
     ./git/fugitive.nix
     ./git/gitgutter.nix
+    ./git/neogit.nix
 
     ./languages/ledger.nix
     ./languages/nix.nix
