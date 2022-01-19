@@ -45,5 +45,6 @@
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/undotree.nix
+    ./utils/dashboard.nix
   ];
 }
