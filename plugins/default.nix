@@ -47,5 +47,6 @@
     ./utils/surround.nix
     ./utils/undotree.nix
     ./utils/dashboard.nix
+    ./utils/emmet.nix
   ];
 }
