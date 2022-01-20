@@ -19,41 +19,49 @@ in
       enable = mkEnableOption "Enable neogit";
 
       disableSigns = mkOption {
+        description = "Disable signs";
         type = types.nullOr types.bool;
         default = null;
       };
 
       disableHint = mkOption {
+        description = "Disable hint";
         type = types.nullOr types.bool;
         default = null;
       };
 
       disableContextHighlighting = mkOption {
+        description = "Disable the context highlighting";
         type = types.nullOr types.bool;
         default = null;
       };
 
       disableCommitConfirmation = mkOption {
+        description = "Disable the commit confirmation prompt";
         type = types.nullOr types.bool;
         default = null;
       };
 
       autoRefresh = mkOption {
+        description = "Enable Auto Refresh";
         type = types.nullOr types.bool;
         default = null;
       };
 
       disableBuiltinNotifications = mkOption {
+        description = "Disable builtin notifications";
         type = types.nullOr types.bool;
         default = null;
       };
 
       useMagitKeybindings = mkOption {
+        description = "Enable Magit keybindings";
         type = types.nullOr types.bool;
         default = null;
       };
 
       commitPopup = mkOption {
+        description = "Commit popup configuration";
         type = types.submodule {
           options = {
             kind = mkOption {
@@ -66,10 +74,13 @@ in
       };
 
       kind = mkOption {
+        description = "The way of opening neogit";
         type = types.nullOr types.str;
+        default = null;
       };
 
       signs = mkOption {
+        description = "Customize displayed signs";
         type = types.submodule {
           options = {
             section = mkOption {
@@ -92,9 +103,11 @@ in
       };
 
       integrations = mkOption {
+        description = "Tools integration";
         type = types.submodule {
           options = {
             diffview = mkOption {
+              description = "Enable diff popup";
               type = types.bool;
               default = false;
             };
@@ -104,6 +117,7 @@ in
       };
 
       sections = mkOption {
+        description = "Section configuration";
         type = types.submodule {
           options = {
             untracked = mkOption {
@@ -140,6 +154,7 @@ in
       };
 
       mappings = mkOption {
+        description = "Custom mappings";
         type = types.submodule {
           options = {
             status = mkOption {
@@ -178,7 +193,7 @@ in
 
   config = let 
     setupOptions = with cfg; helpers.toLuaObject {
-      inherit integrations sections mappings;
+      inherit kind integrations sections mappings;
       disable_signs = disableSigns;
       disable_hint = disableHint;
       disable_context_highlighting = disableContextHighlighting;
