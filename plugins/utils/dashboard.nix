@@ -105,11 +105,13 @@ in
         type = types.submodule {
           options = {
             float = mkOption {
+              description = "Fzf floating window mode";
               type = types.nullOr types.int;
               default = null;
             };
 
             engine = mkOption {
+              description = "Grep tool to fzf use";
               type = types.nullOr (types.enum [ "rg" "ag" ]);
               default = null;
             };

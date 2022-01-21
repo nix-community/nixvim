@@ -84,16 +84,19 @@ in
         type = types.submodule {
           options = {
             section = mkOption {
+              description = "Cosed and opened signs for sections";
               type = types.nullOr (types.listOf types.str);
               default = null;
             };
 
             item = mkOption {
+              description = "Cosed and opened signs for items";
               type = types.nullOr (types.listOf types.str);
               default = null;
             };
 
             hunk = mkOption {
+              description = "Cosed and opened signs for hunks";
               type = types.nullOr (types.listOf types.str);
               default = null;
             };
@@ -121,30 +124,37 @@ in
         type = types.submodule {
           options = {
             untracked = mkOption {
+              description = "Options for untracked section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
             unstaged = mkOption {
+              description = "Options for unstaged section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
             staged = mkOption {
+              description = "Options for staged section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
             stashes = mkOption {
+              description = "Options for stashes section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
             unpulled = mkOption {
+              description = "Options for unpulled section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
             unmerged = mkOption {
+              description = "Options for unmerged section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
             recent = mkOption {
+              description = "Options for recent commits section";
               type = types.nullOr sectionDefaultsModule;
               default = null;
             };
