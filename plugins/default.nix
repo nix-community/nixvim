@@ -13,6 +13,7 @@
 
     ./git/fugitive.nix
     ./git/gitgutter.nix
+    ./git/neogit.nix
 
     ./languages/ledger.nix
     ./languages/nix.nix
@@ -45,5 +46,7 @@
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/undotree.nix
+    ./utils/dashboard.nix
+    ./utils/emmet.nix
   ];
 }
