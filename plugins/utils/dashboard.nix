@@ -123,6 +123,8 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.dashboard-nvim ];
+      extraPackages = if (cfg.fzf.engine == "ag") then [ pkgs.silver-searcher ]
+        else [ pkgs.ripgrep ];
 
       globals = {
         dashboard_default_executive = mkIf (!isNull cfg.executive) cfg.executive;
