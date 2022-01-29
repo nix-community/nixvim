@@ -11,6 +11,7 @@ in
     ./rnix-lsp.nix
     ./pyright.nix
     ./zls.nix
+    ./gopls.nix
   ];
 
   options = {
