@@ -2,6 +2,22 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
+        "lastModified": 1652659998,
+        "narHash": "sha256-FqNrXC1EE6U2RACwXBlsAvg1lqQGLYpuYb6+W3DL9vA=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1d7db1b9e4cf1ee075a9f52e5c36f7b9f4207502",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
         "lastModified": 1641710811,
         "narHash": "sha256-yVJ+CtwWZY8BnkNIJ/ue5a28yrRM6CkDF1LvmGmqqwM=",
         "owner": "NixOS",
@@ -18,17 +34,17 @@
     },
     "nixvim": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nmdSrc": "nmdSrc"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-k/hC20SoFT6EwMJqWsMCvuPJtgvt7sbaNSyFpLmcFOM=",
-        "path": "/nix/store/473gwv0jpm31srl1qvgzsqnfp8n3pyni-source",
+        "narHash": "sha256-LBtLSrOcN6b7Pjq8kXkbQcdnIb85a9c5fSdh74vOlFA=",
+        "path": "/nix/store/57hbdzxjfxni56js78x7nqh55ric43ds-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/473gwv0jpm31srl1qvgzsqnfp8n3pyni-source",
+        "path": "/nix/store/57hbdzxjfxni56js78x7nqh55ric43ds-source",
         "type": "path"
       }
     },
@@ -50,6 +66,7 @@
     },
     "root": {
       "inputs": {
+        "nixpkgs": "nixpkgs",
         "nixvim": "nixvim"
       }
     }

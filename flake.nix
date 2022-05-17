@@ -15,29 +15,16 @@
     nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
     homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
 
-    build = with nixpkgs.lib; configuration:
+    build =
+      with nixpkgs.lib;
+      with builtins;
+      configuration:
       let
-        nixvimModules = ({ pkgs, config, ... }: {
-          options = {
-            package = mkOption {
-              type = types.nullOr types.package;
-              default = pkgs.neovim;
-              description = "The package to use for neovim";
-            };
+        # TODO: Support nesting
+        nixvimModules = map (f: ./modules + "/${f}") (attrNames (builtins.readDir ./modules));
 
-            output = mkOption {
-              type = types.package;
-              description = "The final, configured package";
-            };
-          };
-
-          config = {
-            output = config.package;
-          };
-        });
         eval = evalModules {
-          modules = [
-            nixvimModules
+          modules = nixvimModules ++ [
             (rec {
               _file = ./flake.nix;
               key = _file;
