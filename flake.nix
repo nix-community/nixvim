@@ -15,88 +15,41 @@
     nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
     homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
 
-    # This is a simple container for testing
-    nixosConfigurations.container = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ({ pkgs, ... }: {
-          boot.isContainer = true;
-          system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+    build = with nixpkgs.lib; configuration:
+      let
+        nixvimModules = ({ pkgs, config, ... }: {
+          options = {
+            package = mkOption {
+              type = types.nullOr types.package;
+              default = pkgs.neovim;
+              description = "The package to use for neovim";
+            };
 
-          users.users.test = {
-            isNormalUser = true;
-            password = "";
+            output = mkOption {
+              type = types.package;
+              description = "The final, configured package";
+            };
           };
 
-          imports = [ nixosModules.nixvim ];
-
-          programs.nixvim = {
-            enable = true;
-            package = pkgs.neovim;
-            colorschemes.tokyonight = { enable = true; };
-
-            extraPlugins = [ pkgs.vimPlugins.vim-nix ];
-
-            options = {
-              number = true;
-              mouse = "a";
-              tabstop = 2;
-              shiftwidth = 2;
-              expandtab = true;
-              smarttab = true;
-              autoindent = true;
-              cindent = true;
-              linebreak = true;
-              hidden = true;
-            };
-
-            maps.normalVisualOp."ç" = ":";
-            maps.normal."<leader>m" = {
-              silent = true;
-              action = "<cmd>make<CR>";
-            };
-
-            plugins.lualine = {
-              enable = true;
-            };
-
-            plugins.undotree.enable = true;
-            plugins.gitgutter.enable = true;
-            plugins.fugitive.enable = true;
-            plugins.commentary.enable = true;
-            plugins.startify = {
-              enable = true;
-              useUnicode = true;
-            };
-            plugins.goyo = {
-              enable = true;
-              showLineNumbers = true;
-            };
-
-            plugins.lsp = {
-              enable = true;
-              servers.clangd.enable = true;
-            };
-
-            plugins.telescope = {
-              enable = true;
-              extensions = { frecency.enable = true; };
-            };
-
-            plugins.nvim-autopairs = { enable = true; };
-
-            globals = {
-              vimsyn_embed = "l";
-              mapleader = " ";
-            };
-
-            plugins.lspsaga.enable = true;
-
-            plugins.treesitter.enable = true;
-            plugins.ledger.enable = true;
+          config = {
+            output = config.package;
           };
-        })
-      ];
-    };
+        });
+        eval = evalModules {
+          modules = [
+            nixvimModules
+            (rec {
+              _file = ./flake.nix;
+              key = _file;
+              config = {
+                _module.args.pkgs = mkForce (import nixpkgs { system = "x86_64-linux"; });
+                _module.args.lib = nixpkgs.lib;
+              };
+            })
+            configuration
+          ];
+        };
+      in
+      eval.config.output;
   };
 }

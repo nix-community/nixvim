@@ -1,0 +1,59 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1641710811,
+        "narHash": "sha256-yVJ+CtwWZY8BnkNIJ/ue5a28yrRM6CkDF1LvmGmqqwM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0ecf7d414811f831060cf55707c374d54fbb1dec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixvim": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "nmdSrc": "nmdSrc"
+      },
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-k/hC20SoFT6EwMJqWsMCvuPJtgvt7sbaNSyFpLmcFOM=",
+        "path": "/nix/store/473gwv0jpm31srl1qvgzsqnfp8n3pyni-source",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/473gwv0jpm31srl1qvgzsqnfp8n3pyni-source",
+        "type": "path"
+      }
+    },
+    "nmdSrc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1637239786,
+        "narHash": "sha256-l2KsnY537mz0blZdqALZKrWXn9PD39CpvotgPnxyIP4=",
+        "owner": "rycee",
+        "repo": "nmd",
+        "rev": "527245ff605bde88c2dd2ddae21c6479bb7cf8aa",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "rycee",
+        "repo": "nmd",
+        "type": "gitlab"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixvim": "nixvim"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
