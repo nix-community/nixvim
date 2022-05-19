@@ -43,8 +43,8 @@ in {
       };
 
       powerline = mkOption {
-        default = null;
-        type = with types; nullOr bool;
+        default = false;
+        type = types.bool;
         description = "Whether to use powerline symbols";
       };
 
