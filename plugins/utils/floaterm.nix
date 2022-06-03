@@ -1,12 +1,12 @@
 { config, pkgs, lib, ... }:
 with lib;
 let 
-  cfg = config.programs.nixvim.plugins.floaterm;
+  cfg = config.plugins.floaterm;
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
-    programs.nixvim.plugins.floaterm = {
+    plugins.floaterm = {
       enable = mkEnableOption "Enable floaterm";
       shell = mkOption {
         type = types.nullOr types.str;

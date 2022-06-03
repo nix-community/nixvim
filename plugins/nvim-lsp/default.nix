@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lsp;
+  cfg = config.plugins.lsp;
   helpers = (import ../helpers.nix { inherit lib; });
 in
 {
@@ -14,7 +14,7 @@ in
   ];
 
   options = {
-    programs.nixvim.plugins.lsp = {
+    plugins.lsp = {
       enable = mkEnableOption "Enable neovim's built-in LSP";
 
       enabledServers = mkOption {

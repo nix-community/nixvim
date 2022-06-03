@@ -1,12 +1,12 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.comment-nvim;
+  cfg = config.plugins.comment-nvim;
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
-    programs.nixvim.plugins.comment-nvim = {
+    plugins.comment-nvim = {
       enable = mkEnableOption "Enable comment-nvim";
       padding = mkOption {
         type = types.nullOr types.bool;

@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.colorschemes.tokyonight;
+  cfg = config.colorschemes.tokyonight;
   style = types.enum [ "storm" "night" "day" ];
 in {
   options = {
-    programs.nixvim.colorschemes.tokyonight = {
+    colorschemes.tokyonight = {
       enable = mkEnableOption "Enable tokyonight";
       style = mkOption {
         type = types.nullOr style;

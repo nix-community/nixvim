@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.gitgutter;
+  cfg = config.plugins.gitgutter;
   helpers = import ../helpers.nix { inherit lib; };
 in {
   options = {
-    programs.nixvim.plugins.gitgutter = {
+    plugins.gitgutter = {
       enable = mkEnableOption "Enable gitgutter";
 
       recommendedSettings = mkOption {

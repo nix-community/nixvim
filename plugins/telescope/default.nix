@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.telescope;
+  cfg = config.plugins.telescope;
   helpers = (import ../helpers.nix { inherit lib; });
 in
 {
@@ -13,13 +13,13 @@ in
 
   # TODO:add support for aditional filetypes. This requires autocommands!
 
-  options.programs.nixvim.plugins.telescope = {
+  options.plugins.telescope = {
     enable = mkEnableOption "Enable telescope.nvim";
 
     highlightTheme = mkOption {
       type = types.nullOr types.str;
       description = "The colorscheme to use for syntax highlighting";
-      default = config.programs.nixvim.colorscheme;
+      default = config.colorscheme;
     };
 
     enabledExtensions = mkOption {

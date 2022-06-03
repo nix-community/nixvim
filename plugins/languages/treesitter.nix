@@ -1,12 +1,12 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.treesitter;
+  cfg = config.plugins.treesitter;
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
-    programs.nixvim.plugins.treesitter = {
+    plugins.treesitter = {
       enable = mkEnableOption "Enable tree-sitter syntax highlighting";
 
       nixGrammars = mkOption {

@@ -1,10 +1,10 @@
 { pkgs, config, lib, ... }:
 with lib;
 let 
-  cfg = config.programs.nixvim.plugins.telescope.extensions.frecency;
+  cfg = config.plugins.telescope.extensions.frecency;
 in
 {
-  options.programs.nixvim.plugins.telescope.extensions.frecency = {
+  options.plugins.telescope.extensions.frecency = {
     enable = mkEnableOption "Enable frecency";
 
     dbRoot = mkOption {
@@ -55,13 +55,13 @@ in
       devicons_disabled = cfg.deviconsDisabled;
     };
   in mkIf cfg.enable {
-    programs.nixvim.extraPackages = [ pkgs.sqlite ];
-    programs.nixvim.extraPlugins = with pkgs.vimPlugins; [ 
+    extraPackages = [ pkgs.sqlite ];
+    extraPlugins = with pkgs.vimPlugins; [ 
       telescope-frecency-nvim
       sqlite-lua
     ];
 
-    programs.nixvim.plugins.telescope.enabledExtensions = [ "frecency" ];
-    programs.nixvim.plugins.telescope.extensionConfig."frecency" = configuration;
+    plugins.telescope.enabledExtensions = [ "frecency" ];
+    plugins.telescope.extensionConfig."frecency" = configuration;
   };
 }

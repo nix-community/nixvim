@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.packer;
+  cfg = config.plugins.packer;
   helpers = import ../helpers.nix { lib = lib; };
 in {
   options = {
-    programs.nixvim.plugins.packer = {
+    plugins.packer = {
       enable = mkEnableOption "Enable packer.nvim";
 
       plugins = mkOption {

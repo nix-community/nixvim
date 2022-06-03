@@ -24,7 +24,7 @@ in
   options = {
     package = mkOption {
       type = types.package;
-      default = pkgs.neovim;
+      default = pkgs.neovim-unwrapped;
       description = "Neovim to use for nixvim";
     };
 
@@ -32,6 +32,12 @@ in
       type = with types; listOf (either package pluginWithConfigType);
       default = [ ];
       description = "List of vim plugins to install";
+    };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = "Extra packages to be made available to neovim";
     };
 
     extraConfigLua = mkOption {
@@ -49,11 +55,13 @@ in
     output = mkOption {
       type = types.package;
       description = "Final package built by nixvim";
+      readOnly = true;
+      visible = false;
     };
   };
 
-  config = {
-    output = config.package.override {
+  config =
+    let
       configure = {
         customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "") ''
           lua <<EOF
@@ -71,6 +79,20 @@ in
               config.extraPlugins);
         };
       };
+
+      neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
+        inherit configure;
+        plugins = [ ];
+      };
+
+      extraWrapperArgs = optionalString (config.extraPackages != [ ])
+        ''--prefix PATH : "${makeBinPath config.extraPackages}"'';
+
+      wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig // {
+        wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
+      });
+    in
+    {
+      output = wrappedNeovim;
     };
-  };
 }

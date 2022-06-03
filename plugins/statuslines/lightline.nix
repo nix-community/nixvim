@@ -1,16 +1,16 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lightline;
+  cfg = config.plugins.lightline;
   helpers = import ../helpers.nix { inherit lib; };
 in {
   options = {
-    programs.nixvim.plugins.lightline = {
+    plugins.lightline = {
       enable = mkEnableOption "Enable lightline";
 
       colorscheme = mkOption {
         type = with types; nullOr str;
-        default = config.programs.nixvim.colorscheme;
+        default = config.colorscheme;
         description = "The colorscheme to use for lightline. Defaults to .colorscheme.";
         example = "gruvbox";
       };
@@ -24,7 +24,7 @@ in {
           You should define the functions themselves in extraConfig
         '';
         example = ''
-          programs.nixvim.plugins.lightline = {
+          plugins.lightline = {
             enable = true;
             componentFunction = {
               readonly = "LightlineReadonly";

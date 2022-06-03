@@ -31,6 +31,7 @@
               config = {
                 _module.args.pkgs = mkForce (import nixpkgs { system = "x86_64-linux"; });
                 _module.args.lib = nixpkgs.lib;
+                _module.args.helpers = import ./plugins/helpers.nix { lib = nixpkgs.lib; };
               };
             })
             configuration

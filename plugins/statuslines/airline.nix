@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.airline;
+  cfg = config.plugins.airline;
   helpers = import ../helpers.nix { inherit lib; };
 
   sectionType = with types; nullOr (oneOf [ str (listOf str)]);
@@ -12,7 +12,7 @@ let
   };
 in {
   options = {
-    programs.nixvim.plugins.airline = {
+    plugins.airline = {
       enable = mkEnableOption "Enable airline";
 
       extensions = mkOption {
@@ -49,7 +49,7 @@ in {
       };
 
       theme = mkOption {
-        default = config.programs.nixvim.colorscheme;
+        default = config.colorscheme;
         type = with types; nullOr str;
         description = "The theme to use for vim-airline. If set, vim-airline-themes will be installed.";
       };

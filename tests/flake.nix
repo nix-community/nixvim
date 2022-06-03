@@ -20,5 +20,14 @@
       simple-plugin = nixvim.build {
         extraPlugins = [ pkgs.vimPlugins.vim-surround ];
       };
+
+      gruvbox = nixvim.build {
+        extraPlugins = [ pkgs.vimPlugins.gruvbox ];
+        colorscheme = "gruvbox";
+      };
+
+      gruvbox-module = nixvim.build {
+        colorschemes.gruvbox.enable = true;
+      };
     };
 }

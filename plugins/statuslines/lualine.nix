@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lualine;
+  cfg = config.plugins.lualine;
   helpers = import ../helpers.nix { lib = lib; };
   separators = mkOption {
     type = types.nullOr (types.submodule {
@@ -45,11 +45,11 @@ let
     };
 in {
   options = {
-    programs.nixvim.plugins.lualine = {
+    plugins.lualine = {
       enable = mkEnableOption "Enable lualine";
 
       theme = mkOption {
-        default = config.programs.nixvim.colorscheme;
+        default = config.colorscheme;
         type = types.nullOr types.str;
         description = "The theme to use for lualine-nvim.";
       };
