@@ -4,13 +4,14 @@ let
   cfg = config.plugins.airline;
   helpers = import ../helpers.nix { inherit lib; };
 
-  sectionType = with types; nullOr (oneOf [ str (listOf str)]);
+  sectionType = with types; nullOr (oneOf [ str (listOf str) ]);
   sectionOption = mkOption {
     default = null;
     type = sectionType;
     description = "Configuration for this section. Can be either a statusline-format string or a list of modules to be passed to airline#section#create_*.";
   };
-in {
+in
+{
   options = {
     plugins.airline = {
       enable = mkEnableOption "Enable airline";
@@ -56,10 +57,11 @@ in {
     };
   };
 
-  config = let
-    sections = {};
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      sections = { };
+    in
+    mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         vim-airline
       ] ++ optional (!isNull cfg.theme) vim-airline-themes;
@@ -72,5 +74,4 @@ in {
         airline_theme = mkIf (!isNull cfg.theme) cfg.theme;
       } // sections;
     };
-  };
 }

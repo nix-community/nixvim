@@ -3,7 +3,8 @@ with lib;
 let
   cfg = config.plugins.lightline;
   helpers = import ../helpers.nix { inherit lib; };
-in {
+in
+{
   options = {
     plugins.lightline = {
       enable = mkEnableOption "Enable lightline";
@@ -48,21 +49,23 @@ in {
       active = mkOption {
         default = null;
         type = types.nullOr (types.submodule {
-          options = let
-            listType = with types; nullOr (listOf (listOf str));
-          in {
-            left = mkOption {
-              type = listType;
-              description = "List of components that will show up on the left side of the bar";
-              default = null;
-            };
+          options =
+            let
+              listType = with types; nullOr (listOf (listOf str));
+            in
+            {
+              left = mkOption {
+                type = listType;
+                description = "List of components that will show up on the left side of the bar";
+                default = null;
+              };
 
-            right = mkOption {
-              type = listType;
-              description = "List of components that will show up on the right side of the bar";
-              default = null;
+              right = mkOption {
+                type = listType;
+                description = "List of components that will show up on the right side of the bar";
+                default = null;
+              };
             };
-          };
         });
       };
 
@@ -74,14 +77,14 @@ in {
     };
   };
 
-  config = let
-    configAttrs = filterAttrs (_: v: v != null) {
-      inherit (cfg) colorscheme active component componentFunction modeMap;
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      configAttrs = filterAttrs (_: v: v != null) {
+        inherit (cfg) colorscheme active component componentFunction modeMap;
+      };
+    in
+    mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.lightline-vim ];
-      globals.lightline = mkIf (configAttrs != {}) configAttrs;
+      globals.lightline = mkIf (configAttrs != { }) configAttrs;
     };
-  };
 }

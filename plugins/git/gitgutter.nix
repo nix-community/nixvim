@@ -3,7 +3,8 @@ with lib;
 let
   cfg = config.plugins.gitgutter;
   helpers = import ../helpers.nix { inherit lib; };
-in {
+in
+{
   options = {
     plugins.gitgutter = {
       enable = mkEnableOption "Enable gitgutter";
@@ -51,24 +52,26 @@ in {
       };
 
       signs = mkOption {
-        type = let
-          signOption = desc: mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = "Sign for ${desc}";
+        type =
+          let
+            signOption = desc: mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Sign for ${desc}";
+            };
+          in
+          types.submodule {
+            options = {
+              added = signOption "added lines";
+              modified = signOption "modified lines";
+              removed = signOption "removed lines";
+              modifiedAbove = signOption "modified line above";
+              removedFirstLine = signOption "a removed first line";
+              removedAboveAndBelow = signOption "lines removed above and  below";
+              modifiedRemoved = signOption "modified and removed lines";
+            };
           };
-        in types.submodule {
-          options = {
-            added = signOption "added lines";
-            modified = signOption "modified lines";
-            removed = signOption "removed lines";
-            modifiedAbove = signOption "modified line above";
-            removedFirstLine = signOption "a removed first line";
-            removedAboveAndBelow = signOption "lines removed above and  below";
-            modifiedRemoved = signOption "modified and removed lines";
-          };
-        };
-        default = {};
+        default = { };
         description = "Custom signs for the sign column";
       };
 
@@ -91,19 +94,22 @@ in {
       };
 
       grep = mkOption {
-        type = types.nullOr (types.oneOf [ (types.submodule {
-          options = {
-            command = mkOption {
-              type = types.str;
-              description = "The command to use as a grep alternative";
-            };
+        type = types.nullOr (types.oneOf [
+          (types.submodule {
+            options = {
+              command = mkOption {
+                type = types.str;
+                description = "The command to use as a grep alternative";
+              };
 
-            package = mkOption {
-              type = types.package;
-              description = "The package of the grep alternative to use";
+              package = mkOption {
+                type = types.package;
+                description = "The package of the grep alternative to use";
+              };
             };
-          };
-        }) types.str]);
+          })
+          types.str
+        ]);
         default = null;
         description = "A non-standard grep to use instead of the default";
       };
@@ -158,11 +164,12 @@ in {
     };
   };
 
-  config = let
-    grepPackage = if builtins.isAttrs cfg.grep then [ cfg.grep.package ] else [];
-    grepCommand = if builtins.isAttrs cfg.grep then cfg.grep.command else cfg.grep;
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      grepPackage = if builtins.isAttrs cfg.grep then [ cfg.grep.package ] else [ ];
+      grepCommand = if builtins.isAttrs cfg.grep then cfg.grep.command else cfg.grep;
+    in
+    mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.gitgutter ];
 
       options = mkIf cfg.recommendedSettings {
@@ -205,5 +212,4 @@ in {
         gitgutter_terminal_report_focus = mkIf (!cfg.terminalReportFocus) 0;
       };
     };
-  };
 }

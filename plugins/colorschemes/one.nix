@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.colorschemes.one;
-in {
+in
+{
   options = {
     colorschemes.one = {
       enable = mkEnableOption "Enable vim-one";
@@ -10,13 +11,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      colorscheme = "one";
-      extraPlugins = [ pkgs.vimPlugins.vim-one ];
+    colorscheme = "one";
+    extraPlugins = [ pkgs.vimPlugins.vim-one ];
 
-      options = {
-        termguicolors = true;
-      };
+    options = {
+      termguicolors = true;
     };
   };
 }

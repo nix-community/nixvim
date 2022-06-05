@@ -3,7 +3,8 @@ with lib;
 let
   cfg = config.colorschemes.base16;
   themes = import ./base16-list.nix;
-in {
+in
+{
   options = {
     colorschemes.base16 = {
       enable = mkEnableOption "Enable base16";
@@ -28,14 +29,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      colorscheme = "base16-${cfg.colorscheme}";
-      extraPlugins = [ pkgs.vimPlugins.base16-vim ];
+    colorscheme = "base16-${cfg.colorscheme}";
+    extraPlugins = [ pkgs.vimPlugins.base16-vim ];
 
-      plugins.airline.theme = mkIf (cfg.setUpBar) "base16";
-      plugins.lightline.colorscheme = null;
+    plugins.airline.theme = mkIf (cfg.setUpBar) "base16";
+    plugins.lightline.colorscheme = null;
 
-      options.termguicolors = mkIf cfg.useTruecolor true;
-    };
+    options.termguicolors = mkIf cfg.useTruecolor true;
   };
 }

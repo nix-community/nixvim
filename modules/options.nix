@@ -25,8 +25,8 @@ with lib;
           vim.g[k] = v
         end
       end
-      }}}
-    '' ++ optionalString (config.options != { }) ''
+      -- }}}
+    '' + optionalString (config.options != { }) ''
       -- Set up options {{{
       do
         local nixvim_options = ${helpers.toLuaObject config.options}
@@ -35,7 +35,7 @@ with lib;
           vim.o[k] = v
         end
       end
-      }}}
+      -- }}}
     '';
   };
 }

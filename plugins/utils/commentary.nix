@@ -13,8 +13,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      extraPlugins = [ pkgs.vimPlugins.vim-commentary ];
-    };
+    extraPlugins = [ pkgs.vimPlugins.vim-commentary ];
   };
 }
