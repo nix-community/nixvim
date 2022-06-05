@@ -1,33 +1,37 @@
 {
   description = "A set of test configurations for nixvim";
 
+  inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nixvim.url = "./..";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, nixvim, nixpkgs, ... }:
-    let
-      pkgs = import nixpkgs { system = "x86_64-linux"; };
-    in
-    rec {
-      # A plain nixvim configuration
-      plain = nixvim.build { };
+  outputs = { self, nixvim, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        build = nixvim.build system;
+      in
+      rec {
+        # A plain nixvim configuration
+        packages = {
+          plain = build { };
 
-      # Should print "Hello!" when starting up
-      hello = nixvim.build {
-        extraConfigLua = "print(\"Hello!\")";
-      };
+          # Should print "Hello!" when starting up
+          hello = build {
+            extraConfigLua = "print(\"Hello!\")";
+          };
 
-      simple-plugin = nixvim.build {
-        extraPlugins = [ pkgs.vimPlugins.vim-surround ];
-      };
+          simple-plugin = build {
+            extraPlugins = [ pkgs.vimPlugins.vim-surround ];
+          };
 
-      gruvbox = nixvim.build {
-        extraPlugins = [ pkgs.vimPlugins.gruvbox ];
-        colorscheme = "gruvbox";
-      };
+          gruvbox = build {
+            extraPlugins = [ pkgs.vimPlugins.gruvbox ];
+            colorscheme = "gruvbox";
+          };
 
-      gruvbox-module = nixvim.build {
-        colorschemes.gruvbox.enable = true;
-      };
-    };
+          gruvbox-module = build {
+            colorschemes.gruvbox.enable = true;
+          };
+        };
+      });
 }
