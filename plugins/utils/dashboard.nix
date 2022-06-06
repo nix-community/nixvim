@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.dashboard;
+  cfg = config.plugins.dashboard;
 in
 {
   options = {
-    programs.nixvim.plugins.dashboard = {
+    plugins.dashboard = {
       enable = mkEnableOption "Enable dashboard";
 
       executive = mkOption {
@@ -123,27 +123,26 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      extraPlugins = [ pkgs.vimPlugins.dashboard-nvim ];
-      extraPackages = if (cfg.fzf.engine == "ag") then [ pkgs.silver-searcher ]
-        else [ pkgs.ripgrep ];
+    extraPlugins = [ pkgs.vimPlugins.dashboard-nvim ];
+    extraPackages =
+      if (cfg.fzf.engine == "ag") then [ pkgs.silver-searcher ]
+      else [ pkgs.ripgrep ];
 
-      globals = {
-        dashboard_default_executive = mkIf (!isNull cfg.executive) cfg.executive;
-        dashboard_custom_shortcut = mkIf (!isNull cfg.shortcuts) cfg.shortcuts;
-        dashboard_custom_shortcut_icon = mkIf (!isNull cfg.shortcutsIcon) cfg.shortcutsIcon;
-        dashboard_custom_header = mkIf (!isNull cfg.header) cfg.header;
-        dashboard_custom_footer = mkIf (!isNull cfg.footer) cfg.footer;
-        dashboard_session_directory = mkIf (!isNull cfg.sessionDirectory) cfg.sessionDirectory;
-        dashboard_custom_sections = mkIf (!isNull cfg.sections) cfg.sections;
-        dashboard_preview_command = mkIf (!isNull cfg.preview.command) cfg.preview.command;
-        dashboard_preview_pipeline = mkIf (!isNull cfg.preview.pipeline) cfg.preview.pipeline;
-        dashboard_preview_file = mkIf (!isNull cfg.preview.file) cfg.preview.file;
-        dashboard_preview_file_height = mkIf (!isNull cfg.preview.height) cfg.preview.height;
-        dashboard_preview_file_width = mkIf (!isNull cfg.preview.width) cfg.preview.width;
-        dashboard_fzf_float = mkIf (!isNull cfg.fzf.float) cfg.fzf.float;
-        dashboard_fzf_engine = mkIf (!isNull cfg.fzf.engine) cfg.fzf.engine;
-      };
+    globals = {
+      dashboard_default_executive = mkIf (!isNull cfg.executive) cfg.executive;
+      dashboard_custom_shortcut = mkIf (!isNull cfg.shortcuts) cfg.shortcuts;
+      dashboard_custom_shortcut_icon = mkIf (!isNull cfg.shortcutsIcon) cfg.shortcutsIcon;
+      dashboard_custom_header = mkIf (!isNull cfg.header) cfg.header;
+      dashboard_custom_footer = mkIf (!isNull cfg.footer) cfg.footer;
+      dashboard_session_directory = mkIf (!isNull cfg.sessionDirectory) cfg.sessionDirectory;
+      dashboard_custom_sections = mkIf (!isNull cfg.sections) cfg.sections;
+      dashboard_preview_command = mkIf (!isNull cfg.preview.command) cfg.preview.command;
+      dashboard_preview_pipeline = mkIf (!isNull cfg.preview.pipeline) cfg.preview.pipeline;
+      dashboard_preview_file = mkIf (!isNull cfg.preview.file) cfg.preview.file;
+      dashboard_preview_file_height = mkIf (!isNull cfg.preview.height) cfg.preview.height;
+      dashboard_preview_file_width = mkIf (!isNull cfg.preview.width) cfg.preview.width;
+      dashboard_fzf_float = mkIf (!isNull cfg.fzf.float) cfg.fzf.float;
+      dashboard_fzf_engine = mkIf (!isNull cfg.fzf.engine) cfg.fzf.engine;
     };
   };
 }

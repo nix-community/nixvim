@@ -1,19 +1,20 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.coq-nvim;
+  cfg = config.plugins.coq-nvim;
   helpers = import ../helpers.nix { lib = lib; };
   plugins = import ../plugin-defs.nix { inherit pkgs; };
 
-in {
+in
+{
   options = {
-    programs.nixvim.plugins.coq-nvim = {
+    plugins.coq-nvim = {
       enable = mkEnableOption "Enable coq-nvim";
 
       installArtifacts = mkEnableOption "Install coq-artifacts";
 
       autoStart = mkOption {
-        type = with types; nullOr (oneOf [bool (enum ["shut-up"])]);
+        type = with types; nullOr (oneOf [ bool (enum [ "shut-up" ]) ]);
         default = null;
         description = "Auto-start or shut up";
       };
@@ -25,13 +26,14 @@ in {
       };
     };
   };
-  config = let
-    settings = {
-      auto_start = cfg.autoStart;
-      "keymap.recommended" = cfg.recommendedKeymaps;
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      settings = {
+        auto_start = cfg.autoStart;
+        "keymap.recommended" = cfg.recommendedKeymaps;
+      };
+    in
+    mkIf cfg.enable {
       extraPlugins = [
         plugins.coq-nvim
       ] ++ optional cfg.installArtifacts plugins.coq-artifacts;
@@ -40,8 +42,7 @@ in {
           vim.g.coq_settings = ${helpers.toLuaObject settings}
           local coq = require 'coq'
         '';
-        setupWrappers = [(s: ''coq.lsp_ensure_capabilities(${s})'')];
+        setupWrappers = [ (s: ''coq.lsp_ensure_capabilities(${s})'') ];
       };
     };
-  };
 }

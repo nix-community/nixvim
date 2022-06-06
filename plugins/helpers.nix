@@ -71,7 +71,7 @@ rec {
     options ? {},
     ...
   }: let
-    cfg = config.programs.nixvim.plugins.${name};
+    cfg = config.plugins.${name};
     # TODO support nested options!
     pluginOptions = mapAttrs (k: v: v.option) options;
     globals = mapAttrs' (name: opt: {
@@ -79,11 +79,11 @@ rec {
       value = if cfg.${name} != null then opt.value cfg.${name} else null;
     }) options;
   in {
-    options.programs.nixvim.plugins.${name} = {
+    options.plugins.${name} = {
       enable = mkEnableOption description;
     } // pluginOptions;
 
-    config.programs.nixvim = mkIf cfg.enable {
+    config = mkIf cfg.enable {
       inherit extraPlugins globals;
     };
   };

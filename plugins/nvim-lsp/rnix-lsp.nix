@@ -1,18 +1,18 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lsp.servers.rnix-lsp;
+  cfg = config.plugins.lsp.servers.rnix-lsp;
 in
 {
   options = {
-    programs.nixvim.plugins.lsp.servers.rnix-lsp = {
+    plugins.lsp.servers.rnix-lsp = {
       enable = mkEnableOption "Enable rnix LSP, for Nix";
     };
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim.extraPackages = [ pkgs.rnix-lsp ];
+    extraPackages = [ pkgs.rnix-lsp ];
 
-    programs.nixvim.plugins.lsp.enabledServers = [ "rnix" ];
+    plugins.lsp.enabledServers = [ "rnix" ];
   };
 }

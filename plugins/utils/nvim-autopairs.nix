@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.nvim-autopairs;
+  cfg = config.plugins.nvim-autopairs;
   helpers = import ../helpers.nix { lib = lib; };
 in
 {
-  options.programs.nixvim.plugins.nvim-autopairs = {
+  options.plugins.nvim-autopairs = {
     enable = mkEnableOption "Enable nvim-autopairs";
 
     pairs = mkOption {
@@ -39,21 +39,21 @@ in
     };
   };
 
-  config = let
-    options = {
-      pairs_map = cfg.pairs;
-      disable_filetype = cfg.disabledFiletypes;
-      break_line_filetype = cfg.breakLineFiletypes;
-      html_break_line_filetype = cfg.htmlFiletypes;
-      ignored_next_char = cfg.ignoredNextChar;
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      options = {
+        pairs_map = cfg.pairs;
+        disable_filetype = cfg.disabledFiletypes;
+        break_line_filetype = cfg.breakLineFiletypes;
+        html_break_line_filetype = cfg.htmlFiletypes;
+        ignored_next_char = cfg.ignoredNextChar;
+      };
+    in
+    mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.nvim-autopairs ];
 
       extraConfigLua = ''
         require('nvim-autopairs').setup(${helpers.toLuaObject options})
       '';
     };
-  };
 }

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.bufferline;
+  cfg = config.plugins.bufferline;
   helpers = import ../helpers.nix { inherit lib; };
 
   highlight = mkOption {
@@ -24,7 +24,7 @@ let
 in
 {
   options = {
-    programs.nixvim.plugins.bufferline = {
+    plugins.bufferline = {
       enable = mkEnableOption "Enable bufferline";
       numbers = mkOption {
         type = types.nullOr types.lines;
@@ -118,7 +118,7 @@ in
       };
       showBufferIcons = mkOption {
         type = types.nullOr types.bool;
-        default = null; 
+        default = null;
       };
       showBufferCloseIcons = mkOption {
         type = types.nullOr types.bool;
@@ -154,7 +154,7 @@ in
       };
       highlights = mkOption {
         default = null;
-        type = types.nullOr (types.submodule ({...}: {
+        type = types.nullOr (types.submodule ({ ... }: {
           options = {
             fill = highlight;
             background = highlight;
@@ -221,102 +221,103 @@ in
     };
   };
 
-  config = let 
-    setupOptions = {
-      options = {
-        numbers = cfg.numbers;
-        close_command = cfg.closeCommand;
-        right_mouse_command = cfg.rightMouseCommand;
-        left_mouse_command = cfg.leftMouseCommand;
-        middle_mouse_command = cfg.middleMouseCommand;
-        indicator_icon = cfg.indicatorIcon;
-        buffer_close_icon = cfg.bufferCloseIcon;
-        modified_icon = cfg.modifiedIcon;
-        close_icon = cfg.closeIcon;
-        left_trunc_marker = cfg.leftTruncMarker;
-        right_trunc_marker = cfg.rightTruncMarker;
-        name_formatter = cfg.nameFormatter;
-        max_name_length = cfg.maxNameLength;
-        max_prefix_length = cfg.maxPrefixLength;
-        tab_size = cfg.tabSize;
-        diagnostics = cfg.diagnostics;
-        diagnostics_update_in_insert = cfg.diagnosticsUpdateInInsert;
-        diagnostics_indicator = cfg.diagnosticsIndicator;
-        custom_filter = cfg.customFilter;
-        show_buffer_icons = cfg.showBufferIcons;
-        show_buffer_close_icons = cfg.showBufferCloseIcons;
-        show_close_icon = cfg.showCloseIcon;
-        show_tab_indicators = cfg.showTabIndicators;
-        persist_buffer_sort = cfg.persistBufferSort;
-        separator_style = cfg.separatorStyle;
-        enforce_regular_tabs = cfg.enforceRegularTabs;
-        always_show_bufferline = cfg.alwaysShowBufferline;
-        sort_by = cfg.sortBy;
+  config =
+    let
+      setupOptions = {
+        options = {
+          numbers = cfg.numbers;
+          close_command = cfg.closeCommand;
+          right_mouse_command = cfg.rightMouseCommand;
+          left_mouse_command = cfg.leftMouseCommand;
+          middle_mouse_command = cfg.middleMouseCommand;
+          indicator_icon = cfg.indicatorIcon;
+          buffer_close_icon = cfg.bufferCloseIcon;
+          modified_icon = cfg.modifiedIcon;
+          close_icon = cfg.closeIcon;
+          left_trunc_marker = cfg.leftTruncMarker;
+          right_trunc_marker = cfg.rightTruncMarker;
+          name_formatter = cfg.nameFormatter;
+          max_name_length = cfg.maxNameLength;
+          max_prefix_length = cfg.maxPrefixLength;
+          tab_size = cfg.tabSize;
+          diagnostics = cfg.diagnostics;
+          diagnostics_update_in_insert = cfg.diagnosticsUpdateInInsert;
+          diagnostics_indicator = cfg.diagnosticsIndicator;
+          custom_filter = cfg.customFilter;
+          show_buffer_icons = cfg.showBufferIcons;
+          show_buffer_close_icons = cfg.showBufferCloseIcons;
+          show_close_icon = cfg.showCloseIcon;
+          show_tab_indicators = cfg.showTabIndicators;
+          persist_buffer_sort = cfg.persistBufferSort;
+          separator_style = cfg.separatorStyle;
+          enforce_regular_tabs = cfg.enforceRegularTabs;
+          always_show_bufferline = cfg.alwaysShowBufferline;
+          sort_by = cfg.sortBy;
+        };
+        highlights = if builtins.isNull cfg.highlights then null else with cfg.highlights; {
+          fill = fill;
+          background = background;
+
+          tab = tab;
+          tab_selected = tabSelected;
+          tab_close = tabClose;
+          close_button = closeButton;
+          close_button_visible = closeButtonVisible;
+          close_button_selected = closeButtonSelected;
+
+          buffer_visible = bufferVisible;
+          buffer_selected = bufferSelected;
+
+          diagnostic = diagnostic;
+          diagnostic_visible = diagnosticVisible;
+          diagnostic_selected = diagnosticSelected;
+
+          info = info;
+          info_visible = infoVisible;
+          info_selected = infoSelected;
+
+          info_diagnostic = infoDiagnostic;
+          info_diagnostic_visible = infoDiagnosticVisible;
+          info_diagnostic_selected = infoDiagnosticSelected;
+
+          warning = warning;
+          warning_visible = warningVisible;
+          warning_selected = warningSelected;
+
+          warning_diagnostic = warningDiagnostic;
+          warning_diagnostic_visible = warningDiagnosticVisible;
+          warning_diagnostic_selected = warningDiagnosticSelected;
+
+          error = error;
+          error_visible = errorVisible;
+          error_selected = errorSelected;
+
+          error_dagnostic = errorDiagnostic;
+          error_diagnostic_visible = errorDiagnosticVisible;
+          error_diagnostic_selected = errorDiagnosticSelected;
+
+          modified = modified;
+          modified_visible = modifiedVisible;
+          modified_selected = modifiedSelected;
+
+          duplicate = duplicate;
+          duplicate_visible = duplicateVisible;
+          duplicate_selected = duplicateSelected;
+
+          separator = separator;
+          separator_visible = separatorVisible;
+          separator_selected = separatorSelected;
+
+          indicator_selected = indicatorSelected;
+
+          pick = pick;
+          pick_visible = pickVisible;
+          pick_selected = pickSelected;
+
+        };
       };
-      highlights = if builtins.isNull cfg.highlights then null else with cfg.highlights; {
-        fill = fill;
-        background = background;
-
-        tab = tab;
-        tab_selected = tabSelected;
-        tab_close = tabClose;
-        close_button = closeButton;
-        close_button_visible = closeButtonVisible;
-        close_button_selected = closeButtonSelected;
-
-        buffer_visible = bufferVisible;
-        buffer_selected = bufferSelected;
-
-        diagnostic = diagnostic;
-        diagnostic_visible = diagnosticVisible;
-        diagnostic_selected = diagnosticSelected;
-
-        info = info;
-        info_visible = infoVisible;
-        info_selected = infoSelected;
-
-        info_diagnostic = infoDiagnostic;
-        info_diagnostic_visible = infoDiagnosticVisible;
-        info_diagnostic_selected = infoDiagnosticSelected;
-
-        warning = warning;
-        warning_visible = warningVisible;
-        warning_selected = warningSelected;
-
-        warning_diagnostic = warningDiagnostic;
-        warning_diagnostic_visible = warningDiagnosticVisible;
-        warning_diagnostic_selected = warningDiagnosticSelected;
-
-        error = error;
-        error_visible = errorVisible;
-        error_selected = errorSelected;
-
-        error_dagnostic = errorDiagnostic;
-        error_diagnostic_visible = errorDiagnosticVisible;
-        error_diagnostic_selected = errorDiagnosticSelected;
-
-        modified = modified;
-        modified_visible = modifiedVisible;
-        modified_selected = modifiedSelected;
-
-        duplicate = duplicate;
-        duplicate_visible = duplicateVisible;
-        duplicate_selected = duplicateSelected;
-
-        separator = separator;
-        separator_visible = separatorVisible;
-        separator_selected = separatorSelected;
-
-        indicator_selected = indicatorSelected;
-
-        pick = pick;
-        pick_visible = pickVisible;
-        pick_selected = pickSelected;
-
-      };
-    };
-    in mkIf cfg.enable {
-    programs.nixvim = {
+    in
+    mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         bufferline-nvim
         nvim-web-devicons
@@ -326,5 +327,4 @@ in
         require('bufferline').setup${helpers.toLuaObject setupOptions}
       '';
     };
-  };
 }

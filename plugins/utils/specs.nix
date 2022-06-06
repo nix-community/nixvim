@@ -1,10 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.specs;
+  cfg = config.plugins.specs;
   helpers = import ../helpers.nix { inherit lib; };
-in {
-  options.programs.nixvim.plugins.specs = {
+in
+{
+  options.plugins.specs = {
     enable = mkEnableOption "Enable specs-nvim";
 
     show_jumps = mkOption {
@@ -104,36 +105,36 @@ in {
     };
 
   };
-  config = let
-    setup = helpers.toLuaObject {
-      inherit (cfg) show_jumps min_jump;
-      ignore_filetypes = attrsets.listToAttrs
-        (lib.lists.map (x: attrsets.nameValuePair x true)
-          cfg.ignored_filetypes);
-      ignore_buftypes = attrsets.listToAttrs
-        (lib.lists.map (x: attrsets.nameValuePair x true)
-          cfg.ignored_buffertypes);
-      popup = {
-        inherit (cfg) blend width;
-        delay_ms = cfg.delay;
-        inc_ms = cfg.increment;
-        fader = helpers.mkRaw (if cfg.fader.builtin == null then
-          cfg.fader.custom
-        else
-          ''require("specs").${cfg.fader.builtin}'');
-        resizer = helpers.mkRaw (if cfg.resizer.builtin == null then
-          cfg.resizer.custom
-        else
-          ''require("specs").${cfg.resizer.builtin}'');
+  config =
+    let
+      setup = helpers.toLuaObject {
+        inherit (cfg) show_jumps min_jump;
+        ignore_filetypes = attrsets.listToAttrs
+          (lib.lists.map (x: attrsets.nameValuePair x true)
+            cfg.ignored_filetypes);
+        ignore_buftypes = attrsets.listToAttrs
+          (lib.lists.map (x: attrsets.nameValuePair x true)
+            cfg.ignored_buffertypes);
+        popup = {
+          inherit (cfg) blend width;
+          delay_ms = cfg.delay;
+          inc_ms = cfg.increment;
+          fader = helpers.mkRaw (if cfg.fader.builtin == null then
+            cfg.fader.custom
+          else
+            ''require("specs").${cfg.fader.builtin}'');
+          resizer = helpers.mkRaw (if cfg.resizer.builtin == null then
+            cfg.resizer.custom
+          else
+            ''require("specs").${cfg.resizer.builtin}'');
+        };
       };
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+    in
+    mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.specs-nvim ];
 
       extraConfigLua = ''
         require('specs').setup(${setup})
       '';
     };
-  };
 }
