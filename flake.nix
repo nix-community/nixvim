@@ -29,12 +29,14 @@
       ];
 
       nixvimOption = mkOption {
-        type = types.attrs;
-        default = { enabled = false; };
+        type = types.submodule {
+          options = {
+            import = nixvimModules;
+            enable = mkEnableOption "Enable nixvim";
+          };
+        };
         description = "Nixvim options";
       };
-
-      filterOptions = filterAttrs (k: _: k != "enabled");
 
       build = system:
         configuration:
@@ -54,22 +56,23 @@
 
         nixosModules.nixvim = { pkgs, config, lib, ... }: {
           options.programs.nixvim = nixvimOption;
-          config = mkIf config.programs.nixvim.enabled {
+          config = mkIf config.programs.nixvim.enable {
             environment.systemPackages = [
-              (build system (filterOptions config.programs.nixvim))
+              config.programs.nixvim.config.output
             ];
           };
         };
 
         homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
           options.programs.nixvim = nixvimOption;
-          config = mkIf config.programs.nixvim.enabled {
+          config = mkIf config.programs.nixvim.enable {
             home.packages = [
-              (build system (filterOptions config.programs.nixvim))
+              config.programs.nixvim.config.output
             ];
           };
         };
       }) // {
       inherit build;
+      # TODO: Stuff for home-manager and nixos modules backwards compat, keeping the architecture as x86_64 if none is specified...
     };
 }
