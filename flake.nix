@@ -31,13 +31,9 @@
       ];
 
       nixvimOption = mkOption {
-        type = types.submodule {
-          options = {
-            import = nixvimModules;
-            enable = mkEnableOption "Enable nixvim";
-          };
-        };
-        description = "Nixvim options";
+        type = types.submodule (nixvimModules ++ [{
+          options.enable = mkEnableOption "Enable nixvim";
+        }]);
       };
 
       build = system:
@@ -60,7 +56,7 @@
           options.programs.nixvim = nixvimOption;
           config = mkIf config.programs.nixvim.enable {
             environment.systemPackages = [
-              config.programs.nixvim.config.output
+              config.programs.nixvim.output
             ];
           };
         };
@@ -69,7 +65,7 @@
           options.programs.nixvim = nixvimOption;
           config = mkIf config.programs.nixvim.enable {
             home.packages = [
-              config.programs.nixvim.config.output
+              config.programs.nixvim.output
             ];
           };
         };
