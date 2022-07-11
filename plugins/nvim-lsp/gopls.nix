@@ -13,6 +13,6 @@ in
   config = mkIf cfg.enable {
     programs.nixvim.extraPackages = [ pkgs.gopls ];
 
-    programs.nixvim.plugins.lsp.enabledServers = [ "gopls"];
+    programs.nixvim.plugins.lsp.enabledServers = [ "gopls" ];
   };
 }
