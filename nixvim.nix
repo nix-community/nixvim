@@ -204,7 +204,7 @@ in
       });
 
       configure = {
-        customRC = cfg.extraConfigVim + (optionalString (cfg.colorscheme != "") ''
+        customRC = cfg.extraConfigVim + (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
           colorscheme ${cfg.colorscheme}
         '') + ''
           lua <<EOF
