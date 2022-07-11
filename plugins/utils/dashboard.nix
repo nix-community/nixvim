@@ -107,7 +107,7 @@ in
 
   config =
     let
-      setupOptions = {
+      options = {
         custom_header = cfg.header;
         custom_footer = cfg.footer;
         custom_center = cfg.center;
@@ -122,10 +122,18 @@ in
 
         session_directory = cfg.sessionDirectory;
       };
+
+      filteredOptions = filterAttrs (_: v: !isNull v) options;
     in mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [ pkgs.vimPlugins.dashboard-nvim ];
-      extraConfigLua = ''require("dashboard").setup(${helpers.toLuaObject setupOptions})'';
+      extraConfigLua = ''
+        local dashboard = require("dashboard")
+
+        ${toString (mapAttrsToList (n: v:
+          "dashboard.${n} = ${helpers.toLuaObject v}\n")
+          filteredOptions)}
+      '';
     };
   };
 }
