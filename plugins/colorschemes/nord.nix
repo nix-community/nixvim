@@ -25,8 +25,8 @@ in
 
       italic = mkOption {
         description = "enables/disables italics";
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = null;
       };
     };
   };
@@ -42,7 +42,7 @@ in
         nord_disable_background = mkIf cfg.disable_background 1;
         nord_cursoline_transparent = mkIf cfg.cursorline_transparent 1;
         nord_enable_sidebar_background = mkIf cfg.enable_sidebar_background 1;
-        nord_italic = cfg.italic;
+        nord_italic = mkIf (cfg.italic != null) cfg.italic;
       };
     };
   };
