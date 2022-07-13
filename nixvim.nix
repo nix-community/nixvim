@@ -204,13 +204,16 @@ in
       });
 
       configure = {
-        customRC = cfg.extraConfigVim + (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
-          colorscheme ${cfg.colorscheme}
-        '') + ''
+        customRC = cfg.extraConfigVim + ''
           lua <<EOF
           ${cfg.extraConfigLua}
           EOF
-        '';
+        '' +
+        # Set colorscheme after setting globals.
+        # Some colorschemes depends on variables being set before setting the colorscheme.
+        (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
+          colorscheme ${cfg.colorscheme}
+        '') ;
 
         packages.nixvim = {
           start = filter (f: f != null) (map
