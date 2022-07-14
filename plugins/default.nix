@@ -5,6 +5,7 @@
 
     ./colorschemes/base16.nix
     ./colorschemes/gruvbox.nix
+    ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
     ./colorschemes/tokyonight.nix
