@@ -48,6 +48,59 @@ in
         };
       }));
     };
+
+    mappingPresets = mkOption {
+      default = null;
+      type = types.nullOr types.listOf types.enum [
+        "insert"
+        "cmdine"
+        # Not sure if there are more or if this should just be str
+      ];
+      description = "Mapping presets to use; cmp.mapping.preset.\${mappingPreset} will be called with the configured mappings";
+      example = ''
+        [ "insert" "cmdline" ]
+      '';
+    };
+    mapping = mkOption {
+      default = null;
+      type = types.nullOr (types.attrsOf (types.either types.str (types.submodule ({...}: {
+        options = {
+          action = mkOption {
+            type = types.nonEmptyStr;
+            description = "The function the mapping should call";
+            example = ''"cmp.mapping.scroll_docs(-4)"'';
+          };
+          modes = mkOption {
+            default = null;
+            type = types.nullOr (types.listOf types.str);
+            example = ''[ "i" "s" ]'';
+          };
+        };
+      }))));
+      example = ''
+        {
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<Tab>" = {
+            modes = [ "i" "s" ];
+            action = '${""}'
+              function(fallback)
+                if cmp.visible() then
+                  cmp.select_next_item()
+                elseif luasnip.expandable() then
+                  luasnip.expand()
+                elseif luasnip.expand_or_jumpable() then
+                  luasnip.expand_or_jump()
+                elseif check_backspace() then
+                  fallback()
+                else
+                  fallback()
+                end
+              end
+            '${""}';
+          };
+        }
+      '';
+    };
   };
 
   config = let
@@ -55,7 +108,14 @@ in
       enabled = cfg.enable;
       performance = cfg.performance;
       preselect = if (isNull cfg.preselect) then null else helpers.mkRaw "cmp.PreselectMode.${cfg.preselect}";
-      # mapping = cfg.mapping;
+
+      # Not very readable sorry
+      # If null then null
+      # If an attribute is a string, just treat it as lua code for that mapping
+      # If an attribute is a module, create a mapping with cmp.mapping() using the action as the first input and the modes as the second.
+      mapping = if (isNull cfg.mapping) then null
+        else mapAttrs (bind: mapping: helpers.mkRaw (if isString mapping then mapping
+          else "cmp.mapping(${mapping.action}${optionalString (mapping.modes != null && length mapping.modes >= 1) ("," + (helpers.toLuaObject mapping.modes))})")) cfg.mapping;
       snippet = {
         expand = if (isNull cfg.snippet.expand) then null else helpers.mkRaw cfg.snippet.expand;
       };
