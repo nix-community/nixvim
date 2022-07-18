@@ -197,6 +197,70 @@ in
         };
       }));
     };
+
+    sources = let
+      source_config = types.submodule ({...}: {
+        options = {
+          name = mkOption {
+            type = types.str;
+            description = "The name of the source.";
+            example = ''"buffer"'';
+          };
+
+          option = mkOption {
+            default = null;
+            type = with types; nullOr (attrsOf anything);
+            description = "If direct lua code is needed use helpers.mkRaw";
+          };
+
+          keyword_length = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+
+          keyword_pattern = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+
+          trigger_characters = mkOption {
+            default = null;
+            type = with types; nullOr (listOf str);
+          };
+
+          priority = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+
+          max_item_count = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+
+          group_index = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+        };
+      });
+    in mkOption {
+      default = null;
+      type = with types; nullOr (either (listOf source_config) (listOf (listOf source_config)));
+      description = ''
+        The sources to use.
+        Can either be a list of sourceConfigs which will be made directly to a Lua object.
+        Or it can be a list of lists, which will use the cmp built-in helper function `cmp.config.sources`.
+      '';
+      example = ''
+        [
+          { name = "nvim_lsp"; }
+          { name = "luasnip"; } #For luasnip users.
+          { name = "path"; }
+          { name = "buffer"; }
+        ]
+      '';
+    };
   };
 
   config = let
@@ -235,7 +299,7 @@ in
         priority_weight = cfg.sorting.priority_weight;
         comparators = if (isNull cfg.sorting.comparators) then null else helpers.mkRaw cfg.sorting.comparators;
       };
-      # sources = cfg.sources;
+      sources = cfg.sources;
       # view = cfg.view;
       # window = cfg.window;
       # experimental = cfg.experimental;
