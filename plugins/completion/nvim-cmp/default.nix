@@ -143,6 +143,24 @@ in
         };
       }));
     };
+
+    formatting = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          fields = mkOption {
+            default = null;
+            type = types.nullOr (types.listOf types.str);
+            example = ''[ "kind" "abbr" "menu" ]'';
+          };
+          format = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = "A lua function as a string";
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -172,7 +190,10 @@ in
           if (isString cfg.confirmation.get_commit_characters) then helpers.mkRaw cfg.confirmation.get_commit_characters
           else cfg.confirmation.get_commit_characters;
       };
-      # formatting = cfg.formatting;
+      formatting = if (isNull cfg.formatting) then null else {
+        fields = cfg.formatting.fields;
+        format = if (isNull cfg.formatting.format) then null else helpers.mkRaw cfg.formatting.format;
+      };
       # matching = cfg.matching;
       # sorting = cfg.sorting;
       # sources = cfg.sources;
