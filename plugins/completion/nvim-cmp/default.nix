@@ -101,6 +101,35 @@ in
         }
       '';
     };
+
+    completion = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          keyword_length = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+
+          keyword_pattern = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+          };
+
+          autocomplete = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = "Lua code for the event.";
+            example = ''"false"'';
+          };
+
+          completeopt = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -119,7 +148,12 @@ in
       snippet = {
         expand = if (isNull cfg.snippet.expand) then null else helpers.mkRaw cfg.snippet.expand;
       };
-      # completion = cfg.completion;
+      completion = if (isNull cfg.completion) then null else {
+        keyword_length = cfg.completion.keyword_length;
+        keyword_pattern = cfg.completion.keyword_pattern;
+        autocomplete = if (isNull cfg.completion.autocomplete) then null else mkRaw cfg.completion.autocomplete;
+        completeopt = cfg.completion.completeopt;
+      };
       # confirmation = cfg.confirmation;
       # formatting = cfg.formatting;
       # matching = cfg.matching;
