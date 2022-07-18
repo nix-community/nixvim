@@ -3,6 +3,7 @@ with lib;
 let
   cfg = config.programs.nixvim.plugins.nvim-cmp;
   helpers = import ../../helpers.nix { lib = lib; };
+  cmpLib = import ./cmp-helpers.nix;
 in
 {
   options.programs.nixvim.plugins.nvim-cmp = {
@@ -198,6 +199,13 @@ in
       }));
     };
 
+    auto_enable_sources = mkOption {
+      default = true;
+      description = ''
+        Scans the sources array and installs the plugins if they are known to nixvim.
+      '';
+    };
+
     sources = let
       source_config = types.submodule ({...}: {
         options = {
@@ -312,6 +320,20 @@ in
         local cmp = require('cmp')
         cmp.setup(${helpers.toLuaObject options})
       '';
+
+      # If auto_enable_sources is set to true, figure out which are provided by the user
+      # and enable the corresponding plugins.
+      # plugins = let
+      #   flattened_sources = if (isNull cfg.sources) then [] else flatten cfg.sources;
+      #   found_sources = lists.unique (lists.map (source: source.name) flattened_sources);
+      #   known_source_names = attrNames cmpLib.pluginAndSourceNames;
+      #   # Check if source exists
+      #   known_sources = filter (source_name: elem source_name known_source_names) found_sources;
+      #   plugins_to_enable = map (source_name: cmpLib.pluginAndSourceNames.${source_name}) known_sources;
+      #   # Create attribute set with enabled plugins
+      #   attrs_enabled = listToAttrs (map (name: { inherit name; value.enable = true; }) plugins_to_enable);
+      #   # FIXME: Infinite recursion encountered
+      # in mkIf cfg.auto_enable_sources attrs_enabled;
     };
   };
 }
