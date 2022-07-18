@@ -130,6 +130,19 @@ in
         };
       }));
     };
+
+    confirmation = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          get_commit_characters = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = "Direct lua code as a string";
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -154,7 +167,11 @@ in
         autocomplete = if (isNull cfg.completion.autocomplete) then null else mkRaw cfg.completion.autocomplete;
         completeopt = cfg.completion.completeopt;
       };
-      # confirmation = cfg.confirmation;
+      confirmation = if (isNull cfg.confirmation) then null else {
+        get_commit_characters =
+          if (isString cfg.confirmation.get_commit_characters) then helpers.mkRaw cfg.confirmation.get_commit_characters
+          else cfg.confirmation.get_commit_characters;
+      };
       # formatting = cfg.formatting;
       # matching = cfg.matching;
       # sorting = cfg.sorting;
