@@ -181,6 +181,22 @@ in
         };
       }));
     };
+
+    sorting = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          priority_weight = mkOption {
+            default = null;
+            type = types.nullOr types.int;
+          };
+          comparators = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -215,7 +231,10 @@ in
         format = if (isNull cfg.formatting.format) then null else helpers.mkRaw cfg.formatting.format;
       };
       matching = cfg.matching;
-      # sorting = cfg.sorting;
+      sorting = if (isNull cfg.sorting) then null else {
+        priority_weight = cfg.sorting.priority_weight;
+        comparators = if (isNull cfg.sorting.comparators) then null else helpers.mkRaw cfg.sorting.comparators;
+      };
       # sources = cfg.sources;
       # view = cfg.view;
       # window = cfg.window;
