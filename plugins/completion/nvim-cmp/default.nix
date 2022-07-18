@@ -161,6 +161,26 @@ in
         };
       }));
     };
+
+    matching = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          disallow_fuzzy_matching = mkOption {
+            default = null;
+            type = types.nullOr types.bool;
+          };
+          disallow_partial_matching = mkOption {
+            default = null;
+            type = types.nullOr types.bool;
+          };
+          disallow_prefix_unmatching = mkOption {
+            default = null;
+            type = types.nullOr types.bool;
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -194,7 +214,7 @@ in
         fields = cfg.formatting.fields;
         format = if (isNull cfg.formatting.format) then null else helpers.mkRaw cfg.formatting.format;
       };
-      # matching = cfg.matching;
+      matching = cfg.matching;
       # sorting = cfg.sorting;
       # sources = cfg.sources;
       # view = cfg.view;
