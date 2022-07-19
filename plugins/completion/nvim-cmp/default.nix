@@ -314,6 +314,9 @@ in
         };
       }));
     };
+
+    # This can be kept as types.attrs since experimental features are often removed or completely changed after a while
+    experimental = mkNullOrOption types.attrs "Experimental features";
   };
 
   config = let
@@ -355,7 +358,7 @@ in
       sources = cfg.sources;
       view = cfg.view;
       window = cfg.window;
-      # experimental = cfg.experimental;
+      experimental = cfg.experimental;
     };
   in mkIf cfg.enable {
     programs.nixvim = {
