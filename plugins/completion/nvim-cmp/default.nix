@@ -269,6 +269,18 @@ in
         ]
       '';
     };
+
+    view = mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          entries = mkOption {
+            default = null;
+            type = with types; nullOr (either str attrs);
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -308,7 +320,7 @@ in
         comparators = if (isNull cfg.sorting.comparators) then null else helpers.mkRaw cfg.sorting.comparators;
       };
       sources = cfg.sources;
-      # view = cfg.view;
+      view = cfg.view;
       # window = cfg.window;
       # experimental = cfg.experimental;
     };
