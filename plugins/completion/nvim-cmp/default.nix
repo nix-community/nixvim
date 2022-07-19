@@ -1,9 +1,9 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, ... }@args:
 with lib;
 let
   cfg = config.programs.nixvim.plugins.nvim-cmp;
   helpers = import ../../helpers.nix { lib = lib; };
-  cmpLib = import ./cmp-helpers.nix;
+  cmpLib = import ./cmp-helpers.nix args;
 in
 {
   options.programs.nixvim.plugins.nvim-cmp = {
@@ -323,17 +323,18 @@ in
 
       # If auto_enable_sources is set to true, figure out which are provided by the user
       # and enable the corresponding plugins.
-      # plugins = let
-      #   flattened_sources = if (isNull cfg.sources) then [] else flatten cfg.sources;
-      #   found_sources = lists.unique (lists.map (source: source.name) flattened_sources);
-      #   known_source_names = attrNames cmpLib.pluginAndSourceNames;
-      #   # Check if source exists
-      #   known_sources = filter (source_name: elem source_name known_source_names) found_sources;
-      #   plugins_to_enable = map (source_name: cmpLib.pluginAndSourceNames.${source_name}) known_sources;
-      #   # Create attribute set with enabled plugins
-      #   attrs_enabled = listToAttrs (map (name: { inherit name; value.enable = true; }) plugins_to_enable);
-      #   # FIXME: Infinite recursion encountered
-      # in mkIf cfg.auto_enable_sources attrs_enabled;
+      plugins = let
+        flattened_sources = if (isNull cfg.sources) then [] else flatten cfg.sources;
+        # Take only the names from the sources provided by the user
+        found_sources = lists.unique (lists.map (source: source.name) flattened_sources);
+        # A list of known source names
+        known_source_names = attrNames cmpLib.pluginAndSourceNames;
+
+        attrs_enabled = listToAttrs (map (name: {
+          name = cmpLib.pluginAndSourceNames.${name};
+          value.enable = mkIf (elem name found_sources) true;
+        }) known_source_names);
+      in mkIf cfg.auto_enable_sources attrs_enabled;
     };
   };
 }
