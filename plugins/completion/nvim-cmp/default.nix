@@ -3,6 +3,7 @@ with lib;
 let
   cfg = config.programs.nixvim.plugins.nvim-cmp;
   helpers = import ../../helpers.nix { lib = lib; };
+  mkNullOrOption = helpers.mkNullOrOption;
   cmpLib = import ./cmp-helpers.nix args;
 in
 {
@@ -281,6 +282,38 @@ in
         };
       }));
     };
+
+    window = let
+      # Reusable options
+      border = with types; mkNullOrOption (either str (listOf str)) null;
+      winhighlight = mkNullOrOption types.str null;
+      zindex = mkNullOrOption types.int null;
+    in mkOption {
+      default = null;
+      type = types.nullOr (types.submodule ({...}: {
+        options = {
+          completion = mkOption {
+            default = null;
+            type = types.nullOr (types.submodule ({...}: {
+              options = {
+                inherit border winhighlight zindex;
+              };
+            }));
+          };
+
+          documentation = mkOption {
+            default = null;
+            type = types.nullOr (types.submodule ({...}: {
+              options = {
+                inherit border winhighlight zindex;
+                max_width = mkNullOrOption types.int "Window's max width";
+                max_height = mkNullOrOption types.int "Window's max height";
+              };
+            }));
+          };
+        };
+      }));
+    };
   };
 
   config = let
@@ -321,7 +354,7 @@ in
       };
       sources = cfg.sources;
       view = cfg.view;
-      # window = cfg.window;
+      window = cfg.window;
       # experimental = cfg.experimental;
     };
   in mkIf cfg.enable {
