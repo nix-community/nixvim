@@ -203,30 +203,7 @@ in
           + extraWrapperArgs;
       });
 
-      configure = {
-        customRC = cfg.extraConfigVim + ''
-          lua <<EOF
-          ${cfg.extraConfigLua}
-          EOF
-        '' +
-        # Set colorscheme after setting globals.
-        # Some colorschemes depends on variables being set before setting the colorscheme.
-        (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
-          colorscheme ${cfg.colorscheme}
-        '') ;
-
-        packages.nixvim = {
-          start = filter (f: f != null) (map
-            (x:
-              if x ? plugin && x.optional == true then null else (x.plugin or x))
-            cfg.extraPlugins);
-          opt = filter (f: f != null)
-            (map (x: if x ? plugin && x.optional == true then x.plugin else null)
-              cfg.extraPlugins);
-        };
-      };
-
-      extraConfigLua = optionalString (cfg.globals != { }) ''
+      luaGlobals = optionalString (cfg.globals != { }) ''
         -- Set up globals {{{
         local __nixvim_globals = ${helpers.toLuaObject cfg.globals}
 
@@ -252,6 +229,33 @@ in
         -- }}}
       '';
 
+      configure = {
+        # Make sure that globals are set before plugins are setup.
+        # This is becuase you might want to define variables or global functions
+        # that the plugin configuration depend upon.
+        customRC = cfg.extraConfigVim + ''
+          lua <<EOF
+          ${luaGlobals}
+          ${cfg.extraConfigLua}
+          EOF
+        '' +
+        # Set colorscheme after setting globals.
+        # Some colorschemes depends on variables being set before setting the colorscheme.
+        (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
+          colorscheme ${cfg.colorscheme}
+        '') ;
+
+        packages.nixvim = {
+          start = filter (f: f != null) (map
+            (x:
+              if x ? plugin && x.optional == true then null else (x.plugin or x))
+            cfg.extraPlugins);
+          opt = filter (f: f != null)
+            (map (x: if x ? plugin && x.optional == true then x.plugin else null)
+              cfg.extraPlugins);
+        };
+      };
+
       mappings =
         (helpers.genMaps "" cfg.maps.normalVisualOp) ++
         (helpers.genMaps "n" cfg.maps.normal) ++
@@ -272,12 +276,9 @@ in
         configure = configure;
       };
 
-      programs.nixvim.extraConfigLua = extraConfigLua;
-
       environment.etc."xdg/nvim/sysinit.vim".text = neovimConfig.neovimRcContent;
     } else
       (if homeManager then {
-        programs.nixvim.extraConfigLua = extraConfigLua;
         programs.neovim = {
           enable = true;
           package = mkIf (cfg.package != null) cfg.package;
