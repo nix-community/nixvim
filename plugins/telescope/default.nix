@@ -9,6 +9,7 @@ in
     ./frecency.nix
     ./fzf-native.nix
     ./fzy-native.nix
+    ./media-files.nix
   ];
 
   # TODO:add support for aditional filetypes. This requires autocommands!
