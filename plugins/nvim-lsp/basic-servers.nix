@@ -18,6 +18,11 @@ let
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
     {
+      name = "gdscript";
+      description = "Enable gdscript, for Godot";
+      packages = [];
+    }
+    {
       name = "gopls";
       description = "Enable gopls, for Go.";
     }
