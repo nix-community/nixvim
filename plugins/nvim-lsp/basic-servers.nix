@@ -8,8 +8,28 @@ let
       packages = [ pkgs.clang-tools ];
     }
     {
+      name = "cssls";
+      description = "Enable cssls, for CSS";
+      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+    }
+    {
+      name = "eslint";
+      description = "Enable eslint";
+      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+    }
+    {
       name = "gopls";
       description = "Enable gopls, for Go.";
+    }
+    {
+      name = "html";
+      description = "Enable html, for HTML";
+      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+    }
+    {
+      name = "jsonls";
+      description = "Enable jsonls, for JSON";
+      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
     {
       name = "pyright";
