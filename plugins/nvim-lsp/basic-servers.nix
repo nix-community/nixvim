@@ -51,6 +51,11 @@ let
       serverName = "rust_analyzer";
     }
     {
+      name = "vuels";
+      description = "Enable vuels, for Vue";
+      packages = [ pkgs.nodePackages.vue-language-server ];
+    }
+    {
       name = "zls";
       description = "Enable zls, for Zig.";
     }
