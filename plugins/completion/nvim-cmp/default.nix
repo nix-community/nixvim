@@ -5,6 +5,11 @@ let
   helpers = import ../../helpers.nix { lib = lib; };
   mkNullOrOption = helpers.mkNullOrOption;
   cmpLib = import ./cmp-helpers.nix args;
+  # functionName should be a string
+  # parameters should be a list of strings
+  wrapWithFunction = functionName: parameters: let
+    parameterString = strings.concatStringsSep "," parameters;
+  in ''${functionName}(${parameterString})'';
 in
 {
   options.programs.nixvim.plugins.nvim-cmp = {
@@ -52,12 +57,12 @@ in
     };
 
     mappingPresets = mkOption {
-      default = null;
-      type = types.nullOr types.listOf types.enum [
-        "insert"
-        "cmdine"
-        # Not sure if there are more or if this should just be str
-      ];
+      default = [];
+      type = types.listOf (types.enum [
+          "insert"
+          "cmdline"
+# Not sure if there are more or if this should just be str
+      ]);
       description = "Mapping presets to use; cmp.mapping.preset.\${mappingPreset} will be called with the configured mappings";
       example = ''
         [ "insert" "cmdline" ]
@@ -329,9 +334,13 @@ in
       # If null then null
       # If an attribute is a string, just treat it as lua code for that mapping
       # If an attribute is a module, create a mapping with cmp.mapping() using the action as the first input and the modes as the second.
-      mapping = if (isNull cfg.mapping) then null
-        else mapAttrs (bind: mapping: helpers.mkRaw (if isString mapping then mapping
-          else "cmp.mapping(${mapping.action}${optionalString (mapping.modes != null && length mapping.modes >= 1) ("," + (helpers.toLuaObject mapping.modes))})")) cfg.mapping;
+      mapping = let
+        mappings = if (isNull cfg.mapping) then null
+          else mapAttrs (bind: mapping: helpers.mkRaw (if isString mapping then mapping
+            else "cmp.mapping(${mapping.action}${optionalString (mapping.modes != null && length mapping.modes >= 1) ("," + (helpers.toLuaObject mapping.modes))})")) cfg.mapping;
+        luaMappings = (helpers.toLuaObject mappings);
+        wrapped = lists.fold (presetName: prevString: ''cmp.mapping.preset.${presetName}(${prevString})'') luaMappings cfg.mappingPresets;
+      in  helpers.mkRaw wrapped;
       snippet = {
         expand = if (isNull cfg.snippet.expand) then null else helpers.mkRaw cfg.snippet.expand;
       };
