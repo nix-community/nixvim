@@ -114,6 +114,18 @@ in
         description = "Extra contents for init.lua";
       };
 
+      extraLuaPreConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra contents for init.lua before everything else";
+      };
+
+      extraLuaPostConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra contents for init.lua after everything else";
+      };
+
       extraConfigVim = mkOption {
         type = types.lines;
         default = "";
@@ -235,6 +247,7 @@ in
         # that the plugin configuration depend upon.
         customRC = cfg.extraConfigVim + ''
           lua <<EOF
+          ${cfg.extraLuaPreConfig}
           ${luaGlobals}
           ${cfg.extraConfigLua}
           EOF
@@ -243,7 +256,12 @@ in
         # Some colorschemes depends on variables being set before setting the colorscheme.
         (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
           colorscheme ${cfg.colorscheme}
-        '') ;
+        '') +
+        ''
+        lua <<EOF
+        ${cfg.extraLuaPostConfig}
+        EOF
+        '';
 
         packages.nixvim = {
           start = filter (f: f != null) (map
