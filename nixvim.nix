@@ -250,15 +250,13 @@ in
           ${cfg.extraLuaPreConfig}
           ${luaGlobals}
           ${cfg.extraConfigLua}
-          EOF
         '' +
         # Set colorscheme after setting globals.
         # Some colorschemes depends on variables being set before setting the colorscheme.
         (optionalString (cfg.colorscheme != "" && cfg.colorscheme != null) ''
-          colorscheme ${cfg.colorscheme}
+          vim.cmd([[colorscheme ${cfg.colorscheme}]])
         '') +
         ''
-        lua <<EOF
         ${cfg.extraLuaPostConfig}
         EOF
         '';
