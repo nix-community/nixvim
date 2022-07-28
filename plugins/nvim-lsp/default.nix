@@ -6,12 +6,7 @@ let
 in
 {
   imports = [
-    ./clangd.nix
-    ./rust-analyzer.nix
-    ./rnix-lsp.nix
-    ./pyright.nix
-    ./zls.nix
-    ./gopls.nix
+    ./basic-servers.nix
   ];
 
   options = {
