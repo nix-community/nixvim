@@ -11,6 +11,8 @@
     ./colorschemes/tokyonight.nix
 
     ./completion/coq.nix
+    ./completion/nvim-cmp
+    ./completion/nvim-cmp/sources
 
     ./git/fugitive.nix
     ./git/gitgutter.nix
