@@ -23,6 +23,8 @@
     ./languages/treesitter.nix
     ./languages/zig.nix
 
+    ./null-ls
+
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
 
