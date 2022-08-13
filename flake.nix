@@ -6,16 +6,14 @@
   inputs.nmdSrc.url = "gitlab:rycee/nmd";
   inputs.nmdSrc.flake = false;
 
-  inputs.extraPlugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
+  inputs.vim-extra-plugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
 
   outputs = { self, nixpkgs, nmdSrc, ... }@inputs: rec {
     packages."x86_64-linux".docs = import ./docs {
       pkgs = import nixpkgs {
         system = "x86_64-linux";
         overlays = [
-          ( self: super:  {
-            extraPlugins = inputs.extraPlugins;
-          })
+          inpugs.vim-extra-plugins.overlay
         ];
       };
       lib = nixpkgs.lib;
