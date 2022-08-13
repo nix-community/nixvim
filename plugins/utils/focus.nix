@@ -5,7 +5,7 @@ in with helpers; with lib;
 mkPlugin attrs {
   name = "focus";
   description = "Enable focus.vim";
-  extraPlugins = [ pkgs.extraPlugins.focus-nvim ];
+  extraPlugins = [ pkgs.vimExtraPlugins.focus-nvim ];
 
   options = { };
 }
