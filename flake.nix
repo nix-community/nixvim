@@ -13,7 +13,7 @@
       pkgs = import nixpkgs {
         system = "x86_64-linux";
         overlays = [
-          inpugs.vim-extra-plugins.overlay
+          inputs.vim-extra-plugins.overlay
         ];
       };
       lib = nixpkgs.lib;
