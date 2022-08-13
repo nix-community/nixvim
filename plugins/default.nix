@@ -41,6 +41,7 @@
     ./utils/easyescape.nix
     ./utils/endwise.nix
     ./utils/floaterm.nix
+    ./utils/focus.nix
     ./utils/goyo.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
