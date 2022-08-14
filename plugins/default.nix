@@ -36,6 +36,7 @@
 
     ./telescope
 
+    ./utils/asyncrun.nix
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/easyescape.nix
