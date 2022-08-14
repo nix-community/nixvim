@@ -1,5 +1,5 @@
-{ nixos ? false, nixOnDroid ? false, homeManager ? false }:
-{ pkgs, lib, config, ... }:
+{ nixos ? false, nixOnDroid ? false, homeManager ? false, pkgs }:
+{ lib, config, ... }:
 with lib;
 let
   cfg = config.programs.nixvim;
@@ -195,6 +195,7 @@ in
   };
 
   imports = [
+    # pkgs.vimExtraPlugins
     ./plugins
   ];
 
