@@ -12,11 +12,16 @@
     packages."x86_64-linux".docs = import ./docs {
       pkgs = import nixpkgs {
         system = "x86_64-linux";
+      };
+      lib = nixpkgs.lib;
+    };
+    packages."x86_64-linux" = {
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
         overlays = [
           inputs.vim-extra-plugins.overlay
         ];
       };
-      lib = nixpkgs.lib;
     };
 
     nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
