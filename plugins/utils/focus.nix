@@ -1,11 +1,23 @@
-{ lib, pkgs, ... }@attrs:
+{ pkgs, config, lib, ... }:
+with lib;
 let
-  helpers = import ../helpers.nix { lib = lib; };
-in with helpers; with lib;
-mkPlugin attrs {
-  name = "focus";
-  description = "Enable focus.vim";
-  extraPlugins = [ pkgs.vimExtraPlugins.focus-nvim ];
+  cfg = config.programs.nixvim.plugins.telescope;
+  helpers = (import ../helpers.nix { inherit lib; });
+in
+{
+  options.programs.nixvim.plugins.telescope = {
+    enable = mkEnableOption "Enable focus.nvim";
+  };
 
-  options = { };
+  config = mkIf cfg.enable {
+    programs.nixvim = {
+      extraPlugins = [
+        pkgs.vimExtraPlugins.focus
+      ];
+
+      extraConfigLua = ''
+        require('focus').setup{ }
+      '' ;
+    };
+  };
 }
