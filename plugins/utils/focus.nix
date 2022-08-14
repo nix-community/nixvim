@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.telescope;
+  cfg = config.programs.nixvim.plugins.focus;
   helpers = (import ../helpers.nix { inherit lib; });
 in
 {
