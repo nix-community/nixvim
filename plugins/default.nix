@@ -39,7 +39,9 @@
     ./utils/asyncrun.nix
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
+    ./utils/dashboard.nix
     ./utils/easyescape.nix
+    ./utils/emmet.nix
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/focus.nix
@@ -53,7 +55,6 @@
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/undotree.nix
-    ./utils/dashboard.nix
-    ./utils/emmet.nix
+    ./utils/vimwiki.nix
   ];
 }
