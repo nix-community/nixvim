@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     programs.nixvim = {
       extraPlugins = [
-        pkgs.vimExtraPlugins.focus
+        pkgs.vimExtraPlugins.focus-nvim
       ];
 
       extraConfigLua = ''
