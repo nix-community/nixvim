@@ -96,13 +96,13 @@ in {
       tabline = mkOption {
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
-            lualine_a = component_options "";
-            lualine_b = component_options "";
-            lualine_c = component_options "";
+            lualine_a = sections_option "";
+            lualine_b = sections_option "";
+            lualine_c = sections_option "";
 
-            lualine_x = component_options "";
-            lualine_y = component_options "";
-            lualine_z = component_options "";
+            lualine_x = sections_option "";
+            lualine_y = sections_option "";
+            lualine_z = sections_option "";
           };
         }));
         default = null;
