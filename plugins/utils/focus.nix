@@ -2,30 +2,12 @@
 
 let
   helpers = import ../helpers.nix { inherit lib; };
-in with helpers; with lib; with pkgs.vimExtraPlugins; 
+in with helpers; with lib;
 mkPlugin attrs {
   name = "focus";
   description = "Enable focus.nvim";
-  extraPlugins = [ 
+  extraPlugins = with pkgs.vimExtraPlugins; [
     focus-nvim
   ];
-
   extraConfigLua = "require('focus').setup {}";
-
 }
-#   options.programs.nixvim.plugins.focus = {
-#     enable = mkEnableOption "Enable focus.nvim";
-#   };
-
-#   config = mkIf cfg.enable {
-#     programs.nixvim = {
-#       extraPlugins = [
-#         pkgs.vimExtraPlugins.focus-nvim
-#       ];
-
-#       extraConfigLua = ''
-#         require('focus').setup{ }
-#       '' ;
-#     };
-#   };
-# }
