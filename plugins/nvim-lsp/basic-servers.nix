@@ -36,6 +36,10 @@ let
       description = "Enable jsonls, for JSON";
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
+    # {
+    #   name = "ltex-ls";
+    #   description = "Enable ltex-ls, for text files.";
+    # }
     {
       name = "pyright";
       description = "Enable pyright, for Python.";
@@ -49,6 +53,10 @@ let
       name = "rust-analyzer";
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
+    }
+    {
+      name = "texlab";
+      description = "Enable texlab, for latex.";
     }
     {
       name = "vuels";
