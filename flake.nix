@@ -1,12 +1,12 @@
 {
   description = "A neovim configuration system for NixOS";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
   inputs.nmdSrc.url = "gitlab:rycee/nmd";
   inputs.nmdSrc.flake = false;
 
-  inputs.vimExtraPlugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
+  inputs.vimExtraPlugins.url = "github:jooooscha/nixpkgs-vim-extra-plugins";
 
   outputs = { self, nixpkgs, nmdSrc, vimExtraPlugins, ... }@inputs: 
   let 
