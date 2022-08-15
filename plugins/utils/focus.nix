@@ -12,7 +12,7 @@ mkPlugin attrs {
 
   extraConfigLua = "require('focus').setup {}";
 
-};
+}
 #   options.programs.nixvim.plugins.focus = {
 #     enable = mkEnableOption "Enable focus.nvim";
 #   };
