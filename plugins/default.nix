@@ -54,6 +54,7 @@
     ./utils/specs.nix
     ./utils/startify.nix
     ./utils/surround.nix
+    ./utils/tagbar.nix
     ./utils/undotree.nix
     ./utils/vimwiki.nix
   ];
