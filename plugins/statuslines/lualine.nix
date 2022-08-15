@@ -20,6 +20,7 @@ let
     });
     default = null;
   };
+
   component_options = mode:
     mkOption {
       type = types.nullOr (types.submodule {
@@ -43,6 +44,11 @@ let
       });
       default = null;
     };
+
+  sections_option = default: mkOption {
+    type = types.nullOr (types.listOf types.str);
+    default = default;
+  };
 in {
   options = {
     programs.nixvim.plugins.lualine = {
@@ -74,13 +80,13 @@ in {
       sections = mkOption {
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
-            lualine_a = component_options "mode";
-            lualine_b = component_options "branch";
-            lualine_c = component_options "filename";
+            lualine_a = sections_option "mode";
+            lualine_b = sections_option "branch";
+            lualine_c = sections_option "filename";
 
-            lualine_x = component_options "encoding";
-            lualine_y = component_options "progress";
-            lualine_z = component_options "location";
+            lualine_x = sections_option "encoding";
+            lualine_y = sections_option "progress";
+            lualine_z = sections_option "location";
           };
         }));
 
