@@ -86,7 +86,7 @@ rec {
     } // pluginOptions;
 
     config.programs.nixvim = mkIf cfg.enable {
-      inherit extraPlugins globals;
+      inherit extraPlugins extraConfigLua extraConfigVim globals;
     };
   };
 
