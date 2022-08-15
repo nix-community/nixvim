@@ -48,6 +48,7 @@
     ./utils/goyo.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
+    ./utils/nerdcommenter.nix
     ./utils/notify.nix
     ./utils/nvim-autopairs.nix
     ./utils/nvim-tree.nix
