@@ -68,6 +68,8 @@ rec {
     name,
     description,
     extraPlugins ? [],
+    extraConfigLua ? "",
+    extraConfigVim ? "",
     options ? {},
     ...
   }: let
