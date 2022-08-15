@@ -145,11 +145,11 @@ in
 
     view = {
       width = mkOption {
-        type = types.nullOr types.int;
+        type = types.nullOr types.str;
         default = null;
       };
       height = mkOption {
-        type = types.nullOr types.int;
+        type = types.nullOr types.str;
         default = null;
       };
       hideRootFolder = mkOption {
