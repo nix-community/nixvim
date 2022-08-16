@@ -175,7 +175,7 @@ in
       #   else if cfg.borderStyle == "thick" then 3
       #   else null;
       # in borderStyle;
-      borderStyle = cfg.borderStyle;
+      border_style = cfg.borderStyle;
 
       finder_action_keys = let
         keys = {
