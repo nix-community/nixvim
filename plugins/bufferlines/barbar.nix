@@ -2,39 +2,22 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.barbar;
-in
+  helpers = import ../helpers.nix { lib = lib; };
+in with helpers;
 {
   options.programs.nixvim.plugins.barbar = {
     enable = mkEnableOption "Enable barbar.nvim";
 
-    animations = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Enable animations";
-    };
+    animation = boolOption "Enable animations";
+    autoHide = boolOption "Auto-hide the tab bar when there is only one buffer";
+    tabpages = boolOption "Enable 'current/total' tabpages indicator in top right corner";
+    closable = boolOption "Enable the close button";
+    clickable = boolOption "Enable clickable tabs\n - left-click: go to buffer\n - middle-click: delete buffer";
 
-    autoHide = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Auto-hide the tab bar when there is only one buffer";
-    };
-
-    closeable = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Enable the close button";
-    };
-
-    icons = mkOption {
-      type = with types; nullOr (oneOf [bool (enum ["numbers both"])]);
-      default = null;
-      description = "Enable/disable icons";
-    };
-
-    iconCustomColors = mkOption {
-      type = with types; nullOr (oneOf [bool str]);
-      default = null;
-      description = "Sets the icon highlight group";
+    extraConfig = mkOption {
+      type = types.attrs;
+      default = {};
+      description = "Place any extra config here as attibute-set";
     };
 
     # Keybinds concept:
@@ -48,11 +31,19 @@ in
     # };
   };
 
-  config.programs.nixvim = mkIf cfg.enable {
-    extraPlugins = with pkgs.vimPlugins; [
-      barbar-nvim nvim-web-devicons
+  config.programs.nixvim = let
+    pluginConfig = {
+      animation = cfg.animation;
+      closable = cfg.closable;
+    } // cfg.extraConfig;
+  in mkIf cfg.enable {
+    extraPlugins = with pkgs.vimExtraPlugins; [
+      barbar-nvim
+      nvim-web-devicons
     ];
 
-    # maps = genMaps cfg.keys;
+    extraConfigLua = ''
+      require("bufferline").setup(${helpers.toLuaObject pluginConfig})
+    '';
   };
 }
