@@ -53,6 +53,7 @@ let
       name = "rust-analyzer";
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
+      packages = [ pkgs.cargo ];
     }
     {
       name = "texlab";
