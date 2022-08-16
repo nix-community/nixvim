@@ -169,12 +169,13 @@ in
 
       rename_prompt_prefix = notNull cfg.renamePromptPrefix;
 
-      border_style = let
-        borderStyle = if cfg.borderStyle == "thin" then 1
-        else if cfg.borderStyle == "rounded" then 2
-        else if cfg.borderStyle == "thick" then 3
-        else null;
-      in borderStyle;
+      # border_style = let
+      #   borderStyle = if cfg.borderStyle == "thin" then 1
+      #   else if cfg.borderStyle == "rounded" then 2
+      #   else if cfg.borderStyle == "thick" then 3
+      #   else null;
+      # in borderStyle;
+      borderStyle = cfg.borderStyle;
 
       finder_action_keys = let
         keys = {
