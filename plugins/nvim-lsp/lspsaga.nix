@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.programs.nixvim.plugins.lspsaga;
   helpers = import ../helpers.nix { lib = lib; };
-in
+in with helpers;
 {
   options = {
     programs.nixvim.plugins.lspsaga = {
@@ -127,6 +127,14 @@ in
         };
       };
 
+      codeActionPrompt = {
+        enable = boolOption "Enable code_action_prompt";
+        sign = boolOption "Display sign";
+        enableInInsert = boolOption "Enable prompt in inset mode";
+        signPriority = intOption "Priority of prompt (?)";
+        virtualText = boolOption "Use neovims virtual text feature";
+      };
+
       borderStyle = mkOption {
         type = types.nullOr (types.enum [ "single" "round" "plus" "double" "bold" ]);
         default = null;
@@ -169,13 +177,15 @@ in
 
       rename_prompt_prefix = notNull cfg.renamePromptPrefix;
 
-      # border_style = let
-      #   borderStyle = if cfg.borderStyle == "thin" then 1
-      #   else if cfg.borderStyle == "rounded" then 2
-      #   else if cfg.borderStyle == "thick" then 3
-      #   else null;
-      # in borderStyle;
       border_style = cfg.borderStyle;
+
+      code_action_prompt = notEmpty {
+        enable = notNull cfg.codeActionPrompt.enable;
+        sign = notNull cfg.codeActionPrompt.sign;
+        enable_in_insert = notNull cfg.codeActionPrompt.enableInInsert;
+        sign_priority = notNull cfg.codeActionPrompt.signPriority;
+        virtual_text = notNull cfg.codeActionPrompt.virtualText;
+      };
 
       finder_action_keys = let
         keys = {
@@ -199,9 +209,7 @@ in
     extraPlugins = [ pkgs.vimPlugins.lspsaga-nvim ];
     
     extraConfigLua = ''
-      local saga = require 'lspsaga'
-
-      saga.init_lsp_saga(${helpers.toLuaObject lspsagaConfig})
+      require("lspsaga").init_lsp_saga(${helpers.toLuaObject lspsagaConfig})
     '';
   };
 }
