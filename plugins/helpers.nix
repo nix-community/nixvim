@@ -1,6 +1,25 @@
 { lib, ... }:
 with lib;
 rec {
+
+  boolOption = description: mkOption {
+    description = description;
+    type = types.nullOr types.bool;
+    default = null;
+  };
+
+  intOption = description: mkOption {
+    description = description;
+    type = types.nullOr types.int;
+    default = null;
+  };
+
+  stringOption = description: mkOption {
+    description = description;
+    type = types.nullOr types.str;
+    default = null;
+  };
+
   # vim dictionaries are, in theory, compatible with JSON
   toVimDict = args: toJSON 
     (lib.filterAttrs (n: v: !isNull v) args);
