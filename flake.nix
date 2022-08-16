@@ -18,15 +18,15 @@
       ];
     };
   in {
-    # packages."x86_64-linux".docs = import ./docs {
-    #   # pkgs = import nixpkgs {
-    #   #   system = system;
-    #   # };
-    #   pkgs = pkgs;
-    #   lib = nixpkgs.lib;
-    # };
+    packages."x86_64-linux".docs = import ./docs {
+      # pkgs = import nixpkgs {
+      #   system = system;
+      # };
+      pkgs = pkgs;
+      lib = nixpkgs.lib;
+    };
 
-    nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
+    nixosModules.nixvim = import ./nixvim.nix { nixos = true; pkgs = pkgs; };
     homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; pkgs = pkgs; };
 
     # # This is a simple container for testing
