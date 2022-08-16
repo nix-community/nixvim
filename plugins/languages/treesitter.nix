@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.programs.nixvim.plugins.treesitter;
   helpers = import ../helpers.nix { inherit lib; };
-in
+in with helpers;
 {
   options = {
     programs.nixvim.plugins.treesitter = {
@@ -14,10 +14,11 @@ in
         default = false;
         description = "Install grammars with Nix (beta)";
       };
+
       ensureInstalled = mkOption {
-        type = with types; oneOf [ (enum [ "all" "maintained" ]) (listOf str) ];
-        default = "maintained";
-        description = "Either \"all\", \"maintained\" or a list of languages";
+        type = types.listOf types.str;
+        default = "all";
+        description = "Either \"all\" or a list of languages";
       };
 
       disabledLanguages = mkOption {
@@ -47,14 +48,15 @@ in
         };
       };
 
-      indent = mkEnableOption "Enable tree-sitter based indentation";
-
-      folding = mkEnableOption "Enable tree-sitter based folding";
+      indent = boolOption "Enable tree-sitter based indentation";
+      folding = boolOption "Enable tree-sitter based folding";
+      syncInstall = boolOption;
+      autoInstall = boolOption;
     };
   };
 
   config = let
-    tsOptions = {
+    pluginOptions = {
       highlight = {
         enable = cfg.enable;
         disable = if (cfg.disabledLanguages != []) then cfg.disabledLanguages else null;
@@ -77,16 +79,21 @@ in
       } else null;
 
       ensure_installed = cfg.ensureInstalled;
+      sync_install = cfg.syncInstall;
+      auto_install = cfg.autoInstall;
     };
   in mkIf cfg.enable {
     programs.nixvim = {
       extraConfigLua = ''
-        require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
+        require('nvim-treesitter.configs').setup(${helpers.toLuaObject pluginOptions})
       '';
 
-      extraPlugins = with pkgs; if cfg.nixGrammars then
-      [ (vimPlugins.nvim-treesitter.withPlugins(_: tree-sitter.allGrammars)) ]
-      else [ vimPlugins.nvim-treesitter ];
+      extraPlugins = with pkgs;
+        if cfg.nixGrammars then
+          [ (vimPlugins.nvim-treesitter.withPlugins(_: tree-sitter.allGrammars)) ]
+        else
+          [ vimExtraPlugins.nvim-treesitter ];
+
       extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 
       options = mkIf cfg.folding {
