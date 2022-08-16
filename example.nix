@@ -70,6 +70,6 @@
 
     # What about plugins not available as a module?
     # Use extraPlugins:
-    extraPlugins = with pkgs.vimPlugins; [ vim-toml ];
+    extraPlugins = with pkgs.vimExtraPlugins; [ vim-toml ];
   };
 }

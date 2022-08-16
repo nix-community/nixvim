@@ -2,20 +2,20 @@
 with lib;
 rec {
 
-  boolOption = description: mkOption {
-    description = description;
+  boolOption = description : mkOption {
+    description = description ? "";
     type = types.nullOr types.bool;
     default = null;
   };
 
   intOption = description: mkOption {
-    description = description;
+    description = description ? "";
     type = types.nullOr types.int;
     default = null;
   };
 
   stringOption = description: mkOption {
-    description = description;
+    description = description ? "";
     type = types.nullOr types.str;
     default = null;
   };
@@ -51,6 +51,10 @@ rec {
     else if isNull args then
       "nil"
     else "";
+
+  extraConfigTo = extraConfig: {
+    
+  };
 
   # Generates maps for a lua config
   genMaps = mode: maps: let
@@ -94,7 +98,14 @@ rec {
   }: let
     cfg = config.programs.nixvim.plugins.${name};
     # TODO support nested options!
-    pluginOptions = mapAttrs (k: v: v.option) options;
+    pluginOptions = (mapAttrs (k: v: v.option) options) // {
+      extraConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Place any extra config here as an attibute-set";
+      };
+    };
+
     globals = mapAttrs' (name: opt: {
       name = opt.global;
       value = if cfg.${name} != null then opt.value cfg.${name} else null;

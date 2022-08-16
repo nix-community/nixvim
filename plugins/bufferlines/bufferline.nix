@@ -317,7 +317,7 @@ in
     };
     in mkIf cfg.enable {
     programs.nixvim = {
-      extraPlugins = with pkgs.vimPlugins; [
+      extraPlugins = with pkgs.vimExtraPlugins; [
         bufferline-nvim
         nvim-web-devicons
       ];
