@@ -128,7 +128,7 @@ in
       };
 
       borderStyle = mkOption {
-        type = types.nullOr (types.enum [ "thin" "rounded" "thick" ]);
+        type = types.nullOr (types.enum [ "single" "round" "plus" "double" "bold" ]);
         default = null;
         description = "Border style";
       };
