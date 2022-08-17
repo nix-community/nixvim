@@ -83,7 +83,7 @@ let
     default = { };
   };
 
-  helpers = import ./plugins/helpers.nix { lib = lib; };
+  helpers = import ./plugins/helpers.nix { inherit lib config; };
 in
 {
   options = {

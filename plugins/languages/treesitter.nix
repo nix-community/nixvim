@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.treesitter;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 in with helpers;
 {
   options = {
@@ -16,7 +16,7 @@ in with helpers;
       };
 
       ensureInstalled = mkOption {
-        type = types.listOf types.str;
+        type = with types; either str (listOf str);
         default = "all";
         description = "Either \"all\" or a list of languages";
       };
@@ -48,10 +48,10 @@ in with helpers;
         };
       };
 
-      indent = boolOption "Enable tree-sitter based indentation";
-      folding = boolOption "Enable tree-sitter based folding";
-      syncInstall = boolOption;
-      autoInstall = boolOption;
+      indent = boolOption false "Enable tree-sitter based indentation (This is the equivalent to indent { enable = true } in the original lua config)";
+      folding = boolOption false "Enable tree-sitter based folding";
+      syncInstall = boolOption false "Do not install languages asyncroniously";
+      autoInstall = boolOption true "Install languages automatically";
     };
   };
 
@@ -90,9 +90,9 @@ in with helpers;
 
       extraPlugins = with pkgs;
         if cfg.nixGrammars then
-          [ (vimPlugins.nvim-treesitter.withPlugins(_: tree-sitter.allGrammars)) ]
+          [ (vimExtraPlugins.nvim-treesitter.withPlugins(_: tree-sitter.allGrammars)) ]
         else
-          [ vimExtraPlugins.nvim-treesitter ];
+          [ vimPlugins.nvim-treesitter ];
 
       extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 

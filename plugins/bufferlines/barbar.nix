@@ -2,17 +2,17 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.barbar;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 in with helpers;
 {
   options.programs.nixvim.plugins.barbar = {
     enable = mkEnableOption "Enable barbar.nvim";
 
-    animation = boolOption "Enable animations";
-    autoHide = boolOption "Auto-hide the tab bar when there is only one buffer";
-    tabpages = boolOption "Enable 'current/total' tabpages indicator in top right corner";
-    closable = boolOption "Enable the close button";
-    clickable = boolOption "Enable clickable tabs\n - left-click: go to buffer\n - middle-click: delete buffer";
+    animation = boolOption true "Enable animations";
+    autoHide = boolOption false "Auto-hide the tab bar when there is only one buffer";
+    tabpages = boolOption true "Enable 'current/total' tabpages indicator in top right corner";
+    closable = boolOption true "Enable the close button";
+    clickable = boolOption true "Enable clickable tabs\n - left-click: go to buffer\n - middle-click: delete buffer";
 
     extraConfig = mkOption {
       type = types.attrs;

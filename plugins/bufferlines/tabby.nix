@@ -5,7 +5,7 @@ let
   name = "tabby";
 
   cfg = config.programs.nixvim.plugins.${name};
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 
   highlight = mkOption {
     type = types.nullOr (types.submodule ({ ... }: {

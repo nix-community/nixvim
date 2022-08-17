@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.lspsaga;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 in with helpers;
 {
   options = {
@@ -128,11 +128,11 @@ in with helpers;
       };
 
       codeActionPrompt = {
-        enable = boolOption "Enable code_action_prompt";
-        sign = boolOption "Display sign";
-        enableInInsert = boolOption "Enable prompt in inset mode";
-        signPriority = intOption "Priority of prompt (?)";
-        virtualText = boolOption "Use neovims virtual text feature";
+        enable = boolOption true "Enable code_action_prompt";
+        sign = boolOption true "Display sign";
+        enableInInsert = boolOption true "Enable prompt in inset mode";
+        signPriority = intOption 20 "Priority of prompt (?)";
+        virtualText = boolOption true "Use neovims virtual text feature";
       };
 
       borderStyle = mkOption {

@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.nvim-tree;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 in
 {
   options.programs.nixvim.plugins.nvim-tree = {

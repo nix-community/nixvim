@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.lualine;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
   separators = mkOption {
     type = types.nullOr (types.submodule {
       options = {

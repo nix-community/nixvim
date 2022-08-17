@@ -54,6 +54,7 @@
     ./utils/nvim-autopairs.nix
     ./utils/nvim-tree.nix
     ./utils/specs.nix
+    ./utils/stabilize.nix
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/tagbar.nix

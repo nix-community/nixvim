@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.lsp;
-  helpers = (import ../helpers.nix { inherit lib; });
+  helpers = (import ../helpers.nix { inherit lib config; });
 in
 {
   imports = [

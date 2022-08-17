@@ -1,27 +1,27 @@
-{ lib, ... }:
+{ lib, config, ... }:
 with lib;
 rec {
 
-  boolOption = description : mkOption {
-    description = description ? "";
-    type = types.nullOr types.bool;
-    default = null;
+  boolOption = default: description: mkOption {
+    description = description;
+    type = types.bool;
+    default = default;
   };
 
-  intOption = description: mkOption {
-    description = description ? "";
-    type = types.nullOr types.int;
-    default = null;
+  intOption = default: description: mkOption {
+    description = description;
+    type = types.int;
+    default = default;
   };
 
-  stringOption = description: mkOption {
-    description = description ? "";
-    type = types.nullOr types.str;
-    default = null;
+  stringOption = default: description: mkOption {
+    description = description;
+    type = types.str;
+    default = default;
   };
 
   # vim dictionaries are, in theory, compatible with JSON
-  toVimDict = args: toJSON 
+  toVimDict = args: toJSON
     (lib.filterAttrs (n: v: !isNull v) args);
 
   # Black functional magic that converts a bunch of different Nix types to their
@@ -53,7 +53,7 @@ rec {
     else "";
 
   extraConfigTo = extraConfig: {
-    
+
   };
 
   # Generates maps for a lua config
@@ -98,13 +98,14 @@ rec {
   }: let
     cfg = config.programs.nixvim.plugins.${name};
     # TODO support nested options!
-    pluginOptions = (mapAttrs (k: v: v.option) options) // {
-      extraConfig = mkOption {
-        type = types.attrs;
-        default = {};
-        description = "Place any extra config here as an attibute-set";
-      };
-    };
+    pluginOptions = (mapAttrs (k: v: v.option) options);
+    # // {
+      # extraConfig = mkOption {
+      #   type = types.attrs;
+      #   default = {};
+      #   description = "Place any extra config here as an attibute-set";
+      # };
+    # };
 
     globals = mapAttrs' (name: opt: {
       name = opt.global;
@@ -117,6 +118,31 @@ rec {
 
     config.programs.nixvim = mkIf cfg.enable {
       inherit extraPlugins extraConfigLua extraConfigVim globals;
+    };
+  };
+
+  mkLuaPlugin = {
+    name,
+    description,
+    extraPlugins ? [],
+    extraConfigLua ? "",
+    extraConfigVim ? "",
+    pluginOptions ? {},
+    ...
+  }: let
+    cfg = config.programs.nixvim.plugins.${name};
+  in {
+    options.programs.nixvim.plugins.${name} = {
+      enable = mkEnableOption description;
+      extraConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Place any extra config here as an attibute-set";
+      };
+    } // pluginOptions;
+
+    config.programs.nixvim = mkIf cfg.enable {
+      inherit extraPlugins extraConfigLua extraConfigVim;
     };
   };
 

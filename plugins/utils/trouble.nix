@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.programs.nixvim.plugins.trouble;
 
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 in
 {
   options = {

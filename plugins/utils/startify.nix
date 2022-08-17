@@ -1,6 +1,6 @@
-{ pkgs, lib, ... }@args:
+{ pkgs, lib, config, ... }@args:
 let
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib config; };
 in with lib; with helpers;
 mkPlugin args {
   name = "startify";
