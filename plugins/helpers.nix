@@ -14,7 +14,7 @@ rec {
     default = default;
   };
 
-  stringOption = default: description: mkOption {
+  strOption = default: description: mkOption {
     description = description;
     type = types.str;
     default = default;
@@ -128,7 +128,7 @@ rec {
     extraPackages ? [],
     extraConfigLua ? "",
     extraConfigVim ? "",
-    pluginOptions ? {},
+    moduleOptions ? {},
     # ...
   }: let
     cfg = config.programs.nixvim.plugins.${name};
@@ -140,7 +140,7 @@ rec {
         default = {};
         description = "Place any extra config here as an attibute-set";
       };
-    } // pluginOptions;
+    } // moduleOptions;
 
     config.programs.nixvim = mkIf cfg.enable {
       inherit extraPlugins extraPackages extraConfigLua extraConfigVim;

@@ -1,5 +1,7 @@
 { pkgs, lib, config, ... }:
 
+with lib;
+
 let
 
   name = "PLUGIN_NAME";
@@ -19,9 +21,9 @@ let
     # auto_start = cfg.autoStart
   };
 
-in with lib; with helpers;
+in with helpers;
 mkLuaPlugin {
-  inherit name pluginOptions;
+  inherit name moduleOptions;
   description = "Enable ${name}.nvim";
   extraPlugins = with pkgs.vimExtraPlugins; [ 
     # add neovim plugin here
@@ -31,5 +33,5 @@ mkLuaPlugin {
     # add neovim plugin here
     # tree-sitter
   ];
-  extraConfigLua = "require('treesitter').setup ${toLuaObject pluginOptions}";
+  extraConfigLua = "require('${name}').setup ${toLuaObject pluginOptions}";
 }
