@@ -52,9 +52,15 @@ rec {
       "nil"
     else "";
 
-  extraConfigTo = extraConfig: {
+  extraConfigTo = extraConfig: { };
 
-  };
+  camelToSnake = string:
+    with lib;
+    stringAsChars (x: if (toUpper x == x) then "_${toLower x}" else x) string;
+
+  toLuaOptions = cfg: moduleOptions:
+    mapAttrs' (k: v: nameValuePair (camelToSnake k) (cfg.${k})) moduleOptions;
+
 
   # Generates maps for a lua config
   genMaps = mode: maps: let
