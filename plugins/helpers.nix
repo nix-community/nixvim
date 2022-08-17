@@ -124,7 +124,7 @@ rec {
   mkLuaPlugin = {
     name,
     description,
-    extraPlugins ? [],
+    extraPlugins,
     extraPackages ? [],
     extraConfigLua ? "",
     extraConfigVim ? "",
@@ -132,7 +132,11 @@ rec {
     # ...
   }: let
     cfg = config.programs.nixvim.plugins.${name};
-  in {
+  in 
+
+  assert assertMsg (length extraPlugins > 0) "Module for '${name}' did not specify a plugin in 'extraPlugins'";
+
+  {
     options.programs.nixvim.plugins.${name} = {
       enable = mkEnableOption description;
       extraConfig = mkOption {
