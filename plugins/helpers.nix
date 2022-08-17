@@ -98,7 +98,7 @@ rec {
   }: let
     cfg = config.programs.nixvim.plugins.${name};
     # TODO support nested options!
-    pluginOptions = (mapAttrs (k: v: v.option) options);
+    moduleOptions = (mapAttrs (k: v: v.option) options);
     # // {
       # extraConfig = mkOption {
       #   type = types.attrs;
@@ -114,7 +114,7 @@ rec {
   in {
     options.programs.nixvim.plugins.${name} = {
       enable = mkEnableOption description;
-    } // pluginOptions;
+    } // moduleOptions;
 
     config.programs.nixvim = mkIf cfg.enable {
       inherit extraPlugins extraConfigLua extraConfigVim globals;
@@ -125,10 +125,11 @@ rec {
     name,
     description,
     extraPlugins ? [],
+    extraPackages ? [],
     extraConfigLua ? "",
     extraConfigVim ? "",
     pluginOptions ? {},
-    ...
+    # ...
   }: let
     cfg = config.programs.nixvim.plugins.${name};
   in {
@@ -142,7 +143,7 @@ rec {
     } // pluginOptions;
 
     config.programs.nixvim = mkIf cfg.enable {
-      inherit extraPlugins extraConfigLua extraConfigVim;
+      inherit extraPlugins extraPackages extraConfigLua extraConfigVim;
     };
   };
 
