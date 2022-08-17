@@ -58,6 +58,7 @@
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/tagbar.nix
+    ./utils/todo-comments.nix
     ./utils/trouble.nix
     ./utils/undotree.nix
     ./utils/vimwiki.nix
