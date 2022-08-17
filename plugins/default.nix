@@ -47,6 +47,7 @@
     ./utils/floaterm.nix
     ./utils/focus.nix
     ./utils/goyo.nix
+    ./utils/headlines.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
     ./utils/nerdcommenter.nix
