@@ -4,19 +4,19 @@ let
   helpers = import ../helpers.nix { inherit lib config; };
   cfg = config.programs.nixvim.plugins.stabilize;
 
-  pluginOptions = with helpers; {
+  moduleOptions = with helpers; {
     force = boolOption true "stabilize window even when current cursor position will be hidden behind new window";
   };
 
-  luaOptions = {
+  pluginOptions = {
       force = cfg.force;
   };
 
 in with lib; with helpers;
 mkLuaPlugin {
-  inherit pluginOptions;
+  inherit moduleOptions;
   name = "stabilize";
   description = "Enable stabilize.nvim";
   extraPlugins = with pkgs.vimExtraPlugins; [ stabilize-nvim ];
-  extraConfigLua = "require('stabilize').setup ${toLuaObject luaOptions}";
+  extraConfigLua = "require('stabilize').setup ${toLuaObject pluginOptions}";
 }
