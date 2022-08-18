@@ -1,15 +1,16 @@
 { pkgs, config, lib, ... }:
 
+with lib;
+
 {
-  mkLsp = {
-    name,
-    description ? "Enable ${name}.",
-    serverName ? name,
-    packages ? [ pkgs.${name} ],
-    ... }: 
+  mkLsp = { name
+    , description ? "Enable ${name}."
+    , serverName ? name
+    , packages ? [ pkgs.${name} ]
+    , ... }: 
+
       # returns a module
       { pkgs, config, lib, ... }:
-        with lib;
         let
           cfg = config.programs.nixvim.plugins.lsp.servers.${name};
         in

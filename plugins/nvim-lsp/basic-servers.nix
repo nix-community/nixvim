@@ -36,10 +36,11 @@ let
       description = "Enable jsonls, for JSON";
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
-    # {
-    #   name = "ltex-ls";
-    #   description = "Enable ltex-ls, for text files.";
-    # }
+    {
+      name = "ltex-ls";
+      description = "Enable ltex-ls, for text files.";
+      packages = [ pkgs.unstable.ltex-ls ];
+    }
     {
       name = "pyright";
       description = "Enable pyright, for Python.";
