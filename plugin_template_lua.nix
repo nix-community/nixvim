@@ -15,14 +15,14 @@ let
     # autoStart = boolOption true "Enable this pugin at start"
   };
 
-  pluginOptions = {
-    # manually add plugin mapping of module options here
-    # 
-    # auto_start = cfg.autoStart
-  };
+  # pluginOptions = {
+  #   # manually add plugin mapping of module options here
+  #   #
+  #   # auto_start = cfg.autoStart
+  # };
 
   # you can autogenerate the plugin options from the moduleOptions.
-  # This essentially convert the camalCase moduleOptions to snake_case plugin options
+  # This essentially converts the camalCase moduleOptions to snake_case plugin options
   pluginOptions = helpers.toLuaOptions cfg moduleOptions;
 
 
