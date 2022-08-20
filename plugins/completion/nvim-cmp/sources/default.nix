@@ -7,6 +7,5 @@ let
 in
 {
   # For extra cmp plugins
-  imports = [
-  ] ++ pluginModules;
+  imports = pluginModules;
 }

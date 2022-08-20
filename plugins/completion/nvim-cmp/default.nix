@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.programs.nixvim.plugins.nvim-cmp;
-  helpers = import ../../helpers.nix { lib = lib; };
+  helpers = import ../../helpers.nix { inherit lib config; };
+
   mkNullOrOption = helpers.mkNullOrOption;
   cmpLib = import ./cmp-helpers.nix args;
   # functionName should be a string
@@ -12,26 +13,15 @@ let
       parameterString = strings.concatStringsSep "," parameters;
     in
     ''${functionName}(${parameterString})'';
-in
+in with helpers;
 {
   options.programs.nixvim.plugins.nvim-cmp = {
     enable = mkEnableOption "Enable nvim-cmp";
 
-    performance = mkOption {
-      default = null;
-      type = types.nullOr (types.submodule ({ ... }: {
-        options = {
-          debounce = mkOption {
-            type = types.nullOr types.int;
-            default = null;
-          };
-          throttle = mkOption {
-            type = types.nullOr types.int;
-            default = null;
-          };
-        };
-      }));
-    };
+    performance = import ./options/performance.nix { inherit lib; };
+    mapping = import ./options/mapping.nix { inherit lib; };
+    sources = import ./options/sources.nix { inherit lib config; };
+    completion = import ./options/completion.nix { inherit lib; };
 
     preselect = mkOption {
       type = types.nullOr (types.enum [ "Item" "None" ]);
@@ -71,76 +61,6 @@ in
       '';
     };
 
-    mapping = mkOption {
-      default = null;
-      type = types.nullOr (types.attrsOf (types.either types.str (types.submodule ({ ... }: {
-        options = {
-          action = mkOption {
-            type = types.nonEmptyStr;
-            description = "The function the mapping should call";
-            example = ''"cmp.mapping.scroll_docs(-4)"'';
-          };
-          modes = mkOption {
-            default = null;
-            type = types.nullOr (types.listOf types.str);
-            example = ''[ "i" "s" ]'';
-          };
-        };
-      }))));
-      example = ''
-        {
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<Tab>" = {
-            modes = [ "i" "s" ];
-            action = '${""}'
-              function(fallback)
-                if cmp.visible() then
-                  cmp.select_next_item()
-                elseif luasnip.expandable() then
-                  luasnip.expand()
-                elseif luasnip.expand_or_jumpable() then
-                  luasnip.expand_or_jump()
-                elseif check_backspace() then
-                  fallback()
-                else
-                  fallback()
-                end
-              end
-            '${""}';
-          };
-        }
-      '';
-    };
-
-    completion = mkOption {
-      default = null;
-      type = types.nullOr (types.submodule ({ ... }: {
-        options = {
-          keyword_length = mkOption {
-            default = null;
-            type = types.nullOr types.int;
-          };
-
-          keyword_pattern = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-          };
-
-          autocomplete = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = "Lua code for the event.";
-            example = ''"false"'';
-          };
-
-          completeopt = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-          };
-        };
-      }));
-    };
-
     confirmation = mkOption {
       default = null;
       type = types.nullOr (types.submodule ({ ... }: {
@@ -159,14 +79,14 @@ in
       type = types.nullOr (types.submodule ({ ... }: {
         options = {
           fields = mkOption {
-            default = null;
             type = types.nullOr (types.listOf types.str);
             example = ''[ "kind" "abbr" "menu" ]'';
+            default = null;
           };
           format = mkOption {
-            default = null;
             type = types.nullOr types.str;
             description = "A lua function as a string";
+            default = null;
           };
         };
       }));
@@ -207,79 +127,6 @@ in
         };
       }));
     };
-
-    auto_enable_sources = mkOption {
-      default = true;
-      description = ''
-        Scans the sources array and installs the plugins if they are known to nixvim.
-      '';
-    };
-
-    sources =
-      let
-        source_config = types.submodule ({ ... }: {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = "The name of the source.";
-              example = ''"buffer"'';
-            };
-
-            option = mkOption {
-              default = null;
-              type = with types; nullOr (attrsOf anything);
-              description = "If direct lua code is needed use helpers.mkRaw";
-            };
-
-            keyword_length = mkOption {
-              default = null;
-              type = types.nullOr types.int;
-            };
-
-            keyword_pattern = mkOption {
-              default = null;
-              type = types.nullOr types.int;
-            };
-
-            trigger_characters = mkOption {
-              default = null;
-              type = with types; nullOr (listOf str);
-            };
-
-            priority = mkOption {
-              default = null;
-              type = types.nullOr types.int;
-            };
-
-            max_item_count = mkOption {
-              default = null;
-              type = types.nullOr types.int;
-            };
-
-            group_index = mkOption {
-              default = null;
-              type = types.nullOr types.int;
-            };
-          };
-        });
-      in
-      mkOption {
-        default = null;
-        type = with types; nullOr (either (listOf source_config) (listOf (listOf source_config)));
-        description = ''
-          The sources to use.
-          Can either be a list of sourceConfigs which will be made directly to a Lua object.
-          Or it can be a list of lists, which will use the cmp built-in helper function `cmp.config.sources`.
-        '';
-        example = ''
-          [
-            { name = "nvim_lsp"; }
-            { name = "luasnip"; } #For luasnip users.
-            { name = "path"; }
-            { name = "buffer"; }
-          ]
-        '';
-      };
 
     view = mkOption {
       default = null;
@@ -333,7 +180,7 @@ in
 
   config =
     let
-      options = {
+      pluginOptions = {
         enabled = cfg.enable;
         performance = cfg.performance;
         preselect = if (isNull cfg.preselect) then null else helpers.mkRaw "cmp.PreselectMode.${cfg.preselect}";
@@ -393,31 +240,13 @@ in
     in
     mkIf cfg.enable {
       programs.nixvim = {
-        extraPlugins = [ pkgs.vimPlugins.nvim-cmp ];
+        extraPlugins = [ pkgs.vimExtraPlugins.nvim-cmp ];
 
         extraConfigLua = ''
-          local cmp = require('cmp')
-          cmp.setup(${helpers.toLuaObject options})
+          do -- create scope to not interfere with other plugins
+            require('cmp').setup(${helpers.toLuaObject pluginOptions})
+          end
         '';
-
-        # If auto_enable_sources is set to true, figure out which are provided by the user
-        # and enable the corresponding plugins.
-        plugins =
-          let
-            flattened_sources = if (isNull cfg.sources) then [ ] else flatten cfg.sources;
-            # Take only the names from the sources provided by the user
-            found_sources = lists.unique (lists.map (source: source.name) flattened_sources);
-            # A list of known source names
-            known_source_names = attrNames cmpLib.pluginAndSourceNames;
-
-            attrs_enabled = listToAttrs (map
-              (name: {
-                name = cmpLib.pluginAndSourceNames.${name};
-                value.enable = mkIf (elem name found_sources) true;
-              })
-              known_source_names);
-          in
-          mkIf cfg.auto_enable_sources attrs_enabled;
       };
     };
 }
