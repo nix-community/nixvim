@@ -4,7 +4,6 @@ let
   cfg = config.programs.nixvim.plugins.coq-nvim;
   helpers = import ../helpers.nix { lib = lib; };
   plugins = import ../plugin-defs.nix { inherit pkgs; };
-
 in {
   options = {
     programs.nixvim.plugins.coq-nvim = {
