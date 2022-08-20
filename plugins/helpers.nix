@@ -20,22 +20,26 @@ rec {
     default = default;
   };
 
-  boolNullOption = default: description: mkOption {
+  boolNullOption = description: mkOption {
     type = types.nullOr types.bool;
     description = description;
-    default = default;
+    default = null;
   };
 
-  intNullOption = default: description: mkOption {
+  intNullOption = description: mkOption {
     type = types.nullOr types.int;
     description = description;
-    default = default;
+    default = null;
   };
 
-  strNullOption = default: description: mkOption {
+  strNullOption = description: mkOption {
     type = types.nullOr types.str;
     description = description;
-    default = default;
+    default = null;
+  };
+
+  typeOption = type: default: description: mkOption {
+    inherit type default description;
   };
 
   # vim dictionaries are, in theory, compatible with JSON
