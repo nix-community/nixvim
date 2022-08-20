@@ -25,8 +25,6 @@ let
   # This essentially converts the camalCase moduleOptions to snake_case plugin options
   pluginOptions = helpers.toLuaOptions cfg moduleOptions;
 
-
-
 in with helpers;
 mkLuaPlugin {
   inherit name moduleOptions;
