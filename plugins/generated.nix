@@ -15,7 +15,6 @@ let
     "gruvbox"
     "nest-nvim"
     "plenary-nvim"
-    "nvim-treesitter-context"
     "nvim-ts-context-commentstring"
     "telescope-nvim"
     "indent-blankline-nvim"
