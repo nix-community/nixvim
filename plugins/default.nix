@@ -56,14 +56,17 @@
     ./utils/mark-radar.nix
     ./utils/nerdcommenter.nix
     ./utils/notify.nix
+    ./utils/numb.nix
     ./utils/nvim-autopairs.nix
     ./utils/nvim-tree.nix
+    ./utils/scrollbar.nix
     ./utils/specs.nix
     ./utils/stabilize.nix
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/tagbar.nix
     ./utils/todo-comments.nix
+    ./utils/treesitter-context.nix
     ./utils/trouble.nix
     ./utils/undotree.nix
     ./utils/vimwiki.nix
