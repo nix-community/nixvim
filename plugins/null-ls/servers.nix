@@ -9,6 +9,12 @@ let
     diagnostics = {
     };
     formatting = {
+      alejandra = {
+        packages = [ pkgs.alejandra ];
+      };
+      nixfmt = {
+        packages = [ pkgs.nixfmt ];
+      };
       prettier = {
         packages = [ pkgs.nodePackages.prettier ];
       };
