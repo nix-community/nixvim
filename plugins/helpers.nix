@@ -3,20 +3,38 @@ with lib;
 rec {
 
   boolOption = default: description: mkOption {
-    description = description;
     type = types.bool;
+    description = description;
     default = default;
   };
 
   intOption = default: description: mkOption {
-    description = description;
     type = types.int;
+    description = description;
     default = default;
   };
 
   strOption = default: description: mkOption {
-    description = description;
     type = types.str;
+    description = description;
+    default = default;
+  };
+
+  boolNullOption = default: description: mkOption {
+    type = types.nullOr types.bool;
+    description = description;
+    default = default;
+  };
+
+  intNullOption = default: description: mkOption {
+    type = types.nullOr types.int;
+    description = description;
+    default = default;
+  };
+
+  strNullOption = default: description: mkOption {
+    type = types.nullOr types.str;
+    description = description;
     default = default;
   };
 
@@ -123,7 +141,11 @@ rec {
     } // moduleOptions;
 
     config.programs.nixvim = mkIf cfg.enable {
-      inherit extraPlugins extraConfigLua extraConfigVim globals;
+      inherit extraPlugins extraConfigVim globals;
+      extraConfigLua =
+        if stringLength extraConfigLua > 0 then
+          "do -- config scope: ${name}\n" + extraConfigLua + "\nend"
+        else "";
     };
   };
 
@@ -153,7 +175,11 @@ rec {
     } // moduleOptions;
 
     config.programs.nixvim = mkIf cfg.enable {
-      inherit extraPlugins extraPackages extraConfigLua extraConfigVim;
+      inherit extraPlugins extraPackages extraConfigVim;
+      extraConfigLua =
+        if stringLength extraConfigLua > 0 then
+          "do -- config scope: ${name}\n" + extraConfigLua + "\nend"
+        else "";
     };
   };
 
