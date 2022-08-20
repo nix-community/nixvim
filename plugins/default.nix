@@ -1,5 +1,7 @@
 {
   imports = [
+    ./generated.nix
+
     ./bufferlines/barbar.nix
     ./bufferlines/bufferline.nix
     ./bufferlines/tabby.nix
@@ -38,6 +40,7 @@
     ./telescope
 
     ./utils/asyncrun.nix
+    ./utils/bufdelete.nix
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/dashboard.nix
