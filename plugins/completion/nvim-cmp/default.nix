@@ -244,7 +244,8 @@ in with helpers;
 
         extraConfigLua = ''
           do -- create scope to not interfere with other plugins
-            require('cmp').setup(${helpers.toLuaObject pluginOptions})
+            local cmp = require('cmp') -- this is needed
+            cmp.setup(${helpers.toLuaObject pluginOptions})
           end
         '';
       };

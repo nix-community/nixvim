@@ -66,11 +66,11 @@ let
             type = nullOr (listOf str);
             default = null;
           };
-          keywordLength = intNullOption null "";
-          keywordPattern = intNullOption null "";
-          priority = intNullOption null "";
-          maxItemCount = intNullOption null "";
-          groupIndex = intNullOption null "";
+          keywordLength = intNullOption "";
+          keywordPattern = intNullOption "";
+          priority = intNullOption "";
+          maxItemCount = intNullOption "";
+          groupIndex = intNullOption "";
         };
       });
       description = "Module for the ${name} (${package}) source for nvim-cmp";
