@@ -30,24 +30,25 @@ in with helpers;
       example = ''"Item"'';
     };
 
-    snippet = mkOption {
-      default = null;
-      type = types.nullOr (types.submodule ({ ... }: {
-        options = {
-          expand = mkOption {
-            type = types.nullOr types.str;
-            example = ''
-              function(args)
-                vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-                -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-                -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-                -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-              end
-            '';
-          };
-        };
-      }));
-    };
+    snippet = import ./options/snippet.nix { inherit lib config pkgs; };
+    # snippet = mkOption {
+    #   default = null;
+    #   type = types.nullOr (types.submodule ({ ... }: {
+    #     options = {
+    #       expand = mkOption {
+    #         type = types.nullOr types.str;
+    #         example = ''
+    #           function(args)
+    #             vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+    #             -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+    #             -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+    #             -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+    #           end
+    #         '';
+    #       };
+    #     };
+    #   }));
+    # };
 
     mappingPresets = mkOption {
       default = [ ];
@@ -204,9 +205,9 @@ in with helpers;
           in
           helpers.mkRaw wrapped;
 
-        snippet = {
-          expand = if (isNull cfg.snippet || isNull cfg.snippet.expand) then null else helpers.mkRaw cfg.snippet.expand;
-        };
+        # snippet = {
+        #   expand = if (isNull cfg.snippet || isNull cfg.snippet.expand) then null else helpers.mkRaw cfg.snippet.expand;
+        # };
 
         completion = if (isNull cfg.completion) then null else {
           keyword_length = cfg.completion.keyword_length;
@@ -234,6 +235,9 @@ in with helpers;
         };
 
         sources = cmpLib.sourceConfig cfg.sources;
+        snippet = {
+          expand = "function(args) ${ lib.optionalString cfg.snippet.luasnip.enable "require(\"luasnip\").lsp_expand(args.body)" } end";
+        };
 
         view = cfg.view;
         window = cfg.window;
