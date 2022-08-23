@@ -118,7 +118,7 @@ in
 
     git = {
       enable = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.bool;
         default = null;
         description = "Enable git integration";
       };

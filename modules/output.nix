@@ -46,6 +46,19 @@ in
       description = "Extra contents for init.lua";
     };
 
+    extraConfigLuaPre = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Extra contents for init.lua before everything else";
+    };
+
+    extraConfigLuaPost = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Extra contents for init.lua after everything else";
+    };
+
+
     extraConfigVim = mkOption {
       type = types.lines;
       default = "";
@@ -63,9 +76,11 @@ in
   config =
     let
       configure = {
-        customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "") ''
+        customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
           lua <<EOF
+          ${config.extraConfigLuaPre}
           ${config.extraConfigLua}
+          ${config.extraConfigLuaPost}
           EOF
         '');
 

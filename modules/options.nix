@@ -16,7 +16,7 @@ with lib;
   };
 
   config = {
-    extraConfigLua = optionalString (config.globals != { }) ''
+    extraConfigLuaPre = optionalString (config.globals != { }) ''
       -- Set up globals {{{
       do
         local nixvim_globals = ${helpers.toLuaObject config.globals}
