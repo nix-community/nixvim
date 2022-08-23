@@ -10,7 +10,7 @@ with lib;
   };
 
   config = {
-    extraConfigVim = optionalString (config.colorscheme != "") ''
+    extraConfigVim = optionalString (config.colorscheme != "" && config.colorscheme != null) ''
       colorscheme ${config.colorscheme}
     '';
   };

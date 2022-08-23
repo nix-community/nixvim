@@ -26,6 +26,8 @@
             };
           };
         })
+
+        ./plugins/default.nix
       ];
 
       nixvimOption = mkOption {
@@ -42,7 +44,7 @@
         configuration:
         let
           eval = evalModules {
-            modules = modules system;
+            modules = modules system ++ [ configuration ];
           };
         in
         eval.config.output;
