@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+  gh-pages: sugarshin/gh-pages@1.0.1
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -48,9 +51,11 @@ workflows:
   build-docs-workflow:
     jobs:
       - build-docs
-      - docs-deploy:
-          requires:
-            - build-docs
-          filters:
-            branches:
-              only: main
+      - gh-pages/deploy:
+          attach-workspace: true 
+          git-email: ci-build@pta2002.com 
+          git-user: ci-build 
+          ssh-fingerprints: e6:0d:b3:76:76:d9:e3:93:31:24:a6:49:d7:a2:8f:a3 
+          build-dir: doc 
+          workspace-root: . 
+      
