@@ -47,9 +47,10 @@
     in
     flake-utils.lib.eachDefaultSystem
       (system: rec {
-        packages.${system}.docs = import ./docs {
+        packages.docs = import ./docs {
           pkgs = import nixpkgs { inherit system; };
           lib = nixpkgs.lib;
+          nixvimModules = nixvimModules;
         };
 
         nixosModules.nixvim = { pkgs, config, lib, ... }: {
