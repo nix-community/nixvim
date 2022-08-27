@@ -18,6 +18,7 @@ let
     "nvim-ts-context-commentstring"
     "telescope-nvim"
     "indent-blankline-nvim"
+    "asyncrun-vim"
     { name = "LuaSnip"; setup = false; }
     { name = "lsp-signature-nvim"; setup = false; }
   ];
@@ -31,7 +32,9 @@ in with helpers; {
         if isString p then 
           ""
         else 
-          if (p.setup) then
+          if isString p.setup then
+            p.setup
+          else if p.setup then
             "require('${name}').setup()"
           else "";
     in mkLuaPlugin {

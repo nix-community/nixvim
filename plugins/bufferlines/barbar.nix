@@ -17,12 +17,6 @@ let
     clickable = boolOption true "Enable clickable tabs\n - left-click: go to buffer\n - middle-click: delete buffer";
   };
 
-  # pluginOptions = {
-  #   animation = cfg.animation;
-  #   auto_hide = cfg.autoHide;
-  #   tabpages = cfg.tabpages;
-  #   closable = cfg.closable;
-  # };
   pluginOptions = helpers.toLuaOptions cfg moduleOptions;
 
 in with helpers;
@@ -30,14 +24,8 @@ mkLuaPlugin {
   inherit name moduleOptions;
   description = "Enable ${name}.nvim";
   extraPlugins = with pkgs.vimExtraPlugins; [
-    # add neovim plugin here
-    # nvim-treesitter
       barbar-nvim
       nvim-web-devicons
-  ];
-  extraPackages = with pkgs; [
-    # add neovim plugin here
-    # tree-sitter
   ];
   extraConfigLua = "require('bufferline').setup ${toLuaObject pluginOptions}";
 }

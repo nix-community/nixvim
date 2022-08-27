@@ -5,14 +5,6 @@ with lib;
 let
   helpers = import ../../helpers.nix { inherit lib config; };
 
-  # remove nulls from list (Is there no lib function for this?)
-  removeNull = list:
-    if list == [] then
-      []
-    else if isNull (head list) then
-      [] ++ removeNull (drop 1 list)
-    else
-      [ (head list) ] ++ removeNull (drop 1 list);
 in with helpers;
 rec {
   # mkCmpSourcePlugin = { name, extraPlugins ? [], useDefaultPackage ? true, ... }: mkPlugin attrs {
@@ -84,7 +76,7 @@ rec {
         else
           null
         ) attrs;
-    in removeNull packageList;
+    in filter (p: !(isNull p)) packageList;
 
   # create a list off all activated sources for cmp lua config
   sourceConfig = attrs:
@@ -97,7 +89,7 @@ rec {
         else
           null
         ) attrs;
-    in removeNull packageList;
+    in filter (p: !(isNull p)) packageList;
 
   # create a list off all extraConfig of activated sources for extraConfig of cmp module
   sourceExtraConfig = attrs:
@@ -115,5 +107,5 @@ rec {
         else
           null
         ) attrs;
-    in concatStringsSep "\n" (removeNull packageList);
+    in concatStringsSep "\n" (filter (p: !(isNull p)) packageList);
 }
