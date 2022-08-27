@@ -25,13 +25,13 @@ in
     enabledExtensions = mkOption {
       type = types.listOf types.str;
       description = "A list of enabled extensions. Don't use this directly";
-      default = [];
+      default = [ ];
     };
 
     extensionConfig = mkOption {
       type = types.attrsOf types.anything;
       description = "Configuration for the extensions. Don't use this directly";
-      default = {};
+      default = { };
     };
   };
 
@@ -50,16 +50,18 @@ in
       '';
 
       extraConfigLua = ''
-        local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
+        do
+          local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
 
-        require('telescope').setup{
-          extensions = ${helpers.toLuaObject cfg.extensionConfig}
-        }
+          require('telescope').setup{
+            extensions = ${helpers.toLuaObject cfg.extensionConfig}
+          }
 
-        for i, extension in ipairs(__telescopeExtensions) do
-          require('telescope').load_extension(extension)
+          for i, extension in ipairs(__telescopeExtensions) do
+            require('telescope').load_extension(extension)
+          end
         end
-        '' ;
+      '';
     };
   };
 }
