@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 with lib;
-let 
+let
   cfg = config.programs.nixvim.plugins.telescope.extensions.media_files;
 in
 {
@@ -8,7 +8,7 @@ in
     enable = mkEnableOption "Enable media_files extension for telescope";
 
     filetypes = mkOption {
-      default = types.null;
+      default = null;
       type = with types; nullOr (listOf str);
     };
 
