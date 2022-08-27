@@ -9,6 +9,7 @@ in
     ./frecency.nix
     ./fzf-native.nix
     ./fzy-native.nix
+    ./media-files.nix
   ];
 
   # TODO:add support for aditional filetypes. This requires autocommands!
@@ -49,14 +50,16 @@ in
     '';
 
     extraConfigLua = ''
-      local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
+      do
+        local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
 
-      require('telescope').setup{
-        extensions = ${helpers.toLuaObject cfg.extensionConfig}
-      }
+        require('telescope').setup{
+          extensions = ${helpers.toLuaObject cfg.extensionConfig}
+        }
 
-      for i, extension in ipairs(__telescopeExtensions) do
-        require('telescope').load_extension(extension)
+        for i, extension in ipairs(__telescopeExtensions) do
+          require('telescope').load_extension(extension)
+        end
       end
     '';
   };

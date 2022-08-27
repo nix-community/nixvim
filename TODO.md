@@ -1,0 +1,1 @@
+- Test if the config is actually being evaluated - this is easy to check by purposefully causing an error
