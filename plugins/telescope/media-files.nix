@@ -14,7 +14,7 @@ in
 
     find_cmd = mkOption {
       default = null;
-      type = with types; nollOr str;
+      type = with types; nullOr str;
       example = ''"rg"'';
     };
   };
