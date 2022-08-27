@@ -1,10 +1,10 @@
 { pkgs, config, lib, ... }:
 with lib;
-let 
-  cfg = config.programs.nixvim.plugins.telescope.extensions.media_files;
+let
+  cfg = config.plugins.telescope.extensions.media_files;
 in
 {
-  options.programs.nixvim.plugins.telescope.extensions.media_files = {
+  options.plugins.telescope.extensions.media_files = {
     enable = mkEnableOption "Enable media_files extension for telescope";
 
     filetypes = mkOption {
@@ -20,19 +20,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      plugins.telescope.enabledExtensions = [ "media_files" ];
+    plugins.telescope.enabledExtensions = [ "media_files" ];
 
-      extraPlugins = with pkgs.vimPlugins; [
-        popup-nvim
-        plenary-nvim
-        telescope-media-files-nvim
-      ];
+    extraPlugins = with pkgs.vimPlugins; [
+      popup-nvim
+      plenary-nvim
+      telescope-media-files-nvim
+    ];
 
-      extraPackages = with pkgs; [
-        ueberzug
-      ];
-    };
-
+    extraPackages = with pkgs; [
+      ueberzug
+    ];
   };
 }
