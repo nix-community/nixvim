@@ -8,7 +8,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        build = nixvim.build system;
+        build = nixvim.build pkgs;
       in
       rec {
         # A plain nixvim configuration

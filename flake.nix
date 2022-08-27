@@ -14,15 +14,15 @@
       # TODO: Support nesting
       nixvimModules = map (f: ./modules + "/${f}") (attrNames (builtins.readDir ./modules));
 
-      modules = system: nixvimModules ++ [
+      modules = pkgs: nixvimModules ++ [
         (rec {
           _file = ./flake.nix;
           key = _file;
           config = {
             _module.args = {
-              pkgs = mkForce (import nixpkgs { inherit system; });
-              lib = nixpkgs.lib;
-              helpers = import ./plugins/helpers.nix { lib = nixpkgs.lib; };
+              pkgs = mkForce pkgs;
+              lib = pkgs.lib;
+              helpers = import ./plugins/helpers.nix { lib = pkgs.lib; };
             };
           };
         })
@@ -30,17 +30,17 @@
         ./plugins/default.nix
       ];
 
-      nixvimOption = mkOption {
-        type = types.submodule (nixvimModules ++ [{
+      nixvimOption = pkgs: mkOption {
+        type = types.submodule ((modules pkgs) ++ [{
           options.enable = mkEnableOption "Enable nixvim";
         }]);
       };
 
-      build = system:
+      build = pkgs:
         configuration:
         let
           eval = evalModules {
-            modules = modules system ++ [ configuration ];
+            modules = modules pkgs ++ [ configuration ];
           };
         in
         eval.config.output;
@@ -54,7 +54,7 @@
         };
 
         nixosModules.nixvim = { pkgs, config, lib, ... }: {
-          options.programs.nixvim = nixvimOption;
+          options.programs.nixvim = nixvimOption pkgs;
           config = mkIf config.programs.nixvim.enable {
             environment.systemPackages = [
               config.programs.nixvim.output
@@ -63,7 +63,7 @@
         };
 
         homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
-          options.programs.nixvim = nixvimOption;
+          options.programs.nixvim = nixvimOption pkgs;
           config = mkIf config.programs.nixvim.enable {
             home.packages = [
               config.programs.nixvim.output
