@@ -1,17 +1,17 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lsp-lines;
+  cfg = config.plugins.lsp-lines;
   helpers = import ../helpers.nix { lib = lib; };
 in
 {
   options = {
-    programs.nixvim.plugins.lsp-lines = {
+    plugins.lsp-lines = {
       enable = mkEnableOption "lsp_lines.nvim";
     };
   };
 
-  config.programs.nixvim =
+  config =
     mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.lsp_lines-nvim ];
 
