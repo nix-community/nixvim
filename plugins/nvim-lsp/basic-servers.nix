@@ -37,7 +37,7 @@ let
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
     {
-      name = "ltex-ls";
+      name = "ltex";
       description = "Enable ltex-ls, for text files.";
       packages = [ pkgs.unstable.ltex-ls ];
     }
