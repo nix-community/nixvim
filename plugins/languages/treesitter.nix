@@ -21,6 +21,12 @@ in
         description = "Either \"all\" or a list of languages";
       };
 
+      ignoreInstall = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "List of parsers to ignore installing (for \"all\")";
+      };
+
       disabledLanguages = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -77,12 +83,9 @@ in
             };
           } else null;
 
-        indent =
-          if cfg.indent then {
-            enable = true;
-          } else null;
-
+        indent = if cfg.indent == true then cfg.indent else null;
         ensure_installed = cfg.ensureInstalled;
+        ignore_install = cfg.ignoreInstall;
       };
     in
     mkIf cfg.enable {
@@ -101,3 +104,4 @@ in
       };
     };
 }
+
