@@ -15,9 +15,15 @@ in
         description = "Install grammars with Nix (beta)";
       };
       ensureInstalled = mkOption {
-        type = with types; oneOf [ (enum [ "all" "maintained" ]) (listOf str) ];
-        default = "maintained";
-        description = "Either \"all\", \"maintained\" or a list of languages";
+        type = with types; oneOf [ (enum ["all"]) (listOf str) ];
+        default = "all";
+        description = "Either \"all\" or a list of languages";
+      };
+
+      ignoreInstall = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = "List of parsers to ignore installing (for \"all\")";
       };
 
       disabledLanguages = mkOption {
@@ -77,6 +83,7 @@ in
       } else null;
 
       ensure_installed = cfg.ensureInstalled;
+      ignore_install = cfg.ignoreInstall;
     };
   in mkIf cfg.enable {
     programs.nixvim = {
@@ -96,3 +103,4 @@ in
     };
   };
 }
+
