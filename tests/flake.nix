@@ -33,6 +33,17 @@
             gruvbox-module = build {
               colorschemes.gruvbox.enable = true;
             };
+
+            treesitter = build {
+              plugins.treesitter.enable = true;
+            };
+
+            treesitter-nonix = build {
+              plugins.treesitter = {
+                enable = true;
+                nixGrammars = false;
+              };
+            };
           };
         })) // {
       nixosConfigurations.nixvim-machine = nixpkgs.lib.nixosSystem {

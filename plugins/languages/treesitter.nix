@@ -11,13 +11,14 @@ in
 
       nixGrammars = mkOption {
         type = types.bool;
-        default = false;
-        description = "Install grammars with Nix (beta)";
+        default = true;
+        description = "Install grammars with Nix";
       };
+
       ensureInstalled = mkOption {
-        type = with types; oneOf [ (enum [ "all" "maintained" ]) (listOf str) ];
-        default = "maintained";
-        description = "Either \"all\", \"maintained\" or a list of languages";
+        type = with types; oneOf [ (enum [ "all" ]) (listOf str) ];
+        default = "all";
+        description = "Either \"all\" or a list of languages";
       };
 
       disabledLanguages = mkOption {

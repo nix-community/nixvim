@@ -44,34 +44,39 @@
           };
         in
         eval.config.output;
+
+      flakeOutput =
+        flake-utils.lib.eachDefaultSystem
+          (system: rec {
+            packages.docs = import ./docs {
+              pkgs = import nixpkgs { inherit system; };
+              lib = nixpkgs.lib;
+              nixvimModules = nixvimModules;
+            };
+
+            nixosModules.nixvim = { pkgs, config, lib, ... }: {
+              options.programs.nixvim = nixvimOption pkgs;
+              config = mkIf config.programs.nixvim.enable {
+                environment.systemPackages = [
+                  config.programs.nixvim.output
+                ];
+              };
+            };
+
+            homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
+              options.programs.nixvim = nixvimOption pkgs;
+              config = mkIf config.programs.nixvim.enable {
+                home.packages = [
+                  config.programs.nixvim.output
+                ];
+              };
+            };
+          });
     in
-    flake-utils.lib.eachDefaultSystem
-      (system: rec {
-        packages.docs = import ./docs {
-          pkgs = import nixpkgs { inherit system; };
-          lib = nixpkgs.lib;
-          nixvimModules = nixvimModules;
-        };
-
-        nixosModules.nixvim = { pkgs, config, lib, ... }: {
-          options.programs.nixvim = nixvimOption pkgs;
-          config = mkIf config.programs.nixvim.enable {
-            environment.systemPackages = [
-              config.programs.nixvim.output
-            ];
-          };
-        };
-
-        homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
-          options.programs.nixvim = nixvimOption pkgs;
-          config = mkIf config.programs.nixvim.enable {
-            home.packages = [
-              config.programs.nixvim.output
-            ];
-          };
-        };
-      }) // {
+    flakeOutput // {
       inherit build;
       # TODO: Stuff for home-manager and nixos modules backwards compat, keeping the architecture as x86_64 if none is specified...
+      homeManagerModules.nixvim = flakeOutput.homeManagerModules.x86_64-linux.nixvim;
+      nixosModules.nixvim = flakeOutput.nixosModules.x86_64-linux.nixvim;
     };
 }
