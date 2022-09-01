@@ -75,29 +75,25 @@ in
 
   config =
     let
-      configure = {
-        customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
-          lua <<EOF
-          ${config.extraConfigLuaPre}
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-          EOF
-        '');
+      customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
+        lua <<EOF
+        ${config.extraConfigLuaPre}
+        ${config.extraConfigLua}
+        ${config.extraConfigLuaPost}
+        EOF
+      '');
 
-        packages.nixvim = {
-          start = filter (f: f != null) (map
-            (x:
-              if x ? plugin && x.optional == true then null else (x.plugin or x))
-            config.extraPlugins);
-          opt = filter (f: f != null)
-            (map (x: if x ? plugin && x.optional == true then x.plugin else null)
-              config.extraPlugins);
-        };
+      defaultPlugin = {
+        plugin = null;
+        config = "";
+        optional = false;
       };
 
+      normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) config.extraPlugins;
+
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
-        inherit configure;
-        plugins = [ ];
+        inherit customRC;
+        plugins = normalizedPlugins;
       };
 
       extraWrapperArgs = optionalString (config.extraPackages != [ ])
