@@ -35,6 +35,16 @@
             };
           };
         })) // {
+      nixosConfigurations.nixvim-machine = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ({ pkgs, ... }: {
+            environment.systemPackages = [
+              (nixvim.build pkgs { colorschemes.gruvbox.enable = true; })
+            ];
+          })
+        ];
+      };
       nixosConfigurations.container = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules =
@@ -45,10 +55,6 @@
               # Let 'nixos-version --json' know about the Git revision
               # of this flake.
               system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-
-              # Network configuration.
-              networking.useDHCP = false;
-              networking.firewall.allowedTCPPorts = [ 80 ];
 
               imports = [
                 nixvim.nixosModules.x86_64-linux.nixvim
