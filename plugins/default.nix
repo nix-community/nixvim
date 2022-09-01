@@ -38,7 +38,6 @@
 
     ./telescope
 
-    ./utils/asyncrun.nix
     ./utils/bufdelete.nix
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
