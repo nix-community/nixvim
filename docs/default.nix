@@ -1,16 +1,10 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? import <nixpkgs/lib>
+, nmdSrc
 , nixvimModules ? [ ]
 , ...
 }:
 let
-  nmdSrc = pkgs.fetchFromGitLab {
-    name = "nmd";
-    owner = "rycee";
-    repo = "nmd";
-    rev = "527245ff605bde88c2dd2ddae21c6479bb7cf8aa";
-    sha256 = "1zi0f9y3wq4bpslx1py3sfgrgd9av41ahpandvs6rvkpisfsqqlp";
-  };
   nmd = import nmdSrc { inherit pkgs lib; };
   scrubbedPkgsModule = {
     imports = [{
@@ -49,4 +43,6 @@ let
     '';
   };
 in
-docs.html
+# TODO: Parse this json or something, since docbook isn't working (and it's kind of terrible anyway)
+nixvimDocs.json
+

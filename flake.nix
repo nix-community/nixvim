@@ -52,6 +52,7 @@
               pkgs = import nixpkgs { inherit system; };
               lib = nixpkgs.lib;
               nixvimModules = nixvimModules;
+              inherit nmdSrc;
             };
 
             nixosModules.nixvim = { pkgs, config, lib, ... }: {
