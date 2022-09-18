@@ -83,8 +83,12 @@ in
             };
           } else null;
 
-        indent = if cfg.indent == true then cfg.indent else null;
-        ensure_installed = cfg.ensureInstalled;
+        indent =
+          if cfg.indent then {
+            enable = true;
+          } else null;
+
+        ensure_installed = if cfg.nixGrammars then [ ] else cfg.ensureInstalled;
         ignore_install = cfg.ignoreInstall;
       };
     in
