@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.neogit;
+  cfg = config.plugins.neogit;
   helpers = import ../helpers.nix { inherit lib; };
 
   sectionDefaultsModule = types.submodule {
@@ -15,7 +15,7 @@ let
 in
 {
   options = {
-    programs.nixvim.plugins.neogit = {
+    plugins.neogit = {
       enable = mkEnableOption "Enable neogit";
 
       disableSigns = mkOption {
@@ -201,20 +201,21 @@ in
     };
   };
 
-  config = let 
-    setupOptions = with cfg; helpers.toLuaObject {
-      inherit kind integrations signs sections mappings;
-      disable_signs = disableSigns;
-      disable_hint = disableHint;
-      disable_context_highlighting = disableContextHighlighting;
-      disable_commit_confirmation = disableCommitConfirmation;
-      auto_refresh = autoRefresh;
-      disable_builtin_notifications = disableBuiltinNotifications;
-      use_magit_keybindings = useMagitKeybindings;
-      commit_popup = commitPopup;
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      setupOptions = with cfg; helpers.toLuaObject {
+        inherit kind integrations signs sections mappings;
+        disable_signs = disableSigns;
+        disable_hint = disableHint;
+        disable_context_highlighting = disableContextHighlighting;
+        disable_commit_confirmation = disableCommitConfirmation;
+        auto_refresh = autoRefresh;
+        disable_builtin_notifications = disableBuiltinNotifications;
+        use_magit_keybindings = useMagitKeybindings;
+        commit_popup = commitPopup;
+      };
+    in
+    mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         neogit
         plenary-nvim
@@ -224,5 +225,4 @@ in
         require('neogit').setup(${setupOptions})
       '';
     };
-  };
 }

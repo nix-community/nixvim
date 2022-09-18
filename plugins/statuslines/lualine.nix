@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lualine;
+  cfg = config.plugins.lualine;
   helpers = import ../helpers.nix { lib = lib; };
   separators = mkOption {
     type = types.nullOr (types.submodule {
@@ -43,13 +43,14 @@ let
       });
       default = null;
     };
-in {
+in
+{
   options = {
-    programs.nixvim.plugins.lualine = {
+    plugins.lualine = {
       enable = mkEnableOption "Enable lualine";
 
       theme = mkOption {
-        default = config.programs.nixvim.colorscheme;
+        default = config.colorscheme;
         type = types.nullOr types.str;
         description = "The theme to use for lualine-nvim.";
       };
@@ -109,25 +110,25 @@ in {
       };
     };
   };
-  config = let
-    setupOptions = {
-      options = {
-        theme = cfg.theme;
-        section_separators = cfg.sectionSeparators;
-        component_separators = cfg.componentSeparators;
-        disabled_filetypes = cfg.disabledFiletypes;
-        always_divide_middle = cfg.alwaysDivideMiddle;
-      };
+  config =
+    let
+      setupOptions = {
+        options = {
+          theme = cfg.theme;
+          section_separators = cfg.sectionSeparators;
+          component_separators = cfg.componentSeparators;
+          disabled_filetypes = cfg.disabledFiletypes;
+          always_divide_middle = cfg.alwaysDivideMiddle;
+        };
 
-      sections = cfg.sections;
-      tabline = cfg.tabline;
-      extensions = cfg.extensions;
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+        sections = cfg.sections;
+        tabline = cfg.tabline;
+        extensions = cfg.extensions;
+      };
+    in
+    mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.lualine-nvim ];
       extraConfigLua =
         ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
     };
-  };
 }

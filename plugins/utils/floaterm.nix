@@ -1,12 +1,12 @@
 { config, pkgs, lib, ... }:
 with lib;
-let 
-  cfg = config.programs.nixvim.plugins.floaterm;
+let
+  cfg = config.plugins.floaterm;
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
-    programs.nixvim.plugins.floaterm = {
+    plugins.floaterm = {
       enable = mkEnableOption "Enable floaterm";
       shell = mkOption {
         type = types.nullOr types.str;
@@ -64,23 +64,21 @@ in
     };
   };
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      extraPlugins = with pkgs.vimPlugins; [
-        vim-floaterm
-      ];
-      globals = {
-        floaterm_shell = mkIf (!isNull cfg.shell) cfg.shell;
-        floaterm_title = mkIf (!isNull cfg.title) cfg.title;
-        floaterm_wintype = mkIf (!isNull cfg.winType) cfg.winType;
-        floaterm_width = mkIf (!isNull cfg.winWidth) cfg.winWidth;
-        floaterm_height = mkIf (!isNull cfg.winHeight) cfg.winHeight;
-        floaterm_borderchars = mkIf (!isNull cfg.borderChars) cfg.borderChars;
-        floaterm_rootmarkers = mkIf (!isNull cfg.rootMarkers) cfg.rootMarkers;
-        floaterm_opener = mkIf (!isNull cfg.opener) cfg.opener;
-        floaterm_autoclose = mkIf (!isNull cfg.autoClose) cfg.autoClose;
-        floaterm_autohide = mkIf (!isNull cfg.autoHide) cfg.autoHide;
-        floaterm_autoInsert = mkIf (!isNull cfg.autoInsert) cfg.autoInsert;
-      };
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-floaterm
+    ];
+    globals = {
+      floaterm_shell = mkIf (!isNull cfg.shell) cfg.shell;
+      floaterm_title = mkIf (!isNull cfg.title) cfg.title;
+      floaterm_wintype = mkIf (!isNull cfg.winType) cfg.winType;
+      floaterm_width = mkIf (!isNull cfg.winWidth) cfg.winWidth;
+      floaterm_height = mkIf (!isNull cfg.winHeight) cfg.winHeight;
+      floaterm_borderchars = mkIf (!isNull cfg.borderChars) cfg.borderChars;
+      floaterm_rootmarkers = mkIf (!isNull cfg.rootMarkers) cfg.rootMarkers;
+      floaterm_opener = mkIf (!isNull cfg.opener) cfg.opener;
+      floaterm_autoclose = mkIf (!isNull cfg.autoClose) cfg.autoClose;
+      floaterm_autohide = mkIf (!isNull cfg.autoHide) cfg.autoHide;
+      floaterm_autoInsert = mkIf (!isNull cfg.autoInsert) cfg.autoInsert;
     };
   };
 }

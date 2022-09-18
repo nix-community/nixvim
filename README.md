@@ -75,6 +75,25 @@ You can now access the module using `inputs.nixvim.homeManagerModules.nixvim`,
 for a home-manager instalation, and `inputs.nixvim.nixosModules.nixvim`, if
 you're not using it.
 
+## Usage
+NixVim can be used in three ways: through the home-manager and NixOS modules,
+and through the `build` function. To use the modules, just import the
+`nixvim.homeManagerModules.${system}.nixvim` and
+`nixvim.nixosModules.${system}.nixvim` modules, depending on which system
+you're using.
+
+If you want to use it standalone, you can use the `build` function:
+
+```nix
+{ pkgs, nixvim, ... }: {
+  environment.systemModules = [
+    (nixvim.build pkgs {
+      colorschemes.gruvbox.enable = true;
+    })
+  ];
+}
+```
+
 ## How does it work?
 When you build the module (probably using home-manager), it will install all
 your plugins and generate a lua config for NeoVim with all the options

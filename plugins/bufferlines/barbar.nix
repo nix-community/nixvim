@@ -1,10 +1,10 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.barbar;
+  cfg = config.plugins.barbar;
 in
 {
-  options.programs.nixvim.plugins.barbar = {
+  options.plugins.barbar = {
     enable = mkEnableOption "Enable barbar.nvim";
 
     animations = mkOption {
@@ -48,7 +48,7 @@ in
     # };
   };
 
-  config.programs.nixvim = mkIf cfg.enable {
+  config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [
       barbar-nvim nvim-web-devicons
     ];

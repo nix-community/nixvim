@@ -1,19 +1,20 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.treesitter;
+  cfg = config.plugins.treesitter;
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
-    programs.nixvim.plugins.treesitter = {
+    plugins.treesitter = {
       enable = mkEnableOption "Enable tree-sitter syntax highlighting";
 
       nixGrammars = mkOption {
         type = types.bool;
-        default = false;
-        description = "Install grammars with Nix (beta)";
+        default = true;
+        description = "Install grammars with Nix";
       };
+
       ensureInstalled = mkOption {
         type = with types; oneOf [ (enum [ "all" ]) (listOf str) ];
         default = "all";
@@ -92,20 +93,18 @@ in
       };
     in
     mkIf cfg.enable {
-      programs.nixvim = {
-        extraConfigLua = ''
-          require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
-        '';
+      extraConfigLua = ''
+        require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
+      '';
 
-        extraPlugins = with pkgs; if cfg.nixGrammars then
-          [ (vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)) ]
-        else [ vimPlugins.nvim-treesitter ];
-        extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
+      extraPlugins = with pkgs; if cfg.nixGrammars then
+        [ (vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)) ]
+      else [ vimPlugins.nvim-treesitter ];
+      extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 
-        options = mkIf cfg.folding {
-          foldmethod = "expr";
-          foldexpr = "nvim_treesitter#foldexpr()";
-        };
+      options = mkIf cfg.folding {
+        foldmethod = "expr";
+        foldexpr = "nvim_treesitter#foldexpr()";
       };
     };
 }

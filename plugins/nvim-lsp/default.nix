@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.lsp;
+  cfg = config.plugins.lsp;
   helpers = (import ../helpers.nix { inherit lib; });
 in
 {
@@ -10,25 +10,28 @@ in
   ];
 
   options = {
-    programs.nixvim.plugins.lsp = {
+    plugins.lsp = {
       enable = mkEnableOption "Enable neovim's built-in LSP";
 
       enabledServers = mkOption {
-        type = with types; listOf (oneOf [str (submodule {
-          options = {
-            name = mkOption {
-              type = str;
-              description = "The server's name";
-            };
+        type = with types; listOf (oneOf [
+          str
+          (submodule {
+            options = {
+              name = mkOption {
+                type = str;
+                description = "The server's name";
+              };
 
-            extraOptions = mkOption {
-              type = attrs;
-              description = "Extra options for the server";
+              extraOptions = mkOption {
+                type = attrs;
+                description = "Extra options for the server";
+              };
             };
-          };
-        })]);
+          })
+        ]);
         description = "A list of enabled LSP servers. Don't use this directly.";
-        default = [];
+        default = [ ];
       };
 
       onAttach = mkOption {
@@ -40,7 +43,7 @@ in
       setupWrappers = mkOption {
         type = with types; listOf (functionTo str);
         description = "Code to be run to wrap the setup args. Takes in an argument containing the previous results, and returns a new string of code.";
-        default = [];
+        default = [ ];
       };
 
       preConfig = mkOption {
@@ -51,12 +54,13 @@ in
     };
   };
 
-  config = let
-    runWrappers = wrappers: s:
-    if wrappers == [] then s
-    else (head wrappers) (runWrappers (tail wrappers) s);
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      runWrappers = wrappers: s:
+        if wrappers == [ ] then s
+        else (head wrappers) (runWrappers (tail wrappers) s);
+    in
+    mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.nvim-lspconfig ];
 
       # Enable all LSP servers
@@ -85,5 +89,4 @@ in
         -- }}}
       '';
     };
-  };
 }

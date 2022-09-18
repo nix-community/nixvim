@@ -1,102 +1,83 @@
 {
   description = "A neovim configuration system for NixOS";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.flake-utils.url = "github:numtide/flake-utils";
 
   inputs.nmdSrc.url = "gitlab:rycee/nmd";
   inputs.nmdSrc.flake = false;
 
-  outputs = { self, nixpkgs, nmdSrc, ... }@inputs: rec {
-    packages."x86_64-linux".docs = import ./docs {
-      pkgs = import nixpkgs { system = "x86_64-linux"; };
-      lib = nixpkgs.lib;
-    };
+  # TODO: Use flake-utils to support all architectures
+  outputs = { self, nixpkgs, nmdSrc, flake-utils, ... }@inputs:
+    with nixpkgs.lib;
+    with builtins;
+    let
+      # TODO: Support nesting
+      nixvimModules = map (f: ./modules + "/${f}") (attrNames (builtins.readDir ./modules));
 
-    nixosModules.nixvim = import ./nixvim.nix { nixos = true; };
-    homeManagerModules.nixvim = import ./nixvim.nix { homeManager = true; };
-
-    # This is a simple container for testing
-    nixosConfigurations.container = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ({ pkgs, ... }: {
-          boot.isContainer = true;
-          system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-
-          users.users.test = {
-            isNormalUser = true;
-            password = "";
-          };
-
-          imports = [ nixosModules.nixvim ];
-
-          programs.nixvim = {
-            enable = true;
-            package = pkgs.neovim;
-            colorschemes.tokyonight = { enable = true; };
-
-            extraPlugins = [ pkgs.vimPlugins.vim-nix ];
-
-            options = {
-              number = true;
-              mouse = "a";
-              tabstop = 2;
-              shiftwidth = 2;
-              expandtab = true;
-              smarttab = true;
-              autoindent = true;
-              cindent = true;
-              linebreak = true;
-              hidden = true;
+      modules = pkgs: nixvimModules ++ [
+        (rec {
+          _file = ./flake.nix;
+          key = _file;
+          config = {
+            _module.args = {
+              pkgs = mkForce pkgs;
+              lib = pkgs.lib;
+              helpers = import ./plugins/helpers.nix { lib = pkgs.lib; };
             };
-
-            maps.normalVisualOp."ç" = ":";
-            maps.normal."<leader>m" = {
-              silent = true;
-              action = "<cmd>make<CR>";
-            };
-
-            plugins.lualine = {
-              enable = true;
-            };
-
-            plugins.undotree.enable = true;
-            plugins.gitgutter.enable = true;
-            plugins.fugitive.enable = true;
-            plugins.commentary.enable = true;
-            plugins.startify = {
-              enable = true;
-              useUnicode = true;
-            };
-            plugins.goyo = {
-              enable = true;
-              showLineNumbers = true;
-            };
-
-            plugins.lsp = {
-              enable = true;
-              servers.clangd.enable = true;
-            };
-
-            plugins.telescope = {
-              enable = true;
-              extensions = { frecency.enable = true; };
-            };
-
-            plugins.nvim-autopairs = { enable = true; };
-
-            globals = {
-              vimsyn_embed = "l";
-              mapleader = " ";
-            };
-
-            plugins.lspsaga.enable = true;
-
-            plugins.treesitter.enable = true;
-            plugins.ledger.enable = true;
           };
         })
+
+        ./plugins/default.nix
       ];
+
+      nixvimOption = pkgs: mkOption {
+        type = types.submodule ((modules pkgs) ++ [{
+          options.enable = mkEnableOption "Enable nixvim";
+        }]);
+      };
+
+      build = pkgs:
+        configuration:
+        let
+          eval = evalModules {
+            modules = modules pkgs ++ [ configuration ];
+          };
+        in
+        eval.config.output;
+
+      flakeOutput =
+        flake-utils.lib.eachDefaultSystem
+          (system: rec {
+            packages.docs = import ./docs {
+              pkgs = import nixpkgs { inherit system; };
+              lib = nixpkgs.lib;
+              nixvimModules = nixvimModules;
+              inherit nmdSrc;
+            };
+
+            nixosModules.nixvim = { pkgs, config, lib, ... }: {
+              options.programs.nixvim = nixvimOption pkgs;
+              config = mkIf config.programs.nixvim.enable {
+                environment.systemPackages = [
+                  config.programs.nixvim.output
+                ];
+              };
+            };
+
+            homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
+              options.programs.nixvim = nixvimOption pkgs;
+              config = mkIf config.programs.nixvim.enable {
+                home.packages = [
+                  config.programs.nixvim.output
+                ];
+              };
+            };
+          });
+    in
+    flakeOutput // {
+      inherit build;
+      # TODO: Stuff for home-manager and nixos modules backwards compat, keeping the architecture as x86_64 if none is specified...
+      homeManagerModules.nixvim = flakeOutput.homeManagerModules.x86_64-linux.nixvim;
+      nixosModules.nixvim = flakeOutput.nixosModules.x86_64-linux.nixvim;
     };
-  };
 }

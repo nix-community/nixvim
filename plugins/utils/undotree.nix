@@ -1,11 +1,12 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.undotree;
+  cfg = config.plugins.undotree;
   helpers = import ../helpers.nix { inherit lib; };
-in {
+in
+{
   options = {
-    programs.nixvim.plugins.undotree = {
+    plugins.undotree = {
       enable = mkEnableOption "Enable undotree";
 
       windowLayout = mkOption {
@@ -107,27 +108,25 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      extraPlugins = [ pkgs.vimPlugins.undotree ];
+    extraPlugins = [ pkgs.vimPlugins.undotree ];
 
-      globals = {
-        undotree_WindowLayout = mkIf (cfg.windowLayout != null) cfg.windowLayout;
-        undotree_ShortIndicators = mkIf cfg.shortIndicators 1;
-        undotree_SplitWidth = mkIf (cfg.windowWidth != null) cfg.windowWidth;
-        undotree_DiffpanelHeight = mkIf (cfg.diffHeight != null) cfg.diffHeight;
-        undotree_DiffAutoOpen = mkIf (!cfg.autoOpenDiff) 0;
-        undotree_SetFocusWhenToggle = mkIf cfg.focusOnToggle 1;
-        undotree_TreeNodeShape = mkIf (cfg.treeNodeShape != null) cfg.treeNodeShape;
-        undotree_DiffCommand = mkIf (cfg.diffCommand != null) cfg.diffCommand;
-        undotree_RelativeTimestamp = mkIf (!cfg.relativeTimestamp) 0;
-        undotree_HighlightChangedText = mkIf (!cfg.highlightChangedText) 0;
-        undotree_HighlightChangedWithSign = mkIf (!cfg.highlightChangesWithSign) 0;
-        undotree_HighlightSyntaxAdd = mkIf (cfg.highlightSyntaxAdd != null) cfg.highlightSyntaxAdd;
-        undotree_HighlightSyntaxChange = mkIf (cfg.highlightSyntaxChange != null) cfg.highlightSyntaxAdd;
-        undotree_HighlightSyntaxDel = mkIf (cfg.highlightSyntaxDel != null) cfg.highlightSyntaxDel;
-        undotree_HelpLine = mkIf (!cfg.showHelpLine) 0;
-        undotree_CursorLine = mkIf (!cfg.showCursorLine) 0;
-      };
+    globals = {
+      undotree_WindowLayout = mkIf (cfg.windowLayout != null) cfg.windowLayout;
+      undotree_ShortIndicators = mkIf cfg.shortIndicators 1;
+      undotree_SplitWidth = mkIf (cfg.windowWidth != null) cfg.windowWidth;
+      undotree_DiffpanelHeight = mkIf (cfg.diffHeight != null) cfg.diffHeight;
+      undotree_DiffAutoOpen = mkIf (!cfg.autoOpenDiff) 0;
+      undotree_SetFocusWhenToggle = mkIf cfg.focusOnToggle 1;
+      undotree_TreeNodeShape = mkIf (cfg.treeNodeShape != null) cfg.treeNodeShape;
+      undotree_DiffCommand = mkIf (cfg.diffCommand != null) cfg.diffCommand;
+      undotree_RelativeTimestamp = mkIf (!cfg.relativeTimestamp) 0;
+      undotree_HighlightChangedText = mkIf (!cfg.highlightChangedText) 0;
+      undotree_HighlightChangedWithSign = mkIf (!cfg.highlightChangesWithSign) 0;
+      undotree_HighlightSyntaxAdd = mkIf (cfg.highlightSyntaxAdd != null) cfg.highlightSyntaxAdd;
+      undotree_HighlightSyntaxChange = mkIf (cfg.highlightSyntaxChange != null) cfg.highlightSyntaxAdd;
+      undotree_HighlightSyntaxDel = mkIf (cfg.highlightSyntaxDel != null) cfg.highlightSyntaxDel;
+      undotree_HelpLine = mkIf (!cfg.showHelpLine) 0;
+      undotree_CursorLine = mkIf (!cfg.showCursorLine) 0;
     };
   };
 }

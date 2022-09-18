@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
-let 
-  cfg = config.programs.nixvim.colorschemes.nord;
+let
+  cfg = config.colorschemes.nord;
 in
 {
   options = {
-    programs.nixvim.colorschemes.nord = {
+    colorschemes.nord = {
       enable = mkEnableOption "Enable nord";
 
       contrast = mkEnableOption
@@ -32,18 +32,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.nixvim = {
-      colorscheme = "nord";
-      extraPlugins = [ pkgs.vimPlugins.nord-nvim ];
+    colorscheme = "nord";
+    extraPlugins = [ pkgs.vimPlugins.nord-nvim ];
 
-      globals = {
-        nord_contrast = mkIf cfg.contrast 1;
-        nord_borders = mkIf cfg.borders 1;
-        nord_disable_background = mkIf cfg.disable_background 1;
-        nord_cursoline_transparent = mkIf cfg.cursorline_transparent 1;
-        nord_enable_sidebar_background = mkIf cfg.enable_sidebar_background 1;
-        nord_italic = mkIf (cfg.italic != null) cfg.italic;
-      };
+    globals = {
+      nord_contrast = mkIf cfg.contrast 1;
+      nord_borders = mkIf cfg.borders 1;
+      nord_disable_background = mkIf cfg.disable_background 1;
+      nord_cursoline_transparent = mkIf cfg.cursorline_transparent 1;
+      nord_enable_sidebar_background = mkIf cfg.enable_sidebar_background 1;
+      nord_italic = mkIf (cfg.italic != null) cfg.italic;
     };
   };
 }

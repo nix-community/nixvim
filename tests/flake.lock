@@ -15,6 +15,21 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1661353537,
@@ -27,6 +42,37 @@
       "original": {
         "id": "nixpkgs",
         "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1661353537,
+        "narHash": "sha256-1E2IGPajOsrkR49mM5h55OtYnU0dGyre6gl60NXKITE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0e304ff0d9db453a4b230e9386418fd974d5804a",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixvim": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_2",
+        "nmdSrc": "nmdSrc"
+      },
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-TGzzj1r1lqxquirvC3yzhuh2fYamEjWIrKG1RMtwsSA=",
+        "path": "/nix/store/pql62xd29lxl70icdqc97qiarqkalwga-source",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/pql62xd29lxl70icdqc97qiarqkalwga-source",
+        "type": "path"
       }
     },
     "nmdSrc": {
@@ -49,7 +95,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "nmdSrc": "nmdSrc"
+        "nixvim": "nixvim"
       }
     }
   },

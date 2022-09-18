@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.programs.nixvim.plugins.null-ls;
+  cfg = config.plugins.null-ls;
   helpers = (import ../helpers.nix { inherit lib; });
 in
 {
@@ -9,7 +9,7 @@ in
     ./servers.nix
   ];
 
-  options.programs.nixvim.plugins.null-ls = {
+  options.plugins.null-ls = {
     enable = mkEnableOption "Enable null-ls";
 
     debug = mkOption {
@@ -30,18 +30,18 @@ in
     # };
   };
 
-  config = let
-    options = {
-      debug = cfg.debug;
-      sources = cfg.sourcesItems;
-    };
-  in mkIf cfg.enable {
-    programs.nixvim = {
+  config =
+    let
+      options = {
+        debug = cfg.debug;
+        sources = cfg.sourcesItems;
+      };
+    in
+    mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [ null-ls-nvim ];
 
       extraConfigLua = ''
         require("null-ls").setup(${helpers.toLuaObject options})
       '';
     };
-  };
 }
