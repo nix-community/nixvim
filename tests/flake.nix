@@ -44,6 +44,64 @@
                 nixGrammars = false;
               };
             };
+
+            issue-40 = build {
+              plugins = {
+                nix.enable = true;
+                nvim-autopairs.enable = true;
+
+                lualine = {
+                  enable = true;
+
+                  sectionSeparators = {
+                    left = "";
+                    right = "";
+                  };
+
+                  componentSeparators = {
+                    left = "";
+                    right = "";
+                  };
+
+                  theme = "auto";
+                };
+
+                goyo = {
+                  enable = true;
+                  showLineNumbers = false;
+                };
+
+                lsp = {
+                  enable = true;
+                  servers = {
+                    rust-analyzer.enable = true;
+                    rnix-lsp.enable = true;
+                  };
+                };
+
+              };
+
+              options = {
+                # Indentation
+                autoindent = true;
+                tabstop = 4;
+                shiftwidth = 4;
+                expandtab = true;
+                backspace = "indent,eol,start";
+
+                # Text
+                showmatch = true;
+                mouse = "a";
+                number = true;
+                relativenumber = false;
+                ttyfast = true;
+                clipboard = "unnamedplus";
+
+                # Colors
+                background = "dark";
+                termguicolors = true;
+              };
+            };
           };
         })) // {
       nixosConfigurations.nixvim-machine = nixpkgs.lib.nixosSystem {

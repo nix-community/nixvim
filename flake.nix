@@ -40,7 +40,7 @@
         configuration:
         let
           eval = evalModules {
-            modules = modules pkgs ++ [ configuration ];
+            modules = modules pkgs ++ [{ config = configuration; }];
           };
         in
         eval.config.output;
@@ -76,7 +76,6 @@
     in
     flakeOutput // {
       inherit build;
-      # TODO: Stuff for home-manager and nixos modules backwards compat, keeping the architecture as x86_64 if none is specified...
       homeManagerModules.nixvim = flakeOutput.homeManagerModules.x86_64-linux.nixvim;
       nixosModules.nixvim = flakeOutput.nixosModules.x86_64-linux.nixvim;
     };
