@@ -2,7 +2,7 @@
 with lib;
 rec {
   # vim dictionaries are, in theory, compatible with JSON
-  toVimDict = args: toJSON 
+  toVimDict = args: toJSON
     (lib.filterAttrs (n: v: !isNull v) args);
 
   # Black functional magic that converts a bunch of different Nix types to their
@@ -68,6 +68,7 @@ rec {
     name,
     description,
     extraPlugins ? [],
+    extraPackages ? [],
     options ? {},
     ...
   }: let
@@ -84,7 +85,7 @@ rec {
     } // pluginOptions;
 
     config = mkIf cfg.enable {
-      inherit extraPlugins globals;
+      inherit extraPlugins extraPackages globals;
     };
   };
 
