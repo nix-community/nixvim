@@ -256,5 +256,6 @@ in
       extraConfigLua = ''
         require('nvim-tree').setup(${helpers.toLuaObject options})
       '';
+      extraPackages = [ pkgs.git ];
     };
 }
