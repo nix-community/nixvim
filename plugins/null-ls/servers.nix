@@ -9,6 +9,9 @@ let
     diagnostics = {
     };
     formatting = {
+      phpcbf = {
+        packages = [ pkgs.phpPackages.phpcbf ];
+      };
       alejandra = {
         packages = [ pkgs.alejandra ];
       };
