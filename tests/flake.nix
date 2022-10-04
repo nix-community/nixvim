@@ -4,12 +4,16 @@
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nixvim.url = "./..";
 
-  outputs = { self, nixvim, nixpkgs, flake-utils, ... }:
+  inputs.nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
+
+  outputs = { self, nixvim, nixpkgs, flake-utils, nixpkgs-stable, ... }:
     (flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = import nixpkgs { inherit system; };
+          pkgs-stable = import nixpkgs-stable { inherit system; };
           build = nixvim.build pkgs;
+          build-stable = nixvim.build pkgs-stable;
         in
         rec {
           # A plain nixvim configuration
@@ -45,7 +49,7 @@
               };
             };
 
-            issue-40 = build {
+            issue-40 = build-stable {
               plugins = {
                 nix.enable = true;
                 nvim-autopairs.enable = true;

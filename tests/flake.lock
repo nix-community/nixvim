@@ -44,6 +44,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-stable": {
+      "locked": {
+        "lastModified": 1664790708,
+        "narHash": "sha256-fzxmpOPjzOVIt9KeDN4EDPI13xJn+u0uMxheKCWken8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "81a3237b64e67b66901c735654017e75f0c50943",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1661353537,
@@ -66,12 +82,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-C4eH2MjSU1/DPGxlCA7qvFssE6LgTLZ5CitdhFmiUfo=",
-        "path": "/nix/store/za0r3rgi5ypsl3cnzxpi82ad5cvvyvva-source",
+        "narHash": "sha256-oAI8i2Y3wSyvfkNe/1VgeE6/BRtMGTQtHyYGxMo5DQo=",
+        "path": "/nix/store/bdzif6mvmzrhl01j20a1926c6jfq9szl-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/za0r3rgi5ypsl3cnzxpi82ad5cvvyvva-source",
+        "path": "/nix/store/bdzif6mvmzrhl01j20a1926c6jfq9szl-source",
         "type": "path"
       }
     },
@@ -95,6 +111,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-stable": "nixpkgs-stable",
         "nixvim": "nixvim"
       }
     }
