@@ -91,10 +91,17 @@ in
 
       normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) config.extraPlugins;
 
-      neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
+      neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
         inherit customRC;
         plugins = normalizedPlugins;
-      };
+      }
+      # Necessary to make sure the runtime path is set properly in NixOS 22.05,
+      # or more generally before the commit:
+      # cda1f8ae468 - neovim: pass packpath via the wrapper
+      // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
+        configure.packages =
+          { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = []; }; };
+      });
 
       extraWrapperArgs = optionalString (config.extraPackages != [ ])
         ''--prefix PATH : "${makeBinPath config.extraPackages}"'';
