@@ -32,11 +32,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1661353537,
-        "narHash": "sha256-1E2IGPajOsrkR49mM5h55OtYnU0dGyre6gl60NXKITE=",
+        "lastModified": 1663491030,
+        "narHash": "sha256-MVsfBhE9US5DvLtBAaTRjwYdv1tLO8xjahM8qLXTgTo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0e304ff0d9db453a4b230e9386418fd974d5804a",
+        "rev": "767542707d394ff15ac1981e903e005ba69528b5",
         "type": "github"
       },
       "original": {
@@ -46,11 +46,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1664790708,
-        "narHash": "sha256-fzxmpOPjzOVIt9KeDN4EDPI13xJn+u0uMxheKCWken8=",
+        "lastModified": 1665066044,
+        "narHash": "sha256-mkO0LMHVunMFRWLcJhHT0fBf2v6RlH3vg7EVpfSIAFc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "81a3237b64e67b66901c735654017e75f0c50943",
+        "rev": "ed9b904c5eba055a6d6f5c1ccb89ba8f0a056dc6",
         "type": "github"
       },
       "original": {
@@ -62,11 +62,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1661353537,
-        "narHash": "sha256-1E2IGPajOsrkR49mM5h55OtYnU0dGyre6gl60NXKITE=",
+        "lastModified": 1663491030,
+        "narHash": "sha256-MVsfBhE9US5DvLtBAaTRjwYdv1tLO8xjahM8qLXTgTo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0e304ff0d9db453a4b230e9386418fd974d5804a",
+        "rev": "767542707d394ff15ac1981e903e005ba69528b5",
         "type": "github"
       },
       "original": {
@@ -82,12 +82,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-oAI8i2Y3wSyvfkNe/1VgeE6/BRtMGTQtHyYGxMo5DQo=",
-        "path": "/nix/store/bdzif6mvmzrhl01j20a1926c6jfq9szl-source",
+        "narHash": "sha256-NTQaGxll4rko4eOOxtCODb2mnkwVMNyJNqwsRCc89h4=",
+        "path": "/nix/store/a1ngrmrp1wbv12682s0c2dp60b7gljm8-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/bdzif6mvmzrhl01j20a1926c6jfq9szl-source",
+        "path": "/nix/store/a1ngrmrp1wbv12682s0c2dp60b7gljm8-source",
         "type": "path"
       }
     },

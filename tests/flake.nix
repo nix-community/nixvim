@@ -49,6 +49,10 @@
               };
             };
 
+            lsp-lines = build-stable {
+              plugins.lsp-lines.enable = true;
+            };
+
             issue-40 = build-stable {
               plugins = {
                 nix.enable = true;
