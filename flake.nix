@@ -6,7 +6,6 @@
   inputs.nmdSrc.url = "gitlab:rycee/nmd";
   inputs.nmdSrc.flake = false;
 
-  # TODO: Use flake-utils to support all architectures
   outputs = { self, nixpkgs, nmdSrc, flake-utils, ... }@inputs:
     with nixpkgs.lib;
     with builtins;
@@ -47,7 +46,9 @@
 
       flakeOutput =
         flake-utils.lib.eachDefaultSystem
-          (system: rec {
+          (system: let
+            pkgs = import nixpkgs { inherit system; };
+          in {
             packages.docs = import ./docs {
               pkgs = import nixpkgs { inherit system; };
               lib = nixpkgs.lib;
@@ -55,28 +56,26 @@
               inherit nmdSrc;
             };
 
-            nixosModules.nixvim = { pkgs, config, lib, ... }: {
-              options.programs.nixvim = nixvimOption pkgs;
-              config = mkIf config.programs.nixvim.enable {
-                environment.systemPackages = [
-                  config.programs.nixvim.output
-                ];
-              };
-            };
-
-            homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
-              options.programs.nixvim = nixvimOption pkgs;
-              config = mkIf config.programs.nixvim.enable {
-                home.packages = [
-                  config.programs.nixvim.output
-                ];
-              };
-            };
+            packages.makeNixvim = build pkgs;
           });
     in
     flakeOutput // {
-      inherit build;
-      homeManagerModules.nixvim = flakeOutput.homeManagerModules.x86_64-linux.nixvim;
-      nixosModules.nixvim = flakeOutput.nixosModules.x86_64-linux.nixvim;
+      nixosModules.nixvim = { pkgs, config, lib, ... }: {
+        options.programs.nixvim = nixvimOption pkgs;
+        config = mkIf config.programs.nixvim.enable {
+          environment.systemPackages = [
+            config.programs.nixvim.output
+          ];
+        };
+      };
+
+      homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
+        options.programs.nixvim = nixvimOption pkgs;
+        config = mkIf config.programs.nixvim.enable {
+          home.packages = [
+            config.programs.nixvim.output
+          ];
+        };
+      };
     };
 }
