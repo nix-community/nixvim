@@ -65,9 +65,21 @@ in
       description = "Extra contents for init.vim";
     };
 
-    output = mkOption {
+    wrapRc = mkOption {
+      type = types.bool;
+      description = "Should the config be included in the wrapper script";
+      default = false;
+    };
+
+    finalPackage = mkOption {
       type = types.package;
-      description = "Final package built by nixvim";
+      description = "Wrapped neovim";
+      readOnly = true;
+    };
+
+    initContent = mkOption {
+      type = types.str;
+      description = "The content of the init.vim file";
       readOnly = true;
       visible = false;
     };
@@ -108,9 +120,10 @@ in
 
       wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig // {
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
+        inherit (config) wrapRc;
       });
-    in
-    {
-      output = wrappedNeovim;
+    in {
+      finalPackage = wrappedNeovim;
+      initContent = neovimConfig.neovimRcContent;
     };
 }

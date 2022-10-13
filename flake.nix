@@ -29,21 +29,6 @@
         ./plugins/default.nix
       ];
 
-      nixvimOption = pkgs: mkOption {
-        type = types.submodule ((modules pkgs) ++ [{
-          options.enable = mkEnableOption "Enable nixvim";
-        }]);
-      };
-
-      build = pkgs:
-        configuration:
-        let
-          eval = evalModules {
-            modules = modules pkgs ++ [{ config = configuration; }];
-          };
-        in
-        eval.config.output;
-
       flakeOutput =
         flake-utils.lib.eachDefaultSystem
           (system: let
@@ -56,26 +41,11 @@
               inherit nmdSrc;
             };
 
-            packages.makeNixvim = build pkgs;
+            legacyPackages.makeNixvim = import ./wrappers/standalone.nix pkgs (modules pkgs);
           });
     in
     flakeOutput // {
-      nixosModules.nixvim = { pkgs, config, lib, ... }: {
-        options.programs.nixvim = nixvimOption pkgs;
-        config = mkIf config.programs.nixvim.enable {
-          environment.systemPackages = [
-            config.programs.nixvim.output
-          ];
-        };
-      };
-
-      homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
-        options.programs.nixvim = nixvimOption pkgs;
-        config = mkIf config.programs.nixvim.enable {
-          home.packages = [
-            config.programs.nixvim.output
-          ];
-        };
-      };
+      nixosModules.nixvim = import ./wrappers/nixos.nix modules;
+      homeManagerModules.nixvim = import ./wrappers/hm.nix modules;
     };
 }
