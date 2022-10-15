@@ -21,8 +21,8 @@
           config = {
             _module.args = {
               pkgs = mkForce pkgs;
-              lib = pkgs.lib;
-              helpers = import ./plugins/helpers.nix { lib = pkgs.lib; };
+              inherit (pkgs) lib;
+              helpers = import ./plugins/helpers.nix { inherit (pkgs) lib; };
             };
           };
         })
@@ -34,6 +34,15 @@
         type = types.submodule ((modules pkgs) ++ [{
           options.enable = mkEnableOption "Enable nixvim";
         }]);
+      };
+      helperOption = pkgs: mkOption {
+        type = mkOptionType {
+          name = "helpers";
+          description = "Helpers that can be used when writing nixvim configs";
+          check = builtins.isAttrs;
+        };
+        description = "Use this option to access the helpers";
+        default = import ./plugins/helpers.nix { inherit (pkgs) lib; };
       };
 
       build = pkgs:
@@ -54,29 +63,33 @@
               nixvimModules = nixvimModules;
               inherit nmdSrc;
             };
-
-            nixosModules.nixvim = { pkgs, config, lib, ... }: {
-              options.programs.nixvim = nixvimOption pkgs;
-              config = mkIf config.programs.nixvim.enable {
-                environment.systemPackages = [
-                  config.programs.nixvim.output
-                ];
-              };
-            };
-
-            homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
-              options.programs.nixvim = nixvimOption pkgs;
-              config = mkIf config.programs.nixvim.enable {
-                home.packages = [
-                  config.programs.nixvim.output
-                ];
-              };
-            };
           });
     in
-    flakeOutput // {
+    flakeOutput // rec {
       inherit build;
-      homeManagerModules.nixvim = flakeOutput.homeManagerModules.x86_64-linux.nixvim;
-      nixosModules.nixvim = flakeOutput.nixosModules.x86_64-linux.nixvim;
+
+      nixosModules.nixvim = { pkgs, config, lib, ... }: {
+        options = {
+          programs.nixvim = nixvimOption pkgs;
+          nixvim.helpers = helperOption pkgs;
+        };
+        config = mkIf config.programs.nixvim.enable {
+          environment.systemPackages = [
+            config.programs.nixvim.output
+          ];
+        };
+      };
+
+      homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
+        options = {
+          programs.nixvim = nixvimOption pkgs;
+          nixvim.helpers = helperOption pkgs;
+        };
+        config = mkIf config.programs.nixvim.enable {
+          home.packages = [
+            config.programs.nixvim.output
+          ];
+        };
+      };
     };
 }
