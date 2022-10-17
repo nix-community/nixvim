@@ -5,15 +5,19 @@
   inputs.nixvim.url = "./..";
 
   inputs.nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
+  inputs.nixvim-stable = {
+    url = "./..";
+    inputs.nixpkgs.follows = "nixpkgs-stable";
+  };
 
-  outputs = { self, nixvim, nixpkgs, flake-utils, nixpkgs-stable, ... }:
+  outputs = { self, nixvim, nixvim-stable, nixpkgs, flake-utils, nixpkgs-stable, ... }:
     (flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = import nixpkgs { inherit system; };
           pkgs-stable = import nixpkgs-stable { inherit system; };
-          build = nixvim.build pkgs;
-          build-stable = nixvim.build pkgs-stable;
+          build = nixvim.legacyPackages.${system}.makeNixvim;
+          build-stable = nixvim-stable.legacyPackages.${system}.makeNixvim;
         in
         rec {
           # A plain nixvim configuration

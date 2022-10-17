@@ -6,7 +6,6 @@
   inputs.nmdSrc.url = "gitlab:rycee/nmd";
   inputs.nmdSrc.flake = false;
 
-  # TODO: Use flake-utils to support all architectures
   outputs = { self, nixpkgs, nmdSrc, flake-utils, ... }@inputs:
     with nixpkgs.lib;
     with builtins;
@@ -30,24 +29,11 @@
         ./plugins/default.nix
       ];
 
-      nixvimOption = pkgs: mkOption {
-        type = types.submodule ((modules pkgs) ++ [{
-          options.enable = mkEnableOption "Enable nixvim";
-        }]);
-      };
-
-      build = pkgs:
-        configuration:
-        let
-          eval = evalModules {
-            modules = modules pkgs ++ [{ config = configuration; }];
-          };
-        in
-        eval.config.output;
-
       flakeOutput =
         flake-utils.lib.eachDefaultSystem
-          (system: rec {
+          (system: let
+            pkgs = import nixpkgs { inherit system; };
+          in {
             packages.docs = import ./docs {
               pkgs = import nixpkgs { inherit system; };
               lib = nixpkgs.lib;
@@ -55,28 +41,11 @@
               inherit nmdSrc;
             };
 
-            nixosModules.nixvim = { pkgs, config, lib, ... }: {
-              options.programs.nixvim = nixvimOption pkgs;
-              config = mkIf config.programs.nixvim.enable {
-                environment.systemPackages = [
-                  config.programs.nixvim.output
-                ];
-              };
-            };
-
-            homeManagerModules.nixvim = { pkgs, config, lib, ... }: {
-              options.programs.nixvim = nixvimOption pkgs;
-              config = mkIf config.programs.nixvim.enable {
-                home.packages = [
-                  config.programs.nixvim.output
-                ];
-              };
-            };
+            legacyPackages.makeNixvim = import ./wrappers/standalone.nix pkgs (modules pkgs);
           });
     in
     flakeOutput // {
-      inherit build;
-      homeManagerModules.nixvim = flakeOutput.homeManagerModules.x86_64-linux.nixvim;
-      nixosModules.nixvim = flakeOutput.nixosModules.x86_64-linux.nixvim;
+      nixosModules.nixvim = import ./wrappers/nixos.nix modules;
+      homeManagerModules.nixvim = import ./wrappers/hm.nix modules;
     };
 }
