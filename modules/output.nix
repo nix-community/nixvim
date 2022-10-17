@@ -75,13 +75,18 @@ in
 
   config =
     let
-      customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
-        lua <<EOF
-        ${config.extraConfigLuaPre}
-        ${config.extraConfigLua}
-        ${config.extraConfigLuaPost}
-        EOF
-      '');
+      customRC =
+        (optionalString (config.extraConfigLuaPre != "") ''
+          lua <<EOF
+          ${config.extraConfigLuaPre}
+          EOF
+        '') +
+        config.extraConfigVim + (optionalString (config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
+          lua <<EOF
+          ${config.extraConfigLua}
+          ${config.extraConfigLuaPost}
+          EOF
+        '');
 
       defaultPlugin = {
         plugin = null;
@@ -100,7 +105,7 @@ in
       # cda1f8ae468 - neovim: pass packpath via the wrapper
       // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
         configure.packages =
-          { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = []; }; };
+          { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = [ ]; }; };
       });
 
       extraWrapperArgs = optionalString (config.extraPackages != [ ])
