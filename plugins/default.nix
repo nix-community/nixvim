@@ -11,6 +11,7 @@
     ./colorschemes/tokyonight.nix
 
     ./completion/coq.nix
+    ./completion/copilot.nix
     ./completion/nvim-cmp
     ./completion/nvim-cmp/sources
 
