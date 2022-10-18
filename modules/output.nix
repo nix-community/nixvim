@@ -65,9 +65,21 @@ in
       description = "Extra contents for init.vim";
     };
 
-    output = mkOption {
+    wrapRc = mkOption {
+      type = types.bool;
+      description = "Should the config be included in the wrapper script";
+      default = false;
+    };
+
+    finalPackage = mkOption {
       type = types.package;
-      description = "Final package built by nixvim";
+      description = "Wrapped neovim";
+      readOnly = true;
+    };
+
+    initContent = mkOption {
+      type = types.str;
+      description = "The content of the init.vim file";
       readOnly = true;
       visible = false;
     };
@@ -75,13 +87,18 @@ in
 
   config =
     let
-      customRC = config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
-        lua <<EOF
-        ${config.extraConfigLuaPre}
-        ${config.extraConfigLua}
-        ${config.extraConfigLuaPost}
-        EOF
-      '');
+      customRC =
+        (optionalString (config.extraConfigLuaPre != "") ''
+          lua <<EOF
+          ${config.extraConfigLuaPre}
+          EOF
+        '') +
+        config.extraConfigVim + (optionalString (config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
+          lua <<EOF
+          ${config.extraConfigLua}
+          ${config.extraConfigLuaPost}
+          EOF
+        '');
 
       defaultPlugin = {
         plugin = null;
@@ -100,7 +117,7 @@ in
       # cda1f8ae468 - neovim: pass packpath via the wrapper
       // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
         configure.packages =
-          { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = []; }; };
+          { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = [ ]; }; };
       });
 
       extraWrapperArgs = optionalString (config.extraPackages != [ ])
@@ -108,9 +125,10 @@ in
 
       wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig // {
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
+        inherit (config) wrapRc;
       });
-    in
-    {
-      output = wrappedNeovim;
+    in {
+      finalPackage = wrappedNeovim;
+      initContent = neovimConfig.neovimRcContent;
     };
 }

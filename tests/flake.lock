@@ -30,6 +30,21 @@
         "type": "github"
       }
     },
+    "flake-utils_3": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1663491030,
@@ -82,16 +97,51 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-NTQaGxll4rko4eOOxtCODb2mnkwVMNyJNqwsRCc89h4=",
-        "path": "/nix/store/a1ngrmrp1wbv12682s0c2dp60b7gljm8-source",
+        "narHash": "sha256-51K3gjUQAgBuXJMUCxloBqJeRiB5nwix0kMSbffDxak=",
+        "path": "/nix/store/y78h7ccdy3jdy4mwyw8dyg3prhwqx61f-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/a1ngrmrp1wbv12682s0c2dp60b7gljm8-source",
+        "path": "/nix/store/y78h7ccdy3jdy4mwyw8dyg3prhwqx61f-source",
+        "type": "path"
+      }
+    },
+    "nixvim-stable": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": [
+          "nixpkgs-stable"
+        ],
+        "nmdSrc": "nmdSrc_2"
+      },
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-51K3gjUQAgBuXJMUCxloBqJeRiB5nwix0kMSbffDxak=",
+        "path": "/nix/store/y78h7ccdy3jdy4mwyw8dyg3prhwqx61f-source",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/y78h7ccdy3jdy4mwyw8dyg3prhwqx61f-source",
         "type": "path"
       }
     },
     "nmdSrc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1654807200,
+        "narHash": "sha256-RNLq09vfj21TyYuUCeD6BNTNC6Ew8bLhQULZytN4Xx8=",
+        "owner": "rycee",
+        "repo": "nmd",
+        "rev": "91dee681dd1c478d6040a00835d73c0f4a4c5c29",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "rycee",
+        "repo": "nmd",
+        "type": "gitlab"
+      }
+    },
+    "nmdSrc_2": {
       "flake": false,
       "locked": {
         "lastModified": 1654807200,
@@ -112,7 +162,8 @@
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
-        "nixvim": "nixvim"
+        "nixvim": "nixvim",
+        "nixvim-stable": "nixvim-stable"
       }
     }
   },
