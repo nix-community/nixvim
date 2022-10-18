@@ -394,7 +394,7 @@ in
     mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.nvim-cmp ];
 
-      extraConfigLua = ''
+      extraConfigLua = helpers.wrapDo ''
         local cmp = require('cmp')
         cmp.setup(${helpers.toLuaObject options})
       '';
