@@ -105,4 +105,10 @@ rec {
   };
 
   mkRaw = r: { __raw = r; };
+
+  wrapDo = string: ''
+  do
+    ${string}
+  end
+  '';
 }
