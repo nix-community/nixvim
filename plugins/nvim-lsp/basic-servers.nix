@@ -21,7 +21,7 @@ let
       name = "elixirls";
       description = "Enable elixirls";
       packages = [ ];
-      cmd = "${pkgs.elixir_ls}/bin/elixir-ls";
+      cmd = ["${pkgs.elixir_ls}/bin/elixir-ls"];
     }
     {
       name = "gdscript";
