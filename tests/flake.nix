@@ -52,6 +52,10 @@
                 nixGrammars = false;
               };
             };
+            elixir-ls = build {
+              plugins.lsp.enable = true;
+              plugins.lsp.servers.elixirls.enable = true;
+            };
 
             lsp-lines = build-stable {
               plugins.lsp-lines.enable = true;
