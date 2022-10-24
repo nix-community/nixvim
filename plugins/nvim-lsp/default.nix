@@ -82,6 +82,13 @@ in
               require('lspconfig')[server].setup(__setup)
             else
               local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}
+
+              if options == nil then
+                options = __setup
+              else
+                options = vim.tbl_extend("keep", options, __setup)
+              end
+
               require('lspconfig')[server.name].setup(options)
             end
           end

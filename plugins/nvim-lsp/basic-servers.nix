@@ -18,9 +18,15 @@ let
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
     {
+      name = "elixirls";
+      description = "Enable elixirls";
+      packages = [ ];
+      cmd = ["${pkgs.elixir_ls}/bin/elixir-ls"];
+    }
+    {
       name = "gdscript";
       description = "Enable gdscript, for Godot";
-      packages = [];
+      packages = [ ];
     }
     {
       name = "gopls";

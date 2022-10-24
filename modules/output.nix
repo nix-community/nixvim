@@ -93,7 +93,7 @@ in
           ${config.extraConfigLuaPre}
           EOF
         '') +
-        config.extraConfigVim + (optionalString (config.extraConfigLuaPre != "" || config.extraConfigLuaPost != "") ''
+        config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
           lua <<EOF
           ${config.extraConfigLua}
           ${config.extraConfigLuaPost}
@@ -127,7 +127,8 @@ in
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
         inherit (config) wrapRc;
       });
-    in {
+    in
+    {
       finalPackage = wrappedNeovim;
       initContent = neovimConfig.neovimRcContent;
     };

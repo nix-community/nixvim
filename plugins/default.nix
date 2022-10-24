@@ -49,6 +49,7 @@
     ./utils/notify.nix
     ./utils/nvim-autopairs.nix
     ./utils/nvim-tree.nix
+    ./utils/project-nvim.nix
     ./utils/specs.nix
     ./utils/startify.nix
     ./utils/surround.nix
