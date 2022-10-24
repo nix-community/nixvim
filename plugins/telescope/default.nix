@@ -10,6 +10,7 @@ in
     ./fzf-native.nix
     ./fzy-native.nix
     ./media-files.nix
+    ./project-nvim.nix
   ];
 
   # TODO:add support for aditional filetypes. This requires autocommands!
