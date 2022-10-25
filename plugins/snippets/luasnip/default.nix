@@ -32,7 +32,18 @@ in
           # TODO: add option to also include the default runtimepath
           paths = mkOption {
             default = null;
-            type = with types; nullOr (either str (listOf (either str path)));
+            type = with types; nullOr (oneOf
+              [
+                str
+                path
+                helpers.rawType
+                (listOf (oneOf
+                  [
+                    str
+                    path
+                    helpers.rawType
+                  ]))
+              ]);
           };
 
           exclude = mkOption {
