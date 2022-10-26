@@ -57,6 +57,14 @@ let
       serverName = "rust_analyzer";
     }
     {
+      name = "tsserver";
+      description = "Enable tsserver for typescript";
+      packages = with pkgs; [
+        nodePackages.typescript
+        nodePackages.typescript-language-server
+      ];
+    }
+    {
       name = "vuels";
       description = "Enable vuels, for Vue";
       packages = [ pkgs.nodePackages.vue-language-server ];
