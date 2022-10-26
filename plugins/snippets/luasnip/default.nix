@@ -8,19 +8,10 @@ in
   options.plugins.luasnip = {
     enable = mkEnableOption "Enable luasnip";
 
-    loadVsCode = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether or not to lazy load vscode-like snippets
-      '';
-    };
-
     fromVscode = mkOption {
-      default = null;
-      type = types.nullOr (types.submodule {
+      default = [ ];
+      type = types.listOf (types.submodule {
         options = {
-          enable = mkEnableOption "Enable the vscode snippets loader for luasnip";
           lazyLoad = mkOption {
             type = types.bool;
             default = true;
@@ -71,21 +62,19 @@ in
 
   config =
     let
-      fromVscodeOptions =
-        if (isAttrs cfg.fromVscode) then
-          {
-            exclude = cfg.fromVscode.exclude;
-            include = cfg.fromVscode.include;
-            paths = cfg.fromVscode.paths;
-          }
-        else
-          { };
+
+      fromVscodeLoaders = lists.map
+        (loader:
+          let
+            options = attrsets.getAttrs [ "paths" "exclude" "include" ] loader;
+          in
+          ''
+            require("luasnip.loaders.from_vscode").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
+          '')
+        cfg.fromVscode;
     in
     mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.luasnip ];
-
-      extraConfigLua = optionalString (isAttrs cfg.fromVscode && cfg.fromVscode.enable) ''
-        require("luasnip.loaders.from_vscode").${optionalString cfg.fromVscode.lazyLoad "lazy_"}load(${helpers.toLuaObject fromVscodeOptions})
-      '';
+      extraConfigLua = concatStringsSep "\n" fromVscodeLoaders;
     };
 }
