@@ -21,6 +21,12 @@ in
         description = "Either \"all\" or a list of languages";
       };
 
+      parserInstallDir = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Location of the parsers to be installed by the plugin (only needed when nixGrammars is disabled)";
+      };
+
       ignoreInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -90,11 +96,14 @@ in
 
         ensure_installed = if cfg.nixGrammars then [ ] else cfg.ensureInstalled;
         ignore_install = cfg.ignoreInstall;
+        parser_install_dir = cfg.parserInstallDir;
       };
     in
     mkIf cfg.enable {
       extraConfigLua = ''
         require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
+      '' + optionalString (cfg.parserInstallDir != null) ''
+        vim.opt.runtimepath:append("${cfg.parserInstallDir}")
       '';
 
       extraPlugins = with pkgs; if cfg.nixGrammars then
