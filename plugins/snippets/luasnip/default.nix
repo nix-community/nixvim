@@ -10,6 +10,19 @@ in
 
     fromVscode = mkOption {
       default = [ ];
+      example = ''
+        [
+          {}
+          {
+            paths = ./path/to/snippets;
+          }
+        ]
+        # generates:
+        # 
+        # require("luasnip.loaders.from_vscode").lazy_load({})
+        # require("luasnip.loaders.from_vscode").lazy_load({['paths'] = {'/nix/store/.../path/to/snippets'}})
+        #
+      '';
       type = types.listOf (types.submodule {
         options = {
           lazyLoad = mkOption {
