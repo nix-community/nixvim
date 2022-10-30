@@ -8,6 +8,11 @@ in
   options.plugins.luasnip = {
     enable = mkEnableOption "Enable luasnip";
 
+    package = mkOption {
+      default = pkgs.vimPlugins.luasnip;
+      type = types.package;
+    };
+
     fromVscode = mkOption {
       default = [ ];
       example = ''
@@ -87,7 +92,7 @@ in
         cfg.fromVscode;
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.luasnip ];
+      extraPlugins = [ cfg.package ];
       extraConfigLua = concatStringsSep "\n" fromVscodeLoaders;
     };
 }
