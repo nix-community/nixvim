@@ -5,28 +5,28 @@ let
     {
       name = "clangd";
       description = "Enable clangd LSP, for C/C++.";
-      packages = [ pkgs.clang-tools ];
+      package = pkgs.clang-tools;
     }
     {
       name = "cssls";
       description = "Enable cssls, for CSS";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
     }
     {
       name = "eslint";
       description = "Enable eslint";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
     }
     {
       name = "elixirls";
       description = "Enable elixirls";
-      packages = [ ];
+      package = null;
       cmd = ["${pkgs.elixir_ls}/bin/elixir-ls"];
     }
     {
       name = "gdscript";
       description = "Enable gdscript, for Godot";
-      packages = [ ];
+      package = null;
     }
     {
       name = "gopls";
@@ -35,12 +35,12 @@ let
     {
       name = "html";
       description = "Enable html, for HTML";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
     }
     {
       name = "jsonls";
       description = "Enable jsonls, for JSON";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
     }
     {
       name = "pyright";
@@ -59,15 +59,15 @@ let
     {
       name = "tsserver";
       description = "Enable tsserver for typescript";
-      packages = with pkgs; [
-        nodePackages.typescript
-        nodePackages.typescript-language-server
-      ];
+      package = pkgs.nodePackages.typescript-language-server;
+      extraPackages = {
+        typescript = pkgs.nodePackages.typescript;
+      };
     }
     {
       name = "vuels";
       description = "Enable vuels, for Vue";
-      packages = [ pkgs.nodePackages.vue-language-server ];
+      package = pkgs.nodePackages.vue-language-server;
     }
     {
       name = "zls";
