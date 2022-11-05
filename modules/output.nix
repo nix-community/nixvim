@@ -89,15 +89,16 @@ in
     let
       customRC =
         (optionalString (config.extraConfigLuaPre != "") ''
-          lua <<EOF
           ${config.extraConfigLuaPre}
-          EOF
         '') +
-        config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
-          lua <<EOF
+        (optionalString (config.extraConfigVim != "") ''
+          vim.cmd([[
+            ${config.extraConfigVim}
+          ]])
+        '') + 
+        (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
           ${config.extraConfigLua}
           ${config.extraConfigLuaPost}
-          EOF
         '');
 
       defaultPlugin = {

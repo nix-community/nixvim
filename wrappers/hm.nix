@@ -17,7 +17,7 @@ in {
     (mkMerge [
       { home.packages = [ cfg.finalPackage ]; }
       (mkIf (!cfg.wrapRc) {
-        xdg.configFile."nvim/init.vim".text = cfg.initContent;
+        xdg.configFile."nvim/init.lua".text = cfg.initContent;
       })
     ]);
 }
