@@ -79,7 +79,7 @@ in
 
     initContent = mkOption {
       type = types.str;
-      description = "The content of the init.vim file";
+      description = "The content of the init.lua file";
       readOnly = true;
       visible = false;
     };
@@ -95,7 +95,7 @@ in
           vim.cmd([[
             ${config.extraConfigVim}
           ]])
-        '') + 
+        '') +
         (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
           ${config.extraConfigLua}
           ${config.extraConfigLuaPost}
@@ -110,7 +110,7 @@ in
       normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) config.extraPlugins;
 
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit customRC;
+        # inherit customRC;
         plugins = normalizedPlugins;
       }
       # Necessary to make sure the runtime path is set properly in NixOS 22.05,
@@ -121,12 +121,17 @@ in
           { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = [ ]; }; };
       });
 
-      extraWrapperArgs = optionalString (config.extraPackages != [ ])
-        ''--prefix PATH : "${makeBinPath config.extraPackages}"'';
+      extraWrapperArgs = builtins.concatStringsSep " " (
+        (optional (config.extraPackages != [ ])
+          ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
+        ++
+        (optional (config.wrapRc)
+          ''--add-flags -u --add-flags "${pkgs.writeText "init.lua" customRC}"'')
+      );
 
       wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig // {
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
-        inherit (config) wrapRc;
+        wrapRc = false;
       });
     in
     {
