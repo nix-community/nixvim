@@ -27,7 +27,7 @@ in
     (mkMerge [
       { environment.systemPackages = [ cfg.finalPackage ]; }
       (mkIf (!cfg.wrapRc) {
-        environment.etc."nvim/sysinit.vim".text = cfg.initContent;
+        environment.etc."nvim/sysinit.lua".text = cfg.initContent;
         environment.variables."VIM" = "/etc/nvim";
       })
     ]);
