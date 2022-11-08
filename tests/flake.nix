@@ -118,6 +118,88 @@
                 termguicolors = true;
               };
             };
+
+            issue-65 = build {
+              colorschemes.gruvbox = {
+                enable = true;
+                contrastLight = "hard";
+                contrastDark = "hard";
+              };
+
+              options = {
+                number = true;
+                shiftwidth = 2;
+                tabstop = 2;
+                guifont = "FiraCode\ Nerd\ Font\ Mono:h14";
+              };
+
+              plugins = {
+                lsp = {
+                  enable = true;
+                  servers.rnix-lsp.enable = true;
+                  servers.rust-analyzer.enable = true;
+                  servers.jsonls.enable = true;
+                };
+
+                nvim-tree = {
+                  enable = true;
+                  openOnSetup = true;
+                  openOnTab = true;
+                };
+
+                telescope = {
+                  enable = true;
+                };
+
+                nvim-cmp = {
+                  formatting = {
+                    format = ''
+                      					require("lspkind").cmp_format({
+                      						mode="symbol",
+                      						maxwidth = 50,
+                      						ellipsis_char = "..."
+                      					})
+                      					'';
+                  };
+
+                  auto_enable_sources = true;
+                  snippet = {
+                    expand = ''
+                      	   function(args)
+                      	     require("luasnip").lsp_expand(args.body)
+                      	   end
+                      	 '';
+                  };
+                  enable = true;
+                  sources = [
+                    { name = "nvim_lsp"; }
+                    {
+                      name = "luasnip";
+                      option = {
+                        show_autosnippets = true;
+                      };
+                    }
+                    { name = "path"; }
+                    { name = "buffer"; }
+                  ];
+
+                };
+                barbar.enable = true;
+              };
+
+              globals.mapleader = " ";
+              extraPlugins = with pkgs.vimPlugins; [
+                which-key-nvim
+                # leap-nvim
+                vim-flutter
+                plenary-nvim
+                fidget-nvim
+                luasnip
+                lspkind-nvim
+              ];
+
+              # extraConfigLua = (builtins.readFile ./nvim-extra-lua.lua);
+            };
           };
         })) // {
       nixosConfigurations.nixvim-machine = nixpkgs.lib.nixosSystem {

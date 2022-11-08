@@ -87,19 +87,6 @@ in
 
   config =
     let
-      customRC =
-        (optionalString (config.extraConfigLuaPre != "") ''
-          ${config.extraConfigLuaPre}
-        '') +
-        (optionalString (config.extraConfigVim != "") ''
-          vim.cmd([[
-            ${config.extraConfigVim}
-          ]])
-        '') +
-        (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-        '');
 
       defaultPlugin = {
         plugin = null;
@@ -121,6 +108,25 @@ in
           { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = [ ]; }; };
       });
 
+      customRC =
+        ''
+          vim.cmd([[
+            ${neovimConfig.neovimRcContent}
+          ]])
+        '' +
+        (optionalString (config.extraConfigLuaPre != "") ''
+          ${config.extraConfigLuaPre}
+        '') +
+        (optionalString (config.extraConfigVim != "") ''
+          vim.cmd([[
+            ${config.extraConfigVim}
+          ]])
+        '') +
+        (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
+          ${config.extraConfigLua}
+          ${config.extraConfigLuaPost}
+        '');
+
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (config.extraPackages != [ ])
           ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
@@ -136,6 +142,6 @@ in
     in
     {
       finalPackage = wrappedNeovim;
-      initContent = neovimConfig.neovimRcContent;
+      initContent = customRC;
     };
 }
