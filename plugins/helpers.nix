@@ -23,6 +23,8 @@ rec {
     else if builtins.isString args then
       # This should be enough!
       escapeShellArg args
+    else if builtins.isPath args then
+      escapeShellArg args
     else if builtins.isBool args then
       "${ boolToString args }"
     else if builtins.isFloat args then

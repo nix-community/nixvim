@@ -32,6 +32,8 @@
 
     ./pluginmanagers/packer.nix
 
+    ./snippets/luasnip
+
     ./statuslines/airline.nix
     ./statuslines/lightline.nix
     ./statuslines/lualine.nix
