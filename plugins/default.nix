@@ -14,6 +14,7 @@
     ./completion/copilot.nix
     ./completion/nvim-cmp
     ./completion/nvim-cmp/sources
+    ./completion/lspkind.nix
 
     ./git/fugitive.nix
     ./git/gitgutter.nix

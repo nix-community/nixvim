@@ -154,21 +154,21 @@
                 nvim-cmp = {
                   formatting = {
                     format = ''
-                      					require("lspkind").cmp_format({
-                      						mode="symbol",
-                      						maxwidth = 50,
-                      						ellipsis_char = "..."
-                      					})
-                      					'';
+                      require("lspkind").cmp_format({
+                              mode="symbol",
+                              maxwidth = 50,
+                              ellipsis_char = "..."
+                      })
+                    '';
                   };
 
                   auto_enable_sources = true;
                   snippet = {
                     expand = ''
-                      	   function(args)
-                      	     require("luasnip").lsp_expand(args.body)
-                      	   end
-                      	 '';
+                      function(args)
+                        require("luasnip").lsp_expand(args.body)
+                      end
+                    '';
                   };
                   enable = true;
                   sources = [
@@ -199,6 +199,17 @@
               ];
 
               # extraConfigLua = (builtins.readFile ./nvim-extra-lua.lua);
+            };
+
+            lspkind = build {
+              plugins = {
+                lsp = {
+                  enable = true;
+                  servers.clangd.enable = true;
+                };
+                nvim-cmp.enable = true;
+                lspkind.enable = true;
+              };
             };
           };
         })) // {
