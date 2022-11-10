@@ -48,6 +48,12 @@ in
         default = null;
         description = "Show source names in the popup";
       };
+
+      after = mkOption {
+        type = with types; nullOr types.str;
+        default = null;
+        description = "Function to run after calculating the formatting. function(entry, vim_item, kind)";
+      };
     };
   };
 
@@ -71,8 +77,15 @@ in
         require('lspkind').init(${helpers.toLuaObject options})
       '';
 
-      plugins.nvim-cmp.formatting.format = ''
-        require('lspkind').cmp_format(${helpers.toLuaObject options})
-      '';
+      plugins.nvim-cmp.formatting.format =
+        if cfg.cmp.after != null then ''
+          function(entry, vim_item)
+            local kind = require('lspkind').cmp_format(${helpers.toLuaObject options})(entry, vim_item)
+
+            return ${cmp.cfg.after}(entry, vim_after, kind)
+          end
+        '' else ''
+          require('lspkind').cmp_format(${helpers.toLuaObject options})
+        '';
     };
 }
