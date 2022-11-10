@@ -42,6 +42,12 @@ in
         default = null;
         description = "Character to show when the popup exceeds maxwidth";
       };
+
+      menu = mkOption {
+        type = with types; nullOr (attrsOf str);
+        default = null;
+        description = "Show source names in the popup";
+      };
     };
   };
 
@@ -55,6 +61,7 @@ in
       } // (if doCmp then {
         maxwidth = cfg.cmp.maxWidth;
         ellipsis_char = cfg.cmp.ellipsisChar;
+        menu = cfg.cmp.menu;
       } else { });
     in
     mkIf cfg.enable {
