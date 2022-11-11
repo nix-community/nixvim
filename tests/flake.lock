@@ -97,12 +97,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-2xKbMFW3jSlyvl1ZKoe9sNe4h5k5Qk410Dom4TU3nls=",
-        "path": "/nix/store/89k711hq8f8j87h2kadz5kivkcpxjv58-source",
+        "narHash": "sha256-3m9eDTuaK9RS8HpctJwSu1wnyx5/CILSGppr+6OjTPw=",
+        "path": "/nix/store/pp50jx20wrkbrkv3mxkwzckciy8xcqy2-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/89k711hq8f8j87h2kadz5kivkcpxjv58-source",
+        "path": "/nix/store/pp50jx20wrkbrkv3mxkwzckciy8xcqy2-source",
         "type": "path"
       }
     },
@@ -116,12 +116,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-2xKbMFW3jSlyvl1ZKoe9sNe4h5k5Qk410Dom4TU3nls=",
-        "path": "/nix/store/89k711hq8f8j87h2kadz5kivkcpxjv58-source",
+        "narHash": "sha256-3m9eDTuaK9RS8HpctJwSu1wnyx5/CILSGppr+6OjTPw=",
+        "path": "/nix/store/pp50jx20wrkbrkv3mxkwzckciy8xcqy2-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/89k711hq8f8j87h2kadz5kivkcpxjv58-source",
+        "path": "/nix/store/pp50jx20wrkbrkv3mxkwzckciy8xcqy2-source",
         "type": "path"
       }
     },

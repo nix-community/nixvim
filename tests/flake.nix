@@ -211,6 +211,13 @@
                 lspkind.enable = true;
               };
             };
+
+            highlight = build {
+              options.termguicolors = true;
+              highlight = {
+                Normal.fg = "#ff0000";
+              };
+            };
           };
         })) // {
       nixosConfigurations.nixvim-machine = nixpkgs.lib.nixosSystem {
