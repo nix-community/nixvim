@@ -299,8 +299,8 @@ in
         border = with types; mkNullOrOption (either str (listOf str)) null;
         winhighlight = mkNullOrOption types.str null;
         zindex = mkNullOrOption types.int null;
-        colOffset = mkNullOrOption types.int null;
-        sidePadding = mkNullOrOption types.int null;
+        col_offset = mkNullOrOption types.int null;
+        side_padding = mkNullOrOption types.int null;
       in
       mkOption {
         default = null;
@@ -310,7 +310,7 @@ in
               default = null;
               type = types.nullOr (types.submodule ({ ... }: {
                 options = {
-                  inherit border winhighlight zindex colOffset sidePadding;
+                  inherit border winhighlight zindex col_offset side_padding;
                 };
               }));
             };
@@ -389,13 +389,7 @@ in
 
         sources = cfg.sources;
         view = cfg.view;
-        window = if (isNull cfg.window) then null else {
-          border = cfg.window.border;
-          winhighlight = cfg.window.winhighlight;
-          zindex = cfg.window.zindex;
-          col_offset = cfg.window.colOffset;
-          side_padding = cfg.window.sidePadding;
-        };
+        window = cfg.window;
         experimental = cfg.experimental;
       };
     in
