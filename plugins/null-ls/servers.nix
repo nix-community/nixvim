@@ -2,11 +2,12 @@
 let
   helpers = import ./helpers.nix args;
   serverData = {
-    code_actions = {
-    };
-    completion = {
-    };
+    code_actions = { };
+    completion = { };
     diagnostics = {
+      flake8 = {
+        packages = [ pkgs.python3Packages.flake8 ];
+      };
     };
     formatting = {
       phpcbf = {
@@ -21,8 +22,8 @@ let
       prettier = {
         packages = [ pkgs.nodePackages.prettier ];
       };
-      flake8 = {
-        packages = [ pkgs.python3Packages.flake8 ];
+      black = {
+        packages = [ pkgs.python3Packages.black ];
       };
     };
   };
@@ -32,9 +33,11 @@ let
   #   sourceType = "formatting";
   #   packages = [...];
   # }]
-  serverDataFormatted = lib.mapAttrsToList (sourceType: sourceSet:
-    lib.mapAttrsToList (name: attrs: attrs // { inherit sourceType name; }) sourceSet
-  ) serverData;
+  serverDataFormatted = lib.mapAttrsToList
+    (sourceType: sourceSet:
+      lib.mapAttrsToList (name: attrs: attrs // { inherit sourceType name; }) sourceSet
+    )
+    serverData;
   dataFlattened = lib.flatten serverDataFormatted;
 in
 {
