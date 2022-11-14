@@ -35,6 +35,18 @@ in
       description = "Configuration for the extensions. Don't use this directly";
       default = { };
     };
+
+    defaultsConfig = mkOption {
+      type = types.nullOr types.attrs;
+      default = null;
+      description = "Telescope default configuration";
+    };
+
+    extraOptions = mkOption {
+      type = types.attrs;
+      default = { };
+      description = "An attribute set, that lets you set extra options or override options set by nixvim";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -50,13 +62,16 @@ in
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    extraConfigLua = ''
+    extraConfigLua = let 
+      options = {
+        extensions = cfg.extensionConfig;
+        defaults = cfg.defaultsConfig;
+      } // cfg.extraOptions;
+    in ''
       do
         local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
 
-        require('telescope').setup{
-          extensions = ${helpers.toLuaObject cfg.extensionConfig}
-        }
+        require('telescope').setup(${helpers.toLuaObject options})
 
         for i, extension in ipairs(__telescopeExtensions) do
           require('telescope').load_extension(extension)
