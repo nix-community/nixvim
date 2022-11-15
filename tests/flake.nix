@@ -61,6 +61,15 @@
               plugins.lsp-lines.enable = true;
             };
 
+            trouble = build {
+              plugins.lsp = {
+                enable = true;
+                servers.clangd.enable = true;
+              };
+
+              plugins.trouble.enable = true;
+            };
+
             issue-40 = build-stable {
               plugins = {
                 nix.enable = true;
