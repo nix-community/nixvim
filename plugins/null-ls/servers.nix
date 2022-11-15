@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }@args:
+{ pkgs, config, lib, inputs, ... }@args:
 let
   helpers = import ./helpers.nix args;
   serverData = {
@@ -7,6 +7,9 @@ let
     diagnostics = {
       flake8 = {
         packages = [ pkgs.python3Packages.flake8 ];
+      };
+      shellcheck = {
+        packages = [ pkgs.shellcheck ];
       };
     };
     formatting = {
@@ -24,6 +27,9 @@ let
       };
       black = {
         packages = [ pkgs.python3Packages.black ];
+      };
+      beautysh = {
+        packages = [ inputs.beautysh.packages.${pkgs.system}.beautysh-python38 ];
       };
     };
   };

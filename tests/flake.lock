@@ -1,5 +1,51 @@
 {
   "nodes": {
+    "beautysh": {
+      "inputs": {
+        "nixpkgs": [
+          "nixvim",
+          "nixpkgs"
+        ],
+        "poetry2nix": "poetry2nix",
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1667262410,
+        "narHash": "sha256-yqqvPvazG/Ci3WpIfPb+o+i2cNuyAYYY19lwJGCmUao=",
+        "owner": "lovesegfault",
+        "repo": "beautysh",
+        "rev": "a1fdaff999db2dfc5032914630f5052360f4b432",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lovesegfault",
+        "repo": "beautysh",
+        "type": "github"
+      }
+    },
+    "beautysh_2": {
+      "inputs": {
+        "nixpkgs": [
+          "nixvim-stable",
+          "nixpkgs"
+        ],
+        "poetry2nix": "poetry2nix_2",
+        "utils": "utils_2"
+      },
+      "locked": {
+        "lastModified": 1667262410,
+        "narHash": "sha256-yqqvPvazG/Ci3WpIfPb+o+i2cNuyAYYY19lwJGCmUao=",
+        "owner": "lovesegfault",
+        "repo": "beautysh",
+        "rev": "a1fdaff999db2dfc5032914630f5052360f4b432",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lovesegfault",
+        "repo": "beautysh",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -91,23 +137,25 @@
     },
     "nixvim": {
       "inputs": {
+        "beautysh": "beautysh",
         "flake-utils": "flake-utils_2",
         "nixpkgs": "nixpkgs_2",
         "nmdSrc": "nmdSrc"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-b5FuoFQsTCgKsVTQS13qmFnMmVotIQWtcjPu+WT6ubo=",
-        "path": "/nix/store/m90wvnc3d4rci36q0r0j7d2i1sk35cgy-source",
+        "narHash": "sha256-sjdU/aCTVFGSDxU+jxgaHtDsZQeFNb1nA55wRPgc3tU=",
+        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/m90wvnc3d4rci36q0r0j7d2i1sk35cgy-source",
+        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
         "type": "path"
       }
     },
     "nixvim-stable": {
       "inputs": {
+        "beautysh": "beautysh_2",
         "flake-utils": "flake-utils_3",
         "nixpkgs": [
           "nixpkgs-stable"
@@ -116,12 +164,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-b5FuoFQsTCgKsVTQS13qmFnMmVotIQWtcjPu+WT6ubo=",
-        "path": "/nix/store/m90wvnc3d4rci36q0r0j7d2i1sk35cgy-source",
+        "narHash": "sha256-sjdU/aCTVFGSDxU+jxgaHtDsZQeFNb1nA55wRPgc3tU=",
+        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/m90wvnc3d4rci36q0r0j7d2i1sk35cgy-source",
+        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
         "type": "path"
       }
     },
@@ -157,6 +205,60 @@
         "type": "gitlab"
       }
     },
+    "poetry2nix": {
+      "inputs": {
+        "flake-utils": [
+          "nixvim",
+          "beautysh",
+          "utils"
+        ],
+        "nixpkgs": [
+          "nixvim",
+          "beautysh",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1658665240,
+        "narHash": "sha256-/wkx7D7enyBPRjIkK0w7QxLQhzEkb3UxNQnjyc3FTUI=",
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "rev": "8b8edc85d24661d5a6d0d71d6a7011f3e699780f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "type": "github"
+      }
+    },
+    "poetry2nix_2": {
+      "inputs": {
+        "flake-utils": [
+          "nixvim-stable",
+          "beautysh",
+          "utils"
+        ],
+        "nixpkgs": [
+          "nixvim-stable",
+          "beautysh",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1658665240,
+        "narHash": "sha256-/wkx7D7enyBPRjIkK0w7QxLQhzEkb3UxNQnjyc3FTUI=",
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "rev": "8b8edc85d24661d5a6d0d71d6a7011f3e699780f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -164,6 +266,36 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixvim": "nixvim",
         "nixvim-stable": "nixvim-stable"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1667077288,
+        "narHash": "sha256-bdC8sFNDpT0HK74u9fUkpbf1MEzVYJ+ka7NXCdgBoaA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "6ee9ebb6b1ee695d2cacc4faa053a7b9baa76817",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "utils_2": {
+      "locked": {
+        "lastModified": 1667077288,
+        "narHash": "sha256-bdC8sFNDpT0HK74u9fUkpbf1MEzVYJ+ka7NXCdgBoaA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "6ee9ebb6b1ee695d2cacc4faa053a7b9baa76817",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     }
   },

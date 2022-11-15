@@ -70,6 +70,13 @@
               plugins.trouble.enable = true;
             };
 
+            beautysh = build {
+              plugins.null-ls = {
+                enable = true;
+                sources.formatting.beautysh.enable = true;
+              };
+            };
+
             issue-40 = build-stable {
               plugins = {
                 nix.enable = true;

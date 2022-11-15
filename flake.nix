@@ -6,6 +6,9 @@
   inputs.nmdSrc.url = "gitlab:rycee/nmd";
   inputs.nmdSrc.flake = false;
 
+  inputs.beautysh.url = "github:lovesegfault/beautysh";
+  inputs.beautysh.inputs.nixpkgs.follows = "nixpkgs";
+
   outputs = { self, nixpkgs, nmdSrc, flake-utils, ... }@inputs:
     with nixpkgs.lib;
     with builtins;
@@ -22,6 +25,7 @@
               pkgs = mkForce pkgs;
               inherit (pkgs) lib;
               helpers = import ./plugins/helpers.nix { inherit (pkgs) lib; };
+              inputs = inputs;
             };
           };
         })
