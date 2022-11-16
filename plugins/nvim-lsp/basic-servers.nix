@@ -13,6 +13,11 @@ let
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
     }
     {
+      name = "denols";
+      description = "Enable denols, for Deno";
+      packages = [ pkgs.deno ];
+    }
+    {
       name = "eslint";
       description = "Enable eslint";
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
