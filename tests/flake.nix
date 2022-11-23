@@ -217,6 +217,10 @@
               # extraConfigLua = (builtins.readFile ./nvim-extra-lua.lua);
             };
 
+            issue-71 = build {
+              maps.normal."<leader>hb" = "<cmd>lua require('gitsigns').blame_line{full=true}<cr>";
+            };
+
             lspkind = build {
               plugins = {
                 lsp = {
