@@ -22,9 +22,9 @@ rec {
       "{" + concatMapStringsSep "," toLuaObject args + "}"
     else if builtins.isString args then
       # This should be enough!
-      escapeShellArg args
+      builtins.toJSON args
     else if builtins.isPath args then
-      escapeShellArg args
+      builtins.toJSON (toString args)
     else if builtins.isBool args then
       "${ boolToString args }"
     else if builtins.isFloat args then
