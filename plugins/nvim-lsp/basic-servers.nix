@@ -72,7 +72,7 @@ let
     {
       name = "vuels";
       description = "Enable vuels, for Vue";
-      packages = [ pkgs.nodePackages.vue-language-server ];
+      packages = [ pkgs.nodePackages.vls ];
     }
     {
       name = "zls";
