@@ -106,6 +106,17 @@ rec {
     inherit value global;
   };
 
+  extraOptionsOptions = {
+    extraOptions = mkOption {
+      default = { };
+      type = types.attrs;
+      description = ''
+        These attributes will be added to the table parameter for the setup function.
+        (Can override other attributes set by nixvim)
+      '';
+    };
+  };
+
   mkRaw = r: { __raw = r; };
 
   wrapDo = string: ''

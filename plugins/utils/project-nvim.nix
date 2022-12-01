@@ -5,7 +5,7 @@ let
   helpers = import ../helpers.nix { inherit lib; };
 in
 {
-  options.plugins.project-nvim = {
+  options.plugins.project-nvim = helpers.extraOptionsOptions // {
     enable = mkEnableOption "Enable project.nvim";
 
     manualMode = mkOption {
@@ -52,6 +52,7 @@ in
       type = types.nullOr (types.either types.str helpers.rawType);
       default = null;
     };
+
   };
 
   config =
@@ -66,7 +67,7 @@ in
         silent_chdir = cfg.silentChdir;
         scope_schdir = cfg.scopeChdir;
         data_path = cfg.dataPath;
-      };
+      } // cfg.extraOptions;
     in
     mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.project-nvim ];
