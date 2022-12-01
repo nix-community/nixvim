@@ -36,7 +36,7 @@ in
       default = { };
     };
 
-    defaultsConfig = mkOption {
+    defaults = mkOption {
       type = types.nullOr types.attrs;
       default = null;
       description = "Telescope default configuration";
@@ -65,7 +65,7 @@ in
     extraConfigLua = let 
       options = {
         extensions = cfg.extensionConfig;
-        defaults = cfg.defaultsConfig;
+        defaults = cfg.defaults;
       } // cfg.extraOptions;
     in ''
       do
