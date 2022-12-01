@@ -65,12 +65,12 @@ in
       indent = mkEnableOption "Enable tree-sitter based indentation";
 
       folding = mkEnableOption "Enable tree-sitter based folding";
-    };
 
-    grammarPackages = mkOption {
-      type = with types; listOf package;
-      default = pkgs.tree-sitter.allGrammars;
-      description = "Grammar packages to install";
+      grammarPackages = mkOption {
+        type = with types; listOf package;
+        default = pkgs.tree-sitter.allGrammars;
+        description = "Grammar packages to install";
+      };
     };
   };
 
