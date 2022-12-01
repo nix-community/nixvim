@@ -4,13 +4,17 @@
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nixvim.url = "./..";
 
+  inputs.build-ts.url = "github:pta2002/build-ts-grammar.nix";
+  inputs.gleam.url = "github:gleam-lang/tree-sitter-gleam";
+  inputs.gleam.flake = false;
+
   inputs.nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
   inputs.nixvim-stable = {
     url = "./..";
     inputs.nixpkgs.follows = "nixpkgs-stable";
   };
 
-  outputs = { self, nixvim, nixvim-stable, nixpkgs, flake-utils, nixpkgs-stable, ... }:
+  outputs = { self, nixvim, nixvim-stable, nixpkgs, flake-utils, nixpkgs-stable, build-ts, gleam, ... }:
     (flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -236,6 +240,20 @@
               options.termguicolors = true;
               highlight = {
                 Normal.fg = "#ff0000";
+              };
+            };
+
+            ts-custom = build {
+              plugins.treesitter = {
+                enable = true;
+                nixGrammars = true;
+                grammarPackages = [
+                  (build-ts.lib.buildGrammar pkgs {
+                    language = "gleam";
+                    version = "0.25.0";
+                    source = gleam;
+                  })
+                ];
               };
             };
           };

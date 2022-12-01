@@ -46,6 +46,25 @@
         "type": "github"
       }
     },
+    "build-ts": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1669771646,
+        "narHash": "sha256-IfH9zCq0+QpAB8D1ClhISfWcR59mSDsi91/2NW0RWfs=",
+        "owner": "pta2002",
+        "repo": "build-ts-grammar.nix",
+        "rev": "bba8a5b14a4632f25411dbf0fb01de69e999ce82",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pta2002",
+        "repo": "build-ts-grammar.nix",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -88,6 +107,37 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_4": {
+      "locked": {
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "gleam": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1669665314,
+        "narHash": "sha256-aeho84P91cH13j7uLJwyD/zj8O/peROrpfa41HA/FGo=",
+        "owner": "gleam-lang",
+        "repo": "tree-sitter-gleam",
+        "rev": "97611918f79643ade377a156f3e4192cd50dc3e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gleam-lang",
+        "repo": "tree-sitter-gleam",
         "type": "github"
       }
     },
@@ -135,28 +185,42 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1663491030,
+        "narHash": "sha256-MVsfBhE9US5DvLtBAaTRjwYdv1tLO8xjahM8qLXTgTo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "767542707d394ff15ac1981e903e005ba69528b5",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nixvim": {
       "inputs": {
         "beautysh": "beautysh",
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_2",
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": "nixpkgs_3",
         "nmdSrc": "nmdSrc"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-sjdU/aCTVFGSDxU+jxgaHtDsZQeFNb1nA55wRPgc3tU=",
-        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
+        "narHash": "sha256-HWr75pPDcv+OM0BRyQUtIDPJ4W1V1iDzsEVXY6JQz6E=",
+        "path": "/nix/store/hgr3qr1x8gndpdkaj8cx2xclmd7v20b9-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
+        "path": "/nix/store/hgr3qr1x8gndpdkaj8cx2xclmd7v20b9-source",
         "type": "path"
       }
     },
     "nixvim-stable": {
       "inputs": {
         "beautysh": "beautysh_2",
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_4",
         "nixpkgs": [
           "nixpkgs-stable"
         ],
@@ -164,12 +228,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-sjdU/aCTVFGSDxU+jxgaHtDsZQeFNb1nA55wRPgc3tU=",
-        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
+        "narHash": "sha256-HWr75pPDcv+OM0BRyQUtIDPJ4W1V1iDzsEVXY6JQz6E=",
+        "path": "/nix/store/hgr3qr1x8gndpdkaj8cx2xclmd7v20b9-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/5wxj9v7dzrga7xvp4pr825ph20i1qb42-source",
+        "path": "/nix/store/hgr3qr1x8gndpdkaj8cx2xclmd7v20b9-source",
         "type": "path"
       }
     },
@@ -261,8 +325,10 @@
     },
     "root": {
       "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs",
+        "build-ts": "build-ts",
+        "flake-utils": "flake-utils_2",
+        "gleam": "gleam",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixvim": "nixvim",
         "nixvim-stable": "nixvim-stable"

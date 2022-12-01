@@ -66,6 +66,12 @@ in
 
       folding = mkEnableOption "Enable tree-sitter based folding";
     };
+
+    grammarPackages = mkOption {
+      type = with types; listOf package;
+      default = pkgs.tree-sitter.allGrammars;
+      description = "Grammar packages to install";
+    };
   };
 
   config =
@@ -107,7 +113,7 @@ in
       '';
 
       extraPlugins = with pkgs; if cfg.nixGrammars then
-        [ (vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)) ]
+        [ (vimPlugins.nvim-treesitter.withPlugins (_: cfg.grammarPackages)) ]
       else [ vimPlugins.nvim-treesitter ];
       extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 

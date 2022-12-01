@@ -26,7 +26,7 @@ let
       name = "elixirls";
       description = "Enable elixirls";
       packages = [ ];
-      cmd = ["${pkgs.elixir_ls}/bin/elixir-ls"];
+      cmd = [ "${pkgs.elixir_ls}/bin/elixir-ls" ];
     }
     {
       name = "gdscript";
@@ -77,6 +77,11 @@ let
     {
       name = "zls";
       description = "Enable zls, for Zig.";
+    }
+    {
+      name = "hls";
+      description = "Enable haskell language server";
+      packages = [ pkgs.haskell-language-server ];
     }
   ];
 in
