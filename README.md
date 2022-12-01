@@ -22,6 +22,9 @@ lightline plugin:
 When we do this, lightline will be set up to a sensible default, and will use
 gruvbox as the colorscheme, no extra configuration required!
 
+## Support/Questions
+If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)!
+
 ## Instalation
 ### Without flakes
 NixVim now ships with `flake-compat`, which makes it usable from any system.
