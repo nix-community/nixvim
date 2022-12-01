@@ -82,7 +82,7 @@ let
       name = "hls";
       description = "Enable haskell language server";
       packages = [ pkgs.haskell-language-server ];
-      cmd = [ "${pkgs.haskell-language-server}/bin/haskell-language-server-wrapper" ];
+      cmd = [ "haskell-language-server-wrapper" ];
     }
   ];
 in
