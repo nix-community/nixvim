@@ -31,6 +31,9 @@ let
       beautysh = {
         packages = [ inputs.beautysh.packages.${pkgs.system}.beautysh-python38 ];
       };
+      fourmolu = {
+        packages = [ pkgs.haskellPackages.fourmolu ];
+      };
     };
   };
   # Format the servers to be an array of attrs like the following example
