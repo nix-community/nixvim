@@ -69,7 +69,7 @@ in
         do
           ${cfg.preConfig}
           local __lspServers = ${helpers.toLuaObject cfg.enabledServers}
-          local __lspOnAttach = function(client)
+          local __lspOnAttach = function(client, bufnr)
             ${cfg.onAttach}
           end
 
