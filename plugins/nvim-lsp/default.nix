@@ -36,7 +36,7 @@ in
 
       onAttach = mkOption {
         type = types.lines;
-        description = "A lua function to be run when a new LSP buffer is attached. The argument `client` is provided.";
+        description = "A lua function to be run when a new LSP buffer is attached. The argument `client` and `bufnr` is provided.";
         default = "";
       };
 
@@ -69,7 +69,7 @@ in
         do
           ${cfg.preConfig}
           local __lspServers = ${helpers.toLuaObject cfg.enabledServers}
-          local __lspOnAttach = function(client)
+          local __lspOnAttach = function(client, bufnr)
             ${cfg.onAttach}
           end
 
