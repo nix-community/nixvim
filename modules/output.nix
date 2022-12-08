@@ -22,6 +22,22 @@ let
 in
 {
   options = {
+    viAlias = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Symlink <command>vi</command> to <command>nvim</command> binary.
+      '';
+    };
+
+    vimAlias = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Symlink <command>vim</command> to <command>nvim</command> binary.
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
@@ -97,6 +113,7 @@ in
       normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) config.extraPlugins;
 
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
+        inherit (config) viAlias vimAlias;
         # inherit customRC;
         plugins = normalizedPlugins;
       }
