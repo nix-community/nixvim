@@ -7,6 +7,11 @@ in
   options = {
     plugins.copilot = {
       enable = mkEnableOption "Enable copilot";
+      package = mkOption {
+        type = types.package;
+        description = "The copilot plugin package to use";
+        default = pkgs.vimPlugins.copilot-vim;
+      };
       filetypes = mkOption {
         type = types.attrsOf types.bool;
         description = "A dictionary mapping file types to their enabled status";
@@ -27,7 +32,7 @@ in
 
   config =
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.copilot-vim ];
+      extraPlugins = [ cfg.package ];
       globals = {
         copilot_node_command = "${pkgs.nodejs-16_x}/bin/node";
         copilot_filetypes = cfg.filetypes;
