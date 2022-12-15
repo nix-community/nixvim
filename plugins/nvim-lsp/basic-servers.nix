@@ -62,6 +62,11 @@ let
       serverName = "rust_analyzer";
     }
     {
+      name = "tailwindcss";
+      description = "Enable tailwindcss language server, for tailwindcss";
+      packages = [ pkgs.nodePackages."@tailwindcss/language-server" ];
+    }
+    {
       name = "tsserver";
       description = "Enable tsserver for typescript";
       packages = with pkgs; [
