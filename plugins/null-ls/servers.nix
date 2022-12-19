@@ -34,6 +34,9 @@ let
       fourmolu = {
         packages = [ pkgs.haskellPackages.fourmolu ];
       };
+      fnlfmt = {
+        packages = [ pkgs.fnlfmt ];
+      };
     };
   };
   # Format the servers to be an array of attrs like the following example
