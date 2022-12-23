@@ -84,4 +84,42 @@
       sha256 = "sha256-AtkG2XRVZgvJzH2iLr7UT/U1+LXxenvNckdapnJV+8A=";
     };
   };
+
+  magma-nvim = pkgs.vimUtils.buildVimPlugin rec {
+    pname = "magma-nvim";
+    version = "94370733757d550594fe4a1d65643949d7485989";
+
+    src = pkgs.fetchFromGitHub {
+      # using fork of https://github.com/dccsillag/magma-nvim because there are some unmerged
+      # pull requests that I really want
+      owner = "WhiteBlackGoose";
+      repo = "magma-nvim-goose";
+      rev = version;
+      sha256 = "sha256-IaslJK1F2BxTvZzKGH9OKOl2RICi4d4rSgjliAIAqK4=";
+    };
+
+    passthru.python3Dependencies = ps: with ps;  [
+      pynvim
+      jupyter-client
+      ueberzug
+      pillow
+      cairosvg
+      plotly
+      ipykernel
+      pyperclip
+      (ps.buildPythonPackage rec {
+        pname = "pnglatex";
+        version = "1.1";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-CZUGDUkmttO0BzFYbGFSNMPkWzFC/BW4NmAeOwz4Y9M=";
+        };
+        doCheck = false;
+        meta = with lib; {
+          homepage = "https://github.com/MaT1g3R/pnglatex";
+          description = "a small program that converts LaTeX snippets to png";
+        };
+      })
+    ];
+  };
 }

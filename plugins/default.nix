@@ -60,5 +60,6 @@
     ./utils/undotree.nix
     ./utils/dashboard.nix
     ./utils/emmet.nix
+    ./utils/magma-nvim.nix
   ];
 }
