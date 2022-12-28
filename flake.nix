@@ -47,7 +47,10 @@
                 inherit nmdSrc;
               };
 
-              legacyPackages.makeNixvim = import ./wrappers/standalone.nix pkgs (modules pkgs);
+              legacyPackages = rec {
+			    makeNixvimWithPkgs = import ./wrappers/standalone.nix pkgs modules;
+			  	makeNixvim = configuration: makeNixvimWithPkgs {inherit configuration;};
+			   };
             });
     in
     flakeOutput // {

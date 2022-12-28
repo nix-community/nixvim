@@ -1,4 +1,4 @@
-pkgs: modules: configuration:
+default_pkgs: modules: {pkgs ? default_pkgs, configuration}:
 
 let
 
@@ -7,7 +7,7 @@ let
   wrap = { wrapRc = true; };
 
   eval = lib.evalModules {
-    modules = modules ++ [ { config = configuration; } wrap ];
+    modules = (modules pkgs) ++ [ { config = configuration; } wrap ];
   };
 
 in eval.config.finalPackage
