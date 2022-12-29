@@ -40,8 +40,14 @@
               packages.docs = pkgs.callPackage (import ./docs.nix) {
                 modules = nixvimModules;
               };
-
-              legacyPackages.makeNixvim = import ./wrappers/standalone.nix pkgs (modules pkgs);
+              legacyPackages = rec {
+                makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
+                makeNixvim = configuration: makeNixvimWithModule { 
+                  module = {
+                    config = configuration;
+                  };
+                };
+              };
             });
     in
     flakeOutput // {
