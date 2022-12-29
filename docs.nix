@@ -22,7 +22,7 @@ pkgs.stdenv.mkDerivation {
   phases = [ "buildPhase" ];
 
   buildPhase = ''
-    mkdir -p $out/share
+    mkdir -p $out/share/doc
     cat <<EOF > header.adoc
     = NixVim options
     This lists all the options available for NixVim.
@@ -30,6 +30,6 @@ pkgs.stdenv.mkDerivation {
 
     EOF
     cat header.adoc $src > tmp.adoc
-    asciidoctor tmp.adoc -o $out/share/index.html
+    asciidoctor tmp.adoc -o $out/share/doc/index.html
   '';
 }
