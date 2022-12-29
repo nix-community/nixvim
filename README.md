@@ -107,8 +107,8 @@ Since everything is disabled by default, it will be as snappy as you want it to
 be.
 
 # Documentation
-Documentation is very much a work-in-progress. It will become available on this
-repository's Wiki.
+Documentation is available on this project's GitHub Pages page:
+[https://pta2002.github.io/nixvim](https://pta2002.github.io/nixvim)
 
 ## Plugins
 After you have installed NixVim, you will no doubt want to enable some plugins.
