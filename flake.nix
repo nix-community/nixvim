@@ -3,13 +3,10 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  inputs.nmdSrc.url = "gitlab:rycee/nmd";
-  inputs.nmdSrc.flake = false;
-
   inputs.beautysh.url = "github:lovesegfault/beautysh";
   inputs.beautysh.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, nmdSrc, flake-utils, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     with nixpkgs.lib;
     with builtins;
     let
@@ -30,7 +27,7 @@
           };
         })
 
-        ./plugins/default.nix
+        # ./plugins/default.nix
       ];
 
       flakeOutput =
@@ -40,11 +37,8 @@
               pkgs = import nixpkgs { inherit system; };
             in
             {
-              packages.docs = import ./docs {
-                pkgs = import nixpkgs { inherit system; };
-                lib = nixpkgs.lib;
-                nixvimModules = nixvimModules;
-                inherit nmdSrc;
+              packages.docs = pkgs.callPackage (import ./docs.nix) {
+                modules = nixvimModules;
               };
 
               legacyPackages.makeNixvim = import ./wrappers/standalone.nix pkgs (modules pkgs);

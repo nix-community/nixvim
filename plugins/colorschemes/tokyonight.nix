@@ -1,8 +1,9 @@
-{ pkgs, config, lib, helpers, ... }:
+{ pkgs, config, lib, ... }:
 with lib;
 let
   cfg = config.colorschemes.tokyonight;
   style = types.enum [ "storm" "night" "day" ];
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {

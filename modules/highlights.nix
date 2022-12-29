@@ -1,4 +1,7 @@
-{ config, lib, helpers, ... }:
+{ config, lib, ... }:
+let
+  helpers = import ../plugins/helpers.nix { inherit lib; };
+in
 with lib;
 {
   options = {

@@ -18,6 +18,7 @@ in
       colorscheme = mkOption {
         type = types.enum themes;
         description = "The base16 colorscheme to use";
+        default = head themes;
       };
 
       setUpBar = mkOption {

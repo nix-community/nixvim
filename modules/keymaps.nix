@@ -1,6 +1,8 @@
-{ config, lib, helpers, ... }:
+{ config, lib, ... }:
 with lib;
 let
+  helpers = import ../plugins/helpers.nix { inherit lib; };
+
   mapOption = types.oneOf [
     types.str
     (types.submodule {

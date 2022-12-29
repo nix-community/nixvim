@@ -1,5 +1,8 @@
-{ config, lib, helpers, ... }:
+{ config, lib, ... }:
 with lib;
+let
+  helpers = import ../plugins/helpers.nix { inherit lib; };
+in
 {
   options = {
     options = mkOption {
