@@ -53,7 +53,7 @@
         pname = "std2";
         version = "48bb39b69ed631ef64eed6123443484133fd20fc";
 
-        doCheck = false;
+        doCheck = true;
 
         src = pkgs.fetchFromGitHub {
           owner = "ms-jpq";
@@ -90,13 +90,13 @@
     version = "94370733757d550594fe4a1d65643949d7485989";
 
     src = pkgs.fetchFromGitHub {
-      # using fork of https://github.com/dccsillag/magma-nvim because there are some unmerged
-      # pull requests that I really want
       owner = "WhiteBlackGoose";
       repo = "magma-nvim-goose";
       rev = version;
       sha256 = "sha256-IaslJK1F2BxTvZzKGH9OKOl2RICi4d4rSgjliAIAqK4=";
     };
+
+
 
     passthru.python3Dependencies = ps: with ps;  [
       pynvim
