@@ -203,17 +203,16 @@
       "inputs": {
         "beautysh": "beautysh",
         "flake-utils": "flake-utils_3",
-        "nixpkgs": "nixpkgs_3",
-        "nmdSrc": "nmdSrc"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-x6+KGgpSlPfBvI8YG3hf3lN5FKhJdeLyXDmQdLk34cE=",
-        "path": "/nix/store/l49ggcslcfsav82lgfb5dzw4a2qajfnp-source",
+        "narHash": "sha256-008LHsZ1x6jTE46J4+E2jOQTAyexpf7M9fNqSsjQOds=",
+        "path": "/nix/store/nj5i7q1lcsw9fzch5kha51li3c8w12h6-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/l49ggcslcfsav82lgfb5dzw4a2qajfnp-source",
+        "path": "/nix/store/nj5i7q1lcsw9fzch5kha51li3c8w12h6-source",
         "type": "path"
       }
     },
@@ -223,50 +222,17 @@
         "flake-utils": "flake-utils_4",
         "nixpkgs": [
           "nixpkgs-stable"
-        ],
-        "nmdSrc": "nmdSrc_2"
+        ]
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-x6+KGgpSlPfBvI8YG3hf3lN5FKhJdeLyXDmQdLk34cE=",
-        "path": "/nix/store/l49ggcslcfsav82lgfb5dzw4a2qajfnp-source",
+        "narHash": "sha256-008LHsZ1x6jTE46J4+E2jOQTAyexpf7M9fNqSsjQOds=",
+        "path": "/nix/store/nj5i7q1lcsw9fzch5kha51li3c8w12h6-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/l49ggcslcfsav82lgfb5dzw4a2qajfnp-source",
+        "path": "/nix/store/nj5i7q1lcsw9fzch5kha51li3c8w12h6-source",
         "type": "path"
-      }
-    },
-    "nmdSrc": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666190571,
-        "narHash": "sha256-Z1hc7M9X6L+H83o9vOprijpzhTfOBjd0KmUTnpHAVjA=",
-        "owner": "rycee",
-        "repo": "nmd",
-        "rev": "b75d312b4f33bd3294cd8ae5c2ca8c6da2afc169",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "rycee",
-        "repo": "nmd",
-        "type": "gitlab"
-      }
-    },
-    "nmdSrc_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666190571,
-        "narHash": "sha256-Z1hc7M9X6L+H83o9vOprijpzhTfOBjd0KmUTnpHAVjA=",
-        "owner": "rycee",
-        "repo": "nmd",
-        "rev": "b75d312b4f33bd3294cd8ae5c2ca8c6da2afc169",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "rycee",
-        "repo": "nmd",
-        "type": "gitlab"
       }
     },
     "poetry2nix": {

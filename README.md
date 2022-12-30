@@ -40,9 +40,12 @@ let
 in
 {
   imports = [
+    # For home-manager
     nixvim.homeManagerModules.nixvim
-    # Or, if you're not using home-manager:
+    # For NixOS
     nixvim.nixosModules.nixvim
+    # For nix-darwin
+    nixvim.nixDarwinModules.nixvim
   ];
 
   programs.nixvim.enable = true;
@@ -75,14 +78,14 @@ flakes, just add the nixvim input:
 ```
 
 You can now access the module using `inputs.nixvim.homeManagerModules.nixvim`,
-for a home-manager instalation, and `inputs.nixvim.nixosModules.nixvim`, if
-you're not using it.
+for a home-manager instalation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
+and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 
 ## Usage
-NixVim can be used in three ways: through the home-manager and NixOS modules,
+NixVim can be used in four ways: through the home-manager, nix-darwin, and NixOS modules,
 and through the `makeNixvim` function. To use the modules, just import the
-`nixvim.homeManagerModules.${system}.nixvim` and
-`nixvim.nixosModules.${system}.nixvim` modules, depending on which system
+`nixvim.homeManagerModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
+`nixvim.nixosModules.nixvim` modules, depending on which system
 you're using.
 
 If you want to use it standalone, you can use the `makeNixvim` function:
