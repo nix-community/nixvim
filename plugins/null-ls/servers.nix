@@ -2,7 +2,9 @@
 let
   helpers = import ./helpers.nix args;
   serverData = {
-    code_actions = { };
+    code_actions = { 
+      gitsigns = { };
+    };
     completion = { };
     diagnostics = {
       flake8 = {
@@ -54,4 +56,11 @@ let
 in
 {
   imports = lib.lists.map (helpers.mkServer) dataFlattened;
+
+  config = let
+    cfg = config.plugins.null-ls;
+  in
+    lib.mkIf cfg.enable {
+      plugins.gitsigns.enable = lib.mkIf (cfg.sources.code_actions.gitsigns.enable) true;
+    };
 }
