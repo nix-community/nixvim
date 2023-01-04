@@ -71,6 +71,12 @@ in
         default = pkgs.tree-sitter.allGrammars;
         description = "Grammar packages to install";
       };
+
+      moduleConfig = mkOption {
+        type = types.attrsOf types.anything;
+        default = {};
+        description = "This is the configuration for extra modules. It should not be used directly";
+      };
     };
   };
 
@@ -103,7 +109,7 @@ in
         ensure_installed = if cfg.nixGrammars then [ ] else cfg.ensureInstalled;
         ignore_install = cfg.ignoreInstall;
         parser_install_dir = cfg.parserInstallDir;
-      };
+      } // cfg.moduleConfig;
     in
     mkIf cfg.enable {
       extraConfigLua = ''
