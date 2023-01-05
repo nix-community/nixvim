@@ -24,6 +24,7 @@
     ./languages/ledger.nix
     ./languages/nix.nix
     ./languages/treesitter.nix
+    ./languages/treesitter-context.nix
     ./languages/treesitter-refactor.nix
     ./languages/zig.nix
 
