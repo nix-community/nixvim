@@ -23,6 +23,7 @@
 
     ./languages/ledger.nix
     ./languages/nix.nix
+    ./languages/plantuml-syntax.nix
     ./languages/treesitter.nix
     ./languages/treesitter-refactor.nix
     ./languages/zig.nix
