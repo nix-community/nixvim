@@ -4,6 +4,11 @@ let
   helpers = import ./helpers.nix args;
   servers = [
     {
+      name = "bashls";
+      description = "Enable bashls LSP, for Bash";
+      packages = [ pkgs.nodePackages.bash-language-server ];
+    }
+    {
       name = "clangd";
       description = "Enable clangd LSP, for C/C++.";
       packages = [ pkgs.clang-tools ];
