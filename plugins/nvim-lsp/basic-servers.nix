@@ -1,4 +1,5 @@
 { pkgs, config, lib, ... }@args:
+with lib;
 let
   helpers = import ./helpers.nix args;
   servers = [
@@ -46,6 +47,42 @@ let
       name = "jsonls";
       description = "Enable jsonls, for JSON";
       packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+    }
+    {
+      name = "nil_ls";
+      description = "Enable nil, for Nix";
+      packages = [ pkgs.nil ];
+      extraOptions = {
+        formatting.command = mkOption {
+          type = types.nullOr (types.listOf types.str);
+          default = null;
+          description = ''
+            External formatter command (with arguments).
+            It should accepts file content in stdin and print the formatted code into stdout.
+          '';
+        };
+        diagnostics = {
+          ignored = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = ''
+              Ignored diagnostic kinds.
+              The kind identifier is a snake_cased_string usually shown together
+              with the diagnostic message.
+            '';
+          };
+          excludedFiles = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = ''
+              Files to exclude from showing diagnostics. Useful for generated files.
+              It accepts an array of paths. Relative paths are joint to the workspace root.
+              Glob patterns are currently not supported.
+            '';
+          };
+        };
+      };
+      settings = cfg: { nil = { inherit (cfg) formatting diagnostics; }; };
     }
     {
       name = "pyright";
