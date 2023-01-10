@@ -227,7 +227,7 @@ in
           auto_open = cfg.updateToBufDir.autoOpen;
         };
         diagnostics = cfg.diagnostics;
-        updateFocusedFile = {
+        update_focused_file = {
           enable = cfg.updateFocusedFile.enable;
           update_cwd = cfg.updateFocusedFile.updateCwd;
           ignore_list = cfg.updateFocusedFile.ignoreList;

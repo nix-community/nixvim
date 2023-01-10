@@ -25,7 +25,7 @@ gruvbox as the colorscheme, no extra configuration required!
 ## Support/Questions
 If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)!
 
-## Instalation
+## Installation
 ### Without flakes
 NixVim now ships with `flake-compat`, which makes it usable from any system.
 
@@ -78,7 +78,7 @@ flakes, just add the nixvim input:
 ```
 
 You can now access the module using `inputs.nixvim.homeManagerModules.nixvim`,
-for a home-manager instalation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
+for a home-manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
 and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 
 ## Usage
@@ -132,7 +132,7 @@ can use the following:
 }
 ```
 
-You can then run neovim using `nix run .# -- <file>`. This can be useful to test 
+You can then run neovim using `nix run .# -- <file>`. This can be useful to test
 config changes easily.
 
 ### Advanced Usage

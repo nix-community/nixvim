@@ -5,7 +5,7 @@ let
   servers = [
     {
       name = "bashls";
-      description = "Enable bashls LSP, for Bash";
+      description = "Enable bashls, for bash.";
       packages = [ pkgs.nodePackages.bash-language-server ];
     }
     {
@@ -198,6 +198,11 @@ let
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
       packages = [ pkgs.nodePackages."@tailwindcss/language-server" ];
+    }
+    {
+      name = "texlab";
+      description = "Enable texlab language server, for LaTeX";
+      packages = [ pkgs.texlab ];
     }
     {
       name = "tsserver";
