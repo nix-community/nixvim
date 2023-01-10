@@ -7,6 +7,8 @@
     , serverName ? name
     , packages ? [ pkgs.${name} ]
     , cmd ? null
+    , settings ? null
+    , extraOptions ? { }
     , ...
     }:
     # returns a module
@@ -19,7 +21,7 @@
         options = {
           plugins.lsp.servers.${name} = {
             enable = mkEnableOption description;
-          };
+          } // extraOptions;
         };
 
         config = mkIf cfg.enable {
@@ -29,6 +31,7 @@
             name = serverName;
             extraOptions = {
               inherit cmd;
+              settings = if settings != null then settings cfg else { };
             };
           }];
         };
