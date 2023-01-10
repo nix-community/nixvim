@@ -72,6 +72,11 @@ let
       packages = [ pkgs.nodePackages."@tailwindcss/language-server" ];
     }
     {
+      name = "texlab";
+      description = "Enable texlab language server, for LaTeX";
+      packages = [ pkgs.texlab ];
+    }
+    {
       name = "tsserver";
       description = "Enable tsserver for typescript";
       packages = with pkgs; [
