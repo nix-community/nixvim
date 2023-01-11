@@ -23,7 +23,7 @@ When we do this, lightline will be set up to a sensible default, and will use
 gruvbox as the colorscheme, no extra configuration required!
 
 ## Support/Questions
-If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)!
+If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
 
 ## Installation
 ### Without flakes
