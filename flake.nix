@@ -35,10 +35,49 @@
           (system:
             let
               pkgs = import nixpkgs { inherit system; };
+              extractRustAnalyzer = { stdenv, pkgs }: stdenv.mkDerivation {
+                pname = "extract_rust_analyzer";
+                version = "master";
+
+                dontUnpack = true;
+                dontBuild = true;
+
+                buildInputs = [ pkgs.python3 ];
+
+                installPhase = ''
+                  ls -la
+                  mkdir -p $out/bin
+                  cp ${./helpers/extract_rust_analyzer.py} $out/bin/extract_rust_analyzer.py
+                '';
+              };
+              extractRustAnalyzerPkg = pkgs.callPackage extractRustAnalyzer { };
             in
             {
-              packages.docs = pkgs.callPackage (import ./docs.nix) {
-                modules = nixvimModules;
+              packages = {
+                docs = pkgs.callPackage (import ./docs.nix) {
+                  modules = nixvimModules;
+                };
+                rustAnalyzerOptions = pkgs.callPackage
+                  ({ pkgs, stdenv }: stdenv.mkDerivation { 
+                    pname = "rust_analyzer_options";
+                    version = pkgs.rust-analyzer.version;
+
+                    src = pkgs.rust-analyzer.src;
+
+                    nativeBuildInputs = with pkgs; [extractRustAnalyzerPkg alejandra nixpkgs-fmt];
+
+                    buildPhase = ''
+                      extract_rust_analyzer.py editors/code/package.json | 
+                        alejandra --quiet |
+                        nixpkgs-fmt > rust-analyzer-config.nix
+                    '';
+
+                    installPhase = ''
+                      mkdir -p $out/share
+                      cp rust-analyzer-config.nix $out/share
+                    '';
+                  })
+                  { };
               };
               legacyPackages = rec {
                 makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
