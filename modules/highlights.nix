@@ -15,6 +15,17 @@ with lib;
         };
       '';
     };
+
+    match = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = "Define match groups";
+      example = ''
+        match = {
+          ExtraWhitespace = '\\s\\+$';
+        };
+      '';
+    };
   };
 
   config = mkIf (config.highlight != { }) {
@@ -25,6 +36,16 @@ with lib;
 
         for k,v in pairs(highlights) do
           vim.api.nvim_set_hl(0, k, v)
+        end
+      end
+      -- }}
+
+      -- Match groups {{
+      do
+        local match = ${helpers.toLuaObject config.match}
+
+        for k,v in pairs(match) do
+          vim.fn.matchadd(k, v)
         end
       end
       -- }}
