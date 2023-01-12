@@ -81,6 +81,10 @@
               };
             };
 
+            keymaps = build {
+              maps.normal."," = "<cmd>echo \"test\"<cr>";
+            };
+
             issue-40 = build-stable {
               plugins = {
                 nix.enable = true;
