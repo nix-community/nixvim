@@ -23,7 +23,12 @@ in
 
       parserInstallDir = mkOption {
         type = types.nullOr types.str;
-        default = null;
+        default = if cfg.nixGrammars
+          then
+            null
+          else
+            "$XDG_DATA_HOME/nvim/treesitter"
+        ;
         description = "Location of the parsers to be installed by the plugin (only needed when nixGrammars is disabled)";
       };
 
