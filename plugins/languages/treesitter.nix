@@ -23,13 +23,15 @@ in
 
       parserInstallDir = mkOption {
         type = types.nullOr types.str;
-        default = if cfg.nixGrammars
-          then
-            null
-          else
-            "$XDG_DATA_HOME/nvim/treesitter"
+        default =
+          if cfg.nixGrammars
+          then null
+          else "$XDG_DATA_HOME/nvim/treesitter"
         ;
-        description = "Location of the parsers to be installed by the plugin (only needed when nixGrammars is disabled)";
+        description = ''
+          Location of the parsers to be installed by the plugin (only needed when nixGrammars is disabled).
+          This default might not work on your own install, please make sure that $XDG_DATA_HOME is set if you want to use the default. Otherwise, change it to something that will work for you!
+        '';
       };
 
       ignoreInstall = mkOption {
@@ -79,7 +81,7 @@ in
 
       moduleConfig = mkOption {
         type = types.attrsOf types.anything;
-        default = {};
+        default = { };
         description = "This is the configuration for extra modules. It should not be used directly";
       };
     };
