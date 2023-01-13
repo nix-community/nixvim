@@ -182,7 +182,7 @@ mkPlugin args {
 
     customHeader = mkDefaultOpt {
       description = "Define your own header";
-      global = "startify_custom_headers";
+      global = "startify_custom_header";
       type = types.oneOf [ types.str (types.listOf types.str) ];
     };
 
