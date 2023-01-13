@@ -1,5 +1,5 @@
-{ pkgs, lib, ... }@args:
-with lib; with import ../helpers.nix { lib = lib; };
+{ config, lib, pkgs, ... }@args:
+with lib; with import ../helpers.nix { inherit config lib; };
 mkPlugin args {
   name = "ledger";
   description = "Enable ledger language features";

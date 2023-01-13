@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 with lib;
 rec {
   # vim dictionaries are, in theory, compatible with JSON
@@ -40,7 +40,7 @@ rec {
     normalized = builtins.mapAttrs (key: action:
       if builtins.isString action then
         {
-          silent = false;
+          silent = config.maps.silentDefault;
           expr = false;
           unique = false;
           noremap = true;

@@ -1,8 +1,8 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.plugins.telescope;
-  helpers = (import ../helpers.nix { inherit lib; });
+  helpers = (import ../helpers.nix { inherit config lib; });
 in
 {
   imports = [
@@ -62,7 +62,7 @@ in
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    extraConfigLua = let 
+    extraConfigLua = let
       options = {
         extensions = cfg.extensionConfig;
         defaults = cfg.defaults;

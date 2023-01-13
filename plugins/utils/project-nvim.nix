@@ -1,8 +1,8 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.plugins.project-nvim;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { inherit config lib; };
 in
 {
   options.plugins.project-nvim = helpers.extraOptionsOptions // {

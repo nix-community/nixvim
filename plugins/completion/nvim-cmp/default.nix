@@ -1,8 +1,8 @@
-{ pkgs, config, lib, ... }@args:
+{ config, lib, pkgs, ... }@args:
 with lib;
 let
   cfg = config.plugins.nvim-cmp;
-  helpers = import ../../helpers.nix { lib = lib; };
+  helpers = import ../../helpers.nix { inherit config lib; };
   mkNullOrOption = helpers.mkNullOrOption;
   cmpLib = import ./cmp-helpers.nix args;
   # functionName should be a string

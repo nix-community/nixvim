@@ -1,7 +1,7 @@
 { config, lib, ... }:
 with lib;
 let
-  helpers = import ../plugins/helpers.nix { inherit lib; };
+  helpers = import ../plugins/helpers.nix { inherit config lib; };
 
   mapOption = types.oneOf [
     types.str
@@ -10,7 +10,8 @@ let
         silent = mkOption {
           type = types.bool;
           description = "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
-          default = false;
+          # default = config.maps.silentDefault;
+          default = true;
         };
 
         nowait = mkOption {
@@ -80,6 +81,12 @@ in
           insertCommand = mapOptions "insert and command-line";
           lang = mapOptions "insert, command-line and lang-arg";
           command = mapOptions "command-line";
+
+          silentDefault = mkOption {
+            description = "Makes all mapping silent by default";
+            type = types.bool;
+            default = false;
+          };
         };
       };
       default = { };

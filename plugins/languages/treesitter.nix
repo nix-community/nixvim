@@ -1,8 +1,8 @@
-{ pkgs, lib, config, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.plugins.treesitter;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { inherit config lib; };
 in
 {
   options = {
