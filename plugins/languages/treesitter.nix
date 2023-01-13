@@ -119,10 +119,10 @@ in
       } // cfg.moduleConfig;
     in
     mkIf cfg.enable {
-      extraConfigLua = ''
-        require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
-      '' + optionalString (cfg.parserInstallDir != null) ''
+      extraConfigLua = (optionalString (cfg.parserInstallDir != null) ''
         vim.opt.runtimepath:append("${cfg.parserInstallDir}")
+      '') + ''
+        require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
       '';
 
       extraPlugins = with pkgs; if cfg.nixGrammars then
