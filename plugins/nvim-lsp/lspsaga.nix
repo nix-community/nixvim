@@ -196,7 +196,7 @@ in
     };
   in mkIf cfg.enable {
     extraPlugins = [ pkgs.vimPlugins.lspsaga-nvim ];
-    
+
     extraConfigLua = ''
       local saga = require 'lspsaga'
 

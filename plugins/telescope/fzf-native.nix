@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 with lib;
-let 
+let
   cfg = config.plugins.telescope.extensions.fzf-native;
 in
 {
@@ -28,7 +28,7 @@ in
     };
   };
 
-  config = let 
+  config = let
     configuration = {
       fuzzy = cfg.fuzzy;
       override_generic_sorter = cfg.overrideGenericSorter;

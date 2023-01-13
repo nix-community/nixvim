@@ -62,7 +62,7 @@ in
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    extraConfigLua = let 
+    extraConfigLua = let
       options = {
         extensions = cfg.extensionConfig;
         defaults = cfg.defaults;

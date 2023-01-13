@@ -53,7 +53,7 @@ in
       };
       indicatorIcon = mkOption {
         type = types.nullOr types.str;
-        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
+        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended,
         this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
         default = null;
       };

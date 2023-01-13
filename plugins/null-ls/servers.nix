@@ -2,7 +2,7 @@
 let
   helpers = import ./helpers.nix args;
   serverData = {
-    code_actions = { 
+    code_actions = {
       gitsigns = { };
     };
     completion = { };

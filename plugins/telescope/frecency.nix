@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 with lib;
-let 
+let
   cfg = config.plugins.telescope.extensions.frecency;
 in
 {
@@ -56,7 +56,7 @@ in
     };
   in mkIf cfg.enable {
     extraPackages = [ pkgs.sqlite ];
-    extraPlugins = with pkgs.vimPlugins; [ 
+    extraPlugins = with pkgs.vimPlugins; [
       telescope-frecency-nvim
       sqlite-lua
     ];
