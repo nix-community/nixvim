@@ -17,6 +17,7 @@ let
       name = "cssls";
       description = "Enable cssls, for CSS";
       package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-css-language-server" "--stdio" ];
     }
     {
       name = "dartls";
@@ -118,6 +119,7 @@ let
       name = "eslint";
       description = "Enable eslint";
       package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-eslint-langauge-server" "--stdio" ];
     }
     {
       name = "elixirls";
@@ -138,11 +140,13 @@ let
       name = "html";
       description = "Enable html, for HTML";
       package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-html-language-server" "--stdio" ];
     }
     {
       name = "jsonls";
       description = "Enable jsonls, for JSON";
       package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-json-language-server" "--stdio" ];
     }
     {
       name = "nil_ls";
