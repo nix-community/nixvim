@@ -7,6 +7,12 @@ in
   options.plugins.barbar = {
     enable = mkEnableOption "Enable barbar.nvim";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.barbar-nvim;
+      description = "Plugin to use for barbar";
+    };
+
     animations = mkOption {
       type = types.nullOr types.bool;
       default = null;
@@ -50,7 +56,7 @@ in
 
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [
-      barbar-nvim nvim-web-devicons
+      cfg.package nvim-web-devicons
     ];
 
     # maps = genMaps cfg.keys;
