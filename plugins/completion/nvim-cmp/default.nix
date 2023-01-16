@@ -17,6 +17,12 @@ in
   options.plugins.nvim-cmp = {
     enable = mkEnableOption "Enable nvim-cmp";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-cmp;
+      description = "Plugin to use for nvim-cmp";
+    };
+
     performance = mkOption {
       default = null;
       type = types.nullOr (types.submodule ({ ... }: {
@@ -394,7 +400,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.nvim-cmp ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = helpers.wrapDo ''
         local cmp = require('cmp')
