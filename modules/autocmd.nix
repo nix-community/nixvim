@@ -45,7 +45,7 @@ let
 
       callback = mkOption {
         type = types.nullOr types.str;
-        description = "The name of a Vimscript function to call when this autocommand is triggered. Cannot be used with <command>}.";
+        description = "The name of a Vimscript function to call when this autocommand is triggered. Cannot be used with <command>.";
         default = null;
       };
 
