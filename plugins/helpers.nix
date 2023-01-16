@@ -69,6 +69,7 @@ rec {
   mkPlugin = { config, lib, ... }: {
     name,
     description,
+    package ? null,
     extraPlugins ? [],
     extraPackages ? [],
     options ? {},
@@ -81,13 +82,23 @@ rec {
       name = opt.global;
       value = if cfg.${name} != null then opt.value cfg.${name} else null;
     }) options;
+    # does this evaluate package?
+    packageOption = if package == null then { } else {
+      package = mkOption {
+        type = types.package;
+        default = package;
+        description = "Plugin to use for ${name}";
+      };
+    };
   in {
     options.plugins.${name} = {
       enable = mkEnableOption description;
-    } // pluginOptions;
+    } // packageOption // pluginOptions;
 
     config = mkIf cfg.enable {
-      inherit extraPlugins extraPackages globals;
+      inherit extraPackages globals;
+      # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
+      extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
     };
   };
 
