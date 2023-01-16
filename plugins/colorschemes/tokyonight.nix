@@ -9,6 +9,11 @@ in
   options = {
     colorschemes.tokyonight = {
       enable = mkEnableOption "Enable tokyonight";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.tokyonight-nvim;
+        description = "Plugin to use for tokyonight";
+      };
       style = mkOption {
         type = style;
         default = "storm";
@@ -75,7 +80,7 @@ in
   };
   config = mkIf cfg.enable {
     colorscheme = "tokyonight";
-    extraPlugins = [ pkgs.vimPlugins.tokyonight-nvim ];
+    extraPlugins = [ cfg.package ];
     options = { termguicolors = true; };
     extraConfigLuaPre =
       let
