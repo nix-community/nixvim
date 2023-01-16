@@ -7,8 +7,8 @@
     , serverName ? name
     , package ? pkgs.${name}
     , extraPackages ? { }
-    , cmd ? null
-    , settings ? null
+    , cmd ? (cfg: null)
+    , settings ? (cfg: { })
     , extraOptions ? { }
     , ...
     }:
@@ -25,35 +25,26 @@
               type = types.nullOr types.package;
             };
           } else { };
-
-        extraPackagesOptions = mapAttrs'
-          (name: defaultPackage: {
-            name = "${name}Package";
-            value = mkOption {
-              default = defaultPackage;
-              type = types.package;
-            };
-          })
-          extraPackages;
       in
       {
         options = {
           plugins.lsp.servers.${name} = {
             enable = mkEnableOption description;
-          } // packageOption // extraPackagesOptions;
+          } // packageOption // extraOptions;
         };
 
-        config = mkIf cfg.enable {
-          extraPackages = (optional (package != null) cfg.package) ++
-            (mapAttrsToList (name: _: cfg."${name}Package") extraPackages);
+        config = mkIf cfg.enable
+          {
+            extraPackages = (optional (package != null) cfg.package) ++
+              (mapAttrsToList (name: _: cfg."${name}Package") extraPackages);
 
-          plugins.lsp.enabledServers = [{
-            name = serverName;
-            extraOptions = {
-              inherit cmd;
-              settings = if settings != null then settings cfg else { };
-            };
-          }];
-        };
+            plugins.lsp.enabledServers = [{
+              name = serverName;
+              extraOptions = {
+                cmd = cmd cfg;
+                settings = settings cfg;
+              };
+            }];
+          };
       };
 }

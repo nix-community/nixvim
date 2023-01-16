@@ -6,7 +6,7 @@ let
     {
       name = "bashls";
       description = "Enable bashls, for bash.";
-      packages = [ pkgs.nodePackages.bash-language-server ];
+      package = pkgs.nodePackages.bash-language-server;
     }
     {
       name = "clangd";
@@ -21,7 +21,7 @@ let
     {
       name = "dartls";
       description = "Enable dart language-server, for dart";
-      packages = [ pkgs.dart ];
+      package = pkgs.dart;
       extraOptions = {
         analysisExcludedFolders = mkOption {
           type = types.nullOr (types.listOf types.str);
@@ -112,7 +112,7 @@ let
     {
       name = "denols";
       description = "Enable denols, for Deno";
-      packages = [ pkgs.deno ];
+      package = pkgs.deno;
     }
     {
       name = "eslint";
@@ -122,8 +122,8 @@ let
     {
       name = "elixirls";
       description = "Enable elixirls";
-      package = null;
-      cmd = ["${pkgs.elixir_ls}/bin/elixir-ls"];
+      package = pkgs.elixir_ls;
+      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
       name = "gdscript";
@@ -147,7 +147,7 @@ let
     {
       name = "nil_ls";
       description = "Enable nil, for Nix";
-      packages = [ pkgs.nil ];
+      package = pkgs.nil;
       extraOptions = {
         formatting.command = mkOption {
           type = types.nullOr (types.listOf types.str);
@@ -197,20 +197,16 @@ let
     {
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
-      packages = [ pkgs.nodePackages."@tailwindcss/language-server" ];
+      package = pkgs.nodePackages."@tailwindcss/language-server";
     }
     {
       name = "texlab";
       description = "Enable texlab language server, for LaTeX";
-      packages = [ pkgs.texlab ];
     }
     {
       name = "tsserver";
       description = "Enable tsserver for typescript";
       package = pkgs.nodePackages.typescript-language-server;
-      extraPackages = {
-        typescript = pkgs.nodePackages.typescript;
-      };
     }
     {
       name = "vuels";
@@ -224,8 +220,8 @@ let
     {
       name = "hls";
       description = "Enable haskell language server";
-      packages = [ pkgs.haskell-language-server ];
-      cmd = [ "haskell-language-server-wrapper" ];
+      package = pkgs.haskell-language-server;
+      cmd = cfg: [ "haskell-language-server-wrapper" ];
     }
   ];
 in
