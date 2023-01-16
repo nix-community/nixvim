@@ -14,14 +14,19 @@
     ./completion/copilot.nix
     ./completion/nvim-cmp
     ./completion/nvim-cmp/sources
+    ./completion/lspkind.nix
 
     ./git/fugitive.nix
     ./git/gitgutter.nix
+    ./git/gitsigns.nix
     ./git/neogit.nix
 
     ./languages/ledger.nix
     ./languages/nix.nix
+    ./languages/plantuml-syntax.nix
     ./languages/treesitter.nix
+    ./languages/treesitter-context.nix
+    ./languages/treesitter-refactor.nix
     ./languages/zig.nix
 
     ./null-ls
@@ -29,8 +34,11 @@
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
     ./nvim-lsp/lsp-lines.nix
+    ./nvim-lsp/trouble.nix
 
     ./pluginmanagers/packer.nix
+
+    ./snippets/luasnip
 
     ./statuslines/airline.nix
     ./statuslines/lightline.nix
@@ -56,5 +64,6 @@
     ./utils/undotree.nix
     ./utils/dashboard.nix
     ./utils/emmet.nix
+    ./utils/magma-nvim.nix
   ];
 }

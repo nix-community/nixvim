@@ -8,6 +8,8 @@
     , package ? pkgs.${name}
     , extraPackages ? { }
     , cmd ? null
+    , settings ? null
+    , extraOptions ? { }
     , ...
     }:
     # returns a module
@@ -49,6 +51,7 @@
             name = serverName;
             extraOptions = {
               inherit cmd;
+              settings = if settings != null then settings cfg else { };
             };
           }];
         };

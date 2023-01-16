@@ -48,7 +48,13 @@ in
       description = "Hijack cursor";
     };
 
+    # TODO: change this to it's new definition sync_root_with_cwd
     updateCwd = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+    };
+
+    respectBufCwd = mkOption {
       type = types.nullOr types.bool;
       default = null;
     };
@@ -94,6 +100,7 @@ in
         default = null;
       };
 
+      # TODO: change this to it's new definition update_root
       updateCwd = mkOption {
         type = types.nullOr types.bool;
         default = null;
@@ -214,12 +221,13 @@ in
         open_on_tab = cfg.openOnTab;
         hijack_cursor = cfg.hijackCursor;
         update_cwd = cfg.updateCwd;
+        respect_buf_cwd = cfg.respectBufCwd;
         update_to_buf_dir = {
           enable = cfg.updateToBufDir.enable;
           auto_open = cfg.updateToBufDir.autoOpen;
         };
         diagnostics = cfg.diagnostics;
-        updateFocusedFile = {
+        update_focused_file = {
           enable = cfg.updateFocusedFile.enable;
           update_cwd = cfg.updateFocusedFile.updateCwd;
           ignore_list = cfg.updateFocusedFile.ignoreList;

@@ -22,6 +22,22 @@ let
 in
 {
   options = {
+    viAlias = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Symlink <command>vi</command> to <command>nvim</command> binary.
+      '';
+    };
+
+    vimAlias = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Symlink <command>vim</command> to <command>nvim</command> binary.
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
@@ -79,7 +95,7 @@ in
 
     initContent = mkOption {
       type = types.str;
-      description = "The content of the init.vim file";
+      description = "The content of the init.lua file";
       readOnly = true;
       visible = false;
     };
@@ -87,18 +103,6 @@ in
 
   config =
     let
-      customRC =
-        (optionalString (config.extraConfigLuaPre != "") ''
-          lua <<EOF
-          ${config.extraConfigLuaPre}
-          EOF
-        '') +
-        config.extraConfigVim + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
-          lua <<EOF
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-          EOF
-        '');
 
       defaultPlugin = {
         plugin = null;
@@ -109,7 +113,8 @@ in
       normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) config.extraPlugins;
 
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit customRC;
+        inherit (config) viAlias vimAlias;
+        # inherit customRC;
         plugins = normalizedPlugins;
       }
       # Necessary to make sure the runtime path is set properly in NixOS 22.05,
@@ -120,16 +125,40 @@ in
           { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = [ ]; }; };
       });
 
-      extraWrapperArgs = optionalString (config.extraPackages != [ ])
-        ''--prefix PATH : "${makeBinPath config.extraPackages}"'';
+      customRC =
+        ''
+          vim.cmd([[
+            ${neovimConfig.neovimRcContent}
+          ]])
+        '' +
+        (optionalString (config.extraConfigLuaPre != "") ''
+          ${config.extraConfigLuaPre}
+        '') +
+        (optionalString (config.extraConfigVim != "") ''
+          vim.cmd([[
+            ${config.extraConfigVim}
+          ]])
+        '') +
+        (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
+          ${config.extraConfigLua}
+          ${config.extraConfigLuaPost}
+        '');
+
+      extraWrapperArgs = builtins.concatStringsSep " " (
+        (optional (config.extraPackages != [ ])
+          ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
+        ++
+        (optional (config.wrapRc)
+          ''--add-flags -u --add-flags "${pkgs.writeText "init.lua" customRC}"'')
+      );
 
       wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig // {
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
-        inherit (config) wrapRc;
+        wrapRc = false;
       });
     in
     {
       finalPackage = wrappedNeovim;
-      initContent = neovimConfig.neovimRcContent;
+      initContent = customRC;
     };
 }

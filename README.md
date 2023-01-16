@@ -22,7 +22,10 @@ lightline plugin:
 When we do this, lightline will be set up to a sensible default, and will use
 gruvbox as the colorscheme, no extra configuration required!
 
-## Instalation
+## Support/Questions
+If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
+
+## Installation
 ### Without flakes
 NixVim now ships with `flake-compat`, which makes it usable from any system.
 
@@ -37,9 +40,12 @@ let
 in
 {
   imports = [
+    # For home-manager
     nixvim.homeManagerModules.nixvim
-    # Or, if you're not using home-manager:
+    # For NixOS
     nixvim.nixosModules.nixvim
+    # For nix-darwin
+    nixvim.nixDarwinModules.nixvim
   ];
 
   programs.nixvim.enable = true;
@@ -72,27 +78,77 @@ flakes, just add the nixvim input:
 ```
 
 You can now access the module using `inputs.nixvim.homeManagerModules.nixvim`,
-for a home-manager instalation, and `inputs.nixvim.nixosModules.nixvim`, if
-you're not using it.
+for a home-manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
+and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 
 ## Usage
-NixVim can be used in three ways: through the home-manager and NixOS modules,
-and through the `build` function. To use the modules, just import the
-`nixvim.homeManagerModules.${system}.nixvim` and
-`nixvim.nixosModules.${system}.nixvim` modules, depending on which system
+NixVim can be used in four ways: through the home-manager, nix-darwin, and NixOS modules,
+and through the `makeNixvim` function. To use the modules, just import the
+`nixvim.homeManagerModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
+`nixvim.nixosModules.nixvim` modules, depending on which system
 you're using.
 
-If you want to use it standalone, you can use the `build` function:
+If you want to use it standalone, you can use the `makeNixvim` function:
 
 ```nix
 { pkgs, nixvim, ... }: {
   environment.systemModules = [
-    (nixvim.build pkgs {
+    (nixvim.legacyPackages."${system}".makeNixvim {
       colorschemes.gruvbox.enable = true;
     })
   ];
 }
 ```
+
+Alternatively if you want a minimal flake to allow building a custom neovim you
+can use the following:
+
+```nix
+{
+  description = "A very basic flake";
+
+  inputs.nixvim.url = "github:pta2002/nixvim";
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+
+  outputs = {
+    self,
+    nixpkgs,
+    nixvim,
+    flake-utils,
+  }: let
+    config = {
+      colorschemes.gruvbox.enable = true;
+    };
+  in
+    flake-utils.lib.eachDefaultSystem (system: let
+	  nixvim' = nixvim.legacyPackages."${system}";
+      nvim = nixvim'.makeNixvim config;
+    in {
+      packages = {
+        inherit nvim;
+        default = nvim;
+      };
+    });
+}
+```
+
+You can then run neovim using `nix run .# -- <file>`. This can be useful to test
+config changes easily.
+
+### Advanced Usage
+
+You may want more control over the nixvim modules like:
+
+- Splitting your configuration in multiple files
+- Adding custom nix modules to enhance nixvim
+- Change the nixpkgs used by nixvim
+
+In this case you can use the `makeNixvimWithModule` function.
+
+It takes a set with the following keys:
+- `pkgs`: The nixpkgs to use (defaults to the nixpkgs pointed at by the nixvim flake)
+- `module`: The nix module definition used to extend nixvim.
+  This is useful to pass additional module machinery like `options` or `imports`.
 
 ## How does it work?
 When you build the module (probably using home-manager), it will install all
@@ -104,8 +160,8 @@ Since everything is disabled by default, it will be as snappy as you want it to
 be.
 
 # Documentation
-Documentation is very much a work-in-progress. It will become available on this
-repository's Wiki.
+Documentation is available on this project's GitHub Pages page:
+[https://pta2002.github.io/nixvim](https://pta2002.github.io/nixvim)
 
 ## Plugins
 After you have installed NixVim, you will no doubt want to enable some plugins.

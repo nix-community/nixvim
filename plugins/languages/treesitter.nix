@@ -21,6 +21,19 @@ in
         description = "Either \"all\" or a list of languages";
       };
 
+      parserInstallDir = mkOption {
+        type = types.nullOr types.str;
+        default =
+          if cfg.nixGrammars
+          then null
+          else "$XDG_DATA_HOME/nvim/treesitter"
+        ;
+        description = ''
+          Location of the parsers to be installed by the plugin (only needed when nixGrammars is disabled).
+          This default might not work on your own install, please make sure that $XDG_DATA_HOME is set if you want to use the default. Otherwise, change it to something that will work for you!
+        '';
+      };
+
       ignoreInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -59,6 +72,18 @@ in
       indent = mkEnableOption "Enable tree-sitter based indentation";
 
       folding = mkEnableOption "Enable tree-sitter based folding";
+
+      grammarPackages = mkOption {
+        type = with types; listOf package;
+        default = pkgs.tree-sitter.allGrammars;
+        description = "Grammar packages to install";
+      };
+
+      moduleConfig = mkOption {
+        type = types.attrsOf types.anything;
+        default = { };
+        description = "This is the configuration for extra modules. It should not be used directly";
+      };
     };
   };
 
@@ -90,15 +115,18 @@ in
 
         ensure_installed = if cfg.nixGrammars then [ ] else cfg.ensureInstalled;
         ignore_install = cfg.ignoreInstall;
-      };
+        parser_install_dir = cfg.parserInstallDir;
+      } // cfg.moduleConfig;
     in
     mkIf cfg.enable {
-      extraConfigLua = ''
+      extraConfigLua = (optionalString (cfg.parserInstallDir != null) ''
+        vim.opt.runtimepath:append("${cfg.parserInstallDir}")
+      '') + ''
         require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
       '';
 
       extraPlugins = with pkgs; if cfg.nixGrammars then
-        [ (vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)) ]
+        [ (vimPlugins.nvim-treesitter.withPlugins (_: cfg.grammarPackages)) ]
       else [ vimPlugins.nvim-treesitter ];
       extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 

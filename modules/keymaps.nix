@@ -1,6 +1,8 @@
-{ config, lib, helpers, ... }:
+{ config, lib, ... }:
 with lib;
 let
+  helpers = import ../plugins/helpers.nix { inherit lib; };
+
   mapOption = types.oneOf [
     types.str
     (types.submodule {
@@ -115,14 +117,13 @@ in
         (helpers.genMaps "c" config.maps.command);
     in
     {
-      # TODO: Use vim.keymap.set if on nvim >= 0.7
       extraConfigLua = optionalString (mappings != [ ]) ''
         -- Set up keybinds {{{
         do
           local __nixvim_binds = ${helpers.toLuaObject mappings}
 
           for i, map in ipairs(__nixvim_binds) do
-            vim.api.nvim_set_keymap(map.mode, map.key, map.action, map.config)
+            vim.keymap.set(map.mode, map.key, map.action, map.config)
           end
         end
         -- }}}

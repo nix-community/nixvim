@@ -35,6 +35,11 @@ in
       default = 10;
     };
 
+    color = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+
     width = mkOption {
       type = types.int;
       default = 10;
@@ -117,6 +122,7 @@ in
             cfg.ignored_buffertypes);
         popup = {
           inherit (cfg) blend width;
+          winhl = if (!isNull cfg.color) then "SpecsPopColor" else "PMenu";
           delay_ms = cfg.delay;
           inc_ms = cfg.increment;
           fader = helpers.mkRaw (if cfg.fader.builtin == null then
@@ -132,6 +138,8 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = [ pkgs.vimPlugins.specs-nvim ];
+
+      highlight.SpecsPopColor.bg = mkIf (!isNull cfg.color) cfg.color;
 
       extraConfigLua = ''
         require('specs').setup(${setup})

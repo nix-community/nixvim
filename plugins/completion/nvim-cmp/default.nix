@@ -309,6 +309,8 @@ in
               type = types.nullOr (types.submodule ({ ... }: {
                 options = {
                   inherit border winhighlight zindex;
+                  col_offset = mkNullOrOption types.int "Offsets the completion window relative to the cursor";
+                  side_padding = mkNullOrOption types.int "The amount of padding to add on the completion window's sides";
                 };
               }));
             };

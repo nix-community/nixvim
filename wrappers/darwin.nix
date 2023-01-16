@@ -2,7 +2,7 @@ modules:
 { pkgs, config, lib, ... }:
 
 let
-  inherit (lib) mkEnableOption mkOption mkOptionType mkMerge mkIf types;
+  inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
   cfg = config.programs.nixvim;
 in
 {
@@ -10,6 +10,7 @@ in
     programs.nixvim = mkOption {
       type = types.submodule ((modules pkgs) ++ [{
         options.enable = mkEnableOption "nixvim";
+	config.wrapRc = mkForce true;
       }]);
     };
     nixvim.helpers = mkOption {
@@ -23,11 +24,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable
-    (mkMerge [
-      { home.packages = [ cfg.finalPackage ]; }
-      (mkIf (!cfg.wrapRc) {
-        xdg.configFile."nvim/init.lua".text = cfg.initContent;
-      })
-    ]);
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ cfg.finalPackage ];
+  };
 }
