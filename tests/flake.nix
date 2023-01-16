@@ -247,6 +247,20 @@
               };
             };
 
+            autoCmd = build {
+              autoCmd = [
+                {
+                  event = [ "BufEnter" "BufWinEnter" ];
+                  pattern = [ "*.c" "*.h" ];
+                  command = "echo 'Entering a C or C++ file'";
+                }
+                {
+                  event = "InsertEnter";
+                  command = "norm zz";
+                }
+              ];
+            };
+
             ts-custom = build {
               plugins.treesitter = {
                 enable = true;
