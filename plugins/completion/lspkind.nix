@@ -7,6 +7,13 @@ in
 {
   options.plugins.lspkind = {
     enable = mkEnableOption "lspkind.nvim";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.lspkind-nvim;
+      description = "Plugin to use for lspkind.nvim";
+    };
+
     mode = mkOption {
       type = with types; nullOr (enum [ "text" "text_symbol" "symbol_text" "symbol" ]);
       default = null;
@@ -72,7 +79,7 @@ in
       } else { });
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.lspkind-nvim ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = optionalString (!doCmp) ''
         require('lspkind').init(${helpers.toLuaObject options})
