@@ -10,6 +10,12 @@ in
     plugins.dashboard = {
       enable = mkEnableOption "Enable dashboard";
 
+      package = {
+        type = types.package;
+        default = pkgs.vimPlugins.dashboard-nvim;
+        description = "Plugin to use for dashboard-nvim";
+      };
+
       header = mkOption {
         description = "Header text";
         type = types.nullOr (types.listOf types.str);
@@ -126,7 +132,7 @@ in
       filteredOptions = filterAttrs (_: v: !isNull v) options;
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.dashboard-nvim ];
+      extraPlugins = [ cfg.package ];
       extraConfigLua = ''
         local dashboard = require("dashboard")
 
