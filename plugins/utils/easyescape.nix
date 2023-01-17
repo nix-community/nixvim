@@ -8,11 +8,17 @@ in
   options = {
     plugins.easyescape = {
       enable = mkEnableOption "Enable easyescape";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.vim-easyescape;
+        description = "Plugin to use for easyescape";
+      };
     };
   };
   config = mkIf cfg.enable {
-    extraPlugins = with pkgs.vimPlugins; [
-      vim-easyescape
+    extraPlugins = [
+      cfg.package
     ];
   };
 }
