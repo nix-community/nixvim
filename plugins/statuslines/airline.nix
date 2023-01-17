@@ -16,6 +16,12 @@ in
     plugins.airline = {
       enable = mkEnableOption "Enable airline";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.vim-airline;
+        description = "Plguin to use for airline";
+      };
+
       extensions = mkOption {
         default = null;
         type = with types; nullOr attrs;
@@ -63,7 +69,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
-        vim-airline
+        cfg.package
       ] ++ optional (!isNull cfg.theme) vim-airline-themes;
       globals = {
         airline.extensions = cfg.extensions;
