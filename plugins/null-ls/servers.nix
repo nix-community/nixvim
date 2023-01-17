@@ -8,36 +8,36 @@ let
     completion = { };
     diagnostics = {
       flake8 = {
-        packages = [ pkgs.python3Packages.flake8 ];
+        package = pkgs.python3Packages.flake8;
       };
       shellcheck = {
-        packages = [ pkgs.shellcheck ];
+        package = pkgs.shellcheck;
       };
     };
     formatting = {
       phpcbf = {
-        packages = [ pkgs.phpPackages.phpcbf ];
+        package = pkgs.phpPackages.phpcbf;
       };
       alejandra = {
-        packages = [ pkgs.alejandra ];
+        package = pkgs.alejandra;
       };
       nixfmt = {
-        packages = [ pkgs.nixfmt ];
+        package = pkgs.nixfmt;
       };
       prettier = {
-        packages = [ pkgs.nodePackages.prettier ];
+        package = pkgs.nodePackages.prettier;
       };
       black = {
-        packages = [ pkgs.python3Packages.black ];
+        package = pkgs.python3Packages.black;
       };
       beautysh = {
-        packages = [ inputs.beautysh.packages.${pkgs.system}.beautysh-python38 ];
+        package = inputs.beautysh.packages.${pkgs.system}.beautysh-python38;
       };
       fourmolu = {
-        packages = [ pkgs.haskellPackages.fourmolu ];
+        package = pkgs.haskellPackages.fourmolu;
       };
       fnlfmt = {
-        packages = [ pkgs.fnlfmt ];
+        package = pkgs.fnlfmt;
       };
     };
   };

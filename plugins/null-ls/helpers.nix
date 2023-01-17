@@ -4,7 +4,8 @@
     { name
     , sourceType
     , description ? "Enable ${name} source, for null-ls."
-    , packages ? [ ]
+    , package ? null
+    , extraPackages ? [ ]
     , ...
     }:
     # returns a module
@@ -13,6 +14,14 @@
       let
         helpers = import ../helpers.nix args;
         cfg = config.plugins.null-ls.sources.${sourceType}.${name};
+        # does this evaluate package?
+        packageOption = if package == null then { } else {
+          package = mkOption {
+            type = types.package;
+            default = package;
+            description = "Package to use for ${name} by null-ls";
+          };
+        };
       in
       {
         options.plugins.null-ls.sources.${sourceType}.${name} = {
@@ -28,10 +37,11 @@
             #   '\'{ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }'\'
             # '';
           };
-        };
+        } // packageOption;
 
         config = mkIf cfg.enable {
-          extraPackages = packages;
+          # Does this evaluate package?
+          extraPackages = packages ++ optional (package != null) cfg.package;
 
           # Add source to list of sources
           plugins.null-ls.sourcesItems =
