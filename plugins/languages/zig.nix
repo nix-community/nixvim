@@ -5,7 +5,7 @@ in with helpers; with lib;
 mkPlugin attrs {
   name = "zig";
   description = "Enable zig";
-  extraPlugins = [ pkgs.vimPlugins.zig-vim ];
+  package = pkgs.vimPlugins.zig-vim;
 
   # Possibly add option to disable Treesitter highlighting if this is installed
   options = {
