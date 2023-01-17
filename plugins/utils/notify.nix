@@ -12,6 +12,12 @@ in
   options.plugins.notify = {
     enable = mkEnableOption "Enable notify";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-notify;
+      description = "Plugin to use for notify";
+    };
+
     stages = mkOption {
       type = types.nullOr (types.enum [ "fade_in_slide_out" "fade" "slide" "static" ]);
       description = "Animation style";
@@ -64,7 +70,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.nvim-notify ];
+      extraPlugins = [ cfg.package ];
       extraConfigLua = ''
         vim.notify = require('notify');
         require('notify').setup(${helpers.toLuaObject setupOptions})
