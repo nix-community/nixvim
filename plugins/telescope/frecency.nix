@@ -7,6 +7,12 @@ in
   options.plugins.telescope.extensions.frecency = {
     enable = mkEnableOption "Enable frecency";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.telescope-frecency-nvim;
+      description = "Plugin to use for telescope frecency";
+    };
+
     dbRoot = mkOption {
       type = types.nullOr types.str;
       description = "Path to parent directory of custom database location. Defaults to $XDG_DATA_HOME/nvim";
@@ -57,7 +63,7 @@ in
   in mkIf cfg.enable {
     extraPackages = [ pkgs.sqlite ];
     extraPlugins = with pkgs.vimPlugins; [ 
-      telescope-frecency-nvim
+      cfg.package
       sqlite-lua
     ];
 
