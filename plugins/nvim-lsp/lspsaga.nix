@@ -9,6 +9,12 @@ in
     plugins.lspsaga = {
       enable = mkEnableOption "Enable lspsava.nvim";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.lspsaga-nvim;
+        description = "Plugin to use for lspsaga.nvim";
+      };
+
       signs = {
         use = mkOption {
           default = true;
@@ -195,7 +201,7 @@ in
       in notEmpty keys;
     };
   in mkIf cfg.enable {
-    extraPlugins = [ pkgs.vimPlugins.lspsaga-nvim ];
+    extraPlugins = [ cfg.package ];
     
     extraConfigLua = ''
       local saga = require 'lspsaga'
