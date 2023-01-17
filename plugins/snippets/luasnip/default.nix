@@ -11,6 +11,7 @@ in
     package = mkOption {
       default = pkgs.vimPlugins.luasnip;
       type = types.package;
+      description = "Plugin to use for luasnip";
     };
 
     fromVscode = mkOption {
