@@ -58,6 +58,12 @@ in
     plugins.lualine = {
       enable = mkEnableOption "Enable lualine";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.lualine-nvim;
+        description = "Plugin to use for lualine";
+      };
+
       theme = mkOption {
         default = config.colorscheme;
         type = types.nullOr types.str;
@@ -144,7 +150,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.lualine-nvim ];
+      extraPlugins = [ cfg.package ];
       extraPackages = [ pkgs.git ];
       extraConfigLua =
         ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
