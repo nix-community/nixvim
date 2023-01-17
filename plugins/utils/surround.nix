@@ -5,7 +5,7 @@ in with helpers; with lib;
 mkPlugin attrs {
   name = "surround";
   description = "Enable surround.vim";
-  extraPlugins = [ pkgs.vimPlugins.surround ];
+  package = pkgs.vimPlugins.surround;
 
   options = {};
 }
