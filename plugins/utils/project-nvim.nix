@@ -8,6 +8,12 @@ in
   options.plugins.project-nvim = helpers.extraOptionsOptions // {
     enable = mkEnableOption "Enable project.nvim";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.project-nvim;
+      description = "Plugin to use for project-nvim";
+    };
+
     manualMode = mkOption {
       type = types.nullOr types.bool;
       default = null;
@@ -70,7 +76,7 @@ in
       } // cfg.extraOptions;
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.project-nvim ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
         require('project_nvim').setup(${helpers.toLuaObject options})
