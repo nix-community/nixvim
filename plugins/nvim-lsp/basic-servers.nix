@@ -6,22 +6,23 @@ let
     {
       name = "bashls";
       description = "Enable bashls, for bash.";
-      packages = [ pkgs.nodePackages.bash-language-server ];
+      package = pkgs.nodePackages.bash-language-server;
     }
     {
       name = "clangd";
       description = "Enable clangd LSP, for C/C++.";
-      packages = [ pkgs.clang-tools ];
+      package = pkgs.clang-tools;
     }
     {
       name = "cssls";
       description = "Enable cssls, for CSS";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-css-language-server" "--stdio" ];
     }
     {
       name = "dartls";
       description = "Enable dart language-server, for dart";
-      packages = [ pkgs.dart ];
+      package = pkgs.dart;
       extraOptions = {
         analysisExcludedFolders = mkOption {
           type = types.nullOr (types.listOf types.str);
@@ -112,23 +113,24 @@ let
     {
       name = "denols";
       description = "Enable denols, for Deno";
-      packages = [ pkgs.deno ];
+      package = pkgs.deno;
     }
     {
       name = "eslint";
       description = "Enable eslint";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-eslint-langauge-server" "--stdio" ];
     }
     {
       name = "elixirls";
       description = "Enable elixirls";
-      packages = [ ];
-      cmd = [ "${pkgs.elixir_ls}/bin/elixir-ls" ];
+      package = pkgs.elixir_ls;
+      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
       name = "gdscript";
       description = "Enable gdscript, for Godot";
-      packages = [ ];
+      package = null;
     }
     {
       name = "gopls";
@@ -137,17 +139,19 @@ let
     {
       name = "html";
       description = "Enable html, for HTML";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-html-language-server" "--stdio" ];
     }
     {
       name = "jsonls";
       description = "Enable jsonls, for JSON";
-      packages = [ pkgs.nodePackages.vscode-langservers-extracted ];
+      package = pkgs.nodePackages.vscode-langservers-extracted;
+      cmd = cfg: [ "${cfg.package}/bin/vscode-json-language-server" "--stdio" ];
     }
     {
       name = "nil_ls";
       description = "Enable nil, for Nix";
-      packages = [ pkgs.nil ];
+      package = pkgs.nil;
       extraOptions = {
         formatting.command = mkOption {
           type = types.nullOr (types.listOf types.str);
@@ -197,25 +201,21 @@ let
     {
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
-      packages = [ pkgs.nodePackages."@tailwindcss/language-server" ];
+      package = pkgs.nodePackages."@tailwindcss/language-server";
     }
     {
       name = "texlab";
       description = "Enable texlab language server, for LaTeX";
-      packages = [ pkgs.texlab ];
     }
     {
       name = "tsserver";
       description = "Enable tsserver for typescript";
-      packages = with pkgs; [
-        nodePackages.typescript
-        nodePackages.typescript-language-server
-      ];
+      package = pkgs.nodePackages.typescript-language-server;
     }
     {
       name = "vuels";
       description = "Enable vuels, for Vue";
-      packages = [ pkgs.nodePackages.vls ];
+      package = pkgs.nodePackages.vue-language-server;
     }
     {
       name = "zls";
@@ -224,8 +224,8 @@ let
     {
       name = "hls";
       description = "Enable haskell language server";
-      packages = [ pkgs.haskell-language-server ];
-      cmd = [ "haskell-language-server-wrapper" ];
+      package = pkgs.haskell-language-server;
+      cmd = cfg: [ "haskell-language-server-wrapper" ];
     }
   ];
 in
