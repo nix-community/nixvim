@@ -1,8 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }@args:
 with lib;
 let
   cfg = config.plugins.bufferline;
-  helpers = import ../helpers.nix { inherit lib; };
+  optionWarnings = import ../../lib/option-warnings.nix args;
+  helpers = import ../helpers.nix args;
 
   highlight = mkOption {
     type = types.nullOr (types.submodule ({ ... }: {
@@ -23,6 +24,13 @@ let
   };
 in
 {
+  imports = [
+    (optionWarnings.mkDeprecatedOption {
+      option = [ "plugins" "bufferline" "indicatorIcon" ];
+      alternative = [ "plugins" "bufferline" "indicator" "icon" ];
+    })
+  ];
+
   options = {
     plugins.bufferline = {
       enable = mkEnableOption "Enable bufferline";
@@ -56,12 +64,12 @@ in
         description = "Command or function run when middle clicking on a buffer.";
         default = null;
       };
-      indicatorIcon = mkOption {
-        type = types.nullOr types.str;
-        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
-        this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
-        default = null;
-      };
+      # indicatorIcon = mkOption {
+      #   type = types.nullOr types.str;
+      #   description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
+      #   this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
+      #   default = null;
+      # };
       bufferCloseIcon = mkOption {
         type = types.nullOr types.str;
         description = "The close icon for each buffer.";

@@ -22,5 +22,8 @@ in
       (mkIf (!cfg.wrapRc) {
         xdg.configFile."nvim/init.lua".text = cfg.initContent;
       })
+      ({
+        warnings = cfg.warnings;
+      })
     ]);
 }

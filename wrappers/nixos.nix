@@ -23,5 +23,8 @@ in
         environment.etc."nvim/sysinit.lua".text = cfg.initContent;
         environment.variables."VIM" = "/etc/nvim";
       })
+      ({
+        warnings = cfg.warnings;
+      })
     ]);
 }
