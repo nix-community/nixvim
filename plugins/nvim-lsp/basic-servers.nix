@@ -125,7 +125,7 @@ let
       name = "elixirls";
       description = "Enable elixirls";
       package = pkgs.elixir_ls;
-      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
+      cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
     }
     {
       name = "gdscript";
@@ -201,7 +201,7 @@ let
     {
       name = "sumneko-lua";
       description = "Enable sumneko_lua, for lua";
-      packages = [ pkgs.sumneko-lua-language-server ];
+      package = pkgs.sumneko-lua-language-server;
       serverName = "sumneko_lua";
     }
     {

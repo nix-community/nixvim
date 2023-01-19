@@ -9,7 +9,7 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.vim.telescope-media-files-nvim;
+      default = pkgs.vimPlugins.telescope-media-files-nvim;
       description = "Plugin to use for telescope extension media_files";
     };
 

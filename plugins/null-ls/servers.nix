@@ -1,8 +1,8 @@
-{ pkgs, config, lib, inputs, ... }@args:
+{ pkgs, config, lib, ... }@args:
 let
   helpers = import ./helpers.nix args;
   serverData = {
-    code_actions = { 
+    code_actions = {
       gitsigns = { };
     };
     completion = { };
@@ -30,9 +30,6 @@ let
       black = {
         package = pkgs.python3Packages.black;
       };
-      beautysh = {
-        package = inputs.beautysh.packages.${pkgs.system}.beautysh-python38;
-      };
       fourmolu = {
         package = pkgs.haskellPackages.fourmolu;
       };
@@ -57,9 +54,10 @@ in
 {
   imports = lib.lists.map (helpers.mkServer) dataFlattened;
 
-  config = let
-    cfg = config.plugins.null-ls;
-  in
+  config =
+    let
+      cfg = config.plugins.null-ls;
+    in
     lib.mkIf cfg.enable {
       plugins.gitsigns.enable = lib.mkIf (cfg.sources.code_actions.gitsigns.enable) true;
     };

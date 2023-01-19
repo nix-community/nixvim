@@ -13,7 +13,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.vimPlugins.coq-nvim;
+        default = pkgs.vimPlugins.coq-vim;
         description = "Plugin to use for coq-nvim";
       };
 
