@@ -1,8 +1,9 @@
 modules:
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, ... }@args:
 
 let
   inherit (lib) mkEnableOption mkOption mkOptionType mkMerge mkIf types;
+  shared = import ./_shared.nix args;
   cfg = config.programs.nixvim;
 in
 {
@@ -12,15 +13,7 @@ in
         options.enable = mkEnableOption "nixvim";
       }]);
     };
-    nixvim.helpers = mkOption {
-      type = mkOptionType {
-        name = "helpers";
-        description = "Helpers that can be used when writing nixvim configs";
-        check = builtins.isAttrs;
-      };
-      description = "Use this option to access the helpers";
-      default = import ../plugins/helpers.nix { inherit (pkgs) lib; };
-    };
+    nixvim.helpers = shared.helpers;
   };
 
   config = mkIf cfg.enable
