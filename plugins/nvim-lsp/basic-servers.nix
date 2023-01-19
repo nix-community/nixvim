@@ -199,6 +199,12 @@ let
       serverName = "rust_analyzer";
     }
     {
+      name = "sumneko-lua";
+      description = "Enable sumneko_lua, for lua";
+      packages = [ pkgs.sumneko-lua-language-server ];
+      serverName = "sumneko_lua";
+    }
+    {
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
       package = pkgs.nodePackages."@tailwindcss/language-server";
