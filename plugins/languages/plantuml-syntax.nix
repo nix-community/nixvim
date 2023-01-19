@@ -7,6 +7,13 @@
 with lib; {
   options.plugins.plantuml-syntax = {
     enable = mkEnableOption "Enable plantuml syntax support";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.plantuml-syntax;
+      description = "Plugin to use for plantuml-syntax";
+    };
+
     setMakeprg = mkOption {
       type = types.bool;
       default = true;
@@ -23,7 +30,7 @@ with lib; {
     cfg = config.plugins.plantuml-syntax;
   in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [plantuml-syntax];
+      extraPlugins = [ cfg.package ];
 
       globals = {
         plantuml_set_makeprg = cfg.setMakeprg;

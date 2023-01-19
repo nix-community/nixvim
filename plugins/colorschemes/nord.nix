@@ -8,6 +8,12 @@ in
     colorschemes.nord = {
       enable = mkEnableOption "Enable nord";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.nord-nvim;
+        description = "Plugin to use for nord.nvim";
+      };
+
       contrast = mkEnableOption
         "Make sidebars and popup menus like nvim-tree and telescope have a different background";
 
@@ -33,7 +39,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "nord";
-    extraPlugins = [ pkgs.vimPlugins.nord-nvim ];
+    extraPlugins = [ cfg.package ];
 
     globals = {
       nord_contrast = mkIf cfg.contrast 1;

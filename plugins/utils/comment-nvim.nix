@@ -8,6 +8,13 @@ in
   options = {
     plugins.comment-nvim = {
       enable = mkEnableOption "Enable comment-nvim";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.comment-nvim;
+        description = "Plugin to use for comment-nvim";
+      };
+
       padding = mkOption {
         type = types.nullOr types.bool;
         description = "Add a space b/w comment and the line";
@@ -97,7 +104,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.comment-nvim ];
+      extraPlugins = [ cfg.package ];
       extraConfigLua =
         ''require("Comment").setup${helpers.toLuaObject setupOptions}'';
     };

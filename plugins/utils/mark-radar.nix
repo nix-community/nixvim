@@ -10,6 +10,12 @@ in
   options.plugins.mark-radar = {
     enable = mkEnableOption "Enable mark-radar";
 
+    package = mkOption {
+      type = types.package;
+      default = defs.mark-radar;
+      description = "Plugin to use for mark-radar";
+    };
+
     highlight_background = mkOption {
       type = with types; nullOr bool;
       default = null;
@@ -40,7 +46,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ defs.mark-radar ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
         require("mark-radar").setup(${opts})

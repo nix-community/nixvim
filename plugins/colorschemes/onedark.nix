@@ -7,12 +7,18 @@ in
   options = {
     colorschemes.onedark = {
       enable = mkEnableOption "Enable onedark";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.onedark-vim;
+        description = "Plugin to use for one";
+      };
     };
   };
 
   config = mkIf cfg.enable {
     colorscheme = "onedark";
-    extraPlugins = [ pkgs.vimPlugins.onedark-vim ];
+    extraPlugins = [ cfg.package ];
 
     options = {
       termguicolors = true;

@@ -9,6 +9,12 @@ in
     plugins.lightline = {
       enable = mkEnableOption "Enable lightline";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.lightline-vim;
+        description = "Plugin to use for lightline";
+      };
+
       colorscheme = mkOption {
         type = with types; nullOr str;
         default = config.colorscheme;
@@ -84,7 +90,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.lightline-vim ];
+      extraPlugins = [ cfg.package ];
       globals.lightline = mkIf (configAttrs != { }) configAttrs;
     };
 }

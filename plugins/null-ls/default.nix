@@ -12,6 +12,12 @@ in
   options.plugins.null-ls = {
     enable = mkEnableOption "Enable null-ls";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.null-ls-nvim;
+      description = "Plugin to use for null-ls";
+    };
+
     debug = mkOption {
       default = null;
       type = with types; nullOr bool;
@@ -38,7 +44,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [ null-ls-nvim ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
         require("null-ls").setup(${helpers.toLuaObject options})

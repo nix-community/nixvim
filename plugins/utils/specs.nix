@@ -8,6 +8,12 @@ in
   options.plugins.specs = {
     enable = mkEnableOption "Enable specs-nvim";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.specs-nvim;
+      description = "Plugin to use for specs-nvim";
+    };
+
     show_jumps = mkOption {
       type = types.bool;
       default = true;
@@ -137,7 +143,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.specs-nvim ];
+      extraPlugins = [ cfg.package ];
 
       highlight.SpecsPopColor.bg = mkIf (!isNull cfg.color) cfg.color;
 

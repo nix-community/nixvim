@@ -5,7 +5,7 @@ in with helpers; with lib;
 mkPlugin attrs {
   name = "goyo";
   description = "Enable goyo.vim";
-  extraPlugins = [ pkgs.vimPlugins.goyo-vim ];
+  package = pkgs.vimPlugins.goyo-vim;
 
   options = {
     width = mkDefaultOpt {

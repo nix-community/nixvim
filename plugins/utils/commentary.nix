@@ -9,10 +9,16 @@ in
   options = {
     plugins.commentary = {
       enable = mkEnableOption "Enable commentary";
+
+      package = mkOption {
+        type = types.package;
+        default =  pkgs.vimPlugins.vim-commentary;
+        description = "Plugin to use for vim-commentary";
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ pkgs.vimPlugins.vim-commentary ];
+    extraPlugins = [ cfg.package ];
   };
 }

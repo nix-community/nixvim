@@ -9,6 +9,12 @@ with lib;
   options.plugins.trouble = {
     enable = mkEnableOption "trouble.nvim";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.trouble-nvim;
+      description = "Plugin to use for trouble-nvim";
+    };
+
     position = helpers.mkNullOrOption (types.enum [ "top" "left" "right" "bottom" ]) "Position of the list";
     height = helpers.mkNullOrOption types.int "Height of the trouble list when position is top or bottom";
     width = helpers.mkNullOrOption types.int "Width of the trouble list when position is left or right";
@@ -17,7 +23,7 @@ with lib;
 
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [
-      trouble-nvim
+      cfg.package
       nvim-web-devicons
     ];
   };

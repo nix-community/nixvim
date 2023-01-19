@@ -9,6 +9,12 @@ in
     colorschemes.base16 = {
       enable = mkEnableOption "Enable base16";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.base16-vim;
+        description = "Plugin to use for base16";
+      };
+
       useTruecolor = mkOption {
         type = types.bool;
         default = true;
@@ -31,7 +37,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "base16-${cfg.colorscheme}";
-    extraPlugins = [ pkgs.vimPlugins.base16-vim ];
+    extraPlugins = [ cfg.package ];
 
     plugins.airline.theme = mkIf (cfg.setUpBar) "base16";
     plugins.lightline.colorscheme = null;

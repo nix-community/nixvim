@@ -8,6 +8,12 @@ in
   options.plugins.nvim-tree = {
     enable = mkEnableOption "Enable nvim-tree";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-tree-lua;
+      description = "Plugin to use for nvim-tree";
+    };
+
     disableNetrw = mkOption {
       type = types.nullOr types.bool;
       default = null;
@@ -257,7 +263,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
-        nvim-tree-lua
+        cfg.package
         nvim-web-devicons
       ];
 

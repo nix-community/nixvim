@@ -9,6 +9,12 @@ in
     colorschemes.gruvbox = {
       enable = mkEnableOption "Enable gruvbox";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.gruvbox-nvim;
+        description = "Plugin to use for gruvbox";
+      };
+
       italics = mkEnableOption "Enable italics";
       bold = mkEnableOption "Enable bold";
       underline = mkEnableOption "Enable underlined text";
@@ -113,7 +119,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "gruvbox";
-    extraPlugins = [ pkgs.vimPlugins.gruvbox-nvim ];
+    extraPlugins = [ cfg.package ];
 
     globals = {
       gruvbox_bold = mkIf (!cfg.bold) 0;

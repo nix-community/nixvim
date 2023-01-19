@@ -3,7 +3,7 @@ with lib; with import ../helpers.nix { lib = lib; };
 mkPlugin args {
   name = "ledger";
   description = "Enable ledger language features";
-  extraPlugins = [ pkgs.vimPlugins.vim-ledger ];
+  package = pkgs.vimPlugins.vim-ledger;
 
   options = {
     maxWidth = mkDefaultOpt {

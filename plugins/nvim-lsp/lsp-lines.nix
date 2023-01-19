@@ -8,6 +8,13 @@ in
   options = {
     plugins.lsp-lines = {
       enable = mkEnableOption "lsp_lines.nvim";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.lsp_lines-nvim;
+        description = "Plugin to use for lsp_lines.nvim";
+      };
+
       currentLine = mkOption {
         type = types.bool;
         default = false;
@@ -27,7 +34,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.lsp_lines-nvim ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
         do

@@ -9,6 +9,12 @@ in
     plugins.treesitter = {
       enable = mkEnableOption "Enable tree-sitter syntax highlighting";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.nvim-treesitter;
+        description = "Plugin to use for nvim-treesitter. If using nixGrammars, it should include a `withPlugins` function";
+      };
+
       nixGrammars = mkOption {
         type = types.bool;
         default = true;
@@ -126,8 +132,8 @@ in
       '';
 
       extraPlugins = with pkgs; if cfg.nixGrammars then
-        [ (vimPlugins.nvim-treesitter.withPlugins (_: cfg.grammarPackages)) ]
-      else [ vimPlugins.nvim-treesitter ];
+        [ (cfg.package.withPlugins (_: cfg.grammarPackages)) ]
+      else [ cfg.package ];
       extraPackages = [ pkgs.tree-sitter pkgs.nodejs ];
 
       options = mkIf cfg.folding {

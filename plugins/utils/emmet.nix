@@ -10,7 +10,7 @@ in with helpers;
 mkPlugin attrs {
   name = "emmet";
   description = "Enable emmet";
-  extraPlugins = [ pkgs.vimPlugins.emmet-vim ];
+  package = pkgs.vimPlugins.emmet-vim;
 
   options = {
     mode = mkDefaultOpt {
