@@ -26,6 +26,11 @@ in
   options = {
     plugins.bufferline = {
       enable = mkEnableOption "Enable bufferline";
+      package = mkOption {
+        type = types.package;
+        description = "Plugin to use for bufferline";
+        default = pkgs.vimPlugins.bufferline-nvim;
+      };
       numbers = mkOption {
         type = types.nullOr types.lines;
         description = "A lua function customizing the styling of numbers.";
@@ -109,7 +114,7 @@ in
         default = null;
       };
       diagnosticsIndicator = mkOption {
-        type = types.nullOr types.lines;
+        type = types.nullOr helpers.rawType;
         default = null;
       };
       customFilter = mkOption {
@@ -218,6 +223,12 @@ in
           };
         }));
       };
+
+      extraOptions = mkOption {
+        type = types.attrs;
+        default = { };
+        description = "Extra options, will override others if defined";
+      };
     };
   };
 
@@ -253,7 +264,7 @@ in
           enforce_regular_tabs = cfg.enforceRegularTabs;
           always_show_bufferline = cfg.alwaysShowBufferline;
           sort_by = cfg.sortBy;
-        };
+        } // cfg.extraOptions;
         highlights = if builtins.isNull cfg.highlights then null else with cfg.highlights; {
           fill = fill;
           background = background;
@@ -319,7 +330,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
-        bufferline-nvim
+        cfg.package
         nvim-web-devicons
       ];
       options.termguicolors = true;
