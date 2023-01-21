@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 with lib;
-let 
+let
   cfg = config.plugins.telescope.extensions.frecency;
 in
 {

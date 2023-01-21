@@ -201,8 +201,9 @@ in
       in notEmpty keys;
     };
   in mkIf cfg.enable {
+
     extraPlugins = [ cfg.package ];
-    
+
     extraConfigLua = ''
       local saga = require 'lspsaga'
 

@@ -28,7 +28,7 @@ let
           type = types.nullOr (types.listOf types.str);
           default = null;
           description = ''
-            An array of paths (absolute or relative to each workspace folder) that should be 
+            An array of paths (absolute or relative to each workspace folder) that should be
             excluded from analysis.
           '';
         };
@@ -36,7 +36,7 @@ let
           type = types.nullOr types.bool;
           default = null;
           description = ''
-            When set to false, prevents registration (or unregisters) the SDK formatter. When set 
+            When set to false, prevents registration (or unregisters) the SDK formatter. When set
             to true or not supplied, will register/reregister the SDK formatter
           '';
         };
@@ -44,7 +44,7 @@ let
           type = types.nullOr types.int;
           default = null;
           description = ''
-            The number of characters the formatter should wrap code at. If unspecified, code will 
+            The number of characters the formatter should wrap code at. If unspecified, code will
             be wrapped at 80 characters.
           '';
         };
@@ -59,7 +59,7 @@ let
           type = types.nullOr types.bool;
           default = true;
           description = ''
-            Whether to generate diagnostics for TODO comments. If unspecified, diagnostics will not 
+            Whether to generate diagnostics for TODO comments. If unspecified, diagnostics will not
             be generated.
           '';
         };
@@ -103,7 +103,7 @@ let
           type = types.nullOr types.bool;
           default = null;
           description = ''
-            Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol 
+            Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol
             results. If not set, defaults to true.
           '';
         };

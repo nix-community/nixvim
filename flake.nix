@@ -42,7 +42,7 @@
               };
               legacyPackages = rec {
                 makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
-                makeNixvim = configuration: makeNixvimWithModule { 
+                makeNixvim = configuration: makeNixvimWithModule {
                   module = {
                     config = configuration;
                   };
