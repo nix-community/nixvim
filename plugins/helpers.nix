@@ -66,6 +66,20 @@ rec {
     description = desc;
   };
 
+  defaultNullOpts = rec {
+    mkNullable = type: default: desc: mkNullOrOption type (let
+      defaultDesc = "default: `${default}`";
+    in if desc == "" then defaultDesc else ''
+      ${desc}
+
+      ${defaultDesc}
+    '');
+
+    mkInt = default: mkNullable lib.types.int (toString default);
+    mkBool = default: mkNullable lib.types.bool (toString default);
+    mkStr = default: mkNullable lib.types.str ''"${default}"'';
+  };
+
   mkPlugin = { config, lib, ... }: {
     name,
     description,

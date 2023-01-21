@@ -35,6 +35,7 @@
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
     ./nvim-lsp/lsp-lines.nix
+    ./nvim-lsp/nvim-lightbulb.nix
     ./nvim-lsp/trouble.nix
 
     ./pluginmanagers/packer.nix
