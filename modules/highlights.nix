@@ -28,7 +28,7 @@ with lib;
     };
   };
 
-  config = mkIf (config.highlight != { } || config.matches != { }) {
+  config = mkIf (config.highlight != { } || config.match != { }) {
     extraConfigLuaPost = (optionalString (config.highlight != { }) ''
       -- Highlight groups {{
       do
@@ -40,7 +40,7 @@ with lib;
       end
       -- }}
     '') ++
-    (optionalString (config.matches != { }) ''
+    (optionalString (config.match != { }) ''
       -- Match groups {{
         do
           local match = ${helpers.toLuaObject config.match}
