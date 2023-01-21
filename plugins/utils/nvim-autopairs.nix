@@ -8,6 +8,12 @@ in
   options.plugins.nvim-autopairs = {
     enable = mkEnableOption "Enable nvim-autopairs";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-autopairs;
+      description = "Plugin to use for nvim-autopairs";
+    };
+
     pairs = mkOption {
       type = types.nullOr (types.attrsOf types.str);
       default = null;
@@ -50,7 +56,7 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.nvim-autopairs ];
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
         require('nvim-autopairs').setup(${helpers.toLuaObject options})

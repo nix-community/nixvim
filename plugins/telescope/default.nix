@@ -18,6 +18,12 @@ in
   options.plugins.telescope = {
     enable = mkEnableOption "Enable telescope.nvim";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.telescope-nvim;
+      description = "Plugin to use for telescope.nvim";
+    };
+
     highlightTheme = mkOption {
       type = types.nullOr types.str;
       description = "The colorscheme to use for syntax highlighting";
@@ -53,7 +59,7 @@ in
     extraPackages = [ pkgs.bat ];
 
     extraPlugins = with pkgs.vimPlugins; [
-      telescope-nvim
+      cfg.package
       plenary-nvim
       popup-nvim
     ];

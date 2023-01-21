@@ -8,6 +8,13 @@ in
   options = {
     plugins.floaterm = {
       enable = mkEnableOption "Enable floaterm";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.vim-floaterm;
+        description = "Plugin to use for floatterm";
+      };
+
       shell = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -64,8 +71,8 @@ in
     };
   };
   config = mkIf cfg.enable {
-    extraPlugins = with pkgs.vimPlugins; [
-      vim-floaterm
+    extraPlugins = [
+      cfg.package
     ];
     globals = {
       floaterm_shell = mkIf (!isNull cfg.shell) cfg.shell;

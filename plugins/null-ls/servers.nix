@@ -1,4 +1,4 @@
-{ pkgs, config, lib, inputs, ... }@args:
+{ pkgs, config, lib, ... }@args:
 let
   helpers = import ./helpers.nix args;
   serverData = {
@@ -8,36 +8,33 @@ let
     completion = { };
     diagnostics = {
       flake8 = {
-        packages = [ pkgs.python3Packages.flake8 ];
+        package = pkgs.python3Packages.flake8;
       };
       shellcheck = {
-        packages = [ pkgs.shellcheck ];
+        package = pkgs.shellcheck;
       };
     };
     formatting = {
       phpcbf = {
-        packages = [ pkgs.phpPackages.phpcbf ];
+        package = pkgs.phpPackages.phpcbf;
       };
       alejandra = {
-        packages = [ pkgs.alejandra ];
+        package = pkgs.alejandra;
       };
       nixfmt = {
-        packages = [ pkgs.nixfmt ];
+        package = pkgs.nixfmt;
       };
       prettier = {
-        packages = [ pkgs.nodePackages.prettier ];
+        package = pkgs.nodePackages.prettier;
       };
       black = {
-        packages = [ pkgs.python3Packages.black ];
-      };
-      beautysh = {
-        packages = [ inputs.beautysh.packages.${pkgs.system}.beautysh-python38 ];
+        package = pkgs.python3Packages.black;
       };
       fourmolu = {
-        packages = [ pkgs.haskellPackages.fourmolu ];
+        package = pkgs.haskellPackages.fourmolu;
       };
       fnlfmt = {
-        packages = [ pkgs.fnlfmt ];
+        package = pkgs.fnlfmt;
       };
     };
   };
@@ -57,9 +54,10 @@ in
 {
   imports = lib.lists.map (helpers.mkServer) dataFlattened;
 
-  config = let
-    cfg = config.plugins.null-ls;
-  in
+  config =
+    let
+      cfg = config.plugins.null-ls;
+    in
     lib.mkIf cfg.enable {
       plugins.gitsigns.enable = lib.mkIf (cfg.sources.code_actions.gitsigns.enable) true;
     };

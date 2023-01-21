@@ -5,7 +5,7 @@ in with lib; with helpers;
 mkPlugin args {
   name = "startify";
   description = "Enable startify";
-  extraPlugins = [ pkgs.vimPlugins.vim-startify ];
+  package = pkgs.vimPlugins.vim-startify;
 
   options = {
     sessionDir = mkDefaultOpt {

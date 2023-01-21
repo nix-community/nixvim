@@ -7,6 +7,12 @@ in
   options.plugins.telescope.extensions.media_files = {
     enable = mkEnableOption "Enable media_files extension for telescope";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.telescope-media-files-nvim;
+      description = "Plugin to use for telescope extension media_files";
+    };
+
     filetypes = mkOption {
       default = null;
       type = with types; nullOr (listOf str);
@@ -25,7 +31,7 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       popup-nvim
       plenary-nvim
-      telescope-media-files-nvim
+      cfg.package
     ];
 
     extraPackages = with pkgs; [

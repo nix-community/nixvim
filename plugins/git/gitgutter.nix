@@ -9,6 +9,12 @@ in
     plugins.gitgutter = {
       enable = mkEnableOption "Enable gitgutter";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.gitgutter;
+        description = "Plugin to use for gitgutter";
+      };
+
       recommendedSettings = mkOption {
         type = types.bool;
         default = true;
@@ -170,7 +176,7 @@ in
       grepCommand = if builtins.isAttrs cfg.grep then cfg.grep.command else cfg.grep;
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.gitgutter ];
+      extraPlugins = [ cfg.package ];
 
       options = mkIf cfg.recommendedSettings {
         updatetime = 100;

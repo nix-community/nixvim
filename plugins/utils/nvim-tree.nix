@@ -8,6 +8,12 @@ in
   options.plugins.nvim-tree = {
     enable = mkEnableOption "Enable nvim-tree";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-tree-lua;
+      description = "Plugin to use for nvim-tree";
+    };
+
     disableNetrw = mkOption {
       type = types.nullOr types.bool;
       default = null;
@@ -217,7 +223,6 @@ in
         hijack_netrw = cfg.hijackNetrw;
         open_on_setup = cfg.openOnSetup;
         ignore_ft_on_setup = cfg.ignoreFtOnSetup;
-        auto_close = cfg.autoClose;
         open_on_tab = cfg.openOnTab;
         hijack_cursor = cfg.hijackCursor;
         update_cwd = cfg.updateCwd;
@@ -257,8 +262,16 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
-        nvim-tree-lua
+        cfg.package
         nvim-web-devicons
+      ];
+
+      autoCmd = mkIf cfg.autoClose [
+        {
+          event = "BufEnter";
+          command = "if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif";
+          nested = true;
+        }
       ];
 
       extraConfigLua = ''

@@ -11,6 +11,12 @@ in
     plugins.coq-nvim = {
       enable = mkEnableOption "Enable coq-nvim";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.coq-vim;
+        description = "Plugin to use for coq-nvim";
+      };
+
       installArtifacts = mkEnableOption "Install coq-artifacts";
 
       autoStart = mkOption {
@@ -35,7 +41,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = [
-        plugins.coq-nvim
+        cfg.package
       ] ++ optional cfg.installArtifacts plugins.coq-artifacts;
       plugins.lsp = {
         preConfig = ''

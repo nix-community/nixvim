@@ -18,6 +18,12 @@ in
     plugins.neogit = {
       enable = mkEnableOption "Enable neogit";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.neogit;
+        description = "Plugin to use for neogit";
+      };
+
       disableSigns = mkOption {
         description = "Disable signs";
         type = types.nullOr types.bool;
@@ -217,7 +223,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
-        neogit
+        cfg.package
         plenary-nvim
       ] ++ optional cfg.integrations.diffview diffview-nvim;
 
