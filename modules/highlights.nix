@@ -28,8 +28,8 @@ with lib;
     };
   };
 
-  config = mkIf (config.highlight != { }) {
-    extraConfigLuaPost = ''
+  config = mkIf (config.highlight != { } || config.matches != { }) {
+    extraConfigLuaPost = (optionalString (config.highlight != { }) ''
       -- Highlight groups {{
       do
         local highlights = ${helpers.toLuaObject config.highlight}
@@ -39,16 +39,18 @@ with lib;
         end
       end
       -- }}
-
+    '') ++
+    (optionalString (config.matches != { }) ''
       -- Match groups {{
-      do
-        local match = ${helpers.toLuaObject config.match}
+        do
+          local match = ${helpers.toLuaObject config.match}
 
-        for k,v in pairs(match) do
-          vim.fn.matchadd(k, v)
+          for k,v in pairs(match) do
+            vim.fn.matchadd(k, v)
+          end
         end
-      end
-      -- }}
-    '';
+        -- }}
+    '');
   };
 }
+
