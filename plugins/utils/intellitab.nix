@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.plugins.comment-nvim;
+  cfg = config.plugins.intellitab;
   defs = import ../plugin-defs.nix { inherit pkgs; };
 in
 {
