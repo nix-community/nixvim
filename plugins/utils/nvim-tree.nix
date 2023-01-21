@@ -266,7 +266,7 @@ in
         nvim-web-devicons
       ];
 
-      autoCmd = mkIf cfg.autoClose [
+      autoCmd = mkIf (cfg.autoClose != null && cfg.autoClose) [
         {
           event = "BufEnter";
           command = "if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif";
