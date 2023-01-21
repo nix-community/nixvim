@@ -215,6 +215,7 @@ in
     };
 
     auto_enable_sources = mkOption {
+      type = types.bool;
       default = true;
       description = ''
         Scans the sources array and installs the plugins if they are known to nixvim.
