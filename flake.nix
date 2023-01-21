@@ -57,9 +57,9 @@
                 docs = pkgs.callPackage (import ./docs.nix) {
                   modules = nixvimModules;
                 };
-                rustAnalyzerOptions = pkgs.callPackage
+                runUpdates = pkgs.callPackage
                   ({ pkgs, stdenv }: stdenv.mkDerivation { 
-                    pname = "rust_analyzer_options";
+                    pname = "run-updates";
                     version = pkgs.rust-analyzer.version;
 
                     src = pkgs.rust-analyzer.src;
