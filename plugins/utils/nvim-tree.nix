@@ -223,7 +223,6 @@ in
         hijack_netrw = cfg.hijackNetrw;
         open_on_setup = cfg.openOnSetup;
         ignore_ft_on_setup = cfg.ignoreFtOnSetup;
-        auto_close = cfg.autoClose;
         open_on_tab = cfg.openOnTab;
         hijack_cursor = cfg.hijackCursor;
         update_cwd = cfg.updateCwd;
@@ -265,6 +264,14 @@ in
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package
         nvim-web-devicons
+      ];
+
+      autoCmd = mkIf cfg.autoClose [
+        {
+          event = "BufEnter";
+          command = "if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif";
+          nested = true;
+        }
       ];
 
       extraConfigLua = ''
