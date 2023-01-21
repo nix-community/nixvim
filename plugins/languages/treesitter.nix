@@ -81,7 +81,7 @@ in
 
       grammarPackages = mkOption {
         type = with types; listOf package;
-        default = pkgs.tree-sitter.allGrammars;
+        default = cfg.package.passthru.allGrammars;
         description = "Grammar packages to install";
       };
 
