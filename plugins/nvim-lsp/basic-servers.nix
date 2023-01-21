@@ -197,6 +197,9 @@ let
       name = "rust-analyzer";
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
+
+      extraOptions = import ./rust-analyzer-config.nix lib;
+      settings = cfg: { rust-analyzer = cfg; };
     }
     {
       name = "sumneko-lua";
