@@ -51,6 +51,12 @@ in
         description = "Code to be run before loading the LSP. Useful for requiring plugins";
         default = "";
       };
+
+      postConfig = mkOption {
+        type = types.lines;
+        description = "Code to be run after loading the LSP. This is an internal option";
+        default = "";
+      };
     };
   };
 
@@ -92,6 +98,8 @@ in
               require('lspconfig')[server.name].setup(options)
             end
           end
+
+          ${cfg.postConfig}
         end
         -- }}}
       '';
