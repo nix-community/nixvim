@@ -41,7 +41,7 @@
 
         config = mkIf cfg.enable {
           # Does this evaluate package?
-          extraPackages = packages ++ optional (package != null) cfg.package;
+          extraPackages = extraPackages ++ optional (package != null) cfg.package;
 
           # Add source to list of sources
           plugins.null-ls.sourcesItems =
