@@ -11,13 +11,19 @@ in
     programs.nixvim = mkOption {
       type = types.submodule ((modules pkgs) ++ [{
         options.enable = mkEnableOption "nixvim";
-	config.wrapRc = mkForce true;
+        config.wrapRc = mkForce true;
       }]);
     };
     nixvim.helpers = shared.helpers;
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.finalPackage ];
-  };
+  config = mkIf cfg.enable mkMerge [
+    {
+      environment.systemPackages = [ cfg.finalPackage ];
+    }
+    {
+      warnings = cfg.warnings;
+      assertions = cfg.assertions;
+    }
+  ];
 }

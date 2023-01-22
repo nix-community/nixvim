@@ -25,6 +25,7 @@ in
       })
       ({
         warnings = cfg.warnings;
+        assertions = cfg.assertions;
       })
     ]);
 }
