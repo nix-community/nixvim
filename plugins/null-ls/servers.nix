@@ -4,6 +4,9 @@ let
   serverData = {
     code_actions = {
       gitsigns = { };
+      shellcheck = {
+        package = pkgs.shellcheck;
+      };
     };
     completion = { };
     diagnostics = {
@@ -12,6 +15,12 @@ let
       };
       shellcheck = {
         package = pkgs.shellcheck;
+      };
+      cppcheck = {
+        package = pkgs.cppcheck;
+      };
+      gitlint = {
+        package = pkgs.gitlint;
       };
     };
     formatting = {
@@ -35,6 +44,18 @@ let
       };
       fnlfmt = {
         package = pkgs.fnlfmt;
+      };
+      stylua = {
+        package = pkgs.stylua;
+      };
+      cbfmt = {
+        package = pkgs.cbfmt;
+      };
+      shfmt = {
+        package = pkgs.shfmt;
+      };
+      taplo = {
+        package = pkgs.taplo;
       };
     };
   };
