@@ -1,7 +1,7 @@
 { lib, ... }:
 with lib;
 
-{
+rec {
   # This should be used instead of mkRemovedOptionModule, when the option still works,
   #   but is just deprecated and should be changed now and for the future
   mkDeprecatedOption =
@@ -25,9 +25,56 @@ with lib;
       };
     };
 
-  # For removed options, we can just use nixpkgs mkRemovedOptionModule, which is already in lib
-  mkRemovedOption = mkRemovedOptionModule;
+  mkRenamedOption =
+    { option
+    , newOption
+    , visible ? false
+    , warn ? true
+    , overrideDescription ? null
+    }:
+    { options, ... }:
+    let
+      fromOpt = getAttrFromPath option options;
+      toOf = attrByPath newOption
+        (abort "Renaming error: option `${showOption newOption}` does not exist.");
+      toType = let opt = attrByPath newOption { } options; in
+        opt.type or (types.submodule { });
+      message = "`${showOption option}` has been renamed to `${showOption newOption}`, but can still be used for compatibility";
+    in
+    {
+      options = setAttrByPath option (mkOption
+        {
+          inherit visible;
+          description =
+            if overrideDescription == null
+            then message
+            else overrideDescription;
+        } // optionalAttrs (toType != null) {
+        type = toType;
+      });
+      config = mkMerge [
+        {
+          warnings = mkIf (warn) [ "Nixvim: ${message}" ];
+        }
+        (mkAliasAndWrapDefinitions (setAttrByPath newOption) fromOpt)
+      ];
+    };
 
-  # For renamed options, we can also use the function from nixpkgs
-  mkRenamedOption = mkRenamedOptionModule; # use the function from nixpkgs
+  mkAliasOption = option: newOption: mkRenamedOption {
+    inherit option newOption;
+    visible = true;
+    warn = false;
+    overrideDescription = "Alias of ${showOption newOption}";
+  };
+
+  # TODO:
+  # mkRemovedOption =
+  #   { option
+  #   , visible ? false
+  #   }:
+  #   { options, ... }:
+  #   {
+  #     options = { };
+  #     config = { };
+  #   };
 }

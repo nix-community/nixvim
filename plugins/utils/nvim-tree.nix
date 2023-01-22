@@ -8,8 +8,14 @@ let
 in
 {
   imports = [
-    (optionWarnings.mkRenamedOption (basePluginPath ++ [ "updatedCwd" ]) (basePluginPath ++ [ "syncRootWithCwd" ]))
-    (optionWarnings.mkRenamedOption (basePluginPath ++ [ "updateFocusedFile" "updatedCwd" ]) (basePluginPath ++ [ "updateFocusedFile" "updateRoot" ]))
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ [ "updateCwd" ];
+      newOption = basePluginPath ++ [ "syncRootWithCwd" ];
+    })
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ [ "updateFocusedFile" "updatedCwd" ];
+      newOption = basePluginPath ++ [ "updateFocusedFile" "updateRoot" ];
+    })
   ];
 
   options.plugins.nvim-tree = {
@@ -231,7 +237,7 @@ in
         auto_close = cfg.autoClose;
         open_on_tab = cfg.openOnTab;
         hijack_cursor = cfg.hijackCursor;
-        sync_root_with_ced = cfg.syncRootWithCwd;
+        sync_root_with_cwd = cfg.syncRootWithCwd;
         respect_buf_cwd = cfg.respectBufCwd;
         update_to_buf_dir = {
           enable = cfg.updateToBufDir.enable;
