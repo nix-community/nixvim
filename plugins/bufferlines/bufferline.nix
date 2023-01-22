@@ -166,6 +166,21 @@ in
         type = types.nullOr (types.enum [ "id" "extension" "relative_directory" "directory" "tabs" ]);
         default = null;
       };
+      indicator = mkOption {
+        default = null;
+        type = types.nullOr (types.submodule ({ ... }: {
+          options = {
+            icon = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
+            style = mkOption {
+              type = types.nullOr (types.enum [ "icon" "underline" "none" ]);
+              default = null;
+            };
+          };
+        }));
+      };
       highlights = mkOption {
         default = null;
         type = types.nullOr (types.submodule ({ ... }: {
@@ -250,7 +265,12 @@ in
           right_mouse_command = cfg.rightMouseCommand;
           left_mouse_command = cfg.leftMouseCommand;
           middle_mouse_command = cfg.middleMouseCommand;
+          # deprecated, but might still work
           indicator_icon = cfg.indicatorIcon;
+          indicator = {
+            icon = cfg.indicator.icon;
+            style = cfg.indicator.style;
+          };
           buffer_close_icon = cfg.bufferCloseIcon;
           modified_icon = cfg.modifiedIcon;
           close_icon = cfg.closeIcon;
