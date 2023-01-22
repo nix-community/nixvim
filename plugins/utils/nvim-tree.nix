@@ -1,10 +1,17 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, ... }@args:
 with lib;
 let
   cfg = config.plugins.nvim-tree;
   helpers = import ../helpers.nix { lib = lib; };
+  optionWarnings = import ../../lib/option-warnings.nix args;
+  basePluginPath = [ "plugins" "nvim-tree" ];
 in
 {
+  imports = [
+    (optionWarnings.mkRenamedOption (basePluginPath ++ [ "updatedCwd" ]) (basePluginPath ++ [ "syncRootWithCwd" ]))
+    (optionWarnings.mkRenamedOption (basePluginPath ++ [ "updateFocusedFile" "updatedCwd" ]) (basePluginPath ++ [ "updateFocusedFile" "updateRoot" ]))
+  ];
+
   options.plugins.nvim-tree = {
     enable = mkEnableOption "Enable nvim-tree";
 
@@ -54,8 +61,7 @@ in
       description = "Hijack cursor";
     };
 
-    # TODO: change this to it's new definition sync_root_with_cwd
-    updateCwd = mkOption {
+    syncRootWithCwd = mkOption {
       type = types.nullOr types.bool;
       default = null;
     };
@@ -106,8 +112,7 @@ in
         default = null;
       };
 
-      # TODO: change this to it's new definition update_root
-      updateCwd = mkOption {
+      updateRoot = mkOption {
         type = types.nullOr types.bool;
         default = null;
       };
@@ -226,7 +231,7 @@ in
         auto_close = cfg.autoClose;
         open_on_tab = cfg.openOnTab;
         hijack_cursor = cfg.hijackCursor;
-        update_cwd = cfg.updateCwd;
+        sync_root_with_ced = cfg.syncRootWithCwd;
         respect_buf_cwd = cfg.respectBufCwd;
         update_to_buf_dir = {
           enable = cfg.updateToBufDir.enable;
@@ -235,7 +240,7 @@ in
         diagnostics = cfg.diagnostics;
         update_focused_file = {
           enable = cfg.updateFocusedFile.enable;
-          update_cwd = cfg.updateFocusedFile.updateCwd;
+          update_root = cfg.updateFocusedFile.updateRoot;
           ignore_list = cfg.updateFocusedFile.ignoreList;
         };
         system_open = cfg.systemOpen;
