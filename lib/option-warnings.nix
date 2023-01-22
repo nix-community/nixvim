@@ -10,15 +10,16 @@ rec {
     , message ? null
     , visible ? false
     }:
-    { options, ... }:
+    { options, config, ... }:
     let
       fromOpt = getAttrFromPath option options;
+      fromValue = getAttrFromPath option config;
       fullMessage = "The option `${showOption option}` has been deprecated, but might still work." +
         (optionalString (alternative != null) " You may want to use `${showOption alternative}` instead.") +
         (optionalString (message != null) " Message: ${message}");
     in
     {
-      config = mkIf (fromOpt.isDefined) {
+      config = mkIf (fromOpt.isDefined && fromValue != fromOpt.default) {
         warnings = [
           ("Nixvim: ${fullMessage}")
         ];
@@ -35,8 +36,8 @@ rec {
     { options, ... }:
     let
       fromOpt = getAttrFromPath option options;
-      toOf = attrByPath newOption
-        (abort "Renaming error: option `${showOption newOption}` does not exist.");
+      # toOf = attrByPath newOption
+      #   (abort "Renaming error: option `${showOption newOption}` does not exist.");
       toType = let opt = attrByPath newOption { } options; in
         opt.type or (types.submodule { });
       message = "`${showOption option}` has been renamed to `${showOption newOption}`, but can still be used for compatibility";
@@ -54,7 +55,7 @@ rec {
       });
       config = mkMerge [
         {
-          warnings = mkIf (warn) [ "Nixvim: ${message}" ];
+          warnings = mkIf (warn && fromOpt.isDefined) [ "Nixvim: ${message}" ];
         }
         (mkAliasAndWrapDefinitions (setAttrByPath newOption) fromOpt)
       ];
