@@ -64,12 +64,13 @@ in
         description = "Command or function run when middle clicking on a buffer.";
         default = null;
       };
-      # indicatorIcon = mkOption {
-      #   type = types.nullOr types.str;
-      #   description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
-      #   this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
-      #   default = null;
-      # };
+      # is deprecated, but might still work
+      indicatorIcon = mkOption {
+        type = types.nullOr types.str;
+        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
+        this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
+        default = null;
+      };
       bufferCloseIcon = mkOption {
         type = types.nullOr types.str;
         description = "The close icon for each buffer.";
