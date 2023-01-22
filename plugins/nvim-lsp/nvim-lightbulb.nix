@@ -7,7 +7,7 @@
 }:
 with lib; {
   options.plugins.nvim-lightbulb = {
-    enable = mkEnableOption "Enable nvim-lightbulb, showing available code actions";
+    enable = mkEnableOption "nvim-lightbulb, showing available code actions";
 
     package = mkOption {
       type = types.package;
