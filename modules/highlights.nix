@@ -39,7 +39,7 @@ with lib;
         end
       end
       -- }}
-    '') ++
+    '') +
     (optionalString (config.match != { }) ''
       -- Match groups {{
         do
