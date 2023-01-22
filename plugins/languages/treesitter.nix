@@ -7,7 +7,7 @@ in
 {
   options = {
     plugins.treesitter = {
-      enable = mkEnableOption "Enable tree-sitter syntax highlighting";
+      enable = mkEnableOption "tree-sitter syntax highlighting";
 
       package = mkOption {
         type = types.package;
@@ -66,7 +66,7 @@ in
           };
         in
         {
-          enable = mkEnableOption "Incremental selection based on the named nodes from the grammar";
+          enable = mkEnableOption "incremental selection based on the named nodes from the grammar";
           keymaps = {
             initSelection = keymap "gnn";
             nodeIncremental = keymap "grn";
@@ -75,9 +75,9 @@ in
           };
         };
 
-      indent = mkEnableOption "Enable tree-sitter based indentation";
+      indent = mkEnableOption "tree-sitter based indentation";
 
-      folding = mkEnableOption "Enable tree-sitter based folding";
+      folding = mkEnableOption "tree-sitter based folding";
 
       grammarPackages = mkOption {
         type = with types; listOf package;

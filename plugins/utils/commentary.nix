@@ -8,11 +8,11 @@ in
 
   options = {
     plugins.commentary = {
-      enable = mkEnableOption "Enable commentary";
+      enable = mkEnableOption "commentary";
 
       package = mkOption {
         type = types.package;
-        default =  pkgs.vimPlugins.vim-commentary;
+        default = pkgs.vimPlugins.vim-commentary;
         description = "Plugin to use for vim-commentary";
       };
     };

@@ -8,7 +8,7 @@ in
 {
   options = {
     colorschemes.tokyonight = {
-      enable = mkEnableOption "Enable tokyonight";
+      enable = mkEnableOption "tokyonight";
       package = mkOption {
         type = types.package;
         default = pkgs.vimPlugins.tokyonight-nvim;
@@ -24,8 +24,7 @@ in
         default = true;
         description = "Configure the colors used when opening a :terminal in Neovim";
       };
-      transparent =
-        mkEnableOption "Enable this to disable setting the background color";
+      transparent = mkEnableOption "disable setting the background color";
       styles =
         let
           mkBackgroundStyle = name: mkOption {

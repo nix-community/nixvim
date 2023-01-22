@@ -6,7 +6,7 @@ let
 in
 {
   options.plugins.nvim-tree = {
-    enable = mkEnableOption "Enable nvim-tree";
+    enable = mkEnableOption "nvim-tree";
 
     package = mkOption {
       type = types.package;

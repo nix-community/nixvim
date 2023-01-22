@@ -7,7 +7,7 @@ in
 {
   options = {
     colorschemes.base16 = {
-      enable = mkEnableOption "Enable base16";
+      enable = mkEnableOption "base16";
 
       package = mkOption {
         type = types.package;

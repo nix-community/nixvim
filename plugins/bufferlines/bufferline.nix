@@ -25,7 +25,7 @@ in
 {
   options = {
     plugins.bufferline = {
-      enable = mkEnableOption "Enable bufferline";
+      enable = mkEnableOption "bufferline";
       package = mkOption {
         type = types.package;
         description = "Plugin to use for bufferline";

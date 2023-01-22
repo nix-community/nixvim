@@ -1,11 +1,11 @@
-{ pkgs, config, lib, ...}:
+{ pkgs, config, lib, ... }:
 with lib;
 let
   cfg = config.plugins.telescope.extensions.project-nvim;
 in
 {
   options.plugins.telescope.extensions.project-nvim = {
-    enable = mkEnableOption "Enable project-nvim telescope extension";
+    enable = mkEnableOption "project-nvim telescope extension";
 
   };
 

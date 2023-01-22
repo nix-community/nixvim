@@ -14,7 +14,7 @@ in
 {
   options = {
     plugins.airline = {
-      enable = mkEnableOption "Enable airline";
+      enable = mkEnableOption "airline";
 
       package = mkOption {
         type = types.package;

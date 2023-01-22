@@ -8,7 +8,7 @@ let
 in
 {
   options.plugins.mark-radar = {
-    enable = mkEnableOption "Enable mark-radar";
+    enable = mkEnableOption "mark-radar";
 
     package = mkOption {
       type = types.package;

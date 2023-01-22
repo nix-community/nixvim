@@ -11,7 +11,7 @@ in
 
   options = {
     plugins.lsp = {
-      enable = mkEnableOption "Enable neovim's built-in LSP";
+      enable = mkEnableOption "neovim's built-in LSP";
 
       enabledServers = mkOption {
         type = with types; listOf (oneOf [

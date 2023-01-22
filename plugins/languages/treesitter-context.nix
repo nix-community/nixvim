@@ -5,7 +5,7 @@
 }:
 with lib; {
   options.plugins.treesitter-context = {
-    enable = mkEnableOption "Enable nvim-treesitter-context";
+    enable = mkEnableOption "nvim-treesitter-context";
 
     package = mkOption {
       type = types.package;

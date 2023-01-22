@@ -15,7 +15,7 @@ let
 in
 {
   options.plugins.nvim-cmp = {
-    enable = mkEnableOption "Enable nvim-cmp";
+    enable = mkEnableOption "nvim-cmp";
 
     package = mkOption {
       type = types.package;

@@ -6,7 +6,7 @@ let
 in
 {
   options.plugins.specs = {
-    enable = mkEnableOption "Enable specs-nvim";
+    enable = mkEnableOption "specs-nvim";
 
     package = mkOption {
       type = types.package;

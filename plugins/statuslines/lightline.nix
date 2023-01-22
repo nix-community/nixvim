@@ -7,7 +7,7 @@ in
 {
   options = {
     plugins.lightline = {
-      enable = mkEnableOption "Enable lightline";
+      enable = mkEnableOption "lightline";
 
       package = mkOption {
         type = types.package;

@@ -6,7 +6,7 @@ in
 {
   options = {
     colorschemes.onedark = {
-      enable = mkEnableOption "Enable onedark";
+      enable = mkEnableOption "onedark";
 
       package = mkOption {
         type = types.package;

@@ -15,7 +15,7 @@ with lib; {
     {
       enable =
         mkEnableOption
-          "Enable treesitter-refactor (requires plugins.treesitter.enable to be true)";
+          "treesitter-refactor (requires plugins.treesitter.enable to be true)";
 
       package = mkOption {
         type = types.package;
@@ -39,7 +39,7 @@ with lib; {
       };
       highlightCurrentScope = {
         inherit disable;
-        enable = mkEnableOption "Highlights the block from the current scope where the cursor is.";
+        enable = mkEnableOption "highlights the block from the current scope where the cursor is.";
       };
       smartRename = {
         inherit disable;

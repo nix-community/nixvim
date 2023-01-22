@@ -1,12 +1,11 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 with lib; {
   options.plugins.plantuml-syntax = {
-    enable = mkEnableOption "Enable plantuml syntax support";
+    enable = mkEnableOption "plantuml syntax support";
 
     package = mkOption {
       type = types.package;
@@ -26,9 +25,10 @@ with lib; {
     };
   };
 
-  config = let
-    cfg = config.plugins.plantuml-syntax;
-  in
+  config =
+    let
+      cfg = config.plugins.plantuml-syntax;
+    in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 

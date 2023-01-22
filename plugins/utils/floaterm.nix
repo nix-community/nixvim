@@ -7,7 +7,7 @@ in
 {
   options = {
     plugins.floaterm = {
-      enable = mkEnableOption "Enable floaterm";
+      enable = mkEnableOption "floaterm";
 
       package = mkOption {
         type = types.package;

@@ -9,7 +9,7 @@ in
 {
   options = {
     plugins.coq-nvim = {
-      enable = mkEnableOption "Enable coq-nvim";
+      enable = mkEnableOption "coq-nvim";
 
       package = mkOption {
         type = types.package;
