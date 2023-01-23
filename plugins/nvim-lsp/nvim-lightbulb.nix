@@ -1,10 +1,11 @@
-{
-  pkgs,
-  lib,
-  config,
-  helpers,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
+let
+  helpers = import ../helpers.nix { inherit lib; };
+in
 with lib; {
   options.plugins.nvim-lightbulb = {
     enable = mkEnableOption "nvim-lightbulb, showing available code actions";
@@ -62,30 +63,31 @@ with lib; {
 
       events =
         helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-        ''["CursorHold" "CursorHoldI"]'' "";
+          ''["CursorHold" "CursorHoldI"]'' "";
     };
   };
 
-  config = let
-    cfg = config.plugins.nvim-lightbulb;
-    setupOptions = {
-      inherit (cfg) ignore sign autocmd;
-      float = {
-        inherit (cfg.float) enabled text;
-        win_opts = cfg.float.winOpts;
+  config =
+    let
+      cfg = config.plugins.nvim-lightbulb;
+      setupOptions = {
+        inherit (cfg) ignore sign autocmd;
+        float = {
+          inherit (cfg.float) enabled text;
+          win_opts = cfg.float.winOpts;
+        };
+        virtual_text = {
+          inherit (cfg.virtualText) enabled text;
+          hl_mode = cfg.virtualText.hlMode;
+        };
+        status_text = {
+          inherit (cfg.statusText) enabled text;
+          text_unavailable = cfg.statusText.textUnavailable;
+        };
       };
-      virtual_text = {
-        inherit (cfg.virtualText) enabled text;
-        hl_mode = cfg.virtualText.hlMode;
-      };
-      status_text = {
-        inherit (cfg.statusText) enabled text;
-        text_unavailable = cfg.statusText.textUnavailable;
-      };
-    };
-  in
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
       extraConfigLua = ''
         require("nvim-lightbulb").setup(${helpers.toLuaObject setupOptions})
       '';
