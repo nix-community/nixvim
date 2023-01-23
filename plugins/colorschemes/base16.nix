@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.colorschemes.base16;
+  helpers = import ../helpers.nix { inherit lib; };
   themes = import ./base16-list.nix;
 in
 {
@@ -9,11 +10,7 @@ in
     colorschemes.base16 = {
       enable = mkEnableOption "base16";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.base16-vim;
-        description = "Plugin to use for base16";
-      };
+      package = helpers.mkPackageOption "base16" pkgs.vimPlugins.base16-vim;
 
       useTruecolor = mkOption {
         type = types.bool;

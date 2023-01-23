@@ -2,17 +2,13 @@
 with lib;
 let
   cfg = config.plugins.project-nvim;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { inherit lib pkgs; };
 in
 {
   options.plugins.project-nvim = helpers.extraOptionsOptions // {
     enable = mkEnableOption "project.nvim";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.project-nvim;
-      description = "Plugin to use for project-nvim";
-    };
+    package = helpers.mkPackageOption "project-nvim" pkgs.vimPlugins.projecy-nvim;
 
     manualMode = mkOption {
       type = types.nullOr types.bool;

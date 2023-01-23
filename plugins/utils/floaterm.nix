@@ -9,11 +9,7 @@ in
     plugins.floaterm = {
       enable = mkEnableOption "floaterm";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.vim-floaterm;
-        description = "Plugin to use for floatterm";
-      };
+      package = helpers.mkPackageOption "floaterm" pkgs.vimPlugins.vim-floaterm;
 
       shell = mkOption {
         type = types.nullOr types.str;

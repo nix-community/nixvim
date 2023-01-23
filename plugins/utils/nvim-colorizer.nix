@@ -92,11 +92,7 @@ in
 
       enable = mkEnableOption "nvim-colorizer";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.nvim-colorizer-lua;
-        description = "Plugin to use for vim-commentary";
-      };
+      package = helpers.mkPackageOption "nvim-colorizer" pkgs.vimPlugins.nvim-colorizer-lua;
 
       fileTypes = mkOption {
         description = "Enable and/or configure highlighting for certain filetypes";

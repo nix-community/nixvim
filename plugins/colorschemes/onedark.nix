@@ -8,11 +8,7 @@ in
     colorschemes.onedark = {
       enable = mkEnableOption "onedark";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.onedark-vim;
-        description = "Plugin to use for one";
-      };
+      package = helpers.mkPackageOption "one" pkgs.vimPlugins.onedark-vim;
     };
   };
 

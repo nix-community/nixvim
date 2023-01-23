@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.plugins.packer;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
