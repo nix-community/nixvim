@@ -23,7 +23,7 @@ let
       name = "dartls";
       description = "Enable dart language-server, for dart";
       package = pkgs.dart;
-      extraOptions = {
+      settingsOptions = {
         analysisExcludedFolders = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
@@ -152,7 +152,7 @@ let
       name = "nil_ls";
       description = "Enable nil, for Nix";
       package = pkgs.nil;
-      extraOptions = {
+      settingsOptions = {
         formatting.command = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
@@ -198,7 +198,7 @@ let
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
 
-      extraOptions = import ./rust-analyzer-config.nix lib;
+      settingsOptions = import ./rust-analyzer-config.nix lib;
       settings = cfg: { rust-analyzer = cfg; };
     }
     {
