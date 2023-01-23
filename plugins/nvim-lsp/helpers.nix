@@ -9,7 +9,7 @@
     , extraPackages ? { }
     , cmd ? (cfg: null)
     , settings ? (cfg: { })
-    , extraOptions ? { }
+    , settingsOptions ? { }
     , ...
     }:
     # returns a module
@@ -30,7 +30,8 @@
         options = {
           plugins.lsp.servers.${name} = {
             enable = mkEnableOption description;
-          } // packageOption // extraOptions;
+            settings = settingsOptions;
+          } // packageOption;
         };
 
         config = mkIf cfg.enable
@@ -42,7 +43,7 @@
               name = serverName;
               extraOptions = {
                 cmd = cmd cfg;
-                settings = settings cfg;
+                settings = settings cfg.settings;
               };
             }];
           };
