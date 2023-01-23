@@ -58,6 +58,7 @@
     ./utils/mark-radar.nix
     ./utils/notify.nix
     ./utils/nvim-autopairs.nix
+    ./utils/nvim-colorizer.nix
     ./utils/nvim-tree.nix
     ./utils/project-nvim.nix
     ./utils/specs.nix
