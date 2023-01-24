@@ -11,7 +11,7 @@ in
 
   options = {
     plugins.lsp = {
-      enable = mkEnableOption "Enable neovim's built-in LSP";
+      enable = mkEnableOption "neovim's built-in LSP";
 
       enabledServers = mkOption {
         type = with types; listOf (oneOf [
@@ -49,6 +49,12 @@ in
       preConfig = mkOption {
         type = types.lines;
         description = "Code to be run before loading the LSP. Useful for requiring plugins";
+        default = "";
+      };
+
+      postConfig = mkOption {
+        type = types.lines;
+        description = "Code to be run after loading the LSP. This is an internal option";
         default = "";
       };
     };
@@ -92,6 +98,8 @@ in
               require('lspconfig')[server.name].setup(options)
             end
           end
+
+          ${cfg.postConfig}
         end
         -- }}}
       '';

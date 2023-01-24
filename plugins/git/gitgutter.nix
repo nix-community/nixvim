@@ -7,7 +7,7 @@ in
 {
   options = {
     plugins.gitgutter = {
-      enable = mkEnableOption "Enable gitgutter";
+      enable = mkEnableOption "gitgutter";
 
       package = mkOption {
         type = types.package;

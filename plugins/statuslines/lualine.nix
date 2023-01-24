@@ -56,7 +56,7 @@ in
 {
   options = {
     plugins.lualine = {
-      enable = mkEnableOption "Enable lualine";
+      enable = mkEnableOption "lualine";
 
       package = mkOption {
         type = types.package;

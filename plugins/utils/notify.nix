@@ -10,7 +10,7 @@ let
 in
 {
   options.plugins.notify = {
-    enable = mkEnableOption "Enable notify";
+    enable = mkEnableOption "notify";
 
     package = mkOption {
       type = types.package;

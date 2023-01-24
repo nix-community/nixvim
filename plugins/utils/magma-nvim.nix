@@ -73,21 +73,21 @@ in {
       package = mkOption {
         type = types.nullOr types.package;
         default = null;
-        example = 
+        example =
         "package = pkgs.fetchFromGitHub {
           owner = \"WhiteBlackGoose\";
           repo = \"magma-nvim-goose\";
           rev = version;
           sha256 = \"sha256-IaslJK1F2BxTvZzKGH9OKOl2RICi4d4rSgjliAIAqK4=\";} ";
-        
+
 
       };
 
     };
   };
   config = mkIf cfg.enable {
-    extraPlugins = [ ( 
-      if cfg.package != null then plugins.magma-nvim.override {src = cfg.package;} else plugins.magma-nvim 
+    extraPlugins = [ (
+      if cfg.package != null then plugins.magma-nvim.override {src = cfg.package;} else plugins.magma-nvim
     )];
 
 

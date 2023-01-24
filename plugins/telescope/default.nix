@@ -16,7 +16,7 @@ in
   # TODO:add support for aditional filetypes. This requires autocommands!
 
   options.plugins.telescope = {
-    enable = mkEnableOption "Enable telescope.nvim";
+    enable = mkEnableOption "telescope.nvim";
 
     package = mkOption {
       type = types.package;
@@ -68,21 +68,23 @@ in
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    extraConfigLua = let 
-      options = {
-        extensions = cfg.extensionConfig;
-        defaults = cfg.defaults;
-      } // cfg.extraOptions;
-    in ''
-      do
-        local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
+    extraConfigLua =
+      let
+        options = {
+          extensions = cfg.extensionConfig;
+          defaults = cfg.defaults;
+        } // cfg.extraOptions;
+      in
+      ''
+        do
+          local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
 
-        require('telescope').setup(${helpers.toLuaObject options})
+          require('telescope').setup(${helpers.toLuaObject options})
 
-        for i, extension in ipairs(__telescopeExtensions) do
-          require('telescope').load_extension(extension)
+          for i, extension in ipairs(__telescopeExtensions) do
+            require('telescope').load_extension(extension)
+          end
         end
-      end
-    '';
+      '';
   };
 }

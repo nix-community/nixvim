@@ -6,7 +6,7 @@ let
 in
 {
   options.plugins.project-nvim = helpers.extraOptionsOptions // {
-    enable = mkEnableOption "Enable project.nvim";
+    enable = mkEnableOption "project.nvim";
 
     package = mkOption {
       type = types.package;

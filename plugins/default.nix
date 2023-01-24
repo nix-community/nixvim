@@ -24,6 +24,7 @@
     ./languages/ledger.nix
     ./languages/nix.nix
     ./languages/plantuml-syntax.nix
+    ./languages/rust.nix
     ./languages/treesitter.nix
     ./languages/treesitter-context.nix
     ./languages/treesitter-refactor.nix
@@ -34,6 +35,7 @@
     ./nvim-lsp
     ./nvim-lsp/lspsaga.nix
     ./nvim-lsp/lsp-lines.nix
+    ./nvim-lsp/nvim-lightbulb.nix
     ./nvim-lsp/trouble.nix
 
     ./pluginmanagers/packer.nix
@@ -56,6 +58,7 @@
     ./utils/mark-radar.nix
     ./utils/notify.nix
     ./utils/nvim-autopairs.nix
+    ./utils/nvim-colorizer.nix
     ./utils/nvim-tree.nix
     ./utils/project-nvim.nix
     ./utils/specs.nix

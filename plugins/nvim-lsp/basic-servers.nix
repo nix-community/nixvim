@@ -4,6 +4,12 @@ let
   helpers = import ./helpers.nix args;
   servers = [
     {
+      name = "astro";
+      description = "Enable astrols, for Astro";
+      package = pkgs.nodePackages."@astrojs/language-server";
+      cmd = cfg: [ "${cfg.package}/bin/astro-ls" "--stdio" ];
+    }
+    {
       name = "bashls";
       description = "Enable bashls, for bash.";
       package = pkgs.nodePackages.bash-language-server;
@@ -23,12 +29,12 @@ let
       name = "dartls";
       description = "Enable dart language-server, for dart";
       package = pkgs.dart;
-      extraOptions = {
+      settingsOptions = {
         analysisExcludedFolders = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
           description = ''
-            An array of paths (absolute or relative to each workspace folder) that should be 
+            An array of paths (absolute or relative to each workspace folder) that should be
             excluded from analysis.
           '';
         };
@@ -36,7 +42,7 @@ let
           type = types.nullOr types.bool;
           default = null;
           description = ''
-            When set to false, prevents registration (or unregisters) the SDK formatter. When set 
+            When set to false, prevents registration (or unregisters) the SDK formatter. When set
             to true or not supplied, will register/reregister the SDK formatter
           '';
         };
@@ -44,7 +50,7 @@ let
           type = types.nullOr types.int;
           default = null;
           description = ''
-            The number of characters the formatter should wrap code at. If unspecified, code will 
+            The number of characters the formatter should wrap code at. If unspecified, code will
             be wrapped at 80 characters.
           '';
         };
@@ -59,7 +65,7 @@ let
           type = types.nullOr types.bool;
           default = true;
           description = ''
-            Whether to generate diagnostics for TODO comments. If unspecified, diagnostics will not 
+            Whether to generate diagnostics for TODO comments. If unspecified, diagnostics will not
             be generated.
           '';
         };
@@ -103,7 +109,7 @@ let
           type = types.nullOr types.bool;
           default = null;
           description = ''
-            Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol 
+            Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol
             results. If not set, defaults to true.
           '';
         };
@@ -152,7 +158,7 @@ let
       name = "nil_ls";
       description = "Enable nil, for Nix";
       package = pkgs.nil;
-      extraOptions = {
+      settingsOptions = {
         formatting.command = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
@@ -197,6 +203,9 @@ let
       name = "rust-analyzer";
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
+
+      settingsOptions = import ./rust-analyzer-config.nix lib;
+      settings = cfg: { rust-analyzer = cfg; };
     }
     {
       name = "sumneko-lua";

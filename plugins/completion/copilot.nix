@@ -6,7 +6,7 @@ in
 {
   options = {
     plugins.copilot = {
-      enable = mkEnableOption "Enable copilot";
+      enable = mkEnableOption "copilot";
       package = mkOption {
         type = types.package;
         description = "The copilot plugin package to use";

@@ -3,7 +3,7 @@
   mkServer =
     { name
     , sourceType
-    , description ? "Enable ${name} source, for null-ls."
+    , description ? "${name} source, for null-ls."
     , package ? null
     , extraPackages ? [ ]
     , ...

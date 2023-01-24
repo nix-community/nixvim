@@ -6,7 +6,7 @@ in
 {
   options = {
     colorschemes.nord = {
-      enable = mkEnableOption "Enable nord";
+      enable = mkEnableOption "nord";
 
       package = mkOption {
         type = types.package;

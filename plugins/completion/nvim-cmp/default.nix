@@ -15,7 +15,7 @@ let
 in
 {
   options.plugins.nvim-cmp = {
-    enable = mkEnableOption "Enable nvim-cmp";
+    enable = mkEnableOption "nvim-cmp";
 
     package = mkOption {
       type = types.package;
@@ -215,6 +215,7 @@ in
     };
 
     auto_enable_sources = mkOption {
+      type = types.bool;
       default = true;
       description = ''
         Scans the sources array and installs the plugins if they are known to nixvim.

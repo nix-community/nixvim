@@ -6,7 +6,7 @@ in
 {
   options = {
     colorschemes.one = {
-      enable = mkEnableOption "Enable vim-one";
+      enable = mkEnableOption "vim-one";
 
       package = mkOption {
         type = types.package;

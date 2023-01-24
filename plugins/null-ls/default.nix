@@ -10,7 +10,7 @@ in
   ];
 
   options.plugins.null-ls = {
-    enable = mkEnableOption "Enable null-ls";
+    enable = mkEnableOption "null-ls";
 
     package = mkOption {
       type = types.package;

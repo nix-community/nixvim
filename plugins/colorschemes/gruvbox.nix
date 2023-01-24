@@ -7,7 +7,7 @@ in
 {
   options = {
     colorschemes.gruvbox = {
-      enable = mkEnableOption "Enable gruvbox";
+      enable = mkEnableOption "gruvbox";
 
       package = mkOption {
         type = types.package;
@@ -15,10 +15,10 @@ in
         description = "Plugin to use for gruvbox";
       };
 
-      italics = mkEnableOption "Enable italics";
-      bold = mkEnableOption "Enable bold";
-      underline = mkEnableOption "Enable underlined text";
-      undercurl = mkEnableOption "Enable undercurled text";
+      italics = mkEnableOption "italics";
+      bold = mkEnableOption "bold";
+      underline = mkEnableOption "underlined text";
+      undercurl = mkEnableOption "undercurled text";
 
       contrastDark = mkOption {
         type = types.nullOr (types.enum [ "soft" "medium" "hard" ]);
@@ -110,9 +110,9 @@ in
         description = "Improved warnings";
       };
 
-      transparentBg = mkEnableOption "Transparent background";
+      transparentBg = mkEnableOption "transparent background";
 
-      trueColor = mkEnableOption "Enable true color support";
+      trueColor = mkEnableOption "true color support";
 
     };
   };

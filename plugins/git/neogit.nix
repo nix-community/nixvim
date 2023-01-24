@@ -16,7 +16,7 @@ in
 {
   options = {
     plugins.neogit = {
-      enable = mkEnableOption "Enable neogit";
+      enable = mkEnableOption "neogit";
 
       package = mkOption {
         type = types.package;

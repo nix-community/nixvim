@@ -33,7 +33,7 @@ in
 
   options = {
     plugins.bufferline = {
-      enable = mkEnableOption "Enable bufferline";
+      enable = mkEnableOption "bufferline";
       package = mkOption {
         type = types.package;
         description = "Plugin to use for bufferline";
@@ -67,7 +67,7 @@ in
       # is deprecated, but might still work
       indicatorIcon = mkOption {
         type = types.nullOr types.str;
-        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended, 
+        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended,
         this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
         default = null;
       };

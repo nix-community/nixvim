@@ -6,7 +6,7 @@ let
 in
 {
   options.plugins.nvim-autopairs = {
-    enable = mkEnableOption "Enable nvim-autopairs";
+    enable = mkEnableOption "nvim-autopairs";
 
     package = mkOption {
       type = types.package;

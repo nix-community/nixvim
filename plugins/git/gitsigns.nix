@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  helpers,
-  ...
+{ config
+, lib
+, pkgs
+, helpers
+, ...
 }:
 with lib; let
   signOptions = defaults:
@@ -28,7 +27,7 @@ with lib; let
         description = "Specifies the highlight group to use for the line";
         default = defaults.linehl;
       };
-      showCount = mkEnableOption "Enable showing count of hunk, e.g. number of deleted lines";
+      showCount = mkEnableOption "showing count of hunk, e.g. number of deleted lines";
     };
   signSetupOptions = values: {
     inherit (values) hl text numhl linehl;
@@ -41,7 +40,8 @@ with lib; let
       description = "Lua function definition";
     };
   };
-in {
+in
+{
   options.plugins.gitsigns = {
     enable = mkEnableOption "Enable gitsigns plugin";
     package = mkOption {
@@ -87,18 +87,19 @@ in {
         linehl = "GitSignsAddLn";
       };
     };
-    worktrees = let
-      worktreeModule = {
-        options = {
-          toplevel = mkOption {
-            type = types.str;
-          };
-          gitdir = mkOption {
-            type = types.str;
+    worktrees =
+      let
+        worktreeModule = {
+          options = {
+            toplevel = mkOption {
+              type = types.str;
+            };
+            gitdir = mkOption {
+              type = types.str;
+            };
           };
         };
-      };
-    in
+      in
       mkOption {
         type = types.nullOr (types.listOf (types.submodule worktreeModule));
         default = null;
@@ -166,58 +167,59 @@ in {
       '';
     };
     numhl = mkEnableOption ''
-      Enable/disable line number highlights.
+      line number highlights.
 
       When enabled the highlights defined in `signs.*.numhl` are used. If
       the highlight group does not exist, then it is automatically defined
       and linked to the corresponding highlight group in `signs.*.hl`.
     '';
     linehl = mkEnableOption ''
-      Enable/disable line highlights.
+      line highlights.
 
       When enabled the highlights defined in `signs.*.linehl` are used. If
       the highlight group does not exist, then it is automatically defined
       and linked to the corresponding highlight group in `signs.*.hl`.
     '';
     showDeleted = mkEnableOption ''
-      Show the old version of hunks inline in the buffer (via virtual lines).
+      showing the old version of hunks inline in the buffer (via virtual lines).
 
       Note: Virtual lines currently use the highlight `GitSignsDeleteVirtLn`.
     '';
-    diffOpts = let
-      diffOptModule = {
-        options = {
-          algorithm = mkOption {
-            type = types.enum ["myers" "minimal" "patience" "histogram"];
-            default = "myers";
-            description = "Diff algorithm to use";
-          };
-          internal = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Use Neovim's built in xdiff library for running diffs";
-          };
-          indentHeuristic = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Use the indent heuristic for the internal diff library.";
-          };
-          vertical = mkOption {
-            type = types.bool;
-            default = true;
-            description = "Start diff mode with vertical splits";
-          };
-          linematch = mkOption {
-            type = types.nullOr types.int;
-            default = null;
-            description = ''
-              Enable second-stage diff on hunks to align lines.
-              Requires `internal=true`.
-            '';
+    diffOpts =
+      let
+        diffOptModule = {
+          options = {
+            algorithm = mkOption {
+              type = types.enum [ "myers" "minimal" "patience" "histogram" ];
+              default = "myers";
+              description = "Diff algorithm to use";
+            };
+            internal = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Use Neovim's built in xdiff library for running diffs";
+            };
+            indentHeuristic = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Use the indent heuristic for the internal diff library.";
+            };
+            vertical = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Start diff mode with vertical splits";
+            };
+            linematch = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              description = ''
+                Enable second-stage diff on hunks to align lines.
+                Requires `internal=true`.
+              '';
+            };
           };
         };
-      };
-    in
+      in
       mkOption {
         type = types.nullOr (types.submodule diffOptModule);
         default = null;
@@ -307,7 +309,7 @@ in {
         description = "Whether to show a virtual text blame annotation";
       };
       virtTextPos = mkOption {
-        type = types.enum ["eol" "overlay" "right_align"];
+        type = types.enum [ "eol" "overlay" "right_align" ];
         default = "eol";
         description = "Blame annotation position";
       };
@@ -352,7 +354,7 @@ in {
         window.
       '';
     };
-    yadm.enable = mkEnableOption "Enable YADM support";
+    yadm.enable = mkEnableOption "YADM support";
     wordDiff = mkEnableOption ''
       Highlight intra-line word differences in the buffer.
       Requires `config.diff_opts.internal = true`.
@@ -363,76 +365,84 @@ in {
     '';
   };
 
-  config = let
-    cfg = config.plugins.gitsigns;
-  in
+  config =
+    let
+      cfg = config.plugins.gitsigns;
+    in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package
       ];
-      extraConfigLua = let
-        luaFnOrStrToObj = val:
-          if builtins.isString val
-          then val
-          else {__raw = val.function;};
-        setupOptions = {
-          inherit (cfg) worktrees signcolumn numhl linehl trouble yadm;
-          signs = mapAttrs (_: signSetupOptions) cfg.signs;
-          on_attach =
-            if cfg.onAttach != null
-            then {__raw = cfg.onAttach.function;}
-            else null;
-          watch_gitdir = {
-            inherit (cfg.watchGitDir) enable interval;
-            follow_files = cfg.watchGitDir.followFiles;
-          };
-          sign_priority = cfg.signPriority;
-          show_deleted = cfg.showDeleted;
-          diff_opts =
-            if cfg.diffOpts == null
-            then null
-            else {
-              inherit (cfg.diffOpts) algorithm internal vertical linematch;
-              indent_heuristic = cfg.diffOpts.indentHeuristic;
+      extraConfigLua =
+        let
+          luaFnOrStrToObj = val:
+            if builtins.isString val
+            then val
+            else { __raw = val.function; };
+          setupOptions = {
+            inherit (cfg) worktrees signcolumn numhl linehl trouble yadm;
+            signs = mapAttrs (_: signSetupOptions) cfg.signs;
+            on_attach =
+              if cfg.onAttach != null
+              then { __raw = cfg.onAttach.function; }
+              else null;
+            watch_gitdir = {
+              inherit (cfg.watchGitDir) enable interval;
+              follow_files = cfg.watchGitDir.followFiles;
             };
-          count_chars = let
-            isStrInt = s: (builtins.match "[0-9]+" s) != null;
-          in {
-            __raw =
-              "{"
-              + (concatStringsSep "," (
-                lib.mapAttrsToList (
-                  name: value:
-                    if isStrInt name
-                    then "[${name}] = ${helpers.toLuaObject value}"
-                    else "[${helpers.toLuaObject name}] = ${helpers.toLuaObject value}"
-                )
-                cfg.countChars
-              ))
-              + "}";
+            sign_priority = cfg.signPriority;
+            show_deleted = cfg.showDeleted;
+            diff_opts =
+              if cfg.diffOpts == null
+              then null
+              else {
+                inherit (cfg.diffOpts) algorithm internal vertical linematch;
+                indent_heuristic = cfg.diffOpts.indentHeuristic;
+              };
+            count_chars =
+              let
+                isStrInt = s: (builtins.match "[0-9]+" s) != null;
+              in
+              {
+                __raw =
+                  "{"
+                  + (concatStringsSep "," (
+                    lib.mapAttrsToList
+                      (
+                        name: value:
+                          if isStrInt name
+                          then "[${name}] = ${helpers.toLuaObject value}"
+                          else "[${helpers.toLuaObject name}] = ${helpers.toLuaObject value}"
+                      )
+                      cfg.countChars
+                  ))
+                  + "}";
+              };
+            status_formatter = { __raw = cfg.statusFormatter.function; };
+            max_file_length = cfg.maxFileLength;
+            preview_config = cfg.previewConfig;
+            attach_to_untracked = cfg.attachToUntracked;
+            update_debounce = cfg.updateDebounce;
+            current_line_blame = cfg.currentLineBlame;
+            current_line_blame_opts =
+              let
+                cfgCl = cfg.currentLineBlameOpts;
+              in
+              {
+                inherit (cfgCl) delay;
+                virt_text = cfgCl.virtText;
+                virt_text_pos = cfgCl.virtTextPos;
+                ignore_whitespace = cfgCl.ignoreWhitespace;
+                virt_text_priority = cfgCl.virtTextPriority;
+              };
+            current_line_blame_formatter = luaFnOrStrToObj cfg.currentLineBlameFormatter.normal;
+            current_line_blame_formatter_nc = luaFnOrStrToObj cfg.currentLineBlameFormatter.nonCommitted;
+            word_diff = cfg.wordDiff;
+            debug_mode = cfg.debugMode;
           };
-          status_formatter = {__raw = cfg.statusFormatter.function;};
-          max_file_length = cfg.maxFileLength;
-          preview_config = cfg.previewConfig;
-          attach_to_untracked = cfg.attachToUntracked;
-          update_debounce = cfg.updateDebounce;
-          current_line_blame = cfg.currentLineBlame;
-          current_line_blame_opts = let
-            cfgCl = cfg.currentLineBlameOpts;
-          in {
-            inherit (cfgCl) delay;
-            virt_text = cfgCl.virtText;
-            virt_text_pos = cfgCl.virtTextPos;
-            ignore_whitespace = cfgCl.ignoreWhitespace;
-            virt_text_priority = cfgCl.virtTextPriority;
-          };
-          current_line_blame_formatter = luaFnOrStrToObj cfg.currentLineBlameFormatter.normal;
-          current_line_blame_formatter_nc = luaFnOrStrToObj cfg.currentLineBlameFormatter.nonCommitted;
-          word_diff = cfg.wordDiff;
-          debug_mode = cfg.debugMode;
-        };
-      in ''
-        require('gitsigns').setup(${helpers.toLuaObject setupOptions})
-      '';
+        in
+        ''
+          require('gitsigns').setup(${helpers.toLuaObject setupOptions})
+        '';
     };
 }

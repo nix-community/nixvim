@@ -14,14 +14,15 @@ rec {
       else
         "{" + (concatStringsSep ","
           (mapAttrsToList
-          (n: v: if head (stringToCharacters n) == "@" then
-              toLuaObject v
-            else "[${toLuaObject n}] = " + (toLuaObject v))
-          (filterAttrs (n: v: !isNull v && toLuaObject v != "{}") args))) + "}"
+            (n: v:
+              if head (stringToCharacters n) == "@" then
+                toLuaObject v
+              else "[${toLuaObject n}] = " + (toLuaObject v))
+            (filterAttrs (n: v: !isNull v && toLuaObject v != "{}") args))) + "}"
     else if builtins.isList args then
       "{" + concatMapStringsSep "," toLuaObject args + "}"
     else if builtins.isString args then
-      # This should be enough!
+    # This should be enough!
       builtins.toJSON args
     else if builtins.isPath args then
       builtins.toJSON (toString args)
@@ -36,28 +37,34 @@ rec {
     else "";
 
   # Generates maps for a lua config
-  genMaps = mode: maps: let
-    normalized = builtins.mapAttrs (key: action:
-      if builtins.isString action then
+  genMaps = mode: maps:
+    let
+      normalized = builtins.mapAttrs
+        (key: action:
+          if builtins.isString action then
+            {
+              silent = false;
+              expr = false;
+              unique = false;
+              noremap = true;
+              script = false;
+              nowait = false;
+              action = action;
+            }
+          else action)
+        maps;
+    in
+    builtins.attrValues (builtins.mapAttrs
+      (key: action:
         {
-          silent = false;
-          expr = false;
-          unique = false;
-          noremap = true;
-          script = false;
-          nowait = false;
-          action = action;
-        }
-      else action) maps;
-  in builtins.attrValues (builtins.mapAttrs (key: action:
-    {
-      action = action.action;
-      config = lib.filterAttrs (_: v: v) {
-        inherit (action) silent expr unique noremap script nowait;
-      };
-      key = key;
-      mode = mode;
-    }) normalized);
+          action = action.action;
+          config = lib.filterAttrs (_: v: v) {
+            inherit (action) silent expr unique noremap script nowait;
+          };
+          key = key;
+          mode = mode;
+        })
+      normalized);
 
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption = type: desc: lib.mkOption {
@@ -66,45 +73,66 @@ rec {
     description = desc;
   };
 
-  mkPlugin = { config, lib, ... }: {
-    name,
-    description,
-    package ? null,
-    extraPlugins ? [],
-    extraPackages ? [],
-    options ? {},
-    ...
-  }: let
-    cfg = config.plugins.${name};
-    # TODO support nested options!
-    pluginOptions = mapAttrs (k: v: v.option) options;
-    globals = mapAttrs' (name: opt: {
-      name = opt.global;
-      value = if cfg.${name} != null then opt.value cfg.${name} else null;
-    }) options;
-    # does this evaluate package?
-    packageOption = if package == null then { } else {
-      package = mkOption {
-        type = types.package;
-        default = package;
-        description = "Plugin to use for ${name}";
-      };
-    };
-  in {
-    options.plugins.${name} = {
-      enable = mkEnableOption description;
-    } // packageOption // pluginOptions;
+  defaultNullOpts = rec {
+    mkNullable = type: default: desc: mkNullOrOption type (
+      let
+        defaultDesc = "default: `${default}`";
+      in
+      if desc == "" then defaultDesc else ''
+        ${desc}
 
-    config = mkIf cfg.enable {
-      inherit extraPackages globals;
-      # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
-      extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
-    };
+        ${defaultDesc}
+      ''
+    );
+
+    mkInt = default: mkNullable lib.types.int (toString default);
+    mkBool = default: mkNullable lib.types.bool (toString default);
+    mkStr = default: mkNullable lib.types.str ''"${default}"'';
   };
 
-  globalVal = val: if builtins.isBool val then
-    (if val == false then 0 else 1)
-  else val;
+  mkPlugin = { config, lib, ... }: { name
+                                   , description
+                                   , package ? null
+                                   , extraPlugins ? [ ]
+                                   , extraPackages ? [ ]
+                                   , options ? { }
+                                   , ...
+                                   }:
+    let
+      cfg = config.plugins.${name};
+      # TODO support nested options!
+      pluginOptions = mapAttrs (k: v: v.option) options;
+      globals = mapAttrs'
+        (name: opt: {
+          name = opt.global;
+          value = if cfg.${name} != null then opt.value cfg.${name} else null;
+        })
+        options;
+      # does this evaluate package?
+      packageOption = if package == null then { } else {
+        package = mkOption {
+          type = types.package;
+          default = package;
+          description = "Plugin to use for ${name}";
+        };
+      };
+    in
+    {
+      options.plugins.${name} = {
+        enable = mkEnableOption description;
+      } // packageOption // pluginOptions;
+
+      config = mkIf cfg.enable {
+        inherit extraPackages globals;
+        # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
+        extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
+      };
+    };
+
+  globalVal = val:
+    if builtins.isBool val then
+      (if val == false then 0 else 1)
+    else val;
 
   mkDefaultOpt = { type, global, description ? null, example ? null, default ? null, value ? v: (globalVal v), ... }: {
     option = mkOption {
@@ -131,9 +159,9 @@ rec {
   mkRaw = r: { __raw = r; };
 
   wrapDo = string: ''
-  do
-    ${string}
-  end
+    do
+      ${string}
+    end
   '';
 
   rawType = types.submodule {

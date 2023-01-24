@@ -8,7 +8,7 @@ in
 {
   options = {
     plugins.dashboard = {
-      enable = mkEnableOption "Enable dashboard";
+      enable = mkEnableOption "dashboard";
 
       package = mkOption {
         type = types.package;

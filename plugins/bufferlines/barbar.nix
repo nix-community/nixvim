@@ -5,7 +5,7 @@ let
 in
 {
   options.plugins.barbar = {
-    enable = mkEnableOption "Enable barbar.nvim";
+    enable = mkEnableOption "barbar.nvim";
 
     package = mkOption {
       type = types.package;
@@ -32,13 +32,13 @@ in
     };
 
     icons = mkOption {
-      type = with types; nullOr (oneOf [bool (enum ["numbers both"])]);
+      type = with types; nullOr (oneOf [ bool (enum [ "numbers both" ]) ]);
       default = null;
       description = "Enable/disable icons";
     };
 
     iconCustomColors = mkOption {
-      type = with types; nullOr (oneOf [bool str]);
+      type = with types; nullOr (oneOf [ bool str ]);
       default = null;
       description = "Sets the icon highlight group";
     };
@@ -56,7 +56,8 @@ in
 
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [
-      cfg.package nvim-web-devicons
+      cfg.package
+      nvim-web-devicons
     ];
 
     # maps = genMaps cfg.keys;
