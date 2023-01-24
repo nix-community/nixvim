@@ -2,17 +2,13 @@
 with lib;
 let
   cfg = config.plugins.luasnip;
-  helpers = import ../../helpers.nix { lib = lib; };
+  helpers = import ../../helpers.nix { inherit lib; };
 in
 {
   options.plugins.luasnip = {
     enable = mkEnableOption "Enable luasnip";
 
-    package = mkOption {
-      default = pkgs.vimPlugins.luasnip;
-      type = types.package;
-      description = "Plugin to use for luasnip";
-    };
+    package = helpers.mkPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 
     fromVscode = mkOption {
       default = [ ];

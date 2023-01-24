@@ -7,11 +7,7 @@ in
   options.plugins.telescope.extensions.frecency = {
     enable = mkEnableOption "frecency";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.telescope-frecency-nvim;
-      description = "Plugin to use for telescope frecency";
-    };
+    package = helpers.mkPackageOption "telescope extension frecency" pkgs.vimPlugins.telescope-frecency-nvim;
 
     dbRoot = mkOption {
       type = types.nullOr types.str;

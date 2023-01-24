@@ -2,18 +2,14 @@
 with lib;
 let
   cfg = config.plugins.lspsaga;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
     plugins.lspsaga = {
       enable = mkEnableOption "lspsaga.nvim";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.lspsaga-nvim;
-        description = "Plugin to use for lspsaga.nvim";
-      };
+      package = helpers.mkPackageOption "lspsaga" pkgs.vimPlugins.lspsaga-nvim;
 
       signs = {
         use = mkOption {

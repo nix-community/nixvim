@@ -37,11 +37,7 @@ in
 {
   options.plugins.gitsigns = {
     enable = mkEnableOption "Enable gitsigns plugin";
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.gitsigns-nvim;
-      description = "Plugin to use for gitsigns";
-    };
+    package = helpers.mkPackageOption "gitsigns" pkgs.vimPlugins.gitsigns-nvim;
     signs = {
       add = signOptions {
         hl = "GitSignsAdd";

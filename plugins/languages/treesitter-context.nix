@@ -1,17 +1,14 @@
 { pkgs
 , lib
 , config
+, helpers
 , ...
 }:
 with lib; {
   options.plugins.treesitter-context = {
     enable = mkEnableOption "nvim-treesitter-context";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.nvim-treesitter-context;
-      description = "Plugin to use for nvim-treesitter-context";
-    };
+    package = helpers.mkPackageOption "treesitter-context" pkgs.vimPlugins.nvim-treesitter-context;
 
     maxLines = mkOption {
       type = types.nullOr types.ints.positive;

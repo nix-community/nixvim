@@ -1,8 +1,12 @@
-{ pkgs, config, lib, ... }:
+{ pkgs
+, config
+, lib
+, helpers
+, ...
+}:
 with lib;
 let
   cfg = config.plugins.telescope;
-  helpers = (import ../helpers.nix { inherit lib; });
 in
 {
   imports = [
@@ -18,11 +22,7 @@ in
   options.plugins.telescope = {
     enable = mkEnableOption "telescope.nvim";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.telescope-nvim;
-      description = "Plugin to use for telescope.nvim";
-    };
+    package = helpers.mkPackageOption "telescope.nvim" pkgs.vimPlugins.telescope-nvim;
 
     highlightTheme = mkOption {
       type = types.nullOr types.str;

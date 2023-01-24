@@ -58,7 +58,7 @@
                   modules = nixvimModules;
                 };
                 runUpdates = pkgs.callPackage
-                  ({ pkgs, stdenv }: stdenv.mkDerivation { 
+                  ({ pkgs, stdenv }: stdenv.mkDerivation {
                     pname = "run-updates";
                     version = pkgs.rust-analyzer.version;
 
@@ -67,7 +67,7 @@
                     nativeBuildInputs = with pkgs; [extractRustAnalyzerPkg alejandra nixpkgs-fmt];
 
                     buildPhase = ''
-                      extract_rust_analyzer.py editors/code/package.json | 
+                      extract_rust_analyzer.py editors/code/package.json |
                         alejandra --quiet |
                         nixpkgs-fmt > rust-analyzer-config.nix
                     '';

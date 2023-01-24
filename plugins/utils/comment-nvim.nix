@@ -9,11 +9,7 @@ in
     plugins.comment-nvim = {
       enable = mkEnableOption "Enable comment-nvim";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.comment-nvim;
-        description = "Plugin to use for comment-nvim";
-      };
+      package = helpers.mkPackageOption "comment-nvim" pkgs.vimPlugins.comment-nvim;
 
       padding = mkOption {
         type = types.nullOr types.bool;

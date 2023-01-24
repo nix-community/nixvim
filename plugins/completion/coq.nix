@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.plugins.coq-nvim;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
   plugins = import ../plugin-defs.nix { inherit pkgs; };
 
 in
@@ -11,11 +11,7 @@ in
     plugins.coq-nvim = {
       enable = mkEnableOption "coq-nvim";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.coq-vim;
-        description = "Plugin to use for coq-nvim";
-      };
+      package = helpers.mkPackageOption "coq-nvim" pkgs.vimPlugins.coq-nvim;
 
       installArtifacts = mkEnableOption "Install coq-artifacts";
 
