@@ -1,34 +1,27 @@
 { config
 , lib
 , pkgs
-, helpers
 , ...
-}:
+} @ args:
 with lib; let
-  signOptions = defaults:
-    with types; {
-      hl = mkOption {
-        type = str;
-        description = "Specifies the highlight group to use for the sign";
-        default = defaults.hl;
-      };
-      text = mkOption {
-        type = str;
-        description = "Specifies the character to use for the sign";
-        default = defaults.text;
-      };
-      numhl = mkOption {
-        type = str;
-        description = "Specifies the highlight group to use for the number column";
-        default = defaults.numhl;
-      };
-      linehl = mkOption {
-        type = str;
-        description = "Specifies the highlight group to use for the line";
-        default = defaults.linehl;
-      };
-      showCount = mkEnableOption "showing count of hunk, e.g. number of deleted lines";
-    };
+  helpers = import ../helpers.nix args;
+  signOptions = defaults: {
+    hl =
+      helpers.defaultNullOpts.mkStr defaults.hl
+        "Specifies the highlight group to use for the sign";
+    text =
+      helpers.defaultNullOpts.mkStr defaults.text
+        "Specifies the character to use for the sign";
+    numhl =
+      helpers.defaultNullOpts.mkStr defaults.numhl
+        "Specifies the highlight group to use for the number column";
+    linehl =
+      helpers.defaultNullOpts.mkStr defaults.linehl
+        "Specifies the highlight group to use for the line";
+    showCount =
+      helpers.defaultNullOpts.mkBool false
+        "showing count of hunk, e.g. number of deleted lines";
+  };
   signSetupOptions = values: {
     inherit (values) hl text numhl linehl;
     show_count = values.showCount;
@@ -135,52 +128,42 @@ in
     };
 
     watchGitDir = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether the watcher is enabled";
-      };
-      interval = mkOption {
-        type = types.int;
-        default = 1000;
-        description = "Interval the watcher waits between polls of the gitdir in milliseconds";
-      };
-      followFiles = mkOption {
-        type = types.bool;
-        default = true;
-        description = "If a file is moved with `git mv`, switch the buffer to the new location";
-      };
+      enable =
+        helpers.defaultNullOpts.mkBool true
+          "Whether the watcher is enabled";
+      interval =
+        helpers.defaultNullOpts.mkInt 1000
+          "Interval the watcher waits between polls of the gitdir in milliseconds";
+      followFiles =
+        helpers.defaultNullOpts.mkBool true
+          "If a file is moved with `git mv`, switch the buffer to the new location";
     };
-    signPriority = mkOption {
-      type = types.int;
-      default = 6;
-      description = "Priority to use for signs";
-    };
-    signcolumn = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Enable/disable symbols in the sign column.
+    signPriority =
+      helpers.defaultNullOpts.mkInt 6
+        "Priority to use for signs";
+    signcolumn =
+      helpers.defaultNullOpts.mkBool true
+        ''
+          Enable/disable symbols in the sign column.
 
-        When enabled the highlights defined in `signs.*.hl` and symbols defined
-        in `signs.*.text` are used.
-      '';
-    };
-    numhl = mkEnableOption ''
+          When enabled the highlights defined in `signs.*.hl` and symbols defined
+          in `signs.*.text` are used.
+        '';
+    numhl = helpers.defaultNullOpts.mkBool false ''
       line number highlights.
 
       When enabled the highlights defined in `signs.*.numhl` are used. If
       the highlight group does not exist, then it is automatically defined
       and linked to the corresponding highlight group in `signs.*.hl`.
     '';
-    linehl = mkEnableOption ''
+    linehl = helpers.defaultNullOpts.mkBool false ''
       line highlights.
 
       When enabled the highlights defined in `signs.*.linehl` are used. If
       the highlight group does not exist, then it is automatically defined
       and linked to the corresponding highlight group in `signs.*.hl`.
     '';
-    showDeleted = mkEnableOption ''
+    showDeleted = helpers.defaultNullOpts.mkBool false ''
       showing the old version of hunks inline in the buffer (via virtual lines).
 
       Note: Virtual lines currently use the highlight `GitSignsDeleteVirtLn`.
@@ -189,26 +172,18 @@ in
       let
         diffOptModule = {
           options = {
-            algorithm = mkOption {
-              type = types.enum [ "myers" "minimal" "patience" "histogram" ];
-              default = "myers";
-              description = "Diff algorithm to use";
-            };
-            internal = mkOption {
-              type = types.bool;
-              default = false;
-              description = "Use Neovim's built in xdiff library for running diffs";
-            };
-            indentHeuristic = mkOption {
-              type = types.bool;
-              default = false;
-              description = "Use the indent heuristic for the internal diff library.";
-            };
-            vertical = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Start diff mode with vertical splits";
-            };
+            algorithm =
+              helpers.defaultNullOpts.mkEnumFirstDefault [ "myers" "minimal" "patience" "histogram" ]
+                "Diff algorithm to use";
+            internal =
+              helpers.defaultNullOpts.mkBool false
+                "Use Neovim's built in xdiff library for running diffs";
+            indentHeuristic =
+              helpers.defaultNullOpts.mkBool false
+                "Use the indent heuristic for the internal diff library.";
+            vertical =
+              helpers.defaultNullOpts.mkBool true
+                "Start diff mode with vertical splits";
             linematch = mkOption {
               type = types.nullOr types.int;
               default = null;
@@ -230,21 +205,21 @@ in
       default = null;
       description = "The object/revision to diff against. Default to 'index'";
     };
-    countChars = mkOption {
-      type = types.attrsOf types.str;
-      default = {
-        "1" = "1";
-        "2" = "2";
-        "3" = "3";
-        "4" = "4";
-        "5" = "5";
-        "6" = "6";
-        "7" = "7";
-        "8" = "8";
-        "9" = "9";
-        "+" = ">";
-      };
-      description = ''
+    countChars =
+      helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) ''
+        {
+          "1" = "1";
+          "2" = "2";
+          "3" = "3";
+          "4" = "4";
+          "5" = "5";
+          "6" = "6";
+          "7" = "7";
+          "8" = "8";
+          "9" = "9";
+          "+" = ">";
+        }
+      '' ''
         The count characters used when `signs.*.show_count` is enabled. The
         `+` entry is used as a fallback. With the default, any count outside
         of 1-9 uses the `>` character in the sign.
@@ -253,11 +228,9 @@ in
           • to specify unicode characters for the counts instead of 1-9.
           • to define characters to be used for counts greater than 9.
       '';
-    };
-    statusFormatter = mkOption {
-      type = luaFunction;
-      default = {
-        function = ''
+    statusFormatter = helpers.defaultNullOpts.mkNullable luaFunction ''
+      {
+        function = \'\'
            function(status)
             local added, changed, removed = status.added, status.changed, status.removed
             local status_txt = {}
@@ -266,85 +239,67 @@ in
             if removed and removed > 0 then table.insert(status_txt, '-'..removed) end
             return table.concat(status_txt, ' ')
           end
-        '';
-      };
-      description = "Function used to format `b:gitsigns_status`";
-    };
-    maxFileLength = mkOption {
-      type = types.int;
-      default = 40000;
-      description = "Max file length (in lines) to attach to";
-    };
-    previewConfig = mkOption {
-      type = types.attrsOf types.anything;
-      default = {
-        border = "single";
-        style = "minimal";
-        relative = "cursor";
-        row = 0;
-        col = 1;
-      };
-      description = ''
+        \'\';
+      }
+    '' "Function used to format `b:gitsigns_status`";
+    maxFileLength =
+      helpers.defaultNullOpts.mkInt 40000
+        "Max file length (in lines) to attach to";
+    previewConfig =
+      helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) ''
+        {
+          border = "single";
+          style = "minimal";
+          relative = "cursor";
+          row = 0;
+          col = 1;
+        }
+      '' ''
         Option overrides for the Gitsigns preview window.
         Table is passed directly to `nvim_open_win`.
       '';
-    };
-    attachToUntracked = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Attach to untracked files.";
-    };
-    updateDebounce = mkOption {
-      type = types.number;
-      default = 100;
-      description = "Debounce time for updates (in milliseconds).";
-    };
-    currentLineBlame = mkEnableOption ''
+    attachToUntracked =
+      helpers.defaultNullOpts.mkBool true
+        "Attach to untracked files.";
+    updateDebounce =
+      helpers.defaultNullOpts.mkInt 100
+        "Debounce time for updates (in milliseconds).";
+    currentLineBlame = helpers.defaultNullOpts.mkBool false ''
       Adds an unobtrusive and customisable blame annotation at the end of the current line.
     '';
     currentLineBlameOpts = {
-      virtText = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether to show a virtual text blame annotation";
-      };
-      virtTextPos = mkOption {
-        type = types.enum [ "eol" "overlay" "right_align" ];
-        default = "eol";
-        description = "Blame annotation position";
-      };
-      delay = mkOption {
-        type = types.int;
-        default = 1000;
-        description = "Sets the delay (in milliseconds) before blame virtual text is displayed";
-      };
-      ignoreWhitespace = mkEnableOption "Ignore whitespace when running blame";
-      virtTextPriority = mkOption {
-        type = types.int;
-        default = 100;
-        description = "Priority of virtual text";
-      };
+      virtText =
+        helpers.defaultNullOpts.mkBool true
+          "Whether to show a virtual text blame annotation";
+      virtTextPos =
+        helpers.defaultNullOpts.mkEnumFirstDefault [ "eol" "overlay" "right_align" ]
+          "Blame annotation position";
+      delay =
+        helpers.defaultNullOpts.mkInt 1000
+          "Sets the delay (in milliseconds) before blame virtual text is displayed";
+      ignoreWhitespace =
+        helpers.defaultNullOpts.mkBool false
+          "Ignore whitespace when running blame";
+      virtTextPriority =
+        helpers.defaultNullOpts.mkInt 100
+          "Priority of virtual text";
     };
     currentLineBlameFormatter = {
-      normal = mkOption {
-        type = types.either types.str luaFunction;
-        default = " <author>, <author_time> - <summary>";
-        description = ''
+      normal =
+        helpers.defaultNullOpts.mkNullable (types.either types.str luaFunction)
+          ''" <author>, <author_time> - <summary>"'' ''
           String or function used to format the virtual text of
           |gitsigns-config-current_line_blame|.
 
           See |gitsigns-config-current_line_blame_formatter| for more details.
         '';
-      };
 
-      nonCommitted = mkOption {
-        type = types.either types.str luaFunction;
-        default = " <author>";
-        description = ''
+      nonCommitted =
+        helpers.defaultNullOpts.mkNullable (types.either types.str luaFunction)
+          ''" <author>"'' ''
           String or function used to format the virtual text of
           |gitsigns-config-current_line_blame| for lines that aren't committed.
         '';
-      };
     };
     trouble = mkOption {
       type = types.nullOr types.bool;
@@ -354,12 +309,12 @@ in
         window.
       '';
     };
-    yadm.enable = mkEnableOption "YADM support";
-    wordDiff = mkEnableOption ''
+    yadm.enable = helpers.defaultNullOpts.mkBool false "YADM support";
+    wordDiff = helpers.defaultNullOpts.mkBool false ''
       Highlight intra-line word differences in the buffer.
       Requires `config.diff_opts.internal = true`.
     '';
-    debugMode = mkEnableOption ''
+    debugMode = helpers.defaultNullOpts.mkBool false ''
       Enables debug logging and makes the following functions available: `dump_cache`,
       `debug_messages`, `clear_debug`.
     '';
@@ -370,13 +325,13 @@ in
       cfg = config.plugins.gitsigns;
     in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [
-        cfg.package
-      ];
+      extraPlugins = [ cfg.package ];
       extraConfigLua =
         let
           luaFnOrStrToObj = val:
-            if builtins.isString val
+            if val == null
+            then null
+            else if builtins.isString val
             then val
             else { __raw = val.function; };
           setupOptions = {
@@ -403,7 +358,8 @@ in
               let
                 isStrInt = s: (builtins.match "[0-9]+" s) != null;
               in
-              {
+              if cfg.countChars != null
+              then {
                 __raw =
                   "{"
                   + (concatStringsSep "," (
@@ -417,8 +373,12 @@ in
                       cfg.countChars
                   ))
                   + "}";
-              };
-            status_formatter = { __raw = cfg.statusFormatter.function; };
+              }
+              else null;
+            status_formatter =
+              if cfg.statusFormatter != null
+              then { __raw = cfg.statusFormatter.function; }
+              else null;
             max_file_length = cfg.maxFileLength;
             preview_config = cfg.previewConfig;
             attach_to_untracked = cfg.attachToUntracked;
