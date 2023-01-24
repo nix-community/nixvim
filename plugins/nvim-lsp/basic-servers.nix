@@ -4,6 +4,12 @@ let
   helpers = import ./helpers.nix args;
   servers = [
     {
+      name = "astro";
+      description = "Enable astrols, for Astro";
+      package = pkgs.nodePackages."@astrojs/language-server";
+      cmd = cfg: [ "${cfg.package}/bin/astrols" "--stdio" ];
+    }
+    {
       name = "bashls";
       description = "Enable bashls, for bash.";
       package = pkgs.nodePackages.bash-language-server;
