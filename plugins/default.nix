@@ -54,6 +54,7 @@
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
+    ./utils/harpoon.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
     ./utils/notify.nix
