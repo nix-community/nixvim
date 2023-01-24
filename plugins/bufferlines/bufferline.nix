@@ -1,8 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }@args:
 with lib;
 let
   cfg = config.plugins.bufferline;
-  helpers = import ../helpers.nix { inherit lib; };
+  optionWarnings = import ../../lib/option-warnings.nix args;
+  helpers = import ../helpers.nix args;
 
   highlight = mkOption {
     type = types.nullOr (types.submodule ({ ... }: {
@@ -23,6 +24,13 @@ let
   };
 in
 {
+  imports = [
+    (optionWarnings.mkDeprecatedOption {
+      option = [ "plugins" "bufferline" "indicatorIcon" ];
+      alternative = [ "plugins" "bufferline" "indicator" "icon" ];
+    })
+  ];
+
   options = {
     plugins.bufferline = {
       enable = mkEnableOption "bufferline";
@@ -56,6 +64,7 @@ in
         description = "Command or function run when middle clicking on a buffer.";
         default = null;
       };
+      # is deprecated, but might still work
       indicatorIcon = mkOption {
         type = types.nullOr types.str;
         description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended,
@@ -157,6 +166,21 @@ in
         type = types.nullOr (types.enum [ "id" "extension" "relative_directory" "directory" "tabs" ]);
         default = null;
       };
+      indicator = mkOption {
+        default = null;
+        type = types.nullOr (types.submodule ({ ... }: {
+          options = {
+            icon = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
+            style = mkOption {
+              type = types.nullOr (types.enum [ "icon" "underline" "none" ]);
+              default = null;
+            };
+          };
+        }));
+      };
       highlights = mkOption {
         default = null;
         type = types.nullOr (types.submodule ({ ... }: {
@@ -241,7 +265,12 @@ in
           right_mouse_command = cfg.rightMouseCommand;
           left_mouse_command = cfg.leftMouseCommand;
           middle_mouse_command = cfg.middleMouseCommand;
+          # deprecated, but might still work
           indicator_icon = cfg.indicatorIcon;
+          indicator = {
+            icon = cfg.indicator.icon;
+            style = cfg.indicator.style;
+          };
           buffer_close_icon = cfg.bufferCloseIcon;
           modified_icon = cfg.modifiedIcon;
           close_icon = cfg.closeIcon;

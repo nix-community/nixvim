@@ -1,8 +1,9 @@
 modules:
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, ... }@args:
 
 let
   inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
+  shared = import ./_shared.nix args;
   cfg = config.programs.nixvim;
 in
 {
@@ -10,21 +11,19 @@ in
     programs.nixvim = mkOption {
       type = types.submodule ((modules pkgs) ++ [{
         options.enable = mkEnableOption "nixvim";
-	config.wrapRc = mkForce true;
+        config.wrapRc = mkForce true;
       }]);
     };
-    nixvim.helpers = mkOption {
-      type = mkOptionType {
-        name = "helpers";
-        description = "Helpers that can be used when writing nixvim configs";
-        check = builtins.isAttrs;
-      };
-      description = "Use this option to access the helpers";
-      default = import ../plugins/helpers.nix { inherit (pkgs) lib; };
-    };
+    nixvim.helpers = shared.helpers;
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.finalPackage ];
-  };
+  config = mkIf cfg.enable mkMerge [
+    {
+      environment.systemPackages = [ cfg.finalPackage ];
+    }
+    {
+      warnings = cfg.warnings;
+      assertions = cfg.assertions;
+    }
+  ];
 }
