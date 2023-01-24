@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.plugins.intellitab;
+  helpers = import ../helpers.nix { inherit lib; };
   defs = import ../plugin-defs.nix { inherit pkgs; };
 in
 {
@@ -9,11 +10,7 @@ in
     plugins.intellitab = {
       enable = mkEnableOption "intellitab.nvim";
 
-      package = mkOption {
-        type = types.package;
-        default = defs.intellitab-nvim;
-        description = "Plugin to use for intellitab.nvim";
-      };
+      package = helpers.mkPackageOption "intellitab.nvim" defs.intellitab-nvim;
     };
   };
 

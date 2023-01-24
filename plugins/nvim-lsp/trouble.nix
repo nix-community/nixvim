@@ -9,11 +9,7 @@ with lib;
   options.plugins.trouble = {
     enable = mkEnableOption "trouble.nvim";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.trouble-nvim;
-      description = "Plugin to use for trouble-nvim";
-    };
+    package = helpers.mkPackageOption "trouble-nvim" pkgs.vimPlugins.trouble-nvim;
 
     position = helpers.mkNullOrOption (types.enum [ "top" "left" "right" "bottom" ]) "Position of the list";
     height = helpers.mkNullOrOption types.int "Height of the trouble list when position is top or bottom";

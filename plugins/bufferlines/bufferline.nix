@@ -34,11 +34,7 @@ in
   options = {
     plugins.bufferline = {
       enable = mkEnableOption "bufferline";
-      package = mkOption {
-        type = types.package;
-        description = "Plugin to use for bufferline";
-        default = pkgs.vimPlugins.bufferline-nvim;
-      };
+      package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
       numbers = mkOption {
         type = types.nullOr types.lines;
         description = "A lua function customizing the styling of numbers.";

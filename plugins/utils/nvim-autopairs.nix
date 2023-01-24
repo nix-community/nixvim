@@ -2,17 +2,13 @@
 with lib;
 let
   cfg = config.plugins.nvim-autopairs;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options.plugins.nvim-autopairs = {
     enable = mkEnableOption "nvim-autopairs";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.nvim-autopairs;
-      description = "Plugin to use for nvim-autopairs";
-    };
+    package = helpers.mkPackageOption "nvim-autopairs" pkgs.vimPlugins.nvim-autopairs;
 
     pairs = mkOption {
       type = types.nullOr (types.attrsOf types.str);

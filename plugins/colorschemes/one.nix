@@ -2,17 +2,14 @@
 with lib;
 let
   cfg = config.colorschemes.one;
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
     colorschemes.one = {
       enable = mkEnableOption "vim-one";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.vim-one;
-        description = "Plugin to use for one";
-      };
+      package = helpers.mkPackageOption "one" pkgs.vimPlugins.vim-one;
     };
   };
 

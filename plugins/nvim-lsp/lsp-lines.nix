@@ -2,18 +2,14 @@
 with lib;
 let
   cfg = config.plugins.lsp-lines;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
     plugins.lsp-lines = {
       enable = mkEnableOption "lsp_lines.nvim";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.lsp_lines-nvim;
-        description = "Plugin to use for lsp_lines.nvim";
-      };
+      package = helpers.mkPackageOption "lsp_lines.nvim" pkgs.vimPlugins.lsp_lines-nvim;
 
       currentLine = mkOption {
         type = types.bool;

@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.plugins.lualine;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
   separators = mkOption {
     type = types.nullOr (types.submodule {
       options = {
@@ -58,11 +58,7 @@ in
     plugins.lualine = {
       enable = mkEnableOption "lualine";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.lualine-nvim;
-        description = "Plugin to use for lualine";
-      };
+      package = helpers.mkPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
 
       theme = mkOption {
         default = config.colorscheme;

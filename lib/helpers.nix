@@ -92,6 +92,12 @@ rec {
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
   };
 
+  mkPackageOption = name: default: mkOption {
+    type = types.package;
+    inherit default;
+    description = "Plugin to use for ${name}";
+  };
+
   mkPlugin = { config, lib, ... }: { name
                                    , description
                                    , package ? null
@@ -112,11 +118,7 @@ rec {
         options;
       # does this evaluate package?
       packageOption = if package == null then { } else {
-        package = mkOption {
-          type = types.package;
-          default = package;
-          description = "Plugin to use for ${name}";
-        };
+        package = mkPackageOption name package;
       };
     in
     {

@@ -10,11 +10,7 @@ in
     plugins.dashboard = {
       enable = mkEnableOption "dashboard";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.dashboard-nvim;
-        description = "Plugin to use for dashboard-nvim";
-      };
+      package = helpers.mkPackageOption "dashboard" pkgs.vimPlugins.dashboard-nvim;
 
       header = mkOption {
         description = "Header text";

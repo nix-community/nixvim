@@ -2,16 +2,13 @@
 with lib;
 let
   cfg = config.plugins.copilot;
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
     plugins.copilot = {
       enable = mkEnableOption "copilot";
-      package = mkOption {
-        type = types.package;
-        description = "The copilot plugin package to use";
-        default = pkgs.vimPlugins.copilot-vim;
-      };
+      package = helpers.mkPackageOption "copilot" pkgs.vimPlugins.copilot-vim;
       filetypes = mkOption {
         type = types.attrsOf types.bool;
         description = "A dictionary mapping file types to their enabled status";

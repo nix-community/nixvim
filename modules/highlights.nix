@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  helpers = import ../plugins/helpers.nix { inherit lib; };
+  helpers = import ../lib/helpers.nix { inherit lib; };
 in
 with lib;
 {

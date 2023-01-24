@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.plugins.nvim-cmp;
-  helpers = import ../../helpers.nix { lib = lib; };
+  helpers = import ../../helpers.nix { inherit lib; };
   mkNullOrOption = helpers.mkNullOrOption;
   cmpLib = import ./cmp-helpers.nix args;
   # functionName should be a string
@@ -17,11 +17,7 @@ in
   options.plugins.nvim-cmp = {
     enable = mkEnableOption "nvim-cmp";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.nvim-cmp;
-      description = "Plugin to use for nvim-cmp";
-    };
+    package = helpers.mkPackageOption "nvim-cmp" pkgs.vimPlugins.nvim-cmp;
 
     performance = mkOption {
       default = null;
