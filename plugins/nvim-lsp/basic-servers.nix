@@ -7,7 +7,7 @@ let
       name = "astro";
       description = "Enable astrols, for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
-      cmd = cfg: [ "${cfg.package}/bin/astrols" "--stdio" ];
+      cmd = cfg: [ "${cfg.package}/bin/astro-ls" "--stdio" ];
     }
     {
       name = "bashls";
