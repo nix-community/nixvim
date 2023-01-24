@@ -51,6 +51,11 @@ with lib; {
         default = pkgs.vimPlugins.rust-tools-nvim;
         description = "Package to use for rust-tools";
       };
+      serverPackage = mkOption {
+        type = types.package;
+        default = pkgs.rust-analyzer;
+        description = "Package to use for rust-analyzer";
+      };
 
       executor = mkNullableOptionWithDefault {
         type = types.enum [ "termopen" "quickfix" ];
@@ -160,6 +165,7 @@ with lib; {
     in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [ nvim-lspconfig cfg.package ];
+      extraPackages = [ cfg.serverPackage ];
 
       plugins.lsp.postConfig =
         let
