@@ -46,7 +46,11 @@ with lib; {
     in
     {
       enable = mkEnableOption "rust tools plugins";
-      package = helpers.mkPackageOption "rust-tools" pkgs.vimPlugins.rust-tools-nvim;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.rust-tools-nvim;
+        description = "Package to use for rust-tools";
+      };
       serverPackage = mkOption {
         type = types.package;
         default = pkgs.rust-analyzer;

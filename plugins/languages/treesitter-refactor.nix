@@ -3,11 +3,7 @@
 , lib
 , ...
 }:
-with lib;
-let
-  helpers = import ../helpers.nix { inherit lib; };
-in
-{
+with lib; {
   options.plugins.treesitter-refactor =
     let
       disable = mkOption {
@@ -21,7 +17,11 @@ in
         mkEnableOption
           "treesitter-refactor (requires plugins.treesitter.enable to be true)";
 
-      package = helpers.mkPackageOption "treesitter-refactor" pkgs.vimPlugins.nvim-treesitter-refactor;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.nvim-treesitter-refactor;
+        description = "Plugin to use for treesitter-refactor";
+      };
 
       highlightDefinitions = {
         inherit disable;

@@ -2,14 +2,17 @@
 with lib;
 let
   cfg = config.colorschemes.nord;
-  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options = {
     colorschemes.nord = {
       enable = mkEnableOption "nord";
 
-      package = helpers.mkPackageOption "nord.vim" pkgs.vimPlugins.nord-nvim;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.nord-nvim;
+        description = "Plugin to use for nord.nvim";
+      };
 
       contrast = mkEnableOption
         "Make sidebars and popup menus like nvim-tree and telescope have a different background";

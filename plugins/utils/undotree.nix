@@ -9,7 +9,11 @@ in
     plugins.undotree = {
       enable = mkEnableOption "Enable undotree";
 
-      package = helpers.mkPackageOption "undotree" pkgs.vimPlugins.undotree;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.undotree;
+        description = "Plugin to use for undotree";
+      };
 
       windowLayout = mkOption {
         type = types.nullOr types.int;
