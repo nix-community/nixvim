@@ -20,7 +20,7 @@ let
         };
       };
     }));
-    default = null;
+    default = { };
   };
 in
 {
@@ -182,7 +182,7 @@ in
         }));
       };
       highlights = mkOption {
-        default = null;
+        default = { };
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
             fill = highlight;
