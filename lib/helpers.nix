@@ -73,6 +73,8 @@ rec {
     description = desc;
   };
 
+  mkIfNonNull = c: mkIf (!isNull c) c;
+
   defaultNullOpts = rec {
     mkNullable = type: default: desc: mkNullOrOption type (
       let
