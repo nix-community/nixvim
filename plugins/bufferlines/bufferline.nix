@@ -167,7 +167,7 @@ in
         default = null;
       };
       indicator = mkOption {
-        default = null;
+        default = { };
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
             icon = mkOption {
