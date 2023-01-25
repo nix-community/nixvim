@@ -10,11 +10,7 @@ in
   options.plugins.mark-radar = {
     enable = mkEnableOption "mark-radar";
 
-    package = mkOption {
-      type = types.package;
-      default = defs.mark-radar;
-      description = "Plugin to use for mark-radar";
-    };
+    package = helpers.mkPackageOption "mark-radar" defs.mark-radar;
 
     highlight_background = mkOption {
       type = with types; nullOr bool;

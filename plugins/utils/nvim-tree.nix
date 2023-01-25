@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.plugins.nvim-tree;
-  helpers = import ../helpers.nix { lib = lib; };
+  helpers = import ../helpers.nix { inherit lib; };
   optionWarnings = import ../../lib/option-warnings.nix args;
   basePluginPath = [ "plugins" "nvim-tree" ];
 in
@@ -21,11 +21,7 @@ in
   options.plugins.nvim-tree = {
     enable = mkEnableOption "nvim-tree";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.nvim-tree-lua;
-      description = "Plugin to use for nvim-tree";
-    };
+    package = helpers.mkPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
 
     disableNetrw = mkOption {
       type = types.nullOr types.bool;

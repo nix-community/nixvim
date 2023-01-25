@@ -18,11 +18,7 @@ in
     plugins.neogit = {
       enable = mkEnableOption "neogit";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.neogit;
-        description = "Plugin to use for neogit";
-      };
+      package = helpers.mkPackageOption "neogit" pkgs.vimPlugins.neogit;
 
       disableSigns = mkOption {
         description = "Disable signs";

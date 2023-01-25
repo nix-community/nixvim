@@ -2,16 +2,13 @@
 with lib;
 let
   cfg = config.plugins.telescope.extensions.media_files;
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options.plugins.telescope.extensions.media_files = {
     enable = mkEnableOption "Enable media_files extension for telescope";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.telescope-media-files-nvim;
-      description = "Plugin to use for telescope extension media_files";
-    };
+    package = helpers.mkPackageOption "telescope extension media_files" pkgs.vimPlugins.telescope-media-files-nvim;
 
     filetypes = mkOption {
       default = null;

@@ -1,7 +1,7 @@
 { config, lib, ... }:
 with lib;
 let
-  helpers = import ../plugins/helpers.nix { inherit lib; };
+  helpers = import ../lib/helpers.nix { inherit lib; };
 
   mapOption = types.oneOf [
     types.str

@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.plugins.commentary;
+  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   # TODO Add support for aditional filetypes. This requires autocommands!
@@ -10,11 +11,7 @@ in
     plugins.commentary = {
       enable = mkEnableOption "commentary";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.vim-commentary;
-        description = "Plugin to use for vim-commentary";
-      };
+      package = helpers.mkPackageOption "commentary" pkgs.vimPlugins.vim-commentary;
     };
   };
 

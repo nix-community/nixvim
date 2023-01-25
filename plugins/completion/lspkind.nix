@@ -8,11 +8,7 @@ in
   options.plugins.lspkind = {
     enable = mkEnableOption "lspkind.nvim";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vimPlugins.lspkind-nvim;
-      description = "Plugin to use for lspkind.nvim";
-    };
+    package = helpers.mkPackageOption "lspkind" pkgs.vimPlugins.lspkind-nvim;
 
     mode = mkOption {
       type = with types; nullOr (enum [ "text" "text_symbol" "symbol_text" "symbol" ]);

@@ -9,11 +9,7 @@ in
   options = {
     colorschemes.tokyonight = {
       enable = mkEnableOption "tokyonight";
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vimPlugins.tokyonight-nvim;
-        description = "Plugin to use for tokyonight";
-      };
+      package = helpers.mkPackageOption "tokyonight" pkgs.vimPlugins.tokyonight-nvim;
       style = mkOption {
         type = style;
         default = "storm";
