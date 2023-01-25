@@ -13,7 +13,7 @@ in
       newOption = basePluginPath ++ [ "syncRootWithCwd" ];
     })
     (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ [ "updateFocusedFile" "updatedCwd" ];
+      option = basePluginPath ++ [ "updateFocusedFile" "updateCwd" ];
       newOption = basePluginPath ++ [ "updateFocusedFile" "updateRoot" ];
     })
   ];
