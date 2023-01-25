@@ -9,7 +9,11 @@ in
     plugins.lightline = {
       enable = mkEnableOption "lightline";
 
-      package = helpers.mkPackageOption "lightline" pkgs.vimPlugins.lightline-vim;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.lightline-vim;
+        description = "Plugin to use for lightline";
+      };
 
       colorscheme = mkOption {
         type = with types; nullOr str;

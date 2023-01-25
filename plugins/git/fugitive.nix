@@ -1,6 +1,6 @@
 { lib, pkgs, ... }@attrs:
 let
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { lib = lib; };
 in with helpers; with lib;
 mkPlugin attrs {
   name = "fugitive";

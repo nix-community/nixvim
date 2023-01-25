@@ -1,4 +1,4 @@
-{ pkgs, config, lib, helpers, ... }:
+{ pkgs, config, lib, ... }:
 with lib;
 let
   cfg = config.plugins.telescope.extensions.fzf-native;
@@ -7,7 +7,11 @@ in
   options.plugins.telescope.extensions.fzf-native = {
     enable = mkEnableOption "Enable fzf-native";
 
-    package = helpers.mkPackageOption "telescope extension fzf-native" pkgs.vimPlugins.telescope-fzf-native-nvim;
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.telescope-fzf-native-nvim;
+      description = "Plugin to use for telescope extension fzf-native";
+    };
 
     fuzzy = mkOption {
       type = types.nullOr types.bool;

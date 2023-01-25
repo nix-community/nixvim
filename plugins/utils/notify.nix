@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.plugins.notify;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix { lib = lib; };
   icon = mkOption {
     type = types.nullOr types.str;
     default = null;
@@ -12,7 +12,11 @@ in
   options.plugins.notify = {
     enable = mkEnableOption "notify";
 
-    package = helpers.mkPackageOption "notify" pkgs.vimPlugins.nvim-notify;
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-notify;
+      description = "Plugin to use for notify";
+    };
 
     stages = mkOption {
       type = types.nullOr (types.enum [ "fade_in_slide_out" "fade" "slide" "static" ]);

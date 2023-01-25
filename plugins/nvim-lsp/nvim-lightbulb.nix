@@ -10,7 +10,11 @@ with lib; {
   options.plugins.nvim-lightbulb = {
     enable = mkEnableOption "nvim-lightbulb, showing available code actions";
 
-    package = helpers.mkPackageOption "nvim-lightbulb" pkgs.vimPlugins.nvim-lightbulb;
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.nvim-lightbulb;
+      description = "Plugin to use for nvim-lightbulb";
+    };
 
     ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
       LSP client names to ignore

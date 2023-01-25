@@ -9,7 +9,11 @@ in
     plugins.intellitab = {
       enable = mkEnableOption "intellitab.nvim";
 
-      package = helpers.mkPackageOption "intellitab.nvim" pkgs.vimPlugins.intellitab-nvim;
+      package = mkOption {
+        type = types.package;
+        default = defs.intellitab-nvim;
+        description = "Plugin to use for intellitab.nvim";
+      };
     };
   };
 

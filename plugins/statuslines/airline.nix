@@ -16,7 +16,11 @@ in
     plugins.airline = {
       enable = mkEnableOption "airline";
 
-      package = helpers.mkPackageOption "airline" pkgs.vimPlugins.vim-airline;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.vim-airline;
+        description = "Plguin to use for airline";
+      };
 
       extensions = mkOption {
         default = null;

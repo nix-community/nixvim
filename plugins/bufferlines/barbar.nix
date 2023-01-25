@@ -2,13 +2,16 @@
 with lib;
 let
   cfg = config.plugins.barbar;
-  helpers = import ../helpers.nix { inherit lib; };
 in
 {
   options.plugins.barbar = {
     enable = mkEnableOption "barbar.nvim";
 
-    package = helpers.mkPackageOption "barbar" pkgs.vimPlugins.barbar-nvim;
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vimPlugins.barbar-nvim;
+      description = "Plugin to use for barbar";
+    };
 
     animations = mkOption {
       type = types.nullOr types.bool;

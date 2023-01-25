@@ -9,7 +9,11 @@ in
     plugins.gitgutter = {
       enable = mkEnableOption "gitgutter";
 
-      package = helpers.mkPackageOption "gitgutter" pkgs.vimPlugins.gitgutter;
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vimPlugins.gitgutter;
+        description = "Plugin to use for gitgutter";
+      };
 
       recommendedSettings = mkOption {
         type = types.bool;
