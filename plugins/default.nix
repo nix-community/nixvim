@@ -20,7 +20,8 @@
     ./git/gitgutter.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
-
+  
+    ./languages/clangd-extensions.nix
     ./languages/ledger.nix
     ./languages/nix.nix
     ./languages/plantuml-syntax.nix
