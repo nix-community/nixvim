@@ -25,6 +25,7 @@
     ./languages/nix.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust.nix
+    ./languages/tagbar.nix
     ./languages/treesitter.nix
     ./languages/treesitter-context.nix
     ./languages/treesitter-refactor.nix
