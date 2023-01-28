@@ -263,7 +263,11 @@ in
           middle_mouse_command = cfg.middleMouseCommand;
           # deprecated, but might still work
           indicator_icon = cfg.indicatorIcon;
-          indicator = cfg.indicator;
+          indicator =
+            if cfg.indicator != null then with cfg.indicator; {
+              icon = icon;
+              style = style;
+            } else null;
           buffer_close_icon = cfg.bufferCloseIcon;
           modified_icon = cfg.modifiedIcon;
           close_icon = cfg.closeIcon;
