@@ -21,6 +21,7 @@
     ./git/gitmessenger.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
+
     ./languages/clangd-extensions.nix
     ./languages/ledger.nix
     ./languages/markdown-preview.nix

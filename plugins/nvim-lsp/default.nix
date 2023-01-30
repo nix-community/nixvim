@@ -44,6 +44,12 @@ in {
         default = "";
       };
 
+      capabilities = mkOption {
+        type = types.lines;
+        description = "Lua code that modifies inplace the `capabilities` table.";
+        default = "";
+      };
+
       setupWrappers = mkOption {
         type = with types; listOf (functionTo str);
         description = "Code to be run to wrap the setup args. Takes in an argument containing the previous results, and returns a new string of code.";
@@ -78,13 +84,22 @@ in {
         -- LSP {{{
         do
           ${cfg.preConfig}
+
           local __lspServers = ${helpers.toLuaObject cfg.enabledServers}
           local __lspOnAttach = function(client, bufnr)
             ${cfg.onAttach}
           end
+          local __lspCapabilities = function()
+            capabilities = vim.lsp.protocol.make_client_capabilities()
+
+            ${cfg.capabilities}
+
+            return capabilities
+          end
 
           local __setup = ${runWrappers cfg.setupWrappers "{
-            on_attach = __lspOnAttach
+            on_attach = __lspOnAttach,
+            capabilities = __lspCapabilities()
           }"}
 
           for i,server in ipairs(__lspServers) do

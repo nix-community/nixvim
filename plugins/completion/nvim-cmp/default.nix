@@ -453,6 +453,14 @@ in {
           })
           known_source_names);
       in
-        mkIf cfg.auto_enable_sources attrs_enabled;
+        mkMerge [
+          (mkIf cfg.auto_enable_sources attrs_enabled)
+          (mkIf (elem "nvim_lsp" found_sources)
+            {
+              lsp.capabilities = ''
+                capabilities = require('cmp_nvim_lsp').default_capabilities()
+              '';
+            })
+        ];
     };
 }
