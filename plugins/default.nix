@@ -55,6 +55,7 @@
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
+    ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
     ./utils/notify.nix
