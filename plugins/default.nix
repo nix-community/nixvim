@@ -18,6 +18,7 @@
 
     ./git/fugitive.nix
     ./git/gitgutter.nix
+    ./git/gitmessenger.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
   
