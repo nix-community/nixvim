@@ -68,6 +68,7 @@
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/undotree.nix
+    ./utils/vim-matchup.nix
     ./utils/dashboard.nix
     ./utils/emmet.nix
     ./utils/magma-nvim.nix
