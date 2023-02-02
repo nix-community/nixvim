@@ -27,18 +27,18 @@ let
         Pattern or patterns to match literally against.
       '';
 
-      buffer = helpers.defaultNullOpts.mkInt null ''
+      buffer = helpers.defaultNullOpts.mkInt "" ''
         Buffer number for buffer local autocommands |autocmd-buflocal|.
         Cannot be used with <pattern>.
       '';
 
       description = helpers.defaultNullOpts.mkStr "" "A textual description of this autocommand.";
 
-      callback = helpers.defaultNullOpts.mkStr null ''
+      callback = helpers.defaultNullOpts.mkStr "" ''
         The name of a Vimscript function to call when this autocommand is triggered. Cannot be used with <command>.
       '';
 
-      command = helpers.defaultNullOpts.mkStr null ''
+      command = helpers.defaultNullOpts.mkStr "" ''
         Vim command to execute on event. Cannot be used with <callback>
       '';
 
