@@ -8,7 +8,7 @@ with lib; let
 in
 {
   options.plugins.indent-blankline = {
-    enable = helpers.defaultNullOpts.mkBool false "Enable indent-blankline.nvim";
+    enable = mkEnableOption "indent-blankline.nvim";
 
     package = helpers.mkPackageOption "indent-blankline" pkgs.vimPlugins.indent-blankline-nvim;
 
