@@ -33,6 +33,7 @@ in
       settings = {
         auto_start = cfg.autoStart;
         "keymap.recommended" = cfg.recommendedKeymaps;
+        xdg = true;
       };
     in
     mkIf cfg.enable {
