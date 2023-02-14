@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 let
   inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
