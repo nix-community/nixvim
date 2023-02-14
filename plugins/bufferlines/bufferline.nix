@@ -20,7 +20,7 @@ let
         };
       };
     }));
-    default = null;
+    default = { };
   };
 in
 {
@@ -163,7 +163,7 @@ in
         default = null;
       };
       indicator = mkOption {
-        default = null;
+        default = { };
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
             icon = mkOption {
@@ -178,7 +178,7 @@ in
         }));
       };
       highlights = mkOption {
-        default = null;
+        default = { };
         type = types.nullOr (types.submodule ({ ... }: {
           options = {
             fill = highlight;
