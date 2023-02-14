@@ -7,7 +7,7 @@ let
   projectConfigModule = types.submodule {
     options = {
       termCommands = helpers.mkNullOrOption (types.listOf types.str) ''
-          List of predefined terminal commands for this project.
+        List of predefined terminal commands for this project.
       '';
 
       marks = helpers.mkNullOrOption (types.listOf types.str) ''
@@ -47,13 +47,12 @@ in
     '';
 
     projects = mkOption {
-      default = {};
+      default = { };
       description = ''
         Predefined projetcs. The keys of this attrs should be the path to the project.
         $HOME is working.
-
-        Example:
-
+      '';
+      example = ''
         projects = {
           "$HOME/personal/vim-with-me/server" = {
             term.cmds = [
@@ -84,12 +83,14 @@ in
 
   config =
     let
-      projects = builtins.mapAttrs (
-        name: value: {
-          term.cmds = value.termCommands;
-          mark.marks = map (mark: { filename = mark; }) value.marks;
-        }
-      ) cfg.projects;
+      projects = builtins.mapAttrs
+        (
+          name: value: {
+            term.cmds = value.termCommands;
+            mark.marks = map (mark: { filename = mark; }) value.marks;
+          }
+        )
+        cfg.projects;
 
       options = {
         global_settings = {
