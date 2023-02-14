@@ -21,7 +21,6 @@
     ./git/gitmessenger.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
-  
     ./languages/clangd-extensions.nix
     ./languages/ledger.nix
     ./languages/markdown-preview.nix
@@ -57,6 +56,10 @@
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
+    <<<<<<< HEAD
+    ./utils/harpoon.nix
+    =======
+    >>>>>>> origin/main
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
