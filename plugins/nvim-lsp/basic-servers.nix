@@ -125,7 +125,7 @@ let
       name = "eslint";
       description = "Enable eslint";
       package = pkgs.nodePackages.vscode-langservers-extracted;
-      cmd = cfg: [ "${cfg.package}/bin/vscode-eslint-langauge-server" "--stdio" ];
+      cmd = cfg: [ "${cfg.package}/bin/vscode-eslint-language-server" "--stdio" ];
     }
     {
       name = "elixirls";
