@@ -18,10 +18,13 @@
 
     ./git/fugitive.nix
     ./git/gitgutter.nix
+    ./git/gitmessenger.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
 
+    ./languages/clangd-extensions.nix
     ./languages/ledger.nix
+    ./languages/markdown-preview.nix
     ./languages/nix.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust.nix
@@ -55,6 +58,7 @@
     ./utils/floaterm.nix
     ./utils/goyo.nix
     ./utils/harpoon.nix
+    ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
     ./utils/notify.nix

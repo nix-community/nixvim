@@ -1,75 +1,56 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
+{ pkgs
+, config
+, lib
+, ...
+}@args:
+with lib; let
   cfg = config.colorschemes.tokyonight;
-  style = types.enum [ "storm" "night" "day" ];
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix args;
 in
 {
   options = {
     colorschemes.tokyonight = {
       enable = mkEnableOption "tokyonight";
       package = helpers.mkPackageOption "tokyonight" pkgs.vimPlugins.tokyonight-nvim;
-      style = mkOption {
-        type = style;
-        default = "storm";
-        description = "Theme style";
-      };
-      terminalColors = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Configure the colors used when opening a :terminal in Neovim";
-      };
-      transparent = mkEnableOption "disable setting the background color";
+      style = helpers.defaultNullOpts.mkEnumFirstDefault [ "storm" "night" "day" ] "Theme style";
+      terminalColors =
+        helpers.defaultNullOpts.mkBool true
+          "Configure the colors used when opening a :terminal in Neovim";
+      transparent = helpers.defaultNullOpts.mkBool false "disable setting the background color";
       styles =
         let
-          mkBackgroundStyle = name: mkOption {
-            type = types.enum [ "dark" "transparent" "normal" ];
-            description = "Background style for ${name}";
-            default = "dark";
-          };
+          mkBackgroundStyle = name:
+            helpers.defaultNullOpts.mkEnumFirstDefault [ "dark" "transparent" "normal" ]
+              "Background style for ${name}";
         in
         {
-          comments = mkOption {
-            type = types.attrsOf types.anything;
-            description = "Define comments highlight properties";
-            default = { italic = true; };
-          };
-          keywords = mkOption {
-            type = types.attrsOf types.anything;
-            description = "Define keywords highlight properties";
-            default = { italic = true; };
-          };
-          functions = mkOption {
-            type = types.attrsOf types.anything;
-            description = "Define functions highlight properties";
-            default = { };
-          };
-          variables = mkOption {
-            type = types.attrsOf types.anything;
-            description = "Define variables highlight properties";
-            default = { };
-          };
+          comments =
+            helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{italic = true;}"
+              "Define comments highlight properties";
+          keywords =
+            helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{italic = true;}"
+              "Define keywords highlight properties";
+          functions =
+            helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}"
+              "Define functions highlight properties";
+          variables =
+            helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}"
+              "Define variables highlight properties";
           sidebars = mkBackgroundStyle "sidebars";
           floats = mkBackgroundStyle "floats";
         };
-      sidebars = mkOption {
-        type = types.listOf types.str;
-        default = [ "qf" "help" ];
-        description = "Set a darker background on sidebar-like windows";
-        example = ''["qf" "vista_kind" "terminal" "packer"]'';
-      };
-      dayBrightness = mkOption {
-        type = types.numbers.between 0.0 1.0;
-        default = 0.3;
-        description = "Adjusts the brightness of the colors of the **Day** style";
-      };
+      sidebars =
+        helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["qf" "help"]''
+          "Set a darker background on sidebar-like windows";
+      dayBrightness =
+        helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.3"
+          "Adjusts the brightness of the colors of the **Day** style";
       hideInactiveStatusline =
-        mkEnableOption
+        helpers.defaultNullOpts.mkBool false
           "Enabling this option will hide inactive statuslines and replace them with a thin border";
-      dimInactive = mkEnableOption "dims inactive windows";
+      dimInactive = helpers.defaultNullOpts.mkBool false "dims inactive windows";
       lualineBold =
-        mkEnableOption
+        helpers.defaultNullOpts.mkBool false
           "When true, section headers in the lualine theme will be bold";
     };
   };

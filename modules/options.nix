@@ -35,7 +35,7 @@ in
         local nixvim_options = ${helpers.toLuaObject config.options}
 
         for k,v in pairs(nixvim_options) do
-          vim.o[k] = v
+          vim.opt[k] = v
         end
       end
       -- }}}

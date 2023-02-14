@@ -73,6 +73,8 @@ rec {
     description = desc;
   };
 
+  mkIfNonNull = c: mkIf (!isNull c) c;
+
   defaultNullOpts = rec {
     mkNullable = type: default: desc: mkNullOrOption type (
       let
@@ -87,7 +89,7 @@ rec {
 
     mkInt = default: mkNullable lib.types.int (toString default);
     mkBool = default: mkNullable lib.types.bool (if default then "true" else "false");
-    mkStr = default: mkNullable lib.types.str ''"${default}"'';
+    mkStr = default: mkNullable lib.types.str ''${builtins.toString default}'';
     mkEnum = enum: default: mkNullable (lib.types.enum enum) ''"${default}"'';
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
   };

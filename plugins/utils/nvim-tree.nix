@@ -16,6 +16,14 @@ in
       option = basePluginPath ++ [ "updateFocusedFile" "updateCwd" ];
       newOption = basePluginPath ++ [ "updateFocusedFile" "updateRoot" ];
     })
+    (optionWarnings.mkDeprecatedOption {
+      option = basePluginPath ++ [ "openOnSetup" ];
+      alternative = [];
+    })
+    (optionWarnings.mkDeprecatedOption {
+      option = basePluginPath ++ [ "ignoreFtOnSetup" ];
+      alternative = [];
+    })
   ];
 
   options.plugins.nvim-tree = {
@@ -35,12 +43,14 @@ in
       description = "Hijack netrw";
     };
 
+    # deprecated
     openOnSetup = mkOption {
       type = types.nullOr types.bool;
       default = null;
       description = "Open on setup";
     };
 
+    # deprecated
     ignoreFtOnSetup = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;

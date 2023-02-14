@@ -1,93 +1,99 @@
 { config, lib, ... }:
 with lib;
 let
-  helpers = import ../plugins/helpers.nix { inherit lib; };
+  helpers = import ../lib/helpers.nix { inherit lib; };
 
-  autoCmdOption = types.submodule {
+  autoGroupOption = types.submodule {
     options = {
-      event = mkOption {
-        type = types.oneOf [
-          types.str
-          (types.listOf types.str)
-        ];
-        description = "The event or events to register this autocommand.";
-      };
-
-      group = mkOption {
-        type = types.nullOr (types.oneOf [
-          types.str
-          types.int
-        ]);
-        description = "The autocommand group name or id to match against.";
-        default = null;
-      };
-
-      pattern = mkOption {
-        type = types.nullOr (types.oneOf [
-          types.str
-          (types.listOf types.str)
-        ]);
-        description = "Pattern or patterns to match literally against.";
-        default = null;
-      };
-
-      buffer = mkOption {
-        type = types.nullOr types.int;
-        description = "Buffer number for buffer local autocommands |autocmd-buflocal|. Cannot be used with <pattern>.";
-        default = null;
-      };
-
-      description = mkOption {
-        type = types.nullOr types.str;
-        description = "A textual description of this autocommand.";
-        default = null;
-      };
-
-      callback = mkOption {
-        type = types.nullOr types.str;
-        description = "The name of a Vimscript function to call when this autocommand is triggered. Cannot be used with <command>.";
-        default = null;
-      };
-
-      command = mkOption {
-        type = types.nullOr types.str;
-        description = "Vim command to execute on event. Cannot be used with <callback>";
-        default = null;
-      };
-
-      once = mkOption {
-        type = types.nullOr types.bool;
-        description = "Run the autocommand only once";
-        default = null;
-      };
-
-      nested = mkOption {
-        type = types.nullOr types.bool;
-        description = "Run nested autocommands.";
-        default = null;
+      clear = mkOption {
+        type = types.bool;
+        description = "Clear existing commands if the group already exists.";
+        default = true;
       };
     };
   };
-in
-{
-  options.autoCmd = mkOption {
-    type = types.listOf autoCmdOption;
-    default = [ ];
-    description = "autocmd definitions";
-    example = ''
-      autoCmd = [
-        {
-          event = [ "BufEnter" "BufWinEnter" ];
-          pattern = [ "*.c" "*.h" ];
-          command = "echo 'Entering a C or C++ file'";
-        }
-      ];
-    '';
+
+  autoCmdOption = types.submodule {
+    options = {
+      event = helpers.mkNullOrOption (types.either types.str (types.listOf types.str)) ''
+        The event or events to register this autocommand.
+      '';
+
+      group = helpers.mkNullOrOption (types.either types.str types.int) ''
+        The autocommand group name or id to match against.
+      '';
+
+      pattern = helpers.mkNullOrOption (types.either types.str (types.listOf types.str)) ''
+        Pattern or patterns to match literally against.
+      '';
+
+      buffer = helpers.defaultNullOpts.mkInt "" ''
+        Buffer number for buffer local autocommands |autocmd-buflocal|.
+        Cannot be used with <pattern>.
+      '';
+
+      description = helpers.defaultNullOpts.mkStr "" "A textual description of this autocommand.";
+
+      callback = helpers.defaultNullOpts.mkStr "" ''
+        The name of a Vimscript function to call when this autocommand is triggered. Cannot be used with <command>.
+      '';
+
+      command = helpers.defaultNullOpts.mkStr "" ''
+        Vim command to execute on event. Cannot be used with <callback>
+      '';
+
+      once = helpers.defaultNullOpts.mkBool false "Run the autocommand only once";
+
+      nested = helpers.defaultNullOpts.mkBool false "Run nested autocommands.";
+    };
   };
 
-  config = {
-    extraConfigLua = optionalString (config.autoCmd != [ ]) ''
-      -- Set up autocommands {{{
+in
+{
+  options = {
+    autoGroups = mkOption {
+      type = types.attrsOf autoGroupOption;
+      default = { };
+      description = "augroup definitions";
+      example = ''
+        autoGroups = {
+          my_augroup = {
+            clear = true;
+          }
+        };
+      '';
+    };
+
+    autoCmd = mkOption {
+      type = types.listOf autoCmdOption;
+      default = [ ];
+      description = "autocmd definitions";
+      example = ''
+        autoCmd = [
+          {
+            event = [ "BufEnter" "BufWinEnter" ];
+            pattern = [ "*.c" "*.h" ];
+            command = "echo 'Entering a C or C++ file'";
+          }
+        ];
+      '';
+    };
+  };
+
+  config = mkIf (config.autoGroups != { } || config.autoCmd != { }) {
+    extraConfigLuaPost = (optionalString (config.autoGroups != { }) ''
+      -- Set up autogroups {{
+      do
+        local __nixvim_autogroups = ${helpers.toLuaObject config.autoGroups}
+
+        for group_name, options in pairs(__nixvim_autogroups) do
+          vim.api.nvim_create_augroup(group_name, options)
+        end
+      end
+      -- }}
+    '') +
+    (optionalString (config.autoCmd != [ ]) ''
+      -- Set up autocommands {{
       do
         local __nixvim_autocommands = ${helpers.toLuaObject config.autoCmd}
 
@@ -107,7 +113,7 @@ in
           )
         end
       end
-      -- }}}
-    '';
+      -- }}
+    '');
   };
 }
