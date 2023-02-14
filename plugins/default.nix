@@ -24,6 +24,7 @@
   
     ./languages/clangd-extensions.nix
     ./languages/ledger.nix
+    ./languages/markdown-preview.nix
     ./languages/nix.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust.nix
