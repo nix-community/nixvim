@@ -53,7 +53,7 @@ in
         katex = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "katex options for math";
         uml = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "markdown-it-plantuml options";
         maid = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "mermaid options";
-        disable_sync_scroll  = helpers.defaultNullOpts.mkBool false "Disable sync scroll";
+        disable_sync_scroll = helpers.defaultNullOpts.mkBool false "Disable sync scroll";
         sync_scroll_type = helpers.defaultNullOpts.mkNullable (types.enum [ "middle" "top" "relative" ]) "middle" ''
           Scroll type:
           - "middle": The cursor position is always shown at the middle of the preview page.
@@ -62,8 +62,8 @@ in
         '';
         hide_yaml_meta = helpers.defaultNullOpts.mkBool true "Hide yaml metadata.";
         sequence_diagrams = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "js-sequence-diagrams options";
-        flowchart_diagrams  = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "flowcharts diagrams options";
-        content_editable  = helpers.defaultNullOpts.mkBool false "Content editable from the preview page";
+        flowchart_diagrams = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "flowcharts diagrams options";
+        content_editable = helpers.defaultNullOpts.mkBool false "Content editable from the preview page";
         disable_filename = helpers.defaultNullOpts.mkBool false "Disable filename header for the preview page";
         toc = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "Toc options";
       };
@@ -79,7 +79,7 @@ in
       port = helpers.defaultNullOpts.mkStr "" "Custom port to start server or empty for random";
 
       pageTitle = helpers.defaultNullOpts.mkStr "「\${name}」" ''
-        preview page title. \${name} will be replaced with the file name.
+        preview page title. $${name} will be replaced with the file name.
       '';
 
       fileTypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "['markdown']" ''
@@ -93,9 +93,9 @@ in
   };
 
   config =
-  let
-    previewOptions = mapAttrs (name: value: cfg.previewOptions.${name}) cfg.previewOptions;
-  in
+    let
+      previewOptions = mapAttrs (name: value: cfg.previewOptions.${name}) cfg.previewOptions;
+    in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
@@ -109,7 +109,7 @@ in
         mkdp_browser = mkIf (!isNull cfg.browser) cfg.browser;
         mkdp_echo_preview_url = mkIf (!isNull cfg.echoPreviewUrl) cfg.echoPreviewUrl;
         mkdp_browserfunc = mkIf (!isNull cfg.browserFunc) cfg.browserFunc;
-        mkdp_preview_options = mkIf (cfg.previewOptions != {}) previewOptions;
+        mkdp_preview_options = mkIf (cfg.previewOptions != { }) previewOptions;
         mkdp_markdown_css = mkIf (!isNull cfg.markdownCss) cfg.markdownCss;
         mkdp_highlight_css = mkIf (!isNull cfg.highlightCss) cfg.highlightCss;
         mkdp_port = mkIf (!isNull cfg.port) cfg.port;
@@ -117,5 +117,5 @@ in
         mkdp_filetypes = mkIf (!isNull cfg.fileTypes) cfg.fileTypes;
         mkdp_theme = mkIf (!isNull cfg.theme) cfg.theme;
       };
-  };
+    };
 }
