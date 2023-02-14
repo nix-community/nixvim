@@ -30,6 +30,7 @@
     ./languages/treesitter.nix
     ./languages/treesitter-context.nix
     ./languages/treesitter-refactor.nix
+    ./languages/vimtex.nix
     ./languages/zig.nix
 
     ./null-ls
