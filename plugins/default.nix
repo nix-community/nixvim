@@ -58,10 +58,7 @@
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
-    <<<<<<< HEAD
     ./utils/harpoon.nix
-    =======
-    >>>>>>> origin/main
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
