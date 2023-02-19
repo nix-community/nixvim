@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.nvim-autopairs;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.nvim-autopairs;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.nvim-autopairs = {
     enable = mkEnableOption "nvim-autopairs";
 
@@ -41,18 +44,17 @@ in
     };
   };
 
-  config =
-    let
-      options = {
-        pairs_map = cfg.pairs;
-        disable_filetype = cfg.disabledFiletypes;
-        break_line_filetype = cfg.breakLineFiletypes;
-        html_break_line_filetype = cfg.htmlFiletypes;
-        ignored_next_char = cfg.ignoredNextChar;
-      };
-    in
+  config = let
+    options = {
+      pairs_map = cfg.pairs;
+      disable_filetype = cfg.disabledFiletypes;
+      break_line_filetype = cfg.breakLineFiletypes;
+      html_break_line_filetype = cfg.htmlFiletypes;
+      ignored_next_char = cfg.ignoredNextChar;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require('nvim-autopairs').setup(${helpers.toLuaObject options})

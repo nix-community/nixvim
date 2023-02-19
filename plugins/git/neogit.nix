@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.plugins.neogit;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix {inherit lib;};
 
   sectionDefaultsModule = types.submodule {
     options = {
@@ -12,8 +16,7 @@ let
       };
     };
   };
-in
-{
+in {
   options = {
     plugins.neogit = {
       enable = mkEnableOption "neogit";
@@ -72,7 +75,7 @@ in
             };
           };
         };
-        default = { };
+        default = {};
       };
 
       kind = mkOption {
@@ -104,7 +107,7 @@ in
             };
           };
         };
-        default = { };
+        default = {};
       };
 
       integrations = mkOption {
@@ -118,7 +121,7 @@ in
             };
           };
         };
-        default = { };
+        default = {};
       };
 
       sections = mkOption {
@@ -162,7 +165,7 @@ in
             };
           };
         };
-        default = { };
+        default = {};
       };
 
       mappings = mkOption {
@@ -198,14 +201,14 @@ in
             };
           };
         };
-        default = { };
+        default = {};
       };
     };
   };
 
-  config =
-    let
-      setupOptions = with cfg; helpers.toLuaObject {
+  config = let
+    setupOptions = with cfg;
+      helpers.toLuaObject {
         inherit kind integrations signs sections mappings;
         disable_signs = disableSigns;
         disable_hint = disableHint;
@@ -216,14 +219,16 @@ in
         use_magit_keybindings = useMagitKeybindings;
         commit_popup = commitPopup;
       };
-    in
+  in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [
-        cfg.package
-        plenary-nvim
-      ] ++ optional cfg.integrations.diffview diffview-nvim;
+      extraPlugins = with pkgs.vimPlugins;
+        [
+          cfg.package
+          plenary-nvim
+        ]
+        ++ optional cfg.integrations.diffview diffview-nvim;
 
-      extraPackages = [ pkgs.git ];
+      extraPackages = [pkgs.git];
 
       extraConfigLua = ''
         require('neogit').setup(${setupOptions})

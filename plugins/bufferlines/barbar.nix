@@ -1,10 +1,13 @@
-{ lib, pkgs, config, ... }:
-with lib;
-let
-  cfg = config.plugins.barbar;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.barbar;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.barbar = {
     enable = mkEnableOption "barbar.nvim";
 
@@ -65,24 +68,25 @@ in
 
     highlightVisible = helpers.defaultNullOpts.mkBool true "Highlight visible buffers";
 
-
     icons = {
-      enable = helpers.defaultNullOpts.mkNullable
-        (with types; (either bool (enum [ "numbers" "both" ])))
+      enable =
+        helpers.defaultNullOpts.mkNullable
+        (with types; (either bool (enum ["numbers" "both"])))
         "true"
         ''
-        Enable/disable icons if set to 'numbers', will show buffer index in the tabline if set to
-        'both', will show buffer index and icons in the tabline
+          Enable/disable icons if set to 'numbers', will show buffer index in the tabline if set to
+          'both', will show buffer index and icons in the tabline
         '';
 
-      customColors = helpers.defaultNullOpts.mkNullable
+      customColors =
+        helpers.defaultNullOpts.mkNullable
         (types.either types.bool types.str)
         "false"
         ''
-        If set, the icon color will follow its corresponding buffer
-        highlight group. By default, the Buffer*Icon group is linked to the
-        Buffer* group (see Highlighting below). Otherwise, it will take its
-        default value as defined by devicons.
+          If set, the icon color will follow its corresponding buffer
+          highlight group. By default, the Buffer*Icon group is linked to the
+          Buffer* group (see Highlighting below). Otherwise, it will take its
+          default value as defined by devicons.
         '';
 
       separatorActive = helpers.defaultNullOpts.mkStr "▎" "Icon for the active tab separator";
@@ -121,7 +125,6 @@ in
       Sets the name of unnamed buffers. By default format is "[Buffer X]" where X is the buffer number.
       But only a static string is accepted here.
     '';
-
 
     # Keybinds concept:
     # keys = {
@@ -182,16 +185,16 @@ in
       tabpages = cfg.tabpages;
     };
   in
-   mkIf cfg.enable {
-    extraPlugins = with pkgs.vimPlugins; [
-      cfg.package
-      nvim-web-devicons
-    ];
+    mkIf cfg.enable {
+      extraPlugins = with pkgs.vimPlugins; [
+        cfg.package
+        nvim-web-devicons
+      ];
 
-    extraConfigLua = ''
-      require('bufferline').setup(${helpers.toLuaObject setupOptions})
-    '';
+      extraConfigLua = ''
+        require('bufferline').setup(${helpers.toLuaObject setupOptions})
+      '';
 
-    # maps = genMaps cfg.keys;
-  };
+      # maps = genMaps cfg.keys;
+    };
 }

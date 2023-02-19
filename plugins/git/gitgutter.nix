@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.gitgutter;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.gitgutter;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.gitgutter = {
       enable = mkEnableOption "gitgutter";
@@ -54,14 +57,14 @@ in
       };
 
       signs = mkOption {
-        type =
-          let
-            signOption = desc: mkOption {
+        type = let
+          signOption = desc:
+            mkOption {
               type = types.nullOr types.str;
               default = null;
               description = "Sign for ${desc}";
             };
-          in
+        in
           types.submodule {
             options = {
               added = signOption "added lines";
@@ -73,7 +76,7 @@ in
               modifiedRemoved = signOption "modified and removed lines";
             };
           };
-        default = { };
+        default = {};
         description = "Custom signs for the sign column";
       };
 
@@ -166,20 +169,25 @@ in
     };
   };
 
-  config =
-    let
-      grepPackage = if builtins.isAttrs cfg.grep then [ cfg.grep.package ] else [ ];
-      grepCommand = if builtins.isAttrs cfg.grep then cfg.grep.command else cfg.grep;
-    in
+  config = let
+    grepPackage =
+      if builtins.isAttrs cfg.grep
+      then [cfg.grep.package]
+      else [];
+    grepCommand =
+      if builtins.isAttrs cfg.grep
+      then cfg.grep.command
+      else cfg.grep;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       options = mkIf cfg.recommendedSettings {
         updatetime = 100;
         foldtext = "gitgutter#fold#foldtext";
       };
 
-      extraPackages = [ pkgs.git ] ++ grepPackage;
+      extraPackages = [pkgs.git] ++ grepPackage;
 
       globals = {
         gitgutter_max_signs = mkIf (!isNull cfg.maxSigns) cfg.maxSigns;

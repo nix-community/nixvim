@@ -1,21 +1,24 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.plugins.notify;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix {inherit lib;};
   icon = mkOption {
     type = types.nullOr types.str;
     default = null;
   };
-in
-{
+in {
   options.plugins.notify = {
     enable = mkEnableOption "notify";
 
     package = helpers.mkPackageOption "notify" pkgs.vimPlugins.nvim-notify;
 
     stages = mkOption {
-      type = types.nullOr (types.enum [ "fade_in_slide_out" "fade" "slide" "static" ]);
+      type = types.nullOr (types.enum ["fade_in_slide_out" "fade" "slide" "static"]);
       description = "Animation style";
       default = null;
     };
@@ -45,28 +48,27 @@ in
         };
       });
       description = "Icons for the different levels";
-      default = { };
+      default = {};
     };
   };
 
-  config =
-    let
-      setupOptions = with cfg; {
-        stages = stages;
-        timeout = timeout;
-        background_color = backgroundColor;
-        minimum_width = minimumWidth;
-        icons = with icons; {
-          ERROR = error;
-          WARN = warn;
-          INFO = info;
-          DEBUG = debug;
-          TRACE = trace;
-        };
+  config = let
+    setupOptions = with cfg; {
+      stages = stages;
+      timeout = timeout;
+      background_color = backgroundColor;
+      minimum_width = minimumWidth;
+      icons = with icons; {
+        ERROR = error;
+        WARN = warn;
+        INFO = info;
+        DEBUG = debug;
+        TRACE = trace;
       };
-    in
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       extraConfigLua = ''
         vim.notify = require('notify');
         require('notify').setup(${helpers.toLuaObject setupOptions})

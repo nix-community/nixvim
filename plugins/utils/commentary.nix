@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.commentary;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.commentary;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   # TODO Add support for aditional filetypes. This requires autocommands!
 
   options = {
@@ -16,6 +19,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
   };
 }

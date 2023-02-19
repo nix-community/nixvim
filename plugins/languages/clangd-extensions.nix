@@ -17,7 +17,7 @@ in
     options.plugins.clangd-extensions = {
       enable = mkEnableOption "clangd_extensions, plugin implementing clangd LSP extensions";
 
-      package = 
+      package =
         helpers.mkPackageOption "clangd_extensions.nvim" pkgs.vimPlugins.clangd_extensions-nvim;
 
       enableOffsetEncodingWorkaround = mkEnableOption ''

@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.specs;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.specs;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.specs = {
     enable = mkEnableOption "specs-nvim";
 
@@ -73,15 +76,16 @@ in
           };
         };
       };
-      default = { builtin = "linear_fader"; };
+      default = {builtin = "linear_fader";};
     };
 
     resizer = mkOption {
       type = types.submodule {
         options = {
           builtin = mkOption {
-            type = types.nullOr
-              (types.enum [ "shrink_resizer" "slide_resizer" "empty_resizer" ]);
+            type =
+              types.nullOr
+              (types.enum ["shrink_resizer" "slide_resizer" "empty_resizer"]);
             default = "shrink_resizer";
           };
 
@@ -98,48 +102,53 @@ in
           };
         };
       };
-      default = { builtin = "shrink_resizer"; };
+      default = {builtin = "shrink_resizer";};
     };
 
     ignored_filetypes = mkOption {
       type = with types; listOf string;
-      default = [ ];
+      default = [];
     };
 
     ignored_buffertypes = mkOption {
       type = with types; listOf string;
-      default = [ "nofile" ];
+      default = ["nofile"];
     };
-
   };
-  config =
-    let
-      setup = helpers.toLuaObject {
-        inherit (cfg) show_jumps min_jump;
-        ignore_filetypes = attrsets.listToAttrs
-          (lib.lists.map (x: attrsets.nameValuePair x true)
-            cfg.ignored_filetypes);
-        ignore_buftypes = attrsets.listToAttrs
-          (lib.lists.map (x: attrsets.nameValuePair x true)
-            cfg.ignored_buffertypes);
-        popup = {
-          inherit (cfg) blend width;
-          winhl = if (!isNull cfg.color) then "SpecsPopColor" else "PMenu";
-          delay_ms = cfg.delay;
-          inc_ms = cfg.increment;
-          fader = helpers.mkRaw (if cfg.fader.builtin == null then
-            cfg.fader.custom
-          else
-            ''require("specs").${cfg.fader.builtin}'');
-          resizer = helpers.mkRaw (if cfg.resizer.builtin == null then
-            cfg.resizer.custom
-          else
-            ''require("specs").${cfg.resizer.builtin}'');
-        };
+  config = let
+    setup = helpers.toLuaObject {
+      inherit (cfg) show_jumps min_jump;
+      ignore_filetypes =
+        attrsets.listToAttrs
+        (lib.lists.map (x: attrsets.nameValuePair x true)
+          cfg.ignored_filetypes);
+      ignore_buftypes =
+        attrsets.listToAttrs
+        (lib.lists.map (x: attrsets.nameValuePair x true)
+          cfg.ignored_buffertypes);
+      popup = {
+        inherit (cfg) blend width;
+        winhl =
+          if (!isNull cfg.color)
+          then "SpecsPopColor"
+          else "PMenu";
+        delay_ms = cfg.delay;
+        inc_ms = cfg.increment;
+        fader = helpers.mkRaw (
+          if cfg.fader.builtin == null
+          then cfg.fader.custom
+          else ''require("specs").${cfg.fader.builtin}''
+        );
+        resizer = helpers.mkRaw (
+          if cfg.resizer.builtin == null
+          then cfg.resizer.custom
+          else ''require("specs").${cfg.resizer.builtin}''
+        );
       };
-    in
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       highlight.SpecsPopColor.bg = mkIf (!isNull cfg.color) cfg.color;
 

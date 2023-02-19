@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.undotree;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.undotree;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.undotree = {
       enable = mkEnableOption "Enable undotree";
@@ -110,7 +113,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     globals = {
       undotree_WindowLayout = mkIf (cfg.windowLayout != null) cfg.windowLayout;

@@ -1,8 +1,7 @@
 # This is for plugins not in nixpkgs
 # e.g. intellitab.nvim
 # Ideally, in the future, this would all be specified as a flake input!
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   intellitab-nvim = pkgs.vimUtils.buildVimPlugin rec {
     pname = "intellitab-nvim";
     version = "a6c1a505865f6131866d609c52440306e9914b16";
@@ -47,7 +46,7 @@
           sha256 = "sha256-/m4Paw6AvDzTMWWCWpPnrdI4gsjIDSJPvGCMV7ufbEA=";
         };
 
-        propagatedBuildInputs = [ pkgs.python3Packages.pynvim ];
+        propagatedBuildInputs = [pkgs.python3Packages.pynvim];
       })
       (ps.buildPythonPackage rec {
         pname = "std2";
@@ -96,30 +95,29 @@
       sha256 = "sha256-IaslJK1F2BxTvZzKGH9OKOl2RICi4d4rSgjliAIAqK4=";
     };
 
-
-
-    passthru.python3Dependencies = ps: with ps;  [
-      pynvim
-      jupyter-client
-      ueberzug
-      pillow
-      cairosvg
-      plotly
-      ipykernel
-      pyperclip
-      (ps.buildPythonPackage rec {
-        pname = "pnglatex";
-        version = "1.1";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-CZUGDUkmttO0BzFYbGFSNMPkWzFC/BW4NmAeOwz4Y9M=";
-        };
-        doCheck = false;
-        meta = with lib; {
-          homepage = "https://github.com/MaT1g3R/pnglatex";
-          description = "a small program that converts LaTeX snippets to png";
-        };
-      })
-    ];
+    passthru.python3Dependencies = ps:
+      with ps; [
+        pynvim
+        jupyter-client
+        ueberzug
+        pillow
+        cairosvg
+        plotly
+        ipykernel
+        pyperclip
+        (ps.buildPythonPackage rec {
+          pname = "pnglatex";
+          version = "1.1";
+          src = fetchPypi {
+            inherit pname version;
+            hash = "sha256-CZUGDUkmttO0BzFYbGFSNMPkWzFC/BW4NmAeOwz4Y9M=";
+          };
+          doCheck = false;
+          meta = with lib; {
+            homepage = "https://github.com/MaT1g3R/pnglatex";
+            description = "a small program that converts LaTeX snippets to png";
+          };
+        })
+      ];
   };
 }

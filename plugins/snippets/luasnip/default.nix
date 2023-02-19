@@ -1,17 +1,20 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.luasnip;
-  helpers = import ../../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.luasnip;
+  helpers = import ../../helpers.nix {inherit lib;};
+in {
   options.plugins.luasnip = {
     enable = mkEnableOption "Enable luasnip";
 
     package = helpers.mkPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 
     fromVscode = mkOption {
-      default = [ ];
+      default = [];
       example = ''
         [
           {}
@@ -38,18 +41,19 @@ in
           # TODO: add option to also include the default runtimepath
           paths = mkOption {
             default = null;
-            type = with types; nullOr (oneOf
-              [
-                str
-                path
-                helpers.rawType
-                (listOf (oneOf
-                  [
-                    str
-                    path
-                    helpers.rawType
-                  ]))
-              ]);
+            type = with types;
+              nullOr (oneOf
+                [
+                  str
+                  path
+                  helpers.rawType
+                  (listOf (oneOf
+                    [
+                      str
+                      path
+                      helpers.rawType
+                    ]))
+                ]);
           };
 
           exclude = mkOption {
@@ -75,21 +79,18 @@ in
     # TODO: add support for lua
   };
 
-  config =
-    let
-
-      fromVscodeLoaders = lists.map
-        (loader:
-          let
-            options = attrsets.getAttrs [ "paths" "exclude" "include" ] loader;
-          in
-          ''
-            require("luasnip.loaders.from_vscode").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
-          '')
-        cfg.fromVscode;
-    in
+  config = let
+    fromVscodeLoaders =
+      lists.map
+      (loader: let
+        options = attrsets.getAttrs ["paths" "exclude" "include"] loader;
+      in ''
+        require("luasnip.loaders.from_vscode").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
+      '')
+      cfg.fromVscode;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       extraConfigLua = concatStringsSep "\n" fromVscodeLoaders;
     };
 }

@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.easyescape;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.easyescape;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.easyescape = {
       enable = mkEnableOption "Enable easyescape";

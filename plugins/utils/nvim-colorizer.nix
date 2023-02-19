@@ -1,9 +1,12 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.plugins.nvim-colorizer;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix {inherit lib;};
 
   colorizer-options = {
     RGB = mkOption {
@@ -53,7 +56,7 @@ let
     };
     mode = mkOption {
       description = "Set the display mode";
-      type = types.nullOr (types.enum [ "foreground" "background" "virtualtext" ]);
+      type = types.nullOr (types.enum ["foreground" "background" "virtualtext"]);
       default = null;
     };
     tailwind = mkOption {
@@ -61,7 +64,7 @@ let
       type = types.nullOr (
         types.oneOf [
           types.bool
-          (types.enum [ "normal" "lsp" "both" ])
+          (types.enum ["normal" "lsp" "both"])
         ]
       );
       default = null;
@@ -84,12 +87,9 @@ let
       default = null;
     };
   };
-
-in
-{
+in {
   options = {
     plugins.nvim-colorizer = {
-
       enable = mkEnableOption "nvim-colorizer";
 
       package = helpers.mkPackageOption "nvim-colorizer" pkgs.vimPlugins.nvim-colorizer-lua;
@@ -100,11 +100,13 @@ in
           types.listOf (types.oneOf [
             types.str
             (types.submodule {
-              options = {
-                language = mkOption {
-                  type = types.str;
-                };
-              } // colorizer-options;
+              options =
+                {
+                  language = mkOption {
+                    type = types.str;
+                  };
+                }
+                // colorizer-options;
             })
           ])
         );
@@ -128,24 +130,26 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     extraConfigLua = let
-
-      filetypes = if (cfg.fileTypes != null)
-        then (
-          let
-            list = map (
-              v: if builtins.isAttrs v
-                then v.language + " = " + helpers.toLuaObject (builtins.removeAttrs v [ "language" ])
-                else "'${v}'"
-            ) cfg.fileTypes;
-          in "{" + (concatStringsSep "," list) + "}"
-        )
-        else
-          "nil"
-      ;
-
+      filetypes =
+        if (cfg.fileTypes != null)
+        then
+          (
+            let
+              list =
+                map (
+                  v:
+                    if builtins.isAttrs v
+                    then v.language + " = " + helpers.toLuaObject (builtins.removeAttrs v ["language"])
+                    else "'${v}'"
+                )
+                cfg.fileTypes;
+            in
+              "{" + (concatStringsSep "," list) + "}"
+          )
+        else "nil";
     in ''
       require("colorizer").setup({
         filetypes = ${filetypes},

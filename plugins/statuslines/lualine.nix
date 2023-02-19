@@ -1,8 +1,12 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.plugins.lualine;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix {inherit lib;};
   separators = mkOption {
     type = types.nullOr (types.submodule {
       options = {
@@ -32,7 +36,7 @@ let
               default = defaultName;
             };
             icons_enabled = mkOption {
-              type = types.enum [ "True" "False" ];
+              type = types.enum ["True" "False"];
               default = "True";
               description = "displays icons in alongside component";
             };
@@ -44,7 +48,7 @@ let
             separator = separators;
             extraConfig = mkOption {
               type = types.attrs;
-              default = { };
+              default = {};
               description = "extra options for the component";
             };
           };
@@ -52,8 +56,7 @@ let
       ]));
       default = null;
     };
-in
-{
+in {
   options = {
     plugins.lualine = {
       enable = mkEnableOption "lualine";
@@ -79,12 +82,11 @@ in
       alwaysDivideMiddle = mkOption {
         type = types.nullOr types.bool;
         default = null;
-        description =
-          "When true, left_sections (a,b,c) can't take over entire statusline";
+        description = "When true, left_sections (a,b,c) can't take over entire statusline";
       };
 
       sections = mkOption {
-        type = types.nullOr (types.submodule ({ ... }: {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             lualine_a = component_options "mode";
             lualine_b = component_options "branch";
@@ -100,7 +102,7 @@ in
       };
 
       tabline = mkOption {
-        type = types.nullOr (types.submodule ({ ... }: {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             lualine_a = component_options "";
             lualine_b = component_options "";
@@ -121,34 +123,45 @@ in
       };
     };
   };
-  config =
-    let
-      processComponent = x: (if isAttrs x then processTableComponent else id) x;
-      processTableComponent = { name, icons_enabled, icon, separator, extraConfig }: mergeAttrs
-        {
-          "@" = name;
-          inherit icons_enabled icon separator;
-        }
-        extraConfig;
-      processSections = sections: mapAttrs (_: mapNullable (map processComponent)) sections;
-      setupOptions = {
-        options = {
-          theme = cfg.theme;
-          section_separators = cfg.sectionSeparators;
-          component_separators = cfg.componentSeparators;
-          disabled_filetypes = cfg.disabledFiletypes;
-          always_divide_middle = cfg.alwaysDivideMiddle;
-        };
-
-        sections = mapNullable processSections cfg.sections;
-        tabline = mapNullable processSections cfg.tabline;
-        extensions = cfg.extensions;
+  config = let
+    processComponent = x:
+      (
+        if isAttrs x
+        then processTableComponent
+        else id
+      )
+      x;
+    processTableComponent = {
+      name,
+      icons_enabled,
+      icon,
+      separator,
+      extraConfig,
+    }:
+      mergeAttrs
+      {
+        "@" = name;
+        inherit icons_enabled icon separator;
+      }
+      extraConfig;
+    processSections = sections: mapAttrs (_: mapNullable (map processComponent)) sections;
+    setupOptions = {
+      options = {
+        theme = cfg.theme;
+        section_separators = cfg.sectionSeparators;
+        component_separators = cfg.componentSeparators;
+        disabled_filetypes = cfg.disabledFiletypes;
+        always_divide_middle = cfg.alwaysDivideMiddle;
       };
-    in
+
+      sections = mapNullable processSections cfg.sections;
+      tabline = mapNullable processSections cfg.tabline;
+      extensions = cfg.extensions;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraPackages = [ pkgs.git ];
-      extraConfigLua =
-        ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
+      extraPlugins = [cfg.package];
+      extraPackages = [pkgs.git];
+      extraConfigLua = ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
     };
 }

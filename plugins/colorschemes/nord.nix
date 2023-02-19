@@ -1,29 +1,37 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.colorschemes.nord;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.colorschemes.nord;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     colorschemes.nord = {
       enable = mkEnableOption "nord";
 
       package = helpers.mkPackageOption "nord.vim" pkgs.vimPlugins.nord-nvim;
 
-      contrast = mkEnableOption
+      contrast =
+        mkEnableOption
         "Make sidebars and popup menus like nvim-tree and telescope have a different background";
 
-      borders = mkEnableOption
+      borders =
+        mkEnableOption
         "Enable the border between verticaly split windows visable";
 
-      disable_background = mkEnableOption
+      disable_background =
+        mkEnableOption
         "Disable the setting of background color so that NeoVim can use your terminal background";
 
-      cursorline_transparent = mkEnableOption
+      cursorline_transparent =
+        mkEnableOption
         "Set the cursorline transparent/visible";
 
-      enable_sidebar_background = mkEnableOption
+      enable_sidebar_background =
+        mkEnableOption
         "Re-enables the background of the sidebar if you disabled the background of everything";
 
       italic = mkOption {
@@ -36,7 +44,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "nord";
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     globals = {
       nord_contrast = mkIf cfg.contrast 1;
