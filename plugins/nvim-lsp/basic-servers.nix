@@ -6,6 +6,10 @@
 } @ args:
 with lib; let
   helpers = import ./helpers.nix args;
+
+  optionWarnings = import ../../lib/option-warnings.nix args;
+  basePluginPath = ["plugins" "lsp" "servers"];
+
   servers = [
     {
       name = "astro";
@@ -212,10 +216,10 @@ with lib; let
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
-      name = "sumneko-lua";
-      description = "Enable sumneko_lua, for lua";
-      package = pkgs.sumneko-lua-language-server;
-      serverName = "sumneko_lua";
+      name = "lua-ls";
+      description = "Enable lua LS, for lua";
+      package = pkgs.lua-language-server;
+      serverName = "lua_ls";
     }
     {
       name = "tailwindcss";
@@ -248,5 +252,12 @@ with lib; let
     }
   ];
 in {
-  imports = lib.lists.map (helpers.mkLsp) servers;
+  imports =
+    lib.lists.map (helpers.mkLsp) servers
+    ++ [
+      (optionWarnings.mkRenamedOption {
+        option = basePluginPath ++ ["sumneko-lua"];
+        newOption = basePluginPath ++ ["lua-ls"];
+      })
+    ];
 }
