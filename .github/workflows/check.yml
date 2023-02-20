@@ -1,10 +1,6 @@
 name: Run checks on code
 
-on:
-  push:
-    branches: [ '!gh-pages' ]
-  pull_request:
-    branches: [ '!gh-pages' ]
+on: [push, pull_request]
 
 jobs:
   check:
