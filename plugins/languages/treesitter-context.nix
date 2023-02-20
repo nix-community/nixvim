@@ -1,11 +1,11 @@
-{ pkgs
-, lib
-, config
-, ...
+{
+  pkgs,
+  lib,
+  config,
+  ...
 }:
-with lib;
-let
-  helpers = import ../helpers.nix { inherit lib; };
+with lib; let
+  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.treesitter-context = {
     enable = mkEnableOption "nvim-treesitter-context";
@@ -19,7 +19,7 @@ in {
     };
 
     trimScope = mkOption {
-      type = types.enum [ "outer" "inner" ];
+      type = types.enum ["outer" "inner"];
       default = "outer";
       description = "Which context lines to discard if `max_lines` is exceeded";
     };
@@ -32,7 +32,7 @@ in {
 
     patterns = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      default = { };
+      default = {};
       description = ''
         Patterns to use for context delimitation. The 'default' key matches all filetypes
       '';
@@ -40,17 +40,16 @@ in {
 
     exactPatterns = mkOption {
       type = types.attrsOf types.bool;
-      default = { };
+      default = {};
       description = "Treat the coresponding entry in patterns as an exact match";
     };
   };
 
-  config =
-    let
-      cfg = config.plugins.treesitter-context;
-    in
+  config = let
+    cfg = config.plugins.treesitter-context;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       plugins.treesitter.moduleConfig.context = {
         max_lines = cfg.maxLines;

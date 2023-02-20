@@ -1,13 +1,17 @@
-{ pkgs, config, lib, ... }@args:
-with lib;
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+} @ args:
+with lib; let
   helpers = import ./helpers.nix args;
   servers = [
     {
       name = "astro";
       description = "Enable astrols, for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
-      cmd = cfg: [ "${cfg.package}/bin/astro-ls" "--stdio" ];
+      cmd = cfg: ["${cfg.package}/bin/astro-ls" "--stdio"];
     }
     {
       name = "bashls";
@@ -23,7 +27,7 @@ let
       name = "cssls";
       description = "Enable cssls, for CSS";
       package = pkgs.nodePackages.vscode-langservers-extracted;
-      cmd = cfg: [ "${cfg.package}/bin/vscode-css-language-server" "--stdio" ];
+      cmd = cfg: ["${cfg.package}/bin/vscode-css-language-server" "--stdio"];
     }
     {
       name = "dartls";
@@ -70,7 +74,7 @@ let
           '';
         };
         renameFilesWithClasses = mkOption {
-          type = types.nullOr (types.enum [ "always" "prompt" ]);
+          type = types.nullOr (types.enum ["always" "prompt"]);
           default = null;
           description = ''
             When set to "always", will include edits to rename files when classes are renamed if the
@@ -98,7 +102,7 @@ let
           '';
         };
         documentation = mkOption {
-          type = types.nullOr (types.enum [ "none" "summary" "full" ]);
+          type = types.nullOr (types.enum ["none" "summary" "full"]);
           default = null;
           description = ''
             The typekind of dartdocs to include in Hovers, Code Completion, Signature Help and other
@@ -114,7 +118,7 @@ let
           '';
         };
       };
-      settings = cfg: { dart = cfg; };
+      settings = cfg: {dart = cfg;};
     }
     {
       name = "denols";
@@ -125,13 +129,13 @@ let
       name = "eslint";
       description = "Enable eslint";
       package = pkgs.nodePackages.vscode-langservers-extracted;
-      cmd = cfg: [ "${cfg.package}/bin/vscode-eslint-langauge-server" "--stdio" ];
+      cmd = cfg: ["${cfg.package}/bin/vscode-eslint-language-server" "--stdio"];
     }
     {
       name = "elixirls";
       description = "Enable elixirls";
       package = pkgs.elixir_ls;
-      cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
+      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
       name = "gdscript";
@@ -146,13 +150,13 @@ let
       name = "html";
       description = "Enable html, for HTML";
       package = pkgs.nodePackages.vscode-langservers-extracted;
-      cmd = cfg: [ "${cfg.package}/bin/vscode-html-language-server" "--stdio" ];
+      cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
     }
     {
       name = "jsonls";
       description = "Enable jsonls, for JSON";
       package = pkgs.nodePackages.vscode-langservers-extracted;
-      cmd = cfg: [ "${cfg.package}/bin/vscode-json-language-server" "--stdio" ];
+      cmd = cfg: ["${cfg.package}/bin/vscode-json-language-server" "--stdio"];
     }
     {
       name = "nil_ls";
@@ -170,7 +174,7 @@ let
         diagnostics = {
           ignored = mkOption {
             type = types.listOf types.str;
-            default = [ ];
+            default = [];
             description = ''
               Ignored diagnostic kinds.
               The kind identifier is a snake_cased_string usually shown together
@@ -179,7 +183,7 @@ let
           };
           excludedFiles = mkOption {
             type = types.listOf types.str;
-            default = [ ];
+            default = [];
             description = ''
               Files to exclude from showing diagnostics. Useful for generated files.
               It accepts an array of paths. Relative paths are joint to the workspace root.
@@ -188,7 +192,7 @@ let
           };
         };
       };
-      settings = cfg: { nil = { inherit (cfg) formatting diagnostics; }; };
+      settings = cfg: {nil = {inherit (cfg) formatting diagnostics;};};
     }
     {
       name = "pyright";
@@ -205,7 +209,7 @@ let
       serverName = "rust_analyzer";
 
       settingsOptions = import ./rust-analyzer-config.nix lib;
-      settings = cfg: { rust-analyzer = cfg; };
+      settings = cfg: {rust-analyzer = cfg;};
     }
     {
       name = "sumneko-lua";
@@ -240,10 +244,9 @@ let
       name = "hls";
       description = "Enable haskell language server";
       package = pkgs.haskell-language-server;
-      cmd = cfg: [ "haskell-language-server-wrapper" ];
+      cmd = cfg: ["haskell-language-server-wrapper"];
     }
   ];
-in
-{
+in {
   imports = lib.lists.map (helpers.mkLsp) servers;
 }

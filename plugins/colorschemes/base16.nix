@@ -1,11 +1,14 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.colorschemes.base16;
-  helpers = import ../helpers.nix { inherit lib; };
-  themes = import ./base16-list.nix;
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.colorschemes.base16;
+  helpers = import ../helpers.nix {inherit lib;};
+  themes = import ./base16-list.nix;
+in {
   options = {
     colorschemes.base16 = {
       enable = mkEnableOption "base16";
@@ -34,7 +37,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "base16-${cfg.colorscheme}";
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     plugins.airline.theme = mkIf (cfg.setUpBar) "base16";
     plugins.lightline.colorscheme = null;

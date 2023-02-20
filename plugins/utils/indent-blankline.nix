@@ -1,12 +1,12 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 } @ args:
 with lib; let
   helpers = import ../helpers.nix args;
-in
-{
+in {
   options.plugins.indent-blankline = {
     enable = mkEnableOption "indent-blankline.nvim";
 
@@ -62,7 +62,7 @@ in
 
     useTreesitter =
       helpers.defaultNullOpts.mkBool false
-        "Use treesitter to calculate indentation when possible.";
+      "Use treesitter to calculate indentation when possible.";
 
     indentLevel = helpers.defaultNullOpts.mkInt 10 "Specifies the maximum indent level to display.";
 
@@ -107,14 +107,14 @@ in
 
     filetypeExclude =
       helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-        ''["lspinfo" "packer" "checkhealth" "help" "man" ""]'' ''
+      ''["lspinfo" "packer" "checkhealth" "help" "man" ""]'' ''
         Specifies a list of |filetype| values for which this plugin is not enabled.
         Ignored if the value is an empty list.
       '';
 
     buftypeExclude =
       helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-        ''["terminal" "nofile" "quickfix" "prompt"]'' ''
+      ''["terminal" "nofile" "quickfix" "prompt"]'' ''
         Specifies a list of |buftype| values for which this plugin is not enabled.
         Ignored if the value is an empty list.
       '';
@@ -197,7 +197,7 @@ in
 
     contextStartPriority =
       helpers.defaultNullOpts.mkInt 10000
-        "Specifies the |extmarks| priority for the context start.";
+      "Specifies the |extmarks| priority for the context start.";
 
     contextPatterns = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''
       [
@@ -248,12 +248,11 @@ in
       helpers.defaultNullOpts.mkBool false "Turns deprecation warning messages off.";
   };
 
-  config =
-    let
-      cfg = config.plugins.indent-blankline;
-    in
+  config = let
+    cfg = config.plugins.indent-blankline;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       globals = {
         indent_blankline_char = cfg.char;

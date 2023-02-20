@@ -1,7 +1,10 @@
-{ config, lib, ... }:
-with lib;
-let
-  helpers = import ../lib/helpers.nix { inherit lib; };
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  helpers = import ../lib/helpers.nix {inherit lib;};
 
   autoGroupOption = types.submodule {
     options = {
@@ -47,13 +50,11 @@ let
       nested = helpers.defaultNullOpts.mkBool false "Run nested autocommands.";
     };
   };
-
-in
-{
+in {
   options = {
     autoGroups = mkOption {
       type = types.attrsOf autoGroupOption;
-      default = { };
+      default = {};
       description = "augroup definitions";
       example = ''
         autoGroups = {
@@ -66,7 +67,7 @@ in
 
     autoCmd = mkOption {
       type = types.listOf autoCmdOption;
-      default = [ ];
+      default = [];
       description = "autocmd definitions";
       example = ''
         autoCmd = [
@@ -80,40 +81,41 @@ in
     };
   };
 
-  config = mkIf (config.autoGroups != { } || config.autoCmd != { }) {
-    extraConfigLuaPost = (optionalString (config.autoGroups != { }) ''
-      -- Set up autogroups {{
-      do
-        local __nixvim_autogroups = ${helpers.toLuaObject config.autoGroups}
+  config = mkIf (config.autoGroups != {} || config.autoCmd != {}) {
+    extraConfigLuaPost =
+      (optionalString (config.autoGroups != {}) ''
+        -- Set up autogroups {{
+        do
+          local __nixvim_autogroups = ${helpers.toLuaObject config.autoGroups}
 
-        for group_name, options in pairs(__nixvim_autogroups) do
-          vim.api.nvim_create_augroup(group_name, options)
+          for group_name, options in pairs(__nixvim_autogroups) do
+            vim.api.nvim_create_augroup(group_name, options)
+          end
         end
-      end
-      -- }}
-    '') +
-    (optionalString (config.autoCmd != [ ]) ''
-      -- Set up autocommands {{
-      do
-        local __nixvim_autocommands = ${helpers.toLuaObject config.autoCmd}
+        -- }}
+      '')
+      + (optionalString (config.autoCmd != []) ''
+        -- Set up autocommands {{
+        do
+          local __nixvim_autocommands = ${helpers.toLuaObject config.autoCmd}
 
-        for _, autocmd in ipairs(__nixvim_autocommands) do
-          vim.api.nvim_create_autocmd(
-            autocmd.event,
-            {
-              group     = autocmd.group,
-              pattern   = autocmd.pattern,
-              buffer    = autocmd.buffer,
-              desc      = autocmd.desc,
-              callback  = autocmd.callback,
-              command   = autocmd.command,
-              once      = autocmd.once,
-              nested    = autocmd.nested
-            }
-          )
+          for _, autocmd in ipairs(__nixvim_autocommands) do
+            vim.api.nvim_create_autocmd(
+              autocmd.event,
+              {
+                group     = autocmd.group,
+                pattern   = autocmd.pattern,
+                buffer    = autocmd.buffer,
+                desc      = autocmd.desc,
+                callback  = autocmd.callback,
+                command   = autocmd.command,
+                once      = autocmd.once,
+                nested    = autocmd.nested
+              }
+            )
+          end
         end
-      end
-      -- }}
-    '');
+        -- }}
+      '');
   };
 }

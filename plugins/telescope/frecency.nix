@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.telescope.extensions.frecency;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.telescope.extensions.frecency;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.telescope.extensions.frecency = {
     enable = mkEnableOption "frecency";
 
@@ -47,26 +50,25 @@ in
     };
   };
 
-  config =
-    let
-      configuration = {
-        db_root = cfg.dbRoot;
-        default_workspace = cfg.defaultWorkspace;
-        ignore_patterns = cfg.ignorePatterns;
-        show_scores = cfg.showScores;
-        workspaces = cfg.workspaces;
-        show_unindexed = cfg.showUnindexed;
-        devicons_disabled = cfg.deviconsDisabled;
-      };
-    in
+  config = let
+    configuration = {
+      db_root = cfg.dbRoot;
+      default_workspace = cfg.defaultWorkspace;
+      ignore_patterns = cfg.ignorePatterns;
+      show_scores = cfg.showScores;
+      workspaces = cfg.workspaces;
+      show_unindexed = cfg.showUnindexed;
+      devicons_disabled = cfg.deviconsDisabled;
+    };
+  in
     mkIf cfg.enable {
-      extraPackages = [ pkgs.sqlite ];
+      extraPackages = [pkgs.sqlite];
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package
         sqlite-lua
       ];
 
-      plugins.telescope.enabledExtensions = [ "frecency" ];
+      plugins.telescope.enabledExtensions = ["frecency"];
       plugins.telescope.extensionConfig."frecency" = configuration;
     };
 }

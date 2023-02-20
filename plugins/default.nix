@@ -21,15 +21,17 @@
     ./git/gitmessenger.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
-  
     ./languages/clangd-extensions.nix
     ./languages/ledger.nix
+    ./languages/markdown-preview.nix
     ./languages/nix.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust.nix
+    ./languages/tagbar.nix
     ./languages/treesitter.nix
     ./languages/treesitter-context.nix
     ./languages/treesitter-refactor.nix
+    ./languages/vimtex.nix
     ./languages/zig.nix
 
     ./null-ls
@@ -56,6 +58,7 @@
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
+    ./utils/harpoon.nix
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix

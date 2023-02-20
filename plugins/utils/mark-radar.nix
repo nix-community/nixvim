@@ -1,12 +1,14 @@
-{ pkgs, config, lib, ... }:
-
-with lib;
-let
-  cfg = config.plugins.mark-radar;
-  helpers = import ../helpers.nix { inherit lib; };
-  defs = import ../plugin-defs.nix { inherit pkgs; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.mark-radar;
+  helpers = import ../helpers.nix {inherit lib;};
+  defs = import ../plugin-defs.nix {inherit pkgs;};
+in {
   options.plugins.mark-radar = {
     enable = mkEnableOption "mark-radar";
 
@@ -33,16 +35,15 @@ in
     };
   };
 
-  config =
-    let
-      opts = helpers.toLuaObject {
-        inherit (cfg) highlight_group background_highlight_group;
-        set_default_mappings = cfg.set_default_keybinds;
-        background_highlight = cfg.highlight_background;
-      };
-    in
+  config = let
+    opts = helpers.toLuaObject {
+      inherit (cfg) highlight_group background_highlight_group;
+      set_default_mappings = cfg.set_default_keybinds;
+      background_highlight = cfg.highlight_background;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require("mark-radar").setup(${opts})

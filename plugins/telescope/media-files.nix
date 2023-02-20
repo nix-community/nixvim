@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.telescope.extensions.media_files;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.telescope.extensions.media_files;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.telescope.extensions.media_files = {
     enable = mkEnableOption "Enable media_files extension for telescope";
 
@@ -23,7 +26,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    plugins.telescope.enabledExtensions = [ "media_files" ];
+    plugins.telescope.enabledExtensions = ["media_files"];
 
     extraPlugins = with pkgs.vimPlugins; [
       popup-nvim

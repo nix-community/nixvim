@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.colorschemes.onedark;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.colorschemes.onedark;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     colorschemes.onedark = {
       enable = mkEnableOption "onedark";
@@ -15,7 +18,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "onedark";
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     options = {
       termguicolors = true;

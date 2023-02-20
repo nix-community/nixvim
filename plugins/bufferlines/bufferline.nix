@@ -1,12 +1,16 @@
-{ config, pkgs, lib, ... }@args:
-with lib;
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+} @ args:
+with lib; let
   cfg = config.plugins.bufferline;
   optionWarnings = import ../../lib/option-warnings.nix args;
   helpers = import ../helpers.nix args;
 
   highlight = mkOption {
-    type = types.nullOr (types.submodule ({ ... }: {
+    type = types.nullOr (types.submodule ({...}: {
       options = {
         guifg = mkOption {
           type = types.nullOr types.str;
@@ -20,14 +24,13 @@ let
         };
       };
     }));
-    default = null;
+    default = {};
   };
-in
-{
+in {
   imports = [
     (optionWarnings.mkDeprecatedOption {
-      option = [ "plugins" "bufferline" "indicatorIcon" ];
-      alternative = [ "plugins" "bufferline" "indicator" "icon" ];
+      option = ["plugins" "bufferline" "indicatorIcon"];
+      alternative = ["plugins" "bufferline" "indicator" "icon"];
     })
   ];
 
@@ -111,7 +114,7 @@ in
         default = null;
       };
       diagnostics = mkOption {
-        type = types.nullOr (types.enum [ false "nvim_lsp" "coc" ]);
+        type = types.nullOr (types.enum [false "nvim_lsp" "coc"]);
         default = null;
       };
       diagnosticsUpdateInInsert = mkOption {
@@ -147,7 +150,7 @@ in
         default = null;
       };
       separatorStyle = mkOption {
-        type = types.nullOr (types.enum [ "slant" "thick" "thin" ]);
+        type = types.nullOr (types.enum ["slant" "thick" "thin"]);
         default = null;
       };
       enforceRegularTabs = mkOption {
@@ -159,27 +162,27 @@ in
         default = null;
       };
       sortBy = mkOption {
-        type = types.nullOr (types.enum [ "id" "extension" "relative_directory" "directory" "tabs" ]);
+        type = types.nullOr (types.enum ["id" "extension" "relative_directory" "directory" "tabs"]);
         default = null;
       };
       indicator = mkOption {
-        default = null;
-        type = types.nullOr (types.submodule ({ ... }: {
+        default = {};
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             icon = mkOption {
               type = types.nullOr types.str;
               default = null;
             };
             style = mkOption {
-              type = types.nullOr (types.enum [ "icon" "underline" "none" ]);
+              type = types.nullOr (types.enum ["icon" "underline" "none"]);
               default = null;
             };
           };
         }));
       };
       highlights = mkOption {
-        default = null;
-        type = types.nullOr (types.submodule ({ ... }: {
+        default = {};
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             fill = highlight;
             background = highlight;
@@ -246,16 +249,16 @@ in
 
       extraOptions = mkOption {
         type = types.attrs;
-        default = { };
+        default = {};
         description = "Extra options, will override others if defined";
       };
     };
   };
 
-  config =
-    let
-      setupOptions = {
-        options = {
+  config = let
+    setupOptions = {
+      options =
+        {
           numbers = cfg.numbers;
           close_command = cfg.closeCommand;
           right_mouse_command = cfg.rightMouseCommand;
@@ -263,7 +266,14 @@ in
           middle_mouse_command = cfg.middleMouseCommand;
           # deprecated, but might still work
           indicator_icon = cfg.indicatorIcon;
-          indicator = cfg.indicator;
+          indicator =
+            if cfg.indicator != null
+            then
+              with cfg.indicator; {
+                icon = icon;
+                style = style;
+              }
+            else null;
           buffer_close_icon = cfg.bufferCloseIcon;
           modified_icon = cfg.modifiedIcon;
           close_icon = cfg.closeIcon;
@@ -286,70 +296,74 @@ in
           enforce_regular_tabs = cfg.enforceRegularTabs;
           always_show_bufferline = cfg.alwaysShowBufferline;
           sort_by = cfg.sortBy;
-        } // cfg.extraOptions;
-        highlights = if builtins.isNull cfg.highlights then null else with cfg.highlights; {
-          fill = fill;
-          background = background;
+        }
+        // cfg.extraOptions;
+      highlights =
+        if builtins.isNull cfg.highlights
+        then null
+        else
+          with cfg.highlights; {
+            fill = fill;
+            background = background;
 
-          tab = tab;
-          tab_selected = tabSelected;
-          tab_close = tabClose;
-          close_button = closeButton;
-          close_button_visible = closeButtonVisible;
-          close_button_selected = closeButtonSelected;
+            tab = tab;
+            tab_selected = tabSelected;
+            tab_close = tabClose;
+            close_button = closeButton;
+            close_button_visible = closeButtonVisible;
+            close_button_selected = closeButtonSelected;
 
-          buffer_visible = bufferVisible;
-          buffer_selected = bufferSelected;
+            buffer_visible = bufferVisible;
+            buffer_selected = bufferSelected;
 
-          diagnostic = diagnostic;
-          diagnostic_visible = diagnosticVisible;
-          diagnostic_selected = diagnosticSelected;
+            diagnostic = diagnostic;
+            diagnostic_visible = diagnosticVisible;
+            diagnostic_selected = diagnosticSelected;
 
-          info = info;
-          info_visible = infoVisible;
-          info_selected = infoSelected;
+            info = info;
+            info_visible = infoVisible;
+            info_selected = infoSelected;
 
-          info_diagnostic = infoDiagnostic;
-          info_diagnostic_visible = infoDiagnosticVisible;
-          info_diagnostic_selected = infoDiagnosticSelected;
+            info_diagnostic = infoDiagnostic;
+            info_diagnostic_visible = infoDiagnosticVisible;
+            info_diagnostic_selected = infoDiagnosticSelected;
 
-          warning = warning;
-          warning_visible = warningVisible;
-          warning_selected = warningSelected;
+            warning = warning;
+            warning_visible = warningVisible;
+            warning_selected = warningSelected;
 
-          warning_diagnostic = warningDiagnostic;
-          warning_diagnostic_visible = warningDiagnosticVisible;
-          warning_diagnostic_selected = warningDiagnosticSelected;
+            warning_diagnostic = warningDiagnostic;
+            warning_diagnostic_visible = warningDiagnosticVisible;
+            warning_diagnostic_selected = warningDiagnosticSelected;
 
-          error = error;
-          error_visible = errorVisible;
-          error_selected = errorSelected;
+            error = error;
+            error_visible = errorVisible;
+            error_selected = errorSelected;
 
-          error_dagnostic = errorDiagnostic;
-          error_diagnostic_visible = errorDiagnosticVisible;
-          error_diagnostic_selected = errorDiagnosticSelected;
+            error_dagnostic = errorDiagnostic;
+            error_diagnostic_visible = errorDiagnosticVisible;
+            error_diagnostic_selected = errorDiagnosticSelected;
 
-          modified = modified;
-          modified_visible = modifiedVisible;
-          modified_selected = modifiedSelected;
+            modified = modified;
+            modified_visible = modifiedVisible;
+            modified_selected = modifiedSelected;
 
-          duplicate = duplicate;
-          duplicate_visible = duplicateVisible;
-          duplicate_selected = duplicateSelected;
+            duplicate = duplicate;
+            duplicate_visible = duplicateVisible;
+            duplicate_selected = duplicateSelected;
 
-          separator = separator;
-          separator_visible = separatorVisible;
-          separator_selected = separatorSelected;
+            separator = separator;
+            separator_visible = separatorVisible;
+            separator_selected = separatorSelected;
 
-          indicator_selected = indicatorSelected;
+            indicator_selected = indicatorSelected;
 
-          pick = pick;
-          pick_visible = pickVisible;
-          pick_selected = pickSelected;
-
-        };
-      };
-    in
+            pick = pick;
+            pick_visible = pickVisible;
+            pick_selected = pickSelected;
+          };
+    };
+  in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package

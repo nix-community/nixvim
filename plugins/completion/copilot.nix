@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.copilot;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.copilot;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.copilot = {
       enable = mkEnableOption "copilot";
@@ -12,11 +15,11 @@ in
       filetypes = mkOption {
         type = types.attrsOf types.bool;
         description = "A dictionary mapping file types to their enabled status";
-        default = { };
-        example = literalExpression ''{
-          "*": false,
-          python: true
-        }'';
+        default = {};
+        example = literalExpression ''          {
+                    "*": false,
+                    python: true
+                  }'';
       };
       proxy = mkOption {
         type = types.nullOr types.str;
@@ -27,12 +30,17 @@ in
     };
   };
 
-  config =
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      globals = {
+  config = mkIf cfg.enable {
+    extraPlugins = [cfg.package];
+    globals =
+      {
         copilot_node_command = "${pkgs.nodejs-16_x}/bin/node";
         copilot_filetypes = cfg.filetypes;
-      } // (if cfg.proxy != null then { copilot_proxy = cfg.proxy; } else { });
-    };
+      }
+      // (
+        if cfg.proxy != null
+        then {copilot_proxy = cfg.proxy;}
+        else {}
+      );
+  };
 }

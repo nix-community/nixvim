@@ -1,27 +1,30 @@
-{ pkgs, config, lib, ... }@args:
-with lib;
-let
-  cfg = config.plugins.nvim-tree;
-  helpers = import ../helpers.nix { inherit lib; };
-  optionWarnings = import ../../lib/option-warnings.nix args;
-  basePluginPath = [ "plugins" "nvim-tree" ];
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+} @ args:
+with lib; let
+  cfg = config.plugins.nvim-tree;
+  helpers = import ../helpers.nix {inherit lib;};
+  optionWarnings = import ../../lib/option-warnings.nix args;
+  basePluginPath = ["plugins" "nvim-tree"];
+in {
   imports = [
     (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ [ "updateCwd" ];
-      newOption = basePluginPath ++ [ "syncRootWithCwd" ];
+      option = basePluginPath ++ ["updateCwd"];
+      newOption = basePluginPath ++ ["syncRootWithCwd"];
     })
     (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ [ "updateFocusedFile" "updateCwd" ];
-      newOption = basePluginPath ++ [ "updateFocusedFile" "updateRoot" ];
+      option = basePluginPath ++ ["updateFocusedFile" "updateCwd"];
+      newOption = basePluginPath ++ ["updateFocusedFile" "updateRoot"];
     })
     (optionWarnings.mkDeprecatedOption {
-      option = basePluginPath ++ [ "openOnSetup" ];
+      option = basePluginPath ++ ["openOnSetup"];
       alternative = [];
     })
     (optionWarnings.mkDeprecatedOption {
-      option = basePluginPath ++ [ "ignoreFtOnSetup" ];
+      option = basePluginPath ++ ["ignoreFtOnSetup"];
       alternative = [];
     })
   ];
@@ -102,20 +105,19 @@ in
         description = "Enable diagnostics";
       };
 
-      icons =
-        let
-          diagnosticOption = desc: mkOption {
+      icons = let
+        diagnosticOption = desc:
+          mkOption {
             type = types.nullOr types.str;
             default = null;
             description = desc;
           };
-        in
-        {
-          hint = diagnosticOption "Hints";
-          info = diagnosticOption "Info";
-          warning = diagnosticOption "Warning";
-          error = diagnosticOption "Error";
-        };
+      in {
+        hint = diagnosticOption "Hints";
+        info = diagnosticOption "Info";
+        warning = diagnosticOption "Warning";
+        error = diagnosticOption "Error";
+      };
     };
 
     updateFocusedFile = {
@@ -233,50 +235,49 @@ in
     };
   };
 
-  config =
-    let
-      options = {
-        disable_netrw = cfg.disableNetrw;
-        hijack_netrw = cfg.hijackNetrw;
-        open_on_setup = cfg.openOnSetup;
-        ignore_ft_on_setup = cfg.ignoreFtOnSetup;
-        open_on_tab = cfg.openOnTab;
-        hijack_cursor = cfg.hijackCursor;
-        sync_root_with_cwd = cfg.syncRootWithCwd;
-        respect_buf_cwd = cfg.respectBufCwd;
-        update_to_buf_dir = {
-          enable = cfg.updateToBufDir.enable;
-          auto_open = cfg.updateToBufDir.autoOpen;
-        };
-        diagnostics = cfg.diagnostics;
-        update_focused_file = {
-          enable = cfg.updateFocusedFile.enable;
-          update_root = cfg.updateFocusedFile.updateRoot;
-          ignore_list = cfg.updateFocusedFile.ignoreList;
-        };
-        system_open = cfg.systemOpen;
-        filters = cfg.filters;
-        git = cfg.git;
-        view = {
-          width = cfg.view.width;
-          height = cfg.view.height;
-          hide_root_folder = cfg.view.hideRootFolder;
-          side = cfg.view.side;
-          auto_resize = cfg.view.autoResize;
-          mappings = {
-            custom_only = cfg.view.mappings.customOnly;
-            list = cfg.view.mappings.list;
-          };
-          number = cfg.view.number;
-          relativenumber = cfg.view.relativenumber;
-          signcolumn = cfg.view.signcolumn;
-        };
-        trash = {
-          cmd = cfg.trash.cmd;
-          require_confirm = cfg.trash.requireConfirm;
-        };
+  config = let
+    options = {
+      disable_netrw = cfg.disableNetrw;
+      hijack_netrw = cfg.hijackNetrw;
+      open_on_setup = cfg.openOnSetup;
+      ignore_ft_on_setup = cfg.ignoreFtOnSetup;
+      open_on_tab = cfg.openOnTab;
+      hijack_cursor = cfg.hijackCursor;
+      sync_root_with_cwd = cfg.syncRootWithCwd;
+      respect_buf_cwd = cfg.respectBufCwd;
+      update_to_buf_dir = {
+        enable = cfg.updateToBufDir.enable;
+        auto_open = cfg.updateToBufDir.autoOpen;
       };
-    in
+      diagnostics = cfg.diagnostics;
+      update_focused_file = {
+        enable = cfg.updateFocusedFile.enable;
+        update_root = cfg.updateFocusedFile.updateRoot;
+        ignore_list = cfg.updateFocusedFile.ignoreList;
+      };
+      system_open = cfg.systemOpen;
+      filters = cfg.filters;
+      git = cfg.git;
+      view = {
+        width = cfg.view.width;
+        height = cfg.view.height;
+        hide_root_folder = cfg.view.hideRootFolder;
+        side = cfg.view.side;
+        auto_resize = cfg.view.autoResize;
+        mappings = {
+          custom_only = cfg.view.mappings.customOnly;
+          list = cfg.view.mappings.list;
+        };
+        number = cfg.view.number;
+        relativenumber = cfg.view.relativenumber;
+        signcolumn = cfg.view.signcolumn;
+      };
+      trash = {
+        cmd = cfg.trash.cmd;
+        require_confirm = cfg.trash.requireConfirm;
+      };
+    };
+  in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package
@@ -294,6 +295,6 @@ in
       extraConfigLua = ''
         require('nvim-tree').setup(${helpers.toLuaObject options})
       '';
-      extraPackages = [ pkgs.git ];
+      extraPackages = [pkgs.git];
     };
 }

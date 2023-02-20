@@ -1,70 +1,69 @@
-{ pkgs
-, lib
-, config
-, ...
-}:
-let
-  helpers = import ../helpers.nix { inherit lib; };
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
+  helpers = import ../helpers.nix {inherit lib;};
 in
-with lib; {
-  options.plugins.nvim-lightbulb = {
-    enable = mkEnableOption "nvim-lightbulb, showing available code actions";
+  with lib; {
+    options.plugins.nvim-lightbulb = {
+      enable = mkEnableOption "nvim-lightbulb, showing available code actions";
 
-    package = helpers.mkPackageOption "nvim-lightbulb" pkgs.vimPlugins.nvim-lightbulb;
+      package = helpers.mkPackageOption "nvim-lightbulb" pkgs.vimPlugins.nvim-lightbulb;
 
-    ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-      LSP client names to ignore
-    '';
-
-    sign = {
-      enabled = helpers.defaultNullOpts.mkBool true "";
-      priority = helpers.defaultNullOpts.mkInt 10 "";
-    };
-
-    float = {
-      enabled = helpers.defaultNullOpts.mkBool false "";
-
-      text = helpers.defaultNullOpts.mkStr "💡" "Text to show in the popup float";
-
-      winOpts = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" ''
-        Options for the floating window (see |vim.lsp.util.open_floating_preview| for more information)
+      ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        LSP client names to ignore
       '';
-    };
 
-    virtualText = {
-      enabled = helpers.defaultNullOpts.mkBool false "";
+      sign = {
+        enabled = helpers.defaultNullOpts.mkBool true "";
+        priority = helpers.defaultNullOpts.mkInt 10 "";
+      };
 
-      text = helpers.defaultNullOpts.mkStr "💡" "Text to show at virtual text";
+      float = {
+        enabled = helpers.defaultNullOpts.mkBool false "";
 
-      hlMode = helpers.defaultNullOpts.mkStr "replace" ''
-        highlight mode to use for virtual text (replace, combine, blend), see
-        :help nvim_buf_set_extmark() for reference
-      '';
-    };
+        text = helpers.defaultNullOpts.mkStr "💡" "Text to show in the popup float";
 
-    statusText = {
-      enabled = helpers.defaultNullOpts.mkBool false "";
+        winOpts = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" ''
+          Options for the floating window (see |vim.lsp.util.open_floating_preview| for more information)
+        '';
+      };
 
-      text = helpers.defaultNullOpts.mkStr "💡" "Text to provide when code actions are available";
+      virtualText = {
+        enabled = helpers.defaultNullOpts.mkBool false "";
 
-      textUnavailable = helpers.defaultNullOpts.mkStr "" ''
-        Text to provide when no actions are available
-      '';
-    };
+        text = helpers.defaultNullOpts.mkStr "💡" "Text to show at virtual text";
 
-    autocmd = {
-      enabled = helpers.defaultNullOpts.mkBool false "";
+        hlMode = helpers.defaultNullOpts.mkStr "replace" ''
+          highlight mode to use for virtual text (replace, combine, blend), see
+          :help nvim_buf_set_extmark() for reference
+        '';
+      };
 
-      pattern = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["*"]'' "";
+      statusText = {
+        enabled = helpers.defaultNullOpts.mkBool false "";
 
-      events =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str)
+        text = helpers.defaultNullOpts.mkStr "💡" "Text to provide when code actions are available";
+
+        textUnavailable = helpers.defaultNullOpts.mkStr "" ''
+          Text to provide when no actions are available
+        '';
+      };
+
+      autocmd = {
+        enabled = helpers.defaultNullOpts.mkBool false "";
+
+        pattern = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["*"]'' "";
+
+        events =
+          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
           ''["CursorHold" "CursorHoldI"]'' "";
+      };
     };
-  };
 
-  config =
-    let
+    config = let
       cfg = config.plugins.nvim-lightbulb;
       setupOptions = {
         inherit (cfg) ignore sign autocmd;
@@ -82,10 +81,10 @@ with lib; {
         };
       };
     in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraConfigLua = ''
-        require("nvim-lightbulb").setup(${helpers.toLuaObject setupOptions})
-      '';
-    };
-}
+      mkIf cfg.enable {
+        extraPlugins = [cfg.package];
+        extraConfigLua = ''
+          require("nvim-lightbulb").setup(${helpers.toLuaObject setupOptions})
+        '';
+      };
+  }

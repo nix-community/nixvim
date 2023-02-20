@@ -1,6 +1,10 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   pluginWithConfigType = types.submodule {
     options = {
       config = mkOption {
@@ -9,9 +13,11 @@ let
         default = "";
       };
 
-      optional = mkEnableOption "optional" // {
-        description = "Don't load by default (load with :packadd)";
-      };
+      optional =
+        mkEnableOption "optional"
+        // {
+          description = "Don't load by default (load with :packadd)";
+        };
 
       plugin = mkOption {
         type = types.package;
@@ -19,8 +25,7 @@ let
       };
     };
   };
-in
-{
+in {
   options = {
     viAlias = mkOption {
       type = types.bool;
@@ -46,13 +51,13 @@ in
 
     extraPlugins = mkOption {
       type = with types; listOf (either package pluginWithConfigType);
-      default = [ ];
+      default = [];
       description = "List of vim plugins to install";
     };
 
     extraPackages = mkOption {
       type = types.listOf types.package;
-      default = [ ];
+      default = [];
       description = "Extra packages to be made available to neovim";
     };
 
@@ -73,7 +78,6 @@ in
       default = "";
       description = "Extra contents for init.lua after everything else";
     };
-
 
     extraConfigVim = mkOption {
       type = types.lines;
@@ -101,18 +105,23 @@ in
     };
   };
 
-  config =
-    let
+  config = let
+    defaultPlugin = {
+      plugin = null;
+      config = "";
+      optional = false;
+    };
 
-      defaultPlugin = {
-        plugin = null;
-        config = "";
-        optional = false;
-      };
+    normalizedPlugins = map (x:
+      defaultPlugin
+      // (
+        if x ? plugin
+        then x
+        else {plugin = x;}
+      ))
+    config.extraPlugins;
 
-      normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) config.extraPlugins;
-
-      neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
+    neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
         inherit (config) viAlias vimAlias;
         # inherit customRC;
         plugins = normalizedPlugins;
@@ -121,44 +130,47 @@ in
       # or more generally before the commit:
       # cda1f8ae468 - neovim: pass packpath via the wrapper
       // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
-        configure.packages =
-          { nixvim = { start = map (x: x.plugin) normalizedPlugins; opt = [ ]; }; };
+        configure.packages = {
+          nixvim = {
+            start = map (x: x.plugin) normalizedPlugins;
+            opt = [];
+          };
+        };
       });
 
-      customRC =
-        ''
-          vim.cmd([[
-            ${neovimConfig.neovimRcContent}
-          ]])
-        '' +
-        (optionalString (config.extraConfigLuaPre != "") ''
-          ${config.extraConfigLuaPre}
-        '') +
-        (optionalString (config.extraConfigVim != "") ''
-          vim.cmd([[
-            ${config.extraConfigVim}
-          ]])
-        '') +
-        (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-        '');
+    customRC =
+      ''
+        vim.cmd([[
+          ${neovimConfig.neovimRcContent}
+        ]])
+      ''
+      + (optionalString (config.extraConfigLuaPre != "") ''
+        ${config.extraConfigLuaPre}
+      '')
+      + (optionalString (config.extraConfigVim != "") ''
+        vim.cmd([[
+          ${config.extraConfigVim}
+        ]])
+      '')
+      + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
+        ${config.extraConfigLua}
+        ${config.extraConfigLuaPost}
+      '');
 
-      extraWrapperArgs = builtins.concatStringsSep " " (
-        (optional (config.extraPackages != [ ])
-          ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
-        ++
-        (optional (config.wrapRc)
-          ''--add-flags -u --add-flags "${pkgs.writeText "init.lua" customRC}"'')
-      );
+    extraWrapperArgs = builtins.concatStringsSep " " (
+      (optional (config.extraPackages != [])
+        ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
+      ++ (optional (config.wrapRc)
+        ''--add-flags -u --add-flags "${pkgs.writeText "init.lua" customRC}"'')
+    );
 
-      wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig // {
+    wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig
+      // {
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
         wrapRc = false;
       });
-    in
-    {
-      finalPackage = wrappedNeovim;
-      initContent = customRC;
-    };
+  in {
+    finalPackage = wrappedNeovim;
+    initContent = customRC;
+  };
 }

@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.telescope.extensions.fzf-native;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.telescope.extensions.fzf-native;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.telescope.extensions.fzf-native = {
     enable = mkEnableOption "Enable fzf-native";
 
@@ -26,7 +29,7 @@ in
       default = null;
     };
     caseMode = mkOption {
-      type = types.nullOr (types.enum [ "smart_case" "ignore_case" "respect_case" ]);
+      type = types.nullOr (types.enum ["smart_case" "ignore_case" "respect_case"]);
       default = null;
     };
   };
@@ -38,10 +41,11 @@ in
       override_file_sorter = cfg.overrideFileSorter;
       case_mode = cfg.caseMode;
     };
-  in mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+  in
+    mkIf cfg.enable {
+      extraPlugins = [cfg.package];
 
-    plugins.telescope.enabledExtensions = [ "fzf" ];
-    plugins.telescope.extensionConfig."fzf" = configuration;
-  };
+      plugins.telescope.enabledExtensions = ["fzf"];
+      plugins.telescope.extensionConfig."fzf" = configuration;
+    };
 }
