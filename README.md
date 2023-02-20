@@ -34,7 +34,7 @@ To install it, edit your home-manager (or NixOS) configuration:
 ```nix
 { pkgs, lib, ... }:
 let
-  nixvim = import (lib.fetchGit {
+  nixvim = import (builtins.fetchGit {
     url = "https://github.com/pta2002/nixvim";
   });
 in
