@@ -2,6 +2,7 @@
   description = "A neovim configuration system for NixOS";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   inputs.beautysh.url = "github:lovesegfault/beautysh";
   inputs.beautysh.inputs.nixpkgs.follows = "nixpkgs";
