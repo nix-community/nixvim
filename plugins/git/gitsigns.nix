@@ -1,26 +1,27 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 } @ args:
 with lib; let
   helpers = import ../helpers.nix args;
   signOptions = defaults: {
     hl =
       helpers.defaultNullOpts.mkStr defaults.hl
-        "Specifies the highlight group to use for the sign";
+      "Specifies the highlight group to use for the sign";
     text =
       helpers.defaultNullOpts.mkStr defaults.text
-        "Specifies the character to use for the sign";
+      "Specifies the character to use for the sign";
     numhl =
       helpers.defaultNullOpts.mkStr defaults.numhl
-        "Specifies the highlight group to use for the number column";
+      "Specifies the highlight group to use for the number column";
     linehl =
       helpers.defaultNullOpts.mkStr defaults.linehl
-        "Specifies the highlight group to use for the line";
+      "Specifies the highlight group to use for the line";
     showCount =
       helpers.defaultNullOpts.mkBool false
-        "showing count of hunk, e.g. number of deleted lines";
+      "showing count of hunk, e.g. number of deleted lines";
   };
   signSetupOptions = values: {
     inherit (values) hl text numhl linehl;
@@ -33,8 +34,7 @@ with lib; let
       description = "Lua function definition";
     };
   };
-in
-{
+in {
   options.plugins.gitsigns = {
     enable = mkEnableOption "Enable gitsigns plugin";
     package = helpers.mkPackageOption "gitsigns" pkgs.vimPlugins.gitsigns-nvim;
@@ -76,19 +76,18 @@ in
         linehl = "GitSignsAddLn";
       };
     };
-    worktrees =
-      let
-        worktreeModule = {
-          options = {
-            toplevel = mkOption {
-              type = types.str;
-            };
-            gitdir = mkOption {
-              type = types.str;
-            };
+    worktrees = let
+      worktreeModule = {
+        options = {
+          toplevel = mkOption {
+            type = types.str;
+          };
+          gitdir = mkOption {
+            type = types.str;
           };
         };
-      in
+      };
+    in
       mkOption {
         type = types.nullOr (types.listOf (types.submodule worktreeModule));
         default = null;
@@ -126,25 +125,25 @@ in
     watchGitDir = {
       enable =
         helpers.defaultNullOpts.mkBool true
-          "Whether the watcher is enabled";
+        "Whether the watcher is enabled";
       interval =
         helpers.defaultNullOpts.mkInt 1000
-          "Interval the watcher waits between polls of the gitdir in milliseconds";
+        "Interval the watcher waits between polls of the gitdir in milliseconds";
       followFiles =
         helpers.defaultNullOpts.mkBool true
-          "If a file is moved with `git mv`, switch the buffer to the new location";
+        "If a file is moved with `git mv`, switch the buffer to the new location";
     };
     signPriority =
       helpers.defaultNullOpts.mkInt 6
-        "Priority to use for signs";
+      "Priority to use for signs";
     signcolumn =
       helpers.defaultNullOpts.mkBool true
-        ''
-          Enable/disable symbols in the sign column.
+      ''
+        Enable/disable symbols in the sign column.
 
-          When enabled the highlights defined in `signs.*.hl` and symbols defined
-          in `signs.*.text` are used.
-        '';
+        When enabled the highlights defined in `signs.*.hl` and symbols defined
+        in `signs.*.text` are used.
+      '';
     numhl = helpers.defaultNullOpts.mkBool false ''
       line number highlights.
 
@@ -164,33 +163,32 @@ in
 
       Note: Virtual lines currently use the highlight `GitSignsDeleteVirtLn`.
     '';
-    diffOpts =
-      let
-        diffOptModule = {
-          options = {
-            algorithm =
-              helpers.defaultNullOpts.mkEnumFirstDefault [ "myers" "minimal" "patience" "histogram" ]
-                "Diff algorithm to use";
-            internal =
-              helpers.defaultNullOpts.mkBool false
-                "Use Neovim's built in xdiff library for running diffs";
-            indentHeuristic =
-              helpers.defaultNullOpts.mkBool false
-                "Use the indent heuristic for the internal diff library.";
-            vertical =
-              helpers.defaultNullOpts.mkBool true
-                "Start diff mode with vertical splits";
-            linematch = mkOption {
-              type = types.nullOr types.int;
-              default = null;
-              description = ''
-                Enable second-stage diff on hunks to align lines.
-                Requires `internal=true`.
-              '';
-            };
+    diffOpts = let
+      diffOptModule = {
+        options = {
+          algorithm =
+            helpers.defaultNullOpts.mkEnumFirstDefault ["myers" "minimal" "patience" "histogram"]
+            "Diff algorithm to use";
+          internal =
+            helpers.defaultNullOpts.mkBool false
+            "Use Neovim's built in xdiff library for running diffs";
+          indentHeuristic =
+            helpers.defaultNullOpts.mkBool false
+            "Use the indent heuristic for the internal diff library.";
+          vertical =
+            helpers.defaultNullOpts.mkBool true
+            "Start diff mode with vertical splits";
+          linematch = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            description = ''
+              Enable second-stage diff on hunks to align lines.
+              Requires `internal=true`.
+            '';
           };
         };
-      in
+      };
+    in
       mkOption {
         type = types.nullOr (types.submodule diffOptModule);
         default = null;
@@ -240,7 +238,7 @@ in
     '' "Function used to format `b:gitsigns_status`";
     maxFileLength =
       helpers.defaultNullOpts.mkInt 40000
-        "Max file length (in lines) to attach to";
+      "Max file length (in lines) to attach to";
     previewConfig =
       helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) ''
         {
@@ -256,34 +254,34 @@ in
       '';
     attachToUntracked =
       helpers.defaultNullOpts.mkBool true
-        "Attach to untracked files.";
+      "Attach to untracked files.";
     updateDebounce =
       helpers.defaultNullOpts.mkInt 100
-        "Debounce time for updates (in milliseconds).";
+      "Debounce time for updates (in milliseconds).";
     currentLineBlame = helpers.defaultNullOpts.mkBool false ''
       Adds an unobtrusive and customisable blame annotation at the end of the current line.
     '';
     currentLineBlameOpts = {
       virtText =
         helpers.defaultNullOpts.mkBool true
-          "Whether to show a virtual text blame annotation";
+        "Whether to show a virtual text blame annotation";
       virtTextPos =
-        helpers.defaultNullOpts.mkEnumFirstDefault [ "eol" "overlay" "right_align" ]
-          "Blame annotation position";
+        helpers.defaultNullOpts.mkEnumFirstDefault ["eol" "overlay" "right_align"]
+        "Blame annotation position";
       delay =
         helpers.defaultNullOpts.mkInt 1000
-          "Sets the delay (in milliseconds) before blame virtual text is displayed";
+        "Sets the delay (in milliseconds) before blame virtual text is displayed";
       ignoreWhitespace =
         helpers.defaultNullOpts.mkBool false
-          "Ignore whitespace when running blame";
+        "Ignore whitespace when running blame";
       virtTextPriority =
         helpers.defaultNullOpts.mkInt 100
-          "Priority of virtual text";
+        "Priority of virtual text";
     };
     currentLineBlameFormatter = {
       normal =
         helpers.defaultNullOpts.mkNullable (types.either types.str luaFunction)
-          ''" <author>, <author_time> - <summary>"'' ''
+        ''" <author>, <author_time> - <summary>"'' ''
           String or function used to format the virtual text of
           |gitsigns-config-current_line_blame|.
 
@@ -292,7 +290,7 @@ in
 
       nonCommitted =
         helpers.defaultNullOpts.mkNullable (types.either types.str luaFunction)
-          ''" <author>"'' ''
+        ''" <author>"'' ''
           String or function used to format the virtual text of
           |gitsigns-config-current_line_blame| for lines that aren't committed.
         '';
@@ -316,89 +314,83 @@ in
     '';
   };
 
-  config =
-    let
-      cfg = config.plugins.gitsigns;
-    in
+  config = let
+    cfg = config.plugins.gitsigns;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraConfigLua =
-        let
-          luaFnOrStrToObj = val:
-            if val == null
-            then null
-            else if builtins.isString val
-            then val
-            else { __raw = val.function; };
-          setupOptions = {
-            inherit (cfg) worktrees signcolumn numhl linehl trouble yadm;
-            signs = mapAttrs (_: signSetupOptions) cfg.signs;
-            on_attach =
-              if cfg.onAttach != null
-              then { __raw = cfg.onAttach.function; }
-              else null;
-            watch_gitdir = {
-              inherit (cfg.watchGitDir) enable interval;
-              follow_files = cfg.watchGitDir.followFiles;
-            };
-            sign_priority = cfg.signPriority;
-            show_deleted = cfg.showDeleted;
-            diff_opts =
-              if cfg.diffOpts == null
-              then null
-              else {
-                inherit (cfg.diffOpts) algorithm internal vertical linematch;
-                indent_heuristic = cfg.diffOpts.indentHeuristic;
-              };
-            count_chars =
-              let
-                isStrInt = s: (builtins.match "[0-9]+" s) != null;
-              in
-              if cfg.countChars != null
-              then {
-                __raw =
-                  "{"
-                  + (concatStringsSep "," (
-                    lib.mapAttrsToList
-                      (
-                        name: value:
-                          if isStrInt name
-                          then "[${name}] = ${helpers.toLuaObject value}"
-                          else "[${helpers.toLuaObject name}] = ${helpers.toLuaObject value}"
-                      )
-                      cfg.countChars
-                  ))
-                  + "}";
-              }
-              else null;
-            status_formatter =
-              if cfg.statusFormatter != null
-              then { __raw = cfg.statusFormatter.function; }
-              else null;
-            max_file_length = cfg.maxFileLength;
-            preview_config = cfg.previewConfig;
-            attach_to_untracked = cfg.attachToUntracked;
-            update_debounce = cfg.updateDebounce;
-            current_line_blame = cfg.currentLineBlame;
-            current_line_blame_opts =
-              let
-                cfgCl = cfg.currentLineBlameOpts;
-              in
-              {
-                inherit (cfgCl) delay;
-                virt_text = cfgCl.virtText;
-                virt_text_pos = cfgCl.virtTextPos;
-                ignore_whitespace = cfgCl.ignoreWhitespace;
-                virt_text_priority = cfgCl.virtTextPriority;
-              };
-            current_line_blame_formatter = luaFnOrStrToObj cfg.currentLineBlameFormatter.normal;
-            current_line_blame_formatter_nc = luaFnOrStrToObj cfg.currentLineBlameFormatter.nonCommitted;
-            word_diff = cfg.wordDiff;
-            debug_mode = cfg.debugMode;
+      extraPlugins = [cfg.package];
+      extraConfigLua = let
+        luaFnOrStrToObj = val:
+          if val == null
+          then null
+          else if builtins.isString val
+          then val
+          else {__raw = val.function;};
+        setupOptions = {
+          inherit (cfg) worktrees signcolumn numhl linehl trouble yadm;
+          signs = mapAttrs (_: signSetupOptions) cfg.signs;
+          on_attach =
+            if cfg.onAttach != null
+            then {__raw = cfg.onAttach.function;}
+            else null;
+          watch_gitdir = {
+            inherit (cfg.watchGitDir) enable interval;
+            follow_files = cfg.watchGitDir.followFiles;
           };
-        in
-        ''
-          require('gitsigns').setup(${helpers.toLuaObject setupOptions})
-        '';
+          sign_priority = cfg.signPriority;
+          show_deleted = cfg.showDeleted;
+          diff_opts =
+            if cfg.diffOpts == null
+            then null
+            else {
+              inherit (cfg.diffOpts) algorithm internal vertical linematch;
+              indent_heuristic = cfg.diffOpts.indentHeuristic;
+            };
+          count_chars = let
+            isStrInt = s: (builtins.match "[0-9]+" s) != null;
+          in
+            if cfg.countChars != null
+            then {
+              __raw =
+                "{"
+                + (concatStringsSep "," (
+                  lib.mapAttrsToList
+                  (
+                    name: value:
+                      if isStrInt name
+                      then "[${name}] = ${helpers.toLuaObject value}"
+                      else "[${helpers.toLuaObject name}] = ${helpers.toLuaObject value}"
+                  )
+                  cfg.countChars
+                ))
+                + "}";
+            }
+            else null;
+          status_formatter =
+            if cfg.statusFormatter != null
+            then {__raw = cfg.statusFormatter.function;}
+            else null;
+          max_file_length = cfg.maxFileLength;
+          preview_config = cfg.previewConfig;
+          attach_to_untracked = cfg.attachToUntracked;
+          update_debounce = cfg.updateDebounce;
+          current_line_blame = cfg.currentLineBlame;
+          current_line_blame_opts = let
+            cfgCl = cfg.currentLineBlameOpts;
+          in {
+            inherit (cfgCl) delay;
+            virt_text = cfgCl.virtText;
+            virt_text_pos = cfgCl.virtTextPos;
+            ignore_whitespace = cfgCl.ignoreWhitespace;
+            virt_text_priority = cfgCl.virtTextPriority;
+          };
+          current_line_blame_formatter = luaFnOrStrToObj cfg.currentLineBlameFormatter.normal;
+          current_line_blame_formatter_nc = luaFnOrStrToObj cfg.currentLineBlameFormatter.nonCommitted;
+          word_diff = cfg.wordDiff;
+          debug_mode = cfg.debugMode;
+        };
+      in ''
+        require('gitsigns').setup(${helpers.toLuaObject setupOptions})
+      '';
     };
 }

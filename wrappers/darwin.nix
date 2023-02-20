@@ -1,25 +1,29 @@
-modules:
-{ pkgs, config, lib, ... }@args:
-
-let
+modules: {
+  pkgs,
+  config,
+  lib,
+  ...
+} @ args: let
   inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
   shared = import ./_shared.nix args;
   cfg = config.programs.nixvim;
-in
-{
+in {
   options = {
     programs.nixvim = mkOption {
-      type = types.submodule ((modules pkgs) ++ [{
-        options.enable = mkEnableOption "nixvim";
-        config.wrapRc = mkForce true;
-      }]);
+      type = types.submodule ((modules pkgs)
+        ++ [
+          {
+            options.enable = mkEnableOption "nixvim";
+            config.wrapRc = mkForce true;
+          }
+        ]);
     };
     nixvim.helpers = shared.helpers;
   };
 
   config = mkIf cfg.enable mkMerge [
     {
-      environment.systemPackages = [ cfg.finalPackage ];
+      environment.systemPackages = [cfg.finalPackage];
     }
     {
       warnings = cfg.warnings;

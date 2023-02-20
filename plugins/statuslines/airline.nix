@@ -1,17 +1,20 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.plugins.airline;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix {inherit lib;};
 
-  sectionType = with types; nullOr (oneOf [ str (listOf str) ]);
+  sectionType = with types; nullOr (oneOf [str (listOf str)]);
   sectionOption = mkOption {
     default = null;
     type = sectionType;
     description = "Configuration for this section. Can be either a statusline-format string or a list of modules to be passed to airline#section#create_*.";
   };
-in
-{
+in {
   options = {
     plugins.airline = {
       enable = mkEnableOption "airline";
@@ -33,16 +36,17 @@ in
       sections = mkOption {
         description = "Statusbar sections";
         default = null;
-        type = with types; nullOr (submodule {
-          options = {
-            a = sectionOption;
-            b = sectionOption;
-            c = sectionOption;
-            x = sectionOption;
-            y = sectionOption;
-            z = sectionOption;
-          };
-        });
+        type = with types;
+          nullOr (submodule {
+            options = {
+              a = sectionOption;
+              b = sectionOption;
+              c = sectionOption;
+              x = sectionOption;
+              y = sectionOption;
+              z = sectionOption;
+            };
+          });
       };
 
       powerline = mkOption {
@@ -59,21 +63,24 @@ in
     };
   };
 
-  config =
-    let
-      sections = { };
-    in
+  config = let
+    sections = {};
+  in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [
-        cfg.package
-      ] ++ optional (!isNull cfg.theme) vim-airline-themes;
-      globals = {
-        airline.extensions = cfg.extensions;
+      extraPlugins = with pkgs.vimPlugins;
+        [
+          cfg.package
+        ]
+        ++ optional (!isNull cfg.theme) vim-airline-themes;
+      globals =
+        {
+          airline.extensions = cfg.extensions;
 
-        airline_statusline_ontop = mkIf cfg.onTop 1;
-        airline_powerline_fonts = mkIf (cfg.powerline) 1;
+          airline_statusline_ontop = mkIf cfg.onTop 1;
+          airline_powerline_fonts = mkIf (cfg.powerline) 1;
 
-        airline_theme = mkIf (!isNull cfg.theme) cfg.theme;
-      } // sections;
+          airline_theme = mkIf (!isNull cfg.theme) cfg.theme;
+        }
+        // sections;
     };
 }

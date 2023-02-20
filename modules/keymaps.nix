@@ -1,7 +1,10 @@
-{ config, lib, ... }:
-with lib;
-let
-  helpers = import ../lib/helpers.nix { inherit lib; };
+{
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  helpers = import ../lib/helpers.nix {inherit lib;};
 
   mapOption = types.oneOf [
     types.str
@@ -57,13 +60,13 @@ let
     })
   ];
 
-  mapOptions = mode: mkOption {
-    description = "Mappings for ${mode} mode";
-    type = types.attrsOf mapOption;
-    default = { };
-  };
-in
-{
+  mapOptions = mode:
+    mkOption {
+      description = "Mappings for ${mode} mode";
+      type = types.attrsOf mapOption;
+      default = {};
+    };
+in {
   options = {
     maps = mkOption {
       type = types.submodule {
@@ -82,7 +85,7 @@ in
           command = mapOptions "command-line";
         };
       };
-      default = { };
+      default = {};
       description = ''
         Custom keybindings for any mode.
 
@@ -101,32 +104,30 @@ in
     };
   };
 
-  config =
-    let
-      mappings =
-        (helpers.genMaps "" config.maps.normalVisualOp) ++
-        (helpers.genMaps "n" config.maps.normal) ++
-        (helpers.genMaps "i" config.maps.insert) ++
-        (helpers.genMaps "v" config.maps.visual) ++
-        (helpers.genMaps "x" config.maps.visualOnly) ++
-        (helpers.genMaps "s" config.maps.select) ++
-        (helpers.genMaps "t" config.maps.terminal) ++
-        (helpers.genMaps "o" config.maps.operator) ++
-        (helpers.genMaps "l" config.maps.lang) ++
-        (helpers.genMaps "!" config.maps.insertCommand) ++
-        (helpers.genMaps "c" config.maps.command);
-    in
-    {
-      extraConfigLua = optionalString (mappings != [ ]) ''
-        -- Set up keybinds {{{
-        do
-          local __nixvim_binds = ${helpers.toLuaObject mappings}
+  config = let
+    mappings =
+      (helpers.genMaps "" config.maps.normalVisualOp)
+      ++ (helpers.genMaps "n" config.maps.normal)
+      ++ (helpers.genMaps "i" config.maps.insert)
+      ++ (helpers.genMaps "v" config.maps.visual)
+      ++ (helpers.genMaps "x" config.maps.visualOnly)
+      ++ (helpers.genMaps "s" config.maps.select)
+      ++ (helpers.genMaps "t" config.maps.terminal)
+      ++ (helpers.genMaps "o" config.maps.operator)
+      ++ (helpers.genMaps "l" config.maps.lang)
+      ++ (helpers.genMaps "!" config.maps.insertCommand)
+      ++ (helpers.genMaps "c" config.maps.command);
+  in {
+    extraConfigLua = optionalString (mappings != []) ''
+      -- Set up keybinds {{{
+      do
+        local __nixvim_binds = ${helpers.toLuaObject mappings}
 
-          for i, map in ipairs(__nixvim_binds) do
-            vim.keymap.set(map.mode, map.key, map.action, map.config)
-          end
+        for i, map in ipairs(__nixvim_binds) do
+          vim.keymap.set(map.mode, map.key, map.action, map.config)
         end
-        -- }}}
-      '';
-    };
+      end
+      -- }}}
+    '';
+  };
 }

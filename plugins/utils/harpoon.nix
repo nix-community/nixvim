@@ -1,8 +1,12 @@
-{ pkgs, config, lib, ... }:
-with lib;
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
   cfg = config.plugins.harpoon;
-  helpers = import ../helpers.nix { inherit lib; };
+  helpers = import ../helpers.nix {inherit lib;};
 
   projectConfigModule = types.submodule {
     options = {
@@ -15,8 +19,7 @@ let
       '';
     };
   };
-in
-{
+in {
   options.plugins.harpoon = {
     enable = mkEnableOption "harpoon";
 
@@ -47,7 +50,7 @@ in
     '';
 
     projects = mkOption {
-      default = { };
+      default = {};
       description = ''
         Predefined projetcs. The keys of this attrs should be the path to the project.
         $HOME is working.
@@ -73,50 +76,48 @@ in
         Menu window height
       '';
 
-      borderChars = helpers.defaultNullOpts.mkNullable (types.listOf types.str)
+      borderChars =
+        helpers.defaultNullOpts.mkNullable (types.listOf types.str)
         "[ \"─\" \"│\" \"─\" \"│\" \"╭\" \"╮\" \"╯\" \"╰\" ]"
-        "Border characters"
-      ;
+        "Border characters";
     };
-
   };
 
-  config =
-    let
-      projects = builtins.mapAttrs
-        (
-          name: value: {
-            term.cmds = value.termCommands;
-            mark.marks = map (mark: { filename = mark; }) value.marks;
-          }
-        )
-        cfg.projects;
+  config = let
+    projects =
+      builtins.mapAttrs
+      (
+        name: value: {
+          term.cmds = value.termCommands;
+          mark.marks = map (mark: {filename = mark;}) value.marks;
+        }
+      )
+      cfg.projects;
 
-      options = {
-        global_settings = {
-          save_on_toggle = cfg.saveOnToggle;
-          save_on_change = cfg.saveOnChange;
-          enter_on_sendcmd = cfg.enterOnSendcmd;
-          tmux_autoclose_windows = cfg.tmuxAutocloseWindows;
-          excluded_filetypes = cfg.excludedFiletypes;
-          mark_branch = cfg.markBranch;
-        };
-
-        projects = projects;
-
-        menu = {
-          width = cfg.menu.width;
-          height = cfg.menu.height;
-          borderchars = cfg.menu.borderChars;
-        };
+    options = {
+      global_settings = {
+        save_on_toggle = cfg.saveOnToggle;
+        save_on_change = cfg.saveOnChange;
+        enter_on_sendcmd = cfg.enterOnSendcmd;
+        tmux_autoclose_windows = cfg.tmuxAutocloseWindows;
+        excluded_filetypes = cfg.excludedFiletypes;
+        mark_branch = cfg.markBranch;
       };
-    in
+
+      projects = projects;
+
+      menu = {
+        width = cfg.menu.width;
+        height = cfg.menu.height;
+        borderchars = cfg.menu.borderChars;
+      };
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require('harpoon').setup(${helpers.toLuaObject options})
       '';
     };
 }
-

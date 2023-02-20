@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.floaterm;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.floaterm;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.floaterm = {
       enable = mkEnableOption "floaterm";
@@ -21,7 +24,7 @@ in
         default = null;
       };
       winType = mkOption {
-        type = types.nullOr (types.enum [ "float" "split" "vsplit" ]);
+        type = types.nullOr (types.enum ["float" "split" "vsplit"]);
         default = null;
       };
       winWidth = mkOption {
@@ -45,17 +48,17 @@ in
         default = null;
       };
       opener = mkOption {
-        type = types.nullOr (types.enum [ "edit" "split" "vsplit" "tabe" "drop" ]);
+        type = types.nullOr (types.enum ["edit" "split" "vsplit" "tabe" "drop"]);
         description = "Command used for opening a file in the outside nvim from within :terminal";
         default = null;
       };
       autoClose = mkOption {
-        type = types.nullOr (types.enum [ 0 1 2 ]);
+        type = types.nullOr (types.enum [0 1 2]);
         description = "Whether to close floaterm window once the job gets finished.";
         default = null;
       };
       autoHide = mkOption {
-        type = types.nullOr (types.enum [ 0 1 2 ]);
+        type = types.nullOr (types.enum [0 1 2]);
         description = "Whether to hide previous floaterm before switching to or opening another one.";
         default = null;
       };

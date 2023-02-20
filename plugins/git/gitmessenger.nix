@@ -1,12 +1,12 @@
-{ pkgs
-, lib
-, config
-, ...
+{
+  pkgs,
+  lib,
+  config,
+  ...
 } @ args:
 with lib; let
   helpers = import ../helpers.nix args;
-in
-{
+in {
   options.plugins.gitmessenger = {
     enable = mkEnableOption "Enable the gitmessenger plugin";
 
@@ -16,7 +16,7 @@ in
       A popup window is no longer closed automatically when moving a cursor after the window is
       shown up.
     '';
-    includeDiff = helpers.defaultNullOpts.mkEnumFirstDefault [ "none" "current" "all" ] ''
+    includeDiff = helpers.defaultNullOpts.mkEnumFirstDefault ["none" "current" "all"] ''
       When this value is not set to "none", a popup window includes diff hunks of the commit at
       showing up. "current" includes diff hunks of only current file in the commit. "all" includes
       all diff hunks in the commit.
@@ -26,10 +26,10 @@ in
     '';
     gitCommand =
       helpers.defaultNullOpts.mkStr "git"
-        "git command to retrieve commit messages.";
+      "git command to retrieve commit messages.";
     noDefaultMappings =
       helpers.defaultNullOpts.mkBool false
-        "When this value is set, it does not define any key mappings";
+      "When this value is set, it does not define any key mappings";
     intoPopupAfterShow = helpers.defaultNullOpts.mkBool true ''
       When this value is set to v:false, running :GitMessenger or <plug>(git-messenger) again after
       showing a popup does not move the cursor in the window.
@@ -91,12 +91,11 @@ in
     '';
   };
 
-  config =
-    let
-      cfg = config.plugins.gitmessenger;
-    in
+  config = let
+    cfg = config.plugins.gitmessenger;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       globals = {
         git_messenger_close_on_cursor_moved = cfg.closeOnCursorMoved;
         git_messenger_include_diff = cfg.includeDiff;

@@ -1,11 +1,11 @@
-{ pkgs
-, lib
-, config
-, ...
+{
+  pkgs,
+  lib,
+  config,
+  ...
 }:
-with lib;
-let
-  helpers = import ../helpers.nix { inherit lib; };
+with lib; let
+  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.plantuml-syntax = {
     enable = mkEnableOption "plantuml syntax support";
@@ -24,12 +24,11 @@ in {
     };
   };
 
-  config =
-    let
-      cfg = config.plugins.plantuml-syntax;
-    in
+  config = let
+    cfg = config.plugins.plantuml-syntax;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       globals = {
         plantuml_set_makeprg = cfg.setMakeprg;

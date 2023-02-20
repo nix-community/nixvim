@@ -1,14 +1,13 @@
-{ pkgs
-, config
-, lib
-, ...
-}:
-with lib;
-let
-  cfg = config.plugins.telescope;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.telescope;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   imports = [
     ./frecency.nix
     ./fzf-native.nix
@@ -33,13 +32,13 @@ in
     enabledExtensions = mkOption {
       type = types.listOf types.str;
       description = "A list of enabled extensions. Don't use this directly";
-      default = [ ];
+      default = [];
     };
 
     extensionConfig = mkOption {
       type = types.attrsOf types.anything;
       description = "Configuration for the extensions. Don't use this directly";
-      default = { };
+      default = {};
     };
 
     defaults = mkOption {
@@ -50,13 +49,13 @@ in
 
     extraOptions = mkOption {
       type = types.attrs;
-      default = { };
+      default = {};
       description = "An attribute set, that lets you set extra options or override options set by nixvim";
     };
   };
 
   config = mkIf cfg.enable {
-    extraPackages = [ pkgs.bat ];
+    extraPackages = [pkgs.bat];
 
     extraPlugins = with pkgs.vimPlugins; [
       cfg.package
@@ -68,23 +67,23 @@ in
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    extraConfigLua =
-      let
-        options = {
+    extraConfigLua = let
+      options =
+        {
           extensions = cfg.extensionConfig;
           defaults = cfg.defaults;
-        } // cfg.extraOptions;
-      in
-      ''
-        do
-          local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
+        }
+        // cfg.extraOptions;
+    in ''
+      do
+        local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
 
-          require('telescope').setup(${helpers.toLuaObject options})
+        require('telescope').setup(${helpers.toLuaObject options})
 
-          for i, extension in ipairs(__telescopeExtensions) do
-            require('telescope').load_extension(extension)
-          end
+        for i, extension in ipairs(__telescopeExtensions) do
+          require('telescope').load_extension(extension)
         end
-      '';
+      end
+    '';
   };
 }

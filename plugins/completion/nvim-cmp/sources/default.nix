@@ -1,12 +1,16 @@
-{ lib, pkgs, ... }@attrs:
-with lib;
-let
+{
+  lib,
+  pkgs,
+  ...
+} @ attrs:
+with lib; let
   cmpLib = import ../cmp-helpers.nix attrs;
   cmpSourcesPluginNames = lib.attrValues cmpLib.pluginAndSourceNames;
-  pluginModules = lists.map (name: cmpLib.mkCmpSourcePlugin { inherit name; }) cmpSourcesPluginNames;
-in
-{
+  pluginModules = lists.map (name: cmpLib.mkCmpSourcePlugin {inherit name;}) cmpSourcesPluginNames;
+in {
   # For extra cmp plugins
-  imports = [
-  ] ++ pluginModules;
+  imports =
+    [
+    ]
+    ++ pluginModules;
 }

@@ -1,11 +1,14 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.plugins.dashboard;
 
-  helpers = import ../helpers.nix { inherit lib; };
-in
-{
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.dashboard = {
       enable = mkEnableOption "dashboard";
@@ -90,7 +93,7 @@ in
             };
           };
         };
-        default = { };
+        default = {};
       };
 
       hideStatusline = mkOption {
@@ -107,34 +110,32 @@ in
     };
   };
 
-  config =
-    let
-      options = {
-        custom_header = cfg.header;
-        custom_footer = cfg.footer;
-        custom_center = cfg.center;
+  config = let
+    options = {
+      custom_header = cfg.header;
+      custom_footer = cfg.footer;
+      custom_center = cfg.center;
 
-        preview_file_path = cfg.preview.file;
-        preview_file_height = cfg.preview.height;
-        preview_file_width = cfg.preview.width;
-        preview_command = cfg.preview.command;
+      preview_file_path = cfg.preview.file;
+      preview_file_height = cfg.preview.height;
+      preview_file_width = cfg.preview.width;
+      preview_command = cfg.preview.command;
 
-        hide_statusline = cfg.hideStatusline;
-        hide_tabline = cfg.hideTabline;
+      hide_statusline = cfg.hideStatusline;
+      hide_tabline = cfg.hideTabline;
 
-        session_directory = cfg.sessionDirectory;
-      };
+      session_directory = cfg.sessionDirectory;
+    };
 
-      filteredOptions = filterAttrs (_: v: !isNull v) options;
-    in
+    filteredOptions = filterAttrs (_: v: !isNull v) options;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       extraConfigLua = ''
         local dashboard = require("dashboard")
 
-        ${toString (mapAttrsToList (n: v:
-          "dashboard.${n} = ${helpers.toLuaObject v}\n")
-          filteredOptions)}
+        ${toString (mapAttrsToList (n: v: "dashboard.${n} = ${helpers.toLuaObject v}\n")
+            filteredOptions)}
       '';
     };
 }

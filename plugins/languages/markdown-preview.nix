@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.markdown-preview;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.markdown-preview;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.markdown-preview = {
       enable = mkEnableOption "markdown-preview";
@@ -54,7 +57,7 @@ in
         uml = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "markdown-it-plantuml options";
         maid = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "mermaid options";
         disable_sync_scroll = helpers.defaultNullOpts.mkBool false "Disable sync scroll";
-        sync_scroll_type = helpers.defaultNullOpts.mkNullable (types.enum [ "middle" "top" "relative" ]) "middle" ''
+        sync_scroll_type = helpers.defaultNullOpts.mkNullable (types.enum ["middle" "top" "relative"]) "middle" ''
           Scroll type:
           - "middle": The cursor position is always shown at the middle of the preview page.
           - "top": The vim top viewport is always shown at the top of the preview page.
@@ -86,18 +89,17 @@ in
         Recognized filetypes. These filetypes will have MarkdownPreview... commands.
       '';
 
-      theme = helpers.defaultNullOpts.mkNullable (types.enum [ "dark" "light" ]) "dark" ''
+      theme = helpers.defaultNullOpts.mkNullable (types.enum ["dark" "light"]) "dark" ''
         Default theme (dark or light). By default the theme is define according to the preferences of the system.
       '';
     };
   };
 
-  config =
-    let
-      previewOptions = mapAttrs (name: value: cfg.previewOptions.${name}) cfg.previewOptions;
-    in
+  config = let
+    previewOptions = mapAttrs (name: value: cfg.previewOptions.${name}) cfg.previewOptions;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       globals = {
         mkdp_auto_start = mkIf (!isNull cfg.autoStart) cfg.autoStart;
@@ -109,7 +111,7 @@ in
         mkdp_browser = mkIf (!isNull cfg.browser) cfg.browser;
         mkdp_echo_preview_url = mkIf (!isNull cfg.echoPreviewUrl) cfg.echoPreviewUrl;
         mkdp_browserfunc = mkIf (!isNull cfg.browserFunc) cfg.browserFunc;
-        mkdp_preview_options = mkIf (cfg.previewOptions != { }) previewOptions;
+        mkdp_preview_options = mkIf (cfg.previewOptions != {}) previewOptions;
         mkdp_markdown_css = mkIf (!isNull cfg.markdownCss) cfg.markdownCss;
         mkdp_highlight_css = mkIf (!isNull cfg.highlightCss) cfg.highlightCss;
         mkdp_port = mkIf (!isNull cfg.port) cfg.port;

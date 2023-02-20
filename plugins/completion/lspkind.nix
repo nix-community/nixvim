@@ -1,23 +1,26 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.lspkind;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.lspkind;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options.plugins.lspkind = {
     enable = mkEnableOption "lspkind.nvim";
 
     package = helpers.mkPackageOption "lspkind" pkgs.vimPlugins.lspkind-nvim;
 
     mode = mkOption {
-      type = with types; nullOr (enum [ "text" "text_symbol" "symbol_text" "symbol" ]);
+      type = with types; nullOr (enum ["text" "text_symbol" "symbol_text" "symbol"]);
       default = null;
       description = "Defines how annotations are shown";
     };
 
     preset = mkOption {
-      type = with types; nullOr (enum [ "default" "codicons" ]);
+      type = with types; nullOr (enum ["default" "codicons"]);
       default = null;
       description = "Default symbol map";
     };
@@ -61,34 +64,41 @@ in
     };
   };
 
-  config =
-    let
-      doCmp = cfg.cmp.enable && config.plugins.nvim-cmp.enable;
-      options = {
+  config = let
+    doCmp = cfg.cmp.enable && config.plugins.nvim-cmp.enable;
+    options =
+      {
         mode = cfg.mode;
         preset = cfg.preset;
         symbol_map = cfg.symbolMap;
-      } // (if doCmp then {
-        maxwidth = cfg.cmp.maxWidth;
-        ellipsis_char = cfg.cmp.ellipsisChar;
-        menu = cfg.cmp.menu;
-      } else { });
-    in
+      }
+      // (
+        if doCmp
+        then {
+          maxwidth = cfg.cmp.maxWidth;
+          ellipsis_char = cfg.cmp.ellipsisChar;
+          menu = cfg.cmp.menu;
+        }
+        else {}
+      );
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = optionalString (!doCmp) ''
         require('lspkind').init(${helpers.toLuaObject options})
       '';
 
       plugins.nvim-cmp.formatting.format =
-        if cfg.cmp.after != null then ''
+        if cfg.cmp.after != null
+        then ''
           function(entry, vim_item)
             local kind = require('lspkind').cmp_format(${helpers.toLuaObject options})(entry, vim_item)
 
             return (${cfg.cmp.after})(entry, vim_after, kind)
           end
-        '' else ''
+        ''
+        else ''
           require('lspkind').cmp_format(${helpers.toLuaObject options})
         '';
     };

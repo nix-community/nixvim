@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.null-ls;
-  helpers = (import ../helpers.nix { inherit lib; });
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.null-ls;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   imports = [
     ./servers.nix
   ];
@@ -36,15 +39,14 @@ in
     # };
   };
 
-  config =
-    let
-      options = {
-        debug = cfg.debug;
-        sources = cfg.sourcesItems;
-      };
-    in
+  config = let
+    options = {
+      debug = cfg.debug;
+      sources = cfg.sourcesItems;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require("null-ls").setup(${helpers.toLuaObject options})

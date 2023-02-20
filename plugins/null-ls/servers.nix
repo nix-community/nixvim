@@ -1,14 +1,18 @@
-{ pkgs, config, lib, ... }@args:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+} @ args: let
   helpers = import ./helpers.nix args;
   serverData = {
     code_actions = {
-      gitsigns = { };
+      gitsigns = {};
       shellcheck = {
         package = pkgs.shellcheck;
       };
     };
-    completion = { };
+    completion = {};
     diagnostics = {
       flake8 = {
         package = pkgs.python3Packages.flake8;
@@ -65,20 +69,20 @@ let
   #   sourceType = "formatting";
   #   packages = [...];
   # }]
-  serverDataFormatted = lib.mapAttrsToList
-    (sourceType: sourceSet:
-      lib.mapAttrsToList (name: attrs: attrs // { inherit sourceType name; }) sourceSet
+  serverDataFormatted =
+    lib.mapAttrsToList
+    (
+      sourceType: sourceSet:
+        lib.mapAttrsToList (name: attrs: attrs // {inherit sourceType name;}) sourceSet
     )
     serverData;
   dataFlattened = lib.flatten serverDataFormatted;
-in
-{
+in {
   imports = lib.lists.map (helpers.mkServer) dataFlattened;
 
-  config =
-    let
-      cfg = config.plugins.null-ls;
-    in
+  config = let
+    cfg = config.plugins.null-ls;
+  in
     lib.mkIf cfg.enable {
       plugins.gitsigns.enable = lib.mkIf (cfg.sources.code_actions.gitsigns.enable) true;
     };

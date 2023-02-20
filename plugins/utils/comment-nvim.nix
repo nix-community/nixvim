@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let
-  cfg = config.plugins.comment-nvim;
-  helpers = import ../helpers.nix { inherit lib; };
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.comment-nvim;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
   options = {
     plugins.comment-nvim = {
       enable = mkEnableOption "Enable comment-nvim";
@@ -27,7 +30,7 @@ in
         default = null;
       };
       toggler = mkOption {
-        type = types.nullOr (types.submodule ({ ... }: {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             line = mkOption {
               type = types.str;
@@ -45,7 +48,7 @@ in
         default = null;
       };
       opleader = mkOption {
-        type = types.nullOr (types.submodule ({ ... }: {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             line = mkOption {
               type = types.str;
@@ -63,7 +66,7 @@ in
         default = null;
       };
       mappings = mkOption {
-        type = types.nullOr (types.submodule ({ ... }: {
+        type = types.nullOr (types.submodule ({...}: {
           options = {
             basic = mkOption {
               type = types.bool;
@@ -88,20 +91,18 @@ in
     };
   };
 
-  config =
-    let
-      setupOptions = {
-        padding = cfg.padding;
-        sticky = cfg.sticky;
-        ignore = cfg.ignore;
-        toggler = cfg.toggler;
-        opleader = cfg.opleader;
-        mappings = cfg.mappings;
-      };
-    in
+  config = let
+    setupOptions = {
+      padding = cfg.padding;
+      sticky = cfg.sticky;
+      ignore = cfg.ignore;
+      toggler = cfg.toggler;
+      opleader = cfg.opleader;
+      mappings = cfg.mappings;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraConfigLua =
-        ''require("Comment").setup${helpers.toLuaObject setupOptions}'';
+      extraPlugins = [cfg.package];
+      extraConfigLua = ''require("Comment").setup${helpers.toLuaObject setupOptions}'';
     };
 }
