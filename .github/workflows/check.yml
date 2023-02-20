@@ -1,0 +1,15 @@
+name: Run checks on code
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    name: Check that the module is valid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v19
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: nix flake check
+      - run: nix fmt -- -c .
