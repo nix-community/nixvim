@@ -9,6 +9,27 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
   optionWarnings = import ../../lib/option-warnings.nix args;
   basePluginPath = ["plugins" "nvim-tree"];
+
+  openWinConfigOption =
+    helpers.defaultNullOpts.mkNullable
+    # Type
+    types.attrs
+    # Default
+    ''
+      {
+        col = 1;
+        row = 1;
+        relative = "cursor";
+        border = "shadow";
+        style = "minimal";
+      }
+    ''
+    # Description
+    ''
+      Floating window config for file_popup. See |nvim_open_win| for more details.
+      You shouldn't define `"width"` and `"height"` values here.
+      They will be overridden to fit the file_popup content.
+    '';
 in {
   imports = [
     (optionWarnings.mkRenamedOption {
@@ -19,264 +40,1159 @@ in {
       option = basePluginPath ++ ["updateFocusedFile" "updateCwd"];
       newOption = basePluginPath ++ ["updateFocusedFile" "updateRoot"];
     })
-    (optionWarnings.mkDeprecatedOption {
-      option = basePluginPath ++ ["openOnSetup"];
-      alternative = [];
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ ["openOnTab"];
+      newOption = basePluginPath ++ ["tab" "sync" "open"];
     })
-    (optionWarnings.mkDeprecatedOption {
-      option = basePluginPath ++ ["ignoreFtOnSetup"];
-      alternative = [];
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ ["updateToBufDir"];
+      newOption = basePluginPath ++ ["hijackDirectories"];
     })
   ];
 
-  options.plugins.nvim-tree = {
-    enable = mkEnableOption "nvim-tree";
+  options.plugins.nvim-tree =
+    helpers.extraOptionsOptions
+    // {
+      enable = mkEnableOption "nvim-tree";
 
-    package = helpers.mkPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
+      package = helpers.mkPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
 
-    disableNetrw = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Disable netrw";
-    };
+      disableNetrw = helpers.defaultNullOpts.mkBool false "Disable netrw";
 
-    hijackNetrw = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Hijack netrw";
-    };
+      hijackNetrw = helpers.defaultNullOpts.mkBool true "Hijack netrw";
 
-    # deprecated
-    openOnSetup = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Open on setup";
-    };
-
-    # deprecated
-    ignoreFtOnSetup = mkOption {
-      type = types.nullOr (types.listOf types.str);
-      default = null;
-    };
-
-    autoClose = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Automatically close";
-    };
-
-    openOnTab = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-    };
-
-    hijackCursor = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-      description = "Hijack cursor";
-    };
-
-    syncRootWithCwd = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-    };
-
-    respectBufCwd = mkOption {
-      type = types.nullOr types.bool;
-      default = null;
-    };
-
-    updateToBufDir = {
-      enable = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
+      openOnSetup = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Will automatically open the tree when running setup if startup buffer is a directory, is
+          empty or is unnamed. nvim-tree window will be focused.
+        '';
       };
 
-      autoOpen = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-    };
-
-    diagnostics = {
-      enable = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-        description = "Enable diagnostics";
+      openOnSetupFile = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Will automatically open the tree when running setup if startup buffer is a file.
+          File window will be focused.
+          File will be found if updateFocusedFile is enabled.
+        '';
       };
 
-      icons = let
-        diagnosticOption = desc:
-          mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = desc;
+      ignoreBufferOnSetup = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Will ignore the buffer, when deciding to open the tree on setup.
+        '';
+      };
+
+      ignoreFtOnSetup = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of filetypes that will prevent `open_on_setup` to open.
+          You can use this option if you don't want the tree to open
+          in some scenarios (eg using vim startify).
+        '';
+      };
+
+      autoClose = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Automatically close";
+      };
+
+      autoReloadOnWrite = helpers.defaultNullOpts.mkBool true ''
+        Reloads the explorer every time a buffer is written to.
+      '';
+
+      sortBy =
+        helpers.defaultNullOpts.mkNullable
+        (
+          types.either
+          (types.enum ["name" "case_sensitive" "modification_time" "extension"])
+          helpers.rawType
+        )
+        "name"
+        ''
+          Changes how files within the same directory are sorted.
+          Can be one of `name`, `case_sensitive`, `modification_time`, `extension` or a
+          function.
+            Type: `string` | `function(nodes)`, Default: `"name"`
+
+            Function is passed a table of nodes to be sorted, each node containing:
+            - `absolute_path`: `string`
+            - `executable`:    `boolean`
+            - `extension`:     `string`
+            - `link_to`:       `string`
+            - `name`:          `string`
+            - `type`:          `"directory"` | `"file"` | `"link"`
+
+            Example: sort by name length:
+              sortBy = {
+                __raw = \'\'
+                  local sort_by = function(nodes)
+                    table.sort(nodes, function(a, b)
+                      return #a.name < #b.name
+                    end)
+                  end
+                \'\';
+              };
+        '';
+
+      hijackUnnamedBufferWhenOpening = helpers.defaultNullOpts.mkBool false ''
+        Opens in place of the unnamed buffer if it's empty.
+      '';
+
+      hijackCursor = helpers.defaultNullOpts.mkBool false ''
+        Keeps the cursor on the first letter of the filename when moving in the tree.
+      '';
+
+      rootDirs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        Preferred root directories.
+        Only relevant when `updateFocusedFile.updateRoot` is `true`.
+      '';
+
+      preferStartupRoot = helpers.defaultNullOpts.mkBool false ''
+        Prefer startup root directory when updating root directory of the tree.
+        Only relevant when `updateFocusedFile.updateRoot` is `true`
+      '';
+
+      syncRootWithCwd = helpers.defaultNullOpts.mkBool false ''
+        Changes the tree root directory on `DirChanged` and refreshes the tree.
+      '';
+
+      reloadOnBufenter = helpers.defaultNullOpts.mkBool false ''
+        Automatically reloads the tree on `BufEnter` nvim-tree.
+      '';
+
+      respectBufCwd = helpers.defaultNullOpts.mkBool false ''
+        Will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
+      '';
+
+      hijackDirectories = {
+        enable = helpers.defaultNullOpts.mkBool true ''
+          Hijacks new directory buffers when they are opened (`:e dir`).
+          Disable this option if you use vim-dirvish or dirbuf.nvim.
+          If `hijackNetrw` and `disableNetrw` are `false`, this feature will be disabled.
+        '';
+
+        autoOpen = helpers.defaultNullOpts.mkBool true ''
+          Opens the tree if the tree was previously closed.
+        '';
+      };
+
+      updateFocusedFile = {
+        enable = helpers.defaultNullOpts.mkBool false ''
+          Update the focused file on `BufEnter`, un-collapses the folders recursively until it finds
+          the file.
+        '';
+
+        updateRoot = helpers.defaultNullOpts.mkBool false ''
+          Update the root directory of the tree if the file is not under current root directory.
+          It prefers vim's cwd and `root_dirs`.
+          Otherwise it falls back to the folder containing the file.
+          Only relevant when `updateFocusedFile.enable` is `true`
+        '';
+
+        ignoreList = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          List of buffer names and filetypes that will not update the root dir of the tree if the file
+          isn't found under the current root directory.
+          Only relevant when `updateFocusedFile.updateRoot` and `updateFocusedFile.enable` are `true`.
+        '';
+      };
+
+      systemOpen = {
+        cmd = helpers.defaultNullOpts.mkStr "" ''
+          A custom command to open files or directory with.
+
+          Leave empty for OS specific default:
+            UNIX:    `"xdg-open"`
+            macOS:   `"open"`
+            Windows: "`cmd"`
+        '';
+
+        args = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          Optional argument list.
+
+          Leave empty for OS specific default:
+            Windows: `{ "/c", "start", '""' }`
+        '';
+      };
+
+      diagnostics = {
+        enable = helpers.defaultNullOpts.mkBool false ''
+          Show LSP and COC diagnostics in the signcolumn
+          Note that the modified sign will take precedence over the diagnostics signs.
+
+            `NOTE`: it will use the default diagnostic color groups to highlight the signs.
+            If you wish to customize, you can override these groups:
+            - `NvimTreeLspDiagnosticsError`
+            - `NvimTreeLspDiagnosticsWarning`
+            - `NvimTreeLspDiagnosticsInformation`
+            - `NvimTreeLspDiagnosticsHint`
+        '';
+
+        debounceDelay = helpers.defaultNullOpts.mkInt 50 ''
+          Idle milliseconds between diagnostic event and update.
+        '';
+
+        showOnDirs = helpers.defaultNullOpts.mkBool false ''
+          Show diagnostic icons on parent directories.
+        '';
+
+        showOnOpenDirs = helpers.defaultNullOpts.mkBool true ''
+          Show diagnostics icons on directories that are open.
+          Only relevant when `diagnostics.showOnDirs` is `true
+        '';
+
+        # Icons for diagnostic severity.
+        icons = {
+          hint = helpers.defaultNullOpts.mkStr "" "";
+          info = helpers.defaultNullOpts.mkStr "" "";
+          warning = helpers.defaultNullOpts.mkStr "" "";
+          error = helpers.defaultNullOpts.mkStr "" "";
+        };
+
+        severity = let
+          severityEnum = ["error" "warn" "info" "hint"];
+        in {
+          min = helpers.defaultNullOpts.mkEnum severityEnum "hint" "Minimum severity.";
+          max = helpers.defaultNullOpts.mkEnum severityEnum "error" "Maximum severity.";
+        };
+      };
+
+      git = {
+        enable = helpers.defaultNullOpts.mkBool true "Git integration with icons and colors.";
+
+        ignore = helpers.defaultNullOpts.mkBool true ''
+          Ignore files based on `.gitignore`. Requires `git.enable` to be `true`.
+          Toggle via the `toggle_git_ignored` action, default mapping `I`.
+        '';
+
+        showOnDirs = helpers.defaultNullOpts.mkBool true ''
+          Show status icons of children when directory itself has no status icon.
+        '';
+
+        showOnOpenDirs = helpers.defaultNullOpts.mkBool true ''
+          Show status icons of children on directories that are open.
+          Only relevant when `git.showOnDirs` is `true`.
+        '';
+
+        timeout = helpers.defaultNullOpts.mkInt 400 ''
+          Kills the git process after some time if it takes too long.
+        '';
+      };
+
+      modified = {
+        enable = helpers.defaultNullOpts.mkBool false ''
+          Indicate which file have unsaved modification.
+        '';
+
+        showOnDirs = helpers.defaultNullOpts.mkBool true ''
+          Show modified indication on directory whose children are modified.
+        '';
+
+        showOnOpenDirs = helpers.defaultNullOpts.mkBool true ''
+          Show modified indication on open directories.
+          Only relevant when `modified.showOnDirs` is `true`.
+        '';
+      };
+
+      filesystemWatchers = {
+        enable = helpers.defaultNullOpts.mkBool true ''
+          Will use file system watcher (libuv fs_event) to watch the filesystem for changes.
+          Using this will disable BufEnter / BufWritePost events in nvim-tree which were used to
+          update the whole tree.
+          With this feature, the tree will be updated only for the appropriate folder change,
+          resulting in better performance.
+        '';
+
+        debounceDelay = helpers.defaultNullOpts.mkInt 50 ''
+          Idle milliseconds between filesystem change and action.
+        '';
+
+        ignoreDirs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          List of vim regex for absolute directory paths that will not be watched.
+          Backslashes must be escaped e.g. `"my-project/\\.build$"`.
+          See |string-match|.
+          Useful when path is not in `.gitignore` or git integration is disabled.
+        '';
+      };
+
+      onAttach = helpers.defaultNullOpts.mkStr "disable" ''
+        Function ran when creating the nvim-tree buffer.
+        This can be used to attach keybindings to the tree buffer.
+        When onAttach is "disabled", it will use the older mapping strategy, otherwise it
+        will use the newer one.
+            Type: `function(bufnr)`, Default: `"disable"`
+            e.g. >
+              local api = require("nvim-tree.api")
+              local function on_attach(bufnr)
+                vim.keymap.set("n", "<C-P>", function()
+                  local node = api.tree.get_node_under_cursor()
+                  print(node.absolute_path)
+                end, { buffer = bufnr, noremap = true, silent = true, nowait = true, desc = "print the node's absolute path" })
+              end
+      '';
+
+      removeKeymaps = helpers.defaultNullOpts.mkNullable (types.either types.bool (types.listOf types.str)) "false" ''
+        This can be used to remove the default mappings in the tree.
+        - Remove specific keys by passing a `string` table of keys
+            eg. {"<C-o>", "<CR>", "o", "<Tab>"}
+        - Remove all default mappings by passing `true`
+        - Ignore by passing `false`
+      '';
+
+      selectPrompts = helpers.defaultNullOpts.mkBool false ''
+        Use |vim.ui.select| style prompts.
+        Necessary when using a UI prompt decorator such as dressing.nvim or telescope-ui-select.nvim.
+      '';
+
+      # Window / buffer setup
+      view = {
+        centralizeSelection = helpers.defaultNullOpts.mkBool false ''
+          When entering nvim-tree, reposition the view so that the current node is
+          initially centralized, see |zz|.
+        '';
+
+        cursorline = helpers.defaultNullOpts.mkBool true ''
+          Enable |cursorline| in the tree window.
+        '';
+
+        debounceDelay = helpers.defaultNullOpts.mkInt 15 ''
+          Idle milliseconds before some reload / refresh operations.
+          Increase if you experience performance issues around screen refresh.
+        '';
+
+        hideRootFolder = helpers.defaultNullOpts.mkBool false ''
+          Hide the path of the current working directory on top of the tree.
+        '';
+
+        width =
+          helpers.defaultNullOpts.mkNullable
+          (types.oneOf [
+            types.str
+            types.int
+            (types.submodule {
+              options = {
+                min = helpers.defaultNullOpts.mkNullable (types.either types.str types.int) "30" ''
+                  Minimum dynamic width.
+                '';
+                max = helpers.defaultNullOpts.mkNullable (types.either types.str types.int) "-1" ''
+                  Maximum dynamic width, -1 for unbounded.
+                '';
+                padding = helpers.defaultNullOpts.mkNullable (types.either types.str types.int) "1" ''
+                  Extra padding to the right.
+                '';
+              };
+            })
+          ])
+          "30"
+          ''
+            Width of the window: can be a `%` string, a number representing columns or a table.
+            A table indicates that the view should be dynamically sized based on the longest line.
+          '';
+
+        side = helpers.defaultNullOpts.mkEnumFirstDefault ["left" "right"] ''
+          Side of the tree, can be `"left"`, `"right"`.
+        '';
+
+        preserveWindowProportions = helpers.defaultNullOpts.mkBool false ''
+          Preserves window proportions when opening a file.
+          If `false`, the height and width of windows other than nvim-tree will be equalized.
+        '';
+
+        number = helpers.defaultNullOpts.mkBool false ''
+          Print the line number in front of each line.
+        '';
+
+        relativenumber = helpers.defaultNullOpts.mkBool false ''
+          Show the line number relative to the line with the cursor in front of each line.
+          If the option `view.number` is also `true`, the number on the cursor line
+          will be the line number instead of `0`.
+        '';
+
+        signcolumn = helpers.defaultNullOpts.mkEnum ["yes" "auto" "no"] "yes" ''
+          Show diagnostic sign column. Value can be `"yes"`, `"auto"`, `"no"`.
+        '';
+
+        mappings = {
+          customOnly = helpers.defaultNullOpts.mkBool false ''
+            Will use only the provided user mappings and not the default otherwise,
+            extends the default mappings with the provided user mappings.
+          '';
+
+          list = let
+            mappingOption = types.submodule {
+              options = {
+                key = mkOption {
+                  type = with types; either str (listOf str);
+                  description = "Left hand side of the mapping";
+                };
+                action = mkOption {
+                  type = types.str;
+                  description = ''
+                    `""` to remove an action with {key}. The case of {key} must exactly match the
+                    action you are removing e.g. `"<Tab>"` to remove the default preview action.
+                    An arbitrary description when using `action_cb`.
+                  '';
+                };
+                action_cb = helpers.mkNullOrOption types.str ''
+                  optional custom function that will be called.
+                  Receives the node as a parameter.
+                  Non-empty description for `action` is required.
+                '';
+                mode = helpers.defaultNullOpts.mkStr "n" ''
+                  optional mode as per |nvim_set_keymap|.
+                '';
+              };
+            };
+          in
+            helpers.defaultNullOpts.mkNullable (types.listOf mappingOption) "{}" ''
+              A list of keymaps that will extend or override the default keymaps.
+
+              Example:
+                view.mappings = {
+                  list = [
+
+                    # remove a default mapping for cd
+                    {
+                      key = "<2-RightMouse>";
+                      action = "";
+                    }
+
+                    # add multiple normal mode mappings for edit
+                    {
+                      key = [ "<CR>" "o" ];
+                      action = "edit";
+                      mode = "n";
+                    }
+
+                    # custom action
+                    {
+                      key = "p";
+                      action = "print_the_node_path";
+                      action_cb = \'\'
+                        function print_node_path(node)
+                          print(node.absolute_path)
+                        end
+                      \'\';
+                    };
+                  ];
+                };
+            '';
+        };
+
+        float = {
+          enable = helpers.defaultNullOpts.mkBool false ''
+            Tree window will be floating.
+          '';
+
+          quitOnFocusLoss = helpers.defaultNullOpts.mkBool true ''
+            Close the floating tree window when it loses focus.
+          '';
+
+          openWinConfig = openWinConfigOption;
+        };
+      };
+
+      # UI rendering setup
+      renderer = {
+        addTrailing = helpers.defaultNullOpts.mkBool false ''
+          Appends a trailing slash to folder names.
+        '';
+
+        groupEmpty = helpers.defaultNullOpts.mkBool false ''
+          Compact folders that only contain a single folder into one node in the file tree.
+        '';
+
+        fullName = helpers.defaultNullOpts.mkBool false ''
+          Display node whose name length is wider than the width of nvim-tree window in floating window.
+        '';
+
+        highlightGit = helpers.defaultNullOpts.mkBool false ''
+          Enable file highlight for git attributes using `NvimTreeGit*` highlight groups.
+          Requires `nvim-tree.git.enable`
+          This can be used with or without the icons.
+        '';
+
+        highlightOpenedFiles =
+          helpers.defaultNullOpts.mkEnumFirstDefault
+          ["none" "icon" "name" "all"]
+          ''
+            Highlight icons and/or names for opened files using the `NvimTreeOpenedFile` highlight
+            group.
+          '';
+
+        highlightModified =
+          helpers.defaultNullOpts.mkEnumFirstDefault
+          ["none" "icon" "name" "all"]
+          ''
+            Highlight icons and/or names for modified files using the `NvimTreeModified` highlight
+            group.
+            Requires `nvim-tree.modified.enable`
+            This can be used with or without the icons.
+          '';
+
+        rootFolderLabel =
+          helpers.defaultNullOpts.mkNullable
+          # Type
+          (types.either types.str helpers.rawType)
+          # Default
+          ":~:s?$?/..?"
+          # Description
+          ''
+            In what format to show root folder. See `:help filename-modifiers` for available `string`
+            options.
+
+            This can also be a `function(root_cwd)` which is passed the absolute path of the root folder
+            and should return a string.
+            e.g.
+
+            rootFolderLabel = {
+              __raw = \'\'
+                  my_root_folder_label = function(path)
+                  return ".../" .. vim.fn.fnamemodify(path, ":t")
+                  end
+              \'\';
+            };
+          '';
+
+        indentWidth = helpers.defaultNullOpts.mkInt 2 ''
+          Number of spaces for an each tree nesting level. Minimum 1.
+        '';
+
+        # Configuration options for tree indent markers.
+        indentMarkers = {
+          enable = helpers.defaultNullOpts.mkBool false ''
+            Display indent markers when folders are open
+          '';
+
+          inlineArrows = helpers.defaultNullOpts.mkBool true ''
+            Display folder arrows in the same column as indent marker when using
+            |renderer.icons.show.folder_arrow|.
+          '';
+
+          # Icons shown before the file/directory. Length 1.
+          icons = {
+            corner = helpers.defaultNullOpts.mkStr "└" "";
+            edge = helpers.defaultNullOpts.mkStr "│" "";
+            item = helpers.defaultNullOpts.mkStr "│" "";
+            bottom = helpers.defaultNullOpts.mkStr "─" "";
+            none = helpers.defaultNullOpts.mkStr " " "";
           };
-      in {
-        hint = diagnosticOption "Hints";
-        info = diagnosticOption "Info";
-        warning = diagnosticOption "Warning";
-        error = diagnosticOption "Error";
-      };
-    };
-
-    updateFocusedFile = {
-      enable = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-
-      updateRoot = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-
-      ignoreList = mkOption {
-        type = types.nullOr (types.listOf types.bool);
-        default = null;
-      };
-    };
-
-    systemOpen = {
-      cmd = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
-      args = mkOption {
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-      };
-    };
-
-    git = {
-      enable = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-        description = "Enable git integration";
-      };
-
-      ignore = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-
-      timeout = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-      };
-    };
-
-    filters = {
-      dotfiles = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      custom = mkOption {
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-      };
-    };
-
-    view = {
-      width = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-      };
-      height = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-      };
-      hideRootFolder = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      side = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
-      autoResize = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      mappings = {
-        customOnly = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
         };
-        list = mkOption {
-          # TODO: Type-check the attrset
-          type = types.nullOr (types.listOf types.attrs);
-          default = null;
+
+        # Configuration options for icons.
+        icons = {
+          webdevColors = helpers.defaultNullOpts.mkBool true ''
+            Use the webdev icon colors, otherwise `NvimTreeFileIcon`.
+          '';
+
+          gitPlacement =
+            helpers.defaultNullOpts.mkEnum
+            ["after" "before" "signcolumn"]
+            "before"
+            ''
+              Place where the git icons will be rendered.
+              Can be `"after"` or `"before"` filename (after the file/folders icons) or `"signcolumn"`
+              (requires |nvim-tree.view.signcolumn| enabled).
+              Note that the diagnostic signs and the modified sign will take precedence over the git
+              signs.
+            '';
+
+          modifiedPlacement =
+            helpers.defaultNullOpts.mkEnum
+            ["after" "before" "signcolumn"]
+            "after"
+            ''
+              Place where the modified icon will be rendered.
+              Can be `"after"` or `"before"` filename (after the file/folders icons) or `"signcolumn"`
+              (requires |nvim-tree.view.signcolumn| enabled).
+            '';
+
+          padding = helpers.defaultNullOpts.mkStr " " ''
+            Inserted between icon and filename.
+          '';
+
+          symlinkArrow = helpers.defaultNullOpts.mkStr " ➛ " ''
+            Used as a separator between symlinks' source and target.
+          '';
+
+          # Configuration options for showing icon types.
+          show = {
+            file = helpers.defaultNullOpts.mkBool true ''
+              Show an icon before the file name. `nvim-web-devicons` will be used if available.
+            '';
+
+            folder = helpers.defaultNullOpts.mkBool true ''
+              Show an icon before the folder name.
+            '';
+
+            folderArrow = helpers.defaultNullOpts.mkBool true ''
+              Show a small arrow before the folder node.
+              Arrow will be a part of the node when using |renderer.indent_markers|.
+            '';
+
+            git = helpers.defaultNullOpts.mkBool true ''
+              Show a git status icon, see |renderer.icons.git_placement|
+              Requires `git.enable = true`
+            '';
+
+            modified = helpers.defaultNullOpts.mkBool true ''
+              Show a modified icon, see |renderer.icons.modified_placement|
+              Requires |modified.enable| `= true`
+            '';
+          };
+
+          # Configuration options for icon glyphs.
+          glyphs = {
+            default = helpers.defaultNullOpts.mkStr "" ''
+              Glyph for files. Will be overridden by `nvim-web-devicons` if available.
+            '';
+
+            symlink = helpers.defaultNullOpts.mkStr "" ''
+              Glyph for symlinks to files.
+            '';
+
+            modified = helpers.defaultNullOpts.mkStr "●" ''
+              Icon to display for modified files.
+            '';
+
+            # Glyphs for directories.
+            folder = {
+              arrowClosed = helpers.defaultNullOpts.mkStr "" ''
+                Arrow glyphs for closed directories.
+              '';
+              arrowOpen = helpers.defaultNullOpts.mkStr "" ''
+                Arrow glyphs for open directories.
+              '';
+              default = helpers.defaultNullOpts.mkStr "" ''
+                Default glyph for directories.
+              '';
+              open = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for open directories.
+              '';
+              empty = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for empty directories.
+              '';
+              emptyOpen = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for open empty directories.
+              '';
+              symlink = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for symlink directories.
+              '';
+              symlinkOpen = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for open symlink directories.
+              '';
+            };
+
+            # Glyphs for git status.
+            git = {
+              unstaged = helpers.defaultNullOpts.mkStr "✗" ''
+                Glyph for unstaged nodes.
+              '';
+              staged = helpers.defaultNullOpts.mkStr "✓" ''
+                Glyph for staged nodes.
+              '';
+              unmerged = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for unmerged nodes.
+              '';
+              renamed = helpers.defaultNullOpts.mkStr "➜" ''
+                Glyph for renamed nodes.
+              '';
+              untracked = helpers.defaultNullOpts.mkStr "★" ''
+                Glyph for untracked nodes.
+              '';
+              deleted = helpers.defaultNullOpts.mkStr "" ''
+                Glyph for deleted nodes.
+              '';
+              ignored = helpers.defaultNullOpts.mkStr "◌" ''
+                Glyph for deleted nodes.
+              '';
+            };
+          };
+        };
+
+        specialFiles =
+          helpers.defaultNullOpts.mkNullable
+          (types.listOf types.str)
+          "[ \"Cargo.toml\" \"Makefile\" \"README.md\" \"readme.md\" ]"
+          "A list of filenames that gets highlighted with `NvimTreeSpecialFile`.";
+
+        symlinkDestination = helpers.defaultNullOpts.mkBool true ''
+          Whether to show the destination of the symlink.
+        '';
+      };
+
+      # Filtering options
+      filters = {
+        dotfiles = helpers.defaultNullOpts.mkBool false ''
+          Do not show dotfiles: files starting with a `.`
+          Toggle via the `toggle_dotfiles` action, default mapping `H`.
+        '';
+
+        gitClean = helpers.defaultNullOpts.mkBool false ''
+          Do not show files with no git status. This will show ignored files when
+          |nvim-tree.git.ignore| is set, as they are effectively dirty.
+          Toggle via the `toggle_git_clean` action, default mapping `C`.
+        '';
+
+        noBuffer = helpers.defaultNullOpts.mkBool false ''
+          Do not show files that have no listed buffer.
+          Toggle via the `toggle_no_buffer` action, default mapping `B`.
+          For performance reasons this may not immediately update on buffer delete/wipe.
+          A reload or filesystem event will result in an update.
+        '';
+
+        custom = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          Custom list of vim regex for file/directory names that will not be shown.
+          Backslashes must be escaped e.g. "^\\.git". See |string-match|.
+          Toggle via the `toggle_custom` action, default mapping `U`.
+        '';
+
+        exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          List of directories or files to exclude from filtering: always show them.
+          Overrides `git.ignore`, `filters.dotfiles` and `filters.custom`.
+        '';
+      };
+
+      # Configuration options for trashing
+      trash.cmd = helpers.defaultNullOpts.mkStr "gio trash" ''
+        The command used to trash items (must be installed on your system).
+        The default is shipped with glib2 which is a common linux package.
+        Only available for UNIX.
+      '';
+
+      # Configuration for various actions
+      actions = {
+        # vim |current-directory| behaviour
+        changeDir = {
+          enable = helpers.defaultNullOpts.mkBool true ''
+            Change the working directory when changing directories in the tree.
+          '';
+
+          global = helpers.defaultNullOpts.mkBool false ''
+            Use `:cd` instead of `:lcd` when changing directories.
+            Consider that this might cause issues with the |nvim-tree.sync_root_with_cwd| option.
+          '';
+
+          restrictAboveCwd = helpers.defaultNullOpts.mkBool false ''
+            Restrict changing to a directory above the global current working directory.
+          '';
+        };
+
+        # Configuration for expand_all behaviour
+        expandAll = {
+          maxFolderDiscovery = helpers.defaultNullOpts.mkInt 300 ''
+            Limit the number of folders being explored when expanding every folders.
+            Avoids hanging neovim when running this action on very large folders.
+          '';
+
+          exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+            A list of directories that should not be expanded automatically.
+            E.g `[ ".git" "target" "build" ]` etc.
+          '';
+        };
+
+        # Configuration for file_popup behaviour
+        filePopup.openWinConfig = openWinConfigOption;
+
+        # Configuration options for opening a file from nvim-tree
+        openFile = {
+          quitOnOpen = helpers.defaultNullOpts.mkBool false ''
+            Closes the explorer when opening a file.
+            It will also disable preventing a buffer overriding the tree.
+          '';
+
+          resizeWindow = helpers.defaultNullOpts.mkBool true ''
+            Resizes the tree when opening a file.
+          '';
+
+          # Window picker configuration
+          windowPicker = {
+            enable = helpers.defaultNullOpts.mkBool true ''
+              Enable the feature. If the feature is not enabled, files will open in window from
+              which you last opened the tree.
+            '';
+
+            picker =
+              helpers.defaultNullOpts.mkNullable
+              (types.either types.str helpers.rawType)
+              "default"
+              ''
+                Change the default window picker, can be a string `"default"` or a function.
+                The function should return the window id that will open the node, or `nil` if an
+                invalid window is picked or user cancelled the action.
+
+                This can be both a string or a function (see example below).
+                picker = { __raw = "require('window-picker').pick_window"; };
+              '';
+
+            chars = helpers.defaultNullOpts.mkStr "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" ''
+              A string of chars used as identifiers by the window picker.
+            '';
+
+            exclude =
+              helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
+              ''
+                {
+                  filetype = [ "notify" "packer" "qf" "diff" "fugitive" "fugitiveblame" ];
+                  buftype = [ "nofile" "terminal" "help" ];
+                };
+              ''
+              ''
+                Table of buffer option names mapped to a list of option values that indicates to
+                the picker that the buffer's window should not be selectable.
+              '';
+          };
+        };
+
+        removeFile.closeWindow = helpers.defaultNullOpts.mkBool true ''
+          Close any window displaying a file when removing the file from the tree.
+        '';
+
+        useSystemClipboard = helpers.defaultNullOpts.mkBool true ''
+          A boolean value that toggle the use of system clipboard when copy/paste function are
+          invoked.
+          When enabled, copied text will be stored in registers '+' (system), otherwise, it will be
+          stored in '1' and '"'.
+        '';
+      };
+
+      # Configurations for the live_filtering feature.
+      # The live filter allows you to filter the tree nodes dynamically, based on
+      # regex matching (see |vim.regex|).
+      # This feature is bound to the `f` key by default.
+      # The filter can be cleared with the `F` key by default.
+      liveFilter = {
+        prefix = helpers.defaultNullOpts.mkStr "[FILTER]: " ''
+          Prefix of the filter displayed in the buffer.
+        '';
+
+        alwaysShowFolders = helpers.defaultNullOpts.mkBool true ''
+          Whether to filter folders or not.
+        '';
+      };
+
+      # Configuration for tab behaviour
+      tab = {
+        # Configuration for syncing nvim-tree across tabs
+        sync = {
+          open = helpers.defaultNullOpts.mkBool false ''
+            Opens the tree automatically when switching tabpage or opening a new tabpage if the tree
+            was previously open.
+          '';
+
+          close = helpers.defaultNullOpts.mkBool false ''
+            Closes the tree across all tabpages when the tree is closed.
+          '';
+
+          ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+            List of filetypes or buffer names on new tab that will prevent
+            |nvim-tree.tab.sync.open| and |nvim-tree.tab.sync.close|
+          '';
         };
       };
-      number = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      relativenumber = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      signcolumn = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
-    };
 
-    trash = {
-      cmd = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      # Configuration for notification
+      notify.threshold = helpers.defaultNullOpts.mkEnum ["error" "warning" "info" "debug"] "info" ''
+        Specify minimum notification level, uses the values from |vim.log.levels|
+
+        - `error`:   hard errors e.g. failure to read from the file system.
+        - `warning`: non-fatal errors e.g. unable to system open a file.
+        - `info:`    information only e.g. file copy path confirmation.
+        - `debug:`   not used.
+      '';
+
+      # General UI configuration
+      ui = {
+        # Confirmation prompts
+        confirm = {
+          remove = helpers.defaultNullOpts.mkBool true ''
+            Prompt before removing.
+          '';
+
+          trash = helpers.defaultNullOpts.mkBool true ''
+            Prompt before trashing.
+          '';
+        };
       };
-      requireConfirm = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
+
+      # Configuration for diagnostic logging
+      log = {
+        enable = helpers.defaultNullOpts.mkBool false ''
+          Enable logging to a file `$XDG_CACHE_HOME/nvim/nvim-tree.log`
+        '';
+
+        truncate = helpers.defaultNullOpts.mkBool false ''
+          Remove existing log file at startup.
+        '';
+
+        # Specify which information to log
+        types = {
+          all = helpers.defaultNullOpts.mkBool false "Everything.";
+
+          profile = helpers.defaultNullOpts.mkBool false "Timing of some operations.";
+
+          config = helpers.defaultNullOpts.mkBool false "Options and mappings, at startup.";
+
+          copyPaste = helpers.defaultNullOpts.mkBool false "File copy and paste actions.";
+
+          dev = helpers.defaultNullOpts.mkBool false ''
+            Used for local development only. Not useful for users.
+          '';
+
+          diagnostics = helpers.defaultNullOpts.mkBool false "LSP and COC processing, verbose.";
+
+          git = helpers.defaultNullOpts.mkBool false "Git processing, verbose.";
+
+          watcher = helpers.defaultNullOpts.mkBool false ''
+            |nvim-tree.filesystem_watchers| processing, verbose.
+          '';
+        };
       };
     };
-  };
 
   config = let
-    options = {
-      disable_netrw = cfg.disableNetrw;
-      hijack_netrw = cfg.hijackNetrw;
-      open_on_setup = cfg.openOnSetup;
-      ignore_ft_on_setup = cfg.ignoreFtOnSetup;
-      open_on_tab = cfg.openOnTab;
-      hijack_cursor = cfg.hijackCursor;
-      sync_root_with_cwd = cfg.syncRootWithCwd;
-      respect_buf_cwd = cfg.respectBufCwd;
-      update_to_buf_dir = {
-        enable = cfg.updateToBufDir.enable;
-        auto_open = cfg.updateToBufDir.autoOpen;
-      };
-      diagnostics = cfg.diagnostics;
-      update_focused_file = {
-        enable = cfg.updateFocusedFile.enable;
-        update_root = cfg.updateFocusedFile.updateRoot;
-        ignore_list = cfg.updateFocusedFile.ignoreList;
-      };
-      system_open = cfg.systemOpen;
-      filters = cfg.filters;
-      git = cfg.git;
-      view = {
-        width = cfg.view.width;
-        height = cfg.view.height;
-        hide_root_folder = cfg.view.hideRootFolder;
-        side = cfg.view.side;
-        auto_resize = cfg.view.autoResize;
-        mappings = {
-          custom_only = cfg.view.mappings.customOnly;
-          list = cfg.view.mappings.list;
+    options = with cfg;
+      {
+        disable_netrw = disableNetrw;
+        hijack_netrw = hijackNetrw;
+        auto_reload_on_write = autoReloadOnWrite;
+        sort_by = sortBy;
+        hijack_unnamed_buffer_when_opening = hijackUnnamedBufferWhenOpening;
+        hijack_cursor = hijackCursor;
+        root_dirs = rootDirs;
+        prefer_startup_root = preferStartupRoot;
+        sync_root_with_cwd = syncRootWithCwd;
+        reload_on_bufenter = reloadOnBufenter;
+        respect_buf_cwd = respectBufCwd;
+        hijack_directories = with hijackDirectories; {
+          inherit enable;
+          auto_open = autoOpen;
         };
-        number = cfg.view.number;
-        relativenumber = cfg.view.relativenumber;
-        signcolumn = cfg.view.signcolumn;
-      };
-      trash = {
-        cmd = cfg.trash.cmd;
-        require_confirm = cfg.trash.requireConfirm;
-      };
-    };
+        update_focused_file = with updateFocusedFile; {
+          inherit enable;
+          update_root = updateRoot;
+          ignore_list = ignoreList;
+        };
+        system_open = {
+          inherit (systemOpen) cmd args;
+        };
+        diagnostics = with diagnostics; {
+          inherit enable;
+          debounce_delay = debounceDelay;
+          show_on_dirs = showOnDirs;
+          show_on_open_dirs = showOnOpenDirs;
+          inherit icons;
+          severity =
+            mapAttrs (
+              name: value:
+                if value == null
+                then null
+                else helpers.mkRaw "vim.diagnostic.severity.${string.toUpper value}"
+            )
+            severity;
+        };
+        git = with git; {
+          inherit enable;
+          inherit ignore;
+          show_on_dirs = showOnDirs;
+          show_on_open_dirs = showOnOpenDirs;
+          inherit timeout;
+        };
+        modified = with modified; {
+          inherit enable;
+          show_on_dirs = showOnDirs;
+          show_on_open_dirs = showOnOpenDirs;
+        };
+        filesystem_watchers = with filesystemWatchers; {
+          inherit enable;
+          debounce_delay = debounceDelay;
+          ignore_dirs = ignoreDirs;
+        };
+        on_attach = onAttach;
+        remove_keymaps = removeKeymaps;
+        select_prompts = selectPrompts;
+        view = with view; {
+          centralize_selection = centralizeSelection;
+          inherit cursorline;
+          debounce_delay = debounceDelay;
+          hide_root_folder = hideRootFolder;
+          inherit width;
+          inherit side;
+          preserve_window_proportions = preserveWindowProportions;
+          inherit number;
+          inherit relativenumber;
+          inherit signcolumn;
+          mappings = with mappings; {
+            custom_only = customOnly;
+            list =
+              if list == null
+              then null
+              else
+                map (
+                  mapping: {
+                    inherit (mapping) key action mode;
+                    action_cb =
+                      if (mapping.action_cb == null)
+                      then null
+                      else helpers.mkRaw mapping.action_cb;
+                  }
+                )
+                list;
+          };
+          float = with float; {
+            inherit enable;
+            quit_on_focus_loss = quitOnFocusLoss;
+            open_win_config = openWinConfig;
+          };
+        };
+        renderer = with renderer; {
+          add_trailing = addTrailing;
+          group_empty = groupEmpty;
+          full_name = fullName;
+          highlight_git = highlightGit;
+          highlight_opened_files = highlightOpenedFiles;
+          highlight_modified = highlightModified;
+          root_folder_label = rootFolderLabel;
+          indent_width = indentWidth;
+          indent_markers = with indentMarkers; {
+            inherit enable icons;
+            inline_arrows = inlineArrows;
+          };
+          icons = with icons; {
+            webdev_colors = webdevColors;
+            git_placement = gitPlacement;
+            modified_placement = modifiedPlacement;
+            inherit padding;
+            symlink_arrow = symlinkArrow;
+            show = with show; {
+              inherit file folder git modified;
+              folder_arrow = folderArrow;
+            };
+            glyphs = with glyphs; {
+              inherit default symlink modified git;
+              folder = with folder; {
+                arrow_closed = arrowClosed;
+                arrow_open = arrowOpen;
+                inherit default open empty symlink;
+                empty_open = emptyOpen;
+                symlink_open = symlinkOpen;
+              };
+            };
+          };
+          special_files = specialFiles;
+          symlink_destination = symlinkDestination;
+        };
+        filters = with filters; {
+          inherit dotfiles custom exclude;
+          git_clean = gitClean;
+          no_buffer = noBuffer;
+        };
+        trash.cmd = trash.cmd;
+        actions = with actions; {
+          change_dir = with changeDir; {
+            inherit enable global;
+            restrict_above_cwd = restrictAboveCwd;
+          };
+          expand_all = with expandAll; {
+            max_folder_discovery = maxFolderDiscovery;
+            inherit exclude;
+          };
+          file_popup.open_win_config = filePopup.openWinConfig;
+          open_file = with openFile; {
+            quit_on_open = quitOnOpen;
+            resize_window = resizeWindow;
+            window_picker = windowPicker;
+          };
+          remove_file.close_window = removeFile.closeWindow;
+          use_system_clipboard = useSystemClipboard;
+        };
+        live_filter = with liveFilter; {
+          inherit prefix;
+          always_show_folders = alwaysShowFolders;
+        };
+        inherit tab;
+        notify.threshold =
+          if notify.threshold == null
+          then null
+          else helpers.mkRaw "vim.log.levels.${strings.toUpper notify.threshold}";
+        inherit ui;
+        log = with log; {
+          inherit enable truncate;
+          types = with log.types; {
+            inherit all profile dev diagnostics git watcher;
+            inherit (log.types) config;
+            copy_paste = copyPaste;
+          };
+        };
+      }
+      // cfg.extraOptions;
+
+    openNvimTreeFunction = ''
+      local function open_nvim_tree(data)
+
+        ------------------------------------------------------------------------------------------
+
+        -- buffer is a directory
+        local directory = vim.fn.isdirectory(data.file) == 1
+
+        -- buffer is a [No Name]
+        local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
+
+        -- Will automatically open the tree when running setup if startup buffer is a directory,
+        -- is empty or is unnamed. nvim-tree window will be focused.
+        local open_on_setup = ${helpers.toLuaObject cfg.openOnSetup}
+
+        if (directory or no_name) and open_on_setup then
+          -- change to the directory
+          if directory then
+            vim.cmd.cd(data.file)
+          end
+
+          -- open the tree
+          require("nvim-tree.api").tree.open()
+          return
+        end
+
+        ------------------------------------------------------------------------------------------
+
+        -- Will automatically open the tree when running setup if startup buffer is a file.
+        -- File window will be focused.
+        -- File will be found if updateFocusedFile is enabled.
+        local open_on_setup_file = ${helpers.toLuaObject cfg.openOnSetupFile}
+
+        -- buffer is a real file on the disk
+        local real_file = vim.fn.filereadable(data.file) == 1
+
+        if (real_file or no_name) and open_on_setup_file then
+
+          -- skip ignored filetypes
+          local filetype = vim.bo[data.buf].ft
+          local ignored_filetypes = ${helpers.toLuaObject cfg.ignoreFtOnSetup}
+
+          if not vim.tbl_contains(ignored_filetypes, filetype) then
+            -- open the tree but don't focus it
+            require("nvim-tree.api").tree.toggle({ focus = false })
+            return
+          end
+        end
+
+        ------------------------------------------------------------------------------------------
+
+        -- Will ignore the buffer, when deciding to open the tree on setup.
+        local ignore_buffer_on_setup = ${helpers.toLuaObject cfg.ignoreBufferOnSetup}
+        if ignore_buffer_on_setup then
+          require("nvim-tree.api").tree.open()
+        end
+
+      end
+    '';
   in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
@@ -284,15 +1200,21 @@ in {
         nvim-web-devicons
       ];
 
-      autoCmd = mkIf (cfg.autoClose != null && cfg.autoClose) [
-        {
+      autoCmd =
+        []
+        ++ (optional (cfg.openOnSetup or cfg.openOnSetupFile) {
+          event = "VimEnter";
+          callback = helpers.mkRaw "open_nvim_tree";
+        })
+        ++ (optional cfg.autoClose {
           event = "BufEnter";
           command = "if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif";
           nested = true;
-        }
-      ];
+        });
 
       extraConfigLua = ''
+        ${openNvimTreeFunction}
+
         require('nvim-tree').setup(${helpers.toLuaObject options})
       '';
       extraPackages = [pkgs.git];
