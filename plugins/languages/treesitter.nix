@@ -152,7 +152,7 @@ in {
         if cfg.nixGrammars
         then [(cfg.package.withPlugins (_: cfg.grammarPackages))]
         else [cfg.package];
-      extraPackages = [pkgs.tree-sitter pkgs.nodejs];
+      extraPackages = [pkgs.tree-sitter pkgs.nodejs pkgs.gcc];
 
       options = mkIf cfg.folding {
         foldmethod = "expr";
