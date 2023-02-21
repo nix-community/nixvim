@@ -51,11 +51,18 @@ with lib; let
           description = "The action to execute.";
         };
 
-        description = mkOption {
-          type = types.nullOr types.str;
-          description = "A textual description of this keybind, to be shown in which-key, if you have it.";
-          default = null;
+        lua = mkOption {
+          type = types.bool;
+          description = ''
+            If true, `action` is considered to be lua code.
+            Thus, it will not be wrapped in `""`.
+          '';
+          default = false;
         };
+
+        description = helpers.mkNullOrOption types.str ''
+          A textual description of this keybind, to be shown in which-key, if you have it.
+        '';
       };
     })
   ];
