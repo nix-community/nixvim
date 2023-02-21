@@ -199,6 +199,11 @@ with lib; let
       settings = cfg: {nil = {inherit (cfg) formatting diagnostics;};};
     }
     {
+      name = "pylsp";
+      description = "Enable pylsp, for Python.";
+      package = pkgs.python3Packages.python-lsp-server;
+    }
+    {
       name = "pyright";
       description = "Enable pyright, for Python.";
     }
