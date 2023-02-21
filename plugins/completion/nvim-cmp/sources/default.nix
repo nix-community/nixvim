@@ -11,6 +11,7 @@ in {
   # For extra cmp plugins
   imports =
     [
+      ./cmp-tabnine.nix
     ]
     ++ pluginModules;
 }
