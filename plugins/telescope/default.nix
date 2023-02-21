@@ -23,6 +23,22 @@ in {
 
     package = helpers.mkPackageOption "telescope.nvim" pkgs.vimPlugins.telescope-nvim;
 
+    keymaps = mkOption {
+      type = types.attrsOf types.str;
+      description = "Keymaps for telescope.";
+      default = {};
+      example = {
+        "<leader>fg" = "live_grep";
+        "<C-p>" = "git_files";
+      };
+    };
+
+    keymapsSilent = mkOption {
+      type = types.bool;
+      description = "Whether telescope keymaps should be silent";
+      default = false;
+    };
+
     highlightTheme = mkOption {
       type = types.nullOr types.str;
       description = "The colorscheme to use for syntax highlighting";
@@ -66,6 +82,15 @@ in {
     extraConfigVim = mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
+
+    maps.normal =
+      mapAttrs
+      (key: action: {
+        silent = cfg.keymapsSilent;
+        action = "require('telescope.builtin').${action}";
+        lua = true;
+      })
+      cfg.keymaps;
 
     extraConfigLua = let
       options =
