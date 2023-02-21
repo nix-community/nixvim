@@ -5,9 +5,9 @@
   ...
 } @ args:
 with lib; let
-  helpers = import ./helpers.nix args;
+  helpers = import ../helpers.nix args;
 
-  optionWarnings = import ../../lib/option-warnings.nix args;
+  optionWarnings = import ../../../lib/option-warnings.nix args;
   basePluginPath = ["plugins" "lsp" "servers"];
 
   servers = [
