@@ -40,6 +40,13 @@
           {
             enable = mkEnableOption description;
             settings = settingsOptions;
+            extraSettings = mkOption {
+              default = {};
+              type = types.attrs;
+              description = ''
+                Extra settings for the ${name} language server.
+              '';
+            };
           }
           // packageOption;
       };
@@ -56,7 +63,7 @@
               name = serverName;
               extraOptions = {
                 cmd = cmd cfg;
-                settings = settings cfg.settings;
+                settings = settings (cfg.settings // cfg.extraSettings);
               };
             }
           ];
