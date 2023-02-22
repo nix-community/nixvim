@@ -152,7 +152,7 @@ in {
           setting it to false may improve startup time
         '';
       }
-      // (import ../nvim-lsp/rust-analyzer-config.nix lib);
+      // (import ../nvim-lsp/language-servers/rust-analyzer-config.nix lib);
   };
   config = let
     cfg = config.plugins.rust-tools;

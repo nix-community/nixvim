@@ -9,7 +9,7 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 in {
   imports = [
-    ./basic-servers.nix
+    ./language-servers
   ];
 
   options = {
