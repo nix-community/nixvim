@@ -55,7 +55,13 @@ with lib; rec {
           nowait = false;
           action = action;
         }
-        else action)
+        else {
+          inherit (action) silent expr unique noremap script nowait;
+          action =
+            if action.lua
+            then mkRaw action.action
+            else action;
+        })
       maps;
   in
     builtins.attrValues (builtins.mapAttrs
