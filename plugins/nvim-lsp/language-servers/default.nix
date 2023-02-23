@@ -312,6 +312,7 @@ with lib; let
 in {
   imports =
     lib.lists.map (lspHelpers.mkLsp) servers
+    ++ [./pylsp.nix]
     ++ [
       (optionWarnings.mkRenamedOption {
         option = basePluginPath ++ ["sumneko-lua"];
