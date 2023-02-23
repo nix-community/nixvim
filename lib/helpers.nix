@@ -60,7 +60,7 @@ with lib; rec {
           action =
             if action.lua
             then mkRaw action.action
-            else action;
+            else action.action;
         })
       maps;
   in
