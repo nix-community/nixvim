@@ -7,7 +7,7 @@ with lib;
 with import ../helpers.nix {inherit lib;};
   mkPlugin args {
     name = "ledger";
-    description = "Enable ledger language features";
+    description = "ledger language features";
     package = pkgs.vimPlugins.vim-ledger;
 
     options = {
