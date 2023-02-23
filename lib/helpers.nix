@@ -188,9 +188,7 @@ with lib; rec {
   }: {
     option = mkOption {
       type = types.nullOr type;
-      default = default;
-      description = description;
-      example = example;
+      inherit default description example;
     };
 
     inherit value global;
