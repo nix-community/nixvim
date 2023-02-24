@@ -25,6 +25,70 @@ in {
 
     package = helpers.mkPackageOption "harpoon" pkgs.vimPlugins.harpoon;
 
+    keymapsSilent = mkOption {
+      type = types.bool;
+      description = "Whether harpoon keymaps should be silent.";
+      default = false;
+    };
+
+    keymaps = {
+      addFile = helpers.mkNullOrOption types.str ''
+        Keymap for marking the current file.";
+      '';
+
+      toggleQuickMenu = helpers.mkNullOrOption types.str ''
+        Keymap for toggling the quick menu.";
+      '';
+
+      navFile = helpers.mkNullOrOption (types.attrsOf types.str) ''
+        Keymaps for navigating to marks.
+
+        Examples:
+        navFile = {
+          "1" = "<C-j>";
+          "2" = "<C-k>";
+          "3" = "<C-l>";
+          "4" = "<C-m>";
+        };
+      '';
+
+      navNext = helpers.mkNullOrOption (types.str) ''
+        Keymap for navigating to next mark.";
+      '';
+
+      navPrev = helpers.mkNullOrOption (types.str) ''
+        Keymap for navigating to previous mark.";
+      '';
+
+      gotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
+        Keymaps for navigating to terminals.
+
+        Examples:
+        gotoTerminal = {
+          "1" = "<C-j>";
+          "2" = "<C-k>";
+          "3" = "<C-l>";
+          "4" = "<C-m>";
+        };
+      '';
+
+      cmdToggleQuickMenu = helpers.mkNullOrOption types.str ''
+        Keymap for toggling the cmd quick menu.
+      '';
+
+      tmuxGotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
+        Keymaps for navigating to tmux windows/panes.
+        Attributes can either be tmux window ids or pane identifiers.
+
+        Examples:
+        tmuxGotoTerminal = {
+          "1" = "<C-1>";
+          "2" = "<C-2>";
+          "{down-of}" = "<leader>g";
+        };
+      '';
+    };
+
     saveOnToggle = helpers.defaultNullOpts.mkBool false ''
       Sets the marks upon calling `toggle` on the ui, instead of require `:w`.
     '';
@@ -46,7 +110,7 @@ in {
     '';
 
     markBranch = helpers.defaultNullOpts.mkBool false ''
-      Set marks specific to each git branch inside git repository
+      Set marks specific to each git branch inside git repository.
     '';
 
     projects = mkOption {
@@ -119,5 +183,68 @@ in {
       extraConfigLua = ''
         require('harpoon').setup(${helpers.toLuaObject options})
       '';
+
+      maps.normal = let
+        silent = cfg.keymapsSilent;
+        km = cfg.keymaps;
+
+        simpleMappings = mkMerge (
+          mapAttrsToList
+          (
+            optionName: luaFunc: let
+              key = km.${optionName};
+            in (mkIf (key != null) {
+              ${key} = {
+                action = luaFunc;
+                lua = true;
+                inherit silent;
+              };
+            })
+          )
+          {
+            addFile = "require('harpoon.mark').add_file";
+            toggleQuickMenu = "require('harpoon.ui').toggle_quick_menu";
+            navNext = "require('harpoon.ui').nav_next";
+            navPrev = "require('harpoon.ui').nav_prev";
+            cmdToggleQuickMenu = "require('harpoon.cmd-ui').toggle_quick_menu()";
+          }
+        );
+
+        mkNavMappings = name: genLuaFunc: let
+          mappingsAttrs = km.${name};
+        in
+          mkIf
+          (mappingsAttrs != null)
+          (
+            mapAttrs'
+            (id: key: {
+              name = key;
+              value = {
+                action = genLuaFunc id;
+                lua = true;
+                inherit silent;
+              };
+            })
+            mappingsAttrs
+          );
+      in
+        mkMerge [
+          simpleMappings
+          (
+            mkNavMappings
+            "navFile"
+            (id: "function() require('harpoon.ui').nav_file(${id}) end")
+          )
+          (
+            mkNavMappings
+            "gotoTerminal"
+            (id: "function() require('harpoon.term').gotoTerminal(${id}) end")
+          )
+          (
+            mkNavMappings
+            "tmuxGotoTerminal"
+            (id: "function() require('harpoon.tmux').gotoTerminal(${id}) end")
+          )
+        ];
     };
 }
