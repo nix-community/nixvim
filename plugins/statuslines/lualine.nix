@@ -86,6 +86,12 @@ in {
 
       package = helpers.mkPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
 
+      iconsEnabled = mkOption {
+        type = types.bool;
+        description = "Whether to enable/disable icons for all components.";
+        default = true;
+      };
+
       theme = helpers.defaultNullOpts.mkStr "auto" "The theme to use for lualine-nvim.";
 
       componentSeparators = mkSeparatorsOption {
@@ -216,6 +222,7 @@ in {
     processSections = sections: mapAttrs (_: mapNullable (map processComponent)) sections;
     setupOptions = {
       options = {
+        icons_enabled = cfg.iconsEnabled;
         theme = cfg.theme;
         section_separators = cfg.sectionSeparators;
         component_separators = cfg.componentSeparators;
@@ -231,7 +238,9 @@ in {
     };
   in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins =
+        [cfg.package]
+        ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
       extraPackages = [pkgs.git];
       extraConfigLua = ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
     };
