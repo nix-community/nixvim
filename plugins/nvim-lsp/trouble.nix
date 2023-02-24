@@ -212,7 +212,7 @@ in
             auto_preview = cfg.autoPreview;
             auto_fold = cfg.autoFold;
             auto_jump = cfg.autoJump;
-            inherit signs;
+            inherit (cfg) signs;
             use_diagnostic_signs = cfg.useDiagnosticSigns;
           }
           // cfg.extraOptions;
