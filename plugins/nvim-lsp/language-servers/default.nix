@@ -267,6 +267,7 @@ with lib; let
       name = "pylsp";
       description = "Enable pylsp, for Python.";
       package = pkgs.python3Packages.python-lsp-server;
+      settings = cfg: {pylsp = cfg;};
     }
     {
       name = "pyright";
