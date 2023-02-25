@@ -152,6 +152,12 @@ with lib; let
       description = "Enable gopls, for Go.";
     }
     {
+      name = "hls";
+      description = "Enable haskell language server";
+      package = pkgs.haskell-language-server;
+      cmd = cfg: ["haskell-language-server-wrapper"];
+    }
+    {
       name = "html";
       description = "Enable html, for HTML";
       package = pkgs.nodePackages.vscode-langservers-extracted;
@@ -162,64 +168,6 @@ with lib; let
       description = "Enable jsonls, for JSON";
       package = pkgs.nodePackages.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-json-language-server" "--stdio"];
-    }
-    {
-      name = "nil_ls";
-      description = "Enable nil, for Nix";
-      package = pkgs.nil;
-      settingsOptions = {
-        formatting.command = mkOption {
-          type = types.nullOr (types.listOf types.str);
-          default = null;
-          description = ''
-            External formatter command (with arguments).
-            It should accepts file content in stdin and print the formatted code into stdout.
-          '';
-        };
-        diagnostics = {
-          ignored = mkOption {
-            type = types.listOf types.str;
-            default = [];
-            description = ''
-              Ignored diagnostic kinds.
-              The kind identifier is a snake_cased_string usually shown together
-              with the diagnostic message.
-            '';
-          };
-          excludedFiles = mkOption {
-            type = types.listOf types.str;
-            default = [];
-            description = ''
-              Files to exclude from showing diagnostics. Useful for generated files.
-              It accepts an array of paths. Relative paths are joint to the workspace root.
-              Glob patterns are currently not supported.
-            '';
-          };
-        };
-      };
-      settings = cfg: {nil = {inherit (cfg) formatting diagnostics;};};
-    }
-    {
-      name = "pylsp";
-      description = "Enable pylsp, for Python.";
-      package = pkgs.python3Packages.python-lsp-server;
-    }
-    {
-      name = "pyright";
-      description = "Enable pyright, for Python.";
-    }
-    {
-      name = "rnix-lsp";
-      description = "Enable rnix LSP, for Nix";
-      serverName = "rnix";
-    }
-    {
-      name = "rust-analyzer";
-      description = "Enable rust-analyzer, for Rust.";
-      serverName = "rust_analyzer";
-
-      settingsOptions = import ./rust-analyzer-config.nix lib;
-      settings = cfg: {rust-analyzer = cfg;};
     }
     {
       name = "lua-ls";
@@ -280,6 +228,64 @@ with lib; let
       settings = cfg: {Lua = cfg;};
     }
     {
+      name = "nil_ls";
+      description = "Enable nil, for Nix";
+      package = pkgs.nil;
+      settingsOptions = {
+        formatting.command = mkOption {
+          type = types.nullOr (types.listOf types.str);
+          default = null;
+          description = ''
+            External formatter command (with arguments).
+            It should accepts file content in stdin and print the formatted code into stdout.
+          '';
+        };
+        diagnostics = {
+          ignored = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = ''
+              Ignored diagnostic kinds.
+              The kind identifier is a snake_cased_string usually shown together
+              with the diagnostic message.
+            '';
+          };
+          excludedFiles = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = ''
+              Files to exclude from showing diagnostics. Useful for generated files.
+              It accepts an array of paths. Relative paths are joint to the workspace root.
+              Glob patterns are currently not supported.
+            '';
+          };
+        };
+      };
+      settings = cfg: {nil = {inherit (cfg) formatting diagnostics;};};
+    }
+    {
+      name = "pylsp";
+      description = "Enable pylsp, for Python.";
+      package = pkgs.python3Packages.python-lsp-server;
+    }
+    {
+      name = "pyright";
+      description = "Enable pyright, for Python.";
+    }
+    {
+      name = "rnix-lsp";
+      description = "Enable rnix LSP, for Nix";
+      serverName = "rnix";
+    }
+    {
+      name = "rust-analyzer";
+      description = "Enable rust-analyzer, for Rust.";
+      serverName = "rust_analyzer";
+
+      settingsOptions = import ./rust-analyzer-config.nix lib;
+      settings = cfg: {rust-analyzer = cfg;};
+    }
+    {
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
       package = pkgs.nodePackages."@tailwindcss/language-server";
@@ -301,12 +307,6 @@ with lib; let
     {
       name = "zls";
       description = "Enable zls, for Zig.";
-    }
-    {
-      name = "hls";
-      description = "Enable haskell language server";
-      package = pkgs.haskell-language-server;
-      cmd = cfg: ["haskell-language-server-wrapper"];
     }
   ];
 in {
