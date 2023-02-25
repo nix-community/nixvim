@@ -7,55 +7,78 @@
 with lib; let
   cfg = config.plugins.lualine;
   helpers = import ../helpers.nix {inherit lib;};
-  separators = mkOption {
-    type = types.nullOr (types.submodule {
+
+  mkSeparatorsOption = {
+    leftDefault ? " ",
+    rightDefault ? " ",
+    name,
+  }: (
+    helpers.mkNullOrOption
+    (types.submodule {
       options = {
-        left = mkOption {
-          default = " ";
-          type = types.str;
-          description = "left separator";
-        };
-        right = mkOption {
-          default = " ";
-          type = types.str;
-          description = "right separator";
-        };
+        left = helpers.defaultNullOpts.mkStr leftDefault "Left separator";
+        right = helpers.defaultNullOpts.mkStr rightDefault "Right separator";
       };
-    });
-    default = null;
-  };
-  component_options = defaultName:
-    mkOption {
-      type = types.nullOr (types.listOf (types.oneOf [
-        types.str
-        (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = "component name";
-              default = defaultName;
-            };
-            icons_enabled = mkOption {
-              type = types.enum ["True" "False"];
-              default = "True";
-              description = "displays icons in alongside component";
-            };
-            icon = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "displays icon in front of the component";
-            };
-            separator = separators;
-            extraConfig = mkOption {
-              type = types.attrs;
-              default = {};
-              description = "extra options for the component";
-            };
+    })
+    "${name} separtors."
+  );
+
+  mkComponentOptions = defaultName:
+    helpers.mkNullOrOption
+    (types.listOf (types.oneOf [
+      types.str
+      (types.submodule {
+        options = {
+          name = mkOption {
+            type = types.either types.str helpers.rawType;
+            description = "Component name or function";
+            default = defaultName;
           };
-        })
-      ]));
-      default = null;
-    };
+
+          icons_enabled = helpers.defaultNullOpts.mkBool true ''
+            Enables the display of icons alongside the component.
+          '';
+
+          icon = helpers.mkNullOrOption types.str ''
+            Defines the icon to be displayed in front of the component.
+          '';
+
+          separator = mkSeparatorsOption {name = "Component";};
+
+          color = helpers.mkNullOrOption (with types; either str (attrsOf str)) ''
+            Defines a custom color for the component.
+          '';
+
+          padding =
+            helpers.defaultNullOpts.mkNullable
+            (
+              types.either
+              types.int
+              (types.submodule {
+                options = {
+                  left = mkOption {
+                    type = types.int;
+                    description = "left padding";
+                  };
+                  right = mkOption {
+                    type = types.int;
+                    description = "left padding";
+                  };
+                };
+              })
+            )
+            "1"
+            "Adds padding to the left and right of components.";
+
+          extraConfig = mkOption {
+            type = types.attrs;
+            default = {};
+            description = "extra options for the component";
+          };
+        };
+      })
+    ]))
+    "";
 in {
   options = {
     plugins.lualine = {
@@ -63,58 +86,102 @@ in {
 
       package = helpers.mkPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
 
-      theme = mkOption {
-        default = config.colorscheme;
-        type = types.nullOr types.str;
-        description = "The theme to use for lualine-nvim.";
+      theme = helpers.defaultNullOpts.mkStr "auto" "The theme to use for lualine-nvim.";
+
+      componentSeparators = mkSeparatorsOption {
+        leftDefault = "";
+        rightDefault = "";
+        name = "component";
       };
 
-      sectionSeparators = separators;
-      componentSeparators = separators;
-
-      disabledFiletypes = mkOption {
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-        example = ''[ "lua" ]'';
-        description = "filetypes to disable lualine on";
+      sectionSeparators = mkSeparatorsOption {
+        leftDefault = "";
+        rightDefault = "";
+        name = "section";
       };
 
-      alwaysDivideMiddle = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-        description = "When true, left_sections (a,b,c) can't take over entire statusline";
-      };
-
-      sections = mkOption {
-        type = types.nullOr (types.submodule ({...}: {
+      disabledFiletypes =
+        helpers.mkNullOrOption
+        (types.submodule {
           options = {
-            lualine_a = component_options "mode";
-            lualine_b = component_options "branch";
-            lualine_c = component_options "filename";
+            statusline = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
+              Only ignores the ft for statusline.
+            '';
 
-            lualine_x = component_options "encoding";
-            lualine_y = component_options "progress";
-            lualine_z = component_options "location";
+            winbar = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
+              Only ignores the ft for winbar.
+            '';
           };
-        }));
+        })
+        "Filetypes to disable lualine for.";
 
-        default = null;
-      };
+      ignoreFocus = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        If current filetype is in this list it'll always be drawn as inactive statusline and the
+        last window will be drawn as active statusline.
 
-      tabline = mkOption {
-        type = types.nullOr (types.submodule ({...}: {
+        For example if you don't want statusline of your file tree / sidebar window to have active
+        statusline you can add their filetypes here.
+      '';
+
+      alwaysDivideMiddle = helpers.defaultNullOpts.mkBool true ''
+        When set to true, left sections i.e. 'a','b' and 'c' can't take over the entire statusline
+        even if neither of 'x', 'y' or 'z' are present.
+      '';
+
+      globalstatus = helpers.defaultNullOpts.mkBool false ''
+        Enable global statusline (have a single statusline at bottom of neovim instead of one for
+        every window).
+        This feature is only available in neovim 0.7 and higher.
+      '';
+
+      refresh =
+        helpers.mkNullOrOption
+        (types.submodule {
           options = {
-            lualine_a = component_options "";
-            lualine_b = component_options "";
-            lualine_c = component_options "";
+            statusline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
 
-            lualine_x = component_options "";
-            lualine_y = component_options "";
-            lualine_z = component_options "";
+            tabline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
+
+            winbar = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
           };
-        }));
-        default = null;
-      };
+        })
+        ''
+          Sets how often lualine should refresh it's contents (in ms).
+          The refresh option sets minimum time that lualine tries to maintain between refresh.
+          It's not guarantied if situation arises that lualine needs to refresh itself before this
+          time it'll do it.
+        '';
+
+      sections =
+        helpers.mkNullOrOption
+        (types.submodule {
+          options = {
+            lualine_a = mkComponentOptions "mode";
+            lualine_b = mkComponentOptions "branch";
+            lualine_c = mkComponentOptions "filename";
+
+            lualine_x = mkComponentOptions "encoding";
+            lualine_y = mkComponentOptions "progress";
+            lualine_z = mkComponentOptions "location";
+          };
+        })
+        "Sections configuration";
+
+      tabline =
+        helpers.mkNullOrOption
+        (types.submodule {
+          options = {
+            lualine_a = mkComponentOptions "";
+            lualine_b = mkComponentOptions "";
+            lualine_c = mkComponentOptions "";
+
+            lualine_x = mkComponentOptions "";
+            lualine_y = mkComponentOptions "";
+            lualine_z = mkComponentOptions "";
+          };
+        })
+        "Tabline configuration";
+
       extensions = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
@@ -136,12 +203,14 @@ in {
       icons_enabled,
       icon,
       separator,
+      color,
+      padding,
       extraConfig,
     }:
       mergeAttrs
       {
         "@" = name;
-        inherit icons_enabled icon separator;
+        inherit icons_enabled icon separator color padding;
       }
       extraConfig;
     processSections = sections: mapAttrs (_: mapNullable (map processComponent)) sections;
@@ -152,6 +221,8 @@ in {
         component_separators = cfg.componentSeparators;
         disabled_filetypes = cfg.disabledFiletypes;
         always_divide_middle = cfg.alwaysDivideMiddle;
+        globalstatus = cfg.globalstatus;
+        refresh = cfg.refresh;
       };
 
       sections = mapNullable processSections cfg.sections;
