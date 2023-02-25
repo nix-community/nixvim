@@ -45,7 +45,7 @@ with lib; let
 
           separator = mkSeparatorsOption {name = "Component";};
 
-          color = helpers.mkNullOrOption (with types; either str (attrsOf str)) ''
+          color = helpers.mkNullOrOption (types.attrsOf types.str) ''
             Defines a custom color for the component.
           '';
 
