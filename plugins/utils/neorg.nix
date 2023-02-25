@@ -148,7 +148,7 @@ in
         extraPlugins = [cfg.package];
 
         extraConfigLua = ''
-          require('nvim-tree').setup(${helpers.toLuaObject options})
+          require('neorg').setup(${helpers.toLuaObject options})
         '';
       };
   }
