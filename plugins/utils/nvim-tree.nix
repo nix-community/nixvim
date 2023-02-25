@@ -994,7 +994,7 @@ in {
               name: value:
                 if value == null
                 then null
-                else helpers.mkRaw "vim.diagnostic.severity.${string.toUpper value}"
+                else helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
             )
             severity;
         };
