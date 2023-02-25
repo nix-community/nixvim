@@ -129,7 +129,7 @@ in
                 in
                   if (isInt level)
                   then level
-                  else helpers.mkRaw "vim.log.levels.${string.toUpper level}";
+                  else helpers.mkRaw "vim.log.levels.${strings.toUpper level}";
               })
               cfg.logger.modes;
             float_precision = cfg.logger.floatPrecision;
