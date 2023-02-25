@@ -127,9 +127,14 @@ in
                 level = let
                   level = modeConfig.level;
                 in
-                  if (isInt level)
-                  then level
-                  else helpers.mkRaw "vim.log.levels.${strings.toUpper level}";
+                  if isNull level
+                  then null
+                  else
+                    (
+                      if (isInt level)
+                      then level
+                      else helpers.mkRaw "vim.log.levels.${strings.toUpper level}"
+                    );
               })
               cfg.logger.modes;
             float_precision = cfg.logger.floatPrecision;
