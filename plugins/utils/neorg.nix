@@ -70,18 +70,23 @@ in
           '';
 
           modes =
-            mapAttrs
-            (mode: defaults: {
-              hl = helpers.defaultNullOpts.mkStr defaults.hl ''
-                Highlight for mode ${mode}
-              '';
-              level =
-                helpers.defaultNullOpts.mkNullable
-                (with types; either int (enum levelNames))
-                defaults.level
-                "Level for mode ${mode}";
+            helpers.mkNullOrOption
+            (types.submodule {
+              options =
+                mapAttrs
+                (mode: defaults: {
+                  hl = helpers.defaultNullOpts.mkStr defaults.hl ''
+                    Highlight for mode ${mode}
+                  '';
+                  level = mkOption {
+                    type = with types; either int (enum levelNames);
+                    default = defaults.level;
+                    description = "Level for mode ${mode}";
+                  };
+                })
+                modes;
             })
-            modes;
+            "Level configuration";
 
           floatPrecision = helpers.defaultNullOpts.mkNullable types.float "0.01" ''
             Can limit the number of decimals displayed for floats
@@ -120,23 +125,21 @@ in
             level = cfg.logger.level;
 
             modes =
-              attrsets.mapAttrsToList
-              (mode: modeConfig: {
-                name = mode;
-                inherit (modeConfig) hl;
-                level = let
-                  level = modeConfig.level;
-                in
-                  if isNull level
-                  then null
-                  else
-                    (
-                      if (isInt level)
-                      then level
-                      else helpers.mkRaw "vim.log.levels.${strings.toUpper level}"
-                    );
-              })
-              cfg.logger.modes;
+              if (isNull cfg.logger.modes)
+              then null
+              else
+                attrsets.mapAttrsToList
+                (mode: modeConfig: {
+                  name = mode;
+                  inherit (modeConfig) hl;
+                  level = let
+                    level = modeConfig.level;
+                  in
+                    if (isInt level)
+                    then level
+                    else helpers.mkRaw "vim.log.levels.${strings.toUpper level}";
+                })
+                cfg.logger.modes;
             float_precision = cfg.logger.floatPrecision;
           };
 
