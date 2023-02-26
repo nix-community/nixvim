@@ -36,7 +36,7 @@ with import ../helpers.nix {inherit lib;};
     options =
       mapAttrs (name: value:
         mkDefaultOpt {
-          global = "floaterm_${value.name}";
+          global = "floaterm_${name}";
           inherit (value) type description;
         })
       {
