@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   config,
   ...
@@ -365,6 +366,70 @@ in {
           default = true;
         };
       };
+
+      ### THIRD-PARTY PLUGINS
+      pylsp_mypy = {
+        enabled = mkOption {
+          type = types.bool;
+          description = "Enable or disable the plugin.";
+          default = false;
+        };
+
+        live_mode = helpers.defaultNullOpts.mkBool true ''
+          Provides type checking as you type.
+          This writes to a tempfile every time a check is done.
+          Turning off live_mode means you must save your changes for mypy diagnostics to update
+          correctly.
+        '';
+
+        dmypy = helpers.defaultNullOpts.mkBool false ''
+          Executes via dmypy run rather than mypy.
+          This uses the dmypy daemon and may dramatically improve the responsiveness of the pylsp
+          server, however this currently does not work in live_mode.
+          Enabling this disables live_mode, even for conflicting configs.
+        '';
+
+        strict = helpers.defaultNullOpts.mkBool false ''
+          Refers to the strict option of mypy.
+          This option often is too strict to be useful.
+        '';
+
+        overrides =
+          helpers.defaultNullOpts.mkNullable
+          (with types; listOf (either bool str))
+          "[true]"
+          ''
+            Specifies a list of alternate or supplemental command-line options.
+            This modifies the options passed to mypy or the mypy-specific ones passed to dmypy run.
+            When present, the special boolean member true is replaced with the command-line options that
+            would've been passed had overrides not been specified.
+            Later options take precedence, which allows for replacing or negating individual default
+            options (see mypy.main:process_options and mypy --help | grep inverse).
+          '';
+
+        dmypy_status_file = helpers.defaultNullOpts.mkStr ".dmypy.json" ''
+          Specifies which status file dmypy should use.
+          This modifies the --status-file option passed to dmypy given dmypy is active.
+        '';
+
+        config_sub_paths = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          Specifies sub paths under which the mypy configuration file may be found.
+          For each directory searched for the mypy config file, this also searches the sub paths
+          specified here.
+        '';
+
+        report_progress = helpers.defaultNullOpts.mkBool false ''
+          Report basic progress to the LSP client.
+          With this option, pylsp-mypy will report when mypy is running, given your editor supports
+          LSP progress reporting.
+          For small files this might produce annoying flashing in your editor, especially in with
+          live_mode.
+          For large projects, enabling this can be helpful to assure yourself whether mypy is still
+          running.
+        '';
+      };
+
+      ### END OF THIRD-PARTY PLUGINS
     };
 
     rope = {
@@ -404,6 +469,7 @@ in {
           optionals
           (plugins.rope_autoimport.enabled || plugins.rope_completion.enabled)
           cfg.package.optional-dependencies.rope
-        );
+        )
+        ++ (optional plugins.pylsp_mypy.enabled pkgs.python3Packages.pylsp-mypy);
     };
 }
