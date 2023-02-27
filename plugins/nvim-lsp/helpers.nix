@@ -39,6 +39,10 @@
         plugins.lsp.servers.${name} =
           {
             enable = mkEnableOption description;
+            cmd = mkOption {
+              type = with types; nullOr (listOf str);
+              default = cmd cfg;
+            };
             settings = settingsOptions;
             extraSettings = mkOption {
               default = {};
@@ -62,7 +66,7 @@
             {
               name = serverName;
               extraOptions = {
-                cmd = cmd cfg;
+                cmd = cfg.cmd;
                 settings = settings (cfg.settings // cfg.extraSettings);
               };
             }
