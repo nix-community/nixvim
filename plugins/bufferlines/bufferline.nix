@@ -35,224 +35,221 @@ in {
   ];
 
   options = {
-    plugins.bufferline = {
-      enable = mkEnableOption "bufferline";
-      package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
-      numbers = mkOption {
-        type = types.nullOr types.lines;
-        description = "A lua function customizing the styling of numbers.";
-        default = null;
-      };
-      closeCommand = mkOption {
-        type = types.nullOr types.lines;
-        description = "Command or function run when closing a buffer.";
-        default = null;
-      };
-      rightMouseCommand = mkOption {
-        type = types.nullOr types.lines;
-        description = "Command or function run when right clicking on a buffer.";
-        default = null;
-      };
-      leftMouseCommand = mkOption {
-        type = types.nullOr types.lines;
-        description = "Command or function run when clicking on a buffer.";
-        default = null;
-      };
-      middleMouseCommand = mkOption {
-        type = types.nullOr types.lines;
-        description = "Command or function run when middle clicking on a buffer.";
-        default = null;
-      };
-      # is deprecated, but might still work
-      indicatorIcon = mkOption {
-        type = types.nullOr types.str;
-        description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended,
+    plugins.bufferline =
+      helpers.extraOptionsOptions
+      // {
+        enable = mkEnableOption "bufferline";
+        package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
+        numbers = mkOption {
+          type = types.nullOr types.lines;
+          description = "A lua function customizing the styling of numbers.";
+          default = null;
+        };
+        closeCommand = mkOption {
+          type = types.nullOr types.lines;
+          description = "Command or function run when closing a buffer.";
+          default = null;
+        };
+        rightMouseCommand = mkOption {
+          type = types.nullOr types.lines;
+          description = "Command or function run when right clicking on a buffer.";
+          default = null;
+        };
+        leftMouseCommand = mkOption {
+          type = types.nullOr types.lines;
+          description = "Command or function run when clicking on a buffer.";
+          default = null;
+        };
+        middleMouseCommand = mkOption {
+          type = types.nullOr types.lines;
+          description = "Command or function run when middle clicking on a buffer.";
+          default = null;
+        };
+        # is deprecated, but might still work
+        indicatorIcon =
+          mkOption {
+            type = types.nullOr types.str;
+            description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended,
         this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
-        default = null;
-      };
-      bufferCloseIcon = mkOption {
-        type = types.nullOr types.str;
-        description = "The close icon for each buffer.";
-        default = null;
-      };
-      modifiedIcon = mkOption {
-        type = types.nullOr types.str;
-        description = "The icon indicating a buffer was modified.";
-        default = null;
-      };
-      closeIcon = mkOption {
-        type = types.nullOr types.str;
-        description = "The close icon.";
-        default = null;
-      };
-      leftTruncMarker = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
-      rightTruncMarker = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
-      nameFormatter = mkOption {
-        type = types.nullOr types.lines;
-        description = "A lua function that can be used to modify the buffer's lable. The argument 'buf' containing a name, path and bufnr is supplied.";
-        default = null;
-      };
-      maxNameLength = mkOption {
-        type = types.nullOr types.int;
-        description = "Max length of a buffer name.";
-        default = null;
-      };
-      maxPrefixLength = mkOption {
-        type = types.nullOr types.int;
-        description = "Max length of a buffer prefix (used when a buffer is de-duplicated)";
-        default = null;
-      };
-      tabSize = mkOption {
-        type = types.nullOr types.int;
-        description = "Size of the tabs";
-        default = null;
-      };
-      diagnostics = mkOption {
-        type = types.nullOr (types.enum [false "nvim_lsp" "coc"]);
-        default = null;
-      };
-      diagnosticsUpdateInInsert = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      diagnosticsIndicator = mkOption {
-        type = types.nullOr helpers.rawType;
-        default = null;
-      };
-      customFilter = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-      };
-      showBufferIcons = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      showBufferCloseIcons = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      showCloseIcon = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      showTabIndicators = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      persistBufferSort = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      separatorStyle = mkOption {
-        type = types.nullOr (types.enum ["slant" "thick" "thin"]);
-        default = null;
-      };
-      enforceRegularTabs = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      alwaysShowBufferline = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-      };
-      sortBy = mkOption {
-        type = types.nullOr (types.enum ["id" "extension" "relative_directory" "directory" "tabs"]);
-        default = null;
-      };
-      indicator = mkOption {
-        default = {};
-        type = types.nullOr (types.submodule ({...}: {
-          options = {
-            icon = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-            };
-            style = mkOption {
-              type = types.nullOr (types.enum ["icon" "underline" "none"]);
-              default = null;
-            };
+            default = null;
           };
-        }));
+        bufferCloseIcon = mkOption {
+          type = types.nullOr types.str;
+          description = "The close icon for each buffer.";
+          default = null;
+        };
+        modifiedIcon = mkOption {
+          type = types.nullOr types.str;
+          description = "The icon indicating a buffer was modified.";
+          default = null;
+        };
+        closeIcon = mkOption {
+          type = types.nullOr types.str;
+          description = "The close icon.";
+          default = null;
+        };
+        leftTruncMarker = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+        rightTruncMarker = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+        nameFormatter = mkOption {
+          type = types.nullOr types.lines;
+          description = "A lua function that can be used to modify the buffer's lable. The argument 'buf' containing a name, path and bufnr is supplied.";
+          default = null;
+        };
+        maxNameLength = mkOption {
+          type = types.nullOr types.int;
+          description = "Max length of a buffer name.";
+          default = null;
+        };
+        maxPrefixLength = mkOption {
+          type = types.nullOr types.int;
+          description = "Max length of a buffer prefix (used when a buffer is de-duplicated)";
+          default = null;
+        };
+        tabSize = mkOption {
+          type = types.nullOr types.int;
+          description = "Size of the tabs";
+          default = null;
+        };
+        diagnostics = mkOption {
+          type = types.nullOr (types.enum [false "nvim_lsp" "coc"]);
+          default = null;
+        };
+        diagnosticsUpdateInInsert = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        diagnosticsIndicator = mkOption {
+          type = types.nullOr helpers.rawType;
+          default = null;
+        };
+        customFilter = mkOption {
+          type = types.nullOr types.lines;
+          default = null;
+        };
+        showBufferIcons = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        showBufferCloseIcons = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        showCloseIcon = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        showTabIndicators = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        persistBufferSort = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        separatorStyle = mkOption {
+          type = types.nullOr (types.enum ["slant" "thick" "thin"]);
+          default = null;
+        };
+        enforceRegularTabs = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        alwaysShowBufferline = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+        };
+        sortBy = mkOption {
+          type = types.nullOr (types.enum ["id" "extension" "relative_directory" "directory" "tabs"]);
+          default = null;
+        };
+        indicator = mkOption {
+          default = {};
+          type = types.nullOr (types.submodule ({...}: {
+            options = {
+              icon = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+              };
+              style = mkOption {
+                type = types.nullOr (types.enum ["icon" "underline" "none"]);
+                default = null;
+              };
+            };
+          }));
+        };
+        highlights = mkOption {
+          default = {};
+          type = types.nullOr (types.submodule ({...}: {
+            options = {
+              fill = highlight;
+              background = highlight;
+
+              tab = highlight;
+              tabSelected = highlight;
+              tabClose = highlight;
+
+              closeButton = highlight;
+              closeButtonVisible = highlight;
+              closeButtonSelected = highlight;
+
+              bufferVisible = highlight;
+              bufferSelected = highlight;
+
+              diagnostic = highlight;
+              diagnosticVisible = highlight;
+              diagnosticSelected = highlight;
+
+              info = highlight;
+              infoVisible = highlight;
+              infoSelected = highlight;
+
+              infoDiagnostic = highlight;
+              infoDiagnosticVisible = highlight;
+              infoDiagnosticSelected = highlight;
+
+              warning = highlight;
+              warningVisible = highlight;
+              warningSelected = highlight;
+
+              warningDiagnostic = highlight;
+              warningDiagnosticVisible = highlight;
+              warningDiagnosticSelected = highlight;
+
+              error = highlight;
+              errorVisible = highlight;
+              errorSelected = highlight;
+
+              errorDiagnostic = highlight;
+              errorDiagnosticVisible = highlight;
+              errorDiagnosticSelected = highlight;
+
+              modified = highlight;
+              modifiedVisible = highlight;
+              modifiedSelected = highlight;
+
+              duplicate = highlight;
+              duplicateVisible = highlight;
+              duplicateSelected = highlight;
+
+              separator = highlight;
+              separatorVisible = highlight;
+              separatorSelected = highlight;
+
+              indicatorSelected = highlight;
+
+              pick = highlight;
+              pickVisible = highlight;
+              pickSelected = highlight;
+            };
+          }));
+        };
       };
-      highlights = mkOption {
-        default = {};
-        type = types.nullOr (types.submodule ({...}: {
-          options = {
-            fill = highlight;
-            background = highlight;
-
-            tab = highlight;
-            tabSelected = highlight;
-            tabClose = highlight;
-
-            closeButton = highlight;
-            closeButtonVisible = highlight;
-            closeButtonSelected = highlight;
-
-            bufferVisible = highlight;
-            bufferSelected = highlight;
-
-            diagnostic = highlight;
-            diagnosticVisible = highlight;
-            diagnosticSelected = highlight;
-
-            info = highlight;
-            infoVisible = highlight;
-            infoSelected = highlight;
-
-            infoDiagnostic = highlight;
-            infoDiagnosticVisible = highlight;
-            infoDiagnosticSelected = highlight;
-
-            warning = highlight;
-            warningVisible = highlight;
-            warningSelected = highlight;
-
-            warningDiagnostic = highlight;
-            warningDiagnosticVisible = highlight;
-            warningDiagnosticSelected = highlight;
-
-            error = highlight;
-            errorVisible = highlight;
-            errorSelected = highlight;
-
-            errorDiagnostic = highlight;
-            errorDiagnosticVisible = highlight;
-            errorDiagnosticSelected = highlight;
-
-            modified = highlight;
-            modifiedVisible = highlight;
-            modifiedSelected = highlight;
-
-            duplicate = highlight;
-            duplicateVisible = highlight;
-            duplicateSelected = highlight;
-
-            separator = highlight;
-            separatorVisible = highlight;
-            separatorSelected = highlight;
-
-            indicatorSelected = highlight;
-
-            pick = highlight;
-            pickVisible = highlight;
-            pickSelected = highlight;
-          };
-        }));
-      };
-
-      extraOptions = mkOption {
-        type = types.attrs;
-        default = {};
-        description = "Extra options, will override others if defined";
-      };
-    };
   };
 
   config = let
