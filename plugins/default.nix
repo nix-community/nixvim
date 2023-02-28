@@ -66,6 +66,7 @@
     ./utils/neorg.nix
     ./utils/notify.nix
     ./utils/nvim-autopairs.nix
+    ./utils/nvim-bqf.nix
     ./utils/nvim-colorizer.nix
     ./utils/nvim-tree.nix
     ./utils/project-nvim.nix
