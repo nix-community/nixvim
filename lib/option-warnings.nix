@@ -69,14 +69,27 @@ with lib; rec {
       overrideDescription = "Alias of ${showOption newOption}";
     };
 
-  # TODO:
-  # mkRemovedOption =
-  #   { option
-  #   , visible ? false
-  #   }:
-  #   { options, ... }:
-  #   {
-  #     options = { };
-  #     config = { };
-  #   };
+  mkRemovedOption = {
+    option, # an array of the path to the option
+    alternative ? null,
+    message ? null,
+    visible ? false,
+  }: {
+    options,
+    config,
+    ...
+  }: let
+    fromOpt = getAttrFromPath option options;
+    fromValue = getAttrFromPath option config;
+    fullMessage =
+      "The option `${showOption option}` has been removed."
+      + (optionalString (alternative != null) " You may want to use `${showOption alternative}` instead.")
+      + (optionalString (message != null) " Message: ${message}");
+  in {
+    config = mkIf (fromOpt.isDefined && fromValue != fromOpt.default) {
+      warnings = [
+        "Nixvim: ${fullMessage}"
+      ];
+    };
+  };
 }
