@@ -20,7 +20,7 @@ with lib; rec {
               if head (stringToCharacters n) == "@"
               then toLuaObject v
               else "[${toLuaObject n}] = " + (toLuaObject v))
-            (filterAttrs (n: v: !isNull v && toLuaObject v != "{}") args)))
+            (filterAttrs (n: v: !isNull v) args)))
         + "}"
     else if builtins.isList args
     then "{" + concatMapStringsSep "," toLuaObject args + "}"
