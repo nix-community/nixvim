@@ -172,7 +172,12 @@ with lib; let
     {
       name = "lua-ls";
       description = "Enable lua LS, for lua";
-      package = pkgs.lua-language-server;
+      # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
+      # Rename occured here: https://github.com/NixOS/nixpkgs/pull/215057
+      package =
+        if (hasAttr "lua-language-server" pkgs)
+        then pkgs.lua-language-server
+        else pkgs.sumneko-lua-language-server;
       serverName = "lua_ls";
 
       # All available settings are documented here:
