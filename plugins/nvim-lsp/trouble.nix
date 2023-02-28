@@ -47,88 +47,91 @@ in
 
         padding = helpers.defaultNullOpts.mkBool true "Add an extra new line on top of the list";
 
-        # key mappings for actions in the trouble list
-        # map to {} to remove a mapping, for example:
-        # close = {}
         actionKeys =
-          mapAttrs
-          (
-            action: config:
-              helpers.defaultNullOpts.mkNullable
-              (with types; either str (listOf str))
-              config.default
-              config.description
-          )
-          {
-            close = {
-              default = "q";
-              description = "Close the list";
-            };
-            cancel = {
-              default = "<esc>";
-              description = "Cancel the preview and get back to your last window / buffer / cursor";
-            };
-            refresh = {
-              default = "r";
-              description = "Manually refresh";
-            };
-            jump = {
-              default = "[ \"<cr>\" \"<tab>\" ]";
-              description = "Jump to the diagnostic or open / close folds";
-            };
-            openSplit = {
-              default = "[ \"<c-x>\" ]";
-              description = "Open buffer in new split";
-            };
-            openVsplit = {
-              default = "[ \"<c-v>\" ]";
-              description = "Open buffer in new vsplit";
-            };
-            openTab = {
-              default = "[ \"<c-t>\" ]";
-              description = "Open buffer in new tab";
-            };
-            jumpClose = {
-              default = "[ \"o\" ]";
-              description = "Jump to the diagnostic and close the list";
-            };
-            toggleMode = {
-              default = "m";
-              description = "toggle between 'workspace' and 'document' diagnostics mode";
-            };
-            togglePreview = {
-              default = "P";
-              description = "Toggle auto_preview";
-            };
-            hover = {
-              default = "K";
-              description = "Opens a small popup with the full multiline message";
-            };
-            preview = {
-              default = "p";
-              description = "Preview the diagnostic location";
-            };
-            closeFolds = {
-              default = "[ \"zM\" \"zm\" ]";
-              description = "Close all folds";
-            };
-            openFolds = {
-              default = "[ \"zR\" \"zr\" ]";
-              description = "Open all folds";
-            };
-            toggleFold = {
-              default = "[ \"zA\" \"za\" ]";
-              description = "Toggle fold of current file";
-            };
-            previous = {
-              default = "k";
-              description = "Previous item";
-            };
-            next = {
-              default = "j";
-              description = "Next item";
-            };
-          };
+          helpers.mkCompositeOption
+          ''
+            Key mappings for actions in the trouble list.
+            Map to `{}` to remove a mapping, for example:
+            `close = {};`
+          ''
+          (mapAttrs
+            (
+              action: config:
+                helpers.defaultNullOpts.mkNullable
+                (with types; either str (listOf str))
+                config.default
+                config.description
+            )
+            {
+              close = {
+                default = "q";
+                description = "Close the list";
+              };
+              cancel = {
+                default = "<esc>";
+                description = "Cancel the preview and get back to your last window / buffer / cursor";
+              };
+              refresh = {
+                default = "r";
+                description = "Manually refresh";
+              };
+              jump = {
+                default = "[ \"<cr>\" \"<tab>\" ]";
+                description = "Jump to the diagnostic or open / close folds";
+              };
+              openSplit = {
+                default = "[ \"<c-x>\" ]";
+                description = "Open buffer in new split";
+              };
+              openVsplit = {
+                default = "[ \"<c-v>\" ]";
+                description = "Open buffer in new vsplit";
+              };
+              openTab = {
+                default = "[ \"<c-t>\" ]";
+                description = "Open buffer in new tab";
+              };
+              jumpClose = {
+                default = "[ \"o\" ]";
+                description = "Jump to the diagnostic and close the list";
+              };
+              toggleMode = {
+                default = "m";
+                description = "toggle between 'workspace' and 'document' diagnostics mode";
+              };
+              togglePreview = {
+                default = "P";
+                description = "Toggle auto_preview";
+              };
+              hover = {
+                default = "K";
+                description = "Opens a small popup with the full multiline message";
+              };
+              preview = {
+                default = "p";
+                description = "Preview the diagnostic location";
+              };
+              closeFolds = {
+                default = "[ \"zM\" \"zm\" ]";
+                description = "Close all folds";
+              };
+              openFolds = {
+                default = "[ \"zR\" \"zr\" ]";
+                description = "Open all folds";
+              };
+              toggleFold = {
+                default = "[ \"zA\" \"za\" ]";
+                description = "Toggle fold of current file";
+              };
+              previous = {
+                default = "k";
+                description = "Previous item";
+              };
+              next = {
+                default = "j";
+                description = "Next item";
+              };
+            });
 
         indentLines = helpers.defaultNullOpts.mkBool true ''
           Add an indent guide below the fold icons.
@@ -157,20 +160,22 @@ in
           "[ \"lsp_definitions\" ]"
           "For the given modes, automatically jump if there is only a single result.";
 
-        # icons / text used for a diagnostic
         signs =
-          mapAttrs
+          helpers.mkCompositeOption "Incons/text used for the different diagnostics."
           (
-            diagnostic: default:
-              helpers.defaultNullOpts.mkStr default "Icon/text for ${diagnostic} diagnostics."
-          )
-          {
-            error = "";
-            warning = "";
-            hint = "";
-            information = "";
-            other = "﫠";
-          };
+            mapAttrs
+            (
+              diagnostic: default:
+                helpers.defaultNullOpts.mkStr default "Icon/text for ${diagnostic} diagnostics."
+            )
+            {
+              error = "";
+              warning = "";
+              hint = "";
+              information = "";
+              other = "﫠";
+            }
+          );
 
         useDiagnosticSigns = helpers.defaultNullOpts.mkBool false ''
           Enabling this will use the signs defined in your lsp client
@@ -192,20 +197,22 @@ in
             fold_open = cfg.foldOpen;
             fold_closed = cfg.foldClosed;
             inherit (cfg) group padding;
-            action_keys = with cfg.actionKeys; {
-              inherit close cancel refresh jump;
-              open_split = openSplit;
-              open_vsplit = openVsplit;
-              open_tab = openTab;
-              jump_close = jumpClose;
-              toggle_mode = toggleMode;
-              toggle_preview = togglePreview;
-              inherit hover preview;
-              close_folds = closeFolds;
-              open_folds = openFolds;
-              toggle_fold = toggleFold;
-              inherit next;
-            };
+            action_keys =
+              helpers.ifNonNull' cfg.actionKeys
+              (with cfg.actionKeys; {
+                inherit close cancel refresh jump;
+                open_split = openSplit;
+                open_vsplit = openVsplit;
+                open_tab = openTab;
+                jump_close = jumpClose;
+                toggle_mode = toggleMode;
+                toggle_preview = togglePreview;
+                inherit hover preview;
+                close_folds = closeFolds;
+                open_folds = openFolds;
+                toggle_fold = toggleFold;
+                inherit next;
+              });
             indent_lines = cfg.indentLines;
             auto_open = cfg.autoOpen;
             auto_close = cfg.autoClose;
