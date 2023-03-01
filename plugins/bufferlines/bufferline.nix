@@ -340,7 +340,7 @@ in {
             error_visible = errorVisible;
             error_selected = errorSelected;
 
-            error_dagnostic = errorDiagnostic;
+            error_diagnostic = errorDiagnostic;
             error_diagnostic_visible = errorDiagnosticVisible;
             error_diagnostic_selected = errorDiagnosticSelected;
 
