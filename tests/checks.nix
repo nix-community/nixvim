@@ -11,6 +11,6 @@ in
     name: config: let
       nvim = makeNixvim config;
     in
-      checkConfig { inherit name nvim; }
+      checkConfig {inherit name nvim;}
   )
   tests
