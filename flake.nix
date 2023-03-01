@@ -107,6 +107,11 @@
               };
           };
           formatter = pkgs.alejandra;
+
+          lib = import ./lib {
+            inherit pkgs;
+            inherit (pkgs) lib;
+          };
         });
     in
       flakeOutput
@@ -114,5 +119,14 @@
         nixosModules.nixvim = import ./wrappers/nixos.nix modules;
         homeManagerModules.nixvim = import ./wrappers/hm.nix modules;
         nixDarwinModules.nixvim = import ./wrappers/darwin.nix modules;
+
+        templates = let
+          simple = {
+            path = ./templates/simple;
+            description = "A simple nix flake template for getting started with nixvim";
+          };
+        in {
+          default = simple;
+        };
       };
 }

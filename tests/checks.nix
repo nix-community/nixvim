@@ -1,36 +1,16 @@
 {
   makeNixvim,
   pkgs,
-}: let
+} @ args: let
   tests = import ./plugins {inherit (pkgs) lib;};
+  check = import ../lib/check.nix args;
+  checkConfig = check.checkNvim;
 in
   # We attempt to build & execute all configurations
   builtins.mapAttrs (
     name: config: let
       nvim = makeNixvim config;
     in
-      pkgs.stdenv.mkDerivation {
-        name = name;
-
-        nativeBuildInputs = [nvim];
-
-        dontUnpack = true;
-        # We need to set HOME because neovim will try to create some files
-        #
-        # Because neovim does not return an exitcode when quitting we need to check if there are
-        # errors on stderr
-        buildPhase = ''
-          output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
-          if [[ -n $output ]]; then
-          	echo "ERROR: $output"
-            exit 1
-          fi
-        '';
-
-        # If we don't do this nix is not happy
-        installPhase = ''
-          mkdir $out
-        '';
-      }
+      checkConfig { inherit name nvim; }
   )
   tests
