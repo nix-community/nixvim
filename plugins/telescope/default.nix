@@ -18,57 +18,53 @@ in {
 
   # TODO:add support for aditional filetypes. This requires autocommands!
 
-  options.plugins.telescope = {
-    enable = mkEnableOption "telescope.nvim";
+  options.plugins.telescope =
+    helpers.extraOptionsOptions
+    // {
+      enable = mkEnableOption "telescope.nvim";
 
-    package = helpers.mkPackageOption "telescope.nvim" pkgs.vimPlugins.telescope-nvim;
+      package = helpers.mkPackageOption "telescope.nvim" pkgs.vimPlugins.telescope-nvim;
 
-    keymaps = mkOption {
-      type = types.attrsOf types.str;
-      description = "Keymaps for telescope.";
-      default = {};
-      example = {
-        "<leader>fg" = "live_grep";
-        "<C-p>" = "git_files";
+      keymaps = mkOption {
+        type = types.attrsOf types.str;
+        description = "Keymaps for telescope.";
+        default = {};
+        example = {
+          "<leader>fg" = "live_grep";
+          "<C-p>" = "git_files";
+        };
+      };
+
+      keymapsSilent = mkOption {
+        type = types.bool;
+        description = "Whether telescope keymaps should be silent";
+        default = false;
+      };
+
+      highlightTheme = mkOption {
+        type = types.nullOr types.str;
+        description = "The colorscheme to use for syntax highlighting";
+        default = config.colorscheme;
+      };
+
+      enabledExtensions = mkOption {
+        type = types.listOf types.str;
+        description = "A list of enabled extensions. Don't use this directly";
+        default = [];
+      };
+
+      extensionConfig = mkOption {
+        type = types.attrsOf types.anything;
+        description = "Configuration for the extensions. Don't use this directly";
+        default = {};
+      };
+
+      defaults = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Telescope default configuration";
       };
     };
-
-    keymapsSilent = mkOption {
-      type = types.bool;
-      description = "Whether telescope keymaps should be silent";
-      default = false;
-    };
-
-    highlightTheme = mkOption {
-      type = types.nullOr types.str;
-      description = "The colorscheme to use for syntax highlighting";
-      default = config.colorscheme;
-    };
-
-    enabledExtensions = mkOption {
-      type = types.listOf types.str;
-      description = "A list of enabled extensions. Don't use this directly";
-      default = [];
-    };
-
-    extensionConfig = mkOption {
-      type = types.attrsOf types.anything;
-      description = "Configuration for the extensions. Don't use this directly";
-      default = {};
-    };
-
-    defaults = mkOption {
-      type = types.nullOr types.attrs;
-      default = null;
-      description = "Telescope default configuration";
-    };
-
-    extraOptions = mkOption {
-      type = types.attrs;
-      default = {};
-      description = "An attribute set, that lets you set extra options or override options set by nixvim";
-    };
-  };
 
   config = mkIf cfg.enable {
     extraPackages = [pkgs.bat];
