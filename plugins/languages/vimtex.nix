@@ -13,13 +13,17 @@ in
 
       package = helpers.mkPackageOption "vimtex" pkgs.vimPlugins.vimtex;
 
-      extraConfig = helpers.mkNullOrOption types.attrs ''
-        The configuration options for vimtex without the 'vimtex_' prefix.
-        Example: To set 'vimtex_compiler_enabled' to 1, write
-          extraConfig = {
-            compiler_enabled = true;
-          };
-      '';
+      extraConfig = mkOption {
+        type = types.attrs;
+        description = ''
+          The configuration options for vimtex without the 'vimtex_' prefix.
+          Example: To set 'vimtex_compiler_enabled' to 1, write
+            extraConfig = {
+              compiler_enabled = true;
+            };
+        '';
+        default = {};
+      };
     };
 
     config = let
