@@ -26,6 +26,7 @@ in
       globals =
         {
           enabled = cfg.enable;
+          callback_progpath = "nvim";
         }
         // cfg.extraConfig;
     in
