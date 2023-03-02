@@ -7,10 +7,14 @@
   inputs.beautysh.url = "github:lovesegfault/beautysh";
   inputs.beautysh.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    pre-commit-hooks,
     ...
   } @ inputs:
     with nixpkgs.lib;
@@ -62,9 +66,23 @@
             };
           extractRustAnalyzerPkg = pkgs.callPackage extractRustAnalyzer {};
         in {
-          checks = import ./tests/checks.nix {
-            inherit pkgs;
-            makeNixvim = self.legacyPackages."${system}".makeNixvim;
+          checks =
+            (import ./tests/checks.nix {
+              inherit pkgs;
+              makeNixvim = self.legacyPackages."${system}".makeNixvim;
+            })
+            // {
+              pre-commit-check = pre-commit-hooks.lib.${system}.run {
+                src = ./.;
+                hooks = {
+                  alejandra.enable = true;
+                };
+              };
+            };
+          devShells = {
+            default = pkgs.mkShell {
+              inherit (self.checks.${system}.pre-commit-check) shellHook;
+            };
           };
           packages = {
             docs = pkgs.callPackage (import ./docs.nix) {
