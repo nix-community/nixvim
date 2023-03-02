@@ -2,8 +2,7 @@
   description = "A nixvim configuration";
 
   inputs = {
-    # nixvim.url = "github:pta2002/nixvim";
-    nixvim.url = "path:../..";
+    nixvim.url = "github:pta2002/nixvim";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -17,7 +16,7 @@
     config = import ./config; # import the module directly
   in
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs { inherit system; };
       nixvim' = nixvim.legacyPackages.${system};
       nvim = nixvim'.makeNixvimWithModule {
         inherit pkgs;
