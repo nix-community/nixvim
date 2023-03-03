@@ -82,8 +82,8 @@ for a home-manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
 and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 
 ## Usage
-NixVim can be used in four ways: through the home-manager, nix-darwin, and NixOS modules,
-and through the `makeNixvim` function. To use the modules, just import the
+NixVim can be used in four ways: through the home-manager, nix-darwin, NixOS modules,
+and standalone through the `makeNixvim` function. To use the modules, just import the
 `nixvim.homeManagerModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
 `nixvim.nixosModules.nixvim` modules, depending on which system
 you're using.
@@ -100,8 +100,17 @@ If you want to use it standalone, you can use the `makeNixvim` function:
 }
 ```
 
+To get started with a standalone configuration you can use the template by running the following command in an empty directory (recommended):
+
+```
+nix flake init --template github:pta2002/nixvim
+```
+
 Alternatively if you want a minimal flake to allow building a custom neovim you
 can use the following:
+
+<details>
+  <summary>Minimal flake configuration</summary>
 
 ```nix
 {
@@ -131,6 +140,8 @@ can use the following:
     });
 }
 ```
+
+</details>
 
 You can then run neovim using `nix run .# -- <file>`. This can be useful to test
 config changes easily.
