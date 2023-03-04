@@ -263,6 +263,20 @@ All of these are configurable from within NixVim. All you have to do is set the
 Please note that to, for example, disable numbers you would not set
 `options.nonumber` to true, you'd set `options.number` to false.
 
+### Caveats
+
+If you are using `makeNixvimWithModule`, then options is treated as options for a module. To get around this just wrap the options in a `config` set.
+
+```nix
+{
+  config = {
+    options = {
+      # ...
+    };
+  };
+}
+```
+
 ## Key mappings
 It is fully possible to define key mappings from within NixVim. This is done
 using the `maps` attribute:
