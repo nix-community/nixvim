@@ -19,7 +19,7 @@ in {
 
     tabpages = helpers.defaultNullOpts.mkBool true "current/total tabpages indicator (top right corner)";
 
-    closeable = helpers.defaultNullOpts.mkBool true "Enable the close button";
+    closable = helpers.defaultNullOpts.mkBool true "Enable the close button";
 
     clickable = helpers.defaultNullOpts.mkBool true ''
       Enable clickable tabs
@@ -142,7 +142,7 @@ in {
       animation = cfg.animations;
       auto_hide = cfg.autoHide;
       clickable = cfg.clickable;
-      closeable = cfg.closeable;
+      closable = cfg.closable;
 
       diagnostics = [
         cfg.diagnostics.error
