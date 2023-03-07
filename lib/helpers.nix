@@ -85,7 +85,7 @@ with lib; rec {
 
   mkIfNonNull = c: mkIf (!isNull c) c;
 
-  mkCompositeOptions = desc: options:
+  mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
   defaultNullOpts = rec {
