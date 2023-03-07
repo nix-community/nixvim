@@ -51,7 +51,7 @@ in {
         A custom vim function name to open preview page. This function will receive url as param.
       '';
 
-      previewOptions = {
+      previewOptions = helpers.mkCompositeOption "Options for markdown render" {
         mkit = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "markdown-it options for render";
         katex = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "katex options for math";
         uml = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "markdown-it-plantuml options";
@@ -95,29 +95,26 @@ in {
     };
   };
 
-  config = let
-    previewOptions = mapAttrs (name: value: cfg.previewOptions.${name}) cfg.previewOptions;
-  in
-    mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+  config = mkIf cfg.enable {
+    extraPlugins = [cfg.package];
 
-      globals = {
-        mkdp_auto_start = mkIf (!isNull cfg.autoStart) cfg.autoStart;
-        mkdp_auto_close = mkIf (!isNull cfg.autoClose) cfg.autoClose;
-        mkdp_refresh_slow = mkIf (!isNull cfg.refreshSlow) cfg.refreshSlow;
-        mkdp_command_for_global = mkIf (!isNull cfg.commandForGlobal) cfg.commandForGlobal;
-        mkdp_open_to_the_world = mkIf (!isNull cfg.openToTheWorld) cfg.openToTheWorld;
-        mkdp_open_ip = mkIf (!isNull cfg.openIp) cfg.openIp;
-        mkdp_browser = mkIf (!isNull cfg.browser) cfg.browser;
-        mkdp_echo_preview_url = mkIf (!isNull cfg.echoPreviewUrl) cfg.echoPreviewUrl;
-        mkdp_browserfunc = mkIf (!isNull cfg.browserFunc) cfg.browserFunc;
-        mkdp_preview_options = mkIf (cfg.previewOptions != {}) previewOptions;
-        mkdp_markdown_css = mkIf (!isNull cfg.markdownCss) cfg.markdownCss;
-        mkdp_highlight_css = mkIf (!isNull cfg.highlightCss) cfg.highlightCss;
-        mkdp_port = mkIf (!isNull cfg.port) cfg.port;
-        mkdp_page_title = mkIf (!isNull cfg.pageTitle) cfg.pageTitle;
-        mkdp_filetypes = mkIf (!isNull cfg.fileTypes) cfg.fileTypes;
-        mkdp_theme = mkIf (!isNull cfg.theme) cfg.theme;
-      };
+    globals = {
+      mkdp_auto_start = mkIf (!isNull cfg.autoStart) cfg.autoStart;
+      mkdp_auto_close = mkIf (!isNull cfg.autoClose) cfg.autoClose;
+      mkdp_refresh_slow = mkIf (!isNull cfg.refreshSlow) cfg.refreshSlow;
+      mkdp_command_for_global = mkIf (!isNull cfg.commandForGlobal) cfg.commandForGlobal;
+      mkdp_open_to_the_world = mkIf (!isNull cfg.openToTheWorld) cfg.openToTheWorld;
+      mkdp_open_ip = mkIf (!isNull cfg.openIp) cfg.openIp;
+      mkdp_browser = mkIf (!isNull cfg.browser) cfg.browser;
+      mkdp_echo_preview_url = mkIf (!isNull cfg.echoPreviewUrl) cfg.echoPreviewUrl;
+      mkdp_browserfunc = mkIf (!isNull cfg.browserFunc) cfg.browserFunc;
+      mkdp_preview_options = mkIf (!isNull cfg.previewOptions) cfg.previewOptions;
+      mkdp_markdown_css = mkIf (!isNull cfg.markdownCss) cfg.markdownCss;
+      mkdp_highlight_css = mkIf (!isNull cfg.highlightCss) cfg.highlightCss;
+      mkdp_port = mkIf (!isNull cfg.port) cfg.port;
+      mkdp_page_title = mkIf (!isNull cfg.pageTitle) cfg.pageTitle;
+      mkdp_filetypes = mkIf (!isNull cfg.fileTypes) cfg.fileTypes;
+      mkdp_theme = mkIf (!isNull cfg.theme) cfg.theme;
     };
+  };
 }
