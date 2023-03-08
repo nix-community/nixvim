@@ -382,7 +382,7 @@ in {
           autocomplete =
             if (isNull cfg.completion.autocomplete)
             then null
-            else mkRaw cfg.completion.autocomplete;
+            else helpers.mkRaw cfg.completion.autocomplete;
           completeopt = cfg.completion.completeopt;
         };
 
