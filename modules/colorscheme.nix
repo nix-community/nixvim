@@ -12,8 +12,8 @@ with lib; {
     };
   };
 
-  config = {
-    extraConfigVim = optionalString (config.colorscheme != "" && config.colorscheme != null) ''
+  config = mkIf (config.colorscheme != "" && config.colorscheme != null) {
+    extraConfigVim = ''
       colorscheme ${config.colorscheme}
     '';
   };
