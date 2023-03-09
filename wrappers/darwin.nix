@@ -10,6 +10,7 @@ modules: {
 in {
   options = {
     programs.nixvim = mkOption {
+      default = {};
       type = types.submodule ((modules pkgs)
         ++ [
           {
