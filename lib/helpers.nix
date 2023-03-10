@@ -75,6 +75,54 @@ with lib; rec {
       })
       normalized);
 
+  # Given an attrs of key mappings (for a single mode), applies the defaults to each one of them.
+  #
+  # Example:
+  # mkModeMaps { silent = true; } {
+  #   Y = "y$";
+  #   "<C-c>" = { action = ":b#<CR>"; silent = false; };
+  # };
+  #
+  # would give:
+  # {
+  #   Y = {
+  #     action = "y$";
+  #     silent = true;
+  #   };
+  #   "<C-c>" = {
+  #     action = ":b#<CR>";
+  #     silent = false;
+  #   };
+  # };
+  mkModeMaps = defaults: modeMaps:
+    mapAttrs
+    (
+      shortcut: action: let
+        actionAttrs =
+          if isString action
+          then {inherit action;}
+          else value;
+      in
+        defaults // actionAttrs
+    )
+    modeMaps;
+
+  # Applies some default mapping options to a set of mappings
+  #
+  # Example:
+  #   maps = mkMaps { silent = true; expr = true; } {
+  #     normal = {
+  #       ...
+  #     };
+  #     visual = {
+  #       ...
+  #     };
+  #   }
+  mkMaps = defaults: maps:
+    mapAttrs
+    (name: modeMaps: (mkModeMaps defaults modeMaps))
+    maps;
+
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption = type: desc:
     lib.mkOption {
