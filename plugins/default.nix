@@ -73,6 +73,7 @@
     ./utils/specs.nix
     ./utils/startify.nix
     ./utils/surround.nix
+    ./utils/todo-comments.nix
     ./utils/undotree.nix
     ./utils/vim-matchup.nix
     ./utils/dashboard.nix
