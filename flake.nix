@@ -67,8 +67,9 @@
           extractRustAnalyzerPkg = pkgs.callPackage extractRustAnalyzer {};
         in {
           checks =
-            (import ./tests/checks.nix {
+            (import ./tests {
               inherit pkgs;
+              inherit (pkgs) lib;
               makeNixvim = self.legacyPackages."${system}".makeNixvim;
             })
             // {
