@@ -83,7 +83,16 @@ with lib; rec {
       description = desc;
     };
 
-  mkIfNonNull = c: mkIf (!isNull c) c;
+  mkIfNonNull' = x: y: (mkIf (!isNull x) y);
+
+  mkIfNonNull = x: (mkIfNonNull' x x);
+
+  ifNonNull' = x: y:
+    if (isNull x)
+    then null
+    else y;
+
+  ifNonNull = x: ifNonNull' x x;
 
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
