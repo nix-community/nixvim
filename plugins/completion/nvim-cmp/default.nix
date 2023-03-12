@@ -8,6 +8,13 @@ with lib; let
   cfg = config.plugins.nvim-cmp;
   helpers = import ../../helpers.nix {inherit lib;};
   cmpLib = import ./cmp-helpers.nix args;
+
+  snippetEngines = {
+    "vsnip" = ''vim.fn["vsnip#anonymous"](args.body)'';
+    "luasnip" = ''require('luasnip').lsp_expand(args.body)'';
+    "snippy" = ''require('snippy').expand_snippet(args.body)'';
+    "ultisnips" = ''vim.fn["UltiSnips#Anon"](args.body)'';
+  };
 in {
   options.plugins.nvim-cmp = {
     enable = mkEnableOption "nvim-cmp";
@@ -94,24 +101,34 @@ in {
 
     snippet = helpers.mkCompositeOption "Snippet options" {
       expand =
-        helpers.defaultNullOpts.mkStr
-        ''
-          function(_)
-            error('snippet engine is not configured.')
-          end
-        ''
+        helpers.mkNullOrOption
+        (
+          types.either
+          helpers.rawType
+          (types.enum (attrNames snippetEngines))
+        )
         ''
           The snippet expansion function. That's how nvim-cmp interacts with a
           particular snippet engine.
 
-          Example:
+          You may directly provide one of those four supported engines:
+          - vsnip
+          - luasnip
+          - snippy
+          - ultisnips
+
+          You can also provide a custom function:
           ```
-          function(args)
-            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-          end
+          {
+            __raw = \'\'
+              function(args)
+                vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+                -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+              end
+            \'\';
+          };
           ```
         '';
     };
@@ -486,10 +503,17 @@ in {
         helpers.mkRaw wrapped;
 
       snippet = helpers.ifNonNull' cfg.snippet {
-        expand =
-          helpers.ifNonNull'
-          cfg.snippet.expand
-          (helpers.mkRaw cfg.snippet.expand);
+        expand = let
+          expand = cfg.snippet.expand;
+        in
+          if isString expand
+          then
+            helpers.mkRaw ''
+              function(args)
+                ${snippetEngines.${expand}}
+              end
+            ''
+          else expand;
       };
 
       completion = helpers.ifNonNull' cfg.completion {
