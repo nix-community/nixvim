@@ -12,53 +12,122 @@ in {
     plugins.packer = {
       enable = mkEnableOption "packer.nvim";
 
-      plugins = mkOption {
-        type = types.listOf (types.oneOf [
-          types.str
-          (with types; let
-            mkOpt = type: desc:
-              mkOption {
-                type = nullOr type;
-                default = null;
-                description = desc;
+      plugins = with types; let
+        pluginType =
+          either
+          str
+          (submodule {
+            options = {
+              name = mkOption {
+                type = str;
+                description = "Name of the plugin to install";
               };
-            function = attrsOf str;
-          in
-            types.submodule {
-              options = {
-                name = mkOption {
-                  type = str;
-                  description = "Name of the plugin to install";
-                };
 
-                disable = mkOpt bool "Mark plugin as inactive";
-                as = mkOpt bool "Specifies an alias under which to install the plugin";
-                installer = mkOpt function "A custom installer";
-                updater = mkOpt function "A custom updater";
-                after = mkOpt (oneOf [str (listOf any)]) "Plugins to load after this plugin";
-                rtp = mkOpt str "Specifies a subdirectory of the plugin to add to runtimepath";
-                opt = mkOpt str "Marks a plugin as optional";
-                branch = mkOpt str "Git branch to use";
-                tag = mkOpt str "Git tag to use";
-                commit = mkOpt str "Git commit to use";
-                lock = mkOpt bool "Skip this plugin in updates";
-                run = mkOpt (oneOf [str function]) "Post-install hook";
-                requires = mkOpt (oneOf [str (listOf any)]) "Plugin dependencies";
-                rocks = mkOpt (oneOf [str (listOf any)]) "Luarocks dependencies";
-                config = mkOpt (oneOf [str function]) "Code to run after this plugin is loaded";
-                setup = mkOpt (oneOf [str function]) "Code to be run before this plugin is loaded";
-                cmd = mkOpt (oneOf [str (listOf str)]) "Commands which load this plugin";
-                ft = mkOpt (oneOf [str (listOf str)]) "Filetypes which load this plugin";
-                keys = mkOpt (oneOf [str (listOf str)]) "Keymaps which load this plugin";
-                event = mkOpt (oneOf [str (listOf str)]) "Autocommand events which load this plugin";
-                fn = mkOpt (oneOf [str (listOf str)]) "Functions which load this plugin";
-                cond = mkOpt (oneOf [str function (listOf (oneOf [str function]))]) "Conditional test to load this plugin";
-                module = mkOpt (oneOf [str (listOf str)]) "Patterns of module names which load this plugin";
-              };
-            })
-        ]);
+              disable = helpers.mkNullOrOption bool "Mark plugin as inactive";
+
+              as =
+                helpers.mkNullOrOption str
+                "Specifies an alias under which to install the plugin";
+
+              installer = helpers.mkNullOrOption str "A custom installer";
+
+              updater = helpers.mkNullOrOption str "A custom updater";
+
+              after =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Plugins to load after this plugin";
+
+              rtp =
+                helpers.mkNullOrOption str
+                "Specifies a subdirectory of the plugin to add to runtimepath";
+
+              opt = helpers.mkNullOrOption bool "Marks a plugin as optional";
+
+              branch = helpers.mkNullOrOption str "Git branch to use";
+
+              tag = helpers.mkNullOrOption str "Git tag to use";
+
+              commit = helpers.mkNullOrOption str "Git commit to use";
+
+              lock = helpers.mkNullOrOption bool "Skip this plugin in updates";
+
+              run =
+                helpers.mkNullOrOption
+                (oneOf [
+                  str
+                  helpers.rawType
+                  (listOf (either str helpers.rawType))
+                ])
+                "Post-install hook";
+
+              requires = helpers.mkNullOrOption (either str listOfPlugins) "Plugin dependencies";
+
+              rocks =
+                helpers.mkNullOrOption (either str (listOf (either str attrs)))
+                "Luarocks dependencies";
+
+              config =
+                helpers.mkNullOrOption (either str helpers.rawType)
+                "Code to run after this plugin is loaded";
+
+              setup =
+                helpers.mkNullOrOption (either str helpers.rawType)
+                "Code to be run before this plugin is loaded";
+
+              cmd =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Commands which load this plugin";
+
+              ft =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Filetypes which load this plugin";
+
+              keys =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Keymaps which load this plugin";
+
+              event =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Autocommand events which load this plugin";
+
+              fn =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Functions which load this plugin";
+
+              cond =
+                helpers.mkNullOrOption
+                (oneOf [
+                  str
+                  helpers.rawType
+                  (listOf (either str helpers.rawType))
+                ])
+                "Conditional test to load this plugin";
+
+              module =
+                helpers.mkNullOrOption (either str (listOf str))
+                "Patterns of module names which load this plugin";
+            };
+          });
+
+        listOfPlugins = types.listOf pluginType;
+      in
+        mkOption {
+          type = listOfPlugins;
+          default = [];
+          description = "List of plugins";
+        };
+
+      rockPlugins = mkOption {
+        type = with types; listOf (either str attrs);
+        description = "List of lua rock plugins";
         default = [];
-        description = "List of plugins";
+        example = ''
+          [
+            "penlight"
+            "lua-resty-http"
+            "lpeg"
+          ]
+        '';
       };
     };
   };
@@ -68,29 +137,94 @@ in {
     extraPackages = [pkgs.git];
 
     extraConfigLua = let
-      plugins =
-        map
-        (plugin:
-          if isAttrs plugin
-          then
-            mapAttrs' (k: v: {
-              name =
-                if k == "name"
-                then "@"
-                else k;
-              value = v;
-            })
-            plugin
-          else plugin)
-        cfg.plugins;
+      luaRockPluginToLua = luaRockPlugin:
+        if isAttrs luaRockPlugin
+        then
+          mapAttrs'
+          (k: v: {
+            name =
+              if k == "name"
+              then "@"
+              else k;
+            value = v;
+          })
+          luaRockPlugin
+        else luaRockPlugin;
+      luaRockListToLua = map luaRockPluginToLua;
+
+      pluginToLua = plugin:
+        if isAttrs plugin
+        then {
+          "@" = plugin.name;
+
+          inherit (plugin) disable as;
+
+          installer =
+            helpers.ifNonNull' plugin.installer
+            (helpers.mkRaw plugin.installer);
+
+          updater =
+            helpers.ifNonNull' plugin.updater
+            (helpers.mkRaw plugin.updater);
+
+          inherit
+            (plugin)
+            after
+            rtp
+            opt
+            branch
+            tag
+            commit
+            lock
+            run
+            ;
+
+          requires =
+            helpers.ifNonNull' plugin.requires
+            (
+              if isList plugin.requires
+              then (pluginListToLua plugin.requires)
+              else plugin.requires
+            );
+
+          rocks =
+            helpers.ifNonNull' plugin.rocks
+            (
+              if isList plugin.rocks
+              then luaRockListToLua plugin.rocks
+              else plugin.rocks
+            );
+
+          inherit
+            (plugin)
+            config
+            setup
+            cmd
+            ft
+            keys
+            event
+            fn
+            cond
+            module
+            ;
+        }
+        else plugin;
+
+      pluginListToLua = map pluginToLua;
+
+      plugins = pluginListToLua cfg.plugins;
+
       packedPlugins =
         if length plugins == 1
         then head plugins
         else plugins;
+
+      luaRockPlugins = luaRockListToLua cfg.rockPlugins;
     in
       mkIf (cfg.plugins != []) ''
         require('packer').startup(function()
           use ${helpers.toLuaObject packedPlugins}
+          use_rocks ${helpers.toLuaObject luaRockPlugins}
         end)
       '';
   };
