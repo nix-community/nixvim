@@ -4,6 +4,13 @@
     plugins.nvim-cmp.enable = true;
   };
 
+  snippetEngine = {
+    plugins.nvim-cmp = {
+      enable = true;
+      snippet.expand = "luasnip";
+    };
+  };
+
   # All the upstream default options of nvim-cmp
   defaults = {
     plugins.nvim-cmp = {
@@ -18,7 +25,7 @@
       preselect = "Item";
 
       snippet = {
-        expand = ''
+        expand.__raw = ''
           function(_)
             error('snippet engine is not configured.')
           end
