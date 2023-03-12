@@ -114,9 +114,15 @@ in {
             "fg" or "bg" or empty.
           '';
 
-          pattern = helpers.mkNullOrOption (with types; either str (listOf str)) ''
-            Pattern or list of patterns, used for highlighting (vim regex)
-          '';
+          pattern =
+            helpers.defaultNullOpts.mkNullable
+            (with types; either str (listOf str))
+            ".*<(KEYWORDS)\\s*:"
+            ''
+              Pattern or list of patterns, used for highlighting (vim regex)
+
+              Note: the provided pattern will be embedded as such: `[[PATTERN]]`.
+            '';
 
           commentsOnly = helpers.defaultNullOpts.mkBool true ''
             Uses treesitter to match keywords in comments only.
@@ -168,9 +174,11 @@ in {
             ```
           '';
 
-          pattern = helpers.defaultNullOpts.mkStr "[[\b(KEYWORDS):]]" ''
+          pattern = helpers.defaultNullOpts.mkStr "\\b(KEYWORDS):" ''
             Regex that will be used to match keywords.
             Don't replace the (KEYWORDS) placeholder.
+
+            Note: the provided pattern will be embedded as such: `[[PATTERN]]`.
           '';
         };
 
@@ -226,16 +234,27 @@ in {
             before
             keyword
             after
-            pattern
             exclude
             ;
+          pattern =
+            helpers.ifNonNull' cfg.highlight.pattern
+            (helpers.mkRaw "[[${cfg.highlight.pattern}]]");
           multiline_pattern = cfg.highlight.multilinePattern;
           multiline_context = cfg.highlight.multilineContext;
           comments_only = cfg.highlight.commentsOnly;
           max_line_len = cfg.highlight.maxLineLen;
         };
         colors = cfg.colors;
-        search = cfg.search;
+        search = helpers.ifNonNull' cfg.search {
+          inherit (cfg.search) command args;
+          pattern =
+            helpers.ifNonNull' cfg.search.pattern
+            (
+              if isList cfg.search.pattern
+              then (map (p: helpers.mkRaw p) cfg.search.pattern)
+              else helpers.mkRaw "[[${cfg.search.pattern}]]"
+            );
+        };
       }
       // cfg.extraOptions;
   in

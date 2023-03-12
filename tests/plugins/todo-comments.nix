@@ -62,7 +62,7 @@
         before = "";
         keyword = "wide";
         after = "fg";
-        pattern = "[[.*<(KEYWORDS)\s*:]]";
+        pattern = ''.*<(KEYWORDS)\s*:'';
         commentsOnly = true;
         maxLineLen = 400;
         exclude = [];
@@ -86,7 +86,7 @@
           "--line-number"
           "--column"
         ];
-        pattern = "[[\b(KEYWORDS):]]";
+        pattern = ''\b(KEYWORDS):'';
       };
 
       keymapsSilent = true;
