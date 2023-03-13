@@ -63,6 +63,7 @@
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
+    ./utils/neo-tree.nix
     ./utils/neorg.nix
     ./utils/notify.nix
     ./utils/nvim-autopairs.nix
