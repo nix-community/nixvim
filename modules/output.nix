@@ -27,28 +27,6 @@ with lib; let
   };
 in {
   options = {
-    viAlias = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Symlink <command>vi</command> to <command>nvim</command> binary.
-      '';
-    };
-
-    vimAlias = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Symlink <command>vim</command> to <command>nvim</command> binary.
-      '';
-    };
-
-    package = mkOption {
-      type = types.package;
-      default = pkgs.neovim-unwrapped;
-      description = "Neovim to use for nixvim";
-    };
-
     extraPlugins = mkOption {
       type = with types; listOf (either package pluginWithConfigType);
       default = [];
@@ -64,42 +42,41 @@ in {
     extraConfigLua = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra contents for init.lua";
+      description = "Extra contents for the file";
     };
 
     extraConfigLuaPre = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra contents for init.lua before everything else";
+      description = "Extra contents for the file before everything else";
     };
 
     extraConfigLuaPost = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra contents for init.lua after everything else";
+      description = "Extra contents for the file after everything else";
     };
 
     extraConfigVim = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra contents for init.vim";
+      description = "Extra contents for the file, in vimscript";
     };
 
-    wrapRc = mkOption {
-      type = types.bool;
-      description = "Should the config be included in the wrapper script";
-      default = false;
+    type = mkOption {
+      type = types.enum ["vim" "lua"];
+      default = "lua";
+      description = "Whether the generated file is a vim or a lua file";
     };
 
-    finalPackage = mkOption {
-      type = types.package;
-      description = "Wrapped neovim";
-      readOnly = true;
-    };
-
-    initContent = mkOption {
+    path = mkOption {
       type = types.str;
-      description = "The content of the init.lua file";
+      description = "Path of the file relative to the config directory";
+    };
+
+    content = mkOption {
+      type = types.str;
+      description = "The content of the config file";
       readOnly = true;
       visible = false;
     };
@@ -112,71 +89,29 @@ in {
   };
 
   config = let
-    defaultPlugin = {
-      plugin = null;
-      config = "";
-      optional = false;
-    };
+    contentLua = ''
+      ${config.extraConfigLuaPre}
+      vim.cmd([[
+        ${config.extraConfigVim}
+      ]])
+      ${config.extraConfigLua}
+      ${config.extraConfigLuaPost}
+    '';
 
-    normalizedPlugins = map (x:
-      defaultPlugin
-      // (
-        if x ? plugin
-        then x
-        else {plugin = x;}
-      ))
-    config.extraPlugins;
-
-    neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit (config) viAlias vimAlias extraLuaPackages;
-        # inherit customRC;
-        plugins = normalizedPlugins;
-      }
-      # Necessary to make sure the runtime path is set properly in NixOS 22.05,
-      # or more generally before the commit:
-      # cda1f8ae468 - neovim: pass packpath via the wrapper
-      // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
-        configure.packages = {
-          nixvim = {
-            start = map (x: x.plugin) normalizedPlugins;
-            opt = [];
-          };
-        };
-      });
-
-    customRC =
-      ''
-        vim.cmd([[
-          ${neovimConfig.neovimRcContent}
-        ]])
-      ''
-      + (optionalString (config.extraConfigLuaPre != "") ''
+    contentVim = ''
+      lua << EOF
         ${config.extraConfigLuaPre}
-      '')
-      + (optionalString (config.extraConfigVim != "") ''
-        vim.cmd([[
-          ${config.extraConfigVim}
-        ]])
-      '')
-      + (optionalString (config.extraConfigLua != "" || config.extraConfigLuaPost != "") ''
+      EOF
+      ${config.extraConfigVim}
+      lua << EOF
         ${config.extraConfigLua}
         ${config.extraConfigLuaPost}
-      '');
-
-    extraWrapperArgs = builtins.concatStringsSep " " (
-      (optional (config.extraPackages != [])
-        ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
-      ++ (optional (config.wrapRc)
-        ''--add-flags -u --add-flags "${pkgs.writeText "init.lua" customRC}"'')
-    );
-
-    wrappedNeovim = pkgs.wrapNeovimUnstable config.package (neovimConfig
-      // {
-        wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
-        wrapRc = false;
-      });
+      EOF
+    '';
   in {
-    finalPackage = wrappedNeovim;
-    initContent = customRC;
+    content =
+      if config.type == "lua"
+      then contentLua
+      else contentVim;
   };
 }

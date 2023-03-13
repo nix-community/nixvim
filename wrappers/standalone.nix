@@ -6,8 +6,13 @@ default_pkgs: modules: {
 
   wrap = {wrapRc = true;};
 
+  shared = import ./_shared.nix modules {
+    inherit pkgs lib;
+    config = {};
+  };
+
   eval = lib.evalModules {
-    modules = (modules pkgs) ++ [module wrap];
+    modules = [module wrap] ++ shared.topLevelModules;
   };
 
   handleAssertions = config: let
