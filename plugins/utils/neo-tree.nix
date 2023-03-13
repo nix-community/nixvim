@@ -40,6 +40,10 @@ in {
           The name used here must be the same name you would use in a require() call.
         '';
 
+      extraSources = helpers.mkNullOrOption (types.listOf types.str) ''
+        Extra sources to be added to the sources. This is an internal nixvim option.
+      '';
+
       addBlankLineAtTop =
         helpers.defaultNullOpts.mkBool false
         "Add a blank line at the top of the tree.";
@@ -945,7 +949,15 @@ in {
 
     options = with cfg;
       {
-        inherit (cfg) sources;
+        # Concatenate sources and extraSources, setting sources to it's default value if it is null
+        # and extraSources is not null
+        sources =
+          if (!isNull cfg.extraSources)
+          then
+            if (isNull cfg.sources)
+            then ["filesystem" "git_status" "buffers"] ++ cfg.extraSources
+            else cfg.sources ++ cfg.extraSources
+          else cfg.sources;
         add_blank_line_at_top = cfg.addBlankLineAtTop;
         auto_clean_after_session_restore = cfg.autoCleanAfterSessionRestore;
         close_if_last_window = cfg.closeIfLastWindow;
