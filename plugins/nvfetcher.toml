@@ -1,0 +1,27 @@
+[intellitab-nvim]
+src.git = "https://github.com/pta2002/intellitab.nvim"
+fetch.github = "pta2002/intellitab.nvim"
+
+[mark-radar]
+src.git = "https://github.com/winston0410/mark-radar.nvim"
+fetch.github = "winston0410/mark-radar.nvim"
+
+[coq-nvim]
+src.git = "https://github.com/ms-jpq/coq_nvim"
+fetch.github = "ms-jpq/coq_nvim"
+
+[std2]
+src.git = "https://github.com/ms-jpq/std2"
+fetch.github = "ms-jpq/std2"
+
+[pynvim_pp]
+src.git = "https://github.com/ms-jpq/pynvim_pp"
+fetch.github = "ms-jpq/pynvim_pp"
+
+[coq-artifacts]
+src.git = "https://github.com/ms-jpq/coq.artifacts"
+fetch.github = "ms-jpq/coq.artifacts"
+
+[magma-nvim]
+src.git = "https://github.com/WhiteBlackGoose/magma-nvim-goose"
+fetch.github = "WhiteBlackGoose/magma-nvim-goose"
