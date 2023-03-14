@@ -76,6 +76,7 @@
     ./utils/surround.nix
     ./utils/todo-comments.nix
     ./utils/undotree.nix
+    ./utils/vim-bbye.nix
     ./utils/vim-matchup.nix
     ./utils/dashboard.nix
     ./utils/emmet.nix
