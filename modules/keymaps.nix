@@ -46,6 +46,12 @@ with lib; let
           default = true;
         };
 
+        remap = mkOption {
+          type = types.bool;
+          description = "Make the mapping recursive. Inverses \"noremap\"";
+          default = false;
+        };
+
         action = mkOption {
           type = types.str;
           description = "The action to execute.";
