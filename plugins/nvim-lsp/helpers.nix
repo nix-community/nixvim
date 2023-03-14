@@ -24,6 +24,7 @@
   }:
     with lib; let
       cfg = config.plugins.lsp.servers.${name};
+      helpers = import ../helpers.nix {inherit lib;};
 
       packageOption =
         if package != null
@@ -39,11 +40,25 @@
         plugins.lsp.servers.${name} =
           {
             enable = mkEnableOption description;
+
             cmd = mkOption {
               type = with types; nullOr (listOf str);
               default = cmd cfg;
             };
+
+            filetypes = helpers.mkNullOrOption (types.listOf types.str) ''
+              Set of filetypes for which to attempt to resolve {root_dir}.
+              May be empty, or server may specify a default value.
+            '';
+
+            autostart = helpers.defaultNullOpts.mkBool true ''
+              Controls if the `FileType` autocommand that launches a language server is created.
+              If `false`, allows for deferring language servers until manually launched with
+              `:LspStart` (|lspconfig-commands|).
+            '';
+
             settings = settingsOptions;
+
             extraSettings = mkOption {
               default = {};
               type = types.attrs;
@@ -66,7 +81,7 @@
             {
               name = serverName;
               extraOptions = {
-                cmd = cfg.cmd;
+                inherit (cfg) cmd filetypes autostart;
                 settings = settings (cfg.settings // cfg.extraSettings);
               };
             }
