@@ -16,6 +16,37 @@ in {
     plugins.lsp = {
       enable = mkEnableOption "neovim's built-in LSP";
 
+      keymaps = {
+        silent = mkOption {
+          type = types.bool;
+          description = "Whether nvim-lsp keymaps should be silent";
+          default = false;
+        };
+
+        diagnostic = mkOption {
+          type = types.attrsOf types.str;
+          description = "Mappings for `vim.diagnostic.<action>` functions.";
+          example = {
+            "<leader>k" = "goto_prev";
+            "<leader>j" = "goto_next";
+          };
+          default = {};
+        };
+
+        lspBuf = mkOption {
+          type = types.attrsOf types.str;
+          description = "Mappings for `vim.lsp.buf.<action>` functions.";
+          example = {
+            "gd" = "definition";
+            "gD" = "references";
+            "gt" = "type_definition";
+            "gi" = "implementation";
+            "K" = "hover";
+          };
+          default = {};
+        };
+      };
+
       enabledServers = mkOption {
         type = with types;
           listOf (oneOf [
@@ -78,6 +109,30 @@ in {
   in
     mkIf cfg.enable {
       extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
+
+      maps.normal = let
+        diagnosticMaps =
+          mapAttrs
+          (key: action: {
+            silent = cfg.keymaps.silent;
+            action = "vim.diagnostic.${action}";
+            lua = true;
+          })
+          cfg.keymaps.diagnostic;
+
+        lspBuf =
+          mapAttrs
+          (key: action: {
+            silent = cfg.keymaps.silent;
+            action = "vim.lsp.buf.${action}";
+            lua = true;
+          })
+          cfg.keymaps.lspBuf;
+      in
+        mkMerge [
+          diagnosticMaps
+          lspBuf
+        ];
 
       # Enable all LSP servers
       extraConfigLua = ''
