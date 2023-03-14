@@ -51,6 +51,7 @@ with lib; rec {
           expr = false;
           unique = false;
           noremap = true;
+          remap = false;
           script = false;
           nowait = false;
           action = action;
