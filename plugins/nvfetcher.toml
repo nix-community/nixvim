@@ -29,3 +29,7 @@ fetch.github = "WhiteBlackGoose/magma-nvim-goose"
 [nvim-osc52]
 src.git = "https://github.com/ojroques/nvim-osc52"
 fetch.github = "ojroques/nvim-osc52"
+
+[netman-nvim]
+src.git = "https://github.com/miversen33/netman.nvim"
+fetch.github = "miversen33/netman.nvim"

@@ -61,6 +61,18 @@
     });
     date = "2021-06-22";
   };
+  netman-nvim = {
+    pname = "netman-nvim";
+    version = "1ef50efcbe88f8293e97946af37243a20873bb1c";
+    src = fetchFromGitHub ({
+      owner = "miversen33";
+      repo = "netman.nvim";
+      rev = "1ef50efcbe88f8293e97946af37243a20873bb1c";
+      fetchSubmodules = false;
+      sha256 = "sha256-oRjBjVmO/7bmgyf9ltthRrwZBD5SLD757GklSjw1bJs=";
+    });
+    date = "2023-03-02";
+  };
   nvim-osc52 = {
     pname = "nvim-osc52";
     version = "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31";

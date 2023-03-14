@@ -99,6 +99,26 @@
         },
         "version": "d7fb84a670795a5b36b18a5b59afd1d3865cbec7"
     },
+    "netman-nvim": {
+        "cargoLocks": null,
+        "date": "2023-03-02",
+        "extract": null,
+        "name": "netman-nvim",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "miversen33",
+            "repo": "netman.nvim",
+            "rev": "1ef50efcbe88f8293e97946af37243a20873bb1c",
+            "sha256": "sha256-oRjBjVmO/7bmgyf9ltthRrwZBD5SLD757GklSjw1bJs=",
+            "type": "github"
+        },
+        "version": "1ef50efcbe88f8293e97946af37243a20873bb1c"
+    },
     "nvim-osc52": {
         "cargoLocks": null,
         "date": "2023-03-03",
