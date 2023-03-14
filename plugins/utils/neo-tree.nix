@@ -155,30 +155,38 @@ in {
             helpers.defaultNullOpts.mkBool false
             "toggle to show selector on statusline";
 
-          showScrolledOffParentNode =
-            helpers.defaultNullOpts.mkBool false
-            ''
-                This will replace the tabs with the parent path of the top visible node when scrolled
-              down.
-            '';
+          showScrolledOffParentNode = helpers.defaultNullOpts.mkBool false ''
+            If `true`, tabs are replaced with the parent path of the top visible node when
+            scrolled down.
+          '';
 
-          tabLabels = helpers.mkCompositeOption "falls back to sourceName if null" {
-            filesystem = helpers.defaultNullOpts.mkStr "  Files " "tab label for files";
-            buffers = helpers.defaultNullOpts.mkStr "  Buffers " "tab label for buffers";
-            gitStatus = helpers.defaultNullOpts.mkStr "  Git " "tab label for git status";
-            diagnostics =
-              helpers.defaultNullOpts.mkStr " 裂Diagnostics "
-              "tab label for diagnostics";
-          };
+          tabLabels =
+            helpers.mkCompositeOption
+            ''
+              Configure the characters shown on each tab.
+              Keys of the table should match the source names defined in `sources`.
+              Value is what is printed inside the tab.
+              If value is `nil` or not set, the source name is used instead.
+            '' {
+              filesystem = helpers.defaultNullOpts.mkStr "  Files " "tab label for files";
+              buffers = helpers.defaultNullOpts.mkStr "  Buffers " "tab label for buffers";
+              gitStatus = helpers.defaultNullOpts.mkStr "  Git " "tab label for git status";
+              diagnostics =
+                helpers.defaultNullOpts.mkStr " 裂Diagnostics "
+                "tab label for diagnostics";
+            };
 
           contentLayout =
             helpers.defaultNullOpts.mkEnumFirstDefault ["start" "end" "focus"]
             ''
-              Only with `tabsLayout` = "equal" or "focus".
+              Defines how the labels are placed inside a tab.
+              This only takes effect when the tab width is greater than the length of label i.e.
+              `tabsLayout = "equal", "focus"` or when `tabsMinWidth` is large enough.
 
-              - start  : |/ 裡 bufname     \/...
-              - end    : |/     裡 bufname \/...
-              - center : |/   裡 bufname   \/...
+              Following options are available.
+                  "start"  : left aligned                  / 裡 bufname     \/..
+                  "end"    : right aligned                 /     裡 bufname \/...
+                  "center" : centered with equal padding   /   裡 bufname   \/...
             '';
 
           tabsLayout =
@@ -186,11 +194,16 @@ in {
             ["start" "end" "center" "equal" "focus"]
             "equal"
             ''
-              - start  : |/  a  \/  b  \/  c  \            |
-              - end    : |            /  a  \/  b  \/  c  \|
-              - center : |      /  a  \/  b  \/  c  \      |
-              - equal  : |/    a    \/    b    \/    c    \|
-              - active : |/  focused tab    \/  b  \/  c  \|
+              Defines how the tabs are aligned inside the window when there is more than enough
+              space.
+              The following options are available.
+              `active` will expand the focused tab as much as possible. Bars denote the edge of window.
+
+                  "start"  : left aligned                                       ┃/  ~  \/  ~  \/  ~  \            ┃
+                  "end"    : right aligned                                      ┃            /  ~  \/  ~  \/  ~  \┃
+                  "center" : centered with equal padding                        ┃      /  ~  \/  ~  \/  ~  \      ┃
+                  "equal"  : expand all tabs equally to fit the window width    ┃/    ~    \/    ~    \/    ~    \┃
+                  "active" : expand the focused tab to fit the window width     ┃/  focused tab    \/  ~  \/  ~  \┃
             '';
 
           truncationCharacter =
@@ -210,7 +223,9 @@ in {
             (with types; either int (attrsOf int))
             "0"
             ''
-              Can be int or table";
+              Defines the global padding of the source selector.
+              It can be an integer or an attrs with keys `left` and `right`.
+              Setting `padding = 2` is exactly the same as `{ left = 2; right = 2; }`.
 
               Example: `{ left = 2; right = 0; }`
             '';
@@ -251,8 +266,12 @@ in {
           showSeparatorOnEdge =
             helpers.defaultNullOpts.mkBool false
             ''
-              true  : |/    a    \/    b    \/    c    \|
-              false : |     a    \/    b    \/    c     |
+              Takes a boolean value where `false` (default) hides the separators on the far
+              left / right.
+              Especially useful when left and right separator are the same.
+
+                  'true'  : ┃/    ~    \/    ~    \/    ~    \┃
+                  'false' : ┃     ~    \/    ~    \/    ~     ┃
             '';
 
           highlightTab = helpers.defaultNullOpts.mkStr "NeoTreeTabInactive" "";
