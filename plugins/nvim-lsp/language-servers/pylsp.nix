@@ -412,34 +412,36 @@ in {
       extraPackages = with cfg.settings; let
         isNotNullAndEnabled = x: (!isNull x) && x.enabled;
       in
-        lists.flatten (map
-          (
-            pluginName: (
-              optionals (isNotNullAndEnabled plugins.${pluginName})
-              cfg.package.optional-dependencies.${pluginName}
+        optionals (!isNull cfg.settings.plugins) (
+          lists.flatten (map
+            (
+              pluginName: (
+                optionals (isNotNullAndEnabled plugins.${pluginName})
+                cfg.package.optional-dependencies.${pluginName}
+              )
             )
+            [
+              "autopep8"
+              "flake8"
+              "mccabe"
+              "pycodestyle"
+              "pydocstyle"
+              "pyflakes"
+              "pylint"
+              "yapf"
+            ])
+          ++ (
+            optionals
+            (
+              (isNotNullAndEnabled plugins.rope_autoimport)
+              || (isNotNullAndEnabled plugins.rope_completion)
+            )
+            cfg.package.optional-dependencies.rope
           )
-          [
-            "autopep8"
-            "flake8"
-            "mccabe"
-            "pycodestyle"
-            "pydocstyle"
-            "pyflakes"
-            "pylint"
-            "yapf"
-          ])
-        ++ (
-          optionals
-          (
-            (isNotNullAndEnabled plugins.rope_autoimport)
-            || (isNotNullAndEnabled plugins.rope_completion)
+          ++ (
+            optional (isNotNullAndEnabled plugins.pylsp_mypy)
+            pkgs.python3Packages.pylsp-mypy
           )
-          cfg.package.optional-dependencies.rope
-        )
-        ++ (
-          optional (isNotNullAndEnabled plugins.pylsp_mypy)
-          pkgs.python3Packages.pylsp-mypy
         );
     };
 }
