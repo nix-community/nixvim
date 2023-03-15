@@ -103,12 +103,11 @@
 
                   src = pkgs.rust-analyzer.src;
 
-                  nativeBuildInputs = with pkgs; [extractRustAnalyzerPkg alejandra nixpkgs-fmt];
+                  nativeBuildInputs = with pkgs; [extractRustAnalyzerPkg alejandra];
 
                   buildPhase = ''
                     extract_rust_analyzer.py editors/code/package.json |
-                      alejandra --quiet |
-                      nixpkgs-fmt > rust-analyzer-config.nix
+                      alejandra --quiet > rust-analyzer-config.nix
                   '';
 
                   installPhase = ''
