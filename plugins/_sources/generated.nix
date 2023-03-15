@@ -61,6 +61,18 @@
     });
     date = "2021-06-22";
   };
+  nvim-osc52 = {
+    pname = "nvim-osc52";
+    version = "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31";
+    src = fetchFromGitHub ({
+      owner = "ojroques";
+      repo = "nvim-osc52";
+      rev = "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31";
+      fetchSubmodules = false;
+      sha256 = "sha256-SQpwiA+dyTRXBq0YtUZ4nkYKglyChIyQeWopD73qznQ=";
+    });
+    date = "2023-03-03";
+  };
   pynvim_pp = {
     pname = "pynvim_pp";
     version = "40db0426f171d413dcc976b17c8eff0127664f23";

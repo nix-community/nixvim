@@ -70,4 +70,8 @@ in {
         })
       ];
   };
+
+  nvim-osc52 = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.nvim-osc52) pname version src;
+  };
 }

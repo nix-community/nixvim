@@ -99,6 +99,26 @@
         },
         "version": "d7fb84a670795a5b36b18a5b59afd1d3865cbec7"
     },
+    "nvim-osc52": {
+        "cargoLocks": null,
+        "date": "2023-03-03",
+        "extract": null,
+        "name": "nvim-osc52",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "ojroques",
+            "repo": "nvim-osc52",
+            "rev": "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31",
+            "sha256": "sha256-SQpwiA+dyTRXBq0YtUZ4nkYKglyChIyQeWopD73qznQ=",
+            "type": "github"
+        },
+        "version": "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31"
+    },
     "pynvim_pp": {
         "cargoLocks": null,
         "date": "2023-03-12",

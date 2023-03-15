@@ -25,3 +25,7 @@ fetch.github = "ms-jpq/coq.artifacts"
 [magma-nvim]
 src.git = "https://github.com/WhiteBlackGoose/magma-nvim-goose"
 fetch.github = "WhiteBlackGoose/magma-nvim-goose"
+
+[nvim-osc52]
+src.git = "https://github.com/ojroques/nvim-osc52"
+fetch.github = "ojroques/nvim-osc52"
