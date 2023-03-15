@@ -8,61 +8,45 @@ with lib; let
   cfg = config.plugins.lspkind;
   helpers = import ../helpers.nix {inherit lib;};
 in {
-  options.plugins.lspkind = {
-    enable = mkEnableOption "lspkind.nvim";
+  options.plugins.lspkind =
+    helpers.extraOptionsOptions
+    // {
+      enable = mkEnableOption "lspkind.nvim";
 
-    package = helpers.mkPackageOption "lspkind" pkgs.vimPlugins.lspkind-nvim;
+      package = helpers.mkPackageOption "lspkind" pkgs.vimPlugins.lspkind-nvim;
 
-    mode = mkOption {
-      type = with types; nullOr (enum ["text" "text_symbol" "symbol_text" "symbol"]);
-      default = null;
-      description = "Defines how annotations are shown";
-    };
+      mode =
+        helpers.defaultNullOpts.mkEnum
+        ["text" "text_symbol" "symbol_text" "symbol"]
+        "symbol_text"
+        "Defines how annotations are shown";
 
-    preset = mkOption {
-      type = with types; nullOr (enum ["default" "codicons"]);
-      default = null;
-      description = "Default symbol map";
-    };
+      preset = helpers.defaultNullOpts.mkEnum ["default" "codicons"] "codicons" "Default symbol map";
 
-    symbolMap = mkOption {
-      type = with types; nullOr (attrsOf str);
-      default = null;
-      description = "Override preset symbols";
-    };
+      symbolMap = helpers.mkNullOrOption (types.attrsOf types.str) "Override preset symbols";
 
-    cmp = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Integrate with nvim-cmp";
-      };
+      cmp = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Integrate with nvim-cmp";
+        };
 
-      maxWidth = mkOption {
-        type = with types; nullOr int;
-        default = null;
-        description = "Maximum number of characters to show in the popup";
-      };
+        maxWidth =
+          helpers.mkNullOrOption types.int
+          "Maximum number of characters to show in the popup";
 
-      ellipsisChar = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        description = "Character to show when the popup exceeds maxwidth";
-      };
+        ellipsisChar =
+          helpers.mkNullOrOption types.str
+          "Character to show when the popup exceeds maxwidth";
 
-      menu = mkOption {
-        type = with types; nullOr (attrsOf str);
-        default = null;
-        description = "Show source names in the popup";
-      };
+        menu = helpers.mkNullOrOption (types.attrsOf types.str) "Show source names in the popup";
 
-      after = mkOption {
-        type = with types; nullOr types.str;
-        default = null;
-        description = "Function to run after calculating the formatting. function(entry, vim_item, kind)";
+        after =
+          helpers.mkNullOrOption types.str
+          "Function to run after calculating the formatting. function(entry, vim_item, kind)";
       };
     };
-  };
 
   config = let
     doCmp = cfg.cmp.enable && config.plugins.nvim-cmp.enable;
@@ -80,7 +64,8 @@ in {
           menu = cfg.cmp.menu;
         }
         else {}
-      );
+      )
+      // cfg.extraOptions;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
