@@ -70,6 +70,7 @@
     ./utils/nvim-bqf.nix
     ./utils/nvim-colorizer.nix
     ./utils/nvim-tree.nix
+    ./utils/nvim-osc52.nix
     ./utils/project-nvim.nix
     ./utils/specs.nix
     ./utils/startify.nix
