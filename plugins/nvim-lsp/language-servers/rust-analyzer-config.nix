@@ -2,6 +2,19 @@
 lib:
 with lib; {
   "assist" = {
+    "emitMustUse" = mkOption {
+      type = types.nullOr (types.bool);
+      default = null;
+      description = ''
+        Whether to insert #[must_use] when generating `as_` methods
+        for enum variants.
+
+        default value is:
+        ```nix
+            false
+        ```
+      '';
+    };
     "expressionFillDefault" = mkOption {
       type = types.nullOr (types.enum ["todo" "default"]);
       default = null;
@@ -68,6 +81,39 @@ with lib; {
           ```
         '';
       };
+      "invocationLocation" = mkOption {
+        type = types.nullOr (types.enum ["workspace" "root"]);
+        default = null;
+        description = ''
+          Specifies the working directory for running build scripts.
+          - "workspace": run build scripts for a workspace in the workspace's root directory.
+              This is incompatible with `#rust-analyzer.cargo.buildScripts.invocationStrategy#` set to `once`.
+          - "root": run build scripts in the project's root directory.
+          This config only has an effect when `#rust-analyzer.cargo.buildScripts.overrideCommand#`
+          is set.
+
+          default value is:
+          ```nix
+              "workspace"
+          ```
+        '';
+      };
+      "invocationStrategy" = mkOption {
+        type = types.nullOr (types.enum ["per_workspace" "once"]);
+        default = null;
+        description = ''
+          Specifies the invocation strategy to use when running the build scripts command.
+          If `per_workspace` is set, the command will be executed for each workspace.
+          If `once` is set, the command will be executed once.
+          This config only has an effect when `#rust-analyzer.cargo.buildScripts.overrideCommand#`
+          is set.
+
+          default value is:
+          ```nix
+              "per_workspace"
+          ```
+        '';
+      };
       "overrideCommand" = mkOption {
         type = types.nullOr (types.nullOr (types.listOf (types.str)));
         default = null;
@@ -105,6 +151,19 @@ with lib; {
         '';
       };
     };
+    "extraEnv" = mkOption {
+      type = types.nullOr (types.attrsOf types.anything);
+      default = null;
+      description = ''
+        Extra environment variables that will be set when running cargo, rustc
+        or other commands within the workspace. Useful for setting RUSTFLAGS.
+
+        default value is:
+        ```nix
+            {}
+        ```
+      '';
+    };
     "features" = mkOption {
       type = types.nullOr (types.oneOf [(types.enum ["all"]) (types.listOf (types.str))]);
       default = null;
@@ -131,15 +190,20 @@ with lib; {
         ```
       '';
     };
-    "noSysroot" = mkOption {
-      type = types.nullOr (types.bool);
+    "sysroot" = mkOption {
+      type = types.nullOr (types.nullOr (types.str));
       default = null;
       description = ''
-        Internal config for debugging, disables loading of sysroot crates.
+        Relative path to the sysroot, or "discover" to try to automatically find it via
+        "rustc --print sysroot".
+
+        Unsetting this disables sysroot loading.
+
+        This option does not take effect until rust-analyzer is restarted.
 
         default value is:
         ```nix
-            false
+            "discover"
         ```
       '';
     };
@@ -168,7 +232,19 @@ with lib; {
       '';
     };
   };
-  "checkOnSave" = {
+  "checkOnSave" = mkOption {
+    type = types.nullOr (types.bool);
+    default = null;
+    description = ''
+      Run the check command for diagnostics on save.
+
+      default value is:
+      ```nix
+          true
+      ```
+    '';
+  };
+  "check" = {
     "allTargets" = mkOption {
       type = types.nullOr (types.bool);
       default = null;
@@ -193,18 +269,6 @@ with lib; {
         ```
       '';
     };
-    "enable" = mkOption {
-      type = types.nullOr (types.bool);
-      default = null;
-      description = ''
-        Run specified `cargo check` command for diagnostics on save.
-
-        default value is:
-        ```nix
-            true
-        ```
-      '';
-    };
     "extraArgs" = mkOption {
       type = types.nullOr (types.listOf (types.str));
       default = null;
@@ -214,6 +278,19 @@ with lib; {
         default value is:
         ```nix
             []
+        ```
+      '';
+    };
+    "extraEnv" = mkOption {
+      type = types.nullOr (types.attrsOf types.anything);
+      default = null;
+      description = ''
+        Extra environment variables that will be set when running `cargo check`.
+        Extends `#rust-analyzer.cargo.extraEnv#`.
+
+        default value is:
+        ```nix
+            {}
         ```
       '';
     };
@@ -229,6 +306,39 @@ with lib; {
         default value is:
         ```nix
             null
+        ```
+      '';
+    };
+    "invocationLocation" = mkOption {
+      type = types.nullOr (types.enum ["workspace" "root"]);
+      default = null;
+      description = ''
+        Specifies the working directory for running checks.
+        - "workspace": run checks for workspaces in the corresponding workspaces' root directories.
+            This falls back to "root" if `#rust-analyzer.cargo.checkOnSave.invocationStrategy#` is set to `once`.
+        - "root": run checks in the project's root directory.
+        This config only has an effect when `#rust-analyzer.cargo.buildScripts.overrideCommand#`
+        is set.
+
+        default value is:
+        ```nix
+            "workspace"
+        ```
+      '';
+    };
+    "invocationStrategy" = mkOption {
+      type = types.nullOr (types.enum ["per_workspace" "once"]);
+      default = null;
+      description = ''
+        Specifies the invocation strategy to use when running the checkOnSave command.
+        If `per_workspace` is set, the command will be executed for each workspace.
+        If `once` is set, the command will be executed once.
+        This config only has an effect when `#rust-analyzer.cargo.buildScripts.overrideCommand#`
+        is set.
+
+        default value is:
+        ```nix
+            "per_workspace"
         ```
       '';
     };
@@ -251,7 +361,9 @@ with lib; {
       description = ''
         Override the command rust-analyzer uses instead of `cargo check` for
         diagnostics on save. The command is required to output json and
-        should therefor include `--message-format=json` or a similar option.
+        should therefore include `--message-format=json` or a similar option
+        (if your client supports the `colorDiagnosticOutput` experimental
+        capability, you can use `--message-format=json-diagnostic-rendered-ansi`).
 
         If you're changing this because you're using some tool wrapping
         Cargo, you might also want to change
@@ -274,12 +386,16 @@ with lib; {
         ```
       '';
     };
-    "target" = mkOption {
-      type = types.nullOr (types.nullOr (types.str));
+    "targets" = mkOption {
+      type = types.nullOr (types.nullOr (types.oneOf [(types.str) (types.listOf (types.str))]));
       default = null;
       description = ''
-        Check for a specific target. Defaults to
-        `#rust-analyzer.cargo.target#`.
+        Check for specific targets. Defaults to `#rust-analyzer.cargo.target#` if empty.
+
+        Can be a single target, e.g. `"x86_64-unknown-linux-gnu"` or a list of targets, e.g.
+        `["aarch64-apple-darwin", "x86_64-apple-darwin"]`.
+
+        Aliased as `"checkOnSave.targets"`.
 
         default value is:
         ```nix
@@ -768,6 +884,22 @@ with lib; {
         '';
       };
     };
+    "prefer" = {
+      "no" = {
+        "std" = mkOption {
+          type = types.nullOr (types.bool);
+          default = null;
+          description = ''
+            Prefer to unconditionally use imports of the core and alloc crate, over the std crate.
+
+            default value is:
+            ```nix
+                false
+            ```
+          '';
+        };
+      };
+    };
     "prefix" = mkOption {
       type = types.nullOr (types.enum ["plain" "self" "crate"]);
       default = null;
@@ -851,6 +983,58 @@ with lib; {
         '';
       };
     };
+    "discriminantHints" = {
+      "enable" = mkOption {
+        type = types.nullOr (types.enum ["always" "never" "fieldless"]);
+        default = null;
+        description = ''
+          Whether to show enum variant discriminant hints.
+
+          default value is:
+          ```nix
+              "never"
+          ```
+        '';
+      };
+    };
+    "expressionAdjustmentHints" = {
+      "enable" = mkOption {
+        type = types.nullOr (types.enum ["always" "never" "reborrow"]);
+        default = null;
+        description = ''
+          Whether to show inlay hints for type adjustments.
+
+          default value is:
+          ```nix
+              "never"
+          ```
+        '';
+      };
+      "hideOutsideUnsafe" = mkOption {
+        type = types.nullOr (types.bool);
+        default = null;
+        description = ''
+          Whether to hide inlay hints for type adjustments outside of `unsafe` blocks.
+
+          default value is:
+          ```nix
+              false
+          ```
+        '';
+      };
+      "mode" = mkOption {
+        type = types.nullOr (types.enum ["prefix" "postfix" "prefer_prefix" "prefer_postfix"]);
+        default = null;
+        description = ''
+          Whether to show inlay hints as postfix ops (`.*` instead of `*`, etc).
+
+          default value is:
+          ```nix
+              "prefix"
+          ```
+        '';
+      };
+    };
     "lifetimeElisionHints" = {
       "enable" = mkOption {
         type = types.nullOr (types.enum ["always" "never" "skip_trivial"]);
@@ -909,7 +1093,8 @@ with lib; {
         type = types.nullOr (types.enum ["always" "never" "mutable"]);
         default = null;
         description = ''
-          Whether to show inlay type hints for compiler inserted reborrows.
+          Whether to show inlay hints for compiler inserted reborrows.
+          This setting is deprecated in favor of #rust-analyzer.inlayHints.expressionAdjustmentHints.enable#.
 
           default value is:
           ```nix
@@ -1076,6 +1261,18 @@ with lib; {
         '';
       };
     };
+    "location" = mkOption {
+      type = types.nullOr (types.enum ["above_name" "above_whole_item"]);
+      default = null;
+      description = ''
+        Where to render annotations.
+
+        default value is:
+        ```nix
+            "above_name"
+        ```
+      '';
+    };
     "references" = {
       "adt" = {
         "enable" = mkOption {
@@ -1198,6 +1395,18 @@ with lib; {
       '';
     };
   };
+  "numThreads" = mkOption {
+    type = types.nullOr (types.nullOr (types.addCheck types.int (x: x >= 0)));
+    default = null;
+    description = ''
+      How many worker threads in the main loop. The default `null` means to pick automatically.
+
+      default value is:
+      ```nix
+          null
+      ```
+    '';
+  };
   "procMacro" = {
     "attributes" = {
       "enable" = mkOption {
@@ -1249,6 +1458,20 @@ with lib; {
         default value is:
         ```nix
             null
+        ```
+      '';
+    };
+  };
+  "references" = {
+    "excludeImports" = mkOption {
+      type = types.nullOr (types.bool);
+      default = null;
+      description = ''
+        Exclude imports from find-all-references.
+
+        default value is:
+        ```nix
+            false
         ```
       '';
     };
