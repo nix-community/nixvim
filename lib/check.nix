@@ -2,6 +2,7 @@
   checkNvim = {
     name,
     nvim,
+    dontRun,
     ...
   }:
     pkgs.stdenv.mkDerivation {
@@ -14,13 +15,17 @@
       #
       # Because neovim does not return an exitcode when quitting we need to check if there are
       # errors on stderr
-      buildPhase = ''
-        output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
-        if [[ -n $output ]]; then
-        	echo "ERROR: $output"
-          exit 1
-        fi
-      '';
+      buildPhase =
+        if !dontRun
+        then ''
+          output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
+          if [[ -n $output ]]; then
+          	echo "ERROR: $output"
+            exit 1
+          fi
+        ''
+        else ''
+        '';
 
       # If we don't do this nix is not happy
       installPhase = ''

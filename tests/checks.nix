@@ -9,8 +9,17 @@ in
   # We attempt to build & execute all configurations
   builtins.mapAttrs (
     name: config: let
-      nvim = makeNixvim config;
+      testAttributes =
+        if builtins.hasAttr "tests" config
+        then config.tests
+        else {
+          dontRun = false;
+        };
+      nvim = makeNixvim (pkgs.lib.attrsets.filterAttrs (n: _: n != "tests") config);
     in
-      checkConfig {inherit name nvim;}
+      checkConfig {
+        inherit name nvim;
+        inherit (testAttributes) dontRun;
+      }
   )
   tests
