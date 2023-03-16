@@ -33,3 +33,7 @@ fetch.github = "ojroques/nvim-osc52"
 [netman-nvim]
 src.git = "https://github.com/miversen33/netman.nvim"
 fetch.github = "miversen33/netman.nvim"
+
+[inc-rename]
+src.git = "https://github.com/smjonas/inc-rename.nvim"
+fetch.github = "smjonas/inc-rename.nvim"

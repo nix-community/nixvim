@@ -60,6 +60,7 @@
     ./utils/floaterm.nix
     ./utils/goyo.nix
     ./utils/harpoon.nix
+    ./utils/inc-rename.nix
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix

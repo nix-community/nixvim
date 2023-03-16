@@ -39,6 +39,26 @@
         },
         "version": "4b4b93dbbfc871a3d32a244a4276ee06696c21bb"
     },
+    "inc-rename": {
+        "cargoLocks": null,
+        "date": "2023-01-29",
+        "extract": null,
+        "name": "inc-rename",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "smjonas",
+            "repo": "inc-rename.nvim",
+            "rev": "21c23c379342a731a0c90f226601ec0434627b26",
+            "sha256": "sha256-KxXVe0amA0tyU6J2M+4XERSyERWS4BqGuxmbJ9YUyRs=",
+            "type": "github"
+        },
+        "version": "21c23c379342a731a0c90f226601ec0434627b26"
+    },
     "intellitab-nvim": {
         "cargoLocks": null,
         "date": "2021-11-13",
