@@ -38,6 +38,7 @@
     ./null-ls
 
     ./nvim-lsp
+    ./nvim-lsp/inc-rename.nix
     ./nvim-lsp/lspsaga.nix
     ./nvim-lsp/lsp-lines.nix
     ./nvim-lsp/nvim-lightbulb.nix
@@ -60,7 +61,6 @@
     ./utils/floaterm.nix
     ./utils/goyo.nix
     ./utils/harpoon.nix
-    ./utils/inc-rename.nix
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
