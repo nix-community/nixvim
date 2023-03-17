@@ -8,7 +8,7 @@
     pkgs.stdenv.mkDerivation {
       name = name;
 
-      nativeBuildInputs = [nvim];
+      nativeBuildInputs = [nvim pkgs.docker-client];
 
       dontUnpack = true;
       # We need to set HOME because neovim will try to create some files
