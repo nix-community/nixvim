@@ -140,11 +140,29 @@ can use the following:
     });
 }
 ```
-
 </details>
 
 You can then run neovim using `nix run .# -- <file>`. This can be useful to test
 config changes easily.
+
+### With a `devShell`
+
+You can also use nixvim to define an instance which will only be available inside of a Nix `devShell`:
+
+<details>
+  <summary>devShell configuration</summary>
+
+```nix
+let
+  nvim = nixvim.legacyPackages.x86_64-linux.makeNixvim {
+    plugins.lsp.enable = true;
+  };
+in pkgs.mkShell {
+  buildInputs = [nvim];
+};
+```
+
+</details>
 
 ### Advanced Usage
 
