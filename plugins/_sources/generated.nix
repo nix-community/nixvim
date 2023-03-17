@@ -25,6 +25,18 @@
     });
     date = "2023-03-12";
   };
+  inc-rename = {
+    pname = "inc-rename";
+    version = "21c23c379342a731a0c90f226601ec0434627b26";
+    src = fetchFromGitHub ({
+      owner = "smjonas";
+      repo = "inc-rename.nvim";
+      rev = "21c23c379342a731a0c90f226601ec0434627b26";
+      fetchSubmodules = false;
+      sha256 = "sha256-KxXVe0amA0tyU6J2M+4XERSyERWS4BqGuxmbJ9YUyRs=";
+    });
+    date = "2023-01-29";
+  };
   intellitab-nvim = {
     pname = "intellitab-nvim";
     version = "a6c1a505865f6131866d609c52440306e9914b16";

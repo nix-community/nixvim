@@ -78,4 +78,8 @@ in {
   netman-nvim = pkgs.vimUtils.buildVimPlugin {
     inherit (sources.netman-nvim) pname version src;
   };
+
+  inc-rename = pkgs.vimUtils.buildVimPlugin {
+    inherit (sources.inc-rename) pname version src;
+  };
 }
