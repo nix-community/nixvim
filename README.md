@@ -361,7 +361,7 @@ leader key. This is easy with the `globals` attribute:
 }
 ```
 
-## Aditional config
+## Additional config
 Sometimes NixVim won't be able to provide for all your customization needs.
 In these cases, the `extraConfigVim` and `extraConfigLua` options are
 provided:
