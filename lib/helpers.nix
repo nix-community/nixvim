@@ -161,6 +161,7 @@ with lib; rec {
           ''
       );
 
+    mkNum = default: mkNullable lib.types.number (toString default);
     mkInt = default: mkNullable lib.types.int (toString default);
     mkBool = default:
       mkNullable lib.types.bool (

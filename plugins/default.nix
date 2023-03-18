@@ -55,6 +55,8 @@
 
     ./telescope
 
+    ./ui/noice.nix
+
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/easyescape.nix
