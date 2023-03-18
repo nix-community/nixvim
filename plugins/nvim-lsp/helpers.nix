@@ -11,7 +11,7 @@
     package ? pkgs.${name},
     extraPackages ? {},
     cmd ? (cfg: null),
-    settings ? (cfg: {}),
+    settings ? (cfg: cfg),
     settingsOptions ? {},
     ...
   }:
@@ -82,7 +82,7 @@
               name = serverName;
               extraOptions = {
                 inherit (cfg) cmd filetypes autostart;
-                settings = settings (cfg.settings // cfg.extraSettings);
+                settings = (settings cfg.settings) // cfg.extraSettings;
               };
             }
           ];
