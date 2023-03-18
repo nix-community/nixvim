@@ -220,11 +220,14 @@ in {
         else plugins;
 
       luaRockPlugins = luaRockListToLua cfg.rockPlugins;
+      luaRocksString =
+        optionalString (cfg.rockPlugins != [])
+        "use_rocks ${helpers.toLuaObject luaRockPlugins}";
     in
       mkIf (cfg.plugins != []) ''
         require('packer').startup(function()
           use ${helpers.toLuaObject packedPlugins}
-          use_rocks ${helpers.toLuaObject luaRockPlugins}
+          ${luaRocksString}
         end)
       '';
   };
