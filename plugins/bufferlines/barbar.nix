@@ -7,6 +7,30 @@
 with lib; let
   cfg = config.plugins.barbar;
   helpers = import ../helpers.nix {inherit lib;};
+
+  keymaps = {
+    previous = "Previous";
+    next = "Next";
+    movePrevious = "MovePrevious";
+    moveNext = "MoveNext";
+    goTo1 = "GoTo 1";
+    goTo2 = "GoTo 2";
+    goTo3 = "GoTo 3";
+    goTo4 = "GoTo 4";
+    goTo5 = "GoTo 5";
+    goTo6 = "GoTo 6";
+    goTo7 = "GoTo 7";
+    goTo8 = "GoTo 8";
+    goTo9 = "GoTo 9";
+    last = "Last";
+    pin = "Pin";
+    close = "Close";
+    pick = "Pick";
+    orderByBufferNumber = "OrderByBufferNumber";
+    orderByDirectory = "OrderByDirectory";
+    orderByLanguage = "OrderByLanguage";
+    orderByWindowNumber = "OrderByWindowNumber";
+  };
 in {
   options.plugins.barbar = {
     enable = mkEnableOption "barbar.nvim";
@@ -46,11 +70,11 @@ in {
       };
     };
 
-    excludeFileTypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "{}" ''
+    excludeFileTypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
       Excludes buffers of certain filetypes from the tabline
     '';
 
-    excludeFileNames = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "{}" ''
+    excludeFileNames = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
       Excludes buffers with certain filenames from the tabline
     '';
 
@@ -126,15 +150,18 @@ in {
       But only a static string is accepted here.
     '';
 
-    # Keybinds concept:
-    # keys = {
-    #   previousBuffer = mkBindDef "normal" "Previous buffer" { action = ":BufferPrevious<CR>"; silent = true; } "<A-,>";
-    #   nextBuffer = mkBindDef "normal" "Next buffer" { action = ":BufferNext<CR>"; silent = true; } "<A-.>";
-    #   movePrevious = mkBindDef "normal" "Re-order to previous" { action = ":BufferMovePrevious<CR>"; silent = true; } "<A-<>";
-    #   moveNext = mkBindDef "normal" "Re-order to next" { action = ":BufferMoveNext<CR>"; silent = true; } "<A->>";
-
-    #   # TODO all the other ones.....
-    # };
+    keymaps =
+      {
+        silent = mkEnableOption "silent keymaps for barbar";
+      }
+      // (
+        mapAttrs
+        (
+          optionName: funcName:
+            helpers.mkNullOrOption types.str "Keymap for function Buffer${funcName}"
+        )
+        keymaps
+      );
   };
 
   config = let
@@ -184,6 +211,21 @@ in {
 
       tabpages = cfg.tabpages;
     };
+
+    userKeymapsList =
+      mapAttrsToList
+      (
+        optionName: funcName: let
+          key = cfg.keymaps.${optionName};
+        in
+          mkIf (!isNull key) {
+            ${key} = {
+              action = "<Cmd>Buffer${funcName}<CR>";
+              silent = cfg.keymaps.silent;
+            };
+          }
+      )
+      keymaps;
   in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
@@ -191,10 +233,10 @@ in {
         nvim-web-devicons
       ];
 
+      maps.normal = mkMerge userKeymapsList;
+
       extraConfigLua = ''
         require('bufferline').setup(${helpers.toLuaObject setupOptions})
       '';
-
-      # maps = genMaps cfg.keys;
     };
 }
