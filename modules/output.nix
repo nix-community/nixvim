@@ -103,6 +103,12 @@ in {
       readOnly = true;
       visible = false;
     };
+
+    extraLuaPackages = mkOption {
+      type = types.functionTo (types.listOf types.package);
+      description = "Extra lua packages to include with neovim";
+      default = _: [];
+    };
   };
 
   config = let
@@ -122,7 +128,7 @@ in {
     config.extraPlugins;
 
     neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit (config) viAlias vimAlias;
+        inherit (config) viAlias vimAlias extraLuaPackages;
         # inherit customRC;
         plugins = normalizedPlugins;
       }
