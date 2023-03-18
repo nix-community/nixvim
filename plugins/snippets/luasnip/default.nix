@@ -91,6 +91,7 @@ in {
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
+      extraLuaPackages = ps: [ps.jsregexp];
       extraConfigLua = concatStringsSep "\n" fromVscodeLoaders;
     };
 }
