@@ -3,22 +3,11 @@
   config,
   lib,
   ...
-} @ args:
+}:
 with lib; let
   cfg = config.plugins.nvim-autopairs;
   helpers = import ../helpers.nix {inherit lib;};
-  optionWarnings = import ../../lib/option-warnings.nix args;
-  basePluginPath = ["plugins" "nvim-autopairs"];
 in {
-  imports = [
-    (optionWarnings.mkRemovedOption {
-      option = basePluginPath ++ ["breakLineFiletypes"];
-    })
-    (optionWarnings.mkRemovedOption {
-      option = basePluginPath ++ ["htmlFiletypes"];
-    })
-  ];
-
   options.plugins.nvim-autopairs =
     helpers.extraOptionsOptions
     // {
@@ -30,23 +19,9 @@ in {
 
       disabledFiletypes =
         helpers.defaultNullOpts.mkNullable
-        (types.attrsOf types.str)
-        "[ \"TelescopePrompt\" ]"
+        (types.listOf types.str)
+        ''[ "TelescopePrompt" "spectre_panel" ]''
         "Disabled filetypes";
-
-      # TODO remove this option at some point (it has been marked as removed since XX-XX-2023)
-      breakLineFiletypes = mkOption {
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-        description = "Filetypes to break lines on";
-      };
-
-      # TODO remove this option at some point (it has been marked as removed since XX-XX-2023)
-      htmlFiletypes = mkOption {
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-        description = "Filetypes to treat as HTML";
-      };
 
       disableInMacro = helpers.defaultNullOpts.mkBool false ''
         Disable when recording or executing a macro.
@@ -107,9 +82,8 @@ in {
         disable_in_visualblock = cfg.disableInVisualblock;
         disable_in_replace_mode = cfg.disableInReplaceMode;
         ignored_next_char =
-          if isNull cfg.ignoredNextChar
-          then null
-          else helpers.mkRaw cfg.ignoredNextChar;
+          helpers.ifNonNull' cfg.ignoredNextChar
+          (helpers.mkRaw cfg.ignoredNextChar);
         enable_moveright = cfg.enableMoveright;
         enable_afterquote = cfg.enableAfterQuote;
         enable_check_bracket_line = cfg.enableCheckBracketLine;
