@@ -20,132 +20,134 @@ with lib; let
     };
   };
 in {
-  options.plugins.harpoon = {
-    enable = mkEnableOption "harpoon";
+  options.plugins.harpoon =
+    helpers.extraOptionsOptions
+    // {
+      enable = mkEnableOption "harpoon";
 
-    package = helpers.mkPackageOption "harpoon" pkgs.vimPlugins.harpoon;
+      package = helpers.mkPackageOption "harpoon" pkgs.vimPlugins.harpoon;
 
-    keymapsSilent = mkOption {
-      type = types.bool;
-      description = "Whether harpoon keymaps should be silent.";
-      default = false;
-    };
+      keymapsSilent = mkOption {
+        type = types.bool;
+        description = "Whether harpoon keymaps should be silent.";
+        default = false;
+      };
 
-    keymaps = {
-      addFile = helpers.mkNullOrOption types.str ''
-        Keymap for marking the current file.";
-      '';
+      keymaps = {
+        addFile = helpers.mkNullOrOption types.str ''
+          Keymap for marking the current file.";
+        '';
 
-      toggleQuickMenu = helpers.mkNullOrOption types.str ''
-        Keymap for toggling the quick menu.";
-      '';
+        toggleQuickMenu = helpers.mkNullOrOption types.str ''
+          Keymap for toggling the quick menu.";
+        '';
 
-      navFile = helpers.mkNullOrOption (types.attrsOf types.str) ''
-        Keymaps for navigating to marks.
+        navFile = helpers.mkNullOrOption (types.attrsOf types.str) ''
+          Keymaps for navigating to marks.
 
-        Examples:
-        navFile = {
-          "1" = "<C-j>";
-          "2" = "<C-k>";
-          "3" = "<C-l>";
-          "4" = "<C-m>";
-        };
-      '';
-
-      navNext = helpers.mkNullOrOption (types.str) ''
-        Keymap for navigating to next mark.";
-      '';
-
-      navPrev = helpers.mkNullOrOption (types.str) ''
-        Keymap for navigating to previous mark.";
-      '';
-
-      gotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
-        Keymaps for navigating to terminals.
-
-        Examples:
-        gotoTerminal = {
-          "1" = "<C-j>";
-          "2" = "<C-k>";
-          "3" = "<C-l>";
-          "4" = "<C-m>";
-        };
-      '';
-
-      cmdToggleQuickMenu = helpers.mkNullOrOption types.str ''
-        Keymap for toggling the cmd quick menu.
-      '';
-
-      tmuxGotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
-        Keymaps for navigating to tmux windows/panes.
-        Attributes can either be tmux window ids or pane identifiers.
-
-        Examples:
-        tmuxGotoTerminal = {
-          "1" = "<C-1>";
-          "2" = "<C-2>";
-          "{down-of}" = "<leader>g";
-        };
-      '';
-    };
-
-    saveOnToggle = helpers.defaultNullOpts.mkBool false ''
-      Sets the marks upon calling `toggle` on the ui, instead of require `:w`.
-    '';
-
-    saveOnChange = helpers.defaultNullOpts.mkBool true ''
-      Saves the harpoon file upon every change. disabling is unrecommended.
-    '';
-
-    enterOnSendcmd = helpers.defaultNullOpts.mkBool false ''
-      Sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
-    '';
-
-    tmuxAutocloseWindows = helpers.defaultNullOpts.mkBool false ''
-      Closes any tmux windows harpoon that harpoon creates when you close Neovim.
-    '';
-
-    excludedFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "['harpoon']" ''
-      Filetypes that you want to prevent from adding to the harpoon list menu.
-    '';
-
-    markBranch = helpers.defaultNullOpts.mkBool false ''
-      Set marks specific to each git branch inside git repository.
-    '';
-
-    projects = mkOption {
-      default = {};
-      description = ''
-        Predefined projetcs. The keys of this attrs should be the path to the project.
-        $HOME is working.
-      '';
-      example = ''
-        projects = {
-          "$HOME/personal/vim-with-me/server" = {
-            term.cmds = [
-                "./env && npx ts-node src/index.ts"
-            ];
+          Examples:
+          navFile = {
+            "1" = "<C-j>";
+            "2" = "<C-k>";
+            "3" = "<C-l>";
+            "4" = "<C-m>";
           };
-        };
+        '';
+
+        navNext = helpers.mkNullOrOption (types.str) ''
+          Keymap for navigating to next mark.";
+        '';
+
+        navPrev = helpers.mkNullOrOption (types.str) ''
+          Keymap for navigating to previous mark.";
+        '';
+
+        gotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
+          Keymaps for navigating to terminals.
+
+          Examples:
+          gotoTerminal = {
+            "1" = "<C-j>";
+            "2" = "<C-k>";
+            "3" = "<C-l>";
+            "4" = "<C-m>";
+          };
+        '';
+
+        cmdToggleQuickMenu = helpers.mkNullOrOption types.str ''
+          Keymap for toggling the cmd quick menu.
+        '';
+
+        tmuxGotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
+          Keymaps for navigating to tmux windows/panes.
+          Attributes can either be tmux window ids or pane identifiers.
+
+          Examples:
+          tmuxGotoTerminal = {
+            "1" = "<C-1>";
+            "2" = "<C-2>";
+            "{down-of}" = "<leader>g";
+          };
+        '';
+      };
+
+      saveOnToggle = helpers.defaultNullOpts.mkBool false ''
+        Sets the marks upon calling `toggle` on the ui, instead of require `:w`.
       '';
-      type = types.attrsOf projectConfigModule;
+
+      saveOnChange = helpers.defaultNullOpts.mkBool true ''
+        Saves the harpoon file upon every change. disabling is unrecommended.
+      '';
+
+      enterOnSendcmd = helpers.defaultNullOpts.mkBool false ''
+        Sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
+      '';
+
+      tmuxAutocloseWindows = helpers.defaultNullOpts.mkBool false ''
+        Closes any tmux windows harpoon that harpoon creates when you close Neovim.
+      '';
+
+      excludedFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "['harpoon']" ''
+        Filetypes that you want to prevent from adding to the harpoon list menu.
+      '';
+
+      markBranch = helpers.defaultNullOpts.mkBool false ''
+        Set marks specific to each git branch inside git repository.
+      '';
+
+      projects = mkOption {
+        default = {};
+        description = ''
+          Predefined projetcs. The keys of this attrs should be the path to the project.
+          $HOME is working.
+        '';
+        example = ''
+          projects = {
+            "$HOME/personal/vim-with-me/server" = {
+              term.cmds = [
+                  "./env && npx ts-node src/index.ts"
+              ];
+            };
+          };
+        '';
+        type = types.attrsOf projectConfigModule;
+      };
+
+      menu = {
+        width = helpers.defaultNullOpts.mkInt 60 ''
+          Menu window width
+        '';
+
+        height = helpers.defaultNullOpts.mkInt 10 ''
+          Menu window height
+        '';
+
+        borderChars =
+          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
+          "[ \"─\" \"│\" \"─\" \"│\" \"╭\" \"╮\" \"╯\" \"╰\" ]"
+          "Border characters";
+      };
     };
-
-    menu = {
-      width = helpers.defaultNullOpts.mkInt 60 ''
-        Menu window width
-      '';
-
-      height = helpers.defaultNullOpts.mkInt 10 ''
-        Menu window height
-      '';
-
-      borderChars =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-        "[ \"─\" \"│\" \"─\" \"│\" \"╭\" \"╮\" \"╯\" \"╰\" ]"
-        "Border characters";
-    };
-  };
 
   config = let
     projects =
@@ -158,24 +160,26 @@ in {
       )
       cfg.projects;
 
-    options = {
-      global_settings = {
-        save_on_toggle = cfg.saveOnToggle;
-        save_on_change = cfg.saveOnChange;
-        enter_on_sendcmd = cfg.enterOnSendcmd;
-        tmux_autoclose_windows = cfg.tmuxAutocloseWindows;
-        excluded_filetypes = cfg.excludedFiletypes;
-        mark_branch = cfg.markBranch;
-      };
+    options =
+      {
+        global_settings = {
+          save_on_toggle = cfg.saveOnToggle;
+          save_on_change = cfg.saveOnChange;
+          enter_on_sendcmd = cfg.enterOnSendcmd;
+          tmux_autoclose_windows = cfg.tmuxAutocloseWindows;
+          excluded_filetypes = cfg.excludedFiletypes;
+          mark_branch = cfg.markBranch;
+        };
 
-      projects = projects;
+        projects = projects;
 
-      menu = {
-        width = cfg.menu.width;
-        height = cfg.menu.height;
-        borderchars = cfg.menu.borderChars;
-      };
-    };
+        menu = {
+          width = cfg.menu.width;
+          height = cfg.menu.height;
+          borderchars = cfg.menu.borderChars;
+        };
+      }
+      // cfg.extraOptions;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
