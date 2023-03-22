@@ -4,6 +4,17 @@
     plugins.lspkind.enable = true;
   };
 
+  example = {
+    plugins = {
+      lsp = {
+        enable = true;
+        servers.clangd.enable = true;
+      };
+      nvim-cmp.enable = true;
+      lspkind.enable = true;
+    };
+  };
+
   # All the upstream default options of lspkind
   defaults = {
     plugins.lspkind = {

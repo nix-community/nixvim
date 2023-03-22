@@ -1,5 +1,10 @@
-{pkgs, ...}: {
-  checkNvim = {
+{
+  pkgs,
+  makeNixvim,
+}: let
+  # Create a nix derivation from a nixvim executable.
+  # The build phase simply consists in running the provided nvim binary.
+  mkTestDerivationFromNvim = {
     name,
     nvim,
     dontRun,
@@ -32,4 +37,21 @@
         mkdir $out
       '';
     };
-}
+
+  # Create a nix derivation from a nixvim configuration.
+  # The build phase simply consists in running neovim with the given configuration.
+  mkTestDerivation = name: config: let
+    testAttributes =
+      if builtins.hasAttr "tests" config
+      then config.tests
+      else {
+        dontRun = false;
+      };
+    nvim = makeNixvim (pkgs.lib.attrsets.filterAttrs (n: _: n != "tests") config);
+  in
+    mkTestDerivationFromNvim {
+      inherit name nvim;
+      inherit (testAttributes) dontRun;
+    };
+in
+  mkTestDerivation

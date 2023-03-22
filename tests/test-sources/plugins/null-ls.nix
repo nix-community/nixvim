@@ -4,6 +4,16 @@
     plugins.null-ls.enable = true;
   };
 
+  # Broken:
+  # error: The option `plugins.null-ls.sources.formatting.beautysh' does not exist.
+  #
+  # beautysh = {
+  #   plugins.null-ls = {
+  #     enable = true;
+  #     sources.formatting.beautysh.enable = true;
+  #   };
+  # };
+
   default = {
     plugins.null-ls = {
       enable = true;

@@ -1,4 +1,9 @@
 {
+  # Empty configuration
+  empty = {
+    colorschemes.tokyonight.enable = true;
+  };
+
   # All the upstream default options of tokyonight
   defaults = {
     colorschemes.tokyonight = {

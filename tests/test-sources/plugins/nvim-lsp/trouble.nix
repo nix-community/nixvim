@@ -4,6 +4,15 @@
     plugins.trouble.enable = true;
   };
 
+  lsp = {
+    plugins.lsp = {
+      enable = true;
+      servers.clangd.enable = true;
+    };
+
+    plugins.trouble.enable = true;
+  };
+
   # All the upstream default options of trouble
   defaults = {
     plugins.trouble = {
