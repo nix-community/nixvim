@@ -11,23 +11,24 @@ in
       name = "goyo";
       description = "Enable goyo.vim";
       package = pkgs.vimPlugins.goyo-vim;
+      globalPrefix = "goyo_";
 
       options = {
         width = mkDefaultOpt {
           description = "Width";
-          global = "goyo_width";
+          global = "width";
           type = types.int;
         };
 
         height = mkDefaultOpt {
           description = "Height";
-          global = "goyo_height";
+          global = "height";
           type = types.int;
         };
 
         showLineNumbers = mkDefaultOpt {
           description = "Show line numbers when in Goyo mode";
-          global = "goyo_linenr";
+          global = "linenr";
           type = types.bool;
         };
       };

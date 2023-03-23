@@ -16,23 +16,24 @@ in
       name = "emmet";
       description = "Enable emmet";
       package = pkgs.vimPlugins.emmet-vim;
+      globalPrefix = "user_emmet_";
 
       options = {
         mode = mkDefaultOpt {
           type = types.enum ["i" "n" "v" "a"];
-          global = "user_emmet_mode";
+          global = "mode";
           description = "Mode where emmet will enable";
         };
 
         leader = mkDefaultOpt {
           type = types.str;
-          global = "user_emmet_leader_key";
+          global = "leader_key";
           description = "Set leader key";
         };
 
         settings = mkDefaultOpt {
           type = types.attrsOf (types.attrsOf eitherAttrsStrInt);
-          global = "user_emmet_settings";
+          global = "settings";
           description = "Emmet settings";
         };
       };

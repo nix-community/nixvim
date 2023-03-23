@@ -192,6 +192,7 @@ with lib; rec {
     extraPlugins ? [],
     extraPackages ? [],
     options ? {},
+    globalPrefix ? "",
     ...
   }: let
     cfg = config.plugins.${name};
@@ -200,7 +201,7 @@ with lib; rec {
     globals =
       mapAttrs'
       (name: opt: {
-        name = opt.global;
+        name = globalPrefix + opt.global;
         value =
           if cfg.${name} != null
           then opt.value cfg.${name}
