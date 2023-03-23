@@ -6,249 +6,262 @@
 } @ args:
 with lib; let
   cfg = config.plugins.bufferline;
-  optionWarnings = import ../../lib/option-warnings.nix args;
   helpers = import ../helpers.nix args;
 
-  highlight = mkOption {
-    type = types.nullOr (types.submodule ({...}: {
-      options = {
-        guifg = mkOption {
-          type = types.nullOr types.str;
-          description = "foreground color";
-          default = null;
-        };
-        guibg = mkOption {
-          type = types.nullOr types.str;
-          description = "background color";
-          default = null;
-        };
-      };
-    }));
-    default = {};
+  basePluginPath = ["plugins" "bufferline"];
+
+  highlight = helpers.mkCompositeOption "Highlight option" {
+    guifg = helpers.mkNullOrOption types.str "foreground color";
+
+    guibg = helpers.mkNullOrOption types.str "background color";
   };
 in {
   imports = [
-    (optionWarnings.mkDeprecatedOption {
-      option = ["plugins" "bufferline" "indicatorIcon"];
-      alternative = ["plugins" "bufferline" "indicator" "icon"];
-    })
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["indicatorIcon"])
+      (basePluginPath ++ ["indicator" "icon"])
+    )
   ];
-
   options = {
     plugins.bufferline =
       helpers.extraOptionsOptions
       // {
         enable = mkEnableOption "bufferline";
+
         package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
-        numbers = mkOption {
-          type = types.nullOr types.lines;
-          description = "A lua function customizing the styling of numbers.";
-          default = null;
+
+        mode = helpers.defaultNullOpts.mkEnumFirstDefault ["buffers" "tabs"] "mode";
+
+        themable =
+          helpers.defaultNullOpts.mkBool true
+          "Whether or not bufferline highlights can be overridden externally";
+
+        numbers =
+          helpers.defaultNullOpts.mkNullable
+          (
+            with types;
+              either
+              (enum ["none" "ordinal" "buffer_id" "both"])
+              helpers.rawType
+          )
+          "none"
+          ''
+            Customize the styling of numbers.
+
+            Either one of "none" "ordinal" "buffer_id" "both" or a lua function:
+            ```
+            function({ ordinal, id, lower, raise }): string
+            ```
+          '';
+
+        bufferCloseIcon = helpers.defaultNullOpts.mkStr "" "The close icon for each buffer.";
+
+        modifiedIcon =
+          helpers.defaultNullOpts.mkStr "●"
+          "The icon indicating a buffer was modified.";
+
+        closeIcon = helpers.defaultNullOpts.mkStr "" "The close icon.";
+
+        closeCommand =
+          helpers.defaultNullOpts.mkStr "bdelete! %d"
+          "Command or function run when closing a buffer.";
+
+        leftMouseCommand =
+          helpers.defaultNullOpts.mkStr "buffer %d"
+          "Command or function run when clicking on a buffer.";
+
+        rightMouseCommand =
+          helpers.defaultNullOpts.mkStr "bdelete! %d"
+          "Command or function run when right clicking on a buffer.";
+
+        middleMouseCommand =
+          helpers.defaultNullOpts.mkStr "null"
+          "Command or function run when middle clicking on a buffer.";
+
+        indicator = helpers.mkCompositeOption "Indicator" {
+          icon = helpers.defaultNullOpts.mkStr "▎" "icon";
+
+          style = helpers.defaultNullOpts.mkEnumFirstDefault ["icon" "underline"] "style";
         };
-        closeCommand = mkOption {
-          type = types.nullOr types.lines;
-          description = "Command or function run when closing a buffer.";
-          default = null;
-        };
-        rightMouseCommand = mkOption {
-          type = types.nullOr types.lines;
-          description = "Command or function run when right clicking on a buffer.";
-          default = null;
-        };
-        leftMouseCommand = mkOption {
-          type = types.nullOr types.lines;
-          description = "Command or function run when clicking on a buffer.";
-          default = null;
-        };
-        middleMouseCommand = mkOption {
-          type = types.nullOr types.lines;
-          description = "Command or function run when middle clicking on a buffer.";
-          default = null;
-        };
-        # is deprecated, but might still work
-        indicatorIcon =
-          mkOption {
-            type = types.nullOr types.str;
-            description = "The Icon shown as a indicator for buffer. Changing it is NOT recommended,
-        this is intended to be an escape hatch for people who cannot bear it for whatever reason.";
-            default = null;
+
+        leftTruncMarker = helpers.defaultNullOpts.mkStr "" "left trunc marker";
+
+        rightTruncMarker = helpers.defaultNullOpts.mkStr "" "right trunc marker";
+
+        separatorStyle =
+          helpers.defaultNullOpts.mkEnum ["slant" "thick" "thin"] "thin"
+          "Separator style";
+
+        nameFormatter =
+          helpers.defaultNullOpts.mkStr "null"
+          ''
+            A lua function that can be used to modify the buffer's label.
+            The argument 'buf' containing a name, path and bufnr is supplied.
+          '';
+
+        truncateNames = helpers.defaultNullOpts.mkBool true "Whether to truncate names.";
+
+        tabSize = helpers.defaultNullOpts.mkInt 18 "Size of the tabs";
+
+        maxNameLength = helpers.defaultNullOpts.mkInt 18 "Max length of a buffer name.";
+
+        colorIcons = helpers.defaultNullOpts.mkBool true "Enable color icons.";
+
+        showBufferIcons = helpers.defaultNullOpts.mkBool true "Show buffer icons";
+
+        showBufferCloseIcons = helpers.defaultNullOpts.mkBool true "Show buffer close icons";
+
+        getElementIcon =
+          helpers.defaultNullOpts.mkStr "null"
+          ''
+            Lua function returning an element icon.
+
+            ```
+            fun(opts: IconFetcherOpts): string?, string?
+            ```
+          '';
+
+        showCloseIcon = helpers.defaultNullOpts.mkBool true "Whether to show the close icon.";
+
+        showTabIndicators =
+          helpers.defaultNullOpts.mkBool true
+          "Whether to show the tab indicators.";
+
+        showDuplicatePrefix =
+          helpers.defaultNullOpts.mkBool true
+          "Whether to show the prefix of duplicated files.";
+
+        enforceRegularTabs =
+          helpers.defaultNullOpts.mkBool false
+          "Whether to enforce regular tabs.";
+
+        alwaysShowBufferline =
+          helpers.defaultNullOpts.mkBool true
+          "Whether to always show the bufferline.";
+
+        persistBufferSort =
+          helpers.defaultNullOpts.mkBool true
+          "Whether to make the buffer sort persistent.";
+
+        maxPrefixLength = helpers.defaultNullOpts.mkInt 15 "Maximum prefix length";
+
+        sortBy = helpers.defaultNullOpts.mkStr "id" "sort by";
+
+        diagnostics =
+          helpers.defaultNullOpts.mkNullable
+          (with types; either bool (enum ["nvim_lsp" "coc"])) "false" "diagnostics";
+
+        diagnosticsIndicator =
+          helpers.defaultNullOpts.mkStr "null"
+          "Either `null` or a function that returns the diagnistics indicator.";
+
+        diagnosticsUpdateInInsert =
+          helpers.defaultNullOpts.mkBool true
+          "Whether diagnostics should update in insert mode";
+
+        offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "null" "offsets";
+
+        groups = helpers.mkCompositeOption "groups" {
+          items =
+            helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "[]"
+            "List of groups.";
+
+          options = helpers.mkCompositeOption "Group options" {
+            toggleHiddenOnEnter =
+              helpers.defaultNullOpts.mkBool true
+              "Re-open hidden groups on bufenter.";
           };
-        bufferCloseIcon = mkOption {
-          type = types.nullOr types.str;
-          description = "The close icon for each buffer.";
-          default = null;
         };
-        modifiedIcon = mkOption {
-          type = types.nullOr types.str;
-          description = "The icon indicating a buffer was modified.";
-          default = null;
-        };
-        closeIcon = mkOption {
-          type = types.nullOr types.str;
-          description = "The close icon.";
-          default = null;
-        };
-        leftTruncMarker = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-        };
-        rightTruncMarker = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-        };
-        nameFormatter = mkOption {
-          type = types.nullOr types.lines;
-          description = "A lua function that can be used to modify the buffer's lable. The argument 'buf' containing a name, path and bufnr is supplied.";
-          default = null;
-        };
-        maxNameLength = mkOption {
-          type = types.nullOr types.int;
-          description = "Max length of a buffer name.";
-          default = null;
-        };
-        maxPrefixLength = mkOption {
-          type = types.nullOr types.int;
-          description = "Max length of a buffer prefix (used when a buffer is de-duplicated)";
-          default = null;
-        };
-        tabSize = mkOption {
-          type = types.nullOr types.int;
-          description = "Size of the tabs";
-          default = null;
-        };
-        diagnostics = mkOption {
-          type = types.nullOr (types.enum [false "nvim_lsp" "coc"]);
-          default = null;
-        };
-        diagnosticsUpdateInInsert = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        diagnosticsIndicator = mkOption {
-          type = types.nullOr helpers.rawType;
-          default = null;
-        };
-        customFilter = mkOption {
-          type = types.nullOr types.lines;
-          default = null;
-        };
-        showBufferIcons = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        showBufferCloseIcons = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        showCloseIcon = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        showTabIndicators = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        persistBufferSort = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        separatorStyle = mkOption {
-          type = types.nullOr (types.enum ["slant" "thick" "thin"]);
-          default = null;
-        };
-        enforceRegularTabs = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        alwaysShowBufferline = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-        };
-        sortBy = mkOption {
-          type = types.nullOr (types.enum ["id" "extension" "relative_directory" "directory" "tabs"]);
-          default = null;
-        };
-        indicator = mkOption {
-          default = {};
-          type = types.nullOr (types.submodule ({...}: {
-            options = {
-              icon = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-              };
-              style = mkOption {
-                type = types.nullOr (types.enum ["icon" "underline" "none"]);
-                default = null;
-              };
-            };
-          }));
-        };
-        highlights = mkOption {
-          default = {};
-          type = types.nullOr (types.submodule ({...}: {
-            options = {
-              fill = highlight;
-              background = highlight;
 
-              tab = highlight;
-              tabSelected = highlight;
-              tabClose = highlight;
+        hover = helpers.mkCompositeOption "Hover" {
+          enabled = mkEnableOption "hover";
 
-              closeButton = highlight;
-              closeButtonVisible = highlight;
-              closeButtonSelected = highlight;
+          reveal = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "reveal";
 
-              bufferVisible = highlight;
-              bufferSelected = highlight;
-
-              diagnostic = highlight;
-              diagnosticVisible = highlight;
-              diagnosticSelected = highlight;
-
-              info = highlight;
-              infoVisible = highlight;
-              infoSelected = highlight;
-
-              infoDiagnostic = highlight;
-              infoDiagnosticVisible = highlight;
-              infoDiagnosticSelected = highlight;
-
-              warning = highlight;
-              warningVisible = highlight;
-              warningSelected = highlight;
-
-              warningDiagnostic = highlight;
-              warningDiagnosticVisible = highlight;
-              warningDiagnosticSelected = highlight;
-
-              error = highlight;
-              errorVisible = highlight;
-              errorSelected = highlight;
-
-              errorDiagnostic = highlight;
-              errorDiagnosticVisible = highlight;
-              errorDiagnosticSelected = highlight;
-
-              modified = highlight;
-              modifiedVisible = highlight;
-              modifiedSelected = highlight;
-
-              duplicate = highlight;
-              duplicateVisible = highlight;
-              duplicateSelected = highlight;
-
-              separator = highlight;
-              separatorVisible = highlight;
-              separatorSelected = highlight;
-
-              indicatorSelected = highlight;
-
-              pick = highlight;
-              pickVisible = highlight;
-              pickSelected = highlight;
-            };
-          }));
+          delay = helpers.defaultNullOpts.mkInt 200 "delay";
         };
+
+        debug = helpers.mkCompositeOption "Debug options" {
+          logging = helpers.defaultNullOpts.mkBool false "Whether to enable logging";
+        };
+
+        customFilter =
+          helpers.defaultNullOpts.mkStr "null"
+          ''
+            ```
+            fun(buf: number, bufnums: number[]): boolean
+            ```
+          '';
+
+        highlights =
+          helpers.mkCompositeOption ""
+          (
+            genAttrs
+            [
+              "fill"
+              "background"
+
+              "tab"
+
+              "tabSelected"
+              "tabClose"
+
+              "closeButton"
+              "closeButtonVisible"
+              "closeButtonSelected"
+
+              "bufferVisible"
+              "bufferSelected"
+
+              "diagnostic"
+              "diagnosticVisible"
+              "diagnosticSelected"
+
+              "info"
+              "infoVisible"
+              "infoSelected"
+
+              "infoDiagnostic"
+              "infoDiagnosticVisible"
+              "infoDiagnosticSelected"
+
+              "warning"
+              "warningVisible"
+              "warningSelected"
+
+              "warningDiagnostic"
+              "warningDiagnosticVisible"
+              "warningDiagnosticSelected"
+
+              "error"
+              "errorVisible"
+              "errorSelected"
+
+              "errorDiagnostic"
+              "errorDiagnosticVisible"
+              "errorDiagnosticSelected"
+
+              "modified"
+              "modifiedVisible"
+              "modifiedSelected"
+
+              "duplicate"
+              "duplicateVisible"
+              "duplicateSelected"
+
+              "separator"
+              "separatorVisible"
+              "separatorSelected"
+
+              "indicatorSelected"
+
+              "pick"
+              "pickVisible"
+              "pickSelected"
+            ]
+            (name: highlight)
+          );
       };
   };
 
@@ -256,109 +269,123 @@ in {
     setupOptions = {
       options =
         {
-          numbers = cfg.numbers;
-          close_command = cfg.closeCommand;
-          right_mouse_command = cfg.rightMouseCommand;
-          left_mouse_command = cfg.leftMouseCommand;
-          middle_mouse_command = cfg.middleMouseCommand;
-          # deprecated, but might still work
-          indicator_icon = cfg.indicatorIcon;
-          indicator =
-            if cfg.indicator != null
-            then
-              with cfg.indicator; {
-                icon = icon;
-                style = style;
-              }
-            else null;
+          inherit
+            (cfg)
+            mode
+            themable
+            numbers
+            ;
           buffer_close_icon = cfg.bufferCloseIcon;
           modified_icon = cfg.modifiedIcon;
           close_icon = cfg.closeIcon;
+          close_command = cfg.closeCommand;
+          left_mouse_command = cfg.leftMouseCommand;
+          right_mouse_command = cfg.rightMouseCommand;
+          middle_mouse_command = cfg.middleMouseCommand;
+          inherit (cfg) indicator;
           left_trunc_marker = cfg.leftTruncMarker;
           right_trunc_marker = cfg.rightTruncMarker;
-          name_formatter = cfg.nameFormatter;
-          max_name_length = cfg.maxNameLength;
-          max_prefix_length = cfg.maxPrefixLength;
+          separator_style = cfg.separatorStyle;
+          name_formatter =
+            helpers.ifNonNull' cfg.nameFormatter
+            (helpers.mkRaw cfg.nameFormatter);
+          truncate_names = cfg.truncateNames;
           tab_size = cfg.tabSize;
-          diagnostics = cfg.diagnostics;
-          diagnostics_update_in_insert = cfg.diagnosticsUpdateInInsert;
-          diagnostics_indicator = cfg.diagnosticsIndicator;
-          custom_filter = cfg.customFilter;
+          max_name_length = cfg.maxNameLength;
+          color_icons = cfg.colorIcons;
           show_buffer_icons = cfg.showBufferIcons;
           show_buffer_close_icons = cfg.showBufferCloseIcons;
+          get_element_icon =
+            helpers.ifNonNull' cfg.getElementIcon
+            (helpers.mkRaw cfg.getElementIcon);
           show_close_icon = cfg.showCloseIcon;
           show_tab_indicators = cfg.showTabIndicators;
-          persist_buffer_sort = cfg.persistBufferSort;
-          separator_style = cfg.separatorStyle;
+          show_duplicate_prefix = cfg.showDuplicatePrefix;
           enforce_regular_tabs = cfg.enforceRegularTabs;
           always_show_bufferline = cfg.alwaysShowBufferline;
+          persist_buffer_sort = cfg.persistBufferSort;
+          max_prefix_length = cfg.maxPrefixLength;
           sort_by = cfg.sortBy;
+          inherit (cfg) diagnostics;
+          diagnostics_indicator =
+            helpers.ifNonNull' cfg.diagnosticsIndicator
+            (helpers.mkRaw cfg.diagnosticsIndicator);
+          diagnostics_update_in_insert = cfg.diagnosticsUpdateInInsert;
+          inherit (cfg) offsets;
+          groups = helpers.ifNonNull' cfg.groups {
+            inherit (cfg.groups) items;
+            options = helpers.ifNonNull' (cfg.groups.options) {
+              toggle_hidden_on_enter = cfg.groups.options.toggleHiddenOnEnter;
+            };
+          };
+          inherit (cfg) hover;
+          inherit (cfg) debug;
+          custom_filter =
+            helpers.ifNonNull' cfg.customFilter
+            (helpers.mkRaw cfg.customFilter);
         }
         // cfg.extraOptions;
-      highlights =
-        if builtins.isNull cfg.highlights
-        then null
-        else
-          with cfg.highlights; {
-            fill = fill;
-            background = background;
 
-            tab = tab;
-            tab_selected = tabSelected;
-            tab_close = tabClose;
-            close_button = closeButton;
-            close_button_visible = closeButtonVisible;
-            close_button_selected = closeButtonSelected;
+      highlights = with cfg.highlights;
+        helpers.ifNonNull' cfg.highlights {
+          inherit fill background;
 
-            buffer_visible = bufferVisible;
-            buffer_selected = bufferSelected;
+          inherit tab;
+          tab_selected = tabSelected;
+          tab_close = tabClose;
+          close_button = closeButton;
+          close_button_visible = closeButtonVisible;
+          close_button_selected = closeButtonSelected;
 
-            diagnostic = diagnostic;
-            diagnostic_visible = diagnosticVisible;
-            diagnostic_selected = diagnosticSelected;
+          buffer_visible = bufferVisible;
+          buffer_selected = bufferSelected;
 
-            info = info;
-            info_visible = infoVisible;
-            info_selected = infoSelected;
+          inherit diagnostic;
+          diagnostic_visible = diagnosticVisible;
+          diagnostic_selected = diagnosticSelected;
 
-            info_diagnostic = infoDiagnostic;
-            info_diagnostic_visible = infoDiagnosticVisible;
-            info_diagnostic_selected = infoDiagnosticSelected;
+          inherit info;
+          info_visible = infoVisible;
+          info_selected = infoSelected;
 
-            warning = warning;
-            warning_visible = warningVisible;
-            warning_selected = warningSelected;
+          info_diagnostic = infoDiagnostic;
+          info_diagnostic_visible = infoDiagnosticVisible;
+          info_diagnostic_selected = infoDiagnosticSelected;
 
-            warning_diagnostic = warningDiagnostic;
-            warning_diagnostic_visible = warningDiagnosticVisible;
-            warning_diagnostic_selected = warningDiagnosticSelected;
+          inherit warning;
+          warning_visible = warningVisible;
+          warning_selected = warningSelected;
 
-            error = error;
-            error_visible = errorVisible;
-            error_selected = errorSelected;
+          warning_diagnostic = warningDiagnostic;
+          warning_diagnostic_visible = warningDiagnosticVisible;
+          warning_diagnostic_selected = warningDiagnosticSelected;
 
-            error_diagnostic = errorDiagnostic;
-            error_diagnostic_visible = errorDiagnosticVisible;
-            error_diagnostic_selected = errorDiagnosticSelected;
+          inherit error;
+          error_visible = errorVisible;
+          error_selected = errorSelected;
 
-            modified = modified;
-            modified_visible = modifiedVisible;
-            modified_selected = modifiedSelected;
+          error_diagnostic = errorDiagnostic;
+          error_diagnostic_visible = errorDiagnosticVisible;
+          error_diagnostic_selected = errorDiagnosticSelected;
 
-            duplicate = duplicate;
-            duplicate_visible = duplicateVisible;
-            duplicate_selected = duplicateSelected;
+          inherit modified;
+          modified_visible = modifiedVisible;
+          modified_selected = modifiedSelected;
 
-            separator = separator;
-            separator_visible = separatorVisible;
-            separator_selected = separatorSelected;
+          inherit duplicate;
+          duplicate_visible = duplicateVisible;
+          duplicate_selected = duplicateSelected;
 
-            indicator_selected = indicatorSelected;
+          inherit separator;
+          separator_visible = separatorVisible;
+          separator_selected = separatorSelected;
 
-            pick = pick;
-            pick_visible = pickVisible;
-            pick_selected = pickSelected;
-          };
+          indicator_selected = indicatorSelected;
+
+          inherit pick;
+          pick_visible = pickVisible;
+          pick_selected = pickSelected;
+        };
     };
   in
     mkIf cfg.enable {
