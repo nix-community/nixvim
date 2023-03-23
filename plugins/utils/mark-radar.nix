@@ -7,7 +7,6 @@
 with lib; let
   cfg = config.plugins.mark-radar;
   helpers = import ../helpers.nix {inherit lib;};
-  defs = import ../plugin-defs.nix {inherit pkgs;};
   optionWarnings = import ../../lib/option-warnings.nix args;
   basePluginPath = ["plugins" "mark-radar"];
 in {
@@ -36,7 +35,7 @@ in {
     // {
       enable = mkEnableOption "mark-radar";
 
-      package = helpers.mkPackageOption "mark-radar" defs.mark-radar;
+      package = helpers.mkPackageOption "mark-radar" pkgs.vimPlugins.mark-radar-nvim;
 
       setDefaultMappings =
         helpers.defaultNullOpts.mkBool true

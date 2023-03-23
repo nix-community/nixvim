@@ -7,13 +7,12 @@
 with lib; let
   cfg = config.plugins.intellitab;
   helpers = import ../helpers.nix {inherit lib;};
-  defs = import ../plugin-defs.nix {inherit pkgs;};
 in {
   options = {
     plugins.intellitab = {
       enable = mkEnableOption "intellitab.nvim";
 
-      package = helpers.mkPackageOption "intellitab.nvim" defs.intellitab-nvim;
+      package = helpers.mkPackageOption "intellitab.nvim" pkgs.vimPlugins.intellitab-nvim;
     };
   };
 

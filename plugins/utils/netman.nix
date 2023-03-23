@@ -4,13 +4,13 @@
   pkgs,
   ...
 } @ args: let
-  defs = import ../plugin-defs.nix {inherit pkgs;};
   helpers = import ../helpers.nix args;
 in
   with lib; {
     options.plugins.netman = {
       enable = mkEnableOption "netman.nvim, a framework to access remote resources";
-      package = helpers.mkPackageOption "netman.nvim" defs.netman-nvim;
+
+      package = helpers.mkPackageOption "netman.nvim" pkgs.vimPlugins.netman-nvim;
 
       neoTreeIntegration = mkEnableOption "support for netman as a neo-tree source";
     };

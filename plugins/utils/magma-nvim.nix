@@ -5,7 +5,6 @@
 } @ args:
 with lib;
 with import ../helpers.nix {inherit lib;}; let
-  plugins = import ../plugin-defs.nix {inherit pkgs;};
   optionWarnings = import ../../lib/option-warnings.nix args;
   basePluginPath = ["plugins" "magma-nvim"];
 in
@@ -55,7 +54,7 @@ in
   // mkPlugin args {
     name = "magma-nvim";
     description = "magma-nvim";
-    package = plugins.magma-nvim;
+    package = pkgs.vimPlugins.magma-nvim-goose;
     globalPrefix = "magma_";
 
     options = {
