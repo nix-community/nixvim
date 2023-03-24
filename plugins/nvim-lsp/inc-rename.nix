@@ -14,19 +14,24 @@ in {
     package = helpers.mkPackageOption "inc-rename" plugin-defs.inc-rename;
 
     cmdName = helpers.defaultNullOpts.mkStr "IncRename" "the name of the command";
+
     hlGroup =
       helpers.defaultNullOpts.mkStr "Substitute"
       "the highlight group used for highlighting the identifier's new name";
+
     previewEmptyName = helpers.defaultNullOpts.mkBool false ''
       whether an empty new name should be previewed; if false the command preview will be cancelled
       instead
     '';
+
     showMessage = helpers.defaultNullOpts.mkBool true ''
       whether to display a `Renamed m instances in n files` message after a rename operation
     '';
+
     inputBufferType = helpers.defaultNullOpts.mkNullable (types.enum ["dressing"]) "null" ''
       the type of the external input buffer to use
     '';
+
     postHook = helpers.defaultNullOpts.mkNullable types.str "null" ''
       callback to run after renaming, receives the result table (from LSP handler) as an argument
     '';
