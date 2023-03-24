@@ -78,6 +78,7 @@
     ./utils/nvim-tree.nix
     ./utils/nvim-osc52.nix
     ./utils/project-nvim.nix
+    ./utils/presence-nvim.nix
     ./utils/specs.nix
     ./utils/startify.nix
     ./utils/surround.nix
