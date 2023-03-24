@@ -7,11 +7,21 @@
 with lib; let
   cfg = config.plugins.notify;
   helpers = import ../helpers.nix {inherit lib;};
+  optionWarnings = import ../../lib/option-warnings.nix {inherit lib;};
+  basePluginPath = ["plugins" "notify"];
   icon = mkOption {
     type = types.nullOr types.str;
     default = null;
   };
 in {
+  imports = [
+    (optionWarnings.mkRenamedOption {
+      # 2023-03-24
+      option = basePluginPath ++ ["backgroundColor"];
+      newOption = basePluginPath ++ ["backgroundColour"];
+    })
+  ];
+
   options.plugins.notify = {
     enable = mkEnableOption "notify";
 
@@ -27,7 +37,7 @@ in {
       description = "Default timeout for notifications";
       default = null;
     };
-    backgroundColor = mkOption {
+    backgroundColour = mkOption {
       type = types.nullOr types.str;
       description = "For stages that change opacity this is treated as the highlight between the window";
       default = null;
@@ -56,7 +66,7 @@ in {
     setupOptions = with cfg; {
       stages = stages;
       timeout = timeout;
-      background_color = backgroundColor;
+      background_colour = backgroundColour;
       minimum_width = minimumWidth;
       icons = with icons; {
         ERROR = error;
