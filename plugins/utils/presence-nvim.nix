@@ -34,7 +34,7 @@ in {
           `:lua package.loaded.presence:update()`
         '';
 
-        neovimImageText = helpers.defaultNullOpts.mkStr "The One True Text Editor"
+        neovimImageText = helpers.defaultNullOpts.mkStr "The One True Text Editor" ''
           Text displayed when hovered over the Neovim image.
         '';
 
