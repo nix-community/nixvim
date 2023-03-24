@@ -16,6 +16,7 @@ with lib; let
 in {
   imports = [
     (optionWarnings.mkRenamedOption {
+      # 2023-03-24
       option = basePluginPath ++ ["backgroundColor"];
       newOption = basePluginPath ++ ["backgroundColour"];
     })
