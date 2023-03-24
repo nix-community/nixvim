@@ -22,14 +22,16 @@
       fileAssets = null;
       showTime = true;
 
+      buttons = [];
+
       # Rich presence text options.
-      editing.text = "Editing %s";
-      fileExplorer.text = "Browsing %s";
-      gitCommit.text = "Committing changes";
-      pluginManager.text = "Managing plugins";
-      reading.text = "Reading %s";
-      workspace.text = "Working on %s";
-      lineNumber.text = "Line %s out of %s";
+      editingText = "Editing %s";
+      fileExplorerText = "Browsing %s";
+      gitCommitText = "Committing changes";
+      pluginManagerText = "Managing plugins";
+      readingText = "Reading %s";
+      workspaceText = "Working on %s";
+      lineNumberText = "Line %s out of %s";
     };
   };
 }

@@ -7,18 +7,6 @@
 with lib; let
   cfg = config.plugins.presence-nvim;
   helpers = import ../helpers.nix {inherit lib;};
-
-  # Given an attribute with the child attributes of:
-  # - Some static attribute
-  # - Some attribute which represents a lua function as a string
-  # This function will prioritize choosing the static attribute, then will
-  # fall back to the raw lua function.
-  staticOrFunc = attribute: static_name:
-    helpers.ifNonNull' attribute (
-      if attribute.${static_name} != null
-      then attribute.${static_name}
-      else helpers.mkRaw attribute.function
-    );
 in {
   options = {
     plugins.presence-nvim =
@@ -38,8 +26,8 @@ in {
           Text displayed when hovered over the Neovim image.
         '';
 
-        mainImage = helpers.defaultNullOpts.mkStr "neovim" ''
-          Main image display. (either `"neovim"` or `"file"`).
+        mainImage = helpers.defaultNullOpts.mkEnum ["neovim" "file"] "neovim" ''
+          Main image display.
         '';
 
         clientId = helpers.defaultNullOpts.mkStr "793271441293967371" ''
@@ -64,42 +52,27 @@ in {
           current file name, path, or workspace matches.
         '';
 
-        buttons = helpers.mkCompositeOption "Configure Rich Presence button(s)." {
-          function = helpers.mkNullOrOption types.str ''
-            A lua function: `function(buffer: string, repo_url: string|nil): table)`.
-
-            NOTE: Any modifications to `plugins.presence-nvim.buttons.static`
-            will take precedence over this.
-          '';
-          static =
-            helpers.mkNullOrOption
+        buttons =
+          helpers.defaultNullOpts.mkNullable
+          (types.either helpers.rawType
             (types.listOf (types.submodule {
               options = {
-                label = helpers.mkNullOrOption types.str ''
-                  The label of the button.
-
-                  Example: `"Github Profile";`
-                '';
-
-                url = helpers.mkNullOrOption types.str ''
-                  The URL the button leads to.
-
-                  Example: `"https://github.com/<NAME>";`
-                '';
+                label = helpers.mkNullOrOption types.str "";
+                url = helpers.mkNullOrOption types.str "";
               };
-            }))
-            ''
-              Static button configurations that will always appear in Rich Presence.
+            })))
+          "[]"
+          ''
+            Button configurations which will always appear in Rich Presence.
 
-              Example:
-              ```
-              [
-                { label = "GitHub Profile"; url = "https://github.com/<NAME>"; }
-                { label = "Check out my dotfiles"; url = "https://github.com/<NAME>/dotfiles"; }
-              ];
-              ```
-            '';
-        };
+            Can be a list of attribute sets, each with the following attributes:
+
+            `label`: The label of the button. e.g. `"GitHub Profile"`.
+
+            `url`: The URL the button leads to. e.g. `"https://github.com/<NAME>"`.
+
+            Can also be a lua function: `function(buffer: string, repo_url: string|nil): table)`
+          '';
 
         fileAssets = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
           Custom file asset definitions keyed by file names and extensions.
@@ -126,138 +99,61 @@ in {
         showTime = helpers.defaultNullOpts.mkBool true "Show the timer.";
 
         # Rich presence text options.
+        editingText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Editing %s" ''
+          String rendered when an editable file is loaded in the buffer.
 
-        editing =
-          helpers.mkCompositeOption
-          ''
-            String rendered when an editable file is loaded in the buffer.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Editing %s"'' ''
-              Format string to render.
-            '';
+          Can also be a lua function:
+          `function(filename: string): string`
+        '';
 
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(filename: string): string`.
+        fileExplorerText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Browsing %s" ''
+          String rendered when browsing a file explorer.
 
-              NOTE: Any modifications to `plugins.presence-nvim.editing.text`
-              will take precedence over this.
-            '';
-          };
+          Can also be a lua function:
+          `function(file_explorer_name: string): string`
+        '';
 
-        fileExplorer =
-          helpers.mkCompositeOption
-          ''
-            String rendered when browsing a file explorer.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Browsing %s"'' ''
-              Format string to render.
-            '';
+        gitCommitText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Committing changes" ''
+          String rendered when committing changes in git.
 
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(file_explorer_name: string): string`.
+          Can also be a lua function:
+          `function(filename: string): string`
+        '';
 
-              NOTE: Any modifications to `plugins.presence-nvim.fileExplorer.text`
-              will take precedence over this.
-            '';
-          };
+        pluginManagerText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Managing plugins" ''
+          String rendered when managing plugins.
 
-        gitCommit =
-          helpers.mkCompositeOption
-          ''
-            String rendered when committing changes in git.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Committing changes"'' ''
-              Format string to render.
-            '';
+          Can also be a lua function:
+          `function(plugin_manager_name: string): string`
+        '';
 
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(filename: string): string`.
+        readingText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Reading %s" ''
+          String rendered when a read-only/unmodifiable file is loaded into the buffer.
 
-              NOTE: Any modifications to `plugins.presence-nvim.gitCommit.text`
-              will take precedence over this.
-            '';
-          };
+          Can also be a lua function:
+          `function(filename: string): string`
+        '';
 
-        pluginManager =
-          helpers.mkCompositeOption
-          ''
-            String rendered when managing plugins.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Managing plugins"'' ''
-              Format string to render.
-            '';
+        workspaceText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Working on %s" ''
+          String rendered when in a git repository.
 
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(plugin_manager_name: string): string`.
+          Can also be a lua function:
+          `function(project_name: string|nil, filename: string): string`
+        '';
 
-              NOTE: Any modifications to `plugins.presence-nvim.pluginManager.text`
-              will take precedence over this.
-            '';
-          };
+        lineNumberText = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "Line %s out of %s" ''
+          String rendered when `enableLineNumber` is set to `true` to display the current line number.
 
-        reading =
-          helpers.mkCompositeOption
-          ''
-            String rendered when a read-only/unmodifiable file is loaded into the buffer.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Reading %s"'' ''
-              Format string to render.
-            '';
-
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(filename: string): string`.
-
-              NOTE: Any modifications to `plugins.presence-nvim.reading.text`
-              will take precedence over this.
-            '';
-          };
-
-        workspace =
-          helpers.mkCompositeOption
-          ''
-            String rendered when in a git repository.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Working on %s"'' ''
-              Format string to render.
-            '';
-
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(project_name: string|nil, filename: string): string`.
-
-              NOTE: Any modifications to `plugins.presence-nvim.workspace.text`
-              will take precedence over this.
-            '';
-          };
-
-        lineNumber =
-          helpers.mkCompositeOption
-          ''
-            String rendered when `enableLineNumber` is set to `true` to display the current line number.
-          ''
-          {
-            text = helpers.defaultNullOpts.mkStr ''"Line %s out of %s"'' ''
-              Format string to render.
-            '';
-
-            function = helpers.mkNullOrOption types.str ''
-              Lua function to render from. `function(line_number: number, line_count: number): string`.
-
-              NOTE: Any modifications to `plugins.presence-nvim.lineNumber.text`
-              will take precedence over this.
-            '';
-          };
+          Can also be a lua function:
+          `function(line_number: number, line_count: number): string`
+        '';
       };
   };
 
   config = let
     setupOptions =
       {
+        # General options.
         auto_update = cfg.autoUpdate;
         neovim_image_text = cfg.neovimImageText;
         main_image = cfg.mainImage;
@@ -268,16 +164,16 @@ in {
         blacklist = cfg.blacklist;
         file_assets = cfg.fileAssets;
         show_time = cfg.showTime;
+        buttons = cfg.buttons;
 
-        buttons = staticOrFunc cfg.buttons "static";
-
-        editing_text = staticOrFunc cfg.editing "text";
-        file_explorer_text = staticOrFunc cfg.fileExplorer "text";
-        git_commit_text = staticOrFunc cfg.gitCommit "text";
-        plugin_manager_text = staticOrFunc cfg.pluginManager "text";
-        reading_text = staticOrFunc cfg.reading "text";
-        workspace_text = staticOrFunc cfg.workspace "text";
-        line_number_text = staticOrFunc cfg.lineNumber "text";
+        # Rich presence text options.
+        editing_text = cfg.editingText;
+        file_explorer_text = cfg.fileExplorerText;
+        git_commit_text = cfg.gitCommitText;
+        plugin_manager_text = cfg.pluginManagerText;
+        reading_text = cfg.readingText;
+        workspace_text = cfg.workspaceText;
+        line_number_text = cfg.lineNumberText;
       }
       // cfg.extraOptions;
   in
