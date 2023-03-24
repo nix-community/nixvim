@@ -10,7 +10,7 @@ with lib; let
 
   # Given an attribute with the child attributes of:
   # - Some static attribute
-  # - Some attriubte which represents a lua function as a string
+  # - Some attribute which represents a lua function as a string
   # This function will prioritize choosing the static attribute, then will
   # fall back to the raw lua function.
   staticOrFunc = attribute: static_name:
@@ -34,21 +34,20 @@ in {
           `:lua package.loaded.presence:update()`
         '';
 
-        neovimImageText = helpers.defaultNullOpts.mkStr ''"The One True Text Editor"'' ''
+        neovimImageText = helpers.defaultNullOpts.mkStr "The One True Text Editor"
           Text displayed when hovered over the Neovim image.
         '';
 
-        mainImage = helpers.defaultNullOpts.mkStr ''"neovim"'' ''
+        mainImage = helpers.defaultNullOpts.mkStr "neovim" ''
           Main image display. (either `"neovim"` or `"file"`).
         '';
 
-        clientId = helpers.defaultNullOpts.mkStr ''"793271441293967371"'' ''
+        clientId = helpers.defaultNullOpts.mkStr "793271441293967371" ''
           Use your own Discord application client id. (not recommended)
         '';
 
-        logLevel = helpers.mkNullOrOption types.str ''
+        logLevel = helpers.defaultNullOpts.mkEnum ["debug" "info" "warn" "error"] "null" ''
           Log messages at or above this level.
-          One of the following: `"debug"`, `"info"`, `"warn"`, `"error"`
         '';
 
         debounceTimeout = helpers.defaultNullOpts.mkInt 10 ''
@@ -60,7 +59,7 @@ in {
           Displays the current line number instead of the current project.
         '';
 
-        blacklist = helpers.mkNullOrOption (types.listOf types.str) ''
+        blacklist = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
           A list of strings or Lua patterns that disable Rich Presence if the
           current file name, path, or workspace matches.
         '';
