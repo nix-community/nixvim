@@ -3,50 +3,73 @@
   config,
   lib,
   ...
-}:
+} @ args:
 with lib; let
   cfg = config.plugins.mark-radar;
   helpers = import ../helpers.nix {inherit lib;};
   defs = import ../plugin-defs.nix {inherit pkgs;};
+  optionWarnings = import ../../lib/option-warnings.nix args;
+  basePluginPath = ["plugins" "mark-radar"];
 in {
-  options.plugins.mark-radar = {
-    enable = mkEnableOption "mark-radar";
+  # Those renames were done on 03-24-2023
+  imports = [
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ ["highlight_background"];
+      newOption = basePluginPath ++ ["backgroundHighlight"];
+    })
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ ["background_highlight_group"];
+      newOption = basePluginPath ++ ["backgroundHighlightGroup"];
+    })
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ ["highlight_group"];
+      newOption = basePluginPath ++ ["highlightGroup"];
+    })
+    (optionWarnings.mkRenamedOption {
+      option = basePluginPath ++ ["set_default_keybinds"];
+      newOption = basePluginPath ++ ["setDefaultMappings"];
+    })
+  ];
 
-    package = helpers.mkPackageOption "mark-radar" defs.mark-radar;
+  options.plugins.mark-radar =
+    helpers.extraOptionsOptions
+    // {
+      enable = mkEnableOption "mark-radar";
 
-    highlight_background = mkOption {
-      type = with types; nullOr bool;
-      default = null;
+      package = helpers.mkPackageOption "mark-radar" defs.mark-radar;
+
+      setDefaultMappings =
+        helpers.defaultNullOpts.mkBool true
+        "Whether to set default mappings.";
+
+      highlightGroup =
+        helpers.defaultNullOpts.mkStr "RadarMark"
+        "The name of the highlight group to use.";
+
+      backgroundHighlight =
+        helpers.defaultNullOpts.mkBool true
+        "Whether to highlight the background.";
+
+      backgroundHighlightGroup =
+        helpers.defaultNullOpts.mkStr "RadarBackground"
+        "The name of the highlight group to use for the background.";
     };
-
-    background_highlight_group = mkOption {
-      type = with types; nullOr str;
-      default = null;
-    };
-
-    highlight_group = mkOption {
-      type = with types; nullOr str;
-      default = null;
-    };
-
-    set_default_keybinds = mkOption {
-      type = with types; nullOr str;
-      default = null;
-    };
-  };
 
   config = let
-    opts = helpers.toLuaObject {
-      inherit (cfg) highlight_group background_highlight_group;
-      set_default_mappings = cfg.set_default_keybinds;
-      background_highlight = cfg.highlight_background;
-    };
+    setupOptions =
+      {
+        set_default_mappings = cfg.setDefaultMappings;
+        highlight_group = cfg.highlightGroup;
+        background_highlight = cfg.backgroundHighlight;
+        background_highlight_group = cfg.backgroundHighlightGroup;
+      }
+      // cfg.extraOptions;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
       extraConfigLua = ''
-        require("mark-radar").setup(${opts})
+        require("mark-radar").setup(${helpers.toLuaObject setupOptions})
       '';
     };
 }
