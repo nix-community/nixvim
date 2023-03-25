@@ -73,6 +73,9 @@
               makeNixvim = self.legacyPackages."${system}".makeNixvim;
             })
             // {
+              lib-tests = import ./tests/lib-tests.nix {
+                inherit (pkgs) pkgs lib;
+              };
               pre-commit-check = pre-commit-hooks.lib.${system}.run {
                 src = ./.;
                 hooks = {
