@@ -6,12 +6,11 @@
 } @ args:
 with lib; let
   helpers = import ../helpers.nix args;
-  plugin-defs = import ../plugin-defs.nix {inherit pkgs;};
 in {
   options.plugins.inc-rename = {
     enable = mkEnableOption "inc-rename, a plugin previewing LSP renaming";
 
-    package = helpers.mkPackageOption "inc-rename" plugin-defs.inc-rename;
+    package = helpers.mkPackageOption "inc-rename" pkgs.vimPlugins.inc-rename-nvim;
 
     cmdName = helpers.defaultNullOpts.mkStr "IncRename" "the name of the command";
 

@@ -4,13 +4,13 @@
   config,
   ...
 } @ args: let
-  plugin-defs = import ../plugin-defs.nix {inherit pkgs;};
   helpers = import ../helpers.nix args;
 in
   with lib; {
     options.plugins.nvim-osc52 = {
       enable = mkEnableOption "nvim-osc52, a plugin to use OSC52 sequences to copy/paste";
-      package = helpers.mkPackageOption "nvim-osc52" plugin-defs.nvim-osc52;
+
+      package = helpers.mkPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
 
       maxLength =
         helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit)";

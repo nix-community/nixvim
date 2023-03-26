@@ -1,27 +1,7 @@
 {
-    "coq-artifacts": {
-        "cargoLocks": null,
-        "date": "2023-03-12",
-        "extract": null,
-        "name": "coq-artifacts",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "ms-jpq",
-            "repo": "coq.artifacts",
-            "rev": "ee1814e2183bd424ca5528f82f3d6ce8f64e6f90",
-            "sha256": "sha256-e+w5tLuer/4f0oImlIgxmI4Ke9h6x0PQ8+nVJDihkGQ=",
-            "type": "github"
-        },
-        "version": "ee1814e2183bd424ca5528f82f3d6ce8f64e6f90"
-    },
     "coq-nvim": {
         "cargoLocks": null,
-        "date": "2023-03-12",
+        "date": "2023-03-26",
         "extract": null,
         "name": "coq-nvim",
         "passthru": null,
@@ -33,135 +13,15 @@
             "name": null,
             "owner": "ms-jpq",
             "repo": "coq_nvim",
-            "rev": "4b4b93dbbfc871a3d32a244a4276ee06696c21bb",
-            "sha256": "sha256-OXhLs7fO+qlOPyDc8AOA+bkbj9OzMZO8CFgfE/Q1cro=",
+            "rev": "8847707462e5d89a0043e7846439e180b9dfb04f",
+            "sha256": "sha256-AynBc+TnBBFu+h/ejimgIF+7XyKatv1W81/frzZ4Dto=",
             "type": "github"
         },
-        "version": "4b4b93dbbfc871a3d32a244a4276ee06696c21bb"
-    },
-    "inc-rename": {
-        "cargoLocks": null,
-        "date": "2023-01-29",
-        "extract": null,
-        "name": "inc-rename",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "smjonas",
-            "repo": "inc-rename.nvim",
-            "rev": "21c23c379342a731a0c90f226601ec0434627b26",
-            "sha256": "sha256-KxXVe0amA0tyU6J2M+4XERSyERWS4BqGuxmbJ9YUyRs=",
-            "type": "github"
-        },
-        "version": "21c23c379342a731a0c90f226601ec0434627b26"
-    },
-    "intellitab-nvim": {
-        "cargoLocks": null,
-        "date": "2021-11-13",
-        "extract": null,
-        "name": "intellitab-nvim",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "pta2002",
-            "repo": "intellitab.nvim",
-            "rev": "a6c1a505865f6131866d609c52440306e9914b16",
-            "sha256": "sha256-z5G7v2OttQs5B/uqWdxYtW6wPnVPARjQYidKLYkhvqY=",
-            "type": "github"
-        },
-        "version": "a6c1a505865f6131866d609c52440306e9914b16"
-    },
-    "magma-nvim": {
-        "cargoLocks": null,
-        "date": "2023-03-13",
-        "extract": null,
-        "name": "magma-nvim",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "WhiteBlackGoose",
-            "repo": "magma-nvim-goose",
-            "rev": "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f",
-            "sha256": "sha256-Sq7J43AYvsfUdFXELzEwBNTpnOt/F43/de+2zwBspoE=",
-            "type": "github"
-        },
-        "version": "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f"
-    },
-    "mark-radar": {
-        "cargoLocks": null,
-        "date": "2021-06-22",
-        "extract": null,
-        "name": "mark-radar",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "winston0410",
-            "repo": "mark-radar.nvim",
-            "rev": "d7fb84a670795a5b36b18a5b59afd1d3865cbec7",
-            "sha256": "sha256-6WfEFLFQnDpQ2X0NRSa25ALvm/SxiFoW4PAzBA8TdPg=",
-            "type": "github"
-        },
-        "version": "d7fb84a670795a5b36b18a5b59afd1d3865cbec7"
-    },
-    "netman-nvim": {
-        "cargoLocks": null,
-        "date": "2023-03-02",
-        "extract": null,
-        "name": "netman-nvim",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "miversen33",
-            "repo": "netman.nvim",
-            "rev": "1ef50efcbe88f8293e97946af37243a20873bb1c",
-            "sha256": "sha256-oRjBjVmO/7bmgyf9ltthRrwZBD5SLD757GklSjw1bJs=",
-            "type": "github"
-        },
-        "version": "1ef50efcbe88f8293e97946af37243a20873bb1c"
-    },
-    "nvim-osc52": {
-        "cargoLocks": null,
-        "date": "2023-03-03",
-        "extract": null,
-        "name": "nvim-osc52",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "ojroques",
-            "repo": "nvim-osc52",
-            "rev": "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31",
-            "sha256": "sha256-SQpwiA+dyTRXBq0YtUZ4nkYKglyChIyQeWopD73qznQ=",
-            "type": "github"
-        },
-        "version": "47ce7ee2396fa3ee4fb6b0e0ef14ba06f9c9bd31"
+        "version": "8847707462e5d89a0043e7846439e180b9dfb04f"
     },
     "pynvim_pp": {
         "cargoLocks": null,
-        "date": "2023-03-12",
+        "date": "2023-03-26",
         "extract": null,
         "name": "pynvim_pp",
         "passthru": null,
@@ -173,15 +33,15 @@
             "name": null,
             "owner": "ms-jpq",
             "repo": "pynvim_pp",
-            "rev": "40db0426f171d413dcc976b17c8eff0127664f23",
-            "sha256": "sha256-AtsoRJQcO5jDNlSydVnqcN7f4xURmH6bGFPpjsZ9Yrg=",
+            "rev": "28b86c08b5906401fe661b3cb01f212d4229d146",
+            "sha256": "sha256-DEA+LdWNLzOTAwHSFc44ozlK2kqk+XV2GKyBAqifUJY=",
             "type": "github"
         },
-        "version": "40db0426f171d413dcc976b17c8eff0127664f23"
+        "version": "28b86c08b5906401fe661b3cb01f212d4229d146"
     },
     "std2": {
         "cargoLocks": null,
-        "date": "2023-03-12",
+        "date": "2023-03-26",
         "extract": null,
         "name": "std2",
         "passthru": null,
@@ -193,10 +53,10 @@
             "name": null,
             "owner": "ms-jpq",
             "repo": "std2",
-            "rev": "43635e036486296776b4ef5ac498f742ad25a691",
-            "sha256": "sha256-oWVaw7v1Sl7DkqIJOm8wEReID9MTD3XFOdpyQDXRa04=",
+            "rev": "360d30e19f17e38dba8cf05c9d41d0901a168d83",
+            "sha256": "sha256-3ugG2OieAVOxUylFLAb5EvZNkeEZb3DHYhGgqlMn8qg=",
             "type": "github"
         },
-        "version": "43635e036486296776b4ef5ac498f742ad25a691"
+        "version": "360d30e19f17e38dba8cf05c9d41d0901a168d83"
     }
 }

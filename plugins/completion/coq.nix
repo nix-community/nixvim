@@ -7,7 +7,6 @@
 with lib; let
   cfg = config.plugins.coq-nvim;
   helpers = import ../helpers.nix {inherit lib;};
-  plugins = import ../plugin-defs.nix {inherit pkgs;};
 in {
   options = {
     plugins.coq-nvim = {
@@ -42,7 +41,7 @@ in {
         [
           cfg.package
         ]
-        ++ optional cfg.installArtifacts plugins.coq-artifacts;
+        ++ optional cfg.installArtifacts pkgs.vimPlugins.coq-artifacts;
       plugins.lsp = {
         preConfig = ''
           vim.g.coq_settings = ${helpers.toLuaObject settings}
