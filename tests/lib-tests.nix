@@ -14,6 +14,21 @@
       expected = ''{["foo"] = "bar",["qux"] = {1,2,3}}'';
     };
 
+    testToLuaObjectRawLua = {
+      expr = helpers.toLuaObject {
+        __raw = "<lua code>";
+      };
+      expected = "<lua code>";
+    };
+
+    testToLuaObjectLuaTableMixingList = {
+      expr = helpers.toLuaObject {
+        "@...." = "foo";
+        bar = "baz";
+      };
+      expected = ''{"foo",["bar"] = "baz"}'';
+    };
+
     testToLuaObjectNestedAttrs = {
       expr = helpers.toLuaObject {
         a = {
