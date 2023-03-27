@@ -27,6 +27,7 @@
     ./languages/ledger.nix
     ./languages/markdown-preview.nix
     ./languages/nix.nix
+    ./languages/nvim-jdtls.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust.nix
     ./languages/sniprun.nix
