@@ -27,10 +27,8 @@
       hideInactiveStatusline = false;
       dimInactive = false;
       lualineBold = false;
-      # Not implemented
-      # onColors = {__raw = "function(colors) end";};
-      # Not implemented
-      # onHighlights = {__raw = "function(colors) end";};
+      onColors = "function(colors) end";
+      onHighlights = "function(highlights, colors) end";
     };
   };
 }
