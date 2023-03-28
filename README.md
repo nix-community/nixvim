@@ -379,3 +379,7 @@ provided:
 
 If you feel like what you are doing manually should be supported in NixVim,
 please open an issue.
+
+# Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
