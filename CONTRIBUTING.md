@@ -77,14 +77,13 @@ Because the options may not have the same case (and may require some pre-process
 
 ```nix
 {
-    some_opt = cfg.someOpt;
-    some_raw_opt = helpers.ifNonNull' cfg.some_raw_opt (mkRaw cfg.some_raw_opt);
-    some_submodule_opt = let
-        submoduleOpts = cfg.someSubmoduleOpt;
-    in helpers.ifNonNull cfg.someSubmoduleOpt {
-        inherit (submoduleOpts) some_opt;
-        some_other_opt = submoduleOpts.someOtherOpt;
-    };
+  some_opt = cfg.someOpt;
+  some_raw_opt = helpers.ifNonNull' cfg.some_raw_opt (mkRaw cfg.some_raw_opt);
+  some_submodule_opt = with cfg.submoduleOpt;
+    helpers.ifNonNull' cfg.someSubmoduleOpt {
+        inherit some_opt;
+        some_other_opt = someOtherOpt;
+      };
 }
 ```
 
