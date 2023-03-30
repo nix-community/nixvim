@@ -79,6 +79,21 @@ with lib; let
       })
     ]))
     "";
+
+    mkEmptySectionOption = name:
+      helpers.mkNullOrOption
+      (types.submodule {
+        options = {
+          lualine_a = mkComponentOptions "";
+          lualine_b = mkComponentOptions "";
+          lualine_c = mkComponentOptions "";
+
+          lualine_x = mkComponentOptions "";
+          lualine_y = mkComponentOptions "";
+          lualine_z = mkComponentOptions "";
+        };
+      })
+      name;
 in {
   options = {
     plugins.lualine = {
@@ -173,20 +188,21 @@ in {
         })
         "Sections configuration";
 
-      tabline =
+      inactive_sections =
         helpers.mkNullOrOption
         (types.submodule {
           options = {
-            lualine_a = mkComponentOptions "";
-            lualine_b = mkComponentOptions "";
-            lualine_c = mkComponentOptions "";
-
-            lualine_x = mkComponentOptions "";
-            lualine_y = mkComponentOptions "";
-            lualine_z = mkComponentOptions "";
+            lualine_c = mkComponentOptions "filename";
+            lualine_x = mkComponentOptions "location";
           };
         })
-        "Tabline configuration";
+        "Inactive Sections configuration";
+
+      tabline = mkEmptySectionOption "Tabline configuration";
+
+      winbar = mkEmptySectionOption "Winbar configuration";
+
+      inactive_winbar = mkEmptySectionOption "Inactive Winbar configuration";
 
       extensions = mkOption {
         type = types.nullOr (types.listOf types.str);
@@ -233,7 +249,10 @@ in {
       };
 
       sections = mapNullable processSections cfg.sections;
+      inactive_sections = mapNullable processSections cfg.inactive_sections;
       tabline = mapNullable processSections cfg.tabline;
+      winbar = mapNullable processSections cfg.winbar;
+      inactive_winbar = mapNullable processSections cfg.inactive_winbar;
       extensions = cfg.extensions;
     };
   in
