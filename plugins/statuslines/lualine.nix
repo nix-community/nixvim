@@ -80,20 +80,15 @@ with lib; let
     ]))
     "";
 
-    mkEmptySectionOption = name:
-      helpers.mkNullOrOption
-      (types.submodule {
-        options = {
-          lualine_a = mkComponentOptions "";
-          lualine_b = mkComponentOptions "";
-          lualine_c = mkComponentOptions "";
-
-          lualine_x = mkComponentOptions "";
-          lualine_y = mkComponentOptions "";
-          lualine_z = mkComponentOptions "";
-        };
-      })
-      name;
+  mkEmptySectionOption = name:
+    helpers.mkCompositeOption name {
+      lualine_a = mkComponentOptions "";
+      lualine_b = mkComponentOptions "";
+      lualine_c = mkComponentOptions "";
+      lualine_x = mkComponentOptions "";
+      lualine_y = mkComponentOptions "";
+      lualine_z = mkComponentOptions "";
+    };
 in {
   options = {
     plugins.lualine = {
@@ -188,21 +183,24 @@ in {
         })
         "Sections configuration";
 
-      inactive_sections =
-        helpers.mkNullOrOption
+      inactiveSections =
+        helpers.mkCompositeOption "Inactive Sections configuration"
         (types.submodule {
           options = {
+            lualine_a = mkComponentOptions "";
+            lualine_b = mkComponentOptions "";
             lualine_c = mkComponentOptions "filename";
             lualine_x = mkComponentOptions "location";
+            lualine_y = mkComponentOptions "";
+            lualine_z = mkComponentOptions "";
           };
-        })
-        "Inactive Sections configuration";
+        });
 
       tabline = mkEmptySectionOption "Tabline configuration";
 
       winbar = mkEmptySectionOption "Winbar configuration";
 
-      inactive_winbar = mkEmptySectionOption "Inactive Winbar configuration";
+      inactiveWinbar = mkEmptySectionOption "Inactive Winbar configuration";
 
       extensions = mkOption {
         type = types.nullOr (types.listOf types.str);
@@ -249,10 +247,10 @@ in {
       };
 
       sections = mapNullable processSections cfg.sections;
-      inactive_sections = mapNullable processSections cfg.inactive_sections;
+      inactive_sections = mapNullable processSections cfg.inactiveSections;
       tabline = mapNullable processSections cfg.tabline;
       winbar = mapNullable processSections cfg.winbar;
-      inactive_winbar = mapNullable processSections cfg.inactive_winbar;
+      inactive_winbar = mapNullable processSections cfg.inactiveWinbar;
       extensions = cfg.extensions;
     };
   in
