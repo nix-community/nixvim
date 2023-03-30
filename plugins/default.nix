@@ -28,6 +28,7 @@
     ./languages/markdown-preview.nix
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
+    ./languages/openscad.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust.nix
     ./languages/sniprun.nix
