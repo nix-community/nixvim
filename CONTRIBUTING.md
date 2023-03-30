@@ -87,6 +87,42 @@ Because the options may not have the same case (and may require some pre-process
 }
 ```
 
+#### A note on composite/nested options
+
+Here is how to handle options that have several suboptions:
+```nix
+{
+  options.my-plugin = {
+    ...
+    option1 = ...
+
+    myCompositeOption = helpers.mkCompositeOption "Description of my composite option" {
+
+      subOption1 = helpers.defaultNullOpts.mkStr "foo" "This is subOption1 which does X";
+      subOption2 = helpers.defaultNullOpts.mkStr "baz" "This is subOption2 which does Y";
+    };
+    ...
+  };
+
+  config = mkIf cfg.enabled {
+    option_1 = cfg.option1;
+    my_composite_option = with cfg.myCompositeOption;
+      helpers.ifNonNull' cfg.myCompositeOption {
+        sub_option_1 = subOption1;
+        sub_option_2 = subOption2;
+      };
+  };
+}
+```
+`mkCompositeOption` creates an option which default is `null` and which type is a `types.submodule`
+with the provided options.
+Because the default value for `myCompositeOption` is `null`, we have to handle this case in the
+implementation part using `helpers.ifNonNull'` which is defined as:
+```nix
+ifNonNull' = x: y: if x == null then null else y;
+```
+
+
 ### Tests
 
 Most of the tests of nixvim consist of creating a neovim derivation with the supplied nixvim configuration, and then try to execute neovim to check for any output. All output is considered to be an error.
