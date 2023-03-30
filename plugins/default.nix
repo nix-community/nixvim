@@ -17,6 +17,9 @@
     ./completion/nvim-cmp/sources
     ./completion/lspkind.nix
 
+    ./filetrees/neo-tree.nix
+    ./filetrees/nvim-tree.nix
+
     ./git/fugitive.nix
     ./git/gitgutter.nix
     ./git/gitmessenger.nix
@@ -70,14 +73,12 @@
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/mark-radar.nix
-    ./utils/neo-tree.nix
     ./utils/neorg.nix
     ./utils/notify.nix
     ./utils/netman.nix
     ./utils/nvim-autopairs.nix
     ./utils/nvim-bqf.nix
     ./utils/nvim-colorizer.nix
-    ./utils/nvim-tree.nix
     ./utils/nvim-osc52.nix
     ./utils/project-nvim.nix
     ./utils/presence-nvim.nix
