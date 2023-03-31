@@ -63,6 +63,7 @@
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/easyescape.nix
+    ./utils/editorconfig.nix
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
