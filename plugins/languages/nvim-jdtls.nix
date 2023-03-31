@@ -15,10 +15,50 @@ in {
 
       package = helpers.mkPackageOption "nvim-jdtls" pkgs.vimPlugins.nvim-jdtls;
 
-      cmd = mkOption {
-        type = types.listOf types.str;
-        description = "The command that starts the language server";
-        default = ["${pkgs.jdt-language-server}/bin/jdt-language-server"];
+      cmd = helpers.mkNullOrOption (types.listOf types.str) ''
+        The command that starts the language server.
+
+        You should either set a value for this option, or, you can instead set the `data` (and
+        `configuration`) options.
+
+        ```
+        plugins.nvim-jdtls = {
+          enable = true;
+          cmd = [
+            "$\{pkgs.jdt-language-server}/bin/jdt-language-server"
+            "-data" "/path/to/your/workspace"
+            "-configuration" "/path/to/your/configuration"
+            "-foo" "bar"
+          ];
+        };
+        ```
+
+        Or,
+        ```
+        plugins.nvim-jdtls = {
+          enable = true;
+          data =  "/path/to/your/workspace";
+          configuration = "/path/to/your/configuration";
+        };
+        ```
+      '';
+
+      data = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/home/YOUR_USERNAME/.cache/jdtls/workspace";
+        description = ''
+          eclipse.jdt.ls stores project specific data within the folder set via the -data flag.
+          If you're using eclipse.jdt.ls with multiple different projects you must use a dedicated
+          data directory per project.
+        '';
+      };
+
+      configuration = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/home/YOUR_USERNAME/.cache/jdtls/config";
+        description = "Path to the configuration file.";
       };
 
       rootDir =
@@ -52,9 +92,31 @@ in {
     };
 
   config = let
+    cmd =
+      if isNull cfg.cmd
+      then let
+        data =
+          if isNull cfg.data
+          then
+            throw ''
+              You have to either set the 'plugins.nvim-jdtls.data' or the 'plugins.nvim-jdtls.cmd'
+              option.
+            ''
+          else cfg.data;
+      in
+        [
+          "${pkgs.jdt-language-server}/bin/jdt-language-server"
+        ]
+        ++ ["-data" data]
+        ++ (
+          optionals (!isNull cfg.configuration)
+          ["-configuration" cfg.configuration]
+        )
+      else cfg.cmd;
+
     options =
       {
-        inherit (cfg) cmd;
+        inherit cmd;
         root_dir = cfg.rootDir;
         inherit (cfg) settings;
         init_options = cfg.initOptions;
