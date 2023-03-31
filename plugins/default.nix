@@ -38,6 +38,7 @@
     ./languages/tagbar.nix
     ./languages/treesitter.nix
     ./languages/treesitter-context.nix
+    ./languages/treesitter-playground.nix
     ./languages/treesitter-refactor.nix
     ./languages/vimtex.nix
     ./languages/zig.nix
