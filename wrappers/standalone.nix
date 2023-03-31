@@ -9,5 +9,14 @@ default_pkgs: modules: {
   eval = lib.evalModules {
     modules = (modules pkgs) ++ [module wrap];
   };
+
+  handleAssertions = config: let
+    failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
+  in
+    if failedAssertions != []
+    then throw "\nFailed assertions:\n${builtins.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else lib.showWarnings config.warnings config;
+
+  config = handleAssertions eval.config;
 in
-  eval.config.finalPackage
+  config.finalPackage
