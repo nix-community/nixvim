@@ -81,7 +81,7 @@
       nvim-tree = {
         enable = true;
         openOnSetup = true;
-        openOnTab = true;
+        tab.sync.open = true;
       };
 
       telescope = {

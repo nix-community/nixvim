@@ -74,7 +74,6 @@
         ignoreDirs = [];
       };
       onAttach = "default";
-      removeKeymaps = false;
       selectPrompts = false;
       view = {
         centralizeSelection = false;
