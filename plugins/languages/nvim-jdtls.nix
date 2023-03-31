@@ -18,7 +18,7 @@ in {
       cmd = mkOption {
         type = types.listOf types.str;
         description = "The command that starts the language server";
-        default = ["${pkgs.jdt-language-server}/bin/jdt-language-server"];
+        default = ["${pkgs.jdt-language-server}/bin/jdt-language-server" "-data" "~/.cache/jdtls/workspace/"];
       };
 
       rootDir =
