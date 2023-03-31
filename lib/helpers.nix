@@ -55,9 +55,10 @@ with lib; rec {
           script = false;
           nowait = false;
           action = action;
+          description = null;
         }
         else {
-          inherit (action) silent expr unique noremap script nowait remap;
+          inherit (action) silent expr unique noremap script nowait remap description;
           action =
             if action.lua
             then mkRaw action.action
@@ -68,9 +69,11 @@ with lib; rec {
     builtins.attrValues (builtins.mapAttrs
       (key: action: {
         action = action.action;
-        config = lib.filterAttrs (_: v: v) {
-          inherit (action) silent expr unique noremap script nowait remap;
-        };
+        config =
+          lib.filterAttrs (_: v: v) {
+            inherit (action) silent expr unique noremap script nowait remap;
+          }
+          // {desc = action.description;};
         key = key;
         mode = mode;
       })
