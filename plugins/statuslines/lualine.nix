@@ -241,6 +241,7 @@ in {
         section_separators = cfg.sectionSeparators;
         component_separators = cfg.componentSeparators;
         disabled_filetypes = cfg.disabledFiletypes;
+        ignore_focus = cfg.ignoreFocus;
         always_divide_middle = cfg.alwaysDivideMiddle;
         globalstatus = cfg.globalstatus;
         refresh = cfg.refresh;
