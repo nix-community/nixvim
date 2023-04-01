@@ -1,17 +1,12 @@
 {
-  pkgs,
-  lib,
-}: {
   empty = {
-    plugins.lualine = {
-      enable = true;
-    };
+    plugins.lualine.enable = true;
   };
 
   defaults = {
     plugins.lualine = {
       enable = true;
-      package = pkgs.vimPlugins.lualine-nvim;
+
       iconsEnabled = true;
       theme = "auto";
       componentSeparators = {
@@ -37,7 +32,7 @@
         lualine_y = ["progress"];
         lualine_z = ["location"];
       };
-      inactive_sections = {
+      inactiveSections = {
         lualine_c = ["filename"];
         lualine_x = ["location"];
       };
@@ -49,7 +44,8 @@
       enable = true;
       ignoreFocus = ["NvimTree"];
       sections = {
-        lualine_c = [  # you can specify only the sections you want to change
+        lualine_c = [
+          # you can specify only the sections you want to change
           {
             name = "filename";
             extraConfig.newfile_status = true;
@@ -59,7 +55,7 @@
         ];
         lualine_z = [
           {name = "location";}
-          {name = "%L";}  # total lines
+          {name = "%L";} # total lines
         ];
       };
       tabline = {

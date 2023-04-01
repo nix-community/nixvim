@@ -12,72 +12,69 @@ with lib; let
     leftDefault ? " ",
     rightDefault ? " ",
     name,
-  }: (
-    helpers.mkNullOrOption
-    (types.submodule {
-      options = {
-        left = helpers.defaultNullOpts.mkStr leftDefault "Left separator";
-        right = helpers.defaultNullOpts.mkStr rightDefault "Right separator";
-      };
-    })
-    "${name} separtors."
-  );
+  }:
+    helpers.mkCompositeOption "${name} separtors." {
+      left = helpers.defaultNullOpts.mkStr leftDefault "Left separator";
+      right = helpers.defaultNullOpts.mkStr rightDefault "Right separator";
+    };
 
   mkComponentOptions = defaultName:
     helpers.mkNullOrOption
-    (types.listOf (types.oneOf [
-      types.str
-      (types.submodule {
-        options = {
-          name = mkOption {
-            type = types.either types.str helpers.rawType;
-            description = "Component name or function";
-            default = defaultName;
-          };
+    (with types;
+      listOf (
+        either
+        str
+        (submodule {
+          options = {
+            name = mkOption {
+              type = types.either types.str helpers.rawType;
+              description = "Component name or function";
+              default = defaultName;
+            };
 
-          icons_enabled = helpers.defaultNullOpts.mkBool true ''
-            Enables the display of icons alongside the component.
-          '';
+            icons_enabled = helpers.defaultNullOpts.mkBool true ''
+              Enables the display of icons alongside the component.
+            '';
 
-          icon = helpers.mkNullOrOption types.str ''
-            Defines the icon to be displayed in front of the component.
-          '';
+            icon = helpers.mkNullOrOption types.str ''
+              Defines the icon to be displayed in front of the component.
+            '';
 
-          separator = mkSeparatorsOption {name = "Component";};
+            separator = mkSeparatorsOption {name = "Component";};
 
-          color = helpers.mkNullOrOption (types.attrsOf types.str) ''
-            Defines a custom color for the component.
-          '';
+            color = helpers.mkNullOrOption (types.attrsOf types.str) ''
+              Defines a custom color for the component.
+            '';
 
-          padding =
-            helpers.defaultNullOpts.mkNullable
-            (
-              types.either
-              types.int
-              (types.submodule {
-                options = {
-                  left = mkOption {
-                    type = types.int;
-                    description = "left padding";
+            padding =
+              helpers.defaultNullOpts.mkNullable
+              (
+                types.either
+                types.int
+                (types.submodule {
+                  options = {
+                    left = mkOption {
+                      type = types.int;
+                      description = "left padding";
+                    };
+                    right = mkOption {
+                      type = types.int;
+                      description = "left padding";
+                    };
                   };
-                  right = mkOption {
-                    type = types.int;
-                    description = "left padding";
-                  };
-                };
-              })
-            )
-            "1"
-            "Adds padding to the left and right of components.";
+                })
+              )
+              "1"
+              "Adds padding to the left and right of components.";
 
-          extraConfig = mkOption {
-            type = types.attrs;
-            default = {};
-            description = "extra options for the component";
+            extraConfig = mkOption {
+              type = types.attrs;
+              default = {};
+              description = "extra options for the component";
+            };
           };
-        };
-      })
-    ]))
+        })
+      ))
     "";
 
   mkEmptySectionOption = name:
@@ -116,20 +113,15 @@ in {
         name = "section";
       };
 
-      disabledFiletypes =
-        helpers.mkNullOrOption
-        (types.submodule {
-          options = {
-            statusline = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
-              Only ignores the ft for statusline.
-            '';
+      disabledFiletypes = helpers.mkCompositeOption "Filetypes to disable lualine for." {
+        statusline = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
+          Only ignores the ft for statusline.
+        '';
 
-            winbar = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
-              Only ignores the ft for winbar.
-            '';
-          };
-        })
-        "Filetypes to disable lualine for.";
+        winbar = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
+          Only ignores the ft for winbar.
+        '';
+      };
 
       ignoreFocus = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
         If current filetype is in this list it'll always be drawn as inactive statusline and the
@@ -151,50 +143,39 @@ in {
       '';
 
       refresh =
-        helpers.mkNullOrOption
-        (types.submodule {
-          options = {
-            statusline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
-
-            tabline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
-
-            winbar = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
-          };
-        })
+        helpers.mkCompositeOption
         ''
           Sets how often lualine should refresh it's contents (in ms).
           The refresh option sets minimum time that lualine tries to maintain between refresh.
           It's not guarantied if situation arises that lualine needs to refresh itself before this
           time it'll do it.
-        '';
+        ''
+        {
+          statusline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
 
-      sections =
-        helpers.mkNullOrOption
-        (types.submodule {
-          options = {
-            lualine_a = mkComponentOptions "mode";
-            lualine_b = mkComponentOptions "branch";
-            lualine_c = mkComponentOptions "filename";
+          tabline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
 
-            lualine_x = mkComponentOptions "encoding";
-            lualine_y = mkComponentOptions "progress";
-            lualine_z = mkComponentOptions "location";
-          };
-        })
-        "Sections configuration";
+          winbar = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
+        };
 
-      inactiveSections =
-        helpers.mkCompositeOption "Inactive Sections configuration"
-        (types.submodule {
-          options = {
-            lualine_a = mkComponentOptions "";
-            lualine_b = mkComponentOptions "";
-            lualine_c = mkComponentOptions "filename";
-            lualine_x = mkComponentOptions "location";
-            lualine_y = mkComponentOptions "";
-            lualine_z = mkComponentOptions "";
-          };
-        });
+      sections = helpers.mkCompositeOption "Sections configuration" {
+        lualine_a = mkComponentOptions "mode";
+        lualine_b = mkComponentOptions "branch";
+        lualine_c = mkComponentOptions "filename";
+
+        lualine_x = mkComponentOptions "encoding";
+        lualine_y = mkComponentOptions "progress";
+        lualine_z = mkComponentOptions "location";
+      };
+
+      inactiveSections = helpers.mkCompositeOption "Inactive Sections configuration" {
+        lualine_a = mkComponentOptions "";
+        lualine_b = mkComponentOptions "";
+        lualine_c = mkComponentOptions "filename";
+        lualine_x = mkComponentOptions "location";
+        lualine_y = mkComponentOptions "";
+        lualine_z = mkComponentOptions "";
+      };
 
       tabline = mkEmptySectionOption "Tabline configuration";
 
