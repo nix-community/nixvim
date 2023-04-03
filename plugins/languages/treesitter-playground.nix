@@ -39,6 +39,10 @@ in {
     cfg = config.plugins.treesitter-playground;
   in
     mkIf cfg.enable {
+      warnings = mkIf (!config.plugins.treesitter.enable) [
+        "Nixvim: treesitter-playground needs treesitter to function as intended"
+      ];
+
       extraPlugins = [cfg.package];
 
       plugins.treesitter.moduleConfig.playground = {
