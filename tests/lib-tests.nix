@@ -68,7 +68,7 @@
       expected = ''"foo\\bar\nbaz"'';
     };
 
-    testToLuaObjectShouldFilterNullAttrs = {
+    testToLuaObjectFilters = {
       expr = helpers.toLuaObject {
         a = null;
         b = {};
@@ -78,7 +78,21 @@
           f = {};
         };
       };
-      expected = ''{["b"] = {},["c"] = {},["d"] = {["f"] = {}}}'';
+      expected = ''{}'';
+    };
+
+    testToLuaObjectEmptyTable = {
+      expr = helpers.toLuaObject {
+        a = null;
+        b = {};
+        c = {__empty = null;};
+        d = {
+          e = null;
+          f = {};
+          g = helpers.emptyTable;
+        };
+      };
+      expected = ''{["c"] = { },["d"] = {["g"] = { }}}'';
     };
   };
 in

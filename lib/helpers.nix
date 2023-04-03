@@ -12,6 +12,8 @@ with lib; rec {
     then
       if hasAttr "__raw" args
       then args.__raw
+      else if hasAttr "__empty" args
+      then "{ }"
       else
         "{"
         + (concatStringsSep ","
@@ -20,7 +22,12 @@ with lib; rec {
               if head (stringToCharacters n) == "@"
               then toLuaObject v
               else "[${toLuaObject n}] = " + (toLuaObject v))
-            (filterAttrs (n: v: !isNull v) args)))
+            (filterAttrs
+              (
+                n: v:
+                  !isNull v && (toLuaObject v != "{}")
+              )
+              args)))
         + "}"
     else if builtins.isList args
     then "{" + concatMapStringsSep "," toLuaObject args + "}"
@@ -39,6 +46,8 @@ with lib; rec {
     else if isNull args
     then "nil"
     else "";
+
+  emptyTable = {"__empty" = null;};
 
   # Generates maps for a lua config
   genMaps = mode: maps: let
