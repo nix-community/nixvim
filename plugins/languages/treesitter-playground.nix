@@ -7,54 +7,31 @@
 with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 
-  keybindingsModule = types.submodule {
-    options = let
-      keymap = default:
-        mkOption {
-          type = types.str;
-          inherit default;
-        };
-    in {
-      toggleQueryEditor = keymap "o";
-      toggleHlGroups = keymap "i";
-      toggleInjectedLanguages = keymap "t";
-      toggleAnonymousNodes = keymap "a";
-      toggleLanguageDisplay = keymap "I";
-      focusLanguage = keymap "f";
-      unfocusLanguage = keymap "F";
-      update = keymap "R";
-      gotoNode = keymap "<cr>";
-      showHelp = keymap "?";
-    };
-  };
+  inherit (helpers) mkPackageOption mkCompositeOption;
+  inherit (helpers.defaultNullOpts) mkInt mkBool mkStr mkNullable;
 in {
   options.plugins.treesitter-playground = {
     enable = mkEnableOption "nvim-treesitter-playground";
 
-    package = helpers.mkPackageOption "treesitter-playground" pkgs.vimPlugins.playground;
+    package = mkPackageOption "treesitter-playground" pkgs.vimPlugins.playground;
 
-    disabledLanguages = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      description = "A list of languages where this module should be disabled";
-    };
+    disabledLanguages = mkNullable (types.listOf types.str) "[]" "A list of languages where this module should be disabled";
 
-    updateTime = mkOption {
-      type = types.nullOr types.ints.positive;
-      default = 25;
-      description = "Debounced time for highlighting nodes in the playground from source code";
-    };
+    updateTime = mkInt 25 "Debounced time for highlighting nodes in the playground from source code";
 
-    persistQueries = mkOption {
-      type = types.nullOr types.bool;
-      default = false;
-      description = "Whether the query persists across vim sessions";
-    };
+    persistQueries = mkBool false "Whether the query persists across vim sessions";
 
-    keybindings = mkOption {
-      type = keybindingsModule;
-      default = {};
-      description = "Keybindings inside the Playground";
+    keybindings = mkCompositeOption "Keybindings inside the Playground" {
+      toggleQueryEditor = mkStr "o" "Toggle query editor";
+      toggleHlGroups = mkStr "i" "Toggle highlight groups";
+      toggleInjectedLanguages = mkStr "t" "Toggle injected languages";
+      toggleAnonymousNodes = mkStr "a" "Toggle anonymous nodes";
+      toggleLanguageDisplay = mkStr "I" "Toggle language display";
+      focusLanguage = mkStr "f" "Focus language";
+      unfocusLanguage = mkStr "F" "Unfocus language";
+      update = mkStr "R" "Update";
+      gotoNode = mkStr "<cr>" "Go to node";
+      showHelp = mkStr "?" "Show help";
     };
   };
 
@@ -69,7 +46,7 @@ in {
         disable = cfg.disabledLanguages;
         updatetime = cfg.updateTime;
         persist_queries = cfg.persistQueries;
-        keybindings = {
+        keybindings = mkIf (cfg.keybindings != null) {
           toggle_query_editor = cfg.keybindings.toggleQueryEditor;
           toggle_hl_groups = cfg.keybindings.toggleHlGroups;
           toggle_injected_languages = cfg.keybindings.toggleInjectedLanguages;
