@@ -86,6 +86,7 @@
     ./utils/specs.nix
     ./utils/startify.nix
     ./utils/surround.nix
+    ./utils/tmux-navigator.nix
     ./utils/todo-comments.nix
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
