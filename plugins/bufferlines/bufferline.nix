@@ -10,19 +10,109 @@ with lib; let
 
   basePluginPath = ["plugins" "bufferline"];
 
-  highlight = helpers.mkCompositeOption "Highlight option" {
-    guifg = helpers.mkNullOrOption types.str "foreground color";
+  highlightOption = {
+    fg = helpers.mkNullOrOption types.str "foreground color";
 
-    guibg = helpers.mkNullOrOption types.str "background color";
+    bg = helpers.mkNullOrOption types.str "background color";
+
+    sp = helpers.mkNullOrOption types.str "sp color";
+
+    bold = helpers.mkNullOrOption types.bool "enable bold";
+
+    italic = helpers.mkNullOrOption types.bool "enable italic";
+  };
+
+  highlightOptions = {
+    fill = "fill";
+    background = "background";
+
+    tab = "tab";
+    tab_selected = "tabSelected";
+    tab_close = "tabClose";
+    close_button = "closeButton";
+    close_button_visible = "closeButtonVisible";
+    close_button_selected = "closeButtonSelected";
+
+    buffer_visible = "bufferVisible";
+    buffer_selected = "bufferSelected";
+
+    diagnostic = "diagnostic";
+    diagnostic_visible = "diagnosticVisible";
+    diagnostic_selected = "diagnosticSelected";
+
+    info = "info";
+    info_visible = "infoVisible";
+    info_selected = "infoSelected";
+
+    info_diagnostic = "infoDiagnostic";
+    info_diagnostic_visible = "infoDiagnosticVisible";
+    info_diagnostic_selected = "infoDiagnosticSelected";
+
+    warning = "warning";
+    warning_visible = "warningVisible";
+    warning_selected = "warningSelected";
+
+    warning_diagnostic = "warningDiagnostic";
+    warning_diagnostic_visible = "warningDiagnosticVisible";
+    warning_diagnostic_selected = "warningDiagnosticSelected";
+
+    error = "error";
+    error_visible = "errorVisible";
+    error_selected = "errorSelected";
+
+    error_diagnostic = "errorDiagnostic";
+    error_diagnostic_visible = "errorDiagnosticVisible";
+    error_diagnostic_selected = "errorDiagnosticSelected";
+
+    modified = "modified";
+    modified_visible = "modifiedVisible";
+    modified_selected = "modifiedSelected";
+
+    duplicate = "duplicate";
+    duplicate_visible = "duplicateVisible";
+    duplicate_selected = "duplicateSelected";
+
+    separator = "separator";
+    separator_visible = "separatorVisible";
+    separator_selected = "separatorSelected";
+
+    indicator_selected = "indicatorSelected";
+
+    pick = "pick";
+    pick_visible = "pickVisible";
+    pick_selected = "pickSelected";
   };
 in {
-  imports = [
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["indicatorIcon"])
-      (basePluginPath ++ ["indicator" "icon"])
-    )
-  ];
+  imports =
+    [
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["indicatorIcon"])
+        (basePluginPath ++ ["indicator" "icon"])
+      )
+    ]
+    ++ (
+      lists.flatten (
+        map (
+          highlightOptionName: let
+            prefix = basePluginPath ++ ["highlights" highlightOptionName];
+          in [
+            (
+              mkRenamedOptionModule
+              (prefix ++ ["guifg"])
+              (prefix ++ ["fg"])
+            )
+            (
+              mkRenamedOptionModule
+              (prefix ++ ["guibg"])
+              (prefix ++ ["bg"])
+            )
+          ]
+        )
+        (attrValues highlightOptions)
+      )
+    );
+
   options = {
     plugins.bufferline =
       helpers.extraOptionsOptions
@@ -79,7 +169,7 @@ in {
           helpers.defaultNullOpts.mkStr "null"
           "Command or function run when middle clicking on a buffer.";
 
-        indicator = helpers.mkCompositeOption "Indicator" {
+        indicator = {
           icon = helpers.defaultNullOpts.mkStr "▎" "icon";
 
           style = helpers.defaultNullOpts.mkEnumFirstDefault ["icon" "underline"] "style";
@@ -194,74 +284,7 @@ in {
             ```
           '';
 
-        highlights =
-          helpers.mkCompositeOption ""
-          (
-            genAttrs
-            [
-              "fill"
-              "background"
-
-              "tab"
-
-              "tabSelected"
-              "tabClose"
-
-              "closeButton"
-              "closeButtonVisible"
-              "closeButtonSelected"
-
-              "bufferVisible"
-              "bufferSelected"
-
-              "diagnostic"
-              "diagnosticVisible"
-              "diagnosticSelected"
-
-              "info"
-              "infoVisible"
-              "infoSelected"
-
-              "infoDiagnostic"
-              "infoDiagnosticVisible"
-              "infoDiagnosticSelected"
-
-              "warning"
-              "warningVisible"
-              "warningSelected"
-
-              "warningDiagnostic"
-              "warningDiagnosticVisible"
-              "warningDiagnosticSelected"
-
-              "error"
-              "errorVisible"
-              "errorSelected"
-
-              "errorDiagnostic"
-              "errorDiagnosticVisible"
-              "errorDiagnosticSelected"
-
-              "modified"
-              "modifiedVisible"
-              "modifiedSelected"
-
-              "duplicate"
-              "duplicateVisible"
-              "duplicateSelected"
-
-              "separator"
-              "separatorVisible"
-              "separatorSelected"
-
-              "indicatorSelected"
-
-              "pick"
-              "pickVisible"
-              "pickSelected"
-            ]
-            (name: highlight)
-          );
+        highlights = genAttrs (attrValues highlightOptions) (name: highlightOption);
       };
   };
 
@@ -326,66 +349,20 @@ in {
         }
         // cfg.extraOptions;
 
-      highlights = with cfg.highlights;
-        helpers.ifNonNull' cfg.highlights {
-          inherit fill background;
-
-          inherit tab;
-          tab_selected = tabSelected;
-          tab_close = tabClose;
-          close_button = closeButton;
-          close_button_visible = closeButtonVisible;
-          close_button_selected = closeButtonSelected;
-
-          buffer_visible = bufferVisible;
-          buffer_selected = bufferSelected;
-
-          inherit diagnostic;
-          diagnostic_visible = diagnosticVisible;
-          diagnostic_selected = diagnosticSelected;
-
-          inherit info;
-          info_visible = infoVisible;
-          info_selected = infoSelected;
-
-          info_diagnostic = infoDiagnostic;
-          info_diagnostic_visible = infoDiagnosticVisible;
-          info_diagnostic_selected = infoDiagnosticSelected;
-
-          inherit warning;
-          warning_visible = warningVisible;
-          warning_selected = warningSelected;
-
-          warning_diagnostic = warningDiagnostic;
-          warning_diagnostic_visible = warningDiagnosticVisible;
-          warning_diagnostic_selected = warningDiagnosticSelected;
-
-          inherit error;
-          error_visible = errorVisible;
-          error_selected = errorSelected;
-
-          error_diagnostic = errorDiagnostic;
-          error_diagnostic_visible = errorDiagnosticVisible;
-          error_diagnostic_selected = errorDiagnosticSelected;
-
-          inherit modified;
-          modified_visible = modifiedVisible;
-          modified_selected = modifiedSelected;
-
-          inherit duplicate;
-          duplicate_visible = duplicateVisible;
-          duplicate_selected = duplicateSelected;
-
-          inherit separator;
-          separator_visible = separatorVisible;
-          separator_selected = separatorSelected;
-
-          indicator_selected = indicatorSelected;
-
-          inherit pick;
-          pick_visible = pickVisible;
-          pick_selected = pickSelected;
-        };
+      highlights =
+        mapAttrs (
+          pluginOptionName: nixvimOptionName: {
+            inherit
+              (cfg.highlights.${nixvimOptionName})
+              fg
+              bg
+              sp
+              bold
+              italic
+              ;
+          }
+        )
+        highlightOptions;
     };
   in
     mkIf cfg.enable {
