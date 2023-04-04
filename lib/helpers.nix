@@ -49,42 +49,6 @@ with lib; rec {
 
   emptyTable = {"__empty" = null;};
 
-  # Generates maps for a lua config
-  genMaps = mode: maps: let
-    normalized =
-      builtins.mapAttrs
-      (key: action:
-        if builtins.isString action
-        then {
-          silent = false;
-          expr = false;
-          unique = false;
-          noremap = true;
-          remap = false;
-          script = false;
-          nowait = false;
-          action = action;
-        }
-        else {
-          inherit (action) silent expr unique noremap script nowait remap;
-          action =
-            if action.lua
-            then mkRaw action.action
-            else action.action;
-        })
-      maps;
-  in
-    builtins.attrValues (builtins.mapAttrs
-      (key: action: {
-        action = action.action;
-        config = lib.filterAttrs (_: v: v) {
-          inherit (action) silent expr unique noremap script nowait remap;
-        };
-        key = key;
-        mode = mode;
-      })
-      normalized);
-
   # Given an attrs of key mappings (for a single mode), applies the defaults to each one of them.
   #
   # Example:
