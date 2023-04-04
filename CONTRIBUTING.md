@@ -78,50 +78,14 @@ Because the options may not have the same case (and may require some pre-process
 ```nix
 {
   some_opt = cfg.someOpt;
-  some_raw_opt = helpers.ifNonNull' cfg.some_raw_opt (mkRaw cfg.some_raw_opt);
-  some_submodule_opt = with cfg.submoduleOpt;
-    helpers.ifNonNull' cfg.someSubmoduleOpt {
-        inherit some_opt;
-        some_other_opt = someOtherOpt;
-      };
-}
-```
-
-#### A note on composite/nested options
-
-Here is how to handle options that have several suboptions:
-```nix
-{
-  options.my-plugin = {
-    ...
-    option1 = ...
-
-    myCompositeOption = helpers.mkCompositeOption "Description of my composite option" {
-
-      subOption1 = helpers.defaultNullOpts.mkStr "foo" "This is subOption1 which does X";
-      subOption2 = helpers.defaultNullOpts.mkStr "baz" "This is subOption2 which does Y";
+  some_raw_opt = helpers.ifNonNull' cfg.someRawOpt (mkRaw cfg.someRawOpt);
+  some_meta_opt = with cfg.metaOpt; # metaOpt = { foo = ...; someOtherOpt = ...; };
+    {
+      inherit foo;
+      some_other_opt = someOtherOpt;
     };
-    ...
-  };
-
-  config = mkIf cfg.enabled {
-    option_1 = cfg.option1;
-    my_composite_option = with cfg.myCompositeOption;
-      helpers.ifNonNull' cfg.myCompositeOption {
-        sub_option_1 = subOption1;
-        sub_option_2 = subOption2;
-      };
-  };
 }
 ```
-`mkCompositeOption` creates an option which default is `null` and which type is a `types.submodule`
-with the provided options.
-Because the default value for `myCompositeOption` is `null`, we have to handle this case in the
-implementation part using `helpers.ifNonNull'` which is defined as:
-```nix
-ifNonNull' = x: y: if x == null then null else y;
-```
-
 
 ### Tests
 
