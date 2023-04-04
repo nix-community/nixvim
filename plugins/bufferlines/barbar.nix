@@ -7,6 +7,56 @@
 with lib; let
   cfg = config.plugins.barbar;
   helpers = import ../helpers.nix {inherit lib;};
+  basePluginPath = ["plugins" "barbar"];
+
+  bufferOptions = {
+    bufferIndex = helpers.mkNullOrOption types.bool ''
+      Whether to show the index of the associated buffer with respect to the ordering of the
+      buffers in the tabline.
+    '';
+
+    bufferNumber =
+      helpers.mkNullOrOption types.bool
+      "Whether to show the `bufnr` for the associated buffer.";
+
+    button =
+      helpers.mkNullOrOption (with types; either str (enum [false]))
+      "the button which is clicked to close / save a buffer, or indicate that it is pinned.";
+
+    diagnostics =
+      helpers.mkCompositeOption "Diagnostics icons"
+      (
+        genAttrs
+        ["error" "warn" "info" "hint"]
+        (
+          name:
+            helpers.mkCompositeOption "${name} diagnostic icon" {
+              enable = helpers.defaultNullOpts.mkBool false "Enable the ${name} diagnostic symbol";
+              icon = helpers.mkNullOrOption types.str "${name} diagnostic symbol";
+            }
+        )
+      );
+
+    filetype = {
+      customColors =
+        helpers.defaultNullOpts.mkBool false
+        "Sets the icon's highlight group. If false, will use nvim-web-devicons colors";
+
+      enable = helpers.defaultNullOpts.mkBool true "Show the filetype icon.";
+    };
+
+    separator = {
+      left = helpers.defaultNullOpts.mkStr "▎" "Left seperator";
+      right = helpers.defaultNullOpts.mkStr "" "Right seperator";
+    };
+  };
+
+  stateOptions =
+    {
+      modified = bufferOptions;
+      pinned = bufferOptions;
+    }
+    // bufferOptions;
 
   keymaps = {
     previous = "Previous";
@@ -32,185 +82,296 @@ with lib; let
     orderByWindowNumber = "OrderByWindowNumber";
   };
 in {
-  options.plugins.barbar = {
-    enable = mkEnableOption "barbar.nvim";
+  # All the following renames/removes are from 2023-04-05.
+  # TODO: Remove them in 1-2 months.
+  imports = [
+    (mkRemovedOptionModule (basePluginPath ++ ["closable"]) "")
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["animations"])
+      (basePluginPath ++ ["animation"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["diagnostics"])
+      (basePluginPath ++ ["icons" "diagnostics"])
+    )
+    (mkRemovedOptionModule (basePluginPath ++ ["icons" "enable"]) "")
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["icons" "customColors"])
+      (basePluginPath ++ ["icons" "filetype" "customColors"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["icons" "separatorActive"])
+      (basePluginPath ++ ["icons" "separator" "left"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["icons" "separatorInactive"])
+      (basePluginPath ++ ["icons" "inactive" "separator" "left"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["icons" "separatorVisible"])
+      (basePluginPath ++ ["icons" "visible" "separator" "left"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["icons" "closeTab"])
+      (basePluginPath ++ ["icons" "button"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["icons" "closeTabModified"])
+      (basePluginPath ++ ["icons" "modified" "button"])
+    )
+  ];
 
-    package = helpers.mkPackageOption "barbar" pkgs.vimPlugins.barbar-nvim;
+  options.plugins.barbar =
+    helpers.extraOptionsOptions
+    // {
+      enable = mkEnableOption "barbar.nvim";
 
-    animations = helpers.defaultNullOpts.mkBool true "Enable animations";
+      package = helpers.mkPackageOption "barbar" pkgs.vimPlugins.barbar-nvim;
 
-    autoHide = helpers.defaultNullOpts.mkBool false "Auto-hide the tab bar when there is only one buffer";
+      animation = helpers.defaultNullOpts.mkBool true "Enable/disable animations";
 
-    tabpages = helpers.defaultNullOpts.mkBool true "current/total tabpages indicator (top right corner)";
+      autoHide =
+        helpers.defaultNullOpts.mkBool false
+        "Enable/disable auto-hiding the tab bar when there is a single buffer.";
 
-    closable = helpers.defaultNullOpts.mkBool true "Enable the close button";
+      tabpages =
+        helpers.defaultNullOpts.mkBool true
+        "Enable/disable current/total tabpages indicator (top right corner).";
 
-    clickable = helpers.defaultNullOpts.mkBool true ''
-      Enable clickable tabs
-        - left-click: go to buffer
-        - middle-click: delete buffer
-    '';
+      clickable = helpers.defaultNullOpts.mkBool true ''
+        Enable clickable tabs
+          - left-click: go to buffer
+          - middle-click: delete buffer
+      '';
 
-    diagnostics = {
-      error = {
-        enable = helpers.defaultNullOpts.mkBool false "Enable the error diagnostic symbol";
-        icon = helpers.defaultNullOpts.mkStr "Ⓧ " "Error diagnostic symbol";
-      };
-      warn = {
-        enable = helpers.defaultNullOpts.mkBool false "Enable the warning diagnostic symbol";
-        icon = helpers.defaultNullOpts.mkStr "⚠️ " "Warning diagnostic symbol";
-      };
-      info = {
-        enable = helpers.defaultNullOpts.mkBool false "Enable the info diagnostic symbol";
-        icon = helpers.defaultNullOpts.mkStr "ⓘ " "Info diagnostic symbol";
-      };
-      hint = {
-        enable = helpers.defaultNullOpts.mkBool false "Enable the hint diagnostic symbol";
-        icon = helpers.defaultNullOpts.mkStr "💡" "Hint diagnostic symbol";
-      };
-    };
+      excludeFileTypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        Excludes buffers of certain filetypes from the tabline
+      '';
 
-    excludeFileTypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-      Excludes buffers of certain filetypes from the tabline
-    '';
+      excludeFileNames = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        Excludes buffers with certain filenames from the tabline
+      '';
 
-    excludeFileNames = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-      Excludes buffers with certain filenames from the tabline
-    '';
-
-    hide = {
-      extensions = helpers.defaultNullOpts.mkBool false "Hide file extensions";
-      inactive = helpers.defaultNullOpts.mkBool false "Hide inactive buffers";
-      alternate = helpers.defaultNullOpts.mkBool false "Hide alternate buffers";
-      current = helpers.defaultNullOpts.mkBool false "Hide current buffer";
-      visible = helpers.defaultNullOpts.mkBool false "Hide visible buffers";
-    };
-
-    highlightAlternate = helpers.defaultNullOpts.mkBool false "Highlight alternate buffers";
-
-    highlightInactiveFileIcons = helpers.defaultNullOpts.mkBool false "Highlight file icons in inactive buffers";
-
-    highlightVisible = helpers.defaultNullOpts.mkBool true "Highlight visible buffers";
-
-    icons = {
-      enable =
-        helpers.defaultNullOpts.mkNullable
-        (with types; (either bool (enum ["numbers" "both"])))
-        "true"
+      focusOnClose =
+        helpers.defaultNullOpts.mkEnumFirstDefault ["left" "right"]
         ''
-          Enable/disable icons if set to 'numbers', will show buffer index in the tabline if set to
-          'both', will show buffer index and icons in the tabline
+          A buffer to this direction will be focused (if it exists) when closing the current buffer.
         '';
 
-      customColors =
-        helpers.defaultNullOpts.mkNullable
-        (types.either types.bool types.str)
-        "false"
+      highlightAlternate = helpers.defaultNullOpts.mkBool false "Highlight alternate buffers";
+
+      highlightInactiveFileIcons =
+        helpers.defaultNullOpts.mkBool false
+        "Highlight file icons in inactive buffers";
+
+      highlightVisible = helpers.defaultNullOpts.mkBool true "Highlight visible buffers";
+
+      icons =
+        stateOptions
+        // (
+          mapAttrs (name: description:
+            mkOption {
+              type = types.submodule {
+                options = stateOptions;
+              };
+              default = {};
+              inherit description;
+            })
+          {
+            alternate = "The icons used for an alternate buffer.";
+            current = "The icons for the current buffer.";
+            inactive = "The icons for inactive buffers.";
+            visible = "The icons for visible buffers.";
+          }
+        );
+
+      hide = {
+        alternate = helpers.mkNullOrOption types.bool "Hide alternate buffers";
+        current = helpers.mkNullOrOption types.bool "Hide current buffer";
+        extensions = helpers.mkNullOrOption types.bool "Hide file extensions";
+        inactive = helpers.mkNullOrOption types.bool "Hide inactive buffers";
+        visible = helpers.mkNullOrOption types.bool "Hide visible buffers";
+      };
+
+      insertAtEnd = helpers.defaultNullOpts.mkBool false ''
+        If true, new buffers will be inserted at the end of the list.
+        Default is to insert after current buffer.
+      '';
+
+      insertAtStart = helpers.defaultNullOpts.mkBool false ''
+        If true, new buffers will be inserted at the start of the list.
+        Default is to insert after current buffer.
+      '';
+
+      maximumPadding =
+        helpers.defaultNullOpts.mkInt 4
+        "Sets the maximum padding width with which to surround each tab";
+
+      minimumPadding =
+        helpers.defaultNullOpts.mkInt 1
+        "Sets the minimum padding width with which to surround each tab";
+
+      maximumLength =
+        helpers.defaultNullOpts.mkInt 30
+        "Sets the maximum buffer name length.";
+
+      semanticLetters = helpers.defaultNullOpts.mkBool true ''
+        If set, the letters for each buffer in buffer-pick mode will be assigned based on their
+        name.
+        Otherwise or in case all letters are already assigned, the behavior is to assign letters in
+        order of usability (see `letters` option)
+      '';
+
+      letters =
+        helpers.defaultNullOpts.mkStr
+        "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP"
         ''
-          If set, the icon color will follow its corresponding buffer
-          highlight group. By default, the Buffer*Icon group is linked to the
-          Buffer* group (see Highlighting below). Otherwise, it will take its
-          default value as defined by devicons.
+          New buffer letters are assigned in this order.
+          This order is optimal for the qwerty keyboard layout but might need adjustement for other layouts.
         '';
 
-      separatorActive = helpers.defaultNullOpts.mkStr "▎" "Icon for the active tab separator";
-      separatorInactive = helpers.defaultNullOpts.mkStr "▎" "Icon for the inactive tab separator";
-      separatorVisible = helpers.defaultNullOpts.mkStr "▎" "Icon for the visible tab separator";
-      closeTab = helpers.defaultNullOpts.mkStr "" "Icon for the close tab button";
-      closeTabModified = helpers.defaultNullOpts.mkStr "●" "Icon for the close tab button of a modified buffer";
-      pinned = helpers.defaultNullOpts.mkStr "車" "Icon for the pinned tabs";
-    };
-
-    insertAtEnd = helpers.defaultNullOpts.mkBool false ''
-      If true, new buffers will be inserted at the end of the list.
-      Default is to insert after current buffer.
-    '';
-    insertAtStart = helpers.defaultNullOpts.mkBool false ''
-      If true, new buffers will be inserted at the start of the list.
-      Default is to insert after current buffer.
-    '';
-
-    maximumPadding = helpers.defaultNullOpts.mkInt 4 "Sets the maximum padding width with which to surround each tab";
-    minimumPadding = helpers.defaultNullOpts.mkInt 1 "Sets the minimum padding width with which to surround each tab";
-    maximumLength = helpers.defaultNullOpts.mkInt 30 "Sets the maximum buffer name length.";
-
-    semanticLetters = helpers.defaultNullOpts.mkBool true ''
-      If set, the letters for each buffer in buffer-pick mode will be assigned based on their name.
-      Otherwise or in case all letters are already assigned, the behavior is to assign letters in
-      order of usability (see `letters` option)
-    '';
-
-    letters = helpers.defaultNullOpts.mkStr "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP" ''
-      New buffer letters are assigned in this order.
-      This order is optimal for the qwerty keyboard layout but might need adjustement for other layouts.
-    '';
-
-    noNameTitle = helpers.mkNullOrOption types.str ''
-      Sets the name of unnamed buffers. By default format is "[Buffer X]" where X is the buffer number.
-      But only a static string is accepted here.
-    '';
-
-    keymaps =
-      {
-        silent = mkEnableOption "silent keymaps for barbar";
-      }
-      // (
-        mapAttrs
+      sidebarFiletypes =
+        helpers.mkNullOrOption
         (
-          optionName: funcName:
-            helpers.mkNullOrOption types.str "Keymap for function Buffer${funcName}"
+          with types;
+            attrsOf (
+              either
+              (enum [true])
+              (types.submodule {
+                options = {
+                  text = helpers.mkNullOrOption types.str "The text used for the offset";
+
+                  event =
+                    helpers.mkNullOrOption types.str
+                    "The event which the sidebar executes when leaving.";
+                };
+              })
+            )
         )
-        keymaps
-      );
-  };
+        "Set the filetypes which barbar will offset itself for";
+
+      noNameTitle = helpers.mkNullOrOption types.str ''
+        Sets the name of unnamed buffers.
+        By default format is "[Buffer X]" where X is the buffer number.
+        But only a static string is accepted here.
+      '';
+
+      keymaps =
+        {
+          silent = mkEnableOption "silent keymaps for barbar";
+        }
+        // (
+          mapAttrs
+          (
+            optionName: funcName:
+              helpers.mkNullOrOption types.str "Keymap for function Buffer${funcName}"
+          )
+          keymaps
+        );
+    };
 
   config = let
-    setupOptions = {
-      animation = cfg.animations;
-      auto_hide = cfg.autoHide;
-      clickable = cfg.clickable;
-      closable = cfg.closable;
+    setupOptions =
+      {
+        inherit (cfg) animation;
+        auto_hide = cfg.autoHide;
+        inherit (cfg) tabpages;
+        inherit (cfg) clickable;
+        exclude_ft = cfg.excludeFileTypes;
+        exclude_name = cfg.excludeFileNames;
+        focus_on_close = cfg.focusOnClose;
+        highlight_alternate = cfg.highlightAlternate;
+        highlight_inactive_file_icons = cfg.highlightInactiveFileIcons;
+        highlight_visible = cfg.highlightVisible;
+        icons = let
+          handleBufferOption = bufferOption:
+            with bufferOption; {
+              buffer_index = bufferIndex;
+              buffer_number = bufferNumber;
+              inherit button;
+              diagnostics = helpers.ifNonNull' bufferOption.diagnostics (
+                /*
+                Because the keys of this lua table are not strings (but
+                `vim.diagnostic.severity.XXXX`), we have to manualy build a raw lua string here.
+                */
+                let
+                  setIcons = filterAttrs (n: v: v != null) cfg.icons.diagnostics;
+                  setIconsList =
+                    mapAttrsToList
+                    (name: value: {
+                      key = "vim.diagnostic.severity.${strings.toUpper name}";
+                      value = helpers.ifNonNull' value (helpers.toLuaObject {
+                        enabled = value.enable;
+                        inherit (value) icon;
+                      });
+                    })
+                    setIcons;
+                in
+                  helpers.mkRaw (
+                    "{"
+                    + concatStringsSep ","
+                    (
+                      map
+                      (iconOption: "[${iconOption.key}] = ${iconOption.value}")
+                      setIconsList
+                    )
+                    + "}"
+                  )
+              );
+              filetype = with filetype; {
+                custom_color = customColors;
+                enabled = enable;
+              };
+              inherit separator;
+            };
 
-      diagnostics = [
-        cfg.diagnostics.error
-        cfg.diagnostics.warn
-        cfg.diagnostics.info
-        cfg.diagnostics.hint
-      ];
-
-      exclude_ft = cfg.excludeFileTypes;
-      exclude_name = cfg.excludeFileNames;
-
-      hide = cfg.hide;
-
-      highlight_alternate = cfg.highlightAlternate;
-      highlight_inactive_file_icons = cfg.highlightInactiveFileIcons;
-      highlight_visible = cfg.highlightVisible;
-
-      icon_close_tab = cfg.icons.closeTab;
-      icon_close_tab_modified = cfg.icons.closeTabModified;
-      icon_pinned = cfg.icons.pinned;
-      icon_separator_active = cfg.icons.separatorActive;
-      icon_separator_inactive = cfg.icons.separatorInactive;
-      icon_separator_visible = cfg.icons.separatorVisible;
-      icons = cfg.icons.enable;
-      icon_custom_colors = cfg.icons.customColors;
-
-      insert_at_start = cfg.insertAtStart;
-      insert_at_end = cfg.insertAtEnd;
-
-      letters = cfg.letters;
-
-      maximum_padding = cfg.maximumPadding;
-      minimum_padding = cfg.minimumPadding;
-      maximum_length = cfg.maximumLength;
-
-      no_name_title = cfg.noNameTitle;
-
-      semantic_letters = cfg.semanticLetters;
-
-      tabpages = cfg.tabpages;
-    };
+          handleStateOption = stateOption:
+            with stateOption;
+              {
+                modified = handleBufferOption modified;
+                pinned = handleBufferOption pinned;
+              }
+              // (
+                handleBufferOption
+                (
+                  getAttrs (attrNames stateOption)
+                  stateOption
+                )
+              );
+        in
+          (
+            handleStateOption
+            (
+              getAttrs
+              (attrNames stateOptions)
+              cfg.icons
+            )
+          )
+          // (
+            genAttrs
+            ["alternate" "current" "inactive" "visible"]
+            (optionName: handleStateOption cfg.icons.${optionName})
+          );
+        inherit (cfg) hide;
+        insert_at_end = cfg.insertAtEnd;
+        insert_at_start = cfg.insertAtStart;
+        maximum_padding = cfg.maximumPadding;
+        minimum_padding = cfg.minimumPadding;
+        maximum_length = cfg.maximumLength;
+        semantic_letters = cfg.semanticLetters;
+        inherit (cfg) letters;
+        no_name_title = cfg.noNameTitle;
+        sidebar_filetypes = cfg.sidebarFiletypes;
+      }
+      // cfg.extraOptions;
 
     userKeymapsList =
       mapAttrsToList
