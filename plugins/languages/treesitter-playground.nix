@@ -50,7 +50,7 @@ in {
         disable = cfg.disabledLanguages;
         updatetime = cfg.updateTime;
         persist_queries = cfg.persistQueries;
-        keybindings = mkIf (cfg.keybindings != null) {
+        keybindings = helpers.ifNonNull' cfg.keybindings {
           toggle_query_editor = cfg.keybindings.toggleQueryEditor;
           toggle_hl_groups = cfg.keybindings.toggleHlGroups;
           toggle_injected_languages = cfg.keybindings.toggleInjectedLanguages;
