@@ -83,6 +83,8 @@ with lib; let
     pick_selected = "pickSelected";
   };
 in {
+  # Those renamed are from 2023-04-04.
+  # TODO: remove them in 1-2 months
   imports =
     [
       (
