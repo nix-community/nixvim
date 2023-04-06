@@ -74,6 +74,7 @@
     ./utils/harpoon.nix
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
+    ./utils/lastplace.nix
     ./utils/mark-radar.nix
     ./utils/neorg.nix
     ./utils/notify.nix
