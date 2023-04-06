@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  helpers = import ../helpers.nix {inherit lib;};
+  helpers = import ../../helpers.nix {inherit lib;};
 in {
   options.plugins.treesitter-refactor = let
     disable = mkOption {
@@ -104,6 +104,10 @@ in {
     cfg = config.plugins.treesitter-refactor;
   in
     mkIf cfg.enable {
+      warnings = mkIf (!config.plugins.treesitter.enable) [
+        "Nixvim: treesitter-refactor needs treesitter to function as intended"
+      ];
+
       extraPlugins = [cfg.package];
 
       plugins.treesitter.moduleConfig.refactor = {

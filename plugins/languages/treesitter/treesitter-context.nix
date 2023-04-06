@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  helpers = import ../helpers.nix {inherit lib;};
+  helpers = import ../../helpers.nix {inherit lib;};
 in {
   options.plugins.treesitter-context = {
     enable = mkEnableOption "nvim-treesitter-context";
