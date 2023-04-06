@@ -306,6 +306,12 @@ with lib; let
       package = pkgs.nodePackages.typescript-language-server;
     }
     {
+      name = "typst-lsp";
+      serverName = "typst_lsp";
+      description = "Enable typst-lsp for typst";
+      package = pkgs.typst-lsp;
+    }
+    {
       name = "vuels";
       description = "Enable vuels, for Vue";
       package = pkgs.nodePackages.vls;
