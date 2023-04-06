@@ -20,59 +20,47 @@
   # All the upstream default options of barbar
   defaults = {
     plugins.barbar = {
-      animations = true;
+      enable = true;
+
+      animation = true;
       autoHide = false;
-      tabpages = true;
-      closable = true;
       clickable = true;
-      diagnostics = {
-        error = {
-          enable = false;
-          icon = "Ⓧ ";
-        };
-        warn = {
-          enable = false;
-          icon = "⚠️ ";
-        };
-        info = {
-          enable = false;
-          icon = "ⓘ ";
-        };
-        hint = {
-          enable = false;
-          icon = "💡";
-        };
-      };
       excludeFileTypes = [];
       excludeFileNames = [];
-      hide = {
-        extensions = false;
-        inactive = false;
-        alternate = false;
-        current = false;
-        visible = false;
-      };
+      focusOnClose = "left";
+      hide = {};
       highlightAlternate = false;
       highlightInactiveFileIcons = false;
       highlightVisible = true;
       icons = {
-        enable = true;
-        customColors = false;
-        separatorActive = "▎";
-        separatorInactive = "▎";
-        separatorVisible = "▎";
-        closeTab = "";
-        closeTabModified = "●";
-        pinned = "車";
+        bufferIndex = false;
+        bufferNumber = false;
+        button = "";
+        diagnostics = {};
+        filetype = {enable = true;};
+        inactive = {
+          separator = {
+            left = "▎";
+            right = "";
+          };
+        };
+        modified = {button = "●";};
+        pinned = {button = "";};
+        separator = {
+          left = "▎";
+          right = "";
+        };
       };
       insertAtEnd = false;
       insertAtStart = false;
+      letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP";
+      maximumLength = 30;
       maximumPadding = 4;
       minimumPadding = 1;
-      maximumLength = 30;
-      semanticLetters = true;
-      letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP";
       noNameTitle = null;
+      semanticLetters = true;
+      sidebarFiletypes = {};
+      tabpages = true;
     };
   };
 }
