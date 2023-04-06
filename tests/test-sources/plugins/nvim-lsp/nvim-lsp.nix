@@ -63,6 +63,7 @@
         tailwindcss.enable = true;
         texlab.enable = true;
         tsserver.enable = true;
+        typst-lsp.enable = true;
         vuels.enable = true;
         # zls.enable = true; Broken as of 03/17/2023
       };
