@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  helpers = import ../helpers.nix {inherit lib;};
+  helpers = import ../../helpers.nix {inherit lib;};
 
   inherit (helpers) mkPackageOption mkCompositeOption;
   inherit (helpers.defaultNullOpts) mkInt mkBool mkStr mkNullable;
