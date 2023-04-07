@@ -297,6 +297,11 @@ with lib; let
       package = pkgs.nodePackages."@tailwindcss/language-server";
     }
     {
+      name = "terraformls";
+      description = "Enable terraform-ls, for terraform";
+      package = pkgs.terraform-ls;
+    }
+    {
       name = "texlab";
       description = "Enable texlab language server, for LaTeX";
     }
