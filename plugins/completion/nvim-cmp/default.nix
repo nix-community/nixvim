@@ -463,7 +463,13 @@ in {
 
   config = let
     options = {
-      enabled = cfg.enable;
+      # The upstream default value (which is a function) should not be overwritten.
+      # https://www.reddit.com/r/neovim/comments/vtw4vl/comment/if9zfdf/?utm_source=share&utm_medium=web2x&context=3
+      enabled =
+        if cfg.enable
+        then null
+        else false;
+
       performance = cfg.performance;
       preselect =
         helpers.ifNonNull' cfg.preselect
