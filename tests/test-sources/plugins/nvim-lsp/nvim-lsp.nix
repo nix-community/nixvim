@@ -61,6 +61,7 @@
         rnix-lsp.enable = true;
         rust-analyzer.enable = true;
         tailwindcss.enable = true;
+        terraformls.enable = true;
         texlab.enable = true;
         tsserver.enable = true;
         typst-lsp.enable = true;
