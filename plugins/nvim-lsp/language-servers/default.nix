@@ -317,6 +317,11 @@ with lib; let
       package = pkgs.nodePackages.vls;
     }
     {
+      name = "yamlls";
+      description = "Enable yamlls, for yaml";
+      package = pkgs.yaml-language-server;
+    }
+    {
       name = "zls";
       description = "Enable zls, for Zig.";
     }
