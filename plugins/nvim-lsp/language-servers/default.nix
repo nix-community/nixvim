@@ -233,6 +233,10 @@ with lib; let
       settings = cfg: {Lua = cfg;};
     }
     {
+      name = "metals";
+      description = "Enable metals, for Scala";
+    }
+    {
       name = "nil_ls";
       description = "Enable nil, for Nix";
       package = pkgs.nil;
