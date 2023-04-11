@@ -66,6 +66,7 @@
         tsserver.enable = true;
         typst-lsp.enable = true;
         vuels.enable = true;
+        yamlls.enable = true;
         # zls.enable = true; Broken as of 03/17/2023
       };
     };
