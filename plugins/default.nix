@@ -87,6 +87,7 @@
     ./utils/project-nvim.nix
     ./utils/presence-nvim.nix
     ./utils/specs.nix
+    ./utils/spider.nix
     ./utils/startify.nix
     ./utils/surround.nix
     ./utils/tmux-navigator.nix
