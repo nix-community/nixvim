@@ -8,6 +8,7 @@
     ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
+    ./colorschemes/poimandres.nix
     ./colorschemes/tokyonight.nix
 
     ./completion/coq.nix
