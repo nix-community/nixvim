@@ -23,6 +23,8 @@
       buildPhase =
         if !dontRun
         then ''
+          mkdir -p .cache/nvim
+
           output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
           if [[ -n $output ]]; then
           	echo "ERROR: $output"
