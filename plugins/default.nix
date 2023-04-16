@@ -98,5 +98,6 @@
     ./utils/dashboard.nix
     ./utils/emmet.nix
     ./utils/magma-nvim.nix
+    ./utils/which-key.nix
   ];
 }
