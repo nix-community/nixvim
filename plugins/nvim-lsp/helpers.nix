@@ -57,6 +57,24 @@
               `:LspStart` (|lspconfig-commands|).
             '';
 
+            onAttach =
+              helpers.mkCompositeOption "Server specific on_attach behavior."
+              {
+                override = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Override the global `plugins.lsp.onAttach` function.";
+                };
+
+                function = mkOption {
+                  type = types.str;
+                  description = ''
+                    Body of the on_attach function.
+                    The argument `client` and `bufnr` is provided.
+                  '';
+                };
+              };
+
             settings = settingsOptions;
 
             extraSettings = mkOption {
@@ -82,6 +100,16 @@
               name = serverName;
               extraOptions = {
                 inherit (cfg) cmd filetypes autostart;
+                on_attach =
+                  helpers.ifNonNull' cfg.onAttach
+                  (
+                    helpers.mkRaw ''
+                      function(client, bufnr)
+                        ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
+                        ${cfg.onAttach.function}
+                      end
+                    ''
+                  );
                 settings = (settings cfg.settings) // cfg.extraSettings;
               };
             }
