@@ -25,7 +25,12 @@
 
       servers = {
         bashls.enable = true;
-        clangd.enable = true;
+        clangd = {
+          enable = true;
+          onAttach.function = ''
+            print('The clangd language server has been attached !')
+          '';
+        };
         nil_ls.enable = true;
         rust-analyzer.enable = true;
         pylsp = {
