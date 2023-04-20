@@ -5,19 +5,19 @@ modules: {
   ...
 } @ args: let
   inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
-  shared = import ./_shared.nix args;
+  shared = import ./_shared.nix modules args;
   cfg = config.programs.nixvim;
 in {
   options = {
     programs.nixvim = mkOption {
       default = {};
-      type = types.submodule ((modules pkgs)
-        ++ [
+      type = types.submodule ([
           {
             options.enable = mkEnableOption "nixvim";
             config.wrapRc = mkForce true;
           }
-        ]);
+        ]
+        ++ shared.topLevelModules);
     };
     nixvim.helpers = shared.helpers;
   };
