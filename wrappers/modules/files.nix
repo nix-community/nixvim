@@ -57,8 +57,9 @@ in {
     # A directory with all the files in it
     filesPlugin = pkgs.buildEnv {
       name = "nixvim-config";
-      paths = lib.mapAttrsToList (_: file: file.plugin) files;
-      ignoreCollisions = true; # Collisions can't happen by construction
+      paths =
+        (lib.mapAttrsToList (_: file: file.plugin) files)
+        ++ (lib.mapAttrsToList (path: content: pkgs.writeTextDir path content) config.extraFiles);
     };
   };
 }

@@ -26,12 +26,24 @@ in {
   configFiles = let
     cfg = config.programs.nixvim;
   in
-    lib.mapAttrs'
     (
-      _: file:
-        lib.nameValuePair
-        "nvim/${file.path}"
-        {text = file.content;}
+      lib.mapAttrs'
+      (
+        _: file:
+          lib.nameValuePair
+          "nvim/${file.path}"
+          {text = file.content;}
+      )
+      cfg.files
     )
-    cfg.files;
+    // (
+      lib.mapAttrs'
+      (
+        path: content:
+          lib.nameValuePair
+          "nvim/${path}"
+          {text = content;}
+      )
+      cfg.extraFiles
+    );
 }

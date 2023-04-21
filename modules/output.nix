@@ -86,6 +86,12 @@ in {
       description = "Extra lua packages to include with neovim";
       default = _: [];
     };
+
+    extraFiles = mkOption {
+      type = types.attrsOf types.str;
+      description = "Extra files to add to the runtime path";
+      default = {};
+    };
   };
 
   config = let
