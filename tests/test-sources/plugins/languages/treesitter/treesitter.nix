@@ -12,6 +12,13 @@
     };
   };
 
+  nixvimInjections = {
+    plugins.treesitter = {
+      enable = true;
+      nixvimInjections = true;
+    };
+  };
+
   # This needs a custom input
   # custom = {
   #   plugins.treesitter = {
