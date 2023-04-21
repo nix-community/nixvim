@@ -177,7 +177,7 @@
         nixosModules.nixvim = import ./wrappers/nixos.nix modules;
         homeManagerModules.nixvim = import ./wrappers/hm.nix modules;
         nixDarwinModules.nixvim = import ./wrappers/darwin.nix modules;
-        rawModules.nixvim = modules;
+        rawModules.nixvim = nixvimModules;
 
         templates =
           let
