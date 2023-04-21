@@ -91,6 +91,10 @@ in {
         default = {};
         description = "This is the configuration for extra modules. It should not be used directly";
       };
+
+      nixvimInjections =
+        mkEnableOption
+        "nixvim specific injections, like lua highlighting in extraConfigLua";
     };
   };
 
@@ -147,6 +151,20 @@ in {
         + ''
           require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
         '';
+
+      extraFiles = mkIf cfg.nixvimInjections {
+        "queries/nix/injections.scm" = ''
+          ;; extends
+
+          (binding
+            attrpath: (attrpath (identifier) @_path)
+            expression: [
+              (string_expression (string_fragment) @lua)
+              (indented_string_expression (string_fragment) @lua)
+            ]
+            (#match? @_path "^extraConfigLua(Pre|Post)?$"))
+        '';
+      };
 
       extraPlugins = with pkgs;
         if cfg.nixGrammars
