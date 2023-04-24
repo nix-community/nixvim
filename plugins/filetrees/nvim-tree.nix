@@ -48,6 +48,20 @@ in {
     (optionWarnings.mkDeprecatedOption {
       option = basePluginPath ++ ["removeKeymaps"];
       alternative = basePluginPath ++ ["onAttach"];
+      message = ''
+        Mappings can now be customized from the `onAttach` function.
+        Learn more at `:help nvim-tree-mappings-legacy`.
+      '';
+    })
+    # Deprecate warning added 2023-04-24
+    # TODO Remove both this warning and the one above (removeKeymaps) in ~1 month (June).
+    (optionWarnings.mkDeprecatedOption {
+      option = basePluginPath ++ ["view" "mappings"];
+      alternative = basePluginPath ++ ["onAttach"];
+      message = ''
+        Mappings can now be customized from the `onAttach` function.
+        Learn more at `:help nvim-tree-mappings-legacy`.
+      '';
     })
   ];
 
@@ -373,7 +387,7 @@ in {
         Necessary when using a UI prompt decorator such as dressing.nvim or telescope-ui-select.nvim.
       '';
 
-      view = helpers.mkCompositeOption "Window / buffer setup." {
+      view = {
         centralizeSelection = helpers.defaultNullOpts.mkBool false ''
           When entering nvim-tree, reposition the view so that the current node is
           initially centralized, see |zz|.
@@ -1036,43 +1050,42 @@ in {
         on_attach = onAttach;
         remove_keymaps = removeKeymaps;
         select_prompts = selectPrompts;
-        view = with view;
-          ifNonNull' cfg.view {
-            centralize_selection = centralizeSelection;
-            inherit cursorline;
-            debounce_delay = debounceDelay;
-            hide_root_folder = hideRootFolder;
-            inherit width;
-            inherit side;
-            preserve_window_proportions = preserveWindowProportions;
-            inherit number;
-            inherit relativenumber;
-            inherit signcolumn;
-            mappings = with mappings;
-              ifNonNull' cfg.view.mappings {
-                custom_only = customOnly;
-                list =
-                  if list == null
-                  then null
-                  else
-                    map (
-                      mapping: {
-                        inherit (mapping) key action mode;
-                        action_cb =
-                          if (mapping.action_cb == null)
-                          then null
-                          else helpers.mkRaw mapping.action_cb;
-                      }
-                    )
-                    list;
-              };
-            float = with float;
-              ifNonNull' cfg.view.float {
-                inherit enable;
-                quit_on_focus_loss = quitOnFocusLoss;
-                open_win_config = openWinConfig;
-              };
-          };
+        view = with view; {
+          centralize_selection = centralizeSelection;
+          inherit cursorline;
+          debounce_delay = debounceDelay;
+          hide_root_folder = hideRootFolder;
+          inherit width;
+          inherit side;
+          preserve_window_proportions = preserveWindowProportions;
+          inherit number;
+          inherit relativenumber;
+          inherit signcolumn;
+          mappings = with mappings;
+            ifNonNull' cfg.view.mappings {
+              custom_only = customOnly;
+              list =
+                if list == null
+                then null
+                else
+                  map (
+                    mapping: {
+                      inherit (mapping) key action mode;
+                      action_cb =
+                        if (mapping.action_cb == null)
+                        then null
+                        else helpers.mkRaw mapping.action_cb;
+                    }
+                  )
+                  list;
+            };
+          float = with float;
+            ifNonNull' cfg.view.float {
+              inherit enable;
+              quit_on_focus_loss = quitOnFocusLoss;
+              open_win_config = openWinConfig;
+            };
+        };
         renderer = with renderer;
           ifNonNull' cfg.renderer {
             add_trailing = addTrailing;

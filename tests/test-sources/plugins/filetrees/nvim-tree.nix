@@ -90,34 +90,6 @@
         number = false;
         relativenumber = false;
         signcolumn = "yes";
-        mappings = {
-          customOnly = false;
-          list = [
-            # remove a default mapping for cd
-            {
-              key = "<2-RightMouse>";
-              action = "";
-            }
-
-            # add multiple normal mode mappings for edit
-            {
-              key = ["<CR>" "o"];
-              action = "edit";
-              mode = "n";
-            }
-
-            # custom action
-            {
-              key = "p";
-              action = "print_the_node_path";
-              action_cb = ''
-                function(node)
-                  print(node.absolute_path)
-                end
-              '';
-            }
-          ];
-        };
         float = {
           enable = false;
           quitOnFocusLoss = true;
