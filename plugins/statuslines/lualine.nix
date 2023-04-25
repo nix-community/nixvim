@@ -99,7 +99,7 @@ in {
         default = true;
       };
 
-      theme = helpers.defaultNullOpts.mkStr "auto" "The theme to use for lualine-nvim.";
+      theme = helpers.defaultNullOpts.mkNullable (with types; either str attrs) "auto" "The theme to use for lualine-nvim.";
 
       componentSeparators = mkSeparatorsOption {
         leftDefault = "";
@@ -114,11 +114,11 @@ in {
       };
 
       disabledFiletypes = helpers.mkCompositeOption "Filetypes to disable lualine for." {
-        statusline = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
+        statusline = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
           Only ignores the ft for statusline.
         '';
 
-        winbar = helpers.defaultNullOpts.mkNullable (types.str) "[]" ''
+        winbar = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
           Only ignores the ft for winbar.
         '';
       };
