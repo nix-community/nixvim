@@ -288,6 +288,12 @@ with lib; let
       serverName = "rnix";
     }
     {
+      name = "ruff-lsp";
+      description = "Enable ruff-lsp, for Python.";
+      package = pkgs.python3Packages.ruff-lsp;
+      serverName = "ruff_lsp";
+    }
+    {
       name = "rust-analyzer";
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";

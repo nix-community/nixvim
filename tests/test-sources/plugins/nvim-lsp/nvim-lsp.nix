@@ -65,6 +65,7 @@
         pylsp.enable = true;
         pyright.enable = true;
         rnix-lsp.enable = true;
+        ruff-lsp.enable = true;
         rust-analyzer.enable = true;
         tailwindcss.enable = true;
         terraformls.enable = true;
