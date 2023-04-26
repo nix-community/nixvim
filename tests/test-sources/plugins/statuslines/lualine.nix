@@ -1,4 +1,4 @@
-{
+{pkgs}: {
   empty = {
     plugins.lualine.enable = true;
   };
@@ -40,9 +40,20 @@
   };
 
   example = {
+    extraPlugins = [pkgs.vimPlugins.gruvbox-nvim];
     plugins.lualine = {
       enable = true;
-      ignoreFocus = ["NvimTree"];
+      theme.__raw = ''
+        (function()
+          local custom_gruvbox = require("lualine.themes.gruvbox")
+          custom_gruvbox.normal.c.bg = '#112233'
+          return custom_gruvbox
+        end)()
+      '';
+      ignoreFocus = ["NvimTree" "neo-tree"];
+      disabledFiletypes = {
+        winbar = ["neo-tree"];
+      };
       sections = {
         lualine_c = [
           # you can specify only the sections you want to change
