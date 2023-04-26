@@ -22,7 +22,7 @@ in {
     nixvim.helpers = shared.helpers;
   };
 
-  config = mkIf cfg.enable mkMerge [
+  config = mkIf cfg.enable (mkMerge [
     {
       environment.systemPackages = [cfg.finalPackage];
     }
@@ -30,5 +30,5 @@ in {
       warnings = cfg.warnings;
       assertions = cfg.assertions;
     }
-  ];
+  ]);
 }
