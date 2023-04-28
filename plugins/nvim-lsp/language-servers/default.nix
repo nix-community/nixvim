@@ -302,6 +302,11 @@ with lib; let
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
+      name = "sourcekit";
+      description = "Enable the sourcekit language server, for Swift and C/C++/Objective-C";
+      package = pkgs.sourcekit-lsp;
+    }
+    {
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
       package = pkgs.nodePackages."@tailwindcss/language-server";
