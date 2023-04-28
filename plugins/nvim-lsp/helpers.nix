@@ -79,7 +79,6 @@
             settings = settingsOptions;
 
             extraSettings = mkOption {
-              default = {};
               type = types.attrs;
               description = ''
                 Extra settings for the ${name} language server.
@@ -95,7 +94,10 @@
           // packageOption;
       };
 
-      config =
+      config = let
+        extraSettingsOption = options.plugins.lsp.servers.${name}.extraSettings;
+        extraSettingsAreDefined = extraSettingsOption.isDefined;
+      in
         mkIf cfg.enable
         {
           extraPackages =
@@ -118,17 +120,20 @@
                         end
                       ''
                     );
-                  settings = (settings cfg.settings) // cfg.extraSettings;
+                  settings =
+                    (settings cfg.settings)
+                    // (
+                      if extraSettingsAreDefined
+                      then cfg.extraSettings
+                      else {}
+                    );
                 }
                 // cfg.extraOptions;
             }
           ];
 
-          warnings = let
-            extraSettingsOption = options.plugins.lsp.servers.${name}.extraSettings;
-          in
-            optional
-            (extraSettingsOption.isDefined)
+          warnings =
+            optional extraSettingsAreDefined
             (
               let
                 optionPrefix = "plugins.lsp.servers.${name}";
