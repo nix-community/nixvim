@@ -33,6 +33,12 @@
         };
         nil_ls.enable = true;
         rust-analyzer.enable = true;
+        ruff-lsp = {
+          enable = true;
+          extraOptions = {
+            init_options.settings.args = ["--config=/path/to/config.toml"];
+          };
+        };
         pylsp = {
           enable = true;
           filetypes = ["python"];

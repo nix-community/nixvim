@@ -20,6 +20,7 @@
     pkgs,
     config,
     lib,
+    options,
     ...
   }:
     with lib; let
@@ -84,6 +85,12 @@
                 Extra settings for the ${name} language server.
               '';
             };
+
+            extraOptions = mkOption {
+              default = {};
+              type = types.attrs;
+              description = "Extra options for the ${name} language server.";
+            };
           }
           // packageOption;
       };
@@ -98,22 +105,35 @@
           plugins.lsp.enabledServers = [
             {
               name = serverName;
-              extraOptions = {
-                inherit (cfg) cmd filetypes autostart;
-                on_attach =
-                  helpers.ifNonNull' cfg.onAttach
-                  (
-                    helpers.mkRaw ''
-                      function(client, bufnr)
-                        ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
-                        ${cfg.onAttach.function}
-                      end
-                    ''
-                  );
-                settings = (settings cfg.settings) // cfg.extraSettings;
-              };
+              extraOptions =
+                {
+                  inherit (cfg) cmd filetypes autostart;
+                  on_attach =
+                    helpers.ifNonNull' cfg.onAttach
+                    (
+                      helpers.mkRaw ''
+                        function(client, bufnr)
+                          ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
+                          ${cfg.onAttach.function}
+                        end
+                      ''
+                    );
+                  settings = (settings cfg.settings) // cfg.extraSettings;
+                }
+                // cfg.extraOptions;
             }
           ];
+
+          warnings = let
+            extraSettingsOption = options.plugins.lsp.servers.${name}.extraSettings;
+          in
+            optional
+            (extraSettingsOption.isDefined)
+            (
+              let
+                optionPrefix = "plugins.lsp.servers.${name}";
+              in "The `${optionPrefix}.extraSettings` option is deprecated in favor of `${optionPrefix}.extraOptions.settings`."
+            );
         };
     };
 }
