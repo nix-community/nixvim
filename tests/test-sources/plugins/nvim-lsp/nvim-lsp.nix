@@ -73,6 +73,7 @@
         rnix-lsp.enable = true;
         ruff-lsp.enable = true;
         rust-analyzer.enable = true;
+        sourcekit.enable = true;
         tailwindcss.enable = true;
         terraformls.enable = true;
         texlab.enable = true;
