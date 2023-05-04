@@ -32,6 +32,7 @@ in {
               }
             )
             {
+              wl-copy = "wl-clipboard";
               xclip = "xclip";
               xsel = "xsel";
             };
