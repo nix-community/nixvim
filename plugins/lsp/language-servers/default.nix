@@ -143,6 +143,12 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
+      name = "futhark-lsp";
+      description = "Enable Futhark lsp, for Futhark";
+      package = pkgs.futhark;
+      serverName = "futhark_lsp";
+    }
+    {
       name = "gdscript";
       description = "Enable gdscript, for Godot";
       package = null;

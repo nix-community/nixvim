@@ -61,6 +61,7 @@
         denols.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
+        futhark-lsp.enable = true;
         gopls.enable = true;
         hls.enable = true;
         html.enable = true;
