@@ -68,7 +68,7 @@
                 };
 
                 function = mkOption {
-                  type = types.str;
+                  type = types.lines;
                   description = ''
                     Body of the on_attach function.
                     The argument `client` and `bufnr` is provided.

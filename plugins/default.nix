@@ -48,6 +48,7 @@
     ./lsp
     ./lsp/inc-rename.nix
     ./lsp/lspsaga.nix
+    ./lsp/lsp-format.nix
     ./lsp/lsp-lines.nix
     ./lsp/nvim-lightbulb.nix
     ./lsp/trouble.nix
