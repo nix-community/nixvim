@@ -131,7 +131,7 @@ in {
               setting it to false may improve startup time
             '';
           }
-          // (import ../nvim-lsp/language-servers/rust-analyzer-config.nix lib));
+          // (import ../lsp/language-servers/rust-analyzer-config.nix lib));
     };
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [nvim-lspconfig cfg.package];

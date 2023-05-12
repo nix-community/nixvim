@@ -45,14 +45,14 @@
     ./languages/vimtex.nix
     ./languages/zig.nix
 
-    ./null-ls
+    ./lsp
+    ./lsp/inc-rename.nix
+    ./lsp/lspsaga.nix
+    ./lsp/lsp-lines.nix
+    ./lsp/nvim-lightbulb.nix
+    ./lsp/trouble.nix
 
-    ./nvim-lsp
-    ./nvim-lsp/inc-rename.nix
-    ./nvim-lsp/lspsaga.nix
-    ./nvim-lsp/lsp-lines.nix
-    ./nvim-lsp/nvim-lightbulb.nix
-    ./nvim-lsp/trouble.nix
+    ./null-ls
 
     ./pluginmanagers/packer.nix
 
