@@ -7,7 +7,16 @@
 with lib; let
   cfg = config.plugins.neo-tree;
   helpers = import ../helpers.nix {inherit lib;};
+
+  basePluginPath = ["plugins" "neo-tree"];
 in {
+  imports = [
+    (
+      mkRemovedOptionModule
+      (basePluginPath ++ ["sourceSelector" "tabLabels"])
+      "Use `plugins.neo-tree.sourceSelector.sources` to achieve the same functionnality."
+    )
+  ];
   options.plugins.neo-tree = let
     listOfRendererComponents = with types; listOf (either str attrs);
 
@@ -143,147 +152,147 @@ in {
 
       useDefaultMappings = helpers.defaultNullOpts.mkBool true "";
 
-      sourceSelector =
-        helpers.mkCompositeOption
-        "sourceSelector provides clickable tabs to switch between sources."
-        {
-          winbar =
-            helpers.defaultNullOpts.mkBool false
-            "toggle to show selector on winbar";
+      # sourceSelector provides clickable tabs to switch between sources."
+      sourceSelector = {
+        winbar =
+          helpers.defaultNullOpts.mkBool false
+          "toggle to show selector on winbar";
 
-          statusline =
-            helpers.defaultNullOpts.mkBool false
-            "toggle to show selector on statusline";
+        statusline =
+          helpers.defaultNullOpts.mkBool false
+          "toggle to show selector on statusline";
 
-          showScrolledOffParentNode = helpers.defaultNullOpts.mkBool false ''
-            If `true`, tabs are replaced with the parent path of the top visible node when
-            scrolled down.
+        showScrolledOffParentNode = helpers.defaultNullOpts.mkBool false ''
+          If `true`, tabs are replaced with the parent path of the top visible node when
+          scrolled down.
+        '';
+
+        sources =
+          helpers.mkNullOrOption
+          (
+            with types;
+              listOf
+              (submodule {
+                options = {
+                  source = mkOption {
+                    type = str;
+                    description = "Name of the source to add to the bar.";
+                  };
+
+                  displayName = helpers.mkNullOrOption str "How that source to appear in the bar.";
+                };
+              })
+          )
+          "Configure the characters shown on each tab.";
+
+        contentLayout =
+          helpers.defaultNullOpts.mkEnumFirstDefault ["start" "end" "focus"]
+          ''
+            Defines how the labels are placed inside a tab.
+            This only takes effect when the tab width is greater than the length of label i.e.
+            `tabsLayout = "equal", "focus"` or when `tabsMinWidth` is large enough.
+
+            Following options are available.
+                "start"  : left aligned                  / 裡 bufname     \/..
+                "end"    : right aligned                 /     裡 bufname \/...
+                "center" : centered with equal padding   /   裡 bufname   \/...
           '';
 
-          tabLabels =
-            helpers.mkCompositeOption
-            ''
-              Configure the characters shown on each tab.
-              Keys of the table should match the source names defined in `sources`.
-              Value is what is printed inside the tab.
-              If value is `nil` or not set, the source name is used instead.
-            '' {
-              filesystem = helpers.defaultNullOpts.mkStr "  Files " "tab label for files";
-              buffers = helpers.defaultNullOpts.mkStr "  Buffers " "tab label for buffers";
-              gitStatus = helpers.defaultNullOpts.mkStr "  Git " "tab label for git status";
-              diagnostics =
-                helpers.defaultNullOpts.mkStr " 裂Diagnostics "
-                "tab label for diagnostics";
-            };
+        tabsLayout =
+          helpers.defaultNullOpts.mkEnum
+          ["start" "end" "center" "equal" "focus"]
+          "equal"
+          ''
+            Defines how the tabs are aligned inside the window when there is more than enough
+            space.
+            The following options are available.
+            `active` will expand the focused tab as much as possible. Bars denote the edge of window.
 
-          contentLayout =
-            helpers.defaultNullOpts.mkEnumFirstDefault ["start" "end" "focus"]
-            ''
-              Defines how the labels are placed inside a tab.
-              This only takes effect when the tab width is greater than the length of label i.e.
-              `tabsLayout = "equal", "focus"` or when `tabsMinWidth` is large enough.
+                "start"  : left aligned                                       ┃/  ~  \/  ~  \/  ~  \            ┃
+                "end"    : right aligned                                      ┃            /  ~  \/  ~  \/  ~  \┃
+                "center" : centered with equal padding                        ┃      /  ~  \/  ~  \/  ~  \      ┃
+                "equal"  : expand all tabs equally to fit the window width    ┃/    ~    \/    ~    \/    ~    \┃
+                "active" : expand the focused tab to fit the window width     ┃/  focused tab    \/  ~  \/  ~  \┃
+          '';
 
-              Following options are available.
-                  "start"  : left aligned                  / 裡 bufname     \/..
-                  "end"    : right aligned                 /     裡 bufname \/...
-                  "center" : centered with equal padding   /   裡 bufname   \/...
-            '';
+        truncationCharacter =
+          helpers.defaultNullOpts.mkStr "…"
+          "Character to use when truncating the tab label";
 
-          tabsLayout =
-            helpers.defaultNullOpts.mkEnum
-            ["start" "end" "center" "equal" "focus"]
-            "equal"
-            ''
-              Defines how the tabs are aligned inside the window when there is more than enough
-              space.
-              The following options are available.
-              `active` will expand the focused tab as much as possible. Bars denote the edge of window.
+        tabsMinWidth =
+          helpers.defaultNullOpts.mkNullable types.int "null"
+          "If int padding is added based on `contentLayout`";
 
-                  "start"  : left aligned                                       ┃/  ~  \/  ~  \/  ~  \            ┃
-                  "end"    : right aligned                                      ┃            /  ~  \/  ~  \/  ~  \┃
-                  "center" : centered with equal padding                        ┃      /  ~  \/  ~  \/  ~  \      ┃
-                  "equal"  : expand all tabs equally to fit the window width    ┃/    ~    \/    ~    \/    ~    \┃
-                  "active" : expand the focused tab to fit the window width     ┃/  focused tab    \/  ~  \/  ~  \┃
-            '';
+        tabsMaxWidth =
+          helpers.defaultNullOpts.mkNullable types.int "null"
+          "This will truncate text even if `textTruncToFit = false`";
 
-          truncationCharacter =
-            helpers.defaultNullOpts.mkStr "…"
-            "Character to use when truncating the tab label";
+        padding =
+          helpers.defaultNullOpts.mkNullable
+          (with types; either int (attrsOf int))
+          "0"
+          ''
+            Defines the global padding of the source selector.
+            It can be an integer or an attrs with keys `left` and `right`.
+            Setting `padding = 2` is exactly the same as `{ left = 2; right = 2; }`.
 
-          tabsMinWidth =
-            helpers.defaultNullOpts.mkNullable types.int "null"
-            "If int padding is added based on `contentLayout`";
+            Example: `{ left = 2; right = 0; }`
+          '';
 
-          tabsMaxWidth =
-            helpers.defaultNullOpts.mkNullable types.int "null"
-            "This will truncate text even if `textTruncToFit = false`";
+        separator =
+          helpers.defaultNullOpts.mkNullable
+          (
+            with types;
+              either str (submodule {
+                options = {
+                  left = helpers.defaultNullOpts.mkStr "▏" "";
+                  right = helpers.defaultNullOpts.mkStr "\\" "";
+                  override = helpers.defaultNullOpts.mkStr null "";
+                };
+              })
+          )
+          "Can be a string or a table"
+          ''{ left = "▏"; right= "▕"; }'';
 
-          padding =
-            helpers.defaultNullOpts.mkNullable
-            (with types; either int (attrsOf int))
-            "0"
-            ''
-              Defines the global padding of the source selector.
-              It can be an integer or an attrs with keys `left` and `right`.
-              Setting `padding = 2` is exactly the same as `{ left = 2; right = 2; }`.
+        separatorActive =
+          helpers.defaultNullOpts.mkNullable
+          (
+            with types;
+              either str (submodule {
+                options = {
+                  left = helpers.mkNullOrOption types.str "";
+                  right = helpers.mkNullOrOption types.str "";
+                  override = helpers.mkNullOrOption types.str "";
+                };
+              })
+          )
+          ''
+            Set separators around the active tab.
+            null falls back to `sourceSelector.separator`.
+          ''
+          "null";
 
-              Example: `{ left = 2; right = 0; }`
-            '';
+        showSeparatorOnEdge =
+          helpers.defaultNullOpts.mkBool false
+          ''
+            Takes a boolean value where `false` (default) hides the separators on the far
+            left / right.
+            Especially useful when left and right separator are the same.
 
-          separator =
-            helpers.defaultNullOpts.mkNullable
-            (
-              with types;
-                either str (submodule {
-                  options = {
-                    left = helpers.defaultNullOpts.mkStr "▏" "";
-                    right = helpers.defaultNullOpts.mkStr "\\" "";
-                    override = helpers.defaultNullOpts.mkStr null "";
-                  };
-                })
-            )
-            "Can be a string or a table"
-            ''{ left = "▏"; right= "▕"; }'';
+                'true'  : ┃/    ~    \/    ~    \/    ~    \┃
+                'false' : ┃     ~    \/    ~    \/    ~     ┃
+          '';
 
-          separatorActive =
-            helpers.defaultNullOpts.mkNullable
-            (
-              with types;
-                either str (submodule {
-                  options = {
-                    left = helpers.mkNullOrOption types.str "";
-                    right = helpers.mkNullOrOption types.str "";
-                    override = helpers.mkNullOrOption types.str "";
-                  };
-                })
-            )
-            ''
-              Set separators around the active tab.
-              null falls back to `sourceSelector.separator`.
-            ''
-            "null";
+        highlightTab = helpers.defaultNullOpts.mkStr "NeoTreeTabInactive" "";
 
-          showSeparatorOnEdge =
-            helpers.defaultNullOpts.mkBool false
-            ''
-              Takes a boolean value where `false` (default) hides the separators on the far
-              left / right.
-              Especially useful when left and right separator are the same.
+        highlightTabActive = helpers.defaultNullOpts.mkStr "NeoTreeTabActive" "";
 
-                  'true'  : ┃/    ~    \/    ~    \/    ~    \┃
-                  'false' : ┃     ~    \/    ~    \/    ~     ┃
-            '';
+        highlightBackground = helpers.defaultNullOpts.mkStr "NeoTreeTabInactive" "";
 
-          highlightTab = helpers.defaultNullOpts.mkStr "NeoTreeTabInactive" "";
+        highlightSeparator = helpers.defaultNullOpts.mkStr "NeoTreeTabSeparatorInactive" "";
 
-          highlightTabActive = helpers.defaultNullOpts.mkStr "NeoTreeTabActive" "";
-
-          highlightBackground = helpers.defaultNullOpts.mkStr "NeoTreeTabInactive" "";
-
-          highlightSeparator = helpers.defaultNullOpts.mkStr "NeoTreeTabSeparatorInactive" "";
-
-          highlightSeparatorActive = helpers.defaultNullOpts.mkStr "NeoTreeTabSeparatorActive" "";
-        };
+        highlightSeparatorActive = helpers.defaultNullOpts.mkStr "NeoTreeTabSeparatorActive" "";
+      };
       eventHandlers =
         helpers.mkNullOrOption
         (types.attrsOf types.str)
@@ -1005,29 +1014,35 @@ in {
           (mkRaw cfg.sortFunction);
         use_popups_for_input = cfg.usePopupsForInput;
         use_default_mappings = cfg.useDefaultMappings;
-        source_selector = with cfg.sourceSelector;
-          ifNonNull' cfg.sourceSelector {
-            inherit winbar statusline;
-            show_scrolled_off_parent_node = showScrolledOffParentNode;
-            tab_labels = with tabLabels;
-              ifNonNull' cfg.sourceSelector.tabLabels {
-                inherit filesystem buffers diagnostics;
-                git_status = gitStatus;
-              };
-            content_layout = contentLayout;
-            tabs_layout = tabsLayout;
-            truncation_character = truncationCharacter;
-            tabs_min_width = tabsMinWidth;
-            tabs_max_width = tabsMaxWidth;
-            inherit padding separator;
-            separator_active = separatorActive;
-            show_separator_on_edge = showSeparatorOnEdge;
-            highlight_tab = highlightTab;
-            highlight_tab_active = highlightTabActive;
-            highlight_background = highlightBackground;
-            highlight_separator = highlightSeparator;
-            highlight_separator_active = highlightSeparatorActive;
-          };
+        source_selector = with cfg.sourceSelector; {
+          inherit winbar statusline;
+          show_scrolled_off_parent_node = showScrolledOffParentNode;
+          sources =
+            ifNonNull' cfg.sourceSelector.sources
+            (
+              map
+              (
+                source: {
+                  inherit (source) source;
+                  display_name = source.displayName;
+                }
+              )
+              cfg.sourceSelector.sources
+            );
+          content_layout = contentLayout;
+          tabs_layout = tabsLayout;
+          truncation_character = truncationCharacter;
+          tabs_min_width = tabsMinWidth;
+          tabs_max_width = tabsMaxWidth;
+          inherit padding separator;
+          separator_active = separatorActive;
+          show_separator_on_edge = showSeparatorOnEdge;
+          highlight_tab = highlightTab;
+          highlight_tab_active = highlightTabActive;
+          highlight_background = highlightBackground;
+          highlight_separator = highlightSeparator;
+          highlight_separator_active = highlightSeparatorActive;
+        };
         event_handlers =
           ifNonNull' cfg.eventHandlers
           (
