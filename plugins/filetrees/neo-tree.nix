@@ -926,6 +926,52 @@ in {
           }
         '';
       };
+
+      documentSymbols = {
+        followCursor =
+          helpers.defaultNullOpts.mkBool false
+          "If set to `true`, will automatically focus on the symbol under the cursor.";
+
+        kinds =
+          helpers.mkNullOrOption
+          (
+            with types;
+              attrsOf (submodule {
+                options = {
+                  icon = mkOption {
+                    description = "Icon for this LSP kind.";
+                    type = types.str;
+                    example = "";
+                  };
+                  hl = mkOption {
+                    description = "Highlight group for this LSP kind.";
+                    type = types.str;
+                    example = "Include";
+                  };
+                };
+              })
+          )
+          ''
+            An attrs specifying how LSP kinds should be rendered.
+            Each entry should map the LSP kind name to an icon and a highlight group, for example
+            `Class = { icon = ""; hl = "Include"; }`
+          '';
+
+        customKinds = mkOption {
+          type = with types; attrsOf str;
+          default = {};
+          example = {
+            "252" = "TypeAlias";
+          };
+          description = ''
+            A table mapping the LSP kind id (an integer) to the LSP kind name that is used for
+            `kinds`.
+
+            For the list of kinds (id and name), please refer to
+            https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_documentSymbol
+          '';
+        };
+      };
     };
 
   config = let
@@ -1154,6 +1200,19 @@ in {
               custom = processRendererComponentList renderers.custom;
             };
           };
+        document_symbols = {
+          follow_cursor = cfg.documentSymbols.followCursor;
+          inherit (cfg.documentSymbols) kinds;
+          custom_kinds.__raw =
+            "{"
+            + (concatStringsSep ","
+              (
+                mapAttrsToList
+                (id: name: ''[${id}] = "${name}"'')
+                cfg.documentSymbols.customKinds
+              ))
+            + "}";
+        };
       }
       // cfg.extraOptions;
   in
