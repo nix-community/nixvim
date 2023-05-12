@@ -409,6 +409,23 @@
           };
         };
       };
+      documentSymbols = {
+        followCursor = false;
+        kinds = {
+          File = {
+            icon = "󰈙";
+            hl = "Tag";
+          };
+          Namespace = {
+            icon = "󰌗";
+            hl = "Include";
+          };
+        };
+        customKinds = {
+          "12" = "foo";
+          "15" = "bar";
+        };
+      };
     };
   };
 }
