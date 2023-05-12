@@ -41,12 +41,24 @@
         winbar = false;
         statusline = false;
         showScrolledOffParentNode = false;
-        tabLabels = {
-          filesystem = "  Files ";
-          buffers = "  Buffers ";
-          gitStatus = "  Git ";
-          diagnostics = " 裂Diagnostics ";
-        };
+        sources = [
+          {
+            source = "filesystem";
+            displayName = "  Files ";
+          }
+          {
+            source = "buffers";
+            displayName = "  Buffers ";
+          }
+          {
+            source = "gitStatus";
+            displayName = "  Git ";
+          }
+          {
+            source = "diagnostics";
+            displayName = " 裂Diagnostics ";
+          }
+        ];
         contentLayout = "start";
         tabsLayout = "equal";
         truncationCharacter = "…";
