@@ -12,10 +12,10 @@
     flake-utils,
     ...
   } @ inputs: let
-    nixvimLib = nixvim.lib;
     config = import ./config; # import the module directly
   in
     flake-utils.lib.eachDefaultSystem (system: let
+      nixvimLib = nixvim.lib.${system};
       pkgs = import nixpkgs {inherit system;};
       nixvim' = nixvim.legacyPackages.${system};
       nvim = nixvim'.makeNixvimWithModule {
@@ -24,8 +24,8 @@
       };
     in {
       checks = {
-        # Run `nix check .` to verify that your config is not broken
-        default = nixvim.lib.${system}.check.checkNvim {
+        # Run `nix flake check .` to verify that your config is not broken
+        default = nixvimLib.check.mkTestDerivationFromNvim {
           inherit nvim;
           name = "A nixvim configuration";
         };
