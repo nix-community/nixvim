@@ -1,3 +1,0 @@
-# We should ignore the lock file as every input here should be from paths
-# and the flake is simply a wrapper to get deterministic inputs
-flake.lock
