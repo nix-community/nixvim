@@ -10,6 +10,7 @@
     ./colorschemes/onedark.nix
     ./colorschemes/poimandres.nix
     ./colorschemes/tokyonight.nix
+    ./colorschemes/catppuccin.nix
 
     ./completion/coq.nix
     ./completion/coq-thirdparty.nix
