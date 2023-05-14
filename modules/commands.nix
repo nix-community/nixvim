@@ -64,7 +64,7 @@ in {
 
   config = let
     cleanupCommand = _: cmd: {
-      command = cmd.command;
+      inherit (cmd) command;
       options = filterAttrs (name: _: name != "command") cmd;
     };
   in
