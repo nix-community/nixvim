@@ -7,17 +7,23 @@
 with lib; let
   pluginWithConfigType = types.submodule {
     options = {
-      config = mkOption {
-        type = types.lines;
-        description = "vimscript for this plugin to be placed in init.vim";
-        default = "";
+      packageName = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "lua package name for require";
       };
 
-      optional =
-        mkEnableOption "optional"
-        // {
-          description = "Don't load by default (load with :packadd)";
-        };
+      setupTable = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "lua table to be passed to setup";
+      };
+
+      setupFunction = mkOption {
+        type = types.str;
+        default = "setup";
+        description = "lua function to be called with setupTable";
+      };
 
       plugin = mkOption {
         type = types.package;
