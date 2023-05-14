@@ -356,21 +356,29 @@ in {
           '';
         };
 
-      onAttach = helpers.defaultNullOpts.mkStr "disable" ''
-        Function ran when creating the nvim-tree buffer.
-        This can be used to attach keybindings to the tree buffer.
-        When onAttach is "disabled", it will use the older mapping strategy, otherwise it
-        will use the newer one.
-            Type: `function(bufnr)`, Default: `"disable"`
-            e.g. >
-              local api = require("nvim-tree.api")
-              local function on_attach(bufnr)
+      onAttach =
+        helpers.defaultNullOpts.mkNullable
+        (with types; either (enum ["default"]) helpers.rawType)
+        "default"
+        ''
+          Function ran when creating the nvim-tree buffer.
+          This can be used to attach keybindings to the tree buffer.
+          When onAttach is "default", it will use the older mapping strategy, otherwise it
+          will use the newer one.
+
+          Example:
+          {
+            __raw = \'\'
+              function(bufnr)
+                local api = require("nvim-tree.api")
                 vim.keymap.set("n", "<C-P>", function()
                   local node = api.tree.get_node_under_cursor()
                   print(node.absolute_path)
                 end, { buffer = bufnr, noremap = true, silent = true, nowait = true, desc = "print the node's absolute path" })
               end
-      '';
+            \'\';
+          }
+        '';
 
       removeKeymaps = helpers.defaultNullOpts.mkNullable (types.either types.bool (types.listOf types.str)) "false" ''
         This can be used to remove the default mappings in the tree.
