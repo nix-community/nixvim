@@ -2,7 +2,7 @@
   example = {
     userCommands = {
       "W" = {
-        command = ":W<CR>";
+        command = ":w<CR>";
         desc = "Write file";
       };
     };
