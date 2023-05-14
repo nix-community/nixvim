@@ -68,7 +68,7 @@ in {
       options = filterAttrs (name: _: name != "command") cmd;
     };
   in
-    mkIf (config.userCommands != []) {
+    mkIf (config.userCommands != {}) {
       extraConfigLua = helpers.wrapDo ''
         local cmds = ${helpers.toLuaObject (mapAttrs cleanupCommand config.userCommands)};
         for name,cmd in pairs(cmds) do
