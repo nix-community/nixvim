@@ -1,6 +1,12 @@
 # Args probably only needs pkgs and lib
-args: {
+{
+  makeNixvim,
+  pkgs,
+  ...
+} @ args: {
   # Add all exported modules here
-  check = import ./check.nix args;
+  check = import ../tests/test-derivation.nix {
+    inherit makeNixvim pkgs;
+  };
   helpers = import ./helpers.nix args;
 }

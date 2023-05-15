@@ -7,7 +7,7 @@
   mkTestDerivationFromNvim = {
     name,
     nvim,
-    dontRun,
+    dontRun ? false,
     ...
   }:
     pkgs.stdenv.mkDerivation {
@@ -55,5 +55,6 @@
       inherit name nvim;
       inherit (testAttributes) dontRun;
     };
-in
-  mkTestDerivation
+in {
+  inherit mkTestDerivation mkTestDerivationFromNvim;
+}

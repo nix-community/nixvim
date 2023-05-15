@@ -163,6 +163,7 @@
           lib = import ./lib {
             inherit pkgs;
             inherit (pkgs) lib;
+            makeNixvim = self.legacyPackages."${system}".makeNixvim;
           };
         });
     in
