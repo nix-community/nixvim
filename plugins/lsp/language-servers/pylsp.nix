@@ -24,7 +24,7 @@ in {
       );
     };
 
-    plugins = helpers.mkCompositeOption "pylsp plugins" {
+    plugins = {
       autopep8 = helpers.mkCompositeOption "autopep8 settings" {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
@@ -391,6 +391,98 @@ in {
         '';
       };
 
+      isort = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          Enable or disable the plugin.
+          Setting this explicitely to `true` will install the dependency for this plugin
+          (pyls-isort).
+        '';
+      };
+
+      black = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          Enable or disable the plugin.
+          Setting this explicitely to `true` will install the dependency for this plugin
+          (python-lsp-black).
+        '';
+
+        cache_config = helpers.defaultNullOpts.mkBool false ''
+          Whether to enable black configuration caching.
+        '';
+
+        line_length = helpers.defaultNullOpts.mkInt 88 ''
+          An integer that maps to black's max-line-length setting.
+          Defaults to 88 (same as black's default).
+          This can also be set through black's configuration files, which should be preferred for
+          multi-user projects.
+        '';
+
+        preview = helpers.defaultNullOpts.mkBool false ''
+          Enable or disable black's --preview setting.
+        '';
+      };
+
+      memestra = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          Enable or disable the plugin.
+          Setting this explicitely to `true` will install the dependency for this plugin
+          (pyls-memestra).
+        '';
+      };
+
+      rope = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          Enable or disable the plugin.
+          Setting this explicitely to `true` will install the dependency for this plugin
+          (pylsp-rope).
+        '';
+      };
+
+      ruff = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          Enable or disable the plugin.
+          Setting this explicitely to `true` will install the dependency for this plugin
+          (python-lsp-ruff).
+        '';
+
+        config = helpers.mkNullOrOption types.str "Path to optional pyproject.toml file.";
+
+        exclude = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+          Exclude files from being checked by ruff.
+        '';
+
+        executable = helpers.mkNullOrOption types.str ''
+          Path to the ruff executable. Assumed to be in PATH by default.
+        '';
+
+        ignore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+          Error codes to ignore.
+        '';
+
+        extendIgnore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+          Same as ignore, but append to existing ignores.
+        '';
+
+        lineLength = helpers.mkNullOrOption types.int "Set the line-length for length checks.";
+
+        perFileIgnores = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
+          File-specific error codes to be ignored.
+        '';
+
+        select = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+          List of error codes to enable.
+        '';
+
+        extendSelect = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+          Same as select, but append to existing error codes.
+        '';
+
+        format = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+          List of error codes to fix during formatting.
+          The default is ["I"], any additional codes are appended to this list.
+        '';
+      };
+
       ### END OF THIRD-PARTY PLUGINS
     };
 
@@ -409,14 +501,15 @@ in {
   config =
     mkIf cfg.enable
     {
-      extraPackages = with cfg.settings; let
-        isNotNullAndEnabled = x: (!isNull x) && x.enabled;
+      extraPackages = let
+        isEnabled = x: (!isNull x) && (x.enabled == true);
+        plugins = cfg.settings.plugins;
       in
-        optionals (!isNull cfg.settings.plugins) (
-          lists.flatten (map
+        lists.flatten (
+          (map
             (
               pluginName: (
-                optionals (isNotNullAndEnabled plugins.${pluginName})
+                optionals (isEnabled plugins.${pluginName})
                 cfg.package.optional-dependencies.${pluginName}
               )
             )
@@ -433,14 +526,25 @@ in {
           ++ (
             optionals
             (
-              (isNotNullAndEnabled plugins.rope_autoimport)
-              || (isNotNullAndEnabled plugins.rope_completion)
+              (isEnabled plugins.rope_autoimport)
+              || (isEnabled plugins.rope_completion)
             )
             cfg.package.optional-dependencies.rope
           )
+          # Third party plugins
           ++ (
-            optional (isNotNullAndEnabled plugins.pylsp_mypy)
-            pkgs.python3Packages.pylsp-mypy
+            mapAttrsToList
+            (
+              pluginName: nixPackage: (optional (isEnabled plugins.${pluginName}) nixPackage)
+            )
+            (with pkgs.python3Packages; {
+              pylsp_mypy = pylsp-mypy;
+              isort = pyls-isort;
+              black = python-lsp-black;
+              memestra = pyls-memestra;
+              rope = pylsp-rope;
+              ruff = python-lsp-ruff;
+            })
           )
         );
     };
