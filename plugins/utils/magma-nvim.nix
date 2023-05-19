@@ -4,54 +4,8 @@
   ...
 } @ args:
 with lib;
-with import ../helpers.nix {inherit lib;}; let
-  optionWarnings = import ../../lib/option-warnings.nix args;
-  basePluginPath = ["plugins" "magma-nvim"];
-in
-  {
-    # Those renames happended on 03-24-2023 (TODO remove in 1-2 months)
-    imports =
-      map (
-        {
-          oldName,
-          newName,
-        }:
-          optionWarnings.mkRenamedOption {
-            option = basePluginPath ++ [oldName];
-            newOption = basePluginPath ++ [newName];
-          }
-      ) [
-        {
-          oldName = "image_provider";
-          newName = "imageProvider";
-        }
-        {
-          oldName = "automatically_open_output";
-          newName = "automaticallyOpenOutput";
-        }
-        {
-          oldName = "wrap_output";
-          newName = "wrapOutput";
-        }
-        {
-          oldName = "output_window_borders";
-          newName = "outputWindowBorders";
-        }
-        {
-          oldName = "cell_highlight_group";
-          newName = "cellHighlightGroup";
-        }
-        {
-          oldName = "save_path";
-          newName = "savePath";
-        }
-        {
-          oldName = "show_mimetype_debug";
-          newName = "showMimetypeDebug";
-        }
-      ];
-  }
-  // mkPlugin args {
+with import ../helpers.nix {inherit lib;};
+  mkPlugin args {
     name = "magma-nvim";
     description = "magma-nvim";
     package = pkgs.vimPlugins.magma-nvim-goose;

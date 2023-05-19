@@ -8,8 +8,6 @@ with lib; let
   cfg = config.plugins.bufferline;
   helpers = import ../helpers.nix args;
 
-  basePluginPath = ["plugins" "bufferline"];
-
   highlightOption = {
     fg = helpers.mkNullOrOption types.str "foreground color";
 
@@ -83,38 +81,6 @@ with lib; let
     pick_selected = "pickSelected";
   };
 in {
-  # Those renamed are from 2023-04-04.
-  # TODO: remove them in 1-2 months
-  imports =
-    [
-      (
-        mkRenamedOptionModule
-        (basePluginPath ++ ["indicatorIcon"])
-        (basePluginPath ++ ["indicator" "icon"])
-      )
-    ]
-    ++ (
-      lists.flatten (
-        map (
-          highlightOptionName: let
-            prefix = basePluginPath ++ ["highlights" highlightOptionName];
-          in [
-            (
-              mkRenamedOptionModule
-              (prefix ++ ["guifg"])
-              (prefix ++ ["fg"])
-            )
-            (
-              mkRenamedOptionModule
-              (prefix ++ ["guibg"])
-              (prefix ++ ["bg"])
-            )
-          ]
-        )
-        (attrValues highlightOptions)
-      )
-    );
-
   options = {
     plugins.bufferline =
       helpers.extraOptionsOptions

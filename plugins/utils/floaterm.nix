@@ -3,12 +3,10 @@
   config,
   lib,
   ...
-} @ args:
+}:
 with lib; let
   cfg = config.plugins.floaterm;
   helpers = import ../helpers.nix {inherit lib;};
-  optionWarnings = import ../../lib/option-warnings.nix args;
-  basePluginPath = ["plugins" "floaterm"];
 
   settings = {
     shell = {
@@ -150,25 +148,6 @@ with lib; let
     };
   };
 in {
-  imports = [
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["winType"];
-      newOption = basePluginPath ++ ["wintype"];
-    })
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["winWidth"];
-      newOption = basePluginPath ++ ["width"];
-    })
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["winHeight"];
-      newOption = basePluginPath ++ ["height"];
-    })
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["borderChars"];
-      newOption = basePluginPath ++ ["borderchars"];
-    })
-  ];
-
   options.plugins.floaterm = let
     # Misc options
     # `OPTION = VALUE`
