@@ -7,7 +7,6 @@
 with lib; let
   cfg = config.plugins.barbar;
   helpers = import ../helpers.nix {inherit lib;};
-  basePluginPath = ["plugins" "barbar"];
 
   bufferOptions = {
     bufferIndex = helpers.mkNullOrOption types.bool ''
@@ -82,53 +81,6 @@ with lib; let
     orderByWindowNumber = "OrderByWindowNumber";
   };
 in {
-  # All the following renames/removes are from 2023-04-05.
-  # TODO: Remove them in 1-2 months.
-  imports = [
-    (mkRemovedOptionModule (basePluginPath ++ ["closable"]) "")
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["animations"])
-      (basePluginPath ++ ["animation"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["diagnostics"])
-      (basePluginPath ++ ["icons" "diagnostics"])
-    )
-    (mkRemovedOptionModule (basePluginPath ++ ["icons" "enable"]) "")
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["icons" "customColors"])
-      (basePluginPath ++ ["icons" "filetype" "customColors"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["icons" "separatorActive"])
-      (basePluginPath ++ ["icons" "separator" "left"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["icons" "separatorInactive"])
-      (basePluginPath ++ ["icons" "inactive" "separator" "left"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["icons" "separatorVisible"])
-      (basePluginPath ++ ["icons" "visible" "separator" "left"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["icons" "closeTab"])
-      (basePluginPath ++ ["icons" "button"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["icons" "closeTabModified"])
-      (basePluginPath ++ ["icons" "modified" "button"])
-    )
-  ];
-
   options.plugins.barbar =
     helpers.extraOptionsOptions
     // {

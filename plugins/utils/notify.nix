@@ -7,21 +7,11 @@
 with lib; let
   cfg = config.plugins.notify;
   helpers = import ../helpers.nix {inherit lib;};
-  optionWarnings = import ../../lib/option-warnings.nix {inherit lib;};
-  basePluginPath = ["plugins" "notify"];
   icon = mkOption {
     type = types.nullOr types.str;
     default = null;
   };
 in {
-  imports = [
-    (optionWarnings.mkRenamedOption {
-      # 2023-03-24
-      option = basePluginPath ++ ["backgroundColor"];
-      newOption = basePluginPath ++ ["backgroundColour"];
-    })
-  ];
-
   options.plugins.notify = {
     enable = mkEnableOption "notify";
 

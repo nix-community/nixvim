@@ -8,8 +8,6 @@ with lib; let
   cfg = config.plugins.nvim-tree;
   helpers = import ../helpers.nix {inherit lib;};
   ifNonNull' = helpers.ifNonNull';
-  optionWarnings = import ../../lib/option-warnings.nix args;
-  basePluginPath = ["plugins" "nvim-tree"];
 
   openWinConfigOption =
     helpers.defaultNullOpts.mkNullable
@@ -32,39 +30,6 @@ with lib; let
       They will be overridden to fit the file_popup content.
     '';
 in {
-  imports = [
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["updateCwd"];
-      newOption = basePluginPath ++ ["syncRootWithCwd"];
-    })
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["openOnTab"];
-      newOption = basePluginPath ++ ["tab" "sync" "open"];
-    })
-    (optionWarnings.mkRenamedOption {
-      option = basePluginPath ++ ["updateToBufDir"];
-      newOption = basePluginPath ++ ["hijackDirectories"];
-    })
-    (optionWarnings.mkDeprecatedOption {
-      option = basePluginPath ++ ["removeKeymaps"];
-      alternative = basePluginPath ++ ["onAttach"];
-      message = ''
-        Mappings can now be customized from the `onAttach` function.
-        Learn more at `:help nvim-tree-mappings-legacy`.
-      '';
-    })
-    # Deprecate warning added 2023-04-24
-    # TODO Remove both this warning and the one above (removeKeymaps) in ~1 month (June).
-    (optionWarnings.mkDeprecatedOption {
-      option = basePluginPath ++ ["view" "mappings"];
-      alternative = basePluginPath ++ ["onAttach"];
-      message = ''
-        Mappings can now be customized from the `onAttach` function.
-        Learn more at `:help nvim-tree-mappings-legacy`.
-      '';
-    })
-  ];
-
   options.plugins.nvim-tree =
     helpers.extraOptionsOptions
     // {
@@ -380,16 +345,6 @@ in {
           }
         '';
 
-      removeKeymaps = helpers.defaultNullOpts.mkNullable (types.either types.bool (types.listOf types.str)) "false" ''
-        This can be used to remove the default mappings in the tree.
-        - Remove specific keys by passing a `string` table of keys
-            eg. {"<C-o>", "<CR>", "o", "<Tab>"}
-        - Remove all default mappings by passing `true`
-        - Ignore by passing `false`
-
-        Deprecated: See https://github.com/nvim-tree/nvim-tree.lua/wiki/Migrating-To-on_attach
-      '';
-
       selectPrompts = helpers.defaultNullOpts.mkBool false ''
         Use |vim.ui.select| style prompts.
         Necessary when using a UI prompt decorator such as dressing.nvim or telescope-ui-select.nvim.
@@ -462,73 +417,6 @@ in {
         signcolumn = helpers.defaultNullOpts.mkEnum ["yes" "auto" "no"] "yes" ''
           Show diagnostic sign column. Value can be `"yes"`, `"auto"`, `"no"`.
         '';
-
-        mappings = helpers.mkCompositeOption "Deprecated: please see |nvim-tree-mappings-legacy|." {
-          customOnly = helpers.defaultNullOpts.mkBool false ''
-            Will use only the provided user mappings and not the default otherwise,
-            extends the default mappings with the provided user mappings.
-          '';
-
-          list = let
-            mappingOption = types.submodule {
-              options = {
-                key = mkOption {
-                  type = with types; either str (listOf str);
-                  description = "Left hand side of the mapping";
-                };
-                action = mkOption {
-                  type = types.str;
-                  description = ''
-                    `""` to remove an action with {key}. The case of {key} must exactly match the
-                    action you are removing e.g. `"<Tab>"` to remove the default preview action.
-                    An arbitrary description when using `action_cb`.
-                  '';
-                };
-                action_cb = helpers.mkNullOrOption types.str ''
-                  optional custom function that will be called.
-                  Receives the node as a parameter.
-                  Non-empty description for `action` is required.
-                '';
-                mode = helpers.defaultNullOpts.mkStr "n" ''
-                  optional mode as per |nvim_set_keymap|.
-                '';
-              };
-            };
-          in
-            helpers.defaultNullOpts.mkNullable (types.listOf mappingOption) "{}" ''
-              A list of keymaps that will extend or override the default keymaps.
-
-              Example:
-                view.mappings = {
-                  list = [
-
-                    # remove a default mapping for cd
-                    {
-                      key = "<2-RightMouse>";
-                      action = "";
-                    }
-
-                    # add multiple normal mode mappings for edit
-                    {
-                      key = [ "<CR>" "o" ];
-                      action = "edit";
-                      mode = "n";
-                    }
-
-                    # custom action
-                    {
-                      key = "p";
-                      action = "print_the_node_path";
-                      action_cb = \'\'
-                        function(node)
-                          print(node.absolute_path)
-                        end
-                      \'\';
-                    };
-                  ];
-                };
-            '';
-        };
 
         float = helpers.mkCompositeOption "Configuration options for floating window." {
           enable = helpers.defaultNullOpts.mkBool false ''
@@ -1056,7 +944,6 @@ in {
             ignore_dirs = ignoreDirs;
           };
         on_attach = onAttach;
-        remove_keymaps = removeKeymaps;
         select_prompts = selectPrompts;
         view = with view; {
           centralize_selection = centralizeSelection;
@@ -1069,24 +956,6 @@ in {
           inherit number;
           inherit relativenumber;
           inherit signcolumn;
-          mappings = with mappings;
-            ifNonNull' cfg.view.mappings {
-              custom_only = customOnly;
-              list =
-                if list == null
-                then null
-                else
-                  map (
-                    mapping: {
-                      inherit (mapping) key action mode;
-                      action_cb =
-                        if (mapping.action_cb == null)
-                        then null
-                        else helpers.mkRaw mapping.action_cb;
-                    }
-                  )
-                  list;
-            };
           float = with float;
             ifNonNull' cfg.view.float {
               inherit enable;

@@ -1,15 +1,11 @@
 {
   pkgs,
-  config,
   lib,
   ...
 } @ args:
 with lib; let
   lspHelpers = import ../helpers.nix args;
   helpers = import ../../helpers.nix {inherit lib;};
-
-  optionWarnings = import ../../../lib/option-warnings.nix args;
-  basePluginPath = ["plugins" "lsp" "servers"];
 
   servers = [
     {
@@ -355,11 +351,5 @@ with lib; let
 in {
   imports =
     lib.lists.map (lspHelpers.mkLsp) servers
-    ++ [./pylsp.nix]
-    ++ [
-      (optionWarnings.mkRenamedOption {
-        option = basePluginPath ++ ["sumneko-lua"];
-        newOption = basePluginPath ++ ["lua-ls"];
-      })
-    ];
+    ++ [./pylsp.nix];
 }
