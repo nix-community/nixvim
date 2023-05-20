@@ -105,10 +105,14 @@ with lib; let
       options =
         mapConfigOptions
         // {
-          action = mkOption {
-            type = types.str;
-            description = "The action to execute.";
-          };
+          action =
+            if config.plugins.which-key.enable
+            then helpers.mkNullOrOption types.str "The action to execute"
+            else
+              mkOption {
+                type = types.str;
+                description = "The action to execute.";
+              };
 
           lua = mkOption {
             type = types.bool;
@@ -180,16 +184,34 @@ in {
       ++ (genMaps "!" config.maps.insertCommand)
       ++ (genMaps "c" config.maps.command);
   in {
-    extraConfigLua = optionalString (mappings != []) ''
-      -- Set up keybinds {{{
-      do
-        local __nixvim_binds = ${helpers.toLuaObject mappings}
-
-        for i, map in ipairs(__nixvim_binds) do
-          vim.keymap.set(map.mode, map.key, map.action, map.config)
-        end
-      end
-      -- }}}
-    '';
+    extraConfigLua =
+      optionalString (mappings != [])
+      (
+        if config.plugins.which-key.enable
+        then ''
+          -- Set up keybinds {{{
+          do
+            local __nixvim_binds = ${helpers.toLuaObject mappings}
+            for i, map in ipairs(__nixvim_binds) do
+              if not map.action then
+                require("which-key").register({[map.key] = {name =  map.config.desc }})
+              else
+                vim.keymap.set(map.mode, map.key, map.action, map.config)
+              end
+            end
+          end
+          -- }}}
+        ''
+        else ''
+          -- Set up keybinds {{{
+          do
+            local __nixvim_binds = ${helpers.toLuaObject mappings}
+            for i, map in ipairs(__nixvim_binds) do
+              vim.keymap.set(map.mode, map.key, map.action, map.config)
+            end
+          end
+          -- }}}
+        ''
+      );
   };
 }

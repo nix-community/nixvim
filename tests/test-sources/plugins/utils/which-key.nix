@@ -86,5 +86,7 @@
         filetypes = [];
       };
     };
+    # Simple mapping with only Description
+    maps.normal."ff".desc = "Test";
   };
 }
