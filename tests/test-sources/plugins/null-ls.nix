@@ -34,6 +34,31 @@
       shouldAttach = null;
       tempDir = null;
       updateInInsert = false;
+      sources = {
+        code_actions = {
+          gitsigns.enable = true;
+          shellcheck.enable = true;
+        };
+        diagnostics = {
+          cppcheck.enable = true;
+          flake8.enable = true;
+          gitlint.enable = true;
+          shellcheck.enable = true;
+        };
+        formatting = {
+          alejandra.enable = true;
+          black.enable = true;
+          cbfmt.enable = true;
+          fnlfmt.enable = true;
+          fourmolu.enable = true;
+          nixfmt.enable = true;
+          phpcbf.enable = true;
+          prettier.enable = true;
+          shfmt.enable = true;
+          stylua.enable = true;
+          taplo.enable = true;
+        };
+      };
     };
   };
 }

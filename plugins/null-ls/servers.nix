@@ -82,8 +82,10 @@ in {
 
   config = let
     cfg = config.plugins.null-ls;
+    gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
   in
     lib.mkIf cfg.enable {
-      plugins.gitsigns.enable = lib.mkIf (cfg.sources.code_actions.gitsigns.enable) true;
+      plugins.gitsigns.enable = lib.mkIf gitsignsEnabled true;
+      extraPackages = lib.optional gitsignsEnabled pkgs.git;
     };
 }
