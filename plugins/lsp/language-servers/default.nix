@@ -25,6 +25,12 @@ with lib; let
       package = pkgs.clang-tools;
     }
     {
+      name = "clojure-lsp";
+      description = "Enable clojure-lsp, for clojure.";
+      serverName = "clojure_lsp";
+      package = pkgs.clojure-lsp;
+    }
+    {
       name = "cssls";
       description = "Enable cssls, for CSS";
       package = pkgs.nodePackages.vscode-langservers-extracted;

@@ -56,6 +56,7 @@
         astro.enable = true;
         bashls.enable = true;
         clangd.enable = true;
+        clojure-lsp.enable = true;
         cssls.enable = true;
         dartls.enable = true;
         denols.enable = true;
