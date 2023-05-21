@@ -11,6 +11,9 @@
       shellcheck = {
         package = pkgs.shellcheck;
       };
+      statix = {
+        package = pkgs.statix;
+      };
     };
     completion = {};
     diagnostics = {
@@ -26,6 +29,12 @@
       gitlint = {
         package = pkgs.gitlint;
       };
+      deadnix = {
+        package = pkgs.deadnix;
+      };
+      statix = {
+        package = pkgs.statix;
+      };
     };
     formatting = {
       phpcbf = {
@@ -36,6 +45,9 @@
       };
       nixfmt = {
         package = pkgs.nixfmt;
+      };
+      nixpkgs_fmt = {
+        package = pkgs.nixpkgs-fmt;
       };
       prettier = {
         package = pkgs.nodePackages.prettier;

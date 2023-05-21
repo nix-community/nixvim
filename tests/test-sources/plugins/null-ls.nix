@@ -38,12 +38,15 @@
         code_actions = {
           gitsigns.enable = true;
           shellcheck.enable = true;
+          statix.enable = true;
         };
         diagnostics = {
           cppcheck.enable = true;
           flake8.enable = true;
           gitlint.enable = true;
           shellcheck.enable = true;
+          statix.enable = true;
+          deadnix.enable = true;
         };
         formatting = {
           alejandra.enable = true;
@@ -57,6 +60,7 @@
           shfmt.enable = true;
           stylua.enable = true;
           taplo.enable = true;
+          nixpkgs_fmt.enable = true;
         };
       };
     };
