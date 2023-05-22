@@ -31,6 +31,11 @@
             print('The clangd language server has been attached !')
           '';
         };
+        # Do not install the language server using nixvim
+        gopls = {
+          enable = true;
+          package = null;
+        };
         nil_ls.enable = true;
         rust-analyzer.enable = true;
         ruff-lsp = {
