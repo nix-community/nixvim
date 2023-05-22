@@ -101,7 +101,11 @@
         mkIf cfg.enable
         {
           extraPackages =
-            (optional (package != null) cfg.package)
+            (
+              optional
+              ((package != null) && (cfg.package != null))
+              cfg.package
+            )
             ++ (mapAttrsToList (name: _: cfg."${name}Package") extraPackages);
 
           plugins.lsp.enabledServers = [
