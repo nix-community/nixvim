@@ -33,7 +33,7 @@
                 pkgs = mkForce pkgs;
                 inherit (pkgs) lib;
                 helpers = import ./plugins/helpers.nix {inherit (pkgs) lib;};
-                inputs = inputs;
+                inherit inputs;
               };
             };
           }
@@ -70,7 +70,7 @@
             (import ./tests {
               inherit pkgs;
               inherit (pkgs) lib;
-              makeNixvim = self.legacyPackages."${system}".makeNixvim;
+              inherit (self.legacyPackages."${system}") makeNixvim;
             })
             // {
               lib-tests = import ./tests/lib-tests.nix {
@@ -103,9 +103,7 @@
               }:
                 stdenv.mkDerivation {
                   pname = "run-updates";
-                  version = pkgs.rust-analyzer.version;
-
-                  src = pkgs.rust-analyzer.src;
+                  inherit (pkgs.rust-analyzer) version src;
 
                   nativeBuildInputs = with pkgs; [extractRustAnalyzerPkg alejandra];
 
@@ -121,7 +119,7 @@
                 })
               {};
             # Used to updates plugins, launch 'nix run .#nvfetcher' in the 'plugins' directory
-            nvfetcher = pkgs.nvfetcher;
+            inherit (pkgs) nvfetcher;
           };
           legacyPackages = rec {
             makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
@@ -144,7 +142,7 @@
             }:
               stdenv.mkDerivation {
                 pname = "alejandra-excludes";
-                version = alejandra.version;
+                inherit (alejandra) version;
 
                 dontUnpack = true;
                 dontBuild = true;
@@ -163,7 +161,7 @@
           lib = import ./lib {
             inherit pkgs;
             inherit (pkgs) lib;
-            makeNixvim = self.legacyPackages."${system}".makeNixvim;
+            inherit (self.legacyPackages."${system}") makeNixvim;
           };
         });
     in

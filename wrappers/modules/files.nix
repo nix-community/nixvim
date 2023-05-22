@@ -44,9 +44,9 @@ in {
   };
 
   config = let
-    files = config.files;
+    inherit (config) files;
     concatFilesOption = attr:
-      lib.flatten (lib.mapAttrsToList (_: file: builtins.getAttr attr file) files);
+      lib.flatten (lib.mapAttrsToList (_: builtins.getAttr attr) files);
   in {
     # Each file can declare plugins/packages/warnings/assertions
     extraPlugins = concatFilesOption "extraPlugins";
@@ -59,7 +59,7 @@ in {
       name = "nixvim-config";
       paths =
         (lib.mapAttrsToList (_: file: file.plugin) files)
-        ++ (lib.mapAttrsToList (path: content: pkgs.writeTextDir path content) config.extraFiles);
+        ++ (lib.mapAttrsToList pkgs.writeTextDir config.extraFiles);
     };
   };
 }

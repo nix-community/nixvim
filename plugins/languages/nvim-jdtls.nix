@@ -71,7 +71,7 @@ in {
         '';
 
       settings =
-        helpers.mkNullOrOption (types.attrs)
+        helpers.mkNullOrOption types.attrs
         ''
           Here you can configure eclipse.jdt.ls specific settings
           See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
@@ -79,7 +79,7 @@ in {
         '';
 
       initOptions =
-        helpers.mkNullOrOption (types.attrs)
+        helpers.mkNullOrOption types.attrs
         ''
           Language server `initializationOptions`
           You need to extend the `bundles` with paths to jar files if you want to use additional
@@ -93,10 +93,10 @@ in {
 
   config = let
     cmd =
-      if isNull cfg.cmd
+      if (cfg.cmd == null)
       then let
         data =
-          if isNull cfg.data
+          if (cfg.data == null)
           then
             throw ''
               You have to either set the 'plugins.nvim-jdtls.data' or the 'plugins.nvim-jdtls.cmd'
@@ -109,7 +109,7 @@ in {
         ]
         ++ ["-data" data]
         ++ (
-          optionals (!isNull cfg.configuration)
+          optionals (cfg.configuration != null)
           ["-configuration" cfg.configuration]
         )
       else cfg.cmd;

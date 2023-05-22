@@ -34,8 +34,7 @@ in {
         xdg.configFile = files;
       })
       {
-        warnings = cfg.warnings;
-        assertions = cfg.assertions;
+        inherit (cfg) warnings assertions;
       }
     ]);
 }

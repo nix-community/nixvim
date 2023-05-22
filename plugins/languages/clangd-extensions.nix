@@ -117,7 +117,7 @@ in
       setupOptions = {
         server = cfg.server.extraOptions;
         extensions = {
-          autoSetHints = cfg.extensions.autoSetHints;
+          inherit (cfg.extensions) autoSetHints;
           inlay_hints = {
             only_current_line = cfg.extensions.inlayHints.onlyCurrentLine;
             only_current_line_autocmd = cfg.extensions.inlayHints.onlyCurrentLineAutocmd;
@@ -128,16 +128,11 @@ in
             max_len_align_padding = cfg.extensions.inlayHints.maxLenAlignPadding;
             right_align = cfg.extensions.inlayHints.rightAlign;
             right_align_padding = cfg.extensions.inlayHints.rightAlignPadding;
-            highlight = cfg.extensions.inlayHints.highlight;
-            priority = cfg.extensions.inlayHints.priority;
+            inherit (cfg.extensions.inlayHints) highlight priority;
           };
           ast = {
             role_icons = {
-              type = cfg.extensions.ast.roleIcons.type;
-              declaration = cfg.extensions.ast.roleIcons.declaration;
-              expression = cfg.extensions.ast.roleIcons.expression;
-              statement = cfg.extensions.ast.roleIcons.statement;
-              specifier = cfg.extensions.ast.roleIcons.specifier;
+              inherit (cfg.extensions.ast.roleIcons) type declaration expression statement specifier;
               "template argument" = cfg.extensions.ast.roleIcons.templateArgument;
             };
             kind_icons = {
@@ -150,14 +145,14 @@ in
               TemplateParamObject = cfg.extensions.ast.kindIcons.templateParamObject;
             };
             highlights = {
-              detail = cfg.extensions.ast.highlights.detail;
+              inherit (cfg.extensions.ast.highlights) detail;
             };
           };
           memory_usage = {
-            border = cfg.extensions.memoryUsage.border;
+            inherit (cfg.extensions.memoryUsage) border;
           };
           symbol_info = {
-            border = cfg.extensions.symbolInfo.border;
+            inherit (cfg.extensions.symbolInfo) border;
           };
         };
       };

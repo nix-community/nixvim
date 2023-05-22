@@ -52,8 +52,7 @@ in {
     doCmp = cfg.cmp.enable && config.plugins.nvim-cmp.enable;
     options =
       {
-        mode = cfg.mode;
-        preset = cfg.preset;
+        inherit (cfg) mode preset;
         symbol_map = cfg.symbolMap;
       }
       // (
@@ -61,7 +60,7 @@ in {
         then {
           maxwidth = cfg.cmp.maxWidth;
           ellipsis_char = cfg.cmp.ellipsisChar;
-          menu = cfg.cmp.menu;
+          inherit (cfg.cmp) menu;
         }
         else {}
       )

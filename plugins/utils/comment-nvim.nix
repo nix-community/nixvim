@@ -30,7 +30,7 @@ in {
         default = null;
       };
       toggler = mkOption {
-        type = types.nullOr (types.submodule ({...}: {
+        type = types.nullOr (types.submodule (_: {
           options = {
             line = mkOption {
               type = types.str;
@@ -48,7 +48,7 @@ in {
         default = null;
       };
       opleader = mkOption {
-        type = types.nullOr (types.submodule ({...}: {
+        type = types.nullOr (types.submodule (_: {
           options = {
             line = mkOption {
               type = types.str;
@@ -66,7 +66,7 @@ in {
         default = null;
       };
       mappings = mkOption {
-        type = types.nullOr (types.submodule ({...}: {
+        type = types.nullOr (types.submodule (_: {
           options = {
             basic = mkOption {
               type = types.bool;
@@ -93,12 +93,7 @@ in {
 
   config = let
     setupOptions = {
-      padding = cfg.padding;
-      sticky = cfg.sticky;
-      ignore = cfg.ignore;
-      toggler = cfg.toggler;
-      opleader = cfg.opleader;
-      mappings = cfg.mappings;
+      inherit (cfg) padding sticky ignore toggler opleader mappings;
     };
   in
     mkIf cfg.enable {

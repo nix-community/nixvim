@@ -34,14 +34,14 @@ in {
     extraPlugins = [cfg.package];
 
     maps.normal = with cfg.keymaps;
-      (optionalAttrs (!isNull bdelete)
+      (optionalAttrs (bdelete != null)
         {
           ${bdelete} = {
             action = ":Bdelete<CR>";
             silent = cfg.keymapsSilent;
           };
         })
-      // (optionalAttrs (!isNull bwipeout)
+      // (optionalAttrs (bwipeout != null)
         {
           ${bwipeout} = {
             action = ":Bwipeout<CR>";

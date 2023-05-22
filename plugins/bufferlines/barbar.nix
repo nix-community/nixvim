@@ -331,10 +331,10 @@ in {
         optionName: funcName: let
           key = cfg.keymaps.${optionName};
         in
-          mkIf (!isNull key) {
+          mkIf (key != null) {
             ${key} = {
               action = "<Cmd>Buffer${funcName}<CR>";
-              silent = cfg.keymaps.silent;
+              inherit (cfg.keymaps) silent;
             };
           }
       )

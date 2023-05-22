@@ -102,7 +102,7 @@ in {
     tsOptions =
       {
         highlight = {
-          enable = cfg.enable;
+          inherit (cfg) enable;
           disable =
             if (cfg.disabledLanguages != [])
             then cfg.disabledLanguages

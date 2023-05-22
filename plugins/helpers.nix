@@ -1,1 +1,1 @@
-args: import ../lib/helpers.nix args
+import ../lib/helpers.nix

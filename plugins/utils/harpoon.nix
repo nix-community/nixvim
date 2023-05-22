@@ -54,11 +54,11 @@ in {
           };
         '';
 
-        navNext = helpers.mkNullOrOption (types.str) ''
+        navNext = helpers.mkNullOrOption types.str ''
           Keymap for navigating to next mark.";
         '';
 
-        navPrev = helpers.mkNullOrOption (types.str) ''
+        navPrev = helpers.mkNullOrOption types.str ''
           Keymap for navigating to previous mark.";
         '';
 
@@ -171,11 +171,10 @@ in {
           mark_branch = cfg.markBranch;
         };
 
-        projects = projects;
+        inherit projects;
 
         menu = {
-          width = cfg.menu.width;
-          height = cfg.menu.height;
+          inherit (cfg.menu) width height;
           borderchars = cfg.menu.borderChars;
         };
       }
@@ -197,13 +196,14 @@ in {
           (
             optionName: luaFunc: let
               key = km.${optionName};
-            in (mkIf (key != null) {
-              ${key} = {
-                action = luaFunc;
-                lua = true;
-                inherit silent;
-              };
-            })
+            in
+              mkIf (key != null) {
+                ${key} = {
+                  action = luaFunc;
+                  lua = true;
+                  inherit silent;
+                };
+              }
           )
           {
             addFile = "require('harpoon.mark').add_file";

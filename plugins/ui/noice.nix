@@ -308,7 +308,7 @@ in {
               inherit (cfgLP) enabled format throttle view;
               format_done = cfgLP.formatDone;
             };
-          override = cfgL.override;
+          inherit (cfgL) override;
           hover = helpers.ifNonNull' cfgL.hover {
             inherit (cfgL.hover) enabled view opts;
           };

@@ -1026,9 +1026,9 @@ in {
         # Concatenate sources and extraSources, setting sources to it's default value if it is null
         # and extraSources is not null
         sources =
-          if (!isNull cfg.extraSources)
+          if (cfg.extraSources != null)
           then
-            if (isNull cfg.sources)
+            if (cfg.sources == null)
             then ["filesystem" "git_status" "buffers"] ++ cfg.extraSources
             else cfg.sources ++ cfg.extraSources
           else cfg.sources;

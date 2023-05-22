@@ -118,14 +118,14 @@ in
           lazy_loading = cfg.lazyLoading;
 
           logger = {
-            plugin = cfg.logger.plugin;
+            inherit (cfg.logger) plugin;
             use_console = cfg.logger.useConsole;
-            highlights = cfg.logger.highlights;
+            inherit (cfg.logger) highlights;
             use_file = cfg.logger.useFile;
-            level = cfg.logger.level;
+            inherit (cfg.logger) level;
 
             modes =
-              if (isNull cfg.logger.modes)
+              if (cfg.logger.modes == null)
               then null
               else
                 attrsets.mapAttrsToList
@@ -133,7 +133,7 @@ in
                   name = mode;
                   inherit (modeConfig) hl;
                   level = let
-                    level = modeConfig.level;
+                    inherit (modeConfig) level;
                   in
                     if (isInt level)
                     then level

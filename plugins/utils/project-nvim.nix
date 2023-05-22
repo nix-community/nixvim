@@ -66,7 +66,7 @@ in {
       {
         manual_mode = cfg.manualMode;
         detection_methods = cfg.detectionMethods;
-        patterns = cfg.patterns;
+        inherit (cfg) patterns;
         ignore_lsp = cfg.ignoreLsp;
         exclude_dirs = cfg.excludeDirs;
         show_hidden = cfg.showHidden;

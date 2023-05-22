@@ -222,9 +222,9 @@ in {
   config = let
     setupOptions =
       {
-        signs = cfg.signs;
+        inherit (cfg) signs;
         sign_priority = cfg.signPriority;
-        keywords = cfg.keywords;
+        inherit (cfg) keywords;
         gui_style = cfg.guiStyle;
         merge_keywords = cfg.mergeKeywords;
         highlight = helpers.ifNonNull' cfg.highlight {
@@ -244,14 +244,14 @@ in {
           comments_only = cfg.highlight.commentsOnly;
           max_line_len = cfg.highlight.maxLineLen;
         };
-        colors = cfg.colors;
+        inherit (cfg) colors;
         search = helpers.ifNonNull' cfg.search {
           inherit (cfg.search) command args;
           pattern =
             helpers.ifNonNull' cfg.search.pattern
             (
               if isList cfg.search.pattern
-              then (map (p: helpers.mkRaw p) cfg.search.pattern)
+              then (map helpers.mkRaw cfg.search.pattern)
               else helpers.mkRaw "[[${cfg.search.pattern}]]"
             );
         };
@@ -266,7 +266,7 @@ in {
 
       maps.normal = let
         silent = cfg.keymapsSilent;
-        keymaps = cfg.keymaps;
+        inherit (cfg) keymaps;
       in
         mkMerge (
           mapAttrsToList
@@ -274,25 +274,26 @@ in {
             optionName: funcName: let
               keymap = keymaps.${optionName};
 
-              key = keymap.key;
+              inherit (keymap) key;
 
-              cwd = optionalString (!isNull keymap.cwd) " cwd=${keymap.cwd}";
-              keywords = optionalString (!isNull keymap.keywords) " keywords=${keymap.keywords}";
+              cwd = optionalString (keymap.cwd != null) " cwd=${keymap.cwd}";
+              keywords = optionalString (keymap.keywords != null) " keywords=${keymap.keywords}";
 
               action = ":${funcName}${cwd}${keywords}<CR>";
-            in (mkIf (keymap != null) {
-              ${key} = {
-                inherit silent action;
-              };
-            })
+            in
+              mkIf (keymap != null) {
+                ${key} = {
+                  inherit silent action;
+                };
+              }
           )
           commands
         );
 
       # Automatically enable plugins if keymaps have been set
       plugins = mkMerge [
-        (mkIf (!isNull cfg.keymaps.todoTrouble) {trouble.enable = true;})
-        (mkIf (!isNull cfg.keymaps.todoTelescope) {telescope.enable = true;})
+        (mkIf (cfg.keymaps.todoTrouble != null) {trouble.enable = true;})
+        (mkIf (cfg.keymaps.todoTelescope != null) {telescope.enable = true;})
       ];
     };
 }

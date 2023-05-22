@@ -89,7 +89,7 @@ in {
         "Customize highlight groups (setting this overrides colorscheme)"
         (
           mapAttrs
-          (optionName: defaults: colorOption defaults)
+          (optionName: colorOption)
           {
             SniprunVirtualTextOk = {
               bg = "#66eeff";
@@ -131,7 +131,7 @@ in {
       ++ (
         optional
         (
-          (!isNull cfg.display)
+          (cfg.display != null)
           && (any (hasPrefix "NvimNotify") cfg.display)
         )
         nvim-notify

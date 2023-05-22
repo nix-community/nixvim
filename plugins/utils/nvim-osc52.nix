@@ -61,19 +61,19 @@ in
               action = "require('osc52').copy_operator";
               expr = true;
               lua = true;
-              silent = cfg.keymaps.silent;
+              inherit (cfg.keymaps) silent;
             };
             "${cfg.keymaps.copyLine}" = {
               action = "${cfg.keymaps.copy}_";
               remap = true;
-              silent = cfg.keymaps.silent;
+              inherit (cfg.keymaps) silent;
             };
           };
           visual = {
             "${cfg.keymaps.copyVisual}" = {
               action = "require('osc52').copy_visual";
               lua = true;
-              silent = cfg.keymaps.silent;
+              inherit (cfg.keymaps) silent;
             };
           };
         };

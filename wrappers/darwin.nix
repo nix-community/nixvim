@@ -27,8 +27,7 @@ in {
       environment.systemPackages = [cfg.finalPackage];
     }
     {
-      warnings = cfg.warnings;
-      assertions = cfg.assertions;
+      inherit (cfg) warnings assertions;
     }
   ]);
 }

@@ -5,7 +5,7 @@
   ...
 }: let
   options = lib.evalModules {
-    modules = modules;
+    inherit modules;
     specialArgs = {inherit pkgs lib;};
   };
   docs = pkgs.nixosOptionsDoc {
