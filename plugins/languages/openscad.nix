@@ -45,7 +45,7 @@ in {
   config = let
     cfg = config.plugins.openscad;
     fuzzyFinder =
-      if isNull cfg.fuzzyFinder
+      if (cfg.fuzzyFinder == null)
       then defaultFuzzyFinder
       else cfg.fuzzyFinder;
   in

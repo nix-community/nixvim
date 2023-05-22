@@ -11,7 +11,7 @@
     ...
   }:
     pkgs.stdenv.mkDerivation {
-      name = name;
+      inherit name;
 
       nativeBuildInputs = [nvim pkgs.docker-client];
 

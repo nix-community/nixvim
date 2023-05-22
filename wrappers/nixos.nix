@@ -35,8 +35,7 @@ in {
         environment.variables."VIM" = "/etc/nvim";
       })
       {
-        warnings = cfg.warnings;
-        assertions = cfg.assertions;
+        inherit (cfg) warnings assertions;
       }
     ]);
 }

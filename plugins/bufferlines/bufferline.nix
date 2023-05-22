@@ -305,7 +305,7 @@ in {
           inherit (cfg) offsets;
           groups = helpers.ifNonNull' cfg.groups {
             inherit (cfg.groups) items;
-            options = helpers.ifNonNull' (cfg.groups.options) {
+            options = helpers.ifNonNull' cfg.groups.options {
               toggle_hidden_on_enter = cfg.groups.options.toggleHiddenOnEnter;
             };
           };

@@ -161,10 +161,10 @@ in {
         log_level = cfg.logLevel;
         debounce_timeout = cfg.debounceTimeout;
         enable_line_number = cfg.enableLineNumber;
-        blacklist = cfg.blacklist;
+        inherit (cfg) blacklist;
         file_assets = cfg.fileAssets;
         show_time = cfg.showTime;
-        buttons = cfg.buttons;
+        inherit (cfg) buttons;
 
         # Rich presence text options.
         editing_text = cfg.editingText;

@@ -60,7 +60,7 @@ with lib; let
     {
       action = action;
       config = {
-        inherit (action) <values of the config options that have been explicitly set by the user>
+    inherit (action) <values of the config options that have been explicitly set by the user>
       };
     }
     */
@@ -94,8 +94,7 @@ with lib; let
         normalizedAction = normalizeAction action;
       in {
         inherit (normalizedAction) action config;
-        key = key;
-        mode = mode;
+        inherit key mode;
       })
       maps);
 

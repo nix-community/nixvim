@@ -61,7 +61,7 @@
     cases;
 
   # Helper function that calls `//` for each attrset of a list
-  concatMany = list: lib.lists.foldr lib.mergeAttrs {} list;
+  concatMany = lib.lists.foldr lib.mergeAttrs {};
   # An attrset of 'test-name' -> 'test-config'
 in
   concatMany (builtins.map handleTestFile testsListEvaluated)

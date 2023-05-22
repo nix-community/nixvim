@@ -7,7 +7,7 @@
 with lib; let
   cfg = config.plugins.nvim-tree;
   helpers = import ../helpers.nix {inherit lib;};
-  ifNonNull' = helpers.ifNonNull';
+  inherit (helpers) ifNonNull';
 
   openWinConfigOption =
     helpers.defaultNullOpts.mkNullable

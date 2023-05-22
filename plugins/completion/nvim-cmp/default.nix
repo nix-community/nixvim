@@ -47,7 +47,7 @@ in {
     mapping = mkOption {
       default = null;
       type = with types;
-        nullOr (attrsOf (either str (types.submodule ({...}: {
+        nullOr (attrsOf (either str (types.submodule (_: {
           options = {
             action = mkOption {
               type = types.nonEmptyStr;
@@ -259,7 +259,7 @@ in {
     };
 
     sources = let
-      source_config = types.submodule ({...}: {
+      source_config = types.submodule (_: {
         options = {
           name = mkOption {
             type = types.str;
@@ -267,7 +267,7 @@ in {
             example = ''"buffer"'';
           };
 
-          option = helpers.mkNullOrOption (types.attrs) ''
+          option = helpers.mkNullOrOption types.attrs ''
             Any specific options defined by the source itself.
 
             If direct lua code is needed use `helpers.mkRaw`.
@@ -470,7 +470,7 @@ in {
         then null
         else false;
 
-      performance = cfg.performance;
+      inherit (cfg) performance;
       preselect =
         helpers.ifNonNull' cfg.preselect
         (helpers.mkRaw "cmp.PreselectMode.${cfg.preselect}");
@@ -488,9 +488,9 @@ in {
                 if isString mapping
                 then mapping
                 else let
-                  modes = mapping.modes;
+                  inherit (mapping) modes;
                   modesString =
-                    optionalString (!isNull modes && ((length modes) >= 1))
+                    optionalString (modes != null && ((length modes) >= 1))
                     ("," + (helpers.toLuaObject mapping.modes));
                 in "cmp.mapping(${mapping.action}${modesString})"
               ))
@@ -510,7 +510,7 @@ in {
 
       snippet = helpers.ifNonNull' cfg.snippet {
         expand = let
-          expand = cfg.snippet.expand;
+          inherit (cfg.snippet) expand;
         in
           if isString expand
           then
@@ -525,12 +525,12 @@ in {
       completion = helpers.ifNonNull' cfg.completion {
         keyword_length = cfg.completion.keywordLength;
         keyword_pattern = let
-          keywordPattern = cfg.completion.keywordPattern;
+          inherit (cfg.completion) keywordPattern;
         in
           helpers.ifNonNull' keywordPattern
           (helpers.mkRaw "[[${keywordPattern}]]");
         autocomplete = let
-          autocomplete = cfg.completion.autocomplete;
+          inherit (cfg.completion) autocomplete;
         in
           if isList autocomplete
           then
@@ -540,7 +540,7 @@ in {
             autocomplete
           # either null or false
           else autocomplete;
-        completeopt = cfg.completion.completeopt;
+        inherit (cfg.completion) completeopt;
       };
 
       confirmation = helpers.ifNonNull' cfg.confirmation {
@@ -552,7 +552,7 @@ in {
 
       formatting = helpers.ifNonNull' cfg.formatting {
         expandable_indicator = cfg.formatting.expandableIndicator;
-        fields = cfg.formatting.fields;
+        inherit (cfg.formatting) fields;
         format =
           helpers.ifNonNull' cfg.formatting.format
           (helpers.mkRaw cfg.formatting.format);
@@ -569,7 +569,7 @@ in {
       sorting = helpers.ifNonNull' cfg.sorting {
         priority_weight = cfg.sorting.priorityWeight;
         comparators = let
-          comparators = cfg.sorting.comparators;
+          inherit (cfg.sorting) comparators;
         in
           helpers.ifNonNull' comparators
           (
@@ -605,7 +605,7 @@ in {
         cfg.sources
       );
 
-      view = cfg.view;
+      inherit (cfg) view;
       window = helpers.ifNonNull' cfg.window {
         completion = helpers.ifNonNull' cfg.window.completion {
           inherit
@@ -627,20 +627,20 @@ in {
             zindex
             ;
           max_width = let
-            maxWidth = cfg.window.documentation.maxWidth;
+            inherit (cfg.window.documentation) maxWidth;
           in
             if isInt maxWidth
             then maxWidth
             else helpers.ifNonNull' maxWidth (helpers.mkRaw maxWidth);
           max_height = let
-            maxHeight = cfg.window.documentation.maxHeight;
+            inherit (cfg.window.documentation) maxHeight;
           in
             if isInt maxHeight
             then maxHeight
             else helpers.ifNonNull' maxHeight (helpers.mkRaw maxHeight);
         };
       };
-      experimental = cfg.experimental;
+      inherit (cfg) experimental;
     };
   in
     mkIf cfg.enable {
@@ -655,7 +655,7 @@ in {
       # and enable the corresponding plugins.
       plugins = let
         flattened_sources =
-          if (isNull cfg.sources)
+          if (cfg.sources == null)
           then []
           else flatten cfg.sources;
         # Take only the names from the sources provided by the user

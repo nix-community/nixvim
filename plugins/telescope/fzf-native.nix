@@ -36,7 +36,7 @@ in {
 
   config = let
     configuration = {
-      fuzzy = cfg.fuzzy;
+      inherit (cfg) fuzzy;
       override_generic_sorter = cfg.overrideGenericSorter;
       override_file_sorter = cfg.overrideFileSorter;
       case_mode = cfg.caseMode;

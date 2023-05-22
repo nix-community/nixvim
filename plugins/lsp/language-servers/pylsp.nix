@@ -16,12 +16,10 @@ in {
       type = lib.types.nullOr (types.enum ["pycodestyle" "flake8"]);
       description = "List of configuration sources to use.";
       default = null;
-      apply = (
-        value:
-          if (value != null)
-          then [value]
-          else null
-      );
+      apply = value:
+        if (value != null)
+        then [value]
+        else null;
     };
 
     plugins = {
@@ -502,8 +500,8 @@ in {
     mkIf cfg.enable
     {
       extraPackages = let
-        isEnabled = x: (!isNull x) && (x.enabled == true);
-        plugins = cfg.settings.plugins;
+        isEnabled = x: (x != null) && (x.enabled != null && x.enabled);
+        inherit (cfg.settings) plugins;
       in
         lists.flatten (
           (map

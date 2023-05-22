@@ -40,6 +40,6 @@ in
         # Usefull for inverse search
         extraPackages = with pkgs; [pstree xdotool];
 
-        globals = mapAttrs' (name: value: nameValuePair ("vimtex_" + name) value) globals;
+        globals = mapAttrs' (name: nameValuePair ("vimtex_" + name)) globals;
       };
   }

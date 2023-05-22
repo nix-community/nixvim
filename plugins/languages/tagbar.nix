@@ -27,6 +27,6 @@ in
 
       extraPackages = [pkgs.ctags];
 
-      globals = mapAttrs' (name: value: nameValuePair ("tagbar_" + name) value) cfg.extraConfig;
+      globals = mapAttrs' (name: nameValuePair ("tagbar_" + name)) cfg.extraConfig;
     };
   }

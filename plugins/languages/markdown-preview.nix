@@ -99,22 +99,22 @@ in {
     extraPlugins = [cfg.package];
 
     globals = {
-      mkdp_auto_start = mkIf (!isNull cfg.autoStart) cfg.autoStart;
-      mkdp_auto_close = mkIf (!isNull cfg.autoClose) cfg.autoClose;
-      mkdp_refresh_slow = mkIf (!isNull cfg.refreshSlow) cfg.refreshSlow;
-      mkdp_command_for_global = mkIf (!isNull cfg.commandForGlobal) cfg.commandForGlobal;
-      mkdp_open_to_the_world = mkIf (!isNull cfg.openToTheWorld) cfg.openToTheWorld;
-      mkdp_open_ip = mkIf (!isNull cfg.openIp) cfg.openIp;
-      mkdp_browser = mkIf (!isNull cfg.browser) cfg.browser;
-      mkdp_echo_preview_url = mkIf (!isNull cfg.echoPreviewUrl) cfg.echoPreviewUrl;
-      mkdp_browserfunc = mkIf (!isNull cfg.browserFunc) cfg.browserFunc;
-      mkdp_preview_options = mkIf (!isNull cfg.previewOptions) cfg.previewOptions;
-      mkdp_markdown_css = mkIf (!isNull cfg.markdownCss) cfg.markdownCss;
-      mkdp_highlight_css = mkIf (!isNull cfg.highlightCss) cfg.highlightCss;
-      mkdp_port = mkIf (!isNull cfg.port) cfg.port;
-      mkdp_page_title = mkIf (!isNull cfg.pageTitle) cfg.pageTitle;
-      mkdp_filetypes = mkIf (!isNull cfg.fileTypes) cfg.fileTypes;
-      mkdp_theme = mkIf (!isNull cfg.theme) cfg.theme;
+      mkdp_auto_start = mkIf (cfg.autoStart != null) cfg.autoStart;
+      mkdp_auto_close = mkIf (cfg.autoClose != null) cfg.autoClose;
+      mkdp_refresh_slow = mkIf (cfg.refreshSlow != null) cfg.refreshSlow;
+      mkdp_command_for_global = mkIf (cfg.commandForGlobal != null) cfg.commandForGlobal;
+      mkdp_open_to_the_world = mkIf (cfg.openToTheWorld != null) cfg.openToTheWorld;
+      mkdp_open_ip = mkIf (cfg.openIp != null) cfg.openIp;
+      mkdp_browser = mkIf (cfg.browser != null) cfg.browser;
+      mkdp_echo_preview_url = mkIf (cfg.echoPreviewUrl != null) cfg.echoPreviewUrl;
+      mkdp_browserfunc = mkIf (cfg.browserFunc != null) cfg.browserFunc;
+      mkdp_preview_options = mkIf (cfg.previewOptions != null) cfg.previewOptions;
+      mkdp_markdown_css = mkIf (cfg.markdownCss != null) cfg.markdownCss;
+      mkdp_highlight_css = mkIf (cfg.highlightCss != null) cfg.highlightCss;
+      mkdp_port = mkIf (cfg.port != null) cfg.port;
+      mkdp_page_title = mkIf (cfg.pageTitle != null) cfg.pageTitle;
+      mkdp_filetypes = mkIf (cfg.fileTypes != null) cfg.fileTypes;
+      mkdp_theme = mkIf (cfg.theme != null) cfg.theme;
     };
   };
 }

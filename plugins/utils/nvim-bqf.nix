@@ -136,7 +136,7 @@ in {
           inherit wrap;
           buf_label = bufLabel;
           should_preview_cb =
-            if isNull shouldPreviewCb
+            if (shouldPreviewCb == null)
             then null
             else helpers.mkRaw shouldPreviewCb;
         };

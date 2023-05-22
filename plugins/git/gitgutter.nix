@@ -190,25 +190,25 @@ in {
       extraPackages = [pkgs.git] ++ grepPackage;
 
       globals = {
-        gitgutter_max_signs = mkIf (!isNull cfg.maxSigns) cfg.maxSigns;
+        gitgutter_max_signs = mkIf (cfg.maxSigns != null) cfg.maxSigns;
         gitgutter_show_msg_on_hunk_jumping = mkIf (!cfg.showMessageOnHunkJumping) 0;
         gitgutter_map_keys = mkIf (!cfg.defaultMaps) 0;
-        gitgutter_sign_allow_clobber = mkIf (cfg.allowClobberSigns) 1;
-        gitgutter_sign_priority = mkIf (!isNull cfg.signPriority) cfg.signPriority;
-        gitgutter_set_sign_backgrounds = mkIf (cfg.matchBackgrounds) 1;
+        gitgutter_sign_allow_clobber = mkIf cfg.allowClobberSigns 1;
+        gitgutter_sign_priority = mkIf (cfg.signPriority != null) cfg.signPriority;
+        gitgutter_set_sign_backgrounds = mkIf cfg.matchBackgrounds 1;
 
-        gitgutter_sign_added = mkIf (!isNull cfg.signs.added) cfg.signs.added;
-        gitgutter_sign_modified = mkIf (!isNull cfg.signs.modified) cfg.signs.modified;
-        gitgutter_sign_removed = mkIf (!isNull cfg.signs.removed) cfg.signs.removed;
-        gitgutter_sign_removed_first_line = mkIf (!isNull cfg.signs.removedFirstLine) cfg.signs.removedFirstLine;
-        gitgutter_sign_removed_above_and_bellow = mkIf (!isNull cfg.signs.removedAboveAndBelow) cfg.signs.removedAboveAndBelow;
-        gitgutter_sign_modified_above = mkIf (!isNull cfg.signs.modifiedAbove) cfg.signs.modifiedAbove;
+        gitgutter_sign_added = mkIf (cfg.signs.added != null) cfg.signs.added;
+        gitgutter_sign_modified = mkIf (cfg.signs.modified != null) cfg.signs.modified;
+        gitgutter_sign_removed = mkIf (cfg.signs.removed != null) cfg.signs.removed;
+        gitgutter_sign_removed_first_line = mkIf (cfg.signs.removedFirstLine != null) cfg.signs.removedFirstLine;
+        gitgutter_sign_removed_above_and_bellow = mkIf (cfg.signs.removedAboveAndBelow != null) cfg.signs.removedAboveAndBelow;
+        gitgutter_sign_modified_above = mkIf (cfg.signs.modifiedAbove != null) cfg.signs.modifiedAbove;
 
-        gitgutter_diff_relative_to = mkIf (cfg.diffRelativeToWorkingTree) "working_tree";
+        gitgutter_diff_relative_to = mkIf cfg.diffRelativeToWorkingTree "working_tree";
         gitgutter_git_args = mkIf (cfg.extraGitArgs != "") cfg.extraGitArgs;
         gitgutter_diff_args = mkIf (cfg.extraDiffArgs != "") cfg.extraDiffArgs;
 
-        gitgutter_grep = mkIf (!isNull grepCommand) grepCommand;
+        gitgutter_grep = mkIf (grepCommand != null) grepCommand;
 
         gitgutter_enabled = mkIf (!cfg.enableByDefault) 0;
         gitgutter_signs = mkIf (!cfg.signsByDefault) 0;
@@ -216,8 +216,8 @@ in {
         gitgutter_highlight_lines = mkIf (!cfg.highlightLines) 0;
         gitgutter_highlight_linenrs = mkIf (!cfg.highlightLineNumbers) 0;
         gitgutter_async = mkIf (!cfg.runAsync) 0;
-        gitgutter_preview_win_floating = mkIf (cfg.previewWinFloating) 1;
-        gitgutter_use_location_list = mkIf (cfg.useLocationList) 1;
+        gitgutter_preview_win_floating = mkIf cfg.previewWinFloating 1;
+        gitgutter_use_location_list = mkIf cfg.useLocationList 1;
 
         gitgutter_terminal_report_focus = mkIf (!cfg.terminalReportFocus) 0;
       };

@@ -127,7 +127,7 @@ in {
       session_directory = cfg.sessionDirectory;
     };
 
-    filteredOptions = filterAttrs (_: v: !isNull v) options;
+    filteredOptions = filterAttrs (_: v: v != null) options;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];

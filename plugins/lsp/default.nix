@@ -114,7 +114,7 @@ in {
         diagnosticMaps =
           mapAttrs
           (key: action: {
-            silent = cfg.keymaps.silent;
+            inherit (cfg.keymaps) silent;
             action = "vim.diagnostic.${action}";
             lua = true;
           })
@@ -123,7 +123,7 @@ in {
         lspBuf =
           mapAttrs
           (key: action: {
-            silent = cfg.keymaps.silent;
+            inherit (cfg.keymaps) silent;
             action = "vim.lsp.buf.${action}";
             lua = true;
           })

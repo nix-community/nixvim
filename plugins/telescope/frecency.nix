@@ -56,7 +56,7 @@ in {
       default_workspace = cfg.defaultWorkspace;
       ignore_patterns = cfg.ignorePatterns;
       show_scores = cfg.showScores;
-      workspaces = cfg.workspaces;
+      inherit (cfg) workspaces;
       show_unindexed = cfg.showUnindexed;
       devicons_disabled = cfg.deviconsDisabled;
     };

@@ -113,7 +113,7 @@ in {
     extraWrapperArgs = builtins.concatStringsSep " " (
       (optional (config.extraPackages != [])
         ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
-      ++ (optional (config.wrapRc)
+      ++ (optional config.wrapRc
         ''--add-flags -u --add-flags "${pkgs.writeText "init.lua" customRC}"'')
     );
 

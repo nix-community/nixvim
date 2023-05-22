@@ -92,7 +92,7 @@ in {
       options =
         {
           extensions = cfg.extensionConfig;
-          defaults = cfg.defaults;
+          inherit (cfg) defaults;
         }
         // cfg.extraOptions;
     in ''

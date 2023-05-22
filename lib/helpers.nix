@@ -3,7 +3,7 @@ with lib; rec {
   # vim dictionaries are, in theory, compatible with JSON
   toVimDict = args:
     toJSON
-    (lib.filterAttrs (n: v: !isNull v) args);
+    (lib.filterAttrs (n: v: v != null) args);
 
   # Black functional magic that converts a bunch of different Nix types to their
   # lua equivalents!
@@ -25,7 +25,7 @@ with lib; rec {
             (filterAttrs
               (
                 n: v:
-                  !isNull v && (toLuaObject v != "{}")
+                  v != null && (toLuaObject v != "{}")
               )
               args)))
         + "}"
@@ -43,7 +43,7 @@ with lib; rec {
     then "${toString args}"
     else if builtins.isInt args
     then "${toString args}"
-    else if isNull args
+    else if (args == null)
     then "nil"
     else "";
 
@@ -68,7 +68,7 @@ with lib; rec {
   #     silent = false;
   #   };
   # };
-  mkModeMaps = defaults: modeMaps:
+  mkModeMaps = defaults:
     mapAttrs
     (
       shortcut: action: let
@@ -78,8 +78,7 @@ with lib; rec {
           else action;
       in
         defaults // actionAttrs
-    )
-    modeMaps;
+    );
 
   # Applies some default mapping options to a set of mappings
   #
@@ -92,10 +91,9 @@ with lib; rec {
   #       ...
   #     };
   #   }
-  mkMaps = defaults: maps:
+  mkMaps = defaults:
     mapAttrs
-    (name: modeMaps: (mkModeMaps defaults modeMaps))
-    maps;
+    (name: modeMaps: (mkModeMaps defaults modeMaps));
 
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption = type: desc:
@@ -105,12 +103,12 @@ with lib; rec {
       description = desc;
     };
 
-  mkIfNonNull' = x: y: (mkIf (!isNull x) y);
+  mkIfNonNull' = x: y: (mkIf (x != null) y);
 
   mkIfNonNull = x: (mkIfNonNull' x x);
 
   ifNonNull' = x: y:
-    if (isNull x)
+    if (x == null)
     then null
     else y;
 
@@ -207,7 +205,7 @@ with lib; rec {
     if builtins.isBool val
     then
       (
-        if val == false
+        if !val
         then 0
         else 1
       )

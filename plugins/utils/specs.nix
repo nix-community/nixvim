@@ -129,7 +129,7 @@ in {
       popup = {
         inherit (cfg) blend width;
         winhl =
-          if (!isNull cfg.color)
+          if (cfg.color != null)
           then "SpecsPopColor"
           else "PMenu";
         delay_ms = cfg.delay;
@@ -150,7 +150,7 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      highlight.SpecsPopColor.bg = mkIf (!isNull cfg.color) cfg.color;
+      highlight.SpecsPopColor.bg = mkIf (cfg.color != null) cfg.color;
 
       extraConfigLua = ''
         require('specs').setup(${setup})

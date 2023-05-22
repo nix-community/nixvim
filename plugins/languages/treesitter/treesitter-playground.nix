@@ -58,7 +58,7 @@ in {
           toggle_language_display = cfg.keybindings.toggleLanguageDisplay;
           focus_language = cfg.keybindings.focusLanguage;
           unfocus_language = cfg.keybindings.unfocusLanguage;
-          update = cfg.keybindings.update;
+          inherit (cfg.keybindings) update;
           goto_node = cfg.keybindings.gotoNode;
           show_help = cfg.keybindings.showHelp;
         };

@@ -206,7 +206,7 @@ with lib; let
         };
         workspace = {
           library = mkOption {
-            type = types.nullOr (types.either types.str (helpers.rawType));
+            type = types.nullOr (types.either types.str helpers.rawType);
             description = ''
               An array of abosolute or workspace-relative paths that will be added to the workspace
               diagnosis - meaning you will get completion and context from these library files.
@@ -350,6 +350,6 @@ with lib; let
   ];
 in {
   imports =
-    lib.lists.map (lspHelpers.mkLsp) servers
+    lib.lists.map lspHelpers.mkLsp servers
     ++ [./pylsp.nix];
 }

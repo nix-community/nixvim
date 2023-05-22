@@ -101,7 +101,7 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      plugins.treesitter.enable = mkIf (cfg.checkTs == true) true;
+      plugins.treesitter.enable = mkIf (cfg.checkTs != null && cfg.checkTs) true;
 
       extraConfigLua = ''
         require('nvim-autopairs').setup(${helpers.toLuaObject options})

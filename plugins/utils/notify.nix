@@ -54,8 +54,7 @@ in {
 
   config = let
     setupOptions = with cfg; {
-      stages = stages;
-      timeout = timeout;
+      inherit stages timeout;
       background_colour = backgroundColour;
       minimum_width = minimumWidth;
       icons = with icons; {

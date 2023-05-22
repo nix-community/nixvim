@@ -84,13 +84,12 @@
   serverDataFormatted =
     lib.mapAttrsToList
     (
-      sourceType: sourceSet:
-        lib.mapAttrsToList (name: attrs: attrs // {inherit sourceType name;}) sourceSet
+      sourceType: lib.mapAttrsToList (name: attrs: attrs // {inherit sourceType name;})
     )
     serverData;
   dataFlattened = lib.flatten serverDataFormatted;
 in {
-  imports = lib.lists.map (helpers.mkServer) dataFlattened;
+  imports = lib.lists.map helpers.mkServer dataFlattened;
 
   config = let
     cfg = config.plugins.null-ls;

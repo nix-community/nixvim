@@ -214,18 +214,16 @@ in {
         inherit icons_enabled icon separator color padding;
       }
       extraConfig;
-    processSections = sections: mapAttrs (_: mapNullable (map processComponent)) sections;
+    processSections = mapAttrs (_: mapNullable (map processComponent));
     setupOptions = {
       options = {
+        inherit (cfg) theme globalstatus refresh extensions;
         icons_enabled = cfg.iconsEnabled;
-        theme = cfg.theme;
         section_separators = cfg.sectionSeparators;
         component_separators = cfg.componentSeparators;
         disabled_filetypes = cfg.disabledFiletypes;
         ignore_focus = cfg.ignoreFocus;
         always_divide_middle = cfg.alwaysDivideMiddle;
-        globalstatus = cfg.globalstatus;
-        refresh = cfg.refresh;
       };
 
       sections = mapNullable processSections cfg.sections;
@@ -233,7 +231,6 @@ in {
       tabline = mapNullable processSections cfg.tabline;
       winbar = mapNullable processSections cfg.winbar;
       inactive_winbar = mapNullable processSections cfg.inactiveWinbar;
-      extensions = cfg.extensions;
     };
   in
     mkIf cfg.enable {
