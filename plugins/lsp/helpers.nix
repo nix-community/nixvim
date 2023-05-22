@@ -32,7 +32,7 @@
         then {
           package = mkOption {
             default = package;
-            type = types.nullOr types.package;
+            type = types.package;
           };
         }
         else {};
@@ -42,9 +42,18 @@
           {
             enable = mkEnableOption description;
 
+            installLanguageServer = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Whether nixvim should take care of installing the language server.";
+            };
+
             cmd = mkOption {
               type = with types; nullOr (listOf str);
-              default = cmd cfg;
+              default =
+                if cfg.installLanguageServer
+                then cmd cfg
+                else null;
             };
 
             filetypes = helpers.mkNullOrOption (types.listOf types.str) ''
@@ -103,7 +112,7 @@
           extraPackages =
             (
               optional
-              ((package != null) && (cfg.package != null))
+              (cfg.installLanguageServer && (package != null))
               cfg.package
             )
             ++ (mapAttrsToList (name: _: cfg."${name}Package") extraPackages);

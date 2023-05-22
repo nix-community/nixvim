@@ -34,7 +34,7 @@
         # Do not install the language server using nixvim
         gopls = {
           enable = true;
-          package = null;
+          installLanguageServer = false;
         };
         nil_ls.enable = true;
         rust-analyzer.enable = true;
