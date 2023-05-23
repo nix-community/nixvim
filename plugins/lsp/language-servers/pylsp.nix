@@ -499,11 +499,15 @@ in {
   config =
     mkIf cfg.enable
     {
-      extraPackages = let
+      # WARNING: tricky stuff below:
+      # We need to fix the `python-lsp-server` derivation by adding all of the (user enabled)
+      # plugins to its `propagatedBuildInputs`.
+      # See https://github.com/NixOS/nixpkgs/issues/229337
+      plugins.lsp.servers.pylsp.package = let
         isEnabled = x: (x != null) && (x.enabled != null && x.enabled);
         inherit (cfg.settings) plugins;
-      in
-        lists.flatten (
+
+        nativePlugins =
           (map
             (
               pluginName: (
@@ -528,21 +532,98 @@ in {
               || (isEnabled plugins.rope_completion)
             )
             cfg.package.optional-dependencies.rope
-          )
-          # Third party plugins
-          ++ (
-            mapAttrsToList
-            (
-              pluginName: nixPackage: (optional (isEnabled plugins.${pluginName}) nixPackage)
+          );
+
+        # All of those plugins have `python-lsp-server` as a dependency.
+        # We need to get rid of it to add them to the `python-lsp-server` derivation itself.
+        thirdPartyPlugins = lists.flatten (
+          mapAttrsToList
+          (
+            pluginName: nixPackage: (
+              optional
+              (isEnabled plugins.${pluginName})
+              (
+                nixPackage.overridePythonAttrs (
+                  old: {
+                    # Get rid of the python-lsp-server dependency
+                    propagatedBuildInputs =
+                      filter
+                      (dep: dep.pname != "python-lsp-server")
+                      old.propagatedBuildInputs;
+
+                    # Skip testing because those naked dependencies will complain about missing pylsp
+                    doCheck = false;
+                  }
+                )
+              )
             )
-            (with pkgs.python3Packages; {
-              pylsp_mypy = pylsp-mypy;
-              isort = pyls-isort;
-              black = python-lsp-black;
-              memestra = pyls-memestra;
-              rope = pylsp-rope;
-              ruff = python-lsp-ruff;
-            })
+          )
+          (with pkgs.python3Packages; {
+            pylsp_mypy = pylsp-mypy.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  substituteInPlace setup.cfg \
+                    --replace "python-lsp-server >=1.7.0" ""
+                '';
+            });
+            isort = pyls-isort.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  substituteInPlace setup.py \
+                    --replace 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
+                '';
+            });
+            black = python-lsp-black.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  substituteInPlace setup.cfg \
+                    --replace "python-lsp-server>=1.4.0;" ""
+                '';
+            });
+            memestra = pyls-memestra.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  sed -i '/python-lsp-server/d' requirements.txt
+                '';
+            });
+            rope = pylsp-rope.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  sed -i '/python-lsp-server/d' setup.cfg
+                '';
+            });
+            ruff = python-lsp-ruff.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  sed -i '/python-lsp-server/d' pyproject.toml
+                '';
+
+              nativeBuildInputs = [setuptools] ++ (old.nativeBuildInputs or []);
+            });
+          })
+        );
+
+        # Final list of pylsp plugins to install
+        pylspPlugins = nativePlugins ++ thirdPartyPlugins;
+      in
+        mkDefault (
+          # This is the final default package for pylsp
+          pkgs.python3Packages.python-lsp-server.overridePythonAttrs (
+            old: {
+              propagatedBuildInputs = pylspPlugins ++ old.propagatedBuildInputs;
+            }
           )
         );
     };
