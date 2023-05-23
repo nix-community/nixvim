@@ -129,7 +129,8 @@ in {
       icons =
         stateOptions
         // (
-          mapAttrs (name: description:
+          mapAttrs
+          (name: description:
             mkOption {
               type = types.submodule {
                 options = stateOptions;
@@ -349,7 +350,7 @@ in {
       maps.normal = mkMerge userKeymapsList;
 
       extraConfigLua = ''
-        require('bufferline').setup(${helpers.toLuaObject setupOptions})
+        require('barbar').setup(${helpers.toLuaObject setupOptions})
       '';
     };
 }
