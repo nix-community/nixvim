@@ -1,6 +1,8 @@
 name: Run checks on code
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
 
 jobs:
   check:
@@ -8,8 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v19
+      - uses: cachix/install-nix-action@v20
         with:
+          nix_path: nixpkgs=channel:nixos-unstable
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: cachix/cachix-action@v12
+        with:
+          name: nixvim
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - run: nix flake check
       - run: nix flake check ./templates/_wrapper/simple
