@@ -122,19 +122,9 @@ in {
               type = "group";
               val = [
                 {
-                  shortcut = "SPC sf";
-                  desc = "  Find file";
-                  command = ":Telescope find_files <CR>";
-                }
-                {
-                  shortcut = "SPC sr";
-                  desc = "  Recently used files";
-                  command = ":Telescope oldfiles <CR>";
-                }
-                {
-                  shortcut = "SPC sg";
-                  desc = "  Find text";
-                  command = ":Telescope live_grep <CR>";
+                  shortcut = "e";
+                  desc = "  New file";
+                  command = "<CMD>ene <CR>";
                 }
                 {
                   shortcut = "SPC q";
