@@ -12,39 +12,21 @@ with lib; let
         description = "The command to run";
       };
 
-      nargs = mkOption {
-        type = types.nullOr (types.enum ["0" "1" "*" "?" "+"]);
-        default = null;
-        description = "The number of arguments to expect, see :h command-nargs";
-      };
-      complete = mkOption {
-        # TODO: This can take a lua function
-        type = types.nullOr types.str;
-        default = null;
-        description = "Tab-completion behaviour, see :h command-complete";
-      };
-      range = mkOption {
-        type = types.nullOr (types.oneOf [
-          types.bool
-          (types.enum ["%"])
-          types.int
-        ]);
-        default = null;
-        description = "Whether the command accepts a range, see :h command-range";
-      };
-      count = mkOption {
-        type = types.nullOr (types.oneOf [
-          types.bool
-          types.int
-        ]);
-        default = null;
-        description = "Whether the command accepts a count, see :h command-range";
-      };
-      addr = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "Whether special characters relate to other things, see :h command-addr";
-      };
+      nargs = helpers.mkNullOrOption (types.enum ["0" "1" "*" "?" "+"]) ''
+        The number of arguments to expect, see :h command-nargs.
+      '';
+      complete = helpers.mkNullOrOption (with types; either str helpers.rawType) ''
+        Tab-completion behaviour, see :h command-complete.
+      '';
+      range = helpers.mkNullOrOption (with types; oneOf [bool int (enum ["%"])]) ''
+        Whether the command accepts a range, see :h command-range.
+      '';
+      count = helpers.mkNullOrOption (with types; either bool int) ''
+        Whether the command accepts a count, see :h command-range.
+      '';
+      addr = helpers.mkNullOrOption types.str ''
+        Whether special characters relate to other things, see :h command-addr.
+      '';
       bang = helpers.defaultNullOpts.mkBool false "Whether this command can take a bang (!)";
       bar = helpers.defaultNullOpts.mkBool false "Whether this command can be followed by a \"|\" and another command";
       register = helpers.defaultNullOpts.mkBool false "The first argument to the command can be an optional register";
