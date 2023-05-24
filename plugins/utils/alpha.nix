@@ -16,7 +16,7 @@ with lib; let
     types.submodule {
       options = {
         type = mkOption {
-          type = type;
+          inherit type;
           description = "Type of section";
         };
 
