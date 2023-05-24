@@ -10,7 +10,6 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 
   sectionType = types.enum ["group" "padding" "text"];
-  themeType = types.enum ["dashboard" "startify" "theta"];
 
   mkAlphaSectionOption = type:
     types.submodule {
@@ -80,12 +79,6 @@ in {
 
       package = helpers.mkPackageOption "alpha" pkgs.vimPlugins.alpha-nvim;
 
-      theme = mkOption {
-        description = "Optional theme for alpha-nvim, one of: dashboard, startify, theta";
-        type = themeType;
-        default = "dashboard";
-      };
-
       iconsEnabled = mkOption {
         type = types.bool;
         description = "Toggle icon support. Installs nvim-web-devicons.";
@@ -139,7 +132,7 @@ in {
             }
             {
               type = "text";
-              val = "Don't Stop Until You're Proud";
+              val = "Inspiring quote here.";
               opts = {
                 position = "center";
                 hl = "Keyword";
