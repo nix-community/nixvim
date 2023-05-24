@@ -102,3 +102,5 @@ You can specify the special `tests` attribute in the configuration that will not
 The tests are then runnable with `nix flake check`.
 
 There are a second set of tests, unit tests for nixvim itself, defined in `tests/lib-tests.nix` that use the `pkgs.lib.runTests` framework.
+
+If you want to speed up tests, we have set up a Cachix for nixvim. This way, only tests whose dependencies have changed will be re-run, speeding things up considerably. To use it, just install cachix and run `cachix use nixvim`.
