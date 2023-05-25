@@ -68,6 +68,7 @@
 
     ./ui/noice.nix
 
+    ./utils/alpha.nix
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/conjure.nix
