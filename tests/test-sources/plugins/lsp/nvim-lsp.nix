@@ -49,6 +49,13 @@
           filetypes = ["python"];
           autostart = false;
         };
+        # rootDir
+        typst-lsp = {
+          enable = true;
+          rootDir = ''
+            require 'lspconfig.util'.root_pattern('.git', 'main.typ')
+          '';
+        };
       };
     };
   };
