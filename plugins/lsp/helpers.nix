@@ -67,6 +67,12 @@
               `:LspStart` (|lspconfig-commands|).
             '';
 
+            rootDir = helpers.mkNullOrOption types.str ''
+              A function (or function handle) which returns the root of the project used to
+              determine if lspconfig should launch a new language server, or attach a previously
+              launched server when you open a new buffer matching the filetype of the server.
+            '';
+
             onAttach =
               helpers.mkCompositeOption "Server specific on_attach behavior."
               {
@@ -123,6 +129,9 @@
               extraOptions =
                 {
                   inherit (cfg) cmd filetypes autostart;
+                  root_dir =
+                    helpers.ifNonNull' cfg.rootDir
+                    (helpers.mkRaw cfg.rootDir);
                   on_attach =
                     helpers.ifNonNull' cfg.onAttach
                     (
