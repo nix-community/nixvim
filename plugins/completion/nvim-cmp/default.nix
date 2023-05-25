@@ -607,38 +607,34 @@ in {
 
       inherit (cfg) view;
       window = helpers.ifNonNull' cfg.window {
-        completion = helpers.ifNonNull' cfg.window.completion {
-          inherit
-            (cfg.window.completion)
-            border
-            winhighlight
-            zindex
-            scrolloff
-            scrollbar
-            ;
-          col_offset = cfg.window.completion.colOffset;
-          side_padding = cfg.window.completion.sidePadding;
-        };
-        documentation = helpers.ifNonNull' cfg.window.completion {
-          inherit
-            (cfg.window.completion)
-            border
-            winhighlight
-            zindex
-            ;
-          max_width = let
-            inherit (cfg.window.documentation) maxWidth;
-          in
-            if isInt maxWidth
-            then maxWidth
-            else helpers.ifNonNull' maxWidth (helpers.mkRaw maxWidth);
-          max_height = let
-            inherit (cfg.window.documentation) maxHeight;
-          in
-            if isInt maxHeight
-            then maxHeight
-            else helpers.ifNonNull' maxHeight (helpers.mkRaw maxHeight);
-        };
+        completion = with cfg.window.completion;
+          helpers.ifNonNull' cfg.window.completion {
+            inherit
+              border
+              winhighlight
+              zindex
+              scrolloff
+              scrollbar
+              ;
+            col_offset = colOffset;
+            side_padding = sidePadding;
+          };
+        documentation = with cfg.window.documentation;
+          helpers.ifNonNull' cfg.window.documentation {
+            inherit
+              border
+              winhighlight
+              zindex
+              ;
+            max_width =
+              if isInt maxWidth
+              then maxWidth
+              else helpers.ifNonNull' maxWidth (helpers.mkRaw maxWidth);
+            max_height =
+              if isInt maxHeight
+              then maxHeight
+              else helpers.ifNonNull' maxHeight (helpers.mkRaw maxHeight);
+          };
       };
       inherit (cfg) experimental;
     };
