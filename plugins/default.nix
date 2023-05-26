@@ -88,6 +88,7 @@
     ./utils/nvim-bqf.nix
     ./utils/nvim-colorizer.nix
     ./utils/nvim-osc52.nix
+    ./utils/oil.nix
     ./utils/project-nvim.nix
     ./utils/presence-nvim.nix
     ./utils/specs.nix
