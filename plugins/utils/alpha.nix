@@ -157,8 +157,7 @@ in {
       else attrset;
 
     options = {
-      theme = cfg.theme;
-      iconsEnabled = cfg.iconsEnabled;
+      inherit (cfg) theme iconsEnabled;
       layout = builtins.map processButtons cfg.layout;
     };
   in

@@ -83,7 +83,9 @@
                     enable = true;
                     excludes = ["plugins/_sources"];
                   };
+                  statix.enable = true;
                 };
+                settings.statix.ignore = ["plugins/lsp/language-servers/rust-analyzer-config.nix"];
               };
             };
           devShells = {
