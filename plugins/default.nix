@@ -43,6 +43,7 @@
     ./languages/treesitter/treesitter-playground.nix
     ./languages/treesitter/treesitter-rainbow.nix
     ./languages/treesitter/treesitter-refactor.nix
+    ./languages/typst/typst-vim.nix
     ./languages/vimtex.nix
     ./languages/zig.nix
 
