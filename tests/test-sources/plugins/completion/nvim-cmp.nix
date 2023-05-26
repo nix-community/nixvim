@@ -20,6 +20,8 @@
         debounce = 60;
         throttle = 30;
         fetchingTimeout = 500;
+        asyncBudget = 1;
+        maxViewEntries = 200;
       };
 
       preselect = "Item";

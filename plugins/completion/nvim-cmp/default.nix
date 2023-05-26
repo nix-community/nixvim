@@ -21,7 +21,7 @@ in {
 
     package = helpers.mkPackageOption "nvim-cmp" pkgs.vimPlugins.nvim-cmp;
 
-    performance = helpers.mkCompositeOption "Performance options" {
+    performance = {
       debounce = helpers.defaultNullOpts.mkInt 60 ''
         Sets debounce time
         This is the interval used to group up completions from different sources
@@ -36,6 +36,14 @@ in {
       fetchingTimeout = helpers.defaultNullOpts.mkInt 500 ''
         Sets the timeout of candidate fetching process.
         The nvim-cmp will wait to display the most prioritized source.
+      '';
+
+      asyncBudget = helpers.defaultNullOpts.mkInt 1 ''
+        Maximum time (in ms) an async function is allowed to run during one step of the event loop.
+      '';
+
+      maxViewEntries = helpers.defaultNullOpts.mkInt 200 ''
+        Maximum number of items to show in the entries list.
       '';
     };
 
@@ -289,8 +297,6 @@ in {
 
           priority = helpers.mkNullOrOption types.int "The source-specific priority value.";
 
-          maxItemCount = helpers.mkNullOrOption types.int "The source-specific item count.";
-
           groupIndex = helpers.mkNullOrOption types.int ''
             The source group index.
 
@@ -470,7 +476,12 @@ in {
         then null
         else false;
 
-      inherit (cfg) performance;
+      performance = with cfg.performance; {
+        inherit debounce throttle;
+        fetching_timeout = fetchingTimeout;
+        async_budget = asyncBudget;
+        max_view_entries = maxViewEntries;
+      };
       preselect =
         helpers.ifNonNull' cfg.preselect
         (helpers.mkRaw "cmp.PreselectMode.${cfg.preselect}");
@@ -595,8 +606,6 @@ in {
           trigger_characters = source.triggerCharacters;
 
           inherit (source) priority;
-
-          max_item_count = source.maxItemCount;
 
           group_index = source.groupIndex;
 
