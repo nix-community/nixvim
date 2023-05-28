@@ -10,16 +10,14 @@ with lib; let
 
   fractionType = types.numbers.between 0.0 1.0;
 
-  mkSizeOption = default: desc:
+  mkSizeOption =
     helpers.defaultNullOpts.mkNullable
     (with types;
       oneOf [
         int
         fractionType
         (listOf (either int fractionType))
-      ])
-    default
-    desc;
+      ]);
 
   commonWindowOptions = {
     maxWidth = mkSizeOption "0.9" ''
