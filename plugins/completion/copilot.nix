@@ -34,7 +34,7 @@ in {
     extraPlugins = [cfg.package];
     globals =
       {
-        copilot_node_command = "${pkgs.nodejs-16_x}/bin/node";
+        copilot_node_command = "${pkgs.nodejs-18_x}/bin/node";
         copilot_filetypes = cfg.filetypes;
       }
       // (
