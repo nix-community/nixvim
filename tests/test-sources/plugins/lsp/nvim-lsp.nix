@@ -79,6 +79,7 @@
         hls.enable = true;
         html.enable = true;
         jsonls.enable = true;
+        julials.enable = true;
         lua-ls.enable = true;
         metals.enable = true;
         nil_ls.enable = true;
