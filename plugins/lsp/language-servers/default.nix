@@ -178,6 +178,13 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/vscode-json-language-server" "--stdio"];
     }
     {
+      name = "julials";
+      description = "Enable julials, for Julia";
+      # The julia language server has to be installed from julia and thus is not packaged "as is" in
+      # nixpkgs.
+      package = null;
+    }
+    {
       name = "lua-ls";
       description = "Enable lua LS, for lua";
       # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
