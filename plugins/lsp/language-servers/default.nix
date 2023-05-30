@@ -185,6 +185,13 @@ with lib; let
       package = null;
     }
     {
+      name = "ltex";
+      description = "Enable ltex-ls, for LanguageTool";
+      package = pkgs.ltex-ls;
+      settingsOptions = import ./ltex-settings.nix {inherit lib;};
+      settings = cfg: {ltex = cfg;};
+    }
+    {
       name = "lua-ls";
       description = "Enable lua LS, for lua";
       # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
