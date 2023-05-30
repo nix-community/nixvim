@@ -45,6 +45,7 @@
     ./languages/treesitter/treesitter-refactor.nix
     ./languages/treesitter/ts-autotag.nix
     ./languages/typst/typst-vim.nix
+    ./languages/vim-slime.nix
     ./languages/vimtex.nix
     ./languages/zig.nix
 
