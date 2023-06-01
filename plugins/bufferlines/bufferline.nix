@@ -148,7 +148,7 @@ in {
         rightTruncMarker = helpers.defaultNullOpts.mkStr "" "right trunc marker";
 
         separatorStyle =
-          helpers.defaultNullOpts.mkEnum ["slant" "thick" "thin"] "thin"
+          helpers.defaultNullOpts.mkEnum ["slant" "padded_slant" "slope" "padded_slope" "thick" "thin"] "thin"
           "Separator style";
 
         nameFormatter =
