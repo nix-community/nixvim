@@ -49,6 +49,10 @@ in {
     cfg = config.plugins.treesitter-context;
   in
     mkIf cfg.enable {
+      warnings = mkIf (!config.plugins.treesitter.enable) [
+        "Nixvim: treesitter-context needs treesitter to function as intended"
+      ];
+
       extraPlugins = [cfg.package];
 
       plugins.treesitter.moduleConfig.context = {

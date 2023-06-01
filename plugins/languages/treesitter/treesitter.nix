@@ -174,7 +174,7 @@ in {
         '';
       };
 
-      extraPlugins = with pkgs;
+      extraPlugins =
         if cfg.nixGrammars
         then [(cfg.package.withPlugins (_: cfg.grammarPackages))]
         else [cfg.package];
