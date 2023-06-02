@@ -73,6 +73,7 @@
     ./ui/noice.nix
 
     ./utils/alpha.nix
+    ./utils/auto-save.nix
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/conjure.nix
