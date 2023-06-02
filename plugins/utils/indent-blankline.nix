@@ -246,6 +246,18 @@ in {
 
     disableWarningMessage =
       helpers.defaultNullOpts.mkBool false "Turns deprecation warning messages off.";
+
+    extraOptions = mkOption {
+      type = types.attrs;
+      default = {};
+      description = ''
+        Extra configuration options for indent-blankline without the 'indent_blankline_' prefix.
+        Example: To set 'indent_blankline_foobar' to 1, write
+        extraConfig = {
+          foobar = true;
+        };
+      '';
+    };
   };
 
   config = let
@@ -254,43 +266,49 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      globals = {
-        indent_blankline_char = cfg.char;
-        indent_blankline_char_blankline = cfg.charBlankline;
-        indent_blankline_char_list = cfg.charList;
-        indent_blankline_char_list_blankline = cfg.charListBlankline;
-        indent_blankline_char_highlight_list = cfg.charHighlightList;
-        indent_blankline_space_char_blankline = cfg.spaceCharBlankline;
-        indent_blankline_space_char_highlight_list = cfg.spaceCharHighlightList;
-        indent_blankline_space_char_blankline_highlight_list = cfg.spaceCharBlanklineHighlightList;
-        indent_blankline_use_treesitter = cfg.useTreesitter;
-        indent_blankline_indent_level = cfg.indentLevel;
-        indent_blankline_max_indent_increase = cfg.maxIndentIncrease;
-        indent_blankline_show_first_indent_level = cfg.showFirstIndentLevel;
-        indent_blankline_show_trailing_blankline_indent = cfg.showTrailingBlanklineIndent;
-        indent_blankline_show_end_of_line = cfg.showEndOfLine;
-        indent_blankline_show_foldtext = cfg.showFoldtext;
-        indent_blankline_disable_with_nolist = cfg.disableWithNolist;
-        indent_blankline_filetype = cfg.filetype;
-        indent_blankline_filetype_exclude = cfg.filetypeExclude;
-        indent_blankline_buftype_exclude = cfg.buftypeExclude;
-        indent_blankline_bufname_exclude = cfg.bufnameExclude;
-        indent_blankline_strict_tabs = cfg.strictTabs;
-        indent_blankline_show_current_context = cfg.showCurrentContext;
-        indent_blankline_show_current_context_start = cfg.showCurrentContextStart;
-        indent_blankline_show_current_context_start_on_current_line = cfg.showCurrentContextStartOnCurrentLine;
-        indent_blankline_context_char = cfg.contextChar;
-        indent_blankline_context_char_blankline = cfg.contextCharBlankline;
-        indent_blankline_context_char_list = cfg.contextCharList;
-        indent_blankline_context_char_list_blankline = cfg.contextCharListBlankline;
-        indent_blankline_context_highlight_list = cfg.contextHighlightList;
-        indent_blankline_char_priority = cfg.charPriority;
-        indent_blankline_context_start_priority = cfg.contextStartPriority;
-        indent_blankline_context_patterns = cfg.contextPatterns;
-        indent_blankline_use_treesitter_scope = cfg.useTreesitterScope;
-        indent_blankline_context_pattern_highlight = cfg.contextPatternHighlight;
-        indent_blankline_viewport_buffer = cfg.viewportBuffer;
-        indent_blankline_disable_warning_message = cfg.disableWarningMessage;
-      };
+      globals =
+        mapAttrs'
+        (name: nameValuePair ("indent_blankline_" + name))
+        (
+          {
+            inherit (cfg) char;
+            char_blankline = cfg.charBlankline;
+            char_list = cfg.charList;
+            char_list_blankline = cfg.charListBlankline;
+            char_highlight_list = cfg.charHighlightList;
+            space_char_blankline = cfg.spaceCharBlankline;
+            space_char_highlight_list = cfg.spaceCharHighlightList;
+            space_char_blankline_highlight_list = cfg.spaceCharBlanklineHighlightList;
+            use_treesitter = cfg.useTreesitter;
+            indent_level = cfg.indentLevel;
+            max_indent_increase = cfg.maxIndentIncrease;
+            show_first_indent_level = cfg.showFirstIndentLevel;
+            show_trailing_blankline_indent = cfg.showTrailingBlanklineIndent;
+            show_end_of_line = cfg.showEndOfLine;
+            show_foldtext = cfg.showFoldtext;
+            disable_with_nolist = cfg.disableWithNolist;
+            inherit (cfg) filetype;
+            filetype_exclude = cfg.filetypeExclude;
+            buftype_exclude = cfg.buftypeExclude;
+            bufname_exclude = cfg.bufnameExclude;
+            strict_tabs = cfg.strictTabs;
+            show_current_context = cfg.showCurrentContext;
+            show_current_context_start = cfg.showCurrentContextStart;
+            show_current_context_start_on_current_line = cfg.showCurrentContextStartOnCurrentLine;
+            context_char = cfg.contextChar;
+            context_char_blankline = cfg.contextCharBlankline;
+            context_char_list = cfg.contextCharList;
+            context_char_list_blankline = cfg.contextCharListBlankline;
+            context_highlight_list = cfg.contextHighlightList;
+            char_priority = cfg.charPriority;
+            context_start_priority = cfg.contextStartPriority;
+            context_patterns = cfg.contextPatterns;
+            use_treesitter_scope = cfg.useTreesitterScope;
+            context_pattern_highlight = cfg.contextPatternHighlight;
+            viewport_buffer = cfg.viewportBuffer;
+            disable_warning_message = cfg.disableWarningMessage;
+          }
+          // cfg.extraOptions
+        );
     };
 }
