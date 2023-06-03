@@ -80,6 +80,20 @@ in {
 
       folding = mkEnableOption "tree-sitter based folding";
 
+      languageRegister = mkOption {
+        type = with types; attrsOf (either str (listOf str));
+        description = ''
+          This is a wrapping of the `vim.treesitter.language.register` function.
+          Register specific parsers to one or several filetypes.
+          The keys are the parser names and the values are either one or several filetypes.
+        '';
+        default = {};
+        example = {
+          cpp = "onelab";
+          python = ["myFiletype" "anotherFiletype"];
+        };
+      };
+
       grammarPackages = mkOption {
         type = with types; listOf package;
         default = cfg.package.passthru.allGrammars;
@@ -150,7 +164,14 @@ in {
         '')
         + ''
           require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
-        '';
+        ''
+        + (optionalString (cfg.languageRegister != null) ''
+          __parserFiltypeMappings = ${helpers.toLuaObject cfg.languageRegister}
+
+          for parser_name, ft in pairs(__parserFiltypeMappings) do
+            require('vim.treesitter.language').register(parser_name, ft)
+          end
+        '');
 
       extraFiles = mkIf cfg.nixvimInjections {
         "queries/nix/injections.scm" = ''
@@ -178,7 +199,11 @@ in {
         if cfg.nixGrammars
         then [(cfg.package.withPlugins (_: cfg.grammarPackages))]
         else [cfg.package];
-      extraPackages = [pkgs.tree-sitter pkgs.nodejs pkgs.gcc];
+      extraPackages = with pkgs; [
+        tree-sitter
+        nodejs
+        gcc
+      ];
 
       options = mkIf cfg.folding {
         foldmethod = "expr";

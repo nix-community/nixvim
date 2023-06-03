@@ -16,6 +16,11 @@
     plugins.treesitter = {
       enable = true;
       nixvimInjections = true;
+
+      languageRegister = {
+        cpp = "onelab";
+        python = ["foo" "bar"];
+      };
     };
   };
 
