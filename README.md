@@ -26,6 +26,12 @@ gruvbox as the colorscheme, no extra configuration required!
 If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
 
 ## Installation
+
+NixVim needs to be installed with a compatible nixpkgs version.
+This means that the `main` branch of NixVim requires to be insalled with `nixos-unstable`.
+
+If you want to use NixVim with nixpkgs 23.05 you should use the `nixos-23.05` branch.
+
 ### Without flakes
 NixVim now ships with `flake-compat`, which makes it usable from any system.
 
