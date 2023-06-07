@@ -78,6 +78,7 @@
         gopls.enable = true;
         hls.enable = true;
         html.enable = true;
+        java-language-server.enable = true;
         jsonls.enable = true;
         julials.enable = true;
         ltex.enable = true;

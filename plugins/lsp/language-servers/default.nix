@@ -172,6 +172,12 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
     }
     {
+      name = "java-language-server";
+      description = "Enable java language server";
+      serverName = "java_language_server";
+      cmd = cfg: ["${cfg.package}/bin/java-language-server"];
+    }
+    {
       name = "jsonls";
       description = "Enable jsonls, for JSON";
       package = pkgs.nodePackages.vscode-langservers-extracted;
