@@ -191,6 +191,11 @@ with lib; let
       package = null;
     }
     {
+      name = "kotlin-language-server";
+      description = "Enable kotlin language server";
+      serverName = "kotlin_language_server";
+    }
+    {
       name = "ltex";
       description = "Enable ltex-ls, for LanguageTool";
       package = pkgs.ltex-ls;
