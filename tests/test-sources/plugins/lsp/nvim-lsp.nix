@@ -81,6 +81,7 @@
         java-language-server.enable = true;
         jsonls.enable = true;
         julials.enable = true;
+        kotlin-language-server.enable = true;
         ltex.enable = true;
         lua-ls.enable = true;
         metals.enable = true;
