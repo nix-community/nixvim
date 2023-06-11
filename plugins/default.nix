@@ -87,6 +87,7 @@
     ./utils/intellitab.nix
     ./utils/lastplace.nix
     ./utils/mark-radar.nix
+    ./utils/mini.nix
     ./utils/neorg.nix
     ./utils/notify.nix
     ./utils/netman.nix
