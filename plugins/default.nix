@@ -107,6 +107,7 @@
     ./utils/surround.nix
     ./utils/tmux-navigator.nix
     ./utils/todo-comments.nix
+    ./utils/toggleterm.nix
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
     ./utils/vim-matchup.nix
