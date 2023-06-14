@@ -12,6 +12,7 @@ in {
   imports =
     [
       ./cmp-tabnine.nix
+      ./crates-nvim.nix
     ]
     ++ pluginModules;
 }
