@@ -20,6 +20,10 @@ with lib; let
       package = pkgs.nodePackages.bash-language-server;
     }
     {
+      name = "ccls";
+      description = "Enable ccls, for C/C++.";
+    }
+    {
       name = "clangd";
       description = "Enable clangd LSP, for C/C++.";
       package = pkgs.clang-tools;
@@ -382,5 +386,8 @@ with lib; let
 in {
   imports =
     lib.lists.map lspHelpers.mkLsp servers
-    ++ [./pylsp.nix];
+    ++ [
+      ./ccls.nix
+      ./pylsp.nix
+    ];
 }
