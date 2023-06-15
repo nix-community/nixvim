@@ -67,6 +67,7 @@
       servers = {
         astro.enable = true;
         bashls.enable = true;
+        ccls.enable = true;
         clangd.enable = true;
         clojure-lsp.enable = true;
         cssls.enable = true;
