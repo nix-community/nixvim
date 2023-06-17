@@ -272,7 +272,7 @@ in {
   config = let
     cfg = config.plugins.noice;
     setupOptions = {
-      inherit (cfg) presets routes status format;
+      inherit (cfg) presets views routes status format;
       cmdline = helpers.ifNonNull' cfg.cmdline {
         inherit (cfg.cmdline) enabled view opts format;
       };
