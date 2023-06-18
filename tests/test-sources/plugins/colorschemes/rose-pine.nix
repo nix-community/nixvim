@@ -5,7 +5,7 @@
 
   defaults = {
     colorschemes.rose-pine = {
-      eable = true;
+      enable = true;
 
       style = "main";
 
