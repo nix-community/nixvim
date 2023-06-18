@@ -200,7 +200,7 @@
       };
       throttle = 1000 / 30;
       views = {};
-      routes = {};
+      routes = [];
       status = {};
       format = {};
     };
