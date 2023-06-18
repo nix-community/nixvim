@@ -583,7 +583,7 @@ in {
                 or ''''
                 + ''
                   substituteInPlace setup.cfg \
-                    --replace "python-lsp-server>=1.4.0;" ""
+                    --replace "python-lsp-server>=1.4.0" ""
                 '';
             });
             memestra = pyls-memestra.overridePythonAttrs (old: {
