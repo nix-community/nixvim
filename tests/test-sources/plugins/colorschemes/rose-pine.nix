@@ -38,7 +38,7 @@
         };
       };
 
-      highlight_groups = {
+      highlightGroups = {
         ColorColumn = {bg = "rose";};
 
         CursorLine = {
