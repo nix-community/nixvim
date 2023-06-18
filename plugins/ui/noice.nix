@@ -264,7 +264,7 @@ in {
       '';
 
       views = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
-      routes = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
+      routes = helpers.defaultNullOpts.mkNullable (types.listOf (types.attrsOf types.anything)) "[]" "";
       status = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
       format = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
     };
