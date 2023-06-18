@@ -1,14 +1,16 @@
 {
   description = "A neovim configuration system for NixOS";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  inputs.beautysh.url = "github:lovesegfault/beautysh";
-  inputs.beautysh.inputs.nixpkgs.follows = "nixpkgs";
+    beautysh.url = "github:lovesegfault/beautysh";
+    beautysh.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   outputs = {
     self,
@@ -45,6 +47,12 @@
         flake-utils.lib.eachDefaultSystem
         (system: let
           pkgs = import nixpkgs {inherit system;};
+          # Some nixvim supported plugins require the use of unfree packages.
+          # This unfree-friendly pkgs is used for documentation and testing only.
+          pkgs-unfree = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
           extractRustAnalyzer = {
             stdenv,
             pkgs,
@@ -70,7 +78,18 @@
             (import ./tests {
               inherit pkgs;
               inherit (pkgs) lib;
-              inherit (self.legacyPackages."${system}") makeNixvim;
+              # Some nixvim supported plugins require the use of unfree packages.
+              # As we test as many things as possible, we need to allow unfree sources by generating
+              # a separate `makeNixvim` module (with pkgs-unfree).
+              makeNixvim = let
+                makeNixvimWithModuleUnfree = import ./wrappers/standalone.nix pkgs-unfree modules;
+              in
+                configuration:
+                  makeNixvimWithModuleUnfree {
+                    module = {
+                      config = configuration;
+                    };
+                  };
             })
             // {
               lib-tests = import ./tests/lib-tests.nix {
@@ -94,7 +113,7 @@
             };
           };
           packages = {
-            docs = pkgs.callPackage (import ./docs.nix) {
+            docs = pkgs-unfree.callPackage (import ./docs.nix) {
               modules = nixvimModules;
             };
             runUpdates =
