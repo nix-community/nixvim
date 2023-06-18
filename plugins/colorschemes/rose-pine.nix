@@ -41,13 +41,13 @@ in {
     options = {termguicolors = true;};
     extraConfigLuaPre = let
       setupOptions = with cfg; {
+        inherit (cfg) groups;
         dark_variant = style;
         bold_vert_split = boldVerticalSplit;
         disable_background = transparentBackground;
         disable_float_background = transparentFloat;
         disable_italics = disableItalics;
         dim_nc_background = dimInactive;
-        groups = cfg.groups;
         highlight_groups = highlightGroups;
       };
     in ''
