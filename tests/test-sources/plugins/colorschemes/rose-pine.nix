@@ -6,13 +6,10 @@
   defaults = {
     colorschemes.rose-pine = {
       enable = true;
-
       style = "main";
-
       boldVerticalSplit = false;
       dimInactive = false;
       disableItalics = false;
-
       groups = {
         background = "base";
         background_nc = "_experimental_nc";
@@ -22,12 +19,10 @@
         comment = "muted";
         link = "iris";
         punctuation = "subtle";
-
         error = "love";
         hint = "iris";
         info = "foam";
         warn = "gold";
-
         headings = {
           h1 = "iris";
           h2 = "foam";
@@ -37,10 +32,8 @@
           h6 = "foam";
         };
       };
-
       highlightGroups = {
         ColorColumn = {bg = "rose";};
-
         CursorLine = {
           bg = "foam";
           blend = 10;
@@ -51,7 +44,6 @@
           blend = 10;
         };
       };
-
       transparentBackground = false;
       transparentFloat = false;
     };
