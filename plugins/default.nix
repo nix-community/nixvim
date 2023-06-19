@@ -82,6 +82,7 @@
     ./utils/comment-nvim.nix
     ./utils/commentary.nix
     ./utils/conjure.nix
+    ./utils/coverage.nix
     ./utils/cursorline.nix
     ./utils/easyescape.nix
     ./utils/endwise.nix
