@@ -11,6 +11,7 @@
     ./colorschemes/poimandres.nix
     ./colorschemes/tokyonight.nix
     ./colorschemes/catppuccin.nix
+    ./colorschemes/rose-pine.nix
 
     ./completion/coq.nix
     ./completion/coq-thirdparty.nix
