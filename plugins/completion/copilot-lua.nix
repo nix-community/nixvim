@@ -72,19 +72,17 @@ in {
           helpers.defaultNullOpts.mkNullable
           (with types; attrsOf (either bool helpers.rawType))
           ''
-            ```
-              {
-                yaml = false;
-                markdown = false;
-                help = false;
-                gitcommit = false;
-                gitrebase = false;
-                hgcommit = false;
-                svn = false;
-                cvs = false;
-                "." = false;
-              }
-            ```
+            {
+              yaml = false;
+              markdown = false;
+              help = false;
+              gitcommit = false;
+              gitrebase = false;
+              hgcommit = false;
+              svn = false;
+              cvs = false;
+              "." = false;
+            }
           ''
           ''
             Specify filetypes for attaching copilot.
