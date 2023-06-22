@@ -49,7 +49,7 @@ in
       "npm" = "cmp-npm";
       "cmp-clippy" = "cmp-clippy";
       "cmp_tabnine" = "cmp-tabnine";
-      "copilot" = "cmp-copilot";
+      "copilot" = "copilot-cmp";
       "dap" = "cmp-dap";
       "emoji" = "cmp-emoji";
       "greek" = "cmp-greek";
