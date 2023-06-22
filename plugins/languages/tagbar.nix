@@ -17,7 +17,7 @@ in
         The configuration options for tagbar without the 'tagbar_' prefix.
         Example: To set 'tagbar_show_tag_count' to 1, write
           extraConfig = {
-            show_tag_count= true;
+            show_tag_count = true;
           };
       '';
     };

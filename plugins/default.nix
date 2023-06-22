@@ -15,7 +15,7 @@
 
     ./completion/coq.nix
     ./completion/coq-thirdparty.nix
-    ./completion/copilot.nix
+    ./completion/copilot-vim.nix
     ./completion/nvim-cmp
     ./completion/nvim-cmp/sources
     ./completion/lspkind.nix
