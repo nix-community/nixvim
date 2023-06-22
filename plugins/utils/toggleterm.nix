@@ -15,7 +15,7 @@ in {
 
     size =
       helpers.defaultNullOpts.mkNullable
-      (with types; either number str) "" ''
+      (with types; either number str) "12" ''
         Size of the terminal.
         `size` can be a number or function
         Example:
@@ -34,27 +34,47 @@ in {
         ```
       '';
 
-    openMapping = helpers.defaultNullOpts.mkStr "<c-\\>" "Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for normal mode.";
+    openMapping = helpers.mkNullOrOption types.str ''
+      Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for
+      normal mode.
+    '';
 
-    onCreate = helpers.mkNullOrOption types.str "Function to run when the terminal is first created.";
+    onCreate = helpers.mkNullOrOption types.str ''
+      Function to run when the terminal is first created.
+    '';
 
-    onOpen = helpers.mkNullOrOption types.str "Function to run when the terminal opens.";
+    onOpen = helpers.mkNullOrOption types.str ''
+      Function to run when the terminal opens.
+    '';
 
-    onClose = helpers.mkNullOrOption types.str "Function to run when the terminal closes.";
+    onClose = helpers.mkNullOrOption types.str ''
+      Function to run when the terminal closes.
+    '';
 
-    onStdout = helpers.mkNullOrOption types.str "Callback for processing output on stdout.";
+    onStdout = helpers.mkNullOrOption types.str ''
+      Callback for processing output on stdout.
+    '';
 
-    onStderr = helpers.mkNullOrOption types.str "Callback for processing output on stderr.";
+    onStderr = helpers.mkNullOrOption types.str ''
+      Callback for processing output on stderr.
+    '';
 
-    onExit = helpers.mkNullOrOption types.str "Function to run when terminal process exits.";
+    onExit = helpers.mkNullOrOption types.str ''
+      Function to run when terminal process exits.
+    '';
 
-    hideNumbers = helpers.defaultNullOpts.mkBool true "Hide the number column in toggleterm buffers.";
+    hideNumbers = helpers.defaultNullOpts.mkBool true ''
+      Hide the number column in toggleterm buffers.
+    '';
 
     shadeFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "";
 
-    autochdir = helpers.defaultNullOpts.mkBool false "When neovim changes it current directory the terminal will change it's own when next it's opened.";
+    autochdir = helpers.defaultNullOpts.mkBool false ''
+      When neovim changes it current directory the terminal will change it's own when next it's
+      opened.
+    '';
 
-    highlights = helpers.defaultNullOpts.mkNullable (with types; (attrsOf (attrsOf str))) "{}" ''
+    highlights = helpers.mkNullOrOption (with types; (attrsOf (attrsOf str))) ''
       Highlights which map to a highlight group name and a table of it's values.
 
       Example:
@@ -74,27 +94,49 @@ in {
       ```
     '';
 
-    shadeTerminals = helpers.defaultNullOpts.mkBool false "NOTE: This option takes priority over highlights specified so if you specify Normal highlights you should set this to false.";
+    shadeTerminals = helpers.defaultNullOpts.mkBool false ''
+      NOTE: This option takes priority over highlights specified so if you specify Normal highlights
+      you should set this to false.
+    '';
 
-    shadingFactor = helpers.defaultNullOpts.mkInt (-30) "The percentage by which to lighten terminal background, default: -30 (gets multiplied by -3 if background is light).";
+    shadingFactor = helpers.defaultNullOpts.mkInt (-30) ''
+      The percentage by which to lighten terminal background.
+
+      Default: -30 (gets multiplied by -3 if background is light).
+    '';
 
     startInInsert = helpers.defaultNullOpts.mkBool true "";
 
-    insertMappings = helpers.defaultNullOpts.mkBool true "Whether or not the open mapping applies in insert mode.";
+    insertMappings = helpers.defaultNullOpts.mkBool true ''
+      Whether or not the open mapping applies in insert mode.
+    '';
 
-    terminalMappings = helpers.defaultNullOpts.mkBool true "Whether or not the open mapping applies in the opened terminals.";
+    terminalMappings = helpers.defaultNullOpts.mkBool true ''
+      Whether or not the open mapping applies in the opened terminals.
+    '';
 
     persistSize = helpers.defaultNullOpts.mkBool true "";
 
-    persistMode = helpers.defaultNullOpts.mkBool true "If set to true (default) the previous terminal mode will be remembered.";
+    persistMode = helpers.defaultNullOpts.mkBool true ''
+      If set to true (default) the previous terminal mode will be remembered.
+    '';
 
-    direction = helpers.defaultNullOpts.mkEnumFirstDefault ["vertical" "horizontal" "tab" "float"] "";
+    direction =
+      helpers.defaultNullOpts.mkEnumFirstDefault
+      ["vertical" "horizontal" "tab" "float"]
+      "";
 
-    closeOnExit = helpers.defaultNullOpts.mkBool true "Close the terminal window when the process exits.";
+    closeOnExit = helpers.defaultNullOpts.mkBool true ''
+      Close the terminal window when the process exits.
+    '';
 
-    shell = helpers.defaultNullOpts.mkStr "" "Change the default shell.";
+    shell = helpers.defaultNullOpts.mkStr "`vim.o.shell`" ''
+      Change the default shell.
+    '';
 
-    autoScroll = helpers.defaultNullOpts.mkBool true "Automatically scroll to the bottom on terminal output.";
+    autoScroll = helpers.defaultNullOpts.mkBool true ''
+      Automatically scroll to the bottom on terminal output.
+    '';
 
     floatOpts = {
       border =
