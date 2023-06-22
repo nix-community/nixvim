@@ -34,7 +34,7 @@ in {
         ```
       '';
 
-    openMapping = helpers.defaultNullOpts.mkStr "[[<c-\\>]]" "Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for normal mode.";
+    openMapping = helpers.defaultNullOpts.mkStr "<c-\\>" "Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for normal mode.";
 
     onCreate = helpers.mkNullOrOption types.str "Function to run when the terminal is first created.";
 
@@ -55,9 +55,10 @@ in {
     autochdir = helpers.defaultNullOpts.mkBool false "When neovim changes it current directory the terminal will change it's own when next it's opened.";
 
     highlights = helpers.defaultNullOpts.mkNullable (with types; (attrsOf (attrsOf str))) "{}" ''
-        Highlights which map to a highlight group name and a table of it's values.
-        Example:
-        ```
+      Highlights which map to a highlight group name and a table of it's values.
+
+      Example:
+      ```
         highlights = {
           Normal = {
             guibg = "<VALUE-HERE>";
@@ -134,7 +135,7 @@ in {
         then size
         else helpers.mkRaw size
       );
-      open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw openMapping);
+      open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw "[[${openMapping}]]");
       on_create = helpers.ifNonNull' onCreate (helpers.mkRaw onCreate);
       on_open = helpers.ifNonNull' onOpen (helpers.mkRaw onOpen);
       on_close = helpers.ifNonNull' onClose (helpers.mkRaw onClose);

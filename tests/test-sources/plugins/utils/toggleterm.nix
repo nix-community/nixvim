@@ -16,7 +16,7 @@
           end
         end
       '';
-      openMapping = "[[<c-\\>]]";
+      openMapping = "<c-\\>";
       onCreate = "function() end";
       onOpen = "function() end";
       onClose = "function() end";
