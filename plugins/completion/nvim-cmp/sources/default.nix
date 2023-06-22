@@ -11,6 +11,7 @@ in {
   # For extra cmp plugins
   imports =
     [
+      ./copilot-cmp.nix
       ./cmp-tabnine.nix
       ./crates-nvim.nix
     ]
