@@ -1,0 +1,55 @@
+{
+  empty = {
+    colorschemes.kanagawa.enable = true;
+  };
+
+  default = {
+    colorschemes.kanagawa = {
+      enable = true;
+
+      compile = false;
+      undercurl = true;
+      commentStyle = {italic = true;};
+      functionStyle = {};
+      keywordStyle = {italic = true;};
+      statementStyle = {bold = true;};
+      typeStyle = {};
+      transparent = false;
+      dimInactive = false;
+      terminalColors = true;
+      colors = {
+        theme = {
+          wave = {
+            ui = {
+              float = {
+                bg = "none";
+              };
+            };
+          };
+          dragon = {
+            syn = {
+              parameter = "yellow";
+            };
+          };
+          all = {
+            ui = {
+              bg_gutter = "none";
+            };
+          };
+        };
+        palette = {
+          sumiInk0 = "#000000";
+          fujiWhite = "#FFFFFF";
+        };
+      };
+      overrides = ''
+        return {}
+      '';
+      theme = "wave";
+      background = {
+        light = "lotus";
+        dark = "wave";
+      };
+    };
+  };
+}
