@@ -18,7 +18,7 @@
         end
       '';
 
-      foldVirtualTextHandler = ''
+      foldVirtTextHandler = ''
         function(virtText, lnum, endLnum, width, truncate)
           local newVirtText = {}
           local suffix = ('  %d '):format(endLnum - lnum)
@@ -53,11 +53,11 @@
   defaults = {
     plugins.nvim-ufo = {
       enable = true;
-      openFoldHighlightTimeout = 400;
+      openFoldHlTimeout = 400;
       providerSelector = null;
       closeFoldKinds = {};
-      foldVirtualTextHandler = null;
-      enableGetFoldVirtualText = false;
+      foldVirtTextHandler = null;
+      enableGetFoldVirtText = false;
       preview = {
         winConfig = {
           border = "rounded";

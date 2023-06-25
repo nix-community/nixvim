@@ -15,7 +15,7 @@ in {
 
       package = helpers.mkPackageOption "nvim-ufo" pkgs.vimPlugins.nvim-ufo;
 
-      openFoldHighlightTimeout = helpers.defaultNullOpts.mkInt 400 ''
+      openFoldHlTimeout = helpers.defaultNullOpts.mkInt 400 ''
         Time in millisecond between the range to be highlgihted and to be cleared
         while opening the folded line, `0` value will disable the highlight
       '';
@@ -31,9 +31,9 @@ in {
         run `UfoInspect` for details if your provider has extended the kinds.
       '';
 
-      foldVirtualTextHandler = helpers.defaultNullOpts.mkStr "null" "A lua function to customize fold virtual text";
+      foldVirtTextHandler = helpers.defaultNullOpts.mkStr "null" "A lua function to customize fold virtual text";
 
-      enableGetFoldVirtualText = helpers.defaultNullOpts.mkBool false ''
+      enableGetFoldVirtText = helpers.defaultNullOpts.mkBool false ''
         Enable a function with `lnum` as a parameter to capture the virtual text
         for the folded lines and export the function to `get_fold_virt_text` field of
         ctx table as 6th parameter in `fold_virt_text_handler`
@@ -41,7 +41,9 @@ in {
 
       preview = {
         winConfig = {
-          border = helpers.defaultNullOpts.mkStr "rounded" "The border for preview window, `:h nvim_open_win() | call search('border:')`";
+          border =
+            helpers.defaultNullOpts.mkNullable (types.either types.str (types.listOf types.str)) "rounded"
+            "The border for preview window, `:h nvim_open_win() | call search('border:')`";
 
           winblend = helpers.defaultNullOpts.mkInt 12 "The winblend for preview window, `:h winblend`";
 
@@ -50,18 +52,18 @@ in {
           maxheight = helpers.defaultNullOpts.mkInt 20 "The max height of preview window";
         };
 
-        mappings = helpers.mkNullOrOption types.attrs "mappings for preview window";
+        mappings = helpers.mkNullOrOption types.attrs "Mappings for preview window";
       };
     };
 
   config = let
     options = with cfg;
       {
-        open_fold_hl_timeout = openFoldHighlightTimeout;
+        open_fold_hl_timeout = openFoldHlTimeout;
         provider_selector = helpers.ifNonNull' providerSelector (helpers.mkRaw providerSelector);
         close_fold_kinds = closeFoldKinds;
-        fold_virt_text_handler = helpers.ifNonNull' providerSelector (helpers.mkRaw foldVirtualTextHandler);
-        enable_get_fold_virt_text = enableGetFoldVirtualText;
+        fold_virt_text_handler = helpers.ifNonNull' foldVirtTextHandler (helpers.mkRaw foldVirtTextHandler);
+        enable_get_fold_virt_text = enableGetFoldVirtText;
 
         preview = with preview; {
           inherit mappings;
