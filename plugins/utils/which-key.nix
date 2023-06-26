@@ -81,7 +81,7 @@ in {
         };
       };
     in {
-      border = helpers.defaultNullOpts.mkEnumFirstDefault ["none" "single" "double" "shadow"] "";
+      border = helpers.defaultNullOpts.mkBorder "none" "which-key" "";
       position = helpers.defaultNullOpts.mkEnumFirstDefault ["bottom" "top"] "";
       margin =
         helpers.defaultNullOpts.mkNullable spacingOptions

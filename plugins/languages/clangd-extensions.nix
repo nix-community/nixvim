@@ -7,12 +7,7 @@
   helpers = import ../helpers.nix {inherit lib;};
 in
   with lib; let
-    borderOpt = let
-      bordersTy =
-        types.enum ["double" "rounded" "single" "shadow" "none"];
-    in
-      helpers.defaultNullOpts.mkNullable (types.either bordersTy (types.listOf bordersTy))
-      ''"none"'' "";
+    borderOpt = helpers.defaultNullOpts.mkBorder "none" "clangd-extensions" "";
   in {
     options.plugins.clangd-extensions = {
       enable = mkEnableOption "clangd_extensions, plugin implementing clangd LSP extensions";

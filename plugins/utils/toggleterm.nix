@@ -140,13 +140,12 @@ in {
 
     floatOpts = {
       border =
-        helpers.defaultNullOpts.mkStr "single"
+        helpers.defaultNullOpts.mkBorder "single" "toggleterm"
         ''
           `border` = 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by
           `win open`.
           The border key is *almost* the same as 'nvim_open_win'.
-          See `:h nvim_open_win` for details on borders however the 'curved' border is a custom
-          border type not natively supported but implemented in this plugin.
+          The 'curved' border is a custom border type not natively supported but implemented in this plugin.
         '';
 
       width = helpers.defaultNullOpts.mkInt 50 "";

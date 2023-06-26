@@ -143,6 +143,21 @@ with lib; rec {
     mkStr = default: mkNullable lib.types.str ''${builtins.toString default}'';
     mkEnum = enum: default: mkNullable (lib.types.enum enum) ''"${default}"'';
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
+    mkBorder = default: name: desc:
+      mkNullable (with lib.types; oneOf [str (listOf str) (listOf (listOf str))]) default (let
+        defaultDesc = ''
+          Defines the border to use for ${name}.
+
+          Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info.
+        '';
+      in
+        if desc == ""
+        then defaultDesc
+        else ''
+          ${desc}
+
+          ${defaultDesc}
+        '');
   };
 
   mkPackageOption = name: default:

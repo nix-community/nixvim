@@ -41,9 +41,7 @@ in {
 
       preview = {
         winConfig = {
-          border =
-            helpers.defaultNullOpts.mkNullable (types.either types.str (types.listOf types.str)) "rounded"
-            "The border for preview window, `:h nvim_open_win() | call search('border:')`";
+          border = helpers.defaultNullOpts.mkBorder "rounded" "preview window" "";
 
           winblend = helpers.defaultNullOpts.mkInt 12 "The winblend for preview window, `:h winblend`";
 
