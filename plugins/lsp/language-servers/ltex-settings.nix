@@ -284,7 +284,7 @@ in {
   latex = {
     commands = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
       List of LATEX commands to be handled by the LATEX parser, listed together with empty arguments
-      (e.g., "\ref{}", "\documentclass[]{}").
+      (e.g., `"ref{}"`, `"\documentclass[]{}"`).
 
       This setting is an attrs with the commands as keys and corresponding actions as values.
 
