@@ -118,9 +118,7 @@ in {
         helpers.defaultNullOpts.mkStr "off"
         "Live mode toggle, see Usage - Running for more info.";
 
-      borders =
-        helpers.defaultNullOpts.mkEnum ["none" "single" "double" "shadow"] "single"
-        "Display borders around floating windows.";
+      borders = helpers.defaultNullOpts.mkBorder "single" "floating windows" "";
     };
 
   config = mkIf cfg.enable {

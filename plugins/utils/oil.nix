@@ -52,7 +52,7 @@ with lib; let
       helpers.mkNullOrOption (with types; either int fractionType)
       "Optionally define an integer/float for the exact height of the preview window.";
 
-    border = helpers.defaultNullOpts.mkStr "rounded" "";
+    border = helpers.defaultNullOpts.mkBorder "rounded" "oil" "";
 
     winOptions = {
       winblend = helpers.defaultNullOpts.mkInt 0 "";
@@ -315,7 +315,7 @@ in {
 
         maxHeight = helpers.defaultNullOpts.mkInt 0 "";
 
-        border = helpers.defaultNullOpts.mkStr "rounded" "";
+        border = helpers.defaultNullOpts.mkBorder "rounded" "oil.open_float" "";
 
         winOptions = {
           winblend = helpers.defaultNullOpts.mkInt 10 "";
@@ -329,7 +329,7 @@ in {
       progress =
         commonWindowOptions
         // {
-          minimizedBorder = helpers.defaultNullOpts.mkStr "none" "";
+          minimizedBorder = helpers.defaultNullOpts.mkBorder "none" "oil floating progress window" "";
         };
     };
 

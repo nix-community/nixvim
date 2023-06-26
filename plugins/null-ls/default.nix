@@ -23,10 +23,8 @@ in {
         description = "Plugin to use for null-ls";
       };
 
-      border = helpers.defaultNullOpts.mkStr "null" ''
-        Defines the border to use for the `:NullLsInfo` UI window.
+      border = helpers.defaultNullOpts.mkBorder "null" "`:NullLsInfo` UI window." ''
         Uses `NullLsInfoBorder` highlight group (see [Highlight Groups](#highlight-groups)).
-        Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info.
       '';
 
       cmd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["nvim"]'' ''

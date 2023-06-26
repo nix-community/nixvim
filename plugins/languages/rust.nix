@@ -73,8 +73,7 @@ in {
 
       hoverActions = helpers.mkCompositeOption "hover actions" {
         border =
-          helpers.defaultNullOpts.mkNullable (types.listOf (types.listOf types.str))
-          ''
+          helpers.defaultNullOpts.mkBorder ''
             [
               [ "╭" "FloatBorder" ]
               [ "─" "FloatBorder" ]
@@ -86,7 +85,7 @@ in {
               [ "│" "FloatBorder" ]
             ]
           ''
-          "the border that is used for the hover window. see vim.api.nvim_open_win()";
+          "rust-tools hover window" "";
 
         maxWidth =
           helpers.defaultNullOpts.mkNullable types.int "null"

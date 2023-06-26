@@ -391,15 +391,6 @@ in {
 
     window = let
       # Reusable options
-      mkBorderOption = default:
-        helpers.defaultNullOpts.mkNullable
-        (with types; either str (listOf str))
-        default
-        ''
-          Border characters used for the completion popup menu when |experimental.native_menu| is disabled.
-          See |nvim_open_win|.
-        '';
-
       mkWinhighlightOption = default:
         helpers.defaultNullOpts.mkStr
         default
@@ -415,7 +406,7 @@ in {
     in
       helpers.mkCompositeOption "Windows options" {
         completion = helpers.mkCompositeOption "Completion window options" {
-          border = mkBorderOption ''[ "" "" "" "" "" "" "" "" ]'';
+          border = helpers.defaultNullOpts.mkBorder ''[ "" "" "" "" "" "" "" "" ]'' "nvim-cmp window" "";
 
           winhighlight =
             mkWinhighlightOption
@@ -442,7 +433,7 @@ in {
         };
 
         documentation = helpers.mkCompositeOption "Documentation window options" {
-          border = mkBorderOption ''[ "" "" "" " " "" "" "" " " ]'';
+          border = helpers.defaultNullOpts.mkBorder ''[ "" "" "" " " "" "" "" " " ]'' "nvim-cmp documentation window" "";
 
           winhighlight = mkWinhighlightOption "FloatBorder:NormalFloat";
 
