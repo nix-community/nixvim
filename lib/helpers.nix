@@ -144,10 +144,19 @@ with lib; rec {
     mkEnum = enum: default: mkNullable (lib.types.enum enum) ''"${default}"'';
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
     mkBorder = default: name: desc:
-      mkNullable (with lib.types; oneOf [str (listOf str) (listOf (listOf str))]) default (let
+      mkNullable
+      (
+        with lib.types;
+          oneOf [
+            str
+            (listOf str)
+            (listOf (listOf str))
+          ]
+      )
+      default
+      (let
         defaultDesc = ''
           Defines the border to use for ${name}.
-
           Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info.
         '';
       in
@@ -155,7 +164,6 @@ with lib; rec {
         then defaultDesc
         else ''
           ${desc}
-
           ${defaultDesc}
         '');
   };
