@@ -4,10 +4,7 @@
       enable = true;
 
       servers.nixd = {
-        # TODO nixd is currently broken on Darwin
-        # https://github.com/nix-community/nixd/issues/107
-        # Thus, this test is currently disabled.
-        enable = !pkgs.stdenv.isDarwin;
+        enable = true;
 
         settings = {
           eval = {
