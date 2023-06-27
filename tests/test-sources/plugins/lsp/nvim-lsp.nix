@@ -70,6 +70,7 @@
         ccls.enable = true;
         clangd.enable = true;
         clojure-lsp.enable = true;
+        cmake.enable = true;
         cssls.enable = true;
         dartls.enable = true;
         denols.enable = true;
