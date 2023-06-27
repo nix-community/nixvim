@@ -88,10 +88,7 @@
         lua-ls.enable = true;
         metals.enable = true;
         nil_ls.enable = true;
-        # TODO nixd is currently broken on Darwin
-        # https://github.com/nix-community/nixd/issues/107
-        # Thus, this test is currently disabled.
-        nixd.enable = !pkgs.stdenv.isDarwin;
+        nixd.enable = true;
         pylsp.enable = true;
         pyright.enable = true;
         rnix-lsp.enable = true;
