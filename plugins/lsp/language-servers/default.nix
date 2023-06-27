@@ -35,6 +35,11 @@ with lib; let
       package = pkgs.clojure-lsp;
     }
     {
+      name = "cmake";
+      description = "Enable cmake language server, for cmake files.";
+      package = pkgs.cmake-language-server;
+    }
+    {
       name = "cssls";
       description = "Enable cssls, for CSS";
       package = pkgs.vscode-langservers-extracted;
