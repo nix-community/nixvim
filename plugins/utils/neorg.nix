@@ -43,7 +43,7 @@ in
             };
             fatal = {
               hl = "ErrorMsg";
-              level = "5";
+              level = 5;
             };
           };
 
@@ -70,88 +70,105 @@ in
           '';
 
           modes =
-            helpers.mkNullOrOption
-            (types.submodule {
-              options =
-                mapAttrs
-                (mode: defaults: {
-                  hl = helpers.defaultNullOpts.mkStr defaults.hl ''
-                    Highlight for mode ${mode}
-                  '';
-                  level = mkOption {
-                    type = with types; either int (enum levelNames);
-                    default = defaults.level;
-                    description = "Level for mode ${mode}";
-                  };
-                })
-                modes;
+            mapAttrs
+            (mode: defaults: {
+              hl = helpers.defaultNullOpts.mkStr defaults.hl ''
+                Highlight for mode ${mode}
+              '';
+              level = mkOption {
+                type = with types; either int (enum levelNames);
+                default = defaults.level;
+                description = "Level for mode ${mode}";
+              };
             })
-            "Level configuration";
+            modes;
 
           floatPrecision = helpers.defaultNullOpts.mkNullable types.float "0.01" ''
             Can limit the number of decimals displayed for floats
           '';
         };
 
-        modules = helpers.mkNullOrOption (types.attrsOf types.attrs) ''
-          Modules configuration.
-
-          Example:
-
-          modules = {
-            "core.defaults" = {};
-            "core.norg.dirman" = {
+        modules = mkOption {
+          type = with types; attrsOf attrs;
+          description = "Modules configuration.";
+          default = {};
+          example = {
+            "core.defaults" = {__empty = null;};
+            "core.dirman" = {
               config = {
                 workspaces = {
-                    work = "~/notes/work";
-                    home = "~/notes/home";
+                  work = "~/notes/work";
+                  home = "~/notes/home";
                 };
               };
             };
           };
-        '';
+        };
       };
 
     config = let
-      options =
+      setupOptions = with cfg;
         {
-          lazy_loading = cfg.lazyLoading;
+          lazy_loading = lazyLoading;
 
-          logger = {
-            inherit (cfg.logger) plugin;
-            use_console = cfg.logger.useConsole;
-            inherit (cfg.logger) highlights;
-            use_file = cfg.logger.useFile;
-            inherit (cfg.logger) level;
+          logger = with logger; {
+            inherit plugin;
+            use_console = useConsole;
+            inherit highlights;
+            use_file = useFile;
+            inherit level;
 
             modes =
-              if (cfg.logger.modes == null)
-              then null
-              else
-                attrsets.mapAttrsToList
-                (mode: modeConfig: {
-                  name = mode;
-                  inherit (modeConfig) hl;
-                  level = let
-                    inherit (modeConfig) level;
-                  in
-                    if (isInt level)
-                    then level
-                    else helpers.mkRaw "vim.log.levels.${strings.toUpper level}";
-                })
-                cfg.logger.modes;
-            float_precision = cfg.logger.floatPrecision;
+              mapAttrsToList
+              (mode: modeConfig: {
+                name = mode;
+                inherit (modeConfig) hl;
+                level = let
+                  inherit (modeConfig) level;
+                in
+                  if (isInt level)
+                  then level
+                  else helpers.mkRaw "vim.log.levels.${strings.toUpper level}";
+              })
+              modes;
+            float_precision = floatPrecision;
           };
 
-          load = cfg.modules;
+          load = modules;
         }
         // cfg.extraOptions;
+
+      telescopeSupport = hasAttr "core.integrations.telescope" cfg.modules;
     in
       mkIf cfg.enable {
-        extraPlugins = [cfg.package];
+        warnings =
+          (
+            optional
+            (telescopeSupport && (!config.plugins.telescope.enable))
+            ''
+              Telescope support for neorg (`core.integrations.telescope`) is enabled but the
+              telescope plugin is not.
+            ''
+          )
+          ++ (
+            optional
+            ((hasAttr "core.defaults" cfg.modules) && (!config.plugins.treesitter.enable))
+            ''
+              Neorg's `core.defaults` module is enabled but `plugins.treesitter` is not.
+              Treesitter is required when using the `core.defaults`.
+            ''
+          );
+
+        extraPlugins =
+          [cfg.package]
+          ++ (
+            optional
+            telescopeSupport
+            pkgs.vimPlugins.neorg-telescope
+          );
 
         extraConfigLua = ''
-          require('neorg').setup(${helpers.toLuaObject options})
+          require('neorg').setup(${helpers.toLuaObject setupOptions})
         '';
       };
   }
