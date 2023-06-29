@@ -64,6 +64,8 @@
 
     ./null-ls
 
+    ./dap
+
     ./pluginmanagers/packer.nix
 
     ./snippets/luasnip
