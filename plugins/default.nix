@@ -95,6 +95,7 @@
     ./utils/mark-radar.nix
     ./utils/mini.nix
     ./utils/neorg.nix
+    ./utils/neogen.nix
     ./utils/notify.nix
     ./utils/netman.nix
     ./utils/nvim-autopairs.nix
