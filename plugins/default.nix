@@ -92,6 +92,7 @@
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/lastplace.nix
+    ./utils/leap.nix
     ./utils/mark-radar.nix
     ./utils/mini.nix
     ./utils/neorg.nix
