@@ -11,6 +11,7 @@ with lib; let
   keymapDef = {
     generate = {
       command = "";
+
       description = ''
         The only function required to use Neogen.
 
@@ -19,18 +20,22 @@ with lib; let
         Neogen will go until the start of the function and start annotating for you.
       '';
     };
+
     generateClass = {
       command = "class";
       description = "Generates annotation for class.";
     };
+
     generateFunction = {
       command = "func";
       description = "Generates annotation for function.";
     };
+
     generateType = {
       command = "type";
       description = "Generates annotation for type.";
     };
+
     generateFile = {
       command = "file";
       description = "Generates annotation for file.";
@@ -41,7 +46,9 @@ in {
     helpers.extraOptionsOptions
     // {
       enable = mkEnableOption "neogen";
+
       package = helpers.mkPackageOption "neogen" pkgs.vimPlugins.neogen;
+
       keymaps = mapAttrs (optionsName: properties: helpers.mkNullOrOption types.str properties.description) keymapDef;
 
       keymapsSilent = mkOption {
@@ -53,9 +60,11 @@ in {
       inputAfterComment = helpers.defaultNullOpts.mkBool true ''
         If true, go to annotation after insertion, and change to insert mode
       '';
+
       enablePlaceholders = helpers.defaultNullOpts.mkBool true ''
         If true, enables placeholders when inserting annotation
       '';
+
       languages = helpers.defaultNullOpts.mkNullable types.attrs "see upstream documentation" ''
         Configuration for languages.
 
@@ -94,6 +103,7 @@ in {
           }
         ```
       '';
+
       snippetEngine = helpers.mkNullOrOption types.str ''
         Use a snippet engine to generate annotations.
         Some snippet engines come out of the box bundled with neogen:
@@ -101,40 +111,52 @@ in {
           - `"snippy"` (https://github.com/dcampos/nvim-snippy)
           - `"vsnip"` (https://github.com/hrsh7th/vim-vsnip)
       '';
+
       placeholderHighligt = helpers.defaultNullOpts.mkStr "DiagnosticHint" ''
         Placeholders highlights to use. If you don't want custom highlight, pass "None"
       '';
+
       placeholdersText = {
         description = helpers.defaultNullOpts.mkStr "[TODO:description]" ''
           Placholder for description.
         '';
+
         tparam = helpers.defaultNullOpts.mkStr "[TODO:tparam]" ''
           Placholder for tparam.
         '';
+
         parameter = helpers.defaultNullOpts.mkStr "[TODO:parameter]" ''
           Placholder for parameter.
         '';
+
         return = helpers.defaultNullOpts.mkStr "[TODO:return]" ''
           Placholder for return.
         '';
+
         class = helpers.defaultNullOpts.mkStr "[TODO:class]" ''
           Placholder for class.
         '';
+
         throw = helpers.defaultNullOpts.mkStr "[TODO:throw]" ''
           Placholder for throw.
         '';
+
         varargs = helpers.defaultNullOpts.mkStr "[TODO:varargs]" ''
           Placholder for varargs.
         '';
+
         type = helpers.defaultNullOpts.mkStr "[TODO:type]" ''
           Placholder for type.
         '';
+
         attribute = helpers.defaultNullOpts.mkStr "[TODO:attribute]" ''
           Placholder for attribute.
         '';
+
         args = helpers.defaultNullOpts.mkStr "[TODO:args]" ''
           Placholder for args.
         '';
+
         kwargs = helpers.defaultNullOpts.mkStr "[TODO:kwargs]" ''
           Placholder for kwargs.
         '';
