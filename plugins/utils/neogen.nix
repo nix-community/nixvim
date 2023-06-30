@@ -94,7 +94,7 @@ in {
           }
         ```
       '';
-      snippetEngine = helpers.defaultNullOpts.mkStr null ''
+      snippetEngine = helpers.mkNullOrOption types.str ''
         Use a snippet engine to generate annotations.
         Some snippet engines come out of the box bundled with neogen:
           - `"luasnip"` (https://github.com/L3MON4D3/LuaSnip)
