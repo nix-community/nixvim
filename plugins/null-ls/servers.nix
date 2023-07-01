@@ -35,6 +35,30 @@
       statix = {
         package = pkgs.statix;
       };
+      vale = {
+        package = pkgs.vale;
+      };
+      vulture = {
+        package = pkgs.python3Packages.vulture;
+      };
+      alex = {
+        package = pkgs.nodePackages.alex;
+      };
+      protolint = {
+        package = pkgs.protolint;
+      };
+      hadolint = {
+        package = pkgs.hadolint;
+      };
+      luacheck = {
+        package = pkgs.luaPackages.luacheck;
+      };
+      mypy = {
+        package = pkgs.mypy;
+      };
+      pylint = {
+        package = pkgs.pylint;
+      };
     };
     formatting = {
       phpcbf = {
@@ -72,6 +96,24 @@
       };
       taplo = {
         package = pkgs.taplo;
+      };
+      isort = {
+        package = pkgs.isort;
+      };
+      jq = {
+        package = pkgs.jq;
+      };
+      markdownlint = {
+        package = pkgs.nodePackages.markdownlint-cli;
+      };
+      protolint = {
+        package = pkgs.protolint;
+      };
+      rustfmt = {
+        package = pkgs.rustfmt;
+      };
+      sqlfluff = {
+        package = pkgs.sqlfluff;
       };
     };
   };
