@@ -107,6 +107,7 @@
     ./utils/oil.nix
     ./utils/project-nvim.nix
     ./utils/presence-nvim.nix
+    ./utils/quickmath.nix
     ./utils/specs.nix
     ./utils/spider.nix
     ./utils/startify.nix
