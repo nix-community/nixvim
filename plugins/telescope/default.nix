@@ -9,6 +9,7 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 in {
   imports = [
+    ./file-browser.nix
     ./frecency.nix
     ./fzf-native.nix
     ./fzy-native.nix
