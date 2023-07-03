@@ -122,6 +122,7 @@
     ./utils/emmet.nix
     ./utils/magma-nvim.nix
     ./utils/which-key.nix
+    ./utils/wilder-nvim.nix
     ./utils/zk.nix
   ];
 }
