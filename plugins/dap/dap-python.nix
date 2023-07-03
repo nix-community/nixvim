@@ -1,0 +1,83 @@
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.dap.extensions.dap-python;
+  helpers = import ../helpers.nix {inherit lib;};
+  dapHelpers = import ./dapHelpers.nix {inherit lib;};
+in {
+  options.plugins.dap.extensions.dap-python = {
+    enable = mkEnableOption "dap-python";
+
+    package = helpers.mkPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
+
+    adapterPythonPath = mkOption {
+      default = "${pkgs.python3}/bin/python3";
+      description = "Path to the python interpreter. Path must be absolute or in $PATH and needs to have the debugpy package installed.";
+      type = types.str;
+    };
+
+    console = helpers.defaultNullOpts.mkEnumFirstDefault ["integratedTerminal" "internalConsole" "externalTerminal"] "Debugpy console.";
+
+    customConfigurations = helpers.mkNullOrOption (types.listOf dapHelpers.configurationOption) "Custom python configurations for dap.";
+
+    includeConfigs = helpers.defaultNullOpts.mkBool true "Add default configurations.";
+
+    resolvePython = helpers.mkNullOrOption types.str ''
+      Function to resolve path to python to use for program or test execution.
+      By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
+    '';
+
+    testRunner = helpers.mkNullOrOption (types.either types.str helpers.rawType) ''
+      The name of test runner to use by default.
+      The default value is dynamic and depends on `pytest.ini` or `manage.py` markers.
+      If neither is found "unittest" is used.
+    '';
+
+    testRunners = helpers.mkNullOrOption (types.attrsOf types.str) ''
+      Set to register test runners.
+      Built-in are test runners for unittest, pytest and django.
+      The key is the test runner name, the value a function to generate the
+      module name to run and its arguments.
+      See |dap-python.TestRunner|.
+    '';
+  };
+
+  config = let
+    options = with cfg; {
+      inherit console;
+      include_configs = includeConfigs;
+    };
+  in
+    mkIf cfg.enable {
+      extraPlugins = [cfg.package];
+
+      plugins.dap.enable = true;
+
+      extraConfigLua = with helpers;
+        ''
+          require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject options})
+        ''
+        + (optionalString (cfg.testRunners != null) ''
+          table.insert(require("dap-python").test_runners,
+          ${
+            toLuaObject
+            (
+              builtins.mapAttrs (_: mkRaw) cfg.testRunners
+            )
+          })
+        '')
+        + (optionalString (cfg.customConfigurations != null) ''
+          table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
+        '')
+        + (optionalString (cfg.resolvePython != null) ''
+          require("dap-python").resolve_python = ${toLuaObject (mkRaw cfg.resolvePython)}
+        '')
+        + (optionalString (cfg.testRunner != null) ''
+          require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
+        '');
+    };
+}
