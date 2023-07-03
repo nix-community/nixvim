@@ -7,6 +7,12 @@
   helpers = import ./helpers.nix args;
   serverData = {
     code_actions = {
+      eslint = {
+        package = pkgs.nodePackages.eslint;
+      };
+      eslint_d = {
+        package = pkgs.nodePackages.eslint_d;
+      };
       gitsigns = {};
       shellcheck = {
         package = pkgs.shellcheck;
@@ -25,6 +31,12 @@
       };
       deadnix = {
         package = pkgs.deadnix;
+      };
+      eslint = {
+        package = pkgs.nodePackages.eslint;
+      };
+      eslint_d = {
+        package = pkgs.nodePackages.eslint_d;
       };
       flake8 = {
         package = pkgs.python3Packages.flake8;
@@ -70,6 +82,12 @@
       cbfmt = {
         package = pkgs.cbfmt;
       };
+      eslint = {
+        package = pkgs.nodePackages.eslint;
+      };
+      eslint_d = {
+        package = pkgs.nodePackages.eslint_d;
+      };
       fnlfmt = {
         package = pkgs.fnlfmt;
       };
@@ -96,6 +114,9 @@
       };
       prettier = {
         package = pkgs.nodePackages.prettier;
+      };
+      prettier_d_slim = {
+        package = pkgs.nodePackages.prettier_d_slim;
       };
       protolint = {
         package = pkgs.protolint;
