@@ -47,6 +47,14 @@
           shellcheck.enable = true;
           statix.enable = true;
           deadnix.enable = true;
+          vale.enable = true;
+          vulture.enable = true;
+          alex.enable = true;
+          protolint.enable = true;
+          hadolint.enable = true;
+          luacheck.enable = true;
+          mypy.enable = true;
+          pylint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
@@ -61,6 +69,12 @@
           stylua.enable = true;
           taplo.enable = true;
           nixpkgs_fmt.enable = true;
+          isort.enable = true;
+          jq.enable = true;
+          markdownlint.enable = true;
+          protolint.enable = true;
+          rustfmt.enable = true;
+          sqlfluff.enable = true;
         };
       };
     };
