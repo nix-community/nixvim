@@ -22,7 +22,7 @@ in {
 
       package = helpers.mkPackageOption "wilder-nvim" pkgs.vimPlugins.wilder-nvim;
 
-      modes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "['/', '?']" ''
+      modes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[\"/\", \"?\"]" ''
         List of modes which wilderw will be active in.
         Possible elements: '/', '?' and ':'
       '';
