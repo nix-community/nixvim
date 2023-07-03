@@ -7,6 +7,46 @@
 with lib; let
   cfg = config.plugins.diffview;
   helpers = import ../helpers.nix {inherit lib;};
+  mkWinConfig = type: width: height: position:
+    with helpers.defaultNullOpts; {
+      type = mkEnum ["split" "float"] type ''
+        Determines whether the window should be a float or a normal
+        split.
+      '';
+
+      width = mkInt width ''
+        The width of the window (in character cells). If `type` is
+        `"split"` then this is only applicable when `position` is
+        `"left"|"right"`.
+      '';
+
+      height = mkInt height ''
+        The height of the window (in character cells). If `type` is
+        `"split"` then this is only applicable when `position` is
+        `"top"|"bottom"`.
+      '';
+
+      position = mkEnum ["left" "top" "right" "bottom"] position ''
+        Determines where the panel is positioned (only when
+        `type="split"`).
+      '';
+
+      relative = mkEnum ["editor" "win"] "editor" ''
+        Determines what the `position` is relative to (when
+        `type="split"`).
+      '';
+
+      win = mkInt 0 ''
+        The window handle of the target relative window (when
+        `type="split"`. Only when `relative="win"`). Use `0` for
+        current window.
+      '';
+
+      winOpts = mkAttributeSet "{}" ''
+        Table of window local options (see |vim.opt_local|).
+        These options are applied whenever the window is opened.
+      '';
+    };
 in {
   options.plugins.diffview = with helpers.defaultNullOpts;
     helpers.extraOptionsOptions
@@ -185,15 +225,7 @@ in {
             ${commonDesc}
           '';
         };
-        winConfig = let
-          commonDesc = "See ':h diffview-config-win_config'";
-        in {
-          position = mkStr "left" commonDesc;
-
-          width = mkInt 35 commonDesc;
-
-          winOpts = mkAttributeSet "{ a = 1;}" commonDesc;
-        };
+        winConfig = mkWinConfig "split" 35 "" "left";
       };
       fileHistoryPanel = {
         logOptions = let
@@ -214,23 +246,11 @@ in {
             multiFile = mkAttributeSet "{}" commonDesc;
           };
         };
-        winConfig = let
-          commonDesc = "See ':h diffview-config-win_config'";
-        in {
-          position = mkStr "bottom" commonDesc;
-
-          height = mkInt 16 commonDesc;
-
-          winOpts = mkAttributeSet "{}" commonDesc;
-        };
+        winConfig = mkWinConfig "split" "" 16 "bottom";
       };
 
       commitLogPanel = {
-        winConfig = {
-          winOpts = mkAttributeSet "{}" ''
-            See ':h diffview-config-win_config'
-          '';
-        };
+        winConfig = mkWinConfig "float" "" "" "";
       };
 
       defaultArgs = let
@@ -478,8 +498,12 @@ in {
         };
 
         win_config = with winConfig; {
-          inherit position;
+          inherit type;
           inherit width;
+          inherit height;
+          inherit position;
+          inherit relative;
+          inherit win;
           win_opts = winOpts;
         };
       };
@@ -503,15 +527,25 @@ in {
         };
 
         win_config = with winConfig; {
-          inherit position;
+          inherit type;
+          inherit width;
           inherit height;
+          inherit position;
+          inherit relative;
+          inherit win;
           win_opts = winOpts;
         };
       };
 
-      commit_log_panel = {
-        win_config = {
-          win_opts = commitLogPanel.winConfig.winOpts;
+      commit_log_panel = with commitLogPanel; {
+        win_config = with winConfig; {
+          inherit type;
+          inherit width;
+          inherit height;
+          inherit position;
+          inherit relative;
+          inherit win;
+          win_opts = winOpts;
         };
       };
 
