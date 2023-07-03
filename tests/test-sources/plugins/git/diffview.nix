@@ -73,18 +73,89 @@
         diffviewOpen = ["HEAD"];
         diffviewFileHistory = ["%"];
       };
-      hooks = {};
+      hooks = {
+        viewOpened = ''
+          function(view)
+            print(
+              ("A new %s was opened on tab page %d!")
+              :format(view.class:name(), view.tabpage)
+            )
+          end
+        '';
+      };
       keymaps = {
         view = [
-          [
-            ["n"]
-            "<tab>"
-            "actions.select_next_entry"
-            {desc = "Open the diff for the next file";}
-          ]
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        diff1 = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+          }
+        ];
+        diff2 = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        diff3 = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        diff4 = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        filePanel = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        fileHistoryPanel = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        optionPanel = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
+        ];
+        helpPanel = [
+          {
+            mode = "n";
+            key = "<tab>";
+            action = "actions.select_next_entry";
+            description = "Open the diff for the next file";
+          }
         ];
       };
-      disableDefaultKeymaps = true;
     };
   };
 }

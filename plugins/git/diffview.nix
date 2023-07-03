@@ -7,20 +7,6 @@
 with lib; let
   cfg = config.plugins.diffview;
   helpers = import ../helpers.nix {inherit lib;};
-  mkAttributeSet = helpers.defaultNullOpts.mkNullable types.attrs "{}";
-
-  layoutsDescription = ''
-    Configure the layout and behavior of different types of views.
-    Available layouts:
-     'diff1_plain'
-       |'diff2_horizontal'
-       |'diff2_vertical'
-       |'diff3_horizontal'
-       |'diff3_vertical'
-       |'diff3_mixed'
-       |'diff4_mixed'
-    For more info, see ':h diffview-config-view.x.layout'.
-  '';
 in {
   options.plugins.diffview = with helpers.defaultNullOpts;
     helpers.extraOptionsOptions
@@ -37,11 +23,11 @@ in {
         See ':h diffview-config-enhanced_diff_hl'
       '';
 
-      gitCmd = mkNullable (types.listOf types.str) "[ \"git\" ]" ''
+      gitCmd = mkNullable (types.listOf types.str) ''[ "git" ]'' ''
         The git executable followed by default args.
       '';
 
-      hgCmd = mkNullable (types.listOf types.str) "[ \"hg\" ]" ''
+      hgCmd = mkNullable (types.listOf types.str) ''[ "hg" ]'' ''
         The hg executable followed by default args.
       '';
 
@@ -77,11 +63,37 @@ in {
         done = mkStr "✓" "";
       };
 
-      view = {
+      view = let
+        layoutsDescription = ''
+          Configure the layout and behavior of different types of views.
+          For more info, see ':h diffview-config-view.x.layout'.
+        '';
+        diff2HorizontalDescription = ''
+          diff2_horizontal:
+
+          | A | B |
+        '';
+        diff2VerticalDescription = ''
+          diff2_vertical:
+
+
+          A
+
+          ─
+
+          B
+        '';
+      in {
         default = {
-          layout = mkStr "diff2_horizontal" ''
+          layout = mkEnum ["diff2_horizontal" "diff2_vertical"] "diff2_horizontal" ''
             Config for changed files, and staged files in diff views.
             ${layoutsDescription}
+            - A: Old state
+            - B: New state
+
+            ${diff2HorizontalDescription}
+
+            ${diff2VerticalDescription}
           '';
 
           winbarInfo = mkBool false ''
@@ -90,9 +102,42 @@ in {
         };
 
         mergeTool = {
-          layout = mkStr "diff3_horizontal" ''
+          layout = mkEnum ["diff1_plain" "diff3_horizontal" "diff3_vertical" "diff3_mixed" "diff4_mixed"] "diff3_horizontal" ''
             Config for conflicted files in diff views during a merge or rebase.
             ${layoutsDescription}
+            - A: OURS (current branch)
+            - B: LOCAL (the file as it currently exists on disk)
+            - C: THEIRS (incoming branch)
+            - D: BASE (common ancestor)
+
+            diff1_plain:
+
+            B
+
+            diff3_horizontal:
+
+            A | B | C
+
+            diff3_vertical:
+
+            A
+
+            B
+
+            C
+
+            diff3_mixed:
+
+            A | C
+
+            B
+
+            diff4_mixed:
+
+            A | D | C
+
+            B
+
           '';
 
           disableDiagnostics = mkBool true ''
@@ -105,9 +150,15 @@ in {
         };
 
         fileHistory = {
-          layout = mkStr "diff2_horizontal" ''
+          layout = mkEnum ["diff2_horizontal" "diff2_vertical"] "diff2_horizontal" ''
             Config for changed files in file history views.
             ${layoutsDescription}
+            - A: Old state
+            - B: New state
+
+            ${diff2HorizontalDescription}
+
+            ${diff2VerticalDescription}
           '';
 
           winbarInfo = mkBool false ''
@@ -117,7 +168,7 @@ in {
       };
 
       filePanel = {
-        listingStyle = mkStr "tree" ''
+        listingStyle = mkEnum ["list" "tree"] "tree" ''
           One of 'list' or 'tree'
         '';
 
@@ -129,7 +180,7 @@ in {
             ${commonDesc}
           '';
 
-          folderStatuses = mkStr "only_folded" ''
+          folderStatuses = mkEnum ["never" "only_folded" "always"] "only_folded" ''
             One of 'never', 'only_folded' or 'always'.
             ${commonDesc}
           '';
@@ -141,7 +192,7 @@ in {
 
           width = mkInt 35 commonDesc;
 
-          winOpts = mkAttributeSet commonDesc;
+          winOpts = mkAttributeSet "{ a = 1;}" commonDesc;
         };
       };
       fileHistoryPanel = {
@@ -158,9 +209,9 @@ in {
             };
           };
           hg = {
-            singleFile = mkAttributeSet commonDesc;
+            singleFile = mkAttributeSet "{}" commonDesc;
 
-            multiFile = mkAttributeSet commonDesc;
+            multiFile = mkAttributeSet "{}" commonDesc;
           };
         };
         winConfig = let
@@ -170,13 +221,13 @@ in {
 
           height = mkInt 16 commonDesc;
 
-          winOpts = mkAttributeSet commonDesc;
+          winOpts = mkAttributeSet "{}" commonDesc;
         };
       };
 
       commitLogPanel = {
         winConfig = {
-          winOpts = mkAttributeSet ''
+          winOpts = mkAttributeSet "{}" ''
             See ':h diffview-config-win_config'
           '';
         };
@@ -190,26 +241,189 @@ in {
         diffviewFileHistory = mkNullable (types.listOf types.str) "[ ]" commonDesc;
       };
 
-      hooks = mkAttributeSet ''
-        See ':h diffview-config-hooks'
-      '';
+      hooks = let
+        mkNullStr = helpers.mkNullOrOption types.str;
+      in {
+        viewOpened = mkNullStr ''
+          {view_opened} (`fun(view: View)`)
 
-      keymaps = mkAttributeSet ''
-          See documentation :help diffview-config-keymaps
+            Emitted after a new view has been opened. It's called after
+            initializing the layout in the new tabpage (all windows are
+            ready).
 
-          Example:
+            Callback Parameters:
+                {view} (`View`)
+                    The `View` instance that was opened.
+        '';
 
-        keymaps = {
-          view = [
-            [
-              [ "n" ]
-              "<tab>"
-              "actions.select_next_entry"
-              { desc = "Open the diff for the next file"; }
-            ]
-          ];
-        };
-      '';
+        viewClosed = mkNullStr ''
+          {view_closed} (`fun(view: View)`)
+
+              Emitted after closing a view.
+
+              Callback Parameters:
+                  {view} (`View`)
+                      The `View` instance that was closed.
+        '';
+
+        viewEnter = mkNullStr ''
+          {view_enter} (`fun(view: View)`)
+
+              Emitted just after entering the tabpage of a view.
+
+              Callback Parameters:
+                  {view} (`View`)
+                      The `View` instance that was entered.
+        '';
+
+        viewLeave = mkNullStr ''
+          {view_leave} (`fun(view: View)`)
+
+              Emitted just before leaving the tabpage of a view.
+
+              Callback Parameters:
+                  {view} (`View`)
+                      The `View` instance that's about to be left.
+        '';
+
+        viewPostLayout = mkNullStr ''
+          {view_post_layout} (`fun(view: View)`)
+
+              Emitted after the window layout in a view has been adjusted.
+
+              Callback Parameters:
+                  {view} (`View`)
+                      The `View` whose layout was adjusted.
+        '';
+
+        diffBufRead = mkNullStr ''
+          {diff_buf_read} (`fun(bufnr: integer, ctx: table)`)
+
+              Emitted after a new diff buffer is ready (the first time it's
+              created and loaded into a window). Diff buffers are all
+              buffers with |diff-mode| enabled. That includes buffers of
+              local files (not created from git).
+
+              This is always called with the new buffer as the current
+              buffer and the correct diff window as the current window such
+              that |:setlocal| will apply settings to the relevant buffer /
+              window.
+
+              Callback Parameters:
+                  {bufnr} (`integer`)
+                      The buffer number of the new buffer.
+                  {ctx} (`table`)
+                      • {symbol} (string)
+                        A symbol that identifies the window's position in
+                        the layout. These symbols correspond with the
+                        figures under |diffview-config-view.x.layout|.
+                      • {layout_name} (string)
+                        The name of the current layout.
+        '';
+
+        diffBufWinEnter = mkNullStr ''
+          {diff_buf_win_enter} (`fun(bufnr: integer, winid: integer, ctx: table)`)
+
+              Emitted after a diff buffer is displayed in a window.
+
+              This is always called with the new buffer as the current
+              buffer and the correct diff window as the current window such
+              that |:setlocal| will apply settings to the relevant buffer /
+              window.
+
+              Callback Parameters:
+                  {bufnr} (`integer`)
+                      The buffer number of the new buffer.
+                  {winid} (`integer`)
+                      The window id of window inside which the buffer was
+                      displayed.
+                  {ctx} (`table`)
+                      • {symbol} (string)
+                        A symbol that identifies the window's position in
+                        the layout. These symbols correspond with the
+                        figures under |diffview-config-view.x.layout|.
+                      • {layout_name} (string)
+                        The name of the current layout.
+        '';
+      };
+
+      keymaps = let
+        keymapList = desc:
+          mkOption {
+            type = types.listOf (types.submodule {
+              options = {
+                mode = mkOption {
+                  type = types.str;
+                  description = "mode to bind keybinding to";
+                  example = "n";
+                };
+                key = mkOption {
+                  type = types.str;
+                  description = "key to bind keybinding to";
+                  example = "<tab>";
+                };
+                action = mkOption {
+                  type = types.str;
+                  description = "action for keybinding";
+                  example = "action.select_next_entry";
+                };
+                description = mkOption {
+                  type = types.nullOr types.str;
+                  description = "description for keybinding";
+                  default = null;
+                };
+              };
+            });
+            description = ''
+              List of keybindings.
+              ${desc}
+            '';
+            default = [];
+            example = [
+              {
+                mode = "n";
+                key = "<tab>";
+                action = "actions.select_next_entry";
+                description = "Open the diff for the next file";
+              }
+            ];
+          };
+      in {
+        disableDefaults = mkBool false ''
+          Disable the default keymaps.
+        '';
+
+        view = keymapList ''
+          The `view` bindings are active in the diff buffers, only when the current
+          tabpage is a Diffview.
+        '';
+
+        diff1 = keymapList ''
+          Mappings in single window diff layouts
+        '';
+
+        diff2 = keymapList ''
+          Mappings in 2-way diff layouts
+        '';
+        diff3 = keymapList ''
+          Mappings in 3-way diff layouts
+        '';
+        diff4 = keymapList ''
+          Mappings in 4-way diff layouts
+        '';
+        filePanel = keymapList ''
+          Mappings in file panel.
+        '';
+        fileHistoryPanel = keymapList ''
+          Mappings in file history panel.
+        '';
+        optionPanel = keymapList ''
+          Mappings in options panel.
+        '';
+        helpPanel = keymapList ''
+          Mappings in help panel.
+        '';
+      };
 
       disableDefaultKeymaps = mkBool false ''
         Disable the default keymaps;
@@ -306,13 +520,29 @@ in {
         DiffviewFileHistory = diffviewFileHistory;
       };
 
-      inherit hooks;
-      keymaps =
-        if keymaps == null
-        then {}
-        else
-          keymaps
-          // {disable_defaults = disableDefaultKeymaps;};
+      hooks = with hooks; {
+        view_opened = viewOpened;
+        view_closed = viewClosed;
+        view_enter = viewEnter;
+        view_leave = viewLeave;
+        view_post_layout = viewPostLayout;
+        diff_buf_read = diffBufRead;
+        diff_buf_win_enter = diffBufWinEnter;
+      };
+
+      keymaps = with keymaps; let
+        convertToKeybinding = attr: [attr.mode attr.key attr.action {"desc" = attr.description;}];
+      in {
+        view = map convertToKeybinding view;
+        diff1 = map convertToKeybinding diff1;
+        diff2 = map convertToKeybinding diff2;
+        diff3 = map convertToKeybinding diff3;
+        diff4 = map convertToKeybinding diff4;
+        file_panel = map convertToKeybinding filePanel;
+        file_history_panel = map convertToKeybinding fileHistoryPanel;
+        option_panel = map convertToKeybinding optionPanel;
+        help_panel = map convertToKeybinding helpPanel;
+      };
     };
   in
     mkIf
