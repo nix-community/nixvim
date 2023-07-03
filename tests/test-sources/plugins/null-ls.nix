@@ -36,31 +36,52 @@
       updateInInsert = false;
       sources = {
         code_actions = {
+          eslint.enable = true;
+          eslint_d.enable = true;
           gitsigns.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
         };
         diagnostics = {
           cppcheck.enable = true;
+          deadnix.enable = true;
+          eslint.enable = true;
+          eslint_d.enable = true;
           flake8.enable = true;
           gitlint.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
-          deadnix.enable = true;
+          vale.enable = true;
+          vulture.enable = true;
+          alex.enable = true;
+          protolint.enable = true;
+          hadolint.enable = true;
+          luacheck.enable = true;
+          mypy.enable = true;
+          pylint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
           black.enable = true;
           cbfmt.enable = true;
+          eslint.enable = true;
+          eslint_d.enable = true;
           fnlfmt.enable = true;
           fourmolu.enable = true;
           nixfmt.enable = true;
+          nixpkgs_fmt.enable = true;
           phpcbf.enable = true;
           prettier.enable = true;
+          prettier_d_slim.enable = true;
           shfmt.enable = true;
           stylua.enable = true;
           taplo.enable = true;
-          nixpkgs_fmt.enable = true;
+          isort.enable = true;
+          jq.enable = true;
+          markdownlint.enable = true;
+          protolint.enable = true;
+          rustfmt.enable = true;
+          sqlfluff.enable = true;
         };
       };
     };

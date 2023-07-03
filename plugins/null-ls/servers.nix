@@ -7,6 +7,12 @@
   helpers = import ./helpers.nix args;
   serverData = {
     code_actions = {
+      eslint = {
+        package = pkgs.nodePackages.eslint;
+      };
+      eslint_d = {
+        package = pkgs.nodePackages.eslint_d;
+      };
       gitsigns = {};
       shellcheck = {
         package = pkgs.shellcheck;
@@ -17,31 +23,85 @@
     };
     completion = {};
     diagnostics = {
-      flake8 = {
-        package = pkgs.python3Packages.flake8;
-      };
-      shellcheck = {
-        package = pkgs.shellcheck;
+      alex = {
+        package = pkgs.nodePackages.alex;
       };
       cppcheck = {
         package = pkgs.cppcheck;
       };
+      deadnix = {
+        package = pkgs.deadnix;
+      };
+      eslint = {
+        package = pkgs.nodePackages.eslint;
+      };
+      eslint_d = {
+        package = pkgs.nodePackages.eslint_d;
+      };
+      flake8 = {
+        package = pkgs.python3Packages.flake8;
+      };
       gitlint = {
         package = pkgs.gitlint;
       };
-      deadnix = {
-        package = pkgs.deadnix;
+      hadolint = {
+        package = pkgs.hadolint;
+      };
+      luacheck = {
+        package = pkgs.luaPackages.luacheck;
+      };
+      mypy = {
+        package = pkgs.mypy;
+      };
+      protolint = {
+        package = pkgs.protolint;
+      };
+      pylint = {
+        package = pkgs.pylint;
+      };
+      shellcheck = {
+        package = pkgs.shellcheck;
       };
       statix = {
         package = pkgs.statix;
       };
+      vale = {
+        package = pkgs.vale;
+      };
+      vulture = {
+        package = pkgs.python3Packages.vulture;
+      };
     };
     formatting = {
-      phpcbf = {
-        package = pkgs.phpPackages.phpcbf;
-      };
       alejandra = {
         package = pkgs.alejandra;
+      };
+      black = {
+        package = pkgs.python3Packages.black;
+      };
+      cbfmt = {
+        package = pkgs.cbfmt;
+      };
+      eslint = {
+        package = pkgs.nodePackages.eslint;
+      };
+      eslint_d = {
+        package = pkgs.nodePackages.eslint_d;
+      };
+      fnlfmt = {
+        package = pkgs.fnlfmt;
+      };
+      fourmolu = {
+        package = pkgs.haskellPackages.fourmolu;
+      };
+      isort = {
+        package = pkgs.isort;
+      };
+      jq = {
+        package = pkgs.jq;
+      };
+      markdownlint = {
+        package = pkgs.nodePackages.markdownlint-cli;
       };
       nixfmt = {
         package = pkgs.nixfmt;
@@ -49,26 +109,29 @@
       nixpkgs_fmt = {
         package = pkgs.nixpkgs-fmt;
       };
+      phpcbf = {
+        package = pkgs.phpPackages.phpcbf;
+      };
       prettier = {
         package = pkgs.nodePackages.prettier;
       };
-      black = {
-        package = pkgs.python3Packages.black;
+      prettier_d_slim = {
+        package = pkgs.nodePackages.prettier_d_slim;
       };
-      fourmolu = {
-        package = pkgs.haskellPackages.fourmolu;
+      protolint = {
+        package = pkgs.protolint;
       };
-      fnlfmt = {
-        package = pkgs.fnlfmt;
-      };
-      stylua = {
-        package = pkgs.stylua;
-      };
-      cbfmt = {
-        package = pkgs.cbfmt;
+      rustfmt = {
+        package = pkgs.rustfmt;
       };
       shfmt = {
         package = pkgs.shfmt;
+      };
+      sqlfluff = {
+        package = pkgs.sqlfluff;
+      };
+      stylua = {
+        package = pkgs.stylua;
       };
       taplo = {
         package = pkgs.taplo;

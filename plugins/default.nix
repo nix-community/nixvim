@@ -107,6 +107,7 @@
     ./utils/oil.nix
     ./utils/project-nvim.nix
     ./utils/presence-nvim.nix
+    ./utils/quickmath.nix
     ./utils/specs.nix
     ./utils/spider.nix
     ./utils/startify.nix
@@ -121,6 +122,7 @@
     ./utils/emmet.nix
     ./utils/magma-nvim.nix
     ./utils/which-key.nix
+    ./utils/wilder-nvim.nix
     ./utils/zk.nix
   ];
 }
