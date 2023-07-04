@@ -117,7 +117,7 @@
             };
           };
           packages = {
-            docs = pkgs-unfree.callPackage (import ./docs.nix) {
+            docs = pkgs-unfree.callPackage (import ./docs) {
               modules = nixvimModules;
             };
             runUpdates =
