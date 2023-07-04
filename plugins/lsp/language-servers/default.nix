@@ -40,6 +40,12 @@ with lib; let
       package = pkgs.cmake-language-server;
     }
     {
+      name = "csharp-ls";
+      description = "Enable csharp-ls, for C#.";
+      package = pkgs.csharp-ls;
+      serverName = "csharp_ls";
+    }
+    {
       name = "cssls";
       description = "Enable cssls, for CSS";
       package = pkgs.vscode-langservers-extracted;
