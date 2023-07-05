@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  cfg = config.plugins.vim-illuminate;
+  cfg = config.plugins.illuminate;
   helpers = import ../helpers.nix {inherit lib;};
 
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
@@ -65,13 +65,13 @@ with lib; let
     '';
   };
 in {
-  options.plugins.vim-illuminate = with helpers;
+  options.plugins.illuminate = with helpers;
   with defaultNullOpts;
     helpers.extraOptionsOptions
     // {
-      enable = mkEnableOption "vim-illuminate";
+      enable = mkEnableOption "illuminate";
 
-      package = mkPackageOption "vim-illuminate" pkgs.vimPlugins.vim-illuminate;
+      package = mkPackageOption "illuminate" pkgs.vimPlugins.vim-illuminate;
 
       filetypeOverrides = mkOption {
         type = types.listOf (types.submodule {
@@ -96,7 +96,7 @@ in {
         description = ''
           Config to use for large files (based on large_file_cutoff).
           Supports the same keys passed to .configure
-          If null, vim-illuminate will be disabled for large files.
+          If null, illuminate will be disabled for large files.
         '';
         default = {};
       };

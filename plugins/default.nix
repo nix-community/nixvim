@@ -91,6 +91,7 @@
     ./utils/floaterm.nix
     ./utils/goyo.nix
     ./utils/harpoon.nix
+    ./utils/illuminate.nix
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/lastplace.nix
@@ -119,7 +120,6 @@
     ./utils/toggleterm.nix
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
-    ./utils/vim-illuminate.nix
     ./utils/vim-matchup.nix
     ./utils/dashboard.nix
     ./utils/emmet.nix

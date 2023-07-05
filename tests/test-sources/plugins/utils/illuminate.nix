@@ -1,10 +1,10 @@
 {
   empty = {
-    plugins.vim-illuminate.enable = true;
+    plugins.illuminate.enable = true;
   };
 
   example = {
-    plugins.vim-illuminate = {
+    plugins.illuminate = {
       enable = true;
 
       delay = 50;
