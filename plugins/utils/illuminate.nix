@@ -69,9 +69,9 @@ in {
   with defaultNullOpts;
     helpers.extraOptionsOptions
     // {
-      enable = mkEnableOption "illuminate";
+      enable = mkEnableOption "vim-illuminate";
 
-      package = mkPackageOption "illuminate" pkgs.vimPlugins.vim-illuminate;
+      package = mkPackageOption "vim-illuminate" pkgs.vimPlugins.vim-illuminate;
 
       filetypeOverrides = mkOption {
         type = types.listOf (types.submodule {
