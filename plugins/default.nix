@@ -119,6 +119,7 @@
     ./utils/toggleterm.nix
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
+    ./utils/vim-illuminate.nix
     ./utils/vim-matchup.nix
     ./utils/dashboard.nix
     ./utils/emmet.nix
