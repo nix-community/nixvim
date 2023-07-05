@@ -8,7 +8,7 @@
       enable = true;
       delay = 50;
       providers = ["lsp"];
-      modesDenyList = ["n"];
+      modesDenylist = ["n"];
       modesAllowlist = ["v"];
       underCursor = false;
       largeFileCutoff = 10;

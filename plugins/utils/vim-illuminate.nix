@@ -86,15 +86,20 @@ in {
         description = ''
           Filetype specific overrides.
         '';
+        default = [];
       };
 
-      largeFileOverrides =
-        helpers.mkCompositeOption ''
+      largeFileOverrides = mkOption {
+        type = types.submodule {
+          options = commonOptions // filetypeOptions;
+        };
+        description = ''
           Config to use for large files (based on large_file_cutoff).
           Supports the same keys passed to .configure
           If null, vim-illuminate will be disabled for large files.
-        ''
-        (commonOptions // filetypeOptions);
+        '';
+        default = {};
+      };
     }
     // commonOptions
     // filetypeOptions;
@@ -121,7 +126,7 @@ in {
       {
         large_file_overrides = commonSetupOptions largeFileOverrides // filetypeSetupOptions largeFileOverrides;
 
-        filetypes_overrides = let
+        filetype_overrides = let
           override = attr: {${attr.filetype} = commonSetupOptions attr.overrides;};
         in
           map override filetypeOverrides;
