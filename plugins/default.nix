@@ -91,6 +91,7 @@
     ./utils/floaterm.nix
     ./utils/goyo.nix
     ./utils/harpoon.nix
+    ./utils/illuminate.nix
     ./utils/indent-blankline.nix
     ./utils/intellitab.nix
     ./utils/lastplace.nix
