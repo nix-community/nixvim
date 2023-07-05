@@ -11,57 +11,57 @@ with lib; let
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 
   commonOptions = with helpers.defaultNullOpts; {
-    providers = mkListStr ''[ "lsp" "treesitter" "regex" ]'' ''
-      Provider used to get references in the buffer, ordered by priority
+    providers = mkListStr ''["lsp" "treesitter" "regex"]'' ''
+      Provider used to get references in the buffer, ordered by priority.
     '';
 
     delay = mkInt 100 ''
-      Delay in milliseconds
+      Delay in milliseconds.
     '';
 
     modesDenylist = mkListStr "[]" ''
-      Modes to not illuminate, this overrides modes_allowlist
-      See `:help mode()` for possible values
+      Modes to not illuminate, this overrides `modes_allowlist`.
+      See `:help mode()` for possible values.
     '';
 
     modesAllowlist = mkListStr "[]" ''
-      Modes to illuminate, this is overriden by modes_denylist
-      See `:help mode()` for possible values
+      Modes to illuminate, this is overriden by `modes_denylist`.
+      See `:help mode()` for possible values.
     '';
 
     providersRegexSyntaxDenylist = mkListStr "[]" ''
-      Syntax to not illuminate, this overrides providers_regex_syntax_allowlist
-      Only applies to the 'regex' provider
-      Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+      Syntax to not illuminate, this overrides `providers_regex_syntax_allowlist`.
+      Only applies to the 'regex' provider.
+      Use `:echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')`.
     '';
 
     providersRegexSyntaxAllowlist = mkListStr "[]" ''
-      Syntax to illuminate, this is overriden by providers_regex_syntax_denylist
-      Only applies to the 'regex' provider
-      Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+      Syntax to illuminate, this is overriden by `providers_regex_syntax_denylist`.
+      Only applies to the 'regex' provider.
+      Use `:echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')`.
     '';
 
     underCursor = mkBool true ''
-      Whether or not to illuminate under the cursor
+      Whether or not to illuminate under the cursor.
     '';
 
     largeFileCutoff = helpers.mkNullOrOption types.int ''
-      Number of lines at which to use large_file_config
-      The `under_cursor` option is disabled when this cutoff is hit
+      Number of lines at which to use `large_file_config`.
+      The `under_cursor` option is disabled when this cutoff is hit.
     '';
 
     minCountToHighlight = mkInt 1 ''
-      Minimum number of matches required to perform highlighting
+      Minimum number of matches required to perform highlighting.
     '';
   };
 
   filetypeOptions = {
-    filetypesDenylist = mkListStr ''[ "dirvish" "fugitive" ]'' ''
-      Filetypes to not illuminate, this overrides filetypes_allowlist
+    filetypesDenylist = mkListStr ''["dirvish" "fugitive"]'' ''
+      Filetypes to not illuminate, this overrides `filetypes_allowlist`.
     '';
 
     filetypesAllowlist = mkListStr "[]" ''
-      Filetypes to illuminate, this is overriden by filetypes_denylist
+      Filetypes to illuminate, this is overriden by `filetypes_denylist`.
     '';
   };
 in {
@@ -124,15 +124,15 @@ in {
       };
     setupOptions = with cfg;
       {
-        large_file_overrides = commonSetupOptions largeFileOverrides // filetypeSetupOptions largeFileOverrides;
+        large_file_overrides = (commonSetupOptions largeFileOverrides) // (filetypeSetupOptions largeFileOverrides);
 
         filetype_overrides = let
           override = attr: {${attr.filetype} = commonSetupOptions attr.overrides;};
         in
           map override filetypeOverrides;
       }
-      // filetypeSetupOptions cfg
-      // commonSetupOptions cfg;
+      // (filetypeSetupOptions cfg)
+      // (commonSetupOptions cfg);
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
