@@ -9,6 +9,7 @@
     ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
+    ./colorschemes/oxocarbon.nix
     ./colorschemes/poimandres.nix
     ./colorschemes/tokyonight.nix
     ./colorschemes/catppuccin.nix
