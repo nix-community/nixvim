@@ -53,7 +53,10 @@
       fileHistoryPanel = {
         logOptions = {
           git = {
-            singleFile.diffMerges = "combined";
+            singleFile = {
+              base = "a";
+              diffMerges = "combined";
+            };
             multiFile.diffMerges = "first-parent";
           };
           hg = {

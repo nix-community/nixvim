@@ -229,21 +229,120 @@ in {
       };
       fileHistoryPanel = {
         logOptions = let
-          commonDesc = "See ':h diffview-config-log_options'";
+          mkNullStr = helpers.mkNullOrOption types.str;
+          mkNullBool = helpers.mkNullOrOption types.bool;
+          logOptions = {
+            base = mkNullStr ''
+              Specify a base git rev from which the right side of the diff
+              will be created. Use the special value `LOCAL` to use the
+              local version of the file.
+            '';
+
+            revRange = mkNullStr ''
+              List only the commits in the specified revision range.
+            '';
+
+            pathArgs = mkNullable (types.listOf types.str) "[]" ''
+              Limit the target files to only the files matching the given
+              path arguments (git pathspec is supported).
+            '';
+
+            follow = mkNullBool ''
+              Follow renames (only for single file).
+            '';
+
+            firstParent = mkNullBool ''
+              Follow only the first parent upon seeing a merge commit.
+            '';
+
+            showPulls = mkNullBool ''
+              Show merge commits that are not TREESAME to its first parent,
+              but are to a later parent.
+            '';
+
+            reflog = mkNullBool ''
+              Include all reachable objects mentioned by reflogs.
+            '';
+
+            all = mkNullBool ''
+              Include all refs.
+            '';
+
+            merges = mkNullBool ''
+              List only merge commits.
+            '';
+
+            noMerges = mkNullBool ''
+              List no merge commits.
+            '';
+
+            reverse = mkNullBool ''
+              List commits in reverse order.
+            '';
+
+            cherryPick = mkNullBool ''
+              Omit commits that introduce the same change as another commit
+              on the "other side" when the set of commits are limited with
+              symmetric difference.
+            '';
+
+            leftOnly = mkNullBool ''
+              List only the commits on the left side of a symmetric
+              difference.
+            '';
+
+            rightOnly = mkNullBool ''
+              List only the commits on the right side of a symmetric
+              difference.
+            '';
+
+            maxCount = helpers.mkNullOrOption types.int ''
+              Limit the number of commits.
+            '';
+
+            l = mkNullable (types.listOf types.str) "[]" ''
+              `{ ("<start>,<end>:<file>" | ":<funcname>:<file>")... }`
+
+              Trace the evolution of the line range given by <start>,<end>,
+              or by the function name regex <funcname>, within the <file>.
+            '';
+
+            diffMerges = helpers.mkNullOrOption (types.enum ["off" "on" "first-parent" "separate" "combined" "dense-combined" "remerge"]) ''
+              Determines how merge commits are treated.
+            '';
+
+            author = mkNullStr ''
+              Limit the commits output to ones with author/committer header
+              lines that match the specified pattern (regular expression).
+            '';
+
+            grep = mkNullStr ''
+              Limit the commits output to ones with log message that matches
+              the specified pattern (regular expression).
+            '';
+
+            g = mkNullStr ''
+              Look for differences whose patch text contains added/removed
+              lines that match the specified pattern (extended regular
+              expression).
+            '';
+
+            s = mkNullStr ''
+              Look for differences that change the number of occurences of
+              the specified pattern (extended regular expression) in a
+              file.
+            '';
+          };
         in {
           git = {
-            singleFile = {
-              diffMerges = mkStr "combined" commonDesc;
-            };
+            singleFile = logOptions;
 
-            multiFile = {
-              diffMerges = mkStr "first-parent" commonDesc;
-            };
+            multiFile = logOptions;
           };
           hg = {
-            singleFile = mkAttributeSet "{}" commonDesc;
+            singleFile = logOptions;
 
-            multiFile = mkAttributeSet "{}" commonDesc;
+            multiFile = logOptions;
           };
         };
         winConfig = mkWinConfig "split" "" 16 "bottom";
@@ -509,20 +608,40 @@ in {
       };
 
       file_history_panel = with fileHistoryPanel; {
-        log_options = with logOptions; {
+        log_options = with logOptions; let
+          setupLogOptions = opts:
+            with opts; {
+              inherit base;
+              rev_range = revRange;
+              path_args = pathArgs;
+              inherit follow;
+              first_parent = firstParent;
+              show_pulls = showPulls;
+              inherit reflog;
+              inherit all;
+              inherit merges;
+              no_merges = noMerges;
+              inherit reverse;
+              cherry_pick = cherryPick;
+              left_only = leftOnly;
+              right_only = rightOnly;
+              max_count = maxCount;
+              L = l;
+              diff_merges = diffMerges;
+              inherit author;
+              inherit grep;
+              G = g;
+              S = s;
+            };
+        in {
           git = with git; {
-            single_file = {
-              diff_merges = singleFile.diffMerges;
-            };
-
-            multi_file = {
-              diff_merges = multiFile.diffMerges;
-            };
+            single_file = setupLogOptions singleFile;
+            multi_file = setupLogOptions multiFile;
           };
 
           hg = with hg; {
-            single_file = singleFile;
-            multi_file = multiFile;
+            single_file = setupLogOptions singleFile;
+            multi_file = setupLogOptions multiFile;
           };
         };
 
