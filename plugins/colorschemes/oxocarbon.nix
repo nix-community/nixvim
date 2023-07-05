@@ -12,7 +12,7 @@ in {
     colorschemes.oxocarbon = {
       enable = mkEnableOption "oxocarbon";
 
-      package = helpers.mkPackageOption "one" pkgs.vimPlugins.oxocarbon-nvim;
+      package = helpers.mkPackageOption "oxocarbon" pkgs.vimPlugins.oxocarbon-nvim;
     };
   };
 
