@@ -76,6 +76,7 @@
         cssls.enable = true;
         dartls.enable = true;
         denols.enable = true;
+        elmls.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
         futhark-lsp.enable = true;

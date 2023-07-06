@@ -148,6 +148,11 @@ with lib; let
       package = pkgs.deno;
     }
     {
+      name = "elmls";
+      description = "Enable the Elm Language Server";
+      package = pkgs.elmPackages.elm-language-server;
+    }
+    {
       name = "eslint";
       description = "Enable eslint";
       package = pkgs.vscode-langservers-extracted;
