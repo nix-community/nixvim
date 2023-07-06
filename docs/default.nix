@@ -37,72 +37,141 @@ with lib; let
 
   removeUnwanted = attrs: builtins.removeAttrs attrs ["_module" "warnings" "assertions" "content"];
 
-  doc =
-    foldlAttrs (acc: mod: opts: let
-      isStandalone = hasAttr "type" opts;
-    in rec {
-      modules =
-        acc.modules
-        // (
-          if isStandalone
-          then {${mod} = "${mod}.md";}
-          else {${mod} = mapAttrs (sub: _: "${mod}/${sub}.md") (removeUnwanted opts);}
-        );
+  isStandalone = opts:
+    if isOption opts
+    then true
+    else false;
 
-      commands =
-        acc.commands
-        ++ (
-          if isStandalone
-          then ["cp ${mkMDDoc opts} ${modules.${mod}}\n\n"]
-          else [
-            ''
-              mkdir -p ${mod}
-              ${
-                concatStrings (
-                  mapAttrsToList
-                  (
-                    sub: opts: ''
-                      cp ${mkMDDoc opts} ${modules.${mod}.${sub}}
-                    ''
-                  ) (removeUnwanted opts)
-                )
-              }
-            ''
-          ]
-        );
-    }) {
-      commands = [];
-      modules = {};
-    }
-    (removeUnwanted options.options);
+  hasSubComponents = componentOpts: all (x: x) (mapAttrsToList (_: opts: !(isStandalone opts)) componentOpts);
+
+  processModules =
+    mapAttrsRecursiveCond (set:
+      if set ? type
+      then false
+      else if !isStandalone set
+      then false
+      else true)
+    (
+      path: moduleOpts:
+        if isStandalone moduleOpts
+        then {index.options = moduleOpts;}
+        else
+          mapAttrs (
+            submodule: submoduleOpts:
+              if isStandalone submoduleOpts
+              then {index.options = submoduleOpts;}
+              else
+                foldlAttrs (
+                  acc: component: componentOpts: {
+                    index.options =
+                      acc.index.options
+                      // (optionalAttrs (isStandalone componentOpts) {
+                        ${component} = componentOpts;
+                      });
+
+                    components =
+                      acc.components
+                      // (optionalAttrs (!isStandalone componentOpts) {
+                        ${component} =
+                          if (!hasSubComponents componentOpts)
+                          then {
+                            options = componentOpts;
+                            path = "${concatStringsSep "/" path}/${submodule}/${component}.md";
+                          }
+                          else
+                            mapAttrs (subComponent: subComponentOpts: {
+                              options = subComponentOpts;
+                              path = "${concatStringsSep "/" path}/${submodule}/${component}/${subComponent}.md";
+                            })
+                            componentOpts;
+                      });
+                  }
+                ) {
+                  index.options = {};
+                  components = {};
+                }
+                submoduleOpts
+          )
+          moduleOpts
+    );
+
+  mapAttrsToStringSep = f: attrs: concatStringsSep "\n" (mapAttrsToList f attrs);
+
+  doc = rec {
+    modules = processModules (removeUnwanted options.options);
+    commands =
+      mapAttrsToList (
+        module: moduleOpts:
+          if moduleOpts ? "index"
+          then "cp ${mkMDDoc moduleOpts} ${module}.md\n"
+          else ''
+            mkdir ${module}
+            ${mapAttrsToStringSep (
+                submodule: submoduleOpts:
+                  if !(submoduleOpts ? "components") || submoduleOpts.components == {}
+                  then "cp ${mkMDDoc submoduleOpts.index.options} ${module}/${submodule}.md"
+                  else ''
+                    mkdir ${module}/${submodule}
+                    cp ${mkMDDoc submoduleOpts.index.options} ${module}/${submodule}/index.md
+                    ${mapAttrsToStringSep
+                      (component: componentOpts:
+                        if componentOpts ? "options"
+                        then "cp ${mkMDDoc componentOpts.options} ${componentOpts.path}"
+                        else ''
+                          mkdir ${module}/${submodule}/${component}
+                          ${mapAttrsToStringSep
+                            (
+                              subComponentOpts: subComponentOpts: "cp ${mkMDDoc subComponentOpts.options} ${subComponentOpts.path}"
+                            )
+                            componentOpts}
+                        '')
+                      submoduleOpts.components}
+                  ''
+              )
+              moduleOpts}
+          ''
+      )
+      modules;
+  };
 
   # Options used to substitute variables in mdbook generation
   mdbook = {
-    nixvimOptions = with builtins;
-      concatStrings (
-        mapAttrsToList (
-          mod: opts:
-            if typeOf opts == "string"
-            then "- [${mod}](${opts})\n"
-            else ''
-              - [${mod}](${mod}/index.md)
-              ${concatStringsSep "\n" (
-                mapAttrsToList (
-                  sub: subOpts: "\t- [${sub}](${subOpts})"
-                )
-                opts
-              )}
-            ''
-        )
-        doc.modules
-      );
+    nixvimOptions =
+      mapAttrsToStringSep (
+        module: moduleOpts:
+          if moduleOpts ? "index"
+          then "- [${module}](${module}.md)"
+          else
+            "- [${module}](${module}/index.md)\n"
+            + mapAttrsToStringSep (
+              submodule: submoduleOpts:
+                if !(submoduleOpts ? "components") || submoduleOpts.components == {}
+                then "\t- [${submodule}](${module}/${submodule}.md)"
+                else
+                  "\t- [${submodule}](${module}/${submodule}/index.md)\n"
+                  + mapAttrsToStringSep (
+                    component: componentOpts:
+                      if componentOpts ? "options"
+                      then "\t\t- [${component}](${componentOpts.path})"
+                      else
+                        "\t\t- [${component}](${module}/${submodule}/${component}/index.md)\n"
+                        + (mapAttrsToStringSep (
+                            subComponent: subComponentOpts: "\t\t\t- [${subComponent}](${subComponentOpts.path})"
+                          )
+                          componentOpts)
+                  )
+                  submoduleOpts.components
+            )
+            moduleOpts
+      )
+      doc.modules;
   };
 
   prepareMD = ''
     # Copy inputs into the build directory
     cp -r $inputs/* ./
 
-    # Copy generated docs to dest
+    # Copy the generated md docs into the build directory
     ${builtins.concatStringsSep "\n" doc.commands}
 
     # Prepare SUMMARY.md for mdBook
