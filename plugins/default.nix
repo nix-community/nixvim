@@ -25,6 +25,7 @@
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
 
+    ./git/diffview.nix
     ./git/fugitive.nix
     ./git/gitgutter.nix
     ./git/gitmessenger.nix
