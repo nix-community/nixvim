@@ -1,3 +1,5 @@
 {
-  empty = {colorschemes.oxocarbon.enable = true;};
+  empty = {
+    colorschemes.oxocarbon.enable = true;
+  };
 
