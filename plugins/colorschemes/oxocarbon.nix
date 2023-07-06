@@ -21,7 +21,7 @@ in {
     extraPlugins = [cfg.package];
 
     options = {
-      termguicolors = true;
+      termguicolors = mkDefault true;
     };
   };
 }
