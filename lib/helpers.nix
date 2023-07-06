@@ -141,7 +141,7 @@ with lib; rec {
         else "false"
       );
     mkStr = default: mkNullable lib.types.str ''${builtins.toString default}'';
-    mkAttributeSet = default: mkNullable lib.types.attrs ''"${default}"'';
+    mkAttributeSet = default: mkNullable lib.types.attrs ''${default}'';
     mkEnum = enum: default: mkNullable (lib.types.enum enum) ''"${default}"'';
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
     mkBorder = default: name: desc:

@@ -22,6 +22,7 @@
     ./completion/nvim-cmp/sources
     ./completion/lspkind.nix
 
+    ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
 
