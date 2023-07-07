@@ -4,3 +4,7 @@ language = "en"
 multilingual = false
 src = "."
 title = "nixvim docs"
+
+[output.html.fold]
+enable = true
+level = 0

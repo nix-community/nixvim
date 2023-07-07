@@ -169,7 +169,7 @@ with lib; let
 
   prepareMD = ''
     # Copy inputs into the build directory
-    cp -r $inputs/* ./
+    cp -r --no-preserve=all $inputs/* ./
 
     # Copy the generated md docs into the build directory
     ${builtins.concatStringsSep "\n" doc.commands}
@@ -192,8 +192,8 @@ in
       mkdir -p $dest
       echo $dest # TODO: remove
       ${prepareMD}
+      mkdir $dest/.tmp && cp -r . $dest/.tmp # TODO: remove
       mdbook build
       cp -r ./book/* $dest
-      mkdir $dest/.tmp && cp -r . $dest/.tmp # TODO: remove
     '';
   }
