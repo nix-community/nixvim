@@ -54,7 +54,10 @@ with lib; let
     (
       path: moduleOpts:
         if isStandalone moduleOpts
-        then {index.options = moduleOpts;}
+        then {
+          index.options = moduleOpts;
+          group = "core";
+        }
         else
           mapAttrs (
             submodule: submoduleOpts:
@@ -97,73 +100,182 @@ with lib; let
 
   mapAttrsToStringSep = f: attrs: concatStringsSep "\n" (mapAttrsToList f attrs);
 
-  doc = rec {
-    modules = processModules (removeUnwanted options.options);
-    commands =
-      mapAttrsToList (
-        module: moduleOpts:
-          if moduleOpts ? "index"
-          then "cp ${mkMDDoc moduleOpts} ${module}.md\n"
-          else ''
-            mkdir ${module}
-            ${mapAttrsToStringSep (
-                submodule: submoduleOpts:
-                  if !(submoduleOpts ? "components") || submoduleOpts.components == {}
-                  then "cp ${mkMDDoc submoduleOpts.index.options} ${module}/${submodule}.md"
-                  else ''
-                    mkdir ${module}/${submodule}
-                    cp ${mkMDDoc submoduleOpts.index.options} ${module}/${submodule}/index.md
-                    ${mapAttrsToStringSep
-                      (component: componentOpts:
-                        if componentOpts ? "options"
-                        then "cp ${mkMDDoc componentOpts.options} ${componentOpts.path}"
-                        else ''
-                          mkdir ${module}/${submodule}/${component}
-                          ${mapAttrsToStringSep
-                            (
-                              subComponentOpts: subComponentOpts: "cp ${mkMDDoc subComponentOpts.options} ${subComponentOpts.path}"
-                            )
-                            componentOpts}
-                        '')
-                      submoduleOpts.components}
-                  ''
+  mergeFunctionResults = x: y: let
+    xResult = x;
+    yResult = y;
+  in
+    xResult + yResult;
+
+  mapModulesToString = {
+    moduleFunc ? {module, ...}: module,
+    submoduleFunc ? {submodule, ...}: submodule,
+    componentFunc ? {component, ...}: component,
+    subComponentFunc ? {subComponent, ...}: subComponent,
+    moduleMapFunc ? mapAttrsToStringSep,
+    submoduleMapFunc ? moduleMapFunc,
+    componentMapFunc ? submoduleMapFunc,
+    subComponentMapFunc ? componentMapFunc,
+  }:
+    moduleMapFunc (
+      group: groupOpts:
+        if group != "default"
+        then
+          moduleFunc {
+            module = group;
+            moduleOpts = groupOpts;
+            standalone = true;
+          }
+        else
+          moduleMapFunc (
+            module: moduleOpts:
+              mergeFunctionResults (moduleFunc {
+                inherit module moduleOpts;
+                standalone = moduleOpts ? "index";
+              }) (
+                if !moduleOpts ? "index"
+                then
+                  submoduleMapFunc (
+                    submodule: submoduleOpts:
+                      mergeFunctionResults
+                      (submoduleFunc {
+                        inherit module submodule submoduleOpts;
+                        standalone = !(submoduleOpts ? "components") || submoduleOpts.components == {};
+                        path = "${module}/${submodule}";
+                      })
+                      (
+                        if (submoduleOpts ? "components") && submoduleOpts.components != {}
+                        then
+                          componentMapFunc (
+                            component: componentOpts:
+                              mergeFunctionResults (componentFunc {
+                                inherit module submodule component componentOpts;
+                                standalone = componentOpts ? "options";
+                                path = "${module}/${submodule}/${component}";
+                              })
+                              (
+                                if !componentOpts ? "options"
+                                then
+                                  subComponentMapFunc (
+                                    subComponent: subComponentOpts:
+                                      subComponentFunc {
+                                        inherit module submodule component subComponent subComponentOpts;
+                                        path = "${module}/${submodule}/${component}/${subComponent}";
+                                      }
+                                  )
+                                  componentOpts
+                                else ""
+                              )
+                          )
+                          submoduleOpts.components
+                        else ""
+                      )
+                  )
+                  moduleOpts
+                else ""
               )
-              moduleOpts}
-          ''
-      )
+          )
+          groupOpts
+    );
+
+  doc = rec {
+    modules = foldlAttrs (
+      acc: module: opts: let
+        group = opts.group or "default";
+        last = acc.${group} or {};
+      in
+        acc
+        // {
+          ${group} = last // {${module} = opts;};
+        }
+    ) {} (processModules (removeUnwanted options.options));
+
+    commands =
+      mapModulesToString {
+        moduleFunc = {
+          module,
+          moduleOpts,
+          standalone,
+          ...
+        }:
+          if standalone
+          then "cp ${mkMDDoc moduleOpts} ${module}.md"
+          else "\nmkdir ${module}\n";
+
+        submoduleFunc = {
+          submodule,
+          submoduleOpts,
+          path,
+          standalone,
+          ...
+        }:
+          if standalone
+          then "cp ${mkMDDoc submoduleOpts.index.options} ${path}.md"
+          else "mkdir ${path}\n";
+
+        componentFunc = {
+          component,
+          componentOpts,
+          path,
+          standalone,
+          ...
+        }:
+          if standalone
+          then "cp ${mkMDDoc componentOpts.options} ${path}.md"
+          else "mkdir ${path}\n";
+
+        subComponentFunc = {
+          subComponent,
+          subComponentOpts,
+          path,
+          ...
+        }: "cp ${mkMDDoc subComponentOpts.options} ${path}.md";
+
+        moduleMapFunc = mapAttrsToStringSep;
+      }
       modules;
   };
 
   # Options used to substitute variables in mdbook generation
   mdbook = {
     nixvimOptions =
-      mapAttrsToStringSep (
-        module: moduleOpts:
-          if moduleOpts ? "index"
+      mapModulesToString {
+        moduleFunc = {
+          module,
+          standalone,
+          ...
+        }:
+          if standalone
           then "- [${module}](${module}.md)"
-          else
-            "- [${module}](${module}/index.md)\n"
-            + mapAttrsToStringSep (
-              submodule: submoduleOpts:
-                if !(submoduleOpts ? "components") || submoduleOpts.components == {}
-                then "\t- [${submodule}](${module}/${submodule}.md)"
-                else
-                  "\t- [${submodule}](${module}/${submodule}/index.md)\n"
-                  + mapAttrsToStringSep (
-                    component: componentOpts:
-                      if componentOpts ? "options"
-                      then "\t\t- [${component}](${componentOpts.path})"
-                      else
-                        "\t\t- [${component}](${module}/${submodule}/${component}/index.md)\n"
-                        + (mapAttrsToStringSep (
-                            subComponent: subComponentOpts: "\t\t\t- [${subComponent}](${subComponentOpts.path})"
-                          )
-                          componentOpts)
-                  )
-                  submoduleOpts.components
-            )
-            moduleOpts
-      )
+          else "- [${module}](${module}/index.md)\n";
+
+        submoduleFunc = {
+          submodule,
+          path,
+          standalone,
+          ...
+        }:
+          if standalone
+          then "\t- [${submodule}](${path}.md)"
+          else "\t- [${submodule}](${path}/index.md)\n";
+
+        componentFunc = {
+          component,
+          path,
+          standalone,
+          ...
+        }:
+          if standalone
+          then "\t\t- [${component}](${path}.md)"
+          else "\t\t- [${component}](${path}/index.md)\n";
+
+        subComponentFunc = {
+          subComponent,
+          path,
+          ...
+        }: "\t\t\t- [${subComponent}](${path}.md)";
+
+        moduleMapFunc = mapAttrsToStringSep;
+      }
       doc.modules;
   };
 
@@ -172,7 +284,7 @@ with lib; let
     cp -r --no-preserve=all $inputs/* ./
 
     # Copy the generated md docs into the build directory
-    ${builtins.concatStringsSep "\n" doc.commands}
+    ${doc.commands}
 
     # Prepare SUMMARY.md for mdBook
     substituteInPlace ./SUMMARY.md \
@@ -190,7 +302,6 @@ in
     buildPhase = ''
       dest=$out/share/doc
       mkdir -p $dest
-      echo $dest # TODO: remove
       ${prepareMD}
       mkdir $dest/.tmp && cp -r . $dest/.tmp # TODO: remove
       mdbook build
