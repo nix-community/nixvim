@@ -149,7 +149,7 @@ with lib; let
     }
     {
       name = "elmls";
-      description = "Enable the Elm Language Server";
+      description = "Enable elmls, for Elm.";
       package = pkgs.elmPackages.elm-language-server;
     }
     {
