@@ -210,7 +210,10 @@ with lib; let
         }:
           if standalone
           then "cp ${mkMDDoc submoduleOpts.index.options} ${path}.md"
-          else "mkdir ${path}\n";
+          else ''
+            mkdir ${path}
+            cp ${mkMDDoc submoduleOpts.index.options} ${path}/index.md
+          '';
 
         componentFunc = {
           component,
