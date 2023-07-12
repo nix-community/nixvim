@@ -7,6 +7,13 @@
 with lib; let
   cfg = config.colorschemes.catppuccin;
   helpers = import ../helpers.nix args;
+
+  flavours = [
+    "latte"
+    "mocha"
+    "frappe"
+    "macchiato"
+  ];
 in {
   options = {
     colorschemes.catppuccin = {
@@ -15,21 +22,11 @@ in {
       package =
         helpers.mkPackageOption "catppuccin" pkgs.vimPlugins.catppuccin-nvim;
 
-      flavour = helpers.defaultNullOpts.mkEnumFirstDefault [
-        "latte"
-        "mocha"
-        "frappe"
-        "macchiato"
-      ] "Theme flavour";
+      flavour = helpers.defaultNullOpts.mkEnumFirstDefault flavours "Theme flavour";
 
       background = let
         mkBackgroundStyle = name:
-          helpers.defaultNullOpts.mkEnumFirstDefault [
-            "latte"
-            "mocha"
-            "frappe"
-            "macchiato"
-          ] "Background for ${name}";
+          helpers.defaultNullOpts.mkEnumFirstDefault flavours "Background for ${name}";
       in {
         light = mkBackgroundStyle "light";
         dark = mkBackgroundStyle "dark";
@@ -115,23 +112,20 @@ in {
           "Define operators highlight properties";
       };
 
-      colorOverrides = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) "{}" ''
-        Define color overrides
-        Example:
-         color_overrides = {
-             all = {
-                 text = "#ffffff",
-             },
-             latte = {
-                 base = "#ff0000",
-                 mantle = "#242424",
-                 crust = "#474747",
-             },
-             frappe = {},
-             macchiato = {},
-             mocha = {},
-         }
-      '';
+      colorOverrides =
+        genAttrs
+        (flavours ++ ["all"])
+        (
+          flavour:
+            helpers.defaultNullOpts.mkNullable
+            (with types; attrsOf str)
+            "{}"
+            (
+              if flavour == "all"
+              then "Override colors for all of the flavours."
+              else "Override colors for the ${flavour} flavour."
+            )
+        );
 
       customHighlights =
         helpers.defaultNullOpts.mkNullable

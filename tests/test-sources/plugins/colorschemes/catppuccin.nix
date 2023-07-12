@@ -1,6 +1,8 @@
 {
   # Empty configuration
-  empty = {colorschemes.catppuccin.enable = true;};
+  empty = {
+    colorschemes.catppuccin.enable = true;
+  };
 
   # All the upstream default options of poimandres
   defaults = {
@@ -44,6 +46,46 @@
         telescope = true;
         notify = false;
         mini = false;
+      };
+    };
+  };
+
+  example = {
+    colorschemes.catppuccin = {
+      enable = true;
+
+      flavour = "mocha";
+      terminalColors = true;
+      colorOverrides.mocha.base = "#1e1e2f";
+
+      integrations = {
+        barbar = true;
+        fidget = true;
+        gitsigns = true;
+        illuminate = true;
+        indent_blankline = {
+          enabled = true;
+          colored_indent_levels = true;
+        };
+        lsp_trouble = true;
+        mini = true;
+        native_lsp.enabled = true;
+        navic.enabled = true;
+        nvimtree = true;
+        overseer = true;
+        telescope = true;
+        treesitter = true;
+        treesitter_context = true;
+        ts_rainbow2 = true;
+      };
+      styles = {
+        booleans = ["bold" "italic"];
+        conditionals = ["bold"];
+        functions = ["bold"];
+        keywords = ["italic"];
+        loops = ["bold"];
+        operators = ["bold"];
+        properties = ["italic"];
       };
     };
   };
