@@ -24,7 +24,6 @@
           pathGlob = [];
         };
       };
-
       view = {
         openDirection = "left";
         sortBy = ["is_folder" "ext" "file_name"];
