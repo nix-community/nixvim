@@ -50,7 +50,6 @@
         textColourSet = "env";
         iconColourSet = "github";
       };
-
       keymap = {
         windowManagement = {
           quit = ["q"];
@@ -60,12 +59,9 @@
         };
         rerooting = {
           changeDir = ["b"];
-
           changeFocus = ["c"];
-
           changeFocusUp = ["C"];
         };
-
         openFileFolder = {
           primary = ["<enter>"];
           secondary = ["<tab>" "<2-leftmouse>"];
@@ -75,7 +71,6 @@
           openSys = ["o"];
           collapse = ["o"];
         };
-
         cursor = {
           refocus = ["~"];
           jumpToCurrent = ["J"];
@@ -84,21 +79,17 @@
           copyBasename = ["Y"];
           copyRelname = ["<c-y>"];
         };
-
         filtering = {
           filter = ["f"];
           clearFilter = ["F"];
         };
-
         bookmarks = {
           bookmarkGoto = ["m"];
         };
-
         selecting = {
           select = ["s"];
           clearSelection = ["S"];
         };
-
         fileOperations = {
           new = ["a"];
           link = ["A"];
@@ -109,7 +100,6 @@
           delete = ["d"];
           trash = ["t"];
         };
-
         toggles = {
           toggleHidden = ["."];
           toggleFollow = ["u"];
