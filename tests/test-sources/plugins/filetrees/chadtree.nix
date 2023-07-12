@@ -37,7 +37,6 @@
           wrap = false;
         };
       };
-
       theme = {
         highlights = {
           ignored = "Comment";
