@@ -9,16 +9,15 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in {
-  options.plugins.chadtree = with helpers;
-  with defaultNullOpts;
+  options.plugins.chadtree =
     helpers.extraOptionsOptions
     // {
       enable = mkEnableOption "chadtree";
 
-      package = mkPackageOption "chadtree" pkgs.vimPlugins.chadtree;
+      package = helpers.mkPackageOption "chadtree" pkgs.vimPlugins.chadtree;
 
       options = {
-        follow = mkBool true ''
+        follow = helpers.defaultNullOpts.mkBool true ''
           CHADTree will highlight currently open file, and open all its parents.
         '';
 
@@ -37,24 +36,24 @@ in {
           '';
         };
 
-        pageIncrement = mkInt 5 ''
+        pageIncrement = helpers.defaultNullOpts.mkInt 5 ''
           Change how many lines `{` and `}` scroll.
         '';
 
-        pollingRate = mkNum 2.0 ''
+        pollingRate = helpers.defaultNullOpts.mkNum 2.0 ''
           CHADTree's background refresh rate.
         '';
 
-        session = mkBool true ''
+        session = helpers.defaultNullOpts.mkBool true ''
           Save & restore currently open folders.
         '';
 
-        showHidden = mkBool false ''
+        showHidden = helpers.defaultNullOpts.mkBool false ''
           Hide some files and folders by default. By default this can be toggled using the `.` key.
           see `chadtree_settings.ignore` for more details.
         '';
 
-        versionControl = mkBool true ''
+        versionControl = helpers.defaultNullOpts.mkBool true ''
           Enable version control. This can also be toggled. But unlike `show_hidden`, does not have a default keybind.
         '';
 
@@ -75,7 +74,7 @@ in {
       };
 
       view = {
-        openDirection = mkEnum ["left" "right"] "left" ''
+        openDirection = helpers.defaultNullOpts.mkEnum ["left" "right"] "left" ''
           Which way does CHADTree open?
         '';
 
@@ -86,12 +85,12 @@ in {
           `["is_folder" "ext" "file_name"]`
         '';
 
-        width = mkInt 40 ''
+        width = helpers.defaultNullOpts.mkInt 40 ''
           How big is CHADTree when initially opened?
         '';
 
         windowOptions =
-          mkAttributeSet ''
+          helpers.defaultNullOpts.mkAttributeSet ''
             {
                 cursorline = true;
                 number = false;
@@ -108,30 +107,30 @@ in {
 
       theme = {
         highlights = {
-          ignored = mkStr "Comment" ''
+          ignored = helpers.defaultNullOpts.mkStr "Comment" ''
             These are used for files that are ignored by user supplied pattern
             in `chadtree.ignore` and by version control.
           '';
 
-          bookmarks = mkStr "Title" ''
+          bookmarks = helpers.defaultNullOpts.mkStr "Title" ''
             These are used to show bookmarks.
           '';
 
-          quickfix = mkStr "Label" ''
+          quickfix = helpers.defaultNullOpts.mkStr "Label" ''
             These are used to notify the number of times a file / folder appears in the `quickfix` list.
           '';
 
-          versionControl = mkStr "Comment" ''
+          versionControl = helpers.defaultNullOpts.mkStr "Comment" ''
             These are used to put a version control status beside each file.
           '';
         };
 
-        iconGlyphSet = mkEnum ["devicons" "emoji" "ascii" "ascii_hollow"] "devicons" ''
+        iconGlyphSet = helpers.defaultNullOpts.mkEnum ["devicons" "emoji" "ascii" "ascii_hollow"] "devicons" ''
           Icon glyph set to use.
         '';
 
         textColourSet =
-          mkEnum [
+          helpers.defaultNullOpts.mkEnum [
             "env"
             "solarized_dark_256"
             "solarized_dark"
@@ -149,7 +148,7 @@ in {
             If you are not happy with that, you can choose one of the many others.
           '';
 
-        iconColourSet = mkEnum ["github" "none"] "github" ''
+        iconColourSet = helpers.defaultNullOpts.mkEnum ["github" "none"] "github" ''
           Right now you all the file icons are coloured according to Github colours.
 
           You may also disable colouring if you wish.
@@ -440,5 +439,3 @@ in {
       '';
     };
 }
-# devicons, trash
-
