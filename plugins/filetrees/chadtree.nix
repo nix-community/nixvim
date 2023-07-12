@@ -336,7 +336,6 @@ in {
   config = let
     setupOptions = with cfg; {
       xdg = true;
-
       options = with options; {
         inherit follow;
         inherit lang;
@@ -344,27 +343,23 @@ in {
           inherit warn;
           allow_exts = allowExts;
         };
-
         page_increment = pageIncrement;
         polling_rate = pollingRate;
         inherit session;
         show_hidden = showHidden;
         version_control = versionControl;
-
         ignore = with ignore; {
           name_exact = nameExact;
           name_glob = nameGlob;
           path_glob = pathGlob;
         };
       };
-
       view = with view; {
         open_direction = openDirection;
         sort_by = sortBy;
         inherit width;
         window_options = windowOptions;
       };
-
       theme = with theme; {
         highlights = with highlights; {
           inherit ignored;
@@ -372,14 +367,10 @@ in {
           inherit quickfix;
           version_control = versionControl;
         };
-
         icon_glyph_set = iconGlyphSet;
-
         text_colour_set = textColourSet;
-
         icon_colour_set = iconColourSet;
       };
-
       keymap = with keymap;
       with windowManagement;
       with rerooting;
