@@ -257,7 +257,12 @@ with lib; let
         };
         workspace = {
           library = mkOption {
-            type = types.nullOr (types.either types.str helpers.rawType);
+            type = with types;
+              nullOr
+              (
+                listOf
+                (either str helpers.rawType)
+              );
             description = ''
               An array of abosolute or workspace-relative paths that will be added to the workspace
               diagnosis - meaning you will get completion and context from these library files.
@@ -265,7 +270,7 @@ with lib; let
               Files included here will have some features disabled such as renaming fields to
               prevent accidentally renaming your library files.
             '';
-            default = helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)";
+            default = [(helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)")];
           };
           checkThirdParty = mkOption {
             type = types.nullOr types.bool;
