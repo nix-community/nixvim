@@ -28,7 +28,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 ## Installation
 
 NixVim needs to be installed with a compatible nixpkgs version.
-This means that the `main` branch of NixVim requires to be insalled with `nixos-unstable`.
+This means that the `main` branch of NixVim requires to be installed with `nixos-unstable`.
 
 If you want to use NixVim with nixpkgs 23.05 you should use the `nixos-23.05` branch.
 
@@ -60,7 +60,7 @@ in
 
 ### Using flakes
 This is the recommended method if you are already using flakes to manage your
-sysyem. To enable flakes, add this to `/etc/nixos/configuration.nix`
+system. To enable flakes, add this to `/etc/nixos/configuration.nix`
 
 ```nix
 { pkgs, lib, ... }:
