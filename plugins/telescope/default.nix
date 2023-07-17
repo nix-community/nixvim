@@ -27,12 +27,15 @@ in {
       package = helpers.mkPackageOption "telescope.nvim" pkgs.vimPlugins.telescope-nvim;
 
       keymaps = mkOption {
-        type = types.attrsOf types.str;
+        type = with types; attrsOf (either str attrs);
         description = "Keymaps for telescope.";
         default = {};
         example = {
           "<leader>fg" = "live_grep";
-          "<C-p>" = "git_files";
+          "<C-p>" = {
+            action = "git_files";
+            desc = "Telescope Git Files";
+          };
         };
       };
 
@@ -82,11 +85,22 @@ in {
 
     maps.normal =
       mapAttrs
-      (key: action: {
-        silent = cfg.keymapsSilent;
-        action = "require('telescope.builtin').${action}";
-        lua = true;
-      })
+      (key: action: let
+        actionStr =
+          if isString action
+          then action
+          else action.action;
+        actionProps =
+          if isString action
+          then {}
+          else filterAttrs (n: v: n != "action") action;
+      in
+        {
+          silent = cfg.keymapsSilent;
+          action = "require('telescope.builtin').${actionStr}";
+          lua = true;
+        }
+        // actionProps)
       cfg.keymaps;
 
     extraConfigLua = let
