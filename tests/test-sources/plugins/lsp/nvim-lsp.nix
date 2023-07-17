@@ -11,7 +11,10 @@
         silent = true;
         diagnostic = {
           "<leader>k" = "goto_prev";
-          "<leader>j" = "goto_next";
+          "<leader>j" = {
+            action = "goto_next";
+            desc = "Go to next diagnostic";
+          };
         };
 
         lspBuf = {
@@ -19,7 +22,10 @@
           "gD" = "references";
           "gt" = "type_definition";
           "gi" = "implementation";
-          "K" = "hover";
+          "K" = {
+            action = "hover";
+            desc = "Hover";
+          };
         };
       };
 
