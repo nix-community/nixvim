@@ -92,6 +92,7 @@
         metals.enable = true;
         nil_ls.enable = true;
         nixd.enable = true;
+        omnisharp.enable = true;
         pylsp.enable = true;
         pyright.enable = true;
         rnix-lsp.enable = true;
