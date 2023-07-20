@@ -1,4 +1,4 @@
-{pkgs}: {
+{
   example = {
     plugins.lsp = {
       enable = true;
