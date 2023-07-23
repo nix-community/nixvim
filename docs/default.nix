@@ -285,6 +285,7 @@ with lib; let
   prepareMD = ''
     # Copy inputs into the build directory
     cp -r --no-preserve=all $inputs/* ./
+    cp ${../CONTRIBUTING.md} ./CONTRIBUTING.md
 
     # Copy the generated md docs into the build directory
     ${doc.commands}
