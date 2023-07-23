@@ -13,7 +13,7 @@ in {
     colorschemes.base16 = {
       enable = mkEnableOption "base16";
 
-      package = helpers.mkPackageOption "base16" pkgs.vimPlugins.base16-vim;
+      package = helpers.mkPackageOption "base16" pkgs.vimPlugins.nvim-base16;
 
       useTruecolor = mkOption {
         type = types.bool;

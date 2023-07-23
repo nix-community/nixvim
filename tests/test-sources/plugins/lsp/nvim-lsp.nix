@@ -11,7 +11,10 @@
         silent = true;
         diagnostic = {
           "<leader>k" = "goto_prev";
-          "<leader>j" = "goto_next";
+          "<leader>j" = {
+            action = "goto_next";
+            desc = "Go to next diagnostic";
+          };
         };
 
         lspBuf = {
@@ -19,7 +22,10 @@
           "gD" = "references";
           "gt" = "type_definition";
           "gi" = "implementation";
-          "K" = "hover";
+          "K" = {
+            action = "hover";
+            desc = "Hover";
+          };
         };
       };
 
@@ -71,9 +77,12 @@
         clangd.enable = true;
         clojure-lsp.enable = true;
         cmake.enable = true;
+        # pkgs.csharp-ls only supports linux platforms
+        csharp-ls.enable = pkgs.stdenv.isLinux;
         cssls.enable = true;
         dartls.enable = true;
         denols.enable = true;
+        elmls.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
         futhark-lsp.enable = true;
@@ -89,6 +98,7 @@
         metals.enable = true;
         nil_ls.enable = true;
         nixd.enable = true;
+        omnisharp.enable = true;
         pylsp.enable = true;
         pyright.enable = true;
         rnix-lsp.enable = true;

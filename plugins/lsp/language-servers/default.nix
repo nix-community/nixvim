@@ -40,6 +40,12 @@ with lib; let
       package = pkgs.cmake-language-server;
     }
     {
+      name = "csharp-ls";
+      description = "Enable csharp-ls, for C#.";
+      package = pkgs.csharp-ls;
+      serverName = "csharp_ls";
+    }
+    {
       name = "cssls";
       description = "Enable cssls, for CSS";
       package = pkgs.vscode-langservers-extracted;
@@ -140,6 +146,11 @@ with lib; let
       name = "denols";
       description = "Enable denols, for Deno";
       package = pkgs.deno;
+    }
+    {
+      name = "elmls";
+      description = "Enable elmls, for Elm.";
+      package = pkgs.elmPackages.elm-language-server;
     }
     {
       name = "eslint";
@@ -246,7 +257,12 @@ with lib; let
         };
         workspace = {
           library = mkOption {
-            type = types.nullOr (types.either types.str helpers.rawType);
+            type = with types;
+              nullOr
+              (
+                listOf
+                (either str helpers.rawType)
+              );
             description = ''
               An array of abosolute or workspace-relative paths that will be added to the workspace
               diagnosis - meaning you will get completion and context from these library files.
@@ -254,7 +270,7 @@ with lib; let
               Files included here will have some features disabled such as renaming fields to
               prevent accidentally renaming your library files.
             '';
-            default = helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)";
+            default = [(helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)")];
           };
           checkThirdParty = mkOption {
             type = types.nullOr types.bool;
@@ -359,6 +375,60 @@ with lib; let
             '';
           };
         };
+      };
+    }
+    {
+      name = "omnisharp";
+      description = "Enable omnisharp language server, for C#";
+      package = pkgs.omnisharp-roslyn;
+      cmd = cfg: ["${cfg.package}/bin/OmniSharp"];
+      settings = cfg: {omnisharp = cfg;};
+      settingsOptions = {
+        enableEditorConfigSupport = helpers.defaultNullOpts.mkBool true ''
+          Enables support for reading code style, naming convention and analyzer settings from
+          `.editorconfig`.
+        '';
+
+        enableMsBuildLoadProjectsOnDemand = helpers.defaultNullOpts.mkBool false ''
+          If true, MSBuild project system will only load projects for files that were opened in the
+          editor.
+          This setting is useful for big C# codebases and allows for faster initialization of code
+          navigation features only for projects that are relevant to code that is being edited.
+          With this setting enabled OmniSharp may load fewer projects and may thus display
+          incomplete reference lists for symbols.
+        '';
+
+        enableRoslynAnalyzers = helpers.defaultNullOpts.mkBool false ''
+          If true, MSBuild project system will only load projects for files that were opened in the
+          editor.
+          This setting is useful for big C# codebases and allows for faster initialization of code
+          navigation features only for projects that are relevant to code that is being edited.
+          With this setting enabled OmniSharp may load fewer projects and may thus display
+          incomplete reference lists for symbols.
+        '';
+
+        organizeImportsOnFormat = helpers.defaultNullOpts.mkBool false ''
+          Specifies whether 'using' directives should be grouped and sorted during document
+          formatting.
+        '';
+
+        enableImportCompletion = helpers.defaultNullOpts.mkBool false ''
+          Enables support for showing unimported types and unimported extension methods in
+          completion lists.
+          When committed, the appropriate using directive will be added at the top of the current
+          file.
+          This option can have a negative impact on initial completion responsiveness, particularly
+          for the first few completion sessions after opening a solution.
+        '';
+
+        sdkIncludePrereleases = helpers.defaultNullOpts.mkBool true ''
+          Specifies whether to include preview versions of the .NET SDK when determining which
+          version to use for project loading.
+        '';
+
+        analyzeOpenDocumentsOnly = helpers.defaultNullOpts.mkBool true ''
+          Only run analyzers against open files when 'enableRoslynAnalyzers' is true.
+        '';
       };
     }
     {

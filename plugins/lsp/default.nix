@@ -24,7 +24,7 @@ in {
         };
 
         diagnostic = mkOption {
-          type = types.attrsOf types.str;
+          type = with types; attrsOf (either str attrs);
           description = "Mappings for `vim.diagnostic.<action>` functions.";
           example = {
             "<leader>k" = "goto_prev";
@@ -34,7 +34,7 @@ in {
         };
 
         lspBuf = mkOption {
-          type = types.attrsOf types.str;
+          type = with types; attrsOf (either str attrs);
           description = "Mappings for `vim.lsp.buf.<action>` functions.";
           example = {
             "gd" = "definition";
@@ -111,27 +111,28 @@ in {
       extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
 
       maps.normal = let
-        diagnosticMaps =
+        mkMaps = prefix:
           mapAttrs
-          (key: action: {
-            inherit (cfg.keymaps) silent;
-            action = "vim.diagnostic.${action}";
-            lua = true;
-          })
-          cfg.keymaps.diagnostic;
-
-        lspBuf =
-          mapAttrs
-          (key: action: {
-            inherit (cfg.keymaps) silent;
-            action = "vim.lsp.buf.${action}";
-            lua = true;
-          })
-          cfg.keymaps.lspBuf;
+          (key: action: let
+            actionStr =
+              if isString action
+              then action
+              else action.action;
+            actionProps =
+              if isString action
+              then {}
+              else filterAttrs (n: v: n != "action") action;
+          in
+            {
+              inherit (cfg.keymaps) silent;
+              action = prefix + actionStr;
+              lua = true;
+            }
+            // actionProps);
       in
         mkMerge [
-          diagnosticMaps
-          lspBuf
+          (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
+          (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
         ];
 
       # Enable all LSP servers

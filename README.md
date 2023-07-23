@@ -23,12 +23,12 @@ When we do this, lightline will be set up to a sensible default, and will use
 gruvbox as the colorscheme, no extra configuration required!
 
 ## Support/Questions
-If you have any question, please use the [discussions page](https://github.com/pta2002/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
+If you have any question, please use the [discussions page](https://github.com/nix-community/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
 
 ## Installation
 
 NixVim needs to be installed with a compatible nixpkgs version.
-This means that the `main` branch of NixVim requires to be insalled with `nixos-unstable`.
+This means that the `main` branch of NixVim requires to be installed with `nixos-unstable`.
 
 If you want to use NixVim with nixpkgs 23.05 you should use the `nixos-23.05` branch.
 
@@ -41,7 +41,7 @@ To install it, edit your home-manager (or NixOS) configuration:
 { pkgs, lib, ... }:
 let
   nixvim = import (builtins.fetchGit {
-    url = "https://github.com/pta2002/nixvim";
+    url = "https://github.com/nix-community/nixvim";
   });
 in
 {
@@ -60,7 +60,7 @@ in
 
 ### Using flakes
 This is the recommended method if you are already using flakes to manage your
-sysyem. To enable flakes, add this to `/etc/nixos/configuration.nix`
+system. To enable flakes, add this to `/etc/nixos/configuration.nix`
 
 ```nix
 { pkgs, lib, ... }:
@@ -79,7 +79,7 @@ flakes, just add the nixvim input:
 ```nix
 {
   # ...
-  inputs.nixvim.url = github:pta2002/nixvim;
+  inputs.nixvim.url = "github:nix-community/nixvim";
 }
 ```
 
@@ -109,7 +109,7 @@ If you want to use it standalone, you can use the `makeNixvim` function:
 To get started with a standalone configuration you can use the template by running the following command in an empty directory (recommended):
 
 ```
-nix flake init --template github:pta2002/nixvim
+nix flake init --template github:nix-community/nixvim
 ```
 
 Alternatively if you want a minimal flake to allow building a custom neovim you
@@ -122,7 +122,7 @@ can use the following:
 {
   description = "A very basic flake";
 
-  inputs.nixvim.url = "github:pta2002/nixvim";
+  inputs.nixvim.url = "github:nix-community/nixvim";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = {
@@ -196,7 +196,7 @@ be.
 
 # Documentation
 Documentation is available on this project's GitHub Pages page:
-[https://pta2002.github.io/nixvim](https://pta2002.github.io/nixvim)
+[https://nix-community.github.io/nixvim](https://nix-community.github.io/nixvim)
 
 ## Plugins
 After you have installed NixVim, you will no doubt want to enable some plugins.
