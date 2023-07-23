@@ -25,7 +25,7 @@ with lib; let
                 then let
                   filepath = toString (match "^/nix/store/[^/]*/(.*)" decl);
                 in {
-                  url = "https://github.com/pta2002/nixvim/blob/main/${filepath}";
+                  url = "https://github.com/nix-community/nixvim/blob/main/${filepath}";
                   name = filepath;
                 }
                 else decl
