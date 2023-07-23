@@ -36,7 +36,7 @@ in {
           only sucessful runs (or errored-out runs respectively)
 
           Example:
-          ```
+          ```nix
           [
             "Classic"                    # display results in the command-line  area
             "VirtualTextOk"              # display ok results as virtual text (multiline is shortened)

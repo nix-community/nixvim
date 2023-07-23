@@ -55,7 +55,7 @@ in {
             Configurations for keywords to be recognized as todo comments.
 
             Default:
-            ```
+            ```nix
             {
               FIX = {
                 icon = " "; # Icon used for the sign, and in search results.
@@ -144,7 +144,7 @@ in {
             of highlight groups or use the hex color if hl not found as a fallback.
 
             Default:
-            ```
+            ```nix
             {
               error = [ "DiagnosticError" "ErrorMsg" "#DC2626" ];
               warning = [ "DiagnosticWarn" "WarningMsg" "#FBBF24" ];
@@ -163,7 +163,7 @@ in {
             Arguments to use for the search command in list form.
 
             Default:
-            ```
+            ```nix
             [
               "--color=never"
               "--no-heading"

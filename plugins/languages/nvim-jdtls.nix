@@ -21,7 +21,7 @@ in {
         You should either set a value for this option, or, you can instead set the `data` (and
         `configuration`) options.
 
-        ```
+        ```nix
         plugins.nvim-jdtls = {
           enable = true;
           cmd = [
@@ -34,7 +34,7 @@ in {
         ```
 
         Or,
-        ```
+        ```nix
         plugins.nvim-jdtls = {
           enable = true;
           data =  "/path/to/your/workspace";

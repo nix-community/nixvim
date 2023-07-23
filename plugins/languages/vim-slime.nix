@@ -53,14 +53,14 @@ in
 
           Examples:
             - `tmux`:
-              ```
+              ```nix
                 {
                   socket_name = "default";
                   target_pane = "{last}";
                 }
               ```
             - `zellij`:
-              ```
+              ```nix
                 {
                   session_id = "current";
                   relative_pane = "right";

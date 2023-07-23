@@ -93,7 +93,7 @@ in {
           https://github.com/danymat/neogen/blob/main/docs/adding-languages.md#default-generator
 
         Example:
-        ```
+        ```nix
           {
             csharp = {
               template = {

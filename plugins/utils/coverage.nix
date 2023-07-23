@@ -244,7 +244,7 @@ in {
         See plugin documentation for language specific options.
 
         Example:
-        ```
+        ```nix
           {
             python = {
               coverage_file = ".coverage";

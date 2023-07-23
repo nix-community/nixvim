@@ -60,7 +60,7 @@ in {
           either be defined as strings or tables.
 
           Example:
-          ```
+          ```nix
             [
               "\r\n"
               ")]}>"

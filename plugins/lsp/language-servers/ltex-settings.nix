@@ -100,7 +100,7 @@ in {
     ''
       Lists of additional words that should not be counted as spelling errors.
       This setting is language-specific, so use an attrs of the format
-      ```
+      ```nix
         {
           "<LANGUAGE1>" = [
             "<WORD1>"
@@ -121,7 +121,7 @@ in {
       By default, no additional spelling errors will be ignored.
 
       Example:
-      ```
+      ```nix
       {
         "en-US" = [
           "adaptivity"
@@ -143,7 +143,7 @@ in {
     ''
       Lists of rules that should be disabled (if enabled by default by LanguageTool).
       This setting is language-specific, so use an attrs of the format
-      ```
+      ```nix
         {
           "<LANGUAGE1>" = [
             "<WORD1>"
@@ -165,7 +165,7 @@ in {
       By default, no additional rules will be disabled.
 
       Example:
-      ```
+      ```nix
       {
         "en-US" = [
           "EN_QUOTES"
@@ -183,7 +183,7 @@ in {
     ''
       Lists of rules that should be enabled (if disabled by default by LanguageTool).
       This setting is language-specific, so use an attrs of the format
-      ```
+      ```nix
         {
           "<LANGUAGE1>" = [
             "<WORD1>"
@@ -205,7 +205,7 @@ in {
       By default, no additional rules will be enabled.
 
       Example:
-      ```
+      ```nix
         {
           "en-GB" = [
             "PASSIVE_VOICE"
@@ -224,7 +224,7 @@ in {
       Lists of false-positive diagnostics to hide (by hiding all diagnostics of a specific rule
       within a specific sentence).
       This setting is language-specific, so use an attrs of the format
-      ```
+      ```nix
         {
           "<LANGUAGE1>" = [
             "<JSON1>"
@@ -256,7 +256,7 @@ in {
       If this list is very large, performance may suffer.
 
       Example:
-      ```
+      ```nix
         {
           "en-US" = [ ":/path/to/externalFile.txt" ];
         }
@@ -273,7 +273,7 @@ in {
     Some common fields are already ignored, even if you set this setting to an empty attrs.
 
     Example:
-    ```
+    ```nix
       {
         maintitle = false;
         seealso = true;
@@ -295,7 +295,7 @@ in {
       attrs.
 
       Example:
-      ```
+      ```nix
         {
           "\\label{}" = "ignore";
           "\\documentclass[]{}" = "ignore";
@@ -315,7 +315,7 @@ in {
       attrs.
 
       Example:
-      ```
+      ```nix
         {
           lstlisting = "ignore";
           verbatim = "ignore";
@@ -338,7 +338,7 @@ in {
       empty attrs.
 
       Example:
-      ```
+      ```nix
         {
           CodeBlock = "ignore";
           FencedCodeBlock = "ignore";

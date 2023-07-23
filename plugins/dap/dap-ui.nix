@@ -122,7 +122,7 @@ in {
       layouts =
         helpers.defaultNullOpts.mkNullable (types.listOf layoutOption)
         ''
-          ```
+          ```nix
             [
               {
                 elements = [

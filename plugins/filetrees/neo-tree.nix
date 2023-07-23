@@ -303,7 +303,7 @@ in {
           - values are lua code defining the callback function.
 
           Example:
-          ```
+          ```nix
           {
             before_render = \'\'
               function (state)
@@ -612,7 +612,7 @@ in {
           mappings =
             mkMappingsOption
             ''
-              ```
+              ```nix
                 {
                   "<space>" = {
                     command = "toggle_node";
@@ -665,7 +665,7 @@ in {
         };
       filesystem = helpers.mkCompositeOption "Filesystem options" {
         window = mkWindowMappingsOption (lib.mdDoc ''
-          ```
+          ```nix
             {
               H = "toggle_hidden";
               "/" = "fuzzy_finder";
@@ -733,7 +733,7 @@ in {
             Hide by pattern.
 
             Example:
-            ```
+            ```nix
               [
                 "*.meta"
                 "*/src/*/tsconfig.json"
@@ -794,7 +794,7 @@ in {
 
             Either use a list of strings:
 
-            ```
+            ```nix
             findArgs = {
               fd = [
                 "--exclude"

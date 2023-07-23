@@ -84,7 +84,7 @@ in {
           `source`: The source of the asset, either an art asset key or the URL of an image asset.
 
           Example:
-          ```
+          ```nix
             {
               # Use art assets uploaded in Discord application for the configured client id
               js = [ "JavaScript" "javascript" ];

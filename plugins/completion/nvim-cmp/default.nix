@@ -126,7 +126,7 @@ in {
           - ultisnips
 
           You can also provide a custom function:
-          ```
+          ```nix
           {
             __raw = \'\'
               function(args)
