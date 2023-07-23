@@ -56,7 +56,7 @@ with lib; let
         if isStandalone moduleOpts
         then {
           index.options = moduleOpts;
-          group = "core";
+          group = "Neovim Options";
         }
         else
           mapAttrs (
@@ -100,11 +100,7 @@ with lib; let
 
   mapAttrsToStringSep = f: attrs: concatStringsSep "\n" (mapAttrsToList f attrs);
 
-  mergeFunctionResults = x: y: let
-    xResult = x;
-    yResult = y;
-  in
-    xResult + yResult;
+  removeWhitespace = builtins.replaceStrings [" "] [""];
 
   mapModulesToString = {
     moduleFunc ? {module, ...}: module,
@@ -123,43 +119,45 @@ with lib; let
           moduleFunc {
             module = group;
             moduleOpts = groupOpts;
+            path = removeWhitespace group;
             standalone = true;
           }
         else
           moduleMapFunc (
             module: moduleOpts:
-              mergeFunctionResults (moduleFunc {
+              (moduleFunc {
                 inherit module moduleOpts;
+                path = removeWhitespace module;
                 standalone = moduleOpts ? "index";
-              }) (
+              })
+              + (
                 if !moduleOpts ? "index"
                 then
                   submoduleMapFunc (
                     submodule: submoduleOpts:
-                      mergeFunctionResults
                       (submoduleFunc {
                         inherit module submodule submoduleOpts;
                         standalone = !(submoduleOpts ? "components") || submoduleOpts.components == {};
-                        path = "${module}/${submodule}";
+                        path = removeWhitespace "${module}/${submodule}";
                       })
-                      (
+                      + (
                         if (submoduleOpts ? "components") && submoduleOpts.components != {}
                         then
                           componentMapFunc (
                             component: componentOpts:
-                              mergeFunctionResults (componentFunc {
+                              (componentFunc {
                                 inherit module submodule component componentOpts;
                                 standalone = componentOpts ? "options";
-                                path = "${module}/${submodule}/${component}";
+                                path = removeWhitespace "${module}/${submodule}/${component}";
                               })
-                              (
+                              + (
                                 if !componentOpts ? "options"
                                 then
                                   subComponentMapFunc (
                                     subComponent: subComponentOpts:
                                       subComponentFunc {
                                         inherit module submodule component subComponent subComponentOpts;
-                                        path = "${module}/${submodule}/${component}/${subComponent}";
+                                        path = removeWhitespace "${module}/${submodule}/${component}/${subComponent}";
                                       }
                                   )
                                   componentOpts
@@ -194,11 +192,12 @@ with lib; let
         moduleFunc = {
           module,
           moduleOpts,
+          path,
           standalone,
           ...
         }:
           if standalone
-          then "cp ${mkMDDoc moduleOpts} ${module}.md"
+          then "cp ${mkMDDoc moduleOpts} ${path}.md"
           else "\nmkdir ${module}\n";
 
         submoduleFunc = {
@@ -244,12 +243,13 @@ with lib; let
       mapModulesToString {
         moduleFunc = {
           module,
+          path,
           standalone,
           ...
         }:
           if standalone
-          then "- [${module}](${module}.md)"
-          else "- [${module}](${module}/index.md)\n";
+          then "- [${module}](${path}.md)"
+          else "- [${module}]()\n";
 
         submoduleFunc = {
           submodule,
