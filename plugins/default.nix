@@ -58,6 +58,7 @@
     ./languages/zig.nix
 
     ./lsp
+    ./lsp/fidget.nix
     ./lsp/inc-rename.nix
     ./lsp/lspsaga.nix
     ./lsp/lsp-format.nix
