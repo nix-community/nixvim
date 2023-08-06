@@ -14,7 +14,6 @@
       addBlankLineAtTop = false;
       autoCleanAfterSessionRestore = false;
       closeIfLastWindow = false;
-      closeFloatsOnEscapeKey = true;
       defaultSource = "filesystem";
       enableDiagnostics = true;
       enableGitStatus = true;
@@ -360,13 +359,19 @@
         };
         groupEmptyDirs = false;
         searchLimit = 50;
-        followCurrentFile = false;
+        followCurrentFile = {
+          enabled = false;
+          leaveDirsOpen = false;
+        };
         hijackNetrwBehavior = "open_default";
         useLibuvFileWatcher = false;
       };
       buffers = {
         bindToCwd = true;
-        followCurrentFile = true;
+        followCurrentFile = {
+          enabled = true;
+          leaveDirsOpen = false;
+        };
         groupEmptyDirs = true;
         window = {
           mappings = {

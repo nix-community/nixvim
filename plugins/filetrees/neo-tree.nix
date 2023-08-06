@@ -16,6 +16,11 @@ in {
       (basePluginPath ++ ["sourceSelector" "tabLabels"])
       "Use `plugins.neo-tree.sourceSelector.sources` to achieve the same functionnality."
     )
+    (
+      mkRemovedOptionModule
+      (basePluginPath ++ ["closeFloatsOnEscapeKey"])
+      "This option has been removed from upstream."
+    )
   ];
   options.plugins.neo-tree = let
     listOfRendererComponents = with types; listOf (either str attrs);
@@ -32,6 +37,17 @@ in {
       helpers.mkCompositeOption "Window options" {
         mappings = mkMappingsOption defaults;
       };
+
+    mkFollowCurrentFileOption = default: {
+      enabled = helpers.defaultNullOpts.mkBool default ''
+        This will find and focus the file in the active buffer every time the current file is
+        changed while the tree is open.
+      '';
+
+      leaveDirsOpen = helpers.defaultNullOpts.mkBool false ''
+        `false` closes auto expanded dirs, such as with `:Neotree reveal`.
+      '';
+    };
   in
     helpers.extraOptionsOptions
     // {
@@ -64,8 +80,6 @@ in {
       closeIfLastWindow =
         helpers.defaultNullOpts.mkBool false
         "Close Neo-tree if it is the last window left in the tab";
-
-      closeFloatsOnEscapeKey = helpers.defaultNullOpts.mkBool true "";
 
       defaultSource = helpers.defaultNullOpts.mkStr "filesystem" "";
 
@@ -840,10 +854,7 @@ in {
           helpers.defaultNullOpts.mkInt 50
           "max number of search results when using filters";
 
-        followCurrentFile = helpers.defaultNullOpts.mkBool false ''
-          This will find and focus the file in the active buffer every time the current file is
-          changed while the tree is open.
-        '';
+        followCurrentFile = mkFollowCurrentFileOption false;
 
         hijackNetrwBehavior =
           helpers.defaultNullOpts.mkEnumFirstDefault
@@ -865,10 +876,7 @@ in {
       buffers = helpers.mkCompositeOption "Buffers options" {
         bindToCwd = helpers.defaultNullOpts.mkBool true "Bind to current working directory.";
 
-        followCurrentFile = helpers.defaultNullOpts.mkBool true ''
-          This will find and focus the file in the active buffer every time the current file is
-          changed while the tree is open.
-        '';
+        followCurrentFile = mkFollowCurrentFileOption true;
 
         groupEmptyDirs =
           helpers.defaultNullOpts.mkBool true
@@ -1032,7 +1040,6 @@ in {
         add_blank_line_at_top = cfg.addBlankLineAtTop;
         auto_clean_after_session_restore = cfg.autoCleanAfterSessionRestore;
         close_if_last_window = cfg.closeIfLastWindow;
-        close_floats_on_escape_key = cfg.closeFloatsOnEscapeKey;
         default_source = cfg.defaultSource;
         enable_diagnostics = cfg.enableDiagnostics;
         enable_git_status = cfg.enableGitStatus;
