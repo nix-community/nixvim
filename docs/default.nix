@@ -35,251 +35,159 @@ with lib; let
     })
     .optionsCommonMark;
 
-  removeUnwanted = attrs: builtins.removeAttrs attrs ["_module" "warnings" "assertions" "content"];
-
-  isStandalone = opts:
-    if isOption opts
-    then true
-    else false;
-
-  hasSubComponents = componentOpts: all (x: x) (mapAttrsToList (_: opts: !(isStandalone opts)) componentOpts);
-
-  processModules =
-    mapAttrsRecursiveCond (set:
-      if set ? type
-      then false
-      else if !isStandalone set
-      then false
-      else true)
-    (
-      path: moduleOpts:
-        if isStandalone moduleOpts
-        then {
-          index.options = moduleOpts;
-          group = "Neovim Options";
-        }
-        else
-          mapAttrs (
-            submodule: submoduleOpts:
-              if isStandalone submoduleOpts
-              then {index.options = submoduleOpts;}
-              else
-                foldlAttrs (
-                  acc: component: componentOpts: {
-                    index.options =
-                      acc.index.options
-                      // (optionalAttrs (isStandalone componentOpts) {
-                        ${component} = componentOpts;
-                      });
-
-                    components =
-                      acc.components
-                      // (optionalAttrs (!isStandalone componentOpts) {
-                        ${component} =
-                          if (!hasSubComponents componentOpts)
-                          then {
-                            options = componentOpts;
-                            path = "${concatStringsSep "/" path}/${submodule}/${component}.md";
-                          }
-                          else
-                            mapAttrs (subComponent: subComponentOpts: {
-                              options = subComponentOpts;
-                              path = "${concatStringsSep "/" path}/${submodule}/${component}/${subComponent}.md";
-                            })
-                            componentOpts;
-                      });
-                  }
-                ) {
-                  index.options = {};
-                  components = {};
-                }
-                submoduleOpts
-          )
-          moduleOpts
-    );
-
-  mapAttrsToStringSep = f: attrs: concatStringsSep "\n" (mapAttrsToList f attrs);
+  removeUnwanted = attrs:
+    builtins.removeAttrs attrs [
+      "_module"
+      "_freeformOptions"
+      "warnings"
+      "assertions"
+      "content"
+    ];
 
   removeWhitespace = builtins.replaceStrings [" "] [""];
 
-  mapModulesToString = {
-    moduleFunc ? {module, ...}: module,
-    submoduleFunc ? {submodule, ...}: submodule,
-    componentFunc ? {component, ...}: component,
-    subComponentFunc ? {subComponent, ...}: subComponent,
-    moduleMapFunc ? mapAttrsToStringSep,
-    submoduleMapFunc ? moduleMapFunc,
-    componentMapFunc ? submoduleMapFunc,
-    subComponentMapFunc ? componentMapFunc,
-  }:
-    moduleMapFunc (
-      group: groupOpts:
-        if group != "default"
-        then
-          moduleFunc {
-            module = group;
-            moduleOpts = groupOpts;
-            path = removeWhitespace group;
-            standalone = true;
-          }
-        else
-          moduleMapFunc (
-            module: moduleOpts:
-              (moduleFunc {
-                inherit module moduleOpts;
-                path = removeWhitespace module;
-                standalone = moduleOpts ? "index";
-              })
-              + (
-                if !moduleOpts ? "index"
-                then
-                  submoduleMapFunc (
-                    submodule: submoduleOpts:
-                      (submoduleFunc {
-                        inherit module submodule submoduleOpts;
-                        standalone = !(submoduleOpts ? "components") || submoduleOpts.components == {};
-                        path = removeWhitespace "${module}/${submodule}";
-                      })
-                      + (
-                        if (submoduleOpts ? "components") && submoduleOpts.components != {}
-                        then
-                          componentMapFunc (
-                            component: componentOpts:
-                              (componentFunc {
-                                inherit module submodule component componentOpts;
-                                standalone = componentOpts ? "options";
-                                path = removeWhitespace "${module}/${submodule}/${component}";
-                              })
-                              + (
-                                if !componentOpts ? "options"
-                                then
-                                  subComponentMapFunc (
-                                    subComponent: subComponentOpts:
-                                      subComponentFunc {
-                                        inherit module submodule component subComponent subComponentOpts;
-                                        path = removeWhitespace "${module}/${submodule}/${component}/${subComponent}";
-                                      }
-                                  )
-                                  componentOpts
-                                else ""
-                              )
-                          )
-                          submoduleOpts.components
-                        else ""
-                      )
-                  )
-                  moduleOpts
-                else ""
-              )
-          )
-          groupOpts
-    );
+  getSubOptions = opts: path: removeUnwanted (opts.type.getSubOptions path);
 
-  doc = rec {
-    modules = foldlAttrs (
-      acc: module: opts: let
-        group = opts.group or "default";
-        last = acc.${group} or {};
+  processModulesRec = modules: let
+    recurse = path: mods: let
+      g = name: opts:
+        if !isOption opts
+        then recurse (path ++ [name]) opts
+        else let
+          subOpts = getSubOptions opts (path ++ [name]);
+        in
+          if subOpts != {}
+          then recurse (path ++ [name]) subOpts
+          else {
+            index = {
+              options = opts;
+              path = concatStringsSep "/" (path ++ [name]);
+            };
+            components = {};
+            hasComponents = false;
+            isOption = true;
+          };
+    in
+      mapAttrs
+      (
+        name: opts:
+          if opts ? "hasComponents"
+          then opts
+          else rec {
+            index = {
+              options = filterAttrs (_: component: component ? "isOption") opts;
+              path = concatStringsSep "/" (path ++ [name]);
+            };
+            components = filterAttrs (_: component: !component ? "isOption") opts;
+            hasComponents = components != {};
+          }
+      )
+      (mapAttrs g mods);
+  in
+    foldlAttrs
+    (
+      acc: name: opts: let
+        group =
+          if !opts.hasComponents
+          then "Neovim Options"
+          else "none";
+
+        last =
+          acc.${group}
+          or {
+            index = {
+              options = {};
+              path = removeWhitespace "${group}";
+            };
+            components = {};
+            isGroup = true;
+            hasComponents = false;
+          };
+
+        isOpt = !opts.hasComponents && (isOption opts.index.options);
       in
         acc
         // {
-          ${group} = last // {${module} = opts;};
+          ${group} = recursiveUpdate last {
+            index.options = optionalAttrs isOpt {
+              ${name} = opts.index.options;
+            };
+
+            components = optionalAttrs (!isOpt) {
+              ${name} = recursiveUpdate opts {
+                index.path = removeWhitespace (concatStringsSep "/" ((optional (group != "none") group) ++ [opts.index.path]));
+                hasComponents = true;
+              };
+            };
+
+            hasComponents = last.components != {};
+          };
         }
-    ) {} (processModules (removeUnwanted options.options));
+    )
+    {}
+    (recurse [] modules);
 
+  mapModulesToString = f: modules: let
+    recurse = mods: let
+      g = name: opts:
+        if (opts ? "isGroup")
+        then
+          if name != "none"
+          then (f name opts) + ("\n" + recurse opts.components)
+          else recurse opts.components
+        else if opts.hasComponents
+        then (f name opts) + ("\n" + recurse opts.components)
+        else f name opts;
+    in
+      concatStringsSep "\n" (mapAttrsToList g mods);
+  in
+    recurse modules;
+
+  docs = rec {
+    modules = processModulesRec (removeUnwanted options.options);
     commands =
-      mapModulesToString {
-        moduleFunc = {
-          module,
-          moduleOpts,
-          path,
-          standalone,
-          ...
-        }:
-          if standalone
-          then "cp ${mkMDDoc moduleOpts} ${path}.md"
-          else "\nmkdir ${module}\n";
-
-        submoduleFunc = {
-          submodule,
-          submoduleOpts,
-          path,
-          standalone,
-          ...
-        }:
-          if standalone
-          then "cp ${mkMDDoc submoduleOpts.index.options} ${path}.md"
-          else ''
-            mkdir ${path}
-            cp ${mkMDDoc submoduleOpts.index.options} ${path}/index.md
-          '';
-
-        componentFunc = {
-          component,
-          componentOpts,
-          path,
-          standalone,
-          ...
-        }:
-          if standalone
-          then "cp ${mkMDDoc componentOpts.options} ${path}.md"
-          else "mkdir ${path}\n";
-
-        subComponentFunc = {
-          subComponent,
-          subComponentOpts,
-          path,
-          ...
-        }: "cp ${mkMDDoc subComponentOpts.options} ${path}.md";
-
-        moduleMapFunc = mapAttrsToStringSep;
-      }
+      mapModulesToString
+      (
+        name: opts: let
+          isBranch =
+            if (hasSuffix "index" opts.index.path)
+            then true
+            else opts.hasComponents;
+          path =
+            if isBranch
+            then "${opts.index.path}/index.md"
+            else "${opts.index.path}.md";
+        in
+          (optionalString isBranch
+            "mkdir -p ${opts.index.path}\n")
+          + "cp ${mkMDDoc opts.index.options} ${path}"
+      )
       modules;
   };
 
-  # Options used to substitute variables in mdbook generation
   mdbook = {
     nixvimOptions =
-      mapModulesToString {
-        moduleFunc = {
-          module,
-          path,
-          standalone,
-          ...
-        }:
-          if standalone
-          then "- [${module}](${path}.md)"
-          else "- [${module}]()\n";
+      mapModulesToString
+      (
+        name: opts: let
+          isBranch =
+            if name == "index"
+            then true
+            else opts.hasComponents && opts.index.options != {};
 
-        submoduleFunc = {
-          submodule,
-          path,
-          standalone,
-          ...
-        }:
-          if standalone
-          then "\t- [${submodule}](${path}.md)"
-          else "\t- [${submodule}](${path}/index.md)\n";
+          path =
+            if isBranch
+            then "${opts.index.path}/index.md"
+            else if !opts.hasComponents
+            then "${opts.index.path}.md"
+            else "";
 
-        componentFunc = {
-          component,
-          path,
-          standalone,
-          ...
-        }:
-          if standalone
-          then "\t\t- [${component}](${path}.md)"
-          else "\t\t- [${component}](${path}/index.md)\n";
+          indentLevel = with builtins; length (filter isString (split "/" opts.index.path)) - 1;
 
-        subComponentFunc = {
-          subComponent,
-          path,
-          ...
-        }: "\t\t\t- [${subComponent}](${path}.md)";
-
-        moduleMapFunc = mapAttrsToStringSep;
-      }
-      doc.modules;
+          padding = concatStrings (builtins.genList (_: "\t") indentLevel);
+        in "${padding}- [${name}](${path})"
+      )
+      docs.modules;
   };
 
   prepareMD = ''
@@ -287,12 +195,14 @@ with lib; let
     cp -r --no-preserve=all $inputs/* ./
     cp ${../CONTRIBUTING.md} ./CONTRIBUTING.md
 
-    # Copy the generated md docs into the build directory
-    ${doc.commands}
+    # Copy the generated MD docs into the build directory
+    # Using pkgs.writeShellScript helps to avoid the "bash: argument list too long" error
+    ${pkgs.writeShellScript "copy_docs" docs.commands}
 
     # Prepare SUMMARY.md for mdBook
+    # Using pkgs.writeText helps to avoid the same error as above
     substituteInPlace ./SUMMARY.md \
-      --replace "@NIXVIM_OPTIONS@" "${mdbook.nixvimOptions}"
+      --replace "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
   '';
 in
   pkgs.stdenv.mkDerivation {
@@ -307,7 +217,6 @@ in
       dest=$out/share/doc
       mkdir -p $dest
       ${prepareMD}
-      mkdir $dest/.tmp && cp -r . $dest/.tmp # TODO: remove
       mdbook build
       cp -r ./book/* $dest
     '';
