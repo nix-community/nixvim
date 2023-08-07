@@ -33,12 +33,13 @@ To add a new plugin you need to do the following.
 
     ```nix
     {
-     lib,
-     pkgs,
-     ...
+      lib,
+      pkgs,
+      ...
     } @ args:
+
     let
-     helpers = import ../helpers.nix args;
+      helpers = import ../helpers.nix args;
     in {
     }
     ```
@@ -52,12 +53,16 @@ To add a new plugin you need to do the following.
 
     ```nix
     {
-        config = let cfg = config.plugins."<plug-name>"; in lib.mkIf cfg.enable {
-            extraPlugins = [cfg.package];
+      config =
+        let
+          cfg = config.plugins."<plug-name>";
 
-            extraConfigLua = ''
-                <plugin configuration if needed>
-            '';
+        in lib.mkIf cfg.enable {
+          extraPlugins = [cfg.package];
+
+          extraConfigLua = ''
+            <plugin configuration if needed>
+          '';
         };
     }
     ```
