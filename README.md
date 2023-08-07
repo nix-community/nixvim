@@ -1,3 +1,12 @@
+<h2 align="center">
+  <picture>
+    <img src="assets/nixvim_logo.png" />
+  </picture>
+
+  <a href="https://nix-community.github.io/nixvim">Documentation</a> |
+  <a href="https://matrix.to/#/#nixvim:matrix.org">Chat</a>
+</h2>
+
 # NixVim - A Neovim configuration system for nix
 ## What is it?
 NixVim is a [Neovim](https://neovim.io) distribution built around
