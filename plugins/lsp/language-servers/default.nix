@@ -466,6 +466,11 @@ with lib; let
       package = pkgs.sourcekit-lsp;
     }
     {
+      name = "svelte";
+      description = "Enable the svelte language server, for Svelte";
+      package = pkgs.nodePackages.svelte-language-server;
+    }
+    {
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
       package = pkgs.nodePackages."@tailwindcss/language-server";
@@ -511,5 +516,6 @@ in {
     ++ [
       ./ccls.nix
       ./pylsp.nix
+      ./svelte.nix
     ];
 }
