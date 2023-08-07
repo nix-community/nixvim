@@ -48,41 +48,53 @@ with lib; let
 
   getSubOptions = opts: path: removeUnwanted (opts.type.getSubOptions path);
 
+  wrapModule = path: opts: isOpt: rec {
+    index = {
+      options =
+        if isOpt
+        then opts
+        else filterAttrs (_: component: component.isOption) opts;
+      path = concatStringsSep "/" path;
+    };
+
+    components =
+      if isOpt
+      then {}
+      else filterAttrs (_: component: !component.isOption) opts;
+
+    hasComponents = components != {};
+
+    isOption = isOpt;
+  };
+
   processModulesRec = modules: let
     recurse = path: mods: let
       g = name: opts:
         if !isOption opts
-        then recurse (path ++ [name]) opts
+        then wrapModule (path ++ [name]) (recurse (path ++ [name]) opts) false
         else let
           subOpts = getSubOptions opts (path ++ [name]);
         in
           if subOpts != {}
-          then recurse (path ++ [name]) subOpts
-          else {
-            index = {
-              options = opts;
-              path = concatStringsSep "/" (path ++ [name]);
-            };
-            components = {};
-            hasComponents = false;
-            isOption = true;
-          };
+          then
+            wrapModule
+            (path ++ [name])
+            (
+              (recurse (path ++ [name]) subOpts)
+              // {
+                # This is necessary to include the submodule option's definition in the docs (description, type, etc.)
+                # For instance, this helps submodules like "autoCmd" to include their base definitions and examples in the docs
+                # Though there might be a better, less "hacky" solution than this.
+                ${name} = recursiveUpdate opts {
+                  isOption = true;
+                  type.getSubOptions = _: _: {}; # Used to exclude suboptions from the submodule definition itself
+                };
+              }
+            )
+            false
+          else wrapModule (path ++ [name]) opts true;
     in
-      mapAttrs
-      (
-        name: opts:
-          if opts ? "hasComponents"
-          then opts
-          else rec {
-            index = {
-              options = filterAttrs (_: component: component ? "isOption") opts;
-              path = concatStringsSep "/" (path ++ [name]);
-            };
-            components = filterAttrs (_: component: !component ? "isOption") opts;
-            hasComponents = components != {};
-          }
-      )
-      (mapAttrs g mods);
+      mapAttrs g mods;
   in
     foldlAttrs
     (

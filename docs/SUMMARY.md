@@ -4,5 +4,8 @@
 
 @NIXVIM_OPTIONS@
 
+#
+
 ---
+
 [Contributing](./CONTRIBUTING.md)
