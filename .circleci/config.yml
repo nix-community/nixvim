@@ -15,6 +15,7 @@ jobs:
       - checkout
       - run:
           name: "Build docs"
+          no_output_timeout: 30m
           command: "nix build '.#docs' --show-trace"
       - persist_to_workspace:
           root: "result/share/"
