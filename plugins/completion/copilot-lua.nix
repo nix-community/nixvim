@@ -89,7 +89,7 @@ in {
             Each value can be either a boolean or a lua function that returns a boolean.
 
             Example:
-            ```
+            ```nix
               {
                 markdown = true; # overrides default
                 terraform = false; # disallow specific filetype
@@ -107,7 +107,7 @@ in {
 
             The key `"*"` can be used to disable the default configuration.
             Example:
-            ```
+            ```nix
               {
                 javascript = true; # allow specific filetype
                 typescript = true; # allow specific filetype
@@ -138,7 +138,7 @@ in {
           See `:h vim.lsp.start_client` for list of options.
 
           Example:
-          ```
+          ```nix
             {
               trace = "verbose";
               settings = {

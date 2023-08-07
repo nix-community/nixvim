@@ -19,7 +19,7 @@ in {
         Size of the terminal.
         `size` can be a number or function
         Example:
-        ```
+        ```nix
         size = 20
         ```
         OR
@@ -78,7 +78,7 @@ in {
       Highlights which map to a highlight group name and a table of it's values.
 
       Example:
-      ```
+      ```nix
         highlights = {
           Normal = {
             guibg = "<VALUE-HERE>";

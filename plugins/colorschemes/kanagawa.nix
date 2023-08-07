@@ -76,7 +76,7 @@ in {
               Change specific usages for a certain theme, or for all of them
 
               Example:
-              ```
+              ```nix
                 {
                   wave = {
                     ui = {
@@ -103,7 +103,7 @@ in {
             Change all usages of these colors.
 
             Example:
-            ```
+            ```nix
               {
                 sumiInk0 = "#000000";
                 fujiWhite = "#FFFFFF";
