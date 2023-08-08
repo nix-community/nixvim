@@ -7,16 +7,26 @@ version: 2.1
 jobs:
   build-docs:
     docker:
-      - image: nixpkgs/nix-flakes
+      - image: nixos/nix
+        environment:
+          CACHIX_NAME: "nixvim"
     steps:
       - run:
           name: Disable Sandbox
           command: mkdir -p ~/.config/nix/; echo 'sandbox = false' >> ~/.config/nix/nix.conf;
+      - run:
+          name: Enable experimental nix features
+          command: echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
       - checkout
+      - run:
+          name: Setup cachix
+          command: |
+            nix-env -iA nixpkgs.cachix nixpkgs.bash
+            cachix use $CACHIX_NAME
       - run:
           name: "Build docs"
           no_output_timeout: 30m
-          command: "nix build '.#docs' --show-trace"
+          command: "cachix watch-exec $CACHIX_NAME -- nix build .#docs --show-trace -L"
       - persist_to_workspace:
           root: "result/share/"
           paths: [ doc ]
