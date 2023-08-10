@@ -3,6 +3,7 @@
     ./bufferlines/barbar.nix
     ./bufferlines/bufferline.nix
 
+    ./colorschemes/ayu.nix
     ./colorschemes/base16.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
