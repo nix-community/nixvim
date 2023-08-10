@@ -103,6 +103,7 @@
     ./utils/leap.nix
     ./utils/mark-radar.nix
     ./utils/mini.nix
+    ./utils/mkdnflow.nix
     ./utils/neorg.nix
     ./utils/neogen.nix
     ./utils/notify.nix
