@@ -574,7 +574,7 @@ in {
 
   diagnosticSeverity =
     helpers.defaultNullOpts.mkNullable
-    (with types; either string (attrsOf str))
+    (with types; either str (attrsOf str))
     "information"
     ''
       Severity of the diagnostics corresponding to the grammar and spelling errors.
