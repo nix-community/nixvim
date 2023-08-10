@@ -8,7 +8,7 @@ in
   with lib; {
     options = {
       highlight = mkOption {
-        type = types.attrsOf types.anything;
+        type = types.attrsOf helpers.highlightType;
         default = {};
         description = "Define highlight groups";
         example = ''
