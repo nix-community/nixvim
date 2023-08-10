@@ -106,12 +106,12 @@ in {
     };
 
     ignored_filetypes = mkOption {
-      type = with types; listOf string;
+      type = with types; listOf str;
       default = [];
     };
 
     ignored_buffertypes = mkOption {
-      type = with types; listOf string;
+      type = with types; listOf str;
       default = ["nofile"];
     };
   };
