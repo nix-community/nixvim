@@ -501,6 +501,11 @@ with lib; let
       package = pkgs.nodePackages.vls;
     }
     {
+      name = "volar";
+      description = "Enable @volar/vue-language-server, for Vue";
+      package = pkgs.nodePackages."@volar/vue-language-server";
+    }
+    {
       name = "yamlls";
       description = "Enable yamlls, for yaml";
       package = pkgs.yaml-language-server;
