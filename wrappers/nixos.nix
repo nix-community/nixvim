@@ -4,7 +4,7 @@ modules: {
   lib,
   ...
 } @ args: let
-  inherit (lib) mkEnableOption mkOption mkOptionType mkMerge mkIf types;
+  inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
   shared = import ./_shared.nix modules args;
   cfg = config.programs.nixvim;
   files =
@@ -19,6 +19,7 @@ in {
       type = types.submodule ([
           {
             options.enable = mkEnableOption "nixvim";
+            config.wrapRc = mkForce true;
           }
         ]
         ++ shared.topLevelModules);
