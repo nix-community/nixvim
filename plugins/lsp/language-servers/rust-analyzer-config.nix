@@ -151,6 +151,30 @@ with lib; {
         '';
       };
     };
+    "cfgs" = mkOption {
+      type = types.nullOr (types.attrsOf types.anything);
+      default = null;
+      description = ''
+        List of cfg options to enable with the given values.
+
+        default value is:
+        ```nix
+            {}
+        ```
+      '';
+    };
+    "extraArgs" = mkOption {
+      type = types.nullOr (types.listOf (types.str));
+      default = null;
+      description = ''
+        Extra arguments that are passed to every cargo invocation.
+
+        default value is:
+        ```nix
+            []
+        ```
+      '';
+    };
     "extraEnv" = mkOption {
       type = types.nullOr (types.attrsOf types.anything);
       default = null;
@@ -207,6 +231,21 @@ with lib; {
         ```
       '';
     };
+    "sysrootSrc" = mkOption {
+      type = types.nullOr (types.nullOr (types.str));
+      default = null;
+      description = ''
+        Relative path to the sysroot library sources. If left unset, this will default to
+        `{cargo.sysroot}/lib/rustlib/src/rust/library`.
+
+        This option does not take effect until rust-analyzer is restarted.
+
+        default value is:
+        ```nix
+            null
+        ```
+      '';
+    };
     "target" = mkOption {
       type = types.nullOr (types.nullOr (types.str));
       default = null;
@@ -223,7 +262,7 @@ with lib; {
       type = types.nullOr (types.listOf (types.str));
       default = null;
       description = ''
-        Unsets `#[cfg(test)]` for the specified crates.
+        Unsets the implicit `#[cfg(test)]` for the specified crates.
 
         default value is:
         ```nix
@@ -449,6 +488,18 @@ with lib; {
         '';
       };
     };
+    "limit" = mkOption {
+      type = types.nullOr (types.nullOr (types.addCheck types.int (x: x >= 0)));
+      default = null;
+      description = ''
+        Maximum number of completions to return. If `None`, the limit is infinite.
+
+        default value is:
+        ```nix
+            null
+        ```
+      '';
+    };
     "postfix" = {
       "enable" = mkOption {
         type = types.nullOr (types.bool);
@@ -652,6 +703,20 @@ with lib; {
         '';
       };
     };
+    "closureCaptures" = {
+      "enable" = mkOption {
+        type = types.nullOr (types.bool);
+        default = null;
+        description = ''
+          Enables highlighting of all captures of a closure while the cursor is on the `|` or move keyword of a closure.
+
+          default value is:
+          ```nix
+              true
+          ```
+        '';
+      };
+    };
     "exitPoints" = {
       "enable" = mkOption {
         type = types.nullOr (types.bool);
@@ -819,11 +884,73 @@ with lib; {
         type = types.nullOr (types.bool);
         default = null;
         description = ''
-          Use markdown syntax for links in hover.
+          Use markdown syntax for links on hover.
 
           default value is:
           ```nix
               true
+          ```
+        '';
+      };
+    };
+    "memoryLayout" = {
+      "alignment" = mkOption {
+        type = types.nullOr (types.nullOr (types.oneOf [(types.enum ["both" "decimal" "hexadecimal"])]));
+        default = null;
+        description = ''
+          How to render the align information in a memory layout hover.
+
+          default value is:
+          ```nix
+              "hexadecimal"
+          ```
+        '';
+      };
+      "enable" = mkOption {
+        type = types.nullOr (types.bool);
+        default = null;
+        description = ''
+          Whether to show memory layout data on hover.
+
+          default value is:
+          ```nix
+              true
+          ```
+        '';
+      };
+      "niches" = mkOption {
+        type = types.nullOr (types.nullOr (types.bool));
+        default = null;
+        description = ''
+          How to render the niche information in a memory layout hover.
+
+          default value is:
+          ```nix
+              false
+          ```
+        '';
+      };
+      "offset" = mkOption {
+        type = types.nullOr (types.nullOr (types.oneOf [(types.enum ["both" "decimal" "hexadecimal"])]));
+        default = null;
+        description = ''
+          How to render the offset information in a memory layout hover.
+
+          default value is:
+          ```nix
+              "hexadecimal"
+          ```
+        '';
+      };
+      "size" = mkOption {
+        type = types.nullOr (types.nullOr (types.oneOf [(types.enum ["both" "decimal" "hexadecimal"])]));
+        default = null;
+        description = ''
+          How to render the size information in a memory layout hover.
+
+          default value is:
+          ```nix
+              "both"
           ```
         '';
       };
@@ -969,6 +1096,20 @@ with lib; {
         '';
       };
     };
+    "closureCaptureHints" = {
+      "enable" = mkOption {
+        type = types.nullOr (types.bool);
+        default = null;
+        description = ''
+          Whether to show inlay hints for closure captures.
+
+          default value is:
+          ```nix
+              false
+          ```
+        '';
+      };
+    };
     "closureReturnTypeHints" = {
       "enable" = mkOption {
         type = types.nullOr (types.enum ["always" "never" "with_block"]);
@@ -982,6 +1123,18 @@ with lib; {
           ```
         '';
       };
+    };
+    "closureStyle" = mkOption {
+      type = types.nullOr (types.enum ["impl_fn" "rust_analyzer" "with_id" "hide"]);
+      default = null;
+      description = ''
+        Closure notation in type and chaining inlay hints.
+
+        default value is:
+        ```nix
+            "impl_fn"
+        ```
+      '';
     };
     "discriminantHints" = {
       "enable" = mkOption {
@@ -1153,6 +1306,20 @@ with lib; {
           ```
         '';
       };
+    };
+  };
+  "interpret" = {
+    "tests" = mkOption {
+      type = types.nullOr (types.bool);
+      default = null;
+      description = ''
+        Enables the experimental support for interpreting tests.
+
+        default value is:
+        ```nix
+            false
+        ```
+      '';
     };
   };
   "joinLines" = {
@@ -1380,6 +1547,20 @@ with lib; {
         ```
       '';
     };
+    "query" = {
+      "capacities" = mkOption {
+        type = types.nullOr (types.attrsOf types.anything);
+        default = null;
+        description = ''
+          Sets the LRU capacity of the specified queries.
+
+          default value is:
+          ```nix
+              {}
+          ```
+        '';
+      };
+    };
   };
   "notifications" = {
     "cargoTomlNotFound" = mkOption {
@@ -1452,8 +1633,7 @@ with lib; {
       type = types.nullOr (types.nullOr (types.str));
       default = null;
       description = ''
-        Internal config, path to proc-macro server executable (typically,
-        this is rust-analyzer itself, but we override this in tests).
+        Internal config, path to proc-macro server executable.
 
         default value is:
         ```nix
@@ -1542,7 +1722,10 @@ with lib; {
       default = null;
       description = ''
         Advanced option, fully override the command rust-analyzer uses for
-        formatting.
+        formatting. This should be the equivalent of `rustfmt` here, and
+        not that of `cargo fmt`. The file contents will be passed on the
+        standard input and the formatted result will be read from the
+        standard output.
 
         default value is:
         ```nix
@@ -1589,6 +1772,18 @@ with lib; {
         };
       };
     };
+    "nonStandardTokens" = mkOption {
+      type = types.nullOr (types.bool);
+      default = null;
+      description = ''
+        Whether the server is allowed to emit non-standard tokens and modifiers.
+
+        default value is:
+        ```nix
+            true
+        ```
+      '';
+    };
     "operator" = {
       "enable" = mkOption {
         type = types.nullOr (types.bool);
@@ -1628,7 +1823,7 @@ with lib; {
         type = types.nullOr (types.bool);
         default = null;
         description = ''
-          Use semantic tokens for punctuations.
+          Use semantic tokens for punctuation.
 
           When disabled, rust-analyzer will emit semantic tokens only for punctuation tokens when
           they are tagged with modifiers or have a special role.
@@ -1661,7 +1856,7 @@ with lib; {
           type = types.nullOr (types.bool);
           default = null;
           description = ''
-            Use specialized semantic tokens for punctuations.
+            Use specialized semantic tokens for punctuation.
 
             When enabled, rust-analyzer will emit special token types for punctuation tokens instead
             of the generic `punctuation` token type.
