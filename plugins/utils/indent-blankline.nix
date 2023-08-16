@@ -253,9 +253,11 @@ in {
       description = ''
         Extra configuration options for indent-blankline without the 'indent_blankline_' prefix.
         Example: To set 'indent_blankline_foobar' to 1, write
-        extraConfig = {
-          foobar = true;
-        };
+        ```nix
+          extraConfig = {
+            foobar = true;
+          };
+        ```
       '';
     };
   };
