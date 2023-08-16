@@ -24,6 +24,7 @@ in {
     (
       optionName:
       # See https://github.com/NixOS/nixpkgs/pull/247916
+      # TODO remove those warnings in ~2 months (October 2023)
         mkRemovedOptionModule
         (basePluginPath ++ [optionName])
         ''
