@@ -23,9 +23,7 @@
         asyncBudget = 1;
         maxViewEntries = 200;
       };
-
       preselect = "Item";
-
       snippet = {
         expand.__raw = ''
           function(_)
@@ -33,14 +31,12 @@
           end
         '';
       };
-
       completion = {
         keywordLength = 1;
         keywordPattern = ''\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)'';
         autocomplete = ["TextChanged"];
         completeopt = "menu,menuone,noselect";
       };
-
       confirmation = {
         getCommitCharacters = ''
           function(commit_characters)
@@ -48,7 +44,6 @@
           end
         '';
       };
-
       formatting = {
         expandableIndicator = true;
         fields = ["abbr" "kind" "menu"];
@@ -58,7 +53,6 @@
           end
         '';
       };
-
       matching = {
         disallowFuzzyMatching = false;
         disallowFullfuzzyMatching = false;
@@ -66,7 +60,6 @@
         disallowPartialMatching = false;
         disallowPrefixUnmatching = false;
       };
-
       sorting = {
         priorityWeight = 2;
         comparators = [
@@ -80,20 +73,19 @@
           "order"
         ];
       };
-
       sources = [];
-
       experimental = {
         ghost_text = false;
       };
-
       view = {
         entries = {
           name = "custom";
           selection_order = "top_down";
         };
+        docs = {
+          autoOpen = true;
+        };
       };
-
       window = {
         completion = {
           border = ["" "" "" "" "" "" "" ""];
