@@ -55,29 +55,31 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      plugins.dap.enable = true;
+      plugins.dap = {
+        enable = true;
 
-      extraConfigLua = with helpers;
-        ''
-          require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject options})
-        ''
-        + (optionalString (cfg.testRunners != null) ''
-          table.insert(require("dap-python").test_runners,
-          ${
-            toLuaObject
-            (
-              builtins.mapAttrs (_: mkRaw) cfg.testRunners
-            )
-          })
-        '')
-        + (optionalString (cfg.customConfigurations != null) ''
-          table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
-        '')
-        + (optionalString (cfg.resolvePython != null) ''
-          require("dap-python").resolve_python = ${toLuaObject (mkRaw cfg.resolvePython)}
-        '')
-        + (optionalString (cfg.testRunner != null) ''
-          require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
-        '');
+        extensionConfigLua = with helpers;
+          ''
+            require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject options})
+          ''
+          + (optionalString (cfg.testRunners != null) ''
+            table.insert(require("dap-python").test_runners,
+            ${
+              toLuaObject
+              (
+                builtins.mapAttrs (_: mkRaw) cfg.testRunners
+              )
+            })
+          '')
+          + (optionalString (cfg.customConfigurations != null) ''
+            table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
+          '')
+          + (optionalString (cfg.resolvePython != null) ''
+            require("dap-python").resolve_python = ${toLuaObject (mkRaw cfg.resolvePython)}
+          '')
+          + (optionalString (cfg.testRunner != null) ''
+            require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
+          '');
+      };
     };
 }

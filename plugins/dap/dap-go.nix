@@ -47,10 +47,11 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      plugins.dap.enable = true;
-
-      extraConfigLua = ''
-        require("dap-go").setup(${helpers.toLuaObject options})
-      '';
+      plugins.dap = {
+        enable = true;
+        extensionConfigLua = ''
+          require("dap-go").setup(${helpers.toLuaObject options})
+        '';
+      };
     };
 }
