@@ -82,10 +82,12 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      plugins.dap.enable = true;
+      plugins.dap = {
+        enable = true;
 
-      extraConfigLua = ''
-        require("nvim-dap-virtual-text").setup(${helpers.toLuaObject options});
-      '';
+        extensionConfigLua = ''
+          require("nvim-dap-virtual-text").setup(${helpers.toLuaObject options});
+        '';
+      };
     };
 }

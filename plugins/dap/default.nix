@@ -44,6 +44,15 @@ in
 
           dapBreakpointRejected = mkSignOption "R" "Sign to indicate breakpoints rejected by the debug adapter.";
         };
+
+        extensionConfigLua = mkOption {
+          type = types.lines;
+          description = ''
+            Extension configuration for dap. Don't use this directly !
+          '';
+          default = "";
+          internal = true;
+        };
       };
 
     config = let
@@ -86,6 +95,7 @@ in
             for sign_name, sign in pairs(__dap_signs) do
               vim.fn.sign_define(sign_name, sign)
             end
-          '');
+          '')
+          + cfg.extensionConfigLua;
       };
   }
