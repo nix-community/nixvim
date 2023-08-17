@@ -145,8 +145,6 @@ with lib; rec {
     then null
     else y;
 
-  ifNonNull = x: ifNonNull' x x;
-
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
