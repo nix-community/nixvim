@@ -45,7 +45,14 @@ in
           dapBreakpointRejected = mkSignOption "R" "Sign to indicate breakpoints rejected by the debug adapter.";
         };
 
-        extensionConfigLua = helpers.mkNullOrOption types.lines "Extension configuration for dap. Don't use this directly!";
+        extensionConfigLua = mkOption {
+          type = types.lines;
+          description = ''
+            Extension configuration for dap. Don't use this directly !
+          '';
+          default = "";
+          internal = true;
+        };
       };
 
     config = let
