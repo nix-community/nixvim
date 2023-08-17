@@ -96,6 +96,6 @@ in
               vim.fn.sign_define(sign_name, sign)
             end
           '')
-          + (optionalString (cfg.extensionConfigLua != null) cfg.extensionConfigLua);
+          + cfg.extensionConfigLua;
       };
   }
