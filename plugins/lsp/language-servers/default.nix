@@ -148,6 +148,11 @@ with lib; let
       package = pkgs.deno;
     }
     {
+      name = "efm";
+      description = "Enable efm-langserver, for misc tools";
+      package = pkgs.efm-langserver;
+    }
+    {
       name = "elmls";
       description = "Enable elmls, for Elm.";
       package = pkgs.elmPackages.elm-language-server;

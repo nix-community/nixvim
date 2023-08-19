@@ -82,6 +82,7 @@
         cssls.enable = true;
         dartls.enable = true;
         denols.enable = true;
+        efm.enable = true;
         elmls.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
