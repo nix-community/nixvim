@@ -197,6 +197,11 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
     }
     {
+      name = "intelephense";
+      description = "Enable intelephense, for PHP";
+      package = pkgs.nodePackages.intelephense;
+    }
+    {
       name = "java-language-server";
       description = "Enable java language server";
       serverName = "java_language_server";
