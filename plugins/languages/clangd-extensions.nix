@@ -3,13 +3,61 @@
   pkgs,
   config,
   ...
-}: let
+}:
+with lib; let
+  cfg = config.plugins.clangd-extensions;
   helpers = import ../helpers.nix {inherit lib;};
-in
-  with lib; let
-    borderOpt = helpers.defaultNullOpts.mkBorder "none" "clangd-extensions" "";
-  in {
-    options.plugins.clangd-extensions = {
+
+  basePluginPath = ["plugins" "clangd-extensions"];
+
+  borderOpt = helpers.defaultNullOpts.mkBorder "none" "clangd-extensions" "";
+in {
+  # All of those warnings were introduced on 08/22/2023.
+  # TODO: Remove them in ~2 monts (Oct. 2023).
+  imports =
+    [
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["server"])
+        ''
+          To configure the `clangd` language server options, please use
+          `plugins.lsp.servers.clangd.extraSettings`.
+        ''
+      )
+      (
+        mkRemovedOptionModule (basePluginPath ++ ["extensions" "autoSetHints"]) ""
+      )
+    ]
+    ++ (
+      map
+      (
+        optionPath:
+          mkRenamedOptionModule
+          (basePluginPath ++ ["extensions"] ++ optionPath)
+          (basePluginPath ++ optionPath)
+      )
+      [
+        ["inlayHints" "inline"]
+        ["inlayHints" "onlyCurrentLine"]
+        ["inlayHints" "onlyCurrentLineAutocmd"]
+        ["inlayHints" "showParameterHints"]
+        ["inlayHints" "parameterHintsPrefix"]
+        ["inlayHints" "otherHintsPrefix"]
+        ["inlayHints" "maxLenAlign"]
+        ["inlayHints" "maxLenAlignPadding"]
+        ["inlayHints" "rightAlign"]
+        ["inlayHints" "rightAlignPadding"]
+        ["inlayHints" "highlight"]
+        ["inlayHints" "priority"]
+        ["ast"]
+        ["memoryUsage"]
+        ["symbolInfo"]
+      ]
+    );
+
+  options.plugins.clangd-extensions =
+    helpers.extraOptionsOptions
+    // {
       enable = mkEnableOption "clangd_extensions, plugin implementing clangd LSP extensions";
 
       package =
@@ -20,157 +68,170 @@ in
         "multiple different client offset_encodings detected for buffer, this is not supported yet"
       '';
 
-      server = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.clang-tools;
-          description = "Package to use for clangd";
-        };
+      inlayHints = {
+        inline = helpers.defaultNullOpts.mkStr ''vim.fn.has("nvim-0.10") == 1'' ''
+          Show hints inline.
+        '';
 
-        extraOptions = mkOption {
-          type = types.attrsOf types.anything;
-          default = {};
-          description = "Extra options to pass to nvim-lspconfig. You should not need to use this directly";
+        onlyCurrentLine =
+          helpers.defaultNullOpts.mkBool false
+          "Only show inlay hints for the current line";
+
+        onlyCurrentLineAutocmd = helpers.defaultNullOpts.mkStr "CursorHold" ''
+          Event which triggers a refersh of the inlay hints.
+          You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+          not that this may cause  higher CPU usage.
+          This option is only respected when `onlyCurrentLine` is true.
+        '';
+
+        showParameterHints = helpers.defaultNullOpts.mkBool true ''
+          Whether to show parameter hints with the inlay hints or not.
+        '';
+
+        parameterHintsPrefix = helpers.defaultNullOpts.mkStr "<- " "Prefix for parameter hints.";
+
+        otherHintsPrefix =
+          helpers.defaultNullOpts.mkStr "=> "
+          "Prefix for all the other hints (type, chaining).";
+
+        maxLenAlign = helpers.defaultNullOpts.mkBool false ''
+          Whether to align to the length of the longest line in the file.
+        '';
+
+        maxLenAlignPadding = helpers.defaultNullOpts.mkInt 1 ''
+          Padding from the left if max_len_align is true.
+        '';
+
+        rightAlign = helpers.defaultNullOpts.mkBool false ''
+          Whether to align to the extreme right or not.
+        '';
+
+        rightAlignPadding = helpers.defaultNullOpts.mkInt 7 ''
+          Padding from the right if right_align is true.
+        '';
+
+        highlight = helpers.defaultNullOpts.mkStr "Comment" "The color of the hints.";
+
+        priority = helpers.defaultNullOpts.mkInt 100 "The highlight group priority for extmark.";
+      };
+
+      ast = {
+        roleIcons =
+          mapAttrs
+          (name: default: helpers.defaultNullOpts.mkStr default "")
+          {
+            type = "🄣";
+            declaration = "🄓";
+            expression = "🄔";
+            statement = ";";
+            specifier = "🄢";
+            templateArgument = "🆃";
+          };
+
+        kindIcons =
+          mapAttrs
+          (name: default: helpers.defaultNullOpts.mkStr default "")
+          {
+            compound = "🄲";
+            recovery = "🅁";
+            translationUnit = "🅄";
+            packExpansion = "🄿";
+            templateTypeParm = "🅃";
+            templateTemplateParm = "🅃";
+            templateParamObject = "🅃";
+          };
+
+        highlights = {
+          detail = helpers.defaultNullOpts.mkStr "Comment" "";
         };
       };
 
-      extensions = {
-        autoSetHints = helpers.defaultNullOpts.mkBool true "Automatically set inlay hints (type hints)";
-        inlayHints = {
-          onlyCurrentLine =
-            helpers.defaultNullOpts.mkBool false
-            "Only show inlay hints for the current line";
-          onlyCurrentLineAutocmd = helpers.defaultNullOpts.mkStr "CursorHold" ''
-            Event which triggers a refersh of the inlay hints.
-            You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-            not that this may cause  higher CPU usage.
-            This option is only respected when only_current_line and
-            autoSetHints both are true.
-          '';
-          showParameterHints =
-            helpers.defaultNullOpts.mkBool true
-            "whether to show parameter hints with the inlay hints or not";
-          parameterHintsPrefix = helpers.defaultNullOpts.mkStr "<- " "prefix for parameter hints";
-          otherHintsPrefix =
-            helpers.defaultNullOpts.mkStr "=> "
-            "prefix for all the other hints (type, chaining)";
-          maxLenAlign =
-            helpers.defaultNullOpts.mkBool false
-            "whether to align to the length of the longest line in the file";
-          maxLenAlignPadding =
-            helpers.defaultNullOpts.mkInt 1
-            "padding from the left if max_len_align is true";
-          rightAlign =
-            helpers.defaultNullOpts.mkBool false
-            "whether to align to the extreme right or not";
-          rightAlignPadding =
-            helpers.defaultNullOpts.mkInt 7
-            "padding from the right if right_align is true";
-          highlight =
-            helpers.defaultNullOpts.mkStr "Comment"
-            "The color of the hints";
-          priority = helpers.defaultNullOpts.mkInt 100 "The highlight group priority for extmark";
-        };
+      memoryUsage = {
+        border = borderOpt;
+      };
 
-        ast = {
-          roleIcons = {
-            type = helpers.defaultNullOpts.mkStr "🄣" "";
-            declaration = helpers.defaultNullOpts.mkStr "🄓" "";
-            expression = helpers.defaultNullOpts.mkStr "🄔" "";
-            statement = helpers.defaultNullOpts.mkStr ";" "";
-            specifier = helpers.defaultNullOpts.mkStr "🄢" "";
-            templateArgument = helpers.defaultNullOpts.mkStr "🆃" "";
-          };
-
-          kindIcons = {
-            compound = helpers.defaultNullOpts.mkStr "🄲" "";
-            recovery = helpers.defaultNullOpts.mkStr "🅁" "";
-            translationUnit = helpers.defaultNullOpts.mkStr "🅄" "";
-            packExpansion = helpers.defaultNullOpts.mkStr "🄿" "";
-            templateTypeParm = helpers.defaultNullOpts.mkStr "🅃" "";
-            templateTemplateParm = helpers.defaultNullOpts.mkStr "🅃" "";
-            templateParamObject = helpers.defaultNullOpts.mkStr "🅃" "";
-          };
-
-          highlights = {
-            detail = helpers.defaultNullOpts.mkStr "Comment" "";
-          };
-        };
-
-        memoryUsage = {
-          border = borderOpt;
-        };
-
-        symbolInfo = {
-          border = borderOpt;
-        };
+      symbolInfo = {
+        border = borderOpt;
       };
     };
 
-    config = let
-      cfg = config.plugins.clangd-extensions;
-      setupOptions = {
-        server = cfg.server.extraOptions;
-        extensions = {
-          inherit (cfg.extensions) autoSetHints;
-          inlay_hints = {
-            only_current_line = cfg.extensions.inlayHints.onlyCurrentLine;
-            only_current_line_autocmd = cfg.extensions.inlayHints.onlyCurrentLineAutocmd;
-            show_parameter_hints = cfg.extensions.inlayHints.showParameterHints;
-            parameter_hints_prefix = cfg.extensions.inlayHints.parameterHintsPrefix;
-            other_hints_prefix = cfg.extensions.inlayHints.otherHintsPrefix;
-            max_len_align = cfg.extensions.inlayHints.maxLenAlign;
-            max_len_align_padding = cfg.extensions.inlayHints.maxLenAlignPadding;
-            right_align = cfg.extensions.inlayHints.rightAlign;
-            right_align_padding = cfg.extensions.inlayHints.rightAlignPadding;
-            inherit (cfg.extensions.inlayHints) highlight priority;
+  config = let
+    setupOptions = with cfg;
+      {
+        inlay_hints = with inlayHints; {
+          inline = helpers.ifNonNull' inline (helpers.mkRaw inline);
+          only_current_line = onlyCurrentLine;
+          only_current_line_autocmd = onlyCurrentLineAutocmd;
+          show_parameter_hints = showParameterHints;
+          parameter_hints_prefix = parameterHintsPrefix;
+          other_hints_prefix = otherHintsPrefix;
+          max_len_align = maxLenAlign;
+          max_len_align_padding = maxLenAlignPadding;
+          right_align = rightAlign;
+          right_align_padding = rightAlignPadding;
+          inherit
+            highlight
+            priority
+            ;
+        };
+        ast = with ast; {
+          role_icons = with roleIcons; {
+            inherit
+              type
+              declaration
+              expression
+              statement
+              specifier
+              ;
+            "template argument" = templateArgument;
           };
-          ast = {
-            role_icons = {
-              inherit (cfg.extensions.ast.roleIcons) type declaration expression statement specifier;
-              "template argument" = cfg.extensions.ast.roleIcons.templateArgument;
-            };
-            kind_icons = {
-              Compound = cfg.extensions.ast.kindIcons.compound;
-              Recovery = cfg.extensions.ast.kindIcons.recovery;
-              TranslationUnit = cfg.extensions.ast.kindIcons.translationUnit;
-              PackExpansion = cfg.extensions.ast.kindIcons.packExpansion;
-              TemplateTypeParm = cfg.extensions.ast.kindIcons.templateTypeParm;
-              TemplateTemplateParm = cfg.extensions.ast.kindIcons.templateTemplateParm;
-              TemplateParamObject = cfg.extensions.ast.kindIcons.templateParamObject;
-            };
-            highlights = {
-              inherit (cfg.extensions.ast.highlights) detail;
-            };
+          kind_icons = with kindIcons; {
+            Compound = compound;
+            Recovery = recovery;
+            TranslationUnit = translationUnit;
+            PackExpansion = packExpansion;
+            TemplateTypeParm = templateTypeParm;
+            TemplateTemplateParm = templateTemplateParm;
+            TemplateParamObject = templateParamObject;
           };
-          memory_usage = {
-            inherit (cfg.extensions.memoryUsage) border;
-          };
-          symbol_info = {
-            inherit (cfg.extensions.symbolInfo) border;
+          highlights = with highlights; {
+            inherit detail;
           };
         };
+        memory_usage = with memoryUsage; {
+          inherit border;
+        };
+        symbol_info = with symbolInfo; {
+          inherit border;
+        };
+      }
+      // cfg.extraOptions;
+  in
+    mkIf cfg.enable {
+      warnings = optional (!config.plugins.lsp.enable) ''
+        You have enabled `clangd-extensions` but not the lsp (`plugins.lsp`).
+        You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
+      '';
+
+      plugins.lsp.servers.clangd.extraOptions = mkIf cfg.enableOffsetEncodingWorkaround {
+        capabilities = {__raw = "__clangdCaps";};
       };
-    in
-      mkIf cfg.enable {
-        extraPackages = [cfg.server.package];
-        extraPlugins = [cfg.package];
 
-        plugins.clangd-extensions.server.extraOptions = mkIf cfg.enableOffsetEncodingWorkaround {
-          capabilities = {__raw = "__clangdCaps";};
-        };
+      extraPlugins = [cfg.package];
 
-        plugins.lsp.postConfig = let
-          extraCaps =
-            if cfg.enableOffsetEncodingWorkaround
-            then ''
-              local __clangdCaps = vim.lsp.protocol.make_client_capabilities()
-              __clangdCaps.offsetEncoding = { "utf-16" }
-            ''
-            else "";
-        in ''
-          ${extraCaps}
-          require("clangd_extensions").setup(${helpers.toLuaObject setupOptions})
+      # Enable the clangd language server
+      plugins.lsp.servers.clangd.enable = true;
+
+      plugins.lsp.preConfig =
+        optionalString
+        cfg.enableOffsetEncodingWorkaround
+        ''
+          local __clangdCaps = vim.lsp.protocol.make_client_capabilities()
+          __clangdCaps.offsetEncoding = { "utf-16" }
         '';
-      };
-  }
+
+      plugins.lsp.postConfig = ''
+        require("clangd_extensions").setup(${helpers.toLuaObject setupOptions})
+      '';
+    };
+}
