@@ -11,6 +11,34 @@
     };
   };
 
+  # Issue #536
+  mappings = {
+    plugins.nvim-cmp = {
+      enable = true;
+      mapping = {
+        "<CR>" = "cmp.mapping.confirm({ select = false })";
+        "<Tab>" = {
+          modes = ["i" "s"];
+          action = ''
+            function(fallback)
+              if cmp.visible() then
+                cmp.select_next_item()
+              elseif luasnip.expandable() then
+                luasnip.expand()
+              elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+              elseif check_backspace() then
+                fallback()
+              else
+                fallback()
+              end
+            end
+          '';
+        };
+      };
+    };
+  };
+
   # All the upstream default options of nvim-cmp
   defaults = {
     plugins.nvim-cmp = {

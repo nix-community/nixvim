@@ -505,7 +505,7 @@ in {
                           && ((length modes) >= 1)
                         )
                         ("," + (helpers.toLuaObject modes));
-                    in "cmp.mapping(${mapping.action}${modesString})"
+                    in "cmp.mapping(${action.action}${modesString})"
                   )
               )
               mapping);
