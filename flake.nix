@@ -57,26 +57,6 @@
             inherit system;
             config.allowUnfree = true;
           };
-          extractRustAnalyzer = {
-            stdenv,
-            pkgs,
-          }:
-            stdenv.mkDerivation {
-              pname = "extract_rust_analyzer";
-              version = "master";
-
-              dontUnpack = true;
-              dontBuild = true;
-
-              buildInputs = [pkgs.python3];
-
-              installPhase = ''
-                ls -la
-                mkdir -p $out/bin
-                cp ${./helpers/extract_rust_analyzer.py} $out/bin/extract_rust_analyzer.py
-              '';
-            };
-          extractRustAnalyzerPkg = pkgs.callPackage extractRustAnalyzer {};
         in {
           checks =
             (import ./tests {
@@ -116,34 +96,13 @@
               inherit (self.checks.${system}.pre-commit-check) shellHook;
             };
           };
-          packages = {
-            docs = pkgs-unfree.callPackage (import ./docs) {
-              modules = nixvimModules;
-            };
-            runUpdates =
-              pkgs.callPackage
-              ({
-                pkgs,
-                stdenv,
-              }:
-                stdenv.mkDerivation {
-                  pname = "run-updates";
-                  inherit (pkgs.rust-analyzer) version src;
-
-                  nativeBuildInputs = with pkgs; [extractRustAnalyzerPkg alejandra];
-
-                  buildPhase = ''
-                    extract_rust_analyzer.py editors/code/package.json |
-                      alejandra --quiet > rust-analyzer-config.nix
-                  '';
-
-                  installPhase = ''
-                    mkdir -p $out/share
-                    cp rust-analyzer-config.nix $out/share
-                  '';
-                })
-              {};
-          };
+          packages =
+            {
+              docs = pkgs-unfree.callPackage (import ./docs) {
+                modules = nixvimModules;
+              };
+            }
+            // (import ./helpers pkgs);
           legacyPackages = rec {
             makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
             makeNixvim = configuration:
