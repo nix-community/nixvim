@@ -486,6 +486,11 @@ with lib; let
       package = pkgs.nodePackages."@tailwindcss/language-server";
     }
     {
+      name = "taplo";
+      description = "Enable taplo, for TOML";
+      package = pkgs.taplo;
+    }
+    {
       name = "terraformls";
       description = "Enable terraform-ls, for terraform";
       package = pkgs.terraform-ls;
