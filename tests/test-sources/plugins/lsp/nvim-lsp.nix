@@ -108,6 +108,7 @@
         sourcekit.enable = true;
         svelte.enable = true;
         tailwindcss.enable = true;
+        taplo.enable = true;
         terraformls.enable = true;
         texlab.enable = true;
         tsserver.enable = true;
