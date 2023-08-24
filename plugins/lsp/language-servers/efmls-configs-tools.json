@@ -1,0 +1,330 @@
+{
+    "linters": {
+        "alex": [
+            "misc"
+        ],
+        "ameba": [
+            "crystal"
+        ],
+        "ansible_lint": [
+            "yaml"
+        ],
+        "bashate": [
+            "bash"
+        ],
+        "clang_tidy": [
+            "c",
+            "c++"
+        ],
+        "clazy": [
+            "c++"
+        ],
+        "clj_kondo": [
+            "clojure"
+        ],
+        "cppcheck": [
+            "c",
+            "c++"
+        ],
+        "cpplint": [
+            "c",
+            "c++"
+        ],
+        "dartanalyzer": [
+            "dart"
+        ],
+        "debride": [
+            "ruby"
+        ],
+        "djlint": [
+            "python",
+            "go",
+            "php",
+            "html"
+        ],
+        "dmd": [
+            "d"
+        ],
+        "eslint": [
+            "javascript",
+            "typescript"
+        ],
+        "eslint_d": [
+            "javascript",
+            "typescript"
+        ],
+        "fecs": [
+            "javascript"
+        ],
+        "fish": [
+            "fish"
+        ],
+        "flake8": [
+            "python"
+        ],
+        "flawfinder": [
+            "c"
+        ],
+        "gcc": [
+            "c",
+            "c++"
+        ],
+        "go_revive": [
+            "go"
+        ],
+        "golangci_lint": [
+            "go"
+        ],
+        "golint": [
+            "go"
+        ],
+        "hadolint": [
+            "docker"
+        ],
+        "joker": [
+            "clojure"
+        ],
+        "js_standard": [
+            "javascript"
+        ],
+        "languagetool": [
+            "misc"
+        ],
+        "luacheck": [
+            "lua"
+        ],
+        "mcs": [
+            "c#"
+        ],
+        "phan": [
+            "php"
+        ],
+        "php": [
+            "php"
+        ],
+        "phpcs": [
+            "php"
+        ],
+        "phpstan": [
+            "php"
+        ],
+        "proselint": [
+            "misc"
+        ],
+        "psalm": [
+            "php"
+        ],
+        "pylint": [
+            "python"
+        ],
+        "redpen": [
+            "misc"
+        ],
+        "reek": [
+            "ruby"
+        ],
+        "rubocop": [
+            "ruby"
+        ],
+        "shellcheck": [
+            "sh",
+            "bash"
+        ],
+        "slither": [
+            "solidity"
+        ],
+        "solhint": [
+            "solidity"
+        ],
+        "sorbet": [
+            "ruby"
+        ],
+        "staticcheck": [
+            "go"
+        ],
+        "statix": [
+            "nix"
+        ],
+        "stylelint": [
+            "css",
+            "scss",
+            "sass",
+            "less"
+        ],
+        "textlint": [
+            "misc"
+        ],
+        "vale": [
+            "misc"
+        ],
+        "vint": [
+            "vim"
+        ],
+        "vulture": [
+            "python"
+        ],
+        "write_good": [
+            "misc"
+        ],
+        "xo": [
+            "javascript",
+            "typescript"
+        ],
+        "yamllint": [
+            "yaml"
+        ]
+    },
+    "formatters": {
+        "astyle": [
+            "c",
+            "c++"
+        ],
+        "autopep8": [
+            "python"
+        ],
+        "black": [
+            "python"
+        ],
+        "cbfmt": [
+            "markdown"
+        ],
+        "clang_format": [
+            "c",
+            "c++"
+        ],
+        "clang_tidy": [
+            "c",
+            "c++"
+        ],
+        "dartfmt": [
+            "dart"
+        ],
+        "dfmt": [
+            "d"
+        ],
+        "dotnet_format": [
+            "c#"
+        ],
+        "dprint": [
+            "javascript",
+            "typescript",
+            "json",
+            "markdown",
+            "toml",
+            "rust",
+            "roslyn"
+        ],
+        "eslint": [
+            "javascript",
+            "typescript"
+        ],
+        "eslint_d": [
+            "javascript",
+            "typescript"
+        ],
+        "fecs": [
+            "javascript",
+            "typescript",
+            "css",
+            "html"
+        ],
+        "fish_indent": [
+            "fish"
+        ],
+        "forge_fmt": [
+            "solidity"
+        ],
+        "gofmt": [
+            "go"
+        ],
+        "goimports": [
+            "go"
+        ],
+        "golines": [
+            "go"
+        ],
+        "joker": [
+            "clojure"
+        ],
+        "js_standard": [
+            "javascript"
+        ],
+        "lua_format": [
+            "lua"
+        ],
+        "nixfmt": [
+            "nix"
+        ],
+        "php_cs_fixer": [
+            "php"
+        ],
+        "phpcbf": [
+            "php"
+        ],
+        "pint": [
+            "php"
+        ],
+        "prettier": [
+            "javascript",
+            "typescript",
+            "css",
+            "scss",
+            "sass",
+            "less",
+            "html",
+            "json"
+        ],
+        "prettier_d": [
+            "javascript",
+            "typescript",
+            "css",
+            "scss",
+            "sass",
+            "less",
+            "html",
+            "json"
+        ],
+        "prettier_eslint": [
+            "javascript",
+            "typescript"
+        ],
+        "prettier_standard": [
+            "javascript",
+            "typescript"
+        ],
+        "rustfmt": [
+            "rust"
+        ],
+        "shfmt": [
+            "sh",
+            "bash"
+        ],
+        "smlfmt": [
+            "sml"
+        ],
+        "stylua": [
+            "lua"
+        ],
+        "terraform_fmt": [
+            "terraform"
+        ],
+        "uncrustify": [
+            "c",
+            "c++",
+            "c#",
+            "d",
+            "java",
+            "objective-c",
+            "objective-c++",
+            "pawn",
+            "vala"
+        ],
+        "xo": [
+            "javascript",
+            "typescript"
+        ],
+        "yapf": [
+            "python"
+        ]
+    }
+}
