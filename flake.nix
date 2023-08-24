@@ -143,8 +143,6 @@
                   '';
                 })
               {};
-            # Used to updates plugins, launch 'nix run .#nvfetcher' in the 'plugins' directory
-            inherit (pkgs) nvfetcher;
           };
           legacyPackages = rec {
             makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
