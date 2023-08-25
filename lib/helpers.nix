@@ -21,6 +21,8 @@ with lib; rec {
             (n: v:
               if head (stringToCharacters n) == "@"
               then toLuaObject v
+              else if n == "__emptyString"
+              then "[''] = " + (toLuaObject v)
               else "[${toLuaObject n}] = " + (toLuaObject v))
             (filterAttrs
               (
