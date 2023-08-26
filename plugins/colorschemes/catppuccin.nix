@@ -229,9 +229,11 @@ in {
 
         ts_rainbow =
           helpers.defaultNullOpts.mkBool
-          config.plugins.treesitter-rainbow.enable "";
+          true "";
 
-        ts_rainbow2 = helpers.defaultNullOpts.mkBool false "";
+        ts_rainbow2 = helpers.defaultNullOpts.mkBool true "";
+
+        rainbow_delimiters = helpers.defaultNullOpts.mkBool true "";
 
         vim_sneak = helpers.defaultNullOpts.mkBool false "";
 
