@@ -537,5 +537,6 @@ in {
       ./ccls.nix
       ./pylsp.nix
       ./svelte.nix
+      ./efmls-configs.nix
     ];
 }
