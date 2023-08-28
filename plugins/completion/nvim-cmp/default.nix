@@ -278,7 +278,7 @@ in {
       };
 
       sources = let
-        source_config = types.submodule (_: {
+        source_config = types.submodule {
           options = {
             name = mkOption {
               type = types.str;
@@ -351,13 +351,25 @@ in {
               Using the `ctx` parameter, you can further customize the behaviour of the source.
             '';
           };
-        });
+        };
       in
         mkOption {
           default = null;
-          type = with types; nullOr (listOf source_config);
+          type = with types;
+            nullOr
+            (
+              listOf
+              (
+                either
+                source_config
+                (listOf source_config)
+              )
+            );
           description = ''
             The sources to use.
+            Can either be a list of sourceConfigs which will be made directly to a Lua object.
+            Or it can be a list of lists, which will use the cmp built-in helper function
+            `cmp.config.sources`.
 
             Default: `[]`
           '';
@@ -588,9 +600,8 @@ in {
             );
         };
 
-        sources = helpers.ifNonNull' cfg.sources (
-          map
-          (source:
+        sources = let
+          convertSourceAttrs = source:
             with source; {
               inherit
                 name
@@ -603,9 +614,21 @@ in {
               inherit priority;
               group_index = groupIndex;
               entry_filter = entryFilter;
-            })
-          cfg.sources
-        );
+            };
+        in
+          if sources == null || sources == []
+          then null
+          # List of lists of sources -> we use the `cmp.config.sources` helper
+          else if isList (head sources)
+          then let
+            sourcesListofLists =
+              map
+              (map convertSourceAttrs)
+              sources;
+          in
+            helpers.mkRaw "cmp.config.sources(${helpers.toLuaObject sourcesListofLists})"
+          # List of sources
+          else map convertSourceAttrs sources;
 
         view = with view; {
           inherit entries;
@@ -656,10 +679,10 @@ in {
       # If autoEnableSources is set to true, figure out which are provided by the user
       # and enable the corresponding plugins.
       plugins = let
-        sourcesList =
+        sourcesFlattenedList =
           if cfg.sources == null
           then []
-          else cfg.sources;
+          else flatten cfg.sources;
 
         # Take only the names from the sources provided by the user
         foundSources =
@@ -667,7 +690,7 @@ in {
           (
             map
             (source: source.name)
-            sourcesList
+            sourcesFlattenedList
           );
 
         # A list of known source names

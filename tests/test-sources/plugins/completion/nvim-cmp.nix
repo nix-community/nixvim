@@ -132,4 +132,40 @@
       };
     };
   };
+
+  list-of-sources = {
+    plugins.nvim-cmp = {
+      enable = true;
+
+      sources = [
+        {name = "path";}
+        {name = "nvim_lsp";}
+        {name = "luasnip";}
+        {
+          name = "buffer";
+          option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+        }
+        {name = "neorg";}
+      ];
+    };
+  };
+
+  list-of-lists-of-sources = {
+    plugins.nvim-cmp = {
+      enable = true;
+
+      sources = [
+        [
+          {name = "path";}
+          {name = "nvim_lsp";}
+        ]
+        [
+          {
+            name = "buffer";
+            option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+          }
+        ]
+      ];
+    };
+  };
 }
