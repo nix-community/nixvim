@@ -467,7 +467,7 @@ with lib; let
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
 
-      settingsOptions = import ./rust-analyzer-config.nix lib;
+      settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
