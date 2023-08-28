@@ -11,6 +11,62 @@ tools = {
     "formatters": {},
 }
 
+identity_langs = [
+    "bash",
+    "c",
+    "clojure",
+    "cmake",
+    "crystal",
+    "csh",
+    "css",
+    "d",
+    "dart",
+    "fish",
+    "gitcommit",
+    "go",
+    "haskell",
+    "html",
+    "java",
+    "javascript",
+    "json",
+    "ksh",
+    "less",
+    "lua",
+    "markdown",
+    "nix",
+    "pawn",
+    "php",
+    "python",
+    "roslyn",
+    "ruby",
+    "rust",
+    "sass",
+    "scss",
+    "sh",
+    "slim",
+    "sml",
+    "solidity",
+    "toml",
+    "typescript",
+    "vala",
+    "vim",
+    "yaml",
+    "zsh",
+    "misc",
+]
+
+lang_map = {
+    "c#": "cs",
+    "c++": "cpp",
+    "docker": "dockerfile",
+    "objective-c": "objc",
+    "objective-c++": "objcpp",
+    "terraform": "tf",
+}
+
+for lang in identity_langs:
+    lang_map[lang] = lang
+
 for kind in ["linters", "formatters"]:
     for file in os.listdir(tool_path + "/" + kind):
         tool_name = file.removesuffix(".lua")
@@ -19,7 +75,8 @@ for kind in ["linters", "formatters"]:
             for line in f.readlines():
                 if line.startswith("-- languages:"):
                     languages = [
-                        l.strip() for l in line.split(":")[1].strip().split(",")
+                        lang_map[l.strip()]
+                        for l in line.split(":")[1].strip().split(",")
                     ]
                     break
         tools[kind][tool_name] = languages
