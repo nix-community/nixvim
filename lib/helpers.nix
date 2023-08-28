@@ -318,14 +318,12 @@ with lib; rec {
     end
   '';
 
-  rawType = types.submodule {
-    options = {
-      __raw = mkOption {
-        type = types.str;
-        description = "raw lua code";
-        default = "";
-      };
-    };
+  rawType = mkOptionType {
+    name = "rawType";
+    description = "raw lua code";
+    descriptionClass = "noun";
+    merge = mergeEqualOption;
+    check = isRawType;
   };
 
   isRawType = v: lib.isAttrs v && lib.hasAttr "__raw" v && lib.isString v.__raw;
