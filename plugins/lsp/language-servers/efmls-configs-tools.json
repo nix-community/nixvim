@@ -5,7 +5,7 @@
         ],
         "astyle": [
             "c",
-            "c++"
+            "cpp"
         ],
         "autopep8": [
             "python"
@@ -25,11 +25,11 @@
         ],
         "clang_format": [
             "c",
-            "c++"
+            "cpp"
         ],
         "clang_tidy": [
             "c",
-            "c++"
+            "cpp"
         ],
         "dartfmt": [
             "dart"
@@ -38,7 +38,7 @@
             "d"
         ],
         "dotnet_format": [
-            "c#"
+            "cs"
         ],
         "dprint": [
             "javascript",
@@ -153,16 +153,16 @@
             "lua"
         ],
         "terraform_fmt": [
-            "terraform"
+            "tf"
         ],
         "uncrustify": [
             "c",
-            "c++",
-            "c#",
+            "cpp",
+            "cs",
             "d",
             "java",
-            "objective-c",
-            "objective-c++",
+            "objc",
+            "objcpp",
             "pawn",
             "vala"
         ],
@@ -192,21 +192,21 @@
         ],
         "clang_tidy": [
             "c",
-            "c++"
+            "cpp"
         ],
         "clazy": [
-            "c++"
+            "cpp"
         ],
         "clj_kondo": [
             "clojure"
         ],
         "cppcheck": [
             "c",
-            "c++"
+            "cpp"
         ],
         "cpplint": [
             "c",
-            "c++"
+            "cpp"
         ],
         "dartanalyzer": [
             "dart"
@@ -245,7 +245,7 @@
         ],
         "gcc": [
             "c",
-            "c++"
+            "cpp"
         ],
         "gitlint": [
             "gitcommit"
@@ -260,7 +260,7 @@
             "go"
         ],
         "hadolint": [
-            "docker"
+            "dockerfile"
         ],
         "joker": [
             "clojure"
@@ -278,7 +278,7 @@
             "lua"
         ],
         "mcs": [
-            "c#"
+            "cs"
         ],
         "mypy": [
             "python"
