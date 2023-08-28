@@ -22,4 +22,4 @@ for kind in ["linters", "formatters"]:
                     break
         tools[kind][tool_name] = languages
 
-print(json.dumps(tools, indent=4))
+print(json.dumps(tools, indent=4, sort_keys=True))

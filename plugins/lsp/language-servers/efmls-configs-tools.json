@@ -1,186 +1,21 @@
 {
-    "linters": {
-        "alex": [
-            "misc"
-        ],
-        "ameba": [
-            "crystal"
-        ],
-        "ansible_lint": [
-            "yaml"
-        ],
-        "bashate": [
-            "bash"
-        ],
-        "clang_tidy": [
-            "c",
-            "c++"
-        ],
-        "clazy": [
-            "c++"
-        ],
-        "clj_kondo": [
-            "clojure"
-        ],
-        "cppcheck": [
-            "c",
-            "c++"
-        ],
-        "cpplint": [
-            "c",
-            "c++"
-        ],
-        "dartanalyzer": [
-            "dart"
-        ],
-        "debride": [
-            "ruby"
-        ],
-        "djlint": [
-            "python",
-            "go",
-            "php",
-            "html"
-        ],
-        "dmd": [
-            "d"
-        ],
-        "eslint": [
-            "javascript",
-            "typescript"
-        ],
-        "eslint_d": [
-            "javascript",
-            "typescript"
-        ],
-        "fecs": [
-            "javascript"
-        ],
-        "fish": [
-            "fish"
-        ],
-        "flake8": [
-            "python"
-        ],
-        "flawfinder": [
-            "c"
-        ],
-        "gcc": [
-            "c",
-            "c++"
-        ],
-        "go_revive": [
-            "go"
-        ],
-        "golangci_lint": [
-            "go"
-        ],
-        "golint": [
-            "go"
-        ],
-        "hadolint": [
-            "docker"
-        ],
-        "joker": [
-            "clojure"
-        ],
-        "js_standard": [
-            "javascript"
-        ],
-        "languagetool": [
-            "misc"
-        ],
-        "luacheck": [
-            "lua"
-        ],
-        "mcs": [
-            "c#"
-        ],
-        "phan": [
-            "php"
-        ],
-        "php": [
-            "php"
-        ],
-        "phpcs": [
-            "php"
-        ],
-        "phpstan": [
-            "php"
-        ],
-        "proselint": [
-            "misc"
-        ],
-        "psalm": [
-            "php"
-        ],
-        "pylint": [
-            "python"
-        ],
-        "redpen": [
-            "misc"
-        ],
-        "reek": [
-            "ruby"
-        ],
-        "rubocop": [
-            "ruby"
-        ],
-        "shellcheck": [
-            "sh",
-            "bash"
-        ],
-        "slither": [
-            "solidity"
-        ],
-        "solhint": [
-            "solidity"
-        ],
-        "sorbet": [
-            "ruby"
-        ],
-        "staticcheck": [
-            "go"
-        ],
-        "statix": [
+    "formatters": {
+        "alejandra": [
             "nix"
         ],
-        "stylelint": [
-            "css",
-            "scss",
-            "sass",
-            "less"
-        ],
-        "textlint": [
-            "misc"
-        ],
-        "vale": [
-            "misc"
-        ],
-        "vint": [
-            "vim"
-        ],
-        "vulture": [
-            "python"
-        ],
-        "write_good": [
-            "misc"
-        ],
-        "xo": [
-            "javascript",
-            "typescript"
-        ],
-        "yamllint": [
-            "yaml"
-        ]
-    },
-    "formatters": {
         "astyle": [
             "c",
             "c++"
         ],
         "autopep8": [
             "python"
+        ],
+        "beautysh": [
+            "sh",
+            " bash",
+            " zsh",
+            " csh",
+            " ksh"
         ],
         "black": [
             "python"
@@ -234,6 +69,12 @@
         "forge_fmt": [
             "solidity"
         ],
+        "fourmolu": [
+            "haskell"
+        ],
+        "gersemi": [
+            "cmake"
+        ],
         "gofmt": [
             "go"
         ],
@@ -243,8 +84,14 @@
         "golines": [
             "go"
         ],
+        "isort": [
+            "python"
+        ],
         "joker": [
             "clojure"
+        ],
+        "jq": [
+            "json"
         ],
         "js_standard": [
             "javascript"
@@ -325,6 +172,196 @@
         ],
         "yapf": [
             "python"
+        ]
+    },
+    "linters": {
+        "actionlint": [
+            "yaml"
+        ],
+        "alex": [
+            "misc"
+        ],
+        "ameba": [
+            "crystal"
+        ],
+        "ansible_lint": [
+            "yaml"
+        ],
+        "bashate": [
+            "bash"
+        ],
+        "clang_tidy": [
+            "c",
+            "c++"
+        ],
+        "clazy": [
+            "c++"
+        ],
+        "clj_kondo": [
+            "clojure"
+        ],
+        "cppcheck": [
+            "c",
+            "c++"
+        ],
+        "cpplint": [
+            "c",
+            "c++"
+        ],
+        "dartanalyzer": [
+            "dart"
+        ],
+        "debride": [
+            "ruby"
+        ],
+        "djlint": [
+            "python",
+            "go",
+            "php",
+            "html"
+        ],
+        "dmd": [
+            "d"
+        ],
+        "eslint": [
+            "javascript",
+            "typescript"
+        ],
+        "eslint_d": [
+            "javascript",
+            "typescript"
+        ],
+        "fecs": [
+            "javascript"
+        ],
+        "fish": [
+            "fish"
+        ],
+        "flake8": [
+            "python"
+        ],
+        "flawfinder": [
+            "c"
+        ],
+        "gcc": [
+            "c",
+            "c++"
+        ],
+        "gitlint": [
+            "gitcommit"
+        ],
+        "go_revive": [
+            "go"
+        ],
+        "golangci_lint": [
+            "go"
+        ],
+        "golint": [
+            "go"
+        ],
+        "hadolint": [
+            "docker"
+        ],
+        "joker": [
+            "clojure"
+        ],
+        "jq": [
+            "json"
+        ],
+        "js_standard": [
+            "javascript"
+        ],
+        "languagetool": [
+            "misc"
+        ],
+        "luacheck": [
+            "lua"
+        ],
+        "mcs": [
+            "c#"
+        ],
+        "mypy": [
+            "python"
+        ],
+        "phan": [
+            "php"
+        ],
+        "php": [
+            "php"
+        ],
+        "phpcs": [
+            "php"
+        ],
+        "phpstan": [
+            "php"
+        ],
+        "proselint": [
+            "misc"
+        ],
+        "psalm": [
+            "php"
+        ],
+        "pylint": [
+            "python"
+        ],
+        "redpen": [
+            "misc"
+        ],
+        "reek": [
+            "ruby"
+        ],
+        "rubocop": [
+            "ruby"
+        ],
+        "shellcheck": [
+            "sh",
+            "bash"
+        ],
+        "slim_lint": [
+            "slim"
+        ],
+        "slither": [
+            "solidity"
+        ],
+        "solhint": [
+            "solidity"
+        ],
+        "sorbet": [
+            "ruby"
+        ],
+        "staticcheck": [
+            "go"
+        ],
+        "statix": [
+            "nix"
+        ],
+        "stylelint": [
+            "css",
+            "scss",
+            "sass",
+            "less"
+        ],
+        "textlint": [
+            "misc"
+        ],
+        "vale": [
+            "misc"
+        ],
+        "vint": [
+            "vim"
+        ],
+        "vulture": [
+            "python"
+        ],
+        "write_good": [
+            "misc"
+        ],
+        "xo": [
+            "javascript",
+            "typescript"
+        ],
+        "yamllint": [
+            "yaml"
         ]
     }
 }
