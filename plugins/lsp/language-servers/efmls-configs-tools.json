@@ -12,10 +12,10 @@
         ],
         "beautysh": [
             "sh",
-            " bash",
-            " zsh",
-            " csh",
-            " ksh"
+            "bash",
+            "zsh",
+            "csh",
+            "ksh"
         ],
         "black": [
             "python"
