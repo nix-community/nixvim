@@ -18,7 +18,9 @@ for kind in ["linters", "formatters"]:
         with open(tool_path + "/" + kind + "/" + file) as f:
             for line in f.readlines():
                 if line.startswith("-- languages:"):
-                    languages = line.split(":")[1].strip().split(",")
+                    languages = [
+                        l.strip() for l in line.split(":")[1].strip().split(",")
+                    ]
                     break
         tools[kind][tool_name] = languages
 
