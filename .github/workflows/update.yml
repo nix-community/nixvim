@@ -1,6 +1,6 @@
 name: update-flake-lock
 on:
-  workflow_dispatch:
+  workflow_dispatch: # allows manual triggering
   schedule:
     - cron: "0 12 * * SAT" # runs weekly on Saturday at noon
 
@@ -9,14 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        uses: DeterminateSystems/nix-installer-action@v1
       - name: Update flake.lock
         id: update
-        uses: DeterminateSystems/update-flake-lock@v16
+        uses: DeterminateSystems/update-flake-lock@v20
         with:
           pr-title: "Update flake.lock"
+          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
