@@ -906,7 +906,7 @@ in {
             update_root = updateRoot;
             ignore_list = ignoreList;
           };
-        system_open = helpers.ifNonNull systemOpen;
+        system_open = systemOpen;
         diagnostics = with diagnostics;
           ifNonNull' cfg.diagnostics {
             inherit enable;

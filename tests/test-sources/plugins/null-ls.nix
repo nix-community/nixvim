@@ -55,7 +55,8 @@
           vulture.enable = true;
           alex.enable = true;
           protolint.enable = true;
-          hadolint.enable = true;
+          # Dependency ilist is marked as broken
+          # hadolint.enable = true;
           luacheck.enable = true;
           mypy.enable = true;
           pylint.enable = true;

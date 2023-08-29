@@ -48,19 +48,39 @@ with lib; let
 
   getSubOptions = opts: path: removeUnwanted (opts.type.getSubOptions path);
 
+  isVisible = opts:
+    if isOption opts
+    then attrByPath ["visible"] true opts
+    else if opts.isOption
+    then attrByPath ["index" "options" "visible"] true opts
+    else let
+      filterFunc =
+        filterAttrs
+        (
+          _: v:
+            if isAttrs v
+            then isVisible v
+            else true
+        );
+
+      hasEmptyIndex = (filterFunc opts.index.options) == {};
+      hasEmptyComponents = (filterFunc opts.components) == {};
+    in
+      !hasEmptyIndex || !hasEmptyComponents;
+
   wrapModule = path: opts: isOpt: rec {
     index = {
       options =
         if isOpt
         then opts
-        else filterAttrs (_: component: component.isOption) opts;
+        else filterAttrs (_: component: component.isOption && (isVisible component)) opts;
       path = concatStringsSep "/" path;
     };
 
     components =
       if isOpt
       then {}
-      else filterAttrs (_: component: !component.isOption) opts;
+      else filterAttrs (_: component: !component.isOption && (isVisible component)) opts;
 
     hasComponents = components != {};
 

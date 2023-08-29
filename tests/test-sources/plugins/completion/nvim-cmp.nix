@@ -11,6 +11,34 @@
     };
   };
 
+  # Issue #536
+  mappings = {
+    plugins.nvim-cmp = {
+      enable = true;
+      mapping = {
+        "<CR>" = "cmp.mapping.confirm({ select = false })";
+        "<Tab>" = {
+          modes = ["i" "s"];
+          action = ''
+            function(fallback)
+              if cmp.visible() then
+                cmp.select_next_item()
+              elseif luasnip.expandable() then
+                luasnip.expand()
+              elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+              elseif check_backspace() then
+                fallback()
+              else
+                fallback()
+              end
+            end
+          '';
+        };
+      };
+    };
+  };
+
   # All the upstream default options of nvim-cmp
   defaults = {
     plugins.nvim-cmp = {
@@ -23,9 +51,7 @@
         asyncBudget = 1;
         maxViewEntries = 200;
       };
-
       preselect = "Item";
-
       snippet = {
         expand.__raw = ''
           function(_)
@@ -33,14 +59,12 @@
           end
         '';
       };
-
       completion = {
         keywordLength = 1;
         keywordPattern = ''\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)'';
         autocomplete = ["TextChanged"];
         completeopt = "menu,menuone,noselect";
       };
-
       confirmation = {
         getCommitCharacters = ''
           function(commit_characters)
@@ -48,7 +72,6 @@
           end
         '';
       };
-
       formatting = {
         expandableIndicator = true;
         fields = ["abbr" "kind" "menu"];
@@ -58,7 +81,6 @@
           end
         '';
       };
-
       matching = {
         disallowFuzzyMatching = false;
         disallowFullfuzzyMatching = false;
@@ -66,7 +88,6 @@
         disallowPartialMatching = false;
         disallowPrefixUnmatching = false;
       };
-
       sorting = {
         priorityWeight = 2;
         comparators = [
@@ -80,20 +101,19 @@
           "order"
         ];
       };
-
       sources = [];
-
       experimental = {
         ghost_text = false;
       };
-
       view = {
         entries = {
           name = "custom";
           selection_order = "top_down";
         };
+        docs = {
+          autoOpen = true;
+        };
       };
-
       window = {
         completion = {
           border = ["" "" "" "" "" "" "" ""];
@@ -110,6 +130,42 @@
           winhighlight = "FloatBorder:NormalFloat";
         };
       };
+    };
+  };
+
+  list-of-sources = {
+    plugins.nvim-cmp = {
+      enable = true;
+
+      sources = [
+        {name = "path";}
+        {name = "nvim_lsp";}
+        {name = "luasnip";}
+        {
+          name = "buffer";
+          option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+        }
+        {name = "neorg";}
+      ];
+    };
+  };
+
+  list-of-lists-of-sources = {
+    plugins.nvim-cmp = {
+      enable = true;
+
+      sources = [
+        [
+          {name = "path";}
+          {name = "nvim_lsp";}
+        ]
+        [
+          {
+            name = "buffer";
+            option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+          }
+        ]
+      ];
     };
   };
 }

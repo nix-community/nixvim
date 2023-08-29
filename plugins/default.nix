@@ -46,10 +46,10 @@
     ./languages/rust.nix
     ./languages/sniprun.nix
     ./languages/tagbar.nix
+    ./languages/treesitter/rainbow-delimiters.nix
     ./languages/treesitter/treesitter.nix
     ./languages/treesitter/treesitter-context.nix
     ./languages/treesitter/treesitter-playground.nix
-    ./languages/treesitter/treesitter-rainbow.nix
     ./languages/treesitter/treesitter-refactor.nix
     ./languages/treesitter/ts-autotag.nix
     ./languages/treesitter/ts-context-commentstring.nix

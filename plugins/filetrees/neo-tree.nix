@@ -1162,7 +1162,7 @@ in {
             scan_mode = scanMode;
             bind_to_cwd = bindToCwd;
             cwd_target = cwdTarget;
-            filteredItems = with filteredItems;
+            filtered_items = with filteredItems;
               ifNonNull' cfg.filesystem.filteredItems {
                 inherit visible;
                 force_visible_in_empty_folder = forceVisibleInEmptyFolder;

@@ -21,6 +21,8 @@ with lib; rec {
             (n: v:
               if head (stringToCharacters n) == "@"
               then toLuaObject v
+              else if n == "__emptyString"
+              then "[''] = " + (toLuaObject v)
               else "[${toLuaObject n}] = " + (toLuaObject v))
             (filterAttrs
               (
@@ -145,8 +147,6 @@ with lib; rec {
     then null
     else y;
 
-  ifNonNull = x: ifNonNull' x x;
-
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
@@ -167,6 +167,10 @@ with lib; rec {
 
     mkNum = default: mkNullable lib.types.number (toString default);
     mkInt = default: mkNullable lib.types.int (toString default);
+    # Positive: >0
+    mkPositiveInt = default: mkNullable lib.types.ints.positive (toString default);
+    # Unsigned: >=0
+    mkUnsignedInt = default: mkNullable lib.types.ints.unsigned (toString default);
     mkBool = default:
       mkNullable lib.types.bool (
         if default
@@ -314,14 +318,12 @@ with lib; rec {
     end
   '';
 
-  rawType = types.submodule {
-    options = {
-      __raw = mkOption {
-        type = types.str;
-        description = "raw lua code";
-        default = "";
-      };
-    };
+  rawType = mkOptionType {
+    name = "rawType";
+    description = "raw lua code";
+    descriptionClass = "noun";
+    merge = mergeEqualOption;
+    check = isRawType;
   };
 
   isRawType = v: lib.isAttrs v && lib.hasAttr "__raw" v && lib.isString v.__raw;

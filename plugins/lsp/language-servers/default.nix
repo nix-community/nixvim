@@ -197,6 +197,11 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
     }
     {
+      name = "intelephense";
+      description = "Enable intelephense, for PHP";
+      package = pkgs.nodePackages.intelephense;
+    }
+    {
       name = "java-language-server";
       description = "Enable java language server";
       serverName = "java_language_server";
@@ -462,7 +467,7 @@ with lib; let
       description = "Enable rust-analyzer, for Rust.";
       serverName = "rust_analyzer";
 
-      settingsOptions = import ./rust-analyzer-config.nix lib;
+      settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
@@ -479,6 +484,11 @@ with lib; let
       name = "tailwindcss";
       description = "Enable tailwindcss language server, for tailwindcss";
       package = pkgs.nodePackages."@tailwindcss/language-server";
+    }
+    {
+      name = "taplo";
+      description = "Enable taplo, for TOML";
+      package = pkgs.taplo;
     }
     {
       name = "terraformls";
@@ -527,5 +537,6 @@ in {
       ./ccls.nix
       ./pylsp.nix
       ./svelte.nix
+      ./efmls-configs.nix
     ];
 }
