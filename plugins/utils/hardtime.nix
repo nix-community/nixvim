@@ -143,19 +143,21 @@ in {
   };
 
   config = let
-    setupOptions = {
-      inherit (cfg) hint notification enabled hints;
+    setupOptions =
+      {
+        inherit (cfg) hint notification enabled hints;
 
-      max_time = cfg.maxTime;
-      max_count = cfg.maxCount;
-      disable_mouse = cfg.disableMouse;
-      allow_different_key = cfg.allowDifferentKey;
-      resetting_keys = cfg.resettingKeys;
-      restricted_keys = cfg.restrictedKeys;
-      restriction_mode = cfg.restrictionMode;
-      disabled_keys = cfg.disabledKeys;
-      disabled_filetypes = cfg.disabledFiletypes;
-    };
+        max_time = cfg.maxTime;
+        max_count = cfg.maxCount;
+        disable_mouse = cfg.disableMouse;
+        allow_different_key = cfg.allowDifferentKey;
+        resetting_keys = cfg.resettingKeys;
+        restricted_keys = cfg.restrictedKeys;
+        restriction_mode = cfg.restrictionMode;
+        disabled_keys = cfg.disabledKeys;
+        disabled_filetypes = cfg.disabledFiletypes;
+      }
+      // cfg.extraOptions;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
