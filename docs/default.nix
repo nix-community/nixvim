@@ -74,7 +74,7 @@ with lib; let
         if isOpt
         then opts
         else filterAttrs (_: component: component.isOption && (isVisible component)) opts;
-      path = concatStringsSep "/" path;
+      path = removeWhitespace (concatStringsSep "/" path);
     };
 
     components =
@@ -147,7 +147,14 @@ with lib; let
 
             components = optionalAttrs (!isOpt) {
               ${name} = recursiveUpdate opts {
-                index.path = removeWhitespace (concatStringsSep "/" ((optional (group != "none") group) ++ [opts.index.path]));
+                index.path =
+                  removeWhitespace
+                  (
+                    concatStringsSep "/"
+                    (
+                      (optional (group != "none") group) ++ [opts.index.path]
+                    )
+                  );
                 hasComponents = true;
               };
             };
