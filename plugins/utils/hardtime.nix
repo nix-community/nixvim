@@ -13,13 +13,14 @@ in {
       helpers.extraOptionsOptions
       // {
         enable = mkEnableOption "Enable hardtime.";
+
         package = helpers.mkPackageOption "hardtime" pkgs.vimPlugins.hardtime-nvim;
 
-        maxTime = helpers.defaultNullOpts.mkInt 1000 ''
+        maxTime = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
           Maximum time (in milliseconds) to consider key presses as repeated.
         '';
 
-        maxCount = helpers.defaultNullOpts.mkInt 2 ''
+        maxCount = helpers.defaultNullOpts.mkUnsignedInt 2 ''
           Maximum count of repeated key presses allowed within the `max_time` period.
         '';
 
@@ -125,14 +126,12 @@ in {
             options = {
               message = lib.mkOption {
                 description = "Hint message to be displayed.";
-                type = with types; either str helpers.rawType;
-                default = {};
+                type = helpers.rawType;
               };
 
               length = lib.mkOption {
                 description = "The length of actual key strokes that matches this pattern.";
-                type = types.int;
-                default = {};
+                type = types.ints.unsigned;
               };
             };
           })) ''
@@ -143,21 +142,21 @@ in {
   };
 
   config = let
-    setupOptions =
+    setupOptions = with cfg;
       {
-        inherit (cfg) hint notification enabled hints;
+        inherit hint notification enabled hints;
 
-        max_time = cfg.maxTime;
-        max_count = cfg.maxCount;
-        disable_mouse = cfg.disableMouse;
-        allow_different_key = cfg.allowDifferentKey;
-        resetting_keys = cfg.resettingKeys;
-        restricted_keys = cfg.restrictedKeys;
-        restriction_mode = cfg.restrictionMode;
-        disabled_keys = cfg.disabledKeys;
-        disabled_filetypes = cfg.disabledFiletypes;
+        max_time = maxTime;
+        max_count = maxCount;
+        disable_mouse = disableMouse;
+        allow_different_key = allowDifferentKey;
+        resetting_keys = resettingKeys;
+        restricted_keys = restrictedKeys;
+        restriction_mode = restrictionMode;
+        disabled_keys = disabledKeys;
+        disabled_filetypes = disabledFiletypes;
       }
-      // cfg.extraOptions;
+      // extraOptions;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
