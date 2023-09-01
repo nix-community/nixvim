@@ -95,6 +95,7 @@
     ./utils/endwise.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
+    ./utils/hardtime.nix
     ./utils/harpoon.nix
     ./utils/illuminate.nix
     ./utils/indent-blankline.nix
