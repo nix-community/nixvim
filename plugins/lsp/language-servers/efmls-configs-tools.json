@@ -84,6 +84,9 @@
         "golines": [
             "go"
         ],
+        "google_java_format": [
+            "java"
+        ],
         "isort": [
             "python"
         ],
@@ -102,6 +105,8 @@
         "nixfmt": [
             "nix"
         ],
+        "perlimports": [],
+        "perltidy": [],
         "php_cs_fixer": [
             "php"
         ],
@@ -312,6 +317,9 @@
         ],
         "rubocop": [
             "ruby"
+        ],
+        "selene": [
+            "lua"
         ],
         "shellcheck": [
             "sh",
