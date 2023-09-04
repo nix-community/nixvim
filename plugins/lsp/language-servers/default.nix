@@ -148,6 +148,12 @@ with lib; let
       package = pkgs.deno;
     }
     {
+      name = "digestif";
+      description = "Enable digestif, for LaTeX";
+      # luaPackages.digestif is currently broken, using lua54Packages instead
+      package = pkgs.lua54Packages.digestif;
+    }
+    {
       name = "efm";
       description = "Enable efm-langserver, for misc tools";
       package = pkgs.efm-langserver;
