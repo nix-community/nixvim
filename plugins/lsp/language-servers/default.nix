@@ -148,6 +148,11 @@ with lib; let
       package = pkgs.deno;
     }
     {
+      name = "digestif";
+      description = "Enable digestif, for LaTeX";
+      package = pkgs.lua54Packages.digestif;
+    }
+    {
       name = "efm";
       description = "Enable efm-langserver, for misc tools";
       package = pkgs.efm-langserver;
