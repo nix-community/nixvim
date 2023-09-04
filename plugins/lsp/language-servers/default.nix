@@ -150,6 +150,7 @@ with lib; let
     {
       name = "digestif";
       description = "Enable digestif, for LaTeX";
+      # luaPackages.digestif is currently broken, using lua54Packages instead
       package = pkgs.lua54Packages.digestif;
     }
     {
