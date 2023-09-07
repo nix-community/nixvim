@@ -106,6 +106,7 @@
     ./utils/mark-radar.nix
     ./utils/mini.nix
     ./utils/mkdnflow.nix
+    ./utils/multicursors.nix
     ./utils/neorg.nix
     ./utils/neogen.nix
     ./utils/notify.nix
