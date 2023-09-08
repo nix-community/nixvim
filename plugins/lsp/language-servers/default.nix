@@ -351,47 +351,6 @@ with lib; let
       description = "Enable nixd, for Nix";
       package = pkgs.nixd;
       settings = cfg: {nixd = cfg;};
-      settingsOptions = {
-        # The evaluation section, provide auto completion for dynamic bindings.
-        eval = {
-          target = {
-            args = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
-              Accept args as "nix eval".
-            '';
-
-            installable = helpers.defaultNullOpts.mkStr "" ''
-              "nix eval"
-            '';
-          };
-
-          depth = helpers.defaultNullOpts.mkInt 0 "Extra depth for evaluation";
-
-          workers = helpers.defaultNullOpts.mkInt 3 "The number of workers for evaluation task.";
-        };
-
-        formatting = {
-          command = helpers.defaultNullOpts.mkStr "nixpkgs-fmt" ''
-            Which command you would like to do formatting
-          '';
-        };
-
-        options = {
-          enable = helpers.defaultNullOpts.mkBool true ''
-            Enable option completion task.
-            If you are writting a package, disable this
-          '';
-
-          target = {
-            args = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
-              Accept args as "nix eval".
-            '';
-
-            installable = helpers.defaultNullOpts.mkStr "" ''
-              "nix eval"
-            '';
-          };
-        };
-      };
     }
     {
       name = "omnisharp";
@@ -541,8 +500,9 @@ in {
     lib.lists.map lspHelpers.mkLsp servers
     ++ [
       ./ccls.nix
+      ./efmls-configs.nix
+      ./nixd.nix
       ./pylsp.nix
       ./svelte.nix
-      ./efmls-configs.nix
     ];
 }
