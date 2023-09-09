@@ -20,3 +20,4 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - run: nix flake check
       - run: nix flake check ./templates/_wrapper/simple
+      - run: nix build .#docs --show-trace
