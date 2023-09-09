@@ -74,6 +74,9 @@ with lib; let
     separator_visible = "separatorVisible";
     separator_selected = "separatorSelected";
 
+    tab_separator = "tabSeparator";
+    tab_separator_selected = "tabSeparatorSelected";
+
     indicator_selected = "indicatorSelected";
 
     pick = "pick";
