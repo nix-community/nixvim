@@ -5,6 +5,7 @@
 
     ./colorschemes/ayu.nix
     ./colorschemes/base16.nix
+    ./colorschemes/dracula.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
     ./colorschemes/nord.nix
