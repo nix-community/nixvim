@@ -32,9 +32,29 @@ in {
       description = "For stages that change opacity this is treated as the highlight between the window";
       default = null;
     };
+    maxWidth = mkOption {
+      type = types.nullOr types.int;
+      description = "Max number of columns for messages";
+      default = null;
+    };
+    maxHeight = mkOption {
+      type = types.nullOr types.int;
+      description = "Max number of rows for messages";
+      default = null;
+    };
     minimumWidth = mkOption {
       type = types.nullOr types.int;
       description = "Minimum width for notification windows";
+      default = null;
+    };
+    topDown = mkOption {
+      type = types.nullOr types.bool;
+      description = "Whether or not to position the notifications at the top or not";
+      default = null;
+    };
+    level = mkOption {
+      type = types.nullOr types.int;
+      description = "Log level. See vim.log.levels";
       default = null;
     };
     icons = mkOption {
@@ -54,9 +74,12 @@ in {
 
   config = let
     setupOptions = with cfg; {
-      inherit stages timeout;
+      inherit stages timeout level;
       background_colour = backgroundColour;
       minimum_width = minimumWidth;
+      top_down = topDown;
+      max_height = maxHeight;
+      max_width = maxWidth;
       icons = with icons; {
         ERROR = error;
         WARN = warn;
