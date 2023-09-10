@@ -23,65 +23,62 @@ with lib; let
   highlightOptions = {
     fill = "fill";
     background = "background";
-
     tab = "tab";
     tab_selected = "tabSelected";
+    tab_separator = "tabSeparator";
+    tab_separator_selected = "tabSeparatorSelected";
     tab_close = "tabClose";
     close_button = "closeButton";
     close_button_visible = "closeButtonVisible";
     close_button_selected = "closeButtonSelected";
-
     buffer_visible = "bufferVisible";
     buffer_selected = "bufferSelected";
-
+    numbers = "numbers";
+    numbers_visible = "numbersVisible";
+    numbers_selected = "numbersSelected";
     diagnostic = "diagnostic";
     diagnostic_visible = "diagnosticVisible";
     diagnostic_selected = "diagnosticSelected";
-
+    hint = "hint";
+    hint_visible = "hintVisible";
+    hint_selected = "hintSelected";
+    hint_diagnostic = "hintDiagnostic";
+    hint_diagnostic_visible = "hintDiagnosticVisible";
+    hint_diagnostic_selected = "hintDiagnosticSelected";
     info = "info";
     info_visible = "infoVisible";
     info_selected = "infoSelected";
-
     info_diagnostic = "infoDiagnostic";
     info_diagnostic_visible = "infoDiagnosticVisible";
     info_diagnostic_selected = "infoDiagnosticSelected";
-
     warning = "warning";
     warning_visible = "warningVisible";
     warning_selected = "warningSelected";
-
     warning_diagnostic = "warningDiagnostic";
     warning_diagnostic_visible = "warningDiagnosticVisible";
     warning_diagnostic_selected = "warningDiagnosticSelected";
-
     error = "error";
     error_visible = "errorVisible";
     error_selected = "errorSelected";
-
     error_diagnostic = "errorDiagnostic";
     error_diagnostic_visible = "errorDiagnosticVisible";
     error_diagnostic_selected = "errorDiagnosticSelected";
-
     modified = "modified";
     modified_visible = "modifiedVisible";
     modified_selected = "modifiedSelected";
-
-    duplicate = "duplicate";
-    duplicate_visible = "duplicateVisible";
     duplicate_selected = "duplicateSelected";
-
-    separator = "separator";
-    separator_visible = "separatorVisible";
+    duplicate_visible = "duplicateVisible";
+    duplicate = "duplicate";
     separator_selected = "separatorSelected";
-
-    tab_separator = "tabSeparator";
-    tab_separator_selected = "tabSeparatorSelected";
-
+    separator_visible = "separatorVisible";
+    separator = "separator";
+    indicator_visible = "indicatorVisible";
     indicator_selected = "indicatorSelected";
-
-    pick = "pick";
-    pick_visible = "pickVisible";
     pick_selected = "pickSelected";
+    pick_visible = "pickVisible";
+    pick = "pick";
+    offset_separator = "offsetSeparator";
+    trunc_marker = "truncMarker";
   };
 in {
   options = {
@@ -321,7 +318,8 @@ in {
         // cfg.extraOptions;
 
       highlights =
-        mapAttrs (
+        mapAttrs
+        (
           pluginOptionName: nixvimOptionName: {
             inherit
               (cfg.highlights.${nixvimOptionName})
