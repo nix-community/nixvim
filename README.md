@@ -321,18 +321,23 @@ If you are using `makeNixvimWithModule`, then options is treated as options for 
 
 ## Key mappings
 It is fully possible to define key mappings from within NixVim. This is done
-using the `maps` attribute:
+using the `keymaps` attribute:
 
 ```nix
 {
   programs.nixvim = {
-    maps = {
-      normalVisualOp.";" = ":";
-      normal."<leader>m" = {
-        silent = true;
-        action = "<cmd>make<CR>";
+    keymaps = [
+      {
+        key = ";";
+        action = ":";
+      }
+      {
+        mode = "n";
+        key = "<leader>m";
+        options.silent = true;
+        action = "<cmd>!make<CR>";
       };
-    };
+    ];
   };
 }
 ```
@@ -344,34 +349,35 @@ noremap ; :
 nnoremap <leader>m <silent> <cmd>make<CR>
 ```
 
-This table describes all modes for the `maps` option:
+This table describes all modes for the `keymaps` option.
+You can provide several mode to a single mapping by using a list of strings.
 
-| NixVim         | NeoVim                                           |
-|----------------|--------------------------------------------------|
-| normal         | Normal mode                                      |
-| insert         | Insert mode                                      |
-| visual         | Visual and Select mode                           |
-| select         | Select mode                                      |
-| terminal       | Terminal mode                                    |
-| normalVisualOp | Normal, visual, select and operator-pending mode |
-| visualOnly     | Visual mode only, without select                 |
-| operator       | Operator-pending mode                            |
-| insertCommand  | Insert and command-line mode                     |
-| lang           | Insert, command-line and lang-arg mode           |
-| command        | Command-line mode                                |
+| Short | Description                                      |
+|-------|--------------------------------------------------|
+| `"n"` | Normal mode                                      |
+| `"i"` | Insert mode                                      |
+| `"v"` | Visual and Select mode                           |
+| `"s"` | Select mode                                      |
+| `"t"` | Terminal mode                                    |
+| `"" ` | Normal, visual, select and operator-pending mode |
+| `"x"` | Visual mode only, without select                 |
+| `"o"` | Operator-pending mode                            |
+| `"!"` | Insert and command-line mode                     |
+| `"l"` | Insert, command-line and lang-arg mode           |
+| `"c"` | Command-line mode                                |
 
-The map options can be set to either a string, containing just the action,
-or to a set describing additional options:
+Each keymap can specify the following settings in the `options` attrs.
 
-| NixVim  | Default | VimScript                                |
-|---------|---------|------------------------------------------|
-| silent  | false   | `<silent>`                               |
-| nowait  | false   | `<silent>`                               |
-| script  | false   | `<script>`                               |
-| expr    | false   | `<expr>`                                 |
-| unique  | false   | `<unique>`                               |
-| noremap | true    | Use the 'noremap' variant of the mapping |
-| action  | N/A     | Action to execute                        |
+| NixVim  | Default | VimScript                                         |
+|---------|---------|---------------------------------------------------|
+| silent  | false   | `<silent>`                                        |
+| nowait  | false   | `<silent>`                                        |
+| script  | false   | `<script>`                                        |
+| expr    | false   | `<expr>`                                          |
+| unique  | false   | `<unique>`                                        |
+| noremap | true    | Use the 'noremap' variant of the mapping          |
+| remap   | false   | Make the mapping recursive (inverses `noremap`)   |
+| desc    | ""      | A description of this keymap                      |
 
 ## Globals
 Sometimes you might want to define a global variable, for example to set the
