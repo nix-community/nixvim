@@ -34,7 +34,7 @@ in {
         xdg.configFile = files;
       })
       {
-        inherit (cfg) warnings assertions;
+        inherit (cfg) warnings assertions defaultEditor;
       }
     ]);
 }

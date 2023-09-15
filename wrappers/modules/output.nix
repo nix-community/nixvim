@@ -94,7 +94,7 @@ in {
     config.extraPlugins;
 
     neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit (config) viAlias vimAlias defaultEditor;
+        inherit (config) viAlias vimAlias;
         # inherit customRC;
         plugins = normalizedPlugins;
       }
