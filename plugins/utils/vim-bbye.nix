@@ -33,20 +33,29 @@ in {
   config = mkIf cfg.enable {
     extraPlugins = [cfg.package];
 
-    maps.normal = with cfg.keymaps;
-      (optionalAttrs (bdelete != null)
-        {
-          ${bdelete} = {
+    keymaps = with cfg.keymaps;
+      helpers.mkKeymaps
+      {
+        mode = "n";
+        options.silent = cfg.keymapsSilent;
+      }
+      (
+        (
+          optional
+          (bdelete != null)
+          {
+            key = bdelete;
             action = ":Bdelete<CR>";
-            silent = cfg.keymapsSilent;
-          };
-        })
-      // (optionalAttrs (bwipeout != null)
-        {
-          ${bwipeout} = {
+          }
+        )
+        ++ (
+          optional
+          (bwipeout != null)
+          {
+            key = bwipeout;
             action = ":Bwipeout<CR>";
-            silent = cfg.keymapsSilent;
-          };
-        });
+          }
+        )
+      );
   };
 }

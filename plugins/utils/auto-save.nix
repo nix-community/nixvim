@@ -142,16 +142,14 @@ in {
         require('auto-save').setup(${helpers.toLuaObject options})
       '';
 
-      maps.normal = with cfg.keymaps; let
-        inherit (cfg.keymaps) silent;
-      in
-        mkMerge [
-          (mkIf (toggle != null) {
-            ${toggle} = {
-              action = ":ASToggle<CR>";
-              inherit silent;
-            };
-          })
-        ];
+      keymaps = with cfg.keymaps;
+        optional
+        (toggle != null)
+        {
+          mode = "n";
+          key = toggle;
+          action = ":ASToggle<CR>";
+          options.silent = cfg.keymaps.silent;
+        };
     };
 }

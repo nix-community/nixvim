@@ -19,6 +19,7 @@ in
 
       keymaps = {
         enable = mkEnableOption "keymaps for copying using OSC52";
+
         silent = mkOption {
           type = types.bool;
           description = "Wether nvim-osc52 keymaps should be silent";
@@ -55,28 +56,36 @@ in
       mkIf cfg.enable {
         extraPlugins = [cfg.package];
 
-        maps = mkIf cfg.keymaps.enable {
-          normal = {
-            "${cfg.keymaps.copy}" = {
+        keymaps = with cfg.keymaps;
+          mkIf enable
+          [
+            {
+              mode = "n";
+              key = copy;
               action = "require('osc52').copy_operator";
-              expr = true;
               lua = true;
-              inherit (cfg.keymaps) silent;
-            };
-            "${cfg.keymaps.copyLine}" = {
-              action = "${cfg.keymaps.copy}_";
-              remap = true;
-              inherit (cfg.keymaps) silent;
-            };
-          };
-          visual = {
-            "${cfg.keymaps.copyVisual}" = {
+              options = {
+                expr = true;
+                inherit silent;
+              };
+            }
+            {
+              mode = "n";
+              key = copyLine;
+              action = "${copy}_";
+              options = {
+                remap = true;
+                inherit silent;
+              };
+            }
+            {
+              mode = "v";
+              key = copyVisual;
               action = "require('osc52').copy_visual";
               lua = true;
-              inherit (cfg.keymaps) silent;
-            };
-          };
-        };
+              options.silent = silent;
+            }
+          ];
 
         extraConfigLua = ''
           require('osc52').setup(${helpers.toLuaObject setupOptions})

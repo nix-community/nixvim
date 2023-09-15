@@ -264,27 +264,24 @@ in {
         require("todo-comments").setup${helpers.toLuaObject setupOptions}
       '';
 
-      maps.normal = let
-        silent = cfg.keymapsSilent;
-        inherit (cfg) keymaps;
-      in
-        mkMerge (
+      keymaps =
+        flatten
+        (
           mapAttrsToList
           (
             optionName: funcName: let
-              keymap = keymaps.${optionName};
-
-              inherit (keymap) key;
+              keymap = cfg.keymaps.${optionName};
 
               cwd = optionalString (keymap.cwd != null) " cwd=${keymap.cwd}";
               keywords = optionalString (keymap.keywords != null) " keywords=${keymap.keywords}";
-
-              action = ":${funcName}${cwd}${keywords}<CR>";
             in
-              mkIf (keymap != null) {
-                ${key} = {
-                  inherit silent action;
-                };
+              optional
+              (keymap != null)
+              {
+                mode = "n";
+                inherit (keymap) key;
+                action = ":${funcName}${cwd}${keywords}<CR>";
+                options.silent = cfg.keymapsSilent;
               }
           )
           commands

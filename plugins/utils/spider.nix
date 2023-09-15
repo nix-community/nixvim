@@ -52,25 +52,25 @@ in {
       // cfg.extraOptions;
 
     mappings =
-      mapAttrs'
-      (motion: key: {
-        name = key;
-        value = {
+      mapAttrsToList
+      (
+        motion: key: {
+          mode = ["n" "o" "x"];
+          inherit key;
           action = "function() require('spider').motion('${motion}') end";
           lua = true;
-          inherit (cfg.keymaps) silent;
-          desc = "Spider-${motion}";
-        };
-      })
+          options = {
+            inherit (cfg.keymaps) silent;
+            desc = "Spider-${motion}";
+          };
+        }
+      )
       cfg.keymaps.motions;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      maps =
-        genAttrs
-        ["normal" "operator" "visualOnly"]
-        (mode: mappings);
+      keymaps = mappings;
 
       extraConfigLua = ''
         require("${pluginName}").setup(${helpers.toLuaObject setupOptions})

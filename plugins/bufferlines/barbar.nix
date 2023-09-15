@@ -57,7 +57,7 @@ with lib; let
     }
     // bufferOptions;
 
-  keymaps = {
+  keymapsActions = {
     previous = "Previous";
     next = "Next";
     movePrevious = "MovePrevious";
@@ -227,7 +227,7 @@ in {
             optionName: funcName:
               helpers.mkNullOrOption types.str "Keymap for function Buffer${funcName}"
           )
-          keymaps
+          keymapsActions
         );
     };
 
@@ -326,20 +326,25 @@ in {
       }
       // cfg.extraOptions;
 
-    userKeymapsList =
-      mapAttrsToList
+    keymaps =
+      flatten
       (
-        optionName: funcName: let
-          key = cfg.keymaps.${optionName};
-        in
-          mkIf (key != null) {
-            ${key} = {
+        mapAttrsToList
+        (
+          optionName: funcName: let
+            key = cfg.keymaps.${optionName};
+          in
+            optional
+            (key != null)
+            {
+              mode = "n";
+              inherit key;
               action = "<Cmd>Buffer${funcName}<CR>";
-              inherit (cfg.keymaps) silent;
-            };
-          }
-      )
-      keymaps;
+              options.silent = cfg.keymaps.silent;
+            }
+        )
+        keymapsActions
+      );
   in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
@@ -347,7 +352,7 @@ in {
         nvim-web-devicons
       ];
 
-      maps.normal = mkMerge userKeymapsList;
+      inherit keymaps;
 
       extraConfigLua = ''
         require('barbar').setup(${helpers.toLuaObject setupOptions})

@@ -187,22 +187,20 @@ in {
         require('harpoon').setup(${helpers.toLuaObject options})
       '';
 
-      maps.normal = let
-        silent = cfg.keymapsSilent;
+      keymaps = let
         km = cfg.keymaps;
 
-        simpleMappings = mkMerge (
+        simpleMappings = flatten (
           mapAttrsToList
           (
             optionName: luaFunc: let
               key = km.${optionName};
             in
-              mkIf (key != null) {
-                ${key} = {
-                  action = luaFunc;
-                  lua = true;
-                  inherit silent;
-                };
+              optional
+              (key != null)
+              {
+                inherit key;
+                action = luaFunc;
               }
           )
           {
@@ -217,38 +215,44 @@ in {
         mkNavMappings = name: genLuaFunc: let
           mappingsAttrs = km.${name};
         in
-          mkIf
-          (mappingsAttrs != null)
+          flatten
           (
-            mapAttrs'
-            (id: key: {
-              name = key;
-              value = {
+            optionals
+            (mappingsAttrs != null)
+            (
+              mapAttrsToList
+              (id: key: {
+                inherit key;
                 action = genLuaFunc id;
-                lua = true;
-                inherit silent;
-              };
-            })
-            mappingsAttrs
+              })
+              mappingsAttrs
+            )
           );
-      in
-        mkMerge [
+
+        allMappings =
           simpleMappings
-          (
+          ++ (
             mkNavMappings
             "navFile"
             (id: "function() require('harpoon.ui').nav_file(${id}) end")
           )
-          (
+          ++ (
             mkNavMappings
             "gotoTerminal"
             (id: "function() require('harpoon.term').gotoTerminal(${id}) end")
           )
-          (
+          ++ (
             mkNavMappings
             "tmuxGotoTerminal"
             (id: "function() require('harpoon.tmux').gotoTerminal(${id}) end")
-          )
-        ];
+          );
+      in
+        helpers.mkKeymaps
+        {
+          mode = "n";
+          lua = true;
+          options.silent = cfg.keymapsSilent;
+        }
+        allMappings;
     };
 }

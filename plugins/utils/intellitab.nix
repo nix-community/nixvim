@@ -19,7 +19,14 @@ in {
   config = mkIf cfg.enable {
     extraPlugins = [cfg.package];
 
-    maps.insert."<Tab>" = "<CMD>lua require([[intellitab]]).indent()<CR>";
+    keymaps = [
+      {
+        mode = "i";
+        key = "<Tab>";
+        action = "require('intellitab').indent";
+        lua = true;
+      }
+    ];
     plugins.treesitter = {
       indent = true;
     };
