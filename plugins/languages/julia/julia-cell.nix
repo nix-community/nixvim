@@ -93,19 +93,19 @@ in
           // cfg.extraConfig
         );
 
-      maps.normal = mkMerge (
+      keymaps = flatten (
         mapAttrsToList
         (
           name: value: let
             key = cfg.keymaps.${name};
           in
-            if key == null
-            then {}
-            else {
-              ${key} = {
-                action = ":JuliaCell${value.cmd}<CR>";
-                inherit (cfg.keymaps) silent;
-              };
+            optional
+            (key != null)
+            {
+              mode = "n";
+              inherit key;
+              action = ":JuliaCell${value.cmd}<CR>";
+              options.silent = cfg.keymaps.silent;
             }
         )
         mappings

@@ -87,6 +87,6 @@
       };
     };
     # Simple mapping with only Description
-    maps.normal."ff".desc = "Test";
+    maps.byMode.normal."ff".options.desc = "Test";
   };
 }

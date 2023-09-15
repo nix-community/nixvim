@@ -83,24 +83,31 @@ in {
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    maps.normal =
-      mapAttrs
-      (key: action: let
-        actionStr =
-          if isString action
-          then action
-          else action.action;
-        actionProps =
-          if isString action
-          then {}
-          else filterAttrs (n: v: n != "action") action;
-      in
-        {
-          silent = cfg.keymapsSilent;
+    keymaps =
+      mapAttrsToList
+      (
+        key: action: let
+          actionStr =
+            if isString action
+            then action
+            else action.action;
+          actionProps =
+            if isString action
+            then {}
+            else filterAttrs (n: v: n != "action") action;
+        in {
+          mode = "n";
+          inherit key;
           action = "require('telescope.builtin').${actionStr}";
           lua = true;
+
+          options =
+            {
+              silent = cfg.keymapsSilent;
+            }
+            // actionProps;
         }
-        // actionProps)
+      )
       cfg.keymaps;
 
     extraConfigLua = let

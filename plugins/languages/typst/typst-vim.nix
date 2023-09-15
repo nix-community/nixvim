@@ -34,9 +34,20 @@ in {
     # Add the typst compiler to nixvim packages
     extraPackages = with pkgs; [typst];
 
-    maps.normal = with cfg.keymaps;
-      helpers.mkModeMaps {inherit silent;} {
-        ${watch} = ":TypstWatch<CR>";
-      };
+    keymaps = with cfg.keymaps;
+      helpers.mkKeymaps
+      {
+        mode = "n";
+        options.silent = silent;
+      }
+      (
+        optional
+        (watch != null)
+        {
+          # mode = "n";
+          key = watch;
+          action = ":TypstWatch<CR>";
+        }
+      );
   };
 }

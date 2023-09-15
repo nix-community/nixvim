@@ -27,11 +27,13 @@ in {
   config = mkIf cfg.enable {
     extraPlugins = [cfg.package];
 
-    maps.normal = mkIf (cfg.keymap.key != null) {
-      ${cfg.keymap.key} = {
+    keymaps = with cfg.keymap;
+      optional (key != null)
+      {
+        mode = "n";
+        inherit key;
         action = ":Quickmath<CR>";
-        inherit (cfg.keymap) silent;
+        options.silent = cfg.keymap.silent;
       };
-    };
   };
 }

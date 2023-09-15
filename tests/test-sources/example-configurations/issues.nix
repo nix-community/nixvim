@@ -140,6 +140,12 @@
   };
 
   "71" = {
-    maps.normal."<leader>hb" = "<cmd>lua require('gitsigns').blame_line{full=true}<cr>";
+    keymaps = [
+      {
+        mode = "n";
+        key = "<leader>hb";
+        action = "<cmd>lua require('gitsigns').blame_line{full=true}<cr>";
+      }
+    ];
   };
 }

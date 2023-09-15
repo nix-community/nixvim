@@ -181,21 +181,23 @@ in {
         require("neogen").setup(${helpers.toLuaObject setupOptions})
       '';
 
-      maps.normal = mkMerge (
-        mapAttrsToList
+      keymaps =
+        flatten
         (
-          optionName: properties: let
-            key = cfg.keymaps.${optionName};
-          in
-            mkIf (key != null)
-            {
-              ${key} = {
+          mapAttrsToList
+          (
+            optionName: properties: let
+              key = cfg.keymaps.${optionName};
+            in
+              optional (key != null)
+              {
+                mode = "n";
+                inherit key;
                 action = ":Neogen ${properties.command}<CR>";
-                silent = cfg.keymapsSilent;
-              };
-            }
-        )
-        keymapDef
-      );
+                options.silent = cfg.keymapsSilent;
+              }
+          )
+          keymapDef
+        );
     };
 }

@@ -110,30 +110,35 @@ in {
     mkIf cfg.enable {
       extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
 
-      maps.normal = let
+      keymaps = let
         mkMaps = prefix:
-          mapAttrs
-          (key: action: let
-            actionStr =
-              if isString action
-              then action
-              else action.action;
-            actionProps =
-              if isString action
-              then {}
-              else filterAttrs (n: v: n != "action") action;
-          in
-            {
-              inherit (cfg.keymaps) silent;
+          mapAttrsToList
+          (
+            key: action: let
+              actionStr =
+                if isString action
+                then action
+                else action.action;
+              actionProps =
+                if isString action
+                then {}
+                else filterAttrs (n: v: n != "action") action;
+            in {
+              mode = "n";
+              inherit key;
               action = prefix + actionStr;
               lua = true;
+
+              options =
+                {
+                  inherit (cfg.keymaps) silent;
+                }
+                // actionProps;
             }
-            // actionProps);
+          );
       in
-        mkMerge [
-          (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
-          (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
-        ];
+        (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
+        ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf);
 
       # Enable all LSP servers
       extraConfigLua = ''

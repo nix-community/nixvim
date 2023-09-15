@@ -38,9 +38,13 @@
       {
         key = ",";
         action = "<cmd>echo \"test\"<cr>";
+      }
+      {
         mode = ["n" "s"];
-      };
-    };
+        key = "<C-p>";
+        action = "<cmd>echo \"test\"<cr>";
+      }
+    ];
   };
 
   mkMaps = {

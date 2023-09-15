@@ -299,21 +299,24 @@ in {
         require("coverage").setup(${helpers.toLuaObject setupOptions})
       '';
 
-      maps.normal = mkMerge (
-        mapAttrsToList
+      keymaps =
+        flatten
         (
-          optionName: properties: let
-            key = cfg.keymaps.${optionName};
-          in
-            mkIf (key != null)
-            {
-              ${key} = {
+          mapAttrsToList
+          (
+            optionName: properties: let
+              key = cfg.keymaps.${optionName};
+            in
+              optional
+              (key != null)
+              {
+                mode = "n";
+                inherit key;
                 action = ":Coverage${properties.command}<CR>";
-                silent = cfg.keymapsSilent;
-              };
-            }
-        )
-        keymapsDef
-      );
+                options.silent = cfg.keymapsSilent;
+              }
+          )
+          keymapsDef
+        );
     };
 }
