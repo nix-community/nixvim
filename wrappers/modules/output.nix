@@ -43,6 +43,14 @@ in {
       '';
     };
 
+    defaultEditor = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Configure <command>nvim</command> as the default editor using the EDITOR environment variable
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
@@ -86,7 +94,7 @@ in {
     config.extraPlugins;
 
     neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit (config) viAlias vimAlias;
+        inherit (config) viAlias vimAlias defaultEditor;
         # inherit customRC;
         plugins = normalizedPlugins;
       }
