@@ -73,9 +73,11 @@
     plugins = {
       lsp = {
         enable = true;
-        servers.rnix-lsp.enable = true;
-        servers.rust-analyzer.enable = true;
-        servers.jsonls.enable = true;
+        servers = {
+          rnix-lsp.enable = true;
+          rust-analyzer.enable = true;
+          jsonls.enable = true;
+        };
       };
 
       nvim-tree = {

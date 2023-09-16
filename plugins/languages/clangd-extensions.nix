@@ -213,22 +213,26 @@ in {
         You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
       '';
 
-      plugins.lsp.servers.clangd.extraOptions = mkIf cfg.enableOffsetEncodingWorkaround {
-        capabilities = {__raw = "__clangdCaps";};
+      plugins.lsp = {
+        servers.clangd = {
+          # Enable the clangd language server
+          enable = true;
+
+          extraOptions = mkIf cfg.enableOffsetEncodingWorkaround {
+            capabilities = {__raw = "__clangdCaps";};
+          };
+        };
+
+        preConfig =
+          optionalString
+          cfg.enableOffsetEncodingWorkaround
+          ''
+            local __clangdCaps = vim.lsp.protocol.make_client_capabilities()
+            __clangdCaps.offsetEncoding = { "utf-16" }
+          '';
       };
 
       extraPlugins = [cfg.package];
-
-      # Enable the clangd language server
-      plugins.lsp.servers.clangd.enable = true;
-
-      plugins.lsp.preConfig =
-        optionalString
-        cfg.enableOffsetEncodingWorkaround
-        ''
-          local __clangdCaps = vim.lsp.protocol.make_client_capabilities()
-          __clangdCaps.offsetEncoding = { "utf-16" }
-        '';
 
       plugins.lsp.postConfig = ''
         require("clangd_extensions").setup(${helpers.toLuaObject setupOptions})
