@@ -92,12 +92,6 @@ in {
 
       extraPackages = [pkgs.git];
 
-      globals = {
-      };
-
-      options = {
-      };
-
       extraConfigLua = ''
         require('gitblame').setup${helpers.toLuaObject setupOptions}
       '';
