@@ -16,7 +16,7 @@ in {
 
       messageTemplate = mkOption {
         type = types.str;
-        default = "<author> • <date> • <summary>";
+        default = "  <author> • <date> • <summary>";
         description = "The template for the blame message that will be shown.";
       };
 
@@ -28,7 +28,7 @@ in {
 
       messageWhenNotCommitted = mkOption {
         type = types.str;
-        default = "Not Committed Yet";
+        default = "  Not Committed Yet";
         description = "The blame message that will be shown when the current modification hasn't been committed yet.";
       };
 
