@@ -1136,8 +1136,7 @@ in {
       ];
 
       autoCmd =
-        []
-        ++ (optional autoOpenEnabled {
+        (optional autoOpenEnabled {
           event = "VimEnter";
           callback = helpers.mkRaw "open_nvim_tree";
         })
