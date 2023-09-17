@@ -22,11 +22,7 @@ in {
 
       highlightGroup = helpers.defaultNullOpts.mkStr "Comment" "The highlight group for virtual text.";
 
-      displayVirtualText = mkOption {
-        type = with types; nullOr bool;
-        default = true;
-        description = "If the blame message should be displayed as virtual text. You may want to disable this if you display the blame message in statusline.";
-      };
+      displayVirtualText = helpers.defaultNullOpts.mkNullable (types.nullOr types.bool) (toString true) "If the blame message should be displayed as virtual text. You may want to disable this if you display the blame message in statusline.";
 
       ignoredFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) (toString []) "A list of filetypes for which gitblame information will not be displayed.";
 
@@ -45,10 +41,11 @@ in {
       date_format = cfg.dateFormat;
       message_when_not_committed = cfg.messageWhenNotCommitted;
       highlight_group = cfg.highlightGroup;
-      display_virtual_text =
+      display_virtual_text = helpers.ifNonNull' cfg.displayVirtualText (
         if cfg.displayVirtualText
         then 1
-        else 0;
+        else 0
+      );
       ignored_filetypes = cfg.ignoredFiletypes;
       inherit (cfg) delay;
       virtual_text_column = cfg.virtualTextColumn;
