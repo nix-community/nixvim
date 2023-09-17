@@ -31,7 +31,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Symlink <command>vi</command> to <command>nvim</command> binary.
+        Symlink `vi` to `nvim` binary.
       '';
     };
 
@@ -39,7 +39,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Symlink <command>vim</command> to <command>nvim</command> binary.
+        Symlink `vim` to `nvim` binary.
       '';
     };
 
@@ -47,7 +47,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Configure <command>nvim</command> as the default editor using the EDITOR environment variable
+        Configure `nvim` as the default editor using the EDITOR environment variable
       '';
     };
 
