@@ -31,6 +31,7 @@
 
     ./git/diffview.nix
     ./git/fugitive.nix
+    ./git/gitblame.nix
     ./git/gitgutter.nix
     ./git/gitmessenger.nix
     ./git/gitsigns.nix
