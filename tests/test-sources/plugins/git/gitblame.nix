@@ -10,7 +10,7 @@
       dateFormat = "%c";
       messageWhenNotCommitted = "  Not Committed Yet";
       highlightGroup = "Comment";
-      enableVirtualText = true;
+      displayVirtualText = true;
       delay = 0;
       virtualTextColumn = null;
       extmarkOptions = null;
