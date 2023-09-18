@@ -623,6 +623,13 @@ in {
           pkgs.python3Packages.python-lsp-server.overridePythonAttrs (
             old: {
               propagatedBuildInputs = pylspPlugins ++ old.propagatedBuildInputs;
+              disabledTests =
+                (old.disabledTests or [])
+                ++ [
+                  # Those tests fail when third-party plugins are loaded
+                  "test_notebook_document__did_open"
+                  "test_notebook_document__did_change"
+                ];
             }
           )
         );
