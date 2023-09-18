@@ -39,7 +39,9 @@ in {
         environment.variables."VIM" = "/etc/nvim";
       })
       {
-        inherit (cfg) warnings assertions defaultEditor;
+        inherit (cfg) warnings assertions;
+        programs.neovim.defaultEditor = cfg.defaultEditor;
+        environment.variables.EDITOR = mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
       }
     ]);
 }
