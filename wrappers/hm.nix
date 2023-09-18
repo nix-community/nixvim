@@ -37,7 +37,8 @@ in {
         xdg.configFile = files;
       })
       {
-        inherit (cfg) warnings assertions defaultEditor;
+        inherit (cfg) warnings assertions;
+        home.sessionVariables = mkIf cfg.defaultEditor {EDITOR = "nvim";};
       }
     ]);
 }
