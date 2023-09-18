@@ -18,7 +18,10 @@ in {
       default = {};
       type = types.submodule ([
           {
-            options.enable = mkEnableOption "nixvim";
+            options = {
+              enable = mkEnableOption "nixvim";
+              defaultEditor = mkEnableOption "Set nixvim as the default editor";
+            };
           }
         ]
         ++ shared.topLevelModules);

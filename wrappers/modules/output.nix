@@ -43,14 +43,6 @@ in {
       '';
     };
 
-    defaultEditor = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Configure `nvim` as the default editor using the EDITOR environment variable
-      '';
-    };
-
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
