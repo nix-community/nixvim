@@ -26,14 +26,14 @@ in {
           ...
         };
 
-      lsp = with helpers.defaultNullOpts; {
+      lsp = {
         autoAttach =
           helpers.defaultNullOpts.mkBool false
           ''
             Enable to have nvim-navic automatically attach to every LSP for current buffer. Its disabled by default.
           '';
 
-        preference = mkListStr "[]" ''
+        preference = helpers.defaultNullOpts.mkListStr "[]" ''
           Table ranking lsp_servers. Lower the index, higher the priority of the server. If there are more than one server attached to a buffer. In the example below will prefer clangd over pyright
 
           Example: `[ "clangd" "pyright" ]`.
