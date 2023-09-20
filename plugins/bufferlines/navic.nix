@@ -84,12 +84,17 @@ in {
     };
 
   config = let
-    setupOptions =
+    setupOptions = with cfg;
       {
-        inherit (cfg) icons highlight separator click;
+        inherit 
+          icons
+          highlight
+          separator
+          click
+        ;
         lsp = with lsp; {
           auto_attach = autoAttach;
-          inherit (lsp) preference;
+          inherit preference;
         };
         depth_limit = depthLimit;
         safe_output = safeOutput;
