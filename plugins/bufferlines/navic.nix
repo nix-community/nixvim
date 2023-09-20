@@ -18,12 +18,37 @@ in {
 
       icons =
         mapAttrs
-        (name: default:
-          helpers.defaultNullOpts.mkStr default "icon for ${name}."
+        (
+          name: default:
+            default "icon for ${name}."
         )
         {
           File = "󰈙 ";
-          ...
+          Module = " ";
+          Namespace = "󰌗 ";
+          Package = " ";
+          Class = "󰌗 ";
+          Method = "󰆧 ";
+          Property = " ";
+          Field = " ";
+          Constructor = " ";
+          Enum = "󰕘";
+          Interface = "󰕘";
+          Function = "󰊕 ";
+          Variable = "󰆧 ";
+          Constant = "󰏿 ";
+          String = "󰀬 ";
+          Number = "󰎠 ";
+          Boolean = "◩ ";
+          Array = "󰅪 ";
+          Object = "󰅩 ";
+          Key = "󰌋 ";
+          Null = "󰟢 ";
+          EnumMember = " ";
+          Struct = "󰌗 ";
+          Event = " ";
+          Operator = "󰆕 ";
+          TypeParameter = "󰊄 ";
         };
 
       lsp = {
@@ -47,7 +72,7 @@ in {
         '';
 
       separator =
-        helpers.defaultNullOpts.mkStr " > "
+        " > "
         ''
           Icon to separate items. to use between items.
         '';
@@ -59,7 +84,7 @@ in {
         '';
 
       depthLimitIndicator =
-        helpers.defaultNullOpts.mkStr ".."
+        ".."
         ''
           Icon to indicate that depth_limit was hit and the shown context is truncated.
         '';
@@ -86,12 +111,12 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        inherit 
+        inherit
           icons
           highlight
           separator
           click
-        ;
+          ;
         lsp = with lsp; {
           auto_attach = autoAttach;
           inherit preference;
