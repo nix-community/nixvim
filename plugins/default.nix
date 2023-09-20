@@ -2,6 +2,7 @@
   imports = [
     ./bufferlines/barbar.nix
     ./bufferlines/bufferline.nix
+    ./bufferlines/navic.nix
 
     ./colorschemes/ayu.nix
     ./colorschemes/base16.nix
