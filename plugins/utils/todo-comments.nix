@@ -15,6 +15,13 @@ with lib; let
     todoTelescope = "TodoTelescope";
   };
 in {
+  imports = [
+    (
+      mkRemovedOptionModule
+      ["plugins" "todo-comments" "keymapsSilent"]
+      "Use `plugins.todo-comments.keymaps.<COMMAND>.options.silent`."
+    )
+  ];
   options = {
     plugins.todo-comments =
       helpers.extraOptionsOptions
@@ -182,16 +189,11 @@ in {
           '';
         };
 
-        # Keyboard shortcuts for :Todo* commands
-        keymapsSilent = mkOption {
-          type = types.bool;
-          description = "Whether todo-comments keymaps should be silent.";
-          default = false;
-        };
-
         keymaps = let
           mkKeymapOption = optionName: funcName:
-            helpers.mkCompositeOption "Keymap settings for the `:${funcName}` function." {
+            helpers.mkCompositeOption
+            "Keymap settings for the `:${funcName}` function."
+            {
               key = mkOption {
                 type = types.str;
                 description = "Key for the `${funcName}` function.";
@@ -213,6 +215,8 @@ in {
                 default = null;
                 example = "TODO,FIX";
               };
+
+              options = helpers.keymaps.mapConfigOptions;
             };
         in
           mapAttrs mkKeymapOption commands;
@@ -279,9 +283,12 @@ in {
               (keymap != null)
               {
                 mode = "n";
-                inherit (keymap) key;
+                inherit
+                  (keymap)
+                  key
+                  options
+                  ;
                 action = ":${funcName}${cwd}${keywords}<CR>";
-                options.silent = cfg.keymapsSilent;
               }
           )
           commands

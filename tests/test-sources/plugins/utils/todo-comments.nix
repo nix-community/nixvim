@@ -89,14 +89,13 @@
         pattern = ''\b(KEYWORDS):'';
       };
 
-      keymapsSilent = true;
-
       keymaps = {
         todoQuickFix.key = "<C-a>";
         todoLocList = {
           key = "<C-f>";
           cwd = "~/projects/foobar";
           keywords = "TODO,FIX";
+          options.silent = true;
         };
         todoTrouble = {
           key = "<C-t>";
@@ -105,6 +104,23 @@
         todoTelescope = {
           key = "<C-e>";
           cwd = "~/projects/foobar";
+        };
+      };
+    };
+  };
+
+  keymapsOptions = {
+    plugins.todo-comments = {
+      enable = true;
+
+      keymaps = {
+        todoTrouble = {
+          key = "<C-f>";
+          keywords = "TODO,FIX";
+          options = {
+            desc = "Description for todoTrouble";
+            silent = true;
+          };
         };
       };
     };
