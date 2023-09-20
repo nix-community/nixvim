@@ -103,19 +103,16 @@ in {
     };
 
   config = let
-    setupOptions = with cfg;
+    setupOptions =
       {
-        icons = icons;
+        inherit (cfg) icons highlight separator click;
         lsp = with lsp; {
           auto_attach = autoAttach;
-          preference = preference;
+          inherit (lsp) preference;
         };
-        highlight = highlight;
-        separator = separator;
         depth_limit = depthLimit;
         safe_output = safeOutput;
         lazy_update_context = lazyUpdateContext;
-        click = click;
       }
       // cfg.extraOptions;
   in
