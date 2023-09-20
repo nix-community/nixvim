@@ -16,34 +16,15 @@ in {
 
       package = helpers.mkPackageOption "nvim-navic" pkgs.vimPlugins.nvim-navic;
 
-      icons = {
-        File = helpers.defaultNullOpts.mkStr "󰈙 " "";
-        Module = helpers.defaultNullOpts.mkStr " " "";
-        Namespace = helpers.defaultNullOpts.mkStr "󰌗 " "";
-        Package = helpers.defaultNullOpts.mkStr " " "";
-        Class = helpers.defaultNullOpts.mkStr "󰌗 " "";
-        Method = helpers.defaultNullOpts.mkStr "󰆧 " "";
-        Property = helpers.defaultNullOpts.mkStr " " "";
-        Field = helpers.defaultNullOpts.mkStr " " "";
-        Constructor = helpers.defaultNullOpts.mkStr " " "";
-        Enum = helpers.defaultNullOpts.mkStr "󰕘" "";
-        Interface = helpers.defaultNullOpts.mkStr "󰕘" "";
-        Function = helpers.defaultNullOpts.mkStr "󰊕 " "";
-        Variable = helpers.defaultNullOpts.mkStr "󰆧 " "";
-        Constant = helpers.defaultNullOpts.mkStr "󰏿 " "";
-        String = helpers.defaultNullOpts.mkStr "󰀬 " "";
-        Number = helpers.defaultNullOpts.mkStr "󰎠 " "";
-        Boolean = helpers.defaultNullOpts.mkStr "◩ " "";
-        Array = helpers.defaultNullOpts.mkStr "󰅪 " "";
-        Object = helpers.defaultNullOpts.mkStr "󰅩 " "";
-        Key = helpers.defaultNullOpts.mkStr "󰌋 " "";
-        Null = helpers.defaultNullOpts.mkStr "󰟢 " "";
-        EnumMember = helpers.defaultNullOpts.mkStr " " "";
-        Struct = helpers.defaultNullOpts.mkStr "󰌗 " "";
-        Event = helpers.defaultNullOpts.mkStr " " "";
-        Operator = helpers.defaultNullOpts.mkStr "󰆕 " "";
-        TypeParameter = helpers.defaultNullOpts.mkStr "󰊄 " "";
-      };
+      icons =
+        mapAttrs
+        (name: default:
+          helpers.defaultNullOpts.mkStr default "icon for ${name}."
+        )
+        {
+          File = "󰈙 ";
+          ...
+        };
 
       lsp = with helpers.defaultNullOpts; {
         autoAttach =
