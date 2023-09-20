@@ -103,10 +103,7 @@ in {
       // cfg.extraOptions;
   in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [
-        cfg.package
-        nvim-lspconfig
-      ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require('nvim-navic').setup(${helpers.toLuaObject setupOptions})
