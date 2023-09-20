@@ -12,9 +12,9 @@ in {
   options.plugins.navic =
     helpers.extraOptionsOptions
     // {
-      enable = mkEnableOption "navic.nvim";
+      enable = mkEnableOption "nvim-navic";
 
-      package = helpers.mkPackageOption "navic" pkgs.vimPlugins.nvim-navic;
+      package = helpers.mkPackageOption "nvim-navic" pkgs.vimPlugins.nvim-navic;
 
       icons = {
         File = helpers.defaultNullOpts.mkStr "󰈙 " "";
