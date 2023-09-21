@@ -75,11 +75,9 @@ in {
         Maximum depth of context to be shown. If the context hits this depth limit, it is truncated.
       '';
 
-      depthLimitIndicator =
-        ".."
-        ''
-          Icon to indicate that depth_limit was hit and the shown context is truncated.
-        '';
+      depthLimitIndicator = helpers.defaultNullOpts.mkStr ".." ''
+        Icon to indicate that depth_limit was hit and the shown context is truncated.
+      '';
 
       safeOutput = helpers.defaultNullOpts.mkBool true ''
         Sanitize the output for use in statusline and winbar.
