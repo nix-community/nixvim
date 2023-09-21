@@ -66,7 +66,7 @@ in {
         };
       };
 
-      node_markers = {
+      nodeMarkers = {
         enabled = true;
         icons = {
           leaf = helpers.defaultNullOpts.mkStr "  " ''
@@ -117,9 +117,12 @@ in {
           TypeParameter = "󰊄 ";
         };
 
-      use_default_mapping = helpers.defaultNullOpts.mkBool true ''
+      useDefaultMapping = helpers.defaultNullOpts.mkBool true ''
         If set to false, only mappings set by user are set. Else default mappings are used for keys that are not set by user
       '';
+
+      # TODO: how to set mappings, like in nvim-cmp ?
+      mapping = {};
 
       lsp = {
         autoAttach = helpers.defaultNullOpts.mkBool false ''
@@ -131,47 +134,34 @@ in {
         '';
       };
 
-      separator = " > " ''
-        Icon to separate items. to use between items.
-      '';
-
-      depthLimit = helpers.defaultNullOpts.mkInt 0 ''
-        Maximum depth of context to be shown. If the context hits this depth limit, it is truncated.
-      '';
-
-      depthLimitIndicator = helpers.defaultNullOpts.mkStr ".." ''
-        Icon to indicate that depth_limit was hit and the shown context is truncated.
-      '';
-
-      safeOutput = helpers.defaultNullOpts.mkBool true ''
-        Sanitize the output for use in statusline and winbar.
-      '';
-
-      lazyUpdateContext = helpers.defaultNullOpts.mkBool false ''
-        If true, turns off context updates for the "CursorMoved" event.
-      '';
-
-      click = helpers.defaultNullOpts.mkBool false ''
-        Single click to goto element, double click to open nvim-navbuddy on the clicked element.
-      '';
+      sourceBuffer = {
+        followNode = helpers.defaultNullOpts.mkBool true "Keep the current node in focus on the source buffer";
+        highlight = helpers.defaultNullOpts.mkBool true "Highlight the currently focused node";
+        reorient = helpers.defaultNullOpts.mkEnum ["smart" "top" "mid" "none"] "smart" ''
+          Right section can show previews too.
+                Options: "leaf", "always" or "never"
+        '';
+        scrolloff = helpers.defaultNullOpts.mkInt null ''
+          scrolloff value when navbuddy is open
+        '';
+      };
     };
 
   config = let
     setupOptions = with cfg;
       {
         inherit
+          window
           icons
-          highlight
-          separator
-          click
+          mapping
           ;
+        node_markers = nodeMarkers;
+        use_default_mapping = useDefaultMapping;
         lsp = with lsp; {
           auto_attach = autoAttach;
           inherit preference;
         };
-        depth_limit = depthLimit;
-        safe_output = safeOutput;
-        lazy_update_context = lazyUpdateContext;
+        source_buffer = sourceBuffer;
       }
       // cfg.extraOptions;
   in
