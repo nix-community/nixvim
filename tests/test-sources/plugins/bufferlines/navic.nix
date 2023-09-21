@@ -6,6 +6,7 @@
   defaults = {
     plugins.navic = {
       enable = true;
+
       icons = {
         File = "󰆧 ";
         Module = " ";
