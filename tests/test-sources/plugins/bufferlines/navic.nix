@@ -43,7 +43,6 @@
       separator = " | ";
       depthLimit = 10;
       safeOutput = false;
-
       click = true;
     };
   };
