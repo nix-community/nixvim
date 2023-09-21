@@ -67,7 +67,7 @@ in {
         If set to true, will add colors to icons and text as defined by highlight groups NavicIcons* (NavicIconsFile, NavicIconsModule.. etc.), NavicText and NavicSeparator.
       '';
 
-      separator = " > " ''
+      separator = helpers.defaultNullOpts.mkStr " > " ''
         Icon to separate items. to use between items.
       '';
 
