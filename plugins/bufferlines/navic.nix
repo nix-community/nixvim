@@ -20,7 +20,7 @@ in {
         mapAttrs
         (
           name: default:
-            default "icon for ${name}."
+            helpers.defaultNullOpts.mkStr default "icon for ${name}."
         )
         {
           File = "󰈙 ";
