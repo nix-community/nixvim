@@ -8,6 +8,8 @@ with lib; let
   cfg = config.plugins.navic;
   helpers = import ../helpers.nix {inherit lib;};
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
+  percentageType = types.ints.between 0 100;
+  mkPercentageOpt = helpers.defaultNullOpts.mkNullable percentageType toString;
 in {
   options.plugins.navic =
     helpers.extraOptionsOptions
@@ -22,18 +24,41 @@ in {
           starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
         '';
 
-        # TODO: how to do attribute set here or string ?
-        size = helpers.defaultNullOpts.mkStr "60%" ''
-          Or table format example: { height = "40%", width = "100%"}
-        '';
+        size =
+          helpers.defaultNullOpts.mkNullable
+          (
+            with types;
+              either
+              percentageType
+              (submodule {
+                options = {
+                  height = mkPercentageOpt 40 "The height size (in %).";
 
-        # TODO: see above
-        position = helpers.defaultNullOpts.mkStr "50%" ''
-          Or table format example: { height = "40%", width = "100%"}
-        '';
+                  width = mkPercentageOpt 100 "The width size (in %).";
+                };
+              })
+          )
+          "60"
+          "The size of the window.";
 
-        scrolloff = helpers.defaultNullOpts.mkStr null ''
-          Or table format example: { height = "40%", width = "100%"}
+        position =
+          helpers.defaultNullOpts.mkNullable
+          (
+            with types;
+              either
+              percentageType
+              (submodule {
+                options = {
+                  height = mkPercentageOpt 40 "The height size (in %).";
+
+                  width = mkPercentageOpt 100 "The width size (in %).";
+                };
+              })
+          )
+          "50";
+
+        scrolloff = helpers.defaultNullOpts.mkInt null ''
+          scrolloff value within navbuddy window
         '';
 
         sections = {
