@@ -146,48 +146,56 @@ in
         If set to false, only mappings set by user are set. Else default mappings are used for keys that are not set by user
       '';
 
-      mapping = {
-        "<esc>" = "close";
-        "q" = "close";
+      mapping = mkOption {
+        type = types.attrsOf types.str;
+        description = ''
+          Actions to be triggered for specified keybindings. 
+          For each keybinding it takes a table of format { callback = <function_to_be_called>, description = "string"}.
+          The callback function takes the "display" object as an argument.
+        '';
+        default = {
+          "<esc>" = "close";
+          "q" = "close";
 
-        "j" = "next_sibling";
-        "k" = "previous_sibling";
+          "j" = "next_sibling";
+          "k" = "previous_sibling";
 
-        "h" = "parent";
-        "l" = "children";
-        "0" = "root";
+          "h" = "parent";
+          "l" = "children";
+          "0" = "root";
 
-        "v" = "visual_name";
-        "V" = "visual_scope";
+          "v" = "visual_name";
+          "V" = "visual_scope";
 
-        "y" = "yank_name";
-        "Y" = "yank_scope";
+          "y" = "yank_name";
+          "Y" = "yank_scope";
 
-        "i" = "insert_name";
-        "I" = "insert_scope";
+          "i" = "insert_name";
+          "I" = "insert_scope";
 
-        "a" = "append_name";
-        "A" = "append_scope";
+          "a" = "append_name";
+          "A" = "append_scope";
 
-        "r" = "rename";
+          "r" = "rename";
 
-        "d" = "delete";
+          "d" = "delete";
 
-        "f" = "fold_create";
-        "F" = "fold_delete";
+          "f" = "fold_create";
+          "F" = "fold_delete";
 
-        "c" = "comment";
+          "c" = "comment";
 
-        "<enter>" = "select";
-        "o" = "select";
+          "<enter>" = "select";
+          "o" = "select";
 
-        "J" = "move_down";
-        "K" = "move_up";
+          "J" = "move_down";
+          "K" = "move_up";
 
-        "s" = "toggle_preview";
+          "s" = "toggle_preview";
 
-        "<C-v>" = "vsplit";
-        "<C-s>" = "hsplit";
+          "<C-v>" = "vsplit";
+          "<C-s>" = "hsplit";
+        };
       };
 
       lsp = {
