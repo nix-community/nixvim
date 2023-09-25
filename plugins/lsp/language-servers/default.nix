@@ -407,6 +407,11 @@ with lib; let
       };
     }
     {
+      name = "phpactor";
+      description = "Enable phpactor, for PHP";
+      package = pkgs.phpactor;
+    }
+    {
       name = "pylsp";
       description = "Enable pylsp, for Python.";
       package = pkgs.python3Packages.python-lsp-server;
