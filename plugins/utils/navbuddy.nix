@@ -257,8 +257,8 @@ in
 
       maps =
         genAttrs
-          [ "normal" ]
-          (mode: mappings);
+        ["normal"]
+        (mode: mappings);
 
       extraConfigLua = ''
         require('nvim-navbuddy').setup(${helpers.toLuaObject setupOptions})
