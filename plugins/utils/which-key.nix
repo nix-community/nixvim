@@ -14,6 +14,15 @@ in {
 
     package = helpers.mkPackageOption "whick-key-nvim" pkgs.vimPlugins.which-key-nvim;
 
+    registrations = mkOption {
+      type = with types; attrsOf str;
+      default = {};
+      description = "Manually register the description of mappings.";
+      example = {
+        "<leader>p" = "Find git files with telescope";
+      };
+    };
+
     plugins = {
       marks = helpers.defaultNullOpts.mkBool true "shows a list of your marks on ' and `";
 
@@ -194,8 +203,14 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      extraConfigLua = ''
-        require("which-key").setup(${helpers.toLuaObject setupOptions})
-      '';
+      extraConfigLua =
+        ''
+          require("which-key").setup(${helpers.toLuaObject setupOptions})
+        ''
+        + (
+          optionalString (cfg.registrations != {}) ''
+            require("which-key").register(${helpers.toLuaObject cfg.registrations})
+          ''
+        );
     };
 }
