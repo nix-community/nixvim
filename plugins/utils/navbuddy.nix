@@ -253,7 +253,7 @@ in
           cfg.keymaps.motions;
     in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       maps =
         genAttrs
