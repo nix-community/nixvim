@@ -57,7 +57,7 @@ in
             )
             "50";
 
-        scrolloff = helpers.defaultNullOpts.mkInt null ''
+        scrolloff = helpers.mkNullOrOption types.int ''
           scrolloff value within navbuddy window
         '';
 
