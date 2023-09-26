@@ -6,6 +6,10 @@
   defaults = {
     plugins.which-key = {
       enable = true;
+
+      # Simple mapping with only Description
+      registrations."ff" = "Test";
+
       plugins = {
         marks = true;
         registers = true;
@@ -86,7 +90,5 @@
         filetypes = [];
       };
     };
-    # Simple mapping with only Description
-    maps.byMode.normal."ff".options.desc = "Test";
   };
 }
