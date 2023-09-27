@@ -240,17 +240,13 @@ in {
       // cfg.extraOptions;
 
     mappings =
-      mapAttrs'
-      (action: key: {
-        name = key;
-        value = {
-          action = "function() require('nvim-navbuddy.actions').actions.${action}) end";
-          lua = true;
-          inherit (cfg.keymaps) silent;
-          #desc = "Spider-${motion}";
-        };
+      mapAttrs
+      (key: action: {
+        action = "function() require('nvim-navbuddy.actions').actions.${action}) end";
+        lua = true;
+        silent = cfg.keymapsSilent;
       })
-      cfg.keymaps.motions;
+      cfg.keymaps;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
