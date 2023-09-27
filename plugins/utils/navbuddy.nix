@@ -146,8 +146,14 @@ in {
       useDefaultMapping = helpers.defaultNullOpts.mkBool true ''
         If set to false, only mappings set by user are set. Else default mappings are used for keys that are not set by user
       '';
+      
+      keymapsSilent = mkOption {
+        type = types.bool;
+        description = "Whether navbuddy keymaps should be silent";
+        default = false;
+      };
 
-      mapping = mkOption {
+      keymaps = mkOption {
         type = types.attrsOf types.str;
         description = ''
           Actions to be triggered for specified keybindings.
