@@ -1,4 +1,4 @@
-{pkgs}: {
+{pkgs, ...}: {
   example = {
     plugins.nvim-jdtls = {
       enable = true;

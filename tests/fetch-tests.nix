@@ -35,6 +35,7 @@
   # Remove the nesting
   testsList = lib.lists.flatten (parseDirectories root []);
 
+  helpers = import ../lib/helpers.nix {inherit lib;};
   testsListEvaluated = builtins.map ({
       cases,
       namespace,
@@ -42,8 +43,8 @@
       if builtins.isAttrs cases
       then args
       else {
-        # cases = cases {inherit pkgs;};
-        cases = cases {inherit pkgs;};
+        # cases is a function
+        cases = cases {inherit pkgs helpers;};
         inherit namespace;
       })
   testsList;
