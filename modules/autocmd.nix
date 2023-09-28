@@ -129,7 +129,7 @@ in {
                   group     = autocmd.group,
                   pattern   = autocmd.pattern,
                   buffer    = autocmd.buffer,
-                  desc      = autocmd.desc,
+                  desc      = autocmd.description,
                   callback  = autocmd.callback,
                   command   = autocmd.command,
                   once      = autocmd.once,
