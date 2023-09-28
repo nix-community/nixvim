@@ -152,58 +152,65 @@ in {
         description = "Whether navbuddy keymaps should be silent";
         default = false;
       };
+      mappings =
+        helpers.defaultNullOpts.mkNullable
+        (
+          with types;
+            attrsOf
+            (
+              either
+              str
+              helpers.rawTypes
+            )
+        )
+        ''
+          {
+            "<esc>" = "close";
+            q = "close";
+              "j" = "next_sibling";
+              "k" = "previous_sibling";
 
-      keymaps = mkOption {
-        type = types.attrsOf types.str;
-        description = ''
-          Actions to be triggered for specified keybindings.
-          For each keybinding it takes a table of format { callback = <function_to_be_called>, description = "string"}.
-          The callback function takes the "display" object as an argument.
+              "h" = "parent";
+              "l" = "children";
+              "0" = "root";
+
+              "v" = "visual_name";
+              "V" = "visual_scope";
+
+              "y" = "yank_name";
+              "Y" = "yank_scope";
+
+              "i" = "insert_name";
+              "I" = "insert_scope";
+
+              "a" = "append_name";
+              "A" = "append_scope";
+
+              "r" = "rename";
+
+              "d" = "delete";
+
+              "f" = "fold_create";
+              "F" = "fold_delete";
+
+              "c" = "comment";
+
+              "<enter>" = "select";
+              "o" = "select";
+
+              "J" = "move_down";
+              "K" = "move_up";
+
+              "s" = "toggle_preview";
+
+              "<C-v>" = "vsplit";
+              "<C-s>" = "hsplit";
+          }
+        ''
+        ''
+           Actions to be triggered for specified keybindings. It can take either action name i.e `toggle_preview`
+          Or it can a `rawType`.
         '';
-        default = {
-          "<esc>" = "close";
-          "q" = "close";
-
-          "j" = "next_sibling";
-          "k" = "previous_sibling";
-
-          "h" = "parent";
-          "l" = "children";
-          "0" = "root";
-
-          "v" = "visual_name";
-          "V" = "visual_scope";
-
-          "y" = "yank_name";
-          "Y" = "yank_scope";
-
-          "i" = "insert_name";
-          "I" = "insert_scope";
-
-          "a" = "append_name";
-          "A" = "append_scope";
-
-          "r" = "rename";
-
-          "d" = "delete";
-
-          "f" = "fold_create";
-          "F" = "fold_delete";
-
-          "c" = "comment";
-
-          "<enter>" = "select";
-          "o" = "select";
-
-          "J" = "move_down";
-          "K" = "move_up";
-
-          "s" = "toggle_preview";
-
-          "<C-v>" = "vsplit";
-          "<C-s>" = "hsplit";
-        };
-      };
 
       lsp = {
         autoAttach = helpers.defaultNullOpts.mkBool false ''
@@ -242,25 +249,21 @@ in {
           inherit preference;
         };
         source_buffer = sourceBuffer;
+        mappings =
+          ifNonNull' mappings
+          (mapAttrs
+            (
+              key: action:
+                if isString action
+                then helpers.mkRaw "actions.${action}()"
+                else action
+            )
+            mappings);
       }
       // cfg.extraOptions;
-
-    mappings =
-      mapAttrs
-      (key: action: {
-        action = "function() require('nvim-navbuddy.actions').actions.${action}) end";
-        lua = true;
-        silent = cfg.keymapsSilent;
-      })
-      cfg.keymaps;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
-
-      maps =
-        genAttrs
-        ["normal"]
-        (mode: mappings);
 
       extraConfigLua = ''
         require('nvim-navbuddy').setup(${helpers.toLuaObject setupOptions})
