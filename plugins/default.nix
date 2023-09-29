@@ -2,6 +2,7 @@
   imports = [
     ./bufferlines/barbar.nix
     ./bufferlines/bufferline.nix
+    ./bufferlines/navic.nix
 
     ./colorschemes/ayu.nix
     ./colorschemes/base16.nix
@@ -31,6 +32,7 @@
 
     ./git/diffview.nix
     ./git/fugitive.nix
+    ./git/gitblame.nix
     ./git/gitgutter.nix
     ./git/gitmessenger.nix
     ./git/gitsigns.nix

@@ -18,7 +18,10 @@ in {
       default = {};
       type = types.submodule ([
           {
-            options.enable = mkEnableOption "nixvim";
+            options = {
+              enable = mkEnableOption "nixvim";
+              defaultEditor = mkEnableOption "Set nixvim as the default editor";
+            };
             config.wrapRc = mkForce true;
           }
         ]
@@ -37,6 +40,8 @@ in {
       })
       {
         inherit (cfg) warnings assertions;
+        programs.neovim.defaultEditor = cfg.defaultEditor;
+        environment.variables.EDITOR = mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
       }
     ]);
 }

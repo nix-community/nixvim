@@ -1,4 +1,4 @@
-{pkgs}: {
+{
   empty = {
     plugins = {
       treesitter.enable = true;

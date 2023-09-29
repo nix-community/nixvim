@@ -26,7 +26,10 @@ with lib; let
 
     tab = "tab";
     tab_selected = "tabSelected";
+    tab_separator = "tabSeparator";
+    tab_separator_selected = "tabSeparatorSelected";
     tab_close = "tabClose";
+
     close_button = "closeButton";
     close_button_visible = "closeButtonVisible";
     close_button_selected = "closeButtonSelected";
@@ -34,9 +37,21 @@ with lib; let
     buffer_visible = "bufferVisible";
     buffer_selected = "bufferSelected";
 
+    numbers = "numbers";
+    numbers_visible = "numbersVisible";
+    numbers_selected = "numbersSelected";
+
     diagnostic = "diagnostic";
     diagnostic_visible = "diagnosticVisible";
     diagnostic_selected = "diagnosticSelected";
+
+    hint = "hint";
+    hint_visible = "hintVisible";
+    hint_selected = "hintSelected";
+
+    hint_diagnostic = "hintDiagnostic";
+    hint_diagnostic_visible = "hintDiagnosticVisible";
+    hint_diagnostic_selected = "hintDiagnosticSelected";
 
     info = "info";
     info_visible = "infoVisible";
@@ -74,11 +89,16 @@ with lib; let
     separator_visible = "separatorVisible";
     separator_selected = "separatorSelected";
 
+    indicator_visible = "indicatorVisible";
     indicator_selected = "indicatorSelected";
 
     pick = "pick";
     pick_visible = "pickVisible";
     pick_selected = "pickSelected";
+
+    offset_separator = "offsetSeparator";
+
+    trunc_marker = "trunkMarker";
   };
 in {
   options = {
@@ -252,73 +272,76 @@ in {
             ```
           '';
 
-        highlights = genAttrs (attrValues highlightOptions) (name: highlightOption);
+        highlights =
+          genAttrs
+          (attrValues highlightOptions)
+          (name: highlightOption);
       };
   };
 
   config = let
-    setupOptions = {
+    setupOptions = with cfg; {
       options =
         {
           inherit
-            (cfg)
             mode
             themable
             numbers
             ;
-          buffer_close_icon = cfg.bufferCloseIcon;
-          modified_icon = cfg.modifiedIcon;
-          close_icon = cfg.closeIcon;
-          close_command = cfg.closeCommand;
-          left_mouse_command = cfg.leftMouseCommand;
-          right_mouse_command = cfg.rightMouseCommand;
-          middle_mouse_command = cfg.middleMouseCommand;
-          inherit (cfg) indicator;
-          left_trunc_marker = cfg.leftTruncMarker;
-          right_trunc_marker = cfg.rightTruncMarker;
-          separator_style = cfg.separatorStyle;
+          buffer_close_icon = bufferCloseIcon;
+          modified_icon = modifiedIcon;
+          close_icon = closeIcon;
+          close_command = closeCommand;
+          left_mouse_command = leftMouseCommand;
+          right_mouse_command = rightMouseCommand;
+          middle_mouse_command = middleMouseCommand;
+          inherit indicator;
+          left_trunc_marker = leftTruncMarker;
+          right_trunc_marker = rightTruncMarker;
+          separator_style = separatorStyle;
           name_formatter =
-            helpers.ifNonNull' cfg.nameFormatter
-            (helpers.mkRaw cfg.nameFormatter);
-          truncate_names = cfg.truncateNames;
-          tab_size = cfg.tabSize;
-          max_name_length = cfg.maxNameLength;
-          color_icons = cfg.colorIcons;
-          show_buffer_icons = cfg.showBufferIcons;
-          show_buffer_close_icons = cfg.showBufferCloseIcons;
+            helpers.ifNonNull' nameFormatter
+            (helpers.mkRaw nameFormatter);
+          truncate_names = truncateNames;
+          tab_size = tabSize;
+          max_name_length = maxNameLength;
+          color_icons = colorIcons;
+          show_buffer_icons = showBufferIcons;
+          show_buffer_close_icons = showBufferCloseIcons;
           get_element_icon =
-            helpers.ifNonNull' cfg.getElementIcon
-            (helpers.mkRaw cfg.getElementIcon);
-          show_close_icon = cfg.showCloseIcon;
-          show_tab_indicators = cfg.showTabIndicators;
-          show_duplicate_prefix = cfg.showDuplicatePrefix;
-          enforce_regular_tabs = cfg.enforceRegularTabs;
-          always_show_bufferline = cfg.alwaysShowBufferline;
-          persist_buffer_sort = cfg.persistBufferSort;
-          max_prefix_length = cfg.maxPrefixLength;
-          sort_by = cfg.sortBy;
-          inherit (cfg) diagnostics;
+            helpers.ifNonNull' getElementIcon
+            (helpers.mkRaw getElementIcon);
+          show_close_icon = showCloseIcon;
+          show_tab_indicators = showTabIndicators;
+          show_duplicate_prefix = showDuplicatePrefix;
+          enforce_regular_tabs = enforceRegularTabs;
+          always_show_bufferline = alwaysShowBufferline;
+          persist_buffer_sort = persistBufferSort;
+          max_prefix_length = maxPrefixLength;
+          sort_by = sortBy;
+          inherit diagnostics;
           diagnostics_indicator =
-            helpers.ifNonNull' cfg.diagnosticsIndicator
-            (helpers.mkRaw cfg.diagnosticsIndicator);
-          diagnostics_update_in_insert = cfg.diagnosticsUpdateInInsert;
-          inherit (cfg) offsets;
-          groups = helpers.ifNonNull' cfg.groups {
-            inherit (cfg.groups) items;
-            options = helpers.ifNonNull' cfg.groups.options {
-              toggle_hidden_on_enter = cfg.groups.options.toggleHiddenOnEnter;
+            helpers.ifNonNull' diagnosticsIndicator
+            (helpers.mkRaw diagnosticsIndicator);
+          diagnostics_update_in_insert = diagnosticsUpdateInInsert;
+          inherit offsets;
+          groups = helpers.ifNonNull' groups {
+            inherit (groups) items;
+            options = helpers.ifNonNull' groups.options {
+              toggle_hidden_on_enter = groups.options.toggleHiddenOnEnter;
             };
           };
-          inherit (cfg) hover;
-          inherit (cfg) debug;
+          inherit hover;
+          inherit debug;
           custom_filter =
-            helpers.ifNonNull' cfg.customFilter
-            (helpers.mkRaw cfg.customFilter);
+            helpers.ifNonNull' customFilter
+            (helpers.mkRaw customFilter);
         }
         // cfg.extraOptions;
 
       highlights =
-        mapAttrs (
+        mapAttrs
+        (
           pluginOptionName: nixvimOptionName: {
             inherit
               (cfg.highlights.${nixvimOptionName})

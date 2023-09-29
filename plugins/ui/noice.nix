@@ -312,7 +312,7 @@ in {
           hover = helpers.ifNonNull' cfgL.hover {
             inherit (cfgL.hover) enabled view opts;
           };
-          sigature = let
+          signature = let
             cfgLS = cfgL.signature;
           in
             helpers.ifNonNull' cfgLS {

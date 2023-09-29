@@ -1,4 +1,4 @@
-{pkgs}: {
+{pkgs, ...}: {
   empty = {
     plugins.lualine.enable = true;
   };
@@ -59,9 +59,11 @@
           # you can specify only the sections you want to change
           {
             name = "filename";
-            extraConfig.newfile_status = true;
-            extraConfig.path = 1;
-            extraConfig.shorting_target = 60;
+            extraConfig = {
+              newfile_status = true;
+              path = 1;
+              shorting_target = 60;
+            };
           }
         ];
         lualine_z = [

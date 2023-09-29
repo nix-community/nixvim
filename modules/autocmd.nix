@@ -17,6 +17,13 @@ with lib; let
   };
 
   autoCmdOption = types.submodule {
+    imports = [
+      (
+        # TODO remove this deprecation warning in December 2023
+        mkRenamedOptionModule
+        ["description"] ["desc"]
+      )
+    ];
     options = {
       event = helpers.mkNullOrOption (types.either types.str (types.listOf types.str)) ''
         The event or events to register this autocommand.
@@ -35,7 +42,9 @@ with lib; let
         Cannot be used with `pattern`.
       '';
 
-      description = helpers.mkNullOrOption types.str "A textual description of this autocommand.";
+      desc = helpers.mkNullOrOption types.str ''
+        A textual description of this autocommand.
+      '';
 
       callback = helpers.mkNullOrOption (types.either types.str helpers.rawType) ''
         A function or a string.

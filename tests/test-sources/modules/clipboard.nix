@@ -1,4 +1,4 @@
-{pkgs}: {
+{
   example-with-str = {
     clipboard = {
       register = "unnamed";
