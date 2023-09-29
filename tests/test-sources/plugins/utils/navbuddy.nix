@@ -78,7 +78,6 @@
       };
 
       useDefaultMapping = false;
-      keymapsSilent = true;
       mappings = {
         "<esc>" = "close";
         "q" = "close";
