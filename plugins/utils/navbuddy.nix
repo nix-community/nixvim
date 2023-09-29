@@ -251,7 +251,7 @@ in {
         };
         source_buffer = sourceBuffer;
         mappings =
-          ifNonNull' mappings
+          ifNonNull' cfg.mappings
           (mapAttrs
             (
               key: action:
