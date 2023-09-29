@@ -266,8 +266,8 @@ in {
       extraPlugins = [cfg.package];
 
       extraConfigLua = ''
-        local actions = require("nvim-navbuddy.actions")
-            require('nvim-navbuddy').setup(${helpers.toLuaObject setupOptions})
+            local actions = require("nvim-navbuddy.actions")
+        require('nvim-navbuddy').setup(${helpers.toLuaObject setupOptions})
       '';
     };
 }
