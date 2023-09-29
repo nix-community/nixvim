@@ -194,7 +194,7 @@ with lib; let
       name = "hls";
       description = "Enable haskell language server";
       package = pkgs.haskell-language-server;
-      cmd = cfg: ["haskell-language-server-wrapper"];
+      cmd = cfg: ["haskell-language-server-wrapper" "--lsp"];
     }
     {
       name = "html";
