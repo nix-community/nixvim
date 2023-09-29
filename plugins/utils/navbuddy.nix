@@ -64,7 +64,7 @@ in {
 
         sections = {
           left = {
-            size = helpers.defaultNullOpts.mkStr "20%";
+            size = mkPercentageOpt 20 "The height size (in %).";
             border = helpers.defaultNullOpts.mkBorder "rounded" "double" "solid" "none" null ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
@@ -72,7 +72,7 @@ in {
           };
 
           mid = {
-            size = helpers.defaultNullOpts.mkStr "40%";
+            size = mkPercentageOpt 40 "The height size (in %).";
             border = helpers.defaultNullOpts.mkBorder "rounded" "double" "solid" "none" null ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
@@ -93,7 +93,7 @@ in {
       };
 
       nodeMarkers = {
-        enabled = true;
+        enabled = helpers.defaultNullOpts.mkBool true;
         icons = {
           leaf = helpers.defaultNullOpts.mkStr "  " ''
             The icon to use for leaf nodes.
@@ -152,6 +152,7 @@ in {
         description = "Whether navbuddy keymaps should be silent";
         default = false;
       };
+
       mappings =
         helpers.defaultNullOpts.mkNullable
         (
@@ -166,7 +167,7 @@ in {
         ''
           {
             "<esc>" = "close";
-            q = "close";
+            "q" = "close";
               "j" = "next_sibling";
               "k" = "previous_sibling";
 
