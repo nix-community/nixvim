@@ -17,13 +17,6 @@ with lib; let
   };
 
   autoCmdOption = types.submodule {
-    imports = [
-      (
-        # TODO remove this deprecation warning in December 2023
-        mkRenamedOptionModule
-        ["description"] ["desc"]
-      )
-    ];
     options = {
       event = helpers.mkNullOrOption (types.either types.str (types.listOf types.str)) ''
         The event or events to register this autocommand.
@@ -40,6 +33,12 @@ with lib; let
       buffer = helpers.mkNullOrOption types.int ''
         Buffer number for buffer local autocommands |autocmd-buflocal|.
         Cannot be used with `pattern`.
+      '';
+
+      # Introduced early October 2023.
+      # TODO remove in early December 2023.
+      description = helpers.mkNullOrOption types.str ''
+        DEPRECATED, please use `desc`.
       '';
 
       desc = helpers.mkNullOrOption types.str ''
@@ -114,6 +113,21 @@ in {
     inherit (config) autoGroups autoCmd;
   in
     mkIf (autoGroups != {} || autoCmd != {}) {
+      # Introduced early October 2023.
+      # TODO remove in early December 2023.
+      assertions = [
+        {
+          assertion =
+            all
+            (x: x.description == null)
+            autoCmd;
+          message = ''
+            RENAMED OPTION: `autoCmd[].description` has been renamed `autoCmd[].desc`.
+            Please update your configuration.
+          '';
+        }
+      ];
+
       extraConfigLuaPost =
         (optionalString (autoGroups != {}) ''
           -- Set up autogroups {{
