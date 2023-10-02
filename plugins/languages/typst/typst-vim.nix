@@ -35,7 +35,7 @@ in {
     extraPackages = with pkgs; [typst];
 
     keymaps = with cfg.keymaps;
-      helpers.mkKeymaps
+      helpers.keymaps.mkKeymaps
       {
         mode = "n";
         options.silent = silent;
