@@ -4,7 +4,7 @@
   };
 
   defaults = {
-    plugins.navic = {
+    plugins.navbuddy = {
       enable = true;
 
       window = {
