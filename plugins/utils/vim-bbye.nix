@@ -34,7 +34,7 @@ in {
     extraPlugins = [cfg.package];
 
     keymaps = with cfg.keymaps;
-      helpers.mkKeymaps
+      helpers.keymaps.mkKeymaps
       {
         mode = "n";
         options.silent = cfg.keymapsSilent;

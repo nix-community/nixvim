@@ -4,7 +4,7 @@
   };
 
   legacy-mkMaps = {
-    maps = helpers.mkMaps {silent = true;} {
+    maps = helpers.keymaps.mkMaps {silent = true;} {
       normal."," = "<cmd>echo \"test\"<cr>";
       visual = {
         "<C-a>" = {
@@ -20,7 +20,7 @@
   };
 
   legacy-mkModeMaps = {
-    maps.normal = helpers.mkModeMaps {silent = true;} {
+    maps.normal = helpers.keymaps.mkModeMaps {silent = true;} {
       "," = "<cmd>echo \"test\"<cr>";
       "<C-a>" = {
         action = "function() print('toto') end";
@@ -49,7 +49,7 @@
 
   mkMaps = {
     keymaps =
-      helpers.mkKeymaps
+      helpers.keymaps.mkKeymaps
       {
         mode = "x";
         options.silent = true;

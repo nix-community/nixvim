@@ -5,142 +5,6 @@
 }:
 with lib; let
   helpers = import ../lib/helpers.nix {inherit lib;};
-
-  # These are the configuration options that change the behavior of each mapping.
-  mapConfigOptions = {
-    silent =
-      helpers.defaultNullOpts.mkBool false
-      "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
-
-    nowait =
-      helpers.defaultNullOpts.mkBool false
-      "Whether to wait for extra input on ambiguous mappings. Equivalent to adding <nowait> to a map.";
-
-    script =
-      helpers.defaultNullOpts.mkBool false
-      "Equivalent to adding <script> to a map.";
-
-    expr =
-      helpers.defaultNullOpts.mkBool false
-      "Means that the action is actually an expression. Equivalent to adding <expr> to a map.";
-
-    unique =
-      helpers.defaultNullOpts.mkBool false
-      "Whether to fail if the map is already defined. Equivalent to adding <unique> to a map.";
-
-    noremap =
-      helpers.defaultNullOpts.mkBool true
-      "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
-
-    remap =
-      helpers.defaultNullOpts.mkBool false
-      "Make the mapping recursive. Inverses \"noremap\"";
-
-    desc =
-      helpers.mkNullOrOption types.str
-      "A textual description of this keybind, to be shown in which-key, if you have it.";
-  };
-
-  modes = {
-    normal.short = "n";
-    insert.short = "i";
-    visual = {
-      desc = "visual and select";
-      short = "v";
-    };
-    visualOnly = {
-      desc = "visual only";
-      short = "x";
-    };
-    select.short = "s";
-    terminal.short = "t";
-    normalVisualOp = {
-      desc = "normal, visual, select and operator-pending (same as plain 'map')";
-      short = "";
-    };
-    operator.short = "o";
-    lang = {
-      desc = "normal, visual, select and operator-pending (same as plain 'map')";
-      short = "l";
-    };
-    insertCommand = {
-      desc = "insert and command-line";
-      short = "!";
-    };
-    command.short = "c";
-  };
-
-  mkMapOptionSubmodule = {
-    defaultMode ? "",
-    withKeyOpt ? true,
-    flatConfig ? false,
-  }:
-    with types;
-      either
-      str
-      (types.submodule {
-        options =
-          (
-            if withKeyOpt
-            then {
-              key = mkOption {
-                type = types.str;
-                description = "The key to map.";
-                example = "<C-m>";
-              };
-            }
-            else {}
-          )
-          // {
-            mode = mkOption {
-              type = let
-                modeEnum =
-                  enum
-                  # ["" "n" "v" ...]
-                  (
-                    map
-                    (
-                      {short, ...}: short
-                    )
-                    (attrValues modes)
-                  );
-              in
-                either modeEnum (listOf modeEnum);
-              description = ''
-                One or several modes.
-                Use the short-names (`"n"`, `"v"`, ...).
-                See `:h map-modes` to learn more.
-              '';
-              default = defaultMode;
-              example = ["n" "v"];
-            };
-
-            action =
-              if config.plugins.which-key.enable
-              then helpers.mkNullOrOption types.str "The action to execute"
-              else
-                mkOption {
-                  type = types.str;
-                  description = "The action to execute.";
-                };
-
-            lua = mkOption {
-              type = types.bool;
-              description = ''
-                If true, `action` is considered to be lua code.
-                Thus, it will not be wrapped in `""`.
-              '';
-              default = false;
-            };
-          }
-          // (
-            if flatConfig
-            then mapConfigOptions
-            else {
-              options = mapConfigOptions;
-            }
-          );
-      });
 in {
   options = {
     maps =
@@ -157,21 +21,26 @@ in {
                 either
                 str
                 (
-                  mkMapOptionSubmodule
+                  helpers.keymaps.mkMapOptionSubmodule
                   {
                     defaultMode = modeProps.short;
                     withKeyOpt = false;
                     flatConfig = true;
+                    actionIsOptional = config.plugins.which-key.enable;
                   }
                 )
               );
             default = {};
           }
       )
-      modes;
+      helpers.keymaps.modes;
 
     keymaps = mkOption {
-      type = types.listOf (mkMapOptionSubmodule {});
+      type =
+        types.listOf
+        (helpers.keymaps.mkMapOptionSubmodule {
+          actionIsOptional = config.plugins.which-key.enable;
+        });
       default = [];
       example = [
         {
@@ -246,7 +115,7 @@ in {
                       // {
                         options =
                           getAttrs
-                          (attrNames mapConfigOptions)
+                          (attrNames helpers.keymaps.mapConfigOptions)
                           action;
                       }
                   )
@@ -254,7 +123,7 @@ in {
               )
               config.maps.${modeOptionName}
           )
-          modes
+          helpers.keymaps.modes
         );
 
       mappings = let
