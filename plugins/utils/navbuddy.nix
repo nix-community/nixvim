@@ -168,44 +168,43 @@ in {
           {
             "<esc>" = "close";
             "q" = "close";
-              "j" = "next_sibling";
-              "k" = "previous_sibling";
+            "j" = "next_sibling";
+            "k" = "previous_sibling";
 
-              "h" = "parent";
-              "l" = "children";
-              "0" = "root";
+            "h" = "parent";
+            "l" = "children";
+            "0" = "root";
 
-              "v" = "visual_name";
-              "V" = "visual_scope";
+            "v" = "visual_name";
+            "V" = "visual_scope";
 
-              "y" = "yank_name";
-              "Y" = "yank_scope";
+            "y" = "yank_name";
+            "Y" = "yank_scope";
 
-              "i" = "insert_name";
-              "I" = "insert_scope";
+            "i" = "insert_name";
+            "I" = "insert_scope";
 
-              "a" = "append_name";
-              "A" = "append_scope";
+            "a" = "append_name";
+            "A" = "append_scope";
 
-              "r" = "rename";
+            "r" = "rename";
 
-              "d" = "delete";
+            "d" = "delete";
 
-              "f" = "fold_create";
-              "F" = "fold_delete";
+            "f" = "fold_create";
+            "F" = "fold_delete";
 
-              "c" = "comment";
+            "c" = "comment";
 
-              "<enter>" = "select";
-              "o" = "select";
+            "<enter>" = "select";
+            "o" = "select";
+            "J" = "move_down";
+            "K" = "move_up";
 
-              "J" = "move_down";
-              "K" = "move_up";
+            "s" = "toggle_preview";
 
-              "s" = "toggle_preview";
-
-              "<C-v>" = "vsplit";
-              "<C-s>" = "hsplit";
+            "<C-v>" = "vsplit";
+            "<C-s>" = "hsplit";
           }
         ''
         ''
