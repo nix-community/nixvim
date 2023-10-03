@@ -25,6 +25,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: nscloud-ubuntu-22.04-amd64-4x16
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v3

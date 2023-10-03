@@ -8,6 +8,7 @@ jobs:
   check:
     name: Check that the module is valid
     runs-on: nscloud-ubuntu-22.04-amd64-4x16
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v20
