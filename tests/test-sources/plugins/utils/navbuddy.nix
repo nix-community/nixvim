@@ -9,28 +9,28 @@
 
       window = {
         border = "rounded";
-      };
-      size = {
-        height = 50;
-        width = 50;
-      };
-      position = {
-        height = 50;
-        width = 50;
-      };
-      scrolloff = 8;
-      sections = {
-        left = {
-          size = 50;
-          border = "rounded";
+        size = {
+          height = 50;
+          width = 50;
         };
-        mid = {
-          size = 50;
-          border = "rounded";
+        position = {
+          height = 50;
+          width = 50;
         };
-        right = {
-          preview = "always";
-          border = "rounded";
+        scrolloff = 8;
+        sections = {
+          left = {
+            size = 50;
+            border = "rounded";
+          };
+          mid = {
+            size = 50;
+            border = "rounded";
+          };
+          right = {
+            preview = "always";
+            border = "rounded";
+          };
         };
       };
       nodeMarkers = {
