@@ -79,7 +79,7 @@ in {
           };
 
           right = {
-            border = helpers.defaultNullOpts.mkBorder "rounded" "right section border" null ''
+            border = helpers.defaultNullOpts.mkBorder "rounded" "right section border" ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
             '';
@@ -162,7 +162,7 @@ in {
             (
               either
               str
-              helpers.rawTypes
+              helpers.rawType
             )
         )
         ''
@@ -239,15 +239,15 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        inherit
-          window
-          ;
-        node_markers = nodeMarkers;
-        icons = with icons; {
-          leaf_selected = leafSelected;
-          inherit leaf branch;
+        inherit window;
+        icons = icons;
+        node_markers = with nodeMarkers; {
+          inherit enabled;
+          icons = with icons; {
+            inherit leaf branch;
+            leaf_selected = nodeMarkers.icons.leafSelected;
+          };
         };
-
         use_default_mapping = useDefaultMapping;
         lsp = with lsp; {
           auto_attach = autoAttach;
@@ -255,7 +255,7 @@ in {
         };
         source_buffer = sourceBuffer;
         mappings =
-          ifNonNull' cfg.mappings
+          helpers.ifNonNull' cfg.mappings
           (mapAttrs
             (
               key: action:
