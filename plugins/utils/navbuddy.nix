@@ -217,7 +217,7 @@ in {
           If set to true, you don't need to manually use attach function
         '';
 
-        preference = helpers.defaultNullOpts.mkListStr null ''
+        preference = helpers.mkNullOrOption (with types; listOf str) ''
           list of lsp server names in order of preference
         '';
       };
