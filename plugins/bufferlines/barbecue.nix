@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  cfg = config.plugins.navic;
+  cfg = config.plugins.barbecue;
   helpers = import ../helpers.nix {inherit lib;};
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in {
