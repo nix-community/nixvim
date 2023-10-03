@@ -10,11 +10,11 @@ with lib; let
 
   projectConfigModule = types.submodule {
     options = {
-      termCommands = helpers.mkNullOrOption (types.listOf types.str) ''
+      termCommands = helpers.mkNullOrOption (with types; listOf str) ''
         List of predefined terminal commands for this project.
       '';
 
-      marks = helpers.mkNullOrOption (types.listOf types.str) ''
+      marks = helpers.mkNullOrOption (with types; listOf str) ''
         List of predefined marks (filenames) for this project.
       '';
     };
@@ -42,7 +42,7 @@ in {
           Keymap for toggling the quick menu.";
         '';
 
-        navFile = helpers.mkNullOrOption (types.attrsOf types.str) ''
+        navFile = helpers.mkNullOrOption (with types; attrsOf str) ''
           Keymaps for navigating to marks.
 
           Examples:
@@ -62,7 +62,7 @@ in {
           Keymap for navigating to previous mark.";
         '';
 
-        gotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
+        gotoTerminal = helpers.mkNullOrOption (with types; attrsOf str) ''
           Keymaps for navigating to terminals.
 
           Examples:
@@ -78,7 +78,7 @@ in {
           Keymap for toggling the cmd quick menu.
         '';
 
-        tmuxGotoTerminal = helpers.mkNullOrOption (types.attrsOf types.str) ''
+        tmuxGotoTerminal = helpers.mkNullOrOption (with types; attrsOf str) ''
           Keymaps for navigating to tmux windows/panes.
           Attributes can either be tmux window ids or pane identifiers.
 
@@ -107,9 +107,11 @@ in {
         Closes any tmux windows harpoon that harpoon creates when you close Neovim.
       '';
 
-      excludedFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "['harpoon']" ''
-        Filetypes that you want to prevent from adding to the harpoon list menu.
-      '';
+      excludedFiletypes =
+        helpers.defaultNullOpts.mkNullable
+        (with types; listOf str)
+        ''["harpoon"]''
+        "Filetypes that you want to prevent from adding to the harpoon list menu.";
 
       markBranch = helpers.defaultNullOpts.mkBool false ''
         Set marks specific to each git branch inside git repository.
@@ -124,7 +126,7 @@ in {
         example = ''
           projects = {
             "$HOME/personal/vim-with-me/server" = {
-              term.cmds = [
+              termCommands = [
                   "./env && npx ts-node src/index.ts"
               ];
             };
@@ -143,8 +145,9 @@ in {
         '';
 
         borderChars =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          "[ \"─\" \"│\" \"─\" \"│\" \"╭\" \"╮\" \"╯\" \"╰\" ]"
+          helpers.defaultNullOpts.mkNullable
+          (with types; listOf str)
+          ''["─" "│" "─" "│" "╭" "╮" "╯" "╰"]''
           "Border characters";
       };
     };
@@ -155,27 +158,41 @@ in {
       (
         name: value: {
           term.cmds = value.termCommands;
-          mark.marks = map (mark: {filename = mark;}) value.marks;
+          mark.marks =
+            helpers.ifNonNull' value.marks
+            (
+              map
+              (
+                mark: {
+                  filename = mark;
+                }
+              )
+              value.marks
+            );
         }
       )
       cfg.projects;
 
-    options =
+    setupOptions = with cfg;
       {
         global_settings = {
-          save_on_toggle = cfg.saveOnToggle;
-          save_on_change = cfg.saveOnChange;
-          enter_on_sendcmd = cfg.enterOnSendcmd;
-          tmux_autoclose_windows = cfg.tmuxAutocloseWindows;
-          excluded_filetypes = cfg.excludedFiletypes;
-          mark_branch = cfg.markBranch;
+          save_on_toggle = saveOnToggle;
+          save_on_change = saveOnChange;
+          enter_on_sendcmd = enterOnSendcmd;
+          tmux_autoclose_windows = tmuxAutocloseWindows;
+          excluded_filetypes = excludedFiletypes;
+          mark_branch = markBranch;
         };
 
         inherit projects;
 
         menu = {
-          inherit (cfg.menu) width height;
-          borderchars = cfg.menu.borderChars;
+          inherit
+            (menu)
+            width
+            height
+            ;
+          borderchars = menu.borderChars;
         };
       }
       // cfg.extraOptions;
@@ -184,7 +201,7 @@ in {
       extraPlugins = [cfg.package];
 
       extraConfigLua = ''
-        require('harpoon').setup(${helpers.toLuaObject options})
+        require('harpoon').setup(${helpers.toLuaObject setupOptions})
       '';
 
       keymaps = let
@@ -247,7 +264,7 @@ in {
             (id: "function() require('harpoon.tmux').gotoTerminal(${id}) end")
           );
       in
-        helpers.mkKeymaps
+        helpers.keymaps.mkKeymaps
         {
           mode = "n";
           lua = true;
