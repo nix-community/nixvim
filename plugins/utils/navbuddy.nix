@@ -65,6 +65,7 @@ in {
         sections = {
           left = {
             size = mkPercentageOpt 20 "The height size (in %).";
+
             border = helpers.defaultNullOpts.mkBorder "rounded" "left section border" ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
