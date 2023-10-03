@@ -229,13 +229,16 @@ in {
 
       sourceBuffer = {
         followNode = helpers.defaultNullOpts.mkBool true "Keep the current node in focus on the source buffer";
+
         highlight = helpers.defaultNullOpts.mkBool true "Highlight the currently focused node";
+
         reorient = helpers.defaultNullOpts.mkEnum ["smart" "top" "mid" "none"] "smart" ''
           Right section can show previews too.
-                Options: "leaf", "always" or "never"
+          Options: "leaf", "always" or "never"
         '';
+
         scrolloff = helpers.defaultNullOpts.mkInt null ''
-          scrolloff value when navbuddy is open
+          scrolloff value when navbuddy is open.
         '';
       };
     };
