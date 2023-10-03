@@ -240,7 +240,6 @@ in {
     setupOptions = with cfg;
       {
         inherit window;
-        icons = icons;
         node_markers = with nodeMarkers; {
           inherit enabled;
           icons = with icons; {
@@ -248,6 +247,7 @@ in {
             leaf_selected = nodeMarkers.icons.leafSelected;
           };
         };
+        inherit icons;
         use_default_mapping = useDefaultMapping;
         lsp = with lsp; {
           auto_attach = autoAttach;
