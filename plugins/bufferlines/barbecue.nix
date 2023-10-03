@@ -166,7 +166,7 @@ in {
       extraPlugins = [cfg.package];
 
       extraConfigLua = ''
-        require('barbecue-nvim').setup(${helpers.toLuaObject setupOptions})
+        require('barbecue').setup(${helpers.toLuaObject setupOptions})
       '';
     };
 }
