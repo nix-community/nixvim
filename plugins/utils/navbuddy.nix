@@ -93,7 +93,8 @@ in {
       };
 
       nodeMarkers = {
-        enabled = helpers.defaultNullOpts.mkBool true;
+        enabled = helpers.defaultNullOpts.mkBool true "Enable node markers.";
+
         icons = {
           leaf = helpers.defaultNullOpts.mkStr "  " ''
             The icon to use for leaf nodes.
@@ -102,6 +103,7 @@ in {
           leaf_selected = helpers.defaultNullOpts.mkStr " → " ''
             The icon to use for selected leaf node.
           '';
+
           branch = helpers.defaultNullOpts.mkStr "  " ''
             The icon to use for branch nodes.
           '';
