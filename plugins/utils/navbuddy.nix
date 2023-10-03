@@ -74,6 +74,7 @@ in {
 
           mid = {
             size = mkPercentageOpt 40 "The height size (in %).";
+
             border = helpers.defaultNullOpts.mkBorder "rounded" "mid section border" ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
