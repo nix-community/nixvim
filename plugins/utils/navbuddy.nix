@@ -244,7 +244,7 @@ in {
           inherit enabled;
           icons = with icons; {
             inherit leaf branch;
-            leaf_selected = nodeMarkers.icons.leafSelected;
+            leaf_selected = leafSelected;
           };
         };
         inherit icons;
