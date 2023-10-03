@@ -110,6 +110,7 @@
     ./utils/mini.nix
     ./utils/mkdnflow.nix
     ./utils/multicursors.nix
+    ./utils/navbuddy.nix
     ./utils/neorg.nix
     ./utils/neogen.nix
     ./utils/notify.nix
