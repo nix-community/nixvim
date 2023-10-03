@@ -37,7 +37,7 @@
         enabled = true;
         icons = {
           leaf = " ... ";
-          leaf_selected = "  ";
+          leafSelected = "  ";
           branch = " 󰆧 ";
         };
       };

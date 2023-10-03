@@ -7,7 +7,6 @@
 with lib; let
   cfg = config.plugins.navbuddy;
   helpers = import ../helpers.nix {inherit lib;};
-  mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
   percentageType = types.ints.between 0 100;
   mkPercentageOpt = default: helpers.defaultNullOpts.mkNullable percentageType (toString default);
 in {
@@ -19,7 +18,7 @@ in {
       package = helpers.mkPackageOption "nvim-navbuddy" pkgs.vimPlugins.nvim-navbuddy;
 
       window = {
-        border = helpers.defaultNullOpts.mkBorder "rounded" "double" "solid" "none" ''
+        border = helpers.defaultNullOpts.mkBorder "rounded" "window border" ''
           "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
           starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
         '';
@@ -65,7 +64,7 @@ in {
         sections = {
           left = {
             size = mkPercentageOpt 20 "The height size (in %).";
-            border = helpers.defaultNullOpts.mkBorder "rounded" "double" "solid" "none" null ''
+            border = helpers.defaultNullOpts.mkBorder "rounded" "left section border" ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
             '';
@@ -73,14 +72,14 @@ in {
 
           mid = {
             size = mkPercentageOpt 40 "The height size (in %).";
-            border = helpers.defaultNullOpts.mkBorder "rounded" "double" "solid" "none" null ''
+            border = helpers.defaultNullOpts.mkBorder "rounded" "mid section border" ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
             '';
           };
 
           right = {
-            border = helpers.defaultNullOpts.mkBorder "rounded" "double" "solid" "none" null ''
+            border = helpers.defaultNullOpts.mkBorder "rounded" "right section border" null ''
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
             '';
@@ -100,7 +99,7 @@ in {
             The icon to use for leaf nodes.
           '';
 
-          leaf_selected = helpers.defaultNullOpts.mkStr " → " ''
+          leafSelected = helpers.defaultNullOpts.mkStr " → " ''
             The icon to use for selected leaf node.
           '';
 
@@ -242,9 +241,13 @@ in {
       {
         inherit
           window
-          icons
           ;
         node_markers = nodeMarkers;
+        icons = with icons; {
+          leaf_selected = leafSelected;
+          inherit leaf branch;
+        };
+
         use_default_mapping = useDefaultMapping;
         lsp = with lsp; {
           auto_attach = autoAttach;
