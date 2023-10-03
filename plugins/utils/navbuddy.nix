@@ -86,6 +86,7 @@ in {
               "rounded", "double", "solid", "none"  or an array with eight chars building up the border in a clockwise fashion
               starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
             '';
+
             preview = helpers.defaultNullOpts.mkEnum ["leaf" "always" "never"] "leaf" ''
               Right section can show previews too.
                     Options: "leaf", "always" or "never"
