@@ -7,6 +7,7 @@
 with lib; let
   cfg = config.plugins.navbuddy;
   helpers = import ../helpers.nix {inherit lib;};
+
   percentageType = types.ints.between 0 100;
   mkPercentageOpt = default: helpers.defaultNullOpts.mkNullable percentageType (toString default);
 in {
