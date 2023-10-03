@@ -1,6 +1,7 @@
 {
   imports = [
     ./bufferlines/barbar.nix
+    ./bufferlines/barbecue.nix
     ./bufferlines/bufferline.nix
     ./bufferlines/navic.nix
 
