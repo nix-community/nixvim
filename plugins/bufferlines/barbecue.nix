@@ -68,11 +68,17 @@ in {
         Whether to show/use navic in the winbar.
       '';
 
-      leadCustomSection = helpers.defaultNullOpts.mkStr ''function() return " " end,'' ''
-            Get leading custom section contents.
-
-        NOTE: This function shouldn't do any expensive actions as it is run on each render.
-      '';
+      leadCustomSection =
+        helpers.defaultNullOpts.mkStr
+        ''
+          function()
+            return " "
+          end
+        ''
+        ''
+          Get leading custom section contents.
+          NOTE: This function shouldn't do any expensive actions as it is run on each render.
+        '';
 
       customSection = helpers.defaultNullOpts.mkStr ''function() return " " end,'' ''
             Get custom section contents.
