@@ -6,6 +6,7 @@
   defaults = {
     plugins.barbecue = {
       enable = true;
+
       attachNavic = true;
       createAutocmd = true;
       includeBuftypes = [""];
