@@ -24,7 +24,7 @@ in {
         Whether to create winbar updater autocmd.
       '';
 
-      includeBuftypes = mkListStr ''[ "" ]'' ''
+      includeBuftypes = mkListStr ''[""]'' ''
         Buftypes to enable winbar in.
       '';
 
