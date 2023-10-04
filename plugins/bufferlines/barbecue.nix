@@ -28,7 +28,7 @@ in {
         Buftypes to enable winbar in.
       '';
 
-      excludeFiletypes = mkListStr ''[ "netrw" "toggleterm" ]'' ''
+      excludeFiletypes = mkListStr ''["netrw" "toggleterm"]'' ''
         Filetypes not to enable winbar in.
       '';
 
