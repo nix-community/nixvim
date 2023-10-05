@@ -365,10 +365,6 @@ in {
           Increase if you experience performance issues around screen refresh.
         '';
 
-        hideRootFolder = helpers.defaultNullOpts.mkBool false ''
-          Hide the path of the current working directory on top of the tree.
-        '';
-
         width =
           helpers.defaultNullOpts.mkNullable
           (types.oneOf [
@@ -471,13 +467,15 @@ in {
         rootFolderLabel =
           helpers.defaultNullOpts.mkNullable
           # Type
-          (types.either types.str helpers.rawType)
+          (with types; oneOf [str bool helpers.rawType])
           # Default
           ":~:s?$?/..?"
           # Description
           ''
             In what format to show root folder. See `:help filename-modifiers` for available `string`
             options.
+
+            Set to `false` to hide the root folder.
 
             This can also be a `function(root_cwd)` which is passed the absolute path of the root folder
             and should return a string.
@@ -949,7 +947,6 @@ in {
           centralize_selection = centralizeSelection;
           inherit cursorline;
           debounce_delay = debounceDelay;
-          hide_root_folder = hideRootFolder;
           inherit width;
           inherit side;
           preserve_window_proportions = preserveWindowProportions;
