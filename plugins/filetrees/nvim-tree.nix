@@ -30,6 +30,12 @@ with lib; let
       They will be overridden to fit the file_popup content.
     '';
 in {
+  imports = [
+    (
+      mkRemovedOptionModule ["plugins" "nvim-tree" "view" "hideRootFolder"]
+      "Set `plugins.nvim-tree.renderer.rootFolderLabel` to `false` to hide the root folder."
+    )
+  ];
   options.plugins.nvim-tree =
     helpers.extraOptionsOptions
     // {
