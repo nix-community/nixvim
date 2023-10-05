@@ -58,11 +58,17 @@ in {
         Whether to replace file icon with the modified symbol when buffer is modified.
       '';
 
-      modified = helpers.defaultNullOpts.mkStr ''function(bufnr) return vim.bo[bufnr].modified end,'' ''
-        Get modified status of file.
-
-        NOTE: This can be used to get file modified status from SCM (e.g. git)
-      '';
+      modified =
+        helpers.defaultNullOpts.mkStr
+        ''
+          function(bufnr)
+          	return vim.bo[bufnr].modified
+          end
+        ''
+        ''
+          Get modified status of file.
+          NOTE: This can be used to get file modified status from SCM (e.g. git)
+        '';
 
       showNavic = helpers.defaultNullOpts.mkBool true ''
         Whether to show/use navic in the winbar.
@@ -80,11 +86,17 @@ in {
           NOTE: This function shouldn't do any expensive actions as it is run on each render.
         '';
 
-      customSection = helpers.defaultNullOpts.mkStr ''function() return " " end,'' ''
-            Get custom section contents.
-
-        NOTE: This function shouldn't do any expensive actions as it is run on each render.
-      '';
+      customSection =
+        helpers.defaultNullOpts.mkStr
+        ''
+          function()
+            return " "
+          end
+        ''
+        ''
+          Get custom section contents.
+          NOTE: This function shouldn't do any expensive actions as it is run on each render.
+        '';
 
       theme = helpers.defaultNullOpts.mkStr "auto" ''
         Theme to be used for generating highlight groups dynamically.
