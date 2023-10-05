@@ -79,7 +79,6 @@
         centralizeSelection = false;
         cursorline = true;
         debounceDelay = 15;
-        hideRootFolder = false;
         width = {
           min = 30;
           max = -1;
