@@ -159,24 +159,33 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        inherit
-          modifiers
-          modified
-          theme
-          symbols
-          kinds
-          ;
         attach_navic = attachNavic;
         create_autocmd = createAutocmd;
         include_buftypes = includeBuftypes;
         exclude_filetypes = excludeFiletypes;
+        modifiers = {
+          inherit (modifiers)
+            dirname
+            basename
+            ;
+        };
         show_dirname = showDirname;
         show_basename = showBasename;
         show_modified = showModified;
+        modified = helpers.ifNonNull' modified; (helpers.mkRaw modified);
         show_navic = showNavic;
-        lead_custom_section = leadCustomSection;
-        custom_section = customSection;
+        lead_custom_section = helpers.ifNonNull' leadCustomSection (helpers.mkRaw leadCustomSection);
+        custom_section = helpers.ifNonNull' customSection (helpers.mkRaw customSection);
+        inherit theme;
         context_follow_icon_color = contextFollowIconColor;
+        symbols = {
+          inherit (symbols);
+            modified
+            ellipsis
+            separator
+            ;
+        };
+        inherit kinds;       
       }
       // cfg.extraOptions;
   in
