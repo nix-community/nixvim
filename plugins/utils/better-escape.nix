@@ -50,7 +50,7 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        inherit mappings timeout keys;
+        inherit mapping timeout keys;
         clear_empty_lines = clearEmptyLines;
       }
       // cfg.extraOptions;
@@ -59,7 +59,7 @@ in {
       extraPlugins = [cfg.package];
 
       extraConfigLua = ''
-        require('better-escape').setup(${helpers.toLuaObject setupOptions})
+        require('better_escape').setup(${helpers.toLuaObject setupOptions})
       '';
     };
 }

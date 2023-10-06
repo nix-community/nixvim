@@ -6,7 +6,7 @@
   example = {
     plugins.better-escape = {
       enable = true;
-      mappings = ["jj" "jk"];
+      mapping = ["jj" "jk"];
       timeout = 150;
       clearEmptyLines = false;
       keys = "<ESC>";
