@@ -97,6 +97,7 @@
     ./utils/cursorline.nix
     ./utils/easyescape.nix
     ./utils/endwise.nix
+    ./utils/flash.nix
     ./utils/floaterm.nix
     ./utils/goyo.nix
     ./utils/hardtime.nix
