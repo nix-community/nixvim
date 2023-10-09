@@ -373,24 +373,29 @@ in {
 
         width =
           helpers.defaultNullOpts.mkNullable
-          (types.oneOf [
-            types.str
-            types.int
-            (types.submodule {
-              options = let
-                strOrInt = types.either types.str types.int;
-              in {
-                min = helpers.defaultNullOpts.mkNullable strOrInt "30" "Minimum dynamic width.";
+          (with types;
+            oneOf [
+              str
+              int
+              (submodule {
+                options = let
+                  strOrInt = either str int;
+                in {
+                  # TODO check type
+                  min = helpers.defaultNullOpts.mkNullable strOrInt "30" "Minimum dynamic width.";
 
-                max = helpers.defaultNullOpts.mkNullable strOrInt "-1" ''
-                  Maximum dynamic width, -1 for unbounded.
-                '';
-                padding = helpers.defaultNullOpts.mkNullable strOrInt "1" ''
-                  Extra padding to the right.
-                '';
-              };
-            })
-          ])
+                  max = helpers.defaultNullOpts.mkNullable strOrInt "-1" ''
+                    Maximum dynamic width, -1 for unbounded.
+                  '';
+
+                  padding =
+                    helpers.defaultNullOpts.mkNullable
+                    (either ints.unsigned helpers.rawType)
+                    "1"
+                    "Extra padding to the right.";
+                };
+              })
+            ])
           "30"
           ''
             Width of the window: can be a `%` string, a number representing columns or a table.
