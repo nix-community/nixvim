@@ -17,8 +17,17 @@
             "csh",
             "ksh"
         ],
+        "biome": [
+            "typescript",
+            "javascript",
+            "json",
+            "jsonc"
+        ],
         "black": [
             "python"
+        ],
+        "blade_formatter": [
+            "blade"
         ],
         "cbfmt": [
             "markdown"
@@ -66,6 +75,9 @@
         "fish_indent": [
             "fish"
         ],
+        "fixjson": [
+            "json"
+        ],
         "forge_fmt": [
             "solidity"
         ],
@@ -76,6 +88,9 @@
             "cmake"
         ],
         "gofmt": [
+            "go"
+        ],
+        "gofumpt": [
             "go"
         ],
         "goimports": [
@@ -99,8 +114,14 @@
         "js_standard": [
             "javascript"
         ],
+        "latexindent": [
+            "tex"
+        ],
         "lua_format": [
             "lua"
+        ],
+        "mdformat": [
+            "markdown"
         ],
         "nixfmt": [
             "nix"
@@ -124,7 +145,8 @@
             "sass",
             "less",
             "html",
-            "json"
+            "json",
+            "yaml"
         ],
         "prettier_d": [
             "javascript",
@@ -144,8 +166,25 @@
             "javascript",
             "typescript"
         ],
+        "protolint": [
+            "proto"
+        ],
+        "rome": [
+            "typescript",
+            "javascript",
+            "json"
+        ],
+        "ruff": [
+            "python"
+        ],
         "rustfmt": [
             "rust"
+        ],
+        "scalafmt": [
+            "scala"
+        ],
+        "shellharden": [
+            "sh"
         ],
         "shfmt": [
             "sh",
@@ -154,8 +193,20 @@
         "smlfmt": [
             "sml"
         ],
+        "sql-formatter": [
+            "sql"
+        ],
+        "stylelint": [
+            "css",
+            "scss",
+            "sass",
+            "less"
+        ],
         "stylua": [
             "lua"
+        ],
+        "taplo": [
+            "toml"
         ],
         "terraform_fmt": [
             "tf"
@@ -177,6 +228,9 @@
         ],
         "yapf": [
             "python"
+        ],
+        "yq": [
+            "yaml"
         ]
     },
     "linters": {
@@ -195,6 +249,12 @@
         "bashate": [
             "bash"
         ],
+        "checkmake": [
+            "make"
+        ],
+        "chktex": [
+            "tex"
+        ],
         "clang_tidy": [
             "c",
             "cpp"
@@ -205,6 +265,12 @@
         "clj_kondo": [
             "clojure"
         ],
+        "cmake_lint": [
+            "cmake"
+        ],
+        "codespell": [
+            "misc"
+        ],
         "cppcheck": [
             "c",
             "cpp"
@@ -212,6 +278,9 @@
         "cpplint": [
             "c",
             "cpp"
+        ],
+        "cspell": [
+            "misc"
         ],
         "dartanalyzer": [
             "dart"
@@ -282,12 +351,16 @@
         "luacheck": [
             "lua"
         ],
+        "markdownlint": [
+            "markdown"
+        ],
         "mcs": [
             "cs"
         ],
         "mypy": [
             "python"
         ],
+        "perlcritic": [],
         "phan": [
             "php"
         ],
