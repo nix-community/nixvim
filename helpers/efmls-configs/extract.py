@@ -51,6 +51,7 @@ identity_langs = [
     "slim",
     "sml",
     "solidity",
+    "sql",
     "tex",
     "toml",
     "typescript",
