@@ -21,7 +21,7 @@ with lib; rec {
         + (concatStringsSep ","
           (mapAttrsToList
             (n: v:
-              if head (stringToCharacters n) == "@"
+              if (builtins.match "__unkeyed.*" n) != null
               then toLuaObject v
               else if n == "__emptyString"
               then "[''] = " + (toLuaObject v)
