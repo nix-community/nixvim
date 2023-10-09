@@ -990,7 +990,7 @@ in {
             name: value: {
               name =
                 if name == "name"
-                then "@"
+                then "__unkeyed"
                 else name;
               value =
                 if isList value
@@ -1011,7 +1011,7 @@ in {
         mapAttrs' (k: v: {
           name =
             if k == "command"
-            then "@"
+            then "__unkeyed"
             else k;
           value = v;
         })

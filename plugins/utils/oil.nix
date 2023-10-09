@@ -338,35 +338,35 @@ in {
       {
         columns = with cfg.columns;
           (optional type.enable {
-            "@" = "type";
+            "__unkeyed" = "type";
             inherit (type) highlight icons;
           })
           ++ (optional icon.enable {
-            "@" = "icon";
+            "__unkeyed" = "icon";
             inherit (icon) highlight defaultFile directory;
           })
           ++ (optional size.enable {
-            "@" = "size";
+            "__unkeyed" = "size";
             inherit (size) highlight;
           })
           ++ (optional permissions.enable {
-            "@" = "permissions";
+            "__unkeyed" = "permissions";
             inherit (permissions) highlight;
           })
           ++ (optional ctime.enable {
-            "@" = "ctime";
+            "__unkeyed" = "ctime";
             inherit (ctime) highlight format;
           })
           ++ (optional mtime.enable {
-            "@" = "mtime";
+            "__unkeyed" = "mtime";
             inherit (mtime) highlight format;
           })
           ++ (optional atime.enable {
-            "@" = "atime";
+            "__unkeyed" = "atime";
             inherit (atime) highlight format;
           })
           ++ (optional birthtime.enable {
-            "@" = "birthtime";
+            "__unkeyed" = "birthtime";
             inherit (birthtime) highlight format;
           });
         buf_opions = cfg.bufOptions;

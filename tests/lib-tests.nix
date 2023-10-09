@@ -23,7 +23,7 @@
 
     testToLuaObjectLuaTableMixingList = {
       expr = helpers.toLuaObject {
-        "@...." = "foo";
+        "__unkeyed...." = "foo";
         bar = "baz";
       };
       expected = ''{"foo",["bar"] = "baz"}'';

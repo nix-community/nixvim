@@ -144,7 +144,7 @@ in {
           (k: v: {
             name =
               if k == "name"
-              then "@"
+              then "__unkeyed"
               else k;
             value = v;
           })
@@ -155,7 +155,7 @@ in {
       pluginToLua = plugin:
         if isAttrs plugin
         then {
-          "@" = plugin.name;
+          "__unkeyed" = plugin.name;
 
           inherit (plugin) disable as;
 
