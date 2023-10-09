@@ -9,7 +9,7 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.tmux-navigator = {
-    enable = mkEnableOption "Enable Tmux-Navigator (see https://github.com/christoomey/vim-tmux-navigator for tmux installation instruction)";
+    enable = mkEnableOption "Tmux-Navigator (see https://github.com/christoomey/vim-tmux-navigator for tmux installation instruction)";
 
     package = helpers.mkPackageOption "tmux-navigator" pkgs.vimPlugins.tmux-navigator;
 

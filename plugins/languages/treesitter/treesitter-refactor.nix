@@ -36,7 +36,7 @@ in {
     };
     highlightCurrentScope = {
       inherit disable;
-      enable = mkEnableOption "highlights the block from the current scope where the cursor is.";
+      enable = mkEnableOption "highlighting the block from the current scope where the cursor is";
     };
     smartRename = {
       inherit disable;

@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     plugins.easyescape = {
-      enable = mkEnableOption "Enable easyescape";
+      enable = mkEnableOption "easyescape";
 
       package = helpers.mkPackageOption "easyescape" pkgs.vimPlugins.vim-easyescape;
     };

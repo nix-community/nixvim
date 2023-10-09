@@ -12,7 +12,7 @@ in {
     plugins.presence-nvim =
       helpers.extraOptionsOptions
       // {
-        enable = mkEnableOption "Enable presence-nvim.";
+        enable = mkEnableOption "presence-nvim";
         package = helpers.mkPackageOption "presence-nvim" pkgs.vimPlugins.presence-nvim;
 
         # General options.

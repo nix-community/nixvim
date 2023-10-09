@@ -16,7 +16,7 @@ in {
       package = helpers.mkPackageOption "gruvbox" pkgs.vimPlugins.gruvbox-nvim;
 
       italics = mkEnableOption "italics";
-      bold = mkEnableOption "bold";
+      bold = mkEnableOption "bold text";
       underline = mkEnableOption "underlined text";
       undercurl = mkEnableOption "undercurled text";
 

@@ -8,7 +8,7 @@ with lib; let
   cfg = config.plugins.telescope.extensions.fzy-native;
 in {
   options.plugins.telescope.extensions.fzy-native = {
-    enable = mkEnableOption "Enable fzy-native";
+    enable = mkEnableOption "fzy-native";
 
     overrideGenericSorter = mkOption {
       type = types.nullOr types.bool;

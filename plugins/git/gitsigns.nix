@@ -36,7 +36,7 @@ with lib; let
   };
 in {
   options.plugins.gitsigns = {
-    enable = mkEnableOption "Enable gitsigns plugin";
+    enable = mkEnableOption "gitsigns plugin";
     package = helpers.mkPackageOption "gitsigns" pkgs.vimPlugins.gitsigns-nvim;
     signs = {
       add = signOptions {
