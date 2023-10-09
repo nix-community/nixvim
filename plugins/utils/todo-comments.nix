@@ -19,7 +19,7 @@ in {
     plugins.todo-comments =
       helpers.extraOptionsOptions
       // {
-        enable = mkEnableOption "Enable todo-comments.";
+        enable = mkEnableOption "todo-comments";
 
         package =
           helpers.mkPackageOption

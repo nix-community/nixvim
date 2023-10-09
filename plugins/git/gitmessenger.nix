@@ -8,7 +8,7 @@ with lib; let
   helpers = import ../helpers.nix args;
 in {
   options.plugins.gitmessenger = {
-    enable = mkEnableOption "Enable the gitmessenger plugin";
+    enable = mkEnableOption "gitmessenger";
 
     package = helpers.mkPackageOption "git-messenger" pkgs.vimPlugins.git-messenger-vim;
 

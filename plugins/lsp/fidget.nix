@@ -12,7 +12,7 @@ in {
     plugins.fidget =
       helpers.extraOptionsOptions
       // {
-        enable = mkEnableOption "Enable fidget.";
+        enable = mkEnableOption "fidget";
 
         package = helpers.mkPackageOption "fidget" pkgs.vimPlugins.fidget-nvim;
 

@@ -12,7 +12,7 @@ in {
     plugins.hardtime =
       helpers.extraOptionsOptions
       // {
-        enable = mkEnableOption "Enable hardtime.";
+        enable = mkEnableOption "hardtime";
 
         package = helpers.mkPackageOption "hardtime" pkgs.vimPlugins.hardtime-nvim;
 

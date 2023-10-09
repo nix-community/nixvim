@@ -14,7 +14,7 @@ in {
 
       package = helpers.mkPackageOption "coq-nvim" pkgs.vimPlugins.coq_nvim;
 
-      installArtifacts = mkEnableOption "Install coq-artifacts";
+      installArtifacts = mkEnableOption "and install coq-artifacts";
 
       autoStart = mkOption {
         type = with types; nullOr (oneOf [bool (enum ["shut-up"])]);

@@ -9,7 +9,7 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.telescope.extensions.fzf-native = {
-    enable = mkEnableOption "Enable fzf-native";
+    enable = mkEnableOption "fzf-native";
 
     package = helpers.mkPackageOption "telescope extension fzf-native" pkgs.vimPlugins.telescope-fzf-native-nvim;
 

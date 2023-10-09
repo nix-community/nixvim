@@ -9,7 +9,7 @@ with lib; let
   helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.telescope.extensions.media_files = {
-    enable = mkEnableOption "Enable media_files extension for telescope";
+    enable = mkEnableOption "media_files extension for telescope";
 
     package = helpers.mkPackageOption "telescope extension media_files" pkgs.vimPlugins.telescope-media-files-nvim;
 

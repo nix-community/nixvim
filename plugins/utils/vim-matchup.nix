@@ -8,12 +8,12 @@ with lib; let
   helpers = import ../helpers.nix args;
 in {
   options.plugins.vim-matchup = {
-    enable = mkEnableOption "Enable vim-matchup";
+    enable = mkEnableOption "vim-matchup";
 
     package = helpers.mkPackageOption "vim-matchup" pkgs.vimPlugins.vim-matchup;
 
     treesitterIntegration = {
-      enable = mkEnableOption "Enable treesitter integration";
+      enable = mkEnableOption "treesitter integration";
       disable =
         helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
         "Languages for each to disable this module";

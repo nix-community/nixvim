@@ -20,7 +20,7 @@ in {
           {
             options = {
               enable = mkEnableOption "nixvim";
-              defaultEditor = mkEnableOption "Set nixvim as the default editor";
+              defaultEditor = mkEnableOption "nixvim as the default editor";
             };
           }
         ]

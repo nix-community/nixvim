@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     plugins.comment-nvim = {
-      enable = mkEnableOption "Enable comment-nvim";
+      enable = mkEnableOption "comment-nvim";
 
       package = helpers.mkPackageOption "comment-nvim" pkgs.vimPlugins.comment-nvim;
 

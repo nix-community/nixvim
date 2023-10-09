@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     plugins.undotree = {
-      enable = mkEnableOption "Enable undotree";
+      enable = mkEnableOption "undotree";
 
       package = helpers.mkPackageOption "undotree" pkgs.vimPlugins.undotree;
 

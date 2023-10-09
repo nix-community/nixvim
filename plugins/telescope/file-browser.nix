@@ -25,7 +25,7 @@ with lib; let
   };
 in {
   options.plugins.telescope.extensions.file_browser = {
-    enable = mkEnableOption "File browser extension for telescope";
+    enable = mkEnableOption "file browser extension for telescope";
 
     package = helpers.mkPackageOption "telescope file_browser" pkgs.vimPlugins.telescope-file-browser-nvim;
 

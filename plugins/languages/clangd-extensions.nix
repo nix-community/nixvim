@@ -58,7 +58,7 @@ in {
   options.plugins.clangd-extensions =
     helpers.extraOptionsOptions
     // {
-      enable = mkEnableOption "clangd_extensions, plugin implementing clangd LSP extensions";
+      enable = mkEnableOption "clangd_extensions, plugins implementing clangd LSP extensions";
 
       package =
         helpers.mkPackageOption "clangd_extensions.nvim" pkgs.vimPlugins.clangd_extensions-nvim;

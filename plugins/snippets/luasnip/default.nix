@@ -9,7 +9,7 @@ with lib; let
   helpers = import ../../helpers.nix {inherit lib;};
 in {
   options.plugins.luasnip = {
-    enable = mkEnableOption "Enable luasnip";
+    enable = mkEnableOption "luasnip";
 
     package = helpers.mkPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 

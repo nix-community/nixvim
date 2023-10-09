@@ -19,7 +19,7 @@ This can then be passed to `pkgs.wrapNeovimUnstable` to generate a derivation th
 
 All the options that nixvim expose end up in those three places. This is done in the `modules/output.nix` file.
 
-The guiding principle of nixvim is too only add to the `init.lua` what the user added to the configuration. This means that we must trim out all the options that were not set.
+The guiding principle of nixvim is to only add to the `init.lua` what the user added to the configuration. This means that we must trim out all the options that were not set.
 
 This is done by making most of the options of the type `types.nullOr ....`, and not setting any option that is null.
 
