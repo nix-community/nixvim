@@ -210,7 +210,7 @@ in {
     }:
       mergeAttrs
       {
-        "@" = name;
+        "__unkeyed" = name;
         inherit icons_enabled icon separator color padding;
       }
       extraConfig;
