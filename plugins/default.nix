@@ -10,6 +10,7 @@
     ./colorschemes/dracula.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
+    ./colorschemes/melange.nix
     ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
