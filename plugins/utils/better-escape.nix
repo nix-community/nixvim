@@ -22,7 +22,7 @@ in {
       timeout =
         helpers.defaultNullOpts.mkNullable
         (with types;
-            either int helpers.rawType)
+            either ints.unsigned str)
         "vim.o.timeoutlen" ''
           The time in which the keys must be hit in ms. Use option timeoutlen by default.
         '';
