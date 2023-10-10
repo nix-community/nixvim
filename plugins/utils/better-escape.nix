@@ -19,9 +19,13 @@ in {
         List of mappings to use to enter escape mode.
       '';
 
-      timeout = helpers.defaultNullOpts.mkInt 100 ''
-        The time in which the keys must be hit in ms. Use option timeoutlen by default.
-      '';
+      timeout =
+        helpers.defaultNullOpts.mkNullable
+        (with types;
+            either int helpers.rawType)
+        "vim.o.timeoutlen" ''
+          The time in which the keys must be hit in ms. Use option timeoutlen by default.
+        '';
 
       clearEmptyLines = helpers.defaultNullOpts.mkBool false ''
         Clear line after escaping if there is only whitespace.
@@ -50,7 +54,11 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        inherit mapping timeout keys;
+        inherit mapping keys;
+        timeout =
+          if isInt timeout
+          then helpers.mkRaw "timeout"
+          else timeout;
         clear_empty_lines = clearEmptyLines;
       }
       // cfg.extraOptions;
