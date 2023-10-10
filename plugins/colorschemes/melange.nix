@@ -6,7 +6,7 @@
 }: let
   inherit (lib) mkEnableOption mkDefault mkIf;
   inherit (import ../helpers.nix {inherit lib;}) mkPackageOption;
-  cfg = config.colorscheme.melange;
+  cfg = config.colorschemes.melange;
 in {
   options = {
     colorschemes.melange = {
