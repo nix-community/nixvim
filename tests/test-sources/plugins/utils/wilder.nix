@@ -1,11 +1,12 @@
 {
   empty = {
-    plugins.wilder-nvim.enable = true;
+    plugins.wilder.enable = true;
   };
 
   example = {
-    plugins.wilder-nvim = {
+    plugins.wilder = {
       enable = true;
+
       modes = ["/" ":"];
       enableCmdlineEnter = false;
       wildcharm = "k";

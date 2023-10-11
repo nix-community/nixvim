@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  cfg = config.plugins.wilder-nvim;
+  cfg = config.plugins.wilder;
   helpers = import ../helpers.nix {inherit lib;};
 
   boolToInt = value:
@@ -15,7 +15,15 @@ with lib; let
     then "1"
     else "0";
 in {
-  options.plugins.wilder-nvim =
+  imports = [
+    (
+      mkRenamedOptionModule
+      ["plugins" "wilder-nvim"]
+      ["plugins" "wilder"]
+    )
+  ];
+
+  options.plugins.wilder =
     helpers.extraOptionsOptions
     // {
       enable = mkEnableOption "wilder-nvim";
