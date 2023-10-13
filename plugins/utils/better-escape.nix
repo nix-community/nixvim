@@ -22,9 +22,12 @@ in {
       timeout =
         helpers.defaultNullOpts.mkNullable
         (with types;
-            either ints.unsigned str)
-        "vim.o.timeoutlen" ''
-          The time in which the keys must be hit in ms. Use option timeoutlen by default.
+          either ints.unsigned str
+        )
+        "vim.o.timeoutlen"
+        ''
+          The time in which the keys must be hit in ms.
+          Uses the value of `vim.o.timeoutlen` (`options.timeoutlen` in nixvim) by default.
         '';
 
       clearEmptyLines = helpers.defaultNullOpts.mkBool false ''
