@@ -34,20 +34,19 @@ in {
       keys =
         helpers.defaultNullOpts.mkNullable
         (with types;
-            either str helpers.rawType)
+          either str helpers.rawType
+        )
         "<ESC>"
         ''
           Keys used for escaping, if it is a function will use the result everytime.
 
-          example(recommended):
+          Example (recommended):
 
-          keys = {
-          	_raw = \'\'
-          		function()
-          			return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
-          		 end,.
-          		 \'\'
-          	};
+          keys.__raw = \'\'
+            function()
+              return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
+            end
+          \'\';
         '';
     };
 
