@@ -5,22 +5,27 @@
   ...
 }:
 with lib; let
-  cfg = config.plugins.null-ls;
+  cfg = config.plugins.none-ls;
   helpers = import ../helpers.nix {inherit lib;};
 in {
   imports = [
     ./servers.nix
+    (
+      mkRenamedOptionModule
+      ["plugins" "null-ls"]
+      ["plugins" "none-ls"]
+    )
   ];
 
-  options.plugins.null-ls =
+  options.plugins.none-ls =
     helpers.extraOptionsOptions
     // {
-      enable = mkEnableOption "null-ls";
+      enable = mkEnableOption "none-ls";
 
       package = mkOption {
         type = types.package;
-        default = pkgs.vimPlugins.null-ls-nvim;
-        description = "Plugin to use for null-ls";
+        default = pkgs.vimPlugins.none-ls-nvim;
+        description = "Plugin to use for none-ls";
       };
 
       border = helpers.defaultNullOpts.mkBorder "null" "`:NullLsInfo` UI window." ''

@@ -7,7 +7,7 @@
   mkServer = {
     name,
     sourceType,
-    description ? "${name} source, for null-ls.",
+    description ? "${name} source, for none-ls.",
     package ? null,
     extraPackages ? [],
     ...
@@ -21,7 +21,7 @@
   } @ args:
     with lib; let
       helpers = import ../helpers.nix args;
-      cfg = config.plugins.null-ls.sources.${sourceType}.${name};
+      cfg = config.plugins.none-ls.sources.${sourceType}.${name};
       # does this evaluate package?
       packageOption =
         if package == null
@@ -30,11 +30,11 @@
           package = mkOption {
             type = types.package;
             default = package;
-            description = "Package to use for ${name} by null-ls";
+            description = "Package to use for ${name} by none-ls";
           };
         };
     in {
-      options.plugins.null-ls.sources.${sourceType}.${name} =
+      options.plugins.none-ls.sources.${sourceType}.${name} =
         {
           enable = mkEnableOption description;
 
@@ -56,7 +56,7 @@
         extraPackages = extraPackages ++ optional (package != null) cfg.package;
 
         # Add source to list of sources
-        plugins.null-ls.sourcesItems = let
+        plugins.none-ls.sourcesItems = let
           sourceItem = "${sourceType}.${name}";
           withArgs =
             if (cfg.withArgs == null)

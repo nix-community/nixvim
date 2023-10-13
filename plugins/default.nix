@@ -72,7 +72,7 @@
     ./lsp/nvim-lightbulb.nix
     ./lsp/trouble.nix
 
-    ./null-ls
+    ./none-ls
 
     ./dap
 
