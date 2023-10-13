@@ -161,7 +161,7 @@ in {
   imports = lib.lists.map helpers.mkServer dataFlattened;
 
   config = let
-    cfg = config.plugins.null-ls;
+    cfg = config.plugins.none-ls;
     gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
   in
     lib.mkIf cfg.enable {

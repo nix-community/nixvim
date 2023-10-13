@@ -1,21 +1,21 @@
 {
   # Empty configuration
   empty = {
-    plugins.null-ls.enable = true;
+    plugins.none-ls.enable = true;
   };
 
   # Broken:
-  # error: The option `plugins.null-ls.sources.formatting.beautysh' does not exist.
+  # error: The option `plugins.none-ls.sources.formatting.beautysh' does not exist.
   #
   # beautysh = {
-  #   plugins.null-ls = {
+  #   plugins.none-ls = {
   #     enable = true;
   #     sources.formatting.beautysh.enable = true;
   #   };
   # };
 
   default = {
-    plugins.null-ls = {
+    plugins.none-ls = {
       enable = true;
       border = null;
       cmd = ["nvim"];
