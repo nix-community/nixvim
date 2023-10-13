@@ -56,7 +56,7 @@ in {
       {
         inherit mapping keys;
         timeout =
-          if isInt timeout
+          if isString timeout
           then helpers.mkRaw "timeout"
           else timeout;
         clear_empty_lines = clearEmptyLines;
