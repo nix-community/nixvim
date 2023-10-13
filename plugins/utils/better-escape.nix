@@ -21,8 +21,9 @@ in {
 
       timeout =
         helpers.defaultNullOpts.mkNullable
-        (with types;
-          either ints.unsigned str
+        (
+          with types;
+            either ints.unsigned str
         )
         "vim.o.timeoutlen"
         ''
@@ -36,8 +37,9 @@ in {
 
       keys =
         helpers.defaultNullOpts.mkNullable
-        (with types;
-          either str helpers.rawType
+        (
+          with types;
+            either str helpers.rawType
         )
         "<ESC>"
         ''
@@ -56,12 +58,13 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        inherit mapping keys;
+        inherit mapping;
         timeout =
-          if isString timeout
-          then helpers.mkRaw timeout
+          if isInt timeout
+          then helpers.mkRaw "timeout"
           else timeout;
         clear_empty_lines = clearEmptyLines;
+        inherit keys;
       }
       // cfg.extraOptions;
   in
