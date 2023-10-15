@@ -51,6 +51,10 @@ with lib; rec {
     then "nil"
     else "";
 
+  listToUnkeyedAttrs = list:
+    builtins.listToAttrs
+    (lib.lists.imap0 (idx: lib.nameValuePair "__unkeyed-${toString idx}") list);
+
   emptyTable = {"__empty" = null;};
 
   highlightType = with lib.types;
