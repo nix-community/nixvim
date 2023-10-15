@@ -104,6 +104,7 @@
     ./utils/goyo.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix
+    ./utils/hmts.nix
     ./utils/illuminate.nix
     ./utils/indent-blankline.nix
     ./utils/instant.nix
