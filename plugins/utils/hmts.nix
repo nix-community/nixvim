@@ -18,9 +18,5 @@ in {
 
   config = mkIf cfg.enable {
     extraPlugins = [cfg.package];
-
-    extraConfigLua = ''
-      require('hmts').setup()
-    '';
   };
 }
