@@ -124,6 +124,7 @@
     ./utils/nvim-osc52.nix
     ./utils/nvim-ufo.nix
     ./utils/oil.nix
+    ./utils/persistence.nix
     ./utils/project-nvim.nix
     ./utils/presence-nvim.nix
     ./utils/quickmath.nix

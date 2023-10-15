@@ -103,6 +103,8 @@ with lib; rec {
     then null
     else y;
 
+  mkRawIfNonNull = v: ifNonNull' v (mkRaw v);
+
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
