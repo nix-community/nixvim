@@ -129,17 +129,13 @@ in {
             (keyMapping)
             mode
             key
+            options
             ;
 
           action =
             if keyMapping.lua
             then helpers.mkRaw keyMapping.action
             else keyMapping.action;
-
-          options =
-            if keyMapping.options == {}
-            then helpers.emptyTable
-            else keyMapping.options;
         };
       in
         map normalizeMapping
