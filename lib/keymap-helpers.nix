@@ -84,10 +84,8 @@ in rec {
     withKeyOpt ? true,
     flatConfig ? false,
   }:
-    with types;
-      either
-      str
-      (submodule {
+    with types; let
+      mapOptionSubmodule = submodule {
         options =
           (
             if withKeyOpt
@@ -133,7 +131,11 @@ in rec {
               options = mapConfigOptions;
             }
           );
-      });
+      };
+    in
+      if flatConfig
+      then either str mapOptionSubmodule
+      else mapOptionSubmodule;
 
   # Correctly merge two attrs (partially) representing a mapping.
   mergeKeymap = defaults: keymap: let
