@@ -83,7 +83,6 @@ in rec {
     defaultMode ? "",
     withKeyOpt ? true,
     flatConfig ? false,
-    actionIsOptional ? false,
   }:
     with types;
       either
@@ -113,14 +112,10 @@ in rec {
               example = ["n" "v"];
             };
 
-            action =
-              if actionIsOptional
-              then helpers.mkNullOrOption str "The action to execute"
-              else
-                mkOption {
-                  type = str;
-                  description = "The action to execute.";
-                };
+            action = mkOption {
+              type = str;
+              description = "The action to execute.";
+            };
 
             lua = mkOption {
               type = bool;

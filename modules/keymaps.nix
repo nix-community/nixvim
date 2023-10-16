@@ -26,7 +26,6 @@ in {
                     defaultMode = modeProps.short;
                     withKeyOpt = false;
                     flatConfig = true;
-                    actionIsOptional = config.plugins.which-key.enable;
                   }
                 )
               );
@@ -38,9 +37,7 @@ in {
     keymaps = mkOption {
       type =
         types.listOf
-        (helpers.keymaps.mkMapOptionSubmodule {
-          actionIsOptional = config.plugins.which-key.enable;
-        });
+        (helpers.keymaps.mkMapOptionSubmodule {});
       default = [];
       example = [
         {
