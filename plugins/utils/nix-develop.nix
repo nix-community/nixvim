@@ -17,10 +17,12 @@ in {
 
       ignoredVariables = mkOption {
         type = types.attrsOf types.bool;
+        default = {};
       };
 
       separatedVariables = mkOption {
         type = types.attrsOf types.str;
+        default = {};
       };
     };
 
