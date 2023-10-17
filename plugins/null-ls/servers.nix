@@ -76,6 +76,9 @@
       alejandra = {
         package = pkgs.alejandra;
       };
+      beautysh = {
+        package = pkgs.beautysh;
+      };
       black = {
         package = pkgs.python3Packages.black;
       };
