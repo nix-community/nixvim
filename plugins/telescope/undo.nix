@@ -1,0 +1,80 @@
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.plugins.telescope.extensions.undo;
+  helpers = import ../helpers.nix {inherit lib;};
+in {
+  options.plugins.telescope.extensions.undo = {
+    enable = mkEnableOption "undo";
+
+    package = helpers.mkPackageOption "telescope extension undo" pkgs.vimPlugins.telescope-undo-nvim;
+
+    useDelta = mkOption {
+      type = types.nullOr types.bool;
+      description = ''
+        When set to true, [delta](https://github.com/dandavison/delta) is used for fancy diffs in the preview section.
+        If set to false, `telescope-undo` will not use `delta` even when available and fall back to a plain diff with
+        treesitter highlights.
+      '';
+      default = true;
+    };
+
+    useCustomCommand = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      description = ''
+        should be in this format: [ "bash" "-c" "echo '$DIFF' | delta" ]
+      '';
+      default = null;
+    };
+
+    sideBySide = mkOption {
+      type = types.nullOr types.bool;
+      description = ''
+        If set to true tells `delta` to render diffs side-by-side. Thus, requires `delta` to be
+        used. Be aware that `delta` always uses its own configuration, so it might be that you're getting
+        the side-by-side view even if this is set to false.
+      '';
+      default = false;
+    };
+
+    diffContextLines = mkOption {
+      type = types.nullOr types.int;
+      description = '''';
+      default = "vim.o.scrolloff";
+    };
+
+    entryFormat = mkOption {
+      type = types.nullOr types.str;
+      description = ''The format to show on telescope for the different versions of the file.'';
+      default = "state #$ID, $STAT, $TIME";
+    };
+
+    timeFormat = mkOption {
+      type = types.nullOr types.str;
+      description = ''
+        Can be set to a [Lua date format string](https://www.lua.org/pil/22.1.html).
+      '';
+      default = "";
+    };
+    mappings = {};
+  };
+
+  config = let
+    configuration = {
+      inherit (cfg) fuzzy;
+      override_generic_sorter = cfg.overrideGenericSorter;
+      override_file_sorter = cfg.overrideFileSorter;
+      case_mode = cfg.caseMode;
+    };
+  in
+    mkIf cfg.enable {
+      extraPlugins = [cfg.package];
+
+      plugins.telescope.enabledExtensions = ["undo"];
+      plugins.telescope.extensionConfig."undo" = configuration;
+    };
+}
