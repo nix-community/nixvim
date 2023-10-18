@@ -97,6 +97,9 @@
       fourmolu = {
         package = pkgs.haskellPackages.fourmolu;
       };
+      gofmt = {
+        package = pkgs.go;
+      };
       isort = {
         package = pkgs.isort;
       };
