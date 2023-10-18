@@ -15,7 +15,7 @@
     plugins.harpoon = {
       enable = true;
 
-      enableTelescope = true;
+      enableTelescope = false;
       keymapsSilent = true;
       keymaps = {
         addFile = "<leader>a";
