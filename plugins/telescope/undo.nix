@@ -74,11 +74,11 @@ in {
             attrsOf str
         )
         ''
-               {
-          "<cr>" = "yank_additions";
-          "<s-cr>" = "yank_deletions";
-          "<c-cr>" = "restore";
-               }
+          {
+               "<cr>" = "yank_additions";
+               "<s-cr>" = "yank_deletions";
+               "<c-cr>" = "restore";
+          }
         '';
       n =
         helpers.defaultNullOpts.mkNullable
@@ -87,11 +87,11 @@ in {
             attrsOf str
         )
         ''
-               {
-          "y" = "yank_additions";
-          "Y" = "yank_deletions";
-          "u" = "restore";
-               }
+           {
+                 "y" = "yank_additions";
+                 "Y" = "yank_deletions";
+                 "u" = "restore";
+          }
         '';
     };
   };
