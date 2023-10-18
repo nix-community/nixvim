@@ -202,7 +202,7 @@ in {
     mkIf cfg.enable {
       assertions = [
         {
-          assertion = !config.plugins.telescope.enable -> cfg.enableTelescope;
+          assertion = config.plugins.telescope.enable -> cfg.enableTelescope;
           message = ''Nixvim: The harpoon telescope integration needs telescope to function as intended'';
         }
       ];
