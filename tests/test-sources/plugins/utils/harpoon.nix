@@ -7,14 +7,19 @@
     plugins.harpoon.enable = true;
   };
 
-  example = {
+  telescopeEnabled = {
     # Harpoon expects to access `~/.local/share/nvim/harpoon.json` which is not available in the
     # test environment
     tests.dontRun = true;
 
+    plugins.telescope = {
+      enable = true;
+    };
+
     plugins.harpoon = {
       enable = true;
 
+      enableTelescope = true;
       keymapsSilent = true;
       keymaps = {
         addFile = "<leader>a";
@@ -57,6 +62,18 @@
         height = 10;
         borderChars = ["─" "│" "─" "│" "╭" "╮" "╯" "╰"];
       };
+    };
+  };
+
+  telescopeDisabled = {
+    # Harpoon expects to access `~/.local/share/nvim/harpoon.json` which is not available in the
+    # test environment
+    tests.dontRun = true;
+
+    plugins.harpoon = {
+      enable = true;
+
+      enableTelescope = false;
     };
   };
 }
