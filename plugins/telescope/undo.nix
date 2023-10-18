@@ -42,8 +42,13 @@ in {
     };
 
     diffContextLines = mkOption {
-      type = types.nullOr types.int;
-      description = '''';
+      type =
+        helpers.defaultNullOpts.mkNullable
+        (
+          with types;
+            either ints.unsigned str
+        );
+      description = ''Defaults to the scrolloff'';
       default = "vim.o.scrolloff";
     };
 
@@ -60,18 +65,72 @@ in {
       '';
       default = "";
     };
-    mappings = {};
+
+    mappings = {
+      i =
+        helpers.defaultNullOpts.mkNullable
+        (
+          with types;
+            attrsOf str
+        )
+        ''
+               {
+          "<cr>" = "yank_additions";
+          "<s-cr>" = "yank_deletions";
+          "<c-cr>" = "restore";
+               }
+        '';
+      n =
+        helpers.defaultNullOpts.mkNullable
+        (
+          with types;
+            attrsOf str
+        )
+        ''
+               {
+          "y" = "yank_additions";
+          "Y" = "yank_deletions";
+          "u" = "restore";
+               }
+        '';
+    };
   };
 
   config = let
-    configuration = {
-      inherit (cfg) fuzzy;
-      override_generic_sorter = cfg.overrideGenericSorter;
-      override_file_sorter = cfg.overrideFileSorter;
-      case_mode = cfg.caseMode;
+    configuration = with cfg; {
+      use_delta = useDelta;
+      use_custom_command = useCustomCommand;
+      side_by_side = sideBySide;
+      diff_context_lines =
+        if isInt diffContextLines
+        then helpers.mkRaw "diffContextLines"
+        else diffContextLines;
+      entry_format = entryFormat;
+      time_format = timeFormat;
+      mappings = with mappings; {
+        i =
+          helpers.ifNonNull' i
+          (mapAttrs
+            (
+              key: action:
+                helpers.mkRaw "require('telescope-undo.actions').${action}"
+            )
+            mappings);
+
+        n =
+          helpers.ifNonNull' n
+          (mapAttrs
+            (
+              key: action:
+                helpers.mkRaw "require('telescope-undo.actions').${action}"
+            )
+            mappings);
+      };
     };
   in
-    mkIf cfg.enable {
+    mkIf
+    cfg.enable
+    {
       extraPlugins = [cfg.package];
 
       plugins.telescope.enabledExtensions = ["undo"];
