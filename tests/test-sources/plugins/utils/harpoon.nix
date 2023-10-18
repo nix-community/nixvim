@@ -12,10 +12,14 @@
     # test environment
     tests.dontRun = true;
 
+    plugins.telescope = {
+      enable = true;
+    };
+
     plugins.harpoon = {
       enable = true;
 
-      enableTelescope = false;
+      enableTelescope = true;
       keymapsSilent = true;
       keymaps = {
         addFile = "<leader>a";
