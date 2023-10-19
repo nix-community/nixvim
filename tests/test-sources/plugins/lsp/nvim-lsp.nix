@@ -87,6 +87,7 @@
         elmls.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
+        fsautocomplete.enable = true;
         futhark-lsp.enable = true;
         gopls.enable = true;
         hls.enable = true;

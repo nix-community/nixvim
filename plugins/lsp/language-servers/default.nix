@@ -176,6 +176,11 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
+      name = "fsautocomplete";
+      description = "Enable fsautocomplete, for F#";
+      package = pkgs.fsautocomplete;
+    }
+    {
       name = "futhark-lsp";
       description = "Enable Futhark lsp, for Futhark";
       package = pkgs.futhark;
