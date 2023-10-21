@@ -27,7 +27,7 @@ in {
 
       package = helpers.mkPackageOption "harpoon" pkgs.vimPlugins.harpoon;
 
-      enableTelescope = mkEnableOption "Enable telescope integration";
+      enableTelescope = mkEnableOption "telescope integration";
 
       keymapsSilent = mkOption {
         type = types.bool;
@@ -202,7 +202,7 @@ in {
     mkIf cfg.enable {
       assertions = [
         {
-          assertion = config.plugins.telescope.enable -> cfg.enableTelescope;
+          assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
           message = ''Nixvim: The harpoon telescope integration needs telescope to function as intended'';
         }
       ];
