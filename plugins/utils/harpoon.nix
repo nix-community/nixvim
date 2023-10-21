@@ -27,7 +27,7 @@ in {
 
       package = helpers.mkPackageOption "harpoon" pkgs.vimPlugins.harpoon;
 
-      enableTelescope = mkEnableOption "enable telescope integration";
+      enableTelescope = mkEnableOption "telescope integration";
 
       keymapsSilent = mkOption {
         type = types.bool;
