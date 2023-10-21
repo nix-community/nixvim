@@ -88,7 +88,9 @@
         eslint.enable = true;
         elixirls.enable = true;
         fsautocomplete.enable = true;
-        futhark-lsp.enable = true;
+        # As of 2023/10/21, futhark is broken
+        # TODO: test and uncomment if it gets fixed
+        # futhark-lsp.enable = true;
         gopls.enable = true;
         hls.enable = true;
         html.enable = true;
