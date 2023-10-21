@@ -87,7 +87,8 @@
         elmls.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
-        fsautocomplete.enable = true;
+        # pkgs.fsautocomplete only supports linux platforms
+        fsautocomplete.enable = pkgs.stdenv.isLinux;
         # As of 2023/10/21, futhark is broken
         # TODO: test and uncomment if it gets fixed
         # futhark-lsp.enable = true;
