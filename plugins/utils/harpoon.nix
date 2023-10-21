@@ -29,6 +29,12 @@ in {
 
       enableTelescope = mkEnableOption "enable telescope integration";
 
+      keymapsSilent = mkOption {
+        type = types.bool;
+        description = "Whether harpoon keymaps should be silent.";
+        default = false;
+      };
+
       keymaps = {
         addFile = helpers.mkNullOrOption types.str ''
           Keymap for marking the current file.";
