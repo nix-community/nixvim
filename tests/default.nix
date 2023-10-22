@@ -14,4 +14,16 @@
   };
 in
   # We attempt to build & execute all configurations
-  builtins.mapAttrs mkTestDerivation testFiles
+  builtins.mapAttrs mkTestDerivation (testFiles
+    // {
+      example = let
+        config = import ../example.nix {inherit pkgs;};
+      in
+        builtins.removeAttrs config.programs.nixvim [
+          # This is not available to standalone modules, only HM & NixOS Modules
+          "enable"
+          # This is purely an example, it does not reflect a real usage
+          "extraConfigLua"
+          "extraConfigVim"
+        ];
+    })
