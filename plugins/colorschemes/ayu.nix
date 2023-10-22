@@ -55,7 +55,9 @@ in {
       extraPlugins = [cfg.package];
 
       extraConfigLuaPre = ''
-        require("ayu").setup(${helpers.toLuaObject setupOptions})
+        local ayu = require("ayu")
+        ayu.setup(${helpers.toLuaObject setupOptions})
+        ayu.colorscheme()
       '';
     };
 }
