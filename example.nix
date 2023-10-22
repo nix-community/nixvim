@@ -25,7 +25,7 @@
     ];
 
     # We can set the leader key:
-    leader = ",";
+    globals.mapleader = ",";
 
     # We can create maps for every mode!
     # There is .normal, .insert, .visual, .operator, etc!
