@@ -13,6 +13,20 @@ in {
 
     package = helpers.mkPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 
+    extraConfig = mkOption {
+      type = types.attrs;
+      description = ''
+        Extra config options for luasnip.
+
+         Example:
+         {
+           enable_autosnippets = true,
+           store_selection_keys = "<Tab>",
+         }
+      '';
+      default = {};
+    };
+
     fromVscode = mkOption {
       default = [];
       example = ''
@@ -76,7 +90,48 @@ in {
     };
 
     # TODO: add support for snipmate
-    # TODO: add support for lua
+    fromLua = mkOption {
+      default = [];
+      description = ''
+        Load lua snippets with the lua loader.
+        Check https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#lua for the necessary file structure.
+      '';
+      example = ''
+        [
+          {}
+          {
+            paths = ./path/to/snippets;
+          }
+        ]
+      '';
+      type = types.listOf (types.submodule {
+        options = {
+          lazyLoad = mkOption {
+            type = types.bool;
+            default = true;
+            description = ''
+              Whether or not to lazy load the snippets
+            '';
+          };
+          paths = mkOption {
+            default = null;
+            type = with types;
+              nullOr (oneOf
+                [
+                  str
+                  path
+                  helpers.rawType
+                  (listOf (oneOf
+                    [
+                      str
+                      path
+                      helpers.rawType
+                    ]))
+                ]);
+          };
+        };
+      });
+    };
   };
 
   config = let
@@ -88,10 +143,26 @@ in {
         require("luasnip.loaders.from_vscode").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
       '')
       cfg.fromVscode;
+    fromLuaLoaders =
+      lists.map
+      (
+        loader: let
+          options = attrsets.getAttrs ["paths"] loader;
+        in ''
+          require("luasnip.loaders.from_lua").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
+
+        ''
+      )
+      cfg.fromLua;
+    extraConfig = [
+      ''
+        require("luasnip").config.set_config(${helpers.toLuaObject cfg.extraConfig})
+      ''
+    ];
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
       extraLuaPackages = ps: [ps.jsregexp];
-      extraConfigLua = concatStringsSep "\n" fromVscodeLoaders;
+      extraConfigLua = concatStringsSep "\n" (extraConfig ++ fromVscodeLoaders ++ fromLuaLoaders);
     };
 }
