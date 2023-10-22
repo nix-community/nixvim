@@ -150,7 +150,6 @@ in {
           options = attrsets.getAttrs ["paths"] loader;
         in ''
           require("luasnip.loaders.from_lua").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
-
         ''
       )
       cfg.fromLua;
