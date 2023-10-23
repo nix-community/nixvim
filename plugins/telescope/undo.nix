@@ -75,7 +75,8 @@ in {
                "<s-cr>" = "yank_deletions";
                "<c-cr>" = "restore";
           }
-        '';
+        ''
+        "<INSERT_DESCRIPTION>";
       n =
         helpers.defaultNullOpts.mkNullable
         (
@@ -88,7 +89,8 @@ in {
                  "Y" = "yank_deletions";
                  "u" = "restore";
           }
-        '';
+        ''
+        "<INSERT_DESCRIPTION>";
     };
   };
 
