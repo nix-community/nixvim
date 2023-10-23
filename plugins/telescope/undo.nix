@@ -76,7 +76,7 @@ in {
                "<c-cr>" = "restore";
           }
         ''
-        "<INSERT_DESCRIPTION>";
+        "Keymaps in insert mode";
       n =
         helpers.defaultNullOpts.mkNullable
         (
@@ -90,7 +90,7 @@ in {
                  "u" = "restore";
           }
         ''
-        "<INSERT_DESCRIPTION>";
+        "Keymaps in normal mode";
     };
   };
 
