@@ -1,5 +1,6 @@
 default_pkgs: modules: {
   pkgs ? default_pkgs,
+  extraSpecialArgs ? {},
   module,
 }: let
   inherit (pkgs) lib;
@@ -8,7 +9,9 @@ default_pkgs: modules: {
 
   shared = import ./_shared.nix modules {
     inherit pkgs lib;
-    config = {};
+    config = {
+      _module.args = extraSpecialArgs;
+    };
   };
 
   eval = lib.evalModules {

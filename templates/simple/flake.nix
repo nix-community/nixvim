@@ -7,6 +7,7 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
     nixvim,
     flake-utils,
@@ -21,6 +22,10 @@
       nvim = nixvim'.makeNixvimWithModule {
         inherit pkgs;
         module = config;
+        # You can use `extraSpecialArgs` to pass additional arguments to your module files
+        extraSpecialArgs = {
+          inherit self;
+        };
       };
     in {
       checks = {
