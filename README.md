@@ -202,6 +202,8 @@ It takes a set with the following keys:
 - `pkgs`: The nixpkgs to use (defaults to the nixpkgs pointed at by the nixvim flake)
 - `module`: The nix module definition used to extend nixvim.
   This is useful to pass additional module machinery like `options` or `imports`.
+- `extraSpecialArgs`: Extra arguments to pass to the modules when using functions.
+  Can be `self` in a flake for example.
 
 ## How does it work?
 When you build the module (probably using home-manager), it will install all
