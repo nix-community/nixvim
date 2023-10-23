@@ -42,12 +42,8 @@ in {
     };
 
     diffContextLines = mkOption {
-      type =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            either ints.unsigned str
-        );
+      type = with types;
+        either ints.unsigned str;
       description = ''Defaults to the scrolloff'';
       default = "vim.o.scrolloff";
     };
