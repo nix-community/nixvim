@@ -64,21 +64,33 @@ in {
 
     mappings = {
       i =
-        helpers.ifNonNull' i
+        helpers.defaultNullOpts.mkNullable
         (
-          mapAttrs
-          (key: action:
-            helpers.mkRaw "require('telescope-undo.actions').${action}")
-          i
-        );
+          with types;
+            attrsOf str
+        )
+        ''
+          {
+               "<cr>" = "yank_additions";
+               "<s-cr>" = "yank_deletions";
+               "<c-cr>" = "restore";
+          }
+        ''
+        "Keymaps in insert mode";
       n =
-        helpers.ifNonNull' n
+        helpers.defaultNullOpts.mkNullable
         (
-          mapAttrs
-          (key: action:
-            helpers.mkRaw "require('telescope-undo.actions').${action}")
-          n
-        );
+          with types;
+            attrsOf str
+        )
+        ''
+           {
+                 "y" = "yank_additions";
+                 "Y" = "yank_deletions";
+                 "u" = "restore";
+          }
+        ''
+        "Keymaps in normal mode";
     };
   };
 
