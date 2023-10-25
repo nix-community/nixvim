@@ -62,7 +62,7 @@ in {
       default = "";
     };
 
-    mappings = with mappings; {
+    mappings = {
       i =
         helpers.ifNonNull' i
         (
