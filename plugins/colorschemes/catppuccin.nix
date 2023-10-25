@@ -62,6 +62,8 @@ in {
 
       disableBold = helpers.defaultNullOpts.mkBool false "Force no bold";
 
+      disableUnderline = helpers.defaultNullOpts.mkBool false "Force no underline";
+
       styles = {
         comments =
           helpers.defaultNullOpts.mkNullable (types.listOf types.str)
@@ -326,6 +328,7 @@ in {
         dim_inactive = dimInactive;
         no_italic = disableItalic;
         no_bold = disableBold;
+        no_underline = disableUnderline;
         color_overrides = colorOverrides;
         custom_highlights =
           helpers.ifNonNull' cfg.customHighlights
