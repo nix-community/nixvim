@@ -171,6 +171,7 @@ in {
           color_mode = helpers.defaultNullOpts.mkBool false "";
         };
 
+        # TODO: requires additional setup
         feline = helpers.defaultNullOpts.mkBool false "";
 
         fern = helpers.defaultNullOpts.mkBool false "";
@@ -206,6 +207,7 @@ in {
 
         lightspeed = helpers.defaultNullOpts.mkBool false "";
 
+        # TODO: lspsaga.setup call for custom kinds and colors
         lsp_saga =
           helpers.defaultNullOpts.mkBool config.plugins.lspsaga.enable "";
 
@@ -258,6 +260,8 @@ in {
           };
         };
 
+        # TODO: require("nvim-navic").setup { highlight = true }
+        #  or:  plugins.navic.highlight = true
         navic = {
           enabled = helpers.defaultNullOpts.mkBool false "";
 
