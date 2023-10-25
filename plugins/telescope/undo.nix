@@ -62,35 +62,23 @@ in {
       default = "";
     };
 
-    mappings = {
+    mappings = with mappings; {
       i =
-        helpers.defaultNullOpts.mkNullable
+        helpers.ifNonNull' i
         (
-          with types;
-            attrsOf str
-        )
-        ''
-          {
-               "<cr>" = "yank_additions";
-               "<s-cr>" = "yank_deletions";
-               "<c-cr>" = "restore";
-          }
-        ''
-        "Keymaps in insert mode";
+          mapAttrs
+          (key: action:
+            helpers.mkRaw "require('telescope-undo.actions').${action}")
+          i
+        );
       n =
-        helpers.defaultNullOpts.mkNullable
+        helpers.ifNonNull' n
         (
-          with types;
-            attrsOf str
-        )
-        ''
-           {
-                 "y" = "yank_additions";
-                 "Y" = "yank_deletions";
-                 "u" = "restore";
-          }
-        ''
-        "Keymaps in normal mode";
+          mapAttrs
+          (key: action:
+            helpers.mkRaw "require('telescope-undo.actions').${action}")
+          n
+        );
     };
   };
 
