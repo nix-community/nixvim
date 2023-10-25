@@ -108,21 +108,21 @@ in {
       mappings = with mappings; {
         i =
           helpers.ifNonNull' i
-          (mapAttrs
-            (
-              key: action:
-                helpers.mkRaw "require('telescope-undo.actions').${action}"
-            )
-            mappings);
+          (
+            mapAttrs
+            (key: action:
+              helpers.mkRaw "require('telescope-undo.actions').${action}")
+            i
+          );
 
         n =
           helpers.ifNonNull' n
-          (mapAttrs
-            (
-              key: action:
-                helpers.mkRaw "require('telescope-undo.actions').${action}"
-            )
-            mappings);
+          (
+            mapAttrs
+            (key: action:
+              helpers.mkRaw "require('telescope-undo.actions').${action}")
+            n
+          );
       };
     };
   in
