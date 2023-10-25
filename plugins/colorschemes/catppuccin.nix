@@ -144,20 +144,40 @@ in {
       integrations = {
         aerial = helpers.defaultNullOpts.mkBool false "";
 
+        alpha = helpers.defaultNullOpts.mkBool false "";
+
         barbar = helpers.defaultNullOpts.mkBool config.plugins.barbar.enable "";
 
         beacon = helpers.defaultNullOpts.mkBool false "";
+
+        # TODO: bufferline = ;
 
         cmp = helpers.defaultNullOpts.mkBool config.plugins.nvim-cmp.enable "";
 
         coc_nvim = helpers.defaultNullOpts.mkBool false "";
 
+        dap = {
+          enabled = helpers.defaultNullOpts.mkBool false "";
+
+          enable_ui = helpers.defaultNullOpts.mkBool false "";
+        };
+
         dashboard =
           helpers.defaultNullOpts.mkBool config.plugins.dashboard.enable "";
+
+        dropbar = {
+          enabled = helpers.defaultNullOpts.mkBool true "";
+
+          color_mode = helpers.defaultNullOpts.mkBool false "";
+        };
+
+        feline = helpers.defaultNullOpts.mkBool false "";
 
         fern = helpers.defaultNullOpts.mkBool false "";
 
         fidget = helpers.defaultNullOpts.mkBool false "";
+
+        flash = helpers.defaultNullOpts.mkBool false "";
 
         gitgutter =
           helpers.defaultNullOpts.mkBool config.plugins.gitgutter.enable "";
@@ -174,6 +194,14 @@ in {
 
         illuminate = helpers.defaultNullOpts.mkBool false "";
 
+        indent_blankline = {
+          enabled = helpers.defaultNullOpts.mkBool config.plugins.indent-blankline.enable "";
+
+          scope_color = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "" "";
+
+          colored_indent_levels = helpers.defaultNullOpts.mkBool false "";
+        };
+
         leap = helpers.defaultNullOpts.mkBool false "";
 
         lightspeed = helpers.defaultNullOpts.mkBool false "";
@@ -189,81 +217,6 @@ in {
         mason = helpers.defaultNullOpts.mkBool false "";
 
         mini = helpers.defaultNullOpts.mkBool false "";
-
-        neogit = helpers.defaultNullOpts.mkBool config.plugins.neogit.enable "";
-
-        neotest = helpers.defaultNullOpts.mkBool false "";
-
-        neotree =
-          helpers.defaultNullOpts.mkBool config.plugins.neo-tree.enable "";
-
-        noice = helpers.defaultNullOpts.mkBool config.plugins.noice.enable "";
-
-        notify = helpers.defaultNullOpts.mkBool config.plugins.notify.enable "";
-
-        nvimtree =
-          helpers.defaultNullOpts.mkBool config.plugins.nvim-tree.enable "";
-
-        octo = helpers.defaultNullOpts.mkBool false "";
-
-        overseer = helpers.defaultNullOpts.mkBool false "";
-
-        pounce = helpers.defaultNullOpts.mkBool false "";
-
-        sandwich = helpers.defaultNullOpts.mkBool false "";
-
-        semantic_tokens = helpers.defaultNullOpts.mkBool false "";
-
-        symbols_outline = helpers.defaultNullOpts.mkBool false "";
-
-        telekasten = helpers.defaultNullOpts.mkBool false "";
-
-        telescope =
-          helpers.defaultNullOpts.mkBool config.plugins.telescope.enable "";
-
-        treesitter =
-          helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
-
-        treesitter_context =
-          helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
-
-        ts_rainbow =
-          helpers.defaultNullOpts.mkBool
-          true "";
-
-        ts_rainbow2 = helpers.defaultNullOpts.mkBool true "";
-
-        rainbow_delimiters = helpers.defaultNullOpts.mkBool true "";
-
-        vim_sneak = helpers.defaultNullOpts.mkBool false "";
-
-        vimwiki = helpers.defaultNullOpts.mkBool false "";
-
-        which_key =
-          helpers.defaultNullOpts.mkBool config.plugins.which-key.enable "";
-
-        barbecue = {
-          dim_dirname = helpers.defaultNullOpts.mkBool true "";
-
-          bold_basename = helpers.defaultNullOpts.mkBool true "";
-
-          dim_context = helpers.defaultNullOpts.mkBool false "";
-
-          alt_background = helpers.defaultNullOpts.mkBool false "";
-        };
-
-        dap = {
-          enabled = helpers.defaultNullOpts.mkBool false "";
-
-          enable_ui = helpers.defaultNullOpts.mkBool false "";
-        };
-        indent_blankline = {
-          enabled =
-            helpers.defaultNullOpts.mkBool
-            config.plugins.indent-blankline.enable "";
-
-          colored_indent_levels = helpers.defaultNullOpts.mkBool false "";
-        };
 
         native_lsp = {
           enabled = helpers.defaultNullOpts.mkBool config.plugins.lsp.enable "";
@@ -309,6 +262,72 @@ in {
           enabled = helpers.defaultNullOpts.mkBool false "";
 
           custom_bg = helpers.defaultNullOpts.mkStr "NONE" "";
+        };
+
+        neogit = helpers.defaultNullOpts.mkBool config.plugins.neogit.enable "";
+
+        neotest = helpers.defaultNullOpts.mkBool false "";
+
+        neotree =
+          helpers.defaultNullOpts.mkBool config.plugins.neo-tree.enable "";
+
+        noice = helpers.defaultNullOpts.mkBool config.plugins.noice.enable "";
+
+        # TODO: NormalNvim = ;
+
+        notifier = helpers.defaultNullOpts.mkBool false "";
+
+        notify = helpers.defaultNullOpts.mkBool config.plugins.notify.enable "";
+
+        nvimtree =
+          helpers.defaultNullOpts.mkBool config.plugins.nvim-tree.enable "";
+
+        octo = helpers.defaultNullOpts.mkBool false "";
+
+        overseer = helpers.defaultNullOpts.mkBool false "";
+
+        pounce = helpers.defaultNullOpts.mkBool false "";
+
+        rainbow_delimiters = helpers.defaultNullOpts.mkBool true "";
+
+        sandwich = helpers.defaultNullOpts.mkBool false "";
+
+        semantic_tokens = helpers.defaultNullOpts.mkBool false "";
+
+        symbols_outline = helpers.defaultNullOpts.mkBool false "";
+
+        telekasten = helpers.defaultNullOpts.mkBool false "";
+
+        telescope =
+          helpers.defaultNullOpts.mkBool config.plugins.telescope.enable "";
+
+        treesitter =
+          helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
+
+        treesitter_context =
+          helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
+
+        ts_rainbow =
+          helpers.defaultNullOpts.mkBool
+          true "";
+
+        ts_rainbow2 = helpers.defaultNullOpts.mkBool true "";
+
+        vim_sneak = helpers.defaultNullOpts.mkBool false "";
+
+        vimwiki = helpers.defaultNullOpts.mkBool false "";
+
+        which_key =
+          helpers.defaultNullOpts.mkBool config.plugins.which-key.enable "";
+
+        barbecue = {
+          dim_dirname = helpers.defaultNullOpts.mkBool true "";
+
+          bold_basename = helpers.defaultNullOpts.mkBool true "";
+
+          dim_context = helpers.defaultNullOpts.mkBool false "";
+
+          alt_background = helpers.defaultNullOpts.mkBool false "";
         };
       };
     };
