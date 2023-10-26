@@ -29,6 +29,9 @@
         "blade_formatter": [
             "blade"
         ],
+        "buf": [
+            "proto"
+        ],
         "cbfmt": [
             "markdown"
         ],
@@ -248,6 +251,9 @@
         ],
         "bashate": [
             "bash"
+        ],
+        "buf": [
+            "proto"
         ],
         "checkmake": [
             "make"
