@@ -198,7 +198,7 @@ in {
         indent_blankline = {
           enabled = helpers.defaultNullOpts.mkBool config.plugins.indent-blankline.enable "";
 
-          scope_color = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "" "";
+          scope_color = helpers.defaultNullOpts.mkStr "" "";
 
           colored_indent_levels = helpers.defaultNullOpts.mkBool false "";
         };
