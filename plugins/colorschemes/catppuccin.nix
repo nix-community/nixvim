@@ -218,7 +218,11 @@ in {
 
         mason = helpers.defaultNullOpts.mkBool false "";
 
-        mini = helpers.defaultNullOpts.mkBool false "";
+        mini = {
+          enabled = helpers.defaultNullOpts.mkBool  config.plugins.mini.enable "";
+
+          indentscope_color = helpers.defaultNullOpts.mkStr "" "";
+        };
 
         native_lsp = {
           enabled = helpers.defaultNullOpts.mkBool config.plugins.lsp.enable "";
