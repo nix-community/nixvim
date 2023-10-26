@@ -144,9 +144,19 @@ in {
       integrations = {
         aerial = helpers.defaultNullOpts.mkBool false "";
 
-        alpha = helpers.defaultNullOpts.mkBool false "";
+        alpha = helpers.defaultNullOpts.mkBool true "";
 
         barbar = helpers.defaultNullOpts.mkBool config.plugins.barbar.enable "";
+
+        barbecue = {
+          dim_dirname = helpers.defaultNullOpts.mkBool true "";
+
+          bold_basename = helpers.defaultNullOpts.mkBool true "";
+
+          dim_context = helpers.defaultNullOpts.mkBool false "";
+
+          alt_background = helpers.defaultNullOpts.mkBool false "";
+        };
 
         beacon = helpers.defaultNullOpts.mkBool false "";
 
@@ -166,7 +176,7 @@ in {
           helpers.defaultNullOpts.mkBool config.plugins.dashboard.enable "";
 
         dropbar = {
-          enabled = helpers.defaultNullOpts.mkBool true "";
+          enabled = helpers.defaultNullOpts.mkBool false "";
 
           color_mode = helpers.defaultNullOpts.mkBool false "";
         };
@@ -178,7 +188,7 @@ in {
 
         fidget = helpers.defaultNullOpts.mkBool false "";
 
-        flash = helpers.defaultNullOpts.mkBool false "";
+        flash = helpers.defaultNullOpts.mkBool true "";
 
         gitgutter =
           helpers.defaultNullOpts.mkBool config.plugins.gitgutter.enable "";
@@ -193,7 +203,11 @@ in {
 
         hop = helpers.defaultNullOpts.mkBool false "";
 
-        illuminate = helpers.defaultNullOpts.mkBool false "";
+        illuminate = {
+          enabled = helpers.defaultNullOpts.mkBool config.plugins.illuminate.enable "";
+
+          lsp = helpers.defaultNullOpts.mkBool false "";
+        };
 
         indent_blankline = {
           enabled = helpers.defaultNullOpts.mkBool config.plugins.indent-blankline.enable "";
@@ -214,12 +228,12 @@ in {
         lsp_trouble =
           helpers.defaultNullOpts.mkBool config.plugins.trouble.enable "";
 
-        markdown = helpers.defaultNullOpts.mkBool false "";
+        markdown = helpers.defaultNullOpts.mkBool true "";
 
         mason = helpers.defaultNullOpts.mkBool false "";
 
         mini = {
-          enabled = helpers.defaultNullOpts.mkBool  config.plugins.mini.enable "";
+          enabled = helpers.defaultNullOpts.mkBool config.plugins.mini.enable "";
 
           indentscope_color = helpers.defaultNullOpts.mkStr "" "";
         };
@@ -261,6 +275,10 @@ in {
             information =
               helpers.defaultNullOpts.mkNullable (types.listOf types.str)
               ''[ "underline" ]'' "";
+          };
+
+          inlay_hints = {
+            background = helpers.defaultNullOpts.mkBool true "";
           };
         };
 
@@ -306,8 +324,11 @@ in {
 
         telekasten = helpers.defaultNullOpts.mkBool false "";
 
-        telescope =
-          helpers.defaultNullOpts.mkBool config.plugins.telescope.enable "";
+        telescope = {
+          enabled = helpers.defaultNullOpts.mkBool config.plugins.telescope.enable "";
+
+          style = helpers.defaultNullOpts.mkStr "" "";
+        };
 
         treesitter =
           helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
@@ -321,6 +342,8 @@ in {
 
         ts_rainbow2 = helpers.defaultNullOpts.mkBool true "";
 
+        ufo = helpers.defaultNullOpts.mkBool true "";
+
         vim_sneak = helpers.defaultNullOpts.mkBool false "";
 
         vimwiki = helpers.defaultNullOpts.mkBool false "";
@@ -328,15 +351,7 @@ in {
         which_key =
           helpers.defaultNullOpts.mkBool config.plugins.which-key.enable "";
 
-        barbecue = {
-          dim_dirname = helpers.defaultNullOpts.mkBool true "";
-
-          bold_basename = helpers.defaultNullOpts.mkBool true "";
-
-          dim_context = helpers.defaultNullOpts.mkBool false "";
-
-          alt_background = helpers.defaultNullOpts.mkBool false "";
-        };
+        window_picker = helpers.defaultNullOpts.mkBool false "";
       };
     };
   };
