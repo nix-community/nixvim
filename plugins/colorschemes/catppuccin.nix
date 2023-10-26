@@ -233,7 +233,7 @@ in {
         mason = helpers.defaultNullOpts.mkBool false "";
 
         mini = {
-          enabled = helpers.defaultNullOpts.mkBool config.plugins.mini.enable "";
+          enabled = helpers.defaultNullOpts.mkBool false "";
 
           indentscope_color = helpers.defaultNullOpts.mkStr "" "";
         };

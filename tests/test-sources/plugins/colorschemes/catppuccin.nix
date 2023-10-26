@@ -43,9 +43,13 @@
         cmp = true;
         gitsigns = true;
         nvimtree = true;
-        telescope = true;
+        telescope = {
+          enabled = true;
+        };
         notify = false;
-        mini = false;
+        mini = {
+          enabled = false;
+        };
       };
     };
   };
@@ -62,18 +66,25 @@
         barbar = true;
         fidget = true;
         gitsigns = true;
-        illuminate = true;
+        illuminate = {
+          enabled = true;
+        };
         indent_blankline = {
           enabled = true;
           colored_indent_levels = true;
         };
         lsp_trouble = true;
-        mini = true;
+        mini = {
+          enabled = true;
+        };
         native_lsp.enabled = true;
         navic.enabled = true;
         nvimtree = true;
         overseer = true;
-        telescope = true;
+        telescope = {
+          enabled = true;
+          style = "nvchad";
+        };
         treesitter = true;
         treesitter_context = true;
         ts_rainbow2 = true;
