@@ -4,7 +4,7 @@
     colorschemes.catppuccin.enable = true;
   };
 
-  # All the upstream default options of poimandres
+  # All the upstream default options of catppuccin
   defaults = {
     colorschemes.catppuccin = {
       enable = true;
@@ -14,15 +14,13 @@
         dark = "mocha";
       };
       transparentBackground = false;
-      terminalColors = true;
+      terminalColors = false;
       showBufferEnd = false;
       dimInactive = {
         enabled = true;
         shade = "dark";
         percentage = 0.15;
       };
-      disableItalic = true;
-      disableBold = true;
       styles = {
         comments = ["italic"];
         conditionals = ["italic"];
@@ -57,6 +55,10 @@
       flavour = "mocha";
       terminalColors = true;
       colorOverrides.mocha.base = "#1e1e2f";
+
+      disableItalic = true;
+      disableBold = true;
+      disableUnderline = true;
 
       integrations = {
         barbar = true;
