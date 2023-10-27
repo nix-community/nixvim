@@ -4,7 +4,7 @@
     colorschemes.catppuccin.enable = true;
   };
 
-  # All the upstream default options of catppuccin 
+  # All the upstream default options of catppuccin
   defaults = {
     colorschemes.catppuccin = {
       enable = true;
