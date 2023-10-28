@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   # Empty configuration
   empty = {
     plugins.none-ls.enable = true;
@@ -66,7 +66,7 @@
           cbfmt.enable = true;
           eslint.enable = true;
           eslint_d.enable = true;
-          fantomas.enable = true;
+          fantomas.enable = pkgs.stdenv.isLinux;
           fnlfmt.enable = true;
           fourmolu.enable = true;
           gofmt.enable = true;
