@@ -113,22 +113,27 @@ in {
               Whether or not to lazy load the snippets
             '';
           };
-          paths = mkOption {
-            default = null;
-            type = with types;
-              nullOr (oneOf
-                [
-                  str
-                  path
-                  helpers.rawType
-                  (listOf (oneOf
-                    [
-                      str
-                      path
-                      helpers.rawType
-                    ]))
-                ]);
-          };
+          paths =
+            helpers.defaultNullOpts.mkNullable
+            (
+              with types;
+                nullOr (
+                  oneOf
+                  [
+                    str
+                    path
+                    helpers.rawType
+                    (listOf (oneOf
+                      [
+                        str
+                        path
+                        helpers.rawType
+                      ]))
+                  ]
+                )
+            )
+            ""
+            "Paths with snippets specified with native lua";
         };
       });
     };
