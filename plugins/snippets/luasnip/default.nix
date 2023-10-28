@@ -14,7 +14,7 @@ in {
     package = helpers.mkPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 
     extraConfig = mkOption {
-      type = types.attrs;
+      type = types.attrsOf types.anything;
       description = ''
         Extra config options for luasnip.
 
