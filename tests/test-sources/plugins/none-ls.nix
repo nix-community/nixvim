@@ -66,6 +66,7 @@
           cbfmt.enable = true;
           eslint.enable = true;
           eslint_d.enable = true;
+          fantomas.enable = true;
           fnlfmt.enable = true;
           fourmolu.enable = true;
           gofmt.enable = true;

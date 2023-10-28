@@ -91,6 +91,9 @@
       eslint_d = {
         package = pkgs.nodePackages.eslint_d;
       };
+      fantomas = {
+        package = pkgs.fantomas;
+      };
       fnlfmt = {
         package = pkgs.fnlfmt;
       };
