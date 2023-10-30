@@ -22,13 +22,13 @@ in {
         )
         ''
           {
-            "go" = "false";
-            "java" = "false";
-            "cpp" = "false";
-            "c" = "false";
-            "h" = "false";
-            "hpp" = "false";
-            "cxx" = "false";
+            "go" = false;
+            "java" = false;
+            "cpp" = false;
+            "c" = false;
+            "h" = false;
+            "hpp" = false;
+            "cxx" = false;
           }
         ''
         ''
@@ -45,13 +45,13 @@ in {
         )
         ''
           {
-            "go" = "false";
-            "java" = "false";
-            "cpp" = "false";
-            "c" = "false";
-            "h" = "false";
-            "hpp" = "false";
-            "cxx" = "false";
+            "go" = false;
+            "java" = false;
+            "cpp" = false;
+            "c" = false;
+            "h" = false;
+            "hpp" = false;
+            "cxx" = false;
           }
         ''
         ''
