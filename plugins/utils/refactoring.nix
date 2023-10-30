@@ -64,7 +64,7 @@ in {
         helpers.defaultNullOpts.mkNullable
         (
           with types;
-            attrOf (listOf str)
+            attrsOf (listOf str)
         )
         ''
           {
@@ -94,7 +94,7 @@ in {
         helpers.defaultNullOpts.mkNullable
         (
           with types;
-            attrOf (listOf str)
+            attrsOf (listOf str)
         )
         ''
           {
