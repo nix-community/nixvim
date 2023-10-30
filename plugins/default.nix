@@ -129,6 +129,7 @@
     ./utils/oil.nix
     ./utils/persistence.nix
     ./utils/project-nvim.nix
+    ./utils/refactoring.nix
     ./utils/presence-nvim.nix
     ./utils/quickmath.nix
     ./utils/specs.nix
