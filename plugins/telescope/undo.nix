@@ -13,54 +13,33 @@ in {
 
     package = helpers.mkPackageOption "telescope extension undo" pkgs.vimPlugins.telescope-undo-nvim;
 
-    useDelta = mkOption {
-      type = types.nullOr types.bool;
-      description = ''
-        When set to true, [delta](https://github.com/dandavison/delta) is used for fancy diffs in the preview section.
-        If set to false, `telescope-undo` will not use `delta` even when available and fall back to a plain diff with
-        treesitter highlights.
-      '';
-      default = true;
-    };
+    useDelta = helpers.defaultNullOpts.mkBool true ''
+      When set to true, [delta](https://github.com/dandavison/delta) is used for fancy diffs in the preview section.
+      If set to false, `telescope-undo` will not use `delta` even when available and fall back to a plain diff with
+      treesitter highlights.
+    '';
 
-    useCustomCommand = mkOption {
-      type = types.nullOr (types.listOf types.str);
-      description = ''
-        should be in this format: [ "bash" "-c" "echo '$DIFF' | delta" ]
-      '';
-      default = null;
-    };
+    useCustomCommand = helpers.mkNullOrOption (with types; listOf str) ''
+      should be in this format: [ "bash" "-c" "echo '$DIFF' | delta" ]
+    '';
 
-    sideBySide = mkOption {
-      type = types.nullOr types.bool;
-      description = ''
-        If set to true tells `delta` to render diffs side-by-side. Thus, requires `delta` to be
-        used. Be aware that `delta` always uses its own configuration, so it might be that you're getting
-        the side-by-side view even if this is set to false.
-      '';
-      default = false;
-    };
+    sideBySide = helpers.defaultNullOpts.mkBool false ''
+      If set to true tells `delta` to render diffs side-by-side. Thus, requires `delta` to be
+      used. Be aware that `delta` always uses its own configuration, so it might be that you're getting
+      the side-by-side view even if this is set to false.
+    '';
 
-    diffContextLines = mkOption {
-      type = with types;
-        either ints.unsigned str;
-      description = ''Defaults to the scrolloff'';
-      default = "vim.o.scrolloff";
-    };
+    diffContextLines = helpers.defaultNullOpts.mkNullable (with types; either ints.unsigned str) "vim.o.scrolloff" ''
+      Defaults to the scrolloff
+    '';
 
-    entryFormat = mkOption {
-      type = types.nullOr types.str;
-      description = ''The format to show on telescope for the different versions of the file.'';
-      default = "state #$ID, $STAT, $TIME";
-    };
+    entryFormat = helpers.defaultNullOpts.mkStr "state #$ID, $STAT, $TIME" ''
+      The format to show on telescope for the different versions of the file.
+    '';
 
-    timeFormat = mkOption {
-      type = types.nullOr types.str;
-      description = ''
-        Can be set to a [Lua date format string](https://www.lua.org/pil/22.1.html).
-      '';
-      default = "";
-    };
+    timeFormat = helpers.defaultNullOpts.mkStr "" ''
+      Can be set to a [Lua date format string](https://www.lua.org/pil/22.1.html).
+    '';
 
     mappings = {
       i =
