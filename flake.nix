@@ -127,6 +127,18 @@
         nixDarwinModules.nixvim = import ./wrappers/darwin.nix modules;
         rawModules.nixvim = nixvimModules;
 
+        overlays.default = final: prev: {
+          nixvim = rec {
+            makeNixvimWithModule = import ./wrappers/standalone.nix prev modules;
+            makeNixvim = configuration:
+              makeNixvimWithModule {
+                module = {
+                  config = configuration;
+                };
+              };
+          };
+        };
+
         templates = let
           simple = {
             path = ./templates/simple;
