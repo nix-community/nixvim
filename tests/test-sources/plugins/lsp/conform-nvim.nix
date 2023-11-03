@@ -6,6 +6,7 @@
   default = {
     plugins.conform-nvim = {
       enable = true;
+
       formattersByFt = {
         lua = ["stylua"];
         python = ["isort" "black"];
