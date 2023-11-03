@@ -65,6 +65,7 @@
     ./languages/zig.nix
 
     ./lsp
+    ./lsp/conform-nvim.nix
     ./lsp/fidget.nix
     ./lsp/inc-rename.nix
     ./lsp/lspsaga.nix
