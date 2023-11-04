@@ -241,7 +241,7 @@ in {
             toggleQuickMenu = "require('harpoon.ui').toggle_quick_menu";
             navNext = "require('harpoon.ui').nav_next";
             navPrev = "require('harpoon.ui').nav_prev";
-            cmdToggleQuickMenu = "require('harpoon.cmd-ui').toggle_quick_menu()";
+            cmdToggleQuickMenu = "require('harpoon.cmd-ui').toggle_quick_menu";
           }
         );
 
