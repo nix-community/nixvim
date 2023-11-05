@@ -47,6 +47,11 @@
           # ./plugins/default.nix
         ];
 
+      wrapperArgs = {
+        inherit modules;
+        inherit self;
+      };
+
       flakeOutput =
         flake-utils.lib.eachDefaultSystem
         (system: let
@@ -66,7 +71,7 @@
               # As we test as many things as possible, we need to allow unfree sources by generating
               # a separate `makeNixvim` module (with pkgs-unfree).
               makeNixvim = let
-                makeNixvimWithModuleUnfree = import ./wrappers/standalone.nix pkgs-unfree modules;
+                makeNixvimWithModuleUnfree = import ./wrappers/standalone.nix pkgs-unfree wrapperArgs;
               in
                 configuration:
                   makeNixvimWithModuleUnfree {
@@ -108,7 +113,7 @@
               modules = modules pkgs;
             });
           legacyPackages = rec {
-            makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
+            makeNixvimWithModule = import ./wrappers/standalone.nix pkgs wrapperArgs;
             makeNixvim = configuration:
               makeNixvimWithModule {
                 module = {
@@ -126,14 +131,14 @@
     in
       flakeOutput
       // {
-        nixosModules.nixvim = import ./wrappers/nixos.nix modules;
-        homeManagerModules.nixvim = import ./wrappers/hm.nix modules;
-        nixDarwinModules.nixvim = import ./wrappers/darwin.nix modules;
+        nixosModules.nixvim = import ./wrappers/nixos.nix wrapperArgs;
+        homeManagerModules.nixvim = import ./wrappers/hm.nix wrapperArgs;
+        nixDarwinModules.nixvim = import ./wrappers/darwin.nix wrapperArgs;
         rawModules.nixvim = nixvimModules;
 
         overlays.default = final: prev: {
           nixvim = rec {
-            makeNixvimWithModule = import ./wrappers/standalone.nix prev modules;
+            makeNixvimWithModule = import ./wrappers/standalone.nix prev wrapperArgs;
             makeNixvim = configuration:
               makeNixvimWithModule {
                 module = {

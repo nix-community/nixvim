@@ -1,4 +1,7 @@
-default_pkgs: modules: {
+default_pkgs: {
+  modules,
+  self,
+}: {
   pkgs ? default_pkgs,
   extraSpecialArgs ? {},
   module,
@@ -27,4 +30,8 @@ default_pkgs: modules: {
 
   config = handleAssertions eval.config;
 in
-  config.finalPackage
+  config.finalPackage.overrideAttrs (oa: {
+    paths =
+      oa.paths
+      ++ (pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs);
+  })

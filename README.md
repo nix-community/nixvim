@@ -218,6 +218,9 @@ be.
 Documentation is available on this project's GitHub Pages page:
 [https://nix-community.github.io/nixvim](https://nix-community.github.io/nixvim)
 
+If the option `enableMan` is set to `true` (by default it is), man pages will also
+be installed containing the same informations, they can be viewed with `man nixvim`.
+
 ## Plugins
 After you have installed NixVim, you will no doubt want to enable some plugins.
 Plugins are based on a modules system, similarly to NixOS and Home Manager.
