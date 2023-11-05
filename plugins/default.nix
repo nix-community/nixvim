@@ -7,6 +7,7 @@
 
     ./colorschemes/ayu.nix
     ./colorschemes/base16.nix
+    ./colorschemes/catppuccin.nix
     ./colorschemes/dracula.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
@@ -16,17 +17,16 @@
     ./colorschemes/onedark.nix
     ./colorschemes/oxocarbon.nix
     ./colorschemes/poimandres.nix
-    ./colorschemes/tokyonight.nix
-    ./colorschemes/catppuccin.nix
     ./colorschemes/rose-pine.nix
+    ./colorschemes/tokyonight.nix
 
-    ./completion/coq.nix
-    ./completion/coq-thirdparty.nix
     ./completion/copilot-lua.nix
     ./completion/copilot-vim.nix
+    ./completion/coq.nix
+    ./completion/coq-thirdparty.nix
+    ./completion/lspkind.nix
     ./completion/nvim-cmp
     ./completion/nvim-cmp/sources
-    ./completion/lspkind.nix
 
     ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix
@@ -99,7 +99,9 @@
     ./utils/conjure.nix
     ./utils/coverage.nix
     ./utils/cursorline.nix
+    ./utils/dashboard.nix
     ./utils/easyescape.nix
+    ./utils/emmet.nix
     ./utils/endwise.nix
     ./utils/flash.nix
     ./utils/floaterm.nix
@@ -113,6 +115,7 @@
     ./utils/intellitab.nix
     ./utils/lastplace.nix
     ./utils/leap.nix
+    ./utils/magma-nvim.nix
     ./utils/mark-radar.nix
     ./utils/mini.nix
     ./utils/mkdnflow.nix
@@ -144,9 +147,6 @@
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
     ./utils/vim-matchup.nix
-    ./utils/dashboard.nix
-    ./utils/emmet.nix
-    ./utils/magma-nvim.nix
     ./utils/which-key.nix
     ./utils/wilder.nix
     ./utils/zk.nix
