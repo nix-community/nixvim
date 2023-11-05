@@ -99,7 +99,7 @@
           packages =
             {
               docs = pkgs-unfree.callPackage (import ./docs) {
-                modules = nixvimModules;
+                modules = modules pkgs;
               };
             }
             // (import ./helpers pkgs);
