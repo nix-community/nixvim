@@ -102,7 +102,11 @@
                 modules = nixvimModules;
               };
             }
-            // (import ./helpers pkgs);
+            // (import ./helpers pkgs)
+            // (import ./man-docs {
+              pkgs = pkgs-unfree;
+              modules = modules pkgs;
+            });
           legacyPackages = rec {
             makeNixvimWithModule = import ./wrappers/standalone.nix pkgs modules;
             makeNixvim = configuration:
