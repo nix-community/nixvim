@@ -1,4 +1,7 @@
-modules: {
+{
+  modules,
+  self,
+}: {
   pkgs,
   config,
   lib,
@@ -24,7 +27,9 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
-      environment.systemPackages = [cfg.finalPackage];
+      environment.systemPackages =
+        [cfg.finalPackage]
+        ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
     }
     {
       inherit (cfg) warnings assertions;

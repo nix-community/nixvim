@@ -1,4 +1,7 @@
-modules: {
+{
+  modules,
+  self,
+}: {
   pkgs,
   config,
   lib,
@@ -33,7 +36,11 @@ in {
   config =
     mkIf cfg.enable
     (mkMerge [
-      {environment.systemPackages = [cfg.finalPackage];}
+      {
+        environment.systemPackages =
+          [cfg.finalPackage]
+          ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
+      }
       (mkIf (!cfg.wrapRc) {
         environment.etc = files;
         environment.variables."VIM" = "/etc/nvim";
