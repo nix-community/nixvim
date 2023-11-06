@@ -6,13 +6,9 @@
   ...
 }:
 with lib; let
-  tools = trivial.importJSON ./efmls-configs-tools.json;
-  inherit (tools) linters formatters;
+  tools = trivial.importJSON "${pkgs.vimPlugins.efmls-configs-nvim.src}/doc/supported-list.json";
 
-  searchLanguages = tools: (lists.unique (builtins.concatLists (builtins.attrValues tools)));
-  languages =
-    lists.filter
-    (v: v != "misc") (lists.unique ((searchLanguages linters) ++ (searchLanguages formatters)));
+  languages = builtins.attrNames tools;
 in {
   options.plugins.efmls-configs = {
     enable = mkEnableOption "efmls-configs, premade configurations for efm-langserver";
@@ -33,11 +29,15 @@ in {
     }
     */
     setup = let
-      languageTools = lang: tools:
-        builtins.attrNames (attrsets.filterAttrs (_: lists.any (e: e == lang)) tools);
+      languageTools = lang: kind:
+        builtins.map (v: v.name) (
+          if builtins.hasAttr kind tools.${lang}
+          then tools.${lang}.${kind}
+          else []
+        );
 
-      miscLinters = languageTools "misc" linters;
-      miscFormatters = languageTools "misc" formatters;
+      miscLinters = languageTools "misc" "linters";
+      miscFormatters = languageTools "misc" "formatters";
 
       mkChooseOption = lang: kind: possible: let
         toolType = with types; either (enum possible) helpers.rawType;
@@ -58,8 +58,8 @@ in {
               in {
                 name = lang;
                 value = {
-                  linter = mkChooseOption lang "linter" ((langTools linters) ++ miscLinters);
-                  formatter = mkChooseOption lang "formatter" ((langTools formatters) ++ miscFormatters);
+                  linter = mkChooseOption lang "linter" ((langTools "linters") ++ miscLinters);
+                  formatter = mkChooseOption lang "formatter" ((langTools "formatters") ++ miscFormatters);
                 };
               })
               languages))
