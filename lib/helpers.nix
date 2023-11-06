@@ -90,6 +90,13 @@ with lib; rec {
       };
     };
 
+  borderType = with lib.types;
+    oneOf [
+      str
+      (listOf str)
+      (listOf (listOf str))
+    ];
+
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption = type: desc:
     lib.mkOption {
@@ -145,14 +152,7 @@ with lib; rec {
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
     mkBorder = default: name: desc:
       mkNullable
-      (
-        with lib.types;
-          oneOf [
-            str
-            (listOf str)
-            (listOf (listOf str))
-          ]
-      )
+      borderType
       default
       (let
         defaultDesc = ''
