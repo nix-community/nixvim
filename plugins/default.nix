@@ -121,6 +121,7 @@
     ./utils/mark-radar.nix
     ./utils/mini.nix
     ./utils/mkdnflow.nix
+    ./utils/molten.nix
     ./utils/multicursors.nix
     ./utils/navbuddy.nix
     ./utils/neorg.nix
