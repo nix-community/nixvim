@@ -1,12 +1,12 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   ...
 }:
 with lib; let
   copilot-lua-cfg = config.plugins.copilot-lua;
   cfg = config.plugins.copilot-cmp;
-  helpers = import ../../../helpers.nix {inherit lib;};
 in {
   options.plugins.copilot-cmp =
     helpers.extraOptionsOptions

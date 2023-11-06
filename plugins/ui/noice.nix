@@ -1,15 +1,14 @@
 {
   lib,
-  pkgs,
+  helpers,
   config,
+  pkgs,
   ...
-} @ args:
+}:
 # TODO: This uses a lot of types.anything because noice.nvim types are quite complex.
 # It should be possible to map them to nix, but they would not map really well through
 # toLuaObject, we would maybe need some ad-hoc pre-processing functions.
-with lib; let
-  helpers = import ../helpers.nix args;
-in {
+with lib; {
   options.plugins.noice =
     helpers.extraOptionsOptions
     // {
@@ -254,7 +253,7 @@ in {
             lsp_doc_border = false;
           }
         '' "
-        you can enable a preset by setting it to true, or a table that will override the preset 
+        you can enable a preset by setting it to true, or a table that will override the preset
         config. you can also add custom presets that you can enable/disable with enabled=true
       ";
 

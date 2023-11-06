@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   pkgs,
   config,
-  lib,
   ...
 } @ args:
 with lib; let
   cfg = config.plugins.nvim-cmp;
-  helpers = import ../../helpers.nix {inherit lib;};
   cmpLib = import ./cmp-helpers.nix args;
 
   snippetEngines = {

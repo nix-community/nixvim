@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.mini;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.mini = {
     enable = mkEnableOption "mini.nvim";

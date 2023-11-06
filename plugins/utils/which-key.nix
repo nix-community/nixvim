@@ -1,12 +1,11 @@
 {
+  lib,
+  helpers,
   pkgs,
   config,
-  lib,
   ...
-} @ args:
-with lib; let
-  helpers = import ../helpers.nix args;
-in {
+}:
+with lib; {
   options.plugins.which-key = {
     enable =
       mkEnableOption

@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.nvim-colorizer;
-  helpers = import ../helpers.nix {inherit lib;};
 
   colorizer-options = {
     RGB = mkOption {

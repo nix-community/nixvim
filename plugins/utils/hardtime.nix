@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
   cfg = config.plugins.hardtime;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     plugins.hardtime =

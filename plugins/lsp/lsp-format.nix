@@ -1,12 +1,12 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.lsp-format;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.lsp-format =
     helpers.extraOptionsOptions

@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.illuminate;
-  helpers = import ../helpers.nix {inherit lib;};
 
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 

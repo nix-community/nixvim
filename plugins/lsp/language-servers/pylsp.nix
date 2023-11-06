@@ -1,11 +1,11 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
   cfg = config.plugins.lsp.servers.pylsp;
 in {
   # All settings are documented here:

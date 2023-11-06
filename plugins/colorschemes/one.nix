@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.colorschemes.one;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     colorschemes.one = {

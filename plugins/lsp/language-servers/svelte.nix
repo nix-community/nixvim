@@ -1,10 +1,10 @@
 {
   lib,
+  helpers,
   config,
   ...
 }:
 with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
   cfg = config.plugins.lsp.servers.svelte;
 in {
   # Options: https://github.com/sveltejs/language-tools/tree/master/packages/language-server#settings

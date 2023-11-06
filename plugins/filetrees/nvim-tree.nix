@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   pkgs,
   config,
-  lib,
   ...
-} @ args:
+}:
 with lib; let
   cfg = config.plugins.nvim-tree;
-  helpers = import ../helpers.nix {inherit lib;};
   inherit (helpers) ifNonNull';
 
   openWinConfigOption =

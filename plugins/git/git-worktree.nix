@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.git-worktree;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     plugins.git-worktree = {

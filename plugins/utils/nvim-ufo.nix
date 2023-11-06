@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.nvim-ufo;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.nvim-ufo =
     helpers.extraOptionsOptions

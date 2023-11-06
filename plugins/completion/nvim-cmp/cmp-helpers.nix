@@ -1,8 +1,9 @@
 {
   lib,
+  config,
   pkgs,
   ...
-} @ attrs: let
+}: let
   helpers = import ../../helpers.nix {inherit lib;};
 in
   with helpers;
@@ -13,7 +14,7 @@ in
       useDefaultPackage ? true,
       ...
     }:
-      mkPlugin attrs {
+      mkPlugin {inherit lib config pkgs;} {
         inherit name;
         extraPlugins = extraPlugins ++ (lists.optional useDefaultPackage pkgs.vimPlugins.${name});
         description = "Enable ${name}";

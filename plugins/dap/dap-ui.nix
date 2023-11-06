@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.dap.extensions.dap-ui;
-  helpers = import ../helpers.nix {inherit lib;};
 
   mkSizeOption =
     helpers.mkNullOrOption

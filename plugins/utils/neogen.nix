@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.neogen;
-  helpers = import ../helpers.nix {inherit lib;};
 
   keymapDef = {
     generate = {

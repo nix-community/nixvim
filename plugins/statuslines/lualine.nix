@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.lualine;
-  helpers = import ../helpers.nix {inherit lib;};
 
   mkSeparatorsOption = {
     leftDefault ? " ",

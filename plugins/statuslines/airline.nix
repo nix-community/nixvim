@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.airline;
-  helpers = import ../helpers.nix {inherit lib;};
 
   sectionType = with types; nullOr (oneOf [str (listOf str)]);
   sectionOption = mkOption {

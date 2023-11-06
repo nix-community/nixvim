@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
   cfg = config.plugins.multicursors;
-  helpers = import ../helpers.nix {inherit lib;};
 
   keyOptionType = with types;
     attrsOf (

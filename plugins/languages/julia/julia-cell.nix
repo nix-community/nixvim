@@ -1,11 +1,11 @@
 {
-  pkgs,
   lib,
+  helpers,
+  pkgs,
   config,
   ...
 }: let
   cfg = config.plugins.julia-cell;
-  helpers = import ../../helpers.nix {inherit lib;};
 
   # The keys are the option name in nixvim (under plugins.julia-cell.keymaps)
   # cmd: Such that the mapping action is ':JuliaCell${cmd}<CR>'

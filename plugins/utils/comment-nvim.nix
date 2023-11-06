@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
   cfg = config.plugins.comment-nvim;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     plugins.comment-nvim = {

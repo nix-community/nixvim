@@ -1,12 +1,11 @@
 {
   lib,
+  helpers,
   config,
   pkgs,
   ...
-} @ args:
-with lib; let
-  helpers = import ../helpers.nix args;
-in {
+}:
+with lib; {
   options.plugins.inc-rename = {
     enable = mkEnableOption "inc-rename, a plugin previewing LSP renaming";
 

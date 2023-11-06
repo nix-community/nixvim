@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
   cfg = config.plugins.copilot-lua;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     plugins.copilot-lua = let

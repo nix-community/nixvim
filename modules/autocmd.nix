@@ -1,11 +1,10 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   ...
 }:
 with lib; let
-  helpers = import ../lib/helpers.nix {inherit lib;};
-
   autoGroupOption = types.submodule {
     options = {
       clear = mkOption {

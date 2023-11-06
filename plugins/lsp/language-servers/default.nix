@@ -1,11 +1,12 @@
 {
-  pkgs,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
-} @ args:
+}:
 with lib; let
-  lspHelpers = import ../helpers.nix args;
-  helpers = import ../../helpers.nix {inherit lib;};
+  lspHelpers = import ../helpers.nix {inherit lib config pkgs;};
 
   servers = [
     {

@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.dap.extensions.dap-go;
-  helpers = import ../helpers.nix {inherit lib;};
   dapHelpers = import ./dapHelpers.nix {inherit lib;};
 in {
   options.plugins.dap.extensions.dap-go = {

@@ -1,11 +1,11 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }: let
   cfg = config.plugins.neorg;
-  helpers = import ../helpers.nix {inherit lib;};
 in
   with lib; {
     options.plugins.neorg =

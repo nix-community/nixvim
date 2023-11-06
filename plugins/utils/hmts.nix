@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.hmts;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.hmts =
     helpers.extraOptionsOptions

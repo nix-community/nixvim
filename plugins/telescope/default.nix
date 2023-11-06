@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.telescope;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   imports = [
     ./file-browser.nix

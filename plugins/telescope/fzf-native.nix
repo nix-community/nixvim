@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.telescope.extensions.fzf-native;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.telescope.extensions.fzf-native = {
     enable = mkEnableOption "fzf-native";

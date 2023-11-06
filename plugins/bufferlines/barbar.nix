@@ -1,12 +1,12 @@
 {
   lib,
-  pkgs,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.barbar;
-  helpers = import ../helpers.nix {inherit lib;};
 
   bufferOptions = {
     bufferIndex = helpers.mkNullOrOption types.bool ''

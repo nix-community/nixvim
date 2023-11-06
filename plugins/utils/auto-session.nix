@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.auto-session;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.auto-session =
     helpers.extraOptionsOptions

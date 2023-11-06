@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.coverage;
-  helpers = import ../helpers.nix {inherit lib;};
 
   keymapsDef = {
     coverage = {

@@ -1,11 +1,10 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   ...
 }:
-with lib; let
-  helpers = import ../lib/helpers.nix {inherit lib;};
-in {
+with lib; {
   options = {
     options = mkOption {
       type = types.attrsOf types.anything;

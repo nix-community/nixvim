@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.auto-save;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.auto-save =
     helpers.extraOptionsOptions

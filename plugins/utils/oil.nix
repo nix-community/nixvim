@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.oil;
-  helpers = import ../helpers.nix {inherit lib;};
 
   fractionType = types.numbers.between 0.0 1.0;
 

@@ -1,6 +1,6 @@
 {
-  pkgs,
   lib,
+  pkgs,
   ...
 } @ args: let
   helpers = import ../helpers.nix {inherit lib;};

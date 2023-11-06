@@ -1,13 +1,12 @@
 {
   lib,
-  pkgs,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.navic;
-  helpers = import ../helpers.nix {inherit lib;};
-  mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in {
   options.plugins.navic =
     helpers.extraOptionsOptions

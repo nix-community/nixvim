@@ -1,13 +1,12 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.dashboard;
-
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     plugins.dashboard = {
