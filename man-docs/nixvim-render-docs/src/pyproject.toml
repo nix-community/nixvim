@@ -1,0 +1,14 @@
+[project]
+name = "nixvim-render-docs"
+version = "0.0"
+description = "Renderer for Nixvim option docs"
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"Operating System :: OS Independent",
+]
+
+[project.scripts]
+nixvim-render-docs = "nixvim_render_docs:main"
+
+[build-system]
+requires = ["setuptools"]
