@@ -1,12 +1,11 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
-} @ args:
-with lib; let
-  helpers = import ../helpers.nix args;
-in {
+}:
+with lib; {
   options.plugins.zk = {
     enable = mkEnableOption "zk.nvim, a plugin to integrate with zk";
 

@@ -1,12 +1,11 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   pkgs,
   ...
 }:
-with lib; let
-  helpers = import ../helpers.nix {inherit lib;};
-in {
+with lib; {
   options.plugins.persistence =
     helpers.extraOptionsOptions
     // {

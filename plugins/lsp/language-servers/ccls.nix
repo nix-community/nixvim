@@ -1,11 +1,10 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
   ...
 }:
 with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
   cfg = config.plugins.lsp.servers.ccls;
 in {
   # Options: https://github.com/MaskRay/ccls/wiki/Customization#initialization-options

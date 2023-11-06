@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.typst-vim;
-  helpers = import ../../helpers.nix {inherit lib;};
 in {
   options.plugins.typst-vim =
     helpers.extraOptionsOptions

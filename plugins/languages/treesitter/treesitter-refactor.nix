@@ -1,12 +1,11 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
-with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
-in {
+with lib; {
   options.plugins.treesitter-refactor = let
     disable = mkOption {
       type = types.listOf types.str;

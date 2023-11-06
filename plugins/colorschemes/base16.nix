@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.colorschemes.base16;
-  helpers = import ../helpers.nix {inherit lib;};
   themes = import ./base16-list.nix;
 in {
   options = {

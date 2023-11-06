@@ -1,12 +1,12 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.lspsaga;
-  helpers = import ../helpers.nix {inherit lib;};
 
   mkKeymapOption = default:
     helpers.defaultNullOpts.mkNullable

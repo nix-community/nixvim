@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
-} @ args:
+}:
 with lib; let
   cfg = config.plugins.bufferline;
-  helpers = import ../helpers.nix args;
 
   highlightOption = {
     fg = helpers.mkNullOrOption types.str "foreground color";

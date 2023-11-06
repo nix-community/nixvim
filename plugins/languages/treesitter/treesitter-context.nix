@@ -1,12 +1,12 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.treesitter-context;
-  helpers = import ../../helpers.nix {inherit lib;};
 in {
   # Those warnings were introduced on 08/25/2023. TODO: remove them in October 2023.
   imports = let

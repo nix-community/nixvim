@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   pkgs,
   config,
-  lib,
   ...
-} @ args:
+}:
 with lib; let
   cfg = config.colorschemes.poimandres;
-  helpers = import ../helpers.nix args;
 in {
   options = {
     colorschemes.poimandres =

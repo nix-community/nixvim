@@ -1,11 +1,11 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }: let
   cfg = config.plugins.trouble;
-  helpers = import ../helpers.nix {inherit lib;};
 in
   with lib; {
     options.plugins.trouble =

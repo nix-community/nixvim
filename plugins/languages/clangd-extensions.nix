@@ -1,12 +1,12 @@
 {
   lib,
-  pkgs,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.clangd-extensions;
-  helpers = import ../helpers.nix {inherit lib;};
 
   basePluginPath = ["plugins" "clangd-extensions"];
 

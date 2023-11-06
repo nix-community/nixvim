@@ -1,12 +1,11 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
   ...
 }:
 with lib; let
   cfg = config.plugins.cmp-tabnine;
-  helpers = import ../../../helpers.nix {inherit lib;};
 in {
   options.plugins.cmp-tabnine = helpers.extraOptionsOptions;
 

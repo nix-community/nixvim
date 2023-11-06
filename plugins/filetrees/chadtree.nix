@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.chadtree;
-  helpers = import ../helpers.nix {inherit lib;};
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in {
   options.plugins.chadtree =

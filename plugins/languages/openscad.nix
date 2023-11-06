@@ -1,12 +1,12 @@
 {
   lib,
-  pkgs,
+  helpers,
   config,
+  pkgs,
   ...
-} @ args:
+}:
 with lib; let
   defaultFuzzyFinder = "skim";
-  helpers = import ../helpers.nix args;
 in {
   options.plugins.openscad = {
     enable = mkEnableOption "openscad.nvim, a plugin to manage OpenSCAD files";

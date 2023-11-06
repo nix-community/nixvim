@@ -3,8 +3,8 @@
   config,
   lib,
   ...
-} @ args: let
-  helpers = import ./helpers.nix args;
+}: let
+  helpers = import ./helpers.nix;
   serverData = {
     code_actions = {
       eslint = {

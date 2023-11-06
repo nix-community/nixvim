@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.floaterm;
-  helpers = import ../helpers.nix {inherit lib;};
 
   settings = {
     shell = {

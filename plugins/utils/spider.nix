@@ -1,13 +1,13 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   pluginName = "spider";
   cfg = config.plugins.${pluginName};
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.${pluginName} =
     helpers.extraOptionsOptions

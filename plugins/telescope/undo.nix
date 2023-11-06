@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.telescope.extensions.undo;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.telescope.extensions.undo = {
     enable = mkEnableOption "undo";

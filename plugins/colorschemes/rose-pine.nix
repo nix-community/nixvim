@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
-} @ args:
+}:
 with lib; let
   cfg = config.colorschemes.rose-pine;
-  helpers = import ../helpers.nix args;
 in {
   options = {
     colorschemes.rose-pine = {

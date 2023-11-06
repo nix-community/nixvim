@@ -1,13 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.neo-tree;
-  helpers = import ../helpers.nix {inherit lib;};
-
   basePluginPath = ["plugins" "neo-tree"];
 in {
   imports = [

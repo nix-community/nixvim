@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.notify;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.notify =
     helpers.extraOptionsOptions

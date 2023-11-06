@@ -1,12 +1,12 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   pkgs,
   ...
-} @ attrs:
+}:
 with lib; let
   cfg = config.plugins.tmux-navigator;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.tmux-navigator = {
     enable = mkEnableOption "Tmux-Navigator (see https://github.com/christoomey/vim-tmux-navigator for tmux installation instruction)";

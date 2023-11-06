@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.coq-thirdparty;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.coq-thirdparty = {
     enable = mkEnableOption "coq-thirdparty";

@@ -1,9 +1,4 @@
 {
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
   mkServer = {
     name,
     sourceType,

@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.telescope.extensions.frecency;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.telescope.extensions.frecency = {
     enable = mkEnableOption "frecency";

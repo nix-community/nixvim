@@ -1,12 +1,12 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.neogit;
-  helpers = import ../helpers.nix {inherit lib;};
 
   sectionDefaultsModule = types.submodule {
     options = {

@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.dap;
-  helpers = import ../helpers.nix {inherit lib;};
   dapHelpers = import ./dapHelpers.nix {inherit lib;};
 in
   with dapHelpers; {

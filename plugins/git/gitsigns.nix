@@ -1,11 +1,11 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   pkgs,
   ...
-} @ args:
+}:
 with lib; let
-  helpers = import ../helpers.nix args;
   signOptions = defaults: {
     hl =
       helpers.defaultNullOpts.mkStr defaults.hl

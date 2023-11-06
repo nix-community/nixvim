@@ -1,19 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.wilder;
-  helpers = import ../helpers.nix {inherit lib;};
-
-  boolToInt = value:
-    if value == null
-    then null
-    else if value
-    then "1"
-    else "0";
 
   mkKeyOption = default: desc:
     helpers.defaultNullOpts.mkNullable

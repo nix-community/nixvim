@@ -1,12 +1,11 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
-
   tools = trivial.importJSON ./efmls-configs-tools.json;
   inherit (tools) linters formatters;
 

@@ -1,12 +1,11 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }:
-with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
-in {
+with lib; {
   # TODO those warnings have been added XX/XX/2023
   # -> Remove them in ~ 1 month (oct. 2023)
   imports =

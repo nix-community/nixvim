@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
   cfg = config.plugins.todo-comments;
-  helpers = import ../helpers.nix {inherit lib;};
 
   commands = {
     todoQuickFix = "TodoQuickFix";

@@ -1,12 +1,12 @@
 {
+  lib,
+  helpers,
   config,
   pkgs,
-  lib,
   ...
 }:
 with lib; let
   cfg = config.plugins.copilot-vim;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   imports = [
     (lib.mkRenamedOptionModule ["plugins" "copilot"] ["plugins" "copilot-vim"])

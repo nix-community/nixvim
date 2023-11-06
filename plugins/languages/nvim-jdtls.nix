@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.nvim-jdtls;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.nvim-jdtls =
     helpers.extraOptionsOptions

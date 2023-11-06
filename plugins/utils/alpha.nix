@@ -1,13 +1,12 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.alpha;
-
-  helpers = import ../helpers.nix {inherit lib;};
 
   sectionType = types.enum ["group" "padding" "text"];
 
@@ -85,71 +84,70 @@ in {
         default = true;
       };
 
-      layout = with helpers;
-        mkOption {
-          default = [
-            {
-              type = "padding";
-              val = 2;
-            }
-            {
-              type = "text";
-              val = [
-                "  ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗  "
-                "  ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║  "
-                "  ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║  "
-                "  ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║  "
-                "  ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║  "
-                "  ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝  "
-              ];
-              opts = {
-                position = "center";
-                hl = "Type";
-              };
-            }
-            {
-              type = "padding";
-              val = 2;
-            }
-            {
-              type = "group";
-              val = [
-                {
-                  shortcut = "e";
-                  desc = "  New file";
-                  command = "<CMD>ene <CR>";
-                }
-                {
-                  shortcut = "SPC q";
-                  desc = "  Quit Neovim";
-                  command = ":qa<CR>";
-                }
-              ];
-            }
-            {
-              type = "padding";
-              val = 2;
-            }
-            {
-              type = "text";
-              val = "Inspiring quote here.";
-              opts = {
-                position = "center";
-                hl = "Keyword";
-              };
-            }
-          ];
-          description = "List of sections to layout for the dashboard";
-          type = types.listOf (mkAlphaSectionOption sectionType);
-        };
+      layout = mkOption {
+        default = [
+          {
+            type = "padding";
+            val = 2;
+          }
+          {
+            type = "text";
+            val = [
+              "  ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗  "
+              "  ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║  "
+              "  ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║  "
+              "  ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║  "
+              "  ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║  "
+              "  ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝  "
+            ];
+            opts = {
+              position = "center";
+              hl = "Type";
+            };
+          }
+          {
+            type = "padding";
+            val = 2;
+          }
+          {
+            type = "group";
+            val = [
+              {
+                shortcut = "e";
+                desc = "  New file";
+                command = "<CMD>ene <CR>";
+              }
+              {
+                shortcut = "SPC q";
+                desc = "  Quit Neovim";
+                command = ":qa<CR>";
+              }
+            ];
+          }
+          {
+            type = "padding";
+            val = 2;
+          }
+          {
+            type = "text";
+            val = "Inspiring quote here.";
+            opts = {
+              position = "center";
+              hl = "Keyword";
+            };
+          }
+        ];
+        description = "List of sections to layout for the dashboard";
+        type = types.listOf (mkAlphaSectionOption sectionType);
+      };
     };
   };
 
-  config = with helpers; let
+  config = let
     processButton = button: let
       stringifyButton = button: ''button("${button.shortcut}", "${button.desc}", "${button.command}")'';
     in
-      mkRaw (stringifyButton button);
+      helpers.mkRaw (stringifyButton button);
 
     processButtons = attrset:
       if attrset.type == "group"
@@ -203,7 +201,7 @@ in {
         end
 
         local config = {
-          layout = ${toLuaObject options.layout},
+          layout = ${helpers.toLuaObject options.layout},
           opts = {
             margin = 5,
           },

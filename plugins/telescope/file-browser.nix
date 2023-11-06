@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.telescope.extensions.file_browser;
-  helpers = import ../helpers.nix {inherit lib;};
 
   hiddenOption = types.submodule {
     options = {

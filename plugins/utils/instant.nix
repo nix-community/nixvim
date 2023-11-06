@@ -1,12 +1,11 @@
 {
   lib,
-  pkgs,
+  helpers,
   config,
+  pkgs,
   ...
-} @ args:
-with lib; let
-  helpers = import ../helpers.nix args;
-in {
+}:
+with lib; {
   options.plugins.instant = {
     enable = mkEnableOption "instant.nvim";
 

@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.commentary;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   # TODO Add support for aditional filetypes. This requires autocommands!
 

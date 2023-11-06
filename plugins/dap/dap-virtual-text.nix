@@ -1,12 +1,12 @@
 {
-  pkgs,
-  config,
   lib,
+  helpers,
+  config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.dap.extensions.dap-virtual-text;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options.plugins.dap.extensions.dap-virtual-text = {
     enable = mkEnableOption "dap-virtual-text";

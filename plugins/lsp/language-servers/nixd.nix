@@ -1,11 +1,11 @@
 {
   lib,
+  helpers,
   config,
   pkgs,
   ...
 }:
 with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
   cfg = config.plugins.lsp.servers.nixd;
 in {
   # Options: https://github.com/nix-community/nixd/blob/main/docs/user-guide.md#configuration

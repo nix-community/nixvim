@@ -1,10 +1,10 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   ...
-} @ args:
+}:
 with lib; let
-  helpers = import ../lib/helpers.nix args;
   filetypeDefinition = helpers.mkNullOrOption (types.attrsOf (
     types.oneOf [
       # Raw filetype

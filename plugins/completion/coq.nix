@@ -1,12 +1,12 @@
 {
-  pkgs,
   lib,
+  helpers,
   config,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.plugins.coq-nvim;
-  helpers = import ../helpers.nix {inherit lib;};
 in {
   options = {
     plugins.coq-nvim = {

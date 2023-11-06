@@ -1,10 +1,10 @@
 {
-  config,
   lib,
+  helpers,
+  config,
   ...
 }:
 with lib; let
-  helpers = import ../lib/helpers.nix {inherit lib;};
   commandAttributes = types.submodule {
     options = {
       command = mkOption {

@@ -1,10 +1,10 @@
 # For shorter test iterations run the following in the root of the repo:
 #   `echo ':b checks.${builtins.currentSystem}.lib-tests' | nix repl .`
 {
-  pkgs,
   lib,
+  pkgs,
 }: let
-  helpers = import ../lib/helpers.nix {inherit pkgs lib;};
+  helpers = import ../lib/helpers.nix {inherit lib pkgs;};
   results = pkgs.lib.runTests {
     testToLuaObject = {
       expr = helpers.toLuaObject {
