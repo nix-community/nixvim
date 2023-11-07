@@ -299,7 +299,7 @@ in {
 
         noice = helpers.defaultNullOpts.mkBool config.plugins.noice.enable "";
 
-        # TODO: NormalNvim = ;
+        NormalNvim = helpers.defaultNullOpts.mkBool false "";
 
         notifier = helpers.defaultNullOpts.mkBool false "";
 
