@@ -160,7 +160,16 @@ in {
 
         beacon = helpers.defaultNullOpts.mkBool false "";
 
-        # TODO: bufferline = ;
+        # TODO: bufferline needs to be loaded after setting up catppuccin or it will highlight incorrectly
+        # use "akinsho/bufferline.nvim" {
+        #   after = "catppuccin",
+        #   config = function()
+        #     require("bufferline").setup {
+        #       highlights = require("catppuccin.groups.integrations.bufferline").get()
+        #     }
+        #   end
+        # }
+        # bufferline = helpers.defaultNullOpts.mkBool false "";
 
         cmp = helpers.defaultNullOpts.mkBool config.plugins.nvim-cmp.enable "";
 
@@ -181,8 +190,13 @@ in {
           color_mode = helpers.defaultNullOpts.mkBool false "";
         };
 
-        # TODO: requires additional setup
-        feline = helpers.defaultNullOpts.mkBool false "";
+        # TODO: feline requires additional setup
+        # local ctp_feline = require("catppuccin.groups.integrations.feline")
+        # ctp_feline.setup()
+        # require("feline").setup({
+        #     components = ctp_feline.get(),
+        # })
+        # feline = helpers.defaultNullOpts.mkBool false "";
 
         fern = helpers.defaultNullOpts.mkBool false "";
 
@@ -222,6 +236,11 @@ in {
         lightspeed = helpers.defaultNullOpts.mkBool false "";
 
         # TODO: lspsaga.setup call for custom kinds and colors
+        # require("lspsaga").setup {
+        #     ui = {
+        #         kind = require("catppuccin.groups.integrations.lsp_saga").custom_kind(),
+        #     },
+        # }
         lsp_saga =
           helpers.defaultNullOpts.mkBool config.plugins.lspsaga.enable "";
 
@@ -283,7 +302,7 @@ in {
         };
 
         # TODO: require("nvim-navic").setup { highlight = true }
-        #  or:  plugins.navic.highlight = true
+        # or via nixvim options?:  plugins.navic.highlight = true
         navic = {
           enabled = helpers.defaultNullOpts.mkBool false "";
 
