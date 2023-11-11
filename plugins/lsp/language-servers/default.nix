@@ -238,6 +238,11 @@ with lib; let
       serverName = "kotlin_language_server";
     }
     {
+      name = "leanls";
+      description = "Enable leanls, for Lean";
+      package = pkgs.lean;
+    }
+    {
       name = "ltex";
       description = "Enable ltex-ls, for LanguageTool";
       package = pkgs.ltex-ls;

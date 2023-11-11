@@ -99,6 +99,7 @@
         jsonls.enable = true;
         julials.enable = true;
         kotlin-language-server.enable = true;
+        leanls.enable = true;
         ltex.enable = true;
         lua-ls.enable = true;
         metals.enable = true;
