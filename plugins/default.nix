@@ -43,6 +43,7 @@
 
     ./languages/clangd-extensions.nix
     ./languages/julia/julia-cell.nix
+    ./languages/lean.nix
     ./languages/ledger.nix
     ./languages/markdown-preview.nix
     ./languages/nix.nix
