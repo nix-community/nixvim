@@ -21,6 +21,11 @@ with lib; let
       package = pkgs.nodePackages.bash-language-server;
     }
     {
+      name = "biome";
+      description = "Enable Biome, Toolchain of the Web";
+      package = pkgs.biome;
+    }
+    {
       name = "ccls";
       description = "Enable ccls, for C/C++.";
     }
