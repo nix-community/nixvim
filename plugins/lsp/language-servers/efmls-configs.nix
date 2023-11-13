@@ -99,12 +99,14 @@ in {
         hadolint
         joker
         languagetool
+        mypy
         nixfmt
         php
         prettierd
         proselint
         pylint
         rubocop
+        ruff
         rustfmt
         shellcheck
         shfmt
