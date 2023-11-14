@@ -21,6 +21,10 @@ with lib; let
       package = pkgs.nodePackages.bash-language-server;
     }
     {
+      name = "biome";
+      description = "Enable Biome, Toolchain of the Web";
+    }
+    {
       name = "ccls";
       description = "Enable ccls, for C/C++.";
     }
@@ -253,7 +257,7 @@ with lib; let
       name = "lua-ls";
       description = "Enable lua LS, for lua";
       # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
-      # Rename occured here: https://github.com/NixOS/nixpkgs/pull/215057
+      # Rename occurred here: https://github.com/NixOS/nixpkgs/pull/215057
       package =
         if (hasAttr "lua-language-server" pkgs)
         then pkgs.lua-language-server
