@@ -45,6 +45,7 @@
     ./languages/julia/julia-cell.nix
     ./languages/lean.nix
     ./languages/ledger.nix
+    ./languages/lint.nix
     ./languages/markdown-preview.nix
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
