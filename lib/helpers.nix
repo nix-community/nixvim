@@ -1,6 +1,7 @@
 {lib, ...}:
 with lib; rec {
   keymaps = import ./keymap-helpers.nix {inherit lib;};
+  autocmd = import ./autocmd-helpers.nix {inherit lib;};
 
   # vim dictionaries are, in theory, compatible with JSON
   toVimDict = args:
