@@ -23,7 +23,6 @@ with lib; let
     {
       name = "biome";
       description = "Enable Biome, Toolchain of the Web";
-      package = pkgs.biome;
     }
     {
       name = "ccls";
