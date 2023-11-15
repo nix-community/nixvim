@@ -21,6 +21,7 @@
         initializeTimeoutSec = 20;
         port = "$\{port}";
         args = [];
+        buildFlags = "-tags=unit";
       };
     };
   };
