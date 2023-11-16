@@ -11,9 +11,8 @@ with lib; let
   languages = builtins.attrNames tools;
 
   # Mapping of tool name to the nixpkgs package (if any)
-  toolPkgs = {
+  toolPkgs = with pkgs; {
     inherit
-      (pkgs)
       actionlint
       alejandra
       ameba
@@ -68,37 +67,37 @@ with lib; let
       yamllint
       yapf
       ;
-    inherit (pkgs.python3.pkgs) autopep8 flake8 vulture mdformat;
-    inherit (pkgs.nodePackages) eslint eslint_d prettier alex stylelint textlint write-good;
-    inherit (pkgs.phpPackages) phpcbf phan phpcs phpstan psalm;
-    inherit (pkgs.luaPackages) luacheck;
-    inherit (pkgs.haskellPackages) fourmolu;
-    ansible_lint = pkgs.ansible-lint;
-    chktex = pkgs.texliveMedium;
-    clang_format = pkgs.clang-tools;
-    clang_tidy = pkgs.clang-tools;
-    clj_kondo = pkgs.clj-kondo;
-    cmake_lint = pkgs.cmake-format;
-    dartfmt = pkgs.dart;
-    dotnet_format = pkgs.dotnet-runtime;
-    fish_indent = pkgs.fish;
-    gofmt = pkgs.go;
-    goimports = pkgs.go-tools;
-    golangci_lint = pkgs.golangci-lint;
-    google_java_format = pkgs.google-java-format;
-    go_revive = pkgs.revive;
-    latexindent = pkgs.texliveMedium;
-    lua_format = pkgs.luaformatter;
-    markdownlint = pkgs.markdownlint-cli;
-    mcs = pkgs.mono;
-    php_cs_fixer = pkgs.phpPackages.php-cs-fixer;
-    prettier_d = pkgs.prettierd;
-    slither = pkgs.slither-analyzer;
-    staticcheck = pkgs.go-tools;
-    terraform_fmt = pkgs.terraform;
-    vint = pkgs.vim-vint;
-    write_good = pkgs.write-good;
-    yq = pkgs.yq-go;
+    inherit (python3.pkgs) autopep8 flake8 vulture mdformat;
+    inherit (nodePackages) eslint eslint_d prettier alex stylelint textlint write-good;
+    inherit (phpPackages) phpcbf phan phpcs phpstan psalm;
+    inherit (luaPackages) luacheck;
+    inherit (haskellPackages) fourmolu;
+    ansible_lint = ansible-lint;
+    chktex = texliveMedium;
+    clang_format = clang-tools;
+    clang_tidy = clang-tools;
+    clj_kondo = clj-kondo;
+    cmake_lint = cmake-format;
+    dartfmt = dart;
+    dotnet_format = dotnet-runtime;
+    fish_indent = fish;
+    gofmt = go;
+    goimports = go-tools;
+    golangci_lint = golangci-lint;
+    google_java_format = google-java-format;
+    go_revive = revive;
+    latexindent = texliveMedium;
+    lua_format = luaformatter;
+    markdownlint = markdownlint-cli;
+    mcs = mono;
+    php_cs_fixer = phpPackages.php-cs-fixer;
+    prettier_d = prettierd;
+    slither = slither-analyzer;
+    staticcheck = go-tools;
+    terraform_fmt = terraform;
+    vint = vim-vint;
+    write_good = write-good;
+    yq = yq-go;
   };
 in {
   options.plugins.efmls-configs = {
