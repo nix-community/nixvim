@@ -14,65 +14,91 @@ with lib; let
   toolPkgs = {
     inherit
       (pkgs)
+      actionlint
+      alejandra
       ameba
       astyle
       bashate
+      beautysh
+      biome
       black
       cbfmt
+      checkmake
       clazy
+      codespell
       cppcheck
       cpplint
+      dfmt
+      djlint
       dmd
       dprint
       fish
       flawfinder
       gcc
+      gitlint
+      gofumpt
       golines
       golint
       hadolint
+      isort
       joker
+      jq
       languagetool
       mypy
       nixfmt
       php
       prettierd
       proselint
+      protolint
       pylint
       rubocop
       ruff
       rustfmt
+      scalafmt
+      selene
       shellcheck
+      shellharden
       shfmt
       smlfmt
       statix
       stylua
+      taplo
       uncrustify
       vale
       yamllint
       yapf
       ;
-    inherit (pkgs.python3.pkgs) autopep8 flake8 vulture;
+    inherit (pkgs.python3.pkgs) autopep8 flake8 vulture mdformat;
     inherit (pkgs.nodePackages) eslint eslint_d prettier alex stylelint textlint write-good;
     inherit (pkgs.phpPackages) phpcbf phan phpcs phpstan psalm;
     inherit (pkgs.luaPackages) luacheck;
+    inherit (pkgs.haskellPackages) fourmolu;
     ansible_lint = pkgs.ansible-lint;
+    chktex = pkgs.texliveMedium;
     clang_format = pkgs.clang-tools;
     clang_tidy = pkgs.clang-tools;
     clj_kondo = pkgs.clj-kondo;
+    cmake_lint = pkgs.cmake-format;
     dartfmt = pkgs.dart;
     dotnet_format = pkgs.dotnet-runtime;
     fish_indent = pkgs.fish;
     gofmt = pkgs.go;
     goimports = pkgs.go-tools;
     golangci_lint = pkgs.golangci-lint;
+    google_java_format = pkgs.google-java-format;
     go_revive = pkgs.revive;
+    latexindent = pkgs.texliveMedium;
     lua_format = pkgs.luaformatter;
+    markdownlint = pkgs.markdownlint-cli;
     mcs = pkgs.mono;
     php_cs_fixer = pkgs.phpPackages.php-cs-fixer;
+    prettier_d = pkgs.prettierd;
     slither = pkgs.slither-analyzer;
     staticcheck = pkgs.go-tools;
     terraform_fmt = pkgs.terraform;
     vint = pkgs.vim-vint;
+    write_good = pkgs.write-good;
+    yq = pkgs.yq-go;
   };
 in {
   options.plugins.efmls-configs = {
