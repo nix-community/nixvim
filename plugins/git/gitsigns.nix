@@ -108,17 +108,19 @@ in {
         This callback can return `false` to prevent attaching to the buffer.
       '';
       example = ''
-        \'\'
-        function(bufnr)
-          if vim.api.nvim_buf_get_name(bufnr):match(<PATTERN>) then
-            -- Don't attach to specific buffers whose name matches a pattern
-            return false
-          end
-          -- Setup keymaps
-          vim.api.nvim_buf_set_keymap(bufnr, 'n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
-          ... -- More keymaps
-        end
-        \'\'
+        {
+          function = \'\'
+            function(bufnr)
+              if vim.api.nvim_buf_get_name(bufnr):match(<PATTERN>) then
+                -- Don't attach to specific buffers whose name matches a pattern
+                return false
+              end
+              -- Setup keymaps
+              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
+              ... -- More keymaps
+            end
+          \'\'
+        }
       '';
     };
 
