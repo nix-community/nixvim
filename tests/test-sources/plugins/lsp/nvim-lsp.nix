@@ -107,6 +107,7 @@
         nil_ls.enable = true;
         nixd.enable = true;
         omnisharp.enable = true;
+        prismals.enable = true;
         pylsp.enable = true;
         pyright.enable = true;
         rnix-lsp.enable = true;
