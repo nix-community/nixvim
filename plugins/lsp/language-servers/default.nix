@@ -427,6 +427,11 @@ with lib; let
       package = pkgs.phpactor;
     }
     {
+      name = "prismals";
+      description = "Enable prismals, for Prisma";
+      package = pkgs.nodePackages."@prisma/language-server";
+    }
+    {
       name = "pylsp";
       description = "Enable pylsp, for Python.";
       package = pkgs.python3Packages.python-lsp-server;
