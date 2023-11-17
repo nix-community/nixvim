@@ -44,7 +44,13 @@
       then args
       else {
         # cases is a function
-        cases = cases {inherit pkgs helpers;};
+        cases = cases {
+          inherit pkgs helpers;
+          efmls-options = import ../plugins/lsp/language-servers/efmls-configs.nix {
+            inherit pkgs lib helpers;
+            config = {};
+          };
+        };
         inherit namespace;
       })
   testsList;
