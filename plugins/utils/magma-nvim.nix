@@ -22,7 +22,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: "none"
         '';
-        type = types.enum ["none" "uberzug" "kitty"];
+        type = types.enum ["none" "ueberzug" "kitty"];
       };
 
       automaticallyOpenOutput = mkDefaultOpt {
