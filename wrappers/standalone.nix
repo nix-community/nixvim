@@ -31,7 +31,12 @@ default_pkgs: {
   config = handleAssertions eval.config;
 in
   config.finalPackage.overrideAttrs (oa: {
-    paths =
-      oa.paths
-      ++ (pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs);
+    preInstall =
+      if config.enableMan
+      then ''
+        mkdir -p $out/share/man/man5
+        cp ${self.packages.${pkgs.system}.man-docs}/share/man/man5/nixvim.5 $out/share/man/man5
+      ''
+      else ''
+      '';
   })
