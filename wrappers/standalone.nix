@@ -32,6 +32,6 @@ default_pkgs: {
 in
   config.finalPackage.overrideAttrs (oa: {
     paths =
-      oa.paths
+      oa.paths or []
       ++ (pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs);
   })
