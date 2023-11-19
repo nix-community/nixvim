@@ -11,7 +11,7 @@ with lib; let
   languages = builtins.attrNames tools;
 
   # Mapping of tool name to the nixpkgs package (if any)
-  toolPkgs = with pkgs; {
+  allToolPkgs = with pkgs; {
     inherit
       actionlint
       alejandra
@@ -99,6 +99,16 @@ with lib; let
     write_good = write-good;
     yq = yq-go;
   };
+  # Filter packages that are not compatible with the current platform
+  toolPkgs =
+    filterAttrs
+    (
+      a: pkg:
+        meta.availableOn
+        pkgs.stdenv.hostPlatform
+        pkg
+    )
+    allToolPkgs;
 in {
   options.plugins.efmls-configs = {
     enable = mkEnableOption "efmls-configs, premade configurations for efm-langserver";
@@ -249,6 +259,14 @@ in {
         extraOptions.settings.languages = setupOptions;
       };
 
-      extraPackages = [pkgs.efm-langserver] ++ (builtins.map (v: toolPkgs.${v}) nixvimPkgs.right);
+      extraPackages =
+        [
+          pkgs.efm-langserver
+        ]
+        ++ (
+          builtins.map
+          (v: toolPkgs.${v})
+          nixvimPkgs.right
+        );
     };
 }

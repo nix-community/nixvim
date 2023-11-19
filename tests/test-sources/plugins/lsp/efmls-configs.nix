@@ -1,4 +1,8 @@
-{efmls-options, ...}: {
+{
+  efmls-options,
+  pkgs,
+  ...
+}: {
   empty = {
     plugins.efmls-configs.enable = true;
   };
@@ -16,27 +20,41 @@
         "phpstan"
       ];
 
-      unpackaged = [
-        "blade_formatter"
-        "cspell"
-        "dartanalyzer"
-        "debride"
-        "fecs"
-        "fixjson"
-        "forge_fmt"
-        "gersemi"
-        "js_standard"
-        "pint"
-        "prettier_eslint"
-        "prettier_standard"
-        "redpen"
-        "reek"
-        "rome"
-        "slim_lint"
-        "solhint"
-        "sorbet"
-        "xo"
-      ];
+      unpackaged =
+        [
+          "blade_formatter"
+          "cspell"
+          "dartanalyzer"
+          "debride"
+          "fecs"
+          "fixjson"
+          "forge_fmt"
+          "gersemi"
+          "js_standard"
+          "pint"
+          "prettier_eslint"
+          "prettier_standard"
+          "redpen"
+          "reek"
+          "rome"
+          "slim_lint"
+          "solhint"
+          "sorbet"
+          "xo"
+        ]
+        ++ (
+          pkgs.lib.optionals
+          pkgs.stdenv.isDarwin
+          ["clazy"]
+        )
+        ++ (
+          pkgs.lib.optionals
+          pkgs.stdenv.isAarch64
+          [
+            "dmd"
+            "smlfmt"
+          ]
+        );
 
       # Fetch the valid enum members from the tool options
       toolsFromOptions = opt: let
