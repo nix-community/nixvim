@@ -427,6 +427,11 @@ with lib; let
       };
     }
     {
+      name = "pest_ls";
+      description = "Enable pest_ls, for pest";
+      package = pkgs.pest-ide-tools;
+    }
+    {
       name = "phpactor";
       description = "Enable phpactor, for PHP";
       package = pkgs.phpactor;
