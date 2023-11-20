@@ -62,6 +62,7 @@ with lib; let
       statix
       stylua
       taplo
+      typstfmt
       uncrustify
       vale
       yamllint
