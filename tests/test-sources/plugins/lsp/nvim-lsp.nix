@@ -112,6 +112,7 @@
         nil_ls.enable = true;
         nixd.enable = true;
         omnisharp.enable = true;
+        pest_ls.enable = true;
         prismals.enable = true;
         pylsp.enable = true;
         pyright.enable = true;
