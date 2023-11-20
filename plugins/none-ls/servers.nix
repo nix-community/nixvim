@@ -44,6 +44,9 @@
       gitlint = {
         package = pkgs.gitlint;
       };
+      golangci_lint = {
+        package = pkgs.golangci-lint;
+      };
       hadolint = {
         package = pkgs.hadolint;
       };

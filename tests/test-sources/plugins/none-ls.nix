@@ -49,6 +49,7 @@
           eslint_d.enable = true;
           flake8.enable = true;
           gitlint.enable = true;
+          golangci_lint.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
           vale.enable = true;
