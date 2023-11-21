@@ -59,6 +59,7 @@
     ./languages/treesitter/treesitter-context.nix
     ./languages/treesitter/treesitter-playground.nix
     ./languages/treesitter/treesitter-refactor.nix
+    ./languages/treesitter/treesitter-textobjects.nix
     ./languages/treesitter/ts-autotag.nix
     ./languages/treesitter/ts-context-commentstring.nix
     ./languages/typst/typst-vim.nix
