@@ -8,22 +8,6 @@
 with lib; let
   cfg = config.plugins.treesitter-context;
 in {
-  # Those warnings were introduced on 08/25/2023. TODO: remove them in October 2023.
-  imports = let
-    basePluginPath = ["plugins" "treesitter-context"];
-  in [
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["maxWindowHeight"])
-      (basePluginPath ++ ["minWindowHeight"])
-    )
-    (
-      mkRemovedOptionModule (basePluginPath ++ ["patterns"]) ""
-    )
-    (
-      mkRemovedOptionModule (basePluginPath ++ ["extractPatterns"]) ""
-    )
-  ];
   options.plugins.treesitter-context =
     helpers.extraOptionsOptions
     // {
