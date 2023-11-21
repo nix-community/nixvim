@@ -7,7 +7,7 @@ This document is mainly for contributors to nixvim, but it can also be useful fo
 In order to submit a change you must be careful of several points:
 
 - The code must be properly formatted. This can be done through `nix fmt`.
-- The tests must pass. This can be done through `nix flake check` (this also checks formatting).
+- The tests must pass. This can be done through `nix flake check --all-systems` (this also checks formatting).
 - The change should try to avoid breaking existing configurations.
 - If the change introduces a new feature it should add tests for it (see the architecture section for details).
 
@@ -104,7 +104,7 @@ You can specify the special `tests` attribute in the configuration that will not
 
 - `tests.dontRun`: avoid launching this test, simply build the configuration.
 
-The tests are then runnable with `nix flake check`.
+The tests are then runnable with `nix flake check --all-systems`.
 
 There are a second set of tests, unit tests for nixvim itself, defined in `tests/lib-tests.nix` that use the `pkgs.lib.runTests` framework.
 
