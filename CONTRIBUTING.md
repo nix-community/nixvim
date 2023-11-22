@@ -83,7 +83,7 @@ Because the options may not have the same case (and may require some pre-process
 ```nix
 {
   some_opt = cfg.someOpt;
-  some_raw_opt = helpers.ifNonNull' cfg.someRawOpt (mkRaw cfg.someRawOpt);
+  some_raw_opt = helpers.mkRaw cfg.someRawOpt;
   some_meta_opt = with cfg.metaOpt; # metaOpt = { foo = ...; someOtherOpt = ...; };
     {
       inherit foo;
