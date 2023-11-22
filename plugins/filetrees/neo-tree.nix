@@ -975,6 +975,7 @@ in {
             https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_documentSymbol
           '';
         };
+        window = mkWindowMappingsOption "{}";
       };
     };
 
@@ -1215,6 +1216,7 @@ in {
                 cfg.documentSymbols.customKinds
               ))
             + "}";
+          window = processWindowMappings cfg.documentSymbols.window;
         };
       }
       // cfg.extraOptions;
