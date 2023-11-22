@@ -115,8 +115,6 @@ with lib; rec {
     then null
     else y;
 
-  mkRawIfNonNull = v: ifNonNull' v (mkRaw v);
-
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
@@ -273,7 +271,10 @@ with lib; rec {
     };
   };
 
-  mkRaw = r: {__raw = r;};
+  mkRaw = r:
+    ifNonNull'
+    r
+    {__raw = r;};
 
   wrapDo = string: ''
     do
