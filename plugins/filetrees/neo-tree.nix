@@ -1059,9 +1059,7 @@ in {
         popup_border_style = cfg.popupBorderStyle;
         resize_timer_interval = cfg.resizeTimerInterval;
         sort_case_insensitive = cfg.sortCaseInsensitive;
-        sort_function =
-          ifNonNull' cfg.sortFunction
-          (mkRaw cfg.sortFunction);
+        sort_function = mkRaw cfg.sortFunction;
         use_popups_for_input = cfg.usePopupsForInput;
         use_default_mappings = cfg.useDefaultMappings;
         source_selector = with cfg.sourceSelector; {

@@ -144,9 +144,7 @@ in {
               helpers.ifNonNull' cfg.executor
               (helpers.mkRaw "require(${rust-tools.executors}).${cfg.executor}");
 
-            on_initialized =
-              helpers.ifNonNull' cfg.onInitialized
-              (helpers.mkRaw cfg.onInitialized);
+            on_initialized = helpers.mkRaw cfg.onInitialized;
 
             reload_workspace_from_cargo_toml = cfg.reloadWorkspaceFromCargoToml;
             inlay_hints = with cfg.inlayHints;

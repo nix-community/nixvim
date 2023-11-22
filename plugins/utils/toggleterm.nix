@@ -177,12 +177,12 @@ in {
         else helpers.mkRaw size
       );
       open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw "[[${openMapping}]]");
-      on_create = helpers.ifNonNull' onCreate (helpers.mkRaw onCreate);
-      on_open = helpers.ifNonNull' onOpen (helpers.mkRaw onOpen);
-      on_close = helpers.ifNonNull' onClose (helpers.mkRaw onClose);
-      on_stdout = helpers.ifNonNull' onStdout (helpers.mkRaw onStdout);
-      on_stderr = helpers.ifNonNull' onStderr (helpers.mkRaw onStderr);
-      on_exit = helpers.ifNonNull' onExit (helpers.mkRaw onExit);
+      on_create = helpers.mkRaw onCreate;
+      on_open = helpers.mkRaw onOpen;
+      on_close = helpers.mkRaw onClose;
+      on_stdout = helpers.mkRaw onStdout;
+      on_stderr = helpers.mkRaw onStderr;
+      on_exit = helpers.mkRaw onExit;
       hide_numbers = hideNumbers;
       shade_filetypes = shadeFiletypes;
       shade_terminals = shadeTerminals;
@@ -197,7 +197,7 @@ in {
       float_opts = floatOpts;
       winbar = with winbar; {
         inherit enabled;
-        name_formatter = helpers.ifNonNull' nameFormatter (helpers.mkRaw nameFormatter);
+        name_formatter = helpers.mkRaw nameFormatter;
       };
     };
   in

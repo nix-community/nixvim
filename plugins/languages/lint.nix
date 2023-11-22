@@ -86,7 +86,7 @@ with lib; let
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
       '';
-      apply = s: helpers.ifNonNull' s (helpers.mkRaw s);
+      apply = helpers.mkRaw;
       mandatory = true;
     };
   };

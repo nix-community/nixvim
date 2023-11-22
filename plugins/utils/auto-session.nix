@@ -160,8 +160,8 @@ in {
           then
             with cfg.cwdChangeHandling; {
               restore_upcoming_session = restoreUpcomingSession;
-              pre_cwd_changed_hook = helpers.ifNonNull' preCwdChangedHook (helpers.mkRaw preCwdChangedHook);
-              post_cwd_changed_hook = helpers.ifNonNull' postCwdChangedHook (helpers.mkRaw postCwdChangedHook);
+              pre_cwd_changed_hook = helpers.mkRaw preCwdChangedHook;
+              post_cwd_changed_hook = helpers.mkRaw postCwdChangedHook;
             }
           else cfg.cwdChangeHandling;
         bypass_session_save_file_types = cfg.bypassSessionSaveFileTypes;

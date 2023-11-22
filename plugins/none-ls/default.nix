@@ -225,21 +225,11 @@ in {
           else cfg.fallbackSeverity;
         log_level = cfg.logLevel;
         notify_format = cfg.notifyFormat;
-        on_attach =
-          helpers.ifNonNull' cfg.onAttach
-          (helpers.mkRaw cfg.onAttach);
-        on_init =
-          helpers.ifNonNull' cfg.onInit
-          (helpers.mkRaw cfg.onInit);
-        on_exit =
-          helpers.ifNonNull' cfg.onExit
-          (helpers.mkRaw cfg.onExit);
-        root_dir =
-          helpers.ifNonNull' cfg.rootDir
-          (helpers.mkRaw cfg.rootDir);
-        should_attach =
-          helpers.ifNonNull' cfg.shouldAttach
-          (helpers.mkRaw cfg.shouldAttach);
+        on_attach = helpers.mkRaw cfg.onAttach;
+        on_init = helpers.mkRaw cfg.onInit;
+        on_exit = helpers.mkRaw cfg.onExit;
+        root_dir = helpers.mkRaw cfg.rootDir;
+        should_attach = helpers.mkRaw cfg.shouldAttach;
         temp_dir = cfg.tempDir;
         update_in_insert = cfg.updateInInsert;
 

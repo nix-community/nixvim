@@ -58,9 +58,9 @@ in {
     options = with cfg;
       {
         open_fold_hl_timeout = openFoldHlTimeout;
-        provider_selector = helpers.ifNonNull' providerSelector (helpers.mkRaw providerSelector);
+        provider_selector = helpers.mkRaw providerSelector;
         close_fold_kinds = closeFoldKinds;
-        fold_virt_text_handler = helpers.ifNonNull' foldVirtTextHandler (helpers.mkRaw foldVirtTextHandler);
+        fold_virt_text_handler = helpers.mkRaw foldVirtTextHandler;
         enable_get_fold_virt_text = enableGetFoldVirtText;
 
         preview = with preview; {

@@ -135,10 +135,7 @@ in {
           win_vheight = winVheight;
           inherit wrap;
           buf_label = bufLabel;
-          should_preview_cb =
-            if (shouldPreviewCb == null)
-            then null
-            else helpers.mkRaw shouldPreviewCb;
+          should_preview_cb = helpers.mkRaw shouldPreviewCb;
         };
         func_map = cfg.funcMap;
         filter = {

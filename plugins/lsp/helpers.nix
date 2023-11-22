@@ -129,9 +129,7 @@
               extraOptions =
                 {
                   inherit (cfg) cmd filetypes autostart;
-                  root_dir =
-                    helpers.ifNonNull' cfg.rootDir
-                    (helpers.mkRaw cfg.rootDir);
+                  root_dir = helpers.mkRaw cfg.rootDir;
                   on_attach =
                     helpers.ifNonNull' cfg.onAttach
                     (

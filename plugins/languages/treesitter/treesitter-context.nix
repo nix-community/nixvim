@@ -86,9 +86,7 @@ in {
           separator
           zindex
           ;
-        on_attach =
-          helpers.ifNonNull' onAttach
-          (helpers.mkRaw onAttach);
+        on_attach = helpers.mkRaw onAttach;
       }
       // cfg.extraOptions;
   in

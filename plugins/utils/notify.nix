@@ -139,8 +139,8 @@ in {
             }
           )
           icons;
-        on_open = helpers.ifNonNull' onOpen (helpers.mkRaw onOpen);
-        on_close = helpers.ifNonNull' onClose (helpers.mkRaw onClose);
+        on_open = helpers.mkRaw onOpen;
+        on_close = helpers.mkRaw onClose;
         inherit render;
         minimum_width = minimumWidth;
         inherit fps;

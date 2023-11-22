@@ -299,18 +299,14 @@ in {
           left_trunc_marker = leftTruncMarker;
           right_trunc_marker = rightTruncMarker;
           separator_style = separatorStyle;
-          name_formatter =
-            helpers.ifNonNull' nameFormatter
-            (helpers.mkRaw nameFormatter);
+          name_formatter = helpers.mkRaw nameFormatter;
           truncate_names = truncateNames;
           tab_size = tabSize;
           max_name_length = maxNameLength;
           color_icons = colorIcons;
           show_buffer_icons = showBufferIcons;
           show_buffer_close_icons = showBufferCloseIcons;
-          get_element_icon =
-            helpers.ifNonNull' getElementIcon
-            (helpers.mkRaw getElementIcon);
+          get_element_icon = helpers.mkRaw getElementIcon;
           show_close_icon = showCloseIcon;
           show_tab_indicators = showTabIndicators;
           show_duplicate_prefix = showDuplicatePrefix;
@@ -320,9 +316,7 @@ in {
           max_prefix_length = maxPrefixLength;
           sort_by = sortBy;
           inherit diagnostics;
-          diagnostics_indicator =
-            helpers.ifNonNull' diagnosticsIndicator
-            (helpers.mkRaw diagnosticsIndicator);
+          diagnostics_indicator = helpers.mkRaw diagnosticsIndicator;
           diagnostics_update_in_insert = diagnosticsUpdateInInsert;
           inherit offsets;
           groups = helpers.ifNonNull' groups {
@@ -333,9 +327,7 @@ in {
           };
           inherit hover;
           inherit debug;
-          custom_filter =
-            helpers.ifNonNull' customFilter
-            (helpers.mkRaw customFilter);
+          custom_filter = helpers.mkRaw customFilter;
         }
         // cfg.extraOptions;
 

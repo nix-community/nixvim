@@ -151,12 +151,8 @@ in {
         ;
       add_dirs = addDirs;
       auto_depth = autoDepth;
-      browse_files =
-        helpers.ifNonNull' browseFiles
-        (helpers.mkRaw browseFiles);
-      browse_folders =
-        helpers.ifNonNull' browseFolders
-        (helpers.mkRaw browseFolders);
+      browse_files = helpers.mkRaw browseFiles;
+      browse_folders = helpers.mkRaw browseFolders;
       collapse_dirs = collapseDirs;
       cwd_to_path = cwdToPath;
       dir_icon = dirIcon;
@@ -172,7 +168,7 @@ in {
                 else
                   attr
                   // {
-                    display = helpers.ifNonNull' attr.display (helpers.mkRaw attr.display);
+                    display = helpers.mkRaw attr.display;
                   }
             )
             displayStat
