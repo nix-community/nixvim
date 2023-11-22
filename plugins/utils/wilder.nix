@@ -237,15 +237,9 @@ in {
         pipeline =
           helpers.ifNonNull' pipeline
           (map helpers.mkRaw pipeline);
-        render =
-          helpers.ifNonNull' render
-          (helpers.mkRaw render);
-        preHook =
-          helpers.ifNonNull' preHook
-          (helpers.mkRaw preHook);
-        postHook =
-          helpers.ifNonNull' postHook
-          (helpers.mkRaw postHook);
+        render = helpers.mkRaw render;
+        preHook = helpers.mkRaw preHook;
+        postHook = helpers.mkRaw postHook;
       }
       // cfg.extraOptions;
   in

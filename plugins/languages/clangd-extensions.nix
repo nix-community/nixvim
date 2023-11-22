@@ -159,7 +159,7 @@ in {
     setupOptions = with cfg;
       {
         inlay_hints = with inlayHints; {
-          inline = helpers.ifNonNull' inline (helpers.mkRaw inline);
+          inline = helpers.mkRaw inline;
           only_current_line = onlyCurrentLine;
           only_current_line_autocmd = onlyCurrentLineAutocmd;
           show_parameter_hints = showParameterHints;

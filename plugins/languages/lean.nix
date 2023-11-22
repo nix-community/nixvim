@@ -302,9 +302,7 @@ in {
               enable
               height
               ;
-            on_lines =
-              helpers.ifNonNull' onLines
-              (helpers.mkRaw onLines);
+            on_lines = helpers.mkRaw onLines;
           };
           inherit lsp3;
         }

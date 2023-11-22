@@ -387,8 +387,6 @@ in {
     // configOpts;
 
   config = let
-    mkRawIfNonNull = v: helpers.ifNonNull' v (helpers.mkRaw v);
-
     mkGlobalConfig = c: {
       inherit (c) labels;
       search =
@@ -408,14 +406,14 @@ in {
         rainbow = {
           inherit (c.label.rainbow) enabled shade;
         };
-        format = mkRawIfNonNull c.label.format;
+        format = helpers.mkRaw c.label.format;
       };
       highlight = {
         inherit (c.highlight) backdrop matches priority groups;
       };
-      action = mkRawIfNonNull c.action;
+      action = helpers.mkRaw c.action;
       inherit (c) pattern continue;
-      config = mkRawIfNonNull c.config;
+      config = helpers.mkRaw c.config;
       prompt = {
         inherit (c.prompt) enabled prefix;
         win_config = c.prompt.winConfig;
@@ -446,7 +444,7 @@ in {
               jump_labels = c.jumpLabels;
               multi_line = c.multiLine;
               inherit (c) keys;
-              char_actions = mkRawIfNonNull c.charActions;
+              char_actions = helpers.mkRaw c.charActions;
             });
           treesitter = mkModeConfig cfg.modes.treesitter (c: {});
           treesitter_search = mkModeConfig cfg.modes.treesitterSearch (c: {});

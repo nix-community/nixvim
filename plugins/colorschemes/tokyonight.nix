@@ -79,12 +79,8 @@ in {
         dim_inactive = dimInactive;
         lualine_bold = lualineBold;
         day_brightness = dayBrightness;
-        on_colors =
-          helpers.ifNonNull' cfg.onColors
-          (helpers.mkRaw onColors);
-        on_highlights =
-          helpers.ifNonNull' cfg.onHighlights
-          (helpers.mkRaw onHighlights);
+        on_colors = helpers.mkRaw onColors;
+        on_highlights = helpers.mkRaw onHighlights;
       };
     in ''
       require("tokyonight").setup(${helpers.toLuaObject setupOptions})

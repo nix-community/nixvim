@@ -159,13 +159,9 @@ in {
 
           inherit (plugin) disable as;
 
-          installer =
-            helpers.ifNonNull' plugin.installer
-            (helpers.mkRaw plugin.installer);
+          installer = helpers.mkRaw plugin.installer;
 
-          updater =
-            helpers.ifNonNull' plugin.updater
-            (helpers.mkRaw plugin.updater);
+          updater = helpers.mkRaw plugin.updater;
 
           inherit
             (plugin)

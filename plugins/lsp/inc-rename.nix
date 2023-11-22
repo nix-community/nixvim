@@ -43,7 +43,7 @@ with lib; {
       preview_empty_name = cfg.previewEmptyName;
       show_message = cfg.showMessage;
       input_buffer_type = cfg.inputBufferType;
-      post_hook = helpers.ifNonNull' cfg.postHook (helpers.mkRaw cfg.postHook);
+      post_hook = helpers.mkRaw cfg.postHook;
     };
   in
     mkIf cfg.enable {

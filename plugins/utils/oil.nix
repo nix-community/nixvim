@@ -381,12 +381,8 @@ in {
         use_default_keymaps = cfg.useDefaultKeymaps;
         view_options = with cfg.viewOptions; {
           show_hidden = showHidden;
-          is_hidden_file =
-            helpers.ifNonNull' isHiddenFile
-            (helpers.mkRaw isHiddenFile);
-          is_always_hidden =
-            helpers.ifNonNull' isAlwaysHidden
-            (helpers.mkRaw isAlwaysHidden);
+          is_hidden_file = helpers.mkRaw isHiddenFile;
+          is_always_hidden = helpers.mkRaw isAlwaysHidden;
         };
         float = with cfg.float; {
           inherit padding;

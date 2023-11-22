@@ -120,13 +120,11 @@ in {
           cleaning_interval = cleaningInterval;
         };
         trigger_events = cfg.triggerEvents;
-        condition =
-          helpers.ifNonNull' cfg.condition
-          (helpers.mkRaw cfg.condition);
+        condition = helpers.mkRaw cfg.condition;
         write_all_buffers = cfg.writeAllBuffers;
         debounce_delay = cfg.debounceDelay;
         callbacks = with cfg.callbacks;
-          mapAttrs (name: value: helpers.ifNonNull' value (helpers.mkRaw value)) {
+          mapAttrs (_: helpers.mkRaw) {
             inherit enabling disabling;
             before_asserting_save = beforeAssertingSave;
             before_saving = beforeSaving;

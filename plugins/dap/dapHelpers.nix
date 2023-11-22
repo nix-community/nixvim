@@ -129,7 +129,7 @@ in rec {
             adapter
             // {
               inherit type;
-              enrich_config = helpers.ifNonNull' adapter.enrichConfig (helpers.mkRaw adapter.enrichConfig);
+              enrich_config = helpers.mkRaw adapter.enrichConfig;
             }
           ))
       adapters;

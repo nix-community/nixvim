@@ -57,7 +57,7 @@ with lib; {
       extraConfigLua = let
         opts = {
           inherit (cfg) dir options;
-          pre_save = helpers.mkRawIfNonNull cfg.preSave;
+          pre_save = helpers.mkRaw cfg.preSave;
           save_empty = cfg.saveEmpty;
         };
       in ''

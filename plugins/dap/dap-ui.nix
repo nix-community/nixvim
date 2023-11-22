@@ -212,7 +212,7 @@ in {
           max_value_lines = maxValueLines;
         });
 
-        select_window = helpers.ifNonNull' selectWindow (helpers.mkRaw selectWindow);
+        select_window = helpers.mkRaw selectWindow;
       }
       // cfg.extraOptions;
   in

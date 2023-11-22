@@ -30,7 +30,7 @@ in {
     '';
 
     diffContextLines = helpers.defaultNullOpts.mkNullable (with types; either ints.unsigned str) "vim.o.scrolloff" ''
-      Defaults to the scrolloff
+      Defaults to the scrolloff.
     '';
 
     entryFormat = helpers.defaultNullOpts.mkStr "state #$ID, $STAT, $TIME" ''
@@ -79,8 +79,8 @@ in {
       use_custom_command = useCustomCommand;
       side_by_side = sideBySide;
       diff_context_lines =
-        if isInt diffContextLines
-        then helpers.mkRaw "diffContextLines"
+        if isString diffContextLines
+        then helpers.mkRaw diffContextLines
         else diffContextLines;
       entry_format = entryFormat;
       time_format = timeFormat;

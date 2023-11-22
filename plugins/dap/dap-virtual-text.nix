@@ -72,7 +72,7 @@ in {
       only_first_definition = onlyFirstDefinition;
       all_references = allReferences;
       clear_on_continue = clearOnContinue;
-      display_callback = helpers.ifNonNull' displayCallback (helpers.mkRaw displayCallback);
+      display_callback = helpers.mkRaw displayCallback;
       virt_text_pos = virtTextPos;
       all_frames = allFrames;
       virt_lines = virtLines;

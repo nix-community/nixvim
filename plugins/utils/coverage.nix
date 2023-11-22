@@ -278,7 +278,7 @@ in {
           summary_pass = summaryPass;
           summary_fail = summaryFail;
         };
-        load_coverage_cb = helpers.ifNonNull' loadCoverageCb (helpers.mkRaw loadCoverageCb);
+        load_coverage_cb = helpers.mkRaw loadCoverageCb;
         inherit signs;
         sign_group = signGroup;
         summary = with summary; {

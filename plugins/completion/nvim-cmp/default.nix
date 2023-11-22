@@ -573,9 +573,7 @@ in {
         formatting = with formatting; {
           expandable_indicator = expandableIndicator;
           inherit fields;
-          format =
-            helpers.ifNonNull' format
-            (helpers.mkRaw format);
+          format = helpers.mkRaw format;
         };
 
         matching = with matching; {
@@ -657,11 +655,11 @@ in {
             max_width =
               if isInt maxWidth
               then maxWidth
-              else helpers.ifNonNull' maxWidth (helpers.mkRaw maxWidth);
+              else helpers.mkRaw maxWidth;
             max_height =
               if isInt maxHeight
               then maxHeight
-              else helpers.ifNonNull' maxHeight (helpers.mkRaw maxHeight);
+              else helpers.mkRaw maxHeight;
           };
         };
         inherit experimental;
