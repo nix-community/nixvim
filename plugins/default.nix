@@ -30,6 +30,8 @@
     ./completion/lspkind.nix
     ./completion/cmp
 
+    ./dap
+
     ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
@@ -90,9 +92,9 @@
     ./lsp/trouble.nix
     ./lsp/wtf.nix
 
-    ./none-ls
+    ./neotest
 
-    ./dap
+    ./none-ls
 
     ./pluginmanagers/packer.nix
     ./pluginmanagers/lazy.nix
