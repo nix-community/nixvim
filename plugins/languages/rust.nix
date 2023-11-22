@@ -136,58 +136,62 @@ in {
     extraPlugins = with pkgs.vimPlugins; [nvim-lspconfig cfg.package];
     extraPackages = [cfg.serverPackage];
 
-    plugins.lsp.postConfig = let
-      options =
-        {
-          tools = {
-            executor =
-              helpers.ifNonNull' cfg.executor
-              (helpers.mkRaw "require(${rust-tools.executors}).${cfg.executor}");
+    plugins.lsp = {
+      preConfig = let
+        options =
+          {
+            tools = {
+              executor =
+                helpers.ifNonNull' cfg.executor
+                (helpers.mkRaw "require(${rust-tools.executors}).${cfg.executor}");
 
-            on_initialized =
-              helpers.ifNonNull' cfg.onInitialized
-              (helpers.mkRaw cfg.onInitialized);
+              on_initialized =
+                helpers.ifNonNull' cfg.onInitialized
+                (helpers.mkRaw cfg.onInitialized);
 
-            reload_workspace_from_cargo_toml = cfg.reloadWorkspaceFromCargoToml;
-            inlay_hints = with cfg.inlayHints;
-              helpers.ifNonNull' cfg.inlayHints {
-                inherit auto;
-                only_current_line = onlyCurrentLine;
-                show_parameter_hints = showParameterHints;
-                parameter_hints_prefix = parameterHintsPrefix;
-                other_hints_prefix = otherHintsPrefix;
-                max_len_align = maxLenAlign;
-                max_len_align_padding = maxLenAlignPadding;
-                right_align = rightAlign;
-                right_align_padding = rightAlignPadding;
-                inherit highlight;
-              };
+              reload_workspace_from_cargo_toml = cfg.reloadWorkspaceFromCargoToml;
+              inlay_hints = with cfg.inlayHints;
+                helpers.ifNonNull' cfg.inlayHints {
+                  inherit auto;
+                  only_current_line = onlyCurrentLine;
+                  show_parameter_hints = showParameterHints;
+                  parameter_hints_prefix = parameterHintsPrefix;
+                  other_hints_prefix = otherHintsPrefix;
+                  max_len_align = maxLenAlign;
+                  max_len_align_padding = maxLenAlignPadding;
+                  right_align = rightAlign;
+                  right_align_padding = rightAlignPadding;
+                  inherit highlight;
+                };
 
-            hover_actions = with cfg.hoverActions;
-              helpers.ifNonNull' cfg.hoverActions
-              {
-                inherit border;
-                max_width = maxWidth;
-                max_height = maxHeight;
-                auto_focus = autoFocus;
-              };
+              hover_actions = with cfg.hoverActions;
+                helpers.ifNonNull' cfg.hoverActions
+                {
+                  inherit border;
+                  max_width = maxWidth;
+                  max_height = maxHeight;
+                  auto_focus = autoFocus;
+                };
 
-            crate_graph = with cfg.crateGraph;
-              helpers.ifNonNull' cfg.crateGraph {
-                inherit backend output full;
-                enabled_graphviz_backends = enabledGraphvizBackends;
-              };
-          };
-          server = with cfg.server;
-            helpers.ifNonNull' cfg.server {
-              inherit standalone;
-              settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
-              on_attach = helpers.mkRaw "__lspOnAttach";
+              crate_graph = with cfg.crateGraph;
+                helpers.ifNonNull' cfg.crateGraph {
+                  inherit backend output full;
+                  enabled_graphviz_backends = enabledGraphvizBackends;
+                };
             };
-        }
-        // cfg.extraOptions;
-    in ''
-      require('rust-tools').setup(${helpers.toLuaObject options})
-    '';
+            server = with cfg.server;
+              helpers.ifNonNull' cfg.server {
+                inherit standalone;
+                settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
+                on_attach = helpers.mkRaw "__lspOnAttach";
+              };
+          }
+          // cfg.extraOptions;
+      in ''
+        require('rust-tools').setup(${helpers.toLuaObject options})
+      '';
+
+      servers.rust-analyzer.enable = true;
+    };
   };
 }
