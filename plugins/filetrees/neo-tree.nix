@@ -1022,7 +1022,7 @@ in {
 
     processWindowMappings = window:
       ifNonNull' window {
-        mappings = processMappings window;
+        mappings = processMappings window.mappings;
       };
 
     options = with cfg;
