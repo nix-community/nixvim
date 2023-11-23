@@ -265,7 +265,7 @@ in {
         ]
         ++ (
           builtins.map
-          (v: toolPkgs.${v})
+          (v: cfg.toolPackages.${v})
           nixvimPkgs.right
         );
     };
