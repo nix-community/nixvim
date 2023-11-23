@@ -9,7 +9,6 @@
     description ? "Enable ${name}.",
     serverName ? name,
     package ? pkgs.${name},
-    extraPackages ? {},
     cmd ? (cfg: null),
     settings ? (cfg: cfg),
     settingsOptions ? {},
@@ -116,12 +115,9 @@
         mkIf cfg.enable
         {
           extraPackages =
-            (
-              optional
-              (cfg.installLanguageServer && (package != null))
-              cfg.package
-            )
-            ++ (mapAttrsToList (name: _: cfg."${name}Package") extraPackages);
+            optional
+            (cfg.installLanguageServer && (package != null))
+            cfg.package;
 
           plugins.lsp.enabledServers = [
             {
