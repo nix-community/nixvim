@@ -28,7 +28,11 @@
       lsp = {
         enable = true;
         servers = {
-          rust-analyzer.enable = true;
+          rust-analyzer = {
+            enable = true;
+            installCargo = true;
+            installRustc = true;
+          };
           rnix-lsp.enable = true;
         };
       };
@@ -75,7 +79,11 @@
         enable = true;
         servers = {
           rnix-lsp.enable = true;
-          rust-analyzer.enable = true;
+          rust-analyzer = {
+            enable = true;
+            installCargo = true;
+            installRustc = true;
+          };
           jsonls.enable = true;
         };
       };

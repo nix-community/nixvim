@@ -43,7 +43,11 @@
           installLanguageServer = false;
         };
         nil_ls.enable = true;
-        rust-analyzer.enable = true;
+        rust-analyzer = {
+          enable = true;
+          installCargo = true;
+          installRustc = true;
+        };
         ruff-lsp = {
           enable = true;
           extraOptions = {
@@ -112,7 +116,11 @@
         pyright.enable = true;
         rnix-lsp.enable = true;
         ruff-lsp.enable = true;
-        rust-analyzer.enable = true;
+        rust-analyzer = {
+          enable = true;
+          installCargo = true;
+          installRustc = true;
+        };
         sourcekit.enable = true;
         svelte.enable = true;
         tailwindcss.enable = true;

@@ -528,6 +528,7 @@ in {
       ./efmls-configs.nix
       ./nixd.nix
       ./pylsp.nix
+      ./rust-analyzer.nix
       ./svelte.nix
     ];
 }
