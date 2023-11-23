@@ -7,7 +7,7 @@ on:
 jobs:
   check:
     name: Check that the module is valid
-    runs-on: nscloud-ubuntu-22.04-amd64-4x16
+    runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v3
@@ -19,6 +19,6 @@ jobs:
         with:
           name: nix-community
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix flake check --all-systems --max-jobs 1
+      - run: nix flake check --all-systems
       - run: nix flake check --all-systems ./templates/_wrapper/simple
       - run: nix build .#docs --show-trace
