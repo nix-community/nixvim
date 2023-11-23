@@ -107,6 +107,7 @@
     ./utils/endwise.nix
     ./utils/flash.nix
     ./utils/floaterm.nix
+    ./utils/formatter-nvim.nix
     ./utils/goyo.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix
