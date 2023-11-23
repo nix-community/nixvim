@@ -32,10 +32,9 @@ in {
       defaults
       "Mapping options";
 
-    mkWindowMappingsOption = defaults:
-      helpers.mkCompositeOption "Window options" {
-        mappings = mkMappingsOption defaults;
-      };
+    mkWindowMappingsOption = defaults: {
+      mappings = mkMappingsOption defaults;
+    };
 
     mkFollowCurrentFileOption = default: {
       enabled = helpers.defaultNullOpts.mkBool default ''
@@ -96,25 +95,23 @@ in {
 
       gitStatusAsync = helpers.defaultNullOpts.mkBool true "";
 
-      gitStatusAsyncOptions =
-        helpers.mkCompositeOption
-        "These options are for people with VERY large git repos" {
-          batchSize =
-            helpers.defaultNullOpts.mkInt 1000
-            "How many lines of git status results to process at a time";
+      gitStatusAsyncOptions = {
+        batchSize =
+          helpers.defaultNullOpts.mkInt 1000
+          "How many lines of git status results to process at a time";
 
-          batchDelay =
-            helpers.defaultNullOpts.mkInt 10
-            "delay in ms between batches. Spreads out the workload to let other processes run.";
+        batchDelay =
+          helpers.defaultNullOpts.mkInt 10
+          "delay in ms between batches. Spreads out the workload to let other processes run.";
 
-          maxLines =
-            helpers.defaultNullOpts.mkInt 10000
-            ''
-              How many lines of git status results to process. Anything after this will be dropped.
-              Anything before this will be used.
-              The last items to be processed are the untracked files.
-            '';
-        };
+        maxLines =
+          helpers.defaultNullOpts.mkInt 10000
+          ''
+            How many lines of git status results to process. Anything after this will be dropped.
+            Anything before this will be used.
+            The last items to be processed are the untracked files.
+          '';
+      };
 
       hideRootNode = helpers.defaultNullOpts.mkBool false "Hide the root node.";
 
@@ -308,7 +305,7 @@ in {
       };
       eventHandlers =
         helpers.mkNullOrOption
-        (types.attrsOf types.str)
+        (with types; attrsOf str)
         ''
           Configuration of event handlers.
           Attrs:
@@ -334,8 +331,8 @@ in {
           ```
         '';
 
-      defaultComponentConfigs = helpers.mkCompositeOption "Configuration for default components." {
-        container = helpers.mkCompositeOption "Container options" {
+      defaultComponentConfigs = {
+        container = {
           enableCharacterFade = helpers.defaultNullOpts.mkBool true "";
 
           width = helpers.defaultNullOpts.mkStr "100%" "";
@@ -343,8 +340,8 @@ in {
           rightPadding = helpers.defaultNullOpts.mkInt 0 "";
         };
 
-        diagnostics = helpers.mkCompositeOption "diagnostics" {
-          symbols = helpers.mkCompositeOption "symbols" {
+        diagnostics = {
+          symbols = {
             hint = helpers.defaultNullOpts.mkStr "H" "";
 
             info = helpers.defaultNullOpts.mkStr "I" "";
@@ -354,7 +351,7 @@ in {
             error = helpers.defaultNullOpts.mkStr "X" "";
           };
 
-          highlights = helpers.mkCompositeOption "highlights" {
+          highlights = {
             hint = helpers.defaultNullOpts.mkStr "DiagnosticSignHint" "";
 
             info = helpers.defaultNullOpts.mkStr "DiagnosticSignInfo" "";
@@ -365,7 +362,7 @@ in {
           };
         };
 
-        indent = helpers.mkCompositeOption "indent" {
+        indent = {
           indentSize = helpers.defaultNullOpts.mkInt 2 "";
 
           padding = helpers.defaultNullOpts.mkInt 1 "";
@@ -409,13 +406,13 @@ in {
           '';
         };
 
-        modified = helpers.mkCompositeOption "modified" {
+        modified = {
           symbol = helpers.defaultNullOpts.mkStr "[+] " "";
 
           highlight = helpers.defaultNullOpts.mkStr "NeoTreeModified" "";
         };
 
-        name = helpers.mkCompositeOption "name" {
+        name = {
           trailingSlash = helpers.defaultNullOpts.mkBool false "";
 
           useGitStatusColors = helpers.defaultNullOpts.mkBool true "";
@@ -423,37 +420,30 @@ in {
           highlight = helpers.defaultNullOpts.mkStr "NeoTreeFileName" "";
         };
 
-        gitStatus = helpers.mkCompositeOption "git status" {
+        gitStatus = {
           symbols =
-            helpers.mkCompositeOption
-            ''
-              Symbol characters for git status.
-              Set to empty string to not show them.
-            ''
+            mapAttrs
             (
-              mapAttrs
-              (
-                optionName: default:
-                  helpers.defaultNullOpts.mkStr default optionName
-              )
-              {
-                added = "✚";
-                deleted = "✖";
-                modified = "";
-                renamed = "";
-                untracked = "";
-                ignored = "";
-                unstaged = "";
-                staged = "";
-                conflict = "";
-              }
-            );
+              optionName: default:
+                helpers.defaultNullOpts.mkStr default optionName
+            )
+            {
+              added = "✚";
+              deleted = "✖";
+              modified = "";
+              renamed = "";
+              untracked = "";
+              ignored = "";
+              unstaged = "";
+              staged = "";
+              conflict = "";
+            };
 
           align = helpers.defaultNullOpts.mkStr "right" "icon alignment";
         };
       };
 
-      renderers = helpers.mkCompositeOption "Renderers configuration" {
+      renderers = {
         directory =
           mkRendererComponentListOption
           ''
@@ -566,117 +556,110 @@ in {
         helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) "{}"
         "nesting rules";
 
-      window =
-        helpers.mkCompositeOption
-        ''
-          Window options.
-          See https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup for possible options.
-          These can also be functions that return these options.
-        ''
-        {
-          position =
-            helpers.defaultNullOpts.mkEnum
-            ["left" "right" "top" "bottom" "float" "current"] "left" "position";
+      window = {
+        position =
+          helpers.defaultNullOpts.mkEnum
+          ["left" "right" "top" "bottom" "float" "current"] "left" "position";
 
-          width = helpers.defaultNullOpts.mkInt 40 "Applies to left and right positions";
+        width = helpers.defaultNullOpts.mkInt 40 "Applies to left and right positions";
 
-          height = helpers.defaultNullOpts.mkInt 15 "Applies to top and bottom positions";
+        height = helpers.defaultNullOpts.mkInt 15 "Applies to top and bottom positions";
 
-          autoExpandWidth =
-            helpers.defaultNullOpts.mkBool false
-            ''
-              Expand the window when file exceeds the window width. does not work with
-              position = "float"
-            '';
-
-          popup = helpers.mkCompositeOption "Settings that apply to float position only" {
-            size = helpers.mkCompositeOption "size" {
-              height = helpers.defaultNullOpts.mkStr "80%" "height";
-
-              width = helpers.defaultNullOpts.mkStr "50%" "height";
-            };
-
-            position = helpers.defaultNullOpts.mkStr "80%" ''
-              50% means center it.
-              You can also specify border here, if you want a different setting from the global
-              `popupBorderStyle`.
-            '';
-          };
-
-          sameLevel = helpers.defaultNullOpts.mkBool false ''
-            Create and paste/move files/directories on the same level as the directory under cursor
-            (as opposed to within the directory under cursor).
+        autoExpandWidth =
+          helpers.defaultNullOpts.mkBool false
+          ''
+            Expand the window when file exceeds the window width. does not work with
+            position = "float"
           '';
 
-          insertAs = helpers.defaultNullOpts.mkEnumFirstDefault ["child" "sibling"] ''
-            Affects how nodes get inserted into the tree during creation/pasting/moving of files if
-            the node under the cursor is a directory:
+        popup = {
+          size = {
+            height = helpers.defaultNullOpts.mkStr "80%" "height";
 
-            - "child":   Insert nodes as children of the directory under cursor.
-            - "sibling": Insert nodes  as siblings of the directory under cursor.
-          '';
-
-          mappingOptions = helpers.mkCompositeOption "Mapping options" {
-            noremap = helpers.defaultNullOpts.mkBool true "noremap";
-
-            nowait = helpers.defaultNullOpts.mkBool true "nowait";
+            width = helpers.defaultNullOpts.mkStr "50%" "height";
           };
 
-          mappings =
-            mkMappingsOption
-            ''
-              ```nix
-                {
-                  "<space>" = {
-                    command = "toggle_node";
-                    # disable `nowait` if you have existing combos starting with this char that you want to use
-                    nowait = false;
-                  };
-                  "<2-LeftMouse>" = "open";
-                  "<cr>" = "open";
-                  "<esc>" = "revert_preview";
-                  P = {
-                    command = "toggle_preview";
-                    config = { use_float = true; };
-                  };
-                  l = "focus_preview";
-                  S = "open_split";
-                  # S = "split_with_window_picker";
-                  s = "open_vsplit";
-                  # s = "vsplit_with_window_picker";
-                  t = "open_tabnew";
-                  # "<cr>" = "open_drop";
-                  # t = "open_tab_drop";
-                  w = "open_with_window_picker";
-                  C = "close_node";
-                  z = "close_all_nodes";
-                  # Z = "expand_all_nodes";
-                  R = "refresh";
-                  a = {
-                    command = "add";
-                    # some commands may take optional config options, see `:h neo-tree-mappings` for details
-                    config = {
-                      show_path = "none"; # "none", "relative", "absolute"
-                    };
-                  };
-                  A = "add_directory"; # also accepts the config.show_path and config.insert_as options.
-                  d = "delete";
-                  r = "rename";
-                  y = "copy_to_clipboard";
-                  x = "cut_to_clipboard";
-                  p = "paste_from_clipboard";
-                  c = "copy"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
-                  m = "move"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
-                  e = "toggle_auto_expand_width";
-                  q = "close_window";
-                  "?" = "show_help";
-                  "<" = "prev_source";
-                  ">" = "next_source";
-                }
-              ```
-            '';
+          position = helpers.defaultNullOpts.mkStr "80%" ''
+            50% means center it.
+            You can also specify border here, if you want a different setting from the global
+            `popupBorderStyle`.
+          '';
         };
-      filesystem = helpers.mkCompositeOption "Filesystem options" {
+
+        sameLevel = helpers.defaultNullOpts.mkBool false ''
+          Create and paste/move files/directories on the same level as the directory under cursor
+          (as opposed to within the directory under cursor).
+        '';
+
+        insertAs = helpers.defaultNullOpts.mkEnumFirstDefault ["child" "sibling"] ''
+          Affects how nodes get inserted into the tree during creation/pasting/moving of files if
+          the node under the cursor is a directory:
+
+          - "child":   Insert nodes as children of the directory under cursor.
+          - "sibling": Insert nodes  as siblings of the directory under cursor.
+        '';
+
+        mappingOptions = {
+          noremap = helpers.defaultNullOpts.mkBool true "noremap";
+
+          nowait = helpers.defaultNullOpts.mkBool true "nowait";
+        };
+
+        mappings =
+          mkMappingsOption
+          ''
+            ```nix
+              {
+                "<space>" = {
+                  command = "toggle_node";
+                  # disable `nowait` if you have existing combos starting with this char that you want to use
+                  nowait = false;
+                };
+                "<2-LeftMouse>" = "open";
+                "<cr>" = "open";
+                "<esc>" = "revert_preview";
+                P = {
+                  command = "toggle_preview";
+                  config = { use_float = true; };
+                };
+                l = "focus_preview";
+                S = "open_split";
+                # S = "split_with_window_picker";
+                s = "open_vsplit";
+                # s = "vsplit_with_window_picker";
+                t = "open_tabnew";
+                # "<cr>" = "open_drop";
+                # t = "open_tab_drop";
+                w = "open_with_window_picker";
+                C = "close_node";
+                z = "close_all_nodes";
+                # Z = "expand_all_nodes";
+                R = "refresh";
+                a = {
+                  command = "add";
+                  # some commands may take optional config options, see `:h neo-tree-mappings` for details
+                  config = {
+                    show_path = "none"; # "none", "relative", "absolute"
+                  };
+                };
+                A = "add_directory"; # also accepts the config.show_path and config.insert_as options.
+                d = "delete";
+                r = "rename";
+                y = "copy_to_clipboard";
+                x = "cut_to_clipboard";
+                p = "paste_from_clipboard";
+                c = "copy"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
+                m = "move"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
+                e = "toggle_auto_expand_width";
+                q = "close_window";
+                "?" = "show_help";
+                "<" = "prev_source";
+                ">" = "next_source";
+              }
+            ```
+          '';
+      };
+      filesystem = {
         window = mkWindowMappingsOption (lib.mdDoc ''
           ```nix
             {
@@ -711,12 +694,12 @@ in {
           helpers.defaultNullOpts.mkBool true
           "true creates a 2-way binding between vim's cwd and neo-tree's root.";
 
-        cwdTarget = helpers.mkCompositeOption "cwd target" {
+        cwdTarget = {
           sidebar = helpers.defaultNullOpts.mkStr "tab" "sidebar is when position = left or right";
           current = helpers.defaultNullOpts.mkStr "window" "current is when position = current";
         };
 
-        filteredItems = helpers.mkCompositeOption "filtered items" {
+        filteredItems = {
           visible =
             helpers.defaultNullOpts.mkBool false
             "when true, they will just be displayed differently than normal items";
@@ -872,7 +855,7 @@ in {
         '';
       };
 
-      buffers = helpers.mkCompositeOption "Buffers options" {
+      buffers = {
         bindToCwd = helpers.defaultNullOpts.mkBool true "Bind to current working directory.";
 
         followCurrentFile = mkFollowCurrentFileOption true;
@@ -890,7 +873,7 @@ in {
         '';
       };
 
-      gitStatus = helpers.mkCompositeOption "git status options" {
+      gitStatus = {
         window = mkWindowMappingsOption ''
           {
             A = "git_add_all";
@@ -904,8 +887,8 @@ in {
         '';
       };
 
-      example = helpers.mkCompositeOption "example options" {
-        renderers = helpers.mkCompositeOption "renderers" {
+      example = {
+        renderers = {
           custom =
             mkRendererComponentListOption
             ''
@@ -1021,52 +1004,51 @@ in {
       ifNonNull' mappings
       (mapAttrs processMapping mappings);
 
-    processWindowMappings = window:
-      ifNonNull' window {
-        mappings = processMappings window.mappings;
-      };
+    processWindowMappings = window: {
+      mappings = processMappings window.mappings;
+    };
 
-    options = with cfg;
+    setupOptions = with cfg;
       {
         # Concatenate sources and extraSources, setting sources to it's default value if it is null
         # and extraSources is not null
         sources =
-          if (cfg.extraSources != null)
+          if (extraSources != null)
           then
-            if (cfg.sources == null)
-            then ["filesystem" "git_status" "buffers"] ++ cfg.extraSources
-            else cfg.sources ++ cfg.extraSources
-          else cfg.sources;
-        add_blank_line_at_top = cfg.addBlankLineAtTop;
-        auto_clean_after_session_restore = cfg.autoCleanAfterSessionRestore;
-        close_if_last_window = cfg.closeIfLastWindow;
-        default_source = cfg.defaultSource;
-        enable_diagnostics = cfg.enableDiagnostics;
-        enable_git_status = cfg.enableGitStatus;
-        enable_modified_markers = cfg.enableModifiedMarkers;
-        enable_refresh_on_write = cfg.enableRefreshOnWrite;
-        git_status_async = cfg.gitStatusAsync;
-        git_status_async_options = ifNonNull' cfg.gitStatusAsyncOptions {
-          batch_size = cfg.gitStatusAsyncOptions.batchSize;
-          batch_delay = cfg.gitStatusAsyncOptions.batchDelay;
-          max_lines = cfg.gitStatusAsyncOptions.maxLines;
+            if (sources == null)
+            then ["filesystem" "git_status" "buffers"] ++ extraSources
+            else sources ++ extraSources
+          else sources;
+        add_blank_line_at_top = addBlankLineAtTop;
+        auto_clean_after_session_restore = autoCleanAfterSessionRestore;
+        close_if_last_window = closeIfLastWindow;
+        default_source = defaultSource;
+        enable_diagnostics = enableDiagnostics;
+        enable_git_status = enableGitStatus;
+        enable_modified_markers = enableModifiedMarkers;
+        enable_refresh_on_write = enableRefreshOnWrite;
+        git_status_async = gitStatusAsync;
+        git_status_async_options = with gitStatusAsyncOptions; {
+          batch_size = batchSize;
+          batch_delay = batchDelay;
+          max_lines = maxLines;
         };
-        hide_root_node = cfg.hideRootNode;
-        retain_hidden_root_indent = cfg.retainHiddenRootIndent;
-        log_level = cfg.logLevel;
-        log_to_file = cfg.logToFile;
-        open_files_in_last_window = cfg.openFilesInLastWindow;
-        popup_border_style = cfg.popupBorderStyle;
-        resize_timer_interval = cfg.resizeTimerInterval;
-        sort_case_insensitive = cfg.sortCaseInsensitive;
-        sort_function = mkRaw cfg.sortFunction;
-        use_popups_for_input = cfg.usePopupsForInput;
-        use_default_mappings = cfg.useDefaultMappings;
-        source_selector = with cfg.sourceSelector; {
+        hide_root_node = hideRootNode;
+        retain_hidden_root_indent = retainHiddenRootIndent;
+        log_level = logLevel;
+        log_to_file = logToFile;
+        open_files_in_last_window = openFilesInLastWindow;
+        popup_border_style = popupBorderStyle;
+        resize_timer_interval = resizeTimerInterval;
+        sort_case_insensitive = sortCaseInsensitive;
+        sort_function = mkRaw sortFunction;
+        use_popups_for_input = usePopupsForInput;
+        use_default_mappings = useDefaultMappings;
+        source_selector = with sourceSelector; {
           inherit winbar statusline;
           show_scrolled_off_parent_node = showScrolledOffParentNode;
           sources =
-            ifNonNull' cfg.sourceSelector.sources
+            ifNonNull' sources
             (
               map
               (
@@ -1075,7 +1057,7 @@ in {
                   display_name = source.displayName;
                 }
               )
-              cfg.sourceSelector.sources
+              sources
             );
           content_layout = contentLayout;
           tabs_layout = tabsLayout;
@@ -1092,129 +1074,123 @@ in {
           highlight_separator_active = highlightSeparatorActive;
         };
         event_handlers =
-          ifNonNull' cfg.eventHandlers
+          ifNonNull' eventHandlers
           (
             mapAttrsToList
             (event: handler: {
               inherit event;
               handler = helpers.mkRaw handler;
             })
-            cfg.eventHandlers
+            eventHandlers
           );
-        default_component_configs = with cfg.defaultComponentConfigs;
-          ifNonNull' cfg.defaultComponentConfigs {
-            container = ifNonNull' cfg.defaultComponentConfigs.container {
-              enable_character_fade = container.enableCharacterFade;
-              inherit (container) width;
-              right_padding = container.rightPadding;
-            };
-            inherit diagnostics;
-            indent = with indent;
-              ifNonNull' cfg.defaultComponentConfigs.indent {
-                indent_size = indentSize;
-                inherit padding;
-                with_markers = withMarkers;
-                indent_markers = indentMarker;
-                last_indent_marker = lastIndentMarker;
-                inherit highlight;
-                with_expanders = withExpanders;
-                expander_collapsed = expanderCollapsed;
-                expander_expanded = expanderExpanded;
-                expander_highlight = expanderHighlight;
-              };
-            icon = with icon;
-              ifNonNull' cfg.defaultComponentConfigs.icon {
-                folder_closed = folderClosed;
-                folder_open = folderOpen;
-                folder_empty = folderEmpty;
-                folder_empty_open = folderEmptyOpen;
-                inherit default highlight;
-              };
-            inherit modified;
-            name = with name;
-              ifNonNull' cfg.defaultComponentConfigs.name {
-                trailing_slash = trailingSlash;
-                use_git_status_colors = useGitStatusColors;
-                inherit highlight;
-              };
-            git_status = gitStatus;
+        default_component_configs = with defaultComponentConfigs; {
+          container = with container; {
+            enable_character_fade = enableCharacterFade;
+            inherit width;
+            right_padding = rightPadding;
           };
+          inherit diagnostics;
+          indent = with indent; {
+            indent_size = indentSize;
+            inherit padding;
+            with_markers = withMarkers;
+            indent_markers = indentMarker;
+            last_indent_marker = lastIndentMarker;
+            inherit highlight;
+            with_expanders = withExpanders;
+            expander_collapsed = expanderCollapsed;
+            expander_expanded = expanderExpanded;
+            expander_highlight = expanderHighlight;
+          };
+          icon = with icon; {
+            folder_closed = folderClosed;
+            folder_open = folderOpen;
+            folder_empty = folderEmpty;
+            folder_empty_open = folderEmptyOpen;
+            inherit
+              default
+              highlight
+              ;
+          };
+          inherit modified;
+          name = with name; {
+            trailing_slash = trailingSlash;
+            use_git_status_colors = useGitStatusColors;
+            inherit highlight;
+          };
+          git_status = gitStatus;
+        };
         renderers = ifNonNull' cfg.renderers (
           mapAttrs (name: processRendererComponentList) cfg.renderers
         );
         nesting_rules = cfg.nestingRules;
-        window = with window;
-          ifNonNull' cfg.window {
-            inherit position width height;
-            auto_expand_width = autoExpandWidth;
-            inherit popup;
-            same_level = sameLevel;
-            insert_as = insertAs;
-            mapping_options = mappingOptions;
-            mappings = processMappings mappings;
+        window = with window; {
+          inherit position width height;
+          auto_expand_width = autoExpandWidth;
+          inherit popup;
+          same_level = sameLevel;
+          insert_as = insertAs;
+          mapping_options = mappingOptions;
+          mappings = processMappings mappings;
+        };
+        filesystem = with filesystem; {
+          window = processWindowMappings window;
+          async_directory_scan = asyncDirectoryScan;
+          scan_mode = scanMode;
+          bind_to_cwd = bindToCwd;
+          cwd_target = cwdTarget;
+          filtered_items = with filteredItems; {
+            inherit visible;
+            force_visible_in_empty_folder = forceVisibleInEmptyFolder;
+            show_hidden_count = showHiddenCount;
+            hide_dotfiles = hideDotfiles;
+            hide_gitignored = hideGitignored;
+            hide_hidden = hideHidden;
+            hide_by_name = hideByName;
+            hide_by_pattern = hideByPattern;
+            always_show = alwaysShow;
+            never_show = neverShow;
+            never_show_by_pattern = neverShowByPattern;
           };
-        filesystem = with filesystem;
-          ifNonNull' cfg.filesystem {
-            window = processWindowMappings window;
-            async_directory_scan = asyncDirectoryScan;
-            scan_mode = scanMode;
-            bind_to_cwd = bindToCwd;
-            cwd_target = cwdTarget;
-            filtered_items = with filteredItems;
-              ifNonNull' cfg.filesystem.filteredItems {
-                inherit visible;
-                force_visible_in_empty_folder = forceVisibleInEmptyFolder;
-                show_hidden_count = showHiddenCount;
-                hide_dotfiles = hideDotfiles;
-                hide_gitignored = hideGitignored;
-                hide_hidden = hideHidden;
-                hide_by_name = hideByName;
-                hide_by_pattern = hideByPattern;
-                always_show = alwaysShow;
-                never_show = neverShow;
-                never_show_by_pattern = neverShowByPattern;
-              };
-            find_by_full_path_words = findByFullPathWords;
-            find_command = findCommand;
-            find_args =
-              if isString findArgs
-              then mkRaw findArgs
-              else findArgs;
-            group_empty_dirs = groupEmptyDirs;
-            search_limit = searchLimit;
-            follow_current_file = followCurrentFile;
-            hijack_netrw_behavior = hijackNetrwBehavior;
-            use_libuv_file_watcher = useLibuvFileWatcher;
-          };
-        buffers = with buffers;
-          ifNonNull' cfg.buffers {
-            bind_to_cwd = bindToCwd;
-            follow_current_file = followCurrentFile;
-            group_empty_dirs = groupEmptyDirs;
-            window = processWindowMappings window;
-          };
-        git_status = ifNonNull' cfg.gitStatus {
+          find_by_full_path_words = findByFullPathWords;
+          find_command = findCommand;
+          find_args =
+            if isString findArgs
+            then mkRaw findArgs
+            else findArgs;
+          group_empty_dirs = groupEmptyDirs;
+          search_limit = searchLimit;
+          follow_current_file = followCurrentFile;
+          hijack_netrw_behavior = hijackNetrwBehavior;
+          use_libuv_file_watcher = useLibuvFileWatcher;
+        };
+        buffers = with buffers; {
+          bind_to_cwd = bindToCwd;
+          follow_current_file = followCurrentFile;
+          group_empty_dirs = groupEmptyDirs;
+          window = processWindowMappings window;
+        };
+        git_status = {
           window = processWindowMappings cfg.gitStatus.window;
         };
-        example = with example;
-          ifNonNull' cfg.example {
-            renderers = ifNonNull' cfg.example.renderers {
-              custom = processRendererComponentList renderers.custom;
-            };
+        example = with example; {
+          renderers = with renderers; {
+            custom = processRendererComponentList custom;
           };
-        document_symbols = {
-          follow_cursor = cfg.documentSymbols.followCursor;
-          inherit (cfg.documentSymbols) kinds;
+        };
+        document_symbols = with documentSymbols; {
+          follow_cursor = followCursor;
+          inherit kinds;
           custom_kinds.__raw =
             "{"
             + (concatStringsSep ","
               (
                 mapAttrsToList
                 (id: name: ''[${id}] = "${name}"'')
-                cfg.documentSymbols.customKinds
+                customKinds
               ))
             + "}";
-          window = processWindowMappings cfg.documentSymbols.window;
+          window = processWindowMappings window;
         };
       }
       // cfg.extraOptions;
@@ -1226,7 +1202,7 @@ in {
       ];
 
       extraConfigLua = ''
-        require('neo-tree').setup(${helpers.toLuaObject options})
+        require('neo-tree').setup(${helpers.toLuaObject setupOptions})
       '';
       extraPackages = [pkgs.git];
     };
