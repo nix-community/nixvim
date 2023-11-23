@@ -123,14 +123,13 @@ in {
       };
 
       server =
-        helpers.mkCompositeOption "server"
-        ({
-            standalone = helpers.defaultNullOpts.mkBool true ''
-              standalone file support
-              setting it to false may improve startup time
-            '';
-          }
-          // (import ../lsp/language-servers/rust-analyzer-config.nix lib pkgs));
+        {
+          standalone = helpers.defaultNullOpts.mkBool true ''
+            standalone file support
+            setting it to false may improve startup time
+          '';
+        }
+        // (import ../lsp/language-servers/rust-analyzer-config.nix lib pkgs);
     };
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [nvim-lspconfig cfg.package];
@@ -178,12 +177,11 @@ in {
                 enabled_graphviz_backends = enabledGraphvizBackends;
               };
           };
-          server = with cfg.server;
-            helpers.ifNonNull' cfg.server {
-              inherit standalone;
-              settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
-              on_attach = helpers.mkRaw "__lspOnAttach";
-            };
+          server = {
+            inherit (cfg.server) standalone;
+            settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
+            on_attach = helpers.mkRaw "__lspOnAttach";
+          };
         }
         // cfg.extraOptions;
     in ''
