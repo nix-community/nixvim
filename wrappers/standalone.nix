@@ -30,13 +30,10 @@ default_pkgs: {
 
   config = handleAssertions eval.config;
 in
-  config.finalPackage.overrideAttrs (oa: {
-    preInstall =
-      if config.enableMan
-      then ''
-        mkdir -p $out/share/man/man5
-        cp ${self.packages.${pkgs.system}.man-docs}/share/man/man5/nixvim.5 $out/share/man/man5
-      ''
-      else ''
-      '';
-  })
+  pkgs.symlinkJoin {
+    name = "nixvim";
+    paths =
+      [config.finalPackage]
+      ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
+    meta.mainProgram = "nvim";
+  }
