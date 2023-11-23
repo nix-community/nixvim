@@ -50,6 +50,9 @@
       hadolint = {
         package = pkgs.hadolint;
       };
+      ktlint = {
+        package = pkgs.ktlint;
+      };
       luacheck = {
         package = pkgs.luaPackages.luacheck;
       };
@@ -111,6 +114,9 @@
       };
       jq = {
         package = pkgs.jq;
+      };
+      ktlint = {
+        package = pkgs.ktlint;
       };
       markdownlint = {
         package = pkgs.nodePackages.markdownlint-cli;

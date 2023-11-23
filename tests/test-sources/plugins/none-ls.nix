@@ -50,6 +50,7 @@
           flake8.enable = true;
           gitlint.enable = true;
           golangci_lint.enable = true;
+          ktlint.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
           vale.enable = true;
@@ -71,6 +72,7 @@
           fnlfmt.enable = true;
           fourmolu.enable = true;
           gofmt.enable = true;
+          ktlint.enable = true;
           nixfmt.enable = true;
           nixpkgs_fmt.enable = true;
           phpcbf.enable = true;
