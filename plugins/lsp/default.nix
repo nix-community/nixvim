@@ -67,6 +67,8 @@ in {
           ]);
         description = "A list of enabled LSP servers. Don't use this directly.";
         default = [];
+        internal = true;
+        visible = false;
       };
 
       onAttach = mkOption {
