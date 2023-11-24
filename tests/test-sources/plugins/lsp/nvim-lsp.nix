@@ -90,6 +90,7 @@
         digestif.enable = true;
         efm.enable = true;
         elmls.enable = true;
+        emmet_ls.enable = true;
         eslint.enable = true;
         elixirls.enable = true;
         # pkgs.fsautocomplete only supports linux platforms

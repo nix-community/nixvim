@@ -169,6 +169,11 @@ with lib; let
       package = pkgs.elmPackages.elm-language-server;
     }
     {
+      name = "emmet_ls";
+      description = "Enable emmet_ls, emmet support based on LSP";
+      package = pkgs.emmet-ls;
+    }
+    {
       name = "eslint";
       description = "Enable eslint";
       package = pkgs.vscode-langservers-extracted;
