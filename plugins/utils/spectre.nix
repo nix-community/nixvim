@@ -7,11 +7,11 @@
 }:
 with lib; {
   options.plugins.spectre = let
-    mkMappingsOption = defaults:
+    option = defaults:
       helpers.defaultNullOpts.mkNullable
       (with types; attrsOf attrs)
       defaults
-      "Mapping options";
+      "placeholder option";
   in
     helpers.extraOptionsOptions
     // {
@@ -38,7 +38,7 @@ with lib; {
       };
 
       mappings =
-        mkMappingsOption
+        option
         ''
           ```lua
           {
@@ -115,10 +115,123 @@ with lib; {
           }
           ```
         '';
+      findEngine = {
+        "rg" = {
+          cmd = helpers.defaultNullOpts.mkStr "rg";
+          args = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[
+					'--color=never'
+					'--no-heading'
+					'--with-filename'
+					'--line-number'
+					'--column'
+				]" ''Default arguments passed to the rg command'';
+          options =
+            option
+            ''
+                  ```lua
+                  {
+              ['ignore-case'] = {
+              	value= "--ignore-case",
+              	icon="[I]",
+              	desc="ignore case"
+              },
+              ['hidden'] = {
+              	value="--hidden",
+              	desc="hidden file",
+              	icon="[H]"
+              },
+                  }
+                  ```
+            '' ''You can put any rg search option you want here it can toggle with show_option function'';
+        };
+        "ag" = {
+          cmd = helpers.defaultNullOpts.mkStr "ag";
+          args = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[
+					 '--vimgrep'
+					'-s'
+				  ]" ''Default arguments passed to the ag command'';
+          options =
+            option
+            ''
+              ```lua
+              {
+                      ['ignore-case'] = {
+                      	value= "-i",
+                      	icon="[I]",
+                      	desc="ignore case"
+                      },
+                      ['hidden'] = {
+                      	value="--hidden",
+                      	desc="hidden file",
+                      	icon="[H]"
+                      },
+              }
+              ```
+            '' ''You can put any ag search option you want here it can toggle with show_option function'';
+        };
+      };
+      replaceEngine = {
+        "sed" = {
+          cmd = helpers.defaultNullOpts.mkStr "sed";
+          args = helpers.defaultNullOpts.mkNullable (with types; listOf str) null ''Default arguments passed to the sed command'';
+          options =
+            option
+            ''
+              ```lua
+              {
+                      ['ignore-case'] = {
+                      	value= "--ignore-case",
+                      	icon="[I]",
+                      	desc="ignore case"
+                      },
+              }
+              ```
+            '';
+        };
+        "oxi" = {
+          cmd = helpers.defaultNullOpts.mkStr "oxi";
+          args = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''Default arguments passed to the oxi command'';
+          options =
+            option
+            ''
+              ```lua
+              {
+                      ['ignore-case'] = {
+                      	value= "i",
+                      	icon="[I]",
+                      	desc="ignore case"
+                      },
+              }
+              ```
+            '';
+        };
+      };
+      default = {
+        find = {
+          cmd = helpers.defaultNullOpts.mkStr "rg" "Must be one of the options in the findEngine";
+          options = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[ignore-case]";
+        };
+        replace = {
+          cmd = helpers.defaultNullOpts.mkStr "sed" "Must be one of the options in the replaceEngine";
+          options = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]";
+        };
+      };
+      replaceVimCmd = helpers.defaultNullOpts.mkStr "cdo";
+      isOpenTargetWin = helpers.defaultNullOpts.mkBool true "Open file on opener window";
+      isInsertMode = helpers.defaultNullOpts.mkBool false "If set to true will open window in insert mode";
+      isBlockUIBreak = helpers.defaultNullOpts.mkBool false "If set to true will map backspace and enter key to avoid ui break";
+      openTemplate =
+        mkMappingsOption
+        ''
+                 ```lua
+          { search_text = "text1", replace_text = "", path = "" }
+          ```
+        ''
+        "An template to use on open function";
     };
 
   config = let
-    cfg = config.plugins.refactoring;
+    cfg = config.plugins.spectre;
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
