@@ -37,6 +37,7 @@
     ./git/git-worktree.nix
     ./git/gitblame.nix
     ./git/gitgutter.nix
+    ./git/gitlinker.nix
     ./git/gitmessenger.nix
     ./git/gitsigns.nix
     ./git/neogit.nix
