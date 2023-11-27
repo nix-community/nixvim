@@ -131,6 +131,7 @@
         texlab.enable = true;
         tsserver.enable = true;
         typst-lsp.enable = true;
+        vls.enable = true;
         vuels.enable = true;
         yamlls.enable = true;
         zls.enable = true;
