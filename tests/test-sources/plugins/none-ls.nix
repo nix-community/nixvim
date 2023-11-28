@@ -14,9 +14,21 @@
   #   };
   # };
 
+  with-lsp-format = {
+    plugins = {
+      lsp-format.enable = true;
+      none-ls = {
+        enable = true;
+        enableLspFormat = true;
+      };
+    };
+  };
+
   default = {
     plugins.none-ls = {
       enable = true;
+
+      enableLspFormat = false;
       border = null;
       cmd = ["nvim"];
       debounce = 250;
