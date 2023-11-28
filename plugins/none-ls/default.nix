@@ -28,6 +28,15 @@ in {
         description = "Plugin to use for none-ls";
       };
 
+      enableLspFormat = mkOption {
+        type = types.bool;
+        default = config.plugins.lsp-format.enable;
+        description = ''
+          Automatically enable the `lsp-format` plugin and configure `none-ls` accordingly.
+        '';
+        example = true;
+      };
+
       border = helpers.defaultNullOpts.mkBorder "null" "`:NullLsInfo` UI window." ''
         Uses `NullLsInfoBorder` highlight group (see [Highlight Groups](#highlight-groups)).
       '';
@@ -206,42 +215,67 @@ in {
         "The list of sources to enable, should be strings of lua code. Don't use this directly";
     };
 
-  config = let
-    options =
-      {
-        inherit
-          (cfg)
-          border
-          cmd
-          debounce
-          debug
-          ;
-        default_timeout = cfg.defaultTimeout;
-        diagnostic_config = cfg.diagnosticConfig;
-        diagnostics_format = cfg.diagnosticsFormat;
-        fallback_severity =
-          if isString cfg.fallbackSeverity
-          then helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper cfg.fallbackSeverity}"
-          else cfg.fallbackSeverity;
-        log_level = cfg.logLevel;
-        notify_format = cfg.notifyFormat;
-        on_attach = helpers.mkRaw cfg.onAttach;
-        on_init = helpers.mkRaw cfg.onInit;
-        on_exit = helpers.mkRaw cfg.onExit;
-        root_dir = helpers.mkRaw cfg.rootDir;
-        should_attach = helpers.mkRaw cfg.shouldAttach;
-        temp_dir = cfg.tempDir;
-        update_in_insert = cfg.updateInInsert;
+  config = mkIf cfg.enable {
+    warnings =
+      optional
+      (cfg.enableLspFormat && (cfg.onAttach != null))
+      ''
+        You have enabled the lsp-format integration with none-ls.
+        However, you have provided a custom value to `plugins.none-ls.onAttach`.
 
-        sources = cfg.sourcesItems;
-      }
-      // cfg.extraOptions;
-  in
-    mkIf cfg.enable {
-      extraPlugins = [cfg.package];
-
-      extraConfigLua = ''
-        require("null-ls").setup(${helpers.toLuaObject options})
+        -> The `enableLspFormat` option will thus not be able to add the `require('lsp-format').on_attach` snippet to `none-ls`.
       '';
-    };
+
+    assertions = [
+      {
+        assertion = cfg.enableLspFormat -> config.plugins.lsp-format.enable;
+        message = ''
+          Nixvim: You have enabled the `lsp-format` integration with none-ls.
+          However, you have not enabled the `lsp-format` plugin itself (`plugins.lsp-format.enable = true`).
+        '';
+      }
+    ];
+
+    extraPlugins = [cfg.package];
+
+    extraConfigLua = let
+      onAttach' =
+        if (cfg.onAttach == null) && cfg.enableLspFormat
+        then ''
+          require('lsp-format').on_attach
+        ''
+        else cfg.onAttach;
+
+      setupOptions = with cfg;
+        {
+          inherit
+            border
+            cmd
+            debounce
+            debug
+            ;
+          default_timeout = defaultTimeout;
+          diagnostic_config = diagnosticConfig;
+          diagnostics_format = diagnosticsFormat;
+          fallback_severity =
+            if isString fallbackSeverity
+            then helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper fallbackSeverity}"
+            else fallbackSeverity;
+          log_level = logLevel;
+          notify_format = notifyFormat;
+          on_attach = helpers.mkRaw onAttach';
+          on_init = helpers.mkRaw onInit;
+          on_exit = helpers.mkRaw onExit;
+          root_dir = helpers.mkRaw rootDir;
+          should_attach = helpers.mkRaw shouldAttach;
+          temp_dir = tempDir;
+          update_in_insert = updateInInsert;
+
+          sources = sourcesItems;
+        }
+        // cfg.extraOptions;
+    in ''
+      require("null-ls").setup(${helpers.toLuaObject setupOptions})
+    '';
+  };
 }
