@@ -272,9 +272,9 @@ with lib; rec {
   };
 
   mkRaw = r:
-    ifNonNull'
-    r
-    {__raw = r;};
+    if (isString r && (r != ""))
+    then {__raw = r;}
+    else null;
 
   wrapDo = string: ''
     do
