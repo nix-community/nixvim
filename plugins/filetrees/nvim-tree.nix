@@ -243,14 +243,12 @@ in {
           error = helpers.defaultNullOpts.mkStr "" "";
         };
 
-        severity = let
-          severityEnum = ["error" "warn" "info" "hint"];
-        in {
-          min = helpers.defaultNullOpts.mkEnum severityEnum "hint" ''
+        severity = {
+          min = helpers.defaultNullOpts.mkSeverity "hint" ''
             Minimum severity for which the diagnostics will be displayed.
             See `|diagnostic-severity|`.
           '';
-          max = helpers.defaultNullOpts.mkEnum severityEnum "error" ''
+          max = helpers.defaultNullOpts.mkSeverity "error" ''
             Maximum severity for which the diagnostics will be displayed.
             See `|diagnostic-severity|`.
           '';
@@ -899,13 +897,12 @@ in {
           show_on_dirs = showOnDirs;
           show_on_open_dirs = showOnOpenDirs;
           inherit icons;
-          severity =
-            mapAttrs (
-              name: value:
-                ifNonNull' value
-                (helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper value}")
-            )
-            severity;
+          severity = with severity; {
+            inherit
+              min
+              max
+              ;
+          };
         };
         git = with git; {
           inherit enable;
