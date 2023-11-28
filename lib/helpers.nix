@@ -165,6 +165,37 @@ with lib; rec {
           ${desc}
           ${defaultDesc}
         '');
+    mkSeverity = default: desc:
+      mkOption {
+        type = with types;
+          nullOr
+          (
+            either ints.unsigned
+            (
+              enum
+              ["error" "warn" "info" "hint"]
+            )
+          );
+        default = null;
+        apply =
+          mapNullable
+          (
+            value:
+              if isInt value
+              then value
+              else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
+          );
+        description = let
+          defaultDesc = "default: `${toString default}`";
+        in
+          if desc == ""
+          then defaultDesc
+          else ''
+            ${desc}
+
+            ${defaultDesc}
+          '';
+      };
 
     mkHighlight = default: name: desc:
       mkNullable
