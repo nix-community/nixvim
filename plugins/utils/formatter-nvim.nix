@@ -5,13 +5,13 @@
   pkgs,
   ...
 }: let
-  cfg = config.plugins.formatter-nix;
+  cfg = config.plugins.formatter-nvim;
 in
   with lib; {
     # TODO examples & descriptions
-    options.plugins.formatter-nix = {
-      enable = mkEnableOption "formatter-nix";
-      package = helpers.mkPackageOption "formatter-nix" pkgs.vimPlugins.formatter-nvim;
+    options.plugins.formatter-nvim = {
+      enable = mkEnableOption "formatter-nvim";
+      package = helpers.mkPackageOption "formatter-nvim" pkgs.vimPlugins.formatter-nvim;
       filetype =
         helpers.defaultNullOpts.mkNullable
         (
