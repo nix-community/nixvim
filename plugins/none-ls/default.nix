@@ -109,14 +109,10 @@ in {
         method, described in [BUILTIN_CONFIG](BUILTIN_CONFIG.md).
       '';
 
-      fallbackSeverity =
-        helpers.defaultNullOpts.mkNullable
-        (with types; either int (enum ["error" "warn" "info" "hint"]))
-        "error"
-        ''
-          Defines the severity used when a diagnostic source does not explicitly define a severity.
-          See `:help diagnostic-severity` for available values.
-        '';
+      fallbackSeverity = helpers.defaultNullOpts.mkSeverity "error" ''
+        Defines the severity used when a diagnostic source does not explicitly define a severity.
+        See `:help diagnostic-severity` for available values.
+      '';
 
       logLevel =
         helpers.defaultNullOpts.mkEnum ["off" "error" "warn" "info" "debug" "trace"] "warn"
@@ -257,10 +253,7 @@ in {
           default_timeout = defaultTimeout;
           diagnostic_config = diagnosticConfig;
           diagnostics_format = diagnosticsFormat;
-          fallback_severity =
-            if isString fallbackSeverity
-            then helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper fallbackSeverity}"
-            else fallbackSeverity;
+          fallback_severity = fallbackSeverity;
           log_level = logLevel;
           notify_format = notifyFormat;
           on_attach = helpers.mkRaw onAttach';
