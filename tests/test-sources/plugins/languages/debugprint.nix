@@ -1,14 +1,14 @@
 {
   default = {
     plugins.debugprint = {
-      create_keymaps = true;
-      display_counter = true;
-      display_snippet = true;
+      createKeymaps = true;
+      displayCounter = true;
+      displaySnippet = true;
       enable = false;
       filetypes = {};
-      ignore_treesitter = false;
-      move_to_debugline = false;
-      print_tag = "DEBUGPRINT";
+      ignoreTreesitter = false;
+      moveToDebugline = false;
+      printTag = "DEBUGPRINT";
     };
   };
 
@@ -16,14 +16,14 @@
 
   example = {
     plugins.debugprint = {
-      create_keymaps = false;
-      display_counter = false;
-      display_snippet = false;
+      createKeymaps = false;
+      displayCounter = false;
+      displaySnippet = false;
       enable = true;
       filetypes = {};
-      ignore_treesitter = true;
-      move_to_debugline = true;
-      print_tag = "DEBUG";
+      ignoreTreesitter = true;
+      moveToDebugline = true;
+      printTag = "DEBUG";
     };
   };
 }
