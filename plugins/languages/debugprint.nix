@@ -22,6 +22,7 @@
 
     packageName = "debugprint.nvim";
   in {
+    createCommands = mkEnableOptionInverted "commands";
     createKeymaps = mkEnableOptionInverted "keymaps";
     displayCounter = mkEnableOptionInverted "display counter";
     displaySnippet = mkEnableOptionInverted "display snippet";
@@ -77,6 +78,7 @@
       extraConfigLua = let
         options = {
           inherit (cfg) filetypes;
+          create_commands = cfg.createCommands;
           create_keymaps = cfg.createKeymaps;
           display_counter = cfg.displayCounter;
           display_snippet = cfg.displaySnippet;
