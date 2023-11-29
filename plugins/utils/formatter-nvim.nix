@@ -200,6 +200,13 @@ in
             "*" = [ "any.remove_trailing_whitespace" ]
           }
         '';
+      installFormatters = mkOption {
+        type = bool;
+        default = true;
+        description = ''
+          If the formatters should automatically be installed
+        '';
+      };
     };
 
     config = let
@@ -222,166 +229,170 @@ in
           then null
           else "vim.log.levels.${cfg.log_level}";
       };
-      packages = lists.unique (
-        concatMap (
-          formatters:
-            lists.remove "" (concatMap (
-                formatter:
-                  if (builtins.typeOf formatter) == "set"
-                  then ""
-                  else
-                    with pkgs;
-                      {
-                        "any.remove_trailing_whitespace" = "";
-                        "any.substitute_trailing_whitespace" = "";
-                        "awk.prettier" = nodePackages.prettier;
-                        "awk.prettierd" = prettierd;
-                        "c.uncrustify" = uncrustify;
-                        "c.clangformat" = clang-tools;
-                        "c.astyle" = astyle;
-                        "cmake.cmakeformat" = cmake-format;
-                        "cpp.uncrustify" = uncrustify;
-                        "cpp.clangformat" = clang-tools;
-                        "cpp.astyle" = astyle;
-                        "cs.uncrustify" = uncrustify;
-                        "cs.clangformat" = clang-tools;
-                        "cs.astyle" = astyle;
-                        "cs.dotnetformat" = dotnet-sdk;
-                        "cs.csharpier" = abort "Can't find a csharpier package";
-                        "css.prettydiff" = abort "Can't find a prettydiff package";
-                        "css.prettier" = nodePackages.prettier;
-                        "css.prettierd" = prettierd;
-                        "css.eslint_d" = nodePackages.eslint_d;
-                        "css.stylefmt" = abort "Can't find a stylefmt package";
-                        "css.cssbeautify" = python3Packages.cssbeautifier;
-                        "css.csscomb" = abort "Can't find a csscomb package";
-                        "dart.dartformat" = dart;
-                        "elixir.mixformat" = elixir;
-                        "eruby.erbformatter" = rubyPackages.erb-formatter;
-                        "eruby.htmlbeautifier" = rubyPackages.htmlbeautifier;
-                        "fish.fishindent" = fish;
-                        "go.gofmt" = go;
-                        "go.goimports" = gotools;
-                        "go.gofumpt" = gofumpt;
-                        "go.gofumports" = abort "Can't find a gofumports package";
-                        "go.golines" = golines;
-                        "graphql.prettier" = nodePackages.prettier;
-                        "graphql.prettierd" = prettierd;
-                        "haskell.stylish_haskell" = stylish-haskell;
-                        "html.prettier" = nodePackages.prettier;
-                        "html.prettierd" = prettierd;
-                        "html.prettydiff" = abort "Can't find a prettydiff package";
-                        "html.htmlbeautifier" = rubyPackages.htmlbeautifier;
-                        "html.tidy" = html-tidy;
-                        "java.clangformat" = clang-tools;
-                        "java.google_java_format" = google-java-format;
-                        "javascript.jsbeautify" = nodePackages.js-beautify;
-                        "javascript.clangformat" = clang-tools;
-                        "javascript.prettydiff" = abort "Can't find a prettydiff package";
-                        "javascript.esformatter" = abort "Can't find a esformatter package";
-                        "javascript.prettier" = nodePackages.prettier;
-                        "javascript.prettierd" = prettierd;
-                        "javascript.prettiereslint" = abort "Can't find a prettier-eslint package";
-                        "javascript.eslint_d" = nodePackages.eslint_d;
-                        "javascript.standard" = abort "Can't find a standard package";
-                        "javascript.denofmt" = deno;
-                        "javascript.semistandard" = abort "Can't find a semistandard package";
-                        "javascript.biome" = biome;
-                        "javascriptreact.jsbeautify" = nodePackages.js-beautify;
-                        "javascriptreact.clangformat" = clang-tools;
-                        "javascriptreact.prettydiff" = abort "Can't find a prettydiff package";
-                        "javascriptreact.esformatter" = abort "Can't find a esformatter package";
-                        "javascriptreact.prettier" = nodePackages.prettier;
-                        "javascriptreact.prettierd" = prettierd;
-                        "javascriptreact.prettiereslint" = abort "Can't find a prettier-eslint package";
-                        "javascriptreact.eslint_d" = nodePackages.eslint_d;
-                        "javascriptreact.standard" = abort "Can't find a standard package";
-                        "javascriptreact.denofmt" = deno;
-                        "javascriptreact.semistandard" = abort "Can't find a semistandard package";
-                        "javascriptreact.biome" = biome;
-                        "json.jsbeautify" = nodePackages.js-beautify;
-                        "json.prettydiff" = abort "Can't find a prettydiff package";
-                        "json.prettier" = nodePackages.prettier;
-                        "json.prettierd" = prettierd;
-                        "json.denofmt" = deno;
-                        "json.biome" = biome;
-                        "json.jq" = jq;
-                        "json.fixjson" = nodePackages.fixjson;
-                        "kotlin.ktlint" = ktlint;
-                        "rust.rustfmt" = rustfmt;
-                        "sh.shfmt" = shfmt;
-                        "latex.latexindent" = texlive.combine {inherit (pkgs.texlive) scheme-minimal latexindent;};
-                        "liquidsoap.liquidsoap_prettier" = abort "Can't find a liquidsoap-prettier package";
-                        "lua.luaformatter" = luaformatter;
-                        "lua.luafmt" = abort "Can't find a luafmt package";
-                        "lua.luaformat" = abort "Can't find a lua-format package";
-                        "lua.stylua" = stylua;
-                        "markdown.prettier" = nodePackages.prettier;
-                        "markdown.prettierd" = prettierd;
-                        "markdown.denofmt" = deno;
-                        "nix.alejandra" = alejandra;
-                        "nix.nixfmt" = nixfmt;
-                        "nix.nixpkgs_fmt" = nixpkgs-fmt;
-                        "ocaml.ocamlformat" = ocamlPackages.ocamlformat;
-                        "perl.perltidy" = perlPackages.PerlTidy;
-                        "php.phpcbf" = phpPackages.phpcbf;
-                        "php.php_cs_fixer" = phpPackages.php-cs-fixer;
-                        "php.pint" = abort "Can't find a pint package";
-                        "proto.buf_format" = buf;
-                        "python.yapf" = yapf;
-                        "python.autopep8" = python3Packages.autopep8;
-                        "python.isort" = isort;
-                        "python.docformatter" = python3Packages.docformatter;
-                        "python.black" = black;
-                        "python.ruff" = ruff;
-                        "python.pyment" = python3Packages.pyment;
-                        "python.pydevf" = abort "Can't find a pydevf package";
-                        "python.autoflake" = autoflake;
-                        "r.styler" = [R rPackages.styler];
-                        "ruby.rubocop" = rubocop;
-                        "ruby.standardrb" = abort "Can't find a standardrb package";
-                        "rust.rustfmt" = rustfmt;
-                        "sh.shfmt" = shfmt;
-                        "sql.pgformat" = pgformatter;
-                        "sql.sqlfluff" = sqlfluff;
-                        "svelte.prettier" = nodePackages.prettier;
-                        "terraform.terraformfmt" = terraform;
-                        "tex.latexindent" = texlive.combine {inherit (pkgs.texlive) scheme-minimal latexindent;};
-                        "toml.taplo" = taplo;
-                        "typescript.tsfmt" = abort "Can't find a tsfmt package";
-                        "typescript.prettier" = nodePackages.prettier;
-                        "typescript.prettierd" = prettierd;
-                        "typescript.prettiereslint" = abort "Can't find a prettier-eslint package";
-                        "typescript.eslint_d" = nodePackages.eslint_d;
-                        "typescript.clangformat" = clang-tools;
-                        "typescript.denofmt" = deno;
-                        "typescript.biome" = biome;
-                        "typescriptreact.tsfmt" = abort "Can't find a tsfmt package";
-                        "typescriptreact.prettier" = nodePackages.prettier;
-                        "typescriptreact.prettierd" = prettierd;
-                        "typescriptreact.prettiereslint" = abort "Can't find a prettier-eslint package";
-                        "typescriptreact.eslint_d" = nodePackages.eslint_d;
-                        "typescriptreact.clangformat" = clang-tools;
-                        "typescriptreact.denofmt" = deno;
-                        "typescriptreact.biome" = biome;
-                        "vue.prettier" = nodePackages.prettier;
-                        "xhtml.tidy" = html-tidy;
-                        "xml.tidy" = html-tidy;
-                        "xml.xmllint" = libxml2;
-                        "xml.xmlformat" = xmlformat;
-                        "yaml.prettier" = nodePackages.prettier;
-                        "yaml.prettierd" = prettierd;
-                        "yaml.pyaml" = python3Packages.pyaml;
-                        "yaml.yamlfmt" = yamlfmt;
-                        "zig.zigfmt" = zig;
-                        "zsh.beautysh" = beautysh;
-                      }
-                      ."${formatter}"
-              )
-              formatters)
-        )
-        (attrValues cfg.filetype)
-      );
+      packages =
+        if cfg.installFormatters
+        then
+          lists.unique (
+            concatMap (
+              formatters:
+                lists.remove "" (concatMap (
+                    formatter:
+                      if (builtins.typeOf formatter) == "set"
+                      then ""
+                      else
+                        with pkgs;
+                          {
+                            "any.remove_trailing_whitespace" = "";
+                            "any.substitute_trailing_whitespace" = "";
+                            "awk.prettier" = nodePackages.prettier;
+                            "awk.prettierd" = prettierd;
+                            "c.uncrustify" = uncrustify;
+                            "c.clangformat" = clang-tools;
+                            "c.astyle" = astyle;
+                            "cmake.cmakeformat" = cmake-format;
+                            "cpp.uncrustify" = uncrustify;
+                            "cpp.clangformat" = clang-tools;
+                            "cpp.astyle" = astyle;
+                            "cs.uncrustify" = uncrustify;
+                            "cs.clangformat" = clang-tools;
+                            "cs.astyle" = astyle;
+                            "cs.dotnetformat" = dotnet-sdk;
+                            "cs.csharpier" = abort "Can't find a csharpier package";
+                            "css.prettydiff" = abort "Can't find a prettydiff package";
+                            "css.prettier" = nodePackages.prettier;
+                            "css.prettierd" = prettierd;
+                            "css.eslint_d" = nodePackages.eslint_d;
+                            "css.stylefmt" = abort "Can't find a stylefmt package";
+                            "css.cssbeautify" = python3Packages.cssbeautifier;
+                            "css.csscomb" = abort "Can't find a csscomb package";
+                            "dart.dartformat" = dart;
+                            "elixir.mixformat" = elixir;
+                            "eruby.erbformatter" = rubyPackages.erb-formatter;
+                            "eruby.htmlbeautifier" = rubyPackages.htmlbeautifier;
+                            "fish.fishindent" = fish;
+                            "go.gofmt" = go;
+                            "go.goimports" = gotools;
+                            "go.gofumpt" = gofumpt;
+                            "go.gofumports" = abort "Can't find a gofumports package";
+                            "go.golines" = golines;
+                            "graphql.prettier" = nodePackages.prettier;
+                            "graphql.prettierd" = prettierd;
+                            "haskell.stylish_haskell" = stylish-haskell;
+                            "html.prettier" = nodePackages.prettier;
+                            "html.prettierd" = prettierd;
+                            "html.prettydiff" = abort "Can't find a prettydiff package";
+                            "html.htmlbeautifier" = rubyPackages.htmlbeautifier;
+                            "html.tidy" = html-tidy;
+                            "java.clangformat" = clang-tools;
+                            "java.google_java_format" = google-java-format;
+                            "javascript.jsbeautify" = nodePackages.js-beautify;
+                            "javascript.clangformat" = clang-tools;
+                            "javascript.prettydiff" = abort "Can't find a prettydiff package";
+                            "javascript.esformatter" = abort "Can't find a esformatter package";
+                            "javascript.prettier" = nodePackages.prettier;
+                            "javascript.prettierd" = prettierd;
+                            "javascript.prettiereslint" = abort "Can't find a prettier-eslint package";
+                            "javascript.eslint_d" = nodePackages.eslint_d;
+                            "javascript.standard" = abort "Can't find a standard package";
+                            "javascript.denofmt" = deno;
+                            "javascript.semistandard" = abort "Can't find a semistandard package";
+                            "javascript.biome" = biome;
+                            "javascriptreact.jsbeautify" = nodePackages.js-beautify;
+                            "javascriptreact.clangformat" = clang-tools;
+                            "javascriptreact.prettydiff" = abort "Can't find a prettydiff package";
+                            "javascriptreact.esformatter" = abort "Can't find a esformatter package";
+                            "javascriptreact.prettier" = nodePackages.prettier;
+                            "javascriptreact.prettierd" = prettierd;
+                            "javascriptreact.prettiereslint" = abort "Can't find a prettier-eslint package";
+                            "javascriptreact.eslint_d" = nodePackages.eslint_d;
+                            "javascriptreact.standard" = abort "Can't find a standard package";
+                            "javascriptreact.denofmt" = deno;
+                            "javascriptreact.semistandard" = abort "Can't find a semistandard package";
+                            "javascriptreact.biome" = biome;
+                            "json.jsbeautify" = nodePackages.js-beautify;
+                            "json.prettydiff" = abort "Can't find a prettydiff package";
+                            "json.prettier" = nodePackages.prettier;
+                            "json.prettierd" = prettierd;
+                            "json.denofmt" = deno;
+                            "json.biome" = biome;
+                            "json.jq" = jq;
+                            "json.fixjson" = nodePackages.fixjson;
+                            "kotlin.ktlint" = ktlint;
+                            "rust.rustfmt" = rustfmt;
+                            "sh.shfmt" = shfmt;
+                            "latex.latexindent" = texlive.combine {inherit (pkgs.texlive) scheme-minimal latexindent;};
+                            "liquidsoap.liquidsoap_prettier" = abort "Can't find a liquidsoap-prettier package";
+                            "lua.luaformatter" = luaformatter;
+                            "lua.luafmt" = abort "Can't find a luafmt package";
+                            "lua.luaformat" = abort "Can't find a lua-format package";
+                            "lua.stylua" = stylua;
+                            "markdown.prettier" = nodePackages.prettier;
+                            "markdown.prettierd" = prettierd;
+                            "markdown.denofmt" = deno;
+                            "nix.alejandra" = alejandra;
+                            "nix.nixfmt" = nixfmt;
+                            "nix.nixpkgs_fmt" = nixpkgs-fmt;
+                            "ocaml.ocamlformat" = ocamlPackages.ocamlformat;
+                            "perl.perltidy" = perlPackages.PerlTidy;
+                            "php.phpcbf" = phpPackages.phpcbf;
+                            "php.php_cs_fixer" = phpPackages.php-cs-fixer;
+                            "php.pint" = abort "Can't find a pint package";
+                            "proto.buf_format" = buf;
+                            "python.yapf" = yapf;
+                            "python.autopep8" = python3Packages.autopep8;
+                            "python.isort" = isort;
+                            "python.docformatter" = python3Packages.docformatter;
+                            "python.black" = black;
+                            "python.ruff" = ruff;
+                            "python.pyment" = python3Packages.pyment;
+                            "python.pydevf" = abort "Can't find a pydevf package";
+                            "python.autoflake" = autoflake;
+                            "r.styler" = [R rPackages.styler];
+                            "ruby.rubocop" = rubocop;
+                            "ruby.standardrb" = abort "Can't find a standardrb package";
+                            "rust.rustfmt" = rustfmt;
+                            "sh.shfmt" = shfmt;
+                            "sql.pgformat" = pgformatter;
+                            "sql.sqlfluff" = sqlfluff;
+                            "svelte.prettier" = nodePackages.prettier;
+                            "terraform.terraformfmt" = terraform;
+                            "tex.latexindent" = texlive.combine {inherit (pkgs.texlive) scheme-minimal latexindent;};
+                            "toml.taplo" = taplo;
+                            "typescript.tsfmt" = abort "Can't find a tsfmt package";
+                            "typescript.prettier" = nodePackages.prettier;
+                            "typescript.prettierd" = prettierd;
+                            "typescript.prettiereslint" = abort "Can't find a prettier-eslint package";
+                            "typescript.eslint_d" = nodePackages.eslint_d;
+                            "typescript.clangformat" = clang-tools;
+                            "typescript.denofmt" = deno;
+                            "typescript.biome" = biome;
+                            "typescriptreact.tsfmt" = abort "Can't find a tsfmt package";
+                            "typescriptreact.prettier" = nodePackages.prettier;
+                            "typescriptreact.prettierd" = prettierd;
+                            "typescriptreact.prettiereslint" = abort "Can't find a prettier-eslint package";
+                            "typescriptreact.eslint_d" = nodePackages.eslint_d;
+                            "typescriptreact.clangformat" = clang-tools;
+                            "typescriptreact.denofmt" = deno;
+                            "typescriptreact.biome" = biome;
+                            "vue.prettier" = nodePackages.prettier;
+                            "xhtml.tidy" = html-tidy;
+                            "xml.tidy" = html-tidy;
+                            "xml.xmllint" = libxml2;
+                            "xml.xmlformat" = xmlformat;
+                            "yaml.prettier" = nodePackages.prettier;
+                            "yaml.prettierd" = prettierd;
+                            "yaml.pyaml" = python3Packages.pyaml;
+                            "yaml.yamlfmt" = yamlfmt;
+                            "zig.zigfmt" = zig;
+                            "zsh.beautysh" = beautysh;
+                          }
+                          ."${formatter}"
+                  )
+                  formatters)
+            )
+            (attrValues cfg.filetype)
+          )
+        else [];
     in
       mkIf cfg.enable {
         extraPlugins = [cfg.package];
