@@ -8,9 +8,7 @@
     url = "https://github.com/${user}/${repo}/blob/master/${subpath}";
     name = "<${repo}/${subpath}>";
   };
-in rec {
-  nixvim-render-docs = pkgs.callPackage ./nixvim-render-docs {};
-
+in {
   man-docs = let
     eval = pkgs.lib.evalModules {
       inherit modules;
@@ -38,13 +36,16 @@ in rec {
     };
   in
     pkgs.runCommand "nixvim-configuration-reference-manpage" {
-      nativeBuildInputs = with pkgs; [installShellFiles nixvim-render-docs];
+      nativeBuildInputs = with pkgs; [installShellFiles nixos-render-docs];
     } ''
       # Generate man-pages
       mkdir -p $out/share/man/man5
-      nixvim-render-docs -j $NIX_BUILD_CORES options manpage \
+      nixos-render-docs -j $NIX_BUILD_CORES options manpage \
         --revision unstable \
+        --header ${./nixvim-header.5} \
+        --footer ${./nixvim-footer.5} \
         ${options.optionsJSON}/share/doc/nixos/options.json \
         $out/share/man/man5/nixvim.5
+      compressManPages $out
     '';
 }
