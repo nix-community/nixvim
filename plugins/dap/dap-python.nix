@@ -15,7 +15,7 @@ in {
     package = helpers.mkPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
 
     adapterPythonPath = mkOption {
-      default = "${pkgs.python3}/bin/python3";
+      default = "${pkgs.python3.withPackages (ps: with ps; [debugpy])}/bin/python3";
       description = "Path to the python interpreter. Path must be absolute or in $PATH and needs to have the debugpy package installed.";
       type = types.str;
     };
