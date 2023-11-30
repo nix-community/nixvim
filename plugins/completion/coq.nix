@@ -27,6 +27,12 @@ in {
         default = null;
         description = "Use the recommended keymaps";
       };
+
+      alwaysComplete = mkOption {
+        type = with types; nullOr bool;
+        default = null;
+        description = "Always trigger completion on keystroke";
+      };
     };
   };
   config = let
@@ -34,6 +40,7 @@ in {
       auto_start = cfg.autoStart;
       "keymap.recommended" = cfg.recommendedKeymaps;
       xdg = true;
+      "completion.always" = cfg.alwaysComplete;
     };
   in
     mkIf cfg.enable {
