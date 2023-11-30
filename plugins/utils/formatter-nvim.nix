@@ -201,7 +201,7 @@ in
           }
         '';
       installFormatters = mkOption {
-        type = bool;
+        type = types.bool;
         default = true;
         description = ''
           If the formatters should automatically be installed
