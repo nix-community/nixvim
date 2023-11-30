@@ -15,18 +15,9 @@ in {
 
       package = helpers.mkPackageOption "nvim-notify" pkgs.vimPlugins.nvim-notify;
 
-      level =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            oneOf [
-              ints.unsigned
-              helpers.rawType
-              str
-            ]
-        )
-        ''{__raw = "vim.log.levels.INFO";}''
-        "Minimum log level to display. See `vim.log.levels`.";
+      level = helpers.defaultNullOpts.mkLogLevel "info" ''
+        Minimum log level to display. See `vim.log.levels`.
+      '';
 
       timeout = helpers.defaultNullOpts.mkUnsignedInt 5000 "Default timeout for notification.";
 

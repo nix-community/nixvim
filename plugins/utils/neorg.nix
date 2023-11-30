@@ -46,8 +46,6 @@ in
               level = 5;
             };
           };
-
-          levelNames = attrNames modes;
         in {
           plugin = helpers.defaultNullOpts.mkStr "neorg" ''
             Name of the plugin. Prepended to log messages
@@ -65,22 +63,22 @@ in
             Should write to a file
           '';
 
-          level = helpers.defaultNullOpts.mkEnum levelNames "warn" ''
+          level = helpers.defaultNullOpts.mkEnum (attrNames modes) "warn" ''
             Any messages above this level will be logged
           '';
 
           modes =
             mapAttrs
-            (mode: defaults: {
-              hl = helpers.defaultNullOpts.mkStr defaults.hl ''
-                Highlight for mode ${mode}
-              '';
-              level = mkOption {
-                type = with types; either int (enum levelNames);
-                default = defaults.level;
-                description = "Level for mode ${mode}";
-              };
-            })
+            (mode: defaults:
+              helpers.mkCompositeOption "Settings for mode ${mode}." {
+                hl = helpers.defaultNullOpts.mkStr defaults.hl ''
+                  Highlight for mode ${mode}.
+                '';
+
+                level = helpers.defaultNullOpts.mkLogLevel defaults.level ''
+                  Level for mode ${mode}.
+                '';
+              })
             modes;
 
           floatPrecision = helpers.defaultNullOpts.mkNullable types.float "0.01" ''
@@ -119,18 +117,20 @@ in
             inherit level;
 
             modes =
-              mapAttrsToList
-              (mode: modeConfig: {
-                name = mode;
-                inherit (modeConfig) hl;
-                level = let
-                  inherit (modeConfig) level;
-                in
-                  if (isInt level)
-                  then level
-                  else helpers.mkRaw "vim.log.levels.${strings.toUpper level}";
-              })
-              modes;
+              filter (v: v != null)
+              (
+                mapAttrsToList
+                (mode: modeConfig:
+                  helpers.ifNonNull' modeConfig {
+                    name = mode;
+                    inherit
+                      (modeConfig)
+                      hl
+                      level
+                      ;
+                  })
+                modes
+              );
             float_precision = floatPrecision;
           };
 

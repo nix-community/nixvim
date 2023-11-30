@@ -812,7 +812,7 @@ in {
       };
 
       notify = {
-        threshold = helpers.defaultNullOpts.mkEnum ["error" "warning" "info" "debug"] "info" ''
+        threshold = helpers.defaultNullOpts.mkLogLevel "info" ''
           Specify minimum notification level, uses the values from |vim.log.levels|
 
           - `error`:   hard errors e.g. failure to read from the file system.
@@ -1010,9 +1010,7 @@ in {
         };
         inherit tab;
         notify = with notify; {
-          threshold =
-            ifNonNull' cfg.notify.threshold
-            (helpers.mkRaw "vim.log.levels.${strings.toUpper notify.threshold}");
+          inherit threshold;
         };
         inherit ui;
         log = with log; {

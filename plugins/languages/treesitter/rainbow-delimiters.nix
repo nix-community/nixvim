@@ -136,15 +136,11 @@ with lib; {
             (see `|standard-path|`).
           '';
 
-        level =
-          helpers.defaultNullOpts.mkEnum
-          ["debug" "error" "info" "trace" "warn" "off"]
-          "warn"
-          ''
-            Only messages equal to or above this value will be logged.
-            The default is to log warnings or above.
-            See `|log_levels|` for possible values.
-          '';
+        level = helpers.defaultNullOpts.mkLogLevel "warn" ''
+          Only messages equal to or above this value will be logged.
+          The default is to log warnings or above.
+          See `|log_levels|` for possible values.
+        '';
       };
     };
 
@@ -210,10 +206,10 @@ with lib; {
             blacklist
             ;
           log = with log; {
-            inherit file;
-            level =
-              helpers.ifNonNull' level
-              (helpers.mkRaw "vim.log.levels.${strings.toUpper level}");
+            inherit
+              file
+              level
+              ;
           };
         }
         // cfg.extraOptions;
