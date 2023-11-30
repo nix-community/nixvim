@@ -85,10 +85,9 @@ in {
           This can also be a function that returns the table.
         '';
 
-      logLevel =
-        helpers.defaultNullOpts.mkEnumFirstDefault
-        ["ERROR" "DEBUG" "INFO" "TRACE" "WARN" "OFF"]
-        "Set the log level. Use `:ConformInfo` to see the location of the log file.";
+      logLevel = helpers.defaultNullOpts.mkLogLevel "error" ''
+        Set the log level. Use `:ConformInfo` to see the location of the log file.
+      '';
 
       notifyOnError =
         helpers.defaultNullOpts.mkBool true
@@ -114,7 +113,7 @@ in {
         format_after_save = helpers.ifNonNull' formatAfterSave {
           lsp_fallback = formatAfterSave.lspFallback;
         };
-        log_level = helpers.ifNonNull' logLevel (helpers.mkRaw "vim.log.levels.${logLevel}");
+        log_level = logLevel;
         notify_on_error = notifyOnError;
         inherit formatters;
       }

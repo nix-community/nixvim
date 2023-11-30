@@ -21,7 +21,7 @@
       formatAfterSave = {
         lspFallback = true;
       };
-      logLevel = "ERROR";
+      logLevel = "error";
       notifyOnError = true;
       formatters = {
         myFormatter = {
