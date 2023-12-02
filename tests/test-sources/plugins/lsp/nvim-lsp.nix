@@ -128,6 +128,7 @@
           installCargo = true;
           installRustc = true;
         };
+        solargraph.enable = true;
         sourcekit.enable = true;
         svelte.enable = true;
         tailwindcss.enable = true;
