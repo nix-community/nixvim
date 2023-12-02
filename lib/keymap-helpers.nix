@@ -79,63 +79,43 @@ in rec {
 
   # TODO: When `maps` will have to be deprecated (early December 2023), change this.
   # mapOptionSubmodule = {...} (no need for options... except for 'optionalAction')
-  mkMapOptionSubmodule = {
-    defaultMode ? "",
-    withKeyOpt ? true,
-    flatConfig ? false,
-  }:
-    with types; let
-      mapOptionSubmodule = submodule {
-        options =
-          (
-            if withKeyOpt
-            then {
-              key = mkOption {
-                type = str;
-                description = "The key to map.";
-                example = "<C-m>";
-              };
-            }
-            else {}
-          )
-          // {
-            mode = mkOption {
-              type = either modeEnum (listOf modeEnum);
-              description = ''
-                One or several modes.
-                Use the short-names (`"n"`, `"v"`, ...).
-                See `:h map-modes` to learn more.
-              '';
-              default = defaultMode;
-              example = ["n" "v"];
-            };
+  mapOptionSubmodule = with types;
+    submodule {
+      options = {
+        key = mkOption {
+          type = str;
+          description = "The key to map.";
+          example = "<C-m>";
+        };
 
-            action = mkOption {
-              type = str;
-              description = "The action to execute.";
-            };
+        mode = mkOption {
+          type = either modeEnum (listOf modeEnum);
+          description = ''
+            One or several modes.
+            Use the short-names (`"n"`, `"v"`, ...).
+            See `:h map-modes` to learn more.
+          '';
+          default = "";
+          example = ["n" "v"];
+        };
 
-            lua = mkOption {
-              type = bool;
-              description = ''
-                If true, `action` is considered to be lua code.
-                Thus, it will not be wrapped in `""`.
-              '';
-              default = false;
-            };
-          }
-          // (
-            if flatConfig
-            then mapConfigOptions
-            else {
-              options = mapConfigOptions;
-            }
-          );
+        action = mkOption {
+          type = str;
+          description = "The action to execute.";
+        };
+
+        lua = mkOption {
+          type = bool;
+          description = ''
+            If true, `action` is considered to be lua code.
+            Thus, it will not be wrapped in `""`.
+          '';
+          default = false;
+        };
+
+        options = mapConfigOptions;
       };
-    in
-      if flatConfig
-      then either str mapOptionSubmodule
-      else mapOptionSubmodule;
+    };
 
   # Correctly merge two attrs (partially) representing a mapping.
   mergeKeymap = defaults: keymap: let
@@ -145,56 +125,6 @@ in rec {
     # Then, merge the root attrs together and add the previously merged `options` attrs.
     (defaults // keymap) // {options = mergedOpts;};
 
-  # Given an attrs of key mappings (for a single mode), applies the defaults to each one of them.
-  #
-  # Example:
-  # mkModeMaps { silent = true; } {
-  #   Y = "y$";
-  #   "<C-c>" = { action = ":b#<CR>"; silent = false; };
-  # };
-  #
-  # would give:
-  # {
-  #   Y = {
-  #     action = "y$";
-  #     silent = true;
-  #   };
-  #   "<C-c>" = {
-  #     action = ":b#<CR>";
-  #     silent = false;
-  #   };
-  # };
-  mkModeMaps = defaults:
-    mapAttrs
-    (
-      key: action: let
-        actionAttrs =
-          if isString action
-          then {inherit action;}
-          else action;
-      in
-        defaults // actionAttrs
-    );
-
-  # Applies some default mapping options to a set of mappings
-  #
-  # Example:
-  #   maps = mkMaps { silent = true; expr = true; } {
-  #     normal = {
-  #       ...
-  #     };
-  #     visual = {
-  #       ...
-  #     };
-  #   }
-  mkMaps = defaults:
-    mapAttrs
-    (
-      name: modeMaps:
-        mkModeMaps defaults modeMaps
-    );
-
-  # TODO deprecate `mkMaps` and `mkModeMaps` and leave only this one
   mkKeymaps = defaults:
     map
     (mergeKeymap defaults);

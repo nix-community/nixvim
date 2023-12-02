@@ -5,59 +5,11 @@
   ...
 }:
 with lib; {
-  options = {
-    maps =
-      mapAttrs
-      (
-        modeName: modeProps: let
-          desc = modeProps.desc or modeName;
-        in
-          mkOption {
-            description = "Mappings for ${desc} mode";
-            type = with types;
-              attrsOf
-              (
-                either
-                str
-                (
-                  helpers.keymaps.mkMapOptionSubmodule
-                  {
-                    defaultMode = modeProps.short;
-                    withKeyOpt = false;
-                    flatConfig = true;
-                  }
-                )
-              );
-            default = {};
-          }
-      )
-      helpers.keymaps.modes;
-
-    keymaps = mkOption {
-      type =
-        types.listOf
-        (helpers.keymaps.mkMapOptionSubmodule {});
-      default = [];
-      example = [
-        {
-          key = "<C-m>";
-          action = "<cmd>make<CR>";
-          options.silent = true;
-        }
-      ];
-    };
-  };
-
-  config = {
-    warnings =
-      optional
-      (
-        any
-        (modeMaps: modeMaps != {})
-        (attrValues config.maps)
-      )
+  # This warning has been added on 2023-12-02. TODO: remove it in early Feb. 2024.
+  imports = [
+    (mkRemovedOptionModule
+      ["maps"]
       ''
-        The `maps` option will be deprecated in the near future.
         Please, use the new `keymaps` option which works as follows:
 
         keymaps = [
@@ -79,66 +31,42 @@ with lib; {
             };
           }
         ];
-      '';
+      '')
+  ];
 
+  options = {
+    keymaps = mkOption {
+      type =
+        types.listOf
+        helpers.keymaps.mapOptionSubmodule;
+      default = [];
+      example = [
+        {
+          key = "<C-m>";
+          action = "<cmd>make<CR>";
+          options.silent = true;
+        }
+      ];
+    };
+  };
+
+  config = {
     extraConfigLua = let
-      modeMapsAsList =
-        flatten
-        (
-          mapAttrsToList
-          (
-            modeOptionName: modeProps:
-              mapAttrsToList
-              (
-                key: action:
-                  (
-                    if isString action
-                    then {
-                      mode = modeProps.short;
-                      inherit action;
-                      lua = false;
-                      options = {};
-                    }
-                    else
-                      {
-                        inherit
-                          (action)
-                          action
-                          lua
-                          mode
-                          ;
-                      }
-                      // {
-                        options =
-                          getAttrs
-                          (attrNames helpers.keymaps.mapConfigOptions)
-                          action;
-                      }
-                  )
-                  // {inherit key;}
-              )
-              config.maps.${modeOptionName}
-          )
-          helpers.keymaps.modes
-        );
+      normalizeMapping = keyMapping: {
+        inherit
+          (keyMapping)
+          mode
+          key
+          options
+          ;
 
-      mappings = let
-        normalizeMapping = keyMapping: {
-          inherit
-            (keyMapping)
-            mode
-            key
-            options
-            ;
+        action =
+          if keyMapping.lua
+          then helpers.mkRaw keyMapping.action
+          else keyMapping.action;
+      };
 
-          action =
-            if keyMapping.lua
-            then helpers.mkRaw keyMapping.action
-            else keyMapping.action;
-        };
-      in
-        map normalizeMapping
-        (config.keymaps ++ modeMapsAsList);
+      mappings = map normalizeMapping config.keymaps;
     in
       optionalString (mappings != [])
       ''
