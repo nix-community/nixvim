@@ -36,7 +36,7 @@ with lib; let
               Enables the display of icons alongside the component.
             '';
 
-            icon = helpers.mkNullOrOption types.str ''
+            icon = helpers.mkNullOrOption (types.either types.str helpers.rawType) ''
               Defines the icon to be displayed in front of the component.
             '';
 
