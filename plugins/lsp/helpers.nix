@@ -1,9 +1,4 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}: {
+{pkgs, ...}: {
   mkLsp = {
     name,
     description ? "Enable ${name}.",
@@ -92,13 +87,6 @@
 
             settings = settingsOptions;
 
-            extraSettings = mkOption {
-              type = types.attrs;
-              description = ''
-                Extra settings for the ${name} language server.
-              '';
-            };
-
             extraOptions = mkOption {
               default = {};
               type = types.attrs;
@@ -108,10 +96,7 @@
           // packageOption;
       };
 
-      config = let
-        extraSettingsOption = options.plugins.lsp.servers.${name}.extraSettings;
-        extraSettingsAreDefined = extraSettingsOption.isDefined;
-      in
+      config =
         mkIf cfg.enable
         {
           extraPackages =
@@ -136,25 +121,21 @@
                         end
                       ''
                     );
-                  settings =
-                    (settings cfg.settings)
-                    // (
-                      if extraSettingsAreDefined
-                      then cfg.extraSettings
-                      else {}
-                    );
+                  settings = settings cfg.settings;
                 }
                 // cfg.extraOptions;
             }
           ];
-
-          warnings =
-            optional extraSettingsAreDefined
-            (
-              let
-                optionPrefix = "plugins.lsp.servers.${name}";
-              in "The `${optionPrefix}.extraSettings` option is deprecated in favor of `${optionPrefix}.extraOptions.settings`."
-            );
         };
+      imports = let
+        basePluginPath = ["plugins" "lsp" "servers" name];
+        basePluginPathString = concatStringsSep "." basePluginPath;
+      in [
+        (
+          mkRemovedOptionModule
+          (basePluginPath ++ ["extraSettings"])
+          "You can use `${basePluginPathString}.extraOptions.settings` instead."
+        )
+      ];
     };
 }
