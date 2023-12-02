@@ -179,7 +179,11 @@ with lib; let
     serverData;
   dataFlattened = flatten serverDataFormatted;
 in {
-  imports = map helpers.mkServer dataFlattened;
+  imports =
+    (map helpers.mkServer dataFlattened)
+    ++ [
+      ./prettier.nix
+    ];
 
   config = let
     cfg = config.plugins.none-ls;
