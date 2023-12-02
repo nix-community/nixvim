@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: let
+}:
+with lib; let
   helpers = import ./helpers.nix;
   serverData = {
     code_actions = {
@@ -163,21 +164,29 @@
   #   packages = [...];
   # }]
   serverDataFormatted =
-    lib.mapAttrsToList
+    mapAttrsToList
     (
-      sourceType: lib.mapAttrsToList (name: attrs: attrs // {inherit sourceType name;})
+      sourceType:
+        mapAttrsToList
+        (
+          name: attrs:
+            attrs
+            // {
+              inherit sourceType name;
+            }
+        )
     )
     serverData;
-  dataFlattened = lib.flatten serverDataFormatted;
+  dataFlattened = flatten serverDataFormatted;
 in {
-  imports = lib.lists.map helpers.mkServer dataFlattened;
+  imports = map helpers.mkServer dataFlattened;
 
   config = let
     cfg = config.plugins.none-ls;
     gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
   in
-    lib.mkIf cfg.enable {
-      plugins.gitsigns.enable = lib.mkIf gitsignsEnabled true;
-      extraPackages = lib.optional gitsignsEnabled pkgs.git;
+    mkIf cfg.enable {
+      plugins.gitsigns.enable = mkIf gitsignsEnabled true;
+      extraPackages = optional gitsignsEnabled pkgs.git;
     };
 }
