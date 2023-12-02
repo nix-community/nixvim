@@ -18,7 +18,7 @@ in {
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     warnings =
       optional
       (
