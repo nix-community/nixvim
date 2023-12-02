@@ -496,6 +496,11 @@ with lib; let
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
+      name = "solargraph";
+      description = "Enable solargraph, for Ruby";
+      package = pkgs.rubyPackages.solargraph;
+    }
+    {
       name = "sourcekit";
       description = "Enable the sourcekit language server, for Swift and C/C++/Objective-C";
       package = pkgs.sourcekit-lsp;
