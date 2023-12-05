@@ -165,6 +165,12 @@ with lib; let
       package = pkgs.lua54Packages.digestif;
     }
     {
+      name = "dockerls";
+      description = "Enable dockerls, for Dockerfile";
+      package = pkgs.dockerfile-language-server-nodejs;
+      cmd = cfg: ["${cfg.package}/bin/docker-langserver" "--stdio"];
+    }
+    {
       name = "efm";
       description = "Enable efm-langserver, for misc tools";
       package = pkgs.efm-langserver;

@@ -89,6 +89,7 @@
         dartls.enable = true;
         denols.enable = true;
         digestif.enable = true;
+        dockerls.enable = true;
         efm.enable = true;
         elmls.enable = true;
         emmet_ls.enable = true;
