@@ -75,6 +75,7 @@
       enable = true;
 
       servers = {
+        ansiblels.enable = true;
         astro.enable = true;
         bashls.enable = true;
         biome.enable = true;
