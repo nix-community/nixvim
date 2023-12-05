@@ -10,6 +10,12 @@ with lib; let
 
   servers = [
     {
+      name = "ansiblels";
+      description = "Enable ansiblels, for Ansible";
+      package = pkgs.ansible-language-server;
+      cmd = cfg: ["${cfg.package}/bin/ansible-language-server" "--stdio"];
+    }
+    {
       name = "astro";
       description = "Enable astrols, for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
