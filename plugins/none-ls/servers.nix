@@ -167,6 +167,8 @@ with lib; let
       taplo = {
         package = pkgs.taplo;
       };
+      trim_newlines = {};
+      trim_whitespace = {};
     };
   };
   # Format the servers to be an array of attrs like the following example

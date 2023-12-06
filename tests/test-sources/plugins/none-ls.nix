@@ -104,6 +104,8 @@
           protolint.enable = true;
           rustfmt.enable = true;
           sqlfluff.enable = true;
+          trim_newlines.enable = true;
+          trim_whitespace.enable = true;
         };
       };
     };
