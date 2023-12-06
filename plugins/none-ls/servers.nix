@@ -27,6 +27,9 @@ with lib; let
       alex = {
         package = pkgs.nodePackages.alex;
       };
+      ansiblelint = {
+        package = pkgs.ansible-lint;
+      };
       cppcheck = {
         package = pkgs.cppcheck;
       };
