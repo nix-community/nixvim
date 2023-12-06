@@ -60,6 +60,9 @@ with lib; let
       luacheck = {
         package = pkgs.luaPackages.luacheck;
       };
+      markdownlint = {
+        package = pkgs.nodePackages.markdownlint-cli;
+      };
       mypy = {
         package = pkgs.mypy;
       };
