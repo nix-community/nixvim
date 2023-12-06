@@ -87,6 +87,9 @@ with lib; let
       write_good = {
         package = pkgs.write-good;
       };
+      yamllint = {
+        package = pkgs.yamllint;
+      };
     };
     formatting = {
       alejandra = {

@@ -77,6 +77,7 @@
           mypy.enable = true;
           pylint.enable = true;
           write_good.enable = true;
+          yamllint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
