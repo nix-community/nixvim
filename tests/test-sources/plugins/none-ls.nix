@@ -16,6 +16,7 @@
 
   with-lsp-format = {
     plugins = {
+      lsp.enable = true;
       lsp-format.enable = true;
       none-ls = {
         enable = true;
