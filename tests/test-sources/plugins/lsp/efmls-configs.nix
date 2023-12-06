@@ -24,6 +24,7 @@
         [
           "blade_formatter"
           "cspell"
+          "cljstyle"
           "dartanalyzer"
           "debride"
           "fecs"

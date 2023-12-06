@@ -21,6 +21,7 @@ with lib; let
       beautysh
       biome
       black
+      buf
       cbfmt
       checkmake
       clazy
@@ -33,6 +34,7 @@ with lib; let
       dprint
       fish
       flawfinder
+      fnlfmt
       gcc
       gitlint
       gofumpt
@@ -59,6 +61,7 @@ with lib; let
       shellharden
       shfmt
       smlfmt
+      sqlfluff
       statix
       stylua
       taplo
@@ -68,11 +71,40 @@ with lib; let
       yamllint
       yapf
       ;
-    inherit (python3.pkgs) autopep8 flake8 vulture mdformat;
-    inherit (nodePackages) eslint eslint_d prettier alex stylelint textlint write-good;
-    inherit (phpPackages) phpcbf phan phpcs phpstan psalm;
-    inherit (luaPackages) luacheck;
-    inherit (haskellPackages) fourmolu;
+    inherit
+      (python3.pkgs)
+      autopep8
+      flake8
+      mdformat
+      vulture
+      ;
+    inherit
+      (nodePackages)
+      eslint
+      eslint_d
+      prettier
+      alex
+      sql-formatter
+      stylelint
+      textlint
+      write-good
+      ;
+    inherit
+      (phpPackages)
+      phpcbf
+      phan
+      phpcs
+      phpstan
+      psalm
+      ;
+    inherit
+      (luaPackages)
+      luacheck
+      ;
+    inherit
+      (haskellPackages)
+      fourmolu
+      ;
     ansible_lint = ansible-lint;
     chktex = texliveMedium;
     clang_format = clang-tools;
