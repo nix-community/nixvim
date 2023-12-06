@@ -56,6 +56,7 @@
           statix.enable = true;
         };
         diagnostics = {
+          ansiblelint.enable = true;
           cppcheck.enable = true;
           deadnix.enable = true;
           eslint.enable = true;
