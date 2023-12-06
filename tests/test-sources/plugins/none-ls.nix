@@ -76,6 +76,7 @@
           luacheck.enable = true;
           mypy.enable = true;
           pylint.enable = true;
+          write_good.enable = true;
         };
         formatting = {
           alejandra.enable = true;

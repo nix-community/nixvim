@@ -84,6 +84,9 @@ with lib; let
       vulture = {
         package = pkgs.python3Packages.vulture;
       };
+      write_good = {
+        package = pkgs.write-good;
+      };
     };
     formatting = {
       alejandra = {
