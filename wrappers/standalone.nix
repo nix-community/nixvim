@@ -33,7 +33,10 @@ in
   pkgs.symlinkJoin {
     name = "nixvim";
     paths =
-      [config.finalPackage]
+      [
+        config.finalPackage
+        config.printInitPackage
+      ]
       ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
     meta.mainProgram = "nvim";
   }
