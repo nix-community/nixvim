@@ -96,10 +96,7 @@
         eslint.enable = true;
         elixirls.enable = true;
         # pkgs.fsautocomplete only supports linux platforms
-        # fsautocomplete.enable = pkgs.stdenv.isLinux;
-        # As of 2023/12/02, fsautocomplete is broken
-        # See https://github.com/NixOS/nixpkgs/issues/271704
-        fsautocomplete.enable = false;
+        fsautocomplete.enable = pkgs.stdenv.isLinux;
         futhark-lsp.enable = true;
         gleam.enable = true;
         gopls.enable = true;
