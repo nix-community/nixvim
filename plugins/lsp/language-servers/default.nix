@@ -439,6 +439,11 @@ with lib; let
       };
     }
     {
+      name = "perlpls";
+      description = "Enable PLS, for Perl";
+      package = pkgs.perlPackages.PLS;
+    }
+    {
       name = "pest_ls";
       description = "Enable pest_ls, for pest";
       package = pkgs.pest-ide-tools;

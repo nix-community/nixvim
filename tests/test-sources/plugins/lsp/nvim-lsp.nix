@@ -115,6 +115,7 @@
         nil_ls.enable = true;
         nixd.enable = true;
         omnisharp.enable = true;
+        perlpls.enable = true;
         pest_ls.enable = true;
         prismals.enable = true;
         pylsp.enable = true;
