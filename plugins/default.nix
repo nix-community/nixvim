@@ -123,6 +123,7 @@
     ./utils/endwise.nix
     ./utils/flash.nix
     ./utils/floaterm.nix
+    ./utils/fzf-lua.nix
     ./utils/goyo.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix
