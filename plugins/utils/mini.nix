@@ -27,7 +27,7 @@ in {
           n_lines = 50;
           search_method = "cover_or_next";
         };
-        surrounds = {};
+        surround = {};
       };
     };
   };
