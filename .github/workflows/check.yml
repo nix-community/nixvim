@@ -20,5 +20,5 @@ jobs:
           name: nix-community
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - run: nix flake check --all-systems
-      - run: nix flake check --all-systems ./templates/_wrapper/simple
+      - run: nix flake check --all-systems ./templates/_wrapper/simple --no-write-lock-file
       - run: nix build .#docs --show-trace
