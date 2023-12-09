@@ -23,17 +23,15 @@ with lib; let
       "the button which is clicked to close / save a buffer, or indicate that it is pinned.";
 
     diagnostics =
-      helpers.mkCompositeOption "Diagnostics icons"
+      genAttrs
+      ["error" "warn" "info" "hint"]
       (
-        genAttrs
-        ["error" "warn" "info" "hint"]
-        (
-          name:
-            helpers.mkCompositeOption "${name} diagnostic icon" {
-              enable = helpers.defaultNullOpts.mkBool false "Enable the ${name} diagnostic symbol";
-              icon = helpers.mkNullOrOption types.str "${name} diagnostic symbol";
-            }
-        )
+        name:
+          helpers.mkCompositeOption "${name} diagnostic icon." {
+            enable = helpers.defaultNullOpts.mkBool false "Enable the ${name} diagnostic symbol";
+
+            icon = helpers.mkNullOrOption types.str "${name} diagnostic symbol";
+          }
       );
 
     filetype = {
@@ -250,7 +248,7 @@ in {
               buffer_index = bufferIndex;
               buffer_number = bufferNumber;
               inherit button;
-              diagnostics = helpers.ifNonNull' bufferOption.diagnostics (
+              diagnostics =
                 /*
                 Because the keys of this lua table are not strings (but
                 `vim.diagnostic.severity.XXXX`), we have to manualy build a raw lua string here.
@@ -277,8 +275,7 @@ in {
                       setIconsList
                     )
                     + "}"
-                  )
-              );
+                  );
               filetype = with filetype; {
                 custom_color = customColors;
                 enabled = enable;

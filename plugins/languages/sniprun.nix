@@ -56,7 +56,7 @@ in {
         helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["VirtualTextOk"]''
         "Display modes used in live_mode";
 
-      displayOptions = helpers.mkCompositeOption "Display options" {
+      displayOptions = {
         terminalWidth =
           helpers.defaultNullOpts.mkInt 45
           "Change the terminal display option width.";
@@ -77,42 +77,37 @@ in {
           bg ? "",
           ctermbg ? "",
           ctermfg ? "",
-        }:
-          helpers.mkCompositeOption "" {
-            bg = helpers.defaultNullOpts.mkStr fg "Background color";
-            fg = helpers.defaultNullOpts.mkStr bg "Foreground color";
-            ctermbg = helpers.defaultNullOpts.mkStr ctermbg "Foreground color";
-            ctermfg = helpers.defaultNullOpts.mkStr ctermfg "Foreground color";
-          };
+        }: {
+          bg = helpers.defaultNullOpts.mkStr fg "Background color";
+          fg = helpers.defaultNullOpts.mkStr bg "Foreground color";
+          ctermbg = helpers.defaultNullOpts.mkStr ctermbg "Foreground color";
+          ctermfg = helpers.defaultNullOpts.mkStr ctermfg "Foreground color";
+        };
       in
-        helpers.mkCompositeOption
-        "Customize highlight groups (setting this overrides colorscheme)"
-        (
-          mapAttrs
-          (optionName: colorOption)
-          {
-            SniprunVirtualTextOk = {
-              bg = "#66eeff";
-              fg = "#000000";
-              ctermbg = "Cyan";
-              ctermfg = "Black";
-            };
-            SniprunFloatingWinOk = {
-              fg = "#66eeff";
-              ctermfg = "Cyan";
-            };
-            SniprunVirtualTextErr = {
-              bg = "#881515";
-              fg = "#000000";
-              ctermbg = "DarkRed";
-              ctermfg = "Black";
-            };
-            SniprunFloatingWinErr = {
-              fg = "#881515";
-              ctermfg = "DarkRed";
-            };
-          }
-        );
+        mapAttrs
+        (optionName: colorOption)
+        {
+          SniprunVirtualTextOk = {
+            bg = "#66eeff";
+            fg = "#000000";
+            ctermbg = "Cyan";
+            ctermfg = "Black";
+          };
+          SniprunFloatingWinOk = {
+            fg = "#66eeff";
+            ctermfg = "Cyan";
+          };
+          SniprunVirtualTextErr = {
+            bg = "#881515";
+            fg = "#000000";
+            ctermbg = "DarkRed";
+            ctermfg = "Black";
+          };
+          SniprunFloatingWinErr = {
+            fg = "#881515";
+            ctermfg = "DarkRed";
+          };
+        };
 
       liveModeToggle =
         helpers.defaultNullOpts.mkStr "off"
@@ -144,11 +139,10 @@ in {
           interpreter_options = cfg.interpreterOptions;
           inherit (cfg) display;
           live_display = cfg.liveDisplay;
-          display_options = with cfg.displayOptions;
-            helpers.ifNonNull' cfg.displayOptions {
-              terminal_width = terminalWidth;
-              notification_timeout = notificationTimeout;
-            };
+          display_options = with cfg.displayOptions; {
+            terminal_width = terminalWidth;
+            notification_timeout = notificationTimeout;
+          };
           show_no_output = cfg.showNoOutput;
           inherit (cfg) snipruncolors;
           live_mode_toggle = cfg.liveModeToggle;

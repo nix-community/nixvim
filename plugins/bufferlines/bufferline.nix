@@ -240,19 +240,19 @@ in {
 
         offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "null" "offsets";
 
-        groups = helpers.mkCompositeOption "groups" {
+        groups = {
           items =
             helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "[]"
             "List of groups.";
 
-          options = helpers.mkCompositeOption "Group options" {
+          options = {
             toggleHiddenOnEnter =
               helpers.defaultNullOpts.mkBool true
               "Re-open hidden groups on bufenter.";
           };
         };
 
-        hover = helpers.mkCompositeOption "Hover" {
+        hover = {
           enabled = mkEnableOption "hover";
 
           reveal = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "reveal";
@@ -260,7 +260,7 @@ in {
           delay = helpers.defaultNullOpts.mkInt 200 "delay";
         };
 
-        debug = helpers.mkCompositeOption "Debug options" {
+        debug = {
           logging = helpers.defaultNullOpts.mkBool false "Whether to enable logging";
         };
 
@@ -319,14 +319,23 @@ in {
           diagnostics_indicator = helpers.mkRaw diagnosticsIndicator;
           diagnostics_update_in_insert = diagnosticsUpdateInInsert;
           inherit offsets;
-          groups = helpers.ifNonNull' groups {
+          groups = {
             inherit (groups) items;
-            options = helpers.ifNonNull' groups.options {
+            options = {
               toggle_hidden_on_enter = groups.options.toggleHiddenOnEnter;
             };
           };
-          inherit hover;
-          inherit debug;
+          hover = {
+            inherit
+              (hover)
+              enabled
+              reveal
+              delay
+              ;
+          };
+          debug = {
+            inherit (debug) logging;
+          };
           custom_filter = helpers.mkRaw customFilter;
         }
         // cfg.extraOptions;

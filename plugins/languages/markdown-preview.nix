@@ -51,7 +51,7 @@ in {
         A custom vim function name to open preview page. This function will receive url as param.
       '';
 
-      previewOptions = helpers.mkCompositeOption "Options for markdown render" {
+      previewOptions = {
         mkit = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "markdown-it options for render";
         katex = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "katex options for math";
         uml = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "markdown-it-plantuml options";
@@ -108,7 +108,7 @@ in {
       mkdp_browser = mkIf (cfg.browser != null) cfg.browser;
       mkdp_echo_preview_url = mkIf (cfg.echoPreviewUrl != null) cfg.echoPreviewUrl;
       mkdp_browserfunc = mkIf (cfg.browserFunc != null) cfg.browserFunc;
-      mkdp_preview_options = mkIf (cfg.previewOptions != null) cfg.previewOptions;
+      mkdp_preview_options = cfg.previewOptions;
       mkdp_markdown_css = mkIf (cfg.markdownCss != null) cfg.markdownCss;
       mkdp_highlight_css = mkIf (cfg.highlightCss != null) cfg.highlightCss;
       mkdp_port = mkIf (cfg.port != null) cfg.port;
