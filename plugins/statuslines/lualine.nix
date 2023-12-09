@@ -36,7 +36,7 @@ with lib; let
               Enables the display of icons alongside the component.
             '';
 
-            icon = helpers.mkNullOrOption (types.either types.str helpers.rawType) ''
+            icon = helpers.mkNullOrOption (with types; either str (attrsOf anything)) ''
               Defines the icon to be displayed in front of the component.
             '';
 
@@ -211,7 +211,11 @@ in {
       mergeAttrs
       {
         "__unkeyed" = name;
-        inherit icons_enabled icon separator color padding;
+        icon =
+          if isAttrs icon
+          then removeAttrs (icon // {"__unkeyed" = icon.icon;}) ["icon"]
+          else icon;
+        inherit icons_enabled separator color padding;
       }
       extraConfig;
     processSections = mapAttrs (_: mapNullable (map processComponent));
