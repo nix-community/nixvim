@@ -16,7 +16,7 @@ in {
 
         package = helpers.mkPackageOption "fidget" pkgs.vimPlugins.fidget-nvim;
 
-        text = helpers.mkCompositeOption "Fidget text options." {
+        text = {
           spinner =
             helpers.defaultNullOpts.mkNullable
             (types.either
@@ -75,7 +75,7 @@ in {
           '';
         };
 
-        align = helpers.mkCompositeOption "Fidget alignment options." {
+        align = {
           bottom = helpers.defaultNullOpts.mkBool true ''
             Whether to align fidgets along the bottom edge of each buffer.
           '';
@@ -88,7 +88,7 @@ in {
           '';
         };
 
-        timer = helpers.mkCompositeOption "Fidget timing options." {
+        timer = {
           spinnerRate = helpers.defaultNullOpts.mkNum 125 ''
             Duration of each frame of the spinner animation, in ms. Set to
             `0` to only use the first frame of the spinner animation.
@@ -109,7 +109,7 @@ in {
           '';
         };
 
-        window = helpers.mkCompositeOption "Windowing rules options." {
+        window = {
           relative = helpers.defaultNullOpts.mkEnum ["win" "editor"] "win" ''
             Whether to position the window relative to the current window,
             or the editor. Valid values are `"win"` or `"editor"`.
@@ -129,7 +129,7 @@ in {
           '';
         };
 
-        fmt = helpers.mkCompositeOption "Fidget formatting options." {
+        fmt = {
           leftpad = helpers.defaultNullOpts.mkBool true ''
             Whether to right-justify the text in a fidget box by left-padding
             it with spaces. Recommended when `align.right` is `true`.
@@ -194,7 +194,7 @@ in {
             List of options for fidget sources.
           '';
 
-        debug = helpers.mkCompositeOption "Fidget debugging options." {
+        debug = {
           logging = helpers.defaultNullOpts.mkBool false ''
             Whether to enable logging, for debugging. The log is written to
             `~/.local/share/nvim/fidget.nvim.log`.
@@ -216,12 +216,12 @@ in {
     setupOptions =
       {
         inherit (cfg) text align window sources;
-        timer = helpers.ifNonNull' cfg.timer {
+        timer = {
           spinner_rate = cfg.timer.spinnerRate;
           fidget_decay = cfg.timer.fidgetDecay;
           task_decay = cfg.timer.taskDecay;
         };
-        fmt = helpers.ifNonNull' cfg.fmt {
+        fmt = {
           inherit (cfg.fmt) leftpad fidget task;
           stack_upwards = cfg.fmt.stackUpwards;
           max_width = cfg.fmt.maxWidth;

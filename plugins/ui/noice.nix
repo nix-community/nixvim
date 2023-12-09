@@ -20,7 +20,7 @@ with lib; {
 
       package = helpers.mkPackageOption "noice" pkgs.vimPlugins.noice-nvim;
 
-      cmdline = helpers.mkCompositeOption "" {
+      cmdline = {
         enabled = helpers.defaultNullOpts.mkBool true "enables Noice cmdline UI";
         view = helpers.defaultNullOpts.mkStr "cmdline_popup" "";
         opts = helpers.defaultNullOpts.mkNullable types.anything "{}" "";
@@ -45,18 +45,19 @@ with lib; {
           '';
       };
 
-      messages =
-        helpers.mkCompositeOption
-        "NOTE: If you enable messages, then the cmdline is enabled automatically" {
-          enabled = helpers.defaultNullOpts.mkBool true "enables the messages UI";
-          view = helpers.defaultNullOpts.mkStr "notify" "default view for messages";
-          viewError = helpers.defaultNullOpts.mkStr "notify" "default view for errors";
-          viewWarn = helpers.defaultNullOpts.mkStr "notify" "default view for warnings";
-          viewHistory = helpers.defaultNullOpts.mkStr "messages" "view for :messages";
-          viewSearch = helpers.defaultNullOpts.mkStr "virtualtext" "view for search count messages";
-        };
+      messages = {
+        enabled = helpers.defaultNullOpts.mkBool true ''
+          Enables the messages UI.
+          NOTE: If you enable messages, then the cmdline is enabled automatically.
+        '';
+        view = helpers.defaultNullOpts.mkStr "notify" "default view for messages";
+        viewError = helpers.defaultNullOpts.mkStr "notify" "default view for errors";
+        viewWarn = helpers.defaultNullOpts.mkStr "notify" "default view for warnings";
+        viewHistory = helpers.defaultNullOpts.mkStr "messages" "view for :messages";
+        viewSearch = helpers.defaultNullOpts.mkStr "virtualtext" "view for search count messages";
+      };
 
-      popupmenu = helpers.mkCompositeOption "" {
+      popupmenu = {
         enabled = helpers.defaultNullOpts.mkBool true "enables the Noice popupmenu UI";
         backend = helpers.defaultNullOpts.mkEnumFirstDefault ["nui" "cmp"] "";
         kindIcons =
@@ -110,20 +111,21 @@ with lib; {
         }
       '' "You can add any custom commands that will be available with `:Noice command`";
 
-      notify =
-        helpers.mkCompositeOption ''
-          Noice can be used as `vim.notify` so you can route any notification like other messages
-          Notification messages have their level and other properties set.
-          event is always "notify" and kind can be any log level as a string
-          The default routes will forward notifications to nvim-notify
-          Benefit of using Noice for this is the routing and consistent history view
-        '' {
-          enabled = helpers.defaultNullOpts.mkBool true "enable notification handling";
-          view = helpers.defaultNullOpts.mkStr "notify" "";
-        };
+      notify = {
+        enabled = helpers.defaultNullOpts.mkBool true ''
+          Enable notification handling.
 
-      lsp = helpers.mkCompositeOption "" {
-        progress = helpers.mkCompositeOption "" {
+          Noice can be used as `vim.notify` so you can route any notification like other messages.
+          Notification messages have their level and other properties set.
+          event is always "notify" and kind can be any log level as a string.
+          The default routes will forward notifications to nvim-notify.
+          Benefit of using Noice for this is the routing and consistent history view.
+        '';
+        view = helpers.defaultNullOpts.mkStr "notify" "";
+      };
+
+      lsp = {
+        progress = {
           enabled = helpers.defaultNullOpts.mkBool true "enable LSP progress";
 
           format =
@@ -150,7 +152,7 @@ with lib; {
           }
         '' "";
 
-        hover = helpers.mkCompositeOption "" {
+        hover = {
           enabled = helpers.defaultNullOpts.mkBool true "enable hover UI";
           view =
             helpers.defaultNullOpts.mkNullable types.str "null"
@@ -160,10 +162,10 @@ with lib; {
             "merged with defaults from documentation";
         };
 
-        signature = helpers.mkCompositeOption "" {
+        signature = {
           enabled = helpers.defaultNullOpts.mkBool true "enable signature UI";
 
-          autoOpen = helpers.mkCompositeOption "" {
+          autoOpen = {
             enabled = helpers.defaultNullOpts.mkBool true "";
             trigger =
               helpers.defaultNullOpts.mkBool true
@@ -184,14 +186,14 @@ with lib; {
             "merged with defaults from documentation";
         };
 
-        message = helpers.mkCompositeOption "Messages shown by lsp servers" {
+        message = {
           enabled = helpers.defaultNullOpts.mkBool true "enable display of messages";
 
           view = helpers.defaultNullOpts.mkStr "notify" "";
           opts = helpers.defaultNullOpts.mkNullable types.anything "{}" "";
         };
 
-        documentation = helpers.mkCompositeOption "defaults for hover and signature help" {
+        documentation = {
           view = helpers.defaultNullOpts.mkStr "hover" "";
 
           opts = helpers.defaultNullOpts.mkNullable types.anything ''
@@ -206,7 +208,7 @@ with lib; {
         };
       };
 
-      markdown = helpers.mkCompositeOption "" {
+      markdown = {
         hover = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) ''
           {
             "|(%S-)|" = helpers.mkRaw "vim.cmd.help"; // vim help links
@@ -226,22 +228,23 @@ with lib; {
         '' "set highlight groups";
       };
 
-      health = helpers.mkCompositeOption "" {
+      health = {
         checker =
           helpers.defaultNullOpts.mkBool true
           "Disable if you don't want health checks to run";
       };
 
-      smartMove =
-        helpers.mkCompositeOption
-        "noice tries to move out of the way of existing floating windows." {
-          enabled = helpers.defaultNullOpts.mkBool true "you can disable this behaviour here";
-          excludedFiletypes =
-            helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-            ''[ "cmp_menu" "cmp_docs" "notify"]'' ''
-              add any filetypes here, that shouldn't trigger smart move
-            '';
-        };
+      smartMove = {
+        enabled = helpers.defaultNullOpts.mkBool true ''
+          Noice tries to move out of the way of existing floating windows.
+          You can disable this behaviour here
+        '';
+        excludedFiletypes =
+          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
+          ''[ "cmp_menu" "cmp_docs" "notify"]'' ''
+            add any filetypes here, that shouldn't trigger smart move
+          '';
+      };
 
       presets =
         helpers.defaultNullOpts.mkNullable (types.either types.bool types.anything) ''
@@ -272,74 +275,68 @@ with lib; {
     cfg = config.plugins.noice;
     setupOptions = {
       inherit (cfg) presets views routes status format;
-      cmdline = helpers.ifNonNull' cfg.cmdline {
+      cmdline = {
         inherit (cfg.cmdline) enabled view opts format;
       };
       messages = let
         cfgM = cfg.messages;
-      in
-        helpers.ifNonNull' cfgM {
-          inherit (cfgM) enabled view;
-          view_error = cfgM.viewError;
-          view_warn = cfgM.viewWarn;
-          view_history = cfgM.viewHistory;
-          view_search = cfgM.viewSearch;
-        };
+      in {
+        inherit (cfgM) enabled view;
+        view_error = cfgM.viewError;
+        view_warn = cfgM.viewWarn;
+        view_history = cfgM.viewHistory;
+        view_search = cfgM.viewSearch;
+      };
       popupmenu = let
         cfgP = cfg.popupmenu;
-      in
-        helpers.ifNonNull' cfgP {
-          inherit (cfgP) enabled backend;
-          kind_icons = cfgP.kindIcons;
-        };
+      in {
+        inherit (cfgP) enabled backend;
+        kind_icons = cfgP.kindIcons;
+      };
       inherit (cfg) redirect commands;
-      notify = helpers.ifNonNull' cfg.notify {
+      notify = {
         inherit (cfg.notify) enabled view;
       };
       lsp = let
         cfgL = cfg.lsp;
-      in
-        helpers.ifNonNull' cfgL {
-          progress = let
-            cfgLP = cfgL.progress;
-          in
-            helpers.ifNonNull' cfgLP {
-              inherit (cfgLP) enabled format throttle view;
-              format_done = cfgLP.formatDone;
-            };
-          inherit (cfgL) override;
-          hover = helpers.ifNonNull' cfgL.hover {
-            inherit (cfgL.hover) enabled view opts;
-          };
-          signature = let
-            cfgLS = cfgL.signature;
-          in
-            helpers.ifNonNull' cfgLS {
-              inherit (cfgLS) enabled view opts;
-              auto_open = helpers.ifNonNull' cfgLS.autoOpen {
-                inherit (cfgLS.autoOpen) enabled trigger luasnip throttle;
-              };
-            };
-          message = helpers.ifNonNull' cfgL.message {
-            inherit (cfgL.message) enabled view opts;
-          };
-          documentation = helpers.ifNonNull' cfgL.documentation {
-            inherit (cfgL.documentation) view opts;
+      in {
+        progress = let
+          cfgLP = cfgL.progress;
+        in {
+          inherit (cfgLP) enabled format throttle view;
+          format_done = cfgLP.formatDone;
+        };
+        inherit (cfgL) override;
+        hover = {
+          inherit (cfgL.hover) enabled view opts;
+        };
+        signature = let
+          cfgLS = cfgL.signature;
+        in {
+          inherit (cfgLS) enabled view opts;
+          auto_open = {
+            inherit (cfgLS.autoOpen) enabled trigger luasnip throttle;
           };
         };
-      markdown = helpers.ifNonNull' cfg.markdown {
+        message = {
+          inherit (cfgL.message) enabled view opts;
+        };
+        documentation = {
+          inherit (cfgL.documentation) view opts;
+        };
+      };
+      markdown = {
         inherit (cfg.markdown) hover highlights;
       };
-      health = helpers.ifNonNull' cfg.health {
+      health = {
         inherit (cfg.health) checker;
       };
       smart_move = let
         cfgS = cfg.smartMove;
-      in
-        helpers.ifNonNull' cfgS {
-          inherit (cfgS) enabled;
-          excluded_filetypes = cfgS.excludedFiletypes;
-        };
+      in {
+        inherit (cfgS) enabled;
+        excluded_filetypes = cfgS.excludedFiletypes;
+      };
     };
   in
     mkIf cfg.enable {

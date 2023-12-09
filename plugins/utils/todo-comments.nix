@@ -79,7 +79,7 @@ in {
             ```
           '';
 
-        guiStyle = helpers.mkCompositeOption "The gui style for highlight groups." {
+        guiStyle = {
           fg = helpers.defaultNullOpts.mkStr "NONE" ''
             The gui style to use for the fg highlight group.
           '';
@@ -93,7 +93,7 @@ in {
           When true, custom keywords will be merged with the default
         '';
 
-        highlight = helpers.mkCompositeOption "Highlight options." {
+        highlight = {
           multiline = helpers.defaultNullOpts.mkBool true ''
             Enable multiline todo comments.
           '';
@@ -163,7 +163,7 @@ in {
             ```
           '';
 
-        search = helpers.mkCompositeOption "Search options." {
+        search = {
           command = helpers.defaultNullOpts.mkStr "rg" "Command to use for searching for keywords.";
 
           args = helpers.mkNullOrOption (types.listOf types.str) ''
@@ -231,7 +231,7 @@ in {
         inherit (cfg) keywords;
         gui_style = cfg.guiStyle;
         merge_keywords = cfg.mergeKeywords;
-        highlight = helpers.ifNonNull' cfg.highlight {
+        highlight = {
           inherit
             (cfg.highlight)
             multiline
@@ -249,7 +249,7 @@ in {
           max_line_len = cfg.highlight.maxLineLen;
         };
         inherit (cfg) colors;
-        search = helpers.ifNonNull' cfg.search {
+        search = {
           inherit (cfg.search) command args;
           pattern =
             helpers.ifNonNull' cfg.search.pattern

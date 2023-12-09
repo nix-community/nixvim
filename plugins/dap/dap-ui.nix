@@ -58,7 +58,7 @@ in {
 
       package = helpers.mkPackageOption "dap-ui" pkgs.vimPlugins.nvim-dap-ui;
 
-      controls = helpers.mkCompositeOption "Options for dap-ui controls." {
+      controls = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable controls";
 
         element =
@@ -178,7 +178,7 @@ in {
         })
         "Keys to trigger actions in elements.";
 
-      render = helpers.mkCompositeOption "Rendering options which can be updated after initial setup." {
+      render = {
         indent = helpers.defaultNullOpts.mkInt 1 "Default indentation size.";
 
         maxTypeLength = helpers.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
@@ -206,11 +206,11 @@ in {
 
         force_buffers = forceBuffers;
 
-        render = helpers.ifNonNull' render (with render; {
+        render = with render; {
           inherit indent;
           max_type_length = maxTypeLength;
           max_value_lines = maxValueLines;
-        });
+        };
 
         select_window = helpers.mkRaw selectWindow;
       }
