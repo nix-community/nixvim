@@ -79,6 +79,10 @@
               lib-tests = import ./tests/lib-tests.nix {
                 inherit (pkgs) pkgs lib;
               };
+              extra-args-tests = import ./tests/extra-args.nix {
+                inherit pkgs;
+                inherit (self.legacyPackages.${system}) makeNixvimWithModule;
+              };
               pre-commit-check = pre-commit-hooks.lib.${system}.run {
                 src = ./.;
                 hooks = {

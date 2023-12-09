@@ -12,13 +12,11 @@ default_pkgs: {
 
   shared = import ./_shared.nix modules {
     inherit pkgs lib;
-    config = {
-      _module.args = extraSpecialArgs;
-    };
+    config = {};
   };
 
   eval = lib.evalModules {
-    modules = [module wrap] ++ shared.topLevelModules;
+    modules = [module wrap {_module.args = extraSpecialArgs;}] ++ shared.topLevelModules;
   };
 
   handleAssertions = config: let
