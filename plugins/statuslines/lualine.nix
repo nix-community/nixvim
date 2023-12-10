@@ -36,14 +36,15 @@ with lib; let
               Enables the display of icons alongside the component.
             '';
 
-            icon = helpers.mkNullOrOption
+            icon =
+              helpers.mkNullOrOption
               (
                 with types;
                   either
                   str
                   (submodule {
                     freeformType = attrsOf anything;
-                    
+
                     options = {
                       icon = mkOption {
                         type = str;
@@ -53,8 +54,6 @@ with lib; let
                   })
               )
               "Defines the icon to be displayed in front of the component.";
-              Defines the icon to be displayed in front of the component.
-            '';
 
             separator = mkSeparatorsOption {name = "Component";};
 
