@@ -10,6 +10,10 @@
       # Simple mapping with only Description
       registrations."ff" = "Test";
 
+      registrations."f" = {
+        name = "Group Test";
+      };
+
       plugins = {
         marks = true;
         registers = true;

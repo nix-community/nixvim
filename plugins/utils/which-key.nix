@@ -14,7 +14,7 @@ with lib; {
     package = helpers.mkPackageOption "whick-key-nvim" pkgs.vimPlugins.which-key-nvim;
 
     registrations = mkOption {
-      type = with types; attrsOf str;
+      type = with types; attrsOf (oneOf [str (listOf str) (attrsOf str)]);
       default = {};
       description = "Manually register the description of mappings.";
       example = {
