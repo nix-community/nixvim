@@ -465,6 +465,10 @@ with lib; let
       settings = cfg: {pylsp = cfg;};
     }
     {
+      name = "pylyzer";
+      description = "Enable pylyzer, for Python.";
+    }
+    {
       name = "pyright";
       description = "Enable pyright, for Python.";
     }
