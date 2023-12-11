@@ -24,6 +24,20 @@
           "Raw Lua Code and List KeyMapping Test"
         ];
         "oo" = "Label Test 2";
+        "<tab>" = {
+          name = "Group in Group Test";
+          f = [
+            {
+              __raw = ''
+                function()
+                  vim.cmd("echo 'Raw Lua Code and List KeyMapping Test 2'")
+                end
+              '';
+            }
+
+            "Raw Lua Code and List KeyMapping Test 2"
+          ];
+        };
       };
 
       plugins = {
