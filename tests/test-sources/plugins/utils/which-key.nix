@@ -7,11 +7,23 @@
     plugins.which-key = {
       enable = true;
 
-      # Simple mapping with only Description
-      registrations."ff" = "Test";
-
+      # Testing for registrations
       registrations."f" = {
+        prefix = "<leader>";
+        mode = ["n" "v" "i" "t" "c" "x" "s" "o"];
         name = "Group Test";
+        f = "Label Test";
+        "1" = [
+          {
+            __raw = ''
+              function()
+                print("Raw Lua Code and List KeyMapping Test")
+              end
+            '';
+          }
+          "Raw Lua Code and List KeyMapping Test"
+        ];
+        "oo" = "Label Test 2";
       };
 
       plugins = {
