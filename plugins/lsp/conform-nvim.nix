@@ -111,8 +111,8 @@ in {
             timeout_ms = formatOnSave.timeoutMs;
           }
           else helpers.mkRaw formatOnSave;
-        format_after_save = helpers.ifNonNull' formatOnSave {
-          lsp_fallback = formatOnSave.lspFallback;
+        format_after_save = helpers.ifNonNull' formatAfterSave {
+          lsp_fallback = formatAfterSave.lspFallback;
         };
         log_level = helpers.ifNonNull' logLevel (helpers.mkRaw "vim.log.levels.${logLevel}");
         notify_on_error = notifyOnError;
