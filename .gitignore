@@ -2,5 +2,3 @@
 result
 .pre-commit-config.yaml
 .direnv
-
-templates/_wrapper/simple/flake.lock
