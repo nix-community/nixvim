@@ -101,6 +101,7 @@
         # See https://github.com/NixOS/nixpkgs/issues/271704
         fsautocomplete.enable = false;
         futhark-lsp.enable = true;
+        gleam.enable = true;
         gopls.enable = true;
         hls.enable = true;
         html.enable = true;
