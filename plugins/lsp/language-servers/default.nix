@@ -214,6 +214,10 @@ with lib; let
       package = null;
     }
     {
+      name = "gleam";
+      description = "Enable gleam, for gleam.";
+    }
+    {
       name = "gopls";
       description = "Enable gopls, for Go.";
     }
