@@ -36,7 +36,7 @@
           )
         ''
       ];
-      render = ''
+      renderer = ''
         wilder.wildmenu_renderer({
           -- highlighter applies highlighting to the candidates
           highlighter = wilder.basic_highlighter(),
