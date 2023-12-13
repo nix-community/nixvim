@@ -175,7 +175,7 @@ in {
         ```
       '';
 
-      render = helpers.mkNullOrOption types.str ''
+      renderer = helpers.mkNullOrOption types.str ''
         Sets the renderer to used to display the completions.
         See `|wilder-renderer|`.
 
@@ -237,7 +237,7 @@ in {
         pipeline =
           helpers.ifNonNull' pipeline
           (map helpers.mkRaw pipeline);
-        render = helpers.mkRaw render;
+        renderer = helpers.mkRaw renderer;
         preHook = helpers.mkRaw preHook;
         postHook = helpers.mkRaw postHook;
       }
