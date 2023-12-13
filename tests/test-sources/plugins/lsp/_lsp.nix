@@ -61,7 +61,9 @@
         };
         # rootDir
         typst-lsp = {
-          enable = true;
+          # As of 2023-12-13, typst-lsp is broken
+          # TODO: re-enable this test when fixed
+          enable = false;
           rootDir = ''
             require 'lspconfig.util'.root_pattern('.git', 'main.typ')
           '';
@@ -127,14 +129,18 @@
           installRustc = true;
         };
         solargraph.enable = true;
-        sourcekit.enable = true;
+        # As of 2023-12-13, sourcekit-lsp is broken
+        # TODO: re-enable this test when fixed
+        sourcekit.enable = false;
         svelte.enable = true;
         tailwindcss.enable = true;
         taplo.enable = true;
         terraformls.enable = true;
         texlab.enable = true;
         tsserver.enable = true;
-        typst-lsp.enable = true;
+        # As of 2023-12-13, typst-lsp is broken
+        # TODO: re-enable this test when fixed
+        typst-lsp.enable = false;
         vls.enable = true;
         vuels.enable = true;
         yamlls.enable = true;
