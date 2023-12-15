@@ -222,6 +222,11 @@ with lib; let
       description = "Enable gopls, for Go.";
     }
     {
+      name = "graphql";
+      description = "Enable graphql, for GraphQL.";
+      package = pkgs.nodePackages.graphql-language-service-cli;
+    }
+    {
       name = "hls";
       description = "Enable haskell language server";
       package = pkgs.haskell-language-server;
