@@ -77,16 +77,21 @@ in rec {
       (attrValues modes)
     );
 
-  # TODO: When `maps` will have to be deprecated (early December 2023), change this.
-  # mapOptionSubmodule = {...} (no need for options... except for 'optionalAction')
-  mapOptionSubmodule = with types;
+  mapOptionSubmodule = mkMapOptionSubmodule {};
+
+  mkMapOptionSubmodule = defaults: (with types;
     submodule {
       options = {
-        key = mkOption {
-          type = str;
-          description = "The key to map.";
-          example = "<C-m>";
-        };
+        key = mkOption ({
+            type = str;
+            description = "The key to map.";
+            example = "<C-m>";
+          }
+          // (
+            optionalAttrs
+            (defaults ? key)
+            {default = defaults.key;}
+          ));
 
         mode = mkOption {
           type = either modeEnum (listOf modeEnum);
@@ -95,14 +100,19 @@ in rec {
             Use the short-names (`"n"`, `"v"`, ...).
             See `:h map-modes` to learn more.
           '';
-          default = "";
+          default = defaults.mode or "";
           example = ["n" "v"];
         };
 
-        action = mkOption {
-          type = str;
-          description = "The action to execute.";
-        };
+        action = mkOption ({
+            type = str;
+            description = "The action to execute.";
+          }
+          // (
+            optionalAttrs
+            (defaults ? action)
+            {default = defaults.action;}
+          ));
 
         lua = mkOption {
           type = bool;
@@ -110,12 +120,12 @@ in rec {
             If true, `action` is considered to be lua code.
             Thus, it will not be wrapped in `""`.
           '';
-          default = false;
+          default = defaults.lua or false;
         };
 
         options = mapConfigOptions;
       };
-    };
+    });
 
   # Correctly merge two attrs (partially) representing a mapping.
   mergeKeymap = defaults: keymap: let
