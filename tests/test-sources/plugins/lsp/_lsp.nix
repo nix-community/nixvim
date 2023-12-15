@@ -102,6 +102,7 @@
         futhark-lsp.enable = true;
         gleam.enable = true;
         gopls.enable = true;
+        graphql.enable = true;
         hls.enable = true;
         html.enable = true;
         java-language-server.enable = true;
