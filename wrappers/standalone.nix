@@ -12,13 +12,11 @@ default_pkgs: {
 
   shared = import ./_shared.nix modules {
     inherit pkgs lib;
-    config = {
-      _module.args = extraSpecialArgs;
-    };
+    config = {};
   };
 
   eval = lib.evalModules {
-    modules = [module wrap] ++ shared.topLevelModules;
+    modules = [module wrap {_module.args = extraSpecialArgs;}] ++ shared.topLevelModules;
   };
 
   handleAssertions = config: let
@@ -33,7 +31,10 @@ in
   pkgs.symlinkJoin {
     name = "nixvim";
     paths =
-      [config.finalPackage]
+      [
+        config.finalPackage
+        config.printInitPackage
+      ]
       ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
     meta.mainProgram = "nvim";
   }

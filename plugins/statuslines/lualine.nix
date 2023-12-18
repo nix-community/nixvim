@@ -11,12 +11,10 @@ with lib; let
   mkSeparatorsOption = {
     leftDefault ? " ",
     rightDefault ? " ",
-    name,
-  }:
-    helpers.mkCompositeOption "${name} separtors." {
-      left = helpers.defaultNullOpts.mkStr leftDefault "Left separator";
-      right = helpers.defaultNullOpts.mkStr rightDefault "Right separator";
-    };
+  }: {
+    left = helpers.defaultNullOpts.mkStr leftDefault "Left separator";
+    right = helpers.defaultNullOpts.mkStr rightDefault "Right separator";
+  };
 
   mkComponentOptions = defaultName:
     helpers.mkNullOrOption
@@ -36,11 +34,26 @@ with lib; let
               Enables the display of icons alongside the component.
             '';
 
-            icon = helpers.mkNullOrOption types.str ''
-              Defines the icon to be displayed in front of the component.
-            '';
+            icon =
+              helpers.mkNullOrOption
+              (
+                with types;
+                  either
+                  str
+                  (submodule {
+                    freeformType = attrsOf anything;
 
-            separator = mkSeparatorsOption {name = "Component";};
+                    options = {
+                      icon = mkOption {
+                        type = str;
+                        description = "Icon character.";
+                      };
+                    };
+                  })
+              )
+              "Defines the icon to be displayed in front of the component.";
+
+            separator = mkSeparatorsOption {};
 
             color = helpers.mkNullOrOption (types.attrsOf types.str) ''
               Defines a custom color for the component.
@@ -77,15 +90,14 @@ with lib; let
       ))
     "";
 
-  mkEmptySectionOption = name:
-    helpers.mkCompositeOption name {
-      lualine_a = mkComponentOptions "";
-      lualine_b = mkComponentOptions "";
-      lualine_c = mkComponentOptions "";
-      lualine_x = mkComponentOptions "";
-      lualine_y = mkComponentOptions "";
-      lualine_z = mkComponentOptions "";
-    };
+  mkEmptySectionOption = name: {
+    lualine_a = mkComponentOptions "";
+    lualine_b = mkComponentOptions "";
+    lualine_c = mkComponentOptions "";
+    lualine_x = mkComponentOptions "";
+    lualine_y = mkComponentOptions "";
+    lualine_z = mkComponentOptions "";
+  };
 in {
   options = {
     plugins.lualine = {
@@ -104,16 +116,14 @@ in {
       componentSeparators = mkSeparatorsOption {
         leftDefault = "";
         rightDefault = "";
-        name = "component";
       };
 
       sectionSeparators = mkSeparatorsOption {
         leftDefault = "";
         rightDefault = "";
-        name = "section";
       };
 
-      disabledFiletypes = helpers.mkCompositeOption "Filetypes to disable lualine for." {
+      disabledFiletypes = {
         statusline = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
           Only ignores the ft for statusline.
         '';
@@ -142,23 +152,15 @@ in {
         This feature is only available in neovim 0.7 and higher.
       '';
 
-      refresh =
-        helpers.mkCompositeOption
-        ''
-          Sets how often lualine should refresh it's contents (in ms).
-          The refresh option sets minimum time that lualine tries to maintain between refresh.
-          It's not guarantied if situation arises that lualine needs to refresh itself before this
-          time it'll do it.
-        ''
-        {
-          statusline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
+      refresh = {
+        statusline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
 
-          tabline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
+        tabline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
 
-          winbar = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
-        };
+        winbar = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
+      };
 
-      sections = helpers.mkCompositeOption "Sections configuration" {
+      sections = {
         lualine_a = mkComponentOptions "mode";
         lualine_b = mkComponentOptions "branch";
         lualine_c = mkComponentOptions "filename";
@@ -168,7 +170,7 @@ in {
         lualine_z = mkComponentOptions "location";
       };
 
-      inactiveSections = helpers.mkCompositeOption "Inactive Sections configuration" {
+      inactiveSections = {
         lualine_a = mkComponentOptions "";
         lualine_b = mkComponentOptions "";
         lualine_c = mkComponentOptions "filename";
@@ -211,7 +213,11 @@ in {
       mergeAttrs
       {
         "__unkeyed" = name;
-        inherit icons_enabled icon separator color padding;
+        icon =
+          if isAttrs icon
+          then removeAttrs (icon // {"__unkeyed" = icon.icon;}) ["icon"]
+          else icon;
+        inherit icons_enabled separator color padding;
       }
       extraConfig;
     processSections = mapAttrs (_: mapNullable (map processComponent));
@@ -226,11 +232,11 @@ in {
         always_divide_middle = cfg.alwaysDivideMiddle;
       };
 
-      sections = mapNullable processSections cfg.sections;
-      inactive_sections = mapNullable processSections cfg.inactiveSections;
-      tabline = mapNullable processSections cfg.tabline;
-      winbar = mapNullable processSections cfg.winbar;
-      inactive_winbar = mapNullable processSections cfg.inactiveWinbar;
+      sections = processSections cfg.sections;
+      inactive_sections = processSections cfg.inactiveSections;
+      tabline = processSections cfg.tabline;
+      winbar = processSections cfg.winbar;
+      inactive_winbar = processSections cfg.inactiveWinbar;
     };
   in
     mkIf cfg.enable {

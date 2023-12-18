@@ -5,11 +5,6 @@
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    beautysh = {
-      url = "github:lovesegfault/beautysh";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,6 +78,10 @@
             // {
               lib-tests = import ./tests/lib-tests.nix {
                 inherit (pkgs) pkgs lib;
+              };
+              extra-args-tests = import ./tests/extra-args.nix {
+                inherit pkgs;
+                inherit (self.legacyPackages.${system}) makeNixvimWithModule;
               };
               pre-commit-check = pre-commit-hooks.lib.${system}.run {
                 src = ./.;

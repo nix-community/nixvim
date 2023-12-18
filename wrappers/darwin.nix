@@ -28,7 +28,10 @@ in {
   config = mkIf cfg.enable (mkMerge [
     {
       environment.systemPackages =
-        [cfg.finalPackage]
+        [
+          cfg.finalPackage
+          cfg.printInitPackage
+        ]
         ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
     }
     {

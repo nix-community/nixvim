@@ -35,7 +35,7 @@ in {
         Automatically call RustReloadWorkspace when writing to a Cargo.toml file.
       '';
 
-      inlayHints = helpers.mkCompositeOption "inlay hints" {
+      inlayHints = {
         auto = helpers.defaultNullOpts.mkBool true "automatically set inlay hints (type hints)";
 
         onlyCurrentLine = helpers.defaultNullOpts.mkBool false "Only show for current line";
@@ -71,7 +71,7 @@ in {
         highlight = helpers.defaultNullOpts.mkStr "Comment" "The color of the hints";
       };
 
-      hoverActions = helpers.mkCompositeOption "hover actions" {
+      hoverActions = {
         border =
           helpers.defaultNullOpts.mkBorder ''
             [
@@ -100,7 +100,7 @@ in {
           "whether the hover action window gets automatically focused";
       };
 
-      crateGraph = helpers.mkCompositeOption "create graph" {
+      crateGraph = {
         backend = helpers.defaultNullOpts.mkStr "x11" ''
           Backend used for displaying the graph
           see: https://graphviz.org/docs/outputs/
@@ -146,34 +146,30 @@ in {
             on_initialized = helpers.mkRaw cfg.onInitialized;
 
             reload_workspace_from_cargo_toml = cfg.reloadWorkspaceFromCargoToml;
-            inlay_hints = with cfg.inlayHints;
-              helpers.ifNonNull' cfg.inlayHints {
-                inherit auto;
-                only_current_line = onlyCurrentLine;
-                show_parameter_hints = showParameterHints;
-                parameter_hints_prefix = parameterHintsPrefix;
-                other_hints_prefix = otherHintsPrefix;
-                max_len_align = maxLenAlign;
-                max_len_align_padding = maxLenAlignPadding;
-                right_align = rightAlign;
-                right_align_padding = rightAlignPadding;
-                inherit highlight;
-              };
+            inlay_hints = with cfg.inlayHints; {
+              inherit auto;
+              only_current_line = onlyCurrentLine;
+              show_parameter_hints = showParameterHints;
+              parameter_hints_prefix = parameterHintsPrefix;
+              other_hints_prefix = otherHintsPrefix;
+              max_len_align = maxLenAlign;
+              max_len_align_padding = maxLenAlignPadding;
+              right_align = rightAlign;
+              right_align_padding = rightAlignPadding;
+              inherit highlight;
+            };
 
-            hover_actions = with cfg.hoverActions;
-              helpers.ifNonNull' cfg.hoverActions
-              {
-                inherit border;
-                max_width = maxWidth;
-                max_height = maxHeight;
-                auto_focus = autoFocus;
-              };
+            hover_actions = with cfg.hoverActions; {
+              inherit border;
+              max_width = maxWidth;
+              max_height = maxHeight;
+              auto_focus = autoFocus;
+            };
 
-            crate_graph = with cfg.crateGraph;
-              helpers.ifNonNull' cfg.crateGraph {
-                inherit backend output full;
-                enabled_graphviz_backends = enabledGraphvizBackends;
-              };
+            crate_graph = with cfg.crateGraph; {
+              inherit backend output full;
+              enabled_graphviz_backends = enabledGraphvizBackends;
+            };
           };
           server = {
             inherit (cfg.server) standalone;

@@ -38,20 +38,28 @@ in {
         '';
 
       formatOnSave =
-        helpers.defaultNullOpts.mkNullable (types.submodule {
-          options = {
-            lspFallback = mkOption {
-              type = types.bool;
-              default = true;
-              description = "See :help conform.format for details.";
-            };
-            timeoutMs = mkOption {
-              type = types.int;
-              default = 500;
-              description = "See :help conform.format for details.";
-            };
-          };
-        })
+        helpers.defaultNullOpts.mkNullable
+        (
+          with types;
+            either
+            str
+            (
+              submodule {
+                options = {
+                  lspFallback = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = "See :help conform.format for details.";
+                  };
+                  timeoutMs = mkOption {
+                    type = types.int;
+                    default = 500;
+                    description = "See :help conform.format for details.";
+                  };
+                };
+              }
+            )
+        )
         "see documentation"
         ''
           If this is set, Conform will run the formatter on save.
@@ -96,12 +104,15 @@ in {
     setupOptions = with cfg;
       {
         formatters_by_ft = formattersByFt;
-        format_on_save = helpers.ifNonNull' formatOnSave {
-          lsp_fallback = formatOnSave.lspFallback;
-          timeout_ms = formatOnSave.timeoutMs;
-        };
-        format_after_save = helpers.ifNonNull' formatOnSave {
-          lsp_fallback = formatOnSave.lspFallback;
+        format_on_save =
+          if builtins.isAttrs formatOnSave
+          then {
+            lsp_fallback = formatOnSave.lspFallback;
+            timeout_ms = formatOnSave.timeoutMs;
+          }
+          else helpers.mkRaw formatOnSave;
+        format_after_save = helpers.ifNonNull' formatAfterSave {
+          lsp_fallback = formatAfterSave.lspFallback;
         };
         log_level = helpers.ifNonNull' logLevel (helpers.mkRaw "vim.log.levels.${logLevel}");
         notify_on_error = notifyOnError;

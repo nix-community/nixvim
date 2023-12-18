@@ -61,7 +61,9 @@
         };
         # rootDir
         typst-lsp = {
-          enable = true;
+          # As of 2023-12-13, typst-lsp is broken
+          # TODO: re-enable this test when fixed
+          enable = false;
           rootDir = ''
             require 'lspconfig.util'.root_pattern('.git', 'main.typ')
           '';
@@ -75,6 +77,7 @@
       enable = true;
 
       servers = {
+        ansiblels.enable = true;
         astro.enable = true;
         bashls.enable = true;
         biome.enable = true;
@@ -88,6 +91,7 @@
         dartls.enable = true;
         denols.enable = true;
         digestif.enable = true;
+        dockerls.enable = true;
         efm.enable = true;
         elmls.enable = true;
         emmet_ls.enable = true;
@@ -95,10 +99,10 @@
         elixirls.enable = true;
         # pkgs.fsautocomplete only supports linux platforms
         fsautocomplete.enable = pkgs.stdenv.isLinux;
-        # As of 2023/10/21, futhark is broken
-        # TODO: test and uncomment if it gets fixed
-        # futhark-lsp.enable = true;
+        futhark-lsp.enable = true;
+        gleam.enable = true;
         gopls.enable = true;
+        graphql.enable = true;
         hls.enable = true;
         html.enable = true;
         java-language-server.enable = true;
@@ -112,9 +116,11 @@
         nil_ls.enable = true;
         nixd.enable = true;
         omnisharp.enable = true;
+        perlpls.enable = true;
         pest_ls.enable = true;
         prismals.enable = true;
         pylsp.enable = true;
+        pylyzer.enable = true;
         pyright.enable = true;
         rnix-lsp.enable = true;
         ruff-lsp.enable = true;
@@ -123,14 +129,19 @@
           installCargo = true;
           installRustc = true;
         };
-        sourcekit.enable = true;
+        solargraph.enable = true;
+        # As of 2023-12-13, sourcekit-lsp is broken
+        # TODO: re-enable this test when fixed
+        sourcekit.enable = false;
         svelte.enable = true;
         tailwindcss.enable = true;
         taplo.enable = true;
         terraformls.enable = true;
         texlab.enable = true;
         tsserver.enable = true;
-        typst-lsp.enable = true;
+        # As of 2023-12-13, typst-lsp is broken
+        # TODO: re-enable this test when fixed
+        typst-lsp.enable = false;
         vls.enable = true;
         vuels.enable = true;
         yamlls.enable = true;

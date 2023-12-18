@@ -78,6 +78,7 @@
     ./lsp/lsp-lines.nix
     ./lsp/nvim-lightbulb.nix
     ./lsp/trouble.nix
+    ./lsp/wtf.nix
 
     ./none-ls
 

@@ -10,6 +10,12 @@ with lib; let
 
   servers = [
     {
+      name = "ansiblels";
+      description = "Enable ansiblels, for Ansible";
+      package = pkgs.ansible-language-server;
+      cmd = cfg: ["${cfg.package}/bin/ansible-language-server" "--stdio"];
+    }
+    {
       name = "astro";
       description = "Enable astrols, for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
@@ -159,6 +165,12 @@ with lib; let
       package = pkgs.lua54Packages.digestif;
     }
     {
+      name = "dockerls";
+      description = "Enable dockerls, for Dockerfile";
+      package = pkgs.dockerfile-language-server-nodejs;
+      cmd = cfg: ["${cfg.package}/bin/docker-langserver" "--stdio"];
+    }
+    {
       name = "efm";
       description = "Enable efm-langserver, for misc tools";
       package = pkgs.efm-langserver;
@@ -202,8 +214,17 @@ with lib; let
       package = null;
     }
     {
+      name = "gleam";
+      description = "Enable gleam, for gleam.";
+    }
+    {
       name = "gopls";
       description = "Enable gopls, for Go.";
+    }
+    {
+      name = "graphql";
+      description = "Enable graphql, for GraphQL.";
+      package = pkgs.nodePackages.graphql-language-service-cli;
     }
     {
       name = "hls";
@@ -427,6 +448,11 @@ with lib; let
       };
     }
     {
+      name = "perlpls";
+      description = "Enable PLS, for Perl";
+      package = pkgs.perlPackages.PLS;
+    }
+    {
       name = "pest_ls";
       description = "Enable pest_ls, for pest";
       package = pkgs.pest-ide-tools;
@@ -446,6 +472,10 @@ with lib; let
       description = "Enable pylsp, for Python.";
       package = pkgs.python3Packages.python-lsp-server;
       settings = cfg: {pylsp = cfg;};
+    }
+    {
+      name = "pylyzer";
+      description = "Enable pylyzer, for Python.";
     }
     {
       name = "pyright";
@@ -469,6 +499,11 @@ with lib; let
 
       settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
       settings = cfg: {rust-analyzer = cfg;};
+    }
+    {
+      name = "solargraph";
+      description = "Enable solargraph, for Ruby";
+      package = pkgs.rubyPackages.solargraph;
     }
     {
       name = "sourcekit";

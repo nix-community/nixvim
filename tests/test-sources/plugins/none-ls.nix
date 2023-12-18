@@ -16,6 +16,7 @@
 
   with-lsp-format = {
     plugins = {
+      lsp.enable = true;
       lsp-format.enable = true;
       none-ls = {
         enable = true;
@@ -55,6 +56,7 @@
           statix.enable = true;
         };
         diagnostics = {
+          ansiblelint.enable = true;
           cppcheck.enable = true;
           deadnix.enable = true;
           eslint.enable = true;
@@ -63,6 +65,7 @@
           gitlint.enable = true;
           golangci_lint.enable = true;
           ktlint.enable = true;
+          markdownlint.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
           vale.enable = true;
@@ -73,6 +76,8 @@
           luacheck.enable = true;
           mypy.enable = true;
           pylint.enable = true;
+          write_good.enable = true;
+          yamllint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
@@ -99,6 +104,8 @@
           protolint.enable = true;
           rustfmt.enable = true;
           sqlfluff.enable = true;
+          trim_newlines.enable = true;
+          trim_whitespace.enable = true;
         };
       };
     };
