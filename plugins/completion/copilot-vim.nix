@@ -22,12 +22,10 @@ in {
         type = types.attrsOf types.bool;
         description = "A dictionary mapping file types to their enabled status";
         default = {};
-        example = literalExpression ''
-          {
-            "*" = false;
-            python = true;
-          }
-        '';
+        example = {
+          "*" = false;
+          python = true;
+        };
       };
 
       proxy = helpers.defaultNullOpts.mkStr "" ''
