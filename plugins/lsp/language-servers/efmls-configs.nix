@@ -49,6 +49,7 @@ with lib; let
       nixfmt
       php
       prettierd
+      prettypst
       proselint
       protolint
       pylint
