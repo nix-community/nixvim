@@ -147,6 +147,7 @@
     ./utils/specs.nix
     ./utils/spider.nix
     ./utils/startify.nix
+    ./utils/startup.nix
     ./utils/surround.nix
     ./utils/tmux-navigator.nix
     ./utils/todo-comments.nix
