@@ -156,6 +156,7 @@
     ./utils/vim-matchup.nix
     ./utils/which-key.nix
     ./utils/wilder.nix
+    ./utils/yanky.nix
     ./utils/zk.nix
   ];
 }
