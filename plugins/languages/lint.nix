@@ -297,6 +297,6 @@ in {
         )
       );
 
-    # autoCmd = optional (cfg.autoCmd != null) cfg.autoCmd;
+    autoCmd = optional (cfg.autoCmd != null) cfg.autoCmd;
   };
 }
