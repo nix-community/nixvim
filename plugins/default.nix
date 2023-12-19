@@ -43,6 +43,7 @@
     ./git/neogit.nix
 
     ./languages/clangd-extensions.nix
+    ./languages/debugprint.nix
     ./languages/julia/julia-cell.nix
     ./languages/lean.nix
     ./languages/ledger.nix
