@@ -61,9 +61,7 @@
         };
         # rootDir
         typst-lsp = {
-          # As of 2023-12-13, typst-lsp is broken
-          # TODO: re-enable this test when fixed
-          enable = false;
+          enable = true;
           rootDir = ''
             require 'lspconfig.util'.root_pattern('.git', 'main.typ')
           '';
@@ -139,9 +137,7 @@
         terraformls.enable = true;
         texlab.enable = true;
         tsserver.enable = true;
-        # As of 2023-12-13, typst-lsp is broken
-        # TODO: re-enable this test when fixed
-        typst-lsp.enable = false;
+        typst-lsp.enable = true;
         vls.enable = true;
         vuels.enable = true;
         yamlls.enable = true;
