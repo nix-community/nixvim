@@ -56,12 +56,16 @@ in {
         type = types.listOf types.str;
         description = "A list of enabled extensions. Don't use this directly";
         default = [];
+        internal = true;
+        visible = false;
       };
 
       extensionConfig = mkOption {
         type = types.attrsOf types.anything;
         description = "Configuration for the extensions. Don't use this directly";
         default = {};
+        internal = true;
+        visible = false;
       };
 
       defaults = mkOption {
