@@ -8,6 +8,7 @@
       enable = true;
 
       createKeymaps = true;
+      createCommands = true;
       moveToDebugline = false;
       displayCounter = true;
       displaySnippet = true;
