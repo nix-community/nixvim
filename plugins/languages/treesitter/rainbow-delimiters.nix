@@ -6,25 +6,6 @@
   ...
 }:
 with lib; {
-  # TODO those warnings have been added XX/XX/2023
-  # -> Remove them in ~ 1 month (oct. 2023)
-  imports =
-    mapAttrsToList
-    (
-      old: new:
-        mkRenamedOptionModule
-        ["plugins" "treesitter-rainbow" old]
-        ["plugins" "rainbow-delimiters" new]
-    )
-    {
-      enable = "enable";
-      package = "package";
-      strategy = "strategy";
-      query = "query";
-      disable = "blacklist";
-      hlgroups = "highlight";
-    };
-
   options.plugins.rainbow-delimiters =
     helpers.extraOptionsOptions
     // {
