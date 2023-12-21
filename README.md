@@ -1,6 +1,6 @@
 <h2 align="center">
   <picture>
-    <img src="assets/nixvim_logo.png" />
+    <img src="assets/nixvim_logo.svg" />
   </picture>
 
   <a href="https://nix-community.github.io/nixvim">Documentation</a> |
