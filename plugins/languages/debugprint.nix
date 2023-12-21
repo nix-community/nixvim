@@ -15,6 +15,10 @@ in {
 
       package = helpers.mkPackageOption "debugprint.nvim" pkgs.vimPlugins.debugprint-nvim;
 
+      createCommands = helpers.defaultNullOpts.mkBool true ''
+        Creates default commands.
+      '';
+
       createKeymaps = helpers.defaultNullOpts.mkBool true ''
         Creates default keymappings.
       '';
@@ -96,6 +100,7 @@ in {
     extraConfigLua = let
       setupOptions = with cfg;
         {
+          create_commands = createCommands;
           create_keymaps = createKeymaps;
           move_to_debugline = moveToDebugline;
           display_counter = displayCounter;
