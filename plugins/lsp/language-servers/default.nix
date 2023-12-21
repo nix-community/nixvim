@@ -394,6 +394,11 @@ with lib; let
       settings = cfg: {nixd = cfg;};
     }
     {
+      name = "ols";
+      description = "Enable ols, for the odin programming language";
+      package = pkgs.ols;
+    }
+    {
       name = "omnisharp";
       description = "Enable omnisharp language server, for C#";
       package = pkgs.omnisharp-roslyn;
