@@ -113,6 +113,7 @@
         metals.enable = true;
         nil_ls.enable = true;
         nixd.enable = true;
+        odin.enable = true;
         omnisharp.enable = true;
         perlpls.enable = true;
         pest_ls.enable = true;
