@@ -100,7 +100,7 @@ in {
     extraConfigLua = let
       setupOptions = with cfg;
         {
-          create_command = createCommands;
+          create_commands = createCommands;
           create_keymaps = createKeymaps;
           move_to_debugline = moveToDebugline;
           display_counter = displayCounter;
