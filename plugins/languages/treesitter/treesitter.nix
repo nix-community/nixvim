@@ -165,7 +165,7 @@ in {
         + ''
           require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
         ''
-        + (optionalString (cfg.languageRegister != null) ''
+        + (optionalString (cfg.languageRegister != {}) ''
           __parserFiltypeMappings = ${helpers.toLuaObject cfg.languageRegister}
 
           for parser_name, ft in pairs(__parserFiltypeMappings) do
