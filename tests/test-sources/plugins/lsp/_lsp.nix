@@ -113,7 +113,7 @@
         metals.enable = true;
         nil_ls.enable = true;
         nixd.enable = true;
-        ols.enable = true;
+        ols.enable = pkgs.stdenv.hostPlatform.system != "aarch64-linux";
         omnisharp.enable = true;
         perlpls.enable = true;
         pest_ls.enable = true;
