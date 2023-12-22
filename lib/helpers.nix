@@ -1,5 +1,6 @@
 {lib, ...}:
 with lib; rec {
+  maintainers = import ./maintainers.nix;
   keymaps = import ./keymap-helpers.nix {inherit lib;};
   autocmd = import ./autocmd-helpers.nix {inherit lib;};
 
