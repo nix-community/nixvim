@@ -39,6 +39,7 @@
             };
           }
 
+          (pkgs.path + "/nixos/modules/misc/meta.nix")
           # ./plugins/default.nix
         ];
 
