@@ -356,7 +356,8 @@ in {
 
         overrides =
           helpers.defaultNullOpts.mkNullable
-          (with types; listOf (either bool str))
+          (types.listOf
+            (types.oneOf [types.bool types.str helpers.rawType]))
           "[true]"
           ''
             Specifies a list of alternate or supplemental command-line options.
