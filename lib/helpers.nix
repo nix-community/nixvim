@@ -118,7 +118,9 @@ with lib; rec {
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
-  defaultNullOpts = rec {
+  defaultNullOpts = let
+    maybeRaw = t: lib.types.either t rawType;
+  in rec {
     mkNullable = type: default: desc:
       mkNullOrOption type (
         let
@@ -133,21 +135,31 @@ with lib; rec {
           ''
       );
 
-    mkNum = default: mkNullable lib.types.number (toString default);
-    mkInt = default: mkNullable lib.types.int (toString default);
+    # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
+    # documentation
+    mkNullableWithRaw = type: mkNullable (maybeRaw type);
+
+    mkNum = default: mkNullable (maybeRaw lib.types.number) (toString default);
+    mkInt = default: mkNullable (maybeRaw lib.types.int) (toString default);
     # Positive: >0
-    mkPositiveInt = default: mkNullable lib.types.ints.positive (toString default);
+    mkPositiveInt = default: mkNullable (maybeRaw lib.types.ints.positive) (toString default);
     # Unsigned: >=0
-    mkUnsignedInt = default: mkNullable lib.types.ints.unsigned (toString default);
+    mkUnsignedInt = default: mkNullable (maybeRaw lib.types.ints.unsigned) (toString default);
     mkBool = default:
-      mkNullable lib.types.bool (
+      mkNullable (maybeRaw lib.types.bool) (
         if default
         then "true"
         else "false"
       );
     mkStr = default: mkNullable lib.types.str ''${builtins.toString default}'';
     mkAttributeSet = default: mkNullable lib.types.attrs ''${default}'';
-    mkEnum = enum: default: mkNullable (lib.types.enum enum) ''"${default}"'';
+    # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
+    # documentation
+    mkListOf = ty: default: mkNullable (lib.types.listOf (maybeRaw ty)) default;
+    # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
+    # documentation
+    mkAttrsOf = ty: default: mkNullable (lib.types.attrsOf (maybeRaw ty)) default;
+    mkEnum = enum: default: mkNullable (maybeRaw (lib.types.enum enum)) ''"${default}"'';
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
     mkBorder = default: name: desc:
       mkNullable
