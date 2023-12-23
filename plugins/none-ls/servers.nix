@@ -131,6 +131,9 @@ with lib; let
       goimports = {
         package = pkgs.gotools;
       };
+      golines = {
+        package = pkgs.golines;
+      };
       isort = {
         package = pkgs.isort;
       };
