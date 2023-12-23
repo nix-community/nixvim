@@ -92,6 +92,7 @@
           fourmolu.enable = true;
           gofmt.enable = true;
           goimports.enable = true;
+          golines.enable = true;
           ktlint.enable = true;
           nixfmt.enable = true;
           nixpkgs_fmt.enable = true;
