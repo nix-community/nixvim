@@ -78,6 +78,9 @@ with lib; let
       shellcheck = {
         package = pkgs.shellcheck;
       };
+      staticcheck = {
+        pacakge = pkgs.go-tools;
+      };
       statix = {
         package = pkgs.statix;
       };
