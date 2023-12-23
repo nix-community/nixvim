@@ -128,6 +128,9 @@ with lib; let
       gofmt = {
         package = pkgs.go;
       };
+      goimports = {
+        package = pkgs.gotools;
+      };
       isort = {
         package = pkgs.isort;
       };
