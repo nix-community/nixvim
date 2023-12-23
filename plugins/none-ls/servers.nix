@@ -72,6 +72,9 @@ with lib; let
       pylint = {
         package = pkgs.pylint;
       };
+      revive = {
+        pacakge = pkgs.revive;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
       };

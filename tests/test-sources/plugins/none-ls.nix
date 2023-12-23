@@ -72,6 +72,7 @@
           vulture.enable = true;
           alex.enable = true;
           protolint.enable = true;
+          revive.enable = true;
           hadolint.enable = true;
           luacheck.enable = true;
           mypy.enable = true;
