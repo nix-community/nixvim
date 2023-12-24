@@ -105,6 +105,7 @@
           isort.enable = true;
           jq.enable = true;
           markdownlint.enable = true;
+          pint.enable = true;
           protolint.enable = true;
           rustfmt.enable = true;
           sqlfluff.enable = true;
