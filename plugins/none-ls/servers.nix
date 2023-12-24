@@ -152,6 +152,7 @@ with lib; let
       nixpkgs_fmt = {
         package = pkgs.nixpkgs-fmt;
       };
+      pint = {};
       phpcbf = {
         package = pkgs.phpPackages.phpcbf;
       };
