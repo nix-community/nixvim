@@ -14,9 +14,9 @@ in {
       enable = mkEnableOption "rust tools plugins";
       package = helpers.mkPackageOption "rust-tools" pkgs.vimPlugins.rust-tools-nvim;
       serverPackage = mkOption {
-        type = types.package;
+        type = with types; nullOr package;
         default = pkgs.rust-analyzer;
-        description = "Package to use for rust-analyzer";
+        description = "Package to use for rust-analyzer. rust-analyzer will not be installed if this is set to `null`";
       };
 
       executor =
@@ -133,7 +133,7 @@ in {
     };
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [nvim-lspconfig cfg.package];
-    extraPackages = [cfg.serverPackage];
+    extraPackages = optional (cfg.serverPackage != null) cfg.serverPackage;
 
     plugins.lsp.postConfig = let
       options =
