@@ -4,78 +4,79 @@
   config,
   ...
 }:
-with lib; {
-  options = {
-    options = mkOption {
-      type = types.attrsOf types.anything;
-      default = {};
+with lib; let
+  optionsAttrs = {
+    options = {
+      prettyName = "options";
+      luaVariableName = "options";
+      luaApi = "opt";
       description = "The configuration options, e.g. line numbers";
     };
 
-    globalOptions = mkOption {
-      type = types.attrsOf types.anything;
-      default = {};
+    globalOptions = {
+      prettyName = "global options";
+      luaVariableName = "global_options";
+      luaApi = "opt_global";
       description = "The configuration global options";
     };
 
-    localOptions = mkOption {
-      type = types.attrsOf types.anything;
-      default = {};
+    localOptions = {
+      prettyName = "local options";
+      luaVariableName = "local_options";
+      luaApi = "opt_local";
       description = "The configuration local options";
     };
 
-    globals = mkOption {
-      type = types.attrsOf types.anything;
-      default = {};
+    globals = {
+      prettyName = "globals";
+      luaVariableName = "globals";
+      luaApi = "g";
       description = "Global variables";
     };
   };
+in {
+  options =
+    mapAttrs
+    (
+      _: {description, ...}:
+        mkOption {
+          type = with types; attrsOf anything;
+          default = {};
+          inherit description;
+        }
+    )
+    optionsAttrs;
 
   config = {
     extraConfigLuaPre =
-      optionalString (config.globals != {}) ''
-        -- Set up globals {{{
-        do
-          local nixvim_globals = ${helpers.toLuaObject config.globals}
+      concatLines
+      (
+        mapAttrsToList
+        (
+          optionName: {
+            prettyName,
+            luaVariableName,
+            luaApi,
+            ...
+          }: let
+            varName = "nixvim_${luaVariableName}";
+            optionDefinitions = config.${optionName};
+          in
+            optionalString
+            (optionDefinitions != {})
+            ''
+              -- Set up ${prettyName} {{{
+              do
+                local ${varName} = ${helpers.toLuaObject optionDefinitions}
 
-          for k,v in pairs(nixvim_globals) do
-            vim.g[k] = v
-          end
-        end
-        -- }}}
-      ''
-      + optionalString (config.options != {}) ''
-        -- Set up options {{{
-        do
-          local nixvim_options = ${helpers.toLuaObject config.options}
-
-          for k,v in pairs(nixvim_options) do
-            vim.opt[k] = v
-          end
-        end
-        -- }}}
-      ''
-      + optionalString (config.localOptions != {}) ''
-        -- Set up local options {{{
-        do
-          local nixvim_local_options = ${helpers.toLuaObject config.localOptions}
-
-          for k,v in pairs(nixvim_local_options) do
-            vim.opt_local[k] = v
-          end
-        end
-        -- }}}
-      ''
-      + optionalString (config.globalOptions != {}) ''
-        -- Set up global options {{{
-        do
-          local nixvim_global_options = ${helpers.toLuaObject config.globalOptions}
-
-          for k,v in pairs(nixvim_global_options) do
-            vim.opt_global[k] = v
-          end
-        end
-        -- }}}
-      '';
+                for k,v in pairs(${varName}) do
+                  vim.${luaApi}[k] = v
+                end
+              end
+              -- }}}
+            ''
+        )
+        optionsAttrs
+      );
   };
 }
