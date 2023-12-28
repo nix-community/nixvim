@@ -29,6 +29,8 @@ in {
         description = "Lines to be ignored while comment/uncomment";
         default = null;
       };
+      preHook = helpers.mkNullOrLuaFn "Lua function called before (un)comment.";
+      postHook = helpers.mkNullOrLuaFn "Lua function called after (un)comment.";
       toggler = mkOption {
         type = types.nullOr (types.submodule (_: {
           options = {
@@ -94,6 +96,8 @@ in {
   config = let
     setupOptions = {
       inherit (cfg) padding sticky ignore toggler opleader mappings;
+      pre_hook = cfg.preHook;
+      post_hook = cfg.postHook;
     };
   in
     mkIf cfg.enable {
