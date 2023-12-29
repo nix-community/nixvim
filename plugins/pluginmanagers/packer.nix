@@ -29,9 +29,9 @@ in {
                 helpers.mkNullOrOption str
                 "Specifies an alias under which to install the plugin";
 
-              installer = helpers.mkNullOrOption str "A custom installer";
+              installer = helpers.defaultNullOpts.mkLuaFn "nil" "A custom installer";
 
-              updater = helpers.mkNullOrOption str "A custom updater";
+              updater = helpers.defaultNullOpts.mkLuaFn "nil" "A custom updater";
 
               after =
                 helpers.mkNullOrOption (either str (listOf str))
@@ -157,14 +157,12 @@ in {
         then {
           "__unkeyed" = plugin.name;
 
-          inherit (plugin) disable as;
-
-          installer = helpers.mkRaw plugin.installer;
-
-          updater = helpers.mkRaw plugin.updater;
-
           inherit
             (plugin)
+            disable
+            as
+            installer
+            updater
             after
             rtp
             opt

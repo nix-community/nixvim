@@ -26,7 +26,7 @@ in {
 
     includeConfigs = helpers.defaultNullOpts.mkBool true "Add default configurations.";
 
-    resolvePython = helpers.mkNullOrOption types.str ''
+    resolvePython = helpers.defaultNullOpts.mkLuaFn "null" ''
       Function to resolve path to python to use for program or test execution.
       By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
     '';
@@ -75,7 +75,7 @@ in {
             table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
           '')
           + (optionalString (cfg.resolvePython != null) ''
-            require("dap-python").resolve_python = ${toLuaObject (mkRaw cfg.resolvePython)}
+            require("dap-python").resolve_python = ${toLuaObject cfg.resolvePython}
           '')
           + (optionalString (cfg.testRunner != null) ''
             require("dap-python").test_runner = ${toLuaObject cfg.testRunner};

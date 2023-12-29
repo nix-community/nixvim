@@ -155,7 +155,7 @@ in {
         };
 
         format =
-          helpers.defaultNullOpts.mkStr ''
+          helpers.defaultNullOpts.mkLuaFn ''
             format = function(opts)
               return { { opts.match.label, opts.hl_group } }
             end
@@ -186,7 +186,7 @@ in {
         };
       };
 
-      action = helpers.mkNullOrOption types.str ''
+      action = helpers.defaultNullOpts.mkLuaFn "nil" ''
         action to perform when picking a label.
         defaults to the jumping logic depending on the mode.
         @type fun(match:Flash.Match, state:Flash.State)
@@ -198,7 +198,7 @@ in {
         When `true`, flash will try to continue the last search
       '';
 
-      config = helpers.mkNullOrOption types.str ''
+      config = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Set config to a function to dynamically change the config
         @type fun(opts:Flash.Config)
       '';
@@ -298,7 +298,7 @@ in {
               '';
 
             charActions =
-              helpers.defaultNullOpts.mkStr ''
+              helpers.defaultNullOpts.mkLuaFn ''
                 function(motion)
                   return {
                     [";"] = "next", -- set to right to always go right
@@ -406,14 +406,12 @@ in {
         rainbow = {
           inherit (c.label.rainbow) enabled shade;
         };
-        format = helpers.mkRaw c.label.format;
+        inherit (c.label) format;
       };
       highlight = {
         inherit (c.highlight) backdrop matches priority groups;
       };
-      action = helpers.mkRaw c.action;
-      inherit (c) pattern continue;
-      config = helpers.mkRaw c.config;
+      inherit (c) action pattern continue config;
       prompt = {
         inherit (c.prompt) enabled prefix;
         win_config = c.prompt.winConfig;
@@ -443,8 +441,7 @@ in {
               inherit (c) enabled autohide;
               jump_labels = c.jumpLabels;
               multi_line = c.multiLine;
-              inherit (c) keys;
-              char_actions = helpers.mkRaw c.charActions;
+              inherit (c) keys charActions;
             });
           treesitter = mkModeConfig cfg.modes.treesitter (c: {});
           treesitter_search = mkModeConfig cfg.modes.treesitterSearch (c: {});

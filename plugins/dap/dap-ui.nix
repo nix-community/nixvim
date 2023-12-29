@@ -186,7 +186,7 @@ in {
         maxValueLines = helpers.defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
       };
 
-      selectWindow = helpers.mkNullOrOption types.str ''
+      selectWindow = helpers.defaultNullOpts.mkLuaFn "null" ''
         A function which returns a window to be used for opening buffers such as a stack frame location.
       '';
     };
@@ -212,7 +212,7 @@ in {
           max_value_lines = maxValueLines;
         };
 
-        select_window = helpers.mkRaw selectWindow;
+        select_window = selectWindow;
       }
       // cfg.extraOptions;
   in

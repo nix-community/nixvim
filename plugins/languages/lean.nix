@@ -187,7 +187,7 @@ in {
 
         height = helpers.defaultNullOpts.mkPositiveInt 5 "Height of the window.";
 
-        onLines = helpers.mkNullOrOption types.str ''
+        onLines = helpers.defaultNullOpts.mkLuaFn "nil" ''
           A callback which will be called with (multi-line) stderr output.
 
           e.g., use:
@@ -302,7 +302,7 @@ in {
               enable
               height
               ;
-            on_lines = helpers.mkRaw onLines;
+            on_lines = onLines;
           };
           inherit lsp3;
         }

@@ -30,7 +30,7 @@ with lib; {
       the type of the external input buffer to use
     '';
 
-    postHook = helpers.defaultNullOpts.mkNullable types.str "null" ''
+    postHook = helpers.defaultNullOpts.mkLuaFn "null" ''
       callback to run after renaming, receives the result table (from LSP handler) as an argument
     '';
   };
@@ -43,7 +43,7 @@ with lib; {
       preview_empty_name = cfg.previewEmptyName;
       show_message = cfg.showMessage;
       input_buffer_type = cfg.inputBufferType;
-      post_hook = helpers.mkRaw cfg.postHook;
+      post_hook = cfg.postHook;
     };
   in
     mkIf cfg.enable {

@@ -137,17 +137,17 @@ in {
         custom callback for null-ls, or leave this undefined.
       '';
 
-      onInit = helpers.defaultNullOpts.mkStr "null" ''
+      onInit = helpers.defaultNullOpts.mkLuaFn "null" ''
         Defines an `on_init` callback to run when null-ls initializes. From here, you
         can make changes to the client (the first argument) or `initialize_result` (the
         second argument, which as of now is not used).
       '';
 
-      onExit = helpers.defaultNullOpts.mkStr "null" ''
+      onExit = helpers.defaultNullOpts.mkLuaFn "null" ''
         Defines an `on_exit` callback to run when the null-ls client exits.
       '';
 
-      rootDir = helpers.defaultNullOpts.mkStr "null" ''
+      rootDir = helpers.defaultNullOpts.mkLuaFn "null" ''
         Determines the root of the null-ls server. On startup, null-ls will call
         `root_dir` with the full path to the first file that null-ls attaches to.
 
@@ -161,7 +161,7 @@ in {
         directory.
       '';
 
-      shouldAttach = helpers.defaultNullOpts.mkStr "null" ''
+      shouldAttach = helpers.defaultNullOpts.mkLuaFn "null" ''
         A user-defined function that controls whether to enable null-ls for a given
         buffer. Receives `bufnr` as its first argument.
 
@@ -257,10 +257,10 @@ in {
           log_level = logLevel;
           notify_format = notifyFormat;
           on_attach = helpers.mkRaw onAttach';
-          on_init = helpers.mkRaw onInit;
-          on_exit = helpers.mkRaw onExit;
-          root_dir = helpers.mkRaw rootDir;
-          should_attach = helpers.mkRaw shouldAttach;
+          on_init = onInit;
+          on_exit = onExit;
+          root_dir = rootDir;
+          should_attach = shouldAttach;
           temp_dir = tempDir;
           update_in_insert = updateInInsert;
 

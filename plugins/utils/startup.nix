@@ -191,7 +191,7 @@ in {
             - if > 1 numbers of column
           '';
 
-        after = helpers.mkNullOrOption types.str ''
+        after = helpers.defaultNullOpts.mkLuaFn "nil" ''
           A function that gets executed at the end.
         '';
 
@@ -312,7 +312,7 @@ in {
         {
           mapping_keys = mappingKeys;
           cursor_column = cursorColumn;
-          after = helpers.mkRaw after;
+          inherit after;
           empty_lines_between_mappings = emptyLinesBetweenMappings;
           disable_statuslines = disableStatuslines;
           inherit paddings;

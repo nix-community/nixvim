@@ -289,7 +289,7 @@ in {
         '';
 
         isHiddenFile =
-          helpers.defaultNullOpts.mkStr
+          helpers.defaultNullOpts.mkLuaFn
           ''
             function(name, bufnr)
               return vim.startswith(name, ".")
@@ -298,7 +298,7 @@ in {
           "This function defines what is considered a 'hidden' file.";
 
         isAlwaysHidden =
-          helpers.defaultNullOpts.mkStr
+          helpers.defaultNullOpts.mkLuaFn
           ''
             function(name, bufnr)
               return false
@@ -381,8 +381,8 @@ in {
         use_default_keymaps = cfg.useDefaultKeymaps;
         view_options = with cfg.viewOptions; {
           show_hidden = showHidden;
-          is_hidden_file = helpers.mkRaw isHiddenFile;
-          is_always_hidden = helpers.mkRaw isAlwaysHidden;
+          is_hidden_file = isHiddenFile;
+          is_always_hidden = isAlwaysHidden;
         };
         float = with cfg.float; {
           inherit padding;

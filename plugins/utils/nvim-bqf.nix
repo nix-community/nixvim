@@ -70,7 +70,7 @@ in {
           Add label of current item buffer at the end of the item line.
         '';
 
-        shouldPreviewCb = helpers.mkNullOrOption types.str ''
+        shouldPreviewCb = helpers.defaultNullOpts.mkLuaFn "nil" ''
           A callback function to decide whether to preview while switching buffer, with
           (bufnr: number, qwinid: number) parameters.
         '';
@@ -135,7 +135,7 @@ in {
           win_vheight = winVheight;
           inherit wrap;
           buf_label = bufLabel;
-          should_preview_cb = helpers.mkRaw shouldPreviewCb;
+          should_preview_cb = shouldPreviewCb;
         };
         func_map = cfg.funcMap;
         filter = {

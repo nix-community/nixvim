@@ -69,7 +69,7 @@ in {
         '';
 
       condition =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(buf)
             local fn = vim.fn
@@ -120,7 +120,7 @@ in {
           cleaning_interval = cleaningInterval;
         };
         trigger_events = cfg.triggerEvents;
-        condition = helpers.mkRaw cfg.condition;
+        inherit (cfg) condition;
         write_all_buffers = cfg.writeAllBuffers;
         debounce_delay = cfg.debounceDelay;
         callbacks = with cfg.callbacks;

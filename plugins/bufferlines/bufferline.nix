@@ -172,7 +172,7 @@ in {
           "Separator style";
 
         nameFormatter =
-          helpers.defaultNullOpts.mkStr "null"
+          helpers.defaultNullOpts.mkLuaFn "null"
           ''
             A lua function that can be used to modify the buffer's label.
             The argument 'buf' containing a name, path and bufnr is supplied.
@@ -191,7 +191,7 @@ in {
         showBufferCloseIcons = helpers.defaultNullOpts.mkBool true "Show buffer close icons";
 
         getElementIcon =
-          helpers.defaultNullOpts.mkStr "null"
+          helpers.defaultNullOpts.mkLuaFn "null"
           ''
             Lua function returning an element icon.
 
@@ -231,7 +231,7 @@ in {
           (with types; either bool (enum ["nvim_lsp" "coc"])) "false" "diagnostics";
 
         diagnosticsIndicator =
-          helpers.defaultNullOpts.mkStr "null"
+          helpers.defaultNullOpts.mkLuaFn "null"
           "Either `null` or a function that returns the diagnistics indicator.";
 
         diagnosticsUpdateInInsert =
@@ -265,7 +265,7 @@ in {
         };
 
         customFilter =
-          helpers.defaultNullOpts.mkStr "null"
+          helpers.defaultNullOpts.mkLuaFn "null"
           ''
             ```
             fun(buf: number, bufnums: number[]): boolean
@@ -299,14 +299,14 @@ in {
           left_trunc_marker = leftTruncMarker;
           right_trunc_marker = rightTruncMarker;
           separator_style = separatorStyle;
-          name_formatter = helpers.mkRaw nameFormatter;
+          name_formatter = nameFormatter;
           truncate_names = truncateNames;
           tab_size = tabSize;
           max_name_length = maxNameLength;
           color_icons = colorIcons;
           show_buffer_icons = showBufferIcons;
           show_buffer_close_icons = showBufferCloseIcons;
-          get_element_icon = helpers.mkRaw getElementIcon;
+          get_element_icon = getElementIcon;
           show_close_icon = showCloseIcon;
           show_tab_indicators = showTabIndicators;
           show_duplicate_prefix = showDuplicatePrefix;
@@ -316,7 +316,7 @@ in {
           max_prefix_length = maxPrefixLength;
           sort_by = sortBy;
           inherit diagnostics;
-          diagnostics_indicator = helpers.mkRaw diagnosticsIndicator;
+          diagnostics_indicator = diagnosticsIndicator;
           diagnostics_update_in_insert = diagnosticsUpdateInInsert;
           inherit offsets;
           groups = {
@@ -336,7 +336,7 @@ in {
           debug = {
             inherit (debug) logging;
           };
-          custom_filter = helpers.mkRaw customFilter;
+          custom_filter = customFilter;
         }
         // cfg.extraOptions;
 
