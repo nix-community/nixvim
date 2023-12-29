@@ -75,7 +75,9 @@ in {
 
       filetypeOverrides =
         helpers.defaultNullOpts.mkNullable
-        (with types; attrsOf (submodule {options = commonOptions;})) "{}" ''
+        (with types; attrsOf (submodule {options = commonOptions;}))
+        "{}"
+        ''
           Filetype specific overrides.
           The keys are strings to represent the filetype.
         '';
