@@ -131,6 +131,7 @@
     ./utils/neorg.nix
     ./utils/neogen.nix
     ./utils/notify.nix
+    ./utils/neotest.nix
     ./utils/netman.nix
     ./utils/nix-develop.nix
     ./utils/nvim-autopairs.nix
