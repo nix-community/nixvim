@@ -153,7 +153,7 @@ in {
         "Used when sorting files and directories in the tree";
 
       sortFunction =
-        helpers.defaultNullOpts.mkStr "nil"
+        helpers.defaultNullOpts.mkLuaFn "nil"
         "Uses a custom function for sorting files and directories in the tree";
 
       usePopupsForInput =
@@ -1041,7 +1041,7 @@ in {
         popup_border_style = popupBorderStyle;
         resize_timer_interval = resizeTimerInterval;
         sort_case_insensitive = sortCaseInsensitive;
-        sort_function = mkRaw sortFunction;
+        sort_function = sortFunction;
         use_popups_for_input = usePopupsForInput;
         use_default_mappings = useDefaultMappings;
         source_selector = with sourceSelector; {

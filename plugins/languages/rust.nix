@@ -24,7 +24,7 @@ in {
         "how to execute terminal commands";
 
       onInitialized =
-        helpers.defaultNullOpts.mkStr "null"
+        helpers.defaultNullOpts.mkLuaFn "null"
         ''
           Callback to execute once rust-analyzer is done initializing the workspace
           The callback receives one parameter indicating the `health` of the server:
@@ -143,7 +143,7 @@ in {
               helpers.ifNonNull' cfg.executor
               (helpers.mkRaw "require(${rust-tools.executors}).${cfg.executor}");
 
-            on_initialized = helpers.mkRaw cfg.onInitialized;
+            on_initialized = cfg.onInitialized;
 
             reload_workspace_from_cargo_toml = cfg.reloadWorkspaceFromCargoToml;
             inlay_hints = with cfg.inlayHints; {

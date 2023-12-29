@@ -81,12 +81,12 @@ in {
                   Restore session for upcoming cwd on cwd change.
                 '';
 
-                preCwdChangedHook = helpers.mkNullOrOption types.str ''
+                preCwdChangedHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
                   lua function hook.
                   This is called after auto_session code runs for the `DirChangedPre` autocmd.
                 '';
 
-                postCwdChangedHook = helpers.mkNullOrOption types.str ''
+                postCwdChangedHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
                   lua function hook.
                   This is called after auto_session code runs for the `DirChanged` autocmd.
                 '';
@@ -160,8 +160,8 @@ in {
           then
             with cfg.cwdChangeHandling; {
               restore_upcoming_session = restoreUpcomingSession;
-              pre_cwd_changed_hook = helpers.mkRaw preCwdChangedHook;
-              post_cwd_changed_hook = helpers.mkRaw postCwdChangedHook;
+              pre_cwd_changed_hook = preCwdChangedHook;
+              post_cwd_changed_hook = postCwdChangedHook;
             }
           else cfg.cwdChangeHandling;
         bypass_session_save_file_types = cfg.bypassSessionSaveFileTypes;

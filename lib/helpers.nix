@@ -140,6 +140,33 @@ with lib; rec {
     # documentation
     mkNullableWithRaw = type: mkNullable (maybeRaw type);
 
+    mkLuaFn = default: desc:
+      lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = let
+          defaultDesc = ''
+            default:
+            ```lua
+            ${default}
+            ```
+          '';
+        in
+          if desc == ""
+          then ''
+            (lua function)
+
+            ${defaultDesc}
+          ''
+          else ''
+            ${desc}
+
+            (lua function)
+
+            ${defaultDesc}
+          '';
+        apply = mkRaw;
+      };
     mkNum = default: mkNullable (maybeRaw lib.types.number) (toString default);
     mkInt = default: mkNullable (maybeRaw lib.types.int) (toString default);
     # Positive: >0

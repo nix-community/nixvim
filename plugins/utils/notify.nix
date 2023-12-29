@@ -71,11 +71,11 @@ in {
           trace = "✎";
         };
 
-      onOpen = helpers.mkNullOrOption types.str ''
+      onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Function called when a new window is opened, use for changing win settings/config.
       '';
 
-      onClose = helpers.mkNullOrOption types.str ''
+      onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Function called when a new window is closed.
       '';
 
@@ -130,8 +130,8 @@ in {
             }
           )
           icons;
-        on_open = helpers.mkRaw onOpen;
-        on_close = helpers.mkRaw onClose;
+        on_open = onOpen;
+        on_close = onClose;
         inherit render;
         minimum_width = minimumWidth;
         inherit fps;

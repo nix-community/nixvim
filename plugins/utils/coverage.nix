@@ -140,7 +140,7 @@ in {
           "Fail text highlight group of the summary pop-up.";
       };
 
-      loadCoverageCb = helpers.mkNullOrOption types.str ''
+      loadCoverageCb = helpers.defaultNullOpts.mkLuaFn "nil" ''
         A lua function that will be called when a coverage file is loaded.
 
         Example:
@@ -278,7 +278,7 @@ in {
           summary_pass = summaryPass;
           summary_fail = summaryFail;
         };
-        load_coverage_cb = helpers.mkRaw loadCoverageCb;
+        load_coverage_cb = loadCoverageCb;
         inherit signs;
         sign_group = signGroup;
         summary = with summary; {

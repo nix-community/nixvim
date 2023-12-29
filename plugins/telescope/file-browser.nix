@@ -78,11 +78,11 @@ in {
       Induces slow-down w/ plenary finder (true if `fd` available).
     '';
 
-    browseFiles = helpers.defaultNullOpts.mkStr "fb_finders.browse_files" ''
+    browseFiles = helpers.defaultNullOpts.mkLuaFn "fb_finders.browse_files" ''
       A custom lua function to override for the file browser.
     '';
 
-    browseFolders = helpers.defaultNullOpts.mkStr "fb_finders.browse_folders" ''
+    browseFolders = helpers.defaultNullOpts.mkLuaFn "fb_finders.browse_folders" ''
       A custom lua function to override for the folder browser.
     '';
 
@@ -151,8 +151,8 @@ in {
         ;
       add_dirs = addDirs;
       auto_depth = autoDepth;
-      browse_files = helpers.mkRaw browseFiles;
-      browse_folders = helpers.mkRaw browseFolders;
+      browse_files = browseFiles;
+      browse_folders = browseFolders;
       collapse_dirs = collapseDirs;
       cwd_to_path = cwdToPath;
       dir_icon = dirIcon;

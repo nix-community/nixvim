@@ -51,14 +51,14 @@ in {
         helpers.defaultNullOpts.mkBool false
         "When true, section headers in the lualine theme will be bold";
       onColors =
-        helpers.defaultNullOpts.mkStr "function(colors) end"
+        helpers.defaultNullOpts.mkLuaFn "function(colors) end"
         ''
           Override specific color groups to use other groups or a hex color.
           function will be called with a ColorScheme table.
           `@param colors ColorScheme`
         '';
       onHighlights =
-        helpers.defaultNullOpts.mkStr "function(highlights, colors) end"
+        helpers.defaultNullOpts.mkLuaFn "function(highlights, colors) end"
         ''
           Override specific highlights to use other groups or a hex color.
           function will be called with a Highlights and ColorScheme table
@@ -79,8 +79,8 @@ in {
         dim_inactive = dimInactive;
         lualine_bold = lualineBold;
         day_brightness = dayBrightness;
-        on_colors = helpers.mkRaw onColors;
-        on_highlights = helpers.mkRaw onHighlights;
+        on_colors = onColors;
+        on_highlights = onHighlights;
       };
     in ''
       require("tokyonight").setup(${helpers.toLuaObject setupOptions})

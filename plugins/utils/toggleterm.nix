@@ -39,27 +39,27 @@ in {
       normal mode.
     '';
 
-    onCreate = helpers.mkNullOrOption types.str ''
+    onCreate = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when the terminal is first created.
     '';
 
-    onOpen = helpers.mkNullOrOption types.str ''
+    onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when the terminal opens.
     '';
 
-    onClose = helpers.mkNullOrOption types.str ''
+    onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when the terminal closes.
     '';
 
-    onStdout = helpers.mkNullOrOption types.str ''
+    onStdout = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Callback for processing output on stdout.
     '';
 
-    onStderr = helpers.mkNullOrOption types.str ''
+    onStderr = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Callback for processing output on stderr.
     '';
 
-    onExit = helpers.mkNullOrOption types.str ''
+    onExit = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when terminal process exits.
     '';
 
@@ -160,7 +160,7 @@ in {
       enabled = helpers.defaultNullOpts.mkBool false "";
 
       nameFormatter =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(term)
             return term.name
@@ -177,12 +177,12 @@ in {
         else helpers.mkRaw size
       );
       open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw "[[${openMapping}]]");
-      on_create = helpers.mkRaw onCreate;
-      on_open = helpers.mkRaw onOpen;
-      on_close = helpers.mkRaw onClose;
-      on_stdout = helpers.mkRaw onStdout;
-      on_stderr = helpers.mkRaw onStderr;
-      on_exit = helpers.mkRaw onExit;
+      on_create = onCreate;
+      on_open = onOpen;
+      on_close = onClose;
+      on_stdout = onStdout;
+      on_stderr = onStderr;
+      on_exit = onExit;
       hide_numbers = hideNumbers;
       shade_filetypes = shadeFiletypes;
       shade_terminals = shadeTerminals;
@@ -197,7 +197,7 @@ in {
       float_opts = floatOpts;
       winbar = with winbar; {
         inherit enabled;
-        name_formatter = helpers.mkRaw nameFormatter;
+        name_formatter = nameFormatter;
       };
     };
   in

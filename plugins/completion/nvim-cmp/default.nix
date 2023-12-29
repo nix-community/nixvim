@@ -212,7 +212,7 @@ in {
           "An array of completion fields to specify their order.";
 
         format =
-          helpers.defaultNullOpts.mkStr
+          helpers.defaultNullOpts.mkLuaFn
           ''
             function(_, vim_item)
               return vim_item
@@ -572,8 +572,7 @@ in {
 
         formatting = with formatting; {
           expandable_indicator = expandableIndicator;
-          inherit fields;
-          format = helpers.mkRaw format;
+          inherit fields format;
         };
 
         matching = with matching; {

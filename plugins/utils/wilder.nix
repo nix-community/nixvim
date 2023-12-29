@@ -175,7 +175,7 @@ in {
         ```
       '';
 
-      renderer = helpers.mkNullOrOption types.str ''
+      renderer = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Sets the renderer to used to display the completions.
         See `|wilder-renderer|`.
 
@@ -190,7 +190,7 @@ in {
         ```
       '';
 
-      preHook = helpers.mkNullOrOption types.str ''
+      preHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
         A function which takes a `ctx`.
         This function is called when wilder starts, or when wilder becomes unhidden.
         See `|wilder-hidden|`.
@@ -198,7 +198,7 @@ in {
         `ctx` contains no keys.
       '';
 
-      postHook = helpers.mkNullOrOption types.str ''
+      postHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
         A function which takes a `ctx`.
         This function is called when wilder stops, or when wilder becomes hidden.
         See `|wilder-hidden|`.
@@ -237,9 +237,9 @@ in {
         pipeline =
           helpers.ifNonNull' pipeline
           (map helpers.mkRaw pipeline);
-        renderer = helpers.mkRaw renderer;
-        preHook = helpers.mkRaw preHook;
-        postHook = helpers.mkRaw postHook;
+        inherit renderer;
+        pre_hook = preHook;
+        post_hook = postHook;
       }
       // cfg.extraOptions;
   in

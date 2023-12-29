@@ -72,9 +72,9 @@ in {
           "Default search engine.";
 
         hooks = {
-          requestStarted = helpers.mkNullOrOption types.str "Callback for request start.";
+          requestStarted = helpers.defaultNullOpts.mkLuaFn "nil" "Callback for request start.";
 
-          requestFinished = helpers.mkNullOrOption types.str "Callback for request finished.";
+          requestFinished = helpers.defaultNullOpts.mkLuaFn "nil" "Callback for request finished.";
         };
 
         winhighlight = helpers.defaultNullOpts.mkStr "Normal:Normal,FloatBorder:FloatBorder" ''
@@ -96,8 +96,8 @@ in {
         additional_instructions = additionalInstructions;
         search_engine = searchEngine;
         hooks = {
-          request_started = helpers.mkRaw hooks.requestStarted;
-          request_finished = helpers.mkRaw hooks.requestFinished;
+          request_started = hooks.requestStarted;
+          request_finished = hooks.requestFinished;
         };
         inherit winhighlight;
       }
