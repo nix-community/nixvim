@@ -10,28 +10,28 @@ with lib; let
       prettyName = "options";
       luaVariableName = "options";
       luaApi = "opt";
-      description = "The configuration options, e.g. line numbers";
+      description = "The configuration options, e.g. line numbers (`vim.opt.*`)";
     };
 
     globalOptions = {
       prettyName = "global options";
       luaVariableName = "global_options";
       luaApi = "opt_global";
-      description = "The configuration global options";
+      description = "The configuration global options (`vim.opt_global.*`)";
     };
 
     localOptions = {
       prettyName = "local options";
       luaVariableName = "local_options";
       luaApi = "opt_local";
-      description = "The configuration local options";
+      description = "The configuration local options (`vim.opt_local.*`)";
     };
 
     globals = {
       prettyName = "globals";
       luaVariableName = "globals";
       luaApi = "g";
-      description = "Global variables";
+      description = "Global variables (`vim.g.*`)";
     };
   };
 in {
