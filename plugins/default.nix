@@ -94,6 +94,7 @@
 
     ./telescope
 
+    ./ui/image.nix
     ./ui/noice.nix
 
     ./utils/alpha.nix
