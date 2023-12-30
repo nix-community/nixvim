@@ -160,7 +160,7 @@ with lib; let
     }
     {
       name = "dhall-lsp-server";
-      description = "Enable dhall-lsp-server, for Dhall.";
+      description = "Enable dhall-lsp-server, for Dhall";
       serverName = "dhall_lsp_server";
     }
     {
