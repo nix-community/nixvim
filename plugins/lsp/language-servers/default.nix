@@ -159,6 +159,11 @@ with lib; let
       package = pkgs.deno;
     }
     {
+      name = "dhall-lsp-server";
+      description = "Enable dhall-lsp-server, for Dhall";
+      serverName = "dhall_lsp_server";
+    }
+    {
       name = "digestif";
       description = "Enable digestif, for LaTeX";
       # luaPackages.digestif is currently broken, using lua54Packages instead

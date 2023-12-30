@@ -88,6 +88,7 @@
         cssls.enable = true;
         dartls.enable = true;
         denols.enable = true;
+        dhall-lsp-server.enable = true;
         digestif.enable = true;
         dockerls.enable = true;
         efm.enable = true;
