@@ -159,9 +159,9 @@ with lib; let
       package = pkgs.deno;
     }
     {
-      name = "dhall_lsp_server";
+      name = "dhall-lsp-server";
       description = "Enable dhall-lsp-server, for Dhall.";
-      package = pkgs.dhall-lsp-server;
+      serverName = "dhall_lsp_server";
     }
     {
       name = "digestif";
