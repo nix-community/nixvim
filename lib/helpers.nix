@@ -144,27 +144,26 @@ with lib; rec {
       lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = let
-          defaultDesc = ''
-            default:
-            ```lua
-            ${default}
-            ```
-          '';
-        in
-          if desc == ""
-          then ''
-            (lua function)
+        description =
+          (
+            optionalString (desc != "") ''
+              ${desc}
 
-            ${defaultDesc}
+            ''
+          )
+          + ''
+
+            (lua function)
           ''
-          else ''
-            ${desc}
+          + (
+            optionalString (default != "") ''
 
-            (lua function)
-
-            ${defaultDesc}
-          '';
+              default:
+              ```lua
+              ${default}
+              ```
+            ''
+          );
         apply = mkRaw;
       };
     mkNum = default: mkNullable (maybeRaw lib.types.number) (toString default);
