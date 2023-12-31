@@ -21,6 +21,7 @@
     ./colorschemes/rose-pine.nix
     ./colorschemes/tokyonight.nix
 
+    ./completion/codeium-vim.nix
     ./completion/copilot-lua.nix
     ./completion/copilot-vim.nix
     ./completion/coq.nix
