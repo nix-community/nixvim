@@ -353,6 +353,11 @@ with lib; let
       settings = cfg: {Lua = cfg;};
     }
     {
+      name = "marksman";
+      description = "Enable marksman, for Markdown";
+      package = pkgs.marksman;
+    }
+    {
       name = "metals";
       description = "Enable metals, for Scala";
     }
