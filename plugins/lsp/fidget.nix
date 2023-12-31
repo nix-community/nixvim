@@ -200,7 +200,7 @@ in {
           '';
 
           notificationGroup =
-            helpers.defaultNullOpts.mkStr
+            helpers.defaultNullOpts.mkLuaFn
             "function(msg) return msg.lsp_name end"
             ''
               How to get a progress message's notification group key
@@ -321,7 +321,7 @@ in {
             '';
 
             formatMessage =
-              helpers.defaultNullOpts.mkStr
+              helpers.defaultNullOpts.mkLua
               "require('fidget.progress.display').default_format_message"
               ''
                 How to format a progress message.
@@ -341,12 +341,12 @@ in {
               '';
 
             formatAnnote =
-              helpers.defaultNullOpts.mkStr
+              helpers.defaultNullOpts.mkLuaFn
               "function(msg) return msg.title end"
               "How to format a progress annotation.";
 
             formatGroupName =
-              helpers.defaultNullOpts.mkStr
+              helpers.defaultNullOpts.mkLuaFn
               "function(group) return tostring(group) end"
               "How to format a progress notification group's name.";
 
@@ -653,7 +653,7 @@ in {
             suppress_on_insert = suppressOnInsert;
             ignore_done_already = ignoreDoneAlready;
             ignore_empty_message = ignoreEmptyMessage;
-            notification_group = helpers.mkRaw notificationGroup;
+            notification_group = notificationGroup;
             clear_on_detach =
               if isString clearOnDetach
               then helpers.mkRaw clearOnDetach
@@ -677,9 +677,9 @@ in {
               icon_style = iconStyle;
               inherit priority;
               skip_history = skipHistory;
-              format_message = helpers.mkRaw formatMessage;
-              format_annote = helpers.mkRaw formatAnnote;
-              format_group_name = helpers.mkRaw formatGroupName;
+              format_message = formatMessage;
+              format_annote = formatAnnote;
+              format_group_name = formatGroupName;
               overrides =
                 helpers.ifNonNull' overrides
                 (

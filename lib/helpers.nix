@@ -119,6 +119,27 @@ with lib; rec {
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
+  mkNullOrLua = desc:
+    lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = desc;
+      apply = mkRaw;
+    };
+
+  mkNullOrLuaFn = desc: let
+    fnDesc = "(lua function)";
+  in
+    mkNullOrLua (
+      if desc == ""
+      then fnDesc
+      else ''
+        ${desc}
+
+        ${fnDesc}
+      ''
+    );
+
   defaultNullOpts = let
     maybeRaw = t: lib.types.either t rawType;
   in rec {
@@ -140,33 +161,34 @@ with lib; rec {
     # documentation
     mkNullableWithRaw = type: mkNullable (maybeRaw type);
 
-    mkLuaFn = default: desc:
-      lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = let
-          defaultDesc = ''
-            default:
-            ```lua
-            ${default}
-            ```
-          '';
-        in
-          if desc == ""
-          then ''
-            (lua function)
+    mkLua = default: desc: let
+      defaultDesc = "default: `${default}`";
+    in
+      mkNullOrLua
+      (
+        if desc == ""
+        then defaultDesc
+        else ''
+          ${desc}
 
-            ${defaultDesc}
-          ''
-          else ''
-            ${desc}
+          ${defaultDesc}
+        ''
+      );
 
-            (lua function)
+    mkLuaFn = default: desc: let
+      defaultDesc = "default: `${default}`";
+    in
+      mkNullOrLuaFn
+      (
+        if desc == ""
+        then defaultDesc
+        else ''
+          ${desc}
 
-            ${defaultDesc}
-          '';
-        apply = mkRaw;
-      };
+          ${defaultDesc}
+        ''
+      );
+
     mkNum = default: mkNullable (maybeRaw lib.types.number) (toString default);
     mkInt = default: mkNullable (maybeRaw lib.types.int) (toString default);
     # Positive: >0
@@ -179,7 +201,7 @@ with lib; rec {
         then "true"
         else "false"
       );
-    mkStr = default: mkNullable lib.types.str ''${builtins.toString default}'';
+    mkStr = default: mkNullable (maybeRaw lib.types.str) ''${builtins.toString default}'';
     mkAttributeSet = default: mkNullable lib.types.attrs ''${default}'';
     # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
     # documentation
