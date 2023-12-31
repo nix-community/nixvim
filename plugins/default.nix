@@ -16,6 +16,7 @@
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
     ./colorschemes/oxocarbon.nix
+    ./colorschemes/palette.nix
     ./colorschemes/poimandres.nix
     ./colorschemes/rose-pine.nix
     ./colorschemes/tokyonight.nix
