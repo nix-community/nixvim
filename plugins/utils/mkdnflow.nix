@@ -219,8 +219,7 @@ in {
         '';
 
         transformExplicit =
-          helpers.defaultNullOpts.mkNullable
-          (with types; either str (enum [false]))
+          helpers.defaultNullOpts.mkStrLuaFnOr (types.enum [false])
           "false"
           ''
             A function that transforms the text to be inserted as the source/path of a link when a
@@ -241,8 +240,7 @@ in {
           '';
 
         transformImplicit =
-          helpers.defaultNullOpts.mkNullable
-          (with types; either str (enum [false]))
+          helpers.defaultNullOpts.mkStrLuaFnOr (types.enum [false])
           ''
             function(text)
                 text = text:gsub(" ", "-")
@@ -578,14 +576,8 @@ in {
             context
             ;
           implicit_extension = implicitExtension;
-          transform_implicit =
-            if isString transformImplicit
-            then helpers.mkRaw transformImplicit
-            else transformImplicit;
-          transform_explicit =
-            if isString transformExplicit
-            then helpers.mkRaw transformExplicit
-            else transformExplicit;
+          transform_implicit = transformImplicit;
+          transform_explicit = transformExplicit;
         };
         to_do = with toDo; {
           inherit symbols;

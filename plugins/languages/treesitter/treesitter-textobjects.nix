@@ -84,21 +84,17 @@ with lib; {
             selection mode per capture, default is `v`(charwise).
           '';
 
-        includeSurroundingWhitespace =
-          helpers.defaultNullOpts.mkNullable
-          (with types; either bool str)
-          "`false`"
-          ''
-            `true` or `false`, when `true` textobjects are extended to include preceding or
-            succeeding whitespace.
+        includeSurroundingWhitespace = helpers.defaultNullOpts.mkStrLuaFnOr types.bool "`false`" ''
+          `true` or `false`, when `true` textobjects are extended to include preceding or
+          succeeding whitespace.
 
-            Can also be a function which gets passed a table with the keys `query_string`
-            (`@function.inner`) and `selection_mode` (`v`) and returns `true` of `false`.
+          Can also be a function which gets passed a table with the keys `query_string`
+          (`@function.inner`) and `selection_mode` (`v`) and returns `true` of `false`.
 
-            If you set this to `true` (default is `false`) then any textobject is extended to
-            include preceding or succeeding whitespace.
-            Succeeding whitespace has priority in order to act similarly to eg the built-in `ap`.
-          '';
+          If you set this to `true` (default is `false`) then any textobject is extended to
+          include preceding or succeeding whitespace.
+          Succeeding whitespace has priority in order to act similarly to eg the built-in `ap`.
+        '';
       };
 
       swap = {
@@ -227,10 +223,7 @@ with lib; {
               ;
             keymaps = processKeymapsOpt keymaps;
             selection_modes = selectionModes;
-            include_surrounding_whitespace =
-              if isString includeSurroundingWhitespace
-              then helpers.mkRaw includeSurroundingWhitespace
-              else includeSurroundingWhitespace;
+            include_surrounding_whitespace = includeSurroundingWhitespace;
           };
           swap = with swap; {
             inherit

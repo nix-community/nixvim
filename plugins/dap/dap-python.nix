@@ -37,7 +37,7 @@ in {
       If neither is found "unittest" is used.
     '';
 
-    testRunners = helpers.mkNullOrOption (types.attrsOf types.str) ''
+    testRunners = helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf strLuaFn) ''
       Set to register test runners.
       Built-in are test runners for unittest, pytest and django.
       The key is the test runner name, the value a function to generate the

@@ -218,8 +218,7 @@ in {
             '';
 
           clearOnDetach =
-            helpers.defaultNullOpts.mkNullable
-            (with types; either str (enum [false]))
+            helpers.defaultNullOpts.mkStrLuaFnOr (types.enum [false])
             ''
               function(client_id)
                 local client = vim.lsp.get_client_by_id(client_id)
@@ -264,18 +263,14 @@ in {
                 per-server limit.
               '';
 
-            doneTtl =
-              helpers.defaultNullOpts.mkNullable
-              (with types; either str ints.unsigned)
-              "3"
-              ''
-                How long a message should persist after completion.
+            doneTtl = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "3" ''
+              How long a message should persist after completion.
 
-                Set to `0` to use notification group config default, and `math.huge` to show
-                notification indefinitely (until overwritten).
+              Set to `0` to use notification group config default, and `math.huge` to show
+              notification indefinitely (until overwritten).
 
-                Measured in seconds.
-              '';
+              Measured in seconds.
+            '';
 
             doneIcon = mkIconOption "✔" "Icon shown when all LSP progress tasks are complete.";
 
@@ -283,13 +278,9 @@ in {
               Highlight group for completed LSP tasks.
             '';
 
-            progressTtl =
-              helpers.defaultNullOpts.mkNullable
-              (with types; either str ints.unsigned)
-              "math.huge"
-              ''
-                How long a message should persist when in progress.
-              '';
+            progressTtl = helpers.defaultNullOpts.mkStrLuaFnOr types.ints.unsigned "math.huge" ''
+              How long a message should persist when in progress.
+            '';
 
             progressIcon =
               mkIconOption
@@ -441,8 +432,7 @@ in {
             '';
 
           redirect =
-            helpers.defaultNullOpts.mkNullable
-            (with types; either str (enum [false]))
+            helpers.defaultNullOpts.mkStrLuaFnOr (types.enum [false])
             ''
               function(msg, level, opts)
                 if opts and opts.on_open then
@@ -654,23 +644,14 @@ in {
             ignore_done_already = ignoreDoneAlready;
             ignore_empty_message = ignoreEmptyMessage;
             notification_group = notificationGroup;
-            clear_on_detach =
-              if isString clearOnDetach
-              then helpers.mkRaw clearOnDetach
-              else clearOnDetach;
+            clear_on_detach = clearOnDetach;
             inherit ignore;
             display = with display; {
               render_limit = renderLimit;
-              done_ttl =
-                if isString doneTtl
-                then helpers.mkRaw doneTtl
-                else doneTtl;
+              done_ttl = doneTtl;
               done_icon = doneIcon;
               done_style = doneStyle;
-              progress_ttl =
-                if isString progressTtl
-                then helpers.mkRaw progressTtl
-                else progressTtl;
+              progress_ttl = progressTtl;
               progress_icon = progressIcon;
               progress_style = progressStyle;
               group_style = groupStyle;
@@ -711,10 +692,7 @@ in {
                 )
                 configs
               );
-            redirect =
-              if isString redirect
-              then helpers.mkRaw redirect
-              else redirect;
+            inherit redirect;
             view = with view; {
               stack_upwards = stackUpwards;
               icon_separator = iconSeparator;

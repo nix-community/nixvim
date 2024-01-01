@@ -769,8 +769,8 @@ in {
           "This is determined automatically, you probably don't need to set it";
 
         findArgs =
-          helpers.mkNullOrOption
-          (types.either types.str (types.submodule {
+          helpers.mkNullOrStrLuaFnOr
+          (types.submodule {
             options = {
               fd =
                 helpers.defaultNullOpts.mkNullable (types.listOf types.str)
@@ -784,7 +784,7 @@ in {
                 ''
                 "You can specify extra args to pass to the find command.";
             };
-          }))
+          })
           ''
             Find arguments
 
@@ -1154,10 +1154,7 @@ in {
           };
           find_by_full_path_words = findByFullPathWords;
           find_command = findCommand;
-          find_args =
-            if isString findArgs
-            then mkRaw findArgs
-            else findArgs;
+          find_args = findArgs;
           group_empty_dirs = groupEmptyDirs;
           search_limit = searchLimit;
           follow_current_file = followCurrentFile;

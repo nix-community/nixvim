@@ -81,7 +81,7 @@ with lib; let
     };
 
     parser = {
-      type = str;
+      type = helpers.nixvimTypes.strLuaFn;
       description = "The code for your parser function.";
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
