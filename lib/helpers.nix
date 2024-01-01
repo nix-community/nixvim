@@ -59,39 +59,6 @@ with lib; rec {
 
   emptyTable = {"__empty" = null;};
 
-  highlightType = with lib.types;
-    submodule {
-      # Adds flexibility for other keys
-      freeformType = types.attrs;
-
-      # :help nvim_set_hl()
-      options = {
-        fg = mkNullOrOption str "Color for the foreground (color name or '#RRGGBB').";
-        bg = mkNullOrOption str "Color for the background (color name or '#RRGGBB').";
-        sp = mkNullOrOption str "Special color (color name or '#RRGGBB').";
-        blend = mkNullOrOption (numbers.between 0 100) "Integer between 0 and 100.";
-        bold = mkNullOrOption bool "";
-        standout = mkNullOrOption bool "";
-        underline = mkNullOrOption bool "";
-        undercurl = mkNullOrOption bool "";
-        underdouble = mkNullOrOption bool "";
-        underdotted = mkNullOrOption bool "";
-        underdashed = mkNullOrOption bool "";
-        strikethrough = mkNullOrOption bool "";
-        italic = mkNullOrOption bool "";
-        reverse = mkNullOrOption bool "";
-        nocombine = mkNullOrOption bool "";
-        link = mkNullOrOption str "Name of another highlight group to link to.";
-        default = mkNullOrOption bool "Don't override existing definition.";
-        ctermfg = mkNullOrOption str "Sets foreground of cterm color.";
-        ctermbg = mkNullOrOption str "Sets background of cterm color.";
-        cterm = mkNullOrOption attrs ''
-          cterm attribute map, like |highlight-args|.
-          If not set, cterm attributes will match those from the attribute map documented above.
-        '';
-      };
-    };
-
   borderType = with lib.types;
     oneOf [
       str
@@ -290,7 +257,7 @@ with lib; rec {
 
     mkHighlight = default: name: desc:
       mkNullable
-      highlightType
+      nixvimTypes.highlight
       default
       (
         if desc == ""
@@ -412,6 +379,38 @@ with lib; rec {
         descriptionClass = "noun";
         merge = mergeEqualOption;
         check = isRawType;
+      };
+
+      highlight = types.submodule {
+        # Adds flexibility for other keys
+        freeformType = types.attrs;
+
+        # :help nvim_set_hl()
+        options = with types; {
+          fg = mkNullOrOption str "Color for the foreground (color name or '#RRGGBB').";
+          bg = mkNullOrOption str "Color for the background (color name or '#RRGGBB').";
+          sp = mkNullOrOption str "Special color (color name or '#RRGGBB').";
+          blend = mkNullOrOption (numbers.between 0 100) "Integer between 0 and 100.";
+          bold = mkNullOrOption bool "";
+          standout = mkNullOrOption bool "";
+          underline = mkNullOrOption bool "";
+          undercurl = mkNullOrOption bool "";
+          underdouble = mkNullOrOption bool "";
+          underdotted = mkNullOrOption bool "";
+          underdashed = mkNullOrOption bool "";
+          strikethrough = mkNullOrOption bool "";
+          italic = mkNullOrOption bool "";
+          reverse = mkNullOrOption bool "";
+          nocombine = mkNullOrOption bool "";
+          link = mkNullOrOption str "Name of another highlight group to link to.";
+          default = mkNullOrOption bool "Don't override existing definition.";
+          ctermfg = mkNullOrOption str "Sets foreground of cterm color.";
+          ctermbg = mkNullOrOption str "Sets background of cterm color.";
+          cterm = mkNullOrOption attrs ''
+            cterm attribute map, like |highlight-args|.
+            If not set, cterm attributes will match those from the attribute map documented above.
+          '';
+        };
       };
     }
     # Allow to do `with nixvimTypes;` instead of `with types;`

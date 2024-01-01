@@ -25,7 +25,7 @@ in {
           (
             with types;
               either
-              (attrsOf helpers.highlightType)
+              (attrsOf helpers.nixvimTypes.highlight)
               str
           )
           "{}"

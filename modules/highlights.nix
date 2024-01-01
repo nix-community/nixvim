@@ -7,7 +7,7 @@
 with lib; {
   options = {
     highlight = mkOption {
-      type = types.attrsOf helpers.highlightType;
+      type = types.attrsOf helpers.nixvimTypes.highlight;
       default = {};
       description = "Define highlight groups";
       example = ''
