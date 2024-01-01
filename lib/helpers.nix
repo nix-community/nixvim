@@ -161,21 +161,15 @@ with lib; rec {
     # documentation
     mkNullableWithRaw = type: mkNullable (maybeRaw type);
 
-    mkLua = default: desc: let
-      defaultDesc = "default: `${default}`";
-    in
+    mkLua = default: desc:
       mkNullOrLua
       (
         (optionalString (desc != "") ''
           ${desc}
-          
+
         '')
         + ''
           default: `${default}`
-        ''
-      );
-
-          ${defaultDesc}
         ''
       );
 
