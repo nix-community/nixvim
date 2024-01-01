@@ -371,7 +371,7 @@ with lib; rec {
   in
     {
       rawLua = mkOptionType {
-        name = "rawType";
+        name = "rawLua";
         description = "raw lua code";
         descriptionClass = "noun";
         merge = mergeEqualOption;

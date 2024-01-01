@@ -214,7 +214,7 @@ in {
         ''
         ''
            Actions to be triggered for specified keybindings. It can take either action name i.e `toggle_preview`
-          Or it can a `rawType`.
+          Or it can a `rawLua`.
         '';
 
       lsp = {
