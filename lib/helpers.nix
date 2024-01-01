@@ -81,24 +81,19 @@ with lib; rec {
 
   mkNullOrLua = desc:
     lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr nixvimTypes.strLua;
       default = null;
       description = desc;
       apply = mkRaw;
     };
 
-  mkNullOrLuaFn = desc: let
-    fnDesc = "(lua function)";
-  in
-    mkNullOrLua (
-      if desc == ""
-      then fnDesc
-      else ''
-        ${desc}
-
-        ${fnDesc}
-      ''
-    );
+  mkNullOrLuaFn = desc:
+    lib.mkOption {
+      type = lib.types.nullOr nixvimTypes.strLuaFn;
+      default = null;
+      description = desc;
+      apply = mkRaw;
+    };
 
   defaultNullOpts = let
     maybeRaw = t: lib.types.either t nixvimTypes.rawLua;
@@ -364,7 +359,16 @@ with lib; rec {
     end
   '';
 
-  nixvimTypes =
+  nixvimTypes = let
+    strLikeType = description:
+      mkOptionType {
+        name = "str";
+        inherit description;
+        descriptionClass = "noun";
+        check = lib.isString;
+        merge = lib.options.mergeEqualOption;
+      };
+  in
     {
       rawLua = mkOptionType {
         name = "rawType";
@@ -412,6 +416,9 @@ with lib; rec {
           '';
         };
       };
+
+      strLua = strLikeType "lua code string";
+      strLuaFn = strLikeType "lua function string";
     }
     # Allow to do `with nixvimTypes;` instead of `with types;`
     // types;
