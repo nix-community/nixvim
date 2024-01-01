@@ -166,10 +166,14 @@ with lib; rec {
     in
       mkNullOrLua
       (
-        if desc == ""
-        then defaultDesc
-        else ''
+        (optionalString (desc != "") ''
           ${desc}
+          
+        '')
+        + ''
+          default: `${default}`
+        ''
+      );
 
           ${defaultDesc}
         ''
