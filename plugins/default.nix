@@ -141,6 +141,7 @@
     ./utils/nvim-osc52.nix
     ./utils/nvim-ufo.nix
     ./utils/oil.nix
+    ./utils/ollama.nix
     ./utils/persistence.nix
     ./utils/project-nvim.nix
     ./utils/refactoring.nix
