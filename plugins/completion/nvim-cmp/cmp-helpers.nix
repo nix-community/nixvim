@@ -61,5 +61,6 @@ in
       "cmp_pandoc" = "cmp-pandoc-nvim";
       "treesitter" = "cmp-treesitter";
       "vimwiki-tags" = "cmp-vimwiki-tags";
+      "codeium" = "codeium-nvim";
     };
   }
