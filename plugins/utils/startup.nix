@@ -84,7 +84,7 @@ in {
                 )
                 ''
                   The type of `content` depends on the secton `type`:
-                  - "text" -> a list of strings or a function (`rawType`) that requires a function that returns a table of strings
+                  - "text" -> a list of strings or a function (`rawLua`) that requires a function that returns a table of strings
                   - "mapping" -> a list of list of strings in the format:
                     ```nix
                       [

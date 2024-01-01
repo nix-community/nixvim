@@ -77,7 +77,7 @@ in {
             after cursor.
 
             This is either:
-            - a `rawType` value (`action.__raw = "function() foo end";`).
+            - a `rawLua` value (`action.__raw = "function() foo end";`).
             - a string. In this case, Nixvim will automatically interpret it as a builtin yanky
             action.
               Example: `action = "put('p')";` will translate to

@@ -367,7 +367,7 @@ with lib; rec {
   nixvimTypes =
     {
       rawLua = mkOptionType {
-        name = "rawType";
+        name = "rawLua";
         description = "raw lua code";
         descriptionClass = "noun";
         merge = mergeEqualOption;
