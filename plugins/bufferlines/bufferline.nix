@@ -8,18 +8,6 @@
 with lib; let
   cfg = config.plugins.bufferline;
 
-  highlightOption = {
-    fg = helpers.mkNullOrOption types.str "foreground color";
-
-    bg = helpers.mkNullOrOption types.str "background color";
-
-    sp = helpers.mkNullOrOption types.str "sp color";
-
-    bold = helpers.mkNullOrOption types.bool "enable bold";
-
-    italic = helpers.mkNullOrOption types.bool "enable italic";
-  };
-
   highlightOptions = {
     fill = "fill";
     background = "background";
@@ -275,7 +263,12 @@ in {
         highlights =
           genAttrs
           (attrValues highlightOptions)
-          (name: highlightOption);
+          (
+            name:
+              helpers.mkNullOrOption helpers.nixvimTypes.highlight ''
+                Highlight group definition for ${name}.
+              ''
+          );
       };
   };
 
@@ -343,16 +336,8 @@ in {
       highlights =
         mapAttrs
         (
-          pluginOptionName: nixvimOptionName: {
-            inherit
-              (cfg.highlights.${nixvimOptionName})
-              fg
-              bg
-              sp
-              bold
-              italic
-              ;
-          }
+          pluginOptionName: nixvimOptionName:
+            cfg.highlights.${nixvimOptionName}
         )
         highlightOptions;
     };
