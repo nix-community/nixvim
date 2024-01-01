@@ -95,6 +95,28 @@ with lib; rec {
       apply = mkRaw;
     };
 
+  mkNullOrStrLuaOr = ty: desc:
+    lib.mkOption {
+      type = lib.types.nullOr (types.either nixvimTypes.strLua ty);
+      default = null;
+      description = desc;
+      apply = v:
+        if builtins.isString v
+        then mkRaw v
+        else v;
+    };
+
+  mkNullOrStrLuaFnOr = ty: desc:
+    lib.mkOption {
+      type = lib.types.nullOr (types.either nixvimTypes.strLuaFn ty);
+      default = null;
+      description = desc;
+      apply = v:
+        if builtins.isString v
+        then mkRaw v
+        else v;
+    };
+
   defaultNullOpts = let
     maybeRaw = t: lib.types.either t nixvimTypes.rawLua;
   in rec {
@@ -115,6 +137,30 @@ with lib; rec {
     # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
     # documentation
     mkNullableWithRaw = type: mkNullable (maybeRaw type);
+
+    mkStrLuaOr = type: default: desc:
+      mkNullOrStrLuaOr type (let
+        defaultDesc = "default: `${default}`";
+      in
+        if desc == ""
+        then defaultDesc
+        else ''
+          ${desc}
+
+          ${defaultDesc}
+        '');
+
+    mkStrLuaFnOr = type: default: desc:
+      mkNullOrStrLuaFnOr type (let
+        defaultDesc = "default: `${default}`";
+      in
+        if desc == ""
+        then defaultDesc
+        else ''
+          ${desc}
+
+          ${defaultDesc}
+        '');
 
     mkLua = default: desc:
       mkNullOrLua

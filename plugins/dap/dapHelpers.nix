@@ -12,7 +12,7 @@ in rec {
             For most debug adapters setting this is not necessary.
           '';
 
-          enrichConfig = helpers.mkNullOrOption types.str ''
+          enrichConfig = helpers.mkNullOrLuaFn ''
             A lua function (`func(config, on_config)`) which allows an adapter to enrich a
             configuration with additional information. It receives a configuration as first
             argument, and a callback that must be called with the final configuration as second argument.
@@ -129,7 +129,7 @@ in rec {
             adapter
             // {
               inherit type;
-              enrich_config = helpers.mkRaw adapter.enrichConfig;
+              enrich_config = adapter.enrichConfig;
             }
           ))
       adapters;

@@ -29,7 +29,7 @@ in {
       the side-by-side view even if this is set to false.
     '';
 
-    diffContextLines = helpers.defaultNullOpts.mkNullable (with types; either ints.unsigned str) "vim.o.scrolloff" ''
+    diffContextLines = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.scrolloff" ''
       Defaults to the scrolloff.
     '';
 
@@ -78,10 +78,7 @@ in {
       use_delta = useDelta;
       use_custom_command = useCustomCommand;
       side_by_side = sideBySide;
-      diff_context_lines =
-        if isString diffContextLines
-        then helpers.mkRaw diffContextLines
-        else diffContextLines;
+      diff_context_lines = diffContextLines;
       entry_format = entryFormat;
       time_format = timeFormat;
       mappings = with mappings; {

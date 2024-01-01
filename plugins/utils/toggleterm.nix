@@ -13,26 +13,24 @@ in {
 
     package = helpers.mkPackageOption "toggleterm" pkgs.vimPlugins.toggleterm-nvim;
 
-    size =
-      helpers.defaultNullOpts.mkNullable
-      (with types; either number str) "12" ''
-        Size of the terminal.
-        `size` can be a number or function
-        Example:
-        ```nix
-        size = 20
-        ```
-        OR
-        ```
-        size = function(term)
-          if term.direction == "horizontal" then
-            return 15
-          elseif term.direction == "vertical" then
-            return vim.o.columns * 0.4
-          end
+    size = helpers.defaultNullOpts.mkStrLuaFnOr types.number "12" ''
+      Size of the terminal.
+      `size` can be a number or function
+      Example:
+      ```nix
+      size = 20
+      ```
+      OR
+      ```
+      size = function(term)
+        if term.direction == "horizontal" then
+          return 15
+        elseif term.direction == "vertical" then
+          return vim.o.columns * 0.4
         end
-        ```
-      '';
+      end
+      ```
+    '';
 
     openMapping = helpers.mkNullOrOption types.str ''
       Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for
@@ -170,12 +168,7 @@ in {
   };
   config = let
     setupOptions = with cfg; {
-      inherit autochdir highlights direction shell;
-      size = helpers.ifNonNull' size (
-        if isInt size
-        then size
-        else helpers.mkRaw size
-      );
+      inherit autochdir highlights direction shell size;
       open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw "[[${openMapping}]]");
       on_create = onCreate;
       on_open = onOpen;
