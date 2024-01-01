@@ -95,7 +95,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: `["" "━" "" ""]`
         '';
-        type = borderType;
+        type = nixvimTypes.border;
       };
 
       outputWinCoverGutter = mkDefaultOpt {
