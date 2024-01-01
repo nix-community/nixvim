@@ -117,9 +117,7 @@ with lib; rec {
         else v;
     };
 
-  defaultNullOpts = let
-    maybeRaw = t: lib.types.either t nixvimTypes.rawLua;
-  in rec {
+  defaultNullOpts = rec {
     mkNullable = type: default: desc:
       mkNullOrOption type (
         let
@@ -188,28 +186,28 @@ with lib; rec {
         ''
       );
 
-    mkNum = default: mkNullable (maybeRaw lib.types.number) (toString default);
-    mkInt = default: mkNullable (maybeRaw lib.types.int) (toString default);
+    mkNum = default: mkNullable (with nixvimTypes; maybeRaw number) (toString default);
+    mkInt = default: mkNullable (with nixvimTypes; maybeRaw int) (toString default);
     # Positive: >0
-    mkPositiveInt = default: mkNullable (maybeRaw lib.types.ints.positive) (toString default);
+    mkPositiveInt = default: mkNullable (with nixvimTypes; maybeRaw ints.positive) (toString default);
     # Unsigned: >=0
-    mkUnsignedInt = default: mkNullable (maybeRaw lib.types.ints.unsigned) (toString default);
+    mkUnsignedInt = default: mkNullable (with nixvimTypes; maybeRaw ints.unsigned) (toString default);
     mkBool = default:
-      mkNullable (maybeRaw lib.types.bool) (
+      mkNullable (with nixvimTypes; maybeRaw bool) (
         if default
         then "true"
         else "false"
       );
-    mkStr = default: mkNullable (maybeRaw lib.types.str) ''${builtins.toString default}'';
-    mkAttributeSet = default: mkNullable lib.types.attrs ''${default}'';
+    mkStr = default: mkNullable (with nixvimTypes; maybeRaw str) ''${builtins.toString default}'';
+    mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
     # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
     # documentation
-    mkListOf = ty: default: mkNullable (lib.types.listOf (maybeRaw ty)) default;
+    mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
     # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
     # documentation
-    mkAttrsOf = ty: default: mkNullable (lib.types.attrsOf (maybeRaw ty)) default;
-    mkEnum = enum: default: mkNullable (maybeRaw (lib.types.enum enum)) ''"${default}"'';
-    mkEnumFirstDefault = enum: mkEnum enum (head enum);
+    mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
+    mkEnum = enumValues: default: mkNullable (with nixvimTypes; maybeRaw (enum enumValues)) ''"${default}"'';
+    mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
     mkBorder = default: name: desc:
       mkNullable
       nixvimTypes.border
@@ -423,6 +421,11 @@ with lib; rec {
         merge = mergeEqualOption;
         check = isRawType;
       };
+
+      maybeRaw = type:
+        types.either
+        type
+        nixvimTypes.rawLua;
 
       border = with types;
         oneOf [
