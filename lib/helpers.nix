@@ -141,7 +141,7 @@ with lib; rec {
     );
 
   defaultNullOpts = let
-    maybeRaw = t: lib.types.either t rawType;
+    maybeRaw = t: lib.types.either t nixvimTypes.rawLua;
   in rec {
     mkNullable = type: default: desc:
       mkNullOrOption type (
@@ -404,13 +404,18 @@ with lib; rec {
     end
   '';
 
-  rawType = mkOptionType {
-    name = "rawType";
-    description = "raw lua code";
-    descriptionClass = "noun";
-    merge = mergeEqualOption;
-    check = isRawType;
-  };
+  nixvimTypes =
+    {
+      rawLua = mkOptionType {
+        name = "rawType";
+        description = "raw lua code";
+        descriptionClass = "noun";
+        merge = mergeEqualOption;
+        check = isRawType;
+      };
+    }
+    # Allow to do `with nixvimTypes;` instead of `with types;`
+    // types;
 
   isRawType = v: lib.isAttrs v && lib.hasAttr "__raw" v && lib.isString v.__raw;
 }

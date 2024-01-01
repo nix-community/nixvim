@@ -51,7 +51,7 @@ in {
           Default AI popup type.
         '';
 
-        openaiApiKey = helpers.mkNullOrOption (with types; either str helpers.rawType) ''
+        openaiApiKey = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
           An alternative way to set your API key.
         '';
 

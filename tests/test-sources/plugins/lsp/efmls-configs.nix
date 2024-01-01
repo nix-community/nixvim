@@ -62,7 +62,7 @@
         # tool options are a `either toolType (listOf toolType)`
         # Look into `nestedTypes.left` to get a `toolType` option.
         toolType = opt.type.nestedTypes.left;
-        # toolType is a `either (enum possible) helpers.rawType
+        # toolType is a `either (enum possible) helpers.nixvimTypes.rawLua
         # Look into `nestedTypes.left` for the enum
         possible = toolType.nestedTypes.left;
         # possible is an enum, look into functor.payload for the variants

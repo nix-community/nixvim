@@ -55,8 +55,8 @@ in {
                 helpers.mkNullOrOption
                 (oneOf [
                   str
-                  helpers.rawType
-                  (listOf (either str helpers.rawType))
+                  helpers.nixvimTypes.rawLua
+                  (listOf (either str helpers.nixvimTypes.rawLua))
                 ])
                 "Post-install hook";
 
@@ -67,11 +67,11 @@ in {
                 "Luarocks dependencies";
 
               config =
-                helpers.mkNullOrOption (either str helpers.rawType)
+                helpers.mkNullOrOption (either str helpers.nixvimTypes.rawLua)
                 "Code to run after this plugin is loaded";
 
               setup =
-                helpers.mkNullOrOption (either str helpers.rawType)
+                helpers.mkNullOrOption (either str helpers.nixvimTypes.rawLua)
                 "Code to be run before this plugin is loaded";
 
               cmd =
@@ -98,8 +98,8 @@ in {
                 helpers.mkNullOrOption
                 (oneOf [
                   str
-                  helpers.rawType
-                  (listOf (either str helpers.rawType))
+                  helpers.nixvimTypes.rawLua
+                  (listOf (either str helpers.nixvimTypes.rawLua))
                 ])
                 "Conditional test to load this plugin";
 

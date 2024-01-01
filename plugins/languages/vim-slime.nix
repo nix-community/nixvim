@@ -46,7 +46,7 @@ in
 
       defaultConfig =
         helpers.defaultNullOpts.mkNullable
-        (with types; attrsOf (either str helpers.rawType))
+        (with types; attrsOf (either str helpers.nixvimTypes.rawLua))
         "null"
         ''
           Pre-filled prompt answer.

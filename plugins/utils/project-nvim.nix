@@ -64,7 +64,7 @@ in {
 
       dataPath =
         helpers.defaultNullOpts.mkNullable
-        (with types; either str helpers.rawType)
+        (with types; either str helpers.nixvimTypes.rawLua)
         ''{__raw = "vim.fn.stdpath('data')";}''
         "Path where project.nvim will store the project history for use in telescope.";
     };

@@ -22,7 +22,7 @@ with lib; {
           with types;
             attrsOf (
               either
-              helpers.rawType
+              helpers.nixvimTypes.rawLua
               (enum ["global" "local" "noop"])
             )
         )
@@ -106,7 +106,7 @@ with lib; {
       log = {
         file =
           helpers.defaultNullOpts.mkNullable
-          (with types; either str helpers.rawType)
+          (with types; either str helpers.nixvimTypes.rawLua)
           ''
             {
               __raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'";

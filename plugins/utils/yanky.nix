@@ -40,7 +40,7 @@ in {
 
         storagePath =
           helpers.defaultNullOpts.mkNullable
-          (with types; either str helpers.rawType)
+          (with types; either str helpers.nixvimTypes.rawLua)
           ''{__raw = "vim.fn.stdpath('data') .. '/databases/yanky.db'";}''
           "Only for sqlite storage.";
 
@@ -70,7 +70,7 @@ in {
 
       picker = {
         select = {
-          action = helpers.mkNullOrOption (with types; either helpers.rawType str) ''
+          action = helpers.mkNullOrOption (with types; either helpers.nixvimTypes.rawLua str) ''
             This define the action that should be done when selecting an item in the
             `vim.ui.select` prompt.
             If you let this option to `null`, this will use the default action: put selected item

@@ -21,11 +21,11 @@ in {
 
       timeout = helpers.defaultNullOpts.mkUnsignedInt 5000 "Default timeout for notification.";
 
-      maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned helpers.rawType) ''
+      maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned helpers.nixvimTypes.rawLua) ''
         Max number of columns for messages.
       '';
 
-      maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned helpers.rawType) ''
+      maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned helpers.nixvimTypes.rawLua) ''
         Max number of lines for a message.
       '';
 
@@ -85,7 +85,7 @@ in {
           with types;
             either
             (enum ["default" "minimal"])
-            helpers.rawType
+            helpers.nixvimTypes.rawLua
         )
         "default"
         "Function to render a notification buffer or a built-in renderer name.";

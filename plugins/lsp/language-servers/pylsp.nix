@@ -357,7 +357,7 @@ in {
         overrides =
           helpers.defaultNullOpts.mkNullable
           (types.listOf
-            (types.oneOf [types.bool types.str helpers.rawType]))
+            (types.oneOf [types.bool types.str helpers.nixvimTypes.rawLua]))
           "[true]"
           ''
             Specifies a list of alternate or supplemental command-line options.

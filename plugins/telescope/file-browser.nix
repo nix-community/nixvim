@@ -31,12 +31,12 @@ in {
 
     theme = helpers.mkNullOrOption types.str "Custom theme, will use your global theme by default.";
 
-    path = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "vim.loop.cwd()" ''
+    path = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "vim.loop.cwd()" ''
       Directory to browse files from.
       `vim.fn.expanded` automatically.
     '';
 
-    cwd = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "vim.loop.cwd()" ''
+    cwd = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "vim.loop.cwd()" ''
       Directory to browse folders from.
       `vim.fn.expanded` automatically.
     '';
@@ -131,7 +131,7 @@ in {
     mappings =
       helpers.mkNullOrOption (
         with types;
-          attrsOf (attrsOf (either str helpers.rawType))
+          attrsOf (attrsOf (either str helpers.nixvimTypes.rawLua))
       ) ''
         `fb_actions` mappings.
         Mappings can also be a lua function.

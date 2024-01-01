@@ -40,7 +40,7 @@ with lib; let
     };
 
     args = {
-      type = listOf (either str helpers.rawType);
+      type = listOf (either str helpers.nixvimTypes.rawLua);
       description = ''
         List of arguments.
         Can contain functions with zero arguments that will be evaluated once the linter is used.
@@ -229,7 +229,7 @@ in {
 
                   callback = mkOption {
                     type = with types;
-                      nullOr (either str helpers.rawType);
+                      nullOr (either str helpers.nixvimTypes.rawLua);
                     default = defaultCallback;
                     description = "What action to perform for linting";
                   };

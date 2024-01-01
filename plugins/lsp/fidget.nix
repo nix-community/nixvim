@@ -14,7 +14,7 @@ with lib; let
       with types;
         oneOf [
           str
-          helpers.rawType
+          helpers.nixvimTypes.rawLua
           (listOf str)
           (attrsOf (either str ints.unsigned))
         ]
@@ -593,7 +593,7 @@ in {
 
           path =
             helpers.defaultNullOpts.mkNullable
-            (with types; either str helpers.rawType)
+            (with types; either str helpers.nixvimTypes.rawLua)
             ''{__raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))";}''
             ''
               Where Fidget writes its logs to.

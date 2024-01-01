@@ -121,7 +121,7 @@ in {
             with types;
               either
               (enum ["none" "ordinal" "buffer_id" "both"])
-              helpers.rawType
+              helpers.nixvimTypes.rawLua
           )
           "none"
           ''

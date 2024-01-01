@@ -13,7 +13,7 @@ with lib; let
           # Raw filetype
           str
           # Function to set the filetype
-          helpers.rawType
+          helpers.nixvimTypes.rawLua
           # ["filetype" {priority = xx;}]
           (listOf (either str (submodule {
             options = {

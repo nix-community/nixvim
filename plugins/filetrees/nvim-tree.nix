@@ -99,7 +99,7 @@ in {
         (
           types.either
           (types.enum ["name" "case_sensitive" "modification_time" "extension"])
-          helpers.rawType
+          helpers.nixvimTypes.rawLua
         )
         "name"
         ''
@@ -317,7 +317,7 @@ in {
 
       onAttach =
         helpers.defaultNullOpts.mkNullable
-        (with types; either (enum ["default"]) helpers.rawType)
+        (with types; either (enum ["default"]) helpers.nixvimTypes.rawLua)
         "default"
         ''
           Function ran when creating the nvim-tree buffer.
@@ -378,7 +378,7 @@ in {
 
                   padding =
                     helpers.defaultNullOpts.mkNullable
-                    (either ints.unsigned helpers.rawType)
+                    (either ints.unsigned helpers.nixvimTypes.rawLua)
                     "1"
                     "Extra padding to the right.";
                 };
@@ -466,7 +466,7 @@ in {
         rootFolderLabel =
           helpers.defaultNullOpts.mkNullable
           # Type
-          (with types; oneOf [str bool helpers.rawType])
+          (with types; oneOf [str bool helpers.nixvimTypes.rawLua])
           # Default
           ":~:s?$?/..?"
           # Description
@@ -740,7 +740,7 @@ in {
 
           picker =
             helpers.defaultNullOpts.mkNullable
-            (types.either types.str helpers.rawType)
+            (types.either types.str helpers.nixvimTypes.rawLua)
             "default"
             ''
               Change the default window picker, can be a string `"default"` or a function.

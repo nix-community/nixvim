@@ -70,7 +70,7 @@ in {
 
         filetypes =
           helpers.defaultNullOpts.mkNullable
-          (with types; attrsOf (either bool helpers.rawType))
+          (with types; attrsOf (either bool helpers.nixvimTypes.rawLua))
           ''
             {
               yaml = false;

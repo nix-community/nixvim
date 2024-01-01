@@ -323,7 +323,7 @@ with lib; let
               nullOr
               (
                 listOf
-                (either str helpers.rawType)
+                (either str helpers.nixvimTypes.rawLua)
               );
             description = ''
               An array of abosolute or workspace-relative paths that will be added to the workspace

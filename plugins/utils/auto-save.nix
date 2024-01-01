@@ -32,7 +32,7 @@ in {
       executionMessage = {
         message =
           helpers.defaultNullOpts.mkNullable
-          (with types; either str helpers.rawType)
+          (with types; either str helpers.nixvimTypes.rawLua)
           ''
             {
               __raw = \'\'
