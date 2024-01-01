@@ -100,7 +100,7 @@ in {
         mapAttrs
         (
           name: desc:
-            helpers.mkNullOrOption types.str "The code of the function that runs ${desc}."
+            helpers.mkNullOrLuaFn "The code of the function that runs ${desc}."
         )
         {
           enabling = "when enabling auto-save";
@@ -123,13 +123,12 @@ in {
         inherit (cfg) condition;
         write_all_buffers = cfg.writeAllBuffers;
         debounce_delay = cfg.debounceDelay;
-        callbacks = with cfg.callbacks;
-          mapAttrs (_: helpers.mkRaw) {
-            inherit enabling disabling;
-            before_asserting_save = beforeAssertingSave;
-            before_saving = beforeSaving;
-            after_saving = afterSaving;
-          };
+        callbacks = with cfg.callbacks; {
+          inherit enabling disabling;
+          before_asserting_save = beforeAssertingSave;
+          before_saving = beforeSaving;
+          after_saving = afterSaving;
+        };
       }
       // cfg.extraOptions;
   in
