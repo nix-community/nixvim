@@ -34,7 +34,7 @@ in {
 
         mode =
           helpers.defaultNullOpts.mkNullable
-          (with types; either (enum ["exact" "search" "fuzzy"]) helpers.rawType) ''"exact"'' ''
+          (with types; either (enum ["exact" "search" "fuzzy"]) helpers.nixvimTypes.rawLua) ''"exact"'' ''
             - exact: exact match
             - search: regular search
             - fuzzy: fuzzy search
@@ -48,7 +48,7 @@ in {
         incremental = helpers.defaultNullOpts.mkBool false "behave like `incsearch`";
 
         exclude =
-          helpers.defaultNullOpts.mkNullable (with types; listOf (either str helpers.rawType)) ''
+          helpers.defaultNullOpts.mkNullable (with types; listOf (either str helpers.nixvimTypes.rawLua)) ''
             [
               "notify"
               "cmp_menu"

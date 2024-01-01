@@ -39,7 +39,7 @@ in {
         helpers.defaultNullOpts.mkNullable
         (
           with types;
-            either str helpers.rawType
+            either str helpers.nixvimTypes.rawLua
         )
         "<ESC>"
         ''

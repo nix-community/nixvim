@@ -14,7 +14,7 @@ with lib; {
       package = helpers.mkPackageOption "persistence.nvim" pkgs.vimPlugins.persistence-nvim;
 
       dir =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.rawType)
+        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
         ''vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/")''
         "directory where session files are saved";
 

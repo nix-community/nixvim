@@ -25,7 +25,7 @@ with lib; let
         (submodule {
           options = {
             name = mkOption {
-              type = types.either types.str helpers.rawType;
+              type = types.either types.str helpers.nixvimTypes.rawLua;
               description = "Component name or function";
               default = defaultName;
             };

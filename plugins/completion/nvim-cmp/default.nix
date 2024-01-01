@@ -123,7 +123,7 @@ in {
           (
             with types;
               either
-              helpers.rawType
+              helpers.nixvimTypes.rawLua
               (enum (attrNames snippetEngines))
           )
           ''

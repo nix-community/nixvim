@@ -190,7 +190,7 @@ in {
       miscFormatters = languageTools "misc" "formatters";
 
       mkChooseOption = lang: kind: possible: let
-        toolType = with types; either (enum possible) helpers.rawType;
+        toolType = with types; either (enum possible) helpers.nixvimTypes.rawLua;
       in
         mkOption {
           type = with types; either toolType (listOf toolType);

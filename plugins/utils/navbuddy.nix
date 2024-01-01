@@ -166,7 +166,7 @@ in {
             (
               either
               str
-              helpers.rawType
+              helpers.nixvimTypes.rawLua
             )
         )
         ''

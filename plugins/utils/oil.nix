@@ -67,7 +67,7 @@ in {
       package = helpers.mkPackageOption "oil" pkgs.vimPlugins.oil-nvim;
 
       columns = let
-        highlightsOption = helpers.mkNullOrOption (with types; either str helpers.rawType) ''
+        highlightsOption = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
           A string or a lua function (`fun(value: string): string`).
           Highlight group, or function that returns a highlight group.
         '';

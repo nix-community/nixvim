@@ -32,7 +32,7 @@ in {
 
         rootDir =
           helpers.defaultNullOpts.mkNullable
-          (with types; either str helpers.rawType)
+          (with types; either str helpers.nixvimTypes.rawLua)
           "{__raw = \"vim.fn.stdpath 'data' .. '/sessions/'\";}"
           ''
             Root directory for session files.
@@ -128,7 +128,7 @@ in {
         sessionControl = {
           controlDir =
             helpers.defaultNullOpts.mkNullable
-            (with types; either str helpers.rawType)
+            (with types; either str helpers.nixvimTypes.rawLua)
             "\"vim.fn.stdpath 'data' .. '/auto_session/'\""
             ''
               Auto session control dir, for control files, like alternating between two sessions

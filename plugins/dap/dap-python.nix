@@ -31,7 +31,7 @@ in {
       By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
     '';
 
-    testRunner = helpers.mkNullOrOption (types.either types.str helpers.rawType) ''
+    testRunner = helpers.mkNullOrOption (types.either types.str helpers.nixvimTypes.rawLua) ''
       The name of test runner to use by default.
       The default value is dynamic and depends on `pytest.ini` or `manage.py` markers.
       If neither is found "unittest" is used.

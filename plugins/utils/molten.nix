@@ -157,7 +157,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: `{__raw = "vim.fn.stdpath('data')..'/molten'";}`
         '';
-        type = with types; either str rawType;
+        type = with nixvimTypes; either str rawLua;
       };
 
       useBorderHighlights = mkDefaultOpt {

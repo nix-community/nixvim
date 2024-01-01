@@ -77,7 +77,7 @@ in {
                           (listOf str)
                         )
                       )
-                      helpers.rawType
+                      helpers.nixvimTypes.rawLua
                       # for "oldfiles" sections
                       (enum [""])
                     ]
