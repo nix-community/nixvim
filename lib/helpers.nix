@@ -59,13 +59,6 @@ with lib; rec {
 
   emptyTable = {"__empty" = null;};
 
-  borderType = with lib.types;
-    oneOf [
-      str
-      (listOf str)
-      (listOf (listOf str))
-    ];
-
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption = type: desc:
     lib.mkOption {
@@ -178,7 +171,7 @@ with lib; rec {
     mkEnumFirstDefault = enum: mkEnum enum (head enum);
     mkBorder = default: name: desc:
       mkNullable
-      borderType
+      nixvimTypes.border
       default
       (let
         defaultDesc = ''
@@ -380,6 +373,13 @@ with lib; rec {
         merge = mergeEqualOption;
         check = isRawType;
       };
+
+      border = with types;
+        oneOf [
+          str
+          (listOf str)
+          (listOf (listOf str))
+        ];
 
       highlight = types.submodule {
         # Adds flexibility for other keys
