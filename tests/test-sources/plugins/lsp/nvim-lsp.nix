@@ -123,7 +123,9 @@
           installCargo = true;
           installRustc = true;
         };
-        sourcekit.enable = true;
+        # As of 2023-12-13, sourcekit-lsp is broken
+        # TODO: re-enable this test when fixed
+        sourcekit.enable = false;
         svelte.enable = true;
         tailwindcss.enable = true;
         taplo.enable = true;
