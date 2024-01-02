@@ -155,8 +155,8 @@ in {
 
     extraConfigLuaPre = lib.optionalString config.wrapRc ''
       -- Ignore the user lua configuration
-      vim.opt.runtimepath:remove(vim.fn.expand('~/.config/nvim'))
-      vim.opt.packpath:remove(vim.fn.expand('~/.local/share/nvim/site'))
+      vim.opt.runtimepath:remove(vim.fn.stdpath('config'))  -- ~/.config/nvim
+      vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")  -- ~/.local/share/nvim/site
     '';
 
     extraPlugins =
