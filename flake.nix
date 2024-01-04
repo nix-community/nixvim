@@ -59,8 +59,8 @@
             config.allowUnfree = true;
           };
         in {
-          checks =
-            (import ./tests {
+          checks = {
+            tests = import ./tests {
               inherit pkgs;
               inherit (pkgs) lib;
               # Some nixvim supported plugins require the use of unfree packages.
@@ -75,27 +75,26 @@
                       config = configuration;
                     };
                   };
-            })
-            // {
-              lib-tests = import ./tests/lib-tests.nix {
-                inherit (pkgs) pkgs lib;
-              };
-              extra-args-tests = import ./tests/extra-args.nix {
-                inherit pkgs;
-                inherit (self.legacyPackages.${system}) makeNixvimWithModule;
-              };
-              pre-commit-check = pre-commit-hooks.lib.${system}.run {
-                src = ./.;
-                hooks = {
-                  alejandra = {
-                    enable = true;
-                    excludes = ["plugins/_sources"];
-                  };
-                  statix.enable = true;
-                };
-                settings.statix.ignore = ["plugins/lsp/language-servers/rust-analyzer-config.nix"];
-              };
             };
+            lib-tests = import ./tests/lib-tests.nix {
+              inherit (pkgs) pkgs lib;
+            };
+            extra-args-tests = import ./tests/extra-args.nix {
+              inherit pkgs;
+              inherit (self.legacyPackages.${system}) makeNixvimWithModule;
+            };
+            pre-commit-check = pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks = {
+                alejandra = {
+                  enable = true;
+                  excludes = ["plugins/_sources"];
+                };
+                statix.enable = true;
+              };
+              settings.statix.ignore = ["plugins/lsp/language-servers/rust-analyzer-config.nix"];
+            };
+          };
           devShells = {
             default = pkgs.mkShell {
               inherit (self.checks.${system}.pre-commit-check) shellHook;
