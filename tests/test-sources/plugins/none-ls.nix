@@ -84,7 +84,9 @@
         formatting = {
           alejandra.enable = true;
           black.enable = true;
-          cbfmt.enable = true;
+          # As of 2024-01-04, cbfmt is broken on darwin
+          # TODO: re-enable this test when fixed
+          cbfmt.enable = !pkgs.stdenv.isDarwin;
           eslint.enable = true;
           eslint_d.enable = true;
           fantomas.enable = pkgs.stdenv.isLinux;
