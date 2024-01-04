@@ -63,6 +63,11 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/vscode-css-language-server" "--stdio"];
     }
     {
+      name = "dagger";
+      description = "Enable dagger, for Cuelang";
+      package = pkgs.cuelsp;
+    }
+    {
       name = "dartls";
       description = "Enable dart language-server, for dart";
       package = pkgs.dart;
