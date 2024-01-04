@@ -28,6 +28,14 @@
           # TODO: re-enable those tests when fixed
           "chktex"
           "latexindent"
+        ]
+        ++ pkgs.lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-darwin") [
+          # As of 2024-01-04, dmd is broken on x86_64-darwin
+          # TODO: re-enable this test when fixed
+          "dmd"
+          # As of 2024-01-04, luaformat is broken on x86_64-darwin
+          # TODO: re-enable this test when fixed
+          "lua_format"
         ];
 
       unpackaged =
