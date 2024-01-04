@@ -115,7 +115,12 @@
         metals.enable = true;
         nil_ls.enable = true;
         nixd.enable = true;
-        ols.enable = pkgs.stdenv.hostPlatform.system != "aarch64-linux";
+        ols.enable =
+          # ols is not supported on aarch64-linux
+          (pkgs.stdenv.hostPlatform.system != "aarch64-linux")
+          # As of 2024-01-04, ols is broken on darwin
+          # TODO: re-enable this test when fixed
+          && !pkgs.stdenv.isDarwin;
         omnisharp.enable = true;
         perlpls.enable = true;
         pest_ls.enable = true;
