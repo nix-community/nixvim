@@ -15,10 +15,20 @@
       # Where tools is the option type representing the valid tools for this language
       toolOptions = (builtins.head options.setup.type.getSubModules).options;
 
-      brokenTools = [
-        #Broken as of 16 of November 2023
-        "phpstan"
-      ];
+      brokenTools =
+        [
+          #Broken as of 16 of November 2023
+          "phpstan"
+        ]
+        ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+          # As of 2024-01-04, cbfmt is broken on darwin
+          # TODO: re-enable this test when fixed
+          "cbfmt"
+          # As of 2024-01-04, texliveMedium is broken on darwin
+          # TODO: re-enable those tests when fixed
+          "chktex"
+          "latexindent"
+        ];
 
       unpackaged =
         [
