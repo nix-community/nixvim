@@ -8,6 +8,9 @@
 </h2>
 
 # NixVim - A Neovim configuration system for nix
+
+- noop
+
 ## What is it?
 NixVim is a [Neovim](https://neovim.io) distribution built around
 [Nix](https://nixos.org) modules. It is distributed as a Nix flake, and
