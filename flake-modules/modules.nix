@@ -1,8 +1,4 @@
-{
-  modules,
-  inputs,
-  ...
-}: {
+{modules, ...}: {
   _module.args = let
     nixvimModules = with builtins;
       map
@@ -22,8 +18,6 @@
             pkgs = pkgs.lib.mkForce pkgs;
             inherit (pkgs) lib;
             helpers = import ../lib/helpers.nix {inherit (pkgs) lib;};
-            # TODO: Not sure why the modules need to access the whole flake inputs...
-            inherit inputs;
           };
         };
       };
