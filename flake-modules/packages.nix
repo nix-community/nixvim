@@ -17,12 +17,8 @@
         pkgs = pkgsUnfree;
         inherit modules;
       };
-
-      # TODO: deprecate (unused)
-      helpers = import ../helpers pkgs;
     in
       docs
-      // man-docs
-      // helpers;
+      // man-docs;
   };
 }
