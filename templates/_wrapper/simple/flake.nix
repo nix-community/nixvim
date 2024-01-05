@@ -3,8 +3,11 @@
     nixvim.url = "path:../../..";
     simple = {
       url = "path:../../simple";
-      inputs.nixvim.follows = "nixvim";
-      inputs.flake-utils.follows = "nixvim/flake-utils";
+      inputs = {
+        nixvim.follows = "nixvim";
+        nixpkgs.follows = "nixvim/nixpkgs";
+        flake-parts.follows = "nixvim/flake-parts";
+      };
     };
   };
 
