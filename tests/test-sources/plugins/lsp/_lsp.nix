@@ -91,6 +91,7 @@
           # pkgs.csharp-ls only supports linux platforms
           csharp-ls.enable = pkgs.stdenv.isLinux;
           cssls.enable = true;
+          dagger.enable = true;
           dartls.enable = true;
           denols.enable = true;
           dhall-lsp-server.enable = true;
