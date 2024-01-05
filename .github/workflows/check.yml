@@ -21,4 +21,3 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - run: nix flake check --all-systems --builders ""
       - run: nix flake check --all-systems --builders "" ./templates/_wrapper/simple --no-write-lock-file
-      - run: nix build .#docs --show-trace --builders ""
