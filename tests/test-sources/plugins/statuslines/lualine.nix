@@ -59,6 +59,7 @@
           # you can specify only the sections you want to change
           {
             name = "filename";
+            icon = "-";
             extraConfig = {
               newfile_status = true;
               path = 1;
@@ -75,6 +76,10 @@
         lualine_a = [
           {
             name = "buffers";
+            icon = {
+              icon = "X";
+              align = "right";
+            };
             extraConfig.mode = 4;
             extraConfig.filetype_names = {
               TelescopePrompt = "Telescope";
