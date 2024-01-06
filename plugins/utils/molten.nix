@@ -51,7 +51,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: `"none"`
         '';
-        type = types.enum ["none" "image_nvim"];
+        type = types.enum ["none" "image.nvim"];
       };
 
       outputCropBorder = mkDefaultOpt {
