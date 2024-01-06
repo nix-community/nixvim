@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 with lib; let
@@ -36,6 +37,24 @@ in {
       type = types.listOf types.package;
       default = [];
       description = "Extra packages to be made available to neovim";
+    };
+
+    python = {
+      package = mkOption {
+        type = types.package;
+        default = pkgs.python3;
+        description = "";
+      };
+
+      extraPythonPackages = mkOption {
+        type = with types; functionTo (listOf package);
+        default = p: [];
+        defaultText = literalExpression "p: with p; [ ]";
+        description = "Python packages to add to the `PYTHONPATH` of neovim.";
+        example = lib.literalExpression ''
+          p: [ p.numpy ]
+        '';
+      };
     };
 
     extraConfigLua = mkOption {
