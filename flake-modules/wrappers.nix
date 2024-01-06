@@ -28,8 +28,8 @@ in {
   };
 
   flake = {
-    nixosModules.nixvim = import ./nixos.nix wrapperArgs;
-    homeManagerModules.nixvim = import ./wrappers/hm.nix wrapperArgs;
-    nixDarwinModules.nixvim = import ./wrappers/darwin.nix wrapperArgs;
+    nixosModules.nixvim = import ../wrappers/nixos.nix wrapperArgs;
+    homeManagerModules.nixvim = import ../wrappers/hm.nix wrapperArgs;
+    nixDarwinModules.nixvim = import ../wrappers/darwin.nix wrapperArgs;
   };
 }
