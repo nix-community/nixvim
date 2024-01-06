@@ -8,7 +8,6 @@
   };
 
   outputs = {
-    self,
     nixvim,
     flake-parts,
     ...
@@ -35,7 +34,7 @@
           module = config;
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
           extraSpecialArgs = {
-            inherit self;
+            # inherit (inputs) foo;
           };
         };
       in {
