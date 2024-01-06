@@ -100,16 +100,14 @@ in {
     config.extraPlugins;
 
     neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
-        inherit (config) viAlias vimAlias;
+        inherit
+          (config)
+          extraPythonPackages
+          viAlias
+          vimAlias
+          ;
         # inherit customRC;
         plugins = normalizedPlugins;
-
-        # Python 3 environment
-        python3Env = let
-          python = config.python.package;
-          inherit (config.python) extraPythonPackages;
-        in
-          python.withPackages extraPythonPackages;
       }
       # Necessary to make sure the runtime path is set properly in NixOS 22.05,
       # or more generally before the commit:
