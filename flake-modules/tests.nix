@@ -1,4 +1,8 @@
 {
+  inputs,
+  self,
+  ...
+}: {
   perSystem = {
     pkgs,
     config,
@@ -27,6 +31,14 @@
         inherit pkgs;
         inherit (pkgs) lib;
       };
+
+      home-manager =
+        (import ../tests/modules/hm.nix {
+          inherit pkgs;
+          inherit (inputs) home-manager;
+          nixvim = self;
+        })
+        .activationPackage;
     };
   };
 }
