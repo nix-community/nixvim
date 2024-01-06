@@ -53,6 +53,15 @@
           .system
           .build
           .toplevel;
+      }
+      // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+        darwin-module =
+          (import ../tests/modules/darwin.nix {
+            inherit system;
+            inherit (inputs) nix-darwin;
+            nixvim = self;
+          })
+          .system;
       };
   };
 }
