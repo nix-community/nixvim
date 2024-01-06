@@ -546,6 +546,10 @@ with lib; let
       package = pkgs.taplo;
     }
     {
+      name = "templ";
+      description = "Enable the templ language server for the templ HTML templating language";
+    }
+    {
       name = "terraformls";
       description = "Enable terraform-ls, for terraform";
       package = pkgs.terraform-ls;
