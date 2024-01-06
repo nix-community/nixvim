@@ -16,7 +16,8 @@ default_pkgs: {
   };
 
   eval = lib.evalModules {
-    modules = [module wrap {_module.args = extraSpecialArgs;}] ++ shared.topLevelModules;
+    modules = [module wrap] ++ shared.topLevelModules;
+    specialArgs = extraSpecialArgs;
   };
 
   handleAssertions = config: let
