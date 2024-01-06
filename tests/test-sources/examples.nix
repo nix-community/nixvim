@@ -2,7 +2,7 @@
   plain = {};
 
   python-packages = {
-    extraPythonPackages = p:
+    extraPython3Packages = p:
       with p; [
         numpy
       ];
