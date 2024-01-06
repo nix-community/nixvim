@@ -1,1 +1,3 @@
 ignore = ["plugins/lsp/language-servers/rust-analyzer-config.nix"]
+# Frequent in nix module configurations
+disabled = ["repeated_keys"]
