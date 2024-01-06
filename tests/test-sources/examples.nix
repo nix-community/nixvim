@@ -2,13 +2,10 @@
   plain = {};
 
   python-packages = {
-    python = {
-      package = pkgs.python3;
-      extraPythonPackages = p:
-        with p; [
-          numpy
-        ];
-    };
+    extraPythonPackages = p:
+      with p; [
+        numpy
+      ];
   };
 
   simple-plugin = {
