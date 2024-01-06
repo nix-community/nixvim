@@ -548,7 +548,6 @@ with lib; let
     {
       name = "templ";
       description = "Enable the templ language server for the templ HTML templating language";
-      package = pkgs.templ;
     }
     {
       name = "terraformls";
