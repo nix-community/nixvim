@@ -7,7 +7,9 @@
     ...
   }: {
     packages = let
-      docs = {
+      # Do not check if documentation builds fine on darwin as it fails:
+      # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
+      docs = pkgs.lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
         docs = pkgsUnfree.callPackage (import ../docs) {
           inherit modules;
         };
