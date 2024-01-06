@@ -27,7 +27,6 @@
         inherit pkgs;
         inherit (pkgs) lib;
       };
-      docs = config.packages.docs ? null;
     };
   };
 }
