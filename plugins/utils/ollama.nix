@@ -98,7 +98,7 @@ in {
             Defaults to the value of `plugins.ollama.action`.
           '';
 
-          model = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw str) ''
+          model = helpers.mkNullOrStr ''
             The model to use for this prompt.
 
             Defaults to the value of `plugins.ollama.model`.
@@ -125,7 +125,7 @@ in {
             Additional model parameters, such as temperature, listed in the documentation for the [Modelfile](https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values).
           '';
 
-          system = helpers.mkNullOrOption (helpers.nixvimTypes.maybeRaw types.str) ''
+          system = helpers.mkNullOrStr ''
             The SYSTEM instruction specifies the system prompt to be used in the Modelfile template,
             if applicable.
             (overrides what's in the Modelfile).
