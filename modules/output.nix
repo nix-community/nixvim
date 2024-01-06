@@ -39,7 +39,7 @@ in {
       description = "Extra packages to be made available to neovim";
     };
 
-    extraPythonPackages = mkOption {
+    extraPython3Packages = mkOption {
       type = with types; functionTo (listOf package);
       default = p: [];
       defaultText = literalExpression "p: with p; [ ]";

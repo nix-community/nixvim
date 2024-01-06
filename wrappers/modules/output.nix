@@ -102,7 +102,7 @@ in {
     neovimConfig = pkgs.neovimUtils.makeNeovimConfig ({
         inherit
           (config)
-          extraPythonPackages
+          extraPython3Packages
           viAlias
           vimAlias
           ;
