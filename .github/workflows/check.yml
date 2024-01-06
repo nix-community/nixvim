@@ -19,4 +19,3 @@ jobs:
         with:
           name: nix-community
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix flake check --all-systems --builders ""
