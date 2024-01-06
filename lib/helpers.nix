@@ -79,6 +79,8 @@ with lib; rec {
   mkCompositeOption = desc: options:
     mkNullOrOption (types.submodule {inherit options;}) desc;
 
+  mkNullOrStr = mkNullOrOption (with nixvimTypes; maybeRaw str);
+
   mkNullOrLua = desc:
     lib.mkOption {
       type = lib.types.nullOr nixvimTypes.strLua;
