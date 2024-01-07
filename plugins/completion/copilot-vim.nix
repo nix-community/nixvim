@@ -1,63 +1,48 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
-}:
-with lib; let
-  cfg = config.plugins.copilot-vim;
-in {
-  imports = [
-    (lib.mkRenamedOptionModule ["plugins" "copilot"] ["plugins" "copilot-vim"])
-  ];
+} @ args:
+with lib;
+  (
+    with import ../helpers.nix {inherit lib;};
+      mkPlugin args {
+        name = "copilot-vim";
+        description = "copilot.vim";
+        package = pkgs.vimPlugins.copilot-vim;
+        globalPrefix = "copilot_";
 
-  options = {
-    plugins.copilot-vim = {
-      enable = mkEnableOption "copilot.vim";
+        options = {
+          nodeCommand = mkDefaultOpt {
+            global = "node_command";
+            type = types.str;
+            default = "${pkgs.nodejs-18_x}/bin/node";
+            description = "Tell Copilot what `node` binary to use.";
+          };
 
-      package = helpers.mkPackageOption "copilot.vim" pkgs.vimPlugins.copilot-vim;
+          filetypes = mkDefaultOpt {
+            type = with types; attrsOf bool;
+            description = ''
+              A dictionary mapping file types to their enabled status
 
-      filetypes = mkOption {
-        type = types.attrsOf types.bool;
-        description = "A dictionary mapping file types to their enabled status";
-        default = {};
-        example = {
-          "*" = false;
-          python = true;
-        };
-      };
-
-      proxy = helpers.defaultNullOpts.mkStr "" ''
-        Tell Copilot what proxy server to use.
-        Example: "localhost:3128"
-      '';
-
-      extraConfig = mkOption {
-        type = types.attrs;
-        description = ''
-          The configuration options for copilot without the 'copilot_' prefix.
-          Example: To set 'copilot_foo_bar' to 1, write
-            extraConfig = {
-              foo_bar = true;
+              Default: `{}`
+            '';
+            example = {
+              "*" = false;
+              python = true;
             };
-        '';
-        default = {};
-      };
-    };
-  };
+          };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-
-    globals = with cfg;
-      mapAttrs' (name: nameValuePair ("copilot_" + name))
-      (
-        {
-          node_command = "${pkgs.nodejs-18_x}/bin/node";
-          inherit filetypes proxy;
-        }
-        // cfg.extraConfig
-      );
-  };
-}
+          proxy = mkDefaultOpt {
+            type = types.str;
+            description = "Tell Copilot what proxy server to use.";
+            example = "localhost:3128";
+          };
+        };
+      }
+  )
+  // {
+    imports = [
+      (lib.mkRenamedOptionModule ["plugins" "copilot"] ["plugins" "copilot-vim"])
+    ];
+  }
