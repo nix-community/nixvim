@@ -2,14 +2,26 @@
   makeNixvimWithModule,
   pkgs,
 }: let
+  defaultModule = {regularArg, ...}: {
+    extraConfigLua = ''
+      -- regularArg=${regularArg}
+    '';
+  };
   generated = makeNixvimWithModule {
-    module = {importedArgument, ...}: {
-      extraConfigLua = ''
-        -- importedArgument=${importedArgument}
-      '';
+    module = {
+      regularArg,
+      extraModule,
+      ...
+    }: {
+      _module.args = {regularArg = "regularValue";};
+      imports = [defaultModule extraModule];
     };
     extraSpecialArgs = {
-      importedArgument = "foobar";
+      extraModule = {
+        extraConfigLua = ''
+          -- specialArg=specialValue
+        '';
+      };
     };
   };
 in
@@ -17,8 +29,12 @@ in
     printConfig = "${generated}/bin/nixvim-print-init";
   } ''
     config=$($printConfig)
-    if ! "$printConfig" | grep -- '-- importedArgument=foobar'; then
-      echo "Missing importedArgument in config"
+    if ! "$printConfig" | grep -- '-- regularArg=regularValue'; then
+      echo "Missing regularArg in config"
+      exit 1
+    fi
+    if ! "$printConfig" | grep -- '-- specialArg=specialValue'; then
+      echo "Missing specialArg in config"
       exit 1
     fi
 
