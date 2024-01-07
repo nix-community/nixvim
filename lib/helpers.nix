@@ -322,16 +322,27 @@ with lib; rec {
     ...
   }: let
     cfg = config.plugins.${name};
+
+    description =
+      if description is null
+      then name
+      else description;
+
     # TODO support nested options!
-    pluginOptions = mapAttrs (k: v: v.option) options;
+    pluginOptions =
+      mapAttrs
+      (
+        optName: opt:
+          opt.option
+      )
+      options;
     globals =
       mapAttrs'
-      (name: opt: {
+      (optName: opt: {
         name = globalPrefix + opt.global;
         value =
-          if cfg.${name} != null
-          then opt.value cfg.${name}
-          else null;
+          ifNonNull' cfg.${optName}
+          (opt.value cfg.${optName});
       })
       options;
     # does this evaluate package?
@@ -341,11 +352,31 @@ with lib; rec {
       else {
         package = mkPackageOption name package;
       };
+
+    extraConfigOption =
+      if (isString globalPrefix) && (globalPrefix != "")
+      then {
+        extraConfig = mkOption {
+          type = with types; attrsOf anything;
+          description = ''
+            The configuration options for ${name} without the '${globalPrefix}' prefix.
+            Example: To set '${globalPrefix}_foo_bar' to 1, write
+            ```nix
+              extraConfig = {
+                foo_bar = true;
+              };
+            ```
+          '';
+          default = {};
+        };
+      }
+      else {};
   in {
     options.plugins.${name} =
       {
         enable = mkEnableOption description;
       }
+      // extraConfigOption
       // packageOption
       // pluginOptions;
 
