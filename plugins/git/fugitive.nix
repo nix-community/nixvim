@@ -13,6 +13,6 @@ in
       package = pkgs.vimPlugins.vim-fugitive;
       extraPackages = [pkgs.git];
 
-      # In typical tpope fashin, this plugin has no config options
+      # In typical tpope fashion, this plugin has no config options
       options = {};
     }
