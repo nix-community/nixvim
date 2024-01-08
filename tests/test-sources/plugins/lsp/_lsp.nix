@@ -83,6 +83,7 @@
           ansiblels.enable = true;
           astro.enable = true;
           bashls.enable = true;
+          beancount.enable = true;
           biome.enable = true;
           ccls.enable = true;
           clangd.enable = true;

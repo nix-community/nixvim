@@ -27,6 +27,11 @@ with lib; let
       package = pkgs.nodePackages.bash-language-server;
     }
     {
+      name = "beancount";
+      description = "Enable beancount-language-server";
+      package = pkgs.beancount-language-server;
+    }
+    {
       name = "biome";
       description = "Enable Biome, Toolchain of the Web";
     }
