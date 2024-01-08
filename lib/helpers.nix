@@ -334,7 +334,13 @@ with lib; rec {
     globals =
       mapAttrs'
       (optName: opt: {
-        name = globalPrefix + opt.global;
+        name = let
+          optGlobal =
+            if opt.global == null
+            then optName
+            else opt.global;
+        in
+          globalPrefix + optGlobal;
         value = cfg.${optName};
       })
       options;
@@ -386,7 +392,7 @@ with lib; rec {
 
   mkDefaultOpt = {
     type,
-    global,
+    global ? null,
     description ? null,
     example ? null,
     default ? null,
