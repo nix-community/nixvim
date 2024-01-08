@@ -335,9 +335,7 @@ with lib; rec {
       mapAttrs'
       (optName: opt: {
         name = globalPrefix + opt.global;
-        value =
-          ifNonNull' cfg.${optName}
-          (opt.value cfg.${optName});
+        value = cfg.${optName};
       })
       options;
     # does this evaluate package?
@@ -392,7 +390,6 @@ with lib; rec {
     description ? null,
     example ? null,
     default ? null,
-    value ? v: v,
     ...
   }: {
     option = mkOption {
@@ -400,7 +397,7 @@ with lib; rec {
       inherit default description example;
     };
 
-    inherit value global;
+    inherit global;
   };
 
   extraOptionsOptions = {
