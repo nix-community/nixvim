@@ -386,23 +386,13 @@ with lib; rec {
     };
   };
 
-  globalVal = val:
-    if builtins.isBool val
-    then
-      (
-        if !val
-        then 0
-        else 1
-      )
-    else val;
-
   mkDefaultOpt = {
     type,
     global,
     description ? null,
     example ? null,
     default ? null,
-    value ? v: (globalVal v),
+    value ? v: v,
     ...
   }: {
     option = mkOption {
