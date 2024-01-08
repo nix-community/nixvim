@@ -1,137 +1,129 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
-}:
-with lib; let
-  cfg = config.plugins.undotree;
-in {
-  options = {
-    plugins.undotree = {
-      enable = mkEnableOption "undotree";
+} @ args:
+with lib;
+with import ../helpers.nix {inherit lib;};
+  mkPlugin args {
+    name = "undotree";
+    package = pkgs.vimPlugins.undotree;
+    globalPrefix = "undotree_";
 
-      package = helpers.mkPackageOption "undotree" pkgs.vimPlugins.undotree;
-
-      windowLayout = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-        description = "Window layout for undotree. Check https://github.com/mbbill/undotree/blob/master/plugin/undotree.vim#L29 for reference";
+    options = {
+      windowLayout = mkDefaultOpt {
+        type = types.int;
+        description = ''
+          Window layout for undotree.
+          Check https://github.com/mbbill/undotree/blob/master/plugin/undotree.vim#L29 for reference
+        '';
       };
 
-      shortIndicators = mkOption {
+      shortIndicators = mkDefaultOpt {
         type = types.bool;
-        default = false;
-        description = "E.g. use 'd' instead of 'days'";
+        description = ''
+          E.g. use 'd' instead of 'days'
+
+          Default: `false`
+        '';
       };
 
-      windowWidth = mkOption {
-        type = types.nullOr types.int;
-        default = null;
+      windowWidth = mkDefaultOpt {
+        type = types.int;
         description = "Undotree window width";
       };
 
-      diffHeight = mkOption {
-        type = types.nullOr types.int;
-        default = null;
+      diffHeight = mkDefaultOpt {
+        type = types.int;
         description = "Undotree diff panel height";
       };
 
-      autoOpenDiff = mkOption {
+      autoOpenDiff = mkDefaultOpt {
         type = types.bool;
-        default = true;
-        description = "Auto open diff window";
+        description = ''
+          Auto open diff window
+
+          Default: `true`
+        '';
       };
 
-      focusOnToggle = mkOption {
+      focusOnToggle = mkDefaultOpt {
         type = types.bool;
-        default = false;
-        description = "Focus undotree after being opened";
+        description = ''
+          Focus undotree after being opened
+
+          Default: `false`
+        '';
       };
 
-      treeNodeShape = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      treeNodeShape = mkDefaultOpt {
+        type = types.str;
         description = "Tree node shape";
       };
 
-      diffCommand = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      diffCommand = mkDefaultOpt {
+        type = types.str;
         description = "Diff command";
       };
 
-      relativeTimestamp = mkOption {
+      relativeTimestamp = mkDefaultOpt {
         type = types.bool;
-        default = true;
-        description = "Use a relative timestamp";
+        description = ''
+          Use a relative timestamp.
+
+          Default: `true`
+        '';
       };
 
-      highlightChangedText = mkOption {
+      highlightChangedText = mkDefaultOpt {
         type = types.bool;
-        default = true;
-        description = "Highlight changed text";
+        description = ''
+          Highlight changed text
+
+          Default: `true`
+        '';
       };
 
-      highlightChangesWithSign = mkOption {
+      highlightChangesWithSign = mkDefaultOpt {
         type = types.bool;
-        default = true;
-        description = "Highlight changes with a sign in the gutter";
+        description = ''
+          Highlight changes with a sign in the gutter
+
+          Default: `true`
+        '';
       };
 
-      highlightSyntaxAdd = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      highlightSyntaxAdd = mkDefaultOpt {
+        type = types.str;
         description = "Added lines highlight group";
       };
 
-      highlightSyntaxChange = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      highlightSyntaxChange = mkDefaultOpt {
+        type = types.str;
         description = "Changed lines highlight group";
       };
 
-      highlightSyntaxDel = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      highlightSyntaxDel = mkDefaultOpt {
+        type = types.str;
         description = "Deleted lines highlight group";
       };
 
-      showHelpLine = mkOption {
+      showHelpLine = mkDefaultOpt {
         type = types.bool;
-        default = true;
-        description = "Show help line";
+        description = ''
+          Show help line.
+
+          Default: `true`
+        '';
       };
 
-      showCursorLine = mkOption {
+      showCursorLine = mkDefaultOpt {
         type = types.bool;
-        default = true;
-        description = "Show cursor line";
+        description = ''
+          Show cursor line
+
+          Default: `true`
+        '';
       };
     };
-  };
-
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-
-    globals = {
-      undotree_WindowLayout = mkIf (cfg.windowLayout != null) cfg.windowLayout;
-      undotree_ShortIndicators = mkIf cfg.shortIndicators 1;
-      undotree_SplitWidth = mkIf (cfg.windowWidth != null) cfg.windowWidth;
-      undotree_DiffpanelHeight = mkIf (cfg.diffHeight != null) cfg.diffHeight;
-      undotree_DiffAutoOpen = mkIf (!cfg.autoOpenDiff) 0;
-      undotree_SetFocusWhenToggle = mkIf cfg.focusOnToggle 1;
-      undotree_TreeNodeShape = mkIf (cfg.treeNodeShape != null) cfg.treeNodeShape;
-      undotree_DiffCommand = mkIf (cfg.diffCommand != null) cfg.diffCommand;
-      undotree_RelativeTimestamp = mkIf (!cfg.relativeTimestamp) 0;
-      undotree_HighlightChangedText = mkIf (!cfg.highlightChangedText) 0;
-      undotree_HighlightChangedWithSign = mkIf (!cfg.highlightChangesWithSign) 0;
-      undotree_HighlightSyntaxAdd = mkIf (cfg.highlightSyntaxAdd != null) cfg.highlightSyntaxAdd;
-      undotree_HighlightSyntaxChange = mkIf (cfg.highlightSyntaxChange != null) cfg.highlightSyntaxAdd;
-      undotree_HighlightSyntaxDel = mkIf (cfg.highlightSyntaxDel != null) cfg.highlightSyntaxDel;
-      undotree_HelpLine = mkIf (!cfg.showHelpLine) 0;
-      undotree_CursorLine = mkIf (!cfg.showCursorLine) 0;
-    };
-  };
-}
+  }
