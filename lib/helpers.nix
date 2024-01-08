@@ -313,7 +313,7 @@ with lib; rec {
     ...
   }: {
     name,
-    description,
+    description ? null,
     package ? null,
     extraPlugins ? [],
     extraPackages ? [],
@@ -322,11 +322,6 @@ with lib; rec {
     ...
   }: let
     cfg = config.plugins.${name};
-
-    description =
-      if description is null
-      then name
-      else description;
 
     # TODO support nested options!
     pluginOptions =
@@ -374,7 +369,11 @@ with lib; rec {
   in {
     options.plugins.${name} =
       {
-        enable = mkEnableOption description;
+        enable = mkEnableOption (
+          if description == null
+          then name
+          else description
+        );
       }
       // extraConfigOption
       // packageOption
