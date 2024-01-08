@@ -1,58 +1,51 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
-}:
-with lib; let
-  cfg = config.colorschemes.nord;
-in {
-  options = {
-    colorschemes.nord = {
-      enable = mkEnableOption "nord";
+} @ args:
+with lib;
+with import ../helpers.nix {inherit lib;};
+  mkPlugin args {
+    name = "nord";
+    description = "nord.nvim";
+    package = pkgs.vimPlugins.nord-nvim;
+    globalPrefix = "nord_";
 
-      package = helpers.mkPackageOption "nord.vim" pkgs.vimPlugins.nord-nvim;
+    options = {
+      contrast = mkDefaultOpt {
+        type = types.bool;
+        description = ''
+          Make sidebars and popup menus like nvim-tree and telescope have a different background.
+        '';
+      };
 
-      contrast =
-        mkEnableOption
-        "Make sidebars and popup menus like nvim-tree and telescope have a different background";
+      borders = mkDefaultOpt {
+        type = types.bool;
+        description = "Enable the border between verticaly split windows visable.";
+      };
 
-      borders =
-        mkEnableOption
-        "Enable the border between verticaly split windows visable";
+      disable_background = mkDefaultOpt {
+        type = types.bool;
+        description = ''
+          Disable the setting of background color so that NeoVim can use your terminal background.
+        '';
+      };
 
-      disable_background =
-        mkEnableOption
-        "Disable the setting of background color so that NeoVim can use your terminal background";
+      cursorline_transparent = mkDefaultOpt {
+        type = types.bool;
+        description = "Set the cursorline transparent/visible.";
+      };
 
-      cursorline_transparent =
-        mkEnableOption
-        "Set the cursorline transparent/visible";
+      enable_sidebar_background = mkDefaultOpt {
+        type = types.bool;
+        description = ''
+          Re-enables the background of the sidebar if you disabled the background of everything.
+        '';
+      };
 
-      enable_sidebar_background =
-        mkEnableOption
-        "Re-enables the background of the sidebar if you disabled the background of everything";
-
-      italic = mkOption {
-        description = "enables/disables italics";
-        type = types.nullOr types.bool;
-        default = null;
+      italic = mkDefaultOpt {
+        type = types.bool;
+        description = "Enables/disables italics.";
       };
     };
-  };
-
-  config = mkIf cfg.enable {
-    colorscheme = "nord";
-    extraPlugins = [cfg.package];
-
-    globals = {
-      nord_contrast = mkIf cfg.contrast 1;
-      nord_borders = mkIf cfg.borders 1;
-      nord_disable_background = mkIf cfg.disable_background 1;
-      nord_cursoline_transparent = mkIf cfg.cursorline_transparent 1;
-      nord_enable_sidebar_background = mkIf cfg.enable_sidebar_background 1;
-      nord_italic = mkIf (cfg.italic != null) cfg.italic;
-    };
-  };
-}
+  }
