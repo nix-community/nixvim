@@ -1,10 +1,14 @@
-{
+let
+  # As of 2024-01-08, lua5.1-magick is broken
+  # TODO: re-enable this test when fixed
+  enable = false;
+in {
   empty = {
     # At runtime, the plugin tries to get the size of the terminal which doesn't exist in the
     # headless environment.
     tests.dontRun = true;
 
-    plugins.image.enable = true;
+    plugins.image.enable = enable;
   };
 
   defaults = {
@@ -13,7 +17,7 @@
     tests.dontRun = true;
 
     plugins.image = {
-      enable = true;
+      inherit enable;
 
       backend = "kitty";
       integrations = {
@@ -57,7 +61,7 @@
     tests.dontRun = true;
 
     plugins.image = {
-      enable = true;
+      inherit enable;
       backend = "ueberzug";
     };
   };
