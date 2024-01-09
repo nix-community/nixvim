@@ -122,7 +122,7 @@ in rec {
   processAdapters = type: adapters:
     with builtins;
       mapAttrs (_: adapter:
-        if typeOf adapter == "string"
+        if isString adapter
         then helpers.mkRaw adapter
         else
           filterAttrs (n: _: n != "enrichConfig") (
