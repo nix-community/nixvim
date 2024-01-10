@@ -30,6 +30,9 @@ with lib; let
       ansiblelint = {
         package = pkgs.ansible-lint;
       };
+      bandit = {
+        package = pkgs.python3Packages.bandit;
+      };
       cppcheck = {
         package = pkgs.cppcheck;
       };
