@@ -57,6 +57,7 @@
         };
         diagnostics = {
           ansiblelint.enable = true;
+          bandit.enable = true;
           cppcheck.enable = true;
           deadnix.enable = true;
           eslint.enable = true;
