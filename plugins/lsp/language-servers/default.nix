@@ -414,6 +414,11 @@ with lib; let
       settings = cfg: {nixd = cfg;};
     }
     {
+      name = "nushell";
+      description = "Enable nushell language server";
+      cmd = cfg: ["${cfg.package}/bin/nu" "--lsp"];
+    }
+    {
       name = "ols";
       description = "Enable ols, for the odin programming language";
       package = pkgs.ols;
