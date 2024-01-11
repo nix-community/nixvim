@@ -122,6 +122,7 @@
           metals.enable = true;
           nil_ls.enable = true;
           nixd.enable = true;
+          nushell.enable = true;
           ols.enable =
             # ols is not supported on aarch64-linux
             (pkgs.stdenv.hostPlatform.system != "aarch64-linux")
