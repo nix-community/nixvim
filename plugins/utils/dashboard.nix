@@ -7,12 +7,19 @@
 }:
 with lib; let
   cfg = config.plugins.dashboard;
+  themes = [ "hyper" "doom" ];
 in {
   options = {
     plugins.dashboard = {
       enable = mkEnableOption "dashboard";
 
       package = helpers.mkPackageOption "dashboard" pkgs.vimPlugins.dashboard-nvim;
+
+      theme = mkOption {
+        description = "Dashboard theme";
+        type = types.oneOf themes;
+        default = "hyper";
+      };
 
       header = mkOption {
         description = "Header text";
@@ -41,7 +48,7 @@ in {
               type = types.str;
             };
 
-            shortcut = mkOption {
+            key = mkOption {
               description = "Item shortcut";
               type = types.nullOr types.str;
               default = null;
@@ -54,12 +61,6 @@ in {
             };
           };
         }));
-        default = null;
-      };
-
-      sessionDirectory = mkOption {
-        description = "Path to session file";
-        type = types.nullOr types.str;
         default = null;
       };
 
@@ -106,24 +107,38 @@ in {
         type = types.nullOr types.bool;
         default = null;
       };
+
+      hideWinbar = mkOption {
+        description = "Whether to hide winbar in Dashboard buffer";
+        type = types.nullOr types.bool;
+        default = null;
+      };
     };
   };
 
   config = let
     options = {
-      custom_header = cfg.header;
-      custom_footer = cfg.footer;
-      custom_center = cfg.center;
+      theme = cfg.theme;
 
-      preview_file_path = cfg.preview.file;
-      preview_file_height = cfg.preview.height;
-      preview_file_width = cfg.preview.width;
-      preview_command = cfg.preview.command;
+      config = {
+        shortcut = if cfg.theme == "doom" then cfg.center else null;
 
-      hide_statusline = cfg.hideStatusline;
-      hide_tabline = cfg.hideTabline;
+        center = if cfg.theme == "hyper" then cfg.center else null;
+        foooter = if cfg.theme == "hyper" then cfg.foooter else null;
+      };
 
-      session_directory = cfg.sessionDirectory;
+      hide = {
+        statusline = cfg.hideStatusline;
+        tabline = cfg.hideTabline;
+        winbar = cfg.hideWinbar;
+      };
+
+      preview = {
+        command = cfg.preview.command;
+        file_height = cfg.preview.height;
+        file_path = cfg.preview.file;
+        file_width = cfg.preview.width;
+      };
     };
 
     filteredOptions = filterAttrs (_: v: v != null) options;
