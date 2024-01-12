@@ -16,13 +16,13 @@ in {
 
       theme = mkOption {
         description = "Dashboard theme";
-        type = with types; oneOf [(enum ["hyper"]) (enum ["doom"])];
+        type = with types; nullOr (oneOf [(enum ["hyper"]) (enum ["doom"])]);
         default = "hyper";
       };
 
       disableMove = mkOption {
         description = "Whether to disable the move keys";
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = true;
       };
 
@@ -196,7 +196,7 @@ in {
 
             desc = mkOption {
               description = "Item description";
-              type = types.str;
+              type = types.nullOr types.str;
             };
 
             desc_hl = mkOption {
