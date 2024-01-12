@@ -145,7 +145,7 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
       extraConfigLua = ''
-        dashboard = require("dashboard").setup {
+        require("dashboard").setup {
           ${toString (mapAttrsToList (n: v: "${n} = ${helpers.toLuaObject v}\n")
               filteredOptions)}
         }
