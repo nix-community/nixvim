@@ -254,6 +254,11 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
     }
     {
+      name = "htmx";
+      description = "Enable htmx, for HTMX";
+      package = pkgs.htmx-lsp;
+    }
+    {
       name = "intelephense";
       description = "Enable intelephense, for PHP";
       package = pkgs.nodePackages.intelephense;
