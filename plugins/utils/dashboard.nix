@@ -146,7 +146,7 @@ in {
       extraPlugins = [cfg.package];
       extraConfigLua = ''
         require("dashboard").setup {
-          ${toString (mapAttrsToList (n: v: "${n} = ${helpers.toLuaObject v}\n")
+          ${toString (mapAttrsToList (n: v: "${n} = ${helpers.toLuaObject v},\n")
               filteredOptions)}
         }
       '';
