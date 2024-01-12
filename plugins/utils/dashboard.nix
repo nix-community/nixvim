@@ -124,6 +124,12 @@ in {
         type = types.bool;
         default = false;
       };
+
+      disableMove = mkOption {
+        description = "Whether to disable the move keys";
+        type = types.bool;
+        default = true;
+      };
     };
   };
 
@@ -131,9 +137,10 @@ in {
     options = {
       theme = cfg.theme;
 
-      header = cfg.header;
-
       config = {
+        header = cfg.header;
+        disable_move = cfg.disableMove;
+
         # Only available in "hyper" theme.
         shortcut = cfg.center;
         packages.enable = cfg.showPackages;
