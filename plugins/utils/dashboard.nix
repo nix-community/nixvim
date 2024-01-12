@@ -145,10 +145,10 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
       extraConfigLua = ''
-        local dashboard = require("dashboard")
-
-        ${toString (mapAttrsToList (n: v: "dashboard.${n} = ${helpers.toLuaObject v}\n")
-            filteredOptions)}
+        dashboard = require("dashboard").setup {
+          ${toString (mapAttrsToList (n: v: "${n} = ${helpers.toLuaObject v}\n")
+              filteredOptions)}
+        }
       '';
     };
 }
