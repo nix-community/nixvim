@@ -111,6 +111,7 @@
           graphql.enable = true;
           hls.enable = true;
           html.enable = true;
+          htmx.enable = true;
           java-language-server.enable = true;
           jsonls.enable = true;
           julials.enable = true;
