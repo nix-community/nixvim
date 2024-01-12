@@ -7,7 +7,6 @@
 }:
 with lib; let
   cfg = config.plugins.dashboard;
-  themes = [ "hyper" "doom" ];
 in {
   options = {
     plugins.dashboard = {
@@ -17,7 +16,7 @@ in {
 
       theme = mkOption {
         description = "Dashboard theme";
-        type = types.oneOf themes;
+        type = with types; oneOf [(enum ["hyper"]) (enum ["doom"])];
         default = "hyper";
       };
 
