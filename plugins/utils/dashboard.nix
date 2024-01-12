@@ -20,15 +20,161 @@ in {
         default = "hyper";
       };
 
+      disableMove = mkOption {
+        description = "Whether to disable the move keys";
+        type = types.bool;
+        default = true;
+      };
+
+      shortcutType = mkOption {
+        description = "Shortcut type";
+        type = with types; nullOr (oneOf [(enum ["letter"]) (enum ["number"])]);
+        default = null;
+      };
+
+      changeVCSRoot = mkOption {
+        description = "Change to the root of VCS for hyper mru";
+        type = types.nullOr types.bool;
+        default = false;
+      };
+
       header = mkOption {
         description = "Header text";
         type = types.nullOr (types.listOf types.str);
         default = null;
       };
 
+      weekHeader = mkOption {
+        description = "Week header options";
+        type = types.nullOr (types.submodule {
+          options = {
+            enable = mkOption {
+              description = "Whether to enable the week header";
+              type = types.nullOr types.bool;
+              default = null;
+            };
+
+            concat = mkOption {
+              description = "Text to be added after the time string line";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            append = mkOption {
+              description = "Text to be 'table' appended after the time string line";
+              type = types.nullOr types.str;
+              default = null;
+            };
+          };
+        });
+        default = null;
+      };
+
       footer = mkOption {
         description = "Footer text";
         type = types.nullOr (types.listOf types.str);
+        default = null;
+      };
+
+      shortcut = mkOption {
+        description = "Shortcut section, only available for the `hyper` theme";
+        type = types.nullOr (types.listOf (types.submodule {
+          options = {
+            desc = mkOption {
+              description = "The description of the action";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            group = mkOption {
+              description = "The highlight group of the action";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            action = mkOption {
+              description = "The action to be taken";
+              type = types.nullOr types.str;
+              default = null;
+            };
+          };
+        }));
+        default = null;
+      };
+
+      showPackages = mkOption {
+        description = "Whether to hide what packages have looaded. Only available in the 'hyper' theme";
+        type = types.bool;
+        default = false;
+      };
+
+      project = mkOption {
+        description = "Project showcase options. Only available in the 'hyper' theme";
+        type = types.nullOr (types.submodule {
+          options = {
+            enable = mkOption {
+              description = "Whether to enable the showcase of the project list";
+              type = types.nullOr types.bool;
+              default = null;
+            };
+
+            limit = mkOption {
+              description = "The limit of projects to be showcased";
+              type = types.nullOr types.int;
+              default = null;
+            };
+
+            icon = mkOption {
+              description = "The icon of the project section";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            label = mkOption {
+              description = "The label of the project section";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            action = mkOption {
+              description = "The action to be ran when selecting a project, this can be a function";
+              type = types.nullOr types.str;
+              default = null;
+            };
+          };
+        });
+        default = null;
+      };
+
+      mru = mkOption {
+        description = "MRU section";
+        type = types.nullOr (types.submodule {
+          options = {
+            limit = mkOption {
+              description = "The limit of recently opened projects to be shown";
+              type = types.nullOr types.int;
+              default = null;
+            };
+
+            icon = mkOption {
+              description = "The icon of the MRU section";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            label = mkOption {
+              description = "The label of the MRU section";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            cwd_only = mkOption {
+              description = "Whether to cwd only";
+              type = types.nullOr types.bool;
+              default = null;
+            };
+          };
+        });
         default = null;
       };
 
@@ -42,13 +188,36 @@ in {
               default = null;
             };
 
+            icon_hl = mkOption {
+              description = "Icon's highlight group";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
             desc = mkOption {
               description = "Item description";
               type = types.str;
             };
 
+            desc_hl = mkOption {
+              description = "Description's highlight group";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
             key = mkOption {
               description = "Item shortcut";
+              type = types.nullOr types.str;
+              default = null;
+            };
+            key_hl = mkOption {
+              description = "Shortcut's highlight group";
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            key_format = mkOption {
+              description = "Shortcut's text format, %s will be replaced with the value of `key`";
               type = types.nullOr types.str;
               default = null;
             };
@@ -112,43 +281,30 @@ in {
         type = types.nullOr types.bool;
         default = null;
       };
-
-      showProjects = mkOption {
-        description = "Whether to hide the project list. Only available in the 'hyper' theme";
-        type = types.bool;
-        default = false;
-      };
-
-      showPackages = mkOption {
-        description = "Whether to hide what packages have looaded. Only available in the 'hyper' theme";
-        type = types.bool;
-        default = false;
-      };
-
-      disableMove = mkOption {
-        description = "Whether to disable the move keys";
-        type = types.bool;
-        default = true;
-      };
     };
   };
 
   config = let
     options = {
-      theme = cfg.theme;
+      inherit (cfg) theme;
+
+      change_to_vcs_root = cfg.changeVCSRoot;
+      disable_move = cfg.disableMove;
+      shortcut_type = cfg.shortcutType;
 
       config = {
-        header = cfg.header;
+        inherit (cfg) footer header;
+        week_header = cfg.weekHeader;
+
+        # According to the README, it's located both outside and inside config
         disable_move = cfg.disableMove;
 
-        # Only available in "hyper" theme.
-        shortcut = cfg.center;
+        # Only available in "hyper" theme
+        inherit (cfg) project shortcut;
         packages.enable = cfg.showPackages;
-        project.enable = cfg.showProjects;
 
-        # Only available in "doom" theme.
-        center = cfg.center;
-        footer = cfg.footer;
+        # Only available in "doom" theme
+        inherit (cfg) center;
       };
 
       hide = {
@@ -158,7 +314,8 @@ in {
       };
 
       preview = {
-        command = cfg.preview.command;
+        inherit (cfg.preview) command;
+
         file_height = cfg.preview.height;
         file_path = cfg.preview.file;
         file_width = cfg.preview.width;
@@ -172,7 +329,7 @@ in {
       extraConfigLua = ''
         require("dashboard").setup {
           ${toString (mapAttrsToList (n: v: "${n} = ${helpers.toLuaObject v},\n")
-              filteredOptions)}
+            filteredOptions)}
         }
       '';
     };
