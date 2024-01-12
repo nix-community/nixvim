@@ -133,6 +133,7 @@
           perlpls.enable = true;
           pest_ls.enable = true;
           prismals.enable = true;
+          prolog-ls.enable = true;
           pylsp.enable = true;
           pylyzer.enable = true;
           pyright.enable = true;

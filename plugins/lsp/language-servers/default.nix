@@ -498,6 +498,12 @@ with lib; let
       package = pkgs.nodePackages."@prisma/language-server";
     }
     {
+      name = "prolog-ls";
+      description = "enable prolog_ls, for SWI-Prolog";
+      serverName = "prolog_ls";
+      package = pkgs.swiProlog;
+    }
+    {
       name = "pylsp";
       description = "Enable pylsp, for Python.";
       package = pkgs.python3Packages.python-lsp-server;
