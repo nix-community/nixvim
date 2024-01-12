@@ -1,262 +1,255 @@
 {
-  pkgs,
   lib,
   modules,
-  ...
-}:
-with lib; let
-  options = lib.evalModules {
-    inherit modules;
-    specialArgs = {inherit pkgs lib;};
+  pkgs,
+}: let
+  nixvimPath = toString ./..;
+
+  gitHubDeclaration = user: repo: subpath: {
+    url = "https://github.com/${user}/${repo}/blob/master/${subpath}";
+    name = "<${repo}/${subpath}>";
   };
 
-  mkMDDoc = options:
-    (pkgs.nixosOptionsDoc {
-      options = filterAttrs (k: _: k != "_module") options;
-      warningsAreErrors = false;
-      transformOptions = opts:
-        opts
-        // {
-          declarations = with builtins;
-            map
-            (
-              decl:
-                if hasPrefix "/nix/store/" decl
-                then let
-                  filepath = toString (match "^/nix/store/[^/]*/(.*)" decl);
-                in {
-                  url = "https://github.com/nix-community/nixvim/blob/main/${filepath}";
-                  name = filepath;
-                }
-                else decl
-            )
-            opts.declarations;
-        };
-    })
-    .optionsCommonMark;
-
-  removeUnwanted = attrs:
-    builtins.removeAttrs attrs [
-      "_module"
-      "_freeformOptions"
-      "warnings"
-      "assertions"
-      "content"
-    ];
-
-  removeWhitespace = builtins.replaceStrings [" "] [""];
-
-  getSubOptions = opts: path: removeUnwanted (opts.type.getSubOptions path);
-
-  isVisible = opts:
-    if isOption opts
-    then attrByPath ["visible"] true opts
-    else if opts.isOption
-    then attrByPath ["index" "options" "visible"] true opts
-    else let
-      filterFunc =
-        filterAttrs
-        (
-          _: v:
-            if isAttrs v
-            then isVisible v
-            else true
-        );
-
-      hasEmptyIndex = (filterFunc opts.index.options) == {};
-      hasEmptyComponents = (filterFunc opts.components) == {};
-    in
-      !hasEmptyIndex || !hasEmptyComponents;
-
-  wrapModule = path: opts: isOpt: rec {
-    index = {
-      options =
-        if isOpt
-        then opts
-        else filterAttrs (_: component: component.isOption && (isVisible component)) opts;
-      path = removeWhitespace (concatStringsSep "/" path);
+  transformOptions = opt:
+    opt
+    // {
+      declarations =
+        map (
+          decl:
+            if pkgs.lib.hasPrefix nixvimPath (toString decl)
+            then
+              gitHubDeclaration "nix-community" "nixvim"
+              (pkgs.lib.removePrefix "/" (pkgs.lib.removePrefix nixvimPath (toString decl)))
+            else if decl == "lib/modules.nix"
+            then gitHubDeclaration "NixOS" "nixpkgs" decl
+            else decl
+        )
+        opt.declarations;
     };
 
-    components =
-      if isOpt
-      then {}
-      else filterAttrs (_: component: !component.isOption && (isVisible component)) opts;
+  getSubOptions' = type: loc: let
+    types =
+      # Composite types
+      {
+        either =
+          (getSubOptions' type.nestedTypes.left loc)
+          // (getSubOptions' type.nestedTypes.right loc);
+        nullOr = getSubOptions' type.nestedTypes.elemType loc;
+        lazyAttrsOf = getSubOptions' type.nestedTypes.elemType (loc ++ ["<name>"]);
+        attrsOf = getSubOptions' type.nestedTypes.elemType (loc ++ ["<name>"]);
+        listOf = getSubOptions' type.nestedTypes.elemType (loc ++ ["*"]);
+        functionTo = getSubOptions' type.nestedTypes.elemType (loc ++ ["<function body>"]);
 
-    hasComponents = components != {};
-
-    isOption = isOpt;
-  };
-
-  processModulesRec = modules: let
-    recurse = path: mods: let
-      g = name: opts:
-        if !isOption opts
-        then wrapModule (path ++ [name]) (recurse (path ++ [name]) opts) false
-        else let
-          subOpts = getSubOptions opts (path ++ [name]);
-        in
-          if subOpts != {}
-          then
-            wrapModule
-            (path ++ [name])
-            (
-              (recurse (path ++ [name]) subOpts)
-              // {
-                # This is necessary to include the submodule option's definition in the docs (description, type, etc.)
-                # For instance, this helps submodules like "autoCmd" to include their base definitions and examples in the docs
-                # Though there might be a better, less "hacky" solution than this.
-                ${name} = recursiveUpdate opts {
-                  isOption = true;
-                  type.getSubOptions = _: _: {}; # Used to exclude suboptions from the submodule definition itself
-                };
-              }
-            )
-            false
-          else wrapModule (path ++ [name]) opts true;
-    in
-      mapAttrs g mods;
-  in
-    foldlAttrs
-    (
-      acc: name: opts: let
-        group =
-          if !opts.hasComponents
-          then "Neovim Options"
-          else "none";
-
-        last =
-          acc.${group}
-          or {
-            index = {
-              options = {};
-              path = removeWhitespace "${group}";
-            };
-            components = {};
-            isGroup = true;
-            hasComponents = false;
+        # Taken from lib/types.nix
+        submodule = let
+          base = lib.evalModules {
+            modules =
+              [
+                {
+                  _module.args.name = lib.mkOptionDefault "‹name›";
+                }
+              ]
+              ++ type.getSubModules;
           };
+          inherit (base._module) freeformType;
+        in
+          (base.extendModules
+            {prefix = loc;})
+          .options
+          // lib.optionalAttrs (freeformType != null) {
+            _freeformOptions = getSubOptions' freeformType loc;
+          };
+      }
+      # Leaf types
+      // lib.genAttrs [
+        "raw"
+        "bool"
+        "optionType"
+        "unspecified"
+        "str"
+        "attrs"
+        "rawLua"
+        "int"
+        "package"
+        "numberBetween"
+        "enum"
+        "anything"
+        "separatedString"
+        "path"
+        "maintainer"
+        "unsignedInt"
+        "float"
+        "positiveInt"
+        "intBetween"
+        "nullType"
+        "nonEmptyStr"
+      ] (_: {});
+  in
+    # For recursive types avoid calculating sub options, else this
+    # will end up in an unbounded recursion
+    if loc == ["plugins" "packer" "plugins" "*" "requires"]
+    then {}
+    else if builtins.hasAttr type.name types
+    then types.${type.name}
+    else throw "unhandled type in documentation: ${type.name}";
 
-        isOpt = !opts.hasComponents && (isOption opts.index.options);
+  mkOptionsJSON = options: let
+    # Mainly present to patch the type.getSubOptions of `either`, but we need to patch all
+    # the options in order to correctly handle other composite options
+    # The code that follows is taken almost exactly from nixpkgs,
+    # by changing type.getSubOptions to getSubOptions'
+    # lib/options.nix
+    optionAttrSetToDocList' = _: options:
+      lib.concatMap (opt: let
+        name = lib.showOption opt.loc;
+        docOption =
+          {
+            inherit (opt) loc;
+            inherit name;
+            description = opt.description or null;
+            declarations = builtins.filter (x: x != lib.unknownModule) opt.declarations;
+            internal = opt.internal or false;
+            visible =
+              if (opt ? visible && opt.visible == "shallow")
+              then true
+              else opt.visible or true;
+            readOnly = opt.readOnly or false;
+            type = opt.type.description or "unspecified";
+          }
+          // lib.optionalAttrs (opt ? example) {
+            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+              lib.options.renderOptionValue opt.example
+            );
+          }
+          // lib.optionalAttrs (opt ? defaultText || opt ? default) {
+            default =
+              builtins.addErrorContext "while evaluating the ${
+                if opt ? defaultText
+                then "defaultText"
+                else "default value"
+              } of option `${name}`" (
+                lib.options.renderOptionValue (opt.defaultText or opt.default)
+              );
+          }
+          // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {inherit (opt) relatedPackages;};
+
+        subOptions = let
+          ss = getSubOptions' opt.type opt.loc;
+        in
+          if ss != {}
+          then optionAttrSetToDocList' opt.loc ss
+          else [];
+        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
-        acc
-        // {
-          ${group} = recursiveUpdate last {
-            index.options = optionalAttrs isOpt {
-              ${name} = opts.index.options;
-            };
+        # To find infinite recursion in NixOS option docs:
+        # builtins.trace opt.loc
+        [docOption] ++ lib.optionals subOptionsVisible subOptions) (lib.collect lib.isOption options);
 
-            components = optionalAttrs (!isOpt) {
-              ${name} = recursiveUpdate opts {
-                index.path =
-                  removeWhitespace
-                  (
-                    concatStringsSep "/"
-                    (
-                      (optional (group != "none") group) ++ [opts.index.path]
-                    )
-                  );
-                hasComponents = true;
-              };
-            };
+    # Generate documentation template from the list of option declaration like
+    # the set generated with filterOptionSets.
+    optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-            hasComponents = last.components != {};
-          };
+    # nixos/lib/make-options-doc/default.nix
+
+    rawOpts = optionAttrSetToDocList options;
+    transformedOpts = map transformOptions rawOpts;
+    filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
+
+    # Generate DocBook documentation for a list of packages. This is
+    # what `relatedPackages` option of `mkOption` from
+    # ../../../lib/options.nix influences.
+    #
+    # Each element of `relatedPackages` can be either
+    # - a string:  that will be interpreted as an attribute name from `pkgs` and turned into a link
+    #              to search.nixos.org,
+    # - a list:    that will be interpreted as an attribute path from `pkgs` and turned into a link
+    #              to search.nixos.org,
+    # - an attrset: that can specify `name`, `path`, `comment`
+    #   (either of `name`, `path` is required, the rest are optional).
+    #
+    # NOTE: No checks against `pkgs` are made to ensure that the referenced package actually exists.
+    # Such checks are not compatible with option docs caching.
+    genRelatedPackages = packages: optName: let
+      unpack = p:
+        if lib.isString p
+        then {name = p;}
+        else if lib.isList p
+        then {path = p;}
+        else p;
+      describe = args: let
+        title = args.title or null;
+        name = args.name or (lib.concatStringsSep "." args.path);
+      in ''
+        - [${lib.optionalString (title != null) "${title} aka "}`pkgs.${name}`](
+            https://search.nixos.org/packages?show=${name}&sort=relevance&query=${name}
+          )${
+          lib.optionalString (args ? comment) "\n\n  ${args.comment}"
         }
-    )
-    {}
-    (recurse [] modules);
-
-  mapModulesToString = f: modules: let
-    recurse = mods: let
-      g = name: opts:
-        if (opts ? "isGroup")
-        then
-          if name != "none"
-          then (f name opts) + ("\n" + recurse opts.components)
-          else recurse opts.components
-        else if opts.hasComponents
-        then (f name opts) + ("\n" + recurse opts.components)
-        else f name opts;
+      '';
     in
-      concatStringsSep "\n" (mapAttrsToList g mods);
+      lib.concatMapStrings (p: describe (unpack p)) packages;
+
+    nixvimOptionsList =
+      lib.flip map filteredOpts
+      (
+        opt:
+          opt
+          // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) {
+            relatedPackages = genRelatedPackages opt.relatedPackages opt.name;
+          }
+      );
+
+    nixvimOptionsNix = builtins.listToAttrs (map (o: {
+        inherit (o) name;
+        value = removeAttrs o ["name" "visible" "internal"];
+      })
+      nixvimOptionsList);
   in
-    recurse modules;
+    pkgs.runCommand "options.json"
+    {
+      meta.description = "List of NixOS options in JSON format";
+      nativeBuildInputs = [
+        pkgs.brotli
+        pkgs.python3Minimal
+      ];
+      options =
+        builtins.toFile "options.json"
+        (builtins.unsafeDiscardStringContext (builtins.toJSON nixvimOptionsNix));
+      baseJSON = builtins.toFile "base.json" "{}";
+    }
+    ''
+        # Export list of options in different format.
+        dst=$out/share/doc/nixos
+        mkdir -p $dst
 
-  docs = rec {
-    modules = processModulesRec (removeUnwanted options.options);
-    commands =
-      mapModulesToString
-      (
-        name: opts: let
-          isBranch =
-            if (hasSuffix "index" opts.index.path)
-            then true
-            else opts.hasComponents;
-          path =
-            if isBranch
-            then "${opts.index.path}/index.md"
-            else "${opts.index.path}.md";
-        in
-          (optionalString isBranch
-            "mkdir -p ${opts.index.path}\n")
-          + "cp ${mkMDDoc opts.index.options} ${path}"
-      )
-      modules;
-  };
+        TOUCH_IF_DB=$dst/.used-docbook \
+        python ${pkgs.path}/nixos/lib/make-options-doc/mergeJSON.py \
+          $baseJSON $options \
+          > $dst/options.json
 
-  mdbook = {
-    nixvimOptions =
-      mapModulesToString
-      (
-        name: opts: let
-          isBranch =
-            if name == "index"
-            then true
-            else opts.hasComponents && opts.index.options != {};
+      if grep /nixpkgs/nixos/modules $dst/options.json; then
+        echo "The manual appears to depend on the location of Nixpkgs, which is bad"
+        echo "since this prevents sharing via the NixOS channel.  This is typically"
+        echo "caused by an option default that refers to a relative path (see above"
+        echo "for hints about the offending path)."
+        exit 1
+      fi
 
-          path =
-            if isBranch
-            then "${opts.index.path}/index.md"
-            else if !opts.hasComponents
-            then "${opts.index.path}.md"
-            else "";
+        brotli -9 < $dst/options.json > $dst/options.json.br
 
-          indentLevel = with builtins; length (filter isString (split "/" opts.index.path)) - 1;
-
-          padding = concatStrings (builtins.genList (_: "\t") indentLevel);
-        in "${padding}- [${name}](${path})"
-      )
-      docs.modules;
-  };
-
-  prepareMD = ''
-    # Copy inputs into the build directory
-    cp -r --no-preserve=all $inputs/* ./
-    cp ${../CONTRIBUTING.md} ./CONTRIBUTING.md
-
-    # Copy the generated MD docs into the build directory
-    # Using pkgs.writeShellScript helps to avoid the "bash: argument list too long" error
-    bash -e ${pkgs.writeShellScript "copy_docs" docs.commands}
-
-    # Prepare SUMMARY.md for mdBook
-    # Using pkgs.writeText helps to avoid the same error as above
-    substituteInPlace ./SUMMARY.md \
-      --replace "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
-  '';
-in
-  pkgs.stdenv.mkDerivation {
-    name = "nixvim-docs";
-
-    phases = ["buildPhase"];
-
-    buildInputs = [pkgs.mdbook];
-    inputs = sourceFilesBySuffices ./. [".md" ".toml" ".js"];
-
-    buildPhase = ''
-      dest=$out/share/doc
-      mkdir -p $dest
-      ${prepareMD}
-      mdbook build
-      cp -r ./book/* $dest
+        mkdir -p $out/nix-support
+        echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+        echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
+in
+  rec {
+    options-json = mkOptionsJSON (lib.evalModules {inherit modules;}).options;
+    man-docs = pkgs.callPackage ./man {inherit options-json;};
+  }
+  # Do not check if documentation builds fine on darwin as it fails:
+  # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
+  // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
+    docs = pkgs.callPackage ./mdbook {
+      inherit mkOptionsJSON modules getSubOptions';
+    };
   }
