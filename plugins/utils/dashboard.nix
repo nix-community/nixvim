@@ -123,7 +123,7 @@ in {
         shortcut = if cfg.theme == "doom" then cfg.center else null;
 
         center = if cfg.theme == "hyper" then cfg.center else null;
-        foooter = if cfg.theme == "hyper" then cfg.foooter else null;
+        footer = if cfg.theme == "hyper" then cfg.footer else null;
       };
 
       hide = {
