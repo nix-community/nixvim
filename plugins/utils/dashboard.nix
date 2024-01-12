@@ -112,6 +112,18 @@ in {
         type = types.nullOr types.bool;
         default = null;
       };
+
+      showProjects = mkOption {
+        description = "Whether to hide the project list. Only available in the 'hyper' theme";
+        type = types.bool;
+        default = false;
+      };
+
+      showPackages = mkOption {
+        description = "Whether to hide what packages have looaded. Only available in the 'hyper' theme";
+        type = types.bool;
+        default = false;
+      };
     };
   };
 
@@ -119,11 +131,17 @@ in {
     options = {
       theme = cfg.theme;
 
-      config = {
-        shortcut = if cfg.theme == "doom" then cfg.center else null;
+      header = cfg.header;
 
-        center = if cfg.theme == "hyper" then cfg.center else null;
-        footer = if cfg.theme == "hyper" then cfg.footer else null;
+      config = {
+        # Only available in "hyper" theme.
+        shortcut = cfg.center;
+        packages.enable = cfg.showPackages;
+        project.enable = cfg.showProjects;
+
+        # Only available in "doom" theme.
+        center = cfg.center;
+        footer = cfg.footer;
       };
 
       hide = {
