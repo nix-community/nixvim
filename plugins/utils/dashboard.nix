@@ -56,13 +56,13 @@ in {
 
             concat = mkOption {
               description = "Text to be added after the time string line";
-              type = types.nullOr types.str;
+              type = types.nullOr (types.listOf types.str);
               default = null;
             };
 
             append = mkOption {
               description = "Text to be 'table' appended after the time string line";
-              type = types.nullOr types.str;
+              type = types.nullOr (types.listOf types.str);
               default = null;
             };
           };
