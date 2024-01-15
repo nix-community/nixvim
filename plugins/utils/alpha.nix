@@ -104,14 +104,12 @@ in {
             type = "group";
             val = [
               {
-                shortcut = "e";
-                desc = "  New file";
-                command = "<CMD>ene <CR>";
+                val = "  New file";
+                on_press.__raw = "function() vim.cmd[[ene]] end";
               }
               {
-                shortcut = "SPC q";
-                desc = "  Quit Neovim";
-                command = ":qa<CR>";
+                val = " Quit Neovim";
+                on_press.__raw = "function() vim.cmd[[qa]] end";
               }
             ];
           }
