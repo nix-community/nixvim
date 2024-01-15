@@ -14,273 +14,311 @@ in {
 
       package = helpers.mkPackageOption "dashboard" pkgs.vimPlugins.dashboard-nvim;
 
-      theme = mkOption {
-        description = "Dashboard theme";
-        type = with types; nullOr (oneOf [(enum ["hyper"]) (enum ["doom"])]);
-        default = "hyper";
-      };
+      theme =
+        helpers.defaultNullOpts.mkNullable
+        (with types; either (enum ["hyper"]) (enum ["doom"]))
+        "hyper"
+        "The dashboard's theme.";
 
-      disableMove = mkOption {
-        description = "Whether to disable the move keys";
-        type = types.nullOr types.bool;
-        default = true;
-      };
+      disableMove =
+        helpers.defaultNullOpts.mkBool
+        true
+        "Whether to disable the move keys";
 
-      shortcutType = mkOption {
-        description = "Shortcut type";
-        type = with types; nullOr (oneOf [(enum ["letter"]) (enum ["number"])]);
-        default = null;
-      };
+      shortcutType =
+        helpers.defaultNullOpts.mkNullable
+        (with types; either (enum ["letter"]) (enum ["number"]))
+        "letter"
+        "The shortcut type.";
 
-      changeVCSRoot = mkOption {
-        description = "Change to the root of VCS for hyper mru";
-        type = types.nullOr types.bool;
-        default = false;
-      };
+      changeVCSRoot =
+        helpers.defaultNullOpts.mkBool
+        false
+        "Change the root of VCS for the `hyper` theme's MRU module.";
 
-      header = mkOption {
-        description = "Header text";
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-      };
+      header =
+        helpers.defaultNullOpts.mkListOf
+        types.str
+        "null"
+        "The header's text.";
 
       weekHeader = mkOption {
         description = "Week header options";
-        type = types.nullOr (types.submodule {
+        type = types.submodule {
           options = {
-            enable = mkOption {
-              description = "Whether to enable the week header";
-              type = types.nullOr types.bool;
-              default = null;
-            };
+            enable =
+              helpers.defaultNullOpts.mkBool
+              false
+              "Whether to enable the week header.";
 
-            concat = mkOption {
-              description = "Text to be added after the time string line";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            concat =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Text to be added after the time string line.";
 
-            append = mkOption {
-              description = "Text to be table appended after the time string line";
-              type = types.nullOr (types.listOf types.str);
-              default = null;
-            };
+            append =
+              helpers.defaultNullOpts.mkListOf
+              types.str
+              "null"
+              "List of text to be appended after the time string line, since the `header` is filled by `weekHeader` this allows you to create ASCII art right below it.";
           };
-        });
-        default = null;
+        };
+        default = {};
+        example = {
+          enable = true;
+          concat = "Some text to be going after the clock.";
+          append = [
+            "⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠶⠶⠶⠦⠤⠤⠤⠤⠤⢤⣤⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⢀⠄⢂⣠⣭⣭⣕⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠀⠀⠤⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉"
+            "⠀⠀⢀⠜⣳⣾⡿⠛⣿⣿⣿⣦⡠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣍⣀⣦⠦⠄⣀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+            "⠀⠠⣄⣽⣿⠋⠀⡰⢿⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⡿⠛⠛⡿⠿⣿⣿⣿⣿⣿⣿⣷⣶⣿⣁⣂⣤⡄⠀⠀⠀⠀⠀⠀"
+            "⢳⣶⣼⣿⠃⠀⢀⠧⠤⢜⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⠟⠁⠀⠀⠀⡇⠀⣀⡈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠁⠐⠀⣀⠀⠀"
+            "⠀⠙⠻⣿⠀⠀⠀⠀⠀⠀⢹⣿⣿⡝⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡿⠋⠀⠀⠀⠀⠠⠃⠁⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣿⡿⠋⠀⠀"
+            "⠀⠀⠀⠙⡄⠀⠀⠀⠀⠀⢸⣿⣿⡃⢼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⡏⠉⠉⠻⣿⡿⠋⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⢰⠀⠀⠰⡒⠊⠻⠿⠋⠐⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⠀⠀⠀⠀⣿⠇⠀⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⠸⣇⡀⠀⠑⢄⠀⠀⠀⡠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢖⠠⠤⠤⠔⠙⠻⠿⠋⠱⡑⢄⠀⢠⠟⠀⠀⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⠀⠀⠈⠉⠒⠒⠻⠶⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡄⠀⠀⠀⠀⠀⠀⠀⠀⠡⢀⡵⠃⠀⠀⠀⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠦⣀⠀⠀⠀⠀⠀⢀⣤⡟⠉⠀⠀⠀⠀⠀⠀⠀⠀"
+            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠙⠛⠓⠒⠲⠿⢍⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+          ];
+        };
       };
 
-      footer = mkOption {
-        description = "Footer text";
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-      };
+      footer =
+        helpers.defaultNullOpts.mkListOf
+        types.str
+        "null"
+        "Dashboard's footer text";
 
       shortcut = mkOption {
         description = "Shortcut section, only available for the `hyper` theme";
-        type = types.nullOr (types.listOf (types.submodule {
+        type = types.listOf (types.submodule {
           options = {
-            desc = mkOption {
-              description = "The description of the action";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            desc =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The shortcut's description";
 
-            group = mkOption {
-              description = "The highlight group of the action";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            group =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The highlight group of the action";
 
-            action = mkOption {
-              description = "The action to be taken";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            action =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The action to be taken";
           };
-        }));
-        default = null;
+        });
+        default = [];
+        example = [
+          {
+            desc = "Find files";
+            group = "EndOfBuffer";
+            action = "Telescope find_files";
+          }
+        ];
       };
 
-      showPackages = mkOption {
-        description = "Whether to hide what packages have looaded. Only available in the 'hyper' theme";
-        type = types.bool;
-        default = false;
-      };
+      showPackages =
+        helpers.defaultNullOpts.mkBool
+        false
+        "Whether to hide what packages have looaded. Only available in the 'hyper' theme";
 
       project = mkOption {
         description = "Project showcase options. Only available in the 'hyper' theme";
-        type = types.nullOr (types.submodule {
+        type = types.submodule {
           options = {
-            enable = mkOption {
-              description = "Whether to enable the showcase of the project list";
-              type = types.nullOr types.bool;
-              default = null;
-            };
+            enable =
+              helpers.defaultNullOpts.mkBool
+              true
+              "Whether to enable the showcase of the project list";
 
-            limit = mkOption {
-              description = "The limit of projects to be showcased";
-              type = types.nullOr types.int;
-              default = null;
-            };
+            limit =
+              helpers.defaultNullOpts.mkInt
+              8
+              "The limit of projects to be showcased";
 
-            icon = mkOption {
-              description = "The icon of the project section";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            icon =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The icon of the project section";
 
-            label = mkOption {
-              description = "The label of the project section";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            label =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The label of the project section";
 
-            action = mkOption {
-              description = "The action to be ran when selecting a project, this can be a function";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            action =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The action to be ran when selecting a project, this can be a function";
           };
-        });
-        default = null;
+        };
+        default = {};
+        example = {
+          enable = true;
+          limit = 10;
+          icon = "»";
+          label = "Find projects' files";
+          action = "Telescope find_files cwd=";
+        };
       };
 
       mru = mkOption {
-        description = "MRU section";
-        type = types.nullOr (types.submodule {
+        description = "Configuration for the 'Most Recently Files' module.";
+        type = types.submodule {
           options = {
-            limit = mkOption {
-              description = "The limit of recently opened projects to be shown";
-              type = types.nullOr types.int;
-              default = null;
-            };
+            limit =
+              helpers.defaultNullOpts.mkInt
+              10
+              "The limit of recently opened files to be shown";
 
-            icon = mkOption {
-              description = "The icon of the MRU section";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            icon =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The icon of the module's section";
 
-            label = mkOption {
-              description = "The label of the MRU section";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            label =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "The label of the module's section";
 
-            cwd_only = mkOption {
-              description = "Whether to cwd only";
-              type = types.nullOr types.bool;
-              default = null;
-            };
+            cwd_only =
+              helpers.defaultNullOpts.mkBool
+              false
+              "Whether to only change the directory when selecting a file";
           };
-        });
-        default = null;
+        };
+        default = {
+          limit = 10;
+          icon = "»";
+          label = "Most recently opened files";
+          cwd_only = true;
+        };
       };
 
       center = mkOption {
         description = "Center section";
-        type = types.nullOr (types.listOf (types.submodule {
+        type = types.listOf (types.submodule {
           options = {
-            icon = mkOption {
-              description = "Item icon";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            icon =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Item's icon";
 
-            icon_hl = mkOption {
-              description = "Icon's highlight group";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            icon_hl =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Icon's highlight group";
 
-            desc = mkOption {
-              description = "Item description";
-              type = types.nullOr types.str;
-            };
+            desc =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Item's description";
 
-            desc_hl = mkOption {
-              description = "Description's highlight group";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            desc_hl =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Description's highlight group";
 
-            key = mkOption {
-              description = "Item shortcut";
-              type = types.nullOr types.str;
-              default = null;
-            };
-            key_hl = mkOption {
-              description = "Shortcut's highlight group";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            key =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Item's shortcut";
 
-            key_format = mkOption {
-              description = "Shortcut's text format, %s will be replaced with the value of `key`";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            key_hl =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Shortcut's highlight group";
 
-            action = mkOption {
-              description = "Item action";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            key_format =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Shortcut's text format, %s will be replaced with the value of `key`";
+
+            action =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Item's action";
           };
-        }));
-        default = null;
+        });
+        default = [];
+        example = [
+          {
+            icon = "Ω";
+            icon_hl = "Directory";
+            desc = "Find files";
+            desc_hl = "ModeMsg";
+            key = "<leader>f";
+            key_hl = "CurSearch";
+            key_format = "{ %s }";
+            action = "Telescope find_files";
+          }
+        ];
       };
 
       preview = mkOption {
         description = "Preview options";
         type = types.submodule {
           options = {
-            command = mkOption {
-              description = "Command to print file contents";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            command =
+              helpers.defaultNullOpts.mkStr
+              ""
+              "Command to print file contents";
 
-            file = mkOption {
-              description = "Path to preview file";
-              type = types.nullOr types.str;
-              default = null;
-            };
+            file =
+              helpers.defaultNullOpts.mkNullable
+              types.str
+              "null"
+              "Path to preview file";
 
-            height = mkOption {
-              description = "The height of the preview file";
-              type = types.nullOr types.int;
-              default = null;
-            };
+            height =
+              helpers.defaultNullOpts.mkInt
+              0
+              "The height of the preview file";
 
-            width = mkOption {
-              description = "The width of the preview file";
-              type = types.nullOr types.int;
-              default = null;
-            };
+            width =
+              helpers.defaultNullOpts.mkInt
+              0
+              "The width of the preview file";
           };
         };
         default = {};
       };
 
-      hideStatusline = mkOption {
-        description = "Whether to hide statusline in Dashboard buffer";
-        type = types.nullOr types.bool;
-        default = null;
-      };
+      hideStatusline =
+        helpers.defaultNullOpts.mkBool
+        true
+        "Whether to hide statusline in Dashboard buffer";
 
-      hideTabline = mkOption {
-        description = "Whether to hide tabline in Dashboard buffer";
-        type = types.nullOr types.bool;
-        default = null;
-      };
+      hideTabline =
+        helpers.defaultNullOpts.mkBool
+        true
+        "Whether to hide tabline in Dashboard buffer";
 
-      hideWinbar = mkOption {
-        description = "Whether to hide winbar in Dashboard buffer";
-        type = types.nullOr types.bool;
-        default = null;
-      };
+      hideWinbar =
+        helpers.defaultNullOpts.mkBool
+        false
+        "Whether to hide winbar in Dashboard buffer";
     };
   };
 

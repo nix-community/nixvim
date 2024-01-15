@@ -14,11 +14,24 @@
       hideStatusline = null;
       hideTabline = null;
       hideWinbar = null;
-      mru = null;
-      project = null;
       shortcutType = null;
       showPackages = false;
       theme = null;
+
+      mru = {
+        limit = null;
+        icon = null;
+        label = null;
+        cwd_only = null;
+      };
+
+      project = {
+        enable = null;
+        limit = null;
+        icon = null;
+        label = null;
+        action = null;
+      };
 
       center = [
         {
