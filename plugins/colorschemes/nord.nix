@@ -1,51 +1,58 @@
 {
   lib,
+  helpers,
+  config,
   pkgs,
   ...
-} @ args:
-with lib;
-with import ../helpers.nix {inherit lib;};
-  mkPlugin args {
-    name = "nord";
-    description = "nord.nvim";
-    package = pkgs.vimPlugins.nord-nvim;
-    globalPrefix = "nord_";
+}:
+with lib; let
+  cfg = config.colorschemes.nord;
+in {
+  options = {
+    colorschemes.nord = {
+      enable = mkEnableOption "nord";
 
-    options = {
-      contrast = mkDefaultOpt {
-        type = types.bool;
-        description = ''
-          Make sidebars and popup menus like nvim-tree and telescope have a different background.
-        '';
-      };
+      package = helpers.mkPackageOption "nord.vim" pkgs.vimPlugins.nord-nvim;
 
-      borders = mkDefaultOpt {
-        type = types.bool;
-        description = "Enable the border between verticaly split windows visable.";
-      };
+      contrast =
+        mkEnableOption
+        "Make sidebars and popup menus like nvim-tree and telescope have a different background";
 
-      disable_background = mkDefaultOpt {
-        type = types.bool;
-        description = ''
-          Disable the setting of background color so that NeoVim can use your terminal background.
-        '';
-      };
+      borders =
+        mkEnableOption
+        "Enable the border between verticaly split windows visable";
 
-      cursorline_transparent = mkDefaultOpt {
-        type = types.bool;
-        description = "Set the cursorline transparent/visible.";
-      };
+      disable_background =
+        mkEnableOption
+        "Disable the setting of background color so that NeoVim can use your terminal background";
 
-      enable_sidebar_background = mkDefaultOpt {
-        type = types.bool;
-        description = ''
-          Re-enables the background of the sidebar if you disabled the background of everything.
-        '';
-      };
+      cursorline_transparent =
+        mkEnableOption
+        "Set the cursorline transparent/visible";
 
-      italic = mkDefaultOpt {
-        type = types.bool;
-        description = "Enables/disables italics.";
+      enable_sidebar_background =
+        mkEnableOption
+        "Re-enables the background of the sidebar if you disabled the background of everything";
+
+      italic = mkOption {
+        description = "enables/disables italics";
+        type = types.nullOr types.bool;
+        default = null;
       };
     };
-  }
+  };
+
+  config = mkIf cfg.enable {
+    colorscheme = "nord";
+    extraPlugins = [cfg.package];
+
+    globals = {
+      nord_contrast = mkIf cfg.contrast 1;
+      nord_borders = mkIf cfg.borders 1;
+      nord_disable_background = mkIf cfg.disable_background 1;
+      nord_cursoline_transparent = mkIf cfg.cursorline_transparent 1;
+      nord_enable_sidebar_background = mkIf cfg.enable_sidebar_background 1;
+      nord_italic = mkIf (cfg.italic != null) cfg.italic;
+    };
+  };
+}
