@@ -94,28 +94,29 @@ in {
 
       shortcut = mkOption {
         description = "Shortcut section, only available for the `hyper` theme";
-        type = types.listOf (types.submodule {
-          options = {
-            desc =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The shortcut's description";
+        type = with types;
+          nullOr (listOf (submodule {
+            options = {
+              desc =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The shortcut's description";
 
-            group =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The highlight group of the action";
+              group =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The highlight group of the action";
 
-            action =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The action to be taken";
-          };
-        });
-        default = [];
+              action =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The action to be taken";
+            };
+          }));
+        default = null;
         example = [
           {
             desc = "Find files";
@@ -132,38 +133,41 @@ in {
 
       project = mkOption {
         description = "Project showcase options. Only available in the 'hyper' theme";
-        type = types.submodule {
-          options = {
-            enable =
-              helpers.defaultNullOpts.mkBool
-              true
-              "Whether to enable the showcase of the project list";
+        type = with types;
+          nullOr (submodule {
+            options = {
+              enable =
+                helpers.defaultNullOpts.mkNullable
+                types.bool
+                "null"
+                "Whether to enable the showcase of the project list";
 
-            limit =
-              helpers.defaultNullOpts.mkInt
-              8
-              "The limit of projects to be showcased";
+              limit =
+                helpers.defaultNullOpts.mkNullable
+                types.int
+                "null"
+                "The limit of projects to be showcased";
 
-            icon =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The icon of the project section";
+              icon =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The icon of the project section";
 
-            label =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The label of the project section";
+              label =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The label of the project section";
 
-            action =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The action to be ran when selecting a project, this can be a function";
-          };
-        };
-        default = {};
+              action =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The action to be ran when selecting a project, this can be a function";
+            };
+          });
+        default = null;
         example = {
           enable = true;
           limit = 10;
@@ -175,32 +179,36 @@ in {
 
       mru = mkOption {
         description = "Configuration for the 'Most Recently Files' module.";
-        type = types.submodule {
-          options = {
-            limit =
-              helpers.defaultNullOpts.mkInt
-              10
-              "The limit of recently opened files to be shown";
+        type = with types;
+          nullOr (submodule {
+            options = {
+              limit =
+                helpers.defaultNullOpts.mkNullable
+                types.int
+                "null"
+                "The limit of recently opened files to be shown";
 
-            icon =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The icon of the module's section";
+              icon =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The icon of the module's section";
 
-            label =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "The label of the module's section";
+              label =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "The label of the module's section";
 
-            cwd_only =
-              helpers.defaultNullOpts.mkBool
-              false
-              "Whether to only change the directory when selecting a file";
-          };
-        };
-        default = {
+              cwd_only =
+                helpers.defaultNullOpts.mkNullable
+                types.bool
+                "null"
+                "Whether to only change the directory when selecting a file";
+            };
+          });
+        default = null;
+        example = {
           limit = 10;
           icon = "»";
           label = "Most recently opened files";
@@ -210,58 +218,59 @@ in {
 
       center = mkOption {
         description = "Center section";
-        type = types.listOf (types.submodule {
-          options = {
-            icon =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Item's icon";
+        type = with types;
+          nullOr (listOf (submodule {
+            options = {
+              icon =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Item's icon";
 
-            icon_hl =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Icon's highlight group";
+              icon_hl =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Icon's highlight group";
 
-            desc =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Item's description";
+              desc =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Item's description";
 
-            desc_hl =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Description's highlight group";
+              desc_hl =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Description's highlight group";
 
-            key =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Item's shortcut";
+              key =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Item's shortcut";
 
-            key_hl =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Shortcut's highlight group";
+              key_hl =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Shortcut's highlight group";
 
-            key_format =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Shortcut's text format, %s will be replaced with the value of `key`";
+              key_format =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Shortcut's text format, %s will be replaced with the value of `key`";
 
-            action =
-              helpers.defaultNullOpts.mkNullable
-              types.str
-              "null"
-              "Item's action";
-          };
-        });
-        default = [];
+              action =
+                helpers.defaultNullOpts.mkNullable
+                types.str
+                "null"
+                "Item's action";
+            };
+          }));
+        default = null;
         example = [
           {
             icon = "Ω";
