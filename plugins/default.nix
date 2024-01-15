@@ -125,6 +125,7 @@
     ./utils/leap.nix
     ./utils/magma-nvim.nix
     ./utils/mark-radar.nix
+    ./utils/marks.nix
     ./utils/mini.nix
     ./utils/mkdnflow.nix
     ./utils/molten.nix
