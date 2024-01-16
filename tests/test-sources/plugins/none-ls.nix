@@ -94,7 +94,9 @@
           fnlfmt.enable = true;
           fourmolu.enable = true;
           gofmt.enable = true;
+          gofumpt.enable = true;
           goimports.enable = true;
+          goimports_reviser.enable = true;
           golines.enable = true;
           ktlint.enable = true;
           nixfmt.enable = true;
