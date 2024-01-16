@@ -131,8 +131,14 @@ with lib; let
       gofmt = {
         package = pkgs.go;
       };
+      gofumpt = {
+        package = pkgs.gofumpt;
+      };
       goimports = {
         package = pkgs.gotools;
+      };
+      goimports_reviser = {
+        package = pkgs.goimports-reviser;
       };
       golines = {
         package = pkgs.golines;
