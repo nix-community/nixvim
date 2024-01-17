@@ -134,8 +134,6 @@ with lib; rec {
           ''
       );
 
-    # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
-    # documentation
     mkNullableWithRaw = type: mkNullable (maybeRaw type);
 
     mkStrLuaOr = type: default: desc:
@@ -202,11 +200,7 @@ with lib; rec {
       );
     mkStr = default: mkNullable (with nixvimTypes; maybeRaw str) ''${builtins.toString default}'';
     mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
-    # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
-    # documentation
     mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
-    # Note that this function is _not_ to be used with submodule elements, as it may obstruct the
-    # documentation
     mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
     mkEnum = enumValues: default: mkNullable (with nixvimTypes; maybeRaw (enum enumValues)) ''"${default}"'';
     mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
