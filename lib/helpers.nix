@@ -465,9 +465,9 @@ with lib; rec {
 
         # :help nvim_set_hl()
         options = with types; {
-          fg = mkNullOrOption str "Color for the foreground (color name or '#RRGGBB').";
-          bg = mkNullOrOption str "Color for the background (color name or '#RRGGBB').";
-          sp = mkNullOrOption str "Special color (color name or '#RRGGBB').";
+          fg = mkNullOrStr "Color for the foreground (color name or '#RRGGBB').";
+          bg = mkNullOrStr "Color for the background (color name or '#RRGGBB').";
+          sp = mkNullOrStr "Special color (color name or '#RRGGBB').";
           blend = mkNullOrOption (numbers.between 0 100) "Integer between 0 and 100.";
           bold = mkNullOrOption bool "";
           standout = mkNullOrOption bool "";
@@ -480,10 +480,10 @@ with lib; rec {
           italic = mkNullOrOption bool "";
           reverse = mkNullOrOption bool "";
           nocombine = mkNullOrOption bool "";
-          link = mkNullOrOption str "Name of another highlight group to link to.";
+          link = mkNullOrStr "Name of another highlight group to link to.";
           default = mkNullOrOption bool "Don't override existing definition.";
-          ctermfg = mkNullOrOption str "Sets foreground of cterm color.";
-          ctermbg = mkNullOrOption str "Sets background of cterm color.";
+          ctermfg = mkNullOrStr "Sets foreground of cterm color.";
+          ctermbg = mkNullOrStr "Sets background of cterm color.";
           cterm = mkNullOrOption attrs ''
             cterm attribute map, like |highlight-args|.
             If not set, cterm attributes will match those from the attribute map documented above.
