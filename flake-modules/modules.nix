@@ -31,11 +31,13 @@
 
   perSystem = {
     pkgs,
+    pkgsUnfree,
     config,
     ...
   }: {
     _module.args = {
       modules = modules pkgs;
+      modulesUnfree = modules pkgsUnfree;
     };
   };
 }
