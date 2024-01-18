@@ -89,8 +89,7 @@
           clangd.enable = true;
           clojure-lsp.enable = true;
           cmake.enable = true;
-          # pkgs.csharp-ls only supports linux platforms
-          csharp-ls.enable = pkgs.stdenv.isLinux;
+          csharp-ls.enable = true;
           cssls.enable = true;
           dagger.enable = true;
           dartls.enable = true;
