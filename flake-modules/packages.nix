@@ -2,11 +2,13 @@
   perSystem = {
     pkgs,
     config,
-    modules,
+    modulesUnfree,
+    pkgsUnfree,
     ...
   }: {
     packages = import ../docs {
-      inherit modules pkgs;
+      modules = modulesUnfree;
+      pkgs = pkgsUnfree;
       inherit (pkgs) lib;
     };
 
