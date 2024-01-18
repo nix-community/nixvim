@@ -290,7 +290,7 @@ with lib; let
     {
       name = "leanls";
       description = "Enable leanls, for Lean";
-      package = pkgs.lean;
+      package = pkgs.lean4;
     }
     {
       name = "ltex";
