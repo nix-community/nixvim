@@ -66,6 +66,7 @@
           gitlint.enable = true;
           golangci_lint.enable = true;
           ktlint.enable = true;
+          ltrs.enable = true;
           markdownlint.enable = true;
           shellcheck.enable = true;
           statix.enable = true;

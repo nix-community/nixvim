@@ -63,6 +63,9 @@ with lib; let
       luacheck = {
         package = pkgs.luaPackages.luacheck;
       };
+      ltrs = {
+        package = pkgs.languagetool-rust;
+      };
       markdownlint = {
         package = pkgs.nodePackages.markdownlint-cli;
       };
