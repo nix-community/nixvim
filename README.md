@@ -419,10 +419,10 @@ provided:
 ```nix
 {
   programs.nixvim = {
-    extraConfigLua = '''
+    extraConfigLua = ''
       -- Print a little welcome message when nvim is opened!
       print("Hello world!")
-    ''';
+    '';
   };
 }
 ```
