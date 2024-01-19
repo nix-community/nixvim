@@ -15,6 +15,9 @@ with lib; let
         package = pkgs.nodePackages.eslint_d;
       };
       gitsigns = {};
+      ltrs = {
+        package = pkgs.languagetool-rust;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
       };

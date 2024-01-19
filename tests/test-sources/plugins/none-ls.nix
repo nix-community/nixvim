@@ -52,6 +52,7 @@
           eslint.enable = true;
           eslint_d.enable = true;
           gitsigns.enable = true;
+          ltrs.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
         };
