@@ -54,7 +54,7 @@ in {
       extraConfigLua = helpers.wrapDo ''
         local cmds = ${helpers.toLuaObject (mapAttrs cleanupCommand config.userCommands)};
         for name,cmd in pairs(cmds) do
-          vim.api.nvim_create_user_command(name, cmd.command, cmd.options)
+          vim.api.nvim_create_user_command(name, cmd.command, cmd.options or {})
         end
       '';
     };
