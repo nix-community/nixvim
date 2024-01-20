@@ -52,6 +52,7 @@
           eslint.enable = true;
           eslint_d.enable = true;
           gitsigns.enable = true;
+          ltrs.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
         };
@@ -66,6 +67,7 @@
           gitlint.enable = true;
           golangci_lint.enable = true;
           ktlint.enable = true;
+          ltrs.enable = true;
           markdownlint.enable = true;
           shellcheck.enable = true;
           statix.enable = true;

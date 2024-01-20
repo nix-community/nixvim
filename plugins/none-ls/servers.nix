@@ -15,6 +15,9 @@ with lib; let
         package = pkgs.nodePackages.eslint_d;
       };
       gitsigns = {};
+      ltrs = {
+        package = pkgs.languagetool-rust;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
       };
@@ -62,6 +65,9 @@ with lib; let
       };
       luacheck = {
         package = pkgs.luaPackages.luacheck;
+      };
+      ltrs = {
+        package = pkgs.languagetool-rust;
       };
       markdownlint = {
         package = pkgs.nodePackages.markdownlint-cli;
