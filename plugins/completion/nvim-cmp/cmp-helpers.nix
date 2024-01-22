@@ -28,6 +28,7 @@ in
       "cmp-clippy" = "cmp-clippy";
       "cmp-cmdline-history" = "cmp-cmdline-history";
       "cmp_pandoc" = "cmp-pandoc-nvim";
+      "cmp_tabby" = "cmp-tabby";
       "cmp_tabnine" = "cmp-tabnine";
       "codeium" = "codeium-nvim";
       "conventionalcommits" = "cmp-conventionalcommits";
