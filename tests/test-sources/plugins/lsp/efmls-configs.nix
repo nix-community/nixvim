@@ -45,6 +45,7 @@
           "cljstyle"
           "dartanalyzer"
           "debride"
+          "deno_fmt"
           "fecs"
           "fixjson"
           "forge_fmt"
@@ -59,6 +60,8 @@
           "slim_lint"
           "solhint"
           "sorbet"
+          "swiftformat"
+          "swiftlint"
           "xo"
         ]
         ++ (
