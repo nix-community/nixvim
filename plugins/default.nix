@@ -88,6 +88,7 @@
 
     ./pluginmanagers/packer.nix
 
+    ./snippets/friendly-snippets.nix
     ./snippets/luasnip
 
     ./statuslines/airline.nix
