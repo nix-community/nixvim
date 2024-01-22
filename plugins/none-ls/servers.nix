@@ -174,9 +174,6 @@ with lib; let
       prettier = {
         package = pkgs.nodePackages.prettier;
       };
-      prettier_d_slim = {
-        package = pkgs.nodePackages.prettier_d_slim;
-      };
       protolint = {
         package = pkgs.protolint;
       };
@@ -225,6 +222,13 @@ in {
     (map helpers.mkServer dataFlattened)
     ++ [
       ./prettier.nix
+      # Introduced January 22 2024.
+      # TODO remove in early March 2024.
+      (
+        mkRemovedOptionModule
+        ["plugins" "none-ls" "sources" "formatting" "prettier_d_slim"]
+        "`prettier_d_slim` is no longer maintained for >3 years. Please migrate to `prettierd`"
+      )
     ];
 
   config = let
