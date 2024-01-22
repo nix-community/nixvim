@@ -284,7 +284,7 @@ in {
       extraPlugins = [cfg.package];
 
       warnings = optional ((builtins.length nixvimPkgs.wrong) > 0) ''
-        Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
+        Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
           ${builtins.concatStringsSep " " nixvimPkgs.wrong}
       '';
 
