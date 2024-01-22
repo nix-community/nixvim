@@ -14,6 +14,7 @@ in {
     [
       ./codeium-nvim.nix
       ./copilot-cmp.nix
+      ./cmp-tabby.nix
       ./cmp-tabnine.nix
       ./crates-nvim.nix
     ]
