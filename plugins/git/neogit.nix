@@ -65,6 +65,11 @@ in {
         default = null;
       };
 
+      graphStyle = helpers.defaultNullOpts.mkEnumFirstDefault ["ascii" "unicode"] ''
+        "ascii"   is the graph the git CLI generates
+        "unicode" is the graph like https://github.com/rbong/vim-flog
+      '';
+
       commitPopup = mkOption {
         description = "Commit popup configuration";
         type = types.submodule {
@@ -218,6 +223,7 @@ in {
         disable_builtin_notifications = disableBuiltinNotifications;
         use_magit_keybindings = useMagitKeybindings;
         commit_popup = commitPopup;
+        graph_style = graphStyle;
       };
   in
     mkIf cfg.enable {
