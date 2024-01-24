@@ -5,7 +5,7 @@
   ...
 } @ args:
 with lib;
-with import ../helpers.nix {inherit lib;};
+with (import ../helpers.nix {inherit lib;}).vim-plugin;
   mkPlugin args {
     name = "markdown-preview";
     description = "markdown-preview.nvim";
