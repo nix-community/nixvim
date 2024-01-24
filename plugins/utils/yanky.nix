@@ -227,20 +227,20 @@ in {
                     picker.telescope.mappings
                   );
               };
-              system_clipboard = {
-                sync_with_ring = systemClipboard.syncWithRing;
-              };
-              highlight = {
-                on_put = highlight.onPut;
-                on_yank = highlight.onYank;
-                inherit (highlight) timer;
-              };
-              preserve_cursor_position = {
-                inherit (preserveCursorPosition) enabled;
-              };
-              textobj = {
-                inherit (textobj) enabled;
-              };
+            };
+            system_clipboard = {
+              sync_with_ring = systemClipboard.syncWithRing;
+            };
+            highlight = {
+              on_put = highlight.onPut;
+              on_yank = highlight.onYank;
+              inherit (highlight) timer;
+            };
+            preserve_cursor_position = {
+              inherit (preserveCursorPosition) enabled;
+            };
+            textobj = {
+              inherit (textobj) enabled;
             };
           }
           // cfg.extraOptions;
