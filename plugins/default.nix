@@ -43,7 +43,7 @@
     ./git/gitlinker.nix
     ./git/gitmessenger.nix
     ./git/gitsigns.nix
-    ./git/neogit.nix
+    ./git/neogit
 
     ./languages/clangd-extensions.nix
     ./languages/debugprint.nix
