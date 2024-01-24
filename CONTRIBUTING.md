@@ -71,7 +71,7 @@ You will then need to add Nix options for all (or most) of the upstream plugin o
 These options should be in `camelCase` (whereas most plugins define their options in `snake_case`), and their names should match exactly (except the case) to the upstream names.
 There are a number of helpers to help you correctly implement them:
 
-- `helpers.mkPlugin`: This helper is useful for simple plugins that are configured through (vim) global variables.
+- `helpers.vim-plugin.mkPlugin`: This helper is useful for simple plugins that are configured through (vim) global variables.
 - `helpers.defaultNullOpts.{mkBool,mkInt,mkStr,...}`: This family of helpers takes a default value and a description, and sets the Nix default to `null`. These are the main functions you should use to define options.
 - `helpers.defaultNullOpts.mkNullable`: This takes a type, a default and a description. This is useful for more complex options.
 - `helpers.nixvimTypes.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkLua`/`mkLuaFn` should be used in this case.

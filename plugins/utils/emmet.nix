@@ -11,7 +11,7 @@ with lib; let
   in
     either strInt (attrsOf (either strInt (attrsOf strInt)));
 in
-  with helpers;
+  with helpers.vim-plugin;
     mkPlugin attrs {
       name = "emmet";
       description = "Enable emmet";

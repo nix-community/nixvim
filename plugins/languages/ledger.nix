@@ -4,7 +4,7 @@
   ...
 } @ args:
 with lib;
-with import ../helpers.nix {inherit lib;};
+with (import ../helpers.nix {inherit lib;}).vim-plugin;
   mkPlugin args {
     name = "ledger";
     description = "ledger language features";

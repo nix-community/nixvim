@@ -6,7 +6,7 @@
 }: let
   helpers = import ../../helpers.nix {inherit lib;};
 in
-  with helpers;
+  with helpers.vim-plugin;
   with lib; {
     mkCmpSourcePlugin = {
       name,
