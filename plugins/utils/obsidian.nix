@@ -438,7 +438,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.obsidian =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "obsidian.nvim";
 

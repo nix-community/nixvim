@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.leap;
 in {
   options.plugins.leap =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "leap.nvim";
 

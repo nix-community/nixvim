@@ -37,7 +37,7 @@ in {
     )
   ];
   options.plugins.nvim-tree =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-tree";
 

@@ -9,7 +9,7 @@
 in
   with lib; {
     options.plugins.lastplace =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "lastplace";
 

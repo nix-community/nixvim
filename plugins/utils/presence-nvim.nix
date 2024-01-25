@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     plugins.presence-nvim =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "presence-nvim";
         package = helpers.mkPackageOption "presence-nvim" pkgs.vimPlugins.presence-nvim;

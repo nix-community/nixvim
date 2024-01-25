@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.notify;
 in {
   options.plugins.notify =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-notify";
 

@@ -9,7 +9,7 @@
 in
   with lib; {
     options.plugins.neorg =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "neorg";
 

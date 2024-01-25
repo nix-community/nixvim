@@ -91,7 +91,7 @@ with lib; let
 in {
   options = {
     plugins.bufferline =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "bufferline";
 

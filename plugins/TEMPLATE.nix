@@ -12,7 +12,7 @@ in {
 
   # TODO replace
   options.plugins.my-plugin =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "my-plugin.nvim"; # TODO replace
 

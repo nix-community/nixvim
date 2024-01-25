@@ -18,7 +18,7 @@ in
     ];
 
     options.plugins.dap =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "dap";
 

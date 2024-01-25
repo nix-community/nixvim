@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     colorschemes.poimandres =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "poimandres";
 

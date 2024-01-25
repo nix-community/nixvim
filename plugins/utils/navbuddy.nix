@@ -12,7 +12,7 @@ with lib; let
   mkPercentageOpt = default: helpers.defaultNullOpts.mkNullable percentageType (toString default);
 in {
   options.plugins.navbuddy =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-navbuddy";
 

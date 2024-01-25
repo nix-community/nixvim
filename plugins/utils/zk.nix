@@ -17,7 +17,7 @@ with lib; {
 
     lsp = {
       config =
-        helpers.extraOptionsOptions
+        helpers.neovim-plugin.extraOptionsOptions
         // {
           cmd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["zk" "lsp"]'' "";
           name = helpers.defaultNullOpts.mkStr "zk" "";

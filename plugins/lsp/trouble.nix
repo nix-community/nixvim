@@ -9,7 +9,7 @@
 in
   with lib; {
     options.plugins.trouble =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "trouble.nvim";
 

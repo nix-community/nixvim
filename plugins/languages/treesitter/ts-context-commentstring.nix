@@ -7,7 +7,7 @@
 }:
 with lib; {
   options.plugins.ts-context-commentstring =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-ts-context-commentstring";
 

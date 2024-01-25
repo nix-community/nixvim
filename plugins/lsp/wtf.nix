@@ -26,7 +26,7 @@ with lib; let
 in {
   options = {
     plugins.wtf =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "wtf.nvim";
 

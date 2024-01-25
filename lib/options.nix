@@ -237,15 +237,4 @@ with nixvimUtils; rec {
       inherit default;
       description = "Plugin to use for ${name}";
     };
-
-  extraOptionsOptions = {
-    extraOptions = mkOption {
-      default = {};
-      type = types.attrs;
-      description = ''
-        These attributes will be added to the table parameter for the setup function.
-        (Can override other attributes set by nixvim)
-      '';
-    };
-  };
 }

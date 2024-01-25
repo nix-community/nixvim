@@ -11,7 +11,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.rustaceanvim =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "rustaceanvim";
 

@@ -52,7 +52,7 @@ with lib; let
   };
 in {
   options.plugins.coverage =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-coverage";
 

@@ -133,7 +133,7 @@ with lib; let
     };
 in {
   options.plugins.lint =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-lint";
 

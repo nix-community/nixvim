@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.yanky;
 in {
   options.plugins.yanky =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "yanky.nvim";
 

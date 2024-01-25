@@ -58,7 +58,7 @@ in {
   ];
 
   options.plugins.wilder =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "wilder-nvim";
 

@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.mkdnflow;
 in {
   options.plugins.mkdnflow =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "mkdnflow.nvim";
 

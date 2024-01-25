@@ -58,7 +58,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.ollama =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "ollama.nvim";
 

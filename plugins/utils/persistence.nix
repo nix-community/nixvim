@@ -7,7 +7,7 @@
 }:
 with lib; {
   options.plugins.persistence =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "persistence.nvim";
 

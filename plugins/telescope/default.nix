@@ -21,7 +21,7 @@ in {
   # TODO:add support for aditional filetypes. This requires autocommands!
 
   options.plugins.telescope =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "telescope.nvim";
 
