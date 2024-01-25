@@ -6,7 +6,7 @@
 with lib;
   (
     with (import ../helpers.nix {inherit lib;}).vim-plugin;
-      mkPlugin args {
+      mkVimPlugin args {
         name = "copilot-vim";
         description = "copilot.vim";
         package = pkgs.vimPlugins.copilot-vim;

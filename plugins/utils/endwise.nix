@@ -7,7 +7,7 @@
 in
   with helpers.vim-plugin;
   with lib;
-    mkPlugin attrs {
+    mkVimPlugin attrs {
       name = "endwise";
       description = "Enable vim-endwise";
       package = pkgs.vimPlugins.vim-endwise;

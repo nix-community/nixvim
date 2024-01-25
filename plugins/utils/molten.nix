@@ -7,7 +7,7 @@
 in
   with lib;
   with helpers.vim-plugin;
-    mkPlugin args {
+    mkVimPlugin args {
       name = "molten";
       description = "molten-nvim";
       package = pkgs.vimPlugins.molten-nvim;

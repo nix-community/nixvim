@@ -7,7 +7,7 @@
 in
   with helpers.vim-plugin;
   with lib;
-    mkPlugin attrs {
+    mkVimPlugin attrs {
       name = "fugitive";
       description = "Enable vim-fugitive";
       package = pkgs.vimPlugins.vim-fugitive;

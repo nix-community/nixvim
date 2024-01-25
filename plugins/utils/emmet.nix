@@ -12,7 +12,7 @@ with lib; let
     either strInt (attrsOf (either strInt (attrsOf strInt)));
 in
   with helpers.vim-plugin;
-    mkPlugin attrs {
+    mkVimPlugin attrs {
       name = "emmet";
       description = "Enable emmet";
       package = pkgs.vimPlugins.emmet-vim;

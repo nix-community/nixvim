@@ -7,7 +7,7 @@
 in
   with lib;
   with helpers.vim-plugin;
-    mkPlugin args {
+    mkVimPlugin args {
       name = "vim-slime";
       package = pkgs.vimPlugins.vim-slime;
       globalPrefix = "slime_";

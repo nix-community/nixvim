@@ -5,7 +5,7 @@
 } @ args:
 with lib;
 with (import ../helpers.nix {inherit lib;}).vim-plugin;
-  mkPlugin args {
+  mkVimPlugin args {
     name = "magma-nvim";
     description = "magma-nvim";
     package = pkgs.vimPlugins.magma-nvim-goose;

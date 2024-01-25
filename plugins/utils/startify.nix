@@ -7,7 +7,7 @@
 in
   with lib;
   with helpers.vim-plugin;
-    mkPlugin args {
+    mkVimPlugin args {
       name = "startify";
       description = "Enable startify";
       package = pkgs.vimPlugins.vim-startify;

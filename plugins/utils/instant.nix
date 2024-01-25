@@ -5,7 +5,7 @@
 } @ args:
 with lib;
 with (import ../helpers.nix {inherit lib;}).vim-plugin;
-  mkPlugin args {
+  mkVimPlugin args {
     name = "instant";
     description = "instant.nvim";
     package = pkgs.vimPlugins.instant-nvim;
