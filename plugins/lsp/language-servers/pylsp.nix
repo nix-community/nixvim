@@ -23,14 +23,14 @@ in {
     };
 
     plugins = {
-      autopep8 = helpers.mkCompositeOption "autopep8 settings" {
+      autopep8 = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (autopep8).
         '';
       };
 
-      flake8 = helpers.mkCompositeOption "flake8 settings" {
+      flake8 = {
         config = helpers.mkNullOrOption types.str ''
           Path to the config file that will be the authoritative config source.
         '';
@@ -84,7 +84,7 @@ in {
         '';
       };
 
-      jedi = helpers.mkCompositeOption "jedi settings" {
+      jedi = {
         auto_import_modules =
           helpers.defaultNullOpts.mkNullable
           (types.listOf types.str)
@@ -100,7 +100,7 @@ in {
         '';
       };
 
-      jedi_completion = helpers.mkCompositeOption "jedi_completion settings" {
+      jedi_completion = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
 
         include_params = helpers.defaultNullOpts.mkBool true ''
@@ -134,7 +134,7 @@ in {
           "Modules for which labels and snippets should be cached.";
       };
 
-      jedi_definition = helpers.mkCompositeOption "jedi_definition settings" {
+      jedi_definition = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
 
         follow_imports = helpers.defaultNullOpts.mkBool true ''
@@ -150,19 +150,19 @@ in {
         '';
       };
 
-      jedi_hover = helpers.mkCompositeOption "jedi_hover settings" {
+      jedi_hover = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
       };
 
-      jedi_references = helpers.mkCompositeOption "jedi_references settings" {
+      jedi_references = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
       };
 
-      jedi_signature_help = helpers.mkCompositeOption "jedi_signature_help settings" {
+      jedi_signature_help = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
       };
 
-      jedi_symbols = helpers.mkCompositeOption "jedi_symbols settings" {
+      jedi_symbols = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
 
         all_scopes = helpers.defaultNullOpts.mkBool true ''
@@ -174,7 +174,7 @@ in {
         '';
       };
 
-      mccabe = helpers.mkCompositeOption "mccabe settings" {
+      mccabe = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (mccabe).
@@ -185,7 +185,7 @@ in {
         '';
       };
 
-      preload = helpers.mkCompositeOption "preload settings" {
+      preload = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
 
         modules = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
@@ -193,7 +193,7 @@ in {
         '';
       };
 
-      pycodestyle = helpers.mkCompositeOption "pycodestyle settings" {
+      pycodestyle = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin
@@ -229,7 +229,7 @@ in {
         '';
       };
 
-      pydocstyle = helpers.mkCompositeOption "pydocstyle settings" {
+      pydocstyle = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin
@@ -273,14 +273,14 @@ in {
         '';
       };
 
-      pyflakes = helpers.mkCompositeOption "pyflakes settings" {
+      pyflakes = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (pyflakes).
         '';
       };
 
-      pylint = helpers.mkCompositeOption "pylint settings" {
+      pylint = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (pylint).
@@ -297,7 +297,7 @@ in {
         '';
       };
 
-      rope_autoimport = helpers.mkCompositeOption "rope_autoimport settings" {
+      rope_autoimport = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (rope).
@@ -309,7 +309,7 @@ in {
         '';
       };
 
-      rope_completion = helpers.mkCompositeOption "rope_completion settings" {
+      rope_completion = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (rope).
@@ -320,7 +320,7 @@ in {
         '';
       };
 
-      yapf = helpers.mkCompositeOption "yapf settings" {
+      yapf = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin (yapf).
@@ -328,7 +328,7 @@ in {
       };
 
       ### THIRD-PARTY PLUGINS
-      pylsp_mypy = helpers.mkCompositeOption "pylsp_mypy settings" {
+      pylsp_mypy = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
           Setting this explicitely to `true` will install the dependency for this plugin
@@ -356,7 +356,8 @@ in {
 
         overrides =
           helpers.defaultNullOpts.mkNullable
-          (with types; listOf (either bool str))
+          (types.listOf
+            (types.oneOf [types.bool types.str helpers.nixvimTypes.rawLua]))
           "[true]"
           ''
             Specifies a list of alternate or supplemental command-line options.
@@ -484,7 +485,7 @@ in {
       ### END OF THIRD-PARTY PLUGINS
     };
 
-    rope = helpers.mkCompositeOption "rope settings" {
+    rope = {
       extensionModules = helpers.mkNullOrOption types.str ''
         Builtin and c-extension modules that are allowed to be imported and inspected by rope.
       '';
@@ -504,7 +505,7 @@ in {
       # plugins to its `propagatedBuildInputs`.
       # See https://github.com/NixOS/nixpkgs/issues/229337
       plugins.lsp.servers.pylsp.package = let
-        isEnabled = x: (x != null) && (x.enabled != null && x.enabled);
+        isEnabled = x: (x.enabled != null && x.enabled);
         inherit (cfg.settings) plugins;
 
         nativePlugins =

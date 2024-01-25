@@ -7,7 +7,7 @@
     plugins.notify = {
       enable = true;
 
-      level.__raw = "vim.log.levels.INFO";
+      level = "info";
       timeout = 5000;
       maxWidth = null;
       maxHeight = null;

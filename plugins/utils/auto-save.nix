@@ -32,7 +32,7 @@ in {
       executionMessage = {
         message =
           helpers.defaultNullOpts.mkNullable
-          (with types; either str helpers.rawType)
+          (with types; either str helpers.nixvimTypes.rawLua)
           ''
             {
               __raw = \'\'
@@ -69,7 +69,7 @@ in {
         '';
 
       condition =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(buf)
             local fn = vim.fn
@@ -100,7 +100,7 @@ in {
         mapAttrs
         (
           name: desc:
-            helpers.mkNullOrOption types.str "The code of the function that runs ${desc}."
+            helpers.mkNullOrLuaFn "The code of the function that runs ${desc}."
         )
         {
           enabling = "when enabling auto-save";
@@ -120,18 +120,15 @@ in {
           cleaning_interval = cleaningInterval;
         };
         trigger_events = cfg.triggerEvents;
-        condition =
-          helpers.ifNonNull' cfg.condition
-          (helpers.mkRaw cfg.condition);
+        inherit (cfg) condition;
         write_all_buffers = cfg.writeAllBuffers;
         debounce_delay = cfg.debounceDelay;
-        callbacks = with cfg.callbacks;
-          mapAttrs (name: value: helpers.ifNonNull' value (helpers.mkRaw value)) {
-            inherit enabling disabling;
-            before_asserting_save = beforeAssertingSave;
-            before_saving = beforeSaving;
-            after_saving = afterSaving;
-          };
+        callbacks = with cfg.callbacks; {
+          inherit enabling disabling;
+          before_asserting_save = beforeAssertingSave;
+          before_saving = beforeSaving;
+          after_saving = afterSaving;
+        };
       }
       // cfg.extraOptions;
   in

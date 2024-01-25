@@ -21,13 +21,8 @@ in {
         '';
 
         overrides =
-          helpers.defaultNullOpts.mkNullable
-          (
-            with types;
-              either
-              (attrsOf helpers.highlightType)
-              str
-          )
+          helpers.defaultNullOpts.mkStrLuaOr
+          (with helpers.nixvimTypes; attrsOf highlight)
           "{}"
           ''
             A dictionary of group names, each associated with a dictionary of parameters
@@ -44,10 +39,7 @@ in {
   config = let
     setupOptions = with cfg;
       {
-        overrides =
-          if isString overrides
-          then helpers.mkRaw overrides
-          else overrides;
+        inherit overrides;
       }
       // cfg.extraOptions;
   in

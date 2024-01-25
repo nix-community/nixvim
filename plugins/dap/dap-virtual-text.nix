@@ -36,7 +36,7 @@ in {
 
     clearOnContinue = helpers.defaultNullOpts.mkBool false "Clear virtual text on `continue` (might cause flickering when stepping).";
 
-    displayCallback = helpers.defaultNullOpts.mkStr ''
+    displayCallback = helpers.defaultNullOpts.mkLuaFn ''
       function(variable, buf, stackframe, node, options)
         if options.virt_text_pos == 'inline' then
           return ' = ' .. variable.value
@@ -72,7 +72,7 @@ in {
       only_first_definition = onlyFirstDefinition;
       all_references = allReferences;
       clear_on_continue = clearOnContinue;
-      display_callback = helpers.ifNonNull' displayCallback (helpers.mkRaw displayCallback);
+      display_callback = displayCallback;
       virt_text_pos = virtTextPos;
       all_frames = allFrames;
       virt_lines = virtLines;

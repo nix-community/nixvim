@@ -20,7 +20,7 @@ in {
         while opening the folded line, `0` value will disable the highlight
       '';
 
-      providerSelector = helpers.defaultNullOpts.mkStr "null" ''
+      providerSelector = helpers.defaultNullOpts.mkLuaFn "null" ''
         A lua function as a selector for fold providers.
       '';
 
@@ -31,7 +31,7 @@ in {
         run `UfoInspect` for details if your provider has extended the kinds.
       '';
 
-      foldVirtTextHandler = helpers.defaultNullOpts.mkStr "null" "A lua function to customize fold virtual text";
+      foldVirtTextHandler = helpers.defaultNullOpts.mkLuaFn "null" "A lua function to customize fold virtual text";
 
       enableGetFoldVirtText = helpers.defaultNullOpts.mkBool false ''
         Enable a function with `lnum` as a parameter to capture the virtual text
@@ -58,9 +58,9 @@ in {
     options = with cfg;
       {
         open_fold_hl_timeout = openFoldHlTimeout;
-        provider_selector = helpers.ifNonNull' providerSelector (helpers.mkRaw providerSelector);
+        provider_selector = providerSelector;
         close_fold_kinds = closeFoldKinds;
-        fold_virt_text_handler = helpers.ifNonNull' foldVirtTextHandler (helpers.mkRaw foldVirtTextHandler);
+        fold_virt_text_handler = foldVirtTextHandler;
         enable_get_fold_virt_text = enableGetFoldVirtText;
 
         preview = with preview; {

@@ -73,21 +73,14 @@ in {
 
       package = mkPackageOption "vim-illuminate" pkgs.vimPlugins.vim-illuminate;
 
-      filetypeOverrides = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            filetype = defaultNullOpts.mkStr "" ''
-              Filetype to override
-            '';
-
-            overrides = commonOptions;
-          };
-        });
-        description = ''
+      filetypeOverrides =
+        helpers.defaultNullOpts.mkNullable
+        (with types; attrsOf (submodule {options = commonOptions;}))
+        "{}"
+        ''
           Filetype specific overrides.
+          The keys are strings to represent the filetype.
         '';
-        default = [];
-      };
 
       largeFileOverrides = mkOption {
         type = types.submodule {
@@ -126,10 +119,13 @@ in {
       {
         large_file_overrides = (commonSetupOptions largeFileOverrides) // (filetypeSetupOptions largeFileOverrides);
 
-        filetype_overrides = let
-          override = attr: {${attr.filetype} = commonSetupOptions attr.overrides;};
-        in
-          map override filetypeOverrides;
+        filetype_overrides =
+          helpers.ifNonNull' filetypeOverrides
+          (
+            mapAttrs
+            (_: commonSetupOptions)
+            filetypeOverrides
+          );
       }
       // (filetypeSetupOptions cfg)
       // (commonSetupOptions cfg);

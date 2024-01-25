@@ -60,12 +60,12 @@ in {
                 [
                   str
                   path
-                  helpers.rawType
+                  helpers.nixvimTypes.rawLua
                   (listOf (oneOf
                     [
                       str
                       path
-                      helpers.rawType
+                      helpers.nixvimTypes.rawLua
                     ]))
                 ]);
           };
@@ -122,12 +122,12 @@ in {
                   [
                     str
                     path
-                    helpers.rawType
+                    helpers.nixvimTypes.rawLua
                     (listOf (oneOf
                       [
                         str
                         path
-                        helpers.rawType
+                        helpers.nixvimTypes.rawLua
                       ]))
                   ]
                 )

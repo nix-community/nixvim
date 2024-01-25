@@ -22,7 +22,6 @@
       nameHlGroupUser3 = "CursorLineNr";
       nameHlGroupUser4 = "CursorLineNr";
       nameHlGroupDefault = "CursorLineNr";
-      extraOptions = {};
     };
   };
 }

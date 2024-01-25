@@ -11,7 +11,7 @@ with lib; let
   languages = builtins.attrNames tools;
 
   # Mapping of tool name to the nixpkgs package (if any)
-  toolPkgs = with pkgs; {
+  allToolPkgs = with pkgs; {
     inherit
       actionlint
       alejandra
@@ -21,6 +21,7 @@ with lib; let
       beautysh
       biome
       black
+      buf
       cbfmt
       checkmake
       clazy
@@ -33,6 +34,7 @@ with lib; let
       dprint
       fish
       flawfinder
+      fnlfmt
       gcc
       gitlint
       gofumpt
@@ -47,6 +49,7 @@ with lib; let
       nixfmt
       php
       prettierd
+      prettypst
       proselint
       protolint
       pylint
@@ -59,19 +62,50 @@ with lib; let
       shellharden
       shfmt
       smlfmt
+      sqlfluff
       statix
       stylua
       taplo
+      typstfmt
       uncrustify
       vale
       yamllint
       yapf
       ;
-    inherit (python3.pkgs) autopep8 flake8 vulture mdformat;
-    inherit (nodePackages) eslint eslint_d prettier alex stylelint textlint write-good;
-    inherit (phpPackages) phpcbf phan phpcs phpstan psalm;
-    inherit (luaPackages) luacheck;
-    inherit (haskellPackages) fourmolu;
+    inherit
+      (python3.pkgs)
+      autopep8
+      flake8
+      mdformat
+      vulture
+      ;
+    inherit
+      (nodePackages)
+      eslint
+      eslint_d
+      prettier
+      alex
+      sql-formatter
+      stylelint
+      textlint
+      write-good
+      ;
+    inherit
+      (phpPackages)
+      phpcbf
+      phan
+      phpcs
+      phpstan
+      psalm
+      ;
+    inherit
+      (luaPackages)
+      luacheck
+      ;
+    inherit
+      (haskellPackages)
+      fourmolu
+      ;
     ansible_lint = ansible-lint;
     chktex = texliveMedium;
     clang_format = clang-tools;
@@ -99,6 +133,16 @@ with lib; let
     write_good = write-good;
     yq = yq-go;
   };
+  # Filter packages that are not compatible with the current platform
+  toolPkgs =
+    filterAttrs
+    (
+      a: pkg:
+        meta.availableOn
+        pkgs.stdenv.hostPlatform
+        pkg
+    )
+    allToolPkgs;
 in {
   options.plugins.efmls-configs = {
     enable = mkEnableOption "efmls-configs, premade configurations for efm-langserver";
@@ -146,7 +190,7 @@ in {
       miscFormatters = languageTools "misc" "formatters";
 
       mkChooseOption = lang: kind: possible: let
-        toolType = with types; either (enum possible) helpers.rawType;
+        toolType = with types; either (enum possible) helpers.nixvimTypes.rawLua;
       in
         mkOption {
           type = with types; either toolType (listOf toolType);
@@ -240,7 +284,7 @@ in {
       extraPlugins = [cfg.package];
 
       warnings = optional ((builtins.length nixvimPkgs.wrong) > 0) ''
-        Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
+        Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
           ${builtins.concatStringsSep " " nixvimPkgs.wrong}
       '';
 
@@ -249,6 +293,14 @@ in {
         extraOptions.settings.languages = setupOptions;
       };
 
-      extraPackages = [pkgs.efm-langserver] ++ (builtins.map (v: toolPkgs.${v}) nixvimPkgs.right);
+      extraPackages =
+        [
+          pkgs.efm-langserver
+        ]
+        ++ (
+          builtins.map
+          (v: cfg.toolPackages.${v})
+          nixvimPkgs.right
+        );
     };
 }

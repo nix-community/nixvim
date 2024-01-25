@@ -1,11 +1,22 @@
 {
-  empty = {
-    plugins.alpha.enable = true;
-  };
-
-  default = {
+  theme = {
     plugins.alpha = {
       enable = true;
+      theme = "dashboard";
+    };
+  };
+
+  theme-lua = {
+    plugins.alpha = {
+      enable = true;
+      theme.__raw = "require'alpha.themes.startify'.config";
+    };
+  };
+
+  custom-layout = {
+    plugins.alpha = {
+      enable = true;
+
       iconsEnabled = true;
       layout = [
         {
@@ -15,12 +26,12 @@
         {
           type = "text";
           val = [
-            "  ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗  "
-            "  ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║  "
-            "  ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║  "
-            "  ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║  "
-            "  ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║  "
-            "  ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝  "
+            "███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+            "████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+            "██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+            "██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+            "██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+            "╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
           ];
           opts = {
             position = "center";
@@ -35,14 +46,16 @@
           type = "group";
           val = [
             {
-              shortcut = "e";
-              desc = "  New file";
-              command = "<CMD>ene <CR>";
+              type = "button";
+              val = "  New file";
+              on_press.__raw = "function() vim.cmd[[ene]] end";
+              opts.shortcut = "n";
             }
             {
-              shortcut = "SPC q";
-              desc = "  Quit Neovim";
-              command = ":qa<CR>";
+              type = "button";
+              val = " Quit Neovim";
+              on_press.__raw = "function() vim.cmd[[qa]] end";
+              opts.shortcut = "q";
             }
           ];
         }
@@ -59,6 +72,15 @@
           };
         }
       ];
+      opts = {
+        margin = 0;
+        noautocmd = true;
+
+        keymap = {
+          press = "<CR>";
+          press_queue = "<M-CR>";
+        };
+      };
     };
   };
 }

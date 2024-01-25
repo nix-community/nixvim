@@ -13,53 +13,51 @@ in {
 
     package = helpers.mkPackageOption "toggleterm" pkgs.vimPlugins.toggleterm-nvim;
 
-    size =
-      helpers.defaultNullOpts.mkNullable
-      (with types; either number str) "12" ''
-        Size of the terminal.
-        `size` can be a number or function
-        Example:
-        ```nix
-        size = 20
-        ```
-        OR
-        ```
-        size = function(term)
-          if term.direction == "horizontal" then
-            return 15
-          elseif term.direction == "vertical" then
-            return vim.o.columns * 0.4
-          end
+    size = helpers.defaultNullOpts.mkStrLuaFnOr types.number "12" ''
+      Size of the terminal.
+      `size` can be a number or function
+      Example:
+      ```nix
+      size = 20
+      ```
+      OR
+      ```
+      size = function(term)
+        if term.direction == "horizontal" then
+          return 15
+        elseif term.direction == "vertical" then
+          return vim.o.columns * 0.4
         end
-        ```
-      '';
+      end
+      ```
+    '';
 
     openMapping = helpers.mkNullOrOption types.str ''
       Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for
       normal mode.
     '';
 
-    onCreate = helpers.mkNullOrOption types.str ''
+    onCreate = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when the terminal is first created.
     '';
 
-    onOpen = helpers.mkNullOrOption types.str ''
+    onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when the terminal opens.
     '';
 
-    onClose = helpers.mkNullOrOption types.str ''
+    onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when the terminal closes.
     '';
 
-    onStdout = helpers.mkNullOrOption types.str ''
+    onStdout = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Callback for processing output on stdout.
     '';
 
-    onStderr = helpers.mkNullOrOption types.str ''
+    onStderr = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Callback for processing output on stderr.
     '';
 
-    onExit = helpers.mkNullOrOption types.str ''
+    onExit = helpers.defaultNullOpts.mkLuaFn "nil" ''
       Function to run when terminal process exits.
     '';
 
@@ -160,7 +158,7 @@ in {
       enabled = helpers.defaultNullOpts.mkBool false "";
 
       nameFormatter =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(term)
             return term.name
@@ -170,19 +168,14 @@ in {
   };
   config = let
     setupOptions = with cfg; {
-      inherit autochdir highlights direction shell;
-      size = helpers.ifNonNull' size (
-        if isInt size
-        then size
-        else helpers.mkRaw size
-      );
+      inherit autochdir highlights direction shell size;
       open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw "[[${openMapping}]]");
-      on_create = helpers.ifNonNull' onCreate (helpers.mkRaw onCreate);
-      on_open = helpers.ifNonNull' onOpen (helpers.mkRaw onOpen);
-      on_close = helpers.ifNonNull' onClose (helpers.mkRaw onClose);
-      on_stdout = helpers.ifNonNull' onStdout (helpers.mkRaw onStdout);
-      on_stderr = helpers.ifNonNull' onStderr (helpers.mkRaw onStderr);
-      on_exit = helpers.ifNonNull' onExit (helpers.mkRaw onExit);
+      on_create = onCreate;
+      on_open = onOpen;
+      on_close = onClose;
+      on_stdout = onStdout;
+      on_stderr = onStderr;
+      on_exit = onExit;
       hide_numbers = hideNumbers;
       shade_filetypes = shadeFiletypes;
       shade_terminals = shadeTerminals;
@@ -197,7 +190,7 @@ in {
       float_opts = floatOpts;
       winbar = with winbar; {
         inherit enabled;
-        name_formatter = helpers.ifNonNull' nameFormatter (helpers.mkRaw nameFormatter);
+        name_formatter = nameFormatter;
       };
     };
   in

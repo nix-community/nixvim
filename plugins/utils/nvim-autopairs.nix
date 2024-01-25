@@ -33,7 +33,7 @@ in {
 
       disableInReplaceMode = helpers.defaultNullOpts.mkBool true "Disable in replace mode.";
 
-      ignoredNextChar = helpers.defaultNullOpts.mkStr "[=[[%w%%%'%[%\"%.%`%$]]=]" ''
+      ignoredNextChar = helpers.defaultNullOpts.mkLua "[=[[%w%%%'%[%\"%.%`%$]]=]" ''
         Regexp to ignore if it matches the next character.
       '';
 
@@ -81,9 +81,7 @@ in {
         disable_in_macro = cfg.disableInMacro;
         disable_in_visualblock = cfg.disableInVisualblock;
         disable_in_replace_mode = cfg.disableInReplaceMode;
-        ignored_next_char =
-          helpers.ifNonNull' cfg.ignoredNextChar
-          (helpers.mkRaw cfg.ignoredNextChar);
+        ignored_next_char = cfg.ignoredNextChar;
         enable_moveright = cfg.enableMoveright;
         enable_afterquote = cfg.enableAfterQuote;
         enable_check_bracket_line = cfg.enableCheckBracketLine;

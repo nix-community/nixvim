@@ -5,22 +5,25 @@
   ...
 }:
 with lib; let
-  filetypeDefinition = helpers.mkNullOrOption (types.attrsOf (
-    types.oneOf [
-      # Raw filetype
-      types.str
-      # Function to set the filetype
-      helpers.rawType
-      # ["filetype" {priority = xx;}]
-      (types.listOf (types.either types.str (types.submodule {
-        options = {
-          priority = mkOption {
-            type = types.int;
-          };
-        };
-      })))
-    ]
-  ));
+  filetypeDefinition =
+    helpers.mkNullOrOption
+    (with types;
+      attrsOf (
+        oneOf [
+          # Raw filetype
+          str
+          # Function to set the filetype
+          helpers.nixvimTypes.rawLua
+          # ["filetype" {priority = xx;}]
+          (listOf (either str (submodule {
+            options = {
+              priority = mkOption {
+                type = int;
+              };
+            };
+          })))
+        ]
+      ));
 in {
   options.filetype =
     helpers.mkCompositeOption ''

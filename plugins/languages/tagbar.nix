@@ -1,32 +1,13 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
-}: let
-  cfg = config.plugins.tagbar;
-in
-  with lib; {
-    options.plugins.tagbar = {
-      enable = mkEnableOption "tagbar";
-
-      package = helpers.mkPackageOption "tagbar" pkgs.vimPlugins.tagbar;
-
-      extraConfig = helpers.mkNullOrOption types.attrs ''
-        The configuration options for tagbar without the 'tagbar_' prefix.
-        Example: To set 'tagbar_show_tag_count' to 1, write
-          extraConfig = {
-            show_tag_count = true;
-          };
-      '';
-    };
-
-    config = mkIf cfg.enable {
-      extraPlugins = [cfg.package];
-
-      extraPackages = [pkgs.ctags];
-
-      globals = mapAttrs' (name: nameValuePair ("tagbar_" + name)) cfg.extraConfig;
-    };
+} @ args:
+with lib;
+with import ../helpers.nix {inherit lib;};
+  mkPlugin args {
+    name = "tagbar";
+    package = pkgs.vimPlugins.tagbar;
+    globalPrefix = "tagbar_";
+    extraPackages = [pkgs.ctags];
   }

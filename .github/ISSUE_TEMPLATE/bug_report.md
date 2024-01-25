@@ -1,18 +1,26 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
+name: Bug Report
+about: Report a bug to help us improve
+title: '[BUG] <BUG>'
 labels: bug
 assignees: ''
-
 ---
 
-**Plugin affected**: What plugin does this bug relate to (if applicable)
-**Nixpkgs channel**: Either unstable or your nixos version
-**Home-manager version**: (if applicable)
+| Field        | Description |
+|--------------|-------------|
+| Plugin       | `<PLUGIN>`  | <!-- [REQUIRED] affected NixVim plugin(s) -->
+| Nixpkgs      | `<VERSION>` | <!-- [REQUIRED] `unstable` or specific version -->
+| Home Manager | `<VERSION>` | <!-- [OPTIONAL] `unstable` or specific version -->
 
 ## Description
-Please describe the bug detail
 
-## Config
-Your nixvim config
+<!-- See https://stackoverflow.com/questions/29416909 -->
+
+## Minimal, Reproducible Example (MRE)
+
+<!-- See https://stackoverflow.com/help/minimal-reproducible-example -->
+
+```nix
+programs.nixvim = {
+}
+```

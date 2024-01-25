@@ -34,7 +34,7 @@ in {
 
         mode =
           helpers.defaultNullOpts.mkNullable
-          (with types; either (enum ["exact" "search" "fuzzy"]) helpers.rawType) ''"exact"'' ''
+          (with types; either (enum ["exact" "search" "fuzzy"]) helpers.nixvimTypes.rawLua) ''"exact"'' ''
             - exact: exact match
             - search: regular search
             - fuzzy: fuzzy search
@@ -48,7 +48,7 @@ in {
         incremental = helpers.defaultNullOpts.mkBool false "behave like `incsearch`";
 
         exclude =
-          helpers.defaultNullOpts.mkNullable (with types; listOf (either str helpers.rawType)) ''
+          helpers.defaultNullOpts.mkNullable (with types; listOf (either str helpers.nixvimTypes.rawLua)) ''
             [
               "notify"
               "cmp_menu"
@@ -155,7 +155,7 @@ in {
         };
 
         format =
-          helpers.defaultNullOpts.mkStr ''
+          helpers.defaultNullOpts.mkLuaFn ''
             format = function(opts)
               return { { opts.match.label, opts.hl_group } }
             end
@@ -186,7 +186,7 @@ in {
         };
       };
 
-      action = helpers.mkNullOrOption types.str ''
+      action = helpers.defaultNullOpts.mkLuaFn "nil" ''
         action to perform when picking a label.
         defaults to the jumping logic depending on the mode.
         @type fun(match:Flash.Match, state:Flash.State)
@@ -198,7 +198,7 @@ in {
         When `true`, flash will try to continue the last search
       '';
 
-      config = helpers.mkNullOrOption types.str ''
+      config = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Set config to a function to dynamically change the config
         @type fun(opts:Flash.Config)
       '';
@@ -298,7 +298,7 @@ in {
               '';
 
             charActions =
-              helpers.defaultNullOpts.mkStr ''
+              helpers.defaultNullOpts.mkLuaFn ''
                 function(motion)
                   return {
                     [";"] = "next", -- set to right to always go right
@@ -387,8 +387,6 @@ in {
     // configOpts;
 
   config = let
-    mkRawIfNonNull = v: helpers.ifNonNull' v (helpers.mkRaw v);
-
     mkGlobalConfig = c: {
       inherit (c) labels;
       search =
@@ -408,14 +406,12 @@ in {
         rainbow = {
           inherit (c.label.rainbow) enabled shade;
         };
-        format = mkRawIfNonNull c.label.format;
+        inherit (c.label) format;
       };
       highlight = {
         inherit (c.highlight) backdrop matches priority groups;
       };
-      action = mkRawIfNonNull c.action;
-      inherit (c) pattern continue;
-      config = mkRawIfNonNull c.config;
+      inherit (c) action pattern continue config;
       prompt = {
         inherit (c.prompt) enabled prefix;
         win_config = c.prompt.winConfig;
@@ -445,8 +441,7 @@ in {
               inherit (c) enabled autohide;
               jump_labels = c.jumpLabels;
               multi_line = c.multiLine;
-              inherit (c) keys;
-              char_actions = mkRawIfNonNull c.charActions;
+              inherit (c) keys charActions;
             });
           treesitter = mkModeConfig cfg.modes.treesitter (c: {});
           treesitter_search = mkModeConfig cfg.modes.treesitterSearch (c: {});

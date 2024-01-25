@@ -7,12 +7,12 @@
 with lib; {
   options = {
     highlight = mkOption {
-      type = types.attrsOf helpers.highlightType;
+      type = types.attrsOf helpers.nixvimTypes.highlight;
       default = {};
       description = "Define highlight groups";
       example = ''
         highlight = {
-          Comment.fg = '#ff0000';
+          Comment.fg = "#ff0000";
         };
       '';
     };
@@ -23,7 +23,7 @@ with lib; {
       description = "Define match groups";
       example = ''
         match = {
-          ExtraWhitespace = '\\s\\+$';
+          ExtraWhitespace = "\\s\\+$";
         };
       '';
     };

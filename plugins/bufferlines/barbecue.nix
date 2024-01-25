@@ -59,7 +59,7 @@ in {
       '';
 
       modified =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(bufnr)
           	return vim.bo[bufnr].modified
@@ -75,7 +75,7 @@ in {
       '';
 
       leadCustomSection =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function()
             return " "
@@ -87,7 +87,7 @@ in {
         '';
 
       customSection =
-        helpers.defaultNullOpts.mkStr
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function()
             return " "
@@ -173,10 +173,10 @@ in {
         show_dirname = showDirname;
         show_basename = showBasename;
         show_modified = showModified;
-        modified = helpers.ifNonNull' modified (helpers.mkRaw modified);
+        inherit modified;
         show_navic = showNavic;
-        lead_custom_section = helpers.ifNonNull' leadCustomSection (helpers.mkRaw leadCustomSection);
-        custom_section = helpers.ifNonNull' customSection (helpers.mkRaw customSection);
+        lead_custom_section = leadCustomSection;
+        custom_section = customSection;
         inherit theme;
         context_follow_icon_color = contextFollowIconColor;
         symbols = {

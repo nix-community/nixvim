@@ -1,4 +1,8 @@
-{efmls-options, ...}: {
+{
+  efmls-options,
+  pkgs,
+  ...
+}: {
   empty = {
     plugins.efmls-configs.enable = true;
   };
@@ -11,39 +15,75 @@
       # Where tools is the option type representing the valid tools for this language
       toolOptions = (builtins.head options.setup.type.getSubModules).options;
 
-      brokenTools = [
-        #Broken as of 16 of November 2023
-        "phpstan"
-      ];
+      brokenTools =
+        [
+          #Broken as of 16 of November 2023
+          "phpstan"
+        ]
+        ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+          # As of 2024-01-04, cbfmt is broken on darwin
+          # TODO: re-enable this test when fixed
+          "cbfmt"
+          # As of 2024-01-04, texliveMedium is broken on darwin
+          # TODO: re-enable those tests when fixed
+          "chktex"
+          "latexindent"
+        ]
+        ++ pkgs.lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-darwin") [
+          # As of 2024-01-04, dmd is broken on x86_64-darwin
+          # TODO: re-enable this test when fixed
+          "dmd"
+          # As of 2024-01-04, luaformat is broken on x86_64-darwin
+          # TODO: re-enable this test when fixed
+          "lua_format"
+        ];
 
-      unpackaged = [
-        "blade_formatter"
-        "cspell"
-        "dartanalyzer"
-        "debride"
-        "fecs"
-        "fixjson"
-        "forge_fmt"
-        "gersemi"
-        "js_standard"
-        "pint"
-        "prettier_eslint"
-        "prettier_standard"
-        "redpen"
-        "reek"
-        "rome"
-        "slim_lint"
-        "solhint"
-        "sorbet"
-        "xo"
-      ];
+      unpackaged =
+        [
+          "blade_formatter"
+          "cspell"
+          "cljstyle"
+          "dartanalyzer"
+          "debride"
+          "deno_fmt"
+          "fecs"
+          "fixjson"
+          "forge_fmt"
+          "gersemi"
+          "js_standard"
+          "pint"
+          "prettier_eslint"
+          "prettier_standard"
+          "redpen"
+          "reek"
+          "rome"
+          "slim_lint"
+          "solhint"
+          "sorbet"
+          "swiftformat"
+          "swiftlint"
+          "xo"
+        ]
+        ++ (
+          pkgs.lib.optionals
+          pkgs.stdenv.isDarwin
+          ["clazy"]
+        )
+        ++ (
+          pkgs.lib.optionals
+          pkgs.stdenv.isAarch64
+          [
+            "dmd"
+            "smlfmt"
+          ]
+        );
 
       # Fetch the valid enum members from the tool options
       toolsFromOptions = opt: let
         # tool options are a `either toolType (listOf toolType)`
         # Look into `nestedTypes.left` to get a `toolType` option.
         toolType = opt.type.nestedTypes.left;
-        # toolType is a `either (enum possible) helpers.rawType
+        # toolType is a `either (enum possible) helpers.nixvimTypes.rawLua
         # Look into `nestedTypes.left` for the enum
         possible = toolType.nestedTypes.left;
         # possible is an enum, look into functor.payload for the variants

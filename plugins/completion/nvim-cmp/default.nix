@@ -82,25 +82,19 @@ in {
             )
           );
         example = {
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<C-d>" = "cmp.mapping.scroll_docs(-4)";
+          "<C-f>" = "cmp.mapping.scroll_docs(4)";
+          "<C-Space>" = "cmp.mapping.complete()";
+          "<C-e>" = "cmp.mapping.close()";
           "<Tab>" = {
             modes = ["i" "s"];
-            action = ''
-              function(fallback)
-                if cmp.visible() then
-                  cmp.select_next_item()
-                elseif luasnip.expandable() then
-                  luasnip.expand()
-                elseif luasnip.expand_or_jumpable() then
-                  luasnip.expand_or_jump()
-                elseif check_backspace() then
-                  fallback()
-                else
-                  fallback()
-                end
-              end
-            '';
+            action = "cmp.mapping.select_next_item()";
           };
+          "<S-Tab>" = {
+            modes = ["i" "s"];
+            action = "cmp.mapping.select_prev_item()";
+          };
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
         };
       };
 
@@ -123,7 +117,7 @@ in {
           (
             with types;
               either
-              helpers.rawType
+              helpers.nixvimTypes.rawLua
               (enum (attrNames snippetEngines))
           )
           ''
@@ -212,7 +206,7 @@ in {
           "An array of completion fields to specify their order.";
 
         format =
-          helpers.defaultNullOpts.mkStr
+          helpers.defaultNullOpts.mkLuaFn
           ''
             function(_, vim_item)
               return vim_item
@@ -572,10 +566,7 @@ in {
 
         formatting = with formatting; {
           expandable_indicator = expandableIndicator;
-          inherit fields;
-          format =
-            helpers.ifNonNull' format
-            (helpers.mkRaw format);
+          inherit fields format;
         };
 
         matching = with matching; {
@@ -657,11 +648,11 @@ in {
             max_width =
               if isInt maxWidth
               then maxWidth
-              else helpers.ifNonNull' maxWidth (helpers.mkRaw maxWidth);
+              else helpers.mkRaw maxWidth;
             max_height =
               if isInt maxHeight
               then maxHeight
-              else helpers.ifNonNull' maxHeight (helpers.mkRaw maxHeight);
+              else helpers.mkRaw maxHeight;
           };
         };
         inherit experimental;

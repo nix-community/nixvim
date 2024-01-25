@@ -10,6 +10,12 @@ with lib; let
 
   servers = [
     {
+      name = "ansiblels";
+      description = "Enable ansiblels, for Ansible";
+      package = pkgs.ansible-language-server;
+      cmd = cfg: ["${cfg.package}/bin/ansible-language-server" "--stdio"];
+    }
+    {
       name = "astro";
       description = "Enable astrols, for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
@@ -19,6 +25,11 @@ with lib; let
       name = "bashls";
       description = "Enable bashls, for bash.";
       package = pkgs.nodePackages.bash-language-server;
+    }
+    {
+      name = "beancount";
+      description = "Enable beancount-language-server";
+      package = pkgs.beancount-language-server;
     }
     {
       name = "biome";
@@ -55,6 +66,11 @@ with lib; let
       description = "Enable cssls, for CSS";
       package = pkgs.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-css-language-server" "--stdio"];
+    }
+    {
+      name = "dagger";
+      description = "Enable dagger, for Cuelang";
+      package = pkgs.cuelsp;
     }
     {
       name = "dartls";
@@ -153,10 +169,21 @@ with lib; let
       package = pkgs.deno;
     }
     {
+      name = "dhall-lsp-server";
+      description = "Enable dhall-lsp-server, for Dhall";
+      serverName = "dhall_lsp_server";
+    }
+    {
       name = "digestif";
       description = "Enable digestif, for LaTeX";
       # luaPackages.digestif is currently broken, using lua54Packages instead
       package = pkgs.lua54Packages.digestif;
+    }
+    {
+      name = "dockerls";
+      description = "Enable dockerls, for Dockerfile";
+      package = pkgs.dockerfile-language-server-nodejs;
+      cmd = cfg: ["${cfg.package}/bin/docker-langserver" "--stdio"];
     }
     {
       name = "efm";
@@ -167,6 +194,11 @@ with lib; let
       name = "elmls";
       description = "Enable elmls, for Elm.";
       package = pkgs.elmPackages.elm-language-server;
+    }
+    {
+      name = "emmet_ls";
+      description = "Enable emmet_ls, emmet support based on LSP";
+      package = pkgs.emmet-ls;
     }
     {
       name = "eslint";
@@ -197,8 +229,17 @@ with lib; let
       package = null;
     }
     {
+      name = "gleam";
+      description = "Enable gleam, for gleam.";
+    }
+    {
       name = "gopls";
       description = "Enable gopls, for Go.";
+    }
+    {
+      name = "graphql";
+      description = "Enable graphql, for GraphQL.";
+      package = pkgs.nodePackages.graphql-language-service-cli;
     }
     {
       name = "hls";
@@ -211,6 +252,11 @@ with lib; let
       description = "Enable html, for HTML";
       package = pkgs.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
+    }
+    {
+      name = "htmx";
+      description = "Enable htmx, for HTMX";
+      package = pkgs.htmx-lsp;
     }
     {
       name = "intelephense";
@@ -244,7 +290,7 @@ with lib; let
     {
       name = "leanls";
       description = "Enable leanls, for Lean";
-      package = pkgs.lean;
+      package = pkgs.lean4;
     }
     {
       name = "ltex";
@@ -292,7 +338,7 @@ with lib; let
               nullOr
               (
                 listOf
-                (either str helpers.rawType)
+                (either str helpers.nixvimTypes.rawLua)
               );
             description = ''
               An array of abosolute or workspace-relative paths that will be added to the workspace
@@ -320,6 +366,11 @@ with lib; let
         };
       };
       settings = cfg: {Lua = cfg;};
+    }
+    {
+      name = "marksman";
+      description = "Enable marksman, for Markdown";
+      package = pkgs.marksman;
     }
     {
       name = "metals";
@@ -366,6 +417,16 @@ with lib; let
       description = "Enable nixd, for Nix";
       package = pkgs.nixd;
       settings = cfg: {nixd = cfg;};
+    }
+    {
+      name = "nushell";
+      description = "Enable nushell language server";
+      cmd = cfg: ["${cfg.package}/bin/nu" "--lsp"];
+    }
+    {
+      name = "ols";
+      description = "Enable ols, for the odin programming language";
+      package = pkgs.ols;
     }
     {
       name = "omnisharp";
@@ -422,6 +483,16 @@ with lib; let
       };
     }
     {
+      name = "perlpls";
+      description = "Enable PLS, for Perl";
+      package = pkgs.perlPackages.PLS;
+    }
+    {
+      name = "pest_ls";
+      description = "Enable pest_ls, for pest";
+      package = pkgs.pest-ide-tools;
+    }
+    {
       name = "phpactor";
       description = "Enable phpactor, for PHP";
       package = pkgs.phpactor;
@@ -432,10 +503,20 @@ with lib; let
       package = pkgs.nodePackages."@prisma/language-server";
     }
     {
+      name = "prolog-ls";
+      description = "enable prolog_ls, for SWI-Prolog";
+      serverName = "prolog_ls";
+      package = pkgs.swiProlog;
+    }
+    {
       name = "pylsp";
       description = "Enable pylsp, for Python.";
       package = pkgs.python3Packages.python-lsp-server;
       settings = cfg: {pylsp = cfg;};
+    }
+    {
+      name = "pylyzer";
+      description = "Enable pylyzer, for Python.";
     }
     {
       name = "pyright";
@@ -461,6 +542,11 @@ with lib; let
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
+      name = "solargraph";
+      description = "Enable solargraph, for Ruby";
+      package = pkgs.rubyPackages.solargraph;
+    }
+    {
       name = "sourcekit";
       description = "Enable the sourcekit language server, for Swift and C/C++/Objective-C";
       package = pkgs.sourcekit-lsp;
@@ -481,6 +567,10 @@ with lib; let
       package = pkgs.taplo;
     }
     {
+      name = "templ";
+      description = "Enable the templ language server for the templ HTML templating language";
+    }
+    {
       name = "terraformls";
       description = "Enable terraform-ls, for terraform";
       package = pkgs.terraform-ls;
@@ -499,6 +589,13 @@ with lib; let
       serverName = "typst_lsp";
       description = "Enable typst-lsp for typst";
       package = pkgs.typst-lsp;
+    }
+    {
+      name = "vls";
+      description = "Enable vls for v";
+      # The v language server has to be installed from v and thus is not packaged "as is" in
+      # nixpkgs.
+      package = null;
     }
     {
       name = "vuels";
@@ -528,6 +625,8 @@ in {
       ./efmls-configs.nix
       ./nixd.nix
       ./pylsp.nix
+      ./rust-analyzer.nix
       ./svelte.nix
+      ./vls.nix
     ];
 }

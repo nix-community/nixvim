@@ -15,7 +15,7 @@ with lib; let
       nargs = helpers.mkNullOrOption (types.enum ["0" "1" "*" "?" "+"]) ''
         The number of arguments to expect, see :h command-nargs.
       '';
-      complete = helpers.mkNullOrOption (with types; either str helpers.rawType) ''
+      complete = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
         Tab-completion behaviour, see :h command-complete.
       '';
       range = helpers.mkNullOrOption (with types; oneOf [bool int (enum ["%"])]) ''
@@ -54,7 +54,7 @@ in {
       extraConfigLua = helpers.wrapDo ''
         local cmds = ${helpers.toLuaObject (mapAttrs cleanupCommand config.userCommands)};
         for name,cmd in pairs(cmds) do
-          vim.api.nvim_create_user_command(name, cmd.command, cmd.options)
+          vim.api.nvim_create_user_command(name, cmd.command, cmd.options or {})
         end
       '';
     };

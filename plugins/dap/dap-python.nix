@@ -15,7 +15,7 @@ in {
     package = helpers.mkPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
 
     adapterPythonPath = mkOption {
-      default = "${pkgs.python3}/bin/python3";
+      default = "${pkgs.python3.withPackages (ps: with ps; [debugpy])}/bin/python3";
       description = "Path to the python interpreter. Path must be absolute or in $PATH and needs to have the debugpy package installed.";
       type = types.str;
     };
@@ -26,18 +26,18 @@ in {
 
     includeConfigs = helpers.defaultNullOpts.mkBool true "Add default configurations.";
 
-    resolvePython = helpers.mkNullOrOption types.str ''
+    resolvePython = helpers.defaultNullOpts.mkLuaFn "null" ''
       Function to resolve path to python to use for program or test execution.
       By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
     '';
 
-    testRunner = helpers.mkNullOrOption (types.either types.str helpers.rawType) ''
+    testRunner = helpers.mkNullOrOption (types.either types.str helpers.nixvimTypes.rawLua) ''
       The name of test runner to use by default.
       The default value is dynamic and depends on `pytest.ini` or `manage.py` markers.
       If neither is found "unittest" is used.
     '';
 
-    testRunners = helpers.mkNullOrOption (types.attrsOf types.str) ''
+    testRunners = helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf strLuaFn) ''
       Set to register test runners.
       Built-in are test runners for unittest, pytest and django.
       The key is the test runner name, the value a function to generate the
@@ -75,7 +75,7 @@ in {
             table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
           '')
           + (optionalString (cfg.resolvePython != null) ''
-            require("dap-python").resolve_python = ${toLuaObject (mkRaw cfg.resolvePython)}
+            require("dap-python").resolve_python = ${toLuaObject cfg.resolvePython}
           '')
           + (optionalString (cfg.testRunner != null) ''
             require("dap-python").test_runner = ${toLuaObject cfg.testRunner};

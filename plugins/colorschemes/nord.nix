@@ -8,36 +8,72 @@
 with lib; let
   cfg = config.colorschemes.nord;
 in {
+  # Introduced January, 16 2024.
+  # TODO remove in early February 2023.
+  imports = let
+    basePluginPath = ["colorschemes" "nord"];
+  in [
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["disable_background"])
+      (basePluginPath ++ ["disableBackground"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["cursorline_transparent"])
+      (basePluginPath ++ ["cursorlineTransparent"])
+    )
+    (
+      mkRenamedOptionModule
+      (basePluginPath ++ ["enable_sidebar_background"])
+      (basePluginPath ++ ["enableSidebarBackground"])
+    )
+  ];
+
   options = {
     colorschemes.nord = {
       enable = mkEnableOption "nord";
 
-      package = helpers.mkPackageOption "nord.vim" pkgs.vimPlugins.nord-nvim;
+      package = helpers.mkPackageOption "nord.nvim" pkgs.vimPlugins.nord-nvim;
 
-      contrast =
-        mkEnableOption
-        "Make sidebars and popup menus like nvim-tree and telescope have a different background";
+      contrast = helpers.defaultNullOpts.mkBool false ''
+        Make sidebars and popup menus like nvim-tree and telescope have a different background.
+      '';
 
-      borders =
-        mkEnableOption
-        "Enable the border between verticaly split windows visable";
+      borders = helpers.defaultNullOpts.mkBool false ''
+        Enable the border between verticaly split windows visable.
+      '';
 
-      disable_background =
-        mkEnableOption
-        "Disable the setting of background color so that NeoVim can use your terminal background";
+      disableBackground = helpers.defaultNullOpts.mkBool false ''
+        Disable the setting of background color so that NeoVim can use your terminal background.
+      '';
 
-      cursorline_transparent =
-        mkEnableOption
-        "Set the cursorline transparent/visible";
+      cursorlineTransparent = helpers.defaultNullOpts.mkBool false ''
+        Set the cursorline transparent/visible.
+      '';
 
-      enable_sidebar_background =
-        mkEnableOption
-        "Re-enables the background of the sidebar if you disabled the background of everything";
+      enableSidebarBackground = helpers.defaultNullOpts.mkBool false ''
+        Re-enables the background of the sidebar if you disabled the background of everything.
+      '';
 
-      italic = mkOption {
-        description = "enables/disables italics";
-        type = types.nullOr types.bool;
-        default = null;
+      italic = helpers.defaultNullOpts.mkBool true ''
+        Enables/disables italics.
+      '';
+
+      uniformDiffBackground = helpers.defaultNullOpts.mkBool false ''
+        Enables/disables colorful backgrounds when used in _diff_ mode.
+      '';
+
+      extraConfig = mkOption {
+        type = types.attrs;
+        description = ''
+          The configuration options for vimtex without the 'nord_' prefix.
+          Example: To set 'nord_foo_bar' to 1, write
+            extraConfig = {
+              foo_bar = true;
+            };
+        '';
+        default = {};
       };
     };
   };
@@ -46,13 +82,21 @@ in {
     colorscheme = "nord";
     extraPlugins = [cfg.package];
 
-    globals = {
-      nord_contrast = mkIf cfg.contrast 1;
-      nord_borders = mkIf cfg.borders 1;
-      nord_disable_background = mkIf cfg.disable_background 1;
-      nord_cursoline_transparent = mkIf cfg.cursorline_transparent 1;
-      nord_enable_sidebar_background = mkIf cfg.enable_sidebar_background 1;
-      nord_italic = mkIf (cfg.italic != null) cfg.italic;
-    };
+    globals =
+      mapAttrs'
+      (name: value: nameValuePair "nord_${name}" value)
+      (with cfg;
+        {
+          inherit
+            contrast
+            borders
+            ;
+          disable_background = disableBackground;
+          cursorline_transparent = cursorlineTransparent;
+          enable_sidebar_background = enableSidebarBackground;
+          inherit italic;
+          uniform_diff_background = uniformDiffBackground;
+        }
+        // cfg.extraConfig);
   };
 }

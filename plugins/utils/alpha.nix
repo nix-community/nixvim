@@ -8,75 +8,52 @@
 with lib; let
   cfg = config.plugins.alpha;
 
-  sectionType = types.enum ["group" "padding" "text"];
+  sectionType = types.submodule {
+    freeformType = with types; attrsOf anything;
+    options = {
+      type = mkOption {
+        type = types.enum [
+          "button"
+          "group"
+          "padding"
+          "text"
+          "terminal"
+        ];
+        description = "Type of section";
+      };
 
-  mkAlphaSectionOption = type:
-    types.submodule {
-      options = {
-        type = mkOption {
-          inherit type;
-          description = "Type of section";
-        };
+      val = mkOption {
+        type = with helpers.nixvimTypes;
+          oneOf [
+            # "button", "text"
+            str
+            # "padding"
+            int
+            (listOf (
+              either
+              # "text" (list of strings)
+              str
+              # "group"
+              (attrsOf anything)
+            ))
+          ];
+        default = null;
+        description = "Value for section";
+      };
 
-        val = mkOption {
-          type = with types;
-            oneOf [
-              (either str int)
-              (listOf (
-                either
-                str
-                (submodule {
-                  options = {
-                    shortcut = helpers.mkNullOrOption str "Shortcut for keymap";
-                    desc = helpers.mkNullOrOption str "Description to display for keymap";
-                    command = helpers.mkNullOrOption str "Command to run for keymap";
-                  };
-                })
-              ))
-            ];
-          default = null;
-          description = "Value for section";
-        };
-
-        opts = mkOption {
-          type = types.submodule {
-            options = {
-              spacing = mkOption {
-                type = types.int;
-                default = 0;
-                description = "Spacing between grouped components";
-              };
-
-              hl = mkOption {
-                type = types.str;
-                default = "Keyword";
-                description = "HighlightGroup to apply";
-              };
-
-              position = mkOption {
-                type = types.str;
-                default = "center";
-                description = "How to align section";
-              };
-
-              margin = mkOption {
-                type = types.int;
-                default = 0;
-                description = "Margin for section";
-              };
-            };
-          };
-          default = {};
-          description = "Additional options for the section";
-        };
+      opts = mkOption {
+        type = with types; attrsOf anything;
+        default = {};
+        description = "Additional options for the section";
       };
     };
+  };
 in {
   options = {
     plugins.alpha = {
-      enable = mkEnableOption "alpha";
+      enable = mkEnableOption "alpha-nvim";
 
-      package = helpers.mkPackageOption "alpha" pkgs.vimPlugins.alpha-nvim;
+      package = helpers.mkPackageOption "alpha-nvim" pkgs.vimPlugins.alpha-nvim;
 
       iconsEnabled = mkOption {
         type = types.bool;
@@ -84,8 +61,22 @@ in {
         default = true;
       };
 
+      theme = mkOption {
+        type = with helpers.nixvimTypes; nullOr (maybeRaw str);
+        apply = v:
+          if isString v
+          then helpers.mkRaw "require'alpha.themes.${v}'.config"
+          else v;
+        default = null;
+        example = "dashboard";
+        description = "You can directly use a pre-defined theme.";
+      };
+
       layout = mkOption {
-        default = [
+        type = types.listOf sectionType;
+        default = [];
+        description = "List of sections to layout for the dashboard";
+        example = [
           {
             type = "padding";
             val = 2;
@@ -93,12 +84,12 @@ in {
           {
             type = "text";
             val = [
-              "  ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗  "
-              "  ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║  "
-              "  ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║  "
-              "  ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║  "
-              "  ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║  "
-              "  ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝  "
+              "███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+              "████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+              "██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+              "██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+              "██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+              "╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
             ];
             opts = {
               position = "center";
@@ -113,14 +104,16 @@ in {
             type = "group";
             val = [
               {
-                shortcut = "e";
-                desc = "  New file";
-                command = "<CMD>ene <CR>";
+                type = "button";
+                val = "  New file";
+                on_press.__raw = "function() vim.cmd[[ene]] end";
+                opts.shortcut = "n";
               }
               {
-                shortcut = "SPC q";
-                desc = "  Quit Neovim";
-                command = ":qa<CR>";
+                type = "button";
+                val = " Quit Neovim";
+                on_press.__raw = "function() vim.cmd[[qa]] end";
+                opts.shortcut = "q";
               }
             ];
           }
@@ -137,27 +130,17 @@ in {
             };
           }
         ];
-        description = "List of sections to layout for the dashboard";
-        type = types.listOf (mkAlphaSectionOption sectionType);
       };
+
+      opts = helpers.mkNullOrOption (with types; attrsOf anything) ''
+        Optional global options.
+      '';
     };
   };
 
   config = let
-    processButton = button: let
-      stringifyButton = button: ''button("${button.shortcut}", "${button.desc}", "${button.command}")'';
-    in
-      helpers.mkRaw (stringifyButton button);
-
-    processButtons = attrset:
-      if attrset.type == "group"
-      then attrset // {val = builtins.map processButton attrset.val;}
-      else attrset;
-
-    options = {
-      inherit (cfg) theme iconsEnabled;
-      layout = builtins.map processButtons cfg.layout;
-    };
+    layoutDefined = cfg.layout != [];
+    themeDefined = cfg.theme != null;
   in
     mkIf cfg.enable {
       extraPlugins =
@@ -165,48 +148,36 @@ in {
           cfg.package
         ]
         ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
-      extraConfigLua = ''
-        local leader = "SPC"
-        --- @param sc string
-        --- @param txt string
-        --- @param keybind string? optional
-        --- @param keybind_opts table? optional
-        local function button(sc, txt, keybind, keybind_opts)
-            local sc_ = sc:gsub("%s", ""):gsub(leader, "<leader>")
 
-            local opts = {
-                position = "center",
-                shortcut = sc,
-                cursor = 3,
-                width = 50,
-                align_shortcut = "right",
-                hl_shortcut = "Keyword",
-            }
-            if keybind then
-                keybind_opts = vim.F.if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
-                opts.keymap = { "n", sc_, keybind, keybind_opts }
-            end
-
-            local function on_press()
-                local key = vim.api.nvim_replace_termcodes(keybind or sc_ .. "<Ignore>", true, false, true)
-                vim.api.nvim_feedkeys(key, "t", false)
-            end
-
-            return {
-                type = "button",
-                val = txt,
-                on_press = on_press,
-                opts = opts,
-            }
-        end
-
-        local config = {
-          layout = ${helpers.toLuaObject options.layout},
-          opts = {
-            margin = 5,
-          },
+      assertions = [
+        {
+          assertion = themeDefined || layoutDefined;
+          message = ''
+            Nixvim (plugins.alpha): You have to either set a `theme` or define some sections in `layout`.
+          '';
         }
-        require('alpha').setup(config)
+        {
+          assertion = !(themeDefined && layoutDefined);
+          message = ''
+            Nixvim (plugins.alpha): You can't define both a `theme` and custom options.
+            Set `plugins.alpha.theme = null` if you want to configure alpha manually using the `layout` option.
+          '';
+        }
+      ];
+
+      extraConfigLua = let
+        setupOptions =
+          if themeDefined
+          then cfg.theme
+          else
+            (with cfg; {
+              inherit
+                layout
+                opts
+                ;
+            });
+      in ''
+        require('alpha').setup(${helpers.toLuaObject setupOptions})
       '';
     };
 }

@@ -40,7 +40,7 @@ in rec {
       A textual description of this autocommand.
     '';
 
-    callback = helpers.mkNullOrOption (with types; either str helpers.rawType) ''
+    callback = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
       A function or a string.
       - if a string, the name of a Vimscript function to call when this autocommand is triggered.
       - Otherwise, a Lua function which is called when this autocommand is triggered.

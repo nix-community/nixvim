@@ -6,6 +6,8 @@
   ...
 }:
 with lib; {
+  meta.maintainers = [maintainers.traxys];
+
   options.plugins.gitmessenger = {
     enable = mkEnableOption "gitmessenger";
 

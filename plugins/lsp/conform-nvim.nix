@@ -38,20 +38,28 @@ in {
         '';
 
       formatOnSave =
-        helpers.defaultNullOpts.mkNullable (types.submodule {
-          options = {
-            lspFallback = mkOption {
-              type = types.bool;
-              default = true;
-              description = "See :help conform.format for details.";
-            };
-            timeoutMs = mkOption {
-              type = types.int;
-              default = 500;
-              description = "See :help conform.format for details.";
-            };
-          };
-        })
+        helpers.defaultNullOpts.mkNullable
+        (
+          with types;
+            either
+            str
+            (
+              submodule {
+                options = {
+                  lspFallback = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = "See :help conform.format for details.";
+                  };
+                  timeoutMs = mkOption {
+                    type = types.int;
+                    default = 500;
+                    description = "See :help conform.format for details.";
+                  };
+                };
+              }
+            )
+        )
         "see documentation"
         ''
           If this is set, Conform will run the formatter on save.
@@ -77,10 +85,9 @@ in {
           This can also be a function that returns the table.
         '';
 
-      logLevel =
-        helpers.defaultNullOpts.mkEnumFirstDefault
-        ["ERROR" "DEBUG" "INFO" "TRACE" "WARN" "OFF"]
-        "Set the log level. Use `:ConformInfo` to see the location of the log file.";
+      logLevel = helpers.defaultNullOpts.mkLogLevel "error" ''
+        Set the log level. Use `:ConformInfo` to see the location of the log file.
+      '';
 
       notifyOnError =
         helpers.defaultNullOpts.mkBool true
@@ -96,14 +103,17 @@ in {
     setupOptions = with cfg;
       {
         formatters_by_ft = formattersByFt;
-        format_on_save = helpers.ifNonNull' formatOnSave {
-          lsp_fallback = formatOnSave.lspFallback;
-          timeout_ms = formatOnSave.timeoutMs;
+        format_on_save =
+          if builtins.isAttrs formatOnSave
+          then {
+            lsp_fallback = formatOnSave.lspFallback;
+            timeout_ms = formatOnSave.timeoutMs;
+          }
+          else helpers.mkRaw formatOnSave;
+        format_after_save = helpers.ifNonNull' formatAfterSave {
+          lsp_fallback = formatAfterSave.lspFallback;
         };
-        format_after_save = helpers.ifNonNull' formatOnSave {
-          lsp_fallback = formatOnSave.lspFallback;
-        };
-        log_level = helpers.ifNonNull' logLevel (helpers.mkRaw "vim.log.levels.${logLevel}");
+        log_level = logLevel;
         notify_on_error = notifyOnError;
         inherit formatters;
       }

@@ -31,12 +31,12 @@ in {
 
     theme = helpers.mkNullOrOption types.str "Custom theme, will use your global theme by default.";
 
-    path = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "vim.loop.cwd()" ''
+    path = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "vim.loop.cwd()" ''
       Directory to browse files from.
       `vim.fn.expanded` automatically.
     '';
 
-    cwd = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.rawType) "vim.loop.cwd()" ''
+    cwd = helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "vim.loop.cwd()" ''
       Directory to browse folders from.
       `vim.fn.expanded` automatically.
     '';
@@ -78,11 +78,11 @@ in {
       Induces slow-down w/ plenary finder (true if `fd` available).
     '';
 
-    browseFiles = helpers.defaultNullOpts.mkStr "fb_finders.browse_files" ''
+    browseFiles = helpers.defaultNullOpts.mkLuaFn "fb_finders.browse_files" ''
       A custom lua function to override for the file browser.
     '';
 
-    browseFolders = helpers.defaultNullOpts.mkStr "fb_finders.browse_folders" ''
+    browseFolders = helpers.defaultNullOpts.mkLuaFn "fb_finders.browse_folders" ''
       A custom lua function to override for the folder browser.
     '';
 
@@ -131,7 +131,7 @@ in {
     mappings =
       helpers.mkNullOrOption (
         with types;
-          attrsOf (attrsOf (either str helpers.rawType))
+          attrsOf (attrsOf (either str helpers.nixvimTypes.rawLua))
       ) ''
         `fb_actions` mappings.
         Mappings can also be a lua function.
@@ -151,12 +151,8 @@ in {
         ;
       add_dirs = addDirs;
       auto_depth = autoDepth;
-      browse_files =
-        helpers.ifNonNull' browseFiles
-        (helpers.mkRaw browseFiles);
-      browse_folders =
-        helpers.ifNonNull' browseFolders
-        (helpers.mkRaw browseFolders);
+      browse_files = browseFiles;
+      browse_folders = browseFolders;
       collapse_dirs = collapseDirs;
       cwd_to_path = cwdToPath;
       dir_icon = dirIcon;
@@ -172,7 +168,7 @@ in {
                 else
                   attr
                   // {
-                    display = helpers.ifNonNull' attr.display (helpers.mkRaw attr.display);
+                    display = helpers.mkRaw attr.display;
                   }
             )
             displayStat

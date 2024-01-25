@@ -51,7 +51,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: `"none"`
         '';
-        type = types.enum ["none" "image_nvim"];
+        type = types.enum ["none" "image.nvim"];
       };
 
       outputCropBorder = mkDefaultOpt {
@@ -95,7 +95,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: `["" "━" "" ""]`
         '';
-        type = borderType;
+        type = nixvimTypes.border;
       };
 
       outputWinCoverGutter = mkDefaultOpt {
@@ -157,7 +157,7 @@ with import ../helpers.nix {inherit lib;};
 
           Default: `{__raw = "vim.fn.stdpath('data')..'/molten'";}`
         '';
-        type = with types; either str rawType;
+        type = with nixvimTypes; either str rawLua;
       };
 
       useBorderHighlights = mkDefaultOpt {

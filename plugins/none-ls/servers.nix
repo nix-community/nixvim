@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: let
+}:
+with lib; let
   helpers = import ./helpers.nix;
   serverData = {
     code_actions = {
@@ -14,6 +15,9 @@
         package = pkgs.nodePackages.eslint_d;
       };
       gitsigns = {};
+      ltrs = {
+        package = pkgs.languagetool-rust;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
       };
@@ -25,6 +29,12 @@
     diagnostics = {
       alex = {
         package = pkgs.nodePackages.alex;
+      };
+      ansiblelint = {
+        package = pkgs.ansible-lint;
+      };
+      bandit = {
+        package = pkgs.python3Packages.bandit;
       };
       cppcheck = {
         package = pkgs.cppcheck;
@@ -44,11 +54,23 @@
       gitlint = {
         package = pkgs.gitlint;
       };
+      golangci_lint = {
+        package = pkgs.golangci-lint;
+      };
       hadolint = {
         package = pkgs.hadolint;
       };
+      ktlint = {
+        package = pkgs.ktlint;
+      };
       luacheck = {
         package = pkgs.luaPackages.luacheck;
+      };
+      ltrs = {
+        package = pkgs.languagetool-rust;
+      };
+      markdownlint = {
+        package = pkgs.nodePackages.markdownlint-cli;
       };
       mypy = {
         package = pkgs.mypy;
@@ -59,8 +81,14 @@
       pylint = {
         package = pkgs.pylint;
       };
+      revive = {
+        pacakge = pkgs.revive;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
+      };
+      staticcheck = {
+        pacakge = pkgs.go-tools;
       };
       statix = {
         package = pkgs.statix;
@@ -70,6 +98,12 @@
       };
       vulture = {
         package = pkgs.python3Packages.vulture;
+      };
+      write_good = {
+        package = pkgs.write-good;
+      };
+      yamllint = {
+        package = pkgs.yamllint;
       };
     };
     formatting = {
@@ -103,11 +137,26 @@
       gofmt = {
         package = pkgs.go;
       };
+      gofumpt = {
+        package = pkgs.gofumpt;
+      };
+      goimports = {
+        package = pkgs.gotools;
+      };
+      goimports_reviser = {
+        package = pkgs.goimports-reviser;
+      };
+      golines = {
+        package = pkgs.golines;
+      };
       isort = {
         package = pkgs.isort;
       };
       jq = {
         package = pkgs.jq;
+      };
+      ktlint = {
+        package = pkgs.ktlint;
       };
       markdownlint = {
         package = pkgs.nodePackages.markdownlint-cli;
@@ -118,14 +167,12 @@
       nixpkgs_fmt = {
         package = pkgs.nixpkgs-fmt;
       };
+      pint = {};
       phpcbf = {
         package = pkgs.phpPackages.phpcbf;
       };
       prettier = {
         package = pkgs.nodePackages.prettier;
-      };
-      prettier_d_slim = {
-        package = pkgs.nodePackages.prettier_d_slim;
       };
       protolint = {
         package = pkgs.protolint;
@@ -145,6 +192,8 @@
       taplo = {
         package = pkgs.taplo;
       };
+      trim_newlines = {};
+      trim_whitespace = {};
     };
   };
   # Format the servers to be an array of attrs like the following example
@@ -154,21 +203,40 @@
   #   packages = [...];
   # }]
   serverDataFormatted =
-    lib.mapAttrsToList
+    mapAttrsToList
     (
-      sourceType: lib.mapAttrsToList (name: attrs: attrs // {inherit sourceType name;})
+      sourceType:
+        mapAttrsToList
+        (
+          name: attrs:
+            attrs
+            // {
+              inherit sourceType name;
+            }
+        )
     )
     serverData;
-  dataFlattened = lib.flatten serverDataFormatted;
+  dataFlattened = flatten serverDataFormatted;
 in {
-  imports = lib.lists.map helpers.mkServer dataFlattened;
+  imports =
+    (map helpers.mkServer dataFlattened)
+    ++ [
+      ./prettier.nix
+      # Introduced January 22 2024.
+      # TODO remove in early March 2024.
+      (
+        mkRemovedOptionModule
+        ["plugins" "none-ls" "sources" "formatting" "prettier_d_slim"]
+        "`prettier_d_slim` is no longer maintained for >3 years. Please migrate to `prettierd`"
+      )
+    ];
 
   config = let
     cfg = config.plugins.none-ls;
     gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
   in
-    lib.mkIf cfg.enable {
-      plugins.gitsigns.enable = lib.mkIf gitsignsEnabled true;
-      extraPackages = lib.optional gitsignsEnabled pkgs.git;
+    mkIf cfg.enable {
+      plugins.gitsigns.enable = mkIf gitsignsEnabled true;
+      extraPackages = optional gitsignsEnabled pkgs.git;
     };
 }

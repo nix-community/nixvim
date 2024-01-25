@@ -14,7 +14,7 @@ with lib; {
       package = helpers.mkPackageOption "persistence.nvim" pkgs.vimPlugins.persistence-nvim;
 
       dir =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.rawType)
+        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
         ''vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/")''
         "directory where session files are saved";
 
@@ -41,7 +41,7 @@ with lib; {
         helpers.defaultNullOpts.mkNullable (with types; listOf (enum sessionOpts))
         ''["buffers" "curdir" "tabpages" "winsize" "skiprtp"]'' "sessionoptions used for saving";
 
-      preSave = helpers.mkNullOrOption types.str "a function to call before saving the session";
+      preSave = helpers.defaultNullOpts.mkLuaFn "nil" "a function to call before saving the session";
 
       saveEmpty = helpers.defaultNullOpts.mkBool false ''
         don't save if there are no open file buffers
@@ -57,7 +57,7 @@ with lib; {
       extraConfigLua = let
         opts = {
           inherit (cfg) dir options;
-          pre_save = helpers.mkRawIfNonNull cfg.preSave;
+          pre_save = cfg.preSave;
           save_empty = cfg.saveEmpty;
         };
       in ''

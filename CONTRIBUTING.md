@@ -7,7 +7,7 @@ This document is mainly for contributors to nixvim, but it can also be useful fo
 In order to submit a change you must be careful of several points:
 
 - The code must be properly formatted. This can be done through `nix fmt`.
-- The tests must pass. This can be done through `nix flake check` (this also checks formatting).
+- The tests must pass. This can be done through `nix flake check --all-systems` (this also checks formatting).
 - The change should try to avoid breaking existing configurations.
 - If the change introduces a new feature it should add tests for it (see the architecture section for details).
 
@@ -74,7 +74,7 @@ There are a number of helpers to help you correctly implement them:
 - `helpers.mkPlugin`: This helper is useful for simple plugins that are configured through (vim) global variables.
 - `helpers.defaultNullOpts.{mkBool,mkInt,mkStr,...}`: This family of helpers takes a default value and a description, and sets the Nix default to `null`. These are the main functions you should use to define options.
 - `helpers.defaultNullOpts.mkNullable`: This takes a type, a default and a description. This is useful for more complex options.
-- `helpers.rawType`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkStr` should be used in this case.
+- `helpers.nixvimTypes.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkLua`/`mkLuaFn` should be used in this case.
 
 You will then need to map the Nix options to lua code. This can be done through `helpers.toLuaObject`. This function takes a Nix expression, and converts it to a lua string.
 
@@ -83,7 +83,7 @@ Because the options may not have the same case (and may require some pre-process
 ```nix
 {
   some_opt = cfg.someOpt;
-  some_raw_opt = helpers.ifNonNull' cfg.someRawOpt (mkRaw cfg.someRawOpt);
+  some_raw_opt = helpers.mkRaw cfg.someRawOpt;
   some_meta_opt = with cfg.metaOpt; # metaOpt = { foo = ...; someOtherOpt = ...; };
     {
       inherit foo;
@@ -104,7 +104,7 @@ You can specify the special `tests` attribute in the configuration that will not
 
 - `tests.dontRun`: avoid launching this test, simply build the configuration.
 
-The tests are then runnable with `nix flake check`.
+The tests are then runnable with `nix flake check --all-systems`.
 
 There are a second set of tests, unit tests for nixvim itself, defined in `tests/lib-tests.nix` that use the `pkgs.lib.runTests` framework.
 

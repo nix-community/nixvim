@@ -1,0 +1,16 @@
+name: "Publish every Git push to main to Flakestry"
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  publish-flake:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
+    steps:
+      - uses: flakestry/flakestry-publish@main
+        with:
+          version: "${{ github.ref_name }}"

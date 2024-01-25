@@ -126,7 +126,7 @@ in {
             options = {
               message = lib.mkOption {
                 description = "Hint message to be displayed.";
-                type = helpers.rawType;
+                type = helpers.nixvimTypes.rawLua;
               };
 
               length = lib.mkOption {

@@ -40,7 +40,7 @@ with lib; let
     };
 
     args = {
-      type = listOf (either str helpers.rawType);
+      type = listOf (either str helpers.nixvimTypes.rawLua);
       description = ''
         List of arguments.
         Can contain functions with zero arguments that will be evaluated once the linter is used.
@@ -81,12 +81,12 @@ with lib; let
     };
 
     parser = {
-      type = str;
+      type = helpers.nixvimTypes.strLuaFn;
       description = "The code for your parser function.";
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
       '';
-      apply = s: helpers.ifNonNull' s (helpers.mkRaw s);
+      apply = helpers.mkRaw;
       mandatory = true;
     };
   };
@@ -229,7 +229,7 @@ in {
 
                   callback = mkOption {
                     type = with types;
-                      nullOr (either str helpers.rawType);
+                      nullOr (either str helpers.nixvimTypes.rawLua);
                     default = defaultCallback;
                     description = "What action to perform for linting";
                   };
@@ -297,6 +297,6 @@ in {
         )
       );
 
-    # autoCmd = optional (cfg.autoCmd != null) cfg.autoCmd;
+    autoCmd = optional (cfg.autoCmd != null) cfg.autoCmd;
   };
 }

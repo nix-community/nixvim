@@ -69,7 +69,7 @@ in {
       '';
 
       inlayHints = {
-        inline = helpers.defaultNullOpts.mkStr ''vim.fn.has("nvim-0.10") == 1'' ''
+        inline = helpers.defaultNullOpts.mkLua ''vim.fn.has("nvim-0.10") == 1'' ''
           Show hints inline.
         '';
 
@@ -159,7 +159,7 @@ in {
     setupOptions = with cfg;
       {
         inlay_hints = with inlayHints; {
-          inline = helpers.ifNonNull' inline (helpers.mkRaw inline);
+          inherit inline;
           only_current_line = onlyCurrentLine;
           only_current_line_autocmd = onlyCurrentLineAutocmd;
           show_parameter_hints = showParameterHints;

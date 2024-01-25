@@ -15,26 +15,17 @@ in {
 
       package = helpers.mkPackageOption "nvim-notify" pkgs.vimPlugins.nvim-notify;
 
-      level =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            oneOf [
-              ints.unsigned
-              helpers.rawType
-              str
-            ]
-        )
-        ''{__raw = "vim.log.levels.INFO";}''
-        "Minimum log level to display. See `vim.log.levels`.";
+      level = helpers.defaultNullOpts.mkLogLevel "info" ''
+        Minimum log level to display. See `vim.log.levels`.
+      '';
 
       timeout = helpers.defaultNullOpts.mkUnsignedInt 5000 "Default timeout for notification.";
 
-      maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned helpers.rawType) ''
+      maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned helpers.nixvimTypes.rawLua) ''
         Max number of columns for messages.
       '';
 
-      maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned helpers.rawType) ''
+      maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned helpers.nixvimTypes.rawLua) ''
         Max number of lines for a message.
       '';
 
@@ -80,11 +71,11 @@ in {
           trace = "✎";
         };
 
-      onOpen = helpers.mkNullOrOption types.str ''
+      onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Function called when a new window is opened, use for changing win settings/config.
       '';
 
-      onClose = helpers.mkNullOrOption types.str ''
+      onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
         Function called when a new window is closed.
       '';
 
@@ -94,7 +85,7 @@ in {
           with types;
             either
             (enum ["default" "minimal"])
-            helpers.rawType
+            helpers.nixvimTypes.rawLua
         )
         "default"
         "Function to render a notification buffer or a built-in renderer name.";
@@ -139,8 +130,8 @@ in {
             }
           )
           icons;
-        on_open = helpers.ifNonNull' onOpen (helpers.mkRaw onOpen);
-        on_close = helpers.ifNonNull' onClose (helpers.mkRaw onClose);
+        on_open = onOpen;
+        on_close = onClose;
         inherit render;
         minimum_width = minimumWidth;
         inherit fps;

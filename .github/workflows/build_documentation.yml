@@ -24,11 +24,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: nscloud-ubuntu-22.04-amd64-4x16
+    runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pages
         uses: actions/configure-pages@v3
@@ -39,7 +39,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Configure cachix
-        uses: cachix/cachix-action@v12
+        uses: cachix/cachix-action@v13
         with:
           name: nix-community
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
