@@ -116,6 +116,7 @@
           julials.enable = true;
           kotlin-language-server.enable = true;
           leanls.enable = true;
+          lemminx.enable = true;
           ltex.enable = true;
           lua-ls.enable = true;
           marksman.enable = true;

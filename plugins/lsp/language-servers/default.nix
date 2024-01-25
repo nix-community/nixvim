@@ -293,6 +293,11 @@ with lib; let
       package = pkgs.lean4;
     }
     {
+      name = "lemminx";
+      description = "Enable lemminx, for XML";
+      packages = pkgs.lemminx;
+    }
+    {
       name = "ltex";
       description = "Enable ltex-ls, for LanguageTool";
       package = pkgs.ltex-ls;
