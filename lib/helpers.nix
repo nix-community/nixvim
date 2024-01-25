@@ -5,11 +5,6 @@ with lib; rec {
   autocmd = import ./autocmd-helpers.nix {inherit lib;};
   vim-plugin = import ./vim-plugin.nix {inherit lib mkPackageOption;};
 
-  # vim dictionaries are, in theory, compatible with JSON
-  toVimDict = args:
-    toJSON
-    (lib.filterAttrs (n: v: v != null) args);
-
   # Black functional magic that converts a bunch of different Nix types to their
   # lua equivalents!
   toLuaObject = args:
