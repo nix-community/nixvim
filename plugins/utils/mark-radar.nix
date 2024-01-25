@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.mark-radar;
 in {
   options.plugins.mark-radar =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "mark-radar";
 

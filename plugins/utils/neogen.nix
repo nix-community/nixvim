@@ -43,7 +43,7 @@ with lib; let
   };
 in {
   options.plugins.neogen =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "neogen";
 

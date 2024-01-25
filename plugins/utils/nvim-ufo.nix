@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.nvim-ufo;
 in {
   options.plugins.nvim-ufo =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-ufo";
 

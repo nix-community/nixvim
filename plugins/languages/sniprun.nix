@@ -11,7 +11,7 @@ with lib; let
   mkList = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in {
   options.plugins.sniprun =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "sniprun";
 

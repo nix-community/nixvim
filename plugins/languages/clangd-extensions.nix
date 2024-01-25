@@ -56,7 +56,7 @@ in {
     );
 
   options.plugins.clangd-extensions =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "clangd_extensions, plugins implementing clangd LSP extensions";
 

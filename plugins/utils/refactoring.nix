@@ -7,7 +7,7 @@
 }:
 with lib; {
   options.plugins.refactoring =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "refactoring.nvim";
 

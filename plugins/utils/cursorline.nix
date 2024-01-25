@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.cursorline;
 in {
   options.plugins.cursorline =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-cursorline";
 

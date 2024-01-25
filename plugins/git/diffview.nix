@@ -49,7 +49,7 @@ with lib; let
     };
 in {
   options.plugins.diffview = with helpers.defaultNullOpts;
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "diffview";
 

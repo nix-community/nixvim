@@ -7,7 +7,7 @@
 }:
 with lib; {
   options.plugins.rainbow-delimiters =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "rainbow-delimiters.nvim";
 

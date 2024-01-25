@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.debugprint;
 in {
   options.plugins.debugprint =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "debugprint.nvim";
 

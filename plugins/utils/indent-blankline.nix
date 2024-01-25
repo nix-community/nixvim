@@ -75,7 +75,7 @@ in {
     );
 
   options.plugins.indent-blankline =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "indent-blankline.nvim";
 

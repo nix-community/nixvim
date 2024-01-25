@@ -10,7 +10,7 @@ with lib; let
   cfg = config.plugins.${pluginName};
 in {
   options.plugins.${pluginName} =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption pluginName;
 

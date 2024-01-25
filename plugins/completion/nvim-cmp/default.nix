@@ -17,7 +17,7 @@ with lib; let
   };
 in {
   options.plugins.nvim-cmp =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-cmp";
 

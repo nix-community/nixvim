@@ -21,7 +21,7 @@ with lib; let
   };
 in {
   options.plugins.harpoon =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "harpoon";
 

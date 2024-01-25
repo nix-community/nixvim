@@ -10,7 +10,7 @@
 # toLuaObject, we would maybe need some ad-hoc pre-processing functions.
 with lib; {
   options.plugins.noice =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption ''
         noice.nvim, an experimental nvim UI.

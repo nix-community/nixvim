@@ -11,7 +11,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.codeium-nvim =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       package = helpers.mkPackageOption "codeium.nvim" pkgs.vimPlugins.codeium-nvim;
 

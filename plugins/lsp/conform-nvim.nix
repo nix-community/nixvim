@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.conform-nvim;
 in {
   options.plugins.conform-nvim =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "conform-nvim";
 

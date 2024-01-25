@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.better-escape;
 in {
   options.plugins.better-escape =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "better-escape.nvim";
 

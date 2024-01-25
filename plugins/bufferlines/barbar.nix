@@ -80,7 +80,7 @@ with lib; let
   };
 in {
   options.plugins.barbar =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "barbar.nvim";
 

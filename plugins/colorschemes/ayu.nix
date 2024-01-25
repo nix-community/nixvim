@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     colorschemes.ayu =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "ayu";
 

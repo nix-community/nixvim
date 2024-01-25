@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.rust-tools;
 in {
   options.plugins.rust-tools =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "rust tools plugins";
       package = helpers.mkPackageOption "rust-tools" pkgs.vimPlugins.rust-tools-nvim;

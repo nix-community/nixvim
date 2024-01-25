@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.nvim-autopairs;
 in {
   options.plugins.nvim-autopairs =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-autopairs";
 

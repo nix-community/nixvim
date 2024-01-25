@@ -7,7 +7,7 @@
 }:
 with lib; {
   options.plugins.gitlinker =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "gitlinker.nvim";
 

@@ -60,7 +60,7 @@ with lib; let
   };
 in {
   options.plugins.oil =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "oil";
 

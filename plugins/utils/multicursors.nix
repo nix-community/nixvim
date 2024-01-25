@@ -45,7 +45,7 @@ with lib; let
 in {
   options = {
     plugins.multicursors =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "multicursors.nvim";
 

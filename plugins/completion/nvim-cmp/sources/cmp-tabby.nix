@@ -10,7 +10,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.cmp-tabby =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       host = helpers.defaultNullOpts.mkStr "http://localhost:5000" ''
         The adress of the tabby host server.

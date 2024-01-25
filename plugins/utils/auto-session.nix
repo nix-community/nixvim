@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.auto-session;
 in {
   options.plugins.auto-session =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "auto-session";
 

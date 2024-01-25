@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.lspkind;
 in {
   options.plugins.lspkind =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "lspkind.nvim";
 

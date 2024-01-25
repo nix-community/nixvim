@@ -46,7 +46,7 @@ in {
 
   options = {
     plugins.lspsaga =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "lspsaga.nvim";
 
