@@ -1,11 +1,10 @@
 {
   lib,
-  mkIf,
-  mkIfNonNull,
-  mkRaw,
   nixvimTypes,
+  nixvimUtils,
 }:
-with lib; rec {
+with lib;
+with nixvimUtils; rec {
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption = type: desc:
     lib.mkOption {
