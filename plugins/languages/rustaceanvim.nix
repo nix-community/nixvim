@@ -135,6 +135,8 @@ in {
           ```
         '';
 
+        onAttach = helpers.defaultNullOpts.mkLuaFn "__lspOnAttach" "Function to call on attach";
+
         cmd = helpers.mkNullOrStrLuaFnOr (with types; listOf str) ''
           Command and arguments for starting rust-analyzer.
 
