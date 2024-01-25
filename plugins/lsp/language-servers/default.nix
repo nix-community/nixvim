@@ -295,7 +295,6 @@ with lib; let
     {
       name = "lemminx";
       description = "Enable lemminx, for XML";
-      packages = pkgs.lemminx;
     }
     {
       name = "ltex";
