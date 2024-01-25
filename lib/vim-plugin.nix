@@ -1,6 +1,6 @@
 {
   lib,
-  mkPackageOption,
+  nixvimOptions,
 }:
 with lib; {
   mkVimPlugin = {
@@ -45,7 +45,7 @@ with lib; {
       if package == null
       then {}
       else {
-        package = mkPackageOption name package;
+        package = nixvimOptions.mkPackageOption name package;
       };
 
     extraConfigOption =
