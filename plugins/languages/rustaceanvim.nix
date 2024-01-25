@@ -243,42 +243,47 @@ in {
       (cfg.rustAnalyzerPackage != null)
       cfg.rustAnalyzerPackage;
 
-    globals.rustaceanvim = with cfg;
-      {
-        tools = with tools; {
-          inherit executor;
-          on_initialized = onInitialized;
-          reload_workspace_from_cargo_toml = reloadWorkspaceFromCargoToml;
-          hover_actions = {
-            replace_builtin_hover = hoverActions.replaceBuiltinHover;
+    plugins.lsp.postConfig = let
+      globalOptions = with cfg;
+        {
+          tools = with tools; {
+            inherit executor;
+            on_initialized = onInitialized;
+            reload_workspace_from_cargo_toml = reloadWorkspaceFromCargoToml;
+            hover_actions = {
+              replace_builtin_hover = hoverActions.replaceBuiltinHover;
+            };
+            float_win_config = floatWinConfig;
+            create_graph = {
+              inherit
+                (crateGraph)
+                backend
+                output
+                full
+                ;
+              enabled_graphviz_backends = crateGraph.enabledGraphvizBackends;
+              inherit (crateGraph) pipe;
+            };
+            open_url = openUrl;
           };
-          float_win_config = floatWinConfig;
-          create_graph = {
+          server = with server; {
+            auto_attach = autoAttach;
+            on_attach = onAttach;
             inherit
-              (crateGraph)
-              backend
-              output
-              full
+              cmd
+              settings
+              standalone
+              logfile
               ;
-            enabled_graphviz_backends = crateGraph.enabledGraphvizBackends;
-            inherit (crateGraph) pipe;
           };
-          open_url = openUrl;
-        };
-        server = with server; {
-          auto_attach = autoAttach;
-          inherit
-            cmd
-            settings
-            standalone
-            logfile
-            ;
-        };
-        dap = with dap; {
-          autoload_configurations = autoloadConfigurations;
-          inherit adapter;
-        };
-      }
-      // cfg.extraOptions;
+          dap = with dap; {
+            autoload_configurations = autoloadConfigurations;
+            inherit adapter;
+          };
+        }
+        // cfg.extraOptions;
+    in ''
+      vim.g.rustaceanvim = ${helpers.toLuaObject globalOptions}
+    '';
   };
 }
