@@ -3,7 +3,7 @@
   mkPackageOption,
 }:
 with lib; {
-  mkPlugin = {
+  mkVimPlugin = {
     config,
     lib,
     ...

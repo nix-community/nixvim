@@ -14,7 +14,7 @@ in
       useDefaultPackage ? true,
       ...
     }:
-      mkPlugin {inherit lib config pkgs;} {
+      mkVimPlugin {inherit lib config pkgs;} {
         inherit name;
         extraPlugins = extraPlugins ++ (lists.optional useDefaultPackage pkgs.vimPlugins.${name});
         description = "Enable ${name}";

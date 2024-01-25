@@ -7,7 +7,7 @@
 in
   with helpers.vim-plugin;
   with lib;
-    mkPlugin attrs {
+    mkVimPlugin attrs {
       name = "goyo";
       description = "Enable goyo.vim";
       package = pkgs.vimPlugins.goyo-vim;

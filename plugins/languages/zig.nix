@@ -7,7 +7,7 @@
 in
   with helpers.vim-plugin;
   with lib;
-    mkPlugin attrs {
+    mkVimPlugin attrs {
       name = "zig";
       description = "Enable zig";
       package = pkgs.vimPlugins.zig-vim;

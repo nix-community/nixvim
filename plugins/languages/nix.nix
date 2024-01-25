@@ -7,7 +7,7 @@
 in
   with helpers.vim-plugin;
   with lib;
-    mkPlugin attrs {
+    mkVimPlugin attrs {
       name = "nix";
       description = "Enable nix";
       package = pkgs.vimPlugins.vim-nix;
