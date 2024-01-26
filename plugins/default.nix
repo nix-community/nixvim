@@ -59,6 +59,7 @@
     ./languages/rustaceanvim.nix
     ./languages/sniprun.nix
     ./languages/tagbar.nix
+    ./languages/treesitter/hmts.nix
     ./languages/treesitter/rainbow-delimiters.nix
     ./languages/treesitter/treesitter.nix
     ./languages/treesitter/treesitter-context.nix
@@ -121,7 +122,6 @@
     ./utils/goyo.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix
-    ./utils/hmts.nix
     ./utils/illuminate.nix
     ./utils/indent-blankline.nix
     ./utils/instant.nix
