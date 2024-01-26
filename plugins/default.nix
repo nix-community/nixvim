@@ -46,6 +46,7 @@
 
     ./languages/clangd-extensions.nix
     ./languages/debugprint.nix
+    ./languages/haskell-scope-highlighting.nix
     ./languages/julia/julia-cell.nix
     ./languages/lean.nix
     ./languages/ledger.nix
@@ -61,15 +62,15 @@
     ./languages/tagbar.nix
     ./languages/treesitter/hmts.nix
     ./languages/treesitter/rainbow-delimiters.nix
-    ./languages/treesitter/treesitter.nix
     ./languages/treesitter/treesitter-context.nix
     ./languages/treesitter/treesitter-playground.nix
     ./languages/treesitter/treesitter-refactor.nix
     ./languages/treesitter/treesitter-textobjects.nix
+    ./languages/treesitter/treesitter.nix
     ./languages/treesitter/ts-autotag.nix
     ./languages/treesitter/ts-context-commentstring.nix
-    ./languages/typst/typst-vim.nix
     ./languages/typescript-tools.nix
+    ./languages/typst/typst-vim.nix
     ./languages/vim-slime.nix
     ./languages/vimtex.nix
     ./languages/zig.nix
