@@ -1,11 +1,8 @@
 {
   empty = {
-    plugins.hmts.enable = true;
-  };
-
-  example = {
-    plugins.hmts = {
-      enable = true;
+    plugins = {
+      hmts.enable = true;
+      treesitter.enable = true;
     };
   };
 }
