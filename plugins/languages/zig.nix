@@ -9,7 +9,7 @@ in
   with lib;
     mkVimPlugin attrs {
       name = "zig";
-      description = "Enable zig";
+      description = "zig.vim";
       package = pkgs.vimPlugins.zig-vim;
       globalPrefix = "zig_";
 

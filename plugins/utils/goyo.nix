@@ -9,7 +9,7 @@ in
   with lib;
     mkVimPlugin attrs {
       name = "goyo";
-      description = "Enable goyo.vim";
+      description = "goyo.vim";
       package = pkgs.vimPlugins.goyo-vim;
       globalPrefix = "goyo_";
 

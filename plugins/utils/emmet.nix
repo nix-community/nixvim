@@ -14,7 +14,6 @@ in
   with helpers.vim-plugin;
     mkVimPlugin attrs {
       name = "emmet";
-      description = "Enable emmet";
       package = pkgs.vimPlugins.emmet-vim;
       globalPrefix = "user_emmet_";
 

@@ -9,7 +9,7 @@ in
   with lib;
     mkVimPlugin attrs {
       name = "surround";
-      description = "Enable surround.vim";
+      description = "surround.vim";
       package = pkgs.vimPlugins.surround;
 
       options = {};

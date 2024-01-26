@@ -9,7 +9,7 @@ in
   with lib;
     mkVimPlugin attrs {
       name = "endwise";
-      description = "Enable vim-endwise";
+      description = "vim-endwise";
       package = pkgs.vimPlugins.vim-endwise;
 
       # Yes it's really not configurable

@@ -11,70 +11,70 @@ with lib; let
   servers = [
     {
       name = "ansiblels";
-      description = "Enable ansiblels, for Ansible";
+      description = "ansiblels for Ansible";
       package = pkgs.ansible-language-server;
       cmd = cfg: ["${cfg.package}/bin/ansible-language-server" "--stdio"];
     }
     {
       name = "astro";
-      description = "Enable astrols, for Astro";
+      description = "astrols for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
       cmd = cfg: ["${cfg.package}/bin/astro-ls" "--stdio"];
     }
     {
       name = "bashls";
-      description = "Enable bashls, for bash.";
+      description = "bashls for bash";
       package = pkgs.nodePackages.bash-language-server;
     }
     {
       name = "beancount";
-      description = "Enable beancount-language-server";
+      description = "beancount-language-server";
       package = pkgs.beancount-language-server;
     }
     {
       name = "biome";
-      description = "Enable Biome, Toolchain of the Web";
+      description = "Biome, Toolchain of the Web";
     }
     {
       name = "ccls";
-      description = "Enable ccls, for C/C++.";
+      description = "ccls for C/C++";
     }
     {
       name = "clangd";
-      description = "Enable clangd LSP, for C/C++.";
+      description = "clangd LSP for C/C++";
       package = pkgs.clang-tools;
     }
     {
       name = "clojure-lsp";
-      description = "Enable clojure-lsp, for clojure.";
+      description = "clojure-lsp for Clojure";
       serverName = "clojure_lsp";
       package = pkgs.clojure-lsp;
     }
     {
       name = "cmake";
-      description = "Enable cmake language server, for cmake files.";
+      description = "cmake language server";
       package = pkgs.cmake-language-server;
     }
     {
       name = "csharp-ls";
-      description = "Enable csharp-ls, for C#.";
+      description = "csharp-ls for C#";
       package = pkgs.csharp-ls;
       serverName = "csharp_ls";
     }
     {
       name = "cssls";
-      description = "Enable cssls, for CSS";
+      description = "cssls for CSS";
       package = pkgs.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-css-language-server" "--stdio"];
     }
     {
       name = "dagger";
-      description = "Enable dagger, for Cuelang";
+      description = "dagger for Cuelang";
       package = pkgs.cuelsp;
     }
     {
       name = "dartls";
-      description = "Enable dart language-server, for dart";
+      description = "dart language-server";
       package = pkgs.dart;
       settingsOptions = {
         analysisExcludedFolders = mkOption {
@@ -165,147 +165,145 @@ with lib; let
     }
     {
       name = "denols";
-      description = "Enable denols, for Deno";
+      description = "denols for Deno";
       package = pkgs.deno;
     }
     {
       name = "dhall-lsp-server";
-      description = "Enable dhall-lsp-server, for Dhall";
+      description = "dhall-lsp-server for Dhall";
       serverName = "dhall_lsp_server";
     }
     {
       name = "digestif";
-      description = "Enable digestif, for LaTeX";
+      description = "digestif for LaTeX";
       # luaPackages.digestif is currently broken, using lua54Packages instead
       package = pkgs.lua54Packages.digestif;
     }
     {
       name = "dockerls";
-      description = "Enable dockerls, for Dockerfile";
+      description = "dockerls for Dockerfile";
       package = pkgs.dockerfile-language-server-nodejs;
       cmd = cfg: ["${cfg.package}/bin/docker-langserver" "--stdio"];
     }
     {
       name = "efm";
-      description = "Enable efm-langserver, for misc tools";
+      description = "efm-langserver for misc tools";
       package = pkgs.efm-langserver;
     }
     {
       name = "elmls";
-      description = "Enable elmls, for Elm.";
+      description = "elmls for Elm";
       package = pkgs.elmPackages.elm-language-server;
     }
     {
       name = "emmet_ls";
-      description = "Enable emmet_ls, emmet support based on LSP";
+      description = "emmet_ls, emmet support based on LSP";
       package = pkgs.emmet-ls;
     }
     {
       name = "eslint";
-      description = "Enable eslint";
       package = pkgs.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-eslint-language-server" "--stdio"];
     }
     {
       name = "elixirls";
-      description = "Enable elixirls";
       package = pkgs.elixir_ls;
       cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
       name = "fsautocomplete";
-      description = "Enable fsautocomplete, for F#";
+      description = "fsautocomplete for F#";
       package = pkgs.fsautocomplete;
     }
     {
       name = "futhark-lsp";
-      description = "Enable Futhark lsp, for Futhark";
+      description = "futhark-lsp for Futhark";
       package = pkgs.futhark;
       serverName = "futhark_lsp";
     }
     {
       name = "gdscript";
-      description = "Enable gdscript, for Godot";
+      description = "gdscript for Godot";
       package = null;
     }
     {
       name = "gleam";
-      description = "Enable gleam, for gleam.";
+      description = "gleam for gleam";
     }
     {
       name = "gopls";
-      description = "Enable gopls, for Go.";
+      description = "gopls for Go";
     }
     {
       name = "graphql";
-      description = "Enable graphql, for GraphQL.";
+      description = "graphql for GraphQL";
       package = pkgs.nodePackages.graphql-language-service-cli;
     }
     {
       name = "hls";
-      description = "Enable haskell language server";
+      description = "haskell language server";
       package = pkgs.haskell-language-server;
       cmd = cfg: ["haskell-language-server-wrapper" "--lsp"];
     }
     {
       name = "html";
-      description = "Enable html, for HTML";
+      description = "HTML language server from `vscode-langservers-extracted`";
       package = pkgs.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
     }
     {
       name = "htmx";
-      description = "Enable htmx, for HTMX";
+      description = "htmx for HTMX";
       package = pkgs.htmx-lsp;
     }
     {
       name = "intelephense";
-      description = "Enable intelephense, for PHP";
+      description = "intelephense for PHP";
       package = pkgs.nodePackages.intelephense;
     }
     {
       name = "java-language-server";
-      description = "Enable java language server";
+      description = "Java language server";
       serverName = "java_language_server";
       cmd = cfg: ["${cfg.package}/bin/java-language-server"];
     }
     {
       name = "jsonls";
-      description = "Enable jsonls, for JSON";
+      description = "jsonls for JSON";
       package = pkgs.vscode-langservers-extracted;
       cmd = cfg: ["${cfg.package}/bin/vscode-json-language-server" "--stdio"];
     }
     {
       name = "julials";
-      description = "Enable julials, for Julia";
+      description = "julials for Julia";
       # The julia language server has to be installed from julia and thus is not packaged "as is" in
       # nixpkgs.
       package = null;
     }
     {
       name = "kotlin-language-server";
-      description = "Enable kotlin language server";
+      description = "Kotlin language server";
       serverName = "kotlin_language_server";
     }
     {
       name = "leanls";
-      description = "Enable leanls, for Lean";
+      description = "leanls for Lean";
       package = pkgs.lean4;
     }
     {
       name = "lemminx";
-      description = "Enable lemminx, for XML";
+      description = "lemminx for XML";
     }
     {
       name = "ltex";
-      description = "Enable ltex-ls, for LanguageTool";
+      description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
       settingsOptions = import ./ltex-settings.nix {inherit lib;};
       settings = cfg: {ltex = cfg;};
     }
     {
       name = "lua-ls";
-      description = "Enable lua LS, for lua";
+      description = "lua-ls for Lua";
       # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
       # Rename occurred here: https://github.com/NixOS/nixpkgs/pull/215057
       package =
@@ -373,16 +371,16 @@ with lib; let
     }
     {
       name = "marksman";
-      description = "Enable marksman, for Markdown";
+      description = "marksman for Markdown";
       package = pkgs.marksman;
     }
     {
       name = "metals";
-      description = "Enable metals, for Scala";
+      description = "metals for Scala";
     }
     {
       name = "nil_ls";
-      description = "Enable nil, for Nix";
+      description = "nil for Nix";
       package = pkgs.nil;
       settingsOptions = {
         formatting.command = mkOption {
@@ -418,23 +416,23 @@ with lib; let
     }
     {
       name = "nixd";
-      description = "Enable nixd, for Nix";
+      description = "nixd for Nix";
       package = pkgs.nixd;
       settings = cfg: {nixd = cfg;};
     }
     {
       name = "nushell";
-      description = "Enable nushell language server";
+      description = "Nushell language server";
       cmd = cfg: ["${cfg.package}/bin/nu" "--lsp"];
     }
     {
       name = "ols";
-      description = "Enable ols, for the odin programming language";
+      description = "ols for the Odin programming language";
       package = pkgs.ols;
     }
     {
       name = "omnisharp";
-      description = "Enable omnisharp language server, for C#";
+      description = "OmniSharp language server for C#";
       package = pkgs.omnisharp-roslyn;
       cmd = cfg: ["${cfg.package}/bin/OmniSharp"];
       settings = cfg: {omnisharp = cfg;};
@@ -488,58 +486,58 @@ with lib; let
     }
     {
       name = "perlpls";
-      description = "Enable PLS, for Perl";
+      description = "PLS for Perl";
       package = pkgs.perlPackages.PLS;
     }
     {
       name = "pest_ls";
-      description = "Enable pest_ls, for pest";
+      description = "pest_ls for pest";
       package = pkgs.pest-ide-tools;
     }
     {
       name = "phpactor";
-      description = "Enable phpactor, for PHP";
+      description = "phpactor for PHP";
       package = pkgs.phpactor;
     }
     {
       name = "prismals";
-      description = "Enable prismals, for Prisma";
+      description = "prismals for Prisma";
       package = pkgs.nodePackages."@prisma/language-server";
     }
     {
       name = "prolog-ls";
-      description = "enable prolog_ls, for SWI-Prolog";
+      description = "prolog_ls for SWI-Prolog";
       serverName = "prolog_ls";
       package = pkgs.swiProlog;
     }
     {
       name = "pylsp";
-      description = "Enable pylsp, for Python.";
+      description = "pylsp for Python";
       package = pkgs.python3Packages.python-lsp-server;
       settings = cfg: {pylsp = cfg;};
     }
     {
       name = "pylyzer";
-      description = "Enable pylyzer, for Python.";
+      description = "pylyzer for Python";
     }
     {
       name = "pyright";
-      description = "Enable pyright, for Python.";
+      description = "pyright for Python";
     }
     {
       name = "rnix-lsp";
-      description = "Enable rnix LSP, for Nix";
+      description = "rnix LSP for Nix";
       serverName = "rnix";
     }
     {
       name = "ruff-lsp";
-      description = "Enable ruff-lsp, for Python.";
+      description = "ruff-lsp, for Python";
       package = pkgs.python3Packages.ruff-lsp;
       serverName = "ruff_lsp";
     }
     {
       name = "rust-analyzer";
-      description = "Enable rust-analyzer, for Rust.";
+      description = "rust-analyzer for Rust";
       serverName = "rust_analyzer";
 
       settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
@@ -547,78 +545,78 @@ with lib; let
     }
     {
       name = "solargraph";
-      description = "Enable solargraph, for Ruby";
+      description = "solargraph for Ruby";
       package = pkgs.rubyPackages.solargraph;
     }
     {
       name = "sourcekit";
-      description = "Enable the sourcekit language server, for Swift and C/C++/Objective-C";
+      description = "sourcekit language server for Swift and C/C++/Objective-C";
       package = pkgs.sourcekit-lsp;
     }
     {
       name = "svelte";
-      description = "Enable the svelte language server, for Svelte";
+      description = "svelte language server for Svelte";
       package = pkgs.nodePackages.svelte-language-server;
     }
     {
       name = "tailwindcss";
-      description = "Enable tailwindcss language server, for tailwindcss";
+      description = "tailwindcss language server for tailwindcss";
       package = pkgs.nodePackages."@tailwindcss/language-server";
     }
     {
       name = "taplo";
-      description = "Enable taplo, for TOML";
+      description = "taplo for TOML";
       package = pkgs.taplo;
     }
     {
       name = "templ";
-      description = "Enable the templ language server for the templ HTML templating language";
+      description = "templ language server for the templ HTML templating language";
     }
     {
       name = "terraformls";
-      description = "Enable terraform-ls, for terraform";
+      description = "terraform-ls for terraform";
       package = pkgs.terraform-ls;
     }
     {
       name = "texlab";
-      description = "Enable texlab language server, for LaTeX";
+      description = "texlab language server for LaTeX";
     }
     {
       name = "tsserver";
-      description = "Enable tsserver for typescript";
+      description = "tsserver for TypeScript";
       package = pkgs.nodePackages.typescript-language-server;
     }
     {
       name = "typst-lsp";
       serverName = "typst_lsp";
-      description = "Enable typst-lsp for typst";
+      description = "typst-lsp for typst";
       package = pkgs.typst-lsp;
     }
     {
       name = "vls";
-      description = "Enable vls for v";
+      description = "vls for V";
       # The v language server has to be installed from v and thus is not packaged "as is" in
       # nixpkgs.
       package = null;
     }
     {
       name = "vuels";
-      description = "Enable vuels, for Vue";
+      description = "vuels for Vue";
       package = pkgs.nodePackages.vls;
     }
     {
       name = "volar";
-      description = "Enable @volar/vue-language-server, for Vue";
+      description = "@volar/vue-language-server for Vue";
       package = pkgs.nodePackages."@volar/vue-language-server";
     }
     {
       name = "yamlls";
-      description = "Enable yamlls, for yaml";
+      description = "yamlls for YAML";
       package = pkgs.yaml-language-server;
     }
     {
       name = "zls";
-      description = "Enable zls, for Zig.";
+      description = "zls for Zig";
     }
   ];
 in {
