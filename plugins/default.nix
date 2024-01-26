@@ -68,6 +68,7 @@
     ./languages/treesitter/ts-autotag.nix
     ./languages/treesitter/ts-context-commentstring.nix
     ./languages/typst/typst-vim.nix
+    ./languages/typescript-tools.nix
     ./languages/vim-slime.nix
     ./languages/vimtex.nix
     ./languages/zig.nix
