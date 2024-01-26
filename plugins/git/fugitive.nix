@@ -9,7 +9,7 @@ in
   with lib;
     mkVimPlugin attrs {
       name = "fugitive";
-      description = "Enable vim-fugitive";
+      description = "vim-fugitive";
       package = pkgs.vimPlugins.vim-fugitive;
       extraPackages = [pkgs.git];
 

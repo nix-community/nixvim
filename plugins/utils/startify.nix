@@ -9,7 +9,6 @@ in
   with helpers.vim-plugin;
     mkVimPlugin args {
       name = "startify";
-      description = "Enable startify";
       package = pkgs.vimPlugins.vim-startify;
       globalPrefix = "startify_";
 
