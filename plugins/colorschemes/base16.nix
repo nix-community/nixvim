@@ -87,6 +87,7 @@ in {
     extraPlugins = [cfg.package];
 
     plugins.airline.theme = mkIf cfg.setUpBar "base16";
+    plugins.lualine.theme = mkIf cfg.setUpBar "base16";
     plugins.lightline.colorscheme = null;
 
     options.termguicolors = mkIf cfg.useTruecolor true;
