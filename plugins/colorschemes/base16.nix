@@ -91,7 +91,7 @@ in {
 
     options.termguicolors = mkIf cfg.useTruecolor true;
 
-    extraConfigLua = mkIf (cfg.customColorScheme != null) ''
+    extraConfigLuaPre = mkIf (cfg.customColorScheme != null) ''
       require('base16-colorscheme').setup(${helpers.toLuaObject cfg.customColorScheme})
     '';
   };
