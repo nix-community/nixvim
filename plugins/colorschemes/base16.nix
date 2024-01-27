@@ -22,9 +22,9 @@ in {
       };
 
       colorscheme = mkOption {
-        type = types.enum themes;
+        type = types.nullOr (types.enum themes);
         description = "The base16 colorscheme to use";
-        default = head themes;
+        default = null;
       };
 
       setUpBar = mkOption {
@@ -83,7 +83,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    colorscheme = "base16-${cfg.colorscheme}";
+    colorscheme = mkIf (cfg.colorscheme != null) "base16-${cfg.colorscheme}";
     extraPlugins = [cfg.package];
 
     plugins.airline.theme = mkIf cfg.setUpBar "base16";
