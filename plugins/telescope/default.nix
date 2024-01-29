@@ -15,6 +15,7 @@ in {
     ./fzy-native.nix
     ./media-files.nix
     ./project-nvim.nix
+    ./ui-select.nix
     ./undo.nix
   ];
 
