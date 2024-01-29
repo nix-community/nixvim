@@ -1,6 +1,9 @@
 {
   empty = {
-    plugins.telescope.enable = true;
+    plugins.telescope = {
+      enable = true;
+      extensions.undo.enable = true;
+    };
   };
 
   example = {
