@@ -7,112 +7,66 @@
 }:
 with lib; let
   cfg = config.colorschemes.gruvbox;
-  colors = types.enum ["bg" "red" "green" "yellow" "blue" "purple" "aqua" "gray" "fg" "bg0_h" "bg0" "bg1" "bg2" "bg3" "bg4" "gray" "orange" "bg0_s" "fg0" "fg1" "fg2" "fg3" "fg4"];
 in {
-  options = {
-    colorschemes.gruvbox = {
-      enable = mkEnableOption "gruvbox";
+  meta.maintainers = [maintainers.GaetanLepage];
 
-      package = helpers.mkPackageOption "gruvbox" pkgs.vimPlugins.gruvbox-nvim;
+  # Introduced January 31 2024
+  # TODO remove in early March 2024.
+  imports =
+    map
+    (
+      optionName:
+        mkRemovedOptionModule
+        ["colorschemes" "gruvbox" optionName]
+        "Please use `colorschemes.gruvox.settings.${helpers.toSnakeCase optionName}` instead."
+    )
+    [
+      "italics"
+      "bold"
+      "underline"
+      "undercurl"
+      "contrastDark"
+      "contrastLight"
+      "highlightSearchCursor"
+      "numberColumn"
+      "signColumn"
+      "colorColumn"
+      "vertSplitColor"
+      "italicizeComments"
+      "italicizeStrings"
+      "invertSelection"
+      "invertSigns"
+      "invertIndentGuides"
+      "invertTabline"
+      "improvedStrings"
+      "improvedWarnings"
+      "transparentBg"
+      "trueColor"
+    ];
 
-      italics = mkEnableOption "italics";
-      bold = mkEnableOption "bold text";
-      underline = mkEnableOption "underlined text";
-      undercurl = mkEnableOption "undercurled text";
+  options.colorschemes.gruvbox = {
+    enable = mkEnableOption "gruvbox.nvim";
 
-      contrastDark = mkOption {
-        type = types.nullOr (types.enum ["soft" "medium" "hard"]);
-        default = null;
-        description = "Contrast for the dark mode";
+    package = helpers.mkPackageOption "gruvbox.nvim" pkgs.vimPlugins.gruvbox-nvim;
+
+    settings = mkOption {
+      type = with types;
+        submodule {
+          freeformType = attrs;
+          options = {};
+        };
+      description = "The configuration options for gruvbox.";
+      default = {};
+      example = {
+        terminal_colors = true;
+        palette_overrides = {
+          dark1 = "#323232";
+          dark2 = "#383330";
+          dark3 = "#323232";
+          bright_blue = "#5476b2";
+          bright_purple = "#fb4934";
+        };
       };
-
-      contrastLight = mkOption {
-        type = types.nullOr (types.enum ["soft" "medium" "hard"]);
-        default = null;
-        description = "Contrast for the light mode";
-      };
-
-      highlightSearchCursor = mkOption {
-        type = types.nullOr colors;
-        default = null;
-        description = "The cursor background while search is highlighted";
-      };
-
-      numberColumn = mkOption {
-        type = types.nullOr colors;
-        default = null;
-        description = "The number column background";
-      };
-
-      signColumn = mkOption {
-        type = types.nullOr colors;
-        default = null;
-        description = "The sign column background";
-      };
-
-      colorColumn = mkOption {
-        type = types.nullOr colors;
-        default = null;
-        description = "The color column background";
-      };
-
-      vertSplitColor = mkOption {
-        type = types.nullOr colors;
-        default = null;
-        description = "The vertical split background color";
-      };
-
-      italicizeComments = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Italicize comments";
-      };
-
-      italicizeStrings = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Italicize strings";
-      };
-
-      invertSelection = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Invert the select text";
-      };
-
-      invertSigns = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Invert GitGutter and Syntastic signs";
-      };
-
-      invertIndentGuides = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Invert indent guides";
-      };
-
-      invertTabline = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Invert tabline highlights";
-      };
-
-      improvedStrings = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Improved strings";
-      };
-
-      improvedWarnings = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Improved warnings";
-      };
-
-      transparentBg = mkEnableOption "transparent background";
-
-      trueColor = mkEnableOption "true color support";
     };
   };
 
@@ -120,28 +74,8 @@ in {
     colorscheme = "gruvbox";
     extraPlugins = [cfg.package];
 
-    globals = {
-      gruvbox_bold = mkIf (!cfg.bold) 0;
-      gruvbox_italic = mkIf cfg.italics 1;
-      gruvbox_underline = mkIf cfg.underline 1;
-      gruvbox_undercurl = mkIf cfg.undercurl 1;
-      gruvbox_transparent_bg = mkIf cfg.transparentBg 0;
-      gruvbox_contrast_dark = mkIf (cfg.contrastDark != null) cfg.contrastDark;
-      gruvbox_contrast_light = mkIf (cfg.contrastLight != null) cfg.contrastLight;
-      gruvbox_hls_cursor = mkIf (cfg.highlightSearchCursor != null) cfg.highlightSearchCursor;
-      gruvbox_number_column = mkIf (cfg.numberColumn != null) cfg.numberColumn;
-      gruvbox_sign_column = mkIf (cfg.signColumn != null) cfg.signColumn;
-      gruvbox_color_column = mkIf (cfg.colorColumn != null) cfg.colorColumn;
-      gruvbox_vert_split = mkIf (cfg.vertSplitColor != null) cfg.vertSplitColor;
-
-      gruvbox_italicize_comments = mkIf (!cfg.italicizeComments) 0;
-      gruvbox_italicize_strings = mkIf cfg.italicizeStrings 1;
-      gruvbox_invert_selection = mkIf (!cfg.invertSelection) 0;
-      gruvbox_invert_signs = mkIf cfg.invertSigns 1;
-      gruvbox_invert_indent_guides = mkIf cfg.invertIndentGuides 1;
-      gruvbox_invert_tabline = mkIf cfg.invertTabline 1;
-      gruvbox_improved_strings = mkIf cfg.improvedStrings 1;
-      gruvbox_improved_warnings = mkIf cfg.improvedWarnings 1;
-    };
+    extraConfigLua = ''
+      require('gruvbox').setup(${helpers.toLuaObject cfg.settings})
+    '';
   };
 }
