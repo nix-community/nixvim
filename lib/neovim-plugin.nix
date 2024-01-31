@@ -1,8 +1,9 @@
 {
   lib,
   nixvimOptions,
+  toLuaObject,
 }:
-with lib; {
+with lib; rec {
   mkSettingsOption = {
     pluginName ? null,
     options ? {},
@@ -26,5 +27,58 @@ with lib; {
         Typically, it can override NixVim's default settings.
       '';
     };
+  };
+
+  mkNeovimPlugin = config: {
+    name,
+    namespace ? "plugins",
+    maintainers,
+    imports ? [],
+    # options
+    originalName ? name,
+    defaultPackage,
+    settingsOptions ? {},
+    settingsExample ? null,
+    extraOptions ? {},
+    # config
+    luaName ? name,
+    extraConfig ? cfg: {},
+    extraPlugins ? [],
+    extraPackages ? [],
+  }: {
+    meta.maintainers = maintainers;
+
+    inherit imports;
+
+    options.${namespace}.${name} =
+      {
+        enable = mkEnableOption originalName;
+
+        package = nixvimOptions.mkPackageOption originalName defaultPackage;
+
+        settings = mkSettingsOption {
+          pluginName = name;
+          options = settingsOptions;
+          example = settingsExample;
+        };
+      }
+      // extraOptions;
+
+    config = let
+      cfg = config.${namespace}.${name};
+    in
+      mkIf cfg.enable (
+        mkMerge [
+          {
+            extraPlugins = [cfg.package] ++ extraPlugins;
+            inherit extraPackages;
+
+            extraConfigLua = ''
+              require('${luaName}').setup(${toLuaObject cfg.settings})
+            '';
+          }
+          (extraConfig cfg)
+        ]
+      );
   };
 }
