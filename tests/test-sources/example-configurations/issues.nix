@@ -63,8 +63,10 @@
   "65" = {
     colorschemes.gruvbox = {
       enable = true;
-      contrastLight = "hard";
-      contrastDark = "hard";
+      settings = {
+        contrast_light = "hard";
+        contrast_dark = "hard";
+      };
     };
 
     options = {
