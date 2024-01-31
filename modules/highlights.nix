@@ -30,7 +30,7 @@ with lib; {
   };
 
   config = mkIf (config.highlight != {} || config.match != {}) {
-    extraConfigLuaPost =
+    extraConfigLuaPre =
       (optionalString (config.highlight != {}) ''
         -- Highlight groups {{
         do
