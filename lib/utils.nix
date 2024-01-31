@@ -6,6 +6,22 @@ with lib; {
 
   emptyTable = {"__empty" = null;};
 
+  /*
+     Convert a string from camelCase to snake_case
+  Type: string -> string
+  */
+  toSnakeCase = let
+    splitByWords = builtins.split "([A-Z])";
+    processWord = s:
+      if isString s
+      then s
+      else "_" + toLower (elemAt s 0);
+  in
+    string: let
+      words = splitByWords string;
+    in
+      concatStrings (map processWord words);
+
   mkIfNonNull' = x: y: (mkIf (x != null) y);
 
   mkIfNonNull = x: (mkIfNonNull' x x);
