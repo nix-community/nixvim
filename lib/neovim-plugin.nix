@@ -3,7 +3,7 @@
   nixvimOptions,
 }:
 with lib; {
-  mkSetupOptionsOption = pluginName: options: {
+  mkSettingsOption = pluginName: options: {
     type = with types;
       submodule {
         freeformType = with types; attrsOf anything;
