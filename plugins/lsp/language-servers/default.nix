@@ -207,7 +207,7 @@ with lib; let
     }
     {
       name = "elixirls";
-      package = pkgs.elixir_ls;
+      package = pkgs.elixir-ls;
       cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
