@@ -143,7 +143,7 @@ with nixvimUtils; rec {
     mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
     mkBorder = default: name: desc:
       mkNullable
-      nixvimTypes.border
+      (with nixvimTypes; maybeRaw border)
       default
       (let
         defaultDesc = ''
