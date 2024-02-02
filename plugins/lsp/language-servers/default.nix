@@ -459,7 +459,7 @@ with lib; let
     {
       name = "ruff-lsp";
       description = "Enable ruff-lsp, for Python.";
-      package = pkgs.python3Packages.ruff-lsp;
+      package = pkgs.ruff-lsp;
       serverName = "ruff_lsp";
     }
     {
