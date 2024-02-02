@@ -47,6 +47,7 @@
     ./languages/clangd-extensions.nix
     ./languages/debugprint.nix
     ./languages/haskell-scope-highlighting.nix
+    ./languages/helm.nix
     ./languages/julia/julia-cell.nix
     ./languages/lean.nix
     ./languages/ledger.nix
