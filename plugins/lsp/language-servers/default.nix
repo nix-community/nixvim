@@ -240,6 +240,11 @@ with lib; let
       package = pkgs.nodePackages.graphql-language-service-cli;
     }
     {
+      name = "helm-ls";
+      description = "helm_ls for Helm";
+      serverName = "helm_ls";
+    }
+    {
       name = "hls";
       description = "haskell language server";
       package = pkgs.haskell-language-server;

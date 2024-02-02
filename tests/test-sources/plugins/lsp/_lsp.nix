@@ -108,6 +108,7 @@
           gleam.enable = true;
           gopls.enable = true;
           graphql.enable = true;
+          helm-ls.enable = true;
           hls.enable = true;
           html.enable = true;
           htmx.enable = true;
