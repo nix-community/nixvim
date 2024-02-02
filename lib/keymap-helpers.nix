@@ -105,7 +105,7 @@ in rec {
         };
 
         action = mkOption ({
-            type = str;
+            type = helpers.nixvimTypes.maybeRaw str;
             description = "The action to execute.";
           }
           // (

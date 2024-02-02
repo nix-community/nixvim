@@ -27,6 +27,11 @@
           action = "<cmd>echo \"test\"<cr>";
         }
         {
+          # raw action using rawType
+          key = "<C-p>";
+          action.__raw = "function() print('hello') end";
+        }
+        {
           key = "<C-a>";
           action = "function() print('toto') end";
           lua = true;
