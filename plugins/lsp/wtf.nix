@@ -12,15 +12,13 @@ with lib; let
     ai = {
       key = "gw";
       mode = ["n" "x"];
-      action = "require('wtf').ai";
-      lua = true;
+      action.__raw = "require('wtf').ai";
     };
 
     search = {
       key = "gW";
       mode = "n";
-      action = "require('wtf').search";
-      lua = true;
+      action.__raw = "require('wtf').search";
     };
   };
 in {

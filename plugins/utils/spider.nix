@@ -57,8 +57,7 @@ in {
         motion: key: {
           mode = ["n" "o" "x"];
           inherit key;
-          action = "function() require('spider').motion('${motion}') end";
-          lua = true;
+          action.__raw = "function() require('spider').motion('${motion}') end";
           options = {
             inherit (cfg.keymaps) silent;
             desc = "Spider-${motion}";

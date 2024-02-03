@@ -104,8 +104,7 @@ in {
         in {
           mode = "n";
           inherit key;
-          action = "require('telescope.builtin').${actionStr}";
-          lua = true;
+          action.__raw = "require('telescope.builtin').${actionStr}";
 
           options =
             {
