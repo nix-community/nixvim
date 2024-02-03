@@ -84,7 +84,7 @@ in
         max_view_entries = maxViewEntries;
       };
       inherit preselect;
-      inherit mapping';
+      mapping = mapping';
       snippet = with snippet; {
         inherit expand;
       };
@@ -114,7 +114,7 @@ in
         priority_weight = priorityWeight;
         inherit comparators;
       };
-      inherit sources';
+      sources = sources';
       view = with view; {
         inherit entries;
         docs = with docs; {
