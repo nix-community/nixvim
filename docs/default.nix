@@ -83,6 +83,7 @@
         "intBetween"
         "nullType"
         "nonEmptyStr"
+        "nixvim-configuration"
       ] (_: {});
   in
     # For recursive types avoid calculating sub options, else this
@@ -241,15 +242,45 @@
         echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
         echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
+
+  nixvmConfigType = lib.mkOptionType {
+    name = "nixvim-configuration";
+    description = "nixvim configuration options";
+    descriptionClass = "noun";
+    # Evaluation is irrelevant, only used for documentation.
+  };
+
+  topLevelModules =
+    [
+      ../wrappers/modules/output.nix
+      # Fake module to avoid a duplicated documentation
+      (lib.setDefaultModuleLocation "${nixvimPath}/wrappers/modules/files.nix" {
+        options.files = lib.mkOption {
+          type = lib.types.attrsOf nixvmConfigType;
+          description = "Extra files to add to the runtimepath";
+          example = {
+            "ftplugin/nix.lua" = {
+              options = {
+                tabstop = 2;
+                shiftwidth = 2;
+                expandtab = true;
+              };
+            };
+          };
+        };
+      })
+    ]
+    ++ modules;
 in
   rec {
-    options-json = mkOptionsJSON (lib.evalModules {inherit modules;}).options;
+    options-json = mkOptionsJSON (lib.evalModules {modules = topLevelModules;}).options;
     man-docs = pkgs.callPackage ./man {inherit options-json;};
   }
   # Do not check if documentation builds fine on darwin as it fails:
   # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
   // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
     docs = pkgs.callPackage ./mdbook {
-      inherit mkOptionsJSON modules getSubOptions';
+      inherit mkOptionsJSON getSubOptions';
+      modules = topLevelModules;
     };
   }
