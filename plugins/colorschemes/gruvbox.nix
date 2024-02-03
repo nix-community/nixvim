@@ -18,7 +18,7 @@ in {
       optionName:
         mkRemovedOptionModule
         ["colorschemes" "gruvbox" optionName]
-        "Please use `colorschemes.gruvox.settings.${helpers.toSnakeCase optionName}` instead."
+        "Please use `colorschemes.gruvbox.settings.${helpers.toSnakeCase optionName}` instead."
     )
     [
       "italics"
