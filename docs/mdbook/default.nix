@@ -2,10 +2,8 @@
   pkgs,
   lib,
   modules,
-  mkOptionsJSON,
-  runCommand,
-  nixos-render-docs,
-  getSubOptions',
+  nixosOptionsDoc,
+  transformOptions,
 }:
 with lib; let
   options = lib.evalModules {
@@ -13,18 +11,12 @@ with lib; let
     specialArgs = {inherit pkgs lib;};
   };
 
-  mkMDDoc = options: let
-    optionsJson = mkOptionsJSON options;
-  in
-    runCommand "options.md" {
-      nativeBuildInputs = [nixos-render-docs];
-    } ''
-      nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
-        --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
-        --revision "" \
-        ${optionsJson}/share/doc/nixos/options.json \
-        $out
-    '';
+  mkMDDoc = options:
+    (nixosOptionsDoc {
+      inherit options transformOptions;
+      warningsAreErrors = false;
+    })
+    .optionsCommonMark;
 
   removeUnwanted = attrs:
     builtins.removeAttrs attrs [
@@ -37,7 +29,7 @@ with lib; let
 
   removeWhitespace = builtins.replaceStrings [" "] [""];
 
-  getSubOptions = opts: path: removeUnwanted (getSubOptions' opts.type path);
+  getSubOptions = opts: path: removeUnwanted (opts.type.getSubOptions path);
 
   isVisible = opts:
     if isOption opts

@@ -60,7 +60,9 @@ in {
                 ])
                 "Post-install hook";
 
-              requires = helpers.mkNullOrOption (either str listOfPlugins) "Plugin dependencies";
+              requires =
+                helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str listOfPlugins)
+                "Plugin dependencies";
 
               rocks =
                 helpers.mkNullOrOption (either str (listOf (either str attrs)))
