@@ -6,8 +6,6 @@
 with lib;
 with nixvimOptions;
 with lib.types; let
-  isRawType = v: lib.isAttrs v && lib.hasAttr "__raw" v && lib.isString v.__raw;
-
   strLikeType = description:
     mkOptionType {
       name = "str";
@@ -18,6 +16,8 @@ with lib.types; let
     };
 in
   rec {
+    isRawType = v: lib.isAttrs v && lib.hasAttr "__raw" v && lib.isString v.__raw;
+
     rawLua = mkOptionType {
       name = "rawLua";
       description = "raw lua code";
