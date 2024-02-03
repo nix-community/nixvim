@@ -17,9 +17,9 @@
         fixPairs = true;
       };
 
-      nvim-cmp = {
+      cmp = {
         enable = true;
-        sources = [
+        settings.sources = [
           {name = "copilot";}
         ];
       };

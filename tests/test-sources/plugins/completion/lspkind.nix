@@ -10,7 +10,7 @@
         enable = true;
         servers.clangd.enable = true;
       };
-      nvim-cmp.enable = true;
+      cmp.enable = true;
       lspkind.enable = true;
     };
   };

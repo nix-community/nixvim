@@ -173,7 +173,7 @@ in {
         # }
         # bufferline = helpers.defaultNullOpts.mkBool false "";
 
-        cmp = helpers.defaultNullOpts.mkBool config.plugins.nvim-cmp.enable "";
+        cmp = helpers.defaultNullOpts.mkBool config.plugins.cmp.enable "";
 
         coc_nvim = helpers.defaultNullOpts.mkBool false "";
 

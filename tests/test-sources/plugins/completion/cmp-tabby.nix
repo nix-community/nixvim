@@ -1,8 +1,8 @@
 {
   empty = {
-    plugins.nvim-cmp = {
+    plugins.cmp = {
       enable = true;
-      sources = [
+      settings.sources = [
         {name = "cmp_tabby";}
       ];
     };
@@ -10,9 +10,9 @@
 
   defaults = {
     plugins = {
-      nvim-cmp = {
+      cmp = {
         enable = true;
-        sources = [
+        settings.sources = [
           {name = "cmp_tabby";}
         ];
       };
