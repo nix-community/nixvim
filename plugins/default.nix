@@ -108,6 +108,7 @@
     ./utils/alpha.nix
     ./utils/auto-save.nix
     ./utils/auto-session.nix
+    ./utils/autoclose.nix
     ./utils/better-escape.nix
     ./utils/clipboard-image.nix
     ./utils/comment-nvim.nix
@@ -138,11 +139,11 @@
     ./utils/molten.nix
     ./utils/multicursors.nix
     ./utils/navbuddy.nix
-    ./utils/neorg.nix
     ./utils/neogen.nix
-    ./utils/notify.nix
+    ./utils/neorg.nix
     ./utils/netman.nix
     ./utils/nix-develop.nix
+    ./utils/notify.nix
     ./utils/nvim-autopairs.nix
     ./utils/nvim-bqf.nix
     ./utils/nvim-colorizer.nix
@@ -152,11 +153,11 @@
     ./utils/oil.nix
     ./utils/ollama.nix
     ./utils/persistence.nix
+    ./utils/presence-nvim.nix
     ./utils/project-nvim.nix
+    ./utils/quickmath.nix
     ./utils/refactoring.nix
     ./utils/rest.nix
-    ./utils/presence-nvim.nix
-    ./utils/quickmath.nix
     ./utils/specs.nix
     ./utils/spider.nix
     ./utils/startify.nix
