@@ -6,7 +6,7 @@
 
   example = {
     plugins = {
-      nvim-cmp.enable = true;
+      cmp.enable = true;
 
       obsidian = {
         enable = false;

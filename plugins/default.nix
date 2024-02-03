@@ -27,8 +27,7 @@
     ./completion/coq.nix
     ./completion/coq-thirdparty.nix
     ./completion/lspkind.nix
-    ./completion/nvim-cmp
-    ./completion/nvim-cmp/sources
+    ./completion/cmp
 
     ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix

@@ -49,7 +49,7 @@ in {
     };
 
   config = let
-    doCmp = cfg.cmp.enable && config.plugins.nvim-cmp.enable;
+    doCmp = cfg.cmp.enable && config.plugins.cmp.enable;
     options =
       {
         inherit (cfg) mode preset;
@@ -73,7 +73,7 @@ in {
         require('lspkind').init(${helpers.toLuaObject options})
       '';
 
-      plugins.nvim-cmp.formatting.format =
+      plugins.cmp.settings.formatting.format =
         if cfg.cmp.after != null
         then ''
           function(entry, vim_item)
