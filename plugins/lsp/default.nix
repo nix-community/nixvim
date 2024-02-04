@@ -58,6 +58,12 @@ in {
                   description = "The server's name";
                 };
 
+                capabilities = mkOption {
+                  type = types.nullOr (types.attrsOf types.bool);
+                  description = "Control resolved capabilities for the language server.";
+                  default = null;
+                };
+
                 extraOptions = mkOption {
                   type = attrs;
                   description = "Extra options for the server";
@@ -108,6 +114,27 @@ in {
       if wrappers == []
       then s
       else (head wrappers) (runWrappers (tail wrappers) s);
+    updateCapabilities = let
+      servers =
+        builtins.filter
+        (server: server.capabilities != null && server.capabilities != {})
+        cfg.enabledServers;
+    in
+      lib.concatMapStringsSep "\n" (
+        server: let
+          updates =
+            lib.concatMapStringsSep "\n"
+            (name: ''
+              client.server_capabilities.${name} = ${helpers.toLuaObject server.capabilities.${name}}
+            '')
+            (builtins.attrNames server.capabilities);
+        in ''
+          if client.name == "${server.name}" then
+            ${updates}
+          end
+        ''
+      )
+      servers;
   in
     mkIf cfg.enable {
       extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
@@ -149,6 +176,8 @@ in {
 
           local __lspServers = ${helpers.toLuaObject cfg.enabledServers}
           local __lspOnAttach = function(client, bufnr)
+            ${updateCapabilities}
+
             ${cfg.onAttach}
           end
           local __lspCapabilities = function()
