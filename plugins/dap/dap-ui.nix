@@ -52,7 +52,7 @@ with lib; let
   };
 in {
   options.plugins.dap.extensions.dap-ui =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "dap-ui";
 

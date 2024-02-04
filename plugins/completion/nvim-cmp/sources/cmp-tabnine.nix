@@ -7,7 +7,7 @@
 with lib; let
   cfg = config.plugins.cmp-tabnine;
 in {
-  options.plugins.cmp-tabnine = helpers.extraOptionsOptions;
+  options.plugins.cmp-tabnine = helpers.neovim-plugin.extraOptionsOptions;
 
   config = mkIf cfg.enable {
     extraConfigLua = ''

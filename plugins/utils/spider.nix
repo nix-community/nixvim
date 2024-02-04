@@ -10,7 +10,7 @@ with lib; let
   cfg = config.plugins.${pluginName};
 in {
   options.plugins.${pluginName} =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption pluginName;
 
@@ -57,8 +57,7 @@ in {
         motion: key: {
           mode = ["n" "o" "x"];
           inherit key;
-          action = "function() require('spider').motion('${motion}') end";
-          lua = true;
+          action.__raw = "function() require('spider').motion('${motion}') end";
           options = {
             inherit (cfg.keymaps) silent;
             desc = "Spider-${motion}";

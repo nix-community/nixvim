@@ -47,7 +47,7 @@ in {
       '';
     };
   in
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "neo-tree";
 

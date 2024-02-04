@@ -10,7 +10,7 @@ with lib; let
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in {
   options.plugins.chadtree =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "chadtree";
 

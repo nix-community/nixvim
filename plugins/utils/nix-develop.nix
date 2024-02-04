@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.nix-develop;
 in {
   options.plugins.nix-develop =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nix-develop.nvim";
 

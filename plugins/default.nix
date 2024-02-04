@@ -46,6 +46,8 @@
 
     ./languages/clangd-extensions.nix
     ./languages/debugprint.nix
+    ./languages/haskell-scope-highlighting.nix
+    ./languages/helm.nix
     ./languages/julia/julia-cell.nix
     ./languages/lean.nix
     ./languages/ledger.nix
@@ -61,15 +63,15 @@
     ./languages/tagbar.nix
     ./languages/treesitter/hmts.nix
     ./languages/treesitter/rainbow-delimiters.nix
-    ./languages/treesitter/treesitter.nix
     ./languages/treesitter/treesitter-context.nix
     ./languages/treesitter/treesitter-playground.nix
     ./languages/treesitter/treesitter-refactor.nix
     ./languages/treesitter/treesitter-textobjects.nix
+    ./languages/treesitter/treesitter.nix
     ./languages/treesitter/ts-autotag.nix
     ./languages/treesitter/ts-context-commentstring.nix
-    ./languages/typst/typst-vim.nix
     ./languages/typescript-tools.nix
+    ./languages/typst/typst-vim.nix
     ./languages/vim-slime.nix
     ./languages/vimtex.nix
     ./languages/zig.nix
@@ -106,6 +108,7 @@
     ./utils/alpha.nix
     ./utils/auto-save.nix
     ./utils/auto-session.nix
+    ./utils/autoclose.nix
     ./utils/better-escape.nix
     ./utils/clipboard-image.nix
     ./utils/comment-nvim.nix
@@ -136,11 +139,11 @@
     ./utils/molten.nix
     ./utils/multicursors.nix
     ./utils/navbuddy.nix
-    ./utils/neorg.nix
     ./utils/neogen.nix
-    ./utils/notify.nix
+    ./utils/neorg.nix
     ./utils/netman.nix
     ./utils/nix-develop.nix
+    ./utils/notify.nix
     ./utils/nvim-autopairs.nix
     ./utils/nvim-bqf.nix
     ./utils/nvim-colorizer.nix
@@ -150,11 +153,11 @@
     ./utils/oil.nix
     ./utils/ollama.nix
     ./utils/persistence.nix
+    ./utils/presence-nvim.nix
     ./utils/project-nvim.nix
+    ./utils/quickmath.nix
     ./utils/refactoring.nix
     ./utils/rest.nix
-    ./utils/presence-nvim.nix
-    ./utils/quickmath.nix
     ./utils/specs.nix
     ./utils/spider.nix
     ./utils/startify.nix

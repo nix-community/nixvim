@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.lsp-format;
 in {
   options.plugins.lsp-format =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "lsp-format.nvim";
 

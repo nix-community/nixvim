@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.nvim-bqf;
 in {
   options.plugins.nvim-bqf =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-bqf";
 

@@ -12,7 +12,7 @@ in {
     plugins.copilot-lua = let
       keymapOption = helpers.defaultNullOpts.mkNullable (with types; either (enum [false]) str);
     in
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "copilot.lua";
 

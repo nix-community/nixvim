@@ -2,14 +2,11 @@
   perSystem = {
     pkgs,
     config,
-    modulesUnfree,
-    pkgsUnfree,
+    rawModules,
     ...
   }: {
     packages = import ../docs {
-      modules = modulesUnfree;
-      pkgs = pkgsUnfree;
-      inherit (pkgs) lib;
+      inherit rawModules pkgs;
     };
 
     # Test that all packages build fine when running `nix flake check`.

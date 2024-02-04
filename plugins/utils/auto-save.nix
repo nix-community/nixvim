@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.auto-save;
 in {
   options.plugins.auto-save =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "auto-save";
 

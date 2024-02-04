@@ -8,7 +8,7 @@ with lib; let
   helpers = import ../../helpers.nix {inherit lib;};
 in {
   options.plugins.ts-autotag =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-ts-autotag";
 

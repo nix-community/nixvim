@@ -24,7 +24,7 @@ in {
   ];
   options = {
     plugins.todo-comments =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "todo-comments";
 

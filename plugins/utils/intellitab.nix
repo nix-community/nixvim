@@ -23,8 +23,7 @@ in {
       {
         mode = "i";
         key = "<Tab>";
-        action = "require('intellitab').indent";
-        lua = true;
+        action.__raw = "require('intellitab').indent";
       }
     ];
     plugins.treesitter = {

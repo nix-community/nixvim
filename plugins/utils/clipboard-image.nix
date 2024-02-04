@@ -85,7 +85,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.clipboard-image =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "clipboard-image.nvim";
 

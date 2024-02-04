@@ -128,8 +128,7 @@ in {
             in {
               mode = "n";
               inherit key;
-              action = prefix + actionStr;
-              lua = true;
+              action.__raw = prefix + actionStr;
 
               options =
                 {

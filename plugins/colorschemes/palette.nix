@@ -11,7 +11,7 @@ in {
   meta.maintainers = [maintainers.GaetanLepage];
 
   options.colorschemes.palette =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "palette.nvim";
 

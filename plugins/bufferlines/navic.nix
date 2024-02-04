@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.navic;
 in {
   options.plugins.navic =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-navic";
 

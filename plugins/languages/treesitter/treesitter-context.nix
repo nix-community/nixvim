@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.treesitter-context;
 in {
   options.plugins.treesitter-context =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-treesitter-context";
 

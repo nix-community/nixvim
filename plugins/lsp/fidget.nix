@@ -136,7 +136,7 @@ in {
 
   options = {
     plugins.fidget =
-      helpers.extraOptionsOptions
+      helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "fidget-nvim";
 

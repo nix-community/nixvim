@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.project-nvim;
 in {
   options.plugins.project-nvim =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "project.nvim";
 

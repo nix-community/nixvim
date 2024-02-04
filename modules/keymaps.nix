@@ -22,8 +22,7 @@ with lib; {
             # Mode can be a string or a list of strings
             mode = "n";
             key = "<leader>p";
-            action = "require('my-plugin').do_stuff";
-            lua = true;
+            action.__raw = "require('my-plugin').do_stuff";
             # Note that all of the mapping options are now under the `options` attrs
             options = {
               silent = true;

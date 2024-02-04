@@ -72,6 +72,9 @@ in
 
     strLua = strLikeType "lua code string";
     strLuaFn = strLikeType "lua function string";
+
+    # Overridden when building the documentation
+    eitherRecursive = either;
   }
   # Allow to do `with nixvimTypes;` instead of `with types;`
   // lib.types

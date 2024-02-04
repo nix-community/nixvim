@@ -61,8 +61,7 @@ with lib; {
           {
             mode = "n";
             key = copy;
-            action = "require('osc52').copy_operator";
-            lua = true;
+            action.__raw = "require('osc52').copy_operator";
             options = {
               expr = true;
               inherit silent;
@@ -80,8 +79,7 @@ with lib; {
           {
             mode = "v";
             key = copyVisual;
-            action = "require('osc52').copy_visual";
-            lua = true;
+            action.__raw = "require('osc52').copy_visual";
             options.silent = silent;
           }
         ];

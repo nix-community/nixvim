@@ -15,13 +15,14 @@ in {
     ./fzy-native.nix
     ./media-files.nix
     ./project-nvim.nix
+    ./ui-select.nix
     ./undo.nix
   ];
 
   # TODO:add support for aditional filetypes. This requires autocommands!
 
   options.plugins.telescope =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "telescope.nvim";
 
@@ -103,8 +104,7 @@ in {
         in {
           mode = "n";
           inherit key;
-          action = "require('telescope.builtin').${actionStr}";
-          lua = true;
+          action.__raw = "require('telescope.builtin').${actionStr}";
 
           options =
             {

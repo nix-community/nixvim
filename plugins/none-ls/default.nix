@@ -18,7 +18,7 @@ in {
   ];
 
   options.plugins.none-ls =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "none-ls";
 

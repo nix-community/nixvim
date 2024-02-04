@@ -126,7 +126,7 @@
         documentation = {
           maxHeight = "math.floor(40 * (40 / vim.o.lines))";
           maxWidth = "math.floor((40 * 2) * (vim.o.columns / (40 * 2 * 16 / 9)))";
-          border = ["" "" "" " " "" "" "" " "];
+          border.__raw = "cmp.config.window.bordered()";
           winhighlight = "FloatBorder:NormalFloat";
         };
       };

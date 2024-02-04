@@ -41,7 +41,7 @@ with lib; {
       "{}"
       desc;
   in
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable =
         mkEnableOption

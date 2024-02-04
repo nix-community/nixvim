@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.nvim-jdtls;
 in {
   options.plugins.nvim-jdtls =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "nvim-jdtls";
 

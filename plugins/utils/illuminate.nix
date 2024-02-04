@@ -67,7 +67,7 @@ with lib; let
 in {
   options.plugins.illuminate = with helpers;
   with defaultNullOpts;
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "vim-illuminate";
 

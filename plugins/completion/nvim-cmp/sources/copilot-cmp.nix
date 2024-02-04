@@ -9,7 +9,7 @@ with lib; let
   cfg = config.plugins.copilot-cmp;
 in {
   options.plugins.copilot-cmp =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       event =
         helpers.defaultNullOpts.mkNullable

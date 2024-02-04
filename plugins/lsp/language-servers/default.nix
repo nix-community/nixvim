@@ -207,7 +207,7 @@ with lib; let
     }
     {
       name = "elixirls";
-      package = pkgs.elixir_ls;
+      package = pkgs.elixir-ls;
       cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
@@ -238,6 +238,11 @@ with lib; let
       name = "graphql";
       description = "graphql for GraphQL";
       package = pkgs.nodePackages.graphql-language-service-cli;
+    }
+    {
+      name = "helm-ls";
+      description = "helm_ls for Helm";
+      serverName = "helm_ls";
     }
     {
       name = "hls";

@@ -21,7 +21,7 @@ with lib; let
   };
 in {
   options.plugins.harpoon =
-    helpers.extraOptionsOptions
+    helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "harpoon";
 
@@ -233,7 +233,7 @@ in {
               (key != null)
               {
                 inherit key;
-                action = luaFunc;
+                action.__raw = luaFunc;
               }
           )
           {
@@ -256,7 +256,7 @@ in {
               mapAttrsToList
               (id: key: {
                 inherit key;
-                action = genLuaFunc id;
+                action.__raw = genLuaFunc id;
               })
               mappingsAttrs
             )
@@ -283,7 +283,6 @@ in {
         helpers.keymaps.mkKeymaps
         {
           mode = "n";
-          lua = true;
           options.silent = cfg.keymapsSilent;
         }
         allMappings;
