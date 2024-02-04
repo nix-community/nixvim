@@ -109,6 +109,7 @@
     ./telescope
 
     ./ui/image.nix
+    ./ui/neoscroll.nix
     ./ui/noice.nix
     ./ui/transparent.nix
     ./ui/twilight.nix
