@@ -598,6 +598,12 @@ with lib; let
       package = pkgs.typst-lsp;
     }
     {
+      name = "vala-ls";
+      description = "vala_ls for Vala";
+      serverName = "vala_ls";
+      package = pkgs.vala-language-server;
+    }
+    {
       name = "vls";
       description = "vls for V";
       # The v language server has to be installed from v and thus is not packaged "as is" in
