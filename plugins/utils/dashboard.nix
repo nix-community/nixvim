@@ -8,8 +8,6 @@
 with lib; let
   cfg = config.plugins.dashboard;
 
-  helpers = import ../helpers.nix {inherit lib;};
-
   shortcutType = types.submodule {
     options.icon = mkOption {
       description = "The icon to display";
