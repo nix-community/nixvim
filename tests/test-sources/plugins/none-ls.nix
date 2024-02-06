@@ -84,6 +84,7 @@
           pylint.enable = true;
           write_good.enable = true;
           yamllint.enable = true;
+          stylelint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
@@ -112,6 +113,7 @@
           prettierd.enable = true;
           shfmt.enable = true;
           stylua.enable = true;
+          stylelint.enable = true;
           taplo.enable = true;
           isort.enable = true;
           jq.enable = true;
