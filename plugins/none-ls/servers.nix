@@ -96,6 +96,9 @@ with lib; let
       statix = {
         package = pkgs.statix;
       };
+      stylelint = {
+        package = pkgs.stylelint;
+      };
       vale = {
         package = pkgs.vale;
       };
@@ -191,6 +194,9 @@ with lib; let
       };
       sqlfluff = {
         package = pkgs.sqlfluff;
+      };
+      stylelint = {
+        package = pkgs.stylelint;
       };
       stylua = {
         package = pkgs.stylua;
