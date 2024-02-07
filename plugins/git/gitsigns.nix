@@ -37,7 +37,15 @@ with lib; let
 in {
   options.plugins.gitsigns = {
     enable = mkEnableOption "gitsigns plugin";
+
     package = helpers.mkPackageOption "gitsigns" pkgs.vimPlugins.gitsigns-nvim;
+
+    gitPackage = mkOption {
+      type = with types; nullOr package;
+      default = pkgs.git;
+      description = "Which package to use for git.";
+    };
+
     signs = {
       add = signOptions {
         hl = "GitSignsAdd";
@@ -321,6 +329,9 @@ in {
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
+
+      extraPackages = optional (cfg.gitPackage != null) cfg.gitPackage;
+
       extraConfigLua = let
         luaFnOrStrToObj = val:
           if val == null
