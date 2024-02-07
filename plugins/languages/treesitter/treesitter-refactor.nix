@@ -72,12 +72,12 @@ with lib; {
             mapping fo `lua require'nvim-treesitter.refactor.navigation(nil, fallback_function)<cr>`.
           '';
         };
-        listDefinitons = mkOption {
+        listDefinitions = mkOption {
           type = types.nullOr types.str;
           default = "gnD";
           description = "list all definitions from the current file";
         };
-        listDefinitonsToc = mkOption {
+        listDefinitionsToc = mkOption {
           type = types.nullOr types.str;
           default = "gO";
           description = ''
@@ -98,6 +98,15 @@ with lib; {
       };
     };
   };
+
+  imports = [
+    (mkRenamedOptionModule
+      ["plugins" "treesitter-refactor" "navigation" "keymaps" "listDefinitons"]
+      ["plugins" "treesitter-refactor" "navigation" "keymaps" "listDefinitions"])
+    (mkRenamedOptionModule
+      ["plugins" "treesitter-refactor" "navigation" "keymaps" "listDefinitonsToc"]
+      ["plugins" "treesitter-refactor" "navigation" "keymaps" "listDefinitionsToc"])
+  ];
 
   config = let
     cfg = config.plugins.treesitter-refactor;
@@ -126,8 +135,8 @@ with lib; {
           in {
             goto_definition = cfgK.gotoDefinition;
             goto_definition_lsp_fallback = cfgK.gotoDefinitionLspFallback;
-            list_definitions = cfgK.listDefinitons;
-            list_definitions_toc = cfgK.listDefinitonsToc;
+            list_definitions = cfgK.listDefinitions;
+            list_definitions_toc = cfgK.listDefinitionsToc;
             goto_next_usage = cfgK.gotoNextUsage;
             goto_previous_usage = cfgK.gotoPreviousUsage;
           };
