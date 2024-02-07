@@ -1,6 +1,7 @@
 {
   modules,
   self,
+  getHelpers,
 }: {
   pkgs,
   config,
@@ -8,19 +9,25 @@
   ...
 } @ args: let
   inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
-  shared = import ./_shared.nix modules args;
+  helpers = getHelpers pkgs;
+  shared = import ./_shared.nix {inherit modules helpers;} args;
   cfg = config.programs.nixvim;
 in {
   options = {
     programs.nixvim = mkOption {
       default = {};
-      type = types.submodule ([
-          {
-            options.enable = mkEnableOption "nixvim";
-            config.wrapRc = mkForce true;
-          }
-        ]
-        ++ shared.topLevelModules);
+      type = types.submoduleWith {
+        shorthandOnlyDefinesConfig = true;
+        specialArgs.helpers = helpers;
+        modules =
+          [
+            {
+              options.enable = mkEnableOption "nixvim";
+              config.wrapRc = mkForce true;
+            }
+          ]
+          ++ shared.topLevelModules;
+      };
     };
     nixvim.helpers = shared.helpers;
   };

@@ -2,13 +2,14 @@
   pkgs,
   lib,
   modules,
+  helpers,
   nixosOptionsDoc,
   transformOptions,
 }:
 with lib; let
   options = lib.evalModules {
     inherit modules;
-    specialArgs = {inherit pkgs lib;};
+    specialArgs = {inherit pkgs lib helpers;};
   };
 
   mkMDDoc = options:

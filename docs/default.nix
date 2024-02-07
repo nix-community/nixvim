@@ -1,5 +1,6 @@
 {
   rawModules,
+  helpers,
   pkgs,
 }: let
   pkgsDoc =
@@ -73,7 +74,13 @@ in
     options-json =
       (pkgsDoc.nixosOptionsDoc
         {
-          inherit (lib.evalModules {modules = topLevelModules;}) options;
+          inherit
+            (lib.evalModules {
+              modules = topLevelModules;
+              specialArgs.helpers = helpers;
+            })
+            options
+            ;
           inherit transformOptions;
           warningsAreErrors = false;
         })
@@ -86,5 +93,6 @@ in
     docs = pkgsDoc.callPackage ./mdbook {
       inherit transformOptions;
       modules = topLevelModules;
+      inherit helpers;
     };
   }

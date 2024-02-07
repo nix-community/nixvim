@@ -1,4 +1,7 @@
-modules: {
+{
+  modules,
+  helpers,
+}: {
   lib,
   pkgs,
   config,
@@ -20,7 +23,7 @@ in {
       check = builtins.isAttrs;
     };
     description = "Use this option to access the helpers";
-    default = import ../plugins/helpers.nix {inherit (pkgs) lib;};
+    default = helpers;
   };
 
   configFiles = let
