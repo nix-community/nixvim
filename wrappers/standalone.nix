@@ -1,6 +1,7 @@
 default_pkgs: {
   modules,
   self,
+  getHelpers,
 }: {
   pkgs ? default_pkgs,
   extraSpecialArgs ? {},
@@ -8,16 +9,24 @@ default_pkgs: {
 }: let
   inherit (pkgs) lib;
 
-  wrap = {wrapRc = true;};
-
-  shared = import ./_shared.nix modules {
+  helpers = getHelpers pkgs;
+  shared = import ./_shared.nix {inherit modules helpers;} {
     inherit pkgs lib;
     config = {};
   };
 
   eval = lib.evalModules {
-    modules = [module wrap] ++ shared.topLevelModules;
-    specialArgs = extraSpecialArgs;
+    modules =
+      [
+        module
+        {wrapRc = true;}
+      ]
+      ++ shared.topLevelModules;
+    specialArgs =
+      {
+        inherit helpers;
+      }
+      // extraSpecialArgs;
   };
 
   handleAssertions = config: let

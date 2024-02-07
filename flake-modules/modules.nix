@@ -10,7 +10,6 @@
           _module.args = {
             pkgs = pkgs.lib.mkForce pkgs;
             inherit (pkgs) lib;
-            helpers = import ../lib/helpers.nix {inherit (pkgs) lib;};
           };
         };
       };
