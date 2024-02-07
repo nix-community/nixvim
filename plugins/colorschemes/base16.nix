@@ -22,9 +22,9 @@ in {
       };
 
       colorscheme = mkOption {
-        type = types.enum themes;
+        type = types.nullOr (types.enum themes);
         description = "The base16 colorscheme to use";
-        default = head themes;
+        default = null;
       };
 
       setUpBar = mkOption {
@@ -83,15 +83,29 @@ in {
   };
 
   config = mkIf cfg.enable {
-    colorscheme = "base16-${cfg.colorscheme}";
+    warnings = optional (cfg.colorscheme != null && cfg.customColorScheme != null) "
+      You have set both `colorschemes.base16.colorscheme` and `colorschemes.base16.customColorScheme`, `colorscheme` will be preferred.
+    ";
+    assertions = [
+      {
+        assertion = cfg.colorscheme != null || cfg.customColorScheme != null;
+        message = ''
+          You have enabled `colorschemes.base16` but haven't set a specific color scheme.
+          Please set a color scheme using `colorschemes.base16.colorscheme` or `colorschemes.base16.customColorScheme`.
+        '';
+      }
+    ];
+
+    colorscheme = mkIf (cfg.colorscheme != null) "base16-${cfg.colorscheme}";
     extraPlugins = [cfg.package];
 
     plugins.airline.theme = mkIf cfg.setUpBar "base16";
+    plugins.lualine.theme = mkIf cfg.setUpBar "base16";
     plugins.lightline.colorscheme = null;
 
     options.termguicolors = mkIf cfg.useTruecolor true;
 
-    extraConfigLua = mkIf (cfg.customColorScheme != null) ''
+    extraConfigLuaPre = mkIf (cfg.customColorScheme != null) ''
       require('base16-colorscheme').setup(${helpers.toLuaObject cfg.customColorScheme})
     '';
   };
