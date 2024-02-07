@@ -83,6 +83,19 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = optional (cfg.colorscheme != null && cfg.customColorScheme != null) "
+      You have set both `colorschemes.base16.colorscheme` and `colorschemes.base16.customColorScheme`, `colorscheme` will be preferred.
+    ";
+    assertions = [
+      {
+        assertion = cfg.colorscheme != null || cfg.customColorScheme != null;
+        message = ''
+          You have enabled `colorschemes.base16` but haven't set a specific color scheme.
+          Please set a color scheme using `colorschemes.base16.colorscheme` or `colorschemes.base16.customColorScheme`.
+        '';
+      }
+    ];
+
     colorscheme = mkIf (cfg.colorscheme != null) "base16-${cfg.colorscheme}";
     extraPlugins = [cfg.package];
 
