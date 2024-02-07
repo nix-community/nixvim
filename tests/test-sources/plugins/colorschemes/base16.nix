@@ -1,8 +1,5 @@
 {
-  # Empty configuration
-  empty = {
-    colorschemes.base16.enable = true;
-  };
+  # No empty test because not setting `colorscheme` and `customColorScheme` would error
 
   # All the upstream default options of poimandres
   defaults = {
