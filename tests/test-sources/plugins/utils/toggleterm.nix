@@ -55,6 +55,31 @@
           end
         '';
       };
+      customTerms = [
+        {
+          cmd = "lazygit";
+          keymap = "<leader>g";
+          direction = "float";
+          dir = "git_dir";
+          name = "lazygit float test";
+          hidden = true;
+          closeOnExit = false;
+          highlights = {
+            Normal.guibg = "#000000";
+            NormalFloat.link = "#FFFFFF";
+          };
+          env = {
+            TEST_ENV = "test_value";
+          };
+          clearEnv = true;
+          onOpen = "function() end";
+          onClose = "function() end";
+          autoScroll = false;
+          onStdout = "function() end";
+          onStderr = "function() end";
+          onExit = "function() end";
+        }
+      ];
     };
   };
 }
