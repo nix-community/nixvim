@@ -1,12 +1,5 @@
 {modules, ...}: {
-  _module.args = let
-    nixvimModules = with builtins;
-      map
-      (f: ../modules + "/${f}")
-      (
-        attrNames (readDir ../modules)
-      );
-  in {
+  _module.args = {
     modules = pkgs: let
       nixpkgsMaintainersList = pkgs.path + "/nixos/modules/misc/meta.nix";
 
@@ -21,12 +14,11 @@
           };
         };
       };
-    in
-      nixvimModules
-      ++ [
-        nixpkgsMaintainersList
-        nixvimExtraArgsModule
-      ];
+    in [
+      ../modules
+      nixpkgsMaintainersList
+      nixvimExtraArgsModule
+    ];
   };
 
   perSystem = {
