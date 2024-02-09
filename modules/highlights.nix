@@ -9,7 +9,18 @@ with lib; {
     highlight = mkOption {
       type = types.attrsOf helpers.nixvimTypes.highlight;
       default = {};
-      description = "Define highlight groups.";
+      description = "Define new highlight groups";
+      example = ''
+        highlight = {
+          MacchiatoRed.fg = "#ed8796";
+        };
+      '';
+    };
+
+    highlightOverride = mkOption {
+      type = types.attrsOf helpers.nixvimTypes.highlight;
+      default = {};
+      description = "Define highlight groups to override existing highlight";
       example = ''
         highlight = {
           Comment.fg = "#ff0000";
@@ -31,19 +42,27 @@ with lib; {
 
   config = {
     extraConfigLuaPre =
-      (optionalString (config.highlight != {}) ''
-        -- Highlight groups {{
-        do
-          local highlights = ${helpers.toLuaObject config.highlight}
+      (optionalString (config.highlight != {})
+        /*
+        lua
+        */
+        ''
+          -- Highlight groups {{
+          do
+            local highlights = ${helpers.toLuaObject config.highlight}
 
-          for k,v in pairs(highlights) do
-            vim.api.nvim_set_hl(0, k, v)
+            for k,v in pairs(highlights) do
+              vim.api.nvim_set_hl(0, k, v)
+            end
           end
-        end
-        -- }}
-      '')
-      + (optionalString (config.match != {}) ''
-        -- Match groups {{
+          -- }}
+        '')
+      + (optionalString (config.match != {})
+        /*
+        lua
+        */
+        ''
+          -- Match groups {{
           do
             local match = ${helpers.toLuaObject config.match}
 
@@ -51,7 +70,24 @@ with lib; {
               vim.fn.matchadd(k, v)
             end
           end
-          -- }}
-      '');
+            -- }}
+        '');
+
+    extraConfigLuaPost =
+      optionalString (config.highlightOverride != {})
+      /*
+      lua
+      */
+      ''
+        -- Highlight groups {{
+        do
+          local highlights = ${helpers.toLuaObject config.highlightOverride}
+
+          for k,v in pairs(highlights) do
+            vim.api.nvim_set_hl(0, k, v)
+          end
+        end
+        -- }}
+      '';
   };
 }
