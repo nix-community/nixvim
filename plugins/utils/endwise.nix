@@ -1,17 +1,14 @@
 {
-  lib,
+  config,
   pkgs,
+  helpers,
   ...
-} @ attrs: let
-  helpers = import ../helpers.nix {inherit lib;};
-in
-  with helpers.vim-plugin;
-  with lib;
-    mkVimPlugin attrs {
-      name = "endwise";
-      description = "vim-endwise";
-      package = pkgs.vimPlugins.vim-endwise;
+}:
+helpers.vim-plugin.mkVimPlugin config {
+  name = "endwise";
+  description = "vim-endwise";
+  package = pkgs.vimPlugins.vim-endwise;
 
-      # Yes it's really not configurable
-      options = {};
-    }
+  # Yes it's really not configurable
+  options = {};
+}
