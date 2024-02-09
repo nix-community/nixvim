@@ -3,11 +3,7 @@
   nixvimOptions,
 }:
 with lib; {
-  mkVimPlugin = {
-    config,
-    lib,
-    ...
-  }: {
+  mkVimPlugin = config: {
     name,
     description ? null,
     package ? null,
