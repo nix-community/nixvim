@@ -55,10 +55,9 @@
           end
         '';
       };
-      customTerms = [
-        {
+      customTerms = {
+        "<leader>g" = {
           cmd = "lazygit";
-          keymap = "<leader>g";
           direction = "float";
           dir = "git_dir";
           name = "lazygit float test";
@@ -78,8 +77,8 @@
           onStdout = "function() end";
           onStderr = "function() end";
           onExit = "function() end";
-        }
-      ];
+        };
+      };
     };
   };
 }

@@ -189,9 +189,6 @@ in {
           cmd = helpers.mkNullOrStr ''
             Command to execute when creating the terminal e.g. 'top'.
           '';
-          keymap = helpers.mkNullOrStr ''
-            Keymap to toggle the terminal.
-          '';
           direction = directionOpt;
           dir = helpers.mkNullOrStr "The directory for the terminal.";
           name = helpers.mkNullOrStr "The name of the terminal.";
@@ -216,21 +213,24 @@ in {
       };
     in
       mkOption {
-        default = [];
-        description = "Declare custom toggleterm terminals.";
+        default = {};
+        description = "Keymap to custom terminals configurations.";
         example = ''
           ```nix
-          customTerms = [
-            {
+          customTerms = {
+            "<leader>g" = {
               cmd = "lazygit";
-              keymap = "<leader>g";
               dir = "git_dir";
               direction = "float";
-            }
-          ];
-          ```
+              hidden = true;
+            };
+            "<leader>h" = {
+              cmd = "htop";
+              direction = "horizontal";
+            };
+          };
         '';
-        type = types.listOf termConfig;
+        type = types.attrsOf termConfig;
       };
   };
   config = let
@@ -267,7 +267,7 @@ in {
         require("toggleterm").setup(${helpers.toLuaObject setupOptions})
       '';
       keymaps = let
-        customTermToMapping = tcfg: let
+        customTermToMapping = keymap: tcfg: let
           termSetupOptions = with tcfg; {
             inherit cmd direction dir highlights;
             close_on_exit = closeOnExit;
@@ -279,7 +279,7 @@ in {
             on_exit = onExit;
           };
         in {
-          key = tcfg.keymap;
+          key = keymap;
           action.__raw = ''
             function()
               local Terminal = require('toggleterm.terminal').Terminal
@@ -287,9 +287,7 @@ in {
             end
           '';
         };
-        mappings = builtins.map customTermToMapping (
-          builtins.filter (tcfg: tcfg.keymap != null) cfg.customTerms
-        );
+        mappings = mapAttrsToList customTermToMapping cfg.customTerms;
       in
         helpers.keymaps.mkKeymaps
         {
