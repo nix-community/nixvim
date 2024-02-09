@@ -303,7 +303,7 @@ with lib; let
       name = "ltex";
       description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
-      settingsOptions = import ./ltex-settings.nix {inherit lib;};
+      settingsOptions = import ./ltex-settings.nix {inherit lib helpers;};
       settings = cfg: {ltex = cfg;};
     }
     {

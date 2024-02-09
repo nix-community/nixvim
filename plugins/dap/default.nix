@@ -7,7 +7,7 @@
 }:
 with lib; let
   cfg = config.plugins.dap;
-  dapHelpers = import ./dapHelpers.nix {inherit lib;};
+  dapHelpers = import ./dapHelpers.nix {inherit lib helpers;};
 in
   with dapHelpers; {
     imports = [

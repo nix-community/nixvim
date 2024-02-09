@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  helpers = import ./helpers.nix;
+  cmpHelpers = import ./helpers.nix;
   serverData = {
     code_actions = {
       eslint = {
@@ -225,7 +225,7 @@ with lib; let
   dataFlattened = flatten serverDataFormatted;
 in {
   imports =
-    (map helpers.mkServer dataFlattened)
+    (map cmpHelpers.mkServer dataFlattened)
     ++ [
       ./prettier.nix
       # Introduced January 22 2024.

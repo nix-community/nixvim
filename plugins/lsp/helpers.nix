@@ -13,13 +13,12 @@
   {
     pkgs,
     config,
+    helpers,
     lib,
-    options,
     ...
   }:
     with lib; let
       cfg = config.plugins.lsp.servers.${name};
-      helpers = import ../helpers.nix {inherit lib;};
 
       packageOption =
         if package != null

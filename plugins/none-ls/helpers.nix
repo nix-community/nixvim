@@ -12,10 +12,10 @@
     pkgs,
     config,
     lib,
+    helpers,
     ...
-  } @ args:
+  }:
     with lib; let
-      helpers = import ../helpers.nix args;
       cfg = config.plugins.none-ls.sources.${sourceType}.${name};
       # does this evaluate package?
       packageOption =

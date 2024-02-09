@@ -7,7 +7,7 @@
 }:
 with lib; let
   cfg = config.plugins.dap.extensions.dap-go;
-  dapHelpers = import ./dapHelpers.nix {inherit lib;};
+  dapHelpers = import ./dapHelpers.nix {inherit lib helpers;};
 in {
   options.plugins.dap.extensions.dap-go = {
     enable = mkEnableOption "dap-go";
