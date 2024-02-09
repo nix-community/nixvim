@@ -2,31 +2,38 @@ modules: {
   pkgs,
   config,
   lib,
+  helpers,
   ...
 }: let
   inherit (lib) types;
-  fileModuleType = types.submodule ({
-    name,
-    config,
-    ...
-  }: {
-    imports = modules;
-    options.plugin = lib.mkOption {
-      type = types.package;
-      description = "A derivation with the content of the file in it";
-      readOnly = true;
-      internal = true;
-    };
-    config = {
-      path = name;
-      type = lib.mkDefault (
-        if lib.hasSuffix ".vim" name
-        then "vim"
-        else "lua"
-      );
-      plugin = pkgs.writeTextDir config.path config.content;
-    };
-  });
+  fileModuleType = types.submoduleWith {
+    shorthandOnlyDefinesConfig = true;
+    specialArgs.helpers = helpers;
+    modules = [
+      ({
+        name,
+        config,
+        ...
+      }: {
+        imports = modules;
+        options.plugin = lib.mkOption {
+          type = types.package;
+          description = "A derivation with the content of the file in it";
+          readOnly = true;
+          internal = true;
+        };
+        config = {
+          path = name;
+          type = lib.mkDefault (
+            if lib.hasSuffix ".vim" name
+            then "vim"
+            else "lua"
+          );
+          plugin = pkgs.writeTextDir config.path config.content;
+        };
+      })
+    ];
+  };
 in {
   options = {
     files = lib.mkOption {
