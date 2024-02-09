@@ -3,13 +3,14 @@
     pkgs,
     config,
     system,
+    helpers,
     makeNixvimWithModuleUnfree,
     makeNixvimWithModule,
     ...
   }: {
     checks = {
       tests = import ../tests {
-        inherit pkgs;
+        inherit pkgs helpers;
         inherit (pkgs) lib;
         makeNixvim = configuration:
           makeNixvimWithModuleUnfree {
@@ -25,7 +26,7 @@
       };
 
       lib-tests = import ../tests/lib-tests.nix {
-        inherit pkgs;
+        inherit pkgs helpers;
         inherit (pkgs) lib;
       };
     };
