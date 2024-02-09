@@ -5,7 +5,7 @@
 in
   {
     maintainers = import ./maintainers.nix;
-    keymaps = import ./keymap-helpers.nix {inherit lib;};
+    keymaps = import ./keymap-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
     autocmd = import ./autocmd-helpers.nix {inherit lib;};
     neovim-plugin = import ./neovim-plugin.nix {inherit lib nixvimOptions;};
     vim-plugin = import ./vim-plugin.nix {inherit lib nixvimOptions;};
