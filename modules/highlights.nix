@@ -29,7 +29,7 @@ with lib; {
     };
   };
 
-  config = mkIf (config.highlight != {} || config.match != {}) {
+  config = {
     extraConfigLuaPre =
       (optionalString (config.highlight != {}) ''
         -- Highlight groups {{
