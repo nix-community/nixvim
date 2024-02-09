@@ -17,6 +17,7 @@ in {
     programs.nixvim = mkOption {
       default = {};
       type = types.submoduleWith {
+        shorthandOnlyDefinesConfig = true;
         specialArgs.helpers = helpers;
         modules =
           [
