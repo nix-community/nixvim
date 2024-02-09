@@ -5,11 +5,6 @@
 } @ attrs:
 with lib; let
   helpers = import ../helpers.nix {inherit lib;};
-
-  eitherAttrsStrInt = with types; let
-    strInt = either str int;
-  in
-    either strInt (attrsOf (either strInt (attrsOf strInt)));
 in
   with helpers.vim-plugin;
     mkVimPlugin attrs {
@@ -31,7 +26,7 @@ in
         };
 
         settings = mkDefaultOpt {
-          type = types.attrsOf (types.attrsOf eitherAttrsStrInt);
+          type = with types; attrsOf anything;
           global = "settings";
           description = "Emmet settings";
         };
