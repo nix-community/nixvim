@@ -101,6 +101,7 @@
           goimports.enable = true;
           goimports_reviser.enable = true;
           golines.enable = true;
+          google-java-format.enable = true;
           ktlint.enable = true;
           nixfmt.enable = true;
           nixpkgs_fmt.enable = true;
