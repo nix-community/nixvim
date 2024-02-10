@@ -87,6 +87,7 @@
         };
         formatting = {
           alejandra.enable = true;
+          asmfmt.enable = true;
           bean_format.enable = true;
           black.enable = true;
           # As of 2024-01-04, cbfmt is broken on darwin

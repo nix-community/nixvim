@@ -113,6 +113,9 @@ with lib; let
       alejandra = {
         package = pkgs.alejandra;
       };
+      asmfmt = {
+        package = pkgs.asmfmt;
+      };
       bean_format = {
         package = pkgs.beancount;
       };
