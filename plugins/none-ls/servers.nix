@@ -36,6 +36,9 @@ with lib; let
       bandit = {
         package = pkgs.python3Packages.bandit;
       };
+      checkstyle = {
+        package = pkgs.checkstyle;
+      };
       cppcheck = {
         package = pkgs.cppcheck;
       };
