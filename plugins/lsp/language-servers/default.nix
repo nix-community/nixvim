@@ -516,9 +516,8 @@ with lib; let
       package = pkgs.swiProlog;
     }
     {
-      name = "purescript-language-server";
-      description = "purescript-language-server for PureScript";
-      serverName = "purescriptls";
+      name = "purescriptls";
+      description = "purescriptls for PureScript";
       package = pkgs.nodePackages.purescript-language-server;
     }
     {
