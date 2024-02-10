@@ -34,6 +34,7 @@
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
 
+    ./git/committia.nix
     ./git/diffview.nix
     ./git/fugitive.nix
     ./git/git-worktree.nix
