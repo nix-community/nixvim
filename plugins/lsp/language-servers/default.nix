@@ -516,6 +516,12 @@ with lib; let
       package = pkgs.swiProlog;
     }
     {
+      name = "purescript-language-server";
+      description = "purescript-language-server for PureScript";
+      serverName = "purescriptls";
+      package = pkgs.nodePackages.purescript-language-server;
+    }
+    {
       name = "pylsp";
       description = "pylsp for Python";
       package = pkgs.python3Packages.python-lsp-server;
