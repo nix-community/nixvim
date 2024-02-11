@@ -87,6 +87,7 @@
         };
         formatting = {
           alejandra.enable = true;
+          asmfmt.enable = true;
           astyle.enable = true;
           bean_format.enable = true;
           black.enable = true;
