@@ -27,7 +27,6 @@ with helpers.vim-plugin;
 
       settings = mkDefaultOpt {
         type = with types; attrsOf anything;
-        global = "settings";
         description = "Emmet settings";
       };
     };
