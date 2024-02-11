@@ -3,8 +3,8 @@
 {
   lib,
   pkgs,
+  helpers,
 }: let
-  helpers = import ../lib/helpers.nix {inherit lib pkgs;};
   results = pkgs.lib.runTests {
     testToLuaObject = {
       expr = helpers.toLuaObject {

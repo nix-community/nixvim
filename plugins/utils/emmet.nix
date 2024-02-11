@@ -14,8 +14,7 @@ with helpers.vim-plugin;
 
     options = {
       mode = mkDefaultOpt {
-        type = types.enum ["i" "n" "v" "a"];
-        global = "mode";
+        type = types.str;
         description = "Mode where emmet will enable";
       };
 
@@ -27,7 +26,6 @@ with helpers.vim-plugin;
 
       settings = mkDefaultOpt {
         type = with types; attrsOf anything;
-        global = "settings";
         description = "Emmet settings";
       };
     };

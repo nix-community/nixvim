@@ -2,7 +2,7 @@
   mkServer = {
     name,
     sourceType,
-    description ? "${name} source, for none-ls.",
+    description ? "${name} built-in source for none-ls",
     package ? null,
     extraPackages ? [],
     ...
@@ -12,10 +12,10 @@
     pkgs,
     config,
     lib,
+    helpers,
     ...
-  } @ args:
+  }:
     with lib; let
-      helpers = import ../helpers.nix args;
       cfg = config.plugins.none-ls.sources.${sourceType}.${name};
       # does this evaluate package?
       packageOption =
@@ -25,7 +25,7 @@
           package = mkOption {
             type = types.package;
             default = package;
-            description = "Package to use for ${name} by none-ls";
+            description = "Package to use for ${name} by none-ls.";
           };
         };
     in {
@@ -37,7 +37,7 @@
           withArgs = mkOption {
             default = null;
             type = with types; nullOr str;
-            description = ''Raw Lua code to be called with the with function'';
+            description = ''Raw Lua code passed as an argument to the source's `with` method.'';
             # Not sure that it makes sense to have the same example for all servers
             # example = ''
             #   '\'{ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }'\'

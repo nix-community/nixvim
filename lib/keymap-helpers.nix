@@ -1,39 +1,41 @@
-{lib, ...}:
-with lib; let
-  helpers = import ../lib/helpers.nix {inherit lib;};
-in rec {
+{
+  lib,
+  nixvimOptions,
+  nixvimTypes,
+}:
+with lib; rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
     silent =
-      helpers.defaultNullOpts.mkBool false
+      nixvimOptions.defaultNullOpts.mkBool false
       "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
 
     nowait =
-      helpers.defaultNullOpts.mkBool false
+      nixvimOptions.defaultNullOpts.mkBool false
       "Whether to wait for extra input on ambiguous mappings. Equivalent to adding <nowait> to a map.";
 
     script =
-      helpers.defaultNullOpts.mkBool false
+      nixvimOptions.defaultNullOpts.mkBool false
       "Equivalent to adding <script> to a map.";
 
     expr =
-      helpers.defaultNullOpts.mkBool false
+      nixvimOptions.defaultNullOpts.mkBool false
       "Means that the action is actually an expression. Equivalent to adding <expr> to a map.";
 
     unique =
-      helpers.defaultNullOpts.mkBool false
+      nixvimOptions.defaultNullOpts.mkBool false
       "Whether to fail if the map is already defined. Equivalent to adding <unique> to a map.";
 
     noremap =
-      helpers.defaultNullOpts.mkBool true
+      nixvimOptions.defaultNullOpts.mkBool true
       "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
 
     remap =
-      helpers.defaultNullOpts.mkBool false
+      nixvimOptions.defaultNullOpts.mkBool false
       "Make the mapping recursive. Inverses \"noremap\"";
 
     desc =
-      helpers.mkNullOrOption types.str
+      nixvimOptions.mkNullOrOption types.str
       "A textual description of this keybind, to be shown in which-key, if you have it.";
   };
 
@@ -105,7 +107,7 @@ in rec {
         };
 
         action = mkOption ({
-            type = helpers.nixvimTypes.maybeRaw str;
+            type = nixvimTypes.maybeRaw str;
             description = "The action to execute.";
           }
           // (

@@ -136,6 +136,7 @@
           pest_ls.enable = true;
           prismals.enable = true;
           prolog-ls.enable = true;
+          purescriptls.enable = true;
           pylsp.enable = true;
           pylyzer.enable = true;
           pyright.enable = true;

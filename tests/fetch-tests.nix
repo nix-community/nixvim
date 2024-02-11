@@ -2,6 +2,7 @@
   root,
   lib,
   pkgs,
+  helpers,
 }: let
   # Handle an entry from readDir and either extract the configuration if its a regular file,
   # or continue to recurse if it's a directory. While recursing maintain a list of the traversed
@@ -35,7 +36,6 @@
   # Remove the nesting
   testsList = lib.lists.flatten (parseDirectories root []);
 
-  helpers = import ../lib/helpers.nix {inherit lib;};
   testsListEvaluated = builtins.map ({
       cases,
       namespace,
