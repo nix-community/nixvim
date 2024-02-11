@@ -31,7 +31,7 @@ with lib; {
       type = with types; attrsOf anything;
       description = ''
         These attributes will be added to the table parameter for the setup function.
-        (Can override other attributes set by nixvim)
+        Typically, it can override NixVim's default settings.
       '';
     };
   };

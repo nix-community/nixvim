@@ -9,7 +9,7 @@ with lib; {
     highlight = mkOption {
       type = types.attrsOf helpers.nixvimTypes.highlight;
       default = {};
-      description = "Define highlight groups";
+      description = "Define highlight groups.";
       example = ''
         highlight = {
           Comment.fg = "#ff0000";

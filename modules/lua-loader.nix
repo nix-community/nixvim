@@ -17,7 +17,7 @@ in {
           - overrides loadfile
           - adds the lua loader using the byte-compilation cache
           - adds the libs loader
-          - removes the default Neovim loade
+          - removes the default Neovim loader
 
         If `false`: Disables the experimental Lua module loader:
           - removes the loaders

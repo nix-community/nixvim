@@ -38,13 +38,13 @@ in {
   options = {
     files = lib.mkOption {
       type = types.attrsOf fileModuleType;
-      description = "Files to include in the vim config";
+      description = "Files to include in the Vim config.";
       default = {};
     };
 
     filesPlugin = lib.mkOption {
       type = types.package;
-      description = "A derivation with all the files inside";
+      description = "A derivation with all the files inside.";
       internal = true;
       readOnly = true;
     };
