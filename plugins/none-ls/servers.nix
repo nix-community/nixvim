@@ -113,6 +113,9 @@ with lib; let
       alejandra = {
         package = pkgs.alejandra;
       };
+      astyle = {
+        package = pkgs.astyle;
+      };
       bean_format = {
         package = pkgs.beancount;
       };
