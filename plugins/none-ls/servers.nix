@@ -60,6 +60,9 @@ with lib; let
       golangci_lint = {
         package = pkgs.golangci-lint;
       };
+      google_java_format = {
+        package = pkgs.google-java-format;
+      };
       hadolint = {
         package = pkgs.hadolint;
       };
