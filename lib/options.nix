@@ -246,7 +246,7 @@ with nixvimUtils; rec {
     mkOption {
       type = with types;
         submodule {
-          freeformType = with types; attrsOf anything;
+          freeformType = attrsOf anything;
           inherit options;
         };
       default = {};
