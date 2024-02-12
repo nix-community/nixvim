@@ -5,13 +5,17 @@
 with lib; {
   mkVimPlugin = config: {
     name,
+    # options
     description ? null,
     package ? null,
-    extraPlugins ? [],
-    extraPackages ? [],
     options ? {},
+    settingsOptions ? {},
+    settingsExample ? null,
     globalPrefix ? "",
     addExtraConfigRenameWarning ? false,
+    # config
+    extraPlugins ? [],
+    extraPackages ? [],
     ...
   }: let
     cfg = config.plugins.${name};
@@ -24,19 +28,23 @@ with lib; {
           opt.option
       )
       options;
-    globals =
+
+    globalsFromOptions =
       mapAttrs'
       (optName: opt: {
-        name = let
-          optGlobal =
-            if opt.global == null
-            then optName
-            else opt.global;
-        in
-          globalPrefix + optGlobal;
+        name =
+          if opt.global == null
+          then optName
+          else opt.global;
         value = cfg.${optName};
       })
       options;
+    globalsFromSettings =
+      if (hasAttr "settings" cfg) && (cfg.settings != null)
+      then cfg.settings
+      else {};
+    globals = globalsFromOptions // globalsFromSettings;
+
     # does this evaluate package?
     packageOption =
       if package == null
@@ -47,21 +55,21 @@ with lib; {
 
     createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
 
-    extraConfigOption =
+    settingsOption =
       optionalAttrs createSettingsOption
       {
-        settings = mkOption {
-          type = with types; attrsOf anything;
+        settings = nixvimOptions.mkSettingsOption {
+          options = settingsOptions;
+          example = settingsExample;
           description = ''
             The configuration options for ${name} without the '${globalPrefix}' prefix.
             Example: To set '${globalPrefix}_foo_bar' to 1, write
             ```nix
-              extraConfig = {
+              settings = {
                 foo_bar = true;
               };
             ```
           '';
-          default = {};
         };
       };
   in {
@@ -73,7 +81,7 @@ with lib; {
           else description
         );
       }
-      // extraConfigOption
+      // settingsOption
       // packageOption
       // pluginOptions;
 
@@ -84,7 +92,8 @@ with lib; {
     );
 
     config = mkIf cfg.enable {
-      inherit extraPackages globals;
+      inherit extraPackages;
+      globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
       # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
       extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
     };

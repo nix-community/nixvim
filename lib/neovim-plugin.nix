@@ -3,28 +3,20 @@
   nixvimOptions,
 }:
 with lib; {
-  mkSettingsOption = pluginName: options:
-    mkOption {
-      type = with types;
-        submodule {
-          freeformType = with types; attrsOf anything;
-          inherit options;
-        };
-      description = ''
-        Options provided to the `require('${pluginName}').setup` function.
-      '';
-      default = {};
-      example = {
-        foo_bar = 42;
-        hostname = "localhost:8080";
-        callback.__raw = ''
-          function()
-            print('nixvim')
-          end
-        '';
-      };
+  mkSettingsOption = {
+    pluginName ? null,
+    options ? {},
+    description ?
+      if pluginName != null
+      then "Options provided to the `require('${pluginName}').setup` function."
+      else throw "mkSettingsOption: Please provide either a `pluginName` or `description`.",
+    example ? null,
+  }:
+    nixvimOptions.mkSettingsOption {
+      inherit options description example;
     };
 
+  # TODO: DEPRECATED: use the `settings` option instead
   extraOptionsOptions = {
     extraOptions = mkOption {
       default = {};
