@@ -237,4 +237,31 @@ with nixvimUtils; rec {
       inherit default;
       description = "Plugin to use for ${name}";
     };
+
+  mkSettingsOption = {
+    options ? {},
+    description,
+    example ? null,
+  }:
+    mkOption {
+      type = with types;
+        submodule {
+          freeformType = with types; attrsOf anything;
+          inherit options;
+        };
+      default = {};
+      inherit description;
+      example =
+        if example == null
+        then {
+          foo_bar = 42;
+          hostname = "localhost:8080";
+          callback.__raw = ''
+            function()
+              print('nixvim')
+            end
+          '';
+        }
+        else example;
+    };
 }
