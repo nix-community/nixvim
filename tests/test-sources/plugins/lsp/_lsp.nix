@@ -130,12 +130,17 @@
             (pkgs.stdenv.hostPlatform.system != "aarch64-linux")
             # As of 2024-01-04, ols is broken on darwin
             # TODO: re-enable this test when fixed
-            && !pkgs.stdenv.isDarwin;
+            && !pkgs.stdenv.isDarwin
+            # As of 2024-02-11, ols is broken on x86_64-linux
+            # TODO: re-enable this test when fixed
+            # See https://github.com/NixOS/nixpkgs/pull/287577
+            && (pkgs.stdenv.hostPlatform.system != "x86_64-linux");
           omnisharp.enable = true;
           perlpls.enable = true;
           pest_ls.enable = true;
           prismals.enable = true;
           prolog-ls.enable = true;
+          purescriptls.enable = true;
           pylsp.enable = true;
           pylyzer.enable = true;
           pyright.enable = true;

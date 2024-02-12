@@ -1,12 +1,11 @@
 {
   pkgs,
   lib,
+  helpers,
   config,
   ...
 }:
-with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
-in {
+with lib; {
   options.plugins.ts-autotag =
     helpers.neovim-plugin.extraOptionsOptions
     // {

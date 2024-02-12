@@ -9,7 +9,7 @@ with lib; let
     options = {
       command = mkOption {
         type = types.str;
-        description = "The command to run";
+        description = "The command to run.";
       };
 
       nargs = helpers.mkNullOrOption (types.enum ["0" "1" "*" "?" "+"]) ''
@@ -27,12 +27,12 @@ with lib; let
       addr = helpers.mkNullOrOption types.str ''
         Whether special characters relate to other things, see :h command-addr.
       '';
-      bang = helpers.defaultNullOpts.mkBool false "Whether this command can take a bang (!)";
-      bar = helpers.defaultNullOpts.mkBool false "Whether this command can be followed by a \"|\" and another command";
-      register = helpers.defaultNullOpts.mkBool false "The first argument to the command can be an optional register";
-      keepscript = helpers.defaultNullOpts.mkBool false "Do not use the location of where the user command was defined for verbose messages, use the location of where the command was invoked";
-      force = helpers.defaultNullOpts.mkBool false "Overwrite an existing user command";
-      desc = helpers.defaultNullOpts.mkStr "" "A description of the command";
+      bang = helpers.defaultNullOpts.mkBool false "Whether this command can take a bang (!).";
+      bar = helpers.defaultNullOpts.mkBool false "Whether this command can be followed by a \"|\" and another command.";
+      register = helpers.defaultNullOpts.mkBool false "The first argument to the command can be an optional register.";
+      keepscript = helpers.defaultNullOpts.mkBool false "Do not use the location of where the user command was defined for verbose messages, use the location of where the command was invoked.";
+      force = helpers.defaultNullOpts.mkBool false "Overwrite an existing user command.";
+      desc = helpers.defaultNullOpts.mkStr "" "A description of the command.";
 
       # TODO: command-preview, need to grab a function here.
     };
@@ -41,7 +41,7 @@ in {
   options.userCommands = mkOption {
     type = types.attrsOf commandAttributes;
     default = {};
-    description = "A list of user commands to add to the configuration";
+    description = "A list of user commands to add to the configuration.";
   };
 
   config = let

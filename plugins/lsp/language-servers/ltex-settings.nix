@@ -1,7 +1,8 @@
-{lib}:
-with lib; let
-  helpers = import ../../helpers.nix {inherit lib;};
-in {
+{
+  lib,
+  helpers,
+}:
+with lib; {
   enabled =
     helpers.defaultNullOpts.mkNullable
     (with types; either bool (listOf str))

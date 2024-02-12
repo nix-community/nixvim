@@ -59,6 +59,7 @@
         diagnostics = {
           ansiblelint.enable = true;
           bandit.enable = true;
+          checkstyle.enable = true;
           cppcheck.enable = true;
           deadnix.enable = true;
           eslint.enable = true;
@@ -83,9 +84,12 @@
           pylint.enable = true;
           write_good.enable = true;
           yamllint.enable = true;
+          stylelint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
+          asmfmt.enable = true;
+          astyle.enable = true;
           bean_format.enable = true;
           black.enable = true;
           # As of 2024-01-04, cbfmt is broken on darwin
@@ -107,8 +111,10 @@
           nixpkgs_fmt.enable = true;
           phpcbf.enable = true;
           prettier.enable = true;
+          prettierd.enable = true;
           shfmt.enable = true;
           stylua.enable = true;
+          stylelint.enable = true;
           taplo.enable = true;
           isort.enable = true;
           jq.enable = true;

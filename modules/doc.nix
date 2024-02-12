@@ -2,6 +2,6 @@
   options.enableMan = lib.mkOption {
     type = lib.types.bool;
     default = true;
-    description = "Install the man pages for nixvim options";
+    description = "Install the man pages for NixVim options.";
   };
 }

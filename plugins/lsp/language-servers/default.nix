@@ -303,7 +303,7 @@ with lib; let
       name = "ltex";
       description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
-      settingsOptions = import ./ltex-settings.nix {inherit lib;};
+      settingsOptions = import ./ltex-settings.nix {inherit lib helpers;};
       settings = cfg: {ltex = cfg;};
     }
     {
@@ -514,6 +514,11 @@ with lib; let
       description = "prolog_ls for SWI-Prolog";
       serverName = "prolog_ls";
       package = pkgs.swiProlog;
+    }
+    {
+      name = "purescriptls";
+      description = "purescriptls for PureScript";
+      package = pkgs.nodePackages.purescript-language-server;
     }
     {
       name = "pylsp";

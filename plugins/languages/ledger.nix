@@ -1,16 +1,18 @@
 {
   lib,
+  config,
+  helpers,
   pkgs,
   ...
-} @ args:
+}:
 with lib;
-with (import ../helpers.nix {inherit lib;}).vim-plugin;
-  mkVimPlugin args {
+with helpers.vim-plugin;
+  mkVimPlugin config {
     name = "ledger";
     description = "ledger language features";
     package = pkgs.vimPlugins.vim-ledger;
-
     globalPrefix = "ledger_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       maxWidth = mkDefaultOpt {

@@ -29,43 +29,7 @@ Most of nixvim is dedicated to wrapping neovim plugin such that we can configure
 To add a new plugin you need to do the following.
 
 1.  Add a file in the correct sub-directory of [plugins](plugins). This depends on your exact plugin.
-    You will most certainly need the `helpers`, they can be added by doing something like:
-
-    ```nix
-    {
-      lib,
-      pkgs,
-      ...
-    } @ args:
-
-    let
-      helpers = import ../helpers.nix args;
-    in {
-    }
-    ```
-
-2.  Create the minimal options for a new plugin (in `options.plugins.<plug-name>`:
-
-    - `enable = mkEnableOption ...` to toggle the plugin.
-    - `package = helpers.mkPackageOption ...` to change the package options.
-
-3.  Add the plugin package to the installed plugins if it is enabled. This can be done with the following:
-
-    ```nix
-    {
-      config =
-        let
-          cfg = config.plugins."<plug-name>";
-
-        in lib.mkIf cfg.enable {
-          extraPlugins = [cfg.package];
-
-          extraConfigLua = ''
-            <plugin configuration if needed>
-          '';
-        };
-    }
-    ```
+2. Write the code for the corresponding nixvim module. You can start from the [template](plugins/TEMPLATE.nix).
 
 You will then need to add Nix options for all (or most) of the upstream plugin options.
 These options should be in `camelCase` (whereas most plugins define their options in `snake_case`), and their names should match exactly (except the case) to the upstream names.

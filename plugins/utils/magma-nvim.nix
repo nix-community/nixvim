@@ -1,15 +1,18 @@
 {
   lib,
+  config,
+  helpers,
   pkgs,
   ...
-} @ args:
+}:
 with lib;
-with (import ../helpers.nix {inherit lib;}).vim-plugin;
-  mkVimPlugin args {
+with helpers.vim-plugin;
+  mkVimPlugin config {
     name = "magma-nvim";
     description = "magma-nvim";
     package = pkgs.vimPlugins.magma-nvim-goose;
     globalPrefix = "magma_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       imageProvider = mkDefaultOpt {

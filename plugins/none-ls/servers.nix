@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  helpers = import ./helpers.nix;
+  cmpHelpers = import ./helpers.nix;
   serverData = {
     code_actions = {
       eslint = {
@@ -35,6 +35,9 @@ with lib; let
       };
       bandit = {
         package = pkgs.python3Packages.bandit;
+      };
+      checkstyle = {
+        package = pkgs.checkstyle;
       };
       cppcheck = {
         package = pkgs.cppcheck;
@@ -93,6 +96,9 @@ with lib; let
       statix = {
         package = pkgs.statix;
       };
+      stylelint = {
+        package = pkgs.stylelint;
+      };
       vale = {
         package = pkgs.vale;
       };
@@ -109,6 +115,12 @@ with lib; let
     formatting = {
       alejandra = {
         package = pkgs.alejandra;
+      };
+      asmfmt = {
+        package = pkgs.asmfmt;
+      };
+      astyle = {
+        package = pkgs.astyle;
       };
       bean_format = {
         package = pkgs.beancount;
@@ -180,6 +192,9 @@ with lib; let
       prettier = {
         package = pkgs.nodePackages.prettier;
       };
+      prettierd = {
+        package = pkgs.prettierd;
+      };
       protolint = {
         package = pkgs.protolint;
       };
@@ -191,6 +206,9 @@ with lib; let
       };
       sqlfluff = {
         package = pkgs.sqlfluff;
+      };
+      stylelint = {
+        package = pkgs.stylelint;
       };
       stylua = {
         package = pkgs.stylua;
@@ -225,7 +243,7 @@ with lib; let
   dataFlattened = flatten serverDataFormatted;
 in {
   imports =
-    (map helpers.mkServer dataFlattened)
+    (map cmpHelpers.mkServer dataFlattened)
     ++ [
       ./prettier.nix
       # Introduced January 22 2024.

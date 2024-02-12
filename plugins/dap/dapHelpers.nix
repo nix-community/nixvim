@@ -1,7 +1,8 @@
-{lib, ...}:
-with lib; let
-  helpers = import ../helpers.nix {inherit lib;};
-in rec {
+{
+  lib,
+  helpers,
+}:
+with lib; rec {
   mkAdapterType = attrs:
     types.submodule {
       options =

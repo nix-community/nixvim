@@ -3,11 +3,7 @@
   nixvimOptions,
 }:
 with lib; {
-  mkVimPlugin = {
-    config,
-    lib,
-    ...
-  }: {
+  mkVimPlugin = config: {
     name,
     description ? null,
     package ? null,
@@ -15,6 +11,7 @@ with lib; {
     extraPackages ? [],
     options ? {},
     globalPrefix ? "",
+    addExtraConfigRenameWarning ? false,
     ...
   }: let
     cfg = config.plugins.${name};
@@ -48,10 +45,12 @@ with lib; {
         package = nixvimOptions.mkPackageOption name package;
       };
 
+    createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
+
     extraConfigOption =
-      if (isString globalPrefix) && (globalPrefix != "")
-      then {
-        extraConfig = mkOption {
+      optionalAttrs createSettingsOption
+      {
+        settings = mkOption {
           type = with types; attrsOf anything;
           description = ''
             The configuration options for ${name} without the '${globalPrefix}' prefix.
@@ -64,8 +63,7 @@ with lib; {
           '';
           default = {};
         };
-      }
-      else {};
+      };
   in {
     options.plugins.${name} =
       {
@@ -78,6 +76,12 @@ with lib; {
       // extraConfigOption
       // packageOption
       // pluginOptions;
+
+    imports = optional (addExtraConfigRenameWarning && createSettingsOption) (
+      mkRenamedOptionModule
+      ["plugins" name "extraConfig"]
+      ["plugins" name "settings"]
+    );
 
     config = mkIf cfg.enable {
       inherit extraPackages globals;

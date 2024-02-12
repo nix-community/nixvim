@@ -1,14 +1,17 @@
 {
   lib,
+  config,
+  helpers,
   pkgs,
   ...
-} @ args:
+}:
 with lib;
-with (import ../helpers.nix {inherit lib;}).vim-plugin;
-  mkVimPlugin args {
+with helpers.vim-plugin;
+  mkVimPlugin config {
     name = "undotree";
     package = pkgs.vimPlugins.undotree;
     globalPrefix = "undotree_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       windowLayout = mkDefaultOpt {

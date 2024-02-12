@@ -1,6 +1,7 @@
 {
   makeNixvim,
   lib,
+  helpers,
   pkgs,
 }: let
   fetchTests = import ./fetch-tests.nix;
@@ -9,7 +10,7 @@
 
   # List of files containing configurations
   testFiles = fetchTests {
-    inherit lib pkgs;
+    inherit lib pkgs helpers;
     root = ./test-sources;
   };
 

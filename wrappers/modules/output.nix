@@ -25,38 +25,38 @@ with lib; {
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
-      description = "Neovim to use for nixvim";
+      description = "Neovim to use for NixVim.";
     };
 
     wrapRc = mkOption {
       type = types.bool;
-      description = "Should the config be included in the wrapper script";
+      description = "Should the config be included in the wrapper script.";
       default = false;
     };
 
     finalPackage = mkOption {
       type = types.package;
-      description = "Wrapped neovim";
+      description = "Wrapped Neovim.";
       readOnly = true;
     };
 
     initPath = mkOption {
       type = types.str;
-      description = "The path to the init.lua file";
+      description = "The path to the `init.lua` file.";
       readOnly = true;
       visible = false;
     };
 
     initContent = mkOption {
       type = types.str;
-      description = "The content of the init.lua file";
+      description = "The content of the `init.lua` file.";
       readOnly = true;
       visible = false;
     };
 
     printInitPackage = mkOption {
       type = types.package;
-      description = "A tool to show the content of the generated init.lua file.";
+      description = "A tool to show the content of the generated `init.lua` file.";
       readOnly = true;
       visible = false;
     };

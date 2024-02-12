@@ -5,8 +5,8 @@
 in
   {
     maintainers = import ./maintainers.nix;
-    keymaps = import ./keymap-helpers.nix {inherit lib;};
-    autocmd = import ./autocmd-helpers.nix {inherit lib;};
+    keymaps = import ./keymap-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
+    autocmd = import ./autocmd-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
     neovim-plugin = import ./neovim-plugin.nix {inherit lib nixvimOptions;};
     vim-plugin = import ./vim-plugin.nix {inherit lib nixvimOptions;};
     inherit (import ./to-lua.nix {inherit lib;}) toLuaObject;

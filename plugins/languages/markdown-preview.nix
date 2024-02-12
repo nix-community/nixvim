@@ -1,16 +1,18 @@
 {
   lib,
-  pkgs,
+  config,
   helpers,
+  pkgs,
   ...
-} @ args:
+}:
 with lib;
-with (import ../helpers.nix {inherit lib;}).vim-plugin;
-  mkVimPlugin args {
+with helpers.vim-plugin;
+  mkVimPlugin config {
     name = "markdown-preview";
     description = "markdown-preview.nvim";
     package = pkgs.vimPlugins.markdown-preview-nvim;
     globalPrefix = "mkdp_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       autoStart = mkDefaultOpt {
