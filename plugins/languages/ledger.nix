@@ -11,8 +11,8 @@ with helpers.vim-plugin;
     name = "ledger";
     description = "ledger language features";
     package = pkgs.vimPlugins.vim-ledger;
-
     globalPrefix = "ledger_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       maxWidth = mkDefaultOpt {

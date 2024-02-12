@@ -11,6 +11,7 @@ with helpers.vim-plugin;
     name = "emmet";
     package = pkgs.vimPlugins.emmet-vim;
     globalPrefix = "user_emmet_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       mode = mkDefaultOpt {

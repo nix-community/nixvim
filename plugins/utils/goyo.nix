@@ -12,6 +12,7 @@ with lib;
     description = "goyo.vim";
     package = pkgs.vimPlugins.goyo-vim;
     globalPrefix = "goyo_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       width = mkDefaultOpt {
