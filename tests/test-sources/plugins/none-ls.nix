@@ -67,6 +67,7 @@
           flake8.enable = true;
           gitlint.enable = true;
           golangci_lint.enable = true;
+          google_java_format.enable = true;
           ktlint.enable = true;
           ltrs.enable = true;
           markdownlint.enable = true;
