@@ -12,6 +12,7 @@ with helpers.vim-plugin;
     description = "zig.vim";
     package = pkgs.vimPlugins.zig-vim;
     globalPrefix = "zig_";
+    addExtraConfigRenameWarning = true;
 
     # Possibly add option to disable Treesitter highlighting if this is installed
     options = {

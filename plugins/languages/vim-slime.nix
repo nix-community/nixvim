@@ -11,6 +11,7 @@ with helpers.vim-plugin;
     name = "vim-slime";
     package = pkgs.vimPlugins.vim-slime;
     globalPrefix = "slime_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       target = mkDefaultOpt {

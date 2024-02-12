@@ -12,6 +12,7 @@ with helpers.vim-plugin;
     description = "magma-nvim";
     package = pkgs.vimPlugins.magma-nvim-goose;
     globalPrefix = "magma_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       imageProvider = mkDefaultOpt {

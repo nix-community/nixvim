@@ -12,6 +12,7 @@ with helpers.vim-plugin;
     description = "vim-airline";
     package = pkgs.vimPlugins.vim-airline;
     globalPrefix = "airline_";
+    addExtraConfigRenameWarning = true;
 
     options =
       (

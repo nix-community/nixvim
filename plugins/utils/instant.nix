@@ -12,6 +12,7 @@ with helpers.vim-plugin;
     description = "instant.nvim";
     package = pkgs.vimPlugins.instant-nvim;
     globalPrefix = "instant_";
+    addExtraConfigRenameWarning = true;
 
     options = let
       mkStr = global: default: desc:

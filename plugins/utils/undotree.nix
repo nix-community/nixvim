@@ -11,6 +11,7 @@ with helpers.vim-plugin;
     name = "undotree";
     package = pkgs.vimPlugins.undotree;
     globalPrefix = "undotree_";
+    addExtraConfigRenameWarning = true;
 
     options = {
       windowLayout = mkDefaultOpt {
