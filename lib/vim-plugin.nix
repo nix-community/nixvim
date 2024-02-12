@@ -16,7 +16,6 @@ with lib; {
     # config
     extraPlugins ? [],
     extraPackages ? [],
-    ...
   }: let
     cfg = config.plugins.${name};
 
