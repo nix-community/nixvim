@@ -164,6 +164,9 @@ with lib; let
       golines = {
         package = pkgs.golines;
       };
+      google_java_format = {
+        package = pkgs.google-java-format;
+      };
       isort = {
         package = pkgs.isort;
       };
