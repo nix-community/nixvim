@@ -186,6 +186,9 @@ with lib; let
       prettier = {
         package = pkgs.nodePackages.prettier;
       };
+      prettierd = {
+        package = pkgs.prettierd;
+      };
       protolint = {
         package = pkgs.protolint;
       };

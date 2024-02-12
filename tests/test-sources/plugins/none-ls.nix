@@ -109,6 +109,7 @@
           nixpkgs_fmt.enable = true;
           phpcbf.enable = true;
           prettier.enable = true;
+          prettierd.enable = true;
           shfmt.enable = true;
           stylua.enable = true;
           taplo.enable = true;
