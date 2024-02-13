@@ -5,6 +5,7 @@
 with lib; {
   mkVimPlugin = config: {
     name,
+    namespace ? "plugins",
     maintainers ? [],
     # options
     description ? null,
@@ -18,7 +19,7 @@ with lib; {
     extraPlugins ? [],
     extraPackages ? [],
   }: let
-    cfg = config.plugins.${name};
+    cfg = config.${namespace}.${name};
 
     # TODO support nested options!
     pluginOptions =
@@ -74,7 +75,7 @@ with lib; {
       };
   in {
     meta.maintainers = maintainers;
-    options.plugins.${name} =
+    options.${namespace}.${name} =
       {
         enable = mkEnableOption (
           if description == null
