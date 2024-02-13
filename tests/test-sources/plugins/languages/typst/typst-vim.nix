@@ -7,10 +7,13 @@
     plugins.typst-vim = {
       enable = true;
 
-      cmd = "typst";
-      pdfViewer = "zathura";
-      concealMath = false;
-      autoCloseToc = false;
+      settings = {
+        cmd = "typst";
+        pdf_viewer = "zathura";
+        conceal_math = false;
+        auto_close_toc = false;
+      };
+
       keymaps = {
         silent = true;
         watch = "<leader>w";
