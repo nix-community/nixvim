@@ -5,6 +5,7 @@
 with lib; {
   mkVimPlugin = config: {
     name,
+    maintainers ? [],
     # options
     description ? null,
     package ? null,
@@ -72,6 +73,7 @@ with lib; {
         };
       };
   in {
+    meta.maintainers = maintainers;
     options.plugins.${name} =
       {
         enable = mkEnableOption (
