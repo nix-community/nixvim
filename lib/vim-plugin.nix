@@ -18,6 +18,7 @@ with lib; {
     addExtraConfigRenameWarning ? false,
     extraOptions ? {},
     # config
+    extraConfig ? cfg: {},
     extraPlugins ? [],
     extraPackages ? [],
   }: let
@@ -98,12 +99,19 @@ with lib; {
         ["plugins" name "settings"]
       );
 
-    config = mkIf cfg.enable {
-      inherit extraPackages;
-      globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
-      # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
-      extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
-    };
+    config =
+      mkIf cfg.enable
+      (
+        mkMerge [
+          {
+            inherit extraPackages;
+            globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
+            # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
+            extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
+          }
+          (extraConfig cfg)
+        ]
+      );
   };
 
   mkDefaultOpt = {
