@@ -9,6 +9,7 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "emmet";
+    originalName = "emmet-vim";
     package = pkgs.vimPlugins.emmet-vim;
     globalPrefix = "user_emmet_";
     addExtraConfigRenameWarning = true;

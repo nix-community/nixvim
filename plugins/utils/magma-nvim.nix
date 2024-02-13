@@ -9,7 +9,7 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "magma-nvim";
-    description = "magma-nvim";
+    originalName = "magma-nvim";
     package = pkgs.vimPlugins.magma-nvim-goose;
     globalPrefix = "magma_";
     addExtraConfigRenameWarning = true;

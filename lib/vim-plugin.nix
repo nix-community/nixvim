@@ -9,7 +9,7 @@ with lib; {
     maintainers ? [],
     imports ? [],
     # options
-    description ? null,
+    originalName ? name,
     package ? null,
     options ? {},
     settingsOptions ? {},
@@ -80,11 +80,7 @@ with lib; {
     meta.maintainers = maintainers;
     options.${namespace}.${name} =
       {
-        enable = mkEnableOption (
-          if description == null
-          then name
-          else description
-        );
+        enable = mkEnableOption originalName;
       }
       // settingsOption
       // packageOption
