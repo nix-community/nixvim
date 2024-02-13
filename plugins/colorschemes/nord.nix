@@ -5,76 +5,60 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.nord;
-in {
-  options = {
-    colorschemes.nord = {
-      enable = mkEnableOption "nord";
+helpers.vim-plugin.mkVimPlugin config {
+  namespace = "colorschemes";
+  name = "nord";
+  originalName = "nord.nvim";
+  defaultPackage = pkgs.vimPlugins.nord-nvim;
+  globalPrefix = "nord_";
 
-      package = helpers.mkPackageOption "nord.nvim" pkgs.vimPlugins.nord-nvim;
+  maintainers = [lib.maintainers.GaetanLepage];
 
-      contrast = helpers.defaultNullOpts.mkBool false ''
-        Make sidebars and popup menus like nvim-tree and telescope have a different background.
-      '';
+  # TODO introduced 2024-02-20: remove 2024-04-20
+  deprecateExtraConfig = true;
+  optionsRenamedToSettings = [
+    "contrast"
+    "borders"
+    "disableBackground"
+    "cursorlineTransparent"
+    "enableSidebarBackground"
+    "italic"
+    "uniformDiffBackground"
+  ];
 
-      borders = helpers.defaultNullOpts.mkBool false ''
-        Enable the border between verticaly split windows visable.
-      '';
+  settingsOptions = {
+    contrast = helpers.defaultNullOpts.mkBool false ''
+      Make sidebars and popup menus like nvim-tree and telescope have a different background.
+    '';
 
-      disableBackground = helpers.defaultNullOpts.mkBool false ''
-        Disable the setting of background color so that NeoVim can use your terminal background.
-      '';
+    borders = helpers.defaultNullOpts.mkBool false ''
+      Enable the border between verticaly split windows visable.
+    '';
 
-      cursorlineTransparent = helpers.defaultNullOpts.mkBool false ''
-        Set the cursorline transparent/visible.
-      '';
+    disable_background = helpers.defaultNullOpts.mkBool false ''
+      Disable the setting of background color so that NeoVim can use your terminal background.
+    '';
 
-      enableSidebarBackground = helpers.defaultNullOpts.mkBool false ''
-        Re-enables the background of the sidebar if you disabled the background of everything.
-      '';
+    cursorline_transparent = helpers.defaultNullOpts.mkBool false ''
+      Set the cursorline transparent/visible.
+    '';
 
-      italic = helpers.defaultNullOpts.mkBool true ''
-        Enables/disables italics.
-      '';
+    enable_sidebar_background = helpers.defaultNullOpts.mkBool false ''
+      Re-enables the background of the sidebar if you disabled the background of everything.
+    '';
 
-      uniformDiffBackground = helpers.defaultNullOpts.mkBool false ''
-        Enables/disables colorful backgrounds when used in _diff_ mode.
-      '';
+    italic = helpers.defaultNullOpts.mkBool true ''
+      Enables/disables italics.
+    '';
 
-      extraConfig = mkOption {
-        type = types.attrs;
-        description = ''
-          The configuration options for vimtex without the 'nord_' prefix.
-          Example: To set 'nord_foo_bar' to 1, write
-            extraConfig = {
-              foo_bar = true;
-            };
-        '';
-        default = {};
-      };
-    };
+    uniform_diff_background = helpers.defaultNullOpts.mkBool false ''
+      Enables/disables colorful backgrounds when used in _diff_ mode.
+    '';
   };
 
-  config = mkIf cfg.enable {
-    colorscheme = "nord";
-    extraPlugins = [cfg.package];
-
-    globals =
-      mapAttrs'
-      (name: value: nameValuePair "nord_${name}" value)
-      (with cfg;
-        {
-          inherit
-            contrast
-            borders
-            ;
-          disable_background = disableBackground;
-          cursorline_transparent = cursorlineTransparent;
-          enable_sidebar_background = enableSidebarBackground;
-          inherit italic;
-          uniform_diff_background = uniformDiffBackground;
-        }
-        // cfg.extraConfig);
+  settingsExample = {
+    borders = true;
+    disable_background = true;
+    italic = false;
   };
 }
