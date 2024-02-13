@@ -4,80 +4,94 @@
   config,
   pkgs,
   ...
-}: let
-  cfg = config.plugins.vimtex;
-in
-  with lib; {
-    options.plugins.vimtex = {
-      enable = mkEnableOption "vimtex";
+}:
+with lib;
+  helpers.vim-plugin.mkVimPlugin config {
+    name = "vimtex";
+    defaultPackage = pkgs.vimPlugins.vimtex;
+    globalPrefix = "vimtex_";
 
-      package = helpers.mkPackageOption "vimtex" pkgs.vimPlugins.vimtex;
+    maintainers = [maintainers.GaetanLepage];
 
-      extraConfig = mkOption {
-        type = types.attrs;
-        description = ''
-          The configuration options for vimtex without the 'vimtex_' prefix.
-          Example: To set 'vimtex_compiler_enabled' to 1, write
-            extraConfig = {
-              compiler_enabled = true;
-            };
-        '';
-        default = {};
-      };
+    extraPackages = [pkgs.pstree];
 
-      viewMethod = mkOption {
+    # TODO introduced 2024-02-20: remove 2024-04-20
+    deprecateExtraConfig = true;
+    optionsRenamedToSettings = [
+      "viewMethod"
+    ];
+    imports = let
+      basePluginPath = ["plugins" "vimtex"];
+    in [
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["installTexLive"])
+        "If you don't want `texlive` to be installed, set `plugins.vimtex.texlivePackage` to `null`."
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["texLivePackage"])
+        (basePluginPath ++ ["texlivePackage"])
+      )
+    ];
+
+    settingsOptions = {
+      view_method = mkOption {
         type = types.str;
-        description = ''
-          The view method that vimtex will use to display PDF's.
-          Check https://github.com/lervag/vimtex/blob/03c83443108a6984bf90100f6d00ec270b84a339/doc/vimtex.txt#L3322
-          for more information.
-        '';
         default = "general";
-      };
-      installTexLive = mkOption {
-        type = types.bool;
+        example = "zathura";
         description = ''
-          Whether or not to install TexLive.
-          See https://nixos.wiki/wiki/TexLive.
+          Set the viewer method.
+          By default, a generic viewer is used through the general view method (e.g. `xdg-open` on Linux).
         '';
-        default = false;
       };
-      texLivePackage = helpers.mkPackageOption "texLivePackage" pkgs.texlive.combined.scheme-medium;
     };
 
-    config = let
-      globals =
-        {
-          enabled = cfg.enable;
-          callback_progpath = "nvim";
-          view_method = cfg.viewMethod;
-        }
-        // cfg.extraConfig;
-      basePackages =
-        [pkgs.pstree]
-        ++ (
-          lib.optional cfg.installTexLive cfg.texLivePackage
-        );
-      viewMethodAndPDFViewerPairs = {
-        general = [pkgs.xdotool];
-        zathura = [pkgs.xdotool pkgs.zathura];
-        zathura_simple = [pkgs.zathura];
-        mupdf = [pkgs.xdotool pkgs.mupdf];
+    settingsExample = {
+      view_method = "zathura";
+      compiler_method = "latexrun";
+      toc_config = {
+        split_pos = "vert topleft";
+        split_width = 40;
       };
-    in
-      mkIf cfg.enable {
-        extraPlugins = [cfg.package];
+    };
 
-        extraPackages =
-          basePackages
-          ++ (
-            optionals
-            (
-              hasAttr "${cfg.viewMethod}" viewMethodAndPDFViewerPairs
-            )
-            viewMethodAndPDFViewerPairs."${cfg.viewMethod}"
-          );
-
-        globals = mapAttrs' (name: nameValuePair ("vimtex_" + name)) globals;
+    extraOptions = {
+      texlivePackage = mkOption {
+        type = with types; nullOr package;
+        default = pkgs.texlive.combined.scheme-medium;
+        example = null;
+        description = ''
+          The package to install for `textlive.
+          Set to `null` for not installing `texlive` at all.
+        '';
       };
+    };
+
+    extraConfig = cfg: {
+      plugins.vimtex.settings = {
+        enabled = true;
+        callback_progpath = "nvim";
+      };
+
+      extraPackages = let
+        # xdotool does not exist on darwin
+        xdotool = optional pkgs.stdenv.isLinux pkgs.xdotool;
+        viewerPackages =
+          {
+            general = xdotool;
+            zathura = xdotool ++ [pkgs.zathura];
+            zathura_simple = [pkgs.zathura];
+            mupdf = xdotool ++ [pkgs.mupdf];
+          }
+          .${cfg.settings.view_method}
+          or [];
+      in
+        (
+          optional
+          (cfg.texlivePackage != null)
+          cfg.texlivePackage
+        )
+        ++ viewerPackages;
+    };
   }
