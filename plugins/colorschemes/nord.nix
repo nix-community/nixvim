@@ -8,28 +8,6 @@
 with lib; let
   cfg = config.colorschemes.nord;
 in {
-  # Introduced January, 16 2024.
-  # TODO remove in early February 2023.
-  imports = let
-    basePluginPath = ["colorschemes" "nord"];
-  in [
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["disable_background"])
-      (basePluginPath ++ ["disableBackground"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["cursorline_transparent"])
-      (basePluginPath ++ ["cursorlineTransparent"])
-    )
-    (
-      mkRenamedOptionModule
-      (basePluginPath ++ ["enable_sidebar_background"])
-      (basePluginPath ++ ["enableSidebarBackground"])
-    )
-  ];
-
   options = {
     colorschemes.nord = {
       enable = mkEnableOption "nord";
