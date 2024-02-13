@@ -16,6 +16,7 @@ with lib; {
     settingsExample ? null,
     globalPrefix ? "",
     addExtraConfigRenameWarning ? false,
+    extraOptions ? {},
     # config
     extraPlugins ? [],
     extraPackages ? [],
@@ -86,7 +87,8 @@ with lib; {
       }
       // settingsOption
       // packageOption
-      // pluginOptions;
+      // pluginOptions
+      // extraOptions;
 
     imports =
       imports
