@@ -7,6 +7,7 @@ with lib; {
     name,
     namespace ? "plugins",
     maintainers ? [],
+    imports ? [],
     # options
     description ? null,
     package ? null,
@@ -87,11 +88,13 @@ with lib; {
       // packageOption
       // pluginOptions;
 
-    imports = optional (addExtraConfigRenameWarning && createSettingsOption) (
-      mkRenamedOptionModule
-      ["plugins" name "extraConfig"]
-      ["plugins" name "settings"]
-    );
+    imports =
+      imports
+      ++ optional (addExtraConfigRenameWarning && createSettingsOption) (
+        mkRenamedOptionModule
+        ["plugins" name "extraConfig"]
+        ["plugins" name "settings"]
+      );
 
     config = mkIf cfg.enable {
       inherit extraPackages;
