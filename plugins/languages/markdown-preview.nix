@@ -9,7 +9,7 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "markdown-preview";
-    description = "markdown-preview.nvim";
+    originalName = "markdown-preview.nvim";
     package = pkgs.vimPlugins.markdown-preview-nvim;
     globalPrefix = "mkdp_";
     addExtraConfigRenameWarning = true;

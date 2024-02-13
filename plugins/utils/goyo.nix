@@ -9,7 +9,7 @@ with helpers.vim-plugin;
 with lib;
   mkVimPlugin config {
     name = "goyo";
-    description = "goyo.vim";
+    originalName = "goyo.vim";
     package = pkgs.vimPlugins.goyo-vim;
     globalPrefix = "goyo_";
     addExtraConfigRenameWarning = true;

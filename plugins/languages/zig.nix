@@ -9,7 +9,7 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "zig";
-    description = "zig.vim";
+    originalName = "zig.vim";
     package = pkgs.vimPlugins.zig-vim;
     globalPrefix = "zig_";
     addExtraConfigRenameWarning = true;

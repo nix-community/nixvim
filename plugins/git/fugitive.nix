@@ -6,7 +6,7 @@
 }:
 helpers.vim-plugin.mkVimPlugin config {
   name = "fugitive";
-  description = "vim-fugitive";
+  originalName = "vim-fugitive";
   package = pkgs.vimPlugins.vim-fugitive;
   extraPackages = [pkgs.git];
 
