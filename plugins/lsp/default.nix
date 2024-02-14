@@ -8,9 +8,97 @@
 with lib; let
   cfg = config.plugins.lsp;
 in {
-  imports = [
-    ./language-servers
-  ];
+  imports =
+    [
+      ./language-servers
+    ]
+    # TODO: introduced 2024-02-14, remove on 2024-03-14
+    ++ (
+      map
+      (
+        serverName:
+          mkRemovedOptionModule
+          ["plugins" "lsp" "servers" serverName "installLanguageServer"]
+          "If you want to not install the language server package, set `plugins.lsp.servers.${serverName}.package` to `false`."
+      )
+      [
+        "astro"
+        "bashls"
+        "beancount"
+        "biome"
+        "ccls"
+        "clangd"
+        "clojure-lsp"
+        "cmake"
+        "csharp-ls"
+        "cssls"
+        "dagger"
+        "dartls"
+        "denols"
+        "dhall-lsp-server"
+        "digestif"
+        "dockerls"
+        "efm"
+        "elixirls"
+        "elmls"
+        "emmet_ls"
+        "eslint"
+        "fsautocomplete"
+        "futhark-lsp"
+        "gdscript"
+        "gleam"
+        "gopls"
+        "graphql"
+        "helm-ls"
+        "hls"
+        "html"
+        "htmx"
+        "intelephense"
+        "java-language-server"
+        "jsonls"
+        "julials"
+        "kotlin-language-server"
+        "leanls"
+        "lemminx"
+        "ltex"
+        "lua-ls"
+        "marksman"
+        "metals"
+        "nil_ls"
+        "nixd"
+        "nushell"
+        "ols"
+        "omnisharp"
+        "perlpls"
+        "pest_ls"
+        "phpactor"
+        "prismals"
+        "prolog-ls"
+        "purescriptls"
+        "pylsp"
+        "pylyzer"
+        "pyright"
+        "rnix-lsp"
+        "ruff-lsp"
+        "rust-analyzer"
+        "solargraph"
+        "sourcekit"
+        "svelte"
+        "tailwindcss"
+        "taplo"
+        "templ"
+        "terraformls"
+        "texlab"
+        "tsserver"
+        "typst-lsp"
+        "vala-ls"
+        "vls"
+        "volar"
+        "vuels"
+        "yamlls"
+        "zls"
+      ]
+    );
 
   options = {
     plugins.lsp = {
