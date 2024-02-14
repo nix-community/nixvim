@@ -14,18 +14,21 @@
         accept = "<Tab>";
         complete = "<M-Bslash>";
       };
-      filetypes = {
-        help = false;
-        gitcommit = false;
-        gitrebase = false;
-        "." = false;
+
+      settings = {
+        filetypes = {
+          help = false;
+          gitcommit = false;
+          gitrebase = false;
+          "." = false;
+        };
+        manual = false;
+        no_map_tab = false;
+        idle_delay = 75;
+        render = true;
+        tab_fallback = "\t";
+        disable_bindings = true;
       };
-      manual = false;
-      noMapTab = false;
-      idleDelay = 75;
-      render = true;
-      tabFallback = "\t";
-      disableBindings = true;
     };
   };
 }
