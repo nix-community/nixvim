@@ -112,6 +112,7 @@
     ./utils/auto-session.nix
     ./utils/autoclose.nix
     ./utils/bacon.nix
+    ./utils/baleia.nix
     ./utils/better-escape.nix
     ./utils/clipboard-image.nix
     ./utils/comment-nvim.nix
