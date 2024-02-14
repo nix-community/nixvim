@@ -81,6 +81,21 @@ with lib; rec {
 
   mapOptionSubmodule = mkMapOptionSubmodule {};
 
+  mkModeOption = default:
+    mkOption {
+      type = with types;
+        either
+        modeEnum
+        (listOf modeEnum);
+      description = ''
+        One or several modes.
+        Use the short-names (`"n"`, `"v"`, ...).
+        See `:h map-modes` to learn more.
+      '';
+      inherit default;
+      example = ["n" "v"];
+    };
+
   mkMapOptionSubmodule = defaults: (with types;
     submodule {
       options = {
@@ -95,16 +110,7 @@ with lib; rec {
             {default = defaults.key;}
           ));
 
-        mode = mkOption {
-          type = either modeEnum (listOf modeEnum);
-          description = ''
-            One or several modes.
-            Use the short-names (`"n"`, `"v"`, ...).
-            See `:h map-modes` to learn more.
-          '';
-          default = defaults.mode or "";
-          example = ["n" "v"];
-        };
+        mode = mkModeOption defaults.mode or "";
 
         action = mkOption ({
             type = nixvimTypes.maybeRaw str;
