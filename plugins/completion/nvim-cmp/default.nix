@@ -570,7 +570,7 @@ in {
         (mkIf (elem "nvim_lsp" foundSources)
           {
             lsp.capabilities = ''
-              capabilities = require('cmp_nvim_lsp').default_capabilities()
+              capabilities = vim.tbl_deep_extend("force", capabilities, require('cmp_nvim_lsp').default_capabilities())
             '';
           })
       ];
