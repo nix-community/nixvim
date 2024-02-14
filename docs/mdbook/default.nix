@@ -217,6 +217,7 @@ with lib; let
     # Copy inputs into the build directory
     cp -r --no-preserve=all $inputs/* ./
     cp ${../../CONTRIBUTING.md} ./CONTRIBUTING.md
+    cp ${../helpers.md} ./helpers.md
 
     # Copy the generated MD docs into the build directory
     # Using pkgs.writeShellScript helps to avoid the "bash: argument list too long" error
