@@ -1,10 +1,11 @@
 {
   lib,
   pkgs,
+  _nixvimTests,
   ...
 }: let
   nixvimTypes = import ./types.nix {inherit lib nixvimOptions;};
-  nixvimUtils = import ./utils.nix {inherit lib;};
+  nixvimUtils = import ./utils.nix {inherit lib _nixvimTests;};
   nixvimOptions = import ./options.nix {inherit lib nixvimTypes nixvimUtils;};
   inherit (import ./to-lua.nix {inherit lib;}) toLuaObject;
 in

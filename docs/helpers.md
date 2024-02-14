@@ -37,3 +37,6 @@ A certain number of helpers are defined that can be useful:
   ```lua
     {"a", "b", [foo] = "bar"}
   ```
+
+- `helpers.enableExceptInTests`: Evaluates to `true`, except in `mkTestDerivationFromNixvimModule`
+  where it evaluates to `false`. This allows to skip instantiating plugins that can't be run in tests.

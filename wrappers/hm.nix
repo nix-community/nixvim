@@ -9,7 +9,7 @@
   ...
 } @ args: let
   inherit (lib) mkEnableOption mkOption mkOptionType mkMerge mkIf types;
-  helpers = getHelpers pkgs;
+  helpers = getHelpers pkgs false;
   shared = import ./_shared.nix {inherit modules helpers;} args;
   cfg = config.programs.nixvim;
   files =
