@@ -41,6 +41,7 @@ with lib; rec {
     settingsExample ? null,
     extraOptions ? {},
     # config
+    processSettings ? lib.id,
     luaName ? name,
     extraConfig ? cfg: {},
     extraPlugins ? [],
@@ -73,8 +74,10 @@ with lib; rec {
             extraPlugins = [cfg.package] ++ extraPlugins;
             inherit extraPackages;
 
-            extraConfigLua = ''
-              require('${luaName}').setup(${toLuaObject cfg.settings})
+            extraConfigLua = let
+              finalSettings = processSettings cfg.settings;
+            in ''
+              require('${luaName}').setup(${toLuaObject finalSettings})
             '';
           }
           (extraConfig cfg)
