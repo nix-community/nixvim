@@ -57,4 +57,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       bright_purple = "#fb4934";
     };
   };
+
+  extraConfig = cfg: {
+    colorscheme = "gruvbox";
+  };
 }
