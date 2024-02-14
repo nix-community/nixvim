@@ -7,8 +7,10 @@
     plugins.julia-cell = {
       enable = true;
 
-      delimitCellsBy = "marks";
-      tag = "##";
+      settings = {
+        delimit_cells_by = "marks";
+        tag = "##";
+      };
 
       keymaps = {
         silent = true;

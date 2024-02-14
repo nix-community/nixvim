@@ -1,12 +1,10 @@
 {
   lib,
   helpers,
-  pkgs,
   config,
+  pkgs,
   ...
 }: let
-  cfg = config.plugins.julia-cell;
-
   # The keys are the option name in nixvim (under plugins.julia-cell.keymaps)
   # cmd: Such that the mapping action is ':JuliaCell${cmd}<CR>'
   # desc: The description of the option.
@@ -37,78 +35,66 @@
     };
   };
 in
-  with lib; {
-    options.plugins.julia-cell = {
-      enable = mkEnableOption "julia-cell";
+  with lib;
+    helpers.vim-plugin.mkVimPlugin config {
+      name = "julia-cell";
+      originalName = "vim-julia-cell";
+      defaultPackage = pkgs.vimPlugins.vim-julia-cell;
+      globalPrefix = "julia_cell_";
 
-      package = helpers.mkPackageOption "julia-cell" pkgs.vimPlugins.vim-julia-cell;
+      maintainers = [maintainers.GaetanLepage];
 
-      delimitCellsBy = helpers.defaultNullOpts.mkEnumFirstDefault ["marks" "tags"] ''
-        Specifies if cells are delimited by 'marks' or 'tags'.
-      '';
+      # TODO introduced 2024-02-19: remove 2024-04-19
+      deprecateExtraConfig = true;
+      optionsRenamedToSettings = [
+        "delimitCellsBy"
+        "tag"
+      ];
 
-      tag = helpers.defaultNullOpts.mkStr "##" "Specifies the tag format.";
-
-      extraConfig = mkOption {
-        type = types.attrs;
-        default = {};
-        description = ''
-          The configuration options for julia-cell without the 'julia_cell_' prefix.
-          Example: To set 'julia_cell_foobar' to 1, write
-          extraConfig = {
-            foobar = true;
-          };
+      settingsOptions = {
+        delimit_cells_by = helpers.defaultNullOpts.mkEnumFirstDefault ["marks" "tags"] ''
+          Specifies if cells are delimited by 'marks' or 'tags'.
         '';
+
+        tag = helpers.defaultNullOpts.mkStr "##" "Specifies the tag format.";
       };
 
-      keymaps =
-        {
-          silent = mkOption {
-            type = types.bool;
-            description = "Whether julia-cell keymaps should be silent";
-            default = false;
-          };
-        }
-        // (
-          mapAttrs
+      extraOptions = {
+        keymaps =
+          {
+            silent = mkOption {
+              type = types.bool;
+              description = "Whether julia-cell keymaps should be silent";
+              default = false;
+            };
+          }
+          // (
+            mapAttrs
+            (
+              name: value:
+                helpers.mkNullOrOption types.str "Keymap for ${value.desc}."
+            )
+            mappings
+          );
+      };
+
+      extraConfig = cfg: {
+        keymaps = flatten (
+          mapAttrsToList
           (
-            name: value:
-              helpers.mkNullOrOption types.str "Keymap for ${value.desc}."
+            name: value: let
+              key = cfg.keymaps.${name};
+            in
+              optional
+              (key != null)
+              {
+                mode = "n";
+                inherit key;
+                action = ":JuliaCell${value.cmd}<CR>";
+                options.silent = cfg.keymaps.silent;
+              }
           )
           mappings
         );
-    };
-
-    config = mkIf cfg.enable {
-      extraPlugins = [cfg.package];
-
-      globals =
-        mapAttrs'
-        (name: nameValuePair ("julia_cell_" + name))
-        (
-          {
-            delimit_cells_by = cfg.delimitCellsBy;
-            inherit (cfg) tag;
-          }
-          // cfg.extraConfig
-        );
-
-      keymaps = flatten (
-        mapAttrsToList
-        (
-          name: value: let
-            key = cfg.keymaps.${name};
-          in
-            optional
-            (key != null)
-            {
-              mode = "n";
-              inherit key;
-              action = ":JuliaCell${value.cmd}<CR>";
-              options.silent = cfg.keymaps.silent;
-            }
-        )
-        mappings
-      );
-    };
-  }
+      };
+    }
