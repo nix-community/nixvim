@@ -166,6 +166,7 @@
     ./utils/quickmath.nix
     ./utils/refactoring.nix
     ./utils/rest.nix
+    ./utils/smart-splits.nix
     ./utils/specs.nix
     ./utils/spider.nix
     ./utils/startify.nix
