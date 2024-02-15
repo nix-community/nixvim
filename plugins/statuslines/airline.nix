@@ -10,7 +10,7 @@ with helpers.vim-plugin;
   mkVimPlugin config {
     name = "airline";
     originalName = "vim-airline";
-    package = pkgs.vimPlugins.vim-airline;
+    defaultPackage = pkgs.vimPlugins.vim-airline;
     globalPrefix = "airline_";
     addExtraConfigRenameWarning = true;
 

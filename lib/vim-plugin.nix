@@ -10,7 +10,7 @@ with lib; {
     imports ? [],
     # options
     originalName ? name,
-    package ? null,
+    defaultPackage ? null,
     options ? {},
     settingsOptions ? {},
     settingsExample ? null,
@@ -51,10 +51,10 @@ with lib; {
 
     # does this evaluate package?
     packageOption =
-      if package == null
+      if defaultPackage == null
       then {}
       else {
-        package = nixvimOptions.mkPackageOption name package;
+        package = nixvimOptions.mkPackageOption name defaultPackage;
       };
 
     createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
@@ -103,7 +103,7 @@ with lib; {
             inherit extraPackages;
             globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
             # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
-            extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
+            extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
           }
           (extraConfig cfg)
         ]

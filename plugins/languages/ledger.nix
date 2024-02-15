@@ -10,7 +10,7 @@ with helpers.vim-plugin;
   mkVimPlugin config {
     name = "ledger";
     originalName = "vim-ledger";
-    package = pkgs.vimPlugins.vim-ledger;
+    defaultPackage = pkgs.vimPlugins.vim-ledger;
     globalPrefix = "ledger_";
     addExtraConfigRenameWarning = true;
 
