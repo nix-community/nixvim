@@ -30,6 +30,12 @@
         inherit (self.lib.${system}.check) mkTestDerivationFromNixvimModule;
       };
 
+      no-flake = import ../tests/no-flake.nix {
+        inherit system;
+        inherit (self.lib.${system}.check) mkTestDerivationFromNvim;
+        nixvim = "${self}";
+      };
+
       lib-tests = import ../tests/lib-tests.nix {
         inherit pkgs helpers;
         inherit (pkgs) lib;
