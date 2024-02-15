@@ -99,6 +99,9 @@ with lib; let
       stylelint = {
         package = pkgs.stylelint;
       };
+      typos = {
+        package = pkgs.typos;
+      };
       vale = {
         package = pkgs.vale;
       };

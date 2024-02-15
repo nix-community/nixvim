@@ -73,6 +73,7 @@
           shellcheck.enable = true;
           statix.enable = true;
           staticcheck.enable = true;
+          typos.enable = true;
           vale.enable = true;
           vulture.enable = true;
           alex.enable = true;
