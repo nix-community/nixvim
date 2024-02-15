@@ -19,7 +19,7 @@ in {
         serverName:
           mkRemovedOptionModule
           ["plugins" "lsp" "servers" serverName "installLanguageServer"]
-          "If you want to not install the language server package, set `plugins.lsp.servers.${serverName}.package` to `false`."
+          "If you want to not install the language server package, set `plugins.lsp.servers.${serverName}.package` to `null`."
       )
       [
         "astro"
