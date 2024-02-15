@@ -9,7 +9,7 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "vim-slime";
-    package = pkgs.vimPlugins.vim-slime;
+    defaultPackage = pkgs.vimPlugins.vim-slime;
     globalPrefix = "slime_";
     addExtraConfigRenameWarning = true;
 

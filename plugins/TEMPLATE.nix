@@ -5,30 +5,16 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.my-plugin; # TODO replace
-in {
-  meta.maintainers = [maintainers.MyName]; # TODO replace with your name
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "my-plugin";
+  originalName = "my-plugin.nvim";
+  defaultPackage = pkgs.vimPlugins.my-plugin-nvim; # TODO replace
 
-  # TODO replace
-  options.plugins.my-plugin =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "my-plugin.nvim"; # TODO replace
-
-      package = helpers.mkPackageOption "my-plugin.nvim" pkgs.vimPlugins.my-plugin-nvim; # TODO replace
-    };
-
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-
-    extraConfigLua = let
-      setupOptions = with cfg;
-        {
-        }
-        // cfg.extraOptions;
-    in ''
-      require('my-plugin').setup(${helpers.toLuaObject setupOptions})
-    '';
+  # Optionnally provide an example for the `settings` option.
+  settingsExample = {
+    foo = 42;
+    bar.__raw = "function() print('hello') end";
   };
+
+  maintainers = [lib.maintainers.MyName]; # TODO replace with your name
 }

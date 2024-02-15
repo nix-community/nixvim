@@ -5,11 +5,12 @@ default_pkgs: {
 }: {
   pkgs ? default_pkgs,
   extraSpecialArgs ? {},
+  _nixvimTests ? false,
   module,
 }: let
   inherit (pkgs) lib;
 
-  helpers = getHelpers pkgs;
+  helpers = getHelpers pkgs _nixvimTests;
   shared = import ./_shared.nix {inherit modules helpers;} {
     inherit pkgs lib;
     config = {};

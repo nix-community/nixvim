@@ -1,11 +1,12 @@
 {
   makeNixvim,
+  makeNixvimWithModule,
   lib,
   helpers,
   pkgs,
 }: let
   fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ./test-derivation.nix {inherit pkgs makeNixvim;};
+  test-derivation = import ./test-derivation.nix {inherit pkgs makeNixvim makeNixvimWithModule;};
   inherit (test-derivation) mkTestDerivation;
 
   # List of files containing configurations

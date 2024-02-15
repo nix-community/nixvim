@@ -9,8 +9,8 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "airline";
-    description = "vim-airline";
-    package = pkgs.vimPlugins.vim-airline;
+    originalName = "vim-airline";
+    defaultPackage = pkgs.vimPlugins.vim-airline;
     globalPrefix = "airline_";
     addExtraConfigRenameWarning = true;
 

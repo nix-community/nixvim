@@ -9,7 +9,8 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "startify";
-    package = pkgs.vimPlugins.vim-startify;
+    originalName = "vim-startify";
+    defaultPackage = pkgs.vimPlugins.vim-startify;
     globalPrefix = "startify_";
     addExtraConfigRenameWarning = true;
 
