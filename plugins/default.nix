@@ -57,6 +57,7 @@
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
     ./languages/openscad.nix
+    ./languages/parinfer-rust.nix
     ./languages/plantuml-syntax.nix
     ./languages/rust-tools.nix
     ./languages/rustaceanvim.nix
