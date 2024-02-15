@@ -163,7 +163,7 @@ in {
       # General options.
       auto_update = cfg.autoUpdate;
       inherit (cfg) logo;
-      inherit (cfg) logo_tooltip;
+      logo_tooltip = cfg.logoTooltip;
       main_image = cfg.mainImage;
       client_id = cfg.clientId;
       log_level = cfg.logLevel;

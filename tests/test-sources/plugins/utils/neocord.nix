@@ -10,7 +10,7 @@
       # General options.
       autoUpdate = true;
       logo = "auto";
-      logo_tooltip = null;
+      logoTooltip = null;
 
       mainImage = "language";
       clientId = "1157438221865717891";
