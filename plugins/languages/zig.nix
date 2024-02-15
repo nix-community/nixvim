@@ -10,7 +10,7 @@ with helpers.vim-plugin;
   mkVimPlugin config {
     name = "zig";
     originalName = "zig.vim";
-    package = pkgs.vimPlugins.zig-vim;
+    defaultPackage = pkgs.vimPlugins.zig-vim;
     globalPrefix = "zig_";
     addExtraConfigRenameWarning = true;
 

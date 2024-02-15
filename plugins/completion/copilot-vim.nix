@@ -10,7 +10,7 @@ with helpers.vim-plugin;
   helpers.vim-plugin.mkVimPlugin config {
     name = "copilot-vim";
     originalName = "copilot.vim";
-    package = pkgs.vimPlugins.copilot-vim;
+    defaultPackage = pkgs.vimPlugins.copilot-vim;
     globalPrefix = "copilot_";
     addExtraConfigRenameWarning = true;
 

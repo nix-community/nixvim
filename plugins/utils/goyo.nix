@@ -10,7 +10,7 @@ with lib;
   mkVimPlugin config {
     name = "goyo";
     originalName = "goyo.vim";
-    package = pkgs.vimPlugins.goyo-vim;
+    defaultPackage = pkgs.vimPlugins.goyo-vim;
     globalPrefix = "goyo_";
     addExtraConfigRenameWarning = true;
 
