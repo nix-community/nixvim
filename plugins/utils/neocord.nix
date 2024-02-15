@@ -10,7 +10,7 @@ with lib; let
 in {
   options = {
     plugins.neocord = {
-      enable = mkEnableOption "neocord";
+      enable = mkEnableOption "Enable neocord";
       package = helpers.mkPackageOption "neocord" pkgs.vimPlugins.neocord;
 
       # General options.
@@ -159,34 +159,32 @@ in {
   };
 
   config = let
-    setupOptions =
-      {
-        # General options.
-        auto_update = cfg.autoUpdate;
-        inherit (cfg) logo;
-        inherit (cfg) logo_tooltip;
-        main_image = cfg.mainImage;
-        client_id = cfg.clientId;
-        log_level = cfg.logLevel;
-        debounce_timeout = cfg.debounceTimeout;
-        enable_line_number = cfg.enableLineNumber;
-        inherit (cfg) blacklist;
-        inherit (cfg) buttons;
-        file_assets = cfg.fileAssets;
-        show_time = cfg.showTime;
-        global_timer = cfg.globalTimer;
+    setupOptions = {
+      # General options.
+      auto_update = cfg.autoUpdate;
+      inherit (cfg) logo;
+      inherit (cfg) logo_tooltip;
+      main_image = cfg.mainImage;
+      client_id = cfg.clientId;
+      log_level = cfg.logLevel;
+      debounce_timeout = cfg.debounceTimeout;
+      enable_line_number = cfg.enableLineNumber;
+      inherit (cfg) blacklist;
+      inherit (cfg) buttons;
+      file_assets = cfg.fileAssets;
+      show_time = cfg.showTime;
+      global_timer = cfg.globalTimer;
 
-        # Rich presence text options.
-        editing_text = cfg.editingText;
-        file_explorer_text = cfg.fileExplorerText;
-        git_commit_text = cfg.gitCommitText;
-        plugin_manager_text = cfg.pluginManagerText;
-        reading_text = cfg.readingText;
-        workspace_text = cfg.workspaceText;
-        line_number_text = cfg.lineNumberText;
-        terminal_text = cfg.terminalText;
-      }
-      // cfg.extraOptions;
+      # Rich presence text options.
+      editing_text = cfg.editingText;
+      file_explorer_text = cfg.fileExplorerText;
+      git_commit_text = cfg.gitCommitText;
+      plugin_manager_text = cfg.pluginManagerText;
+      reading_text = cfg.readingText;
+      workspace_text = cfg.workspaceText;
+      line_number_text = cfg.lineNumberText;
+      terminal_text = cfg.terminalText;
+    };
   in
     mkIf cfg.enable {
       extraPlugins = [
