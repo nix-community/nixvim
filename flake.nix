@@ -17,6 +17,8 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
+
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
