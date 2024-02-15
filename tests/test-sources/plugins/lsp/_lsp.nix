@@ -158,6 +158,7 @@
           terraformls.enable = true;
           texlab.enable = true;
           tsserver.enable = true;
+          typos-lsp.enable = true;
           typst-lsp.enable = true;
           vala-ls.enable = true;
           vls.enable = true;
