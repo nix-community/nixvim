@@ -1,8 +1,13 @@
-{lib}:
+{
+  lib,
+  _nixvimTests,
+}:
 with lib; {
   listToUnkeyedAttrs = list:
     builtins.listToAttrs
     (lib.lists.imap0 (idx: lib.nameValuePair "__unkeyed-${toString idx}") list);
+
+  enableExceptInTests = !_nixvimTests;
 
   emptyTable = {"__empty" = null;};
 

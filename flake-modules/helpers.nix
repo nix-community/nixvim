@@ -1,7 +1,7 @@
 {getHelpers, ...}: {
-  _module.args.getHelpers = pkgs:
+  _module.args.getHelpers = pkgs: _nixvimTests:
     import ../lib/helpers.nix {
-      inherit pkgs;
+      inherit pkgs _nixvimTests;
       inherit (pkgs) lib;
     };
 
@@ -10,6 +10,6 @@
     config,
     ...
   }: {
-    _module.args.helpers = getHelpers pkgs;
+    _module.args.helpers = getHelpers pkgs false;
   };
 }
