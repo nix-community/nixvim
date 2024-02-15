@@ -9,7 +9,7 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "undotree";
-    package = pkgs.vimPlugins.undotree;
+    defaultPackage = pkgs.vimPlugins.undotree;
     globalPrefix = "undotree_";
     addExtraConfigRenameWarning = true;
 

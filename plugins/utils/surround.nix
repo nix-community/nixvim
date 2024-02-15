@@ -6,8 +6,6 @@
 }:
 helpers.vim-plugin.mkVimPlugin config {
   name = "surround";
-  description = "surround.vim";
-  package = pkgs.vimPlugins.surround;
-
-  options = {};
+  originalName = "surround.vim";
+  defaultPackage = pkgs.vimPlugins.surround;
 }

@@ -9,8 +9,8 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "instant";
-    description = "instant.nvim";
-    package = pkgs.vimPlugins.instant-nvim;
+    originalName = "instant.nvim";
+    defaultPackage = pkgs.vimPlugins.instant-nvim;
     globalPrefix = "instant_";
     addExtraConfigRenameWarning = true;
 

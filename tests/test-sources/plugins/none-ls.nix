@@ -73,6 +73,7 @@
           shellcheck.enable = true;
           statix.enable = true;
           staticcheck.enable = true;
+          typos.enable = true;
           vale.enable = true;
           vulture.enable = true;
           alex.enable = true;
@@ -105,6 +106,7 @@
           goimports.enable = true;
           goimports_reviser.enable = true;
           golines.enable = true;
+          google_java_format.enable = true;
           ktlint.enable = true;
           nixfmt.enable = true;
           nixpkgs_fmt.enable = true;

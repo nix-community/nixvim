@@ -5,20 +5,24 @@
 with lib; {
   mkVimPlugin = config: {
     name,
+    namespace ? "plugins",
+    maintainers ? [],
+    imports ? [],
     # options
-    description ? null,
-    package ? null,
+    originalName ? name,
+    defaultPackage ? null,
     options ? {},
     settingsOptions ? {},
     settingsExample ? null,
     globalPrefix ? "",
     addExtraConfigRenameWarning ? false,
+    extraOptions ? {},
     # config
+    extraConfig ? cfg: {},
     extraPlugins ? [],
     extraPackages ? [],
-    ...
   }: let
-    cfg = config.plugins.${name};
+    cfg = config.${namespace}.${name};
 
     # TODO support nested options!
     pluginOptions =
@@ -47,10 +51,10 @@ with lib; {
 
     # does this evaluate package?
     packageOption =
-      if package == null
+      if defaultPackage == null
       then {}
       else {
-        package = nixvimOptions.mkPackageOption name package;
+        package = nixvimOptions.mkPackageOption name defaultPackage;
       };
 
     createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
@@ -73,30 +77,37 @@ with lib; {
         };
       };
   in {
-    options.plugins.${name} =
+    meta.maintainers = maintainers;
+    options.${namespace}.${name} =
       {
-        enable = mkEnableOption (
-          if description == null
-          then name
-          else description
-        );
+        enable = mkEnableOption originalName;
       }
       // settingsOption
       // packageOption
-      // pluginOptions;
+      // pluginOptions
+      // extraOptions;
 
-    imports = optional (addExtraConfigRenameWarning && createSettingsOption) (
-      mkRenamedOptionModule
-      ["plugins" name "extraConfig"]
-      ["plugins" name "settings"]
-    );
+    imports =
+      imports
+      ++ optional (addExtraConfigRenameWarning && createSettingsOption) (
+        mkRenamedOptionModule
+        ["plugins" name "extraConfig"]
+        ["plugins" name "settings"]
+      );
 
-    config = mkIf cfg.enable {
-      inherit extraPackages;
-      globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
-      # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
-      extraPlugins = extraPlugins ++ optional (package != null) cfg.package;
-    };
+    config =
+      mkIf cfg.enable
+      (
+        mkMerge [
+          {
+            inherit extraPackages;
+            globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
+            # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
+            extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
+          }
+          (extraConfig cfg)
+        ]
+      );
   };
 
   mkDefaultOpt = {

@@ -9,8 +9,8 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "molten";
-    description = "molten-nvim";
-    package = pkgs.vimPlugins.molten-nvim;
+    originalName = "molten-nvim";
+    defaultPackage = pkgs.vimPlugins.molten-nvim;
     globalPrefix = "molten_";
     addExtraConfigRenameWarning = true;
 

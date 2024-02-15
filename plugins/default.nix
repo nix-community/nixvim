@@ -34,6 +34,7 @@
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
 
+    ./git/committia.nix
     ./git/diffview.nix
     ./git/fugitive.nix
     ./git/git-worktree.nix
@@ -122,6 +123,7 @@
     ./utils/endwise.nix
     ./utils/flash.nix
     ./utils/floaterm.nix
+    ./utils/fzf-lua.nix
     ./utils/goyo.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix

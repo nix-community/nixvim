@@ -9,8 +9,8 @@ with lib;
 with helpers.vim-plugin;
   mkVimPlugin config {
     name = "ledger";
-    description = "ledger language features";
-    package = pkgs.vimPlugins.vim-ledger;
+    originalName = "vim-ledger";
+    defaultPackage = pkgs.vimPlugins.vim-ledger;
     globalPrefix = "ledger_";
     addExtraConfigRenameWarning = true;
 

@@ -40,7 +40,7 @@
         # Do not install the language server using nixvim
         gopls = {
           enable = true;
-          installLanguageServer = false;
+          package = null;
         };
         nil_ls.enable = true;
         rust-analyzer = {
@@ -130,11 +130,7 @@
             (pkgs.stdenv.hostPlatform.system != "aarch64-linux")
             # As of 2024-01-04, ols is broken on darwin
             # TODO: re-enable this test when fixed
-            && !pkgs.stdenv.isDarwin
-            # As of 2024-02-11, ols is broken on x86_64-linux
-            # TODO: re-enable this test when fixed
-            # See https://github.com/NixOS/nixpkgs/pull/287577
-            && (pkgs.stdenv.hostPlatform.system != "x86_64-linux");
+            && !pkgs.stdenv.isDarwin;
           omnisharp.enable = true;
           perlpls.enable = true;
           pest_ls.enable = true;
