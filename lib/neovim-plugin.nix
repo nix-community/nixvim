@@ -2,6 +2,7 @@
   lib,
   nixvimOptions,
   toLuaObject,
+  nixvimUtils,
 }:
 with lib; rec {
   mkSettingsOption = {
@@ -34,6 +35,9 @@ with lib; rec {
     namespace ? "plugins",
     maintainers,
     imports ? [],
+    # deprecations
+    deprecateExtraConfig ? false,
+    optionsRenamedToSettings ? [],
     # options
     originalName ? name,
     defaultPackage,
@@ -49,7 +53,29 @@ with lib; rec {
   }: {
     meta.maintainers = maintainers;
 
-    inherit imports;
+    imports = let
+      basePluginPath = [namespace name];
+    in
+      imports
+      ++ (
+        optional
+        deprecateExtraConfig
+        (
+          mkRenamedOptionModule
+          (basePluginPath ++ ["extraConfig"])
+          (basePluginPath ++ ["settings"])
+        )
+      )
+      ++ (
+        map
+        (
+          optionName:
+            mkRenamedOptionModule
+            (basePluginPath ++ [optionName])
+            (basePluginPath ++ ["settings" (nixvimUtils.toSnakeCase optionName)])
+        )
+        optionsRenamedToSettings
+      );
 
     options.${namespace}.${name} =
       {
