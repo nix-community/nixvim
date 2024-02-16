@@ -566,7 +566,6 @@ with lib; let
     {
       name = "statix";
       description = "Lints and suggestions for the Nix programming language.";
-      package = pkgs.statix;
     }
     {
       name = "svelte";
