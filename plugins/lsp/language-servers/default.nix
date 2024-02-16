@@ -564,6 +564,10 @@ with lib; let
       package = pkgs.sourcekit-lsp;
     }
     {
+      name = "statix";
+      description = "statix for Nix";
+    }
+    {
       name = "svelte";
       description = "svelte language server for Svelte";
       package = pkgs.nodePackages.svelte-language-server;

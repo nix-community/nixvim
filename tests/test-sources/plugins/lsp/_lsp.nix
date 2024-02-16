@@ -151,6 +151,7 @@
           # As of 2023-12-13, sourcekit-lsp is broken
           # TODO: re-enable this test when fixed
           sourcekit.enable = false;
+          statix.enable = true;
           svelte.enable = true;
           tailwindcss.enable = true;
           taplo.enable = true;
