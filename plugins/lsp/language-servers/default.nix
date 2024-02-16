@@ -565,7 +565,7 @@ with lib; let
     }
     {
       name = "statix";
-      description = "Lints and suggestions for the Nix programming language.";
+      description = "statix for Nix";
     }
     {
       name = "svelte";
