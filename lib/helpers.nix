@@ -13,7 +13,7 @@ in
     maintainers = import ./maintainers.nix;
     keymaps = import ./keymap-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
     autocmd = import ./autocmd-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
-    neovim-plugin = import ./neovim-plugin.nix {inherit lib nixvimOptions toLuaObject;};
+    neovim-plugin = import ./neovim-plugin.nix {inherit lib nixvimOptions nixvimUtils toLuaObject;};
     vim-plugin = import ./vim-plugin.nix {inherit lib nixvimOptions;};
     inherit nixvimTypes;
     inherit toLuaObject;
