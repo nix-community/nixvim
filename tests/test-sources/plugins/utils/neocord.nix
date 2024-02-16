@@ -47,7 +47,7 @@
         #General options
         auto_update = true;
         logo = "auto";
-        logo_tooltip = null;
+        logo_tooltip = "Nixvim";
         main_image = "language";
         client_id = "1157438221865717891";
         log_level = null;
