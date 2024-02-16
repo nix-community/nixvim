@@ -45,6 +45,7 @@ with lib; rec {
     extraConfig ? cfg: {},
     extraPlugins ? [],
     extraPackages ? [],
+    callSetup ? true,
   }: {
     meta.maintainers = maintainers;
 
@@ -73,7 +74,7 @@ with lib; rec {
             extraPlugins = [cfg.package] ++ extraPlugins;
             inherit extraPackages;
 
-            extraConfigLua = ''
+            extraConfigLua = optionalString callSetup ''
               require('${luaName}').setup(${toLuaObject cfg.settings})
             '';
           }
