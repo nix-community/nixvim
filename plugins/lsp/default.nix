@@ -83,7 +83,6 @@ in {
         "rust-analyzer"
         "solargraph"
         "sourcekit"
-        "statix"
         "svelte"
         "tailwindcss"
         "taplo"
