@@ -169,7 +169,7 @@ in {
           load_on_setup = loadOnSetup;
           theme_conf = themeConf;
           inherit previewer;
-          sessionControl = with sessionControl; {
+          session_control = with sessionControl; {
             control_dir = controlDir;
             control_filename = controlFilename;
           };
