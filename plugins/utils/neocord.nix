@@ -20,11 +20,11 @@ with lib;
         `:lua package.loaded.neocord:update()`
       '';
 
-      logo = helpers.defaultNullOpts.mkEnum ["auto" "url"] "auto" ''
+      logo = helpers.defaultNullOpts.mkStr "auto" ''
         Update the Logo to the specified option ("auto" or url).
       '';
 
-      logo_tooltip = helpers.defaultNullOpts.mkEnum ["null" "string"] "null" ''
+      logo_tooltip = helpers.mkNullOrStr ''
         Sets the logo tooltip
       '';
 
