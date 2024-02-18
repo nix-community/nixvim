@@ -159,7 +159,7 @@
     ./utils/nvim-colorizer.nix
     ./utils/nvim-osc52.nix
     ./utils/nvim-ufo.nix
-    ./utils/obsidian.nix
+    ./utils/obsidian
     ./utils/oil.nix
     ./utils/ollama.nix
     ./utils/persistence.nix
