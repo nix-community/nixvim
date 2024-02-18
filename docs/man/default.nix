@@ -5,7 +5,7 @@
   nixos-render-docs,
   pandoc,
 }: let
-  capitalizeHeaders = ''
+  manualFilter = ''
     local text = pandoc.text
 
     function Header(el)
@@ -17,17 +17,24 @@
           }
         end
     end
+
+    function Link(el)
+      return el.content
+    end
   '';
 
-  manHeader =
+  manHeader = let
+    mkMDSection = file: "<(pandoc --lua-filter <(echo \"$manualFilter\") -f gfm -t man ${file})";
+  in
     runCommand "nixvim-general-doc-manpage" {
       nativeBuildInputs = [pandoc];
-      inherit capitalizeHeaders;
+      inherit manualFilter;
     } ''
       mkdir -p $out
       cat \
         ${./nixvim-header-start.5} \
-        <(pandoc --lua-filter <(echo "$capitalizeHeaders") -f gfm -t man ${../helpers.md}) \
+        ${mkMDSection ../user-guide/helpers.md} \
+        ${mkMDSection ../user-guide/faq.md} \
         ${./nixvim-header-end.5} \
         >$out/nixvim-header.5
     '';
