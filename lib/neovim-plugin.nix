@@ -36,7 +36,7 @@ with lib; rec {
     maintainers,
     imports ? [],
     # deprecations
-    deprecateExtraConfig ? false,
+    deprecateExtraOptions ? false,
     optionsRenamedToSettings ? [],
     # options
     originalName ? name,
@@ -59,10 +59,10 @@ with lib; rec {
       imports
       ++ (
         optional
-        deprecateExtraConfig
+        deprecateExtraOptions
         (
           mkRenamedOptionModule
-          (basePluginPath ++ ["extraConfig"])
+          (basePluginPath ++ ["extraOptions"])
           (basePluginPath ++ ["settings"])
         )
       )
