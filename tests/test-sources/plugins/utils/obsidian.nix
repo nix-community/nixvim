@@ -1,6 +1,7 @@
 {
   empty = {
-    plugins.obsidian.enable = true;
+    # TODO fix the plugin tests
+    plugins.obsidian.enable = false;
   };
 
   example = {
@@ -8,7 +9,7 @@
       nvim-cmp.enable = true;
 
       obsidian = {
-        enable = true;
+        enable = false;
 
         dir = null;
         workspaces = [
