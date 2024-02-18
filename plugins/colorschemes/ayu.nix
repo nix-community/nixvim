@@ -15,7 +15,7 @@ with lib;
 
     maintainers = [maintainers.GaetanLepage];
 
-    deprecateExtraConfig = true;
+    deprecateExtraOptions = true;
     optionsRenamedToSettings = [
       "mirage"
       "overrides"
