@@ -14,7 +14,7 @@ in
     keymaps = import ./keymap-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
     autocmd = import ./autocmd-helpers.nix {inherit lib nixvimOptions nixvimTypes;};
     neovim-plugin = import ./neovim-plugin.nix {inherit lib nixvimOptions nixvimUtils toLuaObject;};
-    vim-plugin = import ./vim-plugin.nix {inherit lib nixvimOptions;};
+    vim-plugin = import ./vim-plugin.nix {inherit lib nixvimOptions nixvimUtils;};
     inherit nixvimTypes;
     inherit toLuaObject;
   }
