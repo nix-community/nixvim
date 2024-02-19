@@ -12,6 +12,9 @@ assignees: ''
 | Nixpkgs      | `<VERSION>` | <!-- [REQUIRED] `unstable` or specific version -->
 | Home Manager | `<VERSION>` | <!-- [OPTIONAL] `unstable` or specific version -->
 
+<!-- IMPORTANT -->
+- [ ] I have read the [FAQ](https://nix-community.github.io/nixvim/user-guide/faq.html) and my bug is not listed there.
+
 ## Description
 
 <!-- See https://stackoverflow.com/questions/29416909 -->
