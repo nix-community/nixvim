@@ -12,7 +12,7 @@ with helpers.vim-plugin;
     originalName = "copilot.vim";
     defaultPackage = pkgs.vimPlugins.copilot-vim;
     globalPrefix = "copilot_";
-    addExtraConfigRenameWarning = true;
+    deprecateExtraConfig = true;
 
     options = {
       nodeCommand = mkDefaultOpt {

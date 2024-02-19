@@ -12,7 +12,7 @@ with helpers.vim-plugin;
     originalName = "vim-ledger";
     defaultPackage = pkgs.vimPlugins.vim-ledger;
     globalPrefix = "ledger_";
-    addExtraConfigRenameWarning = true;
+    deprecateExtraConfig = true;
 
     options = {
       maxWidth = mkDefaultOpt {

@@ -12,7 +12,7 @@ with helpers.vim-plugin;
     originalName = "emmet-vim";
     defaultPackage = pkgs.vimPlugins.emmet-vim;
     globalPrefix = "user_emmet_";
-    addExtraConfigRenameWarning = true;
+    deprecateExtraConfig = true;
 
     options = {
       mode = mkDefaultOpt {

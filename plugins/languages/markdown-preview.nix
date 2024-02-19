@@ -12,7 +12,7 @@ with helpers.vim-plugin;
     originalName = "markdown-preview.nvim";
     defaultPackage = pkgs.vimPlugins.markdown-preview-nvim;
     globalPrefix = "mkdp_";
-    addExtraConfigRenameWarning = true;
+    deprecateExtraConfig = true;
 
     options = {
       autoStart = mkDefaultOpt {
