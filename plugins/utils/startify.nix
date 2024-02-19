@@ -12,7 +12,7 @@ with helpers.vim-plugin;
     originalName = "vim-startify";
     defaultPackage = pkgs.vimPlugins.vim-startify;
     globalPrefix = "startify_";
-    addExtraConfigRenameWarning = true;
+    deprecateExtraConfig = true;
 
     options = {
       sessionDir = mkDefaultOpt {

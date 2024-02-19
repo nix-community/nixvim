@@ -8,6 +8,8 @@ with lib; {
     namespace ? "plugins",
     maintainers ? [],
     imports ? [],
+    # deprecations
+    deprecateExtraConfig ? false,
     # options
     originalName ? name,
     defaultPackage ? null,
@@ -15,7 +17,6 @@ with lib; {
     settingsOptions ? {},
     settingsExample ? null,
     globalPrefix ? "",
-    addExtraConfigRenameWarning ? false,
     extraOptions ? {},
     # config
     extraConfig ? cfg: {},
@@ -89,7 +90,7 @@ with lib; {
 
     imports =
       imports
-      ++ optional (addExtraConfigRenameWarning && createSettingsOption) (
+      ++ optional (deprecateExtraConfig && createSettingsOption) (
         mkRenamedOptionModule
         ["plugins" name "extraConfig"]
         ["plugins" name "settings"]

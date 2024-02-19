@@ -12,7 +12,7 @@ with helpers.vim-plugin;
     originalName = "molten-nvim";
     defaultPackage = pkgs.vimPlugins.molten-nvim;
     globalPrefix = "molten_";
-    addExtraConfigRenameWarning = true;
+    deprecateExtraConfig = true;
 
     options = {
       autoOpenOutput = mkDefaultOpt {
