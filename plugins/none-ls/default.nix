@@ -232,7 +232,10 @@ in {
       }
     ];
 
-    extraPlugins = [cfg.package];
+    extraPlugins = with pkgs.vimPlugins; [
+      cfg.package
+      plenary-nvim
+    ];
 
     extraConfigLua = let
       onAttach' =
