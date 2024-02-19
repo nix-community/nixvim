@@ -98,7 +98,7 @@
           cbfmt.enable = !pkgs.stdenv.isDarwin;
           eslint.enable = true;
           eslint_d.enable = true;
-          fantomas.enable = pkgs.stdenv.isLinux;
+          fantomas.enable = true;
           fnlfmt.enable = true;
           fourmolu.enable = true;
           gofmt.enable = true;
