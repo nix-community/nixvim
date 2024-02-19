@@ -1,6 +1,7 @@
 {
   lib,
   nixvimOptions,
+  nixvimUtils,
 }:
 with lib; {
   mkVimPlugin = config: {
@@ -10,6 +11,7 @@ with lib; {
     imports ? [],
     # deprecations
     deprecateExtraConfig ? false,
+    optionsRenamedToSettings ? [],
     # options
     originalName ? name,
     defaultPackage ? null,
@@ -88,12 +90,36 @@ with lib; {
       // pluginOptions
       // extraOptions;
 
-    imports =
+    imports = let
+      basePluginPath = [namespace name];
+      settingsPath = basePluginPath ++ ["settings"];
+    in
       imports
-      ++ optional (deprecateExtraConfig && createSettingsOption) (
-        mkRenamedOptionModule
-        ["plugins" name "extraConfig"]
-        ["plugins" name "settings"]
+      ++ (
+        optional
+        (deprecateExtraConfig && createSettingsOption)
+        (
+          mkRenamedOptionModule
+          (basePluginPath ++ ["extraConfig"])
+          settingsPath
+        )
+      )
+      ++ (
+        map
+        (
+          option: let
+            optionPath =
+              if isString option
+              then [option]
+              else option; # option is already a path (i.e. a list)
+
+            optionPathSnakeCase = map nixvimUtils.toSnakeCase optionPath;
+          in
+            mkRenamedOptionModule
+            (basePluginPath ++ optionPath)
+            (settingsPath ++ optionPathSnakeCase)
+        )
+        optionsRenamedToSettings
       );
 
     config =
