@@ -62,6 +62,7 @@ with lib; rec {
 
     imports = let
       basePluginPath = [namespace name];
+      settingsPath = basePluginPath ++ ["settings"];
     in
       imports
       ++ (
@@ -70,16 +71,23 @@ with lib; rec {
         (
           mkRenamedOptionModule
           (basePluginPath ++ ["extraOptions"])
-          (basePluginPath ++ ["settings"])
+          settingsPath
         )
       )
       ++ (
         map
         (
-          optionName:
+          option: let
+            optionPath =
+              if isString option
+              then [option]
+              else option; # option is already a path (i.e. a list)
+
+            optionPathSnakeCase = map nixvimUtils.toSnakeCase optionPath;
+          in
             mkRenamedOptionModule
-            (basePluginPath ++ [optionName])
-            (basePluginPath ++ ["settings" (nixvimUtils.toSnakeCase optionName)])
+            (basePluginPath ++ optionPath)
+            (settingsPath ++ optionPathSnakeCase)
         )
         optionsRenamedToSettings
       );
