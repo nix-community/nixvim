@@ -5,7 +5,35 @@
   pkgs,
   ...
 }:
-with lib;
+with lib; let
+  keymapsDefinitions = {
+    clear = {
+      default = "<C-]>";
+      description = "Keymap for clearing current suggestion.";
+      command = "codeium#Clear()";
+    };
+    next = {
+      default = "<M-]>";
+      description = "Keymap for cycling to the next suggestion.";
+      command = "codeium#CycleCompletions(1)";
+    };
+    prev = {
+      default = "<M-[>";
+      description = "Keymap for cycling to the previous suggestion.";
+      command = "codeium#CycleCompletions(-1)";
+    };
+    accept = {
+      default = "<Tab>";
+      description = "Keymap for inserting the proposed suggestion.";
+      command = "codeium#Accept()";
+    };
+    complete = {
+      default = "<M-Bslash>";
+      description = "Keymap for manually triggering the suggestion.";
+      command = "codeium#Complete()";
+    };
+  };
+in
   helpers.vim-plugin.mkVimPlugin config {
     name = "codeium-vim";
     originalName = "codeium.vim";
@@ -78,80 +106,46 @@ with lib;
     };
 
     extraOptions = {
-      keymaps = {
-        clear = helpers.defaultNullOpts.mkStr "<C-]>" ''
-          Keymap for clearing current suggestion.
-          Command: `codeium#Clear()`
-        '';
-
-        next = helpers.defaultNullOpts.mkStr "<M-]>" ''
-          Keymap for cycling to the next suggestion.
-          Command: `codeium#CycleCompletions(1)`
-        '';
-
-        prev = helpers.defaultNullOpts.mkStr "<M-[>" ''
-          Keymap for cycling to the previous suggestion.
-          Command: `codeium#CycleCompletions(-1)`
-        '';
-
-        accept = helpers.defaultNullOpts.mkStr "<Tab>" ''
-          Keymap for inserting the proposed suggestion.
-          Command: `codeium#Accept()`
-        '';
-
-        complete = helpers.defaultNullOpts.mkStr "<M-Bslash>" ''
-          Keymap for manually triggering the suggestion.
-          Command: `codeium#Complete()`
-        '';
-      };
+      keymaps =
+        mapAttrs
+        (
+          optionName: v:
+            helpers.defaultNullOpts.mkStr v.default ''
+              ${v.description}
+              Command: `${v.command}`
+            ''
+        )
+        keymapsDefinitions;
     };
 
     extraConfig = cfg: {
       plugins.codeium-vim.settings.enabled = true;
 
-      keymaps = with cfg.keymaps;
-        helpers.keymaps.mkKeymaps
-        {
+      keymaps = let
+        processKeymap = optionName: v:
+          optional
+          (v != null)
+          {
+            key = v;
+            action = let
+              inherit (keymapsDefinitions.${optionName}) command;
+            in "<Cmd>${command}<CR>";
+          };
+
+        keymapsList = flatten (
+          mapAttrsToList processKeymap cfg.keymaps
+        );
+
+        defaults = {
           mode = "i";
           options = {
             silent = true;
             expr = true;
           };
-        }
-        (
-          flatten
-          [
-            (optional
-              (clear != null)
-              {
-                key = clear;
-                action = "<Cmd>call codeium#Clear()<CR>";
-              })
-            (optional
-              (next != null)
-              {
-                key = next;
-                action = "codeium#CycleCompletions(1)";
-              })
-            (optional
-              (prev != null)
-              {
-                key = prev;
-                action = "codeium#CycleCompletions(-1)";
-              })
-            (optional
-              (accept != null)
-              {
-                key = accept;
-                action = "codeium#Accept()";
-              })
-            (optional
-              (complete != null)
-              {
-                key = complete;
-                action = "codeium#Complete()";
-              })
-          ]
-        );
+        };
+      in
+        helpers.keymaps.mkKeymaps
+        defaults
+        keymapsList;
     };
   }
