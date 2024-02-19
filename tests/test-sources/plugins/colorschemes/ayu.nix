@@ -7,8 +7,10 @@
     colorschemes.ayu = {
       enable = true;
 
-      mirage = false;
-      overrides = {};
+      settings = {
+        mirage = false;
+        overrides = {};
+      };
     };
   };
 }
