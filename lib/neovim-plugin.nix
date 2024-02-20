@@ -34,6 +34,7 @@ with lib; rec {
     name,
     namespace ? "plugins",
     maintainers,
+    url ? defaultPackage.meta.homepage,
     imports ? [],
     # deprecations
     deprecateExtraOptions ? false,
@@ -51,7 +52,13 @@ with lib; rec {
     extraPackages ? [],
     callSetup ? true,
   }: {
-    meta.maintainers = maintainers;
+    meta = {
+      inherit maintainers;
+      nixvimInfo = {
+        inherit name url;
+        kind = namespace;
+      };
+    };
 
     imports = let
       basePluginPath = [namespace name];

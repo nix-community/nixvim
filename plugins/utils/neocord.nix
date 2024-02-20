@@ -10,7 +10,7 @@ with lib;
     name = "neocord";
     defaultPackage = pkgs.vimPlugins.neocord;
 
-    maintainers = [maintainers.redyf];
+    maintainers = [];
 
     settingsOptions = {
       # General options.

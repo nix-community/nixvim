@@ -1,5 +1,4 @@
 {
-  lib,
   config,
   helpers,
   pkgs,
@@ -12,7 +11,7 @@ helpers.vim-plugin.mkVimPlugin config {
   globalPrefix = "committia_";
   extraPackages = [pkgs.git];
 
-  maintainers = [lib.maintainers.alisonjenkins];
+  maintainers = [helpers.maintainers.alisonjenkins];
 
   settingsOptions = {
     open_only_vim_starting = helpers.defaultNullOpts.mkBool true ''

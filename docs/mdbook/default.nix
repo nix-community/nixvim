@@ -12,6 +12,8 @@ with lib; let
     specialArgs = {inherit pkgs lib helpers;};
   };
 
+  inherit (options.config.meta) nixvimInfo;
+
   mkMDDoc = options:
     (nixosOptionsDoc {
       inherit options transformOptions;
@@ -59,6 +61,17 @@ with lib; let
         then opts
         else filterAttrs (_: component: component.isOption && (isVisible component)) opts;
       path = removeWhitespace (concatStringsSep "/" path);
+      moduleDoc =
+        if builtins.length path >= 2 && lib.hasAttrByPath path nixvimInfo
+        then let
+          info = lib.getAttrFromPath path nixvimInfo;
+          maintainers = options.config.meta.maintainers."${info.file}" or null;
+        in
+          "# ${lib.last path}\n\n"
+          + (lib.optionalString (maintainers != null && builtins.length maintainers > 0)
+            "Maintainers: ${lib.concatStringsSep ", " (builtins.map (m: m.name) maintainers)}\n\n")
+          + (lib.optionalString (info.url != null) "Url: [${info.url}](${info.url})\n\n")
+        else null;
     };
 
     components =
@@ -114,6 +127,7 @@ with lib; let
             index = {
               options = {};
               path = removeWhitespace "${group}";
+              moduleDoc = null;
             };
             components = {};
             isGroup = true;
@@ -183,7 +197,18 @@ with lib; let
         in
           (optionalString isBranch
             "mkdir -p ${opts.index.path}\n")
-          + "cp ${mkMDDoc opts.index.options} ${path}"
+          + (
+            if opts.index.moduleDoc == null
+            then "cp ${mkMDDoc opts.index.options} ${path}"
+            else ''
+              {
+              cat <<EOF
+              ${opts.index.moduleDoc}
+              EOF
+              cat ${mkMDDoc opts.index.options}
+              } > ${path}
+            ''
+          )
       )
       modules;
   };

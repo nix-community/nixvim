@@ -7,6 +7,10 @@ with lib; {
   mkVimPlugin = config: {
     name,
     namespace ? "plugins",
+    url ?
+      if defaultPackage != null
+      then defaultPackage.meta.homepage
+      else null,
     maintainers ? [],
     imports ? [],
     # deprecations
@@ -80,7 +84,13 @@ with lib; {
         };
       };
   in {
-    meta.maintainers = maintainers;
+    meta = {
+      inherit maintainers;
+      nixvimInfo = {
+        inherit name url;
+        kind = namespace;
+      };
+    };
     options.${namespace}.${name} =
       {
         enable = mkEnableOption originalName;
