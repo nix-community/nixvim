@@ -13,8 +13,8 @@ with lib; {
   };
 
   config = mkIf (config.colorscheme != "" && config.colorscheme != null) {
-    extraConfigVim = ''
-      colorscheme ${config.colorscheme}
+    extraConfigLuaPost = ''
+      vim.cmd.colorscheme("${config.colorscheme}")
     '';
   };
 }
