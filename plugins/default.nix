@@ -130,6 +130,7 @@
     ./utils/harpoon.nix
     ./utils/illuminate.nix
     ./utils/indent-blankline.nix
+    ./utils/indent-o-matic.nix
     ./utils/instant.nix
     ./utils/intellitab.nix
     ./utils/lastplace.nix
