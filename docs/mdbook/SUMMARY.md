@@ -4,6 +4,7 @@
 
 - [Installation](./user-guide/install.md)
 - [Helpers](./user-guide/helpers.md)
+- [Extending a standalone configuration](./user-guide/extending-config.md)
 - [FAQ](./user-guide/faq.md)
 
 # Options
