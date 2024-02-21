@@ -14,7 +14,6 @@
         import ../lib {
           inherit pkgs lib;
           inherit (config.legacyPackages) makeNixvim makeNixvimWithModule;
-          _nixvimTests = false;
         }
     )
   );
