@@ -87,6 +87,9 @@ with lib; let
       revive = {
         pacakge = pkgs.revive;
       };
+      ruff = {
+        package = pkgs.ruff;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
       };
@@ -200,6 +203,12 @@ with lib; let
       };
       protolint = {
         package = pkgs.protolint;
+      };
+      ruff = {
+        package = pkgs.ruff;
+      };
+      ruff_format = {
+        package = pkgs.ruff;
       };
       rustfmt = {
         package = pkgs.rustfmt;

@@ -70,6 +70,7 @@
           ktlint.enable = true;
           ltrs.enable = true;
           markdownlint.enable = true;
+          ruff.enable = true;
           shellcheck.enable = true;
           statix.enable = true;
           staticcheck.enable = true;
@@ -122,6 +123,8 @@
           markdownlint.enable = true;
           pint.enable = true;
           protolint.enable = true;
+          ruff.enable = true;
+          ruff_format.enable = true;
           rustfmt.enable = true;
           sqlfluff.enable = true;
           trim_newlines.enable = true;
