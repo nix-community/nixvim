@@ -34,6 +34,7 @@
       cat \
         ${./nixvim-header-start.5} \
         ${mkMDSection ../user-guide/helpers.md} \
+        ${mkMDSection ../user-guide/extending-config.md} \
         ${mkMDSection ../user-guide/faq.md} \
         ${./nixvim-header-end.5} \
         >$out/nixvim-header.5

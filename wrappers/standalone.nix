@@ -16,19 +16,20 @@ default_pkgs: {
     config = {};
   };
 
-  eval = lib.evalModules {
-    modules =
-      [
-        module
-        {wrapRc = true;}
-      ]
-      ++ shared.topLevelModules;
-    specialArgs =
-      {
-        inherit helpers;
-      }
-      // extraSpecialArgs;
-  };
+  mkEval = mod:
+    lib.evalModules {
+      modules =
+        [
+          mod
+          {wrapRc = true;}
+        ]
+        ++ shared.topLevelModules;
+      specialArgs =
+        {
+          inherit helpers;
+        }
+        // extraSpecialArgs;
+    };
 
   handleAssertions = config: let
     failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
@@ -37,15 +38,21 @@ default_pkgs: {
     then throw "\nFailed assertions:\n${builtins.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
     else lib.showWarnings config.warnings config;
 
-  config = handleAssertions eval.config;
+  mkNvim = mod: let
+    config = handleAssertions (mkEval mod).config;
+  in
+    (pkgs.symlinkJoin {
+      name = "nixvim";
+      paths =
+        [
+          config.finalPackage
+          config.printInitPackage
+        ]
+        ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
+      meta.mainProgram = "nvim";
+    })
+    // {
+      nixvimExtend = extension: mkNvim {imports = [mod extension];};
+    };
 in
-  pkgs.symlinkJoin {
-    name = "nixvim";
-    paths =
-      [
-        config.finalPackage
-        config.printInitPackage
-      ]
-      ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
-    meta.mainProgram = "nvim";
-  }
+  mkNvim module
