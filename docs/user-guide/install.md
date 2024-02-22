@@ -57,6 +57,9 @@ The imports can be added as a `imports = [ <nixvim_import> ]` in a configuration
 You will then be able to enable nixvim through `programs.nixvim.enable = true`, and configure the
 options as `programs.nixvim.<path>.<to>.<option> = <value>`.
 
+When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for home-manager, NixOS, and nix-darwin respectively.
+This is useful is you use nixvim both as part of an environment and as standalone.
+
 ## Standalone usage
 
 When using nixvim as a standalone derivation you can use the following functions, located in `<nixvim>.legacyPackages.${system}`:

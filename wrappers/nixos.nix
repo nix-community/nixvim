@@ -23,7 +23,10 @@ in {
       default = {};
       type = types.submoduleWith {
         shorthandOnlyDefinesConfig = true;
-        specialArgs.helpers = helpers;
+        specialArgs = {
+          nixosConfig = config;
+          inherit helpers;
+        };
         modules =
           [
             {

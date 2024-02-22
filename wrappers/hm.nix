@@ -23,7 +23,10 @@ in {
       default = {};
       type = types.submoduleWith {
         shorthandOnlyDefinesConfig = true;
-        specialArgs.helpers = helpers;
+        specialArgs = {
+          hmConfig = config;
+          inherit helpers;
+        };
         modules =
           [
             {
