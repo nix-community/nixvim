@@ -120,6 +120,7 @@
     ./utils/coverage.nix
     ./utils/cursorline.nix
     ./utils/dashboard.nix
+    ./utils/direnv.nix
     ./utils/easyescape.nix
     ./utils/emmet.nix
     ./utils/endwise.nix
