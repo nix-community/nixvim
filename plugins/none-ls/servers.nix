@@ -93,6 +93,9 @@ with lib; let
       staticcheck = {
         pacakge = pkgs.go-tools;
       };
+      ruff = {
+        package = pkgs.ruff;
+      };
       statix = {
         package = pkgs.statix;
       };
@@ -200,6 +203,12 @@ with lib; let
       };
       protolint = {
         package = pkgs.protolint;
+      };
+      ruff = {
+        package = pkgs.ruff;
+      };
+      ruff_format = {
+        package = pkgs.ruff;
       };
       rustfmt = {
         package = pkgs.rustfmt;
