@@ -87,14 +87,14 @@ with lib; let
       revive = {
         pacakge = pkgs.revive;
       };
+      ruff = {
+        package = pkgs.ruff;
+      };
       shellcheck = {
         package = pkgs.shellcheck;
       };
       staticcheck = {
         pacakge = pkgs.go-tools;
-      };
-      ruff = {
-        package = pkgs.ruff;
       };
       statix = {
         package = pkgs.statix;

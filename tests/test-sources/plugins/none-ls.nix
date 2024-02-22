@@ -70,8 +70,8 @@
           ktlint.enable = true;
           ltrs.enable = true;
           markdownlint.enable = true;
-          shellcheck.enable = true;
           ruff.enable = true;
+          shellcheck.enable = true;
           statix.enable = true;
           staticcheck.enable = true;
           typos.enable = true;
