@@ -264,6 +264,17 @@ in {
         helpers.defaultNullOpts.mkBool true
         "Selecting a new/moved/renamed file or directory will prompt you to save changes first.";
 
+      cleanupDelayMs =
+        helpers.defaultNullOpts.mkInt 2000 ''
+          Oil will automatically delete hidden buffers after this delay.
+          You can set the delay to false to disable cleanup entirely.
+          Note that the cleanup process only starts when none of the oil buffers are currently displayed
+        '';
+
+      lspRenameAutosave =
+        helpers.defaultNullOpts.mkBool false
+        "Set to true to autosave buffers that are updated with LSP willRenameFiles. Set to \"unmodified\" to only save unmodified buffers";
+
       keymaps =
         helpers.defaultNullOpts.mkNullable
         types.attrs
