@@ -2,277 +2,190 @@
   pkgs,
   config,
   lib,
+  helpers,
   ...
 }:
 with lib; let
-  cmpHelpers = import ./helpers.nix;
-  serverData = {
-    code_actions = {
-      eslint = {
-        package = pkgs.nodePackages.eslint;
-      };
-      eslint_d = {
-        package = pkgs.nodePackages.eslint_d;
-      };
-      gitsigns = {};
-      ltrs = {
-        package = pkgs.languagetool-rust;
-      };
-      shellcheck = {
-        package = pkgs.shellcheck;
-      };
-      statix = {
-        package = pkgs.statix;
-      };
-    };
-    completion = {};
-    diagnostics = {
-      alex = {
-        package = pkgs.nodePackages.alex;
-      };
-      ansiblelint = {
-        package = pkgs.ansible-lint;
-      };
-      bandit = {
-        package = pkgs.python3Packages.bandit;
-      };
-      checkstyle = {
-        package = pkgs.checkstyle;
-      };
-      cppcheck = {
-        package = pkgs.cppcheck;
-      };
-      deadnix = {
-        package = pkgs.deadnix;
-      };
-      eslint = {
-        package = pkgs.nodePackages.eslint;
-      };
-      eslint_d = {
-        package = pkgs.nodePackages.eslint_d;
-      };
-      flake8 = {
-        package = pkgs.python3Packages.flake8;
-      };
-      gitlint = {
-        package = pkgs.gitlint;
-      };
-      golangci_lint = {
-        package = pkgs.golangci-lint;
-      };
-      hadolint = {
-        package = pkgs.hadolint;
-      };
-      ktlint = {
-        package = pkgs.ktlint;
-      };
-      luacheck = {
-        package = pkgs.luaPackages.luacheck;
-      };
-      ltrs = {
-        package = pkgs.languagetool-rust;
-      };
-      markdownlint = {
-        package = pkgs.nodePackages.markdownlint-cli;
-      };
-      mypy = {
-        package = pkgs.mypy;
-      };
-      protolint = {
-        package = pkgs.protolint;
-      };
-      pylint = {
-        package = pkgs.pylint;
-      };
-      revive = {
-        pacakge = pkgs.revive;
-      };
-      ruff = {
-        package = pkgs.ruff;
-      };
-      shellcheck = {
-        package = pkgs.shellcheck;
-      };
-      staticcheck = {
-        pacakge = pkgs.go-tools;
-      };
-      statix = {
-        package = pkgs.statix;
-      };
-      stylelint = {
-        package = pkgs.stylelint;
-      };
-      typos = {
-        package = pkgs.typos;
-      };
-      vale = {
-        package = pkgs.vale;
-      };
-      vulture = {
-        package = pkgs.python3Packages.vulture;
-      };
-      write_good = {
-        package = pkgs.write-good;
-      };
-      yamllint = {
-        package = pkgs.yamllint;
-      };
-    };
-    formatting = {
-      alejandra = {
-        package = pkgs.alejandra;
-      };
-      asmfmt = {
-        package = pkgs.asmfmt;
-      };
-      astyle = {
-        package = pkgs.astyle;
-      };
-      bean_format = {
-        package = pkgs.beancount;
-      };
-      beautysh = {
-        package = pkgs.beautysh;
-      };
-      black = {
-        package = pkgs.python3Packages.black;
-      };
-      cbfmt = {
-        package = pkgs.cbfmt;
-      };
-      eslint = {
-        package = pkgs.nodePackages.eslint;
-      };
-      eslint_d = {
-        package = pkgs.nodePackages.eslint_d;
-      };
-      fantomas = {
-        package = pkgs.fantomas;
-      };
-      fnlfmt = {
-        package = pkgs.fnlfmt;
-      };
-      fourmolu = {
-        package = pkgs.haskellPackages.fourmolu;
-      };
-      gofmt = {
-        package = pkgs.go;
-      };
-      gofumpt = {
-        package = pkgs.gofumpt;
-      };
-      goimports = {
-        package = pkgs.gotools;
-      };
-      goimports_reviser = {
-        package = pkgs.goimports-reviser;
-      };
-      golines = {
-        package = pkgs.golines;
-      };
-      google_java_format = {
-        package = pkgs.google-java-format;
-      };
-      isort = {
-        package = pkgs.isort;
-      };
-      jq = {
-        package = pkgs.jq;
-      };
-      ktlint = {
-        package = pkgs.ktlint;
-      };
-      markdownlint = {
-        package = pkgs.nodePackages.markdownlint-cli;
-      };
-      nixfmt = {
-        package = pkgs.nixfmt;
-      };
-      nixpkgs_fmt = {
-        package = pkgs.nixpkgs-fmt;
-      };
-      pint = {};
-      phpcbf = {
-        package = pkgs.phpPackages.php-codesniffer;
-      };
-      prettier = {
-        package = pkgs.nodePackages.prettier;
-      };
-      prettierd = {
-        package = pkgs.prettierd;
-      };
-      protolint = {
-        package = pkgs.protolint;
-      };
-      ruff = {
-        package = pkgs.ruff;
-      };
-      ruff_format = {
-        package = pkgs.ruff;
-      };
-      rustfmt = {
-        package = pkgs.rustfmt;
-      };
-      shfmt = {
-        package = pkgs.shfmt;
-      };
-      sqlfluff = {
-        package = pkgs.sqlfluff;
-      };
-      stylelint = {
-        package = pkgs.stylelint;
-      };
-      stylua = {
-        package = pkgs.stylua;
-      };
-      taplo = {
-        package = pkgs.taplo;
-      };
-      trim_newlines = {};
-      trim_whitespace = {};
-    };
+  noneLsBuiltins = builtins.fromJSON (
+    builtins.readFile "${pkgs.vimPlugins.none-ls-nvim.src}/doc/builtins.json"
+  );
+
+  # Can contain either:
+  #  - a package
+  #  - null if the source is not present in nixpkgs
+  #  - false if this source does not need a package
+  builtinPackages = {
+    inherit
+      (pkgs)
+      alejandra
+      asmfmt
+      astyle
+      beancount
+      beautysh
+      cbfmt
+      checkstyle
+      cppcheck
+      deadnix
+      fantomas
+      fnlfmt
+      gitlint
+      gofumpt
+      golines
+      hadolint
+      isort
+      jq
+      ktlint
+      mypy
+      nixfmt
+      prettierd
+      protolint
+      pylint
+      revive
+      ruff
+      rustfmt
+      shellcheck
+      shfmt
+      sqlfluff
+      statix
+      stylelint
+      stylua
+      taplo
+      typos
+      vale
+      yamlfmt
+      yamllint
+      ;
+    inherit
+      (pkgs.nodePackages)
+      alex
+      eslint
+      eslint_d
+      prettier
+      ;
+    inherit
+      (pkgs.python3.pkgs)
+      bandit
+      black
+      flake8
+      vulture
+      ;
+    inherit
+      (pkgs.luaPackages)
+      luacheck
+      ;
+    inherit
+      (pkgs.haskellPackages)
+      fourmolu
+      ;
+    inherit
+      (pkgs.phpPackages)
+      phpcbf
+      ;
+    ansiblelint = pkgs.ansible-lint;
+    bean_format = pkgs.beancount;
+    gitsigns = pkgs.git;
+    gofmt = pkgs.go;
+    goimports = pkgs.gotools;
+    goimports_reviser = pkgs.goimports-reviser;
+    golangci_lint = pkgs.golangci-lint;
+    google_java_format = pkgs.google-java-format;
+    ltrs = pkgs.languagetool-rust;
+    markdownlint = pkgs.nodePackages.markdownlint-cli;
+    nixpkgs_fmt = pkgs.nixpkgs-fmt;
+    ruff_format = pkgs.ruff;
+    staticcheck = pkgs.go-tools;
+    trim_newlines = pkgs.gawk;
+    trim_whitespace = pkgs.gawk;
+    write_good = pkgs.write-good;
+
+    # Sources not present in nixpkgs
+    pint = null;
   };
-  # Format the servers to be an array of attrs like the following example
-  # [{
-  #   name = "prettier";
-  #   sourceType = "formatting";
-  #   packages = [...];
-  # }]
-  serverDataFormatted =
-    mapAttrsToList
-    (
-      sourceType:
-        mapAttrsToList
-        (
-          name: attrs:
-            attrs
-            // {
-              inherit sourceType name;
-            }
-        )
-    )
-    serverData;
-  dataFlattened = flatten serverDataFormatted;
+
+  # Check if the package is set to `false` or not
+  hasBuiltinPackage = source:
+    if builtins.hasAttr source builtinPackages
+    then !(builtins.isBool builtinPackages.${source})
+    else true;
+
+  builtinPackage = source: builtinPackages.${source} or null;
 in {
-  imports =
-    (map cmpHelpers.mkServer dataFlattened)
-    ++ [
-      ./prettier.nix
-      # Introduced January 22 2024.
-      # TODO remove in early March 2024.
-      (
-        mkRemovedOptionModule
-        ["plugins" "none-ls" "sources" "formatting" "prettier_d_slim"]
-        "`prettier_d_slim` is no longer maintained for >3 years. Please migrate to `prettierd`"
-      )
-    ];
+  imports = [
+    ./prettier.nix
+  ];
+
+  options.plugins.none-ls.sources =
+    builtins.mapAttrs (
+      sourceType: sources:
+        builtins.mapAttrs
+        (source: _:
+          {
+            enable = mkEnableOption "the ${source} ${sourceType} source for none-ls";
+            withArgs = helpers.mkNullOrLua ''
+              Raw Lua code passed as an argument to the source's `with` method.
+            '';
+          }
+          // lib.optionalAttrs (hasBuiltinPackage source) {
+            package = let
+              pkg = builtinPackage source;
+            in
+              mkOption ({
+                  type = types.nullOr types.package;
+                  description =
+                    "Package to use for ${source} by none-ls. "
+                    + (
+                      lib.optionalString (pkg == null) ''
+                        Not handled in nixvim, either install externally and set to null or set the option with a derivation.
+                      ''
+                    );
+                }
+                // optionalAttrs (pkg != null) {
+                  default = pkg;
+                });
+          })
+        sources
+    )
+    noneLsBuiltins;
 
   config = let
     cfg = config.plugins.none-ls;
     gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
+
+    flattenedSources = lib.flatten (
+      lib.mapAttrsToList (
+        sourceType: sources: (lib.mapAttrsToList (sourceName: source:
+          source
+          // {
+            inherit sourceType sourceName;
+          })
+        sources)
+      )
+      cfg.sources
+    );
+
+    enabledSources = builtins.filter (source: source.enable) flattenedSources;
   in
     mkIf cfg.enable {
+      plugins.none-ls.sourcesItems =
+        builtins.map (
+          source: let
+            sourceItem = "${source.sourceType}.${source.sourceName}";
+            withArgs =
+              if source.withArgs == null
+              then sourceItem
+              else "${sourceItem}.with(${source.withArgs}})";
+          in
+            helpers.mkRaw ''
+              require("null-ls").builtins.${withArgs}
+            ''
+        )
+        enabledSources;
       plugins.gitsigns.enable = mkIf gitsignsEnabled true;
-      extraPackages = optional gitsignsEnabled pkgs.git;
+      extraPackages = builtins.filter (p: p != null) (
+        builtins.map (
+          source: source.package or null
+        )
+        enabledSources
+      );
     };
 }

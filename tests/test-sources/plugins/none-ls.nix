@@ -121,7 +121,10 @@
           isort.enable = true;
           jq.enable = true;
           markdownlint.enable = true;
-          pint.enable = true;
+          pint = {
+            enable = true;
+            package = null;
+          };
           protolint.enable = true;
           ruff.enable = true;
           ruff_format.enable = true;
