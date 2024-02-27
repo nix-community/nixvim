@@ -92,7 +92,6 @@ with lib; let
       ;
     inherit
       (phpPackages)
-      phpcbf
       phan
       phpcs
       phpstan
@@ -126,6 +125,7 @@ with lib; let
     mcs = mono;
     php_cs_fixer = phpPackages.php-cs-fixer;
     prettier_d = prettierd;
+    phpcbf = phpPackages.php-codesniffer;
     slither = slither-analyzer;
     staticcheck = go-tools;
     terraform_fmt = terraform;
