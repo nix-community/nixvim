@@ -50,6 +50,10 @@
             inherit pkgs lib helpers;
             config = {};
           };
+          nonels-sources-options = import ../plugins/none-ls/servers.nix {
+            inherit pkgs lib helpers;
+            config = {};
+          };
         };
         inherit namespace;
       })
