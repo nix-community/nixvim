@@ -264,6 +264,21 @@ in {
         helpers.defaultNullOpts.mkBool true
         "Selecting a new/moved/renamed file or directory will prompt you to save changes first.";
 
+      cleanupDelayMs =
+        helpers.defaultNullOpts.mkNullable
+        (types.either types.int (types.enum [false]))
+        "2000" ''
+          Oil will automatically delete hidden buffers after this delay.
+          You can set the delay to false to disable cleanup entirely.
+          Note that the cleanup process only starts when none of the oil buffers are currently displayed
+        '';
+
+      lspRenameAutosave =
+        helpers.defaultNullOpts.mkNullable
+        (types.either types.bool (types.enum ["unmodified"]))
+        "false"
+        "Set to true to autosave buffers that are updated with LSP willRenameFiles. Set to \"unmodified\" to only save unmodified buffers";
+
       keymaps =
         helpers.defaultNullOpts.mkNullable
         types.attrs
@@ -377,6 +392,8 @@ in {
         delete_to_trash = cfg.deleteToTrash;
         trash_command = cfg.trashCommand;
         prompt_save_on_select_new_entry = cfg.promptSaveOnSelectNewEntry;
+        lsp_rename_autosave = cfg.lspRenameAutosave;
+        cleanup_delay_ms = cfg.cleanupDelayMs;
         inherit (cfg) keymaps;
         use_default_keymaps = cfg.useDefaultKeymaps;
         view_options = with cfg.viewOptions; {

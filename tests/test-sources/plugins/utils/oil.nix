@@ -68,6 +68,8 @@
       deleteToTrash = false;
       trashCommand = "trash-put";
       promptSaveOnSelectNewEntry = true;
+      lspRenameAutosave = true;
+      cleanupDelayMs = 500;
       keymaps = {
         "g?" = "actions.show_help";
         "<CR>" = "actions.select";
