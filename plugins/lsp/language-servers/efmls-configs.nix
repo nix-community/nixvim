@@ -92,9 +92,7 @@ with lib; let
       ;
     inherit
       (phpPackages)
-      phpcbf
       phan
-      phpcs
       phpstan
       psalm
       ;
@@ -124,7 +122,9 @@ with lib; let
     lua_format = luaformatter;
     markdownlint = markdownlint-cli;
     mcs = mono;
+    phpcbf = phpPackages.php-codesniffer;
     php_cs_fixer = phpPackages.php-cs-fixer;
+    phpcs = phpPackages.php-codesniffer;
     prettier_d = prettierd;
     slither = slither-analyzer;
     staticcheck = go-tools;
