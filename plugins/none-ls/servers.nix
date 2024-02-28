@@ -193,7 +193,7 @@ with lib; let
       };
       pint = {};
       phpcbf = {
-        package = pkgs.phpPackages.phpcbf;
+        package = pkgs.phpPackages.php-codesniffer;
       };
       prettier = {
         package = pkgs.nodePackages.prettier;
