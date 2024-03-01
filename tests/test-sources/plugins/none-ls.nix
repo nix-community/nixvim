@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  nonels-sources-options,
+  ...
+}: {
   # Empty configuration
   empty = {
     plugins.none-ls.enable = true;
@@ -27,7 +31,8 @@
 
   default = {
     plugins.none-ls = {
-      enable = true;
+      # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
+      enable = !pkgs.stdenv.isDarwin;
 
       enableLspFormat = false;
       border = null;
@@ -47,90 +52,116 @@
       shouldAttach = null;
       tempDir = null;
       updateInInsert = false;
-      sources = {
-        code_actions = {
-          eslint.enable = true;
-          eslint_d.enable = true;
-          gitsigns.enable = true;
-          ltrs.enable = true;
-          shellcheck.enable = true;
-          statix.enable = true;
-        };
-        diagnostics = {
-          ansiblelint.enable = true;
-          bandit.enable = true;
-          checkstyle.enable = true;
-          cppcheck.enable = true;
-          deadnix.enable = true;
-          eslint.enable = true;
-          eslint_d.enable = true;
-          flake8.enable = true;
-          gitlint.enable = true;
-          golangci_lint.enable = true;
-          ktlint.enable = true;
-          ltrs.enable = true;
-          markdownlint.enable = true;
-          ruff.enable = true;
-          shellcheck.enable = true;
-          statix.enable = true;
-          staticcheck.enable = true;
-          typos.enable = true;
-          vale.enable = true;
-          vulture.enable = true;
-          alex.enable = true;
-          protolint.enable = true;
-          revive.enable = true;
-          hadolint.enable = true;
-          luacheck.enable = true;
-          mypy.enable = true;
-          pylint.enable = true;
-          write_good.enable = true;
-          yamllint.enable = true;
-          stylelint.enable = true;
-        };
-        formatting = {
-          alejandra.enable = true;
-          asmfmt.enable = true;
-          astyle.enable = true;
-          bean_format.enable = true;
-          black.enable = true;
-          # As of 2024-01-04, cbfmt is broken on darwin
-          # TODO: re-enable this test when fixed
-          cbfmt.enable = !pkgs.stdenv.isDarwin;
-          eslint.enable = true;
-          eslint_d.enable = true;
-          fantomas.enable = true;
-          fnlfmt.enable = true;
-          fourmolu.enable = true;
-          gofmt.enable = true;
-          gofumpt.enable = true;
-          goimports.enable = true;
-          goimports_reviser.enable = true;
-          golines.enable = true;
-          google_java_format.enable = true;
-          ktlint.enable = true;
-          nixfmt.enable = true;
-          nixpkgs_fmt.enable = true;
-          phpcbf.enable = true;
-          prettier.enable = true;
-          prettierd.enable = true;
-          shfmt.enable = true;
-          stylua.enable = true;
-          stylelint.enable = true;
-          taplo.enable = true;
-          isort.enable = true;
-          jq.enable = true;
-          markdownlint.enable = true;
-          pint.enable = true;
-          protolint.enable = true;
-          ruff.enable = true;
-          ruff_format.enable = true;
-          rustfmt.enable = true;
-          sqlfluff.enable = true;
-          trim_newlines.enable = true;
-          trim_whitespace.enable = true;
-        };
-      };
+      sources = let
+        options = nonels-sources-options.options.plugins.none-ls.sources;
+
+        unpackaged =
+          [
+            "blade_formatter"
+            "blue"
+            "brittany"
+            "bsfmt"
+            "bslint"
+            "cljstyle"
+            "cueimports"
+            "curlylint"
+            "dtsfmt"
+            "erb_lint"
+            "fixjson"
+            "forge_fmt"
+            "gccdiag"
+            "gersemi"
+            "gospel"
+            "jshint"
+            "jsonlint"
+            "markdown_toc"
+            "markuplint"
+            "misspell"
+            "mlint"
+            "nginx_beautifier"
+            "npm_groovy_lint"
+            "ocdc"
+            "packer"
+            "perlimports"
+            "pint"
+            "pretty_php"
+            "puglint"
+            "purs_tidy"
+            "pyflyby"
+            "pyink"
+            "pyproject_flake8"
+            "reek"
+            "regal"
+            "remark"
+            "rescript"
+            "saltlint"
+            "semistandardjs"
+            "solhint"
+            "spectral"
+            "sqlfmt"
+            "sql_formatter"
+            "standardjs"
+            "standardrb"
+            "standardts"
+            "styler"
+            "stylint"
+            "swiftformat"
+            "swiftlint"
+            "terrafmt"
+            "textidote"
+            "textlint"
+            "twigcs"
+            "vacuum"
+            "xo"
+            "yamlfix"
+          ]
+          ++ (
+            pkgs.lib.optionals
+            (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64)
+            [
+              "rubyfmt"
+              # Currently broken
+              "lua_format"
+              # Currently broken
+              "zigfmt"
+            ]
+          )
+          ++ (
+            pkgs.lib.optionals
+            pkgs.stdenv.isDarwin
+            [
+              "rpmspec"
+              "clazy"
+              "gdformat"
+              "gdlint"
+              "haml_lint"
+              "verilator"
+              "verible_verilog_format"
+              # Broken due to a dependency
+              "jsonnetfmt"
+            ]
+          )
+          ++ (
+            pkgs.lib.optionals
+            pkgs.stdenv.isAarch64
+            [
+              "semgrep"
+              "smlfmt"
+            ]
+          );
+
+        sources = pkgs.lib.mapAttrs (_: sources:
+          pkgs.lib.mapAttrs (source: _:
+            {
+              enable = true;
+            }
+            // pkgs.lib.optionalAttrs (builtins.elem source unpackaged) {
+              package = null;
+            })
+          sources)
+        options;
+      in
+        sources;
     };
   };
 }
