@@ -169,7 +169,7 @@
     ./utils/smart-splits.nix
     ./utils/specs.nix
     ./utils/spider.nix
-    ./utils/startify.nix
+    ./utils/startify
     ./utils/startup.nix
     ./utils/surround.nix
     ./utils/tmux-navigator.nix
