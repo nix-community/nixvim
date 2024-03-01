@@ -12,201 +12,181 @@ with helpers.vim-plugin;
     originalName = "molten-nvim";
     defaultPackage = pkgs.vimPlugins.molten-nvim;
     globalPrefix = "molten_";
+
+    # TODO introduced 2024-03-01: remove 2024-05-01
     deprecateExtraConfig = true;
+    optionsRenamedToSettings = [
+      "autoOpenOutput"
+      "copyOutput"
+      "enterOutputBehavior"
+      "imageProvider"
+      "outputCropBorder"
+      "outputShowMore"
+      "outputVirtLines"
+      "outputWinBorder"
+      "outputWinCoverGutter"
+      "outputWinHideOnLeave"
+      "outputWinMaxHeight"
+      "outputWinMaxWidth"
+      "outputWinStyle"
+      "savePath"
+      "useBorderHighlights"
+      "virtLinesOffBy1"
+      "wrapOutput"
+      "showMimetypeDebug"
+    ];
 
-    options = {
-      autoOpenOutput = mkDefaultOpt {
-        global = "auto_open_output";
-        description = ''
-          Automatically open the output window when your cursor moves over a cell.
+    settingsOptions = {
+      auto_image_popup = helpers.defaultNullOpts.mkBool false ''
+        When true, cells that produce an image output will open the image output automatically with
+        python's `Image.show()`.
+      '';
 
-          Default: `true`
-        '';
-        type = types.bool;
-        example = false;
-      };
+      auto_init_behavior = helpers.defaultNullOpts.mkStr "init" ''
+        When set to "raise" commands which would otherwise ask for a kernel when they're run without
+        a running kernel will instead raise an exception.
+        Useful for other plugins that want to use `pcall` and do their own error handling.
+      '';
 
-      copyOutput = mkDefaultOpt {
-        global = "copy_output";
-        description = ''
-          Copy evaluation output to clipboard automatically (requires pyperclip).
+      auto_open_html_in_browser = helpers.defaultNullOpts.mkBool false ''
+        Automatically open HTML outputs in a browser. related: `open_cmd`.
+      '';
 
-          Default: `false`
-        '';
-        type = types.bool;
-        example = true;
-      };
+      auto_open_output = helpers.defaultNullOpts.mkBool true ''
+        Automatically open the floating output window when your cursor moves into a cell.
+      '';
 
-      enterOutputBehavior = mkDefaultOpt {
-        global = "enter_output_behavior";
-        description = ''
-          The behavior of MoltenEnterOutput.
+      cover_empty_lines = helpers.defaultNullOpts.mkBool false ''
+        The output window and virtual text will be shown just below the last line of code in the
+        cell.
+      '';
 
-          Default: `"open_then_enter"`
-        '';
-        type = types.enum ["open_then_enter" "open_and_enter" "no_open"];
-      };
+      cover_lines_starting_with = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        When `cover_empty_lines` is `true`, also covers lines starting with these strings.
+      '';
 
-      imageProvider = mkDefaultOpt {
-        global = "image_provider";
-        description = ''
-          How images are displayed.
+      copy_output = helpers.defaultNullOpts.mkBool false ''
+        Copy evaluation output to clipboard automatically (requires `pyperclip`).
+      '';
 
-          Default: `"none"`
-        '';
-        type = types.enum ["none" "image.nvim"];
-      };
+      enter_output_behavior =
+        helpers.defaultNullOpts.mkEnumFirstDefault
+        ["open_then_enter" "open_and_enter" "no_open"]
+        "The behavior of [MoltenEnterOutput](https://github.com/benlubas/molten-nvim#moltenenteroutput).";
 
-      outputCropBorder = mkDefaultOpt {
-        global = "output_crop_border";
-        description = ''
-          'crops' the bottom border of the output window when it would otherwise just sit at the
-          bottom of the screen.
+      image_provider = helpers.defaultNullOpts.mkEnumFirstDefault ["none" "image.nvim"] ''
+        How images are displayed.
+      '';
 
-          Default: `true`
-        '';
-        type = types.bool;
-      };
+      open_cmd = helpers.mkNullOrOption types.str ''
+        Defaults to `xdg-open` on Linux, `open` on Darwin, and `start` on Windows.
+        But you can override it to whatever you want.
+        The command is called like: `subprocess.run([open_cmd, filepath])`
+      '';
 
-      outputShowMore = mkDefaultOpt {
-        global = "output_show_more";
-        description = ''
-          When the window can't display the entire contents of the output buffer, shows the number
-          of extra lines in the window footer (requires nvim 10.0+ and a window border).
+      output_crop_border = helpers.defaultNullOpts.mkBool true ''
+        'crops' the bottom border of the output window when it would otherwise just sit at the
+        bottom of the screen.
+      '';
 
-          Default: `false`
-        '';
-        type = types.bool;
-      };
+      output_show_more = helpers.defaultNullOpts.mkBool false ''
+        When the window can't display the entire contents of the output buffer, shows the number of
+        extra lines in the window footer (requires nvim 10.0+ and a window border).
+      '';
 
-      outputVirtLines = mkDefaultOpt {
-        global = "output_virt_lines";
-        description = ''
-          Pad the main buffer with virtual lines so the output doesn't cover anything while it's
-          open.
+      output_virt_lines = helpers.defaultNullOpts.mkBool false ''
+        Pad the main buffer with virtual lines so the floating window doesn't cover anything while
+        it's open.
+      '';
 
-          Default: `false`
-        '';
-        type = types.bool;
-      };
+      output_win_border = helpers.defaultNullOpts.mkBorder ''["" "━" "" ""]'' "output window" "";
 
-      outputWinBorder = mkDefaultOpt {
-        global = "output_win_border";
-        description = ''
-          Some border features will not work if you don't specify your border as a table.
-          See border option of `:h nvim_open_win()`.
+      output_win_cover_gutter = helpers.defaultNullOpts.mkBool true ''
+        Should the output window cover the gutter (numbers and sign col), or not.
+        If you change this, you probably also want to change `output_win_style`.
+      '';
 
-          Default: `["" "━" "" ""]`
-        '';
-        type = helpers.nixvimTypes.border;
-      };
+      output_win_hide_on_leave = helpers.defaultNullOpts.mkBool true ''
+        After leaving the output window (via `:q` or switching windows), do not attempt to redraw
+        the output window.
+      '';
 
-      outputWinCoverGutter = mkDefaultOpt {
-        global = "output_win_cover_gutter";
-        description = ''
-          Should the output window cover the gutter (numbers and sign col), or not.
-          If you change this, you probably also want to change `outputWinStyle`.
+      output_win_max_height = helpers.defaultNullOpts.mkUnsignedInt 999999 ''
+        Max height of the output window.
+      '';
 
-          Default: `true`
-        '';
-        type = types.bool;
-      };
+      output_win_max_width = helpers.defaultNullOpts.mkUnsignedInt 999999 ''
+        Max width of the output window.
+      '';
 
-      outputWinHideOnLeave = mkDefaultOpt {
-        global = "output_win_hide_on_leave";
-        description = ''
-          After leaving the output window (via `:q` or switching windows), do not attempt to redraw
-          the output window.
+      output_win_style = helpers.defaultNullOpts.mkEnum [false "minimal"] "false" ''
+        Value passed to the style option in `:h nvim_open_win()`.
+      '';
 
-          Default: `true`
-        '';
-        type = types.bool;
-      };
+      save_path =
+        helpers.defaultNullOpts.mkStr
+        ''{__raw = "vim.fn.stdpath('data')..'/molten'";}''
+        "Where to save/load data with `:MoltenSave` and `:MoltenLoad`.";
 
-      outputWinMaxHeight = mkDefaultOpt {
-        global = "output_win_max_height";
-        description = ''
-          Max height of the output window.
+      tick_rate = helpers.defaultNullOpts.mkUnsignedInt 500 ''
+        How often (in ms) we poll the kernel for updates.
+        Determines how quickly the ui will update, if you want a snappier experience, you can set
+        this to 150 or 200.
+      '';
 
-          Default: `999999`
-        '';
-        type = types.ints.unsigned;
-      };
+      use_border_highlights = helpers.defaultNullOpts.mkBool false ''
+        When true, uses different highlights for output border depending on the state of the cell
+        (running, done, error).
+      '';
 
-      outputWinMaxWidth = mkDefaultOpt {
-        global = "output_win_max_width";
-        description = ''
-          Max width of the output window.
+      limit_output_chars = helpers.defaultNullOpts.mkUnsignedInt 1000000 ''
+        Limit on the number of chars in an output.
+        If you're lagging your editor with too much output text, decrease it.
+      '';
 
-          Default: `999999`
-        '';
-        type = types.ints.unsigned;
-      };
+      virt_lines_off_by_1 = helpers.defaultNullOpts.mkBool false ''
+        Allows the output window to cover exactly one line of the regular buffer when
+        `output_virt_lines` is `true`, also effects where `virt_text_output` is displayed.
+        (useful for running code in a markdown file where that covered line will just be ```).
+      '';
 
-      outputWinStyle = mkDefaultOpt {
-        global = "output_win_style";
-        description = ''
-          Value passed to the `style` option in `:h nvim_open_win()`
+      virt_text_output = helpers.defaultNullOpts.mkBool false ''
+        When true, show output as virtual text below the cell, virtual text stays after leaving the
+        cell.
+        When true, output window doesn't open automatically on run.
+        Effected by `virt_lines_off_by_1`.
+      '';
 
-          Default: `false`
-        '';
-        type = types.enum [false "minimal"];
-      };
+      virt_text_max_lines = helpers.defaultNullOpts.mkUnsignedInt 12 ''
+        Max height of the virtual text.
+      '';
 
-      savePath = mkDefaultOpt {
-        global = "save_path";
-        description = ''
-          Where to save/load data with `:MoltenSave` and `:MoltenLoad`.
+      wrap_output = helpers.defaultNullOpts.mkBool false ''
+        Wrap output text.
+      '';
 
-          Default: `{__raw = "vim.fn.stdpath('data')..'/molten'";}`
-        '';
-        type = with helpers.nixvimTypes; either str rawLua;
-      };
+      show_mimetype_debug = helpers.defaultNullOpts.mkBool false ''
+        Before any non-iostream output chunk, the mime-type for that output chunk is shown.
+        Meant for debugging/plugin devlopment.
+      '';
+    };
 
-      useBorderHighlights = mkDefaultOpt {
-        global = "use_border_highlights";
-        description = ''
-          When true, uses different highlights for output border depending on the state of the cell
-          (running, done, error).
-          See [highlights](https://github.com/benlubas/molten-nvim#highlights).
-
-          Default: `false`
-        '';
-        type = types.bool;
-      };
-
-      virtLinesOffBy1 = mkDefaultOpt {
-        global = "virt_lines_off_by_1";
-        description = ''
-          _Only has effect when `outputVirtLines` is true._
-          Allows the output window to cover exactly one line of the regular buffer.
-          (useful for running code in a markdown file where that covered line will just be ```)
-
-          Default: `false`
-        '';
-        type = types.bool;
-      };
-
-      wrapOutput = mkDefaultOpt {
-        global = "wrap_output";
-        description = ''
-          Wrap text in output windows.
-
-          Default: `false`
-        '';
-        type = types.bool;
-      };
-
-      # Debug
-      showMimetypeDebug = mkDefaultOpt {
-        global = "show_mimetype_debug";
-        description = ''
-          Before any non-iostream output chunk, the mime-type for that output chunk is shown.
-          Meant for debugging/plugin devlopment.
-
-          Default: `false`
-        '';
-        type = types.bool;
-      };
+    settingsExample = {
+      auto_open_output = true;
+      copy_output = false;
+      enter_output_behavior = "open_then_enter";
+      image_provider = "none";
+      output_crop_border = true;
+      output_show_more = false;
+      output_virt_lines = false;
+      output_win_border = ["" "━" "" ""];
+      output_win_cover_gutter = true;
+      output_win_hide_on_leave = true;
+      output_win_style = false;
+      save_path.__raw = "vim.fn.stdpath('data')..'/molten'";
+      use_border_highlights = false;
+      virt_lines_off_by1 = false;
+      wrap_output = false;
+      show_mimetype_debug = false;
     };
   }
