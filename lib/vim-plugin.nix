@@ -73,8 +73,9 @@ with lib; {
           options = settingsOptions;
           example = settingsExample;
           description = ''
-            The configuration options for ${name} without the '${globalPrefix}' prefix.
-            Example: To set '${globalPrefix}_foo_bar' to 1, write
+            The configuration options for **${name}** without the `${globalPrefix}` prefix.
+
+            Example: To set '${globalPrefix}foo_bar' to 1, write
             ```nix
               settings = {
                 foo_bar = true;
