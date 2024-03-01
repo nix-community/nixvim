@@ -12,23 +12,76 @@ with helpers.vim-plugin;
     originalName = "emmet-vim";
     defaultPackage = pkgs.vimPlugins.emmet-vim;
     globalPrefix = "user_emmet_";
+
+    # TODO introduced 2024-03-01: remove 2024-05-01
     deprecateExtraConfig = true;
+    optionsRenamedToSettings = [
+      "mode"
+    ];
+    imports = [
+      (
+        mkRenamedOptionModule
+        ["plugins" "emmet" "leader"]
+        ["plugins" "emmet" "settings" "leader_key"]
+      )
+    ];
 
-    options = {
-      mode = mkDefaultOpt {
-        type = types.str;
-        description = "Mode where emmet will enable";
-      };
+    settingsOptions = {
+      mode = helpers.defaultNullOpts.mkStr "a" ''
+        Choose modes, in which Emmet mappings will be created.
+        Default value: 'a' - all modes.
+        - 'n' - normal mode.
+        - 'i' - insert mode.
+        - 'v' - visual mode.
 
-      leader = mkDefaultOpt {
-        type = types.str;
-        global = "leader_key";
-        description = "Set leader key";
-      };
+        Examples:
+        - create Emmet mappings only for normal mode: `n`
+        - create Emmet mappings for insert, normal and visual modes: `inv`
+        - create Emmet mappings for all modes: `a`
+      '';
 
-      settings = mkDefaultOpt {
-        type = with types; attrsOf anything;
-        description = "Emmet settings";
+      leader_key = helpers.defaultNullOpts.mkStr "<C-y>" ''
+        Leading keys to run Emmet functions.
+      '';
+
+      settings = helpers.mkNullOrOption (with types; attrsOf anything) ''
+        Emmet settings.
+
+        Defaults: see https://github.com/mattn/emmet-vim/blob/master/autoload/emmet.vim
+      '';
+    };
+
+    settingsExample = {
+      mode = "inv";
+      leader = "<C-Z>";
+      settings = {
+        variables = {
+          lang = "ja";
+        };
+        html = {
+          default_attributes = {
+            option = {value = null;};
+            textarea = {
+              id = null;
+              name = null;
+              cols = 10;
+              rows = 10;
+            };
+          };
+          snippets = {
+            "html:5" = ''
+              <!DOCTYPE html>
+              <html lang=\"$\{lang}\">
+              <head>
+              \t<meta charset=\"$\{charset}\">
+              \t<title></title>
+              \t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+              </head>
+              <body>\n\t$\{child}|\n</body>
+              </html>
+            '';
+          };
+        };
       };
     };
   }
