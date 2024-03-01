@@ -22,7 +22,7 @@
 
       goyo = {
         enable = true;
-        showLineNumbers = false;
+        settings.linenr = false;
       };
 
       lsp = {

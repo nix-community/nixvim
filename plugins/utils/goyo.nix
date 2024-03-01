@@ -12,25 +12,28 @@ with lib;
     originalName = "goyo.vim";
     defaultPackage = pkgs.vimPlugins.goyo-vim;
     globalPrefix = "goyo_";
+
+    # TODO introduced 2024-03-01: remove 2024-05-01
     deprecateExtraConfig = true;
+    optionsRenamedToSettings = [
+      "width"
+      "height"
+    ];
+    imports = [
+      (
+        mkRenamedOptionModule
+        ["plugins" "goyo" "showLineNumbers"]
+        ["plugins" "goyo" "settings" "linenr"]
+      )
+    ];
 
-    options = {
-      width = mkDefaultOpt {
-        description = "Width";
-        global = "width";
-        type = types.int;
-      };
+    settingsOptions = {
+      width = helpers.mkNullOrOption types.ints.unsigned "width";
 
-      height = mkDefaultOpt {
-        description = "Height";
-        global = "height";
-        type = types.int;
-      };
+      height = helpers.mkNullOrOption types.ints.unsigned "height";
 
-      showLineNumbers = mkDefaultOpt {
-        description = "Show line numbers when in Goyo mode";
-        global = "linenr";
-        type = types.bool;
-      };
+      linenr = helpers.defaultNullOpts.mkBool false ''
+        Show line numbers when in Goyo mode.
+      '';
     };
   }
