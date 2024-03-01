@@ -94,6 +94,7 @@
     ./dap
 
     ./pluginmanagers/packer.nix
+    ./pluginmanagers/lazy.nix
 
     ./snippets/friendly-snippets.nix
     ./snippets/luasnip

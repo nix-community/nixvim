@@ -759,7 +759,7 @@ in {
             helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
             ''
               {
-                filetype = [ "notify" "packer" "qf" "diff" "fugitive" "fugitiveblame" ];
+                filetype = [ "notify" "lazy" "packer" "qf" "diff" "fugitive" "fugitiveblame" ];
                 buftype = [ "nofile" "terminal" "help" ];
               };
             ''
