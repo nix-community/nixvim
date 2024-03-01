@@ -7,9 +7,11 @@
     plugins.goyo = {
       enable = true;
 
-      width = 80;
-      height = 85;
-      showLineNumbers = false;
+      settings = {
+        width = 80;
+        height = 85;
+        linenr = false;
+      };
     };
   };
 }
