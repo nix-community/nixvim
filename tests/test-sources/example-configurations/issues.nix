@@ -148,8 +148,6 @@
       luasnip
       lspkind-nvim
     ];
-
-    # extraConfigLua = (builtins.readFile ./nvim-extra-lua.lua);
   };
 
   "71" = {
