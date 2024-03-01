@@ -1,17 +1,10 @@
 {inputs, ...}: {
   imports = [
     inputs.pre-commit-hooks.flakeModule
+    ./devshell.nix
   ];
 
-  perSystem = {
-    pkgs,
-    config,
-    ...
-  }: {
-    devShells.default = pkgs.mkShellNoCC {
-      shellHook = config.pre-commit.installationScript;
-    };
-
+  perSystem = {pkgs, ...}: {
     formatter = pkgs.alejandra;
 
     pre-commit = {

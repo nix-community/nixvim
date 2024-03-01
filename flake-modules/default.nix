@@ -1,6 +1,6 @@
 {inputs, ...}: {
   imports = [
-    ./dev.nix
+    ./dev
     ./helpers.nix
     ./lib.nix
     ./legacy-packages.nix
