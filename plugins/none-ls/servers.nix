@@ -331,7 +331,7 @@ in {
         (source: _:
           {
             enable = mkEnableOption "the ${source} ${sourceType} source for none-ls";
-            withArgs = helpers.mkNullOrLua ''
+            withArgs = helpers.mkNullOrStr ''
               Raw Lua code passed as an argument to the source's `with` method.
             '';
           }
