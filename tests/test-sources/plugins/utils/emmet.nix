@@ -7,34 +7,36 @@
     plugins.emmet = {
       enable = true;
 
-      mode = "inv";
-      leader = "<C-Z>";
       settings = {
-        variables = {
-          lang = "ja";
-        };
-        html = {
-          default_attributes = {
-            option = {value = null;};
-            textarea = {
-              id = null;
-              name = null;
-              cols = 10;
-              rows = 10;
-            };
+        mode = "inv";
+        leader = "<C-Z>";
+        settings = {
+          variables = {
+            lang = "ja";
           };
-          snippets = {
-            "html:5" = ''
-              <!DOCTYPE html>
-              <html lang=\"$\{lang}\">
-              <head>
-              \t<meta charset=\"$\{charset}\">
-              \t<title></title>
-              \t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-              </head>
-              <body>\n\t$\{child}|\n</body>
-              </html>
-            '';
+          html = {
+            default_attributes = {
+              option = {value = null;};
+              textarea = {
+                id = null;
+                name = null;
+                cols = 10;
+                rows = 10;
+              };
+            };
+            snippets = {
+              "html:5" = ''
+                <!DOCTYPE html>
+                <html lang=\"$\{lang}\">
+                <head>
+                \t<meta charset=\"$\{charset}\">
+                \t<title></title>
+                \t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+                </head>
+                <body>\n\t$\{child}|\n</body>
+                </html>
+              '';
+            };
           };
         };
       };
