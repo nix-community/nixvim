@@ -5,34 +5,6 @@
   ...
 }:
 with lib; {
-  # This warning has been added on 2023-12-02. TODO: remove it in early Feb. 2024.
-  imports = [
-    (mkRemovedOptionModule
-      ["maps"]
-      ''
-        Please, use the new `keymaps` option which works as follows:
-
-        keymaps = [
-          {
-            # Default mode is "" which means normal-visual-op
-            key = "<C-m>";
-            action = ":!make<CR>";
-          }
-          {
-            # Mode can be a string or a list of strings
-            mode = "n";
-            key = "<leader>p";
-            action.__raw = "require('my-plugin').do_stuff";
-            # Note that all of the mapping options are now under the `options` attrs
-            options = {
-              silent = true;
-              desc = "My plugin does stuff";
-            };
-          }
-        ];
-      '')
-  ];
-
   options = {
     keymaps = mkOption {
       type =
