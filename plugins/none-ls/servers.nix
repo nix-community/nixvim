@@ -383,7 +383,7 @@ in {
             withArgs =
               if source.withArgs == null
               then sourceItem
-              else "${sourceItem}.with(${source.withArgs}})";
+              else "${sourceItem}.with(${source.withArgs})";
           in
             helpers.mkRaw ''
               require("null-ls").builtins.${withArgs}
