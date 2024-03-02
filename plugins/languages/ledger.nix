@@ -34,6 +34,21 @@ with helpers.vim-plugin;
       )
     ];
 
+    extraOptions = {
+      ledgerPackage = mkOption {
+        type = with types; nullOr package;
+        default = pkgs.ledger;
+        description = ''
+          The package to install for `ledger`.
+          Set to `null` for disabling installation.
+        '';
+      };
+    };
+
+    extraConfig = cfg: {
+      extraPackages = optional (cfg.ledgerPackage != null) cfg.ledgerPackage;
+    };
+
     settingsOptions = {
       bin = helpers.mkNullOrStr ''
         Path to the `ledger` executable.
