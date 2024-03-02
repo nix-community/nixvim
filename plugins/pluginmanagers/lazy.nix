@@ -76,19 +76,19 @@ in {
               submodules = helpers.defaultNullOpts.mkBool true "When false, git submodules will not be fetched. Defaults to true";
 
               event = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
                 "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
 
               cmd = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
                 "Lazy-load on command";
 
               ft = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
                 "Lazy-load on filetype";
 
               keys = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
                 "Lazy-load on key mapping";
 
               module = helpers.defaultNullOpts.mkBool false "Do not automatically load this Lua module when it's required somewhere";
