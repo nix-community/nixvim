@@ -11,11 +11,24 @@ with helpers.vim-plugin;
     name = "vim-slime";
     defaultPackage = pkgs.vimPlugins.vim-slime;
     globalPrefix = "slime_";
-    deprecateExtraConfig = true;
 
-    options = {
-      target = mkDefaultOpt {
-        type = types.enum [
+    # TODO introduced 2024-03-02: remove 2024-05-02
+    deprecateExtraConfig = true;
+    optionsRenamedToSettings = [
+      "target"
+      "vimterminalCmd"
+      "noMappings"
+      "pasteFile"
+      "preserveCurpos"
+      "defaultConfig"
+      "dontAskDefault"
+      "bracketedPaste"
+    ];
+
+    settingsOptions = {
+      target =
+        helpers.defaultNullOpts.mkEnum
+        [
           "dtach"
           "kitty"
           "neovim"
@@ -26,60 +39,37 @@ with helpers.vim-plugin;
           "whimrepl"
           "x11"
           "zellij"
-        ];
-        description = ''
-          Which backend vim-slime should use.
+        ]
+        "screen"
+        "Which backend vim-slime should use.";
 
-          Default: "screen"
-        '';
-        example = "dtach";
-      };
+      vimterminal_cmd = helpers.mkNullOrStr ''
+        The vim terminal command to execute.
+      '';
 
-      vimterminalCmd = mkDefaultOpt {
-        global = "vimterminal_cmd";
-        type = types.str;
-        description = "The vim terminal command to execute.";
-      };
+      no_mappings = helpers.defaultNullOpts.mkBool false ''
+        Whether to disable the default mappings.
+      '';
 
-      noMappings = mkDefaultOpt {
-        global = "no_mappings";
-        type = types.bool;
-        description = ''
-          Whether to disable the default mappings.
+      paste_file = helpers.defaultNullOpts.mkStr "$HOME/.slime_paste" ''
+        Required to transfer data from vim to GNU screen or tmux.
+        Setting this explicitly can work around some occasional portability issues.
+        whimrepl does not require or support this setting.
+      '';
 
-          Default: `false`
-        '';
-      };
+      preserve_curpos = helpers.defaultNullOpts.mkBool true ''
+        Whether to preserve cursor position when sending a line or paragraph.
+      '';
 
-      pasteFile = mkDefaultOpt {
-        global = "paste_file";
-        type = types.str;
-        description = ''
-          Required to transfer data from vim to GNU screen or tmux.
-          Setting this explicitly can work around some occasional portability issues.
-          whimrepl does not require or support this setting.
-
-          Default: "$HOME/.slime_paste"
-        '';
-      };
-
-      preserveCurpos = mkDefaultOpt {
-        global = "preserve_curpos";
-        type = types.bool;
-        description = ''
-          Whether to preserve cursor position when sending a line or paragraph.
-
-          Default: `true`
-        '';
-      };
-
-      defaultConfig = mkDefaultOpt {
-        global = "default_config";
-        type = with helpers.nixvimTypes; attrsOf (either str rawLua);
-        description = ''
+      default_config =
+        helpers.mkNullOrOption
+        (
+          with helpers.nixvimTypes;
+            attrsOf
+            (either str rawLua)
+        )
+        ''
           Pre-filled prompt answer.
-
-          Default: `null`
 
           Examples:
             - `tmux`:
@@ -97,30 +87,31 @@ with helpers.vim-plugin;
                 }
               ```
         '';
+
+      dont_ask_default = helpers.defaultNullOpts.mkBool false ''
+        Whether to bypass the prompt and use the specified default configuration options.
+      '';
+
+      bracketed_paste = helpers.defaultNullOpts.mkBool false ''
+        Sometimes REPL are too smart for their own good, e.g. autocompleting a bracket that should
+        not be autocompleted when pasting code from a file.
+        In this case it can be useful to rely on bracketed-paste
+        (https://cirw.in/blog/bracketed-paste).
+        Luckily, tmux knows how to handle that. See tmux's manual.
+      '';
+    };
+
+    settingsExample = {
+      target = "screen";
+      vimterminal_cmd = null;
+      no_mappings = false;
+      paste_file = "$HOME/.slime_paste";
+      preserve_curpos = true;
+      default_config = {
+        socket_name = "default";
+        target_pane = "{last}";
       };
-
-      dontAskDefault = mkDefaultOpt {
-        global = "dont_ask_default";
-        type = types.bool;
-        description = ''
-          Whether to bypass the prompt and use the specified default configuration options.
-
-          Default: `false`
-        '';
-      };
-
-      bracketedPaste = mkDefaultOpt {
-        global = "bracketed_paste";
-        type = with types; nullOr bool;
-        description = ''
-          Sometimes REPL are too smart for their own good, e.g. autocompleting a bracket that should
-          not be autocompleted when pasting code from a file.
-          In this case it can be useful to rely on bracketed-paste
-          (https://cirw.in/blog/bracketed-paste).
-          Luckily, tmux knows how to handle that. See tmux's manual.
-
-          Default: `false`
-        '';
-      };
+      dont_ask_default = false;
+      bracketed_paste = false;
     };
   }
