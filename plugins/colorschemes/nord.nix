@@ -61,4 +61,8 @@ helpers.vim-plugin.mkVimPlugin config {
     disable_background = true;
     italic = false;
   };
+
+  extraConfig = cfg: {
+    colorscheme = "nord";
+  };
 }
