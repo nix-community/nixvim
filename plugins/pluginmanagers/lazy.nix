@@ -56,12 +56,7 @@ in {
               enabled = helpers.defaultNullOpts.mkBool true "When false then this plugin will not be included in the spec";
 
               cond =
-                helpers.mkNullOrOption
-                (oneOf [
-                  str
-                  helpers.nixvimTypes.rawLua
-                  (listOf (either str helpers.nixvimTypes.rawLua))
-                ])
+                helpers.mkNullOrOption (helpers.nixvimTypes.maybeRaw bool)
                 "When false, or if the function returns false, then this plugin will not be loaded. Useful to disable some plugins in vscode, or firenvim for example.";
 
               dependencies =
@@ -69,64 +64,41 @@ in {
                 "Plugin dependencies";
 
               init =
-                helpers.mkNullOrOption (either bool helpers.nixvimTypes.rawLua)
+                helpers.mkNullOrOption (helpers.nixvimTypes.maybeRaw bool)
                 "init functions are always executed during startup";
 
               config =
-                helpers.mkNullOrOption (either bool helpers.nixvimTypes.rawLua)
+                helpers.mkNullOrOption (helpers.nixvimTypes.maybeRaw bool)
                 "config is executed when the plugin loads. The default implementation will automatically run require(MAIN).setup(opts). Lazy uses several heuristics to determine the plugin's MAIN module automatically based on the plugin's name. See also opts. To use the default implementation without opts set config to true.";
 
               main = helpers.mkNullOrOption str "You can specify the main module to use for config() and opts(), in case it can not be determined automatically. See config()";
 
-              build =
-                helpers.mkNullOrOption
-                (oneOf [
-                  (either str (listOf str))
-                  helpers.nixvimTypes.rawLua
-                ])
-                "build is executed when a plugin is installed or updated. Before running build, a plugin is first loaded. If it's a string it will be ran as a shell command. When prefixed with : it is a Neovim command. You can also specify a list to executed multiple build commands. Some plugins provide their own build.lua which is automatically used by lazy. So no need to specify a build step for those plugins.";
-
               submodules = helpers.defaultNullOpts.mkBool true "When false, git submodules will not be fetched. Defaults to true";
 
-              event =
-                helpers.mkNullOrOption
-                (oneOf [
-                  (either str (listOf str))
-                  helpers.nixvimTypes.rawLua
-                ])
+              event = with helpers.nixvimTypes;
+                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
                 "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
 
-              cmd =
-                helpers.mkNullOrOption
-                (oneOf [
-                  (either str (listOf str))
-                  helpers.nixvimTypes.rawLua
-                ])
+              cmd = with helpers.nixvimTypes;
+                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
                 "Lazy-load on command";
 
-              ft =
-                helpers.mkNullOrOption
-                (oneOf [
-                  (either str (listOf str))
-                  helpers.nixvimTypes.rawLua
-                ])
+              ft = with helpers.nixvimTypes;
+                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
                 "Lazy-load on filetype";
 
-              keys =
-                helpers.mkNullOrOption
-                (oneOf [
-                  (either str (listOf str))
-                  helpers.nixvimTypes.rawLua
-                ])
+              keys = with helpers.nixvimTypes;
+                helpers.mkNullOrOption (either (maybeRaw str) (maybeRaw (listOf str)))
                 "Lazy-load on key mapping";
 
               module = helpers.defaultNullOpts.mkBool false "Do not automatically load this Lua module when it's required somewhere";
 
-              priority = helpers.defaultNullOpts.mkNum null "Only useful for start plugins (lazy=false) to force loading certain plugins first. Default priority is 50. It's recommended to set this to a high number for colorschemes.";
+              priority = helpers.mkNullOrOption number "Only useful for start plugins (lazy=false) to force loading certain plugins first. Default priority is 50. It's recommended to set this to a high number for colorschemes.";
 
               optional = helpers.defaultNullOpts.mkBool false "When a spec is tagged optional, it will only be included in the final spec, when the same plugin has been specified at least once somewhere else without optional. This is mainly useful for Neovim distros, to allow setting options on plugins that may/may not be part of the user's plugins";
 
-              opts = helpers.mkNullOrOption (either attrs helpers.nixvimTypes.rawLua) "opts should be a table (will be merged with parent specs), return a table (replaces parent specs) or should change a table. The table will be passed to the Plugin.config() function. Setting this value will imply Plugin.config()";
+              opts = with helpers.nixvimTypes;
+                helpers.mkNullOrOption (maybeRaw (attrsOf anything)) "opts should be a table (will be merged with parent specs), return a table (replaces parent specs) or should change a table. The table will be passed to the Plugin.config() function. Setting this value will imply Plugin.config()";
             };
           });
 
@@ -141,7 +113,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [(pkgs.vimPlugins.lazy-nvim.overrideAttrs (_: {pname = "lazy.nvim";}))];
+    extraPlugins = [pkgs.vimPlugins.lazy-nvim];
     extraPackages = [pkgs.git];
 
     extraConfigLua = let
@@ -157,7 +129,6 @@ in {
 
           inherit
             (plugin)
-            build
             cmd
             cond
             config

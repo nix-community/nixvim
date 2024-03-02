@@ -52,21 +52,13 @@
         # Plugins can have post-install/update hooks
         {
           pkg = markdown-preview-nvim;
-          build = "cd app && yarn install";
           cmd = "MarkdownPreview";
         }
 
         # Post-install/update hook with neovim command
         {
           pkg = nvim-treesitter;
-          build = ":TSUpdate";
           opts = {ensure_installed = {};};
-        }
-
-        # Post-install/update hook with call of vimscript function with argument
-        {
-          pkg = firenvim;
-          build.__raw = ''function() vim.fn["firenvim#install"](0) end'';
         }
 
         # Use dependency and run lua function after load
