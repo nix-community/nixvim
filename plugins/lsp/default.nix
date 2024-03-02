@@ -67,6 +67,7 @@ in {
         "nil_ls"
         "nixd"
         "nushell"
+        "ocamllsp"
         "ols"
         "omnisharp"
         "perlpls"
