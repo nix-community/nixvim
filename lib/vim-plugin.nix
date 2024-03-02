@@ -75,7 +75,7 @@ with lib; {
           description = ''
             The configuration options for **${name}** without the `${globalPrefix}` prefix.
 
-            Example: To set '${globalPrefix}foo_bar' to 1, write
+            Example: To set `${globalPrefix}foo_bar` to `1`, write
             ```nix
               settings = {
                 foo_bar = true;
