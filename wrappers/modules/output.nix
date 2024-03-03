@@ -22,6 +22,12 @@ with lib; {
       '';
     };
 
+    withNodeJs = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable Node provider.";
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
@@ -84,6 +90,7 @@ with lib; {
           extraPython3Packages
           viAlias
           vimAlias
+          withNodeJs
           ;
         # inherit customRC;
         plugins = normalizedPlugins;
