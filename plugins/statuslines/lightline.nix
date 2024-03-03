@@ -55,19 +55,11 @@ in {
         default = null;
         type = types.nullOr (types.submodule {
           options = let
-            listType = with types; nullOr (listOf (listOf str));
+            listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
           in {
-            left = mkOption {
-              type = listType;
-              description = "List of components that will show up on the left side of the bar";
-              default = null;
-            };
+            left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
 
-            right = mkOption {
-              type = listType;
-              description = "List of components that will show up on the right side of the bar";
-              default = null;
-            };
+            right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
           };
         });
       };
