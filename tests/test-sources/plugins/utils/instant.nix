@@ -1,9 +1,6 @@
 {
   empty = {
-    plugins.instant = {
-      enable = true;
-      username = null;
-    };
+    plugins.instant.enable = true;
   };
 
   example = {
