@@ -331,7 +331,7 @@ in {
         (source: _:
           {
             enable = mkEnableOption "the ${source} ${sourceType} source for none-ls";
-            withArgs = helpers.mkNullOrLua ''
+            withArgs = helpers.mkNullOrOption helpers.nixvimTypes.strLua ''
               Raw Lua code passed as an argument to the source's `with` method.
             '';
           }
@@ -383,7 +383,7 @@ in {
             withArgs =
               if source.withArgs == null
               then sourceItem
-              else "${sourceItem}.with(${source.withArgs}})";
+              else "${sourceItem}.with(${source.withArgs})";
           in
             helpers.mkRaw ''
               require("null-ls").builtins.${withArgs}
