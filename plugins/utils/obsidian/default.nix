@@ -159,17 +159,14 @@ with lib;
     };
 
     extraConfig = cfg: {
-      assertions = [
-        {
-          assertion = let
-            nvimCmpEnabled = isBool cfg.settings.completion.nvim_cmp && cfg.settings.completion.nvim_cmp;
-          in
-            nvimCmpEnabled -> config.plugins.nvim-cmp.enable;
-          message = ''
-            Nixvim (plugins.obsidian): You have enabled `completion.nvim_cmp` but `plugins.cmp.enable` is `false`.
-            You need to enable `nvim-cmp` to use this setting.
-          '';
-        }
-      ];
+      warnings = let
+        nvimCmpEnabled = isBool cfg.settings.completion.nvim_cmp && cfg.settings.completion.nvim_cmp;
+      in
+        optional
+        (nvimCmpEnabled && !config.plugins.cmp.enable)
+        ''
+          Nixvim (plugins.obsidian): You have enabled `completion.nvim_cmp` but `plugins.cmp.enable` is `false`.
+          You should probably enable `nvim-cmp`.
+        '';
     };
   }
