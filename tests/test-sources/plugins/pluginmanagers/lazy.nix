@@ -25,7 +25,6 @@
         }
 
         # Load on a combination of conditions: specific filetypes or commands
-        # Also run code after load (see the "config" key)
         {
           pkg = ale;
           name = "w0rp/ale";
@@ -65,7 +64,7 @@
         {
           pkg = gitsigns-nvim;
           dependencies = [plenary-nvim];
-          config.__raw = ''function() require("gitsigns").setup() end'';
+          config = ''function() require("gitsigns").setup() end'';
         }
       ];
     };
