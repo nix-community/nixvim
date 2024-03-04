@@ -11,7 +11,7 @@ with lib; {
       if defaultPackage != null
       then defaultPackage.meta.homepage
       else null,
-    maintainers ? [],
+    maintainers,
     imports ? [],
     # deprecations
     deprecateExtraConfig ? false,
