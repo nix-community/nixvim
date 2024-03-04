@@ -16,6 +16,7 @@ with lib; {
     mkVimPlugin config {
       inherit name;
       extraPlugins = extraPlugins ++ (lists.optional useDefaultPackage pkgs.vimPlugins.${name});
+      maintainers = [maintainers.GaetanLepage];
     };
 
   pluginAndSourceNames = {

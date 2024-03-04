@@ -13,6 +13,8 @@ with lib;
     defaultPackage = pkgs.vimPlugins.goyo-vim;
     globalPrefix = "goyo_";
 
+    maintainers = [maintainers.GaetanLepage];
+
     # TODO introduced 2024-03-01: remove 2024-05-01
     deprecateExtraConfig = true;
     optionsRenamedToSettings = [

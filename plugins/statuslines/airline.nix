@@ -14,6 +14,8 @@ with helpers.vim-plugin;
     globalPrefix = "airline_";
     deprecateExtraConfig = true;
 
+    maintainers = [maintainers.GaetanLepage];
+
     options =
       (
         listToAttrs (

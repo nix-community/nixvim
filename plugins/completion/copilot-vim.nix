@@ -14,6 +14,8 @@ with helpers.vim-plugin;
     globalPrefix = "copilot_";
     deprecateExtraConfig = true;
 
+    maintainers = [maintainers.GaetanLepage];
+
     options = {
       nodeCommand = mkDefaultOpt {
         global = "node_command";

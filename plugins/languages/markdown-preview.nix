@@ -14,6 +14,8 @@ with helpers.vim-plugin;
     globalPrefix = "mkdp_";
     deprecateExtraConfig = true;
 
+    maintainers = [maintainers.GaetanLepage];
+
     options = {
       autoStart = mkDefaultOpt {
         global = "auto_start";

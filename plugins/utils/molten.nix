@@ -13,6 +13,8 @@ with helpers.vim-plugin;
     defaultPackage = pkgs.vimPlugins.molten-nvim;
     globalPrefix = "molten_";
 
+    maintainers = [maintainers.GaetanLepage];
+
     # TODO introduced 2024-03-01: remove 2024-05-01
     deprecateExtraConfig = true;
     optionsRenamedToSettings = [

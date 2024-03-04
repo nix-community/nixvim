@@ -11,9 +11,11 @@ with helpers.vim-plugin;
     name = "undotree";
     defaultPackage = pkgs.vimPlugins.undotree;
     globalPrefix = "undotree_";
-    deprecateExtraConfig = true;
+
+    maintainers = [maintainers.GaetanLepage];
 
     # TODO introduced 2024-02-22: remove 2024-04-22
+    deprecateExtraConfig = true;
     imports = let
       basePluginPath = ["plugins" "undotree"];
     in
