@@ -13,6 +13,8 @@ with helpers.vim-plugin;
     defaultPackage = pkgs.vimPlugins.vim-ledger;
     globalPrefix = "ledger_";
 
+    maintainers = [maintainers.GaetanLepage];
+
     # TODO introduced 2024-03-02: remove 2024-05-02
     deprecateExtraConfig = true;
     optionsRenamedToSettings = [

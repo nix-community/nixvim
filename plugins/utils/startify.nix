@@ -14,6 +14,8 @@ with helpers.vim-plugin;
     globalPrefix = "startify_";
     deprecateExtraConfig = true;
 
+    maintainers = [maintainers.GaetanLepage];
+
     options = {
       sessionDir = mkDefaultOpt {
         description = "Directory to save/load session";
