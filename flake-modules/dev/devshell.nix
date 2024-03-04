@@ -19,7 +19,7 @@
         {
           name = "checks";
           help = "Run all nixvim checks";
-          command = "nix flake check";
+          command = "nix flake check '$@'";
         }
         {
           name = "tests";
@@ -27,7 +27,7 @@
           command = ''
             echo "=> Running nixvim tests for the '${system}' architecture..."
 
-            ${nix} build .#checks.${system}.tests
+            ${nix} build .#checks.${system}.tests "$@"
           '';
         }
         {
@@ -41,7 +41,7 @@
           command = ''
             echo "=> Building nixvim documentation..."
 
-            ${nix} build .#docs
+            ${nix} build .#docs "$@"
           '';
         }
         {
