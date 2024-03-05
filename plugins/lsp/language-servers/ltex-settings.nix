@@ -636,32 +636,4 @@ with lib; {
           server.
       '';
   };
-
-  ltex_extra = {
-    enable = helpers.defaultNullOpts.mkBool true ''
-      Enable LTeX_extra plugin which provides external LTeX file handling
-      and other extra features.
-    '';
-    path = helpers.defaultNullOpts.mkStr "" ''
-      Path (relative to project root) to load external files from.
-
-      Commonly used values are:
-      - `.ltex`
-      - `.vscode` for compatibility with projects using the associated VS Code extension.
-    '';
-  };
-
-  config = let
-    cfg = config.lsp.servers.ltex.ltex_extra;
-  in
-    mkIf ltex_extra.enabled {
-      plugins.lsp.servers.ltex.onAttach.function = ''
-        require("ltex_extra").setup{
-          path = "${cfg.path}",
-        }
-      '';
-      extraPlugins = with pkgs.vimPlugins; [
-        ltex_extra-nvim
-      ];
-    };
 }
