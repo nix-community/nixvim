@@ -63,12 +63,14 @@ in {
       extraPlugins = [cfg.package];
 
       plugins.lsp = {
-        # Enable the ltex language server
-        servers.ltex.enable = true;
+        servers.ltex = {
+          # Enable the ltex language server
+          enable = true;
 
-        postConfig = ''
-          require("ltex_extra").setup(${helpers.toLuaObject setupOptions})
-        '';
+          onAttach = ''
+            require("ltex_extra").setup(${helpers.toLuaObject setupOptions})
+          '';
+        };
       };
     };
 }
