@@ -67,7 +67,7 @@ in {
           # Enable the ltex language server
           enable = true;
 
-          onAttach = ''
+          onAttach.function = ''
             require("ltex_extra").setup(${helpers.toLuaObject setupOptions})
           '';
         };
