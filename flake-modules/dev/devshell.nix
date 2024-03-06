@@ -19,7 +19,7 @@
         {
           name = "checks";
           help = "Run all nixvim checks";
-          command = "nix flake check '$@'";
+          command = "nix flake check";
         }
         {
           name = "tests";
