@@ -67,7 +67,7 @@
   "da-one-sea"
   "da-one-white"
   "danqing"
-  "dracula"
+  "darcula"
   "darkmoss"
   "darktooth"
   "darkviolet"
