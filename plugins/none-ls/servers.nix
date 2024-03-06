@@ -100,6 +100,7 @@ with lib; let
       verilator
       xmlformat
       xq
+      yamlfix
       yamlfmt
       yamllint
       yapf
@@ -112,6 +113,8 @@ with lib; let
       alex
       eslint
       eslint_d
+      fixjson
+      jsonlint
       prettier
       ;
     inherit
@@ -247,13 +250,11 @@ with lib; let
     curlylint = null;
     dtsfmt = null;
     erb_lint = null;
-    fixjson = null;
     forge_fmt = null;
     gccdiag = null;
     gersemi = null;
     gospel = null;
     jshint = null;
-    jsonlint = null;
     markdown_toc = null;
     markuplint = null;
     misspell = null;
@@ -293,7 +294,6 @@ with lib; let
     twigcs = null;
     vacuum = null;
     xo = null;
-    yamlfix = null;
 
     # Sources without packages
     gitrebase = false;
