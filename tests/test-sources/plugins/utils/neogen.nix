@@ -24,7 +24,7 @@
           };
         };
       };
-      placeholderHighligt = "None";
+      placeholderHighlight = "None";
       placeholdersText = {
         attribute = "attribute";
         class = "class";

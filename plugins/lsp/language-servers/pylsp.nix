@@ -26,7 +26,7 @@ in {
       autopep8 = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (autopep8).
+          Setting this explicitly to `true` will install the dependency for this plugin (autopep8).
         '';
       };
 
@@ -37,7 +37,7 @@ in {
 
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (flake8).
+          Setting this explicitly to `true` will install the dependency for this plugin (flake8).
         '';
 
         exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
@@ -177,7 +177,7 @@ in {
       mccabe = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (mccabe).
+          Setting this explicitly to `true` will install the dependency for this plugin (mccabe).
         '';
 
         threshold = helpers.defaultNullOpts.mkInt 15 ''
@@ -196,7 +196,7 @@ in {
       pycodestyle = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (pycodestyle).
         '';
 
@@ -232,7 +232,7 @@ in {
       pydocstyle = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (pydocstyle).
         '';
 
@@ -276,14 +276,14 @@ in {
       pyflakes = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (pyflakes).
+          Setting this explicitly to `true` will install the dependency for this plugin (pyflakes).
         '';
       };
 
       pylint = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (pylint).
+          Setting this explicitly to `true` will install the dependency for this plugin (pylint).
         '';
 
         args = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
@@ -300,7 +300,7 @@ in {
       rope_autoimport = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (rope).
+          Setting this explicitly to `true` will install the dependency for this plugin (rope).
         '';
 
         memory = helpers.defaultNullOpts.mkBool false ''
@@ -312,7 +312,7 @@ in {
       rope_completion = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (rope).
+          Setting this explicitly to `true` will install the dependency for this plugin (rope).
         '';
 
         eager = helpers.defaultNullOpts.mkBool false ''
@@ -323,7 +323,7 @@ in {
       yapf = {
         enabled = helpers.defaultNullOpts.mkBool true ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin (yapf).
+          Setting this explicitly to `true` will install the dependency for this plugin (yapf).
         '';
       };
 
@@ -331,7 +331,7 @@ in {
       pylsp_mypy = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (pylsp-mypy).
         '';
 
@@ -393,7 +393,7 @@ in {
       isort = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (pyls-isort).
         '';
       };
@@ -401,7 +401,7 @@ in {
       black = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (python-lsp-black).
         '';
 
@@ -424,7 +424,7 @@ in {
       memestra = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (pyls-memestra).
         '';
       };
@@ -432,7 +432,7 @@ in {
       rope = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (pylsp-rope).
         '';
       };
@@ -440,7 +440,7 @@ in {
       ruff = {
         enabled = helpers.defaultNullOpts.mkBool false ''
           Enable or disable the plugin.
-          Setting this explicitely to `true` will install the dependency for this plugin
+          Setting this explicitly to `true` will install the dependency for this plugin
           (python-lsp-ruff).
         '';
 

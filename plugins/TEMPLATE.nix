@@ -10,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "my-plugin.nvim";
   defaultPackage = pkgs.vimPlugins.my-plugin-nvim; # TODO replace
 
-  # Optionnally provide an example for the `settings` option.
+  # Optionally provide an example for the `settings` option.
   settingsExample = {
     foo = 42;
     bar.__raw = "function() print('hello') end";

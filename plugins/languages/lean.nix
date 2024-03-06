@@ -182,7 +182,7 @@ in {
 
       stderr = {
         enable = helpers.defaultNullOpts.mkBool true ''
-          Redirect Lean's stderr messages somehwere (to a buffer by default).
+          Redirect Lean's stderr messages somewhere (to a buffer by default).
         '';
 
         height = helpers.defaultNullOpts.mkPositiveInt 5 "Height of the window.";

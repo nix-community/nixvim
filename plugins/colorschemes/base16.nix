@@ -55,7 +55,7 @@ in {
               );
           })
         ''
-          Optionaly, you can provide a table specifying your colors to the setup function.
+          Optionally, you can provide a table specifying your colors to the setup function.
 
           Example:
           ```nix

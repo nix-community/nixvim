@@ -384,7 +384,7 @@ in {
             "__unkeyed" = "birthtime";
             inherit (birthtime) highlight format;
           });
-        buf_opions = cfg.bufOptions;
+        buf_options = cfg.bufOptions;
         win_options = cfg.winOptions;
         default_file_explorer = cfg.defaultFileExplorer;
         restore_win_options = cfg.restoreWinOptions;

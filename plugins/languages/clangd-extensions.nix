@@ -13,7 +13,7 @@ with lib; let
   borderOpt = helpers.defaultNullOpts.mkBorder "none" "clangd-extensions" "";
 in {
   # All of those warnings were introduced on 08/22/2023.
-  # TODO: Remove them in ~2 monts (Oct. 2023).
+  # TODO: Remove them in ~2 months (Oct. 2023).
   imports =
     [
       (

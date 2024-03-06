@@ -32,7 +32,7 @@ helpers.vim-plugin.mkVimPlugin config {
     '';
 
     borders = helpers.defaultNullOpts.mkBool false ''
-      Enable the border between verticaly split windows visable.
+      Enable the border between vertically split windows.
     '';
 
     disable_background = helpers.defaultNullOpts.mkBool false ''

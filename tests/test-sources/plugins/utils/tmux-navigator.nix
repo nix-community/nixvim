@@ -4,7 +4,7 @@
     plugins.tmux-navigator.enable = true;
   };
 
-  # Actiavte all settings
+  # Activate all settings
   defaults = {
     plugins.tmux-navigator = {
       enable = true;

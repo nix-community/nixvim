@@ -19,7 +19,7 @@
     ]
     else parseDirectories file (namespace ++ [name]);
 
-  # Recurse into all directories, extracting files as we find them. This returs a deeply nested
+  # Recurse into all directories, extracting files as we find them. This returns a deeply nested
   # list, where each non list element is a set of test cases.
   parseDirectories = path: namespace: let
     relativePath = lib.removePrefix "${root}" "${path}";

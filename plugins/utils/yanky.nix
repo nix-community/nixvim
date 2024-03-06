@@ -58,7 +58,7 @@ in {
         '';
 
         ignoreRegisters = helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["_"]'' ''
-          Define registeres to be ignored.
+          Define registers to be ignored.
           By default the black hole register is ignored.
         '';
 
@@ -125,12 +125,12 @@ in {
           This works regardless to your `&clipboard` setting.
 
           This means, if `&clipboard` is set to `unnamed` and/or `unnamedplus`, if you yank
-          something outside of Neovim, you can put it immediatly using `p` and it will be added to
+          something outside of Neovim, you can put it immediately using `p` and it will be added to
           your yank ring.
 
           If `&clipboard` is empty, if you yank something outside of Neovim, this will be the first
           value you'll have when cycling through the ring.
-          Basicly, you can do `p` and then `<c-p>` to paste yanked text.
+          Basically, you can do `p` and then `<c-p>` to paste yanked text.
         '';
       };
 

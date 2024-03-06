@@ -78,7 +78,7 @@ with lib; {
         helpers.defaultNullOpts.mkInt 60
         "Adjust timeouts in milliseconds for matchparen highlighting";
 
-      deffered = {
+      deferred = {
         enable = helpers.defaultNullOpts.mkBool false ''
           Deferred highlighting improves cursor movement performance (for example, when using hjkl)
           by delaying highlighting for a short time and waiting to see if the cursor continues
@@ -170,9 +170,9 @@ with lib; {
         matchup_matchparen_stopline = cfg.matchParen.stopline;
         matchup_matchparen_timeout = cfg.matchParen.timeout;
         matchup_matchparen_insert_timeout = cfg.matchParen.insertTimeout;
-        matchup_matchparen_deferred = cfg.matchParen.deffered.enable;
-        matchup_matchparen_deferred_show_delay = cfg.matchParen.deffered.showDelay;
-        matchup_matchparen_deferred_hide_delay = cfg.matchParen.deffered.hideDelay;
+        matchup_matchparen_deferred = cfg.matchParen.deferred.enable;
+        matchup_matchparen_deferred_show_delay = cfg.matchParen.deferred.showDelay;
+        matchup_matchparen_deferred_hide_delay = cfg.matchParen.deferred.hideDelay;
         matchup_matchparen_hi_surround_always = cfg.matchParen.hiSurroundAlways;
 
         matchup_motion_enabled = cfg.motion.enable;

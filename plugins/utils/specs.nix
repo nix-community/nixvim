@@ -26,13 +26,13 @@ in {
     delay = mkOption {
       type = types.int;
       default = 0;
-      description = "Delay in miliseconds";
+      description = "Delay in milliseconds";
     };
 
     increment = mkOption {
       type = types.int;
       default = 10;
-      description = "Increment in miliseconds";
+      description = "Increment in milliseconds";
     };
 
     blend = mkOption {

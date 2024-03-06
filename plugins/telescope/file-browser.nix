@@ -95,7 +95,7 @@ in {
     '';
 
     quiet = helpers.defaultNullOpts.mkBool false ''
-      Surpress any notification from file_brower actions.
+      Suppress any notification from file_browser actions.
     '';
 
     dirIcon = helpers.defaultNullOpts.mkStr "" ''

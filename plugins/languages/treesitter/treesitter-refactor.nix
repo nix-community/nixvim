@@ -69,7 +69,7 @@ with lib; {
           description = ''
             go to the definition of the symbol under the cursor or use vim.lsp.buf.definition if
             the symbol can not be resolved. You can use your own fallback function if create a
-            mapping fo `lua require'nvim-treesitter.refactor.navigation(nil, fallback_function)<cr>`.
+            mapping for `lua require'nvim-treesitter.refactor.navigation(nil, fallback_function)<cr>`.
           '';
         };
         listDefinitions = mkOption {

@@ -33,7 +33,7 @@ in {
         mkList ''["Classic" "VirtualTextOk"]''
         ''
           You can combo different display modes as desired and with the 'Ok' or 'Err' suffix to filter
-          only sucessful runs (or errored-out runs respectively)
+          only successful runs (or errored-out runs respectively)
 
           Example:
           ```nix

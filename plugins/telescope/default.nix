@@ -19,7 +19,7 @@ in {
     ./undo.nix
   ];
 
-  # TODO:add support for aditional filetypes. This requires autocommands!
+  # TODO:add support for additional filetypes. This requires autocommands!
 
   options.plugins.telescope =
     helpers.neovim-plugin.extraOptionsOptions

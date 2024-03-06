@@ -328,7 +328,7 @@ in {
             '';
 
             s = mkNullStr ''
-              Look for differences that change the number of occurences of
+              Look for differences that change the number of occurrences of
               the specified pattern (extended regular expression) in a
               file.
             '';

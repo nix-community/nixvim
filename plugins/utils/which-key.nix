@@ -139,7 +139,7 @@ with lib; {
     triggers =
       helpers.defaultNullOpts.mkNullable
       (types.either (types.enum ["auto"]) (types.listOf types.str))
-      ''"auto"'' "automatically setup triggers, or specifiy a list manually";
+      ''"auto"'' "automatically setup triggers, or specify a list manually";
 
     triggersNoWait =
       helpers.defaultNullOpts.mkNullable (types.listOf types.str)

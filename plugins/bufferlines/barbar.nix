@@ -43,8 +43,8 @@ with lib; let
     };
 
     separator = {
-      left = helpers.defaultNullOpts.mkStr "▎" "Left seperator";
-      right = helpers.defaultNullOpts.mkStr "" "Right seperator";
+      left = helpers.defaultNullOpts.mkStr "▎" "Left separator";
+      right = helpers.defaultNullOpts.mkStr "" "Right separator";
     };
   };
 
@@ -186,7 +186,7 @@ in {
         "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP"
         ''
           New buffer letters are assigned in this order.
-          This order is optimal for the qwerty keyboard layout but might need adjustement for other layouts.
+          This order is optimal for the qwerty keyboard layout but might need adjustment for other layouts.
         '';
 
       sidebarFiletypes =
@@ -251,7 +251,7 @@ in {
               diagnostics =
                 /*
                 Because the keys of this lua table are not strings (but
-                `vim.diagnostic.severity.XXXX`), we have to manualy build a raw lua string here.
+                `vim.diagnostic.severity.XXXX`), we have to manually build a raw lua string here.
                 */
                 let
                   setIcons = filterAttrs (n: v: v != null) cfg.icons.diagnostics;

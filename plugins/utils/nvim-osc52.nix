@@ -21,7 +21,7 @@ with lib; {
 
       silent = mkOption {
         type = types.bool;
-        description = "Wether nvim-osc52 keymaps should be silent";
+        description = "Whether nvim-osc52 keymaps should be silent";
         default = false;
       };
 

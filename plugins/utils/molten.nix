@@ -169,7 +169,7 @@ with helpers.vim-plugin;
 
       show_mimetype_debug = helpers.defaultNullOpts.mkBool false ''
         Before any non-iostream output chunk, the mime-type for that output chunk is shown.
-        Meant for debugging/plugin devlopment.
+        Meant for debugging/plugin development.
       '';
     };
 

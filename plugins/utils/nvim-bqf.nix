@@ -20,7 +20,7 @@ in {
       '';
 
       magicWindow = helpers.defaultNullOpts.mkBool true ''
-        Give the window magic, when the window is splited horizontally, keep the distance between the
+        Give the window magic, when the window is split horizontally, keep the distance between the
         current line and the top/bottom border of neovim unchanged.
         It's a bit like a floating window, but the window is indeed a normal window, without any
         floating attributes.
