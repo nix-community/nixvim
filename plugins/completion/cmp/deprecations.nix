@@ -110,6 +110,11 @@ in {
     renameWarnings
     ++ [
       (
+        mkRenamedOptionModule
+        (oldPluginBasePath ++ ["enable"])
+        (newPluginBasePath ++ ["enable"])
+      )
+      (
         mkRemovedOptionModule
         (oldPluginBasePath ++ ["preselect"])
         ''
