@@ -40,9 +40,9 @@ in {
       formatOnSave =
         helpers.defaultNullOpts.mkNullable
         (
-          with types;
+          with helpers.nixvimTypes;
             either
-            str
+            strLuaFn
             (
               submodule {
                 options = {
@@ -69,15 +69,23 @@ in {
         '';
 
       formatAfterSave =
-        helpers.defaultNullOpts.mkNullable (types.submodule {
-          options = {
-            lspFallback = mkOption {
-              type = types.bool;
-              default = true;
-              description = "See :help conform.format for details.";
-            };
-          };
-        })
+        helpers.defaultNullOpts.mkNullable
+        (
+          with helpers.nixvimTypes;
+            either
+            strLuaFn
+            (
+              submodule {
+                options = {
+                  lspFallback = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = "See :help conform.format for details.";
+                  };
+                };
+              }
+            )
+        )
         "see documentation"
         ''
           If this is set, Conform will run the formatter asynchronously after save.
@@ -110,9 +118,12 @@ in {
             timeout_ms = formatOnSave.timeoutMs;
           }
           else helpers.mkRaw formatOnSave;
-        format_after_save = helpers.ifNonNull' formatAfterSave {
-          lsp_fallback = formatAfterSave.lspFallback;
-        };
+        format_after_save =
+          if builtins.isAttrs formatAfterSave
+          then {
+            lsp_fallback = formatOnSave.lspFallback;
+          }
+          else helpers.mkRaw formatAfterSave;
         log_level = logLevel;
         notify_on_error = notifyOnError;
         inherit formatters;
