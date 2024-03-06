@@ -554,6 +554,11 @@ with lib; let
       settings = cfg: {rust-analyzer = cfg;};
     }
     {
+      name = "slint-lsp";
+      description = "slint_lsp for Slint GUI language";
+      serverName = "slint_lsp";
+    }
+    {
       name = "solargraph";
       description = "solargraph for Ruby";
       package = pkgs.rubyPackages.solargraph;

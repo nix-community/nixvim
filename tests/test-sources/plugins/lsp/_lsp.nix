@@ -149,6 +149,7 @@
             installCargo = true;
             installRustc = true;
           };
+          slint-lsp.enable = true;
           solargraph.enable = true;
           # As of 2023-12-13, sourcekit-lsp is broken
           # TODO: re-enable this test when fixed
