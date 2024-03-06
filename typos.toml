@@ -1,0 +1,5 @@
+[default.extend-words]
+tabe = "tabe"
+noice = "noice"
+Parm = "Parm"             # clangd-extensions
+Definitons = "Definitons" # ./plugins/languages/treesitter/treesitter-refactor.nix
