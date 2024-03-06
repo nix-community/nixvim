@@ -62,6 +62,9 @@ in {
                   type = types.nullOr (types.attrsOf types.bool);
                   description = "Control resolved capabilities for the language server.";
                   default = null;
+                  example = {
+                    documentFormattingProvider = false;
+                  };
                 };
 
                 extraOptions = mkOption {
