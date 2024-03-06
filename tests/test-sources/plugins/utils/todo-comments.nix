@@ -125,4 +125,12 @@
       };
     };
   };
+
+  withoutRipgrep = {
+    plugins.todo-comments = {
+      enable = true;
+
+      ripgrepPackage = null;
+    };
+  };
 }

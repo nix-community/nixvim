@@ -33,6 +33,13 @@ in {
           "todo-comments"
           pkgs.vimPlugins.todo-comments-nvim;
 
+        ripgrepPackage = mkOption {
+          type = with types; nullOr package;
+          default = pkgs.ripgrep;
+          example = null;
+          description = "Which package (if any) to be added for file search support in todo-comments.";
+        };
+
         signs = helpers.defaultNullOpts.mkBool true "Show icons in the signs column.";
 
         signPriority = helpers.defaultNullOpts.mkInt 8 "Sign priority.";
@@ -264,6 +271,7 @@ in {
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
+      extraPackages = optional (cfg.ripgrepPackage != null) cfg.ripgrepPackage;
       extraConfigLua = ''
         require("todo-comments").setup${helpers.toLuaObject setupOptions}
       '';
