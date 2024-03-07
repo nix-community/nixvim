@@ -5,18 +5,17 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.ltex-extra;
-in {
-  meta.maintainers = [maintainers.loicreynier];
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "ltex-extra";
+    originalName = "ltex_extra.nvim";
+    defaultPackage = pkgs.vimPlugins.ltex_extra-nvim;
 
-  options.plugins.ltex-extra =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "ltex-extra";
+    maintainers = [maintainers.loicreynier];
 
-      package = helpers.mkPackageOption "ltex-extra" pkgs.vimPlugins.ltex_extra-nvim;
+    callSetup = false;
 
+    settingsOptions = {
       path = helpers.defaultNullOpts.mkStr "" ''
         Path (relative to project root) to load external files from.
 
@@ -26,7 +25,7 @@ in {
       '';
 
       initCheck = helpers.defaultNullOpts.mkBool true ''
-        Whether to load dicionnaries on startup.
+        Whether to load dictionaries on startup.
       '';
 
       loadLangs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["en-US"]'' ''
@@ -46,15 +45,7 @@ in {
       '';
     };
 
-  config = let
-    setupOptions = with cfg; {
-      inherit path;
-      init_check = initCheck;
-      load_langs = loadLangs;
-      log_level = logLevel;
-    };
-  in
-    mkIf cfg.enable {
+    extraConfig = cfg: {
       warnings = optional (!config.plugins.lsp.enable) ''
         You have enabled `ltex-extra` but not the lsp (`plugins.lsp`).
         You should set `plugins.lsp.enable = true` to make use of the LTeX_extra plugin's features.
@@ -73,4 +64,11 @@ in {
         };
       };
     };
-}
+
+    settingsExample = {
+      path = ".ltex";
+      initCheck = true;
+      loadLangs = ["en-US" "fr-FR"];
+      logLevel = "non";
+    };
+  }
