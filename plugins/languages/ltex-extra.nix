@@ -24,16 +24,16 @@ with lib;
         - `.vscode` for compatibility with projects using the associated VS Code extension.
       '';
 
-      initCheck = helpers.defaultNullOpts.mkBool true ''
+      init_check = helpers.defaultNullOpts.mkBool true ''
         Whether to load dictionaries on startup.
       '';
 
-      loadLangs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["en-US"]'' ''
+      load_langs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["en-US"]'' ''
         Languages for witch dicionnaries will be loaded.
         See `plugins.lsp.servers.ltex.languages` for possible values.
       '';
 
-      logLevel = helpers.defaultNullOpts.mkStr "none" ''
+      log_level = helpers.defaultNullOpts.mkStr "none" ''
         Log level. Possible values:
         - "none"
         - "trace"
