@@ -30,7 +30,7 @@ in
         };
 
         configurations = helpers.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationOption)) ''
-          Debugee configurations, see `:h dap-configuration` for more info.
+          Debuggee configurations, see `:h dap-configuration` for more info.
         '';
 
         signs = helpers.mkCompositeOption "Signs for dap." {
@@ -40,7 +40,7 @@ in
 
           dapLogPoint = mkSignOption "L" "Sign for log points.";
 
-          dapStopped = mkSignOption "→" "Sign to indicate where the debugee is stopped.";
+          dapStopped = mkSignOption "→" "Sign to indicate where the debuggee is stopped.";
 
           dapBreakpointRejected = mkSignOption "R" "Sign to indicate breakpoints rejected by the debug adapter.";
         };

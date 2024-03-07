@@ -180,9 +180,9 @@ in {
           require('nvim-treesitter.configs').setup(${helpers.toLuaObject tsOptions})
         ''
         + (optionalString (cfg.languageRegister != {}) ''
-          __parserFiltypeMappings = ${helpers.toLuaObject cfg.languageRegister}
+          __parserFiletypeMappings = ${helpers.toLuaObject cfg.languageRegister}
 
-          for parser_name, ft in pairs(__parserFiltypeMappings) do
+          for parser_name, ft in pairs(__parserFiletypeMappings) do
             require('vim.treesitter.language').register(parser_name, ft)
           end
         '');

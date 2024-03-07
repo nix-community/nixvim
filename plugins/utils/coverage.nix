@@ -73,7 +73,7 @@ in {
         keymapsDef;
 
       autoReload = helpers.defaultNullOpts.mkBool false ''
-        If true, the `coverage_file` for a langauge will be watched for changes after executing
+        If true, the `coverage_file` for a language will be watched for changes after executing
         `:CoverageLoad` or `coverage.load()`.
         The file watcher will be stopped after executing `:CoverageClear` or `coverage.clear()`.
       '';

@@ -39,7 +39,7 @@ in {
             - search: regular search
             - fuzzy: fuzzy search
             - fun(str): custom search function that returns a pattern
-              For example, to only match at the begining of a word:
+              For example, to only match at the beginning of a word:
               function(str)
                 return "\\<" .. str
               end
@@ -108,7 +108,7 @@ in {
       };
 
       label = {
-        uppercase = helpers.defaultNullOpts.mkBool true "allow upercase labels";
+        uppercase = helpers.defaultNullOpts.mkBool true "allow uppercase labels";
 
         exclude = helpers.defaultNullOpts.mkStr "" ''
           add any labels with the correct case here, that you want to exclude

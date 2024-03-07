@@ -8,7 +8,7 @@
 with lib; let
   cfg = config.plugins.commentary;
 in {
-  # TODO Add support for aditional filetypes. This requires autocommands!
+  # TODO Add support for additional filetypes. This requires autocommands!
 
   options = {
     plugins.commentary = {

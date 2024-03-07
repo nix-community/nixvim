@@ -13,7 +13,7 @@ in {
     helpers.neovim-plugin.extraOptionsOptions
     // {
       host = helpers.defaultNullOpts.mkStr "http://localhost:5000" ''
-        The adress of the tabby host server.
+        The address of the tabby host server.
       '';
 
       maxLines = helpers.defaultNullOpts.mkUnsignedInt 100 ''

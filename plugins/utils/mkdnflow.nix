@@ -300,7 +300,7 @@ in {
           provided, the plugin will attempt to infer what the meanings of the symbols in your list
           are by their order.
 
-          For example, if you set `toDo.symbols` as `[" " "⧖" "✓"]`, `" "` will be assiged to
+          For example, if you set `toDo.symbols` as `[" " "⧖" "✓"]`, `" "` will be assigned to
           `toDo.notStarted`, "⧖" will be assigned to `toDo.inProgress`, etc.
           If more than three symbols are specified, the first will be used as `notStarted`, the
           second will be used as `inProgress`, and the last will be used as `complete`.
@@ -317,7 +317,7 @@ in {
           provided, the plugin will attempt to infer what the meanings of the symbols in your list
           are by their order.
 
-          For example, if you set `toDo.symbols` as `[" " "⧖" "✓"]`, `" "` will be assiged to
+          For example, if you set `toDo.symbols` as `[" " "⧖" "✓"]`, `" "` will be assigned to
           `toDo.notStarted`, "⧖" will be assigned to `toDo.inProgress`, etc.
           If more than three symbols are specified, the first will be used as `notStarted`, the
           second will be used as `inProgress`, and the last will be used as `complete`.
@@ -334,7 +334,7 @@ in {
           provided, the plugin will attempt to infer what the meanings of the symbols in your list
           are by their order.
 
-          For example, if you set `toDo.symbols` as `[" " "⧖" "✓"]`, `" "` will be assiged to
+          For example, if you set `toDo.symbols` as `[" " "⧖" "✓"]`, `" "` will be assigned to
           `toDo.notStarted`, "⧖" will be assigned to `toDo.inProgress`, etc.
           If more than three symbols are specified, the first will be used as `notStarted`, the
           second will be used as `inProgress`, and the last will be used as `complete`.

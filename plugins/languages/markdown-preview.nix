@@ -119,7 +119,7 @@ with helpers.vim-plugin;
                   Scroll type:
                   - "middle": The cursor position is always shown at the middle of the preview page.
                   - "top": The vim top viewport is always shown at the top of the preview page.
-                  - "relative": The cursor position is always shown at the relative positon of the preview page.
+                  - "relative": The cursor position is always shown at the relative position of the preview page.
                 '';
 
               hide_yaml_meta = helpers.defaultNullOpts.mkBool true ''

@@ -245,7 +245,7 @@ in {
           '';
 
           keys = {
-            shuttle = mkKeymapOption "[w" "Shuttle bettween the finder layout window.";
+            shuttle = mkKeymapOption "[w" "Shuttle between the finder layout window.";
 
             toggleOrOpen = mkKeymapOption "o" "Toggle expand or open.";
 
@@ -403,7 +403,7 @@ in {
 
             quit = mkKeymapOption "q" "Quit layout.";
 
-            shuttle = mkKeymapOption "[w" "Shuttle bettween the layout left and right.";
+            shuttle = mkKeymapOption "[w" "Shuttle between the layout left and right.";
 
             toggleOrReq = mkKeymapOption "u" "Toggle or do request.";
           };

@@ -37,7 +37,7 @@
       in
         result;
 
-      templateFlakeOuputs = callFlake {
+      templateFlakeOutputs = callFlake {
         inputs = {
           inherit (inputs) flake-parts nixpkgs;
           nixvim = self;
@@ -47,7 +47,7 @@
         sourceInfo = {};
       };
 
-      templateChecks = templateFlakeOuputs.checks.${system};
+      templateChecks = templateFlakeOutputs.checks.${system};
     in
       lib.concatMapAttrs
       (

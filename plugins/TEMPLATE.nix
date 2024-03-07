@@ -12,7 +12,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   maintainers = [lib.maintainers.MyName]; # TODO replace with your name
 
-  # Optionnally, explicitly declare some options. You don't have to.
+  # Optionally, explicitly declare some options. You don't have to.
   settingsOptions = {
     foo = helpers.defaultNullOpts.mkUnsignedInt 97 ''
       The best birth year.
@@ -23,7 +23,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     '';
   };
 
-  # Optionnally, provide an example for the `settings` option.
+  # Optionally, provide an example for the `settings` option.
   settingsExample = {
     foo = 42;
     bar.__raw = "function() print('hello') end";

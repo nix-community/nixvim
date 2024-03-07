@@ -38,7 +38,7 @@ in {
     options = {
       enable = helpers.defaultNullOpts.mkBool true ''
         Enable option completion task.
-        If you are writting a package, disable this
+        If you are writing a package, disable this
       '';
 
       target = {

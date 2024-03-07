@@ -102,7 +102,7 @@ with lib; rec {
       request = mkOption {
         type = types.enum ["attach" "launch"];
         description = ''
-          Indicates whether the debug adapter should launch a debugee or attach to one that is already running.
+          Indicates whether the debug adapter should launch a debuggee or attach to one that is already running.
         '';
       };
 

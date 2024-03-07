@@ -132,7 +132,7 @@ in {
           https://github.com/zbirenbaum/copilot.lua/blob/master/SettingsOpts.md.
           These options are specific to the copilot lsp and can be used to customize its behavior.
 
-          Ensure that the `name` field is not overriden as is is used for efficiency reasons in
+          Ensure that the `name` field is not overridden as is is used for efficiency reasons in
           numerous checks to verify copilot is actually running.
 
           See `:h vim.lsp.start_client` for list of options.

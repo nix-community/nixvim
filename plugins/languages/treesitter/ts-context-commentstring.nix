@@ -20,7 +20,7 @@ with lib; {
         type = types.bool;
         default = true;
         description = ''
-          Whethter to skip backwards compatibility routines and speed up loading.
+          Whether to skip backwards compatibility routines and speed up loading.
         '';
         example = false;
       };

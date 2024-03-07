@@ -17,7 +17,7 @@ in {
       package = helpers.mkPackageOption pluginName pkgs.vimPlugins.nvim-spider;
 
       skipInsignificantPunctuation =
-        helpers.defaultNullOpts.mkBool true "Whether to skip unsignificant punctuation.";
+        helpers.defaultNullOpts.mkBool true "Whether to skip insignificant punctuation.";
 
       keymaps = {
         silent = mkOption {

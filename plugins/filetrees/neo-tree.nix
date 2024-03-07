@@ -13,7 +13,7 @@ in {
     (
       mkRemovedOptionModule
       (basePluginPath ++ ["sourceSelector" "tabLabels"])
-      "Use `plugins.neo-tree.sourceSelector.sources` to achieve the same functionnality."
+      "Use `plugins.neo-tree.sourceSelector.sources` to achieve the same functionality."
     )
     (
       mkRemovedOptionModule

@@ -107,7 +107,7 @@ in {
             '';
 
           pipe = helpers.mkNullOrStr ''
-            Overide the pipe symbol in the shell command.
+            Override the pipe symbol in the shell command.
             Useful if using a shell that is not supported by this plugin.
           '';
         };

@@ -83,7 +83,7 @@ in {
                     ]
                 )
                 ''
-                  The type of `content` depends on the secton `type`:
+                  The type of `content` depends on the section `type`:
                   - "text" -> a list of strings or a function (`rawLua`) that requires a function that returns a table of strings
                   - "mapping" -> a list of list of strings in the format:
                     ```nix

@@ -49,7 +49,7 @@ in {
         positions/redraw signs.
         Lower values means that mark positions and signs will refresh much quicker, but may incur a
         higher performance penalty, whereas higher values may result in better performance, but may
-        also cause noticable lag in signs updating.
+        also cause noticeable lag in signs updating.
       '';
 
       signPriority =

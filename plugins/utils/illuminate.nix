@@ -25,7 +25,7 @@ with lib; let
     '';
 
     modesAllowlist = mkListStr "[]" ''
-      Modes to illuminate, this is overriden by `modes_denylist`.
+      Modes to illuminate, this is overridden by `modes_denylist`.
       See `:help mode()` for possible values.
     '';
 
@@ -36,7 +36,7 @@ with lib; let
     '';
 
     providersRegexSyntaxAllowlist = mkListStr "[]" ''
-      Syntax to illuminate, this is overriden by `providers_regex_syntax_denylist`.
+      Syntax to illuminate, this is overridden by `providers_regex_syntax_denylist`.
       Only applies to the 'regex' provider.
       Use `:echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')`.
     '';
@@ -61,7 +61,7 @@ with lib; let
     '';
 
     filetypesAllowlist = mkListStr "[]" ''
-      Filetypes to illuminate, this is overriden by `filetypes_denylist`.
+      Filetypes to illuminate, this is overridden by `filetypes_denylist`.
     '';
   };
 in {

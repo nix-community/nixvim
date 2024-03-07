@@ -126,7 +126,7 @@ in {
         "WARNING: Experimental feature also in VSCode, disabled by default because it might impact server performance.";
 
       disableMemberCodeLens = helpers.defaultNullOpts.mkBool true ''
-        By default code lenses are displayed on all referencable values. Display less by removing member references from lenses.
+        By default code lenses are displayed on all referenceable values. Display less by removing member references from lenses.
       '';
 
       jsxCloseTag = {

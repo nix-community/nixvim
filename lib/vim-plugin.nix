@@ -140,7 +140,7 @@ with lib; {
           {
             inherit extraPackages;
             globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
-            # does this evaluate package? it would not be desired to evaluate pacakge if we use another package.
+            # does this evaluate package? it would not be desired to evaluate package if we use another package.
             extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
           }
           (extraConfig cfg)

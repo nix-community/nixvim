@@ -16,6 +16,7 @@
             "plugins/lsp/language-servers/rust-analyzer-config.nix"
           ];
         };
+        typos.enable = true;
       };
     };
   };

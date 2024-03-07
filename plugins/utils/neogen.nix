@@ -112,56 +112,65 @@ in {
           - `"vsnip"` (https://github.com/hrsh7th/vim-vsnip)
       '';
 
-      placeholderHighligt = helpers.defaultNullOpts.mkStr "DiagnosticHint" ''
+      placeholderHighlight = helpers.defaultNullOpts.mkStr "DiagnosticHint" ''
         Placeholders highlights to use. If you don't want custom highlight, pass "None"
       '';
 
       placeholdersText = {
         description = helpers.defaultNullOpts.mkStr "[TODO:description]" ''
-          Placholder for description.
+          Placeholder for description.
         '';
 
         tparam = helpers.defaultNullOpts.mkStr "[TODO:tparam]" ''
-          Placholder for tparam.
+          Placeholder for tparam.
         '';
 
         parameter = helpers.defaultNullOpts.mkStr "[TODO:parameter]" ''
-          Placholder for parameter.
+          Placeholder for parameter.
         '';
 
         return = helpers.defaultNullOpts.mkStr "[TODO:return]" ''
-          Placholder for return.
+          Placeholder for return.
         '';
 
         class = helpers.defaultNullOpts.mkStr "[TODO:class]" ''
-          Placholder for class.
+          Placeholder for class.
         '';
 
         throw = helpers.defaultNullOpts.mkStr "[TODO:throw]" ''
-          Placholder for throw.
+          Placeholder for throw.
         '';
 
         varargs = helpers.defaultNullOpts.mkStr "[TODO:varargs]" ''
-          Placholder for varargs.
+          Placeholder for varargs.
         '';
 
         type = helpers.defaultNullOpts.mkStr "[TODO:type]" ''
-          Placholder for type.
+          Placeholder for type.
         '';
 
         attribute = helpers.defaultNullOpts.mkStr "[TODO:attribute]" ''
-          Placholder for attribute.
+          Placeholder for attribute.
         '';
 
         args = helpers.defaultNullOpts.mkStr "[TODO:args]" ''
-          Placholder for args.
+          Placeholder for args.
         '';
 
         kwargs = helpers.defaultNullOpts.mkStr "[TODO:kwargs]" ''
-          Placholder for kwargs.
+          Placeholder for kwargs.
         '';
       };
     };
+
+  # TODO introduced 2024-03-07: remove 2024-05-07
+  imports = [
+    (
+      mkRenamedOptionModule
+      ["plugins" "neogen" "placeholderHighligt"]
+      ["plugins" "neogen" "placeholderHighlight"]
+    )
+  ];
 
   config = let
     setupOptions = with cfg; {
@@ -171,7 +180,7 @@ in {
       snippet_engine = snippetEngine;
       enable_placeholders = enablePlaceholders;
       placeholder_text = placeholdersText;
-      placeholder_hl = placeholderHighligt;
+      placeholder_hl = placeholderHighlight;
     };
   in
     mkIf cfg.enable {
