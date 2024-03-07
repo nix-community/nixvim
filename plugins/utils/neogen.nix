@@ -163,6 +163,15 @@ in {
       };
     };
 
+  # TODO introduced 2024-03-07: remove 2024-05-07
+  imports = [
+    (
+      mkRenamedOptionModule
+      ["plugins" "neogen" "placeholderHighligt"]
+      ["plugins" "neogen" "placeholderHighlight"]
+    )
+  ];
+
   config = let
     setupOptions = with cfg; {
       enabled = enable;
