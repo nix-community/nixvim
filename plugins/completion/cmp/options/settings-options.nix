@@ -300,7 +300,7 @@ with lib; {
         See |'scrolloff'|.
       '';
 
-      col_offset = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+      col_offset = helpers.defaultNullOpts.mkInt 0 ''
         Offsets the completion window relative to the cursor.
       '';
 
