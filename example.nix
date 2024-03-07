@@ -61,7 +61,7 @@
         active = {
           left = [
             ["mode" "paste"]
-            ["redaonly" "filename" "modified" "helloworld"]
+            ["readonly" "filename" "modified" "helloworld"]
           ];
         };
 
