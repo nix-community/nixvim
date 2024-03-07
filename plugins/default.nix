@@ -52,6 +52,7 @@
     ./languages/lean.nix
     ./languages/ledger.nix
     ./languages/lint.nix
+    ./languages/ltex-extra.nix
     ./languages/markdown-preview.nix
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
