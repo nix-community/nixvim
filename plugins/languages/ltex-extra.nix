@@ -59,7 +59,7 @@ with lib;
           enable = true;
 
           onAttach.function = ''
-            require("ltex_extra").setup(${helpers.toLuaObject setupOptions})
+            require("ltex_extra").setup(${helpers.toLuaObject cfg.settings})
           '';
         };
       };
