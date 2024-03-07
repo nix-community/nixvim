@@ -3,4 +3,5 @@ tabe = "tabe"
 noice = "noice"
 darcula = "darcula"       # base16-list
 Parm = "Parm"             # clangd-extensions
-Definitons = "Definitons" # ./plugins/languages/treesitter/treesitter-refactor.nix
+Definitons = "Definitons" # TODO: ./plugins/languages/treesitter/treesitter-refactor.nix
+deffered = "deffered"     # TODO: ./plugins/utils/vim-matchup.nix

@@ -145,6 +145,15 @@ with lib; {
     '';
   };
 
+  # TODO introduced 2024-03-07: remove 2024-05-07
+  imports = [
+    (
+      mkRenamedOptionModule
+      ["plugins" "vim-matchup" "matchParen" "deffered"]
+      ["plugins" "vim-matchup" "matchParen" "deferred"]
+    )
+  ];
+
   config = let
     cfg = config.plugins.vim-matchup;
   in
