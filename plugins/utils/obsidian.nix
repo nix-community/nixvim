@@ -122,7 +122,7 @@ with lib; let
       nvimCmp = helpers.mkNullOrOption types.bool ''
         Set to false to disable completion.
 
-        Default: `true` if `nvim-cmp` is enabled.
+        Default: `true` if `cmp` is enabled.
       '';
 
       minChars = helpers.defaultNullOpts.mkUnsignedInt 2 ''
@@ -500,10 +500,10 @@ in {
         assertion = let
           nvimCmpEnabled = isBool cfg.completion.nvimCmp && cfg.completion.nvimCmp;
         in
-          nvimCmpEnabled -> config.plugins.nvim-cmp.enable;
+          nvimCmpEnabled -> config.plugins.cmp.enable;
         message = ''
-          Nixvim (plugins.obsidian): You have enabled `completion.nvimCmp` but `plugins.nvim-cmp.enable` is `false`.
-          You need to enable `nvim-cmp` to use this setting.
+          Nixvim (plugins.obsidian): You have enabled `completion.nvimCmp` but `plugins.cmp.enable` is `false`.
+          You need to enable `cmp` to use this setting.
         '';
       }
     ];

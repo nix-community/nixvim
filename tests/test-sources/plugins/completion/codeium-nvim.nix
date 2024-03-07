@@ -4,10 +4,10 @@
   };
 
   enabled-by-cmp = {
-    plugins.nvim-cmp = {
+    plugins.cmp = {
       enable = true;
 
-      sources = [
+      settings.sources = [
         {name = "codeium";}
       ];
     };

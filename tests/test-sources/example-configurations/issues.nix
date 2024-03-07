@@ -100,37 +100,40 @@
         enable = true;
       };
 
-      nvim-cmp = {
-        formatting = {
-          format = ''
-            require("lspkind").cmp_format({
-                    mode="symbol",
-                    maxwidth = 50,
-                    ellipsis_char = "..."
-            })
-          '';
-        };
-
-        autoEnableSources = true;
-        snippet = {
-          expand.__raw = ''
-            function(args)
-              require("luasnip").lsp_expand(args.body)
-            end
-          '';
-        };
+      cmp = {
         enable = true;
-        sources = [
-          {name = "nvim_lsp";}
-          {
-            name = "luasnip";
-            option = {
-              show_autosnippets = true;
-            };
-          }
-          {name = "path";}
-          {name = "buffer";}
-        ];
+        autoEnableSources = true;
+
+        settings = {
+          formatting = {
+            format = ''
+              require("lspkind").cmp_format({
+                      mode="symbol",
+                      maxwidth = 50,
+                      ellipsis_char = "..."
+              })
+            '';
+          };
+
+          snippet = {
+            expand = ''
+              function(args)
+                require("luasnip").lsp_expand(args.body)
+              end
+            '';
+          };
+          sources = [
+            {name = "nvim_lsp";}
+            {
+              name = "luasnip";
+              option = {
+                show_autosnippets = true;
+              };
+            }
+            {name = "path";}
+            {name = "buffer";}
+          ];
+        };
       };
       barbar.enable = true;
     };
@@ -145,8 +148,6 @@
       luasnip
       lspkind-nvim
     ];
-
-    # extraConfigLua = (builtins.readFile ./nvim-extra-lua.lua);
   };
 
   "71" = {
