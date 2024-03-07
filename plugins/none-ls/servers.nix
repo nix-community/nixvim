@@ -376,6 +376,47 @@ in {
     enabledSources = builtins.filter (source: source.enable) flattenedSources;
   in
     mkIf cfg.enable {
+      # ASSERTIONS FOR DEVELOPMENT PURPOSES: Any failure should be caught by CI before deployment.
+      # Ensure that the keys of the manually declared `builtinPackages` match the ones from upstream.
+      assertions = let
+        upstreamToolNames = unique (
+          flatten
+          (
+            mapAttrsToList
+            (_: attrNames)
+            noneLsBuiltins
+          )
+        );
+        localToolNames = attrNames builtinPackages;
+
+        undeclaredToolNames =
+          filter
+          # Keep tool names which are not declared locally
+          (toolName: !(elem toolName localToolNames))
+          upstreamToolNames;
+
+        uselesslyDeclaredToolNames =
+          filter
+          # Keep tool names which are not in upstream
+          (toolName: !(elem toolName upstreamToolNames))
+          localToolNames;
+      in [
+        {
+          assertion = (length undeclaredToolNames) == 0;
+          message = ''
+            Nixvim (plugins.none-ls): Some tools from upstream are not declared locally in `builtinPackages`.
+            -> [${concatStringsSep ", " undeclaredToolNames}]
+          '';
+        }
+        {
+          assertion = (length uselesslyDeclaredToolNames) == 0;
+          message = ''
+            Nixvim (plugins.none-ls): Some tools are declared locally but are not in the upstream list of supported plugins.
+            -> [${concatStringsSep ", " uselesslyDeclaredToolNames}]
+          '';
+        }
+      ];
+
       plugins.none-ls.sourcesItems =
         builtins.map (
           source: let
