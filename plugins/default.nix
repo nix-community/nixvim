@@ -6,7 +6,7 @@
     ./bufferlines/navic.nix
 
     ./colorschemes/ayu.nix
-    ./colorschemes/base16.nix
+    ./colorschemes/base16
     ./colorschemes/catppuccin.nix
     ./colorschemes/dracula.nix
     ./colorschemes/gruvbox.nix
