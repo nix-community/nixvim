@@ -8,7 +8,7 @@
 with lib;
   helpers.neovim-plugin.mkNeovimPlugin config {
     name = "ayu";
-    namespace = "colorschemes";
+    colorscheme = true;
     originalName = "neovim-ayu";
     defaultPackage = pkgs.vimPlugins.neovim-ayu;
     callSetup = false;
@@ -42,6 +42,9 @@ with lib;
     };
 
     extraConfig = cfg: {
+      # The colorscheme option is set by the `setup` function.
+      colorscheme = null;
+
       extraConfigLuaPre = ''
         local ayu = require("ayu")
         ayu.setup(${helpers.toLuaObject cfg.settings})

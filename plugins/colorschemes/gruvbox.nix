@@ -7,7 +7,7 @@
 }:
 helpers.neovim-plugin.mkNeovimPlugin config {
   name = "gruvbox";
-  namespace = "colorschemes";
+  colorscheme = true;
   originalName = "gruvbox.nvim";
   defaultPackage = pkgs.vimPlugins.gruvbox-nvim;
 
@@ -56,9 +56,5 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       bright_blue = "#5476b2";
       bright_purple = "#fb4934";
     };
-  };
-
-  extraConfig = cfg: {
-    colorscheme = "gruvbox";
   };
 }
