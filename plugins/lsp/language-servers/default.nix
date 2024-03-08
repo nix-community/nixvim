@@ -431,6 +431,11 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/nu" "--lsp"];
     }
     {
+      name = "ocamllsp";
+      description = "ocamllsp for OCaml";
+      package = pkgs.ocamlPackages.ocaml-lsp;
+    }
+    {
       name = "ols";
       description = "ols for the Odin programming language";
       package = pkgs.ols;
