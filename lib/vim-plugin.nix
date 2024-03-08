@@ -6,7 +6,7 @@
 with lib; {
   mkVimPlugin = config: {
     name,
-    namespace ? "plugins",
+    colorscheme ? false,
     url ?
       if defaultPackage != null
       then defaultPackage.meta.homepage
@@ -29,6 +29,11 @@ with lib; {
     extraPlugins ? [],
     extraPackages ? [],
   }: let
+    namespace =
+      if colorscheme
+      then "colorschemes"
+      else "plugins";
+
     cfg = config.${namespace}.${name};
 
     # TODO support nested options!
@@ -143,6 +148,11 @@ with lib; {
             # does this evaluate package? it would not be desired to evaluate package if we use another package.
             extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
           }
+          (optionalAttrs colorscheme {
+            # We use `mkDefault` here to let individual plugins override this option.
+            # For instance, setting it to `null` a specific way of setting the coloscheme.
+            colorscheme = lib.mkDefault name;
+          })
           (extraConfig cfg)
         ]
       );
