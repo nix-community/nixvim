@@ -7,7 +7,7 @@
 }:
 with lib; let
   cfg = config.colorschemes.base16;
-  themes = import ./base16-list.nix;
+  themes = import ./theme-list.nix;
 in {
   options = {
     colorschemes.base16 = {
