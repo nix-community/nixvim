@@ -32,7 +32,7 @@ with lib; rec {
 
   mkNeovimPlugin = config: {
     name,
-    namespace ? "plugins",
+    colorscheme ? false,
     maintainers,
     url ? defaultPackage.meta.homepage,
     imports ? [],
@@ -51,7 +51,12 @@ with lib; rec {
     extraPlugins ? [],
     extraPackages ? [],
     callSetup ? true,
-  }: {
+  }: let
+    namespace =
+      if colorscheme
+      then "colorschemes"
+      else "plugins";
+  in {
     meta = {
       inherit maintainers;
       nixvimInfo = {
@@ -108,6 +113,10 @@ with lib; rec {
 
     config = let
       cfg = config.${namespace}.${name};
+      extraConfigNamespace =
+        if colorscheme
+        then "extraConfigLuaPre"
+        else "extraConfigLua";
     in
       mkIf cfg.enable (
         mkMerge [
@@ -115,10 +124,15 @@ with lib; rec {
             extraPlugins = [cfg.package] ++ extraPlugins;
             inherit extraPackages;
 
-            extraConfigLua = optionalString callSetup ''
+            ${extraConfigNamespace} = optionalString callSetup ''
               require('${luaName}').setup(${toLuaObject cfg.settings})
             '';
           }
+          (optionalAttrs colorscheme {
+            # We use `mkDefault` here to let individual plugins override this option.
+            # For instance, setting it to `null` a specific way of setting the coloscheme.
+            colorscheme = lib.mkDefault name;
+          })
           (extraConfig cfg)
         ]
       );
