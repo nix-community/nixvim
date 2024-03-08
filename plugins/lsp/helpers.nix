@@ -77,7 +77,7 @@
 
           extraOptions = mkOption {
             default = {};
-            type = types.attrs;
+            type = types.attrsOf types.anything;
             description = "Extra options for the ${name} language server.";
           };
         };
