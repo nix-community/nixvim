@@ -1,15 +1,12 @@
 {
-  # No empty test because not setting `colorscheme` and `customColorScheme` would error
+  # No empty test because not setting `colorscheme` would error
 
-  # All the upstream default options of poimandres
   defaults = {
     colorschemes.base16 = {
       enable = true;
 
-      useTruecolor = true;
       colorscheme = "gruvbox-dark-hard";
       setUpBar = true;
-      customColorScheme = null;
     };
   };
 
@@ -17,7 +14,7 @@
     colorschemes.base16 = {
       enable = true;
 
-      customColorScheme = {
+      colorscheme = {
         base00 = "#16161D";
         base01 = "#2c313c";
         base02 = "#3e4451";
