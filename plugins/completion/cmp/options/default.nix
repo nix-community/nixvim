@@ -64,17 +64,13 @@ with lib; rec {
       ":" = {
         mapping.__raw = "cmp.mapping.preset.cmdline()";
         sources = [
-          [
-            {name = "path";}
-          ]
-          [
-            {
-              name = "cmdline";
-              option = {
-                ignore_cmds = ["Man" "!"];
-              };
-            }
-          ]
+          {name = "path";}
+          {
+            name = "cmdline";
+            option = {
+              ignore_cmds = ["Man" "!"];
+            };
+          }
         ];
       };
     };
