@@ -5,75 +5,7 @@
   pkgs,
   ...
 }:
-with lib; let
-  basePluginPath = ["plugins" "indent-blankline"];
-in {
-  # TODO: Those warnings were introduced on 2023/10/17.
-  # Please, remove in early December 2023.
-  imports =
-    # Removed options
-    (
-      map
-      (
-        optionName:
-          mkRemovedOptionModule
-          (basePluginPath ++ [optionName])
-          ''
-            Please use the new options.
-            See https://github.com/lukas-reineke/indent-blankline.nvim.
-          ''
-      )
-      [
-        "charBlankline"
-        "charList"
-        "charListBlankline"
-        "charHighlightList"
-        "spaceCharBlankline"
-        "spaceCharHighlightList"
-        "spaceCharBlanklineHighlightList"
-        "useTreesitter"
-        "indentLevel"
-        "maxIndentIncrease"
-        "showFirstIndentLevel"
-        "showEndOfLine"
-        "showFoldtext"
-        "disableWithNolist"
-        "filetype"
-        "bufnameExclude"
-        "strictTabs"
-        "showCurrentContextStartOnCurrentLine"
-        "contextCharBlankline"
-        "contextCharListBlankline"
-        "charPriority"
-        "contextStartPriority"
-        "contextPatterns"
-        "useTreesitterScope"
-        "contextPatternHighlight"
-        "disableWarningMessage"
-      ]
-    )
-    # New options
-    ++ (
-      mapAttrsToList
-      (
-        oldName: newPath:
-          mkRenamedOptionModule
-          (basePluginPath ++ [oldName])
-          (basePluginPath ++ newPath)
-      )
-      {
-        char = ["indent" "char"];
-        showCurrentContext = ["scope" "enabled"];
-        showTrailingBlanklineIndent = ["whitespace" "removeBlanklineTrail"];
-        filetypeExclude = ["exclude" "filetypes"];
-        buftypeExclude = ["exclude" "buftypes"];
-        showCurrentContextStart = ["scope" "showStart"];
-        contextChar = ["scope" "char"];
-        contextCharList = ["scope" "char"];
-        contextHighlightList = ["scope" "highlight"];
-      }
-    );
-
+with lib; {
   options.plugins.indent-blankline =
     helpers.neovim-plugin.extraOptionsOptions
     // {
