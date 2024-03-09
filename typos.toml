@@ -6,3 +6,4 @@ Parm = "Parm"             # clangd-extensions
 Definitons = "Definitons" # TODO: ./plugins/languages/treesitter/treesitter-refactor.nix
 deffered = "deffered"     # TODO: ./plugins/utils/vim-matchup.nix
 Highligt = "Highligt"     # TODO: ./plugins/utils/neogen.nix
+Annote = "Annote"         # TODO: ./plugins/lsp/fidget.nix
