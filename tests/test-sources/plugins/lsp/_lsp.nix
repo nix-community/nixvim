@@ -143,7 +143,7 @@
           pylsp.enable = true;
           pylyzer.enable = true;
           pyright.enable = true;
-          rnix-lsp.enable = true;
+          rnix-lsp.enable = false; # Deprecated
           ruff-lsp.enable = true;
           rust-analyzer = {
             enable = true;
