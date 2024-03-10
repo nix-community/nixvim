@@ -123,7 +123,8 @@
           marksman.enable = true;
           metals.enable = true;
           nil_ls.enable = true;
-          nixd.enable = true;
+          # TODO As of 2024-03-10, nixd is broken (see https://github.com/nix-community/nixd/issues/357)
+          nixd.enable = false;
           nushell.enable = true;
           ocamllsp.enable = true;
           ols.enable =
