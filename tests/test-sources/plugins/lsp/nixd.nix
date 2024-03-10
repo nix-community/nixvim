@@ -4,7 +4,8 @@
       enable = true;
 
       servers.nixd = {
-        enable = true;
+        # TODO As of 2024-03-10, nixd is broken (see https://github.com/nix-community/nixd/issues/357)
+        enable = false;
 
         settings = {
           eval = {
