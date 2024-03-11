@@ -25,36 +25,50 @@ This is done by making most of the options of the type `types.nullOr ....`, and 
 
 ### Plugin configurations
 
-Most of nixvim is dedicated to wrapping neovim plugin such that we can configure them in Nix.
+Most of nixvim is dedicated to wrapping neovim plugins such that we can configure them in Nix.
 To add a new plugin you need to do the following.
 
-1.  Add a file in the correct sub-directory of [plugins](plugins). This depends on your exact plugin.
-2. Write the code for the corresponding nixvim module. You can start from the [template](plugins/TEMPLATE.nix).
+1. Add a file in the correct sub-directory of [plugins](plugins). This depends on your exact plugin.
 
-You will then need to add Nix options for all (or most) of the upstream plugin options.
-These options should be in `camelCase` (whereas most plugins define their options in `snake_case`), and their names should match exactly (except the case) to the upstream names.
+The vast majority of plugins fall into one of those two categories:
+- _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
+  For those, you should use the `helpers.vim-plugin.mkVimPlugin`.\
+  -> See [this plugin](plugins/utils/direnv.nix) for an example.
+- _neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
+  For those, you should use the `helpers.neovim-plugin.mkNeovimPlugin`.\
+  -> See the [template](plugins/TEMPLATE.nix).
+
+2. Add the necessary parameters for the `mkNeovimPlugin`/`mkVimPlugin`:
+  - `name`: The name of the plugin. The resulting nixvim module will have `plugins.<name>` as a path.\
+    For a plugin named `foo-bar.nvim`, set this to `foo-bar` (subject to exceptions).
+  - `originalName`: The "real" name of the plugin (i.e. `foo-bar.nvim`). This is used mostly in documentation.
+  - `defaultPackage`: The nixpkgs package for this plugin (e.g. `pkgs.vimPlugins.foo-bar-nvim`).
+  - `maintainers`: Register yourself as a maintainer for this plugin:
+    - `[lib.maintainers.JosephFourier]` if you are already registered as a [`nixpkgs` maintainer](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix)
+    - `[helpers.maintainers.GaspardMonge]` otherwise. (Also add yourself to [`maintainers.nix`](lib/maintainers.nix))
+  - `settingsOptions`: All or some (only the most important ones) option declarations for this plugin settings.\
+    See below for more information
+  - `settingsExample`: An example of what could the `settings` attrs look like.
+
+#### Declaring plugin options
+
+You will then need to add Nix options for all (or some) of the upstream plugin options.
+These option declarations should be in `settingsOptions` and their names should match exactly the upstream plugin.
 There are a number of helpers to help you correctly implement them:
 
-- `helpers.vim-plugin.mkVimPlugin`: This helper is useful for simple plugins that are configured through (vim) global variables.
 - `helpers.defaultNullOpts.{mkBool,mkInt,mkStr,...}`: This family of helpers takes a default value and a description, and sets the Nix default to `null`. These are the main functions you should use to define options.
 - `helpers.defaultNullOpts.mkNullable`: This takes a type, a default and a description. This is useful for more complex options.
 - `helpers.nixvimTypes.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkLua`/`mkLuaFn` should be used in this case.
 
-You will then need to map the Nix options to lua code. This can be done through `helpers.toLuaObject`. This function takes a Nix expression, and converts it to a lua string.
+The resulting `settings` attrs will be directly translated to `lua` and will be forwarded the plugin:
+- Using globals (`vim.g.<globalPrefix>_<option-name>`) for plugins using `mkVimPlugin`
+- Using the `require('<plugin>').setup()` function for the plugins using `mkNeovimPlugin`
 
-Because the options may not have the same case (and may require some pre-processing before passing it to `toLuaObject`) most options define a `setupOptions` object of the form:
+In either case, you don't need to bother implementing this part. It is done automatically.
 
-```nix
-{
-  some_opt = cfg.someOpt;
-  some_raw_opt = helpers.mkRaw cfg.someRawOpt;
-  some_meta_opt = with cfg.metaOpt; # metaOpt = { foo = ...; someOtherOpt = ...; };
-    {
-      inherit foo;
-      some_other_opt = someOtherOpt;
-    };
-}
-```
+> [!NOTE]
+> Learn more about the [RFC 42](https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md) which motivated this new approach.
+
 
 ### Tests
 
