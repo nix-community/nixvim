@@ -75,6 +75,9 @@
           [
             "dmd"
             "smlfmt"
+            # As of 2024-03-11, swift-format is broken on aarch64
+            # TODO: re-enable this test when fixed
+            # "swift_format"
           ]
         );
 
