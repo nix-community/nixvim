@@ -36,30 +36,10 @@ with lib; {
 
     cfg = config.${namespace}.${name};
 
-    # TODO support nested options!
-    pluginOptions =
-      mapAttrs
-      (
-        optName: opt:
-          opt.option
-      )
-      options;
-
-    globalsFromOptions =
-      mapAttrs'
-      (optName: opt: {
-        name =
-          if opt.global == null
-          then optName
-          else opt.global;
-        value = cfg.${optName};
-      })
-      options;
-    globalsFromSettings =
+    globals =
       if (hasAttr "settings" cfg) && (cfg.settings != null)
       then cfg.settings
       else {};
-    globals = globalsFromOptions // globalsFromSettings;
 
     # does this evaluate package?
     packageOption =
@@ -103,7 +83,6 @@ with lib; {
       }
       // settingsOption
       // packageOption
-      // pluginOptions
       // extraOptions;
 
     imports = let
@@ -156,21 +135,5 @@ with lib; {
           (extraConfig cfg)
         ]
       );
-  };
-
-  mkDefaultOpt = {
-    type,
-    global ? null,
-    description ? null,
-    example ? null,
-    default ? null,
-    ...
-  }: {
-    option = mkOption {
-      type = types.nullOr type;
-      inherit default description example;
-    };
-
-    inherit global;
   };
 }
