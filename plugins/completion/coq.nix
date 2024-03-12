@@ -5,56 +5,74 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.coq-nvim;
-in {
-  options = {
-    plugins.coq-nvim = {
-      enable = mkEnableOption "coq-nvim";
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "coq-nvim";
+    originalName = "coq_nvim";
+    defaultPackage = pkgs.vimPlugins.coq_nvim;
 
-      package = helpers.mkPackageOption "coq-nvim" pkgs.vimPlugins.coq_nvim;
+    maintainers = [maintainers.traxys];
 
+    extraOptions = {
       installArtifacts = mkEnableOption "and install coq-artifacts";
-
-      autoStart = mkOption {
-        type = with types; nullOr (oneOf [bool (enum ["shut-up"])]);
-        default = null;
-        description = "Auto-start or shut up";
-      };
-
-      recommendedKeymaps = mkOption {
-        type = with types; nullOr bool;
-        default = null;
-        description = "Use the recommended keymaps";
-      };
-
-      alwaysComplete = mkOption {
-        type = with types; nullOr bool;
-        default = null;
-        description = "Always trigger completion on keystroke";
+      artifactsPackage = mkOption {
+        type = types.package;
+        description = "Package to use for coq-artifacts (when enabled with installArtifacts)";
+        default = pkgs.vimPlugins.coq-artifacts;
       };
     };
-  };
-  config = let
-    settings = {
-      auto_start = cfg.autoStart;
-      "keymap.recommended" = cfg.recommendedKeymaps;
-      xdg = true;
-      "completion.always" = cfg.alwaysComplete;
+
+    # Introduced 12-03-2022, remove 12-05-2022
+    optionsRenamedToSettings = [
+      "xdg"
+      "autoStart"
+    ];
+    imports = let
+      basePath = ["plugins" "coq-nvim"];
+      settingsPath = basePath ++ ["settings"];
+    in [
+      (
+        mkRenamedOptionModule
+        (basePath ++ ["recommendedKeymaps"])
+        (settingsPath ++ ["keymap" "recommended"])
+      )
+
+      (
+        mkRenamedOptionModule
+        (basePath ++ ["alwaysComplete"])
+        (settingsPath ++ ["completion" "always"])
+      )
+    ];
+
+    callSetup = false;
+    settingsOptions = {
+      auto_start =
+        helpers.mkNullOrOption
+        (with helpers.nixvimTypes; maybeRaw (either bool (enum ["shut-up"])))
+        "Auto-start or shut up";
+
+      xdg = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Use XDG paths. May be required when installing coq with Nix.";
+      };
+
+      keymap.recommended = helpers.defaultNullOpts.mkBool true "Use the recommended keymaps";
+
+      completion.always = helpers.defaultNullOpts.mkBool true "Always trigger completion on keystroke";
     };
-  in
-    mkIf cfg.enable {
-      extraPlugins =
-        [
-          cfg.package
-        ]
-        ++ optional cfg.installArtifacts pkgs.vimPlugins.coq-artifacts;
+
+    extraConfig = cfg: {
+      extraPlugins = mkIf cfg.installArtifacts [
+        cfg.artifactsPackage
+      ];
+
       plugins.lsp = {
         preConfig = ''
-          vim.g.coq_settings = ${helpers.toLuaObject settings}
+          vim.g.coq_settings = ${helpers.toLuaObject cfg.settings}
           local coq = require 'coq'
         '';
         setupWrappers = [(s: ''coq.lsp_ensure_capabilities(${s})'')];
       };
     };
-}
+  }
