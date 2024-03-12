@@ -22,7 +22,7 @@ with lib;
       };
     };
 
-    # Introduced 12-03-2022, remove 12-05-2022
+    # TODO: Introduced 12-03-2022, remove 12-05-2022
     optionsRenamedToSettings = [
       "xdg"
       "autoStart"
