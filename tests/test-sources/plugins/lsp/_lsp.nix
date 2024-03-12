@@ -147,7 +147,6 @@
           # https://github.com/mtshiba/pylyzer/issues/78
           pylyzer.enable = false;
           pyright.enable = true;
-          # rnix-lsp.enable = false; # Deprecated
           ruff-lsp.enable = true;
           rust-analyzer = {
             enable = true;

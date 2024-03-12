@@ -539,11 +539,6 @@ with lib; let
       name = "pyright";
       description = "pyright for Python";
     }
-    #{
-    #  name = "rnix-lsp";
-    #  description = "rnix LSP for Nix";
-    #  serverName = "rnix";
-    #}
     {
       name = "ruff-lsp";
       description = "ruff-lsp, for Python";
