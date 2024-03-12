@@ -7,7 +7,7 @@
 }:
 helpers.neovim-plugin.mkNeovimPlugin config {
   name = "gruvbox";
-  colorscheme = true;
+  isColorscheme = true;
   originalName = "gruvbox.nvim";
   defaultPackage = pkgs.vimPlugins.gruvbox-nvim;
 
