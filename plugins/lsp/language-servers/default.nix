@@ -543,6 +543,7 @@ with lib; let
       name = "rnix-lsp";
       description = "rnix LSP for Nix";
       serverName = "rnix";
+      package = null;
     }
     {
       name = "ruff-lsp";
