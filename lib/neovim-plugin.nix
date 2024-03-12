@@ -32,13 +32,15 @@ with lib; rec {
 
   mkNeovimPlugin = config: {
     name,
-    colorscheme ? false,
     maintainers,
     url ? defaultPackage.meta.homepage,
     imports ? [],
     # deprecations
     deprecateExtraOptions ? false,
     optionsRenamedToSettings ? [],
+    # colorscheme
+    isColorscheme ? false,
+    colorscheme ? name,
     # options
     originalName ? name,
     defaultPackage,
@@ -53,7 +55,7 @@ with lib; rec {
     callSetup ? true,
   }: let
     namespace =
-      if colorscheme
+      if isColorscheme
       then "colorschemes"
       else "plugins";
   in {
@@ -114,7 +116,7 @@ with lib; rec {
     config = let
       cfg = config.${namespace}.${name};
       extraConfigNamespace =
-        if colorscheme
+        if isColorscheme
         then "extraConfigLuaPre"
         else "extraConfigLua";
     in
@@ -128,10 +130,8 @@ with lib; rec {
               require('${luaName}').setup(${toLuaObject cfg.settings})
             '';
           }
-          (optionalAttrs colorscheme {
-            # We use `mkDefault` here to let individual plugins override this option.
-            # For instance, setting it to `null` a specific way of setting the coloscheme.
-            colorscheme = lib.mkDefault name;
+          (optionalAttrs (isColorscheme && (colorscheme != null)) {
+            inherit colorscheme;
           })
           (extraConfig cfg)
         ]

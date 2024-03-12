@@ -7,7 +7,7 @@
 }:
 helpers.vim-plugin.mkVimPlugin config {
   name = "nord";
-  colorscheme = true;
+  isColorscheme = true;
   originalName = "nord.nvim";
   defaultPackage = pkgs.vimPlugins.nord-nvim;
   globalPrefix = "nord_";

@@ -6,7 +6,6 @@
 with lib; {
   mkVimPlugin = config: {
     name,
-    colorscheme ? false,
     url ?
       if defaultPackage != null
       then defaultPackage.meta.homepage
@@ -16,6 +15,9 @@ with lib; {
     # deprecations
     deprecateExtraConfig ? false,
     optionsRenamedToSettings ? [],
+    # colorscheme
+    isColorscheme ? false,
+    colorscheme ? name,
     # options
     originalName ? name,
     defaultPackage ? null,
@@ -30,7 +32,7 @@ with lib; {
     extraPackages ? [],
   }: let
     namespace =
-      if colorscheme
+      if isColorscheme
       then "colorschemes"
       else "plugins";
 
@@ -148,10 +150,8 @@ with lib; {
             # does this evaluate package? it would not be desired to evaluate package if we use another package.
             extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
           }
-          (optionalAttrs colorscheme {
-            # We use `mkDefault` here to let individual plugins override this option.
-            # For instance, setting it to `null` a specific way of setting the coloscheme.
-            colorscheme = lib.mkDefault name;
+          (optionalAttrs (isColorscheme && (colorscheme != null)) {
+            inherit colorscheme;
           })
           (extraConfig cfg)
         ]
