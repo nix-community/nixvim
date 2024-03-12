@@ -35,8 +35,8 @@ in {
         };
       });
       description = ''
-        List of sources. Each source is a free form type, so additional settings like `accept_key`
-        may be specified even if they are not declared by nixvim
+        List of sources.
+        Each source is a free-form type, so additional settings like `accept_key` may be specified even if they are not declared by nixvim.
       '';
       default = [];
       example = [
