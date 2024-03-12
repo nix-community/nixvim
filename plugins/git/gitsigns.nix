@@ -340,7 +340,7 @@ in {
           then val
           else {__raw = val.function;};
         setupOptions = {
-          inherit (cfg) worktrees signcolumn numhl linehl trouble yadm;
+          inherit (cfg) worktrees signcolumn numhl linehl trouble yadm base;
           signs = mapAttrs (_: signSetupOptions) cfg.signs;
           on_attach =
             if cfg.onAttach != null
