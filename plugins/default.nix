@@ -107,6 +107,7 @@
 
     ./ui/image.nix
     ./ui/noice.nix
+    ./ui/transparent.nix
 
     ./utils/alpha.nix
     ./utils/auto-save.nix
