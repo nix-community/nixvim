@@ -106,7 +106,9 @@ in {
         '';
       };
     onAttach = mkOption {
-      type = types.nullOr luaFunction;
+      # TODO remove luaFunction in type
+      # Introduced 12-03-2024, remove 12-05-2024
+      type = with helpers.nixvimTypes; nullOr (either strLuaFn luaFunction);
       default = null;
       description = ''
         Callback called when attaching to a buffer. Mainly used to setup keymaps
@@ -116,19 +118,15 @@ in {
         This callback can return `false` to prevent attaching to the buffer.
       '';
       example = ''
-        {
-          function = \'\'
-            function(bufnr)
-              if vim.api.nvim_buf_get_name(bufnr):match(<PATTERN>) then
-                -- Don't attach to specific buffers whose name matches a pattern
-                return false
-              end
-              -- Setup keymaps
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
-              ... -- More keymaps
-            end
-          \'\'
-        }
+        function(bufnr)
+          if vim.api.nvim_buf_get_name(bufnr):match(<PATTERN>) then
+            -- Don't attach to specific buffers whose name matches a pattern
+            return false
+          end
+          -- Setup keymaps
+          vim.api.nvim_buf_set_keymap(bufnr, 'n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
+          ... -- More keymaps
+        end
       '';
     };
 
@@ -332,6 +330,10 @@ in {
 
       extraPackages = optional (cfg.gitPackage != null) cfg.gitPackage;
 
+      warnings =
+        optional (builtins.isAttrs cfg.onAttach)
+        "Nixvim: plugins.gitsigns.onAttach.function is deprecated, simply assign a string to plugins.gitsigns.onAttach";
+
       extraConfigLua = let
         luaFnOrStrToObj = val:
           if val == null
@@ -343,9 +345,11 @@ in {
           inherit (cfg) worktrees signcolumn numhl linehl trouble yadm;
           signs = mapAttrs (_: signSetupOptions) cfg.signs;
           on_attach =
-            if cfg.onAttach != null
-            then {__raw = cfg.onAttach.function;}
-            else null;
+            if cfg.onAttach == null
+            then null
+            else if builtins.isString cfg.onAttach
+            then helpers.mkRaw cfg.onAttach
+            else helpers.mkRaw cfg.onAttach.function;
           watch_gitdir = {
             inherit (cfg.watchGitDir) enable interval;
             follow_files = cfg.watchGitDir.followFiles;
