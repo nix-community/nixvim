@@ -215,7 +215,6 @@ with lib; let
       package = pkgs.fortls;
       cmd = cfg: [
         "${cfg.package}/bin/fortls"
-        "--notify_init"
         "--hover_signature"
         "--hover_language=fortran"
         "--use_signature_help"
