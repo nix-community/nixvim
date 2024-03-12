@@ -191,4 +191,32 @@ with helpers.vim-plugin;
       wrap_output = false;
       show_mimetype_debug = false;
     };
+
+    extraOptions = {
+      python3Dependencies = mkOption {
+        type = with types; functionTo (listOf package);
+        default = p:
+          with p; [
+            pynvim
+            jupyter-client
+            cairosvg
+            ipython
+            nbformat
+          ];
+        defaultText = literalExpression ''
+          p: with p; [
+            pynvim
+            jupyter-client
+            cairosvg
+            ipython
+            nbformat
+          ]
+        '';
+        description = "Python packages to add to the `PYTHONPATH` of neovim.";
+      };
+    };
+
+    extraConfig = cfg: {
+      extraPython3Packages = cfg.python3Dependencies;
+    };
   }
