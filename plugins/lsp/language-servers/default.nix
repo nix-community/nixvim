@@ -212,6 +212,7 @@ with lib; let
     }
     {
       name = "fortls";
+      description = "fortls for Fortran";
       cmd = cfg: [
         "${cfg.package}/bin/fortls"
         "--hover_signature"
