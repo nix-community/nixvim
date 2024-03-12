@@ -44,7 +44,7 @@
     ./git/gitgutter.nix
     ./git/gitlinker.nix
     ./git/gitmessenger.nix
-    ./git/gitsigns.nix
+    ./git/gitsigns
     ./git/neogit
 
     ./languages/clangd-extensions.nix
