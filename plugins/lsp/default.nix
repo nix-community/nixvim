@@ -79,7 +79,7 @@ in {
         "pylsp"
         "pylyzer"
         "pyright"
-        "rnix-lsp"
+        # "rnix-lsp" Deprecated
         "ruff-lsp"
         "rust-analyzer"
         "solargraph"
