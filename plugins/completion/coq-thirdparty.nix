@@ -39,16 +39,16 @@ in {
       example = [
         {
           src = "nvimlua";
-          shortName = "nLUA";
+          short_name = "nLUA";
         }
         {
           src = "vimtex";
-          shortName = "vTEX";
+          short_name = "vTEX";
         }
         {
           src = "copilot";
-          shortName = "COP";
-          acceptKey = "<c-f>";
+          short_name = "COP";
+          accept_key = "<c-f>";
         }
         {src = "demo";}
       ];
