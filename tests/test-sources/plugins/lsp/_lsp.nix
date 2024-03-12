@@ -102,6 +102,7 @@
           emmet_ls.enable = true;
           eslint.enable = true;
           elixirls.enable = true;
+          fortls.enable = true;
           # pkgs.fsautocomplete only supports linux platforms
           fsautocomplete.enable = pkgs.stdenv.isLinux;
           futhark-lsp.enable = true;

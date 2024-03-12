@@ -211,6 +211,16 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
+      name = "fortls";
+      description = "fortls for Fortran";
+      cmd = cfg: [
+        "${cfg.package}/bin/fortls"
+        "--hover_signature"
+        "--hover_language=fortran"
+        "--use_signature_help"
+      ];
+    }
+    {
       name = "fsautocomplete";
       description = "fsautocomplete for F#";
       package = pkgs.fsautocomplete;
