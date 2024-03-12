@@ -80,6 +80,7 @@ in {
         "pylyzer"
         "pyright"
         "ruff-lsp"
+        "rnix-lsp"
         "rust-analyzer"
         "solargraph"
         "sourcekit"
