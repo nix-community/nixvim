@@ -212,7 +212,6 @@ with lib; let
     }
     {
       name = "fortls";
-      package = pkgs.fortls;
       cmd = cfg: [
         "${cfg.package}/bin/fortls"
         "--hover_signature"
