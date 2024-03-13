@@ -45,39 +45,37 @@
       ];
   };
 
-  mkKeymapsOnEvent = {
-    keymaps =
-      helpers.keymaps.mkKeymaps
-      {
-        mode = "x";
-        options.silent = true;
-      }
-      [
+  mkKeymapsOnEvents = {
+    keymapsOnEvents = {
+      "InsertEnter" =
+        helpers.keymaps.mkKeymaps
         {
-          mode = "n";
-          key = ",";
-          action = "<cmd>echo \"test\"<cr>";
-          onEvent = "InsertEnter";
+          mode = "x";
+          options.silent = true;
         }
-        {
-          # raw action using rawType
-          key = "<C-p>";
-          action.__raw = "function() print('hello') end";
-          onEvent = "InsertEnter";
-        }
-        {
-          key = "<C-a>";
-          action = "function() print('toto') end";
-          lua = true;
-          options.silent = false;
-          onEvent = "InsertEnter";
-        }
-        {
-          mode = ["n" "v"];
-          key = "<C-z>";
-          action = "bar";
-          onEvent = "InsertEnter";
-        }
-      ];
+        [
+          {
+            mode = "n";
+            key = ",";
+            action = "<cmd>echo \"test\"<cr>";
+          }
+          {
+            # raw action using rawType
+            key = "<C-p>";
+            action.__raw = "function() print('hello') end";
+          }
+          {
+            key = "<C-a>";
+            action = "function() print('toto') end";
+            lua = true;
+            options.silent = false;
+          }
+          {
+            mode = ["n" "v"];
+            key = "<C-z>";
+            action = "bar";
+          }
+        ];
+    };
   };
 }

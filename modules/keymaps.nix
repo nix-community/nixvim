@@ -19,27 +19,33 @@ with lib; {
         }
       ];
     };
+
+    keymapsOnEvents = mkOption {
+      type = types.attrsOf (types.listOf helpers.keymaps.mapOptionSubmodule);
+      default = {};
+      example = {
+        "InsertEnter" = [
+          {
+            key = "<C-y>";
+            action = ''require("cmp").mapping.confirm()'';
+            lua = true;
+          }
+          {
+            key = "<C-n>";
+            action = ''require("cmp").mapping.select_next_item()'';
+            lua = true;
+          }
+        ];
+      };
+      description = ''
+        Register keymaps on an event instead of when nvim opens.
+        Keys are the events to register on, and values are lists of keymaps to register on each event.
+      '';
+    };
   };
 
   config = {
     extraConfigLua = let
-      # Divide mappings if they have "onEvent" set or not
-      partitioned = partition (keymap: (keymap.onEvent or null) != null) config.keymaps;
-
-      nonEventMaps =
-        optionalString (partitioned.wrong != [])
-        ''
-          do
-            local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping partitioned.wrong)}
-            for i, map in ipairs(__nixvim_binds) do
-              vim.keymap.set(map.mode, map.key, map.action, map.options)
-            end
-          end
-        '';
-
-      # Group by event
-      grouped = groupBy (keymap: keymap.onEvent) partitioned.right;
-
       normalizeMapping = keyMapping: {
         inherit
           (keyMapping)
@@ -53,22 +59,28 @@ with lib; {
           then helpers.mkRaw keyMapping.action
           else keyMapping.action;
       };
+
+      mappings = map normalizeMapping config.keymaps;
     in
+      optionalString (mappings != [])
       ''
         -- Set up keybinds {{{
-          ${nonEventMaps}
+        do
+          local __nixvim_binds = ${helpers.toLuaObject mappings}
+          for i, map in ipairs(__nixvim_binds) do
+            vim.keymap.set(map.mode, map.key, map.action, map.options)
+          end
+        end
       ''
       + foldl (a: b: a + "\n" + b)
       ""
-      (mapAttrsToList
-        (event: autocmd: autocmd)
-        (mapAttrs
-          (
-            event: mappings:
-              optionalString (mappings != [])
-              ''
-                vim.api.nvim_create_autocmd(
-                  "${event}", {
+      (
+        mapAttrsToList
+        (event: mappings:
+          optionalString (mappings != [])
+          ''
+            vim.api.nvim_create_autocmd(
+              "${event}", {
                   group = vim.api.nvim_create_augroup("nixvim_binds_${event}", { clear = true }),
                   callback = function()
                     do
@@ -78,10 +90,11 @@ with lib; {
                       end
                     end
                   end
-                })
-              ''
-          )
-          grouped))
+              }
+            )
+          '')
+        config.keymapsOnEvents
+      )
       + "-- }}}";
   };
 }
