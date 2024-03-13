@@ -3,6 +3,17 @@
     plugins.project-nvim.enable = true;
   };
 
+  telescopeEnabled = {
+    plugins.telescope = {
+      enable = true;
+    };
+
+    plugins.project-nvim = {
+      enable = true;
+      enableTelescope = true;
+    };
+  };
+
   defaults = {
     plugins.project-nvim = {
       enable = true;

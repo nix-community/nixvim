@@ -8,6 +8,12 @@
 with lib; let
   cfg = config.plugins.project-nvim;
 in {
+  imports = [
+    (lib.mkRenamedOptionModule
+      ["plugins" "telescope" "extensions" "project-nvim" "enable"]
+      ["plugins" "project-nvim" "enableTelescope"])
+  ];
+
   options.plugins.project-nvim =
     helpers.neovim-plugin.extraOptionsOptions
     // {
@@ -67,9 +73,20 @@ in {
         (with types; either str helpers.nixvimTypes.rawLua)
         ''{__raw = "vim.fn.stdpath('data')";}''
         "Path where project.nvim will store the project history for use in telescope.";
+
+      enableTelescope = mkEnableOption ''
+        When set to true, enabled project-nvim telescope integration.
+      '';
     };
 
   config = mkIf cfg.enable {
+    warnings =
+      optional
+      (cfg.enableTelescope && (!config.plugins.telescope.enable))
+      ''
+        Telescope support for project-nvim is enabled but the telescope plugin is not.
+      '';
+
     extraPlugins = [cfg.package];
 
     extraConfigLua = let
@@ -89,5 +106,7 @@ in {
     in ''
       require('project_nvim').setup(${helpers.toLuaObject setupOptions})
     '';
+
+    plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope ["projects"];
   };
 }
