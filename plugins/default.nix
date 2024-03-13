@@ -20,6 +20,7 @@
     ./colorschemes/poimandres.nix
     ./colorschemes/rose-pine.nix
     ./colorschemes/tokyonight.nix
+    ./colorschemes/vscode.nix
 
     ./completion/codeium-vim.nix
     ./completion/copilot-lua.nix
