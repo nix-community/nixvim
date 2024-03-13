@@ -131,6 +131,15 @@ with lib; rec {
           default = defaults.lua or false;
         };
 
+        onEvent = mkOption {
+          type = nullOr str;
+          description = ''
+            Register this keymap on the given event, or on each event in the list.
+            If not set, then the keymap will be set like normal.
+          '';
+          default = null;
+        };
+
         options = mapConfigOptions;
       };
     });
