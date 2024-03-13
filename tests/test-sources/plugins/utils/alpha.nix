@@ -13,6 +13,23 @@
     };
   };
 
+  terminal = {
+    plugins.alpha = {
+      enable = true;
+      layout = [
+        {
+          type = "terminal";
+          command = "thisisfine";
+          width = 46;
+          height = 25;
+          opts = {
+            redraw = true;
+          };
+        }
+      ];
+    };
+  };
+
   custom-layout = {
     plugins.alpha = {
       enable = true;

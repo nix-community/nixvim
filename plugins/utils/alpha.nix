@@ -22,9 +22,10 @@ with lib; let
         description = "Type of section";
       };
 
-      val = mkOption {
-        type = with helpers.nixvimTypes;
-          oneOf [
+      val =
+        helpers.mkNullOrOption
+        (with helpers.nixvimTypes;
+          nullOr (oneOf [
             # "button", "text"
             str
             # "padding"
@@ -36,10 +37,8 @@ with lib; let
               # "group"
               (attrsOf anything)
             ))
-          ];
-        default = null;
-        description = "Value for section";
-      };
+          ]))
+        "Value for section";
 
       opts = mkOption {
         type = with types; attrsOf anything;
