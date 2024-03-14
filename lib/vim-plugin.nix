@@ -38,10 +38,7 @@ with lib; {
 
     cfg = config.${namespace}.${name};
 
-    globals =
-      if (hasAttr "settings" cfg) && (cfg.settings != null)
-      then cfg.settings
-      else {};
+    globals = cfg.settings or {};
 
     # does this evaluate package?
     packageOption =
