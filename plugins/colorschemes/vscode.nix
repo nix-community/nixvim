@@ -22,16 +22,14 @@ with lib;
       underline_links = helpers.defaultNullOpts.mkBool false "Whether to underline links";
       disable_nvimtree_bg = helpers.defaultNullOpts.mkBool true "Whether to disable nvim-tree background";
       color_overrides =
-        helpers.defaultNullOpts.mkStrLuaOr
-        (with helpers.nixvimTypes; attrsOf strLua)
+        helpers.defaultNullOpts.mkAttrsOf types.str
         "{}"
         ''
           A dictionary of color overrides.
           See https://github.com/Mofiqul/vscode.nvim/blob/main/lua/vscode/colors.lua for color names.
         '';
-      group_overrides =
-        helpers.defaultNullOpts.mkStrLuaOr
-        (with helpers.nixvimTypes; attrsOf highlight)
+      group_overrides = with helpers;
+        defaultNullOpts.mkAttrsOf nixvimTypes.highlight
         "{}"
         ''
           A dictionary of group names, each associated with a dictionary of parameters
@@ -41,9 +39,9 @@ with lib;
 
     extraConfig = cfg: {
       extraConfigLuaPre = ''
-        local vscode = require("vscode")
-        vscode.setup(${helpers.toLuaObject cfg.settings})
-        vscode.load()
+        local _vscode = require("vscode")
+        _vscode.setup(${helpers.toLuaObject cfg.settings})
+        _vscode.load()
       '';
     };
   }
