@@ -103,6 +103,8 @@ with lib;
           plugins.airline.settings.theme = mkIf cfg.setUpBar "base16";
           plugins.lualine.theme = mkIf cfg.setUpBar "base16";
           plugins.lightline.colorscheme = null;
+
+          options.termguicolors = mkDefault true;
         }
         (mkIf (isString cfg.colorscheme) {
           colorscheme = "base16-${cfg.colorscheme}";
