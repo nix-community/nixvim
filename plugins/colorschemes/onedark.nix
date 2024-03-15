@@ -5,23 +5,42 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.onedark;
-in {
-  options = {
-    colorschemes.onedark = {
-      enable = mkEnableOption "onedark";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "onedark";
+  isColorscheme = true;
+  originalName = "onedark.nvim";
+  defaultPackage = pkgs.vimPlugins.onedark-nvim;
 
-      package = helpers.mkPackageOption "one" pkgs.vimPlugins.onedark-vim;
+  maintainers = [lib.maintainers.GaetanLepage];
+
+  settingsExample = {
+    colors = {
+      bright_orange = "#ff8800";
+      green = "#00ffaa";
+    };
+    highlights = {
+      "@keyword".fg = "$green";
+      "@string" = {
+        fg = "$bright_orange";
+        bg = "#00ff00";
+        fmt = "bold";
+      };
+      "@function" = {
+        fg = "#0000ff";
+        sp = "$cyan";
+        fmt = "underline,italic";
+      };
+      "@function.builtin".fg = "#0059ff";
     };
   };
 
-  config = mkIf cfg.enable {
-    colorscheme = "onedark";
-    extraPlugins = [cfg.package];
-
-    options = {
-      termguicolors = true;
-    };
+  callSetup = false;
+  colorscheme = null;
+  extraConfig = cfg: {
+    extraConfigLuaPre = ''
+      _onedark = require('onedark')
+      _onedark.setup(${helpers.toLuaObject cfg.settings})
+      _onedark.load()
+    '';
   };
 }
