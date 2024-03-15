@@ -5,195 +5,225 @@
   config,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.kanagawa;
-in {
-  options = {
-    colorschemes.kanagawa =
-      helpers.neovim-plugin.extraOptionsOptions
-      // {
-        enable = mkEnableOption "kanagawa";
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "kanagawa";
+    isColorscheme = true;
+    originalName = "kanagawa.nvim";
+    defaultPackage = pkgs.vimPlugins.kanagawa-nvim;
 
-        package = helpers.mkPackageOption "kanagawa" pkgs.vimPlugins.kanagawa-nvim;
+    description = ''
+      You can select the theme in two ways:
+      - Set `colorschemes.kanagawa.settings.theme` AND explicitly unset `vim.o.background` (i.e. `options.background = ""`).
+      - Set `colorschemes.kanagawa.settings.background` (the active theme will depend on the value of `vim.o.background`).
+    '';
 
-        compile = helpers.defaultNullOpts.mkBool false "Enable compiling the colorscheme.";
+    maintainers = [maintainers.GaetanLepage];
 
-        undercurl = helpers.defaultNullOpts.mkBool true "Enable undercurls.";
+    # TODO introduced 2024-03-15: remove 2024-05-15
+    deprecateExtraOptions = true;
+    imports = let
+      basePluginPath = ["colorschemes" "kanagawa"];
+    in
+      (
+        map
+        (
+          optionPath:
+            mkRenamedOptionModule
+            (basePluginPath ++ optionPath)
+            (basePluginPath ++ ["settings"] ++ optionPath)
+        )
+        [
+          ["compile"]
+          ["undercurl"]
+          ["commentStyle"]
+          ["functionStyle"]
+          ["keywordStyle"]
+          ["statementStyle"]
+          ["typeStyle"]
+          ["transparent"]
+          ["dimInactive"]
+          ["terminalColors"]
+          ["colors" "palette"]
+          ["colors" "theme"]
+          ["theme"]
+          ["background" "dark"]
+          ["background" "light"]
+        ]
+      )
+      ++ [
+        (
+          mkRemovedOptionModule
+          (basePluginPath ++ ["overrides"])
+          ''
+            Use `colorschemes.kanagawa.settings.overrides` but you now have to add the full function definition:
+            ```
+              function(colors)
+                ...
+              end
+            ```
+          ''
+        )
+      ];
 
-        commentStyle =
-          helpers.defaultNullOpts.mkNullable
-          types.attrs
-          "{italic = true;}"
-          "Highlight options for comments.";
+    settingsOptions = {
+      compile = helpers.defaultNullOpts.mkBool false ''
+        Enable compiling the colorscheme.
+      '';
 
-        functionStyle =
-          helpers.defaultNullOpts.mkNullable
-          types.attrs
-          "{}"
-          "Highlight options for functions.";
+      undercurl = helpers.defaultNullOpts.mkBool true ''
+        Enable undercurls.
+      '';
 
-        keywordStyle =
-          helpers.defaultNullOpts.mkNullable
-          types.attrs
-          "{italic = true;}"
-          "Highlight options for keywords.";
+      commentStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
+        Highlight options for comments.
+      '';
 
-        statementStyle =
-          helpers.defaultNullOpts.mkNullable
-          types.attrs
-          "{bold = true;}"
-          "Highlight options for statements.";
+      functionStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+        Highlight options for functions.
+      '';
 
-        typeStyle =
-          helpers.defaultNullOpts.mkNullable
-          types.attrs
-          "{}"
-          "Highlight options for types.";
+      keywordStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
+        Highlight options for keywords.
+      '';
 
-        transparent = helpers.defaultNullOpts.mkBool false "Whether to set a background color.";
+      statementStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{bold = true;}" ''
+        Highlight options for statements.
+      '';
 
-        dimInactive = helpers.defaultNullOpts.mkBool false ''
-          Whether dim inactive window `:h hl-NormalNC`.
-        '';
+      typeStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+        Highlight options for types.
+      '';
 
-        terminalColors = helpers.defaultNullOpts.mkBool true ''
-          If true, defines `vim.g.terminal_color_{0,17}`.
-        '';
+      transparent = helpers.defaultNullOpts.mkBool false ''
+        Whether to set a background color.
+      '';
 
-        colors = {
-          theme =
-            helpers.defaultNullOpts.mkNullable
-            (with types; attrsOf attrs)
-            ''
-              {
-                wave = {};
-                lotus = {};
-                dragon = {};
-                all = {};
-              }
-            ''
-            ''
-              Change specific usages for a certain theme, or for all of them
+      dimInactive = helpers.defaultNullOpts.mkBool false ''
+        Whether dim inactive window `:h hl-NormalNC`.
+      '';
 
-              Example:
-              ```nix
-                {
-                  wave = {
-                    ui = {
-                        float = {
-                            bg = "none";
-                        };
-                    };
-                  };
-                  dragon = {
-                      syn = {
-                          parameter = "yellow";
-                      };
-                  };
-                  all = {
-                      ui = {
-                          bg_gutter = "none";
-                      };
-                  };
-                }
-              ```
-            '';
+      terminalColors = helpers.defaultNullOpts.mkBool true ''
+        If true, defines `vim.g.terminal_color_{0,17}`.
+      '';
 
-          palette = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
-            Change all usages of these colors.
+      colors = {
+        theme =
+          helpers.defaultNullOpts.mkAttrsOf types.attrs
+          ''
+            {
+              wave = {};
+              lotus = {};
+              dragon = {};
+              all = {};
+            }
+          ''
+          ''
+            Change specific usages for a certain theme, or for all of them
 
             Example:
             ```nix
               {
-                sumiInk0 = "#000000";
-                fujiWhite = "#FFFFFF";
+                wave = {
+                  ui = {
+                      float = {
+                          bg = "none";
+                      };
+                  };
+                };
+                dragon = {
+                    syn = {
+                        parameter = "yellow";
+                    };
+                };
+                all = {
+                    ui = {
+                        bg_gutter = "none";
+                    };
+                };
               }
             ```
           '';
-        };
 
-        overrides =
-          helpers.defaultNullOpts.mkStr
-          ''
-            return {}
-          ''
-          ''
-            The body of a function that add/modify hihlights.
-            It takes as input a `colors` argument which is a table of this form:
-            ```
-              colors = {
-                palette = {
-                  foo = "#RRGGBB",
-                  bar = "#RRGGBB"
-                },
-                theme = {
-                  foo = "#RRGGBB",
-                  bar = "#RRGGBB"
-                }
-              }
-            ```
-            It should return a table of highlights.
+        palette = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+          Change all usages of these colors.
 
-            ```
-              function(colors)
-                CONTENT_OF_OVERRIDE_OPTION
-              end
-            ```
-          '';
-
-        theme = helpers.defaultNullOpts.mkStr "wave" ''
-          The theme to load when background is not set.
+          Example:
+          ```nix
+            {
+              sumiInk0 = "#000000";
+              fujiWhite = "#FFFFFF";
+            }
+          ```
         '';
-        background = {
-          light = helpers.defaultNullOpts.mkStr "lotus" ''
-            The theme to use when `vim.o.background = "light"`.
-          '';
+      };
 
-          dark = helpers.defaultNullOpts.mkStr "wave" ''
-            The theme to use when `vim.o.background = "dark"`.
-          '';
+      overrides =
+        helpers.defaultNullOpts.mkLuaFn
+        ''
+          function(colors)
+            return {}
+          end
+        ''
+        ''
+          The body of a function that add/modify hihlights.
+          It takes as input a `colors` argument which is a table of this form:
+          ```
+            colors = {
+              palette = {
+                foo = "#RRGGBB",
+                bar = "#RRGGBB"
+              },
+              theme = {
+                foo = "#RRGGBB",
+                bar = "#RRGGBB"
+              }
+            }
+          ```
+          It should return a table of highlights.
+
+          ```
+            function(colors)
+              CONTENT_OF_OVERRIDE_OPTION
+            end
+          ```
+        '';
+
+      theme = helpers.defaultNullOpts.mkStr "wave" ''
+        The theme to load when background is not set.
+      '';
+
+      background = {
+        light = helpers.defaultNullOpts.mkStr "lotus" ''
+          The theme to use when `vim.o.background = "light"`.
+        '';
+
+        dark = helpers.defaultNullOpts.mkStr "wave" ''
+          The theme to use when `vim.o.background = "dark"`.
+        '';
+      };
+    };
+
+    settingsExample = {
+      compile = false;
+      undercurl = true;
+      commentStyle.italic = true;
+      functionStyle = {};
+      transparent = false;
+      dimInactive = false;
+      terminalColors = true;
+      colors = {
+        theme = {
+          wave.ui.float.bg = "none";
+          dragon.syn.parameter = "yellow";
+          all.ui.bg_gutter = "none";
+        };
+        palette = {
+          sumiInk0 = "#000000";
+          fujiWhite = "#FFFFFF";
         };
       };
-  };
-  config = let
-    setupOptions = with cfg;
-      {
-        inherit
-          compile
-          undercurl
-          commentStyle
-          functionStyle
-          keywordStyle
-          statementStyle
-          typeStyle
-          transparent
-          dimInactive
-          terminalColors
-          ;
-        colors = with colors; {
-          inherit theme palette;
-        };
-        overrides =
-          helpers.ifNonNull' overrides
-          (helpers.mkRaw ''
-            function(colors)
-              ${overrides}
-            end
-          '');
-        inherit theme;
-        background = with background; {
-          inherit light dark;
-        };
-      }
-      // cfg.extraOptions;
-  in
-    mkIf cfg.enable {
-      colorscheme = "kanagawa";
-
-      extraPlugins = [cfg.package];
-
-      extraConfigLuaPre = ''
-        require("kanagawa").setup(${helpers.toLuaObject setupOptions})
-      '';
+      overrides = "function(colors) return {} end";
+      theme = "wave";
     };
-}
+  }
