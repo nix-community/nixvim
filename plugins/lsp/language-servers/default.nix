@@ -235,6 +235,12 @@ with lib; let
       description = "gopls for Go";
     }
     {
+      name = "golangci-lint-ls";
+      description = "golangci-lint-ls for Go";
+      serverName = "golangci_lint_ls";
+      package = pkgs.golangci-lint-langserver;
+    }
+    {
       name = "graphql";
       description = "graphql for GraphQL";
       package = pkgs.nodePackages.graphql-language-service-cli;

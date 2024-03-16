@@ -107,6 +107,7 @@
           futhark-lsp.enable = true;
           gleam.enable = true;
           gopls.enable = true;
+          golangci-lint-ls.enable = true;
           graphql.enable = true;
           helm-ls.enable = true;
           hls.enable = true;
