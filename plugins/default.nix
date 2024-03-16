@@ -111,6 +111,7 @@
     ./ui/image.nix
     ./ui/noice.nix
     ./ui/transparent.nix
+    ./ui/twilight.nix
     ./ui/virt-column.nix
 
     ./utils/alpha.nix
