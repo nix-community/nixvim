@@ -115,6 +115,11 @@ in {
         (newPluginBasePath ++ ["enable"])
       )
       (
+        mkRenamedOptionModule
+        (oldPluginBasePath ++ ["autoEnableSources"])
+        (newPluginBasePath ++ ["autoEnableSources"])
+      )
+      (
         mkRemovedOptionModule
         (oldPluginBasePath ++ ["preselect"])
         ''
