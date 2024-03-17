@@ -29,6 +29,47 @@ with lib; let
       "Use `${settingStr "no_wrap"}` option."
     )
   ];
+
+  # All `:TmuxNavigate*` commands
+  commands = [
+    "left"
+    "down"
+    "up"
+    "right"
+    "previous"
+  ];
+
+  # Define a submodule so we get docs and enum type-safety for `action`
+  # FIXME: Do we really want _all_ of `mapConfigOptions` here?
+  #    Should we consider filtering it? Etc?
+  keymapOptions = {
+    options =
+      (recursiveUpdate helpers.keymaps.mapConfigOptions (mapAttrs (n: v: {${n}.default = v;}) defaultOptions))
+      // {
+        action = mkOption {
+          type = types.enum commands;
+          description = "The `TmuxNavigate*` command. One of ${toString commands}.";
+          example = head commands;
+        };
+      };
+  };
+
+  defaultOptions = {
+    silent = true;
+  };
+
+  normaliseKeymap = key: cmd: let
+    attrs =
+      if isAttrs cmd
+      then cmd
+      else {action = cmd;};
+    action = "<cmd>TmuxNavigate${helpers.upperFirstChar attrs.action}<cr>";
+    options = defaultOptions // (filterAttrs (n: v: n != "action" && v != null) attrs);
+  in {inherit key action options;};
+
+  keymapConfig = {
+    keymaps = mapAttrsToList normaliseKeymap config.plugins.tmux-navigator.keymaps;
+  };
 in
   helpers.vim-plugin.mkVimPlugin config {
     # FIXME document tmux-side installation instructions
@@ -39,7 +80,37 @@ in
 
     maintainers = [maintainers.GaetanLepage];
 
-    imports = deprecations;
+    imports = deprecations ++ [keymapConfig];
+
+    extraOptions = {
+      # FIXME should this be attrsOf enum or
+      # enumerated options of (either str (listOf (either str submodule)))?
+      # e.g. keymaps.left = "<C-w>h";
+      #      keymaps.right = ["<C-w>l" "<C-l>"];
+      #      keymaps.up = ["<C-w>k" {key = "<C-k>";}];
+      # I guess this would need a custom merge function?
+      keymaps = mkOption {
+        type = with types;
+          attrsOf (oneOf [
+            (enum commands)
+            (submodule keymapOptions)
+          ]);
+        description = ''
+          Keymaps for the various `:TmuxNavigator*` commands.
+        '';
+        example = {
+          "<C-w>h" = "left";
+          "<C-w>j" = "down";
+          "<C-w>k" = "up";
+          "<C-w>l" = "right";
+          "<C-w>\\" = {
+            action = "previous";
+            desc = "Move to the previous pane";
+          };
+        };
+        default = {};
+      };
+    };
 
     settingsOptions = {
       save_on_switch = helpers.mkNullOrOption (types.enum [1 2]) ''
@@ -94,37 +165,7 @@ in
 
         This option disables those default mappings being created.
 
-        You can use the plugin's five commands to define your own custom mappings:
-
-        ```nix
-          keymaps = [
-            {
-              key = "<C-w>h";
-              action = "<cmd><C-U>TmuxNavigateLeft<cr>";
-              options.silent = true;
-            }
-            {
-              key = "<C-w>j";
-              action = "<cmd><C-U>TmuxNavigateDown<cr>";
-              options.silent = true;
-            }
-            {
-              key = "<C-w>k";
-              action = "<cmd><C-U>TmuxNavigateUp<cr>";
-              options.silent = true;
-            }
-            {
-              key = "<C-w>l";
-              action = "<cmd><C-U>TmuxNavigateRight<cr>";
-              options.silent = true;
-            }
-            {
-              key = "<C-w>\\";
-              action = "<cmd><C-U>TmuxNavigatePrevious<cr>";
-              options.silent = true;
-            }
-          ];
-        ```
+        You can use `plugins.tmux-navigator.keymaps.*` to define your own custom mappings.
 
         You will also need to update your tmux bindings to match.
       '';

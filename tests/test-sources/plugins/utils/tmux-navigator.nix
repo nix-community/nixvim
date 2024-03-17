@@ -16,6 +16,17 @@
         no_wrap = true;
         no_mappings = true;
       };
+
+      keymaps = {
+        "<C-w>h" = "left";
+        "<C-w>j" = "down";
+        "<C-w>k" = "up";
+        "<C-w>l" = "right";
+        "<C-w>\\" = {
+          action = "previous";
+          desc = "Move to the previous pane";
+        };
+      };
     };
   };
 }
