@@ -121,38 +121,72 @@ helpers.vim-plugin.mkVimPlugin config {
     '';
 
     no_mappings = helpers.defaultNullOpts.mkBool false ''
-      By default `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`, & `<C-\\>` are mapped to navigating left, down, up, right, & previous, respectively.
+      By default `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`, & `<C-\\>`
+      are mapped to navigating left, down, up, right, & previous, respectively.
 
       This option disables those default mappings being created.
 
-      You can use the plugin's five commands to define your own custom mappings:
-
-      ```nix
-        keymaps = [
-          {
-            key = "<C-w>h";
-            action = "<cmd>TmuxNavigateLeft<cr>";
-          }
-          {
-            key = "<C-w>j";
-            action = "<cmd>TmuxNavigateDown<cr>";
-          }
-          {
-            key = "<C-w>k";
-            action = "<cmd>TmuxNavigateUp<cr>";
-          }
-          {
-            key = "<C-w>l";
-            action = "<cmd>TmuxNavigateRight<cr>";
-          }
-          {
-            key = "<C-w>\\";
-            action = "<cmd>TmuxNavigatePrevious<cr>";
-          }
-        ];
-      ```
-
-      You will also need to update your tmux bindings to match.
+      You can use `plugins.tmux-navigator.keymaps` to define your own custom mappings.
+      You will also need to **update your tmux bindings** separately,
+      if you want them to match.
     '';
+  };
+
+  extraOptions = {
+    keymaps = mkOption {
+      description = ''
+        Keymaps for the `:TmuxNavigate*` commands.
+
+        Note: by default, tmux-navigator adds its own keymaps.
+        If you wish to disable that behaviour, use `settings.no_mappings`.
+
+        You will also need to **update your tmux bindings** separately,
+        if you want them to match.
+      '';
+      example = [
+        {
+          key = "<C-w>h";
+          action = "left";
+        }
+        {
+          key = "<C-w>j";
+          action = "down";
+        }
+        {
+          key = "<C-w>k";
+          action = "up";
+        }
+        {
+          key = "<C-w>l";
+          action = "right";
+        }
+        {
+          key = "<C-w>\\";
+          action = "previous";
+        }
+      ];
+      default = [ ];
+      type = types.listOf (
+        helpers.keymaps.mkMapOptionSubmodule {
+          action = {
+            description = "The direction in which to navigate.";
+            type = types.enum [
+              "left"
+              "down"
+              "up"
+              "right"
+              "previous"
+            ];
+            example = "left";
+          };
+        }
+      );
+    };
+  };
+
+  extraConfig = cfg: {
+    keymaps = map (
+      mapping: mapping // { action = "<cmd>TmuxNavigate${helpers.upperFirstChar mapping.action}<cr>"; }
+    ) cfg.keymaps;
   };
 }
