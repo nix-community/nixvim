@@ -113,6 +113,23 @@ let
       };
       expected = ''{["c"] = { },["d"] = {["g"] = { }}}'';
     };
+
+    testUpperFirstChar = {
+      expr = map helpers.upperFirstChar [
+        "foo"
+        " foo"
+        "foo bar"
+        "UPPER"
+        "mIxEd"
+      ];
+      expected = [
+        "Foo"
+        " foo"
+        "Foo bar"
+        "UPPER"
+        "MIxEd"
+      ];
+    };
   };
 in
 if results == [ ] then
