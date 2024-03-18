@@ -18,6 +18,7 @@
           foundry.enable = true;
           go.enable = true;
           gradle.enable = true;
+          hardhat.enable = true;
           haskell.enable = true;
           java.enable = true;
           jest.enable = true;

@@ -28,6 +28,10 @@
   gradle = {
     treesitter-parser = "kotlin,java";
   };
+  hardhat = {
+    treesitter-parser = "javascript";
+    packageName = "hardhat-nvim";
+  };
   haskell = {
     treesitter-parser = "haskell";
   };

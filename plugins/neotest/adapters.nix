@@ -10,12 +10,13 @@ with lib; let
 
   mkAdapter = name: {
     treesitter-parser,
+    packageName ? "neotest-${name}",
     settingsSuffix ? settingsLua: "(${settingsLua})",
   }: {
     options.plugins.neotest.adapters.${name} = {
       enable = mkEnableOption name;
 
-      package = helpers.mkPackageOption name pkgs.vimPlugins."neotest-${name}";
+      package = helpers.mkPackageOption name pkgs.vimPlugins.${packageName};
 
       settings = helpers.mkSettingsOption {
         description = "settings for the `${name}` adapter.";
