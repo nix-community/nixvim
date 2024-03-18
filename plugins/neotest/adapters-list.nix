@@ -46,6 +46,10 @@
   phpunit = {
     treesitter-parser = "php";
   };
+  playwright = {
+    treesitter-parser = "typescript";
+    settingsSuffix = settingsLua: ".adapter(${settingsLua})";
+  };
   plenary = {
     treesitter-parser = "lua";
   };

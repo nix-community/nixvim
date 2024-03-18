@@ -24,6 +24,7 @@
           minitest.enable = true;
           pest.enable = true;
           phpunit.enable = true;
+          playwright.enable = true;
           plenary.enable = true;
           python.enable = true;
           rspec.enable = true;
