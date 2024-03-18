@@ -10,13 +10,18 @@
         enable = true;
 
         adapters = {
+          bash.enable = true;
           dart.enable = true;
           deno.enable = true;
           dotnet.enable = true;
           elixir.enable = true;
+          foundry.enable = true;
           go.enable = true;
+          gradle.enable = true;
           haskell.enable = true;
+          java.enable = true;
           jest.enable = true;
+          minitest.enable = true;
           pest.enable = true;
           phpunit.enable = true;
           plenary.enable = true;
@@ -26,6 +31,7 @@
           scala.enable = true;
           testthat.enable = true;
           vitest.enable = true;
+          zig.enable = true;
         };
       };
     };

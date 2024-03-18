@@ -8,7 +8,7 @@
 with lib; let
   supportedAdapters = import ./adapters-list.nix;
 
-  mkAdapter = name: props: {
+  mkAdapter = name: {treesitter-parser}: {
     options.plugins.neotest.adapters.${name} = {
       enable = mkEnableOption name;
 
@@ -30,7 +30,7 @@ with lib; let
           (!config.plugins.treesitter.enable)
           ''
             Nixvim (plugins.neotest.adapters.${name}): This adapter requires `treesitter` to be enabled.
-            You might want to set `plugins.treesitter.enable = true` and ensure that the `${props.treesitter-parser}` is enabled.
+            You might want to set `plugins.treesitter.enable = true` and ensure that the `${props.treesitter-parser}` parser is enabled.
           '';
 
         plugins.neotest.enabledAdapters = [

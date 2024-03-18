@@ -4,6 +4,9 @@
 # - Add the adapter to `all-adapters` in `tests/test-sources/plugins/neotest/default.nix`
 # - Add a more complete test case in `tests/test-sources/plugins/neotest/NAME.nix`
 {
+  bash = {
+    treesitter-parser = "bash";
+  };
   dart = {
     treesitter-parser = "dart";
   };
@@ -16,14 +19,26 @@
   elixir = {
     treesitter-parser = "elixir";
   };
+  foundry = {
+    treesitter-parser = "solidity";
+  };
   go = {
     treesitter-parser = "go";
+  };
+  gradle = {
+    treesitter-parser = "kotlin,java";
   };
   haskell = {
     treesitter-parser = "haskell";
   };
+  java = {
+    treesitter-parser = "java";
+  };
   jest = {
     treesitter-parser = "javascript";
+  };
+  minitest = {
+    treesitter-parser = "ruby";
   };
   pest = {
     treesitter-parser = "php";
@@ -51,5 +66,8 @@
   };
   vitest = {
     treesitter-parser = "javascript";
+  };
+  zig = {
+    treesitter-parser = "zig";
   };
 }
