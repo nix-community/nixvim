@@ -392,7 +392,7 @@ in {
         delete_to_trash = cfg.deleteToTrash;
         trash_command = cfg.trashCommand;
         prompt_save_on_select_new_entry = cfg.promptSaveOnSelectNewEntry;
-        lsp_rename_autosave = cfg.lspRenameAutosave;
+        lsp_file_methods.autosave_changes = cfg.lspRenameAutosave;
         cleanup_delay_ms = cfg.cleanupDelayMs;
         inherit (cfg) keymaps;
         use_default_keymaps = cfg.useDefaultKeymaps;
