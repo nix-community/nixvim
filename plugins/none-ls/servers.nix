@@ -136,6 +136,7 @@ with lib; let
     gdformat = pkgs.gdtoolkit;
     gdlint = pkgs.gdtoolkit;
     gitsigns = pkgs.git;
+    gleam_format = pkgs.gleam;
     glslc = pkgs.shaderc;
     gn_format = pkgs.gn;
     gofmt = pkgs.go;
@@ -159,6 +160,7 @@ with lib; let
     phpcs = pkgs.phpPackages.php-codesniffer;
     prismaFmt = pkgs.nodePackages.prisma;
     ptop = pkgs.fpc;
+    puppet_lint = pkgs.puppet-lint;
     qmlformat = pkgs.qt6.qtdeclarative;
     qmllint = pkgs.qt6.qtdeclarative;
     racket_fixw = pkgs.racket;
@@ -184,6 +186,7 @@ with lib; let
     cljstyle = null;
     cueimports = null;
     erb_lint = null;
+    findent = null;
     forge_fmt = null;
     gccdiag = null;
     gersemi = null;
