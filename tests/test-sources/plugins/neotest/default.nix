@@ -18,6 +18,9 @@
           foundry.enable = true;
           go.enable = true;
           gradle.enable = true;
+          # We cannot test neotest-gtest as it tries to create file in the upper directory
+          # https://github.com/alfaix/neotest-gtest/blob/6e794ac91f4c347e2ea5ddeb23d594f8fc64f2a8/lua/neotest-gtest/utils.lua#L10-L16
+          gtest.enable = false;
           hardhat.enable = true;
           haskell.enable = true;
           java.enable = true;
