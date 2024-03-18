@@ -8,7 +8,10 @@
 with lib; let
   supportedAdapters = import ./adapters-list.nix;
 
-  mkAdapter = name: {treesitter-parser}: {
+  mkAdapter = name: {
+    treesitter-parser,
+    settingsSuffix ? settingsLua: "(${settingsLua})",
+  }: {
     options.plugins.neotest.adapters.${name} = {
       enable = mkEnableOption name;
 
@@ -37,7 +40,7 @@ with lib; let
           settingsString =
             optionalString
             (cfg.settings != {})
-            "(${helpers.toLuaObject cfg.settings})";
+            (settingsSuffix (helpers.toLuaObject cfg.settings));
         in [
           "require('neotest-${name}')${settingsString}"
         ];
