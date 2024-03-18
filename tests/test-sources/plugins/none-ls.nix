@@ -68,6 +68,7 @@
             "dtsfmt"
             "erb_lint"
             "fixjson"
+            "findent"
             "forge_fmt"
             "gccdiag"
             "gersemi"
