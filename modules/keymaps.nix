@@ -44,57 +44,55 @@ with lib; {
     };
   };
 
-  config = {
-    extraConfigLua = let
-      normalizeMapping = keyMapping: {
-        inherit
-          (keyMapping)
-          mode
-          key
-          options
-          ;
+  config = let
+    normalizeMapping = keyMapping: {
+      inherit
+        (keyMapping)
+        mode
+        key
+        options
+        ;
 
-        action =
-          if keyMapping.lua
-          then helpers.mkRaw keyMapping.action
-          else keyMapping.action;
-      };
-
-      mappings = map normalizeMapping config.keymaps;
-    in
-      optionalString (mappings != [])
+      action =
+        if keyMapping.lua
+        then helpers.mkRaw keyMapping.action
+        else keyMapping.action;
+    };
+  in {
+    extraConfigLua =
+      optionalString (config.keymaps != [])
       ''
         -- Set up keybinds {{{
         do
-          local __nixvim_binds = ${helpers.toLuaObject mappings}
+          local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping config.keymaps)}
           for i, map in ipairs(__nixvim_binds) do
             vim.keymap.set(map.mode, map.key, map.action, map.options)
           end
         end
-      ''
-      + foldl (a: b: a + "\n" + b)
-      ""
+        -- }}}
+      '';
+
+    autoGroups = mapAttrs' (event: mappings: nameValuePair "nixvim_binds_${event}" {clear = true;}) config.keymapsOnEvents;
+
+    autoCmd =
+      mapAttrsToList
       (
-        mapAttrsToList
-        (event: mappings:
-          optionalString (mappings != [])
-          ''
-            vim.api.nvim_create_autocmd(
-              "${event}", {
-                  group = vim.api.nvim_create_augroup("nixvim_binds_${event}", { clear = true }),
-                  callback = function()
-                    do
-                      local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping mappings)}
-                      for i, map in ipairs(__nixvim_binds) do
-                        vim.keymap.set(map.mode, map.key, map.action, map.options)
-                      end
-                    end
-                  end
-              }
-            )
-          '')
-        config.keymapsOnEvents
+        event: mappings: {
+          inherit event;
+          group = "nixvim_binds_${event}";
+          callback = helpers.mkRaw ''
+            function()
+              do
+                local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping mappings)}
+                for i, map in ipairs(__nixvim_binds) do
+                  vim.keymap.set(map.mode, map.key, map.action, map.options)
+                end
+              end
+            end
+          '';
+          desc = "Load keymaps for ${event}";
+        }
       )
-      + "-- }}}";
+      config.keymapsOnEvents;
   };
 }
