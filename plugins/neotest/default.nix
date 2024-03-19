@@ -16,34 +16,18 @@ with lib;
       ./adapters.nix
     ];
 
-    extraOptions = {
-      enabledAdapters = mkOption {
-        type = with types;
-          listOf
-          (submodule {
-            options = {
-              name = mkOption {
-                type = types.str;
-              };
-              settings = mkOption {
-                type = with types; attrsOf anything;
-              };
-            };
-          });
-        internal = true;
-        visible = false;
-        default = [];
-      };
-    };
-
     settingsOptions =
       (import ./options.nix {inherit lib helpers;})
       // {
         adapters = mkOption {
           type = with helpers.nixvimTypes; listOf strLua;
           default = [];
-          internal = true;
           apply = map helpers.mkRaw;
+          # NOTE: We hide this option from the documentation as users should use the top-level
+          # `adapters` option.
+          # They can still directly append raw lua code to this `settings.adapters` option.
+          # In this case, they are responsible for explicitly installing the manually added adapters.
+          visible = false;
         };
       };
 
@@ -57,19 +41,5 @@ with lib;
         enabled = true;
         open = "botright split | resize 15";
       };
-    };
-
-    extraConfig = cfg: {
-      plugins.neotest.settings.adapters =
-        map
-        (
-          adapter: let
-            settingsString =
-              optionalString
-              (adapter.settings != {})
-              "(${helpers.toLuaObject adapter.settings})";
-          in "require('neotest-${adapter.name}')${settingsString}"
-        )
-        cfg.enabledAdapters;
     };
   }
