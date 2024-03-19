@@ -1,9 +1,13 @@
-name: "Publish every Git push to main to Flakestry"
 on:
   push:
     branches:
-      - "main"
-
+      - main
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "The existing reference to publish"
+        type: "string"
+        required: true
 jobs:
   publish-flake:
     runs-on: ubuntu-latest
@@ -13,4 +17,4 @@ jobs:
     steps:
       - uses: flakestry/flakestry-publish@main
         with:
-          version: "${{ github.ref_name }}"
+          ref: "${{ inputs.ref || github.ref }}"
