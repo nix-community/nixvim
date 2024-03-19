@@ -9,11 +9,13 @@
     plugins.tmux-navigator = {
       enable = true;
 
-      tmuxNavigatorSaveOnSwitch = 2;
-
-      tmuxNavigatorDisableWhenZoomed = 1;
-
-      tmuxNavigatorNoWrap = 1;
+      settings = {
+        save_on_switch = 2;
+        disable_when_zoomed = true;
+        preserve_zoom = true;
+        no_wrap = true;
+        no_mappings = true;
+      };
     };
   };
 }
