@@ -33,8 +33,7 @@
             installCargo = true;
             installRustc = true;
           };
-          # TODO As of 2024-03-10, nixd is broken (see https://github.com/nix-community/nixd/issues/357)
-          nixd.enable = false;
+          nixd.enable = true;
         };
       };
     };
@@ -81,8 +80,7 @@
       lsp = {
         enable = true;
         servers = {
-          # TODO As of 2024-03-10, nixd is broken (see https://github.com/nix-community/nixd/issues/357)
-          nixd.enable = false;
+          nixd.enable = true;
           rust-analyzer = {
             enable = true;
             installCargo = true;
