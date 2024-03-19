@@ -33,11 +33,13 @@ with lib; let
             You might want to set `plugins.treesitter.enable = true` and ensure that the `${props.treesitter-parser}` parser is enabled.
           '';
 
-        plugins.neotest.enabledAdapters = [
-          {
-            inherit name;
-            inherit (cfg) settings;
-          }
+        plugins.neotest.settings.adapters = let
+          settingsString =
+            optionalString
+            (cfg.settings != {})
+            "(${helpers.toLuaObject cfg.settings})";
+        in [
+          "require('neotest-${name}')${settingsString}"
         ];
       };
   };
