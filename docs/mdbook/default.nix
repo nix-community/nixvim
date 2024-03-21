@@ -68,9 +68,9 @@ with lib; let
           maintainers = lib.unique (options.config.meta.maintainers."${info.file}" or []);
         in
           "# ${lib.last path}\n\n"
+          + (lib.optionalString (info.url != null) "Url: [${info.url}](${info.url})\n\n")
           + (lib.optionalString (builtins.length maintainers > 0)
             "Maintainers: ${lib.concatStringsSep ", " (builtins.map (m: m.name) maintainers)}\n\n")
-          + (lib.optionalString (info.url != null) "Url: [${info.url}](${info.url})\n\n")
         else null;
     };
 
