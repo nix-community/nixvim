@@ -10,27 +10,27 @@ with lib; let
     clear = {
       default = "<C-]>";
       description = "Keymap for clearing current suggestion.";
-      command = "codeium#Clear()";
+      command = "vim.fn['codeium#Clear']()";
     };
     next = {
       default = "<M-]>";
       description = "Keymap for cycling to the next suggestion.";
-      command = "codeium#CycleCompletions(1)";
+      command = "vim.fn['codeium#CycleCompletions'](1)";
     };
     prev = {
       default = "<M-[>";
       description = "Keymap for cycling to the previous suggestion.";
-      command = "codeium#CycleCompletions(-1)";
+      command = "vim.fn['codeium#CycleCompletions'](-1)";
     };
     accept = {
       default = "<Tab>";
       description = "Keymap for inserting the proposed suggestion.";
-      command = "codeium#Accept()";
+      command = "vim.fn['codeium#Accept']()";
     };
     complete = {
       default = "<M-Bslash>";
       description = "Keymap for manually triggering the suggestion.";
-      command = "codeium#Complete()";
+      command = "vim.fn['codeium#Complete']()";
     };
   };
 in
@@ -129,7 +129,8 @@ in
             key = v;
             action = let
               inherit (keymapsDefinitions.${optionName}) command;
-            in "<Cmd>${command}<CR>";
+            in
+              helpers.mkRaw "function() ${command} end";
           };
 
         keymapsList = flatten (
