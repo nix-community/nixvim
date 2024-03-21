@@ -12,6 +12,7 @@ with lib; {
       else null,
     maintainers,
     imports ? [],
+    description ? null,
     # deprecations
     deprecateExtraConfig ? false,
     optionsRenamedToSettings ? [],
@@ -72,7 +73,11 @@ with lib; {
     meta = {
       inherit maintainers;
       nixvimInfo = {
-        inherit name url;
+        inherit
+          description
+          name
+          url
+          ;
         kind = namespace;
       };
     };

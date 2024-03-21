@@ -22,6 +22,7 @@
           # Attribute may contain the following fields:
           #  - name: Name of the module
           #  - kind: Either colorschemes or plugins
+          #  - description: A short description of the plugin
           #  - url: Url for the plugin
           #
           #  [kind name] will identify the plugin
@@ -37,12 +38,16 @@
                 # }
                 #
                 # Where <info> is an attrset of the form:
-                # {file = "path"; url = null or "<URL>";}
+                # {
+                #   file = "path";
+                #   description = null or "<DESCRIPTION>";
+                #   url = null or "<URL>";
+                # }
                 merge = _: defs:
                   lib.foldl' (acc: def:
                     lib.recursiveUpdate acc {
                       "${def.value.kind}"."${def.value.name}" = {
-                        inherit (def.value) url;
+                        inherit (def.value) url description;
                         inherit (def) file;
                       };
                     }) {
