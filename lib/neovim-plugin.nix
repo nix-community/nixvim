@@ -35,6 +35,7 @@ with lib; rec {
     maintainers,
     url ? defaultPackage.meta.homepage,
     imports ? [],
+    description ? null,
     # deprecations
     deprecateExtraOptions ? false,
     optionsRenamedToSettings ? [],
@@ -62,7 +63,11 @@ with lib; rec {
     meta = {
       inherit maintainers;
       nixvimInfo = {
-        inherit name url;
+        inherit
+          description
+          name
+          url
+          ;
         kind = namespace;
       };
     };

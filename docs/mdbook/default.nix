@@ -65,12 +65,14 @@ with lib; let
         if builtins.length path >= 2 && lib.hasAttrByPath path nixvimInfo
         then let
           info = lib.getAttrFromPath path nixvimInfo;
-          maintainers = lib.unique (options.config.meta.maintainers."${info.file}" or []);
+          maintainers = lib.unique (options.config.meta.maintainers.${info.file} or []);
+          maintainersNames = builtins.map (m: m.name) maintainers;
         in
           "# ${lib.last path}\n\n"
-          + (lib.optionalString (info.url != null) "Url: [${info.url}](${info.url})\n\n")
+          + (lib.optionalString (info.description != null) "${info.description}\n\n")
+          + (lib.optionalString (info.url != null) "**Url:** [${info.url}](${info.url})\n\n")
           + (lib.optionalString (builtins.length maintainers > 0)
-            "Maintainers: ${lib.concatStringsSep ", " (builtins.map (m: m.name) maintainers)}\n\n")
+            "**Maintainers:** ${lib.concatStringsSep ", " maintainersNames}\n\n")
         else null;
     };
 
