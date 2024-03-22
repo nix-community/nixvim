@@ -62,6 +62,9 @@
             "bslint"
             "cljstyle"
             "cueimports"
+            # As of 2024-03-22, pkgs.d2 is broken
+            # TODO: re-enable this test when fixed
+            "d2_fmt"
             "erb_lint"
             "findent"
             "forge_fmt"
