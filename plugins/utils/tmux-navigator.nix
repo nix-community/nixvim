@@ -44,7 +44,7 @@ with lib; let
   #    Should we consider filtering it? Etc?
   keymapOptions = {
     options =
-      (recursiveUpdate helpers.keymaps.mapConfigOptions (mapAttrs (n: v: {${n}.default = v;}) defaultOptions))
+      helpers.keymaps.mapConfigOptions
       // {
         action = mkOption {
           type = types.enum commands;
@@ -54,18 +54,20 @@ with lib; let
       };
   };
 
-  defaultOptions = {
-    silent = true;
-  };
-
   normaliseKeymap = key: cmd: let
     attrs =
       if isAttrs cmd
-      then cmd
+      then filterAttrs (n: v: v != null) cmd
       else {action = cmd;};
-    action = "<cmd>TmuxNavigate${helpers.upperFirstChar attrs.action}<cr>";
-    options = defaultOptions // (filterAttrs (n: v: n != "action" && v != null) attrs);
-  in {inherit key action options;};
+    direction = attrs.action;
+    options = filterAttrs (n: v: n != "action") attrs;
+    # FIXME is it idiomatic to set a default desc here?
+    defaults.desc = "Go to the ${direction} pane";
+  in {
+    inherit key;
+    action = "<cmd>TmuxNavigate${helpers.upperFirstChar direction}<cr>";
+    options = recursiveUpdate defaults options;
+  };
 
   keymapConfig = {
     keymaps = mapAttrsToList normaliseKeymap config.plugins.tmux-navigator.keymaps;
