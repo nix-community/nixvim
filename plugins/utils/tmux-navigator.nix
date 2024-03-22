@@ -33,7 +33,7 @@ in
   helpers.vim-plugin.mkVimPlugin config {
     name = "tmux-navigator";
     originalName = "vim-tmux-navigator";
-    defaultPackage = pkgs.vimPlugins.tmux-navigator;
+    defaultPackage = pkgs.vimPlugins.vim-tmux-navigator;
     globalPrefix = "tmux_navigator_";
 
     maintainers = [helpers.maintainers.MattSturgeon];
