@@ -19,8 +19,8 @@
 
   nixvimPath = toString ./..;
 
-  gitHubDeclaration = user: repo: subpath: {
-    url = "https://github.com/${user}/${repo}/blob/master/${subpath}";
+  gitHubDeclaration = user: repo: branch: subpath: {
+    url = "https://github.com/${user}/${repo}/blob/${branch}/${subpath}";
     name = "<${repo}/${subpath}>";
   };
 
@@ -32,10 +32,10 @@
           decl:
             if lib.hasPrefix nixvimPath (toString decl)
             then
-              gitHubDeclaration "nix-community" "nixvim"
+              gitHubDeclaration "nix-community" "nixvim" "main"
               (lib.removePrefix "/" (lib.removePrefix nixvimPath (toString decl)))
             else if decl == "lib/modules.nix"
-            then gitHubDeclaration "NixOS" "nixpkgs" decl
+            then gitHubDeclaration "NixOS" "nixpkgs" "master" decl
             else decl
         )
         opt.declarations;
