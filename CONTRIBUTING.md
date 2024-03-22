@@ -61,7 +61,7 @@ There are a number of helpers to help you correctly implement them:
 - `helpers.nixvimTypes.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkLua`/`mkLuaFn` should be used in this case.
 
 The resulting `settings` attrs will be directly translated to `lua` and will be forwarded the plugin:
-- Using globals (`vim.g.<globalPrefix>_<option-name>`) for plugins using `mkVimPlugin`
+- Using globals (`vim.g.<globalPrefix><option-name>`) for plugins using `mkVimPlugin`
 - Using the `require('<plugin>').setup()` function for the plugins using `mkNeovimPlugin`
 
 In either case, you don't need to bother implementing this part. It is done automatically.
