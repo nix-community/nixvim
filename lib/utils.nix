@@ -27,6 +27,17 @@ with lib; {
     in
       concatStrings (map processWord words);
 
+  /*
+    Capitalize a string by making the first character uppercase
+  Type: string -> string
+  */
+  upperFirstChar = s: let
+    first = substring 0 1 s;
+    rest = substring 1 (stringLength s) s;
+    result = (toUpper first) + rest;
+  in
+    optionalString (s != "") result;
+
   mkIfNonNull' = x: y: (mkIf (x != null) y);
 
   mkIfNonNull = x: (mkIfNonNull' x x);
