@@ -202,14 +202,15 @@ with lib; let
           + (
             if opts.index.moduleDoc == null
             then "cp ${mkMDDoc opts.index.options} ${path}"
-            else ''
-              {
-              cat <<EOF
-              ${opts.index.moduleDoc}
-              EOF
-              cat ${mkMDDoc opts.index.options}
-              } > ${path}
-            ''
+            else
+              # Including moduleDoc's text directly will result in bash interpreting special chars,
+              # write it to the nix store and `cat` the file instead.
+              ''
+                {
+                cat ${pkgs.writeText "module-doc" opts.index.moduleDoc}
+                cat ${mkMDDoc opts.index.options}
+                } > ${path}
+              ''
           )
       )
       modules;
