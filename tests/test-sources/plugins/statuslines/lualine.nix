@@ -85,6 +85,11 @@
               TelescopePrompt = "Telescope";
               NvimTree = "NvimTree";
             };
+            fmt = ''
+              function(value)
+                return value
+              end
+            '';
           }
         ];
         lualine_z = [
