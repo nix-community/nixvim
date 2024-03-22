@@ -6,7 +6,7 @@
   snippet-engine = {
     plugins.cmp = {
       enable = true;
-      settings.snippet.expand = "luasnip";
+      settings.snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
     };
   };
 
@@ -182,7 +182,7 @@
       enable = true;
 
       settings = {
-        snippet.expand = "luasnip";
+        snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
         window = {
           completion.__raw = "cmp.config.window.bordered";
           documentation.__raw = "cmp.config.window.bordered";
