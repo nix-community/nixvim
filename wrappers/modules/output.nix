@@ -46,6 +46,20 @@ with lib; {
       readOnly = true;
     };
 
+    nvimVersion = mkOption {
+      type = types.package;
+      description = ''
+        The Neovim version included in `package`, as reported by `nvim --version`.
+
+        Note: you can access the package version using `lib.getVersion`, the Neovim version may be different
+        from the package version, especially for "nightly" builds of Neovim.
+
+        For Neovim nightly, the package version may be something like "a44ac26",
+        while this version will be something like "0.10.0-dev-a44ac26".
+      '';
+      readOnly = true;
+    };
+
     initPath = mkOption {
       type = types.str;
       description = "The path to the `init.lua` file.";
@@ -130,11 +144,19 @@ with lib; {
         wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
         wrapRc = false;
       });
+
+    # Extract version from `nvim --version` by taking the first line and stripping the prefix.
+    # `lib.getVersion config.package` may not be semver, e.g. when using neovim nightly.
+    nvimVersion = let
+      exe = getExe config.package;
+      out = pkgs.runCommand "neovim-version" {} "${exe} --version > $out";
+      lines = splitString "\n" (readFile out);
+    in removePrefix "NVIM v" (head lines);
   in {
+    inherit initPath nvimVersion;
     type = lib.mkForce "lua";
     finalPackage = wrappedNeovim;
     initContent = customRC;
-    inherit initPath;
 
     printInitPackage = pkgs.writeShellApplication {
       name = "nixvim-print-init";
