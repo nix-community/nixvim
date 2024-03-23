@@ -112,6 +112,12 @@ in
         visible = false;
       };
 
+      inlayHints = mkEnableOption ''
+        LSP inlay-hints. Only affects language servers with inlay-hints support.
+
+        See [`:h lsp-inlay_hint`](https://neovim.io/doc/user/lsp.html#lsp-inlay_hint).
+      '';
+
       onAttach = mkOption {
         type = types.lines;
         description = "A lua function to be run when a new LSP buffer is attached. The argument `client` and `bufnr` is provided.";
@@ -195,6 +201,15 @@ in
         (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
         ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
         ++ cfg.keymaps.extra;
+
+      # Enable inlay-hints
+      plugins.lsp.onAttach = mkIf cfg.inlayHints ''
+        -- LSP Inlay Hints {{{
+        if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(bufnr, true)
+        end
+        -- }}}
+      '';
 
       # Enable all LSP servers
       extraConfigLua = ''
