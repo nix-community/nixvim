@@ -591,6 +591,10 @@ with lib; let
       package = pkgs.sourcekit-lsp;
     }
     {
+      name = "sqls";
+      description = "sqls for SQL";
+    }
+    {
       name = "svelte";
       description = "svelte language server for Svelte";
       package = pkgs.nodePackages.svelte-language-server;

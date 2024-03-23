@@ -159,6 +159,7 @@
           # As of 2024-03-11, sourcekit-lsp is broken on aarch64
           # TODO: re-enable this test when fixed
           sourcekit.enable = !pkgs.stdenv.isAarch64;
+          sqls.enable = true;
           svelte.enable = true;
           tailwindcss.enable = true;
           taplo.enable = true;
