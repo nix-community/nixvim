@@ -16,14 +16,14 @@ jobs:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v26
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update flake.lock
         id: update
-        uses: DeterminateSystems/update-flake-lock@v20
+        uses: DeterminateSystems/update-flake-lock@v21
         with:
           pr-title: "Update flake.lock"
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
