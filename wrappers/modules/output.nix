@@ -151,7 +151,8 @@ with lib; {
       exe = getExe config.package;
       out = pkgs.runCommand "neovim-version" {} "${exe} --version > $out";
       lines = splitString "\n" (readFile out);
-    in removePrefix "NVIM v" (head lines);
+    in
+      removePrefix "NVIM v" (head lines);
   in {
     inherit initPath nvimVersion;
     type = lib.mkForce "lua";
