@@ -123,7 +123,7 @@
     ./utils/baleia.nix
     ./utils/better-escape.nix
     ./utils/clipboard-image.nix
-    ./utils/comment-nvim.nix
+    ./utils/comment.nix
     ./utils/commentary.nix
     ./utils/conjure.nix
     ./utils/coverage.nix
