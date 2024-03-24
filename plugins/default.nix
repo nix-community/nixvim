@@ -174,6 +174,7 @@
     ./utils/quickmath.nix
     ./utils/refactoring.nix
     ./utils/rest.nix
+    ./utils/sleuth.nix
     ./utils/smart-splits.nix
     ./utils/specs.nix
     ./utils/spider.nix
