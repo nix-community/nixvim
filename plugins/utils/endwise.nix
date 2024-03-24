@@ -12,6 +12,5 @@ helpers.vim-plugin.mkVimPlugin config {
 
   maintainers = [lib.maintainers.GaetanLepage];
 
-  # Yes it's really not configurable
-  options = {};
+  # This plugin has no config options
 }
