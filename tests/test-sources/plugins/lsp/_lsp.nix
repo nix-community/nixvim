@@ -170,6 +170,7 @@
           typos-lsp.enable = true;
           typst-lsp.enable = true;
           vala-ls.enable = true;
+          vhdl-ls.enable = true;
           vls.enable = true;
           vuels.enable = true;
           yamlls.enable = true;

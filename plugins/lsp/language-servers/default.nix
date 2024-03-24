@@ -645,6 +645,11 @@ with lib; let
       package = pkgs.vala-language-server;
     }
     {
+      name = "vhdl-ls";
+      description = "vhdl_ls for VHDL";
+      serverName = "vhdl_ls";
+    }
+    {
       name = "vls";
       description = "vls for V";
       # The v language server has to be installed from v and thus is not packaged "as is" in
