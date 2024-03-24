@@ -5,37 +5,55 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.telescope;
-in {
-  imports = [
-    ./file-browser.nix
-    ./frecency.nix
-    ./fzf-native.nix
-    ./fzy-native.nix
-    ./media-files.nix
-    ./ui-select.nix
-    ./undo.nix
-  ];
+with lib;
+# TODO:add support for additional filetypes. This requires autocommands!
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "telescope";
+    originalName = "telescope.nvim";
+    defaultPackage = pkgs.vimPlugins.telescope-nvim;
 
-  # TODO:add support for additional filetypes. This requires autocommands!
+    maintainers = [maintainers.GaetanLepage];
 
-  options.plugins.telescope =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "telescope.nvim";
+    extraPackages = [pkgs.bat];
 
-      package = helpers.mkPackageOption "telescope.nvim" pkgs.vimPlugins.telescope-nvim;
+    # TODO introduced 2024-03-24: remove 2024-05-24
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = ["defaults"];
 
+    imports = [
+      ./file-browser.nix
+      ./frecency.nix
+      ./fzf-native.nix
+      ./fzy-native.nix
+      ./media-files.nix
+      ./ui-select.nix
+      ./undo.nix
+    ];
+
+    extraOptions = {
       keymaps = mkOption {
-        type = with types; attrsOf (either str attrs);
+        type = with types;
+          attrsOf
+          (
+            either
+            str
+            (submodule {
+              options = {
+                action = mkOption {
+                  type = types.str;
+                };
+                mode = helpers.keymaps.mkModeOption "n";
+                options = helpers.keymaps.mapConfigOptions;
+              };
+            })
+          );
         description = "Keymaps for telescope.";
         default = {};
         example = {
           "<leader>fg" = "live_grep";
           "<C-p>" = {
             action = "git_files";
-            desc = "Telescope Git Files";
+            options.desc = "Telescope Git Files";
           };
         };
       };
@@ -59,78 +77,86 @@ in {
         internal = true;
         visible = false;
       };
-
-      extensionConfig = mkOption {
-        type = types.attrsOf types.anything;
-        description = "Configuration for the extensions. Don't use this directly";
-        default = {};
-        internal = true;
-        visible = false;
-      };
-
-      defaults = mkOption {
-        type = types.nullOr types.attrs;
-        default = null;
-        description = "Telescope default configuration";
-      };
     };
 
-  config = mkIf cfg.enable {
-    extraPackages = [pkgs.bat];
+    callSetup = false;
+    extraConfig = cfg: {
+      extraConfigVim = mkIf (cfg.highlightTheme != null) ''
+        let $BAT_THEME = '${cfg.highlightTheme}'
+      '';
 
-    extraPlugins = with pkgs.vimPlugins; [
-      cfg.package
-      plenary-nvim
-      popup-nvim
-    ];
+      keymaps =
+        mapAttrsToList
+        (
+          key: mapping: let
+            actionStr =
+              if isString mapping
+              then mapping
+              else mapping.action;
+          in {
+            mode = mapping.mode or "n";
+            inherit key;
+            action.__raw = "require('telescope.builtin').${actionStr}";
 
-    extraConfigVim = mkIf (cfg.highlightTheme != null) ''
-      let $BAT_THEME = '${cfg.highlightTheme}'
-    '';
+            options =
+              {
+                silent = cfg.keymapsSilent;
+              }
+              // (mapping.options or {});
+          }
+        )
+        cfg.keymaps;
 
-    keymaps =
-      mapAttrsToList
-      (
-        key: action: let
-          actionStr =
-            if isString action
-            then action
-            else action.action;
-          actionProps =
-            if isString action
-            then {}
-            else filterAttrs (n: v: n != "action") action;
-        in {
-          mode = "n";
-          inherit key;
-          action.__raw = "require('telescope.builtin').${actionStr}";
+      extraConfigLua = ''
+        require('telescope').setup(${helpers.toLuaObject cfg.settings})
 
-          options =
-            {
-              silent = cfg.keymapsSilent;
-            }
-            // actionProps;
-        }
-      )
-      cfg.keymaps;
-
-    extraConfigLua = let
-      options =
-        {
-          extensions = cfg.extensionConfig;
-          inherit (cfg) defaults;
-        }
-        // cfg.extraOptions;
-    in ''
-      do
         local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
-
-        require('telescope').setup(${helpers.toLuaObject options})
-
         for i, extension in ipairs(__telescopeExtensions) do
           require('telescope').load_extension(extension)
         end
-      end
-    '';
-  };
-}
+      '';
+    };
+
+    settingsOptions = {
+      defaults = helpers.mkNullOrOption (with types; attrsOf anything) ''
+        Default configuration for telescope.
+      '';
+
+      pickers = helpers.mkNullOrOption (with types; attrsOf anything) ''
+        Default configuration for builtin pickers.
+      '';
+
+      extensions = mkOption {
+        type = with types; attrsOf anything;
+        default = {};
+        # NOTE: We hide this option from the documentation as users should use the top-level
+        # `extensions.*` options.
+        # They can still directly change this `settings.adapters` option.
+        # In this case, they are responsible for explicitly installing the manually added extensions.
+        visible = false;
+      };
+    };
+
+    settingsExample = {
+      defaults = {
+        file_ignore_patterns = [
+          "^.git/"
+          "^.mypy_cache/"
+          "^__pycache__/"
+          "^output/"
+          "^data/"
+          "%.ipynb"
+        ];
+        set_env.COLORTERM = "truecolor";
+        sorting_strategy = "ascending";
+        selection_caret = "> ";
+        layout_config.prompt_position = "top";
+        mappings = {
+          i = {
+            "<A-j>".__raw = "require('telescope.actions').move_selection_next";
+            "<A-k>".__raw = "require('telescope.actions').move_selection_previous";
+          };
+        };
+      };
+    };
+  }

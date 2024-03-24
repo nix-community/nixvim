@@ -26,7 +26,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    plugins.telescope.enabledExtensions = ["media_files"];
+    plugins.telescope = {
+      enabledExtensions = ["media_files"];
+    };
 
     extraPlugins = with pkgs.vimPlugins; [
       popup-nvim

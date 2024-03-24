@@ -107,7 +107,9 @@ in {
     {
       extraPlugins = [cfg.package];
 
-      plugins.telescope.enabledExtensions = ["undo"];
-      plugins.telescope.extensionConfig."undo" = configuration;
+      plugins.telescope = {
+        enabledExtensions = ["undo"];
+        settings.extensions.undo = configuration;
+      };
     };
 }

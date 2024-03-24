@@ -26,7 +26,7 @@ in {
   config = mkIf cfg.enable {
     plugins.telescope = {
       enabledExtensions = ["ui-select"];
-      extensionConfig."ui-select" = cfg.settings;
+      settings.extensions.ui-select = cfg.settings;
     };
 
     extraPlugins = [cfg.package];

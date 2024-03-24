@@ -68,7 +68,9 @@ in {
         sqlite-lua
       ];
 
-      plugins.telescope.enabledExtensions = ["frecency"];
-      plugins.telescope.extensionConfig."frecency" = configuration;
+      plugins.telescope = {
+        enabledExtensions = ["frecency"];
+        settings.extensions.frecency = configuration;
+      };
     };
 }

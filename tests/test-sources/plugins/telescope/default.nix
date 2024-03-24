@@ -11,7 +11,7 @@
         "<leader>fg" = "live_grep";
         "<C-p>" = {
           action = "git_files";
-          desc = "Telescope Git Files";
+          options.desc = "Telescope Git Files";
         };
       };
       keymapsSilent = true;
