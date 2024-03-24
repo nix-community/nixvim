@@ -210,7 +210,7 @@ in {
 
       plugins.telescope = {
         enabledExtensions = ["file_browser"];
-        extensionConfig."file_browser" = options;
+        settings.extensions.file_browser = options;
       };
     };
 }

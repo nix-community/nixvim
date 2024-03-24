@@ -45,7 +45,9 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      plugins.telescope.enabledExtensions = ["fzf"];
-      plugins.telescope.extensionConfig."fzf" = configuration;
+      plugins.telescope = {
+        enabledExtensions = ["fzf"];
+        settings.extensions.fzf = configuration;
+      };
     };
 }

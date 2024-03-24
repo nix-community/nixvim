@@ -31,7 +31,9 @@ in {
     mkIf cfg.enable {
       extraPlugins = [pkgs.vimPlugins.telescope-fzy-native-nvim];
 
-      plugins.telescope.enabledExtensions = ["fzy_native"];
-      plugins.telescope.extensionConfig."fzy_native" = configuration;
+      plugins.telescope = {
+        enabledExtensions = ["fzy_native"];
+        settings.extensions.fzy_native = options;
+      };
     };
 }
