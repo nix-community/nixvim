@@ -6,8 +6,7 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin
-  config {
+  helpers.neovim-plugin.mkNeovimPlugin config {
     name = "neoscroll";
     originalName = "neoscroll.nvim";
     defaultPackage = pkgs.vimPlugins.neoscroll-nvim;
