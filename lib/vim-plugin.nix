@@ -22,7 +22,6 @@ with lib; {
     # options
     originalName ? name,
     defaultPackage ? null,
-    options ? {},
     settingsOptions ? {},
     settingsExample ? null,
     globalPrefix ? "",
