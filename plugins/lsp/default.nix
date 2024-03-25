@@ -134,6 +134,35 @@ in {
           };
           default = {};
         };
+
+        extra = mkOption {
+          type = with types; listOf helpers.keymaps.mapOptionSubmodule;
+          description = "Extra keymaps to register on 'LspAttach'.";
+          example = [
+            {
+              key = "<leader>lx";
+              action = "<CMD>LspStop<Enter>";
+            }
+            {
+              key = "<leader>ls";
+              action = "<CMD>LspStart<Enter>";
+            }
+            {
+              key = "<leader>lr";
+              action = "<CMD>LspRestart<Enter>";
+            }
+            {
+              key = "gd";
+              action = "require('telescope.builtin').lsp_definitions()";
+              lua = true;
+            }
+            {
+              key = "K";
+              action = "<CMD>Lspsaga hover_doc<Enter>";
+            }
+          ];
+          default = [];
+        };
       };
 
       enabledServers = mkOption {
@@ -231,34 +260,37 @@ in {
     mkIf cfg.enable {
       extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
 
-      keymaps = let
-        mkMaps = prefix:
-          mapAttrsToList
-          (
-            key: action: let
-              actionStr =
-                if isString action
-                then action
-                else action.action;
-              actionProps =
-                if isString action
-                then {}
-                else filterAttrs (n: v: n != "action") action;
-            in {
-              mode = "n";
-              inherit key;
-              action.__raw = prefix + actionStr;
+      keymapsOnEvents = {
+        "LspAttach" = let
+          mkMaps = prefix:
+            mapAttrsToList
+            (
+              key: action: let
+                actionStr =
+                  if isString action
+                  then action
+                  else action.action;
+                actionProps =
+                  if isString action
+                  then {}
+                  else filterAttrs (n: v: n != "action") action;
+              in {
+                mode = "n";
+                inherit key;
+                action.__raw = prefix + actionStr;
 
-              options =
-                {
-                  inherit (cfg.keymaps) silent;
-                }
-                // actionProps;
-            }
-          );
-      in
-        (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
-        ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf);
+                options =
+                  {
+                    inherit (cfg.keymaps) silent;
+                  }
+                  // actionProps;
+              }
+            );
+        in
+          (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
+          ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
+          ++ cfg.keymaps.extra;
+      };
 
       # Enable all LSP servers
       extraConfigLua = ''

@@ -27,6 +27,29 @@
             desc = "Hover";
           };
         };
+
+        extra = [
+          {
+            key = "<leader>li";
+            action = "<CMD>LspInfo<Enter>";
+          }
+          {
+            key = "<leader>lx";
+            action = "<CMD>LspStop<Enter>";
+          }
+          {
+            key = "<leader>ls";
+            action = "<CMD>LspStart<Enter>";
+          }
+          {
+            key = "<leader>lr";
+            action = "<CMD>LspRestart<Enter>";
+          }
+          {
+            key = "<leader>ll";
+            action = "<CMD>LspLog<Enter>";
+          }
+        ];
       };
 
       servers = {
