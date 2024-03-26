@@ -260,37 +260,35 @@ in {
     mkIf cfg.enable {
       extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
 
-      keymapsOnEvents = {
-        "LspAttach" = let
-          mkMaps = prefix:
-            mapAttrsToList
-            (
-              key: action: let
-                actionStr =
-                  if isString action
-                  then action
-                  else action.action;
-                actionProps =
-                  if isString action
-                  then {}
-                  else filterAttrs (n: v: n != "action") action;
-              in {
-                mode = "n";
-                inherit key;
-                action.__raw = prefix + actionStr;
+      keymapsOnEvents.LspAttach = let
+        mkMaps = prefix:
+          mapAttrsToList
+          (
+            key: action: let
+              actionStr =
+                if isString action
+                then action
+                else action.action;
+              actionProps =
+                if isString action
+                then {}
+                else filterAttrs (n: v: n != "action") action;
+            in {
+              mode = "n";
+              inherit key;
+              action = helpers.mkRaw (prefix + actionStr);
 
-                options =
-                  {
-                    inherit (cfg.keymaps) silent;
-                  }
-                  // actionProps;
-              }
-            );
-        in
-          (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
-          ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
-          ++ cfg.keymaps.extra;
-      };
+              options =
+                {
+                  inherit (cfg.keymaps) silent;
+                }
+                // actionProps;
+            }
+          );
+      in
+        (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
+        ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
+        ++ cfg.keymaps.extra;
 
       # Enable all LSP servers
       extraConfigLua = ''
