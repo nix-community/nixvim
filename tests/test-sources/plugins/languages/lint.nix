@@ -15,7 +15,9 @@
         ruby = ["ruby"];
         janet = ["janet"];
         inko = ["inko"];
-        clojure = ["clj-kondo"];
+        # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
+        # TODO: re-enable this test when fixed
+        # clojure = ["clj-kondo"];
         dockerfile = ["hadolint"];
         terraform = ["tflint"];
       };
