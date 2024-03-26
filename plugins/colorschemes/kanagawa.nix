@@ -188,7 +188,10 @@ in {
       // cfg.extraOptions;
   in
     mkIf cfg.enable {
-      colorscheme = "kanagawa";
+      colorscheme =
+        if cfg.theme == null
+        then "kanagawa"
+        else "kanagawa-${cfg.theme}";
 
       extraPlugins = [cfg.package];
 
