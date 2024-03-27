@@ -5,23 +5,26 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.one;
-in {
-  options = {
-    colorschemes.one = {
-      enable = mkEnableOption "vim-one";
+helpers.vim-plugin.mkVimPlugin config {
+  name = "one";
+  isColorscheme = true;
+  originalName = "vim-one";
+  defaultPackage = pkgs.vimPlugins.vim-one;
+  globalPrefix = "one_";
 
-      package = helpers.mkPackageOption "one" pkgs.vimPlugins.vim-one;
-    };
+  maintainers = [lib.maintainers.GaetanLepage];
+
+  settingsOptions = {
+    allow_italics = helpers.defaultNullOpts.mkBool false ''
+      Whether to enable _italic_ (as long as your terminal supports it).
+    '';
   };
 
-  config = mkIf cfg.enable {
-    colorscheme = "one";
-    extraPlugins = [cfg.package];
+  settingsExample = {
+    allow_italics = true;
+  };
 
-    options = {
-      termguicolors = true;
-    };
+  extraConfig = cfg: {
+    options.termguicolors = lib.mkDefault true;
   };
 }
