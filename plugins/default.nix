@@ -62,8 +62,9 @@
     ./languages/openscad.nix
     ./languages/parinfer-rust.nix
     ./languages/plantuml-syntax.nix
-    ./languages/rust-tools.nix
-    ./languages/rustaceanvim.nix
+    ./languages/rust/crates.nix
+    ./languages/rust/rustaceanvim.nix
+    ./languages/rust/rust-tools.nix
     ./languages/sniprun.nix
     ./languages/tagbar.nix
     ./languages/treesitter/hmts.nix
