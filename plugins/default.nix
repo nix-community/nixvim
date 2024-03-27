@@ -186,6 +186,7 @@
     ./utils/toggleterm.nix
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
+    ./utils/vim-css-color.nix
     ./utils/vim-matchup.nix
     ./utils/which-key.nix
     ./utils/wilder.nix
