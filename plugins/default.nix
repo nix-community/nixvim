@@ -190,6 +190,7 @@
     ./utils/which-key.nix
     ./utils/wilder.nix
     ./utils/yanky.nix
+    ./utils/zellij.nix
     ./utils/zk.nix
   ];
 }
