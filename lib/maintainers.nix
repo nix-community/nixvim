@@ -22,4 +22,14 @@
       {fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299";}
     ];
   };
+  DanielLaing = {
+    email = "daniel@daniellaing.com";
+    matrix = "@bodleum:matrix.org";
+    github = "Bodelum";
+    githubId = 60107449;
+    name = "Daniel Laing";
+    keys = [
+      {fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8";}
+    ];
+  };
 }
