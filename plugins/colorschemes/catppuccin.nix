@@ -5,408 +5,254 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.catppuccin;
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "catppuccin";
+    isColorscheme = true;
+    defaultPackage = pkgs.vimPlugins.catppuccin-nvim;
 
-  flavours = [
-    "latte"
-    "mocha"
-    "frappe"
-    "macchiato"
-  ];
-in {
-  options = {
-    colorschemes.catppuccin = {
-      enable = mkEnableOption "catppuccin";
+    maintainers = [maintainers.GaetanLepage];
 
-      package =
-        helpers.mkPackageOption "catppuccin" pkgs.vimPlugins.catppuccin-nvim;
+    # TODO introduced 2024-03-27: remove 2024-05-27
+    optionsRenamedToSettings = [
+      "flavour"
+      ["background" "light"]
+      ["background" "dark"]
+      "transparentBackground"
+      ["dimInactive" "enabled"]
+      ["dimInactive" "shade"]
+      ["dimInactive" "percentage"]
+      ["styles" "comments"]
+      ["styles" "conditionals"]
+      ["styles" "loops"]
+      ["styles" "functions"]
+      ["styles" "keywords"]
+      ["styles" "strings"]
+      ["styles" "variables"]
+      ["styles" "numbers"]
+      ["styles" "booleans"]
+      ["styles" "properties"]
+      ["styles" "types"]
+      ["styles" "operators"]
+      "colorOverrides"
+      "customHighlights"
+      "integrations"
+    ];
+    imports =
+      mapAttrsToList (
+        old: new:
+          mkRenamedOptionModule
+          ["colorschemes" "catppuccin" old]
+          ["colorschemes" "catppuccin" "settings" new]
+      )
+      {
+        showBufferEnd = "show_end_of_buffer";
+        terminalColors = "term_colors";
+        disableItalic = "no_italic";
+        disableBold = "no_bold";
+        disableUnderline = "no_underline";
+      };
 
-      flavour = helpers.defaultNullOpts.mkEnumFirstDefault flavours "Theme flavour";
+    settingsOptions = let
+      flavours = [
+        "latte"
+        "mocha"
+        "frappe"
+        "macchiato"
+      ];
+    in {
+      compile_path =
+        helpers.defaultNullOpts.mkStr
+        ''{__raw = "vim.fn.stdpath 'cache' .. '/catppuccin'";}''
+        "Set the compile cache directory.";
+
+      flavour = helpers.mkNullOrOption (types.enum (flavours ++ ["auto"])) ''
+        Theme flavour.
+      '';
 
       background = let
         mkBackgroundStyle = name:
-          helpers.defaultNullOpts.mkEnumFirstDefault flavours "Background for ${name}";
+          helpers.defaultNullOpts.mkEnumFirstDefault flavours ''
+            Background for `${name}` background.
+          '';
       in {
         light = mkBackgroundStyle "light";
+
         dark = mkBackgroundStyle "dark";
       };
 
-      terminalColors =
-        helpers.defaultNullOpts.mkBool false
-        "Configure the colors used when opening a :terminal in Neovim";
+      transparent_background = helpers.defaultNullOpts.mkBool false ''
+        Enable Transparent background.
+      '';
 
-      transparentBackground =
-        helpers.defaultNullOpts.mkBool false "Enable Transparent background";
+      show_end_of_buffer = helpers.defaultNullOpts.mkBool false ''
+        Show the '~' characters after the end of buffers.
+      '';
 
-      showBufferEnd =
-        helpers.defaultNullOpts.mkBool false
-        "show the '~' characters after the end of buffers";
+      term_colors = helpers.defaultNullOpts.mkBool false ''
+        Configure the colors used when opening a :terminal in Neovim.
+      '';
 
-      dimInactive = {
-        enabled =
-          helpers.defaultNullOpts.mkBool false
-          "if true, dims the background color of inactive window or buffer or split";
+      dim_inactive = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          If true, dims the background color of inactive window or buffer or split.
+        '';
 
-        shade =
-          helpers.defaultNullOpts.mkStr "dark"
-          "sets the shade to apply to the inactive split or window or buffer";
+        shade = helpers.defaultNullOpts.mkStr "dark" ''
+          Sets the shade to apply to the inactive split or window or buffer.
+        '';
 
-        percentage =
-          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0)
-          "0.15"
-          "percentage of the shade to apply to the inactive window, split or buffer";
+        percentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.15" ''
+          percentage of the shade to apply to the inactive window, split or buffer.
+        '';
       };
 
-      disableItalic = helpers.defaultNullOpts.mkBool false "Force no italic";
+      no_italic = helpers.defaultNullOpts.mkBool false ''
+        Force no italic.
+      '';
 
-      disableBold = helpers.defaultNullOpts.mkBool false "Force no bold";
+      no_bold = helpers.defaultNullOpts.mkBool false ''
+        Force no bold.
+      '';
 
-      disableUnderline = helpers.defaultNullOpts.mkBool false "Force no underline";
+      no_underline = helpers.defaultNullOpts.mkBool false ''
+        Force no underline.
+      '';
 
       styles = {
-        comments =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          ''[ "italic" ]'' "Define comments highlight properties";
+        comments = helpers.defaultNullOpts.mkListOf types.str ''["italic"]'' ''
+          Define comments highlight properties.
+        '';
 
-        conditionals =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          ''[ 'italic" ]'' "Define conditionals highlight properties";
+        conditionals = helpers.defaultNullOpts.mkListOf types.str ''["italic"]'' ''
+          Define conditionals highlight properties.
+        '';
 
-        loops =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define loops highlight properties";
+        loops = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define loops highlight properties.
+        '';
 
-        functions =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define functions highlight properties";
+        functions = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define functions highlight properties.
+        '';
 
-        keywords =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define keywords highlight properties";
+        keywords = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define keywords highlight properties.
+        '';
 
-        strings =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define strings highlight properties";
+        strings = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define strings highlight properties.
+        '';
 
-        variables =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define variables highlight properties";
+        variables = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define variables highlight properties.
+        '';
 
-        numbers =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define numbers highlight properties";
+        numbers = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define numbers highlight properties.
+        '';
 
-        booleans =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define booleans highlight properties";
+        booleans = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define booleans highlight properties.
+        '';
 
-        properties =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define properties highlight properties";
+        properties = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define properties highlight properties.
+        '';
 
-        types =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define types highlight properties";
+        types = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define types highlight properties.
+        '';
 
-        operators =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Define operators highlight properties";
+        operators = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          Define operators highlight properties.
+        '';
       };
 
-      colorOverrides =
+      color_overrides =
         genAttrs
         (flavours ++ ["all"])
         (
           flavour:
-            helpers.defaultNullOpts.mkNullable
-            (with types; attrsOf str)
+            helpers.defaultNullOpts.mkAttrsOf types.str
             "{}"
             (
               if flavour == "all"
-              then "Override colors for all of the flavours."
+              then "Override colors for all the flavours."
               else "Override colors for the ${flavour} flavour."
             )
         );
 
-      customHighlights =
-        helpers.defaultNullOpts.mkNullable
-        (with types; either str (attrsOf attrs)) "" ''
-          Override specific highlight groups to use other groups or a hex color
-          Example:
+      custom_highlights = helpers.mkNullOrStrLuaFnOr (with types; attrsOf anything) ''
+        Override specific highlight groups to use other groups or a hex color.
+        You can provide either a lua function or directly an attrs.
+
+        Example:
+        ```lua
           function(colors)
-              return {
-                  Comment = { fg = colors.flamingo },
-                  ["@constant.builtin"] = { fg = colors.peach, style = {} },
-                  ["@comment"] = { fg = colors.surface2, style = { "italic" } },
-              }
+            return {
+              Comment = { fg = colors.flamingo },
+              ["@constant.builtin"] = { fg = colors.peach, style = {} },
+              ["@comment"] = { fg = colors.surface2, style = { "italic" } },
+            }
           end
-        '';
+        ```
 
+        Default: `{}`
+      '';
+
+      default_integrations = helpers.defaultNullOpts.mkBool true ''
+        Some integrations are enabled by default, you can control this behaviour with this option.
+      '';
+
+      integrations = helpers.mkNullOrOption (with types; attrsOf anything) ''
+        Catppuccin provides theme support for other plugins in the Neovim ecosystem and extended
+        Neovim functionality through _integrations_.
+
+        To enable/disable an integration you just need to set it to `true`/`false`.
+
+        Example:
+        ```nix
+          {
+            cmp = true;
+            gitsigns = true;
+            nvimtree = true;
+            treesitter = true;
+            notify = false;
+            mini = {
+              enabled = true;
+              indentscope_color = "";
+            };
+          }
+        ```
+
+        Default: see plugin source.
+      '';
+    };
+
+    settingsExample = {
+      flavour = "mocha";
+      disable_underline = true;
+      term_colors = true;
+      color_overrides.mocha.base = "#1e1e2f";
+      styles = {
+        booleans = ["bold" "italic"];
+        conditionals = ["bold"];
+      };
       integrations = {
-        aerial = helpers.defaultNullOpts.mkBool false "";
-
-        alpha = helpers.defaultNullOpts.mkBool true "";
-
-        barbar = helpers.defaultNullOpts.mkBool config.plugins.barbar.enable "";
-
-        barbecue = {
-          dim_dirname = helpers.defaultNullOpts.mkBool true "";
-
-          bold_basename = helpers.defaultNullOpts.mkBool true "";
-
-          dim_context = helpers.defaultNullOpts.mkBool false "";
-
-          alt_background = helpers.defaultNullOpts.mkBool false "";
-        };
-
-        beacon = helpers.defaultNullOpts.mkBool false "";
-
-        # TODO: bufferline needs to be loaded after setting up catppuccin or it will highlight incorrectly
-        # use "akinsho/bufferline.nvim" {
-        #   after = "catppuccin",
-        #   config = function()
-        #     require("bufferline").setup {
-        #       highlights = require("catppuccin.groups.integrations.bufferline").get()
-        #     }
-        #   end
-        # }
-        # bufferline = helpers.defaultNullOpts.mkBool false "";
-
-        cmp = helpers.defaultNullOpts.mkBool config.plugins.cmp.enable "";
-
-        coc_nvim = helpers.defaultNullOpts.mkBool false "";
-
-        dap = {
-          enabled = helpers.defaultNullOpts.mkBool false "";
-
-          enable_ui = helpers.defaultNullOpts.mkBool false "";
-        };
-
-        dashboard =
-          helpers.defaultNullOpts.mkBool config.plugins.dashboard.enable "";
-
-        dropbar = {
-          enabled = helpers.defaultNullOpts.mkBool false "";
-
-          color_mode = helpers.defaultNullOpts.mkBool false "";
-        };
-
-        # TODO: feline requires additional setup
-        # local ctp_feline = require("catppuccin.groups.integrations.feline")
-        # ctp_feline.setup()
-        # require("feline").setup({
-        #     components = ctp_feline.get(),
-        # })
-        # feline = helpers.defaultNullOpts.mkBool false "";
-
-        fern = helpers.defaultNullOpts.mkBool false "";
-
-        fidget = helpers.defaultNullOpts.mkBool false "";
-
-        flash = helpers.defaultNullOpts.mkBool true "";
-
-        gitgutter =
-          helpers.defaultNullOpts.mkBool config.plugins.gitgutter.enable "";
-
-        gitsigns =
-          helpers.defaultNullOpts.mkBool config.plugins.gitsigns.enable "";
-
-        harpoon =
-          helpers.defaultNullOpts.mkBool config.plugins.harpoon.enable "";
-
-        headlines = helpers.defaultNullOpts.mkBool false "";
-
-        hop = helpers.defaultNullOpts.mkBool false "";
-
-        illuminate = {
-          enabled = helpers.defaultNullOpts.mkBool config.plugins.illuminate.enable "";
-
-          lsp = helpers.defaultNullOpts.mkBool false "";
-        };
-
-        indent_blankline = {
-          enabled = helpers.defaultNullOpts.mkBool config.plugins.indent-blankline.enable "";
-
-          scope_color = helpers.defaultNullOpts.mkStr "" "";
-
-          colored_indent_levels = helpers.defaultNullOpts.mkBool false "";
-        };
-
-        leap = helpers.defaultNullOpts.mkBool false "";
-
-        lightspeed = helpers.defaultNullOpts.mkBool false "";
-
-        # TODO: lspsaga.setup call for custom kinds and colors
-        # require("lspsaga").setup {
-        #     ui = {
-        #         kind = require("catppuccin.groups.integrations.lsp_saga").custom_kind(),
-        #     },
-        # }
-        lsp_saga =
-          helpers.defaultNullOpts.mkBool config.plugins.lspsaga.enable "";
-
-        lsp_trouble =
-          helpers.defaultNullOpts.mkBool config.plugins.trouble.enable "";
-
-        markdown = helpers.defaultNullOpts.mkBool true "";
-
-        mason = helpers.defaultNullOpts.mkBool false "";
-
+        cmp = true;
+        gitsigns = true;
+        nvimtree = true;
+        treesitter = true;
+        notify = false;
         mini = {
-          enabled = helpers.defaultNullOpts.mkBool false "";
-
-          indentscope_color = helpers.defaultNullOpts.mkStr "" "";
+          enabled = true;
+          indentscope_color = "";
         };
-
-        native_lsp = {
-          enabled = helpers.defaultNullOpts.mkBool config.plugins.lsp.enable "";
-
-          virtual_text = {
-            errors =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "italic" ]'' "";
-
-            hints =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "italic" ]'' "";
-
-            warnings =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "italic" ]'' "";
-
-            information =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "italic" ]'' "";
-          };
-
-          underlines = {
-            errors =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "underline" ]'' "";
-
-            hints =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "underline" ]'' "";
-
-            warnings =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "underline" ]'' "";
-
-            information =
-              helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-              ''[ "underline" ]'' "";
-          };
-
-          inlay_hints = {
-            background = helpers.defaultNullOpts.mkBool true "";
-          };
-        };
-
-        # TODO: require("nvim-navic").setup { highlight = true }
-        # or via nixvim options?:  plugins.navic.highlight = true
-        navic = {
-          enabled = helpers.defaultNullOpts.mkBool false "";
-
-          custom_bg = helpers.defaultNullOpts.mkStr "NONE" "";
-        };
-
-        neogit = helpers.defaultNullOpts.mkBool config.plugins.neogit.enable "";
-
-        neotest = helpers.defaultNullOpts.mkBool false "";
-
-        neotree =
-          helpers.defaultNullOpts.mkBool config.plugins.neo-tree.enable "";
-
-        noice = helpers.defaultNullOpts.mkBool config.plugins.noice.enable "";
-
-        NormalNvim = helpers.defaultNullOpts.mkBool false "";
-
-        notifier = helpers.defaultNullOpts.mkBool false "";
-
-        notify = helpers.defaultNullOpts.mkBool config.plugins.notify.enable "";
-
-        nvimtree =
-          helpers.defaultNullOpts.mkBool config.plugins.nvim-tree.enable "";
-
-        octo = helpers.defaultNullOpts.mkBool false "";
-
-        overseer = helpers.defaultNullOpts.mkBool false "";
-
-        pounce = helpers.defaultNullOpts.mkBool false "";
-
-        rainbow_delimiters = helpers.defaultNullOpts.mkBool true "";
-
-        sandwich = helpers.defaultNullOpts.mkBool false "";
-
-        semantic_tokens = helpers.defaultNullOpts.mkBool false "";
-
-        symbols_outline = helpers.defaultNullOpts.mkBool false "";
-
-        telekasten = helpers.defaultNullOpts.mkBool false "";
-
-        telescope = {
-          enabled = helpers.defaultNullOpts.mkBool config.plugins.telescope.enable "";
-
-          style = helpers.defaultNullOpts.mkStr "" "";
-        };
-
-        treesitter =
-          helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
-
-        treesitter_context =
-          helpers.defaultNullOpts.mkBool config.plugins.treesitter.enable "";
-
-        ts_rainbow =
-          helpers.defaultNullOpts.mkBool
-          true "";
-
-        ts_rainbow2 = helpers.defaultNullOpts.mkBool true "";
-
-        ufo = helpers.defaultNullOpts.mkBool true "";
-
-        vim_sneak = helpers.defaultNullOpts.mkBool false "";
-
-        vimwiki = helpers.defaultNullOpts.mkBool false "";
-
-        which_key =
-          helpers.defaultNullOpts.mkBool config.plugins.which-key.enable "";
-
-        window_picker = helpers.defaultNullOpts.mkBool false "";
       };
     };
-  };
-  config = mkIf cfg.enable {
-    colorscheme = "catppuccin";
-    extraPlugins = [cfg.package];
-    opts.termguicolors = true;
-    extraConfigLuaPre = let
-      setupOptions = with cfg; {
-        inherit (cfg) flavour background styles integrations;
-        transparent_background = transparentBackground;
-        show_end_of_buffer = showBufferEnd;
-        term_colors = terminalColors;
-        dim_inactive = dimInactive;
-        no_italic = disableItalic;
-        no_bold = disableBold;
-        no_underline = disableUnderline;
-        color_overrides = colorOverrides;
-        custom_highlights =
-          helpers.ifNonNull' cfg.customHighlights
-          (
-            if isString customHighlights
-            then helpers.mkRaw customHighlights
-            else
-              helpers.mkRaw ''
-                function(colors)
-                  return
-                    ${helpers.toLuaObject customHighlights}
-                end
-              ''
-          );
-      };
-    in ''
-      require("catppuccin").setup(${helpers.toLuaObject setupOptions})
-    '';
-  };
-}
+
+    extraConfig = cfg: {
+      opts.termguicolors = mkDefault true;
+    };
+  }
