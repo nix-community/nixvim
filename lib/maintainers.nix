@@ -25,7 +25,7 @@
   DanielLaing = {
     email = "daniel@daniellaing.com";
     matrix = "@bodleum:matrix.org";
-    github = "Bodelum";
+    github = "Bodleum";
     githubId = 60107449;
     name = "Daniel Laing";
     keys = [
