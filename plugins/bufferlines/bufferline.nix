@@ -347,7 +347,7 @@ in {
         cfg.package
         nvim-web-devicons
       ];
-      options.termguicolors = true;
+      opts.termguicolors = true;
       extraConfigLua = ''
         require('bufferline').setup${helpers.toLuaObject setupOptions}
       '';

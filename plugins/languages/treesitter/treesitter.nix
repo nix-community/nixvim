@@ -220,7 +220,7 @@ in {
         ]
         ++ optional (cfg.gccPackage != null) cfg.gccPackage;
 
-      options = mkIf cfg.folding {
+      opts = mkIf cfg.folding {
         foldmethod = "expr";
         foldexpr = "nvim_treesitter#foldexpr()";
       };

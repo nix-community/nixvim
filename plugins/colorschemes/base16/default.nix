@@ -104,7 +104,7 @@ with lib;
           plugins.lualine.theme = mkIf cfg.setUpBar "base16";
           plugins.lightline.colorscheme = null;
 
-          options.termguicolors = mkDefault true;
+          opts.termguicolors = mkDefault true;
         }
         (mkIf (isString cfg.colorscheme) {
           colorscheme = "base16-${cfg.colorscheme}";

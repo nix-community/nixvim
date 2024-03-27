@@ -47,7 +47,7 @@ in {
   };
 
   config = {
-    options.clipboard = mkIf (cfg.register != null) cfg.register;
+    opts.clipboard = mkIf (cfg.register != null) cfg.register;
 
     extraPackages =
       mapAttrsToList
