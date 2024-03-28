@@ -169,6 +169,8 @@ in {
         visible = false;
       };
 
+      inlayHints = mkEnableOption "LSP inlay hints.";
+
       onAttach = mkOption {
         type = types.lines;
         description = "A lua function to be run when a new LSP buffer is attached. The argument `client` and `bufnr` is provided.";
@@ -259,6 +261,15 @@ in {
       in
         (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
         ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf);
+
+      # Enable inlay-hints
+      plugins.lsp.onAttach = mkIf cfg.inlayHints ''
+        -- LSP Inlay Hints {{{
+        if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(bufnr, true)
+        end
+        -- }}}
+      '';
 
       # Enable all LSP servers
       extraConfigLua = ''
