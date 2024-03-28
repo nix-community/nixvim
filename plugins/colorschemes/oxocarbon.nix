@@ -5,23 +5,15 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.oxocarbon;
-in {
-  options = {
-    colorschemes.oxocarbon = {
-      enable = mkEnableOption "oxocarbon";
+helpers.vim-plugin.mkVimPlugin config {
+  name = "oxocarbon";
+  isColorscheme = true;
+  originalName = "oxocarbon.nvim";
+  defaultPackage = pkgs.vimPlugins.oxocarbon-nvim;
 
-      package = helpers.mkPackageOption "oxocarbon" pkgs.vimPlugins.oxocarbon-nvim;
-    };
-  };
+  maintainers = [lib.maintainers.GaetanLepage];
 
-  config = mkIf cfg.enable {
-    colorscheme = "oxocarbon";
-    extraPlugins = [cfg.package];
-
-    options = {
-      termguicolors = mkDefault true;
-    };
+  extraConfig = cfg: {
+    options.termguicolors = lib.mkDefault true;
   };
 }
