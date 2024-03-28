@@ -182,7 +182,7 @@ in {
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
 
-      options = mkIf cfg.recommendedSettings {
+      opts = mkIf cfg.recommendedSettings {
         updatetime = 100;
         foldtext = "gitgutter#fold#foldtext";
       };

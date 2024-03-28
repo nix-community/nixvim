@@ -307,12 +307,12 @@ NeoVim has a lot of configuration options. You can find a list of them by doing
 `:h option-list` from within NeoVim.
 
 All of these are configurable from within NixVim. All you have to do is set the
-`options` attribute:
+`opts` attribute:
 
 ```nix
 {
   programs.nixvim = {
-    options = {
+    opts = {
       number = true;         # Show line numbers
       relativenumber = true; # Show relative line numbers
 
@@ -323,21 +323,7 @@ All of these are configurable from within NixVim. All you have to do is set the
 ```
 
 Please note that to, for example, disable numbers you would not set
-`options.nonumber` to true, you'd set `options.number` to false.
-
-### Caveats
-
-If you are using `makeNixvimWithModule`, then options are treated as options for a module. To get around this, just wrap the options in a `config` set.
-
-```nix
-{
-  config = {
-    options = {
-      # ...
-    };
-  };
-}
-```
+`opts.nonumber` to true, you'd set `opts.number` to false.
 
 ## Key mappings
 It is fully possible to define key mappings from within NixVim. This is done

@@ -25,6 +25,6 @@ helpers.vim-plugin.mkVimPlugin config {
   };
 
   extraConfig = cfg: {
-    options.termguicolors = lib.mkDefault true;
+    opts.termguicolors = lib.mkDefault true;
   };
 }

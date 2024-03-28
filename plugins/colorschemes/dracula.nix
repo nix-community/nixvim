@@ -76,8 +76,6 @@ in {
       dracula_colorterm = mkIf (!cfg.colorterm) 0;
     };
 
-    options = {
-      termguicolors = mkDefault true;
-    };
+    opts.termguicolors = mkDefault true;
   };
 }

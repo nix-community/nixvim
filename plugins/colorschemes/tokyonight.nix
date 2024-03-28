@@ -70,7 +70,7 @@ in {
   config = mkIf cfg.enable {
     colorscheme = "tokyonight";
     extraPlugins = [cfg.package];
-    options = {termguicolors = true;};
+    opts.termguicolors = true;
     extraConfigLuaPre = let
       setupOptions = with cfg; {
         inherit (cfg) style transparent styles sidebars;
