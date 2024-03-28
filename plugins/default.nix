@@ -115,6 +115,7 @@
     ./ui/transparent.nix
     ./ui/twilight.nix
     ./ui/virt-column.nix
+    ./ui/zen-mode.nix
 
     ./utils/alpha.nix
     ./utils/auto-save.nix
