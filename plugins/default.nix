@@ -109,6 +109,7 @@
 
     ./telescope
 
+    ./ui/headlines.nix
     ./ui/image.nix
     ./ui/neoscroll.nix
     ./ui/noice.nix
