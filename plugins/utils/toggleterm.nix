@@ -7,6 +7,59 @@
 }:
 with lib; let
   cfg = config.plugins.toggleterm;
+
+  directionOpt =
+    helpers.defaultNullOpts.mkEnumFirstDefault
+    ["vertical" "horizontal" "tab" "float"]
+    "";
+
+  closeOnExitOpt = helpers.defaultNullOpts.mkBool true ''
+    Close the terminal window when the process exits.
+  '';
+
+  highlightsOpt = helpers.mkNullOrOption (with types; (attrsOf (attrsOf str))) ''
+    Highlights which map to a highlight group name and a table of it's values.
+
+    Example:
+    ```nix
+      highlights = {
+        Normal = {
+          guibg = "<VALUE-HERE>";
+        };
+        NormalFloat = {
+          link = "Normal";
+        },
+        FloatBorder = {
+          guifg = "<VALUE-HERE>";
+          guibg = "<VALUE-HERE>";
+        };
+      };
+    ```
+  '';
+
+  onOpenOpt = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    Function to run when the terminal opens.
+  '';
+
+  onCloseOpt = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    Function to run when the terminal closes.
+  '';
+
+  onStdoutOpt = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    Callback for processing output on stdout.
+  '';
+
+  onStderrOpt = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    Callback for processing output on stderr.
+  '';
+
+  onExitOpt = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    Function to run when terminal process exits.
+  '';
+
+  autoScrollOpt = helpers.defaultNullOpts.mkBool true ''
+    Automatically scroll to the bottom on terminal output.
+  '';
 in {
   options.plugins.toggleterm = {
     enable = mkEnableOption "toggleterm";
@@ -41,25 +94,15 @@ in {
       Function to run when the terminal is first created.
     '';
 
-    onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when the terminal opens.
-    '';
+    onOpen = onOpenOpt;
 
-    onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when the terminal closes.
-    '';
+    onClose = onCloseOpt;
 
-    onStdout = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Callback for processing output on stdout.
-    '';
+    onStdout = onStdoutOpt;
 
-    onStderr = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Callback for processing output on stderr.
-    '';
+    onStderr = onStderrOpt;
 
-    onExit = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when terminal process exits.
-    '';
+    onExit = onExitOpt;
 
     hideNumbers = helpers.defaultNullOpts.mkBool true ''
       Hide the number column in toggleterm buffers.
@@ -72,25 +115,7 @@ in {
       opened.
     '';
 
-    highlights = helpers.mkNullOrOption (with types; (attrsOf (attrsOf str))) ''
-      Highlights which map to a highlight group name and a table of it's values.
-
-      Example:
-      ```nix
-        highlights = {
-          Normal = {
-            guibg = "<VALUE-HERE>";
-          };
-          NormalFloat = {
-            link = "Normal";
-          },
-          FloatBorder = {
-            guifg = "<VALUE-HERE>";
-            guibg = "<VALUE-HERE>";
-          };
-        };
-      ```
-    '';
+    highlights = highlightsOpt;
 
     shadeTerminals = helpers.defaultNullOpts.mkBool false ''
       NOTE: This option takes priority over highlights specified so if you specify Normal highlights
@@ -119,22 +144,15 @@ in {
       If set to true (default) the previous terminal mode will be remembered.
     '';
 
-    direction =
-      helpers.defaultNullOpts.mkEnumFirstDefault
-      ["vertical" "horizontal" "tab" "float"]
-      "";
+    direction = directionOpt;
 
-    closeOnExit = helpers.defaultNullOpts.mkBool true ''
-      Close the terminal window when the process exits.
-    '';
+    closeOnExit = closeOnExitOpt;
 
     shell = helpers.defaultNullOpts.mkStr "`vim.o.shell`" ''
       Change the default shell.
     '';
 
-    autoScroll = helpers.defaultNullOpts.mkBool true ''
-      Automatically scroll to the bottom on terminal output.
-    '';
+    autoScroll = autoScrollOpt;
 
     floatOpts = {
       border =
@@ -165,6 +183,55 @@ in {
           end
         '' "";
     };
+    customTerms = let
+      termConfig = types.submodule {
+        options = {
+          cmd = helpers.mkNullOrStr ''
+            Command to execute when creating the terminal e.g. 'top'.
+          '';
+          direction = directionOpt;
+          dir = helpers.mkNullOrStr "The directory for the terminal.";
+          name = helpers.mkNullOrStr "The name of the terminal.";
+          hidden = helpers.defaultNullOpts.mkBool false ''
+            Whether or not to include this terminal in the terminals list.
+          '';
+          closeOnExit = closeOnExitOpt;
+          highlights = highlightsOpt;
+          env = helpers.mkNullOrOption (with types; attrsOf str) ''
+            key:value attribute set with environmental variables set in the terminal.
+          '';
+          clearEnv = helpers.defaultNullOpts.mkBool false ''
+            Use only environmental variables from `env`.
+          '';
+          onOpen = onOpenOpt;
+          onClose = onCloseOpt;
+          autoScroll = autoScrollOpt;
+          onStdout = onStdoutOpt;
+          onStderr = onStderrOpt;
+          onExit = onExitOpt;
+        };
+      };
+    in
+      mkOption {
+        default = {};
+        description = "Keymap to custom terminals configurations.";
+        example = ''
+          ```nix
+          customTerms = {
+            "<leader>g" = {
+              cmd = "lazygit";
+              dir = "git_dir";
+              direction = "float";
+              hidden = true;
+            };
+            "<leader>h" = {
+              cmd = "htop";
+              direction = "horizontal";
+            };
+          };
+        '';
+        type = types.attrsOf termConfig;
+      };
   };
   config = let
     setupOptions = with cfg; {
@@ -199,5 +266,34 @@ in {
       extraConfigLua = ''
         require("toggleterm").setup(${helpers.toLuaObject setupOptions})
       '';
+      keymaps = let
+        customTermToMapping = keymap: tcfg: let
+          termSetupOptions = with tcfg; {
+            inherit cmd direction dir highlights;
+            close_on_exit = closeOnExit;
+            on_open = onOpen;
+            on_close = onClose;
+            auto_scroll = autoScroll;
+            on_stdout = onStdout;
+            on_stderr = onStderr;
+            on_exit = onExit;
+          };
+        in {
+          key = keymap;
+          action.__raw = ''
+            function()
+              local Terminal = require('toggleterm.terminal').Terminal
+              Terminal:new(${helpers.toLuaObject termSetupOptions}):toggle()
+            end
+          '';
+        };
+        mappings = mapAttrsToList customTermToMapping cfg.customTerms;
+      in
+        helpers.keymaps.mkKeymaps
+        {
+          mode = "n";
+          options.silent = true;
+        }
+        mappings;
     };
 }
