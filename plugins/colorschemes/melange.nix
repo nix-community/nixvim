@@ -18,8 +18,6 @@ in {
   config = mkIf cfg.enable {
     colorscheme = "melange";
     extraPlugins = [cfg.package];
-    options = {
-      termguicolors = mkDefault true;
-    };
+    opts.termguicolors = mkDefault true;
   };
 }

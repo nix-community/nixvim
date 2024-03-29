@@ -35,7 +35,7 @@ in {
   config = mkIf cfg.enable {
     colorscheme = "rose-pine";
     extraPlugins = [cfg.package];
-    options = {termguicolors = true;};
+    opts.termguicolors = true;
     extraConfigLuaPre = let
       setupOptions = with cfg; {
         inherit groups;

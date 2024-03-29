@@ -10,7 +10,7 @@
     ./highlights.nix
     ./keymaps.nix
     ./lua-loader.nix
-    ./options.nix
+    ./opts.nix
     ./output.nix
     ./plugins.nix
     ./warnings.nix

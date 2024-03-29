@@ -20,8 +20,6 @@ in {
     colorscheme = "oxocarbon";
     extraPlugins = [cfg.package];
 
-    options = {
-      termguicolors = mkDefault true;
-    };
+    opts.termguicolors = mkDefault true;
   };
 }

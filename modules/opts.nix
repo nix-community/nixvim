@@ -6,21 +6,21 @@
 }:
 with lib; let
   optionsAttrs = {
-    options = {
+    opts = {
       prettyName = "options";
       luaVariableName = "options";
       luaApi = "opt";
       description = "The configuration options, e.g. line numbers (`vim.opt.*`)";
     };
 
-    globalOptions = {
+    globalOpts = {
       prettyName = "global options";
       luaVariableName = "global_options";
       luaApi = "opt_global";
       description = "The configuration global options (`vim.opt_global.*`)";
     };
 
-    localOptions = {
+    localOpts = {
       prettyName = "local options";
       luaVariableName = "local_options";
       luaApi = "opt_local";
@@ -46,6 +46,16 @@ in {
         }
     )
     optionsAttrs;
+
+  # Added 2024-03-29 (do not remove)
+  imports =
+    mapAttrsToList
+    (old: new: mkRenamedOptionModule [old] [new])
+    {
+      options = "opts";
+      globalOptions = "globalOpts";
+      localOptions = "localOpts";
+    };
 
   config = {
     extraConfigLuaPre =
