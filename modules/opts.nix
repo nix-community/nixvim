@@ -5,22 +5,6 @@
   ...
 }:
 with lib; let
-  # Added 2024-03-26 (do not remove)
-  legacyAliases = [
-    {
-      from = "options";
-      to = "opts";
-    }
-    {
-      from = "globalOptions";
-      to = "globalOpts";
-    }
-    {
-      from = "localOptions";
-      to = "localOpts";
-    }
-  ];
-
   optionsAttrs = {
     opts = {
       prettyName = "options";
@@ -63,14 +47,15 @@ in {
     )
     optionsAttrs;
 
+  # Added 2024-03-29 (do not remove)
   imports =
-    map
-    ({
-      from,
-      to,
-    }:
-      mkRenamedOptionModule [from] [to])
-    legacyAliases;
+    mapAttrsToList
+    (old: new: mkRenamedOptionModule [old] [new])
+    {
+      options = "opts";
+      globalOptions = "globalOpts";
+      localOptions = "localOpts";
+    };
 
   config = {
     extraConfigLuaPre =
