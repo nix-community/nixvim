@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     colorschemes.poimandres.enable = true;
   };
 
-  # All the upstream default options of poimandres
   defaults = {
     colorschemes.poimandres = {
       enable = true;

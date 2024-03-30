@@ -1,5 +1,4 @@
 {
-  # Empty configuration
   empty = {
     plugins.lspkind.enable = true;
   };
@@ -15,7 +14,6 @@
     };
   };
 
-  # All the upstream default options of lspkind
   defaults = {
     plugins.lspkind = {
       enable = true;

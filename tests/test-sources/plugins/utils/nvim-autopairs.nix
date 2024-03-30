@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     plugins.nvim-autopairs.enable = true;
   };
 
-  # All the upstream default options of trouble
   defaults = {
     plugins.nvim-autopairs = {
       enable = true;

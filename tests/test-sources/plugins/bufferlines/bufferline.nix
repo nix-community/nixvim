@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     plugins.bufferline.enable = true;
   };
 
-  # Lua functions
   example = {
     plugins.bufferline = {
       enable = true;
@@ -43,7 +41,6 @@
     };
   };
 
-  # All the upstream default options of bufferline
   defaults = {
     plugins.bufferline = {
       enable = true;

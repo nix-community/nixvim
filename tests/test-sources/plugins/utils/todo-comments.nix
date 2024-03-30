@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     plugins.todo-comments.enable = true;
   };
 
-  # All the upstream default options of todo-comments
   defaults = {
     plugins.todo-comments = {
       enable = true;
