@@ -1,6 +1,6 @@
 {
   options = {
-    options = {
+    opts = {
       updatetime = 100; # Faster completion
 
       # Line numbers

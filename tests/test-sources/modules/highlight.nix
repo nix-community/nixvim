@@ -1,6 +1,6 @@
 {
   example = {
-    options.termguicolors = true;
+    opts.termguicolors = true;
 
     highlight = {
       MacchiatoRed.fg = "#ed8796";
