@@ -38,7 +38,7 @@
       };
     };
 
-    options = {
+    opts = {
       # Indentation
       autoindent = true;
       tabstop = 4;
@@ -69,7 +69,7 @@
       };
     };
 
-    options = {
+    opts = {
       number = true;
       shiftwidth = 2;
       tabstop = 2;
