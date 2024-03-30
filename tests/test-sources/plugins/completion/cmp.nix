@@ -38,7 +38,6 @@
     };
   };
 
-  # All the upstream default options of nvim-cmp
   defaults = {
     plugins.cmp = {
       enable = true;

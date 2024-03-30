@@ -1,8 +1,6 @@
 {
   empty = {plugins.typescript-tools.enable = true;};
 
-  # Upstream defaults (couldn't find defaults for on_attach or handlers)
-
   defaults = {
     plugins.typescript-tools = {
       enable = true;

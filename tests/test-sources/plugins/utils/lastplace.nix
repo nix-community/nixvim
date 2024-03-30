@@ -3,7 +3,6 @@
     plugins.lastplace.enable = true;
   };
 
-  # All the upstream default options of lastplace
   defaults = {
     plugins.lastplace = {
       enable = true;

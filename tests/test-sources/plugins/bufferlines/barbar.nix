@@ -17,7 +17,6 @@
     };
   };
 
-  # All the upstream default options of barbar
   defaults = {
     plugins.barbar = {
       enable = true;

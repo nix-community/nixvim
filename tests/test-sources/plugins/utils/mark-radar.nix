@@ -3,7 +3,6 @@
     plugins.mark-radar.enable = true;
   };
 
-  # All the upstream default options of mark-radar
   defaults = {
     plugins.mark-radar = {
       enable = true;

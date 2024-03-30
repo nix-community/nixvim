@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     plugins.neo-tree.enable = true;
   };
 
-  # All the upstream default options of neo-tree
   defaults = {
     plugins.neo-tree = {
       enable = true;

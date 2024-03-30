@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     plugins.rust-tools.enable = true;
   };
 
-  # All the upstream default options of rust-tools
   defaults = {
     plugins.rust-tools = {
       enable = true;

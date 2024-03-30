@@ -1,10 +1,8 @@
 {
-  # Empty configuration
   empty = {
     plugins.nvim-tree.enable = true;
   };
 
-  # All the upstream default options of nvim-tree
   defaults = {
     plugins.nvim-tree = {
       enable = true;
