@@ -53,5 +53,10 @@ in
       inherit (cfg) warnings assertions;
       home.sessionVariables = mkIf cfg.defaultEditor { EDITOR = "nvim"; };
     }
+    {
+      programs.bash.shellAliases = mkIf cfg.vimdiffAlias { vimdiff = "nvim -d"; };
+      programs.fish.shellAliases = mkIf cfg.vimdiffAlias { vimdiff = "nvim -d"; };
+      programs.zsh.shellAliases = mkIf cfg.vimdiffAlias { vimdiff = "nvim -d"; };
+    }
   ]);
 }
