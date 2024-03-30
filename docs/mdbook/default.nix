@@ -5,6 +5,7 @@
   helpers,
   nixosOptionsDoc,
   transformOptions,
+  hmOptions,
 }:
 with lib; let
   options = lib.evalModules {
@@ -246,6 +247,7 @@ with lib; let
     cp -r --no-preserve=all $inputs/* ./
     cp ${../../CONTRIBUTING.md} ./CONTRIBUTING.md
     cp -r ${../user-guide} ./user-guide
+    cp -r ${../modules} ./modules
 
     # Copy the generated MD docs into the build directory
     # Using pkgs.writeShellScript helps to avoid the "bash: argument list too long" error
@@ -254,7 +256,10 @@ with lib; let
     # Prepare SUMMARY.md for mdBook
     # Using pkgs.writeText helps to avoid the same error as above
     substituteInPlace ./SUMMARY.md \
-      --replace "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
+      --replace-fail "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
+
+    substituteInPlace ./modules/hm.md \
+      --replace-fail "@HM_OPTIONS@" "$(cat ${mkMDDoc hmOptions})"
   '';
 in
   pkgs.stdenv.mkDerivation {

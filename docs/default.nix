@@ -69,6 +69,16 @@
       })
     ]
     ++ (rawModules pkgsDoc);
+
+  hmOptions =
+    builtins.removeAttrs
+    (lib.evalModules {
+      modules = [
+        (import ../wrappers/modules/hm.nix {inherit lib;})
+      ];
+    })
+    .options
+    ["_module"];
 in
   rec {
     options-json =
@@ -93,6 +103,6 @@ in
     docs = pkgsDoc.callPackage ./mdbook {
       inherit transformOptions;
       modules = topLevelModules;
-      inherit helpers;
+      inherit helpers hmOptions;
     };
   }

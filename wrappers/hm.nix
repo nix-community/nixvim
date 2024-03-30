@@ -29,12 +29,9 @@ in {
         };
         modules =
           [
-            {
-              options = {
-                enable = mkEnableOption "nixvim";
-                defaultEditor = mkEnableOption "nixvim as the default editor";
-              };
-            }
+            (import ./modules/hm.nix {
+              inherit lib;
+            })
           ]
           ++ shared.topLevelModules;
       };

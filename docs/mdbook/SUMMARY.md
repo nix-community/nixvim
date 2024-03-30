@@ -7,6 +7,10 @@
 - [Extending a standalone configuration](./user-guide/extending-config.md)
 - [FAQ](./user-guide/faq.md)
 
+# Module Specific Options
+
+- [Home Manager Usage](./modules/hm.md)
+
 # Options
 
 @NIXVIM_OPTIONS@
