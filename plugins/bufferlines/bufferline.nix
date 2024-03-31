@@ -220,7 +220,7 @@ in {
 
         diagnosticsIndicator =
           helpers.defaultNullOpts.mkLuaFn "null"
-          "Either `null` or a function that returns the diagnistics indicator.";
+          "Either `null` or a function that returns the diagnostics indicator.";
 
         diagnosticsUpdateInInsert =
           helpers.defaultNullOpts.mkBool true
