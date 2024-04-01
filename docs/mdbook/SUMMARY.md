@@ -4,12 +4,12 @@
 
 - [Installation](./user-guide/install.md)
 - [Helpers](./user-guide/helpers.md)
-- [Extending a standalone configuration](./user-guide/extending-config.md)
 - [FAQ](./user-guide/faq.md)
 
-# Module Specific Options
+# Platforms
 
 - [Home Manager Usage](./modules/hm.md)
+- [Standalone Usage](./modules/standalone.md)
 
 # Options
 
