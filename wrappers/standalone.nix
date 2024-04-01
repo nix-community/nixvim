@@ -52,6 +52,7 @@ default_pkgs: {
       meta.mainProgram = "nvim";
     })
     // {
+      inherit config;
       nixvimExtend = extension: mkNvim {imports = [mod extension];};
     };
 in

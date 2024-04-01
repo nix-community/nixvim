@@ -49,3 +49,9 @@ in
 
 This will generate a `init.lua` that will contain the three comments from each stages.
 
+## Accessing options used in an existing configuration
+
+The `config` used to produce a standalone nixvim derivation can be accessed as an attribute on the derivation, similar to `nixvimExtend`.
+
+This may be useful if you want unrelated parts of your NixOS or home-manager configuration to use the same value as something in your nixvim configuration.
+
