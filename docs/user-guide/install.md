@@ -70,7 +70,7 @@ options as `programs.nixvim.<path>.<to>.<option> = <value>`.
 When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for home-manager, NixOS, and nix-darwin respectively.
 This is useful is you use nixvim both as part of an environment and as standalone.
 
-If using the home-manager module, see [Home Manager Usage](../modules/hm.md) for more information.
+If using the home-manager module, see [Home Manager Usage](./modules/hm.md) for more information.
 
 ### Standalone usage
 
@@ -87,4 +87,4 @@ The nixvim derivation can then be used like any other package!
 
 For an example, see the [nixvim standalone flake template](https://github.com/nix-community/nixvim/blob/main/templates/simple/flake.nix).
 
-For more information see [Standalone Usage](../modules/standalone.md).
+For more information see [Standalone Usage](./modules/standalone.md).
