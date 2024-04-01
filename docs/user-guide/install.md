@@ -73,15 +73,6 @@ There are also some helper functions in `<nixvim>.lib.${system}` like:
 
 The nixvim derivation can then be used like any other package!
 
-For more information you can look at the [nixvim standalone flake template](https://github.com/nix-community/nixvim/blob/main/templates/simple/flake.nix).
+For an example, see the [nixvim standalone flake template](https://github.com/nix-community/nixvim/blob/main/templates/simple/flake.nix).
 
-Here is an example on how to integrate into a NixOS or Home-manager configuration when using flake parts (assuming your standalone flake's input is `nixvim-config`):
-```nix
-{ inputs, system, ... }:
-{
-  # NixOS
-  environment.systemPackages = [ inputs.nixvim-config.packages.${system}.default ];
-  # home-manager
-  home.packages = [ inputs.nixvim-config.packages.${system}.default ];
-}
-```
+For more information see [Standalone Usage](../modules/standalone.md).
