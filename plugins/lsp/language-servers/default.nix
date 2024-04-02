@@ -316,6 +316,10 @@ with lib; let
       description = "lemminx for XML";
     }
     {
+      name = "lexical";
+      description = "lexical for Elixir";
+    }
+    {
       name = "ltex";
       description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
