@@ -143,6 +143,7 @@
           kotlin-language-server.enable = true;
           leanls.enable = true;
           lemminx.enable = true;
+          lexical.enable = true;
           ltex.enable = true;
           lua-ls.enable = true;
           marksman.enable = true;
