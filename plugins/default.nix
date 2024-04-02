@@ -125,6 +125,7 @@
     ./utils/bacon.nix
     ./utils/baleia.nix
     ./utils/better-escape.nix
+    ./utils/ccc.nix
     ./utils/clipboard-image.nix
     ./utils/comment.nix
     ./utils/commentary.nix
