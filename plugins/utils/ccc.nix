@@ -17,22 +17,25 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       The default color used when a color cannot be picked. It must be HEX format.
     '';
 
-    highlight_mode = helpers.defaultNullOpts.mkStr "bg" ''
-      Option to highlight text foreground or background. It is used to output_line and highlighter.
-      Options: `"fg" | "bg" | "foreground" | "background"`
+    highlight_mode = helpers.defaultNullOpts.mkEnum ["fg" "bg" "foreground" "background"] "bg" ''
+      Option to highlight text foreground or background. It is used to
+      `output_line` and `highlighter`.
     '';
 
     lsp = helpers.defaultNullOpts.mkBool true ''
-      Whether to enable nvim-lsp support. The color information is updated in the background and the result is used by `|:CccPick|` and highlighter.
+      Whether to enable LSP support. The color information is updated in the
+      background and the result is used by `:CccPick` and highlighter.
     '';
 
     highlighter = {
       auto_enable = helpers.defaultNullOpts.mkBool false ''
-        Whether to enable automatically on BufEnter.
+        Whether to enable automatically on `BufEnter`.
       '';
 
       lsp = helpers.defaultNullOpts.mkBool true ''
-        If true, highlight using nvim-lsp. If LS with the color provider is not attached to a buffer, it falls back to highlight with pickers. See also `|ccc-option-lsp|`.
+        If true, highlight using LSP. If a language server with the color
+        provider is not attached to a buffer, it falls back to highlight with
+        pickers. See also `:help ccc-option-lsp`.
       '';
     };
   };
@@ -46,5 +49,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       lsp = false;
     };
   };
+
   extraConfig = cfg: {opts.termguicolors = lib.mkDefault true;};
 }
