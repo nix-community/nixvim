@@ -107,6 +107,10 @@ with lib; let
       phpstan
       ;
     inherit
+      (pkgs.rubyPackages)
+      htmlbeautifier
+      ;
+    inherit
       (pkgs.ocamlPackages)
       ocamlformat
       ;
