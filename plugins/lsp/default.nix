@@ -114,7 +114,7 @@ in {
 
         diagnostic = mkOption {
           type = with types; attrsOf (either str attrs);
-          description = "Mappings for `vim.diagnostic.<action>` functions.";
+          description = "Mappings for `vim.diagnostic.<action>` functions to be added when an LSP is attached.";
           example = {
             "<leader>k" = "goto_prev";
             "<leader>j" = "goto_next";
@@ -124,7 +124,7 @@ in {
 
         lspBuf = mkOption {
           type = with types; attrsOf (either str attrs);
-          description = "Mappings for `vim.lsp.buf.<action>` functions.";
+          description = "Mappings for `vim.lsp.buf.<action>` functions to be added when an LSP it attached.";
           example = {
             "gd" = "definition";
             "gD" = "references";
@@ -137,7 +137,10 @@ in {
 
         extra = mkOption {
           type = with types; listOf helpers.keymaps.mapOptionSubmodule;
-          description = "Extra keymaps to register on 'LspAttach'.";
+          description = ''
+            Extra keymaps to register when an LSP is attached.
+            This can be used to customise LSP behaviour, for example with "telescope" or the "Lspsaga" plugin, as seen in the examples.
+          '';
           example = [
             {
               key = "<leader>lx";
