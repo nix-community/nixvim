@@ -193,7 +193,9 @@
           tsserver.enable = true;
           typos-lsp.enable = true;
           typst-lsp.enable = true;
-          vala-ls.enable = true;
+          # As of 2024-04-03, pkgs.vala-language-server is broken on linux
+          # TODO: re-enable this test when fixed
+          vala-ls.enable = !pkgs.stdenv.isLinux;
           vhdl-ls.enable = true;
           vls.enable = true;
           vuels.enable = true;
