@@ -54,7 +54,6 @@ with lib; let
       mdformat
       mdl
       mypy
-      nixfmt
       pmd
       prettierd
       proselint
@@ -156,6 +155,7 @@ with lib; let
     markdownlint = pkgs.nodePackages.markdownlint-cli;
     mix = pkgs.elixir;
     nimpretty = pkgs.nim;
+    nixfmt = pkgs.nixfmt-classic;
     nixpkgs_fmt = pkgs.nixpkgs-fmt;
     opacheck = pkgs.open-policy-agent;
     pg_format = pkgs.pgformatter;
