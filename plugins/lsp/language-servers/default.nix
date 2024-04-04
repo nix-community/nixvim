@@ -436,6 +436,11 @@ with lib; let
       settings = cfg: {nil = {inherit (cfg) formatting diagnostics;};};
     }
     {
+      name = "nimls";
+      description = "nimls for Nim";
+      package = pkgs.nimlsp;
+    }
+    {
       name = "nixd";
       description = "nixd for Nix";
       package = pkgs.nixd;

@@ -148,6 +148,7 @@
           marksman.enable = true;
           metals.enable = true;
           nil_ls.enable = true;
+          nimls.enable = true;
           nixd.enable = true;
           nushell.enable = true;
           ocamllsp.enable = true;
