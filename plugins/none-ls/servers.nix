@@ -54,7 +54,7 @@ with lib; let
       mdformat
       mdl
       mypy
-      nixfmt
+      nixfmt-rfc-style
       pmd
       prettierd
       proselint
