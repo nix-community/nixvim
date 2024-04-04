@@ -25,7 +25,7 @@ in {
         plugins.nvim-jdtls = {
           enable = true;
           cmd = [
-            "$\{pkgs.jdt-language-server}/bin/jdt-language-server"
+            (lib.getExe pkgs.jdt-language-server)
             "-data" "/path/to/your/workspace"
             "-configuration" "/path/to/your/configuration"
             "-foo" "bar"
@@ -105,7 +105,7 @@ in {
           else cfg.data;
       in
         [
-          "${pkgs.jdt-language-server}/bin/jdt-language-server"
+          (lib.getExe pkgs.jdt-language-server)
         ]
         ++ ["-data" data]
         ++ (
