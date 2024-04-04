@@ -46,7 +46,6 @@ with lib; let
       jq
       languagetool
       mypy
-      nixfmt
       php
       prettierd
       prettypst
@@ -122,6 +121,7 @@ with lib; let
     lua_format = luaformatter;
     markdownlint = markdownlint-cli;
     mcs = mono;
+    nixfmt = nixfmt-classic;
     phpcbf = phpPackages.php-codesniffer;
     php_cs_fixer = phpPackages.php-cs-fixer;
     phpcs = phpPackages.php-codesniffer;
