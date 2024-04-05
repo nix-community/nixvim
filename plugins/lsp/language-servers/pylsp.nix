@@ -566,7 +566,7 @@ in {
                 or ''''
                 + ''
                   substituteInPlace setup.cfg \
-                    --replace "python-lsp-server >=1.7.0" ""
+                    --replace-fail "python-lsp-server >=1.7.0" ""
                 '';
             });
             isort = pyls-isort.overridePythonAttrs (old: {
@@ -575,7 +575,7 @@ in {
                 or ''''
                 + ''
                   substituteInPlace setup.py \
-                    --replace 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
+                    --replace-fail 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
                 '';
             });
             black = python-lsp-black.overridePythonAttrs (old: {
@@ -584,7 +584,7 @@ in {
                 or ''''
                 + ''
                   substituteInPlace setup.cfg \
-                    --replace "python-lsp-server>=1.4.0" ""
+                    --replace-fail "python-lsp-server>=1.4.0" ""
                 '';
             });
             memestra = pyls-memestra.overridePythonAttrs (old: {
