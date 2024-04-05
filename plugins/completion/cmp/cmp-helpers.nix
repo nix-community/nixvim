@@ -62,6 +62,7 @@ with lib; rec {
     "vim_lsp" = "cmp-vim-lsp";
     "vimwiki-tags" = "cmp-vimwiki-tags";
     "vsnip" = "cmp-vsnip";
+    "yanky" = "cmp_yanky";
     "zsh" = "cmp-zsh";
   };
 
