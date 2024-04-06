@@ -191,6 +191,7 @@
           templ.enable = true;
           terraformls.enable = true;
           texlab.enable = true;
+          tinymist.enable = true;
           tsserver.enable = true;
           typos-lsp.enable = true;
           typst-lsp.enable = true;
