@@ -632,6 +632,10 @@ with lib; let
       description = "texlab language server for LaTeX";
     }
     {
+      name = "tinymist";
+      description = "tinymist for Typst";
+    }
+    {
       name = "tsserver";
       description = "tsserver for TypeScript";
       package = pkgs.nodePackages.typescript-language-server;
