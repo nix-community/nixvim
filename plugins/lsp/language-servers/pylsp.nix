@@ -611,7 +611,7 @@ in {
                   sed -i '/python-lsp-server/d' pyproject.toml
                 '';
 
-              nativeBuildInputs = [setuptools] ++ (old.nativeBuildInputs or []);
+              build-system = [setuptools] ++ (old.build-system or []);
             });
           })
         );
@@ -623,7 +623,7 @@ in {
           # This is the final default package for pylsp
           pkgs.python3Packages.python-lsp-server.overridePythonAttrs (
             old: {
-              propagatedBuildInputs = pylspPlugins ++ old.propagatedBuildInputs;
+              propagatedBuildInputs = pylspPlugins ++ old.dependencies;
               disabledTests =
                 (old.disabledTests or [])
                 ++ [
