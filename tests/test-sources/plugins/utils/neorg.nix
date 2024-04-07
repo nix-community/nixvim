@@ -1,9 +1,19 @@
 {
   empty = {
+    # neorg should be re-packaged in nixpkgs from the luarocks `neorg` package.
+    # In the meantime, disable the test.
+    # TODO: re-enable when this will have been fixed upstream.
+    tests.dontRun = true;
+
     plugins.neorg.enable = true;
   };
 
   example = {
+    # neorg should be re-packaged in nixpkgs from the luarocks `neorg` package.
+    # In the meantime, disable the test.
+    # TODO: re-enable when this will have been fixed upstream.
+    tests.dontRun = true;
+
     plugins = {
       # Treesitter is required when using the "core.defaults" module.
       treesitter.enable = true;
