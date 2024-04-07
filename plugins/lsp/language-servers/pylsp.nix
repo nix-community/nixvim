@@ -623,7 +623,7 @@ in {
           # This is the final default package for pylsp
           pkgs.python3Packages.python-lsp-server.overridePythonAttrs (
             old: {
-              propagatedBuildInputs = pylspPlugins ++ old.propagatedBuildInputs;
+              dependencies = pylspPlugins ++ old.dependencies;
               disabledTests =
                 (old.disabledTests or [])
                 ++ [
