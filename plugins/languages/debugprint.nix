@@ -5,33 +5,118 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.debugprint;
-in {
-  options.plugins.debugprint =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "debugprint.nvim";
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "debugprint";
+    originalName = "debugprint.nvim";
+    defaultPackage = pkgs.vimPlugins.debugprint-nvim;
 
-      package = helpers.mkPackageOption "debugprint.nvim" pkgs.vimPlugins.debugprint-nvim;
+    maintainers = [maintainers.GaetanLepage];
 
-      createCommands = helpers.defaultNullOpts.mkBool true ''
-        Creates default commands.
-      '';
+    # TODO introduced 2024-04-07: remove 2024-06-07
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "moveToDebugline"
+      "displayCounter"
+      "displaySnippet"
+      "ignoreTreesitter"
+      "printTag"
+    ];
+    imports = let
+      basePluginPath = ["plugins" "debugprint"];
+    in [
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["createCommands"])
+        ''
+          This option has been deprectaded upstream.
+          Learn more [here](https://github.com/andrewferrier/debugprint.nvim/blob/796d8d4528bc5882d287b26e69cc8d810a9147c8/doc/debugprint.nvim.txt#L203-L213).
+        ''
+      )
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["createKeymaps"])
+        ''
+          This option has been deprectaded upstream.
+          Learn more [here](https://github.com/andrewferrier/debugprint.nvim/blob/796d8d4528bc5882d287b26e69cc8d810a9147c8/doc/debugprint.nvim.txt#L203-L213).
+        ''
+      )
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["filetypes"])
+        ''
+          Please use `plugins.debugprint.settings.filetypes` instead.
+          The sub-module options for each filetype are `left`, `right`, `mid_var` and `right_var`.
+        ''
+      )
+    ];
 
-      createKeymaps = helpers.defaultNullOpts.mkBool true ''
-        Creates default keymappings.
-      '';
+    settingsOptions = {
+      keymaps =
+        helpers.defaultNullOpts.mkAttrsOf
+        (with helpers.nixvimTypes; attrsOf (either str rawLua))
+        ''
+          {
+            normal = {
+              plain_below = "g?p";
+              plain_above = "g?P";
+              variable_below = "g?v";
+              variable_above = "g?V";
+              variable_below_alwaysprompt.__raw = "nil";
+              variable_above_alwaysprompt.__raw = "nil";
+              textobj_below = "g?o";
+              textobj_above = "g?O";
+              toggle_comment_debug_prints.__raw = "nil";
+              delete_debug_prints.__raw = "nil";
+            };
+            visual = {
+              variable_below = "g?v";
+              variable_above = "g?V";
+            };
+          }
+        ''
+        ''
+          By default, the plugin will create some keymappings for use 'out of the box'.
+          There are also some function invocations which are not mapped to any keymappings by
+          default, but could be.
+          This can be overridden using this option.
 
-      moveToDebugline = helpers.defaultNullOpts.mkBool false ''
+          You only need to include the keys which you wish to override, others will default as shown
+          in the documentation.
+          Setting any key to `nil` (warning: use `__raw`) will skip it.
+
+          The default keymappings are chosen specifically because ordinarily in NeoVim they are used
+          to convert sections to ROT-13, which most folks don’t use.
+        '';
+
+      commands =
+        helpers.defaultNullOpts.mkAttrsOf types.str
+        ''
+          {
+            toggle_comment_debug_prints = "ToggleCommentDebugPrints";
+            delete_debug_prints = "DeleteDebugPrints";
+          }
+        ''
+        ''
+          By default, the plugin will create some commands for use 'out of the box'.
+          There are also some function invocations which are not mapped to any commands by default,
+          but could be.
+          This can be overridden using this option.
+
+          You only need to include the commands which you wish to override, others will default as
+          shown in the documentation.
+          Setting any command to `nil` (warning: use `__raw`) will skip it.
+        '';
+
+      move_to_debugline = helpers.defaultNullOpts.mkBool false ''
         When adding a debug line, moves the cursor to that line.
       '';
 
-      displayCounter = helpers.defaultNullOpts.mkBool true ''
+      display_counter = helpers.defaultNullOpts.mkBool true ''
         Whether to display/include the monotonically increasing counter in each debug message.
       '';
 
-      displaySnippet = helpers.defaultNullOpts.mkBool true ''
+      display_snippet = helpers.defaultNullOpts.mkBool true ''
         Whether to include a snippet of the line above/below in plain debug lines.
       '';
 
@@ -51,12 +136,12 @@ in {
                   description = "Right part of snippet to insert (plain debug line mode).";
                 };
 
-                midVar = mkOption {
+                mid_var = mkOption {
                   type = str;
                   description = "Middle part of snippet to insert (variable debug line mode).";
                 };
 
-                rightVar = mkOption {
+                right_var = mkOption {
                   type = str;
                   description = "Right part of snippet to insert (variable debug line mode).";
                 };
@@ -76,54 +161,53 @@ in {
               python = {
                 left = "print(f'";
                 right = "')";
-                midVar = "{";
-                rightVar = "}')";
+                mid_var = "{";
+                right_var = "}')";
               };
             };
           ```
         '';
 
-      ignoreTreesitter = helpers.defaultNullOpts.mkBool false ''
+      ignore_treesitter = helpers.defaultNullOpts.mkBool false ''
         Never use treesitter to find a variable under the cursor, always prompt for it - overrides
         the same setting on `debugprint()` if set to true.
       '';
 
-      printTag = helpers.defaultNullOpts.mkStr "DEBUGPRINT" ''
+      print_tag = helpers.defaultNullOpts.mkStr "DEBUGPRINT" ''
         The string inserted into each print statement, which can be used to uniquely identify
         statements inserted by `debugprint`.
       '';
     };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-
-    extraConfigLua = let
-      setupOptions = with cfg;
-        {
-          create_commands = createCommands;
-          create_keymaps = createKeymaps;
-          move_to_debugline = moveToDebugline;
-          display_counter = displayCounter;
-          display_snippet = displaySnippet;
-          filetypes =
-            helpers.ifNonNull' filetypes
-            (
-              mapAttrs
-              (
-                _: ft: {
-                  inherit (ft) left right;
-                  mid_var = ft.midVar;
-                  right_var = ft.rightVar;
-                }
-              )
-              filetypes
-            );
-          ignore_treesitter = ignoreTreesitter;
-          print_tag = printTag;
-        }
-        // cfg.extraOptions;
-    in ''
-      require('debugprint').setup(${helpers.toLuaObject setupOptions})
-    '';
-  };
-}
+    settingsExample = {
+      keymaps = {
+        normal = {
+          variable_below = "g?v";
+          variable_above = "g?V";
+          variable_below_alwaysprompt.__raw = "nil";
+          variable_above_alwaysprompt.__raw = "nil";
+        };
+        visual = {
+          variable_below = "g?v";
+          variable_above = "g?V";
+        };
+      };
+      commands = {
+        toggle_comment_debug_prints = "ToggleCommentDebugPrints";
+        delete_debug_prints = "DeleteDebugPrints";
+      };
+      move_to_debugline = false;
+      display_counter = true;
+      display_snippet = true;
+      filetypes = {
+        python = {
+          left = "print(f'";
+          right = "')";
+          mid_var = "{";
+          right_var = "}')";
+        };
+      };
+      ignore_treesitter = false;
+      print_tag = "DEBUGPRINT";
+    };
+  }
