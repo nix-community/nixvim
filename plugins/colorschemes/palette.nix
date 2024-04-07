@@ -5,18 +5,34 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.palette;
-in {
-  meta.maintainers = [maintainers.GaetanLepage];
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "palette";
+    isColorscheme = true;
+    originalName = "palette.nvim";
+    defaultPackage = pkgs.vimPlugins.palette-nvim;
 
-  options.colorschemes.palette =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "palette.nvim";
+    maintainers = [maintainers.GaetanLepage];
 
-      package = helpers.mkPackageOption "palette.nvim" pkgs.vimPlugins.palette-nvim;
+    extraPlugins = [
+      # Annoyingly, lspconfig is required, otherwise this line is breaking:
+      # https://github.com/roobert/palette.nvim/blob/a808c190a4f74f73782302152ebf323660d8db5f/lua/palette/init.lua#L45
+      # An issue has been opened upstream to warn the maintainer: https://github.com/roobert/palette.nvim/issues/2
+      pkgs.vimPlugins.nvim-lspconfig
+    ];
 
+    # TODO introduced 2024-04-07: remove 2024-06-07
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "palettes"
+      "customPalettes"
+      "italics"
+      "transparentBackground"
+      "caching"
+      "cacheDir"
+    ];
+
+    settingsOptions = {
       palettes = {
         main = helpers.defaultNullOpts.mkStr "dark" ''
           Palette for the main colors.
@@ -89,7 +105,7 @@ in {
         Whether to use italics.
       '';
 
-      transparentBackground = helpers.defaultNullOpts.mkBool false ''
+      transparent_background = helpers.defaultNullOpts.mkBool false ''
         Whether to use transparent background.
       '';
 
@@ -97,54 +113,33 @@ in {
         Whether to enable caching.
       '';
 
-      cacheDir =
+      cache_dir =
         helpers.defaultNullOpts.mkStr
         ''{__raw = "vim.fn.stdpath('cache') .. '/palette'";}''
         "Cache directory.";
     };
 
-  config = mkIf cfg.enable {
-    assertions =
-      mapAttrsToList (
-        name: defaultPaletteNames: let
-          palette = cfg.palettes.${name};
-          allowedPaletteNames = (attrNames cfg.customPalettes.${name}) ++ defaultPaletteNames;
-        in {
-          assertion = isString palette -> elem palette allowedPaletteNames;
-          message = ''
-            Nixvim: `colorschemes.palette.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${concatStringsSep " " allowedPaletteNames}).
-          '';
-        }
-      )
-      {
-        main = ["dark" "light"];
-        accent = ["pastel" "dark" "bright"];
-        state = ["pastel" "dark" "bright"];
-      };
+    settingsExample = {};
 
-    colorscheme = "palette";
+    extraConfig = cfg: {
+      assertions =
+        mapAttrsToList (
+          name: defaultPaletteNames: let
+            customPalettesNames = attrNames cfg.settings.custom_palettes.${name};
+            allowedPaletteNames = customPalettesNames ++ defaultPaletteNames;
 
-    extraPlugins = [
-      cfg.package
-      # Annoyingly, lspconfig is required, otherwise this line is breaking:
-      # https://github.com/roobert/palette.nvim/blob/a808c190a4f74f73782302152ebf323660d8db5f/lua/palette/init.lua#L45https://github.com/roobert/palette.nvim/blob/a808c190a4f74f73782302152ebf323660d8db5f/lua/palette/init.lua#L45
-      # An issue has been opened upstream to warn the maintainer: https://github.com/roobert/palette.nvim/issues/2
-      pkgs.vimPlugins.nvim-lspconfig
-    ];
-
-    extraConfigLuaPre = let
-      setupOptions = with cfg;
+            palette = cfg.settings.palettes.${name};
+          in {
+            assertion = isString palette -> elem palette allowedPaletteNames;
+            message = ''
+              Nixvim (colorschemes.palette): `settings.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${concatStringsSep " " allowedPaletteNames}).
+            '';
+          }
+        )
         {
-          inherit palettes;
-          custom_palettes = customPalettes;
-          inherit italics;
-          transparent_background = transparentBackground;
-          inherit caching;
-          cache_dir = cacheDir;
-        }
-        // cfg.extraOptions;
-    in ''
-      require('palette').setup(${helpers.toLuaObject setupOptions})
-    '';
-  };
-}
+          main = ["dark" "light"];
+          accent = ["pastel" "dark" "bright"];
+          state = ["pastel" "dark" "bright"];
+        };
+    };
+  }
