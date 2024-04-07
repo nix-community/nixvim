@@ -260,6 +260,20 @@ with lib;
               "HTML formatter.";
           };
         };
+
+        keybinds = {
+          buffer_local = helpers.defaultNullOpts.mkBool false ''
+            Enable keybinds only in request result buffer.
+          '';
+
+          prev = helpers.defaultNullOpts.mkStr "H" ''
+            Mapping for cycle to previous result pane.
+          '';
+
+          next = helpers.defaultNullOpts.mkStr "L" ''
+            Mapping for cycle to next result pane.
+          '';
+        };
       };
 
       highlight = {
