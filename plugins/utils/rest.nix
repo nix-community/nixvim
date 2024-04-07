@@ -5,179 +5,320 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.rest;
-in {
-  meta.maintainers = [maintainers.GaetanLepage];
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "rest";
+    originalName = "rest.nvim";
+    luaName = "rest-nvim";
+    defaultPackage = pkgs.vimPlugins.rest-nvim;
 
-  options.plugins.rest =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "rest.nvim";
+    extraPackages = [pkgs.curl];
 
-      package = helpers.mkPackageOption "rest.nvim" pkgs.vimPlugins.rest-nvim;
+    maintainers = [maintainers.GaetanLepage];
 
-      resultSplitHorizontal = helpers.defaultNullOpts.mkBool false ''
-        Open request results in a horizontal split (default opens on vertical).
+    # TODO introduced 2024-04-07: remove 2024-06-07
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "envFile"
+      "encodeUrl"
+      "skipSslVerification"
+      "customDynamicVariables"
+      ["highlight" "timeout"]
+    ];
+    imports = let
+      basePluginPath = ["plugins" "rest"];
+      settingsPath = basePluginPath ++ ["settings"];
+    in [
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["resultSplitHorizontal"])
+        (settingsPath ++ ["result" "split" "horizontal"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["resultSplitInPlace"])
+        (settingsPath ++ ["result" "split" "in_place"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["stayInCurrentWindowAfterSplit"])
+        (settingsPath ++ ["result" "split" "stay_in_current_window_after_split"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["result" "showUrl"])
+        (settingsPath ++ ["result" "behavior" "show_info" "url"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["result" "showHeaders"])
+        (settingsPath ++ ["result" "behavior" "show_info" "headers"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["result" "showHttpInfo"])
+        (settingsPath ++ ["result" "behavior" "show_info" "http_info"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["result" "showCurlCommand"])
+        (settingsPath ++ ["result" "behavior" "show_info" "curl_command"])
+      )
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["result" "showStatistics"])
+        ''
+          Use `plugins.rest.settings.result.behavior.statistics.{enable,stats}` instead.
+          Refer to the documentation for more information.
+        ''
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["result" "formatters"])
+        (settingsPath ++ ["result" "behavior" "formatters"])
+      )
+      (
+        mkRenamedOptionModule
+        (basePluginPath ++ ["highlight" "enabled"])
+        (settingsPath ++ ["highlight" "enable"])
+      )
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["jumpToRequest"])
+        ''
+          This option has been deprecated upstream.
+        ''
+      )
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["yankDryRun"])
+        ''
+          This option has been deprecated upstream.
+        ''
+      )
+      (
+        mkRemovedOptionModule
+        (basePluginPath ++ ["searchBack"])
+        ''
+          This option has been deprecated upstream.
+        ''
+      )
+    ];
+
+    settingsOptions = {
+      client = helpers.defaultNullOpts.mkStr "curl" ''
+        The HTTP client to be used when running requests.
       '';
 
-      resultSplitInPlace = helpers.defaultNullOpts.mkBool false ''
-        Keep the http file buffer above|left when split horizontal|vertical.
+      env_file = helpers.defaultNullOpts.mkStr ".env" ''
+        Environment variables file to be used for the request variables in the document.
       '';
 
-      stayInCurrentWindowAfterSplit = helpers.defaultNullOpts.mkBool false ''
-        Stay in current windows (`.http` file) or change to results window (default).
+      env_pattern = helpers.defaultNullOpts.mkStr "\\.env$" ''
+        Environment variables file pattern for `telescope.nvim`.
       '';
 
-      skipSslVerification = helpers.defaultNullOpts.mkBool false ''
-        Skip SSL verification, useful for unknown certificates.
+      env_edit_command = helpers.defaultNullOpts.mkStr "tabedit" ''
+        Neovim command to edit an environment file.
       '';
 
-      encodeUrl = helpers.defaultNullOpts.mkBool true ''
+      encode_url = helpers.defaultNullOpts.mkBool true ''
         Encode URL before making request.
       '';
 
-      highlight = {
-        enabled = helpers.defaultNullOpts.mkBool true ''
-          Enable the highlighting of the selected request when send.
+      skip_ssl_verification = helpers.defaultNullOpts.mkBool false ''
+        Skip SSL verification, useful for unknown certificates.
+      '';
+
+      custom_dynamic_variables = mkOption {
+        type = with helpers.nixvimTypes;
+          nullOr (
+            maybeRaw (
+              attrsOf strLuaFn
+            )
+          );
+        default = null;
+        example = {
+          "$timestamp" = "os.time";
+          "$randomInt" = ''
+            function()
+              return math.random(0, 1000)
+            end
+          '';
+        };
+        description = ''
+          Custom dynamic variables. Keys are variable names and values are lua functions.
+
+          default: `{}`
+        '';
+        apply = v:
+          if isAttrs v
+          then mapAttrs (_: helpers.mkRaw) v
+          else v;
+      };
+
+      logs = {
+        level = helpers.defaultNullOpts.mkNullable helpers.nixvimTypes.logLevel "info" ''
+          The logging level name, see `:h vim.log.levels`.
         '';
 
-        timeout = helpers.defaultNullOpts.mkUnsignedInt 150 ''
-          Timeout for highlighting.
+        save = helpers.defaultNullOpts.mkBool true ''
+          Whether to save log messages into a `.log` file.
         '';
       };
 
       result = {
-        showUrl = helpers.defaultNullOpts.mkBool true ''
-          Toggle showing URL, HTTP info, headers at top the of result window.
-        '';
-
-        showCurlCommand = helpers.defaultNullOpts.mkBool true ''
-          Show the generated curl command in case you want to launch the same request via the
-          terminal (can be verbose).
-        '';
-
-        showHttpInfo = helpers.defaultNullOpts.mkBool true ''
-          Show HTTP information.
-        '';
-
-        showHeaders = helpers.defaultNullOpts.mkBool true ''
-          Show headers information.
-        '';
-
-        showStatistics =
-          helpers.defaultNullOpts.mkNullable
-          (
-            with types;
-              either
-              (enum [false])
-              (
-                listOf
-                (
-                  either
-                  str
-                  (listOf str)
-                )
-              )
-          )
-          "false"
-          ''
-            Table of curl `--write-out` variables or false if disabled.
-            For more granular control see [Statistics Spec](https://github.com/rest-nvim/rest.nvim?tab=readme-ov-file#statistics-spec).
+        split = {
+          horizontal = helpers.defaultNullOpts.mkBool false ''
+            Open request results in a horizontal split.
           '';
 
-        formatters =
-          helpers.defaultNullOpts.mkAttrsOf
-          (
-            with types;
-              either str (enum [false])
-          )
-          ''
-            {
-              json = "jq";
-              html.__raw = \'\'
-                function(body)
-                  if vim.fn.executable("tidy") == 0 then
-                    return body
-                  end
-                  -- stylua: ignore
-                  return vim.fn.system({
-                    "tidy", "-i", "-q",
-                    "--tidy-mark",      "no",
-                    "--show-body-only", "auto",
-                    "--show-errors",    "0",
-                    "--show-warnings",  "0",
-                    "-",
-                  }, body):gsub("\n$", "")
-                end
-              \'\';
-            }
-          ''
-          ''
-            Executables or functions for formatting response body [optional].
-            Set them to false if you want to disable them.
+          in_place = helpers.defaultNullOpts.mkBool false ''
+            Keep the HTTP file buffer above|left when split horizontal|vertical.
           '';
+
+          stay_in_current_window_after_split = helpers.defaultNullOpts.mkBool true ''
+            Stay in the current window (HTTP file) or change the focus to the results window.
+          '';
+        };
+
+        behavior = {
+          show_info = {
+            url = helpers.defaultNullOpts.mkBool true ''
+              Display the request URL.
+            '';
+
+            headers = helpers.defaultNullOpts.mkBool true ''
+              Display the request headers.
+            '';
+
+            http_info = helpers.defaultNullOpts.mkBool true ''
+              Display the request HTTP information.
+            '';
+
+            curl_command = helpers.defaultNullOpts.mkBool true ''
+              Display the cURL command that was used for the request.
+            '';
+          };
+
+          decode_url = helpers.defaultNullOpts.mkBool true ''
+            Whether to decode the request URL query parameters to improve readability.
+          '';
+
+          statistics = {
+            enable = helpers.defaultNullOpts.mkBool true ''
+              Whether to enable statistics or not.
+            '';
+
+            stats =
+              helpers.defaultNullOpts.mkListOf (with types; attrsOf str)
+              ''
+                [
+                  {
+                    __unkeyed = "total_time";
+                    title = "Time taken:";
+                  }
+                  {
+                    __unkeyed = "size_download_t";
+                    title = "Download size:";
+                  }
+                ]
+              ''
+              "See https://curl.se/libcurl/c/curl_easy_getinfo.html.";
+          };
+
+          formatters = {
+            json = helpers.defaultNullOpts.mkStr "jq" ''
+              JSON formatter.
+            '';
+
+            html =
+              helpers.defaultNullOpts.mkStr
+              ''
+                {
+                  __raw = \'\'
+                    function(body)
+                      if vim.fn.executable("tidy") == 0 then
+                        return body, { found = false, name = "tidy" }
+                      end
+                      local fmt_body = vim.fn.system({
+                        "tidy",
+                        "-i",
+                        "-q",
+                        "--tidy-mark",      "no",
+                        "--show-body-only", "auto",
+                        "--show-errors",    "0",
+                        "--show-warnings",  "0",
+                        "-",
+                      }, body):gsub("\n$", "")
+
+                      return fmt_body, { found = true, name = "tidy" }
+                    end
+                  \'\';
+                }
+              ''
+              "HTML formatter.";
+          };
+        };
       };
 
-      jumpToRequest = helpers.defaultNullOpts.mkBool false ''
-        Moves the cursor to the selected request line when send.
-      '';
-
-      envFile = helpers.defaultNullOpts.mkStr ".env" ''
-        Specifies file name that consist environment variables.
-      '';
-
-      customDynamicVariables = mkOption {
-        type = with helpers.nixvimTypes; nullOr (attrsOf strLuaFn);
-        default = null;
-        description = ''
-          Allows to extend or overwrite built-in dynamic variable functions.
+      highlight = {
+        enable = helpers.defaultNullOpts.mkBool true ''
+          Whether current request highlighting is enabled or not.
         '';
-        apply = v: helpers.ifNonNull' v (mapAttrs (_: helpers.mkRaw) v);
+
+        timeout = helpers.defaultNullOpts.mkUnsignedInt 750 ''
+          Duration time of the request highlighting in milliseconds.
+        '';
       };
 
-      yankDryRun = helpers.defaultNullOpts.mkBool true "";
-
-      searchBack = helpers.defaultNullOpts.mkBool true "";
+      keybinds =
+        helpers.defaultNullOpts.mkListOf (with types; listOf str)
+        ''
+          [
+            [
+              "<localleader>rr"
+              "<cmd>Rest run<cr>"
+              "Run request under the cursor"
+            ]
+            [
+              "<localleader>rl"
+              "<cmd>Rest run last<cr>"
+              "Re-run latest request"
+            ]
+          ]
+        ''
+        ''
+          Declare some keybindings.
+          Format: list of 3 strings lists: key, action and description.
+        '';
     };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-
-    extraPackages = [pkgs.curl];
-
-    extraConfigLua = let
-      setupOptions = with cfg;
-        {
-          result_split_horizontal = resultSplitHorizontal;
-          result_split_in_place = resultSplitInPlace;
-          stay_in_current_window_after_split = stayInCurrentWindowAfterSplit;
-          skip_ssl_verification = skipSslVerification;
-          encode_url = encodeUrl;
-          highlight = with highlight; {
-            inherit
-              (highlight)
-              enabled
-              timeout
-              ;
-          };
-          result = with result; {
-            show_url = showUrl;
-            show_curl_command = showCurlCommand;
-            show_http_info = showHttpInfo;
-            show_headers = showHeaders;
-            show_statistics = showStatistics;
-            inherit formatters;
-          };
-          jump_to_request = jumpToRequest;
-          env_file = envFile;
-          custom_dynamic_variables = customDynamicVariables;
-          yank_dry_run = yankDryRun;
-          search_back = searchBack;
-        }
-        // cfg.extraOptions;
-    in ''
-      require('rest-nvim').setup(${helpers.toLuaObject setupOptions})
-    '';
-  };
-}
+    settingsExample = {
+      client = "curl";
+      env_file = ".env";
+      logs = {
+        level = "info";
+        save = true;
+      };
+      result = {
+        split = {
+          horizontal = false;
+          in_place = false;
+          stay_in_current_window_after_split = true;
+        };
+      };
+      keybinds = [
+        [
+          "<localleader>rr"
+          "<cmd>Rest run<cr>"
+          "Run request under the cursor"
+        ]
+        [
+          "<localleader>rl"
+          "<cmd>Rest run last<cr>"
+          "Re-run latest request"
+        ]
+      ];
+    };
+  }
