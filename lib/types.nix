@@ -65,7 +65,7 @@ in
         default = mkNullOrOption bool "Don't override existing definition.";
         ctermfg = mkNullOrStr "Sets foreground of cterm color.";
         ctermbg = mkNullOrStr "Sets background of cterm color.";
-        cterm = mkNullOrOption attrs ''
+        cterm = mkNullOrOption (either str attrs) ''
           cterm attribute map, like |highlight-args|.
           If not set, cterm attributes will match those from the attribute map documented above.
         '';
