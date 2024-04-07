@@ -38,6 +38,8 @@ in
         (listOf (listOf str))
       ];
 
+    logLevel = types.enum ["off" "error" "warn" "info" "debug" "trace"];
+
     highlight = types.submodule {
       # Adds flexibility for other keys
       freeformType = types.attrs;

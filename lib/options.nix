@@ -193,11 +193,9 @@ with nixvimUtils; rec {
         type = with types;
           nullOr
           (
-            either ints.unsigned
-            (
-              enum
-              ["off" "error" "warn" "info" "debug" "trace"]
-            )
+            either
+            ints.unsigned
+            nixvimTypes.logLevel
           );
         default = null;
         apply =
