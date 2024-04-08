@@ -143,6 +143,7 @@
     ./utils/goyo.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix
+    ./utils/hop.nix
     ./utils/illuminate.nix
     ./utils/indent-blankline.nix
     ./utils/indent-o-matic.nix
