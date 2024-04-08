@@ -48,4 +48,10 @@
     githubId = 39652808;
     name = "Kareem Medhat";
   };
+  AndresBermeoMarinelli = {
+    email = "andres_bermeo@outlook.com";
+    github = "theabm";
+    githubId = 72303015;
+    name = "Andres Bermeo Marinelli";
+  };
 }
