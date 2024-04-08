@@ -42,4 +42,10 @@
       {fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC";}
     ];
   };
+  AndresBermeoMarinelli = {
+    email = "andres_bermeo@outlook.com";
+    github = "theabm";
+    githubId = "72303015";
+    name = "Andres Bermeo Marinelli";
+  };
 }
