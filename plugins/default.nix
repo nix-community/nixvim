@@ -59,6 +59,7 @@
     ./git/octo.nix
 
     ./languages/clangd-extensions.nix
+    ./languages/cmake-tools.nix
     ./languages/debugprint.nix
     ./languages/godot.nix
     ./languages/haskell-scope-highlighting.nix
