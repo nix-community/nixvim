@@ -55,8 +55,8 @@
 
             overseer = {
               new_task_opts = {
-                __raw = ''
-                  strategy = {
+                strategy.__raw = ''
+                  {
                     "terminal",
                   },
                 '';
@@ -104,8 +104,8 @@
 
             overseer = {
               new_task_opts = {
-                __raw = ''
-                  strategy = {
+                strategy.__raw = ''
+                  {
                     "terminal",
                   },
                 '';

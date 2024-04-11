@@ -12,6 +12,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   maintainers = [helpers.maintainers.NathanFelber];
 
+  extraPlugins = with pkgs.vimPlugins; [
+    plenary-nvim
+  ];
+
   settingsOptions = {
     cmake_command = helpers.defaultNullOpts.mkStr "cmake" ''
       This is used to specify cmake command path.
@@ -122,8 +126,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
               overseer = {
                 new_task_opts = {
-                  __raw = '''
-                    strategy = {
+                  strategy.__raw = '''
+                    {
                       "terminal",
                     },
                   '''';
@@ -189,11 +193,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
               overseer = {
                 new_task_opts = {
-                  __raw = '''
-                    strategy = {
+                  strategy.__raw = '''
+                    {
                       "terminal",
                     },
-                  ''';
+                  '''';
                 }; # options to pass into the `overseer.new_task` command
                 on_new_task = {
                   __raw = '''
@@ -295,8 +299,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
         overseer = {
           new_task_opts = {
-            __raw = ''
-              strategy = {
+            strategy.__raw = ''
+              {
                 "terminal",
               },
             '';
@@ -346,8 +350,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
         overseer = {
           new_task_opts = {
-            __raw = ''
-              strategy = {
+            strategy.__raw = ''
+              {
                 "terminal",
               },
             '';
