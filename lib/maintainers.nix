@@ -42,4 +42,10 @@
       {fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC";}
     ];
   };
+  NathanFelber = {
+    email = "nathan@pascaline.org";
+    github = "nfelber";
+    githubId = 46248772;
+    name = "Nathan Felber";
+  };
 }
