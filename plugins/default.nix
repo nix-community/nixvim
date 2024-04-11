@@ -48,6 +48,7 @@
     ./git/neogit
 
     ./languages/clangd-extensions.nix
+    ./languages/cmake-tools.nix
     ./languages/debugprint.nix
     ./languages/haskell-scope-highlighting.nix
     ./languages/helm.nix
