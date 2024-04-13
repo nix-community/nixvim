@@ -11,7 +11,7 @@ with lib;
     originalName = "coq_nvim";
     defaultPackage = pkgs.vimPlugins.coq_nvim;
 
-    maintainers = [maintainers.traxys];
+    maintainers = [maintainers.traxys helpers.maintainers.Kareem-Medhat];
 
     extraOptions = {
       installArtifacts = mkEnableOption "and install coq-artifacts";
@@ -67,9 +67,14 @@ with lib;
         cfg.artifactsPackage
       ];
 
+      globals = {
+        coq_settings = cfg.settings;
+      };
+
+      extraConfigLua = "require('coq')";
+
       plugins.lsp = {
         preConfig = ''
-          vim.g.coq_settings = ${helpers.toLuaObject cfg.settings}
           local coq = require 'coq'
         '';
         setupWrappers = [(s: ''coq.lsp_ensure_capabilities(${s})'')];
