@@ -145,6 +145,7 @@
     ./utils/harpoon.nix
     ./utils/hop.nix
     ./utils/illuminate.nix
+    ./utils/improved-search.nix
     ./utils/indent-blankline.nix
     ./utils/indent-o-matic.nix
     ./utils/instant.nix
