@@ -48,4 +48,10 @@
     githubId = 46248772;
     name = "Nathan Felber";
   };
+  Kareem-Medhat = {
+    email = "kareemmedhatnabil@gmail.com";
+    github = "Kareem-Medhat";
+    githubId = 39652808;
+    name = "Kareem Medhat";
+  };
 }

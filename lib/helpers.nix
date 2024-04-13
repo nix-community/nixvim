@@ -4,6 +4,7 @@
   _nixvimTests,
   ...
 }: let
+  nixvimBuilders = import ./builders.nix {inherit lib pkgs;};
   nixvimTypes = import ./types.nix {inherit lib nixvimOptions;};
   nixvimUtils = import ./utils.nix {inherit lib _nixvimTests;};
   nixvimOptions = import ./options.nix {inherit lib nixvimTypes nixvimUtils;};
@@ -20,3 +21,4 @@ in
   }
   // nixvimUtils
   // nixvimOptions
+  // nixvimBuilders

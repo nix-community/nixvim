@@ -5,199 +5,253 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.toggleterm;
-in {
-  options.plugins.toggleterm = {
-    enable = mkEnableOption "toggleterm";
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "toggleterm";
+    originalName = "toggleterm.nvim";
+    defaultPackage = pkgs.vimPlugins.toggleterm-nvim;
 
-    package = helpers.mkPackageOption "toggleterm" pkgs.vimPlugins.toggleterm-nvim;
+    maintainers = [maintainers.GaetanLepage];
 
-    size = helpers.defaultNullOpts.mkStrLuaFnOr types.number "12" ''
-      Size of the terminal.
-      `size` can be a number or function
-      Example:
-      ```nix
-      size = 20
-      ```
-      OR
-      ```
-      size = function(term)
-        if term.direction == "horizontal" then
-          return 15
-        elseif term.direction == "vertical" then
-          return vim.o.columns * 0.4
-        end
-      end
-      ```
-    '';
-
-    openMapping = helpers.mkNullOrOption types.str ''
-      Setting the open_mapping key to use for toggling the terminal(s) will set up mappings for
-      normal mode.
-    '';
-
-    onCreate = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when the terminal is first created.
-    '';
-
-    onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when the terminal opens.
-    '';
-
-    onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when the terminal closes.
-    '';
-
-    onStdout = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Callback for processing output on stdout.
-    '';
-
-    onStderr = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Callback for processing output on stderr.
-    '';
-
-    onExit = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Function to run when terminal process exits.
-    '';
-
-    hideNumbers = helpers.defaultNullOpts.mkBool true ''
-      Hide the number column in toggleterm buffers.
-    '';
-
-    shadeFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "";
-
-    autochdir = helpers.defaultNullOpts.mkBool false ''
-      When neovim changes it current directory the terminal will change it's own when next it's
-      opened.
-    '';
-
-    highlights = helpers.mkNullOrOption (with types; (attrsOf (attrsOf str))) ''
-      Highlights which map to a highlight group name and a table of it's values.
-
-      Example:
-      ```nix
-        highlights = {
-          Normal = {
-            guibg = "<VALUE-HERE>";
-          };
-          NormalFloat = {
-            link = "Normal";
-          },
-          FloatBorder = {
-            guifg = "<VALUE-HERE>";
-            guibg = "<VALUE-HERE>";
-          };
-        };
-      ```
-    '';
-
-    shadeTerminals = helpers.defaultNullOpts.mkBool false ''
-      NOTE: This option takes priority over highlights specified so if you specify Normal highlights
-      you should set this to false.
-    '';
-
-    shadingFactor = helpers.defaultNullOpts.mkInt (-30) ''
-      The percentage by which to lighten terminal background.
-
-      Default: -30 (gets multiplied by -3 if background is light).
-    '';
-
-    startInInsert = helpers.defaultNullOpts.mkBool true "";
-
-    insertMappings = helpers.defaultNullOpts.mkBool true ''
-      Whether or not the open mapping applies in insert mode.
-    '';
-
-    terminalMappings = helpers.defaultNullOpts.mkBool true ''
-      Whether or not the open mapping applies in the opened terminals.
-    '';
-
-    persistSize = helpers.defaultNullOpts.mkBool true "";
-
-    persistMode = helpers.defaultNullOpts.mkBool true ''
-      If set to true (default) the previous terminal mode will be remembered.
-    '';
-
-    direction =
-      helpers.defaultNullOpts.mkEnumFirstDefault
-      ["vertical" "horizontal" "tab" "float"]
-      "";
-
-    closeOnExit = helpers.defaultNullOpts.mkBool true ''
-      Close the terminal window when the process exits.
-    '';
-
-    shell = helpers.defaultNullOpts.mkStr "`vim.o.shell`" ''
-      Change the default shell.
-    '';
-
-    autoScroll = helpers.defaultNullOpts.mkBool true ''
-      Automatically scroll to the bottom on terminal output.
-    '';
-
-    floatOpts = {
-      border =
-        helpers.defaultNullOpts.mkBorder "single" "toggleterm"
+    # TODO: introduced 2024-04-07, remove on 2024-06-07
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "size"
+      "onCreate"
+      "onOpen"
+      "onClose"
+      "onStdout"
+      "onStderr"
+      "onExit"
+      "hideNumbers"
+      "shadeFiletypes"
+      "autochdir"
+      "highlights"
+      "shadeTerminals"
+      "shadingFactor"
+      "startInInsert"
+      "insertMappings"
+      "terminalMappings"
+      "persistSize"
+      "persistMode"
+      "direction"
+      "closeOnExit"
+      "shell"
+      "autoScroll"
+      ["floatOpts" "border"]
+      ["floatOpts" "width"]
+      ["floatOpts" "height"]
+      ["floatOpts" "winblend"]
+      ["floatOpts" "zindex"]
+      ["winbar" "enabled"]
+      ["winbar" "nameFormatter"]
+    ];
+    imports = [
+      (
+        mkRemovedOptionModule
+        ["plugins" "toggleterm" "openMapping"]
         ''
-          `border` = 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by
+          Please use `plugins.toggleterm.settings.open_mapping` instead but beware, you have to provide the value in this form: `"[[<c-\>]]"`.
+        ''
+      )
+    ];
+
+    settingsOptions = {
+      size = helpers.defaultNullOpts.mkStrLuaFnOr types.number "12" ''
+        Size of the terminal.
+        `size` can be a number or a function.
+
+        Example:
+        ```nix
+          size = 20
+        ```
+        OR
+
+        ```nix
+        size = \'\'
+          function(term)
+            if term.direction == "horizontal" then
+              return 15
+            elseif term.direction == "vertical" then
+              return vim.o.columns * 0.4
+            end
+          end
+        \'\';
+        ```
+      '';
+
+      open_mapping = helpers.mkNullOrLua ''
+        Setting the `open_mapping` key to use for toggling the terminal(s) will set up mappings for
+        normal mode.
+      '';
+
+      on_create = helpers.mkNullOrLuaFn ''
+        Function to run when the terminal is first created.
+
+        `fun(t: Terminal)`
+      '';
+
+      on_open = helpers.mkNullOrLuaFn ''
+        Function to run when the terminal opens.
+
+        `fun(t: Terminal)`
+      '';
+
+      on_close = helpers.mkNullOrLuaFn ''
+        Function to run when the terminal closes.
+
+        `fun(t: Terminal)`
+      '';
+
+      on_stdout = helpers.mkNullOrLuaFn ''
+        Callback for processing output on stdout.
+
+        `fun(t: Terminal, job: number, data: string[], name: string)`
+      '';
+
+      on_stderr = helpers.mkNullOrLuaFn ''
+        Callback for processing output on stderr.
+
+        `fun(t: Terminal, job: number, data: string[], name: string)`
+      '';
+
+      on_exit = helpers.mkNullOrLuaFn ''
+        Function to run when terminal process exits.
+
+        `fun(t: Terminal, job: number, exit_code: number, name: string)`
+      '';
+
+      hide_numbers = helpers.defaultNullOpts.mkBool true ''
+        Hide the number column in toggleterm buffers.
+      '';
+
+      shade_filetypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        Shade filetypes.
+      '';
+
+      autochdir = helpers.defaultNullOpts.mkBool false ''
+        When neovim changes it current directory the terminal will change it's own when next it's
+        opened.
+      '';
+
+      highlights =
+        helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight
+        ''
+          {
+            NormalFloat.link = "Normal";
+            FloatBorder.link = "Normal";
+            StatusLine.gui = "NONE";
+            StatusLineNC = {
+              cterm = "italic";
+              gui = "NONE";
+            };
+          }
+        ''
+        "Highlights which map a highlight group name to an attrs of it's values.";
+
+      shade_terminals = helpers.defaultNullOpts.mkBool true ''
+        NOTE: This option takes priority over highlights specified so if you specify Normal
+        highlights you should set this to `false`.
+      '';
+
+      shading_factor = helpers.mkNullOrOption types.int ''
+        The percentage by which to lighten terminal background.
+
+        default: -30 (gets multiplied by -3 if background is light).
+      '';
+
+      start_in_insert = helpers.defaultNullOpts.mkBool true ''
+        Whether to start toggleterm in insert mode.
+      '';
+
+      insert_mappings = helpers.defaultNullOpts.mkBool true ''
+        Whether or not the open mapping applies in insert mode.
+      '';
+
+      terminal_mappings = helpers.defaultNullOpts.mkBool true ''
+        Whether or not the open mapping applies in the opened terminals.
+      '';
+
+      persist_size = helpers.defaultNullOpts.mkBool true ''
+        Whether the terminal size should persist.
+      '';
+
+      persist_mode = helpers.defaultNullOpts.mkBool true ''
+        If set to true (default) the previous terminal mode will be remembered.
+      '';
+
+      direction =
+        helpers.defaultNullOpts.mkEnum
+        ["vertical" "horizontal" "tab" "float"] "horizontal"
+        "The direction the terminal should be opened in.";
+
+      close_on_exit = helpers.defaultNullOpts.mkBool true ''
+        Close the terminal window when the process exits.
+      '';
+
+      shell = helpers.defaultNullOpts.mkStr ''{__raw = "vim.o.shell";}'' ''
+        Change the default shell.
+      '';
+
+      auto_scroll = helpers.defaultNullOpts.mkBool true ''
+        Automatically scroll to the bottom on terminal output.
+      '';
+
+      float_opts = {
+        border = helpers.mkNullOrOption helpers.nixvimTypes.border ''
+          `border` = "single" | "double" | "shadow" | "curved" | ... other options supported by
           `win open`.
           The border key is *almost* the same as 'nvim_open_win'.
           The 'curved' border is a custom border type not natively supported but implemented in this plugin.
         '';
 
-      width = helpers.defaultNullOpts.mkInt 50 "";
+        width = helpers.mkNullOrOption types.ints.unsigned "";
 
-      height = helpers.defaultNullOpts.mkInt 50 "";
+        height = helpers.mkNullOrOption types.ints.unsigned "";
 
-      winblend = helpers.defaultNullOpts.mkInt 3 "";
+        row = helpers.mkNullOrOption types.ints.unsigned "";
 
-      zindex = helpers.defaultNullOpts.mkInt 50 "";
-    };
-    winbar = {
-      enabled = helpers.defaultNullOpts.mkBool false "";
+        col = helpers.mkNullOrOption types.ints.unsigned "";
 
-      nameFormatter =
-        helpers.defaultNullOpts.mkLuaFn
-        ''
-          function(term)
-            return term.name
-          end
-        '' "";
-    };
-  };
-  config = let
-    setupOptions = with cfg; {
-      inherit autochdir highlights direction shell size;
-      open_mapping = helpers.ifNonNull' openMapping (helpers.mkRaw "[[${openMapping}]]");
-      on_create = onCreate;
-      on_open = onOpen;
-      on_close = onClose;
-      on_stdout = onStdout;
-      on_stderr = onStderr;
-      on_exit = onExit;
-      hide_numbers = hideNumbers;
-      shade_filetypes = shadeFiletypes;
-      shade_terminals = shadeTerminals;
-      shading_factor = shadingFactor;
-      start_in_insert = startInInsert;
-      insert_mappings = insertMappings;
-      terminal_mappings = terminalMappings;
-      persist_size = persistSize;
-      persist_mode = persistMode;
-      close_on_exit = closeOnExit;
-      auto_scroll = autoScroll;
-      float_opts = floatOpts;
-      winbar = with winbar; {
-        inherit enabled;
-        name_formatter = nameFormatter;
+        winblend = helpers.defaultNullOpts.mkUnsignedInt 0 "";
+
+        zindex = helpers.mkNullOrOption types.ints.unsigned "";
+
+        title_pos = helpers.defaultNullOpts.mkStr "left" "";
+      };
+
+      winbar = {
+        enabled = helpers.defaultNullOpts.mkBool false ''
+          Whether to enable winbar.
+        '';
+
+        name_formatter =
+          helpers.defaultNullOpts.mkLuaFn
+          ''
+            function(term)
+              return term.name
+            end
+          ''
+          ''
+            `func(term: Terminal):string`
+
+            Example:
+            ```lua
+              function(term)
+                return fmt("%d:%s", term.id, term:_display_name())
+              end
+            ```
+          '';
       };
     };
-  in
-    mkIf cfg.enable {
-      extraPlugins = [cfg.package];
-      extraConfigLua = ''
-        require("toggleterm").setup(${helpers.toLuaObject setupOptions})
-      '';
+
+    settingsExample = {
+      open_mapping = "[[<c-\>]]";
+      direction = "float";
+      float_opts = {
+        border = "curved";
+        width = 130;
+        height = 30;
+      };
     };
-}
+  }
