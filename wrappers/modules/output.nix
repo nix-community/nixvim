@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  helpers,
   ...
 }:
 with lib; {
@@ -115,7 +116,7 @@ with lib; {
       ''
       + config.content;
 
-    init = pkgs.writeText "init.lua" customRC;
+    init = helpers.writeLua "init.lua" customRC;
     initPath = toString init;
 
     extraWrapperArgs = builtins.concatStringsSep " " (
