@@ -15,10 +15,22 @@ with lib;
     defaultPackage = pkgs.vimPlugins.telescope-media-files-nvim;
 
     # TODO: introduced 2024-03-24, remove on 2024-05-24
-    optionsRenamedToSettings = [
-      "filetypes"
-      "find_cmd"
-    ];
+    imports = let
+      telescopeExtensionsPath = ["plugins" "telescope" "extensions"];
+    in
+      mapAttrsToList
+      (
+        oldOptionName: newOptionPath:
+          mkRenamedOptionModule
+          (telescopeExtensionsPath ++ ["media_files" oldOptionName])
+          (telescopeExtensionsPath ++ ["media-files"] ++ newOptionPath)
+      )
+      {
+        enable = ["enable"];
+        package = ["package"];
+        filetypes = ["settings" "filetypes"];
+        find_cmd = ["settings" "find_cmd"];
+      };
 
     extraOptions = {
       dependencies = let
