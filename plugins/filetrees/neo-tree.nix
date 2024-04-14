@@ -660,7 +660,7 @@ in {
           '';
       };
       filesystem = {
-        window = mkWindowMappingsOption (lib.mdDoc ''
+        window = mkWindowMappingsOption ''
           ```nix
             {
               H = "toggle_hidden";
@@ -677,7 +677,7 @@ in {
               "]g" = "next_git_modified";
             }
           ```
-        '');
+        '';
         asyncDirectoryScan = helpers.defaultNullOpts.mkEnumFirstDefault ["auto" "always" "never"] ''
           - "auto" means refreshes are async, but it's synchronous when called from the Neotree
           commands.
