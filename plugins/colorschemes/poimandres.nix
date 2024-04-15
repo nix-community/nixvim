@@ -5,59 +5,69 @@
   config,
   ...
 }:
-with lib; let
-  cfg = config.colorschemes.poimandres;
-in {
-  options = {
-    colorschemes.poimandres =
-      helpers.neovim-plugin.extraOptionsOptions
-      // {
-        enable = mkEnableOption "poimandres";
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "poimandres";
+    isColorscheme = true;
+    originalName = "poimandres.nvim";
+    defaultPackage = pkgs.vimPlugins.poimandres-nvim;
 
-        package = helpers.mkPackageOption "poimandres" pkgs.vimPlugins.poimandres-nvim;
+    maintainers = [maintainers.GaetanLepage];
 
-        boldVertSplit = helpers.defaultNullOpts.mkBool false "bold vertical split";
+    # TODO introduced 2024-04-15: remove 2024-06-15
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "boldVertSplit"
+      "darkVariant"
+      "disableBackground"
+      "disableFloatBackground"
+      "disableItalics"
+      "dimNcBackground"
+      "groups"
+      "highlightGroups"
+    ];
 
-        darkVariant = helpers.defaultNullOpts.mkStr "main" "dark variant";
+    settingsOptions = {
+      bold_vert_split = helpers.defaultNullOpts.mkBool false ''
+        Use bold vertical separators.
+      '';
 
-        disableBackground = helpers.defaultNullOpts.mkBool false "Whether to disable the background.";
+      dim_nc_background = helpers.defaultNullOpts.mkBool false ''
+        Dim 'non-current' window backgrounds.
+      '';
 
-        disableFloatBackground =
-          helpers.defaultNullOpts.mkBool false
-          "Whether to disable the float background.";
+      disable_background = helpers.defaultNullOpts.mkBool false ''
+        Whether to disable the background.
+      '';
 
-        disableItalics = helpers.defaultNullOpts.mkBool false "Whether to disable italics.";
+      disable_float_background = helpers.defaultNullOpts.mkBool false ''
+        Whether to disable the background for floats.
+      '';
 
-        dimNcBackground = helpers.defaultNullOpts.mkBool false "Dim NC background";
+      disable_italics = helpers.defaultNullOpts.mkBool false ''
+        Whether to disable italics.
+      '';
 
-        groups =
-          helpers.mkNullOrOption (with types; attrsOf (either str (attrsOf str)))
-          "groups";
+      dark_variant = helpers.defaultNullOpts.mkStr "main" ''
+        Dark variant.
+      '';
 
-        highlightGroups = helpers.mkNullOrOption types.attrs "highlight groups";
-      };
-  };
-  config = let
-    setupOptions =
-      {
-        bold_vert_split = cfg.boldVertSplit;
-        dark_variant = cfg.darkVariant;
-        disable_background = cfg.disableBackground;
-        disable_float_background = cfg.disableFloatBackground;
-        disable_italics = cfg.disableItalics;
-        dim_nc_background = cfg.dimNcBackground;
-        inherit (cfg) groups;
-        highlight_groups = cfg.highlightGroups;
-      }
-      // cfg.extraOptions;
-  in
-    mkIf cfg.enable {
-      colorscheme = "poimandres";
+      groups = helpers.mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
+        Which color to use for each group.
 
-      extraPlugins = [cfg.package];
+        default: see [source](https://github.com/olivercederborg/poimandres.nvim/blob/main/lua/poimandres/init.lua)
+      '';
 
-      extraConfigLuaPre = ''
-        require("poimandres").setup(${helpers.toLuaObject setupOptions})
+      highlight_groups = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+        Highlight groups.
       '';
     };
-}
+
+    settingsExample = {
+      bold_vert_split = false;
+      dim_nc_background = true;
+      disable_background = false;
+      disable_float_background = false;
+      disable_italics = true;
+    };
+  }
