@@ -7,26 +7,27 @@
     colorschemes.tokyonight = {
       enable = true;
 
-      style = "storm";
-      # Not implemented
-      # lightStyle = "day";
-      transparent = false;
-      terminalColors = true;
-      styles = {
-        comments = {italic = true;};
-        keywords = {italic = true;};
-        functions = {};
-        variables = {};
-        sidebars = "dark";
-        floats = "dark";
+      settings = {
+        style = "storm";
+        light_style = "day";
+        transparent = false;
+        terminal_colors = true;
+        styles = {
+          comments.italic = true;
+          keywords.italic = true;
+          functions = {};
+          variables = {};
+          sidebars = "dark";
+          floats = "dark";
+        };
+        sidebars = ["qf" "help"];
+        day_brightness = 0.3;
+        hide_inactive_statusline = false;
+        dim_inactive = false;
+        lualine_bold = false;
+        on_colors = "function(colors) end";
+        on_highlights = "function(highlights, colors) end";
       };
-      sidebars = ["qf" "help"];
-      dayBrightness = 0.3;
-      hideInactiveStatusline = false;
-      dimInactive = false;
-      lualineBold = false;
-      onColors = "function(colors) end";
-      onHighlights = "function(highlights, colors) end";
     };
   };
 }
