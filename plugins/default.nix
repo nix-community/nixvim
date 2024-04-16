@@ -114,6 +114,7 @@
     ./ui/image.nix
     ./ui/neoscroll.nix
     ./ui/noice.nix
+    ./ui/statuscol.nix
     ./ui/transparent.nix
     ./ui/twilight.nix
     ./ui/virt-column.nix
