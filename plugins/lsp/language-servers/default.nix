@@ -180,6 +180,11 @@ with lib; let
       package = pkgs.lua54Packages.digestif;
     }
     {
+      name = "docker-compose-language-service";
+      description = "docker-compose-language-service for Docker Compose";
+      serverName = "docker_compose_language_service";
+    }
+    {
       name = "dockerls";
       description = "dockerls for Dockerfile";
       package = pkgs.dockerfile-language-server-nodejs;
