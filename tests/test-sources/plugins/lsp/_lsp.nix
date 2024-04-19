@@ -174,6 +174,7 @@
           # https://github.com/mtshiba/pylyzer/issues/78
           pylyzer.enable = false;
           pyright.enable = true;
+          ruff.enable = true;
           ruff-lsp.enable = true;
           rust-analyzer = {
             enable = true;

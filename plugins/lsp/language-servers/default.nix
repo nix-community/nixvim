@@ -576,6 +576,10 @@ with lib; let
       package = null;
     }
     {
+      name = "ruff";
+      description = "Official ruff language server (Rust) for Python";
+    }
+    {
       name = "ruff-lsp";
       description = "ruff-lsp, for Python";
       package = pkgs.python3Packages.ruff-lsp;
