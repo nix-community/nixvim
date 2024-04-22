@@ -114,6 +114,7 @@ with lib; let
       ocamlformat
       ;
     ansiblelint = pkgs.ansible-lint;
+    bean_check = pkgs.beancount;
     bean_format = pkgs.beancount;
     blackd = pkgs.black;
     buildifier = pkgs.bazel-buildtools;
@@ -129,6 +130,7 @@ with lib; let
     dart_format = pkgs.dart;
     dictionary = pkgs.curl;
     dotenv_linter = pkgs.dotenv-linter;
+    dxfmt = pkgs.dioxus-cli;
     editorconfig_checker = pkgs.editorconfig-checker;
     elm_format = pkgs.elmPackages.elm-format;
     emacs_scheme_mode = pkgs.emacs;
@@ -162,7 +164,7 @@ with lib; let
     phpcbf = pkgs.phpPackages.php-codesniffer;
     phpcsfixer = pkgs.phpPackages.php-cs-fixer;
     phpcs = pkgs.phpPackages.php-codesniffer;
-    prismaFmt = pkgs.nodePackages.prisma;
+    prisma_format = pkgs.nodePackages.prisma;
     ptop = pkgs.fpc;
     puppet_lint = pkgs.puppet-lint;
     qmlformat = pkgs.qt6.qtdeclarative;
