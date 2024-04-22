@@ -192,6 +192,7 @@
     ./utils/sleuth.nix
     ./utils/smart-splits.nix
     ./utils/specs.nix
+    ./utils/spectre.nix
     ./utils/spider.nix
     ./utils/startify
     ./utils/startup.nix
