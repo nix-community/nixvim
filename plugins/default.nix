@@ -137,6 +137,7 @@
     ./utils/cursorline.nix
     ./utils/dashboard.nix
     ./utils/direnv.nix
+    ./utils/dressing.nix
     ./utils/easyescape.nix
     ./utils/emmet.nix
     ./utils/endwise.nix
