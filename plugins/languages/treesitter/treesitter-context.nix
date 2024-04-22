@@ -5,34 +5,51 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.plugins.treesitter-context;
-in {
-  options.plugins.treesitter-context =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "nvim-treesitter-context";
+with lib;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "treesitter-context";
+    originalName = "nvim-treesitter-context";
+    defaultPackage = pkgs.vimPlugins.nvim-treesitter-context;
 
-      package = helpers.mkPackageOption "nvim-treesitter-context" pkgs.vimPlugins.nvim-treesitter-context;
+    maintainers = [maintainers.GaetanLepage];
 
-      maxLines = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+    # TODO introduced 2024-04-22: remove 2024-06-22
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "maxLines"
+      "minWindowHeight"
+      "lineNumbers"
+      "multilineThreshold"
+      "trimScope"
+      "mode"
+      "separator"
+      "zindex"
+      "onAttach"
+    ];
+
+    settingsOptions = {
+      enable = helpers.defaultNullOpts.mkBool true ''
+        Enable this plugin (Can be enabled/disabled later via commands)
+      '';
+
+      max_lines = helpers.defaultNullOpts.mkUnsignedInt 0 ''
         How many lines the window should span. 0 means no limit.
       '';
 
-      minWindowHeight = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+      min_window_height = helpers.defaultNullOpts.mkUnsignedInt 0 ''
         Minimum editor window height to enable context. 0 means no limit.
       '';
 
-      lineNumbers = helpers.defaultNullOpts.mkBool true ''
+      line_numbers = helpers.defaultNullOpts.mkBool true ''
         Whether to show line numbers.
       '';
 
-      multilineThreshold = helpers.defaultNullOpts.mkUnsignedInt 20 ''
+      multiline_threshold = helpers.defaultNullOpts.mkUnsignedInt 20 ''
         Maximum number of lines to collapse for a single context line.
       '';
 
-      trimScope = helpers.defaultNullOpts.mkEnumFirstDefault ["outer" "inner"] ''
-        Which context lines to discard if `maxLines` is exceeded.
+      trim_scope = helpers.defaultNullOpts.mkEnumFirstDefault ["outer" "inner"] ''
+        Which context lines to discard if `max_lines` is exceeded.
       '';
 
       mode = helpers.defaultNullOpts.mkEnumFirstDefault ["cursor" "topline"] ''
@@ -50,39 +67,27 @@ in {
         The Z-index of the context window.
       '';
 
-      onAttach = helpers.defaultNullOpts.mkLuaFn "nil" ''
+      on_attach = helpers.defaultNullOpts.mkLuaFn "nil" ''
         The implementation of a lua function which takes an integer `buf` as parameter and returns a
         boolean.
         Return `false` to disable attaching.
       '';
     };
 
-  config = let
-    setupOptions = with cfg;
-      {
-        max_lines = maxLines;
-        min_window_height = minWindowHeight;
-        line_numbers = lineNumbers;
-        multiline_threshold = multilineThreshold;
-        trim_scope = trimScope;
-        inherit
-          mode
-          separator
-          zindex
-          ;
-        on_attach = onAttach;
-      }
-      // cfg.extraOptions;
-  in
-    mkIf cfg.enable {
+    settingsExample = {
+      max_lines = 0;
+      min_window_height = 0;
+      line_numbers = true;
+      multiline_threshold = 20;
+      trim_scope = "inner";
+      mode = "topline";
+      separator = "-";
+      zindex = 20;
+    };
+
+    extraConfig = cfg: {
       warnings = mkIf (!config.plugins.treesitter.enable) [
         "Nixvim: treesitter-context needs treesitter to function as intended"
       ];
-
-      extraPlugins = [cfg.package];
-
-      extraConfigLua = ''
-        require('treesitter-context').setup(${helpers.toLuaObject setupOptions})
-      '';
     };
-}
+  }
