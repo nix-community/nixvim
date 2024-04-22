@@ -152,6 +152,7 @@
     ./utils/hardtime.nix
     ./utils/harpoon.nix
     ./utils/hop.nix
+    ./utils/hydra
     ./utils/illuminate.nix
     ./utils/improved-search.nix
     ./utils/indent-blankline.nix
