@@ -19,6 +19,12 @@ with lib; {
     };
   };
 
+  # Added to main 2024-03-29
+  # Backported 2024-04-22
+  imports = [
+    (mkAliasOptionModule ["opts"] ["options"])
+  ];
+
   config = {
     extraConfigLuaPre =
       optionalString (config.globals != {}) ''
