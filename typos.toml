@@ -8,3 +8,4 @@ deffered = "deffered"     # TODO: ./plugins/utils/vim-matchup.nix
 Highligt = "Highligt"     # TODO: ./plugins/utils/neogen.nix
 Annote = "Annote"         # TODO: ./plugins/lsp/fidget.nix
 ket = "ket"               # ./plugins/utils/sandwich.nix
+tro = "tro"               # ./plugins/utils/spectre.nix
