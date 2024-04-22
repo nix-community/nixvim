@@ -49,6 +49,7 @@
 
     ./languages/clangd-extensions.nix
     ./languages/debugprint.nix
+    ./languages/godot.nix
     ./languages/haskell-scope-highlighting.nix
     ./languages/helm.nix
     ./languages/julia/julia-cell.nix
