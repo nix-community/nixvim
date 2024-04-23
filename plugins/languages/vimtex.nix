@@ -87,11 +87,9 @@ with lib;
           .${cfg.settings.view_method}
           or [];
       in
-        (
-          optional
-          (cfg.texlivePackage != null)
+        [
           cfg.texlivePackage
-        )
+        ]
         ++ viewerPackages;
     };
   }

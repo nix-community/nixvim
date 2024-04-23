@@ -238,10 +238,7 @@ in {
   config = mkIf cfg.enable {
     extraPlugins = [cfg.package];
 
-    extraPackages =
-      optional
-      (cfg.rustAnalyzerPackage != null)
-      cfg.rustAnalyzerPackage;
+    extraPackages = [cfg.rustAnalyzerPackage];
 
     plugins.lsp.postConfig = let
       globalOptions = with cfg;

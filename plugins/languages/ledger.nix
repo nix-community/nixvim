@@ -48,7 +48,7 @@ with helpers.vim-plugin;
     };
 
     extraConfig = cfg: {
-      extraPackages = optional (cfg.ledgerPackage != null) cfg.ledgerPackage;
+      extraPackages = [cfg.ledgerPackage];
     };
 
     settingsOptions = {

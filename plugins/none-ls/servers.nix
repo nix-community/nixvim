@@ -363,11 +363,9 @@ in {
         )
         enabledSources;
       plugins.gitsigns.enable = mkIf gitsignsEnabled true;
-      extraPackages = builtins.filter (p: p != null) (
-        builtins.map (
-          source: source.package or null
-        )
-        enabledSources
-      );
+      extraPackages =
+        map
+        (source: source.package or null)
+        enabledSources;
     };
 }

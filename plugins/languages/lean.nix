@@ -252,7 +252,7 @@ in {
       }
     ];
 
-    extraPackages = optional (cfg.leanPackage != null) cfg.leanPackage;
+    extraPackages = [cfg.leanPackage];
 
     extraConfigLua = let
       setupOptions = with cfg;

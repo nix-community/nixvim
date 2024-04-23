@@ -150,6 +150,6 @@ with lib;
           `plugins.trouble.enable` is `false`.
           You should maybe enable the `trouble` plugin.
         '';
-      extraPackages = optional (cfg.gitPackage != null) cfg.gitPackage;
+      extraPackages = [cfg.gitPackage];
     };
   }

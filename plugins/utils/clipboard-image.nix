@@ -134,10 +134,7 @@ in {
   config = mkIf cfg.enable {
     extraPlugins = [cfg.package];
 
-    extraPackages =
-      optional
-      (cfg.clipboardPackage != null)
-      cfg.clipboardPackage;
+    extraPackages = [cfg.clipboardPackage];
 
     extraConfigLua = let
       setupOptions =

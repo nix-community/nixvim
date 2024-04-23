@@ -36,9 +36,6 @@ with lib;
     };
 
     extraConfig = cfg: {
-      extraPackages =
-        optional
-        (cfg.godotPackage != null)
-        cfg.godotPackage;
+      extraPackages = [cfg.godotPackage];
     };
   }
