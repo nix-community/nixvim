@@ -271,7 +271,7 @@ in {
   in
     mkIf cfg.enable {
       extraPlugins = [cfg.package];
-      extraPackages = optional (cfg.ripgrepPackage != null) cfg.ripgrepPackage;
+      extraPackages = [cfg.ripgrepPackage];
       extraConfigLua = ''
         require("todo-comments").setup${helpers.toLuaObject setupOptions}
       '';

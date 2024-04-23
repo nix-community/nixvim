@@ -133,7 +133,7 @@ in {
     };
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [nvim-lspconfig cfg.package];
-    extraPackages = optional (cfg.serverPackage != null) cfg.serverPackage;
+    extraPackages = [cfg.serverPackage];
 
     plugins.lsp.postConfig = let
       options =

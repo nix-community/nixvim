@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 with lib; let
@@ -34,9 +33,10 @@ in {
     };
 
     extraPackages = mkOption {
-      type = types.listOf types.package;
+      type = with types; listOf (nullOr package);
       default = [];
       description = "Extra packages to be made available to neovim";
+      apply = builtins.filter (p: p != null);
     };
 
     extraPython3Packages = mkOption {

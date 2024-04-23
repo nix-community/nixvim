@@ -86,10 +86,7 @@
       config =
         mkIf cfg.enable
         {
-          extraPackages =
-            optional
-            (cfg.package != null)
-            cfg.package;
+          extraPackages = [cfg.package];
 
           plugins.lsp.enabledServers = [
             {
