@@ -13,7 +13,7 @@ in {
     colorschemes.gruvbox = {
       enable = mkEnableOption "gruvbox";
 
-      package = helpers.mkPackageOption "gruvbox" pkgs.vimPlugins.gruvbox-nvim;
+      package = helpers.mkPackageOption "gruvbox" pkgs.vimPlugins.gruvbox;
 
       italics = mkEnableOption "italics";
       bold = mkEnableOption "bold text";
