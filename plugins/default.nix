@@ -131,6 +131,7 @@
     ./utils/better-escape.nix
     ./utils/ccc.nix
     ./utils/clipboard-image.nix
+    ./utils/cloak.nix
     ./utils/comment.nix
     ./utils/commentary.nix
     ./utils/conjure.nix
