@@ -135,6 +135,7 @@
     ./utils/cloak.nix
     ./utils/comment.nix
     ./utils/commentary.nix
+    ./utils/competitest.nix
     ./utils/conjure.nix
     ./utils/coverage.nix
     ./utils/cursorline.nix
