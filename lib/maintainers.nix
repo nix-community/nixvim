@@ -54,4 +54,10 @@
     githubId = 72303015;
     name = "Andres Bermeo Marinelli";
   };
+  svl = {
+    matrix = "@gyn:matrix.org";
+    github = "4lxs";
+    githubId = 66408983;
+    name = "svl";
+  };
 }
