@@ -16,6 +16,12 @@ with lib; let
       cmd = cfg: ["${cfg.package}/bin/ansible-language-server" "--stdio"];
     }
     {
+      name = "ast_grep";
+      description = "ast_grep lsp";
+      package = pkgs.ast-grep;
+      cmd = cfg: ["${cfg.package}/bin/ast-grep" "lsp"];
+    }
+    {
       name = "astro";
       description = "astrols for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";

@@ -22,6 +22,7 @@ in {
           "If you want to not install the language server package, set `plugins.lsp.servers.${serverName}.package` to `null`."
       )
       [
+        "ast_grep"
         "astro"
         "bashls"
         "beancount"
