@@ -104,6 +104,7 @@
 
         servers = {
           ansiblels.enable = true;
+          ast-grep.enable = true;
           astro.enable = true;
           bashls.enable = true;
           beancount.enable = true;
