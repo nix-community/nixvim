@@ -268,6 +268,6 @@ in {
   config =
     mkIf cfg.enable
     {
-      plugins.lsp.servers.pylsp.extraOptions.init_options = cfg.initOptions;
+      plugins.lsp.servers.ccls.extraOptions.init_options = cfg.initOptions;
     };
 }
