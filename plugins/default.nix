@@ -70,6 +70,7 @@
     ./languages/rustaceanvim.nix
     ./languages/sniprun.nix
     ./languages/tagbar.nix
+    ./languages/texpresso.nix
     ./languages/treesitter/hmts.nix
     ./languages/treesitter/rainbow-delimiters.nix
     ./languages/treesitter/treesitter-context.nix
