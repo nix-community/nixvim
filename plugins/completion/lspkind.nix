@@ -79,7 +79,7 @@ in
             function(entry, vim_item)
               local kind = require('lspkind').cmp_format(${helpers.toLuaObject options})(entry, vim_item)
 
-              return (${cfg.cmp.after})(entry, vim_after, kind)
+              return (${cfg.cmp.after})(entry, vim_item, kind)
             end
           ''
         else
