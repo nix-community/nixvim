@@ -417,6 +417,11 @@ with lib; let
       description = "metals for Scala";
     }
     {
+      name = "nginx-language-server";
+      description = "nginx-language-server for `nginx.conf`";
+      serverName = "nginx_language_server";
+    }
+    {
       name = "nil_ls";
       description = "nil for Nix";
       package = pkgs.nil;
