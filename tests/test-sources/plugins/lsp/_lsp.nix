@@ -150,6 +150,7 @@
           lua-ls.enable = true;
           marksman.enable = true;
           metals.enable = true;
+          nginx-language-server.enable = true;
           nil_ls.enable = true;
           nimls.enable = true;
           nixd.enable = true;
