@@ -46,6 +46,7 @@
     ./git/gitlinker.nix
     ./git/gitmessenger.nix
     ./git/gitsigns
+    ./git/lazygit.nix
     ./git/neogit
 
     ./languages/clangd-extensions.nix
