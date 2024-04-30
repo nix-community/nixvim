@@ -1,13 +1,19 @@
 { lib, helpers }:
-# Options:
-#  - https://github.com/oxalica/nil/blob/main/docs/configuration.md?plain=1#
+# All available settings are documented here:
+# https://github.com/oxalica/nil/blob/main/docs/configuration.md
 with lib;
 {
   formatting = {
-    command = helpers.defaultNullOpts.mkListOf types.str null ''
-      External formatter command (with arguments).
-      It should accepts file content in stdin and print the formatted code into stdout.
-    '';
+    command = helpers.defaultNullOpts.mkListOf' {
+      type = types.str;
+      default = null;
+      description = ''
+        External formatting command, complete with required arguments.
+
+        It should accept file content from stdin and print the formatted code to stdout.
+      '';
+      example = [ "nixpkgs-fmt" ];
+    };
   };
 
   diagnostics = {
@@ -17,26 +23,40 @@ with lib;
       with the diagnostic message.
     '';
 
-    excludedFiles = helpers.defaultNullOpts.mkListOf types.str [ ] ''
-      Files to exclude from showing diagnostics. Useful for generated files.
-      It accepts an array of paths. Relative paths are joint to the workspace root.
-      Glob patterns are currently not supported.
-    '';
+    excludedFiles = helpers.defaultNullOpts.mkListOf' {
+      type = types.str;
+      default = [ ];
+      description = ''
+        Files to exclude from showing diagnostics. Useful for generated files.
+
+        It accepts an array of paths. Relative paths are joint to the workspace root.
+        Glob patterns are currently not supported.
+      '';
+      example = [ "Cargo.nix" ];
+    };
   };
 
   nix = {
-    binary = helpers.defaultNullOpts.mkStr "nix" ''
-      The path to the `nix` binary.
-    '';
+    binary = helpers.defaultNullOpts.mkStr' {
+      default = "nix";
+      description = "The path to the `nix` binary.";
+      example = "/run/current-system/sw/bin/nix";
+    };
 
-    maxMemoryMB = helpers.defaultNullOpts.mkInt 2560 ''
-      The heap memory limit in MiB for `nix` evaluation.
-      Currently it only applies to flake evaluation when `autoEvalInputs` is enabled, and only works
-      for Linux.
-      Other `nix` invocations may be also applied in the future.
-      `null` means no limit.
-      As a reference, `nix flake show --legacy nixpkgs` usually requires about 2GiB memory.
-    '';
+    maxMemoryMB = helpers.defaultNullOpts.mkUnsignedInt' {
+      default = 2560;
+      example = 1024;
+      description = ''
+        The heap memory limit in MiB for `nix` evaluation.
+
+        Currently it only applies to flake evaluation when `autoEvalInputs` is enabled, and only works
+        for Linux.
+        Other `nix` invocations may be also applied in the future.
+        `null` means no limit.
+
+        As a reference, `nix flake show --legacy nixpkgs` usually requires about 2GiB memory.
+      '';
+    };
 
     flake = {
       autoArchive = helpers.defaultNullOpts.mkBool false ''
@@ -51,13 +71,18 @@ with lib;
         The evaluation result is used to improve completion, but may cost lots of time and/or memory.
       '';
 
-      nixpkgsInputName = helpers.defaultNullOpts.mkStr "nixpkgs" ''
-        The input name of nixpkgs for NixOS options evaluation.
+      nixpkgsInputName = helpers.defaultNullOpts.mkStr' {
+        default = "nixpkgs";
+        example = "nixos";
+        description = ''
+          The input name of nixpkgs for NixOS options evaluation.
 
-        The options hierarchy is used to improve completion, but may cost lots of time and/or memory.
-        If this value is `null` or is not found in the workspace flake's inputs, NixOS options are
-        not evaluated.
-      '';
+          The options hierarchy is used to improve completion, but may cost lots of time and/or memory.
+
+          If this value is `null` or is not found in the workspace flake's inputs, NixOS options are
+          not evaluated.
+        '';
+      };
     };
   };
 }
