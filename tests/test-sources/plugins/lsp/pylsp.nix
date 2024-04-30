@@ -1,6 +1,5 @@
 {
-  # Example pylsp config
-  default = {
+  example = {
     plugins.lsp = {
       enable = true;
 
