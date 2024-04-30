@@ -8,6 +8,7 @@
     ./colorschemes/ayu.nix
     ./colorschemes/base16
     ./colorschemes/catppuccin.nix
+    ./colorschemes/cyberdream.nix
     ./colorschemes/dracula.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
