@@ -1,5 +1,6 @@
 # Maps each source name to the plugin that provides it
 {
+  async_path = "cmp-async-path";
   buffer = "cmp-buffer";
   calc = "cmp-calc";
   dap = "cmp-dap";
