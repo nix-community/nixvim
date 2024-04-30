@@ -664,6 +664,7 @@ let
       name = "yamlls";
       description = "yamlls for YAML";
       package = pkgs.yaml-language-server;
+      settings = cfg: { yaml = cfg; };
     }
     {
       name = "zls";
