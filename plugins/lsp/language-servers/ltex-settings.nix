@@ -2,8 +2,19 @@
 with lib;
 {
   enabled =
-    helpers.defaultNullOpts.mkNullable (with types; either bool (listOf str))
-      ''["bibtex" "context" "context.tex" "html" "latex" "markdown" "org" "restructuredtext" "rsweave"]''
+    helpers.defaultNullOpts.mkNullableWithRaw
+      (with helpers.nixvimTypes; either bool (listOf (maybeRaw str)))
+      [
+        "bibtex"
+        "context"
+        "context.tex"
+        "html"
+        "latex"
+        "markdown"
+        "org"
+        "restructuredtext"
+        "rsweave"
+      ]
       ''
         Controls whether the extension is enabled.
         Allows disabling LanguageTool on specific workspaces or for specific code language modes
@@ -91,161 +102,169 @@ with lib;
     - "zh-CN": Chinese
   '';
 
-  dictionary = helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str)) "{}" ''
-    Lists of additional words that should not be counted as spelling errors.
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<WORD1>"
-          "<WORD2>"
-          ...
-        ];
-        "<LANGUAGE2>" = [
-          "<WORD1>"
-          "<WORD2>"
-        ];
-        ...
-      };
-    ```
-    where <LANGUAGE> denotes the language code in `settings.language`.
+  dictionary =
+    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
+      ''
+        Lists of additional words that should not be counted as spelling errors.
+        This setting is language-specific, so use an attrs of the format
+        ```nix
+          {
+            "<LANGUAGE1>" = [
+              "<WORD1>"
+              "<WORD2>"
+              ...
+            ];
+            "<LANGUAGE2>" = [
+              "<WORD1>"
+              "<WORD2>"
+            ];
+            ...
+          };
+        ```
+        where <LANGUAGE> denotes the language code in `settings.language`.
 
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    By default, no additional spelling errors will be ignored.
+        This setting is a multi-scope setting. See the documentation for details.
+        This setting supports external files. See the documentation for details.
+        By default, no additional spelling errors will be ignored.
 
-    Example:
-    ```nix
-    {
-      "en-US" = [
-        "adaptivity"
-        "precomputed"
-        "subproblem"
-      ];
-      "de-DE" = [
-        "B-Splines"
-        ":/path/to/externalFile.txt"
-      ];
-    }
-    ```
-  '';
+        Example:
+        ```nix
+        {
+          "en-US" = [
+            "adaptivity"
+            "precomputed"
+            "subproblem"
+          ];
+          "de-DE" = [
+            "B-Splines"
+            ":/path/to/externalFile.txt"
+          ];
+        }
+        ```
+      '';
 
-  disabledRules = helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str)) "{}" ''
-    Lists of rules that should be disabled (if enabled by default by LanguageTool).
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<WORD1>"
-          "<WORD2>"
-          ...
-        ];
-        "<LANGUAGE2>" = [
-          "<WORD1>"
-          "<WORD2>"
-        ];
-        ...
-      };
-    ```
-    where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
-    the LanguageTool rule.
+  disabledRules =
+    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
+      ''
+        Lists of rules that should be disabled (if enabled by default by LanguageTool).
+        This setting is language-specific, so use an attrs of the format
+        ```nix
+          {
+            "<LANGUAGE1>" = [
+              "<WORD1>"
+              "<WORD2>"
+              ...
+            ];
+            "<LANGUAGE2>" = [
+              "<WORD1>"
+              "<WORD2>"
+            ];
+            ...
+          };
+        ```
+        where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
+        the LanguageTool rule.
 
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    By default, no additional rules will be disabled.
+        This setting is a multi-scope setting. See the documentation for details.
+        This setting supports external files. See the documentation for details.
+        By default, no additional rules will be disabled.
 
-    Example:
-    ```nix
-    {
-      "en-US" = [
-        "EN_QUOTES"
-        "UPPERCASE_SENTENCE_START"
-        ":/path/to/externalFile.txt"
-      ];
-    }
-    ```
-  '';
+        Example:
+        ```nix
+        {
+          "en-US" = [
+            "EN_QUOTES"
+            "UPPERCASE_SENTENCE_START"
+            ":/path/to/externalFile.txt"
+          ];
+        }
+        ```
+      '';
 
-  enabledRules = helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str)) "{}" ''
-    Lists of rules that should be enabled (if disabled by default by LanguageTool).
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<WORD1>"
-          "<WORD2>"
-          ...
-        ];
-        "<LANGUAGE2>" = [
-          "<WORD1>"
-          "<WORD2>"
-        ];
-        ...
-      };
-    ```
-    where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
-    the LanguageTool rule.
+  enabledRules =
+    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
+      ''
+        Lists of rules that should be enabled (if disabled by default by LanguageTool).
+        This setting is language-specific, so use an attrs of the format
+        ```nix
+          {
+            "<LANGUAGE1>" = [
+              "<WORD1>"
+              "<WORD2>"
+              ...
+            ];
+            "<LANGUAGE2>" = [
+              "<WORD1>"
+              "<WORD2>"
+            ];
+            ...
+          };
+        ```
+        where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
+        the LanguageTool rule.
 
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    By default, no additional rules will be enabled.
+        This setting is a multi-scope setting. See the documentation for details.
+        This setting supports external files. See the documentation for details.
+        By default, no additional rules will be enabled.
 
-    Example:
-    ```nix
-      {
-        "en-GB" = [
-          "PASSIVE_VOICE"
-          "OXFORD_SPELLING_NOUNS"
-          ":/path/to/externalFile.txt"
-        ];
-      }
-    ```
-  '';
+        Example:
+        ```nix
+          {
+            "en-GB" = [
+              "PASSIVE_VOICE"
+              "OXFORD_SPELLING_NOUNS"
+              ":/path/to/externalFile.txt"
+            ];
+          }
+        ```
+      '';
 
-  hiddenFalsePositives = helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str)) "{}" ''
-    Lists of false-positive diagnostics to hide (by hiding all diagnostics of a specific rule
-    within a specific sentence).
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<JSON1>"
-          "<JSON2>"
-          ...
-        ];
-        "<LANGUAGE2>" = [
-          "<JSON1>"
-          "<JSON2>"
-        ];
-        ...
-      };
-    ```
-    where `<LANGUAGE>` denotes the language code in `settings.language` and `<JSON>` is a JSON
-    string containing information about the rule and sentence.
+  hiddenFalsePositives =
+    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
+      ''
+        Lists of false-positive diagnostics to hide (by hiding all diagnostics of a specific rule
+        within a specific sentence).
+        This setting is language-specific, so use an attrs of the format
+        ```nix
+          {
+            "<LANGUAGE1>" = [
+              "<JSON1>"
+              "<JSON2>"
+              ...
+            ];
+            "<LANGUAGE2>" = [
+              "<JSON1>"
+              "<JSON2>"
+            ];
+            ...
+          };
+        ```
+        where `<LANGUAGE>` denotes the language code in `settings.language` and `<JSON>` is a JSON
+        string containing information about the rule and sentence.
 
-    Although it is possible to manually edit this setting, the intended way is the
-    `Hide false positive` quick fix.
+        Although it is possible to manually edit this setting, the intended way is the
+        `Hide false positive` quick fix.
 
-    The JSON string currently has the form `{"rule": "<RULE>", "sentence": "<SENTENCE>"}`, where
-    `<RULE>` is the ID of the LanguageTool rule and `<SENTENCE>` is a Java-compatible regular
-    expression.
-    All occurrences of the given rule are hidden in sentences (as determined by the LanguageTool
-    tokenizer) that match the regular expression.
-    See the documentation for details.
+        The JSON string currently has the form `{"rule": "<RULE>", "sentence": "<SENTENCE>"}`, where
+        `<RULE>` is the ID of the LanguageTool rule and `<SENTENCE>` is a Java-compatible regular
+        expression.
+        All occurrences of the given rule are hidden in sentences (as determined by the LanguageTool
+        tokenizer) that match the regular expression.
+        See the documentation for details.
 
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    If this list is very large, performance may suffer.
+        This setting is a multi-scope setting. See the documentation for details.
+        This setting supports external files. See the documentation for details.
+        If this list is very large, performance may suffer.
 
-    Example:
-    ```nix
-      {
-        "en-US" = [ ":/path/to/externalFile.txt" ];
-      }
-    ```
-  '';
+        Example:
+        ```nix
+          {
+            "en-US" = [ ":/path/to/externalFile.txt" ];
+          }
+        ```
+      '';
 
-  fields = helpers.defaultNullOpts.mkNullable (with types; attrsOf bool) "{}" ''
+  fields = helpers.defaultNullOpts.mkAttrsOf types.bool { } ''
     List of BibTEX fields whose values are to be checked in BibTEX files.
 
     This setting is an attrs with the field names as keys (not restricted to classical BibTEX
@@ -264,7 +283,7 @@ with lib;
   '';
 
   latex = {
-    commands = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
+    commands = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       List of LATEX commands to be handled by the LATEX parser, listed together with empty arguments
       (e.g., `"ref{}"`, `"\documentclass[]{}"`).
 
@@ -287,7 +306,7 @@ with lib;
       ```
     '';
 
-    environments = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
+    environments = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       List of names of LATEX environments to be handled by the LATEX parser.
 
       This setting is an attrs with the environment names as keys and corresponding actions as
@@ -307,7 +326,7 @@ with lib;
   };
 
   markdown = {
-    nodes = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
+    nodes = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       List of Markdown node types to be handled by the Markdown parser.
 
       This setting is an attrs with the node types as keys and corresponding actions as values.
@@ -332,14 +351,12 @@ with lib;
   };
 
   configurationTarget =
-    helpers.defaultNullOpts.mkNullable (with types; attrsOf str)
-      ''
-        {
-          dictionary = "workspaceFolderExternalFile";
-          disabledRules = "workspaceFolderExternalFile";
-          hiddenFalsePositives = "workspaceFolderExternalFile";
-        }
-      ''
+    helpers.defaultNullOpts.mkAttrsOf types.str
+      {
+        dictionary = "workspaceFolderExternalFile";
+        disabledRules = "workspaceFolderExternalFile";
+        hiddenFalsePositives = "workspaceFolderExternalFile";
+      }
       ''
         Controls which `settings.json` or external setting file (see documentation) to update when
         using one of the quick fixes.
@@ -505,7 +522,7 @@ with lib;
       Changes require restarting LTEX to take effect.
     '';
 
-    initialHeapSize = helpers.defaultNullOpts.mkInt 64 ''
+    initialHeapSize = helpers.defaultNullOpts.mkUnsignedInt 64 ''
       Initial size of the Java heap memory in megabytes (corresponds to Java’s -Xms option, must be
       a positive integer).
 
@@ -514,7 +531,7 @@ with lib;
       Changes require restarting LTEX to take effect.
     '';
 
-    maximumHeapSize = helpers.defaultNullOpts.mkInt 512 ''
+    maximumHeapSize = helpers.defaultNullOpts.mkUnsignedInt 512 ''
       Maximum size of the Java heap memory in megabytes (corresponds to Java’s -Xmx option, must be
       a positive integer).
 
@@ -526,7 +543,7 @@ with lib;
     '';
   };
 
-  sentenceCacheSize = helpers.defaultNullOpts.mkInt 2000 ''
+  sentenceCacheSize = helpers.defaultNullOpts.mkUnsignedInt 2000 ''
     Size of the LanguageTool ResultCache in sentences (must be a positive integer).
 
     If only a small portion of the text changed (e.g., a single key press in the editor),
@@ -554,7 +571,9 @@ with lib;
   '';
 
   diagnosticSeverity =
-    helpers.defaultNullOpts.mkNullable (with types; either str (attrsOf str)) "information"
+    helpers.defaultNullOpts.mkNullableWithRaw
+      (with helpers.nixvimTypes; either str (attrsOf (maybeRaw str)))
+      "information"
       ''
         Severity of the diagnostics corresponding to the grammar and spelling errors.
 
