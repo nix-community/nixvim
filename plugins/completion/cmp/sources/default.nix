@@ -22,6 +22,7 @@ in {
       ./codeium-nvim.nix
       ./copilot-cmp.nix
       ./cmp-fish.nix
+      ./cmp-git.nix
       ./cmp-tabby.nix
       ./cmp-tabnine.nix
       ./crates-nvim.nix
