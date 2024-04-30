@@ -284,57 +284,7 @@ let
       description = "lua-ls for Lua";
       package = pkgs.lua-language-server;
       serverName = "lua_ls";
-
-      # All available settings are documented here:
-      # https://github.com/LuaLS/lua-language-server/wiki/Settings
-      settingsOptions = {
-        runtime = {
-          version = mkOption {
-            type = types.nullOr types.str;
-            description = ''
-              Tell the language server which version of Lua you're using
-              (most likely LuaJIT in the case of Neovim)
-            '';
-            default = "LuaJIT";
-          };
-        };
-        diagnostics = {
-          globals = mkOption {
-            type = types.nullOr (types.listOf types.str);
-            description = ''
-              An array of variable names that will be declared as global.
-            '';
-            default = [ "vim" ];
-          };
-        };
-        workspace = {
-          library = mkOption {
-            type = with types; nullOr (listOf (either str helpers.nixvimTypes.rawLua));
-            description = ''
-              An array of abosolute or workspace-relative paths that will be added to the workspace
-              diagnosis - meaning you will get completion and context from these library files.
-              Can be a file or directory.
-              Files included here will have some features disabled such as renaming fields to
-              prevent accidentally renaming your library files.
-            '';
-            default = [ (helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)") ];
-          };
-          checkThirdParty = mkOption {
-            type = types.nullOr types.bool;
-            description = ''
-              Whether third party libraries can be automatically detected and applied.
-              Third party libraries can set up the environment to be as close as possible to your
-              target runtime environment.
-            '';
-            # prevents an annoying warning
-            # https://github.com/LuaLS/lua-language-server/discussions/1688#discussioncomment-4185003
-            default = false;
-          };
-        };
-        telemetry = {
-          enable = mkEnableOption "telemetry";
-        };
-      };
+      settingsOptions = import ./lua-ls-settings.nix { inherit lib helpers; };
       settings = cfg: { Lua = cfg; };
     }
     {
