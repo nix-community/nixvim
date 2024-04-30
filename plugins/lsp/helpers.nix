@@ -73,7 +73,10 @@
               };
             };
 
-          settings = settingsOptions;
+          settings = helpers.mkSettingsOption {
+            description = "The settings for this LSP.";
+            options = settingsOptions;
+          };
 
           extraOptions = mkOption {
             default = {};
