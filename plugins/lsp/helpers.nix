@@ -7,6 +7,7 @@
     cmd ? (cfg: null),
     settings ? (cfg: cfg),
     settingsOptions ? {},
+    extraConfig ? cfg: {},
     ...
   }:
   # returns a module
@@ -123,6 +124,7 @@
           (basePluginPath ++ ["extraSettings"])
           "You can use `${basePluginPathString}.extraOptions.settings` instead."
         )
+        (extraConfig cfg)
       ];
     };
 }
