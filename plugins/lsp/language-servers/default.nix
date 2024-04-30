@@ -245,6 +245,7 @@ let
         "${cfg.package}/bin/vscode-json-language-server"
         "--stdio"
       ];
+      settings = cfg: { json = cfg; };
     }
     {
       name = "julials";
