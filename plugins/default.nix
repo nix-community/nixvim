@@ -103,6 +103,7 @@
     ./lsp/lsp-lines.nix
     ./lsp/lsp-status.nix
     ./lsp/nvim-lightbulb.nix
+    ./lsp/schemastore.nix
     ./lsp/trouble.nix
     ./lsp/wtf.nix
 
