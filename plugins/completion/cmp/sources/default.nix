@@ -7,7 +7,7 @@
 }:
 with lib; let
   cmpLib = import ../cmp-helpers.nix {inherit lib config helpers pkgs;};
-  cmpSourcesPluginNames = attrValues cmpLib.pluginAndSourceNames;
+  cmpSourcesPluginNames = attrValues (import ../sources.nix);
   pluginModules =
     map
     (
