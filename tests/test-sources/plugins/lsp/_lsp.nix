@@ -171,10 +171,7 @@
           prolog-ls.enable = true;
           purescriptls.enable = true;
           pylsp.enable = true;
-          # As of 2024-03-11, pylyzer is broken
-          # TODO: re-enable this test when fixed
-          # https://github.com/mtshiba/pylyzer/issues/78
-          pylyzer.enable = false;
+          pylyzer.enable = true;
           pyright.enable = true;
           ruff.enable = true;
           ruff-lsp.enable = true;
