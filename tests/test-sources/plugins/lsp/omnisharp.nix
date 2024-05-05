@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   defaults = {
     plugins.lsp = {
       enable = true;

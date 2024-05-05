@@ -20,7 +20,10 @@
         direction = "require'hop.hint'.HintDirection.BEFORE_CURSOR";
         hint_position = "require'hop.hint'.HintPosition.BEGIN";
         hint_type = "require'hop.hint'.HintType.OVERLAY";
-        match_mappings = ["zh" "zh_sc"];
+        match_mappings = [
+          "zh"
+          "zh_sc"
+        ];
       };
     };
 
@@ -104,8 +107,8 @@
         yank_register = "";
         extensions = null;
         multi_windows = false;
-        excluded_filetypes = [];
-        match_mappings = [];
+        excluded_filetypes = [ ];
+        match_mappings = [ ];
       };
     };
   };

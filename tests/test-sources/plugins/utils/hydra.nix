@@ -86,7 +86,10 @@
                 end
               '';
             };
-            mode = ["n" "x"];
+            mode = [
+              "n"
+              "x"
+            ];
             body = "<leader>g";
             heads = [
               [
@@ -104,7 +107,7 @@
                     end
                   '';
                 }
-                {expr = true;}
+                { expr = true; }
               ]
               [
                 "K"
@@ -121,14 +124,34 @@
                     end
                   '';
                 }
-                {expr = true;}
+                { expr = true; }
               ]
-              ["s" ":Gitsigns stage_hunk<CR>" {silent = true;}]
-              ["u" {__raw = "require('gitsigns').undo_stage_hunk";}]
-              ["S" {__raw = "require('gitsigns').stage_buffer";}]
-              ["p" {__raw = "require('gitsigns').preview_hunk";}]
-              ["d" {__raw = "require('gitsigns').toggle_deleted";} {nowait = true;}]
-              ["b" {__raw = "require('gitsigns').blame_line";}]
+              [
+                "s"
+                ":Gitsigns stage_hunk<CR>"
+                { silent = true; }
+              ]
+              [
+                "u"
+                { __raw = "require('gitsigns').undo_stage_hunk"; }
+              ]
+              [
+                "S"
+                { __raw = "require('gitsigns').stage_buffer"; }
+              ]
+              [
+                "p"
+                { __raw = "require('gitsigns').preview_hunk"; }
+              ]
+              [
+                "d"
+                { __raw = "require('gitsigns').toggle_deleted"; }
+                { nowait = true; }
+              ]
+              [
+                "b"
+                { __raw = "require('gitsigns').blame_line"; }
+              ]
               [
                 "B"
                 {
@@ -139,8 +162,16 @@
                   '';
                 }
               ]
-              ["/" {__raw = "require('gitsigns').show";} {exit = true;}]
-              ["<Enter>" "<cmd>Neogit<CR>" {exit = true;}]
+              [
+                "/"
+                { __raw = "require('gitsigns').show"; }
+                { exit = true; }
+              ]
+              [
+                "<Enter>"
+                "<cmd>Neogit<CR>"
+                { exit = true; }
+              ]
               [
                 "q"
                 null

@@ -5,7 +5,8 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.bufferline;
 
   highlightOptions = {
@@ -88,28 +89,31 @@ with lib; let
 
     trunc_marker = "trunkMarker";
   };
-in {
+in
+{
   options = {
-    plugins.bufferline =
-      helpers.neovim-plugin.extraOptionsOptions
-      // {
-        enable = mkEnableOption "bufferline";
+    plugins.bufferline = helpers.neovim-plugin.extraOptionsOptions // {
+      enable = mkEnableOption "bufferline";
 
-        package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
+      package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
 
-        mode = helpers.defaultNullOpts.mkEnumFirstDefault ["buffers" "tabs"] "mode";
+      mode = helpers.defaultNullOpts.mkEnumFirstDefault [
+        "buffers"
+        "tabs"
+      ] "mode";
 
-        themable =
-          helpers.defaultNullOpts.mkBool true
-          "Whether or not bufferline highlights can be overridden externally";
+      themable = helpers.defaultNullOpts.mkBool true "Whether or not bufferline highlights can be overridden externally";
 
-        numbers =
-          helpers.defaultNullOpts.mkNullable
+      numbers =
+        helpers.defaultNullOpts.mkNullable
           (
             with types;
-              either
-              (enum ["none" "ordinal" "buffer_id" "both"])
-              helpers.nixvimTypes.rawLua
+            either (enum [
+              "none"
+              "ordinal"
+              "buffer_id"
+              "both"
+            ]) helpers.nixvimTypes.rawLua
           )
           "none"
           ''
@@ -121,166 +125,137 @@ in {
             ```
           '';
 
-        bufferCloseIcon = helpers.defaultNullOpts.mkStr "" "The close icon for each buffer.";
+      bufferCloseIcon = helpers.defaultNullOpts.mkStr "" "The close icon for each buffer.";
 
-        modifiedIcon =
-          helpers.defaultNullOpts.mkStr "●"
-          "The icon indicating a buffer was modified.";
+      modifiedIcon = helpers.defaultNullOpts.mkStr "●" "The icon indicating a buffer was modified.";
 
-        closeIcon = helpers.defaultNullOpts.mkStr "" "The close icon.";
+      closeIcon = helpers.defaultNullOpts.mkStr "" "The close icon.";
 
-        closeCommand =
-          helpers.defaultNullOpts.mkStr "bdelete! %d"
-          "Command or function run when closing a buffer.";
+      closeCommand = helpers.defaultNullOpts.mkStr "bdelete! %d" "Command or function run when closing a buffer.";
 
-        leftMouseCommand =
-          helpers.defaultNullOpts.mkStr "buffer %d"
-          "Command or function run when clicking on a buffer.";
+      leftMouseCommand = helpers.defaultNullOpts.mkStr "buffer %d" "Command or function run when clicking on a buffer.";
 
-        rightMouseCommand =
-          helpers.defaultNullOpts.mkStr "bdelete! %d"
-          "Command or function run when right clicking on a buffer.";
+      rightMouseCommand = helpers.defaultNullOpts.mkStr "bdelete! %d" "Command or function run when right clicking on a buffer.";
 
-        middleMouseCommand =
-          helpers.defaultNullOpts.mkStr "null"
-          "Command or function run when middle clicking on a buffer.";
+      middleMouseCommand = helpers.defaultNullOpts.mkStr "null" "Command or function run when middle clicking on a buffer.";
 
-        indicator = {
-          icon = helpers.defaultNullOpts.mkStr "▎" "icon";
+      indicator = {
+        icon = helpers.defaultNullOpts.mkStr "▎" "icon";
 
-          style = helpers.defaultNullOpts.mkEnumFirstDefault ["icon" "underline"] "style";
-        };
-
-        leftTruncMarker = helpers.defaultNullOpts.mkStr "" "left trunc marker";
-
-        rightTruncMarker = helpers.defaultNullOpts.mkStr "" "right trunc marker";
-
-        separatorStyle =
-          helpers.defaultNullOpts.mkEnum ["slant" "padded_slant" "slope" "padded_slope" "thick" "thin"] "thin"
-          "Separator style";
-
-        nameFormatter =
-          helpers.defaultNullOpts.mkLuaFn "null"
-          ''
-            A lua function that can be used to modify the buffer's label.
-            The argument 'buf' containing a name, path and bufnr is supplied.
-          '';
-
-        truncateNames = helpers.defaultNullOpts.mkBool true "Whether to truncate names.";
-
-        tabSize = helpers.defaultNullOpts.mkInt 18 "Size of the tabs";
-
-        maxNameLength = helpers.defaultNullOpts.mkInt 18 "Max length of a buffer name.";
-
-        colorIcons = helpers.defaultNullOpts.mkBool true "Enable color icons.";
-
-        showBufferIcons = helpers.defaultNullOpts.mkBool true "Show buffer icons";
-
-        showBufferCloseIcons = helpers.defaultNullOpts.mkBool true "Show buffer close icons";
-
-        getElementIcon =
-          helpers.defaultNullOpts.mkLuaFn "null"
-          ''
-            Lua function returning an element icon.
-
-            ```
-            fun(opts: IconFetcherOpts): string?, string?
-            ```
-          '';
-
-        showCloseIcon = helpers.defaultNullOpts.mkBool true "Whether to show the close icon.";
-
-        showTabIndicators =
-          helpers.defaultNullOpts.mkBool true
-          "Whether to show the tab indicators.";
-
-        showDuplicatePrefix =
-          helpers.defaultNullOpts.mkBool true
-          "Whether to show the prefix of duplicated files.";
-
-        enforceRegularTabs =
-          helpers.defaultNullOpts.mkBool false
-          "Whether to enforce regular tabs.";
-
-        alwaysShowBufferline =
-          helpers.defaultNullOpts.mkBool true
-          "Whether to always show the bufferline.";
-
-        persistBufferSort =
-          helpers.defaultNullOpts.mkBool true
-          "Whether to make the buffer sort persistent.";
-
-        maxPrefixLength = helpers.defaultNullOpts.mkInt 15 "Maximum prefix length";
-
-        sortBy = helpers.defaultNullOpts.mkStr "id" "sort by";
-
-        diagnostics =
-          helpers.defaultNullOpts.mkNullable
-          (with types; either bool (enum ["nvim_lsp" "coc"])) "false" "diagnostics";
-
-        diagnosticsIndicator =
-          helpers.defaultNullOpts.mkLuaFn "null"
-          "Either `null` or a function that returns the diagnostics indicator.";
-
-        diagnosticsUpdateInInsert =
-          helpers.defaultNullOpts.mkBool true
-          "Whether diagnostics should update in insert mode";
-
-        offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "null" "offsets";
-
-        groups = {
-          items =
-            helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "[]"
-            "List of groups.";
-
-          options = {
-            toggleHiddenOnEnter =
-              helpers.defaultNullOpts.mkBool true
-              "Re-open hidden groups on bufenter.";
-          };
-        };
-
-        hover = {
-          enabled = mkEnableOption "hover";
-
-          reveal = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "reveal";
-
-          delay = helpers.defaultNullOpts.mkInt 200 "delay";
-        };
-
-        debug = {
-          logging = helpers.defaultNullOpts.mkBool false "Whether to enable logging";
-        };
-
-        customFilter =
-          helpers.defaultNullOpts.mkLuaFn "null"
-          ''
-            ```
-            fun(buf: number, bufnums: number[]): boolean
-            ```
-          '';
-
-        highlights =
-          genAttrs
-          (attrValues highlightOptions)
-          (
-            name:
-              helpers.mkNullOrOption helpers.nixvimTypes.highlight ''
-                Highlight group definition for ${name}.
-              ''
-          );
+        style = helpers.defaultNullOpts.mkEnumFirstDefault [
+          "icon"
+          "underline"
+        ] "style";
       };
+
+      leftTruncMarker = helpers.defaultNullOpts.mkStr "" "left trunc marker";
+
+      rightTruncMarker = helpers.defaultNullOpts.mkStr "" "right trunc marker";
+
+      separatorStyle = helpers.defaultNullOpts.mkEnum [
+        "slant"
+        "padded_slant"
+        "slope"
+        "padded_slope"
+        "thick"
+        "thin"
+      ] "thin" "Separator style";
+
+      nameFormatter = helpers.defaultNullOpts.mkLuaFn "null" ''
+        A lua function that can be used to modify the buffer's label.
+        The argument 'buf' containing a name, path and bufnr is supplied.
+      '';
+
+      truncateNames = helpers.defaultNullOpts.mkBool true "Whether to truncate names.";
+
+      tabSize = helpers.defaultNullOpts.mkInt 18 "Size of the tabs";
+
+      maxNameLength = helpers.defaultNullOpts.mkInt 18 "Max length of a buffer name.";
+
+      colorIcons = helpers.defaultNullOpts.mkBool true "Enable color icons.";
+
+      showBufferIcons = helpers.defaultNullOpts.mkBool true "Show buffer icons";
+
+      showBufferCloseIcons = helpers.defaultNullOpts.mkBool true "Show buffer close icons";
+
+      getElementIcon = helpers.defaultNullOpts.mkLuaFn "null" ''
+        Lua function returning an element icon.
+
+        ```
+        fun(opts: IconFetcherOpts): string?, string?
+        ```
+      '';
+
+      showCloseIcon = helpers.defaultNullOpts.mkBool true "Whether to show the close icon.";
+
+      showTabIndicators = helpers.defaultNullOpts.mkBool true "Whether to show the tab indicators.";
+
+      showDuplicatePrefix = helpers.defaultNullOpts.mkBool true "Whether to show the prefix of duplicated files.";
+
+      enforceRegularTabs = helpers.defaultNullOpts.mkBool false "Whether to enforce regular tabs.";
+
+      alwaysShowBufferline = helpers.defaultNullOpts.mkBool true "Whether to always show the bufferline.";
+
+      persistBufferSort = helpers.defaultNullOpts.mkBool true "Whether to make the buffer sort persistent.";
+
+      maxPrefixLength = helpers.defaultNullOpts.mkInt 15 "Maximum prefix length";
+
+      sortBy = helpers.defaultNullOpts.mkStr "id" "sort by";
+
+      diagnostics = helpers.defaultNullOpts.mkNullable (
+        with types;
+        either bool (enum [
+          "nvim_lsp"
+          "coc"
+        ])
+      ) "false" "diagnostics";
+
+      diagnosticsIndicator = helpers.defaultNullOpts.mkLuaFn "null" "Either `null` or a function that returns the diagnostics indicator.";
+
+      diagnosticsUpdateInInsert = helpers.defaultNullOpts.mkBool true "Whether diagnostics should update in insert mode";
+
+      offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "null" "offsets";
+
+      groups = {
+        items = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "[]" "List of groups.";
+
+        options = {
+          toggleHiddenOnEnter = helpers.defaultNullOpts.mkBool true "Re-open hidden groups on bufenter.";
+        };
+      };
+
+      hover = {
+        enabled = mkEnableOption "hover";
+
+        reveal = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "reveal";
+
+        delay = helpers.defaultNullOpts.mkInt 200 "delay";
+      };
+
+      debug = {
+        logging = helpers.defaultNullOpts.mkBool false "Whether to enable logging";
+      };
+
+      customFilter = helpers.defaultNullOpts.mkLuaFn "null" ''
+        ```
+        fun(buf: number, bufnums: number[]): boolean
+        ```
+      '';
+
+      highlights = genAttrs (attrValues highlightOptions) (
+        name:
+        helpers.mkNullOrOption helpers.nixvimTypes.highlight ''
+          Highlight group definition for ${name}.
+        ''
+      );
+    };
   };
 
-  config = let
-    setupOptions = with cfg; {
-      options =
-        {
-          inherit
-            mode
-            themable
-            numbers
-            ;
+  config =
+    let
+      setupOptions = with cfg; {
+        options = {
+          inherit mode themable numbers;
           buffer_close_icon = bufferCloseIcon;
           modified_icon = modifiedIcon;
           close_icon = closeIcon;
@@ -319,29 +294,19 @@ in {
             };
           };
           hover = {
-            inherit
-              (hover)
-              enabled
-              reveal
-              delay
-              ;
+            inherit (hover) enabled reveal delay;
           };
           debug = {
             inherit (debug) logging;
           };
           custom_filter = customFilter;
-        }
-        // cfg.extraOptions;
+        } // cfg.extraOptions;
 
-      highlights =
-        mapAttrs
-        (
-          pluginOptionName: nixvimOptionName:
-            cfg.highlights.${nixvimOptionName}
-        )
-        highlightOptions;
-    };
-  in
+        highlights = mapAttrs (
+          pluginOptionName: nixvimOptionName: cfg.highlights.${nixvimOptionName}
+        ) highlightOptions;
+      };
+    in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package

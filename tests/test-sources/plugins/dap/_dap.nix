@@ -11,7 +11,10 @@
         executables = {
           python = {
             command = ".virtualenvs/tools/bin/python";
-            args = ["-m" "debugpy.adapter"];
+            args = [
+              "-m"
+              "debugpy.adapter"
+            ];
           };
         };
         servers = {
@@ -54,10 +57,10 @@
       enable = true;
 
       adapters = {
-        executables = {};
-        servers = {};
+        executables = { };
+        servers = { };
       };
-      configurations = {};
+      configurations = { };
       signs = {
         dapStopped = {
           text = "→";

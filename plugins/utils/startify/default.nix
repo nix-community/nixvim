@@ -7,48 +7,57 @@
 }:
 with lib;
 with helpers.vim-plugin;
-  mkVimPlugin config {
-    name = "startify";
-    originalName = "vim-startify";
-    defaultPackage = pkgs.vimPlugins.vim-startify;
-    globalPrefix = "startify_";
+mkVimPlugin config {
+  name = "startify";
+  originalName = "vim-startify";
+  defaultPackage = pkgs.vimPlugins.vim-startify;
+  globalPrefix = "startify_";
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    # TODO introduced 2024-03-01: remove 2024-05-01
-    deprecateExtraConfig = true;
-    optionsRenamedToSettings = [
-      "sessionDir"
-      "lists"
-      "bookmarks"
-      "commands"
-      "filesNumber"
-      "sessionAutoload"
-      "sessionBeforeSave"
-      "sessionPersistence"
-      "sessionDeleteBuffers"
-      "changeToDir"
-      "changeToVcsRoot"
-      "changeCmd"
-      "paddingLeft"
-      "enableSpecial"
-      "enableUnsafe"
-      "sessionRemoveLines"
-      "sessionNumber"
-      "sessionSort"
-      "customIndices"
-      "customHeader"
-      "customFooter"
-      "relativePath"
-      "useEnv"
-    ];
-    imports =
-      map
+  # TODO introduced 2024-03-01: remove 2024-05-01
+  deprecateExtraConfig = true;
+  optionsRenamedToSettings = [
+    "sessionDir"
+    "lists"
+    "bookmarks"
+    "commands"
+    "filesNumber"
+    "sessionAutoload"
+    "sessionBeforeSave"
+    "sessionPersistence"
+    "sessionDeleteBuffers"
+    "changeToDir"
+    "changeToVcsRoot"
+    "changeCmd"
+    "paddingLeft"
+    "enableSpecial"
+    "enableUnsafe"
+    "sessionRemoveLines"
+    "sessionNumber"
+    "sessionSort"
+    "customIndices"
+    "customHeader"
+    "customFooter"
+    "relativePath"
+    "useEnv"
+  ];
+  imports =
+    map
       (
         option:
-          mkRenamedOptionModule
-          ["plugins" "startify" option.old]
-          ["plugins" "startify" "settings" option.new]
+        mkRenamedOptionModule
+          [
+            "plugins"
+            "startify"
+            option.old
+          ]
+          [
+            "plugins"
+            "startify"
+            "settings"
+            option.new
+          ]
       )
       [
         {
@@ -85,20 +94,20 @@ with helpers.vim-plugin;
         }
       ];
 
-    settingsOptions = import ./options.nix {inherit lib helpers;};
+  settingsOptions = import ./options.nix { inherit lib helpers; };
 
-    # TODO
-    settingsExample = {
-      custom_header = [
-        ""
-        "     ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
-        "     ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
-        "     ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
-        "     ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
-        "     ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
-        "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
-      ];
-      change_to_dir = false;
-      fortune_use_unicode = true;
-    };
-  }
+  # TODO
+  settingsExample = {
+    custom_header = [
+      ""
+      "     ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+      "     ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+      "     ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+      "     ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+      "     ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+      "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
+    ];
+    change_to_dir = false;
+    fortune_use_unicode = true;
+  };
+}

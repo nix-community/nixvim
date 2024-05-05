@@ -5,29 +5,29 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.nix-develop;
-in {
-  options.plugins.nix-develop =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "nix-develop.nvim";
+in
+{
+  options.plugins.nix-develop = helpers.neovim-plugin.extraOptionsOptions // {
+    enable = mkEnableOption "nix-develop.nvim";
 
-      package = helpers.mkPackageOption "nix-develop.nvim" pkgs.vimPlugins.nix-develop-nvim;
+    package = helpers.mkPackageOption "nix-develop.nvim" pkgs.vimPlugins.nix-develop-nvim;
 
-      ignoredVariables = mkOption {
-        type = types.attrsOf types.bool;
-        default = {};
-      };
-
-      separatedVariables = mkOption {
-        type = types.attrsOf types.str;
-        default = {};
-      };
+    ignoredVariables = mkOption {
+      type = types.attrsOf types.bool;
+      default = { };
     };
 
+    separatedVariables = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+    };
+  };
+
   config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
     extraConfigLua = ''
       local __ignored_variables = ${helpers.toLuaObject cfg.ignoredVariables}
       for ignoredVariable, shouldIgnore in ipairs(__ignored_variables) do

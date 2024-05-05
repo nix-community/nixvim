@@ -60,8 +60,8 @@
         lualine = {
           transparent = false;
         };
-        colors = {};
-        highlights = {};
+        colors = { };
+        highlights = { };
         diagnostics = {
           darker = true;
           undercurl = true;

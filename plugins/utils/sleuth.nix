@@ -11,7 +11,7 @@ helpers.vim-plugin.mkVimPlugin config {
   defaultPackage = pkgs.vimPlugins.vim-sleuth;
   globalPrefix = "sleuth_";
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     heuristics = helpers.defaultNullOpts.mkBool true ''

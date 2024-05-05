@@ -4,7 +4,8 @@
   installShellFiles,
   nixos-render-docs,
   pandoc,
-}: let
+}:
+let
   manualFilter = ''
     local text = pandoc.text
 
@@ -23,26 +24,34 @@
     end
   '';
 
-  manHeader = let
-    mkMDSection = file: "<(pandoc --lua-filter <(echo \"$manualFilter\") -f gfm -t man ${file})";
-  in
-    runCommand "nixvim-general-doc-manpage" {
-      nativeBuildInputs = [pandoc];
-      inherit manualFilter;
-    } ''
-      mkdir -p $out
-      cat \
-        ${./nixvim-header-start.5} \
-        ${mkMDSection ../user-guide/helpers.md} \
-        ${mkMDSection ../user-guide/faq.md} \
-        ${./nixvim-header-end.5} \
-        >$out/nixvim-header.5
-    '';
-  # FIXME add platform specific docs to manpage
+  manHeader =
+    let
+      mkMDSection = file: "<(pandoc --lua-filter <(echo \"$manualFilter\") -f gfm -t man ${file})";
+    in
+    runCommand "nixvim-general-doc-manpage"
+      {
+        nativeBuildInputs = [ pandoc ];
+        inherit manualFilter;
+      }
+      ''
+        mkdir -p $out
+        cat \
+          ${./nixvim-header-start.5} \
+          ${mkMDSection ../user-guide/helpers.md} \
+          ${mkMDSection ../user-guide/faq.md} \
+          ${./nixvim-header-end.5} \
+          >$out/nixvim-header.5
+      '';
 in
-  runCommand "nixvim-configuration-reference-manpage" {
-    nativeBuildInputs = [installShellFiles nixos-render-docs];
-  } ''
+# FIXME add platform specific docs to manpage
+runCommand "nixvim-configuration-reference-manpage"
+  {
+    nativeBuildInputs = [
+      installShellFiles
+      nixos-render-docs
+    ];
+  }
+  ''
     # Generate man-pages
     mkdir -p $out/share/man/man5
     nixos-render-docs -j $NIX_BUILD_CORES options manpage \

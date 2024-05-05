@@ -1,6 +1,5 @@
 {
-  empty = {
-  };
+  empty = { };
 
   example = {
     plugins.tagbar = {
@@ -12,7 +11,10 @@
         autofocus = false;
         foldlevel = 2;
         autoshowtag = true;
-        iconchars = ["" ""];
+        iconchars = [
+          ""
+          ""
+        ];
         wrap = true;
         show_data_type = true;
         show_visibility = true;

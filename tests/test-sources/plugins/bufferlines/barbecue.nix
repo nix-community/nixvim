@@ -9,8 +9,11 @@
 
       attachNavic = true;
       createAutocmd = true;
-      includeBuftypes = [""];
-      excludeFiletypes = ["netrw" "toggleterm"];
+      includeBuftypes = [ "" ];
+      excludeFiletypes = [
+        "netrw"
+        "toggleterm"
+      ];
       modifiers = {
         dirname = ":~:.";
         basename = "";

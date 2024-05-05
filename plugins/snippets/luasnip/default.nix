@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.luasnip;
-in {
+in
+{
   options.plugins.luasnip = {
     enable = mkEnableOption "luasnip";
 
@@ -24,11 +26,11 @@ in {
            store_selection_keys = "<Tab>",
          }
       '';
-      default = {};
+      default = { };
     };
 
     fromVscode = mkOption {
-      default = [];
+      default = [ ];
       example = ''
         [
           {}
@@ -42,56 +44,57 @@ in {
         # require("luasnip.loaders.from_vscode").lazy_load({['paths'] = {'/nix/store/.../path/to/snippets'}})
         #
       '';
-      type = types.listOf (types.submodule {
-        options = {
-          lazyLoad = mkOption {
-            type = types.bool;
-            default = true;
-            description = ''
-              Whether or not to lazy load the snippets
-            '';
-          };
+      type = types.listOf (
+        types.submodule {
+          options = {
+            lazyLoad = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether or not to lazy load the snippets
+              '';
+            };
 
-          # TODO: add option to also include the default runtimepath
-          paths = mkOption {
-            default = null;
-            type = with types;
-              nullOr (oneOf
-                [
+            # TODO: add option to also include the default runtimepath
+            paths = mkOption {
+              default = null;
+              type =
+                with types;
+                nullOr (oneOf [
                   str
                   path
                   helpers.nixvimTypes.rawLua
-                  (listOf (oneOf
-                    [
-                      str
-                      path
-                      helpers.nixvimTypes.rawLua
-                    ]))
+                  (listOf (oneOf [
+                    str
+                    path
+                    helpers.nixvimTypes.rawLua
+                  ]))
                 ]);
-          };
+            };
 
-          exclude = mkOption {
-            type = types.nullOr (types.listOf types.str);
-            default = null;
-            description = ''
-              List of languages to exclude, by default is empty.
-            '';
-          };
+            exclude = mkOption {
+              type = types.nullOr (types.listOf types.str);
+              default = null;
+              description = ''
+                List of languages to exclude, by default is empty.
+              '';
+            };
 
-          include = mkOption {
-            type = types.nullOr (types.listOf types.str);
-            default = null;
-            description = ''
-              List of languages to include, by default is not set.
-            '';
+            include = mkOption {
+              type = types.nullOr (types.listOf types.str);
+              default = null;
+              description = ''
+                List of languages to include, by default is not set.
+              '';
+            };
           };
-        };
-      });
+        }
+      );
     };
 
     # TODO: add support for snipmate
     fromLua = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Load lua snippets with the lua loader.
         Check https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#lua for the necessary file structure.
@@ -104,69 +107,68 @@ in {
           }
         ]
       '';
-      type = types.listOf (types.submodule {
-        options = {
-          lazyLoad = mkOption {
-            type = types.bool;
-            default = true;
-            description = ''
-              Whether or not to lazy load the snippets
-            '';
-          };
-          paths =
-            helpers.defaultNullOpts.mkNullable
-            (
+      type = types.listOf (
+        types.submodule {
+          options = {
+            lazyLoad = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether or not to lazy load the snippets
+              '';
+            };
+            paths = helpers.defaultNullOpts.mkNullable (
               with types;
-                nullOr (
-                  oneOf
-                  [
-                    str
-                    path
-                    helpers.nixvimTypes.rawLua
-                    (listOf (oneOf
-                      [
-                        str
-                        path
-                        helpers.nixvimTypes.rawLua
-                      ]))
-                  ]
-                )
-            )
-            ""
-            "Paths with snippets specified with native lua";
-        };
-      });
+              nullOr (oneOf [
+                str
+                path
+                helpers.nixvimTypes.rawLua
+                (listOf (oneOf [
+                  str
+                  path
+                  helpers.nixvimTypes.rawLua
+                ]))
+              ])
+            ) "" "Paths with snippets specified with native lua";
+          };
+        }
+      );
     };
   };
 
-  config = let
-    fromVscodeLoaders =
-      lists.map
-      (loader: let
-        options = attrsets.getAttrs ["paths" "exclude" "include"] loader;
-      in ''
-        require("luasnip.loaders.from_vscode").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
-      '')
-      cfg.fromVscode;
-    fromLuaLoaders =
-      lists.map
-      (
-        loader: let
-          options = attrsets.getAttrs ["paths"] loader;
-        in ''
+  config =
+    let
+      fromVscodeLoaders = lists.map (
+        loader:
+        let
+          options = attrsets.getAttrs [
+            "paths"
+            "exclude"
+            "include"
+          ] loader;
+        in
+        ''
+          require("luasnip.loaders.from_vscode").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
+        ''
+      ) cfg.fromVscode;
+      fromLuaLoaders = lists.map (
+        loader:
+        let
+          options = attrsets.getAttrs [ "paths" ] loader;
+        in
+        ''
           require("luasnip.loaders.from_lua").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
         ''
-      )
-      cfg.fromLua;
-    extraConfig = [
-      ''
-        require("luasnip").config.set_config(${helpers.toLuaObject cfg.extraConfig})
-      ''
-    ];
-  in
+      ) cfg.fromLua;
+      extraConfig = [
+        ''
+          require("luasnip").config.set_config(${helpers.toLuaObject cfg.extraConfig})
+        ''
+      ];
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
-      extraLuaPackages = ps: [ps.jsregexp];
+      extraPlugins = [ cfg.package ];
+      extraLuaPackages = ps: [ ps.jsregexp ];
       extraConfigLua = concatStringsSep "\n" (extraConfig ++ fromVscodeLoaders ++ fromLuaLoaders);
     };
 }

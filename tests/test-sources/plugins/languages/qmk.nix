@@ -27,7 +27,7 @@
         auto_format_pattern = "*keymap.c";
         comment_preview = {
           position = "top";
-          keymap_overrides = {};
+          keymap_overrides = { };
           symbols = {
             space = " ";
             horz = "─";

@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   empty = {
     plugins.neogit.enable = true;
   };
@@ -6,7 +7,7 @@
   defaults = {
     # Otherwise `os.execute('which gpg')` returns an error and make the whole test derivation fail
     # (option `settings.commit_view.verify_commit`)
-    extraPackages = [pkgs.gnupg];
+    extraPackages = [ pkgs.gnupg ];
 
     plugins.neogit = {
       enable = true;
@@ -73,9 +74,18 @@
           kind = "split";
         };
         signs = {
-          hunk = ["" ""];
-          item = [">" "v"];
-          section = [">" "v"];
+          hunk = [
+            ""
+            ""
+          ];
+          item = [
+            ">"
+            "v"
+          ];
+          section = [
+            ">"
+            "v"
+          ];
         };
         integrations = {
           telescope = null;

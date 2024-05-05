@@ -10,5 +10,5 @@ helpers.vim-plugin.mkVimPlugin config {
   originalName = "surround.vim";
   defaultPackage = pkgs.vimPlugins.surround;
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 }

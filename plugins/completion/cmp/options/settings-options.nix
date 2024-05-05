@@ -1,8 +1,6 @@
+{ lib, helpers }:
+with lib;
 {
-  lib,
-  helpers,
-}:
-with lib; {
   performance = {
     debounce = helpers.defaultNullOpts.mkUnsignedInt 60 ''
       Sets debounce time.
@@ -39,16 +37,16 @@ with lib; {
   '';
 
   mapping = mkOption {
-    default = {};
-    type = with helpers.nixvimTypes;
-      maybeRaw
-      (attrsOf strLua);
-    apply = v:
-    # Handle the raw case first
-      if helpers.nixvimTypes.isRawType v
-      then v
+    default = { };
+    type = with helpers.nixvimTypes; maybeRaw (attrsOf strLua);
+    apply =
+      v:
+      # Handle the raw case first
+      if helpers.nixvimTypes.isRawType v then
+        v
       # When v is an attrs **but not {__raw = ...}**
-      else mapAttrs (_: helpers.mkRaw) v;
+      else
+        mapAttrs (_: helpers.mkRaw) v;
     example = {
       "<C-d>" = "cmp.mapping.scroll_docs(-4)";
       "<C-f>" = "cmp.mapping.scroll_docs(4)";
@@ -110,24 +108,16 @@ with lib; {
       The number of characters needed to trigger auto-completion.
     '';
 
-    keyword_pattern =
-      helpers.defaultNullOpts.mkLua
-      ''[[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]]''
-      "The default keyword pattern.";
+    keyword_pattern = helpers.defaultNullOpts.mkLua ''[[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]]'' "The default keyword pattern.";
 
     autocomplete =
       helpers.defaultNullOpts.mkNullable
-      (
-        with helpers.nixvimTypes;
-          either
-          (enum [false])
-          (listOf strLua)
-      )
-      ''["require('cmp.types').cmp.TriggerEvent.TextChanged"]''
-      ''
-        The event to trigger autocompletion.
-        If set to `false`, then completion is only invoked manually (e.g. by calling `cmp.complete`).
-      '';
+        (with helpers.nixvimTypes; either (enum [ false ]) (listOf strLua))
+        ''["require('cmp.types').cmp.TriggerEvent.TextChanged"]''
+        ''
+          The event to trigger autocompletion.
+          If set to `false`, then completion is only invoked manually (e.g. by calling `cmp.complete`).
+        '';
 
     completeopt = helpers.defaultNullOpts.mkStr "menu,menuone,noselect" ''
       Like vim's completeopt setting.
@@ -138,15 +128,15 @@ with lib; {
   confirmation = {
     get_commit_characters =
       helpers.defaultNullOpts.mkLuaFn
-      ''
-        function(commit_characters)
-          return commit_characters
-        end
-      ''
-      ''
-        You can append or exclude `commitCharacters` via this configuration option function.
-        The `commitCharacters` are defined by the LSP spec.
-      '';
+        ''
+          function(commit_characters)
+            return commit_characters
+          end
+        ''
+        ''
+          You can append or exclude `commitCharacters` via this configuration option function.
+          The `commitCharacters` are defined by the LSP spec.
+        '';
   };
 
   formatting = {
@@ -160,21 +150,21 @@ with lib; {
 
     format =
       helpers.defaultNullOpts.mkLuaFn
-      ''
-        function(_, vim_item)
-          return vim_item
-        end
-      ''
-      ''
-        `fun(entry: cmp.Entry, vim_item: vim.CompletedItem): vim.CompletedItem`
+        ''
+          function(_, vim_item)
+            return vim_item
+          end
+        ''
+        ''
+          `fun(entry: cmp.Entry, vim_item: vim.CompletedItem): vim.CompletedItem`
 
-        The function used to customize the appearance of the completion menu.
-        See `|complete-items|`.
-        This value can also be used to modify the `dup` property.
+          The function used to customize the appearance of the completion menu.
+          See `|complete-items|`.
+          This value can also be used to modify the `dup` property.
 
-        NOTE: The `vim.CompletedItem` can contain the special properties `abbr_hl_group`,
-        `kind_hl_group` and `menu_hl_group`.
-      '';
+          NOTE: The `vim.CompletedItem` can contain the special properties `abbr_hl_group`,
+          `kind_hl_group` and `menu_hl_group`.
+        '';
   };
 
   matching = {
@@ -210,12 +200,7 @@ with lib; {
 
     comparators = mkOption {
       type = with helpers.nixvimTypes; nullOr (listOf strLuaFn);
-      apply = v:
-        helpers.ifNonNull' v (
-          map
-          helpers.mkRaw
-          v
-        );
+      apply = v: helpers.ifNonNull' v (map helpers.mkRaw v);
       default = null;
       description = ''
         The function to customize the sorting behavior.
@@ -240,26 +225,20 @@ with lib; {
     };
   };
 
-  sources = import ./sources-option.nix {inherit lib helpers;};
+  sources = import ./sources-option.nix { inherit lib helpers; };
 
   view = {
     entries =
-      helpers.defaultNullOpts.mkNullable
-      (
-        with types;
-          either
-          str
-          (attrsOf anything)
-      )
-      ''
-        {
-          name = "custom";
-          selection_order = "top_down";
-        }
-      ''
-      ''
-        The view class used to customize nvim-cmp's appearance.
-      '';
+      helpers.defaultNullOpts.mkNullable (with types; either str (attrsOf anything))
+        ''
+          {
+            name = "custom";
+            selection_order = "top_down";
+          }
+        ''
+        ''
+          The view class used to customize nvim-cmp's appearance.
+        '';
 
     docs = {
       auto_open = helpers.defaultNullOpts.mkBool true ''
@@ -268,79 +247,71 @@ with lib; {
     };
   };
 
-  window = let
-    mkWinhighlightOption = default:
-      helpers.defaultNullOpts.mkStr
-      default
-      ''
-        Specify the window's winhighlight option.
+  window =
+    let
+      mkWinhighlightOption =
+        default:
+        helpers.defaultNullOpts.mkStr default ''
+          Specify the window's winhighlight option.
+          See `|nvim_open_win|`.
+        '';
+
+      zindex = helpers.mkNullOrOption types.ints.unsigned ''
+        The window's zindex.
         See `|nvim_open_win|`.
       '';
+    in
+    {
+      completion = {
+        border =
+          helpers.defaultNullOpts.mkBorder ''[ "" "" "" "" "" "" "" "" ]'' "nvim-cmp completion popup menu"
+            "";
 
-    zindex = helpers.mkNullOrOption types.ints.unsigned ''
-      The window's zindex.
-      See `|nvim_open_win|`.
-    '';
-  in {
-    completion = {
-      border =
-        helpers.defaultNullOpts.mkBorder
-        ''[ "" "" "" "" "" "" "" "" ]''
-        "nvim-cmp completion popup menu"
-        "";
+        winhighlight = mkWinhighlightOption "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None";
 
-      winhighlight =
-        mkWinhighlightOption
-        "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None";
+        inherit zindex;
 
-      inherit zindex;
+        scrolloff = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+          Specify the window's scrolloff option.
+          See |'scrolloff'|.
+        '';
 
-      scrolloff = helpers.defaultNullOpts.mkUnsignedInt 0 ''
-        Specify the window's scrolloff option.
-        See |'scrolloff'|.
-      '';
+        col_offset = helpers.defaultNullOpts.mkInt 0 ''
+          Offsets the completion window relative to the cursor.
+        '';
 
-      col_offset = helpers.defaultNullOpts.mkInt 0 ''
-        Offsets the completion window relative to the cursor.
-      '';
+        side_padding = helpers.defaultNullOpts.mkUnsignedInt 1 ''
+          The amount of padding to add on the completion window's sides.
+        '';
 
-      side_padding = helpers.defaultNullOpts.mkUnsignedInt 1 ''
-        The amount of padding to add on the completion window's sides.
-      '';
+        scrollbar = helpers.defaultNullOpts.mkBool true ''
+          Whether the scrollbar should be enabled if there are more items that fit.
+        '';
+      };
 
-      scrollbar = helpers.defaultNullOpts.mkBool true ''
-        Whether the scrollbar should be enabled if there are more items that fit.
-      '';
-    };
+      documentation = {
+        border =
+          helpers.defaultNullOpts.mkBorder ''[ "" "" "" " " "" "" "" " " ]''
+            "nvim-cmp documentation popup menu"
+            "";
 
-    documentation = {
-      border =
-        helpers.defaultNullOpts.mkBorder
-        ''[ "" "" "" " " "" "" "" " " ]''
-        "nvim-cmp documentation popup menu"
-        "";
+        winhighlight = mkWinhighlightOption "FloatBorder:NormalFloat";
 
-      winhighlight = mkWinhighlightOption "FloatBorder:NormalFloat";
+        inherit zindex;
 
-      inherit zindex;
-
-      max_width =
-        helpers.mkNullOrStrLuaOr types.ints.unsigned
-        ''
+        max_width = helpers.mkNullOrStrLuaOr types.ints.unsigned ''
           The documentation window's max width.
 
           Default: "math.floor((40 * 2) * (vim.o.columns / (40 * 2 * 16 / 9)))"
         '';
 
-      max_height =
-        helpers.mkNullOrStrLuaOr types.ints.unsigned
-        ''
+        max_height = helpers.mkNullOrStrLuaOr types.ints.unsigned ''
           The documentation window's max height.
 
           Default: "math.floor(40 * (40 / vim.o.lines))"
         '';
+      };
     };
-  };
 
   # This can be kept as types.attrs since experimental features are often removed or completely
   # changed after a while

@@ -5,7 +5,8 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.floaterm;
 
   settings = {
@@ -28,7 +29,11 @@ with lib; let
     };
 
     wintype = {
-      type = types.enum ["float" "split" "vsplit"];
+      type = types.enum [
+        "float"
+        "split"
+        "vsplit"
+      ];
       description = ''
         'float'(nvim's floating or vim's popup) by default.
         Set it to 'split' or 'vsplit' if you don't want to use floating or popup window.
@@ -104,7 +109,13 @@ with lib; let
     };
 
     opener = {
-      type = types.enum ["edit" "split" "vsplit" "tabe" "drop"];
+      type = types.enum [
+        "edit"
+        "split"
+        "vsplit"
+        "tabe"
+        "drop"
+      ];
       description = ''
         Command used for opening a file in the outside nvim from within `:terminal`.
 
@@ -113,7 +124,11 @@ with lib; let
     };
 
     autoclose = {
-      type = types.enum [0 1 2];
+      type = types.enum [
+        0
+        1
+        2
+      ];
       description = ''
         Whether to close floaterm window once the job gets finished.
 
@@ -126,7 +141,11 @@ with lib; let
     };
 
     autohide = {
-      type = types.enum [0 1 2];
+      type = types.enum [
+        0
+        1
+        2
+      ];
       description = ''
         Whether to hide previous floaterms before switching to or opening a another one.
 
@@ -147,38 +166,37 @@ with lib; let
       '';
     };
   };
-in {
-  options.plugins.floaterm = let
-    # Misc options
-    # `OPTION = VALUE`
-    # which will translate to `globals.floaterm_OPTION = VALUE;`
-    miscOptions =
-      mapAttrs
-      (name: value: helpers.mkNullOrOption value.type value.description)
-      settings;
+in
+{
+  options.plugins.floaterm =
+    let
+      # Misc options
+      # `OPTION = VALUE`
+      # which will translate to `globals.floaterm_OPTION = VALUE;`
+      miscOptions = mapAttrs (name: value: helpers.mkNullOrOption value.type value.description) settings;
 
-    # Keymaps options
-    # `keymaps.ACTION = KEY`
-    # which will translate to `globals.floaterm_keymap_ACTION = KEY;`
-    keymapOptions = listToAttrs (
-      map (
-        name: {
-          inherit name;
-          value = helpers.mkNullOrOption types.str "Key to map to ${name}";
-        }
-      ) [
-        "new"
-        "prev"
-        "next"
-        "first"
-        "last"
-        "hide"
-        "show"
-        "kill"
-        "toggle"
-      ]
-    );
-  in
+      # Keymaps options
+      # `keymaps.ACTION = KEY`
+      # which will translate to `globals.floaterm_keymap_ACTION = KEY;`
+      keymapOptions = listToAttrs (
+        map
+          (name: {
+            inherit name;
+            value = helpers.mkNullOrOption types.str "Key to map to ${name}";
+          })
+          [
+            "new"
+            "prev"
+            "next"
+            "first"
+            "last"
+            "hide"
+            "show"
+            "kill"
+            "toggle"
+          ]
+      );
+    in
     {
       enable = mkEnableOption "floaterm";
 
@@ -189,28 +207,24 @@ in {
     // miscOptions;
 
   config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
 
-    globals = let
-      # misc options
-      optionGlobals = listToAttrs (
-        map
-        (optionName: {
-          name = "floaterm_${optionName}";
-          value = cfg.${optionName};
-        })
-        (attrNames settings)
-      );
+    globals =
+      let
+        # misc options
+        optionGlobals = listToAttrs (
+          map (optionName: {
+            name = "floaterm_${optionName}";
+            value = cfg.${optionName};
+          }) (attrNames settings)
+        );
 
-      # keymaps options
-      keymapGlobals =
-        mapAttrs'
-        (name: key: {
+        # keymaps options
+        keymapGlobals = mapAttrs' (name: key: {
           name = "floaterm_keymap_${name}";
           value = key;
-        })
-        cfg.keymaps;
-    in
+        }) cfg.keymaps;
+      in
       optionGlobals // keymapGlobals;
   };
 }

@@ -7,9 +7,7 @@
     plugins.cmp = {
       enable = true;
 
-      settings.sources = [
-        {name = "codeium";}
-      ];
+      settings.sources = [ { name = "codeium"; } ];
     };
   };
 

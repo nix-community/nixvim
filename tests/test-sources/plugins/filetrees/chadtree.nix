@@ -10,8 +10,13 @@
       options = {
         follow = true;
         mimetypes = {
-          warn = ["audio" "font" "image" "video"];
-          allowExts = [".ts"];
+          warn = [
+            "audio"
+            "font"
+            "image"
+            "video"
+          ];
+          allowExts = [ ".ts" ];
         };
         pageIncrement = 5;
         pollingRate = 2.0;
@@ -19,14 +24,23 @@
         showHidden = false;
         versionControl = true;
         ignore = {
-          nameExact = [".DS_Store" ".directory" "thumbs.db" ".git"];
-          nameGlob = [];
-          pathGlob = [];
+          nameExact = [
+            ".DS_Store"
+            ".directory"
+            "thumbs.db"
+            ".git"
+          ];
+          nameGlob = [ ];
+          pathGlob = [ ];
         };
       };
       view = {
         openDirection = "left";
-        sortBy = ["is_folder" "ext" "file_name"];
+        sortBy = [
+          "is_folder"
+          "ext"
+          "file_name"
+        ];
         width = 40;
         windowOptions = {
           cursorline = true;
@@ -50,58 +64,70 @@
       };
       keymap = {
         windowManagement = {
-          quit = ["q"];
-          bigger = ["+" "="];
-          smaller = ["-" "_"];
-          refresh = ["<c-r>"];
+          quit = [ "q" ];
+          bigger = [
+            "+"
+            "="
+          ];
+          smaller = [
+            "-"
+            "_"
+          ];
+          refresh = [ "<c-r>" ];
         };
         rerooting = {
-          changeDir = ["b"];
-          changeFocus = ["c"];
-          changeFocusUp = ["C"];
+          changeDir = [ "b" ];
+          changeFocus = [ "c" ];
+          changeFocusUp = [ "C" ];
         };
         openFileFolder = {
-          primary = ["<enter>"];
-          secondary = ["<tab>" "<2-leftmouse>"];
-          tertiary = ["<m-enter>" "<middlemouse>"];
-          vSplit = ["w"];
-          hSplit = ["W"];
-          openSys = ["o"];
-          collapse = ["o"];
+          primary = [ "<enter>" ];
+          secondary = [
+            "<tab>"
+            "<2-leftmouse>"
+          ];
+          tertiary = [
+            "<m-enter>"
+            "<middlemouse>"
+          ];
+          vSplit = [ "w" ];
+          hSplit = [ "W" ];
+          openSys = [ "o" ];
+          collapse = [ "o" ];
         };
         cursor = {
-          refocus = ["~"];
-          jumpToCurrent = ["J"];
-          stat = ["K"];
-          copyName = ["y"];
-          copyBasename = ["Y"];
-          copyRelname = ["<c-y>"];
+          refocus = [ "~" ];
+          jumpToCurrent = [ "J" ];
+          stat = [ "K" ];
+          copyName = [ "y" ];
+          copyBasename = [ "Y" ];
+          copyRelname = [ "<c-y>" ];
         };
         filtering = {
-          filter = ["f"];
-          clearFilter = ["F"];
+          filter = [ "f" ];
+          clearFilter = [ "F" ];
         };
         bookmarks = {
-          bookmarkGoto = ["m"];
+          bookmarkGoto = [ "m" ];
         };
         selecting = {
-          select = ["s"];
-          clearSelection = ["S"];
+          select = [ "s" ];
+          clearSelection = [ "S" ];
         };
         fileOperations = {
-          new = ["a"];
-          link = ["A"];
-          rename = ["r"];
-          toggleExec = ["X"];
-          copy = ["p"];
-          cut = ["x"];
-          delete = ["d"];
-          trash = ["t"];
+          new = [ "a" ];
+          link = [ "A" ];
+          rename = [ "r" ];
+          toggleExec = [ "X" ];
+          copy = [ "p" ];
+          cut = [ "x" ];
+          delete = [ "d" ];
+          trash = [ "t" ];
         };
         toggles = {
-          toggleHidden = ["."];
-          toggleFollow = ["u"];
-          toggleVersionControl = ["i"];
+          toggleHidden = [ "." ];
+          toggleFollow = [ "u" ];
+          toggleVersionControl = [ "i" ];
         };
       };
     };

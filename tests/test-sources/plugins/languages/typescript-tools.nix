@@ -1,5 +1,7 @@
 {
-  empty = {plugins.typescript-tools.enable = true;};
+  empty = {
+    plugins.typescript-tools.enable = true;
+  };
 
   defaults = {
     plugins.typescript-tools = {
@@ -20,7 +22,10 @@
         disableMemberCodeLens = true;
         jsxCloseTag = {
           enable = false;
-          filetypes = ["javascriptreact" "typescriptreact"];
+          filetypes = [
+            "javascriptreact"
+            "typescriptreact"
+          ];
         };
       };
     };

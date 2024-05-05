@@ -27,7 +27,10 @@
             "TelescopeResults"
             "yaml"
           ];
-          buftypes = ["terminal" "quickfix"];
+          buftypes = [
+            "terminal"
+            "quickfix"
+          ];
         };
       };
     };
@@ -64,14 +67,17 @@
           highlight = null;
           priority = 1024;
           include = {
-            node_type = {};
+            node_type = { };
           };
           exclude = {
-            language = [];
+            language = [ ];
             node_type = {
-              "*" = ["source_file" "program"];
-              lua = ["chunk"];
-              python = ["module"];
+              "*" = [
+                "source_file"
+                "program"
+              ];
+              lua = [ "chunk" ];
+              python = [ "module" ];
             };
           };
         };

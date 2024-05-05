@@ -22,8 +22,11 @@
 
         setup = {
           gopls = {
-            exclude = ["gopls"];
-            order = ["gopls" "efm"];
+            exclude = [ "gopls" ];
+            order = [
+              "gopls"
+              "efm"
+            ];
             sync = true;
             force = true;
 

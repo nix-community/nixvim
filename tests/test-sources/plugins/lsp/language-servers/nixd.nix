@@ -9,7 +9,10 @@
         settings = {
           eval = {
             target = {
-              args = ["foo" "bar"];
+              args = [
+                "foo"
+                "bar"
+              ];
               installable = "";
             };
             depth = 0;
@@ -21,7 +24,11 @@
           options = {
             enable = true;
             target = {
-              args = ["yes" "no" "maybe"];
+              args = [
+                "yes"
+                "no"
+                "maybe"
+              ];
               installable = "";
             };
           };

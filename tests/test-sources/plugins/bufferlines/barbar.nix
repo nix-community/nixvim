@@ -24,10 +24,10 @@
       animation = true;
       autoHide = false;
       clickable = true;
-      excludeFileTypes = [];
-      excludeFileNames = [];
+      excludeFileTypes = [ ];
+      excludeFileNames = [ ];
       focusOnClose = "left";
-      hide = {};
+      hide = { };
       highlightAlternate = false;
       highlightInactiveFileIcons = false;
       highlightVisible = true;
@@ -35,16 +35,22 @@
         bufferIndex = false;
         bufferNumber = false;
         button = "";
-        diagnostics = {};
-        filetype = {enable = true;};
+        diagnostics = { };
+        filetype = {
+          enable = true;
+        };
         inactive = {
           separator = {
             left = "▎";
             right = "";
           };
         };
-        modified = {button = "●";};
-        pinned = {button = "";};
+        modified = {
+          button = "●";
+        };
+        pinned = {
+          button = "";
+        };
         separator = {
           left = "▎";
           right = "";
@@ -58,7 +64,7 @@
       minimumPadding = 1;
       noNameTitle = null;
       semanticLetters = true;
-      sidebarFiletypes = {};
+      sidebarFiletypes = { };
       tabpages = true;
     };
   };

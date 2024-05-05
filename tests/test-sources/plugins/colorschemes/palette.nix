@@ -14,9 +14,9 @@
           state = "pastel";
         };
         custom_palettes = {
-          main = {};
-          accent = {};
-          state = {};
+          main = { };
+          accent = { };
+          state = { };
         };
         italics = true;
         transparent_background = false;

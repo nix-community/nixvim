@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   options.enableMan = lib.mkOption {
     type = lib.types.bool;
     default = true;

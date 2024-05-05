@@ -15,8 +15,14 @@
         collapse = "⊟";
         codeAction = "💡";
         actionfix = "";
-        lines = ["┗" "┣" "┃" "━" "┏"];
-        kind = {};
+        lines = [
+          "┗"
+          "┣"
+          "┃"
+          "━"
+          "┏"
+        ];
+        kind = { };
         impSign = "󰳛 ";
       };
       hover = {
@@ -42,7 +48,10 @@
           execAction = "o";
           quit = "q";
           toggleOrJump = "<CR>";
-          quitInShow = ["q" "<ESC>"];
+          quitInShow = [
+            "q"
+            "<ESC>"
+          ];
         };
       };
       codeAction = {
@@ -76,7 +85,7 @@
         default = "ref+imp";
         layout = "float";
         silent = false;
-        filter = {};
+        filter = { };
         keys = {
           shuttle = "[w";
           toggleOrOpen = "o";

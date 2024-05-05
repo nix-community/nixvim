@@ -1,9 +1,6 @@
+{ config, lib, ... }:
+with lib;
 {
-  config,
-  lib,
-  ...
-}:
-with lib; {
   options = {
     colorscheme = mkOption {
       type = types.nullOr types.str;

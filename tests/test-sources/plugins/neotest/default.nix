@@ -46,7 +46,7 @@
     plugins.neotest = {
       enable = true;
 
-      adapters = {};
+      adapters = { };
       settings = {
         discovery = {
           enabled = true;
@@ -58,7 +58,7 @@
         };
         default_strategy = "integrated";
         log_level = "warn";
-        consumers = {};
+        consumers = { };
         icons = {
           child_indent = "│";
           child_prefix = "├";
@@ -70,7 +70,16 @@
           non_collapsible = "─";
           passed = "";
           running = "";
-          running_animated = ["/" "|" "\\" "-" "/" "|" "\\" "-"];
+          running_animated = [
+            "/"
+            "|"
+            "\\"
+            "-"
+            "/"
+            "|"
+            "\\"
+            "-"
+          ];
           skipped = "";
           unknown = "";
           watching = "";
@@ -99,7 +108,7 @@
           border = "rounded";
           max_height = 0.6;
           max_width = 0.6;
-          options = {};
+          options = { };
         };
         strategies = {
           integrated = {
@@ -118,7 +127,10 @@
             clear_target = "T";
             debug = "d";
             debug_marked = "D";
-            expand = ["<CR>" "<2-LeftMouse>"];
+            expand = [
+              "<CR>"
+              "<2-LeftMouse>"
+            ];
             expand_all = "e";
             jumpto = "i";
             mark = "m";

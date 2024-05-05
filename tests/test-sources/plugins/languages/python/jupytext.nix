@@ -11,7 +11,7 @@
         style = "hydrogen";
         output_extension = "auto";
         force_ft = null;
-        custom_language_formatting = {};
+        custom_language_formatting = { };
       };
     };
   };

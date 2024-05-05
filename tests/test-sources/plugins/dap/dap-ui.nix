@@ -22,12 +22,15 @@
           terminate = "";
         };
       };
-      elementMappings = {};
+      elementMappings = { };
       expandLines = true;
       floating = {
         border = "single";
         mappings = {
-          close = ["q" "<Esc>"];
+          close = [
+            "q"
+            "<Esc>"
+          ];
         };
       };
       forceBuffers = true;
@@ -76,7 +79,10 @@
       ];
       mappings = {
         edit = "e";
-        expand = ["<CR>" "<2-LeftMouse>"];
+        expand = [
+          "<CR>"
+          "<2-LeftMouse>"
+        ];
         open = "o";
         remove = "d";
         repl = "r";

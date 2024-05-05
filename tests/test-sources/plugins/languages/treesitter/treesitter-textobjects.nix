@@ -14,7 +14,7 @@
 
         select = {
           enable = true;
-          disable = [];
+          disable = [ ];
           lookahead = true;
           keymaps = {
             af = "@function.outer";
@@ -34,7 +34,7 @@
         };
         swap = {
           enable = true;
-          disable = [];
+          disable = [ ];
           swapNext = {
             "<leader>a" = "@parameter.inner";
           };
@@ -44,7 +44,7 @@
         };
         move = {
           enable = true;
-          disable = [];
+          disable = [ ];
           setJumps = true;
           gotoNextStart = {
             "]m" = "@function.outer";
@@ -76,7 +76,7 @@
             "<leader>df" = "@function.outer";
             "<leader>dF" = "@class.outer";
           };
-          floatingPreviewOpts = {};
+          floatingPreviewOpts = { };
         };
       };
     };

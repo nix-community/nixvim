@@ -8,18 +8,18 @@
       enable = true;
 
       lintersByFt = {
-        text = ["vale"];
-        json = ["jsonlint"];
-        markdown = ["vale"];
-        rst = ["vale"];
-        ruby = ["ruby"];
-        janet = ["janet"];
-        inko = ["inko"];
+        text = [ "vale" ];
+        json = [ "jsonlint" ];
+        markdown = [ "vale" ];
+        rst = [ "vale" ];
+        ruby = [ "ruby" ];
+        janet = [ "janet" ];
+        inko = [ "inko" ];
         # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
         # TODO: re-enable this test when fixed
         # clojure = ["clj-kondo"];
-        dockerfile = ["hadolint"];
-        terraform = ["tflint"];
+        dockerfile = [ "hadolint" ];
+        terraform = [ "tflint" ];
       };
       linters = {
         phpcs.args = [
@@ -33,7 +33,7 @@
           cmd = "foo_cmd";
           stdin = true;
           append_fname = false;
-          args = [];
+          args = [ ];
           stream = "stderr";
           ignore_exitcode = false;
           env = {

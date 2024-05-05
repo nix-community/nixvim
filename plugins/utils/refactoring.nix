@@ -5,20 +5,15 @@
   pkgs,
   ...
 }:
-with lib; {
-  options.plugins.refactoring =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "refactoring.nvim";
+with lib;
+{
+  options.plugins.refactoring = helpers.neovim-plugin.extraOptionsOptions // {
+    enable = mkEnableOption "refactoring.nvim";
 
-      package = helpers.mkPackageOption "refactoring.nvim" pkgs.vimPlugins.refactoring-nvim;
+    package = helpers.mkPackageOption "refactoring.nvim" pkgs.vimPlugins.refactoring-nvim;
 
-      promptFuncReturnType =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            attrsOf bool
-        )
+    promptFuncReturnType =
+      helpers.defaultNullOpts.mkNullable (with types; attrsOf bool)
         ''
           {
             "go" = false;
@@ -36,12 +31,8 @@ with lib; {
           we want to provide a way to input a type instead of inserting a placeholder value.
         '';
 
-      promptFuncParamType =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            attrsOf bool
-        )
+    promptFuncParamType =
+      helpers.defaultNullOpts.mkNullable (with types; attrsOf bool)
         ''
           {
             "go" = false;
@@ -59,12 +50,8 @@ with lib; {
           we want to provide a way to input a type instead of inserting a placeholder value.
         '';
 
-      printVarStatements =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            attrsOf (listOf str)
-        )
+    printVarStatements =
+      helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
         ''
           {
             "go" = [];
@@ -89,12 +76,8 @@ with lib; {
           	]
         '';
 
-      printfStatements =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            attrsOf (listOf str)
-        )
+    printfStatements =
+      helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
         ''
           {
             "go" = [];
@@ -116,12 +99,8 @@ with lib; {
           		]
         '';
 
-      extractVarStatements =
-        helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-            attrsOf str
-        )
+    extractVarStatements =
+      helpers.defaultNullOpts.mkNullable (with types; attrsOf str)
         ''
           {
             "go" = "";
@@ -140,24 +119,27 @@ with lib; {
           Example:
           	 go = "%s := %s // poggers"
         '';
-    };
+  };
 
-  config = let
-    cfg = config.plugins.refactoring;
-  in
+  config =
+    let
+      cfg = config.plugins.refactoring;
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
-      extraConfigLua = let
-        opts = with cfg; {
-          prompt_func_return_type = promptFuncReturnType;
-          prompt_func_param_type = promptFuncParamType;
-          print_var_statements = printVarStatements;
-          printf_statements = printfStatements;
-          extract_var_statements = extractVarStatements;
-        };
-      in ''
-        require('refactoring').setup(${helpers.toLuaObject opts})
-      '';
+      extraConfigLua =
+        let
+          opts = with cfg; {
+            prompt_func_return_type = promptFuncReturnType;
+            prompt_func_param_type = promptFuncParamType;
+            print_var_statements = printVarStatements;
+            printf_statements = printfStatements;
+            extract_var_statements = extractVarStatements;
+          };
+        in
+        ''
+          require('refactoring').setup(${helpers.toLuaObject opts})
+        '';
     };
 }

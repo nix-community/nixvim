@@ -20,7 +20,12 @@
         {
           name = "tpope/vim-dispatch";
           opt = true;
-          cmd = ["Dispatch" "Make" "Focus" "Start"];
+          cmd = [
+            "Dispatch"
+            "Make"
+            "Focus"
+            "Start"
+          ];
         }
 
         # Load on an autocommand event
@@ -33,7 +38,19 @@
         # Also run code after load (see the "config" key)
         {
           name = "w0rp/ale";
-          ft = ["sh" "zsh" "bash" "c" "cpp" "cmake" "html" "markdown" "racket" "vim" "tex"];
+          ft = [
+            "sh"
+            "zsh"
+            "bash"
+            "c"
+            "cpp"
+            "cmake"
+            "html"
+            "markdown"
+            "racket"
+            "vim"
+            "tex"
+          ];
           cmd = "ALEEnable";
           config = "vim.cmd[[ALEEnable]]";
         }
@@ -93,13 +110,13 @@
           name = "glepnir/galaxyline.nvim";
           branch = "main";
           config.__raw = ''function() require"statusline" end'';
-          requires = ["kyazdani42/nvim-web-devicons"];
+          requires = [ "kyazdani42/nvim-web-devicons" ];
         }
 
         # Use dependency and run lua function after load
         {
           name = "lewis6991/gitsigns.nvim";
-          requires = ["nvim-lua/plenary.nvim"];
+          requires = [ "nvim-lua/plenary.nvim" ];
           config.__raw = ''function() require("gitsigns").setup() end'';
         }
 

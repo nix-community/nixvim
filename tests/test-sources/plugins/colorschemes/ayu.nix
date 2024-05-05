@@ -9,7 +9,7 @@
 
       settings = {
         mirage = false;
-        overrides = {};
+        overrides = { };
       };
     };
   };

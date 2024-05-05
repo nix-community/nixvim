@@ -5,10 +5,9 @@
   pkgs,
   _nixvimTests ? false,
   ...
-} @ args: {
+}@args:
+{
   # Add all exported modules here
-  check = import ../tests/test-derivation.nix {
-    inherit makeNixvim makeNixvimWithModule pkgs;
-  };
-  helpers = import ./helpers.nix (args // {inherit _nixvimTests;});
+  check = import ../tests/test-derivation.nix { inherit makeNixvim makeNixvimWithModule pkgs; };
+  helpers = import ./helpers.nix (args // { inherit _nixvimTests; });
 }

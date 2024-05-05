@@ -23,14 +23,38 @@
       };
       hoverActions = {
         border = [
-          ["╭" "FloatBorder"]
-          ["─" "FloatBorder"]
-          ["╮" "FloatBorder"]
-          ["│" "FloatBorder"]
-          ["╯" "FloatBorder"]
-          ["─" "FloatBorder"]
-          ["╰" "FloatBorder"]
-          ["│" "FloatBorder"]
+          [
+            "╭"
+            "FloatBorder"
+          ]
+          [
+            "─"
+            "FloatBorder"
+          ]
+          [
+            "╮"
+            "FloatBorder"
+          ]
+          [
+            "│"
+            "FloatBorder"
+          ]
+          [
+            "╯"
+            "FloatBorder"
+          ]
+          [
+            "─"
+            "FloatBorder"
+          ]
+          [
+            "╰"
+            "FloatBorder"
+          ]
+          [
+            "│"
+            "FloatBorder"
+          ]
         ];
         maxWidth = null;
         maxHeight = null;

@@ -10,7 +10,16 @@
       # Testing for registrations
       registrations."f" = {
         prefix = "<leader>";
-        mode = ["n" "v" "i" "t" "c" "x" "s" "o"];
+        mode = [
+          "n"
+          "v"
+          "i"
+          "t"
+          "c"
+          "x"
+          "s"
+          "o"
+        ];
         name = "Group Test";
         f = "Label Test";
         "1" = [
@@ -58,8 +67,10 @@
         };
       };
 
-      operators = {gc = "Comments";};
-      keyLabels = {};
+      operators = {
+        gc = "Comments";
+      };
+      keyLabels = { };
 
       motions = {
         count = true;
@@ -106,18 +117,41 @@
         align = "left";
       };
       ignoreMissing = false;
-      hidden = ["<silent>" "<cmd>" "<Cmd>" "<CR>" "^:" "^ " "^call " "^lua "];
+      hidden = [
+        "<silent>"
+        "<cmd>"
+        "<Cmd>"
+        "<CR>"
+        "^:"
+        "^ "
+        "^call "
+        "^lua "
+      ];
       showHelp = true;
       showKeys = true;
       triggers = "auto";
-      triggersNoWait = ["`" "'" "g`" "g'" ''"'' "<c-r>" "z="];
+      triggersNoWait = [
+        "`"
+        "'"
+        "g`"
+        "g'"
+        ''"''
+        "<c-r>"
+        "z="
+      ];
       triggersBlackList = {
-        i = ["j" "k"];
-        v = ["j" "k"];
+        i = [
+          "j"
+          "k"
+        ];
+        v = [
+          "j"
+          "k"
+        ];
       };
       disable = {
-        buftypes = [];
-        filetypes = [];
+        buftypes = [ ];
+        filetypes = [ ];
       };
     };
   };

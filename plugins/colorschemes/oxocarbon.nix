@@ -11,9 +11,7 @@ helpers.vim-plugin.mkVimPlugin config {
   originalName = "oxocarbon.nvim";
   defaultPackage = pkgs.vimPlugins.oxocarbon-nvim;
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraConfig = cfg: {
-    opts.termguicolors = lib.mkDefault true;
-  };
+  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
 }

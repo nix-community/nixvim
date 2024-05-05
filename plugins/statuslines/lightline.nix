@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.lightline;
-in {
+in
+{
   options = {
     plugins.lightline = {
       enable = mkEnableOption "lightline";
@@ -53,28 +55,36 @@ in {
 
       active = mkOption {
         default = null;
-        type = types.nullOr (types.submodule {
-          options = let
-            listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
-          in {
-            left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
+        type = types.nullOr (
+          types.submodule {
+            options =
+              let
+                listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
+              in
+              {
+                left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
 
-            right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
-          };
-        });
+                right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
+              };
+          }
+        );
       };
 
       inactive = mkOption {
         default = null;
-        type = types.nullOr (types.submodule {
-          options = let
-            listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
-          in {
-            left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
+        type = types.nullOr (
+          types.submodule {
+            options =
+              let
+                listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
+              in
+              {
+                left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
 
-            right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
-          };
-        });
+                right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
+              };
+          }
+        );
       };
 
       modeMap = mkOption {
@@ -85,13 +95,21 @@ in {
     };
   };
 
-  config = let
-    configAttrs = filterAttrs (_: v: v != null) {
-      inherit (cfg) colorscheme active inactive component componentFunction modeMap;
-    };
-  in
+  config =
+    let
+      configAttrs = filterAttrs (_: v: v != null) {
+        inherit (cfg)
+          colorscheme
+          active
+          inactive
+          component
+          componentFunction
+          modeMap
+          ;
+      };
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
-      globals.lightline = mkIf (configAttrs != {}) configAttrs;
+      extraPlugins = [ cfg.package ];
+      globals.lightline = mkIf (configAttrs != { }) configAttrs;
     };
 }

@@ -5,17 +5,20 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   defaultFuzzyFinder = "skim";
-in {
+in
+{
   options.plugins.openscad = {
     enable = mkEnableOption "openscad.nvim, a plugin to manage OpenSCAD files";
 
     package = helpers.mkPackageOption "openscad.nvim" pkgs.vimPlugins.openscad-nvim;
 
-    fuzzyFinder =
-      helpers.defaultNullOpts.mkEnum ["skim" "fzf"] defaultFuzzyFinder
-      "fuzzy finder to find documentation";
+    fuzzyFinder = helpers.defaultNullOpts.mkEnum [
+      "skim"
+      "fzf"
+    ] defaultFuzzyFinder "fuzzy finder to find documentation";
 
     cheatsheetWindowBlend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) "15" "";
 
@@ -30,28 +33,23 @@ in {
 
       helpTrigger = helpers.defaultNullOpts.mkStr "<A-h>" "Fuzzy find help resource";
 
-      helpManualTrigger =
-        helpers.defaultNullOpts.mkStr "<A-m>"
-        "Open offline openscad manual in pdf via zathura";
+      helpManualTrigger = helpers.defaultNullOpts.mkStr "<A-m>" "Open offline openscad manual in pdf via zathura";
 
       execOpenSCADTrigger = helpers.defaultNullOpts.mkStr "<A-o>" "Open file in OpenSCAD";
 
-      topToggle =
-        helpers.defaultNullOpts.mkStr "<A-c>"
-        "toggle htop filtered for openscad processes";
+      topToggle = helpers.defaultNullOpts.mkStr "<A-c>" "toggle htop filtered for openscad processes";
     };
   };
 
-  config = let
-    cfg = config.plugins.openscad;
-    fuzzyFinder =
-      if (cfg.fuzzyFinder == null)
-      then defaultFuzzyFinder
-      else cfg.fuzzyFinder;
-  in
+  config =
+    let
+      cfg = config.plugins.openscad;
+      fuzzyFinder = if (cfg.fuzzyFinder == null) then defaultFuzzyFinder else cfg.fuzzyFinder;
+    in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins;
-        [cfg.package]
+      extraPlugins =
+        with pkgs.vimPlugins;
+        [ cfg.package ]
         ++ (optional (fuzzyFinder == "skim") skim-vim)
         ++ (optional (fuzzyFinder == "fzf") fzf-vim);
 

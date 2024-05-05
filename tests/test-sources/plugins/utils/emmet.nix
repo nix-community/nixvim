@@ -16,7 +16,9 @@
           };
           html = {
             default_attributes = {
-              option = {value = null;};
+              option = {
+                value = null;
+              };
               textarea = {
                 id = null;
                 name = null;

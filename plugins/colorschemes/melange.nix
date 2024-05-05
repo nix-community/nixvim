@@ -6,15 +6,13 @@
   ...
 }:
 with lib;
-  helpers.vim-plugin.mkVimPlugin config {
-    name = "melange";
-    isColorscheme = true;
-    originalName = "melange-nvim";
-    defaultPackage = pkgs.vimPlugins.melange-nvim;
+helpers.vim-plugin.mkVimPlugin config {
+  name = "melange";
+  isColorscheme = true;
+  originalName = "melange-nvim";
+  defaultPackage = pkgs.vimPlugins.melange-nvim;
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    extraConfig = cfg: {
-      opts.termguicolors = mkDefault true;
-    };
-  }
+  extraConfig = cfg: { opts.termguicolors = mkDefault true; };
+}

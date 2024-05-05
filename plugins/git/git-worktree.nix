@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.git-worktree;
-in {
+in
+{
   options = {
     plugins.git-worktree = {
       enable = mkEnableOption "git-worktree";
@@ -43,16 +45,17 @@ in {
     };
   };
 
-  config = let
-    setupOptions = with cfg; {
-      enabled = cfg.enable;
-      change_directory_command = cfg.changeDirectoryCommand;
-      update_on_change = cfg.updateOnChange;
-      update_on_change_command = cfg.updateOnChangeCommand;
-      clearjumps_on_change = cfg.clearJumpsOnChange;
-      inherit autopush;
-    };
-  in
+  config =
+    let
+      setupOptions = with cfg; {
+        enabled = cfg.enable;
+        change_directory_command = cfg.changeDirectoryCommand;
+        update_on_change = cfg.updateOnChange;
+        update_on_change_command = cfg.updateOnChangeCommand;
+        clearjumps_on_change = cfg.clearJumpsOnChange;
+        inherit autopush;
+      };
+    in
     mkIf cfg.enable {
       assertions = [
         {
@@ -66,17 +69,15 @@ in {
         plenary-nvim
       ];
 
-      extraPackages = [pkgs.git];
+      extraPackages = [ pkgs.git ];
 
-      extraConfigLua = let
-        telescopeCfg = ''require("telescope").load_extension("git_worktree")'';
-      in ''
-        require('git-worktree').setup(${helpers.toLuaObject setupOptions})
-        ${
-          if cfg.enableTelescope
-          then telescopeCfg
-          else ""
-        }
-      '';
+      extraConfigLua =
+        let
+          telescopeCfg = ''require("telescope").load_extension("git_worktree")'';
+        in
+        ''
+          require('git-worktree').setup(${helpers.toLuaObject setupOptions})
+          ${if cfg.enableTelescope then telescopeCfg else ""}
+        '';
     };
 }

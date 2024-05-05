@@ -5,22 +5,28 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.dap.extensions.dap-python;
-  dapHelpers = import ./dapHelpers.nix {inherit lib helpers;};
-in {
+  dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
+in
+{
   options.plugins.dap.extensions.dap-python = {
     enable = mkEnableOption "dap-python";
 
     package = helpers.mkPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
 
     adapterPythonPath = mkOption {
-      default = "${pkgs.python3.withPackages (ps: with ps; [debugpy])}/bin/python3";
+      default = "${pkgs.python3.withPackages (ps: with ps; [ debugpy ])}/bin/python3";
       description = "Path to the python interpreter. Path must be absolute or in $PATH and needs to have the debugpy package installed.";
       type = types.str;
     };
 
-    console = helpers.defaultNullOpts.mkEnumFirstDefault ["integratedTerminal" "internalConsole" "externalTerminal"] "Debugpy console.";
+    console = helpers.defaultNullOpts.mkEnumFirstDefault [
+      "integratedTerminal"
+      "internalConsole"
+      "externalTerminal"
+    ] "Debugpy console.";
 
     customConfigurations = helpers.mkNullOrOption (types.listOf dapHelpers.configurationOption) "Custom python configurations for dap.";
 
@@ -46,30 +52,27 @@ in {
     '';
   };
 
-  config = let
-    options = with cfg; {
-      inherit console;
-      include_configs = includeConfigs;
-    };
-  in
+  config =
+    let
+      options = with cfg; {
+        inherit console;
+        include_configs = includeConfigs;
+      };
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
       plugins.dap = {
         enable = true;
 
-        extensionConfigLua = with helpers;
+        extensionConfigLua =
+          with helpers;
           ''
             require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject options})
           ''
           + (optionalString (cfg.testRunners != null) ''
             table.insert(require("dap-python").test_runners,
-            ${
-              toLuaObject
-              (
-                builtins.mapAttrs (_: mkRaw) cfg.testRunners
-              )
-            })
+            ${toLuaObject (builtins.mapAttrs (_: mkRaw) cfg.testRunners)})
           '')
           + (optionalString (cfg.customConfigurations != null) ''
             table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})

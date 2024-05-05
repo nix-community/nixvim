@@ -1,4 +1,5 @@
-{helpers, ...}: {
+{ helpers, ... }:
+{
   empty = {
     plugins.flash.enable = true;
   };
@@ -78,7 +79,12 @@
       config = null;
       prompt = {
         enabled = true;
-        prefix = [["⚡" "FlashPromptIcon"]];
+        prefix = [
+          [
+            "⚡"
+            "FlashPromptIcon"
+          ]
+        ];
         winConfig = {
           relative = "editor";
           width = 1;
@@ -95,7 +101,9 @@
       modes = {
         search = {
           enabled = true;
-          highlight = {backdrop = false;};
+          highlight = {
+            backdrop = false;
+          };
           jump = {
             history = true;
             register = true;
@@ -124,8 +132,17 @@
           autohide = false;
           jumpLabels = false;
           multiLine = true;
-          label = {exclude = "hjkliardc";};
-          keys = helpers.listToUnkeyedAttrs ["f" "F" "t" "T" ";" ","];
+          label = {
+            exclude = "hjkliardc";
+          };
+          keys = helpers.listToUnkeyedAttrs [
+            "f"
+            "F"
+            "t"
+            "T"
+            ";"
+            ","
+          ];
           charActions = ''
             function(motion)
               return {
@@ -140,14 +157,24 @@
               }
             end
           '';
-          search = {wrap = false;};
-          highlight = {backdrop = true;};
-          jump = {register = false;};
+          search = {
+            wrap = false;
+          };
+          highlight = {
+            backdrop = true;
+          };
+          jump = {
+            register = false;
+          };
         };
         treesitter = {
           labels = "abcdefghijklmnopqrstuvwxyz";
-          jump = {pos = "range";};
-          search = {incremental = false;};
+          jump = {
+            pos = "range";
+          };
+          search = {
+            incremental = false;
+          };
           label = {
             before = true;
             after = true;
@@ -159,13 +186,17 @@
           };
         };
         treesitterSearch = {
-          jump = {pos = "range";};
+          jump = {
+            pos = "range";
+          };
           search = {
             multiWindow = true;
             wrap = true;
             incremental = false;
           };
-          remoteOp = {restore = true;};
+          remoteOp = {
+            restore = true;
+          };
           label = {
             before = true;
             after = true;

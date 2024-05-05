@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   empty = {
     # Godot is only available on Linux
     plugins.godot.enable = pkgs.stdenv.isLinux;

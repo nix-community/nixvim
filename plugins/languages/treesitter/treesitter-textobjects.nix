@@ -5,20 +5,20 @@
   pkgs,
   ...
 }:
-with lib; {
-  options.plugins.treesitter-textobjects = let
-    disable = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
-      List of languages to disable this module for.
-    '';
+with lib;
+{
+  options.plugins.treesitter-textobjects =
+    let
+      disable = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        List of languages to disable this module for.
+      '';
 
-    mkKeymapsOption = desc:
-      helpers.defaultNullOpts.mkNullable
-      (
-        with types;
+      mkKeymapsOption =
+        desc:
+        helpers.defaultNullOpts.mkNullable (
+          with types;
           attrsOf (
-            either
-            str
-            (submodule {
+            either str (submodule {
               options = {
                 query = mkOption {
                   type = str;
@@ -37,15 +37,11 @@ with lib; {
               };
             })
           )
-      )
-      "{}"
-      desc;
-  in
+        ) "{}" desc;
+    in
     helpers.neovim-plugin.extraOptionsOptions
     // {
-      enable =
-        mkEnableOption
-        "treesitter-textobjects (requires plugins.treesitter.enable to be true)";
+      enable = mkEnableOption "treesitter-textobjects (requires plugins.treesitter.enable to be true)";
 
       package = helpers.mkPackageOption "treesitter-textobjects" pkgs.vimPlugins.nvim-treesitter-textobjects;
 
@@ -70,19 +66,19 @@ with lib; {
 
         selectionModes =
           helpers.defaultNullOpts.mkNullable
-          (
-            with types;
-              attrsOf
-              (
-                enum
-                ["v" "V" "<c-v>"]
-              )
-          )
-          "{}"
-          ''
-            Map of capture group to `v`(charwise), `V`(linewise), or `<c-v>`(blockwise), choose a
-            selection mode per capture, default is `v`(charwise).
-          '';
+            (
+              with types;
+              attrsOf (enum [
+                "v"
+                "V"
+                "<c-v>"
+              ])
+            )
+            "{}"
+            ''
+              Map of capture group to `v`(charwise), `V`(linewise), or `<c-v>`(blockwise), choose a
+              selection mode per capture, default is `v`(charwise).
+            '';
 
         includeSurroundingWhitespace = helpers.defaultNullOpts.mkStrLuaFnOr types.bool "`false`" ''
           `true` or `false`, when `true` textobjects are extended to include preceding or
@@ -165,10 +161,14 @@ with lib; {
       lspInterop = {
         enable = helpers.defaultNullOpts.mkBool false "LSP interop.";
 
-        border =
-          helpers.defaultNullOpts.mkEnumFirstDefault
-          ["none" "single" "double" "rounded" "solid" "shadow"]
-          "Define the style of the floating window border.";
+        border = helpers.defaultNullOpts.mkEnumFirstDefault [
+          "none"
+          "single"
+          "double"
+          "rounded"
+          "solid"
+          "shadow"
+        ] "Define the style of the floating window border.";
 
         peekDefinitionCode = mkKeymapsOption ''
           Show textobject surrounding definition as determined using Neovim's built-in LSP in a
@@ -177,67 +177,57 @@ with lib; {
           (when https://github.com/neovim/neovim/pull/12720 or its successor is merged).
         '';
 
-        floatingPreviewOpts =
-          helpers.defaultNullOpts.mkNullable
-          (with types; attrsOf anything)
-          "{}"
-          ''
-            Options to pass to `vim.lsp.util.open_floating_preview`.
-            For example, `maximum_height`.
-          '';
+        floatingPreviewOpts = helpers.defaultNullOpts.mkNullable (with types; attrsOf anything) "{}" ''
+          Options to pass to `vim.lsp.util.open_floating_preview`.
+          For example, `maximum_height`.
+        '';
       };
     };
 
-  config = let
-    cfg = config.plugins.treesitter-textobjects;
-  in
+  config =
+    let
+      cfg = config.plugins.treesitter-textobjects;
+    in
     mkIf cfg.enable {
       warnings = mkIf (!config.plugins.treesitter.enable) [
         "Nixvim: treesitter-textobjects needs treesitter to function as intended"
       ];
 
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
-      plugins.treesitter.moduleConfig.textobjects = with cfg; let
-        processKeymapsOpt = keymapsOptionValue:
-          helpers.ifNonNull' keymapsOptionValue
-          (
-            mapAttrs
-            (key: mapping:
-              if isString mapping
-              then mapping
-              else {
-                inherit (mapping) query;
-                query_group = mapping.queryGroup;
-                inherit (mapping) desc;
-              })
-            keymapsOptionValue
-          );
-      in
+      plugins.treesitter.moduleConfig.textobjects =
+        with cfg;
+        let
+          processKeymapsOpt =
+            keymapsOptionValue:
+            helpers.ifNonNull' keymapsOptionValue (
+              mapAttrs (
+                key: mapping:
+                if isString mapping then
+                  mapping
+                else
+                  {
+                    inherit (mapping) query;
+                    query_group = mapping.queryGroup;
+                    inherit (mapping) desc;
+                  }
+              ) keymapsOptionValue
+            );
+        in
         {
           select = with select; {
-            inherit
-              enable
-              disable
-              lookahead
-              ;
+            inherit enable disable lookahead;
             keymaps = processKeymapsOpt keymaps;
             selection_modes = selectionModes;
             include_surrounding_whitespace = includeSurroundingWhitespace;
           };
           swap = with swap; {
-            inherit
-              enable
-              disable
-              ;
+            inherit enable disable;
             swap_next = processKeymapsOpt swapNext;
             swap_previous = processKeymapsOpt swapPrevious;
           };
           move = with move; {
-            inherit
-              enable
-              disable
-              ;
+            inherit enable disable;
             set_jumps = setJumps;
             goto_next_start = processKeymapsOpt gotoNextStart;
             goto_next_end = processKeymapsOpt gotoNextEnd;
@@ -247,10 +237,7 @@ with lib; {
             goto_previous = processKeymapsOpt gotoPrevious;
           };
           lsp_interop = with lspInterop; {
-            inherit
-              enable
-              border
-              ;
+            inherit enable border;
             peek_definition_code = processKeymapsOpt peekDefinitionCode;
             floating_preview_opts = floatingPreviewOpts;
           };

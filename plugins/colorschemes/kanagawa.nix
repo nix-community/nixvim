@@ -6,110 +6,121 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin config {
-    name = "kanagawa";
-    isColorscheme = true;
-    originalName = "kanagawa.nvim";
-    defaultPackage = pkgs.vimPlugins.kanagawa-nvim;
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "kanagawa";
+  isColorscheme = true;
+  originalName = "kanagawa.nvim";
+  defaultPackage = pkgs.vimPlugins.kanagawa-nvim;
 
-    description = ''
-      You can select the theme in two ways:
-      - Set `colorschemes.kanagawa.settings.theme` AND explicitly unset `vim.o.background` (i.e. `options.background = ""`).
-      - Set `colorschemes.kanagawa.settings.background` (the active theme will depend on the value of `vim.o.background`).
+  description = ''
+    You can select the theme in two ways:
+    - Set `colorschemes.kanagawa.settings.theme` AND explicitly unset `vim.o.background` (i.e. `options.background = ""`).
+    - Set `colorschemes.kanagawa.settings.background` (the active theme will depend on the value of `vim.o.background`).
+  '';
+
+  maintainers = [ maintainers.GaetanLepage ];
+
+  # TODO introduced 2024-03-15: remove 2024-05-15
+  deprecateExtraOptions = true;
+  imports =
+    let
+      basePluginPath = [
+        "colorschemes"
+        "kanagawa"
+      ];
+    in
+    (map
+      (
+        optionPath:
+        mkRenamedOptionModule (basePluginPath ++ optionPath) (
+          basePluginPath ++ [ "settings" ] ++ optionPath
+        )
+      )
+      [
+        [ "compile" ]
+        [ "undercurl" ]
+        [ "commentStyle" ]
+        [ "functionStyle" ]
+        [ "keywordStyle" ]
+        [ "statementStyle" ]
+        [ "typeStyle" ]
+        [ "transparent" ]
+        [ "dimInactive" ]
+        [ "terminalColors" ]
+        [
+          "colors"
+          "palette"
+        ]
+        [
+          "colors"
+          "theme"
+        ]
+        [ "theme" ]
+        [
+          "background"
+          "dark"
+        ]
+        [
+          "background"
+          "light"
+        ]
+      ]
+    )
+    ++ [
+      (mkRemovedOptionModule (basePluginPath ++ [ "overrides" ]) ''
+        Use `colorschemes.kanagawa.settings.overrides` but you now have to add the full function definition:
+        ```
+          function(colors)
+            ...
+          end
+        ```
+      '')
+    ];
+
+  settingsOptions = {
+    compile = helpers.defaultNullOpts.mkBool false ''
+      Enable compiling the colorscheme.
     '';
 
-    maintainers = [maintainers.GaetanLepage];
+    undercurl = helpers.defaultNullOpts.mkBool true ''
+      Enable undercurls.
+    '';
 
-    # TODO introduced 2024-03-15: remove 2024-05-15
-    deprecateExtraOptions = true;
-    imports = let
-      basePluginPath = ["colorschemes" "kanagawa"];
-    in
-      (
-        map
-        (
-          optionPath:
-            mkRenamedOptionModule
-            (basePluginPath ++ optionPath)
-            (basePluginPath ++ ["settings"] ++ optionPath)
-        )
-        [
-          ["compile"]
-          ["undercurl"]
-          ["commentStyle"]
-          ["functionStyle"]
-          ["keywordStyle"]
-          ["statementStyle"]
-          ["typeStyle"]
-          ["transparent"]
-          ["dimInactive"]
-          ["terminalColors"]
-          ["colors" "palette"]
-          ["colors" "theme"]
-          ["theme"]
-          ["background" "dark"]
-          ["background" "light"]
-        ]
-      )
-      ++ [
-        (
-          mkRemovedOptionModule
-          (basePluginPath ++ ["overrides"])
-          ''
-            Use `colorschemes.kanagawa.settings.overrides` but you now have to add the full function definition:
-            ```
-              function(colors)
-                ...
-              end
-            ```
-          ''
-        )
-      ];
+    commentStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
+      Highlight options for comments.
+    '';
 
-    settingsOptions = {
-      compile = helpers.defaultNullOpts.mkBool false ''
-        Enable compiling the colorscheme.
-      '';
+    functionStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+      Highlight options for functions.
+    '';
 
-      undercurl = helpers.defaultNullOpts.mkBool true ''
-        Enable undercurls.
-      '';
+    keywordStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
+      Highlight options for keywords.
+    '';
 
-      commentStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
-        Highlight options for comments.
-      '';
+    statementStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{bold = true;}" ''
+      Highlight options for statements.
+    '';
 
-      functionStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
-        Highlight options for functions.
-      '';
+    typeStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+      Highlight options for types.
+    '';
 
-      keywordStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
-        Highlight options for keywords.
-      '';
+    transparent = helpers.defaultNullOpts.mkBool false ''
+      Whether to set a background color.
+    '';
 
-      statementStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{bold = true;}" ''
-        Highlight options for statements.
-      '';
+    dimInactive = helpers.defaultNullOpts.mkBool false ''
+      Whether dim inactive window `:h hl-NormalNC`.
+    '';
 
-      typeStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
-        Highlight options for types.
-      '';
+    terminalColors = helpers.defaultNullOpts.mkBool true ''
+      If true, defines `vim.g.terminal_color_{0,17}`.
+    '';
 
-      transparent = helpers.defaultNullOpts.mkBool false ''
-        Whether to set a background color.
-      '';
-
-      dimInactive = helpers.defaultNullOpts.mkBool false ''
-        Whether dim inactive window `:h hl-NormalNC`.
-      '';
-
-      terminalColors = helpers.defaultNullOpts.mkBool true ''
-        If true, defines `vim.g.terminal_color_{0,17}`.
-      '';
-
-      colors = {
-        theme =
-          helpers.defaultNullOpts.mkAttrsOf types.attrs
+    colors = {
+      theme =
+        helpers.defaultNullOpts.mkAttrsOf types.attrs
           ''
             {
               wave = {};
@@ -145,21 +156,21 @@ with lib;
             ```
           '';
 
-        palette = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
-          Change all usages of these colors.
+      palette = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+        Change all usages of these colors.
 
-          Example:
-          ```nix
-            {
-              sumiInk0 = "#000000";
-              fujiWhite = "#FFFFFF";
-            }
-          ```
-        '';
-      };
+        Example:
+        ```nix
+          {
+            sumiInk0 = "#000000";
+            fujiWhite = "#FFFFFF";
+          }
+        ```
+      '';
+    };
 
-      overrides =
-        helpers.defaultNullOpts.mkLuaFn
+    overrides =
+      helpers.defaultNullOpts.mkLuaFn
         ''
           function(colors)
             return {}
@@ -189,41 +200,41 @@ with lib;
           ```
         '';
 
-      theme = helpers.defaultNullOpts.mkStr "wave" ''
-        The theme to load when background is not set.
+    theme = helpers.defaultNullOpts.mkStr "wave" ''
+      The theme to load when background is not set.
+    '';
+
+    background = {
+      light = helpers.defaultNullOpts.mkStr "lotus" ''
+        The theme to use when `vim.o.background = "light"`.
       '';
 
-      background = {
-        light = helpers.defaultNullOpts.mkStr "lotus" ''
-          The theme to use when `vim.o.background = "light"`.
-        '';
+      dark = helpers.defaultNullOpts.mkStr "wave" ''
+        The theme to use when `vim.o.background = "dark"`.
+      '';
+    };
+  };
 
-        dark = helpers.defaultNullOpts.mkStr "wave" ''
-          The theme to use when `vim.o.background = "dark"`.
-        '';
+  settingsExample = {
+    compile = false;
+    undercurl = true;
+    commentStyle.italic = true;
+    functionStyle = { };
+    transparent = false;
+    dimInactive = false;
+    terminalColors = true;
+    colors = {
+      theme = {
+        wave.ui.float.bg = "none";
+        dragon.syn.parameter = "yellow";
+        all.ui.bg_gutter = "none";
+      };
+      palette = {
+        sumiInk0 = "#000000";
+        fujiWhite = "#FFFFFF";
       };
     };
-
-    settingsExample = {
-      compile = false;
-      undercurl = true;
-      commentStyle.italic = true;
-      functionStyle = {};
-      transparent = false;
-      dimInactive = false;
-      terminalColors = true;
-      colors = {
-        theme = {
-          wave.ui.float.bg = "none";
-          dragon.syn.parameter = "yellow";
-          all.ui.bg_gutter = "none";
-        };
-        palette = {
-          sumiInk0 = "#000000";
-          fujiWhite = "#FFFFFF";
-        };
-      };
-      overrides = "function(colors) return {} end";
-      theme = "wave";
-    };
-  }
+    overrides = "function(colors) return {} end";
+    theme = "wave";
+  };
+}

@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.dashboard;
-in {
+in
+{
   options = {
     plugins.dashboard = {
       enable = mkEnableOption "dashboard";
@@ -28,32 +30,36 @@ in {
 
       center = mkOption {
         description = "Center section";
-        type = types.nullOr (types.listOf (types.submodule {
-          options = {
-            icon = mkOption {
-              description = "Item icon";
-              type = types.nullOr types.str;
-              default = null;
-            };
+        type = types.nullOr (
+          types.listOf (
+            types.submodule {
+              options = {
+                icon = mkOption {
+                  description = "Item icon";
+                  type = types.nullOr types.str;
+                  default = null;
+                };
 
-            desc = mkOption {
-              description = "Item description";
-              type = types.str;
-            };
+                desc = mkOption {
+                  description = "Item description";
+                  type = types.str;
+                };
 
-            shortcut = mkOption {
-              description = "Item shortcut";
-              type = types.nullOr types.str;
-              default = null;
-            };
+                shortcut = mkOption {
+                  description = "Item shortcut";
+                  type = types.nullOr types.str;
+                  default = null;
+                };
 
-            action = mkOption {
-              description = "Item action";
-              type = types.nullOr types.str;
-              default = null;
-            };
-          };
-        }));
+                action = mkOption {
+                  description = "Item action";
+                  type = types.nullOr types.str;
+                  default = null;
+                };
+              };
+            }
+          )
+        );
         default = null;
       };
 
@@ -92,7 +98,7 @@ in {
             };
           };
         };
-        default = {};
+        default = { };
       };
 
       hideStatusline = mkOption {
@@ -109,32 +115,32 @@ in {
     };
   };
 
-  config = let
-    options = {
-      custom_header = cfg.header;
-      custom_footer = cfg.footer;
-      custom_center = cfg.center;
+  config =
+    let
+      options = {
+        custom_header = cfg.header;
+        custom_footer = cfg.footer;
+        custom_center = cfg.center;
 
-      preview_file_path = cfg.preview.file;
-      preview_file_height = cfg.preview.height;
-      preview_file_width = cfg.preview.width;
-      preview_command = cfg.preview.command;
+        preview_file_path = cfg.preview.file;
+        preview_file_height = cfg.preview.height;
+        preview_file_width = cfg.preview.width;
+        preview_command = cfg.preview.command;
 
-      hide_statusline = cfg.hideStatusline;
-      hide_tabline = cfg.hideTabline;
+        hide_statusline = cfg.hideStatusline;
+        hide_tabline = cfg.hideTabline;
 
-      session_directory = cfg.sessionDirectory;
-    };
+        session_directory = cfg.sessionDirectory;
+      };
 
-    filteredOptions = filterAttrs (_: v: v != null) options;
-  in
+      filteredOptions = filterAttrs (_: v: v != null) options;
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
       extraConfigLua = ''
         local dashboard = require("dashboard")
 
-        ${toString (mapAttrsToList (n: v: "dashboard.${n} = ${helpers.toLuaObject v}\n")
-            filteredOptions)}
+        ${toString (mapAttrsToList (n: v: "dashboard.${n} = ${helpers.toLuaObject v}\n") filteredOptions)}
       '';
     };
 }

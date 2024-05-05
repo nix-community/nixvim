@@ -6,103 +6,165 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin config {
-    name = "trouble";
-    originalName = "trouble-nvim";
-    defaultPackage = pkgs.vimPlugins.trouble-nvim;
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "trouble";
+  originalName = "trouble-nvim";
+  defaultPackage = pkgs.vimPlugins.trouble-nvim;
 
-    extraPlugins = with pkgs.vimPlugins; [
-      nvim-web-devicons
-    ];
+  extraPlugins = with pkgs.vimPlugins; [ nvim-web-devicons ];
 
-    maintainers = [maintainers.loicreynier];
+  maintainers = [ maintainers.loicreynier ];
 
-    # TODO introduced 2024-03-15: remove 2024-05-15
-    optionsRenamedToSettings = [
-      "autoClose"
-      "autoFold"
-      "autoOpen"
-      "autoJump"
-      "autoPreview"
-      "foldClosed"
-      "foldOpen"
-      "group"
-      "height"
-      "icons"
-      "indentLines"
-      "mode"
-      "padding"
-      "position"
-      "width"
-      "useDiagnosticSigns"
+  # TODO introduced 2024-03-15: remove 2024-05-15
+  optionsRenamedToSettings = [
+    "autoClose"
+    "autoFold"
+    "autoOpen"
+    "autoJump"
+    "autoPreview"
+    "foldClosed"
+    "foldOpen"
+    "group"
+    "height"
+    "icons"
+    "indentLines"
+    "mode"
+    "padding"
+    "position"
+    "width"
+    "useDiagnosticSigns"
 
-      ["actionKeys" "cancel"]
-      ["actionKeys" "close"]
-      ["actionKeys" "closeFolds"]
-      ["actionKeys" "hover"]
-      ["actionKeys" "jump"]
-      ["actionKeys" "jumpClose"]
-      ["actionKeys" "next"]
-      ["actionKeys" "openFolds"]
-      ["actionKeys" "openSplit"]
-      ["actionKeys" "openTab"]
-      ["actionKeys" "openVsplit"]
-      ["actionKeys" "previous"]
-      ["actionKeys" "refresh"]
-      ["actionKeys" "toggleFold"]
-      ["actionKeys" "toggleMode"]
-      ["actionKeys" "togglePreview"]
-      ["signs" "error"]
-      ["signs" "hint"]
-      ["signs" "other"]
-      ["signs" "warning"]
-    ];
+    [
+      "actionKeys"
+      "cancel"
+    ]
+    [
+      "actionKeys"
+      "close"
+    ]
+    [
+      "actionKeys"
+      "closeFolds"
+    ]
+    [
+      "actionKeys"
+      "hover"
+    ]
+    [
+      "actionKeys"
+      "jump"
+    ]
+    [
+      "actionKeys"
+      "jumpClose"
+    ]
+    [
+      "actionKeys"
+      "next"
+    ]
+    [
+      "actionKeys"
+      "openFolds"
+    ]
+    [
+      "actionKeys"
+      "openSplit"
+    ]
+    [
+      "actionKeys"
+      "openTab"
+    ]
+    [
+      "actionKeys"
+      "openVsplit"
+    ]
+    [
+      "actionKeys"
+      "previous"
+    ]
+    [
+      "actionKeys"
+      "refresh"
+    ]
+    [
+      "actionKeys"
+      "toggleFold"
+    ]
+    [
+      "actionKeys"
+      "toggleMode"
+    ]
+    [
+      "actionKeys"
+      "togglePreview"
+    ]
+    [
+      "signs"
+      "error"
+    ]
+    [
+      "signs"
+      "hint"
+    ]
+    [
+      "signs"
+      "other"
+    ]
+    [
+      "signs"
+      "warning"
+    ]
+  ];
 
-    settingsOptions = {
-      position = helpers.defaultNullOpts.mkEnum ["top" "left" "right" "bottom"] "bottom" ''
-        Position of the list.
-      '';
-
-      height = helpers.defaultNullOpts.mkInt 10 ''
-        Height of the trouble list when position is top or bottom.
-      '';
-
-      width = helpers.defaultNullOpts.mkInt 50 ''
-        Width of the list when position is left or right.
-      '';
-
-      icons = helpers.defaultNullOpts.mkBool true "Use devicons for filenames";
-
-      mode =
-        helpers.defaultNullOpts.mkEnum
+  settingsOptions = {
+    position =
+      helpers.defaultNullOpts.mkEnum
         [
-          "workspace_diagnostics"
-          "document_diagnostics"
-          "quickfix"
-          "lsp_references"
-          "loclist"
+          "top"
+          "left"
+          "right"
+          "bottom"
         ]
-        "workspace_diagnostics"
-        "Mode for default list";
+        "bottom"
+        ''
+          Position of the list.
+        '';
 
-      fold_open = helpers.defaultNullOpts.mkStr "" "Icon used for open folds";
+    height = helpers.defaultNullOpts.mkInt 10 ''
+      Height of the trouble list when position is top or bottom.
+    '';
 
-      fold_closed = helpers.defaultNullOpts.mkStr "" "Icon used for closed folds";
+    width = helpers.defaultNullOpts.mkInt 50 ''
+      Width of the list when position is left or right.
+    '';
 
-      group = helpers.defaultNullOpts.mkBool true "Group results by file";
+    icons = helpers.defaultNullOpts.mkBool true "Use devicons for filenames";
 
-      padding = helpers.defaultNullOpts.mkBool true "Add an extra new line on top of the list";
+    mode = helpers.defaultNullOpts.mkEnum [
+      "workspace_diagnostics"
+      "document_diagnostics"
+      "quickfix"
+      "lsp_references"
+      "loclist"
+    ] "workspace_diagnostics" "Mode for default list";
 
-      cycle_results = helpers.defaultNullOpts.mkBool true "Whether to cycle item list when reaching beginning or end of list";
+    fold_open = helpers.defaultNullOpts.mkStr "" "Icon used for open folds";
 
-      action_keys =
-        mapAttrs
+    fold_closed = helpers.defaultNullOpts.mkStr "" "Icon used for closed folds";
+
+    group = helpers.defaultNullOpts.mkBool true "Group results by file";
+
+    padding = helpers.defaultNullOpts.mkBool true "Add an extra new line on top of the list";
+
+    cycle_results = helpers.defaultNullOpts.mkBool true "Whether to cycle item list when reaching beginning or end of list";
+
+    action_keys =
+      mapAttrs
         (
           action: config:
-            helpers.defaultNullOpts.mkNullable
-            (with types; either str (listOf str))
-            config.default
-            config.description
+          helpers.defaultNullOpts.mkNullable (
+            with types; either str (listOf str)
+          ) config.default config.description
         )
         {
           close = {
@@ -175,50 +237,47 @@ with lib;
           };
         };
 
-      indent_lines = helpers.defaultNullOpts.mkBool true ''
-        Add an indent guide below the fold icons.
-      '';
+    indent_lines = helpers.defaultNullOpts.mkBool true ''
+      Add an indent guide below the fold icons.
+    '';
 
-      win_config =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
-        ''
-          {
-            border = "single";
-          }
-        ''
-        "Configuration for floating windows. See `|nvim_open_win()|`.";
+    win_config = helpers.defaultNullOpts.mkAttrsOf types.anything ''
+      {
+        border = "single";
+      }
+    '' "Configuration for floating windows. See `|nvim_open_win()|`.";
 
-      auto_open = helpers.defaultNullOpts.mkBool false ''
-        Automatically open the list when you have diagnostics.
-      '';
+    auto_open = helpers.defaultNullOpts.mkBool false ''
+      Automatically open the list when you have diagnostics.
+    '';
 
-      auto_close = helpers.defaultNullOpts.mkBool false ''
-        Automatically close the list when you have no diagnostics.
-      '';
+    auto_close = helpers.defaultNullOpts.mkBool false ''
+      Automatically close the list when you have no diagnostics.
+    '';
 
-      auto_preview = helpers.defaultNullOpts.mkBool true ''
-        Automatically preview the location of the diagnostic.
-        <esc> to close preview and go back to last window.
-      '';
+    auto_preview = helpers.defaultNullOpts.mkBool true ''
+      Automatically preview the location of the diagnostic.
+      <esc> to close preview and go back to last window.
+    '';
 
-      auto_fold = helpers.defaultNullOpts.mkBool false ''
-        Automatically fold a file trouble list at creation.
-      '';
+    auto_fold = helpers.defaultNullOpts.mkBool false ''
+      Automatically fold a file trouble list at creation.
+    '';
 
-      auto_jump = helpers.defaultNullOpts.mkListOf types.str ''["lsp_definitions"]'' ''
-        For the given modes, automatically jump if there is only a single result.
-      '';
+    auto_jump = helpers.defaultNullOpts.mkListOf types.str ''["lsp_definitions"]'' ''
+      For the given modes, automatically jump if there is only a single result.
+    '';
 
-      include_declaration =
-        helpers.defaultNullOpts.mkListOf types.str
+    include_declaration =
+      helpers.defaultNullOpts.mkListOf types.str
         ''["lsp_references" "lsp_implementations" "lsp_definitions"]''
         "For the given modes, include the declaration of the current symbol in the results.";
 
-      signs =
-        mapAttrs
+    signs =
+      mapAttrs
         (
           diagnostic: default:
-            helpers.defaultNullOpts.mkStr default "Icon/text for ${diagnostic} diagnostics."
+          helpers.defaultNullOpts.mkStr default "Icon/text for ${diagnostic} diagnostics."
         )
         {
           error = "";
@@ -228,8 +287,8 @@ with lib;
           other = "﫠";
         };
 
-      use_diagnostic_signs = helpers.defaultNullOpts.mkBool false ''
-        Enabling this will use the signs defined in your lsp client
-      '';
-    };
-  }
+    use_diagnostic_signs = helpers.defaultNullOpts.mkBool false ''
+      Enabling this will use the signs defined in your lsp client
+    '';
+  };
+}

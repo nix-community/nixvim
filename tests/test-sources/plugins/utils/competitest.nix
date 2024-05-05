@@ -15,33 +15,49 @@
         compile_command = {
           c = {
             exec = "gcc";
-            args = ["-Wall" "$(FNAME)" "-o" "$(FNOEXT)"];
+            args = [
+              "-Wall"
+              "$(FNAME)"
+              "-o"
+              "$(FNOEXT)"
+            ];
           };
           cpp = {
             exec = "g++";
-            args = ["-Wall" "$(FNAME)" "-o" "$(FNOEXT)"];
+            args = [
+              "-Wall"
+              "$(FNAME)"
+              "-o"
+              "$(FNOEXT)"
+            ];
           };
           rust = {
             exec = "rustc";
-            args = ["$(FNAME)"];
+            args = [ "$(FNAME)" ];
           };
           java = {
             exec = "javac";
-            args = ["$(FNAME)"];
+            args = [ "$(FNAME)" ];
           };
         };
         running_directory = ".";
         run_command = {
-          c = {exec = "./$(FNOEXT)";};
-          cpp = {exec = "./$(FNOEXT)";};
-          rust = {exec = "./$(FNOEXT)";};
+          c = {
+            exec = "./$(FNOEXT)";
+          };
+          cpp = {
+            exec = "./$(FNOEXT)";
+          };
+          rust = {
+            exec = "./$(FNOEXT)";
+          };
           python = {
             exec = "python";
-            args = ["$(FNAME)"];
+            args = [ "$(FNAME)" ];
           };
           java = {
             exec = "java";
-            args = ["$(FNOEXT)"];
+            args = [ "$(FNOEXT)" ];
           };
         };
         multiple_testing = -1;

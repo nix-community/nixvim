@@ -9,9 +9,9 @@ helpers.vim-plugin.mkVimPlugin config {
   name = "tagbar";
   defaultPackage = pkgs.vimPlugins.tagbar;
   globalPrefix = "tagbar_";
-  extraPackages = [pkgs.ctags];
+  extraPackages = [ pkgs.ctags ];
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-02-12: remove 2024-04-12
   deprecateExtraConfig = true;
@@ -22,7 +22,10 @@ helpers.vim-plugin.mkVimPlugin config {
     autofocus = false;
     foldlevel = 2;
     autoshowtag = true;
-    iconchars = ["" ""];
+    iconchars = [
+      ""
+      ""
+    ];
     visibility_symbols = {
       public = "󰡭 ";
       protected = "󱗤 ";

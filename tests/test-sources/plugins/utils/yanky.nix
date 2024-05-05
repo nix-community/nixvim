@@ -13,7 +13,7 @@
         storagePath.__raw = "vim.fn.stdpath('data') .. '/databases/yanky.db'";
         syncWithNumberedRegisters = true;
         cancelEvent = "update";
-        ignoreRegisters = ["_"];
+        ignoreRegisters = [ "_" ];
         updateRegisterOnCycle = false;
       };
       picker = {

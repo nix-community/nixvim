@@ -48,19 +48,26 @@
       saveOnChange = true;
       enterOnSendcmd = false;
       tmuxAutocloseWindows = false;
-      excludedFiletypes = ["harpoon"];
+      excludedFiletypes = [ "harpoon" ];
       markBranch = false;
       projects = {
         "$HOME/personal/vim-with-me/server" = {
-          termCommands = [
-            "./env && npx ts-node src/index.ts"
-          ];
+          termCommands = [ "./env && npx ts-node src/index.ts" ];
         };
       };
       menu = {
         width = 60;
         height = 10;
-        borderChars = ["─" "│" "─" "│" "╭" "╮" "╯" "╰"];
+        borderChars = [
+          "─"
+          "│"
+          "─"
+          "│"
+          "╭"
+          "╮"
+          "╯"
+          "╰"
+        ];
       };
     };
   };

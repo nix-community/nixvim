@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.commentary;
-in {
+in
+{
   # TODO Add support for additional filetypes. This requires autocommands!
 
   options = {
@@ -18,7 +20,5 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-  };
+  config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };
 }

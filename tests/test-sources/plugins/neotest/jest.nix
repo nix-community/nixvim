@@ -11,7 +11,9 @@
           settings = {
             jestCommand = "npm test --";
             jestConfigFile = "custom.jest.config.ts";
-            env = {CI = true;};
+            env = {
+              CI = true;
+            };
             cwd.__raw = ''
               function(path)
                 return vim.fn.getcwd()

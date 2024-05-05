@@ -14,8 +14,8 @@
           settings = {
             cwd = "~/Github";
             winopts = {
-              height = 0.10;
-              width = 0.50;
+              height = 0.1;
+              width = 0.5;
             };
           };
           options.silent = true;

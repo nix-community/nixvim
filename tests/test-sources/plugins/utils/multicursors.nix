@@ -25,7 +25,9 @@
           method = "require 'multicursors.normal_mode'.clear_others";
 
           # you can pass :map-arguments here
-          opts = {desc = "Clear others";};
+          opts = {
+            desc = "Clear others";
+          };
         };
         "<C-/>" = {
           method = ''
@@ -39,7 +41,9 @@
               )
             end
           '';
-          opts = {desc = "comment selections";};
+          opts = {
+            desc = "comment selections";
+          };
         };
       };
       insertKeys = null;

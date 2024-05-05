@@ -5,13 +5,16 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.copilot-lua;
-in {
+in
+{
   options = {
-    plugins.copilot-lua = let
-      keymapOption = helpers.defaultNullOpts.mkNullable (with types; either (enum [false]) str);
-    in
+    plugins.copilot-lua =
+      let
+        keymapOption = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) str);
+      in
       helpers.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "copilot.lua";
@@ -36,9 +39,18 @@ in {
           };
 
           layout = {
-            position = helpers.defaultNullOpts.mkEnum ["bottom" "top" "left" "right"] "bottom" ''
-              The panel position.
-            '';
+            position =
+              helpers.defaultNullOpts.mkEnum
+                [
+                  "bottom"
+                  "top"
+                  "left"
+                  "right"
+                ]
+                "bottom"
+                ''
+                  The panel position.
+                '';
 
             ratio = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.4" ''
               The panel ratio.
@@ -69,52 +81,51 @@ in {
         };
 
         filetypes =
-          helpers.defaultNullOpts.mkNullable
-          (with types; attrsOf (either bool helpers.nixvimTypes.rawLua))
-          ''
-            {
-              yaml = false;
-              markdown = false;
-              help = false;
-              gitcommit = false;
-              gitrebase = false;
-              hgcommit = false;
-              svn = false;
-              cvs = false;
-              "." = false;
-            }
-          ''
-          ''
-            Specify filetypes for attaching copilot.
-            Each value can be either a boolean or a lua function that returns a boolean.
-
-            Example:
-            ```nix
+          helpers.defaultNullOpts.mkNullable (with types; attrsOf (either bool helpers.nixvimTypes.rawLua))
+            ''
               {
-                markdown = true; # overrides default
-                terraform = false; # disallow specific filetype
-                sh.__raw = \'\'
-                  function ()
-                    if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
-                      -- disable for .env files
-                      return false
+                yaml = false;
+                markdown = false;
+                help = false;
+                gitcommit = false;
+                gitrebase = false;
+                hgcommit = false;
+                svn = false;
+                cvs = false;
+                "." = false;
+              }
+            ''
+            ''
+              Specify filetypes for attaching copilot.
+              Each value can be either a boolean or a lua function that returns a boolean.
+
+              Example:
+              ```nix
+                {
+                  markdown = true; # overrides default
+                  terraform = false; # disallow specific filetype
+                  sh.__raw = \'\'
+                    function ()
+                      if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
+                        -- disable for .env files
+                        return false
+                      end
+                      return true
                     end
-                    return true
-                  end
-                \'\';
-              }
-            ```
+                  \'\';
+                }
+              ```
 
-            The key `"*"` can be used to disable the default configuration.
-            Example:
-            ```nix
-              {
-                javascript = true; # allow specific filetype
-                typescript = true; # allow specific filetype
-                "*" = false; # disable for all other filetypes and ignore default `filetypes`
-              }
-            ```
-          '';
+              The key `"*"` can be used to disable the default configuration.
+              Example:
+              ```nix
+                {
+                  javascript = true; # allow specific filetype
+                  typescript = true; # allow specific filetype
+                  "*" = false; # disable for all other filetypes and ignore default `filetypes`
+                }
+              ```
+            '';
 
         copilotNodeCommand = mkOption {
           type = types.str;
@@ -164,41 +175,44 @@ in {
       }
     ];
 
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
 
-    extraConfigLua = let
-      setupOptions = with cfg;
-        {
-          panel = with panel; {
-            inherit enabled;
-            auto_refresh = autoRefresh;
-            keymap = with keymap; {
-              jump_prev = jumpPrev;
-              jump_next = jumpNext;
-              inherit accept refresh open;
+    extraConfigLua =
+      let
+        setupOptions =
+          with cfg;
+          {
+            panel = with panel; {
+              inherit enabled;
+              auto_refresh = autoRefresh;
+              keymap = with keymap; {
+                jump_prev = jumpPrev;
+                jump_next = jumpNext;
+                inherit accept refresh open;
+              };
+              layout = with layout; {
+                inherit position ratio;
+              };
             };
-            layout = with layout; {
-              inherit position ratio;
+            suggestion = with suggestion; {
+              inherit enabled;
+              auto_trigger = autoTrigger;
+              inherit debounce;
+              keymap = with keymap; {
+                inherit accept;
+                accept_word = acceptWord;
+                accept_line = acceptLine;
+                inherit next prev dismiss;
+              };
             };
-          };
-          suggestion = with suggestion; {
-            inherit enabled;
-            auto_trigger = autoTrigger;
-            inherit debounce;
-            keymap = with keymap; {
-              inherit accept;
-              accept_word = acceptWord;
-              accept_line = acceptLine;
-              inherit next prev dismiss;
-            };
-          };
-          inherit filetypes;
-          copilot_node_command = copilotNodeCommand;
-          server_opts_overrides = serverOptsOverrides;
-        }
-        // cfg.extraOptions;
-    in ''
-      require('copilot').setup(${helpers.toLuaObject setupOptions})
-    '';
+            inherit filetypes;
+            copilot_node_command = copilotNodeCommand;
+            server_opts_overrides = serverOptsOverrides;
+          }
+          // cfg.extraOptions;
+      in
+      ''
+        require('copilot').setup(${helpers.toLuaObject setupOptions})
+      '';
   };
 }
