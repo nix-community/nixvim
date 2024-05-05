@@ -5,20 +5,20 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   defaultFuzzyFinder = "skim";
-in
-{
+in {
   options.plugins.openscad = {
     enable = mkEnableOption "openscad.nvim, a plugin to manage OpenSCAD files";
 
     package = helpers.mkPackageOption "openscad.nvim" pkgs.vimPlugins.openscad-nvim;
 
-    fuzzyFinder = helpers.defaultNullOpts.mkEnum [
-      "skim"
-      "fzf"
-    ] defaultFuzzyFinder "fuzzy finder to find documentation";
+    fuzzyFinder =
+      helpers.defaultNullOpts.mkEnum [
+        "skim"
+        "fzf"
+      ]
+      defaultFuzzyFinder "fuzzy finder to find documentation";
 
     cheatsheetWindowBlend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) "15" "";
 
@@ -41,15 +41,16 @@ in
     };
   };
 
-  config =
-    let
-      cfg = config.plugins.openscad;
-      fuzzyFinder = if (cfg.fuzzyFinder == null) then defaultFuzzyFinder else cfg.fuzzyFinder;
-    in
+  config = let
+    cfg = config.plugins.openscad;
+    fuzzyFinder =
+      if (cfg.fuzzyFinder == null)
+      then defaultFuzzyFinder
+      else cfg.fuzzyFinder;
+  in
     mkIf cfg.enable {
-      extraPlugins =
-        with pkgs.vimPlugins;
-        [ cfg.package ]
+      extraPlugins = with pkgs.vimPlugins;
+        [cfg.package]
         ++ (optional (fuzzyFinder == "skim") skim-vim)
         ++ (optional (fuzzyFinder == "fzf") fzf-vim);
 

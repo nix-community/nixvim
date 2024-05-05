@@ -2,15 +2,14 @@
   modules,
   self,
   getHelpers,
-}:
-{
+}: {
   pkgs,
   config,
   lib,
   ...
-}@args:
-let
-  inherit (lib)
+} @ args: let
+  inherit
+    (lib)
     mkEnableOption
     mkOption
     mkOptionType
@@ -20,31 +19,34 @@ let
     types
     ;
   helpers = getHelpers pkgs false;
-  shared = import ./_shared.nix { inherit modules helpers; } args;
+  shared = import ./_shared.nix {inherit modules helpers;} args;
   cfg = config.programs.nixvim;
-  files = shared.configFiles // {
-    "nvim/sysinit.lua".text = cfg.initContent;
-  };
-in
-{
+  files =
+    shared.configFiles
+    // {
+      "nvim/sysinit.lua".text = cfg.initContent;
+    };
+in {
   options = {
     programs.nixvim = mkOption {
-      default = { };
+      default = {};
       type = types.submoduleWith {
         shorthandOnlyDefinesConfig = true;
         specialArgs = {
           nixosConfig = config;
           inherit helpers;
         };
-        modules = [
-          {
-            options = {
-              enable = mkEnableOption "nixvim";
-              defaultEditor = mkEnableOption "nixvim as the default editor";
-            };
-            config.wrapRc = mkForce true;
-          }
-        ] ++ shared.topLevelModules;
+        modules =
+          [
+            {
+              options = {
+                enable = mkEnableOption "nixvim";
+                defaultEditor = mkEnableOption "nixvim as the default editor";
+              };
+              config.wrapRc = mkForce true;
+            }
+          ]
+          ++ shared.topLevelModules;
       };
     };
     nixvim.helpers = shared.helpers;
@@ -52,10 +54,12 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      environment.systemPackages = [
-        cfg.finalPackage
-        cfg.printInitPackage
-      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
+      environment.systemPackages =
+        [
+          cfg.finalPackage
+          cfg.printInitPackage
+        ]
+        ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
     }
     (mkIf (!cfg.wrapRc) {
       environment.etc = files;

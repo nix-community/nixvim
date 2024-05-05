@@ -16,8 +16,8 @@
         terminal_colors = true;
 
         theme = {
-          highlights = { };
-          colors = { };
+          highlights = {};
+          colors = {};
         };
       };
     };

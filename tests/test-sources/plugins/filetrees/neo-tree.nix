@@ -242,7 +242,7 @@
           "bufnr"
         ];
       };
-      nestingRules = { };
+      nestingRules = {};
       window = {
         position = "left";
         width = 40;
@@ -346,10 +346,10 @@
             ".DS_Store"
             "thumbs.db"
           ];
-          hideByPattern = [ ];
-          alwaysShow = [ ];
-          neverShow = [ ];
-          neverShowByPattern = [ ];
+          hideByPattern = [];
+          alwaysShow = [];
+          neverShow = [];
+          neverShowByPattern = [];
         };
         findByFullPathWords = false;
         findCommand = "fd";

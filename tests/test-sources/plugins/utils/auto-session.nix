@@ -16,7 +16,7 @@
         };
         createEnabled = true;
         suppressDirs = null;
-        allowedDirs = [ ];
+        allowedDirs = [];
         useGitBranch = true;
       };
       autoSave = {
@@ -30,7 +30,7 @@
         preCwdChangedHook = null;
         postCwdChangedHook = null;
       };
-      bypassSessionSaveFileTypes = [ ];
+      bypassSessionSaveFileTypes = [];
       sessionLens = {
         loadOnSetup = true;
         themeConf = {

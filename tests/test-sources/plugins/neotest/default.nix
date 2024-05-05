@@ -46,7 +46,7 @@
     plugins.neotest = {
       enable = true;
 
-      adapters = { };
+      adapters = {};
       settings = {
         discovery = {
           enabled = true;
@@ -58,7 +58,7 @@
         };
         default_strategy = "integrated";
         log_level = "warn";
-        consumers = { };
+        consumers = {};
         icons = {
           child_indent = "│";
           child_prefix = "├";
@@ -108,7 +108,7 @@
           border = "rounded";
           max_height = 0.6;
           max_width = 0.6;
-          options = { };
+          options = {};
         };
         strategies = {
           integrated = {

@@ -16,7 +16,7 @@
             "image"
             "video"
           ];
-          allowExts = [ ".ts" ];
+          allowExts = [".ts"];
         };
         pageIncrement = 5;
         pollingRate = 2.0;
@@ -30,8 +30,8 @@
             "thumbs.db"
             ".git"
           ];
-          nameGlob = [ ];
-          pathGlob = [ ];
+          nameGlob = [];
+          pathGlob = [];
         };
       };
       view = {
@@ -64,7 +64,7 @@
       };
       keymap = {
         windowManagement = {
-          quit = [ "q" ];
+          quit = ["q"];
           bigger = [
             "+"
             "="
@@ -73,15 +73,15 @@
             "-"
             "_"
           ];
-          refresh = [ "<c-r>" ];
+          refresh = ["<c-r>"];
         };
         rerooting = {
-          changeDir = [ "b" ];
-          changeFocus = [ "c" ];
-          changeFocusUp = [ "C" ];
+          changeDir = ["b"];
+          changeFocus = ["c"];
+          changeFocusUp = ["C"];
         };
         openFileFolder = {
-          primary = [ "<enter>" ];
+          primary = ["<enter>"];
           secondary = [
             "<tab>"
             "<2-leftmouse>"
@@ -90,44 +90,44 @@
             "<m-enter>"
             "<middlemouse>"
           ];
-          vSplit = [ "w" ];
-          hSplit = [ "W" ];
-          openSys = [ "o" ];
-          collapse = [ "o" ];
+          vSplit = ["w"];
+          hSplit = ["W"];
+          openSys = ["o"];
+          collapse = ["o"];
         };
         cursor = {
-          refocus = [ "~" ];
-          jumpToCurrent = [ "J" ];
-          stat = [ "K" ];
-          copyName = [ "y" ];
-          copyBasename = [ "Y" ];
-          copyRelname = [ "<c-y>" ];
+          refocus = ["~"];
+          jumpToCurrent = ["J"];
+          stat = ["K"];
+          copyName = ["y"];
+          copyBasename = ["Y"];
+          copyRelname = ["<c-y>"];
         };
         filtering = {
-          filter = [ "f" ];
-          clearFilter = [ "F" ];
+          filter = ["f"];
+          clearFilter = ["F"];
         };
         bookmarks = {
-          bookmarkGoto = [ "m" ];
+          bookmarkGoto = ["m"];
         };
         selecting = {
-          select = [ "s" ];
-          clearSelection = [ "S" ];
+          select = ["s"];
+          clearSelection = ["S"];
         };
         fileOperations = {
-          new = [ "a" ];
-          link = [ "A" ];
-          rename = [ "r" ];
-          toggleExec = [ "X" ];
-          copy = [ "p" ];
-          cut = [ "x" ];
-          delete = [ "d" ];
-          trash = [ "t" ];
+          new = ["a"];
+          link = ["A"];
+          rename = ["r"];
+          toggleExec = ["X"];
+          copy = ["p"];
+          cut = ["x"];
+          delete = ["d"];
+          trash = ["t"];
         };
         toggles = {
-          toggleHidden = [ "." ];
-          toggleFollow = [ "u" ];
-          toggleVersionControl = [ "i" ];
+          toggleHidden = ["."];
+          toggleFollow = ["u"];
+          toggleVersionControl = ["i"];
         };
       };
     };

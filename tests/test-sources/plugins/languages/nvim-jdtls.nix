@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   example = {
     plugins.nvim-jdtls = {
       enable = true;
@@ -15,11 +14,11 @@
       rootDir.__raw = "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})";
 
       settings = {
-        java = { };
+        java = {};
       };
 
       initOptions = {
-        bundles = { };
+        bundles = {};
       };
     };
   };

@@ -24,10 +24,10 @@
       animation = true;
       autoHide = false;
       clickable = true;
-      excludeFileTypes = [ ];
-      excludeFileNames = [ ];
+      excludeFileTypes = [];
+      excludeFileNames = [];
       focusOnClose = "left";
-      hide = { };
+      hide = {};
       highlightAlternate = false;
       highlightInactiveFileIcons = false;
       highlightVisible = true;
@@ -35,7 +35,7 @@
         bufferIndex = false;
         bufferNumber = false;
         button = "";
-        diagnostics = { };
+        diagnostics = {};
         filetype = {
           enable = true;
         };
@@ -64,7 +64,7 @@
       minimumPadding = 1;
       noNameTitle = null;
       semanticLetters = true;
-      sidebarFiletypes = { };
+      sidebarFiletypes = {};
       tabpages = true;
     };
   };

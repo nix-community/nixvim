@@ -23,7 +23,7 @@
         ".*/etc/foo.*" = "fooscript";
         ".*/etc/foo.*%.conf" = [
           "dosini"
-          { priority = 10; }
+          {priority = 10;}
         ];
         "\${XDG_CONFIG_HOME}/foo/git" = "git";
         "README.(a+)$".__raw = ''

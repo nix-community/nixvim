@@ -27,8 +27,8 @@
                 return vim.loop.cwd()
               end
             '';
-            env = { };
-            extra_args = [ ];
+            env = {};
+            extra_args = [];
             filter_dir.__raw = ''
               function(name, rel_path, root)
                 return name ~= "node_modules"

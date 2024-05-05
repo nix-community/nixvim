@@ -13,9 +13,9 @@
             retainInMemory = 1;
           };
           clang = {
-            extraArgs = [ ];
-            excludeArgs = [ "-frounding-math" ];
-            pathMappings = [ "/remote/>/host/" ];
+            extraArgs = [];
+            excludeArgs = ["-frounding-math"];
+            pathMappings = ["/remote/>/host/"];
             resourceDir = "";
           };
           client = {
@@ -36,8 +36,8 @@
             threads = 0;
             comments = 2;
             multiVersion = 0;
-            multiVersionBlacklist = [ "^/usr/include" ];
-            initialBlacklist = [ "." ];
+            multiVersionBlacklist = ["^/usr/include"];
+            initialBlacklist = ["."];
             onChange = false;
             trackDependency = 2;
           };

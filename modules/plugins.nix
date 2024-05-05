@@ -1,4 +1,3 @@
-{ ... }:
-{
-  imports = [ ../plugins/default.nix ];
+{...}: {
+  imports = [../plugins/default.nix];
 }

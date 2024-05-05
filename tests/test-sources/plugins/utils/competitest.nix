@@ -33,11 +33,11 @@
           };
           rust = {
             exec = "rustc";
-            args = [ "$(FNAME)" ];
+            args = ["$(FNAME)"];
           };
           java = {
             exec = "javac";
-            args = [ "$(FNAME)" ];
+            args = ["$(FNAME)"];
           };
         };
         running_directory = ".";
@@ -53,11 +53,11 @@
           };
           python = {
             exec = "python";
-            args = [ "$(FNAME)" ];
+            args = ["$(FNAME)"];
           };
           java = {
             exec = "java";
-            args = [ "$(FNOEXT)" ];
+            args = ["$(FNOEXT)"];
           };
         };
         multiple_testing = -1;

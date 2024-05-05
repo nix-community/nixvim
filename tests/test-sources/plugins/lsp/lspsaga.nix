@@ -22,7 +22,7 @@
           "━"
           "┏"
         ];
-        kind = { };
+        kind = {};
         impSign = "󰳛 ";
       };
       hover = {
@@ -85,7 +85,7 @@
         default = "ref+imp";
         layout = "float";
         silent = false;
-        filter = { };
+        filter = {};
         keys = {
           shuttle = "[w";
           toggleOrOpen = "o";

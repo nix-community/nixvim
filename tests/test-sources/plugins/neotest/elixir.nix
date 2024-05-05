@@ -9,13 +9,13 @@
           enable = true;
 
           settings = {
-            mix_task = [ "my_custom_task" ];
+            mix_task = ["my_custom_task"];
             extra_formatters = [
               "ExUnit.CLIFormatter"
               "ExUnitNotifier"
             ];
-            extra_block_identifiers = [ "test_with_mock" ];
-            args = [ "--trace" ];
+            extra_block_identifiers = ["test_with_mock"];
+            args = ["--trace"];
             post_process_command.__raw = ''
               function(cmd)
                 return vim.tbl_flatten({{"env", "FOO=bar"}, cmd})

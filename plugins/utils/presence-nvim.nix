@@ -5,29 +5,29 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.presence-nvim;
-in
-{
+in {
   options = {
-    plugins.presence-nvim = helpers.neovim-plugin.extraOptionsOptions // {
-      enable = mkEnableOption "presence-nvim";
-      package = helpers.mkPackageOption "presence-nvim" pkgs.vimPlugins.presence-nvim;
+    plugins.presence-nvim =
+      helpers.neovim-plugin.extraOptionsOptions
+      // {
+        enable = mkEnableOption "presence-nvim";
+        package = helpers.mkPackageOption "presence-nvim" pkgs.vimPlugins.presence-nvim;
 
-      # General options.
-      autoUpdate = helpers.defaultNullOpts.mkBool true ''
-        Update activity based on autocmd events.
-        If `false`, map or manually execute
-        `:lua package.loaded.presence:update()`
-      '';
+        # General options.
+        autoUpdate = helpers.defaultNullOpts.mkBool true ''
+          Update activity based on autocmd events.
+          If `false`, map or manually execute
+          `:lua package.loaded.presence:update()`
+        '';
 
-      neovimImageText = helpers.defaultNullOpts.mkStr "The One True Text Editor" ''
-        Text displayed when hovered over the Neovim image.
-      '';
+        neovimImageText = helpers.defaultNullOpts.mkStr "The One True Text Editor" ''
+          Text displayed when hovered over the Neovim image.
+        '';
 
-      mainImage =
-        helpers.defaultNullOpts.mkEnum
+        mainImage =
+          helpers.defaultNullOpts.mkEnum
           [
             "neovim"
             "file"
@@ -37,12 +37,12 @@ in
             Main image display.
           '';
 
-      clientId = helpers.defaultNullOpts.mkStr "793271441293967371" ''
-        Use your own Discord application client id. (not recommended)
-      '';
+        clientId = helpers.defaultNullOpts.mkStr "793271441293967371" ''
+          Use your own Discord application client id. (not recommended)
+        '';
 
-      logLevel =
-        helpers.defaultNullOpts.mkEnum
+        logLevel =
+          helpers.defaultNullOpts.mkEnum
           [
             "debug"
             "info"
@@ -54,22 +54,22 @@ in
             Log messages at or above this level.
           '';
 
-      debounceTimeout = helpers.defaultNullOpts.mkInt 10 ''
-        Number of seconds to debounce events.
-        (or calls to `:lua package.loaded.presence:update(<filename>, true)`)
-      '';
+        debounceTimeout = helpers.defaultNullOpts.mkInt 10 ''
+          Number of seconds to debounce events.
+          (or calls to `:lua package.loaded.presence:update(<filename>, true)`)
+        '';
 
-      enableLineNumber = helpers.defaultNullOpts.mkBool false ''
-        Displays the current line number instead of the current project.
-      '';
+        enableLineNumber = helpers.defaultNullOpts.mkBool false ''
+          Displays the current line number instead of the current project.
+        '';
 
-      blacklist = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-        A list of strings or Lua patterns that disable Rich Presence if the
-        current file name, path, or workspace matches.
-      '';
+        blacklist = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+          A list of strings or Lua patterns that disable Rich Presence if the
+          current file name, path, or workspace matches.
+        '';
 
-      buttons =
-        helpers.defaultNullOpts.mkNullable
+        buttons =
+          helpers.defaultNullOpts.mkNullable
           (types.either helpers.nixvimTypes.rawLua (
             types.listOf (
               types.submodule {
@@ -93,33 +93,33 @@ in
             Can also be a lua function: `function(buffer: string, repo_url: string|nil): table)`
           '';
 
-      fileAssets = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
-        Custom file asset definitions keyed by file names and extensions.
+        fileAssets = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
+          Custom file asset definitions keyed by file names and extensions.
 
-        List elements for each attribute (filetype):
+          List elements for each attribute (filetype):
 
-        `name`: The name of the asset shown as the title of the file in Discord.
+          `name`: The name of the asset shown as the title of the file in Discord.
 
-        `source`: The source of the asset, either an art asset key or the URL of an image asset.
+          `source`: The source of the asset, either an art asset key or the URL of an image asset.
 
-        Example:
-        ```nix
-          {
-            # Use art assets uploaded in Discord application for the configured client id
-            js = [ "JavaScript" "javascript" ];
-            ts = [ "TypeScript" "typescript" ];
-            # Use image URLs
-            rs = [ "Rust" "https://www.rust-lang.org/logos/rust-logo-512x512.png" ];
-            go = [ "Go" "https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Aqua.png" ];
-          };
-        ```
-      '';
+          Example:
+          ```nix
+            {
+              # Use art assets uploaded in Discord application for the configured client id
+              js = [ "JavaScript" "javascript" ];
+              ts = [ "TypeScript" "typescript" ];
+              # Use image URLs
+              rs = [ "Rust" "https://www.rust-lang.org/logos/rust-logo-512x512.png" ];
+              go = [ "Go" "https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Aqua.png" ];
+            };
+          ```
+        '';
 
-      showTime = helpers.defaultNullOpts.mkBool true "Show the timer.";
+        showTime = helpers.defaultNullOpts.mkBool true "Show the timer.";
 
-      # Rich presence text options.
-      editingText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Editing %s"
+        # Rich presence text options.
+        editingText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Editing %s"
           ''
             String rendered when an editable file is loaded in the buffer.
 
@@ -127,8 +127,8 @@ in
             `function(filename: string): string`
           '';
 
-      fileExplorerText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Browsing %s"
+        fileExplorerText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Browsing %s"
           ''
             String rendered when browsing a file explorer.
 
@@ -136,8 +136,8 @@ in
             `function(file_explorer_name: string): string`
           '';
 
-      gitCommitText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
+        gitCommitText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
           "Committing changes"
           ''
             String rendered when committing changes in git.
@@ -146,8 +146,8 @@ in
             `function(filename: string): string`
           '';
 
-      pluginManagerText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
+        pluginManagerText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
           "Managing plugins"
           ''
             String rendered when managing plugins.
@@ -156,8 +156,8 @@ in
             `function(plugin_manager_name: string): string`
           '';
 
-      readingText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Reading %s"
+        readingText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Reading %s"
           ''
             String rendered when a read-only/unmodifiable file is loaded into the buffer.
 
@@ -165,8 +165,8 @@ in
             `function(filename: string): string`
           '';
 
-      workspaceText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
+        workspaceText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
           "Working on %s"
           ''
             String rendered when in a git repository.
@@ -175,8 +175,8 @@ in
             `function(project_name: string|nil, filename: string): string`
           '';
 
-      lineNumberText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
+        lineNumberText =
+          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
           "Line %s out of %s"
           ''
             String rendered when `enableLineNumber` is set to `true` to display the current line number.
@@ -184,12 +184,12 @@ in
             Can also be a lua function:
             `function(line_number: number, line_count: number): string`
           '';
-    };
+      };
   };
 
-  config =
-    let
-      setupOptions = {
+  config = let
+    setupOptions =
+      {
         # General options.
         auto_update = cfg.autoUpdate;
         neovim_image_text = cfg.neovimImageText;
@@ -211,10 +211,11 @@ in
         reading_text = cfg.readingText;
         workspace_text = cfg.workspaceText;
         line_number_text = cfg.lineNumberText;
-      } // cfg.extraOptions;
-    in
+      }
+      // cfg.extraOptions;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       extraConfigLua = ''
         require("presence").setup${helpers.toLuaObject setupOptions}
       '';

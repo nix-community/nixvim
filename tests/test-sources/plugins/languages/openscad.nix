@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{pkgs, ...}:
 # As of 2024-01-04, vimPlugins.openscad is broken on darwin
 # TODO: re-enable this test when fixed
 pkgs.lib.optionalAttrs (!pkgs.stdenv.isDarwin) {

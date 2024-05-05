@@ -12,7 +12,7 @@
       highlightUnlabeledPhaseOneTargets = false;
       maxHighlightedTraversalTargets = 10;
       caseSensitive = false;
-      equivalenceClasses = [ " \t\r\n" ];
+      equivalenceClasses = [" \t\r\n"];
       substituteChars = {
         "\r" = "¬";
       };

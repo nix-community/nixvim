@@ -1,5 +1,4 @@
-{ helpers, ... }:
-{
+{helpers, ...}: {
   empty = {
     plugins.flash.enable = true;
   };

@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.lsp.servers.nixd;
-in
-{
+in {
   # Options: https://github.com/nix-community/nixd/blob/main/docs/user-guide.md#configuration
   options.plugins.lsp.servers.nixd.settings = {
     # The evaluation section, provide auto completion for dynamic bindings.

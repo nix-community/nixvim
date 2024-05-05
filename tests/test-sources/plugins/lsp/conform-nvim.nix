@@ -8,7 +8,7 @@
       enable = true;
 
       formattersByFt = {
-        lua = [ "stylua" ];
+        lua = ["stylua"];
         python = [
           "isort"
           "black"
@@ -19,8 +19,8 @@
             "prettier"
           ]
         ];
-        "*" = [ "codespell" ];
-        "_" = [ "trimWhitespace" ];
+        "*" = ["codespell"];
+        "_" = ["trimWhitespace"];
       };
       formatOnSave = {
         lspFallback = true;
@@ -61,7 +61,7 @@
             VAR = "value";
           };
           "inherit" = true;
-          prependArgs = [ "--use-tabs" ];
+          prependArgs = ["--use-tabs"];
         };
         otherFormatter = ''
           function(bufnr)
@@ -79,7 +79,7 @@
       enable = true;
 
       formattersByFt = {
-        lua = [ "stylua" ];
+        lua = ["stylua"];
         python = [
           "isort"
           "black"
@@ -90,8 +90,8 @@
             "prettier"
           ]
         ];
-        "*" = [ "codespell" ];
-        "_" = [ "trimWhitespace" ];
+        "*" = ["codespell"];
+        "_" = ["trimWhitespace"];
       };
 
       formatOnSave = ''
@@ -122,7 +122,7 @@
       enable = true;
 
       formattersByFt = {
-        lua = [ "stylua" ];
+        lua = ["stylua"];
         python = [
           "isort"
           "black"
@@ -133,8 +133,8 @@
             "prettier"
           ]
         ];
-        "*" = [ "codespell" ];
-        "_" = [ "trimWhitespace" ];
+        "*" = ["codespell"];
+        "_" = ["trimWhitespace"];
       };
 
       formatAfterSave = ''

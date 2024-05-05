@@ -13,7 +13,7 @@
           "quickfix"
           "prompt"
         ];
-        ignored_buftypes = [ "NvimTree" ];
+        ignored_buftypes = ["NvimTree"];
         default_amount = 3;
         move_cursor_same_row = true;
         cursor_follows_swapped_bufs = true;

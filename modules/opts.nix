@@ -4,8 +4,7 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   optionsAttrs = {
     opts = {
       prettyName = "options";
@@ -35,20 +34,20 @@ let
       description = "Global variables (`vim.g.*`)";
     };
   };
-in
-{
-  options = mapAttrs (
-    _:
-    { description, ... }:
-    mkOption {
-      type = with types; attrsOf anything;
-      default = { };
-      inherit description;
-    }
-  ) optionsAttrs;
+in {
+  options =
+    mapAttrs (
+      _: {description, ...}:
+        mkOption {
+          type = with types; attrsOf anything;
+          default = {};
+          inherit description;
+        }
+    )
+    optionsAttrs;
 
   # Added 2024-03-29 (do not remove)
-  imports = mapAttrsToList (old: new: mkRenamedOptionModule [ old ] [ new ]) {
+  imports = mapAttrsToList (old: new: mkRenamedOptionModule [old] [new]) {
     options = "opts";
     globalOptions = "globalOpts";
     localOptions = "localOpts";
@@ -57,29 +56,28 @@ in
   config = {
     extraConfigLuaPre = concatLines (
       mapAttrsToList (
-        optionName:
-        {
+        optionName: {
           prettyName,
           luaVariableName,
           luaApi,
           ...
-        }:
-        let
+        }: let
           varName = "nixvim_${luaVariableName}";
           optionDefinitions = config.${optionName};
         in
-        optionalString (optionDefinitions != { }) ''
-          -- Set up ${prettyName} {{{
-          do
-            local ${varName} = ${helpers.toLuaObject optionDefinitions}
+          optionalString (optionDefinitions != {}) ''
+            -- Set up ${prettyName} {{{
+            do
+              local ${varName} = ${helpers.toLuaObject optionDefinitions}
 
-            for k,v in pairs(${varName}) do
-              vim.${luaApi}[k] = v
+              for k,v in pairs(${varName}) do
+                vim.${luaApi}[k] = v
+              end
             end
-          end
-          -- }}}
-        ''
-      ) optionsAttrs
+            -- }}}
+          ''
+      )
+      optionsAttrs
     );
   };
 }

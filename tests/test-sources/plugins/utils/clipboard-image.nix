@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   empty = {
     plugins.clipboard-image = {
       enable = true;

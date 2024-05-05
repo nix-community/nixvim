@@ -107,8 +107,8 @@
         yank_register = "";
         extensions = null;
         multi_windows = false;
-        excluded_filetypes = [ ];
-        match_mappings = [ ];
+        excluded_filetypes = [];
+        match_mappings = [];
       };
     };
   };

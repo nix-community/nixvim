@@ -61,7 +61,7 @@
       };
 
       options = {
-        disabledFiletypes = [ "text" ];
+        disabledFiletypes = ["text"];
         disableWhenTouch = false;
         touchRegex = "[%w(%[{]";
         pairSpaces = false;

@@ -1,8 +1,12 @@
-{ lib, config, ... }:
-with lib;
 {
+  lib,
+  config,
+  ...
+}:
+with lib; {
   imports = [
-    (lib.mkRenamedOptionModule
+    (
+      lib.mkRenamedOptionModule
       [
         "plugins"
         "editorconfig"
@@ -29,7 +33,7 @@ with lib;
 
     properties = mkOption {
       type = types.attrsOf types.str;
-      default = { };
+      default = {};
       description = ''
         The table key is a property name and the value is a callback function which accepts the
         number of the buffer to be modified, the value of the property in the .editorconfig file,
@@ -50,26 +54,23 @@ with lib;
     };
   };
 
-  config =
-    let
-      cfg = config.editorconfig;
+  config = let
+    cfg = config.editorconfig;
+  in {
+    globals.editorconfig = mkIf (!cfg.enable) false;
+
+    extraConfigLua = let
+      mkProperty = name: function: ''
+        __editorconfig.properties.${name} = ${function}
+      '';
+      propertiesString = lib.concatLines (lib.mapAttrsToList mkProperty cfg.properties);
     in
-    {
-      globals.editorconfig = mkIf (!cfg.enable) false;
+      mkIf (propertiesString != "" && cfg.enable) ''
+        do
+          local __editorconfig = require('editorconfig')
 
-      extraConfigLua =
-        let
-          mkProperty = name: function: ''
-            __editorconfig.properties.${name} = ${function}
-          '';
-          propertiesString = lib.concatLines (lib.mapAttrsToList mkProperty cfg.properties);
-        in
-        mkIf (propertiesString != "" && cfg.enable) ''
-          do
-            local __editorconfig = require('editorconfig')
-
-            ${propertiesString}
-          end
-        '';
-    };
+          ${propertiesString}
+        end
+      '';
+  };
 }

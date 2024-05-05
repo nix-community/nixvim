@@ -13,14 +13,14 @@
         commentStyle = {
           italic = true;
         };
-        functionStyle = { };
+        functionStyle = {};
         keywordStyle = {
           italic = true;
         };
         statementStyle = {
           bold = true;
         };
-        typeStyle = { };
+        typeStyle = {};
         transparent = false;
         dimInactive = false;
         terminalColors = true;

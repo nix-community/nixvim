@@ -57,10 +57,10 @@
       enable = true;
 
       adapters = {
-        executables = { };
-        servers = { };
+        executables = {};
+        servers = {};
       };
-      configurations = { };
+      configurations = {};
       signs = {
         dapStopped = {
           text = "→";

@@ -22,7 +22,7 @@
           short_name = "COP";
           accept_key = "<c-f>";
         }
-        { src = "demo"; }
+        {src = "demo";}
       ];
     };
   };

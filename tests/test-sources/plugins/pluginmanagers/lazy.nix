@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   # Empty configuration
   empty = {
     plugins.lazy.enable = true;
@@ -76,14 +75,14 @@
         {
           pkg = nvim-treesitter;
           opts = {
-            ensure_installed = { };
+            ensure_installed = {};
           };
         }
 
         # Use dependency and run lua function after load
         {
           pkg = gitsigns-nvim;
-          dependencies = [ plenary-nvim ];
+          dependencies = [plenary-nvim];
           config = ''function() require("gitsigns").setup() end'';
         }
       ];

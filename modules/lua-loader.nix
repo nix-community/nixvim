@@ -1,9 +1,11 @@
-{ lib, config, ... }:
-with lib;
-let
-  cfg = config.luaLoader;
-in
 {
+  lib,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.luaLoader;
+in {
   options.luaLoader = {
     enable = mkOption {
       type = types.bool;
@@ -25,6 +27,9 @@ in
   };
 
   config = {
-    extraConfigLuaPre = if cfg.enable then "vim.loader.enable()" else "vim.loader.disable()";
+    extraConfigLuaPre =
+      if cfg.enable
+      then "vim.loader.enable()"
+      else "vim.loader.disable()";
   };
 }

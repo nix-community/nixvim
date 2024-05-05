@@ -32,8 +32,8 @@
         "Makefile"
         "package.json"
       ];
-      ignoreLsp = [ ];
-      excludeDirs = [ ];
+      ignoreLsp = [];
+      excludeDirs = [];
       showHidden = false;
       silentChdir = true;
       scopeChdir = "global";

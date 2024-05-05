@@ -1,10 +1,12 @@
-{ lib, config, ... }:
-with lib;
-let
+{
+  lib,
+  config,
+  ...
+}:
+with lib; let
   cfg = config.plugins.none-ls.sources.formatting.prettier;
   tsserver-cfg = config.plugins.lsp.servers.tsserver;
-in
-{
+in {
   options.plugins.none-ls.sources.formatting.prettier = {
     disableTsServerFormatter = mkOption {
       type = with types; nullOr bool;
@@ -28,16 +30,16 @@ in
 
     plugins.lsp.servers.tsserver =
       mkIf
-        (
-          cfg.enable
-          && tsserver-cfg.enable
-          && (isBool cfg.disableTsServerFormatter)
-          && cfg.disableTsServerFormatter
-        )
-        {
-          onAttach.function = ''
-            client.server_capabilities.documentFormattingProvider = false
-          '';
-        };
+      (
+        cfg.enable
+        && tsserver-cfg.enable
+        && (isBool cfg.disableTsServerFormatter)
+        && cfg.disableTsServerFormatter
+      )
+      {
+        onAttach.function = ''
+          client.server_capabilities.documentFormattingProvider = false
+        '';
+      };
   };
 }

@@ -6,29 +6,27 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "spectre";
-  originalName = "nvim-spectre";
-  defaultPackage = pkgs.vimPlugins.nvim-spectre;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "spectre";
+    originalName = "nvim-spectre";
+    defaultPackage = pkgs.vimPlugins.nvim-spectre;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  description = ''
-    You may want to set the package for your find/replace tool(s) like shown below:
+    description = ''
+      You may want to set the package for your find/replace tool(s) like shown below:
 
-    ```nix
-      plugins.spectre.findPackage = pkgs.rg;
-      plugins.spectre.replacePackage = pkgs.gnused;
-    ```
-  '';
+      ```nix
+        plugins.spectre.findPackage = pkgs.rg;
+        plugins.spectre.replacePackage = pkgs.gnused;
+      ```
+    '';
 
-  settingsOptions =
-    let
-      mkEngineOption =
-        type:
+    settingsOptions = let
+      mkEngineOption = type:
         helpers.mkNullOrOption
-          (
-            with types;
+        (
+          with types;
             attrsOf (submodule {
               options = {
                 cmd = mkOption {
@@ -61,14 +59,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 }) "{}" "The options for this engine.";
               };
             })
-          )
-          ''
-            Definition of the ${type} engines.
+        )
+        ''
+          Definition of the ${type} engines.
 
-            default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
-          '';
-    in
-    {
+          default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
+        '';
+    in {
       color_devicons = helpers.defaultNullOpts.mkBool true ''
         Whether to enable color devicons.
       '';
@@ -107,8 +104,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       mapping =
         helpers.mkNullOrOption
-          (
-            with types;
+        (
+          with types;
             attrsOf (submodule {
               options = {
                 map = mkOption {
@@ -127,12 +124,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 '';
               };
             })
-          )
-          ''
-            Keymaps declaration.
+        )
+        ''
+          Keymaps declaration.
 
-            default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
-          '';
+          default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
+        '';
 
       find_engine = mkEngineOption "find";
 
@@ -177,59 +174,58 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
     };
 
-  settingsExample = {
-    live_update = true;
-    is_insert_mode = false;
-    find_engine = {
-      rg = {
-        cmd = "rg";
-        args = [
-          "--color=never"
-          "--no-heading"
-          "--with-filename"
-          "--line-number"
-          "--column"
-        ];
-        options = {
-          ignore-case = {
-            value = "--ignore-case";
-            icon = "[I]";
-            desc = "ignore case";
-          };
-          hidden = {
-            value = "--hidden";
-            desc = "hidden file";
-            icon = "[H]";
-          };
-          line = {
-            value = "-x";
-            icon = "[L]";
-            desc = "match in line";
-          };
-          word = {
-            value = "-w";
-            icon = "[W]";
-            desc = "match in word";
+    settingsExample = {
+      live_update = true;
+      is_insert_mode = false;
+      find_engine = {
+        rg = {
+          cmd = "rg";
+          args = [
+            "--color=never"
+            "--no-heading"
+            "--with-filename"
+            "--line-number"
+            "--column"
+          ];
+          options = {
+            ignore-case = {
+              value = "--ignore-case";
+              icon = "[I]";
+              desc = "ignore case";
+            };
+            hidden = {
+              value = "--hidden";
+              desc = "hidden file";
+              icon = "[H]";
+            };
+            line = {
+              value = "-x";
+              icon = "[L]";
+              desc = "match in line";
+            };
+            word = {
+              value = "-w";
+              icon = "[W]";
+              desc = "match in word";
+            };
           };
         };
       };
-    };
-    default = {
-      find = {
-        cmd = "rg";
-        options = [
-          "word"
-          "hidden"
-        ];
+      default = {
+        find = {
+          cmd = "rg";
+          options = [
+            "word"
+            "hidden"
+          ];
+        };
+        replace = {
+          cmd = "sed";
+        };
       };
-      replace = {
-        cmd = "sed";
-      };
     };
-  };
 
-  extraOptions =
-    let
+    extraOptions = let
       userCommandSettings = config.plugins.spectre.settings.default;
 
       findPackages = {
@@ -244,8 +240,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # `toString` will turn `null` into `"null"` to allow for the attrs indexation.
       findDefaultPackage = findPackages.${toString userCommandSettings.find.cmd} or null;
       replaceDefaultPackage = replacePackages.${toString userCommandSettings.replace.cmd} or null;
-    in
-    {
+    in {
       findPackage = mkOption {
         type = with types; nullOr package;
         default = findDefaultPackage;
@@ -269,10 +264,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
     };
 
-  extraConfig = cfg: {
-    extraPackages = [
-      cfg.findPackage
-      cfg.replacePackage
-    ];
-  };
-}
+    extraConfig = cfg: {
+      extraPackages = [
+        cfg.findPackage
+        cfg.replacePackage
+      ];
+    };
+  }

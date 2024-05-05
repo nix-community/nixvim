@@ -22,7 +22,7 @@
           terminate = "";
         };
       };
-      elementMappings = { };
+      elementMappings = {};
       expandLines = true;
       floating = {
         border = "single";

@@ -15,7 +15,7 @@
         after = null;
         emptyLinesBetweenMappings = true;
         disableStatuslines = true;
-        paddings = [ ];
+        paddings = [];
       };
       mappings = {
         executeCommand = "<CR>";
@@ -113,7 +113,7 @@
           foldSection = true;
           title = "Oldfiles of Directory";
           margin = 5;
-          content = [ ];
+          content = [];
           highlight = "String";
           defaultColor = "#FFFFFF";
           oldfilesAmount = 5;
@@ -125,7 +125,7 @@
           foldSection = true;
           title = "Oldfiles";
           margin = 5;
-          content = [ "startup.nvim" ];
+          content = ["startup.nvim"];
           highlight = "TSString";
           defaultColor = "#FFFFFF";
           oldfilesAmount = 5;

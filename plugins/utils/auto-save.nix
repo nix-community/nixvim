@@ -5,33 +5,33 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.auto-save;
-in
-{
-  options.plugins.auto-save = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "auto-save";
+in {
+  options.plugins.auto-save =
+    helpers.neovim-plugin.extraOptionsOptions
+    // {
+      enable = mkEnableOption "auto-save";
 
-    package = helpers.mkPackageOption "auto-save" pkgs.vimPlugins.auto-save-nvim;
+      package = helpers.mkPackageOption "auto-save" pkgs.vimPlugins.auto-save-nvim;
 
-    keymaps = {
-      silent = mkOption {
-        type = types.bool;
-        description = "Whether auto-save keymaps should be silent.";
-        default = false;
+      keymaps = {
+        silent = mkOption {
+          type = types.bool;
+          description = "Whether auto-save keymaps should be silent.";
+          default = false;
+        };
+
+        toggle = helpers.mkNullOrOption types.str "Keymap for running auto-save.";
       };
 
-      toggle = helpers.mkNullOrOption types.str "Keymap for running auto-save.";
-    };
+      enableAutoSave = helpers.defaultNullOpts.mkBool true ''
+        Whether to start auto-save when the plugin is loaded.
+      '';
 
-    enableAutoSave = helpers.defaultNullOpts.mkBool true ''
-      Whether to start auto-save when the plugin is loaded.
-    '';
-
-    executionMessage = {
-      message =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
+      executionMessage = {
+        message =
+          helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
           ''
             {
               __raw = \'\'
@@ -46,26 +46,27 @@ in
             This can be a lua function that returns a string.
           '';
 
-      dim = helpers.defaultNullOpts.mkNullable (types.numbers.between 0
-        1
-      ) "0.18" "Dim the color of `message`.";
+        dim = helpers.defaultNullOpts.mkNullable (
+          types.numbers.between 0
+          1
+        ) "0.18" "Dim the color of `message`.";
 
-      cleaningInterval = helpers.defaultNullOpts.mkInt 1250 ''
-        Time (in milliseconds) to wait before automatically cleaning MsgArea after displaying
-        `message`.
-        See `:h MsgArea`.
-      '';
-    };
+        cleaningInterval = helpers.defaultNullOpts.mkInt 1250 ''
+          Time (in milliseconds) to wait before automatically cleaning MsgArea after displaying
+          `message`.
+          See `:h MsgArea`.
+        '';
+      };
 
-    triggerEvents =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["InsertLeave" "TextChanged"]''
+      triggerEvents =
+        helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["InsertLeave" "TextChanged"]''
         ''
           Vim events that trigger auto-save.
           See `:h events`.
         '';
 
-    condition =
-      helpers.defaultNullOpts.mkLuaFn
+      condition =
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(buf)
             local fn = vim.fn
@@ -84,16 +85,16 @@ in
           - return false: if it's not ok to be saved
         '';
 
-    writeAllBuffers = helpers.defaultNullOpts.mkBool false ''
-      Write all buffers when the current one meets `condition`.
-    '';
+      writeAllBuffers = helpers.defaultNullOpts.mkBool false ''
+        Write all buffers when the current one meets `condition`.
+      '';
 
-    debounceDelay = helpers.defaultNullOpts.mkInt 135 ''
-      Saves the file at most every `debounce_delay` milliseconds.
-    '';
+      debounceDelay = helpers.defaultNullOpts.mkInt 135 ''
+        Saves the file at most every `debounce_delay` milliseconds.
+      '';
 
-    callbacks =
-      mapAttrs (name: desc: helpers.mkNullOrLuaFn "The code of the function that runs ${desc}.")
+      callbacks =
+        mapAttrs (name: desc: helpers.mkNullOrLuaFn "The code of the function that runs ${desc}.")
         {
           enabling = "when enabling auto-save";
           disabling = "when disabling auto-save";
@@ -101,11 +102,11 @@ in
           beforeSaving = "before doing the actual save";
           afterSaving = "after doing the actual save";
         };
-  };
+    };
 
-  config =
-    let
-      options = {
+  config = let
+    options =
+      {
         enabled = cfg.enableAutoSave;
         execution_message = with cfg.executionMessage; {
           inherit message dim;
@@ -121,17 +122,17 @@ in
           before_saving = beforeSaving;
           after_saving = afterSaving;
         };
-      } // cfg.extraOptions;
-    in
+      }
+      // cfg.extraOptions;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require('auto-save').setup(${helpers.toLuaObject options})
       '';
 
-      keymaps =
-        with cfg.keymaps;
+      keymaps = with cfg.keymaps;
         optional (toggle != null) {
           mode = "n";
           key = toggle;

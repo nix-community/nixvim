@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   programs.nixvim = {
     # This just enables NixVim.
     # If all you have is this, then there will be little visible difference
@@ -89,6 +88,6 @@
 
     # What about plugins not available as a module?
     # Use extraPlugins:
-    extraPlugins = with pkgs.vimPlugins; [ vim-toml ];
+    extraPlugins = with pkgs.vimPlugins; [vim-toml];
   };
 }

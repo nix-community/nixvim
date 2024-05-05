@@ -5,9 +5,8 @@
   pkgs,
   ...
 }:
-with lib;
-{
-  meta.maintainers = [ maintainers.traxys ];
+with lib; {
+  meta.maintainers = [maintainers.traxys];
 
   options.plugins.gitmessenger = {
     enable = mkEnableOption "gitmessenger";
@@ -20,19 +19,19 @@ with lib;
     '';
     includeDiff =
       helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "none"
-          "current"
-          "all"
-        ]
-        ''
-          When this value is not set to "none", a popup window includes diff hunks of the commit at
-          showing up. "current" includes diff hunks of only current file in the commit. "all" includes
-          all diff hunks in the commit.
+      [
+        "none"
+        "current"
+        "all"
+      ]
+      ''
+        When this value is not set to "none", a popup window includes diff hunks of the commit at
+        showing up. "current" includes diff hunks of only current file in the commit. "all" includes
+        all diff hunks in the commit.
 
-          Please note that typing d/D or r/R in popup window toggle showing diff hunks even if this
-          value is set to "none".
-        '';
+        Please note that typing d/D or r/R in popup window toggle showing diff hunks even if this
+        value is set to "none".
+      '';
     gitCommand = helpers.defaultNullOpts.mkStr "git" "git command to retrieve commit messages.";
     noDefaultMappings = helpers.defaultNullOpts.mkBool false "When this value is set, it does not define any key mappings";
     intoPopupAfterShow = helpers.defaultNullOpts.mkBool true ''
@@ -96,12 +95,11 @@ with lib;
     '';
   };
 
-  config =
-    let
-      cfg = config.plugins.gitmessenger;
-    in
+  config = let
+    cfg = config.plugins.gitmessenger;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       globals = {
         git_messenger_close_on_cursor_moved = cfg.closeOnCursorMoved;
         git_messenger_include_diff = cfg.includeDiff;

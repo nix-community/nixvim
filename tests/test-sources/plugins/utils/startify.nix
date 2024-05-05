@@ -12,23 +12,23 @@
         lists = [
           {
             type = "files";
-            header = [ "   MRU" ];
+            header = ["   MRU"];
           }
           {
             type = "dir";
-            header = [ { __raw = "'   MRU' .. vim.loop.cwd()"; } ];
+            header = [{__raw = "'   MRU' .. vim.loop.cwd()";}];
           }
           {
             type = "sessions";
-            header = [ "   Sessions" ];
+            header = ["   Sessions"];
           }
           {
             type = "bookmarks";
-            header = [ "   Bookmarks" ];
+            header = ["   Bookmarks"];
           }
           {
             type = "commands";
-            header = [ "   Commands" ];
+            header = ["   Commands"];
           }
         ];
         commands = [
@@ -37,7 +37,7 @@
             "Vim Reference"
             "h ref"
           ]
-          { h = "h ref"; }
+          {h = "h ref";}
           {
             m = [
               "My magical function"
@@ -48,7 +48,7 @@
         files_number = 10;
         update_oldfiles = false;
         session_autoload = false;
-        session_before_save = [ "silent! tabdo NERDTreeClose" ];
+        session_before_save = ["silent! tabdo NERDTreeClose"];
         session_persistence = false;
         session_delete_buffers = true;
         change_to_dir = true;
@@ -61,7 +61,7 @@
         ];
         fortune_use_unicode = false;
         padding_left = 3;
-        skiplist_server = [ "GVIM" ];
+        skiplist_server = ["GVIM"];
         enable_special = true;
         enable_unsafe = false;
         session_remove_lines = [
@@ -73,7 +73,7 @@
           "g:startify_session_savecmds"
           "g:random_plugin_use_feature"
         ];
-        session_savecmds = [ "silent !pdfreader ~/latexproject/main.pdf &" ];
+        session_savecmds = ["silent !pdfreader ~/latexproject/main.pdf &"];
         session_number = 999;
         session_sort = false;
         custom_indices = [
@@ -91,7 +91,7 @@
           "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
         ];
         custom_header_quotes = [
-          [ "quote #1" ]
+          ["quote #1"]
           [
             "quote #2"
             "using"

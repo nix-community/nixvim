@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.illuminate;
 
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
@@ -65,11 +64,9 @@ let
       Filetypes to illuminate, this is overridden by `filetypes_denylist`.
     '';
   };
-in
-{
-  options.plugins.illuminate =
-    with helpers;
-    with defaultNullOpts;
+in {
+  options.plugins.illuminate = with helpers;
+  with defaultNullOpts;
     helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "vim-illuminate";
@@ -78,65 +75,63 @@ in
 
       filetypeOverrides =
         helpers.defaultNullOpts.mkNullable
-          (
-            with types;
+        (
+          with types;
             attrsOf (submodule {
               options = commonOptions;
             })
-          )
-          "{}"
-          ''
-            Filetype specific overrides.
-            The keys are strings to represent the filetype.
-          '';
+        )
+        "{}"
+        ''
+          Filetype specific overrides.
+          The keys are strings to represent the filetype.
+        '';
 
       largeFileOverrides = mkOption {
-        type = types.submodule { options = commonOptions // filetypeOptions; };
+        type = types.submodule {options = commonOptions // filetypeOptions;};
         description = ''
           Config to use for large files (based on large_file_cutoff).
           Supports the same keys passed to .configure
           If null, illuminate will be disabled for large files.
         '';
-        default = { };
+        default = {};
       };
     }
     // commonOptions
     // filetypeOptions;
 
-  config =
-    let
-      filetypeSetupOptions =
-        filetypeOptions: with filetypeOptions; {
-          filetypes_denylist = filetypesDenylist;
-          filetypes_allowlist = filetypesAllowlist;
-        };
-      commonSetupOptions =
-        opts: with opts; {
-          inherit providers;
-          inherit delay;
-          modes_denylist = modesDenylist;
-          modes_allowlist = modesAllowlist;
-          providers_regex_syntax_denylist = providersRegexSyntaxDenylist;
-          providers_regex_syntax_allowlist = providersRegexSyntaxAllowlist;
-          under_cursor = underCursor;
-          large_file_cutoff = largeFileCutoff;
-          min_count_to_highlight = minCountToHighlight;
-        };
-      setupOptions =
-        with cfg;
-        {
-          large_file_overrides =
-            (commonSetupOptions largeFileOverrides) // (filetypeSetupOptions largeFileOverrides);
+  config = let
+    filetypeSetupOptions = filetypeOptions:
+      with filetypeOptions; {
+        filetypes_denylist = filetypesDenylist;
+        filetypes_allowlist = filetypesAllowlist;
+      };
+    commonSetupOptions = opts:
+      with opts; {
+        inherit providers;
+        inherit delay;
+        modes_denylist = modesDenylist;
+        modes_allowlist = modesAllowlist;
+        providers_regex_syntax_denylist = providersRegexSyntaxDenylist;
+        providers_regex_syntax_allowlist = providersRegexSyntaxAllowlist;
+        under_cursor = underCursor;
+        large_file_cutoff = largeFileCutoff;
+        min_count_to_highlight = minCountToHighlight;
+      };
+    setupOptions = with cfg;
+      {
+        large_file_overrides =
+          (commonSetupOptions largeFileOverrides) // (filetypeSetupOptions largeFileOverrides);
 
-          filetype_overrides = helpers.ifNonNull' filetypeOverrides (
-            mapAttrs (_: commonSetupOptions) filetypeOverrides
-          );
-        }
-        // (filetypeSetupOptions cfg)
-        // (commonSetupOptions cfg);
-    in
+        filetype_overrides = helpers.ifNonNull' filetypeOverrides (
+          mapAttrs (_: commonSetupOptions) filetypeOverrides
+        );
+      }
+      // (filetypeSetupOptions cfg)
+      // (commonSetupOptions cfg);
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require("illuminate").configure(${helpers.toLuaObject setupOptions})

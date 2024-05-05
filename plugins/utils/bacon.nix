@@ -7,7 +7,7 @@
 helpers.neovim-plugin.mkNeovimPlugin config {
   name = "bacon";
   defaultPackage = pkgs.vimPlugins.nvim-bacon;
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [helpers.maintainers.alisonjenkins];
 
   settingsOptions = {
     quickfix = {

@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.coq-thirdparty;
-in
-{
+in {
   options.plugins.coq-thirdparty = {
     enable = mkEnableOption "coq-thirdparty";
 
@@ -42,7 +40,7 @@ in
         List of sources.
         Each source is a free-form type, so additional settings like `accept_key` may be specified even if they are not declared by nixvim.
       '';
-      default = [ ];
+      default = [];
       example = [
         {
           src = "nvimlua";
@@ -57,13 +55,13 @@ in
           short_name = "COP";
           accept_key = "<c-f>";
         }
-        { src = "demo"; }
+        {src = "demo";}
       ];
     };
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     extraConfigLua = ''
       require('coq_3p')(${helpers.toLuaObject cfg.sources})

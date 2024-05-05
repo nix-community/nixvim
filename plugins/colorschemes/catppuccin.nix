@@ -6,94 +6,94 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "catppuccin";
-  isColorscheme = true;
-  defaultPackage = pkgs.vimPlugins.catppuccin-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "catppuccin";
+    isColorscheme = true;
+    defaultPackage = pkgs.vimPlugins.catppuccin-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  # TODO introduced 2024-03-27: remove 2024-05-27
-  optionsRenamedToSettings = [
-    "flavour"
-    [
-      "background"
-      "light"
-    ]
-    [
-      "background"
-      "dark"
-    ]
-    "transparentBackground"
-    [
-      "dimInactive"
-      "enabled"
-    ]
-    [
-      "dimInactive"
-      "shade"
-    ]
-    [
-      "dimInactive"
-      "percentage"
-    ]
-    [
-      "styles"
-      "comments"
-    ]
-    [
-      "styles"
-      "conditionals"
-    ]
-    [
-      "styles"
-      "loops"
-    ]
-    [
-      "styles"
-      "functions"
-    ]
-    [
-      "styles"
-      "keywords"
-    ]
-    [
-      "styles"
-      "strings"
-    ]
-    [
-      "styles"
-      "variables"
-    ]
-    [
-      "styles"
-      "numbers"
-    ]
-    [
-      "styles"
-      "booleans"
-    ]
-    [
-      "styles"
-      "properties"
-    ]
-    [
-      "styles"
-      "types"
-    ]
-    [
-      "styles"
-      "operators"
-    ]
-    "colorOverrides"
-    "customHighlights"
-    "integrations"
-  ];
-  imports =
-    mapAttrsToList
+    # TODO introduced 2024-03-27: remove 2024-05-27
+    optionsRenamedToSettings = [
+      "flavour"
+      [
+        "background"
+        "light"
+      ]
+      [
+        "background"
+        "dark"
+      ]
+      "transparentBackground"
+      [
+        "dimInactive"
+        "enabled"
+      ]
+      [
+        "dimInactive"
+        "shade"
+      ]
+      [
+        "dimInactive"
+        "percentage"
+      ]
+      [
+        "styles"
+        "comments"
+      ]
+      [
+        "styles"
+        "conditionals"
+      ]
+      [
+        "styles"
+        "loops"
+      ]
+      [
+        "styles"
+        "functions"
+      ]
+      [
+        "styles"
+        "keywords"
+      ]
+      [
+        "styles"
+        "strings"
+      ]
+      [
+        "styles"
+        "variables"
+      ]
+      [
+        "styles"
+        "numbers"
+      ]
+      [
+        "styles"
+        "booleans"
+      ]
+      [
+        "styles"
+        "properties"
+      ]
+      [
+        "styles"
+        "types"
+      ]
+      [
+        "styles"
+        "operators"
+      ]
+      "colorOverrides"
+      "customHighlights"
+      "integrations"
+    ];
+    imports =
+      mapAttrsToList
       (
         old: new:
-        mkRenamedOptionModule
+          mkRenamedOptionModule
           [
             "colorschemes"
             "catppuccin"
@@ -114,35 +114,30 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         disableUnderline = "no_underline";
       };
 
-  settingsOptions =
-    let
+    settingsOptions = let
       flavours = [
         "latte"
         "mocha"
         "frappe"
         "macchiato"
       ];
-    in
-    {
+    in {
       compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath 'cache' .. '/catppuccin'";}'' "Set the compile cache directory.";
 
-      flavour = helpers.mkNullOrOption (types.enum (flavours ++ [ "auto" ])) ''
+      flavour = helpers.mkNullOrOption (types.enum (flavours ++ ["auto"])) ''
         Theme flavour.
       '';
 
-      background =
-        let
-          mkBackgroundStyle =
-            name:
-            helpers.defaultNullOpts.mkEnumFirstDefault flavours ''
-              Background for `${name}` background.
-            '';
-        in
-        {
-          light = mkBackgroundStyle "light";
+      background = let
+        mkBackgroundStyle = name:
+          helpers.defaultNullOpts.mkEnumFirstDefault flavours ''
+            Background for `${name}` background.
+          '';
+      in {
+        light = mkBackgroundStyle "light";
 
-          dark = mkBackgroundStyle "dark";
-        };
+        dark = mkBackgroundStyle "dark";
+      };
 
       transparent_background = helpers.defaultNullOpts.mkBool false ''
         Enable Transparent background.
@@ -232,14 +227,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
       };
 
-      color_overrides = genAttrs (flavours ++ [ "all" ]) (
+      color_overrides = genAttrs (flavours ++ ["all"]) (
         flavour:
-        helpers.defaultNullOpts.mkAttrsOf types.str "{}" (
-          if flavour == "all" then
-            "Override colors for all the flavours."
-          else
-            "Override colors for the ${flavour} flavour."
-        )
+          helpers.defaultNullOpts.mkAttrsOf types.str "{}" (
+            if flavour == "all"
+            then "Override colors for all the flavours."
+            else "Override colors for the ${flavour} flavour."
+          )
       );
 
       custom_highlights = helpers.mkNullOrStrLuaFnOr (with types; attrsOf anything) ''
@@ -289,30 +283,30 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
     };
 
-  settingsExample = {
-    flavour = "mocha";
-    disable_underline = true;
-    term_colors = true;
-    color_overrides.mocha.base = "#1e1e2f";
-    styles = {
-      booleans = [
-        "bold"
-        "italic"
-      ];
-      conditionals = [ "bold" ];
-    };
-    integrations = {
-      cmp = true;
-      gitsigns = true;
-      nvimtree = true;
-      treesitter = true;
-      notify = false;
-      mini = {
-        enabled = true;
-        indentscope_color = "";
+    settingsExample = {
+      flavour = "mocha";
+      disable_underline = true;
+      term_colors = true;
+      color_overrides.mocha.base = "#1e1e2f";
+      styles = {
+        booleans = [
+          "bold"
+          "italic"
+        ];
+        conditionals = ["bold"];
+      };
+      integrations = {
+        cmp = true;
+        gitsigns = true;
+        nvimtree = true;
+        treesitter = true;
+        notify = false;
+        mini = {
+          enabled = true;
+          indentscope_color = "";
+        };
       };
     };
-  };
 
-  extraConfig = cfg: { opts.termguicolors = mkDefault true; };
-}
+    extraConfig = cfg: {opts.termguicolors = mkDefault true;};
+  }

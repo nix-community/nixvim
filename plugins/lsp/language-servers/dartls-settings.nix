@@ -1,6 +1,8 @@
-{ lib, helpers }:
-with lib;
 {
+  lib,
+  helpers,
+}:
+with lib; {
   analysisExcludedFolders = helpers.mkNullOrOption (with types; listOf str) ''
     An array of paths (absolute or relative to each workspace folder) that should be excluded from
     analysis.
@@ -27,19 +29,19 @@ with lib;
 
   renameFilesWithClasses =
     helpers.mkNullOrOption
-      (types.enum [
-        "always"
-        "prompt"
-      ])
-      ''
-        When set to "always", will include edits to rename files when classes are renamed if the
-        filename matches the class name (but in snake_form).
-        When set to "prompt", a prompt will be shown on each class rename asking to confirm the file
-        rename.
-        Otherwise, files will not be renamed.
-        Renames are performed using LSP's `ResourceOperation` edits - that means the rename is simply
-        included in the resulting `WorkspaceEdit` and must be handled by the client.
-      '';
+    (types.enum [
+      "always"
+      "prompt"
+    ])
+    ''
+      When set to "always", will include edits to rename files when classes are renamed if the
+      filename matches the class name (but in snake_form).
+      When set to "prompt", a prompt will be shown on each class rename asking to confirm the file
+      rename.
+      Otherwise, files will not be renamed.
+      Renames are performed using LSP's `ResourceOperation` edits - that means the rename is simply
+      included in the resulting `WorkspaceEdit` and must be handled by the client.
+    '';
 
   enableSnippets = helpers.mkNullOrOption types.bool ''
     Whether to include code snippets (such as class, stful, switch) in code completion.
@@ -53,16 +55,16 @@ with lib;
 
   documentation =
     helpers.mkNullOrOption
-      (types.enum [
-        "none"
-        "summary"
-        "full"
-      ])
-      ''
-        The typekind of dartdocs to include in Hovers, Code Completion, Signature Help and other similar
-        requests.
-        If not set, defaults to `"full"`.
-      '';
+    (types.enum [
+      "none"
+      "summary"
+      "full"
+    ])
+    ''
+      The typekind of dartdocs to include in Hovers, Code Completion, Signature Help and other similar
+      requests.
+      If not set, defaults to `"full"`.
+    '';
 
   includeDependenciesInWorkspaceSymbols = helpers.mkNullOrOption types.bool ''
     Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol results.

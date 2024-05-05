@@ -61,7 +61,7 @@
         completion = {
           keywordLength = 1;
           keywordPattern = ''[[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]]'';
-          autocomplete = [ "TextChanged" ];
+          autocomplete = ["TextChanged"];
           completeopt = "menu,menuone,noselect";
         };
         confirmation = {
@@ -104,7 +104,7 @@
             "order"
           ];
         };
-        sources = [ ];
+        sources = [];
         experimental = {
           ghost_text = false;
         };
@@ -151,14 +151,14 @@
       enable = true;
 
       settings.sources = [
-        { name = "path"; }
-        { name = "nvim_lsp"; }
-        { name = "luasnip"; }
+        {name = "path";}
+        {name = "nvim_lsp";}
+        {name = "luasnip";}
         {
           name = "buffer";
           option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
         }
-        { name = "neorg"; }
+        {name = "neorg";}
       ];
     };
   };

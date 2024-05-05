@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.easyescape;
-in
-{
+in {
   options = {
     plugins.easyescape = {
       enable = mkEnableOption "easyescape";
@@ -17,5 +15,5 @@ in
       package = helpers.mkPackageOption "easyescape" pkgs.vimPlugins.vim-easyescape;
     };
   };
-  config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };
+  config = mkIf cfg.enable {extraPlugins = [cfg.package];};
 }

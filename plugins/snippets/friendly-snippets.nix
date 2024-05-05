@@ -5,12 +5,10 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.friendly-snippets;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+in {
+  meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.friendly-snippets = {
     enable = mkEnableOption "friendly-snippets";
@@ -19,9 +17,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     # Simply add an element to the `fromVscode` list to trigger the import of friendly-snippets
-    plugins.luasnip.fromVscode = [ { } ];
+    plugins.luasnip.fromVscode = [{}];
   };
 }

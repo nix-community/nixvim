@@ -26,21 +26,21 @@
         no_bold = false;
         no_underline = false;
         styles = {
-          comments = [ "italic" ];
-          conditionals = [ "italic" ];
-          loops = [ ];
-          functions = [ ];
-          keywords = [ ];
-          strings = [ ];
-          variables = [ ];
-          numbers = [ ];
-          booleans = [ ];
-          properties = [ ];
-          types = [ ];
-          operators = [ ];
+          comments = ["italic"];
+          conditionals = ["italic"];
+          loops = [];
+          functions = [];
+          keywords = [];
+          strings = [];
+          variables = [];
+          numbers = [];
+          booleans = [];
+          properties = [];
+          types = [];
+          operators = [];
         };
-        color_overrides = { };
-        custom_highlights = { };
+        color_overrides = {};
+        custom_highlights = {};
         default_integrations = true;
         integrations = {
           alpha = true;
@@ -78,16 +78,16 @@
           native_lsp = {
             enabled = true;
             virtual_text = {
-              errors = [ "italic" ];
-              hints = [ "italic" ];
-              warnings = [ "italic" ];
-              information = [ "italic" ];
+              errors = ["italic"];
+              hints = ["italic"];
+              warnings = ["italic"];
+              information = ["italic"];
             };
             underlines = {
-              errors = [ "underline" ];
-              hints = [ "underline" ];
-              warnings = [ "underline" ];
-              information = [ "underline" ];
+              errors = ["underline"];
+              hints = ["underline"];
+              warnings = ["underline"];
+              information = ["underline"];
             };
             inlay_hints = {
               background = true;
@@ -123,21 +123,21 @@
             mantle = "#242424";
             crust = "#474747";
           };
-          frappe = { };
-          macchiato = { };
-          mocha = { };
+          frappe = {};
+          macchiato = {};
+          mocha = {};
         };
         styles = {
           booleans = [
             "bold"
             "italic"
           ];
-          conditionals = [ "bold" ];
-          functions = [ "bold" ];
-          keywords = [ "italic" ];
-          loops = [ "bold" ];
-          operators = [ "bold" ];
-          properties = [ "italic" ];
+          conditionals = ["bold"];
+          functions = ["bold"];
+          keywords = ["italic"];
+          loops = ["bold"];
+          operators = ["bold"];
+          properties = ["italic"];
         };
         integrations = {
           cmp = true;

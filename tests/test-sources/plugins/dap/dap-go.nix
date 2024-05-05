@@ -20,7 +20,7 @@
         path = "dlv";
         initializeTimeoutSec = 20;
         port = "$\{port}";
-        args = [ ];
+        args = [];
         buildFlags = "-tags=unit";
       };
     };

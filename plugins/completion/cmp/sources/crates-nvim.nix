@@ -4,11 +4,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.crates-nvim;
-in
-{
+in {
   options.plugins.crates-nvim = helpers.neovim-plugin.extraOptionsOptions;
 
   config = mkIf cfg.enable {

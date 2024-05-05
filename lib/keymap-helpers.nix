@@ -3,8 +3,7 @@
   nixvimOptions,
   nixvimTypes,
 }:
-with lib;
-rec {
+with lib; rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
     silent = nixvimOptions.defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
@@ -55,13 +54,12 @@ rec {
 
   modeEnum =
     types.enum
-      # ["" "n" "v" ...]
-      (map ({ short, ... }: short) (attrValues modes));
+    # ["" "n" "v" ...]
+    (map ({short, ...}: short) (attrValues modes));
 
-  mapOptionSubmodule = mkMapOptionSubmodule { };
+  mapOptionSubmodule = mkMapOptionSubmodule {};
 
-  mkModeOption =
-    default:
+  mkModeOption = default:
     mkOption {
       type = with types; either modeEnum (listOf modeEnum);
       description = ''
@@ -76,10 +74,8 @@ rec {
       ];
     };
 
-  mkMapOptionSubmodule =
-    defaults:
-    (
-      with types;
+  mkMapOptionSubmodule = defaults: (
+    with types;
       submodule {
         options = {
           key = mkOption (
@@ -88,7 +84,7 @@ rec {
               description = "The key to map.";
               example = "<C-m>";
             }
-            // (optionalAttrs (defaults ? key) { default = defaults.key; })
+            // (optionalAttrs (defaults ? key) {default = defaults.key;})
           );
 
           mode = mkModeOption defaults.mode or "";
@@ -98,7 +94,7 @@ rec {
               type = nixvimTypes.maybeRaw str;
               description = "The action to execute.";
             }
-            // (optionalAttrs (defaults ? action) { default = defaults.action; })
+            // (optionalAttrs (defaults ? action) {default = defaults.action;})
           );
 
           lua = mkOption {
@@ -113,17 +109,15 @@ rec {
           options = mapConfigOptions;
         };
       }
-    );
+  );
 
   # Correctly merge two attrs (partially) representing a mapping.
-  mergeKeymap =
-    defaults: keymap:
-    let
-      # First, merge the `options` attrs of both options.
-      mergedOpts = (defaults.options or { }) // (keymap.options or { });
-    in
+  mergeKeymap = defaults: keymap: let
+    # First, merge the `options` attrs of both options.
+    mergedOpts = (defaults.options or {}) // (keymap.options or {});
+  in
     # Then, merge the root attrs together and add the previously merged `options` attrs.
-    (defaults // keymap) // { options = mergedOpts; };
+    (defaults // keymap) // {options = mergedOpts;};
 
   mkKeymaps = defaults: map (mergeKeymap defaults);
 }

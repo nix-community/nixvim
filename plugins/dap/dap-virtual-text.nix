@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.dap.extensions.dap-virtual-text;
-in
-{
+in {
   options.plugins.dap.extensions.dap-virtual-text = {
     enable = mkEnableOption "dap-virtual-text";
 
@@ -63,27 +61,26 @@ in
     '';
   };
 
-  config =
-    let
-      options = with cfg; {
-        inherit commented;
+  config = let
+    options = with cfg; {
+      inherit commented;
 
-        enabled_commands = enabledCommands;
-        highlight_changed_variables = highlightChangedVariables;
-        highlight_new_as_changed = highlightNewAsChanged;
-        show_stop_reason = showStopReason;
-        only_first_definition = onlyFirstDefinition;
-        all_references = allReferences;
-        clear_on_continue = clearOnContinue;
-        display_callback = displayCallback;
-        virt_text_pos = virtTextPos;
-        all_frames = allFrames;
-        virt_lines = virtLines;
-        virt_text_win_col = virtTextWinCol;
-      };
-    in
+      enabled_commands = enabledCommands;
+      highlight_changed_variables = highlightChangedVariables;
+      highlight_new_as_changed = highlightNewAsChanged;
+      show_stop_reason = showStopReason;
+      only_first_definition = onlyFirstDefinition;
+      all_references = allReferences;
+      clear_on_continue = clearOnContinue;
+      display_callback = displayCallback;
+      virt_text_pos = virtTextPos;
+      all_frames = allFrames;
+      virt_lines = virtLines;
+      virt_text_win_col = virtTextWinCol;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       plugins.dap = {
         enable = true;

@@ -9,7 +9,7 @@
           enable = true;
 
           settings = {
-            args = [ "--no-color" ];
+            args = ["--no-color"];
             runner = "bloop";
             framework = "utest";
           };

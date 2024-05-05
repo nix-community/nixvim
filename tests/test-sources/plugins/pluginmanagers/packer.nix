@@ -110,13 +110,13 @@
           name = "glepnir/galaxyline.nvim";
           branch = "main";
           config.__raw = ''function() require"statusline" end'';
-          requires = [ "kyazdani42/nvim-web-devicons" ];
+          requires = ["kyazdani42/nvim-web-devicons"];
         }
 
         # Use dependency and run lua function after load
         {
           name = "lewis6991/gitsigns.nvim";
-          requires = [ "nvim-lua/plenary.nvim" ];
+          requires = ["nvim-lua/plenary.nvim"];
           config.__raw = ''function() require("gitsigns").setup() end'';
         }
 

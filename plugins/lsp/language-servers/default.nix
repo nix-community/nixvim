@@ -5,9 +5,8 @@
   pkgs,
   ...
 }:
-with lib;
-let
-  lspHelpers = import ../helpers.nix { inherit lib config pkgs; };
+with lib; let
+  lspHelpers = import ../helpers.nix {inherit lib config pkgs;};
 
   servers = [
     {
@@ -94,8 +93,8 @@ let
       name = "dartls";
       description = "dart language-server";
       package = pkgs.dart;
-      settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
-      settings = cfg: { dart = cfg; };
+      settingsOptions = import ./dartls-settings.nix {inherit lib helpers;};
+      settings = cfg: {dart = cfg;};
     }
     {
       name = "denols";
@@ -153,7 +152,7 @@ let
     {
       name = "elixirls";
       package = pkgs.elixir-ls;
-      cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
+      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
       name = "fortls";
@@ -237,7 +236,7 @@ let
       name = "java-language-server";
       description = "Java language server";
       serverName = "java_language_server";
-      cmd = cfg: [ "${cfg.package}/bin/java-language-server" ];
+      cmd = cfg: ["${cfg.package}/bin/java-language-server"];
     }
     {
       name = "jsonls";
@@ -277,8 +276,8 @@ let
       name = "ltex";
       description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
-      settingsOptions = import ./ltex-settings.nix { inherit lib helpers; };
-      settings = cfg: { ltex = cfg; };
+      settingsOptions = import ./ltex-settings.nix {inherit lib helpers;};
+      settings = cfg: {ltex = cfg;};
     }
     {
       name = "lua-ls";
@@ -286,10 +285,9 @@ let
       # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
       # Rename occurred here: https://github.com/NixOS/nixpkgs/pull/215057
       package =
-        if (hasAttr "lua-language-server" pkgs) then
-          pkgs.lua-language-server
-        else
-          pkgs.sumneko-lua-language-server;
+        if (hasAttr "lua-language-server" pkgs)
+        then pkgs.lua-language-server
+        else pkgs.sumneko-lua-language-server;
       serverName = "lua_ls";
 
       # All available settings are documented here:
@@ -311,7 +309,7 @@ let
             description = ''
               An array of variable names that will be declared as global.
             '';
-            default = [ "vim" ];
+            default = ["vim"];
           };
         };
         workspace = {
@@ -324,7 +322,7 @@ let
               Files included here will have some features disabled such as renaming fields to
               prevent accidentally renaming your library files.
             '';
-            default = [ (helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)") ];
+            default = [(helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)")];
           };
           checkThirdParty = mkOption {
             type = types.nullOr types.bool;
@@ -342,7 +340,7 @@ let
           enable = mkEnableOption "telemetry";
         };
       };
-      settings = cfg: { Lua = cfg; };
+      settings = cfg: {Lua = cfg;};
     }
     {
       name = "marksman";
@@ -374,7 +372,7 @@ let
         diagnostics = {
           ignored = mkOption {
             type = types.listOf types.str;
-            default = [ ];
+            default = [];
             description = ''
               Ignored diagnostic kinds.
               The kind identifier is a snake_cased_string usually shown together
@@ -383,7 +381,7 @@ let
           };
           excludedFiles = mkOption {
             type = types.listOf types.str;
-            default = [ ];
+            default = [];
             description = ''
               Files to exclude from showing diagnostics. Useful for generated files.
               It accepts an array of paths. Relative paths are joint to the workspace root.
@@ -407,7 +405,7 @@ let
       name = "nixd";
       description = "nixd for Nix";
       package = pkgs.nixd;
-      settings = cfg: { nixd = cfg; };
+      settings = cfg: {nixd = cfg;};
     }
     {
       name = "nushell";
@@ -431,8 +429,8 @@ let
       name = "omnisharp";
       description = "OmniSharp language server for C#";
       package = pkgs.omnisharp-roslyn;
-      cmd = cfg: [ "${cfg.package}/bin/OmniSharp" ];
-      settings = cfg: { omnisharp = cfg; };
+      cmd = cfg: ["${cfg.package}/bin/OmniSharp"];
+      settings = cfg: {omnisharp = cfg;};
       settingsOptions = {
         enableEditorConfigSupport = helpers.defaultNullOpts.mkBool true ''
           Enables support for reading code style, naming convention and analyzer settings from
@@ -516,7 +514,7 @@ let
       name = "pylsp";
       description = "pylsp for Python";
       package = pkgs.python3Packages.python-lsp-server;
-      settings = cfg: { pylsp = cfg; };
+      settings = cfg: {pylsp = cfg;};
     }
     {
       name = "pylyzer";
@@ -548,7 +546,7 @@ let
       serverName = "rust_analyzer";
 
       settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
-      settings = cfg: { rust-analyzer = cfg; };
+      settings = cfg: {rust-analyzer = cfg;};
     }
     {
       name = "slint-lsp";
@@ -655,15 +653,16 @@ let
       description = "zls for Zig";
     }
   ];
-in
-{
-  imports = lib.lists.map lspHelpers.mkLsp servers ++ [
-    ./ccls.nix
-    ./efmls-configs.nix
-    ./nixd.nix
-    ./pylsp.nix
-    ./rust-analyzer.nix
-    ./svelte.nix
-    ./vls.nix
-  ];
+in {
+  imports =
+    lib.lists.map lspHelpers.mkLsp servers
+    ++ [
+      ./ccls.nix
+      ./efmls-configs.nix
+      ./nixd.nix
+      ./pylsp.nix
+      ./rust-analyzer.nix
+      ./svelte.nix
+      ./vls.nix
+    ];
 }

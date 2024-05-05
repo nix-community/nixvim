@@ -64,7 +64,7 @@
             # subdir = "templates";
             date_format = "%Y-%m-%d";
             time_format = "%H:%M";
-            substitutions = { };
+            substitutions = {};
           };
           new_notes_location = "current_dir";
           note_id_func = ''

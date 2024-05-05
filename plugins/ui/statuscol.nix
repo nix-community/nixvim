@@ -6,46 +6,45 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "statuscol";
-  originalName = "statuscol.nvim";
-  defaultPackage = pkgs.vimPlugins.statuscol-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "statuscol";
+    originalName = "statuscol.nvim";
+    defaultPackage = pkgs.vimPlugins.statuscol-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  settingsOptions = {
-    setopt = helpers.defaultNullOpts.mkBool true ''
-      Whether to set the `statuscolumn` option, may be set to false for those who want to use the
-      click handlers in their own `statuscolumn`: `_G.Sc[SFL]a()`.
-      Although I recommend just using the segments field below to build your statuscolumn to
-      benefit from the performance optimizations in this plugin.
-    '';
+    settingsOptions = {
+      setopt = helpers.defaultNullOpts.mkBool true ''
+        Whether to set the `statuscolumn` option, may be set to false for those who want to use the
+        click handlers in their own `statuscolumn`: `_G.Sc[SFL]a()`.
+        Although I recommend just using the segments field below to build your statuscolumn to
+        benefit from the performance optimizations in this plugin.
+      '';
 
-    thousands = helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "false" ''
-      `false` or line number thousands separator string ("." / ",").
-    '';
+      thousands = helpers.defaultNullOpts.mkNullable (with types; either str (enum [false])) "false" ''
+        `false` or line number thousands separator string ("." / ",").
+      '';
 
-    relculright = helpers.defaultNullOpts.mkBool false ''
-      Whether to right-align the cursor line number with `relativenumber` set.
-    '';
+      relculright = helpers.defaultNullOpts.mkBool false ''
+        Whether to right-align the cursor line number with `relativenumber` set.
+      '';
 
-    ft_ignore = helpers.defaultNullOpts.mkListOf types.str "null" ''
-      Lua table with 'filetype' values for which `statuscolumn` will be unset.
-    '';
+      ft_ignore = helpers.defaultNullOpts.mkListOf types.str "null" ''
+        Lua table with 'filetype' values for which `statuscolumn` will be unset.
+      '';
 
-    bt_ignore = helpers.defaultNullOpts.mkListOf types.str "null" ''
-      Lua table with 'buftype' values for which `statuscolumn` will be unset.
-    '';
+      bt_ignore = helpers.defaultNullOpts.mkListOf types.str "null" ''
+        Lua table with 'buftype' values for which `statuscolumn` will be unset.
+      '';
 
-    segments =
-      let
+      segments = let
         segmentType = types.submodule {
           freeformType = with types; attrsOf anything;
           options = {
             text = mkOption {
               type = with helpers.nixvimTypes; listOf (either str rawLua);
               description = "Segment text.";
-              example = [ "%C" ];
+              example = ["%C"];
             };
 
             click = helpers.mkNullOrStr ''
@@ -97,84 +96,84 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           };
         };
       in
-      helpers.defaultNullOpts.mkListOf segmentType ''
-        [
-          {
-            text = ["%C"];
-            click = "v:lua.ScFa";
-          }
-          {
-            text = ["%s"];
-            click = "v:lua.ScSa";
-          }
-          {
-            text = [
-              {__raw = "require('statuscol.builtin').lnumfunc";}
-              " "
-            ];
-            condition = [
-              true
-              {__raw = "require('statuscol.builtin').not_empty";}
-            ];
-            click = "v:lua.ScLa";
-          }
-        ]
-      '' "The statuscolumn can be customized through the `segments` option.";
+        helpers.defaultNullOpts.mkListOf segmentType ''
+          [
+            {
+              text = ["%C"];
+              click = "v:lua.ScFa";
+            }
+            {
+              text = ["%s"];
+              click = "v:lua.ScSa";
+            }
+            {
+              text = [
+                {__raw = "require('statuscol.builtin').lnumfunc";}
+                " "
+              ];
+              condition = [
+                true
+                {__raw = "require('statuscol.builtin').not_empty";}
+              ];
+              click = "v:lua.ScLa";
+            }
+          ]
+        '' "The statuscolumn can be customized through the `segments` option.";
 
-    clickmod = helpers.defaultNullOpts.mkStr "c" ''
-      Modifier used for certain actions in the builtin clickhandlers:
-      `a` for Alt, `c` for Ctrl and `m` for Meta.
-    '';
-
-    clickhandlers = mkOption {
-      type = with helpers.nixvimTypes; attrsOf strLuaFn;
-      default = { };
-      description = ''
-        Builtin click handlers.
+      clickmod = helpers.defaultNullOpts.mkStr "c" ''
+        Modifier used for certain actions in the builtin clickhandlers:
+        `a` for Alt, `c` for Ctrl and `m` for Meta.
       '';
-      apply = mapAttrs (_: helpers.mkRaw);
-      example = {
+
+      clickhandlers = mkOption {
+        type = with helpers.nixvimTypes; attrsOf strLuaFn;
+        default = {};
+        description = ''
+          Builtin click handlers.
+        '';
+        apply = mapAttrs (_: helpers.mkRaw);
+        example = {
+          Lnum = "require('statuscol.builtin').lnum_click";
+          FoldClose = "require('statuscol.builtin').foldclose_click";
+          FoldOpen = "require('statuscol.builtin').foldopen_click";
+          FoldOther = "require('statuscol.builtin').foldother_click";
+        };
+      };
+    };
+
+    settingsExample = {
+      setopt = true;
+      thousands = ".";
+      relculright = true;
+      ft_ignore = null;
+      bt_ignore = null;
+      segments = [
+        {
+          text = ["%C"];
+          click = "v:lua.ScFa";
+        }
+        {
+          text = ["%s"];
+          click = "v:lua.ScSa";
+        }
+        {
+          text = [
+            {__raw = "require('statuscol.builtin').lnumfunc";}
+            " "
+          ];
+          condition = [
+            true
+            {__raw = "require('statuscol.builtin').not_empty";}
+          ];
+          click = "v:lua.ScLa";
+        }
+      ];
+      clickmod = "c";
+      clickhandlers = {
         Lnum = "require('statuscol.builtin').lnum_click";
         FoldClose = "require('statuscol.builtin').foldclose_click";
         FoldOpen = "require('statuscol.builtin').foldopen_click";
         FoldOther = "require('statuscol.builtin').foldother_click";
       };
     };
-  };
-
-  settingsExample = {
-    setopt = true;
-    thousands = ".";
-    relculright = true;
-    ft_ignore = null;
-    bt_ignore = null;
-    segments = [
-      {
-        text = [ "%C" ];
-        click = "v:lua.ScFa";
-      }
-      {
-        text = [ "%s" ];
-        click = "v:lua.ScSa";
-      }
-      {
-        text = [
-          { __raw = "require('statuscol.builtin').lnumfunc"; }
-          " "
-        ];
-        condition = [
-          true
-          { __raw = "require('statuscol.builtin').not_empty"; }
-        ];
-        click = "v:lua.ScLa";
-      }
-    ];
-    clickmod = "c";
-    clickhandlers = {
-      Lnum = "require('statuscol.builtin').lnum_click";
-      FoldClose = "require('statuscol.builtin').foldclose_click";
-      FoldOpen = "require('statuscol.builtin').foldopen_click";
-      FoldOther = "require('statuscol.builtin').foldother_click";
-    };
-  };
-}
+  }

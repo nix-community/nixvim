@@ -70,7 +70,7 @@
       operators = {
         gc = "Comments";
       };
-      keyLabels = { };
+      keyLabels = {};
 
       motions = {
         count = true;
@@ -150,8 +150,8 @@
         ];
       };
       disable = {
-        buftypes = [ ];
-        filetypes = [ ];
+        buftypes = [];
+        filetypes = [];
       };
     };
   };

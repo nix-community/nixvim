@@ -1,30 +1,26 @@
-{ pkgs, ... }:
-{
-  mkLsp =
-    {
-      name,
-      description ? "Enable ${name}.",
-      serverName ? name,
-      package ? pkgs.${name},
-      cmd ? (cfg: null),
-      settings ? (cfg: cfg),
-      settingsOptions ? { },
-      extraConfig ? cfg: { },
-      ...
-    }:
-    # returns a module
-    {
-      pkgs,
-      config,
-      helpers,
-      lib,
-      ...
-    }:
-    with lib;
-    let
+{pkgs, ...}: {
+  mkLsp = {
+    name,
+    description ? "Enable ${name}.",
+    serverName ? name,
+    package ? pkgs.${name},
+    cmd ? (cfg: null),
+    settings ? (cfg: cfg),
+    settingsOptions ? {},
+    extraConfig ? cfg: {},
+    ...
+  }:
+  # returns a module
+  {
+    pkgs,
+    config,
+    helpers,
+    lib,
+    ...
+  }:
+    with lib; let
       cfg = config.plugins.lsp.servers.${name};
-    in
-    {
+    in {
       options = {
         plugins.lsp.servers.${name} = {
           enable = mkEnableOption description;
@@ -37,7 +33,10 @@
 
           cmd = mkOption {
             type = with types; nullOr (listOf str);
-            default = if (cfg.package or null) != null then cmd cfg else null;
+            default =
+              if (cfg.package or null) != null
+              then cmd cfg
+              else null;
           };
 
           filetypes = helpers.mkNullOrOption (types.listOf types.str) ''
@@ -79,7 +78,7 @@
           };
 
           extraOptions = mkOption {
-            default = { };
+            default = {};
             type = types.attrsOf types.anything;
             description = "Extra options for the ${name} language server.";
           };
@@ -87,42 +86,42 @@
       };
 
       config = mkIf cfg.enable {
-        extraPackages = [ cfg.package ];
+        extraPackages = [cfg.package];
 
         plugins.lsp.enabledServers = [
           {
             name = serverName;
-            extraOptions = {
-              inherit (cfg) cmd filetypes autostart;
-              root_dir = cfg.rootDir;
-              on_attach = helpers.ifNonNull' cfg.onAttach (
-                helpers.mkRaw ''
-                  function(client, bufnr)
-                    ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
-                    ${cfg.onAttach.function}
-                  end
-                ''
-              );
-              settings = settings cfg.settings;
-            } // cfg.extraOptions;
+            extraOptions =
+              {
+                inherit (cfg) cmd filetypes autostart;
+                root_dir = cfg.rootDir;
+                on_attach = helpers.ifNonNull' cfg.onAttach (
+                  helpers.mkRaw ''
+                    function(client, bufnr)
+                      ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
+                      ${cfg.onAttach.function}
+                    end
+                  ''
+                );
+                settings = settings cfg.settings;
+              }
+              // cfg.extraOptions;
           }
         ];
       };
-      imports =
-        let
-          basePluginPath = [
-            "plugins"
-            "lsp"
-            "servers"
-            name
-          ];
-          basePluginPathString = concatStringsSep "." basePluginPath;
-        in
-        [
-          (mkRemovedOptionModule (
-            basePluginPath ++ [ "extraSettings" ]
-          ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
-          (extraConfig cfg)
+      imports = let
+        basePluginPath = [
+          "plugins"
+          "lsp"
+          "servers"
+          name
         ];
+        basePluginPathString = concatStringsSep "." basePluginPath;
+      in [
+        (mkRemovedOptionModule (
+          basePluginPath ++ ["extraSettings"]
+        ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
+        (extraConfig cfg)
+      ];
     };
 }

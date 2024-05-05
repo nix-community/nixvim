@@ -12,7 +12,7 @@ helpers.vim-plugin.mkVimPlugin config {
   defaultPackage = pkgs.vimPlugins.vim-one;
   globalPrefix = "one_";
 
-  maintainers = [ lib.maintainers.GaetanLepage ];
+  maintainers = [lib.maintainers.GaetanLepage];
 
   settingsOptions = {
     allow_italics = helpers.defaultNullOpts.mkBool false ''
@@ -24,5 +24,5 @@ helpers.vim-plugin.mkVimPlugin config {
     allow_italics = true;
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = cfg: {opts.termguicolors = lib.mkDefault true;};
 }

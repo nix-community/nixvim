@@ -1,35 +1,37 @@
-{ lib, helpers }:
-with lib;
 {
+  lib,
+  helpers,
+}:
+with lib; {
   enabled =
     helpers.defaultNullOpts.mkNullable (with types; either bool (listOf str))
-      ''["bibtex" "context" "context.tex" "html" "latex" "markdown" "org" "restructuredtext" "rsweave"]''
-      ''
-        Controls whether the extension is enabled.
-        Allows disabling LanguageTool on specific workspaces or for specific code language modes
-        (i.e., file types).
+    ''["bibtex" "context" "context.tex" "html" "latex" "markdown" "org" "restructuredtext" "rsweave"]''
+    ''
+      Controls whether the extension is enabled.
+      Allows disabling LanguageTool on specific workspaces or for specific code language modes
+      (i.e., file types).
 
-        Either supply a boolean value stating whether LTEX is enabled for all supported markup languages
-        or disabled for all of them, or supply a list of code language identifiers for which LTEX should
-        be enabled (note that extensions can define additional code language identifiers).
+      Either supply a boolean value stating whether LTEX is enabled for all supported markup languages
+      or disabled for all of them, or supply a list of code language identifiers for which LTEX should
+      be enabled (note that extensions can define additional code language identifiers).
 
-        All supported markup languages are listed in the default value of this setting.
-        In addition, LTEX can check comments in many popular programming languages like C++ or Java, if
-        you add the corresponding code language identifiers to this setting.
-        If you add an unsupported code language mode, LTEX will check corresponding files as plain text
-        without any parsing.
+      All supported markup languages are listed in the default value of this setting.
+      In addition, LTEX can check comments in many popular programming languages like C++ or Java, if
+      you add the corresponding code language identifiers to this setting.
+      If you add an unsupported code language mode, LTEX will check corresponding files as plain text
+      without any parsing.
 
-        The activation events are unaffected by this setting.
-        This means that the extension will be activated whenever a file with a supported code language
-        mode is opened.
-        For unsupported code language modes, you may need to activate the extension explicitly by
-        executing the LTeX: Activate Extension command.
+      The activation events are unaffected by this setting.
+      This means that the extension will be activated whenever a file with a supported code language
+      mode is opened.
+      For unsupported code language modes, you may need to activate the extension explicitly by
+      executing the LTeX: Activate Extension command.
 
-        Examples:
-        - true
-        - false
-        - ["latex" "markdown"]
-      '';
+      Examples:
+      - true
+      - false
+      - ["latex" "markdown"]
+    '';
 
   language = helpers.defaultNullOpts.mkStr "en-US" ''
     The language (e.g., "en-US") LanguageTool should check against.
@@ -333,17 +335,17 @@ with lib;
 
   configurationTarget =
     helpers.defaultNullOpts.mkNullable (with types; attrsOf str)
-      ''
-        {
-          dictionary = "workspaceFolderExternalFile";
-          disabledRules = "workspaceFolderExternalFile";
-          hiddenFalsePositives = "workspaceFolderExternalFile";
-        }
-      ''
-      ''
-        Controls which `settings.json` or external setting file (see documentation) to update when
-        using one of the quick fixes.
-      '';
+    ''
+      {
+        dictionary = "workspaceFolderExternalFile";
+        disabledRules = "workspaceFolderExternalFile";
+        hiddenFalsePositives = "workspaceFolderExternalFile";
+      }
+    ''
+    ''
+      Controls which `settings.json` or external setting file (see documentation) to update when
+      using one of the quick fixes.
+    '';
 
   additionalRules = {
     enablePickyRules = helpers.defaultNullOpts.mkBool false ''
@@ -463,34 +465,34 @@ with lib;
 
     logLevel =
       helpers.defaultNullOpts.mkEnum
-        [
-          "severe"
-          "warning"
-          "info"
-          "config"
-          "fine"
-          "finer"
-          "finest"
-        ]
+      [
+        "severe"
+        "warning"
+        "info"
+        "config"
         "fine"
-        ''
-          Logging level (verbosity) of the `ltex-ls` server log.
+        "finer"
+        "finest"
+      ]
+      "fine"
+      ''
+        Logging level (verbosity) of the `ltex-ls` server log.
 
-          The levels in descending order are "severe", "warning", "info", "config", "fine", "finer", and
-          "finest".
-          All messages that have the specified log level or a higher level are logged.
+        The levels in descending order are "severe", "warning", "info", "config", "fine", "finer", and
+        "finest".
+        All messages that have the specified log level or a higher level are logged.
 
-          `ltex-ls` does not use all log levels.
+        `ltex-ls` does not use all log levels.
 
-          Possible values:
-          - "severe": Minimum verbosity. Only log severe errors.
-          - "warning": Very low verbosity. Only log severe errors and warnings.
-          - "info": Low verbosity. Additionally, log startup and shutdown messages.
-          - "config": Medium verbosity. Additionally, log configuration messages.
-          - "fine": Medium to high verbosity (default). Additionally, log when LanguageTool is called or LanguageTool has to be reinitialized due to changed settings.
-          - "finer": High verbosity. Log additional debugging information such as full texts to be checked.
-          - "finest": Maximum verbosity. Log all available debugging information.
-        '';
+        Possible values:
+        - "severe": Minimum verbosity. Only log severe errors.
+        - "warning": Very low verbosity. Only log severe errors and warnings.
+        - "info": Low verbosity. Additionally, log startup and shutdown messages.
+        - "config": Medium verbosity. Additionally, log configuration messages.
+        - "fine": Medium to high verbosity (default). Additionally, log when LanguageTool is called or LanguageTool has to be reinitialized due to changed settings.
+        - "finer": High verbosity. Log additional debugging information such as full texts to be checked.
+        - "finest": Maximum verbosity. Log all available debugging information.
+      '';
   };
 
   java = {
@@ -555,41 +557,41 @@ with lib;
 
   diagnosticSeverity =
     helpers.defaultNullOpts.mkNullable (with types; either str (attrsOf str)) "information"
-      ''
-        Severity of the diagnostics corresponding to the grammar and spelling errors.
+    ''
+      Severity of the diagnostics corresponding to the grammar and spelling errors.
 
-        Controls how and where the diagnostics appear.
-        The possible severities are "error", "warning", "information", and "hint".
+      Controls how and where the diagnostics appear.
+      The possible severities are "error", "warning", "information", and "hint".
 
-        This setting can either be a string with the severity to use for all diagnostics, or an attrs
-        with rule-dependent severities.
-        If an attrs is used, each key is the ID of a LanguageTool rule and each value is one of the
-        possible severities.
-        In this case, the severity of other rules, which don’t match any of the keys, has to be
-        specified with the special key "default".
+      This setting can either be a string with the severity to use for all diagnostics, or an attrs
+      with rule-dependent severities.
+      If an attrs is used, each key is the ID of a LanguageTool rule and each value is one of the
+      possible severities.
+      In this case, the severity of other rules, which don’t match any of the keys, has to be
+      specified with the special key "default".
 
-        Examples:
-        - `"information"`
-        - `{PASSIVE_VOICE = "hint"; default = "information";}`
-      '';
+      Examples:
+      - `"information"`
+      - `{PASSIVE_VOICE = "hint"; default = "information";}`
+    '';
 
   checkFrequency =
     helpers.defaultNullOpts.mkEnumFirstDefault
-      [
-        "edit"
-        "save"
-        "manual"
-      ]
-      ''
-        Controls when documents should be checked.
+    [
+      "edit"
+      "save"
+      "manual"
+    ]
+    ''
+      Controls when documents should be checked.
 
-        Possible values:
-        - "edit": Documents are checked when they are opened or edited (on every keystroke), or when
-          the settings change.
-        - "save": Documents are checked when they are opened or saved, or when the settings change.
-        - "manual": Documents are not checked automatically, except when the settings change.
-          Use commands such as LTeX: Check Current Document to manually trigger checks.
-      '';
+      Possible values:
+      - "edit": Documents are checked when they are opened or edited (on every keystroke), or when
+        the settings change.
+      - "save": Documents are checked when they are opened or saved, or when the settings change.
+      - "manual": Documents are not checked automatically, except when the settings change.
+        Use commands such as LTeX: Check Current Document to manually trigger checks.
+    '';
 
   clearDiagnosticsWhenClosingFile = helpers.defaultNullOpts.mkBool true ''
     If set to true, diagnostics of a file are cleared when the file is closed.
@@ -602,24 +604,24 @@ with lib;
   trace = {
     server =
       helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "off"
-          "messages"
-          "verbose"
-        ]
-        ''
-          Debug setting to log the communication between language client and server.
+      [
+        "off"
+        "messages"
+        "verbose"
+      ]
+      ''
+        Debug setting to log the communication between language client and server.
 
-          When reporting issues, set this to "verbose".
-          Append the relevant part to the GitHub issue.
+        When reporting issues, set this to "verbose".
+        Append the relevant part to the GitHub issue.
 
-          Changes require restarting LTEX to take effect.
+        Changes require restarting LTEX to take effect.
 
-          Possible values:
-          - "off": Don’t log any of the communication between language client and server.
-          - "messages": Log the type of requests and responses between language client and server.
-          - "verbose": Log the type and contents of requests and responses between language client and
-            server.
-        '';
+        Possible values:
+        - "off": Don’t log any of the communication between language client and server.
+        - "messages": Log the type of requests and responses between language client and server.
+        - "verbose": Log the type and contents of requests and responses between language client and
+          server.
+      '';
   };
 }

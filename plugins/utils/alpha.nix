@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.alpha;
 
   sectionType = types.submodule {
@@ -25,30 +24,29 @@ let
 
       val = helpers.mkNullOrOption (
         with helpers.nixvimTypes;
-        nullOr (oneOf [
-          # "button", "text"
-          str
-          # "padding"
-          int
-          (listOf (
-            either
+          nullOr (oneOf [
+            # "button", "text"
+            str
+            # "padding"
+            int
+            (listOf (
+              either
               # "text" (list of strings)
               str
               # "group"
               (attrsOf anything)
-          ))
-        ])
+            ))
+          ])
       ) "Value for section";
 
       opts = mkOption {
         type = with types; attrsOf anything;
-        default = { };
+        default = {};
         description = "Additional options for the section";
       };
     };
   };
-in
-{
+in {
   options = {
     plugins.alpha = {
       enable = mkEnableOption "alpha-nvim";
@@ -63,7 +61,10 @@ in
 
       theme = mkOption {
         type = with helpers.nixvimTypes; nullOr (maybeRaw str);
-        apply = v: if isString v then helpers.mkRaw "require'alpha.themes.${v}'.config" else v;
+        apply = v:
+          if isString v
+          then helpers.mkRaw "require'alpha.themes.${v}'.config"
+          else v;
         default = null;
         example = "dashboard";
         description = "You can directly use a pre-defined theme.";
@@ -71,7 +72,7 @@ in
 
       layout = mkOption {
         type = types.listOf sectionType;
-        default = [ ];
+        default = [];
         description = "List of sections to layout for the dashboard";
         example = [
           {
@@ -135,13 +136,12 @@ in
     };
   };
 
-  config =
-    let
-      layoutDefined = cfg.layout != [ ];
-      themeDefined = cfg.theme != null;
-    in
+  config = let
+    layoutDefined = cfg.layout != [];
+    themeDefined = cfg.theme != null;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ] ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
+      extraPlugins = [cfg.package] ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
 
       assertions = [
         {
@@ -159,18 +159,16 @@ in
         }
       ];
 
-      extraConfigLua =
-        let
-          setupOptions =
-            if themeDefined then
-              cfg.theme
-            else
-              (with cfg; {
-                inherit layout opts;
-              });
-        in
-        ''
-          require('alpha').setup(${helpers.toLuaObject setupOptions})
-        '';
+      extraConfigLua = let
+        setupOptions =
+          if themeDefined
+          then cfg.theme
+          else
+            (with cfg; {
+              inherit layout opts;
+            });
+      in ''
+        require('alpha').setup(${helpers.toLuaObject setupOptions})
+      '';
     };
 }

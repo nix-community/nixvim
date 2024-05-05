@@ -4,23 +4,20 @@
   nixvimUtils,
 }:
 with lib;
-with nixvimUtils;
-rec {
+with nixvimUtils; rec {
   # Creates an option with a nullable type that defaults to null.
-  mkNullOrOption =
-    type: desc:
+  mkNullOrOption = type: desc:
     lib.mkOption {
       type = lib.types.nullOr type;
       default = null;
       description = desc;
     };
 
-  mkCompositeOption = desc: options: mkNullOrOption (types.submodule { inherit options; }) desc;
+  mkCompositeOption = desc: options: mkNullOrOption (types.submodule {inherit options;}) desc;
 
   mkNullOrStr = mkNullOrOption (with nixvimTypes; maybeRaw str);
 
-  mkNullOrLua =
-    desc:
+  mkNullOrLua = desc:
     lib.mkOption {
       type = lib.types.nullOr nixvimTypes.strLua;
       default = null;
@@ -28,8 +25,7 @@ rec {
       apply = mkRaw;
     };
 
-  mkNullOrLuaFn =
-    desc:
+  mkNullOrLuaFn = desc:
     lib.mkOption {
       type = lib.types.nullOr nixvimTypes.strLuaFn;
       default = null;
@@ -37,35 +33,37 @@ rec {
       apply = mkRaw;
     };
 
-  mkNullOrStrLuaOr =
-    ty: desc:
+  mkNullOrStrLuaOr = ty: desc:
     lib.mkOption {
       type = lib.types.nullOr (types.either nixvimTypes.strLua ty);
       default = null;
       description = desc;
-      apply = v: if builtins.isString v then mkRaw v else v;
+      apply = v:
+        if builtins.isString v
+        then mkRaw v
+        else v;
     };
 
-  mkNullOrStrLuaFnOr =
-    ty: desc:
+  mkNullOrStrLuaFnOr = ty: desc:
     lib.mkOption {
       type = lib.types.nullOr (types.either nixvimTypes.strLuaFn ty);
       default = null;
       description = desc;
-      apply = v: if builtins.isString v then mkRaw v else v;
+      apply = v:
+        if builtins.isString v
+        then mkRaw v
+        else v;
     };
 
   defaultNullOpts = rec {
-    mkNullable =
-      type: default: desc:
+    mkNullable = type: default: desc:
       mkNullOrOption type (
         let
           defaultDesc = "default: `${default}`";
         in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
+          if desc == ""
+          then defaultDesc
+          else ''
             ${desc}
 
             ${defaultDesc}
@@ -74,40 +72,35 @@ rec {
 
     mkNullableWithRaw = type: mkNullable (maybeRaw type);
 
-    mkStrLuaOr =
-      type: default: desc:
+    mkStrLuaOr = type: default: desc:
       mkNullOrStrLuaOr type (
         let
           defaultDesc = "default: `${default}`";
         in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
+          if desc == ""
+          then defaultDesc
+          else ''
             ${desc}
 
             ${defaultDesc}
           ''
       );
 
-    mkStrLuaFnOr =
-      type: default: desc:
+    mkStrLuaFnOr = type: default: desc:
       mkNullOrStrLuaFnOr type (
         let
           defaultDesc = "default: `${default}`";
         in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
+          if desc == ""
+          then defaultDesc
+          else ''
             ${desc}
 
             ${defaultDesc}
           ''
       );
 
-    mkLua =
-      default: desc:
+    mkLua = default: desc:
       mkNullOrLua (
         (optionalString (desc != "") ''
           ${desc}
@@ -118,20 +111,17 @@ rec {
         ''
       );
 
-    mkLuaFn =
-      default: desc:
-      let
-        defaultDesc = "default: `${default}`";
-      in
+    mkLuaFn = default: desc: let
+      defaultDesc = "default: `${default}`";
+    in
       mkNullOrLuaFn (
-        if desc == "" then
-          defaultDesc
-        else
-          ''
-            ${desc}
+        if desc == ""
+        then defaultDesc
+        else ''
+          ${desc}
 
-            ${defaultDesc}
-          ''
+          ${defaultDesc}
+        ''
       );
 
     mkNum = default: mkNullable (with nixvimTypes; maybeRaw number) (toString default);
@@ -140,17 +130,19 @@ rec {
     mkPositiveInt = default: mkNullable (with nixvimTypes; maybeRaw ints.positive) (toString default);
     # Unsigned: >=0
     mkUnsignedInt = default: mkNullable (with nixvimTypes; maybeRaw ints.unsigned) (toString default);
-    mkBool =
-      default: mkNullable (with nixvimTypes; maybeRaw bool) (if default then "true" else "false");
+    mkBool = default:
+      mkNullable (with nixvimTypes; maybeRaw bool) (
+        if default
+        then "true"
+        else "false"
+      );
     mkStr = default: mkNullable (with nixvimTypes; maybeRaw str) ''${builtins.toString default}'';
     mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
     mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
     mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
-    mkEnum =
-      enumValues: default: mkNullable (with nixvimTypes; maybeRaw (enum enumValues)) ''"${default}"'';
+    mkEnum = enumValues: default: mkNullable (with nixvimTypes; maybeRaw (enum enumValues)) ''"${default}"'';
     mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
-    mkBorder =
-      default: name: desc:
+    mkBorder = default: name: desc:
       mkNullable (with nixvimTypes; maybeRaw border) default (
         let
           defaultDesc = ''
@@ -158,19 +150,16 @@ rec {
             Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info.
           '';
         in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
+          if desc == ""
+          then defaultDesc
+          else ''
             ${desc}
             ${defaultDesc}
           ''
       );
-    mkSeverity =
-      default: desc:
+    mkSeverity = default: desc:
       mkOption {
-        type =
-          with types;
+        type = with types;
           nullOr (
             either ints.unsigned (enum [
               "error"
@@ -181,83 +170,83 @@ rec {
           );
         default = null;
         apply = mapNullable (
-          value: if isInt value then value else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
+          value:
+            if isInt value
+            then value
+            else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
         );
-        description =
-          let
-            defaultDesc = "default: `${toString default}`";
-          in
-          if desc == "" then
-            defaultDesc
-          else
-            ''
-              ${desc}
+        description = let
+          defaultDesc = "default: `${toString default}`";
+        in
+          if desc == ""
+          then defaultDesc
+          else ''
+            ${desc}
 
-              ${defaultDesc}
-            '';
+            ${defaultDesc}
+          '';
       };
-    mkLogLevel =
-      default: desc:
+    mkLogLevel = default: desc:
       mkOption {
         type = with types; nullOr (either ints.unsigned nixvimTypes.logLevel);
         default = null;
         apply = mapNullable (
-          value: if isInt value then value else mkRaw "vim.log.levels.${strings.toUpper value}"
+          value:
+            if isInt value
+            then value
+            else mkRaw "vim.log.levels.${strings.toUpper value}"
         );
-        description =
-          let
-            defaultDesc = "default: `${toString default}`";
-          in
-          if desc == "" then
-            defaultDesc
-          else
-            ''
-              ${desc}
+        description = let
+          defaultDesc = "default: `${toString default}`";
+        in
+          if desc == ""
+          then defaultDesc
+          else ''
+            ${desc}
 
-              ${defaultDesc}
-            '';
+            ${defaultDesc}
+          '';
       };
 
-    mkHighlight =
-      default: name: desc:
-      mkNullable nixvimTypes.highlight default (if desc == "" then "Highlight settings." else desc);
+    mkHighlight = default: name: desc:
+      mkNullable nixvimTypes.highlight default (
+        if desc == ""
+        then "Highlight settings."
+        else desc
+      );
   };
 
-  mkPackageOption =
-    name: default:
+  mkPackageOption = name: default:
     mkOption {
       type = types.package;
       inherit default;
       description = "Plugin to use for ${name}";
     };
 
-  mkSettingsOption =
-    {
-      options ? { },
-      description,
-      example ? null,
-    }:
+  mkSettingsOption = {
+    options ? {},
+    description,
+    example ? null,
+  }:
     mkOption {
-      type =
-        with types;
+      type = with types;
         submodule {
           freeformType = attrsOf anything;
           inherit options;
         };
-      default = { };
+      default = {};
       inherit description;
       example =
-        if example == null then
-          {
-            foo_bar = 42;
-            hostname = "localhost:8080";
-            callback.__raw = ''
-              function()
-                print('nixvim')
-              end
-            '';
-          }
-        else
-          example;
+        if example == null
+        then {
+          foo_bar = 42;
+          hostname = "localhost:8080";
+          callback.__raw = ''
+            function()
+              print('nixvim')
+            end
+          '';
+        }
+        else example;
     };
 }

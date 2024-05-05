@@ -12,7 +12,7 @@ helpers.vim-plugin.mkVimPlugin config {
   defaultPackage = pkgs.vimPlugins.nord-nvim;
   globalPrefix = "nord_";
 
-  maintainers = [ lib.maintainers.GaetanLepage ];
+  maintainers = [lib.maintainers.GaetanLepage];
 
   # TODO introduced 2024-02-20: remove 2024-04-20
   deprecateExtraConfig = true;

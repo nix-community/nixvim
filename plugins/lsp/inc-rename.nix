@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-{
+with lib; {
   options.plugins.inc-rename = {
     enable = mkEnableOption "inc-rename, a plugin previewing LSP renaming";
 
@@ -25,7 +24,7 @@ with lib;
       whether to display a `Renamed m instances in n files` message after a rename operation
     '';
 
-    inputBufferType = helpers.defaultNullOpts.mkNullable (types.enum [ "dressing" ]) "null" ''
+    inputBufferType = helpers.defaultNullOpts.mkNullable (types.enum ["dressing"]) "null" ''
       the type of the external input buffer to use
     '';
 
@@ -34,20 +33,19 @@ with lib;
     '';
   };
 
-  config =
-    let
-      cfg = config.plugins.inc-rename;
-      setupOptions = {
-        cmd_name = cfg.cmdName;
-        hl_group = cfg.hlGroup;
-        preview_empty_name = cfg.previewEmptyName;
-        show_message = cfg.showMessage;
-        input_buffer_type = cfg.inputBufferType;
-        post_hook = cfg.postHook;
-      };
-    in
+  config = let
+    cfg = config.plugins.inc-rename;
+    setupOptions = {
+      cmd_name = cfg.cmdName;
+      hl_group = cfg.hlGroup;
+      preview_empty_name = cfg.previewEmptyName;
+      show_message = cfg.showMessage;
+      input_buffer_type = cfg.inputBufferType;
+      post_hook = cfg.postHook;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require("inc_rename").setup(${helpers.toLuaObject setupOptions})

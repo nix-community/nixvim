@@ -63,7 +63,7 @@
             width = 0.5;
             height = 0.4;
           };
-          fzf_lua = { };
+          fzf_lua = {};
           nui = {
             position = "50%";
             size = null;
@@ -88,7 +88,7 @@
             border = "rounded";
             relative = "editor";
 
-            buf_options = { };
+            buf_options = {};
             win_options = {
               cursorline = true;
               cursorlineopt = "both";
@@ -118,7 +118,7 @@
 
             override = "function(conf) return conf end";
           };
-          format_item_override = { };
+          format_item_override = {};
           get_config = null;
         };
       };

@@ -1,80 +1,79 @@
-{ lib, helpers }:
-with lib;
 {
-  signs =
-    let
-      signOptions = defaults: {
-        hl = helpers.defaultNullOpts.mkStr defaults.hl ''
-          Specifies the highlight group to use for the sign.
-        '';
+  lib,
+  helpers,
+}:
+with lib; {
+  signs = let
+    signOptions = defaults: {
+      hl = helpers.defaultNullOpts.mkStr defaults.hl ''
+        Specifies the highlight group to use for the sign.
+      '';
 
-        text = helpers.defaultNullOpts.mkStr defaults.text ''
-          Specifies the character to use for the sign.
-        '';
+      text = helpers.defaultNullOpts.mkStr defaults.text ''
+        Specifies the character to use for the sign.
+      '';
 
-        numhl = helpers.defaultNullOpts.mkStr defaults.numhl ''
-          Specifies the highlight group to use for the number column.
-        '';
+      numhl = helpers.defaultNullOpts.mkStr defaults.numhl ''
+        Specifies the highlight group to use for the number column.
+      '';
 
-        linehl = helpers.defaultNullOpts.mkStr defaults.linehl ''
-          Specifies the highlight group to use for the line.
-        '';
+      linehl = helpers.defaultNullOpts.mkStr defaults.linehl ''
+        Specifies the highlight group to use for the line.
+      '';
 
-        show_count = helpers.defaultNullOpts.mkBool false ''
-          Showing count of hunk, e.g. number of deleted lines.
-        '';
-      };
-    in
-    {
-      add = signOptions {
-        hl = "GitSignsAdd";
-        text = "┃";
-        numhl = "GitSignsAddNr";
-        linehl = "GitSignsAddLn";
-      };
-      change = signOptions {
-        hl = "GitSignsChange";
-        text = "┃";
-        numhl = "GitSignsChangeNr";
-        linehl = "GitSignsChangeLn";
-      };
-      delete = signOptions {
-        hl = "GitSignsDelete";
-        text = "▁";
-        numhl = "GitSignsDeleteNr";
-        linehl = "GitSignsDeleteLn";
-      };
-      topdelete = signOptions {
-        hl = "GitSignsDelete";
-        text = "▔";
-        numhl = "GitSignsDeleteNr";
-        linehl = "GitSignsDeleteLn";
-      };
-      changedelete = signOptions {
-        hl = "GitSignsChange";
-        text = "~";
-        numhl = "GitSignsChangeNr";
-        linehl = "GitSignsChangeLn";
-      };
-      untracked = signOptions {
-        hl = "GitSignsAdd";
-        text = "┆";
-        numhl = "GitSignsAddNr";
-        linehl = "GitSignsAddLn";
+      show_count = helpers.defaultNullOpts.mkBool false ''
+        Showing count of hunk, e.g. number of deleted lines.
+      '';
+    };
+  in {
+    add = signOptions {
+      hl = "GitSignsAdd";
+      text = "┃";
+      numhl = "GitSignsAddNr";
+      linehl = "GitSignsAddLn";
+    };
+    change = signOptions {
+      hl = "GitSignsChange";
+      text = "┃";
+      numhl = "GitSignsChangeNr";
+      linehl = "GitSignsChangeLn";
+    };
+    delete = signOptions {
+      hl = "GitSignsDelete";
+      text = "▁";
+      numhl = "GitSignsDeleteNr";
+      linehl = "GitSignsDeleteLn";
+    };
+    topdelete = signOptions {
+      hl = "GitSignsDelete";
+      text = "▔";
+      numhl = "GitSignsDeleteNr";
+      linehl = "GitSignsDeleteLn";
+    };
+    changedelete = signOptions {
+      hl = "GitSignsChange";
+      text = "~";
+      numhl = "GitSignsChangeNr";
+      linehl = "GitSignsChangeLn";
+    };
+    untracked = signOptions {
+      hl = "GitSignsAdd";
+      text = "┆";
+      numhl = "GitSignsAddNr";
+      linehl = "GitSignsAddLn";
+    };
+  };
+
+  worktrees = let
+    worktreeType = types.submodule {
+      freeformType = with types; attrsOf anything;
+      options = {
+        toplevel = mkOption {type = with helpers.nixvimTypes; maybeRaw str;};
+
+        gitdir = mkOption {type = with helpers.nixvimTypes; maybeRaw str;};
       };
     };
-
-  worktrees =
-    let
-      worktreeType = types.submodule {
-        freeformType = with types; attrsOf anything;
-        options = {
-          toplevel = mkOption { type = with helpers.nixvimTypes; maybeRaw str; };
-
-          gitdir = mkOption { type = with helpers.nixvimTypes; maybeRaw str; };
-        };
-      };
-    in
+  in
     helpers.mkNullOrOption (types.listOf worktreeType) ''
       Detached working trees.
       If normal attaching fails, then each entry in the table is attempted with the work tree
@@ -146,63 +145,62 @@ with lib;
     Note: Virtual lines currently use the highlight `GitSignsDeleteVirtLn`.
   '';
 
-  diff_opts =
-    let
-      diffOptType = types.submodule {
-        freeformType = with types; attrsOf anything;
-        options = {
-          algorithm =
-            helpers.defaultNullOpts.mkEnumFirstDefault
-              [
-                "myers"
-                "minimal"
-                "patience"
-                "histogram"
-              ]
-              ''
-                Diff algorithm to use. Values:
-                - "myers"      the default algorithm
-                - "minimal"    spend extra time to generate the smallest possible diff
-                - "patience"   patience diff algorithm
-                - "histogram"  histogram diff algorithm
-              '';
-
-          internal = helpers.defaultNullOpts.mkBool false ''
-            Use Neovim's built in `xdiff` library for running diffs.
+  diff_opts = let
+    diffOptType = types.submodule {
+      freeformType = with types; attrsOf anything;
+      options = {
+        algorithm =
+          helpers.defaultNullOpts.mkEnumFirstDefault
+          [
+            "myers"
+            "minimal"
+            "patience"
+            "histogram"
+          ]
+          ''
+            Diff algorithm to use. Values:
+            - "myers"      the default algorithm
+            - "minimal"    spend extra time to generate the smallest possible diff
+            - "patience"   patience diff algorithm
+            - "histogram"  histogram diff algorithm
           '';
 
-          indent_heuristic = helpers.defaultNullOpts.mkBool false ''
-            Use the indent heuristic for the internal diff library.
-          '';
+        internal = helpers.defaultNullOpts.mkBool false ''
+          Use Neovim's built in `xdiff` library for running diffs.
+        '';
 
-          vertical = helpers.defaultNullOpts.mkBool true ''
-            Start diff mode with vertical splits.
-          '';
+        indent_heuristic = helpers.defaultNullOpts.mkBool false ''
+          Use the indent heuristic for the internal diff library.
+        '';
 
-          linematch = helpers.mkNullOrOption types.int ''
-            Enable second-stage diff on hunks to align lines.
-            Requires `internal=true`.
-          '';
+        vertical = helpers.defaultNullOpts.mkBool true ''
+          Start diff mode with vertical splits.
+        '';
 
-          ignore_blank_lines = helpers.defaultNullOpts.mkBool true ''
-            Ignore changes where lines are blank.
-          '';
+        linematch = helpers.mkNullOrOption types.int ''
+          Enable second-stage diff on hunks to align lines.
+          Requires `internal=true`.
+        '';
 
-          ignore_whitespace_change = helpers.defaultNullOpts.mkBool true ''
-            Ignore changes in amount of white space.
-            It should ignore adding trailing white space, but not leading white space.
-          '';
+        ignore_blank_lines = helpers.defaultNullOpts.mkBool true ''
+          Ignore changes where lines are blank.
+        '';
 
-          ignore_whitespace = helpers.defaultNullOpts.mkBool true ''
-            Ignore all white space changes.
-          '';
+        ignore_whitespace_change = helpers.defaultNullOpts.mkBool true ''
+          Ignore changes in amount of white space.
+          It should ignore adding trailing white space, but not leading white space.
+        '';
 
-          ignore_whitespace_change_at_eol = helpers.defaultNullOpts.mkBool true ''
-            Ignore white space changes at end of line.
-          '';
-        };
+        ignore_whitespace = helpers.defaultNullOpts.mkBool true ''
+          Ignore all white space changes.
+        '';
+
+        ignore_whitespace_change_at_eol = helpers.defaultNullOpts.mkBool true ''
+          Ignore white space changes at end of line.
+        '';
       };
-    in
+    };
+  in
     helpers.mkNullOrOption diffOptType ''
       Diff options.
       If set to null they are derived from the vim `diffopt`.
@@ -215,29 +213,29 @@ with lib;
 
   count_chars =
     helpers.defaultNullOpts.mkAttrsOf types.str
-      ''
-        {
-          "__unkeyed_1" = "1";
-          "__unkeyed_2" = "2";
-          "__unkeyed_3" = "3";
-          "__unkeyed_4" = "4";
-          "__unkeyed_5" = "5";
-          "__unkeyed_6" = "6";
-          "__unkeyed_7" = "7";
-          "__unkeyed_8" = "8";
-          "__unkeyed_9" = "9";
-          "+" = ">";
-        }
-      ''
-      ''
-        The count characters used when `signs.*.show_count` is enabled.
-        The `+` entry is used as a fallback. With the default, any count outside of 1-9 uses the `>`
-        character in the sign.
+    ''
+      {
+        "__unkeyed_1" = "1";
+        "__unkeyed_2" = "2";
+        "__unkeyed_3" = "3";
+        "__unkeyed_4" = "4";
+        "__unkeyed_5" = "5";
+        "__unkeyed_6" = "6";
+        "__unkeyed_7" = "7";
+        "__unkeyed_8" = "8";
+        "__unkeyed_9" = "9";
+        "+" = ">";
+      }
+    ''
+    ''
+      The count characters used when `signs.*.show_count` is enabled.
+      The `+` entry is used as a fallback. With the default, any count outside of 1-9 uses the `>`
+      character in the sign.
 
-        Possible use cases for this field:
-        - to specify unicode characters for the counts instead of 1-9.
-        - to define characters to be used for counts greater than 9.
-      '';
+      Possible use cases for this field:
+      - to specify unicode characters for the counts instead of 1-9.
+      - to define characters to be used for counts greater than 9.
+    '';
 
   status_formatter = helpers.defaultNullOpts.mkLuaFn ''
     function(status)
@@ -262,19 +260,19 @@ with lib;
 
   preview_config =
     helpers.defaultNullOpts.mkAttrsOf types.anything
-      ''
-        {
-          border = "single";
-          style = "minimal";
-          relative = "cursor";
-          row = 0;
-          col = 1;
-        }
-      ''
-      ''
-        Option overrides for the Gitsigns preview window.
-        Table is passed directly to `nvim_open_win`.
-      '';
+    ''
+      {
+        border = "single";
+        style = "minimal";
+        relative = "cursor";
+        row = 0;
+        col = 1;
+      }
+    ''
+    ''
+      Option overrides for the Gitsigns preview window.
+      Table is passed directly to `nvim_open_win`.
+    '';
 
   auto_attach = helpers.defaultNullOpts.mkBool true ''
     Automatically attach to files.
@@ -300,19 +298,19 @@ with lib;
 
     virt_text_pos =
       helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "eol"
-          "overlay"
-          "right_align"
-        ]
-        ''
-          Blame annotation position.
+      [
+        "eol"
+        "overlay"
+        "right_align"
+      ]
+      ''
+        Blame annotation position.
 
-          Available values:
-          - `eol`         Right after eol character.
-          - `overlay`     Display over the specified column, without shifting the underlying text.
-          - `right_align` Display right aligned in the window.
-        '';
+        Available values:
+        - `eol`         Right after eol character.
+        - `overlay`     Display over the specified column, without shifting the underlying text.
+        - `right_align` Display right aligned in the window.
+      '';
 
     delay = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
       Sets the delay (in milliseconds) before blame virtual text is displayed.

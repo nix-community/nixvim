@@ -9,7 +9,7 @@
           enable = true;
 
           settings = {
-            args = [ "--no-capture" ];
+            args = ["--no-capture"];
             dap_adapter = "lldb";
           };
         };

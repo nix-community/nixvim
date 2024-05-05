@@ -29,7 +29,7 @@
           enabled = false;
           text = "💡";
           hl = "LightBulbFloatWin";
-          win_opts = { };
+          win_opts = {};
         };
         status_text = {
           enabled = false;
@@ -47,15 +47,15 @@
         autocmd = {
           enabled = false;
           updatetime = 200;
-          pattern = [ "*" ];
+          pattern = ["*"];
           events = [
             "CursorHold"
             "CursorHoldI"
           ];
         };
         ignore = {
-          clients = [ ];
-          ft = [ ];
+          clients = [];
+          ft = [];
           actions_without_kind = false;
         };
       };

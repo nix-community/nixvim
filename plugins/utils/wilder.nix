@@ -5,15 +5,13 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.wilder;
 
-  mkKeyOption =
-    default: desc:
+  mkKeyOption = default: desc:
     helpers.defaultNullOpts.mkNullable
-      (
-        with types;
+    (
+      with types;
         either str (submodule {
           options = {
             key = mkOption {
@@ -22,7 +20,7 @@ let
             };
 
             fallback = mkOption {
-              type = either str (enum [ false ]);
+              type = either str (enum [false]);
               description = ''
                 For a no-op, set <fallback> to "".
 
@@ -35,23 +33,23 @@ let
             };
           };
         })
-      )
-      default
-      ''
-        ${desc}
+    )
+    default
+    ''
+      ${desc}
 
-        NOTE:
-        A string or an attrs (with keys `key` and `fallback`) representing the mapping to bind to
-        `|wilder#next()|`.
-        If a string is provided, it is automatically converted to `{key = <KEY>; fallback = <KEY>;}`.
+      NOTE:
+      A string or an attrs (with keys `key` and `fallback`) representing the mapping to bind to
+      `|wilder#next()|`.
+      If a string is provided, it is automatically converted to `{key = <KEY>; fallback = <KEY>;}`.
 
-        - `mapping` is the `|cmap|` used to bind to `|wilder#next()|`.
-        - `fallback` is the mapping used if `|wilder#in_context()|` is false.
-      '';
-in
-{
+      - `mapping` is the `|cmap|` used to bind to `|wilder#next()|`.
+      - `fallback` is the mapping used if `|wilder#in_context()|` is false.
+    '';
+in {
   imports = [
-    (mkRenamedOptionModule
+    (
+      mkRenamedOptionModule
       [
         "plugins"
         "wilder-nvim"
@@ -63,27 +61,29 @@ in
     )
   ];
 
-  options.plugins.wilder = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "wilder-nvim";
+  options.plugins.wilder =
+    helpers.neovim-plugin.extraOptionsOptions
+    // {
+      enable = mkEnableOption "wilder-nvim";
 
-    package = helpers.mkPackageOption "wilder-nvim" pkgs.vimPlugins.wilder-nvim;
+      package = helpers.mkPackageOption "wilder-nvim" pkgs.vimPlugins.wilder-nvim;
 
-    ### Setup options ###
-    enableCmdlineEnter = helpers.defaultNullOpts.mkBool true ''
-      If true calls `wilder#enable_cmdline_enter()`.
-      Creates a new `|CmdlineEnter|` autocmd to which will start wilder when the cmdline is
-      entered.
-    '';
+      ### Setup options ###
+      enableCmdlineEnter = helpers.defaultNullOpts.mkBool true ''
+        If true calls `wilder#enable_cmdline_enter()`.
+        Creates a new `|CmdlineEnter|` autocmd to which will start wilder when the cmdline is
+        entered.
+      '';
 
-    modes =
-      helpers.defaultNullOpts.mkNullable
+      modes =
+        helpers.defaultNullOpts.mkNullable
         (
           with types;
-          listOf (enum [
-            "/"
-            "?"
-            ":"
-          ])
+            listOf (enum [
+              "/"
+              "?"
+              ":"
+            ])
         )
         ''["/" "?"]''
         ''
@@ -91,170 +91,163 @@ in
           Possible elements: '/', '?' and ':'
         '';
 
-    wildcharm =
-      helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "&wildchar"
+      wildcharm =
+        helpers.defaultNullOpts.mkNullable (with types; either str (enum [false])) "&wildchar"
         ''
           Key to set the 'wildcharm' option to.
           Can be set to v:false to skip the setting.
         '';
 
-    nextKey = mkKeyOption "<Tab>" ''
-      A key to map to `wilder#next()` providing next suggestion.
-    '';
+      nextKey = mkKeyOption "<Tab>" ''
+        A key to map to `wilder#next()` providing next suggestion.
+      '';
 
-    prevKey = mkKeyOption "<S-Tab>" ''
-      A key to map to `wilder#prev()` providing previous suggestion.
-    '';
+      prevKey = mkKeyOption "<S-Tab>" ''
+        A key to map to `wilder#prev()` providing previous suggestion.
+      '';
 
-    acceptKey = mkKeyOption "<Down>" ''
-      Mapping to bind to `wilder#accept_completion()`.
-    '';
+      acceptKey = mkKeyOption "<Down>" ''
+        Mapping to bind to `wilder#accept_completion()`.
+      '';
 
-    rejectKey = mkKeyOption "<Up>" ''
-      Mapping to bind to `wilder#reject_completion()`.
-    '';
+      rejectKey = mkKeyOption "<Up>" ''
+        Mapping to bind to `wilder#reject_completion()`.
+      '';
 
-    acceptCompletionAutoSelect = helpers.defaultNullOpts.mkBool true ''
-      The `auto_select` option passed to `wilder#accept_completion()`, if mapped.
-    '';
+      acceptCompletionAutoSelect = helpers.defaultNullOpts.mkBool true ''
+        The `auto_select` option passed to `wilder#accept_completion()`, if mapped.
+      '';
 
-    ### Other options ###
-    useCmdlinechanged = helpers.mkNullOrOption types.bool ''
-      If true, wilder will refresh queries when the `|CmdlineChanged|` autocommand is triggered.
-      Otherwise it will use a `|timer|` to check whether the cmdline has changed.
-      Using a timer will be more resource intensive.
+      ### Other options ###
+      useCmdlinechanged = helpers.mkNullOrOption types.bool ''
+        If true, wilder will refresh queries when the `|CmdlineChanged|` autocommand is triggered.
+        Otherwise it will use a `|timer|` to check whether the cmdline has changed.
+        Using a timer will be more resource intensive.
 
-      Default: `exists('##CmdlineChanged')`
-    '';
+        Default: `exists('##CmdlineChanged')`
+      '';
 
-    interval = helpers.defaultNullOpts.mkUnsignedInt 100 ''
-      Interval of the `|timer|` used to check whether the cmdline has changed, in milliseconds.
-      Only applicable if `useCmdlinechanged` is false.
-    '';
+      interval = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+        Interval of the `|timer|` used to check whether the cmdline has changed, in milliseconds.
+        Only applicable if `useCmdlinechanged` is false.
+      '';
 
-    beforeCursor = helpers.defaultNullOpts.mkBool false ''
-      If true, wilder will look only at the part of the cmdline before the cursor, and when
-      selecting a completion, the entire cmdline will be replaced.
-      Only applicable if `useCmdlinechanged` is false.
-    '';
+      beforeCursor = helpers.defaultNullOpts.mkBool false ''
+        If true, wilder will look only at the part of the cmdline before the cursor, and when
+        selecting a completion, the entire cmdline will be replaced.
+        Only applicable if `useCmdlinechanged` is false.
+      '';
 
-    usePythonRemotePlugin = helpers.mkNullOrOption types.bool ''
-      If true, uses the Python remote plugin.
-      This option can be set to false to disable the Python remote plugin.
+      usePythonRemotePlugin = helpers.mkNullOrOption types.bool ''
+        If true, uses the Python remote plugin.
+        This option can be set to false to disable the Python remote plugin.
 
-      This option has to be set before setting the `pipeline` option and before wilder is first
-      run.
+        This option has to be set before setting the `pipeline` option and before wilder is first
+        run.
 
-      Default: `has('python3') && (has('nvim') || exists('*yarp#py3'))`
-    '';
+        Default: `has('python3') && (has('nvim') || exists('*yarp#py3'))`
+      '';
 
-    numWorkers = helpers.defaultNullOpts.mkUnsignedInt 2 ''
-      Number of workers for the Python 3 `|remote-plugin|`.
-      Has to be set at startup, before wilder is first run.
-      Setting the option after the first run has no effect.
-    '';
+      numWorkers = helpers.defaultNullOpts.mkUnsignedInt 2 ''
+        Number of workers for the Python 3 `|remote-plugin|`.
+        Has to be set at startup, before wilder is first run.
+        Setting the option after the first run has no effect.
+      '';
 
-    pipeline = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf strLua) ''
-      Sets the pipeline to use to get completions.
-      See `|wilder-pipeline|`.
+      pipeline = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf strLua) ''
+        Sets the pipeline to use to get completions.
+        See `|wilder-pipeline|`.
 
-      Example:
-      ```lua
-        [
+        Example:
+        ```lua
+          [
+            \'\'
+              wilder.branch(
+                wilder.cmdline_pipeline({
+                  language = 'python',
+                  fuzzy = 1,
+                }),
+                wilder.python_search_pipeline({
+                  pattern = wilder.python_fuzzy_pattern(),
+                  sorter = wilder.python_difflib_sorter(),
+                  engine = 're',
+                })
+              )
+            \'\'
+          ]
+        ```
+      '';
+
+      renderer = helpers.defaultNullOpts.mkLuaFn "nil" ''
+        Sets the renderer to used to display the completions.
+        See `|wilder-renderer|`.
+
+        Example:
+        ```lua
           \'\'
-            wilder.branch(
-              wilder.cmdline_pipeline({
-                language = 'python',
-                fuzzy = 1,
-              }),
-              wilder.python_search_pipeline({
-                pattern = wilder.python_fuzzy_pattern(),
-                sorter = wilder.python_difflib_sorter(),
-                engine = 're',
-              })
-            )
+            wilder.wildmenu_renderer({
+              -- highlighter applies highlighting to the candidates
+              highlighter = wilder.basic_highlighter(),
+            })
           \'\'
-        ]
-      ```
-    '';
+        ```
+      '';
 
-    renderer = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      Sets the renderer to used to display the completions.
-      See `|wilder-renderer|`.
+      preHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
+        A function which takes a `ctx`.
+        This function is called when wilder starts, or when wilder becomes unhidden.
+        See `|wilder-hidden|`.
 
-      Example:
-      ```lua
-        \'\'
-          wilder.wildmenu_renderer({
-            -- highlighter applies highlighting to the candidates
-            highlighter = wilder.basic_highlighter(),
-          })
-        \'\'
-      ```
-    '';
+        `ctx` contains no keys.
+      '';
 
-    preHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      A function which takes a `ctx`.
-      This function is called when wilder starts, or when wilder becomes unhidden.
-      See `|wilder-hidden|`.
+      postHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
+        A function which takes a `ctx`.
+        This function is called when wilder stops, or when wilder becomes hidden.
+        See `|wilder-hidden|`.
 
-      `ctx` contains no keys.
-    '';
+        `ctx` contains no keys.
+      '';
+    };
 
-    postHook = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      A function which takes a `ctx`.
-      This function is called when wilder stops, or when wilder becomes hidden.
-      See `|wilder-hidden|`.
+  config = let
+    setupOptions = with cfg; let
+      processKeyOpt = key:
+        helpers.ifNonNull' key (
+          if isString key
+          then key
+          else [
+            key.key
+            key.fallback
+          ]
+        );
+    in {
+      enable_cmdline_enter = enableCmdlineEnter;
+      inherit modes;
+      inherit wildcharm;
+      next_key = processKeyOpt nextKey;
+      previous_key = processKeyOpt prevKey;
+      accept_key = processKeyOpt acceptKey;
+      reject_key = processKeyOpt rejectKey;
+      accept_completion_auto_select = acceptCompletionAutoSelect;
+    };
 
-      `ctx` contains no keys.
-    '';
-  };
-
-  config =
-    let
-      setupOptions =
-        with cfg;
-        let
-          processKeyOpt =
-            key:
-            helpers.ifNonNull' key (
-              if isString key then
-                key
-              else
-                [
-                  key.key
-                  key.fallback
-                ]
-            );
-        in
-        {
-          enable_cmdline_enter = enableCmdlineEnter;
-          inherit modes;
-          inherit wildcharm;
-          next_key = processKeyOpt nextKey;
-          previous_key = processKeyOpt prevKey;
-          accept_key = processKeyOpt acceptKey;
-          reject_key = processKeyOpt rejectKey;
-          accept_completion_auto_select = acceptCompletionAutoSelect;
-        };
-
-      options =
-        with cfg;
-        {
-          use_cmdlinechanged = useCmdlinechanged;
-          inherit interval;
-          before_cursor = beforeCursor;
-          use_python_remote_plugin = usePythonRemotePlugin;
-          num_workers = numWorkers;
-          pipeline = helpers.ifNonNull' pipeline (map helpers.mkRaw pipeline);
-          inherit renderer;
-          pre_hook = preHook;
-          post_hook = postHook;
-        }
-        // cfg.extraOptions;
-    in
+    options = with cfg;
+      {
+        use_cmdlinechanged = useCmdlinechanged;
+        inherit interval;
+        before_cursor = beforeCursor;
+        use_python_remote_plugin = usePythonRemotePlugin;
+        num_workers = numWorkers;
+        pipeline = helpers.ifNonNull' pipeline (map helpers.mkRaw pipeline);
+        inherit renderer;
+        pre_hook = preHook;
+        post_hook = postHook;
+      }
+      // cfg.extraOptions;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         wilder = require("wilder")

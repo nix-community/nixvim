@@ -4,8 +4,7 @@
   lib,
   pkgs,
   helpers,
-}:
-let
+}: let
   results = pkgs.lib.runTests {
     testToLuaObject = {
       expr = helpers.toLuaObject {
@@ -20,7 +19,7 @@ let
     };
 
     testToLuaObjectRawLua = {
-      expr = helpers.toLuaObject { __raw = "<lua code>"; };
+      expr = helpers.toLuaObject {__raw = "<lua code>";};
       expected = "<lua code>";
     };
 
@@ -88,11 +87,11 @@ let
     testToLuaObjectFilters = {
       expr = helpers.toLuaObject {
         a = null;
-        b = { };
-        c = [ ];
+        b = {};
+        c = [];
         d = {
           e = null;
-          f = { };
+          f = {};
         };
       };
       expected = ''{}'';
@@ -101,13 +100,13 @@ let
     testToLuaObjectEmptyTable = {
       expr = helpers.toLuaObject {
         a = null;
-        b = { };
+        b = {};
         c = {
           __empty = null;
         };
         d = {
           e = null;
-          f = { };
+          f = {};
           g = helpers.emptyTable;
         };
       };
@@ -115,17 +114,18 @@ let
     };
   };
 in
-if results == [ ] then
-  pkgs.runCommand "lib-tests-success" { } "touch $out"
-else
-  pkgs.runCommand "lib-tests-failure"
+  if results == []
+  then pkgs.runCommand "lib-tests-success" {} "touch $out"
+  else
+    pkgs.runCommand "lib-tests-failure"
     {
       results = pkgs.lib.concatStringsSep "\n" (
         builtins.map (result: ''
           ${result.name}:
             expected: ${result.expected}
             result: ${result.result}
-        '') results
+        '')
+        results
       );
     }
     ''

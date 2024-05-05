@@ -1,6 +1,9 @@
-{ lib, config, ... }:
-with lib;
-let
+{
+  lib,
+  config,
+  ...
+}:
+with lib; let
   pluginWithConfigType = types.submodule {
     options = {
       config = mkOption {
@@ -9,9 +12,11 @@ let
         default = "";
       };
 
-      optional = mkEnableOption "optional" // {
-        description = "Don't load by default (load with :packadd)";
-      };
+      optional =
+        mkEnableOption "optional"
+        // {
+          description = "Don't load by default (load with :packadd)";
+        };
 
       plugin = mkOption {
         type = types.package;
@@ -19,25 +24,24 @@ let
       };
     };
   };
-in
-{
+in {
   options = {
     extraPlugins = mkOption {
       type = with types; listOf (either package pluginWithConfigType);
-      default = [ ];
+      default = [];
       description = "List of vim plugins to install";
     };
 
     extraPackages = mkOption {
       type = with types; listOf (nullOr package);
-      default = [ ];
+      default = [];
       description = "Extra packages to be made available to neovim";
       apply = builtins.filter (p: p != null);
     };
 
     extraPython3Packages = mkOption {
       type = with types; functionTo (listOf package);
-      default = p: [ ];
+      default = p: [];
       defaultText = literalExpression "p: with p; [ ]";
       description = "Python packages to add to the `PYTHONPATH` of neovim.";
       example = lib.literalExpression ''
@@ -93,39 +97,40 @@ in
     extraLuaPackages = mkOption {
       type = types.functionTo (types.listOf types.package);
       description = "Extra lua packages to include with neovim";
-      default = _: [ ];
+      default = _: [];
     };
 
     extraFiles = mkOption {
       type = types.attrsOf types.str;
       description = "Extra files to add to the runtime path";
-      default = { };
+      default = {};
     };
   };
 
-  config =
-    let
-      contentLua = ''
+  config = let
+    contentLua = ''
+      ${config.extraConfigLuaPre}
+      vim.cmd([[
+        ${config.extraConfigVim}
+      ]])
+      ${config.extraConfigLua}
+      ${config.extraConfigLuaPost}
+    '';
+
+    contentVim = ''
+      lua << EOF
         ${config.extraConfigLuaPre}
-        vim.cmd([[
-          ${config.extraConfigVim}
-        ]])
+      EOF
+      ${config.extraConfigVim}
+      lua << EOF
         ${config.extraConfigLua}
         ${config.extraConfigLuaPost}
-      '';
-
-      contentVim = ''
-        lua << EOF
-          ${config.extraConfigLuaPre}
-        EOF
-        ${config.extraConfigVim}
-        lua << EOF
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-        EOF
-      '';
-    in
-    {
-      content = if config.type == "lua" then contentLua else contentVim;
-    };
+      EOF
+    '';
+  in {
+    content =
+      if config.type == "lua"
+      then contentLua
+      else contentVim;
+  };
 }

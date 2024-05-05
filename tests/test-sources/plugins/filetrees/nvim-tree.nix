@@ -13,14 +13,14 @@
       openOnSetup = true;
       openOnSetupFile = true;
       ignoreBufferOnSetup = true;
-      ignoreFtOnSetup = [ "tex" ];
+      ignoreFtOnSetup = ["tex"];
       autoClose = true;
 
       autoReloadOnWrite = true;
       sortBy = "name";
       hijackUnnamedBufferWhenOpening = false;
       hijackCursor = false;
-      rootDirs = [ ];
+      rootDirs = [];
       preferStartupRoot = false;
       syncRootWithCwd = false;
       reloadOnBufenter = false;
@@ -32,11 +32,11 @@
       updateFocusedFile = {
         enable = false;
         updateRoot = false;
-        ignoreList = [ ];
+        ignoreList = [];
       };
       systemOpen = {
         cmd = "";
-        args = [ ];
+        args = [];
       };
       diagnostics = {
         enable = false;
@@ -69,7 +69,7 @@
       filesystemWatchers = {
         enable = true;
         debounceDelay = 50;
-        ignoreDirs = [ ];
+        ignoreDirs = [];
       };
       onAttach = "default";
       selectPrompts = false;
@@ -169,8 +169,8 @@
         dotfiles = false;
         gitClean = false;
         noBuffer = false;
-        custom = [ ];
-        exclude = [ ];
+        custom = [];
+        exclude = [];
       };
       actions = {
         changeDir = {
@@ -180,7 +180,7 @@
         };
         expandAll = {
           maxFolderDiscovery = 300;
-          exclude = [ ];
+          exclude = [];
         };
         filePopup = {
           openWinConfig = {
@@ -228,7 +228,7 @@
         sync = {
           open = false;
           close = false;
-          ignore = [ ];
+          ignore = [];
         };
       };
       notify = {

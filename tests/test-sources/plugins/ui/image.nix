@@ -32,14 +32,14 @@
           clearInInsertMode = false;
           downloadRemoteImages = true;
           onlyRenderImageAtCursor = false;
-          filetypes = [ "norg" ];
+          filetypes = ["norg"];
         };
         syslang = {
           enabled = true;
           clearInInsertMode = false;
           downloadRemoteImages = true;
           onlyRenderImageAtCursor = false;
-          filetypes = [ "syslang" ];
+          filetypes = ["syslang"];
         };
       };
       maxWidth = null;
