@@ -4,10 +4,12 @@
   config,
   pkgs,
   ...
-}:
+}@args:
 with lib;
 let
   lspHelpers = import ../helpers.nix { inherit lib config pkgs; };
+
+  nixdSettings = import ./nixd.nix args;
 
   servers = [
     {
@@ -408,6 +410,7 @@ let
       description = "nixd for Nix";
       package = pkgs.nixd;
       settings = cfg: { nixd = cfg; };
+      settingsOptions = nixdSettings.options;
     }
     {
       name = "nushell";
@@ -660,10 +663,11 @@ in
   imports = lib.lists.map lspHelpers.mkLsp servers ++ [
     ./ccls.nix
     ./efmls-configs.nix
-    ./nixd.nix
     ./pylsp.nix
     ./rust-analyzer.nix
     ./svelte.nix
     ./vls.nix
   ];
+
+  config = lib.mkMerge [ nixdSettings.config ];
 }

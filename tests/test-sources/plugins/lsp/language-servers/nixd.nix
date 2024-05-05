@@ -7,30 +7,22 @@
         enable = true;
 
         settings = {
-          eval = {
-            target = {
-              args = [
-                "foo"
-                "bar"
-              ];
-              installable = "";
-            };
-            depth = 0;
-            workers = 3;
-          };
+          nixpkgs.expr = ''
+            import (builtins.getFlake "/home/lyc/workspace/CS/OS/NixOS/flakes").inputs.nixpkgs { }
+          '';
+
           formatting = {
-            command = "nixpkgs-fmt";
+            command = [ "nixpkgs-fmt" ];
           };
+
           options = {
-            enable = true;
-            target = {
-              args = [
-                "yes"
-                "no"
-                "maybe"
-              ];
-              installable = "";
-            };
+            nixos.expr = ''
+              (builtins.getFlake "/home/lyc/flakes").nixosConfigurations.adrastea.options
+            '';
+
+            home-manager.expr = ''
+              (builtins.getFlake "/home/lyc/flakes").homeConfigurations."lyc@adrastea".options
+            '';
           };
         };
       };
