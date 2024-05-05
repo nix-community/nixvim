@@ -10,7 +10,10 @@
 
           settings = {
             dap.justMyCode = false;
-            args = ["--log-level" "DEBUG"];
+            args = [
+              "--log-level"
+              "DEBUG"
+            ];
             runner = "pytest";
             python = ".venv/bin/python";
             is_test_file.__raw = ''

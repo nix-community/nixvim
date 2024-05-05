@@ -10,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "zellij.nvim";
   defaultPackage = pkgs.vimPlugins.zellij-nvim;
 
-  maintainers = [lib.maintainers.hmajid2301];
+  maintainers = [ lib.maintainers.hmajid2301 ];
 
   settingsOptions = {
     path = helpers.defaultNullOpts.mkStr "zellij" ''

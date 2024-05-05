@@ -5,14 +5,14 @@
   config,
   ...
 }:
-with lib; {
+with lib;
+{
   options.plugins.nvim-osc52 = {
     enable = mkEnableOption "nvim-osc52, a plugin to use OSC52 sequences to copy/paste";
 
     package = helpers.mkPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
 
-    maxLength =
-      helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit)";
+    maxLength = helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit)";
     silent = helpers.defaultNullOpts.mkBool false "Disable message on successful copy";
     trim = helpers.defaultNullOpts.mkBool false "Trim text before copy";
 
@@ -45,19 +45,20 @@ with lib; {
     };
   };
 
-  config = let
-    cfg = config.plugins.nvim-osc52;
-    setupOptions = with cfg; {
-      inherit silent trim;
-      max_length = maxLength;
-    };
-  in
+  config =
+    let
+      cfg = config.plugins.nvim-osc52;
+      setupOptions = with cfg; {
+        inherit silent trim;
+        max_length = maxLength;
+      };
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
-      keymaps = with cfg.keymaps;
-        mkIf enable
-        [
+      keymaps =
+        with cfg.keymaps;
+        mkIf enable [
           {
             mode = "n";
             key = copy;

@@ -16,14 +16,38 @@
         };
         floatWinConfig = {
           border = [
-            ["╭" "FloatBorder"]
-            ["─" "FloatBorder"]
-            ["╮" "FloatBorder"]
-            ["│" "FloatBorder"]
-            ["╯" "FloatBorder"]
-            ["─" "FloatBorder"]
-            ["╰" "FloatBorder"]
-            ["│" "FloatBorder"]
+            [
+              "╭"
+              "FloatBorder"
+            ]
+            [
+              "─"
+              "FloatBorder"
+            ]
+            [
+              "╮"
+              "FloatBorder"
+            ]
+            [
+              "│"
+              "FloatBorder"
+            ]
+            [
+              "╯"
+              "FloatBorder"
+            ]
+            [
+              "─"
+              "FloatBorder"
+            ]
+            [
+              "╰"
+              "FloatBorder"
+            ]
+            [
+              "│"
+              "FloatBorder"
+            ]
           ];
           max_width = null;
           max_height = null;
@@ -127,10 +151,10 @@
       enable = true;
 
       server.settings = {
-        linkedProjects = ["foo/bar/hello"];
+        linkedProjects = [ "foo/bar/hello" ];
         numThreads = 42;
         joinLines.joinElseIf = true;
-        runnables.extraArgs = ["--release"];
+        runnables.extraArgs = [ "--release" ];
       };
     };
   };

@@ -4,7 +4,8 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   commandAttributes = types.submodule {
     options = {
       command = mkOption {
@@ -12,15 +13,34 @@ with lib; let
         description = "The command to run.";
       };
 
-      nargs = helpers.mkNullOrOption (types.enum ["0" "1" "*" "?" "+"]) ''
-        The number of arguments to expect, see :h command-nargs.
-      '';
+      nargs =
+        helpers.mkNullOrOption
+          (types.enum [
+            "0"
+            "1"
+            "*"
+            "?"
+            "+"
+          ])
+          ''
+            The number of arguments to expect, see :h command-nargs.
+          '';
       complete = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
         Tab-completion behaviour, see :h command-complete.
       '';
-      range = helpers.mkNullOrOption (with types; oneOf [bool int (enum ["%"])]) ''
-        Whether the command accepts a range, see :h command-range.
-      '';
+      range =
+        helpers.mkNullOrOption
+          (
+            with types;
+            oneOf [
+              bool
+              int
+              (enum [ "%" ])
+            ]
+          )
+          ''
+            Whether the command accepts a range, see :h command-range.
+          '';
       count = helpers.mkNullOrOption (with types; either bool int) ''
         Whether the command accepts a count, see :h command-range.
       '';
@@ -37,20 +57,22 @@ with lib; let
       # TODO: command-preview, need to grab a function here.
     };
   };
-in {
+in
+{
   options.userCommands = mkOption {
     type = types.attrsOf commandAttributes;
-    default = {};
+    default = { };
     description = "A list of user commands to add to the configuration.";
   };
 
-  config = let
-    cleanupCommand = _: cmd: {
-      inherit (cmd) command;
-      options = filterAttrs (name: _: name != "command") cmd;
-    };
-  in
-    mkIf (config.userCommands != {}) {
+  config =
+    let
+      cleanupCommand = _: cmd: {
+        inherit (cmd) command;
+        options = filterAttrs (name: _: name != "command") cmd;
+      };
+    in
+    mkIf (config.userCommands != { }) {
       extraConfigLua = helpers.wrapDo ''
         local cmds = ${helpers.toLuaObject (mapAttrs cleanupCommand config.userCommands)};
         for name,cmd in pairs(cmds) do

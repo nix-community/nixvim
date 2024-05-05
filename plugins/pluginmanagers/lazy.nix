@@ -5,40 +5,46 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.lazy;
   lazyPlugins = cfg.plugins;
 
-  processPlugin = plugin: let
-    mkEntryFromDrv = p:
-      if lib.isDerivation p
-      then {
-        name = "${lib.getName p}";
-        path = p;
-      }
-      else {
-        name = "${lib.getName p.pkg}";
-        path = p.pkg;
-      };
-    processDependencies =
-      if plugin ? dependencies && plugin.dependencies != null
-      then builtins.concatMap processPlugin plugin.dependencies
-      else [];
-  in
-    [(mkEntryFromDrv plugin)] ++ processDependencies;
+  processPlugin =
+    plugin:
+    let
+      mkEntryFromDrv =
+        p:
+        if lib.isDerivation p then
+          {
+            name = "${lib.getName p}";
+            path = p;
+          }
+        else
+          {
+            name = "${lib.getName p.pkg}";
+            path = p.pkg;
+          };
+      processDependencies =
+        if plugin ? dependencies && plugin.dependencies != null then
+          builtins.concatMap processPlugin plugin.dependencies
+        else
+          [ ];
+    in
+    [ (mkEntryFromDrv plugin) ] ++ processDependencies;
 
   processedPlugins = builtins.concatLists (builtins.map processPlugin lazyPlugins);
   lazyPath = pkgs.linkFarm "lazy-plugins" processedPlugins;
-in {
+in
+{
   options = {
     plugins.lazy = {
       enable = mkEnableOption "lazy.nvim";
 
-      plugins = with types; let
-        pluginType =
-          either
-          package
-          (submodule {
+      plugins =
+        with types;
+        let
+          pluginType = either package (submodule {
             options = {
               dir = helpers.mkNullOrOption str "A directory pointing to a local plugin";
 
@@ -64,23 +70,17 @@ in {
                 When false then this plugin will not be included in the spec. (accepts fun():boolean)
               '';
 
-              cond =
-                helpers.defaultNullOpts.mkStrLuaFnOr types.bool "`true`"
-                ''
-                  When false, or if the function returns false,
-                  then this plugin will not be loaded. Useful to disable some plugins in vscode,
-                  or firenvim for example. (accepts fun(LazyPlugin):boolean)
-                '';
+              cond = helpers.defaultNullOpts.mkStrLuaFnOr types.bool "`true`" ''
+                When false, or if the function returns false,
+                then this plugin will not be loaded. Useful to disable some plugins in vscode,
+                or firenvim for example. (accepts fun(LazyPlugin):boolean)
+              '';
 
-              dependencies =
-                helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str listOfPlugins)
-                "Plugin dependencies";
+              dependencies = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str listOfPlugins) "Plugin dependencies";
 
-              init =
-                helpers.mkNullOrLuaFn
-                "init functions are always executed during startup";
+              init = helpers.mkNullOrLuaFn "init functions are always executed during startup";
 
-              config = helpers.mkNullOrStrLuaFnOr (types.enum [true]) ''
+              config = helpers.mkNullOrStrLuaFnOr (types.enum [ true ]) ''
                 config is executed when the plugin loads.
                 The default implementation will automatically run require(MAIN).setup(opts).
                 Lazy uses several heuristics to determine the plugin's MAIN module automatically based on the plugin's name.
@@ -97,23 +97,23 @@ in {
                 Defaults to true
               '';
 
-              event = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
-                "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
+              event =
+                with helpers.nixvimTypes;
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
 
-              cmd = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
-                "Lazy-load on command";
+              cmd =
+                with helpers.nixvimTypes;
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on command";
 
-              ft = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
-                "Lazy-load on filetype";
+              ft =
+                with helpers.nixvimTypes;
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on filetype";
 
-              keys = with helpers.nixvimTypes;
-                helpers.mkNullOrOption (maybeRaw (either str (listOf str)))
-                "Lazy-load on key mapping";
+              keys =
+                with helpers.nixvimTypes;
+                helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on key mapping";
 
-              module = helpers.mkNullOrOption (enum [false]) ''
+              module = helpers.mkNullOrOption (enum [ false ]) ''
                 Do not automatically load this Lua module when it's required somewhere
               '';
 
@@ -129,7 +129,8 @@ in {
                 of the user's plugins
               '';
 
-              opts = with helpers.nixvimTypes;
+              opts =
+                with helpers.nixvimTypes;
                 helpers.mkNullOrOption (maybeRaw (attrsOf anything)) ''
                   opts should be a table (will be merged with parent specs),
                   return a table (replaces parent specs) or should change a table.
@@ -139,76 +140,68 @@ in {
             };
           });
 
-        listOfPlugins = types.listOf pluginType;
-      in
+          listOfPlugins = types.listOf pluginType;
+        in
         mkOption {
           type = listOfPlugins;
-          default = [];
+          default = [ ];
           description = "List of plugins";
         };
     };
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [pkgs.vimPlugins.lazy-nvim];
-    extraPackages = [pkgs.git];
+    extraPlugins = [ pkgs.vimPlugins.lazy-nvim ];
+    extraPackages = [ pkgs.git ];
 
-    extraConfigLua = let
-      pluginToLua = plugin: let
-        keyExists = keyToCheck: attrSet: lib.elem keyToCheck (lib.attrNames attrSet);
+    extraConfigLua =
+      let
+        pluginToLua =
+          plugin:
+          let
+            keyExists = keyToCheck: attrSet: lib.elem keyToCheck (lib.attrNames attrSet);
+          in
+          if isDerivation plugin then
+            { dir = "${lazyPath}/${lib.getName plugin}"; }
+          else
+            {
+              "__unkeyed" = plugin.name;
+
+              inherit (plugin)
+                cmd
+                cond
+                config
+                dev
+                enabled
+                event
+                ft
+                init
+                keys
+                lazy
+                main
+                module
+                name
+                optional
+                opts
+                priority
+                submodules
+                ;
+
+              dependencies = helpers.ifNonNull' plugin.dependencies (
+                if isList plugin.dependencies then (pluginListToLua plugin.dependencies) else plugin.dependencies
+              );
+
+              dir =
+                if plugin ? dir && plugin.dir != null then plugin.dir else "${lazyPath}/${lib.getName plugin.pkg}";
+            };
+
+        pluginListToLua = map pluginToLua;
+
+        plugins = pluginListToLua cfg.plugins;
+
+        packedPlugins = if length plugins == 1 then head plugins else plugins;
       in
-        if isDerivation plugin
-        then {
-          dir = "${lazyPath}/${lib.getName plugin}";
-        }
-        else {
-          "__unkeyed" = plugin.name;
-
-          inherit
-            (plugin)
-            cmd
-            cond
-            config
-            dev
-            enabled
-            event
-            ft
-            init
-            keys
-            lazy
-            main
-            module
-            name
-            optional
-            opts
-            priority
-            submodules
-            ;
-
-          dependencies =
-            helpers.ifNonNull' plugin.dependencies
-            (
-              if isList plugin.dependencies
-              then (pluginListToLua plugin.dependencies)
-              else plugin.dependencies
-            );
-
-          dir =
-            if plugin ? dir && plugin.dir != null
-            then plugin.dir
-            else "${lazyPath}/${lib.getName plugin.pkg}";
-        };
-
-      pluginListToLua = map pluginToLua;
-
-      plugins = pluginListToLua cfg.plugins;
-
-      packedPlugins =
-        if length plugins == 1
-        then head plugins
-        else plugins;
-    in
-      mkIf (cfg.plugins != []) ''
+      mkIf (cfg.plugins != [ ]) ''
         require('lazy').setup(
           {
             dev = {

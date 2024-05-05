@@ -13,15 +13,16 @@
       };
 
       copilot-cmp = {
-        event = ["InsertEnter" "LspAttach"];
+        event = [
+          "InsertEnter"
+          "LspAttach"
+        ];
         fixPairs = true;
       };
 
       cmp = {
         enable = true;
-        settings.sources = [
-          {name = "copilot";}
-        ];
+        settings.sources = [ { name = "copilot"; } ];
       };
     };
   };

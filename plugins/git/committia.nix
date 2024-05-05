@@ -9,9 +9,9 @@ helpers.vim-plugin.mkVimPlugin config {
   originalName = "committia.vim";
   defaultPackage = pkgs.vimPlugins.committia-vim;
   globalPrefix = "committia_";
-  extraPackages = [pkgs.git];
+  extraPackages = [ pkgs.git ];
 
-  maintainers = [helpers.maintainers.alisonjenkins];
+  maintainers = [ helpers.maintainers.alisonjenkins ];
 
   settingsOptions = {
     open_only_vim_starting = helpers.defaultNullOpts.mkBool true ''

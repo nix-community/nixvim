@@ -6,27 +6,29 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin config {
-    name = "spectre";
-    originalName = "nvim-spectre";
-    defaultPackage = pkgs.vimPlugins.nvim-spectre;
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "spectre";
+  originalName = "nvim-spectre";
+  defaultPackage = pkgs.vimPlugins.nvim-spectre;
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    description = ''
-      You may want to set the package for your find/replace tool(s) like shown below:
+  description = ''
+    You may want to set the package for your find/replace tool(s) like shown below:
 
-      ```nix
-        plugins.spectre.findPackage = pkgs.rg;
-        plugins.spectre.replacePackage = pkgs.gnused;
-      ```
-    '';
+    ```nix
+      plugins.spectre.findPackage = pkgs.rg;
+      plugins.spectre.replacePackage = pkgs.gnused;
+    ```
+  '';
 
-    settingsOptions = let
-      mkEngineOption = type:
+  settingsOptions =
+    let
+      mkEngineOption =
+        type:
         helpers.mkNullOrOption
-        (
-          with types;
+          (
+            with types;
             attrsOf (submodule {
               options = {
                 cmd = mkOption {
@@ -38,38 +40,35 @@ with lib;
                   List of arguments to provide to the engine.
                 '';
 
-                options =
-                  helpers.defaultNullOpts.mkAttrsOf
-                  (types.submodule {
-                    options = {
-                      value = mkOption {
-                        type = types.str;
-                        example = "-i";
-                        description = "The option flag.";
-                      };
-
-                      icon = mkOption {
-                        type = types.str;
-                        example = "[I]";
-                        description = "The option icon.";
-                      };
-
-                      desc = helpers.mkNullOrStr ''
-                        The description for this option.
-                      '';
+                options = helpers.defaultNullOpts.mkAttrsOf (types.submodule {
+                  options = {
+                    value = mkOption {
+                      type = types.str;
+                      example = "-i";
+                      description = "The option flag.";
                     };
-                  })
-                  "{}"
-                  "The options for this engine.";
+
+                    icon = mkOption {
+                      type = types.str;
+                      example = "[I]";
+                      description = "The option icon.";
+                    };
+
+                    desc = helpers.mkNullOrStr ''
+                      The description for this option.
+                    '';
+                  };
+                }) "{}" "The options for this engine.";
               };
             })
-        )
-        ''
-          Definition of the ${type} engines.
+          )
+          ''
+            Definition of the ${type} engines.
 
-          default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
-        '';
-    in {
+            default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
+          '';
+    in
+    {
       color_devicons = helpers.defaultNullOpts.mkBool true ''
         Whether to enable color devicons.
       '';
@@ -86,39 +85,30 @@ with lib;
         Show line number for search/replace results.
       '';
 
-      line_sep_start =
-        helpers.defaultNullOpts.mkStr
-        "┌──────────────────────────────────────────────────────"
-        "Start of the line separator";
+      line_sep_start = helpers.defaultNullOpts.mkStr "┌──────────────────────────────────────────────────────" "Start of the line separator";
 
       result_padding = helpers.defaultNullOpts.mkStr "│  " ''
         Result padding string.
       '';
 
-      line_sep =
-        helpers.defaultNullOpts.mkStr
-        "└──────────────────────────────────────────────────────"
-        "Line separator.";
+      line_sep = helpers.defaultNullOpts.mkStr "└──────────────────────────────────────────────────────" "Line separator.";
 
-      highlight =
-        helpers.defaultNullOpts.mkAttrsOf types.str
-        ''
-          {
-            headers = "SpectreHeader";
-            ui = "SpectreBody";
-            filename = "SpectreFile";
-            filedirectory = "SpectreDir";
-            search = "SpectreSearch";
-            border = "SpectreBorder";
-            replace = "SpectreReplace";
-          }
-        ''
-        "Highlight groups.";
+      highlight = helpers.defaultNullOpts.mkAttrsOf types.str ''
+        {
+          headers = "SpectreHeader";
+          ui = "SpectreBody";
+          filename = "SpectreFile";
+          filedirectory = "SpectreDir";
+          search = "SpectreSearch";
+          border = "SpectreBorder";
+          replace = "SpectreReplace";
+        }
+      '' "Highlight groups.";
 
       mapping =
         helpers.mkNullOrOption
-        (
-          with types;
+          (
+            with types;
             attrsOf (submodule {
               options = {
                 map = mkOption {
@@ -137,12 +127,12 @@ with lib;
                 '';
               };
             })
-        )
-        ''
-          Keymaps declaration.
+          )
+          ''
+            Keymaps declaration.
 
-          default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
-        '';
+            default: see [here](https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/config.lua)
+          '';
 
       find_engine = mkEngineOption "find";
 
@@ -187,55 +177,59 @@ with lib;
       '';
     };
 
-    settingsExample = {
-      live_update = true;
-      is_insert_mode = false;
-      find_engine = {
-        rg = {
-          cmd = "rg";
-          args = [
-            "--color=never"
-            "--no-heading"
-            "--with-filename"
-            "--line-number"
-            "--column"
-          ];
-          options = {
-            ignore-case = {
-              value = "--ignore-case";
-              icon = "[I]";
-              desc = "ignore case";
-            };
-            hidden = {
-              value = "--hidden";
-              desc = "hidden file";
-              icon = "[H]";
-            };
-            line = {
-              value = "-x";
-              icon = "[L]";
-              desc = "match in line";
-            };
-            word = {
-              value = "-w";
-              icon = "[W]";
-              desc = "match in word";
-            };
+  settingsExample = {
+    live_update = true;
+    is_insert_mode = false;
+    find_engine = {
+      rg = {
+        cmd = "rg";
+        args = [
+          "--color=never"
+          "--no-heading"
+          "--with-filename"
+          "--line-number"
+          "--column"
+        ];
+        options = {
+          ignore-case = {
+            value = "--ignore-case";
+            icon = "[I]";
+            desc = "ignore case";
+          };
+          hidden = {
+            value = "--hidden";
+            desc = "hidden file";
+            icon = "[H]";
+          };
+          line = {
+            value = "-x";
+            icon = "[L]";
+            desc = "match in line";
+          };
+          word = {
+            value = "-w";
+            icon = "[W]";
+            desc = "match in word";
           };
         };
       };
-      default = {
-        find = {
-          cmd = "rg";
-          options = ["word" "hidden"];
-        };
-        replace = {
-          cmd = "sed";
-        };
+    };
+    default = {
+      find = {
+        cmd = "rg";
+        options = [
+          "word"
+          "hidden"
+        ];
+      };
+      replace = {
+        cmd = "sed";
       };
     };
+  };
 
-    extraOptions = let
+  extraOptions =
+    let
       userCommandSettings = config.plugins.spectre.settings.default;
 
       findPackages = {
@@ -250,7 +244,8 @@ with lib;
       # `toString` will turn `null` into `"null"` to allow for the attrs indexation.
       findDefaultPackage = findPackages.${toString userCommandSettings.find.cmd} or null;
       replaceDefaultPackage = replacePackages.${toString userCommandSettings.replace.cmd} or null;
-    in {
+    in
+    {
       findPackage = mkOption {
         type = with types; nullOr package;
         default = findDefaultPackage;
@@ -274,10 +269,10 @@ with lib;
       };
     };
 
-    extraConfig = cfg: {
-      extraPackages = [
-        cfg.findPackage
-        cfg.replacePackage
-      ];
-    };
-  }
+  extraConfig = cfg: {
+    extraPackages = [
+      cfg.findPackage
+      cfg.replacePackage
+    ];
+  };
+}

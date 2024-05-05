@@ -40,9 +40,12 @@
       serve = {
         onStart = false;
         command = "ollama";
-        args = ["serve"];
+        args = [ "serve" ];
         stopCommand = "pkill";
-        stopArgs = ["-SIGTERM" "ollama"];
+        stopArgs = [
+          "-SIGTERM"
+          "ollama"
+        ];
       };
     };
   };

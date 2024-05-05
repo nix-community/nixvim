@@ -1,20 +1,17 @@
+{ lib, helpers }:
+with lib;
+let
+  mkKindOption = helpers.defaultNullOpts.mkEnum [
+    "split"
+    "vsplit"
+    "split_above"
+    "tab"
+    "floating"
+    "replace"
+    "auto"
+  ];
+in
 {
-  lib,
-  helpers,
-}:
-with lib; let
-  mkKindOption =
-    helpers.defaultNullOpts.mkEnum
-    [
-      "split"
-      "vsplit"
-      "split_above"
-      "tab"
-      "floating"
-      "replace"
-      "auto"
-    ];
-in {
   filewatcher = {
     interval = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
       Interval between two refreshes.
@@ -26,10 +23,16 @@ in {
     '';
   };
 
-  graph_style = helpers.defaultNullOpts.mkEnumFirstDefault ["ascii" "unicode"] ''
-    - "ascii"   is the graph the git CLI generates
-    - "unicode" is the graph like https://github.com/rbong/vim-flog
-  '';
+  graph_style =
+    helpers.defaultNullOpts.mkEnumFirstDefault
+      [
+        "ascii"
+        "unicode"
+      ]
+      ''
+        - "ascii"   is the graph the git CLI generates
+        - "unicode" is the graph like https://github.com/rbong/vim-flog
+      '';
 
   disable_hint = helpers.defaultNullOpts.mkBool false ''
     Hides the hints at the top of the status buffer.
@@ -43,16 +46,13 @@ in {
     Disables signs for sections/items/hunks.
   '';
 
-  git_services =
-    helpers.defaultNullOpts.mkAttrsOf types.str
-    ''
-      {
-        "github.com" = "https://github.com/$\{owner}/$\{repository}/compare/$\{branch_name}?expand=1";
-        "bitbucket.org" = "https://bitbucket.org/$\{owner}/$\{repository}/pull-requests/new?source=$\{branch_name}&t=1";
-        "gitlab.com" = "https://gitlab.com/$\{owner}/$\{repository}/merge_requests/new?merge_request[source_branch]=$\{branch_name}";
-      }
-    ''
-    "Used to generate URL's for branch popup action 'pull request'.";
+  git_services = helpers.defaultNullOpts.mkAttrsOf types.str ''
+    {
+      "github.com" = "https://github.com/$\{owner}/$\{repository}/compare/$\{branch_name}?expand=1";
+      "bitbucket.org" = "https://bitbucket.org/$\{owner}/$\{repository}/pull-requests/new?source=$\{branch_name}&t=1";
+      "gitlab.com" = "https://gitlab.com/$\{owner}/$\{repository}/merge_requests/new?merge_request[source_branch]=$\{branch_name}";
+    }
+  '' "Used to generate URL's for branch popup action 'pull request'.";
 
   fetch_after_checkout = helpers.defaultNullOpts.mkBool false ''
     Perform a fetch if the newly checked out branch has an upstream or pushRemote set.
@@ -71,15 +71,13 @@ in {
   '';
 
   disable_insert_on_commit =
-    helpers.defaultNullOpts.mkNullable
-    (with types; either bool (enum ["auto"]))
-    "auto"
-    ''
-      Changes what mode the Commit Editor starts in.
-      `true` will leave nvim in normal mode, `false` will change nvim to insert mode, and `"auto"`
-      will change nvim to insert mode IF the commit message is empty, otherwise leaving it in normal
-      mode.
-    '';
+    helpers.defaultNullOpts.mkNullable (with types; either bool (enum [ "auto" ])) "auto"
+      ''
+        Changes what mode the Commit Editor starts in.
+        `true` will leave nvim in normal mode, `false` will change nvim to insert mode, and `"auto"`
+        will change nvim to insert mode IF the commit message is empty, otherwise leaving it in normal
+        mode.
+      '';
 
   use_per_project_settings = helpers.defaultNullOpts.mkBool true ''
     Scope persisted settings on a per-project basis.
@@ -178,24 +176,26 @@ in {
 
   signs =
     mapAttrs
-    (n: v:
-      helpers.defaultNullOpts.mkListOf types.str ''["${v.closed}" "${v.opened}"]'' ''
-        The icons to use for open and closed ${n}s.
-      '')
-    {
-      hunk = {
-        closed = "";
-        opened = "";
+      (
+        n: v:
+        helpers.defaultNullOpts.mkListOf types.str ''["${v.closed}" "${v.opened}"]'' ''
+          The icons to use for open and closed ${n}s.
+        ''
+      )
+      {
+        hunk = {
+          closed = "";
+          opened = "";
+        };
+        item = {
+          closed = ">";
+          opened = "v";
+        };
+        section = {
+          closed = ">";
+          opened = "v";
+        };
       };
-      item = {
-        closed = ">";
-        opened = "v";
-      };
-      section = {
-        closed = ">";
-        opened = "v";
-      };
-    };
 
   integrations = {
     telescope = helpers.mkNullOrOption types.bool ''
@@ -217,10 +217,11 @@ in {
 
   sections =
     mapAttrs
-    (
-      name: default:
+      (
+        name: default:
         mkOption {
-          type = with types;
+          type =
+            with types;
             nullOr (submodule {
               options = {
                 folded = mkOption {
@@ -237,87 +238,84 @@ in {
           inherit default;
           description = "Settings for the ${name} section";
         }
-    )
-    {
-      sequencer = {
-        folded = false;
-        hidden = false;
+      )
+      {
+        sequencer = {
+          folded = false;
+          hidden = false;
+        };
+        untracked = {
+          folded = false;
+          hidden = false;
+        };
+        unstaged = {
+          folded = false;
+          hidden = false;
+        };
+        staged = {
+          folded = false;
+          hidden = false;
+        };
+        stashes = {
+          folded = true;
+          hidden = false;
+        };
+        unpulled_upstream = {
+          folded = true;
+          hidden = false;
+        };
+        unmerged_upstream = {
+          folded = false;
+          hidden = false;
+        };
+        unpulled_pushRemote = {
+          folded = true;
+          hidden = false;
+        };
+        unmerged_pushRemote = {
+          folded = false;
+          hidden = false;
+        };
+        recent = {
+          folded = true;
+          hidden = false;
+        };
+        rebase = {
+          folded = true;
+          hidden = false;
+        };
       };
-      untracked = {
-        folded = false;
-        hidden = false;
-      };
-      unstaged = {
-        folded = false;
-        hidden = false;
-      };
-      staged = {
-        folded = false;
-        hidden = false;
-      };
-      stashes = {
-        folded = true;
-        hidden = false;
-      };
-      unpulled_upstream = {
-        folded = true;
-        hidden = false;
-      };
-      unmerged_upstream = {
-        folded = false;
-        hidden = false;
-      };
-      unpulled_pushRemote = {
-        folded = true;
-        hidden = false;
-      };
-      unmerged_pushRemote = {
-        folded = false;
-        hidden = false;
-      };
-      recent = {
-        folded = true;
-        hidden = false;
-      };
-      rebase = {
-        folded = true;
-        hidden = false;
-      };
-    };
 
   ignored_settings =
     helpers.defaultNullOpts.mkListOf types.str
-    ''
-      [
-        "NeogitPushPopup--force-with-lease"
-        "NeogitPushPopup--force"
-        "NeogitPullPopup--rebase"
-        "NeogitCommitPopup--allow-empty"
-        "NeogitRevertPopup--no-edit"
-      ]
-    ''
-    ''
-      Table of settings to never persist.
-      Uses format "Filetype--cli-value".
-    '';
-
-  mappings = let
-    mkMappingOption = helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [false]));
-  in {
-    commit_editor =
-      mkMappingOption
       ''
+        [
+          "NeogitPushPopup--force-with-lease"
+          "NeogitPushPopup--force"
+          "NeogitPullPopup--rebase"
+          "NeogitCommitPopup--allow-empty"
+          "NeogitRevertPopup--no-edit"
+        ]
+      ''
+      ''
+        Table of settings to never persist.
+        Uses format "Filetype--cli-value".
+      '';
+
+  mappings =
+    let
+      mkMappingOption = helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [ false ]));
+    in
+    {
+      commit_editor = mkMappingOption ''
         {
           q = "Close";
           "<c-c><c-c>" = "Submit";
           "<c-c><c-k>" = "Abort";
         }
-      ''
-      "Mappings for the commit editor.";
+      '' "Mappings for the commit editor.";
 
-    rebase_editor =
-      mkMappingOption
-      ''
+      rebase_editor = mkMappingOption ''
         {
           p = "Pick";
           r = "Reword";
@@ -334,12 +332,9 @@ in {
           "<c-c><c-c>" = "Submit";
           "<c-c><c-k>" = "Abort";
         }
-      ''
-      "Mappings for the rebase editor.";
+      '' "Mappings for the rebase editor.";
 
-    finder =
-      mkMappingOption
-      ''
+      finder = mkMappingOption ''
         {
           "<cr>" = "Select";
           "<c-c>" = "Close";
@@ -352,12 +347,9 @@ in {
           "<s-tab>" = "MultiselectTogglePrevious";
           "<c-j>" = "NOP";
         }
-      ''
-      "Mappings for the finder.";
+      '' "Mappings for the finder.";
 
-    popup =
-      mkMappingOption
-      ''
+      popup = mkMappingOption ''
         {
           "?" = "HelpPopup";
           A = "CherryPickPopup";
@@ -375,12 +367,9 @@ in {
           r = "RebasePopup";
           v = "RevertPopup";
         }
-      ''
-      "Mappings for popups.";
+      '' "Mappings for popups.";
 
-    status =
-      mkMappingOption
-      ''
+      status = mkMappingOption ''
         {
           q = "Close";
           I = "InitRepo";
@@ -406,9 +395,8 @@ in {
           "{" = "GoToPreviousHunkHeader";
           "}" = "GoToNextHunkHeader";
         }
-      ''
-      "Mappings for status.";
-  };
+      '' "Mappings for status.";
+    };
 
   notification_icon = helpers.defaultNullOpts.mkStr "󰊢" ''
     Icon for notifications.
@@ -418,10 +406,9 @@ in {
     Set to false if you want to be responsible for creating _ALL_ keymappings.
   '';
 
-  highlight =
-    genAttrs ["italic" "bold" "underline"]
-    (
-      n:
-        helpers.defaultNullOpts.mkBool true "Set the ${n} property of the highlight group."
-    );
+  highlight = genAttrs [
+    "italic"
+    "bold"
+    "underline"
+  ] (n: helpers.defaultNullOpts.mkBool true "Set the ${n} property of the highlight group.");
 }

@@ -3,14 +3,18 @@
     plugins = {
       cmp = {
         enable = true;
-        settings.sources = [
-          {name = "git";}
-        ];
+        settings.sources = [ { name = "git"; } ];
       };
 
       cmp-git.settings = {
-        filetypes = ["gitcommit" "octo"];
-        remotes = ["upstream" "origin"];
+        filetypes = [
+          "gitcommit"
+          "octo"
+        ];
+        remotes = [
+          "upstream"
+          "origin"
+        ];
         enableRemoteUrlRewrites = false;
         git = {
           commits = {
@@ -20,9 +24,15 @@
           };
         };
         github = {
-          hosts = [];
+          hosts = [ ];
           issues = {
-            fields = ["title" "number" "body" "updatedAt" "state"];
+            fields = [
+              "title"
+              "number"
+              "body"
+              "updatedAt"
+              "state"
+            ];
             filter = "all";
             limit = 100;
             state = "open";
@@ -35,7 +45,13 @@
             format.__raw = "require('cmp_git.format').github.mentions";
           };
           pull_requests = {
-            fields = ["title" "number" "body" "updatedAt" "state"];
+            fields = [
+              "title"
+              "number"
+              "body"
+              "updatedAt"
+              "state"
+            ];
             limit = 100;
             state = "open";
             sort_by.__raw = "require('cmp_git.sort').github.pull_requests";
@@ -43,7 +59,7 @@
           };
         };
         gitlab = {
-          hosts = [];
+          hosts = [ ];
           issues = {
             limit = 100;
             state = "opened";
@@ -126,13 +142,15 @@
     plugins = {
       cmp = {
         enable = true;
-        settings.sources = [
-          {name = "git";}
-        ];
+        settings.sources = [ { name = "git"; } ];
       };
 
       cmp-git.settings = {
-        remotes = ["upstream" "origin" "foo"];
+        remotes = [
+          "upstream"
+          "origin"
+          "foo"
+        ];
         github = {
           issues = {
             filter = "all";

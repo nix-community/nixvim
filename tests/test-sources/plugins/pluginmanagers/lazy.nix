@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Empty configuration
   empty = {
     plugins.lazy.enable = true;
@@ -15,7 +16,12 @@
         {
           pkg = vim-dispatch;
           optional = true;
-          cmd = ["Dispatch" "Make" "Focus" "Start"];
+          cmd = [
+            "Dispatch"
+            "Make"
+            "Focus"
+            "Start"
+          ];
         }
 
         # Load on an autocommand event
@@ -28,7 +34,19 @@
         {
           pkg = ale;
           name = "w0rp/ale";
-          ft = ["sh" "zsh" "bash" "c" "cpp" "cmake" "html" "markdown" "racket" "vim" "tex"];
+          ft = [
+            "sh"
+            "zsh"
+            "bash"
+            "c"
+            "cpp"
+            "cmake"
+            "html"
+            "markdown"
+            "racket"
+            "vim"
+            "tex"
+          ];
           cmd = "ALEEnable";
         }
 
@@ -57,13 +75,15 @@
         # Post-install/update hook with neovim command
         {
           pkg = nvim-treesitter;
-          opts = {ensure_installed = {};};
+          opts = {
+            ensure_installed = { };
+          };
         }
 
         # Use dependency and run lua function after load
         {
           pkg = gitsigns-nvim;
-          dependencies = [plenary-nvim];
+          dependencies = [ plenary-nvim ];
           config = ''function() require("gitsigns").setup() end'';
         }
       ];

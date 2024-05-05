@@ -1,8 +1,6 @@
-{
-  lib,
-  helpers,
-}:
-with lib; let
+{ lib, helpers }:
+with lib;
+let
   sourceType = types.submodule {
     freeformType = with types; attrsOf anything;
     options = {
@@ -81,27 +79,26 @@ with lib; let
     };
   };
 in
-  mkOption {
-    default = [];
-    type = with helpers.nixvimTypes;
-      maybeRaw (listOf sourceType);
-    description = ''
-      The sources to use.
-      Can either be a list of `sourceConfigs` which will be made directly to a Lua object.
-      Or it can be a raw lua string which might be necessary for more advanced use cases.
+mkOption {
+  default = [ ];
+  type = with helpers.nixvimTypes; maybeRaw (listOf sourceType);
+  description = ''
+    The sources to use.
+    Can either be a list of `sourceConfigs` which will be made directly to a Lua object.
+    Or it can be a raw lua string which might be necessary for more advanced use cases.
 
-      WARNING:
-      If `plugins.cmp.autoEnableSources` Nixivm will automatically enable the corresponding source
-      plugins. This will work only when this option is set to a list.
-      If you use a raw lua string, you will need to explicitly enable the relevant source plugins in
-      your nixvim configuration.
+    WARNING:
+    If `plugins.cmp.autoEnableSources` Nixivm will automatically enable the corresponding source
+    plugins. This will work only when this option is set to a list.
+    If you use a raw lua string, you will need to explicitly enable the relevant source plugins in
+    your nixvim configuration.
 
-      Default: `[]`
-    '';
-    example = [
-      {name = "nvim_lsp";}
-      {name = "luasnip";}
-      {name = "path";}
-      {name = "buffer";}
-    ];
-  }
+    Default: `[]`
+  '';
+  example = [
+    { name = "nvim_lsp"; }
+    { name = "luasnip"; }
+    { name = "path"; }
+    { name = "buffer"; }
+  ];
+}

@@ -61,7 +61,7 @@
         completion = {
           keywordLength = 1;
           keywordPattern = ''[[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]]'';
-          autocomplete = ["TextChanged"];
+          autocomplete = [ "TextChanged" ];
           completeopt = "menu,menuone,noselect";
         };
         confirmation = {
@@ -73,7 +73,11 @@
         };
         formatting = {
           expandableIndicator = true;
-          fields = ["abbr" "kind" "menu"];
+          fields = [
+            "abbr"
+            "kind"
+            "menu"
+          ];
           format = ''
             function(_, vim_item)
               return vim_item
@@ -100,7 +104,7 @@
             "order"
           ];
         };
-        sources = [];
+        sources = [ ];
         experimental = {
           ghost_text = false;
         };
@@ -115,7 +119,16 @@
         };
         window = {
           completion = {
-            border = ["" "" "" "" "" "" "" ""];
+            border = [
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+            ];
             winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None";
             scrolloff = 0;
             colOffset = 0;
@@ -138,14 +151,14 @@
       enable = true;
 
       settings.sources = [
-        {name = "path";}
-        {name = "nvim_lsp";}
-        {name = "luasnip";}
+        { name = "path"; }
+        { name = "nvim_lsp"; }
+        { name = "luasnip"; }
         {
           name = "buffer";
           option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
         }
-        {name = "neorg";}
+        { name = "neorg"; }
       ];
     };
   };

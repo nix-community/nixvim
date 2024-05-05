@@ -11,10 +11,12 @@
       autoSession = {
         enabled = true;
         enableLastSession = false;
-        rootDir = {__raw = "vim.fn.stdpath 'data' .. '/sessions/'";};
+        rootDir = {
+          __raw = "vim.fn.stdpath 'data' .. '/sessions/'";
+        };
         createEnabled = true;
         suppressDirs = null;
-        allowedDirs = [];
+        allowedDirs = [ ];
         useGitBranch = true;
       };
       autoSave = {
@@ -28,7 +30,7 @@
         preCwdChangedHook = null;
         postCwdChangedHook = null;
       };
-      bypassSessionSaveFileTypes = [];
+      bypassSessionSaveFileTypes = [ ];
       sessionLens = {
         loadOnSetup = true;
         themeConf = {

@@ -32,7 +32,9 @@
             '';
             history_size = 3;
             parsing_throttle_ms = 10;
-            mappings = {configure = null;};
+            mappings = {
+              configure = null;
+            };
             summary_view = {
               header_length = 80;
               shell_palette = {
@@ -43,7 +45,7 @@
                 bold = "\27[1m";
               };
             };
-            extra_args = [];
+            extra_args = [ ];
             filter_dir.__raw = ''
               function(name, rel_path, root)
               end

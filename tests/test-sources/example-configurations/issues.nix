@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   "40" = {
     plugins = {
       nix.enable = true;
@@ -123,15 +124,15 @@
             '';
           };
           sources = [
-            {name = "nvim_lsp";}
+            { name = "nvim_lsp"; }
             {
               name = "luasnip";
               option = {
                 show_autosnippets = true;
               };
             }
-            {name = "path";}
-            {name = "buffer";}
+            { name = "path"; }
+            { name = "buffer"; }
           ];
         };
       };

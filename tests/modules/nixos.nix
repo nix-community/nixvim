@@ -10,7 +10,9 @@ nixpkgs.lib.nixosSystem {
     {
       system.stateVersion = "23.11";
       boot.loader.systemd-boot.enable = true;
-      fileSystems."/" = {device = "/non/existent/device";};
+      fileSystems."/" = {
+        device = "/non/existent/device";
+      };
 
       programs.nixvim = {
         enable = true;

@@ -13,14 +13,10 @@
         go = true;
       };
       printVarStatements = {
-        cpp = [
-          "printf(\"a custom statement %%s %s\", %s)"
-        ];
+        cpp = [ "printf(\"a custom statement %%s %s\", %s)" ];
       };
       printfStatements = {
-        cpp = [
-          "std::cout << \"%s\" << std::endl;"
-        ];
+        cpp = [ "std::cout << \"%s\" << std::endl;" ];
       };
       extractVarStatements = {
         go = "%s := %s // poggers";

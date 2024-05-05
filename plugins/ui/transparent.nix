@@ -6,16 +6,16 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin config {
-    name = "transparent";
-    originalName = "transparent.nvim";
-    defaultPackage = pkgs.vimPlugins.transparent-nvim;
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "transparent";
+  originalName = "transparent.nvim";
+  defaultPackage = pkgs.vimPlugins.transparent-nvim;
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    settingsOptions = {
-      groups =
-        helpers.defaultNullOpts.mkListOf types.str
+  settingsOptions = {
+    groups =
+      helpers.defaultNullOpts.mkListOf types.str
         ''
           [
             "Normal"
@@ -49,24 +49,24 @@ with lib;
           The list of transparent groups.
         '';
 
-      extra_groups = helpers.defaultNullOpts.mkListOf types.str "[]" ''
-        Additional groups that should be cleared.
-      '';
+    extra_groups = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+      Additional groups that should be cleared.
+    '';
 
-      exclude_groups = helpers.defaultNullOpts.mkListOf types.str "[]" ''
-        Groups that you don't want to clear.
-      '';
-    };
+    exclude_groups = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+      Groups that you don't want to clear.
+    '';
+  };
 
-    settingsExample = {
-      extra_groups = [
-        "BufferLineTabClose"
-        "BufferLineBufferSelected"
-        "BufferLineFill"
-        "BufferLineBackground"
-        "BufferLineSeparator"
-        "BufferLineIndicatorSelected"
-      ];
-      exclude_groups = [];
-    };
-  }
+  settingsExample = {
+    extra_groups = [
+      "BufferLineTabClose"
+      "BufferLineBufferSelected"
+      "BufferLineFill"
+      "BufferLineBackground"
+      "BufferLineSeparator"
+      "BufferLineIndicatorSelected"
+    ];
+    exclude_groups = [ ];
+  };
+}

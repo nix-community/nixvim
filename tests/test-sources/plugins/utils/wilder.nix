@@ -8,7 +8,10 @@
       enable = true;
 
       enableCmdlineEnter = true;
-      modes = ["/" "?"];
+      modes = [
+        "/"
+        "?"
+      ];
       wildcharm = "&wildchar";
       nextKey = "<Tab>";
       prevKey = "<S-Tab>";

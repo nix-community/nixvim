@@ -1,7 +1,9 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   # Fails on darwin with: `module 'plenary.job' not found`
   enable = !pkgs.stdenv.isDarwin;
-in {
+in
+{
   empty = {
     plugins.spectre.enable = enable;
   };
@@ -70,7 +72,10 @@ in {
         default = {
           find = {
             cmd = "rg";
-            options = ["word" "hidden"];
+            options = [
+              "word"
+              "hidden"
+            ];
           };
           replace = {
             cmd = "sed";
@@ -258,7 +263,7 @@ in {
           };
           oxi = {
             cmd = "oxi";
-            args = [];
+            args = [ ];
             options = {
               ignore-case = {
                 value = "i";
@@ -269,13 +274,13 @@ in {
           };
           sd = {
             cmd = "sd";
-            options = {};
+            options = { };
           };
         };
         default = {
           find = {
             cmd = "rg";
-            options = ["ignore-case"];
+            options = [ "ignore-case" ];
           };
           replace = {
             cmd = "sed";
@@ -285,7 +290,7 @@ in {
         is_open_target_win = true;
         is_insert_mode = false;
         is_block_ui_break = false;
-        open_template = {};
+        open_template = { };
       };
     };
   };

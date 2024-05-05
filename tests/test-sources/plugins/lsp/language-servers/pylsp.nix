@@ -16,20 +16,20 @@
             flake8 = {
               config = null;
               enabled = true;
-              exclude = [];
+              exclude = [ ];
               executable = "flake8";
               filename = null;
               hangClosing = null;
-              ignore = [];
+              ignore = [ ];
               maxComplexity = null;
               maxLineLength = null;
               indentSize = null;
-              perFileIgnores = [];
+              perFileIgnores = [ ];
               select = null;
             };
             jedi = {
-              auto_import_modules = ["numpy"];
-              extra_paths = [];
+              auto_import_modules = [ "numpy" ];
+              extra_paths = [ ];
               environment = null;
             };
             jedi_completion = {
@@ -40,7 +40,12 @@
               fuzzy = false;
               eager = false;
               resolve_at_most = 25;
-              cache_for = ["pandas" "numpy" "tensorflow" "matplotlib"];
+              cache_for = [
+                "pandas"
+                "numpy"
+                "tensorflow"
+                "matplotlib"
+              ];
             };
             jedi_definition = {
               enabled = true;
@@ -68,14 +73,14 @@
             };
             preload = {
               enabled = true;
-              modules = [];
+              modules = [ ];
             };
             pycodestyle = {
               enabled = true;
-              exclude = [];
-              filename = [];
+              exclude = [ ];
+              filename = [ ];
               ropeFolder = null;
-              ignore = [];
+              ignore = [ ];
               hangClosing = true;
               maxLineLength = 80;
               indentSize = 4;
@@ -83,9 +88,9 @@
             pydocstyle = {
               enabled = false;
               convention = null;
-              addIgnore = [];
-              addSelect = [];
-              ignore = [];
+              addIgnore = [ ];
+              addSelect = [ ];
+              ignore = [ ];
               select = null;
               match = "(?!test_).*\\.py";
               matchDir = "[^\\.].*";
@@ -95,7 +100,7 @@
             };
             pylint = {
               enabled = true;
-              args = [];
+              args = [ ];
               executable = null;
             };
             rope_autoimport = {
@@ -115,9 +120,9 @@
               live_mode = true;
               dmypy = false;
               strict = false;
-              overrides = [true];
+              overrides = [ true ];
               dmypy_status_file = ".dmypy.json";
-              config_sub_paths = [];
+              config_sub_paths = [ ];
               report_progress = false;
             };
             black = {
@@ -135,18 +140,27 @@
             ruff = {
               enabled = true;
               config = "/foo/bar/pyproject.toml";
-              exclude = ["foo" "bar"];
+              exclude = [
+                "foo"
+                "bar"
+              ];
               executable = "/foo/bar/ruff";
-              ignore = ["E42" "E720"];
-              extendIgnore = ["E12"];
+              ignore = [
+                "E42"
+                "E720"
+              ];
+              extendIgnore = [ "E12" ];
               lineLength = 123;
               perFileIgnores = {
-                "__init__.py" = ["E402"];
-                "path/to/file.py" = ["E402"];
+                "__init__.py" = [ "E402" ];
+                "path/to/file.py" = [ "E402" ];
               };
-              select = ["E01" "E56"];
-              extendSelect = ["E68"];
-              format = ["E90"];
+              select = [
+                "E01"
+                "E56"
+              ];
+              extendSelect = [ "E68" ];
+              format = [ "E90" ];
             };
           };
           rope = {

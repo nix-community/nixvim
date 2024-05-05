@@ -7,8 +7,17 @@
     plugins.lastplace = {
       enable = true;
 
-      ignoreBuftype = ["quickfix" "nofix" "help"];
-      ignoreFiletype = ["gitcommit" "gitrebase" "svn" "hgcommit"];
+      ignoreBuftype = [
+        "quickfix"
+        "nofix"
+        "help"
+      ];
+      ignoreFiletype = [
+        "gitcommit"
+        "gitrebase"
+        "svn"
+        "hgcommit"
+      ];
       openFolds = true;
     };
   };

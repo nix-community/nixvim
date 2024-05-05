@@ -14,7 +14,7 @@
         };
         proxy = "localhost:3128";
         proxy_strict_ssl = false;
-        workspace_folders = ["~/Projects/myproject"];
+        workspace_folders = [ "~/Projects/myproject" ];
       };
     };
   };

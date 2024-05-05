@@ -22,21 +22,24 @@
           clearInInsertMode = false;
           downloadRemoteImages = true;
           onlyRenderImageAtCursor = false;
-          filetypes = ["markdown" "vimwiki"];
+          filetypes = [
+            "markdown"
+            "vimwiki"
+          ];
         };
         neorg = {
           enabled = true;
           clearInInsertMode = false;
           downloadRemoteImages = true;
           onlyRenderImageAtCursor = false;
-          filetypes = ["norg"];
+          filetypes = [ "norg" ];
         };
         syslang = {
           enabled = true;
           clearInInsertMode = false;
           downloadRemoteImages = true;
           onlyRenderImageAtCursor = false;
-          filetypes = ["syslang"];
+          filetypes = [ "syslang" ];
         };
       };
       maxWidth = null;
@@ -44,10 +47,20 @@
       maxWidthWindowPercentage = null;
       maxHeightWindowPercentage = 50;
       windowOverlapClearEnabled = false;
-      windowOverlapClearFtIgnore = ["cmp_menu" "cmp_docs" ""];
+      windowOverlapClearFtIgnore = [
+        "cmp_menu"
+        "cmp_docs"
+        ""
+      ];
       editorOnlyRenderWhenFocused = false;
       tmuxShowOnlyInActiveWindow = false;
-      hijackFilePatterns = ["*.png" "*.jpg" "*.jpeg" "*.gif" "*.webp"];
+      hijackFilePatterns = [
+        "*.png"
+        "*.jpg"
+        "*.jpeg"
+        "*.gif"
+        "*.webp"
+      ];
     };
   };
 

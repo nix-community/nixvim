@@ -22,18 +22,34 @@
       autoReloadTimeoutMs = 500;
       commands = true;
       highlights = {
-        covered = {fg = "#B7F071";};
-        uncovered = {fg = "#F07178";};
-        partial = {fg = "#AA71F0";};
-        summaryBorder = {link = "FloatBorder";};
-        summaryNormal = {link = "NormalFloat";};
-        summaryCursorLine = {link = "CursorLine";};
+        covered = {
+          fg = "#B7F071";
+        };
+        uncovered = {
+          fg = "#F07178";
+        };
+        partial = {
+          fg = "#AA71F0";
+        };
+        summaryBorder = {
+          link = "FloatBorder";
+        };
+        summaryNormal = {
+          link = "NormalFloat";
+        };
+        summaryCursorLine = {
+          link = "CursorLine";
+        };
         summaryHeader = {
           style = "bold,underline";
           sp = "bg";
         };
-        summaryPass = {link = "CoverageCovered";};
-        summaryFail = {link = "CoverageUncovered";};
+        summaryPass = {
+          link = "CoverageCovered";
+        };
+        summaryFail = {
+          link = "CoverageUncovered";
+        };
       };
       loadCoverageCb = ''
         function (ftype)
@@ -56,8 +72,8 @@
       };
       signGroup = "coverage";
       summary = {
-        widthPercentage = 0.70;
-        heightPercentage = 0.50;
+        widthPercentage = 0.7;
+        heightPercentage = 0.5;
         borders = {
           topleft = "╭";
           topright = "╮";

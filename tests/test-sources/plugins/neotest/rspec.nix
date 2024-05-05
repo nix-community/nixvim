@@ -18,8 +18,15 @@
                 })
               end
             '';
-            root_files = ["Gemfile" ".rspec" ".gitignore"];
-            filter_dirs = [".git" "node_modules"];
+            root_files = [
+              "Gemfile"
+              ".rspec"
+              ".gitignore"
+            ];
+            filter_dirs = [
+              ".git"
+              "node_modules"
+            ];
             transform_spec_path.__raw = ''
               function(path)
                 return path

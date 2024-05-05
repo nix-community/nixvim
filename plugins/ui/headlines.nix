@@ -6,25 +6,25 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin config {
-    name = "headlines";
-    originalName = "headlines.nvim";
-    defaultPackage = pkgs.vimPlugins.headlines-nvim;
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "headlines";
+  originalName = "headlines.nvim";
+  defaultPackage = pkgs.vimPlugins.headlines-nvim;
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    settingsExample = {
-      org.headline_highlights = false;
-      norg = {
-        headline_highlights = ["Headline"];
-        codeblock_highlight = false;
-      };
-      markdown.headline_highlights = ["Headline1"];
+  settingsExample = {
+    org.headline_highlights = false;
+    norg = {
+      headline_highlights = [ "Headline" ];
+      codeblock_highlight = false;
     };
+    markdown.headline_highlights = [ "Headline1" ];
+  };
 
-    extraConfig = cfg: {
-      warnings = optional (!config.plugins.treesitter.enable) ''
-        Nixvim (plugins.headlines): headlines requires `plugins.treesitter` to be enabled with the relevant grammars installed.
-      '';
-    };
-  }
+  extraConfig = cfg: {
+    warnings = optional (!config.plugins.treesitter.enable) ''
+      Nixvim (plugins.headlines): headlines requires `plugins.treesitter` to be enabled with the relevant grammars installed.
+    '';
+  };
+}

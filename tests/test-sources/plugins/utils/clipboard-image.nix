@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   empty = {
     plugins.clipboard-image = {
       enable = true;
@@ -20,7 +21,11 @@
       };
       filetypes = {
         markdown = {
-          imgDir = ["src" "assets" "img"];
+          imgDir = [
+            "src"
+            "assets"
+            "img"
+          ];
           imgDirTxt = "/assets/img";
           imgHandler = ''
             function(img) -- New feature from PR #22

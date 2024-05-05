@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.gitgutter;
-in {
+in
+{
   options = {
     plugins.gitgutter = {
       enable = mkEnableOption "gitgutter";
@@ -57,14 +59,16 @@ in {
       };
 
       signs = mkOption {
-        type = let
-          signOption = desc:
-            mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Sign for ${desc}";
-            };
-        in
+        type =
+          let
+            signOption =
+              desc:
+              mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Sign for ${desc}";
+              };
+          in
           types.submodule {
             options = {
               added = signOption "added lines";
@@ -76,7 +80,7 @@ in {
               modifiedRemoved = signOption "modified and removed lines";
             };
           };
-        default = {};
+        default = { };
         description = "Custom signs for the sign column";
       };
 
@@ -99,22 +103,24 @@ in {
       };
 
       grep = mkOption {
-        type = types.nullOr (types.oneOf [
-          (types.submodule {
-            options = {
-              command = mkOption {
-                type = types.str;
-                description = "The command to use as a grep alternative";
-              };
+        type = types.nullOr (
+          types.oneOf [
+            (types.submodule {
+              options = {
+                command = mkOption {
+                  type = types.str;
+                  description = "The command to use as a grep alternative";
+                };
 
-              package = mkOption {
-                type = types.package;
-                description = "The package of the grep alternative to use";
+                package = mkOption {
+                  type = types.package;
+                  description = "The package of the grep alternative to use";
+                };
               };
-            };
-          })
-          types.str
-        ]);
+            })
+            types.str
+          ]
+        );
         default = null;
         description = "A non-standard grep to use instead of the default";
       };
@@ -169,25 +175,20 @@ in {
     };
   };
 
-  config = let
-    grepPackage =
-      if builtins.isAttrs cfg.grep
-      then [cfg.grep.package]
-      else [];
-    grepCommand =
-      if builtins.isAttrs cfg.grep
-      then cfg.grep.command
-      else cfg.grep;
-  in
+  config =
+    let
+      grepPackage = if builtins.isAttrs cfg.grep then [ cfg.grep.package ] else [ ];
+      grepCommand = if builtins.isAttrs cfg.grep then cfg.grep.command else cfg.grep;
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
       opts = mkIf cfg.recommendedSettings {
         updatetime = 100;
         foldtext = "gitgutter#fold#foldtext";
       };
 
-      extraPackages = [pkgs.git] ++ grepPackage;
+      extraPackages = [ pkgs.git ] ++ grepPackage;
 
       globals = {
         gitgutter_max_signs = mkIf (cfg.maxSigns != null) cfg.maxSigns;
@@ -200,8 +201,12 @@ in {
         gitgutter_sign_added = mkIf (cfg.signs.added != null) cfg.signs.added;
         gitgutter_sign_modified = mkIf (cfg.signs.modified != null) cfg.signs.modified;
         gitgutter_sign_removed = mkIf (cfg.signs.removed != null) cfg.signs.removed;
-        gitgutter_sign_removed_first_line = mkIf (cfg.signs.removedFirstLine != null) cfg.signs.removedFirstLine;
-        gitgutter_sign_removed_above_and_bellow = mkIf (cfg.signs.removedAboveAndBelow != null) cfg.signs.removedAboveAndBelow;
+        gitgutter_sign_removed_first_line = mkIf (
+          cfg.signs.removedFirstLine != null
+        ) cfg.signs.removedFirstLine;
+        gitgutter_sign_removed_above_and_bellow = mkIf (
+          cfg.signs.removedAboveAndBelow != null
+        ) cfg.signs.removedAboveAndBelow;
         gitgutter_sign_modified_above = mkIf (cfg.signs.modifiedAbove != null) cfg.signs.modifiedAbove;
 
         gitgutter_diff_relative_to = mkIf cfg.diffRelativeToWorkingTree "working_tree";

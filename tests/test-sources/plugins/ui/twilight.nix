@@ -12,7 +12,10 @@
         settings = {
           dimming = {
             alpha = 0.25;
-            color = ["Normal" "#ffffff"];
+            color = [
+              "Normal"
+              "#ffffff"
+            ];
             term_bg = "#000000";
             inactive = false;
           };
@@ -24,7 +27,7 @@
             "table"
             "if_statement"
           ];
-          exclude = [];
+          exclude = [ ];
         };
       };
     };

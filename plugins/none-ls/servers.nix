@@ -5,7 +5,8 @@
   helpers,
   ...
 }:
-with lib; let
+with lib;
+let
   noneLsBuiltins = builtins.fromJSON (
     builtins.readFile "${pkgs.vimPlugins.none-ls-nvim.src}/doc/builtins.json"
   );
@@ -15,8 +16,7 @@ with lib; let
   #  - null if the source is not present in nixpkgs
   #  - false if this source does not need a package
   builtinPackages = {
-    inherit
-      (pkgs)
+    inherit (pkgs)
       actionlint
       alejandra
       asmfmt
@@ -91,28 +91,11 @@ with lib; let
       zprint
       zsh
       ;
-    inherit
-      (pkgs.nodePackages)
-      alex
-      prettier
-      ;
-    inherit
-      (pkgs.python3.pkgs)
-      black
-      ;
-    inherit
-      (pkgs.phpPackages)
-      phpmd
-      phpstan
-      ;
-    inherit
-      (pkgs.rubyPackages)
-      htmlbeautifier
-      ;
-    inherit
-      (pkgs.ocamlPackages)
-      ocamlformat
-      ;
+    inherit (pkgs.nodePackages) alex prettier;
+    inherit (pkgs.python3.pkgs) black;
+    inherit (pkgs.phpPackages) phpmd phpstan;
+    inherit (pkgs.rubyPackages) htmlbeautifier;
+    inherit (pkgs.ocamlPackages) ocamlformat;
     ansiblelint = pkgs.ansible-lint;
     bean_check = pkgs.beancount;
     bean_format = pkgs.beancount;
@@ -243,129 +226,102 @@ with lib; let
   };
 
   # Check if the package is set to `false` or not
-  hasBuiltinPackage = source:
-    if builtins.hasAttr source builtinPackages
-    then !(builtins.isBool builtinPackages.${source})
-    else true;
+  hasBuiltinPackage =
+    source:
+    if builtins.hasAttr source builtinPackages then
+      !(builtins.isBool builtinPackages.${source})
+    else
+      true;
 
   builtinPackage = source: builtinPackages.${source} or null;
-in {
-  imports = [
-    ./prettier.nix
-  ];
+in
+{
+  imports = [ ./prettier.nix ];
 
-  options.plugins.none-ls.sources =
+  options.plugins.none-ls.sources = builtins.mapAttrs (
+    sourceType: sources:
     builtins.mapAttrs (
-      sourceType: sources:
-        builtins.mapAttrs
-        (source: _:
-          {
-            enable = mkEnableOption "the ${source} ${sourceType} source for none-ls";
-            withArgs = helpers.mkNullOrOption helpers.nixvimTypes.strLua ''
-              Raw Lua code passed as an argument to the source's `with` method.
-            '';
-          }
-          // lib.optionalAttrs (hasBuiltinPackage source) {
-            package = let
-              pkg = builtinPackage source;
-            in
-              mkOption ({
-                  type = types.nullOr types.package;
-                  description =
-                    "Package to use for ${source} by none-ls. "
-                    + (
-                      lib.optionalString (pkg == null) ''
-                        Not handled in nixvim, either install externally and set to null or set the option with a derivation.
-                      ''
-                    );
-                }
-                // optionalAttrs (pkg != null) {
-                  default = pkg;
-                });
-          })
-        sources
-    )
-    noneLsBuiltins;
+      source: _:
+      {
+        enable = mkEnableOption "the ${source} ${sourceType} source for none-ls";
+        withArgs = helpers.mkNullOrOption helpers.nixvimTypes.strLua ''
+          Raw Lua code passed as an argument to the source's `with` method.
+        '';
+      }
+      // lib.optionalAttrs (hasBuiltinPackage source) {
+        package =
+          let
+            pkg = builtinPackage source;
+          in
+          mkOption (
+            {
+              type = types.nullOr types.package;
+              description =
+                "Package to use for ${source} by none-ls. "
+                + (lib.optionalString (pkg == null) ''
+                  Not handled in nixvim, either install externally and set to null or set the option with a derivation.
+                '');
+            }
+            // optionalAttrs (pkg != null) { default = pkg; }
+          );
+      }
+    ) sources
+  ) noneLsBuiltins;
 
-  config = let
-    cfg = config.plugins.none-ls;
-    gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
+  config =
+    let
+      cfg = config.plugins.none-ls;
+      gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
 
-    flattenedSources = lib.flatten (
-      lib.mapAttrsToList (
-        sourceType: sources: (lib.mapAttrsToList (sourceName: source:
-          source
-          // {
-            inherit sourceType sourceName;
-          })
-        sources)
-      )
-      cfg.sources
-    );
+      flattenedSources = lib.flatten (
+        lib.mapAttrsToList (
+          sourceType: sources:
+          (lib.mapAttrsToList (sourceName: source: source // { inherit sourceType sourceName; }) sources)
+        ) cfg.sources
+      );
 
-    enabledSources = builtins.filter (source: source.enable) flattenedSources;
-  in
+      enabledSources = builtins.filter (source: source.enable) flattenedSources;
+    in
     mkIf cfg.enable {
       # ASSERTIONS FOR DEVELOPMENT PURPOSES: Any failure should be caught by CI before deployment.
       # Ensure that the keys of the manually declared `builtinPackages` match the ones from upstream.
-      warnings = let
-        upstreamToolNames = unique (
-          flatten
-          (
-            mapAttrsToList
-            (_: attrNames)
-            noneLsBuiltins
-          )
-        );
-        localToolNames = attrNames builtinPackages;
+      warnings =
+        let
+          upstreamToolNames = unique (flatten (mapAttrsToList (_: attrNames) noneLsBuiltins));
+          localToolNames = attrNames builtinPackages;
 
-        undeclaredToolNames =
-          filter
-          # Keep tool names which are not declared locally
-          (toolName: !(elem toolName localToolNames))
-          upstreamToolNames;
+          undeclaredToolNames =
+            filter
+              # Keep tool names which are not declared locally
+              (toolName: !(elem toolName localToolNames))
+              upstreamToolNames;
 
-        uselesslyDeclaredToolNames =
-          filter
-          # Keep tool names which are not in upstream
-          (toolName: !(elem toolName upstreamToolNames))
-          localToolNames;
-      in
-        (
-          optional
-          ((length undeclaredToolNames) > 0)
-          ''
-            [DEV] Nixvim (plugins.none-ls): Some tools from upstream are not declared locally in `builtinPackages`.
-            -> [${concatStringsSep ", " undeclaredToolNames}]
-          ''
-        )
-        ++ (
-          optional
-          ((length uselesslyDeclaredToolNames) > 0)
-          ''
-            [DEV] Nixvim (plugins.none-ls): Some tools are declared locally but are not in the upstream list of supported plugins.
-            -> [${concatStringsSep ", " uselesslyDeclaredToolNames}]
-          ''
-        );
+          uselesslyDeclaredToolNames =
+            filter
+              # Keep tool names which are not in upstream
+              (toolName: !(elem toolName upstreamToolNames))
+              localToolNames;
+        in
+        (optional ((length undeclaredToolNames) > 0) ''
+          [DEV] Nixvim (plugins.none-ls): Some tools from upstream are not declared locally in `builtinPackages`.
+          -> [${concatStringsSep ", " undeclaredToolNames}]
+        '')
+        ++ (optional ((length uselesslyDeclaredToolNames) > 0) ''
+          [DEV] Nixvim (plugins.none-ls): Some tools are declared locally but are not in the upstream list of supported plugins.
+          -> [${concatStringsSep ", " uselesslyDeclaredToolNames}]
+        '');
 
-      plugins.none-ls.sourcesItems =
-        builtins.map (
-          source: let
-            sourceItem = "${source.sourceType}.${source.sourceName}";
-            withArgs =
-              if source.withArgs == null
-              then sourceItem
-              else "${sourceItem}.with(${source.withArgs})";
-          in
-            helpers.mkRaw ''
-              require("null-ls").builtins.${withArgs}
-            ''
-        )
-        enabledSources;
+      plugins.none-ls.sourcesItems = builtins.map (
+        source:
+        let
+          sourceItem = "${source.sourceType}.${source.sourceName}";
+          withArgs = if source.withArgs == null then sourceItem else "${sourceItem}.with(${source.withArgs})";
+        in
+        helpers.mkRaw ''
+          require("null-ls").builtins.${withArgs}
+        ''
+      ) enabledSources;
       plugins.gitsigns.enable = mkIf gitsignsEnabled true;
-      extraPackages =
-        map
-        (source: source.package or null)
-        enabledSources;
+      extraPackages = map (source: source.package or null) enabledSources;
     };
 }

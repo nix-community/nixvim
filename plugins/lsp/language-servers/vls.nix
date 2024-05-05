@@ -1,11 +1,9 @@
-{
-  lib,
-  config,
-  ...
-}:
-with lib; let
+{ lib, config, ... }:
+with lib;
+let
   cfg = config.plugins.lsp.servers.vls;
-in {
+in
+{
   options.plugins.lsp.servers.vls = {
     autoSetFiletype = mkOption {
       type = types.bool;
@@ -18,11 +16,5 @@ in {
     };
   };
 
-  config =
-    mkIf cfg.enable
-    {
-      filetype.extension =
-        mkIf cfg.autoSetFiletype
-        {v = "vlang";};
-    };
+  config = mkIf cfg.enable { filetype.extension = mkIf cfg.autoSetFiletype { v = "vlang"; }; };
 }

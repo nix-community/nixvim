@@ -4,9 +4,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.cmp-tabnine;
-in {
+in
+{
   options.plugins.cmp-tabnine = helpers.neovim-plugin.extraOptionsOptions;
 
   config = mkIf cfg.enable {

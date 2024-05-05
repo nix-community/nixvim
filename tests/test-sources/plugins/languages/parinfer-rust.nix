@@ -12,7 +12,7 @@
         enabled = true;
         force_balance = false;
         comment_char = ";";
-        string_delimiters = [''"''];
+        string_delimiters = [ ''"'' ];
         lisp_vline_symbols = false;
         lisp_block_comments = false;
         guile_block_comments = false;

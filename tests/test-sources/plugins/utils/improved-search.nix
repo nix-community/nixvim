@@ -9,12 +9,20 @@
 
       keymaps = [
         {
-          mode = ["n" "x" "o"];
+          mode = [
+            "n"
+            "x"
+            "o"
+          ];
           key = "n";
           action = "stable_next";
         }
         {
-          mode = ["n" "x" "o"];
+          mode = [
+            "n"
+            "x"
+            "o"
+          ];
           key = "N";
           action = "stable_previous";
         }

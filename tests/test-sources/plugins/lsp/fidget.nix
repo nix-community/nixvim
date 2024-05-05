@@ -19,7 +19,7 @@
             return client and client.name or nil
           end
         '';
-        ignore = [];
+        ignore = [ ];
         display = {
           renderLimit = 16;
           doneTtl = 3;
@@ -89,7 +89,7 @@
       };
       logger = {
         level = "warn";
-        floatPrecision = 0.01;
+        floatPrecision = 1.0e-2;
         path.__raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))";
       };
     };

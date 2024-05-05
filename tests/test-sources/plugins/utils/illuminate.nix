@@ -8,18 +8,18 @@
       enable = true;
 
       delay = 50;
-      providers = ["lsp"];
-      modesDenylist = ["n"];
-      modesAllowlist = ["v"];
+      providers = [ "lsp" ];
+      modesDenylist = [ "n" ];
+      modesAllowlist = [ "v" ];
       underCursor = false;
       largeFileCutoff = 10;
       minCountToHighlight = 2;
-      filetypesDenylist = ["csharp"];
-      filetypesAllowlist = ["python"];
+      filetypesDenylist = [ "csharp" ];
+      filetypesAllowlist = [ "python" ];
       filetypeOverrides = {
         x = {
           delay = 10;
-          providers = ["treesitter"];
+          providers = [ "treesitter" ];
         };
       };
       largeFileOverrides = {

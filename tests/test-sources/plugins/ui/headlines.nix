@@ -38,7 +38,7 @@
                   ]]
               )
             '';
-            headline_highlights = ["Headline"];
+            headline_highlights = [ "Headline" ];
             bullet_highlights = [
               "@text.title.1.marker.markdown"
               "@text.title.2.marker.markdown"
@@ -47,7 +47,12 @@
               "@text.title.5.marker.markdown"
               "@text.title.6.marker.markdown"
             ];
-            bullets = ["◉" "○" "✸" "✿"];
+            bullets = [
+              "◉"
+              "○"
+              "✸"
+              "✿"
+            ];
             codeblock_highlight = "CodeBlock";
             dash_highlight = "Dash";
             dash_string = "-";
@@ -83,7 +88,7 @@
               )
             '';
             treesitter_language = "markdown";
-            headline_highlights = ["Headline"];
+            headline_highlights = [ "Headline" ];
             bullet_highlights = [
               "@text.title.1.marker.markdown"
               "@text.title.2.marker.markdown"
@@ -92,7 +97,12 @@
               "@text.title.5.marker.markdown"
               "@text.title.6.marker.markdown"
             ];
-            bullets = ["◉" "○" "✸" "✿"];
+            bullets = [
+              "◉"
+              "○"
+              "✸"
+              "✿"
+            ];
             codeblock_highlight = "CodeBlock";
             dash_highlight = "Dash";
             dash_string = "-";
@@ -132,7 +142,7 @@
                 ]]
               )
             '';
-            headline_highlights = ["Headline"];
+            headline_highlights = [ "Headline" ];
             bullet_highlights = [
               "@neorg.headings.1.prefix"
               "@neorg.headings.2.prefix"
@@ -141,7 +151,12 @@
               "@neorg.headings.5.prefix"
               "@neorg.headings.6.prefix"
             ];
-            bullets = ["◉" "○" "✸" "✿"];
+            bullets = [
+              "◉"
+              "○"
+              "✸"
+              "✿"
+            ];
             codeblock_highlight = "CodeBlock";
             dash_highlight = "Dash";
             dash_string = "-";
@@ -176,7 +191,7 @@
                 ]]
               )
             '';
-            headline_highlights = ["Headline"];
+            headline_highlights = [ "Headline" ];
             bullet_highlights = [
               "@org.headline.level1"
               "@org.headline.level2"
@@ -187,7 +202,12 @@
               "@org.headline.level7"
               "@org.headline.level8"
             ];
-            bullets = ["◉" "○" "✸" "✿"];
+            bullets = [
+              "◉"
+              "○"
+              "✸"
+              "✿"
+            ];
             codeblock_highlight = "CodeBlock";
             dash_highlight = "Dash";
             dash_string = "-";

@@ -10,17 +10,26 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "ccc.nvim";
   defaultPackage = pkgs.vimPlugins.ccc-nvim;
 
-  maintainers = [helpers.maintainers.JanKremer];
+  maintainers = [ helpers.maintainers.JanKremer ];
 
   settingsOptions = {
     default_color = helpers.defaultNullOpts.mkStr "#000000" ''
       The default color used when a color cannot be picked. It must be HEX format.
     '';
 
-    highlight_mode = helpers.defaultNullOpts.mkEnum ["fg" "bg" "foreground" "background"] "bg" ''
-      Option to highlight text foreground or background. It is used to
-      `output_line` and `highlighter`.
-    '';
+    highlight_mode =
+      helpers.defaultNullOpts.mkEnum
+        [
+          "fg"
+          "bg"
+          "foreground"
+          "background"
+        ]
+        "bg"
+        ''
+          Option to highlight text foreground or background. It is used to
+          `output_line` and `highlighter`.
+        '';
 
     lsp = helpers.defaultNullOpts.mkBool true ''
       Whether to enable LSP support. The color information is updated in the
@@ -50,5 +59,5 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
   };
 
-  extraConfig = cfg: {opts.termguicolors = lib.mkDefault true;};
+  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
 }

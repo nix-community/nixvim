@@ -1,59 +1,69 @@
-default_pkgs: {
+default_pkgs:
+{
   modules,
   self,
   getHelpers,
-}: {
+}:
+{
   pkgs ? default_pkgs,
-  extraSpecialArgs ? {},
+  extraSpecialArgs ? { },
   _nixvimTests ? false,
   module,
-}: let
+}:
+let
   inherit (pkgs) lib;
 
   helpers = getHelpers pkgs _nixvimTests;
-  shared = import ./_shared.nix {inherit modules helpers;} {
+  shared = import ./_shared.nix { inherit modules helpers; } {
     inherit pkgs lib;
-    config = {};
+    config = { };
   };
 
-  mkEval = mod:
+  mkEval =
+    mod:
     lib.evalModules {
-      modules =
-        [
-          mod
-          {wrapRc = true;}
-        ]
-        ++ shared.topLevelModules;
-      specialArgs =
-        {
-          inherit helpers;
-        }
-        // extraSpecialArgs;
+      modules = [
+        mod
+        { wrapRc = true; }
+      ] ++ shared.topLevelModules;
+      specialArgs = {
+        inherit helpers;
+      } // extraSpecialArgs;
     };
 
-  handleAssertions = config: let
-    failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
-  in
-    if failedAssertions != []
-    then throw "\nFailed assertions:\n${builtins.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
-    else lib.showWarnings config.warnings config;
+  handleAssertions =
+    config:
+    let
+      failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
+    in
+    if failedAssertions != [ ] then
+      throw "\nFailed assertions:\n${builtins.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else
+      lib.showWarnings config.warnings config;
 
-  mkNvim = mod: let
-    config = handleAssertions (mkEval mod).config;
-  in
+  mkNvim =
+    mod:
+    let
+      config = handleAssertions (mkEval mod).config;
+    in
     (pkgs.symlinkJoin {
       name = "nixvim";
-      paths =
-        [
-          config.finalPackage
-          config.printInitPackage
-        ]
-        ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
+      paths = [
+        config.finalPackage
+        config.printInitPackage
+      ] ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
       meta.mainProgram = "nvim";
     })
     // {
       inherit config;
-      nixvimExtend = extension: mkNvim {imports = [mod extension];};
+      nixvimExtend =
+        extension:
+        mkNvim {
+          imports = [
+            mod
+            extension
+          ];
+        };
     };
 in
-  mkNvim module
+mkNvim module

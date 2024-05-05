@@ -4,9 +4,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.lsp.servers.ccls;
-in {
+in
+{
   # Options: https://github.com/MaskRay/ccls/wiki/Customization#initialization-options
   options.plugins.lsp.servers.ccls.initOptions = {
     cache = {
@@ -42,20 +44,28 @@ in {
         use a JSON formatter such as `jq . < /tmp/ccls/@tmp@c/a.cc.json` to display it.
       '';
 
-      retainInMemory = helpers.defaultNullOpts.mkEnum [0 1 2] "1" ''
-        Change to 0 if you want to save memory, but having multiple ccls processes operating in the
-        same directory may corrupt ccls's in-memory representation of the index.
+      retainInMemory =
+        helpers.defaultNullOpts.mkEnum
+          [
+            0
+            1
+            2
+          ]
+          "1"
+          ''
+            Change to 0 if you want to save memory, but having multiple ccls processes operating in the
+            same directory may corrupt ccls's in-memory representation of the index.
 
-        After this number of loads, keep a copy of file index in memory (which increases memory
-        usage).
-        During incremental updates, the removed file index will be taken from the in-memory copy,
-        instead of the on-disk file.
+            After this number of loads, keep a copy of file index in memory (which increases memory
+            usage).
+            During incremental updates, the removed file index will be taken from the in-memory copy,
+            instead of the on-disk file.
 
-        Every index action is counted: the initial load, a save action.
-        - 0: never retain
-        - 1: retain after initial load
-        - 2: retain after 2 loads (initial load+first save)
-      '';
+            Every index action is counted: the initial load, a save action.
+            - 0: never retain
+            - 1: retain after initial load
+            - 2: retain after 2 loads (initial load+first save)
+          '';
     };
 
     clang = {
@@ -189,30 +199,45 @@ in {
         If you want to reduce peak CPU and memory usage, set it to a small integer.
       '';
 
-      comments = helpers.defaultNullOpts.mkEnum [0 1 2] "2" ''
-        `ccls` can index the contents of comments associated with functions/types/variables (macros
-        are not handled).
-        This value controls how comments are indexed:
-        - `0`: don't index comments
-        - `1`: index Doxygen comment markers
-        - `2`: use `-fparse-all-comments` and recognize plain `//` `/* */` in addition to Doxygen
-          comment markers
-      '';
+      comments =
+        helpers.defaultNullOpts.mkEnum
+          [
+            0
+            1
+            2
+          ]
+          "2"
+          ''
+            `ccls` can index the contents of comments associated with functions/types/variables (macros
+            are not handled).
+            This value controls how comments are indexed:
+            - `0`: don't index comments
+            - `1`: index Doxygen comment markers
+            - `2`: use `-fparse-all-comments` and recognize plain `//` `/* */` in addition to Doxygen
+              comment markers
+          '';
 
-      multiVersion = helpers.defaultNullOpts.mkEnum [0 1] "0" ''
-        Index a file only once (`0`), or in each translation unit that includes it (`1`).
+      multiVersion =
+        helpers.defaultNullOpts.mkEnum
+          [
+            0
+            1
+          ]
+          "0"
+          ''
+            Index a file only once (`0`), or in each translation unit that includes it (`1`).
 
-        The default is sensible for common usage: it reduces memory footprint.
-        If both `a.cc` and `b.cc` include `a.h`, there is only one indexed version of `a.h`.
+            The default is sensible for common usage: it reduces memory footprint.
+            If both `a.cc` and `b.cc` include `a.h`, there is only one indexed version of `a.h`.
 
-        But for dependent name lookup, or references in headers that may change depending on other
-        macros, etc, you may want to index a file multiple times to get every possible cross
-        reference.
-        In that case set the option to `1` but be aware that it may increase index file sizes
-        significantly.
+            But for dependent name lookup, or references in headers that may change depending on other
+            macros, etc, you may want to index a file multiple times to get every possible cross
+            reference.
+            In that case set the option to `1` but be aware that it may increase index file sizes
+            significantly.
 
-        Also consider using `index.multiVersionBlacklist` to exclude system headers.
-      '';
+            Also consider using `index.multiVersionBlacklist` to exclude system headers.
+          '';
 
       multiVersionBlacklist = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
         A list of regular expressions matching files that should not be indexed via multi-version
@@ -250,24 +275,28 @@ in {
         cache files to disk.
       '';
 
-      trackDependency = helpers.defaultNullOpts.mkEnum [0 1 2] "2" ''
-        Determine whether a file should be re-indexed when any of its dependencies changes
-        timestamp.
+      trackDependency =
+        helpers.defaultNullOpts.mkEnum
+          [
+            0
+            1
+            2
+          ]
+          "2"
+          ''
+            Determine whether a file should be re-indexed when any of its dependencies changes
+            timestamp.
 
-        If `a.h` has been changed, when you open `a.cc` which includes `a.h` then if
-        `trackDependency` is:
+            If `a.h` has been changed, when you open `a.cc` which includes `a.h` then if
+            `trackDependency` is:
 
-        - 0: no re-indexing unless `a.cc` itself changes timestamp.
-        - 2: the index of `a.cc` is considered stale and it should be re-indexed.
-        - 1: before the initial load, the behavior of `2` is used, otherwise the behavior of `0` is
-          used.
-      '';
+            - 0: no re-indexing unless `a.cc` itself changes timestamp.
+            - 2: the index of `a.cc` is considered stale and it should be re-indexed.
+            - 1: before the initial load, the behavior of `2` is used, otherwise the behavior of `0` is
+              used.
+          '';
     };
   };
 
-  config =
-    mkIf cfg.enable
-    {
-      plugins.lsp.servers.ccls.extraOptions.init_options = cfg.initOptions;
-    };
+  config = mkIf cfg.enable { plugins.lsp.servers.ccls.extraOptions.init_options = cfg.initOptions; };
 }
