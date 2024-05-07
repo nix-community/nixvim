@@ -2,13 +2,24 @@
 {
   imports = [
     inputs.pre-commit-hooks.flakeModule
+    inputs.treefmt-nix.flakeModule
     ./devshell.nix
   ];
 
   perSystem =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
-      formatter = pkgs.nixfmt-rfc-style;
+      formatter = config.treefmt.build.wrapper;
+
+      treefmt.config = {
+        inherit (config.flake-root) projectRootFile;
+        package = pkgs.treefmt;
+
+        programs = {
+          nixfmt-rfc-style.enable = true;
+          statix.enable = true;
+        };
+      };
 
       pre-commit = {
         settings.hooks = {
