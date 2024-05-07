@@ -24,6 +24,12 @@ with lib;
       '';
     };
 
+    withRuby = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Ruby provider.";
+    };
+
     withNodeJs = mkOption {
       type = types.bool;
       default = false;
@@ -88,6 +94,7 @@ with lib;
             extraPython3Packages
             viAlias
             vimAlias
+            withRuby
             withNodeJs
             ;
           # inherit customRC;
