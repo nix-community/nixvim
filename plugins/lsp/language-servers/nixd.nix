@@ -37,7 +37,7 @@ in
       '';
     };
 
-    options = helpers.defaultNullOpts.mkNullable (with types; attrsOf (submodule {
+    options = helpers.defaultNullOpts.mkNullable (with types; attrsOf {
       expr = mkOption {
         type = types.str;
         description = ''
@@ -48,7 +48,7 @@ in
           `(builtins.getFlake "/path/to/your/home-manager/flake").homeConfigurations."USER@HOSTNAME".options`
         '';
       };
-    })) "{}" ''
+    }) "{}" ''
       A set of overrides for where to search for defined `option`s.
     '';
   };
