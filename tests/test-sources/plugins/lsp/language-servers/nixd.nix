@@ -19,18 +19,10 @@
             workers = 3;
           };
           formatting = {
-            command = "nixpkgs-fmt";
+            command = [ "nixpkgs-fmt" ];
           };
           options = {
-            enable = true;
-            target = {
-              args = [
-                "yes"
-                "no"
-                "maybe"
-              ];
-              installable = "";
-            };
+            nixos.expr = "(toString ./.).nixosConfigurations.kaboom.options";
           };
         };
       };
