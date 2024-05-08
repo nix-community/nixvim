@@ -10,7 +10,7 @@ let
   cfg = config.plugins.lsp.servers.nixd;
 in
 {
-  # Options: https://github.com/nix-community/nixd/blob/main/docs/user-guide.md#configuration
+  # Options: https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md
   options.plugins.lsp.servers.nixd.settings = {
     # The evaluation section, provide auto completion for dynamic bindings.
     eval = {
@@ -30,32 +30,30 @@ in
     };
 
     formatting = {
-      command = helpers.defaultNullOpts.mkStr "nixpkgs-fmt" ''
+      command = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[nixpkgs-fmt]" ''
         Which command you would like to do formatting.
-        Explicitly set to `"nixpkgs-fmt"` will automatically add `pkgs.nixpkgs-fmt` to the nixvim
-        environment.
+        If this option is explicitly set to `["nixpkgs-fmt"]`, `pkgs.nixpkgs-fmt` will automatically be added
+        to the nixvim environment.
       '';
     };
 
-    options = {
-      enable = helpers.defaultNullOpts.mkBool true ''
-        Enable option completion task.
-        If you are writing a package, disable this
-      '';
-
-      target = {
-        args = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
-          Accept args as "nix eval".
-        '';
-
-        installable = helpers.defaultNullOpts.mkStr "" ''
-          "nix eval"
+    options = helpers.defaultNullOpts.mkNullable (with types; attrsOf (submodule {
+      expr = mkOption {
+        type = types.str;
+        description = ''
+          A Nix expression to evaluate to get a set of options.
+          For a NixOS configuration with a flake this would be:
+          `(builtins.getFlake "/path/to/your/nixos/flake").nixosConfigurations.HOSTNAME.options`
+          For a Home-manager configuratino with a flake this would be:
+          `(builtins.getFlake "/path/to/your/home-manager/flake").homeConfigurations."USER@HOSTNAME".options`
         '';
       };
-    };
+    })) "{}" ''
+      A set of overrides for where to search for defined `option`s.
+    '';
   };
 
   config = mkIf cfg.enable {
-    extraPackages = optional (cfg.settings.formatting.command == "nixpkgs-fmt") pkgs.nixpkgs-fmt;
+    extraPackages = optional (cfg.settings.formatting.command == ["nixpkgs-fmt"]) pkgs.nixpkgs-fmt;
   };
 }
