@@ -126,6 +126,7 @@
     ./ui/zen-mode.nix
 
     ./utils/alpha.nix
+    ./utils/arrow.nix
     ./utils/auto-save.nix
     ./utils/auto-session.nix
     ./utils/autoclose.nix
