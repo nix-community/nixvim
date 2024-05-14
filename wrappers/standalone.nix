@@ -44,7 +44,8 @@ let
   mkNvim =
     mod:
     let
-      config = handleAssertions (mkEval mod).config;
+      evaledModule = mkEval mod;
+      config = handleAssertions evaledModule.config;
     in
     (pkgs.symlinkJoin {
       name = "nixvim";
@@ -56,6 +57,7 @@ let
     })
     // {
       inherit config;
+      inherit (evaledModule) options;
       nixvimExtend =
         extension:
         mkNvim {
