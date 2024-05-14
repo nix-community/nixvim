@@ -7,8 +7,6 @@
 }@args:
 with lib;
 let
-  lspHelpers = import ../helpers.nix { inherit lib config pkgs; };
-
   nixdSettings = import ./nixd.nix args;
 
   servers = [
@@ -660,14 +658,20 @@ let
   ];
 in
 {
-  imports = lib.lists.map lspHelpers.mkLsp servers ++ [
-    ./ccls.nix
-    ./efmls-configs.nix
-    ./pylsp.nix
-    ./rust-analyzer.nix
-    ./svelte.nix
-    ./vls.nix
-  ];
+  imports =
+    let
+      mkLsp = import ./_mk-lsp.nix { inherit lib config pkgs; };
+      lspModules = map mkLsp servers;
+    in
+    lspModules
+    ++ [
+      ./ccls.nix
+      ./efmls-configs.nix
+      ./pylsp.nix
+      ./rust-analyzer.nix
+      ./svelte.nix
+      ./vls.nix
+    ];
 
   config = lib.mkMerge [ nixdSettings.config ];
 }
