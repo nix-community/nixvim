@@ -55,3 +55,16 @@ The `config` used to produce a standalone nixvim derivation can be accessed as a
 
 This may be useful if you want unrelated parts of your NixOS or home-manager configuration to use the same value as something in your nixvim configuration.
 
+## Accessing nixvim options
+
+Given a nixvim derivation it is possible to access the module options using `<derivation>.options`.
+This can be useful to configure `nixd` for example:
+
+```nix
+plugins.lsp.servers.nixd = {
+    enable = true;
+    settings = {
+        options.nixvim.expr = ''(builtins.getFlake "/path/to/flake").packages.${system}.neovimNixvim.options'';
+    };
+};
+```
