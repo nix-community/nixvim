@@ -14,6 +14,7 @@
   settings ? (cfg: cfg),
   settingsOptions ? { },
   extraConfig ? cfg: { },
+  extraOptions ? { },
   ...
 }:
 # returns a module
@@ -87,7 +88,7 @@ in
         type = types.attrsOf types.anything;
         description = "Extra options for the ${name} language server.";
       };
-    };
+    } // extraOptions;
   };
 
   config = mkIf cfg.enable {
