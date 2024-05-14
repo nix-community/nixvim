@@ -602,6 +602,7 @@ let
     {
       name = "tinymist";
       description = "tinymist for Typst";
+      settingsOptions = import ./tinymist-settings.nix { inherit lib helpers; };
     }
     {
       name = "tsserver";
