@@ -635,6 +635,18 @@ let
       # The v language server has to be installed from v and thus is not packaged "as is" in
       # nixpkgs.
       package = null;
+      extraOptions = {
+        autoSetFiletype = mkOption {
+          type = types.bool;
+          description = ''
+            Files with the `.v` extension are not automatically detected as vlang files.
+            If this option is enabled, Nixvim will automatically set  the filetype accordingly.
+          '';
+          default = true;
+          example = false;
+        };
+      };
+      extraConfig = cfg: { filetype.extension = mkIf cfg.autoSetFiletype { v = "vlang"; }; };
     }
     {
       name = "vuels";
@@ -670,7 +682,6 @@ in
       ./pylsp.nix
       ./rust-analyzer.nix
       ./svelte.nix
-      ./vls.nix
     ];
 
   config = lib.mkMerge [ nixdSettings.config ];
