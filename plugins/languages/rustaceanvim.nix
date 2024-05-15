@@ -27,91 +27,123 @@ in
       example = null;
     };
 
-    tools = {
-      executor = helpers.defaultNullOpts.mkNullable (
-        with helpers.nixvimTypes;
-        either strLuaFn (enum [
+    tools =
+      let
+        executors = [
           "termopen"
           "quickfix"
           "toggleterm"
           "vimux"
-        ])
-      ) "termopen" "How to execute terminal commands.";
+          "neotest"
+        ];
+        testExecutors = executors ++ [ "background" ];
+      in
+      {
+        executor = helpers.defaultNullOpts.mkEnum executors "termopen" ''
+          `{execute_command}  (fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts))`
+          The executor to use for runnables/debuggables. 
 
-      onInitialized = helpers.mkNullOrLuaFn ''
-        `fun(health:RustAnalyzerInitializedStatus)`
-        Function that is invoked when the LSP server has finished initializing.
-      '';
+          Example:
+          ```lua
+          {
+            execute_command = function(command, args, cwd, _)
+              require('toggleterm.terminal').Terminal
+                :new({
+                  dir = cwd,
+                  cmd = require('rustaceanvim.shell').make_command_from_args(command, args),
+                  close_on_exit = false,
+                  direction = 'vertical',
+                })
+                :toggle()
+            end
+          }
+          ```
+        '';
 
-      reloadWorkspaceFromCargoToml = helpers.defaultNullOpts.mkBool true ''
-        Automatically call `RustReloadWorkspace` when writing to a `Cargo.toml` file.
-      '';
+        testExecutor = helpers.defaultNullOpts.mkEnum testExecutors "termopen" ''
+          `{execute_command}  (fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts))`
+          The executor to use for runnables that are tests/testables 
+        '';
 
-      hoverActions = {
-        replaceBuiltinHover = helpers.defaultNullOpts.mkBool true ''
-          Whether to replace Neovim's built-in `vim.lsp.buf.hover` with hover actions.
+        crateTestExecutor = helpers.defaultNullOpts.mkEnum testExecutors "termopen" ''
+          `{execute_command}  (fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts))`
+          The executor to use for runnables that are crate test suites (--all-targets)
+        '';
+
+        onInitialized = helpers.mkNullOrLuaFn ''
+          `fun(health:RustAnalyzerInitializedStatus)`
+          Function that is invoked when the LSP server has finished initializing.
+        '';
+
+        reloadWorkspaceFromCargoToml = helpers.defaultNullOpts.mkBool true ''
+          Automatically call `RustReloadWorkspace` when writing to a `Cargo.toml` file.
+        '';
+
+        hoverActions = {
+          replaceBuiltinHover = helpers.defaultNullOpts.mkBool true ''
+            Whether to replace Neovim's built-in `vim.lsp.buf.hover` with hover actions.
+          '';
+        };
+
+        floatWinConfig = helpers.defaultNullOpts.mkAttrsOf types.anything ''
+          {
+            border = [
+              ["╭" "FloatBorder"]
+              ["─" "FloatBorder"]
+              ["╮" "FloatBorder"]
+              ["│" "FloatBorder"]
+              ["╯" "FloatBorder"]
+              ["─" "FloatBorder"]
+              ["╰" "FloatBorder"]
+              ["│" "FloatBorder"]
+            ];
+            max_width = null;
+            max_height = null;
+            auto_focus = false;
+          }
+        '' "Options applied to floating windows. See |api-win_config|.";
+
+        crateGraph = {
+          backend = helpers.defaultNullOpts.mkStr "x11" ''
+            Backend used for displaying the graph.
+            See: https://graphviz.org/docs/outputs
+          '';
+
+          output = helpers.mkNullOrStr ''
+            Where to store the output.
+            No output if unset.
+            Relative path from `cwd`.
+          '';
+
+          full = helpers.defaultNullOpts.mkBool true ''
+            `true` for all crates.io and external crates, false only the local crates.
+          '';
+
+          enabledGraphvizBackends =
+            helpers.defaultNullOpts.mkListOf types.str
+              ''
+                [
+                  "bmp" "cgimage" "canon" "dot" "gv" "xdot" "xdot1.2" "xdot1.4" "eps" "exr" "fig" "gd"
+                  "gd2" "gif" "gtk" "ico" "cmap" "ismap" "imap" "cmapx" "imap_np" "cmapx_np" "jpg"
+                  "jpeg" "jpe" "jp2" "json" "json0" "dot_json" "xdot_json" "pdf" "pic" "pct" "pict"
+                  "plain" "plain-ext" "png" "pov" "ps" "ps2" "psd" "sgi" "svg" "svgz" "tga" "tiff"
+                  "tif" "tk" "vml" "vmlz" "wbmp" "webp" "xlib" "x11"
+                ]
+              ''
+              ''
+                Override the enabled graphviz backends list, used for input validation and autocompletion.
+              '';
+
+          pipe = helpers.mkNullOrStr ''
+            Override the pipe symbol in the shell command.
+            Useful if using a shell that is not supported by this plugin.
+          '';
+        };
+
+        openUrl = helpers.defaultNullOpts.mkLuaFn "require('rustaceanvim.os').open_url" ''
+          If set, overrides how to open URLs.
         '';
       };
-
-      floatWinConfig = helpers.defaultNullOpts.mkAttrsOf types.anything ''
-        {
-          border = [
-            ["╭" "FloatBorder"]
-            ["─" "FloatBorder"]
-            ["╮" "FloatBorder"]
-            ["│" "FloatBorder"]
-            ["╯" "FloatBorder"]
-            ["─" "FloatBorder"]
-            ["╰" "FloatBorder"]
-            ["│" "FloatBorder"]
-          ];
-          max_width = null;
-          max_height = null;
-          auto_focus = false;
-        }
-      '' "Options applied to floating windows. See |api-win_config|.";
-
-      crateGraph = {
-        backend = helpers.defaultNullOpts.mkStr "x11" ''
-          Backend used for displaying the graph.
-          See: https://graphviz.org/docs/outputs
-        '';
-
-        output = helpers.mkNullOrStr ''
-          Where to store the output.
-          No output if unset.
-          Relative path from `cwd`.
-        '';
-
-        full = helpers.defaultNullOpts.mkBool true ''
-          `true` for all crates.io and external crates, false only the local crates.
-        '';
-
-        enabledGraphvizBackends =
-          helpers.defaultNullOpts.mkListOf types.str
-            ''
-              [
-                "bmp" "cgimage" "canon" "dot" "gv" "xdot" "xdot1.2" "xdot1.4" "eps" "exr" "fig" "gd"
-                "gd2" "gif" "gtk" "ico" "cmap" "ismap" "imap" "cmapx" "imap_np" "cmapx_np" "jpg"
-                "jpeg" "jpe" "jp2" "json" "json0" "dot_json" "xdot_json" "pdf" "pic" "pct" "pict"
-                "plain" "plain-ext" "png" "pov" "ps" "ps2" "psd" "sgi" "svg" "svgz" "tga" "tiff"
-                "tif" "tk" "vml" "vmlz" "wbmp" "webp" "xlib" "x11"
-              ]
-            ''
-            ''
-              Override the enabled graphviz backends list, used for input validation and autocompletion.
-            '';
-
-        pipe = helpers.mkNullOrStr ''
-          Override the pipe symbol in the shell command.
-          Useful if using a shell that is not supported by this plugin.
-        '';
-      };
-
-      openUrl = helpers.defaultNullOpts.mkLuaFn "require('rustaceanvim.os').open_url" ''
-        If set, overrides how to open URLs.
-      '';
-    };
 
     server = {
       autoAttach = helpers.mkNullOrStrLuaFnOr types.bool ''
@@ -238,6 +270,8 @@ in
           {
             tools = with tools; {
               inherit executor;
+              test_executor = testExecutor;
+              crate_test_executor = crateTestExecutor;
               on_initialized = onInitialized;
               reload_workspace_from_cargo_toml = reloadWorkspaceFromCargoToml;
               hover_actions = {
