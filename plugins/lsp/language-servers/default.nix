@@ -4,11 +4,9 @@
   config,
   pkgs,
   ...
-}@args:
+}:
 with lib;
 let
-  nixdSettings = import ./nixd.nix args;
-
   servers = [
     {
       name = "ansiblels";
@@ -408,7 +406,10 @@ let
       description = "nixd for Nix";
       package = pkgs.nixd;
       settings = cfg: { nixd = cfg; };
-      settingsOptions = nixdSettings.options;
+      settingsOptions = import ./nixd-settings.nix { inherit lib helpers; };
+      extraConfig = cfg: {
+        extraPackages = optional (cfg.settings.formatting.command == [ "nixpkgs-fmt" ]) pkgs.nixpkgs-fmt;
+      };
     }
     {
       name = "nushell";
@@ -683,6 +684,4 @@ in
       ./rust-analyzer.nix
       ./svelte.nix
     ];
-
-  config = lib.mkMerge [ nixdSettings.config ];
 }
