@@ -29,6 +29,12 @@
           "3" = "<C-l>";
           "4" = "<C-m>";
         };
+        setFile = {
+          "1" = "<A-j>";
+          "2" = "<A-k>";
+          "3" = "<A-l>";
+          "4" = "<A-m>";
+        };
         navNext = "<leader>b";
         navPrev = "<leader>c";
         gotoTerminal = {

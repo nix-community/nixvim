@@ -56,6 +56,18 @@ in
         };
       '';
 
+      setFile = helpers.mkNullOrOption (with types; attrsOf str) ''
+        Keymaps for setting a specific mark.
+
+          Examples:
+          setFile = {
+            "1" = "<C-j>";
+            "2" = "<C-k>";
+            "3" = "<C-l>";
+            "4" = "<C-m>";
+          };
+      '';
+
       navNext = helpers.mkNullOrOption types.str ''
         Keymap for navigating to next mark.";
       '';
@@ -239,6 +251,7 @@ in
           allMappings =
             simpleMappings
             ++ (mkNavMappings "navFile" (id: "function() require('harpoon.ui').nav_file(${id}) end"))
+            ++ (mkNavMappings "setFile" (id: "function() require('harpoon.mark').set_current_at(${id}) end"))
             ++ (mkNavMappings "gotoTerminal" (id: "function() require('harpoon.term').gotoTerminal(${id}) end"))
             ++ (mkNavMappings "tmuxGotoTerminal" (
               id: "function() require('harpoon.tmux').gotoTerminal(${id}) end"
