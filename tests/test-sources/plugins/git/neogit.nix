@@ -1,10 +1,18 @@
 { pkgs, ... }:
 {
   empty = {
+    # The master branch of neogit does not yet support neovim 0.10
+    # https://github.com/NeogitOrg/neogit/issues/1291
+    tests.dontRun = true;
+
     plugins.neogit.enable = true;
   };
 
   defaults = {
+    # The master branch of neogit does not yet support neovim 0.10
+    # https://github.com/NeogitOrg/neogit/issues/1291
+    tests.dontRun = true;
+
     # Otherwise `os.execute('which gpg')` returns an error and make the whole test derivation fail
     # (option `settings.commit_view.verify_commit`)
     extraPackages = [ pkgs.gnupg ];
@@ -235,6 +243,10 @@
   };
 
   example = {
+    # The master branch of neogit does not yet support neovim 0.10
+    # https://github.com/NeogitOrg/neogit/issues/1291
+    tests.dontRun = true;
+
     plugins.neogit = {
       enable = true;
 
