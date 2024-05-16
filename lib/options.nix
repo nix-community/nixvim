@@ -72,7 +72,7 @@ rec {
           ''
       );
 
-    mkNullableWithRaw = type: mkNullable (maybeRaw type);
+    mkNullableWithRaw = type: mkNullable (nixvimTypes.maybeRaw type);
 
     mkStrLuaOr =
       type: default: desc:
@@ -134,24 +134,22 @@ rec {
           ''
       );
 
-    mkNum = default: mkNullable (with nixvimTypes; maybeRaw number) (toString default);
-    mkInt = default: mkNullable (with nixvimTypes; maybeRaw int) (toString default);
+    mkNum = default: mkNullableWithRaw types.number (toString default);
+    mkInt = default: mkNullableWithRaw types.int (toString default);
     # Positive: >0
-    mkPositiveInt = default: mkNullable (with nixvimTypes; maybeRaw ints.positive) (toString default);
+    mkPositiveInt = default: mkNullableWithRaw types.ints.positive (toString default);
     # Unsigned: >=0
-    mkUnsignedInt = default: mkNullable (with nixvimTypes; maybeRaw ints.unsigned) (toString default);
-    mkBool =
-      default: mkNullable (with nixvimTypes; maybeRaw bool) (if default then "true" else "false");
-    mkStr = default: mkNullable (with nixvimTypes; maybeRaw str) ''${builtins.toString default}'';
+    mkUnsignedInt = default: mkNullableWithRaw types.ints.unsigned (toString default);
+    mkBool = default: mkNullableWithRaw types.bool (if default then "true" else "false");
+    mkStr = default: mkNullableWithRaw types.str ''${builtins.toString default}'';
     mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
     mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
     mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
-    mkEnum =
-      enumValues: default: mkNullable (with nixvimTypes; maybeRaw (enum enumValues)) ''"${default}"'';
+    mkEnum = enumValues: default: mkNullableWithRaw (types.enum enumValues) ''"${default}"'';
     mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
     mkBorder =
       default: name: desc:
-      mkNullable (with nixvimTypes; maybeRaw border) default (
+      mkNullableWithRaw nixvimTypes.border default (
         let
           defaultDesc = ''
             Defines the border to use for ${name}.
