@@ -33,6 +33,11 @@
             ];
             click = "v:lua.ScLa";
           }
+          {
+            sign = {
+              name = [ ".*" ];
+            };
+          }
         ];
         clickmod = "c";
         clickhandlers = {
