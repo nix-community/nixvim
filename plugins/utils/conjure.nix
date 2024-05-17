@@ -13,7 +13,7 @@ in
   options.plugins.conjure = {
     enable = mkEnableOption "Conjure";
 
-    package = helpers.mkPackageOption "conjure" pkgs.vimPlugins.conjure;
+    package = helpers.mkPluginPackageOption "conjure" pkgs.vimPlugins.conjure;
   };
 
   config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };

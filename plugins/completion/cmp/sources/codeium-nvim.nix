@@ -13,7 +13,7 @@ in
   meta.maintainers = [ maintainers.GaetanLepage ];
 
   options.plugins.codeium-nvim = helpers.neovim-plugin.extraOptionsOptions // {
-    package = helpers.mkPackageOption "codeium.nvim" pkgs.vimPlugins.codeium-nvim;
+    package = helpers.mkPluginPackageOption "codeium.nvim" pkgs.vimPlugins.codeium-nvim;
 
     configPath = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/codeium/config.json'";}'' "The path to the config file, used to store the API key.";
 

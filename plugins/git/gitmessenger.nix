@@ -12,7 +12,7 @@ with lib;
   options.plugins.gitmessenger = {
     enable = mkEnableOption "gitmessenger";
 
-    package = helpers.mkPackageOption "git-messenger" pkgs.vimPlugins.git-messenger-vim;
+    package = helpers.mkPluginPackageOption "git-messenger" pkgs.vimPlugins.git-messenger-vim;
 
     closeOnCursorMoved = helpers.defaultNullOpts.mkBool true ''
       A popup window is no longer closed automatically when moving a cursor after the window is

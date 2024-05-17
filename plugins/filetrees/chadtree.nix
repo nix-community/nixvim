@@ -14,7 +14,7 @@ in
   options.plugins.chadtree = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "chadtree";
 
-    package = helpers.mkPackageOption "chadtree" pkgs.vimPlugins.chadtree;
+    package = helpers.mkPluginPackageOption "chadtree" pkgs.vimPlugins.chadtree;
 
     options = {
       follow = helpers.defaultNullOpts.mkBool true ''

@@ -13,7 +13,7 @@ in
   options.plugins.nvim-bqf = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-bqf";
 
-    package = helpers.mkPackageOption "nvim-bqf" pkgs.vimPlugins.nvim-bqf;
+    package = helpers.mkPluginPackageOption "nvim-bqf" pkgs.vimPlugins.nvim-bqf;
 
     autoEnable = helpers.defaultNullOpts.mkBool true ''
       Enable nvim-bqf in quickfix window automatically.

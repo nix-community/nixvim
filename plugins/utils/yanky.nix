@@ -13,7 +13,7 @@ in
   options.plugins.yanky = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "yanky.nvim";
 
-    package = helpers.mkPackageOption "yanky.nvim" pkgs.vimPlugins.yanky-nvim;
+    package = helpers.mkPluginPackageOption "yanky.nvim" pkgs.vimPlugins.yanky-nvim;
 
     ring = {
       historyLength = helpers.defaultNullOpts.mkUnsignedInt 100 ''

@@ -79,7 +79,7 @@ in
     // {
       enable = mkEnableOption "diffview";
 
-      package = helpers.mkPackageOption "diffview" pkgs.vimPlugins.diffview-nvim;
+      package = helpers.mkPluginPackageOption "diffview" pkgs.vimPlugins.diffview-nvim;
 
       diffBinaries = mkBool false ''
         Show diffs for binaries

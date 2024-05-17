@@ -15,7 +15,7 @@ in
   options.plugins.autoclose = {
     enable = mkEnableOption "autoclose.nvim";
 
-    package = helpers.mkPackageOption "autoclose.nvim" pkgs.vimPlugins.autoclose-nvim;
+    package = helpers.mkPluginPackageOption "autoclose.nvim" pkgs.vimPlugins.autoclose-nvim;
 
     keys = helpers.mkNullOrOption (with types; attrsOf anything) ''
       Configures various options, such as shortcuts for pairs, what pair of characters to use in the

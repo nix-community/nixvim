@@ -13,7 +13,7 @@ in
   options.plugins.mini = {
     enable = mkEnableOption "mini.nvim";
 
-    package = helpers.mkPackageOption "mini.nvim" pkgs.vimPlugins.mini-nvim;
+    package = helpers.mkPluginPackageOption "mini.nvim" pkgs.vimPlugins.mini-nvim;
 
     modules = mkOption {
       type = with types; attrsOf attrs;

@@ -86,7 +86,7 @@ in
   options.plugins.clipboard-image = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "clipboard-image.nvim";
 
-    package = helpers.mkPackageOption "clipboard-image.nvim" pkgs.vimPlugins.clipboard-image-nvim;
+    package = helpers.mkPluginPackageOption "clipboard-image.nvim" pkgs.vimPlugins.clipboard-image-nvim;
 
     clipboardPackage = mkOption {
       type = with types; nullOr package;

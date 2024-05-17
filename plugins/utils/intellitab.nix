@@ -14,7 +14,7 @@ in
     plugins.intellitab = {
       enable = mkEnableOption "intellitab.nvim";
 
-      package = helpers.mkPackageOption "intellitab.nvim" pkgs.vimPlugins.intellitab-nvim;
+      package = helpers.mkPluginPackageOption "intellitab.nvim" pkgs.vimPlugins.intellitab-nvim;
     };
   };
 

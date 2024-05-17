@@ -14,7 +14,7 @@ in
     plugins.lsp-lines = {
       enable = mkEnableOption "lsp_lines.nvim";
 
-      package = helpers.mkPackageOption "lsp_lines.nvim" pkgs.vimPlugins.lsp_lines-nvim;
+      package = helpers.mkPluginPackageOption "lsp_lines.nvim" pkgs.vimPlugins.lsp_lines-nvim;
 
       currentLine = mkOption {
         type = types.bool;

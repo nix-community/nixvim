@@ -53,7 +53,7 @@ in
     plugins.alpha = {
       enable = mkEnableOption "alpha-nvim";
 
-      package = helpers.mkPackageOption "alpha-nvim" pkgs.vimPlugins.alpha-nvim;
+      package = helpers.mkPluginPackageOption "alpha-nvim" pkgs.vimPlugins.alpha-nvim;
 
       iconsEnabled = mkOption {
         type = types.bool;

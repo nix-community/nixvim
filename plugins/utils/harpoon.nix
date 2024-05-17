@@ -25,7 +25,7 @@ in
   options.plugins.harpoon = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "harpoon";
 
-    package = helpers.mkPackageOption "harpoon" pkgs.vimPlugins.harpoon;
+    package = helpers.mkPluginPackageOption "harpoon" pkgs.vimPlugins.harpoon;
 
     enableTelescope = mkEnableOption "telescope integration";
 

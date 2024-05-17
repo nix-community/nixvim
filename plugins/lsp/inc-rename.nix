@@ -10,7 +10,7 @@ with lib;
   options.plugins.inc-rename = {
     enable = mkEnableOption "inc-rename, a plugin previewing LSP renaming";
 
-    package = helpers.mkPackageOption "inc-rename" pkgs.vimPlugins.inc-rename-nvim;
+    package = helpers.mkPluginPackageOption "inc-rename" pkgs.vimPlugins.inc-rename-nvim;
 
     cmdName = helpers.defaultNullOpts.mkStr "IncRename" "the name of the command";
 

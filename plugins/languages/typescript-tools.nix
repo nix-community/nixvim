@@ -12,7 +12,7 @@ in
 {
   options.plugins.typescript-tools = {
     enable = mkEnableOption "typescript-tools";
-    package = helpers.mkPackageOption "typescript-tools" pkgs.vimPlugins.typescript-tools-nvim;
+    package = helpers.mkPluginPackageOption "typescript-tools" pkgs.vimPlugins.typescript-tools-nvim;
 
     onAttach = helpers.defaultNullOpts.mkLuaFn "__lspOnAttach" "Lua code to run when tsserver attaches to a buffer.";
     handlers = mkOption {

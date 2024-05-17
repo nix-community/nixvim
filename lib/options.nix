@@ -155,12 +155,12 @@ rec {
       mkNullable nixvimTypes.highlight default (if desc == "" then "Highlight settings." else desc);
   };
 
-  mkPackageOption =
+  mkPluginPackageOption =
     name: default:
     mkOption {
       type = types.package;
       inherit default;
-      description = "Plugin to use for ${name}";
+      description = "Which package to use for the ${name} plugin.";
     };
 
   mkSettingsOption =

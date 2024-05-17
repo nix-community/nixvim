@@ -13,7 +13,7 @@ in
   options.plugins.lsp-format = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "lsp-format.nvim";
 
-    package = helpers.mkPackageOption "lsp-format.nvim" pkgs.vimPlugins.lsp-format-nvim;
+    package = helpers.mkPluginPackageOption "lsp-format.nvim" pkgs.vimPlugins.lsp-format-nvim;
 
     setup = mkOption {
       type =

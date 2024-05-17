@@ -13,7 +13,7 @@ in
   options.plugins.luasnip = {
     enable = mkEnableOption "luasnip";
 
-    package = helpers.mkPackageOption "luasnip" pkgs.vimPlugins.luasnip;
+    package = helpers.mkPluginPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 
     extraConfig = mkOption {
       type = types.attrsOf types.anything;

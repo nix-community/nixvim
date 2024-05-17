@@ -18,7 +18,7 @@ with lib;
     {
       enable = mkEnableOption "treesitter-refactor (requires plugins.treesitter.enable to be true)";
 
-      package = helpers.mkPackageOption "treesitter-refactor" pkgs.vimPlugins.nvim-treesitter-refactor;
+      package = helpers.mkPluginPackageOption "treesitter-refactor" pkgs.vimPlugins.nvim-treesitter-refactor;
 
       highlightDefinitions = {
         inherit disable;

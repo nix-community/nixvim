@@ -13,7 +13,7 @@ in
   options = {
     plugins.presence-nvim = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "presence-nvim";
-      package = helpers.mkPackageOption "presence-nvim" pkgs.vimPlugins.presence-nvim;
+      package = helpers.mkPluginPackageOption "presence-nvim" pkgs.vimPlugins.presence-nvim;
 
       # General options.
       autoUpdate = helpers.defaultNullOpts.mkBool true ''

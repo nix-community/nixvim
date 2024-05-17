@@ -13,7 +13,7 @@ in
   options.plugins.quickmath = {
     enable = mkEnableOption "quickmath.nvim";
 
-    package = helpers.mkPackageOption "quickmath.nvim" pkgs.vimPlugins.quickmath-nvim;
+    package = helpers.mkPluginPackageOption "quickmath.nvim" pkgs.vimPlugins.quickmath-nvim;
 
     keymap = {
       key = helpers.mkNullOrOption types.str "Keymap to run the `:Quickmath` command.";

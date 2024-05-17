@@ -16,7 +16,7 @@ in
   options.plugins.navbuddy = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-navbuddy";
 
-    package = helpers.mkPackageOption "nvim-navbuddy" pkgs.vimPlugins.nvim-navbuddy;
+    package = helpers.mkPluginPackageOption "nvim-navbuddy" pkgs.vimPlugins.nvim-navbuddy;
 
     window = {
       border = helpers.defaultNullOpts.mkBorder "rounded" "window border" ''

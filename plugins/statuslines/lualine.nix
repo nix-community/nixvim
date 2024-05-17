@@ -106,7 +106,7 @@ in
     plugins.lualine = {
       enable = mkEnableOption "lualine";
 
-      package = helpers.mkPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
+      package = helpers.mkPluginPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
 
       iconsEnabled = mkOption {
         type = types.bool;

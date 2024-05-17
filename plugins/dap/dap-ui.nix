@@ -59,7 +59,7 @@ in
   options.plugins.dap.extensions.dap-ui = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "dap-ui";
 
-    package = helpers.mkPackageOption "dap-ui" pkgs.vimPlugins.nvim-dap-ui;
+    package = helpers.mkPluginPackageOption "dap-ui" pkgs.vimPlugins.nvim-dap-ui;
 
     controls = {
       enabled = helpers.defaultNullOpts.mkBool true "Enable controls";

@@ -20,7 +20,7 @@ let
       options.plugins.neotest.adapters.${name} = {
         enable = mkEnableOption name;
 
-        package = helpers.mkPackageOption name pkgs.vimPlugins.${packageName};
+        package = helpers.mkPluginPackageOption name pkgs.vimPlugins.${packageName};
 
         settings = helpers.mkSettingsOption { description = "settings for the `${name}` adapter."; };
       };

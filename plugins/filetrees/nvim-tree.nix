@@ -43,7 +43,7 @@ in
   options.plugins.nvim-tree = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-tree";
 
-    package = helpers.mkPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
+    package = helpers.mkPluginPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
 
     disableNetrw = helpers.defaultNullOpts.mkBool false "Disable netrw";
 

@@ -13,7 +13,7 @@ in
   options.plugins.conform-nvim = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "conform-nvim";
 
-    package = helpers.mkPackageOption "conform-nvim" pkgs.vimPlugins.conform-nvim;
+    package = helpers.mkPluginPackageOption "conform-nvim" pkgs.vimPlugins.conform-nvim;
 
     formattersByFt =
       helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "see documentation"

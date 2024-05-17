@@ -55,7 +55,7 @@ in
     // {
       enable = mkEnableOption "neo-tree";
 
-      package = helpers.mkPackageOption "neo-tree" pkgs.vimPlugins.neo-tree-nvim;
+      package = helpers.mkPluginPackageOption "neo-tree" pkgs.vimPlugins.neo-tree-nvim;
 
       sources =
         helpers.defaultNullOpts.mkNullable (types.listOf types.str)

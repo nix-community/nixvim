@@ -13,7 +13,7 @@ in
   options.plugins.coq-thirdparty = {
     enable = mkEnableOption "coq-thirdparty";
 
-    package = helpers.mkPackageOption "coq-thirdparty" pkgs.vimPlugins.coq-thirdparty;
+    package = helpers.mkPluginPackageOption "coq-thirdparty" pkgs.vimPlugins.coq-thirdparty;
 
     sources = mkOption {
       type = types.listOf (

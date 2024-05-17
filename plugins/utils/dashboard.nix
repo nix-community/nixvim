@@ -14,7 +14,7 @@ in
     plugins.dashboard = {
       enable = mkEnableOption "dashboard";
 
-      package = helpers.mkPackageOption "dashboard" pkgs.vimPlugins.dashboard-nvim;
+      package = helpers.mkPluginPackageOption "dashboard" pkgs.vimPlugins.dashboard-nvim;
 
       header = mkOption {
         description = "Header text";

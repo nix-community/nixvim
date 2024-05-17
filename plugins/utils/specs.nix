@@ -13,7 +13,7 @@ in
   options.plugins.specs = {
     enable = mkEnableOption "specs-nvim";
 
-    package = helpers.mkPackageOption "specs-nvim" pkgs.vimPlugins.specs-nvim;
+    package = helpers.mkPluginPackageOption "specs-nvim" pkgs.vimPlugins.specs-nvim;
 
     show_jumps = mkOption {
       type = types.bool;

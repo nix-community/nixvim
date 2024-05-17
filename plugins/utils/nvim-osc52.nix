@@ -10,7 +10,7 @@ with lib;
   options.plugins.nvim-osc52 = {
     enable = mkEnableOption "nvim-osc52, a plugin to use OSC52 sequences to copy/paste";
 
-    package = helpers.mkPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
+    package = helpers.mkPluginPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
 
     maxLength = helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit)";
     silent = helpers.defaultNullOpts.mkBool false "Disable message on successful copy";

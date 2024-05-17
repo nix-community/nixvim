@@ -145,7 +145,7 @@ in
     plugins.fidget = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "fidget-nvim";
 
-      package = helpers.mkPackageOption "fidget-nvim" pkgs.vimPlugins.fidget-nvim;
+      package = helpers.mkPluginPackageOption "fidget-nvim" pkgs.vimPlugins.fidget-nvim;
 
       # Options related to LSP progress subsystem
       progress = {

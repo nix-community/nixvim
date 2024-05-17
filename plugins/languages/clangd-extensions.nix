@@ -98,7 +98,7 @@ in
   options.plugins.clangd-extensions = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "clangd_extensions, plugins implementing clangd LSP extensions";
 
-    package = helpers.mkPackageOption "clangd_extensions.nvim" pkgs.vimPlugins.clangd_extensions-nvim;
+    package = helpers.mkPluginPackageOption "clangd_extensions.nvim" pkgs.vimPlugins.clangd_extensions-nvim;
 
     enableOffsetEncodingWorkaround = mkEnableOption ''
       utf-16 offset encoding. This is used to work around the warning:
