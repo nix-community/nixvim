@@ -69,7 +69,7 @@
     ./languages/python/jupytext.nix
     ./languages/qmk.nix
     ./languages/rust/rust-tools.nix
-    ./languages/rust/rustaceanvim.nix
+    ./languages/rust/rustaceanvim
     ./languages/sniprun.nix
     ./languages/tagbar.nix
     ./languages/texpresso.nix
