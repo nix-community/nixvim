@@ -30,10 +30,8 @@ in
 
       package = helpers.mkPluginPackageOption "todo-comments" pkgs.vimPlugins.todo-comments-nvim;
 
-      ripgrepPackage = mkOption {
-        type = with types; nullOr package;
+      ripgrepPackage = helpers.mkPackageOption {
         default = pkgs.ripgrep;
-        example = null;
         description = "Which package (if any) to be added for file search support in todo-comments.";
       };
 

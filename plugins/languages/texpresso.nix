@@ -16,14 +16,9 @@ helpers.vim-plugin.mkVimPlugin config {
   maintainers = [ maintainers.nickhu ];
 
   extraOptions = {
-    texpressoPackage = mkOption {
-      type = with types; nullOr package;
+    texpressoPackage = helpers.mkPackageOption {
+      name = "texpresso";
       default = pkgs.texpresso;
-      example = null;
-      description = ''
-        The `texpresso` package to use.
-        Set to `null` to not install any package.
-      '';
     };
   };
 
