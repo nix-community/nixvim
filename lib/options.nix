@@ -57,7 +57,7 @@ rec {
 
   defaultNullOpts = rec {
     # Description helpers
-    mkDefaultDesc = defaultValue: "default: `${toString defaultValue}`";
+    mkDefaultDesc = defaultValue: "Plugin default: `${toString defaultValue}`";
     mkDesc =
       default: desc:
       let
