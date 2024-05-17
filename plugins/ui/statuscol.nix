@@ -43,7 +43,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           freeformType = with types; attrsOf anything;
           options = {
             text = mkOption {
-              type = with helpers.nixvimTypes; listOf (either str rawLua);
+              type = with helpers.nixvimTypes; nullOr (listOf (either str rawLua));
+              default = null;
               description = "Segment text.";
               example = [ "%C" ];
             };
