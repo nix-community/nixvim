@@ -56,83 +56,39 @@ rec {
     };
 
   defaultNullOpts = rec {
+    # Description helpers
+    mkDefaultDesc = defaultValue: "default: `${toString defaultValue}`";
+    mkDesc =
+      default: desc:
+      let
+        defaultDesc = mkDefaultDesc default;
+      in
+      if desc == "" then
+        defaultDesc
+      else
+        ''
+          ${desc}
+
+          ${defaultDesc}
+        '';
+
     mkNullable =
       type: default: desc:
-      mkNullOrOption type (
-        let
-          defaultDesc = "default: `${default}`";
-        in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
-            ${desc}
-
-            ${defaultDesc}
-          ''
-      );
+      mkNullOrOption type (mkDesc default desc);
 
     mkNullableWithRaw = type: mkNullable (nixvimTypes.maybeRaw type);
 
     mkStrLuaOr =
       type: default: desc:
-      mkNullOrStrLuaOr type (
-        let
-          defaultDesc = "default: `${default}`";
-        in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
-            ${desc}
-
-            ${defaultDesc}
-          ''
-      );
+      mkNullOrStrLuaOr type (mkDesc default desc);
 
     mkStrLuaFnOr =
       type: default: desc:
-      mkNullOrStrLuaFnOr type (
-        let
-          defaultDesc = "default: `${default}`";
-        in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
-            ${desc}
+      mkNullOrStrLuaFnOr type (mkDesc default desc);
 
-            ${defaultDesc}
-          ''
-      );
+    mkLua = default: desc: mkNullOrLua (mkDesc default desc);
 
-    mkLua =
-      default: desc:
-      mkNullOrLua (
-        (optionalString (desc != "") ''
-          ${desc}
-
-        '')
-        + ''
-          default: `${default}`
-        ''
-      );
-
-    mkLuaFn =
-      default: desc:
-      let
-        defaultDesc = "default: `${default}`";
-      in
-      mkNullOrLuaFn (
-        if desc == "" then
-          defaultDesc
-        else
-          ''
-            ${desc}
-
-            ${defaultDesc}
-          ''
-      );
+    mkLuaFn = default: desc: mkNullOrLuaFn (mkDesc default desc);
 
     mkNum = default: mkNullableWithRaw types.number (toString default);
     mkInt = default: mkNullableWithRaw types.int (toString default);
@@ -181,18 +137,7 @@ rec {
         apply = mapNullable (
           value: if isInt value then value else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
         );
-        description =
-          let
-            defaultDesc = "default: `${toString default}`";
-          in
-          if desc == "" then
-            defaultDesc
-          else
-            ''
-              ${desc}
-
-              ${defaultDesc}
-            '';
+        description = mkDesc default desc;
       };
     mkLogLevel =
       default: desc:
@@ -202,18 +147,7 @@ rec {
         apply = mapNullable (
           value: if isInt value then value else mkRaw "vim.log.levels.${strings.toUpper value}"
         );
-        description =
-          let
-            defaultDesc = "default: `${toString default}`";
-          in
-          if desc == "" then
-            defaultDesc
-          else
-            ''
-              ${desc}
-
-              ${defaultDesc}
-            '';
+        description = mkDesc default desc;
       };
 
     mkHighlight =
