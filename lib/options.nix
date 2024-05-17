@@ -155,6 +155,26 @@ rec {
       mkNullable nixvimTypes.highlight default (if desc == "" then "Highlight settings." else desc);
   };
 
+  mkPackageOption =
+    {
+      name ? null, # Can be null if a custom description is given.
+      default,
+      description ? null,
+      example ? null,
+    }:
+    mkOption {
+      type = with types; nullOr package;
+      inherit default example;
+      description =
+        if description == null then
+          ''
+            Which package to use for `${name}`.
+            Set to `null` to disable its automatic installation.
+          ''
+        else
+          description;
+    };
+
   mkPluginPackageOption =
     name: default:
     mkOption {

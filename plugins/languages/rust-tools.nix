@@ -13,10 +13,9 @@ in
   options.plugins.rust-tools = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "rust tools plugins";
     package = helpers.mkPluginPackageOption "rust-tools" pkgs.vimPlugins.rust-tools-nvim;
-    serverPackage = mkOption {
-      type = with types; nullOr package;
+    serverPackage = helpers.mkPackageOption {
+      name = "rust-analyzer";
       default = pkgs.rust-analyzer;
-      description = "Package to use for rust-analyzer. rust-analyzer will not be installed if this is set to `null`";
     };
 
     executor = helpers.defaultNullOpts.mkEnumFirstDefault [

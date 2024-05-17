@@ -37,10 +37,8 @@ in
         description = "Either \"all\" or a list of languages";
       };
 
-      gccPackage = mkOption {
-        type = with types; nullOr package;
+      gccPackage = helpers.mkPackageOption {
         default = if cfg.nixGrammars then null else pkgs.gcc;
-        example = null;
         description = ''
           Which package (if any) to be added as the GCC compiler.
           This is required to build grammars if you are not using `nixGrammars`.

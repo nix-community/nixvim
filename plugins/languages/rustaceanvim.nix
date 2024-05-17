@@ -17,14 +17,9 @@ in
 
     package = helpers.mkPluginPackageOption "rustaceanvim" pkgs.vimPlugins.rustaceanvim;
 
-    rustAnalyzerPackage = mkOption {
-      type = with types; nullOr package;
+    rustAnalyzerPackage = helpers.mkPackageOption {
+      name = "rust-analyzer";
       default = pkgs.rust-analyzer;
-      description = ''
-        Which package to use for `rust-analyzer`.
-        Set to `null` to disable its automatic installation.
-      '';
-      example = null;
     };
 
     tools =
@@ -41,7 +36,7 @@ in
       {
         executor = helpers.defaultNullOpts.mkEnum executors "termopen" ''
           `{execute_command}  (fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts))`
-          The executor to use for runnables/debuggables. 
+          The executor to use for runnables/debuggables.
 
           Example:
           ```lua
@@ -62,7 +57,7 @@ in
 
         testExecutor = helpers.defaultNullOpts.mkEnum testExecutors "termopen" ''
           `{execute_command}  (fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts))`
-          The executor to use for runnables that are tests/testables 
+          The executor to use for runnables that are tests/testables
         '';
 
         crateTestExecutor = helpers.defaultNullOpts.mkEnum testExecutors "termopen" ''

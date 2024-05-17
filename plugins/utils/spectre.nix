@@ -246,8 +246,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       replaceDefaultPackage = replacePackages.${toString userCommandSettings.replace.cmd} or null;
     in
     {
-      findPackage = mkOption {
-        type = with types; nullOr package;
+      findPackage = helpers.mkPackageOption {
         default = findDefaultPackage;
         description = ''
           Which package to install for the find command.
@@ -257,8 +256,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
       };
 
-      replacePackage = mkOption {
-        type = with types; nullOr package;
+      replacePackage = helpers.mkPackageOption {
         default = replaceDefaultPackage;
         description = ''
           Which package to install for the find command.

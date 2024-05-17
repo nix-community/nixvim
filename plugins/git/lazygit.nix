@@ -64,24 +64,14 @@ helpers.vim-plugin.mkVimPlugin config {
   };
 
   extraOptions = {
-    gitPackage = mkOption {
-      type = with types; nullOr package;
+    gitPackage = helpers.mkPackageOption {
+      name = "git";
       default = pkgs.git;
-      example = null;
-      description = ''
-        The `git` package to use.
-        Set to `null` to not install any package.
-      '';
     };
 
-    lazygitPackage = mkOption {
-      type = with types; nullOr package;
+    lazygitPackage = helpers.mkPackageOption {
+      name = "lazygit";
       default = pkgs.lazygit;
-      example = null;
-      description = ''
-        The `lazygit` package to use.
-        Set to `null` to not install any package.
-      '';
     };
   };
 

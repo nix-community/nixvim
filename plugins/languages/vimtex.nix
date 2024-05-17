@@ -56,14 +56,9 @@ helpers.vim-plugin.mkVimPlugin config {
   };
 
   extraOptions = {
-    texlivePackage = mkOption {
-      type = with types; nullOr package;
+    texlivePackage = helpers.mkPackageOption {
+      name = "texlive";
       default = pkgs.texlive.combined.scheme-medium;
-      example = null;
-      description = ''
-        The package to install for `textlive.
-        Set to `null` for not installing `texlive` at all.
-      '';
     };
   };
 

@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  helpers,
   ...
 }:
 with lib;
@@ -12,14 +13,9 @@ in
   meta.maintainers = [ maintainers.GaetanLepage ];
 
   options.plugins.cmp-fish = {
-    fishPackage = mkOption {
-      type = with types; nullOr package;
+    fishPackage = helpers.mkPackageOption {
+      name = "fish";
       default = pkgs.fish;
-      example = "null";
-      description = ''
-        Which package to use for `fish`.
-        Set to `null` to disable its automatic installation.
-      '';
     };
   };
 

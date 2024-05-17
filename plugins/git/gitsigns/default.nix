@@ -281,13 +281,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     ];
 
   extraOptions = {
-    gitPackage = mkOption {
-      type = with types; nullOr package;
+    gitPackage = helpers.mkPackageOption {
+      name = "git";
       default = pkgs.git;
-      description = ''
-        Which package to use for `git`.
-        Set to `null` to prevent the installation.
-      '';
     };
   };
 

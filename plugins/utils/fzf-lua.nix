@@ -41,13 +41,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   inherit settingsOptions settingsExample;
 
   extraOptions = {
-    fzfPackage = mkOption {
-      type = with types; nullOr package;
+    fzfPackage = helpers.mkPackageOption {
+      name = "fzf";
       default = pkgs.fzf;
-      description = ''
-        The fzf package to use.
-        Set to `null` to not install any package.
-      '';
       example = pkgs.skim;
     };
 

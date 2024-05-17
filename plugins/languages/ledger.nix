@@ -46,13 +46,9 @@ mkVimPlugin config {
     ];
 
   extraOptions = {
-    ledgerPackage = mkOption {
-      type = with types; nullOr package;
+    ledgerPackage = helpers.mkPackageOption {
+      name = "ledger";
       default = pkgs.ledger;
-      description = ''
-        The package to install for `ledger`.
-        Set to `null` for disabling installation.
-      '';
     };
   };
 
