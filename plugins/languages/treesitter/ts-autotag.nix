@@ -10,7 +10,7 @@ with lib;
   options.plugins.ts-autotag = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-ts-autotag";
 
-    package = helpers.mkPackageOption "ts-autotag" pkgs.vimPlugins.nvim-ts-autotag;
+    package = helpers.mkPluginPackageOption "ts-autotag" pkgs.vimPlugins.nvim-ts-autotag;
 
     filetypes = helpers.defaultNullOpts.mkNullable (with types; listOf str) ''
       [

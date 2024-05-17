@@ -19,7 +19,7 @@ in
       // {
         enable = mkEnableOption "copilot.lua";
 
-        package = helpers.mkPackageOption "copilot.lua" pkgs.vimPlugins.copilot-lua;
+        package = helpers.mkPluginPackageOption "copilot.lua" pkgs.vimPlugins.copilot-lua;
 
         panel = {
           enabled = helpers.defaultNullOpts.mkBool true "Enable the panel.";

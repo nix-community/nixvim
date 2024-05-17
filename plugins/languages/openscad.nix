@@ -13,7 +13,7 @@ in
   options.plugins.openscad = {
     enable = mkEnableOption "openscad.nvim, a plugin to manage OpenSCAD files";
 
-    package = helpers.mkPackageOption "openscad.nvim" pkgs.vimPlugins.openscad-nvim;
+    package = helpers.mkPluginPackageOption "openscad.nvim" pkgs.vimPlugins.openscad-nvim;
 
     fuzzyFinder = helpers.defaultNullOpts.mkEnum [
       "skim"

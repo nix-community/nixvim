@@ -13,7 +13,7 @@ in
   options.plugins.nvim-ufo = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-ufo";
 
-    package = helpers.mkPackageOption "nvim-ufo" pkgs.vimPlugins.nvim-ufo;
+    package = helpers.mkPluginPackageOption "nvim-ufo" pkgs.vimPlugins.nvim-ufo;
 
     openFoldHlTimeout = helpers.defaultNullOpts.mkInt 400 ''
       Time in millisecond between the range to be highlgihted and to be cleared

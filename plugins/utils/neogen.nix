@@ -47,7 +47,7 @@ in
   options.plugins.neogen = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "neogen";
 
-    package = helpers.mkPackageOption "neogen" pkgs.vimPlugins.neogen;
+    package = helpers.mkPluginPackageOption "neogen" pkgs.vimPlugins.neogen;
 
     keymaps = mapAttrs (
       optionsName: properties: helpers.mkNullOrOption types.str properties.description

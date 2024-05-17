@@ -10,7 +10,7 @@ with lib;
   options.plugins.vim-matchup = {
     enable = mkEnableOption "vim-matchup";
 
-    package = helpers.mkPackageOption "vim-matchup" pkgs.vimPlugins.vim-matchup;
+    package = helpers.mkPluginPackageOption "vim-matchup" pkgs.vimPlugins.vim-matchup;
 
     treesitterIntegration = {
       enable = mkEnableOption "treesitter integration";

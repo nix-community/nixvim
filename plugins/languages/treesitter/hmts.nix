@@ -15,7 +15,7 @@ in
   options.plugins.hmts = {
     enable = mkEnableOption "hmts.nvim";
 
-    package = helpers.mkPackageOption "hmts.nvim" pkgs.vimPlugins.hmts-nvim;
+    package = helpers.mkPluginPackageOption "hmts.nvim" pkgs.vimPlugins.hmts-nvim;
   };
 
   config = mkIf cfg.enable {

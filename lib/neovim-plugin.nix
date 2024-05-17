@@ -95,7 +95,7 @@ rec {
       options.${namespace}.${name} = {
         enable = mkEnableOption originalName;
 
-        package = nixvimOptions.mkPackageOption originalName defaultPackage;
+        package = nixvimOptions.mkPluginPackageOption originalName defaultPackage;
 
         settings = mkSettingsOption {
           pluginName = name;

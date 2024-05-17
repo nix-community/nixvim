@@ -15,7 +15,7 @@ in
   options.plugins.sniprun = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "sniprun";
 
-    package = helpers.mkPackageOption "sniprun" pkgs.vimPlugins.sniprun;
+    package = helpers.mkPluginPackageOption "sniprun" pkgs.vimPlugins.sniprun;
 
     selectedInterpreters = mkList "[]" "use those instead of the default for the current filetype";
 

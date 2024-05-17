@@ -95,7 +95,7 @@ in
     plugins.bufferline = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "bufferline";
 
-      package = helpers.mkPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
+      package = helpers.mkPluginPackageOption "bufferline" pkgs.vimPlugins.bufferline-nvim;
 
       mode = helpers.defaultNullOpts.mkEnumFirstDefault [
         "buffers"

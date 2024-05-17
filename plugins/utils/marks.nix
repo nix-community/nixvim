@@ -15,7 +15,7 @@ in
   options.plugins.marks = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "marks.nvim";
 
-    package = helpers.mkPackageOption "marks.nvim" pkgs.vimPlugins.marks-nvim;
+    package = helpers.mkPluginPackageOption "marks.nvim" pkgs.vimPlugins.marks-nvim;
 
     builtinMarks =
       helpers.defaultNullOpts.mkListOf

@@ -83,7 +83,7 @@ in
   options.plugins.barbar = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "barbar.nvim";
 
-    package = helpers.mkPackageOption "barbar" pkgs.vimPlugins.barbar-nvim;
+    package = helpers.mkPluginPackageOption "barbar" pkgs.vimPlugins.barbar-nvim;
 
     animation = helpers.defaultNullOpts.mkBool true "Enable/disable animations";
 

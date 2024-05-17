@@ -44,7 +44,7 @@ rec {
       options.plugins.telescope.extensions.${name} = {
         enable = mkEnableOption "the `${name}` telescope extension";
 
-        package = helpers.mkPackageOption name defaultPackage;
+        package = helpers.mkPluginPackageOption name defaultPackage;
 
         settings = helpers.mkSettingsOption {
           description = "settings for the `${name}` telescope extension.";

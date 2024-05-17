@@ -14,7 +14,7 @@ in
     colorschemes.dracula = {
       enable = mkEnableOption "dracula";
 
-      package = helpers.mkPackageOption "dracula" pkgs.vimPlugins.dracula-vim;
+      package = helpers.mkPluginPackageOption "dracula" pkgs.vimPlugins.dracula-vim;
 
       bold = mkOption {
         type = types.bool;

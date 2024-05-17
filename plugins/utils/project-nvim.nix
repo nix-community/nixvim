@@ -30,7 +30,7 @@ in
   options.plugins.project-nvim = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "project.nvim";
 
-    package = helpers.mkPackageOption "project-nvim" pkgs.vimPlugins.project-nvim;
+    package = helpers.mkPluginPackageOption "project-nvim" pkgs.vimPlugins.project-nvim;
 
     manualMode = helpers.defaultNullOpts.mkBool false ''
       Manual mode doesn't automatically change your root directory, so you have the option to

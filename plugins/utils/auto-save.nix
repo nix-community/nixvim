@@ -13,7 +13,7 @@ in
   options.plugins.auto-save = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "auto-save";
 
-    package = helpers.mkPackageOption "auto-save" pkgs.vimPlugins.auto-save-nvim;
+    package = helpers.mkPluginPackageOption "auto-save" pkgs.vimPlugins.auto-save-nvim;
 
     keymaps = {
       silent = mkOption {

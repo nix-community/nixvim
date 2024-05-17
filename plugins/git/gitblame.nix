@@ -14,7 +14,7 @@ in
     plugins.gitblame = {
       enable = mkEnableOption "gitblame";
 
-      package = helpers.mkPackageOption "gitblame" pkgs.vimPlugins.git-blame-nvim;
+      package = helpers.mkPluginPackageOption "gitblame" pkgs.vimPlugins.git-blame-nvim;
 
       messageTemplate = helpers.defaultNullOpts.mkStr "  <author> • <date> • <summary>" "The template for the blame message that will be shown.";
 

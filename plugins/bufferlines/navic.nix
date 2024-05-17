@@ -13,7 +13,7 @@ in
   options.plugins.navic = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-navic";
 
-    package = helpers.mkPackageOption "nvim-navic" pkgs.vimPlugins.nvim-navic;
+    package = helpers.mkPluginPackageOption "nvim-navic" pkgs.vimPlugins.nvim-navic;
 
     icons = mapAttrs (name: default: helpers.defaultNullOpts.mkStr default "icon for ${name}.") {
       File = "󰈙 ";

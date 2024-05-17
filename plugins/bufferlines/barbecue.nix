@@ -14,7 +14,7 @@ in
   options.plugins.barbecue = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "barbecue-nvim";
 
-    package = helpers.mkPackageOption "barbecue-nvim" pkgs.vimPlugins.barbecue-nvim;
+    package = helpers.mkPluginPackageOption "barbecue-nvim" pkgs.vimPlugins.barbecue-nvim;
 
     attachNavic = helpers.defaultNullOpts.mkBool true ''
       Whether to attach navic to language servers automatically.

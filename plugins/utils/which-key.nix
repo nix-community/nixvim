@@ -10,7 +10,7 @@ with lib;
   options.plugins.which-key = {
     enable = mkEnableOption "which-key.nvim, a plugin that popup with possible key bindings of the command you started typing";
 
-    package = helpers.mkPackageOption "which-key-nvim" pkgs.vimPlugins.which-key-nvim;
+    package = helpers.mkPluginPackageOption "which-key-nvim" pkgs.vimPlugins.which-key-nvim;
 
     registrations = mkOption {
       type = with types; attrsOf anything;

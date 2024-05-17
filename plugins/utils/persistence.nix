@@ -10,7 +10,7 @@ with lib;
   options.plugins.persistence = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "persistence.nvim";
 
-    package = helpers.mkPackageOption "persistence.nvim" pkgs.vimPlugins.persistence-nvim;
+    package = helpers.mkPluginPackageOption "persistence.nvim" pkgs.vimPlugins.persistence-nvim;
 
     dir =
       helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)

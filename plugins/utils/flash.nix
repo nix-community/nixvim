@@ -278,7 +278,7 @@ in
     // {
       enable = mkEnableOption "flash.nvim";
 
-      package = helpers.mkPackageOption "flash.nvim" pkgs.vimPlugins.flash-nvim;
+      package = helpers.mkPluginPackageOption "flash.nvim" pkgs.vimPlugins.flash-nvim;
 
       modes =
         let

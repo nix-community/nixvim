@@ -14,7 +14,7 @@ in
     plugins.git-worktree = {
       enable = mkEnableOption "git-worktree";
 
-      package = helpers.mkPackageOption "git-worktree" pkgs.vimPlugins.git-worktree-nvim;
+      package = helpers.mkPluginPackageOption "git-worktree" pkgs.vimPlugins.git-worktree-nvim;
 
       enableTelescope = mkEnableOption "telescope integration";
 

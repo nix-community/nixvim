@@ -14,7 +14,7 @@ in
   options.plugins.dap.extensions.dap-python = {
     enable = mkEnableOption "dap-python";
 
-    package = helpers.mkPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
+    package = helpers.mkPluginPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
 
     adapterPythonPath = mkOption {
       default = "${pkgs.python3.withPackages (ps: with ps; [ debugpy ])}/bin/python3";

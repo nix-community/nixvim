@@ -13,7 +13,7 @@ in
   options.plugins.auto-session = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "auto-session";
 
-    package = helpers.mkPackageOption "auto-session" pkgs.vimPlugins.auto-session;
+    package = helpers.mkPluginPackageOption "auto-session" pkgs.vimPlugins.auto-session;
 
     logLevel = helpers.defaultNullOpts.mkEnum [
       "debug"

@@ -15,7 +15,7 @@ in
   options.plugins.rustaceanvim = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "rustaceanvim";
 
-    package = helpers.mkPackageOption "rustaceanvim" pkgs.vimPlugins.rustaceanvim;
+    package = helpers.mkPluginPackageOption "rustaceanvim" pkgs.vimPlugins.rustaceanvim;
 
     rustAnalyzerPackage = mkOption {
       type = with types; nullOr package;

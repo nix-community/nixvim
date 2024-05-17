@@ -13,7 +13,7 @@ in
   options.plugins.better-escape = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "better-escape.nvim";
 
-    package = helpers.mkPackageOption "better-escape.nvim" pkgs.vimPlugins.better-escape-nvim;
+    package = helpers.mkPluginPackageOption "better-escape.nvim" pkgs.vimPlugins.better-escape-nvim;
 
     mapping = helpers.mkNullOrOption (with types; listOf str) ''
       List of mappings to use to enter escape mode.

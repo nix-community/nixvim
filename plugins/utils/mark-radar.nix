@@ -13,7 +13,7 @@ in
   options.plugins.mark-radar = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "mark-radar";
 
-    package = helpers.mkPackageOption "mark-radar" pkgs.vimPlugins.mark-radar-nvim;
+    package = helpers.mkPluginPackageOption "mark-radar" pkgs.vimPlugins.mark-radar-nvim;
 
     setDefaultMappings = helpers.defaultNullOpts.mkBool true "Whether to set default mappings.";
 

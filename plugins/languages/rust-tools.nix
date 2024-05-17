@@ -12,7 +12,7 @@ in
 {
   options.plugins.rust-tools = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "rust tools plugins";
-    package = helpers.mkPackageOption "rust-tools" pkgs.vimPlugins.rust-tools-nvim;
+    package = helpers.mkPluginPackageOption "rust-tools" pkgs.vimPlugins.rust-tools-nvim;
     serverPackage = mkOption {
       type = with types; nullOr package;
       default = pkgs.rust-analyzer;

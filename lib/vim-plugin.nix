@@ -43,7 +43,7 @@ with lib;
         if defaultPackage == null then
           { }
         else
-          { package = nixvimOptions.mkPackageOption name defaultPackage; };
+          { package = nixvimOptions.mkPluginPackageOption name defaultPackage; };
 
       createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
 

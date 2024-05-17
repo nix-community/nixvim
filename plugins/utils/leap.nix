@@ -13,7 +13,7 @@ in
   options.plugins.leap = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "leap.nvim";
 
-    package = helpers.mkPackageOption "leap.nvim" pkgs.vimPlugins.leap-nvim;
+    package = helpers.mkPluginPackageOption "leap.nvim" pkgs.vimPlugins.leap-nvim;
 
     addDefaultMappings = mkOption {
       type = types.bool;

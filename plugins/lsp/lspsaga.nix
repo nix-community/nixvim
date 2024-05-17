@@ -49,7 +49,7 @@ in
     plugins.lspsaga = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "lspsaga.nvim";
 
-      package = helpers.mkPackageOption "lspsaga" pkgs.vimPlugins.lspsaga-nvim;
+      package = helpers.mkPluginPackageOption "lspsaga" pkgs.vimPlugins.lspsaga-nvim;
 
       ui = {
         border = helpers.defaultNullOpts.mkBorder "single" "lspsaga" "";

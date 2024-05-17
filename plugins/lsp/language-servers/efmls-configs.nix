@@ -128,7 +128,7 @@ in
   options.plugins.efmls-configs = {
     enable = mkEnableOption "efmls-configs, premade configurations for efm-langserver";
 
-    package = helpers.mkPackageOption "efmls-configs-nvim" pkgs.vimPlugins.efmls-configs-nvim;
+    package = helpers.mkPluginPackageOption "efmls-configs-nvim" pkgs.vimPlugins.efmls-configs-nvim;
 
     externallyManagedPackages = mkOption {
       type = types.either (types.enum [ "all" ]) (types.listOf types.str);

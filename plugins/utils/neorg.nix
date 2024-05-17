@@ -13,7 +13,7 @@ with lib;
   options.plugins.neorg = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "neorg";
 
-    package = helpers.mkPackageOption "neorg" pkgs.vimPlugins.neorg;
+    package = helpers.mkPluginPackageOption "neorg" pkgs.vimPlugins.neorg;
 
     lazyLoading = helpers.defaultNullOpts.mkBool false '''';
 

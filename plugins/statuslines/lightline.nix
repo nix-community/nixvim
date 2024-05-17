@@ -14,7 +14,7 @@ in
     plugins.lightline = {
       enable = mkEnableOption "lightline";
 
-      package = helpers.mkPackageOption "lightline" pkgs.vimPlugins.lightline-vim;
+      package = helpers.mkPluginPackageOption "lightline" pkgs.vimPlugins.lightline-vim;
 
       colorscheme = mkOption {
         type = with types; nullOr str;

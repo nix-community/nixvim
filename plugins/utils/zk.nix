@@ -10,7 +10,7 @@ with lib;
   options.plugins.zk = {
     enable = mkEnableOption "zk.nvim, a plugin to integrate with zk";
 
-    package = helpers.mkPackageOption "zk.nvim" pkgs.vimPlugins.zk-nvim;
+    package = helpers.mkPluginPackageOption "zk.nvim" pkgs.vimPlugins.zk-nvim;
 
     picker =
       helpers.defaultNullOpts.mkEnumFirstDefault

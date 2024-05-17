@@ -10,7 +10,7 @@ with lib;
   options.plugins.refactoring = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "refactoring.nvim";
 
-    package = helpers.mkPackageOption "refactoring.nvim" pkgs.vimPlugins.refactoring-nvim;
+    package = helpers.mkPluginPackageOption "refactoring.nvim" pkgs.vimPlugins.refactoring-nvim;
 
     promptFuncReturnType =
       helpers.defaultNullOpts.mkNullable (with types; attrsOf bool)

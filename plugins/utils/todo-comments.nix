@@ -28,7 +28,7 @@ in
     plugins.todo-comments = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "todo-comments";
 
-      package = helpers.mkPackageOption "todo-comments" pkgs.vimPlugins.todo-comments-nvim;
+      package = helpers.mkPluginPackageOption "todo-comments" pkgs.vimPlugins.todo-comments-nvim;
 
       ripgrepPackage = mkOption {
         type = with types; nullOr package;
