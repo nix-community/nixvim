@@ -282,7 +282,7 @@ in
             };
             server = with server; {
               auto_attach = autoAttach;
-              on_attach = onAttach;
+              on_attach = if onAttach == null then helpers.mkRaw "__lspOnAttach" else onAttach;
               inherit
                 cmd
                 settings
