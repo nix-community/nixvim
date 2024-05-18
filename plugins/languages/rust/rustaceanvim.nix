@@ -175,7 +175,7 @@ in
 
       settings =
         helpers.mkNullOrStrLuaFnOr
-          (types.submodule { options = import ../lsp/language-servers/rust-analyzer-config.nix lib pkgs; })
+          (types.submodule { options = import ../../lsp/language-servers/rust-analyzer-config.nix lib pkgs; })
           ''
             Setting passed to rust-analyzer.
             Defaults to a function that looks for a `rust-analyzer.json` file or returns an empty table.
