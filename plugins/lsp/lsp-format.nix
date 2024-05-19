@@ -45,7 +45,7 @@ in
         });
       description = "The setup option maps |filetypes| to format options.";
       example = {
-        gopls = {
+        go = {
           exclude = [ "gopls" ];
           order = [
             "gopls"
