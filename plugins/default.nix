@@ -52,6 +52,7 @@
     ./git/gitsigns
     ./git/lazygit.nix
     ./git/neogit
+    ./git/octo.nix
 
     ./languages/clangd-extensions.nix
     ./languages/debugprint.nix
