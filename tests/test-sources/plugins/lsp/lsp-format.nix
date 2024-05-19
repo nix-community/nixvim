@@ -21,7 +21,7 @@
         enable = true;
 
         setup = {
-          gopls = {
+          go = {
             exclude = [ "gopls" ];
             order = [
               "gopls"
