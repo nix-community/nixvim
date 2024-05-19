@@ -13,10 +13,6 @@ let
 in
 {
   filewatcher = {
-    interval = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
-      Interval between two refreshes.
-    '';
-
     enabled = helpers.defaultNullOpts.mkBool true ''
       When enabled, will watch the `.git/` directory for changes and refresh the status buffer
       in response to filesystem events.
@@ -312,8 +308,18 @@ in
           q = "Close";
           "<c-c><c-c>" = "Submit";
           "<c-c><c-k>" = "Abort";
+          "<m-p>" = "PrevMessage";
+          "<m-n>" = "NextMessage";
+          "<m-r>" = "ResetMessage";
         }
       '' "Mappings for the commit editor.";
+
+      commit_editor_I = mkMappingOption ''
+        {
+          "<c-c><c-c>" = "Submit";
+          "<c-c><c-k>" = "Abort";
+        }
+      '' "Mappings for the commit editor (insert mode)";
 
       rebase_editor = mkMappingOption ''
         {
@@ -331,8 +337,17 @@ in
           gj = "MoveDown";
           "<c-c><c-c>" = "Submit";
           "<c-c><c-k>" = "Abort";
+          "[c" = "OpenOrScrollUp";
+          "]c" = "OpenOrScrollDown";
         }
       '' "Mappings for the rebase editor.";
+
+      rebase_editor_I = mkMappingOption ''
+        {
+          "<c-c><c-c>" = "Submit";
+          "<c-c><c-k>" = "Abort";
+        }
+      '' "Mappings for the rebase editor (insert mode).";
 
       finder = mkMappingOption ''
         {
@@ -346,6 +361,12 @@ in
           "<tab>" = "MultiselectToggleNext";
           "<s-tab>" = "MultiselectTogglePrevious";
           "<c-j>" = "NOP";
+          "<ScrollWheelDown>" = "ScrollWheelDown";
+          "<ScrollWheelUp>" = "ScrollWheelUp";
+          "<ScrollWheelLeft>" = "NOP";
+          "<ScrollWheelRight>" = "NOP";
+          "<LeftMouse>" = "MouseClick";
+          "<2-LeftMouse>" = "NOP";
         }
       '' "Mappings for the finder.";
 
@@ -353,12 +374,16 @@ in
         {
           "?" = "HelpPopup";
           A = "CherryPickPopup";
-          D = "DiffPopup";
+          d = "DiffPopup";
           M = "RemotePopup";
           P = "PushPopup";
           X = "ResetPopup";
           Z = "StashPopup";
+          i = "IgnorePopup";
+          t = "TagPopup";
           b = "BranchPopup";
+          B = "BisectPopup";
+          w = "WorktreePopup";
           c = "CommitPopup";
           f = "FetchPopup";
           l = "LogPopup";
@@ -383,17 +408,20 @@ in
           S = "StageUnstaged";
           "<c-s>" = "StageAll";
           u = "Unstage";
+          K = "Untrack";
           U = "UnstageStaged";
+          y = "ShowRefs";
           "$" = "CommandHistory";
-          "#" = "Console";
           Y = "YankSelected";
           "<c-r>" = "RefreshBuffer";
-          "<enter>" = "GoToFile";
+          "<cr>" = "GoToFile";
           "<c-v>" = "VSplitOpen";
           "<c-x>" = "SplitOpen";
           "<c-t>" = "TabOpen";
           "{" = "GoToPreviousHunkHeader";
           "}" = "GoToNextHunkHeader";
+          "[c" = "OpenOrScrollUp";
+          "]c" = "OpenOrScrollDown";
         }
       '' "Mappings for status.";
     };

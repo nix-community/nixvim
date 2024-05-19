@@ -14,7 +14,6 @@
 
       settings = {
         filewatcher = {
-          interval = 1000;
           enabled = true;
         };
         graph_style = "ascii";
@@ -151,6 +150,13 @@
             q = "Close";
             "<c-c><c-c>" = "Submit";
             "<c-c><c-k>" = "Abort";
+            "<m-p>" = "PrevMessage";
+            "<m-n>" = "NextMessage";
+            "<m-r>" = "ResetMessage";
+          };
+          commit_editor_I = {
+            "<c-c><c-c>" = "Submit";
+            "<c-c><c-k>" = "Abort";
           };
           rebase_editor = {
             p = "Pick";
@@ -167,6 +173,12 @@
             gj = "MoveDown";
             "<c-c><c-c>" = "Submit";
             "<c-c><c-k>" = "Abort";
+            "[c" = "OpenOrScrollUp";
+            "]c" = "OpenOrScrollDown";
+          };
+          rebase_editor_I = {
+            "<c-c><c-c>" = "Submit";
+            "<c-c><c-k>" = "Abort";
           };
           finder = {
             "<cr>" = "Select";
@@ -179,16 +191,26 @@
             "<tab>" = "MultiselectToggleNext";
             "<s-tab>" = "MultiselectTogglePrevious";
             "<c-j>" = "NOP";
+            "<ScrollWheelDown>" = "ScrollWheelDown";
+            "<ScrollWheelUp>" = "ScrollWheelUp";
+            "<ScrollWheelLeft>" = "NOP";
+            "<ScrollWheelRight>" = "NOP";
+            "<LeftMouse>" = "MouseClick";
+            "<2-LeftMouse>" = "NOP";
           };
           popup = {
             "?" = "HelpPopup";
             A = "CherryPickPopup";
-            D = "DiffPopup";
+            d = "DiffPopup";
             M = "RemotePopup";
             P = "PushPopup";
             X = "ResetPopup";
             Z = "StashPopup";
+            i = "IgnorePopup";
+            t = "TagPopup";
             b = "BranchPopup";
+            B = "BisectPopup";
+            w = "WorktreePopup";
             c = "CommitPopup";
             f = "FetchPopup";
             l = "LogPopup";
@@ -210,17 +232,20 @@
             S = "StageUnstaged";
             "<c-s>" = "StageAll";
             u = "Unstage";
+            K = "Untrack";
             U = "UnstageStaged";
+            y = "ShowRefs";
             "$" = "CommandHistory";
-            "#" = "Console";
             Y = "YankSelected";
             "<c-r>" = "RefreshBuffer";
-            "<enter>" = "GoToFile";
+            "<cr>" = "GoToFile";
             "<c-v>" = "VSplitOpen";
             "<c-x>" = "SplitOpen";
             "<c-t>" = "TabOpen";
             "{" = "GoToPreviousHunkHeader";
             "}" = "GoToNextHunkHeader";
+            "[c" = "OpenOrScrollUp";
+            "]c" = "OpenOrScrollDown";
           };
         };
         notification_icon = "󰊢";
