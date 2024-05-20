@@ -90,7 +90,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       {
         mode = mapping.mode or "n";
         inherit key;
-        action.__raw = "require('telescope.builtin').${actionStr}";
+        action = "<cmd>Telescope ${actionStr}<cr>";
 
         options = {
           silent = cfg.keymapsSilent;
