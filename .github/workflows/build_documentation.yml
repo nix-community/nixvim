@@ -44,12 +44,12 @@ jobs:
           name: nix-community
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-      - run: nix build .#docs --show-trace
+      - run: ./build-docs.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "result/share/doc"
+          path: "docs-build"
 
       - name: Deploy to GitHub Pages
         id: deployment
