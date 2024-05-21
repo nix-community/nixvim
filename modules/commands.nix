@@ -9,7 +9,7 @@ let
   commandAttributes = types.submodule {
     options = {
       command = mkOption {
-        type = types.str;
+        type = with helpers.nixvimTypes; either str rawLua;
         description = "The command to run.";
       };
 
