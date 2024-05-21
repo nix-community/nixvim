@@ -16,8 +16,8 @@ let
       nargs =
         helpers.mkNullOrOption
           (types.enum [
-            "0"
-            "1"
+            0
+            1
             "*"
             "?"
             "+"
