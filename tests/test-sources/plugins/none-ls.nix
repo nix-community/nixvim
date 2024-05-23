@@ -105,6 +105,9 @@
               "rubyfmt"
             ])
             ++ (pkgs.lib.optionals pkgs.stdenv.isDarwin [
+              # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
+              # TODO: re-enable this test when fixed
+              "ansible_lint"
               "clazy"
               "gdformat"
               "gdlint"
