@@ -226,12 +226,7 @@ in
       processSections = mapAttrs (_: mapNullable (map processComponent));
       setupOptions = {
         options = {
-          inherit (cfg)
-            theme
-            globalstatus
-            refresh
-            extensions
-            ;
+          inherit (cfg) theme globalstatus refresh;
           icons_enabled = cfg.iconsEnabled;
           section_separators = cfg.sectionSeparators;
           component_separators = cfg.componentSeparators;
@@ -240,6 +235,7 @@ in
           always_divide_middle = cfg.alwaysDivideMiddle;
         };
 
+        inherit (cfg) extensions;
         sections = processSections cfg.sections;
         inactive_sections = processSections cfg.inactiveSections;
         tabline = processSections cfg.tabline;
