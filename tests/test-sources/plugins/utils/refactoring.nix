@@ -23,6 +23,7 @@
         extract_var_statements = {
           go = "%s := %s // poggers";
         };
+        show_success_message = true;
       };
     };
   };
@@ -53,6 +54,7 @@
         printf_statements = { };
         print_var_statements = { };
         extract_var_statements = { };
+        show_success_message = false;
       };
     };
   };

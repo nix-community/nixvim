@@ -136,5 +136,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         }
       ```
     '';
+
+    show_success_message = helpers.defaultNullOpts.mkBool false ''
+      Shows a message with information about the refactor on success. Such as:
+
+      ```
+        [Refactor] Inlined 3 variable occurrences
+      ```
+    '';
   };
 }
