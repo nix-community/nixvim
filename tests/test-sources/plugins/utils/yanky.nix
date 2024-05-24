@@ -20,24 +20,6 @@
         select = {
           action = "put('p')";
         };
-        telescope = {
-          enable = true;
-          useDefaultMappings = true;
-          mappings = {
-            i = {
-              "<c-g>" = "put('p')";
-              "<c-k>" = "put('P')";
-              "<c-x>" = "delete()";
-              "<c-r>" = "set_register(require('yanky.utils').get_default_register())";
-            };
-            n = {
-              p = "put('p')";
-              P = "put('P')";
-              d = "delete()";
-              r = "set_register(require('yanky.utils').get_default_register())";
-            };
-          };
-        };
       };
       systemClipboard = {
         syncWithRing = true;
@@ -52,6 +34,33 @@
       };
       textobj = {
         enabled = true;
+      };
+    };
+  };
+
+  withTelescope = {
+    plugins.telescope.enable = true;
+
+    plugins.yanky = {
+      enable = true;
+
+      picker.telescope = {
+        enable = true;
+        useDefaultMappings = true;
+        mappings = {
+          i = {
+            "<c-g>" = "put('p')";
+            "<c-k>" = "put('P')";
+            "<c-x>" = "delete()";
+            "<c-r>" = "set_register(require('yanky.utils').get_default_register())";
+          };
+          n = {
+            p = "put('p')";
+            P = "put('P')";
+            d = "delete()";
+            r = "set_register(require('yanky.utils').get_default_register())";
+          };
+        };
       };
     };
   };

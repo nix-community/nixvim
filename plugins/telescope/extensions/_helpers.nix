@@ -59,6 +59,16 @@ rec {
         in
         mkIf cfg.enable (mkMerge [
           {
+            assertions = [
+              {
+                assertion = config.plugins.telescope.enable;
+                message = ''
+                  Nixvim: You have enabled the `${extensionName}` telescope extension (`plugins.telescope.extensions.${name}`).
+                  However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+                '';
+              }
+            ];
+
             extraPlugins = [ cfg.package ];
 
             plugins.telescope = {

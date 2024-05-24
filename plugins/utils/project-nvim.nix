@@ -90,9 +90,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = optional (cfg.enableTelescope && (!config.plugins.telescope.enable)) ''
-      Telescope support for project-nvim is enabled but the telescope plugin is not.
-    '';
+    assertions = [
+      {
+        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+        message = ''
+          Nixvim: You have enabled the `telescope` integration with project-nvim.
+          However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+        '';
+      }
+    ];
 
     extraPlugins = [ cfg.package ];
 

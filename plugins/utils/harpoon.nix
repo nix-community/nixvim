@@ -182,20 +182,20 @@ in
       assertions = [
         {
           assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-          message = ''Nixvim: The harpoon telescope integration needs telescope to function as intended'';
+          message = ''
+            Nixvim: You have enabled the `telescope` integration with harpoon.
+            However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+          '';
         }
       ];
 
       extraPlugins = [ cfg.package ];
 
-      extraConfigLua =
-        let
-          telescopeCfg = ''require("telescope").load_extension("harpoon")'';
-        in
-        ''
-          require('harpoon').setup(${helpers.toLuaObject setupOptions})
-          ${if cfg.enableTelescope then telescopeCfg else ""}
-        '';
+      extraConfigLua = ''
+        require('harpoon').setup(${helpers.toLuaObject setupOptions})
+      '';
+
+      plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "harpoon" ];
 
       keymaps =
         let
