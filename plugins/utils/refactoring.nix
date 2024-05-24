@@ -6,140 +6,135 @@
   ...
 }:
 with lib;
-{
-  options.plugins.refactoring = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "refactoring.nvim";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "refactoring";
+  originalName = "refactoring.nvim";
+  defaultPackage = pkgs.vimPlugins.refactoring-nvim;
 
-    package = helpers.mkPluginPackageOption "refactoring.nvim" pkgs.vimPlugins.refactoring-nvim;
+  maintainers = [ helpers.maintainers.MattSturgeon ];
 
-    promptFuncReturnType =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf bool)
+  # TODO: introduced 2024-05-24, remove on 2024-08-24
+  optionsRenamedToSettings = [
+    "promptFuncReturnType"
+    "promptFuncParamType"
+    "printVarStatements"
+    "printfStatements"
+    "extractVarStatements"
+  ];
+
+  settingsOptions = with helpers.nixvimTypes; {
+    prompt_func_return_type =
+      helpers.defaultNullOpts.mkAttrsOf bool
         ''
           {
-            "go" = false;
-            "java" = false;
-            "cpp" = false;
-            "c" = false;
-            "h" = false;
-            "hpp" = false;
-            "cxx" = false;
+            go = false;
+            java = false;
+            cpp = false;
+            c = false;
+            h = false;
+            hpp = false;
+            cxx = false;
           }
         ''
         ''
-          For certain languages like Golang, types are required for functions that return an object(s) and parameters of functions.
-          Unfortunately, for some parameters and functions there is no way to automatically find their type. In those instances,
+          For certain languages like Golang, types are required for functions that return an object(s).
+          Unfortunately, for some functions there is no way to automatically find their type. In those instances,
           we want to provide a way to input a type instead of inserting a placeholder value.
+
+          Set the relevant language(s) to `true` to enable prompting for a return type, e.g:
+
+
+          ```nix
+            {
+              go = true;
+              cpp = true;
+              c = true;
+              java = true;
+            }
+          ```
         '';
 
-    promptFuncParamType =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf bool)
+    prompt_func_param_type =
+      helpers.defaultNullOpts.mkAttrsOf bool
         ''
           {
-            "go" = false;
-            "java" = false;
-            "cpp" = false;
-            "c" = false;
-            "h" = false;
-            "hpp" = false;
-            "cxx" = false;
+            go = false;
+            java = false;
+            cpp = false;
+            c = false;
+            h = false;
+            hpp = false;
+            cxx = false;
           }
         ''
         ''
-          For certain languages like Golang, types are required for functions that return an object(s) and parameters of functions.
-          Unfortunately, for some parameters and functions there is no way to automatically find their type. In those instances,
+          For certain languages like Golang, types are required for functions parameters.
+          Unfortunately, for some parameters there is no way to automatically find their type. In those instances,
           we want to provide a way to input a type instead of inserting a placeholder value.
+
+          Set the relevant language(s) to `true` to enable prompting for parameter types, e.g:
+
+
+          ```nix
+            {
+              go = true;
+              cpp = true;
+              c = true;
+              java = true;
+            }
         '';
 
-    printVarStatements =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
-        ''
-          {
-            "go" = [];
-            "java" = [];
-            "cpp" = [];
-            "c" = [];
-            "h" = [];
-            "hpp" = [];
-            "cxx" = [];
-          }
-        ''
-        ''
-          In any custom print var statement, it is possible to optionally add a max of two %s patterns, which is where the debug path and
-          the actual variable reference will go, respectively. To add a literal "%s" to the string, escape the sequence like this: %%s.
-          For an example custom print var statement, go to this folder, select your language, and view multiple-statements/print_var.config.
+    printf_statements = helpers.defaultNullOpts.mkAttrsOf (listOf (maybeRaw str)) "{ }" ''
+      In any custom printf statement, it is possible to optionally add a **max of one `%s` pattern**, which is where the debug path will go.
+      For an example custom printf statement, go to [this folder][folder], select your language, and click on `multiple-statements/printf.config`.
 
-          Note: for either of these functions, if you have multiple custom statements, the plugin will prompt for which one should be inserted. If you just have one custom statement in your config, it will override the default automatically.
+      Note: if you have multiple custom statements, the plugin will prompt for which one should be inserted.
+      If you just have one custom statement in your config, it will override the default automatically.
 
-          Example:
-          	cpp = [
-          		"printf(\"a custom statement %%s %s\", %s)"
-          	]
-        '';
+      Example:
 
-    printfStatements =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
-        ''
-          {
-            "go" = [];
-            "java" = [];
-            "cpp" = [];
-            "c" = [];
-            "h" = [];
-            "hpp" = [];
-            "cxx" = [];
-          }
-        ''
-        ''
-          In any custom printf statement, it is possible to optionally add a max of one %s pattern, which is where the debug path will go.
-          For an example custom printf statement, go to this folder, select your language, and click on multiple-statements/printf.config.
+      ```nix
+        {
+          # add a custom printf statement for cpp
+          cpp = [ "std::cout << \"%s\" << std::endl;" ];
+        }
+      ```
 
-          Example:
-          		cpp = [
-          				"std::cout << \"%s\" << std::endl;"
-          		]
-        '';
+      [folder]: https://github.com/ThePrimeagen/refactoring.nvim/blob/master/lua/refactoring/tests/debug/printf
+    '';
 
-    extractVarStatements =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf str)
-        ''
-          {
-            "go" = "";
-            "java" = "";
-            "cpp" = "";
-            "c" = "";
-            "h" = "";
-            "hpp" = "";
-            "cxx" = "";
-          }
-        ''
-        ''
-          When performing an extract_var refactor operation, you can custom how the new variable would be declared by setting configuration
-          like the below example.
+    print_var_statements = helpers.defaultNullOpts.mkAttrsOf (listOf (maybeRaw str)) "{ }" ''
+      In any custom print var statement, it is possible to optionally add a **max of two `%s` patterns**, which is where the debug path and
+      the actual variable reference will go, respectively. To add a literal `"%s"` to the string, escape the sequence like this: `%%s`.
+      For an example custom print var statement, go to [this folder][folder], select your language, and view `multiple-statements/print_var.config`.
 
-          Example:
-          	 go = "%s := %s // poggers"
-        '';
+      Note: if you have multiple custom statements, the plugin will prompt for which one should be inserted.
+      If you just have one custom statement in your config, it will override the default automatically.
+
+      Example:
+
+      ```nix
+        {
+          # add a custom print var statement for cpp
+          cpp = [ "printf(\"a custom statement %%s %s\", %s)" ];
+        }
+      ```
+
+      [folder]: https://github.com/ThePrimeagen/refactoring.nvim/blob/master/lua/refactoring/tests/debug/print_var
+    '';
+
+    extract_var_statements = helpers.defaultNullOpts.mkAttrsOf str "{ }" ''
+      When performing an `extract_var` refactor operation, you can custom how the new variable would be declared by setting configuration
+      like the below example.
+
+      Example:
+
+      ```nix
+        {
+          # overriding extract statement for go
+          go = "%s := %s // poggers";
+        }
+      ```
+    '';
   };
-
-  config =
-    let
-      cfg = config.plugins.refactoring;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua =
-        let
-          opts = with cfg; {
-            prompt_func_return_type = promptFuncReturnType;
-            prompt_func_param_type = promptFuncParamType;
-            print_var_statements = printVarStatements;
-            printf_statements = printfStatements;
-            extract_var_statements = extractVarStatements;
-          };
-        in
-        ''
-          require('refactoring').setup(${helpers.toLuaObject opts})
-        '';
-    };
 }
