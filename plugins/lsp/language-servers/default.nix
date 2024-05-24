@@ -361,41 +361,8 @@ let
       name = "nil_ls";
       description = "nil for Nix";
       package = pkgs.nil;
-      settingsOptions = {
-        formatting.command = mkOption {
-          type = types.nullOr (types.listOf types.str);
-          default = null;
-          description = ''
-            External formatter command (with arguments).
-            It should accepts file content in stdin and print the formatted code into stdout.
-          '';
-        };
-        diagnostics = {
-          ignored = mkOption {
-            type = types.listOf types.str;
-            default = [ ];
-            description = ''
-              Ignored diagnostic kinds.
-              The kind identifier is a snake_cased_string usually shown together
-              with the diagnostic message.
-            '';
-          };
-          excludedFiles = mkOption {
-            type = types.listOf types.str;
-            default = [ ];
-            description = ''
-              Files to exclude from showing diagnostics. Useful for generated files.
-              It accepts an array of paths. Relative paths are joint to the workspace root.
-              Glob patterns are currently not supported.
-            '';
-          };
-        };
-      };
-      settings = cfg: {
-        nil = {
-          inherit (cfg) formatting diagnostics;
-        };
-      };
+      settingsOptions = import ./nil_ls-settings.nix { inherit lib helpers; };
+      settings = cfg: { nil = cfg; };
     }
     {
       name = "nimls";
