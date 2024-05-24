@@ -14,7 +14,6 @@
           options.desc = "Telescope Git Files";
         };
       };
-      keymapsSilent = true;
       highlightTheme = "gruvbox";
     };
   };

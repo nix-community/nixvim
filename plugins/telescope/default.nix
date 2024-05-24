@@ -20,7 +20,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   deprecateExtraOptions = true;
   optionsRenamedToSettings = [ "defaults" ];
 
-  imports = [ ./extensions ];
+  imports = [
+    ./extensions
+
+    # TODO introduced 2024-05-24: remove 2024-08-24
+    (mkRemovedOptionModule
+      [
+        "plugins"
+        "telescope"
+        "keymapsSilent"
+      ]
+      "This option no longer has any effect now that the `plugin.telescope.keymaps` implementation uses `<cmd>`."
+    )
+  ];
 
   extraOptions = {
     keymaps = mkOption {
@@ -44,12 +56,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           options.desc = "Telescope Git Files";
         };
       };
-    };
-
-    keymapsSilent = mkOption {
-      type = types.bool;
-      description = "Whether telescope keymaps should be silent";
-      default = false;
     };
 
     highlightTheme = mkOption {
@@ -91,10 +97,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         mode = mapping.mode or "n";
         inherit key;
         action = "<cmd>Telescope ${actionStr}<cr>";
-
-        options = {
-          silent = cfg.keymapsSilent;
-        } // (mapping.options or { });
+        options = mapping.options or { };
       }
     ) cfg.keymaps;
 
