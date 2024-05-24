@@ -60,10 +60,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     enabledExtensions = mkOption {
       type = types.listOf types.str;
-      description = "A list of enabled extensions. Don't use this directly";
       default = [ ];
-      internal = true;
-      visible = false;
+      description = ''
+        A list of enabled extensions.
+
+        You should only use this option directly if the Telescope extension you wish to enable is not natively supported
+        by nixvim.
+
+        Most extensions are available as `plugins.telescope.extensions.<name>.enable`, although some plugins that do
+        more than just provide Telescope extensions may use `plugins.<name>.enableTelescope` instead.
+
+        If you add an extension to this list manually, it is your responsibility to ensure the relevant plugin is also
+        added to `extraPackages`.
+      '';
     };
   };
 
