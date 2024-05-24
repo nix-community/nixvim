@@ -28,6 +28,15 @@
     };
   };
 
+  withTelescope = {
+    plugins.telescope.enable = true;
+
+    plugins.refactoring = {
+      enable = true;
+      enableTelescope = true;
+    };
+  };
+
   defaults = {
     plugins.refactoring = {
       enable = true;

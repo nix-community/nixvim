@@ -22,6 +22,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     "extractVarStatements"
   ];
 
+  extraOptions = {
+    enableTelescope = mkEnableOption "telescope integration";
+  };
+
+  extraConfig = cfg: {
+    assertions = [
+      {
+        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+        message = ''
+          Nixvim: You have enabled the `telescope` integration with refactoring-nvim.
+          However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+        '';
+      }
+    ];
+
+    plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "refactoring" ];
+  };
+
   settingsOptions = with helpers.nixvimTypes; {
     prompt_func_return_type =
       helpers.defaultNullOpts.mkAttrsOf bool
