@@ -122,7 +122,6 @@ with lib;
         + config.content;
 
       init = helpers.writeLua "init.lua" customRC;
-      initPath = toString init;
 
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (config.extraPackages != [ ]) ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
@@ -140,17 +139,14 @@ with lib;
     {
       type = lib.mkForce "lua";
       finalPackage = wrappedNeovim;
-      initContent = customRC;
-      inherit initPath;
+      initContent = readFile init;
+      initPath = "${init}";
 
       printInitPackage = pkgs.writeShellApplication {
         name = "nixvim-print-init";
-        runtimeInputs = with pkgs; [
-          stylua
-          bat
-        ];
+        runtimeInputs = [ pkgs.bat ];
         text = ''
-          stylua - <"${initPath}" | bat --language=lua
+          bat --language=lua "${init}"
         '';
       };
 
