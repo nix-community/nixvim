@@ -22,6 +22,8 @@ rec {
     remap = nixvimOptions.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses \"noremap\"";
 
     desc = nixvimOptions.mkNullOrOption types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
+
+    buffer = nixvimOptions.defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding <buffer> to a map.";
   };
 
   modes = {
