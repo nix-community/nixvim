@@ -2,6 +2,7 @@
   lib,
   helpers,
   config,
+  options,
   ...
 }:
 with lib;
@@ -26,13 +27,11 @@ with lib;
         "InsertEnter" = [
           {
             key = "<C-y>";
-            action = ''require("cmp").mapping.confirm()'';
-            lua = true;
+            action.__raw = ''require("cmp").mapping.confirm()'';
           }
           {
             key = "<C-n>";
-            action = ''require("cmp").mapping.select_next_item()'';
-            lua = true;
+            action.__raw = ''require("cmp").mapping.select_next_item()'';
           }
         ];
       };
@@ -52,6 +51,36 @@ with lib;
       };
     in
     {
+      # Deprecate `lua` keymap option
+      # TODO upgrade to an assertion (removal notice) in 24.11
+      # TODO remove entirely in 25.05?
+      warnings =
+        let
+          luaDefs = pipe options.keymaps.definitionsWithLocations [
+            (map (def: {
+              inherit (def) file;
+              value = filter (hasAttr "lua") def.value;
+            }))
+            (filter (def: def.value != [ ]))
+            (map (
+              def:
+              let
+                count = length def.value;
+                plural = count > 1;
+              in
+              "Found ${toString count} use${optionalString plural "s"} in ${def.file}"
+            ))
+          ];
+        in
+        optional (luaDefs != [ ]) ''
+          Nixvim (keymaps): the `lua` keymap option is deprecated.
+
+          This option will be removed in 24.11. You should use a "raw" `action` instead;
+          e.g. `action.__raw = "<lua code>"` or `action = helpers.mkRaw "<lua code>"`.
+
+          ${concatStringsSep "\n" luaDefs}
+        '';
+
       extraConfigLua = optionalString (config.keymaps != [ ]) ''
         -- Set up keybinds {{{
         do
