@@ -1,11 +1,30 @@
 name: update-flake-lock
 on:
   workflow_dispatch: # allows manual triggering
+    inputs:
+      branch:
+        description: "Branch to update"
+        type: choice
+        options:
+          - 'stable & unstable'
+          - 'main'
+          - 'nixos-23.11'
   schedule:
     - cron: "0 12 * * SAT" # runs weekly on Saturday at noon
 
 jobs:
   lockfile:
+    strategy:
+      matrix:
+        # This allows to update both stable & unstable branches, but not both when triggered
+        # manually
+        branch: ['main', 'nixos-23.11']
+        selectedBranch: ["${{ inputs.branch }}"]
+        exclude:
+          - selectedBranch: main
+            branch: 'nixos-23.11'
+          - selectedBranch: 'nixos-23.11'
+            branch: main
     name: Update the flake inputs and generate options
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -14,6 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
+          ref: '${{ matrix.branch }}'
 
       - name: Install Nix
         uses: cachix/install-nix-action@v26
@@ -25,5 +45,6 @@ jobs:
         id: update
         uses: DeterminateSystems/update-flake-lock@v21
         with:
-          pr-title: "Update flake.lock"
+          pr-title: "Update flake.lock (${{ matrix.branch }})"
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
+          branch: "update_flake_lock_action-${{ matrix.branch }}"
