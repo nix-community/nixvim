@@ -106,8 +106,12 @@ rec {
             description = ''
               If true, `action` is considered to be lua code.
               Thus, it will not be wrapped in `""`.
+
+              This option is deprecated and will be removed in 24.11.
+              You should use a "raw" action instead, e.g. `action.__raw = ""`.
             '';
             default = defaults.lua or false;
+            visible = false;
           };
 
           options = mapConfigOptions;
