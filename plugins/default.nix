@@ -204,6 +204,7 @@
     ./utils/tmux-navigator.nix
     ./utils/todo-comments.nix
     ./utils/toggleterm.nix
+    ./utils/trim.nix
     ./utils/undotree.nix
     ./utils/vim-bbye.nix
     ./utils/vim-css-color.nix
