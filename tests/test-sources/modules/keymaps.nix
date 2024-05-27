@@ -37,8 +37,7 @@
           }
           {
             key = "<C-a>";
-            action = "function() print('toto') end";
-            lua = true;
+            action.__raw = "function() print('toto') end";
             options.silent = false;
           }
           {
@@ -73,8 +72,7 @@
             }
             {
               key = "<C-a>";
-              action = "function() print('toto') end";
-              lua = true;
+              action.__raw = "function() print('toto') end";
               options.silent = false;
             }
             {

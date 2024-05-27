@@ -161,8 +161,7 @@ in
             }
             {
               key = "gd";
-              action = "require('telescope.builtin').lsp_definitions()";
-              lua = true;
+              action.__raw = "require('telescope.builtin').lsp_definitions()";
             }
             {
               key = "K";
