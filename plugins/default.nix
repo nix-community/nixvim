@@ -40,6 +40,7 @@
     ./git/committia.nix
     ./git/diffview.nix
     ./git/fugitive.nix
+    ./git/git-conflict.nix
     ./git/git-worktree.nix
     ./git/gitblame.nix
     ./git/gitgutter.nix
