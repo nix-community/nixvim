@@ -13,6 +13,7 @@
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
     ./colorschemes/melange.nix
+    ./colorschemes/nightfox.nix
     ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
