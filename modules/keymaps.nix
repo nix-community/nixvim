@@ -68,7 +68,10 @@ with lib;
                 count = length def.value;
                 plural = count > 1;
               in
-              "Found ${toString count} use${optionalString plural "s"} in ${def.file}"
+              ''
+                Found ${toString count} use${optionalString plural "s"} in ${def.file}:
+                ${generators.toPretty { } def.value}
+              ''
             ))
           ];
         in
