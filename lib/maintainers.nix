@@ -54,4 +54,11 @@
     githubId = 66408983;
     name = "svl";
   };
+  nwjsmith = {
+    email = "nate@theinternate.com";
+    github = "nwjsmith";
+    githubId = 1348;
+    name = "Nate Smith";
+    keys = [ { fingerprint = "DE6F E362 7DF7 EEA0 79CB  38C1 F208 9547 768B 6CCA"; } ];
+  };
 }
