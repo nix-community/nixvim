@@ -9,7 +9,6 @@
 
       settings = {
         options = {
-
           compile_path.__raw = "vim.fn.stdpath('cache') .. '/nightfox'";
           compile_file_suffix = "_compiled";
           transparent = false;
@@ -73,6 +72,8 @@
   example = {
     colorschemes.nightfox = {
       enable = true;
+
+      flavor = "dayfox";
 
       settings = {
         options = {
