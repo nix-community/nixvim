@@ -57,7 +57,20 @@ rec {
 
   defaultNullOpts = rec {
     # Description helpers
-    mkDefaultDesc = defaultValue: "Plugin default: `${toString defaultValue}`";
+    mkDefaultDesc =
+      defaultValue:
+      let
+        default =
+          # Assume a string default is already formatted as intended,
+          # historically strings were the only type accepted here.
+          # TODO consider deprecating this behavior so we can properly quote strings
+          if isString defaultValue then
+            defaultValue
+          else
+            generators.toPretty { multiline = false; } defaultValue;
+      in
+      "Plugin default: `${default}`";
+
     mkDesc =
       default: desc:
       let
