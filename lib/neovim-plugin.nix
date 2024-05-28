@@ -118,7 +118,7 @@ rec {
               require('${luaName}').setup(${toLuaObject cfg.settings})
             '';
           }
-          (optionalAttrs (isColorscheme && (colorscheme != null)) { inherit colorscheme; })
+          (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
           (extraConfig cfg)
         ]);
     };
