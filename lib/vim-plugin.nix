@@ -105,7 +105,7 @@ with lib;
           # does this evaluate package? it would not be desired to evaluate package if we use another package.
           extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
         }
-        (optionalAttrs (isColorscheme && (colorscheme != null)) { inherit colorscheme; })
+        (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
         (extraConfig cfg)
       ]);
     };
