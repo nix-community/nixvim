@@ -14,6 +14,25 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   maintainers = [ maintainers.GaetanLepage ];
 
+  colorscheme = null;
+  extraOptions = {
+    flavor = mkOption {
+      type = types.enum [
+        "carbonfox"
+        "dawnfox"
+        "dayfox"
+        "duskfox"
+        "nightfox"
+        "nordfox"
+        "terafox"
+      ];
+      example = "dayfox";
+      default = "nightfox";
+      description = "Which palette/flavor to use as the colorscheme.";
+    };
+  };
+  extraConfig = cfg: { colorscheme = mkDefault cfg.flavor; };
+
   settingsOptions = {
     options = {
       compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/nightfox'";}'' ''
