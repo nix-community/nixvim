@@ -64,12 +64,13 @@ rec {
           # Assume a string default is already formatted as intended,
           # historically strings were the only type accepted here.
           # TODO consider deprecating this behavior so we can properly quote strings
-          if isString defaultValue then
-            defaultValue
-          else
-            generators.toPretty { multiline = false; } defaultValue;
+          if isString defaultValue then defaultValue else generators.toPretty { } defaultValue;
       in
-      "Plugin default: `${default}`";
+      "Plugin default:"
+      + (
+        # Detect whether `default` is multiline or inline:
+        if hasInfix "\n" default then "\n\n```nix\n${default}\n```" else " `${default}`"
+      );
 
     mkDesc =
       default: desc:
