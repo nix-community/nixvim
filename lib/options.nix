@@ -111,7 +111,12 @@ rec {
     # Unsigned: >=0
     mkUnsignedInt = default: mkNullableWithRaw types.ints.unsigned (toString default);
     mkBool = default: mkNullableWithRaw types.bool (if default then "true" else "false");
-    mkStr = default: mkNullableWithRaw types.str ''${builtins.toString default}'';
+    mkStr =
+      # TODO we should delegate rendering quoted string to `mkDefaultDesc`,
+      # once we remove its special case for strings.
+      default:
+      assert default == null || isString default;
+      mkNullableWithRaw types.str (generators.toPretty { } default);
     mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
     mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
     mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
