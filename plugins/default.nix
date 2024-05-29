@@ -120,6 +120,7 @@
 
     ./telescope
 
+    ./ui/edgy.nix
     ./ui/headlines.nix
     ./ui/image.nix
     ./ui/neoscroll.nix
