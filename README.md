@@ -35,6 +35,8 @@ lightline plugin:
 When we do this, lightline will be set up to a sensible default, and will use
 gruvbox as the colorscheme, no extra configuration required!
 
+Check out [this list of real world nixvim configs](https://nix-community.github.io/nixvim/user-guide/config-examples.html)!
+
 ## Support/Questions
 If you have any question, please use the [discussions page](https://github.com/nix-community/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
 

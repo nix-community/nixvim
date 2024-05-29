@@ -39,6 +39,7 @@ let
           ${./nixvim-header-start.5} \
           ${mkMDSection ../user-guide/helpers.md} \
           ${mkMDSection ../user-guide/faq.md} \
+          ${mkMDSection ../user-guide/config-examples.md} \
           ${./nixvim-header-end.5} \
           >$out/nixvim-header.5
       '';

@@ -1,0 +1,43 @@
+# User configurations
+
+Want some help with starting your configuration?
+Or maybe you're curious how others have done things?
+Take a look at these configuration examples below.
+
+<!-- TODO: add info about `kickstart.nixvim` -->
+
+**Note:**\
+Most of those configurations are using a [standalone build](../modules/standalone.html), however,
+all of the nixvim options are accessible no matter how you are using it (flake, NixOS/HM module, nix-darwin...).
+
+| Config | Comment |
+|-|-|
+| [ahwxorg/nixvim-config] | |
+| [alisonjenkins/neovim-nix-flake] | |
+| [GaetanLepage/nix-config] | Home-manager |
+| [gwg313/nvim-nix] | |
+| [hbjydev/hvim] | |
+| [nicolas-goudry/nixvim-config] | Heavily inspired by AstroNvim |
+| [pete3n/nixvim-flake] | |
+| [redyf/Neve] | meticulously crafted custom configuration for Nixvim |
+| [siph/nixvim-flake] | |
+| [Tanish2002/neovim-config] | |
+| [traxys/Nixfiles] | |
+
+[ahwxorg/nixvim-config]: https://github.com/ahwxorg/nixvim-config
+[alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
+[GaetanLepage/nix-config]: https://github.com/GaetanLepage/nix-config/tree/master/home/modules/tui/neovim
+[gwg313/nvim-nix]: https://github.com/gwg313/nvim-nix
+[hbjydev/hvim]: https://github.com/hbjydev/hvim
+[nicolas-goudry/nixvim-config]: https://github.com/nicolas-goudry/nixvim-config
+[pete3n/nixvim-flake]: https://github.com/pete3n/nixvim-flake
+[redyf/Neve]: https://github.com/redyf/Neve
+[siph/nixvim-flake]: https://github.com/siph/nixvim-flake
+[Tanish2002/neovim-config]: https://github.com/Tanish2002/neovim-config
+[traxys/Nixfiles]: https://github.com/traxys/Nixfiles/tree/master/neovim
+
+## Share your config !
+
+To add a configuration to this list, either:
+- Edit [this file](https://github.com/nix-community/nixvim/blob/main/docs/user-guide/config-examples.md) and make a PR on the [nixvim repo](https://github.com/nix-community/nixvim).
+- Send a message to the [matrix _Documentation_ room](https://matrix.to/#/#nixvim-documentation:matrix.org)
