@@ -98,6 +98,7 @@
     ./lsp/lspsaga.nix
     ./lsp/lsp-format.nix
     ./lsp/lsp-lines.nix
+    ./lsp/lsp-status.nix
     ./lsp/nvim-lightbulb.nix
     ./lsp/trouble.nix
     ./lsp/wtf.nix
