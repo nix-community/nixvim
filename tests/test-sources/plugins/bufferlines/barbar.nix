@@ -13,6 +13,7 @@
         next = "<TAB>";
         previous = "<S-TAB>";
         close = "<C-w>";
+        restore = "<C-S-t>";
       };
     };
   };
