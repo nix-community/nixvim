@@ -67,6 +67,7 @@ let
       stylua
       taplo
       typstfmt
+      typstyle
       uncrustify
       vale
       yamllint
