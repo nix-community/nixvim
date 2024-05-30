@@ -91,9 +91,11 @@
                     enable = true;
                     excludes = ["plugins/_sources"];
                   };
-                  statix.enable = true;
+                  statix = {
+                    enable = true;
+                    settings.ignore = ["plugins/lsp/language-servers/rust-analyzer-config.nix"];
+                  };
                 };
-                settings.statix.ignore = ["plugins/lsp/language-servers/rust-analyzer-config.nix"];
               };
             };
           devShells = {
