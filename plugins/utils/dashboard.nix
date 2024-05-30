@@ -6,141 +6,423 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.dashboard;
-in
-{
-  options = {
-    plugins.dashboard = {
-      enable = mkEnableOption "dashboard";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "dashboard";
+  originalName = "dashboard-nvim";
+  defaultPackage = pkgs.vimPlugins.dashboard-nvim;
 
-      package = helpers.mkPluginPackageOption "dashboard" pkgs.vimPlugins.dashboard-nvim;
+  maintainers = [ helpers.maintainers.MattSturgeon ];
 
-      header = mkOption {
-        description = "Header text";
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-      };
-
-      footer = mkOption {
-        description = "Footer text";
-        type = types.nullOr (types.listOf types.str);
-        default = null;
-      };
-
-      center = mkOption {
-        description = "Center section";
-        type = types.nullOr (
-          types.listOf (
-            types.submodule {
-              options = {
-                icon = mkOption {
-                  description = "Item icon";
-                  type = types.nullOr types.str;
-                  default = null;
-                };
-
-                desc = mkOption {
-                  description = "Item description";
-                  type = types.str;
-                };
-
-                shortcut = mkOption {
-                  description = "Item shortcut";
-                  type = types.nullOr types.str;
-                  default = null;
-                };
-
-                action = mkOption {
-                  description = "Item action";
-                  type = types.nullOr types.str;
-                  default = null;
-                };
-              };
-            }
+  # TODO introduced 2024-05-30: remove 2024-09-01
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "dashboard"
+      ];
+    in
+    [
+      (mkRemovedOptionModule (
+        basePluginPath ++ [ "sessionDirectory" ]
+      ) "This plugin no longer has session support.")
+    ]
+    ++ (mapAttrsToList
+      (
+        old: new:
+        mkRenamedOptionModule (basePluginPath ++ [ old ]) (basePluginPath ++ [ "settings" ] ++ new)
+      )
+      {
+        header = [
+          "config"
+          "header"
+        ];
+        footer = [
+          "config"
+          "footer"
+        ];
+        center = [
+          "config"
+          "shortcut"
+        ];
+        hideStatusline = [
+          "hide"
+          "statusline"
+        ];
+        hideTabline = [
+          "hide"
+          "tabline"
+        ];
+      }
+    )
+    ++ (mapAttrsToList
+      (
+        old: new:
+        mkRenamedOptionModule
+          (
+            basePluginPath
+            ++ [
+              "preview"
+              old
+            ]
           )
-        );
-        default = null;
-      };
+          (
+            basePluginPath
+            ++ [
+              "settings"
+              "preview"
+              new
+            ]
+          )
+      )
+      {
+        command = "command";
+        file = "file_path";
+        height = "file_height";
+        width = "file_width";
+      }
+    );
 
-      sessionDirectory = mkOption {
-        description = "Path to session file";
-        type = types.nullOr types.str;
-        default = null;
-      };
+  settingsExample = {
+    theme = "hyper";
+    change_to_vcs_root = true;
 
-      preview = mkOption {
-        description = "Preview options";
-        type = types.submodule {
-          options = {
-            command = mkOption {
-              description = "Command to print file contents";
-              type = types.nullOr types.str;
-              default = null;
-            };
+    config = {
+      week_header.enable = true;
+      project.enable = false;
+      mru.limit = 20;
 
-            file = mkOption {
-              description = "Path to preview file";
-              type = types.nullOr types.str;
-              default = null;
-            };
-
-            height = mkOption {
-              description = "The height of the preview file";
-              type = types.nullOr types.int;
-              default = null;
-            };
-
-            width = mkOption {
-              description = "The width of the preview file";
-              type = types.nullOr types.int;
-              default = null;
-            };
-          };
-        };
-        default = { };
-      };
-
-      hideStatusline = mkOption {
-        description = "Whether to hide statusline in Dashboard buffer";
-        type = types.nullOr types.bool;
-        default = null;
-      };
-
-      hideTabline = mkOption {
-        description = "Whether to hide tabline in Dashboard buffer";
-        type = types.nullOr types.bool;
-        default = null;
-      };
+      shortcut = [
+        {
+          icon = " ";
+          icon_hl = "@variable";
+          desc = "Files";
+          group = "Label";
+          action.__raw = "function(path) vim.cmd('Telescope find_files') end";
+          key = "f";
+        }
+        {
+          desc = " Apps";
+          group = "DiagnosticHint";
+          action = "Telescope app";
+          key = "a";
+        }
+        {
+          desc = " dotfiles";
+          group = "Number";
+          action = "Telescope dotfiles";
+          key = "d";
+        }
+      ];
     };
   };
 
-  config =
+  settingsOptions =
     let
-      options = {
-        custom_header = cfg.header;
-        custom_footer = cfg.footer;
-        custom_center = cfg.center;
+      requiresTheme = theme: ''
+        **Note**: This option is only compatible with the "${theme}" theme.
+      '';
 
-        preview_file_path = cfg.preview.file;
-        preview_file_height = cfg.preview.height;
-        preview_file_width = cfg.preview.width;
-        preview_command = cfg.preview.command;
+      # Make an "action" submodule type, as used by `settings.config.shortcut` and `settings.config.center`
+      mkActionType =
+        extraOptions:
+        types.submodule {
+          freeformType = with types; attrsOf anything;
 
-        hide_statusline = cfg.hideStatusline;
-        hide_tabline = cfg.hideTabline;
+          options = {
+            icon = helpers.defaultNullOpts.mkStr "" ''
+              The icon to display with this action.
+            '';
 
-        session_directory = cfg.sessionDirectory;
+            icon_hl = helpers.defaultNullOpts.mkStr "DashboardIcon" ''
+              The highlight group for the icon.
+            '';
+
+            desc = helpers.defaultNullOpts.mkStr "" ''
+              The action's description, shown next to the icon.
+            '';
+
+            desc_hl = helpers.defaultNullOpts.mkStr "DashboardDesc" ''
+              The highlight group to use for the description.
+            '';
+
+            key = helpers.defaultNullOpts.mkStr "" ''
+              Shortcut key available in the dashboard buffer.
+
+              **Note**: this will not create an actual keymap.
+            '';
+
+            key_hl = helpers.defaultNullOpts.mkStr "DashboardKey" ''
+              The highlight group to use for the key.
+            '';
+
+            action = helpers.defaultNullOpts.mkStr "" ''
+              Action done when you press key. Can be a command or a function.
+
+              To use a lua function, pass a raw type instead of a string, e.g:
+
+              ```nix
+                action.__raw = "function(path) vim.cmd('Telescope find_files cwd=' .. path) end";
+              ```
+
+              Is equivialent to:
+
+              ```nix
+                action = "Telescope find_files cwd=";
+              ```
+            '';
+          } // extraOptions;
+        };
+    in
+    {
+      theme =
+        helpers.defaultNullOpts.mkEnumFirstDefault
+          [
+            "hyper"
+            "doom"
+          ]
+          ''
+            Dashboard comes with two themes, that each have their own distinct config options.
+
+            - "hyper" includes a header, custom shortcuts, recent projects, recent files, and a footer.
+            - "doom" is simpler, consisting of a header, center, and footer.
+
+            Some options have a _note_ stating which theme they relate to.
+          '';
+
+      shortcut_type =
+        helpers.defaultNullOpts.mkEnumFirstDefault
+          [
+            "letter"
+            "number"
+          ]
+          ''
+            The shortcut type.
+          '';
+
+      change_to_vcs_root = helpers.defaultNullOpts.mkBool false ''
+        When opening a file in the "hyper" theme's "recent files" list (`mru`), vim will change to the root of vcs.
+      '';
+
+      config = {
+        # TODO double check if this affects "doom" or not
+        disable_move = helpers.defaultNullOpts.mkBool false ''
+          Disable movement keymaps in the dashboard buffer.
+
+          Specifically, the following keymaps are disabled:
+
+          `w`, `f`, `b`, `h`, `j`, `k`, `l`, `<Up>`, `<Down>`, `<Left>`, `<Right>`
+        '';
+
+        packages.enable = helpers.defaultNullOpts.mkBool true ''
+          Show how many vim plugins are loaded.
+
+          ${requiresTheme "hyper"}
+        '';
+
+        week_header = {
+          enable = helpers.defaultNullOpts.mkBool false ''
+            Whether to use a header based on the current day of the week,
+            instead of the default "DASHBOARD" header.
+
+            A subheading showing the current time is also displayed.
+          '';
+
+          concat = helpers.defaultNullOpts.mkStr "" ''
+            Additional text to append at the end of the time line.
+          '';
+
+          append = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+            Additional header lines to append after the the time line.
+          '';
+        };
+
+        header =
+          helpers.defaultNullOpts.mkListOf types.str
+            [
+              ""
+              " ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  "
+              " ██╔══██╗██╔══██╗██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔══██╗██╔══██╗██╔══██╗ "
+              " ██║  ██║███████║███████╗███████║██████╔╝██║   ██║███████║██████╔╝██║  ██║ "
+              " ██║  ██║██╔══██║╚════██║██╔══██║██╔══██╗██║   ██║██╔══██║██╔══██╗██║  ██║ "
+              " ██████╔╝██║  ██║███████║██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝ "
+              " ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  "
+              ""
+            ]
+            ''
+              The header text, displayed at the top of the buffer.
+            '';
+
+        footer = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+          The footer text, displayed at the bottom of the buffer.
+        '';
+
+        # TODO: Once #1618 is fixed, we can switch to `defaultNullOpts.mkAttrs'`,
+        shortcut = helpers.mkNullOrOption' {
+          description = ''
+            Shortcut actions to be added to the "hyper" theme.
+
+            ${requiresTheme "hyper"}
+          '';
+
+          example = [
+            {
+              icon = " ";
+              icon_hl = "@variable";
+              desc = "Files";
+              group = "Label";
+              action.__raw = "function(path) vim.cmd('Telescope find_files') end";
+              key = "f";
+            }
+            {
+              desc = " Apps";
+              group = "DiagnosticHint";
+              action = "Telescope app";
+              key = "a";
+            }
+            {
+              desc = " dotfiles";
+              group = "Number";
+              action = "Telescope dotfiles";
+              key = "d";
+            }
+          ];
+
+          type = types.listOf (mkActionType {
+            group = helpers.defaultNullOpts.mkStr "" ''
+              Highlight group used with the "hyper" theme, 
+            '';
+          });
+        };
+
+        # TODO: Once #1618 is fixed, we can switch to `defaultNullOpts.mkAttrs'`,
+        center = helpers.mkNullOrOption' {
+          description = ''
+            Actions to be added to the center section of the "doom" theme.
+
+            ${requiresTheme "doom"}
+          '';
+
+          example = [
+            {
+              icon = " ";
+              icon_hl = "Title";
+              desc = "Find File           ";
+              desc_hl = "String";
+              key = "b";
+              keymap = "SPC f f";
+              key_hl = "Number";
+              key_format = " %s";
+              action = "lua print(2)";
+            }
+            {
+              icon = " ";
+              desc = "Find Dotfiles";
+              key = "f";
+              keymap = "SPC f d";
+              key_format = " %s";
+              action.__raw = "function() print(3) end";
+            }
+          ];
+
+          type = types.listOf (mkActionType {
+            # TODO if `key_format` is _also_ applicable to hyper theme,
+            # move the option to `mkActionList`.
+            key_format = helpers.defaultNullOpts.mkStr "[%s]" ''
+              Format string used when rendering the key.
+              `%s` will be substituted with value of `key`.
+            '';
+          });
+        };
+
+        project =
+          helpers.mkCompositeOption
+            ''
+              Options relating to the "hyper" theme's recent projects list.
+
+              ${requiresTheme "hyper"}
+            ''
+            {
+              enable = helpers.defaultNullOpts.mkBool true ''
+                Whether to display the recent projects list.
+              '';
+
+              limit = helpers.defaultNullOpts.mkInt 8 ''
+                The maximum number of projects to list.
+              '';
+
+              icon = helpers.defaultNullOpts.mkStr "󰏓 " ''
+                Icon used in the section header.
+              '';
+
+              icon_hl = helpers.defaultNullOpts.mkStr "DashboardRecentProjectIcon" ''
+                Highlight group used for the icon.
+              '';
+
+              label = helpers.defaultNullOpts.mkStr " Recent Projects:" ''
+                Text used in the section header.
+              '';
+
+              action = helpers.defaultNullOpts.mkStr "Telescope find_files cwd=" ''
+                When you press key or enter it will run this action
+              '';
+            };
+
+        mru =
+          helpers.mkCompositeOption
+            ''
+              Options relating to the "hyper" theme's recent files list.
+
+              ${requiresTheme "hyper"}
+            ''
+            {
+              limit = helpers.defaultNullOpts.mkInt 10 ''
+                The maximum number of files to list.
+              '';
+
+              icon = helpers.defaultNullOpts.mkStr " " ''
+                Icon used in the section header.
+              '';
+
+              icon_hl = helpers.defaultNullOpts.mkStr "DashboardMruIcon" ''
+                Highlight group used for the icon.
+              '';
+
+              label = helpers.defaultNullOpts.mkStr " Most Recent Files:" ''
+                Text used in the section header.
+              '';
+
+              cwd_only = helpers.defaultNullOpts.mkBool false ''
+                Whether to only include files from the current working directory.
+              '';
+            };
       };
 
-      filteredOptions = filterAttrs (_: v: v != null) options;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraConfigLua = ''
-        local dashboard = require("dashboard")
+      hide = {
+        statusline = helpers.defaultNullOpts.mkBool true ''
+          Whether to hide the status line.
+        '';
 
-        ${toString (mapAttrsToList (n: v: "dashboard.${n} = ${helpers.toLuaObject v}\n") filteredOptions)}
-      '';
+        tabline = helpers.defaultNullOpts.mkBool true ''
+          Whether to hide the status line.
+        '';
+      };
+
+      preview = {
+        command = helpers.defaultNullOpts.mkStr "" ''
+          Command to print file contents.
+        '';
+
+        file_path = helpers.defaultNullOpts.mkStr null ''
+          Path to preview file.
+        '';
+
+        file_height = helpers.defaultNullOpts.mkInt 0 ''
+          The height of the preview file.
+        '';
+
+        file_width = helpers.defaultNullOpts.mkInt 0 ''
+          The width of the preview file.
+        '';
+      };
     };
 }
