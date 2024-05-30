@@ -17,9 +17,9 @@ rec {
 
     unique = nixvimOptions.defaultNullOpts.mkBool false "Whether to fail if the map is already defined. Equivalent to adding `<unique>` to a map.";
 
-    noremap = nixvimOptions.defaultNullOpts.mkBool true "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
+    noremap = nixvimOptions.defaultNullOpts.mkBool true "Whether to use the `noremap` variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
 
-    remap = nixvimOptions.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses \"noremap\"";
+    remap = nixvimOptions.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
 
     desc = nixvimOptions.mkNullOrOption types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
 
