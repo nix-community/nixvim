@@ -160,11 +160,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ```
         '';
 
-    ignore_treesitter = helpers.defaultNullOpts.mkBool false ''
-      Never use treesitter to find a variable under the cursor, always prompt for it - overrides
-      the same setting on `debugprint()` if set to true.
-    '';
-
     print_tag = helpers.defaultNullOpts.mkStr "DEBUGPRINT" ''
       The string inserted into each print statement, which can be used to uniquely identify
       statements inserted by `debugprint`.
@@ -199,7 +194,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         right_var = "}')";
       };
     };
-    ignore_treesitter = false;
     print_tag = "DEBUGPRINT";
   };
 }
