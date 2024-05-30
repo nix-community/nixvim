@@ -104,20 +104,20 @@ rec {
 
     mkLuaFn = default: desc: mkNullOrLuaFn (mkDesc default desc);
 
-    mkNum = default: mkNullableWithRaw types.number (toString default);
-    mkInt = default: mkNullableWithRaw types.int (toString default);
+    mkNum = mkNullableWithRaw types.number;
+    mkInt = mkNullableWithRaw types.int;
     # Positive: >0
-    mkPositiveInt = default: mkNullableWithRaw types.ints.positive (toString default);
+    mkPositiveInt = mkNullableWithRaw types.ints.positive;
     # Unsigned: >=0
-    mkUnsignedInt = default: mkNullableWithRaw types.ints.unsigned (toString default);
-    mkBool = default: mkNullableWithRaw types.bool (if default then "true" else "false");
+    mkUnsignedInt = mkNullableWithRaw types.ints.unsigned;
+    mkBool = mkNullableWithRaw types.bool;
     mkStr =
       # TODO we should delegate rendering quoted string to `mkDefaultDesc`,
       # once we remove its special case for strings.
       default:
       assert default == null || isString default;
       mkNullableWithRaw types.str (generators.toPretty { } default);
-    mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
+    mkAttributeSet = mkNullable nixvimTypes.attrs;
     mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
     mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
     mkEnum =
