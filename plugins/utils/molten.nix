@@ -129,12 +129,11 @@ mkVimPlugin config {
     '';
 
     output_win_style =
-      helpers.defaultNullOpts.mkEnum
+      helpers.defaultNullOpts.mkEnumFirstDefault
         [
           false
           "minimal"
         ]
-        "false"
         ''
           Value passed to the style option in `:h nvim_open_win()`.
         '';

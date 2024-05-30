@@ -51,7 +51,7 @@ in
             1
             2
           ]
-          "1"
+          1
           ''
             Change to 0 if you want to save memory, but having multiple ccls processes operating in the
             same directory may corrupt ccls's in-memory representation of the index.
@@ -206,7 +206,7 @@ in
             1
             2
           ]
-          "2"
+          2
           ''
             `ccls` can index the contents of comments associated with functions/types/variables (macros
             are not handled).
@@ -218,12 +218,11 @@ in
           '';
 
       multiVersion =
-        helpers.defaultNullOpts.mkEnum
+        helpers.defaultNullOpts.mkEnumFirstDefault
           [
             0
             1
           ]
-          "0"
           ''
             Index a file only once (`0`), or in each translation unit that includes it (`1`).
 
@@ -282,7 +281,7 @@ in
             1
             2
           ]
-          "2"
+          2
           ''
             Determine whether a file should be re-indexed when any of its dependencies changes
             timestamp.

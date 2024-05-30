@@ -120,7 +120,12 @@ rec {
     mkAttributeSet = default: mkNullable nixvimTypes.attrs ''${default}'';
     mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
     mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
-    mkEnum = enumValues: default: mkNullableWithRaw (types.enum enumValues) ''"${default}"'';
+    mkEnum =
+      enumValues: default:
+      mkNullableWithRaw (types.enum enumValues) (
+        # TODO we should remove this once `mkDefaultDesc` no longer has a special case
+        if isString default then generators.toPretty { } default else default
+      );
     mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
     mkBorder =
       default: name: desc:
