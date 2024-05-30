@@ -61,4 +61,10 @@
     name = "Nate Smith";
     keys = [ { fingerprint = "DE6F E362 7DF7 EEA0 79CB  38C1 F208 9547 768B 6CCA"; } ];
   };
+  b3nb5n = {
+    email = "benbaldwin000@gmail.com";
+    github = "b3nb5n";
+    githubId = 67534814;
+    name = "Ben";
+  };
 }
