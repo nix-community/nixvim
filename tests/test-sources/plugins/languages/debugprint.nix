@@ -41,7 +41,6 @@
             right_var = "}')";
           };
         };
-        ignore_treesitter = false;
         print_tag = "DEBUGPRINT";
       };
     };
