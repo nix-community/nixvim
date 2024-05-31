@@ -32,14 +32,16 @@ rec {
   mkNullOrStr' = args: mkNullOrOption' (args // { type = with nixvimTypes; maybeRaw str; });
   mkNullOrStr = description: mkNullOrStr' { inherit description; };
 
-  mkNullOrLua =
-    desc:
-    lib.mkOption {
-      type = lib.types.nullOr nixvimTypes.strLua;
-      default = null;
-      description = desc;
-      apply = mkRaw;
-    };
+  mkNullOrLua' =
+    args:
+    mkNullOrOption' (
+      args
+      // {
+        type = nixvimTypes.strLua;
+        apply = mkRaw;
+      }
+    );
+  mkNullOrLua = description: mkNullOrLua' { inherit description; };
 
   mkNullOrLuaFn =
     desc:
