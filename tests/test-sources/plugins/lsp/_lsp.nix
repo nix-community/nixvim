@@ -174,6 +174,7 @@
             pylsp.enable = true;
             pylyzer.enable = true;
             pyright.enable = true;
+            ruby-lsp.enable = true;
             ruff.enable = true;
             ruff-lsp.enable = true;
             rust-analyzer = {
