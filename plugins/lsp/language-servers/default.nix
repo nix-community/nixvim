@@ -503,6 +503,11 @@ let
       package = null;
     }
     {
+      name = "ruby-lsp";
+      description = "ruby-lsp for Ruby";
+      serverName = "ruby_lsp";
+    }
+    {
       name = "ruff";
       description = "Official ruff language server (Rust) for Python";
     }
