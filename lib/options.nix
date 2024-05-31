@@ -171,9 +171,22 @@ rec {
       default:
       assert default == null || isString default;
       mkNullableWithRaw types.str (generators.toPretty { } default);
-    mkAttributeSet = mkNullable nixvimTypes.attrs;
-    mkListOf = ty: default: mkNullable (with nixvimTypes; listOf (maybeRaw ty)) default;
-    mkAttrsOf = ty: default: mkNullable (with nixvimTypes; attrsOf (maybeRaw ty)) default;
+
+    mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
+    mkAttributeSet = default: description: mkAttributeSet' { inherit default description; };
+
+    mkListOf' =
+      { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
+    mkListOf =
+      type: default: description:
+      mkListOf' { inherit type default description; };
+
+    mkAttrsOf' =
+      { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
+    mkAttrsOf =
+      type: default: description:
+      mkAttrsOf' { inherit type default description; };
+
     mkEnum =
       enumValues: default:
       mkNullableWithRaw (types.enum enumValues) (
