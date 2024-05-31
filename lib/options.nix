@@ -7,13 +7,20 @@ with lib;
 with nixvimUtils;
 rec {
   # Creates an option with a nullable type that defaults to null.
-  mkNullOrOption =
-    type: desc:
-    lib.mkOption {
-      type = lib.types.nullOr type;
-      default = null;
-      description = desc;
-    };
+  mkNullOrOption' =
+    {
+      type,
+      default ? null,
+      ...
+    }@args:
+    lib.mkOption (
+      args
+      // {
+        type = lib.types.nullOr type;
+        inherit default;
+      }
+    );
+  mkNullOrOption = type: description: mkNullOrOption' { inherit type description; };
 
   mkCompositeOption = desc: options: mkNullOrOption (types.submodule { inherit options; }) desc;
 
