@@ -22,7 +22,12 @@ rec {
     );
   mkNullOrOption = type: description: mkNullOrOption' { inherit type description; };
 
-  mkCompositeOption = desc: options: mkNullOrOption (types.submodule { inherit options; }) desc;
+  mkCompositeOption' =
+    { options, ... }@args:
+    mkNullOrOption' (
+      (filterAttrs (n: _: n != "options") args) // { type = types.submodule { inherit options; }; }
+    );
+  mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
   mkNullOrStr = mkNullOrOption (with nixvimTypes; maybeRaw str);
 
