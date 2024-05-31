@@ -248,23 +248,25 @@ rec {
 
   mkPackageOption =
     {
-      name ? null, # Can be null if a custom description is given.
-      default,
+      name ? null, # Can be omitted if a custom description is given.
       description ? null,
-      example ? null,
-    }:
-    mkOption {
-      type = with types; nullOr package;
-      inherit default example;
-      description =
-        if description == null then
-          ''
-            Which package to use for `${name}`.
-            Set to `null` to disable its automatic installation.
-          ''
-        else
-          description;
-    };
+      default, # `default` is not optional
+      ...
+    }@args:
+    mkNullOrOption' (
+      (filterAttrs (n: _: n != "name") args)
+      // {
+        type = types.package;
+        description =
+          if description == null then
+            ''
+              Which package to use for `${name}`.
+              Set to `null` to disable its automatic installation.
+            ''
+          else
+            description;
+      }
+    );
 
   mkPluginPackageOption =
     name: default:
