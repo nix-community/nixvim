@@ -44,10 +44,15 @@ with lib;
 
   config =
     let
+      # TODO remove `normalizeMapping` once `lua` option is gone
       normalizeMapping = keyMapping: {
         inherit (keyMapping) mode key options;
 
-        action = if keyMapping.lua then helpers.mkRaw keyMapping.action else keyMapping.action;
+        action =
+          if keyMapping.lua != null && keyMapping.lua then
+            helpers.mkRaw keyMapping.action
+          else
+            keyMapping.action;
       };
     in
     {
@@ -59,7 +64,7 @@ with lib;
           luaDefs = pipe options.keymaps.definitionsWithLocations [
             (map (def: {
               inherit (def) file;
-              value = filter (hasAttr "lua") def.value;
+              value = filter (v: (v.lua or null) != null) def.value;
             }))
             (filter (def: def.value != [ ]))
             (map (

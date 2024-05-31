@@ -80,6 +80,9 @@ rec {
 
   mkMapOptionSubmodule =
     defaults:
+    # TODO remove assert once `lua` option is gone
+    # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
+    assert !(defaults ? lua);
     (
       with types;
       submodule {
@@ -104,7 +107,7 @@ rec {
           );
 
           lua = mkOption {
-            type = bool;
+            type = nullOr bool;
             description = ''
               If true, `action` is considered to be lua code.
               Thus, it will not be wrapped in `""`.
@@ -112,7 +115,7 @@ rec {
               This option is deprecated and will be removed in 24.11.
               You should use a "raw" action instead, e.g. `action.__raw = ""`.
             '';
-            default = defaults.lua or false;
+            default = null;
             visible = false;
           };
 
