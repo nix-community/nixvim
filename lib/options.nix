@@ -140,7 +140,11 @@ rec {
       type: default: description:
       mkNullable' { inherit type default description; };
 
-    mkNullableWithRaw = type: mkNullable (nixvimTypes.maybeRaw type);
+    mkNullableWithRaw' =
+      { type, ... }@args: mkNullable' (args // { type = nixvimTypes.maybeRaw type; });
+    mkNullableWithRaw =
+      type: default: description:
+      mkNullableWithRaw' { inherit type default description; };
 
     mkStrLuaOr =
       type: default: desc:
