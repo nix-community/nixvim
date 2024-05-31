@@ -56,26 +56,46 @@ rec {
     };
 
   defaultNullOpts = rec {
-    # Description helpers
-    mkDefaultDesc =
-      defaultValue:
-      let
-        default =
-          # Assume a string default is already formatted as intended,
-          # historically strings were the only type accepted here.
-          # TODO consider deprecating this behavior so we can properly quote strings
-          if isString defaultValue then defaultValue else generators.toPretty { } defaultValue;
-      in
-      "Plugin default:"
-      + (
-        # Detect whether `default` is multiline or inline:
-        if hasInfix "\n" default then "\n\n```nix\n${default}\n```" else " `${default}`"
-      );
+    /**
+      Build a description with a plugin default.
 
+      The [default] can be any value, and it will be formatted using `lib.generators.toPretty`.
+
+      If [default] is a String, it will not be formatted.
+      This behavior will likely change in the future.
+
+      # Example
+      ```nix
+      mkDesc 1 "foo"
+      => ''
+        foo
+
+        Plugin default: `1`
+      ''
+      ```
+
+      # Type
+      ```
+      mkDesc :: Any -> String -> String
+      ```
+
+      # Arguments
+      - [default] The plugin's default
+      - [desc] The option's description
+    */
     mkDesc =
       default: desc:
       let
-        defaultDesc = mkDefaultDesc default;
+        # Assume a string default is already formatted as intended,
+        # historically strings were the only type accepted here.
+        # TODO deprecate this behavior so we can properly quote strings
+        defaultString = if isString default then default else generators.toPretty { } default;
+        defaultDesc =
+          "Plugin default:"
+          + (
+            # Detect whether `default` is multiline or inline:
+            if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`"
+          );
       in
       if desc == "" then
         defaultDesc
