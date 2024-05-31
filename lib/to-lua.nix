@@ -21,7 +21,7 @@ rec {
             if hasPrefix "__unkeyed" n then
               valueString
             else if hasPrefix "__rawKey__" n then
-              "[${n}] = " + valueString
+              ''[${removePrefix "__rawKey__" n}] = '' + valueString
             else if n == "__emptyString" then
               "[''] = " + valueString
             else
