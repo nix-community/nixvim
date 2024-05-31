@@ -1,5 +1,7 @@
 {
   imports = [
+    ./ai/copilot-chat.nix
+
     ./bufferlines/barbar.nix
     ./bufferlines/barbecue.nix
     ./bufferlines/bufferline.nix
