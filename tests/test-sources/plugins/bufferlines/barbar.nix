@@ -14,6 +14,7 @@
           key = "<C-w>";
           options.desc = "Barbar close tab";
         };
+        restore.key = "<C-S-t>";
       };
     };
   };
