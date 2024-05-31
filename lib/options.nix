@@ -29,7 +29,8 @@ rec {
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
-  mkNullOrStr = mkNullOrOption (with nixvimTypes; maybeRaw str);
+  mkNullOrStr' = args: mkNullOrOption' (args // { type = with nixvimTypes; maybeRaw str; });
+  mkNullOrStr = description: mkNullOrStr' { inherit description; };
 
   mkNullOrLua =
     desc:
