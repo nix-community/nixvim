@@ -56,8 +56,17 @@ in
     };
 
   flake = {
-    nixosModules.nixvim = import ../wrappers/nixos.nix wrapperArgs;
-    homeManagerModules.nixvim = import ../wrappers/hm.nix wrapperArgs;
-    nixDarwinModules.nixvim = import ../wrappers/darwin.nix wrapperArgs;
+    nixosModules = {
+      nixvim = import ../wrappers/nixos.nix wrapperArgs;
+      default = self.nixosModules.nixvim;
+    };
+    homeManagerModules = {
+      nixvim = import ../wrappers/hm.nix wrapperArgs;
+      default = self.homeManagerModules.nixvim;
+    };
+    nixDarwinModules = {
+      nixvim = import ../wrappers/darwin.nix wrapperArgs;
+      default = self.nixDarwinModules.nixvim;
+    };
   };
 }
