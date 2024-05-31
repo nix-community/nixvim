@@ -17,9 +17,10 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [GaetanLepage/nix-config] | Home-manager |
 | [gwg313/nvim-nix] | |
 | [hbjydev/hvim] | |
+| [MikaelFangel/nixvim-config] | An easy-setup configuration for NixVim, focused on straightforward customization |
 | [nicolas-goudry/nixvim-config] | Heavily inspired by AstroNvim |
 | [pete3n/nixvim-flake] | |
-| [redyf/Neve] | meticulously crafted custom configuration for Nixvim |
+| [redyf/Neve] | Meticulously crafted custom configuration for Nixvim |
 | [siph/nixvim-flake] | |
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
@@ -29,6 +30,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [GaetanLepage/nix-config]: https://github.com/GaetanLepage/nix-config/tree/master/home/modules/tui/neovim
 [gwg313/nvim-nix]: https://github.com/gwg313/nvim-nix
 [hbjydev/hvim]: https://github.com/hbjydev/hvim
+[MikaelFangel/nixvim-config]: https://github.com/MikaelFangel/nixvim-config
 [nicolas-goudry/nixvim-config]: https://github.com/nicolas-goudry/nixvim-config
 [pete3n/nixvim-flake]: https://github.com/pete3n/nixvim-flake
 [redyf/Neve]: https://github.com/redyf/Neve
