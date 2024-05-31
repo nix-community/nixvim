@@ -127,9 +127,18 @@ rec {
           ${defaultDesc}
         '';
 
+    mkNullable' =
+      { default, description, ... }@args:
+      mkNullOrOption' (
+        args
+        // {
+          default = null;
+          description = mkDesc default description;
+        }
+      );
     mkNullable =
-      type: default: desc:
-      mkNullOrOption type (mkDesc default desc);
+      type: default: description:
+      mkNullable' { inherit type default description; };
 
     mkNullableWithRaw = type: mkNullable (nixvimTypes.maybeRaw type);
 
