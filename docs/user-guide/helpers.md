@@ -40,3 +40,18 @@ A certain number of helpers are defined that can be useful:
 
 - `helpers.enableExceptInTests`: Evaluates to `true`, except in `mkTestDerivationFromNixvimModule`
   where it evaluates to `false`. This allows to skip instantiating plugins that can't be run in tests.
+
+- `helpers.toRawKeys attrs`: Convert the keys of the given `attrs` to raw lua.
+  ```nix
+    toRawKeys {foo = 1; bar = "hi";}
+  ```
+  will translate in lua to:
+  ```lua
+    {[foo] = 1, [bar] = 2,}
+  ```
+  Otherwise, the keys of a regular `attrs` will be interpreted as lua string:
+  ```lua
+    {['foo'] = 1, ['bar'] = 2,}
+    -- which is the same as
+    {foo = 1, bar = 2,}
+  ```
