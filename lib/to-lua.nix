@@ -15,12 +15,17 @@ rec {
         + (concatStringsSep "," (
           mapAttrsToList (
             n: v:
-            if (builtins.match "__unkeyed.*" n) != null then
-              toLuaObject v
+            let
+              valueString = toLuaObject v;
+            in
+            if hasPrefix "__unkeyed" n then
+              valueString
+            else if hasPrefix "__rawKey__" n then
+              "[${n}] = " + valueString
             else if n == "__emptyString" then
-              "[''] = " + (toLuaObject v)
+              "[''] = " + valueString
             else
-              "[${toLuaObject n}] = " + (toLuaObject v)
+              "[${toLuaObject n}] = " + valueString
           ) (filterAttrs (n: v: v != null && (toLuaObject v != "{}")) args)
         ))
         + "}"
