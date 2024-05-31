@@ -65,14 +65,16 @@ rec {
     );
   mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
 
-  mkNullOrStrLuaFnOr =
-    ty: desc:
-    lib.mkOption {
-      type = lib.types.nullOr (types.either nixvimTypes.strLuaFn ty);
-      default = null;
-      description = desc;
-      apply = v: if builtins.isString v then mkRaw v else v;
-    };
+  mkNullOrStrLuaFnOr' =
+    { type, ... }@args:
+    mkNullOrOption' (
+      args
+      // {
+        type = with nixvimTypes; either strLuaFn type;
+        apply = v: if isString v then mkRaw v else v;
+      }
+    );
+  mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
 
   defaultNullOpts = rec {
     /**
