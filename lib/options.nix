@@ -168,9 +168,7 @@ rec {
     mkStr =
       # TODO we should delegate rendering quoted string to `mkDefaultDesc`,
       # once we remove its special case for strings.
-      default:
-      assert default == null || isString default;
-      mkNullableWithRaw types.str (generators.toPretty { } default);
+      default: mkNullableWithRaw types.str (generators.toPretty { } default);
 
     mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
     mkAttributeSet = default: description: mkAttributeSet' { inherit default description; };
