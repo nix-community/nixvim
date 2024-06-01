@@ -36,7 +36,14 @@ in
       keymaps = mapAttrs (
         action: defaults:
         helpers.mkNullOrOption (
-          with types; either str (helpers.keymaps.mkMapOptionSubmodule defaults)
+          with types;
+          either str (
+            helpers.keymaps.mkMapOptionSubmodule {
+              inherit defaults;
+              hasKey = true;
+              hasAction = true;
+            }
+          )
         ) "Keymap for the ${action} action."
       ) defaultKeymaps;
 

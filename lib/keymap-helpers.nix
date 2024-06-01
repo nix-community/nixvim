@@ -60,7 +60,11 @@ rec {
       # ["" "n" "v" ...]
       (map ({ short, ... }: short) (attrValues modes));
 
-  mapOptionSubmodule = mkMapOptionSubmodule { };
+  mapOptionSubmodule = mkMapOptionSubmodule {
+    hasKey = true;
+    hasAction = true;
+    rawAction = true;
+  };
 
   mkModeOption =
     default:
@@ -79,48 +83,55 @@ rec {
     };
 
   mkMapOptionSubmodule =
-    defaults:
+    {
+      defaults ? { },
+      hasKey ? false,
+      hasAction ? false,
+      rawAction ? true,
+    }:
     # TODO remove assert once `lua` option is gone
     # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
     assert !(defaults ? lua);
     (
       with types;
       submodule {
-        options = {
-          key = mkOption (
-            {
-              type = str;
-              description = "The key to map.";
-              example = "<C-m>";
-            }
-            // (optionalAttrs (defaults ? key) { default = defaults.key; })
-          );
+        options =
+          (optionalAttrs hasKey {
+            key = mkOption (
+              {
+                type = str;
+                description = "The key to map.";
+                example = "<C-m>";
+              }
+              // (optionalAttrs (defaults ? key) { default = defaults.key; })
+            );
+          })
+          // (optionalAttrs hasAction {
+            action = mkOption (
+              {
+                type = if rawAction then nixvimTypes.maybeRaw str else str;
+                description = "The action to execute.";
+              }
+              // (optionalAttrs (defaults ? action) { default = defaults.action; })
+            );
+          })
+          // {
+            mode = mkModeOption defaults.mode or "";
+            options = mapConfigOptions;
 
-          mode = mkModeOption defaults.mode or "";
+            lua = mkOption {
+              type = nullOr bool;
+              description = ''
+                If true, `action` is considered to be lua code.
+                Thus, it will not be wrapped in `""`.
 
-          action = mkOption (
-            {
-              type = nixvimTypes.maybeRaw str;
-              description = "The action to execute.";
-            }
-            // (optionalAttrs (defaults ? action) { default = defaults.action; })
-          );
-
-          lua = mkOption {
-            type = nullOr bool;
-            description = ''
-              If true, `action` is considered to be lua code.
-              Thus, it will not be wrapped in `""`.
-
-              This option is deprecated and will be removed in 24.11.
-              You should use a "raw" action instead, e.g. `action.__raw = ""`.
-            '';
-            default = null;
-            visible = false;
+                This option is deprecated and will be removed in 24.11.
+                You should use a "raw" action instead, e.g. `action.__raw = ""`.
+              '';
+              default = null;
+              visible = false;
+            };
           };
-
-          options = mapConfigOptions;
-        };
       }
     );
 
