@@ -113,14 +113,15 @@ in
       }
     ];
   };
+
   imports =
     let
-      basePluginPath = [
+      basePath = [
         "plugins"
         "lsp"
         "servers"
-        name
       ];
+      basePluginPath = basePath ++ [ name ];
       basePluginPathString = concatStringsSep "." basePluginPath;
     in
     [
@@ -128,5 +129,10 @@ in
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
       (extraConfig cfg)
-    ];
+    ]
+    # Add an alias (with warning) for the lspconfig server name, if different to `name`.
+    # Note: users may use lspconfig's docs to guess the `plugins.lsp.servers.*` name
+    ++ (optional (name != serverName) (
+      mkRenamedOptionModule (basePath ++ [ serverName ]) basePluginPath
+    ));
 }
