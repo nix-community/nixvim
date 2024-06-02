@@ -66,7 +66,7 @@
           enable = true;
           package = null;
         };
-        nil_ls.enable = true;
+        nil-ls.enable = true;
         rust-analyzer = {
           enable = true;
           installCargo = true;
@@ -125,7 +125,7 @@
             dockerls.enable = true;
             efm.enable = true;
             elmls.enable = true;
-            emmet_ls.enable = true;
+            emmet-ls.enable = true;
             eslint.enable = true;
             elixirls.enable = true;
             fortls.enable = true;
@@ -152,7 +152,7 @@
             marksman.enable = true;
             metals.enable = true;
             nginx-language-server.enable = true;
-            nil_ls.enable = true;
+            nil-ls.enable = true;
             nimls.enable = true;
             nixd.enable = true;
             nushell.enable = true;
@@ -167,7 +167,7 @@
             # TODO: re-enable this test when fixed
             omnisharp.enable = !pkgs.stdenv.isDarwin;
             perlpls.enable = true;
-            pest_ls.enable = true;
+            pest-ls.enable = true;
             prismals.enable = true;
             prolog-ls.enable = true;
             purescriptls.enable = true;

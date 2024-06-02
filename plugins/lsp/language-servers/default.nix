@@ -136,9 +136,10 @@ let
       package = pkgs.elmPackages.elm-language-server;
     }
     {
-      name = "emmet_ls";
+      name = "emmet-ls";
       description = "emmet_ls, emmet support based on LSP";
       package = pkgs.emmet-ls;
+      serverName = "emmet_ls";
     }
     {
       name = "eslint";
@@ -302,10 +303,11 @@ let
       serverName = "nginx_language_server";
     }
     {
-      name = "nil_ls";
+      name = "nil-ls";
       description = "nil for Nix";
       package = pkgs.nil;
-      settingsOptions = import ./nil_ls-settings.nix { inherit lib helpers; };
+      serverName = "nil_ls";
+      settingsOptions = import ./nil-ls-settings.nix { inherit lib helpers; };
       settings = cfg: { nil = cfg; };
     }
     {
@@ -401,9 +403,10 @@ let
       package = pkgs.perlPackages.PLS;
     }
     {
-      name = "pest_ls";
+      name = "pest-ls";
       description = "pest_ls for pest";
       package = pkgs.pest-ide-tools;
+      serverName = "pest_ls";
     }
     {
       name = "phpactor";
