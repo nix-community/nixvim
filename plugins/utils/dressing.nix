@@ -68,7 +68,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
         '';
 
-        width = helpers.defaultNullOpts.mkNullable intOrRatio "null" ''
+        width = helpers.defaultNullOpts.mkNullable intOrRatio null ''
           Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
         '';
 
@@ -130,7 +130,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Used to customize the layout.
         '';
 
-        get_config = helpers.defaultNullOpts.mkLuaFn "null" ''
+        get_config = helpers.defaultNullOpts.mkLuaFn null ''
           This can be a function that accepts the opts parameter that is passed in to 'vim.select'
           or 'vim.input'. It must return either nil or config values to use in place of the global
           config values for that module.
@@ -153,8 +153,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
 
         telescope =
-          helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; either strLua (attrsOf anything))
-            "null"
+          helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; either strLua (attrsOf anything)) null
             ''
               Options for telescope selector.
 
@@ -230,7 +229,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             }
           '' "An attribute set of window options.";
 
-          width = helpers.defaultNullOpts.mkNullable intOrRatio "null" ''
+          width = helpers.defaultNullOpts.mkNullable intOrRatio null ''
             Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
           '';
 
@@ -252,7 +251,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 of total."
               '';
 
-          height = helpers.defaultNullOpts.mkNullable intOrRatio "null" ''
+          height = helpers.defaultNullOpts.mkNullable intOrRatio null ''
             Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
           '';
 
@@ -313,7 +312,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ```
         '';
 
-        get_config = helpers.defaultNullOpts.mkLuaFn "null" ''
+        get_config = helpers.defaultNullOpts.mkLuaFn null ''
           This can be a function that accepts the opts parameter that is passed in to 'vim.select'
           or 'vim.input'. It must return either nil or config values to use in place of the global
           config values for that module.

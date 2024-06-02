@@ -4,20 +4,20 @@
 with lib;
 {
   formatting = {
-    command = helpers.defaultNullOpts.mkListOf types.str "null" ''
+    command = helpers.defaultNullOpts.mkListOf types.str null ''
       External formatter command (with arguments).
       It should accepts file content in stdin and print the formatted code into stdout.
     '';
   };
 
   diagnostics = {
-    ignored = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    ignored = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Ignored diagnostic kinds.
       The kind identifier is a snake_cased_string usually shown together
       with the diagnostic message.
     '';
 
-    excludedFiles = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    excludedFiles = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Files to exclude from showing diagnostics. Useful for generated files.
       It accepts an array of paths. Relative paths are joint to the workspace root.
       Glob patterns are currently not supported.

@@ -221,11 +221,11 @@ in
         truncationCharacter = helpers.defaultNullOpts.mkStr "…" "Character to use when truncating the tab label";
 
         tabsMinWidth =
-          helpers.defaultNullOpts.mkNullable types.int "null"
+          helpers.defaultNullOpts.mkNullable types.int null
             "If int padding is added based on `contentLayout`";
 
         tabsMaxWidth =
-          helpers.defaultNullOpts.mkNullable types.int "null"
+          helpers.defaultNullOpts.mkNullable types.int null
             "This will truncate text even if `textTruncToFit = false`";
 
         padding = helpers.defaultNullOpts.mkNullable (with types; either int (attrsOf int)) "0" ''
@@ -259,11 +259,11 @@ in
                 };
               })
             )
+            null
             ''
               Set separators around the active tab.
               null falls back to `sourceSelector.separator`.
-            ''
-            "null";
+            '';
 
         showSeparatorOnEdge = helpers.defaultNullOpts.mkBool false ''
           Takes a boolean value where `false` (default) hides the separators on the far
@@ -354,7 +354,7 @@ in
           highlight = helpers.defaultNullOpts.mkStr "NeoTreeIndentMarker" "";
 
           withExpanders =
-            helpers.defaultNullOpts.mkNullable types.bool "null"
+            helpers.defaultNullOpts.mkNullable types.bool null
               "If null and file nesting is enabled, will enable expanders.";
 
           expanderCollapsed = helpers.defaultNullOpts.mkStr "" "";

@@ -42,7 +42,7 @@ in
       example = true;
     };
 
-    border = helpers.defaultNullOpts.mkBorder "null" "`:NullLsInfo` UI window." ''
+    border = helpers.defaultNullOpts.mkBorder null "`:NullLsInfo` UI window." ''
       Uses `NullLsInfoBorder` highlight group (see [Highlight Groups](#highlight-groups)).
     '';
 
@@ -80,7 +80,7 @@ in
       Specifying a timeout with a value less than zero will prevent commands from timing out.
     '';
 
-    diagnosticConfig = helpers.defaultNullOpts.mkNullable types.attrs "null" ''
+    diagnosticConfig = helpers.defaultNullOpts.mkNullable types.attrs null ''
       Specifies diagnostic display options for null-ls sources, as described in
       `:help vim.diagnostic.config()`.
       (null-ls uses separate namespaces for each source, so server-wide configuration will not work
@@ -145,23 +145,23 @@ in
       [nvim-notify](https://github.com/rcarriga/nvim-notify).
     '';
 
-    onAttach = helpers.defaultNullOpts.mkStr "null" ''
+    onAttach = helpers.defaultNullOpts.mkStr null ''
       Defines an `on_attach` callback to run whenever null-ls attaches to a buffer.
       If you have a common `on_attach` you're using for LSP servers, you can reuse that here, use a
       custom callback for null-ls, or leave this undefined.
     '';
 
-    onInit = helpers.defaultNullOpts.mkLuaFn "null" ''
+    onInit = helpers.defaultNullOpts.mkLuaFn null ''
       Defines an `on_init` callback to run when null-ls initializes. From here, you
       can make changes to the client (the first argument) or `initialize_result` (the
       second argument, which as of now is not used).
     '';
 
-    onExit = helpers.defaultNullOpts.mkLuaFn "null" ''
+    onExit = helpers.defaultNullOpts.mkLuaFn null ''
       Defines an `on_exit` callback to run when the null-ls client exits.
     '';
 
-    rootDir = helpers.defaultNullOpts.mkLuaFn "null" ''
+    rootDir = helpers.defaultNullOpts.mkLuaFn null ''
       Determines the root of the null-ls server. On startup, null-ls will call
       `root_dir` with the full path to the first file that null-ls attaches to.
 
@@ -175,7 +175,7 @@ in
       directory.
     '';
 
-    shouldAttach = helpers.defaultNullOpts.mkLuaFn "null" ''
+    shouldAttach = helpers.defaultNullOpts.mkLuaFn null ''
       A user-defined function that controls whether to enable null-ls for a given
       buffer. Receives `bufnr` as its first argument.
 
@@ -191,7 +191,7 @@ in
       ```
     '';
 
-    tempDir = helpers.defaultNullOpts.mkStr "null" ''
+    tempDir = helpers.defaultNullOpts.mkStr null ''
       Defines the directory used to create temporary files for sources that rely on them (a
       workaround used for command-based sources that do not support `stdio`).
 

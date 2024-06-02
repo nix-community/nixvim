@@ -51,7 +51,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           "warn"
           "error"
         ]
-        "null"
+        null
         ''
           Log messages at or above this level.
         '';

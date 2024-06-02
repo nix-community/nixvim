@@ -49,7 +49,7 @@ in
             "warn"
             "error"
           ]
-          "null"
+          null
           ''
             Log messages at or above this level.
           '';

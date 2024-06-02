@@ -25,11 +25,11 @@ with lib;
       whether to display a `Renamed m instances in n files` message after a rename operation
     '';
 
-    inputBufferType = helpers.defaultNullOpts.mkNullable (types.enum [ "dressing" ]) "null" ''
+    inputBufferType = helpers.defaultNullOpts.mkNullable (types.enum [ "dressing" ]) null ''
       the type of the external input buffer to use
     '';
 
-    postHook = helpers.defaultNullOpts.mkLuaFn "null" ''
+    postHook = helpers.defaultNullOpts.mkLuaFn null ''
       callback to run after renaming, receives the result table (from LSP handler) as an argument
     '';
   };

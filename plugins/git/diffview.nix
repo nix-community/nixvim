@@ -9,7 +9,14 @@ with lib;
 let
   cfg = config.plugins.diffview;
   mkWinConfig =
-    type: width: height: position: with helpers.defaultNullOpts; {
+    {
+      type ? null,
+      width ? null,
+      height ? null,
+      position ? null,
+    }:
+    with helpers.defaultNullOpts;
+    {
       type =
         mkEnum
           [
@@ -294,7 +301,11 @@ in
                   ${commonDesc}
                 '';
           };
-        winConfig = mkWinConfig "split" 35 "" "left";
+        winConfig = mkWinConfig {
+          type = "split";
+          width = 35;
+          position = "left";
+        };
       };
       fileHistoryPanel = {
         logOptions =
@@ -427,11 +438,15 @@ in
               multiFile = logOptions;
             };
           };
-        winConfig = mkWinConfig "split" "" 16 "bottom";
+        winConfig = mkWinConfig {
+          type = "split";
+          height = 16;
+          position = "bottom";
+        };
       };
 
       commitLogPanel = {
-        winConfig = mkWinConfig "float" "" "" "";
+        winConfig = mkWinConfig { type = "float"; };
       };
 
       defaultArgs =

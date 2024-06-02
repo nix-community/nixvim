@@ -22,7 +22,7 @@ with lib;
         "warn"
         "run"
       ]
-      "null"
+      null
       ''
         Decides what to do when a key which doesn't belong to any head is pressed
         - `null`: hydra exits and foreign key behaves normally, as if the hydra wasn't active
@@ -37,14 +37,14 @@ with lib;
 
   buffer = helpers.defaultNullOpts.mkNullable (
     with types; either (enum [ true ]) ints.unsigned
-  ) "null" "Define a hydra for the given buffer, pass `true` for current buf.";
+  ) null "Define a hydra for the given buffer, pass `true` for current buf.";
 
   invoke_on_body = helpers.defaultNullOpts.mkBool false ''
     When true, summon the hydra after pressing only the `body` keys.
     Normally a head is required.
   '';
 
-  desc = helpers.defaultNullOpts.mkStr "null" ''
+  desc = helpers.defaultNullOpts.mkStr null ''
     Description used for the body keymap when `invoke_on_body` is true.
     When nil, "[Hydra] .. name" is used.
   '';

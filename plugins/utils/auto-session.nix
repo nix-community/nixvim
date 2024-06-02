@@ -58,13 +58,13 @@ in
     };
 
     autoSave = {
-      enabled = helpers.defaultNullOpts.mkNullable types.bool "null" ''
+      enabled = helpers.defaultNullOpts.mkNullable types.bool null ''
         Whether to enable auto saving session.
       '';
     };
 
     autoRestore = {
-      enabled = helpers.defaultNullOpts.mkNullable types.bool "null" ''
+      enabled = helpers.defaultNullOpts.mkNullable types.bool null ''
         Whether to enable auto restoring session.
       '';
     };

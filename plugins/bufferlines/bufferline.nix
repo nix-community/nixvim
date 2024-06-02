@@ -137,7 +137,7 @@ in
 
       rightMouseCommand = helpers.defaultNullOpts.mkStr "bdelete! %d" "Command or function run when right clicking on a buffer.";
 
-      middleMouseCommand = helpers.defaultNullOpts.mkStr "null" "Command or function run when middle clicking on a buffer.";
+      middleMouseCommand = helpers.defaultNullOpts.mkStr null "Command or function run when middle clicking on a buffer.";
 
       indicator = {
         icon = helpers.defaultNullOpts.mkStr "▎" "icon";
@@ -161,7 +161,7 @@ in
         "thin"
       ] "thin" "Separator style";
 
-      nameFormatter = helpers.defaultNullOpts.mkLuaFn "null" ''
+      nameFormatter = helpers.defaultNullOpts.mkLuaFn null ''
         A lua function that can be used to modify the buffer's label.
         The argument 'buf' containing a name, path and bufnr is supplied.
       '';
@@ -178,7 +178,7 @@ in
 
       showBufferCloseIcons = helpers.defaultNullOpts.mkBool true "Show buffer close icons";
 
-      getElementIcon = helpers.defaultNullOpts.mkLuaFn "null" ''
+      getElementIcon = helpers.defaultNullOpts.mkLuaFn null ''
         Lua function returning an element icon.
 
         ```
@@ -210,11 +210,11 @@ in
         ])
       ) "false" "diagnostics";
 
-      diagnosticsIndicator = helpers.defaultNullOpts.mkLuaFn "null" "Either `null` or a function that returns the diagnostics indicator.";
+      diagnosticsIndicator = helpers.defaultNullOpts.mkLuaFn null "Either `null` or a function that returns the diagnostics indicator.";
 
       diagnosticsUpdateInInsert = helpers.defaultNullOpts.mkBool true "Whether diagnostics should update in insert mode";
 
-      offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "null" "offsets";
+      offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) null "offsets";
 
       groups = {
         items = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "[]" "List of groups.";
@@ -236,7 +236,7 @@ in
         logging = helpers.defaultNullOpts.mkBool false "Whether to enable logging";
       };
 
-      customFilter = helpers.defaultNullOpts.mkLuaFn "null" ''
+      customFilter = helpers.defaultNullOpts.mkLuaFn null ''
         ```
         fun(buf: number, bufnums: number[]): boolean
         ```

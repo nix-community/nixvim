@@ -32,7 +32,7 @@ in
 
     includeConfigs = helpers.defaultNullOpts.mkBool true "Add default configurations.";
 
-    resolvePython = helpers.defaultNullOpts.mkLuaFn "null" ''
+    resolvePython = helpers.defaultNullOpts.mkLuaFn null ''
       Function to resolve path to python to use for program or test execution.
       By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
     '';

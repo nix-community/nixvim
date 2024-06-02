@@ -185,7 +185,7 @@ in
           "Maximum number of lines to allow a value to fill before trimming.";
     };
 
-    selectWindow = helpers.defaultNullOpts.mkLuaFn "null" ''
+    selectWindow = helpers.defaultNullOpts.mkLuaFn null ''
       A function which returns a window to be used for opening buffers such as a stack frame location.
     '';
   };

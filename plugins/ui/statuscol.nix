@@ -29,11 +29,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Whether to right-align the cursor line number with `relativenumber` set.
     '';
 
-    ft_ignore = helpers.defaultNullOpts.mkListOf types.str "null" ''
+    ft_ignore = helpers.defaultNullOpts.mkListOf types.str null ''
       Lua table with 'filetype' values for which `statuscolumn` will be unset.
     '';
 
-    bt_ignore = helpers.defaultNullOpts.mkListOf types.str "null" ''
+    bt_ignore = helpers.defaultNullOpts.mkListOf types.str null ''
       Lua table with 'buftype' values for which `statuscolumn` will be unset.
     '';
 

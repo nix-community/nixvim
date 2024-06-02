@@ -23,7 +23,7 @@ in
       "quickfix"
     ] "how to execute terminal commands";
 
-    onInitialized = helpers.defaultNullOpts.mkLuaFn "null" ''
+    onInitialized = helpers.defaultNullOpts.mkLuaFn null ''
       Callback to execute once rust-analyzer is done initializing the workspace
       The callback receives one parameter indicating the `health` of the server:
       "ok" | "warning" | "error"
@@ -72,11 +72,11 @@ in
       '' "rust-tools hover window" "";
 
       maxWidth =
-        helpers.defaultNullOpts.mkNullable types.int "null"
+        helpers.defaultNullOpts.mkNullable types.int null
           "Maximal width of the hover window. null means no max.";
 
       maxHeight =
-        helpers.defaultNullOpts.mkNullable types.int "null"
+        helpers.defaultNullOpts.mkNullable types.int null
           "Maximal height of the hover window. null means no max.";
 
       autoFocus = helpers.defaultNullOpts.mkBool false "whether the hover action window gets automatically focused";
@@ -88,13 +88,13 @@ in
         see: https://graphviz.org/docs/outputs/
       '';
 
-      output = helpers.defaultNullOpts.mkStr "null" "where to store the output, nil for no output stored";
+      output = helpers.defaultNullOpts.mkStr null "where to store the output, nil for no output stored";
 
       full = helpers.defaultNullOpts.mkBool true ''
         true for all crates.io and external crates, false only the local crates
       '';
 
-      enabledGraphvizBackends = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "null" ''
+      enabledGraphvizBackends = helpers.defaultNullOpts.mkNullable (types.listOf types.str) null ''
         List of backends found on: https://graphviz.org/docs/outputs/
         Is used for input validation and autocompletion
       '';

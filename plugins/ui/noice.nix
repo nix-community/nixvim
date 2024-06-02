@@ -156,7 +156,7 @@ with lib;
       hover = {
         enabled = helpers.defaultNullOpts.mkBool true "enable hover UI";
         view =
-          helpers.defaultNullOpts.mkNullable types.str "null"
+          helpers.defaultNullOpts.mkNullable types.str null
             "when null, use defaults from documentation";
         opts =
           helpers.defaultNullOpts.mkNullable types.anything "{}"
@@ -176,7 +176,7 @@ with lib;
         };
 
         view =
-          helpers.defaultNullOpts.mkNullable types.str "null"
+          helpers.defaultNullOpts.mkNullable types.str null
             "when null, use defaults from documentation";
         opts =
           helpers.defaultNullOpts.mkNullable types.anything "{}"
