@@ -213,6 +213,9 @@ rec {
           default ? head values,
           ...
         }@args:
+        # `values` is a list and `default` is one of the values (or null)
+        assert isList values;
+        assert default == null || elem default values;
         mkNullableWithRaw' (
           (filterAttrs (n: v: n != "values") args)
           // {
