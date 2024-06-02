@@ -76,173 +76,235 @@ rec {
     );
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
 
-  defaultNullOpts = rec {
-    /**
-      Build a description with a plugin default.
+  defaultNullOpts =
+    let
+      # Convert `defaultNullOpts`-style arguments into normal `mkOption`-style arguments,
+      # i.e. moves `default` into `description` using `defaultNullOpts.mkDesc`
+      convertArgs =
+        { default, description, ... }@args:
+        (
+          args
+          // {
+            default = null;
+            description = defaultNullOpts.mkDesc default description;
+          }
+        );
+    in
+    rec {
+      /**
+        Build a description with a plugin default.
 
-      The [default] can be any value, and it will be formatted using `lib.generators.toPretty`.
+        The [default] can be any value, and it will be formatted using `lib.generators.toPretty`.
 
-      If [default] is a String, it will not be formatted.
-      This behavior will likely change in the future.
+        If [default] is a String, it will not be formatted.
+        This behavior will likely change in the future.
 
-      # Example
-      ```nix
-      mkDesc 1 "foo"
-      => ''
-        foo
+        # Example
+        ```nix
+        mkDesc 1 "foo"
+        => ''
+          foo
 
-        Plugin default: `1`
-      ''
-      ```
-
-      # Type
-      ```
-      mkDesc :: Any -> String -> String
-      ```
-
-      # Arguments
-      - [default] The plugin's default
-      - [desc] The option's description
-    */
-    mkDesc =
-      default: desc:
-      let
-        # Assume a string default is already formatted as intended,
-        # historically strings were the only type accepted here.
-        # TODO deprecate this behavior so we can properly quote strings
-        defaultString = if isString default then default else generators.toPretty { } default;
-        defaultDesc =
-          "Plugin default:"
-          + (
-            # Detect whether `default` is multiline or inline:
-            if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`"
-          );
-      in
-      if desc == "" then
-        defaultDesc
-      else
+          Plugin default: `1`
         ''
-          ${desc}
+        ```
 
-          ${defaultDesc}
-        '';
+        # Type
+        ```
+        mkDesc :: Any -> String -> String
+        ```
 
-    mkNullable' =
-      { default, description, ... }@args:
-      mkNullOrOption' (
-        args
-        // {
-          default = null;
-          description = mkDesc default description;
-        }
-      );
-    mkNullable =
-      type: default: description:
-      mkNullable' { inherit type default description; };
-
-    mkNullableWithRaw' =
-      { type, ... }@args: mkNullable' (args // { type = nixvimTypes.maybeRaw type; });
-    mkNullableWithRaw =
-      type: default: description:
-      mkNullableWithRaw' { inherit type default description; };
-
-    mkStrLuaOr =
-      type: default: desc:
-      mkNullOrStrLuaOr type (mkDesc default desc);
-
-    mkStrLuaFnOr =
-      type: default: desc:
-      mkNullOrStrLuaFnOr type (mkDesc default desc);
-
-    mkLua = default: desc: mkNullOrLua (mkDesc default desc);
-
-    mkLuaFn = default: desc: mkNullOrLuaFn (mkDesc default desc);
-
-    mkNum = mkNullableWithRaw types.number;
-    mkInt = mkNullableWithRaw types.int;
-    # Positive: >0
-    mkPositiveInt = mkNullableWithRaw types.ints.positive;
-    # Unsigned: >=0
-    mkUnsignedInt = mkNullableWithRaw types.ints.unsigned;
-    mkBool = mkNullableWithRaw types.bool;
-    mkStr =
-      # TODO we should delegate rendering quoted string to `mkDefaultDesc`,
-      # once we remove its special case for strings.
-      default: mkNullableWithRaw types.str (generators.toPretty { } default);
-
-    mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
-    mkAttributeSet = default: description: mkAttributeSet' { inherit default description; };
-
-    mkListOf' =
-      { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
-    mkListOf =
-      type: default: description:
-      mkListOf' { inherit type default description; };
-
-    mkAttrsOf' =
-      { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
-    mkAttrsOf =
-      type: default: description:
-      mkAttrsOf' { inherit type default description; };
-
-    mkEnum =
-      enumValues: default:
-      mkNullableWithRaw (types.enum enumValues) (
-        # TODO we should remove this once `mkDefaultDesc` no longer has a special case
-        if isString default then generators.toPretty { } default else default
-      );
-    mkEnumFirstDefault = enumValues: mkEnum enumValues (head enumValues);
-    mkBorder =
-      default: name: desc:
-      mkNullableWithRaw nixvimTypes.border default (
+        # Arguments
+        - [default] The plugin's default
+        - [desc] The option's description
+      */
+      mkDesc =
+        default: desc:
         let
-          defaultDesc = ''
-            Defines the border to use for ${name}.
-            Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info.
-          '';
+          # Assume a string default is already formatted as intended,
+          # historically strings were the only type accepted here.
+          # TODO deprecate this behavior so we can properly quote strings
+          defaultString = if isString default then default else generators.toPretty { } default;
+          defaultDesc =
+            "Plugin default:"
+            + (
+              # Detect whether `default` is multiline or inline:
+              if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`"
+            );
         in
         if desc == "" then
           defaultDesc
         else
           ''
             ${desc}
-            ${defaultDesc}
-          ''
-      );
-    mkSeverity =
-      default: desc:
-      mkOption {
-        type =
-          with types;
-          nullOr (
-            either ints.unsigned (enum [
-              "error"
-              "warn"
-              "info"
-              "hint"
-            ])
-          );
-        default = null;
-        apply = mapNullable (
-          value: if isInt value then value else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
-        );
-        description = mkDesc default desc;
-      };
-    mkLogLevel =
-      default: desc:
-      mkOption {
-        type = with types; nullOr (either ints.unsigned nixvimTypes.logLevel);
-        default = null;
-        apply = mapNullable (
-          value: if isInt value then value else mkRaw "vim.log.levels.${strings.toUpper value}"
-        );
-        description = mkDesc default desc;
-      };
 
-    mkHighlight =
-      default: name: desc:
-      mkNullable nixvimTypes.highlight default (if desc == "" then "Highlight settings." else desc);
-  };
+            ${defaultDesc}
+          '';
+
+      mkNullable' = { default, description, ... }@args: mkNullOrOption' (convertArgs args);
+      mkNullable =
+        type: default: description:
+        mkNullable' { inherit type default description; };
+
+      mkNullableWithRaw' =
+        { type, ... }@args: mkNullable' (args // { type = nixvimTypes.maybeRaw type; });
+      mkNullableWithRaw =
+        type: default: description:
+        mkNullableWithRaw' { inherit type default description; };
+
+      mkStrLuaOr' = { default, description, ... }@args: mkNullOrStrLuaOr' (convertArgs args);
+      mkStrLuaOr =
+        type: default: description:
+        mkStrLuaOr' { inherit type default description; };
+
+      mkStrLuaFnOr' = { default, description, ... }@args: mkNullOrStrLuaFnOr' (convertArgs args);
+      mkStrLuaFnOr =
+        type: default: description:
+        mkStrLuaFnOr' { inherit type default description; };
+
+      mkLua' = { default, description, ... }@args: mkNullOrLua' (convertArgs args);
+      mkLua = default: description: mkLua' { inherit default description; };
+
+      mkLuaFn' = { default, description, ... }@args: mkNullOrLuaFn' (convertArgs args);
+      mkLuaFn = default: description: mkLuaFn' { inherit default description; };
+
+      mkNum' = args: mkNullableWithRaw' (args // { type = types.number; });
+      mkNum = default: description: mkNum' { inherit default description; };
+      mkInt' = args: mkNullableWithRaw' (args // { type = types.int; });
+      mkInt = default: description: mkNum' { inherit default description; };
+      # Positive: >0
+      mkPositiveInt' = args: mkNullableWithRaw' (args // { type = types.ints.positive; });
+      mkPositiveInt = default: description: mkPositiveInt' { inherit default description; };
+      # Unsigned: >=0
+      mkUnsignedInt' = args: mkNullableWithRaw' (args // { type = types.ints.unsigned; });
+      mkUnsignedInt = default: description: mkUnsignedInt' { inherit default description; };
+      mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
+      mkBool = default: description: mkBool' { inherit default description; };
+      mkStr' =
+        { default, ... }@args:
+        mkNullableWithRaw' (
+          args
+          // {
+            # TODO we should remove this once `mkDesc` no longer has a special case
+            default = generators.toPretty { } default;
+            type = types.str;
+          }
+        );
+      mkStr = default: description: mkStr' { inherit default description; };
+
+      mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
+      mkAttributeSet = default: description: mkAttributeSet' { inherit default description; };
+
+      mkListOf' =
+        { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
+      mkListOf =
+        type: default: description:
+        mkListOf' { inherit type default description; };
+
+      mkAttrsOf' =
+        { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
+      mkAttrsOf =
+        type: default: description:
+        mkAttrsOf' { inherit type default description; };
+
+      mkEnum' =
+        {
+          values,
+          default ? head values,
+          ...
+        }@args:
+        mkNullableWithRaw' (
+          (filterAttrs (n: v: n != "values") args)
+          // {
+            # TODO we should remove this once `mkDesc` no longer has a special case
+            default = if isString default then generators.toPretty { } default else default;
+            type = types.enum values;
+          }
+        );
+      mkEnum =
+        values: default: description:
+        mkEnum' { inherit values default description; };
+      mkEnumFirstDefault = values: description: mkEnum' { inherit values description; };
+
+      mkBorder' =
+        {
+          name,
+          description ? "",
+          ...
+        }@args:
+        mkNullableWithRaw' (
+          (filterAttrs (n: v: n != "name") args)
+          // {
+            type = nixvimTypes.border;
+            description = concatStringsSep "\n" (
+              filter (s: s != "") [
+                description
+                "Defines the border to use for ${name}."
+                "Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info."
+              ]
+            );
+          }
+        );
+      mkBorder =
+        default: name: description:
+        mkBorder' { inherit default name description; };
+
+      mkSeverity' =
+        args:
+        mkNullOrOption' (
+          args
+          // {
+            type =
+              with types;
+              either ints.unsigned (enum [
+                "error"
+                "warn"
+                "info"
+                "hint"
+              ]);
+            apply = mapNullable (
+              value: if isInt value then value else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
+            );
+          }
+        );
+      mkSeverity = default: description: mkSeverity' { inherit default description; };
+
+      mkLogLevel' =
+        args:
+        mkNullOrOption' (
+          args
+          // {
+            type = with nixvimTypes; either ints.unsigned logLevel;
+            apply = mapNullable (
+              value: if isInt value then value else mkRaw "vim.log.levels.${strings.toUpper value}"
+            );
+          }
+        );
+      mkLogLevel = default: description: mkLogLevel' { inherit default description; };
+
+      mkHighlight' =
+        {
+          description ? "Highlight settings.",
+          ...
+        }@args:
+        mkNullable' (
+          args
+          // {
+            type = nixvimTypes.highlight;
+            inherit description;
+          }
+        );
+      # FIXME `name` argument is ignored
+      # TODO deprecate in favor of `mkHighlight'`?
+      mkHighlight =
+        default: name: description:
+        mkHighlight' (
+          {
+            inherit default;
+          }
+          // (optionalAttrs (description != null && description != "") { inherit description; })
+        );
+    };
 
   mkPackageOption =
     {
