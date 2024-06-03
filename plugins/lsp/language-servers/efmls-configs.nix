@@ -164,10 +164,7 @@ in
     setup =
       let
         languageTools =
-          lang: kind:
-          builtins.map (v: v.name) (
-            if builtins.hasAttr kind tools.${lang} then tools.${lang}.${kind} else [ ]
-          );
+          lang: kind: map (v: v.name) (if hasAttr kind tools.${lang} then tools.${lang}.${kind} else [ ]);
 
         miscLinters = languageTools "misc" "linters";
         miscFormatters = languageTools "misc" "formatters";
@@ -188,8 +185,8 @@ in
           freeformType = types.attrs;
 
           options =
-            (builtins.listToAttrs (
-              builtins.map (
+            (listToAttrs (
+              map (
                 lang:
                 let
                   langTools = languageTools lang;
@@ -217,19 +214,19 @@ in
   config =
     let
       cfg = config.plugins.efmls-configs;
-      toolAsList = tools: if builtins.isList tools then tools else [ tools ];
+      toolAsList = tools: if isList tools then tools else [ tools ];
 
       # Tools that have been selected by the user
       tools = lists.unique (
-        builtins.filter builtins.isString (
-          builtins.concatLists (
-            builtins.map (
+        filter isString (
+          concatLists (
+            map (
               {
                 linter ? [ ],
                 formatter ? [ ],
               }:
               (toolAsList linter) ++ (toolAsList formatter)
-            ) (builtins.attrValues cfg.setup)
+            ) (attrValues cfg.setup)
           )
         )
       );
@@ -240,7 +237,7 @@ in
             if cfg.externallyManagedPackages == "all" then
               _: false
             else
-              t: !(builtins.elem t cfg.externallyManagedPackages);
+              toolName: !(elem toolName cfg.externallyManagedPackages);
           partition = lists.partition partitionFn tools;
         in
         {
@@ -248,17 +245,16 @@ in
           external = partition.wrong;
         };
 
-      nixvimPkgs = lists.partition (v: builtins.hasAttr v cfg.toolPackages) pkgsForTools.nixvim;
+      nixvimPkgs = lists.partition (v: hasAttr v cfg.toolPackages) pkgsForTools.nixvim;
 
       mkToolOption =
         kind: opt:
-        builtins.map (
-          tool:
-          if builtins.isString tool then helpers.mkRaw "require 'efmls-configs.${kind}.${tool}'" else tool
+        map (
+          tool: if isString tool then helpers.mkRaw "require 'efmls-configs.${kind}.${tool}'" else tool
         ) (toolAsList opt);
 
       setupOptions =
-        (builtins.mapAttrs (
+        (mapAttrs (
           _:
           {
             linter ? [ ],
@@ -275,9 +271,9 @@ in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
-      warnings = optional ((builtins.length nixvimPkgs.wrong) > 0) ''
+      warnings = optional ((length nixvimPkgs.wrong) > 0) ''
         Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
-          ${builtins.concatStringsSep " " nixvimPkgs.wrong}
+          ${concatStringsSep " " nixvimPkgs.wrong}
       '';
 
       plugins.lsp.servers.efm = {
@@ -285,8 +281,6 @@ in
         extraOptions.settings.languages = setupOptions;
       };
 
-      extraPackages = [
-        pkgs.efm-langserver
-      ] ++ (builtins.map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
+      extraPackages = [ pkgs.efm-langserver ] ++ (map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
     };
 }
