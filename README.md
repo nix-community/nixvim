@@ -130,6 +130,8 @@ you're using.
 
 For more detail, see the [Usage](https://nix-community.github.io/nixvim/user-guide/install.html#usage) section of our documentation.
 
+### Standalone Usage
+
 If you want to use it standalone, you can use the `makeNixvim` function:
 
 ```nix
@@ -198,6 +200,25 @@ can use the following:
 You can then run neovim using `nix run .# -- <file>`. This can be useful to test
 config changes easily.
 
+### Advanced Usage
+
+You may want more control over the nixvim modules, like:
+
+- Splitting your configuration in multiple files
+- Adding custom nix modules to enhance nixvim
+- Change the nixpkgs used by nixvim
+
+In this case, you can use the `makeNixvimWithModule` function.
+
+It takes a set with the following keys:
+- `pkgs`: The nixpkgs to use (defaults to the nixpkgs pointed at by the nixvim flake)
+- `module`: The nix module definition used to extend nixvim.
+  This is useful to pass additional module machinery like `options` or `imports`.
+- `extraSpecialArgs`: Extra arguments to pass to the modules when using functions.
+  Can be `self` in a flake, for example.
+
+For more detail, see the [Standalone Usage](https://nix-community.github.io/nixvim/modules/standalone.html) section of our documentation.
+
 ### With a `devShell`
 
 You can also use nixvim to define an instance which will only be available inside a Nix `devShell`:
@@ -216,23 +237,6 @@ in pkgs.mkShell {
 ```
 
 </details>
-
-### Advanced Usage
-
-You may want more control over the nixvim modules, like:
-
-- Splitting your configuration in multiple files
-- Adding custom nix modules to enhance nixvim
-- Change the nixpkgs used by nixvim
-
-In this case, you can use the `makeNixvimWithModule` function.
-
-It takes a set with the following keys:
-- `pkgs`: The nixpkgs to use (defaults to the nixpkgs pointed at by the nixvim flake)
-- `module`: The nix module definition used to extend nixvim.
-  This is useful to pass additional module machinery like `options` or `imports`.
-- `extraSpecialArgs`: Extra arguments to pass to the modules when using functions.
-  Can be `self` in a flake, for example.
 
 ## How does it work?
 When you build the module (probably using home-manager), it will install all
