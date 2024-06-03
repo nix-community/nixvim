@@ -46,6 +46,38 @@ as fast as possible.
 Since everything is disabled by default, it will be as snappy as you want it to
 be.
 
+### Plugin settings
+Most plugins have a `settings` option, which accepts _any_ nix attribute set
+and translate it into a lua table. This is then passed to the plugin's `setup`
+function. In practice this means if a plugin has a `settings` option, any plugin
+option can be configured, even if we don't explicitly have a corresponding nix
+option.
+
+### Raw lua
+If you just want to add additional lines of lua to your `init.lua`, you can use
+`extraConfigLua`, `extraConfigLuaPre`, and `extraConfigLuaPost`.
+
+If you want to assign lua code to an option that'd normally accept another type
+(string, int, etc), you can use nixvim's "raw type", `{ __raw = "lua code"; }`.
+
+<details>
+  <summary>Example</summary>
+
+This nix code:
+```nix
+{
+  some_option.__raw = "function() print('hello, world!') end";
+}
+```
+Will produce the following lua:
+```lua
+{
+  ['some_option'] = function() print('hello, world!') end,
+}
+```
+
+</details>
+
 ## Support/Questions
 If you have any question, please use the [discussions page](https://github.com/nix-community/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
 
