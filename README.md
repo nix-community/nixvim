@@ -48,7 +48,11 @@ If you have any question, please use the [discussions page](https://github.com/n
 >
 > If you want to use NixVim with nixpkgs 23.11 you should use the `nixos-23.11` branch.
 
-### Without flakes
+For more detail, see the [Installation](https://nix-community.github.io/nixvim/install.html#installation) section of our documentation.
+
+<details>
+  <summary><strong>Without flakes</strong></summary>
+
 NixVim now ships with `flake-compat`, which makes it usable from any system.
 
 To install it, edit your home-manager (or NixOS) configuration:
@@ -76,7 +80,11 @@ in
 }
 ```
 
-### Using flakes
+</details>
+
+<details>
+  <summary><strong>Using flakes</strong></summary>
+
 This is the recommended method if you are already using flakes to manage your
 system. To enable flakes, add this to `/etc/nixos/configuration.nix`
 
@@ -110,6 +118,8 @@ flakes, just add the nixvim input:
 You can now access the module using `inputs.nixvim.homeManagerModules.nixvim`,
 for a home-manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
 and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
+
+</details>
 
 ## Usage
 NixVim can be used in four ways: through the home-manager, nix-darwin, NixOS modules,
