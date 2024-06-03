@@ -128,12 +128,14 @@ and standalone through the `makeNixvim` function. To use the modules, just impor
 `nixvim.nixosModules.nixvim` modules, depending on which system
 you're using.
 
+For more detail, see the [Usage](https://nix-community.github.io/nixvim/user-guide/install.html#usage) section of our documentation.
+
 If you want to use it standalone, you can use the `makeNixvim` function:
 
 ```nix
 { pkgs, nixvim, ... }: {
   environment.systemModules = [
-    (nixvim.legacyPackages."${system}".makeNixvim {
+    (nixvim.legacyPackages."${pkgs.system}".makeNixvim {
       colorschemes.gruvbox.enable = true;
     })
   ];
