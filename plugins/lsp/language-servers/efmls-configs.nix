@@ -214,7 +214,6 @@ in
   config =
     let
       cfg = config.plugins.efmls-configs;
-      toolAsList = tools: if isList tools then tools else [ tools ];
 
       # Tools that have been selected by the user
       tools = lists.unique (
@@ -225,7 +224,7 @@ in
                 linter ? [ ],
                 formatter ? [ ],
               }:
-              (toolAsList linter) ++ (toolAsList formatter)
+              (toList linter) ++ (toList formatter)
             ) (attrValues cfg.setup)
           )
         )
@@ -251,7 +250,7 @@ in
         kind: opt:
         map (
           tool: if isString tool then helpers.mkRaw "require 'efmls-configs.${kind}.${tool}'" else tool
-        ) (toolAsList opt);
+        ) (toList opt);
 
       setupOptions =
         (mapAttrs (
