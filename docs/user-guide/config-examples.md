@@ -14,6 +14,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 |-|-|
 | [ahwxorg/nixvim-config] | |
 | [alisonjenkins/neovim-nix-flake] | |
+| [elythh/nixvim] | |
 | [GaetanLepage/nix-config] | Home-manager |
 | [gwg313/nvim-nix] | |
 | [hbjydev/hvim] | |
@@ -27,6 +28,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 
 [ahwxorg/nixvim-config]: https://github.com/ahwxorg/nixvim-config
 [alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
+[elythh/nixvim]: https://github.com/elythh/nixvim
 [GaetanLepage/nix-config]: https://github.com/GaetanLepage/nix-config/tree/master/home/modules/tui/neovim
 [gwg313/nvim-nix]: https://github.com/gwg313/nvim-nix
 [hbjydev/hvim]: https://github.com/hbjydev/hvim
