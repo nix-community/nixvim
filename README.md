@@ -37,6 +37,15 @@ gruvbox as the colorscheme, no extra configuration required!
 
 Check out [this list of real world nixvim configs](https://nix-community.github.io/nixvim/user-guide/config-examples.html)!
 
+## How does it work?
+When you build the module (probably using home-manager), it will install all
+your plugins and generate a lua config for NeoVim with all the options
+specified. Because it uses lua, this ensures that your configuration will load
+as fast as possible.
+
+Since everything is disabled by default, it will be as snappy as you want it to
+be.
+
 ## Support/Questions
 If you have any question, please use the [discussions page](https://github.com/nix-community/nixvim/discussions/categories/q-a)! Alternatively, join the Matrix channel at [#nixvim:matrix.org](https://matrix.to/#/#nixvim:matrix.org)!
 
@@ -237,15 +246,6 @@ in pkgs.mkShell {
 ```
 
 </details>
-
-## How does it work?
-When you build the module (probably using home-manager), it will install all
-your plugins and generate a lua config for NeoVim with all the options
-specified. Because it uses lua, this ensures that your configuration will load
-as fast as possible.
-
-Since everything is disabled by default, it will be as snappy as you want it to
-be.
 
 # Documentation
 Documentation is available on this project's GitHub Pages page:
