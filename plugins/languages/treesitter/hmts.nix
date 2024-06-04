@@ -20,7 +20,7 @@ in
 
   config = mkIf cfg.enable {
     warnings = optional (!config.plugins.treesitter.enable) [
-      "Nixvim: treesitter-refactor needs treesitter to function as intended"
+      "Nixvim: hmts needs treesitter to function as intended"
     ];
 
     extraPlugins = [ cfg.package ];
