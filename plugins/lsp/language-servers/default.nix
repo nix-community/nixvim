@@ -444,6 +444,11 @@ let
       description = "pyright for Python";
     }
     {
+      name = "r-language-server";
+      description = "Enable languageserver LSP for R";
+      package = pkgs.rPackages.languageserver;
+    }
+    {
       name = "rnix-lsp";
       description = "rnix LSP for Nix";
       serverName = "rnix";
