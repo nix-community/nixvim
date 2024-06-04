@@ -8,12 +8,18 @@
 
   perSystem =
     { pkgs, config, ... }:
+    let
+      fmt = pkgs.nixfmt-rfc-style;
+    in
     {
       treefmt.config = {
         projectRootFile = "flake.nix";
 
         programs = {
-          nixfmt-rfc-style.enable = true;
+          nixfmt = {
+            enable = true;
+            package = fmt;
+          };
           statix.enable = true;
         };
       };
@@ -21,8 +27,8 @@
       pre-commit = {
         settings.hooks = {
           nixfmt = {
-            package = pkgs.nixfmt-rfc-style;
             enable = true;
+            package = fmt;
           };
           statix = {
             enable = true;
