@@ -16,8 +16,6 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    # A flake-parts module for finding the project root directory
-    flake-root.url = "github:srid/flake-root";
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";

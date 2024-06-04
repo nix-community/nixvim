@@ -11,7 +11,6 @@
     ./templates.nix
     ./tests.nix
     ./wrappers.nix
-    inputs.flake-root.flakeModule
   ];
 
   perSystem =
