@@ -11,7 +11,6 @@
     {
       treefmt.config = {
         projectRootFile = "flake.nix";
-        package = pkgs.treefmt;
 
         programs = {
           nixfmt-rfc-style.enable = true;
