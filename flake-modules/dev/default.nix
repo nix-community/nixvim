@@ -9,8 +9,6 @@
   perSystem =
     { pkgs, config, ... }:
     {
-      formatter = config.treefmt.build.wrapper;
-
       treefmt.config = {
         projectRootFile = "flake.nix";
         package = pkgs.treefmt;
