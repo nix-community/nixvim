@@ -1,0 +1,16 @@
+# Git revisions added to this file will be ignored by GitHub's blame feature.
+#
+# This can also be used locally with `git blame` by configuring your "blame.ignoreRevsFile":
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# Or you can this on an ad-hock basis with the `--ignore-revs-file` argument:
+# git blame --ignore-revs-file .git-blame-ignore-revs
+
+# This commit reformatted from alejandra to nixfmt-rfc-style:
+# 2024-05-05: treewide: Reformat with nixfmt
+62f32bfc711f0a3c8a52af4c0790345b4b3d2346
+
+# This commit reverted the formatting back to alejandra ~1 month later:
+# 2024-06-04: treewide: reformat with alejandra
+e9cab7f8e8ae3be7c952c109b37d34dd354d637e
+
