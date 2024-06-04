@@ -10,6 +10,8 @@ In order to submit a change you must be careful of several points:
 - The tests must pass. This can be done through `nix flake check --all-systems` (this also checks formatting).
 - The change should try to avoid breaking existing configurations.
 - If the change introduces a new feature it should add tests for it (see the architecture section for details).
+- The commit title should be consistent with our style. This usually looks like "plugins/<name>: fixed some bug",
+  you can browse the commit history of the files you're editing to see previous commit messages.
 
 ## Nixvim Architecture
 
