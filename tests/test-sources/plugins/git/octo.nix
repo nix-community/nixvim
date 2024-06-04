@@ -51,8 +51,8 @@
           "origin"
         ];
 
-        gh_env = { };
-        ssh_aliases = { };
+        gh_env = {};
+        ssh_aliases = {};
 
         picker_config = {
           use_emojis = false;

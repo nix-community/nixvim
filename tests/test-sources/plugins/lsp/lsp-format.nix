@@ -22,7 +22,7 @@
 
         setup = {
           go = {
-            exclude = [ "gopls" ];
+            exclude = ["gopls"];
             order = [
               "gopls"
               "efm"

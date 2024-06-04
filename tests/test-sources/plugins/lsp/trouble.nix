@@ -34,10 +34,10 @@
             "<cr>"
             "<tab>"
           ];
-          open_split = [ "<c-x>" ];
-          open_vsplit = [ "<c-v>" ];
-          open_tab = [ "<c-t>" ];
-          jump_close = [ "o" ];
+          open_split = ["<c-x>"];
+          open_vsplit = ["<c-v>"];
+          open_tab = ["<c-t>"];
+          jump_close = ["o"];
           toggle_mode = "m";
           toggle_preview = "P";
           hover = "K";
@@ -65,7 +65,7 @@
         auto_close = false;
         auto_preview = true;
         auto_fold = false;
-        auto_jump = [ "lsp_definitions" ];
+        auto_jump = ["lsp_definitions"];
         signs = {
           error = "";
           warning = "";

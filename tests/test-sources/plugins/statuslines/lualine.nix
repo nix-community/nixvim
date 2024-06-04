@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   empty = {
     plugins.lualine.enable = true;
   };
@@ -26,30 +25,30 @@
         winbar = 1000;
       };
       sections = {
-        lualine_a = [ "mode" ];
+        lualine_a = ["mode"];
         lualine_b = [
           "branch"
           "diff"
           "diagnostics"
         ];
-        lualine_c = [ "filename" ];
+        lualine_c = ["filename"];
         lualine_x = [
           "encoding"
           "fileformat"
           "filetype"
         ];
-        lualine_y = [ "progress" ];
-        lualine_z = [ "location" ];
+        lualine_y = ["progress"];
+        lualine_z = ["location"];
       };
       inactiveSections = {
-        lualine_c = [ "filename" ];
-        lualine_x = [ "location" ];
+        lualine_c = ["filename"];
+        lualine_x = ["location"];
       };
     };
   };
 
   example = {
-    extraPlugins = [ pkgs.vimPlugins.gruvbox-nvim ];
+    extraPlugins = [pkgs.vimPlugins.gruvbox-nvim];
     plugins.lualine = {
       enable = true;
       theme.__raw = ''
@@ -64,7 +63,7 @@
         "neo-tree"
       ];
       disabledFiletypes = {
-        winbar = [ "neo-tree" ];
+        winbar = ["neo-tree"];
       };
       sections = {
         lualine_c = [
@@ -80,8 +79,8 @@
           }
         ];
         lualine_z = [
-          { name = "location"; }
-          { name = "%L"; } # total lines
+          {name = "location";}
+          {name = "%L";} # total lines
         ];
       };
       tabline = {
@@ -111,7 +110,7 @@
           }
         ];
       };
-      extensions = [ "nvim-tree" ];
+      extensions = ["nvim-tree"];
     };
   };
 }

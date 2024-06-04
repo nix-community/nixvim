@@ -1,6 +1,8 @@
-{ lib, helpers }:
-with lib;
 {
+  lib,
+  helpers,
+}:
+with lib; {
   # https://github.com/epwalsh/obsidian.nvim/blob/main/lua/obsidian/config.lua
 
   log_level = helpers.defaultNullOpts.mkLogLevel "info" ''
@@ -37,17 +39,17 @@ with lib;
 
   new_notes_location =
     helpers.defaultNullOpts.mkEnumFirstDefault
-      [
-        "current_dir"
-        "notes_subdir"
-      ]
-      ''
-        Where to put new notes created from completion.
+    [
+      "current_dir"
+      "notes_subdir"
+    ]
+    ''
+      Where to put new notes created from completion.
 
-        Valid options are
-        - "current_dir" - put new notes in same directory as the current buffer.
-        - "notes_subdir" - put new notes in the default notes subdirectory.
-      '';
+      Valid options are
+      - "current_dir" - put new notes in same directory as the current buffer.
+      - "notes_subdir" - put new notes in the default notes subdirectory.
+    '';
 
   note_id_func = helpers.mkNullOrLuaFn ''
     Customize how names/IDs for new notes are created.
@@ -135,13 +137,13 @@ with lib;
 
   preferred_link_style =
     helpers.defaultNullOpts.mkEnumFirstDefault
-      [
-        "wiki"
-        "markdown"
-      ]
-      ''
-        Either 'wiki' or 'markdown'.
-      '';
+    [
+      "wiki"
+      "markdown"
+    ]
+    ''
+      Either 'wiki' or 'markdown'.
+    '';
 
   follow_url_func = helpers.mkNullOrLuaFn ''
     By default when you use `:ObsidianFollowLink` on a link to an external URL it will be
@@ -216,8 +218,8 @@ with lib;
 
   mappings =
     helpers.defaultNullOpts.mkNullable
-      (
-        with types;
+    (
+      with types;
         attrsOf (submodule {
           options = {
             action = mkOption {
@@ -225,72 +227,74 @@ with lib;
               description = "The lua code for this keymap action.";
               apply = helpers.mkRaw;
             };
-            opts = helpers.keymaps.mapConfigOptions // {
-              buffer = helpers.defaultNullOpts.mkBool false ''
-                If true, the mapping will be effective in the current buffer only.
-              '';
-            };
+            opts =
+              helpers.keymaps.mapConfigOptions
+              // {
+                buffer = helpers.defaultNullOpts.mkBool false ''
+                  If true, the mapping will be effective in the current buffer only.
+                '';
+              };
           };
         })
-      )
-      ''
-        {
-          gf = {
-            action = "require('obsidian').util.gf_passthrough";
-            opts = {
-              noremap = false;
-              expr = true;
-              buffer = true;
-            };
+    )
+    ''
+      {
+        gf = {
+          action = "require('obsidian').util.gf_passthrough";
+          opts = {
+            noremap = false;
+            expr = true;
+            buffer = true;
           };
+        };
 
-          "<leader>ch" = {
-            action = "require('obsidian').util.toggle_checkbox";
-            opts.buffer = true;
-          };
-        }
-      ''
-      ''
-        Configure key mappings.
-      '';
+        "<leader>ch" = {
+          action = "require('obsidian').util.toggle_checkbox";
+          opts.buffer = true;
+        };
+      }
+    ''
+    ''
+      Configure key mappings.
+    '';
 
   picker = {
     name =
       helpers.mkNullOrOption
-        (types.enum [
-          "telescope.nvim"
-          "fzf-lua"
-          "mini.pick"
-        ])
-        ''
-          Set your preferred picker.
-        '';
+      (types.enum [
+        "telescope.nvim"
+        "fzf-lua"
+        "mini.pick"
+      ])
+      ''
+        Set your preferred picker.
+      '';
 
     note_mappings =
       helpers.defaultNullOpts.mkAttrsOf types.str
-        ''
-          {
-            new = "<C-x>";
-            insert_link = "<C-l>";
-          }
-        ''
-        ''
-          Optional, configure note mappings for the picker. These are the defaults.
-          Not all pickers support all mappings.
-        '';
+      ''
+        {
+          new = "<C-x>";
+          insert_link = "<C-l>";
+        }
+      ''
+      ''
+        Optional, configure note mappings for the picker. These are the defaults.
+        Not all pickers support all mappings.
+      '';
 
     tag_mappings =
       helpers.defaultNullOpts.mkAttrsOf types.str
-        ''
-          {
-            tag_note = "<C-x>";
-            insert_tag = "<C-l>";
-          }
-        ''
-        ''
-          Optional, configure tag mappings for the picker. These are the defaults.
-          Not all pickers support all mappings.
-        '';
+      ''
+        {
+          tag_note = "<C-x>";
+          insert_tag = "<C-l>";
+        }
+      ''
+      ''
+        Optional, configure tag mappings for the picker. These are the defaults.
+        Not all pickers support all mappings.
+      '';
   };
 
   daily_notes = {
@@ -326,18 +330,18 @@ with lib;
 
   sort_by =
     helpers.defaultNullOpts.mkEnum
-      [
-        "path"
-        "modified"
-        "accessed"
-        "created"
-      ]
+    [
+      "path"
       "modified"
-      ''
-        Sort search results by "path", "modified", "accessed", or "created".
-        The recommend value is "modified" and `true` for `sortReversed`, which means, for example,
-        that `:ObsidianQuickSwitch` will show the notes sorted by latest modified time.
-      '';
+      "accessed"
+      "created"
+    ]
+    "modified"
+    ''
+      Sort search results by "path", "modified", "accessed", or "created".
+      The recommend value is "modified" and `true` for `sortReversed`, which means, for example,
+      that `:ObsidianQuickSwitch` will show the notes sorted by latest modified time.
+    '';
 
   sort_reversed = helpers.defaultNullOpts.mkBool true ''
     Whether search results should be reversed.
@@ -345,19 +349,19 @@ with lib;
 
   open_notes_in =
     helpers.defaultNullOpts.mkEnumFirstDefault
-      [
-        "current"
-        "vsplit"
-        "hsplit"
-      ]
-      ''
-        Determines how certain commands open notes.
+    [
+      "current"
+      "vsplit"
+      "hsplit"
+    ]
+    ''
+      Determines how certain commands open notes.
 
-        The valid options are:
-        - "current" (the default) - to always open in the current window
-        - "vsplit" - to open in a vertical split if there's not already a vertical split
-        - "hsplit" - to open in a horizontal split if there's not already a horizontal split
-      '';
+      The valid options are:
+      - "current" (the default) - to always open in the current window
+      - "vsplit" - to open in a vertical split if there's not already a vertical split
+      - "hsplit" - to open in a horizontal split if there's not already a horizontal split
+    '';
 
   ui = {
     enable = helpers.defaultNullOpts.mkBool true ''
@@ -370,8 +374,8 @@ with lib;
 
     checkboxes =
       helpers.defaultNullOpts.mkNullable
-        (
-          with types;
+      (
+        with types;
           attrsOf (submodule {
             options = {
               char = mkOption {
@@ -385,34 +389,34 @@ with lib;
               };
             };
           })
-        )
-        ''
-          {
-            " " = {
-              char = "󰄱";
-              hl_group = "ObsidianTodo";
-            };
-            "x" = {
-              char = "";
-              hl_group = "ObsidianDone";
-            };
-            ">" = {
-              char = "";
-              hl_group = "ObsidianRightArrow";
-            };
-            "~" = {
-              char = "󰰱";
-              hl_group = "ObsidianTilde";
-            };
-          }
-        ''
-        ''
-          Define how various check-boxes are displayed.
-          You can also add more custom ones...
+      )
+      ''
+        {
+          " " = {
+            char = "󰄱";
+            hl_group = "ObsidianTodo";
+          };
+          "x" = {
+            char = "";
+            hl_group = "ObsidianDone";
+          };
+          ">" = {
+            char = "";
+            hl_group = "ObsidianRightArrow";
+          };
+          "~" = {
+            char = "󰰱";
+            hl_group = "ObsidianTilde";
+          };
+        }
+      ''
+      ''
+        Define how various check-boxes are displayed.
+        You can also add more custom ones...
 
-          NOTE: the 'char' value has to be a single character, and the highlight groups are defined
-          in the `ui.hl_groups` option.
-        '';
+        NOTE: the 'char' value has to be a single character, and the highlight groups are defined
+        in the `ui.hl_groups` option.
+      '';
 
     bullets = {
       char = helpers.defaultNullOpts.mkStr "•" ''
@@ -499,32 +503,32 @@ with lib;
 
     img_text_func =
       helpers.defaultNullOpts.mkLuaFn
-        ''
-          function(client, path)
-            ---@type string
-            local link_path
-            local vault_relative_path = client:vault_relative_path(path)
-            if vault_relative_path ~= nil then
-              -- Use relative path if the image is saved in the vault dir.
-              link_path = vault_relative_path
-            else
-              -- Otherwise use the absolute path.
-              link_path = tostring(path)
-            end
-            local display_name = vim.fs.basename(link_path)
-            return string.format("![%s](%s)", display_name, link_path)
+      ''
+        function(client, path)
+          ---@type string
+          local link_path
+          local vault_relative_path = client:vault_relative_path(path)
+          if vault_relative_path ~= nil then
+            -- Use relative path if the image is saved in the vault dir.
+            link_path = vault_relative_path
+          else
+            -- Otherwise use the absolute path.
+            link_path = tostring(path)
           end
-        ''
-        ''
-          A function that determines the text to insert in the note when pasting an image.
-          It takes two arguments, the `obsidian.Client` and a plenary `Path` to the image file.
+          local display_name = vim.fs.basename(link_path)
+          return string.format("![%s](%s)", display_name, link_path)
+        end
+      ''
+      ''
+        A function that determines the text to insert in the note when pasting an image.
+        It takes two arguments, the `obsidian.Client` and a plenary `Path` to the image file.
 
-          ```lua
-            @param client obsidian.Client
-            @param path Path the absolute path to the image file
-            @return string
-          ```
-        '';
+        ```lua
+          @param client obsidian.Client
+          @param path Path the absolute path to the image file
+          @return string
+        ```
+      '';
 
     confirm_img_paste = helpers.defaultNullOpts.mkBool true ''
       Whether to prompt for confirmation when pasting an image.
@@ -565,19 +569,19 @@ with lib;
 
   yaml_parser =
     helpers.defaultNullOpts.mkEnumFirstDefault
-      [
-        "native"
-        "yq"
-      ]
-      ''
-        Set the YAML parser to use.
+    [
+      "native"
+      "yq"
+    ]
+    ''
+      Set the YAML parser to use.
 
-        The valid options are:
-        - "native" - uses a pure Lua parser that's fast but potentially misses some edge cases.
-        - "yq" - uses the command-line tool yq (https://github.com/mikefarah/yq), which is more robust
-          but much slower and needs to be installed separately.
+      The valid options are:
+      - "native" - uses a pure Lua parser that's fast but potentially misses some edge cases.
+      - "yq" - uses the command-line tool yq (https://github.com/mikefarah/yq), which is more robust
+        but much slower and needs to be installed separately.
 
-        In general you should be using the native parser unless you run into a bug with it, in which
-        case you can temporarily switch to the "yq" parser until the bug is fixed.
-      '';
+      In general you should be using the native parser unless you run into a bug with it, in which
+      case you can temporarily switch to the "yq" parser until the bug is fixed.
+    '';
 }

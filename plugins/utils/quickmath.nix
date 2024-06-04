@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.quickmath;
-in
-{
+in {
   options.plugins.quickmath = {
     enable = mkEnableOption "quickmath.nvim";
 
@@ -27,10 +25,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    keymaps =
-      with cfg.keymap;
+    keymaps = with cfg.keymap;
       optional (key != null) {
         mode = "n";
         inherit key;

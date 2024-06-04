@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   keymapsDefinitions = {
     clear = {
       default = "<C-]>";
@@ -35,36 +34,36 @@ let
     };
   };
 in
-helpers.vim-plugin.mkVimPlugin config {
-  name = "codeium-vim";
-  originalName = "codeium.vim";
-  defaultPackage = pkgs.vimPlugins.codeium-vim;
-  globalPrefix = "codeium_";
+  helpers.vim-plugin.mkVimPlugin config {
+    name = "codeium-vim";
+    originalName = "codeium.vim";
+    defaultPackage = pkgs.vimPlugins.codeium-vim;
+    globalPrefix = "codeium_";
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  # TODO introduced 2024-02-19: remove 2024-03-19
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "bin"
-    "filetypes"
-    "manual"
-    "noMapTab"
-    "idleDelay"
-    "render"
-    "tabFallback"
-    "disableBindings"
-  ];
+    # TODO introduced 2024-02-19: remove 2024-03-19
+    deprecateExtraConfig = true;
+    optionsRenamedToSettings = [
+      "bin"
+      "filetypes"
+      "manual"
+      "noMapTab"
+      "idleDelay"
+      "render"
+      "tabFallback"
+      "disableBindings"
+    ];
 
-  settingsOptions = {
-    bin = mkOption {
-      type = with types; nullOr str;
-      default = "${pkgs.codeium}/bin/codeium_language_server";
-      description = "The path to the codeium language server executable.";
-    };
+    settingsOptions = {
+      bin = mkOption {
+        type = with types; nullOr str;
+        default = "${pkgs.codeium}/bin/codeium_language_server";
+        description = "The path to the codeium language server executable.";
+      };
 
-    filetypes =
-      helpers.defaultNullOpts.mkAttrsOf types.bool
+      filetypes =
+        helpers.defaultNullOpts.mkAttrsOf types.bool
         ''
           {
             help = false;
@@ -78,57 +77,56 @@ helpers.vim-plugin.mkVimPlugin config {
           This can be used to opt out of completions for certain filetypes.
         '';
 
-    manual = helpers.defaultNullOpts.mkBool false ''
-      If true, codeium completions will never automatically trigger.
-    '';
+      manual = helpers.defaultNullOpts.mkBool false ''
+        If true, codeium completions will never automatically trigger.
+      '';
 
-    no_map_tab = helpers.defaultNullOpts.mkBool false ''
-      Whether to disable the `<Tab>` keybinding.
-    '';
+      no_map_tab = helpers.defaultNullOpts.mkBool false ''
+        Whether to disable the `<Tab>` keybinding.
+      '';
 
-    idle_delay = helpers.defaultNullOpts.mkPositiveInt 75 ''
-      Delay in milliseconds before autocompletions are shown (limited by language server to a
-      minimum of 75).
-    '';
+      idle_delay = helpers.defaultNullOpts.mkPositiveInt 75 ''
+        Delay in milliseconds before autocompletions are shown (limited by language server to a
+        minimum of 75).
+      '';
 
-    render = helpers.defaultNullOpts.mkBool true ''
-      A global boolean flag that controls whether codeium renders are enabled or disabled.
-    '';
+      render = helpers.defaultNullOpts.mkBool true ''
+        A global boolean flag that controls whether codeium renders are enabled or disabled.
+      '';
 
-    tab_fallback = helpers.mkNullOrOption types.str ''
-      The fallback key when there is no suggestion display in `codeium#Accept()`.
+      tab_fallback = helpers.mkNullOrOption types.str ''
+        The fallback key when there is no suggestion display in `codeium#Accept()`.
 
-      Default: "\<C-N>" when a popup menu is visible, else "\t".
-    '';
+        Default: "\<C-N>" when a popup menu is visible, else "\t".
+      '';
 
-    disable_bindings = helpers.defaultNullOpts.mkBool false ''
-      Whether to disable default keybindings.
-    '';
-  };
+      disable_bindings = helpers.defaultNullOpts.mkBool false ''
+        Whether to disable default keybindings.
+      '';
+    };
 
-  extraOptions = {
-    keymaps = mapAttrs (
-      optionName: v:
-      helpers.defaultNullOpts.mkStr v.default ''
-        ${v.description}
-        Command: `${v.command}`
-      ''
-    ) keymapsDefinitions;
-  };
-
-  extraConfig = cfg: {
-    plugins.codeium-vim.settings.enabled = true;
-
-    keymaps =
-      let
-        processKeymap =
+    extraOptions = {
+      keymaps =
+        mapAttrs (
           optionName: v:
+            helpers.defaultNullOpts.mkStr v.default ''
+              ${v.description}
+              Command: `${v.command}`
+            ''
+        )
+        keymapsDefinitions;
+    };
+
+    extraConfig = cfg: {
+      plugins.codeium-vim.settings.enabled = true;
+
+      keymaps = let
+        processKeymap = optionName: v:
           optional (v != null) {
             key = v;
-            action =
-              let
-                inherit (keymapsDefinitions.${optionName}) command;
-              in
+            action = let
+              inherit (keymapsDefinitions.${optionName}) command;
+            in
               helpers.mkRaw "function() ${command} end";
           };
 
@@ -142,6 +140,6 @@ helpers.vim-plugin.mkVimPlugin config {
           };
         };
       in
-      helpers.keymaps.mkKeymaps defaults keymapsList;
-  };
-}
+        helpers.keymaps.mkKeymaps defaults keymapsList;
+    };
+  }

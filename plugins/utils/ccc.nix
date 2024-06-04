@@ -6,19 +6,17 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "ccc";
-  originalName = "ccc.nvim";
-  defaultPackage = pkgs.vimPlugins.ccc-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "ccc";
+    originalName = "ccc.nvim";
+    defaultPackage = pkgs.vimPlugins.ccc-nvim;
 
-  maintainers = [ helpers.maintainers.JanKremer ];
+    maintainers = [helpers.maintainers.JanKremer];
 
-  settingsOptions =
-    let
+    settingsOptions = let
       listOfRawLua = with helpers.nixvimTypes; listOf strLua;
       mapToRawLua = map helpers.mkRaw;
-    in
-    {
+    in {
       default_color = helpers.defaultNullOpts.mkStr "#000000" ''
         The default color used when a color cannot be picked. It must be HEX format.
       '';
@@ -26,7 +24,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       inputs = mkOption {
         type = listOfRawLua;
         apply = mapToRawLua;
-        default = [ ];
+        default = [];
         example = [
           "ccc.input.rgb"
           "ccc.input.hsl"
@@ -62,7 +60,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       outputs = mkOption {
         type = listOfRawLua;
         apply = mapToRawLua;
-        default = [ ];
+        default = [];
         example = [
           "ccc.output.hex"
           "ccc.output.hex_short"
@@ -98,7 +96,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       pickers = mkOption {
         type = listOfRawLua;
         apply = mapToRawLua;
-        default = [ ];
+        default = [];
         example = [
           "ccc.picker.hex"
           "ccc.picker.css_rgb"
@@ -131,16 +129,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       highlight_mode =
         helpers.defaultNullOpts.mkEnumFirstDefault
-          [
-            "bg"
-            "fg"
-            "background"
-            "foreground"
-          ]
-          ''
-            Option to highlight text foreground or background.
-            It is used to `output_line` and `highlighter`.
-          '';
+        [
+          "bg"
+          "fg"
+          "background"
+          "foreground"
+        ]
+        ''
+          Option to highlight text foreground or background.
+          It is used to `output_line` and `highlighter`.
+        '';
 
       lsp = helpers.defaultNullOpts.mkBool true ''
         Whether to enable LSP support.
@@ -180,17 +178,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       convert = mkOption {
-        type =
-          with helpers.nixvimTypes;
+        type = with helpers.nixvimTypes;
           nullOr (
             maybeRaw (
               listOf
-                # Pairs of lua strings
-                (listOf strLua)
+              # Pairs of lua strings
+              (listOf strLua)
             )
           );
         apply = map mapToRawLua;
-        default = [ ];
+        default = [];
         example = [
           [
             "ccc.picker.hex"
@@ -218,39 +215,39 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
     };
 
-  settingsExample = {
-    default_color = "#FFFFFF";
-    inputs = [
-      "ccc.input.oklab"
-      "ccc.input.oklch"
-    ];
-    outputs = [
-      "ccc.output.css_oklab"
-      "ccc.output.css_oklch"
-    ];
-    pickers = [
-      "ccc.picker.css_oklch"
-      "ccc.picker.css_name"
-      "ccc.picker.hex"
-    ];
-    highlight_mode = "fg";
-    lsp = false;
-    highlighter = {
-      auto_enable = true;
+    settingsExample = {
+      default_color = "#FFFFFF";
+      inputs = [
+        "ccc.input.oklab"
+        "ccc.input.oklch"
+      ];
+      outputs = [
+        "ccc.output.css_oklab"
+        "ccc.output.css_oklch"
+      ];
+      pickers = [
+        "ccc.picker.css_oklch"
+        "ccc.picker.css_name"
+        "ccc.picker.hex"
+      ];
+      highlight_mode = "fg";
       lsp = false;
-      excludes = [ "markdown" ];
-      update_insert = false;
+      highlighter = {
+        auto_enable = true;
+        lsp = false;
+        excludes = ["markdown"];
+        update_insert = false;
+      };
     };
-  };
 
-  callSetup = false;
-  extraConfig = cfg: {
-    # ccc requires `termguicolors` to be enabled.
-    opts.termguicolors = lib.mkDefault true;
+    callSetup = false;
+    extraConfig = cfg: {
+      # ccc requires `termguicolors` to be enabled.
+      opts.termguicolors = lib.mkDefault true;
 
-    extraConfigLua = ''
-      ccc = require('ccc')
-      ccc.setup(${helpers.toLuaObject cfg.settings})
-    '';
-  };
-}
+      extraConfigLua = ''
+        ccc = require('ccc')
+        ccc.setup(${helpers.toLuaObject cfg.settings})
+      '';
+    };
+  }

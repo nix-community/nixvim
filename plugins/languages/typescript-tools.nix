@@ -5,11 +5,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.typescript-tools;
-in
-{
+in {
   options.plugins.typescript-tools = {
     enable = mkEnableOption "typescript-tools";
     package = helpers.mkPluginPackageOption "typescript-tools" pkgs.vimPlugins.typescript-tools-nvim;
@@ -35,19 +33,18 @@ in
 
       publishDiagnosticOn =
         helpers.defaultNullOpts.mkEnum
-          [
-            "change"
-            "insert_leave"
-          ]
+        [
+          "change"
           "insert_leave"
-          ''
-            Either "change" or "insert_leave". Determines when the client asks the server about diagnostics
-          '';
+        ]
+        "insert_leave"
+        ''
+          Either "change" or "insert_leave". Determines when the client asks the server about diagnostics
+        '';
 
       exposeAsCodeAction = mkOption {
-        type =
-          with types;
-          either (enum [ "all" ]) (
+        type = with types;
+          either (enum ["all"]) (
             listOf (enum [
               "fix_all"
               "add_missing_imports"
@@ -57,7 +54,7 @@ in
               "insert_leave"
             ])
           );
-        default = [ ];
+        default = [];
         description = "Specify what to expose as code actions.";
       };
 
@@ -66,19 +63,18 @@ in
         doesn't exist then standard path resolution strategy is applied
       '';
 
-      tsserverPlugins =
-        with helpers.nixvimTypes;
+      tsserverPlugins = with helpers.nixvimTypes;
         helpers.mkNullOrOption (listOf (maybeRaw str)) ''
           List of plugins for tsserver to load. See this plugins's README
           at https://github.com/pmizio/typescript-tools.nvim/#-styled-components-support
         '';
 
       tsserverMaxMemory =
-        helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (either ints.unsigned (enum [ "auto" ])))
-          ''
-            This value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
-            Memory limit in megabytes or "auto"(basically no limit)
-          '';
+        helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (either ints.unsigned (enum ["auto"])))
+        ''
+          This value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
+          Memory limit in megabytes or "auto"(basically no limit)
+        '';
 
       tsserverFormatOptions = mkOption {
         type = with types; nullOr (attrsOf anything);
@@ -124,14 +120,14 @@ in
 
       codeLens =
         helpers.defaultNullOpts.mkEnum
-          [
-            "off"
-            "all"
-            "implementations_only"
-            "references_only"
-          ]
+        [
           "off"
-          "WARNING: Experimental feature also in VSCode, disabled by default because it might impact server performance.";
+          "all"
+          "implementations_only"
+          "references_only"
+        ]
+        "off"
+        "WARNING: Experimental feature also in VSCode, disabled by default because it might impact server performance.";
 
       disableMemberCodeLens = helpers.defaultNullOpts.mkBool true ''
         By default code lenses are displayed on all referenceable values. Display less by removing member references from lenses.
@@ -154,35 +150,32 @@ in
       nvim-lspconfig
     ];
 
-    plugins.lsp.postConfig =
-      with cfg;
-      let
-        options = {
-          inherit handlers;
-          on_attach = onAttach;
+    plugins.lsp.postConfig = with cfg; let
+      options = {
+        inherit handlers;
+        on_attach = onAttach;
 
-          settings = with settings; {
-            separate_diagnostic_server = separateDiagnosticServer;
-            publish_diagnostic_on = publishDiagnosticOn;
-            expose_as_code_action = exposeAsCodeAction;
-            tsserver_path = tsserverPath;
-            tsserver_plugins = tsserverPlugins;
-            tsserver_max_memory = tsserverMaxMemory;
-            tsserver_format_options = tsserverFormatOptions;
-            tsserver_file_preferences = tsserverFilePreferences;
-            tsserver_locale = tsserverLocale;
-            complete_function_calls = completeFunctionCalls;
-            include_completions_with_insert_text = includeCompletionsWithInsertText;
-            code_lens = codeLens;
-            disable_member_code_lens = disableMemberCodeLens;
-            jsx_close_tag = with jsxCloseTag; {
-              inherit enable filetypes;
-            };
+        settings = with settings; {
+          separate_diagnostic_server = separateDiagnosticServer;
+          publish_diagnostic_on = publishDiagnosticOn;
+          expose_as_code_action = exposeAsCodeAction;
+          tsserver_path = tsserverPath;
+          tsserver_plugins = tsserverPlugins;
+          tsserver_max_memory = tsserverMaxMemory;
+          tsserver_format_options = tsserverFormatOptions;
+          tsserver_file_preferences = tsserverFilePreferences;
+          tsserver_locale = tsserverLocale;
+          complete_function_calls = completeFunctionCalls;
+          include_completions_with_insert_text = includeCompletionsWithInsertText;
+          code_lens = codeLens;
+          disable_member_code_lens = disableMemberCodeLens;
+          jsx_close_tag = with jsxCloseTag; {
+            inherit enable filetypes;
           };
         };
-      in
-      ''
-        require('typescript-tools').setup(${helpers.toLuaObject options})
-      '';
+      };
+    in ''
+      require('typescript-tools').setup(${helpers.toLuaObject options})
+    '';
   };
 }

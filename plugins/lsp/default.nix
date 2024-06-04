@@ -5,12 +5,10 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.lsp;
-in
-{
-  imports = [ ./language-servers ];
+in {
+  imports = [./language-servers];
 
   options = {
     plugins.lsp = {
@@ -30,7 +28,7 @@ in
             "<leader>k" = "goto_prev";
             "<leader>j" = "goto_next";
           };
-          default = { };
+          default = {};
         };
 
         lspBuf = mkOption {
@@ -43,7 +41,7 @@ in
             "gi" = "implementation";
             "K" = "hover";
           };
-          default = { };
+          default = {};
         };
 
         extra = mkOption {
@@ -74,13 +72,12 @@ in
               action = "<CMD>Lspsaga hover_doc<Enter>";
             }
           ];
-          default = [ ];
+          default = [];
         };
       };
 
       enabledServers = mkOption {
-        type =
-          with types;
+        type = with types;
           listOf (oneOf [
             str
             (submodule {
@@ -107,7 +104,7 @@ in
             })
           ]);
         description = "A list of enabled LSP servers. Don't use this directly.";
-        default = [ ];
+        default = [];
         internal = true;
         visible = false;
       };
@@ -127,7 +124,7 @@ in
       setupWrappers = mkOption {
         type = with types; listOf (functionTo str);
         description = "Code to be run to wrap the setup args. Takes in an argument containing the previous results, and returns a new string of code.";
-        default = [ ];
+        default = [];
       };
 
       preConfig = mkOption {
@@ -144,54 +141,59 @@ in
     };
   };
 
-  config =
-    let
-      runWrappers =
-        wrappers: s: if wrappers == [ ] then s else (head wrappers) (runWrappers (tail wrappers) s);
-      updateCapabilities =
-        let
-          servers = builtins.filter (
-            server: server.capabilities != null && server.capabilities != { }
-          ) cfg.enabledServers;
-        in
-        lib.concatMapStringsSep "\n" (
-          server:
-          let
-            updates = lib.concatMapStringsSep "\n" (name: ''
-              client.server_capabilities.${name} = ${helpers.toLuaObject server.capabilities.${name}}
-            '') (builtins.attrNames server.capabilities);
-          in
-          ''
-            if client.name == "${server.name}" then
-              ${updates}
-            end
-          ''
-        ) servers;
+  config = let
+    runWrappers = wrappers: s:
+      if wrappers == []
+      then s
+      else (head wrappers) (runWrappers (tail wrappers) s);
+    updateCapabilities = let
+      servers =
+        builtins.filter (
+          server: server.capabilities != null && server.capabilities != {}
+        )
+        cfg.enabledServers;
     in
+      lib.concatMapStringsSep "\n" (
+        server: let
+          updates = lib.concatMapStringsSep "\n" (name: ''
+            client.server_capabilities.${name} = ${helpers.toLuaObject server.capabilities.${name}}
+          '') (builtins.attrNames server.capabilities);
+        in ''
+          if client.name == "${server.name}" then
+            ${updates}
+          end
+        ''
+      )
+      servers;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.nvim-lspconfig ];
+      extraPlugins = [pkgs.vimPlugins.nvim-lspconfig];
 
-      keymapsOnEvents.LspAttach =
-        let
-          mkMaps =
-            prefix:
-            mapAttrsToList (
-              key: action:
-              let
-                actionStr = if isString action then action else action.action;
-                actionProps = if isString action then { } else filterAttrs (n: v: n != "action") action;
-              in
-              {
-                mode = "n";
-                inherit key;
-                action = helpers.mkRaw (prefix + actionStr);
+      keymapsOnEvents.LspAttach = let
+        mkMaps = prefix:
+          mapAttrsToList (
+            key: action: let
+              actionStr =
+                if isString action
+                then action
+                else action.action;
+              actionProps =
+                if isString action
+                then {}
+                else filterAttrs (n: v: n != "action") action;
+            in {
+              mode = "n";
+              inherit key;
+              action = helpers.mkRaw (prefix + actionStr);
 
-                options = {
+              options =
+                {
                   inherit (cfg.keymaps) silent;
-                } // actionProps;
-              }
-            );
-        in
+                }
+                // actionProps;
+            }
+          );
+      in
         (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
         ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
         ++ cfg.keymaps.extra;

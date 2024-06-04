@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.nvim-colorizer;
 
   colorizer-options = {
@@ -98,8 +97,7 @@ let
       default = null;
     };
   };
-in
-{
+in {
   options = {
     plugins.nvim-colorizer = {
       enable = mkEnableOption "nvim-colorizer";
@@ -113,9 +111,11 @@ in
             types.oneOf [
               types.str
               (types.submodule {
-                options = {
-                  language = mkOption { type = types.str; };
-                } // colorizer-options;
+                options =
+                  {
+                    language = mkOption {type = types.str;};
+                  }
+                  // colorizer-options;
               })
             ]
           )
@@ -125,7 +125,7 @@ in
 
       userDefaultOptions = mkOption {
         description = "Default options";
-        type = types.nullOr (types.submodule { options = colorizer-options; });
+        type = types.nullOr (types.submodule {options = colorizer-options;});
         default = null;
       };
 
@@ -138,33 +138,32 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    extraConfigLua =
-      let
-        filetypes =
-          if (cfg.fileTypes != null) then
-            (
-              let
-                list = map (
+    extraConfigLua = let
+      filetypes =
+        if (cfg.fileTypes != null)
+        then
+          (
+            let
+              list =
+                map (
                   v:
-                  if builtins.isAttrs v then
-                    v.language + " = " + helpers.toLuaObject (builtins.removeAttrs v [ "language" ])
-                  else
-                    "'${v}'"
-                ) cfg.fileTypes;
-              in
+                    if builtins.isAttrs v
+                    then v.language + " = " + helpers.toLuaObject (builtins.removeAttrs v ["language"])
+                    else "'${v}'"
+                )
+                cfg.fileTypes;
+            in
               "{" + (concatStringsSep "," list) + "}"
-            )
-          else
-            "nil";
-      in
-      ''
-        require("colorizer").setup({
-          filetypes = ${filetypes},
-          user_default_options = ${helpers.toLuaObject cfg.userDefaultOptions},
-          buftypes = ${helpers.toLuaObject cfg.bufTypes},
-        })
-      '';
+          )
+        else "nil";
+    in ''
+      require("colorizer").setup({
+        filetypes = ${filetypes},
+        user_default_options = ${helpers.toLuaObject cfg.userDefaultOptions},
+        buftypes = ${helpers.toLuaObject cfg.bufTypes},
+      })
+    '';
   };
 }

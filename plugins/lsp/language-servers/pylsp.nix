@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.lsp.servers.pylsp;
-in
-{
+in {
   # All settings are documented here:
   # https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
 
@@ -23,7 +21,10 @@ in
       );
       description = "List of configuration sources to use.";
       default = null;
-      apply = value: if (value != null) then [ value ] else null;
+      apply = value:
+        if (value != null)
+        then [value]
+        else null;
     };
 
     plugins = {
@@ -91,7 +92,7 @@ in
       jedi = {
         auto_import_modules =
           helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[ \"numpy\" ]"
-            "List of module names for `jedi.settings.auto_import_modules`.";
+          "List of module names for `jedi.settings.auto_import_modules`.";
 
         extra_paths = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
           Define extra paths for jedi.Script.
@@ -131,8 +132,8 @@ in
 
         cache_for =
           helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-            "[ \"pandas\" \"numpy\" \"tensorflow\" \"matplotlib\" ]"
-            "Modules for which labels and snippets should be cached.";
+          "[ \"pandas\" \"numpy\" \"tensorflow\" \"matplotlib\" ]"
+          "Modules for which labels and snippets should be cached.";
       };
 
       jedi_definition = {
@@ -354,22 +355,22 @@ in
 
         overrides =
           helpers.defaultNullOpts.mkNullable
-            (types.listOf (
-              types.oneOf [
-                types.bool
-                types.str
-                helpers.nixvimTypes.rawLua
-              ]
-            ))
-            "[true]"
-            ''
-              Specifies a list of alternate or supplemental command-line options.
-              This modifies the options passed to mypy or the mypy-specific ones passed to dmypy run.
-              When present, the special boolean member true is replaced with the command-line options that
-              would've been passed had overrides not been specified.
-              Later options take precedence, which allows for replacing or negating individual default
-              options (see mypy.main:process_options and mypy --help | grep inverse).
-            '';
+          (types.listOf (
+            types.oneOf [
+              types.bool
+              types.str
+              helpers.nixvimTypes.rawLua
+            ]
+          ))
+          "[true]"
+          ''
+            Specifies a list of alternate or supplemental command-line options.
+            This modifies the options passed to mypy or the mypy-specific ones passed to dmypy run.
+            When present, the special boolean member true is replaced with the command-line options that
+            would've been passed had overrides not been specified.
+            Later options take precedence, which allows for replacing or negating individual default
+            options (see mypy.main:process_options and mypy --help | grep inverse).
+          '';
 
         dmypy_status_file = helpers.defaultNullOpts.mkStr ".dmypy.json" ''
           Specifies which status file dmypy should use.
@@ -505,114 +506,120 @@ in
     # We need to fix the `python-lsp-server` derivation by adding all of the (user enabled)
     # plugins to its `propagatedBuildInputs`.
     # See https://github.com/NixOS/nixpkgs/issues/229337
-    plugins.lsp.servers.pylsp.package =
-      let
-        isEnabled = x: (x.enabled != null && x.enabled);
-        inherit (cfg.settings) plugins;
+    plugins.lsp.servers.pylsp.package = let
+      isEnabled = x: (x.enabled != null && x.enabled);
+      inherit (cfg.settings) plugins;
 
-        nativePlugins =
-          (map
-            (
-              pluginName:
-              (optionals (isEnabled plugins.${pluginName}) cfg.package.optional-dependencies.${pluginName})
-            )
-            [
-              "autopep8"
-              "flake8"
-              "mccabe"
-              "pycodestyle"
-              "pydocstyle"
-              "pyflakes"
-              "pylint"
-              "yapf"
-            ]
+      nativePlugins =
+        (
+          map
+          (
+            pluginName: (optionals (isEnabled plugins.${pluginName}) cfg.package.optional-dependencies.${pluginName})
           )
-          ++ (optionals (
+          [
+            "autopep8"
+            "flake8"
+            "mccabe"
+            "pycodestyle"
+            "pydocstyle"
+            "pyflakes"
+            "pylint"
+            "yapf"
+          ]
+        )
+        ++ (optionals (
             (isEnabled plugins.rope_autoimport) || (isEnabled plugins.rope_completion)
-          ) cfg.package.optional-dependencies.rope);
+          )
+          cfg.package.optional-dependencies.rope);
 
-        # All of those plugins have `python-lsp-server` as a dependency.
-        # We need to get rid of it to add them to the `python-lsp-server` derivation itself.
-        thirdPartyPlugins = lists.flatten (
-          mapAttrsToList
-            (
-              pluginName: nixPackage:
-              (optional (isEnabled plugins.${pluginName}) (
-                nixPackage.overridePythonAttrs (old: {
-                  # Get rid of the python-lsp-server dependency
-                  propagatedBuildInputs = filter (dep: dep.pname != "python-lsp-server") old.propagatedBuildInputs;
+      # All of those plugins have `python-lsp-server` as a dependency.
+      # We need to get rid of it to add them to the `python-lsp-server` derivation itself.
+      thirdPartyPlugins = lists.flatten (
+        mapAttrsToList
+        (
+          pluginName: nixPackage: (optional (isEnabled plugins.${pluginName}) (
+            nixPackage.overridePythonAttrs (old: {
+              # Get rid of the python-lsp-server dependency
+              propagatedBuildInputs = filter (dep: dep.pname != "python-lsp-server") old.propagatedBuildInputs;
 
-                  # Skip testing because those naked dependencies will complain about missing pylsp
-                  doCheck = false;
-                })
-              ))
-            )
-            (
-              with pkgs.python3Packages;
-              {
-                pylsp_mypy = pylsp-mypy.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      substituteInPlace setup.cfg \
-                        --replace-fail "python-lsp-server >=1.7.0" ""
-                    '';
-                });
-                isort = pyls-isort.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      substituteInPlace setup.py \
-                        --replace-fail 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
-                    '';
-                });
-                black = python-lsp-black.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      substituteInPlace setup.cfg \
-                        --replace-fail "python-lsp-server>=1.4.0" ""
-                    '';
-                });
-                memestra = pyls-memestra.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      sed -i '/python-lsp-server/d' requirements.txt
-                    '';
-                });
-                rope = pylsp-rope.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      sed -i '/python-lsp-server/d' setup.cfg
-                    '';
-                });
-                ruff = python-lsp-ruff.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      sed -i '/python-lsp-server/d' pyproject.toml
-                    '';
+              # Skip testing because those naked dependencies will complain about missing pylsp
+              doCheck = false;
+            })
+          ))
+        )
+        (
+          with pkgs.python3Packages; {
+            pylsp_mypy = pylsp-mypy.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  substituteInPlace setup.cfg \
+                    --replace-fail "python-lsp-server >=1.7.0" ""
+                '';
+            });
+            isort = pyls-isort.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  substituteInPlace setup.py \
+                    --replace-fail 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
+                '';
+            });
+            black = python-lsp-black.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  substituteInPlace setup.cfg \
+                    --replace-fail "python-lsp-server>=1.4.0" ""
+                '';
+            });
+            memestra = pyls-memestra.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  sed -i '/python-lsp-server/d' requirements.txt
+                '';
+            });
+            rope = pylsp-rope.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  sed -i '/python-lsp-server/d' setup.cfg
+                '';
+            });
+            ruff = python-lsp-ruff.overridePythonAttrs (old: {
+              postPatch =
+                old.postPatch
+                or ''''
+                + ''
+                  sed -i '/python-lsp-server/d' pyproject.toml
+                '';
 
-                  build-system = [ setuptools ] ++ (old.build-system or [ ]);
-                });
-              }
-            )
-        );
+              build-system = [setuptools] ++ (old.build-system or []);
+            });
+          }
+        )
+      );
 
-        # Final list of pylsp plugins to install
-        pylspPlugins = nativePlugins ++ thirdPartyPlugins;
-      in
+      # Final list of pylsp plugins to install
+      pylspPlugins = nativePlugins ++ thirdPartyPlugins;
+    in
       mkDefault (
         # This is the final default package for pylsp
         pkgs.python3Packages.python-lsp-server.overridePythonAttrs (old: {
           propagatedBuildInputs = pylspPlugins ++ old.dependencies;
-          disabledTests = (old.disabledTests or [ ]) ++ [
-            # Those tests fail when third-party plugins are loaded
-            "test_notebook_document__did_open"
-            "test_notebook_document__did_change"
-          ];
+          disabledTests =
+            (old.disabledTests or [])
+            ++ [
+              # Those tests fail when third-party plugins are loaded
+              "test_notebook_document__did_open"
+              "test_notebook_document__did_change"
+            ];
         })
       );
   };

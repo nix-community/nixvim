@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.vim-bbye;
-in
-{
+in {
   options.plugins.vim-bbye = {
     enable = mkEnableOption "vim-bbye";
 
@@ -33,24 +31,23 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    keymaps =
-      with cfg.keymaps;
+    keymaps = with cfg.keymaps;
       helpers.keymaps.mkKeymaps
-        {
-          mode = "n";
-          options.silent = cfg.keymapsSilent;
-        }
-        (
-          (optional (bdelete != null) {
-            key = bdelete;
-            action = ":Bdelete<CR>";
-          })
-          ++ (optional (bwipeout != null) {
-            key = bwipeout;
-            action = ":Bwipeout<CR>";
-          })
-        );
+      {
+        mode = "n";
+        options.silent = cfg.keymapsSilent;
+      }
+      (
+        (optional (bdelete != null) {
+          key = bdelete;
+          action = ":Bdelete<CR>";
+        })
+        ++ (optional (bwipeout != null) {
+          key = bwipeout;
+          action = ":Bwipeout<CR>";
+        })
+      );
   };
 }

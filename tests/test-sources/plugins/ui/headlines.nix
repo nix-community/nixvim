@@ -38,7 +38,7 @@
                   ]]
               )
             '';
-            headline_highlights = [ "Headline" ];
+            headline_highlights = ["Headline"];
             bullet_highlights = [
               "@text.title.1.marker.markdown"
               "@text.title.2.marker.markdown"
@@ -88,7 +88,7 @@
               )
             '';
             treesitter_language = "markdown";
-            headline_highlights = [ "Headline" ];
+            headline_highlights = ["Headline"];
             bullet_highlights = [
               "@text.title.1.marker.markdown"
               "@text.title.2.marker.markdown"
@@ -142,7 +142,7 @@
                 ]]
               )
             '';
-            headline_highlights = [ "Headline" ];
+            headline_highlights = ["Headline"];
             bullet_highlights = [
               "@neorg.headings.1.prefix"
               "@neorg.headings.2.prefix"
@@ -191,7 +191,7 @@
                 ]]
               )
             '';
-            headline_highlights = [ "Headline" ];
+            headline_highlights = ["Headline"];
             bullet_highlights = [
               "@org.headline.level1"
               "@org.headline.level2"

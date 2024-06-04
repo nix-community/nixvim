@@ -5,18 +5,15 @@
   pkgs,
   ...
 }:
-with lib;
-{
-  options.plugins.treesitter-textobjects =
-    let
-      disable = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
-        List of languages to disable this module for.
-      '';
+with lib; {
+  options.plugins.treesitter-textobjects = let
+    disable = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      List of languages to disable this module for.
+    '';
 
-      mkKeymapsOption =
-        desc:
-        helpers.defaultNullOpts.mkNullable (
-          with types;
+    mkKeymapsOption = desc:
+      helpers.defaultNullOpts.mkNullable (
+        with types;
           attrsOf (
             either str (submodule {
               options = {
@@ -37,8 +34,9 @@ with lib;
               };
             })
           )
-        ) "{}" desc;
-    in
+      ) "{}"
+      desc;
+  in
     helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "treesitter-textobjects (requires plugins.treesitter.enable to be true)";
@@ -66,19 +64,19 @@ with lib;
 
         selectionModes =
           helpers.defaultNullOpts.mkNullable
-            (
-              with types;
+          (
+            with types;
               attrsOf (enum [
                 "v"
                 "V"
                 "<c-v>"
               ])
-            )
-            "{}"
-            ''
-              Map of capture group to `v`(charwise), `V`(linewise), or `<c-v>`(blockwise), choose a
-              selection mode per capture, default is `v`(charwise).
-            '';
+          )
+          "{}"
+          ''
+            Map of capture group to `v`(charwise), `V`(linewise), or `<c-v>`(blockwise), choose a
+            selection mode per capture, default is `v`(charwise).
+          '';
 
         includeSurroundingWhitespace = helpers.defaultNullOpts.mkStrLuaFnOr types.bool "`false`" ''
           `true` or `false`, when `true` textobjects are extended to include preceding or
@@ -184,36 +182,32 @@ with lib;
       };
     };
 
-  config =
-    let
-      cfg = config.plugins.treesitter-textobjects;
-    in
+  config = let
+    cfg = config.plugins.treesitter-textobjects;
+  in
     mkIf cfg.enable {
       warnings = mkIf (!config.plugins.treesitter.enable) [
         "Nixvim: treesitter-textobjects needs treesitter to function as intended"
       ];
 
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
-      plugins.treesitter.moduleConfig.textobjects =
-        with cfg;
-        let
-          processKeymapsOpt =
-            keymapsOptionValue:
-            helpers.ifNonNull' keymapsOptionValue (
-              mapAttrs (
-                key: mapping:
-                if isString mapping then
-                  mapping
-                else
-                  {
-                    inherit (mapping) query;
-                    query_group = mapping.queryGroup;
-                    inherit (mapping) desc;
-                  }
-              ) keymapsOptionValue
-            );
-        in
+      plugins.treesitter.moduleConfig.textobjects = with cfg; let
+        processKeymapsOpt = keymapsOptionValue:
+          helpers.ifNonNull' keymapsOptionValue (
+            mapAttrs (
+              key: mapping:
+                if isString mapping
+                then mapping
+                else {
+                  inherit (mapping) query;
+                  query_group = mapping.queryGroup;
+                  inherit (mapping) desc;
+                }
+            )
+            keymapsOptionValue
+          );
+      in
         {
           select = with select; {
             inherit enable disable lookahead;

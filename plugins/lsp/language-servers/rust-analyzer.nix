@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.lsp.servers.rust-analyzer;
-in
-{
+in {
   options.plugins.lsp.servers.rust-analyzer = {
     # https://github.com/nix-community/nixvim/issues/674
     installCargo = mkOption {
@@ -60,8 +58,7 @@ in
           By doing so, you will dismiss this warning.
       '');
 
-    extraPackages =
-      with pkgs;
+    extraPackages = with pkgs;
       (optional ((isBool cfg.installCargo) && cfg.installCargo) cfg.cargoPackage)
       ++ (optional ((isBool cfg.installRustc) && cfg.installRustc) cfg.rustcPackage);
   };

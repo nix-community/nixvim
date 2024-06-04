@@ -1,5 +1,4 @@
-{ inputs, ... }:
-{
+{inputs, ...}: {
   imports = [
     ./dev
     ./helpers.nix
@@ -14,14 +13,16 @@
     inputs.flake-root.flakeModule
   ];
 
-  perSystem =
-    { pkgs, system, ... }:
-    {
-      _module.args = {
-        pkgsUnfree = import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
+  perSystem = {
+    pkgs,
+    system,
+    ...
+  }: {
+    _module.args = {
+      pkgsUnfree = import inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
       };
     };
+  };
 }

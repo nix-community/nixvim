@@ -15,8 +15,8 @@
         styles = {
           comments.italic = true;
           keywords.italic = true;
-          functions = { };
-          variables = { };
+          functions = {};
+          variables = {};
         };
         on_colors = "function(colors) end";
         on_highlights = "function(highlights, colors) end";

@@ -19,7 +19,7 @@
         client_id = "1157438221865717891";
         log_level = null;
         debounce_timeout = 10;
-        blacklist = [ ];
+        blacklist = [];
         file_assets = null;
         show_time = true;
         global_timer = false;
@@ -53,7 +53,7 @@
         log_level = null;
         debounce_timeout = 10;
         enable_line_number = false;
-        blacklist = [ ];
+        blacklist = [];
         file_assets = null;
         show_time = true;
         global_timer = false;

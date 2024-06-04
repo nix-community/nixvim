@@ -1,8 +1,10 @@
-{ lib, helpers }:
+{
+  lib,
+  helpers,
+}:
 # All available settings are documented here:
 # https://github.com/oxalica/nil/blob/main/docs/configuration.md
-with lib;
-{
+with lib; {
   formatting = {
     command = helpers.defaultNullOpts.mkListOf' {
       type = types.str;
@@ -12,12 +14,12 @@ with lib;
 
         It should accept file content from stdin and print the formatted code to stdout.
       '';
-      example = [ "nixpkgs-fmt" ];
+      example = ["nixpkgs-fmt"];
     };
   };
 
   diagnostics = {
-    ignored = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    ignored = helpers.defaultNullOpts.mkListOf types.str [] ''
       Ignored diagnostic kinds.
       The kind identifier is a snake_cased_string usually shown together
       with the diagnostic message.
@@ -25,14 +27,14 @@ with lib;
 
     excludedFiles = helpers.defaultNullOpts.mkListOf' {
       type = types.str;
-      default = [ ];
+      default = [];
       description = ''
         Files to exclude from showing diagnostics. Useful for generated files.
 
         It accepts an array of paths. Relative paths are joint to the workspace root.
         Glob patterns are currently not supported.
       '';
-      example = [ "Cargo.nix" ];
+      example = ["Cargo.nix"];
     };
   };
 

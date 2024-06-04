@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.colorschemes.dracula;
-in
-{
+in {
   options = {
     colorschemes.dracula = {
       enable = mkEnableOption "dracula";
@@ -65,7 +63,7 @@ in
 
   config = mkIf cfg.enable {
     colorscheme = "dracula";
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     globals = {
       dracula_bold = mkIf (!cfg.bold) 0;

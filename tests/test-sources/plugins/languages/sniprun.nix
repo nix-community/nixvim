@@ -6,15 +6,15 @@
   default = {
     plugins.sniprun = {
       enable = true;
-      selectedInterpreters = [ ];
-      replEnable = [ ];
-      replDisable = [ ];
-      interpreterOptions = { };
+      selectedInterpreters = [];
+      replEnable = [];
+      replDisable = [];
+      interpreterOptions = {};
       display = [
         "Classic"
         "VirtualTextOk"
       ];
-      liveDisplay = [ "VirtualTextOk" ];
+      liveDisplay = ["VirtualTextOk"];
       displayOptions = {
         terminalWidth = 45;
         notificationTimeout = 5;

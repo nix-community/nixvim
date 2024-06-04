@@ -12,12 +12,13 @@
     config
     pkgs
     ;
-}).mkExtension
-  {
-    name = "ui-select";
-    defaultPackage = pkgs.vimPlugins.telescope-ui-select-nvim;
+})
+.mkExtension
+{
+  name = "ui-select";
+  defaultPackage = pkgs.vimPlugins.telescope-ui-select-nvim;
 
-    settingsExample = {
-      specific_opts.codeactions = false;
-    };
-  }
+  settingsExample = {
+    specific_opts.codeactions = false;
+  };
+}

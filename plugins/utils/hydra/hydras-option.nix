@@ -1,6 +1,8 @@
-{ lib, helpers }:
-with lib;
-let
+{
+  lib,
+  helpers,
+}:
+with lib; let
   hydraType = types.submodule {
     freeformType = with types; attrsOf anything;
     options = {
@@ -26,73 +28,71 @@ let
         for more information.
       '';
 
-      config = import ./hydra-config-opts.nix { inherit lib helpers; };
+      config = import ./hydra-config-opts.nix {inherit lib helpers;};
 
-      heads =
-        let
-          headsOptType = types.submodule {
-            freeformType = with types; attrsOf anything;
-            options = {
-              private = helpers.defaultNullOpts.mkBool false ''
-                "When the hydra hides, this head does not stick out".
-                Private heads are unreachable outside of the hydra state.
-              '';
+      heads = let
+        headsOptType = types.submodule {
+          freeformType = with types; attrsOf anything;
+          options = {
+            private = helpers.defaultNullOpts.mkBool false ''
+              "When the hydra hides, this head does not stick out".
+              Private heads are unreachable outside of the hydra state.
+            '';
 
-              exit = helpers.defaultNullOpts.mkBool false ''
-                When true, stops the hydra after executing this head.
-                NOTE:
-                  - All exit heads are private
-                  - If no exit head is specified, `esc` is set by default
-              '';
+            exit = helpers.defaultNullOpts.mkBool false ''
+              When true, stops the hydra after executing this head.
+              NOTE:
+                - All exit heads are private
+                - If no exit head is specified, `esc` is set by default
+            '';
 
-              exit_before = helpers.defaultNullOpts.mkBool false ''
-                Like `exit`, but stops the hydra BEFORE executing the command.
-              '';
+            exit_before = helpers.defaultNullOpts.mkBool false ''
+              Like `exit`, but stops the hydra BEFORE executing the command.
+            '';
 
-              ok_key = helpers.defaultNullOpts.mkBool true ''
-                When set to `false`, `config.on_key` isn't run after this head.
-              '';
+            ok_key = helpers.defaultNullOpts.mkBool true ''
+              When set to `false`, `config.on_key` isn't run after this head.
+            '';
 
-              desc = helpers.mkNullOrStr ''
-                Value shown in auto-generated hint.
-                When false, this key doesn't show up in the auto-generated hint.
-              '';
+            desc = helpers.mkNullOrStr ''
+              Value shown in auto-generated hint.
+              When false, this key doesn't show up in the auto-generated hint.
+            '';
 
-              expr = helpers.defaultNullOpts.mkBool false ''
-                Same as the builtin `expr` map option.
-                See `:h :map-expression`.
-              '';
+            expr = helpers.defaultNullOpts.mkBool false ''
+              Same as the builtin `expr` map option.
+              See `:h :map-expression`.
+            '';
 
-              silent = helpers.defaultNullOpts.mkBool false ''
-                Same as the builtin `silent` map option.
-                See `:h :map-silent`.
-              '';
+            silent = helpers.defaultNullOpts.mkBool false ''
+              Same as the builtin `silent` map option.
+              See `:h :map-silent`.
+            '';
 
-              nowait = helpers.defaultNullOpts.mkBool false ''
-                For Pink Hydras only.
-                Allows binding a key which will immediately perform its action and not wait
-                `timeoutlen` for a possible continuation.
-              '';
+            nowait = helpers.defaultNullOpts.mkBool false ''
+              For Pink Hydras only.
+              Allows binding a key which will immediately perform its action and not wait
+              `timeoutlen` for a possible continuation.
+            '';
 
-              mode = helpers.mkNullOrOption (
-                with helpers.nixvimTypes; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
-              ) "Override `mode` for this head.";
-            };
+            mode = helpers.mkNullOrOption (
+              with helpers.nixvimTypes; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
+            ) "Override `mode` for this head.";
           };
-          headType =
-            with helpers.nixvimTypes;
-            # More precisely, a tuple: [head action opts]
-            listOf (
-              nullOr (
-                # action can be `null`
-                oneOf [
-                  str # for `head` and `action`
-                  rawLua # for `action`
-                  headsOptType # for opts
-                ]
-              )
-            );
-        in
+        };
+        headType = with helpers.nixvimTypes;
+        # More precisely, a tuple: [head action opts]
+          listOf (
+            nullOr (
+              # action can be `null`
+              oneOf [
+                str # for `head` and `action`
+                rawLua # for `action`
+                headsOptType # for opts
+              ]
+            )
+          );
+      in
         helpers.mkNullOrOption (types.listOf headType) ''
           Each Hydra's head has the form:
           `[head rhs opts]
@@ -109,138 +109,138 @@ let
     };
   };
 in
-mkOption {
-  type = types.listOf hydraType;
-  default = [ ];
-  example = [
-    {
-      name = "git";
-      hint.__raw = ''
-        [[
-           _J_: next hunk   _s_: stage hunk        _d_: show deleted   _b_: blame line
-           _K_: prev hunk   _u_: undo stage hunk   _p_: preview hunk   _B_: blame show full
-           ^ ^              _S_: stage buffer      ^ ^                 _/_: show base file
-           ^
-           ^ ^              _<Enter>_: Neogit              _q_: exit
-        ]]
-      '';
-      config = {
-        color = "pink";
-        invoke_on_body = true;
-        hint = {
-          position = "bottom";
-        };
-        on_enter = ''
-          function()
-            vim.bo.modifiable = false
-            gitsigns.toggle_signs(true)
-            gitsigns.toggle_linehl(true)
-          end
+  mkOption {
+    type = types.listOf hydraType;
+    default = [];
+    example = [
+      {
+        name = "git";
+        hint.__raw = ''
+          [[
+             _J_: next hunk   _s_: stage hunk        _d_: show deleted   _b_: blame line
+             _K_: prev hunk   _u_: undo stage hunk   _p_: preview hunk   _B_: blame show full
+             ^ ^              _S_: stage buffer      ^ ^                 _/_: show base file
+             ^
+             ^ ^              _<Enter>_: Neogit              _q_: exit
+          ]]
         '';
-        on_exit = ''
+        config = {
+          color = "pink";
+          invoke_on_body = true;
+          hint = {
+            position = "bottom";
+          };
+          on_enter = ''
             function()
-          	gitsigns.toggle_signs(false)
-          	gitsigns.toggle_linehl(false)
-          	gitsigns.toggle_deleted(false)
-          	vim.cmd("echo") -- clear the echo area
-          end
-        '';
-      };
-      mode = [
-        "n"
-        "x"
-      ];
-      body = "<leader>g";
-      heads = [
-        [
-          "J"
-          {
-            __raw = ''
+              vim.bo.modifiable = false
+              gitsigns.toggle_signs(true)
+              gitsigns.toggle_linehl(true)
+            end
+          '';
+          on_exit = ''
               function()
-                if vim.wo.diff then
-                  return "]c"
+            	gitsigns.toggle_signs(false)
+            	gitsigns.toggle_linehl(false)
+            	gitsigns.toggle_deleted(false)
+            	vim.cmd("echo") -- clear the echo area
+            end
+          '';
+        };
+        mode = [
+          "n"
+          "x"
+        ];
+        body = "<leader>g";
+        heads = [
+          [
+            "J"
+            {
+              __raw = ''
+                function()
+                  if vim.wo.diff then
+                    return "]c"
+                  end
+                  vim.schedule(function()
+                    gitsigns.next_hunk()
+                  end)
+                  return "<Ignore>"
                 end
-                vim.schedule(function()
-                  gitsigns.next_hunk()
-                end)
-                return "<Ignore>"
-              end
-            '';
-          }
-          { expr = true; }
-        ]
-        [
-          "K"
-          {
-            __raw = ''
-              function()
-                if vim.wo.diff then
-                  return "[c"
+              '';
+            }
+            {expr = true;}
+          ]
+          [
+            "K"
+            {
+              __raw = ''
+                function()
+                  if vim.wo.diff then
+                    return "[c"
+                  end
+                  vim.schedule(function()
+                    gitsigns.prev_hunk()
+                  end)
+                  return "<Ignore>"
                 end
-                vim.schedule(function()
-                  gitsigns.prev_hunk()
-                end)
-                return "<Ignore>"
-              end
-            '';
-          }
-          { expr = true; }
-        ]
-        [
-          "s"
-          ":Gitsigns stage_hunk<CR>"
-          { silent = true; }
-        ]
-        [
-          "u"
-          { __raw = "require('gitsigns').undo_stage_hunk"; }
-        ]
-        [
-          "S"
-          { __raw = "require('gitsigns').stage_buffer"; }
-        ]
-        [
-          "p"
-          { __raw = "require('gitsigns').preview_hunk"; }
-        ]
-        [
-          "d"
-          { __raw = "require('gitsigns').toggle_deleted"; }
-          { nowait = true; }
-        ]
-        [
-          "b"
-          { __raw = "require('gitsigns').blame_line"; }
-        ]
-        [
-          "B"
-          {
-            __raw = ''
-              function()
-                gitsigns.blame_line({ full = true })
-              end,
-            '';
-          }
-        ]
-        [
-          "/"
-          { __raw = "require('gitsigns').show"; }
-          { exit = true; }
-        ]
-        [
-          "<Enter>"
-          "<cmd>Neogit<CR>"
-          { exit = true; }
-        ]
-        [
-          "q"
-          null
-          {
-            exit = true;
-            nowait = true;
-          }
-        ]
-      ];
-    }
-  ];
-}
+              '';
+            }
+            {expr = true;}
+          ]
+          [
+            "s"
+            ":Gitsigns stage_hunk<CR>"
+            {silent = true;}
+          ]
+          [
+            "u"
+            {__raw = "require('gitsigns').undo_stage_hunk";}
+          ]
+          [
+            "S"
+            {__raw = "require('gitsigns').stage_buffer";}
+          ]
+          [
+            "p"
+            {__raw = "require('gitsigns').preview_hunk";}
+          ]
+          [
+            "d"
+            {__raw = "require('gitsigns').toggle_deleted";}
+            {nowait = true;}
+          ]
+          [
+            "b"
+            {__raw = "require('gitsigns').blame_line";}
+          ]
+          [
+            "B"
+            {
+              __raw = ''
+                function()
+                  gitsigns.blame_line({ full = true })
+                end,
+              '';
+            }
+          ]
+          [
+            "/"
+            {__raw = "require('gitsigns').show";}
+            {exit = true;}
+          ]
+          [
+            "<Enter>"
+            "<cmd>Neogit<CR>"
+            {exit = true;}
+          ]
+          [
+            "q"
+            null
+            {
+              exit = true;
+              nowait = true;
+            }
+          ]
+        ];
+      }
+    ];
+  }

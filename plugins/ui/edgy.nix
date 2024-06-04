@@ -6,24 +6,23 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "edgy";
-  originalName = "edgy.nvim";
-  defaultPackage = pkgs.vimPlugins.edgy-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "edgy";
+    originalName = "edgy.nvim";
+    defaultPackage = pkgs.vimPlugins.edgy-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  extraConfig = cfg: {
-    # Those options are strongly recommended by the plugin author:
-    # https://github.com/folke/edgy.nvim?tab=readme-ov-file#-installation
-    opts = {
-      laststatus = mkDefault 3;
-      splitkeep = mkDefault "screen";
+    extraConfig = cfg: {
+      # Those options are strongly recommended by the plugin author:
+      # https://github.com/folke/edgy.nvim?tab=readme-ov-file#-installation
+      opts = {
+        laststatus = mkDefault 3;
+        splitkeep = mkDefault "screen";
+      };
     };
-  };
 
-  settingsOptions =
-    let
+    settingsOptions = let
       viewOpts = {
         ft = helpers.mkNullOrStr ''
           File type of the view.
@@ -59,16 +58,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
       };
 
-      mkViewOptsOption =
-        name:
+      mkViewOptsOption = name:
         helpers.defaultNullOpts.mkListOf (
           with types;
-          either str (submodule {
-            options = viewOpts;
-          })
-        ) [ ] "List of the ${name} edgebar configurations.";
-    in
-    {
+            either str (submodule {
+              options = viewOpts;
+            })
+        ) [] "List of the ${name} edgebar configurations.";
+    in {
       left = mkViewOptsOption "left";
       bottom = mkViewOptsOption "bottom";
       right = mkViewOptsOption "right";
@@ -76,23 +73,23 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       options =
         mapAttrs
-          (_: defaultSize: {
-            size = helpers.defaultNullOpts.mkUnsignedInt defaultSize ''
-              Size of the short edge of the edgebar.
-              For edgebars, this is the minimum width.
-              For panels, minimum height.
-            '';
+        (_: defaultSize: {
+          size = helpers.defaultNullOpts.mkUnsignedInt defaultSize ''
+            Size of the short edge of the edgebar.
+            For edgebars, this is the minimum width.
+            For panels, minimum height.
+          '';
 
-            wo = helpers.mkNullOrOption (with types; attrsOf anything) ''
-              View-specific window options.
-            '';
-          })
-          {
-            left = 30;
-            bottom = 10;
-            right = 30;
-            top = 10;
-          };
+          wo = helpers.mkNullOrOption (with types; attrsOf anything) ''
+            View-specific window options.
+          '';
+        })
+        {
+          left = 30;
+          bottom = 10;
+          right = 30;
+          top = 10;
+        };
 
       animate = {
         enabled = helpers.defaultNullOpts.mkBool true ''
@@ -121,24 +118,22 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
         # This option accepts an attrs or a lua string.
         # Hence, we use `mkOption` to convert the string to raw lua in `apply`.
-        spinner =
-          let
-            defaultFrames = [
-              "⠋"
-              "⠙"
-              "⠹"
-              "⠸"
-              "⠼"
-              "⠴"
-              "⠦"
-              "⠧"
-              "⠇"
-              "⠏"
-            ];
-          in
+        spinner = let
+          defaultFrames = [
+            "⠋"
+            "⠙"
+            "⠹"
+            "⠸"
+            "⠼"
+            "⠴"
+            "⠦"
+            "⠧"
+            "⠇"
+            "⠏"
+          ];
+        in
           mkOption {
-            type =
-              with helpers.nixvimTypes;
+            type = with helpers.nixvimTypes;
               nullOr (
                 either strLua (submodule {
                   freeformType = attrsOf anything;
@@ -155,7 +150,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               );
             default = null;
             example = "require('noice.util.spinners').spinners.circleFull";
-            apply = v: if isString v then helpers.mkRaw v else v;
+            apply = v:
+              if isString v
+              then helpers.mkRaw v
+              else v;
             description = helpers.defaultNullOpts.mkDesc {
               frames = defaultFrames;
               interval = 80;
@@ -184,82 +182,85 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # This option accepts an attrs or a lua string.
       # Hence, we use `mkOption` to convert the string to raw lua in `apply`.
       keys = mkOption {
-        type = with helpers.nixvimTypes; attrsOf (either strLuaFn (enum [ false ]));
-        default = { };
-        apply = mapAttrs (_: v: if isString v then helpers.mkRaw v else v);
+        type = with helpers.nixvimTypes; attrsOf (either strLuaFn (enum [false]));
+        default = {};
+        apply = mapAttrs (_: v:
+          if isString v
+          then helpers.mkRaw v
+          else v);
         description =
           helpers.defaultNullOpts.mkDesc
-            {
-              q = ''
-                function(win)
-                  win:close()
-                end
-              '';
-              "<c-q>" = ''
-                function(win)
-                  win:hide()
-                end
-              '';
-              Q = ''
-                function(win)
-                  win.view.edgebar:close()
-                end
-              '';
-              "]w" = ''
-                function(win)
-                  win:next({ visible = true, focus = true })
-                end
-              '';
-              "[w" = ''
-                function(win)
-                  win:prev({ visible = true, focus = true })
-                end
-              '';
-              "]W" = ''
-                function(win)
-                  win:next({ pinned = false, focus = true })
-                end
-              '';
-              "[W" = ''
-                function(win)
-                  win:prev({ pinned = false, focus = true })
-                end
-              '';
-              "<c-w>>" = ''
-                function(win)
-                  win:resize("width", 2)
-                end
-              '';
-              "<c-w><lt>" = ''
-                function(win)
-                  win:resize("width", -2)
-                end
-              '';
-              "<c-w>+" = ''
-                function(win)
-                  win:resize("height", 2)
-                end
-              '';
-              "<c-w>-" = ''
-                function(win)
-                  win:resize("height", -2)
-                end
-              '';
-              "<c-w>=" = ''
-                function(win)
-                  win.view.edgebar:equalize()
-                end
-              '';
-            }
-            ''
-              Buffer-local keymaps to be added to edgebar buffers.
-              Existing buffer-local keymaps will never be overridden.
-
-              Each value is either:
-              - A function declaration (as a raw lua string)
-                -> `fun(win:Edgy.Window)`
-              - `false` to disable this mapping.
+          {
+            q = ''
+              function(win)
+                win:close()
+              end
             '';
+            "<c-q>" = ''
+              function(win)
+                win:hide()
+              end
+            '';
+            Q = ''
+              function(win)
+                win.view.edgebar:close()
+              end
+            '';
+            "]w" = ''
+              function(win)
+                win:next({ visible = true, focus = true })
+              end
+            '';
+            "[w" = ''
+              function(win)
+                win:prev({ visible = true, focus = true })
+              end
+            '';
+            "]W" = ''
+              function(win)
+                win:next({ pinned = false, focus = true })
+              end
+            '';
+            "[W" = ''
+              function(win)
+                win:prev({ pinned = false, focus = true })
+              end
+            '';
+            "<c-w>>" = ''
+              function(win)
+                win:resize("width", 2)
+              end
+            '';
+            "<c-w><lt>" = ''
+              function(win)
+                win:resize("width", -2)
+              end
+            '';
+            "<c-w>+" = ''
+              function(win)
+                win:resize("height", 2)
+              end
+            '';
+            "<c-w>-" = ''
+              function(win)
+                win:resize("height", -2)
+              end
+            '';
+            "<c-w>=" = ''
+              function(win)
+                win.view.edgebar:equalize()
+              end
+            '';
+          }
+          ''
+            Buffer-local keymaps to be added to edgebar buffers.
+            Existing buffer-local keymaps will never be overridden.
+
+            Each value is either:
+            - A function declaration (as a raw lua string)
+              -> `fun(win:Edgy.Window)`
+            - `false` to disable this mapping.
+          '';
       };
 
       icons = {
@@ -273,49 +274,49 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
     };
 
-  settingsExample = {
-    animate.enabled = false;
-    wo = {
-      winbar = false;
-      winfixwidth = false;
-      winfixheight = false;
-      winhighlight = "";
-      spell = false;
-      signcolumn = "no";
+    settingsExample = {
+      animate.enabled = false;
+      wo = {
+        winbar = false;
+        winfixwidth = false;
+        winfixheight = false;
+        winhighlight = "";
+        spell = false;
+        signcolumn = "no";
+      };
+      bottom = [
+        {
+          ft = "toggleterm";
+          size = 30;
+          filter = ''
+            function(buf, win)
+              return vim.api.nvim_win_get_config(win).relative == ""
+            end
+          '';
+        }
+        {
+          ft = "help";
+          size = 20;
+          filter = ''
+            function(buf)
+              return vim.bo[buf].buftype == "help"
+            end
+          '';
+        }
+      ];
+      left = [
+        {
+          title = "nvimtree";
+          ft = "NvimTree";
+          size = 30;
+        }
+        {
+          ft = "Outline";
+          open = "SymbolsOutline";
+        }
+        {ft = "dapui_scopes";}
+        {ft = "dapui_breakpoints";}
+        {ft = "dap-repl";}
+      ];
     };
-    bottom = [
-      {
-        ft = "toggleterm";
-        size = 30;
-        filter = ''
-          function(buf, win)
-            return vim.api.nvim_win_get_config(win).relative == ""
-          end
-        '';
-      }
-      {
-        ft = "help";
-        size = 20;
-        filter = ''
-          function(buf)
-            return vim.bo[buf].buftype == "help"
-          end
-        '';
-      }
-    ];
-    left = [
-      {
-        title = "nvimtree";
-        ft = "NvimTree";
-        size = 30;
-      }
-      {
-        ft = "Outline";
-        open = "SymbolsOutline";
-      }
-      { ft = "dapui_scopes"; }
-      { ft = "dapui_breakpoints"; }
-      { ft = "dap-repl"; }
-    ];
-  };
-}
+  }

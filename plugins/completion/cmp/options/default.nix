@@ -1,7 +1,9 @@
-{ lib, helpers }:
-with lib;
-rec {
-  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
+{
+  lib,
+  helpers,
+}:
+with lib; rec {
+  settingsOptions = import ./settings-options.nix {inherit lib helpers;};
 
   settingsExample = {
     snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
@@ -27,8 +29,7 @@ rec {
     '';
   };
 
-  attrsOfOptions =
-    with types;
+  attrsOfOptions = with types;
     attrsOf (submodule {
       freeformType = attrsOf anything;
       options = settingsOptions;
@@ -36,28 +37,28 @@ rec {
 
   filetype = mkOption {
     type = attrsOfOptions;
-    default = { };
+    default = {};
     description = "Options for `cmp.filetype()`.";
     example = {
       python = {
-        sources = [ { name = "nvim_lsp"; } ];
+        sources = [{name = "nvim_lsp";}];
       };
     };
   };
 
   cmdline = mkOption {
     type = attrsOfOptions;
-    default = { };
+    default = {};
     description = "Options for `cmp.cmdline()`.";
     example = {
       "/" = {
         mapping.__raw = "cmp.mapping.preset.cmdline()";
-        sources = [ { name = "buffer"; } ];
+        sources = [{name = "buffer";}];
       };
       ":" = {
         mapping.__raw = "cmp.mapping.preset.cmdline()";
         sources = [
-          { name = "path"; }
+          {name = "path";}
           {
             name = "cmdline";
             option = {

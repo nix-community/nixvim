@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   servers = [
     {
       name = "ansiblels";
@@ -92,8 +91,8 @@ let
       name = "dartls";
       description = "dart language-server";
       package = pkgs.dart;
-      settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
-      settings = cfg: { dart = cfg; };
+      settingsOptions = import ./dartls-settings.nix {inherit lib helpers;};
+      settings = cfg: {dart = cfg;};
     }
     {
       name = "denols";
@@ -152,7 +151,7 @@ let
     {
       name = "elixirls";
       package = pkgs.elixir-ls;
-      cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
+      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
     }
     {
       name = "fortls";
@@ -236,7 +235,7 @@ let
       name = "java-language-server";
       description = "Java language server";
       serverName = "java_language_server";
-      cmd = cfg: [ "${cfg.package}/bin/java-language-server" ];
+      cmd = cfg: ["${cfg.package}/bin/java-language-server"];
     }
     {
       name = "jsonls";
@@ -246,7 +245,7 @@ let
         "${cfg.package}/bin/vscode-json-language-server"
         "--stdio"
       ];
-      settings = cfg: { json = cfg; };
+      settings = cfg: {json = cfg;};
     }
     {
       name = "julials";
@@ -277,16 +276,16 @@ let
       name = "ltex";
       description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
-      settingsOptions = import ./ltex-settings.nix { inherit lib helpers; };
-      settings = cfg: { ltex = cfg; };
+      settingsOptions = import ./ltex-settings.nix {inherit lib helpers;};
+      settings = cfg: {ltex = cfg;};
     }
     {
       name = "lua-ls";
       description = "lua-ls for Lua";
       package = pkgs.lua-language-server;
       serverName = "lua_ls";
-      settingsOptions = import ./lua-ls-settings.nix { inherit lib helpers; };
-      settings = cfg: { Lua = cfg; };
+      settingsOptions = import ./lua-ls-settings.nix {inherit lib helpers;};
+      settings = cfg: {Lua = cfg;};
     }
     {
       name = "marksman";
@@ -307,8 +306,8 @@ let
       description = "nil for Nix";
       package = pkgs.nil;
       serverName = "nil_ls";
-      settingsOptions = import ./nil-ls-settings.nix { inherit lib helpers; };
-      settings = cfg: { nil = cfg; };
+      settingsOptions = import ./nil-ls-settings.nix {inherit lib helpers;};
+      settings = cfg: {nil = cfg;};
     }
     {
       name = "nimls";
@@ -319,10 +318,10 @@ let
       name = "nixd";
       description = "nixd for Nix";
       package = pkgs.nixd;
-      settings = cfg: { nixd = cfg; };
-      settingsOptions = import ./nixd-settings.nix { inherit lib helpers; };
+      settings = cfg: {nixd = cfg;};
+      settingsOptions = import ./nixd-settings.nix {inherit lib helpers;};
       extraConfig = cfg: {
-        extraPackages = optional (cfg.settings.formatting.command == [ "nixpkgs-fmt" ]) pkgs.nixpkgs-fmt;
+        extraPackages = optional (cfg.settings.formatting.command == ["nixpkgs-fmt"]) pkgs.nixpkgs-fmt;
       };
     }
     {
@@ -347,8 +346,8 @@ let
       name = "omnisharp";
       description = "OmniSharp language server for C#";
       package = pkgs.omnisharp-roslyn;
-      cmd = cfg: [ "${cfg.package}/bin/OmniSharp" ];
-      settings = cfg: { omnisharp = cfg; };
+      cmd = cfg: ["${cfg.package}/bin/OmniSharp"];
+      settings = cfg: {omnisharp = cfg;};
       settingsOptions = {
         enableEditorConfigSupport = helpers.defaultNullOpts.mkBool true ''
           Enables support for reading code style, naming convention and analyzer settings from
@@ -433,7 +432,7 @@ let
       name = "pylsp";
       description = "pylsp for Python";
       package = pkgs.python3Packages.python-lsp-server;
-      settings = cfg: { pylsp = cfg; };
+      settings = cfg: {pylsp = cfg;};
     }
     {
       name = "pylyzer";
@@ -470,7 +469,7 @@ let
       serverName = "rust_analyzer";
 
       settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
-      settings = cfg: { rust-analyzer = cfg; };
+      settings = cfg: {rust-analyzer = cfg;};
     }
     {
       name = "slint-lsp";
@@ -522,7 +521,7 @@ let
     {
       name = "tinymist";
       description = "tinymist for Typst";
-      settingsOptions = import ./tinymist-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./tinymist-settings.nix {inherit lib helpers;};
     }
     {
       name = "tsserver";
@@ -568,7 +567,7 @@ let
           example = false;
         };
       };
-      extraConfig = cfg: { filetype.extension = mkIf cfg.autoSetFiletype { v = "vlang"; }; };
+      extraConfig = cfg: {filetype.extension = mkIf cfg.autoSetFiletype {v = "vlang";};};
     }
     {
       name = "vuels";
@@ -584,20 +583,18 @@ let
       name = "yamlls";
       description = "yamlls for YAML";
       package = pkgs.yaml-language-server;
-      settings = cfg: { yaml = cfg; };
+      settings = cfg: {yaml = cfg;};
     }
     {
       name = "zls";
       description = "zls for Zig";
     }
   ];
-in
-{
-  imports =
-    let
-      mkLsp = import ./_mk-lsp.nix { inherit lib config pkgs; };
-      lspModules = map mkLsp servers;
-    in
+in {
+  imports = let
+    mkLsp = import ./_mk-lsp.nix {inherit lib config pkgs;};
+    lspModules = map mkLsp servers;
+  in
     lspModules
     ++ [
       ./ccls.nix

@@ -12,10 +12,10 @@
               "unused_binding"
               "unused_with"
             ];
-            excludedFiles = [ "Cargo.nix" ];
+            excludedFiles = ["Cargo.nix"];
           };
           formatting = {
-            command = [ "nixfmt" ];
+            command = ["nixfmt"];
           };
           nix = {
             binary = "nix";

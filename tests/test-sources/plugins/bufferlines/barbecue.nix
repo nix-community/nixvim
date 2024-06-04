@@ -9,7 +9,7 @@
 
       attachNavic = true;
       createAutocmd = true;
-      includeBuftypes = [ "" ];
+      includeBuftypes = [""];
       excludeFiletypes = [
         "netrw"
         "toggleterm"

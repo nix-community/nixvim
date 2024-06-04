@@ -47,8 +47,8 @@
           v = "V";
           V = "V";
         };
-        exclude_filenames = [ ];
-        exclude_filetypes = [ ];
+        exclude_filenames = [];
+        exclude_filetypes = [];
         filetype_overrides = {
           coc-explorer = [
             "CoC Explorer"

@@ -3,7 +3,7 @@
     plugins = {
       cmp = {
         enable = true;
-        settings.sources = [ { name = "git"; } ];
+        settings.sources = [{name = "git";}];
       };
 
       cmp-git.settings = {
@@ -24,7 +24,7 @@
           };
         };
         github = {
-          hosts = [ ];
+          hosts = [];
           issues = {
             fields = [
               "title"
@@ -59,7 +59,7 @@
           };
         };
         gitlab = {
-          hosts = [ ];
+          hosts = [];
           issues = {
             limit = 100;
             state = "opened";
@@ -142,7 +142,7 @@
     plugins = {
       cmp = {
         enable = true;
-        settings.sources = [ { name = "git"; } ];
+        settings.sources = [{name = "git";}];
       };
 
       cmp-git.settings = {

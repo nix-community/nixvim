@@ -6,59 +6,59 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "palette";
-  isColorscheme = true;
-  originalName = "palette.nvim";
-  defaultPackage = pkgs.vimPlugins.palette-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "palette";
+    isColorscheme = true;
+    originalName = "palette.nvim";
+    defaultPackage = pkgs.vimPlugins.palette-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  extraPlugins = [
-    # Annoyingly, lspconfig is required, otherwise this line is breaking:
-    # https://github.com/roobert/palette.nvim/blob/a808c190a4f74f73782302152ebf323660d8db5f/lua/palette/init.lua#L45
-    # An issue has been opened upstream to warn the maintainer: https://github.com/roobert/palette.nvim/issues/2
-    pkgs.vimPlugins.nvim-lspconfig
-  ];
+    extraPlugins = [
+      # Annoyingly, lspconfig is required, otherwise this line is breaking:
+      # https://github.com/roobert/palette.nvim/blob/a808c190a4f74f73782302152ebf323660d8db5f/lua/palette/init.lua#L45
+      # An issue has been opened upstream to warn the maintainer: https://github.com/roobert/palette.nvim/issues/2
+      pkgs.vimPlugins.nvim-lspconfig
+    ];
 
-  # TODO introduced 2024-04-07: remove 2024-06-07
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "palettes"
-    "customPalettes"
-    "italics"
-    "transparentBackground"
-    "caching"
-    "cacheDir"
-  ];
+    # TODO introduced 2024-04-07: remove 2024-06-07
+    deprecateExtraOptions = true;
+    optionsRenamedToSettings = [
+      "palettes"
+      "customPalettes"
+      "italics"
+      "transparentBackground"
+      "caching"
+      "cacheDir"
+    ];
 
-  settingsOptions = {
-    palettes = {
-      main = helpers.defaultNullOpts.mkStr "dark" ''
-        Palette for the main colors.
-      '';
+    settingsOptions = {
+      palettes = {
+        main = helpers.defaultNullOpts.mkStr "dark" ''
+          Palette for the main colors.
+        '';
 
-      accent = helpers.defaultNullOpts.mkStr "pastel" ''
-        Palette for the accent colors.
-      '';
+        accent = helpers.defaultNullOpts.mkStr "pastel" ''
+          Palette for the accent colors.
+        '';
 
-      state = helpers.defaultNullOpts.mkStr "pastel" ''
-        Palette for the state colors.
-      '';
-    };
+        state = helpers.defaultNullOpts.mkStr "pastel" ''
+          Palette for the state colors.
+        '';
+      };
 
-    customPalettes =
-      mapAttrs
+      customPalettes =
+        mapAttrs
         (
           name: colorNames:
-          helpers.defaultNullOpts.mkAttrsOf
+            helpers.defaultNullOpts.mkAttrsOf
             (types.submodule {
               options = genAttrs colorNames (
                 colorName:
-                mkOption {
-                  type = types.str;
-                  description = "Definition of color '${colorName}'";
-                }
+                  mkOption {
+                    type = types.str;
+                    description = "Definition of color '${colorName}'";
+                  }
               );
             })
             "{}"
@@ -98,35 +98,33 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ];
         };
 
-    italics = helpers.defaultNullOpts.mkBool true ''
-      Whether to use italics.
-    '';
+      italics = helpers.defaultNullOpts.mkBool true ''
+        Whether to use italics.
+      '';
 
-    transparent_background = helpers.defaultNullOpts.mkBool false ''
-      Whether to use transparent background.
-    '';
+      transparent_background = helpers.defaultNullOpts.mkBool false ''
+        Whether to use transparent background.
+      '';
 
-    caching = helpers.defaultNullOpts.mkBool true ''
-      Whether to enable caching.
-    '';
+      caching = helpers.defaultNullOpts.mkBool true ''
+        Whether to enable caching.
+      '';
 
-    cache_dir = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/palette'";}'' "Cache directory.";
-  };
+      cache_dir = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/palette'";}'' "Cache directory.";
+    };
 
-  settingsExample = { };
+    settingsExample = {};
 
-  extraConfig = cfg: {
-    assertions =
-      mapAttrsToList
+    extraConfig = cfg: {
+      assertions =
+        mapAttrsToList
         (
-          name: defaultPaletteNames:
-          let
+          name: defaultPaletteNames: let
             customPalettesNames = attrNames cfg.settings.custom_palettes.${name};
             allowedPaletteNames = customPalettesNames ++ defaultPaletteNames;
 
             palette = cfg.settings.palettes.${name};
-          in
-          {
+          in {
             assertion = isString palette -> elem palette allowedPaletteNames;
             message = ''
               Nixvim (colorschemes.palette): `settings.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${concatStringsSep " " allowedPaletteNames}).
@@ -149,5 +147,5 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             "bright"
           ];
         };
-  };
-}
+    };
+  }

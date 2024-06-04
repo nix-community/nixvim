@@ -23,10 +23,10 @@
             workspaceWord = true;
           };
           diagnostics = {
-            disable = [ ];
-            disableScheme = [ "git" ];
+            disable = [];
+            disableScheme = ["git"];
             enable = true;
-            globals = [ ];
+            globals = [];
             groupFileStatus = {
               ambiguity = "Fallback";
               await = "Fallback";
@@ -169,18 +169,18 @@
               unused-local = "Hint";
               unused-vararg = "Hint";
             };
-            unusedLocalExclude = [ ];
+            unusedLocalExclude = [];
             workspaceDelay = 3000;
             workspaceEvent = "OnSave";
             workspaceRate = 100;
           };
           doc = {
-            packageName = [ ];
-            privateName = [ ];
-            protectedName = [ ];
+            packageName = [];
+            privateName = [];
+            protectedName = [];
           };
           format = {
-            defaultConfig = { };
+            defaultConfig = {};
             enable = true;
           };
           hint = {
@@ -202,7 +202,7 @@
             viewStringMax = 1000;
           };
           misc = {
-            parameters = [ ];
+            parameters = [];
             executablePath = "";
           };
           runtime = {
@@ -227,15 +227,15 @@
             };
             fileEncoding = "utf8";
             meta = "$\{version} $\{language} $\{encoding}";
-            nonstandardSymbol = [ ];
+            nonstandardSymbol = [];
             path = [
               "?.lua"
               "?/init.lua"
             ];
             pathStrict = false;
             plugin = "";
-            pluginArgs = [ ];
-            special = { };
+            pluginArgs = [];
+            special = {};
             unicodeName = false;
             version = "Lua 5.4";
           };
@@ -249,7 +249,7 @@
             enable = true;
           };
           spell = {
-            dict = [ ];
+            dict = [];
           };
           telemetry = {
             enable = null;
@@ -265,9 +265,9 @@
           };
           workspace = {
             checkThirdParty = true;
-            ignoreDir = [ ".vscode" ];
+            ignoreDir = [".vscode"];
             ignoreSubmodules = true;
-            library = [ ];
+            library = [];
             maxPreload = 5000;
             preloadFileSize = 500;
             supportScheme = [
@@ -276,7 +276,7 @@
               "git"
             ];
             useGitIgnore = true;
-            userThirdParty = [ ];
+            userThirdParty = [];
           };
         };
       };

@@ -37,7 +37,6 @@
             enable = false;
             simulate_only = false;
             severity = {
-
               protan = 0;
               deutan = 0;
               tritan = 0;
@@ -62,9 +61,9 @@
             };
           };
         };
-        palettes = { };
-        specs = { };
-        groups = { };
+        palettes = {};
+        specs = {};
+        groups = {};
       };
     };
   };

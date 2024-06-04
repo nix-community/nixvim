@@ -33,8 +33,8 @@
         lsp = true;
         highlighter = {
           auto_enable = false;
-          filetypes = [ ];
-          excludes = [ ];
+          filetypes = [];
+          excludes = [];
           lsp = true;
           update_insert = true;
         };
@@ -79,7 +79,7 @@
         highlighter = {
           auto_enable = true;
           lsp = false;
-          excludes = [ "markdown" ];
+          excludes = ["markdown"];
           update_insert = false;
         };
         convert = [

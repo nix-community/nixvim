@@ -6,22 +6,19 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "lsp-status";
-  originalName = "lsp-status.nvim";
-  defaultPackage = pkgs.vimPlugins.lsp-status-nvim;
-  maintainers = [ helpers.maintainers.b3nb5n ];
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "lsp-status";
+    originalName = "lsp-status.nvim";
+    defaultPackage = pkgs.vimPlugins.lsp-status-nvim;
+    maintainers = [helpers.maintainers.b3nb5n];
 
-  settingsOptions =
-    let
-      mkIndicatorOption =
-        default:
+    settingsOptions = let
+      mkIndicatorOption = default:
         helpers.defaultNullOpts.mkStr default ''
           The string to show as diagnostics.
           If you don't have Nerd/Awesome Fonts you can replace defaults with ASCII chars.
         '';
-    in
-    {
+    in {
       kind_labels = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
         An optional map from LSP symbol kinds to label symbols. Used to decorate the current function name.
       '';
@@ -59,30 +56,30 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
     };
 
-  callSetup = false;
-  extraConfig = cfg: {
-    assertions = [
-      {
-        assertion = config.plugins.lsp.enable;
-        message = ''
-          Nixvim (plugins.lsp-status): `plugins.lsp` must be enabled to use lsp-status
+    callSetup = false;
+    extraConfig = cfg: {
+      assertions = [
+        {
+          assertion = config.plugins.lsp.enable;
+          message = ''
+            Nixvim (plugins.lsp-status): `plugins.lsp` must be enabled to use lsp-status
+          '';
+        }
+      ];
+
+      plugins.lsp = {
+        preConfig = ''
+          do
+            local lsp_status = require('lsp-status')
+            lsp_status.config(${helpers.toLuaObject cfg.settings})
+            lsp_status.register_progress()
+          end
         '';
-      }
-    ];
 
-    plugins.lsp = {
-      preConfig = ''
-        do
-          local lsp_status = require('lsp-status')
-          lsp_status.config(${helpers.toLuaObject cfg.settings})
-          lsp_status.register_progress()
-        end
-      '';
-
-      # the lsp status plugin needs to hook into the on attach and capabilities
-      # fields of the lsp setup call to track the progress of initializing the lsp
-      onAttach = "require('lsp-status').on_attach(client)";
-      capabilities = "capabilities = vim.tbl_extend('keep', capabilities or {}, require('lsp-status').capabilities)";
+        # the lsp status plugin needs to hook into the on attach and capabilities
+        # fields of the lsp setup call to track the progress of initializing the lsp
+        onAttach = "require('lsp-status').on_attach(client)";
+        capabilities = "capabilities = vim.tbl_extend('keep', capabilities or {}, require('lsp-status').capabilities)";
+      };
     };
-  };
-}
+  }

@@ -5,18 +5,18 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.conform-nvim;
-in
-{
-  options.plugins.conform-nvim = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "conform-nvim";
+in {
+  options.plugins.conform-nvim =
+    helpers.neovim-plugin.extraOptionsOptions
+    // {
+      enable = mkEnableOption "conform-nvim";
 
-    package = helpers.mkPluginPackageOption "conform-nvim" pkgs.vimPlugins.conform-nvim;
+      package = helpers.mkPluginPackageOption "conform-nvim" pkgs.vimPlugins.conform-nvim;
 
-    formattersByFt =
-      helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "see documentation"
+      formattersByFt =
+        helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "see documentation"
         ''
           ```nix
             # Map of filetype to formatters
@@ -36,24 +36,24 @@ in
           ```
         '';
 
-    formatOnSave =
-      helpers.defaultNullOpts.mkNullable
+      formatOnSave =
+        helpers.defaultNullOpts.mkNullable
         (
           with helpers.nixvimTypes;
-          either strLuaFn (submodule {
-            options = {
-              lspFallback = mkOption {
-                type = types.bool;
-                default = true;
-                description = "See :help conform.format for details.";
+            either strLuaFn (submodule {
+              options = {
+                lspFallback = mkOption {
+                  type = types.bool;
+                  default = true;
+                  description = "See :help conform.format for details.";
+                };
+                timeoutMs = mkOption {
+                  type = types.int;
+                  default = 500;
+                  description = "See :help conform.format for details.";
+                };
               };
-              timeoutMs = mkOption {
-                type = types.int;
-                default = 500;
-                description = "See :help conform.format for details.";
-              };
-            };
-          })
+            })
         )
         "see documentation"
         ''
@@ -63,19 +63,19 @@ in
           See :help conform.format for details.
         '';
 
-    formatAfterSave =
-      helpers.defaultNullOpts.mkNullable
+      formatAfterSave =
+        helpers.defaultNullOpts.mkNullable
         (
           with helpers.nixvimTypes;
-          either strLuaFn (submodule {
-            options = {
-              lspFallback = mkOption {
-                type = types.bool;
-                default = true;
-                description = "See :help conform.format for details.";
+            either strLuaFn (submodule {
+              options = {
+                lspFallback = mkOption {
+                  type = types.bool;
+                  default = true;
+                  description = "See :help conform.format for details.";
+                };
               };
-            };
-          })
+            })
         )
         "see documentation"
         ''
@@ -84,44 +84,40 @@ in
           This can also be a function that returns the table.
         '';
 
-    logLevel = helpers.defaultNullOpts.mkLogLevel "error" ''
-      Set the log level. Use `:ConformInfo` to see the location of the log file.
-    '';
+      logLevel = helpers.defaultNullOpts.mkLogLevel "error" ''
+        Set the log level. Use `:ConformInfo` to see the location of the log file.
+      '';
 
-    notifyOnError = helpers.defaultNullOpts.mkBool true "Conform will notify you when a formatter errors";
+      notifyOnError = helpers.defaultNullOpts.mkBool true "Conform will notify you when a formatter errors";
 
-    formatters =
-      helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "see documentation"
+      formatters =
+        helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "see documentation"
         "Custom formatters and changes to built-in formatters";
-  };
+    };
 
-  config =
-    let
-      setupOptions =
-        with cfg;
-        {
-          formatters_by_ft = formattersByFt;
-          format_on_save =
-            if builtins.isAttrs formatOnSave then
-              {
-                lsp_fallback = formatOnSave.lspFallback;
-                timeout_ms = formatOnSave.timeoutMs;
-              }
-            else
-              helpers.mkRaw formatOnSave;
-          format_after_save =
-            if builtins.isAttrs formatAfterSave then
-              { lsp_fallback = formatOnSave.lspFallback; }
-            else
-              helpers.mkRaw formatAfterSave;
-          log_level = logLevel;
-          notify_on_error = notifyOnError;
-          inherit formatters;
-        }
-        // cfg.extraOptions;
-    in
+  config = let
+    setupOptions = with cfg;
+      {
+        formatters_by_ft = formattersByFt;
+        format_on_save =
+          if builtins.isAttrs formatOnSave
+          then {
+            lsp_fallback = formatOnSave.lspFallback;
+            timeout_ms = formatOnSave.timeoutMs;
+          }
+          else helpers.mkRaw formatOnSave;
+        format_after_save =
+          if builtins.isAttrs formatAfterSave
+          then {lsp_fallback = formatOnSave.lspFallback;}
+          else helpers.mkRaw formatAfterSave;
+        log_level = logLevel;
+        notify_on_error = notifyOnError;
+        inherit formatters;
+      }
+      // cfg.extraOptions;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       extraConfigLua = ''
         require("conform").setup(${helpers.toLuaObject setupOptions})

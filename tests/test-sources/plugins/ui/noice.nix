@@ -9,7 +9,7 @@
       cmdline = {
         enabled = true;
         view = "cmdline_popup";
-        opts = { };
+        opts = {};
         format = {
           cmdline = {
             pattern = "^:";
@@ -42,7 +42,7 @@
             pattern = "^:%s*he?l?p?%s+";
             icon = "";
           };
-          input = { };
+          input = {};
         };
       };
       messages = {
@@ -56,7 +56,7 @@
       popupmenu = {
         enabled = true;
         backend = "nui";
-        kindIcons = { };
+        kindIcons = {};
       };
       redirect = {
         view = "popup";
@@ -73,12 +73,12 @@
           };
           filter = {
             any = [
-              { event = "notify"; }
-              { error = true; }
-              { warning = true; }
+              {event = "notify";}
+              {error = true;}
+              {warning = true;}
               {
                 event = "msg_show";
-                kind = [ "" ];
+                kind = [""];
               }
               {
                 event = "lsp";
@@ -95,12 +95,12 @@
           };
           filter = {
             any = [
-              { event = "notify"; }
-              { error = true; }
-              { warning = true; }
+              {event = "notify";}
+              {error = true;}
+              {warning = true;}
               {
                 event = "msg_show";
-                kind = [ "" ];
+                kind = [""];
               }
               {
                 event = "lsp";
@@ -146,7 +146,7 @@
         hover = {
           enabled = true;
           view = null;
-          opts = { };
+          opts = {};
         };
         signature = {
           enabled = true;
@@ -157,12 +157,12 @@
             throttle = 50;
           };
           view = null;
-          opts = { };
+          opts = {};
         };
         message = {
           enabled = true;
           view = "notify";
-          opts = { };
+          opts = {};
         };
         documentation = {
           view = "hover";
@@ -170,7 +170,7 @@
             lang = "markdown";
             replace = true;
             render = "plain";
-            format = [ "{message}" ];
+            format = ["{message}"];
             win_options = {
               concealcursor = "n";
               conceallevel = 3;
@@ -211,10 +211,10 @@
         lsp_doc_border = false;
       };
       throttle = 1000 / 30;
-      views = { };
-      routes = [ ];
-      status = { };
-      format = { };
+      views = {};
+      routes = [];
+      status = {};
+      format = {};
     };
   };
 }

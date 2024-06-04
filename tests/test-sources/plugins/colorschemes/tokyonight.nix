@@ -15,8 +15,8 @@
         styles = {
           comments.italic = true;
           keywords.italic = true;
-          functions = { };
-          variables = { };
+          functions = {};
+          variables = {};
           sidebars = "dark";
           floats = "dark";
         };

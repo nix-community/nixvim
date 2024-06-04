@@ -13,7 +13,7 @@
         enable = true;
 
         settings = {
-          kind_labels = { };
+          kind_labels = {};
           select_symbol = "";
           current_function = true;
           show_filename = true;

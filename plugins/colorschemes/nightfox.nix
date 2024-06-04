@@ -6,67 +6,67 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "nightfox";
-  isColorscheme = true;
-  originalName = "nightfox.nvim";
-  defaultPackage = pkgs.vimPlugins.nightfox-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "nightfox";
+    isColorscheme = true;
+    originalName = "nightfox.nvim";
+    defaultPackage = pkgs.vimPlugins.nightfox-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  colorscheme = null;
-  extraOptions = {
-    flavor = mkOption {
-      type = types.enum [
-        "carbonfox"
-        "dawnfox"
-        "dayfox"
-        "duskfox"
-        "nightfox"
-        "nordfox"
-        "terafox"
-      ];
-      example = "dayfox";
-      default = "nightfox";
-      description = "Which palette/flavor to use as the colorscheme.";
+    colorscheme = null;
+    extraOptions = {
+      flavor = mkOption {
+        type = types.enum [
+          "carbonfox"
+          "dawnfox"
+          "dayfox"
+          "duskfox"
+          "nightfox"
+          "nordfox"
+          "terafox"
+        ];
+        example = "dayfox";
+        default = "nightfox";
+        description = "Which palette/flavor to use as the colorscheme.";
+      };
     };
-  };
-  extraConfig = cfg: { colorscheme = mkDefault cfg.flavor; };
+    extraConfig = cfg: {colorscheme = mkDefault cfg.flavor;};
 
-  settingsOptions = {
-    options = {
-      compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/nightfox'";}'' ''
-        The output directory path where the compiled results will be written to.
-      '';
+    settingsOptions = {
+      options = {
+        compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/nightfox'";}'' ''
+          The output directory path where the compiled results will be written to.
+        '';
 
-      compile_file_suffix = helpers.defaultNullOpts.mkStr "_compiled" ''
-        The string appended to the compiled file.
-        Each `style` outputs to its own file.
-        These files will append the suffix to the end of the file.
-      '';
+        compile_file_suffix = helpers.defaultNullOpts.mkStr "_compiled" ''
+          The string appended to the compiled file.
+          Each `style` outputs to its own file.
+          These files will append the suffix to the end of the file.
+        '';
 
-      transparent = helpers.defaultNullOpts.mkBool false ''
-        A boolean value that if set will disable setting the background of `Normal`, `NormalNC` and
-        other highlight groups.
-        This lets you use the colors of the colorscheme but use the background of your terminal.
-      '';
+        transparent = helpers.defaultNullOpts.mkBool false ''
+          A boolean value that if set will disable setting the background of `Normal`, `NormalNC` and
+          other highlight groups.
+          This lets you use the colors of the colorscheme but use the background of your terminal.
+        '';
 
-      terminal_colors = helpers.defaultNullOpts.mkBool true ''
-        A boolean value that if set will define the terminal colors for the builtin `terminal`
-        (`vim.g.terminal_color_*`).
-      '';
+        terminal_colors = helpers.defaultNullOpts.mkBool true ''
+          A boolean value that if set will define the terminal colors for the builtin `terminal`
+          (`vim.g.terminal_color_*`).
+        '';
 
-      dim_inactive = helpers.defaultNullOpts.mkBool false ''
-        A boolean value that if set will set the background of Non current windows to be darker.
-        See `:h hl-NormalNC`.
-      '';
+        dim_inactive = helpers.defaultNullOpts.mkBool false ''
+          A boolean value that if set will set the background of Non current windows to be darker.
+          See `:h hl-NormalNC`.
+        '';
 
-      module_default = helpers.defaultNullOpts.mkBool true ''
-        The default value of a module that has not been overridden in the modules table.
-      '';
+        module_default = helpers.defaultNullOpts.mkBool true ''
+          The default value of a module that has not been overridden in the modules table.
+        '';
 
-      styles =
-        helpers.defaultNullOpts.mkAttrsOf types.str
+        styles =
+          helpers.defaultNullOpts.mkAttrsOf types.str
           ''
             {
               comments = "NONE";
@@ -107,8 +107,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             ```
           '';
 
-      inverse =
-        helpers.defaultNullOpts.mkAttrsOf types.bool
+        inverse =
+          helpers.defaultNullOpts.mkAttrsOf types.bool
           ''
             {
               match_paren = false;
@@ -126,32 +126,32 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             search color it will inverse the foureground and background colors.
           '';
 
-      colorblind = {
-        enable = helpers.defaultNullOpts.mkBool false ''
-          Whether to enable nightfox’s _color vision deficiency_ (cdv) mode.
-        '';
+        colorblind = {
+          enable = helpers.defaultNullOpts.mkBool false ''
+            Whether to enable nightfox’s _color vision deficiency_ (cdv) mode.
+          '';
 
-        simulate_only = helpers.defaultNullOpts.mkBool false ''
-          Only show simulated colorblind colors and not diff shifted.
-        '';
+          simulate_only = helpers.defaultNullOpts.mkBool false ''
+            Only show simulated colorblind colors and not diff shifted.
+          '';
 
-        severity =
-          mapAttrs
+          severity =
+            mapAttrs
             (
               name: color:
-              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0" ''
-                Severity [0, 1] for ${name} (${color}).
-              ''
+                helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0" ''
+                  Severity [0, 1] for ${name} (${color}).
+                ''
             )
             {
               protan = "red";
               deutan = "green";
               tritan = "blue";
             };
-      };
+        };
 
-      modules =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
+        modules =
+          helpers.defaultNullOpts.mkAttrsOf types.anything
           ''
             {
               coc = {
@@ -183,18 +183,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             By default modules will be enabled.
             To change this behaviour change `options.module_default` to `false`.
           '';
-    };
+      };
 
-    palettes =
-      helpers.mkNullOrOption
+      palettes =
+        helpers.mkNullOrOption
         (
           with types;
-          attrsOf
+            attrsOf
             # A theme (or `all`)
             (
               attrsOf
-                # A color
-                (either str (attrsOf str))
+              # A color
+              (either str (attrsOf str))
             )
         )
         ''
@@ -235,16 +235,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ```
         '';
 
-    specs =
-      helpers.mkNullOrOption
+      specs =
+        helpers.mkNullOrOption
         (
           with types;
-          attrsOf
+            attrsOf
             # A theme (or `all`)
             (
               attrsOf
-                # `inactive`, `syntax`, `git`, ...
-                (either str (attrsOf str))
+              # `inactive`, `syntax`, `git`, ...
+              (either str (attrsOf str))
             )
         )
         ''
@@ -279,16 +279,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ```
         '';
 
-    groups =
-      helpers.mkNullOrOption
+      groups =
+        helpers.mkNullOrOption
         (
           with types;
-          attrsOf
+            attrsOf
             # A theme (or `all`)
             (
               attrsOf
-                # `Whitespace`, `IncSearch`, ...
-                (attrsOf str)
+              # `Whitespace`, `IncSearch`, ...
+              (attrsOf str)
             )
         )
         ''
@@ -314,49 +314,49 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             }
           ```
         '';
-  };
+    };
 
-  settingsExample = {
-    options = {
-      transparent = true;
-      terminal_colors = true;
-      styles = {
-        comments = "italic";
-        functions = "italic,bold";
-      };
-      inverse = {
-        match_paren = false;
-        visual = false;
-        search = true;
-      };
-      colorblind = {
-        enable = true;
-        severity = {
-          protan = 0.3;
-          deutan = 0.6;
+    settingsExample = {
+      options = {
+        transparent = true;
+        terminal_colors = true;
+        styles = {
+          comments = "italic";
+          functions = "italic,bold";
         };
-      };
-      modules = {
-        coc.background = false;
-        diagnostic = {
+        inverse = {
+          match_paren = false;
+          visual = false;
+          search = true;
+        };
+        colorblind = {
           enable = true;
-          background = false;
+          severity = {
+            protan = 0.3;
+            deutan = 0.6;
+          };
+        };
+        modules = {
+          coc.background = false;
+          diagnostic = {
+            enable = true;
+            background = false;
+          };
         };
       };
+      palettes.duskfox = {
+        bg1 = "#000000";
+        bg0 = "#1d1d2b";
+        bg3 = "#121820";
+        sel0 = "#131b24";
+      };
+      specs = {
+        all.inactive = "bg0";
+        duskfox.inactive = "#090909";
+      };
+      groups.all.NormalNC = {
+        fg = "fg1";
+        bg = "inactive";
+      };
     };
-    palettes.duskfox = {
-      bg1 = "#000000";
-      bg0 = "#1d1d2b";
-      bg3 = "#121820";
-      sel0 = "#131b24";
-    };
-    specs = {
-      all.inactive = "bg0";
-      duskfox.inactive = "#090909";
-    };
-    groups.all.NormalNC = {
-      fg = "fg1";
-      bg = "inactive";
-    };
-  };
-}
+  }

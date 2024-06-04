@@ -15,10 +15,10 @@
           go = true;
         };
         printf_statements = {
-          cpp = [ "std::cout << \"%s\" << std::endl;" ];
+          cpp = ["std::cout << \"%s\" << std::endl;"];
         };
         print_var_statements = {
-          cpp = [ "printf(\"a custom statement %%s %s\", %s)" ];
+          cpp = ["printf(\"a custom statement %%s %s\", %s)"];
         };
         extract_var_statements = {
           go = "%s := %s // poggers";
@@ -60,9 +60,9 @@
           hpp = false;
           cxx = false;
         };
-        printf_statements = { };
-        print_var_statements = { };
-        extract_var_statements = { };
+        printf_statements = {};
+        print_var_statements = {};
+        extract_var_statements = {};
         show_success_message = false;
       };
     };

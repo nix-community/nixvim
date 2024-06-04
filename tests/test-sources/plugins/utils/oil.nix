@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        columns = [ "icon" ];
+        columns = ["icon"];
         view_options.show_hidden = false;
         win_options = {
           wrap = false;
@@ -42,7 +42,7 @@
           {
             __unkeyed = "type";
             highlight = "Foo";
-            icons = { };
+            icons = {};
           }
 
           {

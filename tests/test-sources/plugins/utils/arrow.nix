@@ -56,7 +56,7 @@
         save_key = "cwd";
         global_bookmarks = false;
         index_keys = "123456789zxcbnmZXVBNM,afghjklAFGHJKLwrtyuiopWRTYUIOP";
-        full_path_list = [ "update_stuff" ];
+        full_path_list = ["update_stuff"];
       };
     };
   };

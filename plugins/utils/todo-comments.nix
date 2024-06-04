@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.todo-comments;
 
   commands = {
@@ -15,8 +14,7 @@ let
     todoTrouble = "TodoTrouble";
     todoTelescope = "TodoTelescope";
   };
-in
-{
+in {
   imports = [
     (mkRemovedOptionModule [
       "plugins"
@@ -25,22 +23,24 @@ in
     ] "Use `plugins.todo-comments.keymaps.<COMMAND>.options.silent`.")
   ];
   options = {
-    plugins.todo-comments = helpers.neovim-plugin.extraOptionsOptions // {
-      enable = mkEnableOption "todo-comments";
+    plugins.todo-comments =
+      helpers.neovim-plugin.extraOptionsOptions
+      // {
+        enable = mkEnableOption "todo-comments";
 
-      package = helpers.mkPluginPackageOption "todo-comments" pkgs.vimPlugins.todo-comments-nvim;
+        package = helpers.mkPluginPackageOption "todo-comments" pkgs.vimPlugins.todo-comments-nvim;
 
-      ripgrepPackage = helpers.mkPackageOption {
-        default = pkgs.ripgrep;
-        description = "Which package (if any) to be added for file search support in todo-comments.";
-      };
+        ripgrepPackage = helpers.mkPackageOption {
+          default = pkgs.ripgrep;
+          description = "Which package (if any) to be added for file search support in todo-comments.";
+        };
 
-      signs = helpers.defaultNullOpts.mkBool true "Show icons in the signs column.";
+        signs = helpers.defaultNullOpts.mkBool true "Show icons in the signs column.";
 
-      signPriority = helpers.defaultNullOpts.mkInt 8 "Sign priority.";
+        signPriority = helpers.defaultNullOpts.mkInt 8 "Sign priority.";
 
-      keywords =
-        helpers.mkNullOrOption
+        keywords =
+          helpers.mkNullOrOption
           (types.attrsOf (
             types.submodule {
               options = {
@@ -83,116 +83,114 @@ in
             ```
           '';
 
-      guiStyle = {
-        fg = helpers.defaultNullOpts.mkStr "NONE" ''
-          The gui style to use for the fg highlight group.
+        guiStyle = {
+          fg = helpers.defaultNullOpts.mkStr "NONE" ''
+            The gui style to use for the fg highlight group.
+          '';
+
+          bg = helpers.defaultNullOpts.mkStr "BOLD" ''
+            The gui style to use for the bg highlight group.
+          '';
+        };
+
+        mergeKeywords = helpers.defaultNullOpts.mkBool true ''
+          When true, custom keywords will be merged with the default
         '';
 
-        bg = helpers.defaultNullOpts.mkStr "BOLD" ''
-          The gui style to use for the bg highlight group.
-        '';
-      };
+        highlight = {
+          multiline = helpers.defaultNullOpts.mkBool true ''
+            Enable multiline todo comments.
+          '';
 
-      mergeKeywords = helpers.defaultNullOpts.mkBool true ''
-        When true, custom keywords will be merged with the default
-      '';
+          multilinePattern = helpers.defaultNullOpts.mkStr "^." ''
+            Lua pattern to match the next multiline from the start of the
+            matched keyword.
+          '';
 
-      highlight = {
-        multiline = helpers.defaultNullOpts.mkBool true ''
-          Enable multiline todo comments.
-        '';
+          multilineContext = helpers.defaultNullOpts.mkInt 10 ''
+            Extra lines that will be re-evaluated when changing a line.
+          '';
 
-        multilinePattern = helpers.defaultNullOpts.mkStr "^." ''
-          Lua pattern to match the next multiline from the start of the
-          matched keyword.
-        '';
+          before = helpers.defaultNullOpts.mkStr "" ''
+            "fg" or "bg" or empty.
+          '';
 
-        multilineContext = helpers.defaultNullOpts.mkInt 10 ''
-          Extra lines that will be re-evaluated when changing a line.
-        '';
+          keyword = helpers.defaultNullOpts.mkStr "wide" ''
+            "fg", "bg", "wide", "wide_bg", "wide_fg" or empty.
+            (wide and wide_bg is the same as bg, but will also highlight
+            surrounding characters, wide_fg acts accordingly but with fg).
+          '';
 
-        before = helpers.defaultNullOpts.mkStr "" ''
-          "fg" or "bg" or empty.
-        '';
+          after = helpers.defaultNullOpts.mkStr "fg" ''
+            "fg" or "bg" or empty.
+          '';
 
-        keyword = helpers.defaultNullOpts.mkStr "wide" ''
-          "fg", "bg", "wide", "wide_bg", "wide_fg" or empty.
-          (wide and wide_bg is the same as bg, but will also highlight
-          surrounding characters, wide_fg acts accordingly but with fg).
-        '';
-
-        after = helpers.defaultNullOpts.mkStr "fg" ''
-          "fg" or "bg" or empty.
-        '';
-
-        pattern =
-          helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) ".*<(KEYWORDS)\\s*:"
+          pattern =
+            helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) ".*<(KEYWORDS)\\s*:"
             ''
               Pattern or list of patterns, used for highlighting (vim regex)
 
               Note: the provided pattern will be embedded as such: `[[PATTERN]]`.
             '';
 
-        commentsOnly = helpers.defaultNullOpts.mkBool true ''
-          Uses treesitter to match keywords in comments only.
-        '';
+          commentsOnly = helpers.defaultNullOpts.mkBool true ''
+            Uses treesitter to match keywords in comments only.
+          '';
 
-        maxLineLen = helpers.defaultNullOpts.mkInt 400 ''
-          Ignore lines longer than this.
-        '';
+          maxLineLen = helpers.defaultNullOpts.mkInt 400 ''
+            Ignore lines longer than this.
+          '';
 
-        exclude = helpers.mkNullOrOption (types.listOf types.str) ''
-          List of file types to exclude highlighting.
-        '';
-      };
-
-      colors = helpers.mkNullOrOption (types.attrsOf (types.listOf types.str)) ''
-        List of named colors where we try to extract the guifg from the list
-        of highlight groups or use the hex color if hl not found as a fallback.
-
-        Default:
-        ```nix
-        {
-          error = [ "DiagnosticError" "ErrorMsg" "#DC2626" ];
-          warning = [ "DiagnosticWarn" "WarningMsg" "#FBBF24" ];
-          info = [ "DiagnosticInfo" "#2563EB" ];
-          hint = [ "DiagnosticHint" "#10B981" ];
-          default = [ "Identifier" "#7C3AED" ];
-          test = [ "Identifier" "#FF00FF" ];
+          exclude = helpers.mkNullOrOption (types.listOf types.str) ''
+            List of file types to exclude highlighting.
+          '';
         };
-        ```
-      '';
 
-      search = {
-        command = helpers.defaultNullOpts.mkStr "rg" "Command to use for searching for keywords.";
-
-        args = helpers.mkNullOrOption (types.listOf types.str) ''
-          Arguments to use for the search command in list form.
+        colors = helpers.mkNullOrOption (types.attrsOf (types.listOf types.str)) ''
+          List of named colors where we try to extract the guifg from the list
+          of highlight groups or use the hex color if hl not found as a fallback.
 
           Default:
           ```nix
-          [
-            "--color=never"
-            "--no-heading"
-            "--with-filename"
-            "--line-number"
-            "--column"
-          ];
+          {
+            error = [ "DiagnosticError" "ErrorMsg" "#DC2626" ];
+            warning = [ "DiagnosticWarn" "WarningMsg" "#FBBF24" ];
+            info = [ "DiagnosticInfo" "#2563EB" ];
+            hint = [ "DiagnosticHint" "#10B981" ];
+            default = [ "Identifier" "#7C3AED" ];
+            test = [ "Identifier" "#FF00FF" ];
+          };
           ```
         '';
 
-        pattern = helpers.defaultNullOpts.mkStr "\\b(KEYWORDS):" ''
-          Regex that will be used to match keywords.
-          Don't replace the (KEYWORDS) placeholder.
+        search = {
+          command = helpers.defaultNullOpts.mkStr "rg" "Command to use for searching for keywords.";
 
-          Note: the provided pattern will be embedded as such: `[[PATTERN]]`.
-        '';
-      };
+          args = helpers.mkNullOrOption (types.listOf types.str) ''
+            Arguments to use for the search command in list form.
 
-      keymaps =
-        let
-          mkKeymapOption =
-            optionName: funcName:
+            Default:
+            ```nix
+            [
+              "--color=never"
+              "--no-heading"
+              "--with-filename"
+              "--line-number"
+              "--column"
+            ];
+            ```
+          '';
+
+          pattern = helpers.defaultNullOpts.mkStr "\\b(KEYWORDS):" ''
+            Regex that will be used to match keywords.
+            Don't replace the (KEYWORDS) placeholder.
+
+            Note: the provided pattern will be embedded as such: `[[PATTERN]]`.
+          '';
+        };
+
+        keymaps = let
+          mkKeymapOption = optionName: funcName:
             helpers.mkCompositeOption "Keymap settings for the `:${funcName}` function." {
               key = mkOption {
                 type = types.str;
@@ -219,20 +217,21 @@ in
               options = helpers.keymaps.mapConfigOptions;
             };
         in
-        mapAttrs mkKeymapOption commands;
-    };
+          mapAttrs mkKeymapOption commands;
+      };
   };
 
-  config =
-    let
-      setupOptions = {
+  config = let
+    setupOptions =
+      {
         inherit (cfg) signs;
         sign_priority = cfg.signPriority;
         inherit (cfg) keywords;
         gui_style = cfg.guiStyle;
         merge_keywords = cfg.mergeKeywords;
         highlight = {
-          inherit (cfg.highlight)
+          inherit
+            (cfg.highlight)
             multiline
             before
             keyword
@@ -249,42 +248,42 @@ in
         search = {
           inherit (cfg.search) command args;
           pattern = helpers.ifNonNull' cfg.search.pattern (
-            if isList cfg.search.pattern then
-              (map helpers.mkRaw cfg.search.pattern)
-            else
-              helpers.mkRaw "[[${cfg.search.pattern}]]"
+            if isList cfg.search.pattern
+            then (map helpers.mkRaw cfg.search.pattern)
+            else helpers.mkRaw "[[${cfg.search.pattern}]]"
           );
         };
-      } // cfg.extraOptions;
-    in
+      }
+      // cfg.extraOptions;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraPackages = [ cfg.ripgrepPackage ];
+      extraPlugins = [cfg.package];
+      extraPackages = [cfg.ripgrepPackage];
       extraConfigLua = ''
         require("todo-comments").setup${helpers.toLuaObject setupOptions}
       '';
 
       keymaps = flatten (
         mapAttrsToList (
-          optionName: funcName:
-          let
+          optionName: funcName: let
             keymap = cfg.keymaps.${optionName};
 
             cwd = optionalString (keymap.cwd != null) " cwd=${keymap.cwd}";
             keywords = optionalString (keymap.keywords != null) " keywords=${keymap.keywords}";
           in
-          optional (keymap != null) {
-            mode = "n";
-            inherit (keymap) key options;
-            action = ":${funcName}${cwd}${keywords}<CR>";
-          }
-        ) commands
+            optional (keymap != null) {
+              mode = "n";
+              inherit (keymap) key options;
+              action = ":${funcName}${cwd}${keywords}<CR>";
+            }
+        )
+        commands
       );
 
       # Automatically enable plugins if keymaps have been set
       plugins = mkMerge [
-        (mkIf (cfg.keymaps.todoTrouble != null) { trouble.enable = true; })
-        (mkIf (cfg.keymaps.todoTelescope != null) { telescope.enable = true; })
+        (mkIf (cfg.keymaps.todoTrouble != null) {trouble.enable = true;})
+        (mkIf (cfg.keymaps.todoTelescope != null) {telescope.enable = true;})
       ];
     };
 }

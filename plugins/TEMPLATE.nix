@@ -10,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "my-plugin.nvim"; # TODO replace (or remove entirely if it is the same as `name`)
   defaultPackage = pkgs.vimPlugins.my-plugin-nvim; # TODO replace
 
-  maintainers = [ lib.maintainers.MyName ]; # TODO replace with your name
+  maintainers = [lib.maintainers.MyName]; # TODO replace with your name
 
   # Optionally, explicitly declare some options. You don't have to.
   settingsOptions = {

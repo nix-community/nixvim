@@ -1,6 +1,8 @@
-{ lib, helpers }:
-with lib;
 {
+  lib,
+  helpers,
+}:
+with lib; {
   #################################################
   # CoreConfig
 

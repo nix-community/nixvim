@@ -3,8 +3,7 @@
   nixvimOptions,
   nixvimTypes,
 }:
-with lib;
-rec {
+with lib; rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
     silent = nixvimOptions.defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding `<silent>` to a map.";
@@ -57,8 +56,8 @@ rec {
 
   modeEnum =
     types.enum
-      # ["" "n" "v" ...]
-      (map ({ short, ... }: short) (attrValues modes));
+    # ["" "n" "v" ...]
+    (map ({short, ...}: short) (attrValues modes));
 
   mapOptionSubmodule = mkMapOptionSubmodule {
     hasKey = true;
@@ -66,8 +65,7 @@ rec {
     rawAction = true;
   };
 
-  mkModeOption =
-    default:
+  mkModeOption = default:
     mkOption {
       type = with types; either modeEnum (listOf modeEnum);
       description = ''
@@ -82,68 +80,67 @@ rec {
       ];
     };
 
-  mkMapOptionSubmodule =
-    {
-      defaults ? { },
-      hasKey ? false,
-      hasAction ? false,
-      rawAction ? true,
-    }:
-    # TODO remove assert once `lua` option is gone
-    # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
-    assert !(defaults ? lua);
-    (
+  mkMapOptionSubmodule = {
+    defaults ? {},
+    hasKey ? false,
+    hasAction ? false,
+    rawAction ? true,
+  }:
+  # TODO remove assert once `lua` option is gone
+  # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
+    assert !(defaults ? lua); (
       with types;
-      submodule {
-        options =
-          (optionalAttrs hasKey {
-            key = mkOption (
-              {
-                type = str;
-                description = "The key to map.";
-                example = "<C-m>";
-              }
-              // (optionalAttrs (defaults ? key) { default = defaults.key; })
-            );
-          })
-          // (optionalAttrs hasAction {
-            action = mkOption (
-              {
-                type = if rawAction then nixvimTypes.maybeRaw str else str;
-                description = "The action to execute.";
-              }
-              // (optionalAttrs (defaults ? action) { default = defaults.action; })
-            );
-          })
-          // {
-            mode = mkModeOption defaults.mode or "";
-            options = mapConfigOptions;
+        submodule {
+          options =
+            (optionalAttrs hasKey {
+              key = mkOption (
+                {
+                  type = str;
+                  description = "The key to map.";
+                  example = "<C-m>";
+                }
+                // (optionalAttrs (defaults ? key) {default = defaults.key;})
+              );
+            })
+            // (optionalAttrs hasAction {
+              action = mkOption (
+                {
+                  type =
+                    if rawAction
+                    then nixvimTypes.maybeRaw str
+                    else str;
+                  description = "The action to execute.";
+                }
+                // (optionalAttrs (defaults ? action) {default = defaults.action;})
+              );
+            })
+            // {
+              mode = mkModeOption defaults.mode or "";
+              options = mapConfigOptions;
 
-            lua = mkOption {
-              type = nullOr bool;
-              description = ''
-                If true, `action` is considered to be lua code.
-                Thus, it will not be wrapped in `""`.
+              lua = mkOption {
+                type = nullOr bool;
+                description = ''
+                  If true, `action` is considered to be lua code.
+                  Thus, it will not be wrapped in `""`.
 
-                This option is deprecated and will be removed in 24.11.
-                You should use a "raw" action instead, e.g. `action.__raw = ""`.
-              '';
-              default = null;
-              visible = false;
+                  This option is deprecated and will be removed in 24.11.
+                  You should use a "raw" action instead, e.g. `action.__raw = ""`.
+                '';
+                default = null;
+                visible = false;
+              };
             };
-          };
-      }
+        }
     );
 
   # Correctly merge two attrs (partially) representing a mapping.
-  mergeKeymap =
-    defaults: keymap:
-    let
-      # First, merge the `options` attrs of both options.
-      mergedOpts = (defaults.options or { }) // (keymap.options or { });
-    in
+  mergeKeymap = defaults: keymap: let
+    # First, merge the `options` attrs of both options.
+    mergedOpts = (defaults.options or {}) // (keymap.options or {});
+  in
     # Then, merge the root attrs together and add the previously merged `options` attrs.
-    (defaults // keymap) // { options = mergedOpts; };
+    (defaults // keymap) // {options = mergedOpts;};
 
   mkKeymaps = defaults: map (mergeKeymap defaults);
 }

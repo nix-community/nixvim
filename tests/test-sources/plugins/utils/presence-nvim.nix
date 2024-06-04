@@ -18,11 +18,11 @@
       debounceTimeout = 10;
       enableLineNumber = false;
 
-      blacklist = [ ];
+      blacklist = [];
       fileAssets = null;
       showTime = true;
 
-      buttons = [ ];
+      buttons = [];
 
       # Rich presence text options.
       editingText = "Editing %s";

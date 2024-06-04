@@ -1,5 +1,4 @@
 {
-
   empty = {
     plugins.copilot-chat.enable = true;
   };

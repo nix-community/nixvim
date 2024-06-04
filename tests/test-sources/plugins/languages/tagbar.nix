@@ -1,5 +1,5 @@
 {
-  empty = { };
+  empty = {};
 
   example = {
     plugins.tagbar = {

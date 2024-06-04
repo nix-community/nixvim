@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-{
+with lib; {
   options.plugins.netman = {
     enable = mkEnableOption "netman.nvim, a framework to access remote resources";
 
@@ -15,16 +14,15 @@ with lib;
     neoTreeIntegration = mkEnableOption "support for netman as a neo-tree source";
   };
 
-  config =
-    let
-      cfg = config.plugins.netman;
-    in
+  config = let
+    cfg = config.plugins.netman;
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
       extraConfigLua = ''
         require("netman")
       '';
 
-      plugins.neo-tree.extraSources = mkIf cfg.neoTreeIntegration [ "netman.ui.neo-tree" ];
+      plugins.neo-tree.extraSources = mkIf cfg.neoTreeIntegration ["netman.ui.neo-tree"];
     };
 }

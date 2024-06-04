@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.floaterm;
 
   settings = {
@@ -166,37 +165,35 @@ let
       '';
     };
   };
-in
-{
-  options.plugins.floaterm =
-    let
-      # Misc options
-      # `OPTION = VALUE`
-      # which will translate to `globals.floaterm_OPTION = VALUE;`
-      miscOptions = mapAttrs (name: value: helpers.mkNullOrOption value.type value.description) settings;
+in {
+  options.plugins.floaterm = let
+    # Misc options
+    # `OPTION = VALUE`
+    # which will translate to `globals.floaterm_OPTION = VALUE;`
+    miscOptions = mapAttrs (name: value: helpers.mkNullOrOption value.type value.description) settings;
 
-      # Keymaps options
-      # `keymaps.ACTION = KEY`
-      # which will translate to `globals.floaterm_keymap_ACTION = KEY;`
-      keymapOptions = listToAttrs (
-        map
-          (name: {
-            inherit name;
-            value = helpers.mkNullOrOption types.str "Key to map to ${name}";
-          })
-          [
-            "new"
-            "prev"
-            "next"
-            "first"
-            "last"
-            "hide"
-            "show"
-            "kill"
-            "toggle"
-          ]
-      );
-    in
+    # Keymaps options
+    # `keymaps.ACTION = KEY`
+    # which will translate to `globals.floaterm_keymap_ACTION = KEY;`
+    keymapOptions = listToAttrs (
+      map
+      (name: {
+        inherit name;
+        value = helpers.mkNullOrOption types.str "Key to map to ${name}";
+      })
+      [
+        "new"
+        "prev"
+        "next"
+        "first"
+        "last"
+        "hide"
+        "show"
+        "kill"
+        "toggle"
+      ]
+    );
+  in
     {
       enable = mkEnableOption "floaterm";
 
@@ -207,24 +204,25 @@ in
     // miscOptions;
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    globals =
-      let
-        # misc options
-        optionGlobals = listToAttrs (
-          map (optionName: {
-            name = "floaterm_${optionName}";
-            value = cfg.${optionName};
-          }) (attrNames settings)
-        );
+    globals = let
+      # misc options
+      optionGlobals = listToAttrs (
+        map (optionName: {
+          name = "floaterm_${optionName}";
+          value = cfg.${optionName};
+        }) (attrNames settings)
+      );
 
-        # keymaps options
-        keymapGlobals = mapAttrs' (name: key: {
+      # keymaps options
+      keymapGlobals =
+        mapAttrs' (name: key: {
           name = "floaterm_keymap_${name}";
           value = key;
-        }) cfg.keymaps;
-      in
+        })
+        cfg.keymaps;
+    in
       optionGlobals // keymapGlobals;
   };
 }

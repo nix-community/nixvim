@@ -12,35 +12,35 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   defaultPackage = pkgs.vimPlugins.modus-themes-nvim;
   isColorscheme = true;
 
-  maintainers = [ helpers.maintainers.nwjsmith ];
+  maintainers = [helpers.maintainers.nwjsmith];
 
   settingsOptions = {
     style =
       helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "modus_operandi"
-          "modus_vivendi"
-        ]
-        ''
-          The theme comes in a light `modus_operandi` style and a dark `modus_vivendi` style.
-        '';
+      [
+        "modus_operandi"
+        "modus_vivendi"
+      ]
+      ''
+        The theme comes in a light `modus_operandi` style and a dark `modus_vivendi` style.
+      '';
 
     variant =
       helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "default"
-          "tinted"
-          "deuteranopia"
-          "tritanopia"
-        ]
-        ''
-          Styles come in four variants:
+      [
+        "default"
+        "tinted"
+        "deuteranopia"
+        "tritanopia"
+      ]
+      ''
+        Styles come in four variants:
 
-          - `default` is the plugin's main style designed to cover a broad range of needs.
-          - `tinted` tones down intensity and provides more color variety.
-          - `deuteranopia` is optimized for users with red-green color deficiency.
-          - `tritanopia` is optimized for users with blue-yellow color deficiency.
-        '';
+        - `default` is the plugin's main style designed to cover a broad range of needs.
+        - `tinted` tones down intensity and provides more color variety.
+        - `deuteranopia` is optimized for users with red-green color deficiency.
+        - `tritanopia` is optimized for users with blue-yellow color deficiency.
+      '';
 
     transparent = helpers.defaultNullOpts.mkBool false ''
       Disable setting the background color.
@@ -96,12 +96,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     styles = {
       comments.italic = true;
       keywords.italic = true;
-      functions = { };
-      variables = { };
+      functions = {};
+      variables = {};
     };
     on_colors = "function(colors) end";
     on_highlights = "function(highlights, colors) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = cfg: {opts.termguicolors = lib.mkDefault true;};
 }

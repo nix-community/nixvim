@@ -15,27 +15,27 @@
         bt_ignore = null;
         segments = [
           {
-            text = [ "%C" ];
+            text = ["%C"];
             click = "v:lua.ScFa";
           }
           {
-            text = [ "%s" ];
+            text = ["%s"];
             click = "v:lua.ScSa";
           }
           {
             text = [
-              { __raw = "require('statuscol.builtin').lnumfunc"; }
+              {__raw = "require('statuscol.builtin').lnumfunc";}
               " "
             ];
             condition = [
               true
-              { __raw = "require('statuscol.builtin').not_empty"; }
+              {__raw = "require('statuscol.builtin').not_empty";}
             ];
             click = "v:lua.ScLa";
           }
           {
             sign = {
-              name = [ ".*" ];
+              name = [".*"];
             };
           }
         ];

@@ -5,36 +5,35 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.clipboard-image;
 
   pluginOptions = {
     imgDir =
       helpers.defaultNullOpts.mkNullable
-        (
-          with helpers.nixvimTypes;
+      (
+        with helpers.nixvimTypes;
           oneOf [
             str
             (listOf str)
             rawLua
           ]
-        )
-        "img"
-        ''
-          Dir name where the image will be pasted to.
+      )
+      "img"
+      ''
+        Dir name where the image will be pasted to.
 
-          Note: If you want to create nested dir, it is better to use table since windows and unix
-          have different path separator.
-        '';
+        Note: If you want to create nested dir, it is better to use table since windows and unix
+        have different path separator.
+      '';
 
     imgDirTxt = helpers.defaultNullOpts.mkNullable (
       with helpers.nixvimTypes;
-      oneOf [
-        str
-        (listOf str)
-        rawLua
-      ]
+        oneOf [
+          str
+          (listOf str)
+          rawLua
+        ]
     ) "img" "Dir that will be inserted into text/buffer.";
 
     imgName = helpers.defaultNullOpts.mkStr ''{__raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";}'' "Image's name.";
@@ -71,79 +70,80 @@ let
     '';
   };
 
-  processPluginOptions =
-    opts: with opts; {
+  processPluginOptions = opts:
+    with opts; {
       img_dir = imgDir;
       img_dir_txt = imgDirTxt;
       img_name = imgName;
       img_handler = imgHandler;
       inherit affix;
     };
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+in {
+  meta.maintainers = [maintainers.GaetanLepage];
 
-  options.plugins.clipboard-image = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "clipboard-image.nvim";
+  options.plugins.clipboard-image =
+    helpers.neovim-plugin.extraOptionsOptions
+    // {
+      enable = mkEnableOption "clipboard-image.nvim";
 
-    package = helpers.mkPluginPackageOption "clipboard-image.nvim" pkgs.vimPlugins.clipboard-image-nvim;
+      package = helpers.mkPluginPackageOption "clipboard-image.nvim" pkgs.vimPlugins.clipboard-image-nvim;
 
-    clipboardPackage = mkOption {
-      type = with types; nullOr package;
-      description = ''
-        Which clipboard provider to use.
+      clipboardPackage = mkOption {
+        type = with types; nullOr package;
+        description = ''
+          Which clipboard provider to use.
 
-        Recommended:
-          - X11: `pkgs.xclip`
-          - Wayland: `pkgs.wl-clipboard`
-          - MacOS: `pkgs.pngpaste`
-      '';
-      example = pkgs.wl-clipboard;
-    };
+          Recommended:
+            - X11: `pkgs.xclip`
+            - Wayland: `pkgs.wl-clipboard`
+            - MacOS: `pkgs.pngpaste`
+        '';
+        example = pkgs.wl-clipboard;
+      };
 
-    default = pluginOptions;
+      default = pluginOptions;
 
-    filetypes = mkOption {
-      type =
-        with types;
-        attrsOf (submodule {
-          options = pluginOptions;
-        });
-      apply = mapAttrs (_: processPluginOptions);
-      default = { };
-      description = "Override certain options for specific filetypes.";
-      example = {
-        markdown = {
-          imgDir = [
-            "src"
-            "assets"
-            "img"
-          ];
-          imgDirTxt = "/assets/img";
-          imgHandler = ''
-            function(img)
-              local script = string.format('./image_compressor.sh "%s"', img.path)
-              os.execute(script)
-            end
-          '';
+      filetypes = mkOption {
+        type = with types;
+          attrsOf (submodule {
+            options = pluginOptions;
+          });
+        apply = mapAttrs (_: processPluginOptions);
+        default = {};
+        description = "Override certain options for specific filetypes.";
+        example = {
+          markdown = {
+            imgDir = [
+              "src"
+              "assets"
+              "img"
+            ];
+            imgDirTxt = "/assets/img";
+            imgHandler = ''
+              function(img)
+                local script = string.format('./image_compressor.sh "%s"', img.path)
+                os.execute(script)
+              end
+            '';
+          };
         };
       };
     };
-  };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    extraPackages = [ cfg.clipboardPackage ];
+    extraPackages = [cfg.clipboardPackage];
 
-    extraConfigLua =
-      let
-        setupOptions = {
+    extraConfigLua = let
+      setupOptions =
+        {
           default = processPluginOptions cfg.default;
-        } // cfg.filetypes // cfg.extraOptions;
-      in
-      ''
-        require('clipboard-image').setup(${helpers.toLuaObject setupOptions})
-      '';
+        }
+        // cfg.filetypes
+        // cfg.extraOptions;
+    in ''
+      require('clipboard-image').setup(${helpers.toLuaObject setupOptions})
+    '';
   };
 }

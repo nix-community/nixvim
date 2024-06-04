@@ -5,15 +5,13 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.neo-tree;
   basePluginPath = [
     "plugins"
     "neo-tree"
   ];
-in
-{
+in {
   imports = [
     (mkRemovedOptionModule (
       basePluginPath
@@ -23,34 +21,33 @@ in
       ]
     ) "Use `plugins.neo-tree.sourceSelector.sources` to achieve the same functionality.")
     (mkRemovedOptionModule (
-      basePluginPath ++ [ "closeFloatsOnEscapeKey" ]
+      basePluginPath ++ ["closeFloatsOnEscapeKey"]
     ) "This option has been removed from upstream.")
   ];
-  options.plugins.neo-tree =
-    let
-      listOfRendererComponents = with types; listOf (either str attrs);
+  options.plugins.neo-tree = let
+    listOfRendererComponents = with types; listOf (either str attrs);
 
-      mkRendererComponentListOption = helpers.defaultNullOpts.mkNullable listOfRendererComponents;
+    mkRendererComponentListOption = helpers.defaultNullOpts.mkNullable listOfRendererComponents;
 
-      mkMappingsOption =
-        defaults:
-        helpers.defaultNullOpts.mkNullable (
-          with types; attrsOf (either str attrs)
-        ) defaults "Mapping options";
+    mkMappingsOption = defaults:
+      helpers.defaultNullOpts.mkNullable (
+        with types; attrsOf (either str attrs)
+      )
+      defaults "Mapping options";
 
-      mkWindowMappingsOption = defaults: { mappings = mkMappingsOption defaults; };
+    mkWindowMappingsOption = defaults: {mappings = mkMappingsOption defaults;};
 
-      mkFollowCurrentFileOption = default: {
-        enabled = helpers.defaultNullOpts.mkBool default ''
-          This will find and focus the file in the active buffer every time the current file is
-          changed while the tree is open.
-        '';
+    mkFollowCurrentFileOption = default: {
+      enabled = helpers.defaultNullOpts.mkBool default ''
+        This will find and focus the file in the active buffer every time the current file is
+        changed while the tree is open.
+      '';
 
-        leaveDirsOpen = helpers.defaultNullOpts.mkBool false ''
-          `false` closes auto expanded dirs, such as with `:Neotree reveal`.
-        '';
-      };
-    in
+      leaveDirsOpen = helpers.defaultNullOpts.mkBool false ''
+        `false` closes auto expanded dirs, such as with `:Neotree reveal`.
+      '';
+    };
+  in
     helpers.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "neo-tree";
@@ -59,13 +56,13 @@ in
 
       sources =
         helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          ''["filesystem" "buffers" "git_status"]''
-          ''
-            If a user has a sources list it will replace this one.
-            Only sources listed here will be loaded.
-            You can also add an external source by adding it's name to this list.
-            The name used here must be the same name you would use in a require() call.
-          '';
+        ''["filesystem" "buffers" "git_status"]''
+        ''
+          If a user has a sources list it will replace this one.
+          Only sources listed here will be loaded.
+          You can also add an external source by adding it's name to this list.
+          The name used here must be the same name you would use in a require() call.
+        '';
 
       extraSources = helpers.mkNullOrOption (types.listOf types.str) ''
         Extra sources to be added to the sources. This is an internal nixvim option.
@@ -92,11 +89,11 @@ in
       gitStatusAsyncOptions = {
         batchSize =
           helpers.defaultNullOpts.mkInt 1000
-            "How many lines of git status results to process at a time";
+          "How many lines of git status results to process at a time";
 
         batchDelay =
           helpers.defaultNullOpts.mkInt 10
-            "delay in ms between batches. Spreads out the workload to let other processes run.";
+          "delay in ms between batches. Spreads out the workload to let other processes run.";
 
         maxLines = helpers.defaultNullOpts.mkInt 10000 ''
           How many lines of git status results to process. Anything after this will be dropped.
@@ -123,7 +120,7 @@ in
 
       logToFile =
         helpers.defaultNullOpts.mkNullable (types.either types.bool types.str) "false"
-          "use :NeoTreeLogs to show the file";
+        "use :NeoTreeLogs to show the file";
 
       openFilesInLastWindow = helpers.defaultNullOpts.mkBool true "If `false`, open files in top left window";
 
@@ -165,68 +162,68 @@ in
 
         sources = helpers.mkNullOrOption (
           with types;
-          listOf (submodule {
-            options = {
-              source = mkOption {
-                type = str;
-                description = "Name of the source to add to the bar.";
-              };
+            listOf (submodule {
+              options = {
+                source = mkOption {
+                  type = str;
+                  description = "Name of the source to add to the bar.";
+                };
 
-              displayName = helpers.mkNullOrOption str "How that source to appear in the bar.";
-            };
-          })
+                displayName = helpers.mkNullOrOption str "How that source to appear in the bar.";
+              };
+            })
         ) "Configure the characters shown on each tab.";
 
         contentLayout =
           helpers.defaultNullOpts.mkEnumFirstDefault
-            [
-              "start"
-              "end"
-              "focus"
-            ]
-            ''
-              Defines how the labels are placed inside a tab.
-              This only takes effect when the tab width is greater than the length of label i.e.
-              `tabsLayout = "equal", "focus"` or when `tabsMinWidth` is large enough.
+          [
+            "start"
+            "end"
+            "focus"
+          ]
+          ''
+            Defines how the labels are placed inside a tab.
+            This only takes effect when the tab width is greater than the length of label i.e.
+            `tabsLayout = "equal", "focus"` or when `tabsMinWidth` is large enough.
 
-              Following options are available.
-                  "start"  : left aligned                  / 裡 bufname     \/..
-                  "end"    : right aligned                 /     裡 bufname \/...
-                  "center" : centered with equal padding   /   裡 bufname   \/...
-            '';
+            Following options are available.
+                "start"  : left aligned                  / 裡 bufname     \/..
+                "end"    : right aligned                 /     裡 bufname \/...
+                "center" : centered with equal padding   /   裡 bufname   \/...
+          '';
 
         tabsLayout =
           helpers.defaultNullOpts.mkEnum
-            [
-              "start"
-              "end"
-              "center"
-              "equal"
-              "focus"
-            ]
+          [
+            "start"
+            "end"
+            "center"
             "equal"
-            ''
-              Defines how the tabs are aligned inside the window when there is more than enough
-              space.
-              The following options are available.
-              `active` will expand the focused tab as much as possible. Bars denote the edge of window.
+            "focus"
+          ]
+          "equal"
+          ''
+            Defines how the tabs are aligned inside the window when there is more than enough
+            space.
+            The following options are available.
+            `active` will expand the focused tab as much as possible. Bars denote the edge of window.
 
-                  "start"  : left aligned                                       ┃/  ~  \/  ~  \/  ~  \            ┃
-                  "end"    : right aligned                                      ┃            /  ~  \/  ~  \/  ~  \┃
-                  "center" : centered with equal padding                        ┃      /  ~  \/  ~  \/  ~  \      ┃
-                  "equal"  : expand all tabs equally to fit the window width    ┃/    ~    \/    ~    \/    ~    \┃
-                  "active" : expand the focused tab to fit the window width     ┃/  focused tab    \/  ~  \/  ~  \┃
-            '';
+                "start"  : left aligned                                       ┃/  ~  \/  ~  \/  ~  \            ┃
+                "end"    : right aligned                                      ┃            /  ~  \/  ~  \/  ~  \┃
+                "center" : centered with equal padding                        ┃      /  ~  \/  ~  \/  ~  \      ┃
+                "equal"  : expand all tabs equally to fit the window width    ┃/    ~    \/    ~    \/    ~    \┃
+                "active" : expand the focused tab to fit the window width     ┃/  focused tab    \/  ~  \/  ~  \┃
+          '';
 
         truncationCharacter = helpers.defaultNullOpts.mkStr "…" "Character to use when truncating the tab label";
 
         tabsMinWidth =
           helpers.defaultNullOpts.mkNullable types.int null
-            "If int padding is added based on `contentLayout`";
+          "If int padding is added based on `contentLayout`";
 
         tabsMaxWidth =
           helpers.defaultNullOpts.mkNullable types.int null
-            "This will truncate text even if `textTruncToFit = false`";
+          "This will truncate text even if `textTruncToFit = false`";
 
         padding = helpers.defaultNullOpts.mkNullable (with types; either int (attrsOf int)) "0" ''
           Defines the global padding of the source selector.
@@ -238,19 +235,19 @@ in
 
         separator = helpers.defaultNullOpts.mkNullable (
           with types;
-          either str (submodule {
-            options = {
-              left = helpers.defaultNullOpts.mkStr "▏" "";
-              right = helpers.defaultNullOpts.mkStr "\\" "";
-              override = helpers.defaultNullOpts.mkStr null "";
-            };
-          })
+            either str (submodule {
+              options = {
+                left = helpers.defaultNullOpts.mkStr "▏" "";
+                right = helpers.defaultNullOpts.mkStr "\\" "";
+                override = helpers.defaultNullOpts.mkStr null "";
+              };
+            })
         ) "Can be a string or a table" ''{ left = "▏"; right= "▕"; }'';
 
         separatorActive =
           helpers.defaultNullOpts.mkNullable
-            (
-              with types;
+          (
+            with types;
               either str (submodule {
                 options = {
                   left = helpers.mkNullOrOption types.str "";
@@ -258,12 +255,12 @@ in
                   override = helpers.mkNullOrOption types.str "";
                 };
               })
-            )
-            null
-            ''
-              Set separators around the active tab.
-              null falls back to `sourceSelector.separator`.
-            '';
+          )
+          null
+          ''
+            Set separators around the active tab.
+            null falls back to `sourceSelector.separator`.
+          '';
 
         showSeparatorOnEdge = helpers.defaultNullOpts.mkBool false ''
           Takes a boolean value where `false` (default) hides the separators on the far
@@ -355,7 +352,7 @@ in
 
           withExpanders =
             helpers.defaultNullOpts.mkNullable types.bool null
-              "If null and file nesting is enabled, will enable expanders.";
+            "If null and file nesting is enabled, will enable expanders.";
 
           expanderCollapsed = helpers.defaultNullOpts.mkStr "" "";
 
@@ -554,17 +551,17 @@ in
 
         insertAs =
           helpers.defaultNullOpts.mkEnumFirstDefault
-            [
-              "child"
-              "sibling"
-            ]
-            ''
-              Affects how nodes get inserted into the tree during creation/pasting/moving of files if
-              the node under the cursor is a directory:
+          [
+            "child"
+            "sibling"
+          ]
+          ''
+            Affects how nodes get inserted into the tree during creation/pasting/moving of files if
+            the node under the cursor is a directory:
 
-              - "child":   Insert nodes as children of the directory under cursor.
-              - "sibling": Insert nodes  as siblings of the directory under cursor.
-            '';
+            - "child":   Insert nodes as children of the directory under cursor.
+            - "sibling": Insert nodes  as siblings of the directory under cursor.
+          '';
 
         mappingOptions = {
           noremap = helpers.defaultNullOpts.mkBool true "noremap";
@@ -645,28 +642,28 @@ in
         '';
         asyncDirectoryScan =
           helpers.defaultNullOpts.mkEnumFirstDefault
-            [
-              "auto"
-              "always"
-              "never"
-            ]
-            ''
-              - "auto" means refreshes are async, but it's synchronous when called from the Neotree
-              commands.
-              - "always" means directory scans are always async.
-              - "never"  means directory scans are never async.
-            '';
+          [
+            "auto"
+            "always"
+            "never"
+          ]
+          ''
+            - "auto" means refreshes are async, but it's synchronous when called from the Neotree
+            commands.
+            - "always" means directory scans are always async.
+            - "never"  means directory scans are never async.
+          '';
 
         scanMode =
           helpers.defaultNullOpts.mkEnumFirstDefault
-            [
-              "shallow"
-              "deep"
-            ]
-            ''
-              - "shallow": Don't scan into directories to detect possible empty directory a priori.
-              - "deep": Scan into directories to detect empty or grouped empty directories a priori.
-            '';
+          [
+            "shallow"
+            "deep"
+          ]
+          ''
+            - "shallow": Don't scan into directories to detect possible empty directory a priori.
+            - "deep": Scan into directories to detect empty or grouped empty directories a priori.
+          '';
 
         bindToCwd = helpers.defaultNullOpts.mkBool true "true creates a 2-way binding between vim's cwd and neo-tree's root.";
 
@@ -690,7 +687,7 @@ in
 
           hideByName =
             helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''[".DS_Store" "thumbs.db"]''
-              "hide by name";
+            "hide by name";
 
           hideByPattern = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
             Hide by pattern.
@@ -735,60 +732,60 @@ in
 
         findArgs =
           helpers.mkNullOrStrLuaFnOr
-            (types.submodule {
-              options = {
-                fd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''
-                  [
-                    "--exclude"
-                    ".git"
-                    "--exclude"
-                    "node_modules"
-                  ]
-                '' "You can specify extra args to pass to the find command.";
-              };
-            })
-            ''
-              Find arguments
-
-              Either use a list of strings:
-
-              ```nix
-              findArgs = {
-                fd = [
+          (types.submodule {
+            options = {
+              fd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''
+                [
                   "--exclude"
                   ".git"
                   "--exclude"
                   "node_modules"
-                ];
-              };
-              ```
+                ]
+              '' "You can specify extra args to pass to the find command.";
+            };
+          })
+          ''
+            Find arguments
 
-              Or use a function instead of list of strings
-              ```
-              findArgs = \'\'
-                find_args = function(cmd, path, search_term, args)
-                  if cmd ~= "fd" then
-                    return args
-                  end
-                  --maybe you want to force the filter to always include hidden files:
-                  table.insert(args, "--hidden")
-                  -- but no one ever wants to see .git files
-                  table.insert(args, "--exclude")
-                  table.insert(args, ".git")
-                  -- or node_modules
-                  table.insert(args, "--exclude")
-                  table.insert(args, "node_modules")
-                  --here is where it pays to use the function, you can exclude more for
-                  --short search terms, or vary based on the directory
-                  if string.len(search_term) < 4 and path == "/home/cseickel" then
-                    table.insert(args, "--exclude")
-                    table.insert(args, "Library")
-                  end
+            Either use a list of strings:
+
+            ```nix
+            findArgs = {
+              fd = [
+                "--exclude"
+                ".git"
+                "--exclude"
+                "node_modules"
+              ];
+            };
+            ```
+
+            Or use a function instead of list of strings
+            ```
+            findArgs = \'\'
+              find_args = function(cmd, path, search_term, args)
+                if cmd ~= "fd" then
                   return args
                 end
-              \'\';
-              ```
-            '';
+                --maybe you want to force the filter to always include hidden files:
+                table.insert(args, "--hidden")
+                -- but no one ever wants to see .git files
+                table.insert(args, "--exclude")
+                table.insert(args, ".git")
+                -- or node_modules
+                table.insert(args, "--exclude")
+                table.insert(args, "node_modules")
+                --here is where it pays to use the function, you can exclude more for
+                --short search terms, or vary based on the directory
+                if string.len(search_term) < 4 and path == "/home/cseickel" then
+                  table.insert(args, "--exclude")
+                  table.insert(args, "Library")
+                end
+                return args
+              end
+            \'\';
+            ```
+          '';
 
         groupEmptyDirs = helpers.defaultNullOpts.mkBool false "when true, empty folders will be grouped together";
 
@@ -798,18 +795,18 @@ in
 
         hijackNetrwBehavior =
           helpers.defaultNullOpts.mkEnumFirstDefault
-            [
-              "open_default"
-              "open_current"
-              "disabled"
-            ]
-            ''
-              - "open_default": netrw disabled, opening a directory opens neo-tree in whatever
-                position is specified in window.position
-              - "open_current": netrw disabled, opening a directory opens within the window like netrw
-                would, regardless of window.position
-              - "disabled": netrw left alone, neo-tree does not handle opening dirs
-            '';
+          [
+            "open_default"
+            "open_current"
+            "disabled"
+          ]
+          ''
+            - "open_default": netrw disabled, opening a directory opens neo-tree in whatever
+              position is specified in window.position
+            - "open_current": netrw disabled, opening a directory opens within the window like netrw
+              would, regardless of window.position
+            - "disabled": netrw left alone, neo-tree does not handle opening dirs
+          '';
 
         useLibuvFileWatcher = helpers.defaultNullOpts.mkBool false ''
           This will use the OS level file watchers to detect changes instead of relying on nvim
@@ -876,8 +873,8 @@ in
 
         kinds =
           helpers.mkNullOrOption
-            (
-              with types;
+          (
+            with types;
               attrsOf (submodule {
                 options = {
                   icon = mkOption {
@@ -892,16 +889,16 @@ in
                   };
                 };
               })
-            )
-            ''
-              An attrs specifying how LSP kinds should be rendered.
-              Each entry should map the LSP kind name to an icon and a highlight group, for example
-              `Class = { icon = ""; hl = "Include"; }`
-            '';
+          )
+          ''
+            An attrs specifying how LSP kinds should be rendered.
+            Each entry should map the LSP kind name to an icon and a highlight group, for example
+            `Class = { icon = ""; hl = "Include"; }`
+          '';
 
         customKinds = mkOption {
           type = with types; attrsOf str;
-          default = { };
+          default = {};
           example = {
             "252" = "TypeAlias";
           };
@@ -917,206 +914,214 @@ in
       };
     };
 
-  config =
-    let
-      inherit (helpers) ifNonNull' mkRaw;
+  config = let
+    inherit (helpers) ifNonNull' mkRaw;
 
-      processRendererComponent =
-        component:
-        if isString component then
-          [ component ]
-        else
-          (mapAttrs' (name: value: {
-            name = if name == "name" then "__unkeyed" else name;
-            value = if isList value then processRendererComponentList value else value;
-          }) component);
+    processRendererComponent = component:
+      if isString component
+      then [component]
+      else
+        (mapAttrs' (name: value: {
+            name =
+              if name == "name"
+              then "__unkeyed"
+              else name;
+            value =
+              if isList value
+              then processRendererComponentList value
+              else value;
+          })
+          component);
 
-      processRendererComponentList =
-        componentList: ifNonNull' componentList (map processRendererComponent componentList);
+    processRendererComponentList = componentList: ifNonNull' componentList (map processRendererComponent componentList);
 
-      processMapping =
-        key: action:
-        if isString action then
-          action
-        else
-          mapAttrs' (k: v: {
-            name = if k == "command" then "__unkeyed" else k;
-            value = v;
-          }) action;
+    processMapping = key: action:
+      if isString action
+      then action
+      else
+        mapAttrs' (k: v: {
+          name =
+            if k == "command"
+            then "__unkeyed"
+            else k;
+          value = v;
+        })
+        action;
 
-      processMappings = mappings: ifNonNull' mappings (mapAttrs processMapping mappings);
+    processMappings = mappings: ifNonNull' mappings (mapAttrs processMapping mappings);
 
-      processWindowMappings = window: { mappings = processMappings window.mappings; };
+    processWindowMappings = window: {mappings = processMappings window.mappings;};
 
-      setupOptions =
-        with cfg;
-        {
-          # Concatenate sources and extraSources, setting sources to it's default value if it is null
-          # and extraSources is not null
-          sources =
-            if (extraSources != null) then
-              if (sources == null) then
-                [
-                  "filesystem"
-                  "git_status"
-                  "buffers"
-                ]
-                ++ extraSources
-              else
-                sources ++ extraSources
-            else
-              sources;
-          add_blank_line_at_top = addBlankLineAtTop;
-          auto_clean_after_session_restore = autoCleanAfterSessionRestore;
-          close_if_last_window = closeIfLastWindow;
-          default_source = defaultSource;
-          enable_diagnostics = enableDiagnostics;
-          enable_git_status = enableGitStatus;
-          enable_modified_markers = enableModifiedMarkers;
-          enable_refresh_on_write = enableRefreshOnWrite;
-          git_status_async = gitStatusAsync;
-          git_status_async_options = with gitStatusAsyncOptions; {
-            batch_size = batchSize;
-            batch_delay = batchDelay;
-            max_lines = maxLines;
-          };
-          hide_root_node = hideRootNode;
-          retain_hidden_root_indent = retainHiddenRootIndent;
-          log_level = logLevel;
-          log_to_file = logToFile;
-          open_files_in_last_window = openFilesInLastWindow;
-          popup_border_style = popupBorderStyle;
-          resize_timer_interval = resizeTimerInterval;
-          sort_case_insensitive = sortCaseInsensitive;
-          sort_function = sortFunction;
-          use_popups_for_input = usePopupsForInput;
-          use_default_mappings = useDefaultMappings;
-          source_selector = with sourceSelector; {
-            inherit winbar statusline;
-            show_scrolled_off_parent_node = showScrolledOffParentNode;
-            sources = ifNonNull' sources (
-              map (source: {
-                inherit (source) source;
-                display_name = source.displayName;
-              }) sources
-            );
-            content_layout = contentLayout;
-            tabs_layout = tabsLayout;
-            truncation_character = truncationCharacter;
-            tabs_min_width = tabsMinWidth;
-            tabs_max_width = tabsMaxWidth;
-            inherit padding separator;
-            separator_active = separatorActive;
-            show_separator_on_edge = showSeparatorOnEdge;
-            highlight_tab = highlightTab;
-            highlight_tab_active = highlightTabActive;
-            highlight_background = highlightBackground;
-            highlight_separator = highlightSeparator;
-            highlight_separator_active = highlightSeparatorActive;
-          };
-          event_handlers = ifNonNull' eventHandlers (
-            mapAttrsToList (event: handler: {
-              inherit event;
-              handler = helpers.mkRaw handler;
-            }) eventHandlers
+    setupOptions = with cfg;
+      {
+        # Concatenate sources and extraSources, setting sources to it's default value if it is null
+        # and extraSources is not null
+        sources =
+          if (extraSources != null)
+          then
+            if (sources == null)
+            then
+              [
+                "filesystem"
+                "git_status"
+                "buffers"
+              ]
+              ++ extraSources
+            else sources ++ extraSources
+          else sources;
+        add_blank_line_at_top = addBlankLineAtTop;
+        auto_clean_after_session_restore = autoCleanAfterSessionRestore;
+        close_if_last_window = closeIfLastWindow;
+        default_source = defaultSource;
+        enable_diagnostics = enableDiagnostics;
+        enable_git_status = enableGitStatus;
+        enable_modified_markers = enableModifiedMarkers;
+        enable_refresh_on_write = enableRefreshOnWrite;
+        git_status_async = gitStatusAsync;
+        git_status_async_options = with gitStatusAsyncOptions; {
+          batch_size = batchSize;
+          batch_delay = batchDelay;
+          max_lines = maxLines;
+        };
+        hide_root_node = hideRootNode;
+        retain_hidden_root_indent = retainHiddenRootIndent;
+        log_level = logLevel;
+        log_to_file = logToFile;
+        open_files_in_last_window = openFilesInLastWindow;
+        popup_border_style = popupBorderStyle;
+        resize_timer_interval = resizeTimerInterval;
+        sort_case_insensitive = sortCaseInsensitive;
+        sort_function = sortFunction;
+        use_popups_for_input = usePopupsForInput;
+        use_default_mappings = useDefaultMappings;
+        source_selector = with sourceSelector; {
+          inherit winbar statusline;
+          show_scrolled_off_parent_node = showScrolledOffParentNode;
+          sources = ifNonNull' sources (
+            map (source: {
+              inherit (source) source;
+              display_name = source.displayName;
+            })
+            sources
           );
-          default_component_configs = with defaultComponentConfigs; {
-            container = with container; {
-              enable_character_fade = enableCharacterFade;
-              inherit width;
-              right_padding = rightPadding;
-            };
-            inherit diagnostics;
-            indent = with indent; {
-              indent_size = indentSize;
-              inherit padding;
-              with_markers = withMarkers;
-              indent_markers = indentMarker;
-              last_indent_marker = lastIndentMarker;
-              inherit highlight;
-              with_expanders = withExpanders;
-              expander_collapsed = expanderCollapsed;
-              expander_expanded = expanderExpanded;
-              expander_highlight = expanderHighlight;
-            };
-            icon = with icon; {
-              folder_closed = folderClosed;
-              folder_open = folderOpen;
-              folder_empty = folderEmpty;
-              folder_empty_open = folderEmptyOpen;
-              inherit default highlight;
-            };
-            inherit modified;
-            name = with name; {
-              trailing_slash = trailingSlash;
-              use_git_status_colors = useGitStatusColors;
-              inherit highlight;
-            };
-            git_status = gitStatus;
+          content_layout = contentLayout;
+          tabs_layout = tabsLayout;
+          truncation_character = truncationCharacter;
+          tabs_min_width = tabsMinWidth;
+          tabs_max_width = tabsMaxWidth;
+          inherit padding separator;
+          separator_active = separatorActive;
+          show_separator_on_edge = showSeparatorOnEdge;
+          highlight_tab = highlightTab;
+          highlight_tab_active = highlightTabActive;
+          highlight_background = highlightBackground;
+          highlight_separator = highlightSeparator;
+          highlight_separator_active = highlightSeparatorActive;
+        };
+        event_handlers = ifNonNull' eventHandlers (
+          mapAttrsToList (event: handler: {
+            inherit event;
+            handler = helpers.mkRaw handler;
+          })
+          eventHandlers
+        );
+        default_component_configs = with defaultComponentConfigs; {
+          container = with container; {
+            enable_character_fade = enableCharacterFade;
+            inherit width;
+            right_padding = rightPadding;
           };
-          renderers = ifNonNull' cfg.renderers (mapAttrs (name: processRendererComponentList) cfg.renderers);
-          nesting_rules = cfg.nestingRules;
-          window = with window; {
-            inherit position width height;
-            auto_expand_width = autoExpandWidth;
-            inherit popup;
-            same_level = sameLevel;
-            insert_as = insertAs;
-            mapping_options = mappingOptions;
-            mappings = processMappings mappings;
+          inherit diagnostics;
+          indent = with indent; {
+            indent_size = indentSize;
+            inherit padding;
+            with_markers = withMarkers;
+            indent_markers = indentMarker;
+            last_indent_marker = lastIndentMarker;
+            inherit highlight;
+            with_expanders = withExpanders;
+            expander_collapsed = expanderCollapsed;
+            expander_expanded = expanderExpanded;
+            expander_highlight = expanderHighlight;
           };
-          filesystem = with filesystem; {
-            window = processWindowMappings window;
-            async_directory_scan = asyncDirectoryScan;
-            scan_mode = scanMode;
-            bind_to_cwd = bindToCwd;
-            cwd_target = cwdTarget;
-            filtered_items = with filteredItems; {
-              inherit visible;
-              force_visible_in_empty_folder = forceVisibleInEmptyFolder;
-              show_hidden_count = showHiddenCount;
-              hide_dotfiles = hideDotfiles;
-              hide_gitignored = hideGitignored;
-              hide_hidden = hideHidden;
-              hide_by_name = hideByName;
-              hide_by_pattern = hideByPattern;
-              always_show = alwaysShow;
-              never_show = neverShow;
-              never_show_by_pattern = neverShowByPattern;
-            };
-            find_by_full_path_words = findByFullPathWords;
-            find_command = findCommand;
-            find_args = findArgs;
-            group_empty_dirs = groupEmptyDirs;
-            search_limit = searchLimit;
-            follow_current_file = followCurrentFile;
-            hijack_netrw_behavior = hijackNetrwBehavior;
-            use_libuv_file_watcher = useLibuvFileWatcher;
+          icon = with icon; {
+            folder_closed = folderClosed;
+            folder_open = folderOpen;
+            folder_empty = folderEmpty;
+            folder_empty_open = folderEmptyOpen;
+            inherit default highlight;
           };
-          buffers = with buffers; {
-            bind_to_cwd = bindToCwd;
-            follow_current_file = followCurrentFile;
-            group_empty_dirs = groupEmptyDirs;
-            window = processWindowMappings window;
+          inherit modified;
+          name = with name; {
+            trailing_slash = trailingSlash;
+            use_git_status_colors = useGitStatusColors;
+            inherit highlight;
           };
-          git_status = {
-            window = processWindowMappings cfg.gitStatus.window;
+          git_status = gitStatus;
+        };
+        renderers = ifNonNull' cfg.renderers (mapAttrs (name: processRendererComponentList) cfg.renderers);
+        nesting_rules = cfg.nestingRules;
+        window = with window; {
+          inherit position width height;
+          auto_expand_width = autoExpandWidth;
+          inherit popup;
+          same_level = sameLevel;
+          insert_as = insertAs;
+          mapping_options = mappingOptions;
+          mappings = processMappings mappings;
+        };
+        filesystem = with filesystem; {
+          window = processWindowMappings window;
+          async_directory_scan = asyncDirectoryScan;
+          scan_mode = scanMode;
+          bind_to_cwd = bindToCwd;
+          cwd_target = cwdTarget;
+          filtered_items = with filteredItems; {
+            inherit visible;
+            force_visible_in_empty_folder = forceVisibleInEmptyFolder;
+            show_hidden_count = showHiddenCount;
+            hide_dotfiles = hideDotfiles;
+            hide_gitignored = hideGitignored;
+            hide_hidden = hideHidden;
+            hide_by_name = hideByName;
+            hide_by_pattern = hideByPattern;
+            always_show = alwaysShow;
+            never_show = neverShow;
+            never_show_by_pattern = neverShowByPattern;
           };
-          example = with example; {
-            renderers = with renderers; {
-              custom = processRendererComponentList custom;
-            };
+          find_by_full_path_words = findByFullPathWords;
+          find_command = findCommand;
+          find_args = findArgs;
+          group_empty_dirs = groupEmptyDirs;
+          search_limit = searchLimit;
+          follow_current_file = followCurrentFile;
+          hijack_netrw_behavior = hijackNetrwBehavior;
+          use_libuv_file_watcher = useLibuvFileWatcher;
+        };
+        buffers = with buffers; {
+          bind_to_cwd = bindToCwd;
+          follow_current_file = followCurrentFile;
+          group_empty_dirs = groupEmptyDirs;
+          window = processWindowMappings window;
+        };
+        git_status = {
+          window = processWindowMappings cfg.gitStatus.window;
+        };
+        example = with example; {
+          renderers = with renderers; {
+            custom = processRendererComponentList custom;
           };
-          document_symbols = with documentSymbols; {
-            follow_cursor = followCursor;
-            inherit kinds;
-            custom_kinds.__raw =
-              "{" + (concatStringsSep "," (mapAttrsToList (id: name: ''[${id}] = "${name}"'') customKinds)) + "}";
-            window = processWindowMappings window;
-          };
-        }
-        // cfg.extraOptions;
-    in
+        };
+        document_symbols = with documentSymbols; {
+          follow_cursor = followCursor;
+          inherit kinds;
+          custom_kinds.__raw =
+            "{" + (concatStringsSep "," (mapAttrsToList (id: name: ''[${id}] = "${name}"'') customKinds)) + "}";
+          window = processWindowMappings window;
+        };
+      }
+      // cfg.extraOptions;
+  in
     mkIf cfg.enable {
       extraPlugins = with pkgs.vimPlugins; [
         cfg.package
@@ -1126,6 +1131,6 @@ in
       extraConfigLua = ''
         require('neo-tree').setup(${helpers.toLuaObject setupOptions})
       '';
-      extraPackages = [ pkgs.git ];
+      extraPackages = [pkgs.git];
     };
 }

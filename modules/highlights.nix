@@ -4,12 +4,11 @@
   config,
   ...
 }:
-with lib;
-{
+with lib; {
   options = {
     highlight = mkOption {
       type = types.attrsOf helpers.nixvimTypes.highlight;
-      default = { };
+      default = {};
       description = "Define new highlight groups";
       example = ''
         highlight = {
@@ -20,7 +19,7 @@ with lib;
 
     highlightOverride = mkOption {
       type = types.attrsOf helpers.nixvimTypes.highlight;
-      default = { };
+      default = {};
       description = "Define highlight groups to override existing highlight";
       example = ''
         highlight = {
@@ -31,7 +30,7 @@ with lib;
 
     match = mkOption {
       type = types.attrsOf types.str;
-      default = { };
+      default = {};
       description = "Define match groups";
       example = ''
         match = {
@@ -43,7 +42,8 @@ with lib;
 
   config = {
     extraConfigLuaPre =
-      (optionalString (config.highlight != { })
+      (
+        optionalString (config.highlight != {})
         # lua
         ''
           -- Highlight groups {{
@@ -57,7 +57,8 @@ with lib;
           -- }}
         ''
       )
-      + (optionalString (config.match != { })
+      + (
+        optionalString (config.match != {})
         # lua
         ''
           -- Match groups {{
@@ -73,18 +74,18 @@ with lib;
       );
 
     extraConfigLuaPost =
-      optionalString (config.highlightOverride != { })
-        # lua
-        ''
-          -- Highlight groups {{
-          do
-            local highlights = ${helpers.toLuaObject config.highlightOverride}
+      optionalString (config.highlightOverride != {})
+      # lua
+      ''
+        -- Highlight groups {{
+        do
+          local highlights = ${helpers.toLuaObject config.highlightOverride}
 
-            for k,v in pairs(highlights) do
-              vim.api.nvim_set_hl(0, k, v)
-            end
+          for k,v in pairs(highlights) do
+            vim.api.nvim_set_hl(0, k, v)
           end
-          -- }}
-        '';
+        end
+        -- }}
+      '';
   };
 }

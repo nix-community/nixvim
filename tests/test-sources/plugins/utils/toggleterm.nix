@@ -41,7 +41,7 @@
         on_stderr = "function() end";
         on_exit = "function() end";
         hide_numbers = false;
-        shade_filetypes = [ "" ];
+        shade_filetypes = [""];
         autochdir = true;
         highlights = {
           Normal.guibg = "#000000";
@@ -91,7 +91,7 @@
         on_stderr = null;
         on_exit = null;
         hide_numbers = true;
-        shade_filetypes = [ ];
+        shade_filetypes = [];
         autochdir = false;
         highlights = {
           NormalFloat.link = "Normal";

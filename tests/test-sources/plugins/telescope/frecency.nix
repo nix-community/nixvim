@@ -38,7 +38,7 @@
           show_scores = false;
           show_unindexed = true;
           workspace_scan_cmd = null;
-          workspaces = { };
+          workspaces = {};
         };
       };
     };

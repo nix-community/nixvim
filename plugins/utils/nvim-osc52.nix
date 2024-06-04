@@ -5,8 +5,7 @@
   config,
   ...
 }:
-with lib;
-{
+with lib; {
   options.plugins.nvim-osc52 = {
     enable = mkEnableOption "nvim-osc52, a plugin to use OSC52 sequences to copy/paste";
 
@@ -45,19 +44,17 @@ with lib;
     };
   };
 
-  config =
-    let
-      cfg = config.plugins.nvim-osc52;
-      setupOptions = with cfg; {
-        inherit silent trim;
-        max_length = maxLength;
-      };
-    in
+  config = let
+    cfg = config.plugins.nvim-osc52;
+    setupOptions = with cfg; {
+      inherit silent trim;
+      max_length = maxLength;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
-      keymaps =
-        with cfg.keymaps;
+      keymaps = with cfg.keymaps;
         mkIf enable [
           {
             mode = "n";

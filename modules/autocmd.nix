@@ -4,12 +4,11 @@
   config,
   ...
 }:
-with lib;
-{
+with lib; {
   options = {
     autoGroups = mkOption {
       type = types.attrsOf helpers.autocmd.autoGroupOption;
-      default = { };
+      default = {};
       description = "augroup definitions";
       example = ''
         autoGroups = {
@@ -22,7 +21,7 @@ with lib;
 
     autoCmd = mkOption {
       type = types.listOf helpers.autocmd.autoCmdOption;
-      default = [ ];
+      default = [];
       description = "autocmd definitions";
       example = ''
         autoCmd = [
@@ -36,11 +35,10 @@ with lib;
     };
   };
 
-  config =
-    let
-      inherit (config) autoGroups autoCmd;
-    in
-    mkIf (autoGroups != { } || autoCmd != { }) {
+  config = let
+    inherit (config) autoGroups autoCmd;
+  in
+    mkIf (autoGroups != {} || autoCmd != {}) {
       # Introduced early October 2023.
       # TODO remove in early December 2023.
       assertions = [
@@ -54,7 +52,7 @@ with lib;
       ];
 
       extraConfigLuaPost =
-        (optionalString (autoGroups != { }) ''
+        (optionalString (autoGroups != {}) ''
           -- Set up autogroups {{
           do
             local __nixvim_autogroups = ${helpers.toLuaObject autoGroups}
@@ -65,7 +63,7 @@ with lib;
           end
           -- }}
         '')
-        + (optionalString (autoCmd != [ ]) ''
+        + (optionalString (autoCmd != []) ''
           -- Set up autocommands {{
           do
             local __nixvim_autocommands = ${helpers.toLuaObject autoCmd}

@@ -12,7 +12,7 @@
           '';
 
           formatting = {
-            command = [ "nixpkgs-fmt" ];
+            command = ["nixpkgs-fmt"];
           };
 
           options = {

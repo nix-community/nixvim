@@ -1,13 +1,14 @@
-{ lib, helpers }:
-with lib;
 {
+  lib,
+  helpers,
+}:
+with lib; {
   session_dir = helpers.defaultNullOpts.mkStr "~/.vim/session" ''
     The directory to save/load sessions to/from.
   '';
 
   lists = mkOption {
-    type =
-      with helpers.nixvimTypes;
+    type = with helpers.nixvimTypes;
       listOf (
         either strLua (submodule {
           freeformType = with types; attrsOf anything;
@@ -30,8 +31,13 @@ with lib;
           };
         })
       );
-    apply = v: map (listElem: if isString listElem then helpers.mkRaw listElem else listElem) v;
-    default = [ ];
+    apply = v:
+      map (listElem:
+        if isString listElem
+        then helpers.mkRaw listElem
+        else listElem)
+      v;
+    default = [];
     description = ''
       Startify displays lists. Each list consists of a `type` and optionally a `header` and
       custom `indices`.
@@ -66,47 +72,47 @@ with lib;
 
   bookmarks =
     helpers.defaultNullOpts.mkListOf
-      (
-        with helpers.nixvimTypes;
+    (
+      with helpers.nixvimTypes;
         oneOf [
           str
           rawLua
           attrs
         ]
-      )
-      "[]"
-      ''
-        A list of files or directories to bookmark.
-        The list can contain two kinds of types.
-        Either a path (str) or an attrs where the key is the custom index and the value is the path.
-      '';
+    )
+    "[]"
+    ''
+      A list of files or directories to bookmark.
+      The list can contain two kinds of types.
+      Either a path (str) or an attrs where the key is the custom index and the value is the path.
+    '';
 
   commands =
     helpers.defaultNullOpts.mkListOf
-      (
-        with types;
+    (
+      with types;
         oneOf [
           str
           (attrsOf (either str (listOf str)))
           (listOf str)
         ]
-      )
-      "[]"
-      ''
-        A list of commands to execute on selection.
-        Leading colons are optional.
-        It supports optional custom indices and/or command descriptions.
+    )
+    "[]"
+    ''
+      A list of commands to execute on selection.
+      Leading colons are optional.
+      It supports optional custom indices and/or command descriptions.
 
-        Example:
-        ```nix
-          [
-            ":help reference"
-            ["Vim Reference" "h ref"]
-            {h = "h ref";}
-            {m = ["My magical function" "call Magic()"];}
-          ]
-        ```
-      '';
+      Example:
+      ```nix
+        [
+          ":help reference"
+          ["Vim Reference" "h ref"]
+          {h = "h ref";}
+          {m = ["My magical function" "call Magic()"];}
+        ]
+      ```
+    '';
 
   files_number = helpers.defaultNullOpts.mkUnsignedInt 10 ''
     The number of files to list.
@@ -309,41 +315,41 @@ with lib;
 
   custom_indices =
     helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; maybeRaw (listOf str)) "[]"
-      ''
-        Use any list of strings as indices instead of increasing numbers. If there are more startify
-        entries than actual items in the custom list, the remaining entries will be filled using the
-        default numbering scheme starting from 0.
+    ''
+      Use any list of strings as indices instead of increasing numbers. If there are more startify
+      entries than actual items in the custom list, the remaining entries will be filled using the
+      default numbering scheme starting from 0.
 
-        Thus you can create your own indexing scheme that fits your keyboard layout.
-        You don't want to leave the home row, do you?!
+      Thus you can create your own indexing scheme that fits your keyboard layout.
+      You don't want to leave the home row, do you?!
 
-        Example:
-        ```nix
-          ["f" "g" "h"]
-        ```
-      '';
+      Example:
+      ```nix
+        ["f" "g" "h"]
+      ```
+    '';
 
   custom_header =
     helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str)))
-      ''
-        Define your own header.
+    ''
+      Define your own header.
 
-        This option takes a `list of strings`, whereas each string will be put on its own line.
-        If it is a simple `string`, it should evaluate to a list of strings.
+      This option takes a `list of strings`, whereas each string will be put on its own line.
+      If it is a simple `string`, it should evaluate to a list of strings.
 
-        Example:
-        ```nix
-          [
-            ""
-            "     ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
-            "     ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
-            "     ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
-            "     ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
-            "     ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
-            "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
-          ]
-        ```
-      '';
+      Example:
+      ```nix
+        [
+          ""
+          "     ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+          "     ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+          "     ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+          "     ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+          "     ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+          "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
+        ]
+      ```
+    '';
 
   custom_header_quotes = helpers.defaultNullOpts.mkListOf (with types; listOf str) "[]" ''
     Example:
@@ -357,9 +363,9 @@ with lib;
 
   custom_footer =
     helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str)))
-      ''
-        Same as the custom header, but shown at the bottom of the startify buffer.
-      '';
+    ''
+      Same as the custom header, but shown at the bottom of the startify buffer.
+    '';
 
   disable_at_vimenter = helpers.defaultNullOpts.mkBool false ''
     Don't run Startify at Vim startup.

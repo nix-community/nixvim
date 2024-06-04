@@ -12,9 +12,9 @@
           rootPath = null;
           semanticTokens = "enable";
           systemFonts = true;
-          fontPaths = [ ];
+          fontPaths = [];
           compileStatus = "enable";
-          typstExtraArgs = [ ];
+          typstExtraArgs = [];
           serverPath = null;
           "trace.server" = "off";
           formatterMode = "disable";

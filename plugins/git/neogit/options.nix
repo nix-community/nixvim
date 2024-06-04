@@ -1,6 +1,8 @@
-{ lib, helpers }:
-with lib;
-let
+{
+  lib,
+  helpers,
+}:
+with lib; let
   mkKindOption = helpers.defaultNullOpts.mkEnum [
     "split"
     "vsplit"
@@ -10,8 +12,7 @@ let
     "replace"
     "auto"
   ];
-in
-{
+in {
   filewatcher = {
     enabled = helpers.defaultNullOpts.mkBool true ''
       When enabled, will watch the `.git/` directory for changes and refresh the status buffer
@@ -21,14 +22,14 @@ in
 
   graph_style =
     helpers.defaultNullOpts.mkEnumFirstDefault
-      [
-        "ascii"
-        "unicode"
-      ]
-      ''
-        - "ascii"   is the graph the git CLI generates
-        - "unicode" is the graph like https://github.com/rbong/vim-flog
-      '';
+    [
+      "ascii"
+      "unicode"
+    ]
+    ''
+      - "ascii"   is the graph the git CLI generates
+      - "unicode" is the graph like https://github.com/rbong/vim-flog
+    '';
 
   disable_hint = helpers.defaultNullOpts.mkBool false ''
     Hides the hints at the top of the status buffer.
@@ -67,13 +68,13 @@ in
   '';
 
   disable_insert_on_commit =
-    helpers.defaultNullOpts.mkNullable (with types; either bool (enum [ "auto" ])) "auto"
-      ''
-        Changes what mode the Commit Editor starts in.
-        `true` will leave nvim in normal mode, `false` will change nvim to insert mode, and `"auto"`
-        will change nvim to insert mode IF the commit message is empty, otherwise leaving it in normal
-        mode.
-      '';
+    helpers.defaultNullOpts.mkNullable (with types; either bool (enum ["auto"])) "auto"
+    ''
+      Changes what mode the Commit Editor starts in.
+      `true` will leave nvim in normal mode, `false` will change nvim to insert mode, and `"auto"`
+      will change nvim to insert mode IF the commit message is empty, otherwise leaving it in normal
+      mode.
+    '';
 
   use_per_project_settings = helpers.defaultNullOpts.mkBool true ''
     Scope persisted settings on a per-project basis.
@@ -172,26 +173,26 @@ in
 
   signs =
     mapAttrs
-      (
-        n: v:
+    (
+      n: v:
         helpers.defaultNullOpts.mkListOf types.str ''["${v.closed}" "${v.opened}"]'' ''
           The icons to use for open and closed ${n}s.
         ''
-      )
-      {
-        hunk = {
-          closed = "";
-          opened = "";
-        };
-        item = {
-          closed = ">";
-          opened = "v";
-        };
-        section = {
-          closed = ">";
-          opened = "v";
-        };
+    )
+    {
+      hunk = {
+        closed = "";
+        opened = "";
       };
+      item = {
+        closed = ">";
+        opened = "v";
+      };
+      section = {
+        closed = ">";
+        opened = "v";
+      };
+    };
 
   integrations = {
     telescope = helpers.mkNullOrOption types.bool ''
@@ -213,11 +214,10 @@ in
 
   sections =
     mapAttrs
-      (
-        name: default:
+    (
+      name: default:
         mkOption {
-          type =
-            with types;
+          type = with types;
             nullOr (submodule {
               options = {
                 folded = mkOption {
@@ -234,197 +234,195 @@ in
           inherit default;
           description = "Settings for the ${name} section";
         }
-      )
-      {
-        sequencer = {
-          folded = false;
-          hidden = false;
-        };
-        untracked = {
-          folded = false;
-          hidden = false;
-        };
-        unstaged = {
-          folded = false;
-          hidden = false;
-        };
-        staged = {
-          folded = false;
-          hidden = false;
-        };
-        stashes = {
-          folded = true;
-          hidden = false;
-        };
-        unpulled_upstream = {
-          folded = true;
-          hidden = false;
-        };
-        unmerged_upstream = {
-          folded = false;
-          hidden = false;
-        };
-        unpulled_pushRemote = {
-          folded = true;
-          hidden = false;
-        };
-        unmerged_pushRemote = {
-          folded = false;
-          hidden = false;
-        };
-        recent = {
-          folded = true;
-          hidden = false;
-        };
-        rebase = {
-          folded = true;
-          hidden = false;
-        };
+    )
+    {
+      sequencer = {
+        folded = false;
+        hidden = false;
       };
+      untracked = {
+        folded = false;
+        hidden = false;
+      };
+      unstaged = {
+        folded = false;
+        hidden = false;
+      };
+      staged = {
+        folded = false;
+        hidden = false;
+      };
+      stashes = {
+        folded = true;
+        hidden = false;
+      };
+      unpulled_upstream = {
+        folded = true;
+        hidden = false;
+      };
+      unmerged_upstream = {
+        folded = false;
+        hidden = false;
+      };
+      unpulled_pushRemote = {
+        folded = true;
+        hidden = false;
+      };
+      unmerged_pushRemote = {
+        folded = false;
+        hidden = false;
+      };
+      recent = {
+        folded = true;
+        hidden = false;
+      };
+      rebase = {
+        folded = true;
+        hidden = false;
+      };
+    };
 
   ignored_settings =
     helpers.defaultNullOpts.mkListOf types.str
-      ''
-        [
-          "NeogitPushPopup--force-with-lease"
-          "NeogitPushPopup--force"
-          "NeogitPullPopup--rebase"
-          "NeogitCommitPopup--allow-empty"
-          "NeogitRevertPopup--no-edit"
-        ]
-      ''
-      ''
-        Table of settings to never persist.
-        Uses format "Filetype--cli-value".
-      '';
+    ''
+      [
+        "NeogitPushPopup--force-with-lease"
+        "NeogitPushPopup--force"
+        "NeogitPullPopup--rebase"
+        "NeogitCommitPopup--allow-empty"
+        "NeogitRevertPopup--no-edit"
+      ]
+    ''
+    ''
+      Table of settings to never persist.
+      Uses format "Filetype--cli-value".
+    '';
 
-  mappings =
-    let
-      mkMappingOption = helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [ false ]));
-    in
-    {
-      commit_editor = mkMappingOption ''
-        {
-          q = "Close";
-          "<c-c><c-c>" = "Submit";
-          "<c-c><c-k>" = "Abort";
-          "<m-p>" = "PrevMessage";
-          "<m-n>" = "NextMessage";
-          "<m-r>" = "ResetMessage";
-        }
-      '' "Mappings for the commit editor.";
+  mappings = let
+    mkMappingOption = helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [false]));
+  in {
+    commit_editor = mkMappingOption ''
+      {
+        q = "Close";
+        "<c-c><c-c>" = "Submit";
+        "<c-c><c-k>" = "Abort";
+        "<m-p>" = "PrevMessage";
+        "<m-n>" = "NextMessage";
+        "<m-r>" = "ResetMessage";
+      }
+    '' "Mappings for the commit editor.";
 
-      commit_editor_I = mkMappingOption ''
-        {
-          "<c-c><c-c>" = "Submit";
-          "<c-c><c-k>" = "Abort";
-        }
-      '' "Mappings for the commit editor (insert mode)";
+    commit_editor_I = mkMappingOption ''
+      {
+        "<c-c><c-c>" = "Submit";
+        "<c-c><c-k>" = "Abort";
+      }
+    '' "Mappings for the commit editor (insert mode)";
 
-      rebase_editor = mkMappingOption ''
-        {
-          p = "Pick";
-          r = "Reword";
-          e = "Edit";
-          s = "Squash";
-          f = "Fixup";
-          x = "Execute";
-          d = "Drop";
-          b = "Break";
-          q = "Close";
-          "<cr>" = "OpenCommit";
-          gk = "MoveUp";
-          gj = "MoveDown";
-          "<c-c><c-c>" = "Submit";
-          "<c-c><c-k>" = "Abort";
-          "[c" = "OpenOrScrollUp";
-          "]c" = "OpenOrScrollDown";
-        }
-      '' "Mappings for the rebase editor.";
+    rebase_editor = mkMappingOption ''
+      {
+        p = "Pick";
+        r = "Reword";
+        e = "Edit";
+        s = "Squash";
+        f = "Fixup";
+        x = "Execute";
+        d = "Drop";
+        b = "Break";
+        q = "Close";
+        "<cr>" = "OpenCommit";
+        gk = "MoveUp";
+        gj = "MoveDown";
+        "<c-c><c-c>" = "Submit";
+        "<c-c><c-k>" = "Abort";
+        "[c" = "OpenOrScrollUp";
+        "]c" = "OpenOrScrollDown";
+      }
+    '' "Mappings for the rebase editor.";
 
-      rebase_editor_I = mkMappingOption ''
-        {
-          "<c-c><c-c>" = "Submit";
-          "<c-c><c-k>" = "Abort";
-        }
-      '' "Mappings for the rebase editor (insert mode).";
+    rebase_editor_I = mkMappingOption ''
+      {
+        "<c-c><c-c>" = "Submit";
+        "<c-c><c-k>" = "Abort";
+      }
+    '' "Mappings for the rebase editor (insert mode).";
 
-      finder = mkMappingOption ''
-        {
-          "<cr>" = "Select";
-          "<c-c>" = "Close";
-          "<esc>" = "Close";
-          "<c-n>" = "Next";
-          "<c-p>" = "Previous";
-          "<down>" = "Next";
-          "<up>" = "Previous";
-          "<tab>" = "MultiselectToggleNext";
-          "<s-tab>" = "MultiselectTogglePrevious";
-          "<c-j>" = "NOP";
-          "<ScrollWheelDown>" = "ScrollWheelDown";
-          "<ScrollWheelUp>" = "ScrollWheelUp";
-          "<ScrollWheelLeft>" = "NOP";
-          "<ScrollWheelRight>" = "NOP";
-          "<LeftMouse>" = "MouseClick";
-          "<2-LeftMouse>" = "NOP";
-        }
-      '' "Mappings for the finder.";
+    finder = mkMappingOption ''
+      {
+        "<cr>" = "Select";
+        "<c-c>" = "Close";
+        "<esc>" = "Close";
+        "<c-n>" = "Next";
+        "<c-p>" = "Previous";
+        "<down>" = "Next";
+        "<up>" = "Previous";
+        "<tab>" = "MultiselectToggleNext";
+        "<s-tab>" = "MultiselectTogglePrevious";
+        "<c-j>" = "NOP";
+        "<ScrollWheelDown>" = "ScrollWheelDown";
+        "<ScrollWheelUp>" = "ScrollWheelUp";
+        "<ScrollWheelLeft>" = "NOP";
+        "<ScrollWheelRight>" = "NOP";
+        "<LeftMouse>" = "MouseClick";
+        "<2-LeftMouse>" = "NOP";
+      }
+    '' "Mappings for the finder.";
 
-      popup = mkMappingOption ''
-        {
-          "?" = "HelpPopup";
-          A = "CherryPickPopup";
-          d = "DiffPopup";
-          M = "RemotePopup";
-          P = "PushPopup";
-          X = "ResetPopup";
-          Z = "StashPopup";
-          i = "IgnorePopup";
-          t = "TagPopup";
-          b = "BranchPopup";
-          B = "BisectPopup";
-          w = "WorktreePopup";
-          c = "CommitPopup";
-          f = "FetchPopup";
-          l = "LogPopup";
-          m = "MergePopup";
-          p = "PullPopup";
-          r = "RebasePopup";
-          v = "RevertPopup";
-        }
-      '' "Mappings for popups.";
+    popup = mkMappingOption ''
+      {
+        "?" = "HelpPopup";
+        A = "CherryPickPopup";
+        d = "DiffPopup";
+        M = "RemotePopup";
+        P = "PushPopup";
+        X = "ResetPopup";
+        Z = "StashPopup";
+        i = "IgnorePopup";
+        t = "TagPopup";
+        b = "BranchPopup";
+        B = "BisectPopup";
+        w = "WorktreePopup";
+        c = "CommitPopup";
+        f = "FetchPopup";
+        l = "LogPopup";
+        m = "MergePopup";
+        p = "PullPopup";
+        r = "RebasePopup";
+        v = "RevertPopup";
+      }
+    '' "Mappings for popups.";
 
-      status = mkMappingOption ''
-        {
-          q = "Close";
-          I = "InitRepo";
-          "1" = "Depth1";
-          "2" = "Depth2";
-          "3" = "Depth3";
-          "4" = "Depth4";
-          "<tab>" = "Toggle";
-          x = "Discard";
-          s = "Stage";
-          S = "StageUnstaged";
-          "<c-s>" = "StageAll";
-          u = "Unstage";
-          K = "Untrack";
-          U = "UnstageStaged";
-          y = "ShowRefs";
-          "$" = "CommandHistory";
-          Y = "YankSelected";
-          "<c-r>" = "RefreshBuffer";
-          "<cr>" = "GoToFile";
-          "<c-v>" = "VSplitOpen";
-          "<c-x>" = "SplitOpen";
-          "<c-t>" = "TabOpen";
-          "{" = "GoToPreviousHunkHeader";
-          "}" = "GoToNextHunkHeader";
-          "[c" = "OpenOrScrollUp";
-          "]c" = "OpenOrScrollDown";
-        }
-      '' "Mappings for status.";
-    };
+    status = mkMappingOption ''
+      {
+        q = "Close";
+        I = "InitRepo";
+        "1" = "Depth1";
+        "2" = "Depth2";
+        "3" = "Depth3";
+        "4" = "Depth4";
+        "<tab>" = "Toggle";
+        x = "Discard";
+        s = "Stage";
+        S = "StageUnstaged";
+        "<c-s>" = "StageAll";
+        u = "Unstage";
+        K = "Untrack";
+        U = "UnstageStaged";
+        y = "ShowRefs";
+        "$" = "CommandHistory";
+        Y = "YankSelected";
+        "<c-r>" = "RefreshBuffer";
+        "<cr>" = "GoToFile";
+        "<c-v>" = "VSplitOpen";
+        "<c-x>" = "SplitOpen";
+        "<c-t>" = "TabOpen";
+        "{" = "GoToPreviousHunkHeader";
+        "}" = "GoToNextHunkHeader";
+        "[c" = "OpenOrScrollUp";
+        "]c" = "OpenOrScrollDown";
+      }
+    '' "Mappings for status.";
+  };
 
   notification_icon = helpers.defaultNullOpts.mkStr "󰊢" ''
     Icon for notifications.

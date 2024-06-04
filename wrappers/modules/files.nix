@@ -1,20 +1,21 @@
-modules:
-{
+modules: {
   pkgs,
   config,
   lib,
   helpers,
   ...
-}:
-let
+}: let
   inherit (lib) types;
   fileModuleType = types.submoduleWith {
     shorthandOnlyDefinesConfig = true;
     specialArgs.helpers = helpers;
     modules = [
       (
-        { name, config, ... }:
         {
+          name,
+          config,
+          ...
+        }: {
           imports = modules;
           options.plugin = lib.mkOption {
             type = types.package;
@@ -24,20 +25,23 @@ let
           };
           config = {
             path = name;
-            type = lib.mkDefault (if lib.hasSuffix ".vim" name then "vim" else "lua");
+            type = lib.mkDefault (
+              if lib.hasSuffix ".vim" name
+              then "vim"
+              else "lua"
+            );
             plugin = pkgs.writeTextDir config.path config.content;
           };
         }
       )
     ];
   };
-in
-{
+in {
   options = {
     files = lib.mkOption {
       type = types.attrsOf fileModuleType;
       description = "Files to include in the Vim config.";
-      default = { };
+      default = {};
     };
 
     filesPlugin = lib.mkOption {
@@ -48,24 +52,22 @@ in
     };
   };
 
-  config =
-    let
-      inherit (config) files;
-      concatFilesOption = attr: lib.flatten (lib.mapAttrsToList (_: builtins.getAttr attr) files);
-    in
-    {
-      # Each file can declare plugins/packages/warnings/assertions
-      extraPlugins = concatFilesOption "extraPlugins";
-      extraPackages = concatFilesOption "extraPackages";
-      warnings = concatFilesOption "warnings";
-      assertions = concatFilesOption "assertions";
+  config = let
+    inherit (config) files;
+    concatFilesOption = attr: lib.flatten (lib.mapAttrsToList (_: builtins.getAttr attr) files);
+  in {
+    # Each file can declare plugins/packages/warnings/assertions
+    extraPlugins = concatFilesOption "extraPlugins";
+    extraPackages = concatFilesOption "extraPackages";
+    warnings = concatFilesOption "warnings";
+    assertions = concatFilesOption "assertions";
 
-      # A directory with all the files in it
-      filesPlugin = pkgs.buildEnv {
-        name = "nixvim-config";
-        paths =
-          (lib.mapAttrsToList (_: file: file.plugin) files)
-          ++ (lib.mapAttrsToList pkgs.writeTextDir config.extraFiles);
-      };
+    # A directory with all the files in it
+    filesPlugin = pkgs.buildEnv {
+      name = "nixvim-config";
+      paths =
+        (lib.mapAttrsToList (_: file: file.plugin) files)
+        ++ (lib.mapAttrsToList pkgs.writeTextDir config.extraFiles);
     };
+  };
 }

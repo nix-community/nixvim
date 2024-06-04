@@ -45,7 +45,7 @@
                 bold = "\27[1m";
               };
             };
-            extra_args = [ ];
+            extra_args = [];
             filter_dir.__raw = ''
               function(name, rel_path, root)
               end

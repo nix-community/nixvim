@@ -5,19 +5,17 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.dap.extensions.dap-python;
-  dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
-in
-{
+  dapHelpers = import ./dapHelpers.nix {inherit lib helpers;};
+in {
   options.plugins.dap.extensions.dap-python = {
     enable = mkEnableOption "dap-python";
 
     package = helpers.mkPluginPackageOption "dap-python" pkgs.vimPlugins.nvim-dap-python;
 
     adapterPythonPath = mkOption {
-      default = "${pkgs.python3.withPackages (ps: with ps; [ debugpy ])}/bin/python3";
+      default = "${pkgs.python3.withPackages (ps: with ps; [debugpy])}/bin/python3";
       description = "Path to the python interpreter. Path must be absolute or in $PATH and needs to have the debugpy package installed.";
       type = types.str;
     };
@@ -52,21 +50,19 @@ in
     '';
   };
 
-  config =
-    let
-      options = with cfg; {
-        inherit console;
-        include_configs = includeConfigs;
-      };
-    in
+  config = let
+    options = with cfg; {
+      inherit console;
+      include_configs = includeConfigs;
+    };
+  in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      extraPlugins = [cfg.package];
 
       plugins.dap = {
         enable = true;
 
-        extensionConfigLua =
-          with helpers;
+        extensionConfigLua = with helpers;
           ''
             require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject options})
           ''

@@ -5,12 +5,10 @@
   helpers,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.cmp-fish;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+in {
+  meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.cmp-fish = {
     fishPackage = helpers.mkPackageOption {
@@ -19,5 +17,5 @@ in
     };
   };
 
-  config = mkIf cfg.enable { extraPackages = [ cfg.fishPackage ]; };
+  config = mkIf cfg.enable {extraPackages = [cfg.fishPackage];};
 }

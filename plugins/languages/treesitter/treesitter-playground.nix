@@ -1,10 +1,10 @@
-{ lib, ... }:
-with lib;
-{
+{lib, ...}:
+with lib; {
   # Deprecation notice added 2023/08/29
   # TODO: remove (along with this file) in early November 2023.
   imports = [
-    (mkRemovedOptionModule
+    (
+      mkRemovedOptionModule
       [
         "plugins"
         "treesitter-playground"

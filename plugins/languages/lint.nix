@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.lint;
 
   linterOptions = with types; {
@@ -96,104 +95,101 @@ let
     };
   };
 
-  mkLinterOpts =
-    noDefaults:
+  mkLinterOpts = noDefaults:
     types.submodule {
       freeformType = types.attrs;
 
-      options = mapAttrs (
-        optionName:
-        (
-          {
-            mandatory ? false,
-            apply ? x: x,
-            example ? null,
-            type,
-            description,
-          }:
-          mkOption (
+      options =
+        mapAttrs (
+          optionName: (
             {
-              inherit apply description example;
-            }
-            // (
-              if
-                noDefaults && mandatory
-              # Make this option mandatory
-              then
-                { inherit type; }
-              # make it optional
-              else
+              mandatory ? false,
+              apply ? x: x,
+              example ? null,
+              type,
+              description,
+            }:
+              mkOption (
                 {
-                  type = types.nullOr type;
-                  default = null;
+                  inherit apply description example;
                 }
-            )
+                // (
+                  if noDefaults && mandatory
+                  # Make this option mandatory
+                  then {inherit type;}
+                  # make it optional
+                  else {
+                    type = types.nullOr type;
+                    default = null;
+                  }
+                )
+              )
           )
         )
-      ) linterOptions;
+        linterOptions;
     };
-in
-{
-  options.plugins.lint = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "nvim-lint";
+in {
+  options.plugins.lint =
+    helpers.neovim-plugin.extraOptionsOptions
+    // {
+      enable = mkEnableOption "nvim-lint";
 
-    package = helpers.mkPluginPackageOption "nvim-lint" pkgs.vimPlugins.nvim-lint;
+      package = helpers.mkPluginPackageOption "nvim-lint" pkgs.vimPlugins.nvim-lint;
 
-    lintersByFt = mkOption {
-      type = with types; attrsOf (listOf str);
-      default = { };
-      description = ''
-        Configure the linters you want to run per file type.
+      lintersByFt = mkOption {
+        type = with types; attrsOf (listOf str);
+        default = {};
+        description = ''
+          Configure the linters you want to run per file type.
 
-        Default:
-        ```nix
-          {
-            text = ["vale"];
-            json = ["jsonlint"];
-            markdown = ["vale"];
-            rst = ["vale"];
-            ruby = ["ruby"];
-            janet = ["janet"];
-            inko = ["inko"];
-            clojure = ["clj-kondo"];
-            dockerfile = ["hadolint"];
-            terraform = ["tflint"];
-          }
-        ```
-      '';
-      example = {
-        markdown = [ "vale" ];
+          Default:
+          ```nix
+            {
+              text = ["vale"];
+              json = ["jsonlint"];
+              markdown = ["vale"];
+              rst = ["vale"];
+              ruby = ["ruby"];
+              janet = ["janet"];
+              inko = ["inko"];
+              clojure = ["clj-kondo"];
+              dockerfile = ["hadolint"];
+              terraform = ["tflint"];
+            }
+          ```
+        '';
+        example = {
+          markdown = ["vale"];
+        };
       };
-    };
 
-    linters = mkOption {
-      type = with types; attrsOf (mkLinterOpts false);
-      default = { };
-      description = ''
-        Customize the existing linters by overriding some of their properties.
-      '';
-      example = {
-        phpcs.args = [
-          "-q"
-          "--report=json"
-          "-"
-        ];
+      linters = mkOption {
+        type = with types; attrsOf (mkLinterOpts false);
+        default = {};
+        description = ''
+          Customize the existing linters by overriding some of their properties.
+        '';
+        example = {
+          phpcs.args = [
+            "-q"
+            "--report=json"
+            "-"
+          ];
+        };
       };
-    };
 
-    customLinters = mkOption {
-      type = with types; attrsOf (either str (mkLinterOpts true));
-      default = { };
-      description = ''
-        Configure the linters you want to run per file type.
-        It can be both an attrs or a string containing the lua code that returns the appropriate
-        table.
-      '';
-      example = { };
-    };
+      customLinters = mkOption {
+        type = with types; attrsOf (either str (mkLinterOpts true));
+        default = {};
+        description = ''
+          Configure the linters you want to run per file type.
+          It can be both an attrs or a string containing the lua code that returns the appropriate
+          table.
+        '';
+        example = {};
+      };
 
-    autoCmd =
-      let
+      autoCmd = let
         defaultEvent = "BufWritePost";
         defaultCallback = helpers.mkRaw ''
           function()
@@ -201,67 +197,72 @@ in
           end
         '';
       in
-      mkOption {
-        type =
-          with types;
-          nullOr (submodule {
-            options = helpers.autocmd.autoCmdOptions // {
-              event = mkOption {
-                type = with types; nullOr (either str (listOf str));
-                default = defaultEvent;
-                description = "The event or events that should trigger linting.";
-              };
+        mkOption {
+          type = with types;
+            nullOr (submodule {
+              options =
+                helpers.autocmd.autoCmdOptions
+                // {
+                  event = mkOption {
+                    type = with types; nullOr (either str (listOf str));
+                    default = defaultEvent;
+                    description = "The event or events that should trigger linting.";
+                  };
 
-              callback = mkOption {
-                type = with types; nullOr (either str helpers.nixvimTypes.rawLua);
-                default = defaultCallback;
-                description = "What action to perform for linting";
-              };
-            };
-          });
-        description = ''
-          The configuration for the linting autocommand.
-          You can disable it by setting this option to `null`.
-        '';
-        default = {
-          event = defaultEvent;
-          callback = defaultCallback;
+                  callback = mkOption {
+                    type = with types; nullOr (either str helpers.nixvimTypes.rawLua);
+                    default = defaultCallback;
+                    description = "What action to perform for linting";
+                  };
+                };
+            });
+          description = ''
+            The configuration for the linting autocommand.
+            You can disable it by setting this option to `null`.
+          '';
+          default = {
+            event = defaultEvent;
+            callback = defaultCallback;
+          };
         };
-      };
-  };
+    };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
     extraConfigLua =
       ''
         __lint = require('lint')
         __lint.linters_by_ft = ${helpers.toLuaObject cfg.lintersByFt}
       ''
-      + (optionalString (cfg.linters != { }) (
+      + (optionalString (cfg.linters != {}) (
         concatLines (
           flatten (
             mapAttrsToList (
               linter: linterConfig:
-              mapAttrsToList (
-                propName: propValue:
-                optionalString (
-                  propValue != null
-                ) "__lint.linters.${linter}.${propName} = ${helpers.toLuaObject propValue}"
-              ) linterConfig
-            ) cfg.linters
+                mapAttrsToList (
+                  propName: propValue:
+                    optionalString (
+                      propValue != null
+                    ) "__lint.linters.${linter}.${propName} = ${helpers.toLuaObject propValue}"
+                )
+                linterConfig
+            )
+            cfg.linters
           )
         )
       ))
-      + (optionalString (cfg.customLinters != { }) (
+      + (optionalString (cfg.customLinters != {}) (
         concatLines (
           mapAttrsToList (
-            customLinter: linterConfig:
-            let
-              linterConfig' = if isString linterConfig then helpers.mkRaw linterConfig else linterConfig;
-            in
-            "__lint.linters.${customLinter} = ${helpers.toLuaObject linterConfig'}"
-          ) cfg.customLinters
+            customLinter: linterConfig: let
+              linterConfig' =
+                if isString linterConfig
+                then helpers.mkRaw linterConfig
+                else linterConfig;
+            in "__lint.linters.${customLinter} = ${helpers.toLuaObject linterConfig'}"
+          )
+          cfg.customLinters
         )
       ));
 

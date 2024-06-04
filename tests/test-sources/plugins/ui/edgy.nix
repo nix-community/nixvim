@@ -8,10 +8,10 @@
       enable = true;
 
       settings = {
-        left = [ ];
-        bottom = [ ];
-        right = [ ];
-        top = [ ];
+        left = [];
+        bottom = [];
+        right = [];
+        top = [];
         options = {
           left = {
             size = 30;
@@ -184,9 +184,9 @@
             ft = "Outline";
             open = "SymbolsOutline";
           }
-          { ft = "dapui_scopes"; }
-          { ft = "dapui_breakpoints"; }
-          { ft = "dap-repl"; }
+          {ft = "dapui_scopes";}
+          {ft = "dapui_breakpoints";}
+          {ft = "dap-repl";}
         ];
       };
     };

@@ -24,7 +24,7 @@
         env_edit_command = "tabedit";
         encode_url = true;
         skip_ssl_verification = false;
-        custom_dynamic_variables = { };
+        custom_dynamic_variables = {};
         logs = {
           level = "info";
           save = true;

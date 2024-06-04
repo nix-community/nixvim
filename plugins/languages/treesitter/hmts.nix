@@ -5,12 +5,10 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.hmts;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+in {
+  meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.hmts = {
     enable = mkEnableOption "hmts.nvim";
@@ -23,6 +21,6 @@ in
       "Nixvim: treesitter-refactor needs treesitter to function as intended"
     ];
 
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
   };
 }

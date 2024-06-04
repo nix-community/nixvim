@@ -5,12 +5,10 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.ollama;
 
-  actionOptionType =
-    with helpers.nixvimTypes;
+  actionOptionType = with helpers.nixvimTypes;
     oneOf [
       rawLua
       (enum [
@@ -23,7 +21,7 @@ let
       ])
       (submodule {
         options = {
-          fn = helpers.mkNullOrStrLuaFnOr (enum [ false ]) ''
+          fn = helpers.mkNullOrStrLuaFnOr (enum [false]) ''
             fun(prompt: table): Ollama.PromptActionResponseCallback
 
             Example:
@@ -56,21 +54,21 @@ let
         };
       })
     ];
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+in {
+  meta.maintainers = [maintainers.GaetanLepage];
 
-  options.plugins.ollama = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "ollama.nvim";
+  options.plugins.ollama =
+    helpers.neovim-plugin.extraOptionsOptions
+    // {
+      enable = mkEnableOption "ollama.nvim";
 
-    package = helpers.mkPluginPackageOption "ollama.nvim" pkgs.vimPlugins.ollama-nvim;
+      package = helpers.mkPluginPackageOption "ollama.nvim" pkgs.vimPlugins.ollama-nvim;
 
-    model = helpers.defaultNullOpts.mkStr "mistral" ''
-      The default model to use.
-    '';
+      model = helpers.defaultNullOpts.mkStr "mistral" ''
+        The default model to use.
+      '';
 
-    prompts =
-      let
+      prompts = let
         promptOptions = {
           prompt = mkOption {
             type = with helpers.nixvimTypes; maybeRaw str;
@@ -108,12 +106,12 @@ in
 
           extract =
             helpers.defaultNullOpts.mkNullable
-              (with helpers.nixvimTypes; maybeRaw (either str (enum [ false ])))
-              "```$ftype\n(.-)```"
-              ''
-                A `string.match` pattern to use for an Action to extract the output from the response
-                (Insert/Replace).
-              '';
+            (with helpers.nixvimTypes; maybeRaw (either str (enum [false])))
+            "```$ftype\n(.-)```"
+            ''
+              A `string.match` pattern to use for an Action to extract the output from the response
+              (Insert/Replace).
+            '';
 
           options = helpers.mkNullOrOption (with types; attrsOf anything) ''
             Additional model parameters, such as temperature, listed in the documentation for the [Modelfile](https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values).
@@ -125,98 +123,94 @@ in
             (overrides what's in the Modelfile).
           '';
 
-          format = helpers.defaultNullOpts.mkEnumFirstDefault [ "json" ] ''
+          format = helpers.defaultNullOpts.mkEnumFirstDefault ["json"] ''
             The format to return a response in.
             Currently the only accepted value is `"json"`.
           '';
         };
 
-        processPrompt =
-          prompt:
-          if isAttrs prompt then
-            {
-              inherit (prompt) prompt;
-              input_label = prompt.inputLabel;
-              inherit (prompt)
-                action
-                model
-                extract
-                options
-                system
-                format
-                ;
-            }
-          else
-            prompt;
+        processPrompt = prompt:
+          if isAttrs prompt
+          then {
+            inherit (prompt) prompt;
+            input_label = prompt.inputLabel;
+            inherit
+              (prompt)
+              action
+              model
+              extract
+              options
+              system
+              format
+              ;
+          }
+          else prompt;
       in
-      mkOption {
-        type = with types; attrsOf (either (submodule { options = promptOptions; }) (enum [ false ]));
-        default = { };
-        apply = v: mapAttrs (_: processPrompt) v;
-        description = ''
-          A table of prompts to use for each model.
-          Default prompts are defined [here](https://github.com/nomnivore/ollama.nvim/blob/main/lua/ollama/prompts.lua).
+        mkOption {
+          type = with types; attrsOf (either (submodule {options = promptOptions;}) (enum [false]));
+          default = {};
+          apply = v: mapAttrs (_: processPrompt) v;
+          description = ''
+            A table of prompts to use for each model.
+            Default prompts are defined [here](https://github.com/nomnivore/ollama.nvim/blob/main/lua/ollama/prompts.lua).
+          '';
+        };
+
+      action = helpers.defaultNullOpts.mkNullable actionOptionType "display" ''
+        How to handle prompt outputs when not specified by prompt.
+
+        See [here](https://github.com/nomnivore/ollama.nvim/tree/main#actions) for more details.
+      '';
+
+      url = helpers.defaultNullOpts.mkStr "http://127.0.0.1:11434" ''
+        The url to use to connect to the ollama server.
+      '';
+
+      serve = {
+        onStart = helpers.defaultNullOpts.mkBool false ''
+          Whether to start the ollama server on startup.
+        '';
+
+        command = helpers.defaultNullOpts.mkStr "ollama" ''
+          The command to use to start the ollama server.
+        '';
+
+        args = helpers.defaultNullOpts.mkListOf types.str ''["serve"]'' ''
+          The arguments to pass to the serve command.
+        '';
+
+        stopCommand = helpers.defaultNullOpts.mkStr "pkill" ''
+          The command to use to stop the ollama server.
+        '';
+
+        stopArgs = helpers.defaultNullOpts.mkListOf types.str ''["-SIGTERM" "ollama"]'' ''
+          The arguments to pass to the stop command.
         '';
       };
-
-    action = helpers.defaultNullOpts.mkNullable actionOptionType "display" ''
-      How to handle prompt outputs when not specified by prompt.
-
-      See [here](https://github.com/nomnivore/ollama.nvim/tree/main#actions) for more details.
-    '';
-
-    url = helpers.defaultNullOpts.mkStr "http://127.0.0.1:11434" ''
-      The url to use to connect to the ollama server.
-    '';
-
-    serve = {
-      onStart = helpers.defaultNullOpts.mkBool false ''
-        Whether to start the ollama server on startup.
-      '';
-
-      command = helpers.defaultNullOpts.mkStr "ollama" ''
-        The command to use to start the ollama server.
-      '';
-
-      args = helpers.defaultNullOpts.mkListOf types.str ''["serve"]'' ''
-        The arguments to pass to the serve command.
-      '';
-
-      stopCommand = helpers.defaultNullOpts.mkStr "pkill" ''
-        The command to use to stop the ollama server.
-      '';
-
-      stopArgs = helpers.defaultNullOpts.mkListOf types.str ''["-SIGTERM" "ollama"]'' ''
-        The arguments to pass to the stop command.
-      '';
     };
-  };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    extraConfigLua =
-      let
-        setupOptions =
-          with cfg;
-          {
-            inherit
-              model
-              prompts
-              action
-              url
-              ;
-            serve = with serve; {
-              on_start = onStart;
-              inherit command args;
-              stop_command = stopCommand;
-              stop_args = stopArgs;
-            };
-          }
-          // cfg.extraOptions;
-      in
-      ''
-        require('ollama').setup(${helpers.toLuaObject setupOptions})
-      '';
+    extraConfigLua = let
+      setupOptions = with cfg;
+        {
+          inherit
+            model
+            prompts
+            action
+            url
+            ;
+          serve = with serve; {
+            on_start = onStart;
+            inherit command args;
+            stop_command = stopCommand;
+            stop_args = stopArgs;
+          };
+        }
+        // cfg.extraOptions;
+    in ''
+      require('ollama').setup(${helpers.toLuaObject setupOptions})
+    '';
   };
 }

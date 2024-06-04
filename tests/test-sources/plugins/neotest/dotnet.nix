@@ -16,11 +16,11 @@
               adapter_name = "netcoredbg";
             };
             custom_attributes = {
-              xunit = [ "MyCustomFactAttribute" ];
-              nunit = [ "MyCustomTestAttribute" ];
-              mstest = [ "MyCustomTestMethodAttribute" ];
+              xunit = ["MyCustomFactAttribute"];
+              nunit = ["MyCustomTestAttribute"];
+              mstest = ["MyCustomTestMethodAttribute"];
             };
-            dotnet_additional_args = [ "--verbosity detailed" ];
+            dotnet_additional_args = ["--verbosity detailed"];
             discovery_root = "project";
           };
         };

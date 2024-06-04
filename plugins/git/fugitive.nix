@@ -9,9 +9,9 @@ helpers.vim-plugin.mkVimPlugin config {
   name = "fugitive";
   originalName = "vim-fugitive";
   defaultPackage = pkgs.vimPlugins.vim-fugitive;
-  extraPackages = [ pkgs.git ];
+  extraPackages = [pkgs.git];
 
-  maintainers = [ lib.maintainers.GaetanLepage ];
+  maintainers = [lib.maintainers.GaetanLepage];
 
   # In typical tpope fashion, this plugin has no config options
 }

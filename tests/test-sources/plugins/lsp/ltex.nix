@@ -45,7 +45,7 @@
             ];
           };
           hiddenFalsePositives = {
-            "en-US" = [ ":/path/to/externalFile.txt" ];
+            "en-US" = [":/path/to/externalFile.txt"];
           };
           fields = {
             maintitle = false;

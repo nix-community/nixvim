@@ -27,8 +27,8 @@
         animation = true;
         auto_hide = -1;
         clickable = true;
-        exclude_ft = [ ];
-        exclude_name = [ ];
+        exclude_ft = [];
+        exclude_name = [];
         focus_on_close = "left";
         hide = {
           alternate = false;
@@ -91,10 +91,10 @@
             filename = false;
             separator.right = " ";
           };
-          alternate = { };
-          current = { };
-          inactive = { };
-          visible = { };
+          alternate = {};
+          current = {};
+          inactive = {};
+          visible = {};
           preset = "default";
         };
         insert_at_start = false;
@@ -106,7 +106,7 @@
         minimum_padding = 1;
         no_name_title = null;
         semantic_letters = true;
-        sidebar_filetypes = { };
+        sidebar_filetypes = {};
         tabpages = true;
       };
     };
@@ -121,8 +121,8 @@
         auto_hide = false;
         tabpages = true;
         clickable = true;
-        exclude_ft = [ "javascript" ];
-        exclude_name = [ "package.json" ];
+        exclude_ft = ["javascript"];
+        exclude_name = ["package.json"];
         focus_on_close = "left";
         hide = {
           extensions = true;

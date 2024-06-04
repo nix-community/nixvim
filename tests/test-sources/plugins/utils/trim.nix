@@ -8,8 +8,8 @@
       enable = true;
 
       settings = {
-        ft_blocklist = [ ];
-        patterns = [ ];
+        ft_blocklist = [];
+        patterns = [];
         trim_on_write = true;
         trim_trailing = true;
         trim_last_line = true;
@@ -26,8 +26,8 @@
       enable = true;
 
       settings = {
-        ft_blocklist = [ "markdown" ];
-        patterns = [ "[[%s/\(\n\n\)\n\+/\1/]]" ];
+        ft_blocklist = ["markdown"];
+        patterns = ["[[%s/\(\n\n\)\n\+/\1/]]"];
         trim_on_write = false;
         highlight = true;
       };

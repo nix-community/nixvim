@@ -6,81 +6,81 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
-  name = "copilot-chat";
-  originalName = "CopilotChat.nvim";
-  luaName = "CopilotChat";
-  defaultPackage = pkgs.vimPlugins.CopilotChat-nvim;
+  helpers.neovim-plugin.mkNeovimPlugin config {
+    name = "copilot-chat";
+    originalName = "CopilotChat.nvim";
+    luaName = "CopilotChat";
+    defaultPackage = pkgs.vimPlugins.CopilotChat-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+    maintainers = [maintainers.GaetanLepage];
 
-  settingsOptions = {
-    debug = helpers.defaultNullOpts.mkBool false ''
-      Enable debug logging.
-    '';
+    settingsOptions = {
+      debug = helpers.defaultNullOpts.mkBool false ''
+        Enable debug logging.
+      '';
 
-    proxy = helpers.defaultNullOpts.mkStr null ''
-      Custom proxy to use, formatted as `[protocol://]host[:port]`.
-    '';
+      proxy = helpers.defaultNullOpts.mkStr null ''
+        Custom proxy to use, formatted as `[protocol://]host[:port]`.
+      '';
 
-    allow_insecure = helpers.defaultNullOpts.mkBool false ''
-      Allow insecure server connections.
-    '';
+      allow_insecure = helpers.defaultNullOpts.mkBool false ''
+        Allow insecure server connections.
+      '';
 
-    system_prompt = helpers.defaultNullOpts.mkLua "require('CopilotChat.prompts').COPILOT_INSTRUCTIONS" ''
-      System prompt to use.
-    '';
+      system_prompt = helpers.defaultNullOpts.mkLua "require('CopilotChat.prompts').COPILOT_INSTRUCTIONS" ''
+        System prompt to use.
+      '';
 
-    model = helpers.defaultNullOpts.mkStr "gpt-4" ''
-      GPT model to use, 'gpt-3.5-turbo' or 'gpt-4'.
-    '';
+      model = helpers.defaultNullOpts.mkStr "gpt-4" ''
+        GPT model to use, 'gpt-3.5-turbo' or 'gpt-4'.
+      '';
 
-    temperature = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.1 ''
-      GPT temperature.
-    '';
+      temperature = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.1 ''
+        GPT temperature.
+      '';
 
-    question_header = helpers.defaultNullOpts.mkStr "## User " ''
-      Header to use for user questions.
-    '';
+      question_header = helpers.defaultNullOpts.mkStr "## User " ''
+        Header to use for user questions.
+      '';
 
-    answer_header = helpers.defaultNullOpts.mkStr "## Copilot " ''
-      Header to use for AI answers.
-    '';
+      answer_header = helpers.defaultNullOpts.mkStr "## Copilot " ''
+        Header to use for AI answers.
+      '';
 
-    error_header = helpers.defaultNullOpts.mkStr "## Error " ''
-      Header to use for errors.
-    '';
+      error_header = helpers.defaultNullOpts.mkStr "## Error " ''
+        Header to use for errors.
+      '';
 
-    separator = helpers.defaultNullOpts.mkStr "───" ''
-      Separator to use in chat.
-    '';
+      separator = helpers.defaultNullOpts.mkStr "───" ''
+        Separator to use in chat.
+      '';
 
-    show_folds = helpers.defaultNullOpts.mkBool true ''
-      Shows folds for sections in chat.
-    '';
+      show_folds = helpers.defaultNullOpts.mkBool true ''
+        Shows folds for sections in chat.
+      '';
 
-    show_help = helpers.defaultNullOpts.mkBool true ''
-      Shows help message as virtual lines when waiting for user input.
-    '';
+      show_help = helpers.defaultNullOpts.mkBool true ''
+        Shows help message as virtual lines when waiting for user input.
+      '';
 
-    auto_follow_cursor = helpers.defaultNullOpts.mkBool true ''
-      Auto-follow cursor in chat.
-    '';
+      auto_follow_cursor = helpers.defaultNullOpts.mkBool true ''
+        Auto-follow cursor in chat.
+      '';
 
-    auto_insert_mode = helpers.defaultNullOpts.mkBool false ''
-      Automatically enter insert mode when opening window and if auto follow cursor is enabled on new prompt.
-    '';
+      auto_insert_mode = helpers.defaultNullOpts.mkBool false ''
+        Automatically enter insert mode when opening window and if auto follow cursor is enabled on new prompt.
+      '';
 
-    clear_chat_on_new_prompt = helpers.defaultNullOpts.mkBool false ''
-      Clears chat on every new prompt.
-    '';
+      clear_chat_on_new_prompt = helpers.defaultNullOpts.mkBool false ''
+        Clears chat on every new prompt.
+      '';
 
-    highlight_selection = helpers.defaultNullOpts.mkBool true ''
-      Highlight selection.
-    '';
+      highlight_selection = helpers.defaultNullOpts.mkBool true ''
+        Highlight selection.
+      '';
 
-    context =
-      helpers.defaultNullOpts.mkEnum
+      context =
+        helpers.defaultNullOpts.mkEnum
         [
           "buffers"
           "buffer"
@@ -90,18 +90,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Default context to use, `"buffers"`, `"buffer"` or `null` (can be specified manually in prompt via @).
         '';
 
-    history_path = helpers.defaultNullOpts.mkStr (helpers.mkRaw "vim.fn.stdpath('data') .. '/copilotchat_history'") ''
-      Default path to stored history.
-    '';
+      history_path = helpers.defaultNullOpts.mkStr (helpers.mkRaw "vim.fn.stdpath('data') .. '/copilotchat_history'") ''
+        Default path to stored history.
+      '';
 
-    callback = helpers.defaultNullOpts.mkLuaFn null ''
-      Callback to use when ask response is received.
+      callback = helpers.defaultNullOpts.mkLuaFn null ''
+        Callback to use when ask response is received.
 
-      `fun(response: string, source: CopilotChat.config.source)`
-    '';
+        `fun(response: string, source: CopilotChat.config.source)`
+      '';
 
-    selection =
-      helpers.defaultNullOpts.mkLuaFn
+      selection =
+        helpers.defaultNullOpts.mkLuaFn
         ''
           function(source)
             local select = require('CopilotChat.select')
@@ -113,8 +113,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           `fun(source: CopilotChat.config.source):CopilotChat.config.selection`
         '';
 
-    prompts =
-      let
+      prompts = let
         promptType = types.submodule {
           freeformType = with types; attrsOf anything;
           options = {
@@ -172,13 +171,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           };
         };
       in
-      helpers.defaultNullOpts.mkAttrsOf (with types; either str promptType) default ''
-        Default prompts.
-      '';
+        helpers.defaultNullOpts.mkAttrsOf (with types; either str promptType) default ''
+          Default prompts.
+        '';
 
-    window = {
-      layout =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+      window = {
+        layout =
+          helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "vertical"
             "horizontal"
@@ -189,24 +188,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             Layout for the window.
           '';
 
-      width =
-        helpers.defaultNullOpts.mkNullableWithRaw
+        width =
+          helpers.defaultNullOpts.mkNullableWithRaw
           (with types; either (numbers.between 0.0 1.0) ints.positive)
           0.5
           ''
             Fractional width of parent, or absolute width in columns when > 1.
           '';
 
-      height =
-        helpers.defaultNullOpts.mkNullableWithRaw
+        height =
+          helpers.defaultNullOpts.mkNullableWithRaw
           (with types; either (numbers.between 0.0 1.0) ints.positive)
           0.5
           ''
             Fractional height of parent, or absolute height in rows when > 1.
           '';
 
-      relative =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        relative =
+          helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "editor"
             "win"
@@ -218,8 +217,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             (Only for floating windows.)
           '';
 
-      border =
-        helpers.defaultNullOpts.mkEnum
+        border =
+          helpers.defaultNullOpts.mkEnum
           [
             "none"
             "single"
@@ -234,31 +233,31 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             (Only for floating windows.)
           '';
 
-      row = helpers.defaultNullOpts.mkUnsignedInt null ''
-        Row position of the window, default is centered.
-        (Only for floating windows.)
-      '';
+        row = helpers.defaultNullOpts.mkUnsignedInt null ''
+          Row position of the window, default is centered.
+          (Only for floating windows.)
+        '';
 
-      col = helpers.defaultNullOpts.mkUnsignedInt null ''
-        Column position of the window, default is centered.
-        (Only for floating windows.)
-      '';
+        col = helpers.defaultNullOpts.mkUnsignedInt null ''
+          Column position of the window, default is centered.
+          (Only for floating windows.)
+        '';
 
-      title = helpers.defaultNullOpts.mkStr "Copilot Chat" ''
-        Title of chat window.
-      '';
+        title = helpers.defaultNullOpts.mkStr "Copilot Chat" ''
+          Title of chat window.
+        '';
 
-      footer = helpers.defaultNullOpts.mkStr null ''
-        Footer of chat window.
-      '';
+        footer = helpers.defaultNullOpts.mkStr null ''
+          Footer of chat window.
+        '';
 
-      zindex = helpers.defaultNullOpts.mkUnsignedInt 1 ''
-        Determines if window is on top or below other floating windows.
-      '';
-    };
+        zindex = helpers.defaultNullOpts.mkUnsignedInt 1 ''
+          Determines if window is on top or below other floating windows.
+        '';
+      };
 
-    mappings =
-      helpers.defaultNullOpts.mkAttrsOf
+      mappings =
+        helpers.defaultNullOpts.mkAttrsOf
         (types.submodule {
           options = {
             normal = helpers.mkNullOrStr "Key for normal mode.";
@@ -295,28 +294,28 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           show_user_selection.normal = "gs";
         }
         "Mappings for CopilotChat.";
-  };
+    };
 
-  settingsExample = {
-    question_header = "## User ";
-    answer_header = "## Copilot ";
-    error_header = "## Error ";
-    prompts = {
-      Explain = "Please explain how the following code works.";
-      Review = "Please review the following code and provide suggestions for improvement.";
-      Tests = "Please explain how the selected code works, then generate unit tests for it.";
-    };
-    auto_follow_cursor = false;
-    show_help = false;
-    mappings = {
-      complete = {
-        detail = "Use @<Tab> or /<Tab> for options.";
-        insert = "<Tab>";
+    settingsExample = {
+      question_header = "## User ";
+      answer_header = "## Copilot ";
+      error_header = "## Error ";
+      prompts = {
+        Explain = "Please explain how the following code works.";
+        Review = "Please review the following code and provide suggestions for improvement.";
+        Tests = "Please explain how the selected code works, then generate unit tests for it.";
       };
-      close = {
-        normal = "q";
-        insert = "<C-c>";
+      auto_follow_cursor = false;
+      show_help = false;
+      mappings = {
+        complete = {
+          detail = "Use @<Tab> or /<Tab> for options.";
+          insert = "<Tab>";
+        };
+        close = {
+          normal = "q";
+          insert = "<C-c>";
+        };
       };
     };
-  };
-}
+  }

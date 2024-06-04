@@ -18,7 +18,7 @@
 
         autoAttach = {
           enabled = true;
-          filetypes = [ "markdown" ];
+          filetypes = ["markdown"];
         };
       };
     };

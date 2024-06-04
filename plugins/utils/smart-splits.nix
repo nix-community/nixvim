@@ -10,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "smart-splits.nvim";
   defaultPackage = pkgs.vimPlugins.smart-splits-nvim;
 
-  maintainers = [ lib.maintainers.foo-dogsquared ];
+  maintainers = [lib.maintainers.foo-dogsquared];
 
   settingsExample = {
     resize_mode = {

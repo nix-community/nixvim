@@ -5,12 +5,10 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.plugins.autoclose;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+in {
+  meta.maintainers = [maintainers.GaetanLepage];
 
   options.plugins.autoclose = {
     enable = mkEnableOption "autoclose.nvim";
@@ -64,24 +62,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+    extraPlugins = [cfg.package];
 
-    extraConfigLua =
-      let
-        setupOptions = with cfg; {
-          inherit keys;
-          options = with options; {
-            disabled_filetypes = disabledFiletypes;
-            disable_when_touch = disableWhenTouch;
-            touch_regex = touchRegex;
-            pair_spaces = pairSpaces;
-            auto_indent = autoIndent;
-            disable_command_mode = disableCommandMode;
-          };
+    extraConfigLua = let
+      setupOptions = with cfg; {
+        inherit keys;
+        options = with options; {
+          disabled_filetypes = disabledFiletypes;
+          disable_when_touch = disableWhenTouch;
+          touch_regex = touchRegex;
+          pair_spaces = pairSpaces;
+          auto_indent = autoIndent;
+          disable_command_mode = disableCommandMode;
         };
-      in
-      ''
-        require('autoclose').setup(${helpers.toLuaObject setupOptions})
-      '';
+      };
+    in ''
+      require('autoclose').setup(${helpers.toLuaObject setupOptions})
+    '';
   };
 }
