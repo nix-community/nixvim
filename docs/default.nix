@@ -4,19 +4,37 @@
   pkgs,
 }:
 let
-  pkgsDoc =
-    import
-      (pkgs.applyPatches {
-        name = "nixpkgs-nixvim-doc";
-        src = pkgs.path;
-        patches = [ ./either_recursive.patch ];
-      })
-      {
-        inherit (pkgs) system;
-        config.allowUnfree = true;
-      };
+  # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
+  lib = pkgs.lib.extend (
+    final: prev: {
+      types = prev.types // {
+        either =
+          t1: t2:
+          (prev.types.either t1 t2)
+          // {
+            getSubOptions = prefix: (t1.getSubOptions prefix) // (t2.getSubOptions prefix);
+          };
 
-  inherit (pkgsDoc) lib;
+        eitherRecursive = t1: t2: (final.types.either t1 t2) // { getSubOptions = _: { }; };
+
+        oneOfRecursive =
+          ts:
+          let
+            head' =
+              if ts == [ ] then
+                throw "types.oneOfRecursive needs to get at least one type in its argument"
+              else
+                builtins.head ts;
+            tail' = builtins.tail ts;
+          in
+          builtins.foldl' final.types.eitherRecursive head' tail';
+      };
+    }
+  );
+
+  pkgsDoc = pkgs // {
+    inherit lib;
+  };
 
   nixvimPath = toString ./..;
 
