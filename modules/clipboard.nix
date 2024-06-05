@@ -14,7 +14,7 @@ in
       register = mkOption {
         description = ''
           Sets the register to use for the clipboard.
-          Learn more at https://neovim.io/doc/user/options.html#'clipboard'.
+          Learn more in [`:h 'clipboard'`](https://neovim.io/doc/user/options.html#'clipboard').
         '';
         type = with types; nullOr (either str (listOf str));
         default = null;
