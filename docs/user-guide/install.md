@@ -5,7 +5,7 @@ You must use a `nixpkgs` version compatible with the nixvim version you choose.
 The `master` branch requires to use a _very recent_ version of nixpkgs unstable.
 In order to guarantee the compatibility between nixvim & nixpkgs it is recommended to always update both at the same time.
 
-When using a `stable` version you must use the corresponding nixvim branch, for example `nixos-23.11` when using NixOS 23.11.
+When using a `stable` version you must use the corresponding nixvim branch, for example `nixos-23.05` when using NixOS 23.05.
 
 Failure to use the correct branch, or an old revision of nixpkgs will likely result in errors of the form `vimPlugins.<name> attribute not found`.
 
@@ -21,7 +21,7 @@ NixVim is also available for nix flakes, or directly through an import.
 
 For a direct import you can add nixvim to your configuration as follows:
 ```nix
-let 
+let
     nixvim = import (builtins.fetchGit {
         url = "https://github.com/nix-community/nixvim";
         # When using a different channel you can use `ref = "nixos-<version>"` to set it here
