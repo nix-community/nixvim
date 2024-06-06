@@ -1,6 +1,17 @@
 {
   empty = {
-    plugins.schemastore.enable = true;
+    plugins = {
+      lsp = {
+        enable = true;
+
+        servers = {
+          jsonls.enable = true;
+          yamlls.enable = true;
+        };
+      };
+
+      schemastore.enable = true;
+    };
   };
 
   example = {
