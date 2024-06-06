@@ -87,7 +87,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 > NixVim needs to be installed with a compatible nixpkgs version.
 > This means that the `main` branch of NixVim requires to be installed with `nixos-unstable`.
 >
-> If you want to use NixVim with nixpkgs 23.11 you should use the `nixos-23.11` branch.
+> If you want to use NixVim with nixpkgs 24.05 you should use the `nixos-24.05` branch.
 
 For more detail, see the [Installation](https://nix-community.github.io/nixvim/install.html#installation) section of our documentation.
 
@@ -104,7 +104,7 @@ let
   nixvim = import (builtins.fetchGit {
     url = "https://github.com/nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-    # ref = "nixos-23.11";
+    # ref = "nixos-24.05";
   });
 in
 {
@@ -149,7 +149,7 @@ flakes, just add the nixvim input:
   inputs.nixvim = {
     url = "github:nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-    # url = "github:nix-community/nixvim/nixos-23.11";
+    # url = "github:nix-community/nixvim/nixos-24.05";
 
     inputs.nixpkgs.follows = "nixpkgs";
   };
