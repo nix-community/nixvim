@@ -91,6 +91,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       project.enable = false;
       mru.limit = 20;
 
+      header = [
+        "███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+        "████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+        "██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+        "██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+        "██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+        "╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
+      ];
+
       shortcut = [
         {
           icon = " ";
@@ -113,6 +122,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           key = "d";
         }
       ];
+
+      footer = [ "Made with ❤️" ];
     };
   };
 
