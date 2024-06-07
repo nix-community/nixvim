@@ -26,20 +26,17 @@
           with lib;
           {
             # Attribute may contain the following fields:
-            #  - name: Name of the module
-            #  - kind: Either colorschemes or plugins
+            #  - path: Path to the module, e.g. [ "plugins" "<name>" ]
             #  - description: A short description of the plugin
             #  - url: Url for the plugin
-            #
-            #  [kind name] will identify the plugin
             #
             # We need to use an attrs instead of a submodule to handle the merge.
             options.meta.nixvimInfo = mkOption {
               type = (types.nullOr types.attrs) // {
                 # This will create an attrset of the form:
-                # {
-                #    "path"."to"."plugin" = { "<name>" = <info>; };
-                # }
+                #
+                # { path.to.plugin.name = <info>; }
+                #
                 #
                 # Where <info> is an attrset of the form:
                 # {
@@ -52,12 +49,13 @@
                   lib.foldl'
                     (
                       acc: def:
-                      lib.recursiveUpdate acc {
-                        "${def.value.kind}"."${def.value.name}" = {
-                          inherit (def.value) url description;
+                      lib.recursiveUpdate acc (
+                        setAttrByPath def.value.path {
                           inherit (def) file;
-                        };
-                      }
+                          url = def.value.url or null;
+                          description = def.value.description or null;
+                        }
+                      )
                     )
                     {
                       plugins = { };

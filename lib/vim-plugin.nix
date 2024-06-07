@@ -68,8 +68,11 @@ with lib;
       meta = {
         inherit maintainers;
         nixvimInfo = {
-          inherit description name url;
-          kind = namespace;
+          inherit description url;
+          path = [
+            namespace
+            name
+          ];
         };
       };
       options.${namespace}.${name} = {

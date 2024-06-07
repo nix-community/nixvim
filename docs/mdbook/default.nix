@@ -67,17 +67,18 @@ let
           filterAttrs (_: component: component.isOption && (isVisible component)) opts;
       path = removeWhitespace (concatStringsSep "/" path);
       moduleDoc =
-        if builtins.length path >= 2 && lib.hasAttrByPath path nixvimInfo then
-          let
-            info = lib.getAttrFromPath path nixvimInfo;
-            maintainers = lib.unique (options.config.meta.maintainers.${info.file} or [ ]);
-            maintainersNames = builtins.map (m: m.name) maintainers;
-          in
+        let
+          info = optionalAttrs (hasAttrByPath path nixvimInfo) (getAttrFromPath path nixvimInfo);
+          maintainers = lib.unique (options.config.meta.maintainers.${info.file} or [ ]);
+          maintainersNames = builtins.map (m: m.name) maintainers;
+        in
+        # Make sure this path has a valid info attrset
+        if info ? file && info ? description && info ? url then
           "# ${lib.last path}\n\n"
           + (lib.optionalString (info.description != null) "${info.description}\n\n")
           + (lib.optionalString (info.url != null) "**Url:** [${info.url}](${info.url})\n\n")
           + (lib.optionalString (
-            builtins.length maintainers > 0
+            maintainers != [ ]
           ) "**Maintainers:** ${lib.concatStringsSep ", " maintainersNames}\n\n")
         else
           null;

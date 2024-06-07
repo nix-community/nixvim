@@ -65,8 +65,11 @@ rec {
       meta = {
         inherit maintainers;
         nixvimInfo = {
-          inherit description name url;
-          kind = namespace;
+          inherit description url;
+          path = [
+            namespace
+            name
+          ];
         };
       };
 
