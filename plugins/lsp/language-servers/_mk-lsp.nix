@@ -10,6 +10,7 @@
   description ? "Enable ${name}.",
   serverName ? name,
   package ? pkgs.${name},
+  url ? package.meta.homepage or null,
   cmd ? (cfg: null),
   settings ? (cfg: cfg),
   settingsOptions ? { },
@@ -30,6 +31,17 @@ let
   cfg = config.plugins.lsp.servers.${name};
 in
 {
+  meta.nixvimInfo = {
+    # TODO: description
+    inherit url;
+    path = [
+      "plugins"
+      "lsp"
+      "servers"
+      name
+    ];
+  };
+
   options = {
     plugins.lsp.servers.${name} = {
       enable = mkEnableOption description;
