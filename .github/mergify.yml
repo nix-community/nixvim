@@ -1,0 +1,91 @@
+# Essential reading on condition syntax:
+# https://docs.mergify.com/configuration/conditions/#testing-and-debugging-conditions
+
+
+# Using a merge queue ensures CI passes before merging;
+# rebasing is done before merge_conditions are checked.
+#
+# https://docs.mergify.com/merge-queue
+queue_rules:
+  - name: default
+    update_method: rebase
+    merge_method: fast-forward
+    merge_conditions:
+      - check-success=buildbot/nix-eval
+    queue_conditions:
+      - or:
+          # One review is enough to manually queue
+        - "#approved-reviews-by>=1"
+
+          # Allow flake.lock without any review
+        - and:
+          - "#files = 1"
+          - files = flake.lock
+          - author = GaetanLepage
+
+
+# We can apply all sorts of "rules" to help automate PRs!
+#
+# https://docs.mergify.com/workflow
+pull_request_rules:
+    # Note: this rule will auto-queue when both its AND queue_rules's conditions are met.
+    # If queue_rules's conditions are met, this rule can be bypassed by manually running `@mergify queue`
+  - name: Queue approved PRs
+    description: Add PRs to the merge queue once they've met basic requirements
+    actions:
+      queue:
+    conditions:
+      - or:
+          # Normally, require 2 reviews
+        - "#approved-reviews-by >= 2"
+
+          # Maintainers only need 1 review
+          # TODO: We could drop this lower requirement. Since we can run `@mergify queue`
+          # if we don't get the 2nd review needed to auto-queue.
+        - and:
+          - author = @nix-community/nixvim
+          - "#approved-reviews-by >= 1"
+
+          # flake.lock updates don't need approval during office hours
+        - and:
+          - "#files = 1"
+          - files = flake.lock
+          - author = GaetanLepage # Gaétan's PAT is used for the update PRs
+          - schedule = Mon-Fri 09:00-17:00[Europe/London]
+
+  - name: Create backport PRs
+    description: Create a backport PR to the specified branches
+    actions:
+      backport:
+        branches:
+          - "nixos-24.05"
+    conditions:
+      - base = main
+      - label = backport
+
+    # TODO: is this needed? We can use the `@mergify backport` command...
+    # I guess it might be nice to label a pr with `backport` and then have that happen
+    # _after_ the PR is merged?
+  - name: Queue backport PRs
+    description: Automatically queue backport PRs
+    actions:
+      queue:
+    conditions:
+      - author = mergify[bot]
+      - head ~= ^mergify/bp/
+      - base = nixos-24.05
+
+    # Open PRs that have no changes requested and have <2 reviews,
+    # should request review from @nixvim
+  - name: Request review
+    description: Request review from @nixvim if there's not enough approvals
+    actions:
+      request_reviews:
+        teams:
+          - nix-community/nixvim
+    conditions:
+      - -closed
+      - "#approved-reviews-by<2"
+      - "#changes-requested-reviews-by=0"
+      - "review-requested!=@nix-community/nixvim"
+
