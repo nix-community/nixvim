@@ -60,11 +60,7 @@ rec {
       # ["" "n" "v" ...]
       (map ({ short, ... }: short) (attrValues modes));
 
-  mapOptionSubmodule = mkMapOptionSubmodule {
-    hasKey = true;
-    hasAction = true;
-    rawAction = true;
-  };
+  mapOptionSubmodule = mkMapOptionSubmodule { };
 
   mkModeOption =
     default:
@@ -85,9 +81,10 @@ rec {
   mkMapOptionSubmodule =
     {
       defaults ? { },
-      hasKey ? false,
-      hasAction ? false,
-      rawAction ? true,
+      # key and action can be true/false to enable/disable adding the option,
+      # or an attrset to enable the option and add/override mkOption args.
+      key ? true,
+      action ? true,
     }:
     # TODO remove assert once `lua` option is gone
     # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
@@ -96,22 +93,24 @@ rec {
       with types;
       submodule {
         options =
-          (optionalAttrs hasKey {
+          (optionalAttrs (isAttrs key || key) {
             key = mkOption (
               {
                 type = str;
                 description = "The key to map.";
                 example = "<C-m>";
               }
+              // (optionalAttrs (isAttrs key) key)
               // (optionalAttrs (defaults ? key) { default = defaults.key; })
             );
           })
-          // (optionalAttrs hasAction {
+          // (optionalAttrs (isAttrs action || action) {
             action = mkOption (
               {
-                type = if rawAction then nixvimTypes.maybeRaw str else str;
+                type = nixvimTypes.maybeRaw str;
                 description = "The action to execute.";
               }
+              // (optionalAttrs (isAttrs action) action)
               // (optionalAttrs (defaults ? action) { default = defaults.action; })
             );
           })

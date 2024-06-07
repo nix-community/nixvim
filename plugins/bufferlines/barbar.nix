@@ -198,8 +198,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           mode = "n";
           action = "<Cmd>Buffer${funcName}<CR>";
         };
-        hasKey = true;
-        hasAction = true;
       }) "Keymap for function Buffer${funcName}"
     ) keymapsActions;
   };
