@@ -6,30 +6,6 @@
   ...
 }:
 with lib;
-let
-  # TODO: Introduced 2024-03-19, remove on 2024-05-19
-  deprecations =
-    let
-      pluginPath = [
-        "plugins"
-        "tmux-navigator"
-      ];
-      option = s: pluginPath ++ [ s ];
-      setting =
-        s:
-        pluginPath
-        ++ [
-          "settings"
-          s
-        ];
-      settingStr = s: concatStringsSep "." (setting s);
-    in
-    [
-      (mkRenamedOptionModule (option "tmuxNavigatorSaveOnSwitch") (setting "save_on_switch"))
-      (mkRemovedOptionModule (option "tmuxNavigatorDisableWhenZoomed") "Use `${settingStr "disable_when_zoomed"}` option.")
-      (mkRemovedOptionModule (option "tmuxNavigatorNoWrap") "Use `${settingStr "no_wrap"}` option.")
-    ];
-in
 helpers.vim-plugin.mkVimPlugin config {
   name = "tmux-navigator";
   originalName = "vim-tmux-navigator";
@@ -89,8 +65,6 @@ helpers.vim-plugin.mkVimPlugin config {
     [no_mappings]: ./settings.html#pluginstmux-navigatorsettingsno_mappings
     [upstream docs]: https://github.com/christoomey/vim-tmux-navigator#installation
   '';
-
-  imports = deprecations;
 
   settingsOptions = {
     save_on_switch =
