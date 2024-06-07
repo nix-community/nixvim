@@ -89,3 +89,11 @@ pull_request_rules:
       - "#changes-requested-reviews-by=0"
       - "review-requested!=@nix-community/nixvim"
 
+  - name: Delete merged branches
+    description: Delete head branch after merge, unless other PRs depend on it
+    conditions:
+      - merged
+    actions:
+      delete_head_branch:
+        force: false
+
