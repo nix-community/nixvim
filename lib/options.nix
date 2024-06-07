@@ -80,14 +80,18 @@ rec {
     let
       # Convert `defaultNullOpts`-style arguments into normal `mkOption`-style arguments,
       # i.e. moves `default` into `description` using `defaultNullOpts.mkDesc`
+      #
+      # "Plugin default" is only added if `args` has a `default` attribute
       convertArgs =
-        { default, description, ... }@args:
+        args:
         (
           args
           // {
             default = null;
-            description = defaultNullOpts.mkDesc default description;
           }
+          // (optionalAttrs (args ? default) {
+            description = defaultNullOpts.mkDesc args.default (args.description or "");
+          })
         );
     in
     rec {
@@ -141,7 +145,7 @@ rec {
             ${defaultDesc}
           '';
 
-      mkNullable' = { default, description, ... }@args: mkNullOrOption' (convertArgs args);
+      mkNullable' = args: mkNullOrOption' (convertArgs args);
       mkNullable =
         type: default: description:
         mkNullable' { inherit type default description; };
@@ -152,20 +156,20 @@ rec {
         type: default: description:
         mkNullableWithRaw' { inherit type default description; };
 
-      mkStrLuaOr' = { default, description, ... }@args: mkNullOrStrLuaOr' (convertArgs args);
+      mkStrLuaOr' = args: mkNullOrStrLuaOr' (convertArgs args);
       mkStrLuaOr =
         type: default: description:
         mkStrLuaOr' { inherit type default description; };
 
-      mkStrLuaFnOr' = { default, description, ... }@args: mkNullOrStrLuaFnOr' (convertArgs args);
+      mkStrLuaFnOr' = args: mkNullOrStrLuaFnOr' (convertArgs args);
       mkStrLuaFnOr =
         type: default: description:
         mkStrLuaFnOr' { inherit type default description; };
 
-      mkLua' = { default, description, ... }@args: mkNullOrLua' (convertArgs args);
+      mkLua' = args: mkNullOrLua' (convertArgs args);
       mkLua = default: description: mkLua' { inherit default description; };
 
-      mkLuaFn' = { default, description, ... }@args: mkNullOrLuaFn' (convertArgs args);
+      mkLuaFn' = args: mkNullOrLuaFn' (convertArgs args);
       mkLuaFn = default: description: mkLuaFn' { inherit default description; };
 
       mkNum' = args: mkNullableWithRaw' (args // { type = types.number; });
@@ -181,14 +185,14 @@ rec {
       mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
       mkBool = default: description: mkBool' { inherit default description; };
       mkStr' =
-        { default, ... }@args:
+        args:
         mkNullableWithRaw' (
           args
           // {
-            # TODO we should remove this once `mkDesc` no longer has a special case
-            default = generators.toPretty { } default;
             type = types.str;
           }
+          # TODO we should remove this once `mkDesc` no longer has a special case
+          // (optionalAttrs (args ? default) { default = generators.toPretty { } args.default; })
         );
       mkStr = default: description: mkStr' { inherit default description; };
 
@@ -208,26 +212,27 @@ rec {
         mkAttrsOf' { inherit type default description; };
 
       mkEnum' =
-        {
-          values,
-          default ? head values,
-          ...
-        }@args:
-        # `values` is a list and `default` is one of the values (or null)
+        { values, ... }@args:
+        # `values` is a list. If `default` is present, then it is either null or one of `values`
         assert isList values;
-        assert default == null || elem default values;
+        assert args ? default -> (args.default == null || elem args.default values);
         mkNullableWithRaw' (
           (filterAttrs (n: v: n != "values") args)
           // {
-            # TODO we should remove this once `mkDesc` no longer has a special case
-            default = if isString default then generators.toPretty { } default else default;
             type = types.enum values;
           }
+          # TODO we should remove this once `mkDesc` no longer has a special case
+          // (optionalAttrs (args ? default) { default = generators.toPretty { } args.default; })
         );
       mkEnum =
         values: default: description:
         mkEnum' { inherit values default description; };
-      mkEnumFirstDefault = values: description: mkEnum' { inherit values description; };
+      mkEnumFirstDefault =
+        values: description:
+        mkEnum' {
+          inherit values description;
+          default = head values;
+        };
 
       mkBorder' =
         {
@@ -240,8 +245,8 @@ rec {
           // {
             type = nixvimTypes.border;
             description = concatStringsSep "\n" (
-              filter (s: s != "") [
-                description
+              (optional (description != "") description)
+              ++ [
                 "Defines the border to use for ${name}."
                 "Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info."
               ]
@@ -310,24 +315,20 @@ rec {
     };
 
   mkPackageOption =
-    {
-      name ? null, # Can be omitted if a custom description is given.
-      description ? null,
-      default, # `default` is not optional
-      ...
-    }@args:
+    args:
+    # A default package is required
+    assert args ? default;
+    # `name` must be present if `description` is missing
+    assert (!args ? description) -> args ? name;
     mkNullOrOption' (
       (filterAttrs (n: _: n != "name") args)
       // {
         type = types.package;
         description =
-          if description == null then
-            ''
-              Which package to use for `${name}`.
-              Set to `null` to disable its automatic installation.
-            ''
-          else
-            description;
+          args.description or ''
+            Which package to use for `${args.name}`.
+            Set to `null` to disable its automatic installation.
+          '';
       }
     );
 
