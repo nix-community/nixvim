@@ -130,7 +130,7 @@ rec {
           # TODO deprecate this behavior so we can properly quote strings
           defaultString = if isString default then default else generators.toPretty { } default;
           defaultDesc =
-            "Plugin default:"
+            "_Plugin default:_"
             + (
               # Detect whether `default` is multiline or inline:
               if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`"
