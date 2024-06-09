@@ -59,7 +59,8 @@ These option declarations should be in `settingsOptions` and their names should 
 There are a number of helpers to help you correctly implement them:
 
 - `helpers.defaultNullOpts.{mkBool,mkInt,mkStr,...}`: This family of helpers takes a default value and a description, and sets the Nix default to `null`. These are the main functions you should use to define options.
-- `helpers.defaultNullOpts.mkNullable`: This takes a type, a default and a description. This is useful for more complex options.
+- `helpers.defaultNullOpts.mkNullableWithRaw`: This takes a type, a default and a description. This is useful for more complex options.
+- The `helpers.defaultNullOpts` functions also have "prime variants", these use the same function arguments as `lib.mkOption`. Any unused arguments are passed through to `mkOption`; this is useful for setting an `example` or other advanced cases.
 - `helpers.nixvimTypes.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkLua`/`mkLuaFn` should be used in this case.
 
 The resulting `settings` attrs will be directly translated to `lua` and will be forwarded the plugin:
