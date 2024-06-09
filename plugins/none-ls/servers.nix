@@ -121,8 +121,8 @@ let
     erb_format = pkgs.rubyPackages.erb-formatter;
     fish_indent = pkgs.fish;
     format_r = pkgs.R;
-    gdformat = pkgs.gdtoolkit;
-    gdlint = pkgs.gdtoolkit;
+    gdformat = pkgs.gdtoolkit_4;
+    gdlint = pkgs.gdtoolkit_4;
     gitsigns = pkgs.git;
     gleam_format = pkgs.gleam;
     glslc = pkgs.shaderc;
