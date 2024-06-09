@@ -24,7 +24,7 @@ in
       Whether to run the completion on every keystroke.
     '';
 
-    stop = helpers.defaultNullOpts.mkListOf types.str ''["\n"]'' "";
+    stop = helpers.defaultNullOpts.mkListOf types.str [ "\n" ] "";
   };
 
   config = mkIf cfg.enable {

@@ -47,26 +47,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   settingsOptions = {
     keymaps =
       helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; attrsOf (either str rawLua))
-        ''
-          {
-            normal = {
-              plain_below = "g?p";
-              plain_above = "g?P";
-              variable_below = "g?v";
-              variable_above = "g?V";
-              variable_below_alwaysprompt.__raw = "nil";
-              variable_above_alwaysprompt.__raw = "nil";
-              textobj_below = "g?o";
-              textobj_above = "g?O";
-              toggle_comment_debug_prints.__raw = "nil";
-              delete_debug_prints.__raw = "nil";
-            };
-            visual = {
-              variable_below = "g?v";
-              variable_above = "g?V";
-            };
-          }
-        ''
+        {
+          normal = {
+            plain_below = "g?p";
+            plain_above = "g?P";
+            variable_below = "g?v";
+            variable_above = "g?V";
+            variable_below_alwaysprompt.__raw = "nil";
+            variable_above_alwaysprompt.__raw = "nil";
+            textobj_below = "g?o";
+            textobj_above = "g?O";
+            toggle_comment_debug_prints.__raw = "nil";
+            delete_debug_prints.__raw = "nil";
+          };
+          visual = {
+            variable_below = "g?v";
+            variable_above = "g?V";
+          };
+        }
         ''
           By default, the plugin will create some keymappings for use 'out of the box'.
           There are also some function invocations which are not mapped to any keymappings by
@@ -83,12 +81,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     commands =
       helpers.defaultNullOpts.mkAttrsOf types.str
-        ''
-          {
-            toggle_comment_debug_prints = "ToggleCommentDebugPrints";
-            delete_debug_prints = "DeleteDebugPrints";
-          }
-        ''
+        {
+          toggle_comment_debug_prints = "ToggleCommentDebugPrints";
+          delete_debug_prints = "DeleteDebugPrints";
+        }
         ''
           By default, the plugin will create some commands for use 'out of the box'.
           There are also some function invocations which are not mapped to any commands by default,
@@ -140,7 +136,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             };
           })
         )
-        "{}"
+        { }
         ''
           Custom filetypes.
           Your new file format will be merged in with those that already exist.

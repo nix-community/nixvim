@@ -14,7 +14,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    ft_blocklist = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    ft_blocklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Filetypes to exclude.
     '';
 

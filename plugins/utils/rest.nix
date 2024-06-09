@@ -287,18 +287,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             Whether to enable statistics or not.
           '';
 
-          stats = helpers.defaultNullOpts.mkListOf (with types; attrsOf str) ''
-            [
-              {
-                __unkeyed = "total_time";
-                title = "Time taken:";
-              }
-              {
-                __unkeyed = "size_download_t";
-                title = "Download size:";
-              }
-            ]
-          '' "See https://curl.se/libcurl/c/curl_easy_getinfo.html.";
+          stats = helpers.defaultNullOpts.mkListOf (with types; attrsOf str) [
+            {
+              __unkeyed = "total_time";
+              title = "Time taken:";
+            }
+            {
+              __unkeyed = "size_download_t";
+              title = "Download size:";
+            }
+          ] "See https://curl.se/libcurl/c/curl_easy_getinfo.html.";
         };
 
         formatters = {
@@ -306,29 +304,27 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             JSON formatter.
           '';
 
-          html = helpers.defaultNullOpts.mkStr ''
-            {
-              __raw = \'\'
-                function(body)
-                  if vim.fn.executable("tidy") == 0 then
-                    return body, { found = false, name = "tidy" }
-                  end
-                  local fmt_body = vim.fn.system({
-                    "tidy",
-                    "-i",
-                    "-q",
-                    "--tidy-mark",      "no",
-                    "--show-body-only", "auto",
-                    "--show-errors",    "0",
-                    "--show-warnings",  "0",
-                    "-",
-                  }, body):gsub("\n$", "")
-
-                  return fmt_body, { found = true, name = "tidy" }
+          html = helpers.defaultNullOpts.mkStr {
+            __raw = ''
+              function(body)
+                if vim.fn.executable("tidy") == 0 then
+                  return body, { found = false, name = "tidy" }
                 end
-              \'\';
-            }
-          '' "HTML formatter.";
+                local fmt_body = vim.fn.system({
+                  "tidy",
+                  "-i",
+                  "-q",
+                  "--tidy-mark",      "no",
+                  "--show-body-only", "auto",
+                  "--show-errors",    "0",
+                  "--show-warnings",  "0",
+                  "-",
+                }, body):gsub("\n$", "")
+
+                return fmt_body, { found = true, name = "tidy" }
+              end
+            '';
+          } "HTML formatter.";
         };
       };
 
@@ -359,20 +355,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     keybinds =
       helpers.defaultNullOpts.mkListOf (with types; listOf str)
-        ''
+        [
           [
-            [
-              "<localleader>rr"
-              "<cmd>Rest run<cr>"
-              "Run request under the cursor"
-            ]
-            [
-              "<localleader>rl"
-              "<cmd>Rest run last<cr>"
-              "Re-run latest request"
-            ]
+            "<localleader>rr"
+            "<cmd>Rest run<cr>"
+            "Run request under the cursor"
           ]
-        ''
+          [
+            "<localleader>rl"
+            "<cmd>Rest run last<cr>"
+            "Re-run latest request"
+          ]
+        ]
         ''
           Declare some keybindings.
           Format: list of 3 strings lists: key, action and description.

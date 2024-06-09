@@ -28,11 +28,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Whether to load dictionaries on startup.
     '';
 
-    load_langs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["en-US"]'' ''
+    load_langs = helpers.defaultNullOpts.mkListOf types.str [ "en-US" ] ''
       Languages for witch dicionnaries will be loaded.
       See `plugins.lsp.servers.ltex.languages` for possible values.
     '';
 
+    # FIXME consider using enum or nixvimTypes.logLevel
     log_level = helpers.defaultNullOpts.mkStr "none" ''
       Log level. Possible values:
       - "none"

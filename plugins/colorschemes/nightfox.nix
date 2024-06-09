@@ -35,9 +35,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     options = {
-      compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/nightfox'";}'' ''
-        The output directory path where the compiled results will be written to.
-      '';
+      compile_path =
+        helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('cache') .. '/nightfox'"; }
+          ''
+            The output directory path where the compiled results will be written to.
+          '';
 
       compile_file_suffix = helpers.defaultNullOpts.mkStr "_compiled" ''
         The string appended to the compiled file.
@@ -65,57 +67,51 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         The default value of a module that has not been overridden in the modules table.
       '';
 
-      styles =
-        helpers.defaultNullOpts.mkAttrsOf types.str
-          ''
-            {
-              comments = "NONE";
-              conditionals = "NONE";
-              constants = "NONE";
-              functions = "NONE";
-              keywords = "NONE";
-              numbers = "NONE";
-              operators = "NONE";
-              preprocs = "NONE";
-              strings = "NONE";
-              types = "NONE";
-              variables = "NONE";
-            }
-          ''
-          ''
-            A table that contains a list of syntax components and their corresponding style.
-            These styles can be any combination of `|highlight-args|`.
-            The list of syntax components are:
-              - comments
-              - conditionals
-              - constants
-              - functions
-              - keywords
-              - numbers
-              - operators
-              - preprocs
-              - strings
-              - types
-              - variables
+      styles = helpers.defaultNullOpts.mkAttrsOf' {
+        type = types.str;
+        description = ''
+          A table that contains a list of syntax components and their corresponding style.
+          These styles can be any combination of `|highlight-args|`.
 
-            Example:
-            ```nix
-              {
-                comments = "italic";
-                functions = "italic,bold";
-              }
-            ```
-          '';
+          The list of syntax components are:
+            - comments
+            - conditionals
+            - constants
+            - functions
+            - keywords
+            - numbers
+            - operators
+            - preprocs
+            - strings
+            - types
+            - variables
+        '';
+        example = {
+          comments = "italic";
+          functions = "italic,bold";
+        };
+        default = {
+          comments = "NONE";
+          conditionals = "NONE";
+          constants = "NONE";
+          functions = "NONE";
+          keywords = "NONE";
+          numbers = "NONE";
+          operators = "NONE";
+          preprocs = "NONE";
+          strings = "NONE";
+          types = "NONE";
+          variables = "NONE";
+        };
+      };
 
       inverse =
         helpers.defaultNullOpts.mkAttrsOf types.bool
-          ''
-            {
-              match_paren = false;
-              visual = false;
-              search = false;
-            }
-          ''
+          {
+            match_paren = false;
+            visual = false;
+            search = false;
+          }
           ''
             A table that contains a list of highlight types.
             If a highlight type is enabled it will inverse the foreground and background colors
@@ -139,7 +135,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           mapAttrs
             (
               name: color:
-              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0" ''
+              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''
                 Severity [0, 1] for ${name} (${color}).
               ''
             )
@@ -152,26 +148,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       modules =
         helpers.defaultNullOpts.mkAttrsOf types.anything
-          ''
-            {
-              coc = {
-                background = true;
-              };
-              diagnostic = {
-                enable = true;
-                background = true;
-              };
-              native_lsp = {
-                enable = true;
-                background = true;
-              };
-              treesitter = true;
-              lsp_semantic_tokens = true;
-              leap = {
-                background = true;
-              };
-            }
-          ''
+          {
+            coc = {
+              background = true;
+            };
+            diagnostic = {
+              enable = true;
+              background = true;
+            };
+            native_lsp = {
+              enable = true;
+              background = true;
+            };
+            treesitter = true;
+            lsp_semantic_tokens = true;
+            leap = {
+              background = true;
+            };
+          }
           ''
             `modules` store configuration information for various plugins and other neovim modules.
             A module can either be a boolean or a table that contains additional configuration for
@@ -185,135 +179,121 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           '';
     };
 
-    palettes =
-      helpers.mkNullOrOption
-        (
-          with types;
-          attrsOf
-            # A theme (or `all`)
-            (
-              attrsOf
-                # A color
-                (either str (attrsOf str))
-            )
-        )
-        ''
-          A `palette` is the base color definitions of a style.
-          Each style defines its own palette to be used by the other components.
-          A palette defines base colors, as well as foreground and background shades.
-          Along with the foreground and background colors a palette also defines other colors such
-          as selection and comment colors.
+    palettes = helpers.mkNullOrOption' {
+      type =
+        with types;
+        attrsOf
+          # A theme (or `all`)
+          (
+            attrsOf
+              # A color
+              (either str (attrsOf str))
+          );
+      description = ''
+        A `palette` is the base color definitions of a style.
+        Each style defines its own palette to be used by the other components.
+        A palette defines base colors, as well as foreground and background shades.
+        Along with the foreground and background colors a palette also defines other colors such
+        as selection and comment colors.
 
-          The base colors are |nightfox-shade| objects that define a `base`, `bright`, and `dim`
-          color.
-          These base colors are: `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`,
-          `white`, `orange`, `pink`.
+        The base colors are |nightfox-shade| objects that define a `base`, `bright`, and `dim`
+        color.
+        These base colors are: `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`,
+        `white`, `orange`, `pink`.
+      '';
+      example = {
+        all = {
+          red = "#ff0000";
+        };
+        nightfox = {
+          red = "#c94f6d";
+        };
+        dayfox = {
+          blue = {
+            base = "#4d688e";
+            bright = "#4e75aa";
+            dim = "#485e7d";
+          };
+        };
+        nordfox = {
+          bg1 = "#2e3440";
+          sel0 = "#3e4a5b";
+          sel1 = "#4f6074";
+          comment = "#60728a";
+        };
+      };
+    };
 
-          Example:
-          ```nix
-            {
-              all = {
-                red = "#ff0000";
-              };
-              nightfox = {
-                red = "#c94f6d";
-              };
-              dayfox = {
-                blue = {
-                  base = "#4d688e";
-                  bright = "#4e75aa";
-                  dim = "#485e7d";
-                };
-              };
-              nordfox = {
-                bg1 = "#2e3440";
-                sel0 = "#3e4a5b";
-                sel1 = "#4f6074";
-                comment = "#60728a";
-              };
-            }
-          ```
-        '';
+    specs = helpers.mkNullOrOption' {
+      type =
+        with types;
+        attrsOf
+          # A theme (or `all`)
+          (
+            attrsOf
+              # `inactive`, `syntax`, `git`, ...
+              (either str (attrsOf str))
+          );
+      description = ''
+        Spec's (specifications) are a mapping of palettes to logical groups that will be used by
+        the groups.
+        Some examples of the groups that specs map would be:
+          - syntax groups (functions, types, keywords, ...)
+          - diagnostic groups (error, warning, info, hints)
+          - git groups (add, removed, changed)
 
-    specs =
-      helpers.mkNullOrOption
-        (
-          with types;
-          attrsOf
-            # A theme (or `all`)
-            (
-              attrsOf
-                # `inactive`, `syntax`, `git`, ...
-                (either str (attrsOf str))
-            )
-        )
-        ''
-          Spec's (specifications) are a mapping of palettes to logical groups that will be used by
-          the groups.
-          Some examples of the groups that specs map would be:
-            - syntax groups (functions, types, keywords, ...)
-            - diagnostic groups (error, warning, info, hints)
-            - git groups (add, removed, changed)
+        You can override these just like palettes.
+      '';
+      example = {
+        all = {
+          syntax = {
+            keyword = "magenta";
+            conditional = "magenta.bright";
+            number = "orange.dim";
+          };
+          git = {
+            changed = "#f4a261";
+          };
+        };
+        nightfox = {
+          syntax = {
+            operator = "orange";
+          };
+        };
+      };
+    };
 
-          You can override these just like palettes.
+    groups = helpers.mkNullOrOption' {
+      type =
+        with types;
+        attrsOf
+          # A theme (or `all`)
+          (
+            attrsOf
+              # `Whitespace`, `IncSearch`, ...
+              (attrsOf str)
+          );
+      description = ''
+        Groups are the highlight group definitions.
+        The keys of this table are the name of the highlight groups that will be overridden.
+        The value is a table with the following values:
+          - fg, bg, style, sp, link,
 
-          Example:
-          ```nix
-            {
-              all = {
-                syntax = {
-                  keyword = "magenta";
-                  conditional = "magenta.bright";
-                  number = "orange.dim";
-                };
-                git = {
-                  changed = "#f4a261";
-                };
-              };
-              nightfox = {
-                syntax = {
-                  operator = "orange";
-                };
-              };
-            }
-          ```
-        '';
+        Just like `spec` groups support templates.
+        This time the template is based on a spec object.
+      '';
 
-    groups =
-      helpers.mkNullOrOption
-        (
-          with types;
-          attrsOf
-            # A theme (or `all`)
-            (
-              attrsOf
-                # `Whitespace`, `IncSearch`, ...
-                (attrsOf str)
-            )
-        )
-        ''
-          Groups are the highlight group definitions.
-          The keys of this table are the name of the highlight groups that will be overridden.
-          The value is a table with the following values:
-            - fg, bg, style, sp, link,
-
-          Just like `spec` groups support templates.
-          This time the template is based on a spec object.
-
-          Example:
-          ```nix
-            {
-              all = {
-                Whitespace.link = "Comment";
-                IncSearch.bg = "palette.cyan";
-              },
-              nightfox.PmenuSel = {
-                bg = "#73daca";
-                fg = "bg0";
-              };
-            }
-          ```
-        '';
+      example = {
+        all = {
+          Whitespace.link = "Comment";
+          IncSearch.bg = "palette.cyan";
+        };
+        nightfox.PmenuSel = {
+          bg = "#73daca";
+          fg = "bg0";
+        };
+      };
+    };
   };
 
   settingsExample = {

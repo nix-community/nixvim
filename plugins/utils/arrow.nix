@@ -100,17 +100,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     window =
       helpers.defaultNullOpts.mkAttrsOf types.anything
-        ''
-          {
-            relative = "editor";
-            width = "auto";
-            height = "auto";
-            row = "auto";
-            col = "auto";
-            style = "minimal";
-            border = "single";
-          }
-        ''
+        {
+          relative = "editor";
+          width = "auto";
+          height = "auto";
+          row = "auto";
+          col = "auto";
+          style = "minimal";
+          border = "single";
+        }
         ''
           Controls the appearance and position of an arrow window.
           See `:h nvim_open_win()` for all options.
@@ -161,7 +159,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Keys mapped to bookmark index.
     '';
 
-    full_path_list = helpers.defaultNullOpts.mkListOf types.str ''[ "update_stuff" ]'' ''
+    full_path_list = helpers.defaultNullOpts.mkListOf types.str [ "update_stuff" ] ''
       Filenames on this list will ALWAYS show the file path too
     '';
   };

@@ -55,10 +55,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     groups = helpers.mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
       Which color to use for each group.
 
-      default: see [source](https://github.com/olivercederborg/poimandres.nvim/blob/main/lua/poimandres/init.lua)
+      _Plugin default:_ see [source](https://github.com/olivercederborg/poimandres.nvim/blob/main/lua/poimandres/init.lua)
     '';
 
-    highlight_groups = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+    highlight_groups = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       Highlight groups.
     '';
   };

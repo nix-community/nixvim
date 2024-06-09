@@ -27,9 +27,9 @@ in
 
       minLength = helpers.defaultNullOpts.mkInt 3 "Minimum length for underlined words.";
 
-      hl =
-        helpers.defaultNullOpts.mkNullable types.attrs "{underline = true;}"
-          "Highliht definition map for cursorword highlighting.";
+      hl = helpers.defaultNullOpts.mkNullable types.attrs {
+        underline = true;
+      } "Highliht definition map for cursorword highlighting.";
     };
   };
 

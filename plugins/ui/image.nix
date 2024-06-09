@@ -56,9 +56,12 @@ in
         };
       in
       mapAttrs mkIntegrationOptions {
-        markdown = ''["markdown" "vimwiki"]'';
-        neorg = ''["norg"]'';
-        syslang = ''["syslang"]'';
+        markdown = [
+          "markdown"
+          "vimwiki"
+        ];
+        neorg = [ "norg" ];
+        syslang = [ "syslang" ];
       };
 
     maxWidth = helpers.mkNullOrOption types.ints.unsigned "Image maximum width.";
@@ -78,7 +81,12 @@ in
     '';
 
     windowOverlapClearFtIgnore =
-      helpers.defaultNullOpts.mkListOf types.str ''["cmp_menu" "cmp_docs" ""]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "cmp_menu"
+          "cmp_docs"
+          ""
+        ]
         ''
           Toggles images when windows are overlapped.
         '';
@@ -92,7 +100,14 @@ in
     '';
 
     hijackFilePatterns =
-      helpers.defaultNullOpts.mkListOf types.str ''["*.png" "*.jpg" "*.jpeg" "*.gif" "*.webp"]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "*.png"
+          "*.jpg"
+          "*.jpeg"
+          "*.gif"
+          "*.webp"
+        ]
         ''
           Render image files as images when opened.
         '';

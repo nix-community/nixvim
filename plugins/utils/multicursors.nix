@@ -79,7 +79,7 @@ in
               opts = { desc = "Clear others"; };
             };
             "<C-/>" = {
-                method = \'\'
+                method = '''
                   function()
                     require('multicursors.utils').call_on_selections(
                       function(selection)
@@ -89,7 +89,7 @@ in
                       end
                     )
                   end
-                \'\';
+                ''';
                 opts = { desc = "comment selections"; };
             };
           }
@@ -161,7 +161,7 @@ in
           ]
           (
             mode:
-            helpers.defaultNullOpts.mkNullable (with types; either bool str) "false" ''
+            helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
               Hints for ${mode} mode.
 
               Accepted values:

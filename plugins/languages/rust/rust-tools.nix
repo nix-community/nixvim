@@ -58,26 +58,44 @@ in
     };
 
     hoverActions = {
-      border = helpers.defaultNullOpts.mkBorder ''
+      border = helpers.defaultNullOpts.mkBorder [
         [
-          [ "╭" "FloatBorder" ]
-          [ "─" "FloatBorder" ]
-          [ "╮" "FloatBorder" ]
-          [ "│" "FloatBorder" ]
-          [ "╯" "FloatBorder" ]
-          [ "─" "FloatBorder" ]
-          [ "╰" "FloatBorder" ]
-          [ "│" "FloatBorder" ]
+          "╭"
+          "FloatBorder"
         ]
-      '' "rust-tools hover window" "";
+        [
+          "─"
+          "FloatBorder"
+        ]
+        [
+          "╮"
+          "FloatBorder"
+        ]
+        [
+          "│"
+          "FloatBorder"
+        ]
+        [
+          "╯"
+          "FloatBorder"
+        ]
+        [
+          "─"
+          "FloatBorder"
+        ]
+        [
+          "╰"
+          "FloatBorder"
+        ]
+        [
+          "│"
+          "FloatBorder"
+        ]
+      ] "rust-tools hover window" "";
 
-      maxWidth =
-        helpers.defaultNullOpts.mkNullable types.int null
-          "Maximal width of the hover window. null means no max.";
+      maxWidth = helpers.defaultNullOpts.mkInt null "Maximal width of the hover window. null means no max.";
 
-      maxHeight =
-        helpers.defaultNullOpts.mkNullable types.int null
-          "Maximal height of the hover window. null means no max.";
+      maxHeight = helpers.defaultNullOpts.mkInt null "Maximal height of the hover window. null means no max.";
 
       autoFocus = helpers.defaultNullOpts.mkBool false "whether the hover action window gets automatically focused";
     };
@@ -94,7 +112,7 @@ in
         true for all crates.io and external crates, false only the local crates
       '';
 
-      enabledGraphvizBackends = helpers.defaultNullOpts.mkNullable (types.listOf types.str) null ''
+      enabledGraphvizBackends = helpers.defaultNullOpts.mkListOf types.str null ''
         List of backends found on: https://graphviz.org/docs/outputs/
         Is used for input validation and autocompletion
       '';

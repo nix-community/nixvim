@@ -80,7 +80,7 @@ with lib;
           }
         ) modes;
 
-        floatPrecision = helpers.defaultNullOpts.mkNullable types.float "0.01" ''
+        floatPrecision = helpers.defaultNullOpts.mkNullable types.float 1.0e-2 ''
           Can limit the number of decimals displayed for floats
         '';
       };

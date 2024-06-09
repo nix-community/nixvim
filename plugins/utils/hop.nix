@@ -20,31 +20,31 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       keymaps = [
         {
           key = "f";
-          action.__raw = \'\'
+          action.__raw = '''
             function()
               require'hop'.hint_char1({
                 direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
                 current_line_only = true
               })
             end
-          \'\';
+          ''';
           options.remap = true;
         }
         {
           key = "F";
-          action.__raw = \'\'
+          action.__raw = '''
             function()
               require'hop'.hint_char1({
                 direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
                 current_line_only = true
               })
             end
-          \'\';
+          ''';
           options.remap = true;
         }
         {
           key = "t";
-          action.__raw = \'\'
+          action.__raw = '''
             function()
               require'hop'.hint_char1({
                 direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
@@ -52,12 +52,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 hint_offset = -1
               })
             end
-          \'\';
+          ''';
           options.remap = true;
         }
         {
           key = "T";
-          action.__raw = \'\'
+          action.__raw = '''
             function()
               require'hop'.hint_char1({
                 direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
@@ -65,7 +65,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 hint_offset = 1
               })
             end
-          \'\';
+          ''';
           options.remap = true;
         }
       ];
@@ -243,7 +243,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       should be good if you have enough keys in `|hop-config-keys|`).
     '';
 
-    excluded_filetypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    excluded_filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Skip hinting windows with the excluded filetypes.
       Those windows to check filetypes are collected only when you enable `multi_windows` or
       execute `MW`-commands.
@@ -251,7 +251,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       for editing.
     '';
 
-    match_mappings = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    match_mappings = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       This option allows you to specify the match mappings to use when applying the hint.
       If you set a non-empty `match_mappings`, the hint will be used as a key to look up the
       pattern to search for.

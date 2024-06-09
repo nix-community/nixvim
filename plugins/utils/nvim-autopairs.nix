@@ -53,9 +53,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     ];
 
   settingsOptions = {
-    disable_filetype =
-      helpers.defaultNullOpts.mkListOf types.str ''["TelescopePrompt" "spectre_panel"]''
-        "Disabled filetypes.";
+    disable_filetype = helpers.defaultNullOpts.mkListOf types.str [
+      "TelescopePrompt"
+      "spectre_panel"
+    ] "Disabled filetypes.";
 
     disable_in_macro = helpers.defaultNullOpts.mkBool false ''
       Disable when recording or executing a macro.
@@ -101,19 +102,17 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Use treesitter to check for a pair.
     '';
 
-    ts_config = helpers.defaultNullOpts.mkAttrsOf types.anything ''
-      {
-        lua = [
-          "string"
-          "source"
-          "string_content"
-        ];
-        javascript = [
-          "string"
-          "template_string"
-        ];
-      }
-    '' "Configuration for TreeSitter.";
+    ts_config = helpers.defaultNullOpts.mkAttrsOf types.anything {
+      lua = [
+        "string"
+        "source"
+        "string_content"
+      ];
+      javascript = [
+        "string"
+        "template_string"
+      ];
+    } "Configuration for TreeSitter.";
 
     map_cr = helpers.defaultNullOpts.mkBool true ''
       Map the `<CR>` key to confirm the completion.
@@ -136,9 +135,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         The key to trigger fast_wrap.
       '';
 
-      chars = helpers.defaultNullOpts.mkListOf types.str ''["{" "[" "(" "\"" "'"]'' ''
-        Characters for which to enable fast wrap.
-      '';
+      chars =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "{"
+            "["
+            "("
+            "\""
+            "'"
+          ]
+          ''
+            Characters for which to enable fast wrap.
+          '';
 
       pattern = helpers.defaultNullOpts.mkLua ''[=[[%'%"%>%]%)%}%,%`]]=]'' ''
         The pattern to match against.

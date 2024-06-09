@@ -38,7 +38,11 @@ in
     '';
 
     detectionMethods =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["lsp" "pattern"]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "lsp"
+          "pattern"
+        ]
         ''
           Methods of detecting the root directory.
           **"lsp"** uses the native neovim lsp, while **"pattern"** uses vim-rooter like glob pattern
@@ -48,19 +52,27 @@ in
         '';
 
     patterns =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str)
-        ''[".git" "_darcs" ".hg" ".bzr" ".svn" "Makefile" "package.json"]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          ".git"
+          "_darcs"
+          ".hg"
+          ".bzr"
+          ".svn"
+          "Makefile"
+          "package.json"
+        ]
         ''
           All the patterns used to detect root dir, when **"pattern"** is in `detectionMethods`.
         '';
 
-    ignoreLsp = helpers.defaultNullOpts.mkNullable (
-      with types; listOf str
-    ) "[]" "Table of lsp clients to ignore by name.";
+    ignoreLsp =
+      helpers.defaultNullOpts.mkListOf types.str [ ]
+        "Table of lsp clients to ignore by name.";
 
-    excludeDirs = helpers.defaultNullOpts.mkNullable (
-      with types; listOf str
-    ) "[]" "Don't calculate root dir on specific directories.";
+    excludeDirs =
+      helpers.defaultNullOpts.mkListOf types.str [ ]
+        "Don't calculate root dir on specific directories.";
 
     showHidden = helpers.defaultNullOpts.mkBool false "Show hidden files in telescope.";
 
@@ -79,14 +91,11 @@ in
           What scope to change the directory.
         '';
 
-    dataPath =
-      helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-        ''{__raw = "vim.fn.stdpath('data')";}''
-        "Path where project.nvim will store the project history for use in telescope.";
+    dataPath = helpers.defaultNullOpts.mkStr {
+      __raw = "vim.fn.stdpath('data')";
+    } "Path where project.nvim will store the project history for use in telescope.";
 
-    enableTelescope = mkEnableOption ''
-      When set to true, enabled project-nvim telescope integration.
-    '';
+    enableTelescope = mkEnableOption "project-nvim telescope integration";
   };
 
   config = mkIf cfg.enable {

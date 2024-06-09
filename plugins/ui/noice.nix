@@ -22,20 +22,43 @@ with lib;
     cmdline = {
       enabled = helpers.defaultNullOpts.mkBool true "enables Noice cmdline UI";
       view = helpers.defaultNullOpts.mkStr "cmdline_popup" "";
-      opts = helpers.defaultNullOpts.mkNullable types.anything "{}" "";
+      opts = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
       format =
-        helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything)
-          ''
-            {
-              cmdline = {pattern = "^:"; icon = ""; lang = "vim";};
-              search_down = {kind = "search"; pattern = "^/"; icon = " "; lang = "regex";};
-              search_up = {kind = "search"; pattern = "?%?"; icon = " "; lang = "regex";};
-              filter = {pattern = "^:%s*!"; icon = "$"; lang = "bash";};
-              lua = {pattern = "^:%s*lua%s+"; icon = ""; lang = "lua";};
-              help = {pattern = "^:%s*he?l?p?%s+"; icon = "";};
-              input = {};
-            }
-          ''
+        helpers.defaultNullOpts.mkAttrsOf types.anything
+          {
+            cmdline = {
+              pattern = "^:";
+              icon = "";
+              lang = "vim";
+            };
+            search_down = {
+              kind = "search";
+              pattern = "^/";
+              icon = " ";
+              lang = "regex";
+            };
+            search_up = {
+              kind = "search";
+              pattern = "?%?";
+              icon = " ";
+              lang = "regex";
+            };
+            filter = {
+              pattern = "^:%s*!";
+              icon = "$";
+              lang = "bash";
+            };
+            lua = {
+              pattern = "^:%s*lua%s+";
+              icon = "";
+              lang = "lua";
+            };
+            help = {
+              pattern = "^:%s*he?l?p?%s+";
+              icon = "";
+            };
+            input = { };
+          }
           ''
             conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
             view: (default is cmdline view)
@@ -66,53 +89,78 @@ with lib;
       ] "";
       kindIcons = helpers.defaultNullOpts.mkNullable (types.either types.bool (
         types.attrsOf types.anything
-      )) "{}" "Icons for completion item kinds. set to `false` to disable icons";
+      )) { } "Icons for completion item kinds. set to `false` to disable icons";
     };
 
-    redirect = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) ''
-      {
-        view = "popup";
-        filter = {event = "msg_show";};
-      }
-    '' "default options for require('noice').redirect";
+    redirect = helpers.defaultNullOpts.mkAttrsOf types.anything {
+      view = "popup";
+      filter = {
+        event = "msg_show";
+      };
+    } "default options for require('noice').redirect";
 
-    commands = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) ''
-      {
-        history = {
-          view = "split";
-          opts = {enter = true; format = "details";};
-          filter = {
-            any = [
-              {event = "notify";}
-              {error = true;}
-              {warning = true;}
-              {event = "msg_show"; kind = [""];}
-              {event = "lsp"; kind = "message";}
-            ];
-          };
+    commands = helpers.defaultNullOpts.mkAttrsOf types.anything {
+      history = {
+        view = "split";
+        opts = {
+          enter = true;
+          format = "details";
         };
-        last = {
-          view = "popup";
-          opts = {enter = true; format = "details";};
-          filter = {
-            any = [
-              {event = "notify";}
-              {error = true;}
-              {warning = true;}
-              {event = "msg_show"; kind = [""];}
-              {event = "lsp"; kind = "message";}
-            ];
-          };
-          filter_opts = {count = 1;};
+        filter = {
+          any = [
+            { event = "notify"; }
+            { error = true; }
+            { warning = true; }
+            {
+              event = "msg_show";
+              kind = [ "" ];
+            }
+            {
+              event = "lsp";
+              kind = "message";
+            }
+          ];
         };
-        errors = {
-          view = "popup";
-          opts = {enter = true; format = "details";};
-          filter = {error = true;};
-          filter_opts = {reverse = true;};
+      };
+      last = {
+        view = "popup";
+        opts = {
+          enter = true;
+          format = "details";
         };
-      }
-    '' "You can add any custom commands that will be available with `:Noice command`";
+        filter = {
+          any = [
+            { event = "notify"; }
+            { error = true; }
+            { warning = true; }
+            {
+              event = "msg_show";
+              kind = [ "" ];
+            }
+            {
+              event = "lsp";
+              kind = "message";
+            }
+          ];
+        };
+        filter_opts = {
+          count = 1;
+        };
+      };
+      errors = {
+        view = "popup";
+        opts = {
+          enter = true;
+          format = "details";
+        };
+        filter = {
+          error = true;
+        };
+        filter_opts = {
+          reverse = true;
+        };
+      };
+    } "You can add any custom commands that will be available with `:Noice command`";
 
     notify = {
       enabled = helpers.defaultNullOpts.mkBool true ''
@@ -132,34 +180,30 @@ with lib;
         enabled = helpers.defaultNullOpts.mkBool true "enable LSP progress";
 
         format =
-          helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) ''"lsp_progress"''
+          helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) "lsp_progress"
             ''
               Lsp Progress is formatted using the builtins for lsp_progress
             '';
         formatDone =
-          helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) ''"lsp_progress"''
+          helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) "lsp_progress"
             "";
 
-        throttle = helpers.defaultNullOpts.mkNum "1000 / 30" "frequency to update lsp progress message";
+        throttle = helpers.defaultNullOpts.mkNum (1000 / 30) "frequency to update lsp progress message";
 
         view = helpers.defaultNullOpts.mkStr "mini" "";
       };
 
-      override = helpers.defaultNullOpts.mkNullable (types.attrsOf types.bool) ''
-        {
-          "vim.lsp.util.convert_input_to_markdown_lines" = false;
-          "vim.lsp.util.stylize_markdown" = false;
-          "cmp.entry.get_documentation" = false;
-        }
-      '' "";
+      override = helpers.defaultNullOpts.mkAttrsOf types.bool {
+        "vim.lsp.util.convert_input_to_markdown_lines" = false;
+        "vim.lsp.util.stylize_markdown" = false;
+        "cmp.entry.get_documentation" = false;
+      } "";
 
       hover = {
         enabled = helpers.defaultNullOpts.mkBool true "enable hover UI";
-        view =
-          helpers.defaultNullOpts.mkNullable types.str null
-            "when null, use defaults from documentation";
+        view = helpers.defaultNullOpts.mkStr null "when null, use defaults from documentation";
         opts =
-          helpers.defaultNullOpts.mkNullable types.anything "{}"
+          helpers.defaultNullOpts.mkAttrsOf types.anything { }
             "merged with defaults from documentation";
       };
 
@@ -175,11 +219,9 @@ with lib;
           '';
         };
 
-        view =
-          helpers.defaultNullOpts.mkNullable types.str null
-            "when null, use defaults from documentation";
+        view = helpers.defaultNullOpts.mkStr null "when null, use defaults from documentation";
         opts =
-          helpers.defaultNullOpts.mkNullable types.anything "{}"
+          helpers.defaultNullOpts.mkAttrsOf types.anything { }
             "merged with defaults from documentation";
       };
 
@@ -187,42 +229,39 @@ with lib;
         enabled = helpers.defaultNullOpts.mkBool true "enable display of messages";
 
         view = helpers.defaultNullOpts.mkStr "notify" "";
-        opts = helpers.defaultNullOpts.mkNullable types.anything "{}" "";
+        opts = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
       };
 
       documentation = {
         view = helpers.defaultNullOpts.mkStr "hover" "";
 
-        opts = helpers.defaultNullOpts.mkNullable types.anything ''
-          {
-            lang = "markdown";
-            replace = true;
-            render = "plain";
-            format = ["{message}"];
-            win_options = { concealcursor = "n"; conceallevel = 3; };
-          }
-        '' "";
+        opts = helpers.defaultNullOpts.mkAttrsOf types.anything {
+          lang = "markdown";
+          replace = true;
+          render = "plain";
+          format = [ "{message}" ];
+          win_options = {
+            concealcursor = "n";
+            conceallevel = 3;
+          };
+        } "";
       };
     };
 
     markdown = {
-      hover = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) ''
-        {
-          "|(%S-)|" = helpers.mkRaw "vim.cmd.help"; // vim help links
-          "%[.-%]%((%S-)%)" = helpers.mkRaw "require("noice.util").open"; // markdown links
-        }
-      '' "set handlers for hover (lua code)";
+      hover = helpers.defaultNullOpts.mkAttrsOf types.str {
+        "|(%S-)|".__raw = "vim.cmd.help"; # vim help links
+        "%[.-%]%((%S-)%)".__raw = "require('noice.util').open"; # markdown links
+      } "set handlers for hover (lua code)";
 
-      highlights = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) ''
-        {
-          "|%S-|" = "@text.reference";
-          "@%S+" = "@parameter";
-          "^%s*(Parameters:)" = "@text.title";
-          "^%s*(Return:)" = "@text.title";
-          "^%s*(See also:)" = "@text.title";
-          "{%S-}" = "@parameter";
-        }
-      '' "set highlight groups";
+      highlights = helpers.defaultNullOpts.mkAttrsOf types.str {
+        "|%S-|" = "@text.reference";
+        "@%S+" = "@parameter";
+        "^%s*(Parameters:)" = "@text.title";
+        "^%s*(Return:)" = "@text.title";
+        "^%s*(See also:)" = "@text.title";
+        "{%S-}" = "@parameter";
+      } "set highlight groups";
     };
 
     health = {
@@ -235,7 +274,12 @@ with lib;
         You can disable this behaviour here
       '';
       excludedFiletypes =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''[ "cmp_menu" "cmp_docs" "notify"]''
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "cmp_menu"
+            "cmp_docs"
+            "notify"
+          ]
           ''
             add any filetypes here, that shouldn't trigger smart move
           '';
@@ -243,29 +287,27 @@ with lib;
 
     presets =
       helpers.defaultNullOpts.mkNullable (types.either types.bool types.anything)
-        ''
-          {
-            bottom_search = false;
-            command_palette = false;
-            long_message_to_split = false;
-            inc_rename = false;
-            lsp_doc_border = false;
-          }
-        ''
+        {
+          bottom_search = false;
+          command_palette = false;
+          long_message_to_split = false;
+          inc_rename = false;
+          lsp_doc_border = false;
+        }
         "
         you can enable a preset by setting it to true, or a table that will override the preset
         config. you can also add custom presets that you can enable/disable with enabled=true
       ";
 
-    throttle = helpers.defaultNullOpts.mkNum "1000 / 30" ''
+    throttle = helpers.defaultNullOpts.mkNum (1000 / 30) ''
       how frequently does Noice need to check for ui updates? This has no effect when in blocking
       mode
     '';
 
-    views = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
-    routes = helpers.defaultNullOpts.mkNullable (types.listOf (types.attrsOf types.anything)) "[]" "";
-    status = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
-    format = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" "";
+    views = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
+    routes = helpers.defaultNullOpts.mkListOf (types.attrsOf types.anything) [ ] "";
+    status = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
+    format = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
   };
 
   config =

@@ -43,17 +43,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   settingsOptions = with helpers.nixvimTypes; {
     prompt_func_return_type =
       helpers.defaultNullOpts.mkAttrsOf bool
-        ''
-          {
-            go = false;
-            java = false;
-            cpp = false;
-            c = false;
-            h = false;
-            hpp = false;
-            cxx = false;
-          }
-        ''
+        {
+          go = false;
+          java = false;
+          cpp = false;
+          c = false;
+          h = false;
+          hpp = false;
+          cxx = false;
+        }
         ''
           For certain languages like Golang, types are required for functions that return an object(s).
           Unfortunately, for some functions there is no way to automatically find their type. In those instances,
@@ -74,17 +72,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     prompt_func_param_type =
       helpers.defaultNullOpts.mkAttrsOf bool
-        ''
-          {
-            go = false;
-            java = false;
-            cpp = false;
-            c = false;
-            h = false;
-            hpp = false;
-            cxx = false;
-          }
-        ''
+        {
+          go = false;
+          java = false;
+          cpp = false;
+          c = false;
+          h = false;
+          hpp = false;
+          cxx = false;
+        }
         ''
           For certain languages like Golang, types are required for functions parameters.
           Unfortunately, for some parameters there is no way to automatically find their type. In those instances,
@@ -102,7 +98,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             }
         '';
 
-    printf_statements = helpers.defaultNullOpts.mkAttrsOf (listOf (maybeRaw str)) "{ }" ''
+    printf_statements = helpers.defaultNullOpts.mkAttrsOf (listOf (maybeRaw str)) { } ''
       In any custom printf statement, it is possible to optionally add a **max of one `%s` pattern**, which is where the debug path will go.
       For an example custom printf statement, go to [this folder][folder], select your language, and click on `multiple-statements/printf.config`.
 
@@ -121,7 +117,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       [folder]: https://github.com/ThePrimeagen/refactoring.nvim/blob/master/lua/refactoring/tests/debug/printf
     '';
 
-    print_var_statements = helpers.defaultNullOpts.mkAttrsOf (listOf (maybeRaw str)) "{ }" ''
+    print_var_statements = helpers.defaultNullOpts.mkAttrsOf (listOf (maybeRaw str)) { } ''
       In any custom print var statement, it is possible to optionally add a **max of two `%s` patterns**, which is where the debug path and
       the actual variable reference will go, respectively. To add a literal `"%s"` to the string, escape the sequence like this: `%%s`.
       For an example custom print var statement, go to [this folder][folder], select your language, and view `multiple-statements/print_var.config`.
@@ -141,7 +137,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       [folder]: https://github.com/ThePrimeagen/refactoring.nvim/blob/master/lua/refactoring/tests/debug/print_var
     '';
 
-    extract_var_statements = helpers.defaultNullOpts.mkAttrsOf str "{ }" ''
+    extract_var_statements = helpers.defaultNullOpts.mkAttrsOf str { } ''
       When performing an `extract_var` refactor operation, you can custom how the new variable would be declared by setting configuration
       like the below example.
 

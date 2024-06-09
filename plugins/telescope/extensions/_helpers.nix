@@ -75,13 +75,8 @@ rec {
     mkOption {
       type = with helpers.nixvimTypes; attrsOf strLuaFn;
       default = { };
-      description = ''
+      description = helpers.defaultNullOpts.mkDesc defaults ''
         Keymaps in ${mode} mode.
-
-        Default:
-        ```nix
-          ${defaults}
-        ```
       '';
       apply = mapAttrs (_: helpers.mkRaw);
     };

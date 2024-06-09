@@ -9,34 +9,41 @@ with lib;
 let
   cfg = config.plugins.illuminate;
 
-  mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
+  mkListStr = helpers.defaultNullOpts.mkListOf types.str;
 
   commonOptions = with helpers.defaultNullOpts; {
-    providers = mkListStr ''["lsp" "treesitter" "regex"]'' ''
-      Provider used to get references in the buffer, ordered by priority.
-    '';
+    providers =
+      mkListStr
+        [
+          "lsp"
+          "treesitter"
+          "regex"
+        ]
+        ''
+          Provider used to get references in the buffer, ordered by priority.
+        '';
 
     delay = mkInt 100 ''
       Delay in milliseconds.
     '';
 
-    modesDenylist = mkListStr "[]" ''
+    modesDenylist = mkListStr [ ] ''
       Modes to not illuminate, this overrides `modes_allowlist`.
       See `:help mode()` for possible values.
     '';
 
-    modesAllowlist = mkListStr "[]" ''
+    modesAllowlist = mkListStr [ ] ''
       Modes to illuminate, this is overridden by `modes_denylist`.
       See `:help mode()` for possible values.
     '';
 
-    providersRegexSyntaxDenylist = mkListStr "[]" ''
+    providersRegexSyntaxDenylist = mkListStr [ ] ''
       Syntax to not illuminate, this overrides `providers_regex_syntax_allowlist`.
       Only applies to the 'regex' provider.
       Use `:echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')`.
     '';
 
-    providersRegexSyntaxAllowlist = mkListStr "[]" ''
+    providersRegexSyntaxAllowlist = mkListStr [ ] ''
       Syntax to illuminate, this is overridden by `providers_regex_syntax_denylist`.
       Only applies to the 'regex' provider.
       Use `:echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')`.
@@ -57,11 +64,17 @@ let
   };
 
   filetypeOptions = {
-    filetypesDenylist = mkListStr ''["dirvish" "fugitive"]'' ''
-      Filetypes to not illuminate, this overrides `filetypes_allowlist`.
-    '';
+    filetypesDenylist =
+      mkListStr
+        [
+          "dirvish"
+          "fugitive"
+        ]
+        ''
+          Filetypes to not illuminate, this overrides `filetypes_allowlist`.
+        '';
 
-    filetypesAllowlist = mkListStr "[]" ''
+    filetypesAllowlist = mkListStr [ ] ''
       Filetypes to illuminate, this is overridden by `filetypes_denylist`.
     '';
   };
@@ -84,7 +97,7 @@ in
               options = commonOptions;
             })
           )
-          "{}"
+          { }
           ''
             Filetype specific overrides.
             The keys are strings to represent the filetype.

@@ -36,7 +36,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     '';
 
     theme = {
-      highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight "{}" ''
+      highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight { } ''
         Highlight groups to override, adding new groups is also possible.
         See `:h highlight-groups` for a list of highlight groups.
 
@@ -55,7 +55,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         Complete list can be found in `lua/cyberdream/theme.lua` in upstream repository.
       '';
 
-      colors = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+      colors = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         Override the default colors used.
 
         For a full list of colors, see upstream documentation.

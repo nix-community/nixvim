@@ -49,7 +49,7 @@ with lib;
         If true, it removes stale entries count over than `db_validate_threshold`.
       '';
 
-      db_root = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath 'data'";}'' ''
+      db_root = helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data'"; } ''
         Path to parent directory of custom database location.
         Defaults to `$XDG_DATA_HOME/nvim` if unset.
       '';
@@ -82,13 +82,11 @@ with lib;
 
       ignore_patterns =
         helpers.defaultNullOpts.mkListOf types.str
-          ''
-            [
-              "*.git/*"
-              "*/tmp/*"
-              "term://*"
-            ]
-          ''
+          [
+            "*.git/*"
+            "*/tmp/*"
+            "term://*"
+          ]
           ''
             Patterns in this table control which files are indexed (and subsequently which you'll see
             in the finder results).
@@ -104,7 +102,7 @@ with lib;
       '';
 
       show_filter_column =
-        helpers.defaultNullOpts.mkNullable (with types; either bool (listOf str)) "true"
+        helpers.defaultNullOpts.mkNullable (with types; either bool (listOf str)) true
           ''
             Show the path of the active filter before file paths.
             In default, it uses the tail of paths for `'LSP'` and `'CWD'` tags.
@@ -140,7 +138,7 @@ with lib;
             If you prefer Native Lua code, set `workspace_scan_cmd.__raw = "LUA"`.
           '';
 
-      workspaces = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+      workspaces = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         This attrs contains mappings of `workspace_tag` -> `workspace_directory`.
         The key corresponds to the `:tag_name` used to select the filter in queries.
         The value corresponds to the top level directory by which results will be filtered.

@@ -67,44 +67,44 @@ in
       If true, enables placeholders when inserting annotation
     '';
 
-    languages = helpers.defaultNullOpts.mkNullable types.attrs "see upstream documentation" ''
-      Configuration for languages.
+    languages = helpers.defaultNullOpts.mkAttrsOf' {
+      # No plugin default (see upstream)
+      type = types.anything;
+      description = ''
+        Configuration for languages.
 
-      `template.annotation_convention` (default: check the language default configurations):
-        Change the annotation convention to use with the language.
+        `template.annotation_convention` (default: check the language default configurations):
+          Change the annotation convention to use with the language.
 
-      `template.use_default_comment` (default: true):
-        Prepend any template line with the default comment for the filetype
+        `template.use_default_comment` (default: true):
+          Prepend any template line with the default comment for the filetype
 
-      `template.position` (fun(node: userdata, type: string):(number,number)?):
-        Provide an absolute position for the annotation.
-        If return values are nil, use default position
+        `template.position` (fun(node: userdata, type: string):(number,number)?):
+          Provide an absolute position for the annotation.
+          If return values are nil, use default position
 
-      `template.append`:
-        If you want to customize the position of the annotation.
+        `template.append`:
+          If you want to customize the position of the annotation.
 
-      `template.append.child_name`:
-        What child node to use for appending the annotation.
+        `template.append.child_name`:
+          What child node to use for appending the annotation.
 
-      `template.append.position` (before/after):
-        Relative positioning with `child_name`.
+        `template.append.position` (before/after):
+          Relative positioning with `child_name`.
 
-      `template.<convention_name>` (replace <convention_name> with an annotation convention):
-        Template for an annotation convention.
-        To know more about how to create your own template, go here:
-        https://github.com/danymat/neogen/blob/main/docs/adding-languages.md#default-generator
-
-      Example:
-      ```nix
-        {
-          csharp = {
-            template = {
-              annotation_convention = "...";
-            };
+        `template.<convention_name>` (replace <convention_name> with an annotation convention):
+          Template for an annotation convention.
+          To know more about how to create your own template, go here:
+          https://github.com/danymat/neogen/blob/main/docs/adding-languages.md#default-generator
+      '';
+      example = {
+        csharp = {
+          template = {
+            annotation_convention = "...";
           };
-        }
-      ```
-    '';
+        };
+      };
+    };
 
     snippetEngine = helpers.mkNullOrOption types.str ''
       Use a snippet engine to generate annotations.

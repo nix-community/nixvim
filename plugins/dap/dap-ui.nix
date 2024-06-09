@@ -15,9 +15,9 @@ let
     name:
     mapAttrs (
       key: default:
-      helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) "${
-        default
-      }" "Map `${key}` for ${name}"
+      helpers.defaultNullOpts.mkNullable (
+        with types; either str (listOf str)
+      ) default "Map `${key}` for ${name}"
     );
 
   elementOption = types.submodule {
@@ -90,7 +90,10 @@ in
       types.submodule {
         options = mkKeymapOptions "element mapping overrides" {
           edit = "e";
-          expand = ''["<CR>" "<2-LeftMouse>"]'';
+          expand = [
+            "<CR>"
+            "<2-LeftMouse>"
+          ];
           open = "o";
           remove = "d";
           repl = "r";
@@ -109,7 +112,12 @@ in
       border = helpers.defaultNullOpts.mkBorder "single" "dap-ui floating window" "";
 
       mappings = helpers.mkNullOrOption (types.submodule {
-        options = mkKeymapOptions "dap-ui floating" { close = ''["<ESC>" "q"]''; };
+        options = mkKeymapOptions "dap-ui floating" {
+          close = [
+            "<ESC>"
+            "q"
+          ];
+        };
       }) "Keys to trigger actions in elements.";
     };
 
@@ -121,53 +129,52 @@ in
       expanded = helpers.defaultNullOpts.mkStr "" "";
     };
 
-    layouts = helpers.defaultNullOpts.mkNullable (types.listOf layoutOption) ''
-      ```nix
-        [
+    layouts = helpers.defaultNullOpts.mkListOf layoutOption [
+      {
+        elements = [
           {
-            elements = [
-              {
-                id = "scopes";
-                size = 0.25;
-              }
-              {
-                id = "breakpoints";
-                size = 0.25;
-              }
-              {
-                id = "stacks";
-                size = 0.25;
-              }
-              {
-                id = "watches";
-                size = 0.25;
-              }
-            ];
-            position = "left";
-            size = 40;
+            id = "scopes";
+            size = 0.25;
           }
           {
-            elements = [
-              {
-                id = "repl";
-                size = 0.5;
-              }
-              {
-                id = "console";
-                size = 0.5;
-              }
-            ];
-            position = "bottom";
-            size = 10;
+            id = "breakpoints";
+            size = 0.25;
+          }
+          {
+            id = "stacks";
+            size = 0.25;
+          }
+          {
+            id = "watches";
+            size = 0.25;
           }
         ];
-      ```
-    '' "List of layouts for dap-ui.";
+        position = "left";
+        size = 40;
+      }
+      {
+        elements = [
+          {
+            id = "repl";
+            size = 0.5;
+          }
+          {
+            id = "console";
+            size = 0.5;
+          }
+        ];
+        position = "bottom";
+        size = 10;
+      }
+    ] "List of layouts for dap-ui.";
 
     mappings = helpers.mkNullOrOption (types.submodule {
       options = mkKeymapOptions "dap-ui" {
         edit = "e";
-        expand = ''["<CR>" "<2-LeftMouse>"]'';
+        expand = [
+          "<CR>"
+          "<2-LeftMouse>"
+        ];
         open = "o";
         remove = "d";
         repl = "r";

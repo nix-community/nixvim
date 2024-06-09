@@ -74,7 +74,7 @@ with lib;
           attrs
         ]
       )
-      "[]"
+      [ ]
       ''
         A list of files or directories to bookmark.
         The list can contain two kinds of types.
@@ -91,7 +91,7 @@ with lib;
           (listOf str)
         ]
       )
-      "[]"
+      [ ]
       ''
         A list of commands to execute on selection.
         Leading colons are optional.
@@ -132,7 +132,7 @@ with lib;
     NOTE: This option is affected by `session_delete_buffers`.
   '';
 
-  session_before_save = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  session_before_save = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     This is a list of commands to be executed before saving a session.
 
     Example: `["silent! tabdo NERDTreeClose"]`
@@ -181,7 +181,7 @@ with lib;
     Affects `change_to_dir` and `change_to_vcs_root`.
   '';
 
-  skiplist = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  skiplist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     A list of Vim regular expressions that is used to filter recently used files.
     See `|pattern.txt|` for what patterns can be used.
 
@@ -227,7 +227,7 @@ with lib;
     The number of spaces used for left padding.
   '';
 
-  skiplist_server = helpers.defaultNullOpts.mkListOf (with helpers.nixvimTypes; maybeRaw str) "[]" ''
+  skiplist_server = helpers.defaultNullOpts.mkListOf (with helpers.nixvimTypes; maybeRaw str) [ ] ''
     Do not create the startify buffer, if this is a Vim server instance with a name contained in
     this list.
 
@@ -255,7 +255,7 @@ with lib;
     - don't filter through the bookmark list
   '';
 
-  session_remove_lines = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  session_remove_lines = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     Lines matching any of the patterns in this list, will be removed from the session file.
 
     Example:
@@ -272,7 +272,7 @@ with lib;
     probably get problems when trying to load it.
   '';
 
-  session_savevars = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  session_savevars = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     Include a list of variables in here which you would like Startify to save into the session file
     in addition to what Vim normally saves into the session file.
 
@@ -286,7 +286,7 @@ with lib;
     ```
   '';
 
-  session_savecmds = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  session_savecmds = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     Include a list of cmdline commands which Vim will run upon loading the session.
 
     Example:
@@ -308,7 +308,7 @@ with lib;
   '';
 
   custom_indices =
-    helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; maybeRaw (listOf str)) "[]"
+    helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; maybeRaw (listOf str)) [ ]
       ''
         Use any list of strings as indices instead of increasing numbers. If there are more startify
         entries than actual items in the custom list, the remaining entries will be filled using the
@@ -345,7 +345,7 @@ with lib;
         ```
       '';
 
-  custom_header_quotes = helpers.defaultNullOpts.mkListOf (with types; listOf str) "[]" ''
+  custom_header_quotes = helpers.defaultNullOpts.mkListOf (with types; listOf str) [ ] ''
     Example:
     ```nix
       [

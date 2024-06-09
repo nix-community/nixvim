@@ -32,7 +32,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Default filetype. Don't change unless you know what you are doing.
     '';
 
-    custom_language_formatting = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+    custom_language_formatting = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
       By default we use the auto mode of jupytext.
       This will create a script with the correct extension for each language.
       However, this can be overridden in a per language basis if you want to.

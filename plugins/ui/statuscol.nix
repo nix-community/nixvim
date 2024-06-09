@@ -21,9 +21,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       benefit from the performance optimizations in this plugin.
     '';
 
-    thousands = helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "false" ''
-      `false` or line number thousands separator string ("." / ",").
-    '';
+    thousands =
+      helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ])) false
+        ''
+          `false` or line number thousands separator string ("." / ",").
+        '';
 
     relculright = helpers.defaultNullOpts.mkBool false ''
       Whether to right-align the cursor line number with `relativenumber` set.
@@ -62,15 +64,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             ) "Table of booleans or functions returning a boolean.";
 
             sign = {
-              name = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+              name = helpers.defaultNullOpts.mkListOf types.str [ ] ''
                 List of lua patterns to match the sign name against.
               '';
 
-              text = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+              text = helpers.defaultNullOpts.mkListOf types.str [ ] ''
                 List of lua patterns to match the extmark sign text against.
               '';
 
-              namespace = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+              namespace = helpers.defaultNullOpts.mkListOf types.str [ ] ''
                 List of lua patterns to match the extmark sign namespace against.
               '';
 
@@ -98,29 +100,27 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           };
         };
       in
-      helpers.defaultNullOpts.mkListOf segmentType ''
-        [
-          {
-            text = ["%C"];
-            click = "v:lua.ScFa";
-          }
-          {
-            text = ["%s"];
-            click = "v:lua.ScSa";
-          }
-          {
-            text = [
-              {__raw = "require('statuscol.builtin').lnumfunc";}
-              " "
-            ];
-            condition = [
-              true
-              {__raw = "require('statuscol.builtin').not_empty";}
-            ];
-            click = "v:lua.ScLa";
-          }
-        ]
-      '' "The statuscolumn can be customized through the `segments` option.";
+      helpers.defaultNullOpts.mkListOf segmentType [
+        {
+          text = [ "%C" ];
+          click = "v:lua.ScFa";
+        }
+        {
+          text = [ "%s" ];
+          click = "v:lua.ScSa";
+        }
+        {
+          text = [
+            { __raw = "require('statuscol.builtin').lnumfunc"; }
+            " "
+          ];
+          condition = [
+            true
+            { __raw = "require('statuscol.builtin').not_empty"; }
+          ];
+          click = "v:lua.ScLa";
+        }
+      ] "The statuscolumn can be customized through the `segments` option.";
 
     clickmod = helpers.defaultNullOpts.mkStr "c" ''
       Modifier used for certain actions in the builtin clickhandlers:

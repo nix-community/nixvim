@@ -15,9 +15,13 @@ in
   options.plugins.codeium-nvim = helpers.neovim-plugin.extraOptionsOptions // {
     package = helpers.mkPluginPackageOption "codeium.nvim" pkgs.vimPlugins.codeium-nvim;
 
-    configPath = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/codeium/config.json'";}'' "The path to the config file, used to store the API key.";
+    configPath = helpers.defaultNullOpts.mkStr {
+      __raw = "vim.fn.stdpath('cache') .. '/codeium/config.json'";
+    } "The path to the config file, used to store the API key.";
 
-    binPath = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/codeium/bin'";}'' "The path to the directory where the Codeium server will be downloaded to.";
+    binPath = helpers.defaultNullOpts.mkStr {
+      __raw = "vim.fn.stdpath('cache') .. '/codeium/bin'";
+    } "The path to the directory where the Codeium server will be downloaded to.";
 
     api = {
       host = helpers.defaultNullOpts.mkStr "server.codeium.com" ''

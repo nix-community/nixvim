@@ -141,45 +141,62 @@ in
           Ignore lines longer than this.
         '';
 
-        exclude = helpers.mkNullOrOption (types.listOf types.str) ''
-          List of file types to exclude highlighting.
-        '';
+        exclude = helpers.defaultNullOpts.mkListOf' {
+          type = types.str;
+          description = "List of file types to exclude highlighting.";
+        };
       };
 
-      colors = helpers.mkNullOrOption (types.attrsOf (types.listOf types.str)) ''
-        List of named colors where we try to extract the guifg from the list
-        of highlight groups or use the hex color if hl not found as a fallback.
-
-        Default:
-        ```nix
-        {
-          error = [ "DiagnosticError" "ErrorMsg" "#DC2626" ];
-          warning = [ "DiagnosticWarn" "WarningMsg" "#FBBF24" ];
-          info = [ "DiagnosticInfo" "#2563EB" ];
-          hint = [ "DiagnosticHint" "#10B981" ];
-          default = [ "Identifier" "#7C3AED" ];
-          test = [ "Identifier" "#FF00FF" ];
-        };
-        ```
-      '';
+      colors =
+        helpers.defaultNullOpts.mkAttrsOf (types.listOf types.str)
+          {
+            error = [
+              "DiagnosticError"
+              "ErrorMsg"
+              "#DC2626"
+            ];
+            warning = [
+              "DiagnosticWarn"
+              "WarningMsg"
+              "#FBBF24"
+            ];
+            info = [
+              "DiagnosticInfo"
+              "#2563EB"
+            ];
+            hint = [
+              "DiagnosticHint"
+              "#10B981"
+            ];
+            default = [
+              "Identifier"
+              "#7C3AED"
+            ];
+            test = [
+              "Identifier"
+              "#FF00FF"
+            ];
+          }
+          ''
+            List of named colors where we try to extract the guifg from the list
+            of highlight groups or use the hex color if hl not found as a fallback.
+          '';
 
       search = {
         command = helpers.defaultNullOpts.mkStr "rg" "Command to use for searching for keywords.";
 
-        args = helpers.mkNullOrOption (types.listOf types.str) ''
-          Arguments to use for the search command in list form.
-
-          Default:
-          ```nix
-          [
-            "--color=never"
-            "--no-heading"
-            "--with-filename"
-            "--line-number"
-            "--column"
-          ];
-          ```
-        '';
+        args =
+          helpers.defaultNullOpts.mkListOf types.str
+            [
+              "--color=never"
+              "--no-heading"
+              "--with-filename"
+              "--line-number"
+              "--column"
+            ]
+            ''
+              Arguments to use for the search command in list form.
+            '';
 
         pattern = helpers.defaultNullOpts.mkStr "\\b(KEYWORDS):" ''
           Regex that will be used to match keywords.

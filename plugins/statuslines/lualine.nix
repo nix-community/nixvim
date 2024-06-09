@@ -69,7 +69,7 @@ let
                   };
                 };
               }
-            )) "1" "Adds padding to the left and right of components.";
+            )) 1 "Adds padding to the left and right of components.";
 
             fmt = helpers.mkNullOrLuaFn ''
               A lua function to format the component string.
@@ -129,16 +129,16 @@ in
       };
 
       disabledFiletypes = {
-        statusline = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        statusline = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Only ignores the ft for statusline.
         '';
 
-        winbar = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        winbar = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Only ignores the ft for winbar.
         '';
       };
 
-      ignoreFocus = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      ignoreFocus = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         If current filetype is in this list it'll always be drawn as inactive statusline and the
         last window will be drawn as active statusline.
 

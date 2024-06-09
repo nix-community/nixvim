@@ -41,13 +41,12 @@ in
       ) defaultKeymaps;
 
       popupType =
-        helpers.defaultNullOpts.mkEnum
+        helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "popup"
             "horizontal"
             "vertical"
           ]
-          "popup"
           ''
             Default AI popup type.
           '';
@@ -66,12 +65,12 @@ in
 
       additionalInstructions = helpers.mkNullOrOption types.str "Any additional instructions.";
 
-      searchEngine = helpers.defaultNullOpts.mkEnum [
+      searchEngine = helpers.defaultNullOpts.mkEnumFirstDefault [
         "google"
         "duck_duck_go"
         "stack_overflow"
         "github"
-      ] "google" "Default search engine.";
+      ] "Default search engine.";
 
       hooks = {
         requestStarted = helpers.defaultNullOpts.mkLuaFn "nil" "Callback for request start.";

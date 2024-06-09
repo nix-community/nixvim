@@ -25,15 +25,18 @@ with lib;
 
     lsp = {
       config = helpers.neovim-plugin.extraOptionsOptions // {
-        cmd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["zk" "lsp"]'' "";
+        cmd = helpers.defaultNullOpts.mkListOf types.str [
+          "zk"
+          "lsp"
+        ] "";
         name = helpers.defaultNullOpts.mkStr "zk" "";
       };
 
       autoAttach = {
         enabled = helpers.defaultNullOpts.mkBool true "automatically attach buffers in a zk notebook";
-        filetypes =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["markdown"]''
-            "matching the given filetypes";
+        filetypes = helpers.defaultNullOpts.mkListOf types.str [
+          "markdown"
+        ] "matching the given filetypes";
       };
     };
   };

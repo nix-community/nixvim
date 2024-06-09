@@ -47,7 +47,7 @@ in
 
       storagePath = helpers.defaultNullOpts.mkNullable (
         with types; either str helpers.nixvimTypes.rawLua
-      ) ''{__raw = "vim.fn.stdpath('data') .. '/databases/yanky.db'";}'' "Only for sqlite storage.";
+      ) { __raw = "vim.fn.stdpath('data') .. '/databases/yanky.db'"; } "Only for sqlite storage.";
 
       syncWithNumberedRegisters = helpers.defaultNullOpts.mkBool true ''
         History can also be synchronized with numbered registers.
@@ -68,7 +68,7 @@ in
             cursor or content changed.
           '';
 
-      ignoreRegisters = helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["_"]'' ''
+      ignoreRegisters = helpers.defaultNullOpts.mkListOf types.str [ "_" ] ''
         Define registers to be ignored.
         By default the black hole register is ignored.
       '';

@@ -110,11 +110,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           "ccc.picker.css_oklch"
           "ccc.picker.css_name"
         ];
-        description = ''
-          List of formats that can be detected by `:CccPick` to be activated.
-
-          Plugin default:
-          ```nix
+        description =
+          helpers.defaultNullOpts.mkDesc
             [
               "ccc.picker.hex"
               "ccc.picker.css_rgb"
@@ -125,8 +122,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               "ccc.picker.css_oklab"
               "ccc.picker.css_oklch"
             ]
-          ```
-        '';
+            ''
+              List of formats that can be detected by `:CccPick` to be activated.
+            '';
       };
 
       highlight_mode =
@@ -153,14 +151,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Whether to enable automatically on `BufEnter`.
         '';
 
-        filetypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           File types for which highlighting is enabled.
           It is only used for automatic highlighting by `ccc-option-highlighter-auto-enable`, and is
           ignored for manual activation.
           An empty table means all file types.
         '';
 
-        excludes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        excludes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Used only when `ccc-option-highlighter-filetypes` is empty table.
           You can specify file types to be excludes.
         '';

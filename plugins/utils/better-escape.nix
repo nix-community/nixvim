@@ -28,19 +28,17 @@ in
       Clear line after escaping if there is only whitespace.
     '';
 
-    keys =
-      helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua) "<ESC>"
-        ''
-          Keys used for escaping, if it is a function will use the result everytime.
+    keys = helpers.defaultNullOpts.mkStr "<ESC>" ''
+      Keys used for escaping, if it is a function will use the result everytime.
 
-          Example (recommended):
+      Example (recommended):
 
-          keys.__raw = \'\'
-            function()
-              return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
-            end
-          \'\';
-        '';
+      keys.__raw = '''
+        function()
+          return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
+        end
+      ''';
+    '';
   };
 
   config =

@@ -58,8 +58,12 @@ in
       package = helpers.mkPluginPackageOption "neo-tree" pkgs.vimPlugins.neo-tree-nvim;
 
       sources =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          ''["filesystem" "buffers" "git_status"]''
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "filesystem"
+            "buffers"
+            "git_status"
+          ]
           ''
             If a user has a sources list it will replace this one.
             Only sources listed here will be loaded.
@@ -122,12 +126,12 @@ in
       ] "info" "";
 
       logToFile =
-        helpers.defaultNullOpts.mkNullable (types.either types.bool types.str) "false"
+        helpers.defaultNullOpts.mkNullable (types.either types.bool types.str) false
           "use :NeoTreeLogs to show the file";
 
       openFilesInLastWindow = helpers.defaultNullOpts.mkBool true "If `false`, open files in top left window";
 
-      popupBorderStyle = helpers.defaultNullOpts.mkEnum [
+      popupBorderStyle = helpers.defaultNullOpts.mkEnumFirstDefault [
         "NC"
         "double"
         "none"
@@ -135,7 +139,7 @@ in
         "shadow"
         "single"
         "solid"
-      ] "NC" "";
+      ] "";
 
       resizeTimerInterval = helpers.defaultNullOpts.mkInt 500 ''
         In ms, needed for containers to redraw right aligned and faded content.
@@ -228,7 +232,7 @@ in
           helpers.defaultNullOpts.mkNullable types.int null
             "This will truncate text even if `textTruncToFit = false`";
 
-        padding = helpers.defaultNullOpts.mkNullable (with types; either int (attrsOf int)) "0" ''
+        padding = helpers.defaultNullOpts.mkNullable (with types; either int (attrsOf int)) 0 ''
           Defines the global padding of the source selector.
           It can be an integer or an attrs with keys `left` and `right`.
           Setting `padding = 2` is exactly the same as `{ left = 2; right = 2; }`.
@@ -236,16 +240,23 @@ in
           Example: `{ left = 2; right = 0; }`
         '';
 
-        separator = helpers.defaultNullOpts.mkNullable (
-          with types;
-          either str (submodule {
-            options = {
-              left = helpers.defaultNullOpts.mkStr "▏" "";
-              right = helpers.defaultNullOpts.mkStr "\\" "";
-              override = helpers.defaultNullOpts.mkStr null "";
-            };
-          })
-        ) "Can be a string or a table" ''{ left = "▏"; right= "▕"; }'';
+        separator =
+          helpers.defaultNullOpts.mkNullable
+            (
+              with types;
+              either str (submodule {
+                options = {
+                  left = helpers.defaultNullOpts.mkStr "▏" "";
+                  right = helpers.defaultNullOpts.mkStr "\\" "";
+                  override = helpers.defaultNullOpts.mkStr null "";
+                };
+              })
+            )
+            {
+              left = "▏";
+              right = "▕";
+            }
+            "Can be a string or a table";
 
         separatorActive =
           helpers.defaultNullOpts.mkNullable
@@ -292,20 +303,20 @@ in
 
         Example:
         ```nix
-        {
-          before_render = \'\'
-            function (state)
-              -- add something to the state that can be used by custom components
-            end
-          \'\';
+          {
+            before_render = '''
+              function (state)
+                -- add something to the state that can be used by custom components
+              end
+            ''';
 
-          file_opened = \'\'
-            function(file_path)
-              --auto close
-              require("neo-tree").close_all()
-            end
-          \'\';
-        }
+            file_opened = '''
+              function(file_path)
+                --auto close
+                require("neo-tree").close_all()
+              end
+            ''';
+          }
         ```
       '';
 
@@ -353,9 +364,7 @@ in
 
           highlight = helpers.defaultNullOpts.mkStr "NeoTreeIndentMarker" "";
 
-          withExpanders =
-            helpers.defaultNullOpts.mkNullable types.bool null
-              "If null and file nesting is enabled, will enable expanders.";
+          withExpanders = helpers.defaultNullOpts.mkBool null "If null and file nesting is enabled, will enable expanders.";
 
           expanderCollapsed = helpers.defaultNullOpts.mkStr "" "";
 
@@ -416,113 +425,105 @@ in
       };
 
       renderers = {
-        directory = mkRendererComponentListOption ''
-          [
-            "indent"
-            "icon"
-            "current_filter"
-            {
-              name = "container";
-              content = [
-                {
-                  name = "name";
-                  zindex = 10;
-                }
-                {
-                  name = "clipboard";
-                  zindex = 10;
-                }
-                {
-                  name = "diagnostics";
-                  errors_only = true;
-                  zindex = 20;
-                  align = "right";
-                  hide_when_expanded = true;
-                }
-                {
-                  name = "git_status";
-                  zindex = 20;
-                  align = "right";
-                  hide_when_expanded = true;
-                }
-              ];
-            }
-          ]
-        '' "directory renderers";
+        directory = mkRendererComponentListOption [
+          "indent"
+          "icon"
+          "current_filter"
+          {
+            name = "container";
+            content = [
+              {
+                name = "name";
+                zindex = 10;
+              }
+              {
+                name = "clipboard";
+                zindex = 10;
+              }
+              {
+                name = "diagnostics";
+                errors_only = true;
+                zindex = 20;
+                align = "right";
+                hide_when_expanded = true;
+              }
+              {
+                name = "git_status";
+                zindex = 20;
+                align = "right";
+                hide_when_expanded = true;
+              }
+            ];
+          }
+        ] "directory renderers";
 
-        file = mkRendererComponentListOption ''
-          [
-            "indent"
-            "icon"
-            {
-              name = "container";
-              content = [
-                {
-                  name = "name";
-                  zindex = 10;
-                }
-                {
-                  name = "clipboard";
-                  zindex = 10;
-                }
-                {
-                  name = "bufnr";
-                  zindex = 10;
-                }
-                {
-                  name = "modified";
-                  zindex = 20;
-                  align = "right";
-                }
-                {
-                  name = "diagnostics";
-                  zindex = 20;
-                  align = "right";
-                }
-                {
-                  name = "git_status";
-                  zindex = 20;
-                  align = "right";
-                }
-              ];
-            }
-          ]
-        '' "file renderers";
+        file = mkRendererComponentListOption [
+          "indent"
+          "icon"
+          {
+            name = "container";
+            content = [
+              {
+                name = "name";
+                zindex = 10;
+              }
+              {
+                name = "clipboard";
+                zindex = 10;
+              }
+              {
+                name = "bufnr";
+                zindex = 10;
+              }
+              {
+                name = "modified";
+                zindex = 20;
+                align = "right";
+              }
+              {
+                name = "diagnostics";
+                zindex = 20;
+                align = "right";
+              }
+              {
+                name = "git_status";
+                zindex = 20;
+                align = "right";
+              }
+            ];
+          }
+        ] "file renderers";
 
-        message = mkRendererComponentListOption ''
-          [
-            {
-              name = "indent";
-              with_markers = false;
-            }
-            {
-              name = "name";
-              highlight = "NeoTreeMessage";
-            }
-          ]
-        '' "message renderers";
+        message = mkRendererComponentListOption [
+          {
+            name = "indent";
+            with_markers = false;
+          }
+          {
+            name = "name";
+            highlight = "NeoTreeMessage";
+          }
+        ] "message renderers";
 
-        terminal = mkRendererComponentListOption ''
-          [
-            "indent"
-            "icon"
-            "name"
-            "bufnr"
-          ]
-        '' "message renderers";
+        terminal = mkRendererComponentListOption [
+          "indent"
+          "icon"
+          "name"
+          "bufnr"
+        ] "message renderers";
       };
 
-      nestingRules = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) "{}" "nesting rules";
+      nestingRules = helpers.defaultNullOpts.mkAttrsOf types.str { } "nesting rules";
 
       window = {
-        position = helpers.defaultNullOpts.mkEnum [
+        position = helpers.defaultNullOpts.mkEnumFirstDefault [
           "left"
           "right"
           "top"
           "bottom"
           "float"
           "current"
-        ] "left" "position";
+        ] "position";
 
         width = helpers.defaultNullOpts.mkInt 40 "Applies to left and right positions";
 
@@ -572,77 +573,71 @@ in
           nowait = helpers.defaultNullOpts.mkBool true "nowait";
         };
 
-        mappings = mkMappingsOption ''
-          ```nix
-            {
-              "<space>" = {
-                command = "toggle_node";
-                # disable `nowait` if you have existing combos starting with this char that you want to use
-                nowait = false;
-              };
-              "<2-LeftMouse>" = "open";
-              "<cr>" = "open";
-              "<esc>" = "revert_preview";
-              P = {
-                command = "toggle_preview";
-                config = { use_float = true; };
-              };
-              l = "focus_preview";
-              S = "open_split";
-              # S = "split_with_window_picker";
-              s = "open_vsplit";
-              # s = "vsplit_with_window_picker";
-              t = "open_tabnew";
-              # "<cr>" = "open_drop";
-              # t = "open_tab_drop";
-              w = "open_with_window_picker";
-              C = "close_node";
-              z = "close_all_nodes";
-              # Z = "expand_all_nodes";
-              R = "refresh";
-              a = {
-                command = "add";
-                # some commands may take optional config options, see `:h neo-tree-mappings` for details
-                config = {
-                  show_path = "none"; # "none", "relative", "absolute"
-                };
-              };
-              A = "add_directory"; # also accepts the config.show_path and config.insert_as options.
-              d = "delete";
-              r = "rename";
-              y = "copy_to_clipboard";
-              x = "cut_to_clipboard";
-              p = "paste_from_clipboard";
-              c = "copy"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
-              m = "move"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
-              e = "toggle_auto_expand_width";
-              q = "close_window";
-              "?" = "show_help";
-              "<" = "prev_source";
-              ">" = "next_source";
-            }
-          ```
-        '';
+        mappings = mkMappingsOption {
+          "<space>" = {
+            command = "toggle_node";
+            # disable `nowait` if you have existing combos starting with this char that you want to use
+            nowait = false;
+          };
+          "<2-LeftMouse>" = "open";
+          "<cr>" = "open";
+          "<esc>" = "revert_preview";
+          P = {
+            command = "toggle_preview";
+            config = {
+              use_float = true;
+            };
+          };
+          l = "focus_preview";
+          S = "open_split";
+          # S = "split_with_window_picker";
+          s = "open_vsplit";
+          # s = "vsplit_with_window_picker";
+          t = "open_tabnew";
+          # "<cr>" = "open_drop";
+          # t = "open_tab_drop";
+          w = "open_with_window_picker";
+          C = "close_node";
+          z = "close_all_nodes";
+          # Z = "expand_all_nodes";
+          R = "refresh";
+          a = {
+            command = "add";
+            # some commands may take optional config options, see `:h neo-tree-mappings` for details
+            config = {
+              show_path = "none"; # "none", "relative", "absolute"
+            };
+          };
+          A = "add_directory"; # also accepts the config.show_path and config.insert_as options.
+          d = "delete";
+          r = "rename";
+          y = "copy_to_clipboard";
+          x = "cut_to_clipboard";
+          p = "paste_from_clipboard";
+          c = "copy"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
+          m = "move"; # takes text input for destination, also accepts the config.show_path and config.insert_as options
+          e = "toggle_auto_expand_width";
+          q = "close_window";
+          "?" = "show_help";
+          "<" = "prev_source";
+          ">" = "next_source";
+        };
       };
       filesystem = {
-        window = mkWindowMappingsOption ''
-          ```nix
-            {
-              H = "toggle_hidden";
-              "/" = "fuzzy_finder";
-              D = "fuzzy_finder_directory";
-              # "/" = "filter_as_you_type"; # this was the default until v1.28
-              "#" = "fuzzy_sorter"; # fuzzy sorting using the fzy algorithm
-              # D = "fuzzy_sorter_directory";
-              f = "filter_on_submit";
-              "<C-x>" = "clear_filter";
-              "<bs>" = "navigate_up";
-              "." = "set_root";
-              "[g" = "prev_git_modified";
-              "]g" = "next_git_modified";
-            }
-          ```
-        '';
+        window = mkWindowMappingsOption {
+          H = "toggle_hidden";
+          "/" = "fuzzy_finder";
+          D = "fuzzy_finder_directory";
+          # "/" = "filter_as_you_type"; # this was the default until v1.28
+          "#" = "fuzzy_sorter"; # fuzzy sorting using the fzy algorithm
+          # D = "fuzzy_sorter_directory";
+          f = "filter_on_submit";
+          "<C-x>" = "clear_filter";
+          "<bs>" = "navigate_up";
+          "." = "set_root";
+          "[g" = "prev_git_modified";
+          "]g" = "next_git_modified";
+        };
         asyncDirectoryScan =
           helpers.defaultNullOpts.mkEnumFirstDefault
             [
@@ -688,39 +683,44 @@ in
 
           hideHidden = helpers.defaultNullOpts.mkBool true "only works on Windows for hidden files/directories";
 
-          hideByName =
-            helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''[".DS_Store" "thumbs.db"]''
-              "hide by name";
+          hideByName = helpers.defaultNullOpts.mkListOf types.str [
+            ".DS_Store"
+            "thumbs.db"
+          ] "hide by name";
 
-          hideByPattern = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-            Hide by pattern.
+          hideByPattern = helpers.defaultNullOpts.mkListOf' {
+            type = types.str;
+            default = [ ];
+            description = "Hide by pattern.";
+            example = [
+              "*.meta"
+              "*/src/*/tsconfig.json"
+            ];
+          };
 
-            Example:
-            ```nix
-              [
-                "*.meta"
-                "*/src/*/tsconfig.json"
-              ]
-            ```
-          '';
+          alwaysShow = helpers.defaultNullOpts.mkListOf' {
+            type = types.str;
+            default = [ ];
+            description = "Files/folders to always show.";
+            example = [ ".gitignore" ];
+          };
 
-          alwaysShow = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-            Files/folders to always show.
+          neverShow = helpers.defaultNullOpts.mkListOf' {
+            type = types.str;
+            default = [ ];
+            description = "Files/folders to never show.";
+            example = [
+              ".DS_Store"
+              "thumbs.db"
+            ];
+          };
 
-            Example: `[".gitignore"]`
-          '';
-
-          neverShow = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-            Files/folders to never show.
-
-            Example: `[".DS_Store" "thumbs.db"]`
-          '';
-
-          neverShowByPattern = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
-            Files/folders to never show (by pattern).
-
-            Example: `[".null-ls_*"]`
-          '';
+          neverShowByPattern = helpers.defaultNullOpts.mkListOf' {
+            type = types.str;
+            default = [ ];
+            description = "Files/folders to never show (by pattern).";
+            example = [ ".null-ls_*" ];
+          };
         };
 
         findByFullPathWords = helpers.defaultNullOpts.mkBool false ''
@@ -737,14 +737,12 @@ in
           helpers.mkNullOrStrLuaFnOr
             (types.submodule {
               options = {
-                fd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''
-                  [
-                    "--exclude"
-                    ".git"
-                    "--exclude"
-                    "node_modules"
-                  ]
-                '' "You can specify extra args to pass to the find command.";
+                fd = helpers.defaultNullOpts.mkListOf types.str [
+                  "--exclude"
+                  ".git"
+                  "--exclude"
+                  "node_modules"
+                ] "You can specify extra args to pass to the find command.";
               };
             })
             ''
@@ -765,7 +763,7 @@ in
 
               Or use a function instead of list of strings
               ```
-              findArgs = \'\'
+              findArgs = '''
                 find_args = function(cmd, path, search_term, args)
                   if cmd ~= "fd" then
                     return args
@@ -786,7 +784,7 @@ in
                   end
                   return args
                 end
-              \'\';
+              ''';
               ```
             '';
 
@@ -824,51 +822,43 @@ in
 
         groupEmptyDirs = helpers.defaultNullOpts.mkBool true "When true, empty directories will be grouped together.";
 
-        window = mkWindowMappingsOption ''
-          {
-            "<bs>" = "navigate_up";
-            "." = "set_root";
-            bd = "buffer_delete";
-          }
-        '';
+        window = mkWindowMappingsOption {
+          "<bs>" = "navigate_up";
+          "." = "set_root";
+          bd = "buffer_delete";
+        };
       };
 
       gitStatus = {
-        window = mkWindowMappingsOption ''
-          {
-            A = "git_add_all";
-            gu = "git_unstage_file";
-            ga = "git_add_file";
-            gr = "git_revert_file";
-            gc = "git_commit";
-            gp = "git_push";
-            gg = "git_commit_and_push";
-          }
-        '';
+        window = mkWindowMappingsOption {
+          A = "git_add_all";
+          gu = "git_unstage_file";
+          ga = "git_add_file";
+          gr = "git_revert_file";
+          gc = "git_commit";
+          gp = "git_push";
+          gg = "git_commit_and_push";
+        };
       };
 
       example = {
         renderers = {
-          custom = mkRendererComponentListOption ''
-            [
-              "indent"
-              {
-                name = "icon";
-                default = "C";
-              }
-              "custom"
-              "name"
-            ]
-          '' "custom renderers";
+          custom = mkRendererComponentListOption [
+            "indent"
+            {
+              name = "icon";
+              default = "C";
+            }
+            "custom"
+            "name"
+          ] "custom renderers";
         };
 
-        window = mkWindowMappingsOption ''
-          {
-            "<cr>" = "toggle_node";
-            "<C-e>" = "example_command";
-            d = "show_debug_info";
-          }
-        '';
+        window = mkWindowMappingsOption {
+          "<cr>" = "toggle_node";
+          "<C-e>" = "example_command";
+          d = "show_debug_info";
+        };
       };
 
       documentSymbols = {
@@ -913,7 +903,7 @@ in
             https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_documentSymbol
           '';
         };
-        window = mkWindowMappingsOption "{}";
+        window = mkWindowMappingsOption { };
       };
     };
 

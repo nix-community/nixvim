@@ -100,9 +100,6 @@ rec {
 
         The [default] can be any value, and it will be formatted using `lib.generators.toPretty`.
 
-        If [default] is a String, it will not be formatted.
-        This behavior will likely change in the future.
-
         # Example
         ```nix
         mkDesc 1 "foo"
@@ -125,16 +122,12 @@ rec {
       mkDesc =
         default: desc:
         let
-          # Assume a string default is already formatted as intended,
-          # historically strings were the only type accepted here.
-          # TODO deprecate this behavior so we can properly quote strings
-          defaultString = if isString default then default else generators.toPretty { } default;
-          defaultDesc =
-            "_Plugin default:_"
-            + (
-              # Detect whether `default` is multiline or inline:
-              if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`"
-            );
+          # Render the default value using `toPretty`
+          defaultString = generators.toPretty { } default;
+          # Detect whether `default` is multiline or inline:
+          mdString =
+            if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`";
+          defaultDesc = "_Plugin default:_${mdString}";
         in
         if desc == "" then
           defaultDesc
@@ -184,16 +177,7 @@ rec {
       mkUnsignedInt = default: description: mkUnsignedInt' { inherit default description; };
       mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
       mkBool = default: description: mkBool' { inherit default description; };
-      mkStr' =
-        args:
-        mkNullableWithRaw' (
-          args
-          // {
-            type = types.str;
-          }
-          # TODO we should remove this once `mkDesc` no longer has a special case
-          // (optionalAttrs (args ? default) { default = generators.toPretty { } args.default; })
-        );
+      mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });
       mkStr = default: description: mkStr' { inherit default description; };
 
       mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
@@ -216,14 +200,7 @@ rec {
         # `values` is a list. If `default` is present, then it is either null or one of `values`
         assert isList values;
         assert args ? default -> (args.default == null || elem args.default values);
-        mkNullableWithRaw' (
-          (filterAttrs (n: v: n != "values") args)
-          // {
-            type = types.enum values;
-          }
-          # TODO we should remove this once `mkDesc` no longer has a special case
-          // (optionalAttrs (args ? default) { default = generators.toPretty { } args.default; })
-        );
+        mkNullableWithRaw' ((filterAttrs (n: v: n != "values") args) // { type = types.enum values; });
       mkEnum =
         values: default: description:
         mkEnum' { inherit values default description; };

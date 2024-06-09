@@ -44,7 +44,7 @@ in
           Setting this explicitly to `true` will install the dependency for this plugin (flake8).
         '';
 
-        exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        exclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of files or directories to exclude.
         '';
 
@@ -60,7 +60,7 @@ in
           Hang closing bracket instead of matching indentation of opening bracket's line.
         '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of errors and warnings to ignore (or skip).
         '';
 
@@ -76,7 +76,7 @@ in
           Set indentation spaces.
         '';
 
-        perFileIgnores = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        perFileIgnores = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           A pairing of filenames and violation codes that defines which violations to ignore in a
           particular file.
 
@@ -89,11 +89,11 @@ in
       };
 
       jedi = {
-        auto_import_modules =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[ \"numpy\" ]"
-            "List of module names for `jedi.settings.auto_import_modules`.";
+        auto_import_modules = helpers.defaultNullOpts.mkListOf types.str [
+          "numpy"
+        ] "List of module names for `jedi.settings.auto_import_modules`.";
 
-        extra_paths = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        extra_paths = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define extra paths for jedi.Script.
         '';
 
@@ -129,10 +129,12 @@ in
           How many labels and snippets (at most) should be resolved.
         '';
 
-        cache_for =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-            "[ \"pandas\" \"numpy\" \"tensorflow\" \"matplotlib\" ]"
-            "Modules for which labels and snippets should be cached.";
+        cache_for = helpers.defaultNullOpts.mkListOf types.str [
+          "pandas"
+          "numpy"
+          "tensorflow"
+          "matplotlib"
+        ] "Modules for which labels and snippets should be cached.";
       };
 
       jedi_definition = {
@@ -189,7 +191,7 @@ in
       preload = {
         enabled = helpers.defaultNullOpts.mkBool true "Enable or disable the plugin.";
 
-        modules = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        modules = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of modules to import on startup.
         '';
       };
@@ -201,11 +203,11 @@ in
           (pycodestyle).
         '';
 
-        exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        exclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Exclude files or directories which match these patterns.
         '';
 
-        filename = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        filename = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           When parsing directories, only check filenames matching these patterns.
         '';
 
@@ -213,7 +215,7 @@ in
           Select errors and warnings.
         '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Ignore errors and warnings.
         '';
 
@@ -244,15 +246,15 @@ in
           "None"
         ]) "Choose the basic list of checked errors by specifying an existing convention.";
 
-        addIgnore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        addIgnore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Ignore errors and warnings in addition to the specified convention.
         '';
 
-        addSelect = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        addSelect = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Select errors and warnings in addition to the specified convention.
         '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Ignore errors and warnings.
         '';
 
@@ -284,7 +286,7 @@ in
           Setting this explicitly to `true` will install the dependency for this plugin (pylint).
         '';
 
-        args = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        args = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Arguments to pass to pylint.
         '';
 
@@ -352,31 +354,21 @@ in
           This option often is too strict to be useful.
         '';
 
-        overrides =
-          helpers.defaultNullOpts.mkNullable
-            (types.listOf (
-              types.oneOf [
-                types.bool
-                types.str
-                helpers.nixvimTypes.rawLua
-              ]
-            ))
-            "[true]"
-            ''
-              Specifies a list of alternate or supplemental command-line options.
-              This modifies the options passed to mypy or the mypy-specific ones passed to dmypy run.
-              When present, the special boolean member true is replaced with the command-line options that
-              would've been passed had overrides not been specified.
-              Later options take precedence, which allows for replacing or negating individual default
-              options (see mypy.main:process_options and mypy --help | grep inverse).
-            '';
+        overrides = helpers.defaultNullOpts.mkListOf (types.either types.bool types.str) [ true ] ''
+          Specifies a list of alternate or supplemental command-line options.
+          This modifies the options passed to mypy or the mypy-specific ones passed to dmypy run.
+          When present, the special boolean member true is replaced with the command-line options that
+          would've been passed had overrides not been specified.
+          Later options take precedence, which allows for replacing or negating individual default
+          options (see mypy.main:process_options and mypy --help | grep inverse).
+        '';
 
         dmypy_status_file = helpers.defaultNullOpts.mkStr ".dmypy.json" ''
           Specifies which status file dmypy should use.
           This modifies the --status-file option passed to dmypy given dmypy is active.
         '';
 
-        config_sub_paths = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        config_sub_paths = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Specifies sub paths under which the mypy configuration file may be found.
           For each directory searched for the mypy config file, this also searches the sub paths
           specified here.
@@ -449,7 +441,7 @@ in
 
         config = helpers.mkNullOrOption types.str "Path to optional pyproject.toml file.";
 
-        exclude = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        exclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Exclude files from being checked by ruff.
         '';
 
@@ -457,11 +449,11 @@ in
           Path to the ruff executable. Assumed to be in PATH by default.
         '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Error codes to ignore.
         '';
 
-        extendIgnore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        extendIgnore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Same as ignore, but append to existing ignores.
         '';
 
@@ -471,15 +463,15 @@ in
           File-specific error codes to be ignored.
         '';
 
-        select = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        select = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of error codes to enable.
         '';
 
-        extendSelect = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        extendSelect = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Same as select, but append to existing error codes.
         '';
 
-        format = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        format = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of error codes to fix during formatting.
           The default is ["I"], any additional codes are appended to this list.
         '';

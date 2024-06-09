@@ -85,7 +85,10 @@ in
             ":"
           ])
         )
-        ''["/" "?"]''
+        [
+          "/"
+          "?"
+        ]
         ''
           List of modes which wilderw will be active in.
           Possible elements: '/', '?' and ':'
@@ -161,7 +164,7 @@ in
       Example:
       ```lua
         [
-          \'\'
+          '''
             wilder.branch(
               wilder.cmdline_pipeline({
                 language = 'python',
@@ -173,7 +176,7 @@ in
                 engine = 're',
               })
             )
-          \'\'
+          '''
         ]
       ```
     '';
@@ -184,12 +187,12 @@ in
 
       Example:
       ```lua
-        \'\'
+        '''
           wilder.wildmenu_renderer({
             -- highlighter applies highlighting to the candidates
             highlighter = wilder.basic_highlighter(),
           })
-        \'\'
+        '''
       ```
     '';
 

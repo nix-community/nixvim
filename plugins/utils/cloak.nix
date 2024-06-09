@@ -64,16 +64,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             '';
           };
         })
-        ''
-          [
-            {
+        [
+          {
 
-              file_pattern = ".env*";
-              cloak_pattern = "=.+";
-              replace = null;
-            }
-          ]
-        ''
+            file_pattern = ".env*";
+            cloak_pattern = "=.+";
+            replace = null;
+          }
+        ]
         ''
           List of pattern configurations.
         '';

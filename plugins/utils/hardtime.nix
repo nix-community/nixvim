@@ -44,55 +44,104 @@ in
         Whether the plugin in enabled by default or not.
       '';
 
-      resettingKeys = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
-        Keys in what modes that reset the count.
+      resettingKeys = helpers.defaultNullOpts.mkAttrsOf (with types; listOf str) {
+        "1" = [
+          "n"
+          "x"
+        ];
+        "2" = [
+          "n"
+          "x"
+        ];
+        "3" = [
+          "n"
+          "x"
+        ];
+        "4" = [
+          "n"
+          "x"
+        ];
+        "5" = [
+          "n"
+          "x"
+        ];
+        "6" = [
+          "n"
+          "x"
+        ];
+        "7" = [
+          "n"
+          "x"
+        ];
+        "8" = [
+          "n"
+          "x"
+        ];
+        "9" = [
+          "n"
+          "x"
+        ];
+        "c" = [ "n" ];
+        "C" = [ "n" ];
+        "d" = [ "n" ];
+        "x" = [ "n" ];
+        "X" = [ "n" ];
+        "y" = [ "n" ];
+        "Y" = [ "n" ];
+        "p" = [ "n" ];
+        "P" = [ "n" ];
+      } "Keys in what modes that reset the count.";
 
-        default:
-        ```nix
-        {
-          "1" = [ "n" "x" ];
-          "2" = [ "n" "x" ];
-          "3" = [ "n" "x" ];
-          "4" = [ "n" "x" ];
-          "5" = [ "n" "x" ];
-          "6" = [ "n" "x" ];
-          "7" = [ "n" "x" ];
-          "8" = [ "n" "x" ];
-          "9" = [ "n" "x" ];
-          "c" = [ "n" ];
-          "C" = [ "n" ];
-          "d" = [ "n" ];
-          "x" = [ "n" ];
-          "X" = [ "n" ];
-          "y" = [ "n" ];
-          "Y" = [ "n" ];
-          "p" = [ "n" ];
-          "P" = [ "n" ];
-        }
-        ```
-      '';
-
-      restrictedKeys = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
-        Keys in what modes triggering the count mechanism.
-
-        default:
-        ```nix
-        {
-          "h" = [ "n" "x" ];
-          "j" = [ "n" "x" ];
-          "k" = [ "n" "x" ];
-          "l" = [ "n" "x" ];
-          "-" = [ "n" "x" ];
-          "+" = [ "n" "x" ];
-          "gj" = [ "n" "x" ];
-          "gk" = [ "n" "x" ];
-          "<CR>" = [ "n" "x" ];
-          "<C-M>" = [ "n" "x" ];
-          "<C-N>" = [ "n" "x" ];
-          "<C-P>" = [ "n" "x" ];
-        }
-        ```
-      '';
+      restrictedKeys = helpers.defaultNullOpts.mkAttrsOf (with types; listOf str) {
+        "h" = [
+          "n"
+          "x"
+        ];
+        "j" = [
+          "n"
+          "x"
+        ];
+        "k" = [
+          "n"
+          "x"
+        ];
+        "l" = [
+          "n"
+          "x"
+        ];
+        "-" = [
+          "n"
+          "x"
+        ];
+        "+" = [
+          "n"
+          "x"
+        ];
+        "gj" = [
+          "n"
+          "x"
+        ];
+        "gk" = [
+          "n"
+          "x"
+        ];
+        "<CR>" = [
+          "n"
+          "x"
+        ];
+        "<C-M>" = [
+          "n"
+          "x"
+        ];
+        "<C-N>" = [
+          "n"
+          "x"
+        ];
+        "<C-P>" = [
+          "n"
+          "x"
+        ];
+      } "Keys in what modes triggering the count mechanism.";
 
       restrictionMode =
         helpers.defaultNullOpts.mkEnumFirstDefault
@@ -104,28 +153,32 @@ in
             The behavior when `restricted_keys` trigger count mechanism.
           '';
 
-      disabledKeys = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
-        Keys in what modes are disabled.
+      disabledKeys = helpers.defaultNullOpts.mkAttrsOf (with types; listOf str) {
+        "<Up>" = [
+          ""
+          "i"
+        ];
+        "<Down>" = [
+          ""
+          "i"
+        ];
+        "<Left>" = [
+          ""
+          "i"
+        ];
+        "<Right>" = [
+          ""
+          "i"
+        ];
+      } "Keys in what modes are disabled.";
 
-        default:
-        ```nix
-        {
-          "<Up>" = [ "" "i" ];
-          "<Down>" = [ "" "i" ];
-          "<Left>" = [ "" "i" ];
-          "<Right>" = [ "" "i" ];
-        }
-        ```
-      '';
-
-      disabledFiletypes = helpers.mkNullOrOption (with types; listOf str) ''
-        `hardtime.nvim` is disabled under these filetypes.
-
-        default:
-        ```nix
-        ["qf" "netrw" "NvimTree" "lazy" "mason"]
-        ```
-      '';
+      disabledFiletypes = helpers.defaultNullOpts.mkListOf types.str [
+        "qf"
+        "netrw"
+        "NvimTree"
+        "lazy"
+        "mason"
+      ] "`hardtime.nvim` is disabled under these filetypes.";
 
       hints =
         helpers.mkNullOrOption

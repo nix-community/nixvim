@@ -208,16 +208,16 @@ in
           "nvim_lsp"
           "coc"
         ])
-      ) "false" "diagnostics";
+      ) false "diagnostics";
 
       diagnosticsIndicator = helpers.defaultNullOpts.mkLuaFn null "Either `null` or a function that returns the diagnostics indicator.";
 
       diagnosticsUpdateInInsert = helpers.defaultNullOpts.mkBool true "Whether diagnostics should update in insert mode";
 
-      offsets = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) null "offsets";
+      offsets = helpers.defaultNullOpts.mkListOf types.attrs null "offsets";
 
       groups = {
-        items = helpers.defaultNullOpts.mkNullable (types.listOf types.attrs) "[]" "List of groups.";
+        items = helpers.defaultNullOpts.mkListOf types.attrs [ ] "List of groups.";
 
         options = {
           toggleHiddenOnEnter = helpers.defaultNullOpts.mkBool true "Re-open hidden groups on bufenter.";
@@ -227,7 +227,7 @@ in
       hover = {
         enabled = mkEnableOption "hover";
 
-        reveal = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "reveal";
+        reveal = helpers.defaultNullOpts.mkListOf types.str [ ] "reveal";
 
         delay = helpers.defaultNullOpts.mkInt 200 "delay";
       };

@@ -232,7 +232,7 @@ in
               will be installed).
             '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of LSP servers to ignore.
         '';
 
@@ -316,7 +316,7 @@ in
           formatGroupName = helpers.defaultNullOpts.mkLuaFn "function(group) return tostring(group) end" "How to format a progress notification group's name.";
 
           overrides =
-            helpers.defaultNullOpts.mkNullable (with types; attrsOf notificationConfigType)
+            helpers.defaultNullOpts.mkAttrsOf notificationConfigType
               ''
                 {
                   rust_analyzer = {
@@ -379,12 +379,8 @@ in
         '';
 
         configs =
-          helpers.defaultNullOpts.mkNullable (with types; attrsOf (either notificationConfigType str))
-            ''
-              {
-                default = "require('fidget.notification').default_config";
-              }
-            ''
+          helpers.defaultNullOpts.mkAttrsOf (with types; either str notificationConfigType)
+            { default = "require('fidget.notification').default_config"; }
             ''
               How to configure notification groups when instantiated.
 
@@ -551,11 +547,11 @@ in
 
         floatPrecision = helpers.defaultNullOpts.mkNullable (
           with types; numbers.between 0.0 1.0
-        ) "0.01" "Limit the number of decimals displayed for floats.";
+        ) 1.0e-2 "Limit the number of decimals displayed for floats.";
 
         path =
           helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-            ''{__raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))";}''
+            { __raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))"; }
             ''
               Where Fidget writes its logs to.
 

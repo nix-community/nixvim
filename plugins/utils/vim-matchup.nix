@@ -15,7 +15,7 @@ with lib;
     treesitterIntegration = {
       enable = mkEnableOption "treesitter integration";
       disable =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
+        helpers.defaultNullOpts.mkListOf types.str [ ]
           "Languages for each to disable this module";
 
       disableVirtualText = helpers.defaultNullOpts.mkBool false ''
@@ -66,7 +66,7 @@ with lib;
             This is intended to prevent flickering while scrolling with j and k.
           '';
         };
-      }) ''{method = "status";}'' "Dictionary controlling the behavior with off-screen matches.";
+      }) { method = "status"; } "Dictionary controlling the behavior with off-screen matches.";
 
       stopline = helpers.defaultNullOpts.mkInt 400 ''
         The number of lines to search in either direction while highlighting matches.
@@ -123,9 +123,10 @@ with lib;
     textObj = {
       enable = helpers.defaultNullOpts.mkBool true "Controls text objects";
 
-      linewiseOperators =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["d" "y"]''
-          "Modify the set of operators which may operate line-wise";
+      linewiseOperators = helpers.defaultNullOpts.mkListOf types.str [
+        "d"
+        "y"
+      ] "Modify the set of operators which may operate line-wise";
     };
 
     enableSurround = helpers.defaultNullOpts.mkBool false "To enable the delete surrounding (ds%) and change surrounding (cs%) maps";
@@ -138,13 +139,12 @@ with lib;
     '';
 
     delimNoSkips =
-      helpers.defaultNullOpts.mkNullable
-        (types.enum [
+      helpers.defaultNullOpts.mkEnumFirstDefault
+        [
           0
           1
           2
-        ])
-        "0"
+        ]
         ''
           To disable matching within strings and comments:
           - 0: matching is enabled within strings and comments

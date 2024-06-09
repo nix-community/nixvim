@@ -40,19 +40,18 @@ in
 
           layout = {
             position =
-              helpers.defaultNullOpts.mkEnum
+              helpers.defaultNullOpts.mkEnumFirstDefault
                 [
                   "bottom"
                   "top"
                   "left"
                   "right"
                 ]
-                "bottom"
                 ''
                   The panel position.
                 '';
 
-            ratio = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.4" ''
+            ratio = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.4 ''
               The panel ratio.
             '';
           };
@@ -68,9 +67,9 @@ in
           keymap = {
             accept = keymapOption "<M-l>" "Keymap for accepting the suggestion.";
 
-            acceptWord = keymapOption "false" "Keymap for accepting a word suggestion.";
+            acceptWord = keymapOption false "Keymap for accepting a word suggestion.";
 
-            acceptLine = keymapOption "false" "Keymap for accepting a line suggestion.";
+            acceptLine = keymapOption false "Keymap for accepting a line suggestion.";
 
             next = keymapOption "<M-]>" "Keymap for accepting the next suggestion.";
 
@@ -81,20 +80,18 @@ in
         };
 
         filetypes =
-          helpers.defaultNullOpts.mkNullable (with types; attrsOf (either bool helpers.nixvimTypes.rawLua))
-            ''
-              {
-                yaml = false;
-                markdown = false;
-                help = false;
-                gitcommit = false;
-                gitrebase = false;
-                hgcommit = false;
-                svn = false;
-                cvs = false;
-                "." = false;
-              }
-            ''
+          helpers.defaultNullOpts.mkAttrsOf types.bool
+            {
+              yaml = false;
+              markdown = false;
+              help = false;
+              gitcommit = false;
+              gitrebase = false;
+              hgcommit = false;
+              svn = false;
+              cvs = false;
+              "." = false;
+            }
             ''
               Specify filetypes for attaching copilot.
               Each value can be either a boolean or a lua function that returns a boolean.
@@ -104,7 +101,7 @@ in
                 {
                   markdown = true; # overrides default
                   terraform = false; # disallow specific filetype
-                  sh.__raw = \'\'
+                  sh.__raw = '''
                     function ()
                       if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
                         -- disable for .env files
@@ -112,7 +109,7 @@ in
                       end
                       return true
                     end
-                  \'\';
+                  ''';
                 }
               ```
 
@@ -137,30 +134,30 @@ in
           '';
         };
 
-        serverOptsOverrides = helpers.defaultNullOpts.mkNullable types.attrs "{}" ''
-          Override copilot lsp client `settings`.
-          The settings field is where you can set the values of the options defined in
-          https://github.com/zbirenbaum/copilot.lua/blob/master/SettingsOpts.md.
-          These options are specific to the copilot lsp and can be used to customize its behavior.
+        serverOptsOverrides = helpers.defaultNullOpts.mkAttrsOf' {
+          type = types.anything;
+          default = { };
+          description = ''
+            Override copilot lsp client `settings`.
+            The settings field is where you can set the values of the options defined in
+            https://github.com/zbirenbaum/copilot.lua/blob/master/SettingsOpts.md.
+            These options are specific to the copilot lsp and can be used to customize its behavior.
 
-          Ensure that the `name` field is not overridden as is is used for efficiency reasons in
-          numerous checks to verify copilot is actually running.
+            Ensure that the `name` field is not overridden as is is used for efficiency reasons in
+            numerous checks to verify copilot is actually running.
 
-          See `:h vim.lsp.start_client` for list of options.
-
-          Example:
-          ```nix
-            {
-              trace = "verbose";
-              settings = {
-                advanced = {
-                  listCount = 10; # number of completions for panel
-                  inlineSuggestCount = 3; # number of completions for getCompletions
-                };
+            See `:h vim.lsp.start_client` for list of options.
+          '';
+          example = {
+            trace = "verbose";
+            settings = {
+              advanced = {
+                listCount = 10; # number of completions for panel
+                inlineSuggestCount = 3; # number of completions for getCompletions
               };
-            }
-          ```
-        '';
+            };
+          };
+        };
       };
   };
 

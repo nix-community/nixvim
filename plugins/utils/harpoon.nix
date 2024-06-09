@@ -109,9 +109,9 @@ in
       Closes any tmux windows harpoon that harpoon creates when you close Neovim.
     '';
 
-    excludedFiletypes = helpers.defaultNullOpts.mkNullable (
-      with types; listOf str
-    ) ''["harpoon"]'' "Filetypes that you want to prevent from adding to the harpoon list menu.";
+    excludedFiletypes = helpers.defaultNullOpts.mkNullable (with types; listOf str) [
+      "harpoon"
+    ] "Filetypes that you want to prevent from adding to the harpoon list menu.";
 
     markBranch = helpers.defaultNullOpts.mkBool false ''
       Set marks specific to each git branch inside git repository.
@@ -144,9 +144,16 @@ in
         Menu window height
       '';
 
-      borderChars = helpers.defaultNullOpts.mkNullable (
-        with types; listOf str
-      ) ''["─" "│" "─" "│" "╭" "╮" "╯" "╰"]'' "Border characters";
+      borderChars = helpers.defaultNullOpts.mkNullable (with types; listOf str) [
+        "─"
+        "│"
+        "─"
+        "│"
+        "╭"
+        "╮"
+        "╯"
+        "╰"
+      ] "Border characters";
     };
   };
 

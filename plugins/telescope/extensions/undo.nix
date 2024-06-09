@@ -90,21 +90,17 @@ telescopeHelpers.mkExtension {
     '';
 
     mappings = telescopeHelpers.mkMappingsOption {
-      insertDefaults = ''
-        {
-          "<cr>" = "require('telescope-undo.actions').yank_additions";
-          "<s-cr>" = "require('telescope-undo.actions').yank_deletions";
-          "<c-cr>" = "require('telescope-undo.actions').restore";
-        }
-      '';
+      insertDefaults = {
+        "<cr>" = "require('telescope-undo.actions').yank_additions";
+        "<s-cr>" = "require('telescope-undo.actions').yank_deletions";
+        "<c-cr>" = "require('telescope-undo.actions').restore";
+      };
 
-      normalDefaults = ''
-        {
-          "y" = "require('telescope-undo.actions').yank_additions";
-          "Y" = "require('telescope-undo.actions').yank_deletions";
-          "u" = "require('telescope-undo.actions').restore";
-        }
-      '';
+      normalDefaults = {
+        "y" = "require('telescope-undo.actions').yank_additions";
+        "Y" = "require('telescope-undo.actions').yank_deletions";
+        "u" = "require('telescope-undo.actions').restore";
+      };
     };
   };
 

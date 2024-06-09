@@ -43,7 +43,7 @@ with lib;
               html = "local";
 
               # Pick the strategy for LaTeX dynamically based on the buffer size
-              latex.__raw = \'\'
+              latex.__raw = '''
                 function()
                   -- Disabled for very large files, global strategy for large files,
                   -- local strategy otherwise
@@ -54,37 +54,33 @@ with lib;
                   end
                   return require 'rainbow-delimiters'.strategy['local']
                 end
-              \'\';
+              ''';
             }
           ```
         '';
 
     query =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf str)
-        ''
-          {
-            default = "rainbow-delimiters";
-            lua = "rainbow-blocks";
-          }
-        ''
+      helpers.defaultNullOpts.mkAttrsOf types.str
+        {
+          default = "rainbow-delimiters";
+          lua = "rainbow-blocks";
+        }
         ''
           Attrs mapping Tree-sitter language names to queries.
           See `|rb-delimiters-query|` for more information about queries.
         '';
 
     highlight =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str)
-        ''
-          [
-            "RainbowDelimiterRed"
-            "RainbowDelimiterYellow"
-            "RainbowDelimiterBlue"
-            "RainbowDelimiterOrange"
-            "RainbowDelimiterGreen"
-            "RainbowDelimiterViolet"
-            "RainbowDelimiterCyan"
-          ]
-        ''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "RainbowDelimiterRed"
+          "RainbowDelimiterYellow"
+          "RainbowDelimiterBlue"
+          "RainbowDelimiterOrange"
+          "RainbowDelimiterGreen"
+          "RainbowDelimiterViolet"
+          "RainbowDelimiterCyan"
+        ]
         ''
           List of names of the highlight groups to use for highlighting, for more information see
           `|rb-delimiters-colors|`.
@@ -102,12 +98,7 @@ with lib;
 
     log = {
       file =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-          ''
-            {
-              __raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'";
-            }
-          ''
+        helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'"; }
           ''
             Path to the log file, default is `rainbow-delimiters.log` in your standard log path
             (see `|standard-path|`).

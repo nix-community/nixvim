@@ -65,14 +65,12 @@ helpers.vim-plugin.mkVimPlugin config {
 
     filetypes =
       helpers.defaultNullOpts.mkAttrsOf types.bool
-        ''
-          {
-            help = false;
-            gitcommit = false;
-            gitrebase = false;
-            "." = false;
-          }
-        ''
+        {
+          help = false;
+          gitcommit = false;
+          gitrebase = false;
+          "." = false;
+        }
         ''
           A dictionary mapping whether codeium should be enabled or disabled in certain filetypes.
           This can be used to opt out of completions for certain filetypes.

@@ -86,23 +86,23 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Enable undercurls.
     '';
 
-    commentStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
+    commentStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { italic = true; } ''
       Highlight options for comments.
     '';
 
-    functionStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+    functionStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
       Highlight options for functions.
     '';
 
-    keywordStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{italic = true;}" ''
+    keywordStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { italic = true; } ''
       Highlight options for keywords.
     '';
 
-    statementStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{bold = true;}" ''
+    statementStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { bold = true; } ''
       Highlight options for statements.
     '';
 
-    typeStyle = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+    typeStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
       Highlight options for types.
     '';
 
@@ -121,14 +121,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     colors = {
       theme =
         helpers.defaultNullOpts.mkAttrsOf types.attrs
-          ''
-            {
-              wave = {};
-              lotus = {};
-              dragon = {};
-              all = {};
-            }
-          ''
+          {
+            wave = { };
+            lotus = { };
+            dragon = { };
+            all = { };
+          }
           ''
             Change specific usages for a certain theme, or for all of them
 
@@ -156,7 +154,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             ```
           '';
 
-      palette = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+      palette = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         Change all usages of these colors.
 
         Example:

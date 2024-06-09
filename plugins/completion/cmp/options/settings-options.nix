@@ -113,7 +113,7 @@ with lib;
     autocomplete =
       helpers.defaultNullOpts.mkNullable
         (with helpers.nixvimTypes; either (enum [ false ]) (listOf strLua))
-        ''["require('cmp.types').cmp.TriggerEvent.TextChanged"]''
+        [ "require('cmp.types').cmp.TriggerEvent.TextChanged" ]
         ''
           The event to trigger autocompletion.
           If set to `false`, then completion is only invoked manually (e.g. by calling `cmp.complete`).
@@ -144,9 +144,16 @@ with lib;
       Boolean to show the `~` expandable indicator in cmp's floating window.
     '';
 
-    fields = helpers.defaultNullOpts.mkListOf types.str ''["abbr" "kind" "menu"]'' ''
-      An array of completion fields to specify their order.
-    '';
+    fields =
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "abbr"
+          "kind"
+          "menu"
+        ]
+        ''
+          An array of completion fields to specify their order.
+        '';
 
     format =
       helpers.defaultNullOpts.mkLuaFn
@@ -230,12 +237,10 @@ with lib;
   view = {
     entries =
       helpers.defaultNullOpts.mkNullable (with types; either str (attrsOf anything))
-        ''
-          {
-            name = "custom";
-            selection_order = "top_down";
-          }
-        ''
+        {
+          name = "custom";
+          selection_order = "top_down";
+        }
         ''
           The view class used to customize nvim-cmp's appearance.
         '';
@@ -263,9 +268,16 @@ with lib;
     in
     {
       completion = {
-        border =
-          helpers.defaultNullOpts.mkBorder ''[ "" "" "" "" "" "" "" "" ]'' "nvim-cmp completion popup menu"
-            "";
+        border = helpers.defaultNullOpts.mkBorder [
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+        ] "nvim-cmp completion popup menu" "";
 
         winhighlight = mkWinhighlightOption "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None";
 
@@ -290,10 +302,16 @@ with lib;
       };
 
       documentation = {
-        border =
-          helpers.defaultNullOpts.mkBorder ''[ "" "" "" " " "" "" "" " " ]''
-            "nvim-cmp documentation popup menu"
-            "";
+        border = helpers.defaultNullOpts.mkBorder [
+          ""
+          ""
+          ""
+          " "
+          ""
+          ""
+          ""
+          " "
+        ] "nvim-cmp documentation popup menu" "";
 
         winhighlight = mkWinhighlightOption "FloatBorder:NormalFloat";
 

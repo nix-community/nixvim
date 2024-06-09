@@ -50,7 +50,7 @@ with lib;
     If set to null or not set, the extension will use the default behavior of the Typst compiler.
   '';
 
-  fontPaths = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  fontPaths = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     Font paths, which doesn't allow for dynamic configuration.
     Note: you can use vscode variables in the path, e.g. `$\{workspaceFolder}/fonts`.
   '';
@@ -69,7 +69,7 @@ with lib;
         server level.
       '';
 
-  typstExtraArgs = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+  typstExtraArgs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
     You can pass any arguments as you like, and we will try to follow behaviors of the
     **same version** of typst-cli.
 

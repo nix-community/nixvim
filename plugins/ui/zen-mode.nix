@@ -16,7 +16,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   # Optionally, explicitly declare some options. You don't have to.
   settingsOptions = {
     window = {
-      backdrop = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.95" ''
+      backdrop = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.95 ''
         Shade the backdrop of the Zen window.
         Set to 1 to keep the same as Normal.
       '';
@@ -31,7 +31,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               rawLua
             ]
           )
-          "120"
+          120
           ''
             Width of the zen window.
 
@@ -51,7 +51,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               rawLua
             ]
           )
-          "1"
+          1
           ''
             Height of the Zen window.
 
@@ -61,7 +61,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             - a function that returns the width or the height
           '';
 
-      options = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+      options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
         By default, no options are changed for the Zen window.
         You can set any `vim.wo` option here.
 
@@ -82,14 +82,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     plugins = {
       options =
         helpers.defaultNullOpts.mkAttrsOf types.anything
-          ''
-            {
-              enabled = true;
-              ruler = false;
-              showcmd = false;
-              laststatus = 0;
-            }
-          ''
+          {
+            enabled = true;
+            ruler = false;
+            showcmd = false;
+            laststatus = 0;
+          }
           ''
             Disable some global vim options (`vim.o`...).
           '';

@@ -208,28 +208,26 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
 
       workspaces =
-        helpers.defaultNullOpts.mkNullable
+        helpers.defaultNullOpts.mkListOf
           (
             with types;
-            listOf (
-              types.submodule {
-                options = {
-                  name = mkOption {
-                    type = with helpers.nixvimTypes; maybeRaw str;
-                    description = "The name for this workspace";
-                  };
-
-                  path = mkOption {
-                    type = with helpers.nixvimTypes; maybeRaw str;
-                    description = "The of the workspace.";
-                  };
-
-                  overrides = opts;
+            types.submodule {
+              options = {
+                name = mkOption {
+                  type = with helpers.nixvimTypes; maybeRaw str;
+                  description = "The name for this workspace";
                 };
-              }
-            )
+
+                path = mkOption {
+                  type = with helpers.nixvimTypes; maybeRaw str;
+                  description = "The of the workspace.";
+                };
+
+                overrides = opts;
+              };
+            }
           )
-          "[]"
+          [ ]
           ''
             A list of vault names and paths.
             Each path should be the path to the vault root.

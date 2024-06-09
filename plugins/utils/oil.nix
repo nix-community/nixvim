@@ -277,7 +277,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
 
       cleanup_delay_ms =
-        helpers.defaultNullOpts.mkNullable (with types; either types.ints.unsigned (enum [ false ])) "2000"
+        helpers.defaultNullOpts.mkNullable (with types; either types.ints.unsigned (enum [ false ])) 2000
           ''
             Oil will automatically delete hidden buffers after this delay.
             You can set the delay to false to disable cleanup entirely.
@@ -290,7 +290,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Time to wait for LSP file operations to complete before skipping.
         '';
 
-        autosave_changes = helpers.defaultNullOpts.mkNullable (with types; either bool str) "false" ''
+        autosave_changes = helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
           Set to true to autosave buffers that are updated with LSP `willRenameFiles`.
           Set to "unmodified" to only save unmodified buffers.
         '';
@@ -317,26 +317,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               (enum [ false ])
             ]
           )
-          ''
-            {
-              "g?" = "actions.show_help";
-              "<CR>" = "actions.select";
-              "<C-s>" = "actions.select_vsplit";
-              "<C-h>" = "actions.select_split";
-              "<C-t>" = "actions.select_tab";
-              "<C-p>" = "actions.preview";
-              "<C-c>" = "actions.close";
-              "<C-l>" = "actions.refresh";
-              "-" = "actions.parent";
-              "_" = "actions.open_cwd";
-              "`" = "actions.cd";
-              "~" = "actions.tcd";
-              "gs" = "actions.change_sort";
-              "gx" = "actions.open_external";
-              "g." = "actions.toggle_hidden";
-              "g\\" = "actions.toggle_trash";
-            }
-          ''
+          {
+            "g?" = "actions.show_help";
+            "<CR>" = "actions.select";
+            "<C-s>" = "actions.select_vsplit";
+            "<C-h>" = "actions.select_split";
+            "<C-t>" = "actions.select_tab";
+            "<C-p>" = "actions.preview";
+            "<C-c>" = "actions.close";
+            "<C-l>" = "actions.refresh";
+            "-" = "actions.parent";
+            "_" = "actions.open_cwd";
+            "`" = "actions.cd";
+            "~" = "actions.tcd";
+            "gs" = "actions.change_sort";
+            "gx" = "actions.open_external";
+            "g." = "actions.toggle_hidden";
+            "g\\" = "actions.toggle_trash";
+          }
           ''
             Keymaps in oil buffer.
             Can be any value that `vim.keymap.set` accepts OR a table of keymap options with a
@@ -347,7 +345,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             See `:help oil-actions` for a list of all available actions.
           '';
 
-      keymaps_help = helpers.defaultNullOpts.mkAttrsOf types.anything ''{border = "rounded";}'' ''
+      keymaps_help = helpers.defaultNullOpts.mkAttrsOf types.anything { border = "rounded"; } ''
         Configuration for the floating keymaps help window.
       '';
 
@@ -379,12 +377,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
         sort =
           helpers.defaultNullOpts.mkListOf (with types; listOf str)
-            ''
+            [
               [
-                ["type" "asc"]
-                ["name" "asc"]
+                "type"
+                "asc"
               ]
-            ''
+              [
+                "name"
+                "asc"
+              ]
+            ]
             ''
               Sort order can be "asc" or "desc".
               See `:help oil-columns` to see which columns are sortable.
@@ -418,33 +420,45 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       preview = {
-        max_width = helpers.defaultNullOpts.mkNullable dimensionType "0.9" ''
+        max_width = helpers.defaultNullOpts.mkNullable dimensionType 0.9 ''
           Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
           Can be a single value or a list of mixed integer/float types.
           `max_width = [100 0.8]` means "the lesser of 100 columns or 80% of total".
         '';
 
-        min_width = helpers.defaultNullOpts.mkNullable dimensionType "[40 0.4]" ''
-          Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
-          Can be a single value or a list of mixed integer/float types.
-          `min_width = [40 0.4]` means "the greater of 40 columns or 40% of total".
-        '';
+        min_width =
+          helpers.defaultNullOpts.mkNullable dimensionType
+            [
+              40
+              0.4
+            ]
+            ''
+              Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
+              Can be a single value or a list of mixed integer/float types.
+              `min_width = [40 0.4]` means "the greater of 40 columns or 40% of total".
+            '';
 
         width = helpers.mkNullOrOption (
           with types; either int (numbers.between 0.0 1.0)
         ) "Optionally define an integer/float for the exact width of the preview window.";
 
-        max_height = helpers.defaultNullOpts.mkNullable dimensionType "0.9" ''
+        max_height = helpers.defaultNullOpts.mkNullable dimensionType 0.9 ''
           Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
           Can be a single value or a list of mixed integer/float types.
           `max_height = [80 0.9]` means "the lesser of 80 columns or 90% of total".
         '';
 
-        min_height = helpers.defaultNullOpts.mkNullable dimensionType "[5 0.1]" ''
-          Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
-          Can be a single value or a list of mixed integer/float types.
-          `min_height = [5 0.1]` means "the greater of 5 columns or 10% of total".
-        '';
+        min_height =
+          helpers.defaultNullOpts.mkNullable dimensionType
+            [
+              5
+              0.1
+            ]
+            ''
+              Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
+              Can be a single value or a list of mixed integer/float types.
+              `min_height = [5 0.1]` means "the greater of 5 columns or 10% of total".
+            '';
 
         height = helpers.mkNullOrOption (
           with types; either int (numbers.between 0.0 1.0)
@@ -462,33 +476,45 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       progress = {
-        max_width = helpers.defaultNullOpts.mkNullable dimensionType "0.9" ''
+        max_width = helpers.defaultNullOpts.mkNullable dimensionType 0.9 ''
           Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
           Can be a single value or a list of mixed integer/float types.
           `max_width = [100 0.8]` means "the lesser of 100 columns or 80% of total".
         '';
 
-        min_width = helpers.defaultNullOpts.mkNullable dimensionType "[40 0.4]" ''
-          Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
-          Can be a single value or a list of mixed integer/float types.
-          `min_width = [40 0.4]` means "the greater of 40 columns or 40% of total".
-        '';
+        min_width =
+          helpers.defaultNullOpts.mkNullable dimensionType
+            [
+              40
+              0.4
+            ]
+            ''
+              Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
+              Can be a single value or a list of mixed integer/float types.
+              `min_width = [40 0.4]` means "the greater of 40 columns or 40% of total".
+            '';
 
         width = helpers.mkNullOrOption (
           with types; either int (numbers.between 0.0 1.0)
         ) "Optionally define an integer/float for the exact width of the preview window.";
 
-        max_height = helpers.defaultNullOpts.mkNullable dimensionType "0.9" ''
+        max_height = helpers.defaultNullOpts.mkNullable dimensionType 0.9 ''
           Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
           Can be a single value or a list of mixed integer/float types.
           `max_height = [80 0.9]` means "the lesser of 80 columns or 90% of total".
         '';
 
-        min_height = helpers.defaultNullOpts.mkNullable dimensionType "[5 0.1]" ''
-          Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
-          Can be a single value or a list of mixed integer/float types.
-          `min_height = [5 0.1]` means "the greater of 5 columns or 10% of total".
-        '';
+        min_height =
+          helpers.defaultNullOpts.mkNullable dimensionType
+            [
+              5
+              0.1
+            ]
+            ''
+              Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%).
+              Can be a single value or a list of mixed integer/float types.
+              `min_height = [5 0.1]` means "the greater of 5 columns or 10% of total".
+            '';
 
         height = helpers.mkNullOrOption (
           with types; either int (numbers.between 0.0 1.0)

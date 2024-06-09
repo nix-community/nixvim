@@ -87,19 +87,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ] "Background style for ${name}";
       in
       {
-        comments = helpers.defaultNullOpts.mkHighlight "{italic = true;}" "" ''
+        comments = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
           Define comments highlight properties.
         '';
 
-        keywords = helpers.defaultNullOpts.mkHighlight "{italic = true;}" "" ''
+        keywords = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
           Define keywords highlight properties.
         '';
 
-        functions = helpers.defaultNullOpts.mkHighlight "{}" "" ''
+        functions = helpers.defaultNullOpts.mkHighlight { } "" ''
           Define functions highlight properties.
         '';
 
-        variables = helpers.defaultNullOpts.mkHighlight "{}" "" ''
+        variables = helpers.defaultNullOpts.mkHighlight { } "" ''
           Define variables highlight properties.
         '';
 
@@ -108,11 +108,17 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         floats = mkBackgroundStyle "floats";
       };
 
-    sidebars = helpers.defaultNullOpts.mkListOf types.str ''["qf" "help"]'' ''
-      Set a darker background on sidebar-like windows.
-    '';
+    sidebars =
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "qf"
+          "help"
+        ]
+        ''
+          Set a darker background on sidebar-like windows.
+        '';
 
-    day_brightness = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.3" ''
+    day_brightness = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
       Adjusts the brightness of the colors of the **Day** style.
       Number between 0 and 1, from dull to vibrant colors.
     '';

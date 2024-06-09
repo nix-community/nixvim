@@ -24,23 +24,21 @@ in
 
       highlightGroup = helpers.defaultNullOpts.mkStr "Comment" "The highlight group for virtual text.";
 
-      displayVirtualText =
-        helpers.defaultNullOpts.mkNullable (types.nullOr types.bool) (toString true)
-          "If the blame message should be displayed as virtual text. You may want to disable this if you display the blame message in statusline.";
+      displayVirtualText = helpers.defaultNullOpts.mkBool true "If the blame message should be displayed as virtual text. You may want to disable this if you display the blame message in statusline.";
 
-      ignoredFiletypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) (toString
-        [ ]
-      ) "A list of filetypes for which gitblame information will not be displayed.";
+      ignoredFiletypes =
+        helpers.defaultNullOpts.mkListOf types.str [ ]
+          "A list of filetypes for which gitblame information will not be displayed.";
 
       delay =
         helpers.defaultNullOpts.mkUnsignedInt 0
           "The delay in milliseconds after which the blame info will be displayed.";
 
       virtualTextColumn =
-        helpers.defaultNullOpts.mkNullable types.ints.unsigned (toString null)
+        helpers.defaultNullOpts.mkNullable types.ints.unsigned null
           "Have the blame message start at a given column instead of EOL. If the current line is longer than the specified column value the blame message will default to being displayed at EOL.";
 
-      extmarkOptions = helpers.defaultNullOpts.mkAttributeSet (toString null) "nvim_buf_set_extmark optional parameters. (Warning: overwriting id and virt_text will break the plugin behavior)";
+      extmarkOptions = helpers.defaultNullOpts.mkAttributeSet null "nvim_buf_set_extmark optional parameters. (Warning: overwriting id and virt_text will break the plugin behavior)";
     };
   };
 

@@ -43,43 +43,68 @@ in
       Whether to consider case in search patterns.
     '';
 
-    equivalenceClasses =
-      helpers.defaultNullOpts.mkNullable (with types; listOf (either str (listOf str))) ''[" \t\r\n"]''
-        ''
-          A character will match any other in its equivalence class. The sets can
-          either be defined as strings or tables.
+    equivalenceClasses = helpers.defaultNullOpts.mkListOf' {
+      type = with types; either str (listOf str);
+      description = ''
+        A character will match any other in its equivalence class. The sets can
+        either be defined as strings or tables.
 
-          Example:
-          ```nix
-            [
-              "\r\n"
-              ")]}>"
-              "([{<"
-              [ "\"" "'" "`" ]
-            ]
-          ```
+        Note: Make sure to have a set containing `\n` if you want to be able to
+        target characters at the end of the line.
 
-          Note: Make sure to have a set containing `\n` if you want to be able to
-          target characters at the end of the line.
+        Note: Non-mutual aliases are not possible in Leap, for the same reason
+        that supporting |smartcase| is not possible: we would need to show two
+        different labels, corresponding to two different futures, at the same
+        time.
+      '';
+      default = [ " \t\r\n" ];
+      example = [
+        "\r\n"
+        ")]}>"
+        "([{<"
+        [
+          "\""
+          "'"
+          "`"
+        ]
+      ];
+    };
 
-          Note: Non-mutual aliases are not possible in Leap, for the same reason
-          that supporting |smartcase| is not possible: we would need to show two
-          different labels, corresponding to two different futures, at the same
-          time.
-        '';
-
-    substituteChars = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
-      The keys in this attrs will be substituted in labels and highlighted matches by the given
-      characters.
-      This way special (e.g. whitespace) characters can be made visible in matches, or even be
-      used as labels.
-
-      Example: `{"\r" = "¬";}`
-    '';
+    substituteChars = helpers.defaultNullOpts.mkAttrsOf' {
+      type = types.str;
+      description = ''
+        The keys in this attrs will be substituted in labels and highlighted matches by the given
+        characters.
+        This way special (e.g. whitespace) characters can be made visible in matches, or even be
+        used as labels.
+      '';
+      default = { };
+      example = {
+        "\r" = "¬";
+      };
+    };
 
     safeLabels =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str)
-        ''["s" "f" "n" "u" "t" "/" "S" "F" "N" "L" "H" "M" "U" "G" "T" "?" "Z"]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "s"
+          "f"
+          "n"
+          "u"
+          "t"
+          "/"
+          "S"
+          "F"
+          "N"
+          "L"
+          "H"
+          "M"
+          "U"
+          "G"
+          "T"
+          "?"
+          "Z"
+        ]
         ''
           When the number of matches does not exceed the number of these "safe" labels plus one, the
           plugin jumps to the first match automatically after entering the pattern.
@@ -93,14 +118,55 @@ in
         '';
 
     labels =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str)
-        ''
-          [
-            "s" "f" "n" "j" "k" "l" "h" "o" "d" "w" "e" "m" "b" "u" "y" "v" "r" "g" "t" "c" "x" "/"
-            "z" "S" "F" "N" "J" "K" "L" "H" "O" "D" "W" "E" "M" "B" "U" "Y" "V" "R" "G" "T" "C" "X"
-            "?" "Z"
-          ]
-        ''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "s"
+          "f"
+          "n"
+          "j"
+          "k"
+          "l"
+          "h"
+          "o"
+          "d"
+          "w"
+          "e"
+          "m"
+          "b"
+          "u"
+          "y"
+          "v"
+          "r"
+          "g"
+          "t"
+          "c"
+          "x"
+          "/"
+          "z"
+          "S"
+          "F"
+          "N"
+          "J"
+          "K"
+          "L"
+          "H"
+          "O"
+          "D"
+          "W"
+          "E"
+          "M"
+          "B"
+          "U"
+          "Y"
+          "V"
+          "R"
+          "G"
+          "T"
+          "C"
+          "X"
+          "?"
+          "Z"
+        ]
         ''
           Target labels to be used when there are more matches than labels in
           `|leap.opts.safe_labels|` plus one.

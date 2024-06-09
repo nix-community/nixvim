@@ -120,7 +120,7 @@ mkVimPlugin config {
               (enum [ "flag" ])
             ]
           )
-          "true"
+          true
           ''
             Display spelling language when spell detection is enabled (if enough space is
             available).
@@ -147,19 +147,18 @@ mkVimPlugin config {
         This can be overridden by defining a value.
 
         Note: Only the dark theme is distributed with vim-airline.
-        For more themes, checkout the vim-airline-themes repository
-        (https://github.com/vim-airline/vim-airline-themes)
+        For more themes, checkout the [vim-airline-themes repository](https://github.com/vim-airline/vim-airline-themes).
       '';
 
       theme_patch_func = helpers.mkNullOrStr ''
         If you want to patch the airline theme before it gets applied, you can supply the name of
         a function where you can modify the palette.
 
-        Example: "AirlineThemePatch"
+        Example: `"AirlineThemePatch"`
 
         Then, define this function using `extraConfigVim`:
         ```nix
-          extraConfigVim = \'\'
+          extraConfigVim = '''
             function! AirlineThemePatch(palette)
               if g:airline_theme == 'badwolf'
                 for colors in values(a:palette.inactive)
@@ -167,7 +166,7 @@ mkVimPlugin config {
                 endfor
               endif
             endfunction
-          \'\';
+          ''';
         ```
       '';
 
@@ -200,28 +199,59 @@ mkVimPlugin config {
         Default: see source for current list
       '';
 
-      filetype_overrides =
-        helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf (listOf str)))
-          ''
-            Define the set of names to be displayed instead of a specific filetypes.
-
-            Example:
-            ```nix
-              {
-                coc-explorer =  ["CoC Explorer" ""];
-                defx = ["defx" "%{b:defx.paths[0]}"];
-                fugitive = ["fugitive" "%{airline#util#wrap(airline#extensions#branch#get_head(),80)}"];
-                gundo = ["Gundo" "" ];
-                help = ["Help" "%f"];
-                minibufexpl = ["MiniBufExplorer" ""];
-                startify = ["startify" ""];
-                vim-plug = ["Plugins" ""];
-                vimfiler = ["vimfiler" "%{vimfiler#get_status_string()}"];
-                vimshell = ["vimshell" "%{vimshell#get_status_string()}"];
-                vaffle = ["Vaffle" "%{b:vaffle.dir}"];
-              }
-            ```
-          '';
+      filetype_overrides = helpers.defaultNullOpts.mkAttrsOf' {
+        type = with types; listOf str;
+        # Unknown plugin default
+        description = ''
+          Define the set of names to be displayed instead of a specific filetypes.
+        '';
+        example = {
+          coc-explorer = [
+            "CoC Explorer"
+            ""
+          ];
+          defx = [
+            "defx"
+            "%{b:defx.paths[0]}"
+          ];
+          fugitive = [
+            "fugitive"
+            "%{airline#util#wrap(airline#extensions#branch#get_head(),80)}"
+          ];
+          gundo = [
+            "Gundo"
+            ""
+          ];
+          help = [
+            "Help"
+            "%f"
+          ];
+          minibufexpl = [
+            "MiniBufExplorer"
+            ""
+          ];
+          startify = [
+            "startify"
+            ""
+          ];
+          vim-plug = [
+            "Plugins"
+            ""
+          ];
+          vimfiler = [
+            "vimfiler"
+            "%{vimfiler#get_status_string()}"
+          ];
+          vimshell = [
+            "vimshell"
+            "%{vimshell#get_status_string()}"
+          ];
+          vaffle = [
+            "Vaffle"
+            "%{b:vaffle.dir}"
+          ];
+        };
+      };
 
       exclude_preview = helpers.defaultNullOpts.mkBool false ''
         Defines whether the preview window should be excluded from having its window statusline
@@ -272,21 +302,18 @@ mkVimPlugin config {
         Display a only file name in statusline.
       '';
 
-      symbols = helpers.mkNullOrOption (with types; attrsOf str) ''
-        Customize airline symbols.
-
-        Example:
-        ```nix
-          {
-            branch = "";
-            colnr = " ℅:";
-            readonly = "";
-            linenr = " :";
-            maxlinenr = "☰ ";
-            dirty= "⚡";
-          }
-        ```
-      '';
+      symbols = helpers.mkNullOrOption' {
+        type = with types; attrsOf str;
+        description = "Customize airline symbols.";
+        example = {
+          branch = "";
+          colnr = " ℅:";
+          readonly = "";
+          linenr = " :";
+          maxlinenr = "☰ ";
+          dirty = "⚡";
+        };
+      };
     };
 
   settingsExample = {

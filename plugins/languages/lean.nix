@@ -44,7 +44,7 @@ in
           '';
         };
       }
-    ) "{}" "LSP settings.";
+    ) { } "LSP settings.";
 
     ft = {
       default = helpers.defaultNullOpts.mkStr "lean" ''
@@ -66,7 +66,7 @@ in
         Whether to enable expanding of unicode abbreviations.
       '';
 
-      extra = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
+      extra = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         Additional abbreviations.
 
         Example:
@@ -159,20 +159,18 @@ in
 
       useWidgets = helpers.defaultNullOpts.mkBool true "Whether to use widgets.";
 
-      mappings = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) ''
-        {
-          K = "click";
-          "<CR>" = "click";
-          gd = "go_to_def";
-          gD = "go_to_decl";
-          gy = "go_to_type";
-          I = "mouse_enter";
-          i = "mouse_leave";
-          "<Esc>" = "clear_all";
-          C = "clear_all";
-          "<LocalLeader><Tab>" = "goto_last_window";
-        }
-      '' "Mappings.";
+      mappings = helpers.defaultNullOpts.mkAttrsOf types.str {
+        K = "click";
+        "<CR>" = "click";
+        gd = "go_to_def";
+        gD = "go_to_decl";
+        gy = "go_to_type";
+        I = "mouse_enter";
+        i = "mouse_leave";
+        "<Esc>" = "clear_all";
+        C = "clear_all";
+        "<LocalLeader><Tab>" = "goto_last_window";
+      } "Mappings.";
     };
 
     progressBars = {
@@ -222,7 +220,7 @@ in
           on_attach = helpers.mkNullOrOption types.str "The LSP handler.";
         };
       }
-    ) "{}" "Legacy Lean3 LSP settings.";
+    ) { } "Legacy Lean3 LSP settings.";
   };
 
   config = mkIf cfg.enable {

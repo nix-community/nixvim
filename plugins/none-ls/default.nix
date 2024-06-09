@@ -46,7 +46,7 @@ in
       Uses `NullLsInfoBorder` highlight group (see [Highlight Groups](#highlight-groups)).
     '';
 
-    cmd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["nvim"]'' ''
+    cmd = helpers.defaultNullOpts.mkListOf types.str [ "nvim" ] ''
       Defines the command used to start the null-ls server. If you do not have an
       `nvim` binary available on your `$PATH`, you should change this to an absolute
       path to the binary.
@@ -80,7 +80,7 @@ in
       Specifying a timeout with a value less than zero will prevent commands from timing out.
     '';
 
-    diagnosticConfig = helpers.defaultNullOpts.mkNullable types.attrs null ''
+    diagnosticConfig = helpers.defaultNullOpts.mkAttrsOf types.anything null ''
       Specifies diagnostic display options for null-ls sources, as described in
       `:help vim.diagnostic.config()`.
       (null-ls uses separate namespaces for each source, so server-wide configuration will not work

@@ -51,19 +51,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     '';
 
     styles = {
-      comments = helpers.defaultNullOpts.mkHighlight "{italic = true;}" "" ''
+      comments = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
         Define comments highlight properties.
       '';
 
-      keywords = helpers.defaultNullOpts.mkHighlight "{italic = true;}" "" ''
+      keywords = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
         Define keywords highlight properties.
       '';
 
-      functions = helpers.defaultNullOpts.mkHighlight "{}" "" ''
+      functions = helpers.defaultNullOpts.mkHighlight { } "" ''
         Define functions highlight properties.
       '';
 
-      variables = helpers.defaultNullOpts.mkHighlight "{}" "" ''
+      variables = helpers.defaultNullOpts.mkHighlight { } "" ''
         Define variables highlight properties.
       '';
     };

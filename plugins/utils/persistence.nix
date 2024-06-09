@@ -12,10 +12,9 @@ with lib;
 
     package = helpers.mkPluginPackageOption "persistence.nvim" pkgs.vimPlugins.persistence-nvim;
 
-    dir =
-      helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-        ''vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/")''
-        "directory where session files are saved";
+    dir = helpers.defaultNullOpts.mkStr {
+      __raw = ''vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/")'';
+    } "directory where session files are saved";
 
     options =
       let
@@ -38,9 +37,13 @@ with lib;
           "winsize"
         ];
       in
-      helpers.defaultNullOpts.mkNullable (
-        with types; listOf (enum sessionOpts)
-      ) ''["buffers" "curdir" "tabpages" "winsize" "skiprtp"]'' "sessionoptions used for saving";
+      helpers.defaultNullOpts.mkListOf (types.enum sessionOpts) [
+        "buffers"
+        "curdir"
+        "tabpages"
+        "winsize"
+        "skiprtp"
+      ] "sessionoptions used for saving";
 
     preSave = helpers.defaultNullOpts.mkLuaFn "nil" "a function to call before saving the session";
 

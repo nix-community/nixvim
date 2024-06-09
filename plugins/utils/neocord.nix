@@ -29,12 +29,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     '';
 
     main_image =
-      helpers.defaultNullOpts.mkEnum
+      helpers.defaultNullOpts.mkEnumFirstDefault
         [
           "language"
           "logo"
         ]
-        "language"
         ''
           Main image display (either "language" or "logo")
         '';
@@ -65,25 +64,23 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Displays the current line number instead of the current project.
     '';
 
-    blacklist = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    blacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       A list of strings or Lua patterns that disable Rich Presence if the
       current file name, path, or workspace matches.
     '';
 
     buttons =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkListOf
         (
           with types;
-          either helpers.nixvimTypes.rawLua (
-            listOf (submodule {
-              options = {
-                label = helpers.mkNullOrOption str "";
-                url = helpers.mkNullOrOption str "";
-              };
-            })
-          )
+          submodule {
+            options = {
+              label = helpers.mkNullOrStr "";
+              url = helpers.mkNullOrStr "";
+            };
+          }
         )
-        "[]"
+        [ ]
         ''
           Button configurations which will always appear in Rich Presence.
           Can be a list of attribute sets, each with the following attributes:

@@ -63,7 +63,7 @@ mkVimPlugin config {
       cell.
     '';
 
-    cover_lines_starting_with = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    cover_lines_starting_with = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       When `cover_empty_lines` is `true`, also covers lines starting with these strings.
     '';
 
@@ -108,7 +108,12 @@ mkVimPlugin config {
       it's open.
     '';
 
-    output_win_border = helpers.defaultNullOpts.mkBorder ''["" "━" "" ""]'' "output window" "";
+    output_win_border = helpers.defaultNullOpts.mkBorder [
+      ""
+      "━"
+      ""
+      ""
+    ] "output window" "";
 
     output_win_cover_gutter = helpers.defaultNullOpts.mkBool true ''
       Should the output window cover the gutter (numbers and sign col), or not.
@@ -138,7 +143,9 @@ mkVimPlugin config {
           Value passed to the style option in `:h nvim_open_win()`.
         '';
 
-    save_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('data')..'/molten'";}'' "Where to save/load data with `:MoltenSave` and `:MoltenLoad`.";
+    save_path = helpers.defaultNullOpts.mkStr {
+      __raw = "vim.fn.stdpath('data')..'/molten'";
+    } "Where to save/load data with `:MoltenSave` and `:MoltenLoad`.";
 
     tick_rate = helpers.defaultNullOpts.mkUnsignedInt 500 ''
       How often (in ms) we poll the kernel for updates.

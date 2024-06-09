@@ -12,50 +12,46 @@ with lib;
 
     package = helpers.mkPluginPackageOption "ts-autotag" pkgs.vimPlugins.nvim-ts-autotag;
 
-    filetypes = helpers.defaultNullOpts.mkNullable (with types; listOf str) ''
-      [
-        "html"
-        "javascript"
-        "typescript"
-        "javascriptreact"
-        "typescriptreact"
-        "svelte"
-        "vue"
-        "tsx"
-        "jsx"
-        "rescript"
-        "xml"
-        "php"
-        "markdown"
-        "astro"
-        "glimmer"
-        "handlebars"
-        "hbs"
-      ]
-    '' "Filetypes for which ts-autotag should be enabled.";
+    filetypes = helpers.defaultNullOpts.mkListOf types.str [
+      "html"
+      "javascript"
+      "typescript"
+      "javascriptreact"
+      "typescriptreact"
+      "svelte"
+      "vue"
+      "tsx"
+      "jsx"
+      "rescript"
+      "xml"
+      "php"
+      "markdown"
+      "astro"
+      "glimmer"
+      "handlebars"
+      "hbs"
+    ] "Filetypes for which ts-autotag should be enabled.";
 
-    skipTags = helpers.defaultNullOpts.mkNullable (with types; listOf str) ''
-      [
-        "area"
-        "base"
-        "br"
-        "col"
-        "command"
-        "embed"
-        "hr"
-        "img"
-        "slot"
-        "input"
-        "keygen"
-        "link"
-        "meta"
-        "param"
-        "source"
-        "track"
-        "wbr"
-        "menuitem"
-      ]
-    '' "Which tags to skip.";
+    skipTags = helpers.defaultNullOpts.mkListOf types.str [
+      "area"
+      "base"
+      "br"
+      "col"
+      "command"
+      "embed"
+      "hr"
+      "img"
+      "slot"
+      "input"
+      "keygen"
+      "link"
+      "meta"
+      "param"
+      "source"
+      "track"
+      "wbr"
+      "menuitem"
+    ] "Which tags to skip.";
   };
 
   config =

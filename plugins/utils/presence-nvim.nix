@@ -27,12 +27,11 @@ in
       '';
 
       mainImage =
-        helpers.defaultNullOpts.mkEnum
+        helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "neovim"
             "file"
           ]
-          "neovim"
           ''
             Main image display.
           '';
@@ -63,24 +62,20 @@ in
         Displays the current line number instead of the current project.
       '';
 
-      blacklist = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      blacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         A list of strings or Lua patterns that disable Rich Presence if the
         current file name, path, or workspace matches.
       '';
 
       buttons =
-        helpers.defaultNullOpts.mkNullable
-          (types.either helpers.nixvimTypes.rawLua (
-            types.listOf (
-              types.submodule {
-                options = {
-                  label = helpers.mkNullOrOption types.str "";
-                  url = helpers.mkNullOrOption types.str "";
-                };
-              }
-            )
-          ))
-          "[]"
+        helpers.defaultNullOpts.mkListOf
+          (types.submodule {
+            options = {
+              label = helpers.mkNullOrOption types.str "";
+              url = helpers.mkNullOrOption types.str "";
+            };
+          })
+          [ ]
           ''
             Button configurations which will always appear in Rich Presence.
 
@@ -118,72 +113,54 @@ in
       showTime = helpers.defaultNullOpts.mkBool true "Show the timer.";
 
       # Rich presence text options.
-      editingText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Editing %s"
-          ''
-            String rendered when an editable file is loaded in the buffer.
+      editingText = helpers.defaultNullOpts.mkStr "Editing %s" ''
+        String rendered when an editable file is loaded in the buffer.
 
-            Can also be a lua function:
-            `function(filename: string): string`
-          '';
+        Can also be a lua function:
+        `function(filename: string): string`
+      '';
 
-      fileExplorerText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Browsing %s"
-          ''
-            String rendered when browsing a file explorer.
+      fileExplorerText = helpers.defaultNullOpts.mkStr "Browsing %s" ''
+        String rendered when browsing a file explorer.
 
-            Can also be a lua function:
-            `function(file_explorer_name: string): string`
-          '';
+        Can also be a lua function:
+        `function(file_explorer_name: string): string`
+      '';
 
-      gitCommitText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Committing changes"
-          ''
-            String rendered when committing changes in git.
+      gitCommitText = helpers.defaultNullOpts.mkStr "Committing changes" ''
+        String rendered when committing changes in git.
 
-            Can also be a lua function:
-            `function(filename: string): string`
-          '';
+        Can also be a lua function:
+        `function(filename: string): string`
+      '';
 
-      pluginManagerText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Managing plugins"
-          ''
-            String rendered when managing plugins.
+      pluginManagerText = helpers.defaultNullOpts.mkStr "Managing plugins" ''
+        String rendered when managing plugins.
 
-            Can also be a lua function:
-            `function(plugin_manager_name: string): string`
-          '';
+        Can also be a lua function:
+        `function(plugin_manager_name: string): string`
+      '';
 
-      readingText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Reading %s"
-          ''
-            String rendered when a read-only/unmodifiable file is loaded into the buffer.
+      readingText = helpers.defaultNullOpts.mkStr "Reading %s" ''
+        String rendered when a read-only/unmodifiable file is loaded into the buffer.
 
-            Can also be a lua function:
-            `function(filename: string): string`
-          '';
+        Can also be a lua function:
+        `function(filename: string): string`
+      '';
 
-      workspaceText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Working on %s"
-          ''
-            String rendered when in a git repository.
+      workspaceText = helpers.defaultNullOpts.mkStr "Working on %s" ''
+        String rendered when in a git repository.
 
-            Can also be a lua function:
-            `function(project_name: string|nil, filename: string): string`
-          '';
+        Can also be a lua function:
+        `function(project_name: string|nil, filename: string): string`
+      '';
 
-      lineNumberText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Line %s out of %s"
-          ''
-            String rendered when `enableLineNumber` is set to `true` to display the current line number.
+      lineNumberText = helpers.defaultNullOpts.mkStr "Line %s out of %s" ''
+        String rendered when `enableLineNumber` is set to `true` to display the current line number.
 
-            Can also be a lua function:
-            `function(line_number: number, line_count: number): string`
-          '';
+        Can also be a lua function:
+        `function(line_number: number, line_count: number): string`
+      '';
     };
   };
 

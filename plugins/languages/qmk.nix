@@ -74,29 +74,27 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             `variant=qmk`).
           '';
 
-      keymap_overrides = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+      keymap_overrides = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         A dictionary of key codes to text replacements, any provided value will be merged with the
         existing dictionary, see [key_map.lua](https://github.com/codethread/qmk.nvim/blob/main/lua/qmk/config/key_map.lua) for details.
       '';
 
       symbols =
         helpers.defaultNullOpts.mkAttrsOf types.str
-          ''
-            {
-              space = " ";
-              horz = "─";
-              vert = "│";
-              tl = "┌";
-              tm = "┬";
-              tr = "┐";
-              ml = "├";
-              mm = "┼";
-              mr = "┤";
-              bl = "└";
-              bm = "┴";
-              br = "┘";
-            }
-          ''
+          {
+            space = " ";
+            horz = "─";
+            vert = "│";
+            tl = "┌";
+            tm = "┬";
+            tr = "┐";
+            ml = "├";
+            mm = "┼";
+            mr = "┤";
+            bl = "└";
+            bm = "┴";
+            br = "┘";
+          }
           ''
             A dictionary of symbols used for the preview comment border chars see [default.lua](https://github.com/codethread/qmk.nvim/blob/main/lua/qmk/config/default.lua) for details.
           '';

@@ -203,12 +203,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             };
           })
         )
-        ''
-          {
-            basic = true;
-            extra = true;
-          }
-        ''
+        {
+          basic = true;
+          extra = true;
+        }
         ''
           Enables keybindings.
           NOTE: If given 'false', then the plugin won't create any mappings.

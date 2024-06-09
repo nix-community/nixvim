@@ -26,7 +26,7 @@ in
           "<"
           ">"
         ])
-        "[]"
+        [ ]
         ''
           Which builtin marks to track and show. If set, these marks will also show up in the
           signcolumn and will update on `|CursorMoved|`.
@@ -76,7 +76,7 @@ in
             };
           })
         )
-        "10"
+        10
         ''
           The sign priority to be used for marks.
           Can either be a number, in which case the priority applies to all types of marks, or a
@@ -88,7 +88,7 @@ in
           - bookmark: sign priority for bookmarks
         '';
 
-    excludedFiletypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    excludedFiletypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Which filetypes to ignore.
       If a buffer with this filetype is opened, then `marks.nvim` will not track any marks set in
       this buffer, and will not display any signs.
@@ -96,7 +96,7 @@ in
       "m[" will not.
     '';
 
-    excludedBuftypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    excludedBuftypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Which buftypes to ignore.
       If a buffer with this buftype is opened, then `marks.nvim` will not track any marks set in
       this buffer, and will not display any signs.
@@ -138,7 +138,7 @@ in
       );
     };
 
-    mappings = helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [ false ])) "{}" ''
+    mappings = helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [ false ])) { } ''
       Custom mappings.
       Set a mapping to `false` to disable it.
     '';

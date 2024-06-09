@@ -32,7 +32,7 @@ with lib;
 
     substitutions = helpers.defaultNullOpts.mkAttrsOf (
       with helpers.nixvimTypes; either str rawLua
-    ) "{}" "A map for custom variables, the key should be the variable and the value a function.";
+    ) { } "A map for custom variables, the key should be the variable and the value a function.";
   };
 
   new_notes_location =
@@ -215,10 +215,10 @@ with lib;
   };
 
   mappings =
-    helpers.defaultNullOpts.mkNullable
+    helpers.defaultNullOpts.mkAttrsOf
       (
         with types;
-        attrsOf (submodule {
+        submodule {
           options = {
             action = mkOption {
               type = helpers.nixvimTypes.strLua;
@@ -231,25 +231,23 @@ with lib;
               '';
             };
           };
-        })
-      )
-      ''
-        {
-          gf = {
-            action = "require('obsidian').util.gf_passthrough";
-            opts = {
-              noremap = false;
-              expr = true;
-              buffer = true;
-            };
-          };
-
-          "<leader>ch" = {
-            action = "require('obsidian').util.toggle_checkbox";
-            opts.buffer = true;
-          };
         }
-      ''
+      )
+      {
+        gf = {
+          action = "require('obsidian').util.gf_passthrough";
+          opts = {
+            noremap = false;
+            expr = true;
+            buffer = true;
+          };
+        };
+
+        "<leader>ch" = {
+          action = "require('obsidian').util.toggle_checkbox";
+          opts.buffer = true;
+        };
+      }
       ''
         Configure key mappings.
       '';
@@ -268,12 +266,10 @@ with lib;
 
     note_mappings =
       helpers.defaultNullOpts.mkAttrsOf types.str
-        ''
-          {
-            new = "<C-x>";
-            insert_link = "<C-l>";
-          }
-        ''
+        {
+          new = "<C-x>";
+          insert_link = "<C-l>";
+        }
         ''
           Optional, configure note mappings for the picker. These are the defaults.
           Not all pickers support all mappings.
@@ -281,12 +277,10 @@ with lib;
 
     tag_mappings =
       helpers.defaultNullOpts.mkAttrsOf types.str
-        ''
-          {
-            tag_note = "<C-x>";
-            insert_tag = "<C-l>";
-          }
-        ''
+        {
+          tag_note = "<C-x>";
+          insert_tag = "<C-l>";
+        }
         ''
           Optional, configure tag mappings for the picker. These are the defaults.
           Not all pickers support all mappings.
@@ -369,10 +363,10 @@ with lib;
     '';
 
     checkboxes =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkAttrsOf
         (
           with types;
-          attrsOf (submodule {
+          submodule {
             options = {
               char = mkOption {
                 type = with helpers.nixvimTypes; maybeRaw str;
@@ -384,28 +378,26 @@ with lib;
                 description = "The name of the highlight group to use for this checkbox.";
               };
             };
-          })
-        )
-        ''
-          {
-            " " = {
-              char = "󰄱";
-              hl_group = "ObsidianTodo";
-            };
-            "x" = {
-              char = "";
-              hl_group = "ObsidianDone";
-            };
-            ">" = {
-              char = "";
-              hl_group = "ObsidianRightArrow";
-            };
-            "~" = {
-              char = "󰰱";
-              hl_group = "ObsidianTilde";
-            };
           }
-        ''
+        )
+        {
+          " " = {
+            char = "󰄱";
+            hl_group = "ObsidianTodo";
+          };
+          "x" = {
+            char = "";
+            hl_group = "ObsidianDone";
+          };
+          ">" = {
+            char = "";
+            hl_group = "ObsidianRightArrow";
+          };
+          "~" = {
+            char = "󰰱";
+            hl_group = "ObsidianTilde";
+          };
+        }
         ''
           Define how various check-boxes are displayed.
           You can also add more custom ones...
@@ -452,40 +444,38 @@ with lib;
       '';
     };
 
-    hl_groups = helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; attrsOf highlight) ''
-      {
-        ObsidianTodo = {
-          bold = true;
-          fg = "#f78c6c";
-        };
-        ObsidianDone = {
-          bold = true;
-          fg = "#89ddff";
-        };
-        ObsidianRightArrow = {
-          bold = true;
-          fg = "#f78c6c";
-        };
-        ObsidianTilde = {
-          bold = true;
-          fg = "#ff5370";
-        };
-        ObsidianRefText = {
-          underline = true;
-          fg = "#c792ea";
-        };
-        ObsidianExtLinkIcon = {
-          fg = "#c792ea";
-        };
-        ObsidianTag = {
-          italic = true;
-          fg = "#89ddff";
-        };
-        ObsidianHighlightText = {
-          bg = "#75662e";
-        };
-      }
-    '' "Highlight group definitions.";
+    hl_groups = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight {
+      ObsidianTodo = {
+        bold = true;
+        fg = "#f78c6c";
+      };
+      ObsidianDone = {
+        bold = true;
+        fg = "#89ddff";
+      };
+      ObsidianRightArrow = {
+        bold = true;
+        fg = "#f78c6c";
+      };
+      ObsidianTilde = {
+        bold = true;
+        fg = "#ff5370";
+      };
+      ObsidianRefText = {
+        underline = true;
+        fg = "#c792ea";
+      };
+      ObsidianExtLinkIcon = {
+        fg = "#c792ea";
+      };
+      ObsidianTag = {
+        italic = true;
+        fg = "#89ddff";
+      };
+      ObsidianHighlightText = {
+        bg = "#75662e";
+      };
+    } "Highlight group definitions.";
   };
 
   attachments = {

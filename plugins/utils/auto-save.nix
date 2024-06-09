@@ -32,15 +32,13 @@ in
     executionMessage = {
       message =
         helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-          ''
-            {
-              __raw = \'\'
-                function()
-                  return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
-                end
-              \'\';
-            }
-          ''
+          {
+            __raw = ''
+              function()
+                return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
+              end
+            '';
+          }
           ''
             The message to print en save.
             This can be a lua function that returns a string.
@@ -48,7 +46,7 @@ in
 
       dim = helpers.defaultNullOpts.mkNullable (types.numbers.between 0
         1
-      ) "0.18" "Dim the color of `message`.";
+      ) 0.18 "Dim the color of `message`.";
 
       cleaningInterval = helpers.defaultNullOpts.mkInt 1250 ''
         Time (in milliseconds) to wait before automatically cleaning MsgArea after displaying
@@ -58,7 +56,11 @@ in
     };
 
     triggerEvents =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["InsertLeave" "TextChanged"]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "InsertLeave"
+          "TextChanged"
+        ]
         ''
           Vim events that trigger auto-save.
           See `:h events`.

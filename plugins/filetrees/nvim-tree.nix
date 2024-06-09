@@ -11,19 +11,15 @@ let
   inherit (helpers) ifNonNull';
 
   openWinConfigOption =
-    helpers.defaultNullOpts.mkNullable
-      # Type
-      types.attrs
+    helpers.defaultNullOpts.mkAttributeSet
       # Default
-      ''
-        {
-          col = 1;
-          row = 1;
-          relative = "cursor";
-          border = "shadow";
-          style = "minimal";
-        }
-      ''
+      {
+        col = 1;
+        row = 1;
+        relative = "cursor";
+        border = "shadow";
+        style = "minimal";
+      }
       # Description
       ''
         Floating window config for file_popup. See |nvim_open_win| for more details.
@@ -97,14 +93,13 @@ in
     '';
 
     sortBy =
-      helpers.defaultNullOpts.mkNullable
-        (types.either (types.enum [
+      helpers.defaultNullOpts.mkEnumFirstDefault
+        [
           "name"
           "case_sensitive"
           "modification_time"
           "extension"
-        ]) helpers.nixvimTypes.rawLua)
-        "name"
+        ]
         ''
           Changes how files within the same directory are sorted.
           Can be one of `name`, `case_sensitive`, `modification_time`, `extension` or a
@@ -120,15 +115,17 @@ in
             - `type`:          `"directory"` | `"file"` | `"link"`
 
             Example: sort by name length:
+            ```nix
               sortBy = {
-                __raw = \'\'
+                __raw = '''
                   local sort_by = function(nodes)
                     table.sort(nodes, function(a, b)
                       return #a.name < #b.name
                     end)
                   end
-                \'\';
+                ''';
               };
+            ```
         '';
 
     hijackUnnamedBufferWhenOpening = helpers.defaultNullOpts.mkBool false ''
@@ -139,7 +136,7 @@ in
       Keeps the cursor on the first letter of the filename when moving in the tree.
     '';
 
-    rootDirs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+    rootDirs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Preferred root directories.
       Only relevant when `updateFocusedFile.updateRoot` is `true`.
     '';
@@ -187,7 +184,7 @@ in
         Only relevant when `updateFocusedFile.enable` is `true`
       '';
 
-      ignoreList = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      ignoreList = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         List of buffer names and filetypes that will not update the root dir of the tree if the
         file isn't found under the current root directory.
         Only relevant when `updateFocusedFile.updateRoot` and `updateFocusedFile.enable` are
@@ -205,7 +202,7 @@ in
           Windows: "`cmd"`
       '';
 
-      args = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      args = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         Optional argument list.
 
         Leave empty for OS specific default:
@@ -310,7 +307,7 @@ in
         Idle milliseconds between filesystem change and action.
       '';
 
-      ignoreDirs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      ignoreDirs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         List of vim regex for absolute directory paths that will not be watched.
         Backslashes must be escaped e.g. `"my-project/\\.build$"`.
         See |string-match|.
@@ -318,29 +315,25 @@ in
       '';
     };
 
-    onAttach =
-      helpers.defaultNullOpts.mkNullable
-        (with types; either (enum [ "default" ]) helpers.nixvimTypes.rawLua)
-        "default"
-        ''
-          Function ran when creating the nvim-tree buffer.
-          This can be used to attach keybindings to the tree buffer.
-          When onAttach is "default", it will use the older mapping strategy, otherwise it
-          will use the newer one.
-
-          Example:
-          {
-            __raw = \'\'
-              function(bufnr)
-                local api = require("nvim-tree.api")
-                vim.keymap.set("n", "<C-P>", function()
-                  local node = api.tree.get_node_under_cursor()
-                  print(node.absolute_path)
-                end, { buffer = bufnr, noremap = true, silent = true, nowait = true, desc = "print the node's absolute path" })
-              end
-            \'\';
-          }
-        '';
+    onAttach = helpers.defaultNullOpts.mkEnum' {
+      values = [ "default" ];
+      default = "default";
+      description = ''
+        Function ran when creating the nvim-tree buffer.
+        This can be used to attach keybindings to the tree buffer.
+        When onAttach is "default", it will use the older mapping strategy, otherwise it
+        will use the newer one.
+      '';
+      example.__raw = ''
+        function(bufnr)
+          local api = require("nvim-tree.api")
+          vim.keymap.set("n", "<C-P>", function()
+            local node = api.tree.get_node_under_cursor()
+            print(node.absolute_path)
+          end, { buffer = bufnr, noremap = true, silent = true, nowait = true, desc = "print the node's absolute path" })
+        end
+      '';
+    };
 
     selectPrompts = helpers.defaultNullOpts.mkBool false ''
       Use |vim.ui.select| style prompts.
@@ -389,7 +382,7 @@ in
               })
             ]
           )
-          "30"
+          30
           ''
             Width of the window: can be a `%` string, a number representing columns or a table.
             A table indicates that the view should be dynamically sized based on the longest line.
@@ -421,13 +414,12 @@ in
       '';
 
       signcolumn =
-        helpers.defaultNullOpts.mkEnum
+        helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "yes"
             "auto"
             "no"
           ]
-          "yes"
           ''
             Show diagnostic sign column. Value can be `"yes"`, `"auto"`, `"no"`.
           '';
@@ -516,13 +508,15 @@ in
             and should return a string.
             e.g.
 
-            rootFolderLabel = {
-              __raw = \'\'
-                  my_root_folder_label = function(path)
-                  return ".../" .. vim.fn.fnamemodify(path, ":t")
-                  end
-              \'\';
-            };
+            ```nix
+              rootFolderLabel = {
+                __raw = '''
+                    my_root_folder_label = function(path)
+                    return ".../" .. vim.fn.fnamemodify(path, ":t")
+                    end
+                ''';
+              };
+            ```
           '';
 
       indentWidth = helpers.defaultNullOpts.mkInt 2 ''
@@ -570,13 +564,12 @@ in
             '';
 
         modifiedPlacement =
-          helpers.defaultNullOpts.mkEnum
+          helpers.defaultNullOpts.mkEnumFirstDefault
             [
               "after"
               "before"
               "signcolumn"
             ]
-            "after"
             ''
               Place where the modified icon will be rendered.
               Can be `"after"` or `"before"` filename (after the file/folders icons) or `"signcolumn"`
@@ -682,10 +675,12 @@ in
         };
       };
 
-      specialFiles =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          "[ \"Cargo.toml\" \"Makefile\" \"README.md\" \"readme.md\" ]"
-          "A list of filenames that gets highlighted with `NvimTreeSpecialFile`.";
+      specialFiles = helpers.defaultNullOpts.mkListOf types.str [
+        "Cargo.toml"
+        "Makefile"
+        "README.md"
+        "readme.md"
+      ] "A list of filenames that gets highlighted with `NvimTreeSpecialFile`.";
 
       symlinkDestination = helpers.defaultNullOpts.mkBool true ''
         Whether to show the destination of the symlink.
@@ -711,13 +706,13 @@ in
         A reload or filesystem event will result in an update.
       '';
 
-      custom = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      custom = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         Custom list of vim regex for file/directory names that will not be shown.
         Backslashes must be escaped e.g. "^\\.git". See |string-match|.
         Toggle via the `toggle_custom` action, default mapping `U`.
       '';
 
-      exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      exclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         List of directories or files to exclude from filtering: always show them.
         Overrides `git.ignore`, `filters.dotfiles` and `filters.custom`.
       '';
@@ -753,7 +748,7 @@ in
           Avoids hanging neovim when running this action on very large folders.
         '';
 
-        exclude = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+        exclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           A list of directories that should not be expanded automatically.
           E.g `[ ".git" "target" "build" ]` etc.
         '';
@@ -781,29 +776,37 @@ in
           tree.
         '';
 
-        picker =
-          helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "default"
-            ''
-              Change the default window picker, can be a string `"default"` or a function.
-              The function should return the window id that will open the node, or `nil` if an
-              invalid window is picked or user cancelled the action.
+        picker = helpers.defaultNullOpts.mkStr "default" ''
+          Change the default window picker, can be a string `"default"` or a function.
+          The function should return the window id that will open the node, or `nil` if an
+          invalid window is picked or user cancelled the action.
 
-              This can be both a string or a function (see example below).
-              picker = { __raw = "require('window-picker').pick_window"; };
-            '';
+          This can be both a string or a function (see example below).
+          picker = { __raw = "require('window-picker').pick_window"; };
+        '';
 
         chars = helpers.defaultNullOpts.mkStr "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" ''
           A string of chars used as identifiers by the window picker.
         '';
 
         exclude =
-          helpers.defaultNullOpts.mkNullable (with types; attrsOf (listOf str))
-            ''
-              {
-                filetype = [ "notify" "lazy" "packer" "qf" "diff" "fugitive" "fugitiveblame" ];
-                buftype = [ "nofile" "terminal" "help" ];
-              };
-            ''
+          helpers.defaultNullOpts.mkAttrsOf (with types; listOf str)
+            {
+              filetype = [
+                "notify"
+                "lazy"
+                "packer"
+                "qf"
+                "diff"
+                "fugitive"
+                "fugitiveblame"
+              ];
+              buftype = [
+                "nofile"
+                "terminal"
+                "help"
+              ];
+            }
             ''
               Table of buffer option names mapped to a list of option values that indicates to
               the picker that the buffer's window should not be selectable.
@@ -845,7 +848,7 @@ in
           Closes the tree across all tabpages when the tree is closed.
         '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of filetypes or buffer names on new tab that will prevent
           |nvim-tree.tab.sync.open| and |nvim-tree.tab.sync.close|
         '';

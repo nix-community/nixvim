@@ -8,7 +8,7 @@
 with lib;
 let
   cfg = config.plugins.chadtree;
-  mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
+  mkListStr = helpers.defaultNullOpts.mkListOf types.str;
 in
 {
   options.plugins.chadtree = helpers.neovim-plugin.extraOptionsOptions // {
@@ -27,11 +27,19 @@ in
       '';
 
       mimetypes = {
-        warn = mkListStr ''["audio" "font" "image" "video"]'' ''
-          Show a warning before opening these datatypes.
-        '';
+        warn =
+          mkListStr
+            [
+              "audio"
+              "font"
+              "image"
+              "video"
+            ]
+            ''
+              Show a warning before opening these datatypes.
+            '';
 
-        allowExts = mkListStr ''[".ts"]'' ''
+        allowExts = mkListStr [ ".ts" ] ''
           Skip warning for these extensions.
         '';
       };
@@ -58,16 +66,24 @@ in
       '';
 
       ignore = {
-        nameExact = mkListStr ''[".DS_Store" ".directory" "thumbs.db" ".git"]'' ''
-          Files whose name match these exactly will be ignored.
-        '';
+        nameExact =
+          mkListStr
+            [
+              ".DS_Store"
+              ".directory"
+              "thumbs.db"
+              ".git"
+            ]
+            ''
+              Files whose name match these exactly will be ignored.
+            '';
 
-        nameGlob = mkListStr "[]" ''
+        nameGlob = mkListStr [ ] ''
           Files whose name match these glob patterns will be ignored.
           ie. `*.py` will match all python files
         '';
 
-        pathGlob = mkListStr "[]" ''
+        pathGlob = mkListStr [ ] ''
           Files whose full path match these glob patterns will be ignored.
         '';
       };
@@ -85,12 +101,19 @@ in
             Which way does CHADTree open?
           '';
 
-      sortBy = mkListStr ''["is_folder" "ext" "file_name"]'' ''
-        CHADTree can sort by the following criterion.
-        Reorder them if you want a different sorting order.
-        legal keys: some of
-        `["is_folder" "ext" "file_name"]`
-      '';
+      sortBy =
+        mkListStr
+          [
+            "is_folder"
+            "ext"
+            "file_name"
+          ]
+          ''
+            CHADTree can sort by the following criterion.
+            Reorder them if you want a different sorting order.
+            legal keys: some of
+            `["is_folder" "ext" "file_name"]`
+          '';
 
       width = helpers.defaultNullOpts.mkInt 40 ''
         How big is CHADTree when initially opened?
@@ -184,123 +207,141 @@ in
 
     keymap = {
       windowManagement = {
-        quit = mkListStr ''["q"]'' ''
+        quit = mkListStr [ "q" ] ''
           Close CHADTree window, quit if it is the last window.
         '';
 
-        bigger = mkListStr ''["+" "="]'' ''
-          Resize CHADTree window bigger.
-        '';
+        bigger =
+          mkListStr
+            [
+              "+"
+              "="
+            ]
+            ''
+              Resize CHADTree window bigger.
+            '';
 
-        smaller = mkListStr ''["-" "_"]'' ''
-          Resize CHADTree window smaller.
-        '';
+        smaller =
+          mkListStr
+            [
+              "-"
+              "_"
+            ]
+            ''
+              Resize CHADTree window smaller.
+            '';
 
-        refresh = mkListStr ''["<c-r>"]'' ''
+        refresh = mkListStr [ "<c-r>" ] ''
           Refresh CHADTree.
         '';
       };
 
       rerooting = {
-        changeDir = mkListStr ''["b"]'' ''
+        changeDir = mkListStr [ "b" ] ''
           Change vim's working directory.
         '';
 
-        changeFocus = mkListStr ''["c"]'' ''
+        changeFocus = mkListStr [ "c" ] ''
           Set CHADTree's root to folder at cursor. Does not change working directory.
         '';
 
-        changeFocusUp = mkListStr ''["C"]'' ''
+        changeFocusUp = mkListStr [ "C" ] ''
           Set CHADTree's root one level up.
         '';
       };
 
       openFileFolder = {
-        primary = mkListStr ''["<enter>"]'' ''
+        primary = mkListStr [ "<enter>" ] ''
           Open file at cursor.
         '';
 
-        secondary = mkListStr ''["<tab> <2-leftmouse>"]'' ''
+        secondary = mkListStr [ "<tab> <2-leftmouse>" ] ''
           Open file at cursor, keep cursor in CHADTree's window.
         '';
 
-        tertiary = mkListStr ''["<m-enter>" <middlemouse>]'' ''
-          Open file at cursor in a new tab.
-        '';
+        tertiary =
+          mkListStr
+            [
+              "<m-enter>"
+              "<middlemouse>"
+            ]
+            ''
+              Open file at cursor in a new tab.
+            '';
 
-        vSplit = mkListStr ''["w"]'' ''
+        vSplit = mkListStr [ "w" ] ''
           Open file at cursor in vertical split.
         '';
 
-        hSplit = mkListStr ''["W"]'' ''
+        hSplit = mkListStr [ "W" ] ''
           Open file at cursor in horizontal split.
         '';
 
-        openSys = mkListStr ''["o"]'' ''
+        openSys = mkListStr [ "o" ] ''
           Open file with GUI tools using `open` or `xdg open`.
           This will open third party tools such as Finder or KDE Dolphin or GNOME nautilus, etc.
           Depends on platform and user setup.
         '';
 
-        collapse = mkListStr ''["o"]'' ''
+        collapse = mkListStr [ "o" ] ''
           Collapse all subdirectories for directory at cursor.
         '';
       };
 
       cursor = {
-        refocus = mkListStr ''["~"]'' ''
+        refocus = mkListStr [ "~" ] ''
           Put cursor at the root of CHADTree.
         '';
 
-        jumpToCurrent = mkListStr ''["J"]'' ''
+        jumpToCurrent = mkListStr [ "J" ] ''
           Position cursor in CHADTree at currently open buffer, if the buffer points to a location visible under CHADTree.
         '';
 
-        stat = mkListStr ''["K"]'' ''
+        stat = mkListStr [ "K" ] ''
           Print `ls --long` stat for file under cursor.
         '';
 
-        copyName = mkListStr ''["y"]'' ''
+        copyName = mkListStr [ "y" ] ''
           Copy paths of files under cursor or visual block.
         '';
 
-        copyBasename = mkListStr ''["Y"]'' ''
+        copyBasename = mkListStr [ "Y" ] ''
           Copy names of files under cursor or visual block.
         '';
 
-        copyRelname = mkListStr ''["<c-y>"]'' ''
+        copyRelname = mkListStr [ "<c-y>" ] ''
           Copy relative paths of files under cursor or visual block.
         '';
       };
 
       filtering = {
-        filter = mkListStr ''["f"]'' ''
+        filter = mkListStr [ "f" ] ''
           Set a glob pattern to narrow down visible files.
         '';
 
-        clearFilter = mkListStr ''["F"]'' ''
+        clearFilter = mkListStr [ "F" ] ''
           Clear filter.
         '';
       };
 
       bookmarks = {
-        bookmarkGoto = mkListStr ''["m"]'' ''
+        bookmarkGoto = mkListStr [ "m" ] ''
           Goto bookmark `A-Z`.
         '';
       };
 
       selecting = {
-        select = mkListStr ''["s"]'' ''
+        select = mkListStr [ "s" ] ''
           Select files under cursor or visual block.
         '';
 
-        clearSelection = mkListStr ''["S"]'' ''
+        clearSelection = mkListStr [ "S" ] ''
           Clear selection.
         '';
       };
 
       fileOperations = {
-        new = mkListStr ''["a"]'' ''
+        new = mkListStr [ "a" ] ''
           Create new file at location under cursor. Files ending with platform specific path separator will be folders.
 
           Intermediary folders are created automatically.
@@ -308,7 +349,7 @@ in
           ie. `uwu/owo/` under unix will create `uwu/` then `owo/` under it. Both are folders.
         '';
 
-        link = mkListStr ''["A"]'' ''
+        link = mkListStr [ "A" ] ''
           Create links at location under cursor from selection.
 
           Links are always relative.
@@ -316,44 +357,44 @@ in
           Intermediary folders are created automatically.
         '';
 
-        rename = mkListStr ''["r"]'' ''
+        rename = mkListStr [ "r" ] ''
           Rename file under cursor.
         '';
 
-        toggleExec = mkListStr ''["X"]'' ''
+        toggleExec = mkListStr [ "X" ] ''
           Toggle all the `+x` bits of the selected / highlighted files.
 
           Except for directories, where `-x` will prevent reading.
         '';
 
-        copy = mkListStr ''["p"]'' ''
+        copy = mkListStr [ "p" ] ''
           Copy the selected files to location under cursor.
         '';
 
-        cut = mkListStr ''["x"]'' ''
+        cut = mkListStr [ "x" ] ''
           Move the selected files to location under cursor.
         '';
 
-        delete = mkListStr ''["d"]'' ''
+        delete = mkListStr [ "d" ] ''
           Delete the selected files. Items deleted cannot be recovered.
         '';
 
-        trash = mkListStr ''[t]'' ''
+        trash = mkListStr [ "t" ] ''
           Trash the selected files using platform specific `trash` command, if they are available.
           Items trashed may be recovered.
         '';
       };
 
       toggles = {
-        toggleHidden = mkListStr ''["."]'' ''
+        toggleHidden = mkListStr [ "." ] ''
           Toggle show_hidden on and off. See `chadtree.showHidden` for details.
         '';
 
-        toggleFollow = mkListStr ''["u"]'' ''
+        toggleFollow = mkListStr [ "u" ] ''
           Toggle `follow` on and off. See `chadtree.follow` for details.
         '';
 
-        toggleVersionControl = mkListStr ''["i"]'' ''
+        toggleVersionControl = mkListStr [ "i" ] ''
           Toggle version control integration on and off.
         '';
       };
