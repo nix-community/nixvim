@@ -112,11 +112,17 @@ in
         visible = false;
       };
 
-      inlayHints = mkEnableOption ''
-        LSP inlay-hints. Only affects language servers with inlay-hints support.
+      inlayHints = mkOption {
+        description = ''
+          Whether to enable LSP inlay-hints.
+          Only affects language servers with inlay-hints support.
 
-        See [`:h lsp-inlay_hint`](https://neovim.io/doc/user/lsp.html#lsp-inlay_hint).
-      '';
+          See [`:h lsp-inlay_hint`](https://neovim.io/doc/user/lsp.html#lsp-inlay_hint).
+        '';
+        type = types.bool;
+        default = false;
+        example = true;
+      };
 
       onAttach = mkOption {
         type = types.lines;
