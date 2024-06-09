@@ -41,7 +41,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         attrsOf (
           either str (submodule {
             options = {
-              action = mkOption { type = types.str; };
+              action = mkOption {
+                type = types.str;
+                description = "The telescope action to run.";
+              };
               mode = helpers.keymaps.mkModeOption "n";
               options = helpers.keymaps.mapConfigOptions;
             };

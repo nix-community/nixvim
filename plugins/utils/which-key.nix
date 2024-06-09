@@ -69,12 +69,21 @@ with lib;
     window =
       let
         spacingOptions = types.submodule {
-          options = {
-            top = mkOption { type = types.int; };
-            right = mkOption { type = types.int; };
-            bottom = mkOption { type = types.int; };
-            left = mkOption { type = types.int; };
-          };
+          options =
+            genAttrs
+              [
+                "top"
+                "right"
+                "bottom"
+                "left"
+              ]
+              (
+                n:
+                mkOption {
+                  type = types.ints.unsigned;
+                  description = "Spacing at the ${n}.";
+                }
+              );
         };
       in
       {
@@ -98,18 +107,26 @@ with lib;
       let
         rangeOption = types.submodule {
           options = {
-            min = mkOption { type = types.int; };
-            max = mkOption { type = types.int; };
+            min = mkOption {
+              type = types.int;
+              description = "Minimum size.";
+            };
+            max = mkOption {
+              type = types.int;
+              description = "Maximum size.";
+            };
           };
         };
       in
       {
-        height =
-          helpers.defaultNullOpts.mkNullable rangeOption "{min = 4; max = 25;}"
-            "min and max height of the columns";
-        width =
-          helpers.defaultNullOpts.mkNullable rangeOption "{min = 20; max = 50;}"
-            "min and max width of the columns";
+        height = helpers.defaultNullOpts.mkNullable rangeOption {
+          min = 4;
+          max = 25;
+        } "min and max height of the columns";
+        width = helpers.defaultNullOpts.mkNullable rangeOption {
+          min = 20;
+          max = 50;
+        } "min and max width of the columns";
         spacing = helpers.defaultNullOpts.mkInt 3 "spacing between columns";
         align = helpers.defaultNullOpts.mkEnumFirstDefault [
           "left"

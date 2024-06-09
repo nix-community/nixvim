@@ -108,18 +108,22 @@ in
 
       fileTypes = mkOption {
         description = "Enable and/or configure highlighting for certain filetypes";
-        type = types.nullOr (
-          types.listOf (
-            types.oneOf [
-              types.str
-              (types.submodule {
-                options = {
-                  language = mkOption { type = types.str; };
-                } // colorizer-options;
-              })
-            ]
-          )
-        );
+        type =
+          with types;
+          nullOr (
+            listOf (
+              either str (
+                types.submodule {
+                  options = {
+                    language = mkOption {
+                      type = types.str;
+                      description = "The language this configuration should apply to.";
+                    };
+                  } // colorizer-options;
+                }
+              )
+            )
+          );
         default = null;
       };
 
