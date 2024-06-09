@@ -6,25 +6,23 @@
 with lib;
 with nixvimUtils;
 rec {
-  # Creates an option with a nullable type that defaults to null.
-  mkNullOrOption' =
-    {
-      type,
-      default ? null,
-      ...
-    }@args:
-    lib.mkOption (
-      args
-      // {
-        type = lib.types.nullOr type;
-        inherit default;
-      }
-    );
-  mkNullOrOption = type: description: mkNullOrOption' { inherit type description; };
+  # Make these available as top-level functions
+  # Mainly for backwards compatibility
+  mkNullOrOption' = nullableOpts.mkOption';
+  mkNullOrOption = nullableOpts.mkOption;
+  mkNullOrLua' = nullableOpts.mkLua';
+  mkNullOrLua = nullableOpts.mkLua;
+  mkNullOrLuaFn' = nullableOpts.mkLuaFn';
+  mkNullOrLuaFn = nullableOpts.mkLuaFn;
+  mkNullOrStrLuaOr' = nullableOpts.mkStrLuaOr';
+  mkNullOrStrLuaOr = nullableOpts.mkStrLuaOr;
+  mkNullOrStrLuaFnOr' = nullableOpts.mkStrLuaFnOr';
+  mkNullOrStrLuaFnOr = nullableOpts.mkStrLuaFnOr;
 
+  # TODO: should we deprecate this?
   mkCompositeOption' =
     { options, ... }@args:
-    mkNullOrOption' (
+    nullableOpts.mkOption' (
       (filterAttrs (n: _: n != "options") args) // { type = types.submodule { inherit options; }; }
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
@@ -32,49 +30,71 @@ rec {
   # TODO: Deprecate in favor of explicitly named functions
   inherit (rawOpts) mkNullOrStr' mkNullOrStr;
 
-  mkNullOrLua' =
-    args:
-    mkNullOrOption' (
-      args
-      // {
-        type = nixvimTypes.strLua;
-        apply = mkRaw;
-      }
-    );
-  mkNullOrLua = description: mkNullOrLua' { inherit description; };
+  # Functions to create nullable options
+  # Warning: does not add support for the raw type
+  nullableOpts = rec {
+    mkOption' =
+      {
+        type,
+        default ? null,
+        ...
+      }@args:
+      lib.mkOption (
+        args
+        // {
+          type = types.nullOr type;
+          inherit default;
+        }
+      );
+    mkOption = type: description: nullableOpts.mkOption' { inherit type description; };
 
-  mkNullOrLuaFn' =
-    args:
-    mkNullOrOption' (
-      args
-      // {
-        type = nixvimTypes.strLuaFn;
-        apply = mkRaw;
-      }
-    );
-  mkNullOrLuaFn = description: mkNullOrLua' { inherit description; };
+    mkStr' = args: mkOption' (args // { type = types.str; });
+    mkStr = description: mkStr' { inherit description; };
 
-  mkNullOrStrLuaOr' =
-    { type, ... }@args:
-    mkNullOrOption' (
-      args
-      // {
-        type = with nixvimTypes; either strLua type;
-        apply = v: if isString v then mkRaw v else v;
-      }
-    );
-  mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
+    mkLua' =
+      args:
+      mkOption' (
+        args
+        // {
+          type = nixvimTypes.strLua;
+          apply = mkRaw;
+        }
+      );
+    mkLua = description: mkLua' { inherit description; };
 
-  mkNullOrStrLuaFnOr' =
-    { type, ... }@args:
-    mkNullOrOption' (
-      args
-      // {
-        type = with nixvimTypes; either strLuaFn type;
-        apply = v: if isString v then mkRaw v else v;
-      }
-    );
-  mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
+    mkLuaFn' =
+      args:
+      mkOption' (
+        args
+        // {
+          type = nixvimTypes.strLuaFn;
+          apply = mkRaw;
+        }
+      );
+    mkLuaFn = description: mkLua' { inherit description; };
+
+    mkStrLuaOr' =
+      { type, ... }@args:
+      mkOption' (
+        args
+        // {
+          type = with nixvimTypes; either strLua type;
+          apply = v: if isString v then mkRaw v else v;
+        }
+      );
+    mkStrLuaOr = type: description: mkStrLuaOr' { inherit type description; };
+
+    mkStrLuaFnOr' =
+      { type, ... }@args:
+      mkOption' (
+        args
+        // {
+          type = with nixvimTypes; either strLuaFn type;
+          apply = v: if isString v then mkRaw v else v;
+        }
+      );
+    mkStrLuaFnOr = type: description: mkStrLuaFnOr' { inherit type description; };
+  };
 
   # Functions to create options that support the raw type
   rawOpts = rec {
@@ -89,7 +109,7 @@ rec {
       { type, ... }@args: mkOption (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
     mkAttrsOf = type: description: mkAttrsOf' { inherit type description; };
 
-    mkNullOrStr' = args: mkNullOrOption' (args // { type = with nixvimTypes; maybeRaw str; });
+    mkNullOrStr' = args: nullableOpts.mkOption' (args // { type = with nixvimTypes; maybeRaw str; });
     mkNullOrStr = description: mkNullOrStr' { inherit description; };
   };
 
@@ -163,7 +183,7 @@ rec {
             ${defaultDesc}
           '';
 
-      mkNullable' = args: mkNullOrOption' (convertArgs args);
+      mkNullable' = args: nullableOpts.mkOption' (convertArgs args);
       mkNullable =
         type: default: description:
         mkNullable' { inherit type default description; };
@@ -174,20 +194,20 @@ rec {
         type: default: description:
         mkNullableWithRaw' { inherit type default description; };
 
-      mkStrLuaOr' = args: mkNullOrStrLuaOr' (convertArgs args);
+      mkStrLuaOr' = args: nullableOpts.mkStrLuaOr' (convertArgs args);
       mkStrLuaOr =
         type: default: description:
         mkStrLuaOr' { inherit type default description; };
 
-      mkStrLuaFnOr' = args: mkNullOrStrLuaFnOr' (convertArgs args);
+      mkStrLuaFnOr' = args: nullableOpts.mkStrLuaFnOr' (convertArgs args);
       mkStrLuaFnOr =
         type: default: description:
         mkStrLuaFnOr' { inherit type default description; };
 
-      mkLua' = args: mkNullOrLua' (convertArgs args);
+      mkLua' = args: nullableOpts.mkLua' (convertArgs args);
       mkLua = default: description: mkLua' { inherit default description; };
 
-      mkLuaFn' = args: mkNullOrLuaFn' (convertArgs args);
+      mkLuaFn' = args: nullableOpts.mkLuaFn' (convertArgs args);
       mkLuaFn = default: description: mkLuaFn' { inherit default description; };
 
       mkNum' = args: mkNullableWithRaw' (args // { type = types.number; });
@@ -277,7 +297,7 @@ rec {
 
       mkSeverity' =
         args:
-        mkNullOrOption' (
+        nullableOpts.mkOption' (
           args
           // {
             type =
@@ -297,7 +317,7 @@ rec {
 
       mkLogLevel' =
         args:
-        mkNullOrOption' (
+        nullableOpts.mkOption' (
           args
           // {
             type = with nixvimTypes; either ints.unsigned logLevel;
@@ -338,7 +358,7 @@ rec {
     assert args ? default;
     # `name` must be present if `description` is missing
     assert (!args ? description) -> args ? name;
-    mkNullOrOption' (
+    nullableOpts.mkOption' (
       (filterAttrs (n: _: n != "name") args)
       // {
         type = types.package;
