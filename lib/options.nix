@@ -183,10 +183,13 @@ rec {
             ${defaultDesc}
           '';
 
-      mkNullable' = args: nullableOpts.mkOption' (convertArgs args);
-      mkNullable =
+      # TODO deprecate, then transition this alias to `mkNullableWithRaw`
+      mkNullable' = mkNullableNoRaw';
+      mkNullable = mkNullableNoRaw;
+      mkNullableNoRaw' = args: nullableOpts.mkOption' (convertArgs args);
+      mkNullableNoRaw =
         type: default: description:
-        mkNullable' { inherit type default description; };
+        mkNullableNoRaw' { inherit type default description; };
 
       mkNullableWithRaw' =
         { type, ... }@args: mkNullable' (args // { type = nixvimTypes.maybeRaw type; });
@@ -234,17 +237,19 @@ rec {
         );
       mkStr = default: description: mkStr' { inherit default description; };
 
-      mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
+      mkAttributeSet' = args: mkNullableWithRaw' (args // { type = nixvimTypes.attrs; });
       mkAttributeSet = default: description: mkAttributeSet' { inherit default description; };
 
       mkListOf' =
-        { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
+        { type, ... }@args:
+        mkNullableWithRaw' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
       mkListOf =
         type: default: description:
         mkListOf' { inherit type default description; };
 
       mkAttrsOf' =
-        { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
+        { type, ... }@args:
+        mkNullableWithRaw' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
       mkAttrsOf =
         type: default: description:
         mkAttrsOf' { inherit type default description; };
@@ -333,7 +338,7 @@ rec {
           description ? "Highlight settings.",
           ...
         }@args:
-        mkNullable' (
+        mkNullableWithRaw' (
           args
           // {
             type = nixvimTypes.highlight;
