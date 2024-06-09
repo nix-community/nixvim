@@ -17,7 +17,20 @@ let
       (listOf (
         either str (submodule {
           options = {
-            priority = mkOption { type = int; };
+            priority = mkOption {
+              type = ints.unsigned;
+              description = ''
+                Filename patterns can specify an optional priority to resolve cases when a file path
+                matches multiple patterns.
+
+                Higher priorities are matched first.
+                When omitted, the priority defaults to 0.
+
+                A pattern can contain environment variables of the form `"''${SOME_VAR}"` that will
+                be automatically expanded.
+                If the environment variable is not set, the pattern won't be matched.
+              '';
+            };
           };
         })
       ))

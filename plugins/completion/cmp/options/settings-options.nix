@@ -39,6 +39,10 @@ with lib;
   mapping = mkOption {
     default = { };
     type = with helpers.nixvimTypes; maybeRaw (attrsOf strLua);
+    description = ''
+      cmp mappings declaration.
+      See `:h cmp-mapping` for more information.
+    '';
     apply =
       v:
       # Handle the raw case first
