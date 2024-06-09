@@ -29,8 +29,8 @@ rec {
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
-  mkNullOrStr' = args: mkNullOrOption' (args // { type = with nixvimTypes; maybeRaw str; });
-  mkNullOrStr = description: mkNullOrStr' { inherit description; };
+  # TODO: Deprecate in favor of explicitly named functions
+  inherit (rawOpts) mkNullOrStr' mkNullOrStr;
 
   mkNullOrLua' =
     args:
@@ -76,6 +76,24 @@ rec {
     );
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
 
+  # Functions to create options that support the raw type
+  rawOpts = rec {
+    mkOption' = { type, ... }@args: lib.mkOption (args // { type = nixvimTypes.maybeRaw type; });
+    mkOption = type: description: mkOption' { inherit type description; };
+
+    mkListOf' =
+      { type, ... }@args: mkOption (args // { type = with nixvimTypes; listOf (maybeRaw type); });
+    mkListOf = type: description: mkListOf' { inherit type description; };
+
+    mkAttrsOf' =
+      { type, ... }@args: mkOption (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
+    mkAttrsOf = type: description: mkAttrsOf' { inherit type description; };
+
+    mkNullOrStr' = args: mkNullOrOption' (args // { type = with nixvimTypes; maybeRaw str; });
+    mkNullOrStr = description: mkNullOrStr' { inherit description; };
+  };
+
+  # Functions to create options that default to null, also with a "plugin default"
   defaultNullOpts =
     let
       # Convert `defaultNullOpts`-style arguments into normal `mkOption`-style arguments,
