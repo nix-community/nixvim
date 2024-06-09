@@ -14,9 +14,7 @@ rec {
   mkNullOrLua = nullableOpts.mkLua;
   mkNullOrLuaFn' = nullableOpts.mkLuaFn';
   mkNullOrLuaFn = nullableOpts.mkLuaFn;
-  mkNullOrStrLuaOr' = nullableOpts.mkStrLuaOr';
   mkNullOrStrLuaOr = nullableOpts.mkStrLuaOr;
-  mkNullOrStrLuaFnOr' = nullableOpts.mkStrLuaFnOr';
   mkNullOrStrLuaFnOr = nullableOpts.mkStrLuaFnOr;
 
   # TODO: should we deprecate this?
@@ -59,8 +57,13 @@ rec {
           type = nixvimTypes.strLua;
           apply = mkRaw;
         }
+        // (optionalAttrs (args ? type) {
+          type = with nixvimTypes; either strLua args.type;
+          apply = v: if isString v then mkRaw v else v;
+        })
       );
     mkLua = description: mkLua' { inherit description; };
+    mkStrLuaOr = type: description: mkLua' { inherit type description; };
 
     mkLuaFn' =
       args:
@@ -70,30 +73,13 @@ rec {
           type = nixvimTypes.strLuaFn;
           apply = mkRaw;
         }
+        // (optionalAttrs (args ? type) {
+          type = with nixvimTypes; either strLuaFn args.type;
+          apply = v: if isString v then mkRaw v else v;
+        })
       );
     mkLuaFn = description: mkLua' { inherit description; };
-
-    mkStrLuaOr' =
-      { type, ... }@args:
-      mkOption' (
-        args
-        // {
-          type = with nixvimTypes; either strLua type;
-          apply = v: if isString v then mkRaw v else v;
-        }
-      );
-    mkStrLuaOr = type: description: mkStrLuaOr' { inherit type description; };
-
-    mkStrLuaFnOr' =
-      { type, ... }@args:
-      mkOption' (
-        args
-        // {
-          type = with nixvimTypes; either strLuaFn type;
-          apply = v: if isString v then mkRaw v else v;
-        }
-      );
-    mkStrLuaFnOr = type: description: mkStrLuaFnOr' { inherit type description; };
+    mkStrLuaFnOr = type: description: mkLuaFn' { inherit type description; };
   };
 
   # Functions to create options that support the raw type
