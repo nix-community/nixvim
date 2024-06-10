@@ -188,7 +188,7 @@ with lib;
           helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) "lsp_progress"
             "";
 
-        throttle = helpers.defaultNullOpts.mkNum (1000 / 30) "frequency to update lsp progress message";
+        throttle = helpers.defaultNullOpts.mkNum (literalExpression "1000 / 30") "frequency to update lsp progress message";
 
         view = helpers.defaultNullOpts.mkStr "mini" "";
       };
@@ -299,7 +299,7 @@ with lib;
         config. you can also add custom presets that you can enable/disable with enabled=true
       ";
 
-    throttle = helpers.defaultNullOpts.mkNum (1000 / 30) ''
+    throttle = helpers.defaultNullOpts.mkNum (literalExpression "1000 / 30") ''
       how frequently does Noice need to check for ui updates? This has no effect when in blocking
       mode
     '';
