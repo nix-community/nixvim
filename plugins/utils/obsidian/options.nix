@@ -203,11 +203,14 @@ with lib;
   '';
 
   completion = {
-    nvim_cmp = helpers.mkNullOrOption types.bool ''
-      Set to false to disable completion.
-
-      Default: `true` if `nvim-cmp` is enabled (`plugins.cmp.enable`).
-    '';
+    # FIXME should this accept raw types?
+    nvim_cmp = helpers.mkNullOrOption' {
+      type = types.bool;
+      description = ''
+        Set to false to disable completion.
+      '';
+      defaultText = literalMD "`true` if `plugins.cmp.enable` is enabled (otherwise `null`).";
+    };
 
     min_chars = helpers.defaultNullOpts.mkUnsignedInt 2 ''
       Trigger completion at this many chars.

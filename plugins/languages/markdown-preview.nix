@@ -186,16 +186,16 @@ mkVimPlugin config {
       Recognized filetypes. These filetypes will have `MarkdownPreview...` commands.
     '';
 
-    theme =
-      helpers.mkNullOrOption
-        (types.enum [
-          "dark"
-          "light"
-        ])
-        ''
-          Default theme (dark or light).
-          By default the theme is define according to the preferences of the system.
-        '';
+    theme = helpers.defaultNullOpts.mkEnum' {
+      values = [
+        "dark"
+        "light"
+      ];
+      description = ''
+        Default theme (dark or light).
+      '';
+      default = literalMD "chosen based on system preferences";
+    };
 
     combine_preview = helpers.defaultNullOpts.mkBool false ''
       Combine preview window.

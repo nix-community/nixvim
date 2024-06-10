@@ -66,12 +66,13 @@ in
         doesn't exist then standard path resolution strategy is applied
       '';
 
-      tsserverPlugins =
-        with helpers.nixvimTypes;
-        helpers.mkNullOrOption (listOf (maybeRaw str)) ''
-          List of plugins for tsserver to load. See this plugins's README
-          at https://github.com/pmizio/typescript-tools.nvim/#-styled-components-support
+      tsserverPlugins = helpers.defaultNullOpts.mkListOf' {
+        type = types.str;
+        description = ''
+          List of plugins for tsserver to load.
+          See this plugins's [README](https://github.com/pmizio/typescript-tools.nvim/#-styled-components-support)
         '';
+      };
 
       tsserverMaxMemory =
         helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (either ints.unsigned (enum [ "auto" ])))

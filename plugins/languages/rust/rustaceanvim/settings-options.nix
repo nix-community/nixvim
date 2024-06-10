@@ -331,9 +331,10 @@ with lib;
             executable = {
               command = helpers.mkNullOrStr "The command for the executable.";
 
-              args = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf str)) ''
-                Its arguments.
-              '';
+              args = helpers.defaultNullOpts.listOf' {
+                type = types.str;
+                description = "Its arguments.";
+              };
             };
           };
         };

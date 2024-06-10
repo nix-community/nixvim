@@ -67,9 +67,17 @@ telescopeHelpers.mkExtension {
       plain diff with treesitter highlights.
     '';
 
-    use_custom_command = helpers.mkNullOrOption (with types; listOf str) ''
-      Should be in this format: `[ "bash" "-c" "echo '$DIFF' | delta" ]`
-    '';
+    use_custom_command = helpers.defaultNullOpts.mkListOf' {
+      type = types.str;
+      description = ''
+        Custom command.
+      '';
+      example = [
+        "bash"
+        "-c"
+        "echo '$DIFF' | delta"
+      ];
+    };
 
     side_by_side = helpers.defaultNullOpts.mkBool false ''
       If set to true tells `delta` to render diffs side-by-side. Thus, requires `delta` to be used.

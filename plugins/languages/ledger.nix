@@ -59,13 +59,17 @@ mkVimPlugin config {
       Path to the `ledger` executable.
     '';
 
-    is_hledger = helpers.mkNullOrOption types.bool ''
-      Whether to use ledger or hledger specific features.
-      Setting this value is optional and in most coses will be guessed correctly based on `bin`,
-      but in the event it isn't guessed correctly or you want to use different syntax features
-      even with your default tooling setup for the other engine this flag can be set to override
-      the value.
-    '';
+    is_hledger = helpers.defaultNullOpts.mkBool' {
+      # plugin default described in description:
+      description = ''
+        Whether to use ledger or hledger specific features.
+
+        Setting this value is optional and in most coses will be guessed correctly based on `bin`,
+        but in the event it isn't guessed correctly or you want to use different syntax features
+        even with your default tooling setup for the other engine this flag can be set to override
+        the value.
+      '';
+    };
 
     extra_options = helpers.defaultNullOpts.mkStr "" ''
       Additional default options for the `ledger` executable.

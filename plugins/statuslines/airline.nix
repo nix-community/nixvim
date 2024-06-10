@@ -180,24 +180,22 @@ mkVimPlugin config {
         If you want to use plain ascii symbols, set this variable: >
       '';
 
-      mode_map = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf str)) ''
+      mode_map = helpers.defaultNullOpts.mkAttrsOf types.str (literalMD "See source") ''
         Define the set of text to display for each mode.
-
-        Default: see source
       '';
 
-      exclude_filenames = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf str)) ''
-        Define the set of filename match queries which excludes a window from having its
-        statusline modified.
+      exclude_filenames =
+        helpers.defaultNullOpts.mkAttrsOf types.str (literalMD "See source for the current list")
+          ''
+            Define the set of filename match queries which excludes a window from having its
+            statusline modified.
+          '';
 
-        Default: see source for current list
-      '';
-
-      exclude_filetypes = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf str)) ''
-        Define the set of filetypes which are excluded from having its window statusline modified.
-
-        Default: see source for current list
-      '';
+      exclude_filetypes =
+        helpers.defaultNullOpts.mkAttrsOf types.str (literalMD "See source for the current list")
+          ''
+            Define the set of filetypes which are excluded from having its window statusline modified.
+          '';
 
       filetype_overrides = helpers.defaultNullOpts.mkAttrsOf' {
         type = with types; listOf str;
@@ -302,8 +300,8 @@ mkVimPlugin config {
         Display a only file name in statusline.
       '';
 
-      symbols = helpers.mkNullOrOption' {
-        type = with types; attrsOf str;
+      symbols = helpers.defaultNullOpts.mkAttrsOf' {
+        type = types.str;
         description = "Customize airline symbols.";
         example = {
           branch = "";

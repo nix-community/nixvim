@@ -197,15 +197,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       opts = import ./options.nix { inherit lib helpers; };
     in
     {
-      dir = helpers.mkNullOrOption types.str ''
-        Alternatively to `workspaces` - and for backwards compatibility - you can set `dir` to a
-        single path instead of `workspaces`.
-
-        For example:
-        ```nix
-          dir = "~/vaults/work";
-        ```
-      '';
+      dir = helpers.defaultNullOpts.mkStr' {
+        description = ''
+          Alternatively to `workspaces` - and for backwards compatibility - you can set `dir` to a
+          single path instead of `workspaces`.
+        '';
+        example = "~/vaults/work";
+      };
 
       workspaces =
         helpers.defaultNullOpts.mkListOf

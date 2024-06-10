@@ -57,10 +57,13 @@ in
         default = if (cfg.package or null) != null then cmd cfg else null;
       };
 
-      filetypes = helpers.mkNullOrOption (types.listOf types.str) ''
-        Set of filetypes for which to attempt to resolve {root_dir}.
-        May be empty, or server may specify a default value.
-      '';
+      filetypes = helpers.defaultNullOpts.mkListOf' {
+        type = types.str;
+        description = ''
+          Set of filetypes for which to attempt to resolve {root_dir}.
+          May be empty, or server may specify a default value.
+        '';
+      };
 
       autostart = helpers.defaultNullOpts.mkBool true ''
         Controls if the `FileType` autocommand that launches a language server is created.

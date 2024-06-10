@@ -68,11 +68,14 @@ in
         css = {
           enable = helpers.defaultNullOpts.mkBool true "Enable the CSS plugin.";
 
-          globals = helpers.mkNullOrOption types.str ''
-            Which css files should be checked for global variables (`--global-var: value;`).
-            These variables are added to the css completions.
-            String of comma-separated file paths or globs relative to workspace root.
-          '';
+          globals = helpers.defaultNullOpts.mkStr' {
+            type = types.str;
+            description = ''
+              Which css files should be checked for global variables (`--global-var: value;`).
+              These variables are added to the css completions.
+              String of comma-separated file paths or globs relative to workspace root.
+            '';
+          };
 
           diagnostics = {
             enable = helpers.defaultNullOpts.mkBool true ''
@@ -168,15 +171,16 @@ in
             '';
           };
 
-          compilerWarnings = helpers.mkNullOrOption (with types; attrsOf str) ''
-            Svelte compiler warning codes to ignore or to treat as errors.
-            Example:
-            ```
-            {
+          compilerWarnings = helpers.defaultNullOpts.mkAttrsOf' {
+            type = types.str;
+            description = ''
+              Svelte compiler warning codes to ignore or to treat as errors.
+            '';
+            example = {
               css-unused-selector = "ignore";
               unused-export-let = "error";
-            }
-          '';
+            };
+          };
 
           format = {
             enable = helpers.defaultNullOpts.mkBool true ''
@@ -277,7 +281,7 @@ in
             '';
           };
 
-          defaultScriptLanguage = helpers.mkNullOrOption types.str ''
+          defaultScriptLanguage = helpers.mkNullOrStr ''
             The default language to use when generating new script tags in Svelte.
           '';
         };

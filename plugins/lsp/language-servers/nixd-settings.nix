@@ -23,10 +23,13 @@ with lib;
         };
       };
     in
-    helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf (maybeRaw provider)) ''
-      Tell the language server your desired option set, for completion.
-      This is lazily evaluated.
-    '';
+    helpers.defaultNullOpts.mkAttrsOf' {
+      type = provider;
+      description = ''
+        Tell the language server your desired option set, for completion.
+        This is lazily evaluated.
+      '';
+    };
 
   nixpkgs =
     let
@@ -39,8 +42,11 @@ with lib;
         };
       };
     in
-    helpers.mkNullOrOption (helpers.nixvimTypes.maybeRaw provider) ''
-      This expression will be interpreted as "nixpkgs" toplevel
-      Nixd provides package, lib completion/information from it.
-    '';
+    helpers.defaultNullOpts.mkNullableWithRaw' {
+      type = provider;
+      description = ''
+        This expression will be interpreted as "nixpkgs" toplevel
+        Nixd provides package, lib completion/information from it.
+      '';
+    };
 }

@@ -69,20 +69,21 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             - "never" disables config validation.
         '';
 
-    action_kinds = helpers.mkNullOrOption (with types; listOf str) ''
-      Code action kinds to observe.
-      To match all code actions, set to `null`.
-      Otherwise, set to a list of kinds.
+    action_kinds = helpers.defaultNullOpts.mkListOf' {
+      type = types.str;
+      description = ''
+        Code action kinds to observe.
+        To match all code actions, set to `null`.
+        Otherwise, set to a list of kinds.
 
-      Example:
-      ```nix
-        [
-          "quickfix"
-          "refactor.rewrite"
-        ]
-      ```
-      See: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#codeActionKind
-    '';
+        See [specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#codeActionKind)
+      '';
+      example = [
+        "quickfix"
+        "refactor.rewrite"
+      ];
+      default = literalMD "Matches all code actions";
+    };
 
     sign = {
       enabled = helpers.defaultNullOpts.mkBool true "Sign column.";

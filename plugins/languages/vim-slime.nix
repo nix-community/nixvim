@@ -59,25 +59,28 @@ mkVimPlugin config {
       Whether to preserve cursor position when sending a line or paragraph.
     '';
 
-    default_config = helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf (either str rawLua)) ''
-      Pre-filled prompt answer.
+    default_config = helpers.defaultNullOpts.mkAttrsOf' {
+      type = types.str;
+      description = ''
+        Pre-filled prompt answer.
 
-      Examples:
-        - `tmux`:
-          ```nix
-            {
-              socket_name = "default";
-              target_pane = "{last}";
-            }
-          ```
-        - `zellij`:
-          ```nix
-            {
-              session_id = "current";
-              relative_pane = "right";
-            }
-          ```
-    '';
+        Examples:
+          - `tmux`:
+            ```nix
+              {
+                socket_name = "default";
+                target_pane = "{last}";
+              }
+            ```
+          - `zellij`:
+            ```nix
+              {
+                session_id = "current";
+                relative_pane = "right";
+              }
+            ```
+      '';
+    };
 
     dont_ask_default = helpers.defaultNullOpts.mkBool false ''
       Whether to bypass the prompt and use the specified default configuration options.

@@ -39,13 +39,19 @@ let
             List of paths to load.
           '';
 
-      exclude = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str))) ''
-        List of languages to exclude, by default is empty.
-      '';
+      exclude = helpers.defaultNullOpts.mkListOf' {
+        type = types.str;
+        description = ''
+          List of languages to exclude, by default is empty.
+        '';
+      };
 
-      include = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str))) ''
-        List of languages to include, by default is not set.
-      '';
+      include = helpers.defaultNullOpts.mkListOf' {
+        type = types.str;
+        description = ''
+          List of languages to include, by default is not set.
+        '';
+      };
     };
   };
 in
