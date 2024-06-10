@@ -6,6 +6,65 @@
 with lib;
 with nixvimUtils;
 rec {
+  # Render a plugin default string
+  pluginDefaultText =
+    let
+      # Assume a string `default` is already formatted as intended,
+      # TODO: remove this behavior so we can quote strings properly
+      # historically strings were the only type accepted by mkDesc.
+      legacyRenderOptionValue =
+        v:
+        literalExpression (
+          if isString v then
+            v
+          else
+            generators.toPretty {
+              allowPrettyValues = true;
+              multiline = true;
+            } v
+        );
+    in
+    {
+      # plugin default: any value or literal expression
+      pluginDefault,
+      # nix option default value, used if `nixDefaultText` is missing
+      default ? null,
+      # nix option default string or literal expression
+      defaultText ? (options.renderOptionValue default) // {
+        __lang = "nix";
+      },
+      ...
+    }:
+    let
+      # Only add `__lang` if `pluginDefault` is not already a literal type
+      pluginDefaultText =
+        if pluginDefault ? _type && pluginDefault ? text then
+          pluginDefault
+        else
+          (legacyRenderOptionValue pluginDefault) // { __lang = "nix"; };
+
+      # Format text using markdown code block or inline code
+      # Handle `v` being a literalExpression or literalMD type
+      toMD =
+        v:
+        let
+          value = options.renderOptionValue v;
+          multiline = hasInfix "\n" value.text;
+          lang = value.__lang or ""; # `__lang` is added internally when parsed in argument defaults
+        in
+        if value._type == "literalMD" then
+          if multiline then "\n${value.text}" else " ${value.text}"
+        else if multiline then
+          "\n```${lang}\n${value.text}\n```"
+        else
+          " `${value.text}`";
+    in
+    literalMD ''
+      ${toMD defaultText}
+
+      _Plugin default:_${toMD pluginDefaultText}
+    '';
+
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption' =
     {
@@ -79,46 +138,36 @@ rec {
   defaultNullOpts =
     let
       # Convert `defaultNullOpts`-style arguments into normal `mkOption`-style arguments,
-      # i.e. moves `default` into `description` using `defaultNullOpts.mkDesc`
+      # i.e. merge `default` or `defaultText` into `defaultText`.
       #
-      # "Plugin default" is only added if `args` has a `default` attribute
+      # "Plugin default" is only added if `args` has either a `default` or `defaultText` attribute.
       convertArgs =
         args:
         (
-          args
+          # TODO filter pluginDefault
+          (filterAttrs (
+            n: _:
+            !(elem n [
+              "pluginDefault"
+              "defaultText"
+            ])
+          ) args)
           // {
+            # TODO assert that args didn't attempt to set `default` or `defaultText`
             default = null;
           }
-          // (optionalAttrs (args ? default) {
-            description = defaultNullOpts.mkDesc args.default (args.description or "");
+          // (optionalAttrs (args ? pluginDefault || args ? default || args ? defaultText) {
+            defaultText = pluginDefaultText {
+              # TODO: this is here for backwards compatibility:
+              # once `defaultNullOpts` migrates from `default` to `pluginDefault`
+              # then we can pass in `args` unmodified or simply inherit `pluginDefault`
+              pluginDefault = args.pluginDefault or args.defaultText or args.default;
+            };
           })
         );
     in
     rec {
-      /**
-        Build a description with a plugin default.
-
-        The [default] can be any value, and it will be formatted using `lib.generators.toPretty`.
-
-        # Example
-        ```nix
-        mkDesc 1 "foo"
-        => ''
-          foo
-
-          Plugin default: `1`
-        ''
-        ```
-
-        # Type
-        ```
-        mkDesc :: Any -> String -> String
-        ```
-
-        # Arguments
-        - [default] The plugin's default
-        - [desc] The option's description
-      */
+      # TODO: deprecated in favor of `helpers.pluginDefaultText`
       mkDesc =
         default: desc:
         let
