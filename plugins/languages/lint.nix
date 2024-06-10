@@ -139,30 +139,27 @@ in
 
     package = helpers.mkPluginPackageOption "nvim-lint" pkgs.vimPlugins.nvim-lint;
 
-    lintersByFt = mkOption {
+    lintersByFt = mkOption rec {
       type = with types; attrsOf (listOf str);
       default = { };
-      description = ''
-        Configure the linters you want to run per file type.
-
-        Default:
-        ```nix
-          {
-            text = ["vale"];
-            json = ["jsonlint"];
-            markdown = ["vale"];
-            rst = ["vale"];
-            ruby = ["ruby"];
-            janet = ["janet"];
-            inko = ["inko"];
-            clojure = ["clj-kondo"];
-            dockerfile = ["hadolint"];
-            terraform = ["tflint"];
-          }
-        ```
-      '';
+      description = "Configure the linters you want to run per file type.";
       example = {
         markdown = [ "vale" ];
+      };
+      defaultText = helpers.pluginDefaultText {
+        inherit default;
+        pluginDefault = {
+          text = [ "vale" ];
+          json = [ "jsonlint" ];
+          markdown = [ "vale" ];
+          rst = [ "vale" ];
+          ruby = [ "ruby" ];
+          janet = [ "janet" ];
+          inko = [ "inko" ];
+          clojure = [ "clj-kondo" ];
+          dockerfile = [ "hadolint" ];
+          terraform = [ "tflint" ];
+        };
       };
     };
 

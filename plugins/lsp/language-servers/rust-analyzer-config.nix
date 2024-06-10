@@ -1,4 +1,9 @@
-lib: pkgs:
+{
+  pkgs,
+  lib,
+  helpers,
+  ...
+}:
 # Future improvements:
 #   - extra documentation from anyOf types, they can have `enumDescriptions` that are valuable
 with lib;
@@ -124,33 +129,21 @@ let
             ;
         }
       );
-      default = null;
       description =
-        if enum != null then
+        if enum == null then
+          markdownDescription
+        else
           let
-            valueDesc = builtins.map ({ fst, snd }: ''- ${fst}: ${snd}'') (
-              lists.zipLists enum enumDescriptions
-            );
+            valueDesc = map ({ fst, snd }: ''- ${fst}: ${snd}'') (lists.zipLists enum enumDescriptions);
           in
           ''
             ${markdownDescription}
 
             Values:
             ${builtins.concatStringsSep "\n" valueDesc}
-
-            ```nix
-            ${generators.toPretty { } default}
-            ```
-          ''
-        else
-          ''
-            ${markdownDescription}
-
-            default:
-            ```nix
-            ${generators.toPretty { } default}
-            ```
           '';
+      defaultText = helpers.pluginDefaultText { pluginDefault = default; };
+      default = null;
     };
 
   nixOptions = builtins.mapAttrs mkRustAnalyzerOption rustAnalyzerOptions;
