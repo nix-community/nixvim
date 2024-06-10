@@ -128,6 +128,7 @@
     ./ui/image.nix
     ./ui/neoscroll.nix
     ./ui/noice.nix
+    ./ui/specs.nix
     ./ui/statuscol.nix
     ./ui/transparent.nix
     ./ui/twilight.nix
@@ -204,7 +205,6 @@
     ./utils/sandwich.nix
     ./utils/sleuth.nix
     ./utils/smart-splits.nix
-    ./utils/specs.nix
     ./utils/spectre.nix
     ./utils/spider.nix
     ./utils/startify
