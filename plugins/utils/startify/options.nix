@@ -5,7 +5,7 @@ with lib;
     The directory to save/load sessions to/from.
   '';
 
-  lists = mkOption {
+  lists = helpers.defaultNullOpts.mkNullableWithRaw' {
     type =
       with helpers.nixvimTypes;
       listOf (
@@ -18,50 +18,51 @@ with lib;
               example = "files";
             };
 
-            header = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf (maybeRaw str)) ''
-              The 'header' is a list of strings, whereas each string will be put on its own
-              line in the header.
-            '';
+            header = helpers.defaultNullOpts.mkListOf' {
+              type = types.str;
+              description = ''
+                The 'header' is a list of strings, whereas each string will be put on its own
+                line in the header.
+              '';
+            };
 
-            indices = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf (maybeRaw str)) ''
-              The 'indices' is a list of strings, which act as indices for the current list.
-              Opposed to the global `custom_indices`, this is limited to the current list.
-            '';
+            indices = helpers.defaultNullOpts.mkListOf' {
+              type = types.str;
+              description = ''
+                The 'indices' is a list of strings, which act as indices for the current list.
+                Opposed to the global `custom_indices`, this is limited to the current list.
+              '';
+            };
           };
         })
       );
     apply = v: map (listElem: if isString listElem then helpers.mkRaw listElem else listElem) v;
-    default = [ ];
     description = ''
       Startify displays lists. Each list consists of a `type` and optionally a `header` and
       custom `indices`.
-
-      Default:
-      ```nix
-        [
-          {
-            type = "files";
-            header = ["   MRU"];
-          }
-          {
-            type = "dir";
-            header = [{__raw = "'   MRU' .. vim.loop.cwd()";}];
-          }
-          {
-            type = "sessions";
-            header = ["   Sessions"];
-          }
-          {
-            type = "bookmarks";
-            header = ["   Bookmarks"];
-          }
-          {
-            type = "commands";
-            header = ["   Commands"];
-          }
-        ]
-      ```
     '';
+    default = [
+      {
+        type = "files";
+        header = [ "   MRU" ];
+      }
+      {
+        type = "dir";
+        header = [ { __raw = "'   MRU' .. vim.loop.cwd()"; } ];
+      }
+      {
+        type = "sessions";
+        header = [ "   Sessions" ];
+      }
+      {
+        type = "bookmarks";
+        header = [ "   Bookmarks" ];
+      }
+      {
+        type = "commands";
+        header = [ "   Commands" ];
+      }
+    ];
   };
 
   bookmarks =
@@ -307,59 +308,63 @@ with lib;
     alphabetically.
   '';
 
-  custom_indices =
-    helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; maybeRaw (listOf str)) [ ]
-      ''
-        Use any list of strings as indices instead of increasing numbers. If there are more startify
-        entries than actual items in the custom list, the remaining entries will be filled using the
-        default numbering scheme starting from 0.
+  custom_indices = helpers.defaultNullOpts.mkListOf' {
+    type = types.str;
+    default = [ ];
+    description = ''
+      Use any list of strings as indices instead of increasing numbers. If there are more startify
+      entries than actual items in the custom list, the remaining entries will be filled using the
+      default numbering scheme starting from 0.
 
-        Thus you can create your own indexing scheme that fits your keyboard layout.
-        You don't want to leave the home row, do you?!
+      Thus you can create your own indexing scheme that fits your keyboard layout.
+      You don't want to leave the home row, do you?!
+    '';
+    example = [
+      "f"
+      "g"
+      "h"
+    ];
+  };
 
-        Example:
-        ```nix
-          ["f" "g" "h"]
-        ```
-      '';
+  custom_header = helpers.defaultNullOpts.mkListOf' {
+    type = types.str;
+    description = ''
+      Define your own header.
 
-  custom_header =
-    helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str)))
-      ''
-        Define your own header.
+      This option takes a `list of strings`, whereas each string will be put on its own line.
+      If it is a simple `string`, it should evaluate to a list of strings.
+    '';
+    example = [
+      ""
+      "     ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+      "     ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+      "     ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+      "     ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+      "     ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+      "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
+    ];
+  };
 
-        This option takes a `list of strings`, whereas each string will be put on its own line.
-        If it is a simple `string`, it should evaluate to a list of strings.
-
-        Example:
-        ```nix
-          [
-            ""
-            "     ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
-            "     ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
-            "     ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
-            "     ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
-            "     ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
-            "     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
-          ]
-        ```
-      '';
-
-  custom_header_quotes = helpers.defaultNullOpts.mkListOf (with types; listOf str) [ ] ''
-    Example:
-    ```nix
+  custom_header_quotes = helpers.defaultNullOpts.mkListOf' {
+    type = with types; listOf str;
+    default = [ ];
+    # description = ""; # TODO
+    example = [
+      [ "quote #1" ]
       [
-        ["quote #1"]
-        ["quote #2" "using" "three lines"]
+        "quote #2"
+        "using"
+        "three lines"
       ]
-    ```
-  '';
+    ];
+  };
 
-  custom_footer =
-    helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str)))
-      ''
-        Same as the custom header, but shown at the bottom of the startify buffer.
-      '';
+  custom_footer = helpers.defaultNullOpts.mkListOf' {
+    type = types.str;
+    description = ''
+      Same as the custom header, but shown at the bottom of the startify buffer.
+    '';
+  };
 
   disable_at_vimenter = helpers.defaultNullOpts.mkBool false ''
     Don't run Startify at Vim startup.

@@ -27,9 +27,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Comma-separated list of screen columns same syntax as `:help colorcolumn`.
     '';
 
-    highlight = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) "NonText" ''
-      Highlight group, or list of highlight groups, that get applied to the virtual column.
-    '';
+    highlight =
+      helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf str)) "NonText"
+        ''
+          Highlight group, or list of highlight groups, that get applied to the virtual column.
+        '';
 
     exclude = {
       filetypes = helpers.defaultNullOpts.mkListOf types.str [

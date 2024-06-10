@@ -35,7 +35,7 @@ with lib;
     `"red" | "amaranth" | "teal" | "pink"`
   '';
 
-  buffer = helpers.defaultNullOpts.mkNullable (
+  buffer = helpers.defaultNullOpts.mkNullableWithRaw (
     with types; either (enum [ true ]) ints.unsigned
   ) null "Define a hydra for the given buffer, pass `true` for current buf.";
 
@@ -61,7 +61,7 @@ with lib;
     Called after every hydra head.
   '';
 
-  timeout = helpers.defaultNullOpts.mkNullable (with types; either bool ints.unsigned) false ''
+  timeout = helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool ints.unsigned) false ''
     Timeout after which the hydra is automatically disabled.
     Calling any head will refresh the timeout
     - `true`: timeout set to value of `timeoutlen` (`:h timeoutlen`)

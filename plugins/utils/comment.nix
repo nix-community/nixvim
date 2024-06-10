@@ -188,7 +188,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
 
     mappings =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkNullableWithRaw
         (
           with types;
           either (enum [ false ]) (submodule {

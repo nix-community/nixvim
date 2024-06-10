@@ -8,8 +8,7 @@
 with lib;
 let
   cfg = config.plugins.sniprun;
-
-  mkList = helpers.defaultNullOpts.mkListOf types.str;
+  inherit (helpers.defaultNullOpts) mkAttrsOf mkListOf mkListOf';
 in
 {
   options.plugins.sniprun = helpers.neovim-plugin.extraOptionsOptions // {
@@ -17,42 +16,46 @@ in
 
     package = helpers.mkPluginPackageOption "sniprun" pkgs.vimPlugins.sniprun;
 
-    selectedInterpreters = mkList [ ] "use those instead of the default for the current filetype";
+    selectedInterpreters =
+      mkListOf types.str [ ]
+        "use those instead of the default for the current filetype";
 
-    replEnable = mkList [ ] "Enable REPL-like behavior for the given interpreters";
+    replEnable = mkListOf types.str [ ] "Enable REPL-like behavior for the given interpreters";
 
-    replDisable = mkList [ ] "Disable REPL-like behavior for the given interpreters";
+    replDisable = mkListOf types.str [ ] "Disable REPL-like behavior for the given interpreters";
 
-    interpreterOptions =
-      helpers.defaultNullOpts.mkNullable types.attrs { }
-        "interpreter-specific options, see docs / :SnipInfo <name>";
+    interpreterOptions = mkAttrsOf types.anything { } ''
+      interpreter-specific options, see docs / :SnipInfo <name>
+    '';
 
-    display =
-      mkList
+    display = mkListOf' {
+      type = types.str;
+      default = [
+        "Classic"
+        "VirtualTextOk"
+      ];
+      description = ''
+        You can combo different display modes as desired and with the 'Ok' or 'Err' suffix to filter
+        only successful runs (or errored-out runs respectively)
+      '';
+
+      example = literalMD ''
+        ```nix
         [
-          "Classic"
-          "VirtualTextOk"
+          "Classic"                    # display results in the command-line  area
+          "VirtualTextOk"              # display ok results as virtual text (multiline is shortened)
+
+          # "VirtualText"              # display results as virtual text
+          # "TempFloatingWindow"       # display results in a floating window
+          # "LongTempFloatingWindow"   # same as above, but only long results. To use with VirtualText[Ok/Err]
+          # "Terminal"                 # display results in a vertical split
+          # "TerminalWithCode"         # display results and code history in a vertical split
+          # "NvimNotify"               # display with the nvim-notify plugin
+          # "Api"                      # return output to a programming interface
         ]
-        ''
-          You can combo different display modes as desired and with the 'Ok' or 'Err' suffix to filter
-          only successful runs (or errored-out runs respectively)
-
-          Example:
-          ```nix
-          [
-            "Classic"                    # display results in the command-line  area
-            "VirtualTextOk"              # display ok results as virtual text (multiline is shortened)
-
-            # "VirtualText"              # display results as virtual text
-            # "TempFloatingWindow"       # display results in a floating window
-            # "LongTempFloatingWindow"   # same as above, but only long results. To use with VirtualText[Ok/Err]
-            # "Terminal"                 # display results in a vertical split
-            # "TerminalWithCode"         # display results and code history in a vertical split
-            # "NvimNotify"               # display with the nvim-notify plugin
-            # "Api"                      # return output to a programming interface
-          ]
-          ```
-        '';
+        ```
+      '';
+    };
 
     liveDisplay = helpers.defaultNullOpts.mkListOf types.str [
       "VirtualTextOk"
@@ -65,7 +68,7 @@ in
     };
 
     showNoOutput =
-      mkList
+      mkListOf types.str
         [
           "Classic"
           "TempFloatingWindow"

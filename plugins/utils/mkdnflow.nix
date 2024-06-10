@@ -141,12 +141,14 @@ in
               notebook (requires `perspective.root_tell` to be specified)
           '';
 
-      rootTell = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) str) false ''
-        - `<any file name>`: Any arbitrary filename by which the plugin can uniquely identify
-          the root directory of the current notebook.
-        - If `false` is used instead, the plugin will never search for a root directory, even
-          if `perspective.priority` is set to `root`.
-      '';
+      rootTell =
+        helpers.defaultNullOpts.mkNullableWithRaw (with types; either (enum [ false ]) str) false
+          ''
+            - `<any file name>`: Any arbitrary filename by which the plugin can uniquely identify
+              the root directory of the current notebook.
+            - If `false` is used instead, the plugin will never search for a root directory, even
+              if `perspective.priority` is set to `root`.
+          '';
 
       nvimWdHeel = helpers.defaultNullOpts.mkBool false ''
         Specifies whether changes in perspective will result in corresponding changes to

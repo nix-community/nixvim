@@ -91,24 +91,22 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     '';
 
     output_compare_method =
-      helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-          either (enum [
-            "exact"
-            "squish"
-          ]) helpers.nixvimTypes.rawLua
-        )
+      helpers.defaultNullOpts.mkEnum
+        [
+          "exact"
+          "squish"
+        ]
         "squish"
         ''
           How given output (stdout) and expected output should be compared.
           It can be a string, representing the method to use, or a custom function.
+
           Available options follows:
-          * "exact": character by character comparison.
-          * "squish": compare stripping extra white spaces and newlines.
-          * custom function: you can use a function accepting two arguments, two strings
-            representing output and expected output. It should return true if the given
-            output is acceptable, false otherwise.
+          * `"exact"`: character by character comparison.
+          * `"squish"`: compare stripping extra white spaces and newlines.
+          * `{ __raw =  "(custom function)"; }`: you can use a function accepting two arguments,
+            two strings representing _output_ and _expected output_.
+            It should return `true` if the given output is acceptable, otherwise `false`.
         '';
 
     view_output_diff = helpers.defaultNullOpts.mkBool false ''

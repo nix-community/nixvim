@@ -106,9 +106,9 @@ in
             Defaults to the value of `plugins.ollama.model`.
           '';
 
+          # FIXME should the default be { __raw = "```$ftype\n(.-)```"; }?
           extract =
-            helpers.defaultNullOpts.mkNullable
-              (with helpers.nixvimTypes; maybeRaw (either str (enum [ false ])))
+            helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ]))
               "```$ftype\n(.-)```"
               ''
                 A `string.match` pattern to use for an Action to extract the output from the response

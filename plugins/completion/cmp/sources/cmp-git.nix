@@ -42,10 +42,12 @@ in
             Max number of git commits to fetch.
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').git.commits";
           } "Function used to sort the commits.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').git.commits";
           } "Function used to format the commits.";
@@ -78,10 +80,12 @@ in
             Which issues to fetch (`"open"`, `"closed"` or `"all"`).
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').github.issues";
           } "Function used to sort the issues.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').github.issues";
           } "Function used to format the issues.";
@@ -92,10 +96,12 @@ in
             Max number of mentions to fetch.
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').github.mentions";
           } "Function used to sort the mentions.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').github.mentions";
           } "Function used to format the mentions.";
@@ -118,10 +124,12 @@ in
             Which issues to fetch (`"open"`, `"closed"`, `"merged"` or `"all"`).
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').github.pull_requests";
           } "Function used to sort the pull requests.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').github.pull_requests";
           } "Function used to format the pull requests.";
@@ -142,10 +150,12 @@ in
             Which issues to fetch (`"open"`, `"closed"` or `"all"`).
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').gitlab.issues";
           } "Function used to sort the issues.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').gitlab.issues";
           } "Function used to format the issues.";
@@ -156,10 +166,12 @@ in
             Max number of mentions to fetch.
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').gitlab.mentions";
           } "Function used to sort the mentions.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').gitlab.mentions";
           } "Function used to format the mentions.";
@@ -174,10 +186,12 @@ in
             Which issues to fetch (`"open"`, `"closed"`, `"locked"` or `"merged"`).
           '';
 
+          # FIXME should this by strLuaFn?
           sort_by = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.sort').gitlab.merge_requests";
           } "Function used to sort the merge requests.";
 
+          # FIXME should this by strLuaFn?
           format = helpers.defaultNullOpts.mkNullableWithRaw types.anything {
             __raw = "require('cmp_git.format').gitlab.merge_requests";
           } "Function used to format the merge requests.";

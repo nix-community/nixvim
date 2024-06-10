@@ -30,7 +30,8 @@ in
 
             Set to `false` to disable, otherwise should be a table of options to pass to
             `leanls`.
-            See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#leanls
+
+            See [here](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#leanls)
             for details.
           '';
 
@@ -209,12 +210,13 @@ in
         freeformType = types.attrs;
         options = {
           enable = helpers.defaultNullOpts.mkBool true ''
-              Whether to enable the legacy Lean 3 language server ?
+            Whether to enable the legacy Lean 3 language server ?
 
-              Set to `false` to disable, otherwise should be a table of options to pass to
+            Set to `false` to disable, otherwise should be a table of options to pass to
             `lean3ls`.
-            See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lean3ls
-              for details.
+
+            See [here](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lean3ls)
+            for details.
           '';
 
           on_attach = helpers.mkNullOrOption types.str "The LSP handler.";

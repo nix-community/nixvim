@@ -45,16 +45,20 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       helpers.defaultNullOpts.mkListOf
         (types.submodule {
           options = {
-            file_pattern = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) ".env*" ''
-              One or several patterns to match against.
-              They should be valid autocommand patterns.
-            '';
+            file_pattern =
+              helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf str)) ".env*"
+                ''
+                  One or several patterns to match against.
+                  They should be valid autocommand patterns.
+                '';
 
-            cloak_pattern = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) "=.+" ''
-              One or several patterns to cloak.
+            cloak_pattern =
+              helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf str)) "=.+"
+                ''
+                  One or several patterns to cloak.
 
-              Example: `[":.+" "-.+"]` for yaml files.
-            '';
+                  Example: `[":.+" "-.+"]` for yaml files.
+                '';
 
             replace = helpers.mkNullOrOption types.anything ''
               A function, table or string to generate the replacement.

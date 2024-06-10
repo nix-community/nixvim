@@ -135,7 +135,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           mapAttrs
             (
               name: color:
-              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''
+              helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0 ''
                 Severity [0, 1] for ${name} (${color}).
               ''
             )

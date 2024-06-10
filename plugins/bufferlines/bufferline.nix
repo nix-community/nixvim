@@ -104,26 +104,25 @@ in
 
       themable = helpers.defaultNullOpts.mkBool true "Whether or not bufferline highlights can be overridden externally";
 
-      numbers =
-        helpers.defaultNullOpts.mkNullable
-          (
-            with types;
-            either (enum [
-              "none"
-              "ordinal"
-              "buffer_id"
-              "both"
-            ]) helpers.nixvimTypes.rawLua
-          )
+      numbers = helpers.defaultNullOpts.mkEnum' rec {
+        values = [
           "none"
-          ''
-            Customize the styling of numbers.
+          "ordinal"
+          "buffer_id"
+          "both"
+        ];
+        default = "none";
+        description = ''
+          Customize the styling of numbers.
 
-            Either one of "none" "ordinal" "buffer_id" "both" or a lua function:
-            ```
+          Either one of ${concatStringsSep " " (map (v: ''`"${v}"`'') values)} or a lua function.
+        '';
+        example = {
+          __raw = ''
             function({ ordinal, id, lower, raise }): string
-            ```
           '';
+        };
+      };
 
       bufferCloseIcon = helpers.defaultNullOpts.mkStr "" "The close icon for each buffer.";
 
@@ -202,7 +201,7 @@ in
 
       sortBy = helpers.defaultNullOpts.mkStr "id" "sort by";
 
-      diagnostics = helpers.defaultNullOpts.mkNullable (
+      diagnostics = helpers.defaultNullOpts.mkNullableWithRaw (
         with types;
         either bool (enum [
           "nvim_lsp"

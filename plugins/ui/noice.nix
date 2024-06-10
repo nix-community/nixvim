@@ -87,9 +87,9 @@ with lib;
         "nui"
         "cmp"
       ] "";
-      kindIcons = helpers.defaultNullOpts.mkNullable (types.either types.bool (
-        types.attrsOf types.anything
-      )) { } "Icons for completion item kinds. set to `false` to disable icons";
+      kindIcons = helpers.defaultNullOpts.mkNullableWithRaw (
+        with types; either bool (attrsOf anything)
+      ) { } "Icons for completion item kinds. set to `false` to disable icons";
     };
 
     redirect = helpers.defaultNullOpts.mkAttrsOf types.anything {
@@ -179,14 +179,16 @@ with lib;
       progress = {
         enabled = helpers.defaultNullOpts.mkBool true "enable LSP progress";
 
+        # FIXME should be either str or attrsOf anything?
         format =
-          helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) "lsp_progress"
+          helpers.defaultNullOpts.mkNullableWithRaw (with types; either str anything) "lsp_progress"
             ''
               Lsp Progress is formatted using the builtins for lsp_progress
             '';
-        formatDone =
-          helpers.defaultNullOpts.mkNullable (types.either types.str types.anything) "lsp_progress"
-            "";
+        # FIXME should be either str or attrsOf anything?
+        formatDone = helpers.defaultNullOpts.mkNullableWithRaw (
+          with types; either str anything
+        ) "lsp_progress" "";
 
         throttle = helpers.defaultNullOpts.mkNum (literalExpression "1000 / 30") "frequency to update lsp progress message";
 
@@ -285,8 +287,9 @@ with lib;
           '';
     };
 
+    # FIXME should be either bool or attrsOf anything?
     presets =
-      helpers.defaultNullOpts.mkNullable (types.either types.bool types.anything)
+      helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool anything)
         {
           bottom_search = false;
           command_palette = false;

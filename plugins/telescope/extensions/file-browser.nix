@@ -123,7 +123,7 @@ telescopeHelpers.mkExtension {
     '';
 
     hidden =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkNullableWithRaw
         (
           with types;
           either bool (submodule {

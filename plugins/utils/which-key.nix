@@ -143,9 +143,9 @@ with lib;
 
     showKeys = helpers.defaultNullOpts.mkBool true "show the currently pressed key and its label as a message in the command line";
 
-    triggers = helpers.defaultNullOpts.mkNullable (types.either (types.enum [ "auto" ]) (
-      types.listOf types.str
-    )) ''"auto"'' "automatically setup triggers, or specify a list manually";
+    triggers = helpers.defaultNullOpts.mkNullableWithRaw (
+      with types; either (enum [ "auto" ]) (listOf str)
+    ) "auto" "automatically setup triggers, or specify a list manually";
 
     triggersNoWait =
       helpers.defaultNullOpts.mkListOf types.str

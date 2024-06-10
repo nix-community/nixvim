@@ -16,7 +16,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   # Optionally, explicitly declare some options. You don't have to.
   settingsOptions = {
     window = {
-      backdrop = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.95 ''
+      backdrop = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.95 ''
         Shade the backdrop of the Zen window.
         Set to 1 to keep the same as Normal.
       '';

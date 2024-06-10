@@ -24,7 +24,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     default_mappings =
-      helpers.defaultNullOpts.mkNullable (with types; either bool (attrsOf str)) true
+      helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (attrsOf str)) true
         ''
           This plugin offers default buffer local mappings inside conflicted files.
           This is primarily because applying these mappings only to relevant buffers is impossible

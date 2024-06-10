@@ -31,13 +31,10 @@ in
         Whether to enable the "last session" feature.
       '';
 
-      rootDir =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-          { __raw = "vim.fn.stdpath 'data' .. '/sessions/'"; }
-          ''
-            Root directory for session files.
-            Can be either a string or lua code (using `{__raw = 'foo';}`).
-          '';
+      rootDir = helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/sessions/'"; } ''
+        Root directory for session files.
+        Can be either a string or lua code (using `{__raw = 'foo';}`).
+      '';
 
       createEnabled = helpers.mkNullOrOption types.bool ''
         Whether to enable auto creating new sessions
@@ -58,19 +55,19 @@ in
     };
 
     autoSave = {
-      enabled = helpers.defaultNullOpts.mkNullable types.bool null ''
+      enabled = helpers.defaultNullOpts.mkBool null ''
         Whether to enable auto saving session.
       '';
     };
 
     autoRestore = {
-      enabled = helpers.defaultNullOpts.mkNullable types.bool null ''
+      enabled = helpers.defaultNullOpts.mkBool null ''
         Whether to enable auto restoring session.
       '';
     };
 
     cwdChangeHandling =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkNullableWithRaw
         (
           with types;
           either (enum [ false ]) (submodule {
@@ -108,7 +105,7 @@ in
         `require("auto-session").setup_session_lens()` if they want to use session-lens.
       '';
 
-      themeConf = helpers.defaultNullOpts.mkNullable types.attrs {
+      themeConf = helpers.defaultNullOpts.mkAttrsOf types.anything {
         winblend = 10;
         border = true;
       } "Theme configuration.";
@@ -124,8 +121,7 @@ in
 
       sessionControl = {
         controlDir =
-          helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-            "vim.fn.stdpath 'data' .. '/auto_session/'"
+          helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/auto_session/'"; }
             ''
               Auto session control dir, for control files, like alternating between two sessions
               with session-lens.

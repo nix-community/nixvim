@@ -80,7 +80,7 @@ in
           '';
 
           maxLength =
-            helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) types.int) false
+            helpers.defaultNullOpts.mkNullableWithRaw (with types; either (enum [ false ]) types.int) false
               ''
                 max pattern length. If the pattern length is equal to this labels will no longer be
                 skipped. When it exceeds this length it will either end in a jump or terminate the search
@@ -130,11 +130,11 @@ in
             you can always jump to the first match with `<CR>`
           '';
 
-          after = helpers.defaultNullOpts.mkNullable (with types; either bool (listOf int)) true ''
+          after = helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int)) true ''
             show the label after the match
           '';
 
-          before = helpers.defaultNullOpts.mkNullable (with types; either bool (listOf int)) false ''
+          before = helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int)) false ''
             show the label before the match
           '';
 
@@ -178,7 +178,7 @@ in
               Can be useful for visualizing Treesitter ranges.
             '';
 
-            shade = helpers.defaultNullOpts.mkNullable (types.ints.between 1 9) 5 "";
+            shade = helpers.defaultNullOpts.mkNullableWithRaw (types.ints.between 1 9) 5 "";
           };
 
           format =

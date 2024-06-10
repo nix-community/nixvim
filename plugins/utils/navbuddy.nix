@@ -10,7 +10,7 @@ let
   cfg = config.plugins.navbuddy;
 
   percentageType = types.ints.between 0 100;
-  mkPercentageOpt = default: helpers.defaultNullOpts.mkNullable percentageType (toString default);
+  mkPercentageOpt = default: helpers.defaultNullOpts.mkNullableWithRaw percentageType default;
 in
 {
   options.plugins.navbuddy = helpers.neovim-plugin.extraOptionsOptions // {
@@ -24,7 +24,7 @@ in
         starting with the top-left corner. eg: { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }.
       '';
 
-      size = helpers.defaultNullOpts.mkNullable (
+      size = helpers.defaultNullOpts.mkNullableWithRaw (
         with types;
         either percentageType (submodule {
           options = {
@@ -35,7 +35,7 @@ in
         })
       ) 60 "The size of the window.";
 
-      position = helpers.defaultNullOpts.mkNullable (
+      position = helpers.defaultNullOpts.mkNullableWithRaw (
         with types;
         either percentageType (submodule {
           options = {

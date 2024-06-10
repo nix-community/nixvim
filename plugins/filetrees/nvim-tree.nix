@@ -358,7 +358,7 @@ in
       width =
         helpers.defaultNullOpts.mkNullable
           (
-            with types;
+            with helpers.nixvimTypes;
             oneOf [
               str
               int
@@ -375,11 +375,12 @@ in
                       Maximum dynamic width, -1 for unbounded.
                     '';
 
-                    padding =
-                      helpers.defaultNullOpts.mkNullable (either ints.unsigned helpers.nixvimTypes.rawLua) "1"
-                        "Extra padding to the right.";
+                    padding = helpers.defaultNullOpts.mkNullable (either ints.unsigned rawLua) "1" ''
+                      Extra padding to the right.
+                    '';
                   };
               })
+              rawLua
             ]
           )
           30
@@ -484,40 +485,32 @@ in
             This can be used with or without the icons.
           '';
 
-      rootFolderLabel =
-        helpers.defaultNullOpts.mkNullable
-          # Type
-          (
-            with types;
-            oneOf [
-              str
-              bool
-              helpers.nixvimTypes.rawLua
-            ]
-          )
-          # Default
-          ":~:s?$?/..?"
-          # Description
-          ''
-            In what format to show root folder. See `:help filename-modifiers` for available `string`
-            options.
+      rootFolderLabel = helpers.defaultNullOpts.mkNullable' {
+        type =
+          with helpers.nixvimTypes;
+          oneOf [
+            str
+            bool
+            rawLua
+          ];
+        default = ":~:s?$?/..?";
+        description = ''
+          In what format to show root folder. See `:help filename-modifiers` for available `string`
+          options.
 
-            Set to `false` to hide the root folder.
+          Set to `false` to hide the root folder.
 
-            This can also be a `function(root_cwd)` which is passed the absolute path of the root folder
-            and should return a string.
-            e.g.
-
-            ```nix
-              rootFolderLabel = {
-                __raw = '''
-                    my_root_folder_label = function(path)
-                    return ".../" .. vim.fn.fnamemodify(path, ":t")
-                    end
-                ''';
-              };
-            ```
+          This can also be a `function(root_cwd)` which is passed the absolute path of the root folder
+          and should return a string.
+        '';
+        example = {
+          __raw = ''
+            my_root_folder_label = function(path)
+              return ".../" .. vim.fn.fnamemodify(path, ":t")
+            end
           '';
+        };
+      };
 
       indentWidth = helpers.defaultNullOpts.mkInt 2 ''
         Number of spaces for an each tree nesting level. Minimum 1.

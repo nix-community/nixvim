@@ -90,14 +90,7 @@ in
       package = mkPluginPackageOption "vim-illuminate" pkgs.vimPlugins.vim-illuminate;
 
       filetypeOverrides =
-        helpers.defaultNullOpts.mkNullable
-          (
-            with types;
-            attrsOf (submodule {
-              options = commonOptions;
-            })
-          )
-          { }
+        helpers.defaultNullOpts.mkAttrsOf (types.submodule { options = commonOptions; }) { }
           ''
             Filetype specific overrides.
             The keys are strings to represent the filetype.

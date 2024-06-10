@@ -12,52 +12,45 @@ with lib;
 
     package = helpers.mkPluginPackageOption "rainbow-delimiters.nvim" pkgs.vimPlugins.rainbow-delimiters-nvim;
 
-    strategy =
-      helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-          attrsOf (
-            either helpers.nixvimTypes.rawLua (enum [
-              "global"
-              "local"
-              "noop"
-            ])
-          )
-        )
-        ''
-          {
-            default = "global";
-          }
-        ''
-        ''
-          Attrs mapping Tree-sitter language names to strategies.
-          See `|rb-delimiters-strategy|` for more information about strategies.
+    strategy = helpers.defaultNullOpts.mkAttrsOf' {
+      type = types.enum [
+        "global"
+        "local"
+        "noop"
+      ];
+      default = {
+        default = "global";
+      };
+      description = ''
+        Attrs mapping Tree-sitter language names to strategies.
+        See `|rb-delimiters-strategy|` for more information about strategies.
+      '';
+      example = literalMD ''
+        ```nix
+        {
+          # Use global strategy by default
+          default = "global";
 
-          Example:
-          ```nix
-            {
-              # Use global strategy by default
-              default = "global";
+          # Use local for HTML
+          html = "local";
 
-              # Use local for HTML
-              html = "local";
-
-              # Pick the strategy for LaTeX dynamically based on the buffer size
-              latex.__raw = '''
-                function()
-                  -- Disabled for very large files, global strategy for large files,
-                  -- local strategy otherwise
-                  if vim.fn.line('$') > 10000 then
-                      return nil
-                  elseif vim.fn.line('$') > 1000 then
-                      return require 'rainbow-delimiters'.strategy['global']
-                  end
-                  return require 'rainbow-delimiters'.strategy['local']
-                end
-              ''';
-            }
-          ```
-        '';
+          # Pick the strategy for LaTeX dynamically based on the buffer size
+          latex.__raw = '''
+            function()
+              -- Disabled for very large files, global strategy for large files,
+              -- local strategy otherwise
+              if vim.fn.line('$') > 10000 then
+                  return nil
+              elseif vim.fn.line('$') > 1000 then
+                  return require 'rainbow-delimiters'.strategy['global']
+              end
+              return require 'rainbow-delimiters'.strategy['local']
+            end
+          ''';
+        }
+        ```
+      '';
+    };
 
     query =
       helpers.defaultNullOpts.mkAttrsOf types.str

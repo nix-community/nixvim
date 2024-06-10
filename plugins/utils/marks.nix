@@ -63,7 +63,7 @@ in
     '';
 
     signPriority =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkNullableWithRaw
         (
           with types;
           either ints.unsigned (submodule {

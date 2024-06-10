@@ -171,11 +171,11 @@ in
     '';
 
     summary = {
-      widthPercentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
+      widthPercentage = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0
         1.0
       ) 0.7 "Width of the pop-up window.";
 
-      heightPercentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
+      heightPercentage = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0
         1.0
       ) 0.5 "Height of the pop-up window.";
 
@@ -191,7 +191,7 @@ in
         highlight = "Normal:CoverageSummaryBorder";
       };
 
-      minCoverage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0 100) 80 ''
+      minCoverage = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0 100) 80 ''
         Minimum coverage percentage.
         Values below this are highlighted with the fail group, values above are highlighted with
         the pass group.

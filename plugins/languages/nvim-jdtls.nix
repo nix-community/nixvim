@@ -62,7 +62,7 @@ in
     };
 
     rootDir =
-      helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
+      helpers.defaultNullOpts.mkStr
         { __raw = "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})"; }
         ''
           This is the default if not provided, you can remove it. Or adjust as needed.

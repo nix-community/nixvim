@@ -149,25 +149,27 @@ in
 
       # Options related to LSP progress subsystem
       progress = {
-        pollRate = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) number) "0" ''
-          How and when to poll for progress messages.
+        pollRate =
+          helpers.defaultNullOpts.mkNullableWithRaw (with types; either (enum [ false ]) number) 0
+            ''
+              How and when to poll for progress messages.
 
-          Set to `0` to immediately poll on each `|LspProgress|` event.
+              Set to `0` to immediately poll on each `|LspProgress|` event.
 
-          Set to a positive number to poll for progress messages at the specified frequency
-          (Hz, i.e., polls per second).
-          Combining a slow `poll_rate` (e.g., `0.5`) with the `ignoreDoneAlready` setting can be
-          used to filter out short-lived progress tasks, de-cluttering notifications.
+              Set to a positive number to poll for progress messages at the specified frequency
+              (Hz, i.e., polls per second).
+              Combining a slow `poll_rate` (e.g., `0.5`) with the `ignoreDoneAlready` setting can be
+              used to filter out short-lived progress tasks, de-cluttering notifications.
 
-          Note that if too many LSP progress messages are sent between polls, Neovim's progress
-          ring buffer will overflow and messages will be overwritten (dropped), possibly causing
-          stale progress notifications.
-          Workarounds include using the `|fidget.option.progress.lsp.progress_ringbuf_size|`
-          option, or manually calling `|fidget.notification.reset|`.
+              Note that if too many LSP progress messages are sent between polls, Neovim's progress
+              ring buffer will overflow and messages will be overwritten (dropped), possibly causing
+              stale progress notifications.
+              Workarounds include using the `|fidget.option.progress.lsp.progress_ringbuf_size|`
+              option, or manually calling `|fidget.notification.reset|`.
 
-          Set to `false` to disable polling altogether; you can still manually poll progress
-          messages by calling `|fidget.progress.poll|`.
-        '';
+              Set to `false` to disable polling altogether; you can still manually poll progress
+              messages by calling `|fidget.progress.poll|`.
+            '';
 
         suppressOnInsert = helpers.defaultNullOpts.mkBool false ''
           Suppress new messages while in insert mode.
@@ -239,7 +241,7 @@ in
         # Options related to how LSP progress messages are displayed as notifications
         display = {
           renderLimit =
-            helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) number) "16"
+            helpers.defaultNullOpts.mkNullableWithRaw (with types; either (enum [ false ]) number) 16
               ''
                 How many LSP messages to show at once.
 
@@ -430,7 +432,7 @@ in
           '';
 
           groupSeparator =
-            helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "---"
+            helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ])) "---"
               ''
                 Separator between notification groups.
 
@@ -438,7 +440,7 @@ in
                 Set to `false` to omit separator entirely.
               '';
 
-          groupSeparatorHl = helpers.defaultNullOpts.mkNullable (
+          groupSeparatorHl = helpers.defaultNullOpts.mkNullableWithRaw (
             with types; either str (enum [ false ])
           ) "Comment" "Highlight group used for group separator.";
         };
@@ -545,12 +547,12 @@ in
       logger = {
         level = helpers.defaultNullOpts.mkLogLevel "warn" "Minimum logging level";
 
-        floatPrecision = helpers.defaultNullOpts.mkNullable (
+        floatPrecision = helpers.defaultNullOpts.mkNullableWithRaw (
           with types; numbers.between 0.0 1.0
         ) 1.0e-2 "Limit the number of decimals displayed for floats.";
 
         path =
-          helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
+          helpers.defaultNullOpts.mkStr
             { __raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))"; }
             ''
               Where Fidget writes its logs to.

@@ -28,9 +28,7 @@ in
   ];
   options.plugins.neo-tree =
     let
-      listOfRendererComponents = with types; listOf (either str attrs);
-
-      mkRendererComponentListOption = helpers.defaultNullOpts.mkNullable listOfRendererComponents;
+      mkRendererComponentListOption = helpers.defaultNullOpts.mkListOf (with types; either str attrs);
 
       mkMappingsOption =
         defaults:

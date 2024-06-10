@@ -197,11 +197,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   settingsOptions =
     let
       dimensionType =
-        with types;
+        with helpers.nixvimTypes;
         oneOf [
           ints.unsigned
           (numbers.between 0.0 1.0)
           (listOf (either ints.unsigned (numbers.between 0.0 1.0)))
+          rawLua
         ];
     in
     {
@@ -277,7 +278,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
 
       cleanup_delay_ms =
-        helpers.defaultNullOpts.mkNullable (with types; either types.ints.unsigned (enum [ false ])) 2000
+        helpers.defaultNullOpts.mkNullableWithRaw (with types; either types.ints.unsigned (enum [ false ]))
+          2000
           ''
             Oil will automatically delete hidden buffers after this delay.
             You can set the delay to false to disable cleanup entirely.
@@ -290,14 +292,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Time to wait for LSP file operations to complete before skipping.
         '';
 
-        autosave_changes = helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
+        autosave_changes = helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool str) false ''
           Set to true to autosave buffers that are updated with LSP `willRenameFiles`.
           Set to "unmodified" to only save unmodified buffers.
         '';
       };
 
       constrain_cursor =
-        helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "editable"
+        helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ])) "editable"
           ''
             Constrain the cursor to the editable parts of the oil buffer.
             Set to `false` to disable, or "name" to keep it on the file names.

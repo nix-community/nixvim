@@ -17,11 +17,13 @@ with lib;
       testExecutors = executors ++ [ "background" ];
       executorSubmodule = types.submodule {
         options = {
-          execute_command = helpers.mkNullOrLuaFn ''
-            ```lua
-              fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts)
-
-              Example:
+          execute_command = helpers.mkNullOrLuaFn' {
+            description = ''
+              ```lua
+                fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts)
+              ```
+            '';
+            example = literalMD ''
               ```lua
                 function(command, args, cwd, _)
                   require('toggleterm.terminal').Terminal
@@ -34,8 +36,8 @@ with lib;
                     :toggle()
                 end
               ```
-            ```
-          '';
+            '';
+          };
         };
       };
     in
@@ -210,14 +212,15 @@ with lib;
     };
 
   server = {
-    auto_attach = helpers.mkNullOrStrLuaFnOr types.bool ''
-      Whether to automatically attach the LSP client.
-      Defaults to `true` if the `rust-analyzer` executable is found.
+    auto_attach = helpers.defaultNullOpts.mkNullable' {
+      type = with helpers.nixvimTypes; either bool strLuaFn;
+      description = ''
+        Whether to automatically attach the LSP client.
+        Defaults to `true` if the `rust-analyzer` executable is found.
 
-      This can also be the definition of a function (`fun():boolean`).
-
-      Plugin default:
-      ```lua
+        This can also be the definition of a function (`fun():boolean`).
+      '';
+      default = ''
         function(bufnr)
           if #vim.bo[bufnr].buftype > 0 then
             return false
@@ -231,8 +234,8 @@ with lib;
           local rs_bin = cmd[1]
           return vim.fn.executable(rs_bin) == 1
         end
-      ```
-    '';
+      '';
+    };
 
     on_attach = helpers.mkNullOrLuaFn ''
       Function to call on attach.

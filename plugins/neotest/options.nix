@@ -94,11 +94,11 @@ with lib;
   floating = {
     border = helpers.defaultNullOpts.mkStr "rounded" "Border style.";
 
-    max_height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+    max_height = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.6 ''
       Max height of window as proportion of NeoVim window.
     '';
 
-    max_width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+    max_width = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.6 ''
       Max width of window as proportion of NeoVim window.
     '';
 
@@ -161,7 +161,7 @@ with lib;
   output = {
     enabled = helpers.defaultNullOpts.mkBool true "Enable output.";
 
-    open_on_run = helpers.defaultNullOpts.mkNullable (with types; either str bool) "short" ''
+    open_on_run = helpers.defaultNullOpts.mkNullableWithRaw (with types; either str bool) "short" ''
       Open nearest test result after running.
     '';
   };
@@ -178,7 +178,7 @@ with lib;
   quickfix = {
     enabled = helpers.defaultNullOpts.mkBool true "Enable quickfix.";
 
-    open = helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
+    open = helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool str) false ''
       Set to true to open quickfix on startup, or a function to be called when the quickfix
       results are set.
     '';

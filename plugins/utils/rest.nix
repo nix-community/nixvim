@@ -235,7 +235,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
 
     logs = {
-      level = helpers.defaultNullOpts.mkNullable helpers.nixvimTypes.logLevel "info" ''
+      level = helpers.defaultNullOpts.mkLogLevel "info" ''
         The logging level name, see `:h vim.log.levels`.
       '';
 

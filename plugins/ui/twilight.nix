@@ -15,7 +15,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     dimming = {
-      alpha = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.25 ''
+      alpha = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.25 ''
         Amount of dimming.
       '';
 

@@ -76,29 +76,23 @@ in
     '';
 
     modes =
-      helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-          listOf (enum [
-            "/"
-            "?"
-            ":"
-          ])
-        )
+      helpers.defaultNullOpts.mkListOf
+        (types.enum [
+          "/"
+          "?"
+          ":"
+        ])
         [
           "/"
           "?"
         ]
-        ''
-          List of modes which wilderw will be active in.
-          Possible elements: '/', '?' and ':'
-        '';
+        "List of modes that wilder will be active in.";
 
     wildcharm =
-      helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "&wildchar"
+      helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ])) "&wildchar"
         ''
           Key to set the 'wildcharm' option to.
-          Can be set to v:false to skip the setting.
+          Can be set to `false` to skip the setting.
         '';
 
     nextKey = mkKeyOption "<Tab>" ''

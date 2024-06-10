@@ -31,7 +31,7 @@ in
 
     executionMessage = {
       message =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
+        helpers.defaultNullOpts.mkStr
           {
             __raw = ''
               function()
@@ -44,7 +44,7 @@ in
             This can be a lua function that returns a string.
           '';
 
-      dim = helpers.defaultNullOpts.mkNullable (types.numbers.between 0
+      dim = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0
         1
       ) 0.18 "Dim the color of `message`.";
 

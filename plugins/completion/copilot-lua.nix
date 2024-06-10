@@ -51,7 +51,7 @@ in
                   The panel position.
                 '';
 
-            ratio = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.4 ''
+            ratio = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.4 ''
               The panel ratio.
             '';
           };

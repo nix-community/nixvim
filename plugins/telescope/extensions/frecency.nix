@@ -102,7 +102,7 @@ with lib;
       '';
 
       show_filter_column =
-        helpers.defaultNullOpts.mkNullable (with types; either bool (listOf str)) true
+        helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf str)) true
           ''
             Show the path of the active filter before file paths.
             In default, it uses the tail of paths for `'LSP'` and `'CWD'` tags.

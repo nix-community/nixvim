@@ -129,7 +129,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
 
     indent = {
-      char = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) "▎" ''
+      char = helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf str)) "▎" ''
         Character, or list of characters, that get used to display the indentation guide.
         Each character has to have a display width of 0 or 1.
       '';

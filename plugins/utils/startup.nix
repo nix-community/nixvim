@@ -65,7 +65,9 @@ in
               '';
 
               margin =
-                helpers.defaultNullOpts.mkNullable (with types; either (numbers.between 0.0 1.0) ints.positive) 5
+                helpers.defaultNullOpts.mkNullableWithRaw
+                  (with types; either (numbers.between 0.0 1.0) ints.positive)
+                  5
                   ''
                     The margin for left or right alignment.
                     - if < 1 fraction of screen width
@@ -179,7 +181,9 @@ in
       '';
 
       cursorColumn =
-        helpers.defaultNullOpts.mkNullable (with types; either (numbers.between 0.0 1.0) ints.positive) 0.5
+        helpers.defaultNullOpts.mkNullableWithRaw
+          (with types; either (numbers.between 0.0 1.0) ints.positive)
+          0.5
           ''
             - if < 1, fraction of screen width
             - if > 1 numbers of column

@@ -15,28 +15,26 @@ with lib;
 
       mkKeymapsOption =
         desc:
-        helpers.defaultNullOpts.mkNullable (
+        helpers.defaultNullOpts.mkAttrsOf (
           with types;
-          attrsOf (
-            either str (submodule {
-              options = {
-                query = mkOption {
-                  type = str;
-                  description = "";
-                  example = "@class.inner";
-                };
-
-                queryGroup = helpers.mkNullOrOption str ''
-                  You can also use captures from other query groups like `locals.scm`
-                '';
-
-                desc = helpers.mkNullOrOption str ''
-                  You can optionally set descriptions to the mappings (used in the `desc`
-                  parameter of `nvim_buf_set_keymap`) which plugins like _which-key_ display.
-                '';
+          either str (submodule {
+            options = {
+              query = mkOption {
+                type = str;
+                description = "";
+                example = "@class.inner";
               };
-            })
-          )
+
+              queryGroup = helpers.mkNullOrOption str ''
+                You can also use captures from other query groups like `locals.scm`
+              '';
+
+              desc = helpers.mkNullOrOption str ''
+                You can optionally set descriptions to the mappings (used in the `desc`
+                parameter of `nvim_buf_set_keymap`) which plugins like _which-key_ display.
+              '';
+            };
+          })
         ) { } desc;
     in
     helpers.neovim-plugin.extraOptionsOptions
