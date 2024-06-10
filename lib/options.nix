@@ -230,9 +230,20 @@ rec {
 
       mkEnum' =
         { values, ... }@args:
-        # `values` is a list. If `default` is present, then it is either null or one of `values`
+        let
+          # Check `v` is either null, one of `values`, or a literal type
+          isValid =
+            v:
+            if v == null || elem v values then
+              true
+            else if v ? _type && v ? text then
+              true
+            else
+              abort "Default value ${generators.toPretty { } v} is not a valid default for enum ${generators.toPretty { } values}";
+        in
+        # Ensure `values` is a list and `default` is valid if present
         assert isList values;
-        assert args ? default -> (args.default == null || elem args.default values);
+        assert args ? default -> (isValid args.default);
         mkNullableWithRaw' ((filterAttrs (n: v: n != "values") args) // { type = types.enum values; });
       mkEnum =
         values: default: description:
