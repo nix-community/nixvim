@@ -8,22 +8,6 @@ with nixvimUtils;
 rec {
   # Render a plugin default string
   pluginDefaultText =
-    let
-      # Assume a string `default` is already formatted as intended,
-      # TODO: remove this behavior so we can quote strings properly
-      # historically strings were the only type accepted by mkDesc.
-      legacyRenderOptionValue =
-        v:
-        literalExpression (
-          if isString v then
-            v
-          else
-            generators.toPretty {
-              allowPrettyValues = true;
-              multiline = true;
-            } v
-        );
-    in
     {
       # plugin default: any value or literal expression
       pluginDefault,
@@ -41,7 +25,7 @@ rec {
         if pluginDefault ? _type && pluginDefault ? text then
           pluginDefault
         else
-          (legacyRenderOptionValue pluginDefault) // { __lang = "nix"; };
+          (options.renderOptionValue pluginDefault) // { __lang = "nix"; };
 
       # Format text using markdown code block or inline code
       # Handle `v` being a literalExpression or literalMD type
