@@ -6,161 +6,134 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.specs;
-in
-{
-  options.plugins.specs = {
-    enable = mkEnableOption "specs-nvim";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "specs";
+  originalName = "specs.nvim";
+  defaultPackage = pkgs.vimPlugins.specs-nvim;
 
-    package = helpers.mkPluginPackageOption "specs-nvim" pkgs.vimPlugins.specs-nvim;
+  maintainers = [ maintainers.GaetanLepage ];
 
-    show_jumps = mkOption {
-      type = types.bool;
-      default = true;
-    };
-
-    min_jump = mkOption {
-      type = types.int;
-      default = 30;
-    };
-
-    delay = mkOption {
-      type = types.int;
-      default = 0;
-      description = "Delay in milliseconds";
-    };
-
-    increment = mkOption {
-      type = types.int;
-      default = 10;
-      description = "Increment in milliseconds";
-    };
-
-    blend = mkOption {
-      type = types.int;
-      default = 10;
-    };
-
-    color = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
-
-    width = mkOption {
-      type = types.int;
-      default = 10;
-    };
-
-    fader = mkOption {
-      type = types.submodule {
-        options = {
-          builtin = mkOption {
-            type = types.nullOr (
-              types.enum [
-                "linear_fader"
-                "exp_fader"
-                "pulse_fader"
-                "empty_fader"
-              ]
-            );
-            default = "linear_fader";
-          };
-
-          custom = mkOption {
-            type = types.lines;
-            default = "";
-            example = ''
-              function(blend, cnt)
-                if cnt > 100 then
-                    return 80
-                else return nil end
-              end
-            '';
-          };
-        };
-      };
-      default = {
-        builtin = "linear_fader";
-      };
-    };
-
-    resizer = mkOption {
-      type = types.submodule {
-        options = {
-          builtin = mkOption {
-            type = types.nullOr (
-              types.enum [
-                "shrink_resizer"
-                "slide_resizer"
-                "empty_resizer"
-              ]
-            );
-            default = "shrink_resizer";
-          };
-
-          custom = mkOption {
-            type = types.lines;
-            default = "";
-            example = ''
-              function(width, ccol, cnt)
-                  if width-cnt > 0 then
-                      return {width+cnt, ccol}
-                  else return nil end
-              end
-            '';
-          };
-        };
-      };
-      default = {
-        builtin = "shrink_resizer";
-      };
-    };
-
-    ignored_filetypes = mkOption {
-      type = with types; listOf str;
-      default = [ ];
-    };
-
-    ignored_buffertypes = mkOption {
-      type = with types; listOf str;
-      default = [ "nofile" ];
-    };
-  };
-  config =
+  # TODO: introduced 2024-06-10, remove on 2024-08-10
+  optionsRenamedToSettings = [
+    "show_jumps"
+    "min_jump"
+  ];
+  imports =
     let
-      setup = helpers.toLuaObject {
-        inherit (cfg) show_jumps min_jump;
-        ignore_filetypes = attrsets.listToAttrs (
-          lib.lists.map (x: attrsets.nameValuePair x true) cfg.ignored_filetypes
+      basePluginPath = [
+        "plugins"
+        "specs"
+      ];
+      settingsPath = basePluginPath ++ [ "settings" ];
+      renameToPopup =
+        old: new:
+        mkRenamedOptionModule (basePluginPath ++ [ old ]) (
+          settingsPath
+          ++ [
+            "popup"
+            new
+          ]
         );
-        ignore_buftypes = attrsets.listToAttrs (
-          lib.lists.map (x: attrsets.nameValuePair x true) cfg.ignored_buffertypes
-        );
-        popup = {
-          inherit (cfg) blend width;
-          winhl = if (cfg.color != null) then "SpecsPopColor" else "PMenu";
-          delay_ms = cfg.delay;
-          inc_ms = cfg.increment;
-          fader = helpers.mkRaw (
-            if cfg.fader.builtin == null then cfg.fader.custom else ''require("specs").${cfg.fader.builtin}''
-          );
-          resizer = helpers.mkRaw (
-            if cfg.resizer.builtin == null then
-              cfg.resizer.custom
-            else
-              ''require("specs").${cfg.resizer.builtin}''
-          );
-        };
-      };
     in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+    [
+      (renameToPopup "delay" "delay_ms")
+      (renameToPopup "increment" "inc_ms")
+      (renameToPopup "blend" "blend")
+      (renameToPopup "width" "width")
+      (mkRemovedOptionModule (
+        basePluginPath ++ [ "color" ]
+      ) "Please, use `settings.popup.winhl` directly.")
+      (mkRemovedOptionModule (
+        basePluginPath ++ [ "fader" ]
+      ) "Please, use `settings.popup.fader` directly.")
+      (mkRemovedOptionModule (
+        basePluginPath ++ [ "resizer" ]
+      ) "Please, use `settings.popup.resizer` directly.")
+      (mkRemovedOptionModule (
+        basePluginPath ++ [ "ignored_filetypes" ]
+      ) "Please, use `settings.ignore_filetypes` instead.")
+      (mkRemovedOptionModule (
+        basePluginPath ++ [ "ignored_buffertypes" ]
+      ) "Please, use `settings.ignore_buftypes` instead.")
+    ];
 
-      highlight.SpecsPopColor.bg = mkIf (cfg.color != null) cfg.color;
+  settingsOptions = {
+    show_jumps = helpers.defaultNullOpts.mkBool true ''
+      Whether to show an animation each time the cursor jumps.
+    '';
 
-      extraConfigLua = ''
-        require('specs').setup(${setup})
+    min_jump = helpers.defaultNullOpts.mkUnsignedInt 30 ''
+      Minimum jump distance to trigger the animation.
+    '';
+
+    popup = {
+      delay_ms = helpers.defaultNullOpts.mkUnsignedInt 10 ''
+        Delay before popup displays.
+      '';
+
+      inc_ms = helpers.defaultNullOpts.mkUnsignedInt 5 ''
+        Time increments used for fade/resize effects.
+      '';
+
+      blend = helpers.defaultNullOpts.mkUnsignedInt 10 ''
+        Starting blend, between 0 (opaque) and 100 (transparent), see `:h winblend`.
+      '';
+
+      width = helpers.defaultNullOpts.mkUnsignedInt 20 ''
+        Width of the popup.
+      '';
+
+      winhl = helpers.defaultNullOpts.mkStr "PMenu" ''
+        The name of the window highlight group of the popup.
+      '';
+
+      fader = helpers.defaultNullOpts.mkLuaFn "require('specs').exp_fader" ''
+        The fader function to use.
+      '';
+
+      resizer = helpers.defaultNullOpts.mkLuaFn "require('specs').shrink_resizer" ''
+        The resizer function to use.
       '';
     };
+
+    ignore_filetypes = helpers.defaultNullOpts.mkAttrsOf types.bool { } ''
+      An attrs where keys are filetypes and values are a boolean stating whether animation should be
+      enabled or not for this filetype.
+    '';
+
+    ignore_buftypes = helpers.defaultNullOpts.mkAttrsOf types.bool { nofile = true; } ''
+      An attrs where keys are buftypes and values are a boolean stating whether animation should be
+      enabled or not for this buftype.
+    '';
+  };
+
+  settingsExample = {
+    show_jumps = true;
+    min_jump = 30;
+    popup = {
+      delay_ms = 0;
+      inc_ms = 10;
+      blend = 10;
+      width = 10;
+      winhl = "PMenu";
+      fader = ''
+        function(blend, cnt)
+            if cnt > 100 then
+                return 80
+            else return nil end
+        end
+      '';
+      resizer = ''
+        function(width, ccol, cnt)
+            if width-cnt > 0 then
+                return {width+cnt, ccol}
+            else return nil end
+        end
+      '';
+    };
+    ignore_filetypes = { };
+    ignore_buftypes = {
+      nofile = true;
+    };
+  };
 }
