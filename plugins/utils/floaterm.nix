@@ -21,11 +21,11 @@ let
         Show floaterm info (e.g., 'floaterm: 1/3' implies there are 3 floaterms in total and the
         current is the first one) at the top left corner of floaterm window.
 
-        Default: 'floaterm: $1/$2'($1 and $2 will be substituted by 'the index of the current
-        floaterm' and 'the count of all floaterms' respectively)
-
-        Example: 'floaterm($1|$2)'
+        - `$1` will be substituted by _'the index of the current floaterm'._
+        - `$2` will be substituted by _'the count of all floaterms'._
       '';
+      example = "floaterm($1|$2)";
+      defaultText = "floaterm: $1/$2";
     };
 
     wintype = {
@@ -45,9 +45,8 @@ let
       description = ''
         Int (number of columns) or float (between 0 and 1).
         if float, the width is relative to &columns.
-
-        Default: 0.6
       '';
+      defaultText = 0.6;
     };
 
     height = {
@@ -55,9 +54,8 @@ let
       description = ''
         Int (number of columns) or float (between 0 and 1).
         if float, the height is relative to &lines.
-
-        Default: 0.6
       '';
+      default = 0.6;
     };
 
     position = {
@@ -74,6 +72,10 @@ let
 
         In addition, there is another option 'random' which allows to pick a random position from
         above when (re)opening a floaterm window.
+      '';
+      defaultText = literalMD ''
+        - If wintype is `split`/`vsplit`: 'botright'.
+        - If wintype is float: 'center'
       '';
     };
 
@@ -173,7 +175,7 @@ in
       # Misc options
       # `OPTION = VALUE`
       # which will translate to `globals.floaterm_OPTION = VALUE;`
-      miscOptions = mapAttrs (name: value: helpers.mkNullOrOption value.type value.description) settings;
+      miscOptions = mapAttrs (name: helpers.mkNullOrOption') settings;
 
       # Keymaps options
       # `keymaps.ACTION = KEY`
