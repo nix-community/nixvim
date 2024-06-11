@@ -62,8 +62,8 @@ in
     };
 
     rootDir =
-      helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-        ''{ __raw = "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})"; }''
+      helpers.defaultNullOpts.mkStr
+        { __raw = "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})"; }
         ''
           This is the default if not provided, you can remove it. Or adjust as needed.
           One dedicated LSP server & client will be started per unique root_dir

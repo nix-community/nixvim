@@ -141,9 +141,15 @@ in
         enable = helpers.defaultNullOpts.mkBool false ''
           Functions similarly to `nvim-ts-autotag`. This is disabled by default to avoid conflicts.
         '';
-        filetypes = helpers.defaultNullOpts.mkListOf types.str ''["javascriptreact" "typescriptreact"]'' ''
-          Filetypes this should apply to.
-        '';
+        filetypes =
+          helpers.defaultNullOpts.mkListOf types.str
+            [
+              "javascriptreact"
+              "typescriptreact"
+            ]
+            ''
+              Filetypes this should apply to.
+            '';
       };
     };
   };

@@ -12,79 +12,68 @@ with lib;
 
     package = helpers.mkPluginPackageOption "rainbow-delimiters.nvim" pkgs.vimPlugins.rainbow-delimiters-nvim;
 
-    strategy =
-      helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-          attrsOf (
-            either helpers.nixvimTypes.rawLua (enum [
-              "global"
-              "local"
-              "noop"
-            ])
-          )
-        )
-        ''
-          {
-            default = "global";
-          }
-        ''
-        ''
-          Attrs mapping Tree-sitter language names to strategies.
-          See `|rb-delimiters-strategy|` for more information about strategies.
+    strategy = helpers.defaultNullOpts.mkAttrsOf' {
+      type = types.enum [
+        "global"
+        "local"
+        "noop"
+      ];
+      pluginDefault = {
+        default = "global";
+      };
+      description = ''
+        Attrs mapping Tree-sitter language names to strategies.
+        See `|rb-delimiters-strategy|` for more information about strategies.
+      '';
+      example = literalMD ''
+        ```nix
+        {
+          # Use global strategy by default
+          default = "global";
 
-          Example:
-          ```nix
-            {
-              # Use global strategy by default
-              default = "global";
+          # Use local for HTML
+          html = "local";
 
-              # Use local for HTML
-              html = "local";
-
-              # Pick the strategy for LaTeX dynamically based on the buffer size
-              latex.__raw = \'\'
-                function()
-                  -- Disabled for very large files, global strategy for large files,
-                  -- local strategy otherwise
-                  if vim.fn.line('$') > 10000 then
-                      return nil
-                  elseif vim.fn.line('$') > 1000 then
-                      return require 'rainbow-delimiters'.strategy['global']
-                  end
-                  return require 'rainbow-delimiters'.strategy['local']
-                end
-              \'\';
-            }
-          ```
-        '';
+          # Pick the strategy for LaTeX dynamically based on the buffer size
+          latex.__raw = '''
+            function()
+              -- Disabled for very large files, global strategy for large files,
+              -- local strategy otherwise
+              if vim.fn.line('$') > 10000 then
+                  return nil
+              elseif vim.fn.line('$') > 1000 then
+                  return require 'rainbow-delimiters'.strategy['global']
+              end
+              return require 'rainbow-delimiters'.strategy['local']
+            end
+          ''';
+        }
+        ```
+      '';
+    };
 
     query =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf str)
-        ''
-          {
-            default = "rainbow-delimiters";
-            lua = "rainbow-blocks";
-          }
-        ''
+      helpers.defaultNullOpts.mkAttrsOf types.str
+        {
+          default = "rainbow-delimiters";
+          lua = "rainbow-blocks";
+        }
         ''
           Attrs mapping Tree-sitter language names to queries.
           See `|rb-delimiters-query|` for more information about queries.
         '';
 
     highlight =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str)
-        ''
-          [
-            "RainbowDelimiterRed"
-            "RainbowDelimiterYellow"
-            "RainbowDelimiterBlue"
-            "RainbowDelimiterOrange"
-            "RainbowDelimiterGreen"
-            "RainbowDelimiterViolet"
-            "RainbowDelimiterCyan"
-          ]
-        ''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "RainbowDelimiterRed"
+          "RainbowDelimiterYellow"
+          "RainbowDelimiterBlue"
+          "RainbowDelimiterOrange"
+          "RainbowDelimiterGreen"
+          "RainbowDelimiterViolet"
+          "RainbowDelimiterCyan"
+        ]
         ''
           List of names of the highlight groups to use for highlighting, for more information see
           `|rb-delimiters-colors|`.
@@ -102,12 +91,7 @@ with lib;
 
     log = {
       file =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-          ''
-            {
-              __raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'";
-            }
-          ''
+        helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'"; }
           ''
             Path to the log file, default is `rainbow-delimiters.log` in your standard log path
             (see `|standard-path|`).

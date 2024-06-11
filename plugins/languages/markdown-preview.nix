@@ -97,19 +97,19 @@ mkVimPlugin config {
       freeformType = types.attrs;
 
       options = {
-        mkit = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        mkit = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           `markdown-it` options for render.
         '';
 
-        katex = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        katex = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           `katex` options for math.
         '';
 
-        uml = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        uml = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           `markdown-it-plantuml` options.
         '';
 
-        maid = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        maid = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           `mermaid` options.
         '';
 
@@ -135,11 +135,11 @@ mkVimPlugin config {
           Hide yaml metadata.
         '';
 
-        sequence_diagrams = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        sequence_diagrams = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           `js-sequence-diagrams` options.
         '';
 
-        flowchart_diagrams = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        flowchart_diagrams = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           `flowcharts` diagrams options.
         '';
 
@@ -151,7 +151,7 @@ mkVimPlugin config {
           Disable filename header for the preview page.
         '';
 
-        toc = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        toc = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Toc options.
         '';
       };
@@ -182,20 +182,20 @@ mkVimPlugin config {
       Use a custom location for images.
     '';
 
-    filetypes = helpers.defaultNullOpts.mkListOf types.str ''["markdown"]'' ''
+    filetypes = helpers.defaultNullOpts.mkListOf types.str [ "markdown" ] ''
       Recognized filetypes. These filetypes will have `MarkdownPreview...` commands.
     '';
 
-    theme =
-      helpers.mkNullOrOption
-        (types.enum [
-          "dark"
-          "light"
-        ])
-        ''
-          Default theme (dark or light).
-          By default the theme is define according to the preferences of the system.
-        '';
+    theme = helpers.defaultNullOpts.mkEnum' {
+      values = [
+        "dark"
+        "light"
+      ];
+      description = ''
+        Default theme (dark or light).
+      '';
+      pluginDefault = literalMD "chosen based on system preferences";
+    };
 
     combine_preview = helpers.defaultNullOpts.mkBool false ''
       Combine preview window.

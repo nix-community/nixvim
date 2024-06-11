@@ -9,35 +9,33 @@ with lib;
 {
   options.plugins.treesitter-textobjects =
     let
-      disable = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      disable = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         List of languages to disable this module for.
       '';
 
       mkKeymapsOption =
         desc:
-        helpers.defaultNullOpts.mkNullable (
+        helpers.defaultNullOpts.mkAttrsOf (
           with types;
-          attrsOf (
-            either str (submodule {
-              options = {
-                query = mkOption {
-                  type = str;
-                  description = "";
-                  example = "@class.inner";
-                };
-
-                queryGroup = helpers.mkNullOrOption str ''
-                  You can also use captures from other query groups like `locals.scm`
-                '';
-
-                desc = helpers.mkNullOrOption str ''
-                  You can optionally set descriptions to the mappings (used in the `desc`
-                  parameter of `nvim_buf_set_keymap`) which plugins like _which-key_ display.
-                '';
+          either str (submodule {
+            options = {
+              query = mkOption {
+                type = str;
+                description = "";
+                example = "@class.inner";
               };
-            })
-          )
-        ) "{}" desc;
+
+              queryGroup = helpers.mkNullOrOption str ''
+                You can also use captures from other query groups like `locals.scm`
+              '';
+
+              desc = helpers.mkNullOrOption str ''
+                You can optionally set descriptions to the mappings (used in the `desc`
+                parameter of `nvim_buf_set_keymap`) which plugins like _which-key_ display.
+              '';
+            };
+          })
+        ) { } desc;
     in
     helpers.neovim-plugin.extraOptionsOptions
     // {
@@ -65,22 +63,22 @@ with lib;
         '';
 
         selectionModes =
-          helpers.defaultNullOpts.mkNullable
+          helpers.defaultNullOpts.mkAttrsOf
             (
               with types;
-              attrsOf (enum [
+              enum [
                 "v"
                 "V"
                 "<c-v>"
-              ])
+              ]
             )
-            "{}"
+            { }
             ''
               Map of capture group to `v`(charwise), `V`(linewise), or `<c-v>`(blockwise), choose a
               selection mode per capture, default is `v`(charwise).
             '';
 
-        includeSurroundingWhitespace = helpers.defaultNullOpts.mkStrLuaFnOr types.bool "`false`" ''
+        includeSurroundingWhitespace = helpers.defaultNullOpts.mkStrLuaFnOr types.bool false ''
           `true` or `false`, when `true` textobjects are extended to include preceding or
           succeeding whitespace.
 
@@ -177,7 +175,7 @@ with lib;
           (when https://github.com/neovim/neovim/pull/12720 or its successor is merged).
         '';
 
-        floatingPreviewOpts = helpers.defaultNullOpts.mkNullable (with types; attrsOf anything) "{}" ''
+        floatingPreviewOpts = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
           Options to pass to `vim.lsp.util.open_floating_preview`.
           For example, `maximum_height`.
         '';

@@ -20,7 +20,7 @@ in
       "fzf"
     ] defaultFuzzyFinder "fuzzy finder to find documentation";
 
-    cheatsheetWindowBlend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) "15" "";
+    cheatsheetWindowBlend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) 15 "";
 
     loadSnippets = helpers.defaultNullOpts.mkBool false "";
 

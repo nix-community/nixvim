@@ -47,7 +47,7 @@ in
       maxLenAlign = helpers.defaultNullOpts.mkBool false "whether to align to the length of the longest line in the file";
 
       maxLenAlignPadding =
-        helpers.defaultNullOpts.mkInt 1
+        helpers.defaultNullOpts.mkUnsignedInt 1
           "padding from the left if max_len_align is true";
 
       rightAlign = helpers.defaultNullOpts.mkBool false "whether to align to the extreme right or not";
@@ -58,26 +58,44 @@ in
     };
 
     hoverActions = {
-      border = helpers.defaultNullOpts.mkBorder ''
+      border = helpers.defaultNullOpts.mkBorder [
         [
-          [ "╭" "FloatBorder" ]
-          [ "─" "FloatBorder" ]
-          [ "╮" "FloatBorder" ]
-          [ "│" "FloatBorder" ]
-          [ "╯" "FloatBorder" ]
-          [ "─" "FloatBorder" ]
-          [ "╰" "FloatBorder" ]
-          [ "│" "FloatBorder" ]
+          "╭"
+          "FloatBorder"
         ]
-      '' "rust-tools hover window" "";
+        [
+          "─"
+          "FloatBorder"
+        ]
+        [
+          "╮"
+          "FloatBorder"
+        ]
+        [
+          "│"
+          "FloatBorder"
+        ]
+        [
+          "╯"
+          "FloatBorder"
+        ]
+        [
+          "─"
+          "FloatBorder"
+        ]
+        [
+          "╰"
+          "FloatBorder"
+        ]
+        [
+          "│"
+          "FloatBorder"
+        ]
+      ] "rust-tools hover window" "";
 
-      maxWidth =
-        helpers.defaultNullOpts.mkNullable types.int null
-          "Maximal width of the hover window. null means no max.";
+      maxWidth = helpers.defaultNullOpts.mkUnsignedInt null "Maximal width of the hover window. null means no max.";
 
-      maxHeight =
-        helpers.defaultNullOpts.mkNullable types.int null
-          "Maximal height of the hover window. null means no max.";
+      maxHeight = helpers.defaultNullOpts.mkUnsignedInt null "Maximal height of the hover window. null means no max.";
 
       autoFocus = helpers.defaultNullOpts.mkBool false "whether the hover action window gets automatically focused";
     };
