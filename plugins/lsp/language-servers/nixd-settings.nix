@@ -5,7 +5,7 @@
 with lib;
 {
   formatting = {
-    command = helpers.defaultNullOpts.mkListOf types.str ''[ "nixpkgs-fmt" ]'' ''
+    command = helpers.defaultNullOpts.mkListOf types.str [ "nixpkgs-fmt" ] ''
       Which command you would like to do formatting.
       Explicitly set to `["nixpkgs-fmt"]` will automatically add `pkgs.nixpkgs-fmt` to the nixvim
       environment.
