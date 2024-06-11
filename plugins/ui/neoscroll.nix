@@ -16,19 +16,17 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   settingsOptions = {
     mappings =
       helpers.defaultNullOpts.mkListOf types.str
-        ''
-          [
-            "<C-u>"
-            "<C-d>"
-            "<C-b>"
-            "<C-f>"
-            "<C-y>"
-            "<C-e>"
-            "zt"
-            "zz"
-            "zb"
-          ]
-        ''
+        [
+          "<C-u>"
+          "<C-d>"
+          "<C-b>"
+          "<C-f>"
+          "<C-y>"
+          "<C-e>"
+          "zt"
+          "zz"
+          "zb"
+        ]
         ''
           All the keys defined in this option will be mapped to their corresponding default
           scrolling animation. To no map any key pass an empty table:

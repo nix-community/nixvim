@@ -18,7 +18,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Enables or disables virt-column.
     '';
 
-    char = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) ''["┃"]'' ''
+    char = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) [ "┃" ] ''
       Character, or list of characters, that get used to display the virtual column.
       Each character has to have a display width of 0 or 1.
     '';
@@ -32,26 +32,22 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     '';
 
     exclude = {
-      filetypes = helpers.defaultNullOpts.mkListOf types.str ''
-        [
-          "lspinfo"
-          "packer"
-          "checkhealth"
-          "help"
-          "man"
-          "TelescopePrompt"
-          "TelescopeResults"
-        ]
-      '' "List of `filetype`s for which virt-column is disabled.";
+      filetypes = helpers.defaultNullOpts.mkListOf types.str [
+        "lspinfo"
+        "packer"
+        "checkhealth"
+        "help"
+        "man"
+        "TelescopePrompt"
+        "TelescopeResults"
+      ] "List of `filetype`s for which virt-column is disabled.";
 
-      buftypes = helpers.defaultNullOpts.mkListOf types.str ''
-        [
-          "nofile"
-          "quickfix"
-          "terminal"
-          "prompt"
-        ]
-      '' "List of `buftype`s for which virt-column is disabled.";
+      buftypes = helpers.defaultNullOpts.mkListOf types.str [
+        "nofile"
+        "quickfix"
+        "terminal"
+        "prompt"
+      ] "List of `buftype`s for which virt-column is disabled.";
     };
   };
 

@@ -15,13 +15,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     dimming = {
-      alpha = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.25" ''
+      alpha = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.25 ''
         Amount of dimming.
       '';
 
-      color = helpers.defaultNullOpts.mkListOf types.str ''["Normal" "#ffffff"]'' ''
-        Highlight groups / colors to use.
-      '';
+      color =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "Normal"
+            "#ffffff"
+          ]
+          ''
+            Highlight groups / colors to use.
+          '';
 
       term_bg = helpers.defaultNullOpts.mkStr "#000000" ''
         If `guibg=NONE`, this will be used to calculate text color.
@@ -42,16 +48,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       the types of nodes that should always be fully expanded.
     '';
 
-    expand = helpers.defaultNullOpts.mkListOf types.str ''
-      [
-        "function"
-        "method"
-        "table"
-        "if_statement"
-      ]
-    '' "For treesitter, we will always try to expand to the top-most ancestor with these types.";
+    expand = helpers.defaultNullOpts.mkListOf types.str [
+      "function"
+      "method"
+      "table"
+      "if_statement"
+    ] "For treesitter, we will always try to expand to the top-most ancestor with these types.";
 
-    exclude = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    exclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Exclude these filetypes.
     '';
   };
