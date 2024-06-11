@@ -46,7 +46,7 @@ in
       Uses `NullLsInfoBorder` highlight group (see [Highlight Groups](#highlight-groups)).
     '';
 
-    cmd = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["nvim"]'' ''
+    cmd = helpers.defaultNullOpts.mkListOf types.str [ "nvim" ] ''
       Defines the command used to start the null-ls server. If you do not have an
       `nvim` binary available on your `$PATH`, you should change this to an absolute
       path to the binary.
