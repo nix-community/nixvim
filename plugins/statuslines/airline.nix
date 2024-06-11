@@ -120,7 +120,7 @@ mkVimPlugin config {
               (enum [ "flag" ])
             ]
           )
-          "true"
+          true
           ''
             Display spelling language when spell detection is enabled (if enough space is
             available).
