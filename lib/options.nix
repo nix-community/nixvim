@@ -166,26 +166,8 @@ rec {
         // (optionalAttrs (args ? default) { pluginDefault = args.pluginDefault or args.default; });
     in
     rec {
-      # TODO: deprecated in favor of `helpers.pluginDefaultText`
-      mkDesc =
-        default: desc:
-        let
-          defaultString = if isString default then default else generators.toPretty { } default;
-          defaultDesc =
-            "_Plugin default:_"
-            + (
-              # Detect whether `default` is multiline or inline:
-              if hasInfix "\n" defaultString then "\n\n```nix\n${defaultString}\n```" else " `${defaultString}`"
-            );
-        in
-        if desc == "" then
-          defaultDesc
-        else
-          ''
-            ${desc}
-
-            ${defaultDesc}
-          '';
+      # TODO: removed 2024-06-14; remove stub 2024-09-01
+      mkDesc = abort "mkDesc has been removed. Use the `pluginDefault` argument or `helpers.pluginDefaultText`.";
 
       mkNullable' = args: mkNullOrOption' (convertArgs args);
       mkNullable =
