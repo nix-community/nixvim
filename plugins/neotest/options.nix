@@ -38,65 +38,70 @@ with lib;
     Minimum log levels.
   '';
 
-  consumers = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.rawLua "{}" ''
+  consumers = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.strLuaFn { } ''
     key: string
     value: lua function
   '';
 
-  icons = helpers.defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) ''
-    {
-      child_indent = "│";
-      child_prefix = "├";
-      collapsed = "─";
-      expanded = "╮";
-      failed = "";
-      final_child_indent = " ";
-      final_child_prefix = "╰";
-      non_collapsible = "─";
-      passed = "";
-      running = "";
-      running_animated = ["/" "|" "\\" "-" "/" "|" "\\" "-"];
-      skipped = "";
-      unknown = "";
-      watching = "";
-    }
-  '' "Icons used throughout the UI. Defaults use VSCode's codicons.";
+  icons = helpers.defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) {
+    child_indent = "│";
+    child_prefix = "├";
+    collapsed = "─";
+    expanded = "╮";
+    failed = "";
+    final_child_indent = " ";
+    final_child_prefix = "╰";
+    non_collapsible = "─";
+    passed = "";
+    running = "";
+    running_animated = [
+      "/"
+      "|"
+      "\\"
+      "-"
+      "/"
+      "|"
+      "\\"
+      "-"
+    ];
+    skipped = "";
+    unknown = "";
+    watching = "";
+  } "Icons used throughout the UI. Defaults use VSCode's codicons.";
 
-  highlights = helpers.defaultNullOpts.mkAttrsOf types.str ''
-    {
-      adapter_name = "NeotestAdapterName";
-      border = "NeotestBorder";
-      dir = "NeotestDir";
-      expand_marker = "NeotestExpandMarker";
-      failed = "NeotestFailed";
-      file = "NeotestFile";
-      focused = "NeotestFocused";
-      indent = "NeotestIndent";
-      marked = "NeotestMarked";
-      namespace = "NeotestNamespace";
-      passed = "NeotestPassed";
-      running = "NeotestRunning";
-      select_win = "NeotestWinSelect";
-      skipped = "NeotestSkipped";
-      target = "NeotestTarget";
-      test = "NeotestTest";
-      unknown = "NeotestUnknown";
-      watching = "NeotestWatching";
-    }
-  '' "";
+  highlights = helpers.defaultNullOpts.mkAttrsOf types.str {
+    adapter_name = "NeotestAdapterName";
+    border = "NeotestBorder";
+    dir = "NeotestDir";
+    expand_marker = "NeotestExpandMarker";
+    failed = "NeotestFailed";
+    file = "NeotestFile";
+    focused = "NeotestFocused";
+    indent = "NeotestIndent";
+    marked = "NeotestMarked";
+    namespace = "NeotestNamespace";
+    passed = "NeotestPassed";
+    running = "NeotestRunning";
+    select_win = "NeotestWinSelect";
+    skipped = "NeotestSkipped";
+    target = "NeotestTarget";
+    test = "NeotestTest";
+    unknown = "NeotestUnknown";
+    watching = "NeotestWatching";
+  } "";
 
   floating = {
     border = helpers.defaultNullOpts.mkStr "rounded" "Border style.";
 
-    max_height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.6" ''
+    max_height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
       Max height of window as proportion of NeoVim window.
     '';
 
-    max_width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.6" ''
+    max_width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
       Max width of window as proportion of NeoVim window.
     '';
 
-    options = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+    options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
       Window local options to set on floating windows (e.g. winblend).
     '';
   };
@@ -122,28 +127,29 @@ with lib;
 
     expandErrors = helpers.defaultNullOpts.mkBool true "Expand all failed positions.";
 
-    mappings = helpers.defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) ''
-      {
-        attach = "a";
-        clear_marked = "M";
-        clear_target = "T";
-        debug = "d";
-        debug_marked = "D";
-        expand = ["<CR>" "<2-LeftMouse>"];
-        expand_all = "e";
-        jumpto = "i";
-        mark = "m";
-        next_failed = "J";
-        output = "o";
-        prev_failed = "K";
-        run = "r";
-        run_marked = "R";
-        short = "O";
-        stop = "u";
-        target = "t";
-        watch = "w";
-      }
-    '' "Buffer mappings for summary window.";
+    mappings = helpers.defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) {
+      attach = "a";
+      clear_marked = "M";
+      clear_target = "T";
+      debug = "d";
+      debug_marked = "D";
+      expand = [
+        "<CR>"
+        "<2-LeftMouse>"
+      ];
+      expand_all = "e";
+      jumpto = "i";
+      mark = "m";
+      next_failed = "J";
+      output = "o";
+      prev_failed = "K";
+      run = "r";
+      run_marked = "R";
+      short = "O";
+      stop = "u";
+      target = "t";
+      watch = "w";
+    } "Buffer mappings for summary window.";
 
     open = helpers.defaultNullOpts.mkStr "botright vsplit | vertical resize 50" ''
       A command or function to open a window for the summary.
@@ -171,7 +177,7 @@ with lib;
   quickfix = {
     enabled = helpers.defaultNullOpts.mkBool true "Enable quickfix.";
 
-    open = helpers.defaultNullOpts.mkNullable (with types; either bool str) "`false`" ''
+    open = helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
       Set to true to open quickfix on startup, or a function to be called when the quickfix
       results are set.
     '';
