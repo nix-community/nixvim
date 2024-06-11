@@ -120,7 +120,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '' "Callback for the ending of animations.";
 
         # This option accepts an attrs or a lua string.
-        # Hence, we use `mkOption` to convert the string to raw lua in `apply`.
+        # Hence, we convert the string to raw lua in `apply`.
         spinner =
           let
             defaultFrames = [
@@ -136,30 +136,29 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               "⠏"
             ];
           in
-          mkOption {
+          helpers.mkNullOrOption' {
             type =
               with helpers.nixvimTypes;
-              nullOr (
-                either strLua (submodule {
-                  freeformType = attrsOf anything;
-                  options = {
-                    frames = helpers.defaultNullOpts.mkListOf types.str defaultFrames ''
-                      Frame characters.
-                    '';
+              either strLua (submodule {
+                freeformType = attrsOf anything;
+                options = {
+                  frames = helpers.defaultNullOpts.mkListOf types.str defaultFrames ''
+                    Frame characters.
+                  '';
 
-                    interval = helpers.defaultNullOpts.mkUnsignedInt 80 ''
-                      Interval time between two consecutive frames.
-                    '';
-                  };
-                })
-              );
+                  interval = helpers.defaultNullOpts.mkUnsignedInt 80 ''
+                    Interval time between two consecutive frames.
+                  '';
+                };
+              });
             default = null;
             example = "require('noice.util.spinners').spinners.circleFull";
             apply = v: if isString v then helpers.mkRaw v else v;
-            description = helpers.defaultNullOpts.mkDesc {
+            description = "Spinner for pinned views that are loading.";
+            pluginDefault = {
               frames = defaultFrames;
               interval = 80;
-            } "Spinner for pinned views that are loading.";
+            };
           };
       };
 
@@ -182,84 +181,81 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       } "Global window options for edgebar windows.";
 
       # This option accepts an attrs or a lua string.
-      # Hence, we use `mkOption` to convert the string to raw lua in `apply`.
-      keys = mkOption {
-        type = with helpers.nixvimTypes; attrsOf (either strLuaFn (enum [ false ]));
-        default = { };
-        apply = mapAttrs (_: v: if isString v then helpers.mkRaw v else v);
-        description =
-          helpers.defaultNullOpts.mkDesc
-            {
-              q = ''
-                function(win)
-                  win:close()
-                end
-              '';
-              "<c-q>" = ''
-                function(win)
-                  win:hide()
-                end
-              '';
-              Q = ''
-                function(win)
-                  win.view.edgebar:close()
-                end
-              '';
-              "]w" = ''
-                function(win)
-                  win:next({ visible = true, focus = true })
-                end
-              '';
-              "[w" = ''
-                function(win)
-                  win:prev({ visible = true, focus = true })
-                end
-              '';
-              "]W" = ''
-                function(win)
-                  win:next({ pinned = false, focus = true })
-                end
-              '';
-              "[W" = ''
-                function(win)
-                  win:prev({ pinned = false, focus = true })
-                end
-              '';
-              "<c-w>>" = ''
-                function(win)
-                  win:resize("width", 2)
-                end
-              '';
-              "<c-w><lt>" = ''
-                function(win)
-                  win:resize("width", -2)
-                end
-              '';
-              "<c-w>+" = ''
-                function(win)
-                  win:resize("height", 2)
-                end
-              '';
-              "<c-w>-" = ''
-                function(win)
-                  win:resize("height", -2)
-                end
-              '';
-              "<c-w>=" = ''
-                function(win)
-                  win.view.edgebar:equalize()
-                end
-              '';
-            }
-            ''
-              Buffer-local keymaps to be added to edgebar buffers.
-              Existing buffer-local keymaps will never be overridden.
+      # Hence, we convert the string to raw lua in `apply`.
+      keys = helpers.defaultNullOpts.mkAttrsOf' {
+        type = with helpers.nixvimTypes; either strLuaFn (enum [ false ]);
+        apply = x: if x == null then null else mapAttrs (_: v: if isString v then helpers.mkRaw v else v) x;
+        description = ''
+          Buffer-local keymaps to be added to edgebar buffers.
+          Existing buffer-local keymaps will never be overridden.
 
-              Each value is either:
-              - A function declaration (as a raw lua string)
-                -> `fun(win:Edgy.Window)`
-              - `false` to disable this mapping.
-            '';
+          Each value is either:
+          - A function declaration (as a raw lua string)
+            -> `fun(win:Edgy.Window)`
+          - `false` to disable this mapping.
+        '';
+        pluginDefault = {
+          q = ''
+            function(win)
+              win:close()
+            end
+          '';
+          "<c-q>" = ''
+            function(win)
+              win:hide()
+            end
+          '';
+          Q = ''
+            function(win)
+              win.view.edgebar:close()
+            end
+          '';
+          "]w" = ''
+            function(win)
+              win:next({ visible = true, focus = true })
+            end
+          '';
+          "[w" = ''
+            function(win)
+              win:prev({ visible = true, focus = true })
+            end
+          '';
+          "]W" = ''
+            function(win)
+              win:next({ pinned = false, focus = true })
+            end
+          '';
+          "[W" = ''
+            function(win)
+              win:prev({ pinned = false, focus = true })
+            end
+          '';
+          "<c-w>>" = ''
+            function(win)
+              win:resize("width", 2)
+            end
+          '';
+          "<c-w><lt>" = ''
+            function(win)
+              win:resize("width", -2)
+            end
+          '';
+          "<c-w>+" = ''
+            function(win)
+              win:resize("height", 2)
+            end
+          '';
+          "<c-w>-" = ''
+            function(win)
+              win:resize("height", -2)
+            end
+          '';
+          "<c-w>=" = ''
+            function(win)
+              win.view.edgebar:equalize()
+            end
+          '';
+        };
       };
 
       icons = {
