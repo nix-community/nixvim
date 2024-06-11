@@ -8,29 +8,13 @@ with nixvimUtils;
 let
   # Render a plugin default string
   pluginDefaultText =
-    let
-      # Assume a string `pluginDefault` is already formatted as intended,
-      # TODO: remove this behavior so we can quote strings properly
-      # historically strings were the only type accepted by mkDesc.
-      legacyRenderOptionValue =
-        v:
-        literalExpression (
-          if isString v then
-            v
-          else
-            generators.toPretty {
-              allowPrettyValues = true;
-              multiline = true;
-            } v
-        );
-    in
     {
       # plugin default: any value or literal expression
       pluginDefault,
       # nix option default value, used if `defaultText` is missing
       default ? null,
       # nix option default string or literal expression
-      defaultText ? (options.renderOptionValue default) // {
+      defaultText ? options.renderOptionValue default // {
         __lang = "nix";
       },
       ...
@@ -41,7 +25,7 @@ let
         if pluginDefault ? _type && pluginDefault ? text then
           pluginDefault
         else
-          (legacyRenderOptionValue pluginDefault) // { __lang = "nix"; };
+          options.renderOptionValue pluginDefault // { __lang = "nix"; };
 
       # Format text using markdown code block or inline code
       # Handle `v` being a literalExpression or literalMD type
@@ -204,18 +188,7 @@ rec {
       mkUnsignedInt = pluginDefault: description: mkUnsignedInt' { inherit pluginDefault description; };
       mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
       mkBool = pluginDefault: description: mkBool' { inherit pluginDefault description; };
-      mkStr' =
-        args:
-        mkNullableWithRaw' (
-          args
-          // {
-            type = types.str;
-          }
-          # TODO we should remove this once `mkDesc` no longer has a special case
-          // (optionalAttrs (args ? pluginDefault) {
-            pluginDefault = generators.toPretty { } args.pluginDefault;
-          })
-        );
+      mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });
       mkStr = pluginDefault: description: mkStr' { inherit pluginDefault description; };
 
       mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
@@ -235,19 +208,20 @@ rec {
 
       mkEnum' =
         { values, ... }@args:
-        # `values` is a list. If `pluginDefault` is present, then it is either null or one of `values`
+        let
+          showInline = generators.toPretty { multiline = false; };
+          # Check `v` is either null, one of `values`, or a literal type
+          assertIsValid =
+            v:
+            v == null
+            || elem v values
+            || (v ? _type && v ? text)
+            || abort "Default value ${showInline v} is not valid for enum ${showInline values}.";
+        in
+        # Ensure `values` is a list and `pluginDefault` is valid if present
         assert isList values;
-        assert args ? pluginDefault -> (args.pluginDefault == null || elem args.pluginDefault values);
-        mkNullableWithRaw' (
-          (filterAttrs (n: v: n != "values") args)
-          // {
-            type = types.enum values;
-          }
-          # TODO we should remove this once `mkDesc` no longer has a special case
-          // (optionalAttrs (args ? pluginDefault) {
-            pluginDefault = generators.toPretty { } args.pluginDefault;
-          })
-        );
+        assert args ? pluginDefault -> assertIsValid args.pluginDefault;
+        mkNullableWithRaw' (removeAttrs args [ "values" ] // { type = types.enum values; });
       mkEnum =
         values: pluginDefault: description:
         mkEnum' { inherit values pluginDefault description; };
