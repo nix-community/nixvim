@@ -1,12 +1,36 @@
 {
-  # No empty test because not setting `colorscheme` would error
+  empty = {
+    colorschemes.base16.enable = true;
+  };
 
   defaults = {
     colorschemes.base16 = {
       enable = true;
 
-      colorscheme = "gruvbox-dark-hard";
+      colorscheme = "schemer-dark";
       setUpBar = true;
+
+      settings = {
+        telescope = true;
+        telescope_borders = false;
+        indentblankline = true;
+        notify = true;
+        ts_rainbow = true;
+        cmp = true;
+        illuminate = true;
+        lsp_semantic = true;
+        mini_completion = true;
+        dapui = true;
+      };
+    };
+  };
+
+  builtin-colorscheme = {
+    colorschemes.base16 = {
+      enable = true;
+
+      colorscheme = "gruvbox-dark-hard";
+      setUpBar = false;
     };
   };
 
