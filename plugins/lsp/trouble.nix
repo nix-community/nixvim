@@ -180,23 +180,26 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             description = "Manually refresh";
           };
           jump = {
-            default = "[ \"<cr>\" \"<tab>\" ]";
+            default = [
+              "<cr>"
+              "<tab>"
+            ];
             description = "Jump to the diagnostic or open / close folds";
           };
           open_split = {
-            default = "[ \"<c-x>\" ]";
+            default = [ "<c-x>" ];
             description = "Open buffer in new split";
           };
           open_vsplit = {
-            default = "[ \"<c-v>\" ]";
+            default = [ "<c-v>" ];
             description = "Open buffer in new vsplit";
           };
           open_tab = {
-            default = "[ \"<c-t>\" ]";
+            default = [ "<c-t>" ];
             description = "Open buffer in new tab";
           };
           jump_close = {
-            default = "[ \"o\" ]";
+            default = [ "o" ];
             description = "Jump to the diagnostic and close the list";
           };
           toggle_mode = {
@@ -216,15 +219,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             description = "Preview the diagnostic location";
           };
           close_folds = {
-            default = "[ \"zM\" \"zm\" ]";
+            default = [
+              "zM"
+              "zm"
+            ];
             description = "Close all folds";
           };
           open_folds = {
-            default = "[ \"zR\" \"zr\" ]";
+            default = [
+              "zR"
+              "zr"
+            ];
             description = "Open all folds";
           };
           toggle_fold = {
-            default = "[ \"zA\" \"za\" ]";
+            default = [
+              "zA"
+              "za"
+            ];
             description = "Toggle fold of current file";
           };
           previous = {
@@ -241,11 +253,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Add an indent guide below the fold icons.
     '';
 
-    win_config = helpers.defaultNullOpts.mkAttrsOf types.anything ''
-      {
-        border = "single";
-      }
-    '' "Configuration for floating windows. See `|nvim_open_win()|`.";
+    win_config = helpers.defaultNullOpts.mkAttrsOf types.anything {
+      border = "single";
+    } "Configuration for floating windows. See `|nvim_open_win()|`.";
 
     auto_open = helpers.defaultNullOpts.mkBool false ''
       Automatically open the list when you have diagnostics.
@@ -264,14 +274,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Automatically fold a file trouble list at creation.
     '';
 
-    auto_jump = helpers.defaultNullOpts.mkListOf types.str ''["lsp_definitions"]'' ''
+    auto_jump = helpers.defaultNullOpts.mkListOf types.str [ "lsp_definitions" ] ''
       For the given modes, automatically jump if there is only a single result.
     '';
 
-    include_declaration =
-      helpers.defaultNullOpts.mkListOf types.str
-        ''["lsp_references" "lsp_implementations" "lsp_definitions"]''
-        "For the given modes, include the declaration of the current symbol in the results.";
+    include_declaration = helpers.defaultNullOpts.mkListOf types.str [
+      "lsp_references"
+      "lsp_implementations"
+      "lsp_definitions"
+    ] "For the given modes, include the declaration of the current symbol in the results.";
 
     signs =
       mapAttrs

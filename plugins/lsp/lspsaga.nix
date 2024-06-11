@@ -66,21 +66,25 @@ in
 
         actionfix = helpers.defaultNullOpts.mkStr "" "Action fix icon.";
 
-        lines = helpers.defaultNullOpts.mkNullable (
-          with types; listOf str
-        ) ''["┗" "┣" "┃" "━" "┏"]'' "Symbols used in virtual text connect.";
+        lines = helpers.defaultNullOpts.mkListOf types.str [
+          "┗"
+          "┣"
+          "┃"
+          "━"
+          "┏"
+        ] "Symbols used in virtual text connect.";
 
-        kind = helpers.defaultNullOpts.mkNullable types.attrs "{}" "LSP kind custom table.";
+        kind = helpers.defaultNullOpts.mkAttrsOf types.anything { } "LSP kind custom table.";
 
         impSign = helpers.defaultNullOpts.mkStr "󰳛 " "Implement icon.";
       };
 
       hover = {
-        maxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.9" ''
+        maxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.9 ''
           Defines float window width.
         '';
 
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.8" ''
+        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.8 ''
           Defines float window height.
         '';
 
@@ -107,19 +111,19 @@ in
           Enable number shortcuts to execute code action quickly.
         '';
 
-        maxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.8" ''
+        maxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.8 ''
           Diagnostic jump window max width.
         '';
 
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.6" ''
+        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
           Diagnostic jump window max height.
         '';
 
-        maxShowWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.9" ''
+        maxShowWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.9 ''
           Show window max width when layout is float.
         '';
 
-        maxShowHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.6" ''
+        maxShowHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
           Show window max height when layout is float.
         '';
 
@@ -201,19 +205,19 @@ in
       };
 
       finder = {
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.5" ''
+        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5 ''
           `max_height` of the finder window (float layout).
         '';
 
-        leftWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.3" ''
+        leftWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
           Width of the left finder window (float layout).
         '';
 
-        rightWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.3" ''
+        rightWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
           Width of the right finder window (float layout).
         '';
 
-        methods = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
+        methods = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
           Keys are alias of LSP methods.
           Values are LSP methods, which you want show in finder.
 
@@ -243,7 +247,7 @@ in
           If it’s true, it will disable show the no response message.
         '';
 
-        filter = helpers.defaultNullOpts.mkNullable (with types; attrsOf str) "{}" ''
+        filter = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
           Keys are LSP methods.
           Values are a filter handler.
           Function parameter are `client_id` and `result`.
@@ -269,11 +273,11 @@ in
       };
 
       definition = {
-        width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.6" ''
+        width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
           Defines float window width.
         '';
 
-        height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.5" ''
+        height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5 ''
           Defines float window height.
         '';
 
@@ -309,11 +313,11 @@ in
 
         projectMaxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
           1.0
-        ) "0.5" "Width for the `project_replace` float window.";
+        ) 0.5 "Width for the `project_replace` float window.";
 
         projectMaxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
           1.0
-        ) "0.5" "Height for the `project_replace` float window.";
+        ) 0.5 "Height for the `project_replace` float window.";
 
         keys = {
           quit = mkKeymapOption "<C-k>" "Quit rename window or `project_replace` window.";
@@ -369,15 +373,15 @@ in
             ]
             ''
               `float` or `normal`.
-              Default is normal.
+
               If set to float, above options will ignored.
             '';
 
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.5" ''
+        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5 ''
           Height of outline float layout.
         '';
 
-        leftWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.3" ''
+        leftWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
           Width of outline float layout left window.
         '';
 

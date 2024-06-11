@@ -127,7 +127,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         Highlight group to highlight the floating window.
       '';
 
-      win_opts = helpers.defaultNullOpts.mkAttrsOf types.anything "{}" ''
+      win_opts = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
         Window options.
         See |vim.lsp.util.open_floating_preview| and |nvim_open_win|.
         Note that some options may be overridden by |open_floating_preview|.
@@ -176,22 +176,28 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         Set to a negative value to avoid setting the updatetime.
       '';
 
-      pattern = helpers.defaultNullOpts.mkListOf types.str ''["*"]'' ''
+      pattern = helpers.defaultNullOpts.mkListOf types.str [ "*" ] ''
         See |nvim_create_autocmd| and |autocmd-pattern|.
       '';
 
-      events = helpers.defaultNullOpts.mkListOf types.str ''["CursorHold" "CursorHoldI"]'' ''
-        See |nvim_create_autocmd|.
-      '';
+      events =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "CursorHold"
+            "CursorHoldI"
+          ]
+          ''
+            See |nvim_create_autocmd|.
+          '';
     };
 
     ignore = {
-      clients = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+      clients = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         LSP client names to ignore.
         Example: {"null-ls", "lua_ls"}
       '';
 
-      ft = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+      ft = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         Filetypes to ignore.
         Example: {"neo-tree", "lua"}
       '';

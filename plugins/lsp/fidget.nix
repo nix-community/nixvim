@@ -149,7 +149,7 @@ in
 
       # Options related to LSP progress subsystem
       progress = {
-        pollRate = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) number) "0" ''
+        pollRate = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) number) 0 ''
           How and when to poll for progress messages.
 
           Set to `0` to immediately poll on each `|LspProgress|` event.
@@ -232,22 +232,20 @@ in
               will be installed).
             '';
 
-        ignore = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+        ignore = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of LSP servers to ignore.
         '';
 
         # Options related to how LSP progress messages are displayed as notifications
         display = {
-          renderLimit =
-            helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) number) "16"
-              ''
-                How many LSP messages to show at once.
+          renderLimit = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) number) 16 ''
+            How many LSP messages to show at once.
 
-                If `false`, no limit.
+            If `false`, no limit.
 
-                This is used to configure each LSP notification group, so by default, this is a
-                per-server limit.
-              '';
+            This is used to configure each LSP notification group, so by default, this is a
+            per-server limit.
+          '';
 
           doneTtl = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "3" ''
             How long a message should persist after completion.
@@ -316,14 +314,12 @@ in
           formatGroupName = helpers.defaultNullOpts.mkLuaFn "function(group) return tostring(group) end" "How to format a progress notification group's name.";
 
           overrides =
-            helpers.defaultNullOpts.mkNullable (with types; attrsOf notificationConfigType)
-              ''
-                {
-                  rust_analyzer = {
-                    name = "rust-analyzer";
-                  };
-                }
-              ''
+            helpers.defaultNullOpts.mkAttrsOf notificationConfigType
+              {
+                rust_analyzer = {
+                  name = "rust-analyzer";
+                };
+              }
               ''
                 Override options from the default notification config.
                 Keys of the table are each notification group's `key`.
@@ -379,12 +375,8 @@ in
         '';
 
         configs =
-          helpers.defaultNullOpts.mkNullable (with types; attrsOf (either notificationConfigType str))
-            ''
-              {
-                default = "require('fidget.notification').default_config";
-              }
-            ''
+          helpers.defaultNullOpts.mkAttrsOf (with types; either str notificationConfigType)
+            { default = "require('fidget.notification').default_config"; }
             ''
               How to configure notification groups when instantiated.
 
@@ -551,11 +543,11 @@ in
 
         floatPrecision = helpers.defaultNullOpts.mkNullable (
           with types; numbers.between 0.0 1.0
-        ) "0.01" "Limit the number of decimals displayed for floats.";
+        ) 1.0e-2 "Limit the number of decimals displayed for floats.";
 
         path =
-          helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-            ''{__raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))";}''
+          helpers.defaultNullOpts.mkStr
+            { __raw = "string.format('%s/fidget.nvim.log', vim.fn.stdpath('cache'))"; }
             ''
               Where Fidget writes its logs to.
 

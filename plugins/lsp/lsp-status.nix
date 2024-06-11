@@ -22,7 +22,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
     in
     {
-      kind_labels = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+      kind_labels = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         An optional map from LSP symbol kinds to label symbols. Used to decorate the current function name.
       '';
 

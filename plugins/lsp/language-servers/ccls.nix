@@ -69,13 +69,13 @@ in
     };
 
     clang = {
-      extraArgs = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      extraArgs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         Additional arguments for `compile_commands.json` entries.
 
         Example: `["-frounding-math"]`
       '';
 
-      excludeArgs = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      excludeArgs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         Excluded arguments for `compile_commands.json` entries.
 
         If your compiler is not Clang and it supports arguments which Clang doesn't understand, then
@@ -84,7 +84,7 @@ in
         Example: `["-frounding-math"]`
       '';
 
-      pathMappings = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      pathMappings = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         A list of `src>dest` path conversions used to remap the paths of files in the project.
         This can be used to move a project to a new location without re-indexing.
 
@@ -238,7 +238,7 @@ in
             Also consider using `index.multiVersionBlacklist` to exclude system headers.
           '';
 
-      multiVersionBlacklist = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      multiVersionBlacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         A list of regular expressions matching files that should not be indexed via multi-version
         if `index.multiVersion` is set to `1`.
 
@@ -248,7 +248,7 @@ in
         Example: `["^/usr/include"]`
       '';
 
-      initialBlacklist = helpers.defaultNullOpts.mkNullable (with types; listOf str) "[]" ''
+      initialBlacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         A list of regular expressions matching files that should not be indexed when the `ccls`
         server starts up, but will still be indexed if a client opens them.
         If there are areas of the project that you have no interest in indexing you can use this to
