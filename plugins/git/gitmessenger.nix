@@ -84,7 +84,7 @@ with lib;
       Note: Word diff is enabled by typing "r" in a popup window.
     '';
 
-    floatingWinOps = helpers.defaultNullOpts.mkNullable (types.attrsOf types.anything) "{}" ''
+    floatingWinOps = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
       Options passed to nvim_open_win() on opening a popup window. This is useful when you want to
       override some window options.
     '';

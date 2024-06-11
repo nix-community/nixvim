@@ -225,20 +225,18 @@ with lib;
 
   count_chars =
     helpers.defaultNullOpts.mkAttrsOf types.str
-      ''
-        {
-          "__unkeyed_1" = "1";
-          "__unkeyed_2" = "2";
-          "__unkeyed_3" = "3";
-          "__unkeyed_4" = "4";
-          "__unkeyed_5" = "5";
-          "__unkeyed_6" = "6";
-          "__unkeyed_7" = "7";
-          "__unkeyed_8" = "8";
-          "__unkeyed_9" = "9";
-          "+" = ">";
-        }
-      ''
+      {
+        "__unkeyed_1" = "1";
+        "__unkeyed_2" = "2";
+        "__unkeyed_3" = "3";
+        "__unkeyed_4" = "4";
+        "__unkeyed_5" = "5";
+        "__unkeyed_6" = "6";
+        "__unkeyed_7" = "7";
+        "__unkeyed_8" = "8";
+        "__unkeyed_9" = "9";
+        "+" = ">";
+      }
       ''
         The count characters used when `signs.*.show_count` is enabled.
         The `+` entry is used as a fallback. With the default, any count outside of 1-9 uses the `>`
@@ -272,15 +270,13 @@ with lib;
 
   preview_config =
     helpers.defaultNullOpts.mkAttrsOf types.anything
-      ''
-        {
-          border = "single";
-          style = "minimal";
-          relative = "cursor";
-          row = 0;
-          col = 1;
-        }
-      ''
+      {
+        border = "single";
+        style = "minimal";
+        relative = "cursor";
+        row = 0;
+        col = 1;
+      }
       ''
         Option overrides for the Gitsigns preview window.
         Table is passed directly to `nvim_open_win`.

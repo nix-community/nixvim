@@ -39,24 +39,21 @@ with lib;
     mappings = helpers.defaultNullOpts.mkStr "<leader>gy" "Mapping to call url generation.";
 
     callbacks =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf (either str helpers.nixvimTypes.rawLua))
+      helpers.defaultNullOpts.mkAttrsOf types.str
+        {
+          "github.com" = "get_github_type_url";
+          "gitlab.com" = "get_gitlab_type_url";
+          "try.gitea.io" = "get_gitea_type_url";
+          "codeberg.org" = "get_gitea_type_url";
+          "bitbucket.org" = "get_bitbucket_type_url";
+          "try.gogs.io" = "get_gogs_type_url";
+          "git.sr.ht" = "get_srht_type_url";
+          "git.launchpad.net" = "get_launchpad_type_url";
+          "repo.or.cz" = "get_repoorcz_type_url";
+          "git.kernel.org" = "get_cgit_type_url";
+          "git.savannah.gnu.org" = "get_cgit_type_url";
+        }
         ''
-          {
-            "github.com" = "get_github_type_url";
-            "gitlab.com" = "get_gitlab_type_url";
-            "try.gitea.io" = "get_gitea_type_url";
-            "codeberg.org" = "get_gitea_type_url";
-            "bitbucket.org" = "get_bitbucket_type_url";
-            "try.gogs.io" = "get_gogs_type_url";
-            "git.sr.ht" = "get_srht_type_url";
-            "git.launchpad.net" = "get_launchpad_type_url";
-            "repo.or.cz" = "get_repoorcz_type_url";
-            "git.kernel.org" = "get_cgit_type_url";
-            "git.savannah.gnu.org" = "get_cgit_type_url";
-          }
-        ''
-        ''
-
           Each key can be
             - the name of a built-in callback. Example: `"get_gitlab_type_url";` is setting
             ```lua

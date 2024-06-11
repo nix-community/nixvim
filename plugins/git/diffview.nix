@@ -73,7 +73,7 @@ let
         current window.
       '';
 
-      winOpts = mkAttributeSet "{}" ''
+      winOpts = mkAttributeSet { } ''
         Table of window local options (see |vim.opt_local|).
         These options are applied whenever the window is opened.
       '';
@@ -96,11 +96,11 @@ in
         See ':h diffview-config-enhanced_diff_hl'
       '';
 
-      gitCmd = mkNullable (types.listOf types.str) ''[ "git" ]'' ''
+      gitCmd = mkListOf types.str [ "git" ] ''
         The git executable followed by default args.
       '';
 
-      hgCmd = mkNullable (types.listOf types.str) ''[ "hg" ]'' ''
+      hgCmd = mkListOf types.str [ "hg" ] ''
         The hg executable followed by default args.
       '';
 
@@ -323,7 +323,7 @@ in
                 List only the commits in the specified revision range.
               '';
 
-              pathArgs = mkNullable (types.listOf types.str) "[]" ''
+              pathArgs = mkListOf types.str [ ] ''
                 Limit the target files to only the files matching the given
                 path arguments (git pathspec is supported).
               '';
@@ -381,7 +381,7 @@ in
                 Limit the number of commits.
               '';
 
-              l = mkNullable (types.listOf types.str) "[]" ''
+              l = mkListOf types.str [ ] ''
                 `{ ("<start>,<end>:<file>" | ":<funcname>:<file>")... }`
 
                 Trace the evolution of the line range given by <start>,<end>,
@@ -454,9 +454,9 @@ in
           commonDesc = "Default args prepended to the arg-list for the listed commands";
         in
         {
-          diffviewOpen = mkNullable (types.listOf types.str) "[ ]" commonDesc;
+          diffviewOpen = mkListOf types.str [ ] commonDesc;
 
-          diffviewFileHistory = mkNullable (types.listOf types.str) "[ ]" commonDesc;
+          diffviewFileHistory = mkListOf types.str [ ] commonDesc;
         };
 
       hooks =
