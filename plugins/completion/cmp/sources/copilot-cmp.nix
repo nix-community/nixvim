@@ -12,7 +12,11 @@ in
 {
   options.plugins.copilot-cmp = helpers.neovim-plugin.extraOptionsOptions // {
     event =
-      helpers.defaultNullOpts.mkNullable (with types; listOf str) ''["InsertEnter" "LspAttach"]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "InsertEnter"
+          "LspAttach"
+        ]
         ''
           Configures when the source is registered.
           Unless you have a unique problem for your particular configuration you probably don't want
