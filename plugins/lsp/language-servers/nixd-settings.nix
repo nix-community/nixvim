@@ -4,6 +4,21 @@
 #  - https://github.com/nix-community/nixd/blob/main/nixd/include/nixd/Controller/Configuration.h
 with lib;
 {
+  diagnostic = {
+    suppress = helpers.defaultNullOpts.mkListOf' {
+      type = types.str;
+      description = ''
+        Disable specific LSP warnings, etc.
+        A list of diagnostic _short names_ that should be suppressed.
+
+        See [the source](https://github.com/nix-community/nixd/blob/main/libnixf/include/nixf/Basic/DiagnosticKinds.inc)
+        for available diagnostics.
+      '';
+      default = [ ];
+      example = [ "sema-escaping-with" ];
+    };
+  };
+
   formatting = {
     command = helpers.defaultNullOpts.mkListOf types.str [ "nixpkgs-fmt" ] ''
       Which command you would like to do formatting.
