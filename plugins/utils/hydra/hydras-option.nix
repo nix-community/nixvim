@@ -112,6 +112,10 @@ in
 mkOption {
   type = types.listOf hydraType;
   default = [ ];
+  description = ''
+    A list of hydra configurations.
+    See [here](https://github.com/nvimtools/hydra.nvim?tab=readme-ov-file#creating-a-new-hydra).
+  '';
   example = [
     {
       name = "git";

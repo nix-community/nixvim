@@ -77,18 +77,23 @@ in
 
     fromVscode = mkOption {
       default = [ ];
-      example = ''
+      example = literalExpression ''
         [
-          {}
-          {
-            paths = ./path/to/snippets;
-          }
-        ]
-        # generates:
-        #
-        # require("luasnip.loaders.from_vscode").lazy_load({})
-        # require("luasnip.loaders.from_vscode").lazy_load({['paths'] = {'/nix/store/.../path/to/snippets'}})
-        #
+          { }
+          { paths = ./path/to/snippets; }
+        ]'';
+      description = ''
+        List of custom vscode style snippets to load.
+
+        For example,
+        ```nix
+          [ {} { paths = ./path/to/snippets; } ]
+        ```
+        will generate the following lua:
+        ```lua
+          require("luasnip.loaders.from_vscode").lazy_load({})
+          require("luasnip.loaders.from_vscode").lazy_load({['paths'] = {'/nix/store/.../path/to/snippets'}})
+        ```
       '';
       type = types.listOf loaderSubmodule;
     };

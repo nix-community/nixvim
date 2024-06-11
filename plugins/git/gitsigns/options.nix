@@ -69,9 +69,19 @@ with lib;
       worktreeType = types.submodule {
         freeformType = with types; attrsOf anything;
         options = {
-          toplevel = mkOption { type = with helpers.nixvimTypes; maybeRaw str; };
+          toplevel = mkOption {
+            type = with helpers.nixvimTypes; maybeRaw str;
+            description = ''
+              Path to the top-level of the parent git repository.
+            '';
+          };
 
-          gitdir = mkOption { type = with helpers.nixvimTypes; maybeRaw str; };
+          gitdir = mkOption {
+            type = with helpers.nixvimTypes; maybeRaw str;
+            description = ''
+              Path to the git directory of the parent git repository (typically the `.git/` directory).
+            '';
+          };
         };
       };
     in

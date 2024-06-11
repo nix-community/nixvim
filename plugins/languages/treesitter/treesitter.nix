@@ -80,6 +80,7 @@ in
             mkOption {
               type = types.str;
               inherit default;
+              description = "Key shortcut";
             };
         in
         {

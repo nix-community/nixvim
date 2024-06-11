@@ -11,6 +11,7 @@ with lib;
     keymaps = mkOption {
       type = types.listOf helpers.keymaps.mapOptionSubmodule;
       default = [ ];
+      description = "Nixvim keymaps.";
       example = [
         {
           key = "<C-m>";

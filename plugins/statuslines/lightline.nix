@@ -55,6 +55,7 @@ in
 
       active = mkOption {
         default = null;
+        description = "List of components for the active window.";
         type = types.nullOr (
           types.submodule {
             options =
@@ -72,6 +73,7 @@ in
 
       inactive = mkOption {
         default = null;
+        description = "List of components for inactive windows.";
         type = types.nullOr (
           types.submodule {
             options =

@@ -55,6 +55,13 @@ in
       cmd = mkOption {
         type = with types; nullOr (listOf str);
         default = if (cfg.package or null) != null then cmd cfg else null;
+        description = ''
+          A list where each entry corresponds to the blankspace delimited part of the command that
+          launches the server.
+
+          The first entry is the binary used to run the language server.
+          Additional entries are passed as arguments.
+        '';
       };
 
       filetypes = helpers.defaultNullOpts.mkListOf' {

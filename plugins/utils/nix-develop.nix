@@ -16,13 +16,26 @@ in
     package = helpers.mkPluginPackageOption "nix-develop.nvim" pkgs.vimPlugins.nix-develop-nvim;
 
     ignoredVariables = mkOption {
-      type = types.attrsOf types.bool;
+      type = with types; attrsOf bool;
       default = { };
+      description = "An attrs specifying the variables should be ignored.";
+      example = {
+        BASHOPTS = true;
+        HOME = true;
+        NIX_BUILD_TOP = true;
+        SHELL = true;
+        TMP = true;
+      };
     };
 
     separatedVariables = mkOption {
-      type = types.attrsOf types.str;
+      type = with types; attrsOf str;
       default = { };
+      description = "An attrs specifying the separator to use for particular environment variables.";
+      example = {
+        PATH = ":";
+        XDG_DATA_DIRS = ":";
+      };
     };
   };
 
