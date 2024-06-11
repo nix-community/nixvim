@@ -122,16 +122,14 @@ with lib;
     };
 
     settingsOptions = {
-      filetypes = helpers.defaultNullOpts.mkListOf types.str ''
-        [
-          "png"
-          "jpg"
-          "gif"
-          "mp4"
-          "webm"
-          "pdf"
-        ]
-      '' "Filetypes whitelist.";
+      filetypes = helpers.defaultNullOpts.mkListOf types.str [
+        "png"
+        "jpg"
+        "gif"
+        "mp4"
+        "webm"
+        "pdf"
+      ] "Filetypes whitelist.";
 
       find_cmd = helpers.defaultNullOpts.mkStr "fd" ''
         Which find command to use.

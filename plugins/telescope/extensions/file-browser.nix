@@ -83,12 +83,12 @@ telescopeHelpers.mkExtension {
       Custom theme, will use your global theme by default.
     '';
 
-    path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.loop.cwd()";}'' ''
+    path = helpers.defaultNullOpts.mkStr { __raw = "vim.loop.cwd()"; } ''
       Directory to browse files from.
       `vim.fn.expanded` automatically.
     '';
 
-    cwd = helpers.defaultNullOpts.mkStr ''{__raw = "vim.loop.cwd()";}'' ''
+    cwd = helpers.defaultNullOpts.mkStr { __raw = "vim.loop.cwd()"; } ''
       Directory to browse folders from.
       `vim.fn.expanded` automatically.
     '';
@@ -134,12 +134,10 @@ telescopeHelpers.mkExtension {
             };
           })
         )
-        ''
-          {
-            file_browser = false;
-            folder_browser = false;
-          }
-        ''
+        {
+          file_browser = false;
+          folder_browser = false;
+        }
         "Determines whether to show hidden files or not.";
 
     respect_gitignore = helpers.defaultNullOpts.mkBool false ''
@@ -170,13 +168,11 @@ telescopeHelpers.mkExtension {
       Change the highlight group of dir icon.
     '';
 
-    display_stat = helpers.defaultNullOpts.mkAttrsOf types.anything ''
-      {
-        date = true;
-        size = true;
-        mode = true;
-      }
-    '' "Ordered stat; see upstream for more info.";
+    display_stat = helpers.defaultNullOpts.mkAttrsOf types.anything {
+      date = true;
+      size = true;
+      mode = true;
+    } "Ordered stat; see upstream for more info.";
 
     hijack_netrw = helpers.defaultNullOpts.mkBool false ''
       Use telescope file browser when opening directory paths.
