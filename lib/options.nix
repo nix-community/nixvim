@@ -5,7 +5,7 @@
 }:
 with lib;
 with nixvimUtils;
-rec {
+let
   # Render a plugin default string
   pluginDefaultText =
     let
@@ -65,6 +65,19 @@ rec {
       _Plugin default:_${toMD pluginDefaultText}
     '';
 
+  # Convert args into normal `mkOption`-style arguments, i.e. merge `pluginDefault` into `defaultText`.
+  #
+  # - `defaultText` is only set if `args` contains `pluginDefault`.
+  # - `pluginDefault` is removed from the resulting args.
+  # - All other args are untouched.
+  processNixvimArgs =
+    args:
+    (removeAttrs args [ "pluginDefault" ])
+    // (optionalAttrs (args ? pluginDefault) { defaultText = pluginDefaultText args; });
+in
+rec {
+  inherit pluginDefaultText;
+
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption' =
     {
@@ -73,7 +86,7 @@ rec {
       ...
     }@args:
     lib.mkOption (
-      args
+      (processNixvimArgs args)
       // {
         type = lib.types.nullOr type;
         inherit default;
@@ -137,34 +150,20 @@ rec {
 
   defaultNullOpts =
     let
-      # Convert `defaultNullOpts`-style arguments into normal `mkOption`-style arguments,
-      # i.e. merge `default` or `defaultText` into `defaultText`.
-      #
-      # "Plugin default" is only added if `args` has either a `default` or `defaultText` attribute.
+      # Ensures that default is null and defaultText is not set
       convertArgs =
         args:
-        (
-          # TODO filter pluginDefault
-          (filterAttrs (
-            n: _:
-            !(elem n [
-              "pluginDefault"
-              "defaultText"
-            ])
-          ) args)
-          // {
-            # TODO assert that args didn't attempt to set `default` or `defaultText`
-            default = null;
-          }
-          // (optionalAttrs (args ? pluginDefault || args ? default || args ? defaultText) {
-            defaultText = pluginDefaultText {
-              # TODO: this is here for backwards compatibility:
-              # once `defaultNullOpts` migrates from `default` to `pluginDefault`
-              # then we can pass in `args` unmodified or simply inherit `pluginDefault`
-              pluginDefault = args.pluginDefault or args.defaultText or args.default;
-            };
-          })
-        );
+        # TODO: uncomment once all call sites migrate to `pluginDefault`
+        # assert args ? default -> abort "defaultNullOpts: unexpected argument `default`. Did you mean `pluginDefault`?";
+        assert
+          args ? defaultText
+          -> abort "defaultNullOpts: unexpected argument `defaultText`. Did you mean `pluginDefault`?";
+        args
+        // {
+          default = null;
+        }
+        # TODO: remove once all call sites migrate to `pluginDefault`
+        // (optionalAttrs (args ? default) { pluginDefault = args.pluginDefault or args.default; });
     in
     rec {
       # TODO: deprecated in favor of `helpers.pluginDefaultText`
