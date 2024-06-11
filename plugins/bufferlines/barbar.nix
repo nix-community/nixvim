@@ -314,7 +314,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         Use `false` to disable it.
       '';
 
-      diagnostics = mkOption {
+      diagnostics = mkOption rec {
         type = types.submodule {
           freeformType = with types; attrsOf anything;
           options =
@@ -338,45 +338,46 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         };
         apply = helpers.toRawKeys;
         default = { };
-        description =
-          helpers.defaultNullOpts.mkDesc
-            {
-              "vim.diagnostic.severity.ERROR" = {
-                enabled = false;
-                icon = " ";
-              };
-              "vim.diagnostic.severity.HINT" = {
-                enabled = false;
-                icon = "󰌶 ";
-              };
-              "vim.diagnostic.severity.INFO" = {
-                enabled = false;
-                icon = " ";
-              };
-              "vim.diagnostic.severity.WARN" = {
-                enabled = false;
-                icon = " ";
-              };
-            }
-            ''
-              Set the icon for each diagnostic level.
+        defaultText = helpers.pluginDefaultText {
+          inherit default;
+          pluginDefault = {
+            "vim.diagnostic.severity.ERROR" = {
+              enabled = false;
+              icon = " ";
+            };
+            "vim.diagnostic.severity.HINT" = {
+              enabled = false;
+              icon = "󰌶 ";
+            };
+            "vim.diagnostic.severity.INFO" = {
+              enabled = false;
+              icon = " ";
+            };
+            "vim.diagnostic.severity.WARN" = {
+              enabled = false;
+              icon = " ";
+            };
+          };
+        };
+        description = ''
+          Set the icon for each diagnostic level.
 
-              The keys will be automatically translated to raw lua:
-              ```nix
-                {
-                  "vim.diagnostic.severity.INFO".enabled = true;
-                  "vim.diagnostic.severity.WARN".enabled = true;
-                }
-              ```
-              will result in the following lua:
-              ```lua
-                {
-                  -- Note the table keys are not string literals:
-                  [vim.diagnostic.severity.INFO] = { ['enabled'] = true },
-                  [vim.diagnostic.severity.WARN] = { ['enabled'] = true },
-                }
-              ```
-            '';
+          The keys will be automatically translated to raw lua:
+          ```nix
+            {
+              "vim.diagnostic.severity.INFO".enabled = true;
+              "vim.diagnostic.severity.WARN".enabled = true;
+            }
+          ```
+          will result in the following lua:
+          ```lua
+            {
+              -- Note the table keys are not string literals:
+              [vim.diagnostic.severity.INFO] = { ['enabled'] = true },
+              [vim.diagnostic.severity.WARN] = { ['enabled'] = true },
+            }
+          ```
+        '';
       };
 
       gitsigns =
