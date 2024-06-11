@@ -24,13 +24,19 @@ in
       Whether to create winbar updater autocmd.
     '';
 
-    includeBuftypes = mkListStr ''[""]'' ''
+    includeBuftypes = mkListStr [ "" ] ''
       Buftypes to enable winbar in.
     '';
 
-    excludeFiletypes = mkListStr ''["netrw" "toggleterm"]'' ''
-      Filetypes not to enable winbar in.
-    '';
+    excludeFiletypes =
+      mkListStr
+        [
+          "netrw"
+          "toggleterm"
+        ]
+        ''
+          Filetypes not to enable winbar in.
+        '';
 
     modifiers = {
       dirname = helpers.defaultNullOpts.mkStr ":~:." ''
