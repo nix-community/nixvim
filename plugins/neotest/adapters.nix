@@ -32,6 +32,13 @@ let
         mkIf cfg.enable {
           extraPlugins = [ cfg.package ];
 
+          assertions = [
+            {
+              assertion = config.plugins.neotest.enable;
+              message = "Nixvim: you have enabled `plugins.neotest.adapters.${name}` but `plugins.neotest.enable` is `false`.";
+            }
+          ];
+
           warnings = optional (!config.plugins.treesitter.enable) ''
             Nixvim (plugins.neotest.adapters.${name}): This adapter requires `treesitter` to be enabled.
             You might want to set `plugins.treesitter.enable = true` and ensure that the `${props.treesitter-parser}` parser is enabled.
