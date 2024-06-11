@@ -212,7 +212,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
 
       include = {
-        node_type = helpers.defaultNullOpts.mkAttrsOf (with types; listOf str) "{}" ''
+        node_type = helpers.defaultNullOpts.mkAttrsOf (with types; listOf str) { } ''
           Map of language to a list of node types which can be used as scope.
 
           - Use `*` as the language to act as a wildcard for all languages.
@@ -221,19 +221,20 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       exclude = {
-        language = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        language = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of treesitter languages for which scope is disabled.
         '';
 
         node_type =
           helpers.defaultNullOpts.mkAttrsOf (with types; (listOf str))
-            ''
-              {
-                "*" = ["source_file" "program"];
-                lua = ["chunk"];
-                python = ["module"];
-              }
-            ''
+            {
+              "*" = [
+                "source_file"
+                "program"
+              ];
+              lua = [ "chunk" ];
+              python = [ "module" ];
+            }
             ''
               Map of language to a list of node types which should not be used as scope.
 
@@ -243,28 +244,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
 
     exclude = {
-      filetypes = helpers.defaultNullOpts.mkListOf types.str ''
-        [
-          "lspinfo"
-          "packer"
-          "checkhealth"
-          "help"
-          "man"
-          "gitcommit"
-          "TelescopePrompt"
-          "TelescopeResults"
-          "\'\'"
-        ]
-      '' "List of filetypes for which indent-blankline is disabled.";
+      filetypes = helpers.defaultNullOpts.mkListOf types.str [
+        "lspinfo"
+        "packer"
+        "checkhealth"
+        "help"
+        "man"
+        "gitcommit"
+        "TelescopePrompt"
+        "TelescopeResults"
+        "''"
+      ] "List of filetypes for which indent-blankline is disabled.";
 
-      buftypes = helpers.defaultNullOpts.mkListOf types.str ''
-        [
-          "terminal"
-          "nofile"
-          "quickfix"
-          "prompt"
-        ]
-      '' "List of buftypes for which indent-blankline is disabled.";
+      buftypes = helpers.defaultNullOpts.mkListOf types.str [
+        "terminal"
+        "nofile"
+        "quickfix"
+        "prompt"
+      ] "List of buftypes for which indent-blankline is disabled.";
     };
   };
 

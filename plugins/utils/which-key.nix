@@ -42,12 +42,12 @@ with lib;
       };
     };
 
-    operators = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) ''{gc = "Comments";}'' ''
+    operators = helpers.defaultNullOpts.mkAttrsOf types.str { gc = "Comments"; } ''
       add operators that will trigger motion and text object completion
       to enable all native operators, set the preset / operators plugin above
     '';
 
-    keyLabels = helpers.defaultNullOpts.mkNullable (types.attrsOf types.str) ''{}'' ''
+    keyLabels = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       override the label used to display some keys. It doesn't effect WK in any other way.
     '';
 
@@ -92,15 +92,21 @@ with lib;
           "bottom"
           "top"
         ] "";
-        margin =
-          helpers.defaultNullOpts.mkNullable spacingOptions ''{top = 1; right = 0; bottom = 1; left = 0;}''
-            "extra window margin";
-        padding =
-          helpers.defaultNullOpts.mkNullable spacingOptions ''{top = 1; right = 2; bottom = 1; left = 2;}''
-            "extra window padding";
+        margin = helpers.defaultNullOpts.mkNullable spacingOptions {
+          top = 1;
+          right = 0;
+          bottom = 1;
+          left = 0;
+        } "extra window margin";
+        padding = helpers.defaultNullOpts.mkNullable spacingOptions {
+          top = 1;
+          right = 2;
+          bottom = 1;
+          left = 2;
+        } "extra window padding";
         winblend = helpers.defaultNullOpts.mkNullable (types.ints.between 0
           100
-        ) "0" "0 for fully opaque and 100 for fully transparent";
+        ) 0 "0 for fully opaque and 100 for fully transparent";
       };
 
     layout =
@@ -137,38 +143,60 @@ with lib;
 
     ignoreMissing = helpers.defaultNullOpts.mkBool false "enable this to hide mappings for which you didn't specify a label";
 
-    hidden = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''
-      ["<silent>" "<cmd>" "<Cmd>" "<CR>" "^:" "^ " "^call " "^lua "]
-    '' "hide mapping boilerplate";
+    hidden = helpers.defaultNullOpts.mkListOf types.str [
+      "<silent>"
+      "<cmd>"
+      "<Cmd>"
+      "<CR>"
+      "^:"
+      "^ "
+      "^call "
+      "^lua "
+    ] "hide mapping boilerplate";
 
     showHelp = helpers.defaultNullOpts.mkBool true "show a help message in the command line for using WhichKey";
 
     showKeys = helpers.defaultNullOpts.mkBool true "show the currently pressed key and its label as a message in the command line";
 
-    triggers = helpers.defaultNullOpts.mkNullable (types.either (types.enum [ "auto" ]) (
-      types.listOf types.str
-    )) ''"auto"'' "automatically setup triggers, or specify a list manually";
+    triggers = helpers.defaultNullOpts.mkNullable (
+      with types; either (enum [ "auto" ]) (listOf str)
+    ) "auto" "automatically setup triggers, or specify a list manually";
 
     triggersNoWait =
-      helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-        ''["`" "'" "g`" "g'" "\"" "<c-r>" "z="]''
+      helpers.defaultNullOpts.mkListOf types.str
+        [
+          "`"
+          "'"
+          "g`"
+          "g'"
+          "\""
+          "<c-r>"
+          "z="
+        ]
         ''
           list of triggers, where WhichKey should not wait for timeoutlen and show immediately
         '';
 
     triggersBlackList =
-      helpers.defaultNullOpts.mkNullable (types.attrsOf (types.listOf types.str))
-        ''{ i = ["j" "k"]; v = ["j" "k"]}}''
+      helpers.defaultNullOpts.mkAttrsOf (types.listOf types.str)
+        {
+          i = [
+            "j"
+            "k"
+          ];
+          v = [
+            "j"
+            "k"
+          ];
+        }
         ''
           list of mode / prefixes that should never be hooked by WhichKey
           this is mostly relevant for keymaps that start with a native binding
         '';
 
     disable = {
-      buftypes =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]"
-          "Disabled by default for Telescope";
-      filetypes = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" "";
+      buftypes = helpers.defaultNullOpts.mkListOf types.str [ ] "Disabled by default for Telescope";
+      filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] "";
     };
   };
 

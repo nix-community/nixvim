@@ -79,8 +79,12 @@ in
         };
 
     filetypes =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf bool)
-        "{md = true; rmd = true; markdown = true;}"
+      helpers.defaultNullOpts.mkAttrsOf types.bool
+        {
+          md = true;
+          rmd = true;
+          markdown = true;
+        }
         ''
           A matching extension will enable the plugin's functionality for a file with that
           extension.
@@ -137,7 +141,7 @@ in
               notebook (requires `perspective.root_tell` to be specified)
           '';
 
-      rootTell = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) str) "false" ''
+      rootTell = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) str) false ''
         - `<any file name>`: Any arbitrary filename by which the plugin can uniquely identify
           the root directory of the current notebook.
         - If `false` is used instead, the plugin will never search for a root directory, even
@@ -233,7 +237,7 @@ in
         an extension, and (b) that new links should be created without an explicit extension.
       '';
 
-      transformExplicit = helpers.defaultNullOpts.mkStrLuaFnOr (types.enum [ false ]) "false" ''
+      transformExplicit = helpers.defaultNullOpts.mkStrLuaFnOr (types.enum [ false ]) false ''
         A function that transforms the text to be inserted as the source/path of a link when a
         link is created.
         Anchor links are not currently customizable.
@@ -282,18 +286,25 @@ in
     };
 
     toDo = {
-      symbols = helpers.defaultNullOpts.mkNullable (with types; listOf str) ''[" " "-" "X"]'' ''
-        A list of symbols (each no more than one character) that represent to-do list completion
-        statuses.
-        `MkdnToggleToDo` references these when toggling the status of a to-do item.
-        Three are expected: one representing not-yet-started to-dos (default: `' '`), one
-        representing in-progress to-dos (default: `-`), and one representing complete to-dos
-        (default: `X`).
+      symbols =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            " "
+            "-"
+            "X"
+          ]
+          ''
+            A list of symbols (each no more than one character) that represent to-do list completion
+            statuses.
+            `MkdnToggleToDo` references these when toggling the status of a to-do item.
+            Three are expected: one representing not-yet-started to-dos (default: `' '`), one
+            representing in-progress to-dos (default: `-`), and one representing complete to-dos
+            (default: `X`).
 
-        NOTE: Native Lua support for UTF-8 characters is limited, so in order to ensure all
-        functionality works as intended if you are using non-ascii to-do symbols, you'll need to
-        install the luarocks module "luautf8".
-      '';
+            NOTE: Native Lua support for UTF-8 characters is limited, so in order to ensure all
+            functionality works as intended if you are using non-ascii to-do symbols, you'll need to
+            install the luarocks module "luautf8".
+          '';
 
       updateParents = helpers.defaultNullOpts.mkBool true ''
         Whether parent to-dos' statuses should be updated based on child to-do status changes
@@ -392,152 +403,158 @@ in
     };
 
     mappings =
-      helpers.defaultNullOpts.mkNullable
+      helpers.defaultNullOpts.mkAttrsOf
         (
           with types;
-          attrsOf (
-            either (enum [ false ]) (submodule {
-              options = {
-                modes = mkOption {
-                  type = either str (listOf str);
-                  description = ''
-                    Either a string or list representing the mode(s) that the mapping should apply
-                    in.
-                  '';
-                  example = [
-                    "n"
-                    "v"
-                  ];
-                };
-
-                key = mkOption {
-                  type = str;
-                  description = "String representing the keymap.";
-                  example = "<Space>";
-                };
+          either (enum [ false ]) (submodule {
+            options = {
+              modes = mkOption {
+                type = either str (listOf str);
+                description = ''
+                  Either a string or list representing the mode(s) that the mapping should apply
+                  in.
+                '';
+                example = [
+                  "n"
+                  "v"
+                ];
               };
-            })
-          )
+
+              key = mkOption {
+                type = str;
+                description = "String representing the keymap.";
+                example = "<Space>";
+              };
+            };
+          })
         )
-        ''
-          {
-            MkdnEnter = {
-              modes = ["n" "v" "i"];
-              key = "<CR>";
-            };
-            MkdnTab = false;
-            MkdnSTab = false;
-            MkdnNextLink = {
-              modes = "n";
-              key = "<Tab>";
-            };
-            MkdnPrevLink = {
-              modes = "n";
-              key = "<S-Tab>";
-            };
-            MkdnNextHeading = {
-              modes = "n";
-              key = "]]";
-            };
-            MkdnPrevHeading = {
-              modes = "n";
-              key = "[[";
-            };
-            MkdnGoBack = {
-              modes = "n";
-              key = "<BS>";
-            };
-            MkdnGoForward = {
-              modes = "n";
-              key = "<Del>";
-            };
-            MkdnFollowLink = false; # see MkdnEnter
-            MkdnCreateLink = false; # see MkdnEnter
-            MkdnCreateLinkFromClipboard = {
-              modes = ["n" "v"];
-              key = "<leader>p";
-            }; # see MkdnEnter
-            MkdnDestroyLink = {
-              modes = "n";
-              key = "<M-CR>";
-            };
-            MkdnMoveSource = {
-              modes = "n";
-              key = "<F2>";
-            };
-            MkdnYankAnchorLink = {
-              modes = "n";
-              key = "ya";
-            };
-            MkdnYankFileAnchorLink = {
-              modes = "n";
-              key = "yfa";
-            };
-            MkdnIncreaseHeading = {
-              modes = "n";
-              key = "+";
-            };
-            MkdnDecreaseHeading = {
-              modes = "n";
-              key = "-";
-            };
-            MkdnToggleToDo = {
-              modes = ["n" "v"];
-              key = "<C-Space>";
-            };
-            MkdnNewListItem = false;
-            MkdnNewListItemBelowInsert = {
-              modes = "n";
-              key = "o";
-            };
-            MkdnNewListItemAboveInsert = {
-              modes = "n";
-              key = "O";
-            };
-            MkdnExtendList = false;
-            MkdnUpdateNumbering = {
-              modes = "n";
-              key = "<leader>nn";
-            };
-            MkdnTableNextCell = {
-              modes = "i";
-              key = "<Tab>";
-            };
-            MkdnTablePrevCell = {
-              modes = "i";
-              key = "<S-Tab>";
-            };
-            MkdnTableNextRow = false;
-            MkdnTablePrevRow = {
-              modes = "i";
-              key = "<M-CR>";
-            };
-            MkdnTableNewRowBelow = {
-              modes = "n";
-              key = "<leader>ir";
-            };
-            MkdnTableNewRowAbove = {
-              modes = "n";
-              key = "<leader>iR";
-            };
-            MkdnTableNewColAfter = {
-              modes = "n";
-              key = "<leader>ic";
-            };
-            MkdnTableNewColBefore = {
-              modes = "n";
-              key = "<leader>iC";
-            };
-            MkdnFoldSection = {
-              modes = "n";
-              key = "<leader>f";
-            };
-            MkdnUnfoldSection = {
-              modes = "n";
-              key = "<leader>F";
-            };
-          }
-        ''
+        {
+          MkdnEnter = {
+            modes = [
+              "n"
+              "v"
+              "i"
+            ];
+            key = "<CR>";
+          };
+          MkdnTab = false;
+          MkdnSTab = false;
+          MkdnNextLink = {
+            modes = "n";
+            key = "<Tab>";
+          };
+          MkdnPrevLink = {
+            modes = "n";
+            key = "<S-Tab>";
+          };
+          MkdnNextHeading = {
+            modes = "n";
+            key = "]]";
+          };
+          MkdnPrevHeading = {
+            modes = "n";
+            key = "[[";
+          };
+          MkdnGoBack = {
+            modes = "n";
+            key = "<BS>";
+          };
+          MkdnGoForward = {
+            modes = "n";
+            key = "<Del>";
+          };
+          MkdnFollowLink = false; # see MkdnEnter
+          MkdnCreateLink = false; # see MkdnEnter
+          MkdnCreateLinkFromClipboard = {
+            modes = [
+              "n"
+              "v"
+            ];
+            key = "<leader>p";
+          }; # see MkdnEnter
+          MkdnDestroyLink = {
+            modes = "n";
+            key = "<M-CR>";
+          };
+          MkdnMoveSource = {
+            modes = "n";
+            key = "<F2>";
+          };
+          MkdnYankAnchorLink = {
+            modes = "n";
+            key = "ya";
+          };
+          MkdnYankFileAnchorLink = {
+            modes = "n";
+            key = "yfa";
+          };
+          MkdnIncreaseHeading = {
+            modes = "n";
+            key = "+";
+          };
+          MkdnDecreaseHeading = {
+            modes = "n";
+            key = "-";
+          };
+          MkdnToggleToDo = {
+            modes = [
+              "n"
+              "v"
+            ];
+            key = "<C-Space>";
+          };
+          MkdnNewListItem = false;
+          MkdnNewListItemBelowInsert = {
+            modes = "n";
+            key = "o";
+          };
+          MkdnNewListItemAboveInsert = {
+            modes = "n";
+            key = "O";
+          };
+          MkdnExtendList = false;
+          MkdnUpdateNumbering = {
+            modes = "n";
+            key = "<leader>nn";
+          };
+          MkdnTableNextCell = {
+            modes = "i";
+            key = "<Tab>";
+          };
+          MkdnTablePrevCell = {
+            modes = "i";
+            key = "<S-Tab>";
+          };
+          MkdnTableNextRow = false;
+          MkdnTablePrevRow = {
+            modes = "i";
+            key = "<M-CR>";
+          };
+          MkdnTableNewRowBelow = {
+            modes = "n";
+            key = "<leader>ir";
+          };
+          MkdnTableNewRowAbove = {
+            modes = "n";
+            key = "<leader>iR";
+          };
+          MkdnTableNewColAfter = {
+            modes = "n";
+            key = "<leader>ic";
+          };
+          MkdnTableNewColBefore = {
+            modes = "n";
+            key = "<leader>iC";
+          };
+          MkdnFoldSection = {
+            modes = "n";
+            key = "<leader>f";
+          };
+          MkdnUnfoldSection = {
+            modes = "n";
+            key = "<leader>F";
+          };
+        }
         ''
           An attrs declaring the key mappings.
           The keys should be the name of a commands defined in

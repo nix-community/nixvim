@@ -229,7 +229,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               }
             )
           )
-          "[]"
+          [ ]
           ''
             A list of vault names and paths.
             Each path should be the path to the vault root.

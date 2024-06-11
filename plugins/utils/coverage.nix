@@ -81,53 +81,53 @@ in
     commands = helpers.defaultNullOpts.mkBool true "If true, create commands.";
 
     highlights = {
-      covered =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{fg = "#B7F071";}''
-          "Highlight group for covered signs.";
+      covered = helpers.defaultNullOpts.mkAttributeSet {
+        fg = "#B7F071";
+      } "Highlight group for covered signs.";
 
-      uncovered =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{fg = "#F07178";}''
-          "Highlight group for uncovered signs.";
+      uncovered = helpers.defaultNullOpts.mkAttributeSet {
+        fg = "#F07178";
+      } "Highlight group for uncovered signs.";
 
-      partial =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{fg = "#AA71F0";}''
-          "Highlight group for partial coverage signs.";
+      partial = helpers.defaultNullOpts.mkAttributeSet {
+        fg = "#AA71F0";
+      } "Highlight group for partial coverage signs.";
 
-      summaryBorder =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{link = "FloatBorder";}''
-          "Border highlight group of the summary pop-up.";
+      summaryBorder = helpers.defaultNullOpts.mkAttributeSet {
+        link = "FloatBorder";
+      } "Border highlight group of the summary pop-up.";
 
-      summaryNormal =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{link = "NormalFloat";}''
-          "Normal text highlight group of the summary pop-up.";
+      summaryNormal = helpers.defaultNullOpts.mkAttributeSet {
+        link = "NormalFloat";
+      } "Normal text highlight group of the summary pop-up.";
 
-      summaryCursorLine =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{link = "CursorLine";}''
-          "Cursor line highlight group of the summary pop-up.";
+      summaryCursorLine = helpers.defaultNullOpts.mkAttributeSet {
+        link = "CursorLine";
+      } "Cursor line highlight group of the summary pop-up.";
 
-      summaryHeader =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{ style = "bold,underline"; sp = "bg"; }''
-          "Header text highlight group of the summary pop-up.";
+      summaryHeader = helpers.defaultNullOpts.mkAttributeSet {
+        style = "bold,underline";
+        sp = "bg";
+      } "Header text highlight group of the summary pop-up.";
 
-      summaryPass =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{link = "CoverageCovered";}''
-          "Pass text highlight group of the summary pop-up.";
+      summaryPass = helpers.defaultNullOpts.mkAttributeSet {
+        link = "CoverageCovered";
+      } "Pass text highlight group of the summary pop-up.";
 
-      summaryFail =
-        helpers.defaultNullOpts.mkNullable types.attrs ''{link = "CoverageUncovered";}''
-          "Fail text highlight group of the summary pop-up.";
+      summaryFail = helpers.defaultNullOpts.mkAttributeSet {
+        link = "CoverageUncovered";
+      } "Fail text highlight group of the summary pop-up.";
     };
 
-    loadCoverageCb = helpers.defaultNullOpts.mkLuaFn "nil" ''
-      A lua function that will be called when a coverage file is loaded.
-
-      Example:
-      ```
-        function (ftype)
+    loadCoverageCb = helpers.defaultNullOpts.mkLuaFn' {
+      description = "A lua function that will be called when a coverage file is loaded.";
+      pluginDefault = "nil";
+      example = ''
+        function(ftype)
           vim.notify("Loaded " .. ftype .. " coverage")
         end
-      ```
-    '';
+      '';
+    };
 
     signs =
       mapAttrs
@@ -173,11 +173,11 @@ in
     summary = {
       widthPercentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
         1.0
-      ) "0.70" "Width of the pop-up window.";
+      ) 0.7 "Width of the pop-up window.";
 
       heightPercentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
         1.0
-      ) "0.50" "Height of the pop-up window.";
+      ) 0.5 "Height of the pop-up window.";
 
       borders = mapAttrs (optionName: default: helpers.defaultNullOpts.mkStr default "") {
         topleft = "╭";
@@ -191,31 +191,31 @@ in
         highlight = "Normal:CoverageSummaryBorder";
       };
 
-      minCoverage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0 100) "80" ''
+      minCoverage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0 100) 80 ''
         Minimum coverage percentage.
         Values below this are highlighted with the fail group, values above are highlighted with
         the pass group.
       '';
     };
 
-    lang = helpers.defaultNullOpts.mkNullable types.attrs "see upstream documentation" ''
-      Each key corresponds with the `filetype` of the language and maps to an attrs of
-      configuration values that differ.
-      See plugin documentation for language specific options.
+    lang = helpers.defaultNullOpts.mkAttributeSet' {
+      description = ''
+        Each key corresponds with the `filetype` of the language and maps to an attrs of
+        configuration values that differ.
 
-      Example:
-      ```nix
-        {
-          python = {
-            coverage_file = ".coverage";
-            coverage_command = "coverage json --fail-under=0 -q -o -";
-          };
-          ruby = {
-              coverage_file = "coverage/coverage.json";
-          };
-        }
-      ```
-    '';
+        See plugin documentation for language specific options.
+      '';
+
+      example = {
+        python = {
+          coverage_file = ".coverage";
+          coverage_command = "coverage json --fail-under=0 -q -o -";
+        };
+        ruby = {
+          coverage_file = "coverage/coverage.json";
+        };
+      };
+    };
 
     lcovFile = helpers.mkNullOrOption types.str "File that the plugin will try to read lcov coverage from.";
   };

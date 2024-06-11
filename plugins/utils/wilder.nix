@@ -76,20 +76,17 @@ in
     '';
 
     modes =
-      helpers.defaultNullOpts.mkNullable
-        (
-          with types;
-          listOf (enum [
-            "/"
-            "?"
-            ":"
-          ])
-        )
-        ''["/" "?"]''
-        ''
-          List of modes which wilderw will be active in.
-          Possible elements: '/', '?' and ':'
-        '';
+      helpers.defaultNullOpts.mkListOf
+        (types.enum [
+          "/"
+          "?"
+          ":"
+        ])
+        [
+          "/"
+          "?"
+        ]
+        "List of modes that wilder will be active in.";
 
     wildcharm =
       helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) "&wildchar"

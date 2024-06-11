@@ -70,13 +70,10 @@ in
       Function called when a new window is closed.
     '';
 
-    render = helpers.defaultNullOpts.mkNullable (
-      with types;
-      either (enum [
-        "default"
-        "minimal"
-      ]) helpers.nixvimTypes.rawLua
-    ) "default" "Function to render a notification buffer or a built-in renderer name.";
+    render = helpers.defaultNullOpts.mkEnumFirstDefault [
+      "default"
+      "minimal"
+    ] "Function to render a notification buffer or a built-in renderer name.";
 
     minimumWidth = helpers.defaultNullOpts.mkUnsignedInt 50 ''
       Minimum width for notification windows.

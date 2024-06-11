@@ -61,7 +61,7 @@ with lib;
     Called after every hydra head.
   '';
 
-  timeout = helpers.defaultNullOpts.mkNullable (with types; either bool ints.unsigned) "false" ''
+  timeout = helpers.defaultNullOpts.mkNullable (with types; either bool ints.unsigned) false ''
     Timeout after which the hydra is automatically disabled.
     Calling any head will refresh the timeout
     - `true`: timeout set to value of `timeoutlen` (`:h timeoutlen`)
@@ -162,13 +162,11 @@ with lib;
       };
     in
     helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) hintConfigType)
-      ''
-        {
-          show_name = true;
-          position = "bottom";
-          offset = 0;
-        }
-      ''
+      {
+        show_name = true;
+        position = "bottom";
+        offset = 0;
+      }
       ''
         Configure the hint.
         Set to `false` to disable.

@@ -41,7 +41,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 type = str;
                 description = "Command to execute";
               };
-              args = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+              args = helpers.defaultNullOpts.mkListOf types.str [ ] ''
                 Arguments to the command.
               '';
             };
@@ -66,7 +66,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 type = str;
                 description = "Command to execute.";
               };
-              args = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+              args = helpers.defaultNullOpts.mkListOf types.str [ ] ''
                 Arguments to the command.
               '';
             };

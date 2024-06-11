@@ -27,12 +27,11 @@ in
       '';
 
       mainImage =
-        helpers.defaultNullOpts.mkEnum
+        helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "neovim"
             "file"
           ]
-          "neovim"
           ''
             Main image display.
           '';
@@ -63,24 +62,20 @@ in
         Displays the current line number instead of the current project.
       '';
 
-      blacklist = helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[]" ''
+      blacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
         A list of strings or Lua patterns that disable Rich Presence if the
         current file name, path, or workspace matches.
       '';
 
       buttons =
-        helpers.defaultNullOpts.mkNullable
-          (types.either helpers.nixvimTypes.rawLua (
-            types.listOf (
-              types.submodule {
-                options = {
-                  label = helpers.mkNullOrOption types.str "";
-                  url = helpers.mkNullOrOption types.str "";
-                };
-              }
-            )
-          ))
-          "[]"
+        helpers.defaultNullOpts.mkListOf
+          (types.submodule {
+            options = {
+              label = helpers.mkNullOrOption types.str "";
+              url = helpers.mkNullOrOption types.str "";
+            };
+          })
+          [ ]
           ''
             Button configurations which will always appear in Rich Presence.
 

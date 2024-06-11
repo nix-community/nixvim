@@ -33,7 +33,7 @@ in
             width = mkPercentageOpt 100 "The width size (in %).";
           };
         })
-      ) "60" "The size of the window.";
+      ) 60 "The size of the window.";
 
       position = helpers.defaultNullOpts.mkNullable (
         with types;
@@ -44,7 +44,7 @@ in
             width = mkPercentageOpt 100 "The width size (in %).";
           };
         })
-      ) "50" "The position of the window.";
+      ) 50 "The position of the window.";
 
       scrolloff = helpers.mkNullOrOption types.int ''
         scrolloff value within navbuddy window
@@ -76,13 +76,12 @@ in
           '';
 
           preview =
-            helpers.defaultNullOpts.mkEnum
+            helpers.defaultNullOpts.mkEnumFirstDefault
               [
                 "leaf"
                 "always"
                 "never"
               ]
-              "leaf"
               ''
                 Right section can show previews too.
                       Options: "leaf", "always" or "never"
@@ -149,50 +148,48 @@ in
     };
 
     mappings =
-      helpers.defaultNullOpts.mkNullable (with types; attrsOf (either str helpers.nixvimTypes.rawLua))
-        ''
-          {
-            "<esc>" = "close";
-            "q" = "close";
-            "j" = "next_sibling";
-            "k" = "previous_sibling";
+      helpers.defaultNullOpts.mkAttrsOf types.str
+        {
+          "<esc>" = "close";
+          "q" = "close";
+          "j" = "next_sibling";
+          "k" = "previous_sibling";
 
-            "h" = "parent";
-            "l" = "children";
-            "0" = "root";
+          "h" = "parent";
+          "l" = "children";
+          "0" = "root";
 
-            "v" = "visual_name";
-            "V" = "visual_scope";
+          "v" = "visual_name";
+          "V" = "visual_scope";
 
-            "y" = "yank_name";
-            "Y" = "yank_scope";
+          "y" = "yank_name";
+          "Y" = "yank_scope";
 
-            "i" = "insert_name";
-            "I" = "insert_scope";
+          "i" = "insert_name";
+          "I" = "insert_scope";
 
-            "a" = "append_name";
-            "A" = "append_scope";
+          "a" = "append_name";
+          "A" = "append_scope";
 
-            "r" = "rename";
+          "r" = "rename";
 
-            "d" = "delete";
+          "d" = "delete";
 
-            "f" = "fold_create";
-            "F" = "fold_delete";
+          "f" = "fold_create";
+          "F" = "fold_delete";
 
-            "c" = "comment";
+          "c" = "comment";
 
-            "<enter>" = "select";
-            "o" = "select";
-            "J" = "move_down";
-            "K" = "move_up";
+          "<enter>" = "select";
+          "o" = "select";
+          "J" = "move_down";
+          "K" = "move_up";
 
-            "s" = "toggle_preview";
+          "s" = "toggle_preview";
 
-            "<C-v>" = "vsplit";
-            "<C-s>" = "hsplit";
-          }
-        ''
+          "<C-v>" = "vsplit";
+          "<C-s>" = "hsplit";
+        }
         ''
            Actions to be triggered for specified keybindings. It can take either action name i.e `toggle_preview`
           Or it can a `rawLua`.
@@ -214,14 +211,13 @@ in
       highlight = helpers.defaultNullOpts.mkBool true "Highlight the currently focused node";
 
       reorient =
-        helpers.defaultNullOpts.mkEnum
+        helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "smart"
             "top"
             "mid"
             "none"
           ]
-          "smart"
           ''
             Right section can show previews too.
             Options: "leaf", "always" or "never"

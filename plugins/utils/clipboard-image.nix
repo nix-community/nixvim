@@ -37,7 +37,9 @@ let
       ]
     ) "img" "Dir that will be inserted into text/buffer.";
 
-    imgName = helpers.defaultNullOpts.mkStr ''{__raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";}'' "Image's name.";
+    imgName = helpers.defaultNullOpts.mkStr {
+      __raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";
+    } "Image's name.";
 
     imgHandler = helpers.defaultNullOpts.mkLuaFn "function(img) end" ''
       Function that will handle image after pasted.

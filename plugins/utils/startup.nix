@@ -65,7 +65,7 @@ in
               '';
 
               margin =
-                helpers.defaultNullOpts.mkNullable (with types; either (numbers.between 0.0 1.0) ints.positive) "5"
+                helpers.defaultNullOpts.mkNullable (with types; either (numbers.between 0.0 1.0) ints.positive) 5
                   ''
                     The margin for left or right alignment.
                     - if < 1 fraction of screen width
@@ -179,8 +179,7 @@ in
       '';
 
       cursorColumn =
-        helpers.defaultNullOpts.mkNullable (with types; either (numbers.between 0.0 1.0) ints.positive)
-          "0.5"
+        helpers.defaultNullOpts.mkNullable (with types; either (numbers.between 0.0 1.0) ints.positive) 0.5
           ''
             - if < 1, fraction of screen width
             - if > 1 numbers of column
@@ -198,7 +197,7 @@ in
         Disable status-, buffer- and tablines.
       '';
 
-      paddings = helpers.defaultNullOpts.mkNullable (with types; listOf ints.unsigned) "[]" ''
+      paddings = helpers.defaultNullOpts.mkListOf types.ints.unsigned [ ] ''
         Amount of empty lines before each section (must be equal to amount of sections).
       '';
     };

@@ -31,13 +31,10 @@ in
         Whether to enable the "last session" feature.
       '';
 
-      rootDir =
-        helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-          "{__raw = \"vim.fn.stdpath 'data' .. '/sessions/'\";}"
-          ''
-            Root directory for session files.
-            Can be either a string or lua code (using `{__raw = 'foo';}`).
-          '';
+      rootDir = helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/sessions/'"; } ''
+        Root directory for session files.
+        Can be either a string or lua code (using `{__raw = 'foo';}`).
+      '';
 
       createEnabled = helpers.mkNullOrOption types.bool ''
         Whether to enable auto creating new sessions
@@ -91,7 +88,7 @@ in
             };
           })
         )
-        "false"
+        false
         ''
           Config for handling the DirChangePre and DirChanged autocmds.
           Set to `false` to disable the feature.
@@ -108,9 +105,10 @@ in
         `require("auto-session").setup_session_lens()` if they want to use session-lens.
       '';
 
-      themeConf =
-        helpers.defaultNullOpts.mkNullable types.attrs "{winblend = 10; border = true;}"
-          "Theme configuration.";
+      themeConf = helpers.defaultNullOpts.mkAttrsOf types.anything {
+        winblend = 10;
+        border = true;
+      } "Theme configuration.";
 
       previewer = helpers.defaultNullOpts.mkBool false ''
         Use default previewer config by setting the value to `null` if some sets previewer to
@@ -123,8 +121,7 @@ in
 
       sessionControl = {
         controlDir =
-          helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-            "\"vim.fn.stdpath 'data' .. '/auto_session/'\""
+          helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/auto_session/'"; }
             ''
               Auto session control dir, for control files, like alternating between two sessions
               with session-lens.

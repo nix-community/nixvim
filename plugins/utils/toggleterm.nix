@@ -81,7 +81,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   ];
 
   settingsOptions = {
-    size = helpers.defaultNullOpts.mkStrLuaFnOr types.number "12" ''
+    size = helpers.defaultNullOpts.mkStrLuaFnOr types.number 12 ''
       Size of the terminal.
       `size` can be a number or a function.
 
@@ -149,7 +149,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Hide the number column in toggleterm buffers.
     '';
 
-    shade_filetypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+    shade_filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
       Shade filetypes.
     '';
 
@@ -158,17 +158,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       opened.
     '';
 
-    highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight ''
-      {
-        NormalFloat.link = "Normal";
-        FloatBorder.link = "Normal";
-        StatusLine.gui = "NONE";
-        StatusLineNC = {
-          cterm = "italic";
-          gui = "NONE";
-        };
-      }
-    '' "Highlights which map a highlight group name to an attrs of it's values.";
+    highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight {
+      NormalFloat.link = "Normal";
+      FloatBorder.link = "Normal";
+      StatusLine.gui = "NONE";
+      StatusLineNC = {
+        cterm = "italic";
+        gui = "NONE";
+      };
+    } "Highlights which map a highlight group name to an attrs of it's values.";
 
     shade_terminals = helpers.defaultNullOpts.mkBool true ''
       NOTE: This option takes priority over highlights specified so if you specify Normal
@@ -212,7 +210,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Close the terminal window when the process exits.
     '';
 
-    shell = helpers.defaultNullOpts.mkStr ''{__raw = "vim.o.shell";}'' ''
+    shell = helpers.defaultNullOpts.mkStr { __raw = "vim.o.shell"; } ''
       Change the default shell.
     '';
 

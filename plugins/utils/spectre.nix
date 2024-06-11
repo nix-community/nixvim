@@ -36,7 +36,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                   description = "Executable to run.";
                 };
 
-                args = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+                args = helpers.defaultNullOpts.mkListOf types.str [ ] ''
                   List of arguments to provide to the engine.
                 '';
 
@@ -58,7 +58,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                       The description for this option.
                     '';
                   };
-                }) "{}" "The options for this engine.";
+                }) { } "The options for this engine.";
               };
             })
           )
@@ -93,17 +93,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       line_sep = helpers.defaultNullOpts.mkStr "└──────────────────────────────────────────────────────" "Line separator.";
 
-      highlight = helpers.defaultNullOpts.mkAttrsOf types.str ''
-        {
-          headers = "SpectreHeader";
-          ui = "SpectreBody";
-          filename = "SpectreFile";
-          filedirectory = "SpectreDir";
-          search = "SpectreSearch";
-          border = "SpectreBorder";
-          replace = "SpectreReplace";
-        }
-      '' "Highlight groups.";
+      highlight = helpers.defaultNullOpts.mkAttrsOf types.str {
+        headers = "SpectreHeader";
+        ui = "SpectreBody";
+        filename = "SpectreFile";
+        filedirectory = "SpectreDir";
+        search = "SpectreSearch";
+        border = "SpectreBorder";
+        replace = "SpectreReplace";
+      } "Highlight groups.";
 
       mapping =
         helpers.mkNullOrOption
@@ -144,7 +142,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             Which find engine to use. Pick one from the `find_engine` list.
           '';
 
-          options = helpers.defaultNullOpts.mkListOf types.str ''["ignore-case"]'' ''
+          options = helpers.defaultNullOpts.mkListOf types.str [ "ignore-case" ] ''
             Options to use for this engine.
           '';
         };
@@ -154,7 +152,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             Which find engine to use. Pick one from the `replace_engine` list.
           '';
 
-          options = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+          options = helpers.defaultNullOpts.mkListOf types.str [ ] ''
             Options to use for this engine.
           '';
         };

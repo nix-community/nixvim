@@ -35,7 +35,7 @@ in
     '';
 
     options = {
-      disabledFiletypes = helpers.defaultNullOpts.mkListOf types.str ''["text"]'' ''
+      disabledFiletypes = helpers.defaultNullOpts.mkListOf types.str [ "text" ] ''
         The plugin will be disabled under the filetypes in this table.
       '';
 

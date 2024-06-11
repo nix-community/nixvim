@@ -161,7 +161,7 @@ in
           ]
           (
             mode:
-            helpers.defaultNullOpts.mkNullable (with types; either bool str) "false" ''
+            helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
               Hints for ${mode} mode.
 
               Accepted values:

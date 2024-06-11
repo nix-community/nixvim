@@ -178,7 +178,7 @@ in
         The command to use to start the ollama server.
       '';
 
-      args = helpers.defaultNullOpts.mkListOf types.str ''["serve"]'' ''
+      args = helpers.defaultNullOpts.mkListOf types.str [ "serve" ] ''
         The arguments to pass to the serve command.
       '';
 
@@ -186,9 +186,15 @@ in
         The command to use to stop the ollama server.
       '';
 
-      stopArgs = helpers.defaultNullOpts.mkListOf types.str ''["-SIGTERM" "ollama"]'' ''
-        The arguments to pass to the stop command.
-      '';
+      stopArgs =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "-SIGTERM"
+            "ollama"
+          ]
+          ''
+            The arguments to pass to the stop command.
+          '';
     };
   };
 

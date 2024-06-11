@@ -15,9 +15,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       helpers.defaultNullOpts.mkInt 2048
         "Number of lines without indentation before giving up (use -1 for infinite)";
     skip_multiline = helpers.defaultNullOpts.mkBool false "Skip multi-line comments and strings (more accurate detection but less performant)";
-    standard_widths =
-      helpers.defaultNullOpts.mkListOf types.ints.unsigned ''[2 4 8]''
-        "Space indentations that should be detected";
+    standard_widths = helpers.defaultNullOpts.mkListOf types.ints.unsigned [
+      2
+      4
+      8
+    ] "Space indentations that should be detected";
   };
 
   settingsExample = {

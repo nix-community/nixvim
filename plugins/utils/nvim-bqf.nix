@@ -38,8 +38,18 @@ in
       '';
 
       borderChars =
-        helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-          "[ \"│\" \"│\" \"─\" \"─\" \"╭\" \"╮\" \"╰\" \"╯\" \"█\" ]"
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "│"
+            "│"
+            "─"
+            "─"
+            "╭"
+            "╮"
+            "╰"
+            "╯"
+            "█"
+          ]
           ''
             Border and scroll bar chars, they respectively represent:
               vline, vline, hline, hline, ulcorner, urcorner, blcorner, brcorner, sbar
@@ -111,9 +121,10 @@ in
           '';
         };
 
-        extraOpts =
-          helpers.defaultNullOpts.mkNullable (types.listOf types.str) "[ \"--bind\" \"ctrl-o:toggle-all\" ]"
-            "Extra options for fzf.";
+        extraOpts = helpers.defaultNullOpts.mkListOf types.str [
+          "--bind"
+          "ctrl-o:toggle-all"
+        ] "Extra options for fzf.";
       };
     };
   };

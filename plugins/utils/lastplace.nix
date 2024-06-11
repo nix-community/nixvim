@@ -15,14 +15,18 @@ with lib;
 
     package = helpers.mkPluginPackageOption "lastplace" pkgs.vimPlugins.nvim-lastplace;
 
-    ignoreBuftype =
-      helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["quickfix" "nofix" "help"]''
-        "The list of buffer types to ignore by lastplace.";
+    ignoreBuftype = helpers.defaultNullOpts.mkListOf types.str [
+      "quickfix"
+      "nofix"
+      "help"
+    ] "The list of buffer types to ignore by lastplace.";
 
-    ignoreFiletype =
-      helpers.defaultNullOpts.mkNullable (types.listOf types.str)
-        ''["gitcommit" "gitrebase" "svn" "hgcommit"]''
-        "The list of file types to ignore by lastplace.";
+    ignoreFiletype = helpers.defaultNullOpts.mkListOf types.str [
+      "gitcommit"
+      "gitrebase"
+      "svn"
+      "hgcommit"
+    ] "The list of file types to ignore by lastplace.";
 
     openFolds = helpers.defaultNullOpts.mkBool true "Whether closed folds are automatically opened when jumping to the last edit position.";
   };
