@@ -61,7 +61,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 }
               );
             })
-            "{}"
+            { }
             ''
               Custom palettes for ${name} colors.
             ''
@@ -110,7 +110,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Whether to enable caching.
     '';
 
-    cache_dir = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/palette'";}'' "Cache directory.";
+    cache_dir = helpers.defaultNullOpts.mkStr {
+      __raw = "vim.fn.stdpath('cache') .. '/palette'";
+    } "Cache directory.";
   };
 
   settingsExample = { };

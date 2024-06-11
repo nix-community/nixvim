@@ -28,7 +28,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Set to `true` to use `mirage` variant instead of `dark` for dark background.
     '';
 
-    overrides = helpers.defaultNullOpts.mkStrLuaOr (with helpers.nixvimTypes; attrsOf highlight) "{}" ''
+    overrides = helpers.defaultNullOpts.mkStrLuaOr (with helpers.nixvimTypes; attrsOf highlight) { } ''
       A dictionary of group names, each associated with a dictionary of parameters
       (`bg`, `fg`, `sp` and `style`) and colors in hex.
 

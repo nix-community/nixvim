@@ -21,13 +21,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     italic_comments = helpers.defaultNullOpts.mkBool false "Whether to enable italic comments";
     underline_links = helpers.defaultNullOpts.mkBool false "Whether to underline links";
     disable_nvimtree_bg = helpers.defaultNullOpts.mkBool true "Whether to disable nvim-tree background";
-    color_overrides = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+    color_overrides = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       A dictionary of color overrides.
       See https://github.com/Mofiqul/vscode.nvim/blob/main/lua/vscode/colors.lua for color names.
     '';
     group_overrides =
       with helpers;
-      defaultNullOpts.mkAttrsOf nixvimTypes.highlight "{}" ''
+      defaultNullOpts.mkAttrsOf nixvimTypes.highlight { } ''
         A dictionary of group names, each associated with a dictionary of parameters
         (`bg`, `fg`, `sp` and `style`) and colors in hex.
       '';

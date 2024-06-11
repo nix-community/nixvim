@@ -115,7 +115,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       default: see [source](https://github.com/rose-pine/neovim/blob/main/lua/rose-pine/config.lua)
     '';
 
-    highlight_groups = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight "{}" ''
+    highlight_groups = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight { } ''
       Custom highlight groups.
     '';
 

@@ -124,7 +124,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       ];
     in
     {
-      compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath 'cache' .. '/catppuccin'";}'' "Set the compile cache directory.";
+      compile_path = helpers.defaultNullOpts.mkStr {
+        __raw = "vim.fn.stdpath 'cache' .. '/catppuccin'";
+      } "Set the compile cache directory.";
 
       flavour = helpers.mkNullOrOption (types.enum (flavours ++ [ "auto" ])) ''
         Theme flavour.
@@ -165,7 +167,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Sets the shade to apply to the inactive split or window or buffer.
         '';
 
-        percentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0.15" ''
+        percentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.15 ''
           percentage of the shade to apply to the inactive window, split or buffer.
         '';
       };
@@ -183,58 +185,58 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
 
       styles = {
-        comments = helpers.defaultNullOpts.mkListOf types.str ''["italic"]'' ''
+        comments = helpers.defaultNullOpts.mkListOf types.str [ "italic" ] ''
           Define comments highlight properties.
         '';
 
-        conditionals = helpers.defaultNullOpts.mkListOf types.str ''["italic"]'' ''
+        conditionals = helpers.defaultNullOpts.mkListOf types.str [ "italic" ] ''
           Define conditionals highlight properties.
         '';
 
-        loops = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        loops = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define loops highlight properties.
         '';
 
-        functions = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        functions = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define functions highlight properties.
         '';
 
-        keywords = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        keywords = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define keywords highlight properties.
         '';
 
-        strings = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        strings = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define strings highlight properties.
         '';
 
-        variables = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        variables = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define variables highlight properties.
         '';
 
-        numbers = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        numbers = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define numbers highlight properties.
         '';
 
-        booleans = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        booleans = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define booleans highlight properties.
         '';
 
-        properties = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        properties = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define properties highlight properties.
         '';
 
-        types = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        types = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define types highlight properties.
         '';
 
-        operators = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        operators = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           Define operators highlight properties.
         '';
       };
 
       color_overrides = genAttrs (flavours ++ [ "all" ]) (
         flavour:
-        helpers.defaultNullOpts.mkAttrsOf types.str "{}" (
+        helpers.defaultNullOpts.mkAttrsOf types.str { } (
           if flavour == "all" then
             "Override colors for all the flavours."
           else

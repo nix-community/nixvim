@@ -58,7 +58,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       default: see [source](https://github.com/olivercederborg/poimandres.nvim/blob/main/lua/poimandres/init.lua)
     '';
 
-    highlight_groups = helpers.defaultNullOpts.mkAttrsOf types.str "{}" ''
+    highlight_groups = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
       Highlight groups.
     '';
   };

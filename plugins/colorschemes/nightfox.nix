@@ -35,9 +35,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     options = {
-      compile_path = helpers.defaultNullOpts.mkStr ''{__raw = "vim.fn.stdpath('cache') .. '/nightfox'";}'' ''
-        The output directory path where the compiled results will be written to.
-      '';
+      compile_path =
+        helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('cache') .. '/nightfox'"; }
+          ''
+            The output directory path where the compiled results will be written to.
+          '';
 
       compile_file_suffix = helpers.defaultNullOpts.mkStr "_compiled" ''
         The string appended to the compiled file.
@@ -65,57 +67,51 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         The default value of a module that has not been overridden in the modules table.
       '';
 
-      styles =
-        helpers.defaultNullOpts.mkAttrsOf types.str
-          ''
-            {
-              comments = "NONE";
-              conditionals = "NONE";
-              constants = "NONE";
-              functions = "NONE";
-              keywords = "NONE";
-              numbers = "NONE";
-              operators = "NONE";
-              preprocs = "NONE";
-              strings = "NONE";
-              types = "NONE";
-              variables = "NONE";
-            }
-          ''
-          ''
-            A table that contains a list of syntax components and their corresponding style.
-            These styles can be any combination of `|highlight-args|`.
-            The list of syntax components are:
-              - comments
-              - conditionals
-              - constants
-              - functions
-              - keywords
-              - numbers
-              - operators
-              - preprocs
-              - strings
-              - types
-              - variables
+      styles = helpers.defaultNullOpts.mkAttrsOf' {
+        type = types.str;
+        description = ''
+          A table that contains a list of syntax components and their corresponding style.
+          These styles can be any combination of `|highlight-args|`.
 
-            Example:
-            ```nix
-              {
-                comments = "italic";
-                functions = "italic,bold";
-              }
-            ```
-          '';
+          The list of syntax components are:
+            - comments
+            - conditionals
+            - constants
+            - functions
+            - keywords
+            - numbers
+            - operators
+            - preprocs
+            - strings
+            - types
+            - variables
+        '';
+        example = {
+          comments = "italic";
+          functions = "italic,bold";
+        };
+        pluginDefault = {
+          comments = "NONE";
+          conditionals = "NONE";
+          constants = "NONE";
+          functions = "NONE";
+          keywords = "NONE";
+          numbers = "NONE";
+          operators = "NONE";
+          preprocs = "NONE";
+          strings = "NONE";
+          types = "NONE";
+          variables = "NONE";
+        };
+      };
 
       inverse =
         helpers.defaultNullOpts.mkAttrsOf types.bool
-          ''
-            {
-              match_paren = false;
-              visual = false;
-              search = false;
-            }
-          ''
+          {
+            match_paren = false;
+            visual = false;
+            search = false;
+          }
           ''
             A table that contains a list of highlight types.
             If a highlight type is enabled it will inverse the foreground and background colors
@@ -139,7 +135,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           mapAttrs
             (
               name: color:
-              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) "0" ''
+              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''
                 Severity [0, 1] for ${name} (${color}).
               ''
             )
@@ -152,26 +148,24 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       modules =
         helpers.defaultNullOpts.mkAttrsOf types.anything
-          ''
-            {
-              coc = {
-                background = true;
-              };
-              diagnostic = {
-                enable = true;
-                background = true;
-              };
-              native_lsp = {
-                enable = true;
-                background = true;
-              };
-              treesitter = true;
-              lsp_semantic_tokens = true;
-              leap = {
-                background = true;
-              };
-            }
-          ''
+          {
+            coc = {
+              background = true;
+            };
+            diagnostic = {
+              enable = true;
+              background = true;
+            };
+            native_lsp = {
+              enable = true;
+              background = true;
+            };
+            treesitter = true;
+            lsp_semantic_tokens = true;
+            leap = {
+              background = true;
+            };
+          }
           ''
             `modules` store configuration information for various plugins and other neovim modules.
             A module can either be a boolean or a table that contains additional configuration for
