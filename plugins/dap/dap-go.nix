@@ -5,14 +5,16 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.dap.extensions.dap-go;
-  dapHelpers = import ./dapHelpers.nix {inherit lib helpers;};
-in {
+  dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
+in
+{
   options.plugins.dap.extensions.dap-go = {
     enable = mkEnableOption "dap-go";
 
-    package = helpers.mkPackageOption "dap-go" pkgs.vimPlugins.nvim-dap-go;
+    package = helpers.mkPluginPackageOption "dap-go" pkgs.vimPlugins.nvim-dap-go;
 
     dapConfigurations = helpers.mkNullOrOption (types.listOf dapHelpers.configurationOption) ''
       Additional dap configurations.
@@ -22,7 +24,9 @@ in {
     delve = {
       path = helpers.defaultNullOpts.mkStr "dlv" "The path to the executable dlv which will be used for debugging.";
 
-      initializeTimeoutSec = helpers.defaultNullOpts.mkInt 20 "Time to wait for delve to initialize the debug session.";
+      initializeTimeoutSec =
+        helpers.defaultNullOpts.mkInt 20
+          "Time to wait for delve to initialize the debug session.";
 
       port = helpers.defaultNullOpts.mkStr "$\{port}" ''
         A string that defines the port to start delve debugger.
@@ -36,19 +40,20 @@ in {
     };
   };
 
-  config = let
-    options = with cfg; {
-      dap_configurations = dapConfigurations;
+  config =
+    let
+      options = with cfg; {
+        dap_configurations = dapConfigurations;
 
-      delve = with delve; {
-        inherit path port args;
-        initialize_timeout_sec = initializeTimeoutSec;
-        build_flags = buildFlags;
+        delve = with delve; {
+          inherit path port args;
+          initialize_timeout_sec = initializeTimeoutSec;
+          build_flags = buildFlags;
+        };
       };
-    };
-  in
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
       plugins.dap = {
         enable = true;

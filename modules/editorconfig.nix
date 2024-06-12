@@ -1,12 +1,23 @@
+{ lib, config, ... }:
+with lib;
 {
-  lib,
-  config,
-  ...
-}:
-with lib; {
   imports = [
-    (lib.mkRenamedOptionModule ["plugins" "editorconfig" "enable"] ["editorconfig" "enable"])
-    (lib.mkRemovedOptionModule ["plugins" "editorconfig" "package"] "editorconfig is now builtin, no plugin required")
+    (lib.mkRenamedOptionModule
+      [
+        "plugins"
+        "editorconfig"
+        "enable"
+      ]
+      [
+        "editorconfig"
+        "enable"
+      ]
+    )
+    (lib.mkRemovedOptionModule [
+      "plugins"
+      "editorconfig"
+      "package"
+    ] "editorconfig is now builtin, no plugin required")
   ];
 
   options.editorconfig = {
@@ -18,7 +29,7 @@ with lib; {
 
     properties = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       description = ''
         The table key is a property name and the value is a callback function which accepts the
         number of the buffer to be modified, the value of the property in the .editorconfig file,
@@ -39,23 +50,26 @@ with lib; {
     };
   };
 
-  config = let
-    cfg = config.editorconfig;
-  in {
-    globals.editorconfig = mkIf (!cfg.enable) false;
-
-    extraConfigLua = let
-      mkProperty = name: function: ''
-        __editorconfig.properties.${name} = ${function}
-      '';
-      propertiesString = lib.concatLines (lib.mapAttrsToList mkProperty cfg.properties);
+  config =
+    let
+      cfg = config.editorconfig;
     in
-      mkIf (propertiesString != "" && cfg.enable) ''
-        do
-          local __editorconfig = require('editorconfig')
+    {
+      globals.editorconfig = mkIf (!cfg.enable) false;
 
-          ${propertiesString}
-        end
-      '';
-  };
+      extraConfigLua =
+        let
+          mkProperty = name: function: ''
+            __editorconfig.properties.${name} = ${function}
+          '';
+          propertiesString = lib.concatLines (lib.mapAttrsToList mkProperty cfg.properties);
+        in
+        mkIf (propertiesString != "" && cfg.enable) ''
+          do
+            local __editorconfig = require('editorconfig')
+
+            ${propertiesString}
+          end
+        '';
+    };
 }

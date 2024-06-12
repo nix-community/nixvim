@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        columns = ["icon"];
+        columns = [ "icon" ];
         view_options.show_hidden = false;
         win_options = {
           wrap = false;
@@ -42,7 +42,7 @@
           {
             __unkeyed = "type";
             highlight = "Foo";
-            icons = {};
+            icons = { };
           }
 
           {
@@ -137,8 +137,14 @@
           '';
           natural_order = true;
           sort = [
-            ["type" "asc"]
-            ["name" "asc"]
+            [
+              "type"
+              "asc"
+            ]
+            [
+              "name"
+              "asc"
+            ]
           ];
         };
         float = {
@@ -157,10 +163,16 @@
         };
         preview = {
           max_width = 0.9;
-          min_width = [40 0.4];
+          min_width = [
+            40
+            0.4
+          ];
           width = null;
           max_height = 0.9;
-          min_height = [5 0.1];
+          min_height = [
+            5
+            0.1
+          ];
           height = null;
           border = "rounded";
           win_options = {
@@ -170,10 +182,16 @@
         };
         progress = {
           max_width = 0.9;
-          min_width = [40 0.4];
+          min_width = [
+            40
+            0.4
+          ];
           width = null;
           max_height = 0.9;
-          min_height = [5 0.1];
+          min_height = [
+            5
+            0.1
+          ];
           height = null;
           border = "rounded";
           minimized_border = "none";

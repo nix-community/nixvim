@@ -7,24 +7,32 @@
 }:
 with lib;
 with helpers.vim-plugin;
-  mkVimPlugin config {
-    name = "undotree";
-    defaultPackage = pkgs.vimPlugins.undotree;
-    globalPrefix = "undotree_";
+mkVimPlugin config {
+  name = "undotree";
+  defaultPackage = pkgs.vimPlugins.undotree;
+  globalPrefix = "undotree_";
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    # TODO introduced 2024-02-22: remove 2024-04-22
-    deprecateExtraConfig = true;
-    imports = let
-      basePluginPath = ["plugins" "undotree"];
+  # TODO introduced 2024-02-22: remove 2024-04-22
+  deprecateExtraConfig = true;
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "undotree"
+      ];
     in
-      mapAttrsToList
+    mapAttrsToList
       (
         old: new:
-          mkRenamedOptionModule
-          (basePluginPath ++ [old])
-          (basePluginPath ++ ["settings" new])
+        mkRenamedOptionModule (basePluginPath ++ [ old ]) (
+          basePluginPath
+          ++ [
+            "settings"
+            new
+          ]
+        )
       )
       {
         windowLayout = "WindowLayout";
@@ -45,25 +53,25 @@ with helpers.vim-plugin;
         showCursorLine = "ShowCursorLine";
       };
 
-    settingsExample = {
-      WindowLayout = 4;
-      ShortIndicators = false;
-      DiffpanelHeight = 10;
-      DiffAutoOpen = true;
-      SetFocusWhenToggle = true;
-      SplitWidth = 40;
-      TreeNodeShape = "*";
-      TreeVertShape = "|";
-      TreeSplitShape = "/";
-      TreeReturnShape = "\\";
-      DiffCommand = "diff";
-      RelativeTimestamp = true;
-      HighlightChangedText = true;
-      HighlightChangedWithSign = true;
-      HighlightSyntaxAdd = "DiffAdd";
-      HighlightSyntaxChange = "DiffChange";
-      HighlightSyntaxDel = "DiffDelete";
-      HelpLine = true;
-      CursorLine = true;
-    };
-  }
+  settingsExample = {
+    WindowLayout = 4;
+    ShortIndicators = false;
+    DiffpanelHeight = 10;
+    DiffAutoOpen = true;
+    SetFocusWhenToggle = true;
+    SplitWidth = 40;
+    TreeNodeShape = "*";
+    TreeVertShape = "|";
+    TreeSplitShape = "/";
+    TreeReturnShape = "\\";
+    DiffCommand = "diff";
+    RelativeTimestamp = true;
+    HighlightChangedText = true;
+    HighlightChangedWithSign = true;
+    HighlightSyntaxAdd = "DiffAdd";
+    HighlightSyntaxChange = "DiffChange";
+    HighlightSyntaxDel = "DiffDelete";
+    HelpLine = true;
+    CursorLine = true;
+  };
+}

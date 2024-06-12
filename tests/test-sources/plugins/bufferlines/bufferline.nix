@@ -82,21 +82,21 @@
       diagnosticsUpdateInInsert = true;
       offsets = null;
       groups = {
-        items = [];
+        items = [ ];
         options = {
           toggleHiddenOnEnter = true;
         };
       };
       hover = {
         enabled = false;
-        reveal = [];
+        reveal = [ ];
         delay = 200;
       };
       debug = {
         logging = false;
       };
       customFilter = null;
-      highlights = {};
+      highlights = { };
     };
   };
 }

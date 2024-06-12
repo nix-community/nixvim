@@ -3,40 +3,27 @@
   nixvimOptions,
   nixvimTypes,
 }:
-with lib; rec {
+with lib;
+rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
-    silent =
-      nixvimOptions.defaultNullOpts.mkBool false
-      "Whether this mapping should be silent. Equivalent to adding <silent> to a map.";
+    silent = nixvimOptions.defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding `<silent>` to a map.";
 
-    nowait =
-      nixvimOptions.defaultNullOpts.mkBool false
-      "Whether to wait for extra input on ambiguous mappings. Equivalent to adding <nowait> to a map.";
+    nowait = nixvimOptions.defaultNullOpts.mkBool false "Whether to wait for extra input on ambiguous mappings. Equivalent to adding `<nowait>` to a map.";
 
-    script =
-      nixvimOptions.defaultNullOpts.mkBool false
-      "Equivalent to adding <script> to a map.";
+    script = nixvimOptions.defaultNullOpts.mkBool false "Equivalent to adding `<script>` to a map.";
 
-    expr =
-      nixvimOptions.defaultNullOpts.mkBool false
-      "Means that the action is actually an expression. Equivalent to adding <expr> to a map.";
+    expr = nixvimOptions.defaultNullOpts.mkBool false "Means that the action is actually an expression. Equivalent to adding `<expr>` to a map.";
 
-    unique =
-      nixvimOptions.defaultNullOpts.mkBool false
-      "Whether to fail if the map is already defined. Equivalent to adding <unique> to a map.";
+    unique = nixvimOptions.defaultNullOpts.mkBool false "Whether to fail if the map is already defined. Equivalent to adding `<unique>` to a map.";
 
-    noremap =
-      nixvimOptions.defaultNullOpts.mkBool true
-      "Whether to use the 'noremap' variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
+    noremap = nixvimOptions.defaultNullOpts.mkBool true "Whether to use the `noremap` variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
 
-    remap =
-      nixvimOptions.defaultNullOpts.mkBool false
-      "Make the mapping recursive. Inverses \"noremap\"";
+    remap = nixvimOptions.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
 
-    desc =
-      nixvimOptions.mkNullOrOption types.str
-      "A textual description of this keybind, to be shown in which-key, if you have it.";
+    desc = nixvimOptions.mkNullOrOption types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
+
+    buffer = nixvimOptions.defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
   };
 
   modes = {
@@ -70,80 +57,92 @@ with lib; rec {
 
   modeEnum =
     types.enum
-    # ["" "n" "v" ...]
-    (
-      map
-      (
-        {short, ...}: short
-      )
-      (attrValues modes)
-    );
+      # ["" "n" "v" ...]
+      (map ({ short, ... }: short) (attrValues modes));
 
-  mapOptionSubmodule = mkMapOptionSubmodule {};
+  mapOptionSubmodule = mkMapOptionSubmodule { };
 
-  mkModeOption = default:
+  mkModeOption =
+    default:
     mkOption {
-      type = with types;
-        either
-        modeEnum
-        (listOf modeEnum);
+      type = with types; either modeEnum (listOf modeEnum);
       description = ''
         One or several modes.
         Use the short-names (`"n"`, `"v"`, ...).
         See `:h map-modes` to learn more.
       '';
       inherit default;
-      example = ["n" "v"];
+      example = [
+        "n"
+        "v"
+      ];
     };
 
-  mkMapOptionSubmodule = defaults: (with types;
-    submodule {
-      options = {
-        key = mkOption ({
-            type = str;
-            description = "The key to map.";
-            example = "<C-m>";
-          }
-          // (
-            optionalAttrs
-            (defaults ? key)
-            {default = defaults.key;}
-          ));
+  mkMapOptionSubmodule =
+    {
+      defaults ? { },
+      # key and action can be true/false to enable/disable adding the option,
+      # or an attrset to enable the option and add/override mkOption args.
+      key ? true,
+      action ? true,
+    }:
+    # TODO remove assert once `lua` option is gone
+    # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
+    assert !(defaults ? lua);
+    (
+      with types;
+      submodule {
+        options =
+          (optionalAttrs (isAttrs key || key) {
+            key = mkOption (
+              {
+                type = str;
+                description = "The key to map.";
+                example = "<C-m>";
+              }
+              // (optionalAttrs (isAttrs key) key)
+              // (optionalAttrs (defaults ? key) { default = defaults.key; })
+            );
+          })
+          // (optionalAttrs (isAttrs action || action) {
+            action = mkOption (
+              {
+                type = nixvimTypes.maybeRaw str;
+                description = "The action to execute.";
+              }
+              // (optionalAttrs (isAttrs action) action)
+              // (optionalAttrs (defaults ? action) { default = defaults.action; })
+            );
+          })
+          // {
+            mode = mkModeOption defaults.mode or "";
+            options = mapConfigOptions;
 
-        mode = mkModeOption defaults.mode or "";
+            lua = mkOption {
+              type = nullOr bool;
+              description = ''
+                If true, `action` is considered to be lua code.
+                Thus, it will not be wrapped in `""`.
 
-        action = mkOption ({
-            type = nixvimTypes.maybeRaw str;
-            description = "The action to execute.";
-          }
-          // (
-            optionalAttrs
-            (defaults ? action)
-            {default = defaults.action;}
-          ));
-
-        lua = mkOption {
-          type = bool;
-          description = ''
-            If true, `action` is considered to be lua code.
-            Thus, it will not be wrapped in `""`.
-          '';
-          default = defaults.lua or false;
-        };
-
-        options = mapConfigOptions;
-      };
-    });
+                This option is deprecated and will be removed in 24.11.
+                You should use a "raw" action instead, e.g. `action.__raw = ""`.
+              '';
+              default = null;
+              visible = false;
+            };
+          };
+      }
+    );
 
   # Correctly merge two attrs (partially) representing a mapping.
-  mergeKeymap = defaults: keymap: let
-    # First, merge the `options` attrs of both options.
-    mergedOpts = (defaults.options or {}) // (keymap.options or {});
-  in
+  mergeKeymap =
+    defaults: keymap:
+    let
+      # First, merge the `options` attrs of both options.
+      mergedOpts = (defaults.options or { }) // (keymap.options or { });
+    in
     # Then, merge the root attrs together and add the previously merged `options` attrs.
-    (defaults // keymap) // {options = mergedOpts;};
+    (defaults // keymap) // { options = mergedOpts; };
 
-  mkKeymaps = defaults:
-    map
-    (mergeKeymap defaults);
+  mkKeymaps = defaults: map (mergeKeymap defaults);
 }

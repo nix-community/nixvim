@@ -13,7 +13,7 @@
         auto_open_html_in_browser = false;
         auto_open_output = true;
         cover_empty_lines = false;
-        cover_lines_starting_with = [];
+        cover_lines_starting_with = [ ];
         copy_output = false;
         enter_output_behavior = "open_then_enter";
         image_provider = "none";
@@ -21,7 +21,12 @@
         output_crop_border = true;
         output_show_more = false;
         output_virt_lines = false;
-        output_win_border = ["" "━" "" ""];
+        output_win_border = [
+          ""
+          "━"
+          ""
+          ""
+        ];
         output_win_cover_gutter = true;
         output_win_hide_on_leave = true;
         output_win_max_height = 999999;
@@ -52,7 +57,12 @@
         output_crop_border = true;
         output_show_more = false;
         output_virt_lines = false;
-        output_win_border = ["" "━" "" ""];
+        output_win_border = [
+          ""
+          "━"
+          ""
+          ""
+        ];
         output_win_cover_gutter = true;
         output_win_hide_on_leave = true;
         output_win_style = false;

@@ -9,8 +9,8 @@
 
       diffBinaries = true;
       enhancedDiffHl = true;
-      gitCmd = ["git"];
-      hgCmd = ["hg"];
+      gitCmd = [ "git" ];
+      hgCmd = [ "hg" ];
       useIcons = false;
       showHelpHints = false;
       watchIndex = true;
@@ -47,7 +47,7 @@
         winConfig = {
           position = "right";
           width = 20;
-          winOpts = {};
+          winOpts = { };
         };
       };
       fileHistoryPanel = {
@@ -60,21 +60,21 @@
             multiFile.diffMerges = "first-parent";
           };
           hg = {
-            singleFile = {};
-            multiFile = {};
+            singleFile = { };
+            multiFile = { };
           };
         };
         winConfig = {
           position = "top";
           height = 10;
-          winOpts = {};
+          winOpts = { };
         };
       };
 
-      commitLogPanel.winConfig.winOpts = {};
+      commitLogPanel.winConfig.winOpts = { };
       defaultArgs = {
-        diffviewOpen = ["HEAD"];
-        diffviewFileHistory = ["%"];
+        diffviewOpen = [ "HEAD" ];
+        diffviewFileHistory = [ "%" ];
       };
       hooks = {
         viewOpened = ''

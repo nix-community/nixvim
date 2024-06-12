@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   empty = {
     plugins.telescope = {
       enable = true;

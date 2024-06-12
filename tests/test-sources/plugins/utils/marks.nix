@@ -7,17 +7,17 @@
     plugins.marks = {
       enable = true;
 
-      builtinMarks = [];
+      builtinMarks = [ ];
       defaultMappings = true;
       signs = true;
       cyclic = true;
       forceWriteShada = false;
       refreshInterval = 150;
       signPriority = 10;
-      excludedFiletypes = [];
-      excludedBuftypes = [];
-      bookmarks = {};
-      mappings = {};
+      excludedFiletypes = [ ];
+      excludedBuftypes = [ ];
+      bookmarks = { };
+      mappings = { };
     };
   };
 }

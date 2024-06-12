@@ -37,7 +37,10 @@
       };
       lsp = {
         autoAttach = true;
-        preference = ["clangd" "pyright"];
+        preference = [
+          "clangd"
+          "pyright"
+        ];
       };
       highlight = true;
       separator = " | ";

@@ -5,7 +5,8 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.nvim-colorizer;
 
   colorizer-options = {
@@ -56,7 +57,13 @@ with lib; let
     };
     mode = mkOption {
       description = "Set the display mode";
-      type = types.nullOr (types.enum ["foreground" "background" "virtualtext"]);
+      type = types.nullOr (
+        types.enum [
+          "foreground"
+          "background"
+          "virtualtext"
+        ]
+      );
       default = null;
     };
     tailwind = mkOption {
@@ -64,7 +71,11 @@ with lib; let
       type = types.nullOr (
         types.oneOf [
           types.bool
-          (types.enum ["normal" "lsp" "both"])
+          (types.enum [
+            "normal"
+            "lsp"
+            "both"
+          ])
         ]
       );
       default = null;
@@ -87,37 +98,38 @@ with lib; let
       default = null;
     };
   };
-in {
+in
+{
   options = {
     plugins.nvim-colorizer = {
       enable = mkEnableOption "nvim-colorizer";
 
-      package = helpers.mkPackageOption "nvim-colorizer" pkgs.vimPlugins.nvim-colorizer-lua;
+      package = helpers.mkPluginPackageOption "nvim-colorizer" pkgs.vimPlugins.nvim-colorizer-lua;
 
       fileTypes = mkOption {
         description = "Enable and/or configure highlighting for certain filetypes";
-        type = types.nullOr (
-          types.listOf (types.oneOf [
-            types.str
-            (types.submodule {
-              options =
-                {
-                  language = mkOption {
-                    type = types.str;
-                  };
+        type =
+          with types;
+          nullOr (
+            listOf (
+              either str (
+                types.submodule {
+                  options = {
+                    language = mkOption {
+                      type = types.str;
+                      description = "The language this configuration should apply to.";
+                    };
+                  } // colorizer-options;
                 }
-                // colorizer-options;
-            })
-          ])
-        );
+              )
+            )
+          );
         default = null;
       };
 
       userDefaultOptions = mkOption {
         description = "Default options";
-        type = types.nullOr (types.submodule {
-          options = colorizer-options;
-        });
+        type = types.nullOr (types.submodule { options = colorizer-options; });
         default = null;
       };
 
@@ -130,32 +142,33 @@ in {
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
 
-    extraConfigLua = let
-      filetypes =
-        if (cfg.fileTypes != null)
-        then
-          (
-            let
-              list =
-                map (
+    extraConfigLua =
+      let
+        filetypes =
+          if (cfg.fileTypes != null) then
+            (
+              let
+                list = map (
                   v:
-                    if builtins.isAttrs v
-                    then v.language + " = " + helpers.toLuaObject (builtins.removeAttrs v ["language"])
-                    else "'${v}'"
-                )
-                cfg.fileTypes;
-            in
+                  if builtins.isAttrs v then
+                    v.language + " = " + helpers.toLuaObject (builtins.removeAttrs v [ "language" ])
+                  else
+                    "'${v}'"
+                ) cfg.fileTypes;
+              in
               "{" + (concatStringsSep "," list) + "}"
-          )
-        else "nil";
-    in ''
-      require("colorizer").setup({
-        filetypes = ${filetypes},
-        user_default_options = ${helpers.toLuaObject cfg.userDefaultOptions},
-        buftypes = ${helpers.toLuaObject cfg.bufTypes},
-      })
-    '';
+            )
+          else
+            "nil";
+      in
+      ''
+        require("colorizer").setup({
+          filetypes = ${filetypes},
+          user_default_options = ${helpers.toLuaObject cfg.userDefaultOptions},
+          buftypes = ${helpers.toLuaObject cfg.bufTypes},
+        })
+      '';
   };
 }

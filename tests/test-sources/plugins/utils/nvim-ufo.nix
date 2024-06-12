@@ -55,7 +55,7 @@
       enable = true;
       openFoldHlTimeout = 400;
       providerSelector = null;
-      closeFoldKinds = {};
+      closeFoldKinds = { };
       foldVirtTextHandler = null;
       enableGetFoldVirtText = false;
       preview = {
@@ -65,7 +65,7 @@
           winhighlight = "Normal:Normal";
           maxheight = 20;
         };
-        mappings = {};
+        mappings = { };
       };
     };
   };

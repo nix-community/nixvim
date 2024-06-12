@@ -11,7 +11,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "onedark.nvim";
   defaultPackage = pkgs.vimPlugins.onedark-nvim;
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsExample = {
     colors = {

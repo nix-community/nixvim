@@ -6,17 +6,23 @@
   default = {
     plugins.sniprun = {
       enable = true;
-      selectedInterpreters = [];
-      replEnable = [];
-      replDisable = [];
-      interpreterOptions = {};
-      display = ["Classic" "VirtualTextOk"];
-      liveDisplay = ["VirtualTextOk"];
+      selectedInterpreters = [ ];
+      replEnable = [ ];
+      replDisable = [ ];
+      interpreterOptions = { };
+      display = [
+        "Classic"
+        "VirtualTextOk"
+      ];
+      liveDisplay = [ "VirtualTextOk" ];
       displayOptions = {
         terminalWidth = 45;
         notificationTimeout = 5;
       };
-      showNoOutput = ["Classic" "TempFloatingWindow"];
+      showNoOutput = [
+        "Classic"
+        "TempFloatingWindow"
+      ];
       snipruncolors = {
         SniprunVirtualTextOk = {
           bg = "#66eeff";

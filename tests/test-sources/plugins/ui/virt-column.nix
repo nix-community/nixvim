@@ -38,7 +38,10 @@
       enable = true;
 
       settings = {
-        char = ["#" "!"];
+        char = [
+          "#"
+          "!"
+        ];
         virtcolumn = "80,90,100";
         highlight = "NonText";
       };

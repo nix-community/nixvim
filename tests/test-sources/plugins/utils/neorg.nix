@@ -54,11 +54,13 @@
               level = 5;
             };
           };
-          floatPrecision = 0.01;
+          floatPrecision = 1.0e-2;
         };
 
         modules = {
-          "core.defaults" = {__empty = null;};
+          "core.defaults" = {
+            __empty = null;
+          };
           "core.dirman" = {
             config = {
               workspaces = {

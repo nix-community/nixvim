@@ -5,29 +5,42 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.nix-develop;
-in {
-  options.plugins.nix-develop =
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "nix-develop.nvim";
+in
+{
+  options.plugins.nix-develop = helpers.neovim-plugin.extraOptionsOptions // {
+    enable = mkEnableOption "nix-develop.nvim";
 
-      package = helpers.mkPackageOption "nix-develop.nvim" pkgs.vimPlugins.nix-develop-nvim;
+    package = helpers.mkPluginPackageOption "nix-develop.nvim" pkgs.vimPlugins.nix-develop-nvim;
 
-      ignoredVariables = mkOption {
-        type = types.attrsOf types.bool;
-        default = {};
-      };
-
-      separatedVariables = mkOption {
-        type = types.attrsOf types.str;
-        default = {};
+    ignoredVariables = mkOption {
+      type = with types; attrsOf bool;
+      default = { };
+      description = "An attrs specifying the variables should be ignored.";
+      example = {
+        BASHOPTS = true;
+        HOME = true;
+        NIX_BUILD_TOP = true;
+        SHELL = true;
+        TMP = true;
       };
     };
 
+    separatedVariables = mkOption {
+      type = with types; attrsOf str;
+      default = { };
+      description = "An attrs specifying the separator to use for particular environment variables.";
+      example = {
+        PATH = ":";
+        XDG_DATA_DIRS = ":";
+      };
+    };
+  };
+
   config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
     extraConfigLua = ''
       local __ignored_variables = ${helpers.toLuaObject cfg.ignoredVariables}
       for ignoredVariable, shouldIgnore in ipairs(__ignored_variables) do

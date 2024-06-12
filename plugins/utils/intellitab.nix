@@ -5,19 +5,21 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.intellitab;
-in {
+in
+{
   options = {
     plugins.intellitab = {
       enable = mkEnableOption "intellitab.nvim";
 
-      package = helpers.mkPackageOption "intellitab.nvim" pkgs.vimPlugins.intellitab-nvim;
+      package = helpers.mkPluginPackageOption "intellitab.nvim" pkgs.vimPlugins.intellitab-nvim;
     };
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
 
     keymaps = [
       {

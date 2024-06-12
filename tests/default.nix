@@ -4,9 +4,10 @@
   lib,
   helpers,
   pkgs,
-}: let
+}:
+let
   fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ./test-derivation.nix {inherit pkgs makeNixvim makeNixvimWithModule;};
+  test-derivation = import ./test-derivation.nix { inherit pkgs makeNixvim makeNixvimWithModule; };
   inherit (test-derivation) mkTestDerivation;
 
   # List of files containing configurations
@@ -16,9 +17,10 @@
   };
 
   exampleFiles = {
-    example = let
-      config = import ../example.nix {inherit pkgs;};
-    in
+    example =
+      let
+        config = import ../example.nix { inherit pkgs; };
+      in
       builtins.removeAttrs config.programs.nixvim [
         # This is not available to standalone modules, only HM & NixOS Modules
         "enable"
@@ -29,14 +31,9 @@
   };
 
   # We attempt to build & execute all configurations
-  derivationList =
-    pkgs.lib.mapAttrsToList
-    (
-      name: path: {
-        inherit name;
-        path = mkTestDerivation name path;
-      }
-    )
-    (testFiles // exampleFiles);
+  derivationList = pkgs.lib.mapAttrsToList (name: path: {
+    inherit name;
+    path = mkTestDerivation name path;
+  }) (testFiles // exampleFiles);
 in
-  pkgs.linkFarm "nixvim-tests" derivationList
+pkgs.linkFarm "nixvim-tests" derivationList

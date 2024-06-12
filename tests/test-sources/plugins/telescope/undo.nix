@@ -15,7 +15,11 @@
 
         settings = {
           use_delta = true;
-          use_custom_command = ["bash" "-c" "echo '$DIFF' | delta"];
+          use_custom_command = [
+            "bash"
+            "-c"
+            "echo '$DIFF' | delta"
+          ];
           side_by_side = true;
           diff_context_lines = 8;
           entry_format = "state #$ID";

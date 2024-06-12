@@ -14,9 +14,18 @@
                 return "vendor/bin/phpunit"
               end
             '';
-            root_files = ["composer.json" "phpunit.xml" ".gitignore"];
-            filter_dirs = [".git" "node_modules"];
-            env = {XDEBUG_CONFIG = "idekey=neotest";};
+            root_files = [
+              "composer.json"
+              "phpunit.xml"
+              ".gitignore"
+            ];
+            filter_dirs = [
+              ".git"
+              "node_modules"
+            ];
+            env = {
+              XDEBUG_CONFIG = "idekey=neotest";
+            };
             dap = null;
           };
         };

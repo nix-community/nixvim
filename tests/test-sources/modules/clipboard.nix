@@ -9,7 +9,10 @@
 
   example-with-package = {
     clipboard = {
-      register = ["unnamed" "unnamedplus"];
+      register = [
+        "unnamed"
+        "unnamedplus"
+      ];
 
       providers.xsel.enable = true;
     };

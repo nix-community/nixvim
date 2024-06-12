@@ -5,21 +5,34 @@
   pkgs,
   ...
 }:
-with lib; let
-  lspHelpers = import ../helpers.nix {inherit lib config pkgs;};
-
+with lib;
+let
   servers = [
     {
       name = "ansiblels";
       description = "ansiblels for Ansible";
       package = pkgs.ansible-language-server;
-      cmd = cfg: ["${cfg.package}/bin/ansible-language-server" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/ansible-language-server"
+        "--stdio"
+      ];
+    }
+    {
+      name = "ast-grep";
+      description = ''
+        ast-grep(sg) is a fast and polyglot tool for code structural search, lint, rewriting at large scale.
+        ast-grep LSP only works in projects that have `sgconfig.y[a]ml` in their root directories.
+      '';
+      serverName = "ast_grep";
     }
     {
       name = "astro";
       description = "astrols for Astro";
       package = pkgs.nodePackages."@astrojs/language-server";
-      cmd = cfg: ["${cfg.package}/bin/astro-ls" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/astro-ls"
+        "--stdio"
+      ];
     }
     {
       name = "bashls";
@@ -65,7 +78,10 @@ with lib; let
       name = "cssls";
       description = "cssls for CSS";
       package = pkgs.vscode-langservers-extracted;
-      cmd = cfg: ["${cfg.package}/bin/vscode-css-language-server" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/vscode-css-language-server"
+        "--stdio"
+      ];
     }
     {
       name = "dagger";
@@ -76,92 +92,8 @@ with lib; let
       name = "dartls";
       description = "dart language-server";
       package = pkgs.dart;
-      settingsOptions = {
-        analysisExcludedFolders = mkOption {
-          type = types.nullOr (types.listOf types.str);
-          default = null;
-          description = ''
-            An array of paths (absolute or relative to each workspace folder) that should be
-            excluded from analysis.
-          '';
-        };
-        enableSdkFormatter = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-          description = ''
-            When set to false, prevents registration (or unregisters) the SDK formatter. When set
-            to true or not supplied, will register/reregister the SDK formatter
-          '';
-        };
-        lineLength = mkOption {
-          type = types.nullOr types.int;
-          default = null;
-          description = ''
-            The number of characters the formatter should wrap code at. If unspecified, code will
-            be wrapped at 80 characters.
-          '';
-        };
-        completeFunctionCalls = mkOption {
-          type = types.nullOr types.bool;
-          default = true;
-          description = ''
-            When set to true, completes functions/methods with their required parameters.
-          '';
-        };
-        showTodos = mkOption {
-          type = types.nullOr types.bool;
-          default = true;
-          description = ''
-            Whether to generate diagnostics for TODO comments. If unspecified, diagnostics will not
-            be generated.
-          '';
-        };
-        renameFilesWithClasses = mkOption {
-          type = types.nullOr (types.enum ["always" "prompt"]);
-          default = null;
-          description = ''
-            When set to "always", will include edits to rename files when classes are renamed if the
-            filename matches the class name (but in snake_form). When set to "prompt", a prompt will
-            be shown on each class rename asking to confirm the file rename. Otherwise, files will
-            not be renamed. Renames are performed using LSP's ResourceOperation edits - that means
-            the rename is simply included in the resulting WorkspaceEdit and must be handled by the
-            client.
-          '';
-        };
-        enableSnippets = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-          description = ''
-            Whether to include code snippets (such as class, stful, switch) in code completion. When
-            unspecified, snippets will be included.
-          '';
-        };
-        updateImportsOnRename = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-          description = ''
-            Whether to update imports and other directives when files are renamed. When unspecified,
-            imports will be updated if the client supports willRenameFiles requests
-          '';
-        };
-        documentation = mkOption {
-          type = types.nullOr (types.enum ["none" "summary" "full"]);
-          default = null;
-          description = ''
-            The typekind of dartdocs to include in Hovers, Code Completion, Signature Help and other
-            similar requests. If not set, defaults to full
-          '';
-        };
-        includeDependenciesInWorkspaceSymbols = mkOption {
-          type = types.nullOr types.bool;
-          default = null;
-          description = ''
-            Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol
-            results. If not set, defaults to true.
-          '';
-        };
-      };
-      settings = cfg: {dart = cfg;};
+      settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
+      settings = cfg: { dart = cfg; };
     }
     {
       name = "denols";
@@ -180,10 +112,18 @@ with lib; let
       package = pkgs.lua54Packages.digestif;
     }
     {
+      name = "docker-compose-language-service";
+      description = "docker-compose-language-service for Docker Compose";
+      serverName = "docker_compose_language_service";
+    }
+    {
       name = "dockerls";
       description = "dockerls for Dockerfile";
       package = pkgs.dockerfile-language-server-nodejs;
-      cmd = cfg: ["${cfg.package}/bin/docker-langserver" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/docker-langserver"
+        "--stdio"
+      ];
     }
     {
       name = "efm";
@@ -196,19 +136,23 @@ with lib; let
       package = pkgs.elmPackages.elm-language-server;
     }
     {
-      name = "emmet_ls";
+      name = "emmet-ls";
       description = "emmet_ls, emmet support based on LSP";
       package = pkgs.emmet-ls;
+      serverName = "emmet_ls";
     }
     {
       name = "eslint";
       package = pkgs.vscode-langservers-extracted;
-      cmd = cfg: ["${cfg.package}/bin/vscode-eslint-language-server" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/vscode-eslint-language-server"
+        "--stdio"
+      ];
     }
     {
       name = "elixirls";
       package = pkgs.elixir-ls;
-      cmd = cfg: ["${cfg.package}/bin/elixir-ls"];
+      cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
     }
     {
       name = "fortls";
@@ -264,13 +208,19 @@ with lib; let
       name = "hls";
       description = "haskell language server";
       package = pkgs.haskell-language-server;
-      cmd = cfg: ["haskell-language-server-wrapper" "--lsp"];
+      cmd = cfg: [
+        "haskell-language-server-wrapper"
+        "--lsp"
+      ];
     }
     {
       name = "html";
       description = "HTML language server from `vscode-langservers-extracted`";
       package = pkgs.vscode-langservers-extracted;
-      cmd = cfg: ["${cfg.package}/bin/vscode-html-language-server" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/vscode-html-language-server"
+        "--stdio"
+      ];
     }
     {
       name = "htmx";
@@ -286,13 +236,17 @@ with lib; let
       name = "java-language-server";
       description = "Java language server";
       serverName = "java_language_server";
-      cmd = cfg: ["${cfg.package}/bin/java-language-server"];
+      cmd = cfg: [ "${cfg.package}/bin/java-language-server" ];
     }
     {
       name = "jsonls";
       description = "jsonls for JSON";
       package = pkgs.vscode-langservers-extracted;
-      cmd = cfg: ["${cfg.package}/bin/vscode-json-language-server" "--stdio"];
+      cmd = cfg: [
+        "${cfg.package}/bin/vscode-json-language-server"
+        "--stdio"
+      ];
+      settings = cfg: { json = cfg; };
     }
     {
       name = "julials";
@@ -323,76 +277,16 @@ with lib; let
       name = "ltex";
       description = "ltex-ls for LanguageTool";
       package = pkgs.ltex-ls;
-      settingsOptions = import ./ltex-settings.nix {inherit lib helpers;};
-      settings = cfg: {ltex = cfg;};
+      settingsOptions = import ./ltex-settings.nix { inherit lib helpers; };
+      settings = cfg: { ltex = cfg; };
     }
     {
       name = "lua-ls";
       description = "lua-ls for Lua";
-      # Use the old name of the lua LS if the user is on a stable branch of nixpkgs
-      # Rename occurred here: https://github.com/NixOS/nixpkgs/pull/215057
-      package =
-        if (hasAttr "lua-language-server" pkgs)
-        then pkgs.lua-language-server
-        else pkgs.sumneko-lua-language-server;
+      package = pkgs.lua-language-server;
       serverName = "lua_ls";
-
-      # All available settings are documented here:
-      # https://github.com/LuaLS/lua-language-server/wiki/Settings
-      settingsOptions = {
-        runtime = {
-          version = mkOption {
-            type = types.nullOr types.str;
-            description = ''
-              Tell the language server which version of Lua you're using
-              (most likely LuaJIT in the case of Neovim)
-            '';
-            default = "LuaJIT";
-          };
-        };
-        diagnostics = {
-          globals = mkOption {
-            type = types.nullOr (types.listOf types.str);
-            description = ''
-              An array of variable names that will be declared as global.
-            '';
-            default = ["vim"];
-          };
-        };
-        workspace = {
-          library = mkOption {
-            type = with types;
-              nullOr
-              (
-                listOf
-                (either str helpers.nixvimTypes.rawLua)
-              );
-            description = ''
-              An array of abosolute or workspace-relative paths that will be added to the workspace
-              diagnosis - meaning you will get completion and context from these library files.
-              Can be a file or directory.
-              Files included here will have some features disabled such as renaming fields to
-              prevent accidentally renaming your library files.
-            '';
-            default = [(helpers.mkRaw "vim.api.nvim_get_runtime_file('', true)")];
-          };
-          checkThirdParty = mkOption {
-            type = types.nullOr types.bool;
-            description = ''
-              Whether third party libraries can be automatically detected and applied.
-              Third party libraries can set up the environment to be as close as possible to your
-              target runtime environment.
-            '';
-            # prevents an annoying warning
-            # https://github.com/LuaLS/lua-language-server/discussions/1688#discussioncomment-4185003
-            default = false;
-          };
-        };
-        telemetry = {
-          enable = mkEnableOption "telemetry";
-        };
-      };
-      settings = cfg: {Lua = cfg;};
+      settingsOptions = import ./lua-ls-settings.nix { inherit lib helpers; };
+      settings = cfg: { Lua = cfg; };
     }
     {
       name = "marksman";
@@ -404,40 +298,17 @@ with lib; let
       description = "metals for Scala";
     }
     {
-      name = "nil_ls";
+      name = "nginx-language-server";
+      description = "nginx-language-server for `nginx.conf`";
+      serverName = "nginx_language_server";
+    }
+    {
+      name = "nil-ls";
       description = "nil for Nix";
       package = pkgs.nil;
-      settingsOptions = {
-        formatting.command = mkOption {
-          type = types.nullOr (types.listOf types.str);
-          default = null;
-          description = ''
-            External formatter command (with arguments).
-            It should accepts file content in stdin and print the formatted code into stdout.
-          '';
-        };
-        diagnostics = {
-          ignored = mkOption {
-            type = types.listOf types.str;
-            default = [];
-            description = ''
-              Ignored diagnostic kinds.
-              The kind identifier is a snake_cased_string usually shown together
-              with the diagnostic message.
-            '';
-          };
-          excludedFiles = mkOption {
-            type = types.listOf types.str;
-            default = [];
-            description = ''
-              Files to exclude from showing diagnostics. Useful for generated files.
-              It accepts an array of paths. Relative paths are joint to the workspace root.
-              Glob patterns are currently not supported.
-            '';
-          };
-        };
-      };
-      settings = cfg: {nil = {inherit (cfg) formatting diagnostics;};};
+      serverName = "nil_ls";
+      settingsOptions = import ./nil-ls-settings.nix { inherit lib helpers; };
+      settings = cfg: { nil = cfg; };
     }
     {
       name = "nimls";
@@ -448,12 +319,19 @@ with lib; let
       name = "nixd";
       description = "nixd for Nix";
       package = pkgs.nixd;
-      settings = cfg: {nixd = cfg;};
+      settings = cfg: { nixd = cfg; };
+      settingsOptions = import ./nixd-settings.nix { inherit lib helpers; };
+      extraConfig = cfg: {
+        extraPackages = optional (cfg.settings.formatting.command == [ "nixpkgs-fmt" ]) pkgs.nixpkgs-fmt;
+      };
     }
     {
       name = "nushell";
       description = "Nushell language server";
-      cmd = cfg: ["${cfg.package}/bin/nu" "--lsp"];
+      cmd = cfg: [
+        "${cfg.package}/bin/nu"
+        "--lsp"
+      ];
     }
     {
       name = "ocamllsp";
@@ -469,8 +347,8 @@ with lib; let
       name = "omnisharp";
       description = "OmniSharp language server for C#";
       package = pkgs.omnisharp-roslyn;
-      cmd = cfg: ["${cfg.package}/bin/OmniSharp"];
-      settings = cfg: {omnisharp = cfg;};
+      cmd = cfg: [ "${cfg.package}/bin/OmniSharp" ];
+      settings = cfg: { omnisharp = cfg; };
       settingsOptions = {
         enableEditorConfigSupport = helpers.defaultNullOpts.mkBool true ''
           Enables support for reading code style, naming convention and analyzer settings from
@@ -525,9 +403,10 @@ with lib; let
       package = pkgs.perlPackages.PLS;
     }
     {
-      name = "pest_ls";
+      name = "pest-ls";
       description = "pest_ls for pest";
       package = pkgs.pest-ide-tools;
+      serverName = "pest_ls";
     }
     {
       name = "phpactor";
@@ -554,7 +433,7 @@ with lib; let
       name = "pylsp";
       description = "pylsp for Python";
       package = pkgs.python3Packages.python-lsp-server;
-      settings = cfg: {pylsp = cfg;};
+      settings = cfg: { pylsp = cfg; };
     }
     {
       name = "pylyzer";
@@ -565,10 +444,25 @@ with lib; let
       description = "pyright for Python";
     }
     {
+      name = "r-language-server";
+      description = "languageserver for R";
+      package = pkgs.rPackages.languageserver;
+      serverName = "r_language_server";
+    }
+    {
       name = "rnix-lsp";
       description = "rnix LSP for Nix";
       serverName = "rnix";
       package = null;
+    }
+    {
+      name = "ruby-lsp";
+      description = "ruby-lsp for Ruby";
+      serverName = "ruby_lsp";
+    }
+    {
+      name = "ruff";
+      description = "Official ruff language server (Rust) for Python";
     }
     {
       name = "ruff-lsp";
@@ -582,7 +476,7 @@ with lib; let
       serverName = "rust_analyzer";
 
       settingsOptions = import ./rust-analyzer-config.nix lib pkgs;
-      settings = cfg: {rust-analyzer = cfg;};
+      settings = cfg: { rust-analyzer = cfg; };
     }
     {
       name = "slint-lsp";
@@ -634,6 +528,7 @@ with lib; let
     {
       name = "tinymist";
       description = "tinymist for Typst";
+      settingsOptions = import ./tinymist-settings.nix { inherit lib helpers; };
     }
     {
       name = "tsserver";
@@ -668,6 +563,18 @@ with lib; let
       # The v language server has to be installed from v and thus is not packaged "as is" in
       # nixpkgs.
       package = null;
+      extraOptions = {
+        autoSetFiletype = mkOption {
+          type = types.bool;
+          description = ''
+            Files with the `.v` extension are not automatically detected as vlang files.
+            If this option is enabled, Nixvim will automatically set  the filetype accordingly.
+          '';
+          default = true;
+          example = false;
+        };
+      };
+      extraConfig = cfg: { filetype.extension = mkIf cfg.autoSetFiletype { v = "vlang"; }; };
     }
     {
       name = "vuels";
@@ -683,22 +590,26 @@ with lib; let
       name = "yamlls";
       description = "yamlls for YAML";
       package = pkgs.yaml-language-server;
+      settings = cfg: { yaml = cfg; };
     }
     {
       name = "zls";
       description = "zls for Zig";
     }
   ];
-in {
+in
+{
   imports =
-    lib.lists.map lspHelpers.mkLsp servers
+    let
+      mkLsp = import ./_mk-lsp.nix { inherit lib config pkgs; };
+      lspModules = map mkLsp servers;
+    in
+    lspModules
     ++ [
       ./ccls.nix
       ./efmls-configs.nix
-      ./nixd.nix
       ./pylsp.nix
       ./rust-analyzer.nix
       ./svelte.nix
-      ./vls.nix
     ];
 }

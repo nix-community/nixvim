@@ -55,7 +55,11 @@
         '';
       };
       toDo = {
-        symbols = [" " "-" "X"];
+        symbols = [
+          " "
+          "-"
+          "X"
+        ];
         updateParents = true;
         notStarted = " ";
         inProgress = "-";
@@ -74,7 +78,11 @@
       };
       mappings = {
         MkdnEnter = {
-          modes = ["n" "v" "i"];
+          modes = [
+            "n"
+            "v"
+            "i"
+          ];
           key = "<CR>";
         };
         MkdnTab = false;
@@ -106,7 +114,10 @@
         MkdnFollowLink = false;
         MkdnCreateLink = false;
         MkdnCreateLinkFromClipboard = {
-          modes = ["n" "v"];
+          modes = [
+            "n"
+            "v"
+          ];
           key = "<leader>p";
         };
         MkdnDestroyLink = {
@@ -134,7 +145,10 @@
           key = "-";
         };
         MkdnToggleToDo = {
-          modes = ["n" "v"];
+          modes = [
+            "n"
+            "v"
+          ];
           key = "<C-Space>";
         };
         MkdnNewListItem = false;

@@ -7,7 +7,11 @@
     plugins.neo-tree = {
       enable = true;
 
-      sources = ["filesystem" "buffers" "git_status"];
+      sources = [
+        "filesystem"
+        "buffers"
+        "git_status"
+      ];
 
       addBlankLineAtTop = false;
       autoCleanAfterSessionRestore = false;
@@ -238,7 +242,7 @@
           "bufnr"
         ];
       };
-      nestingRules = {};
+      nestingRules = { };
       window = {
         position = "left";
         width = 40;
@@ -268,7 +272,9 @@
           "<esc>" = "revert_preview";
           P = {
             command = "toggle_preview";
-            config = {use_float = true;};
+            config = {
+              use_float = true;
+            };
           };
           l = "focus_preview";
           S = "open_split";
@@ -340,10 +346,10 @@
             ".DS_Store"
             "thumbs.db"
           ];
-          hideByPattern = [];
-          alwaysShow = [];
-          neverShow = [];
-          neverShowByPattern = [];
+          hideByPattern = [ ];
+          alwaysShow = [ ];
+          neverShow = [ ];
+          neverShowByPattern = [ ];
         };
         findByFullPathWords = false;
         findCommand = "fd";

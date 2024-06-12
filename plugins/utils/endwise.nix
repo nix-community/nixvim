@@ -10,7 +10,7 @@ helpers.vim-plugin.mkVimPlugin config {
   originalName = "vim-endwise";
   defaultPackage = pkgs.vimPlugins.vim-endwise;
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # This plugin has no config options
 }

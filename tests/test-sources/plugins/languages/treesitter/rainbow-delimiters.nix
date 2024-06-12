@@ -41,7 +41,10 @@
           "RainbowDelimiterViolet"
           "RainbowDelimiterCyan"
         ];
-        blacklist = ["c" "cpp"];
+        blacklist = [
+          "c"
+          "cpp"
+        ];
         log = {
           file.__raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'";
           level = "warn";
@@ -56,7 +59,10 @@
       rainbow-delimiters = {
         enable = true;
 
-        whitelist = ["c" "cpp"];
+        whitelist = [
+          "c"
+          "cpp"
+        ];
       };
     };
   };

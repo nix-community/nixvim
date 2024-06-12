@@ -15,7 +15,7 @@
         after = null;
         emptyLinesBetweenMappings = true;
         disableStatuslines = true;
-        paddings = [];
+        paddings = [ ];
       };
       mappings = {
         executeCommand = "<CR>";
@@ -71,12 +71,36 @@
           title = "Basic Commands";
           margin = 5;
           content = [
-            [" Find File" "Telescope find_files" "<leader>ff"]
-            ["󰍉 Find Word" "Telescope live_grep" "<leader>lg"]
-            [" Recent Files" "Telescope oldfiles" "<leader>of"]
-            [" File Browser" "Telescope file_browser" "<leader>fb"]
-            [" Colorschemes" "Telescope colorscheme" "<leader>cs"]
-            [" New File" "lua require'startup'.new_file()" "<leader>nf"]
+            [
+              " Find File"
+              "Telescope find_files"
+              "<leader>ff"
+            ]
+            [
+              "󰍉 Find Word"
+              "Telescope live_grep"
+              "<leader>lg"
+            ]
+            [
+              " Recent Files"
+              "Telescope oldfiles"
+              "<leader>of"
+            ]
+            [
+              " File Browser"
+              "Telescope file_browser"
+              "<leader>fb"
+            ]
+            [
+              " Colorschemes"
+              "Telescope colorscheme"
+              "<leader>cs"
+            ]
+            [
+              " New File"
+              "lua require'startup'.new_file()"
+              "<leader>nf"
+            ]
           ];
           highlight = "String";
           defaultColor = "";
@@ -89,7 +113,7 @@
           foldSection = true;
           title = "Oldfiles of Directory";
           margin = 5;
-          content = [];
+          content = [ ];
           highlight = "String";
           defaultColor = "#FFFFFF";
           oldfilesAmount = 5;
@@ -101,7 +125,7 @@
           foldSection = true;
           title = "Oldfiles";
           margin = 5;
-          content = ["startup.nvim"];
+          content = [ "startup.nvim" ];
           highlight = "TSString";
           defaultColor = "#FFFFFF";
           oldfilesAmount = 5;
@@ -147,7 +171,15 @@
         cursorColumn = 0.5;
         emptyLinesBetweenMappings = true;
         disableStatuslines = true;
-        paddings = [2 2 2 2 2 2 2];
+        paddings = [
+          2
+          2
+          2
+          2
+          2
+          2
+          2
+        ];
       };
       colors = {
         background = "#1f2227";

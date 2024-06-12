@@ -1,20 +1,26 @@
+{ modules, helpers }:
 {
-  modules,
-  helpers,
-}: {
   lib,
   pkgs,
   config,
   ...
-}: let
-  inherit (lib) mkEnableOption mkOption mkOptionType mkForce mkMerge mkIf types;
-in {
-  topLevelModules =
-    [
-      ./modules/output.nix
-      (import ./modules/files.nix (modules pkgs))
-    ]
-    ++ (modules pkgs);
+}:
+let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkOptionType
+    mkForce
+    mkMerge
+    mkIf
+    types
+    ;
+in
+{
+  topLevelModules = [
+    ./modules/output.nix
+    (import ./modules/files.nix (modules pkgs))
+  ] ++ (modules pkgs);
 
   helpers = mkOption {
     type = mkOptionType {
@@ -26,27 +32,12 @@ in {
     default = helpers;
   };
 
-  configFiles = let
-    cfg = config.programs.nixvim;
-  in
-    (
-      lib.mapAttrs'
-      (
-        _: file:
-          lib.nameValuePair
-          "nvim/${file.path}"
-          {text = file.content;}
-      )
-      cfg.files
-    )
-    // (
-      lib.mapAttrs'
-      (
-        path: content:
-          lib.nameValuePair
-          "nvim/${path}"
-          {text = content;}
-      )
-      cfg.extraFiles
-    );
+  configFiles =
+    let
+      cfg = config.programs.nixvim;
+    in
+    (lib.mapAttrs' (_: file: lib.nameValuePair "nvim/${file.path}" { text = file.content; }) cfg.files)
+    // (lib.mapAttrs' (
+      path: content: lib.nameValuePair "nvim/${path}" { text = content; }
+    ) cfg.extraFiles);
 }

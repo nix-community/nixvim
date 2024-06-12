@@ -5,11 +5,12 @@
   pkgs,
   ...
 }:
-with lib; {
+with lib;
+{
   options.plugins.plantuml-syntax = {
     enable = mkEnableOption "plantuml syntax support";
 
-    package = helpers.mkPackageOption "plantuml-syntax" pkgs.vimPlugins.plantuml-syntax;
+    package = helpers.mkPluginPackageOption "plantuml-syntax" pkgs.vimPlugins.plantuml-syntax;
 
     setMakeprg = mkOption {
       type = types.bool;
@@ -23,11 +24,12 @@ with lib; {
     };
   };
 
-  config = let
-    cfg = config.plugins.plantuml-syntax;
-  in
+  config =
+    let
+      cfg = config.plugins.plantuml-syntax;
+    in
     mkIf cfg.enable {
-      extraPlugins = [cfg.package];
+      extraPlugins = [ cfg.package ];
 
       globals = {
         plantuml_set_makeprg = cfg.setMakeprg;

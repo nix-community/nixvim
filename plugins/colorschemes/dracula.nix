@@ -5,14 +5,16 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.colorschemes.dracula;
-in {
+in
+{
   options = {
     colorschemes.dracula = {
       enable = mkEnableOption "dracula";
 
-      package = helpers.mkPackageOption "dracula" pkgs.vimPlugins.dracula-vim;
+      package = helpers.mkPluginPackageOption "dracula" pkgs.vimPlugins.dracula-vim;
 
       bold = mkOption {
         type = types.bool;
@@ -63,7 +65,7 @@ in {
 
   config = mkIf cfg.enable {
     colorscheme = "dracula";
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
 
     globals = {
       dracula_bold = mkIf (!cfg.bold) 0;

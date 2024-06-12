@@ -18,9 +18,7 @@
     github = "MattSturgeon";
     githubId = 5046562;
     name = "Matt Sturgeon";
-    keys = [
-      {fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299";}
-    ];
+    keys = [ { fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299"; } ];
   };
   DanielLaing = {
     email = "daniel@daniellaing.com";
@@ -28,9 +26,7 @@
     github = "Bodleum";
     githubId = 60107449;
     name = "Daniel Laing";
-    keys = [
-      {fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8";}
-    ];
+    keys = [ { fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8"; } ];
   };
   JanKremer = {
     email = "mail@jankremer.eu";
@@ -38,9 +34,7 @@
     github = "janurskremer";
     githubId = 79042825;
     name = "Jan Kremer";
-    keys = [
-      {fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC";}
-    ];
+    keys = [ { fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC"; } ];
   };
   NathanFelber = {
     email = "nathan@pascaline.org";
@@ -53,5 +47,30 @@
     github = "Kareem-Medhat";
     githubId = 39652808;
     name = "Kareem Medhat";
+  };
+  AndresBermeoMarinelli = {
+    email = "andres_bermeo@outlook.com";
+    github = "theabm";
+    githubId = 72303015;
+    name = "Andres Bermeo Marinelli";
+  };
+  svl = {
+    matrix = "@gyn:matrix.org";
+    github = "4lxs";
+    githubId = 66408983;
+    name = "svl";
+  };
+  nwjsmith = {
+    email = "nate@theinternate.com";
+    github = "nwjsmith";
+    githubId = 1348;
+    name = "Nate Smith";
+    keys = [ { fingerprint = "DE6F E362 7DF7 EEA0 79CB  38C1 F208 9547 768B 6CCA"; } ];
+  };
+  b3nb5n = {
+    email = "benbaldwin000@gmail.com";
+    github = "b3nb5n";
+    githubId = 67534814;
+    name = "Ben";
   };
 }

@@ -47,20 +47,53 @@
           v = "V";
           V = "V";
         };
-        exclude_filenames = [];
-        exclude_filetypes = [];
+        exclude_filenames = [ ];
+        exclude_filetypes = [ ];
         filetype_overrides = {
-          coc-explorer = ["CoC Explorer" ""];
-          defx = ["defx" "%{b:defx.paths[0]}"];
-          fugitive = ["fugitive" "%{airline#util#wrap(airline#extensions#branch#get_head(),80)}"];
-          gundo = ["Gundo" ""];
-          help = ["Help" "%f"];
-          minibufexpl = ["MiniBufExplorer" ""];
-          startify = ["startify" ""];
-          vim-plug = ["Plugins" ""];
-          vimfiler = ["vimfiler" "%{vimfiler#get_status_string()}"];
-          vimshell = ["vimshell" "%{vimshell#get_status_string()}"];
-          vaffle = ["Vaffle" "%{b:vaffle.dir}"];
+          coc-explorer = [
+            "CoC Explorer"
+            ""
+          ];
+          defx = [
+            "defx"
+            "%{b:defx.paths[0]}"
+          ];
+          fugitive = [
+            "fugitive"
+            "%{airline#util#wrap(airline#extensions#branch#get_head(),80)}"
+          ];
+          gundo = [
+            "Gundo"
+            ""
+          ];
+          help = [
+            "Help"
+            "%f"
+          ];
+          minibufexpl = [
+            "MiniBufExplorer"
+            ""
+          ];
+          startify = [
+            "startify"
+            ""
+          ];
+          vim-plug = [
+            "Plugins"
+            ""
+          ];
+          vimfiler = [
+            "vimfiler"
+            "%{vimfiler#get_status_string()}"
+          ];
+          vimshell = [
+            "vimshell"
+            "%{vimshell#get_status_string()}"
+          ];
+          vaffle = [
+            "Vaffle"
+            "%{b:vaffle.dir}"
+          ];
         };
         exclude_preview = false;
         disable_statusline = false;

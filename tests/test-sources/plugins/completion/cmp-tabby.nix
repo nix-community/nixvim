@@ -2,9 +2,7 @@
   empty = {
     plugins.cmp = {
       enable = true;
-      settings.sources = [
-        {name = "cmp_tabby";}
-      ];
+      settings.sources = [ { name = "cmp_tabby"; } ];
     };
   };
 
@@ -12,15 +10,13 @@
     plugins = {
       cmp = {
         enable = true;
-        settings.sources = [
-          {name = "cmp_tabby";}
-        ];
+        settings.sources = [ { name = "cmp_tabby"; } ];
       };
       cmp-tabby = {
         host = "http://localhost:5000";
         maxLines = 100;
         runOnEveryKeyStroke = true;
-        stop = ["\n"];
+        stop = [ "\n" ];
       };
     };
   };

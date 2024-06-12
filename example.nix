@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
     # This just enables NixVim.
     # If all you have is this, then there will be little visible difference
@@ -60,8 +61,16 @@
         # This is one of lightline's example configurations
         active = {
           left = [
-            ["mode" "paste"]
-            ["readonly" "filename" "modified" "helloworld"]
+            [
+              "mode"
+              "paste"
+            ]
+            [
+              "readonly"
+              "filename"
+              "modified"
+              "helloworld"
+            ]
           ];
         };
 
@@ -80,6 +89,6 @@
 
     # What about plugins not available as a module?
     # Use extraPlugins:
-    extraPlugins = with pkgs.vimPlugins; [vim-toml];
+    extraPlugins = with pkgs.vimPlugins; [ vim-toml ];
   };
 }

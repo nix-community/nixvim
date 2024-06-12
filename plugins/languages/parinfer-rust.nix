@@ -10,12 +10,19 @@ helpers.vim-plugin.mkVimPlugin config {
   defaultPackage = pkgs.vimPlugins.parinfer-rust;
   globalPrefix = "parinfer_";
 
-  maintainers = [lib.maintainers.GaetanLepage];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    mode = helpers.defaultNullOpts.mkEnumFirstDefault ["smart" "indent" "paren"] ''
-      The mode used to process buffer changes.
-    '';
+    mode =
+      helpers.defaultNullOpts.mkEnumFirstDefault
+        [
+          "smart"
+          "indent"
+          "paren"
+        ]
+        ''
+          The mode used to process buffer changes.
+        '';
 
     force_balance = helpers.defaultNullOpts.mkBool false ''
       In smart mode and indent mode, parinfer will sometimes leave unbalanced brackets around the

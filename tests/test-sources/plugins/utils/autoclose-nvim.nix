@@ -1,5 +1,7 @@
 {
-  empty = {plugins.autoclose.enable = true;};
+  empty = {
+    plugins.autoclose.enable = true;
+  };
 
   defaults = {
     plugins.autoclose.enable = true;
@@ -59,7 +61,7 @@
       };
 
       options = {
-        disabledFiletypes = ["text"];
+        disabledFiletypes = [ "text" ];
         disableWhenTouch = false;
         touchRegex = "[%w(%[{]";
         pairSpaces = false;

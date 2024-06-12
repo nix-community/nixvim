@@ -3,7 +3,8 @@
   nixvimOptions,
   nixvimTypes,
 }:
-with lib; rec {
+with lib;
+rec {
   autoGroupOption = types.submodule {
     options = {
       clear = mkOption {
@@ -75,7 +76,5 @@ with lib; rec {
     nested = nixvimOptions.defaultNullOpts.mkBool false "Run nested autocommands.";
   };
 
-  autoCmdOption = types.submodule {
-    options = autoCmdOptions;
-  };
+  autoCmdOption = types.submodule { options = autoCmdOptions; };
 }

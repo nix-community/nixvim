@@ -5,17 +5,19 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.mini;
-in {
+in
+{
   options.plugins.mini = {
     enable = mkEnableOption "mini.nvim";
 
-    package = helpers.mkPackageOption "mini.nvim" pkgs.vimPlugins.mini-nvim;
+    package = helpers.mkPluginPackageOption "mini.nvim" pkgs.vimPlugins.mini-nvim;
 
     modules = mkOption {
       type = with types; attrsOf attrs;
-      default = {};
+      default = { };
       description = ''
         Enable and configure the mini modules.
         The keys are the names of the modules (without the `mini.` prefix).
@@ -27,22 +29,18 @@ in {
           n_lines = 50;
           search_method = "cover_or_next";
         };
-        surround = {};
+        surround = { };
       };
     };
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
 
-    extraConfigLua =
-      concatLines
-      (
-        mapAttrsToList
-        (
-          name: config: "require('mini.${name}').setup(${helpers.toLuaObject config})"
-        )
-        cfg.modules
-      );
+    extraConfigLua = concatLines (
+      mapAttrsToList (
+        name: config: "require('mini.${name}').setup(${helpers.toLuaObject config})"
+      ) cfg.modules
+    );
   };
 }

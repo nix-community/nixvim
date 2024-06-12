@@ -9,13 +9,16 @@
       picker = "select";
       lsp = {
         config = {
-          cmd = ["zk" "lsp"];
+          cmd = [
+            "zk"
+            "lsp"
+          ];
           name = "zk";
         };
 
         autoAttach = {
           enabled = true;
-          filetypes = ["markdown"];
+          filetypes = [ "markdown" ];
         };
       };
     };

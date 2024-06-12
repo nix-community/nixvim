@@ -1,23 +1,41 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   imports = [
-    inputs.pre-commit-hooks.flakeModule
+    inputs.git-hooks.flakeModule
+    inputs.treefmt-nix.flakeModule
     ./devshell.nix
   ];
 
-  perSystem = {pkgs, ...}: {
-    formatter = pkgs.alejandra;
+  perSystem =
+    { pkgs, config, ... }:
+    let
+      fmt = pkgs.nixfmt-rfc-style;
+    in
+    {
+      treefmt.config = {
+        projectRootFile = "flake.nix";
 
-    pre-commit = {
-      settings.hooks = {
-        alejandra.enable = true;
-        statix = {
-          enable = true;
-          excludes = [
-            "plugins/lsp/language-servers/rust-analyzer-config.nix"
-          ];
+        programs = {
+          nixfmt = {
+            enable = true;
+            package = fmt;
+          };
+          statix.enable = true;
         };
-        typos.enable = true;
+      };
+
+      pre-commit = {
+        settings.hooks = {
+          nixfmt = {
+            enable = true;
+            package = fmt;
+          };
+          statix = {
+            enable = true;
+            excludes = [ "plugins/lsp/language-servers/rust-analyzer-config.nix" ];
+          };
+          typos.enable = true;
+        };
       };
     };
-  };
 }

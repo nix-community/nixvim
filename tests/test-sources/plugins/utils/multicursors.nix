@@ -1,11 +1,17 @@
 {
   empty = {
-    plugins.multicursors.enable = true;
+    # ERROR: [Hydra.nvim] Option "hint.border" has been deprecated and will be removed on 2024-02-01 -- See hint.float_opts
+    # Will be fixed by:
+    # https://github.com/smoka7/multicursors.nvim/pull/91
+    plugins.multicursors.enable = false;
   };
 
   example = {
     plugins.multicursors = {
-      enable = true;
+      # ERROR: [Hydra.nvim] Option "hint.border" has been deprecated and will be removed on 2024-02-01 -- See hint.float_opts
+      # Will be fixed by:
+      # https://github.com/smoka7/multicursors.nvim/pull/91
+      enable = false;
 
       debugMode = false;
       createCommands = true;
@@ -19,7 +25,9 @@
           method = "require 'multicursors.normal_mode'.clear_others";
 
           # you can pass :map-arguments here
-          opts = {desc = "Clear others";};
+          opts = {
+            desc = "Clear others";
+          };
         };
         "<C-/>" = {
           method = ''
@@ -33,7 +41,9 @@
               )
             end
           '';
-          opts = {desc = "comment selections";};
+          opts = {
+            desc = "comment selections";
+          };
         };
       };
       insertKeys = null;

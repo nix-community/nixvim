@@ -6,280 +6,283 @@
   ...
 }:
 with lib;
-  helpers.neovim-plugin.mkNeovimPlugin config {
-    name = "hop";
-    originalName = "hop.nvim";
-    defaultPackage = pkgs.vimPlugins.hop-nvim;
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "hop";
+  originalName = "hop.nvim";
+  defaultPackage = pkgs.vimPlugins.hop-nvim;
 
-    maintainers = [maintainers.GaetanLepage];
+  maintainers = [ maintainers.GaetanLepage ];
 
-    description = ''
-      Hop doesn’t set any keybindings; you will have to define them by yourself.
-      If you want to create a key binding from within nixvim:
-      ```nix
-        keymaps = [
-          {
-            key = "f";
-            action.__raw = \'\'
-              function()
-                require'hop'.hint_char1({
-                  direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
-                  current_line_only = true
-                })
-              end
-            \'\';
-            options.remap = true;
-          }
-          {
-            key = "F";
-            action.__raw = \'\'
-              function()
-                require'hop'.hint_char1({
-                  direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
-                  current_line_only = true
-                })
-              end
-            \'\';
-            options.remap = true;
-          }
-          {
-            key = "t";
-            action.__raw = \'\'
-              function()
-                require'hop'.hint_char1({
-                  direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
-                  current_line_only = true,
-                  hint_offset = -1
-                })
-              end
-            \'\';
-            options.remap = true;
-          }
-          {
-            key = "T";
-            action.__raw = \'\'
-              function()
-                require'hop'.hint_char1({
-                  direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
-                  current_line_only = true,
-                  hint_offset = 1
-                })
-              end
-            \'\';
-            options.remap = true;
-          }
-        ];
-      ```
+  description = ''
+    Hop doesn’t set any keybindings; you will have to define them by yourself.
+    If you want to create a key binding from within nixvim:
+    ```nix
+      keymaps = [
+        {
+          key = "f";
+          action.__raw = \'\'
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+                current_line_only = true
+              })
+            end
+          \'\';
+          options.remap = true;
+        }
+        {
+          key = "F";
+          action.__raw = \'\'
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+                current_line_only = true
+              })
+            end
+          \'\';
+          options.remap = true;
+        }
+        {
+          key = "t";
+          action.__raw = \'\'
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+                current_line_only = true,
+                hint_offset = -1
+              })
+            end
+          \'\';
+          options.remap = true;
+        }
+        {
+          key = "T";
+          action.__raw = \'\'
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+                current_line_only = true,
+                hint_offset = 1
+              })
+            end
+          \'\';
+          options.remap = true;
+        }
+      ];
+    ```
+  '';
+
+  settingsOptions = {
+    keys = helpers.defaultNullOpts.mkStr "asdghklqwertyuiopzxcvbnmfj" ''
+      A string representing all the keys that can be part of a permutation.
+      Every character (key) used in the string will be used as part of a permutation.
+      The shortest permutation is a permutation of a single character, and, depending on the
+      content of your buffer, you might end up with 3-character (or more) permutations in worst
+      situations.
+
+      However, it is important to notice that if you decide to provide `keys`, you have to ensure
+      to use enough characters in the string, otherwise you might get very long sequences and a
+      not so pleasant experience.
     '';
 
-    settingsOptions = {
-      keys = helpers.defaultNullOpts.mkStr "asdghklqwertyuiopzxcvbnmfj" ''
-        A string representing all the keys that can be part of a permutation.
-        Every character (key) used in the string will be used as part of a permutation.
-        The shortest permutation is a permutation of a single character, and, depending on the
-        content of your buffer, you might end up with 3-character (or more) permutations in worst
-        situations.
+    quit_key = helpers.defaultNullOpts.mkStr "<Esc>" ''
+      A string representing a key that will quit Hop mode without also feeding that key into
+      Neovim to be treated as a normal key press.
 
-        However, it is important to notice that if you decide to provide `keys`, you have to ensure
-        to use enough characters in the string, otherwise you might get very long sequences and a
-        not so pleasant experience.
-      '';
+      It is possible to quit hopping by pressing any key that is not present in |hop-config-keys|;
+      however, when you do this, the key normal function is also performed.
+      For example if, hopping in |visual-mode|, pressing <Esc> will quit hopping and also exit
+      |visual-mode|.
 
-      quit_key = helpers.defaultNullOpts.mkStr "<Esc>" ''
-        A string representing a key that will quit Hop mode without also feeding that key into
-        Neovim to be treated as a normal key press.
+      If the user presses `quit_key`, Hop will be quit without the key normal function being
+      performed.
+      For example if hopping in |visual-mode| with `quit_key` set to '<Esc>', pressing <Esc> will
+      quit hopping without quitting |visual-mode|.
 
-        It is possible to quit hopping by pressing any key that is not present in |hop-config-keys|;
-        however, when you do this, the key normal function is also performed.
-        For example if, hopping in |visual-mode|, pressing <Esc> will quit hopping and also exit
-        |visual-mode|.
+      If you don't want to use a `quit_key`, set `quit_key` to an empty string.
 
-        If the user presses `quit_key`, Hop will be quit without the key normal function being
-        performed.
-        For example if hopping in |visual-mode| with `quit_key` set to '<Esc>', pressing <Esc> will
-        quit hopping without quitting |visual-mode|.
+      Note: `quit_key` should only contain a single key or be an empty string.
 
-        If you don't want to use a `quit_key`, set `quit_key` to an empty string.
+      Note: `quit_key` should not contain a key that is also present in |hop-config-keys|.
+    '';
 
-        Note: `quit_key` should only contain a single key or be an empty string.
+    perm_method = helpers.defaultNullOpts.mkLuaFn "require'hop.perm'.TrieBacktrackFilling" ''
+      Permutation method to use.
 
-        Note: `quit_key` should not contain a key that is also present in |hop-config-keys|.
-      '';
+      Permutation methods allow to change the way permutations (i.e. hints sequence labels) are
+      generated internally.
+      There is currently only one possible option:
+      - `TrieBacktrackFilling`:
+        Permutation algorithm based on tries and backtrack filling.
 
-      perm_method = helpers.defaultNullOpts.mkLuaFn "require'hop.perm'.TrieBacktrackFilling" ''
-        Permutation method to use.
+        This algorithm uses the full potential of |hop-config-keys| by using them all to saturate
+        a trie, representing all the permutations.
+        Once a layer is saturated, this algorithm will backtrack (from the end of the trie,
+        deepest first) and create a new layer in the trie, ensuring that the first permutations
+        will be shorter than the last ones.
 
-        Permutation methods allow to change the way permutations (i.e. hints sequence labels) are
-        generated internally.
-        There is currently only one possible option:
-        - `TrieBacktrackFilling`:
-          Permutation algorithm based on tries and backtrack filling.
+        Because of the last, deepest trie insertion mechanism and trie saturation, this algorithm
+        yields a much better distribution across your buffer, and you should get 1-sequences and
+        2-sequences most of the time.
+        Each dimension grows exponentially, so you get `keys_length²` 2-sequence keys,
+        `keys_length³` 3-sequence keys, etc in the worst cases.
+    '';
 
-          This algorithm uses the full potential of |hop-config-keys| by using them all to saturate
-          a trie, representing all the permutations.
-          Once a layer is saturated, this algorithm will backtrack (from the end of the trie,
-          deepest first) and create a new layer in the trie, ensuring that the first permutations
-          will be shorter than the last ones.
+    reverse_distribution = helpers.defaultNullOpts.mkBool false ''
+      The default behavior for key sequence distribution in your buffer is to concentrate shorter
+      sequences near the cursor, grouping 1-character sequences around.
+      As hints get further from the cursor, the dimension of the sequences will grow, making the
+      furthest sequences the longest ones to type.
 
-          Because of the last, deepest trie insertion mechanism and trie saturation, this algorithm
-          yields a much better distribution across your buffer, and you should get 1-sequences and
-          2-sequences most of the time.
-          Each dimension grows exponentially, so you get `keys_length²` 2-sequence keys,
-          `keys_length³` 3-sequence keys, etc in the worst cases.
-      '';
+      Set this option to `true` to reverse the density and concentrate the shortest sequences
+      (1-character) around the furthest words and the longest sequences around the cursor.
+    '';
 
-      reverse_distribution = helpers.defaultNullOpts.mkBool false ''
-        The default behavior for key sequence distribution in your buffer is to concentrate shorter
-        sequences near the cursor, grouping 1-character sequences around.
-        As hints get further from the cursor, the dimension of the sequences will grow, making the
-        furthest sequences the longest ones to type.
+    x_bias = helpers.defaultNullOpts.mkUnsignedInt 10 ''
+      This Determines which hints get shorter key sequences.
+      The default value has a more balanced distribution around the cursor but increasing it means
+      that hints which are closer vertically will have a shorter key sequences.
 
-        Set this option to `true` to reverse the density and concentrate the shortest sequences
-        (1-character) around the furthest words and the longest sequences around the cursor.
-      '';
+      For instance, when `x_bias` is set to 100, hints located at the end of the line will have
+      shorter key sequence compared to hints in the lines above or below.
+    '';
 
-      x_bias = helpers.defaultNullOpts.mkUnsignedInt 10 ''
-        This Determines which hints get shorter key sequences.
-        The default value has a more balanced distribution around the cursor but increasing it means
-        that hints which are closer vertically will have a shorter key sequences.
+    teasing = helpers.defaultNullOpts.mkBool true ''
+      Boolean value stating whether Hop should tease you when you do something you are not
+      supposed to.
 
-        For instance, when `x_bias` is set to 100, hints located at the end of the line will have
-        shorter key sequence compared to hints in the lines above or below.
-      '';
+      If you find this setting annoying, feel free to turn it to `false`.
+    '';
 
-      teasing = helpers.defaultNullOpts.mkBool true ''
-        Boolean value stating whether Hop should tease you when you do something you are not
-        supposed to.
+    virtual_cursor = helpers.defaultNullOpts.mkBool true ''
+      Creates a virtual cursor in place of actual cursor when hop waits for
+      user input to indicate the active window.
+    '';
 
-        If you find this setting annoying, feel free to turn it to `false`.
-      '';
+    jump_on_sole_occurrence = helpers.defaultNullOpts.mkBool true ''
+      Immediately jump without displaying hints if only one occurrence exists.
+    '';
 
-      virtual_cursor = helpers.defaultNullOpts.mkBool true ''
-        Creates a virtual cursor in place of actual cursor when hop waits for
-        user input to indicate the active window.
-      '';
+    ignore_injections = helpers.defaultNullOpts.mkBool false ''
+      Ignore injected languages when jumping to treesitter node.
+    '';
 
-      jump_on_sole_occurrence = helpers.defaultNullOpts.mkBool true ''
-        Immediately jump without displaying hints if only one occurrence exists.
-      '';
+    case_insensitive = helpers.defaultNullOpts.mkBool true ''
+      Use case-insensitive matching by default for commands requiring user input.
+    '';
 
-      ignore_injections = helpers.defaultNullOpts.mkBool false ''
-        Ignore injected languages when jumping to treesitter node.
-      '';
+    create_hl_autocmd = helpers.defaultNullOpts.mkBool true ''
+      Create and set highlight autocommands to automatically apply highlights.
+      You will want this if you use a theme that clears all highlights before
+      applying its colorscheme.
+    '';
 
-      case_insensitive = helpers.defaultNullOpts.mkBool true ''
-        Use case-insensitive matching by default for commands requiring user input.
-      '';
+    dim_unmatched = helpers.defaultNullOpts.mkBool true ''
+      Whether or not dim the unmatched text to emphasize the hint chars.
+    '';
 
-      create_hl_autocmd = helpers.defaultNullOpts.mkBool true ''
-        Create and set highlight autocommands to automatically apply highlights.
-        You will want this if you use a theme that clears all highlights before
-        applying its colorscheme.
-      '';
+    direction = helpers.mkNullOrLua ''
+      Direction in which to hint.
+      See `|hop.hint.HintDirection|` for further details.
 
-      dim_unmatched = helpers.defaultNullOpts.mkBool true ''
-        Whether or not dim the unmatched text to emphasize the hint chars.
-      '';
+      Setting this in the user configuration will make all commands default to that direction,
+      unless overridden.
+    '';
 
-      direction = helpers.mkNullOrLua ''
-        Direction in which to hint.
-        See `|hop.hint.HintDirection|` for further details.
+    hint_position = helpers.defaultNullOpts.mkLua "require'hop.hint'.HintPosition.BEGIN" ''
+      Position of hint in match. See |hop.hint.HintPosition| for further
+      details.
+    '';
 
-        Setting this in the user configuration will make all commands default to that direction,
-        unless overridden.
-      '';
+    hint_type = helpers.defaultNullOpts.mkLua "require'hop.hint'.HintType.OVERLAY" ''
+      How to show the hint char.
 
-      hint_position = helpers.defaultNullOpts.mkLua "require'hop.hint'.HintPosition.BEGIN" ''
-        Position of hint in match. See |hop.hint.HintPosition| for further
-        details.
-      '';
+      Possible values:
+      - "overlay": display over the specified column, without shifting the underlying text.
+      - "inline": display at the specified column, and shift the buffer text to the right as needed.
+    '';
 
-      hint_type = helpers.defaultNullOpts.mkLua "require'hop.hint'.HintType.OVERLAY" ''
-        How to show the hint char.
+    hint_offset = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+      Offset to apply to a jump location.
 
-        Possible values:
-        - "overlay": display over the specified column, without shifting the underlying text.
-        - "inline": display at the specified column, and shift the buffer text to the right as needed.
-      '';
+      If it is non-zero, the jump target will be offset horizontally from the selected jump position
+      by `hint_offset` character(s).
 
-      hint_offset = helpers.defaultNullOpts.mkUnsignedInt 0 ''
-        Offset to apply to a jump location.
+      This option can be used for emulating the motion commands |t| and |T| where the cursor is
+      positioned on/before the target position.
+    '';
 
-        If it is non-zero, the jump target will be offset horizontally from the selected jump position
-        by `hint_offset` character(s).
+    current_line_only = helpers.defaultNullOpts.mkBool false ''
+      Apply Hop commands only to the current line.
 
-        This option can be used for emulating the motion commands |t| and |T| where the cursor is
-        positioned on/before the target position.
-      '';
+      Note: Trying to use this option along with `multi_windows` is unsound.
+    '';
 
-      current_line_only = helpers.defaultNullOpts.mkBool false ''
-        Apply Hop commands only to the current line.
+    uppercase_labels = helpers.defaultNullOpts.mkBool false ''
+      Display labels as uppercase.
+      This option only affects the displayed labels; you still select them by typing the keys on your
+      keyboard.
+    '';
 
-        Note: Trying to use this option along with `multi_windows` is unsound.
-      '';
+    yank_register = helpers.defaultNullOpts.mkStr "" ''
+      Determines which one of the `registers` stores the yanked text.
+    '';
 
-      uppercase_labels = helpers.defaultNullOpts.mkBool false ''
-        Display labels as uppercase.
-        This option only affects the displayed labels; you still select them by typing the keys on your
-        keyboard.
-      '';
+    extensions = helpers.mkNullOrOption (with types; listOf str) ''
+      List-table of extensions to enable (names).
+      As described in `|hop-extension|`, extensions for which the name in that list must have a
+      `register(opts)` function in their public API for Hop to correctly initialized them.
+    '';
 
-      yank_register = helpers.defaultNullOpts.mkStr "" ''
-        Determines which one of the `registers` stores the yanked text.
-      '';
+    multi_windows = helpers.defaultNullOpts.mkBool false ''
+      Enable cross-windows support and hint all the currently visible windows.
+      This behavior allows you to jump around any position in any buffer currently visible in a
+      window.
+      Although a powerful a feature, remember that enabling this will also generate many more
+      sequence combinations, so you could get deeper sequences to type (most of the time it
+      should be good if you have enough keys in `|hop-config-keys|`).
+    '';
 
-      extensions = helpers.mkNullOrOption (with types; listOf str) ''
-        List-table of extensions to enable (names).
-        As described in `|hop-extension|`, extensions for which the name in that list must have a
-        `register(opts)` function in their public API for Hop to correctly initialized them.
-      '';
+    excluded_filetypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+      Skip hinting windows with the excluded filetypes.
+      Those windows to check filetypes are collected only when you enable `multi_windows` or
+      execute `MW`-commands.
+      This option is useful to skip the windows which are only for displaying something but not
+      for editing.
+    '';
 
-      multi_windows = helpers.defaultNullOpts.mkBool false ''
-        Enable cross-windows support and hint all the currently visible windows.
-        This behavior allows you to jump around any position in any buffer currently visible in a
-        window.
-        Although a powerful a feature, remember that enabling this will also generate many more
-        sequence combinations, so you could get deeper sequences to type (most of the time it
-        should be good if you have enough keys in `|hop-config-keys|`).
-      '';
+    match_mappings = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+      This option allows you to specify the match mappings to use when applying the hint.
+      If you set a non-empty `match_mappings`, the hint will be used as a key to look up the
+      pattern to search for.
 
-      excluded_filetypes = helpers.defaultNullOpts.mkListOf types.str "[]" ''
-        Skip hinting windows with the excluded filetypes.
-        Those windows to check filetypes are collected only when you enable `multi_windows` or
-        execute `MW`-commands.
-        This option is useful to skip the windows which are only for displaying something but not
-        for editing.
-      '';
+      Currently supported mappings:~
+      - 'fa' : farsi characters
+      - 'zh' : Basic characters for Chinese
+      - 'zh_sc' : Simplified Chinese
+      - 'zh_tc' : Traditional Chinese
 
-      match_mappings = helpers.defaultNullOpts.mkListOf types.str "[]" ''
-        This option allows you to specify the match mappings to use when applying the hint.
-        If you set a non-empty `match_mappings`, the hint will be used as a key to look up the
-        pattern to search for.
+      For example, if `match_mappings` is set to `["zh" "zh_sc"], the characters in "zh" and
+      "zh_sc" can be mixed to match together.
+    '';
+  };
 
-        Currently supported mappings:~
-        - 'fa' : farsi characters
-        - 'zh' : Basic characters for Chinese
-        - 'zh_sc' : Simplified Chinese
-        - 'zh_tc' : Traditional Chinese
-
-        For example, if `match_mappings` is set to `["zh" "zh_sc"], the characters in "zh" and
-        "zh_sc" can be mixed to match together.
-      '';
-    };
-
-    settingsExample = {
-      keys = "asdghklqwertyuiopzxcvbnmfj";
-      quit_key = "<Esc>";
-      reverse_distribution = false;
-      x_bias = 10;
-      teasing = true;
-      virtual_cursor = true;
-      jump_on_sole_occurrence = true;
-      case_insensitive = false;
-      dim_unmatched = true;
-      direction = "require'hop.hint'.HintDirection.BEFORE_CURSOR";
-      hint_position = "require'hop.hint'.HintPosition.BEGIN";
-      hint_type = "require'hop.hint'.HintType.OVERLAY";
-      match_mappings = ["zh" "zh_sc"];
-    };
-  }
+  settingsExample = {
+    keys = "asdghklqwertyuiopzxcvbnmfj";
+    quit_key = "<Esc>";
+    reverse_distribution = false;
+    x_bias = 10;
+    teasing = true;
+    virtual_cursor = true;
+    jump_on_sole_occurrence = true;
+    case_insensitive = false;
+    dim_unmatched = true;
+    direction = "require'hop.hint'.HintDirection.BEFORE_CURSOR";
+    hint_position = "require'hop.hint'.HintPosition.BEGIN";
+    hint_type = "require'hop.hint'.HintType.OVERLAY";
+    match_mappings = [
+      "zh"
+      "zh_sc"
+    ];
+  };
+}

@@ -10,7 +10,10 @@
       keymaps = {
         ai = "gw";
         search = {
-          mode = ["n" "x"];
+          mode = [
+            "n"
+            "x"
+          ];
           options.desc = "Search diagnostic with Google";
         };
       };

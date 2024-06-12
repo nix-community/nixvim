@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "baleia.nvim";
   defaultPackage = pkgs.vimPlugins.baleia-nvim;
 
-  maintainers = [helpers.maintainers.alisonjenkins];
+  maintainers = [ helpers.maintainers.alisonjenkins ];
 
   settingsOptions = {
     async = helpers.defaultNullOpts.mkBool true ''
@@ -24,9 +24,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       At which column start colorizing.
     '';
 
-    log = helpers.defaultNullOpts.mkEnum ["ERROR" "WARN" "INFO" "DEBUG"] "INFO" ''
-      Log level, possible values are ERROR, WARN, INFO or DEBUG.
-    '';
+    log =
+      helpers.defaultNullOpts.mkEnum
+        [
+          "ERROR"
+          "WARN"
+          "INFO"
+          "DEBUG"
+        ]
+        "INFO"
+        ''
+          Log level, possible values are ERROR, WARN, INFO or DEBUG.
+        '';
 
     name = helpers.defaultNullOpts.mkStr "BaleiaColors" ''
       Prefix used to name highlight groups.

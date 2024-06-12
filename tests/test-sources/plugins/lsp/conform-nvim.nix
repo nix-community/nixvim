@@ -8,11 +8,19 @@
       enable = true;
 
       formattersByFt = {
-        lua = ["stylua"];
-        python = ["isort" "black"];
-        javascript = [["prettierd" "prettier"]];
-        "*" = ["codespell"];
-        "_" = ["trimWhitespace"];
+        lua = [ "stylua" ];
+        python = [
+          "isort"
+          "black"
+        ];
+        javascript = [
+          [
+            "prettierd"
+            "prettier"
+          ]
+        ];
+        "*" = [ "codespell" ];
+        "_" = [ "trimWhitespace" ];
       };
       formatOnSave = {
         lspFallback = true;
@@ -26,7 +34,10 @@
       formatters = {
         myFormatter = {
           command = "myCmd";
-          args = ["--stdin-from-filename" "$FILENAME"];
+          args = [
+            "--stdin-from-filename"
+            "$FILENAME"
+          ];
           rangeArgs = ''
             function(ctx)
               return { "--line-start", ctx.range.start[1], "--line-end", ctx.range["end"][1] }
@@ -42,12 +53,15 @@
               return vim.fs.basename(ctx.filename) ~= "README.md"
             end;
           '';
-          exitCodes = [0 1];
+          exitCodes = [
+            0
+            1
+          ];
           env = {
             VAR = "value";
           };
           "inherit" = true;
-          prependArgs = ["--use-tabs"];
+          prependArgs = [ "--use-tabs" ];
         };
         otherFormatter = ''
           function(bufnr)
@@ -65,11 +79,19 @@
       enable = true;
 
       formattersByFt = {
-        lua = ["stylua"];
-        python = ["isort" "black"];
-        javascript = [["prettierd" "prettier"]];
-        "*" = ["codespell"];
-        "_" = ["trimWhitespace"];
+        lua = [ "stylua" ];
+        python = [
+          "isort"
+          "black"
+        ];
+        javascript = [
+          [
+            "prettierd"
+            "prettier"
+          ]
+        ];
+        "*" = [ "codespell" ];
+        "_" = [ "trimWhitespace" ];
       };
 
       formatOnSave = ''
@@ -100,11 +122,19 @@
       enable = true;
 
       formattersByFt = {
-        lua = ["stylua"];
-        python = ["isort" "black"];
-        javascript = [["prettierd" "prettier"]];
-        "*" = ["codespell"];
-        "_" = ["trimWhitespace"];
+        lua = [ "stylua" ];
+        python = [
+          "isort"
+          "black"
+        ];
+        javascript = [
+          [
+            "prettierd"
+            "prettier"
+          ]
+        ];
+        "*" = [ "codespell" ];
+        "_" = [ "trimWhitespace" ];
       };
 
       formatAfterSave = ''

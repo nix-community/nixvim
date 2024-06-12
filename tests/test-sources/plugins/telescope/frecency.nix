@@ -38,7 +38,7 @@
           show_scores = false;
           show_unindexed = true;
           workspace_scan_cmd = null;
-          workspaces = {};
+          workspaces = { };
         };
       };
     };
@@ -58,7 +58,10 @@
           db_root = "/home/my_username/path/to/db_root";
           show_scores = false;
           show_unindexed = true;
-          ignore_patterns = ["*.git/*" "*/tmp/*"];
+          ignore_patterns = [
+            "*.git/*"
+            "*/tmp/*"
+          ];
           disable_devicons = false;
           workspaces = {
             conf = "/home/my_username/.config";

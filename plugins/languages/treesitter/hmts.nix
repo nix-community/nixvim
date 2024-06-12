@@ -5,22 +5,24 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.hmts;
-in {
-  meta.maintainers = [maintainers.GaetanLepage];
+in
+{
+  meta.maintainers = [ maintainers.GaetanLepage ];
 
   options.plugins.hmts = {
     enable = mkEnableOption "hmts.nvim";
 
-    package = helpers.mkPackageOption "hmts.nvim" pkgs.vimPlugins.hmts-nvim;
+    package = helpers.mkPluginPackageOption "hmts.nvim" pkgs.vimPlugins.hmts-nvim;
   };
 
   config = mkIf cfg.enable {
     warnings = optional (!config.plugins.treesitter.enable) [
-      "Nixvim: treesitter-refactor needs treesitter to function as intended"
+      "Nixvim: hmts needs treesitter to function as intended"
     ];
 
-    extraPlugins = [cfg.package];
+    extraPlugins = [ cfg.package ];
   };
 }

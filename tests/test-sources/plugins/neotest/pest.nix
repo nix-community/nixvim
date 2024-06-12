@@ -9,9 +9,16 @@
           enable = true;
 
           settings = {
-            ignore_dirs = ["vendor" "node_modules"];
-            root_ignore_files = ["phpunit-only.tests"];
-            test_file_suffixes = ["Test.php" "_test.php" "PestTest.php"];
+            ignore_dirs = [
+              "vendor"
+              "node_modules"
+            ];
+            root_ignore_files = [ "phpunit-only.tests" ];
+            test_file_suffixes = [
+              "Test.php"
+              "_test.php"
+              "PestTest.php"
+            ];
             sail_enabled.__raw = "function() return false end";
             sail_executable = "vendor/bin/sail";
             pest_cmd = "vendor/bin/pest";

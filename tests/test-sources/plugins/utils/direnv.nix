@@ -1,5 +1,7 @@
 {
-  empty = {plugins.direnv.enable = true;};
+  empty = {
+    plugins.direnv.enable = true;
+  };
 
   defaults = {
     plugins.direnv = {

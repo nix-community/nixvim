@@ -19,7 +19,10 @@
 
       languageRegister = {
         cpp = "onelab";
-        python = ["foo" "bar"];
+        python = [
+          "foo"
+          "bar"
+        ];
       };
     };
   };

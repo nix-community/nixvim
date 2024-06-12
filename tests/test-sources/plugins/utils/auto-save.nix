@@ -21,7 +21,10 @@
         dim = 0.18;
         cleaningInterval = 1250;
       };
-      triggerEvents = ["InsertLeave" "TextChanged"];
+      triggerEvents = [
+        "InsertLeave"
+        "TextChanged"
+      ];
       condition = ''
         function(buf)
           local fn = vim.fn

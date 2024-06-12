@@ -8,7 +8,10 @@
       enable = true;
 
       settings = {
-        disable_filetype = ["TelescopePrompt" "spectre_panel"];
+        disable_filetype = [
+          "TelescopePrompt"
+          "spectre_panel"
+        ];
         disable_in_macro = false;
         disable_in_visualblock = false;
         disable_in_replace_mode = true;
@@ -37,7 +40,13 @@
         map_c_w = false;
         fast_wrap = {
           map = "<M-e>";
-          chars = ["{" "[" "(" "\"" "'"];
+          chars = [
+            "{"
+            "["
+            "("
+            "\""
+            "'"
+          ];
           pattern = ''[=[[%'%"%>%]%)%}%,%`]]=]'';
           end_key = "$";
           before_key = "h";

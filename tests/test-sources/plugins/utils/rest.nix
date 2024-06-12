@@ -1,9 +1,19 @@
 {
   empty = {
+    # As of 2024-05-07, the lua dependencies of luaPackage.rest-nvim are not correctly propagated to
+    # the vim plugin.
+    # TODO: re-enable this test when this issue will have been fixed
+    tests.dontRun = true;
+
     plugins.rest.enable = true;
   };
 
   defaults = {
+    # As of 2024-05-07, the lua dependencies of luaPackage.rest-nvim are not correctly propagated to
+    # the vim plugin.
+    # TODO: re-enable this test when this issue will have been fixed
+    tests.dontRun = true;
+
     plugins.rest = {
       enable = true;
 
@@ -14,7 +24,7 @@
         env_edit_command = "tabedit";
         encode_url = true;
         skip_ssl_verification = false;
-        custom_dynamic_variables = {};
+        custom_dynamic_variables = { };
         logs = {
           level = "info";
           save = true;
@@ -68,6 +78,11 @@
                 end
               '';
             };
+          };
+          keybinds = {
+            buffer_local = false;
+            prev = "H";
+            next = "L";
           };
         };
         highlight = {

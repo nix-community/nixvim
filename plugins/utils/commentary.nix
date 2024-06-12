@@ -5,20 +5,20 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.commentary;
-in {
+in
+{
   # TODO Add support for additional filetypes. This requires autocommands!
 
   options = {
     plugins.commentary = {
       enable = mkEnableOption "commentary";
 
-      package = helpers.mkPackageOption "commentary" pkgs.vimPlugins.vim-commentary;
+      package = helpers.mkPluginPackageOption "commentary" pkgs.vimPlugins.vim-commentary;
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [cfg.package];
-  };
+  config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };
 }

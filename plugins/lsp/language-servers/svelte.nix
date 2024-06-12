@@ -4,9 +4,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.plugins.lsp.servers.svelte;
-in {
+in
+{
   # Options: https://github.com/sveltejs/language-tools/tree/master/packages/language-server#settings
   options.plugins.lsp.servers.svelte.initOptions = {
     svelte = {
@@ -283,11 +285,9 @@ in {
     };
   };
 
-  config =
-    mkIf cfg.enable
-    {
-      plugins.lsp.servers.svelte.extraOptions.init_options = {
-        configuration = cfg.initOptions;
-      };
+  config = mkIf cfg.enable {
+    plugins.lsp.servers.svelte.extraOptions.init_options = {
+      configuration = cfg.initOptions;
     };
+  };
 }

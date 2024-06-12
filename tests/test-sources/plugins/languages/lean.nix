@@ -28,7 +28,7 @@
       lean = {
         enable = true;
 
-        lsp = {};
+        lsp = { };
         ft = {
           default = "lean";
           nomodifiable = null;
@@ -78,7 +78,7 @@
           height = 5;
           onLines = "function(lines) vim.notify(lines) end";
         };
-        lsp3 = {};
+        lsp3 = { };
       };
     };
   };
