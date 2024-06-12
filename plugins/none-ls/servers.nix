@@ -168,6 +168,7 @@ let
     verible_verilog_format = pkgs.verible;
     vint = pkgs.vim-vint;
     write_good = pkgs.write-good;
+    xmllint = pkgs.libxml2;
 
     # Sources not present in nixpkgs
     blade_formatter = null;
