@@ -48,5 +48,10 @@ let
     };
 in
 {
-  imports = mapAttrsToList mkAdapter supportedAdapters;
+  imports = (mapAttrsToList mkAdapter supportedAdapters) ++ [
+    # TODO: Remove when https://github.com/NixOS/nixpkgs/pull/319314 reaches `nixos-unstable`
+    (mkIf config.plugins.neotest.adapters.playwright.enable {
+      plugins.telescope.enable = mkDefault true;
+    })
+  ];
 }
