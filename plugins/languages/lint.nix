@@ -247,7 +247,7 @@ in
                 propName: propValue:
                 optionalString (
                   propValue != null
-                ) "__lint.linters.${linter}.${propName} = ${helpers.toLuaObject propValue}"
+                ) ''__lint.linters["${linter}"]["${propName}"] = ${helpers.toLuaObject propValue}''
               ) linterConfig
             ) cfg.linters
           )
@@ -260,7 +260,7 @@ in
             let
               linterConfig' = if isString linterConfig then helpers.mkRaw linterConfig else linterConfig;
             in
-            "__lint.linters.${customLinter} = ${helpers.toLuaObject linterConfig'}"
+            ''__lint.linters["${customLinter}"] = ${helpers.toLuaObject linterConfig'}''
           ) cfg.customLinters
         )
       ));
