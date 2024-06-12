@@ -143,6 +143,7 @@ let
     nixfmt = pkgs.nixfmt-classic;
     nixpkgs_fmt = pkgs.nixpkgs-fmt;
     opacheck = pkgs.open-policy-agent;
+    opentofu_fmt = pkgs.opentofu;
     pg_format = pkgs.pgformatter;
     phpcbf = pkgs.phpPackages.php-codesniffer;
     phpcsfixer = pkgs.phpPackages.php-cs-fixer;
