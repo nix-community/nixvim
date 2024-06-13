@@ -77,7 +77,7 @@ let
         if info ? file && info ? description && info ? url then
           "# ${lib.last path}\n\n"
           + (lib.optionalString (info.description != null) "${info.description}\n\n")
-          + (lib.optionalString (info.url != null) "**Url:** [${info.url}](${info.url})\n\n")
+          + (lib.optionalString (info.url != null) "**URL:** [${info.url}](${info.url})\n\n")
           + (lib.optionalString (
             maintainers != [ ]
           ) "**Maintainers:** ${lib.concatStringsSep ", " maintainersNames}\n\n")
