@@ -303,6 +303,12 @@ let
       serverName = "nginx_language_server";
     }
     {
+      name = "nickel-ls";
+      description = "nls for Nickel";
+      package = pkgs.nls;
+      serverName = "nickel_ls";
+    }
+    {
       name = "nil-ls";
       description = "nil for Nix";
       package = pkgs.nil;

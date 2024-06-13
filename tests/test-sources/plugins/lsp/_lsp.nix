@@ -153,6 +153,7 @@
             marksman.enable = true;
             metals.enable = true;
             nginx-language-server.enable = true;
+            nickel-ls.enable = true;
             nil-ls.enable = true;
             nimls.enable = true;
             nixd.enable = true;
