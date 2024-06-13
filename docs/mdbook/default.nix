@@ -70,7 +70,8 @@ let
         let
           info = optionalAttrs (hasAttrByPath path nixvimInfo) (getAttrFromPath path nixvimInfo);
           maintainers = lib.unique (options.config.meta.maintainers.${info.file} or [ ]);
-          maintainersNames = builtins.map (m: m.name) maintainers;
+          maintainersNames = builtins.map maintToMD maintainers;
+          maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
         in
         # Make sure this path has a valid info attrset
         if info ? file && info ? description && info ? url then
