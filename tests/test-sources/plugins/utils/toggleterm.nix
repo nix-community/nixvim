@@ -60,7 +60,11 @@
         auto_scroll = false;
         float_opts = {
           border = "double";
-          width = 30;
+          width = ''
+            function()
+              return math.ceil(vim.o.columns * 0.8)
+            end
+          '';
           height = 30;
           winblend = 5;
           zindex = 20;

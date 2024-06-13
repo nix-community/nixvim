@@ -228,13 +228,27 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         The 'curved' border is a custom border type not natively supported but implemented in this plugin.
       '';
 
-      width = helpers.mkNullOrOption types.ints.unsigned "";
+      width = helpers.defaultNullOpts.mkStrLuaFnOr types.ints.unsigned null ''
+        Width of the floating terminal. Like `size`, `width` can be a number or
+        function which is passed the current terminal.
+      '';
 
-      height = helpers.mkNullOrOption types.ints.unsigned "";
+      height = helpers.defaultNullOpts.mkStrLuaFnOr types.ints.unsigned null ''
+        Height of the floating terminal. Like `size`, `height` can be a number
+        or function which is passed the current terminal.
+      '';
 
-      row = helpers.mkNullOrOption types.ints.unsigned "";
+      row = helpers.defaultNullOpts.mkStrLuaFnOr types.ints.unsigned null ''
+        Start row of the floating terminal. Defaults to the center of the
+        screen. Like `size`, `row` can be a number or function which is passed
+        the current terminal.
+      '';
 
-      col = helpers.mkNullOrOption types.ints.unsigned "";
+      col = helpers.defaultNullOpts.mkStrLuaFnOr types.ints.unsigned null ''
+        Start column of the floating terminal. Defaults to the center of the
+        screen. Like `size`, `col` can be a number or function which is passed
+        the current terminal.
+      '';
 
       winblend = helpers.defaultNullOpts.mkUnsignedInt 0 "";
 
