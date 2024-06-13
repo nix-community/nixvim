@@ -121,8 +121,11 @@ let
     erb_format = pkgs.rubyPackages.erb-formatter;
     fish_indent = pkgs.fish;
     format_r = pkgs.R;
-    gdformat = pkgs.gdtoolkit_4;
-    gdlint = pkgs.gdtoolkit_4;
+    # TODO: Added 2024-06-13; remove 2024-09-13
+    # Nixpkgs renamed to _3 & _4 without maintaining an alias
+    # Out of sync lock files could be using either attr name...
+    gdformat = pkgs.gdtoolkit_4 or pkgs.gdtoolkit;
+    gdlint = pkgs.gdtoolkit_4 or pkgs.gdtoolkit;
     gitsigns = pkgs.git;
     gleam_format = pkgs.gleam;
     glslc = pkgs.shaderc;
