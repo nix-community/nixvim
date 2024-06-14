@@ -5,6 +5,7 @@
   calc = "cmp-calc";
   dap = "cmp-dap";
   cmdline = "cmp-cmdline";
+  cmp_ai = "cmp-ai";
   cmp-clippy = "cmp-clippy";
   cmp-cmdline-history = "cmp-cmdline-history";
   cmp_pandoc = "cmp-pandoc-nvim";
