@@ -2,8 +2,10 @@ name: Build and deploy documentation
 
 on:
   push:
-    # Runs on pushes targeting the default branch
-    branches: [main]
+    # Runs on pushes targeting the release branches
+    branches:
+     - main
+     - nixos-24.05
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,12 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pages
-        uses: actions/configure-pages@v5
-
       - name: Install nix
         uses: cachix/install-nix-action@v26
         with:
@@ -44,7 +40,13 @@ jobs:
           name: nix-community
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-      - run: ./build-docs.sh
+      - run: |
+          set -ex
+          mkdir -p docs-build
+          nix build github:nix-community/nixvim#docs
+          cp -r result/share/doc/* docs-build
+          nix build github:nix-community/nixvim/nixos-24.05#docs
+          cp -r result/share/doc docs-build/stable
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
