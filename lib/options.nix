@@ -151,7 +151,7 @@ rec {
   defaultNullOpts =
     let
       # Ensures that default is null and defaultText is not set
-      convertArgs =
+      processDefaultNullArgs =
         args:
         assert
           args ? default
@@ -165,7 +165,7 @@ rec {
       # TODO: removed 2024-06-14; remove stub 2024-09-01
       mkDesc = abort "mkDesc has been removed. Use the `pluginDefault` argument or `helpers.pluginDefaultText`.";
 
-      mkNullable' = args: mkNullOrOption' (convertArgs args);
+      mkNullable' = args: mkNullOrOption' (processDefaultNullArgs args);
       mkNullable =
         type: pluginDefault: description:
         mkNullable' { inherit type pluginDefault description; };
@@ -176,20 +176,20 @@ rec {
         type: pluginDefault: description:
         mkNullableWithRaw' { inherit type pluginDefault description; };
 
-      mkStrLuaOr' = args: mkNullOrStrLuaOr' (convertArgs args);
+      mkStrLuaOr' = args: mkNullOrStrLuaOr' (processDefaultNullArgs args);
       mkStrLuaOr =
         type: pluginDefault: description:
         mkStrLuaOr' { inherit type pluginDefault description; };
 
-      mkStrLuaFnOr' = args: mkNullOrStrLuaFnOr' (convertArgs args);
+      mkStrLuaFnOr' = args: mkNullOrStrLuaFnOr' (processDefaultNullArgs args);
       mkStrLuaFnOr =
         type: pluginDefault: description:
         mkStrLuaFnOr' { inherit type pluginDefault description; };
 
-      mkLua' = args: mkNullOrLua' (convertArgs args);
+      mkLua' = args: mkNullOrLua' (processDefaultNullArgs args);
       mkLua = pluginDefault: description: mkLua' { inherit pluginDefault description; };
 
-      mkLuaFn' = args: mkNullOrLuaFn' (convertArgs args);
+      mkLuaFn' = args: mkNullOrLuaFn' (processDefaultNullArgs args);
       mkLuaFn = pluginDefault: description: mkLuaFn' { inherit pluginDefault description; };
 
       mkNum' = args: mkNullableWithRaw' (args // { type = types.number; });
