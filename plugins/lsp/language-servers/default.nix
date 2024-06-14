@@ -539,6 +539,10 @@ let
       description = "texlab language server for LaTeX";
     }
     {
+      name = "tflint";
+      description = "tflint, a terraform linter";
+    }
+    {
       name = "tinymist";
       description = "tinymist for Typst";
       settingsOptions = import ./tinymist-settings.nix { inherit lib helpers; };
