@@ -23,6 +23,7 @@ in
   imports = [
     ./codeium-nvim.nix
     ./copilot-cmp.nix
+    ./cmp-ai.nix
     ./cmp-fish.nix
     ./cmp-git.nix
     ./cmp-tabby.nix

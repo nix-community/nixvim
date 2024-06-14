@@ -14,7 +14,10 @@
         settings.sources =
           with pkgs.lib;
           let
-            disabledSources = optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
+            disabledSources = [
+              # We do not provide the required HF_API_KEY environment variable.
+              "cmp_ai"
+            ] ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
 
             filterFunc = sourceName: !(elem sourceName disabledSources);
 
