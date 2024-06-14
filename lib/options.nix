@@ -9,7 +9,7 @@ let
   # Render a plugin default string
   pluginDefaultText =
     let
-      # Assume a string `default` is already formatted as intended,
+      # Assume a string `pluginDefault` is already formatted as intended,
       # TODO: remove this behavior so we can quote strings properly
       # historically strings were the only type accepted by mkDesc.
       legacyRenderOptionValue =
@@ -153,17 +153,13 @@ rec {
       # Ensures that default is null and defaultText is not set
       convertArgs =
         args:
-        # TODO: uncomment once all call sites migrate to `pluginDefault`
-        # assert args ? default -> abort "defaultNullOpts: unexpected argument `default`. Did you mean `pluginDefault`?";
+        assert
+          args ? default
+          -> abort "defaultNullOpts: unexpected argument `default`. Did you mean `pluginDefault`?";
         assert
           args ? defaultText
           -> abort "defaultNullOpts: unexpected argument `defaultText`. Did you mean `pluginDefault`?";
-        args
-        // {
-          default = null;
-        }
-        # TODO: remove once all call sites migrate to `pluginDefault`
-        // (optionalAttrs (args ? default) { pluginDefault = args.pluginDefault or args.default; });
+        args // { default = null; };
     in
     rec {
       # TODO: removed 2024-06-14; remove stub 2024-09-01
@@ -171,43 +167,43 @@ rec {
 
       mkNullable' = args: mkNullOrOption' (convertArgs args);
       mkNullable =
-        type: default: description:
-        mkNullable' { inherit type default description; };
+        type: pluginDefault: description:
+        mkNullable' { inherit type pluginDefault description; };
 
       mkNullableWithRaw' =
         { type, ... }@args: mkNullable' (args // { type = nixvimTypes.maybeRaw type; });
       mkNullableWithRaw =
-        type: default: description:
-        mkNullableWithRaw' { inherit type default description; };
+        type: pluginDefault: description:
+        mkNullableWithRaw' { inherit type pluginDefault description; };
 
       mkStrLuaOr' = args: mkNullOrStrLuaOr' (convertArgs args);
       mkStrLuaOr =
-        type: default: description:
-        mkStrLuaOr' { inherit type default description; };
+        type: pluginDefault: description:
+        mkStrLuaOr' { inherit type pluginDefault description; };
 
       mkStrLuaFnOr' = args: mkNullOrStrLuaFnOr' (convertArgs args);
       mkStrLuaFnOr =
-        type: default: description:
-        mkStrLuaFnOr' { inherit type default description; };
+        type: pluginDefault: description:
+        mkStrLuaFnOr' { inherit type pluginDefault description; };
 
       mkLua' = args: mkNullOrLua' (convertArgs args);
-      mkLua = default: description: mkLua' { inherit default description; };
+      mkLua = pluginDefault: description: mkLua' { inherit pluginDefault description; };
 
       mkLuaFn' = args: mkNullOrLuaFn' (convertArgs args);
-      mkLuaFn = default: description: mkLuaFn' { inherit default description; };
+      mkLuaFn = pluginDefault: description: mkLuaFn' { inherit pluginDefault description; };
 
       mkNum' = args: mkNullableWithRaw' (args // { type = types.number; });
-      mkNum = default: description: mkNum' { inherit default description; };
+      mkNum = pluginDefault: description: mkNum' { inherit pluginDefault description; };
       mkInt' = args: mkNullableWithRaw' (args // { type = types.int; });
-      mkInt = default: description: mkNum' { inherit default description; };
+      mkInt = pluginDefault: description: mkNum' { inherit pluginDefault description; };
       # Positive: >0
       mkPositiveInt' = args: mkNullableWithRaw' (args // { type = types.ints.positive; });
-      mkPositiveInt = default: description: mkPositiveInt' { inherit default description; };
+      mkPositiveInt = pluginDefault: description: mkPositiveInt' { inherit pluginDefault description; };
       # Unsigned: >=0
       mkUnsignedInt' = args: mkNullableWithRaw' (args // { type = types.ints.unsigned; });
-      mkUnsignedInt = default: description: mkUnsignedInt' { inherit default description; };
+      mkUnsignedInt = pluginDefault: description: mkUnsignedInt' { inherit pluginDefault description; };
       mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
-      mkBool = default: description: mkBool' { inherit default description; };
+      mkBool = pluginDefault: description: mkBool' { inherit pluginDefault description; };
       mkStr' =
         args:
         mkNullableWithRaw' (
@@ -216,46 +212,50 @@ rec {
             type = types.str;
           }
           # TODO we should remove this once `mkDesc` no longer has a special case
-          // (optionalAttrs (args ? default) { default = generators.toPretty { } args.default; })
+          // (optionalAttrs (args ? pluginDefault) {
+            pluginDefault = generators.toPretty { } args.pluginDefault;
+          })
         );
-      mkStr = default: description: mkStr' { inherit default description; };
+      mkStr = pluginDefault: description: mkStr' { inherit pluginDefault description; };
 
       mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
-      mkAttributeSet = default: description: mkAttributeSet' { inherit default description; };
+      mkAttributeSet = pluginDefault: description: mkAttributeSet' { inherit pluginDefault description; };
 
       mkListOf' =
         { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
       mkListOf =
-        type: default: description:
-        mkListOf' { inherit type default description; };
+        type: pluginDefault: description:
+        mkListOf' { inherit type pluginDefault description; };
 
       mkAttrsOf' =
         { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
       mkAttrsOf =
-        type: default: description:
-        mkAttrsOf' { inherit type default description; };
+        type: pluginDefault: description:
+        mkAttrsOf' { inherit type pluginDefault description; };
 
       mkEnum' =
         { values, ... }@args:
-        # `values` is a list. If `default` is present, then it is either null or one of `values`
+        # `values` is a list. If `pluginDefault` is present, then it is either null or one of `values`
         assert isList values;
-        assert args ? default -> (args.default == null || elem args.default values);
+        assert args ? pluginDefault -> (args.pluginDefault == null || elem args.pluginDefault values);
         mkNullableWithRaw' (
           (filterAttrs (n: v: n != "values") args)
           // {
             type = types.enum values;
           }
           # TODO we should remove this once `mkDesc` no longer has a special case
-          // (optionalAttrs (args ? default) { default = generators.toPretty { } args.default; })
+          // (optionalAttrs (args ? pluginDefault) {
+            pluginDefault = generators.toPretty { } args.pluginDefault;
+          })
         );
       mkEnum =
-        values: default: description:
-        mkEnum' { inherit values default description; };
+        values: pluginDefault: description:
+        mkEnum' { inherit values pluginDefault description; };
       mkEnumFirstDefault =
         values: description:
         mkEnum' {
           inherit values description;
-          default = head values;
+          pluginDefault = head values;
         };
 
       mkBorder' =
@@ -278,8 +278,8 @@ rec {
           }
         );
       mkBorder =
-        default: name: description:
-        mkBorder' { inherit default name description; };
+        pluginDefault: name: description:
+        mkBorder' { inherit pluginDefault name description; };
 
       mkSeverity' =
         args:
@@ -299,7 +299,7 @@ rec {
             );
           }
         );
-      mkSeverity = default: description: mkSeverity' { inherit default description; };
+      mkSeverity = pluginDefault: description: mkSeverity' { inherit pluginDefault description; };
 
       mkLogLevel' =
         args:
@@ -312,7 +312,7 @@ rec {
             );
           }
         );
-      mkLogLevel = default: description: mkLogLevel' { inherit default description; };
+      mkLogLevel = pluginDefault: description: mkLogLevel' { inherit pluginDefault description; };
 
       mkHighlight' =
         {
@@ -329,10 +329,10 @@ rec {
       # FIXME `name` argument is ignored
       # TODO deprecate in favor of `mkHighlight'`?
       mkHighlight =
-        default: name: description:
+        pluginDefault: name: description:
         mkHighlight' (
           {
-            inherit default;
+            inherit pluginDefault;
           }
           // (optionalAttrs (description != null && description != "") { inherit description; })
         );

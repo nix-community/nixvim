@@ -14,7 +14,7 @@ with lib;
         See [the source](https://github.com/nix-community/nixd/blob/main/libnixf/include/nixf/Basic/DiagnosticKinds.inc)
         for available diagnostics.
       '';
-      default = [ ];
+      pluginDefault = [ ];
       example = [ "sema-escaping-with" ];
     };
   };

@@ -6,7 +6,7 @@ with lib;
   formatting = {
     command = helpers.defaultNullOpts.mkListOf' {
       type = types.str;
-      default = null;
+      pluginDefault = null;
       description = ''
         External formatting command, complete with required arguments.
 
@@ -25,7 +25,7 @@ with lib;
 
     excludedFiles = helpers.defaultNullOpts.mkListOf' {
       type = types.str;
-      default = [ ];
+      pluginDefault = [ ];
       description = ''
         Files to exclude from showing diagnostics. Useful for generated files.
 
@@ -38,13 +38,13 @@ with lib;
 
   nix = {
     binary = helpers.defaultNullOpts.mkStr' {
-      default = "nix";
+      pluginDefault = "nix";
       description = "The path to the `nix` binary.";
       example = "/run/current-system/sw/bin/nix";
     };
 
     maxMemoryMB = helpers.defaultNullOpts.mkUnsignedInt' {
-      default = 2560;
+      pluginDefault = 2560;
       example = 1024;
       description = ''
         The heap memory limit in MiB for `nix` evaluation.
@@ -72,7 +72,7 @@ with lib;
       '';
 
       nixpkgsInputName = helpers.defaultNullOpts.mkStr' {
-        default = "nixpkgs";
+        pluginDefault = "nixpkgs";
         example = "nixos";
         description = ''
           The input name of nixpkgs for NixOS options evaluation.
