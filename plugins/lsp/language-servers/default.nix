@@ -249,6 +249,13 @@ let
       settings = cfg: { json = cfg; };
     }
     {
+      name = "jsonnet-ls";
+      description = "jsonnet language server";
+      package = pkgs.jsonnet-language-server;
+      serverName = "jsonnet_ls";
+      settingsOptions = import ./jsonnet-ls-settings.nix { inherit lib helpers; };
+    }
+    {
       name = "julials";
       description = "julials for Julia";
       # The julia language server has to be installed from julia and thus is not packaged "as is" in

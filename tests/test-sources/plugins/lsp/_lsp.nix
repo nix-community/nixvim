@@ -143,6 +143,7 @@
             htmx.enable = true;
             java-language-server.enable = true;
             jsonls.enable = true;
+            jsonnet-ls.enable = true;
             julials.enable = true;
             kotlin-language-server.enable = true;
             leanls.enable = true;
