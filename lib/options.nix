@@ -27,7 +27,7 @@ let
     {
       # plugin default: any value or literal expression
       pluginDefault,
-      # nix option default value, used if `nixDefaultText` is missing
+      # nix option default value, used if `defaultText` is missing
       default ? null,
       # nix option default string or literal expression
       defaultText ? (options.renderOptionValue default) // {
