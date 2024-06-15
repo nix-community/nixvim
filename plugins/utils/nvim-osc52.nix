@@ -12,34 +12,40 @@ with lib;
 
     package = helpers.mkPluginPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
 
-    maxLength = helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit)";
-    silent = helpers.defaultNullOpts.mkBool false "Disable message on successful copy";
-    trim = helpers.defaultNullOpts.mkBool false "Trim text before copy";
+    maxLength = helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit).";
+    silent = helpers.defaultNullOpts.mkBool false "Disable message on successful copy.";
+    trim = helpers.defaultNullOpts.mkBool false "Trim text before copy.";
 
     keymaps = {
-      enable = mkEnableOption "keymaps for copying using OSC52";
+      enable = mkEnableOption "keymaps for copying using OSC52.";
 
       silent = mkOption {
         type = types.bool;
-        description = "Whether nvim-osc52 keymaps should be silent";
+        description = "Whether nvim-osc52 keymaps should be silent.";
         default = false;
+      };
+
+      desc = mkOption {
+        type = types.str;
+        description = "Keymap description.";
+        default = "Copy using OSC52";
       };
 
       copy = mkOption {
         type = types.str;
-        description = "Copy into the system clipboard using OSC52";
+        description = "Copy into the system clipboard using OSC52.";
         default = "<leader>y";
       };
 
       copyLine = mkOption {
         type = types.str;
-        description = "Copy line into the system clipboard using OSC52";
+        description = "Copy line into the system clipboard using OSC52.";
         default = "<leader>yy";
       };
 
       copyVisual = mkOption {
         type = types.str;
-        description = "Copy visual selection into the system clipboard using OSC52";
+        description = "Copy visual selection into the system clipboard using OSC52.";
         default = "<leader>y";
       };
     };
@@ -65,6 +71,7 @@ with lib;
             action.__raw = "require('osc52').copy_operator";
             options = {
               expr = true;
+              desc = "Copy using OSC52";
               inherit silent;
             };
           }
@@ -74,6 +81,7 @@ with lib;
             action = "${copy}_";
             options = {
               remap = true;
+              inherit desc;
               inherit silent;
             };
           }
@@ -81,7 +89,10 @@ with lib;
             mode = "v";
             key = copyVisual;
             action.__raw = "require('osc52').copy_visual";
-            options.silent = silent;
+            options = {
+              inherit silent;
+              inherit desc;
+            };
           }
         ];
 
