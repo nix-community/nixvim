@@ -19,17 +19,26 @@ in
       currentLine = mkOption {
         type = types.bool;
         default = false;
-        description = "Show diagnostics only on current line";
+        description = "Show diagnostics only on current line.";
+      };
+
+      disableVirtualText = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Hide virtual text.";
       };
     };
   };
 
   config =
     let
-      diagnosticConfig = {
-        virtual_text = false;
+      vlineConfig = {
         virtual_lines = if cfg.currentLine then { only_current_line = true; } else true;
       };
+      vtextConfig = {
+        virtual_text = false;
+      };
+      diagnosticConfig = if cfg.disableVirtualText then vlineConfig // vtextConfig else vlineConfig;
     in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
