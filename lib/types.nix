@@ -9,12 +9,13 @@ let
       name = "str";
       inherit description;
       descriptionClass = "noun";
-      check = lib.isString;
+      check = v: isString v || isRawType v;
       merge = lib.options.mergeEqualOption;
     };
+  isRawType = v: v ? __raw && isString v.__raw;
 in
 rec {
-  isRawType = v: v ? __raw && isString v.__raw;
+  inherit isRawType;
 
   rawLua = mkOptionType {
     name = "rawLua";
