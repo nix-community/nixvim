@@ -14,7 +14,7 @@ let
     };
 in
 rec {
-  isRawType = v: lib.isAttrs v && lib.hasAttr "__raw" v && lib.isString v.__raw;
+  isRawType = v: v ? __raw && isString v.__raw;
 
   rawLua = mkOptionType {
     name = "rawLua";
