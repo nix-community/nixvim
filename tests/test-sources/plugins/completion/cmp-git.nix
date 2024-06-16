@@ -19,8 +19,8 @@
         git = {
           commits = {
             limit = 100;
-            sort_by.__raw = "require('cmp_git.sort').git.commits";
-            format.__raw = "require('cmp_git.format').git.commits";
+            sort_by = "require('cmp_git.sort').git.commits";
+            format = "require('cmp_git.format').git.commits";
           };
         };
         github = {
@@ -36,13 +36,13 @@
             filter = "all";
             limit = 100;
             state = "open";
-            sort_by.__raw = "require('cmp_git.sort').github.issues";
-            format.__raw = "require('cmp_git.format').github.issues";
+            sort_by = "require('cmp_git.sort').github.issues";
+            format = "require('cmp_git.format').github.issues";
           };
           mentions = {
             limit = 100;
-            sort_by.__raw = "require('cmp_git.sort').github.mentions";
-            format.__raw = "require('cmp_git.format').github.mentions";
+            sort_by = "require('cmp_git.sort').github.mentions";
+            format = "require('cmp_git.format').github.mentions";
           };
           pull_requests = {
             fields = [
@@ -54,8 +54,8 @@
             ];
             limit = 100;
             state = "open";
-            sort_by.__raw = "require('cmp_git.sort').github.pull_requests";
-            format.__raw = "require('cmp_git.format').github.pull_requests";
+            sort_by = "require('cmp_git.sort').github.pull_requests";
+            format = "require('cmp_git.format').github.pull_requests";
           };
         };
         gitlab = {
@@ -63,19 +63,19 @@
           issues = {
             limit = 100;
             state = "opened";
-            sort_by.__raw = "require('cmp_git.sort').gitlab.pull_requests";
-            format.__raw = "require('cmp_git.format').gitlab.pull_requests";
+            sort_by = "require('cmp_git.sort').gitlab.pull_requests";
+            format = "require('cmp_git.format').gitlab.pull_requests";
           };
           mentions = {
             limit = 100;
-            sort_by.__raw = "require('cmp_git.sort').gitlab.mentions";
-            format.__raw = "require('cmp_git.format').gitlab.mentions";
+            sort_by = "require('cmp_git.sort').gitlab.mentions";
+            format = "require('cmp_git.format').gitlab.mentions";
           };
           merge_requests = {
             limit = 100;
             state = "opened";
-            sort_by.__raw = "require('cmp_git.sort').gitlab.merge_requests";
-            format.__raw = "require('cmp_git.format').gitlab.merge_requests";
+            sort_by = "require('cmp_git.sort').gitlab.merge_requests";
+            format = "require('cmp_git.format').gitlab.merge_requests";
           };
         };
         trigger_actions = [
@@ -156,7 +156,7 @@
             filter = "all";
             limit = 250;
             state = "all";
-            format.label.__raw = ''
+            format = ''
               function(_, issue)
                 local icon = ({
                   open = '',
@@ -165,7 +165,7 @@
                 return string.format('%s #%d: %s', icon, issue.number, issue.title)
               end
             '';
-            sort_by.__raw = ''
+            sort_by = ''
               function(issue)
                 local kind_rank = issue.pull_request and 1 or 0
                 local state_rank = issue.state == 'open' and 0 or 1
@@ -191,7 +191,7 @@
           pull_requests = {
             limit = 250;
             state = "all";
-            format.label.__raw = ''
+            format = ''
               function(_, pr)
                 local icon = ({
                   open = '',
@@ -200,7 +200,7 @@
                 return string.format('%s #%d: %s', icon, pr.number, pr.title)
               end
             '';
-            sort_by.__raw = ''
+            sort_by = ''
               function(pr)
                 local state_rank = pr.state == 'open' and 0 or 1
                 local age = os.difftime(os.time(), require('cmp_git.utils').parse_github_date(pr.updatedAt))

@@ -7,18 +7,26 @@
 with lib;
 let
   cfg = config.plugins.cmp-git;
+
+  mkAction =
+    action: target:
+    helpers.defaultNullOpts.mkLuaFn "require('cmp_git.${action}').git.${target}" ''
+      Function used to ${action} the ${replaceStrings [ "_" ] [ " " ] target}.
+    '';
 in
 {
   options.plugins.cmp-git.settings = helpers.neovim-plugin.mkSettingsOption {
     pluginName = "cmp_git";
     options = {
-      filetypes = helpers.defaultNullOpts.mkListOf types.str ''["gitcommit" "octo"]'' ''
-        Filetypes for which to trigger.
-      '';
+      filetypes = helpers.defaultNullOpts.mkListOf types.str [
+        "gitcommit"
+        "octo"
+      ] "Filetypes for which to trigger.";
 
-      remotes = helpers.defaultNullOpts.mkListOf types.str ''["upstream" "origin"]'' ''
-        List of git remotes.
-      '';
+      remotes = helpers.defaultNullOpts.mkListOf types.str [
+        "upstream"
+        "origin"
+      ] "List of git remotes.";
 
       enableRemoteUrlRewrites = helpers.defaultNullOpts.mkBool false ''
         Whether to enable remote URL rewrites.
@@ -30,27 +38,24 @@ in
             Max number of git commits to fetch.
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').git.commits";}''
-              "Function used to sort the commits.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').git.commits";}''
-              "Function used to format the commits.";
+          sort_by = mkAction "sort" "commits";
+          format = mkAction "format" "commits";
         };
       };
 
       github = {
-        hosts = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        hosts = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of private instances of github.
         '';
 
         issues = {
-          fields =
-            helpers.defaultNullOpts.mkListOf types.str ''["title" "number" "body" "updatedAt" "state"]''
-              "The fields used for issues.";
+          fields = helpers.defaultNullOpts.mkListOf types.str [
+            "title"
+            "number"
+            "body"
+            "updatedAt"
+            "state"
+          ] "The fields used for issues.";
 
           filter = helpers.defaultNullOpts.mkStr "all" ''
             The filter to use when fetching issues.
@@ -64,15 +69,8 @@ in
             Which issues to fetch (`"open"`, `"closed"` or `"all"`).
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').github.issues";}''
-              "Function used to sort the issues.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').github.issues";}''
-              "Function used to format the issues.";
+          sort_by = mkAction "sort" "issues";
+          format = mkAction "format" "issues";
         };
 
         mentions = {
@@ -80,21 +78,18 @@ in
             Max number of mentions to fetch.
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').github.mentions";}''
-              "Function used to sort the mentions.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').github.mentions";}''
-              "Function used to format the mentions.";
+          sort_by = mkAction "sort" "mentions";
+          format = mkAction "format" "mentions";
         };
 
         pull_requests = {
-          fields =
-            helpers.defaultNullOpts.mkListOf types.str ''["title" "number" "body" "updatedAt" "state"]''
-              "The fields used for pull requests.";
+          fields = helpers.defaultNullOpts.mkListOf types.str [
+            "title"
+            "number"
+            "body"
+            "updatedAt"
+            "state"
+          ] "The fields used for pull requests.";
 
           limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
             Max number of pull requests to fetch.
@@ -104,20 +99,13 @@ in
             Which issues to fetch (`"open"`, `"closed"`, `"merged"` or `"all"`).
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').github.pull_requests";}''
-              "Function used to sort the pull requests.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').github.pull_requests";}''
-              "Function used to format the pull requests.";
+          sort_by = mkAction "sort" "pull_requests";
+          format = mkAction "format" "pull_requests";
         };
       };
 
       gitlab = {
-        hosts = helpers.defaultNullOpts.mkListOf types.str "[]" ''
+        hosts = helpers.defaultNullOpts.mkListOf types.str [ ] ''
           List of private instances of gitlab.
         '';
 
@@ -130,15 +118,8 @@ in
             Which issues to fetch (`"open"`, `"closed"` or `"all"`).
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').gitlab.issues";}''
-              "Function used to sort the issues.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').gitlab.issues";}''
-              "Function used to format the issues.";
+          sort_by = mkAction "sort" "issues";
+          format = mkAction "format" "issues";
         };
 
         mentions = {
@@ -146,15 +127,8 @@ in
             Max number of mentions to fetch.
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').gitlab.mentions";}''
-              "Function used to sort the mentions.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').gitlab.mentions";}''
-              "Function used to format the mentions.";
+          sort_by = mkAction "sort" "mentions";
+          format = mkAction "format" "mentions";
         };
 
         merge_requests = {
@@ -166,15 +140,8 @@ in
             Which issues to fetch (`"open"`, `"closed"`, `"locked"` or `"merged"`).
           '';
 
-          sort_by =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.sort').gitlab.merge_requests";}''
-              "Function used to sort the merge requests.";
-
-          format =
-            helpers.defaultNullOpts.mkNullable types.anything
-              ''{__raw = "require('cmp_git.format').gitlab.merge_requests";}''
-              "Function used to format the merge requests.";
+          sort_by = mkAction "sort" "merge_requests";
+          format = mkAction "format" "merge_requests";
         };
       };
 
@@ -209,64 +176,62 @@ in
               };
             };
           })
-          ''
-            [
-              {
-                debug_name = "git_commits";
-                trigger_character = ":";
-                action = \'\'
-                  function(sources, trigger_char, callback, params, git_info)
-                    return sources.git:get_commits(callback, params, trigger_char)
-                  end
-                \'\';
-              }
-              {
-                debug_name = "gitlab_issues";
-                trigger_character = "#";
-                action = \'\'
-                  function(sources, trigger_char, callback, params, git_info)
-                      return sources.gitlab:get_issues(callback, git_info, trigger_char)
-                  end
-                \'\';
-              }
-              {
-                debug_name = "gitlab_mentions";
-                trigger_character = "@";
-                action = \'\'
-                  function(sources, trigger_char, callback, params, git_info)
-                      return sources.gitlab:get_mentions(callback, git_info, trigger_char)
-                  end
-                \'\';
-              }
-              {
-                debug_name = "gitlab_mrs";
-                trigger_character = "!";
-                action = \'\'
-                  function(sources, trigger_char, callback, params, git_info)
-                    return sources.gitlab:get_merge_requests(callback, git_info, trigger_char)
-                  end
-                \'\';
-              }
-              {
-                debug_name = "github_issues_and_pr";
-                trigger_character = "#";
-                action = \'\'
-                  function(sources, trigger_char, callback, params, git_info)
-                    return sources.github:get_issues_and_prs(callback, git_info, trigger_char)
-                  end
-                \'\';
-              }
-              {
-                debug_name = "github_mentions";
-                trigger_character = "@";
-                action = \'\'
-                  function(sources, trigger_char, callback, params, git_info)
-                    return sources.github:get_mentions(callback, git_info, trigger_char)
-                  end
-                \'\';
-              }
-            ]
-          ''
+          [
+            {
+              debug_name = "git_commits";
+              trigger_character = ":";
+              action = ''
+                function(sources, trigger_char, callback, params, git_info)
+                  return sources.git:get_commits(callback, params, trigger_char)
+                end
+              '';
+            }
+            {
+              debug_name = "gitlab_issues";
+              trigger_character = "#";
+              action = ''
+                function(sources, trigger_char, callback, params, git_info)
+                    return sources.gitlab:get_issues(callback, git_info, trigger_char)
+                end
+              '';
+            }
+            {
+              debug_name = "gitlab_mentions";
+              trigger_character = "@";
+              action = ''
+                function(sources, trigger_char, callback, params, git_info)
+                    return sources.gitlab:get_mentions(callback, git_info, trigger_char)
+                end
+              '';
+            }
+            {
+              debug_name = "gitlab_mrs";
+              trigger_character = "!";
+              action = ''
+                function(sources, trigger_char, callback, params, git_info)
+                  return sources.gitlab:get_merge_requests(callback, git_info, trigger_char)
+                end
+              '';
+            }
+            {
+              debug_name = "github_issues_and_pr";
+              trigger_character = "#";
+              action = ''
+                function(sources, trigger_char, callback, params, git_info)
+                  return sources.github:get_issues_and_prs(callback, git_info, trigger_char)
+                end
+              '';
+            }
+            {
+              debug_name = "github_mentions";
+              trigger_character = "@";
+              action = ''
+                function(sources, trigger_char, callback, params, git_info)
+                  return sources.github:get_mentions(callback, git_info, trigger_char)
+                end
+              '';
+            }
+          ]
           ''
             If you want specific behaviour for a trigger or new behaviour for a trigger, you need to
             add an entry in the `trigger_actions` list of the config.
@@ -284,7 +249,7 @@ in
         filter = "all";
         limit = 250;
         state = "all";
-        format.label.__raw = ''
+        format = ''
           function(_, issue)
             local icon = ({
               open = '',
@@ -293,17 +258,12 @@ in
             return string.format('%s #%d: %s', icon, issue.number, issue.title)
           end
         '';
-        sort_by.__raw = ''
+        sort_by = ''
           function(issue)
             local kind_rank = issue.pull_request and 1 or 0
             local state_rank = issue.state == 'open' and 0 or 1
             local age = os.difftime(os.time(), require('cmp_git.utils').parse_github_date(issue.updatedAt))
             return string.format('%d%d%010d', kind_rank, state_rank, age)
-          end
-        '';
-        filter_fn.__raw = ''
-          function(trigger_char, issue)
-            return string.format('%s %s %s', trigger_char, issue.number, issue.title)
           end
         '';
       };
