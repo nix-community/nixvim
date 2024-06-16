@@ -7,7 +7,7 @@
 let
   nixvimBuilders = import ./builders.nix { inherit lib pkgs; };
   nixvimTypes = import ./types.nix { inherit lib nixvimOptions; };
-  nixvimUtils = import ./utils.nix { inherit lib _nixvimTests; };
+  nixvimUtils = import ./utils.nix { inherit lib nixvimTypes _nixvimTests; };
   nixvimOptions = import ./options.nix { inherit lib nixvimTypes nixvimUtils; };
   inherit (import ./to-lua.nix { inherit lib; }) toLuaObject;
 in

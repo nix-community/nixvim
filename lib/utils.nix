@@ -1,4 +1,8 @@
-{ lib, _nixvimTests }:
+{
+  lib,
+  nixvimTypes,
+  _nixvimTests,
+}:
 with lib;
 {
   listToUnkeyedAttrs =
@@ -98,7 +102,16 @@ with lib;
 
   ifNonNull' = x: y: if (x == null) then null else y;
 
-  mkRaw = r: if (isString r && (r != "")) then { __raw = r; } else null;
+  mkRaw =
+    r:
+    if r == null || r == "" then
+      null
+    else if isString r then
+      { __raw = r; }
+    else if nixvimTypes.isRawType r then
+      r
+    else
+      throw "mkRaw: invalid input: ${generators.toPretty { multiline = false; } r}";
 
   wrapDo = string: ''
     do
