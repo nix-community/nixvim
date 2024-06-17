@@ -6,589 +6,664 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.flash;
-in
-{
-  options.plugins.flash =
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "flash";
+  originalName = "flash.nvim";
+  defaultPackage = pkgs.vimPlugins.flash-nvim;
+
+  maintainers = with maintainers; [
+    traxys
+    MattSturgeon
+  ];
+
+  # TODO: Added 2024-06-17; remove 2024-09-17
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings =
     let
-      configOpts = {
-        labels = helpers.defaultNullOpts.mkStr "asdfghjklqwertyuiopzxcvbnm" ''
-          Labels appear next to the matches, allowing you to quickly jump to any location. Labels are
-          guaranteed not to exist as a continuation of the search pattern.
-        '';
+      # Combine base option paths with nested mode option paths
+      merged = flatten [
+        opts
+        (mapAttrsToList (mode: extras: map (opt: "${mode}.${opt}") (opts ++ extras)) modes)
+      ];
 
+      # Option paths that should be renamed
+      opts = [
+        "labels"
+        "search.multiWindow"
+        "search.forward"
+        "search.wrap"
+        "search.mode"
+        "search.incremental"
+        "search.exclude"
+        "search.trigger"
+        "search.maxLength"
+        "jump.jumplist"
+        "jump.pos"
+        "jump.history"
+        "jump.register"
+        "jump.nohlsearch"
+        "jump.autojump"
+        "jump.inclusive"
+        "jump.offset"
+        "label.uppercase"
+        "label.exclude"
+        "label.current"
+        "label.after"
+        "label.before"
+        "label.style"
+        "label.reuse"
+        "label.distance"
+        "label.minPatternLength"
+        "label.rainbow.enabled"
+        "label.rainbow.shade"
+        "label.format"
+        "highlight.backdrop"
+        "highlight.matches"
+        "highlight.priority"
+        "highlight.group.match"
+        "highlight.group.current"
+        "highlight.group.backdrop"
+        "highlight.group.label"
+        "action"
+        "pattern"
+        "continue"
+        "config"
+        "prompt.enabled"
+        "prompt.prefix"
+        "prompt.winConfig.relative"
+        "prompt.winConfig.width"
+        "prompt.winConfig.height"
+        "prompt.winConfig.row"
+        "prompt.winConfig.col"
+        "prompt.winConfig.zindex"
+        "remoteOp.restore"
+        "remoteOp.motion"
+      ];
+
+      # "Modes" that should also be renamed
+      # `opts` will get added to the attr value
+      modes = {
+        search = [ "enabled" ];
+        char = [
+          "enabled"
+          "autohide"
+          "jumpLabels"
+          "multiLine"
+          "keys"
+          "charActions"
+        ];
+        treesitter = [ ];
+        treesitterSearch = [ ];
+        remote = [ ];
+      };
+    in
+    map (splitString ".") merged;
+
+  imports = [
+    # TODO: check automatic search config still works
+    (mkRemovedOptionModule [
+      "plugins"
+      "flash"
+      "search"
+      "automatic"
+    ] "You can configure `plugins.flash.settings.modes.search.search.*` directly.")
+  ];
+
+  settingsOptions =
+    let
+      # Default values used for the top-level settings options,
+      # also used as secondary defaults for mode options.
+      configDefaults = {
+        labels = "asdfghjklqwertyuiopzxcvbnm";
         search = {
-          automatic = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Automatically set the values according to context. Same as passing `search = {}` in lua
-            '';
-          };
-
-          multiWindow = helpers.defaultNullOpts.mkBool true "search/jump in all windows";
-
-          forward = helpers.defaultNullOpts.mkBool true "search direction";
-
-          wrap = helpers.defaultNullOpts.mkBool true ''
-            when `false`, find only matches in the given direction
-          '';
-
-          mode =
-            helpers.defaultNullOpts.mkNullable
-              (
-                with types;
-                either (enum [
-                  "exact"
-                  "search"
-                  "fuzzy"
-                ]) helpers.nixvimTypes.rawLua
-              )
-              ''"exact"''
-              ''
-                - exact: exact match
-                - search: regular search
-                - fuzzy: fuzzy search
-                - fun(str): custom search function that returns a pattern
-                  For example, to only match at the beginning of a word:
-                  function(str)
-                    return "\\<" .. str
-                  end
-              '';
-
-          incremental = helpers.defaultNullOpts.mkBool false "behave like `incsearch`";
-
-          exclude =
-            helpers.defaultNullOpts.mkListOf types.str
-              [
-                "notify"
-                "cmp_menu"
-                "noice"
-                "flash_prompt"
-                {
-                  __raw = ''
-                    function(win)
-                      return not vim.api.nvim_win_get_config(win).focusable
-                    end
-                  '';
-                }
-              ]
-              ''
-                Excluded filetypes and custom window filters
-              '';
-
-          trigger = helpers.defaultNullOpts.mkStr "" ''
-            Optional trigger character that needs to be typed before a jump label can be used.
-            It's NOT recommended to set this, unless you know what you're doing
-          '';
-
-          maxLength =
-            helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) types.int) false
-              ''
-                max pattern length. If the pattern length is equal to this labels will no longer be
-                skipped. When it exceeds this length it will either end in a jump or terminate the search
-              '';
+          multi_window = true;
+          forward = true;
+          wrap = true;
+          mode = "exact";
+          incremental = false;
+          exclude = [
+            "notify"
+            "cmp_menu"
+            "noice"
+            "flash_prompt"
+            (helpers.mkRaw ''
+              function(win)
+                -- exclude non-focusable windows
+                return not vim.api.nvim_win_get_config(win).focusable
+              end
+            '')
+          ];
+          trigger = "";
+          max_length = false;
         };
-
         jump = {
-          jumplist = helpers.defaultNullOpts.mkBool true "save location in the jumplist";
-
-          pos = helpers.defaultNullOpts.mkEnumFirstDefault [
-            "start"
-            "end"
-            "range"
-          ] "jump position";
-
-          history = helpers.defaultNullOpts.mkBool false "add pattern to search history";
-
-          register = helpers.defaultNullOpts.mkBool false "add pattern to search register";
-
-          nohlsearch = helpers.defaultNullOpts.mkBool false "clear highlight after jump";
-
-          autojump = helpers.defaultNullOpts.mkBool false ''
-            automatically jump when there is only one match
-          '';
-
-          inclusive = helpers.mkNullOrOption types.bool ''
-            You can force inclusive/exclusive jumps by setting the `inclusive` option. By default it
-            will be automatically set based on the mode.
-          '';
-
-          offset = helpers.mkNullOrOption types.int ''
-            jump position offset. Not used for range jumps.
-              0: default
-              1: when pos == "end" and pos < current position
-          '';
+          jumplist = true;
+          pos = "start";
+          history = false;
+          register = false;
+          nohlsearch = false;
+          autojump = false;
+          inclusive = null;
+          offset = null;
         };
-
         label = {
-          uppercase = helpers.defaultNullOpts.mkBool true "allow uppercase labels";
-
-          exclude = helpers.defaultNullOpts.mkStr "" ''
-            add any labels with the correct case here, that you want to exclude
-          '';
-
-          current = helpers.defaultNullOpts.mkBool true ''
-            add a label for the first match in the current window.
-            you can always jump to the first match with `<CR>`
-          '';
-
-          after = helpers.defaultNullOpts.mkNullable (with types; either bool (listOf int)) true ''
-            show the label after the match
-          '';
-
-          before = helpers.defaultNullOpts.mkNullable (with types; either bool (listOf int)) false ''
-            show the label before the match
-          '';
-
-          style =
-            helpers.defaultNullOpts.mkEnum
-              [
-                "eol"
-                "overlay"
-                "right_align"
-                "inline"
-              ]
-              "overlay"
-              ''
-                position of the label extmark
-              '';
-
-          reuse =
-            helpers.defaultNullOpts.mkEnumFirstDefault
-              [
-                "lowercase"
-                "all"
-                "none"
-              ]
-              ''
-                flash tries to re-use labels that were already assigned to a position,
-                when typing more characters. By default only lower-case labels are re-used.
-              '';
-
-          distance = helpers.defaultNullOpts.mkBool true ''
-            for the current window, label targets closer to the cursor first
-          '';
-
-          minPatternLength = helpers.defaultNullOpts.mkInt 0 ''
-            minimum pattern length to show labels
-            Ignored for custom labelers.
-          '';
-
+          uppercase = true;
+          exclude = "";
+          current = true;
+          after = true;
+          before = false;
+          style = "overlay";
+          reuse = "lowercase";
+          distance = true;
+          min_pattern_length = 0;
           rainbow = {
-            enabled = helpers.defaultNullOpts.mkBool false ''
-              Enable this to use rainbow colors to highlight labels
-              Can be useful for visualizing Treesitter ranges.
-            '';
-
-            shade = helpers.defaultNullOpts.mkNullable (types.ints.between 1 9) 5 "";
+            enabled = false;
+            shade = 5;
           };
-
-          format =
-            helpers.defaultNullOpts.mkLuaFn
-              ''
-                format = function(opts)
-                  return { { opts.match.label, opts.hl_group } }
-                end
-              ''
-              ''
-                With `format`, you can change how the label is rendered.
-                Should return a list of `[text, highlight]` tuples.
-                @class Flash.Format
-                @field state Flash.State
-                @field match Flash.Match
-                @field hl_group string
-                @field after boolean
-                @type fun(opts:Flash.Format): string[][]
-              '';
+          format = ''
+            function(opts)
+              return { { opts.match.label, opts.hl_group } }
+            end
+          '';
         };
-
         highlight = {
-          backdrop = helpers.defaultNullOpts.mkBool true "show a backdrop with hl FlashBackdrop";
-
-          matches = helpers.defaultNullOpts.mkBool true "Highlight the search matches";
-
-          priority = helpers.defaultNullOpts.mkPositiveInt 5000 "extmark priority";
-
-          groups = builtins.mapAttrs (_: default: helpers.defaultNullOpts.mkStr default "") {
+          backdrop = true;
+          matches = true;
+          priority = 5000;
+          groups = {
             match = "FlashMatch";
             current = "FlashCurrent";
             backdrop = "FlashBackdrop";
             label = "FlashLabel";
           };
         };
-
-        action = helpers.defaultNullOpts.mkLuaFn "nil" ''
-          action to perform when picking a label.
-          defaults to the jumping logic depending on the mode.
-          @type fun(match:Flash.Match, state:Flash.State)
-        '';
-
-        pattern = helpers.defaultNullOpts.mkStr "" "initial pattern to use when opening flash";
-
-        continue = helpers.defaultNullOpts.mkBool false ''
-          When `true`, flash will try to continue the last search
-        '';
-
-        config = helpers.defaultNullOpts.mkLuaFn "nil" ''
-          Set config to a function to dynamically change the config
-          @type fun(opts:Flash.Config)
-        '';
-
+        action = null;
+        pattern = "";
+        continue = false;
+        config = null;
         prompt = {
-          enabled = helpers.defaultNullOpts.mkBool true ''
-            options for the floating window that shows the prompt, for regular jumps
-          '';
-
-          # Not sure what is the type...
-          prefix = helpers.defaultNullOpts.mkListOf types.anything [
+          enabled = true;
+          prefix = [
             [
               "⚡"
               "FlashPromptIcon"
             ]
-          ] "";
-          winConfig = helpers.defaultNullOpts.mkAttrsOf types.anything {
+          ];
+          win_config = {
             relative = "editor";
             width = 1;
             height = 1;
             row = -1;
             col = 0;
             zindex = 1000;
-          } "See nvim_open_win for more details";
-        };
-
-        remoteOp = {
-          restore = helpers.defaultNullOpts.mkBool false ''
-            restore window views and cursor position after doing a remote operation
-          '';
-
-          motion = helpers.defaultNullOpts.mkBool false ''
-            For `jump.pos = "range"`, this setting is ignored.
-            - `true`: always enter a new motion when doing a remote operation
-            - `false`: use the window's cursor position and jump target
-            - `nil`: act as `true` for remote windows, `false` for the current window
-          '';
-        };
-      };
-    in
-    helpers.neovim-plugin.extraOptionsOptions
-    // {
-      enable = mkEnableOption "flash.nvim";
-
-      package = helpers.mkPluginPackageOption "flash.nvim" pkgs.vimPlugins.flash-nvim;
-
-      modes =
-        let
-          mkModeConfig =
-            {
-              extra ? { },
-              default,
-              description ? "",
-            }:
-            helpers.defaultNullOpts.mkNullable (types.submodule {
-              options = configOpts // extra;
-            }) default description;
-        in
-        {
-          search = mkModeConfig {
-            description = ''
-              options used when flash is activated through a regular search with `/` or `?`
-            '';
-            extra = {
-              enabled = helpers.defaultNullOpts.mkBool true ''
-                when `true`, flash will be activated during regular search by default.
-                You can always toggle when searching with `require("flash").toggle()`
-              '';
-            };
-            default = {
-              enabled = true;
-              highlight = {
-                backdrop = false;
-              };
-              jump = {
-                history = true;
-                register = true;
-                nohlsearch = true;
-              };
-              /*
-                forward will be automatically set to the search direction
-                mode is always set to 'search'
-                incremental is set to 'true' when 'incsearch' is enabled
-              */
-              search.automatic = true;
-            };
           };
-          char = mkModeConfig {
-            description = "options used when flash is activated through a regular search with `/` or `?`";
-            extra = {
-              enabled = helpers.defaultNullOpts.mkBool true "";
-
-              autohide = helpers.defaultNullOpts.mkBool false ''
-                hide after jump when not using jump labels
-              '';
-
-              jumpLabels = helpers.defaultNullOpts.mkBool false "show jump labels";
-
-              multiLine = helpers.defaultNullOpts.mkBool true ''
-                set to `false` to use the current line only
-              '';
-
-              keys =
-                helpers.defaultNullOpts.mkAttrsOf types.str
-                  # FIXME can't show helper func in docs
-                  (helpers.listToUnkeyedAttrs [
-                    "f"
-                    "F"
-                    "t"
-                    "T"
-                    ";"
-                    ","
-                  ])
-                  ''
-                    by default all keymaps are enabled, but you can disable some of them,
-                    by removing them from the list.
-                    If you rather use another key, you can map them
-                    to something else, e.g., `{ ";" = "L"; "," = "H"; }`
-                  '';
-
-              charActions =
-                helpers.defaultNullOpts.mkLuaFn
-                  ''
-                    function(motion)
-                      return {
-                        [";"] = "next", -- set to right to always go right
-                        [","] = "prev", -- set to left to always go left
-                        -- clever-f style
-                        [motion:lower()] = "next",
-                        [motion:upper()] = "prev",
-                        -- jump2d style: same case goes next, opposite case goes prev
-                        -- [motion] = "next",
-                        -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
-                      }
-                    end
-                  ''
-                  ''
-                    The direction for `prev` and `next` is determined by the motion.
-                    `left` and `right` are always left and right.
-                  '';
-            };
-            default = {
-              enabled = true;
-              # dynamic configuration for ftFT motions
-              config = ''
-                function(opts)
-                  -- autohide flash when in operator-pending mode
-                  opts.autohide = vim.fn.mode(true):find("no") and vim.v.operator == "y"
-
-                  -- disable jump labels when not enabled, when using a count,
-                  -- or when recording/executing registers
-                  opts.jump_labels = opts.jump_labels
-                    and vim.v.count == 0
-                    and vim.fn.reg_executing() == ""
-                    and vim.fn.reg_recording() == ""
-
-                  -- Show jump labels only in operator-pending mode
-                  -- opts.jump_labels = vim.v.count == 0 and vim.fn.mode(true):find("o")
-                end
-              '';
-              autohide = false;
-              jumpLabels = false;
-              multiLine = false;
-              label = {
-                exclude = "hjkliardc";
-              };
-              # FIXME can't show the function call in the docs...
-              keys = helpers.listToUnkeyedAttrs [
-                "f"
-                "F"
-                "t"
-                "T"
-                ";"
-                ","
-              ];
-              charActions = ''
-                function(motion)
-                  return {
-                    [";"] = "next", -- set to right to always go right
-                    [","] = "prev", -- set to left to always go left
-                    -- clever-f style
-                    [motion:lower()] = "next",
-                    [motion:upper()] = "prev",
-                    -- jump2d style: same case goes next, opposite case goes prev
-                    -- [motion] = "next",
-                    -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
-                  }
-                end
-              '';
-              search = {
-                wrap = false;
-              };
-              highlight = {
-                backdrop = true;
-              };
-              jump = {
-                register = false;
-              };
-            };
-          };
-          treesitter = mkModeConfig {
-            description = ''
-              options used for treesitter selections `require("flash").treesitter()`
-            '';
-            default = {
-              labels = "abcdefghijklmnopqrstuvwxyz";
-              jump = {
-                pos = "range";
-              };
-              search = {
-                incremental = false;
-              };
-              label = {
-                before = true;
-                after = true;
-                style = "inline";
-              };
-              highlight = {
-                backdrop = false;
-                matches = false;
-              };
-            };
-          };
-          treesitterSearch = mkModeConfig {
-            default = {
-              jump = {
-                pos = "range";
-              };
-              search = {
-                multiWindow = true;
-                wrap = true;
-                incremental = false;
-              };
-              remoteOp = {
-                restore = true;
-              };
-              label = {
-                before = true;
-                after = true;
-                style = "inline";
-              };
-            };
-          };
-          remote = mkModeConfig {
-            default = {
-              remoteOp = {
-                restore = true;
-                motion = true;
-              };
-            };
-            description = "options used for remote flash";
-          };
-        };
-    }
-    // configOpts;
-
-  config =
-    let
-      mkGlobalConfig = c: {
-        inherit (c) labels;
-        search =
-          if c.search.automatic then
-            helpers.emptyTable
-          else
-            {
-              multi_window = c.search.multiWindow;
-              inherit (c.search)
-                forward
-                wrap
-                mode
-                incremental
-                exclude
-                trigger
-                ;
-              max_length = c.search.maxLength;
-            };
-        jump = {
-          inherit (c.jump)
-            jumplist
-            pos
-            history
-            register
-            nohlsearch
-            autojump
-            inclusive
-            offset
-            ;
-        };
-        label = {
-          inherit (c.label)
-            uppercase
-            exclude
-            current
-            after
-            before
-            style
-            reuse
-            distance
-            ;
-          min_pattern_length = c.label.minPatternLength;
-          rainbow = {
-            inherit (c.label.rainbow) enabled shade;
-          };
-          inherit (c.label) format;
-        };
-        highlight = {
-          inherit (c.highlight)
-            backdrop
-            matches
-            priority
-            groups
-            ;
-        };
-        inherit (c)
-          action
-          pattern
-          continue
-          config
-          ;
-        prompt = {
-          inherit (c.prompt) enabled prefix;
-          win_config = c.prompt.winConfig;
         };
         remote_op = {
-          inherit (c.remoteOp) restore motion;
+          restore = false;
+          motion = false;
         };
       };
 
-      options =
-        (mkGlobalConfig cfg)
-        // {
-          modes =
-            let
-              mkModeConfig = c: extra: helpers.ifNonNull' c ((mkGlobalConfig c) // (extra c));
-            in
-            {
-              search = mkModeConfig cfg.modes.search (c: {
-                inherit (c) enabled;
-              });
-              char = mkModeConfig cfg.modes.char (c: {
-                inherit (c) enabled autohide;
-                jump_labels = c.jumpLabels;
-                multi_line = c.multiLine;
-                inherit (c) keys charActions;
-              });
-              treesitter = mkModeConfig cfg.modes.treesitter (c: { });
-              treesitter_search = mkModeConfig cfg.modes.treesitterSearch (c: { });
-              remote = mkModeConfig cfg.modes.remote (c: { });
-            };
-        }
-        // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+      # Shared config options, used by the top-level settings, as well as modes.
+      # Each usage has different default values.
+      configOpts =
+        defaultOverrides:
+        let
+          defaults = recursiveUpdate configDefaults defaultOverrides;
+        in
+        {
+          labels = helpers.defaultNullOpts.mkStr defaults.labels ''
+            Labels appear next to the matches, allowing you to quickly jump to any location. Labels are
+            guaranteed not to exist as a continuation of the search pattern.
+          '';
 
-      extraConfigLua = ''
-        require('flash').setup(${helpers.toLuaObject options})
-      '';
+          search = {
+            multi_window = helpers.defaultNullOpts.mkBool defaults.search.multi_window ''
+              Search/jump in all windows
+            '';
+
+            forward = helpers.defaultNullOpts.mkBool defaults.search.forward ''
+              Search direction
+            '';
+
+            wrap = helpers.defaultNullOpts.mkBool defaults.search.wrap ''
+              Continue searching after reaching the start/end of the file.
+              When `false`, find only matches in the given direction
+            '';
+
+            mode =
+              helpers.defaultNullOpts.mkEnum
+                [
+                  "exact"
+                  "search"
+                  "fuzzy"
+                ]
+                defaults.search.mode
+                ''
+                  Each mode will take `ignorecase` and `smartcase` into account.
+                  - `exact`: exact match
+                  - `search`: regular search
+                  - `fuzzy`: fuzzy search
+                  - `__raw` fun(str): custom search function that returns a pattern
+
+                  For example, to only match at the beginning of a word:
+                  ```lua
+                    function(str)
+                      return "\\<" .. str
+                    end
+                  ```
+                '';
+
+            incremental = helpers.defaultNullOpts.mkBool defaults.search.incremental ''
+              Behave like `incsearch`.
+            '';
+
+            exclude = helpers.defaultNullOpts.mkListOf types.str defaults.search.exclude ''
+              Excluded filetypes and custom window filters.
+            '';
+
+            trigger = helpers.defaultNullOpts.mkStr defaults.search.trigger ''
+              Optional trigger character that needs to be typed before a jump label can be used.
+              It's NOT recommended to set this, unless you know what you're doing.
+            '';
+
+            max_length =
+              helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) int)
+                defaults.search.max_length
+                ''
+                  Max pattern length. If the pattern length is equal to this labels will no longer be skipped.
+                  When it exceeds this length it will either end in a jump or terminate the search.
+                '';
+          };
+
+          jump = {
+            jumplist = helpers.defaultNullOpts.mkBool defaults.jump.jumplist ''
+              Save location in the jumplist.
+            '';
+
+            pos =
+              helpers.defaultNullOpts.mkEnum
+                [
+                  "start"
+                  "end"
+                  "range"
+                ]
+                defaults.jump.pos
+                ''
+                  Jump position
+                '';
+
+            history = helpers.defaultNullOpts.mkBool defaults.jump.history ''
+              Add pattern to search history.
+            '';
+
+            register = helpers.defaultNullOpts.mkBool defaults.jump.register ''
+              Add pattern to search register.
+            '';
+
+            nohlsearch = helpers.defaultNullOpts.mkBool defaults.jump.nohlsearch ''
+              Clear highlight after jump
+            '';
+
+            autojump = helpers.defaultNullOpts.mkBool defaults.jump.autojump ''
+              Automatically jump when there is only one match
+            '';
+
+            inclusive = helpers.defaultNullOpts.mkBool defaults.jump.inclusive ''
+              You can force inclusive/exclusive jumps by setting the `inclusive` option. By default it
+              will be automatically set based on the mode.
+            '';
+
+            offset = helpers.defaultNullOpts.mkInt defaults.jump.offset ''
+              jump position offset. Not used for range jumps.
+                0: default
+                1: when pos == "end" and pos < current position
+            '';
+          };
+
+          label = {
+            uppercase = helpers.defaultNullOpts.mkBool defaults.label.uppercase ''
+              Allow uppercase labels.
+            '';
+
+            exclude = helpers.defaultNullOpts.mkStr defaults.label.exclude ''
+              add any labels with the correct case here, that you want to exclude
+            '';
+
+            current = helpers.defaultNullOpts.mkBool true ''
+              Add a label for the first match in the current window.
+              You can always jump to the first match with `<CR>`
+            '';
+
+            after =
+              helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int))
+                defaults.label.after
+                ''
+                  Show the label after the match
+                '';
+
+            before =
+              helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int))
+                defaults.label.before
+                ''
+                  Show the label before the match
+                '';
+
+            style =
+              helpers.defaultNullOpts.mkEnum
+                [
+                  "eol"
+                  "overlay"
+                  "right_align"
+                  "inline"
+                ]
+                defaults.label.style
+                ''
+                  position of the label extmark
+                '';
+
+            reuse =
+              helpers.defaultNullOpts.mkEnum
+                [
+                  "lowercase"
+                  "all"
+                  "none"
+                ]
+                defaults.label.reuse
+                ''
+                  flash tries to re-use labels that were already assigned to a position,
+                  when typing more characters. By default only lower-case labels are re-used.
+                '';
+
+            distance = helpers.defaultNullOpts.mkBool defaults.label.distance ''
+              for the current window, label targets closer to the cursor first
+            '';
+
+            min_pattern_length = helpers.defaultNullOpts.mkInt defaults.label.min_pattern_length ''
+              minimum pattrn length to show labels
+              Ignored for custom labelers.
+            '';
+
+            rainbow = {
+              enabled = helpers.defaultNullOpts.mkBool defaults.label.rainbow.enabled ''
+                Enable this to use rainbow colors to highlight labels
+                Can be useful for visualizing Treesitter ranges.
+              '';
+
+              shade = helpers.defaultNullOpts.mkNullable (types.ints.between 1 9) defaults.label.rainbow.shade "";
+            };
+
+            format = helpers.defaultNullOpts.mkLuaFn defaults.label.format ''
+              With `format`, you can change how the label is rendered.
+              Should return a list of `[text, highlight]` tuples.
+
+              @class Flash.Format
+              @field state Flash.State
+              @field match Flash.Match
+              @field hl_group string
+              @field after boolean
+              @type fun(opts:Flash.Format): string[][]
+            '';
+          };
+
+          highlight = {
+            backdrop = helpers.defaultNullOpts.mkBool defaults.highlight.backdrop ''
+              Show a backdrop with hl FlashBackdrop.
+            '';
+
+            matches = helpers.defaultNullOpts.mkBool defaults.highlight.matches ''
+              Highlight the search matches.
+            '';
+
+            priority = helpers.defaultNullOpts.mkPositiveInt defaults.highlight.priority ''
+              Extmark priority.
+            '';
+
+            groups = mapAttrs (name: helpers.defaultNullOpts.mkStr defaults.highlight.groups.${name}) {
+              # opt = description
+              match = "FlashMatch";
+              current = "FlashCurrent";
+              backdrop = "FlashBackdrop";
+              label = "FlashLabel";
+            };
+          };
+
+          action = helpers.defaultNullOpts.mkLuaFn defaults.action ''
+            action to perform when picking a label.
+            defaults to the jumping logic depending on the mode.
+
+            @type fun(match:Flash.Match, state:Flash.State)
+          '';
+
+          pattern = helpers.defaultNullOpts.mkStr defaults.pattern ''
+            Initial pattern to use when opening flash.
+          '';
+
+          continue = helpers.defaultNullOpts.mkBool defaults.continue ''
+            When `true`, flash will try to continue the last search.
+          '';
+
+          config = helpers.defaultNullOpts.mkLuaFn defaults.config ''
+            Set config to a function to dynamically change the config.
+
+            @type fun(opts:Flash.Config)
+          '';
+
+          prompt = {
+            enabled = helpers.defaultNullOpts.mkBool defaults.prompt.enabled ''
+              Options for the floating window that shows the prompt, for regular jumps.
+            '';
+
+            # Not sure what the type is...
+            # Think it's listOf (maybeRaw (listOf (maybeRaw str)))?
+            prefix = helpers.defaultNullOpts.mkListOf types.anything defaults.prompt.prefix "";
+
+            win_config = helpers.defaultNullOpts.mkAttrsOf types.anything defaults.prompt.win_config ''
+              See `:h nvim_open_win` for more details.
+            '';
+          };
+
+          remote_op = {
+            restore = helpers.defaultNullOpts.mkBool defaults.remote_op.restore ''
+              Restore window views and cursor position after doing a remote operation.
+            '';
+
+            motion = helpers.defaultNullOpts.mkBool defaults.remote_op.motion ''
+              For `jump.pos = "range"`, this setting is ignored.
+              - `true`: always enter a new motion when doing a remote operation
+              - `false`: use the window's cursor position and jump target
+              - `nil`: act as `true` for remote windows, `false` for the current window
+            '';
+          };
+        };
+
+      # The `mode`s have all the same options as top-level settings,
+      # but with different defaults and some additional options.
+      mkModeConfig =
+        {
+          defaults ? { },
+          options ? { },
+          ...
+        }@args:
+        # FIXME: use mkNullableWithRaw when #1618 is fixed
+        helpers.defaultNullOpts.mkNullable' (
+          (removeAttrs args [
+            "options"
+            "defaults"
+          ])
+          // {
+            type =
+              with types;
+              submodule {
+                freeformType = attrsOf anything;
+                options = recursiveUpdate (configOpts defaults) options;
+              };
+          }
+        );
+    in
+    (configOpts { })
+    // {
+      modes = {
+        search = mkModeConfig rec {
+          description = ''
+            Options used when flash is activated through a regular search,
+            e.g. with `/` or `?`.
+          '';
+          defaults = {
+            enabled = false;
+            highlight = {
+              backdrop = false;
+            };
+            jump = {
+              history = true;
+              register = true;
+              nohlsearch = true;
+            };
+            search = {
+              forward.__raw = "vim.fn.getcmdtype() == '/'";
+              mode = "search";
+              incremental.__raw = "vim.go.incsearch";
+            };
+          };
+          options = {
+            enabled = helpers.defaultNullOpts.mkBool defaults.enabled ''
+              When `true`, flash will be activated during regular search by default.
+              You can always toggle when searching with `require("flash").toggle()`
+            '';
+          };
+        };
+        char = mkModeConfig rec {
+          description = ''
+            Options used when flash is activated through
+            `f`, `F`, `t`, `T`, `;` and `,` motions.
+          '';
+          defaults = {
+            enabled = true;
+            config = ''
+              -- dynamic configuration for ftFT motions
+              function(opts)
+                -- autohide flash when in operator-pending mode
+                opts.autohide = opts.autohide or (vim.fn.mode(true):find("no") and vim.v.operator == "y")
+
+                -- disable jump labels when not enabled, when using a count,
+                -- or when recording/executing registers
+                opts.jump_labels = opts.jump_labels
+                  and vim.v.count == 0
+                  and vim.fn.reg_executing() == ""
+                  and vim.fn.reg_recording() == ""
+
+                -- Show jump labels only in operator-pending mode
+                -- opts.jump_labels = vim.v.count == 0 and vim.fn.mode(true):find("o")
+              end
+            '';
+            autohide = false;
+            jump_labels = false;
+            multi_line = true;
+            label = {
+              exclude = "hjkliardc";
+            };
+            keys = helpers.listToUnkeyedAttrs (lib.stringToCharacters "fFtT;,");
+            char_actions = ''
+              function(motion)
+                return {
+                  [";"] = "next", -- set to `right` to always go right
+                  [","] = "prev", -- set to `left` to always go left
+                  -- clever-f style
+                  [motion:lower()] = "next",
+                  [motion:upper()] = "prev",
+                  -- jump2d style: same case goes next, opposite case goes prev
+                  -- [motion] = "next",
+                  -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
+                }
+              end
+            '';
+            search.wrap = false;
+            highlight.backdrop = true;
+            jump.register = false;
+          };
+          options = {
+            enabled = helpers.defaultNullOpts.mkBool defaults.enabled "";
+
+            autohide = helpers.defaultNullOpts.mkBool defaults.autohide ''
+              Hide after jump when not using jump labels.
+            '';
+
+            jump_labels = helpers.defaultNullOpts.mkBool defaults.jump_labels ''
+              Show jump labels.
+            '';
+
+            multi_line = helpers.defaultNullOpts.mkBool defaults.multi_line ''
+              Set to `false` to use the current line only.
+            '';
+
+            keys = helpers.defaultNullOpts.mkAttrsOf' {
+              type = types.str;
+              pluginDefault = defaults.keys;
+              description = ''
+                By default all keymaps are enabled, but you can disable some of them,
+                by removing them from the list.
+
+                If you rather use another key, you can map them to something else.
+              '';
+              example = {
+                ";" = "L";
+                "," = "H";
+              };
+            };
+
+            char_actions = helpers.defaultNullOpts.mkLuaFn defaults.char_actions ''
+              The direction for `prev` and `next` is determined by the motion.
+              `left` and `right` are always left and right.
+            '';
+          };
+        };
+        treesitter = mkModeConfig {
+          description = ''
+            Options used for treesitter selections in `require("flash").treesitter()`.
+          '';
+          defaults = {
+            labels = "abcdefghijklmnopqrstuvwxyz";
+            jump.pos = "range";
+            search.incremental = false;
+            label = {
+              before = true;
+              after = true;
+              style = "inline";
+            };
+            highlight = {
+              backdrop = false;
+              matches = false;
+            };
+          };
+        };
+        treesitter_search = mkModeConfig {
+          description = ''
+            Options used when flash is activated through `require("flash").treesitter_search()`.
+          '';
+          defaults = {
+            jump.pos = "range";
+            search = {
+              multi_window = true;
+              wrap = true;
+              incremental = false;
+            };
+            remote_op.restore = true;
+            label = {
+              before = true;
+              after = true;
+              style = "inline";
+            };
+          };
+        };
+        remote = mkModeConfig {
+          description = "Options used for remote flash.";
+          defaults = {
+            remote_op = {
+              restore = true;
+              motion = true;
+            };
+          };
+        };
+      };
     };
 }
