@@ -28,21 +28,20 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Whether to load dictionaries on startup.
     '';
 
-    load_langs = helpers.defaultNullOpts.mkNullable (types.listOf types.str) ''["en-US"]'' ''
+    load_langs = helpers.defaultNullOpts.mkListOf types.str [ "en-US" ] ''
       Languages for witch dicionnaries will be loaded.
       See `plugins.lsp.servers.ltex.languages` for possible values.
     '';
 
-    log_level = helpers.defaultNullOpts.mkStr "none" ''
-      Log level. Possible values:
-      - "none"
-      - "trace"
-      - "debug"
-      - "info"
-      - "warn"
-      - "error"
-      - "fatal"
-    '';
+    log_level = helpers.defaultNullOpts.mkEnumFirstDefault [
+      "none"
+      "trace"
+      "debug"
+      "info"
+      "warn"
+      "error"
+      "fatal"
+    ] "Log level.";
   };
 
   extraConfig = cfg: {
@@ -50,8 +49,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       You have enabled `ltex-extra` but not the lsp (`plugins.lsp`).
       You should set `plugins.lsp.enable = true` to make use of the LTeX_extra plugin's features.
     '';
-
-    extraPlugins = [ cfg.package ];
 
     plugins.lsp = {
       servers.ltex = {
