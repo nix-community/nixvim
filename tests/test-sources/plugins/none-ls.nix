@@ -83,6 +83,10 @@
               "regal"
               "remark"
               "rescript"
+              # As of 2024-06-18, pkgs.rubyfmt is broken on all platforms
+              # https://github.com/NixOS/nixpkgs/issues/320722
+              # TODO: re-enable this test when fixed
+              "rubyfmt"
               "saltlint"
               "solhint"
               "spectral"
@@ -102,7 +106,6 @@
               # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
               # TODO: re-enable this test when fixed
               "clj_kondo"
-              "rubyfmt"
             ])
             ++ (pkgs.lib.optionals pkgs.stdenv.isDarwin [
               # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
