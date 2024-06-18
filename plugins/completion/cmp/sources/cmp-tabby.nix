@@ -11,37 +11,59 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.cmp-tabby = helpers.neovim-plugin.extraOptionsOptions // {
-    host = helpers.defaultNullOpts.mkStr "http://localhost:5000" ''
-      The address of the tabby host server.
-    '';
+  # TODO: introduced 24-06-18, remove after 24.11
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "cmp-tabby"
+      ];
+      settingsPath = basePluginPath ++ [ "settings" ];
+    in
+    [
+      (mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath)
+      (mkRenamedOptionModule (basePluginPath ++ [ "host" ]) (settingsPath ++ [ "host" ]))
+      (mkRenamedOptionModule (basePluginPath ++ [ "maxLines" ]) (settingsPath ++ [ "max_lines" ]))
+      (mkRenamedOptionModule (basePluginPath ++ [ "runOnEveryKeyStroke" ]) (
+        settingsPath ++ [ "run_on_every_keystroke" ]
+      ))
+      (mkRenamedOptionModule (basePluginPath ++ [ "stop" ]) (settingsPath ++ [ "stop" ]))
+    ];
 
-    maxLines = helpers.defaultNullOpts.mkUnsignedInt 100 ''
-      The max number of lines to complete.
-    '';
+  options.plugins.cmp-tabby = {
+    settings = helpers.mkSettingsOption {
+      description = "Options provided to the `require('cmp_ai.config'):setup` function.";
 
-    runOnEveryKeyStroke = helpers.defaultNullOpts.mkBool true ''
-      Whether to run the completion on every keystroke.
-    '';
+      options = {
+        host = helpers.defaultNullOpts.mkStr "http://localhost:5000" ''
+          The address of the tabby host server.
+        '';
 
-    stop = helpers.defaultNullOpts.mkListOf types.str ''["\n"]'' "";
+        max_lines = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          The max number of lines to complete.
+        '';
+
+        run_on_every_keystroke = helpers.defaultNullOpts.mkBool true ''
+          Whether to run the completion on every keystroke.
+        '';
+
+        stop = helpers.defaultNullOpts.mkListOf types.str [ "\n" ] ''
+          Stop character.
+        '';
+      };
+
+      example = {
+        host = "http://localhost:5000";
+        max_lines = 100;
+        run_on_every_keystroke = true;
+        stop = [ "\n" ];
+      };
+    };
   };
 
   config = mkIf cfg.enable {
-    extraConfigLua =
-      let
-        setupOptions =
-          with cfg;
-          {
-            inherit host;
-            max_lines = maxLines;
-            run_on_every_keystroke = runOnEveryKeyStroke;
-            inherit stop;
-          }
-          // cfg.extraOptions;
-      in
-      ''
-        require('cmp_tabby.config'):setup(${helpers.toLuaObject setupOptions})
-      '';
+    extraConfigLua = ''
+      require('cmp_tabby.config'):setup(${helpers.toLuaObject cfg.settings})
+    '';
   };
 }
