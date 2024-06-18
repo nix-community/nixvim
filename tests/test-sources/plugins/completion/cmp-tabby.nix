@@ -12,10 +12,10 @@
         enable = true;
         settings.sources = [ { name = "cmp_tabby"; } ];
       };
-      cmp-tabby = {
+      cmp-tabby.settings = {
         host = "http://localhost:5000";
-        maxLines = 100;
-        runOnEveryKeyStroke = true;
+        max_lines = 100;
+        run_on_every_keystroke = true;
         stop = [ "\n" ];
       };
     };
