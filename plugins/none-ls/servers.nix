@@ -241,28 +241,60 @@ let
   builtinPackage = source: builtinPackages.${source} or null;
 in
 {
-  imports = [ ./prettier.nix ];
+  imports =
+    [ ./prettier.nix ]
+    # Rename `sources.*.*.withArgs` to `sources.*.*.settings`
+    # TODO: Introduced 2024-06-18, remove after 24.11
+    ++ (pipe noneLsBuiltins [
+      (mapAttrsToList (category: sources: mapAttrsToList (name: _: { inherit category name; }) sources))
+      flatten
+      (map (
+        { category, name }:
+        let
+          baseSourcePath = [
+            "plugins"
+            "none-ls"
+            "sources"
+            category
+            name
+          ];
+        in
+        mkRenamedOptionModule (baseSourcePath ++ [ "withArgs" ]) (baseSourcePath ++ [ "settings" ])
+      ))
+    ]);
 
-  options.plugins.none-ls.sources = builtins.mapAttrs (
-    sourceType: sources:
-    builtins.mapAttrs (
-      source: _:
+  options.plugins.none-ls.sources = mapAttrs (
+    category: sources:
+    mapAttrs (
+      name: _:
       {
-        enable = mkEnableOption "the ${source} ${sourceType} source for none-ls";
-        withArgs = helpers.mkNullOrOption helpers.nixvimTypes.strLua ''
-          Raw Lua code passed as an argument to the source's `with` method.
-        '';
+        enable = mkEnableOption "the ${name} ${category} source for none-ls";
+        # Not using helpers.mkSettingsOption because we need `either strLua submodule`
+        settings = mkOption {
+          type =
+            with helpers.nixvimTypes;
+            either strLua (submodule {
+              freeformType = attrsOf anything;
+              options = { }; # TODO
+            });
+          apply = v: if isString v then helpers.mkRaw v else v;
+          description = ''
+            Options provided to the `require('null-ls').builtins.${category}.${name}.with` function.
+          '';
+          # example = { }; # TODO
+          default = { };
+        };
       }
-      // lib.optionalAttrs (hasBuiltinPackage source) {
+      // lib.optionalAttrs (hasBuiltinPackage name) {
         package =
           let
-            pkg = builtinPackage source;
+            pkg = builtinPackage name;
           in
           mkOption (
             {
               type = types.nullOr types.package;
               description =
-                "Package to use for ${source} by none-ls. "
+                "Package to use for ${name} by none-ls. "
                 + (lib.optionalString (pkg == null) ''
                   Not handled in nixvim, either install externally and set to null or set the option with a derivation.
                 '');
@@ -278,14 +310,13 @@ in
       cfg = config.plugins.none-ls;
       gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
 
-      flattenedSources = lib.flatten (
-        lib.mapAttrsToList (
-          sourceType: sources:
-          (lib.mapAttrsToList (sourceName: source: source // { inherit sourceType sourceName; }) sources)
-        ) cfg.sources
-      );
-
-      enabledSources = builtins.filter (source: source.enable) flattenedSources;
+      enabledSources = pipe cfg.sources [
+        (mapAttrsToList (
+          category: sources: (mapAttrsToList (name: cfg': { inherit category name cfg'; }) sources)
+        ))
+        flatten
+        (filter ({ cfg', ... }: cfg'.enable))
+      ];
     in
     mkIf cfg.enable {
       # ASSERTIONS FOR DEVELOPMENT PURPOSES: Any failure should be caught by CI before deployment.
@@ -318,17 +349,16 @@ in
 
       plugins.none-ls.settings.sources = mkIf (enabledSources != [ ]) (
         map (
-          source:
-          let
-            sourceItem = "${source.sourceType}.${source.sourceName}";
-            withArgs = if source.withArgs == null then sourceItem else "${sourceItem}.with(${source.withArgs})";
-          in
-          ''
-            require("null-ls").builtins.${withArgs}
-          ''
+          {
+            category,
+            name,
+            cfg',
+          }:
+          "require('null-ls').builtins.${category}.${name}"
+          + optionalString (cfg'.settings != { }) ".with(${helpers.toLuaObject cfg'.settings})"
         ) enabledSources
       );
       plugins.gitsigns.enable = mkIf gitsignsEnabled true;
-      extraPackages = map (source: source.package or null) enabledSources;
+      extraPackages = map ({ cfg', ... }: cfg'.package or null) enabledSources;
     };
 }
