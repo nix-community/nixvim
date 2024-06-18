@@ -210,7 +210,9 @@ with lib;
     settings =
       helpers.mkNullOrStrLuaFnOr
         (types.submodule {
-          options = import ../../../lsp/language-servers/rust-analyzer-config.nix lib pkgs;
+          # options = import ../../../lsp/language-servers/rust-analyzer-config.nix lib pkgs;
+          options = { };
+          freeformType = with types; attrsOf anything;
         })
         ''
           Setting passed to rust-analyzer.
