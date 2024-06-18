@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  options,
   lib,
   helpers,
   ...
@@ -241,27 +242,7 @@ let
   builtinPackage = source: builtinPackages.${source} or null;
 in
 {
-  imports =
-    [ ./prettier.nix ]
-    # Rename `sources.*.*.withArgs` to `sources.*.*.settings`
-    # TODO: Introduced 2024-06-18, remove after 24.11
-    ++ (pipe noneLsBuiltins [
-      (mapAttrsToList (category: sources: mapAttrsToList (name: _: { inherit category name; }) sources))
-      flatten
-      (map (
-        { category, name }:
-        let
-          baseSourcePath = [
-            "plugins"
-            "none-ls"
-            "sources"
-            category
-            name
-          ];
-        in
-        mkRenamedOptionModule (baseSourcePath ++ [ "withArgs" ]) (baseSourcePath ++ [ "settings" ])
-      ))
-    ]);
+  imports = [ ./prettier.nix ];
 
   options.plugins.none-ls.sources = mapAttrs (
     category: sources:
@@ -269,6 +250,7 @@ in
       name: _:
       {
         enable = mkEnableOption "the ${name} ${category} source for none-ls";
+
         # Not using helpers.mkSettingsOption because we need `either strLua submodule`
         settings = mkOption {
           type =
@@ -283,6 +265,18 @@ in
           '';
           # example = { }; # TODO
           default = { };
+        };
+
+        # TODO: Deprecated option: introduced 2024-06-18, remove after 24.11
+        # Can't use mkRenamedOptionModule: module imports mapped from IFD results in infinite recursion
+        withArgs = helpers.mkNullOrOption' {
+          type = helpers.nixvimTypes.strLua;
+          description = ''
+            Raw Lua code passed as an argument to the source's `with` method.
+
+            Deprecated in favor of `plugins.none-ls.sources.${category}.${name}.settings`.
+          '';
+          visible = false;
         };
       }
       // lib.optionalAttrs (hasBuiltinPackage name) {
@@ -310,13 +304,14 @@ in
       cfg = config.plugins.none-ls;
       gitsignsEnabled = cfg.sources.code_actions.gitsigns.enable;
 
-      enabledSources = pipe cfg.sources [
+      flattenedSources = pipe cfg.sources [
         (mapAttrsToList (
           category: sources: (mapAttrsToList (name: cfg': { inherit category name cfg'; }) sources)
         ))
         flatten
-        (filter ({ cfg', ... }: cfg'.enable))
       ];
+
+      enabledSources = filter ({ cfg', ... }: cfg'.enable) flattenedSources;
     in
     mkIf cfg.enable {
       # ASSERTIONS FOR DEVELOPMENT PURPOSES: Any failure should be caught by CI before deployment.
@@ -345,7 +340,29 @@ in
         ++ (optional ((length uselesslyDeclaredToolNames) > 0) ''
           [DEV] Nixvim (plugins.none-ls): Some tools are declared locally but are not in the upstream list of supported plugins.
           -> [${concatStringsSep ", " uselesslyDeclaredToolNames}]
-        '');
+        '')
+        # TODO: Deprecated withArgs option: introduced 2024-06-18, remove after 24.11
+        ++ (pipe flattenedSources [
+          (map ({ category, name, ... }: splitString "." "plugins.none-ls.sources.${category}.${name}"))
+          (map (path: rec {
+            from = path ++ [ "withArgs" ];
+            to = path ++ [ "settings" ];
+            opt = getAttrFromPath from options;
+          }))
+          # For some reason, this file creates a null definition somewhere.
+          (filter ({ opt, ... }: opt.isDefined && opt.definitions != [ null ]))
+          (map (
+            {
+              from,
+              to,
+              opt,
+            }:
+            ''
+              The option `${showOption from}' is deprecated. You should use `${showOption to}' instead.
+              Definitions: ${lib.options.showDefs opt.definitionsWithLocations}
+            ''
+          ))
+        ]);
 
       plugins.none-ls.settings.sources = mkIf (enabledSources != [ ]) (
         map (
@@ -354,8 +371,10 @@ in
             name,
             cfg',
           }:
-          "require('null-ls').builtins.${category}.${name}"
-          + optionalString (cfg'.settings != { }) ".with(${helpers.toLuaObject cfg'.settings})"
+          let
+            args = if cfg'.settings != { } then helpers.toLuaObject cfg'.settings else cfg'.withArgs;
+          in
+          "require('null-ls').builtins.${category}.${name}" + optionalString (args != null) ".with(${args})"
         ) enabledSources
       );
       plugins.gitsigns.enable = mkIf gitsignsEnabled true;
