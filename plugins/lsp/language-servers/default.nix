@@ -37,7 +37,7 @@ let
     {
       name = "bashls";
       description = "bashls for bash";
-      package = pkgs.nodePackages.bash-language-server;
+      package = pkgs.bash-language-server;
     }
     {
       name = "beancount";
