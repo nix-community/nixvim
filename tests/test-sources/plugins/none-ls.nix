@@ -21,34 +21,45 @@
       lsp-format.enable = true;
       none-ls = {
         enable = true;
-        enableLspFormat = true;
+        # This is implied:
+        # enableLspFormat = true;
       };
     };
   };
 
-  default = {
+  defaults = {
+    plugins.none-ls = {
+      enable = true;
+
+      settings = {
+        border = null;
+        cmd = [ "nvim" ];
+        debounce = 250;
+        debug = false;
+        default_timeout = 5000;
+        diagnostic_config = { };
+        diagnostics_format = "#{m}";
+        fallback_severity.__raw = "vim.diagnostic.severity.ERROR";
+        log_level = "warn";
+        notify_format = "[null-ls] %s";
+        on_attach = null;
+        on_init = null;
+        on_exit = null;
+        root_dir = "require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git')";
+        root_dir_async = null;
+        should_attach = null;
+        sources = null;
+        temp_dir = null;
+        update_in_insert = false;
+      };
+    };
+  };
+
+  with-sources = {
     plugins.none-ls = {
       # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
       enable = !pkgs.stdenv.isDarwin;
 
-      enableLspFormat = false;
-      border = null;
-      cmd = [ "nvim" ];
-      debounce = 250;
-      debug = false;
-      defaultTimeout = 5000;
-      diagnosticConfig = null;
-      diagnosticsFormat = "#{m}";
-      fallbackSeverity = "error";
-      logLevel = "warn";
-      notifyFormat = "[null-ls] %s";
-      onAttach = null;
-      onInit = null;
-      onExit = null;
-      rootDir = null;
-      shouldAttach = null;
-      tempDir = null;
-      updateInInsert = false;
       sources =
         let
           options = nonels-sources-options.options.plugins.none-ls.sources;
