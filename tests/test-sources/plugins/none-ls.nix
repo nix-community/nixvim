@@ -21,34 +21,89 @@
       lsp-format.enable = true;
       none-ls = {
         enable = true;
-        enableLspFormat = true;
+        # This is implied:
+        # enableLspFormat = true;
       };
     };
   };
 
-  default = {
+  defaults = {
+    plugins.none-ls = {
+      enable = true;
+
+      settings = {
+        border = null;
+        cmd = [ "nvim" ];
+        debounce = 250;
+        debug = false;
+        default_timeout = 5000;
+        diagnostic_config = { };
+        diagnostics_format = "#{m}";
+        fallback_severity.__raw = "vim.diagnostic.severity.ERROR";
+        log_level = "warn";
+        notify_format = "[null-ls] %s";
+        on_attach = null;
+        on_init = null;
+        on_exit = null;
+        root_dir = "require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git')";
+        root_dir_async = null;
+        should_attach = null;
+        sources = null;
+        temp_dir = null;
+        update_in_insert = false;
+      };
+    };
+  };
+
+  example = {
+    plugins.none-ls = {
+      enable = true;
+
+      settings = {
+        diagnostics_format = "[#{c}] #{m} (#{s})";
+        on_attach = ''
+          function(client, bufnr)
+            -- Integrate lsp-format with none-ls
+            -- Disabled because plugins.lsp-format is not enabled
+            -- require('lsp-format').on_attach(client, bufnr)
+          end
+        '';
+        on_exit = ''
+          function()
+            print("Goodbye, cruel world!")
+          end
+        '';
+        on_init = ''
+          function(client, initialize_result)
+            print("Hello, world!")
+          end
+        '';
+        root_dir = ''
+          function(fname)
+            return fname:match("my-project") and "my-project-root"
+          end
+        '';
+        root_dir_async = ''
+          function(fname, cb)
+            cb(fname:match("my-project") and "my-project-root")
+          end
+        '';
+        should_attach = ''
+          function(bufnr)
+            return not vim.api.nvim_buf_get_name(bufnr):match("^git://")
+          end
+        '';
+        temp_dir = "/tmp";
+        update_in_insert = false;
+      };
+    };
+  };
+
+  with-sources = {
     plugins.none-ls = {
       # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
       enable = !pkgs.stdenv.isDarwin;
 
-      enableLspFormat = false;
-      border = null;
-      cmd = [ "nvim" ];
-      debounce = 250;
-      debug = false;
-      defaultTimeout = 5000;
-      diagnosticConfig = null;
-      diagnosticsFormat = "#{m}";
-      fallbackSeverity = "error";
-      logLevel = "warn";
-      notifyFormat = "[null-ls] %s";
-      onAttach = null;
-      onInit = null;
-      onExit = null;
-      rootDir = null;
-      shouldAttach = null;
-      tempDir = null;
-      updateInInsert = false;
       sources =
         let
           options = nonels-sources-options.options.plugins.none-ls.sources;

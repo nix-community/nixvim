@@ -317,16 +317,18 @@ in
           -> [${concatStringsSep ", " uselesslyDeclaredToolNames}]
         '');
 
-      plugins.none-ls.sourcesItems = builtins.map (
-        source:
-        let
-          sourceItem = "${source.sourceType}.${source.sourceName}";
-          withArgs = if source.withArgs == null then sourceItem else "${sourceItem}.with(${source.withArgs})";
-        in
-        helpers.mkRaw ''
-          require("null-ls").builtins.${withArgs}
-        ''
-      ) enabledSources;
+      plugins.none-ls.settings.sources = mkIf (enabledSources != [ ]) (
+        map (
+          {
+            sourceType,
+            sourceName,
+            withArgs,
+            ...
+          }:
+          "require('null-ls').builtins.${sourceType}.${sourceName}"
+          + optionalString (withArgs != null) ".with(${withArgs})"
+        ) enabledSources
+      );
       plugins.gitsigns.enable = mkIf gitsignsEnabled true;
       extraPackages = map (source: source.package or null) enabledSources;
     };
