@@ -11,28 +11,30 @@ with lib;
       type = types.attrsOf helpers.autocmd.autoGroupOption;
       default = { };
       description = "augroup definitions";
-      example = ''
-        autoGroups = {
-          my_augroup = {
-            clear = true;
-          }
+      example = {
+        my_augroup = {
+          clear = true;
         };
-      '';
+      };
     };
 
     autoCmd = mkOption {
       type = types.listOf helpers.autocmd.autoCmdOption;
       default = [ ];
       description = "autocmd definitions";
-      example = ''
-        autoCmd = [
-          {
-            event = [ "BufEnter" "BufWinEnter" ];
-            pattern = [ "*.c" "*.h" ];
-            command = "echo 'Entering a C or C++ file'";
-          }
-        ];
-      '';
+      example = [
+        {
+          event = [
+            "BufEnter"
+            "BufWinEnter"
+          ];
+          pattern = [
+            "*.c"
+            "*.h"
+          ];
+          command = "echo 'Entering a C or C++ file'";
+        }
+      ];
     };
   };
 
