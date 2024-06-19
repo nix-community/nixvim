@@ -23,7 +23,7 @@ with lib;
       default = { };
       description = "Define highlight groups to override existing highlight";
       example = ''
-        highlight = {
+        highlightOverride = {
           Comment.fg = "#ff0000";
         };
       '';
