@@ -11,33 +11,27 @@ with lib;
       type = types.attrsOf helpers.nixvimTypes.highlight;
       default = { };
       description = "Define new highlight groups";
-      example = ''
-        highlight = {
-          MacchiatoRed.fg = "#ed8796";
-        };
-      '';
+      example = {
+        MacchiatoRed.fg = "#ed8796";
+      };
     };
 
     highlightOverride = mkOption {
       type = types.attrsOf helpers.nixvimTypes.highlight;
       default = { };
       description = "Define highlight groups to override existing highlight";
-      example = ''
-        highlightOverride = {
-          Comment.fg = "#ff0000";
-        };
-      '';
+      example = {
+        Comment.fg = "#ff0000";
+      };
     };
 
     match = mkOption {
       type = types.attrsOf types.str;
       default = { };
       description = "Define match groups";
-      example = ''
-        match = {
-          ExtraWhitespace = "\\s\\+$";
-        };
-      '';
+      example = {
+        ExtraWhitespace = "\\s\\+$";
+      };
     };
   };
 
