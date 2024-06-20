@@ -63,6 +63,11 @@
                 ${pkgs.lib.getExe pkgs.python3} -m http.server -d "$doc_derivation"/share/doc
               '';
             }
+            {
+              name = "list-plugins";
+              command = "${pkgs.python3.interpreter} ${./list-plugins.py}";
+              help = "List plugins and get implementation infos";
+            }
           ];
       };
     };
