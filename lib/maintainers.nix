@@ -67,4 +67,10 @@
     githubId = 67534814;
     name = "Ben";
   };
+  braindefender = {
+    email = "braindefender@gmail.com";
+    github = "braindefender";
+    githubId = 4646110;
+    name = "Nikita Shirokov";
+  };
 }
