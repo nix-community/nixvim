@@ -9,13 +9,7 @@ with lib;
     config:
     {
       name,
-      # TODO: revert back to the following when https://github.com/NixOS/nixpkgs/pull/320699 will have reached nixos-unstable
-      # url ? if defaultPackage != null then defaultPackage.meta.homepage else null,
-      url ?
-        if (defaultPackage != null) && (defaultPackage.meta ? homepage) then
-          defaultPackage.meta.homepage
-        else
-          null,
+      url ? if defaultPackage != null then defaultPackage.meta.homepage else null,
       maintainers,
       imports ? [ ],
       description ? null,
