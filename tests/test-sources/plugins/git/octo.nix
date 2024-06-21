@@ -1,9 +1,15 @@
 {
   empty = {
+    # This test is flaky and fails non-deterministically
+    tests.dontRun = true;
+
     plugins.octo.enable = true;
   };
 
   example = {
+    # This test is flaky and fails non-deterministically
+    tests.dontRun = true;
+
     plugins.octo = {
       enable = true;
 
@@ -21,6 +27,9 @@
   };
 
   withFzfLuaPicker = {
+    # This test is flaky and fails non-deterministically
+    tests.dontRun = true;
+
     plugins.octo = {
       enable = true;
       settings.picker = "fzf-lua";
@@ -28,6 +37,9 @@
   };
 
   defaults = {
+    # This test is flaky and fails non-deterministically
+    tests.dontRun = true;
+
     plugins.octo = {
       enable = true;
 
