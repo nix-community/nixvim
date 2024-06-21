@@ -1,14 +1,31 @@
+# TODO: As of nvim 0.10 this plugin is obsolete.
+# warning added 2024-06-21, remove after 24.11.
 {
   lib,
   helpers,
   pkgs,
   config,
+  options,
   ...
 }:
 with lib;
 {
   options.plugins.nvim-osc52 = {
-    enable = mkEnableOption "nvim-osc52, a plugin to use OSC52 sequences to copy/paste";
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable nvim-osc52, a plugin to use OSC52 sequences to copy/paste.
+
+        Note: this plugin is obsolete and will be removed after 24.11.
+        As of Neovim 0.10 (specifically since [this PR][1]), native support for OSC52 has been added.
+        Check [`:h clipboard-osc52`][2] for more details.
+
+        [1]: https://github.com/neovim/neovim/pull/25872
+        [2]: https://neovim.io/doc/user/provider.html#clipboard-osc52
+      '';
+    };
 
     package = helpers.mkPluginPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
 
@@ -54,6 +71,15 @@ with lib;
       };
     in
     mkIf cfg.enable {
+      warnings = [
+        ''
+          Nixvim(plugins.nvim-osc52): this plugin is obsolete and will be removed after 24.11.
+          As of Neovim 0.10, native support for OSC52 has been added.
+          See `:h clipboard-osc52` for more details: https://neovim.io/doc/user/provider.html#clipboard-osc52
+          Definitions: ${lib.options.showDefs options.plugins.nvim-osc52.enable.definitionsWithLocations}
+        ''
+      ];
+
       extraPlugins = [ cfg.package ];
 
       keymaps =
