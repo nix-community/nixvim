@@ -5,20 +5,7 @@
   nixvimUtils,
 }:
 with lib;
-rec {
-  mkSettingsOption =
-    {
-      pluginName ? null,
-      options ? { },
-      description ?
-        if pluginName != null then
-          "Options provided to the `require('${pluginName}').setup` function."
-        else
-          throw "mkSettingsOption: Please provide either a `pluginName` or `description`.",
-      example ? null,
-    }:
-    nixvimOptions.mkSettingsOption { inherit options description example; };
-
+{
   # TODO: DEPRECATED: use the `settings` option instead
   extraOptionsOptions = {
     extraOptions = mkOption {
@@ -50,10 +37,12 @@ rec {
       defaultPackage,
       settingsOptions ? { },
       settingsExample ? null,
+      settingsDescription ? "Options provided to the `require('${luaName}')${setup}` function.",
       hasSettings ? true,
       extraOptions ? { },
       # config
       luaName ? name,
+      setup ? ".setup",
       extraConfig ? cfg: { },
       extraPlugins ? [ ],
       extraPackages ? [ ],
@@ -99,11 +88,12 @@ rec {
       options.${namespace}.${name} =
         {
           enable = mkEnableOption originalName;
+
           package = nixvimOptions.mkPluginPackageOption originalName defaultPackage;
         }
         // optionalAttrs hasSettings {
-          settings = mkSettingsOption {
-            pluginName = name;
+          settings = nixvimOptions.mkSettingsOption {
+            description = settingsDescription;
             options = settingsOptions;
             example = settingsExample;
           };
@@ -121,7 +111,7 @@ rec {
             inherit extraPackages;
 
             ${extraConfigNamespace} = optionalString callSetup ''
-              require('${luaName}').setup(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
+              require('${luaName}')${setup}(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
             '';
           }
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })

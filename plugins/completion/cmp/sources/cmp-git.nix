@@ -15,8 +15,8 @@ let
     '';
 in
 {
-  options.plugins.cmp-git.settings = helpers.neovim-plugin.mkSettingsOption {
-    pluginName = "cmp_git";
+  options.plugins.cmp-git.settings = helpers.mkSettingsOption {
+    description = "Options provided to the `require('cmp_git').setup` function.";
     options = {
       filetypes = helpers.defaultNullOpts.mkListOf types.str [
         "gitcommit"
