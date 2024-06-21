@@ -5,6 +5,7 @@ darcula = "darcula"       # base16-list
 Parm = "Parm"             # clangd-extensions
 Definitons = "Definitons" # TODO: ./plugins/languages/treesitter/treesitter-refactor.nix
 deffered = "deffered"     # TODO: ./plugins/utils/vim-matchup.nix
+defered = "defered"       # ./plugins/utils/auto-save.nix
 Highligt = "Highligt"     # TODO: ./plugins/utils/neogen.nix
 Annote = "Annote"         # TODO: ./plugins/lsp/fidget.nix
 ket = "ket"               # ./plugins/utils/sandwich.nix

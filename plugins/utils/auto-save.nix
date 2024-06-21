@@ -6,30 +6,62 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.auto-save;
-in
-{
-  options.plugins.auto-save = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "auto-save";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "auto-save";
+  originalName = "auto-save.nvim";
+  defaultPackage = pkgs.vimPlugins.auto-save-nvim;
 
-    package = helpers.mkPluginPackageOption "auto-save" pkgs.vimPlugins.auto-save-nvim;
+  maintainers = [ helpers.maintainers.braindefender ];
 
-    keymaps = {
-      silent = mkOption {
-        type = types.bool;
-        description = "Whether auto-save keymaps should be silent.";
-        default = false;
-      };
+  # TODO: introduced 2024-06-21, remove after 24.11
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    [
+      "executionMessage"
+      "message"
+    ]
+    [
+      "executionMessage"
+      "dim"
+    ]
+    [
+      "executionMessage"
+      "cleaningInterval"
+    ]
+    "triggerEvents"
+    "writeAllBuffers"
+    "debounceDelay"
+  ];
 
-      toggle = helpers.mkNullOrOption types.str "Keymap for running auto-save.";
-    };
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "auto-save"
+      ];
+      settingsPath = basePluginPath ++ [ "settings" ];
+    in
+    [
+      (mkRenamedOptionModule (basePluginPath ++ [ "enableAutoSave" ]) (settingsPath ++ [ "enabled" ]))
+      (mkRemovedOptionModule (basePluginPath ++ [ "keymaps" ]) ''
+        Use the top-level `keymaps` option to create a keymap that runs :ASToggle
 
-    enableAutoSave = helpers.defaultNullOpts.mkBool true ''
+        keymaps = [
+          { key = "<leader>s"; action = "<cmd>ASToggle<CR>"; }
+        ];
+      '')
+    ];
+
+  settingsOptions = {
+    enabled = helpers.defaultNullOpts.mkBool true ''
       Whether to start auto-save when the plugin is loaded.
     '';
 
-    executionMessage = {
+    execution_message = {
+      enabled = helpers.defaultNullOpts.mkBool true ''
+        Show execution message after successful auto-save.
+      '';
+
       message =
         helpers.defaultNullOpts.mkStr
           {
@@ -40,7 +72,7 @@ in
             '';
           }
           ''
-            The message to print en save.
+            The message to print on save.
             This can be a lua function that returns a string.
           '';
 
@@ -48,97 +80,101 @@ in
         1
       ) 0.18 "Dim the color of `message`.";
 
-      cleaningInterval = helpers.defaultNullOpts.mkInt 1250 ''
+      cleaning_interval = helpers.defaultNullOpts.mkUnsignedInt 1250 ''
         Time (in milliseconds) to wait before automatically cleaning MsgArea after displaying
         `message`.
         See `:h MsgArea`.
       '';
     };
 
-    triggerEvents =
-      helpers.defaultNullOpts.mkListOf types.str
-        [
-          "InsertLeave"
-          "TextChanged"
-        ]
-        ''
-          Vim events that trigger auto-save.
-          See `:h events`.
-        '';
+    trigger_events = {
+      immediate_save =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "BufLeave"
+            "FocusLost"
+          ]
+          ''
+            Vim events that trigger an immediate save.\
+            See `:h events` for events description.
+          '';
 
-    condition =
-      helpers.defaultNullOpts.mkLuaFn
-        ''
-          function(buf)
-            local fn = vim.fn
-            local utils = require("auto-save.utils.data")
+      defer_save =
+        helpers.defaultNullOpts.mkListOf types.str
+          [
+            "InsertLeave"
+            "TextChanged"
+          ]
+          ''
+            Vim events that trigger a deferred save (saves after `debounceDelay`).\
+            See `:h events` for events description.
+          '';
 
-            if
-              fn.getbufvar(buf, "&modifiable") == 1 and utils.not_in(fn.getbufvar(buf, "&filetype"), {}) then
-              return true -- met condition(s), can save
-            end
-            return false -- can't save
+      cancel_defered_save = helpers.defaultNullOpts.mkListOf types.str [ "InsertEnter" ] ''
+        Vim events that cancel a pending deferred save.\
+        See `:h events` for events description.
+      '';
+    };
+
+    condition = helpers.defaultNullOpts.mkLuaFn' {
+      pluginDefault = null;
+      description = ''
+        Function that determines whether to save the current buffer or not.
+        - return true: if buffer is ok to be saved
+        - return false: if it's not ok to be saved
+
+        In this example, the second argument of `utils.not_in(..., {})`
+        determines which filetypes will be ignored by auto-save plugin.
+
+        Buffers that are `nomodifiable` are not saved by default.
+      '';
+      example = ''
+        function(buf)
+          local fn = vim.fn
+          local utils = require("auto-save.utils.data")
+
+          if utils.not_in(fn.getbufvar(buf, "&filetype"), {}) then
+            return true
           end
-        ''
-        ''
-          Function that determines whether to save the current buffer or not.
-          - return true: if buffer is ok to be saved
-          - return false: if it's not ok to be saved
-        '';
+          return false
+        end
+      '';
+    };
 
-    writeAllBuffers = helpers.defaultNullOpts.mkBool false ''
+    write_all_buffers = helpers.defaultNullOpts.mkBool false ''
       Write all buffers when the current one meets `condition`.
     '';
 
-    debounceDelay = helpers.defaultNullOpts.mkInt 135 ''
+    noautocmd = helpers.defaultNullOpts.mkBool false ''
+      Do not execute autocmds when saving.
+    '';
+
+    lockmarks = helpers.defaultNullOpts.mkBool false ''
+      Lock marks when saving, see `:h lockmarks` for more details.
+    '';
+
+    debounce_delay = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
       Saves the file at most every `debounce_delay` milliseconds.
     '';
 
-    callbacks =
-      mapAttrs (name: desc: helpers.mkNullOrLuaFn "The code of the function that runs ${desc}.")
-        {
-          enabling = "when enabling auto-save";
-          disabling = "when disabling auto-save";
-          beforeAssertingSave = "before checking `condition`";
-          beforeSaving = "before doing the actual save";
-          afterSaving = "after doing the actual save";
-        };
+    debug = helpers.defaultNullOpts.mkBool false ''
+      Log debug messages to `auto-save.log` file in NeoVim cache directory.
+    '';
   };
 
-  config =
-    let
-      options = {
-        enabled = cfg.enableAutoSave;
-        execution_message = with cfg.executionMessage; {
-          inherit message dim;
-          cleaning_interval = cleaningInterval;
-        };
-        trigger_events = cfg.triggerEvents;
-        inherit (cfg) condition;
-        write_all_buffers = cfg.writeAllBuffers;
-        debounce_delay = cfg.debounceDelay;
-        callbacks = with cfg.callbacks; {
-          inherit enabling disabling;
-          before_asserting_save = beforeAssertingSave;
-          before_saving = beforeSaving;
-          after_saving = afterSaving;
-        };
-      } // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+  settingsExample = {
+    condition = ''
+      function(buf)
+        local fn = vim.fn
+        local utils = require("auto-save.utils.data")
 
-      extraConfigLua = ''
-        require('auto-save').setup(${helpers.toLuaObject options})
-      '';
-
-      keymaps =
-        with cfg.keymaps;
-        optional (toggle != null) {
-          mode = "n";
-          key = toggle;
-          action = ":ASToggle<CR>";
-          options.silent = cfg.keymaps.silent;
-        };
-    };
+        if utils.not_in(fn.getbufvar(buf, "&filetype"), {'oil'}) then
+          return true
+        end
+        return false
+      end
+    '';
+    write_all_buffers = true;
+    debounce_delay = 1000;
+  };
 }
