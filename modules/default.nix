@@ -4,7 +4,7 @@
     ./clipboard.nix
     ./colorscheme.nix
     ./commands.nix
-    ./diagnostic.nix
+    ./diagnostics.nix
     ./doc.nix
     ./editorconfig.nix
     ./filetype.nix
