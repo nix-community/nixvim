@@ -6,40 +6,35 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.lsp-lines;
-in
-{
-  options = {
-    plugins.lsp-lines = {
-      enable = mkEnableOption "lsp_lines.nvim";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "lsp-lines";
+  luaName = "lsp_lines";
+  originalName = "lsp_lines.nvim";
+  defaultPackage = pkgs.vimPlugins.lsp_lines-nvim;
 
-      package = helpers.mkPluginPackageOption "lsp_lines.nvim" pkgs.vimPlugins.lsp_lines-nvim;
+  # This plugin has no settings; it is configured via vim.diagnostic.config
+  hasSettings = false;
 
-      currentLine = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Show diagnostics only on current line";
-      };
-    };
+  maintainers = [ maintainers.MattSturgeon ];
+
+  # TODO: Introduced 2024-06-25, remove after 24.11
+  imports = [
+    (mkRenamedOptionModule
+      [
+        "plugins"
+        "lsp-lines"
+        "currentLine"
+      ]
+      [
+        "diagnostics"
+        "virtual_lines"
+        "only_current_line"
+      ]
+    )
+  ];
+
+  extraConfig = cfg: {
+    # Strongly recommended by the plugin, to avoid duplication.
+    diagnostics.virtual_text = mkDefault false;
   };
-
-  config =
-    let
-      diagnosticConfig = {
-        virtual_text = false;
-        virtual_lines = if cfg.currentLine then { only_current_line = true; } else true;
-      };
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        do
-          require("lsp_lines").setup()
-
-          vim.diagnostic.config(${helpers.toLuaObject diagnosticConfig})
-        end
-      '';
-    };
 }
