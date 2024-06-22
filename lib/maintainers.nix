@@ -48,6 +48,11 @@
     githubId = 72303015;
     name = "Andres Bermeo Marinelli";
   };
+  sheemap = {
+    github = "sheemap";
+    githubId = 1442292;
+    name = "sheemap";
+  };
   svl = {
     matrix = "@gyn:matrix.org";
     github = "4lxs";
