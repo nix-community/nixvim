@@ -3,8 +3,11 @@ with lib;
 {
   signs =
     let
+      # TODO (2024-06-24): find a way to properly remove the `hl`, `numhl` and `linehl` options
+      # https://github.com/lewis6991/gitsigns.nvim/issues/453#issuecomment-2178736570
       signOptions = defaults: {
         hl = helpers.defaultNullOpts.mkStr defaults.hl ''
+          **DEPRECATED**
           Specifies the highlight group to use for the sign.
         '';
 
@@ -13,10 +16,12 @@ with lib;
         '';
 
         numhl = helpers.defaultNullOpts.mkStr defaults.numhl ''
+          **DEPRECATED**
           Specifies the highlight group to use for the number column.
         '';
 
         linehl = helpers.defaultNullOpts.mkStr defaults.linehl ''
+          **DEPRECATED**
           Specifies the highlight group to use for the line.
         '';
 
@@ -398,8 +403,6 @@ with lib;
       Note that the keys map onto the output of:
         `git blame --line-porcelain`
 
-      - {opts}          Passed directly from `settings.current_line_blame_formatter_opts`.
-
     Return:
       The result of this function is passed directly to the `opts.virt_text` field of
       `|nvim_buf_set_extmark|` and thus must be a list of `[text, highlight]` tuples.
@@ -420,7 +423,10 @@ with lib;
   '';
 
   yadm = {
+    # TODO (2024-06-24): find a way to properly remove this option
+    # https://github.com/lewis6991/gitsigns.nvim/issues/453#issuecomment-2178743878
     enable = helpers.defaultNullOpts.mkBool false ''
+      **DEPRECATED**
       Enable YADM support.
     '';
   };
