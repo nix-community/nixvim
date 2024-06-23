@@ -80,6 +80,7 @@ let
       treefmt
       trivy
       typstfmt
+      typstyle
       uncrustify
       usort
       vale
