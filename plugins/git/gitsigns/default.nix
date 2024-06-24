@@ -19,22 +19,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     [
       "signs"
       "add"
-      "hl"
-    ]
-    [
-      "signs"
-      "add"
       "text"
-    ]
-    [
-      "signs"
-      "add"
-      "numhl"
-    ]
-    [
-      "signs"
-      "add"
-      "linehl"
     ]
     [
       "signs"
@@ -44,22 +29,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     [
       "signs"
       "change"
-      "hl"
-    ]
-    [
-      "signs"
-      "change"
       "text"
-    ]
-    [
-      "signs"
-      "change"
-      "numhl"
-    ]
-    [
-      "signs"
-      "change"
-      "linehl"
     ]
     [
       "signs"
@@ -69,22 +39,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     [
       "signs"
       "topdelete"
-      "hl"
-    ]
-    [
-      "signs"
-      "topdelete"
       "text"
-    ]
-    [
-      "signs"
-      "topdelete"
-      "numhl"
-    ]
-    [
-      "signs"
-      "topdelete"
-      "linehl"
     ]
     [
       "signs"
@@ -94,22 +49,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     [
       "signs"
       "changedelete"
-      "hl"
-    ]
-    [
-      "signs"
-      "changedelete"
       "text"
-    ]
-    [
-      "signs"
-      "changedelete"
-      "numhl"
-    ]
-    [
-      "signs"
-      "changedelete"
-      "linehl"
     ]
     [
       "signs"
@@ -119,22 +59,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     [
       "signs"
       "untracked"
-      "hl"
-    ]
-    [
-      "signs"
-      "untracked"
       "text"
-    ]
-    [
-      "signs"
-      "untracked"
-      "numhl"
-    ]
-    [
-      "signs"
-      "untracked"
-      "linehl"
     ]
     [
       "signs"
@@ -195,10 +120,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       "virtTextPriority"
     ]
     "trouble"
-    [
-      "yadm"
-      "enable"
-    ]
     "wordDiff"
     "debugMode"
   ];
@@ -209,8 +130,41 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         "gitsigns"
       ];
       settingsPath = basePluginPaths ++ [ "settings" ];
+
+      highlights = {
+        add = "Add";
+        change = "Change";
+        delete = "Delete";
+        topdelete = "Topdelete";
+        changedelete = "Changedelete";
+        untracked = "Untracked";
+      };
+
+      subHighlights = {
+        hl = "";
+        linehl = "Ln";
+        numhl = "Nr";
+      };
+
+      highlightRemovals = flatten (
+        mapAttrsToList (
+          opt: hlg:
+          mapAttrsToList (subOpt: subHlg: {
+            optionPath = settingsPath ++ [
+              "signs"
+              opt
+              subOpt
+            ];
+            hlg = "GitSigns${hlg}${subHlg}";
+          }) subHighlights
+        ) highlights
+      );
     in
-    [
+    (map (
+      { optionPath, hlg }:
+      helpers.mkDeprecatedSubOptionModule optionPath "Please define the `${hlg}` highlight group instead."
+    ) highlightRemovals)
+    ++ [
       (mkRenamedOptionModule (
         basePluginPaths
         ++ [
@@ -278,6 +232,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           "nonCommitted"
         ]
       ) (settingsPath ++ [ "current_line_blame_formatter_nc" ]))
+      (helpers.mkDeprecatedSubOptionModule (
+        settingsPath
+        ++ [
+          "yadm"
+          "enable"
+        ]
+      ) "yadm support was removed upstream.")
     ];
 
   extraOptions = {

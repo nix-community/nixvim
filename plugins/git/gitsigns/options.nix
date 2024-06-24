@@ -3,26 +3,9 @@ with lib;
 {
   signs =
     let
-      # TODO (2024-06-24): find a way to properly remove the `hl`, `numhl` and `linehl` options
-      # https://github.com/lewis6991/gitsigns.nvim/issues/453#issuecomment-2178736570
       signOptions = defaults: {
-        hl = helpers.defaultNullOpts.mkStr defaults.hl ''
-          **DEPRECATED**
-          Specifies the highlight group to use for the sign.
-        '';
-
         text = helpers.defaultNullOpts.mkStr defaults.text ''
           Specifies the character to use for the sign.
-        '';
-
-        numhl = helpers.defaultNullOpts.mkStr defaults.numhl ''
-          **DEPRECATED**
-          Specifies the highlight group to use for the number column.
-        '';
-
-        linehl = helpers.defaultNullOpts.mkStr defaults.linehl ''
-          **DEPRECATED**
-          Specifies the highlight group to use for the line.
         '';
 
         show_count = helpers.defaultNullOpts.mkBool false ''
@@ -421,15 +404,6 @@ with lib;
 
     Default: `pcall(require, 'trouble')`
   '';
-
-  yadm = {
-    # TODO (2024-06-24): find a way to properly remove this option
-    # https://github.com/lewis6991/gitsigns.nvim/issues/453#issuecomment-2178743878
-    enable = helpers.defaultNullOpts.mkBool false ''
-      **DEPRECATED**
-      Enable YADM support.
-    '';
-  };
 
   word_diff = helpers.defaultNullOpts.mkBool false ''
     Highlight intra-line word differences in the buffer.
