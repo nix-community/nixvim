@@ -14,7 +14,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 |-|-|
 | [ahwxorg/nixvim-config] | |
 | [alisonjenkins/neovim-nix-flake] | |
-| [dc-tec/nixivm] | NixVim conifg, inspired by some of the contributors in this list and LazyVIM |
+| [dc-tec/nixvim] | NixVim conifg, inspired by some of the contributors in this list and LazyVIM |
 | [elythh/nixvim] | |
 | [GaetanLepage/nix-config] | Home-manager |
 | [gwg313/nvim-nix] | |
