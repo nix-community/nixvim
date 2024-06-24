@@ -146,6 +146,7 @@
     ./utils/ccc.nix
     ./utils/clipboard-image.nix
     ./utils/cloak.nix
+    ./utils/codesnap.nix
     ./utils/comment.nix
     ./utils/commentary.nix
     ./utils/competitest.nix
