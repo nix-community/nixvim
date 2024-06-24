@@ -26,6 +26,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [siph/nixvim-flake] | |
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
+| [dc-tec/nixivm] | NixVim conifg, inspired by some of the contributors in this list and LazyVIM |
 
 [ahwxorg/nixvim-config]: https://github.com/ahwxorg/nixvim-config
 [alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
@@ -41,6 +42,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [siph/nixvim-flake]: https://github.com/siph/nixvim-flake
 [Tanish2002/neovim-config]: https://github.com/Tanish2002/neovim-config
 [traxys/Nixfiles]: https://github.com/traxys/Nixfiles/tree/master/neovim
+[dc-tec/nixvim]: https://github.com/dc-tec/nixvim
 
 ## Share your config !
 
