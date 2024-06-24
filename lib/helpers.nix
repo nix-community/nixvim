@@ -9,6 +9,7 @@ let
   nixvimTypes = import ./types.nix { inherit lib nixvimOptions; };
   nixvimUtils = import ./utils.nix { inherit lib nixvimTypes _nixvimTests; };
   nixvimOptions = import ./options.nix { inherit lib nixvimTypes nixvimUtils; };
+  nixvimDeprecation = import ./deprecation.nix { inherit lib; };
   inherit (import ./to-lua.nix { inherit lib; }) toLuaObject;
 in
 {
@@ -30,3 +31,4 @@ in
 // nixvimUtils
 // nixvimOptions
 // nixvimBuilders
+// nixvimDeprecation
