@@ -14,6 +14,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 |-|-|
 | [ahwxorg/nixvim-config] | |
 | [alisonjenkins/neovim-nix-flake] | |
+| [dc-tec/nixivm] | NixVim conifg, inspired by some of the contributors in this list and LazyVIM |
 | [elythh/nixvim] | |
 | [GaetanLepage/nix-config] | Home-manager |
 | [gwg313/nvim-nix] | |
@@ -26,10 +27,10 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [siph/nixvim-flake] | |
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
-| [dc-tec/nixivm] | NixVim conifg, inspired by some of the contributors in this list and LazyVIM |
 
 [ahwxorg/nixvim-config]: https://github.com/ahwxorg/nixvim-config
 [alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
+[dc-tec/nixvim]: https://github.com/dc-tec/nixvim
 [elythh/nixvim]: https://github.com/elythh/nixvim
 [GaetanLepage/nix-config]: https://github.com/GaetanLepage/nix-config/tree/master/home/modules/tui/neovim
 [gwg313/nvim-nix]: https://github.com/gwg313/nvim-nix
@@ -42,7 +43,6 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [siph/nixvim-flake]: https://github.com/siph/nixvim-flake
 [Tanish2002/neovim-config]: https://github.com/Tanish2002/neovim-config
 [traxys/Nixfiles]: https://github.com/traxys/Nixfiles/tree/master/neovim
-[dc-tec/nixvim]: https://github.com/dc-tec/nixvim
 
 ## Share your config !
 
