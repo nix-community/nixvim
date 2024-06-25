@@ -37,7 +37,8 @@ let
 
   removeWhitespace = builtins.replaceStrings [ " " ] [ "" ];
 
-  getSubOptions = opts: path: removeUnwanted (opts.type.getSubOptions path);
+  getSubOptions =
+    opts: path: optionalAttrs (isVisible opts) (removeUnwanted (opts.type.getSubOptions path));
 
   isVisible =
     opts:
