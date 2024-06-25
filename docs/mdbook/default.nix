@@ -42,13 +42,9 @@ let
   isVisible =
     opts:
     if isOption opts then
-      attrByPath [ "visible" ] true opts
+      opts.visible or true
     else if opts.isOption then
-      attrByPath [
-        "index"
-        "options"
-        "visible"
-      ] true opts
+      opts.index.options.visible or true
     else
       let
         filterFunc = filterAttrs (_: v: if isAttrs v then isVisible v else true);
