@@ -1,0 +1,21 @@
+# Essential reading on condition syntax:
+# https://docs.mergify.com/configuration/conditions/#testing-and-debugging-conditions
+
+# https://docs.mergify.com/merge-queue
+queue_rules:
+  - name: default
+    update_method: rebase
+    merge_method: fast-forward
+    merge_conditions:
+      - check-success = buildbot/nix-eval
+    queue_conditions:
+      - or:
+        # Allow queuing PRs that have been approved
+        - "#approved-reviews-by >= 1"
+
+        # Allow queuing flake.lock updates without approval
+        - and:
+          - "#files = 1"
+          - files = flake.lock
+          - author = GaetanLepage
+
