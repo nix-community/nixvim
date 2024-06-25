@@ -54,12 +54,11 @@ with lib;
           description = ''
             The configuration options for **${name}** without the `${globalPrefix}` prefix.
 
-            Example: To set `${globalPrefix}foo_bar` to `1`, write
-            ```nix
-              settings = {
-                foo_bar = true;
-              };
-            ```
+            For example, the following settings are equivialent to these `:setglobal` commands:
+            - `foo_bar = 1` -> `:setglobal ${globalPrefix}foo_bar=1`
+            - `hello = "world"` -> `:setglobal ${globalPrefix}hello="world"`
+            - `some_toggle = true` -> `:setglobal ${globalPrefix}some_toggle`
+            - `other_toggle = false` -> `:setglobal no${globalPrefix}other_toggle`
           '';
         };
       };
