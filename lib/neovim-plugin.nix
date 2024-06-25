@@ -50,6 +50,7 @@ rec {
       defaultPackage,
       settingsOptions ? { },
       settingsExample ? null,
+      hasSettings ? true,
       extraOptions ? { },
       # config
       luaName ? name,
@@ -95,17 +96,19 @@ rec {
           mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
         ) optionsRenamedToSettings);
 
-      options.${namespace}.${name} = {
-        enable = mkEnableOption originalName;
-
-        package = nixvimOptions.mkPluginPackageOption originalName defaultPackage;
-
-        settings = mkSettingsOption {
-          pluginName = name;
-          options = settingsOptions;
-          example = settingsExample;
-        };
-      } // extraOptions;
+      options.${namespace}.${name} =
+        {
+          enable = mkEnableOption originalName;
+          package = nixvimOptions.mkPluginPackageOption originalName defaultPackage;
+        }
+        // optionalAttrs hasSettings {
+          settings = mkSettingsOption {
+            pluginName = name;
+            options = settingsOptions;
+            example = settingsExample;
+          };
+        }
+        // extraOptions;
 
       config =
         let
@@ -118,7 +121,7 @@ rec {
             inherit extraPackages;
 
             ${extraConfigNamespace} = optionalString callSetup ''
-              require('${luaName}').setup(${toLuaObject cfg.settings})
+              require('${luaName}').setup(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
             '';
           }
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
