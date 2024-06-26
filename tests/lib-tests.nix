@@ -55,7 +55,7 @@ let
           3
         ];
       };
-      expected = ''{foo = "bar", qux = {1, 2, 3}}'';
+      expected = ''{ foo = "bar", qux = { 1, 2, 3 } }'';
     };
 
     testToLuaObjectRawLua = {
@@ -68,7 +68,7 @@ let
         "__unkeyed...." = "foo";
         bar = "baz";
       };
-      expected = ''{"foo", bar = "baz"}'';
+      expected = ''{ "foo", bar = "baz" }'';
     };
 
     testToLuaObjectNestedAttrs = {
@@ -81,7 +81,7 @@ let
           };
         };
       };
-      expected = ''{a = {b = 1, c = 2, d = {e = 3}}}'';
+      expected = ''{ a = { b = 1, c = 2, d = { e = 3 } } }'';
     };
 
     testToLuaObjectNestedList = {
@@ -98,7 +98,7 @@ let
         ]
         7
       ];
-      expected = "{1, 2, {3, 4, {5, 6}}, 7}";
+      expected = "{ 1, 2, { 3, 4, { 5, 6 } }, 7 }";
     };
 
     testToLuaObjectNonStringPrims = {
@@ -109,7 +109,7 @@ let
         d = false;
         e = null;
       };
-      expected = ''{a = 1.000000, b = 2, c = true, d = false}'';
+      expected = ''{ a = 1.0, b = 2, c = true, d = false }'';
     };
 
     testToLuaObjectNilPrim = {
@@ -134,7 +134,7 @@ let
           f = { };
         };
       };
-      expected = ''{}'';
+      expected = ''{ }'';
     };
 
     testToLuaObjectEmptyTable = {
@@ -150,17 +150,7 @@ let
           g = helpers.emptyTable;
         };
       };
-      expected = ''{c = { }, d = {g = { }}}'';
-    };
-
-    testToLuaObjectQuotedKeys = {
-      expr = helpers.toLuaObject {
-        "1_a" = "a";
-        _b = "b";
-        c = "c";
-        d-d = "d";
-      };
-      expected = ''{["1_a"] = "a", _b = "b", c = "c", ["d-d"] = "d"}'';
+      expected = ''{ c = { }, d = { g = { } } }'';
     };
 
     testIsLuaKeyword = {

@@ -26,7 +26,7 @@ rec {
   };
   vim-plugin = import ./vim-plugin.nix { inherit lib nixvimOptions nixvimUtils; };
   inherit nixvimTypes;
-  inherit (lua) toLuaObject;
+  toLuaObject = lua.toLua;
 }
 // nixvimUtils
 // nixvimOptions
