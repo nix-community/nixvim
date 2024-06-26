@@ -1,6 +1,37 @@
 { lib }:
 with lib;
 rec {
+  # Whether the string is a reserved keyword in lua
+  isKeyword =
+    s:
+    elem s [
+      "and"
+      "break"
+      "do"
+      "else"
+      "elseif"
+      "end"
+      "false"
+      "for"
+      "function"
+      "if"
+      "in"
+      "local"
+      "nil"
+      "not"
+      "or"
+      "repeat"
+      "return"
+      "then"
+      "true"
+      "until"
+      "while"
+    ];
+
+  # Valid lua identifiers are not reserved keywords, do not start with a digit,
+  # and contain only letters, digits, and underscores.
+  isIdentifier = s: !(isKeyword s) && (match "[A-Za-z_][0-9A-Za-z_]*" s) == [ ];
+
   # Black functional magic that converts a bunch of different Nix types to their
   # lua equivalents!
   toLuaObject =

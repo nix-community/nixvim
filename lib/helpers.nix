@@ -10,10 +10,10 @@ let
   nixvimUtils = import ./utils.nix { inherit lib nixvimTypes _nixvimTests; };
   nixvimOptions = import ./options.nix { inherit lib nixvimTypes nixvimUtils; };
   nixvimDeprecation = import ./deprecation.nix { inherit lib; };
-  inherit (import ./to-lua.nix { inherit lib; }) toLuaObject;
 in
-{
+rec {
   maintainers = import ./maintainers.nix;
+  lua = import ./to-lua.nix { inherit lib; };
   keymaps = import ./keymap-helpers.nix { inherit lib nixvimOptions nixvimTypes; };
   autocmd = import ./autocmd-helpers.nix { inherit lib nixvimOptions nixvimTypes; };
   neovim-plugin = import ./neovim-plugin.nix {
@@ -26,7 +26,7 @@ in
   };
   vim-plugin = import ./vim-plugin.nix { inherit lib nixvimOptions nixvimUtils; };
   inherit nixvimTypes;
-  inherit toLuaObject;
+  inherit (lua) toLuaObject;
 }
 // nixvimUtils
 // nixvimOptions

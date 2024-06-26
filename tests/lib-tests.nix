@@ -6,6 +6,45 @@
   helpers,
 }:
 let
+  luaNames = {
+    # Keywords in lua 5.1
+    keywords = [
+      "and"
+      "break"
+      "do"
+      "else"
+      "elseif"
+      "end"
+      "false"
+      "for"
+      "function"
+      "if"
+      "in"
+      "local"
+      "nil"
+      "not"
+      "or"
+      "repeat"
+      "return"
+      "then"
+      "true"
+      "until"
+      "while"
+    ];
+    identifiers = [
+      "validIdentifier"
+      "valid_identifier"
+      "_also_valid_"
+      "_weirdNameFMT"
+    ];
+    other = [
+      "1_starts_with_digit"
+      "01234"
+      "12340"
+      "kebab-case"
+    ];
+  };
+
   results = pkgs.lib.runTests {
     testToLuaObject = {
       expr = helpers.toLuaObject {
@@ -112,6 +151,51 @@ let
         };
       };
       expected = ''{["c"] = { },["d"] = {["g"] = { }}}'';
+    };
+
+    testIsLuaKeyword = {
+      expr = builtins.mapAttrs (_: builtins.filter helpers.lua.isKeyword) luaNames;
+      expected = {
+        keywords = [
+          "and"
+          "break"
+          "do"
+          "else"
+          "elseif"
+          "end"
+          "false"
+          "for"
+          "function"
+          "if"
+          "in"
+          "local"
+          "nil"
+          "not"
+          "or"
+          "repeat"
+          "return"
+          "then"
+          "true"
+          "until"
+          "while"
+        ];
+        identifiers = [ ];
+        other = [ ];
+      };
+    };
+
+    testIsLuaIdentifier = {
+      expr = builtins.mapAttrs (_: builtins.filter helpers.lua.isIdentifier) luaNames;
+      expected = {
+        keywords = [ ];
+        identifiers = [
+          "validIdentifier"
+          "valid_identifier"
+          "_also_valid_"
+          "_weirdNameFMT"
+        ];
+        other = [ ];
+      };
     };
 
     testUpperFirstChar = {
