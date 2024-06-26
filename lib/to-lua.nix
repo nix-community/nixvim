@@ -47,16 +47,18 @@ rec {
           mapAttrsToList (
             n: v:
             let
+              keyString =
+                if n == "__emptyString" then
+                  "['']"
+                else if hasPrefix "__rawKey__" n then
+                  "[${removePrefix "__rawKey__" n}]"
+                else if isIdentifier n then
+                  n
+                else
+                  "[${toLuaObject n}]";
               valueString = toLuaObject v;
             in
-            if hasPrefix "__unkeyed" n then
-              valueString
-            else if hasPrefix "__rawKey__" n then
-              ''[${removePrefix "__rawKey__" n}] = '' + valueString
-            else if n == "__emptyString" then
-              "[''] = " + valueString
-            else
-              "[${toLuaObject n}] = " + valueString
+            if hasPrefix "__unkeyed" n then valueString else "${keyString} = ${valueString}"
           ) (filterAttrs (n: v: v != null && (toLuaObject v != "{}")) args)
         ))
         + "}"
