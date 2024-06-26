@@ -30,7 +30,7 @@ rec {
 
   # Valid lua identifiers are not reserved keywords, do not start with a digit,
   # and contain only letters, digits, and underscores.
-  isIdentifier = s: !(isKeyword s) && (match "[A-Za-z_][0-9A-Za-z_]*" s) == [ ];
+  isIdentifier = s: !(isKeyword s) && (builtins.match "[A-Za-z_][0-9A-Za-z_]*" s) == [ ];
 
   # toLua' with default options, aliased as toLuaObject at the top-level
   toLua = toLua' { };
