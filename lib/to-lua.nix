@@ -43,7 +43,7 @@ rec {
         "{ }"
       else
         "{"
-        + (concatStringsSep "," (
+        + (concatStringsSep ", " (
           mapAttrsToList (
             n: v:
             let
@@ -63,7 +63,7 @@ rec {
         ))
         + "}"
     else if builtins.isList args then
-      "{" + concatMapStringsSep "," toLuaObject args + "}"
+      "{" + concatMapStringsSep ", " toLuaObject args + "}"
     else if builtins.isString args then
       # This should be enough!
       builtins.toJSON args
