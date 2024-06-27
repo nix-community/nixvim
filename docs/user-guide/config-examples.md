@@ -28,6 +28,8 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
 
+<!-- WARNING: Please ensure entries are alphabetically sorted ! -->
+
 [ahwxorg/nixvim-config]: https://github.com/ahwxorg/nixvim-config
 [alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
 [dc-tec/nixvim]: https://github.com/dc-tec/nixvim
