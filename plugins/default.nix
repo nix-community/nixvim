@@ -12,6 +12,7 @@
     ./colorschemes/catppuccin.nix
     ./colorschemes/cyberdream.nix
     ./colorschemes/dracula.nix
+    ./colorschemes/everforest.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
     ./colorschemes/melange.nix
