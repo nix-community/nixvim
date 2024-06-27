@@ -16,7 +16,7 @@
         commands =
           let
             # Thanks to this, the user can choose to use `nix-output-monitor` (`nom`) instead of plain `nix`
-            nix = "$([ '$\{NIXVIM_NOM:-0}' = '1' ] && echo ${pkgs.lib.getExe pkgs.nom} || echo nix)";
+            nix = ''$([ "$\{NIXVIM_NOM:-0}" = '1' ] && echo ${pkgs.lib.getExe pkgs.nix-output-monitor} || echo nix)'';
           in
           [
             {
