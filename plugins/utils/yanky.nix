@@ -6,17 +6,123 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.yanky;
-in
-{
-  options.plugins.yanky = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "yanky.nvim";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "yanky";
+  originalName = "yanky.nvim";
+  defaultPackage = pkgs.vimPlugins.yanky-nvim;
 
-    package = helpers.mkPluginPackageOption "yanky.nvim" pkgs.vimPlugins.yanky-nvim;
+  maintainers = [ maintainers.GaetanLepage ];
 
+  # TODO: introduced 2024-06-28. Remove after 24.11 release.
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    [
+      "ring"
+      "historyLength"
+    ]
+    [
+      "ring"
+      "storage"
+    ]
+    [
+      "ring"
+      "storagePath"
+    ]
+    [
+      "ring"
+      "syncWithNumberedRegisters"
+    ]
+    [
+      "ring"
+      "cancelEvent"
+    ]
+    [
+      "ring"
+      "ignoreRegisters"
+    ]
+    [
+      "ring"
+      "updateRegisterOnCycle"
+    ]
+    [
+      "picker"
+      "telescope"
+      "useDefaultMappings"
+    ]
+    [
+      "systemClipboard"
+      "syncWithRing"
+    ]
+    [
+      "highlight"
+      "onPut"
+    ]
+    [
+      "highlight"
+      "onYank"
+    ]
+    [
+      "highlight"
+      "timer"
+    ]
+    [
+      "preserveCursorPosition"
+      "enabled"
+    ]
+    [
+      "textobj"
+      "enabled"
+    ]
+  ];
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "yanky"
+      ];
+    in
+    [
+      (mkRemovedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "picker"
+            "select"
+            "action"
+          ]
+        )
+        ''
+          Please use `plugins.yanky.settings.picker.select.action` instead.
+          However, be careful as we do not perform any manipulation on the provided string.
+        ''
+      )
+      (mkRenamedOptionModule (
+        basePluginPath
+        ++ [
+          "picker"
+          "telescope"
+          "enable"
+        ]
+      ) (basePluginPath ++ [ "enableTelescope" ]))
+      (mkRemovedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "picker"
+            "telescope"
+            "mappings"
+          ]
+        )
+        ''
+          Please use `plugins.yanky.settings.picker.telescope.mappings` instead.
+          However, be careful as we do not perform any manipulation on the provided strings.
+        ''
+      )
+    ];
+
+  settingsOptions = {
     ring = {
-      historyLength = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+      history_length = helpers.defaultNullOpts.mkUnsignedInt 100 ''
         Define the number of yanked items that will be saved and used for ring.
       '';
 
@@ -45,18 +151,18 @@ in
             You can change the storage path using `ring.storagePath` option.
           '';
 
-      storagePath = helpers.defaultNullOpts.mkStr {
+      storage_path = helpers.defaultNullOpts.mkStr {
         __raw = "vim.fn.stdpath('data') .. '/databases/yanky.db'";
       } "Only for sqlite storage.";
 
-      syncWithNumberedRegisters = helpers.defaultNullOpts.mkBool true ''
+      sync_with_numbered_registers = helpers.defaultNullOpts.mkBool true ''
         History can also be synchronized with numbered registers.
         Every time the yank history changes the numbered registers 1 - 9 will be updated to sync
         with the first 9 entries in the yank history.
         See [here](http://vimcasts.org/blog/2013/11/registers-the-good-the-bad-and-the-ugly-parts/) for an explanation of why we would want do do this.
       '';
 
-      cancelEvent =
+      cancel_event =
         helpers.defaultNullOpts.mkEnumFirstDefault
           [
             "update"
@@ -68,12 +174,12 @@ in
             cursor or content changed.
           '';
 
-      ignoreRegisters = helpers.defaultNullOpts.mkListOf types.str [ "_" ] ''
+      ignore_registers = helpers.defaultNullOpts.mkListOf types.str [ "_" ] ''
         Define registers to be ignored.
         By default the black hole register is ignored.
       '';
 
-      updateRegisterOnCycle = helpers.defaultNullOpts.mkBool false ''
+      update_register_on_cycle = helpers.defaultNullOpts.mkBool false ''
         If true, when you cycle through the ring, the contents of the register used to update will
         be updated with the last content cycled.
       '';
@@ -81,57 +187,68 @@ in
 
     picker = {
       select = {
-        action = helpers.mkNullOrOption (with types; either helpers.nixvimTypes.rawLua str) ''
-          This define the action that should be done when selecting an item in the
-          `vim.ui.select` prompt.
-          If you let this option to `null`, this will use the default action: put selected item
-          after cursor.
-
-          This is either:
-          - a `rawLua` value (`action.__raw = "function() foo end";`).
-          - a string. In this case, Nixvim will automatically interpret it as a builtin yanky
-          action.
-            Example: `action = "put('p')";` will translate to
-              `action = require('yanky.picker').actions.put('p')` in lua.
-        '';
+        action = helpers.defaultNullOpts.mkLuaFn' {
+          pluginDefault = null;
+          description = ''
+            This define the action that should be done when selecting an item in the
+            `vim.ui.select` prompt.
+            If you let this option to `null`, this will use the default action: put selected item
+            after cursor.
+          '';
+          example = "require('yanky.picker').actions.put('gp')";
+        };
       };
 
       telescope = {
-        enable = mkEnableOption "the `yank_history` telescope picker.";
-
-        useDefaultMappings = helpers.defaultNullOpts.mkBool true ''
-          This define if default Telescope mappings should be used.
-        '';
-
-        mappings = helpers.mkNullOrOption (with types; attrsOf (attrsOf str)) ''
+        use_default_mappings = helpers.defaultNullOpts.mkBool true ''
           This define or overrides the mappings available in Telescope.
 
-          If you set `useDefaultMappings` to `true`, mappings will be merged with default
-          mappings.
-
-          Example:
-          ```nix
-            {
-              i = {
-                "<c-g>" = "put('p')";
-                "<c-k>" = "put('P')";
-                "<c-x>" = "delete()";
-                "<c-r>" = "set_register(require('yanky.utils').get_default_register())";
-              };
-              n = {
-                p = "put('p')";
-                P = "put('P')";
-                d = "delete()";
-                r = "set_register(require('yanky.utils').get_default_register())";
-              };
-            }
-          ```
+          If you set this option to `true`, mappings will be merged with default mappings.
         '';
+
+        mappings = helpers.defaultNullOpts.mkAttrsOf' {
+          type = with helpers.nixvimTypes; either strLuaFn (attrsOf strLuaFn);
+          apply =
+            mappings:
+            helpers.ifNonNull' mappings (
+              mapAttrs (
+                _: v:
+                if isString v then
+                  # `mappings.default` is a lua function
+                  helpers.mkRaw v
+                else
+                  # `mappings.<mode>` is an attrs of lua function
+                  mapAttrs (_: helpers.mkRaw) v
+              ) mappings
+            );
+          pluginDefault = null;
+          description = ''
+            This define or overrides the mappings available in Telescope.
+
+            If you set `settings.use_default_mappings` to `true`, mappings will be merged with
+            default mappings.
+          '';
+          example = {
+            default = "require('yanky.telescope.mapping').put('p')";
+            i = {
+              "<c-g>" = "require('yanky.telescope.mapping').put('p')";
+              "<c-k>" = "require('yanky.telescope.mapping').put('P')";
+              "<c-x>" = "require('yanky.telescope.mapping').delete()";
+              "<c-r>" = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+            };
+            n = {
+              p = "require('yanky.telescope.mapping').put('p')";
+              P = "require('yanky.telescope.mapping').put('P')";
+              d = "require('yanky.telescope.mapping').delete()";
+              r = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+            };
+          };
+        };
       };
     };
 
-    systemClipboard = {
-      syncWithRing = helpers.defaultNullOpts.mkBool true ''
+    system_clipboard = {
+      sync_with_ring = helpers.defaultNullOpts.mkBool true ''
         Yanky can automatically adds to ring history yanks that occurs outside of Neovim.
         This works regardless to your `&clipboard` setting.
 
@@ -142,15 +259,24 @@ in
         If `&clipboard` is empty, if you yank something outside of Neovim, this will be the first
         value you'll have when cycling through the ring.
         Basically, you can do `p` and then `<c-p>` to paste yanked text.
+
+        Note that `clipboard == unnamed` uses the primary selection of the system (see
+        `:h clipboard` for more details) which is updated on selection, not on copy/yank.
+        Also note that the syncing happens when neovim gains focus.
+      '';
+
+      clipboard_register = helpers.defaultNullOpts.mkStr null ''
+        Choose the register that is synced with ring (from above).
+        If `&clipboard` is empty then `*` is used.
       '';
     };
 
     highlight = {
-      onPut = helpers.defaultNullOpts.mkBool true ''
+      on_put = helpers.defaultNullOpts.mkBool true ''
         Define if highlight put text feature is enabled.
       '';
 
-      onYank = helpers.defaultNullOpts.mkBool true ''
+      on_yank = helpers.defaultNullOpts.mkBool true ''
         Define if highlight yanked text feature is enabled.
       '';
 
@@ -159,7 +285,7 @@ in
       '';
     };
 
-    preserveCursorPosition = {
+    preserve_cursor_position = {
       enabled = helpers.defaultNullOpts.mkBool true ''
         Whether cursor position should be preserved on yank.
         This works only if mappings has been defined.
@@ -174,80 +300,54 @@ in
     };
   };
 
-  config =
-    let
-      thereAreSomeTelescopeMappings =
-        (cfg.picker.telescope.mappings != null) && (cfg.picker.telescope.mappings != { });
-    in
-    mkIf cfg.enable {
-      assertions = [
-        {
-          assertion = thereAreSomeTelescopeMappings -> cfg.picker.telescope.enable;
-          message = ''
-            Nixvim: You have defined some mappings in `plugins.yanky.picker.telescope.mappings` but
-            you have not set `plugins.yanky.picker.telescope.enable`.
-          '';
-        }
-      ];
-
-      plugins.telescope.enable = true;
-      plugins.telescope.enabledExtensions = optional cfg.picker.telescope.enable "yank_history";
-
-      extraPlugins = [
-        cfg.package
-      ] ++ (optional (cfg.ring.storage == "sqlite") pkgs.vimPlugins.sqlite-lua);
-
-      extraConfigLua =
-        let
-          setupOptions =
-            with cfg;
-            {
-              ring = {
-                history_length = ring.historyLength;
-                inherit (ring) storage;
-                storage_path = ring.storagePath;
-                sync_with_numbered_registers = ring.syncWithNumberedRegisters;
-                cancel_event = ring.cancelEvent;
-                ignore_registers = ring.ignoreRegisters;
-                update_register_on_cycle = ring.updateRegisterOnCycle;
-              };
-              picker = {
-                select = {
-                  action =
-                    if isString picker.select.action then
-                      helpers.mkRaw "require('yanky.picker').actions.${picker.select.action}"
-                    else
-                      picker.select.action;
-                };
-                telescope = {
-                  use_default_mappings = picker.telescope.useDefaultMappings;
-                  mappings = helpers.ifNonNull' picker.telescope.mappings (
-                    mapAttrs (
-                      mode: mappings: mapAttrs (key: action: helpers.mkRaw "__yanky_telescope_mapping.${action}") mappings
-                    ) picker.telescope.mappings
-                  );
-                };
-              };
-              system_clipboard = {
-                sync_with_ring = systemClipboard.syncWithRing;
-              };
-              highlight = {
-                on_put = highlight.onPut;
-                on_yank = highlight.onYank;
-                inherit (highlight) timer;
-              };
-              preserve_cursor_position = {
-                inherit (preserveCursorPosition) enabled;
-              };
-              textobj = {
-                inherit (textobj) enabled;
-              };
-            }
-            // cfg.extraOptions;
-        in
-        (optionalString thereAreSomeTelescopeMappings "local __yanky_telescope_mapping = require('yanky.telescope.mapping')")
-        + ''
-          require('yanky').setup(${helpers.toLuaObject setupOptions})
-        '';
+  settingsExample = {
+    highlight = {
+      on_put = true;
+      on_yank = true;
+      timer = 500;
     };
+    preserve_cursor_position = {
+      enabled = true;
+    };
+    picker = {
+      telescope = {
+        mappings = {
+          default = "require('yanky.telescope.mapping').put('p')";
+          i = {
+            "<c-g>" = "require('yanky.telescope.mapping').put('p')";
+            "<c-k>" = "require('yanky.telescope.mapping').put('P')";
+            "<c-x>" = "require('yanky.telescope.mapping').delete()";
+            "<c-r>" = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+          };
+          n = {
+            p = "require('yanky.telescope.mapping').put('p')";
+            P = "require('yanky.telescope.mapping').put('P')";
+            gp = "require('yanky.telescope.mapping').put('gp')";
+            gP = "require('yanky.telescope.mapping').put('gP')";
+            d = "require('yanky.telescope.mapping').delete()";
+            r = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+          };
+        };
+      };
+    };
+  };
+
+  extraOptions = {
+    enableTelescope = mkEnableOption "the `yank_history` telescope picker.";
+  };
+
+  extraConfig = cfg: {
+    assertions = [
+      {
+        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+        message = ''
+          Nixvim (plugins.yanky): The telescope integration needs telescope to function as intended
+        '';
+      }
+    ];
+
+    extraPlugins = mkIf (cfg.settings.ring.storage == "sqlite") [ pkgs.vimPlugins.sqlite-lua ];
+
+    plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "yank_history" ];
+  };
 }
