@@ -28,6 +28,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [siph/nixvim-flake] | |
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
+| [veeronniecaw/ronvim] | |
 
 <!-- WARNING: Please ensure entries are alphabetically sorted ! -->
 
@@ -47,6 +48,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [siph/nixvim-flake]: https://github.com/siph/nixvim-flake
 [Tanish2002/neovim-config]: https://github.com/Tanish2002/neovim-config
 [traxys/Nixfiles]: https://github.com/traxys/Nixfiles/tree/master/neovim
+[veeronniecaw/ronvim]: https://codeberg.org/veeronniecaw/ronvim
 
 ## Share your config !
 
