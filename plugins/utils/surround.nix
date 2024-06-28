@@ -8,7 +8,7 @@
 helpers.vim-plugin.mkVimPlugin config {
   name = "surround";
   originalName = "surround.vim";
-  defaultPackage = pkgs.vimPlugins.surround;
+  defaultPackage = pkgs.vimPlugins.vim-surround;
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 }
