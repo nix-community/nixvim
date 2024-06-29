@@ -9,13 +9,7 @@
     {
       legacyPackages = rec {
         inherit makeNixvimWithModule;
-        makeNixvim =
-          configuration:
-          makeNixvimWithModule {
-            module = {
-              config = configuration;
-            };
-          };
+        makeNixvim = module: makeNixvimWithModule { inherit module; };
       };
     };
 }

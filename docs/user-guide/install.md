@@ -75,9 +75,10 @@ If using the home-manager module, see [Home Manager Usage](./modules/hm.md) for 
 ### Standalone usage
 
 When using nixvim as a standalone derivation you can use the following functions, located in `<nixvim>.legacyPackages.${system}`:
-- `makeNixvim`: This function takes an attribute set of options values as arguments
+- `makeNixvim`: A simplified version of `makeNixvimWithModule` for when you only need to specify `module` and the other options can be left as the defaults.
+  This function's only argument is a nixvim module, e.g. `{ extraConfigLua = "print('hi')"; }`
 - `makeNixvimWithModule`: This function takes an attribute set of the form: `{pkgs, extraSpecialArgs, module}`.
-  The only required argument is `module`, being a NixOS module. This gives access to the `imports`, `options`, `config` variables, and using functions like `{config, ...}: { ... }`.
+  The only required argument is `module`, being a nixvim module. This gives access to the `imports`, `options`, `config` variables, and using functions like `{config, ...}: { ... }`.
 
 There are also some helper functions in `<nixvim>.lib.${system}` like:
 - `check.mkTestDerivationFromNixvimModule`, taking the same arguments as `makeNixvimWithModule` and generates a check derivation.
