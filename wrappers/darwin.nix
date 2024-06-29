@@ -49,7 +49,7 @@ in
       environment.systemPackages = [
         cfg.finalPackage
         cfg.printInitPackage
-      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
+      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs);
     }
     { inherit (cfg) warnings assertions; }
   ]);

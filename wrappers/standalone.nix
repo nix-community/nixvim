@@ -52,7 +52,7 @@ let
       paths = [
         config.finalPackage
         config.printInitPackage
-      ] ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.system}.man-docs;
+      ] ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
       meta.mainProgram = "nvim";
     })
     // {

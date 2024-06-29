@@ -46,7 +46,7 @@ in
       home.packages = [
         cfg.finalPackage
         cfg.printInitPackage
-      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.system}.man-docs);
+      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs);
     }
     (mkIf (!cfg.wrapRc) { xdg.configFile = files; })
     {
