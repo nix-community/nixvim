@@ -1,8 +1,4 @@
-{
-  pkgs,
-  makeNixvim,
-  makeNixvimWithModule,
-}:
+{ pkgs, makeNixvimWithModule, ... }:
 let
   # Create a nix derivation from a nixvim executable.
   # The build phase simply consists in running the provided nvim binary.
@@ -46,12 +42,15 @@ let
       '';
     };
 
+  # Create a nix derivation from a nixvim configuration.
+  # The build phase simply consists in running neovim with the given configuration.
   mkTestDerivationFromNixvimModule =
     {
       name ? "nixvim-check",
-      pkgs,
+      pkgs ? pkgs,
       module,
       extraSpecialArgs ? { },
+      dontRun ? false,
     }:
     let
       nvim = makeNixvimWithModule {
@@ -59,21 +58,8 @@ let
         _nixvimTests = true;
       };
     in
-    mkTestDerivationFromNvim { inherit name nvim; };
-
-  # Create a nix derivation from a nixvim configuration.
-  # The build phase simply consists in running neovim with the given configuration.
-  mkTestDerivation =
-    name: config:
-    let
-      testAttributes = if builtins.hasAttr "tests" config then config.tests else { dontRun = false; };
-      nvim = makeNixvim (pkgs.lib.attrsets.filterAttrs (n: _: n != "tests") config);
-    in
-    mkTestDerivationFromNvim {
-      inherit name nvim;
-      inherit (testAttributes) dontRun;
-    };
+    mkTestDerivationFromNvim { inherit name nvim dontRun; };
 in
 {
-  inherit mkTestDerivation mkTestDerivationFromNvim mkTestDerivationFromNixvimModule;
+  inherit mkTestDerivationFromNvim mkTestDerivationFromNixvimModule;
 }

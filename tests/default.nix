@@ -1,14 +1,14 @@
 {
-  makeNixvim,
   makeNixvimWithModule,
-  lib,
+  lib ? pkgs.lib,
   helpers,
   pkgs,
+  pkgsUnfree,
 }:
 let
   fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ./test-derivation.nix { inherit pkgs makeNixvim makeNixvimWithModule; };
-  inherit (test-derivation) mkTestDerivation;
+  test-derivation = import ./test-derivation.nix { inherit pkgs makeNixvimWithModule; };
+  inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   # List of files containing configurations
   testFiles = fetchTests {
@@ -31,9 +31,16 @@ let
   };
 
   # We attempt to build & execute all configurations
-  derivationList = pkgs.lib.mapAttrsToList (name: path: {
+  derivationList = pkgs.lib.mapAttrsToList (name: def: {
     inherit name;
-    path = mkTestDerivation name path;
+    path = mkTestDerivationFromNixvimModule {
+      inherit name;
+      # The module can either be the actual definition,
+      # or a child attr named `module`.
+      module = def.module or lib.removeAttrs def [ "tests" ];
+      dontRun = def.tests.dontRun or false;
+      pkgs = pkgsUnfree;
+    };
   }) (testFiles // exampleFiles);
 in
 pkgs.linkFarm "nixvim-tests" derivationList

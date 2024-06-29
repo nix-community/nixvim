@@ -14,18 +14,10 @@ let
 in
 {
   perSystem =
-    {
-      system,
-      pkgs,
-      pkgsUnfree,
-      config,
-      ...
-    }:
+    { system, pkgs, ... }:
     {
       _module.args = {
         makeNixvimWithModule = import ../wrappers/standalone.nix pkgs wrapperArgs;
-
-        makeNixvimWithModuleUnfree = import ../wrappers/standalone.nix pkgsUnfree wrapperArgs;
       };
 
       checks =

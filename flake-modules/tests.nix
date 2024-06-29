@@ -3,25 +3,21 @@
   perSystem =
     {
       pkgs,
-      config,
+      pkgsUnfree,
       system,
       helpers,
-      makeNixvimWithModuleUnfree,
       makeNixvimWithModule,
       ...
     }:
     {
       checks = {
         tests = import ../tests {
-          inherit pkgs helpers makeNixvimWithModule;
-          inherit (pkgs) lib;
-          makeNixvim =
-            configuration:
-            makeNixvimWithModuleUnfree {
-              module = {
-                config = configuration;
-              };
-            };
+          inherit
+            pkgs
+            pkgsUnfree
+            helpers
+            makeNixvimWithModule
+            ;
         };
 
         extra-args-tests = import ../tests/extra-args.nix {
