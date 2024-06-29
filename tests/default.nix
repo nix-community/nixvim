@@ -37,7 +37,7 @@ let
       inherit name;
       # The module can either be the actual definition,
       # or a child attr named `module`.
-      module = def.module or lib.removeAttrs def [ "tests" ];
+      module = def.module or (lib.removeAttrs def [ "tests" ]);
       dontRun = def.tests.dontRun or false;
       pkgs = pkgsUnfree;
     };
