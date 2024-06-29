@@ -57,7 +57,6 @@ let
             inherit pkgs lib helpers;
             config = { };
           };
-          cmp-sources = import ../plugins/completion/cmp/sources.nix;
         };
         inherit namespace;
       }

@@ -15,8 +15,11 @@ let
       pkgs
       ;
   };
-  cmpSourcesPluginNames = attrValues (import ../sources.nix);
-  pluginModules = map (name: cmpLib.mkCmpSourcePlugin { inherit name; }) cmpSourcesPluginNames;
+
+  cmpSourcesPluginNames = import ../sources.nix;
+  pluginModules = mapAttrsToList (
+    sourceName: name: cmpLib.mkCmpSourcePlugin { inherit sourceName name; }
+  ) cmpSourcesPluginNames;
 in
 {
   # For extra cmp plugins

@@ -16,42 +16,22 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # Introduced on 2024 February 21
-  # TODO: remove ~June 2024
   imports = [
+    # Introduced on 2024 February 21
+    # TODO: remove ~June 2024
     ./deprecations.nix
+    ./auto-enable.nix
     ./sources
   ];
   deprecateExtraOptions = true;
 
+  inherit (cmpOptions) settingsOptions settingsExample;
   extraOptions = {
-    autoEnableSources = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Scans the sources array and installs the plugins if they are known to nixvim.
-      '';
-    };
-
     inherit (cmpOptions) filetype cmdline;
   };
 
-  inherit (cmpOptions) settingsOptions settingsExample;
-
   callSetup = false;
   extraConfig = cfg: {
-    warnings =
-      optional (cfg.autoEnableSources && (helpers.nixvimTypes.isRawType cfg.settings.sources))
-        ''
-          Nixvim (plugins.cmp): You have enabled `autoEnableSources` that tells Nixvim to automatically
-          enable the source plugins with respect to the list of sources provided in `settings.sources`.
-          However, the latter is proveded as a raw lua string which is not parseable by Nixvim.
-
-          If you want to keep using raw lua for defining your sources:
-          - Ensure you enable the relevant plugins manually in your configuration;
-          - Dismiss this warning by explicitly setting `autoEnableSources` to `false`;
-        '';
-
     extraConfigLua =
       ''
         local cmp = require('cmp')
@@ -68,9 +48,5 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           cmdtype: settings: "cmp.setup.cmdline('${cmdtype}', ${helpers.toLuaObject settings})\n"
         ) cfg.cmdline
       ));
-
-    # If autoEnableSources is set to true, figure out which are provided by the user
-    # and enable the corresponding plugins.
-    plugins = (import ./cmp-helpers.nix args).autoInstallSourcePluginsModule cfg;
   };
 }
