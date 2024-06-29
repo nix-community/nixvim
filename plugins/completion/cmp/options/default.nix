@@ -37,7 +37,7 @@ rec {
   filetype = mkOption {
     type = attrsOfOptions;
     default = { };
-    description = "Options for `cmp.filetype()`.";
+    description = "Options provided to the `require('cmp').setup.filetype` function.";
     example = {
       python = {
         sources = [ { name = "nvim_lsp"; } ];
@@ -48,7 +48,7 @@ rec {
   cmdline = mkOption {
     type = attrsOfOptions;
     default = { };
-    description = "Options for `cmp.cmdline()`.";
+    description = "Options provided to the `require('cmp').setup.cmdline` function.";
     example = {
       "/" = {
         mapping.__raw = "cmp.mapping.preset.cmdline()";
