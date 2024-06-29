@@ -12,6 +12,20 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   maintainers = [ lib.maintainers.perchun ];
 
+  imports = [
+    # TODO: introduced 2024-06-29; remove after 24.11
+    (lib.mkRemovedOptionModule
+      [
+        "plugins"
+        "otter"
+        "addCmpSources"
+      ]
+      "Otter is now supported by `plugins.cmp.autoEnableSources`, adding `otter` to `cmp` sources will enable this plugin."
+    )
+    # Register nvim-cmp association
+    { cmpSourcePlugins.otter = "otter"; }
+  ];
+
   settingsOptions = {
     lsp = {
       hover = {
@@ -68,19 +82,5 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Otter may not work the way you expect when entire code blocks are indented (eg. in Org files).
       When true, otter handles these cases fully. This is a (minor) performance hit.
     '';
-  };
-
-  extraOptions = {
-    addCmpSources = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = ''
-        Automatically add otter to cmp sources, as it is required for some functionality.
-      '';
-    };
-  };
-
-  extraConfig = cfg: {
-    plugins.cmp.settings.sources = lib.mkIf cfg.addCmpSources [ { name = "otter"; } ];
   };
 }
