@@ -138,10 +138,6 @@
               "regal"
               "remark"
               "rescript"
-              # As of 2024-06-18, pkgs.rubyfmt is broken on all platforms
-              # https://github.com/NixOS/nixpkgs/issues/320722
-              # TODO: re-enable this test when fixed
-              "rubyfmt"
               "saltlint"
               "solhint"
               "spectral"
@@ -170,6 +166,9 @@
               "gdformat"
               "gdlint"
               "haml_lint"
+              # As of 2024-06-29, pkgs.rubyfmt is broken on darwin
+              # TODO: re-enable this test when fixed
+              "rubyfmt"
               "verilator"
               "verible_verilog_format"
             ])
