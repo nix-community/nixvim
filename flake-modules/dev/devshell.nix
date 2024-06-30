@@ -22,7 +22,11 @@
             {
               name = "checks";
               help = "Run all nixvim checks";
-              command = "nix flake check";
+              command = ''
+                echo "=> Running all nixvim checks..."
+
+                ${nix} flake check "$@"
+              '';
             }
             {
               name = "tests";
@@ -31,6 +35,15 @@
                 echo "=> Running nixvim tests for the '${system}' architecture..."
 
                 ${nix} build .#checks.${system}.tests "$@"
+              '';
+            }
+            {
+              name = "test-lib";
+              help = "Run nixvim library tests";
+              command = ''
+                echo "=> Running nixvim library tests for the '${system}' architecture..."
+
+                ${nix} build .#checks.${system}.lib-tests "$@"
               '';
             }
             {
