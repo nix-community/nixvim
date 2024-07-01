@@ -68,8 +68,12 @@ The resulting `settings` attrs will be directly translated to `lua` and will be 
 
 In either case, you don't need to bother implementing this part. It is done automatically.
 
-> [!NOTE]
+> [!TIP]
 > Learn more about the [RFC 42](https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md) which motivated this new approach.
+
+> [!NOTE]
+> `settings` has a "freeform" type `attrsOf anything`, meaning it can be configured with _anything_.
+> Declaring `settingsOptions` is therefore optional and just adds type-checking and documentation.
 
 
 ### Tests
