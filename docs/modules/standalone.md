@@ -24,34 +24,34 @@ The example assumes your standalone config is the `default` package of a flake, 
 
 ## Extending an existing configuration
 
-Given a `nvim` derivation obtained from `makeNixvim` or `makeNivxmiWithModule` it is possible to create a new derivation with additional options.
+Given a `<nixvim>` derivation obtained from `makeNixvim` or `makeNivxmiWithModule` it is possible to create a new derivation with additional options.
 
-This is done through the `nvim.nixvimExtend` function. This function takes a NixOS module that is going to be merged with the currently set options.
+This is done through the `<nixvim>.extend` function. This function takes a Nixvim module that is merged with the options used to build `<nixvim>`.
 
-This attribute is recursive, meaning that it can be applied an arbitrary number of times.
+This function is recursive, meaning that it can be applied an arbitrary number of times.
 
 ### Example
 
 ```nix
-{makeNixvimWithModule}: let
-    first = makeNixvimWithModule {
-        module = {
-            extraConfigLua = "-- first stage";
-        };
-    };
-
-    second = first.nixvimExtend {extraConfigLua = "-- second stage";};
-    
-    third = second.nixvimExtend {extraConfigLua = "-- third stage";};
+{makeNixvim}: let
+    first = makeNixvim { extraConfigLua = "-- first stage"; };
+    second = first.extend {extraConfigLua = "-- second stage";};
+    third = second.extend {extraConfigLua = "-- third stage";};
 in
     third
 ```
 
-This will generate a `init.lua` that will contain the three comments from each stages.
+This will generate a `init.lua` that will contain the comments from each stages:
+
+```lua
+-- first stage
+-- second stage
+-- third stage
+```
 
 ## Accessing options used in an existing configuration
 
-The `config` used to produce a standalone nixvim derivation can be accessed as an attribute on the derivation, similar to `nixvimExtend`.
+The `config` used to produce a standalone nixvim derivation can be accessed as an attribute on the derivation, similar to `<nixvim>.extend`.
 
 This may be useful if you want unrelated parts of your NixOS or home-manager configuration to use the same value as something in your nixvim configuration.
 

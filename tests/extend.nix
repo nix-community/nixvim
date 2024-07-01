@@ -6,9 +6,9 @@ let
     };
   };
 
-  secondStage = firstStage.nixvimExtend { extraConfigLua = "-- second stage"; };
+  secondStage = firstStage.extend { extraConfigLua = "-- second stage"; };
 
-  generated = secondStage.nixvimExtend { extraConfigLua = "-- third stage"; };
+  generated = secondStage.extend { extraConfigLua = "-- third stage"; };
 in
 pkgs.runCommand "extend-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
   config=$($printConfig)

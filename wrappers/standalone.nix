@@ -55,10 +55,10 @@ let
       ] ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
       meta.mainProgram = "nvim";
     })
-    // {
+    // rec {
       inherit config;
       inherit (evaledModule) options;
-      nixvimExtend =
+      extend =
         extension:
         mkNvim {
           imports = [
@@ -66,6 +66,7 @@ let
             extension
           ];
         };
+      nixvimExtend = lib.warn "<nixvim>.nixvimExtend has been renamed to <nixvim>.extend" extend;
     };
 in
 mkNvim module
