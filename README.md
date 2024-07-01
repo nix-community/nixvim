@@ -83,7 +83,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 
 ## Installation
 
-**WARNING !**
+> [!WARNING]
 > NixVim needs to be installed with a compatible nixpkgs version.
 > This means that the `main` branch of NixVim requires to be installed with `nixos-unstable`.
 >
