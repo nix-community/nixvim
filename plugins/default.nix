@@ -185,6 +185,7 @@
     ./utils/molten.nix
     ./utils/multicursors.nix
     ./utils/navbuddy.nix
+    ./utils/neoclip.nix
     ./utils/neocord.nix
     ./utils/neogen.nix
     ./utils/neorg.nix
