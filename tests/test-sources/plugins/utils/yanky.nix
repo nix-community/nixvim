@@ -78,18 +78,18 @@
           telescope = {
             use_default_mappings = true;
             mappings = {
-              default = "require('yanky.telescope.mapping').put('p')";
+              default = "mapping.put('p')";
               i = {
-                "<c-g>" = "require('yanky.telescope.mapping').put('p')";
-                "<c-k>" = "require('yanky.telescope.mapping').put('P')";
-                "<c-x>" = "require('yanky.telescope.mapping').delete()";
-                "<c-r>" = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+                "<c-g>" = "mapping.put('p')";
+                "<c-k>" = "mapping.put('P')";
+                "<c-x>" = "mapping.delete()";
+                "<c-r>" = "mapping.set_register(utils.get_default_register())";
               };
               n = {
-                p = "require('yanky.telescope.mapping').put('p')";
-                P = "require('yanky.telescope.mapping').put('P')";
-                d = "require('yanky.telescope.mapping').delete()";
-                r = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+                p = "mapping.put('p')";
+                P = "mapping.put('P')";
+                d = "mapping.delete()";
+                r = "mapping.set_register(utils.get_default_register())";
               };
             };
           };

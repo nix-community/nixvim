@@ -120,6 +120,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       )
     ];
 
+  settingsDescription = ''
+    Options provided to the `require('yanky').setup` function.
+
+    NOTE: The following local variables are available in the scope:
+    ```lua
+    local utils = require('yanky.utils')
+    local mapping = require('yanky.telescope.mapping') -- Only if `plugins.telescope` is enabled
+    ```
+  '';
   settingsOptions = {
     ring = {
       history_length = helpers.defaultNullOpts.mkUnsignedInt 100 ''
@@ -229,18 +238,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             default mappings.
           '';
           example = {
-            default = "require('yanky.telescope.mapping').put('p')";
+            default = "mapping.put('p')";
             i = {
-              "<c-g>" = "require('yanky.telescope.mapping').put('p')";
-              "<c-k>" = "require('yanky.telescope.mapping').put('P')";
-              "<c-x>" = "require('yanky.telescope.mapping').delete()";
-              "<c-r>" = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+              "<c-g>" = "mapping.put('p')";
+              "<c-k>" = "mapping.put('P')";
+              "<c-x>" = "mapping.delete()";
+              "<c-r>" = "mapping.set_register(utils.get_default_register())";
             };
             n = {
-              p = "require('yanky.telescope.mapping').put('p')";
-              P = "require('yanky.telescope.mapping').put('P')";
-              d = "require('yanky.telescope.mapping').delete()";
-              r = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+              p = "mapping.put('p')";
+              P = "mapping.put('P')";
+              d = "mapping.delete()";
+              r = "mapping.set_register(utils.get_default_register())";
             };
           };
         };
@@ -312,20 +321,20 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     picker = {
       telescope = {
         mappings = {
-          default = "require('yanky.telescope.mapping').put('p')";
+          default = "mapping.put('p')";
           i = {
-            "<c-g>" = "require('yanky.telescope.mapping').put('p')";
-            "<c-k>" = "require('yanky.telescope.mapping').put('P')";
-            "<c-x>" = "require('yanky.telescope.mapping').delete()";
-            "<c-r>" = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+            "<c-g>" = "mapping.put('p')";
+            "<c-k>" = "mapping.put('P')";
+            "<c-x>" = "mapping.delete()";
+            "<c-r>" = "mapping.set_register(utils.get_default_register())";
           };
           n = {
-            p = "require('yanky.telescope.mapping').put('p')";
-            P = "require('yanky.telescope.mapping').put('P')";
-            gp = "require('yanky.telescope.mapping').put('gp')";
-            gP = "require('yanky.telescope.mapping').put('gP')";
-            d = "require('yanky.telescope.mapping').delete()";
-            r = "require('yanky.telescope.mapping').set_register(require('yanky.utils').get_default_register())";
+            p = "mapping.put('p')";
+            P = "mapping.put('P')";
+            gp = "mapping.put('gp')";
+            gP = "mapping.put('gP')";
+            d = "mapping.delete()";
+            r = "mapping.set_register(utils.get_default_register())";
           };
         };
       };
@@ -336,6 +345,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     enableTelescope = mkEnableOption "the `yank_history` telescope picker.";
   };
 
+  callSetup = false;
   extraConfig = cfg: {
     assertions = [
       {
@@ -345,6 +355,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
       }
     ];
+
+    extraConfigLua = ''
+      do
+        local utils = require('yanky.utils')
+        ${optionalString config.plugins.telescope.enable "local mapping = require('yanky.telescope.mapping')"}
+
+        require('yanky').setup(${helpers.toLuaObject cfg.settings})
+      end
+    '';
 
     extraPlugins = mkIf (cfg.settings.ring.storage == "sqlite") [ pkgs.vimPlugins.sqlite-lua ];
 
