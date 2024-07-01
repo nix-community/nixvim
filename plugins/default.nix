@@ -68,6 +68,7 @@
     ./languages/lint.nix
     ./languages/ltex-extra.nix
     ./languages/markdown/markdown-preview.nix
+    ./languages/markdown/preview.nix
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
     ./languages/openscad.nix
