@@ -188,10 +188,16 @@ in
             you have not set `plugins.yanky.picker.telescope.enable`.
           '';
         }
+        {
+          assertion = cfg.picker.telescope.enable -> config.plugins.telescope.enable;
+          message = ''
+            Nixvim: You have enabled the `telescope` integration with yanky.
+            However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+          '';
+        }
       ];
 
-      plugins.telescope.enable = true;
-      plugins.telescope.enabledExtensions = optional cfg.picker.telescope.enable "yank_history";
+      plugins.telescope.enabledExtensions = mkIf cfg.picker.telescope.enable [ "yank_history" ];
 
       extraPlugins = [
         cfg.package

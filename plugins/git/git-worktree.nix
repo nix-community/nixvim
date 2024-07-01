@@ -60,7 +60,10 @@ in
       assertions = [
         {
           assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-          message = ''Nixvim: The git-worktree telescope integration needs telescope to function as intended'';
+          message = ''
+            Nixvim: You have enabled the `telescope` integration with git-worktree.
+            However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+          '';
         }
       ];
 
@@ -71,13 +74,10 @@ in
 
       extraPackages = [ pkgs.git ];
 
-      extraConfigLua =
-        let
-          telescopeCfg = ''require("telescope").load_extension("git_worktree")'';
-        in
-        ''
-          require('git-worktree').setup(${helpers.toLuaObject setupOptions})
-          ${if cfg.enableTelescope then telescopeCfg else ""}
-        '';
+      extraConfigLua = ''
+        require('git-worktree').setup(${helpers.toLuaObject setupOptions})
+      '';
+
+      plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "git_worktree" ];
     };
 }
