@@ -201,6 +201,7 @@
     ./utils/obsidian
     ./utils/oil.nix
     ./utils/ollama.nix
+    ./utils/overseer.nix
     ./utils/persistence.nix
     ./utils/presence-nvim.nix
     ./utils/project-nvim.nix
