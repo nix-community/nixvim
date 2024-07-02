@@ -15,6 +15,5 @@
     ./opts.nix
     ./output.nix
     ./plugins.nix
-    ./warnings.nix
   ];
 }

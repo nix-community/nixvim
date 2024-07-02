@@ -8,6 +8,7 @@ in
   imports = [
     ./nixpkgs.nix
     ./nixvim-info.nix
+    (nixosModules + "/misc/assertions.nix")
     (nixosModules + "/misc/meta.nix")
   ];
 }
