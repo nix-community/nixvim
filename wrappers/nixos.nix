@@ -1,8 +1,4 @@
-{
-  modules,
-  self,
-  getHelpers,
-}:
+{ self, getHelpers }:
 {
   pkgs,
   config,
@@ -20,7 +16,7 @@ let
     types
     ;
   helpers = getHelpers pkgs false;
-  shared = import ./_shared.nix { inherit modules helpers; } args;
+  shared = import ./_shared.nix helpers args;
   cfg = config.programs.nixvim;
   files = shared.configFiles // {
     "nvim/sysinit.lua".text = cfg.initContent;
@@ -34,6 +30,7 @@ in
         shorthandOnlyDefinesConfig = true;
         specialArgs = {
           nixosConfig = config;
+          defaultPkgs = pkgs;
           inherit helpers;
         };
         modules = [ ./modules/nixos.nix ] ++ shared.topLevelModules;

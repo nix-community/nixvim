@@ -1,8 +1,4 @@
-{
-  rawModules,
-  helpers,
-  pkgs,
-}:
+{ helpers, pkgs }:
 let
   # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
   lib = pkgs.lib.extend (
@@ -68,6 +64,7 @@ let
   };
 
   topLevelModules = [
+    ../modules
     ../wrappers/modules/output.nix
     # Fake module to avoid a duplicated documentation
     (lib.setDefaultModuleLocation "${nixvimPath}/wrappers/modules/files.nix" {
@@ -85,7 +82,7 @@ let
         };
       };
     })
-  ] ++ (rawModules pkgsDoc);
+  ];
 
   hmOptions = builtins.removeAttrs (lib.evalModules {
     modules = [ (import ../wrappers/modules/hm.nix { inherit lib; }) ];
@@ -97,7 +94,10 @@ rec {
       inherit
         (lib.evalModules {
           modules = topLevelModules;
-          specialArgs.helpers = helpers;
+          specialArgs = {
+            inherit helpers;
+            defaultPkgs = pkgsDoc;
+          };
         })
         options
         ;
