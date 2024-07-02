@@ -1,13 +1,11 @@
 {
   inputs,
-  modules,
   getHelpers,
   self,
   ...
 }:
 let
   wrapperArgs = {
-    inherit modules;
     inherit self;
     inherit getHelpers;
   };

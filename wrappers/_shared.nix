@@ -1,26 +1,15 @@
-{ modules, helpers }:
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+helpers:
+{ lib, config, ... }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkOption
-    mkOptionType
-    mkForce
-    mkMerge
-    mkIf
-    types
-    ;
+  inherit (lib) mkOption mkOptionType;
+  cfg = config.programs.nixvim;
 in
 {
   topLevelModules = [
+    ../modules
     ./modules/output.nix
-    (import ./modules/files.nix (modules pkgs))
-  ] ++ (modules pkgs);
+    ./modules/files.nix
+  ];
 
   helpers = mkOption {
     type = mkOptionType {
@@ -33,9 +22,6 @@ in
   };
 
   configFiles =
-    let
-      cfg = config.programs.nixvim;
-    in
     (lib.mapAttrs' (_: file: lib.nameValuePair "nvim/${file.path}" { text = file.content; }) cfg.files)
     // (lib.mapAttrs' (
       path: content: lib.nameValuePair "nvim/${path}" { text = content; }

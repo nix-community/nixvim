@@ -5,7 +5,6 @@
     ./helpers.nix
     ./lib.nix
     ./legacy-packages.nix
-    ./modules.nix
     ./overlays.nix
     ./packages.nix
     ./templates.nix

@@ -1,5 +1,6 @@
 {
   imports = [
+    ./misc
     ./autocmd.nix
     ./clipboard.nix
     ./colorscheme.nix
