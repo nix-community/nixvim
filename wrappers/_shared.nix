@@ -1,4 +1,4 @@
-{ modules, helpers }:
+helpers:
 {
   lib,
   pkgs,
@@ -18,10 +18,10 @@ let
 in
 {
   topLevelModules = [
+    ../modules
     ./modules/output.nix
-    (import ./modules/files.nix (modules pkgs))
-  ] ++ (modules pkgs);
-
+    ./modules/files.nix
+  ];
   helpers = mkOption {
     type = mkOptionType {
       name = "helpers";

@@ -12,7 +12,8 @@ let
   options = lib.evalModules {
     inherit modules;
     specialArgs = {
-      inherit pkgs lib helpers;
+      inherit helpers;
+      defaultPkgs = pkgs;
     };
   };
 

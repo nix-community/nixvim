@@ -1,9 +1,5 @@
 default_pkgs:
-{
-  modules,
-  self,
-  getHelpers,
-}:
+{ self, getHelpers }:
 {
   pkgs ? default_pkgs,
   extraSpecialArgs ? { },
@@ -14,22 +10,10 @@ let
   inherit (pkgs) lib;
 
   helpers = getHelpers pkgs _nixvimTests;
-  shared = import ./_shared.nix { inherit modules helpers; } {
+  shared = import ./_shared.nix helpers {
     inherit pkgs lib;
     config = { };
   };
-
-  mkEval =
-    mod:
-    lib.evalModules {
-      modules = [
-        mod
-        { wrapRc = true; }
-      ] ++ shared.topLevelModules;
-      specialArgs = {
-        inherit helpers;
-      } // extraSpecialArgs;
-    };
 
   handleAssertions =
     config:
@@ -44,7 +28,16 @@ let
   mkNvim =
     mod:
     let
-      evaledModule = mkEval mod;
+      evaledModule = lib.evalModules {
+        modules = [
+          mod
+          { wrapRc = true; }
+        ] ++ shared.topLevelModules;
+        specialArgs = {
+          inherit helpers;
+          defaultPkgs = pkgs;
+        } // extraSpecialArgs;
+      };
       config = handleAssertions evaledModule.config;
     in
     (pkgs.symlinkJoin {

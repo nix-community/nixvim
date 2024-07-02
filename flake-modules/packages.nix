@@ -3,13 +3,12 @@
     {
       pkgsUnfree,
       config,
-      rawModules,
       helpers,
       ...
     }:
     {
       packages = import ../docs {
-        inherit rawModules helpers;
+        inherit helpers;
         # Building the docs evaluates each plugin's default package, some of which are unfree
         pkgs = pkgsUnfree;
       };

@@ -1,4 +1,3 @@
-modules:
 {
   pkgs,
   config,
@@ -10,12 +9,15 @@ let
   inherit (lib) types;
   fileModuleType = types.submoduleWith {
     shorthandOnlyDefinesConfig = true;
-    specialArgs.helpers = helpers;
+    specialArgs = {
+      inherit helpers;
+      defaultPkgs = pkgs;
+    };
     modules = [
       (
         { name, config, ... }:
         {
-          imports = modules;
+          imports = [ ../../modules ];
           options.plugin = lib.mkOption {
             type = types.package;
             description = "A derivation with the content of the file in it";
