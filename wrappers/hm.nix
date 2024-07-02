@@ -35,7 +35,7 @@ in
           hmConfig = config;
           inherit helpers;
         };
-        modules = [ (import ./modules/hm.nix { inherit lib; }) ] ++ shared.topLevelModules;
+        modules = [ ./modules/hm.nix ] ++ shared.topLevelModules;
       };
     };
     nixvim.helpers = shared.helpers;

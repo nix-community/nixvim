@@ -33,12 +33,7 @@ in
           darwinConfig = config;
           inherit helpers;
         };
-        modules = [
-          {
-            options.enable = mkEnableOption "nixvim";
-            config.wrapRc = mkForce true;
-          }
-        ] ++ shared.topLevelModules;
+        modules = [ ./modules/darwin.nix ] ++ shared.topLevelModules;
       };
     };
     nixvim.helpers = shared.helpers;

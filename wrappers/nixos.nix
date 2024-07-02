@@ -36,15 +36,7 @@ in
           nixosConfig = config;
           inherit helpers;
         };
-        modules = [
-          {
-            options = {
-              enable = mkEnableOption "nixvim";
-              defaultEditor = mkEnableOption "nixvim as the default editor";
-            };
-            config.wrapRc = mkForce true;
-          }
-        ] ++ shared.topLevelModules;
+        modules = [ ./modules/nixos.nix ] ++ shared.topLevelModules;
       };
     };
     nixvim.helpers = shared.helpers;
