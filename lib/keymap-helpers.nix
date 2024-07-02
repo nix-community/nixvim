@@ -91,47 +91,65 @@ rec {
     assert !(defaults ? lua);
     (
       with types;
-      submodule {
-        options =
-          (optionalAttrs (isAttrs key || key) {
-            key = mkOption (
-              {
-                type = str;
-                description = "The key to map.";
-                example = "<C-m>";
-              }
-              // (optionalAttrs (isAttrs key) key)
-              // (optionalAttrs (defaults ? key) { default = defaults.key; })
-            );
-          })
-          // (optionalAttrs (isAttrs action || action) {
-            action = mkOption (
-              {
-                type = nixvimTypes.maybeRaw str;
-                description = "The action to execute.";
-              }
-              // (optionalAttrs (isAttrs action) action)
-              // (optionalAttrs (defaults ? action) { default = defaults.action; })
-            );
-          })
-          // {
-            mode = mkModeOption defaults.mode or "";
-            options = mapConfigOptions;
+      submodule (
+        { config, options, ... }:
+        {
+          options =
+            (optionalAttrs (isAttrs key || key) {
+              key = mkOption (
+                {
+                  type = str;
+                  description = "The key to map.";
+                  example = "<C-m>";
+                }
+                // (optionalAttrs (isAttrs key) key)
+                // (optionalAttrs (defaults ? key) { default = defaults.key; })
+              );
+            })
+            // (optionalAttrs (isAttrs action || action) {
+              action = mkOption (
+                {
+                  type = nixvimTypes.maybeRaw str;
+                  description = "The action to execute.";
+                  # Normalize the mapping:
+                  # TODO: remove once lua option is gone
+                  apply =
+                    action: if isString action && isBool config.lua && config.lua then { __raw = action; } else action;
+                }
+                // (optionalAttrs (isAttrs action) action)
+                // (optionalAttrs (defaults ? action) { default = defaults.action; })
+              );
+            })
+            // {
+              mode = mkModeOption defaults.mode or "";
+              options = mapConfigOptions;
 
-            lua = mkOption {
-              type = nullOr bool;
-              description = ''
-                If true, `action` is considered to be lua code.
-                Thus, it will not be wrapped in `""`.
+              lua = mkOption {
+                type = nullOr bool;
+                description = ''
+                  If true, `action` is considered to be lua code.
+                  Thus, it will not be wrapped in `""`.
 
-                This option is deprecated and will be removed in 24.11.
-                You should use a "raw" action instead, e.g. `action.__raw = ""`.
-              '';
-              default = null;
-              visible = false;
+                  This option is deprecated and will be removed in 24.11.
+                  You should use a "raw" action instead, e.g. `action.__raw = ""`.
+                '';
+                default = null;
+                visible = false;
+              };
+
+              luaDefs = mkOption {
+                type = listOf attrs;
+                default = [ ];
+                visible = false;
+                internal = true;
+              };
             };
+
+          config = {
+            luaDefs = mkIf (options.lua.definitions != [ null ]) options.lua.definitionsWithLocations;
           };
-      }
+        }
+      )
     );
 
   # Correctly merge two attrs (partially) representing a mapping.
