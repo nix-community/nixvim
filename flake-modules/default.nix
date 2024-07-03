@@ -10,6 +10,7 @@
     ./templates.nix
     ./tests.nix
     ./wrappers.nix
+    ./updates
   ];
 
   perSystem =
