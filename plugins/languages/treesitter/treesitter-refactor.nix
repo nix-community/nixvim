@@ -144,7 +144,7 @@ with lib;
 
       extraPlugins = [ cfg.package ];
 
-      plugins.treesitter.moduleConfig.refactor = {
+      plugins.treesitter.settings.refactor = {
         highlight_definitions = {
           inherit (cfg.highlightDefinitions) enable disable;
           clear_on_cursor_move = cfg.highlightDefinitions.clearOnCursorMove;

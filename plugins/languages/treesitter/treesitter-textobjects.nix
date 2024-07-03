@@ -193,7 +193,7 @@ with lib;
 
       extraPlugins = [ cfg.package ];
 
-      plugins.treesitter.moduleConfig.textobjects =
+      plugins.treesitter.settings.textobjects =
         with cfg;
         let
           processKeymapsOpt =

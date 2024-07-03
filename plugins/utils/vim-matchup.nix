@@ -178,7 +178,7 @@ with lib;
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
-      plugins.treesitter.moduleConfig.matchup = mkIf cfg.treesitterIntegration.enable {
+      plugins.treesitter.settings.matchup = mkIf cfg.treesitterIntegration.enable {
         inherit (cfg.treesitterIntegration) enable disable;
         disable_virtual_text = cfg.treesitterIntegration.disableVirtualText;
         include_match_words = cfg.treesitterIntegration.includeMatchWords;
