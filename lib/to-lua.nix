@@ -85,8 +85,20 @@ rec {
       removeEmptyAttrValues ? true,
 
       /**
+        If this option is true, lists like [ { } [ ] "" ]
+        will render as { "" }
+      */
+      removeEmptyListEntries ? false,
+
+      /**
+        If this option is true, lists like [ null "" ]
+        will render as { "" }
+      */
+      removeNullListEntries ? false,
+
+      /**
         If this option is true, attrsets like { a.__empty = null; }
-        will render as { ["a"] = { } }, ignoring removeEmptyAttrValues and removeNullAttrValues.
+        will render as { ["a"] = { } }, ignoring other filters such as removeEmptyAttrValues.
       */
       allowExplicitEmpty ? true,
 
@@ -111,7 +123,12 @@ rec {
     }:
     let
       # If any of these are options are set, we need to preprocess the value
-      needsPreprocessing = removeNullAttrValues || removeEmptyAttrValues || allowExplicitEmpty;
+      needsPreprocessing =
+        allowExplicitEmpty
+        || removeEmptyAttrValues
+        || removeNullAttrValues
+        || removeEmptyListEntries
+        || removeNullListEntries;
 
       # Slight optimization: only preprocess if we actually need to
       preprocessValue = value: if needsPreprocessing then removeEmptiesRecursive value else value;
@@ -125,23 +142,30 @@ rec {
         else if allowRawValues && value ? __raw then
           value
         else if isList value then
-          map removeEmptiesRecursive value
+          let
+            needsFiltering = removeNullListEntries || removeEmptyListEntries;
+            fn =
+              v: (removeNullListEntries -> (v != null)) && (removeEmptyListEntries -> (v != [ ] && v != { }));
+            v' = map removeEmptiesRecursive value;
+          in
+          if needsFiltering then filter fn v' else v'
         else if isAttrs value then
           concatMapAttrs (
             n: v:
+            let
+              v' = removeEmptiesRecursive v;
+            in
             if removeNullAttrValues && v == null then
-              { }
-            else if removeEmptyAttrValues && (v == [ ] || v == { }) then
               { }
             else if allowExplicitEmpty && v ? __empty then
               { ${n} = { }; }
-            else if isAttrs v then
-              let
-                v' = removeEmptiesRecursive v;
-              in
-              if v' == { } then { } else { ${n} = v'; }
+            # Optimisation: check if v is empty before evaluating v'
+            else if removeEmptyAttrValues && (v == [ ] || v == { }) then
+              { }
+            else if removeEmptyAttrValues && (v' == [ ] || v' == { }) then
+              { }
             else
-              { ${n} = v; }
+              { ${n} = v'; }
           ) value
         else
           value;

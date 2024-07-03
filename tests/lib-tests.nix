@@ -137,6 +137,55 @@ let
       expected = ''{ }'';
     };
 
+    testToLuaObjectAttrListFilters = {
+      expr = helpers.toLuaObject {
+        a = null;
+        b = { };
+        c = [ ];
+        d = {
+          e = null;
+          f = { };
+        };
+        g = [
+          {
+            x = null;
+            y = null;
+            z = null;
+          }
+          {
+            x = { };
+            y = [ ];
+            z = null;
+          }
+        ];
+        __unkeyed-1 = [
+          {
+            x = null;
+            y = null;
+            z = null;
+          }
+          {
+            x = { };
+            y = [ ];
+            z = null;
+          }
+          [
+            {
+              x = null;
+              y = null;
+              z = null;
+            }
+            {
+              x = { };
+              y = [ ];
+              z = null;
+            }
+          ]
+        ];
+      };
+      expected = ''{ { { }, { }, { { }, { } } }, g = { { }, { } } }'';
+    };
+
     testToLuaObjectEmptyTable = {
       expr = helpers.toLuaObject {
         a = null;
@@ -151,6 +200,47 @@ let
         };
       };
       expected = ''{ c = { }, d = { g = { } } }'';
+    };
+
+    testToLuaObjectEmptyListEntries = {
+      expr = helpers.lua.toLua' { removeEmptyListEntries = true; } [
+        { }
+        [ ]
+        [ { } ]
+        null
+        1
+        2
+        [
+          null
+          3
+          4
+          { }
+          [ ]
+          [ { } ]
+        ]
+        5
+      ];
+      expected = "{ nil, 1, 2, { nil, 3, 4 }, 5 }";
+    };
+
+    testToLuaObjectNullListEntries = {
+      expr = helpers.lua.toLua' { removeNullListEntries = true; } [
+        null
+        1
+        2
+        [
+          null
+          3
+          4
+          [
+            null
+            5
+            6
+          ]
+        ]
+        7
+      ];
+      expected = "{ 1, 2, { 3, 4, { 5, 6 } }, 7 }";
     };
 
     testIsLuaKeyword = {
