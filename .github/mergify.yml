@@ -4,6 +4,10 @@
 # https://docs.mergify.com/merge-queue
 queue_rules:
   - name: default
+    # Account used for pushing rebased updates. Default is {{author}},
+    # but that doesn't work when they haven't logged into Mergify Dashboard:
+    # https://github.com/Mergifyio/mergify/issues/5075
+    update_bot_account: GaetanLepage
     update_method: rebase
     merge_method: fast-forward
     merge_conditions:
