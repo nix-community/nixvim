@@ -123,7 +123,7 @@ in
         standalone file support
         setting it to false may improve startup time
       '';
-    }; # // (import ../../lsp/language-servers/rust-analyzer-config.nix lib pkgs);
+    } // (import ../../lsp/language-servers/rust-analyzer-config.nix lib helpers);
   };
   config = mkIf cfg.enable {
     extraPlugins = with pkgs.vimPlugins; [
