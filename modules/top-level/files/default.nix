@@ -3,28 +3,42 @@
   config,
   lib,
   helpers,
+  specialArgs,
   ...
 }:
 let
   inherit (lib) types;
+  isDocs = specialArgs.isDocs or false;
+
   fileModuleType = types.submoduleWith {
     shorthandOnlyDefinesConfig = true;
     specialArgs = {
       inherit helpers;
       defaultPkgs = pkgs;
     };
-    modules = [
+    # Don't include the modules in the docs, as that'd be redundant
+    modules = lib.optionals (!isDocs) [
       ../../.
       ./submodule.nix
     ];
+    description = "Nixvim configuration";
   };
 in
 {
   options = {
     files = lib.mkOption {
       type = types.attrsOf fileModuleType;
-      description = "Files to include in the Vim config.";
+      description = "Extra files to add to the runtimepath";
       default = { };
+      example = {
+        "ftplugin/nix.lua" = {
+          opts = {
+            tabstop = 2;
+            shiftwidth = 2;
+            expandtab = true;
+          };
+        };
+      };
     };
 
     filesPlugin = lib.mkOption {

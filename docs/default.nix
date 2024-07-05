@@ -56,35 +56,7 @@ let
       ) opt.declarations;
     };
 
-  nixvmConfigType = lib.mkOptionType {
-    name = "nixvim-configuration";
-    description = "nixvim configuration options";
-    descriptionClass = "noun";
-    # Evaluation is irrelevant, only used for documentation.
-  };
-
-  # Construct our own top-level modules, because we want to stub the `files` option
-  # FIXME: add a way to handle this with specialArgs
-  topLevelModules = [
-    ../modules
-    ../modules/top-level/output.nix
-    # Fake module to avoid a duplicated documentation
-    (lib.setDefaultModuleLocation "${nixvimPath}/wrappers/modules/files.nix" {
-      options.files = lib.mkOption {
-        type = lib.types.attrsOf nixvmConfigType;
-        description = "Extra files to add to the runtimepath";
-        example = {
-          "ftplugin/nix.lua" = {
-            options = {
-              tabstop = 2;
-              shiftwidth = 2;
-              expandtab = true;
-            };
-          };
-        };
-      };
-    })
-  ];
+  modules = [ ../modules/top-level ];
 
   hmOptions = builtins.removeAttrs (lib.evalModules {
     modules = [ (import ../wrappers/modules/hm.nix { inherit lib; }) ];
@@ -95,10 +67,11 @@ rec {
     (pkgsDoc.nixosOptionsDoc {
       inherit
         (lib.evalModules {
-          modules = topLevelModules;
+          inherit modules;
           specialArgs = {
             inherit helpers;
             defaultPkgs = pkgsDoc;
+            isDocs = true;
           };
         })
         options
@@ -112,8 +85,11 @@ rec {
 # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
 // lib.optionalAttrs (!pkgsDoc.stdenv.isDarwin) {
   docs = pkgsDoc.callPackage ./mdbook {
-    inherit transformOptions;
-    modules = topLevelModules;
-    inherit helpers hmOptions;
+    inherit
+      helpers
+      modules
+      hmOptions
+      transformOptions
+      ;
   };
 }
