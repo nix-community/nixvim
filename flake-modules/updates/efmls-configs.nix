@@ -58,11 +58,11 @@ let
 
   unknownTools = lib.filter (tool: !(lib.hasAttr tool packaged || lib.elem tool unpackaged)) toolList;
 in
-assert lib.assertMsg (lib.length unknownTools == 0)
-  "The following tools are neither marked as unpackaged nor as packaged: ${
-    lib.generators.toPretty { } unknownTools
-  }";
 writeText "efmls-configs-sources.nix" (
+  assert lib.assertMsg (lib.length unknownTools == 0)
+    "The following tools are neither marked as unpackaged nor as packaged: ${
+      lib.generators.toPretty { } unknownTools
+    }";
   "# WARNING: DO NOT EDIT\n"
   + "# This file is generated with packages.<system>.efmls-configs-sources, which is run automatically by CI\n"
   + (lib.generators.toPretty { } sources)

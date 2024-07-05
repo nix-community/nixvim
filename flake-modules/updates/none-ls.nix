@@ -21,11 +21,11 @@ let
     unpackaged ++ noPackage ++ (lib.attrNames packaged)
   );
 in
-assert lib.assertMsg (lib.length undeclaredTool == 0)
-  "Undeclared tools: ${lib.generators.toPretty { } undeclaredTool}";
-assert lib.assertMsg (lib.length uselesslyDeclaredTool == 0)
-  "Tool is not supported upstream: ${lib.generators.toPretty { } uselesslyDeclaredTool}";
 writeText "efmls-configs-sources.nix" (
+  assert lib.assertMsg (lib.length undeclaredTool == 0)
+    "Undeclared tools: ${lib.generators.toPretty { } undeclaredTool}";
+  assert lib.assertMsg (lib.length uselesslyDeclaredTool == 0)
+    "Tool is not supported upstream: ${lib.generators.toPretty { } uselesslyDeclaredTool}";
   "# WARNING: DO NOT EDIT\n"
   + "# This file is generated with packages.<system>.none-ls-builtins, which is run automatically by CI\n"
   + (lib.generators.toPretty { } builtinSourceNames)
