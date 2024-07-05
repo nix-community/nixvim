@@ -50,6 +50,13 @@ let
       command = "Summary";
       description = "Displays a coverage summary report in a floating window.";
     };
+    loadLcov = {
+      command = "LoadLcov";
+      description = ''
+        Loads a coverage report from an lcov file but does not display the coverage signs.
+        Uses the lcov file configuration option.
+      '';
+    };
   };
 in
 {

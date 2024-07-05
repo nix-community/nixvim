@@ -16,6 +16,7 @@
         toggle = "<leader>e";
         clear = "<leader>f";
         summary = "<leader>g";
+        loadLcov = "<leader>h";
       };
 
       autoReload = false;
