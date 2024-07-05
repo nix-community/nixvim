@@ -5,146 +5,34 @@
   pkgs,
   ...
 }:
-with lib;
 let
-  tools = trivial.importJSON "${pkgs.vimPlugins.efmls-configs-nvim.src}/doc/supported-list.json";
+  tools = import ../../../generated/efmls-configs.nix;
+  packagingStatus = import ./efmls-configs-pkgs.nix pkgs;
 
-  languages = builtins.attrNames tools;
-
-  # Mapping of tool name to the nixpkgs package (if any)
-  allToolPkgs = with pkgs; {
-    inherit
-      actionlint
-      alejandra
-      ameba
-      astyle
-      bashate
-      beautysh
-      biome
-      black
-      buf
-      cbfmt
-      checkmake
-      clazy
-      codespell
-      cppcheck
-      cpplint
-      dfmt
-      djlint
-      dmd
-      dprint
-      fish
-      flawfinder
-      fnlfmt
-      gcc
-      gitlint
-      gofumpt
-      golines
-      golint
-      hadolint
-      isort
-      joker
-      jq
-      languagetool
-      mypy
-      php
-      prettierd
-      prettypst
-      proselint
-      protolint
-      pylint
-      rubocop
-      ruff
-      rustfmt
-      scalafmt
-      selene
-      shellcheck
-      shellharden
-      shfmt
-      smlfmt
-      sqlfluff
-      statix
-      stylua
-      taplo
-      typstfmt
-      typstyle
-      uncrustify
-      vale
-      yamllint
-      yapf
-      ;
-    inherit (python3.pkgs)
-      autopep8
-      flake8
-      mdformat
-      vulture
-      ;
-    inherit (nodePackages)
-      eslint
-      eslint_d
-      prettier
-      alex
-      sql-formatter
-      stylelint
-      textlint
-      write-good
-      ;
-    inherit (phpPackages) phan phpstan psalm;
-    inherit (luaPackages) luacheck;
-    inherit (haskellPackages) fourmolu;
-    ansible_lint = ansible-lint;
-    chktex = texliveMedium;
-    clang_format = clang-tools;
-    clang_tidy = clang-tools;
-    clj_kondo = clj-kondo;
-    cmake_lint = cmake-format;
-    dartfmt = dart;
-    dotnet_format = dotnet-runtime;
-    fish_indent = fish;
-    gofmt = go;
-    goimports = go-tools;
-    golangci_lint = golangci-lint;
-    google_java_format = google-java-format;
-    go_revive = revive;
-    latexindent = texliveMedium;
-    lua_format = luaformatter;
-    markdownlint = markdownlint-cli;
-    mcs = mono;
-    nixfmt = nixfmt-classic;
-    phpcbf = phpPackages.php-codesniffer;
-    php_cs_fixer = phpPackages.php-cs-fixer;
-    phpcs = phpPackages.php-codesniffer;
-    prettier_d = prettierd;
-    slither = slither-analyzer;
-    staticcheck = go-tools;
-    terraform_fmt = terraform;
-    vint = vim-vint;
-    write_good = write-good;
-    yq = yq-go;
-  };
   # Filter packages that are not compatible with the current platform
-  toolPkgs = filterAttrs (a: pkg: meta.availableOn pkgs.stdenv.hostPlatform pkg) allToolPkgs;
+  toolPkgs = lib.filterAttrs (
+    a: pkg: lib.meta.availableOn pkgs.stdenv.hostPlatform pkg
+  ) packagingStatus.packaged;
 in
 {
   options.plugins.efmls-configs = {
-    enable = mkEnableOption "efmls-configs, premade configurations for efm-langserver";
+    enable = lib.mkEnableOption "efmls-configs, premade configurations for efm-langserver";
 
     package = helpers.mkPluginPackageOption "efmls-configs-nvim" pkgs.vimPlugins.efmls-configs-nvim;
 
-    externallyManagedPackages = mkOption {
-      type = types.either (types.enum [ "all" ]) (types.listOf types.str);
+    externallyManagedPackages = lib.mkOption {
+      type = with lib.types; either (enum [ "all" ]) (listOf str);
       description = ''
         Linters/Formatters to skip installing with nixvim. Set to `all` to install no packages
       '';
       default = [ ];
     };
 
-    toolPackages = attrsets.mapAttrs (
+    toolPackages = lib.attrsets.mapAttrs (
       tool: pkg:
-      mkOption {
-        type = types.package;
+      helpers.mkPackageOption {
+        name = tool;
         default = pkg;
-        description = "Package for ${tool}";
       }
     ) toolPkgs;
 
@@ -161,71 +49,45 @@ in
         };
       }
     */
-    setup =
-      let
-        languageTools =
-          lang: kind: map (v: v.name) (if hasAttr kind tools.${lang} then tools.${lang}.${kind} else [ ]);
+    setup = lib.mkOption {
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf lib.types.anything;
 
-        miscLinters = languageTools "misc" "linters";
-        miscFormatters = languageTools "misc" "formatters";
-
-        mkChooseOption =
-          lang: kind: possible:
-          let
-            toolType = with types; either (enum possible) helpers.nixvimTypes.rawLua;
-          in
-          mkOption {
-            type = with types; either toolType (listOf toolType);
-            default = [ ];
-            description = "${kind} tools for ${lang}";
-          };
-      in
-      mkOption {
-        type = types.submodule {
-          freeformType = types.attrs;
-
-          options =
-            (listToAttrs (
-              map (
-                lang:
-                let
-                  langTools = languageTools lang;
-                in
-                {
-                  name = lang;
-                  value = {
-                    linter = mkChooseOption lang "linter" ((langTools "linters") ++ miscLinters);
-                    formatter = mkChooseOption lang "formatter" ((langTools "formatters") ++ miscFormatters);
-                  };
-                }
-              ) languages
-            ))
-            // {
-              all = {
-                linter = mkChooseOption "all languages" "linter" miscLinters;
-                formatter = mkChooseOption "all languages" "formatter" miscFormatters;
-              };
-            };
-        };
-        description = "Configuration for each filetype. Use `all` to match any filetype.";
-        default = { };
+        options = lib.mapAttrs (
+          _: value:
+          lib.mapAttrs (
+            kind:
+            { lang, possible }:
+            let
+              toolType = helpers.nixvimTypes.maybeRaw (lib.types.enum possible);
+            in
+            lib.mkOption {
+              type = lib.types.either toolType (lib.types.listOf toolType);
+              default = [ ];
+              description = "${kind} tools for ${lang}";
+            }
+          ) value
+        ) tools;
       };
+      description = "Configuration for each filetype. Use `all` to match any filetype.";
+      default = { };
+    };
   };
   config =
     let
       cfg = config.plugins.efmls-configs;
 
       # Tools that have been selected by the user
-      tools = lists.unique (
-        filter isString (
-          concatLists (
+      tools = lib.lists.unique (
+        lib.filter lib.isString (
+          lib.concatLists (
             map (
               {
                 linter ? [ ],
                 formatter ? [ ],
               }:
-              (toList linter) ++ (toList formatter)
-            ) (attrValues cfg.setup)
+              (lib.toList linter) ++ (lib.toList formatter)
+            ) (lib.attrValues cfg.setup)
           )
         )
       );
@@ -236,43 +98,43 @@ in
             if cfg.externallyManagedPackages == "all" then
               _: false
             else
-              toolName: !(elem toolName cfg.externallyManagedPackages);
-          partition = lists.partition partitionFn tools;
+              toolName: !(lib.elem toolName cfg.externallyManagedPackages);
+          partition = lib.lists.partition partitionFn tools;
         in
         {
           nixvim = partition.right;
           external = partition.wrong;
         };
 
-      nixvimPkgs = lists.partition (v: hasAttr v cfg.toolPackages) pkgsForTools.nixvim;
+      nixvimPkgs = lib.lists.partition (v: lib.hasAttr v cfg.toolPackages) pkgsForTools.nixvim;
 
-      mkToolOption =
+      mkToolValue =
         kind: opt:
         map (
-          tool: if isString tool then helpers.mkRaw "require 'efmls-configs.${kind}.${tool}'" else tool
-        ) (toList opt);
+          tool: if lib.isString tool then helpers.mkRaw "require 'efmls-configs.${kind}.${tool}'" else tool
+        ) (lib.toList opt);
 
       setupOptions =
-        (mapAttrs (
+        (lib.mapAttrs (
           _:
           {
             linter ? [ ],
             formatter ? [ ],
           }:
-          (mkToolOption "linters" linter) ++ (mkToolOption "formatters" formatter)
-        ) (attrsets.filterAttrs (v: _: v != "all") cfg.setup))
+          (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
+        ) (lib.attrsets.filterAttrs (v: _: v != "all") cfg.setup))
         // {
           "=" =
-            (mkToolOption "linters" cfg.setup.all.linter)
-            ++ (mkToolOption "formatters" cfg.setup.all.formatter);
+            (mkToolValue "linters" cfg.setup.all.linter) ++ (mkToolValue "formatters" cfg.setup.all.formatter);
         };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
-      warnings = optional ((length nixvimPkgs.wrong) > 0) ''
+      # TODO: print the location of the offending options
+      warnings = lib.optional ((lib.length nixvimPkgs.wrong) > 0) ''
         Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
-          ${concatStringsSep " " nixvimPkgs.wrong}
+          ${lib.concatStringsSep " " nixvimPkgs.wrong}
       '';
 
       plugins.lsp.servers.efm = {
