@@ -84,17 +84,20 @@ in
       };
     };
 
-    safeLabels = helpers.defaultNullOpts.mkListOf types.str (stringToCharacters "sfnut/SFNLHMUGT?Z") ''
-      When the number of matches does not exceed the number of these "safe" labels plus one, the
-      plugin jumps to the first match automatically after entering the pattern.
-      Obviously, for this purpose you should choose keys that are unlikely to be used right
-      after a jump!
+    safeLabels =
+      helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; maybeRaw (listOf str))
+        (stringToCharacters "sfnut/SFNLHMUGT?Z")
+        ''
+          When the number of matches does not exceed the number of these "safe" labels plus one, the
+          plugin jumps to the first match automatically after entering the pattern.
+          Obviously, for this purpose you should choose keys that are unlikely to be used right
+          after a jump!
 
-      Setting the list to `[]` effectively disables the autojump feature.
+          Setting the list to `[]` effectively disables the autojump feature.
 
-      Note: Operator-pending mode ignores this, since we need to be able to select the actual
-      target before executing the operation.
-    '';
+          Note: Operator-pending mode ignores this, since we need to be able to select the actual
+          target before executing the operation.
+        '';
 
     labels =
       helpers.defaultNullOpts.mkListOf types.str
