@@ -6,7 +6,7 @@
 {
   imports = [
     ../.
-    ./files.nix
+    ./files
     ./output.nix
   ];
 }
