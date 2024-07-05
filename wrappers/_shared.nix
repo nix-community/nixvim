@@ -5,12 +5,6 @@ let
   cfg = config.programs.nixvim;
 in
 {
-  topLevelModules = [
-    ../modules
-    ./modules/output.nix
-    ./modules/files.nix
-  ];
-
   helpers = mkOption {
     type = mkOptionType {
       name = "helpers";

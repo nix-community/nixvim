@@ -63,9 +63,11 @@ let
     # Evaluation is irrelevant, only used for documentation.
   };
 
+  # Construct our own top-level modules, because we want to stub the `files` option
+  # FIXME: add a way to handle this with specialArgs
   topLevelModules = [
     ../modules
-    ../wrappers/modules/output.nix
+    ../modules/top-level/output.nix
     # Fake module to avoid a duplicated documentation
     (lib.setDefaultModuleLocation "${nixvimPath}/wrappers/modules/files.nix" {
       options.files = lib.mkOption {

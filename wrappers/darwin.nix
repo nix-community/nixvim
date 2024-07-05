@@ -30,7 +30,10 @@ in
           defaultPkgs = pkgs;
           inherit helpers;
         };
-        modules = [ ./modules/darwin.nix ] ++ shared.topLevelModules;
+        modules = [
+          ./modules/darwin.nix
+          ../modules/top-level
+        ];
       };
     };
     nixvim.helpers = shared.helpers;

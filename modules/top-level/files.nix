@@ -17,7 +17,7 @@ let
       (
         { name, config, ... }:
         {
-          imports = [ ../../modules ];
+          imports = [ ../. ];
           options.plugin = lib.mkOption {
             type = types.package;
             description = "A derivation with the content of the file in it";

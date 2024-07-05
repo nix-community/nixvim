@@ -32,7 +32,10 @@ in
           defaultPkgs = pkgs;
           inherit helpers;
         };
-        modules = [ ./modules/hm.nix ] ++ shared.topLevelModules;
+        modules = [
+          ./modules/hm.nix
+          ../modules/top-level
+        ];
       };
     };
     nixvim.helpers = shared.helpers;

@@ -1,3 +1,7 @@
+# This module includes the nixvim modules that should always be evaluated.
+#
+# You may want to use the `/modules/top-level` module instead, unless you're
+# using this in a submodule nested within another nixvim config.
 {
   imports = [
     ./misc

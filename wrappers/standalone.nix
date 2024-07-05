@@ -10,10 +10,6 @@ let
   inherit (pkgs) lib;
 
   helpers = getHelpers pkgs _nixvimTests;
-  shared = import ./_shared.nix helpers {
-    inherit pkgs lib;
-    config = { };
-  };
 
   handleAssertions =
     config:
@@ -32,7 +28,8 @@ let
         modules = [
           mod
           { wrapRc = true; }
-        ] ++ shared.topLevelModules;
+          ../modules/top-level
+        ];
         specialArgs = {
           inherit helpers;
           defaultPkgs = pkgs;
