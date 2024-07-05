@@ -7,6 +7,7 @@
   <a href="https://matrix.to/#/#nixvim:matrix.org">Chat</a>
 </h2>
 
+
 # NixVim - A Neovim configuration system for nix
 
 - [Quick set up tutorial](https://www.youtube.com/watch?v=b641h63lqy0) (by [@Vimjoyer](https://www.youtube.com/@vimjoyer))
