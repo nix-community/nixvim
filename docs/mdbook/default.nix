@@ -14,7 +14,6 @@ let
     specialArgs = {
       inherit helpers;
       defaultPkgs = pkgs;
-      isDocs = true;
     };
   };
 

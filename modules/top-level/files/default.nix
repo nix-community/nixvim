@@ -3,12 +3,10 @@
   config,
   lib,
   helpers,
-  specialArgs,
   ...
 }:
 let
   inherit (lib) types;
-  isDocs = specialArgs.isDocs or false;
 
   fileModuleType = types.submoduleWith {
     shorthandOnlyDefinesConfig = true;
@@ -17,7 +15,7 @@ let
       defaultPkgs = pkgs;
     };
     # Don't include the modules in the docs, as that'd be redundant
-    modules = lib.optionals (!isDocs) [
+    modules = lib.optionals (!config.isDocs) [
       ../../.
       ./submodule.nix
     ];

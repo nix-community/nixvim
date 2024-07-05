@@ -58,7 +58,10 @@ let
       ) opt.declarations;
     };
 
-  modules = [ ../modules/top-level ];
+  modules = [
+    ../modules/top-level
+    { isDocs = true; }
+  ];
 
   hmOptions = builtins.removeAttrs (lib.evalModules {
     modules = [ (import ../wrappers/modules/hm.nix { inherit lib; }) ];
@@ -73,7 +76,6 @@ rec {
           specialArgs = {
             inherit helpers;
             defaultPkgs = pkgsDoc;
-            isDocs = true;
           };
         })
         options

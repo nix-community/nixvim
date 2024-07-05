@@ -6,6 +6,7 @@ let
 in
 {
   imports = [
+    ./context.nix
     ./nixpkgs.nix
     ./nixvim-info.nix
     (nixosModules + "/misc/assertions.nix")
