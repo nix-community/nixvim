@@ -1,14 +1,10 @@
+{ getHelpers, ... }:
 {
   perSystem =
-    {
-      pkgsUnfree,
-      config,
-      helpers,
-      ...
-    }:
+    { pkgsUnfree, config, ... }:
     {
       packages = import ../docs {
-        inherit helpers;
+        inherit getHelpers;
         # Building the docs evaluates each plugin's default package, some of which are unfree
         pkgs = pkgsUnfree;
       };

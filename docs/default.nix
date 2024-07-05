@@ -1,4 +1,4 @@
-{ helpers, pkgs }:
+{ getHelpers, pkgs }:
 let
   # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
   lib = pkgs.lib.extend (
@@ -31,6 +31,8 @@ let
   pkgsDoc = pkgs // {
     inherit lib;
   };
+
+  helpers = getHelpers pkgsDoc false;
 
   nixvimPath = toString ./..;
 
