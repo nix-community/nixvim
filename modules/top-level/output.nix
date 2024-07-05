@@ -61,13 +61,6 @@ with lib;
       visible = false;
     };
 
-    initContent = mkOption {
-      type = types.str;
-      description = "The content of the `init.lua` file.";
-      readOnly = true;
-      visible = false;
-    };
-
     printInitPackage = mkOption {
       type = types.package;
       description = "A tool to show the content of the generated `init.lua` file.";
@@ -142,7 +135,6 @@ with lib;
     {
       type = lib.mkForce "lua";
       finalPackage = wrappedNeovim;
-      initContent = readFile init;
       initPath = "${init}";
 
       printInitPackage = pkgs.writeShellApplication {

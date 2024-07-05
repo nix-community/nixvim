@@ -19,7 +19,7 @@ let
   shared = import ./_shared.nix helpers args;
   cfg = config.programs.nixvim;
   files = shared.configFiles // {
-    "nvim/sysinit.lua".text = cfg.initContent;
+    "nvim/sysinit.lua".source = cfg.initPath;
   };
 in
 {
