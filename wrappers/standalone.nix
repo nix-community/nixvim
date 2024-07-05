@@ -27,7 +27,7 @@ let
       evaledModule = lib.evalModules {
         modules = [
           mod
-          { wrapRc = true; }
+          ./modules/standalone.nix
           ../modules/top-level
         ];
         specialArgs = {
