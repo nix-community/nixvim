@@ -3,6 +3,15 @@
     plugins.leap.enable = true;
   };
 
+  # https://github.com/nix-community/nixvim/issues/1698
+  autojump-disabled = {
+    plugins.leap = {
+      enable = true;
+
+      safeLabels.__empty = null;
+    };
+  };
+
   example = {
     plugins.leap = {
       enable = true;
