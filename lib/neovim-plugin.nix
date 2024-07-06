@@ -47,6 +47,7 @@ with lib;
       extraPlugins ? [ ],
       extraPackages ? [ ],
       callSetup ? true,
+      installPackage ? true,
     }:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
@@ -107,7 +108,7 @@ with lib;
         in
         mkIf cfg.enable (mkMerge [
           {
-            extraPlugins = [ cfg.package ] ++ extraPlugins;
+            extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
             inherit extraPackages;
 
             ${extraConfigNamespace} = optionalString callSetup ''
