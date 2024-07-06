@@ -10,4 +10,8 @@
     ./output.nix
     ./test.nix
   ];
+
+  config = {
+    isTopLevel = true;
+  };
 }
