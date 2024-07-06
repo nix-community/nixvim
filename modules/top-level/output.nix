@@ -85,6 +85,7 @@ with lib;
         {
           inherit (config)
             extraPython3Packages
+            extraLuaPackages
             viAlias
             vimAlias
             withRuby
