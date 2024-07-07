@@ -46,4 +46,38 @@ rec {
         '';
     };
 
+  # A clone of types.coercedTo, but it prints a warning when oldType is used.
+  transitionType =
+    oldType: coerceFn: newType:
+    assert lib.assertMsg (
+      oldType.getSubModules == null
+    ) "transitionType: oldType must not have submodules (it’s a ${oldType.description})";
+    lib.mkOptionType rec {
+      name = "transitionType";
+      inherit (newType) description;
+      check = x: (oldType.check x && newType.check (coerceFn x)) || newType.check x;
+      merge =
+        opt: defs:
+        let
+          coerceVal =
+            val:
+            if oldType.check val then
+              lib.warn ''
+                Passing a ${oldType.description} for `${lib.showOption opt}' is deprecated, use ${newType.description} instead. Definitions: ${lib.options.showDefs defs}
+              '' (coerceFn val)
+            else
+              val;
+        in
+        newType.merge opt (map (def: def // { value = coerceVal def.value; }) defs);
+      inherit (newType) emptyValue;
+      inherit (newType) getSubOptions;
+      inherit (newType) getSubModules;
+      substSubModules = m: transitionType oldType coerceFn (newType.substSubModules m);
+      typeMerge = t1: t2: null;
+      functor = (lib.types.defaultFunctor name) // {
+        wrapped = newType;
+      };
+      nestedTypes.coercedType = oldType;
+      nestedTypes.finalType = newType;
+    };
 }
