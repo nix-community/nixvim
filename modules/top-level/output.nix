@@ -5,7 +5,10 @@
   helpers,
   ...
 }:
-with lib;
+let
+  inherit (lib) types mkOption;
+  inherit (lib) optional optionalString optionalAttrs;
+in
 {
   options = {
     viAlias = mkOption {
@@ -97,7 +100,7 @@ with lib;
         # Necessary to make sure the runtime path is set properly in NixOS 22.05,
         # or more generally before the commit:
         # cda1f8ae468 - neovim: pass packpath via the wrapper
-        // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
+        // optionalAttrs (lib.functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
           configure.packages = {
             nixvim = {
               start = map (x: x.plugin) normalizedPlugins;
@@ -115,7 +118,9 @@ with lib;
       init = helpers.writeLua "init.lua" customRC;
 
       extraWrapperArgs = builtins.concatStringsSep " " (
-        (optional (config.extraPackages != [ ]) ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
+        (optional (
+          config.extraPackages != [ ]
+        ) ''--prefix PATH : "${lib.makeBinPath config.extraPackages}"'')
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${init}"'')
       );
 
