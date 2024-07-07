@@ -1,13 +1,17 @@
-{ inputs, ... }:
+{ lib, inputs, ... }:
 {
   imports = [
-    inputs.git-hooks.flakeModule
     inputs.treefmt-nix.flakeModule
     ./devshell.nix
-  ];
+  ] ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule;
 
   perSystem =
-    { pkgs, config, ... }:
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
     let
       fmt = pkgs.nixfmt-rfc-style;
     in
@@ -23,7 +27,8 @@
           statix.enable = true;
         };
       };
-
+    }
+    // lib.optionalAttrs (inputs.git-hooks ? flakeModule) {
       pre-commit = {
         settings.hooks = {
           nixfmt = {
