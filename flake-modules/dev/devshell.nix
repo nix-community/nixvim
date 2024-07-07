@@ -1,15 +1,16 @@
-{ inputs, ... }:
+{ lib, inputs, ... }:
 {
-  imports = [ inputs.devshell.flakeModule ];
+  imports = lib.optional (inputs.devshell ? flakeModule) inputs.devshell.flakeModule;
 
   perSystem =
     {
+      lib,
       pkgs,
       config,
       system,
       ...
     }:
-    {
+    lib.optionalAttrs (inputs.devshell ? flakeModule) {
       devshells.default = {
         devshell.startup.pre-commit.text = config.pre-commit.installationScript;
 
