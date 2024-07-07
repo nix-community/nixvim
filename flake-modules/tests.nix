@@ -27,6 +27,8 @@
 
         extend = import ../tests/extend.nix { inherit pkgs makeNixvimWithModule; };
 
+        extra-files = import ../tests/extra-files.nix { inherit pkgs makeNixvimWithModule; };
+
         enable-except-in-tests = import ../tests/enable-except-in-tests.nix {
           inherit pkgs makeNixvimWithModule;
           inherit (self.lib.${system}.check) mkTestDerivationFromNixvimModule;
