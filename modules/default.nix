@@ -12,6 +12,7 @@
     ./diagnostics.nix
     ./doc.nix
     ./editorconfig.nix
+    ./files.nix
     ./filetype.nix
     ./highlights.nix
     ./keymaps.nix

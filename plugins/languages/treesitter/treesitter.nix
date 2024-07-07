@@ -178,7 +178,7 @@ in
         '');
 
       extraFiles = mkIf cfg.nixvimInjections {
-        "queries/nix/injections.scm" = ''
+        "queries/nix/injections.scm".text = ''
           ;; extends
 
           (binding

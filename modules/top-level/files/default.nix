@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  options,
   lib,
   helpers,
   ...
@@ -49,8 +50,8 @@ in
 
   config =
     let
-      inherit (config) files;
-      concatFilesOption = attr: lib.flatten (lib.mapAttrsToList (_: builtins.getAttr attr) files);
+      extraFiles = lib.filter (file: file.enable) (lib.attrValues config.extraFiles);
+      concatFilesOption = attr: lib.flatten (lib.mapAttrsToList (_: builtins.getAttr attr) config.files);
     in
     {
       # Each file can declare plugins/packages/warnings/assertions
@@ -59,12 +60,38 @@ in
       warnings = concatFilesOption "warnings";
       assertions = concatFilesOption "assertions";
 
+      # Add files to extraFiles
+      extraFiles = lib.mkDerivedConfig options.files (
+        lib.mapAttrs' (
+          _: file: {
+            name = file.path;
+            value.source = file.plugin;
+          }
+        )
+      );
+
       # A directory with all the files in it
-      filesPlugin = pkgs.buildEnv {
-        name = "nixvim-config";
-        paths =
-          (lib.mapAttrsToList (_: file: file.plugin) files)
-          ++ (lib.mapAttrsToList pkgs.writeTextDir config.extraFiles);
-      };
+      # Implementation based on NixOS's /etc module
+      filesPlugin = pkgs.runCommandLocal "nvim-config" { } ''
+        set -euo pipefail
+
+        makeEntry() {
+          src="$1"
+          target="$2"
+          mkdir -p "$out/$(dirname "$target")"
+          cp "$src" "$out/$target"
+        }
+
+        mkdir -p "$out"
+        ${lib.concatMapStringsSep "\n" (
+          { target, source, ... }:
+          lib.escapeShellArgs [
+            "makeEntry"
+            # Force local source paths to be added to the store
+            "${source}"
+            target
+          ]
+        ) extraFiles}
+      '';
     };
 }
