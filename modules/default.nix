@@ -19,6 +19,7 @@
     ./lua-loader.nix
     ./opts.nix
     ./output.nix
+    ./performance.nix
     ./plugins.nix
   ];
 }
