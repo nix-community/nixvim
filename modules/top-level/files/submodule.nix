@@ -2,7 +2,7 @@
   name,
   config,
   lib,
-  pkgs,
+  helpers,
   ...
 }:
 {
@@ -22,6 +22,6 @@
       path = lib.mkDefault name;
       type = lib.mkDefault (if lib.hasSuffix ".vim" name then "vim" else "lua");
       # No need to use mkDerivedConfig; this option is readOnly.
-      plugin = pkgs.writeText derivationName config.content;
+      plugin = helpers.writeLua derivationName config.content;
     };
 }
