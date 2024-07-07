@@ -68,6 +68,7 @@
     ./languages/ledger.nix
     ./languages/lint.nix
     ./languages/ltex-extra.nix
+    ./languages/markdown/glow.nix
     ./languages/markdown/markdown-preview.nix
     ./languages/markdown/preview.nix
     ./languages/nix.nix
