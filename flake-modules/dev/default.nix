@@ -1,9 +1,9 @@
 { lib, inputs, ... }:
 {
-  imports = [
-    inputs.treefmt-nix.flakeModule
-    ./devshell.nix
-  ] ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule;
+  imports =
+    [ ./devshell.nix ]
+    ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule
+    ++ lib.optional (inputs.treefmt-nix ? flakeModule) inputs.treefmt-nix.flakeModule;
 
   perSystem =
     {
@@ -15,7 +15,7 @@
     let
       fmt = pkgs.nixfmt-rfc-style;
     in
-    {
+    lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
       treefmt.config = {
         projectRootFile = "flake.nix";
 
