@@ -3,6 +3,36 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
+    /*
+      # NOTE: The inputs below this comment are optional
+      # You can remove them with `inputs.<input>.follows = ""`
+
+      For example:
+
+      ```
+      nixvim = {
+        url = "github:nix-community/nixvim";
+        inputs = {
+          nixpkgs.follows = "nixpkgs";
+          flake-parts.follows = "flake-parts";
+
+          devshell.follows = "";
+          flake-compat.follows = "";
+          git-hooks.follows = "";
+          home-manager.follows = "";
+          nix-darwin.follows = "";
+          treefmt-nix.follows = "";
+        };
+      };
+      ```
+    */
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,10 +42,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
