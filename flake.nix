@@ -31,6 +31,7 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.flake-compat.follows = "flake-compat";
     };
   };
 
