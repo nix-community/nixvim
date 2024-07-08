@@ -24,7 +24,18 @@
             enable = true;
             package = fmt;
           };
+          prettier = {
+            enable = true;
+            excludes = [ "**.md" ];
+          };
           statix.enable = true;
+        };
+
+        settings = {
+          global.excludes = [
+            "LICENSE"
+            "flake.lock"
+          ];
         };
       };
     }
