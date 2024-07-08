@@ -1,4 +1,6 @@
-{ getHelpers, pkgs }:
+{
+  pkgs ? import <nixpkgs> { config.enableUnfree = true; },
+}:
 let
   # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
   lib = pkgs.lib.extend (
@@ -32,7 +34,10 @@ let
     inherit lib;
   };
 
-  helpers = getHelpers pkgsDoc false;
+  helpers = import ../lib/helpers.nix {
+    inherit lib;
+    pkgs = pkgsDoc;
+  };
 
   nixvimPath = toString ./..;
 
