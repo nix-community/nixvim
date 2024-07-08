@@ -31,14 +31,7 @@
     // lib.optionalAttrs (inputs.git-hooks ? flakeModule) {
       pre-commit = {
         settings.hooks = {
-          nixfmt = {
-            enable = true;
-            package = fmt;
-          };
-          statix = {
-            enable = true;
-            excludes = [ "plugins/lsp/language-servers/rust-analyzer-config.nix" ];
-          };
+          treefmt.enable = true;
           typos.enable = true;
         };
       };
