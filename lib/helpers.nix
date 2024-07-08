@@ -1,7 +1,7 @@
 {
-  lib,
   pkgs,
-  _nixvimTests,
+  lib ? pkgs.lib,
+  _nixvimTests ? false,
   ...
 }:
 let

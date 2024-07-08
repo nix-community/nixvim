@@ -1,5 +1,4 @@
-default_pkgs:
-{ self, getHelpers }:
+default_pkgs: self:
 {
   pkgs ? default_pkgs,
   extraSpecialArgs ? { },
@@ -9,7 +8,7 @@ default_pkgs:
 let
   inherit (pkgs) lib;
 
-  helpers = getHelpers pkgs _nixvimTests;
+  helpers = import ../lib/helpers.nix { inherit pkgs lib _nixvimTests; };
 
   handleAssertions =
     config:

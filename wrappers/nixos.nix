@@ -1,4 +1,4 @@
-{ self, getHelpers }:
+self:
 {
   pkgs,
   config,
@@ -15,7 +15,6 @@ let
     mkIf
     types
     ;
-  helpers = getHelpers pkgs false;
   cfg = config.programs.nixvim;
 in
 {
@@ -27,7 +26,7 @@ in
         specialArgs = {
           nixosConfig = config;
           defaultPkgs = pkgs;
-          inherit helpers;
+          inherit (config.nixvim) helpers;
         };
         modules = [
           ./modules/nixos.nix
@@ -39,7 +38,6 @@ in
 
   imports = [
     (import ./_shared.nix {
-      inherit helpers;
       filesOpt = [
         "environment"
         "etc"

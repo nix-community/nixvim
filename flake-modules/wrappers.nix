@@ -1,21 +1,10 @@
-{
-  inputs,
-  getHelpers,
-  self,
-  ...
-}:
-let
-  wrapperArgs = {
-    inherit self;
-    inherit getHelpers;
-  };
-in
+{ inputs, self, ... }:
 {
   perSystem =
     { system, pkgs, ... }:
     {
       _module.args = {
-        makeNixvimWithModule = import ../wrappers/standalone.nix pkgs wrapperArgs;
+        makeNixvimWithModule = import ../wrappers/standalone.nix pkgs self;
       };
 
       checks =
@@ -47,15 +36,15 @@ in
 
   flake = {
     nixosModules = {
-      nixvim = import ../wrappers/nixos.nix wrapperArgs;
+      nixvim = import ../wrappers/nixos.nix self;
       default = self.nixosModules.nixvim;
     };
     homeManagerModules = {
-      nixvim = import ../wrappers/hm.nix wrapperArgs;
+      nixvim = import ../wrappers/hm.nix self;
       default = self.homeManagerModules.nixvim;
     };
     nixDarwinModules = {
-      nixvim = import ../wrappers/darwin.nix wrapperArgs;
+      nixvim = import ../wrappers/darwin.nix self;
       default = self.nixDarwinModules.nixvim;
     };
   };

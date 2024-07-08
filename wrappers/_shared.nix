@@ -1,6 +1,4 @@
 {
-  # Our helpers
-  helpers,
   # Option path where extraFiles should go
   filesOpt ? null,
   # Filepath prefix to apply to extraFiles
@@ -9,7 +7,12 @@
   # Is prefixed with `filesPrefix`
   initName ? "init.lua",
 }:
-{ lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   inherit (lib)
     isAttrs
@@ -39,7 +42,7 @@ in
 
   config = mkMerge [
     # Make our lib available to the host modules
-    { nixvim.helpers = lib.mkDefault helpers; }
+    { nixvim.helpers = lib.mkDefault (import ../lib/helpers.nix { inherit pkgs lib; }); }
     # Propagate extraFiles to the host modules
     (optionalAttrs (filesOpt != null) (
       mkIf (!cfg.wrapRc) (

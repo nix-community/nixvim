@@ -1,4 +1,4 @@
-{ self, getHelpers }:
+self:
 {
   pkgs,
   config,
@@ -14,7 +14,6 @@ let
     mkIf
     types
     ;
-  helpers = getHelpers pkgs false;
   cfg = config.programs.nixvim;
 in
 {
@@ -26,7 +25,7 @@ in
         specialArgs = {
           hmConfig = config;
           defaultPkgs = pkgs;
-          inherit helpers;
+          inherit (config.nixvim) helpers;
         };
         modules = [
           ./modules/hm.nix
@@ -38,7 +37,6 @@ in
 
   imports = [
     (import ./_shared.nix {
-      inherit helpers;
       filesOpt = [
         "xdg"
         "configFile"
