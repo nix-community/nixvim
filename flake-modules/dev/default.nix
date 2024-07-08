@@ -28,6 +28,10 @@
             enable = true;
             excludes = [ "**.md" ];
           };
+          ruff = {
+            check = true;
+            format = true;
+          };
           statix.enable = true;
         };
 
