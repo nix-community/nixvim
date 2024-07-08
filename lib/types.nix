@@ -22,7 +22,7 @@ rec {
     description = "raw lua code";
     descriptionClass = "noun";
     merge = mergeEqualOption;
-    check = isRawType;
+    check = v: (isRawType v) || (v ? __empty);
   };
 
   maybeRaw = type: types.either type rawLua;
