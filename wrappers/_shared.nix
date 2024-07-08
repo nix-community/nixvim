@@ -29,20 +29,24 @@ let
   extraFiles = lib.filter (file: file.enable) (lib.attrValues cfg.extraFiles);
 in
 {
-  options = {
-    nixvim.helpers = mkOption {
-      type = mkOptionType {
-        name = "helpers";
-        description = "Helpers that can be used when writing nixvim configs";
-        check = isAttrs;
-      };
-      description = "Use this option to access the helpers";
-    };
-  };
+  # TODO: Added 2024-07-24; remove after 24.11
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "nixvim"
+        "helpers"
+      ]
+      [
+        "lib"
+        "nixvim"
+      ]
+    )
+  ];
 
   config = mkMerge [
     # Make our lib available to the host modules
-    { nixvim.helpers = lib.mkDefault (import ../lib/helpers.nix { inherit pkgs lib; }); }
+    # TODO: import top-level ../lib
+    { lib.nixvim = lib.mkDefault (import ../lib/helpers.nix { inherit pkgs lib; }); }
     # Propagate extraFiles to the host modules
     (optionalAttrs (filesOpt != null) (
       mkIf (!cfg.wrapRc) (
