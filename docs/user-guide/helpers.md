@@ -1,16 +1,24 @@
 # Helpers
 
-Regardless of the way NixVim is used (as a home-manager module, a nixos module, or as a standalone module),
-helpers can be included in the same way.
-
-You can simply use:
+If Nixvim is built using the standalone method, you can access our `helpers` as a module arg:
 
 ```nix
+{ helpers, ... }:
 {
-    helpers,
-    ...
-}: {
-    # Your config
+  # Your config
+}
+```
+
+If Nixvim is being used as as a home-manager module, a nixos module, or as a dawwin module,
+helpers can be accessed via the `config.nixvim.helpers` option:
+
+```nix
+{ config, ... }:
+let
+  inherit (config.nixvim) helpers;
+in
+{
+  # Your config
 }
 ```
 
