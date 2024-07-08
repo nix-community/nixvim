@@ -39,8 +39,15 @@
 
         settings = {
           global.excludes = [
+            ".envrc"
+            ".git-blame-ignore-revs"
+            ".gitignore"
             "LICENSE"
             "flake.lock"
+            "**.md"
+            "**.scm"
+            "**.svg"
+            "**/man/*.5"
           ];
         };
       };
