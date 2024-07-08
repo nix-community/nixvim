@@ -33,6 +33,7 @@
             format = true;
           };
           statix.enable = true;
+          stylua.enable = true;
         };
 
         settings = {
