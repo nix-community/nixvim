@@ -187,6 +187,8 @@ rec {
       # Unsigned: >=0
       mkUnsignedInt' = args: mkNullableWithRaw' (args // { type = types.ints.unsigned; });
       mkUnsignedInt = pluginDefault: description: mkUnsignedInt' { inherit pluginDefault description; };
+      mkFlagInt = pluginDefault: description: mkFlagInt' { inherit pluginDefault description; };
+      mkFlagInt' = args: mkNullableWithRaw' (args // { type = types.intFlag; });
       mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
       mkBool = pluginDefault: description: mkBool' { inherit pluginDefault description; };
       mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });

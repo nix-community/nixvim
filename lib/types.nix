@@ -1,8 +1,12 @@
 # Custom types to be included in `lib.types`
-{ lib, helpers }:
+{ lib }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) mkNullOrStr mkNullOrOption;
+  inherit (lib.nixvim)
+    deprecation
+    mkNullOrStr
+    mkNullOrOption
+    ;
 
   strLikeType =
     description:
@@ -29,6 +33,15 @@ rec {
   };
 
   maybeRaw = type: types.either type rawLua;
+
+  # Describes an boolean-like integer flag that is either 0 or 1
+  # Has legacy support for boolean definitions, added 2024-09-08
+  intFlag =
+    with types;
+    deprecation.transitionType bool (v: if v then 1 else 0) (enum [
+      0
+      1
+    ]);
 
   border =
     with types;
