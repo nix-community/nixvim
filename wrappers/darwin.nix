@@ -16,7 +16,6 @@ let
     types
     ;
   helpers = getHelpers pkgs false;
-  shared = import ./_shared.nix helpers args;
   cfg = config.programs.nixvim;
 in
 {
@@ -36,8 +35,9 @@ in
         ];
       };
     };
-    nixvim.helpers = shared.helpers;
   };
+
+  imports = [ (import ./_shared.nix { inherit helpers; }) ];
 
   config = mkIf cfg.enable (mkMerge [
     {
