@@ -67,7 +67,9 @@ class Plugin:
                 assert False
         deprecation_icon: str = "⚠️" if self.dep_warnings else "  "
 
-        return f"| {kind_icon}\033[0m  | {state_icon}  | {deprecation_icon} | {self.path}"
+        return (
+            f"| {kind_icon}\033[0m  | {state_icon}  | {deprecation_icon} | {self.path}"
+        )
 
 
 def has_deprecation_warnings(string: str) -> bool:

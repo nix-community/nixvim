@@ -4,8 +4,8 @@ on:
   push:
     # Runs on pushes targeting the release branches
     branches:
-     - main
-     - nixos-24.05
+      - main
+      - nixos-24.05
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
         uses: cachix/cachix-action@v15
         with:
           name: nix-community
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - run: |
           set -ex

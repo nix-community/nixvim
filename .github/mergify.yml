@@ -14,12 +14,11 @@ queue_rules:
       - check-success = buildbot/nix-eval
     queue_conditions:
       - or:
-        # Allow queuing PRs that have been approved
-        - "#approved-reviews-by >= 1"
+          # Allow queuing PRs that have been approved
+          - "#approved-reviews-by >= 1"
 
-        # Allow queuing flake.lock updates without approval
-        - and:
-          - "#files = 1"
-          - files = flake.lock
-          - author = GaetanLepage
-
+          # Allow queuing flake.lock updates without approval
+          - and:
+              - "#files = 1"
+              - files = flake.lock
+              - author = GaetanLepage
