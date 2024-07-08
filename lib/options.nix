@@ -216,7 +216,8 @@ rec {
             v == null
             || elem v values
             || (v ? _type && v ? text)
-            || abort "Default value ${showInline v} is not valid for enum ${showInline values}.";
+            || (v ? __raw && isString v.__raw)
+            || throw "Default value ${showInline v} is not valid for enum ${showInline values}.";
         in
         # Ensure `values` is a list and `pluginDefault` is valid if present
         assert isList values;
