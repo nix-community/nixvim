@@ -155,14 +155,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   };
 
   settingsExample = {
-    additional_vim_regex_highlighting = true;
-    ensure_installed = true;
+    auto_install = false;
+    ensure_installed = [ "all" ];
     ignore_install = [ "rust" ];
-    indent = true;
     parser_install_dir = "$XDG_DATA_HOME/nvim/treesitter";
+    sync_install = false;
 
     highlight = {
       enable = true;
+
+      additional_vim_regex_highlighting = true;
       disable = [ "rust" ];
       custom_captures = { };
     };
@@ -172,10 +174,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       keymaps = {
         init_selection = "gnn";
+        node_decremental = "grm";
         node_incremental = "grn";
         scope_incremental = "grc";
-        node_decremental = "grm";
       };
+    };
+
+    indent = {
+      enable = true;
     };
   };
 
