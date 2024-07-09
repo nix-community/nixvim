@@ -44,6 +44,8 @@
           inherit pkgs helpers;
           inherit (pkgs) lib;
         };
+
+        maintainers = import ../tests/maintainers.nix { inherit pkgs; };
       };
     };
 }
