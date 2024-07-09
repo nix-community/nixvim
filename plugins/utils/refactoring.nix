@@ -11,7 +11,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "refactoring.nvim";
   defaultPackage = pkgs.vimPlugins.refactoring-nvim;
 
-  maintainers = [ helpers.maintainers.MattSturgeon ];
+  maintainers = [ maintainers.MattSturgeon ];
 
   # TODO: introduced 2024-05-24, remove on 2024-08-24
   optionsRenamedToSettings = [

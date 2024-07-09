@@ -12,14 +12,6 @@
     githubId = 1176328;
     name = "Alison Jenkins";
   };
-  MattSturgeon = {
-    email = "matt@sturgeon.me.uk";
-    matrix = "@mattsturg:matrix.org";
-    github = "MattSturgeon";
-    githubId = 5046562;
-    name = "Matt Sturgeon";
-    keys = [ { fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299"; } ];
-  };
   DanielLaing = {
     email = "daniel@daniellaing.com";
     matrix = "@bodleum:matrix.org";

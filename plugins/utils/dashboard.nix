@@ -11,7 +11,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   originalName = "dashboard-nvim";
   defaultPackage = pkgs.vimPlugins.dashboard-nvim;
 
-  maintainers = [ helpers.maintainers.MattSturgeon ];
+  maintainers = [ maintainers.MattSturgeon ];
 
   # TODO introduced 2024-05-30: remove 2024-09-01
   imports =

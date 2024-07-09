@@ -12,7 +12,7 @@ helpers.vim-plugin.mkVimPlugin config {
   defaultPackage = pkgs.vimPlugins.vim-tmux-navigator;
   globalPrefix = "tmux_navigator_";
 
-  maintainers = [ helpers.maintainers.MattSturgeon ];
+  maintainers = [ maintainers.MattSturgeon ];
 
   description = ''
     When combined with a set of tmux key bindings, the plugin will allow you to navigate seamlessly between vim splits and tmux panes using a consistent set of hotkeys.
