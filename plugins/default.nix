@@ -148,6 +148,7 @@
     ./utils/bacon.nix
     ./utils/baleia.nix
     ./utils/better-escape.nix
+    ./utils/bufdelete.nix
     ./utils/ccc.nix
     ./utils/clipboard-image.nix
     ./utils/cloak.nix
