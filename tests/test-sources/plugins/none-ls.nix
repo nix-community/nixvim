@@ -73,6 +73,12 @@
               "nginx_beautifier"
               "npm_groovy_lint"
               "ocdc"
+
+              # As of 2024-07-24, pkgs.open-policy-agent is broken
+              # TODO: re-enable this test when fixed
+              "opacheck"
+              "rego"
+
               "packer"
               "perlimports"
               "pint"
