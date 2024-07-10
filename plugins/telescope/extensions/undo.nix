@@ -77,9 +77,11 @@ telescopeHelpers.mkExtension {
       the side-by-side view even if this is set to false.
     '';
 
-    diff_context_lines = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.scrolloff" ''
-      Defaults to the scrolloff.
-    '';
+    vim_diff_opts = {
+      ctxlen = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.scrolloff" ''
+        Defaults to the scrolloff.
+      '';
+    };
 
     entry_format = helpers.defaultNullOpts.mkStr "state #$ID, $STAT, $TIME" ''
       The format to show on telescope for the different versions of the file.
@@ -116,7 +118,7 @@ telescopeHelpers.mkExtension {
       "echo '$DIFF' | delta"
     ];
     side_by_side = true;
-    diff_context_lines = 8;
+    vim_diff_opts.ctxlen = 8;
     entry_format = "state #$ID";
     time_format = "!%Y-%m-%dT%TZ";
     mappings = {

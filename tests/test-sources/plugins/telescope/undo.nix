@@ -21,7 +21,7 @@
             "echo '$DIFF' | delta"
           ];
           side_by_side = true;
-          diff_context_lines = 8;
+          vim_diff_opts.ctxlen = 8;
           entry_format = "state #$ID";
           time_format = "!%Y-%m-%dT%TZ";
           mappings = {
