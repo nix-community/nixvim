@@ -254,10 +254,10 @@ with lib;
       ```
     '';
 
-    settings =
+    default_settings =
       helpers.mkNullOrStrLuaFnOr
         (types.submodule {
-          options = import ../../../lsp/language-servers/rust-analyzer-config.nix lib helpers;
+          options.rust-analyzer = import ../../../lsp/language-servers/rust-analyzer-config.nix lib helpers;
           freeformType = with types; attrsOf anything;
         })
         ''

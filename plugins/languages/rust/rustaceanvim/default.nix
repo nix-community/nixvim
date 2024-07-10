@@ -34,7 +34,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         "nightly"
         "rust-analyzer"
       ];
-      settings = {
+      default_settings = {
         rust-analyzer = {
           inlayHints = {
             lifetimeElisionHints = {
@@ -58,7 +58,23 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
     in
     mkMerge [
-      { extraPackages = [ cfg.rustAnalyzerPackage ]; }
+      {
+        extraPackages = [ cfg.rustAnalyzerPackage ];
+        # TODO: remove after 24.11
+        warnings =
+          optional
+            (hasAttrByPath [
+              "settings"
+              "server"
+              "settings"
+            ] cfg)
+            ''
+              The `plugins.rustaceanvim.settings.server.settings' option has been renamed to `plugins.rustaceanvim.settings.server.default_settings'.
+
+              Note that if you supplied an attrset and not a function you need to set this attr set in:
+                `plugins.rustaceanvim.settings.server.default_settings.rust-analyzer'.
+            '';
+      }
       # If nvim-lspconfig is enabled:
       (mkIf config.plugins.lsp.enable {
         # Use the same `on_attach` callback as for the other LSP servers

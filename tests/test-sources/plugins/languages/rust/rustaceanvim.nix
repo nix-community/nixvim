@@ -143,7 +143,7 @@
     plugins.rustaceanvim = {
       enable = true;
 
-      settings.server.settings = {
+      settings.server.default_settings.rust-analyzer = {
         linkedProjects = [ "foo/bar/hello" ];
         numThreads = 42;
         joinLines.joinElseIf = true;
