@@ -5,7 +5,7 @@
   pkgs,
 }:
 let
-  inherit (import ../../plugins/none-ls/packages.nix pkgs) packaged noPackage unpackaged;
+  inherit (import ../../plugins/none-ls/packages.nix pkgs) packaged noPackage;
 
   builtinSources = lib.trivial.importJSON "${vimPlugins.none-ls-nvim.src}/doc/builtins.json";
 
@@ -14,11 +14,11 @@ let
   toolNames = lib.unique (lib.flatten (lib.attrValues builtinSourceNames));
 
   undeclaredTool = lib.filter (
-    name: !(lib.hasAttr name packaged || lib.elem name noPackage || lib.elem name unpackaged)
+    name: !(lib.hasAttr name packaged || lib.elem name noPackage)
   ) toolNames;
 
   uselesslyDeclaredTool = lib.filter (name: !(lib.elem name toolNames)) (
-    unpackaged ++ noPackage ++ (lib.attrNames packaged)
+    noPackage ++ (lib.attrNames packaged)
   );
 in
 writeText "efmls-configs-sources.nix" (
