@@ -49,6 +49,7 @@
             "**.svg"
             "**/man/*.5"
           ];
+          formatter.ruff-format.options = [ "--isolated" ];
         };
       };
     }
