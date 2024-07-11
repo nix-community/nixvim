@@ -29,7 +29,7 @@ in
       }
     ];
     plugins.treesitter = {
-      indent = true;
+      settings.indent.enable = true;
     };
   };
 }
