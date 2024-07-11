@@ -142,12 +142,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       List of parsers to ignore installing. Used when `ensure_installed` is set to "all".
     '';
 
-    parser_install_dir = helpers.defaultNullOpts.mkStr "$XDG_DATA_HOME/nvim/treesitter" ''
-      Location of the parsers to be installed by the plugin (only needed when `nixGrammars` is disabled).
+    parser_install_dir = helpers.mkNullOrOption' {
+      type = with helpers.nixvimTypes; maybeRaw str;
+      # Backport the default from nvim-treesitter 1.0
+      # The current default doesn't work on nix, as it is readonly
+      default.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
+      pluginDefault = lib.literalMD "the plugin's package directory";
+      description = ''
+        Location of the parsers to be installed by the plugin (only needed when `nixGrammars` is disabled).
 
-      This default might not work on your own install, please make sure that `$XDG_DATA_HOME` is set if you want to use the default.
-      Otherwise, change it to something that will work for you!
-    '';
+        By default, parsers are installed to the "site" dir.
+        If set to `null` the _plugin default_ is used, which will not work on nix.
+      '';
+    };
 
     sync_install = helpers.defaultNullOpts.mkBool false ''
       Install parsers synchronously (only applied to `ensure_installed`).
@@ -158,7 +165,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     auto_install = false;
     ensure_installed = [ "all" ];
     ignore_install = [ "rust" ];
-    parser_install_dir = "$XDG_DATA_HOME/nvim/treesitter";
+    parser_install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
     sync_install = false;
 
     highlight = {
@@ -284,7 +291,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # NOTE: Upstream state that the parser MUST be at the beginning of runtimepath.
       # Otherwise the parsers from Neovim takes precedent, which may be incompatible with some queries.
       (optionalString (cfg.settings.parser_install_dir != null) ''
-        vim.opt.runtimepath:prepend("${cfg.settings.parser_install_dir}")
+        vim.opt.runtimepath:prepend(${helpers.toLuaObject cfg.settings.parser_install_dir})
       '')
       + ''
         require('nvim-treesitter.configs').setup(${helpers.toLuaObject cfg.settings})

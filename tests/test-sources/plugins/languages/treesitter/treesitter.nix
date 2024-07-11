@@ -8,7 +8,9 @@
         auto_install = false;
         ensure_installed = [ ];
         ignore_install = [ ];
-        parser_install_dir = null;
+        # NOTE: This is our default, not the plugin's
+        parser_install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
+
         sync_install = false;
 
         highlight = {
