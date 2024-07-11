@@ -51,7 +51,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
-      ./servers.nix
+      ./sources.nix
       (mkRenamedOptionModule oldPluginPath basePluginPath)
       (mkRenamedOptionModule (basePluginPath ++ [ "sourcesItems" ]) (settingsPath ++ [ "sources" ]))
     ];
