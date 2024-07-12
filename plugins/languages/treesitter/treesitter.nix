@@ -319,9 +319,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       cfg.treesitterPackage
     ];
 
-    opts = mkIf cfg.folding (mkDefault {
-      foldmethod = "expr";
-      foldexpr = "nvim_treesitter#foldexpr()";
-    });
+    opts = mkIf cfg.folding {
+      foldmethod = mkDefault "expr";
+      foldexpr = mkDefault "nvim_treesitter#foldexpr()";
+    };
   };
 }
