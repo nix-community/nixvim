@@ -134,12 +134,22 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       '';
     };
 
-    ensure_installed = helpers.defaultNullOpts.mkListOf types.str [ ] ''
-      Either "all" or a list of languages to ensure installing.
-    '';
+    ensure_installed = helpers.defaultNullOpts.mkNullable' {
+      type =
+        with helpers.nixvimTypes;
+        oneOf [
+          (enum [ "all" ])
+          (listOf (maybeRaw str))
+          rawLua
+        ];
+      pluginDefault = [ ];
+      description = ''
+        Either `"all"` or a list of languages to ensure installing.
+      '';
+    };
 
     ignore_install = helpers.defaultNullOpts.mkListOf types.str [ ] ''
-      List of parsers to ignore installing. Used when `ensure_installed` is set to "all".
+      List of parsers to ignore installing. Used when `ensure_installed` is set to `"all"`.
     '';
 
     parser_install_dir = helpers.mkNullOrOption' {
@@ -163,7 +173,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsExample = {
     auto_install = false;
-    ensure_installed = [ "all" ];
+    ensure_installed = "all";
     ignore_install = [ "rust" ];
     parser_install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
     sync_install = false;
