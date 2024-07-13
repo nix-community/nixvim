@@ -28,11 +28,20 @@
       ];
     };
   };
+  "rust-analyzer.assist.termSearch.borrowcheck" = {
+    description = ''
+      Enable borrow checking for term search code assists. If set to false, also there will be more suggestions, but some of them may not borrow-check.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.assist.termSearch.fuel" = {
     description = ''
-      Term search fuel in "units of work" for assists (Defaults to 400).
+      Term search fuel in "units of work" for assists (Defaults to 1800).
     '';
-    pluginDefault = 400;
+    pluginDefault = 1800;
     type = {
       kind = "integer";
       maximum = null;
@@ -683,9 +692,9 @@
   };
   "rust-analyzer.completion.termSearch.fuel" = {
     description = ''
-      Term search fuel in "units of work" for autocompletion (Defaults to 200).
+      Term search fuel in "units of work" for autocompletion (Defaults to 1000).
     '';
-    pluginDefault = 200;
+    pluginDefault = 1000;
     type = {
       kind = "integer";
       maximum = null;
