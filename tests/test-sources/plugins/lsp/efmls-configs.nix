@@ -15,31 +15,25 @@
 
         brokenTools =
           [
-            #Broken as of 16 of November 2023
-            "phpstan"
+            # Broken as of 2024-07-08
+            # TODO: re-enable this tests when fixed
+            "cpplint"
+          ]
+          ++ pkgs.lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
+            # Broken as of 2024-07-13
+            # TODO: re-enable this tests when fixed
+            "textlint"
           ]
           ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-            # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
-            # TODO: re-enable this test when fixed
-            "ansible_lint"
-            # As of 2024-01-04, cbfmt is broken on darwin
-            # TODO: re-enable this test when fixed
-            "cbfmt"
             # As of 2024-01-04, texliveMedium is broken on darwin
             # TODO: re-enable those tests when fixed
             "chktex"
             "latexindent"
           ]
           ++ pkgs.lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-darwin") [
-            # As of 2024-01-04, dmd is broken on x86_64-darwin
-            # TODO: re-enable this test when fixed
-            "dmd"
             # As of 2024-01-04, luaformat is broken on x86_64-darwin
             # TODO: re-enable this test when fixed
             "lua_format"
-            # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
-            # TODO: re-enable this test when fixed
-            "clj_kondo"
           ];
 
         unpackaged =
@@ -72,9 +66,6 @@
           ++ (pkgs.lib.optionals pkgs.stdenv.isAarch64 [
             "dmd"
             "smlfmt"
-            # As of 2024-03-11, swift-format is broken on aarch64
-            # TODO: re-enable this test when fixed
-            # "swift_format"
           ]);
 
         # Fetch the valid enum members from the tool options
