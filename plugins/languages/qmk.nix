@@ -16,6 +16,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   settingsOptions = {
     name = mkOption {
       type = types.str;
+      default = "";
       example = "LAYOUT_preonic_grid";
       description = ''
         The name of your layout, for example `LAYOUT_preonic_grid` for the preonic keyboard, for
@@ -25,6 +26,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     layout = mkOption {
       type = with types; listOf str;
+      default = [ ];
       example = [
         "x x"
         "x^x"
