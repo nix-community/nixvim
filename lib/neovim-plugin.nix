@@ -48,9 +48,12 @@ with lib;
       extraPackages ? [ ],
       callSetup ? true,
       installPackage ? true,
+      allowLazyLoad ? true,
+      lazyLoad ? { },
     }:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
+      cfg = config.${namespace}.${name};
     in
     {
       meta = {
@@ -99,21 +102,36 @@ with lib;
             example = settingsExample;
           };
         }
+        // optionalAttrs allowLazyLoad {
+          lazyLoad = nixvimOptions.mkLazyLoadOption {
+            inherit originalName cfg;
+            optionsForPlugin = true;
+            lazyLoad = {
+              # TODO: extract extraConfigLua and extraConfigLuaPre from extraConfig
+              after = optionalString callSetup ''
+                require('${luaName}')${setup}(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
+              '';
+              colorscheme = if (isColorscheme && (colorscheme != null)) then [ colorscheme ] else null;
+            } // lazyLoad;
+          };
+        }
         // extraOptions;
 
       config =
         let
-          cfg = config.${namespace}.${name};
           extraConfigNamespace = if isColorscheme then "extraConfigLuaPre" else "extraConfigLua";
+          lazyLoaded = if (cfg ? lazyLoad) then cfg.lazyLoad.enable else false;
         in
         mkIf cfg.enable (mkMerge [
           {
             extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
             inherit extraPackages;
 
-            ${extraConfigNamespace} = optionalString callSetup ''
+            ${extraConfigNamespace} = optionalString (callSetup && !lazyLoaded) ''
               require('${luaName}')${setup}(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
             '';
+
+            plugins.lz-n.plugins = mkIf lazyLoaded [ cfg.lazyLoad ];
           }
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
           (extraConfig cfg)
