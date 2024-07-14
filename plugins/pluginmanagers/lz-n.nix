@@ -52,6 +52,20 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     globals.lz_n = cfg.settings;
     extraConfigLua =
       let
+        processKeymap =
+          keymaps:
+          if keymaps == null then
+            null
+          else
+            map (
+              keymap:
+              {
+                __unkeyed_1 = keymap.key;
+                __unkeyed_2 = keymap.action;
+                inherit (keymap) mode;
+              }
+              // keymap.options
+            ) keymaps;
         pluginToLua = plugin: {
           "__unkeyed" = plugin.name;
           inherit (plugin)
@@ -61,12 +75,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             event
             cmd
             ft
-            keys
             colorscheme
             priority
             load
             ;
           enabled = enabledInSpec;
+          keys = processKeymap plugin.keys;
         };
         pluginListToLua = map pluginToLua;
         plugins = pluginListToLua cfg.plugins;

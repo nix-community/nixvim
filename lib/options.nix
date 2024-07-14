@@ -2,6 +2,7 @@
   lib,
   nixvimTypes,
   nixvimUtils,
+  nixvimKeymaps,
 }:
 with lib;
 with nixvimUtils;
@@ -411,8 +412,7 @@ rec {
                 "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
             cmd = mkNullable (listOf str) (getPluginDefault "cmd") "Lazy-load on command.";
             ft = mkNullable (listOf str) (getPluginDefault "ft") "Lazy-load on filetype.";
-            #TODO: use keymap-helper?
-            keys = mkNullable (listOf str) (getPluginDefault "keys") "Lazy-load on key mapping.";
+            keys = mkNullable (listOf nixvimKeymaps.mapOptionSubmodule) (getPluginDefault "keys") "Lazy-load on key mapping. Use the same format as `config.keymaps`.";
             colorscheme = mkNullable (listOf str) (getPluginDefault "colorscheme") "Lazy-load on colorscheme.";
             priority = mkNullable number (getPluginDefault "priority") ''
               Only useful for start plugins (not lazy-loaded) to force loading certain plugins first. 
