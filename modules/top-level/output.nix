@@ -80,7 +80,7 @@ in
         let
           defaultPlugin = {
             plugin = null;
-            config = "";
+            config = null;
             optional = false;
           };
         in
@@ -129,25 +129,36 @@ in
               deps = map (p: p.plugin.python3Dependencies or (_: [ ])) startPlugins;
             in
             ps: builtins.concatMap (f: f ps) deps;
+
+          # Combined plugin
+          combinedPlugin = pkgs.vimUtils.toVimPlugin (
+            pkgs.buildEnv {
+              name = "plugin-pack";
+              paths = overriddenPlugins;
+              inherit (config.performance.combinePlugins) pathsToLink;
+              # Remove empty directories and activate vimGenDocHook
+              postBuild = ''
+                find $out -type d -empty -delete
+                runHook preFixup
+              '';
+              passthru = {
+                inherit python3Dependencies;
+              };
+            }
+          );
+
+          # Combined plugin configs
+          combinedConfig = builtins.concatStringsSep "\n" (
+            builtins.concatMap (x: lib.optional (x.config != null && x.config != "") x.config) startPlugins
+          );
         in
-        pkgs.vimUtils.toVimPlugin (
-          pkgs.buildEnv {
-            name = "plugin-pack";
-            paths = overriddenPlugins;
-            inherit (config.performance.combinePlugins) pathsToLink;
-            # Remove empty directories and activate vimGenDocHook
-            postBuild = ''
-              find $out -type d -empty -delete
-              runHook preFixup
-            '';
-            passthru = {
-              inherit python3Dependencies;
-            };
-          }
-        );
+        normalize {
+          plugin = combinedPlugin;
+          config = combinedConfig;
+        };
 
       # Combined plugins
-      combinedPlugins = [ (normalize pluginPack) ] ++ optPlugins;
+      combinedPlugins = [ pluginPack ] ++ optPlugins;
 
       # Plugins to use in finalPackage
       plugins = if config.performance.combinePlugins.enable then combinedPlugins else normalizedPlugins;
