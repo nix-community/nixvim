@@ -102,4 +102,31 @@
         }
       ];
     };
+
+  # Test that plugin python3 dependencies are handled
+  python-dependencies.module =
+    { config, ... }:
+    {
+      performance.combinePlugins.enable = true;
+      extraPlugins = with pkgs.vimPlugins; [
+        # No python3 dependencies
+        plenary-nvim
+        # Duplicate python3 dependencies
+        (nvim-lspconfig.overrideAttrs { passthru.python3Dependencies = ps: [ ps.pyyaml ]; })
+        (nvim-treesitter.overrideAttrs { passthru.python3Dependencies = ps: [ ps.pyyaml ]; })
+        # Another python3 dependency
+        (nvim-cmp.overrideAttrs { passthru.python3Dependencies = ps: [ ps.requests ]; })
+      ];
+      extraConfigLuaPost = ''
+        -- Python modules are importable
+        vim.cmd.py3("import yaml")
+        vim.cmd.py3("import requests")
+      '';
+      assertions = [
+        {
+          assertion = builtins.length config.finalPackage.packpathDirs.myNeovimPackages.start == 1;
+          message = "More than one plugin is defined in packpathDirs.";
+        }
+      ];
+    };
 }
