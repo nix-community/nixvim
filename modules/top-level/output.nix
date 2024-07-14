@@ -74,64 +74,83 @@ in
 
   config =
     let
+      # Plugin normalization
+      normalize =
+        p:
+        let
+          defaultPlugin = {
+            plugin = null;
+            config = "";
+            optional = false;
+          };
+        in
+        defaultPlugin // (if p ? plugin then p else { plugin = p; });
+      normalizePluginList = plugins: map normalize plugins;
+
+      # Normalized plugin list
+      normalizedPlugins = normalizePluginList config.extraPlugins;
+
       # Plugin list extended with dependencies
       allPlugins =
         let
-          pluginWithItsDeps = p: [ p ] ++ builtins.concatMap pluginWithItsDeps p.dependencies or [ ];
+          pluginWithItsDeps =
+            p: [ p ] ++ builtins.concatMap pluginWithItsDeps (normalizePluginList p.plugin.dependencies or [ ]);
         in
-        lib.unique (builtins.concatMap pluginWithItsDeps config.extraPlugins);
+        lib.unique (builtins.concatMap pluginWithItsDeps normalizedPlugins);
 
-      # All plugins with doc tags removed
-      allPluginsOverridden = map (
-        plugin:
-        plugin.overrideAttrs (prev: {
-          nativeBuildInputs = lib.remove pkgs.vimUtils.vimGenDocHook prev.nativeBuildInputs or [ ];
-          configurePhase = builtins.concatStringsSep "\n" (
-            builtins.filter (s: s != ":") [
-              prev.configurePhase or ":"
-              "rm -vf doc/tags"
-            ]
-          );
-        })
-      ) allPlugins;
+      # Separated start and opt plugins
+      partitionedPlugins = builtins.partition (p: p.optional) allPlugins;
+      startPlugins = partitionedPlugins.wrong;
+      # Remove opt plugin dependencies since they are already available in start plugins
+      optPlugins = map (
+        p: p // { plugin = builtins.removeAttrs p.plugin [ "dependencies" ]; }
+      ) partitionedPlugins.right;
 
-      # Python3 dependencies from all plugins
-      python3Dependencies =
+      # Combine start plugins into a single pack
+      pluginPack =
         let
-          deps = map (p: p.python3Dependencies or (_: [ ])) allPluginsOverrided;
-        in
-        ps: builtins.concatMap (f: f ps) deps;
+          # Plugins with doc tags removed
+          overriddenPlugins = map (
+            plugin:
+            plugin.plugin.overrideAttrs (prev: {
+              nativeBuildInputs = lib.remove pkgs.vimUtils.vimGenDocHook prev.nativeBuildInputs or [ ];
+              configurePhase = builtins.concatStringsSep "\n" (
+                builtins.filter (s: s != ":") [
+                  prev.configurePhase or ":"
+                  "rm -vf doc/tags"
+                ]
+              );
+            })
+          ) startPlugins;
 
-      # Combine all plugins into a single pack
-      pluginPack = pkgs.vimUtils.toVimPlugin (
-        pkgs.buildEnv {
-          name = "plugin-pack";
-          paths = allPluginsOverridden;
-          inherit (config.performance.combinePlugins) pathsToLink;
-          # Remove empty directories and activate vimGenDocHook
-          postBuild = ''
-            find $out -type d -empty -delete
-            runHook preFixup
-          '';
-          passthru = {
-            inherit python3Dependencies;
-          };
-        }
-      );
+          # Python3 dependencies
+          python3Dependencies =
+            let
+              deps = map (p: p.plugin.python3Dependencies or (_: [ ])) startPlugins;
+            in
+            ps: builtins.concatMap (f: f ps) deps;
+        in
+        pkgs.vimUtils.toVimPlugin (
+          pkgs.buildEnv {
+            name = "plugin-pack";
+            paths = overriddenPlugins;
+            inherit (config.performance.combinePlugins) pathsToLink;
+            # Remove empty directories and activate vimGenDocHook
+            postBuild = ''
+              find $out -type d -empty -delete
+              runHook preFixup
+            '';
+            passthru = {
+              inherit python3Dependencies;
+            };
+          }
+        );
 
       # Combined plugins
-      combinedPlugins = [ pluginPack ];
+      combinedPlugins = [ (normalize pluginPack) ] ++ optPlugins;
 
       # Plugins to use in finalPackage
-      plugins = if config.performance.combinePlugins.enable then combinedPlugins else config.extraPlugins;
-
-      defaultPlugin = {
-        plugin = null;
-        config = "";
-        optional = false;
-      };
-
-      normalizedPlugins = map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) plugins;
+      plugins = if config.performance.combinePlugins.enable then combinedPlugins else normalizedPlugins;
 
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig (
         {
@@ -144,7 +163,7 @@ in
             withNodeJs
             ;
           # inherit customRC;
-          plugins = normalizedPlugins;
+          inherit plugins;
         }
         # Necessary to make sure the runtime path is set properly in NixOS 22.05,
         # or more generally before the commit:
@@ -152,7 +171,7 @@ in
         // optionalAttrs (lib.functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
           configure.packages = {
             nixvim = {
-              start = map (x: x.plugin) normalizedPlugins;
+              start = map (x: x.plugin) plugins;
               opt = [ ];
             };
           };
