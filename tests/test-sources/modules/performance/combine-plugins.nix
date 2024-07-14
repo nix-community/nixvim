@@ -129,4 +129,66 @@
         }
       ];
     };
+
+  # Test that optional plugins are handled
+  optional-plugins.module =
+    { config, ... }:
+    {
+      performance.combinePlugins.enable = true;
+      extraPlugins = with pkgs.vimPlugins; [
+        # Start plugins
+        plenary-nvim
+        nvim-lspconfig
+        # Optional plugin
+        {
+          plugin = nvim-treesitter;
+          optional = true;
+        }
+        # Optional plugin with dependency on plenary-nvim
+        # Dependencies should not be duplicated
+        {
+          plugin = telescope-nvim;
+          optional = true;
+        }
+      ];
+      extraConfigLuaPost = ''
+        -- Start plugins are loadable
+        require("plenary")
+        require("lspconfig")
+
+        -- Opt plugins are not loadable
+        local ok = pcall(require, "nvim-treesitter")
+        assert(not ok, "nvim-treesitter plugin is loadable")
+        ok = pcall(require, "telescope")
+        assert(not ok, "telescope-nvim plugin is loadable")
+
+        -- Load plugins
+        vim.cmd.packadd("nvim-treesitter")
+        vim.cmd.packadd("telescope.nvim")
+
+        -- Now opt plugins are loadable
+        require("nvim-treesitter")
+        require("telescope")
+
+        -- Only one copy of plenary-nvim should be available
+        assert(
+          #vim.api.nvim_get_runtime_file("lua/plenary/init.lua", true) == 1,
+          "plenary-nvim is duplicated"
+        )
+      '';
+      assertions =
+        let
+          packages = config.finalPackage.packpathDirs.myNeovimPackages;
+        in
+        [
+          {
+            assertion = builtins.length packages.start == 1;
+            message = "More than one start plugin is defined in packpathDirs";
+          }
+          {
+            assertion = builtins.length packages.opt == 2;
+            message = "Less than two opt plugins are defined in packpathDirs";
+          }
+        ];
+    };
 }
