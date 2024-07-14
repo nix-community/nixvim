@@ -1,39 +1,22 @@
-name: update-flake-lock
+name: update
 on:
   workflow_dispatch: # allows manual triggering
-    inputs:
-      branch:
-        description: "Branch to update"
-        type: choice
-        options:
-          - 'stable & unstable'
-          - 'main'
-          - 'nixos-23.11'
-  schedule:
-    - cron: "0 12 * * SAT" # runs weekly on Saturday at noon
 
 jobs:
   lockfile:
-    strategy:
-      matrix:
-        # This allows to update both stable & unstable branches, but not both when triggered
-        # manually
-        branch: ['main', 'nixos-23.11']
-        selectedBranch: ["${{ inputs.branch }}"]
-        exclude:
-          - selectedBranch: main
-            branch: 'nixos-23.11'
-          - selectedBranch: 'nixos-23.11'
-            branch: main
-    name: Update the flake inputs and generate options
+    name: Update the flake inputs
     runs-on: ubuntu-latest
     timeout-minutes: 40
+
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
-          ref: '${{ matrix.branch }}'
+          ssh-key: ${{ secrets.CI_UPDATE_SSH_KEY }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@v26
@@ -41,10 +24,56 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Configure git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
       - name: Update flake.lock
-        id: update
-        uses: DeterminateSystems/update-flake-lock@v21
+        id: flake_lock
+        run: |
+          old=$(git show --no-patch --format=%h)
+          nix flake update --commit-lock-file
+          new=$(git show --no-patch --format=%h)
+          if [ "$old" != "$new" ]; then
+            echo "body<<EOF" >> "$GITHUB_OUTPUT"
+            git show --no-patch --format=%b >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v6
         with:
-          pr-title: "Update flake.lock (${{ matrix.branch }})"
-          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
-          branch: "update_flake_lock_action-${{ matrix.branch }}"
+          branch: update/${{ github.ref_name }}
+          delete-branch: true
+          team-reviewers: |
+            nix-community/nixvim
+          title: |
+            [${{ github.ref_name }}] Update flake.lock
+          body: |
+            ## Flake lockfile
+            ```
+            ${{ steps.flake_lock.outputs.body || 'No changes' }}
+            ```
+
+      - name: Print summary
+        if: ${{ steps.pr.outputs.pull-request-number }}
+        run: |
+          num="${{ steps.pr.outputs.pull-request-number }}"
+          pr_url="${{ steps.pr.outputs.pull-request-url }}"
+          pr_branch="${{ steps.pr.outputs.pull-request-branch }}"
+          head="${{ steps.pr.outputs.pull-request-head-sha }}"
+          operation="${{ steps.pr.outputs.pull-request-operation }}"
+
+          # stdout
+          echo "${head:0:6} pushed to ${pr_branch}"
+          echo "${pr} was ${operation}."
+
+          # markdown summary
+          echo "## ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
+          echo "\`${head:0:6}\` pushed to \`${pr_branch}\`" >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
+          echo "[#${num}](${pr_url}) was ${operation}." >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
