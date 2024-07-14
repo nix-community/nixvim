@@ -95,6 +95,13 @@ in
         })
       ) allPlugins;
 
+      # Python3 dependencies from all plugins
+      python3Dependencies =
+        let
+          deps = map (p: p.python3Dependencies or (_: [ ])) allPluginsOverrided;
+        in
+        ps: builtins.concatMap (f: f ps) deps;
+
       # Combine all plugins into a single pack
       pluginPack = pkgs.vimUtils.toVimPlugin (
         pkgs.buildEnv {
@@ -106,6 +113,9 @@ in
             find $out -type d -empty -delete
             runHook preFixup
           '';
+          passthru = {
+            inherit python3Dependencies;
+          };
         }
       );
 
