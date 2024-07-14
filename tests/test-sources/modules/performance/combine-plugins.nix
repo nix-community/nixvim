@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  pluginCount = pkg: type: builtins.length pkg.packpathDirs.myNeovimPackages.${type};
+in
 {
   # Test basic functionality
   default.module =
@@ -25,7 +28,7 @@
       '';
       assertions = [
         {
-          assertion = builtins.length config.finalPackage.packpathDirs.myNeovimPackages.start == 1;
+          assertion = pluginCount config.finalPackage "start" == 1;
           message = "More than one plugin is defined in packpathDirs, expected one plugin pack.";
         }
       ];
@@ -42,7 +45,7 @@
       ];
       assertions = [
         {
-          assertion = builtins.length config.finalPackage.packpathDirs.myNeovimPackages.start >= 2;
+          assertion = pluginCount config.finalPackage "start" >= 2;
           message = "Only one plugin is defined in packpathDirs, expected at least two.";
         }
       ];
@@ -69,7 +72,7 @@
       '';
       assertions = [
         {
-          assertion = builtins.length config.finalPackage.packpathDirs.myNeovimPackages.start == 1;
+          assertion = pluginCount config.finalPackage "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -97,7 +100,7 @@
       '';
       assertions = [
         {
-          assertion = builtins.length config.finalPackage.packpathDirs.myNeovimPackages.start == 1;
+          assertion = pluginCount config.finalPackage "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -124,7 +127,7 @@
       '';
       assertions = [
         {
-          assertion = builtins.length config.finalPackage.packpathDirs.myNeovimPackages.start == 1;
+          assertion = pluginCount config.finalPackage "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -176,19 +179,58 @@
           "plenary-nvim is duplicated"
         )
       '';
-      assertions =
-        let
-          packages = config.finalPackage.packpathDirs.myNeovimPackages;
-        in
-        [
-          {
-            assertion = builtins.length packages.start == 1;
-            message = "More than one start plugin is defined in packpathDirs";
-          }
-          {
-            assertion = builtins.length packages.opt == 2;
-            message = "Less than two opt plugins are defined in packpathDirs";
-          }
-        ];
+      assertions = [
+        {
+          assertion = pluginCount config.finalPackage "start" == 1;
+          message = "More than one start plugin is defined in packpathDirs";
+        }
+        {
+          assertion = pluginCount config.finalPackage "opt" == 2;
+          message = "Less than two opt plugins are defined in packpathDirs";
+        }
+      ];
+    };
+
+  # Test that plugin configs are handled
+  configs.module =
+    { config, ... }:
+    {
+      performance.combinePlugins.enable = true;
+      extraPlugins = with pkgs.vimPlugins; [
+        # A plugin without config
+        plenary-nvim
+        # Plugins with configs
+        {
+          plugin = nvim-treesitter;
+          config = "let g:treesitter_config = 1";
+        }
+        {
+          plugin = nvim-lspconfig;
+          config = "let g:lspconfig_config = 1";
+        }
+        # Optional plugin with config
+        {
+          plugin = telescope-nvim;
+          optional = true;
+          config = "let g:telescope_config = 1";
+        }
+      ];
+      extraConfigLuaPost = ''
+        -- Plugins are loadable
+        require("plenary")
+        require("nvim-treesitter")
+        require("lspconfig")
+
+        -- Configs are evaluated
+        assert(vim.g.treesitter_config == 1, "nvim-treesitter config isn't evaluated")
+        assert(vim.g.lspconfig_config == 1, "nvim-lspconfig config isn't evaluated")
+        assert(vim.g.telescope_config == 1, "telescope-nvim config isn't evaluated")
+      '';
+      assertions = [
+        {
+          assertion = pluginCount config.finalPackage "start" == 1;
+          message = "More than one start plugin is defined in packpathDirs";
+        }
+      ];
     };
 }
