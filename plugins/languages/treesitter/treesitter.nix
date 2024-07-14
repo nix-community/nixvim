@@ -203,12 +203,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   };
 
   extraOptions = {
-    folding = mkOption {
-      type = types.bool;
-      default = true;
-      example = false;
-      description = "Whether to enable treesitter folding.";
-    };
+    folding = mkEnableOption "tree-sitter based folding";
 
     gccPackage = helpers.mkPackageOption {
       name = "gcc";
