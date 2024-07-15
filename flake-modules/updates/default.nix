@@ -43,13 +43,14 @@
             cd "$generated_dir"
             git add .
 
-            # Construct a msg body from `git status`
+            # Construct a msg body from `git status -- .`
             body=$(
               git status \
                 --short \
                 --ignored=no \
                 --untracked-files=no \
                 --no-ahead-behind \
+                -- . \
               | sed \
                 -e 's/^\s*\([A-Z]\)\s*/\1 /' \
                 -e 's/^A/Added/' \
@@ -60,7 +61,7 @@
             )
 
             # Construct the commit message based on the body
-            count=$(echo "$body" | wc -l)
+            count=$(echo -n "$body" | wc -l)
             if [ "$count" -gt 1 ] || [ ''${#body} -gt 50 ]; then
               msg=$(echo -e "generated: Update\n\n$body")
             else
@@ -68,7 +69,11 @@
             fi
 
             # Commit if there are changes
-            [ "$count" -gt 0 ] && git commit -m "$msg" --no-verify
+            if [ "$count" -gt 0 ]; then
+              echo "Committing $count changes..."
+              echo "$msg"
+              git commit -m "$msg" --no-verify
+            fi
           fi
         '';
       };
