@@ -15,8 +15,9 @@ concurrency:
   group: "update-${{ github.ref_name }}"
   cancel-in-progress: true
 
-# Allow pushing and creating PRs
+# Allow running workflows, pushing and creating PRs
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
