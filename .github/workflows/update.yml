@@ -92,8 +92,6 @@ jobs:
           add-paths: "!**"
           branch: update/${{ github.ref_name }}
           delete-branch: true
-          team-reviewers: |
-            nix-community/nixvim
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
           body: |
