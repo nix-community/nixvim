@@ -1,8 +1,9 @@
-{ lib
-, helpers
-, config
-, pkgs
-, ...
+{
+  lib,
+  helpers,
+  config,
+  pkgs,
+  ...
 }:
 let
   inherit (helpers) mkNullOrLuaFn' nixvimTypes mkLazyLoadOption;
@@ -79,7 +80,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             priority
             load
             ;
-          enabled = enabledInSpec;
+          enabled = plugin.enabledInSpec;
           keys = processKeymap plugin.keys;
         };
         pluginListToLua = map pluginToLua;
