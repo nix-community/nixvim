@@ -368,4 +368,65 @@ rec {
         else
           example;
     };
+
+  mkLazyLoadOption =
+    {
+      originalName ? "this plugin",
+      cfg ? { },
+      lazyLoad ? { },
+    }:
+    let
+      lazyLoadPluginDefault = {
+        enable = false;
+        name = originalName;
+        enabledInSpec = true;
+      } // lazyLoad;
+      getPluginDefault = n: if (lazyLoadPluginDefault ? ${n}) then lazyLoadPluginDefault.${n} else null;
+    in
+    mkOption {
+      description = "Lazy-load settings for ${originalName}.";
+      type =
+        with nixvimTypes;
+        submodule {
+          options = with defaultNullOpts; {
+            enable = mkOption {
+              type = bool;
+              default = getPluginDefault "enable";
+              description = "Enable lazy-loading for ${originalName}";
+            };
+            name = mkOption {
+              type = str;
+              default = getPluginDefault "name";
+              description = "The plugin's name (not the module name). This is what is passed to the load(name) function.";
+            };
+            enabledInSpec = mkStrLuaFnOr bool (getPluginDefault "enabledInSpec") ''
+              When false, or if the function returns false, then ${originalName} will not be included in the spec.
+              This option corresponds to the `enabled` property of lz.n.
+            '';
+            beforeAll = mkLuaFn (getPluginDefault "beforeAll") "Always executed before any plugins are loaded.";
+            before = mkLuaFn (getPluginDefault "before") "Executed before ${originalName} is loaded.";
+            after = mkLuaFn (getPluginDefault "after") "Executed after ${originalName} is loaded.";
+            event =
+              mkNullable (listOf str) (getPluginDefault "event")
+                "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
+            cmd = mkNullable (listOf str) (getPluginDefault "cmd") "Lazy-load on command.";
+            ft = mkNullable (listOf str) (getPluginDefault "ft") "Lazy-load on filetype.";
+            #TODO: use keymap-helper?
+            keys = mkNullable (listOf str) (getPluginDefault "keys") "Lazy-load on key mapping.";
+            colorscheme = mkNullable (listOf str) (getPluginDefault "colorscheme") "Lazy-load on colorscheme.";
+            priority = mkNullable number (getPluginDefault "priority") ''
+              Only useful for start plugins (not lazy-loaded) to force loading certain plugins first. 
+              Default priority is 50 (or 1000 if colorscheme is set).
+            '';
+            load = mkLuaFn (getPluginDefault "load") "Can be used to override the vim.g.lz_n.load() function for ${originalName}.";
+          };
+          config = mkIf (cfg != { }) (
+            mapAttrs (
+              name: value: if (builtins.typeOf value == "list") then value else mkDefault value
+            ) lazyLoadPluginDefault
+          );
+        };
+      default = lazyLoadPluginDefault;
+    };
+
 }
