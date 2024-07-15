@@ -71,10 +71,17 @@ jobs:
           nix run .#generate-files -- --commit
           new=$(git show --no-patch --format=%h)
           if [ "$old" != "$new" ]; then
-            summary=$(git show --no-patch --format=%s)
-            echo "summary=$summary" >> "$GITHUB_OUTPUT"
+            body=$(git show --no-patch --format=%b)
             echo "body<<EOF" >> "$GITHUB_OUTPUT"
-            git show --no-patch --format=%b >> "$GITHUB_OUTPUT"
+            if [ -n "$body" ]; then
+              # Multi-file changes are listed in the body
+              echo "$body" >> "$GITHUB_OUTPUT"
+            else
+              # Single-file changes are only in the summary,
+              # e.g. "generated: Updated none-ls.nix"
+              git show --no-patch --format=%s | \
+              sed -e 's/^generated:/-/' >> "$GITHUB_OUTPUT"
+            fi
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
@@ -96,7 +103,7 @@ jobs:
             ```
 
             ## Generate
-            ${{ steps.generate.outputs.body || steps.generate.outputs.summary || 'No changes' }}
+            ${{ steps.generate.outputs.body || 'No changes' }}
 
       - name: Print summary
         if: ${{ steps.pr.outputs.pull-request-number }}
