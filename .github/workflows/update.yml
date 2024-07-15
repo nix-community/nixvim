@@ -1,16 +1,28 @@
 name: update
 on:
-  workflow_dispatch: # allows manual triggering
+  # Runs every Saturday at noon
+  schedule:
+    - cron: "0 12 * * SAT"
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+
+# Allow one concurrent update per branch
+concurrency:
+  group: "update-${{ github.ref_name }}"
+  cancel-in-progress: true
+
+# Allow running workflows, pushing and creating PRs
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
 
 jobs:
-  lockfile:
+  update:
     name: Update the flake inputs
     runs-on: ubuntu-latest
     timeout-minutes: 40
-
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -45,10 +57,9 @@ jobs:
         id: pr
         uses: peter-evans/create-pull-request@v6
         with:
+          add-paths: "!**"
           branch: update/${{ github.ref_name }}
           delete-branch: true
-          team-reviewers: |
-            nix-community/nixvim
           title: |
             [${{ github.ref_name }}] Update flake.lock
           body: |
