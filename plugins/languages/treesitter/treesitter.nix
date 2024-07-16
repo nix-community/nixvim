@@ -328,5 +328,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       foldmethod = mkDefault "expr";
       foldexpr = mkDefault "nvim_treesitter#foldexpr()";
     };
+
+    # Since https://github.com/NixOS/nixpkgs/pull/321550 upstream queries are added
+    # to grammar plugins. Exclude nvim-treesitter itself from combining to avoid
+    # collisions with grammar's queries
+    performance.combinePlugins.standalonePlugins = [ cfg.package ];
   };
 }
