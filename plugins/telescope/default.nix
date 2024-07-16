@@ -112,6 +112,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         require('telescope').load_extension(extension)
       end
     '';
+
+    # planets picker requires files in data/memes/planets
+    performance.combinePlugins.pathsToLink = [ "/data/memes/planets" ];
   };
 
   settingsOptions = {
