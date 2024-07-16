@@ -119,6 +119,7 @@
 
     ./pluginmanagers/packer.nix
     ./pluginmanagers/lazy.nix
+    ./pluginmanagers/lz-n.nix
 
     ./snippets/friendly-snippets.nix
     ./snippets/luasnip
