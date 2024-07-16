@@ -38,4 +38,9 @@
       override_file_sorter = true;
       override_generic_sorter = false;
     };
+
+    extraConfig = cfg: {
+      # fzy-native itself is in deps directory
+      performance.combinePlugins.pathsToLink = [ "/deps/fzy-lua-native" ];
+    };
   }
