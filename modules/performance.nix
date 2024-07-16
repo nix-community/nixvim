@@ -56,6 +56,8 @@ in
       "/after"
       # ftdetect
       "/ftdetect"
+      # plenary.nvim
+      "/data/plenary/filetypes"
     ];
   };
 }
