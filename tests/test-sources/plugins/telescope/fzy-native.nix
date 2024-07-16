@@ -20,4 +20,13 @@
       };
     };
   };
+
+  combine-plugins = {
+    plugins.telescope = {
+      enable = true;
+      extensions.fzy-native.enable = true;
+    };
+
+    performance.combinePlugins.enable = true;
+  };
 }
