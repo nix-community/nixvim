@@ -374,4 +374,14 @@ in
         }
       ];
     };
+
+  # Test if plenary.filetype is working
+  plenary-nvim = {
+    performance.combinePlugins.enable = true;
+    extraPlugins = [ pkgs.vimPlugins.plenary-nvim ];
+    extraConfigLuaPost = ''
+      -- Plenary filetype detection is usable
+      assert(require("plenary.filetype").detect(".bashrc") == "sh", "plenary.filetype is not working")
+    '';
+  };
 }
