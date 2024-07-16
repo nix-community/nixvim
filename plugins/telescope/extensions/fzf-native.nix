@@ -52,4 +52,9 @@
       override_file_sorter = false;
       case_mode = "ignore_case";
     };
+
+    extraConfig = cfg: {
+      # Native library is in build/libfzf.so
+      performance.combinePlugins.pathsToLink = [ "/build" ];
+    };
   }
