@@ -22,4 +22,13 @@
       };
     };
   };
+
+  combine-plugins = {
+    plugins.telescope = {
+      enable = true;
+      extensions.fzf-native.enable = true;
+    };
+
+    performance.combinePlugins.enable = true;
+  };
 }
