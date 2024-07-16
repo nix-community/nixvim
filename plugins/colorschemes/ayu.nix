@@ -40,7 +40,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   };
 
   extraConfig = cfg: {
-    extraConfigLuaPre = ''
+    colorschemes.ayu.configLuaPre = ''
       local ayu = require("ayu")
       ayu.setup(${helpers.toLuaObject cfg.settings})
       ayu.colorscheme()

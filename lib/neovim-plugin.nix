@@ -90,6 +90,21 @@ with lib;
         {
           enable = mkEnableOption originalName;
 
+          configLua = mkOption {
+            type = types.lines;
+            default = "";
+          };
+
+          configLuaPre = mkOption {
+            type = types.lines;
+            default = "";
+          };
+
+          configLuaPost = mkOption {
+            type = types.lines;
+            default = "";
+          };
+
           package = nixvimOptions.mkPluginPackageOption originalName defaultPackage;
         }
         // optionalAttrs hasSettings {
@@ -104,16 +119,20 @@ with lib;
       config =
         let
           cfg = config.${namespace}.${name};
-          extraConfigNamespace = if isColorscheme then "extraConfigLuaPre" else "extraConfigLua";
+          extraConfigNamespace = if isColorscheme then "configLuaPre" else "configLua";
         in
         mkIf cfg.enable (mkMerge [
           {
             extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
             inherit extraPackages;
 
-            ${extraConfigNamespace} = optionalString callSetup ''
+            ${namespace}.${name}.${extraConfigNamespace} = optionalString callSetup ''
               require('${luaName}')${setup}(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
             '';
+
+            extraConfigLua = cfg.configLua;
+            extraConfigLuaPre = cfg.configLuaPre;
+            extraConfigLuaPost = cfg.configLuaPost;
           }
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
           (extraConfig cfg)
