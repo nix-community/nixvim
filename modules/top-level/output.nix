@@ -87,8 +87,27 @@ in
         defaultPlugin // (if p ? plugin then p else { plugin = p; });
       normalizePluginList = plugins: map normalize plugins;
 
-      # Normalized plugin list
-      normalizedPlugins = normalizePluginList config.extraPlugins;
+      # Byte compiling of normalized plugin list
+      byteCompilePlugins =
+        plugins:
+        let
+          byteCompile =
+            p:
+            (helpers.byteCompileLuaDrv p).overrideAttrs (
+              prev: lib.optionalAttrs (prev ? dependencies) { dependencies = map byteCompile prev.dependencies; }
+            );
+        in
+        map (p: p // { plugin = byteCompile p.plugin; }) plugins;
+
+      # Normalized and optionally byte compiled plugin list
+      normalizedPlugins =
+        let
+          normalized = normalizePluginList config.extraPlugins;
+        in
+        if config.performance.byteCompileLua.enable && config.performance.byteCompileLua.plugins then
+          byteCompilePlugins normalized
+        else
+          normalized;
 
       # Plugin list extended with dependencies
       allPlugins =

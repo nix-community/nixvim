@@ -18,6 +18,9 @@ in
         default = true;
         example = false;
       };
+      plugins = lib.mkEnableOption "plugins" // {
+        description = "Whether to byte compile lua plugins.";
+      };
     };
 
     combinePlugins = {

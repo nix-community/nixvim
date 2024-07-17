@@ -183,3 +183,71 @@ in
     '';
   };
 }
+//
+  # Two equal tests, one with combinePlugins.enable = true
+  pkgs.lib.genAttrs
+    [
+      "plugins"
+      "plugins-combined"
+    ]
+    (name: {
+      performance = {
+        byteCompileLua = {
+          enable = true;
+          plugins = true;
+        };
+
+        combinePlugins.enable = pkgs.lib.hasSuffix "combined" name;
+      };
+
+      extraPlugins = with pkgs.vimPlugins; [
+        nvim-lspconfig
+        # Depends on plenary-nvim
+        telescope-nvim
+        # buildCommand plugin with python3 dependency
+        ((pkgs.writeTextDir "/plugin/test.lua" "vim.opt.tabstop = 2").overrideAttrs {
+          passthru.python3Dependencies = ps: [ ps.pyyaml ];
+        })
+        # Plugin with invalid lua file tests/indent/lua/cond.lua (should be ignored)
+        nvim-treesitter
+      ];
+
+      extraConfigLuaPost = ''
+        ${isByteCompiledFun}
+
+        -- Plugins are loadable
+        require("lspconfig")
+        require("telescope")
+        require("plenary")
+        require("nvim-treesitter")
+
+        -- Python modules are importable
+        vim.cmd.py3("import yaml")
+
+        -- nvim-lspconfig
+        test_rtp_file("lua/lspconfig.lua", true)
+        test_rtp_file("lua/lspconfig/server_configurations/nixd.lua", true)
+        test_rtp_file("plugin/lspconfig.lua", true)
+        test_rtp_file("doc/lspconfig.txt", false)
+
+        -- telescope-nvim
+        test_rtp_file("lua/telescope/init.lua", true)
+        test_rtp_file("lua/telescope/builtin/init.lua", true)
+        test_rtp_file("plugin/telescope.lua", true)
+        test_rtp_file("autoload/health/telescope.vim", false)
+        test_rtp_file("doc/telescope.txt", false)
+
+        -- Dependency of telescope-nvim (plenary-nvim)
+        test_rtp_file("lua/plenary/init.lua", true)
+        test_rtp_file("plugin/plenary.vim", false)
+
+        -- Test plugin
+        test_rtp_file("plugin/test.lua", true)
+
+        -- nvim-treesitter
+        test_rtp_file("lua/nvim-treesitter/health.lua", true)
+        test_rtp_file("lua/nvim-treesitter/install.lua", true)
+        test_rtp_file("plugin/nvim-treesitter.lua", true)
+        test_rtp_file("queries/nix/highlights.scm", false)
+      '';
+    })
