@@ -145,13 +145,13 @@ with lib;
         '';
       };
 
-      extraConfigLuaPre = lib.optionalString config.wrapRc ''
+      extraConfigLuaPre = lib.mkIf config.wrapRc ''
         -- Ignore the user lua configuration
         vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
         vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
         vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
       '';
 
-      extraPlugins = if config.wrapRc then [ config.filesPlugin ] else [ ];
+      extraPlugins = lib.mkIf config.wrapRc [ config.filesPlugin ];
     };
 }
