@@ -38,24 +38,39 @@ let
       buildPhase = lib.optionalString (!dontRun) (
         ''
           mkdir -p .cache/nvim
+          status=0
+          declare -A errors
         ''
-        + lib.concatStringsSep "\n" (
-          builtins.map (
-            {
-              derivation,
-              name,
-              dontRun ? false,
-            }:
-            lib.optionalString (!dontRun) ''
-              echo "Running test for ${name}"
+        + (
+          lib.concatStringsSep "\n" (
+            builtins.map (
+              {
+                derivation,
+                name,
+                dontRun ? false,
+              }:
+              lib.optionalString (!dontRun) ''
+                echo "Running test for ${name}"
 
-              output=$(HOME=$(realpath .) ${lib.getExe derivation} -mn --headless "+q" 2>&1 >/dev/null)
-              if [[ -n $output ]]; then
-                echo "ERROR: $output"
-                exit 1
-              fi
-            ''
-          ) testList
+                output=$(HOME=$(realpath .) ${lib.getExe derivation} -mn --headless "+q" 2>&1 >/dev/null)
+                if [[ -n $output ]]; then
+                  echo "  test failure"
+                  errors[${name}]=$output
+                  status=1
+                fi
+              ''
+            ) testList
+          )
+          + ''
+            if [[ $status -ne 0 ]]; then
+              echo "Some tests failed:"
+              for error in "''${!errors[@]}"; do
+                echo "failure in $error: ''${errors[$error]}"
+              done
+
+              exit $status
+            fi
+          ''
         )
       );
 
