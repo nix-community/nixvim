@@ -17,30 +17,51 @@ let
   };
 
   exampleFiles = {
-    example =
+    name = "examples";
+    cases =
       let
         config = import ../example.nix { inherit pkgs; };
       in
-      builtins.removeAttrs config.programs.nixvim [
-        # This is not available to standalone modules, only HM & NixOS Modules
-        "enable"
-        # This is purely an example, it does not reflect a real usage
-        "extraConfigLua"
-        "extraConfigVim"
+      [
+        {
+          name = "main";
+          case = builtins.removeAttrs config.programs.nixvim [
+            # This is not available to standalone modules, only HM & NixOS Modules
+            "enable"
+            # This is purely an example, it does not reflect a real usage
+            "extraConfigLua"
+            "extraConfigVim"
+          ];
+        }
       ];
   };
 
   # We attempt to build & execute all configurations
-  derivationList = pkgs.lib.mapAttrsToList (name: def: {
-    inherit name;
-    path = mkTestDerivationFromNixvimModule {
-      inherit name;
-      # The module can either be the actual definition,
+  derivationList = builtins.map (
+    { name, cases }:
+    let
+      # The test case can either be the actual definition,
       # or a child attr named `module`.
-      module = def.module or (lib.removeAttrs def [ "tests" ]);
-      dontRun = def.tests.dontRun or false;
-      pkgs = pkgsUnfree;
-    };
-  }) (testFiles // exampleFiles);
+      prepareModule = case: case.module or (lib.removeAttrs case [ "tests" ]);
+      dontRunModule = case: case.tests.dontRun or false;
+    in
+    {
+      inherit name;
+      path = mkTestDerivationFromNixvimModule {
+        inherit name;
+        tests = builtins.map (
+          { name, case }:
+          {
+            inherit name;
+            module = prepareModule case;
+            dontRun = dontRunModule case;
+          }
+        ) cases;
+        # Use the global dontRun only if we don't have a list of modules
+        dontRun = dontRunModule cases;
+        pkgs = pkgsUnfree;
+      };
+    }
+  ) (testFiles ++ [ exampleFiles ]);
 in
 pkgs.linkFarm "nixvim-tests" derivationList
