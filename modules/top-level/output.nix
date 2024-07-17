@@ -292,6 +292,6 @@ in
         vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
       '';
 
-      extraPlugins = if config.wrapRc then [ config.filesPlugin ] else [ ];
+      extraPlugins = lib.mkIf config.wrapRc [ config.filesPlugin ];
     };
 }
