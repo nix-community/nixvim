@@ -62,13 +62,10 @@ let
   # handled by mkTestDerivation
   handleTestFile =
     { namespace, cases }:
-    lib.attrsets.mapAttrs' (case: config: {
-      name = lib.strings.concatStringsSep "-" (namespace ++ [ case ]);
-      value = config;
-    }) cases;
-
-  # Helper function that calls `//` for each attrset of a list
-  concatMany = lib.lists.foldr lib.mergeAttrs { };
+    {
+      name = lib.strings.concatStringsSep "-" namespace;
+      cases = lib.mapAttrsToList (name: case: { inherit case name; }) cases;
+    };
 in
-# An attrset of 'test-name' -> 'test-config'
-concatMany (builtins.map handleTestFile testsListEvaluated)
+# A list of the form [ { name = "..."; modules = [ /* test cases */ ]; } ]
+builtins.map handleTestFile testsListEvaluated
