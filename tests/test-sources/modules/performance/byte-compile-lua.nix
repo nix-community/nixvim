@@ -182,6 +182,40 @@ in
       test_rtp_file("plugin/test2.lua", false)
     '';
   };
+
+  nvim-runtime = {
+    performance.byteCompileLua = {
+      enable = true;
+      nvimRuntime = true;
+    };
+
+    extraPlugins = [
+      # Python 3 dependencies
+      (pkgs.vimPlugins.nvim-lspconfig.overrideAttrs { passthru.python3Dependencies = ps: [ ps.pyyaml ]; })
+    ];
+
+    extraConfigLuaPost = ''
+      ${isByteCompiledFun}
+
+      -- vim namespace is working
+      vim.opt.tabstop = 2
+      vim.api.nvim_get_runtime_file("init.lua", false)
+      vim.lsp.get_clients()
+      vim.treesitter.language.get_filetypes("nix")
+      vim.iter({})
+
+      test_rtp_file("lua/vim/lsp.lua", true)
+      test_rtp_file("lua/vim/iter.lua", true)
+      test_rtp_file("lua/vim/treesitter/query.lua", true)
+      test_rtp_file("lua/vim/lsp/buf.lua", true)
+      test_rtp_file("plugin/editorconfig.lua", true)
+      test_rtp_file("plugin/tutor.vim", false)
+      test_rtp_file("ftplugin/vim.vim", false)
+
+      -- Python3 packages are importable
+      vim.cmd.py3("import yaml")
+    '';
+  };
 }
 //
   # Two equal tests, one with combinePlugins.enable = true

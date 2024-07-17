@@ -244,7 +244,28 @@ in
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${init}"'')
       );
 
-      wrappedNeovim = pkgs.wrapNeovimUnstable config.package (
+      package =
+        if config.performance.byteCompileLua.enable && config.performance.byteCompileLua.nvimRuntime then
+          # Using symlinkJoin to avoid rebuilding neovim
+          pkgs.symlinkJoin {
+            name = "neovim-byte-compiled-${lib.getVersion config.package}";
+            paths = [ config.package ];
+            # Required attributes from original neovim package
+            inherit (config.package) lua;
+            nativeBuildInputs = [ helpers.byteCompileLuaHook ];
+            postBuild = ''
+              # Replace Nvim's binary symlink with a regular file,
+              # or Nvim will use original runtime directory
+              rm $out/bin/nvim
+              cp ${config.package}/bin/nvim $out/bin/nvim
+
+              runHook postFixup
+            '';
+          }
+        else
+          config.package;
+
+      wrappedNeovim = pkgs.wrapNeovimUnstable package (
         neovimConfig
         // {
           wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
