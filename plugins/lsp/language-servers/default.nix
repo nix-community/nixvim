@@ -550,7 +550,7 @@ let
     {
       name = "tsserver";
       description = "tsserver for TypeScript";
-      package = pkgs.nodePackages.typescript-language-server;
+      package = pkgs.typescript-language-server;
     }
     {
       name = "typos-lsp";
