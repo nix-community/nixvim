@@ -81,7 +81,6 @@ pkgs: {
         stylua
         tfsec
         topiary
-        treefmt
         trivy
         typstfmt
         typstyle
@@ -145,7 +144,7 @@ pkgs: {
       isortd = pkgs.isort;
       ltrs = pkgs.languagetool-rust;
       markdownlint_cli2 = pkgs.markdownlint-cli2;
-      markdownlint = pkgs.nodePackages.markdownlint-cli;
+      markdownlint = pkgs.markdownlint-cli;
       mix = pkgs.elixir;
       nimpretty = pkgs.nim;
       nixfmt = pkgs.nixfmt-classic;
@@ -173,6 +172,7 @@ pkgs: {
       terraform_fmt = pkgs.terraform;
       terraform_validate = pkgs.terraform;
       tidy = pkgs.html-tidy;
+      treefmt = pkgs.treefmt2;
       verible_verilog_format = pkgs.verible;
       vint = pkgs.vim-vint;
       write_good = pkgs.write-good;
