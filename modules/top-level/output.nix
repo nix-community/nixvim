@@ -274,7 +274,6 @@ in
       );
     in
     {
-      type = lib.mkForce "lua";
       finalPackage = wrappedNeovim;
       initPath = "${init}";
 
