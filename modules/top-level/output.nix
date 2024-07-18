@@ -69,53 +69,24 @@ with lib;
 
   config =
     let
-      defaultPlugin = {
-        plugin = null;
-        config = "";
-        optional = false;
+      hasContent = str: (builtins.match "[[:space:]]*" str) == null;
+
+      neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
+        inherit (config)
+          extraPython3Packages
+          extraLuaPackages
+          viAlias
+          vimAlias
+          withRuby
+          withNodeJs
+          ;
+        plugins = config.extraPlugins;
+        # We handle `customRC` ourselves, to position it after `extraConfigLuaPre`
       };
-
-      normalizedPlugins = map (
-        x: defaultPlugin // (if x ? plugin then x else { plugin = x; })
-      ) config.extraPlugins;
-
-      neovimConfig = pkgs.neovimUtils.makeNeovimConfig (
-        {
-          inherit (config)
-            extraPython3Packages
-            extraLuaPackages
-            viAlias
-            vimAlias
-            withRuby
-            withNodeJs
-            ;
-          # inherit customRC;
-          plugins = normalizedPlugins;
-        }
-        # Necessary to make sure the runtime path is set properly in NixOS 22.05,
-        # or more generally before the commit:
-        # cda1f8ae468 - neovim: pass packpath via the wrapper
-        // optionalAttrs (functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
-          configure.packages = {
-            nixvim = {
-              start = map (x: x.plugin) normalizedPlugins;
-              opt = [ ];
-            };
-          };
-        }
-      );
 
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (config.extraPackages != [ ]) ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${config.finalConfig}"'')
-      );
-
-      wrappedNeovim = pkgs.wrapNeovimUnstable config.package (
-        neovimConfig
-        // {
-          wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
-          wrapRc = false;
-        }
       );
     in
     {
@@ -139,7 +110,14 @@ with lib;
         ]
       );
 
-      finalPackage = wrappedNeovim;
+      finalPackage = pkgs.wrapNeovimUnstable config.package (
+        neovimConfig
+        // {
+          wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
+          # We handle wrapRc ourselves so we can control how init.lua is written
+          wrapRc = false;
+        }
+      );
 
       printInitPackage = pkgs.writeShellApplication {
         name = "nixvim-print-init";
@@ -149,13 +127,13 @@ with lib;
         '';
       };
 
-      extraConfigLuaPre = lib.optionalString config.wrapRc ''
+      extraConfigLuaPre = mkIf config.wrapRc ''
         -- Ignore the user lua configuration
         vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
         vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
         vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
       '';
 
-      extraPlugins = if config.wrapRc then [ config.filesPlugin ] else [ ];
+      extraPlugins = mkIf config.wrapRc [ config.filesPlugin ];
     };
 }
