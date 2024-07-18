@@ -65,7 +65,7 @@ in
         lib.mapAttrs' (
           _: file: {
             name = file.target;
-            value.source = file.plugin;
+            value.source = file.finalConfig;
           }
         )
       );

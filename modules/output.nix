@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  config,
+  lib,
+  helpers,
+  ...
+}:
 with lib;
 let
   pluginWithConfigType = types.submodule {
@@ -74,7 +79,8 @@ in
         "vim"
         "lua"
       ];
-      default = "lua";
+      default = if lib.hasSuffix ".vim" config.target then "vim" else "lua";
+      defaultText = lib.literalMD ''`"lua"` unless `config.target` ends with `".vim"`'';
       description = "Whether the generated file is a vim or a lua file";
     };
 
@@ -91,6 +97,13 @@ in
       visible = false;
     };
 
+    finalConfig = mkOption {
+      type = types.package;
+      description = "The config file written as a derivation";
+      internal = true;
+      # FIXME: can't be readOnly because we override it in top-level modules
+    };
+
     extraLuaPackages = mkOption {
       type = types.functionTo (types.listOf types.package);
       description = "Extra lua packages to include with neovim";
@@ -102,6 +115,10 @@ in
 
   config =
     let
+      derivationName = "nvim-" + lib.replaceStrings [ "/" ] [ "-" ] config.target;
+
+      writer = if config.type == "lua" then helpers.writeLua else pkgs.writeText;
+
       contentLua = ''
         ${config.extraConfigLuaPre}
         vim.cmd([[
@@ -124,5 +141,6 @@ in
     in
     {
       content = if config.type == "lua" then contentLua else contentVim;
+      finalConfig = writer derivationName config.content;
     };
 }

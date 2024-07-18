@@ -54,13 +54,6 @@ with lib;
       readOnly = true;
     };
 
-    initPath = mkOption {
-      type = types.str;
-      description = "The path to the `init.lua` file.";
-      readOnly = true;
-      visible = false;
-    };
-
     printInitPackage = mkOption {
       type = types.package;
       description = "A tool to show the content of the generated `init.lua` file.";
@@ -68,6 +61,12 @@ with lib;
       visible = false;
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "initPath" ] ''
+      Use `finalConfig' instead.
+    '')
+  ];
 
   config =
     let
@@ -118,11 +117,9 @@ with lib;
         '')
         + config.content;
 
-      init = helpers.writeLua "init.lua" customRC;
-
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (config.extraPackages != [ ]) ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
-        ++ (optional config.wrapRc ''--add-flags -u --add-flags "${init}"'')
+        ++ (optional config.wrapRc ''--add-flags -u --add-flags "${config.finalConfig}"'')
       );
 
       wrappedNeovim = pkgs.wrapNeovimUnstable config.package (
@@ -136,13 +133,13 @@ with lib;
     {
       type = lib.mkForce "lua";
       finalPackage = wrappedNeovim;
-      initPath = "${init}";
+      finalConfig = lib.mkForce (helpers.writeLua config.target customRC);
 
       printInitPackage = pkgs.writeShellApplication {
         name = "nixvim-print-init";
         runtimeInputs = [ pkgs.bat ];
         text = ''
-          bat --language=lua "${init}"
+          bat --language=lua "${config.finalConfig}"
         '';
       };
 

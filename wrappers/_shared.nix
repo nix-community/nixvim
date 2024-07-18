@@ -3,7 +3,7 @@
   filesOpt ? null,
   # Filepath prefix to apply to extraFiles
   filesPrefix ? "nvim/",
-  # Filepath to use when adding `cfg.initPath` to `filesOpt`
+  # Filepath to use when adding `cfg.finalConfig` to `filesOpt`
   # Is prefixed with `filesPrefix`
   initName ? "init.lua",
 }:
@@ -59,7 +59,7 @@ in
             ) extraFiles
           )
           // {
-            ${filesPrefix + initName}.source = cfg.initPath;
+            ${filesPrefix + initName}.source = cfg.finalConfig;
           }
         )
       )
