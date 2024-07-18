@@ -82,6 +82,7 @@ in
       default = if lib.hasSuffix ".vim" config.target then "vim" else "lua";
       defaultText = lib.literalMD ''`"lua"` unless `config.target` ends with `".vim"`'';
       description = "Whether the generated file is a vim or a lua file";
+      readOnly = true;
     };
 
     target = mkOption {
