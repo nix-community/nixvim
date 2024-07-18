@@ -5,6 +5,9 @@
 }:
 with lib;
 {
+  # Whether a string contains something other than whitespace
+  hasContent = str: (builtins.match "[[:space:]]*" str) == null;
+
   listToUnkeyedAttrs =
     list:
     builtins.listToAttrs (lib.lists.imap0 (idx: lib.nameValuePair "__unkeyed-${toString idx}") list);

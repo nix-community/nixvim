@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  helpers,
   ...
 }:
 with lib;
@@ -69,8 +70,6 @@ with lib;
 
   config =
     let
-      hasContent = str: (builtins.match "[[:space:]]*" str) == null;
-
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
         inherit (config)
           extraPython3Packages
@@ -92,7 +91,7 @@ with lib;
     {
       type = lib.mkForce "lua";
 
-      content = lib.mkIf (hasContent neovimConfig.neovimRcContent) (
+      content = lib.mkIf (helpers.hasContent neovimConfig.neovimRcContent) (
         lib.mkBefore ''
           vim.cmd([[
             ${neovimConfig.neovimRcContent}
