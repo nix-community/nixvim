@@ -92,22 +92,12 @@ with lib;
     {
       type = lib.mkForce "lua";
 
-      content = lib.mkForce (
-        lib.concatStringsSep "\n" [
-          (optionalString (hasContent neovimConfig.neovimRcContent) ''
-            vim.cmd([[
-              ${neovimConfig.neovimRcContent}
-            ]])
-          '')
-          config.extraConfigLuaPre
-          (optionalString (hasContent config.extraConfigVim) ''
-            vim.cmd([[
-              ${config.extraConfigVim}
-            ]])
-          '')
-          config.extraConfigLua
-          config.extraConfigLuaPost
-        ]
+      content = lib.mkIf (hasContent neovimConfig.neovimRcContent) (
+        lib.mkBefore ''
+          vim.cmd([[
+            ${neovimConfig.neovimRcContent}
+          ]])
+        ''
       );
 
       finalPackage = pkgs.wrapNeovimUnstable config.package (

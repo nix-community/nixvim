@@ -91,10 +91,10 @@ in
     };
 
     content = mkOption {
-      type = types.str;
+      type = types.lines;
       description = "The content of the config file";
       visible = false;
-      # FIXME: can't be readOnly because we override it in top-level modules
+      # FIXME: can't be readOnly because we prefix it in top-level modules
     };
 
     finalConfig = mkOption {
