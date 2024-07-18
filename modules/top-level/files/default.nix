@@ -64,7 +64,7 @@ in
       extraFiles = lib.mkDerivedConfig options.files (
         lib.mapAttrs' (
           _: file: {
-            name = file.path;
+            name = file.target;
             value.source = file.plugin;
           }
         )

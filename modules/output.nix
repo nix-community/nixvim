@@ -78,9 +78,10 @@ in
       description = "Whether the generated file is a vim or a lua file";
     };
 
-    path = mkOption {
+    target = mkOption {
       type = types.str;
       description = "Path of the file relative to the config directory";
+      default = "init.lua";
     };
 
     content = mkOption {
@@ -96,6 +97,8 @@ in
       default = _: [ ];
     };
   };
+
+  imports = [ (lib.mkRenamedOptionModule [ "path" ] [ "target" ]) ];
 
   config =
     let
