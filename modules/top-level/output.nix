@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -106,17 +105,6 @@ with lib;
         }
       );
 
-      customRC =
-        let
-          hasContent = str: (builtins.match "[[:space:]]*" str) == null;
-        in
-        (optionalString (hasContent neovimConfig.neovimRcContent) ''
-          vim.cmd([[
-            ${neovimConfig.neovimRcContent}
-          ]])
-        '')
-        + config.content;
-
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (config.extraPackages != [ ]) ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${config.finalConfig}"'')
@@ -132,8 +120,26 @@ with lib;
     in
     {
       type = lib.mkForce "lua";
+
+      content = lib.mkForce (
+        lib.concatStringsSep "\n" [
+          (optionalString (hasContent neovimConfig.neovimRcContent) ''
+            vim.cmd([[
+              ${neovimConfig.neovimRcContent}
+            ]])
+          '')
+          config.extraConfigLuaPre
+          (optionalString (hasContent config.extraConfigVim) ''
+            vim.cmd([[
+              ${config.extraConfigVim}
+            ]])
+          '')
+          config.extraConfigLua
+          config.extraConfigLuaPost
+        ]
+      );
+
       finalPackage = wrappedNeovim;
-      finalConfig = lib.mkForce (helpers.writeLua config.target customRC);
 
       printInitPackage = pkgs.writeShellApplication {
         name = "nixvim-print-init";

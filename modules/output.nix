@@ -93,15 +93,15 @@ in
     content = mkOption {
       type = types.str;
       description = "The content of the config file";
-      readOnly = true;
       visible = false;
+      # FIXME: can't be readOnly because we override it in top-level modules
     };
 
     finalConfig = mkOption {
       type = types.package;
       description = "The config file written as a derivation";
+      readOnly = true;
       internal = true;
-      # FIXME: can't be readOnly because we override it in top-level modules
     };
 
     extraLuaPackages = mkOption {
