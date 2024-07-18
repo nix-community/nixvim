@@ -119,25 +119,45 @@ in
 
       writer = if config.type == "lua" then helpers.writeLua else pkgs.writeText;
 
-      contentLua = ''
-        ${config.extraConfigLuaPre}
-        vim.cmd([[
-          ${config.extraConfigVim}
-        ]])
-        ${config.extraConfigLua}
-        ${config.extraConfigLuaPost}
-      '';
+      concatConfig = parts: lib.concatStringsSep "\n" (lib.filter helpers.hasContent parts);
 
-      contentVim = ''
-        lua << EOF
-          ${config.extraConfigLuaPre}
-        EOF
-        ${config.extraConfigVim}
-        lua << EOF
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-        EOF
-      '';
+      wrapConfig =
+        fn: parts:
+        let
+          s = concatConfig (toList parts);
+        in
+        optionalString (helpers.hasContent s) (fn s);
+
+      contentLua = concatConfig [
+        config.extraConfigLuaPre
+        (wrapConfig (s: ''
+          vim.cmd([[
+            ${s}
+          ]])
+        '') config.extraConfigVim)
+        config.extraConfigLua
+        config.extraConfigLuaPost
+      ];
+
+      contentVim = concatConfig [
+        (wrapConfig (s: ''
+          lua << EOF
+            ${s}
+          EOF
+        '') config.extraConfigLuaPre)
+        config.extraConfigVim
+        (wrapConfig
+          (s: ''
+            lua << EOF
+              ${s}
+            EOF
+          '')
+          [
+            config.extraConfigLua
+            config.extraConfigLuaPost
+          ]
+        )
+      ];
     in
     {
       content = if config.type == "lua" then contentLua else contentVim;
