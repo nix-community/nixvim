@@ -8,5 +8,6 @@
 
   config = {
     wrapRc = lib.mkForce true;
+    target = lib.mkDefault "sysinit.lua";
   };
 }

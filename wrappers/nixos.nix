@@ -42,7 +42,6 @@ in
         "environment"
         "etc"
       ];
-      initName = "sysinit.lua";
     })
   ];
 

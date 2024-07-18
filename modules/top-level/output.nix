@@ -87,17 +87,19 @@ with lib;
         (optional (config.extraPackages != [ ]) ''--prefix PATH : "${makeBinPath config.extraPackages}"'')
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${config.finalConfig}"'')
       );
+
+      configPrefix =
+        if config.type == "lua" then
+          ''
+            vim.cmd([[
+              ${neovimConfig.neovimRcContent}
+            ]])
+          ''
+        else
+          neovimConfig.neovimRcContent;
     in
     {
-      type = lib.mkForce "lua";
-
-      content = lib.mkIf (helpers.hasContent neovimConfig.neovimRcContent) (
-        lib.mkBefore ''
-          vim.cmd([[
-            ${neovimConfig.neovimRcContent}
-          ]])
-        ''
-      );
+      content = lib.mkIf (helpers.hasContent neovimConfig.neovimRcContent) (lib.mkBefore configPrefix);
 
       finalPackage = pkgs.wrapNeovimUnstable config.package (
         neovimConfig
