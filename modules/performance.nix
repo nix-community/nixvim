@@ -10,7 +10,8 @@ in
           Whether to enable EXPERIMENTAL option to combine all plugins
           into a single plugin pack. It can significantly reduce startup time,
           but all your plugins must have unique filenames and doc tags.
-          Any collision will result in a build failure.
+          Any collision will result in a build failure. To avoid collisions
+          you can add your plugin to the `standalonePlugins` option.
           Only standard neovim runtime directories are linked to the combined plugin.
           If some of your plugins contain important files outside of standard
           directories, add these paths to `pathsToLink` option.
@@ -21,6 +22,12 @@ in
         default = [ ];
         example = [ "/data" ];
         description = "List of paths to link into a combined plugin pack.";
+      };
+      standalonePlugins = lib.mkOption {
+        type = with types; listOf (either str package);
+        default = [ ];
+        example = [ "nvim-treesitter" ];
+        description = "List of plugins (names or packages) to exclude from plugin pack.";
       };
     };
   };
