@@ -35,10 +35,12 @@ let
         }
       ];
   };
-
-  # We attempt to build & execute all configurations
-  derivationList = builtins.map (
+in
+# We attempt to build & execute all configurations
+builtins.listToAttrs (
+  builtins.map (
     { name, cases }:
+
     let
       # The test case can either be the actual definition,
       # or a child attr named `module`.
@@ -47,7 +49,7 @@ let
     in
     {
       inherit name;
-      path = mkTestDerivationFromNixvimModule {
+      value = mkTestDerivationFromNixvimModule {
         inherit name;
         tests = builtins.map (
           { name, case }:
@@ -62,6 +64,5 @@ let
         pkgs = pkgsUnfree;
       };
     }
-  ) (testFiles ++ [ exampleFiles ]);
-in
-pkgs.linkFarm "nixvim-tests" derivationList
+  ) (testFiles ++ [ exampleFiles ])
+)
