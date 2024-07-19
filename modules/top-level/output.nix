@@ -98,13 +98,26 @@ in
         in
         lib.unique (builtins.concatMap pluginWithItsDeps normalizedPlugins);
 
+      # Remove dependencies from all plugins in a list
+      removeDependencies = ps: map (p: p // { plugin = removeAttrs p.plugin [ "dependencies" ]; }) ps;
+
       # Separated start and opt plugins
       partitionedPlugins = builtins.partition (p: p.optional) allPlugins;
       startPlugins = partitionedPlugins.wrong;
       # Remove opt plugin dependencies since they are already available in start plugins
-      optPlugins = map (
-        p: p // { plugin = builtins.removeAttrs p.plugin [ "dependencies" ]; }
-      ) partitionedPlugins.right;
+      optPlugins = removeDependencies partitionedPlugins.right;
+
+      # Test if plugin shouldn't be included in plugin pack
+      isStandalone =
+        p:
+        builtins.elem p.plugin config.performance.combinePlugins.standalonePlugins
+        || builtins.elem (lib.getName p.plugin) config.performance.combinePlugins.standalonePlugins;
+
+      # Separated standalone and combined start plugins
+      partitionedStartPlugins = builtins.partition isStandalone startPlugins;
+      toCombinePlugins = partitionedStartPlugins.wrong;
+      # Remove standalone plugin dependencies since they are already available in start plugins
+      standaloneStartPlugins = removeDependencies partitionedStartPlugins.right;
 
       # Combine start plugins into a single pack
       pluginPack =
@@ -121,12 +134,12 @@ in
                 ]
               );
             })
-          ) startPlugins;
+          ) toCombinePlugins;
 
           # Python3 dependencies
           python3Dependencies =
             let
-              deps = map (p: p.plugin.python3Dependencies or (_: [ ])) startPlugins;
+              deps = map (p: p.plugin.python3Dependencies or (_: [ ])) toCombinePlugins;
             in
             ps: builtins.concatMap (f: f ps) deps;
 
@@ -149,7 +162,7 @@ in
 
           # Combined plugin configs
           combinedConfig = builtins.concatStringsSep "\n" (
-            builtins.concatMap (x: lib.optional (x.config != null && x.config != "") x.config) startPlugins
+            builtins.concatMap (x: lib.optional (x.config != null && x.config != "") x.config) toCombinePlugins
           );
         in
         normalize {
@@ -158,7 +171,7 @@ in
         };
 
       # Combined plugins
-      combinedPlugins = [ pluginPack ] ++ optPlugins;
+      combinedPlugins = [ pluginPack ] ++ standaloneStartPlugins ++ optPlugins;
 
       # Plugins to use in finalPackage
       plugins = if config.performance.combinePlugins.enable then combinedPlugins else normalizedPlugins;
