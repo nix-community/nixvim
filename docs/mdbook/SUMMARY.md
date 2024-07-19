@@ -21,3 +21,4 @@
 ---
 
 [Contributing](./CONTRIBUTING.md)
+[NixVim Options Search](./search/index.html)

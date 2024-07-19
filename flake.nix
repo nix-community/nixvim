@@ -33,6 +33,11 @@
       ```
     */
 
+    nuschtosSearch = {
+      url = "github:NuschtOS/search";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,6 +50,7 @@
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "nuschtosSearch/flake-utils";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";

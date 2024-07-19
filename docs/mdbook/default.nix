@@ -6,6 +6,7 @@
   nixosOptionsDoc,
   transformOptions,
   hmOptions,
+  search,
 }:
 with lib;
 let
@@ -268,5 +269,7 @@ pkgs.stdenv.mkDerivation {
     ${prepareMD}
     mdbook build
     cp -r ./book/* $dest
+    mkdir -p $dest/search
+    cp -r ${search}/* $dest/search
   '';
 }

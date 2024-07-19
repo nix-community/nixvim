@@ -1,5 +1,6 @@
 {
   pkgs ? import <nixpkgs> { config.enableUnfree = true; },
+  nuschtosSearch,
 }:
 let
   # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
@@ -71,8 +72,7 @@ let
   hmOptions = builtins.removeAttrs (lib.evalModules {
     modules = [ (import ../wrappers/modules/hm.nix { inherit lib; }) ];
   }).options [ "_module" ];
-in
-rec {
+
   options-json =
     (pkgsDoc.nixosOptionsDoc {
       inherit
@@ -88,17 +88,38 @@ rec {
       inherit transformOptions;
       warningsAreErrors = false;
     }).optionsJSON;
+
+in
+{
+  inherit options-json;
+
   man-docs = pkgsDoc.callPackage ./man { inherit options-json; };
 }
-# Do not check if documentation builds fine on darwin as it fails:
-# > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
-// lib.optionalAttrs (!pkgsDoc.stdenv.isDarwin) {
-  docs = pkgsDoc.callPackage ./mdbook {
-    inherit
-      helpers
-      modules
-      hmOptions
-      transformOptions
-      ;
-  };
-}
+// lib.optionalAttrs (!pkgsDoc.stdenv.isDarwin) (
+  let
+    mkSearch =
+      baseHref:
+      nuschtosSearch.packages.mkSearch {
+        optionsJSON = options-json + "/share/doc/nixos/options.json";
+        urlPrefix = "https://github.com/nix-community/nixvim/tree/main";
+        inherit baseHref;
+      };
+  in
+  {
+    # NuschtOS/search does not seem to work on darwin
+    search = mkSearch "/";
+
+    # Do not check if documentation builds fine on darwin as it fails:
+    # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
+    docs = pkgsDoc.callPackage ./mdbook {
+      inherit
+        helpers
+        modules
+        hmOptions
+        transformOptions
+        ;
+      # TODO: Find how to handle stable when 24.11 lands
+      search = mkSearch "/search/";
+    };
+  }
+)
