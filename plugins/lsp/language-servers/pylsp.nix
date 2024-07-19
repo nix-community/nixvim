@@ -536,14 +536,28 @@ in
           mapAttrsToList
             (
               pluginName: nixPackage:
+              let
+                # Get rid of the python-lsp-server dependency
+                filterDependencies = dependencies: filter (dep: dep.pname != "python-lsp-server") dependencies;
+              in
               (optional (isEnabled plugins.${pluginName}) (
-                nixPackage.overridePythonAttrs (old: {
-                  # Get rid of the python-lsp-server dependency
-                  propagatedBuildInputs = filter (dep: dep.pname != "python-lsp-server") old.propagatedBuildInputs;
-
-                  # Skip testing because those naked dependencies will complain about missing pylsp
-                  doCheck = false;
-                })
+                nixPackage.overridePythonAttrs (
+                  old:
+                  (lib.genAttrs
+                    # NOTE: Depending on the exact nixpkgs rev, we may have `dependencies` or `propagatedBuildInputs`
+                    # See https://github.com/NixOS/nixpkgs/pull/327630#discussion_r1679253679
+                    # TODO: Only filter `dependencies`
+                    (lib.filter (n: old ? ${n}) [
+                      "propagatedBuildInputs"
+                      "dependencies"
+                    ])
+                    (n: filterDependencies old.${n})
+                  )
+                  // {
+                    # Skip testing because those naked dependencies will complain about missing pylsp
+                    doCheck = false;
+                  }
+                )
               ))
             )
             (
