@@ -93,5 +93,8 @@ in
           ]
         ) extraFiles}
       '';
+
+      # Never combine user files with the rest of the plugins
+      performance.combinePlugins.standalonePlugins = [ config.filesPlugin ];
     };
 }
