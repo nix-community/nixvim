@@ -1,6 +1,11 @@
 { pkgs, ... }:
 let
-  pluginCount = pkg: type: builtins.length pkg.packpathDirs.myNeovimPackages.${type};
+  inherit (pkgs) lib;
+
+  # Count plugins of given type excluding 'filesPlugin'
+  pluginCount =
+    pkg: filesPlugin: type:
+    builtins.length (builtins.filter (p: p != filesPlugin) pkg.packpathDirs.myNeovimPackages.${type});
 in
 {
   # Test basic functionality
@@ -28,7 +33,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" == 1;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
           message = "More than one plugin is defined in packpathDirs, expected one plugin pack.";
         }
       ];
@@ -45,7 +50,7 @@ in
       ];
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" >= 2;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" >= 2;
           message = "Only one plugin is defined in packpathDirs, expected at least two.";
         }
       ];
@@ -72,7 +77,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" == 1;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -100,7 +105,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" == 1;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -127,7 +132,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" == 1;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -181,11 +186,11 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" == 1;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
           message = "More than one start plugin is defined in packpathDirs";
         }
         {
-          assertion = pluginCount config.finalPackage "opt" == 2;
+          assertion = pluginCount config.finalPackage config.filesPlugin "opt" == 2;
           message = "Less than two opt plugins are defined in packpathDirs";
         }
       ];
@@ -228,7 +233,77 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.finalPackage "start" == 1;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
+          message = "More than one start plugin is defined in packpathDirs";
+        }
+      ];
+    };
+
+  # Test that config.filesPlugin is not combined
+  files-plugin.module =
+    { config, ... }:
+    {
+      performance.combinePlugins.enable = true;
+      extraPlugins = with pkgs.vimPlugins; [
+        nvim-treesitter
+        vim-nix
+      ];
+      # Ensure that filesPlugin is added extraPlugins
+      wrapRc = true;
+      # Extra user files colliding with plugins
+      extraFiles = {
+        "ftplugin/nix.vim".text = "let b:test = 1";
+        "queries/nix/highlights.scm".text = ''
+          ;; extends
+          (comment) @comment
+        '';
+      };
+      # Another form of user files
+      files = {
+        "ftdetect/nix.vim" = {
+          autoCmd = [
+            {
+              event = [
+                "BufRead"
+                "BufNewFile"
+              ];
+              pattern = "*.nix";
+              command = "setf nix";
+            }
+          ];
+        };
+      };
+      extraConfigLuaPost = ''
+        local function get_paths(name)
+          local paths = vim.api.nvim_get_runtime_file(name, true);
+          return vim.tbl_filter(function(v)
+            -- Skip paths from neovim runtime
+            return not v:find("/nvim/runtime/")
+          end, paths)
+        end
+
+        -- Both plugin and user version are available
+        assert(#get_paths("ftplugin/nix.vim") == 2, "only one version of ftplugin/nix.vim")
+        assert(#get_paths("ftdetect/nix.vim") == 2, "only one version of ftdetect/nix.vim")
+        assert(#get_paths("queries/nix/highlights.scm") == 2, "only one version of queries/nix/highlights.scm")
+
+        -- First found file is from filesPlugin
+        assert(
+          get_paths("ftplugin/nix.vim")[1]:find("${lib.getName config.filesPlugin}", 1, true),
+          "first found ftplugin/nix.vim isn't in filesPlugin runtime path"
+        )
+        assert(
+          get_paths("queries/nix/highlights.scm")[1]:find("${lib.getName config.filesPlugin}", 1, true),
+          "first found queries/nix/highlights.scm isn't in filesPlugin runtime path"
+        )
+        assert(
+          get_paths("queries/nix/highlights.scm")[1]:find("${lib.getName config.filesPlugin}", 1, true),
+          "first found queries/nix/highlights.scm isn't in filesPlugin runtime path"
+        )
+      '';
+      assertions = [
+        {
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 1;
           message = "More than one start plugin is defined in packpathDirs";
         }
       ];
@@ -294,7 +369,7 @@ in
       assertions = [
         {
           # plugin-pack, nvim-treesitter, nvim-lspconfig, telescope-nvim, nvim-cmp
-          assertion = pluginCount config.finalPackage "start" == 5;
+          assertion = pluginCount config.finalPackage config.filesPlugin "start" == 5;
           message = "Wrong number of plugins in packpathDirs";
         }
       ];
