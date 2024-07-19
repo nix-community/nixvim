@@ -32,11 +32,21 @@
             {
               name = "tests";
               help = "Run nixvim tests";
-              command = ''
-                echo "=> Running nixvim tests for the '${system}' architecture..."
+              command =
+                let
+                  launchTest = pkgs.writeShellApplication {
+                    name = "launch-tests";
+                    runtimeInputs = with pkgs; [
+                      jq
+                      fzf
+                    ];
 
-                ${nix} build .#checks.${system}.tests "$@"
-              '';
+                    text = builtins.readFile ./launch-test.sh;
+                  };
+                in
+                ''
+                  NIXVIM_SYSTEM=${system} NIXVIM_NIX_COMMAND=${nix} ${lib.getExe launchTest} "$@"
+                '';
             }
             {
               name = "test-lib";

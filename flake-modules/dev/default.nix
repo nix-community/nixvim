@@ -34,6 +34,7 @@
           };
           statix.enable = true;
           stylua.enable = true;
+          shfmt.enable = true;
           taplo.enable = true;
         };
 
