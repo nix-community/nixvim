@@ -48,7 +48,7 @@ builtins.listToAttrs (
       dontRunModule = case: case.tests.dontRun or false;
     in
     {
-      inherit name;
+      name = "test-${name}";
       value = mkTestDerivationFromNixvimModule {
         inherit name;
         tests = builtins.map (
