@@ -87,3 +87,11 @@ keymaps = [
 
 [`map`]: https://nixos.org/manual/nix/stable/language/builtins#builtins-map
 [`keymaps`]: ../keymaps
+
+## How to use system provided binaries instead of nixvim provided ones
+
+There are a number of plugins that install extra packages using `nix`, but this can cause issues.
+For example enabling `plugins.treesitter` could add `gcc` to the PATH of neovim, and this could break workflows that rely on the system provided compiler.
+
+Most plugins that install packages also provide a `xxxPackage` option that can be set to `null` to skip the installation of the package.
+For example `plugin.treesitter` provides the `gccPackage` option.
