@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  config,
+  lib,
+  helpers,
+  ...
+}:
 with lib;
 let
   pluginWithConfigType = types.submodule {
@@ -74,20 +79,30 @@ in
         "vim"
         "lua"
       ];
-      default = "lua";
+      default = if lib.hasSuffix ".vim" config.target then "vim" else "lua";
+      defaultText = lib.literalMD ''`"lua"` unless `config.target` ends with `".vim"`'';
       description = "Whether the generated file is a vim or a lua file";
+      readOnly = true;
     };
 
-    path = mkOption {
+    target = mkOption {
       type = types.str;
       description = "Path of the file relative to the config directory";
+      default = "init.lua";
     };
 
     content = mkOption {
-      type = types.str;
+      type = types.lines;
       description = "The content of the config file";
-      readOnly = true;
       visible = false;
+      # FIXME: can't be readOnly because we prefix it in top-level modules
+    };
+
+    finalConfig = mkOption {
+      type = types.package;
+      description = "The config file written as a derivation";
+      readOnly = true;
+      internal = true;
     };
 
     extraLuaPackages = mkOption {
@@ -97,29 +112,56 @@ in
     };
   };
 
+  imports = [ (lib.mkRenamedOptionModule [ "path" ] [ "target" ]) ];
+
   config =
     let
-      contentLua = ''
-        ${config.extraConfigLuaPre}
-        vim.cmd([[
-          ${config.extraConfigVim}
-        ]])
-        ${config.extraConfigLua}
-        ${config.extraConfigLuaPost}
-      '';
+      derivationName = "nvim-" + lib.replaceStrings [ "/" ] [ "-" ] config.target;
 
-      contentVim = ''
-        lua << EOF
-          ${config.extraConfigLuaPre}
-        EOF
-        ${config.extraConfigVim}
-        lua << EOF
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-        EOF
-      '';
+      writer = if config.type == "lua" then helpers.writeLua else pkgs.writeText;
+
+      concatConfig = parts: lib.concatStringsSep "\n" (lib.filter helpers.hasContent parts);
+
+      wrapConfig =
+        fn: parts:
+        let
+          s = concatConfig (toList parts);
+        in
+        optionalString (helpers.hasContent s) (fn s);
+
+      contentLua = concatConfig [
+        config.extraConfigLuaPre
+        (wrapConfig (s: ''
+          vim.cmd([[
+            ${s}
+          ]])
+        '') config.extraConfigVim)
+        config.extraConfigLua
+        config.extraConfigLuaPost
+      ];
+
+      contentVim = concatConfig [
+        (wrapConfig (s: ''
+          lua << EOF
+            ${s}
+          EOF
+        '') config.extraConfigLuaPre)
+        config.extraConfigVim
+        (wrapConfig
+          (s: ''
+            lua << EOF
+              ${s}
+            EOF
+          '')
+          [
+            config.extraConfigLua
+            config.extraConfigLuaPost
+          ]
+        )
+      ];
     in
     {
       content = if config.type == "lua" then contentLua else contentVim;
+      finalConfig = writer derivationName config.content;
     };
 }

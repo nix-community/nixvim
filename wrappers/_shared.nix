@@ -3,9 +3,6 @@
   filesOpt ? null,
   # Filepath prefix to apply to extraFiles
   filesPrefix ? "nvim/",
-  # Filepath to use when adding `cfg.initPath` to `filesOpt`
-  # Is prefixed with `filesPrefix`
-  initName ? "init.lua",
 }:
 {
   pkgs,
@@ -59,7 +56,7 @@ in
             ) extraFiles
           )
           // {
-            ${filesPrefix + initName}.source = cfg.initPath;
+            ${filesPrefix + cfg.target}.source = cfg.finalConfig;
           }
         )
       )
