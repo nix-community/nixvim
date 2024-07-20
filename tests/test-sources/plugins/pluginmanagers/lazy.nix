@@ -50,6 +50,21 @@
           cmd = "ALEEnable";
         }
 
+        # Plugins can import a plugin module
+        {
+          pkg = LazyVim;
+          import = "lazyvim.plugins";
+        }
+
+        # Plugins can import several plugin modules
+        {
+          pkg = LazyVim;
+          import = [
+            "lazyvim.plugins"
+            "lazyvim.plugins.extras.coding.copilot"
+          ];
+        }
+
         # Plugins can have dependencies on other plugins
         {
           pkg = completion-nvim;
