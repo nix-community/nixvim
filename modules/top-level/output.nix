@@ -107,16 +107,10 @@ with lib;
         }
       );
 
-      customRC =
-        let
-          hasContent = str: (builtins.match "[[:space:]]*" str) == null;
-        in
-        (optionalString (hasContent neovimConfig.neovimRcContent) ''
-          vim.cmd([[
-            ${neovimConfig.neovimRcContent}
-          ]])
-        '')
-        + config.content;
+      customRC = helpers.concatNonEmptyLines [
+        (helpers.wrapVimscriptForLua neovimConfig.neovimRcContent)
+        config.content
+      ];
 
       init = helpers.writeLua "init.lua" customRC;
 
