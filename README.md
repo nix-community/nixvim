@@ -175,7 +175,7 @@ If you want to use it standalone, you can use the `makeNixvim` function:
 
 ```nix
 { pkgs, nixvim, ... }: {
-  environment.systemModules = [
+  environment.systemPackages = [
     (nixvim.legacyPackages."${pkgs.stdenv.hostPlatform.system}".makeNixvim {
       colorschemes.gruvbox.enable = true;
     })
