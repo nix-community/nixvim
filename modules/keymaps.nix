@@ -90,7 +90,7 @@ with lib;
           ${concatStringsSep "\n" luaDefs}
         '';
 
-      extraConfigLua = optionalString (config.keymaps != [ ]) ''
+      extraConfigLua = mkIf (config.keymaps != [ ]) ''
         -- Set up keybinds {{{
         do
           local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping config.keymaps)}

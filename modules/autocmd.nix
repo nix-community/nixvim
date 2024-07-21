@@ -42,7 +42,7 @@ with lib;
     let
       inherit (config) autoGroups autoCmd;
     in
-    mkIf (autoGroups != { } || autoCmd != { }) {
+    mkIf (autoGroups != { } || autoCmd != [ ]) {
       # Introduced early October 2023.
       # TODO remove in early December 2023.
       assertions = [

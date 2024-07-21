@@ -55,31 +55,35 @@ in
   };
 
   config = {
-    extraConfigLuaPre = concatLines (
-      mapAttrsToList (
-        optionName:
-        {
-          prettyName,
-          luaVariableName,
-          luaApi,
-          ...
-        }:
-        let
-          varName = "nixvim_${luaVariableName}";
-          optionDefinitions = config.${optionName};
-        in
-        optionalString (optionDefinitions != { }) ''
-          -- Set up ${prettyName} {{{
-          do
-            local ${varName} = ${helpers.toLuaObject optionDefinitions}
+    extraConfigLuaPre =
+      let
+        content = helpers.concatNonEmptyLines (
+          mapAttrsToList (
+            optionName:
+            {
+              prettyName,
+              luaVariableName,
+              luaApi,
+              ...
+            }:
+            let
+              varName = "nixvim_${luaVariableName}";
+              optionDefinitions = config.${optionName};
+            in
+            optionalString (optionDefinitions != { }) ''
+              -- Set up ${prettyName} {{{
+              do
+                local ${varName} = ${helpers.toLuaObject optionDefinitions}
 
-            for k,v in pairs(${varName}) do
-              vim.${luaApi}[k] = v
-            end
-          end
-          -- }}}
-        ''
-      ) optionsAttrs
-    );
+                for k,v in pairs(${varName}) do
+                  vim.${luaApi}[k] = v
+                end
+              end
+              -- }}}
+            ''
+          ) optionsAttrs
+        );
+      in
+      mkIf (content != "") content;
   };
 }
