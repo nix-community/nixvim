@@ -591,7 +591,9 @@ let
           example = false;
         };
       };
-      extraConfig = cfg: { filetype.extension = mkIf cfg.autoSetFiletype { v = "vlang"; }; };
+      extraConfig = cfg: {
+        filetype.extension = mkIf (cfg.enable && cfg.autoSetFiletype) { v = "vlang"; };
+      };
     }
     {
       name = "vuels";
