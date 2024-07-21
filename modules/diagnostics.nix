@@ -19,7 +19,7 @@ with lib;
   };
 
   config = {
-    extraConfigLuaPre = optionalString (config.diagnostics != { }) ''
+    extraConfigLuaPre = mkIf (config.diagnostics != { }) ''
       vim.diagnostic.config(${helpers.toLuaObject config.diagnostics})
     '';
   };

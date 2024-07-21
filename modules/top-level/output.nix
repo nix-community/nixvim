@@ -140,7 +140,7 @@ with lib;
         '';
       };
 
-      extraConfigLuaPre = lib.optionalString config.wrapRc ''
+      extraConfigLuaPre = lib.mkIf config.wrapRc ''
         -- Ignore the user lua configuration
         vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
         vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after

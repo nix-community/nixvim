@@ -35,50 +35,52 @@ with lib;
     };
   };
 
-  config = {
-    extraConfigLuaPre =
-      (optionalString (config.highlight != { })
-        # lua
-        ''
-          -- Highlight groups {{
-          do
-            local highlights = ${helpers.toLuaObject config.highlight}
+  config = mkMerge [
+    {
+      extraConfigLuaPre =
+        mkIf (config.highlight != { })
+          # lua
+          ''
+            -- Highlight groups {{
+            do
+              local highlights = ${helpers.toLuaObject config.highlight}
 
-            for k,v in pairs(highlights) do
-              vim.api.nvim_set_hl(0, k, v)
+              for k,v in pairs(highlights) do
+                vim.api.nvim_set_hl(0, k, v)
+              end
             end
-          end
-          -- }}
-        ''
-      )
-      + (optionalString (config.match != { })
-        # lua
-        ''
-          -- Match groups {{
-          do
-            local match = ${helpers.toLuaObject config.match}
-
-            for k,v in pairs(match) do
-              vim.fn.matchadd(k, v)
-            end
-          end
             -- }}
-        ''
-      );
+          '';
+      extraConfigLuaPost =
+        mkIf (config.highlightOverride != { })
+          # lua
+          ''
+            -- Highlight groups {{
+            do
+              local highlights = ${helpers.toLuaObject config.highlightOverride}
 
-    extraConfigLuaPost =
-      optionalString (config.highlightOverride != { })
-        # lua
-        ''
-          -- Highlight groups {{
-          do
-            local highlights = ${helpers.toLuaObject config.highlightOverride}
-
-            for k,v in pairs(highlights) do
-              vim.api.nvim_set_hl(0, k, v)
+              for k,v in pairs(highlights) do
+                vim.api.nvim_set_hl(0, k, v)
+              end
             end
-          end
-          -- }}
-        '';
-  };
+            -- }}
+          '';
+    }
+    {
+      extraConfigLuaPre =
+        mkIf (config.match != { })
+          # lua
+          ''
+            -- Match groups {{
+            do
+              local match = ${helpers.toLuaObject config.match}
+
+              for k,v in pairs(match) do
+                vim.fn.matchadd(k, v)
+              end
+            end
+              -- }}
+          '';
+    }
+  ];
 }

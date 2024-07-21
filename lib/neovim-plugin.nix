@@ -110,11 +110,12 @@ with lib;
           {
             extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
             inherit extraPackages;
-
-            ${extraConfigNamespace} = optionalString callSetup ''
+          }
+          (optionalAttrs callSetup {
+            ${extraConfigNamespace} = ''
               require('${luaName}')${setup}(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
             '';
-          }
+          })
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
           (extraConfig cfg)
         ]);
