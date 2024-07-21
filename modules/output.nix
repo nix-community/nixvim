@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  helpers,
+  ...
+}:
 with lib;
 let
   pluginWithConfigType = types.submodule {
@@ -97,29 +102,27 @@ in
     };
   };
 
-  config =
-    let
-      contentLua = ''
-        ${config.extraConfigLuaPre}
-        vim.cmd([[
-          ${config.extraConfigVim}
-        ]])
-        ${config.extraConfigLua}
-        ${config.extraConfigLuaPost}
-      '';
-
-      contentVim = ''
-        lua << EOF
-          ${config.extraConfigLuaPre}
-        EOF
-        ${config.extraConfigVim}
-        lua << EOF
-          ${config.extraConfigLua}
-          ${config.extraConfigLuaPost}
-        EOF
-      '';
-    in
-    {
-      content = if config.type == "lua" then contentLua else contentVim;
-    };
+  config = {
+    content =
+      if config.type == "lua" then
+        # Lua
+        helpers.concatNonEmptyLines [
+          config.extraConfigLuaPre
+          (helpers.wrapVimscriptForLua config.extraConfigVim)
+          config.extraConfigLua
+          config.extraConfigLuaPost
+        ]
+      else
+        # Vimscript
+        helpers.concatNonEmptyLines [
+          (helpers.wrapLuaForVimscript config.extraConfigLuaPre)
+          config.extraConfigVim
+          (helpers.wrapLuaForVimscript (
+            helpers.concatNonEmptyLines [
+              config.extraConfigLua
+              config.extraConfigLuaPost
+            ]
+          ))
+        ];
+  };
 }

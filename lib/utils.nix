@@ -4,7 +4,14 @@
   _nixvimTests,
 }:
 with lib;
-{
+rec {
+  # Whether a string contains something other than whitespaces
+  hasContent = str: builtins.match "[[:space:]]*" str == null;
+
+  # Concatenate a list of strings, adding a newline at the end of each one,
+  # but skipping strings containing only whitespace characters
+  concatNonEmptyLines = lines: concatLines (builtins.filter hasContent lines);
+
   listToUnkeyedAttrs =
     list:
     builtins.listToAttrs (lib.lists.imap0 (idx: lib.nameValuePair "__unkeyed-${toString idx}") list);
@@ -118,4 +125,26 @@ with lib;
       ${string}
     end
   '';
+
+  # Wrap Vimscript for using in lua,
+  # but only if the string contains something other than whitespaces
+  # TODO: account for a possible ']]' in the string
+  wrapVimscriptForLua =
+    string:
+    optionalString (hasContent string) ''
+      vim.cmd([[
+      ${string}
+      ]])
+    '';
+
+  # Wrap lua script for using in Vimscript,
+  # but only if the string contains something other than whitespaces
+  # TODO: account for a possible 'EOF' if the string
+  wrapLuaForVimscript =
+    string:
+    optionalString (hasContent string) ''
+      lua << EOF
+      ${string}
+      EOF
+    '';
 }
