@@ -6,6 +6,8 @@
 }:
 with lib;
 let
+  cfg = config.filetype;
+
   filetypeDefinition = helpers.mkNullOrOption (
     with types;
     attrsOf (oneOf [
@@ -52,7 +54,9 @@ in
         pattern = filetypeDefinition "set filetypes matching the specified pattern";
       };
 
-  config.extraConfigLua = helpers.mkIfNonNull' config.filetype ''
-    vim.filetype.add(${helpers.toLuaObject config.filetype})
-  '';
+  config.extraConfigLua =
+    lib.mkIf (cfg != null && (builtins.any (v: v != null) (builtins.attrValues cfg)))
+      ''
+        vim.filetype.add(${helpers.toLuaObject cfg})
+      '';
 }
