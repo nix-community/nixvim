@@ -141,6 +141,8 @@ rec {
           value
         else if allowRawValues && value ? __raw then
           value
+        else if isDerivation value then
+          value
         else if isList value then
           let
             needsFiltering = removeNullListEntries || removeEmptyListEntries;
@@ -205,8 +207,8 @@ rec {
           builtins.toJSON v
         else if isBool v then
           boolToString v
-        else if isPath v then
-          go indent (toString v)
+        else if isPath v || isDerivation v then
+          go indent "${v}"
         else if isString v then
           # TODO: support lua's escape sequences, literal string, and content-appropriate quote style
           # See https://www.lua.org/pil/2.4.html
@@ -217,8 +219,6 @@ rec {
           "{ }"
         else if isFunction v then
           abort "nixvim(toLua): Unexpected function: " + generators.toPretty { } v
-        else if isDerivation v then
-          abort "nixvim(toLua): Unexpected derivation: " + generators.toPretty { } v
         else if isList v then
           "{" + introSpace + concatMapStringsSep ("," + introSpace) (go (indent + "  ")) v + outroSpace + "}"
         else if isAttrs v then

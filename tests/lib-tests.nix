@@ -45,6 +45,8 @@ let
     ];
   };
 
+  drv = pkgs.writeText "example-derivation" "hello, world!";
+
   results = pkgs.lib.runTests {
     testToLuaObject = {
       expr = helpers.toLuaObject {
@@ -122,6 +124,23 @@ let
         foo\bar
         baz'';
       expected = ''"foo\\bar\nbaz"'';
+    };
+
+    testToLuaObjectDerivation = {
+      expr = helpers.toLuaObject drv;
+      expected = ''"${drv}"'';
+    };
+
+    testToLuaObjectDerivationNested = {
+      expr = helpers.toLuaObject {
+        a = drv;
+        b = {
+          c = drv;
+        };
+        d = [ drv ];
+        e = [ { f = drv; } ];
+      };
+      expected = ''{ a = "${drv}", b = { c = "${drv}" }, d = { "${drv}" }, e = { { f = "${drv}" } } }'';
     };
 
     testToLuaObjectFilters = {
