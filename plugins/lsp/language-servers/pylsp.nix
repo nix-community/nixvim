@@ -539,7 +539,7 @@ in
               (optional (isEnabled plugins.${pluginName}) (
                 nixPackage.overridePythonAttrs (old: {
                   # Get rid of the python-lsp-server dependency
-                  propagatedBuildInputs = filter (dep: dep.pname != "python-lsp-server") old.propagatedBuildInputs;
+                  dependencies = filter (dep: dep.pname != "python-lsp-server") old.dependencies;
 
                   # Skip testing because those naked dependencies will complain about missing pylsp
                   doCheck = false;
@@ -581,6 +581,9 @@ in
                     '';
                 });
                 rope = pylsp-rope.overridePythonAttrs (old: {
+                  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/329137 reaches nixos-unstable
+                  build-system = [ setuptools ];
+
                   postPatch =
                     old.postPatch or ''''
                     + ''
