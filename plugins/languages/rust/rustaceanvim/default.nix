@@ -85,6 +85,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         plugins.lsp.postConfig = configStr;
       })
       # Else, just put the plugin config anywhere
-      (mkIf (!config.plugins.lsp.enable) { extraConfigLua = configStr; })
+      (mkIf (!config.plugins.lsp.enable) { plugins.rustaceanvim.configLua = configStr; })
     ];
 }

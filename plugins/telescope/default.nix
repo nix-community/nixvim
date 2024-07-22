@@ -104,7 +104,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       }
     ) cfg.keymaps;
 
-    extraConfigLua = ''
+    plugins.telescope.configLua = ''
       require('telescope').setup(${helpers.toLuaObject cfg.settings})
 
       local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}

@@ -80,7 +80,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       coq_settings = cfg.settings;
     };
 
-    extraConfigLua = "require('coq')";
+    plugins.coq-nvim.configLua = "require('coq')";
 
     plugins.lsp = {
       preConfig = ''

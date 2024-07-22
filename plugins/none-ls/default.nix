@@ -148,7 +148,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       ];
 
       # We only do this here because of enableLspFormat
-      extraConfigLua = ''
+      plugins.none-ls.configLua = ''
         require("null-ls").setup(${helpers.toLuaObject setupOptions})
       '';
     };

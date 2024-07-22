@@ -179,7 +179,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     # `settings` can either be passed to `with_config` before calling `setup`,
     # or it can be passed as `setup`'s 2nd argument.
     # See https://github.com/RRethy/base16-nvim/blob/6ac181b5733518040a33017dde654059cd771b7c/lua/base16-colorscheme.lua#L107-L125
-    extraConfigLuaPre = ''
+    colorschemes.base16.configLuaPre = ''
       do
         local base16 = require('${luaName}')
         base16.with_config(${helpers.toLuaObject cfg.settings})
