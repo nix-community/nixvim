@@ -6,59 +6,94 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.better-escape;
-in
-{
-  options.plugins.better-escape = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "better-escape.nvim";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "better-escape";
+  originalName = "better-escape.nvim";
+  luaName = "better_escape";
+  defaultPackage = pkgs.vimPlugins.better-escape-nvim;
 
-    package = helpers.mkPluginPackageOption "better-escape.nvim" pkgs.vimPlugins.better-escape-nvim;
+  maintainers = [ maintainers.GaetanLepage ];
 
-    mapping = helpers.mkNullOrOption (with types; listOf str) ''
-      List of mappings to use to enter escape mode.
-    '';
+  # TODO: introduced 2024-07-23. Remove after 24.11 release.
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [ "timeout" ];
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "better-escape"
+      ];
+    in
+    [
+      (mkRemovedOptionModule (basePluginPath ++ [ "clearEmptyLines" ]) ''
+        This option has been removed upstream.
+        See the [upstream README](https://github.com/max397574/better-escape.nvim?tab=readme-ov-file#rewrite) for additional information.
+      '')
+      (mkRemovedOptionModule (basePluginPath ++ [ "keys" ]) ''
+        This option has been removed upstream.
+        See the [upstream README](https://github.com/max397574/better-escape.nvim?tab=readme-ov-file#rewrite) for additional information.
+      '')
+      (mkRemovedOptionModule (basePluginPath ++ [ "mapping" ]) ''
+        This option has been removed in favor of `plugins.better-escape.settings.mapping`.
+        See the [upstream README](https://github.com/max397574/better-escape.nvim?tab=readme-ov-file#rewrite) for additional information.
+      '')
+    ];
 
+  settingsOptions = {
     timeout = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.timeoutlen" ''
       The time in which the keys must be hit in ms.
       Uses the value of `vim.o.timeoutlen` (`options.timeoutlen` in nixvim) by default.
     '';
 
-    clearEmptyLines = helpers.defaultNullOpts.mkBool false ''
-      Clear line after escaping if there is only whitespace.
+    default_mappings = helpers.defaultNullOpts.mkBool true ''
+      Whether to enable default key mappings.
     '';
 
-    keys =
-      helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua) "<ESC>"
-        ''
-          Keys used for escaping, if it is a function will use the result everytime.
-
-          Example (recommended):
-
-          keys.__raw = \'\'
-            function()
-              return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
-            end
-          \'\';
-        '';
+    mappings = helpers.defaultNullOpts.mkAttrsOf' {
+      type = types.anything;
+      pluginDefault = {
+        i.j = {
+          k = "<Esc>";
+          j = "<Esc>";
+        };
+        c.j = {
+          k = "<Esc>";
+          j = "<Esc>";
+        };
+        t.j = {
+          k = "<Esc>";
+          j = "<Esc>";
+        };
+        v.j.k = "<Esc>";
+        s.j.k = "<Esc>";
+      };
+      example.i." "."<tab>".__raw = ''
+          function()
+            -- Defer execution to avoid side-effects
+            vim.defer_fn(function()
+                -- set undo point
+                vim.o.ul = vim.o.ul
+                require("luasnip").expand_or_jump()
+            end, 1)
+        end
+      '';
+      description = "Define mappings for each mode.";
+    };
   };
 
-  config =
-    let
-      setupOptions =
-        with cfg;
-        {
-          inherit mapping timeout;
-          clear_empty_lines = clearEmptyLines;
-          inherit keys;
-        }
-        // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        require('better_escape').setup(${helpers.toLuaObject setupOptions})
+  settingsExample = {
+    timeout = "vim.o.timeoutlen";
+    mapping = {
+      i." "."<tab>".__raw = ''
+        function()
+          -- Defer execution to avoid side-effects
+          vim.defer_fn(function()
+              -- set undo point
+              vim.o.ul = vim.o.ul
+              require("luasnip").expand_or_jump()
+          end, 1)
+        end
       '';
     };
+  };
 }
