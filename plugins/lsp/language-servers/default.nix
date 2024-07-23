@@ -239,6 +239,12 @@ let
       cmd = cfg: [ "${cfg.package}/bin/java-language-server" ];
     }
     {
+      name = "jdt-language-server";
+      description = "Eclipse JDT Language Server for Java";
+      serverName = "jdtls";
+      cmd = cfg: [ (lib.getExe cfg.package) ];
+    }
+    {
       name = "jsonls";
       description = "jsonls for JSON";
       package = pkgs.vscode-langservers-extracted;

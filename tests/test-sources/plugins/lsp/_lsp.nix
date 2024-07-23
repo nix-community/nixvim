@@ -142,6 +142,7 @@
             html.enable = true;
             htmx.enable = true;
             java-language-server.enable = true;
+            jdt-language-server.enable = true;
             jsonls.enable = true;
             jsonnet-ls.enable = true;
             julials.enable = true;
