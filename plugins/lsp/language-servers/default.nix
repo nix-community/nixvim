@@ -411,6 +411,11 @@ let
       };
     }
     {
+      name = "openscad-lsp";
+      description = "A Language Server Protocol server for OpenSCAD";
+      serverName = "openscad_lsp";
+    }
+    {
       name = "perlpls";
       description = "PLS for Perl";
       package = pkgs.perlPackages.PLS;

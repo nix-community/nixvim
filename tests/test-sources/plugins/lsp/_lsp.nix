@@ -169,6 +169,7 @@
             # As of 2024-03-05, omnisharp-roslyn is broken on darwin
             # TODO: re-enable this test when fixed
             omnisharp.enable = !pkgs.stdenv.isDarwin;
+            openscad-lsp.enable = true;
             perlpls.enable = true;
             pest-ls.enable = true;
             prismals.enable = true;
