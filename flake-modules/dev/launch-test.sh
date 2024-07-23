@@ -7,9 +7,12 @@ fi
 
 help() {
   cat <<EOF
-Usage: tests [OPTIONS] [tests...]
+Usage: tests [OPTIONS] [tests...] -- [NIX OPTIONS...]
 
 If tests are passed on the command line only these will be launched
+
+All arguments after '--' starting with '-' will be passed to 'nix build'.
+For example to debug a failing test you can append '-- --show-trace'.
 
 Options:
 	-h, --help: Display this help message and exit
@@ -29,6 +32,7 @@ eval set -- "$OPTS"
 
 system=${NIXVIM_SYSTEM}
 specified_tests=()
+nix_args=()
 interactive=false
 
 mk_test_list() {
@@ -56,7 +60,13 @@ while true; do
     ;;
   --)
     shift
-    specified_tests=("$@")
+    for arg in "$@"; do
+      if [[ $arg == -* ]]; then
+        nix_args+=("$arg")
+      else
+        specified_tests+=("$arg")
+      fi
+    done
     break
     ;;
   esac
@@ -64,7 +74,7 @@ done
 
 run_tests() {
   # Add the prefix "checks.${system}." to each argument
-  if ! "${NIXVIM_NIX_COMMAND}" build --no-link --file . "${@/#/checks.${system}.}"; then
+  if ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "${@/#/checks.${system}.}"; then
     echo "Test failure" >&2
     exit 1
   fi
