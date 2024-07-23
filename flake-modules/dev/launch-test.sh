@@ -14,11 +14,12 @@ If tests are passed on the command line only these will be launched
 Options:
 	-h, --help: Display this help message and exit
 	-l, --list: Display the list of tests and exit
+	-s, --system <system>: Launch checks for "<system>" instead of "${NIXVIM_SYSTEM}".
 	-i, --interactive: Pick interactively the tests. Can't be supplied if tests where passed.
 EOF
 }
 
-if ! OPTS=$(getopt -o "hli" -l "help,list,interactive" -- "$@"); then
+if ! OPTS=$(getopt -o "hlis:" -l "help,list,interactive,system:" -- "$@"); then
   echo "Invalid options" >&2
   help
   exit 1
@@ -26,11 +27,12 @@ fi
 
 eval set -- "$OPTS"
 
+system=${NIXVIM_SYSTEM}
 specified_tests=()
 interactive=false
 
 mk_test_list() {
-  nix eval ".#checks.${NIXVIM_SYSTEM}" --apply builtins.attrNames --json |
+  nix eval ".#checks.${system}" --apply builtins.attrNames --json |
     jq -r 'map(select(startswith("test-")))[]'
 }
 
@@ -48,6 +50,10 @@ while true; do
     interactive=true
     shift
     ;;
+  -s | --system)
+    system=$2
+    shift 2
+    ;;
   --)
     shift
     specified_tests=("$@")
@@ -58,7 +64,7 @@ done
 
 run_tests() {
   # Add the prefix "checks.${system}." to each argument
-  if ! "${NIXVIM_NIX_COMMAND}" build --no-link --file . "${@/#/checks.${NIXVIM_SYSTEM}.}"; then
+  if ! "${NIXVIM_NIX_COMMAND}" build --no-link --file . "${@/#/checks.${system}.}"; then
     echo "Test failure" >&2
     exit 1
   fi
