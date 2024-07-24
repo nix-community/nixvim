@@ -170,6 +170,7 @@
     ./utils/floaterm.nix
     ./utils/fzf-lua.nix
     ./utils/goyo.nix
+    ./utils/guess-indent.nix
     ./utils/hardtime.nix
     ./utils/harpoon.nix
     ./utils/hop.nix
