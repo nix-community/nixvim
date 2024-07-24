@@ -81,10 +81,9 @@
 
                 echo -e "\n=> Documentation successfully built ('$doc_derivation')"
 
-                port=8000
-                echo -e "\n=> Now open your browser and navigate to 'localhost:$port'\n"
+                echo -e "\n=> You can then open your browser to view the doc\n"
 
-                ${pkgs.lib.getExe pkgs.python3} -m http.server -d "$doc_derivation"/share/doc
+                (cd "$doc_derivation"/share/doc && ${pkgs.lib.getExe pkgs.python3} ${./server.py})
               '';
             }
             {
