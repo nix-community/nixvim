@@ -4,6 +4,16 @@ let
 in
 {
   options.performance = {
+    byteCompileLua = {
+      enable = lib.mkEnableOption "byte compiling of lua files";
+      initLua = lib.mkOption {
+        description = "Whether to byte compile init.lua.";
+        type = types.bool;
+        default = true;
+        example = false;
+      };
+    };
+
     combinePlugins = {
       enable = lib.mkEnableOption "combinePlugins" // {
         description = ''

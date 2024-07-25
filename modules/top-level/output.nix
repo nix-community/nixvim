@@ -206,7 +206,17 @@ in
         config.content
       ];
 
-      init = helpers.writeLua "init.lua" customRC;
+      textInit = helpers.writeLua "init.lua" customRC;
+      byteCompiledInit = helpers.writeByteCompiledLua "init.lua" customRC;
+      init =
+        if
+          config.type == "lua"
+          && config.performance.byteCompileLua.enable
+          && config.performance.byteCompileLua.initLua
+        then
+          byteCompiledInit
+        else
+          textInit;
 
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (
@@ -232,7 +242,7 @@ in
         name = "nixvim-print-init";
         runtimeInputs = [ pkgs.bat ];
         text = ''
-          bat --language=lua "${init}"
+          bat --language=lua "${textInit}"
         '';
       };
 

@@ -26,4 +26,26 @@
         --indent-width 4 \
         "$out"
     '';
+
+  /*
+    Write a byte compiled lua file to the nix store.
+
+    # Type
+
+    ```
+    writeByteCompiledLua :: String -> String -> Derivation
+    ```
+
+    # Arguments
+
+    - [name] The name of the derivation
+    - [text] The content of the lua file
+  */
+  writeByteCompiledLua =
+    name: text:
+    pkgs.runCommandLocal name { inherit text; } ''
+      echo -n "$text" > "$out"
+
+      ${lib.getExe' pkgs.luajit "luajit"} -bd -- "$out" "$out"
+    '';
 }
