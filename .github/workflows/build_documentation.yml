@@ -46,7 +46,8 @@ jobs:
           nix build github:nix-community/nixvim#docs
           cp -r result/share/doc/nixvim/* docs-build
           nix build github:nix-community/nixvim/nixos-24.05#docs
-          cp -r result/share/doc/nixvim docs-build/stable
+          # TODO: use the new path when 24.11 hits
+          cp -r result/share/doc docs-build/stable
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
