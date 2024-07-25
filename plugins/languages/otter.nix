@@ -83,4 +83,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       When true, otter handles these cases fully. This is a (minor) performance hit.
     '';
   };
+
+  extraConfig = cfg: {
+    warnings =
+      lib.optional (cfg.enable && config.plugins.treesitter.settings.highlight.enable == null)
+        ''
+          NixVim(plugins.otter): you have enabled otter, but `plugins.treesitter.settings.highlight.enable` is not enabled.
+          Otter functionality might not work as expected without it and `plugins.treesitter.enable` enabled.
+        '';
+  };
+
 }
