@@ -13,12 +13,15 @@ with lib;
     package = helpers.mkPluginPackageOption "which-key-nvim" pkgs.vimPlugins.which-key-nvim;
 
     registrations = mkOption {
-      type = with types; attrsOf anything;
-      default = { };
+      type = with types; anything;
+      default = [ ];
       description = "Manually register the description of mappings.";
-      example = {
-        "<leader>p" = "Find git files with telescope";
-      };
+      example = [
+        [
+          "<leader>p"
+          { desc = "Find git files with telescope"; }
+        ]
+      ];
     };
 
     plugins = {
