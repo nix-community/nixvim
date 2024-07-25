@@ -111,7 +111,7 @@ in
       iconsEnabled = mkOption {
         type = types.bool;
         description = "Whether to enable/disable icons for all components.";
-        default = true;
+        default = config.iconsEnabled;
       };
 
       theme = helpers.defaultNullOpts.mkNullable (

@@ -58,7 +58,7 @@ in
       iconsEnabled = mkOption {
         type = types.bool;
         description = "Toggle icon support. Installs nvim-web-devicons.";
-        default = true;
+        default = config.iconsEnabled;
       };
 
       theme = mkOption {

@@ -107,7 +107,7 @@ in
       useIcons = mkOption {
         type = types.bool;
         description = "Requires nvim-web-devicons";
-        default = true;
+        default = config.iconsEnabled;
       };
 
       showHelpHints = mkBool true ''

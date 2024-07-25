@@ -15,6 +15,7 @@
     ./files.nix
     ./filetype.nix
     ./highlights.nix
+    ./icons.nix
     ./keymaps.nix
     ./lua-loader.nix
     ./opts.nix
