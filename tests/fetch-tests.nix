@@ -14,7 +14,7 @@ let
       file = "${root}/${relativePath}/${name}";
     in
     if type == "regular" then
-      [
+      lib.optional (lib.hasSuffix ".nix" name) [
         {
           namespace = namespace ++ [ (lib.strings.removeSuffix ".nix" name) ];
           cases = import file;

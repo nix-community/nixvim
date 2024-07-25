@@ -15,6 +15,13 @@
               inherit (inputs) home-manager;
               nixvim = self;
             }).activationPackage;
+          home-manager-extra-files-byte-compiling =
+            import ../tests/modules/hm-extra-files-byte-compiling.nix
+              {
+                inherit pkgs;
+                inherit (inputs) home-manager;
+                nixvim = self;
+              };
         }
         // pkgs.lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
           nixos-module =

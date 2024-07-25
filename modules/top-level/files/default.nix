@@ -84,11 +84,11 @@ in
 
         mkdir -p "$out"
         ${lib.concatMapStringsSep "\n" (
-          { target, source, ... }:
+          { target, finalSource, ... }:
           lib.escapeShellArgs [
             "makeEntry"
             # Force local source paths to be added to the store
-            "${source}"
+            "${finalSource}"
             target
           ]
         ) extraFiles}

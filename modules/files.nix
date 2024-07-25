@@ -2,14 +2,16 @@
   lib,
   helpers,
   pkgs,
+  config,
   ...
 }:
 let
-  fileType = lib.types.submodule (
+  fileTypeModule =
     {
       name,
       config,
       options,
+      topConfig,
       ...
     }:
     {
@@ -41,6 +43,14 @@ let
           type = lib.types.path;
           description = "Path of the source file.";
         };
+
+        finalSource = lib.mkOption {
+          type = lib.types.path;
+          description = "Path to the final source file.";
+          readOnly = true;
+          visible = false;
+          internal = true;
+        };
       };
 
       config =
@@ -54,9 +64,29 @@ let
             # This means our `source` definition has the same priority as `text`.
             lib.mkDerivedConfig options.text (pkgs.writeText derivationName)
           );
+          finalSource =
+            # Byte compile lua files if performance.byteCompileLua option is enabled
+            if
+              lib.hasSuffix ".lua" config.target
+              && topConfig.performance.byteCompileLua.enable
+              && topConfig.performance.byteCompileLua.configs
+            then
+              if lib.isDerivation config.source then
+                # Source is a derivation
+                helpers.byteCompileLuaDrv config.source
+              else
+                # Source is a path or string
+                helpers.byteCompileLuaFile derivationName config.source
+            else
+              config.source;
         };
-    }
-  );
+    };
+
+  fileType = lib.types.submoduleWith {
+    shorthandOnlyDefinesConfig = true;
+    modules = [ fileTypeModule ];
+    specialArgs.topConfig = config;
+  };
 
   # TODO: Added 2024-07-07, remove after 24.11
   # Before we had a fileType, we used types.str.

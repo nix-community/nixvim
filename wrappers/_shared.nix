@@ -53,11 +53,11 @@ in
         setAttrByPath filesOpt (
           listToAttrs (
             map (
-              { target, source, ... }:
+              { target, finalSource, ... }:
               {
                 name = filesPrefix + target;
                 value = {
-                  inherit source;
+                  source = finalSource;
                 };
               }
             ) extraFiles

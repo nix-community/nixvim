@@ -12,6 +12,12 @@ in
         default = true;
         example = false;
       };
+      configs = lib.mkOption {
+        description = "Whether to byte compile lua configuration files.";
+        type = types.bool;
+        default = true;
+        example = false;
+      };
     };
 
     combinePlugins = {

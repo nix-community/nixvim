@@ -30,10 +30,31 @@ in
       performance.byteCompileLua.enable = true;
 
       extraFiles = {
+        # By text
         "plugin/file_text.lua".text = "vim.opt.tabstop = 2";
+        # By simple source derivation using buildCommand
         "plugin/file_source.lua".source = helpers.writeLua "file_source.lua" "vim.opt.tabstop = 2";
+        # By standard derivation, it needs to execute fixupPhase
+        "plugin/file_drv.lua".source = pkgs.stdenvNoCC.mkDerivation {
+          name = "file_drv.lua";
+          src = pkgs.emptyDirectory;
+          buildPhase = ''
+            echo "vim.opt.tabstop = 2" > $out
+          '';
+        };
+        # By path
+        "plugin/file_path.lua".source = ./files/file.lua;
+        # By string
+        "plugin/file_string.lua".source = builtins.toFile "file_path.lua" "vim.opt.tabstop = 2";
+        # By derivation converted to string
+        "plugin/file_drv_string.lua".source = toString (
+          helpers.writeLua "file_drv_string.lua" "vim.opt.tabstop = 2"
+        );
+        # Non-lua files
         "plugin/test.vim".text = "set tabstop=2";
         "plugin/test.json".text = builtins.toJSON { a = 1; };
+        # Lua file with txt extension won't be byte compiled
+        "test.txt".source = helpers.writeLua "test.txt" "vim.opt.tabstop = 2";
       };
 
       files = {
@@ -64,14 +85,19 @@ in
         local init_content = vim.fn.system("${config.printInitPackage}/bin/nixvim-print-init")
         assert(init_content:find("VALIDATING_STRING"), "nixvim-print-init's output is byte compiled")
 
-        -- extraFiles
-        test_rtp_file("plugin/file_text.lua", false)
-        test_rtp_file("plugin/file_source.lua", false)
+        -- lua extraFiles are byte compiled
+        test_rtp_file("plugin/file_text.lua", true)
+        test_rtp_file("plugin/file_source.lua", true)
+        test_rtp_file("plugin/file_drv.lua", true)
+        test_rtp_file("plugin/file_path.lua", true)
+        test_rtp_file("plugin/file_string.lua", true)
+        test_rtp_file("plugin/file_drv_string.lua", true)
         test_rtp_file("plugin/test.vim", false)
         test_rtp_file("plugin/test.json", false)
+        test_rtp_file("test.txt", false)
 
-        -- files
-        test_rtp_file("plugin/file.lua", false)
+        -- lua files are byte compiled
+        test_rtp_file("plugin/file.lua", true)
         test_rtp_file("plugin/file.vim", false)
 
         -- Plugins and neovim runtime aren't byte compiled by default
@@ -134,6 +160,26 @@ in
       -- vimrc is not byte compiled
       local init = vim.env.MYVIMRC or vim.fn.getscriptinfo({name = "init.lua"})[1].name
       assert(not is_byte_compiled(init), "MYVIMRC is not expected to be byte compiled, but it is")
+    '';
+  };
+
+  configs-disabled = {
+    performance.byteCompileLua = {
+      enable = true;
+      configs = false;
+    };
+
+    extraFiles."plugin/test1.lua".text = "vim.opt.tabstop = 2";
+
+    files."plugin/test2.lua".opts.tabstop = 2;
+
+    extraConfigLuaPost = ''
+      ${isByteCompiledFun}
+
+      -- extraFiles
+      test_rtp_file("plugin/test1.lua", false)
+      -- files
+      test_rtp_file("plugin/test2.lua", false)
     '';
   };
 }
