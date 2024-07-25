@@ -119,7 +119,7 @@ in
         transformOptions
         ;
       # TODO: Find how to handle stable when 24.11 lands
-      search = mkSearch "/search/";
+      search = mkSearch "/nixvim/search/";
     };
   }
 )

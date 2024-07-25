@@ -264,7 +264,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    dest=$out/share/doc
+    dest=$out/share/doc/nixvim
     mkdir -p $dest
     ${prepareMD}
     mdbook build
