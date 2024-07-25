@@ -581,9 +581,6 @@ in
                     '';
                 });
                 rope = pylsp-rope.overridePythonAttrs (old: {
-                  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/329137 reaches nixos-unstable
-                  build-system = [ setuptools ];
-
                   postPatch =
                     old.postPatch or ''''
                     + ''
