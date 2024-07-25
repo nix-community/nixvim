@@ -558,6 +558,9 @@ in
                     '';
                 });
                 isort = pyls-isort.overridePythonAttrs (old: {
+                  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/329890 reaches nixos-unstable
+                  build-system = [ setuptools ];
+
                   postPatch =
                     old.postPatch or ''''
                     + ''
