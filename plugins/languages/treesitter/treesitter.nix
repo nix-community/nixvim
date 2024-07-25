@@ -118,7 +118,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
       keymaps =
         let
-          mkKeymap = default: helpers.defaultNullOpts.mkStr default "Key shortcut";
+          mkKeymap =
+            default:
+            helpers.defaultNullOpts.mkNullableWithRaw (
+              with types; either str bool
+            ) default "Key shortcut or false to unset.";
         in
         {
           init_selection = mkKeymap "gnn";
@@ -190,7 +194,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       enable = true;
 
       keymaps = {
-        init_selection = "gnn";
+        init_selection = false;
         node_decremental = "grm";
         node_incremental = "grn";
         scope_incremental = "grc";
