@@ -26,7 +26,7 @@ in
         specialArgs = {
           darwinConfig = config;
           defaultPkgs = pkgs;
-          inherit (config.nixvim) helpers;
+          helpers = config.lib.nixvim;
         };
         modules = [
           ./modules/darwin.nix

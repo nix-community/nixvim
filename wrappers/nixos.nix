@@ -26,7 +26,7 @@ in
         specialArgs = {
           nixosConfig = config;
           defaultPkgs = pkgs;
-          inherit (config.nixvim) helpers;
+          helpers = config.lib.nixvim;
         };
         modules = [
           ./modules/nixos.nix
