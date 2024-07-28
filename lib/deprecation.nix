@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 with lib;
 rec {
   # Get a (sub)option by walking the path,
