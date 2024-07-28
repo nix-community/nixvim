@@ -16,6 +16,7 @@ rec {
   lua = import ./to-lua.nix { inherit lib; };
   keymaps = import ./keymap-helpers.nix { inherit lib nixvimOptions nixvimTypes; };
   autocmd = import ./autocmd-helpers.nix { inherit lib nixvimOptions nixvimTypes; };
+  deprecation = import ./deprecation-helpers.nix { inherit lib nixvimUtils; };
   neovim-plugin = import ./neovim-plugin.nix {
     inherit
       lib
