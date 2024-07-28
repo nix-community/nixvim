@@ -8,46 +8,57 @@
       enable = true;
 
       # Testing for registrations
-      registrations."f" = {
-        prefix = "<leader>";
-        mode = [
-          "n"
-          "v"
-          "i"
-          "t"
-          "c"
-          "x"
-          "s"
-          "o"
-        ];
-        name = "Group Test";
-        f = "Label Test";
-        "1" = [
+      settings.spec =
+        let
+          mode = [
+            "n"
+            "v"
+            "i"
+            "t"
+            "c"
+            "x"
+            "s"
+            "o"
+          ];
+        in
+        [
           {
-            __raw = ''
+            __unkeyed-1 = "<leader>f";
+            group = "Group Test";
+            inherit mode;
+          }
+          {
+            __unkeyed-1 = "<leader>ff";
+            desc = "Label Test";
+            inherit mode;
+          }
+          {
+            __unkeyed-1 = "<leader>f1";
+            __unkeyed-2.__raw = ''
               function()
-                print("Raw Lua Code and List KeyMapping Test")
+                print("Raw Lua KeyMapping Test")
               end
             '';
+            desc = "Raw Lua KeyMapping Test";
+            inherit mode;
           }
-          "Raw Lua Code and List KeyMapping Test"
+          {
+            __unkeyed-1 = "<leader>foo";
+            desc = "Label Test 2";
+            inherit mode;
+          }
+          {
+            __unkeyed-1 = "<leader>f<tab>";
+            group = "Group in Group Test";
+            inherit mode;
+          }
+          {
+            __unkeyed-1 = "<leader>f<tab>f";
+            __unkeyed-2 = "<cmd>echo 'Vim cmd KeyMapping Test'<cr>";
+            desc = "Vim cmd KeyMapping Test";
+            inherit mode;
+          }
         ];
-        "oo" = "Label Test 2";
-        "<tab>" = {
-          name = "Group in Group Test";
-          f = [
-            {
-              __raw = ''
-                function()
-                  vim.cmd("echo 'Raw Lua Code and List KeyMapping Test 2'")
-                end
-              '';
-            }
-
-            "Raw Lua Code and List KeyMapping Test 2"
-          ];
-        };
-      };
 
       plugins = {
         marks = true;

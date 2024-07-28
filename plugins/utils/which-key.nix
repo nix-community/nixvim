@@ -3,6 +3,7 @@
   helpers,
   pkgs,
   config,
+  options,
   ...
 }:
 with lib;
@@ -14,11 +15,44 @@ with lib;
 
     registrations = mkOption {
       type = with types; attrsOf anything;
-      default = { };
-      description = "Manually register the description of mappings.";
-      example = {
-        "<leader>p" = "Find git files with telescope";
-      };
+      description = ''
+        This option is deprecated, use `settings.spec` instead.
+
+        Note: the keymap format has changed in v3 of which-key.
+      '';
+      visible = false;
+    };
+
+    settings.spec = helpers.defaultNullOpts.mkListOf' {
+      type = with types; attrsOf anything;
+      pluginDefault = [ ];
+      description = ''
+        WhichKey automatically gets the descriptions of your keymaps from the desc attribute of the keymap.
+        So for most use-cases, you don't need to do anything else.
+
+        However, the mapping spec is still useful to configure group descriptions and mappings that don't really exist as a regular keymap.
+
+        Please refer to the plugin's [documentation](https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings).
+      '';
+      example = [
+        {
+          __unkeyed-1 = "<leader>w";
+          desc = "Window actions";
+        }
+        {
+          __unkeyed-1 = "<leader>b";
+          desc = "Buffer actions";
+        }
+        {
+          __unkeyed-1 = "<leader>p";
+          desc = "Find git files with telescope";
+        }
+        {
+          __unkeyed-1 = "<leader>p";
+          __unkeyed-2.__raw = "function() print('Optional action') end";
+          desc = "Print \"optional action\"";
+        }
+      ];
     };
 
     plugins = {
@@ -203,6 +237,7 @@ with lib;
   config =
     let
       cfg = config.plugins.which-key;
+      opt = options.plugins.which-key;
       setupOptions = {
         plugins = {
           inherit (cfg.plugins) marks registers spelling;
@@ -246,6 +281,7 @@ with lib;
         inherit (cfg) hidden;
         show_help = cfg.showHelp;
         show_keys = cfg.showKeys;
+        inherit (cfg.settings) spec;
         inherit (cfg) triggers;
         triggers_nowait = cfg.triggersNoWait;
         triggers_blacklist = cfg.triggersBlackList;
@@ -255,11 +291,20 @@ with lib;
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
+      warnings = optional opt.registrations.isDefined ''
+        nixvim (plugins.which-key):
+        The option definition `plugins.which-key.registrations' in ${showFiles opt.registrations.files} has been deprecated in which-key v3; please remove it.
+        You should use `plugins.which-key.settings.spec' instead.
+
+        Note: the spec format has changed in which-key v3
+        See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
+      '';
+
       extraConfigLua =
         ''
           require("which-key").setup(${helpers.toLuaObject setupOptions})
         ''
-        + (optionalString (cfg.registrations != { }) ''
+        + (optionalString (opt.registrations.isDefined && cfg.registrations != { }) ''
           require("which-key").register(${helpers.toLuaObject cfg.registrations})
         '');
     };
