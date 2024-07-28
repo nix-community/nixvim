@@ -5,30 +5,21 @@
   ...
 }:
 let
-  nixvimBuilders = import ./builders.nix { inherit lib pkgs; };
-  nixvimTypes = import ./types.nix { inherit lib nixvimOptions; };
-  nixvimUtils = import ./utils.nix { inherit lib nixvimTypes _nixvimTests; };
-  nixvimOptions = import ./options.nix { inherit lib nixvimTypes nixvimUtils; };
-  nixvimDeprecation = import ./deprecation.nix { inherit lib; };
+  # Build helpers recursively
+  helpers =
+    {
+      autocmd = import ./autocmd-helpers.nix { inherit lib helpers; };
+      keymaps = import ./keymap-helpers.nix { inherit lib helpers; };
+      lua = import ./to-lua.nix { inherit lib; };
+      toLuaObject = helpers.lua.toLua;
+      maintainers = import ./maintainers.nix;
+      neovim-plugin = import ./neovim-plugin.nix { inherit lib helpers; };
+      nixvimTypes = import ./types.nix { inherit lib helpers; };
+      vim-plugin = import ./vim-plugin.nix { inherit lib helpers; };
+    }
+    // import ./builders.nix { inherit lib pkgs; }
+    // import ./deprecation.nix { inherit lib; }
+    // import ./options.nix { inherit lib helpers; }
+    // import ./utils.nix { inherit lib helpers _nixvimTests; };
 in
-rec {
-  maintainers = import ./maintainers.nix;
-  lua = import ./to-lua.nix { inherit lib; };
-  keymaps = import ./keymap-helpers.nix { inherit lib nixvimOptions nixvimTypes; };
-  autocmd = import ./autocmd-helpers.nix { inherit lib nixvimOptions nixvimTypes; };
-  neovim-plugin = import ./neovim-plugin.nix {
-    inherit
-      lib
-      nixvimOptions
-      nixvimUtils
-      toLuaObject
-      ;
-  };
-  vim-plugin = import ./vim-plugin.nix { inherit lib nixvimOptions nixvimUtils; };
-  inherit nixvimTypes;
-  toLuaObject = lua.toLua;
-}
-// nixvimUtils
-// nixvimOptions
-// nixvimBuilders
-// nixvimDeprecation
+helpers

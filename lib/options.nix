@@ -1,10 +1,6 @@
-{
-  lib,
-  nixvimTypes,
-  nixvimUtils,
-}:
+{ lib, helpers }:
 with lib;
-with nixvimUtils;
+with helpers;
 let
   # Render a plugin default string
   pluginDefaultText =
@@ -85,7 +81,7 @@ rec {
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
-  mkNullOrStr' = args: mkNullOrOption' (args // { type = with nixvimTypes; maybeRaw str; });
+  mkNullOrStr' = args: mkNullOrOption' (args // { type = with helpers.nixvimTypes; maybeRaw str; });
   mkNullOrStr = description: mkNullOrStr' { inherit description; };
 
   mkNullOrLua' =
@@ -93,7 +89,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = nixvimTypes.strLua;
+        type = helpers.nixvimTypes.strLua;
         apply = mkRaw;
       }
     );
@@ -104,7 +100,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = nixvimTypes.strLuaFn;
+        type = helpers.nixvimTypes.strLuaFn;
         apply = mkRaw;
       }
     );
@@ -115,7 +111,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = with nixvimTypes; either strLua type;
+        type = with helpers.nixvimTypes; either strLua type;
         apply = v: if isString v then mkRaw v else v;
       }
     );
@@ -126,7 +122,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = with nixvimTypes; either strLuaFn type;
+        type = with helpers.nixvimTypes; either strLuaFn type;
         apply = v: if isString v then mkRaw v else v;
       }
     );
@@ -155,7 +151,7 @@ rec {
         mkNullable' { inherit type pluginDefault description; };
 
       mkNullableWithRaw' =
-        { type, ... }@args: mkNullable' (args // { type = nixvimTypes.maybeRaw type; });
+        { type, ... }@args: mkNullable' (args // { type = helpers.nixvimTypes.maybeRaw type; });
       mkNullableWithRaw =
         type: pluginDefault: description:
         mkNullableWithRaw' { inherit type pluginDefault description; };
@@ -191,17 +187,19 @@ rec {
       mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });
       mkStr = pluginDefault: description: mkStr' { inherit pluginDefault description; };
 
-      mkAttributeSet' = args: mkNullable' (args // { type = nixvimTypes.attrs; });
+      mkAttributeSet' = args: mkNullable' (args // { type = helpers.nixvimTypes.attrs; });
       mkAttributeSet = pluginDefault: description: mkAttributeSet' { inherit pluginDefault description; };
 
       mkListOf' =
-        { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; listOf (maybeRaw type); });
+        { type, ... }@args:
+        mkNullable' (args // { type = with helpers.nixvimTypes; listOf (maybeRaw type); });
       mkListOf =
         type: pluginDefault: description:
         mkListOf' { inherit type pluginDefault description; };
 
       mkAttrsOf' =
-        { type, ... }@args: mkNullable' (args // { type = with nixvimTypes; attrsOf (maybeRaw type); });
+        { type, ... }@args:
+        mkNullable' (args // { type = with helpers.nixvimTypes; attrsOf (maybeRaw type); });
       mkAttrsOf =
         type: pluginDefault: description:
         mkAttrsOf' { inherit type pluginDefault description; };
@@ -242,7 +240,7 @@ rec {
         mkNullableWithRaw' (
           (filterAttrs (n: v: n != "name") args)
           // {
-            type = nixvimTypes.border;
+            type = helpers.nixvimTypes.border;
             description = concatStringsSep "\n" (
               (optional (description != "") description)
               ++ [
@@ -281,7 +279,7 @@ rec {
         mkNullOrOption' (
           args
           // {
-            type = with nixvimTypes; either ints.unsigned logLevel;
+            type = with helpers.nixvimTypes; either ints.unsigned logLevel;
             apply = mapNullable (
               value: if isInt value then value else mkRaw "vim.log.levels.${strings.toUpper value}"
             );
@@ -297,7 +295,7 @@ rec {
         mkNullable' (
           args
           // {
-            type = nixvimTypes.highlight;
+            type = helpers.nixvimTypes.highlight;
             inherit description;
           }
         );

@@ -1,8 +1,4 @@
-{
-  lib,
-  nixvimOptions,
-  nixvimTypes,
-}:
+{ lib, helpers }:
 with lib;
 rec {
   autoGroupOption = types.submodule {
@@ -16,34 +12,34 @@ rec {
   };
 
   autoCmdOptions = {
-    event = nixvimOptions.mkNullOrOption (with types; either str (listOf str)) ''
+    event = helpers.mkNullOrOption (with types; either str (listOf str)) ''
       The event or events to register this autocommand.
     '';
 
-    group = nixvimOptions.mkNullOrOption (with types; either str int) ''
+    group = helpers.mkNullOrOption (with types; either str int) ''
       The autocommand group name or id to match against.
     '';
 
-    pattern = nixvimOptions.mkNullOrOption (with types; either str (listOf str)) ''
+    pattern = helpers.mkNullOrOption (with types; either str (listOf str)) ''
       Pattern or patterns to match literally against.
     '';
 
-    buffer = nixvimOptions.mkNullOrOption types.int ''
+    buffer = helpers.mkNullOrOption types.int ''
       Buffer number for buffer local autocommands |autocmd-buflocal|.
       Cannot be used with `pattern`.
     '';
 
     # Introduced early October 2023.
     # TODO remove in early December 2023.
-    description = nixvimOptions.mkNullOrOption types.str ''
+    description = helpers.mkNullOrOption types.str ''
       DEPRECATED, please use `desc`.
     '';
 
-    desc = nixvimOptions.mkNullOrOption types.str ''
+    desc = helpers.mkNullOrOption types.str ''
       A textual description of this autocommand.
     '';
 
-    callback = nixvimOptions.mkNullOrOption (with types; either str nixvimTypes.rawLua) ''
+    callback = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
       A function or a string.
       - if a string, the name of a Vimscript function to call when this autocommand is triggered.
       - Otherwise, a Lua function which is called when this autocommand is triggered.
@@ -67,13 +63,13 @@ rec {
         }
     '';
 
-    command = nixvimOptions.defaultNullOpts.mkStr "" ''
+    command = helpers.defaultNullOpts.mkStr "" ''
       Vim command to execute on event. Cannot be used with `callback`.
     '';
 
-    once = nixvimOptions.defaultNullOpts.mkBool false "Run the autocommand only once.";
+    once = helpers.defaultNullOpts.mkBool false "Run the autocommand only once.";
 
-    nested = nixvimOptions.defaultNullOpts.mkBool false "Run nested autocommands.";
+    nested = helpers.defaultNullOpts.mkBool false "Run nested autocommands.";
   };
 
   autoCmdOption = types.submodule { options = autoCmdOptions; };

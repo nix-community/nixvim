@@ -1,9 +1,4 @@
-{
-  lib,
-  nixvimOptions,
-  toLuaObject,
-  nixvimUtils,
-}:
+{ lib, helpers }:
 with lib;
 {
   # TODO: DEPRECATED: use the `settings` option instead
@@ -81,7 +76,7 @@ with lib;
           let
             optionPath = if isString option then [ option ] else option; # option is already a path (i.e. a list)
 
-            optionPathSnakeCase = map nixvimUtils.toSnakeCase optionPath;
+            optionPathSnakeCase = map helpers.toSnakeCase optionPath;
           in
           mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
         ) optionsRenamedToSettings);
@@ -90,10 +85,10 @@ with lib;
         {
           enable = mkEnableOption originalName;
 
-          package = nixvimOptions.mkPluginPackageOption originalName defaultPackage;
+          package = helpers.mkPluginPackageOption originalName defaultPackage;
         }
         // optionalAttrs hasSettings {
-          settings = nixvimOptions.mkSettingsOption {
+          settings = helpers.mkSettingsOption {
             description = settingsDescription;
             options = settingsOptions;
             example = settingsExample;
@@ -113,7 +108,7 @@ with lib;
           }
           (optionalAttrs callSetup {
             ${extraConfigNamespace} = ''
-              require('${luaName}')${setup}(${optionalString (cfg ? settings) (toLuaObject cfg.settings)})
+              require('${luaName}')${setup}(${optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)})
             '';
           })
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })

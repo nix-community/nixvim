@@ -1,8 +1,4 @@
-{
-  lib,
-  nixvimOptions,
-  nixvimUtils,
-}:
+{ lib, helpers }:
 with lib;
 {
   mkVimPlugin =
@@ -43,12 +39,12 @@ with lib;
         if defaultPackage == null then
           { }
         else
-          { package = nixvimOptions.mkPluginPackageOption name defaultPackage; };
+          { package = helpers.mkPluginPackageOption name defaultPackage; };
 
       createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
 
       settingsOption = optionalAttrs createSettingsOption {
-        settings = nixvimOptions.mkSettingsOption {
+        settings = helpers.mkSettingsOption {
           options = settingsOptions;
           example = settingsExample;
           description = ''
@@ -95,7 +91,7 @@ with lib;
           let
             optionPath = if isString option then [ option ] else option; # option is already a path (i.e. a list)
 
-            optionPathSnakeCase = map nixvimUtils.toSnakeCase optionPath;
+            optionPathSnakeCase = map helpers.toSnakeCase optionPath;
           in
           mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
         ) optionsRenamedToSettings);

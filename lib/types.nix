@@ -1,6 +1,6 @@
-{ lib, nixvimOptions, ... }:
+{ lib, helpers, ... }:
 with lib;
-with nixvimOptions;
+with helpers;
 with lib.types;
 let
   strLikeType =
