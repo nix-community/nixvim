@@ -3,12 +3,7 @@
   combine-plugins = {
     performance.combinePlugins.enable = true;
 
-    plugins.treesitter = {
-      enable = true;
-
-      # Exclude nixvim injections for test to pass
-      nixvimInjections = false;
-    };
+    plugins.treesitter.enable = true;
 
     extraConfigLuaPost = ''
       -- Ensure that queries from nvim-treesitter are first in rtp

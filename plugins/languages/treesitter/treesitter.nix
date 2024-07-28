@@ -315,7 +315,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         end
       '');
 
-    extraFiles = mkIf cfg.nixvimInjections { "queries/nix/injections.scm".source = ./injections.scm; };
+    extraFiles = mkIf cfg.nixvimInjections {
+      "queries/nix/nixvim-injections.scm".source = ./nixvim-injections.scm;
+    };
 
     extraPlugins = mkIf (cfg.package != null) [
       (mkIf cfg.nixGrammars (cfg.package.withPlugins (_: cfg.grammarPackages)))
