@@ -14,6 +14,8 @@ in
     plugins.gitblame = {
       enable = mkEnableOption "gitblame";
 
+      autoEnable = defaultNullOpts.mkBool true "Dictates the git blame messages should be enabled on startup, can be toggled with :GitBlameToggle";
+
       package = helpers.mkPluginPackageOption "gitblame" pkgs.vimPlugins.git-blame-nvim;
 
       messageTemplate = helpers.defaultNullOpts.mkStr "  <author> • <date> • <summary>" "The template for the blame message that will be shown.";
@@ -45,7 +47,7 @@ in
   config =
     let
       setupOptions = {
-        enabled = cfg.enable;
+        enabled = cfg.autoEnable;
         message_template = cfg.messageTemplate;
         date_format = cfg.dateFormat;
         message_when_not_committed = cfg.messageWhenNotCommitted;
