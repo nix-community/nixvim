@@ -311,6 +311,15 @@ let
       description = "metals for Scala";
     }
     {
+      name = "nextls";
+      description = "The language server for Elixir that just works.";
+      package = pkgs.next-ls;
+      cmd = cfg: [
+        "nextls"
+        "--stdio"
+      ];
+    }
+    {
       name = "nginx-language-server";
       description = "nginx-language-server for `nginx.conf`";
       serverName = "nginx_language_server";
