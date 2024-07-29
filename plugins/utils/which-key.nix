@@ -1,29 +1,250 @@
 {
   lib,
-  helpers,
   pkgs,
   config,
   options,
   ...
 }:
 with lib;
-{
-  options.plugins.which-key = {
-    enable = mkEnableOption "which-key.nvim, a plugin that popup with possible key bindings of the command you started typing";
+let
+  inherit (lib.nixvim) defaultNullOpts mkRaw toLuaObject;
+  types = lib.nixvim.nixvimTypes;
 
-    package = helpers.mkPluginPackageOption "which-key-nvim" pkgs.vimPlugins.which-key-nvim;
-
-    registrations = mkOption {
-      type = with types; attrsOf anything;
-      description = ''
-        This option is deprecated, use `settings.spec` instead.
-
-        Note: the keymap format has changed in v3 of which-key.
-      '';
-      visible = false;
+  listOfLen =
+    elemType: len:
+    types.addCheck (types.listOf elemType) (v: length v == len)
+    // {
+      description = "list of ${toString len} ${
+        types.optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+      }";
     };
 
-    settings.spec = helpers.defaultNullOpts.mkListOf' {
+  opt = options.plugins.which-key;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+  name = "which-key";
+  originalName = "which-key.nvim";
+  defaultPackage = pkgs.vimPlugins.which-key-nvim;
+
+  maintainers = [ lib.maintainers.khaneliman ];
+
+  # TODO: introduced 2024-08-05: remove after 24.11
+  optionsRenamedToSettings = [
+    "hidden"
+    "icons"
+    "ignoreMissing"
+    "keyLabels"
+    "layout"
+    "motions"
+    "operators"
+    [
+      "plugins"
+      "mark"
+    ]
+    [
+      "plugins"
+      "registers"
+    ]
+    [
+      "plugins"
+      "spelling"
+    ]
+    [
+      "plugins"
+      "presets"
+      "textObjects"
+    ]
+    [
+      "plugins"
+      "presets"
+      "operators"
+    ]
+    [
+      "plugins"
+      "presets"
+      "motions"
+    ]
+    [
+      "plugins"
+      "presets"
+      "windows"
+    ]
+    [
+      "plugins"
+      "presets"
+      "nav"
+    ]
+    [
+      "plugins"
+      "presets"
+      "z"
+    ]
+    [
+      "plugins"
+      "presets"
+      "g"
+    ]
+    "popupMappings"
+    "showHelp"
+    "showKeys"
+    "triggersBlackList"
+    "triggersNoWait"
+  ];
+
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "which-key"
+      ];
+      settingsPath = basePluginPath ++ [ "settings" ];
+    in
+    [
+      (lib.mkRenamedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "disable"
+            "buftypes"
+          ]
+        )
+        (
+          settingsPath
+          ++ [
+            "disable"
+            "bt"
+          ]
+        )
+      )
+      (lib.mkRenamedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "disable"
+            "filetypes"
+          ]
+        )
+        (
+          settingsPath
+          ++ [
+            "disable"
+            "ft"
+          ]
+        )
+      )
+      (lib.mkRenamedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "window"
+            "winblend"
+          ]
+        )
+        (
+          settingsPath
+          ++ [
+            "win"
+            "wo"
+            "winblend"
+          ]
+        )
+      )
+      (lib.mkRenamedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "window"
+            "border"
+          ]
+        )
+        (
+          settingsPath
+          ++ [
+            "win"
+            "border"
+          ]
+        )
+      )
+      (lib.mkRemovedOptionModule (basePluginPath ++ [ "triggers" ]) ''
+        Please use `plugins.which-key.settings.triggers` instead.
+
+        See the plugin documentation for more details about the new option signature:
+        https://github.com/folke/which-key.nvim#-triggers
+      '')
+      (lib.mkRemovedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "window"
+            "padding"
+          ]
+        )
+        ''
+          Please use `plugins.which-key.settings.win.padding` instead.
+
+          See the plugin documentation for more details about the new option:
+          https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
+        ''
+      )
+      (lib.mkRemovedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "window"
+            "margin"
+          ]
+        )
+        ''
+          Please use `plugins.which-key.settings.layout` instead.
+
+          See the plugin documentation for more details about the new options:
+          https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
+        ''
+      )
+      (lib.mkRemovedOptionModule
+        (
+          basePluginPath
+          ++ [
+            "window"
+            "position"
+          ]
+        )
+        ''
+          Please use `plugins.which-key.settings.layout`, `plugins.which-key.settings.win.title_pos`, or `plugins.which-key.settings.win.footer_pos` instead.
+
+          See the plugin documentation for more details about the new options:
+          https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
+        ''
+      )
+    ];
+
+  settingsOptions = {
+    preset = defaultNullOpts.mkEnumFirstDefault [
+      "classic"
+      "modern"
+      "helix"
+      false
+    ] "Preset style for WhichKey. Set to false to disable.";
+
+    delay = defaultNullOpts.mkInt' {
+      pluginDefault.__raw = ''
+        function(ctx)
+          return ctx.plugin and 0 or 200
+        end
+      '';
+      description = "Delay before showing the popup. Can be a number or a function that returns a number.";
+    };
+
+    filter = defaultNullOpts.mkLuaFn' {
+      pluginDefault.__raw = ''
+        function(mapping)
+          return true
+        end
+      '';
+      description = "Filter used to exclude mappings";
+    };
+
+    spec = defaultNullOpts.mkListOf' {
       type = with types; attrsOf anything;
       pluginDefault = [ ];
       description = ''
@@ -37,275 +258,336 @@ with lib;
       example = [
         {
           __unkeyed-1 = "<leader>w";
-          desc = "Window actions";
+          proxy = "<C-w>";
+          group = "windows";
         }
         {
           __unkeyed-1 = "<leader>b";
-          desc = "Buffer actions";
+          group = "󰓩 Buffers";
         }
         {
-          __unkeyed-1 = "<leader>p";
-          desc = "Find git files with telescope";
-        }
-        {
-          __unkeyed-1 = "<leader>p";
-          __unkeyed-2.__raw = "function() print('Optional action') end";
-          desc = "Print \"optional action\"";
+          __unkeyed = "<leader>r";
+          mode = "x";
+          group = " Refactor";
         }
       ];
     };
 
-    plugins = {
-      marks = helpers.defaultNullOpts.mkBool true "shows a list of your marks on ' and `";
+    notify = defaultNullOpts.mkBool true "Show a warning when issues were detected with your mappings.";
 
-      registers = helpers.defaultNullOpts.mkBool true ''shows your registers on " in NORMAL or <C-r> in INSERT mode'';
+    triggers = defaultNullOpts.mkListOf (with types; attrsOf anything) [
+      {
+        __unkeyed-1 = "<auto>";
+        mode = "nxsot";
+      }
+    ] "Manually setup triggers";
+
+    defer = defaultNullOpts.mkLuaFn' {
+      pluginDefault.__raw = ''
+        function(ctx)
+          return ctx.mode == "V" or ctx.mode == "<C-V>
+         end'';
+      description = ''
+        Start hidden and wait for a key to be pressed before showing the popup.
+
+        Only used by enabled xo mapping modes.
+      '';
+    };
+
+    plugins = {
+      marks = defaultNullOpts.mkBool true ''
+        Shows a list of your marks on `'` and `` ` ``.
+      '';
+
+      registers = defaultNullOpts.mkBool true ''
+        Shows your registers on `"` in NORMAL or `<C-r>` in INSERT mode.
+      '';
 
       spelling = {
-        enabled = helpers.defaultNullOpts.mkBool true "enabling this will show WhichKey when pressing z= to select spelling suggestions";
-        suggestions = helpers.defaultNullOpts.mkInt 20 "how many suggestions should be shown in the list?";
+        enabled = defaultNullOpts.mkBool true ''
+          Enabling this will show WhichKey when pressing `z=` to select spelling suggestions.
+        '';
+        suggestions = defaultNullOpts.mkInt 20 ''
+          How many suggestions should be shown in the list?
+        '';
       };
 
       presets = {
-        operators = helpers.defaultNullOpts.mkBool true "adds help for operators like d, y, ...";
-        motions = helpers.defaultNullOpts.mkBool true "adds help for motions";
-        textObjects = helpers.defaultNullOpts.mkBool true "help for text objects triggered after entering an operator";
-        windows = helpers.defaultNullOpts.mkBool true "default bindings on <c-w>";
-        nav = helpers.defaultNullOpts.mkBool true "misc bindings to work with windows";
-        z = helpers.defaultNullOpts.mkBool true "bindings for folds, spelling and others prefixed with z";
-        g = helpers.defaultNullOpts.mkBool true "bindings for prefixed with g";
+        operators = defaultNullOpts.mkBool true "Adds help for operators like `d`, `y`, ...";
+        motions = defaultNullOpts.mkBool true "Adds help for motions.";
+        text_objects = defaultNullOpts.mkBool true "Help for text objects triggered after entering an operator.";
+        windows = defaultNullOpts.mkBool true "Default bindings on `<c-w>`.";
+        nav = defaultNullOpts.mkBool true "Misc bindings to work with windows.";
+        z = defaultNullOpts.mkBool true "Show WhichKey for folds, spelling and other bindings prefixed with `z`.";
+        g = defaultNullOpts.mkBool true "Show WhichKey for bindings prefixed with `g`.";
       };
     };
 
-    operators = helpers.defaultNullOpts.mkAttrsOf types.str { gc = "Comments"; } ''
-      add operators that will trigger motion and text object completion
-      to enable all native operators, set the preset / operators plugin above
-    '';
+    win = {
+      no_overlap = defaultNullOpts.mkBool true "Don't allow the popup to overlap with the cursor.";
 
-    keyLabels = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
-      override the label used to display some keys. It doesn't effect WK in any other way.
-    '';
+      border = defaultNullOpts.mkBorder "none" "which-key" ''
+        Allows configuring the border of which-key.
 
-    motions = {
-      count = helpers.defaultNullOpts.mkBool true "";
+        Supports all available border types from `vim.api.keyset.win_config.border`.
+      '';
+
+      padding = defaultNullOpts.mkNullable (listOfLen types.int 2) [
+        1
+        2
+      ] "Extra window padding, in the form `[top/bottom, right/left]`.";
+
+      title = defaultNullOpts.mkBool true "Whether to show the title.";
+
+      title_pos = defaultNullOpts.mkStr "center" "Position of the title.";
+
+      zindex = defaultNullOpts.mkUnsignedInt 1000 "Layer depth on the popup window.";
+
+      wo = {
+        winblend = defaultNullOpts.mkNullableWithRaw (types.ints.between 0
+          100
+        ) 0 "`0` for fully opaque and `100` for fully transparent.";
+      };
+    };
+
+    layout = {
+      width = {
+        min = defaultNullOpts.mkInt 20 "Minimum width.";
+        max = defaultNullOpts.mkInt null "Maximum width.";
+      };
+
+      spacing = defaultNullOpts.mkInt 3 "Spacing between columns.";
+    };
+
+    keys = {
+      scroll_up = defaultNullOpts.mkStr "<c-u>" "Binding to scroll up in the popup.";
+      scroll_down = defaultNullOpts.mkStr "<c-d>" "Binding to scroll down in the popup.";
+    };
+
+    sort =
+      defaultNullOpts.mkListOf
+        (types.enum [
+          "local"
+          "order"
+          "group"
+          "alphanum"
+          "mod"
+          "manual"
+          "case"
+        ])
+        [
+          "local"
+          "order"
+          "group"
+          "alphanum"
+          "mod"
+        ]
+        "Mappings are sorted using configured sorters and natural sort of the keys.";
+
+    expand = defaultNullOpts.mkInt 0 "Expand groups when <= n mappings.";
+
+    replace = {
+      key = defaultNullOpts.mkListOf (types.either types.strLuaFn (with types; listOf str)) (mkRaw ''
+        function(key)
+          return require("which-key.view").format(key)
+        end
+      '') "Lua functions or list of strings to replace key left side key name with.";
+      desc = defaultNullOpts.mkListOf (with types; listOf str) [
+        [
+          "<Plug>%(?(.*)%)?"
+          "%1"
+        ]
+        [
+          "^%+"
+          ""
+        ]
+        [
+          "<[cC]md>"
+          ""
+        ]
+        [
+          "<[cC][rR]>"
+          ""
+        ]
+        [
+          "<[sS]ilent>"
+          ""
+        ]
+        [
+          "^lua%s+"
+          ""
+        ]
+        [
+          "^call%s+"
+          ""
+        ]
+        [
+          "^:%s*"
+          ""
+        ]
+      ] "Lua patterns to replace right side description references with.";
     };
 
     icons = {
-      breadcrumb = helpers.defaultNullOpts.mkStr "»" "symbol used in the command line area that shows your active key combo";
-      separator = helpers.defaultNullOpts.mkStr "➜" "symbol used between a key and it's label";
-      group = helpers.defaultNullOpts.mkStr "+" "symbol prepended to a group";
+      breadcrumb = defaultNullOpts.mkStr "»" "Symbol used in the command line area that shows your active key combo.";
+      separator = defaultNullOpts.mkStr "➜" "Symbol used between a key and its label.";
+      group = defaultNullOpts.mkStr "+" "Symbol prepended to a group.";
+      ellipsis = defaultNullOpts.mkStr "…" "Symbol used for overflow.";
+      mappings = defaultNullOpts.mkBool true "Set to false to disable all mapping icons.";
+      rules = defaultNullOpts.mkNullable (
+        with types; either (listOf attrs) bool
+      ) [ ] "Icon rules. Set to false to disable all icons.";
+      colors = defaultNullOpts.mkBool true ''
+        Use the highlights from mini.icons.
+
+        When `false`, it will use `WhichKeyIcon` instead.
+      '';
+
+      keys = defaultNullOpts.mkNullable types.attrs {
+        Up = " ";
+        Down = " ";
+        Left = " ";
+        Right = " ";
+        C = "󰘴 ";
+        M = "󰘵 ";
+        D = "󰘳 ";
+        S = "󰘶 ";
+        CR = "󰌑 ";
+        Esc = "󱊷 ";
+        ScrollWheelDown = "󱕐 ";
+        ScrollWheelUp = "󱕑 ";
+        NL = "󰌑 ";
+        BS = "󰁮";
+        Space = "󱁐 ";
+        Tab = "󰌒 ";
+        F1 = "󱊫";
+        F2 = "󱊬";
+        F3 = "󱊭";
+        F4 = "󱊮";
+        F5 = "󱊯";
+        F6 = "󱊰";
+        F7 = "󱊱";
+        F8 = "󱊲";
+        F9 = "󱊳";
+        F10 = "󱊴";
+        F11 = "󱊵";
+        F12 = "󱊶";
+      } "Icons used by key format.";
     };
 
-    popupMappings = {
-      scrollDown = helpers.defaultNullOpts.mkStr "<c-d>" "binding to scroll down inside the popup";
-      scrollUp = helpers.defaultNullOpts.mkStr "<c-u>" "binding to scroll up inside the popup";
-    };
+    show_help = defaultNullOpts.mkBool true "Show a help message in the command line for using WhichKey.";
 
-    window =
-      let
-        spacingOptions = types.submodule {
-          options =
-            genAttrs
-              [
-                "top"
-                "right"
-                "bottom"
-                "left"
-              ]
-              (
-                n:
-                mkOption {
-                  type = types.ints.unsigned;
-                  description = "Spacing at the ${n}.";
-                }
-              );
-        };
-      in
-      {
-        border = helpers.defaultNullOpts.mkBorder "none" "which-key" "";
-        position = helpers.defaultNullOpts.mkEnumFirstDefault [
-          "bottom"
-          "top"
-        ] "";
-        margin = helpers.defaultNullOpts.mkNullable spacingOptions {
-          top = 1;
-          right = 0;
-          bottom = 1;
-          left = 0;
-        } "extra window margin";
-        padding = helpers.defaultNullOpts.mkNullable spacingOptions {
-          top = 1;
-          right = 2;
-          bottom = 1;
-          left = 2;
-        } "extra window padding";
-        winblend = helpers.defaultNullOpts.mkNullable (types.ints.between 0
-          100
-        ) 0 "0 for fully opaque and 100 for fully transparent";
-      };
-
-    layout =
-      let
-        rangeOption = types.submodule {
-          options = {
-            min = mkOption {
-              type = types.int;
-              description = "Minimum size.";
-            };
-            max = mkOption {
-              type = types.int;
-              description = "Maximum size.";
-            };
-          };
-        };
-      in
-      {
-        height = helpers.defaultNullOpts.mkNullable rangeOption {
-          min = 4;
-          max = 25;
-        } "min and max height of the columns";
-        width = helpers.defaultNullOpts.mkNullable rangeOption {
-          min = 20;
-          max = 50;
-        } "min and max width of the columns";
-        spacing = helpers.defaultNullOpts.mkInt 3 "spacing between columns";
-        align = helpers.defaultNullOpts.mkEnumFirstDefault [
-          "left"
-          "center"
-          "right"
-        ] "";
-      };
-
-    ignoreMissing = helpers.defaultNullOpts.mkBool false "enable this to hide mappings for which you didn't specify a label";
-
-    hidden = helpers.defaultNullOpts.mkListOf types.str [
-      "<silent>"
-      "<cmd>"
-      "<Cmd>"
-      "<CR>"
-      "^:"
-      "^ "
-      "^call "
-      "^lua "
-    ] "hide mapping boilerplate";
-
-    showHelp = helpers.defaultNullOpts.mkBool true "show a help message in the command line for using WhichKey";
-
-    showKeys = helpers.defaultNullOpts.mkBool true "show the currently pressed key and its label as a message in the command line";
-
-    triggers = helpers.defaultNullOpts.mkNullable (
-      with types; either (enum [ "auto" ]) (listOf str)
-    ) "auto" "automatically setup triggers, or specify a list manually";
-
-    triggersNoWait =
-      helpers.defaultNullOpts.mkListOf types.str
-        [
-          "`"
-          "'"
-          "g`"
-          "g'"
-          "\""
-          "<c-r>"
-          "z="
-        ]
-        ''
-          list of triggers, where WhichKey should not wait for timeoutlen and show immediately
-        '';
-
-    triggersBlackList =
-      helpers.defaultNullOpts.mkAttrsOf (types.listOf types.str)
-        {
-          i = [
-            "j"
-            "k"
-          ];
-          v = [
-            "j"
-            "k"
-          ];
-        }
-        ''
-          list of mode / prefixes that should never be hooked by WhichKey
-          this is mostly relevant for keymaps that start with a native binding
-        '';
+    show_keys = defaultNullOpts.mkBool true "Show the currently pressed key and its label as a message in the command line.";
 
     disable = {
-      buftypes = helpers.defaultNullOpts.mkListOf types.str [ ] "Disabled by default for Telescope";
-      filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] "";
+      bt = defaultNullOpts.mkListOf types.str [ ] "Buftypes to disable WhichKey.";
+      ft = defaultNullOpts.mkListOf types.str [ ] "Filetypes to disable WhichKey.";
+    };
+
+    debug = defaultNullOpts.mkBool false "Enable `wk.log` in the current directory.";
+  };
+
+  settingsExample = {
+    preset = false;
+
+    delay = 200;
+
+    spec = [
+      {
+        __unkeyed-1 = "<leader>b";
+        group = "󰓩 Buffers";
+      }
+      {
+        __unkeyed-1 = "<leader>bs";
+        group = "󰒺 Sort";
+      }
+      {
+        __unkeyed-1 = "<leader>g";
+        group = "󰊢 Git";
+      }
+      {
+        __unkeyed-1 = "<leader>f";
+        group = " Find";
+      }
+      {
+        __unkeyed-1 = "<leader>r";
+        group = " Refactor";
+      }
+      {
+        __unkeyed-1 = "<leader>t";
+        group = " Terminal";
+      }
+      {
+        __unkeyed-1 = "<leader>u";
+        group = " UI/UX";
+      }
+    ];
+
+    replace = {
+      desc = [
+        [
+          "<space>"
+          "SPACE"
+        ]
+        [
+          "<leader>"
+          "SPACE"
+        ]
+        [
+          "<[cC][rR]>"
+          "RETURN"
+        ]
+        [
+          "<[tT][aA][bB]>"
+          "TAB"
+        ]
+        [
+          "<[bB][sS]>"
+          "BACKSPACE"
+        ]
+      ];
+    };
+
+    notify = false;
+
+    win = {
+      border = "single";
+    };
+
+    expand = 1;
+  };
+
+  # TODO: introduced 2024-07-29: remove after 24.11
+  extraOptions = {
+    registrations = mkOption {
+      type = with types; attrsOf anything;
+      description = ''
+        This option is deprecated, use `settings.spec` instead.
+
+        Note: the keymap format has changed in v3 of which-key.
+      '';
+      visible = false;
     };
   };
 
-  config =
-    let
-      cfg = config.plugins.which-key;
-      opt = options.plugins.which-key;
-      setupOptions = {
-        plugins = {
-          inherit (cfg.plugins) marks registers spelling;
-          presets = {
-            inherit (cfg.plugins.presets) operators motions;
-            text_objects = cfg.plugins.presets.textObjects;
-            inherit (cfg.plugins.presets)
-              windows
-              nav
-              z
-              g
-              ;
-          };
-        };
-        inherit (cfg) operators;
-        key_labels = cfg.keyLabels;
-        inherit (cfg) motions icons;
-        popup_mappings = {
-          scroll_down = cfg.popupMappings.scrollDown;
-          scroll_up = cfg.popupMappings.scrollUp;
-        };
-        window =
-          let
-            mkSpacing =
-              opt:
-              helpers.ifNonNull' opt [
-                opt.top
-                opt.right
-                opt.bottom
-                opt.top
-              ];
-          in
-          {
-            inherit (cfg.window) border position;
-            margin = mkSpacing cfg.window.margin;
-            padding = mkSpacing cfg.window.padding;
-            inherit (cfg.window) winblend;
-          };
-        inherit (cfg) layout;
-        ignore_missing = cfg.ignoreMissing;
-        inherit (cfg) hidden;
-        show_help = cfg.showHelp;
-        show_keys = cfg.showKeys;
-        inherit (cfg.settings) spec;
-        inherit (cfg) triggers;
-        triggers_nowait = cfg.triggersNoWait;
-        triggers_blacklist = cfg.triggersBlackList;
-        inherit (cfg) disable;
-      };
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+  # TODO: introduced 2024-07-29: remove after 24.11
+  # NOTE: this may be upgraded to a mkRemoveOptionModule when which-key removes support
+  extraConfig =
+    cfg:
+    lib.mkIf opt.registrations.isDefined {
+      warnings = [
+        ''
+          nixvim (plugins.which-key):
+          The option definition `plugins.which-key.registrations' in ${showFiles opt.registrations.files} has been deprecated in which-key v3; please remove it.
+          You should use `plugins.which-key.settings.spec' instead.
 
-      warnings = optional opt.registrations.isDefined ''
-        nixvim (plugins.which-key):
-        The option definition `plugins.which-key.registrations' in ${showFiles opt.registrations.files} has been deprecated in which-key v3; please remove it.
-        You should use `plugins.which-key.settings.spec' instead.
+          Note: the spec format has changed in which-key v3
+          See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
+        ''
+      ];
 
-        Note: the spec format has changed in which-key v3
-        See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
+      extraConfigLua = lib.optionalString opt.registrations.isDefined ''
+        require("which-key").register(${toLuaObject cfg.registrations})
       '';
-
-      extraConfigLua =
-        ''
-          require("which-key").setup(${helpers.toLuaObject setupOptions})
-        ''
-        + (optionalString (opt.registrations.isDefined && cfg.registrations != { }) ''
-          require("which-key").register(${helpers.toLuaObject cfg.registrations})
-        '');
     };
 }

@@ -7,162 +7,251 @@
     plugins.which-key = {
       enable = true;
 
-      # Testing for registrations
-      settings.spec =
-        let
-          mode = [
-            "n"
-            "v"
-            "i"
-            "t"
-            "c"
-            "x"
-            "s"
-            "o"
+      settings = {
+        preset = "classic";
+
+        delay.__raw = ''
+          function(ctx)
+            return ctx.plugin and 0 or 200
+          end
+        '';
+
+        filter.__raw = ''
+          function(mapping)
+              return true
+            end
+        '';
+
+        spec = [ ];
+
+        notify = true;
+
+        triggers = [
+          {
+            __unkeyed = "<auto>";
+            mode = "nsxot";
+          }
+        ];
+
+        defer.__raw = ''
+          function(ctx)
+            return ctx.mode == "V" or ctx.mode == "<C-V>"
+          end
+        '';
+
+        plugins = {
+          marks = true;
+          registers = true;
+
+          spelling = {
+            enabled = true;
+            suggestions = 20;
+          };
+
+          presets = {
+            operators = true;
+            motions = true;
+            text_objects = true;
+            windows = true;
+            nav = true;
+            z = true;
+            g = true;
+          };
+        };
+
+        win = {
+          no_overlap = true;
+
+          padding = [
+            1
+            2
           ];
-        in
-        [
-          {
-            __unkeyed-1 = "<leader>f";
-            group = "Group Test";
-            inherit mode;
-          }
-          {
-            __unkeyed-1 = "<leader>ff";
-            desc = "Label Test";
-            inherit mode;
-          }
-          {
-            __unkeyed-1 = "<leader>f1";
-            __unkeyed-2.__raw = ''
-              function()
-                print("Raw Lua KeyMapping Test")
-              end
-            '';
-            desc = "Raw Lua KeyMapping Test";
-            inherit mode;
-          }
-          {
-            __unkeyed-1 = "<leader>foo";
-            desc = "Label Test 2";
-            inherit mode;
-          }
-          {
-            __unkeyed-1 = "<leader>f<tab>";
-            group = "Group in Group Test";
-            inherit mode;
-          }
-          {
-            __unkeyed-1 = "<leader>f<tab>f";
-            __unkeyed-2 = "<cmd>echo 'Vim cmd KeyMapping Test'<cr>";
-            desc = "Vim cmd KeyMapping Test";
-            inherit mode;
-          }
+
+          title = true;
+          title_pos = "center";
+          zindex = 1000;
+          bo = { };
+          wo = { };
+        };
+
+        layout = {
+          width = {
+            min = 20;
+          };
+          spacing = 3;
+        };
+
+        keys = {
+          scroll_down = "<c-d>";
+          scroll_up = "<c-u>";
+        };
+
+        sort = [
+          "local"
+          "order"
+          "group"
+          "alphanum"
+          "mod"
         ];
 
-      plugins = {
-        marks = true;
-        registers = true;
-        spelling = {
-          enabled = true;
-          suggestions = 20;
-        };
-        presets = {
-          operators = true;
-          motions = true;
-          textObjects = true;
-          windows = true;
-          nav = true;
-          z = true;
-          g = true;
-        };
-      };
+        expand = 0;
 
-      operators = {
-        gc = "Comments";
-      };
-      keyLabels = { };
+        replace = {
+          key = [
+            {
+              __raw = ''
+                function(key)
+                  return require("which-key.view").format(key)
+                end
+              '';
+            }
+          ];
 
-      motions = {
-        count = true;
-      };
+          desc = [
+            [
+              "<Plug>%(?(.*)%)?"
+              "%1"
+            ]
+            [
+              "^%+"
+              ""
+            ]
+            [
+              "<[cC]md>"
+              ""
+            ]
+            [
+              "<[cC][rR]>"
+              ""
+            ]
+            [
+              "<[sS]ilent>"
+              ""
+            ]
+            [
+              "^lua%s+"
+              ""
+            ]
+            [
+              "^call%s+"
+              ""
+            ]
+            [
+              "^:%s*"
+              ""
+            ]
+          ];
+        };
 
-      icons = {
-        breadcrumb = "»";
-        separator = "➜";
-        group = "+";
-      };
+        icons = {
+          breadcrumb = "»";
+          separator = "➜";
+          group = "+";
+          ellipsis = "…";
+          mappings = true;
+          rules = [ ];
+          colors = true;
+          keys = {
+            Up = " ";
+            Down = " ";
+            Left = " ";
+            Right = " ";
+            C = "󰘴 ";
+            M = "󰘵 ";
+            D = "󰘳 ";
+            S = "󰘶 ";
+            CR = "󰌑 ";
+            Esc = "󱊷 ";
+            ScrollWheelDown = "󱕐 ";
+            ScrollWheelUp = "󱕑 ";
+            NL = "󰌑 ";
+            BS = "󰁮";
+            Space = "󱁐 ";
+            Tab = "󰌒 ";
+            F1 = "󱊫";
+            F2 = "󱊬";
+            F3 = "󱊭";
+            F4 = "󱊮";
+            F5 = "󱊯";
+            F6 = "󱊰";
+            F7 = "󱊱";
+            F8 = "󱊲";
+            F9 = "󱊳";
+            F10 = "󱊴";
+            F11 = "󱊵";
+            F12 = "󱊶";
+          };
+        };
 
-      popupMappings = {
-        scrollDown = "<c-d>";
-        scrollUp = "<c-u>";
-      };
+        show_help = true;
+        show_keys = true;
 
-      window = {
-        border = "none";
-        position = "bottom";
-        margin = {
-          top = 1;
-          right = 0;
-          bottom = 1;
-          left = 0;
+        disable = {
+          bt = [ ];
+          ft = [ ];
         };
-        padding = {
-          top = 1;
-          right = 2;
-          bottom = 1;
-          left = 2;
-        };
-        winblend = 0;
+
+        debug = false;
       };
-      layout = {
-        height = {
-          min = 4;
-          max = 25;
-        };
-        width = {
-          min = 20;
-          max = 50;
-        };
-        spacing = 3;
-        align = "left";
-      };
-      ignoreMissing = false;
-      hidden = [
-        "<silent>"
-        "<cmd>"
-        "<Cmd>"
-        "<CR>"
-        "^:"
-        "^ "
-        "^call "
-        "^lua "
-      ];
-      showHelp = true;
-      showKeys = true;
-      triggers = "auto";
-      triggersNoWait = [
-        "`"
-        "'"
-        "g`"
-        "g'"
-        ''"''
-        "<c-r>"
-        "z="
-      ];
-      triggersBlackList = {
-        i = [
-          "j"
-          "k"
-        ];
-        v = [
-          "j"
-          "k"
-        ];
-      };
-      disable = {
-        buftypes = [ ];
-        filetypes = [ ];
+    };
+  };
+
+  # Testing for registrations
+  mappings = {
+    plugins.which-key = {
+      enable = true;
+      settings = {
+        spec =
+          let
+            mode = [
+              "n"
+              "v"
+              "i"
+              "t"
+              "c"
+              "x"
+              "s"
+              "o"
+            ];
+          in
+          [
+            {
+              __unkeyed-1 = "<leader>f";
+              group = "Group Test";
+              inherit mode;
+            }
+            {
+              __unkeyed-1 = "<leader>ff";
+              desc = "Label Test";
+              inherit mode;
+            }
+            {
+              __unkeyed-1 = "<leader>f1";
+              __unkeyed-2.__raw = ''
+                function()
+                  print("Raw Lua KeyMapping Test")
+                end
+              '';
+              desc = "Raw Lua KeyMapping Test";
+              inherit mode;
+            }
+            {
+              __unkeyed-1 = "<leader>foo";
+              desc = "Label Test 2";
+              inherit mode;
+            }
+            {
+              __unkeyed-1 = "<leader>f<tab>";
+              group = "Group in Group Test";
+              inherit mode;
+            }
+            {
+              __unkeyed-1 = "<leader>f<tab>f";
+              __unkeyed-2 = "<cmd>echo 'Vim cmd KeyMapping Test'<cr>";
+              desc = "Vim cmd KeyMapping Test";
+              inherit mode;
+            }
+          ];
       };
     };
   };
