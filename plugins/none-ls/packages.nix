@@ -171,6 +171,8 @@ pkgs: {
       teal = pkgs.luaPackages.tl;
       terraform_fmt = pkgs.terraform;
       terraform_validate = pkgs.terraform;
+      terragrunt_fmt = pkgs.terragrunt;
+      terragrunt_validate = pkgs.terragrunt;
       tidy = pkgs.html-tidy;
       treefmt = pkgs.treefmt2;
       verible_verilog_format = pkgs.verible;

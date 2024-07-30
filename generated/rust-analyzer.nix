@@ -1154,6 +1154,15 @@
       ];
     };
   };
+  "rust-analyzer.imports.prefixExternPrelude" = {
+    description = ''
+      Whether to prefix external (including std, core) crate imports with `::`. e.g. "use ::std::io::Read;".
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.inlayHints.bindingModeHints.enable" = {
     description = ''
       Whether to show inlay type hints for binding modes.
@@ -1308,6 +1317,33 @@
         "prefer_prefix"
         "prefer_postfix"
       ];
+    };
+  };
+  "rust-analyzer.inlayHints.genericParameterHints.const.enable" = {
+    description = ''
+      Whether to show const generic parameter name inlay hints.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.inlayHints.genericParameterHints.lifetime.enable" = {
+    description = ''
+      Whether to show generic lifetime parameter name inlay hints.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.inlayHints.genericParameterHints.type.enable" = {
+    description = ''
+      Whether to show generic type parameter name inlay hints.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
     };
   };
   "rust-analyzer.inlayHints.implicitDrops.enable" = {
