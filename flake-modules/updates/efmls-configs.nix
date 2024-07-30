@@ -2,7 +2,6 @@
   lib,
   vimPlugins,
   writeText,
-  pkgs,
 }:
 let
   tools = lib.trivial.importJSON "${vimPlugins.efmls-configs-nvim.src}/doc/supported-list.json";
@@ -47,22 +46,8 @@ let
         };
       };
     };
-
-  inherit (import ../../plugins/lsp/language-servers/efmls-configs-pkgs.nix pkgs) packaged unpackaged;
-
-  toolList = lib.lists.unique (
-    lib.concatLists (
-      lib.map ({ linter, formatter }: linter.possible ++ formatter.possible) (lib.attrValues sources)
-    )
-  );
-
-  unknownTools = lib.filter (tool: !(lib.hasAttr tool packaged || lib.elem tool unpackaged)) toolList;
 in
 writeText "efmls-configs-sources.nix" (
-  assert lib.assertMsg (lib.length unknownTools == 0)
-    "The following tools are neither marked as unpackaged nor as packaged: ${
-      lib.generators.toPretty { } unknownTools
-    }";
   "# WARNING: DO NOT EDIT\n"
   + "# This file is generated with packages.<system>.efmls-configs-sources, which is run automatically by CI\n"
   + (lib.generators.toPretty { } sources)

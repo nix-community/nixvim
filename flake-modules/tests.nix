@@ -38,6 +38,8 @@
           };
 
           maintainers = import ../tests/maintainers.nix { inherit pkgs; };
+
+          generated = pkgs.callPackage ../tests/generated.nix { };
         }
         // (import ../tests {
           inherit
