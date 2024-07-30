@@ -5,6 +5,8 @@
       apps.generate-files.program = pkgs.writeShellApplication {
         name = "generate-files";
 
+        runtimeInputs = [ pkgs.nixfmt-rfc-style ];
+
         text = ''
           repo_root=$(git rev-parse --show-toplevel)
           generated_dir=$repo_root/generated
@@ -25,15 +27,13 @@
           generate() {
             echo "$2"
             cp "$1" "$generated_dir/$2.nix"
+            nixfmt "$generated_dir/$2.nix"
           }
 
           mkdir -p "$generated_dir"
           generate "${config.packages.rust-analyzer-options}" "rust-analyzer"
           generate "${config.packages.efmls-configs-sources}" "efmls-configs"
           generate "${config.packages.none-ls-builtins}" "none-ls"
-
-          git add --intent-to-add "$generated_dir"
-          nix fmt
 
           if [ -n "$commit" ]; then
             cd "$generated_dir"
