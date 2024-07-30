@@ -1,6 +1,6 @@
 {
   perSystem =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
       apps.generate-files.program = pkgs.writeShellApplication {
         name = "generate-files";
@@ -22,19 +22,15 @@
             shift
           done
 
+          generate() {
+            echo "$2"
+            cp "$1" "$generated_dir/$2.nix"
+          }
+
           mkdir -p "$generated_dir"
-
-          echo "Rust-Analyzer"
-          nix build .#rust-analyzer-options
-          cat ./result >"$generated_dir"/rust-analyzer.nix
-
-          echo "efmls-configs"
-          nix build .#efmls-configs-sources
-          cat ./result >"$generated_dir"/efmls-configs.nix
-
-          echo "none-ls"
-          nix build .#none-ls-builtins
-          cat ./result >"$generated_dir"/none-ls.nix
+          generate "${config.packages.rust-analyzer-options}" "rust-analyzer"
+          generate "${config.packages.efmls-configs-sources}" "efmls-configs"
+          generate "${config.packages.none-ls-builtins}" "none-ls"
 
           git add --intent-to-add "$generated_dir"
           nix fmt
