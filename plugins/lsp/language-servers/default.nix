@@ -605,7 +605,7 @@ let
           type = types.bool;
           description = ''
             Files with the `.v` extension are not automatically detected as vlang files.
-            If this option is enabled, Nixvim will automatically set  the filetype accordingly.
+            If this option is enabled, Nixvim will automatically set the filetype accordingly.
           '';
           default = true;
           example = false;
