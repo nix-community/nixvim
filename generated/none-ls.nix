@@ -8,6 +8,7 @@
     "impl"
     "proselint"
     "refactoring"
+    "regal"
     "statix"
     "ts_node_action"
   ];
@@ -88,6 +89,7 @@
     "swiftlint"
     "teal"
     "terraform_validate"
+    "terragrunt_validate"
     "textidote"
     "textlint"
     "tfsec"
@@ -215,6 +217,7 @@
     "swiftformat"
     "swiftlint"
     "terraform_fmt"
+    "terragrunt_fmt"
     "textlint"
     "tidy"
     "topiary"
