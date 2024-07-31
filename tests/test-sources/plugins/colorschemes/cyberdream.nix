@@ -42,17 +42,12 @@
               bg = "NONE";
               italic = true;
             };
-            SpellBad = {
-              fg = "red";
-              style = "undercurl,underdashed,italic";
-            };
+            SpellBad.fg = "red";
             ErrorMsg = {
               fg = "#000000";
               bg = "#000000";
-              style = {
-                undercurl = true;
-                italic = true;
-              };
+              undercurl = true;
+              italic = true;
             };
           };
           colors = {
