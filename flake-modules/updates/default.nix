@@ -57,7 +57,8 @@
             )
 
             # Construct the commit message based on the body
-            count=$(echo -n "$body" | wc -l)
+            # NOTE: Can't use `wc -l` due to how `echo` pipes its output
+            count=$(echo -n "$body" | awk 'END {print NR}')
             if [ "$count" -gt 1 ] || [ ''${#body} -gt 50 ]; then
               msg=$(echo -e "generated: Update\n\n$body")
             else
