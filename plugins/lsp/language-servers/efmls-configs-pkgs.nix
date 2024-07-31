@@ -63,7 +63,6 @@ pkgs: {
       languagetool
       mypy
       php
-      prettierd
       prettypst
       proselint
       protolint
@@ -102,7 +101,6 @@ pkgs: {
       sql-formatter
       stylelint
       textlint
-      write-good
       ;
     inherit (phpPackages) phan phpstan psalm;
     inherit (luaPackages) luacheck;
