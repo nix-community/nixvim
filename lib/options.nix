@@ -1,6 +1,5 @@
 { lib, helpers }:
 with lib;
-with helpers;
 let
   # Render a plugin default string
   pluginDefaultText =
@@ -90,7 +89,7 @@ rec {
       args
       // {
         type = helpers.nixvimTypes.strLua;
-        apply = mkRaw;
+        apply = helpers.mkRaw;
       }
     );
   mkNullOrLua = description: mkNullOrLua' { inherit description; };
@@ -101,7 +100,7 @@ rec {
       args
       // {
         type = helpers.nixvimTypes.strLuaFn;
-        apply = mkRaw;
+        apply = helpers.mkRaw;
       }
     );
   mkNullOrLuaFn = description: mkNullOrLua' { inherit description; };
@@ -112,7 +111,7 @@ rec {
       args
       // {
         type = with helpers.nixvimTypes; either strLua type;
-        apply = v: if isString v then mkRaw v else v;
+        apply = v: if isString v then helpers.mkRaw v else v;
       }
     );
   mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
@@ -123,7 +122,7 @@ rec {
       args
       // {
         type = with helpers.nixvimTypes; either strLuaFn type;
-        apply = v: if isString v then mkRaw v else v;
+        apply = v: if isString v then helpers.mkRaw v else v;
       }
     );
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
@@ -268,7 +267,8 @@ rec {
                 "hint"
               ]);
             apply = mapNullable (
-              value: if isInt value then value else mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
+              value:
+              if isInt value then value else helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
             );
           }
         );
@@ -281,7 +281,7 @@ rec {
           // {
             type = with helpers.nixvimTypes; either ints.unsigned logLevel;
             apply = mapNullable (
-              value: if isInt value then value else mkRaw "vim.log.levels.${strings.toUpper value}"
+              value: if isInt value then value else helpers.mkRaw "vim.log.levels.${strings.toUpper value}"
             );
           }
         );
