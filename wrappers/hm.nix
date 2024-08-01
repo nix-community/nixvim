@@ -26,6 +26,7 @@ in
           hmConfig = config;
           defaultPkgs = pkgs;
           helpers = config.lib.nixvim;
+          lib = config.lib.nixvim.extendedLib;
         };
         modules = [
           ./modules/hm.nix

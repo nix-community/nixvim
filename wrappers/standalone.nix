@@ -31,6 +31,7 @@ let
         ];
         specialArgs = {
           inherit helpers;
+          lib = helpers.extendedLib;
           defaultPkgs = pkgs;
         } // extraSpecialArgs;
       };

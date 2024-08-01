@@ -6,16 +6,20 @@
 }:
 let
   # Used when importing parts of helpers
-  call = lib.callPackageWith { inherit pkgs lib helpers; };
+  call = lib.callPackageWith {
+    # TODO: deprecate/remove using `helpers` in the subsections
+    inherit pkgs helpers;
+    lib = helpers.extendedLib;
+  };
 
   # Build helpers recursively
   helpers = {
     autocmd = call ./autocmd-helpers.nix { };
     builders = call ./builders.nix { };
     deprecation = call ./deprecation.nix { };
+    extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
-    maintainers = import ./maintainers.nix;
     neovim-plugin = call ./neovim-plugin.nix { };
     nixvimTypes = call ./types.nix { };
     options = call ./options.nix { };
@@ -77,6 +81,9 @@ let
       wrapLuaForVimscript
       wrapVimscriptForLua
       ;
+
+    # TODO: Deprecate this `maintainers` alias
+    inherit (helpers.extendedLib) maintainers;
 
     toLuaObject = helpers.lua.toLua;
   };
