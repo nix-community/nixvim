@@ -30,6 +30,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           (
             with types;
             attrsOf (submodule {
+              freeformType = with types; attrsOf anything;
               options = {
                 cmd = mkOption {
                   type = types.str;
