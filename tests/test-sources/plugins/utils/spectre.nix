@@ -1,16 +1,12 @@
 { pkgs, ... }:
-let
-  # Fails on darwin with: `module 'plenary.job' not found`
-  enable = !pkgs.stdenv.isDarwin;
-in
 {
   empty = {
-    plugins.spectre.enable = enable;
+    plugins.spectre.enable = true;
   };
 
   package-options-manual = {
     plugins.spectre = {
-      inherit enable;
+      enable = true;
 
       findPackage = pkgs.ripgrep;
       replacePackage = pkgs.gnused;
@@ -19,7 +15,7 @@ in
 
   package-options-from-settings = {
     plugins.spectre = {
-      inherit enable;
+      enable = true;
 
       settings.default = {
         find.cmd = "rg";
@@ -30,7 +26,7 @@ in
 
   example = {
     plugins.spectre = {
-      inherit enable;
+      enable = true;
 
       settings = {
         live_update = true;
@@ -87,7 +83,7 @@ in
 
   defaults = {
     plugins.spectre = {
-      inherit enable;
+      enable = true;
 
       settings = {
         filetype = "spectre_panel";
