@@ -22,12 +22,7 @@ in
       default = { };
       type = types.submoduleWith {
         shorthandOnlyDefinesConfig = true;
-        specialArgs = {
-          hmConfig = config;
-          defaultPkgs = pkgs;
-          helpers = config.lib.nixvim;
-          lib = config.lib.nixvim.extendedLib;
-        };
+        specialArgs = config.lib.nixvim.modules.specialArgsWith { hmConfig = config; };
         modules = [
           ./modules/hm.nix
           ../modules/top-level

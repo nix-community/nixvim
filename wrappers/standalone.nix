@@ -1,14 +1,15 @@
 default_pkgs: self:
 {
   pkgs ? default_pkgs,
+  lib ? pkgs.lib,
   extraSpecialArgs ? { },
   _nixvimTests ? false,
   module,
 }:
 let
-  inherit (pkgs) lib;
-
   helpers = import ../lib/helpers.nix { inherit pkgs lib _nixvimTests; };
+
+  inherit (helpers.modules) specialArgsWith;
 
   handleAssertions =
     config:
@@ -29,11 +30,7 @@ let
           ./modules/standalone.nix
           ../modules/top-level
         ];
-        specialArgs = {
-          inherit helpers;
-          lib = helpers.extendedLib;
-          defaultPkgs = pkgs;
-        } // extraSpecialArgs;
+        specialArgs = specialArgsWith extraSpecialArgs;
       };
       config = handleAssertions evaledModule.config;
     in

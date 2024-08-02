@@ -20,6 +20,7 @@ let
     extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
+    modules = call ./modules.nix { };
     neovim-plugin = call ./neovim-plugin.nix { };
     nixvimTypes = call ./types.nix { };
     options = call ./options.nix { };

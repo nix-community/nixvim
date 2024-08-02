@@ -40,6 +40,8 @@ let
     pkgs = pkgsDoc;
   };
 
+  inherit (helpers.modules) specialArgs;
+
   nixvimPath = toString ./..;
 
   gitHubDeclaration = user: repo: branch: subpath: {
@@ -75,16 +77,7 @@ let
 
   options-json =
     (pkgsDoc.nixosOptionsDoc {
-      inherit
-        (lib.evalModules {
-          inherit modules;
-          specialArgs = {
-            inherit helpers;
-            defaultPkgs = pkgsDoc;
-          };
-        })
-        options
-        ;
+      inherit (lib.evalModules { inherit modules specialArgs; }) options;
       inherit transformOptions;
       warningsAreErrors = false;
     }).optionsJSON;
@@ -113,10 +106,10 @@ in
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgsDoc.callPackage ./mdbook {
       inherit
-        helpers
         modules
         hmOptions
         transformOptions
+        specialArgs
         ;
       # TODO: Find how to handle stable when 24.11 lands
       search = mkSearch "/nixvim/search/";

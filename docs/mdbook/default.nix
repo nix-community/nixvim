@@ -2,21 +2,15 @@
   pkgs,
   lib,
   modules,
-  helpers,
   nixosOptionsDoc,
   transformOptions,
   hmOptions,
   search,
+  specialArgs,
 }:
 with lib;
 let
-  options = lib.evalModules {
-    inherit modules;
-    specialArgs = {
-      inherit helpers;
-      defaultPkgs = pkgs;
-    };
-  };
+  options = lib.evalModules { inherit modules specialArgs; };
 
   inherit (options.config.meta) nixvimInfo;
 
