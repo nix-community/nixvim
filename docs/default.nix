@@ -40,8 +40,6 @@ let
     pkgs = pkgsDoc;
   };
 
-  inherit (helpers.modules) specialArgs;
-
   nixvimPath = toString ./..;
 
   gitHubDeclaration = user: repo: branch: subpath: {
@@ -66,18 +64,20 @@ let
       ) opt.declarations;
     };
 
-  modules = [
-    ../modules/top-level
-    { isDocs = true; }
-  ];
+  evaledModules = lib.evalModules {
+    inherit (helpers.modules) specialArgs;
+    modules = [
+      ../modules/top-level
+      { isDocs = true; }
+    ];
+  };
 
-  hmOptions = builtins.removeAttrs (lib.evalModules {
-    modules = [ (import ../wrappers/modules/hm.nix { inherit lib; }) ];
-  }).options [ "_module" ];
+  hmOptions = builtins.removeAttrs (lib.evalModules { modules = [ ../wrappers/modules/hm.nix ]; })
+    .options [ "_module" ];
 
   options-json =
     (pkgsDoc.nixosOptionsDoc {
-      inherit (lib.evalModules { inherit modules specialArgs; }) options;
+      inherit (evaledModules) options;
       inherit transformOptions;
       warningsAreErrors = false;
     }).optionsJSON;
@@ -105,12 +105,7 @@ in
     # Do not check if documentation builds fine on darwin as it fails:
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgsDoc.callPackage ./mdbook {
-      inherit
-        modules
-        hmOptions
-        transformOptions
-        specialArgs
-        ;
+      inherit evaledModules hmOptions transformOptions;
       # TODO: Find how to handle stable when 24.11 lands
       search = mkSearch "/nixvim/search/";
     };

@@ -1,18 +1,15 @@
 {
   pkgs,
   lib,
-  modules,
+  evaledModules,
   nixosOptionsDoc,
   transformOptions,
   hmOptions,
   search,
-  specialArgs,
 }:
 with lib;
 let
-  options = lib.evalModules { inherit modules specialArgs; };
-
-  inherit (options.config.meta) nixvimInfo;
+  inherit (evaledModules.config.meta) nixvimInfo;
 
   mkMDDoc =
     options:
@@ -62,7 +59,7 @@ let
       moduleDoc =
         let
           info = optionalAttrs (hasAttrByPath path nixvimInfo) (getAttrFromPath path nixvimInfo);
-          maintainers = lib.unique (options.config.meta.maintainers.${info.file} or [ ]);
+          maintainers = lib.unique (evaledModules.config.meta.maintainers.${info.file} or [ ]);
           maintainersNames = builtins.map maintToMD maintainers;
           maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
         in
@@ -179,7 +176,7 @@ let
     recurse modules;
 
   docs = rec {
-    modules = processModulesRec (removeUnwanted options.options);
+    modules = processModulesRec (removeUnwanted evaledModules.options);
     commands = mapModulesToString (
       name: opts:
       let
