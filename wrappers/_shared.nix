@@ -44,9 +44,15 @@ in
   ];
 
   config = mkMerge [
-    # Make our lib available to the host modules
-    # TODO: import top-level ../lib
-    { lib.nixvim = lib.mkDefault (import ../lib/helpers.nix { inherit pkgs lib; }); }
+    {
+      # Make our lib available to the host modules
+      # TODO: import top-level ../lib
+      lib.nixvim = lib.mkDefault (import ../lib/helpers.nix { inherit pkgs lib; });
+
+      # Make nixvim's "extended" lib available to the host's module args
+      _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
+    }
+
     # Propagate extraFiles to the host modules
     (optionalAttrs (filesOpt != null) (
       mkIf (!cfg.wrapRc) (
