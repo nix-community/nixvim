@@ -23,6 +23,18 @@ in
 }
 ```
 
+Or you can access the extended `lib` used in standalone builds via the `nixvimLib` module arg:
+
+```nix
+{ nixvimLib, ... }:
+{
+  # You can use nixvimLib.nixvim in your config
+  fooOption = nixvimLib.nixvim.mkRaw "print('hello')";
+}
+```
+
+This "extended" lib, includes everything normally in `lib`, along with some additions from nixvim.
+
 **Note:** the `lib` argument passed to modules is entirely unrelated to the `lib` _option_ accessed as `config.lib`!
 
 A certain number of helpers are defined that can be useful:
