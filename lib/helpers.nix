@@ -8,7 +8,7 @@ let
   # Used when importing parts of helpers
   call = lib.callPackageWith {
     # TODO: deprecate/remove using `helpers` in the subsections
-    inherit pkgs helpers;
+    inherit call pkgs helpers;
     lib = helpers.extendedLib;
   };
 
@@ -22,7 +22,6 @@ let
     lua = call ./to-lua.nix { };
     modules = call ./modules.nix { };
     neovim-plugin = call ./neovim-plugin.nix { };
-    nixvimTypes = call ./types.nix { };
     options = call ./options.nix { };
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
@@ -91,6 +90,9 @@ let
 
     # TODO: Deprecate this `maintainers` alias
     inherit (helpers.extendedLib) maintainers;
+
+    # TODO: Deprecate the old `nixvimTypes` alias?
+    nixvimTypes = helpers.extendedLib.types;
 
     toLuaObject = helpers.lua.toLua;
     mkLuaInline = helpers.lua.mkInline;

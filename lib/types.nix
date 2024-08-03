@@ -1,3 +1,4 @@
+# Custom types to be included in `lib.types`
 { lib, helpers }:
 with lib;
 with helpers;
@@ -91,5 +92,3 @@ rec {
       }";
     };
 }
-# Allow to do `with nixvimTypes;` instead of `with types;`
-// lib.types

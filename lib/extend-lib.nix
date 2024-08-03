@@ -1,5 +1,9 @@
 # Extends nixpkg's lib with our functions, as expected by our modules
-{ lib, helpers }:
+{
+  call,
+  lib,
+  helpers,
+}:
 lib.extend (
   final: prev: {
     # Include our custom lib
@@ -7,5 +11,8 @@ lib.extend (
 
     # Merge in our maintainers
     maintainers = prev.maintainers // import ./maintainers.nix;
+
+    # Merge in our custom types
+    types = call ./types.nix { } // prev.types;
   }
 )
