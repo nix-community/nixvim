@@ -103,7 +103,7 @@ rec {
           // (optionalAttrs (isAttrs action || action) {
             action = mkOption (
               {
-                type = helpers.nixvimTypes.maybeRaw str;
+                type = maybeRaw str;
                 description = "The action to execute.";
               }
               // (optionalAttrs (isAttrs action) action)
