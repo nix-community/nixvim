@@ -10,11 +10,10 @@
     ./templates.nix
     ./tests.nix
     ./wrappers.nix
-    ./updates
   ];
 
   perSystem =
-    { pkgs, system, ... }:
+    { system, ... }:
     {
       _module.args = {
         pkgsUnfree = import inputs.nixpkgs {
