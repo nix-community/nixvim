@@ -6,66 +6,133 @@
   ...
 }:
 with lib;
-let
-  cfg = config.plugins.gitblame;
-in
-{
-  options = {
-    plugins.gitblame = {
-      enable = mkEnableOption "gitblame";
+helpers.neovim-plugin.mkNeovimPlugin config {
+  name = "gitblame";
+  originalName = "git-blame.nvim";
+  defaultPackage = pkgs.vimPlugins.git-blame-nvim;
 
-      package = helpers.mkPluginPackageOption "gitblame" pkgs.vimPlugins.git-blame-nvim;
+  maintainers = [ maintainers.GaetanLepage ];
 
-      messageTemplate = helpers.defaultNullOpts.mkStr "  <author> • <date> • <summary>" "The template for the blame message that will be shown.";
+  # TODO: introduce 2024-08-03. Remove after 24.11
+  optionsRenamedToSettings = [
+    "messageTemplate"
+    "dateFormat"
+    "messageWhenNotCommitted"
+    "highlightGroup"
+    "extmarkOptions"
+    "displayVirtualText"
+    "ignoredFiletypes"
+    "delay"
+    "virtualTextColumn"
+  ];
 
-      dateFormat = helpers.defaultNullOpts.mkStr "%c" "The format of the date fields in messageTemplate.";
+  settingsOptions = {
+    enabled = helpers.defaultNullOpts.mkBool true ''
+      Enables the plugin on Neovim startup.
+      You can toggle git blame messages on/off with the `:GitBlameToggle` command.
+    '';
 
-      messageWhenNotCommitted = helpers.defaultNullOpts.mkStr "  Not Committed Yet" "The blame message that will be shown when the current modification hasn't been committed yet.";
+    message_template = helpers.defaultNullOpts.mkStr "  <author> • <date> • <summary>" ''
+      The template for the blame message that will be shown.
 
-      highlightGroup = helpers.defaultNullOpts.mkStr "Comment" "The highlight group for virtual text.";
+      Available options: `<author>`, `<committer>`, `<date>`, `<committer-date>`, `<summary>`,
+      `<sha>`.
+    '';
 
-      displayVirtualText = helpers.defaultNullOpts.mkBool true "If the blame message should be displayed as virtual text. You may want to disable this if you display the blame message in statusline.";
+    date_format = helpers.defaultNullOpts.mkStr "%c" ''
+      The [format](https://www.lua.org/pil/22.1.html) of the date fields in `message_template`.
 
-      ignoredFiletypes =
-        helpers.defaultNullOpts.mkListOf types.str [ ]
-          "A list of filetypes for which gitblame information will not be displayed.";
+      See [upstream doc](https://github.com/f-person/git-blame.nvim?tab=readme-ov-file#date-format)
+      for the available options.
+    '';
 
-      delay =
-        helpers.defaultNullOpts.mkUnsignedInt 0
-          "The delay in milliseconds after which the blame info will be displayed.";
+    message_when_not_committed = helpers.defaultNullOpts.mkStr "  Not Committed Yet" ''
+      The blame message that will be shown when the current modification hasn't been committed yet.
 
-      virtualTextColumn =
-        helpers.defaultNullOpts.mkNullable types.ints.unsigned null
-          "Have the blame message start at a given column instead of EOL. If the current line is longer than the specified column value the blame message will default to being displayed at EOL.";
+      Supports the same template options as `message_template`.
+    '';
 
-      extmarkOptions = helpers.defaultNullOpts.mkAttributeSet null "nvim_buf_set_extmark optional parameters. (Warning: overwriting id and virt_text will break the plugin behavior)";
+    highlight_group = helpers.defaultNullOpts.mkStr "Comment" ''
+      The highlight group for virtual text.
+    '';
+
+    set_extmark_options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+      `nvim_buf_set_extmark` is the function used for setting the virtual text.
+      You can view an up-to-date full list of options in the
+      [Neovim documentation](https://neovim.io/doc/user/api.html#nvim_buf_set_extmark()).
+
+      **Warning:** overwriting `id` and `virt_text` will break the plugin behavior.
+    '';
+
+    display_virtual_text = helpers.defaultNullOpts.mkBool true ''
+      If the blame message should be displayed as virtual text.
+      You may want to disable this if you display the blame message in statusline.
+    '';
+
+    ignored_filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+      A list of filetypes for which gitblame information will not be displayed.
+    '';
+
+    delay = helpers.defaultNullOpts.mkUnsignedInt 250 ''
+      The delay in milliseconds after which the blame info will be displayed.
+    '';
+
+    virtual_text_column = helpers.defaultNullOpts.mkUnsignedInt null ''
+      Have the blame message start at a given column instead of EOL.
+      If the current line is longer than the specified column value, the blame message will default
+      to being displayed at EOL.
+    '';
+
+    use_blame_commit_file_urls = helpers.defaultNullOpts.mkBool false ''
+      By default the commands `GitBlameOpenFileURL` and `GitBlameCopyFileURL` open the current file
+      at latest branch commit.
+      If you would like to open these files at the latest blame commit (in other words, the commit
+      marked by the blame), set this to true.
+      For ranges, the blame selected will be the most recent blame from the range.
+    '';
+
+    schedule_event = helpers.defaultNullOpts.mkStr "CursorMoved" ''
+      If you are experiencing poor performance (e.g. in particularly large projects) you can use
+      `CursorHold` instead of the default `CursorMoved` autocommand to limit the frequency of events
+      being run.
+    '';
+
+    clear_event = helpers.defaultNullOpts.mkStr "CursorMovedI" ''
+      If you are experiencing poor performance (e.g. in particularly large projects) you can use
+      `CursorHoldI` instead of the default `CursorMovedI` autocommand to limit the frequency of
+      events being run.
+    '';
+
+    clipboard_register = helpers.defaultNullOpts.mkStr "+" ''
+      By default the `:GitBlameCopySHA`, `:GitBlameCopyFileURL` and `:GitBlameCopyCommitURL`
+      commands use the `+` register.
+      Set this value if you would like to use a different register (such as `*`).
+    '';
+  };
+
+  settingsExample = {
+    message_template = "<summary> • <date> • <author>";
+    date_format = "%r";
+    message_when_not_committed = "Oh please, commit this !";
+    highlight_group = "Question";
+    set_extmark_options.priority = 7;
+    display_virtual_text = false;
+    ignored_filetypes = [
+      "lua"
+      "c"
+    ];
+    delay = 1000;
+    virtual_text_column = 80;
+    use_blame_commit_file_urls = true;
+  };
+
+  extraOptions = {
+    gitPackage = helpers.mkPackageOption {
+      name = "git";
+      default = pkgs.git;
     };
   };
 
-  config =
-    let
-      setupOptions = {
-        enabled = cfg.enable;
-        message_template = cfg.messageTemplate;
-        date_format = cfg.dateFormat;
-        message_when_not_committed = cfg.messageWhenNotCommitted;
-        highlight_group = cfg.highlightGroup;
-        display_virtual_text = helpers.ifNonNull' cfg.displayVirtualText (
-          if cfg.displayVirtualText then 1 else 0
-        );
-        ignored_filetypes = cfg.ignoredFiletypes;
-        inherit (cfg) delay;
-        virtual_text_column = cfg.virtualTextColumn;
-        set_extmark_options = cfg.extmarkOptions;
-      };
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+  extraConfig = cfg: { extraPackages = [ cfg.gitPackage ]; };
 
-      extraPackages = [ pkgs.git ];
-
-      extraConfigLua = ''
-        require('gitblame').setup${helpers.toLuaObject setupOptions}
-      '';
-    };
 }
