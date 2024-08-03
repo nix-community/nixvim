@@ -1,3 +1,4 @@
+# Custom types to be included in `lib.types`
 { lib, helpers }:
 with lib;
 with helpers;
@@ -82,5 +83,3 @@ rec {
   # Overridden when building the documentation
   eitherRecursive = either;
 }
-# Allow to do `with nixvimTypes;` instead of `with types;`
-// lib.types
