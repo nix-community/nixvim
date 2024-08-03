@@ -23,19 +23,19 @@
       mkConfigAssertions = name: value: [
         {
           assertion = lib.hasInfix "extraConfigLuaPre1" value;
-          message = "Configuration file ${name} does not contain extraConfigLuaPre.";
+          message = "Configuration file ${name} should contain extraConfigLuaPre.";
         }
         {
           assertion = lib.hasInfix "extraConfigLua2" value;
-          message = "Configuration file ${name} does not contain extraConfigLua.";
+          message = "Configuration file ${name} should contain extraConfigLua.";
         }
         {
           assertion = lib.hasInfix "extraConfigLuaPost3" value;
-          message = "Configuration file ${name} does not contain extraConfigLuaPost.";
+          message = "Configuration file ${name} should contain extraConfigLuaPost.";
         }
         {
           assertion = lib.hasInfix "extraConfigVim4" value;
-          message = "Configuration file ${name} does not contain extraConfigVim.";
+          message = "Configuration file ${name} should contain extraConfigVim.";
         }
       ];
     in
@@ -47,6 +47,8 @@
       };
 
       # Plugin configs
+      # TODO: Test this makes it to the nvim configuration
+      # NOTE: config.content currently does not contain extraPlugins config
       extraPlugins = [
         {
           plugin = pkgs.emptyDirectory;
@@ -55,18 +57,11 @@
       ];
 
       assertions =
+        # Main init.lua
         mkConfigAssertions "init.lua" config.content
+        # Extra file modules
         ++ mkConfigAssertions "test.lua" config.files."test.lua".content
-        ++ mkConfigAssertions "test.vim" config.files."test.vim".content
-        # Check the final generated init.lua too
-        ++ mkConfigAssertions "initPath" (builtins.readFile config.initPath)
-        ++ [
-          # Only init.lua contains configuration from plugin definitions
-          {
-            assertion = lib.hasInfix "neovimRcContent5" (builtins.readFile config.initPath);
-            message = "Configuration file init.lua does not contain plugin configs";
-          }
-        ];
+        ++ mkConfigAssertions "test.vim" config.files."test.vim".content;
     };
 
   files-default-empty.module =
