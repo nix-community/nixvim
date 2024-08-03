@@ -122,6 +122,7 @@
 
     ./snippets/friendly-snippets.nix
     ./snippets/luasnip
+    ./snippets/nvim-snippets.nix
 
     ./statuslines/airline.nix
     ./statuslines/lightline.nix
