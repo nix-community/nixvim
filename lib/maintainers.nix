@@ -83,4 +83,10 @@
     githubId = 46248772;
     name = "Nathan Felber";
   };
+  psfloyd = {
+    email = "peter.racoon@gmail.com";
+    github = "psfloyd";
+    githubId = 30784060;
+    name = "Pedro Sánchez";
+  };
 }
