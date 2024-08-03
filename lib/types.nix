@@ -16,6 +16,8 @@ let
   isRawType = v: v ? __raw && isString v.__raw;
 in
 rec {
+  # TODO: deprecate in favor of types.rawLua.check
+  # Or move to utils, lua, etc?
   inherit isRawType;
 
   rawLua = mkOptionType {

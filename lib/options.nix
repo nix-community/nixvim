@@ -80,7 +80,7 @@ rec {
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
-  mkNullOrStr' = args: mkNullOrOption' (args // { type = with helpers.nixvimTypes; maybeRaw str; });
+  mkNullOrStr' = args: mkNullOrOption' (args // { type = with types; maybeRaw str; });
   mkNullOrStr = description: mkNullOrStr' { inherit description; };
 
   mkNullOrLua' =
@@ -88,7 +88,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = helpers.nixvimTypes.strLua;
+        type = types.strLua;
         apply = helpers.mkRaw;
       }
     );
@@ -99,7 +99,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = helpers.nixvimTypes.strLuaFn;
+        type = types.strLuaFn;
         apply = helpers.mkRaw;
       }
     );
@@ -110,7 +110,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = with helpers.nixvimTypes; either strLua type;
+        type = with types; either strLua type;
         apply = v: if isString v then helpers.mkRaw v else v;
       }
     );
@@ -121,7 +121,7 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = with helpers.nixvimTypes; either strLuaFn type;
+        type = with types; either strLuaFn type;
         apply = v: if isString v then helpers.mkRaw v else v;
       }
     );
@@ -149,8 +149,7 @@ rec {
         type: pluginDefault: description:
         mkNullable' { inherit type pluginDefault description; };
 
-      mkNullableWithRaw' =
-        { type, ... }@args: mkNullable' (args // { type = helpers.nixvimTypes.maybeRaw type; });
+      mkNullableWithRaw' = { type, ... }@args: mkNullable' (args // { type = types.maybeRaw type; });
       mkNullableWithRaw =
         type: pluginDefault: description:
         mkNullableWithRaw' { inherit type pluginDefault description; };
@@ -186,19 +185,17 @@ rec {
       mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });
       mkStr = pluginDefault: description: mkStr' { inherit pluginDefault description; };
 
-      mkAttributeSet' = args: mkNullable' (args // { type = helpers.nixvimTypes.attrs; });
+      mkAttributeSet' = args: mkNullable' (args // { type = types.attrs; });
       mkAttributeSet = pluginDefault: description: mkAttributeSet' { inherit pluginDefault description; };
 
       mkListOf' =
-        { type, ... }@args:
-        mkNullable' (args // { type = with helpers.nixvimTypes; listOf (maybeRaw type); });
+        { type, ... }@args: mkNullable' (args // { type = with types; listOf (maybeRaw type); });
       mkListOf =
         type: pluginDefault: description:
         mkListOf' { inherit type pluginDefault description; };
 
       mkAttrsOf' =
-        { type, ... }@args:
-        mkNullable' (args // { type = with helpers.nixvimTypes; attrsOf (maybeRaw type); });
+        { type, ... }@args: mkNullable' (args // { type = with types; attrsOf (maybeRaw type); });
       mkAttrsOf =
         type: pluginDefault: description:
         mkAttrsOf' { inherit type pluginDefault description; };
@@ -239,7 +236,7 @@ rec {
         mkNullableWithRaw' (
           (filterAttrs (n: v: n != "name") args)
           // {
-            type = helpers.nixvimTypes.border;
+            type = types.border;
             description = concatStringsSep "\n" (
               (optional (description != "") description)
               ++ [
@@ -279,7 +276,7 @@ rec {
         mkNullOrOption' (
           args
           // {
-            type = with helpers.nixvimTypes; either ints.unsigned logLevel;
+            type = with types; either ints.unsigned logLevel;
             apply = mapNullable (
               value: if isInt value then value else helpers.mkRaw "vim.log.levels.${strings.toUpper value}"
             );
@@ -295,7 +292,7 @@ rec {
         mkNullable' (
           args
           // {
-            type = helpers.nixvimTypes.highlight;
+            type = types.highlight;
             inherit description;
           }
         );
