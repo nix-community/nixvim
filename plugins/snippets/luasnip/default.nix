@@ -133,6 +133,27 @@ in
       '';
       type = types.listOf loaderSubmodule;
     };
+
+    filetypeExtend = mkOption {
+      default = { };
+      type = with types; attrsOf (listOf str);
+      example = {
+        lua = [
+          "c"
+          "cpp"
+        ];
+      };
+      description = ''
+        Wrapper for the `filetype_extend` function.
+        Keys are filetypes (`filetype`) and values are list of filetypes (`["ft1" "ft2" "ft3"]`).
+
+        Tells luasnip that for a buffer with `ft=filetype`, snippets from `extend_filetypes` should
+        be searched as well.
+
+        For example, `filetypeExtend.lua = ["c" "cpp"]` would search and expand c and cpp snippets
+        for lua files.
+      '';
+    };
   };
 
   config =
@@ -164,6 +185,11 @@ in
               ''
             ))
           ];
+
+      filetypeExtendConfig = mapAttrsToList (n: v: ''
+        require("luasnip").extend_filetypes("${n}", ${helpers.toLuaObject v})
+      '') cfg.filetypeExtend;
+
       extraConfig = [
         ''
           require("luasnip").config.setup(${helpers.toLuaObject cfg.settings})
@@ -173,6 +199,6 @@ in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
       extraLuaPackages = ps: [ ps.jsregexp ];
-      extraConfigLua = concatStringsSep "\n" (extraConfig ++ loaderConfig);
+      extraConfigLua = concatStringsSep "\n" (extraConfig ++ loaderConfig ++ filetypeExtendConfig);
     };
 }
