@@ -9,42 +9,30 @@ default_pkgs: self:
 let
   helpers = import ../lib/helpers.nix { inherit pkgs lib _nixvimTests; };
 
-  inherit (helpers.modules) specialArgsWith;
-
-  handleAssertions =
-    config:
-    let
-      failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
-    in
-    if failedAssertions != [ ] then
-      throw "\nFailed assertions:\n${builtins.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
-    else
-      lib.showWarnings config.warnings config;
+  inherit (helpers.modules) evalNixvim;
 
   mkNvim =
     mod:
     let
-      evaledModule = lib.evalModules {
+      evaledModule = evalNixvim {
         modules = [
           mod
           ./modules/standalone.nix
-          ../modules/top-level
         ];
-        specialArgs = specialArgsWith extraSpecialArgs;
+        inherit extraSpecialArgs;
       };
-      config = handleAssertions evaledModule.config;
+      inherit (evaledModule.config) enableMan finalPackage printInitPackage;
     in
     (pkgs.symlinkJoin {
       name = "nixvim";
       paths = [
-        config.finalPackage
-        config.printInitPackage
-      ] ++ pkgs.lib.optional config.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
+        finalPackage
+        printInitPackage
+      ] ++ pkgs.lib.optional enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
       meta.mainProgram = "nvim";
     })
     // rec {
-      inherit config;
-      inherit (evaledModule) options;
+      inherit (evaledModule) config options;
       extend =
         extension:
         mkNvim {
