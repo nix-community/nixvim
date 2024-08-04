@@ -1,7 +1,6 @@
 {
   pkgs,
   lib ? pkgs.lib,
-  makeNixvimWithModule,
   ...
 }:
 let
@@ -79,6 +78,10 @@ let
     # At least one of these should be undefined
     assert lib.assertMsg (tests == [ ] || module == null) "Both module & tests can't be supplied";
     let
+      helpers = import ../lib/helpers.nix {
+        inherit pkgs lib;
+        _nixvimTests = true;
+      };
       moduleAsList = lib.optional (module != null) { inherit module name; };
       moduleList = tests ++ moduleAsList;
       testDerivations = builtins.map (
@@ -86,13 +89,47 @@ let
           module,
           name,
           dontRun ? false,
-        }:
-        {
-          derivation = makeNixvimWithModule {
-            inherit pkgs module extraSpecialArgs;
-            _nixvimTests = true;
+        }@args:
+        let
+          result = lib.evalModules {
+            modules = [
+              module
+              ../modules/top-level
+            ];
+            specialArgs = helpers.modules.specialArgsWith extraSpecialArgs;
           };
+
+          # TODO: allow "expecting" specific errors
+          inherit (result.config) warnings;
+          assertions = lib.pipe result.config.assertions [
+            (lib.filter (x: !x.assertion))
+            (lib.map (x: x.message))
+          ];
+
+          errors = pkgs.runCommand name { inherit name assertions warnings; } ''
+            echo "Issues found evaluating $name":
+            if [ -n "$assertions" ]; then
+              echo "Unexpected assertions:"
+              for it in "$assertions"; do
+                echo "- $it"
+              done
+              echo
+            fi
+            if [ -n "$warnings" ]; then
+              echo "Unexpected warnings:"
+              for it in "$warnings"; do
+                echo "- $it"
+              done
+              echo
+            fi
+            exit 1
+          '';
+
+          inherit (result.config) finalPackage;
+        in
+        {
           inherit name dontRun;
+          derivation = if assertions == [ ] && warnings == [ ] then finalPackage else errors;
         }
       ) moduleList;
     in
