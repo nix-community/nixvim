@@ -50,22 +50,32 @@ let
   };
 in
 {
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "luasnip"
+      ];
+    in
+    [
+      # TODO introduced 2024-08-04. Remove after 24.11
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) (basePluginPath ++ [ "settings" ]))
+    ];
+
   options.plugins.luasnip = {
     enable = mkEnableOption "luasnip";
 
     package = helpers.mkPluginPackageOption "luasnip" pkgs.vimPlugins.luasnip;
 
-    extraConfig = mkOption {
-      type = types.attrsOf types.anything;
+    settings = mkOption {
+      type = with types; attrsOf anything;
       description = ''
-        Extra config options for luasnip.
-
-         Example:
-         {
-           enable_autosnippets = true,
-           store_selection_keys = "<Tab>",
-         }
+        Options provided to the `require('luasnip').config.setup()` function.",
       '';
+      example = {
+        enable_autosnippets = true;
+        store_selection_keys = "<Tab>";
+      };
       default = { };
     };
 
@@ -156,7 +166,7 @@ in
           ];
       extraConfig = [
         ''
-          require("luasnip").config.set_config(${helpers.toLuaObject cfg.extraConfig})
+          require("luasnip").config.setup(${helpers.toLuaObject cfg.settings})
         ''
       ];
     in
