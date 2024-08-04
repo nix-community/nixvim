@@ -167,6 +167,7 @@
     ./utils/easyescape.nix
     ./utils/emmet.nix
     ./utils/endwise.nix
+    ./utils/firenvim.nix
     ./utils/flash.nix
     ./utils/floaterm.nix
     ./utils/fzf-lua.nix
