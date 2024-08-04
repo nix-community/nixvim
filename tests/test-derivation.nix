@@ -94,8 +94,9 @@ let
           result = lib.evalModules {
             modules = [
               module
+              ./_module.nix
               ../modules/top-level
-            ];
+            ] ++ lib.optional (args ? dontRun) { tests.dontRun = lib.mkDefault dontRun; };
             specialArgs = helpers.modules.specialArgsWith extraSpecialArgs;
           };
 
@@ -128,7 +129,8 @@ let
           inherit (result.config) finalPackage;
         in
         {
-          inherit name dontRun;
+          inherit name;
+          inherit (result.config.tests) dontRun;
           derivation = if assertions == [ ] && warnings == [ ] then finalPackage else errors;
         }
       ) moduleList;
