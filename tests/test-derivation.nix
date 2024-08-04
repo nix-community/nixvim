@@ -1,7 +1,6 @@
 {
   pkgs,
   lib ? pkgs.lib,
-  makeNixvimWithModule,
   ...
 }:
 let
@@ -63,22 +62,53 @@ let
       dontRun ? false,
     }@args:
     let
-      nvim = makeNixvimWithModule {
-        inherit pkgs extraSpecialArgs;
+      helpers = import ../lib/helpers.nix {
+        inherit pkgs lib;
         _nixvimTests = true;
-        module =
-          if args ? dontRun then
+      };
+      result = lib.evalModules {
+        modules = [
+          module
+          ../modules/top-level
+          (lib.optionalAttrs (args ? dontRun) (
             lib.warn
               "mkTestDerivationFromNixvimModule: the `dontRun` argument is deprecated. You should use the `test.runNvim` module option instead."
-              {
-                imports = [ module ];
-                config.test.runNvim = !dontRun;
-              }
-          else
-            module;
+              { config.test.runNvim = !dontRun; }
+          ))
+        ];
+        specialArgs = helpers.modules.specialArgsWith extraSpecialArgs;
       };
+
+      # TODO: allow "expecting" specific errors
+      inherit (result.config) warnings;
+      assertions = lib.pipe result.config.assertions [
+        (lib.filter (x: !x.assertion))
+        (lib.map (x: x.message))
+      ];
+
+      errors = pkgs.runCommand name { inherit name assertions warnings; } ''
+        echo "Issues found evaluating $name":
+        if [ -n "$assertions" ]; then
+          echo "Unexpected assertions:"
+          for it in "$assertions"; do
+            echo "- $it"
+          done
+          echo
+        fi
+        if [ -n "$warnings" ]; then
+          echo "Unexpected warnings:"
+          for it in "$warnings"; do
+            echo "- $it"
+          done
+          echo
+        fi
+        exit 1
+      '';
+
+      inherit (result.config) finalPackage;
     in
-    mkTestDerivationFromNvim { inherit name nvim; };
+    # FIXME: 
+    if assertions == [ ] && warnings == [ ] then finalPackage else errors;
 in
 {
   inherit mkTestDerivationFromNvim mkTestDerivationFromNixvimModule;
