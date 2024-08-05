@@ -1,7 +1,6 @@
 {
   pkgs,
   lib ? pkgs.lib,
-  makeNixvimWithModule,
   ...
 }:
 let
@@ -16,46 +15,26 @@ let
       ...
     }@args:
     let
-      cfg = nvim.config.test;
-      runNvim =
-        lib.warnIf (args ? dontRun)
-          "mkTestDerivationFromNvim: the `dontRun` argument is deprecated. You should use the `test.runNvim` module option instead."
-          (cfg.runNvim && !dontRun);
+      # FIXME: this doesn't support helpers.enableExceptInTests, a context option would be better
+      result = nvim.extend {
+        config.test =
+          {
+            inherit name;
+          }
+          // lib.optionalAttrs (args ? dontRun) (
+            lib.warn
+              "mkTestDerivationFromNvim: the `dontRun` argument is deprecated. You should use the `test.runNvim` module option instead."
+              { runNvim = !dontRun; }
+          );
+      };
     in
-    pkgs.stdenv.mkDerivation {
-      inherit name;
-
-      nativeBuildInputs = [
-        nvim
-        pkgs.docker-client
-      ];
-
-      dontUnpack = true;
-      # We need to set HOME because neovim will try to create some files
-      #
-      # Because neovim does not return an exitcode when quitting we need to check if there are
-      # errors on stderr
-      buildPhase = lib.optionalString runNvim ''
-        mkdir -p .cache/nvim
-
-        output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
-        if [[ -n $output ]]; then
-            echo "ERROR: $output"
-          exit 1
-        fi
-      '';
-
-      # If we don't do this nix is not happy
-      installPhase = ''
-        mkdir $out
-      '';
-    };
+    result.config.test.derivation;
 
   # Create a nix derivation from a nixvim configuration.
   # The build phase simply consists in running neovim with the given configuration.
   mkTestDerivationFromNixvimModule =
     {
-      name ? "nixvim-check",
+      name ? null,
       pkgs ? pkgs,
       module,
       extraSpecialArgs ? { },
@@ -63,22 +42,29 @@ let
       dontRun ? false,
     }@args:
     let
-      nvim = makeNixvimWithModule {
-        inherit pkgs extraSpecialArgs;
+      helpers = import ../lib/helpers.nix {
+        inherit pkgs lib;
+        # TODO: deprecate helpers.enableExceptInTests,
+        # add a context option e.g. `config.isTest`?
         _nixvimTests = true;
-        module =
-          if args ? dontRun then
+      };
+
+      result = helpers.modules.evalNixvim {
+        modules = [
+          module
+          (lib.optionalAttrs (name != null) { test.name = name; })
+          (lib.optionalAttrs (args ? dontRun) (
             lib.warn
               "mkTestDerivationFromNixvimModule: the `dontRun` argument is deprecated. You should use the `test.runNvim` module option instead."
-              {
-                imports = [ module ];
-                config.test.runNvim = !dontRun;
-              }
-          else
-            module;
+              { config.test.runNvim = !dontRun; }
+          ))
+        ];
+        extraSpecialArgs = {
+          defaultPkgs = pkgs;
+        } // extraSpecialArgs;
       };
     in
-    mkTestDerivationFromNvim { inherit name nvim; };
+    result.config.test.derivation;
 in
 {
   inherit mkTestDerivationFromNvim mkTestDerivationFromNixvimModule;

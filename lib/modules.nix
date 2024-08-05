@@ -23,7 +23,7 @@ rec {
       modules ? [ ],
       extraSpecialArgs ? { },
       # Set to false to disable warnings and assertions
-      # Intended for use with tests, where we may not want to check assertions
+      # Intended to aid accessing config.test.derivation
       # WARNING: This argument may be removed without notice:
       check ? true,
     }:
