@@ -7,6 +7,6 @@
 }@args:
 {
   # Add all exported modules here
-  check = import ../tests/test-derivation.nix { inherit lib pkgs; };
+  check = import ./tests.nix { inherit lib pkgs; };
   helpers = import ./helpers.nix (args // { inherit _nixvimTests; });
 }
