@@ -121,7 +121,7 @@ in
       default = [ ];
       description = ''
         Load lua snippets with the lua loader.
-        Check https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#lua for the necessary file structure.
+        Check <https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#lua> for the necessary file structure.
       '';
       example = ''
         [
