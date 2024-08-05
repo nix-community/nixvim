@@ -1,3 +1,4 @@
+# NOTE: This file is no longer used internally, and only exists to be exported in the `lib` flake output
 {
   pkgs,
   lib ? pkgs.lib,
