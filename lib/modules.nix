@@ -23,6 +23,9 @@ rec {
     {
       modules ? [ ],
       extraSpecialArgs ? { },
+      # Set to false to disable warnings and assertions
+      # Intended to aid accessing the config.test.test derivation
+      check ? true,
     }:
     let
       result = lib.evalModules {
@@ -38,7 +41,7 @@ rec {
         else
           lib.showWarnings result.config.warnings result;
     in
-    checked;
+    if check then checked else result;
 
   # Return the messages for all assertions that failed
   getAssertionMessages =
