@@ -62,6 +62,9 @@ let
         extraSpecialArgs = {
           defaultPkgs = pkgs;
         } // extraSpecialArgs;
+        # Don't check assertions/warnings while evaluating nixvim config
+        # We'll let the test derivation handle that
+        check = false;
       };
     in
     result.config.test.derivation;
