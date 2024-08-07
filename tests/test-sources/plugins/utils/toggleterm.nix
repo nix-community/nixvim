@@ -78,6 +78,41 @@
           '';
         };
       };
+
+      customTerms = {
+        lazygit_term = {
+          cmd = "lazygit";
+          direction = "float";
+          dir = "git_dir";
+          hidden = true;
+          close_on_exit = false;
+          highlights = {
+            Normal.guibg = "#000000";
+            NormalFloat.link = "#FFFFFF";
+          };
+          env = {
+            MY_ENV_VAR = "some value";
+          };
+          clear_env = true;
+          count = 5;
+          toggle = {
+            enable = true;
+            keymap = {
+              key = "<leader>tg";
+              options = {
+                noremap = true;
+                silent = true;
+              };
+            };
+          };
+          on_open = "function(term) print('opened') end";
+          on_close = "function(term) print('closed') end";
+          on_stdout = "function(term) print('stdout') end";
+          on_stderr = "function(term) print('stderr') end";
+          on_exit = "function(term) print('exit') end";
+          auto_scroll = false;
+        };
+      };
     };
   };
 
@@ -136,6 +171,8 @@
           '';
         };
       };
+
+      customTerms = { };
     };
   };
 }
