@@ -25,6 +25,9 @@
   go = {
     treesitter-parser = "go";
   };
+  golang = {
+    treesitter-parser = "go";
+  };
   gradle = {
     treesitter-parser = "kotlin,java";
   };
