@@ -111,6 +111,7 @@
             bashls.enable = true;
             beancount.enable = true;
             biome.enable = true;
+            bufls.enable = true;
             ccls.enable = true;
             clangd.enable = true;
             clojure-lsp.enable = true;

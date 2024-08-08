@@ -49,6 +49,11 @@ let
       description = "Biome, Toolchain of the Web";
     }
     {
+      name = "bufls";
+      description = "Prototype for a Protobuf language server compatible with Buf.";
+      package = pkgs.buf-language-server;
+    }
+    {
       name = "ccls";
       description = "ccls for C/C++";
     }
