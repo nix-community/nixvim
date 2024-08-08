@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  options,
   pkgs,
   ...
 }:
@@ -73,17 +74,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   '';
 
   callSetup = false;
-  extraConfig = cfg: {
-    warnings =
-      lib.optional
-        (
-          config.performance.combinePlugins.enable
-          && !(lib.elem "firenvim" config.performance.combinePlugins.standalonePlugins)
-        )
-        ''
-          Nixvim (plugins.firenvim): Using `performance.combinePlugins` breaks `firenvim`.
-          Add this plugin to `performance.combinePlugins.standalonePlugins` to prevent any issue.
-        '';
-    globals.firenvim_config = lib.modules.mkAliasAndWrapDefsWithPriority lib.id cfg.settings;
-  };
+  extraConfig =
+    let
+      opt = options.plugins.firenvim;
+    in
+    cfg: {
+      warnings =
+        lib.optional
+          (
+            config.performance.combinePlugins.enable
+            && !(lib.elem "firenvim" config.performance.combinePlugins.standalonePlugins)
+          )
+          ''
+            Nixvim (plugins.firenvim): Using `performance.combinePlugins` breaks `firenvim`.
+            Add this plugin to `performance.combinePlugins.standalonePlugins` to prevent any issue.
+          '';
+      globals.firenvim_config = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opt.settings;
+    };
 }
