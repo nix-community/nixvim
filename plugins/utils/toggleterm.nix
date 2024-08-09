@@ -6,6 +6,62 @@
   ...
 }:
 with lib;
+let
+  directionOpt = helpers.defaultNullOpts.mkEnum [
+    "vertical"
+    "horizontal"
+    "tab"
+    "float"
+  ] "horizontal" "The direction the terminal should be opened in.";
+
+  closeOnExitOpt = helpers.defaultNullOpts.mkBool true ''
+    Close the terminal window when the process exits.
+  '';
+
+  highlightsOpt = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight {
+    NormalFloat.link = "Normal";
+    FloatBorder.link = "Normal";
+    StatusLine.gui = "NONE";
+    StatusLineNC = {
+      cterm = "italic";
+      gui = "NONE";
+    };
+  } "Highlights which map a highlight group name to an attrs of it's values.";
+
+  onOpenOpt = helpers.mkNullOrLuaFn ''
+    Function to run when the terminal opens.
+
+    `fun(t: Terminal)`
+  '';
+
+  onCloseOpt = helpers.mkNullOrLuaFn ''
+    Function to run when the terminal closes.
+
+    `fun(t: Terminal)`
+  '';
+
+  onStdoutOpt = helpers.mkNullOrLuaFn ''
+    Callback for processing output on stdout.
+
+    `fun(t: Terminal, job: number, data: string[], name: string)`
+  '';
+
+  onStderrOpt = helpers.mkNullOrLuaFn ''
+    Callback for processing output on stderr.
+
+    `fun(t: Terminal, job: number, data: string[], name: string)`
+  '';
+
+  onExitOpt = helpers.mkNullOrLuaFn ''
+    Function to run when terminal process exits.
+
+    `fun(t: Terminal, job: number, exit_code: number, name: string)`
+  '';
+
+  autoScrollOpt = helpers.defaultNullOpts.mkBool true ''
+    Automatically scroll to the bottom on terminal output.
+  '';
+in
 helpers.neovim-plugin.mkNeovimPlugin config {
   name = "toggleterm";
   originalName = "toggleterm.nvim";
@@ -115,35 +171,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       `fun(t: Terminal)`
     '';
 
-    on_open = helpers.mkNullOrLuaFn ''
-      Function to run when the terminal opens.
+    on_open = onOpenOpt;
 
-      `fun(t: Terminal)`
-    '';
+    on_close = onCloseOpt;
 
-    on_close = helpers.mkNullOrLuaFn ''
-      Function to run when the terminal closes.
+    on_stdout = onStdoutOpt;
 
-      `fun(t: Terminal)`
-    '';
+    on_stderr = onStderrOpt;
 
-    on_stdout = helpers.mkNullOrLuaFn ''
-      Callback for processing output on stdout.
-
-      `fun(t: Terminal, job: number, data: string[], name: string)`
-    '';
-
-    on_stderr = helpers.mkNullOrLuaFn ''
-      Callback for processing output on stderr.
-
-      `fun(t: Terminal, job: number, data: string[], name: string)`
-    '';
-
-    on_exit = helpers.mkNullOrLuaFn ''
-      Function to run when terminal process exits.
-
-      `fun(t: Terminal, job: number, exit_code: number, name: string)`
-    '';
+    on_exit = onExitOpt;
 
     hide_numbers = helpers.defaultNullOpts.mkBool true ''
       Hide the number column in toggleterm buffers.
@@ -158,15 +194,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       opened.
     '';
 
-    highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight {
-      NormalFloat.link = "Normal";
-      FloatBorder.link = "Normal";
-      StatusLine.gui = "NONE";
-      StatusLineNC = {
-        cterm = "italic";
-        gui = "NONE";
-      };
-    } "Highlights which map a highlight group name to an attrs of it's values.";
+    highlights = highlightsOpt;
 
     shade_terminals = helpers.defaultNullOpts.mkBool true ''
       NOTE: This option takes priority over highlights specified so if you specify Normal
@@ -199,24 +227,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       If set to true (default) the previous terminal mode will be remembered.
     '';
 
-    direction = helpers.defaultNullOpts.mkEnum [
-      "vertical"
-      "horizontal"
-      "tab"
-      "float"
-    ] "horizontal" "The direction the terminal should be opened in.";
+    direction = directionOpt;
 
-    close_on_exit = helpers.defaultNullOpts.mkBool true ''
-      Close the terminal window when the process exits.
-    '';
+    close_on_exit = closeOnExitOpt;
 
     shell = helpers.defaultNullOpts.mkStr { __raw = "vim.o.shell"; } ''
       Change the default shell.
     '';
 
-    auto_scroll = helpers.defaultNullOpts.mkBool true ''
-      Automatically scroll to the bottom on terminal output.
-    '';
+    auto_scroll = autoScrollOpt;
 
     float_opts = {
       border = helpers.mkNullOrOption helpers.nixvimTypes.border ''
@@ -288,5 +307,111 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       width = 130;
       height = 30;
     };
+  };
+
+  extraOptions = {
+    customTerms =
+      let
+        termConfig = types.submodule {
+          options = {
+            cmd = helpers.mkNullOrOption types.str ''
+              Command to execute when creating the terminal e.g. 'top'.
+            '';
+            direction = directionOpt;
+            dir = helpers.mkNullOrOption types.str "Directory to start the terminal in.";
+            hidden = helpers.defaultNullOpts.mkBool false ''
+              Whether or not to include this terminal in the terminals list.
+            '';
+            close_on_exit = closeOnExitOpt;
+            highlights = highlightsOpt;
+            env = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+              key:value attribute set with environment variables set in the terminal.
+            '';
+            clear_env = helpers.defaultNullOpts.mkBool false ''
+              Use only environment variables defined in `env`.
+            '';
+            count = helpers.mkNullOrOption types.ints.unsigned ''
+              The number that can be used to trigger this specific terminal.
+              e.g. `:5ToggleTerm<CR>` will open the terminal with count 5.
+            '';
+            toggle = {
+              enable = helpers.defaultNullOpts.mkBool false ''
+                Whether or not to enable toggling of the terminal.
+              '';
+              keymap = helpers.mkNullOrOption (helpers.keymaps.mkMapOptionSubmodule {
+                defaults = { };
+                key = true;
+                action = false;
+              }) "Keymap to toggle the terminal.";
+            };
+            on_open = onOpenOpt;
+            on_close = onCloseOpt;
+            auto_scroll = autoScrollOpt;
+            on_stdout = onStdoutOpt;
+            on_stderr = onStderrOpt;
+            on_exit = onExitOpt;
+          };
+        };
+      in
+      mkOption {
+        default = { };
+        description = "Custom terminal configurations.";
+        example = ''
+          ```nix
+          customTerms = {
+            lazygit_term = {
+              cmd = "lazygit";
+              dir = "git_dir";
+              direction = "float";
+              hidden = true;
+              toggle = {
+                enable = true;
+                keymap = {
+                  key = "<leader>tg";
+                };
+              };
+            };
+            htop_term = {
+              cmd = "htop";
+              direction = "horizontal";
+              toggle = {
+                enable = true;
+                keymap = {
+                  key = "<leader>th";
+                };
+              };
+            };
+          };
+        '';
+        type = types.attrsOf termConfig;
+      };
+  };
+
+  extraConfig = cfg: {
+    extraConfigLua =
+      let
+        termConfigToLua =
+          name: tcfg:
+          let
+            termSetupOptions = filterAttrs (n: v: n != "toggle") (tcfg // { display_name = name; });
+          in
+          ''
+            ${name} = Terminal:new(${helpers.toLuaObject termSetupOptions})
+          '';
+      in
+      optionalString (cfg.customTerms != null && cfg.customTerms != [ ]) ''
+        local Terminal = require('toggleterm.terminal').Terminal
+      ''
+      + concatStrings (mapAttrsToList termConfigToLua cfg.customTerms);
+
+    keymaps =
+      let
+        termConfigsWithKeymap = filterAttrs (
+          name: tcfg: tcfg.toggle != null && tcfg.toggle.enable && tcfg.toggle.keymap != null
+        ) cfg.customTerms;
+        termConfigToKeymap =
+          name: tcfg: tcfg.toggle.keymap // { action.__raw = "function() ${name}:toggle() end"; };
+      in
+      mapAttrsToList termConfigToKeymap termConfigsWithKeymap;
   };
 }
