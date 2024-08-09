@@ -13,6 +13,12 @@ let
   processPlugin =
     plugin:
     let
+      hasNonNullAttr = str: attrs: (builtins.hasAttr str attrs) && (attrs."${str}" != null);
+      hasNonNullName = plugin: hasNonNullAttr "name" plugin;
+      hasNonNullPkg = plugin: hasNonNullAttr "pkg" plugin;
+      hasNonNullPackages = plugin: hasNonNullAttr "packages" plugin;
+      hasNonNullDependencies = plugin: hasNonNullAttr "dependencies" plugin;
+
       mkEntryFromDrv =
         p:
         if lib.isDerivation p then
@@ -22,16 +28,27 @@ let
           }
         else
           {
-            name = "${lib.getName p.pkg}";
-            path = p.pkg;
+            name =
+              if hasNonNullName p then
+                p.name
+              else if hasNonNullPkg p then
+                "${lib.getName p.pkg}"
+              else
+                "${lib.getName p.path}";
+            path = if p ? path then p.path else p.pkg;
           };
-      processDependencies =
-        if plugin ? dependencies && plugin.dependencies != null then
-          builtins.concatMap processPlugin plugin.dependencies
+      processPackages =
+        if hasNonNullPackages plugin then
+          if lib.isList plugin.packages then
+            builtins.concatMap processPlugin plugin.packages
+          else
+            builtins.concatMap processPlugin [ plugin.packages ]
         else
           [ ];
+      processDependencies =
+        if hasNonNullDependencies plugin then builtins.concatMap processPlugin plugin.dependencies else [ ];
     in
-    [ (mkEntryFromDrv plugin) ] ++ processDependencies;
+    [ (mkEntryFromDrv plugin) ] ++ processPackages ++ processDependencies;
 
   processedPlugins = builtins.concatLists (builtins.map processPlugin lazyPlugins);
   lazyPath = pkgs.linkFarm "lazy-plugins" processedPlugins;
@@ -55,6 +72,8 @@ in
 
               name = helpers.mkNullOrOption str "Name of the plugin to install";
 
+              import = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str (listOf str)) "Name of additional plugin module/modules to import";
+
               dev = helpers.defaultNullOpts.mkBool false ''
                 When true, a local plugin directory will be used instead.
                 See config.dev
@@ -75,6 +94,8 @@ in
                 then this plugin will not be loaded. Useful to disable some plugins in vscode,
                 or firenvim for example. (accepts fun(LazyPlugin):boolean)
               '';
+
+              packages = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive types.package listOfPackages) "Additional packages to be made available in the `lazy-plugins` path";
 
               dependencies = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str listOfPlugins) "Plugin dependencies";
 
@@ -140,6 +161,7 @@ in
             };
           });
 
+          listOfPackages = types.listOf (helpers.nixvimTypes.eitherRecursive types.package types.attrs);
           listOfPlugins = types.listOf pluginType;
         in
         mkOption {
@@ -160,42 +182,48 @@ in
           plugin:
           let
             keyExists = keyToCheck: attrSet: lib.elem keyToCheck (lib.attrNames attrSet);
+            pluginImportToLua = pluginImport: { import = pluginImport; };
           in
           if isDerivation plugin then
             { dir = "${lazyPath}/${lib.getName plugin}"; }
           else
-            {
-              "__unkeyed" = plugin.name;
+            [
+              {
+                "__unkeyed" = plugin.name;
 
-              inherit (plugin)
-                cmd
-                cond
-                config
-                dev
-                enabled
-                event
-                ft
-                init
-                keys
-                lazy
-                main
-                module
-                name
-                optional
-                opts
-                priority
-                submodules
-                ;
+                inherit (plugin)
+                  cmd
+                  cond
+                  config
+                  dev
+                  enabled
+                  event
+                  ft
+                  init
+                  keys
+                  lazy
+                  main
+                  module
+                  name
+                  optional
+                  opts
+                  priority
+                  submodules
+                  ;
 
-              dependencies = helpers.ifNonNull' plugin.dependencies (
-                if isList plugin.dependencies then (pluginListToLua plugin.dependencies) else plugin.dependencies
-              );
+                import = helpers.ifNonNull' plugin.import (if isList plugin.import then null else plugin.import);
 
-              dir =
-                if plugin ? dir && plugin.dir != null then plugin.dir else "${lazyPath}/${lib.getName plugin.pkg}";
-            };
+                dependencies = helpers.ifNonNull' plugin.dependencies (
+                  if isList plugin.dependencies then (pluginListToLua plugin.dependencies) else plugin.dependencies
+                );
 
-        pluginListToLua = map pluginToLua;
+                dir =
+                  if plugin ? dir && plugin.dir != null then plugin.dir else "${lazyPath}/${lib.getName plugin.pkg}";
+              }
+            ]
+            ++ (if isList plugin.import then (map pluginImportToLua plugin.import) else [ ]);
+
+        pluginListToLua = pluginList: flatten (map pluginToLua pluginList);
 
         plugins = pluginListToLua cfg.plugins;
 

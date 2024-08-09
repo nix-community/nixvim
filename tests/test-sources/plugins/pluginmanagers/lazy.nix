@@ -50,6 +50,60 @@
           cmd = "ALEEnable";
         }
 
+        # Plugins can import a plugin module
+        {
+          pkg = LazyVim;
+          import = "lazyvim.plugins";
+        }
+
+        # Plugins can import several plugin modules
+        {
+          pkg = LazyVim;
+          import = [
+            "lazyvim.plugins"
+            "lazyvim.plugins.extras.coding.copilot"
+          ];
+        }
+
+        # Plugins can add an additional package to the lazy path
+        {
+          pkg = LazyVim;
+          packages = catppuccin-nvim;
+        }
+
+        # Plugins can add several additional packages to the lazy path
+        {
+          pkg = LazyVim;
+          packages = [
+            bufferline-nvim
+            catppuccin-nvim
+            cmp-buffer
+          ];
+        }
+
+        # Plugins can add an additional package to the lazy path, and import a
+        # plugin module
+        {
+          pkg = LazyVim;
+          packages = catppuccin-nvim;
+          import = "lazyvim.plugins";
+        }
+
+        # Plugins can add several additional packages to the lazy path, and
+        # import several plugin modules
+        {
+          pkg = LazyVim;
+          packages = [
+            bufferline-nvim
+            catppuccin-nvim
+            cmp-buffer
+          ];
+          import = [
+            "lazyvim.plugins"
+            "lazyvim.plugins.extras.coding.copilot"
+          ];
+        }
+
         # Plugins can have dependencies on other plugins
         {
           pkg = completion-nvim;
