@@ -27,6 +27,13 @@ rec {
 
   maybeRaw = type: types.either type rawLua;
 
+  booleanInt =
+    with types;
+    coercedTo bool (v: if v then 1 else 0) (enum [
+      0
+      1
+    ]);
+
   border =
     with types;
     oneOf [
