@@ -1,5 +1,4 @@
 {
-  makeNixvimWithModule,
   lib ? pkgs.lib,
   helpers,
   pkgs,
@@ -7,8 +6,6 @@
 }:
 let
   fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ./test-derivation.nix { inherit pkgs makeNixvimWithModule lib; };
-  inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   # List of files containing configurations
   testFiles = fetchTests {
@@ -40,29 +37,45 @@ in
 builtins.listToAttrs (
   builtins.map (
     { name, cases }:
-
     let
       # The test case can either be the actual definition,
       # or a child attr named `module`.
-      prepareModule = case: case.module or (lib.removeAttrs case [ "tests" ]);
-      dontRunModule = case: case.tests.dontRun or false;
+      prepareModule =
+        case: if lib.isFunction case then case else case.module or (lib.removeAttrs case [ "tests" ]);
+      dontRunModule =
+        case:
+        let
+          dontRun = case.tests.dontRun or false;
+        in
+        lib.optionalAttrs dontRun { test.runNvim = false; };
+
+      # Evaluates a test-case definition and returns the `test.test` option value
+      getTest =
+        { name, case }:
+        let
+          result = helpers.modules.evalNixvim {
+            modules = [
+              { test.name = name; }
+              (dontRunModule case)
+              (prepareModule case)
+            ];
+            extraSpecialArgs = {
+              # TODO: enable unfree via nixpkgs.config module (#1784)
+              defaultPkgs = pkgsUnfree;
+            };
+            # Don't check assertions/warnings while evaluating nixvim config
+            # We'll let the test derivation handle that
+            check = false;
+          };
+        in
+        {
+          inherit name;
+          path = result.config.test.test;
+        };
     in
     {
       name = "test-${name}";
-      value = mkTestDerivationFromNixvimModule {
-        inherit name;
-        tests = builtins.map (
-          { name, case }:
-          {
-            inherit name;
-            module = prepareModule case;
-            dontRun = dontRunModule case;
-          }
-        ) cases;
-        # Use the global dontRun only if we don't have a list of modules
-        dontRun = dontRunModule cases;
-        pkgs = pkgsUnfree;
-      };
+      value = pkgs.linkFarm "test-${name}" (lib.map getTest cases);
     }
   ) (testFiles ++ [ exampleFiles ])
 )
