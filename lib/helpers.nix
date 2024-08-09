@@ -44,6 +44,7 @@ let
       defaultNullOpts
       mkCompositeOption
       mkCompositeOption'
+      mkLazyLoadOption
       mkNullOrLua
       mkNullOrLua'
       mkNullOrLuaFn
