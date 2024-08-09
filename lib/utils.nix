@@ -115,7 +115,7 @@ rec {
       null
     else if isString r then
       { __raw = r; }
-    else if helpers.nixvimTypes.isRawType r then
+    else if types.isRawType r then
       r
     else
       throw "mkRaw: invalid input: ${generators.toPretty { multiline = false; } r}";

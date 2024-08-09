@@ -1,3 +1,4 @@
+# Custom types to be included in `lib.types`
 { lib, helpers }:
 with lib;
 with helpers;
@@ -15,6 +16,8 @@ let
   isRawType = v: v ? __raw && isString v.__raw;
 in
 rec {
+  # TODO: deprecate in favor of types.rawLua.check
+  # Or move to utils, lua, etc?
   inherit isRawType;
 
   rawLua = mkOptionType {
@@ -82,5 +85,3 @@ rec {
   # Overridden when building the documentation
   eitherRecursive = either;
 }
-# Allow to do `with nixvimTypes;` instead of `with types;`
-// lib.types
