@@ -42,6 +42,7 @@
     ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
+    ./filetrees/yazi.nix
 
     ./git/committia.nix
     ./git/diffview.nix
