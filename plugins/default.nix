@@ -161,6 +161,7 @@
     ./utils/competitest.nix
     ./utils/conjure.nix
     ./utils/coverage.nix
+    ./utils/crates-nvim.nix
     ./utils/cursorline.nix
     ./utils/dashboard.nix
     ./utils/direnv.nix
