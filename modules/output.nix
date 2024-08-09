@@ -80,7 +80,12 @@ in
         "lua"
       ];
       default = "lua";
-      description = "Whether the generated file is a vim or a lua file";
+      description = ''
+        Whether the generated file is a vim or a lua file
+
+        Read-only outside of `files` submodules.
+      '';
+      readOnly = config.isTopLevel;
     };
 
     path = mkOption {

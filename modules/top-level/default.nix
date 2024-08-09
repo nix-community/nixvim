@@ -9,4 +9,8 @@
     ./files
     ./output.nix
   ];
+
+  config = {
+    isTopLevel = true;
+  };
 }
