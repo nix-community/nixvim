@@ -44,8 +44,8 @@ builtins.listToAttrs (
     let
       # The test case can either be the actual definition,
       # or a child attr named `module`.
-      prepareModule = case: case.module or (lib.removeAttrs case [ "tests" ]);
-      dontRunModule = case: case.tests.dontRun or false;
+      # TODO: Deprecate this now that `tests.dontRun` is a module option
+      prepareModule = case: case.module or case;
     in
     {
       name = "test-${name}";
@@ -56,11 +56,8 @@ builtins.listToAttrs (
           {
             inherit name;
             module = prepareModule case;
-            dontRun = dontRunModule case;
           }
         ) cases;
-        # Use the global dontRun only if we don't have a list of modules
-        dontRun = dontRunModule cases;
         pkgs = pkgsUnfree;
       };
     }
