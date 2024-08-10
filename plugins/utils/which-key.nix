@@ -236,11 +236,12 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     };
 
     filter = defaultNullOpts.mkLuaFn' {
-      pluginDefault.__raw = ''
-        function(mapping)
-          return true
-        end
-      '';
+      pluginDefault = # Lua
+        ''
+          function(mapping)
+            return true
+          end
+        '';
       description = "Filter used to exclude mappings";
     };
 
@@ -283,10 +284,12 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     ] "Manually setup triggers";
 
     defer = defaultNullOpts.mkLuaFn' {
-      pluginDefault.__raw = ''
-        function(ctx)
-          return ctx.mode == "V" or ctx.mode == "<C-V>
-         end'';
+      pluginDefault = # Lua
+        ''
+          function(ctx)
+            return ctx.mode == "V" or ctx.mode == "<C-V>
+          end
+        '';
       description = ''
         Start hidden and wait for a key to be pressed before showing the popup.
 

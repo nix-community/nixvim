@@ -16,11 +16,12 @@
           end
         '';
 
-        filter.__raw = ''
-          function(mapping)
-              return true
+        filter = # Lua
+          ''
+            function(mapping)
+                return true
             end
-        '';
+          '';
 
         spec = [ ];
 
@@ -33,11 +34,12 @@
           }
         ];
 
-        defer.__raw = ''
-          function(ctx)
-            return ctx.mode == "V" or ctx.mode == "<C-V>"
-          end
-        '';
+        defer = # Lua
+          ''
+            function(ctx)
+              return ctx.mode == "V" or ctx.mode == "<C-V>"
+            end
+          '';
 
         plugins = {
           marks = true;
