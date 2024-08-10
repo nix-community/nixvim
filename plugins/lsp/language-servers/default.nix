@@ -28,7 +28,10 @@ let
     {
       name = "astro";
       description = "astrols for Astro";
-      package = pkgs.nodePackages."@astrojs/language-server";
+      package =
+        pkgs.astro-language-server
+          # TODO remove the following line when https://github.com/NixOS/nixpkgs/pull/333736 reaches nixos-unstable
+          or pkgs.nodePackages."@astrojs/language-server";
       cmd = cfg: [
         "${cfg.package}/bin/astro-ls"
         "--stdio"
