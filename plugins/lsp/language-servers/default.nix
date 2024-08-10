@@ -28,7 +28,7 @@ let
     {
       name = "astro";
       description = "astrols for Astro";
-      package = pkgs.nodePackages."@astrojs/language-server";
+      package = pkgs.astro-language-server;
       cmd = cfg: [
         "${cfg.package}/bin/astro-ls"
         "--stdio"
