@@ -46,11 +46,12 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     enable_mouse_support = defaultNullOpts.mkBool false "Enables mouse support.";
 
     open_file_function = defaultNullOpts.mkLuaFn' {
-      pluginDefault.__raw = ''
-        function(chosen_file)
-          vim.cmd(string.format("edit %s", vim.fn.fnameescape(chosen_file)))
-        end
-      '';
+      pluginDefault = # Lua
+        ''
+          function(chosen_file)
+            vim.cmd(string.format("edit %s", vim.fn.fnameescape(chosen_file)))
+          end
+        '';
       description = ''
         What Neovim should do a when a file was opened (selected) in yazi.
 
@@ -92,10 +93,11 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
 
     hooks = {
       yazi_opened = defaultNullOpts.mkLuaFn' {
-        pluginDefault.__raw = ''
-          function(preselected_path, yazi_buffer_id, config)
-          end
-        '';
+        pluginDefault = # Lua
+          ''
+            function(preselected_path, yazi_buffer_id, config)
+            end
+          '';
         description = ''
           If you want to execute a custom action when yazi has been opened,
           you can define it here.
@@ -103,19 +105,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       };
 
       yazi_closed_successfully = defaultNullOpts.mkLuaFn' {
-        pluginDefault.__raw = ''
-          function(chosen_file, config, state)
-          end
-        '';
+        pluginDefault = # Lua
+          ''
+            function(chosen_file, config, state)
+            end
+          '';
         description = "When yazi was successfully closed";
       };
 
       yazi_opened_multiple_files = defaultNullOpts.mkLuaFn' {
-        pluginDefault.__raw = ''
-          function(chosen_files)
-            vim.cmd("args" .. table.concat(chosen_files, " "))
-          end
-        '';
+        pluginDefault = # Lua
+          ''
+            function(chosen_files)
+              vim.cmd("args" .. table.concat(chosen_files, " "))
+            end
+          '';
         description = ''
           When yazi opened multiple files. The default is to send them to the
           quickfix list, but if you want to change that, you can define it here
