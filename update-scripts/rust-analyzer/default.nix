@@ -17,6 +17,8 @@
   lib,
   rust-analyzer,
   writeText,
+  pandoc,
+  runCommand,
 }:
 let
   packageJSON = "${rust-analyzer.src}/editors/code/package.json";
@@ -132,6 +134,18 @@ let
       type ? null,
     }:
     let
+      filteredMarkdownDesc =
+        # If there is a risk that the string contains an heading filter it out
+        if lib.hasInfix "# " markdownDescription then
+          builtins.readFile (
+            runCommand "filtered-documentation" { inherit markdownDescription; } ''
+              ${lib.getExe pandoc} -o $out -t markdown \
+                --lua-filter=${./heading_filter.lua} <<<"$markdownDescription"
+            ''
+          )
+        else
+          markdownDescription;
+
       enumDesc =
         values: descriptions:
         let
@@ -140,7 +154,7 @@ let
           );
         in
         ''
-          ${markdownDescription}
+          ${filteredMarkdownDesc}
 
           Values:
           ${builtins.concatStringsSep "\n" valueDesc}
@@ -164,7 +178,7 @@ let
           enum == null && (anyOf == null || builtins.all (subProp: !(lib.hasAttr "enum" subProp)) anyOf)
         then
           ''
-            ${markdownDescription}
+            ${filteredMarkdownDesc}
           ''
         else if enum != null then
           assert lib.assertMsg (anyOf == null) "enum + anyOf types are not yet handled";

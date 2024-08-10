@@ -1987,15 +1987,18 @@
   };
   "rust-analyzer.workspace.discoverConfig" = {
     description = ''
-      Enables automatic discovery of projects using [`DiscoverWorkspaceConfig::command`].
+      Enables automatic discovery of projects using
+      \[`DiscoverWorkspaceConfig::command`\].
 
-      [`DiscoverWorkspaceConfig`] also requires setting `progress_label` and `files_to_watch`.
-      `progress_label` is used for the title in progress indicators, whereas `files_to_watch`
-      is used to determine which build system-specific files should be watched in order to
-      reload rust-analyzer.
+      \[`DiscoverWorkspaceConfig`\] also requires setting `progress_label` and
+      `files_to_watch`. `progress_label` is used for the title in progress
+      indicators, whereas `files_to_watch` is used to determine which build
+      system-specific files should be watched in order to reload
+      rust-analyzer.
 
       Below is an example of a valid configuration:
-      ```json
+
+      ``` json
       "rust-analyzer.workspace.discoverConfig": {
               "command": [
                       "rust-project",
@@ -2009,14 +2012,14 @@
       }
       ```
 
-      ## On `DiscoverWorkspaceConfig::command`
+      **On `DiscoverWorkspaceConfig::command`**
 
       **Warning**: This format is provisional and subject to change.
 
-      [`DiscoverWorkspaceConfig::command`] *must* return a JSON object
+      \[`DiscoverWorkspaceConfig::command`\] *must* return a JSON object
       corresponding to `DiscoverProjectData::Finished`:
 
-      ```norun
+      ``` norun
       #[derive(Debug, Clone, Deserialize, Serialize)]
       #[serde(tag = "kind")]
       #[serde(rename_all = "snake_case")]
@@ -2029,7 +2032,7 @@
 
       As JSON, `DiscoverProjectData::Finished` is:
 
-      ```json
+      ``` json
       {
               // the internally-tagged representation of the enum.
               "kind": "finished",
@@ -2051,7 +2054,7 @@
       which will be substituted with the JSON-serialized form of the following
       enum:
 
-      ```norun
+      ``` norun
       #[derive(PartialEq, Clone, Debug, Serialize)]
       #[serde(rename_all = "camelCase")]
       pub enum DiscoverArgument {
@@ -2062,7 +2065,7 @@
 
       The JSON representation of `DiscoverArgument::Path` is:
 
-      ```json
+      ``` json
       {
               "path": "src/main.rs"
       }
@@ -2070,17 +2073,17 @@
 
       Similarly, the JSON representation of `DiscoverArgument::Buildfile` is:
 
-      ```
-      {
-              "buildfile": "BUILD"
-      }
-      ```
+          {
+                  "buildfile": "BUILD"
+          }
 
-      `DiscoverArgument::Path` is used to find and generate a `rust-project.json`,
-      and therefore, a workspace, whereas `DiscoverArgument::buildfile` is used to
-      to update an existing workspace. As a reference for implementors,
-      buck2's `rust-project` will likely be useful:
+      `DiscoverArgument::Path` is used to find and generate a
+      `rust-project.json`, and therefore, a workspace, whereas
+      `DiscoverArgument::buildfile` is used to to update an existing
+      workspace. As a reference for implementors, buck2's `rust-project` will
+      likely be useful:
       https://github.com/facebook/buck2/tree/main/integrations/rust-project.
+
     '';
     pluginDefault = null;
     type = {
