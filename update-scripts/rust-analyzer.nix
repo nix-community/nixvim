@@ -43,6 +43,7 @@ let
       maximum ? null,
       items ? null,
       anyOf ? null,
+      properties ? null,
       # Not used in the function, but anyOf values contain it
       enumDescriptions ? null,
     }@property:
@@ -95,6 +96,13 @@ let
       {
         kind = type;
         inherit minimum maximum;
+      }
+    else if type == "object" && properties != null then
+      {
+        kind = "submodule";
+        options = lib.mapAttrs (
+          name: value: mkRustAnalyzerOptionType false "${property_name}.${name}" value
+        ) properties;
       }
     else if
       lib.elem type [

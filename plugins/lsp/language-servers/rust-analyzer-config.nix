@@ -37,6 +37,16 @@ let
         lib.types.int
     else if kind == "object" then
       lib.types.attrsOf lib.types.anything
+    else if kind == "submodule" then
+      lib.types.submodule {
+        options = lib.mapAttrs (
+          _: ty:
+          lib.mkOption {
+            type = mkRustAnalyzerType ty;
+            description = "";
+          }
+        ) typeInfo.options;
+      }
     else if kind == "string" then
       lib.types.str
     else if kind == "boolean" then
