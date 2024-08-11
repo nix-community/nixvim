@@ -32,6 +32,13 @@ rec {
   # and contain only letters, digits, and underscores.
   isIdentifier = s: !(isKeyword s) && (builtins.match "[A-Za-z_][0-9A-Za-z_]*" s) == [ ];
 
+  # Alias for nixpkgs lib's `mkLuaInline`,
+  # but can also convert rawLua to lua-inline
+  mkInline = v: lib.generators.mkLuaInline (v.__raw or v);
+
+  # Whether the value is a lua-inline type
+  isInline = v: v._type or null == "lua-inline";
+
   # toLua' with default options, aliased as toLuaObject at the top-level
   toLua = toLua' { };
 
@@ -141,6 +148,8 @@ rec {
           value
         else if allowRawValues && value ? __raw then
           value
+        else if isInline value then
+          value
         else if isDerivation value then
           value
         else if isList value then
@@ -227,8 +236,11 @@ rec {
             v.__pretty v.val
           # apply raw values if allowed
           else if allowRawValues && v ? __raw then
-            # TODO: apply indentation to multiline raw values
+            # TODO: deprecate in favour of inline-lua
             v.__raw
+          else if isInline v then
+            # TODO: apply indentation to multiline raw values?
+            "(${v.expr})"
           else
             "{"
             + introSpace

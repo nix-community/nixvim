@@ -87,6 +87,7 @@ let
     inherit (helpers.extendedLib) maintainers;
 
     toLuaObject = helpers.lua.toLua;
+    mkLuaInline = helpers.lua.mkInline;
   };
 in
 helpers

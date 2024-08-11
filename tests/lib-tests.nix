@@ -65,6 +65,16 @@ let
       expected = "<lua code>";
     };
 
+    testToLuaObjectInlineLua = {
+      expr = helpers.toLuaObject (lib.generators.mkLuaInline "<lua code>");
+      expected = "(<lua code>)";
+    };
+
+    testToLuaObjectInlineLuaNested = {
+      expr = helpers.toLuaObject { lua = lib.generators.mkLuaInline "<lua code>"; };
+      expected = "{ lua = (<lua code>) }";
+    };
+
     testToLuaObjectLuaTableMixingList = {
       expr = helpers.toLuaObject {
         "__unkeyed...." = "foo";
