@@ -287,20 +287,6 @@
       kind = "string";
     };
   };
-  "rust-analyzer.cargo.sysrootQueryMetadata" = {
-    description = ''
-      Whether to run cargo metadata on the sysroot library allowing rust-analyzer to analyze
-      third-party dependencies of the standard libraries.
-
-      This will cause `cargo` to create a lockfile in your sysroot directory. rust-analyzer
-      will attempt to clean up afterwards, but nevertheless requires the location to be
-      writable to.
-    '';
-    pluginDefault = false;
-    type = {
-      kind = "boolean";
-    };
-  };
   "rust-analyzer.cargo.sysrootSrc" = {
     description = ''
       Relative path to the sysroot library sources. If left unset, this will default to
@@ -1534,16 +1520,6 @@
       kind = "boolean";
     };
   };
-  "rust-analyzer.lens.forceCustomCommands" = {
-    description = ''
-      Internal config: use custom client-side commands even when the
-      client doesn't set the corresponding capability.
-    '';
-    pluginDefault = true;
-    type = {
-      kind = "boolean";
-    };
-  };
   "rust-analyzer.lens.implementations.enable" = {
     description = ''
       Whether to show `Implementations` lens. Only applies when
@@ -1667,15 +1643,6 @@
       Whether to show `can't find Cargo.toml` error message.
     '';
     pluginDefault = true;
-    type = {
-      kind = "boolean";
-    };
-  };
-  "rust-analyzer.notifications.unindexedProject" = {
-    description = ''
-      Whether to send an UnindexedProject notification to the client.
-    '';
-    pluginDefault = false;
     type = {
       kind = "boolean";
     };
@@ -2002,13 +1969,12 @@
       "rust-analyzer.workspace.discoverConfig": {
               "command": [
                       "rust-project",
-                      "develop-json",
-                      {arg}
+                      "develop-json"
               ],
               "progressLabel": "rust-analyzer",
               "filesToWatch": [
-                      "BUCK",
-              ],
+                      "BUCK"
+              ]
       }
       ```
 
