@@ -1,4 +1,4 @@
-_: {
+{
   empty = {
     plugins.markview.enable = true;
   };

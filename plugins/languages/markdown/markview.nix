@@ -22,9 +22,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     Please refer to the plugin's [documentation](https://github.com/OXY2DEV/markview.nvim/wiki/Configuration-options) for more details.
   '';
 
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/333587 is available
-  extraPlugins = with pkgs.vimPlugins; [ nvim-web-devicons ];
-
   settingsOptions = {
     buf_ignore = defaultNullOpts.mkListOf types.str [ "nofile" ] ''
       Buftypes to disable markview-nvim.
