@@ -154,7 +154,4 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     yazi_floating_window_border = "single";
     yazi_floating_window_winblend = 50;
   };
-
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/333506 is available
-  extraPlugins = with pkgs.vimPlugins; [ plenary-nvim ];
 }
