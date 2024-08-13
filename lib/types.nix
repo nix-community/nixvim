@@ -81,6 +81,15 @@ rec {
 
   # Overridden when building the documentation
   eitherRecursive = either;
+
+  listOfLen =
+    elemType: len:
+    addCheck (listOf elemType) (v: builtins.length v == len)
+    // {
+      description = "list of ${toString len} ${
+        optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+      }";
+    };
 }
 # Allow to do `with nixvimTypes;` instead of `with types;`
 // lib.types

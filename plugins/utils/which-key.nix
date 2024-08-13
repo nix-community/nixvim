@@ -10,15 +10,6 @@ let
   inherit (lib.nixvim) defaultNullOpts mkRaw toLuaObject;
   types = lib.nixvim.nixvimTypes;
 
-  listOfLen =
-    elemType: len:
-    types.addCheck (types.listOf elemType) (v: length v == len)
-    // {
-      description = "list of ${toString len} ${
-        types.optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
-      }";
-    };
-
   opt = options.plugins.which-key;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
@@ -332,7 +323,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         Supports all available border types from `vim.api.keyset.win_config.border`.
       '';
 
-      padding = defaultNullOpts.mkNullable (listOfLen types.int 2) [
+      padding = defaultNullOpts.mkNullable (types.listOfLen types.int 2) [
         1
         2
       ] "Extra window padding, in the form `[top/bottom, right/left]`.";
