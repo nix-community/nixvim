@@ -1534,16 +1534,6 @@
       kind = "boolean";
     };
   };
-  "rust-analyzer.lens.forceCustomCommands" = {
-    description = ''
-      Internal config: use custom client-side commands even when the
-      client doesn't set the corresponding capability.
-    '';
-    pluginDefault = true;
-    type = {
-      kind = "boolean";
-    };
-  };
   "rust-analyzer.lens.implementations.enable" = {
     description = ''
       Whether to show `Implementations` lens. Only applies when
@@ -1667,15 +1657,6 @@
       Whether to show `can't find Cargo.toml` error message.
     '';
     pluginDefault = true;
-    type = {
-      kind = "boolean";
-    };
-  };
-  "rust-analyzer.notifications.unindexedProject" = {
-    description = ''
-      Whether to send an UnindexedProject notification to the client.
-    '';
-    pluginDefault = false;
     type = {
       kind = "boolean";
     };
@@ -2002,13 +1983,12 @@
       "rust-analyzer.workspace.discoverConfig": {
               "command": [
                       "rust-project",
-                      "develop-json",
-                      {arg}
+                      "develop-json"
               ],
               "progressLabel": "rust-analyzer",
               "filesToWatch": [
-                      "BUCK",
-              ],
+                      "BUCK"
+              ]
       }
       ```
 
