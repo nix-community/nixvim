@@ -71,15 +71,7 @@ with lib;
         ++ (optional deprecateExtraOptions (
           mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
         ))
-        ++ (map (
-          option:
-          let
-            optionPath = if isString option then [ option ] else option; # option is already a path (i.e. a list)
-
-            optionPathSnakeCase = map helpers.toSnakeCase optionPath;
-          in
-          mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
-        ) optionsRenamedToSettings);
+        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
 
       options.${namespace}.${name} =
         {

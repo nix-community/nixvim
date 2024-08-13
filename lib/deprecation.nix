@@ -46,6 +46,18 @@ rec {
         '';
     };
 
+  mkSettingsRenamedOptionModules =
+    oldPrefix: newPrefix:
+    map (
+      option':
+      let
+        option = toList option';
+        oldPath = oldPrefix ++ option;
+        newPath = newPrefix ++ map nixvim.toSnakeCase option;
+      in
+      mkRenamedOptionModule oldPath newPath
+    );
+
   # A clone of types.coercedTo, but it prints a warning when oldType is used.
   transitionType =
     oldType: coerceFn: newType:

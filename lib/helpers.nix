@@ -38,7 +38,12 @@ let
       byteCompileLuaDrv
       ;
 
-    inherit (helpers.deprecation) getOptionRecursive mkDeprecatedSubOptionModule transitionType;
+    inherit (helpers.deprecation)
+      getOptionRecursive
+      mkDeprecatedSubOptionModule
+      mkSettingsRenamedOptionModules
+      transitionType
+      ;
 
     inherit (helpers.options)
       defaultNullOpts
