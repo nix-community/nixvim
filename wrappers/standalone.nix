@@ -1,7 +1,10 @@
 default_pkgs: self:
 {
+  # TODO: consider deprecating pkgs & lib args, then bootstrapping from the flake's nixpkgs?
+  # Ideally, everything should be configurable via the module system, however `lib` is needed earlier.
   pkgs ? default_pkgs,
   lib ? pkgs.lib,
+  system ? pkgs.stdenv.hostPlatform.system,
   extraSpecialArgs ? { },
   _nixvimTests ? false,
   module,
@@ -18,6 +21,7 @@ let
         modules = [
           mod
           ./modules/standalone.nix
+          { nixpkgs.hostPlatform = lib.mkDefault system; }
         ];
         extraSpecialArgs = {
           defaultPkgs = pkgs;
@@ -30,7 +34,7 @@ let
       paths = [
         finalPackage
         printInitPackage
-      ] ++ pkgs.lib.optional enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
+      ] ++ pkgs.lib.optional enableMan self.packages.${system}.man-docs;
       meta.mainProgram = "nvim";
     })
     // rec {
