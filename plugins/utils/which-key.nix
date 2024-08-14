@@ -11,6 +11,68 @@ let
   types = lib.nixvim.nixvimTypes;
 
   opt = options.plugins.which-key;
+
+  specExamples = [
+    # Basic group
+    {
+      __unkeyed-1 = "<leader>b";
+      group = "󰓩 Buffers";
+    }
+    # Non-default mode
+    {
+      __unkeyed = "<leader>c";
+      mode = "v";
+      group = "󰄄 Codesnap";
+    }
+    # Group within group
+    {
+      __unkeyed-1 = "<leader>bs";
+      group = "󰒺 Sort";
+    }
+    # Nested mappings for inheritance
+    {
+      mode = [
+        "n"
+        "v"
+      ];
+      __unkeyed-1 = [
+        {
+          __unkeyed-1 = "<leader>f";
+          group = "Normal Visual Group";
+        }
+        {
+          __unkeyed-1 = "<leader>f<tab>";
+          group = "Normal Visual Group in Group";
+        }
+      ];
+    }
+    # Proxy mapping
+    {
+      __unkeyed-1 = "<leader>w";
+      proxy = "<C-w>";
+      group = "windows";
+    }
+    # Create mapping
+    {
+      __unkeyed-1 = "<leader>cS";
+      __unkeyed-2 = "<cmd>CodeSnapSave<CR>";
+      mode = "v";
+      desc = "Save";
+    }
+    # Function mapping
+    {
+      __unkeyed-1 = "<leader>db";
+      __unkeyed-2.__raw = ''
+        function()
+          require("dap").toggle_breakpoint()
+        end
+      '';
+      mode = "n";
+      desc = "Breakpoint toggle";
+      silent = true;
+    }
+  ];
+
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "which-key";
@@ -246,22 +308,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
 
         Please refer to the plugin's [documentation](https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings).
       '';
-      example = [
-        {
-          __unkeyed-1 = "<leader>w";
-          proxy = "<C-w>";
-          group = "windows";
-        }
-        {
-          __unkeyed-1 = "<leader>b";
-          group = "󰓩 Buffers";
-        }
-        {
-          __unkeyed = "<leader>r";
-          mode = "x";
-          group = " Refactor";
-        }
-      ];
+      example = specExamples;
     };
 
     notify = defaultNullOpts.mkBool true "Show a warning when issues were detected with your mappings.";
@@ -483,36 +530,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
 
     delay = 200;
 
-    spec = [
-      {
-        __unkeyed-1 = "<leader>b";
-        group = "󰓩 Buffers";
-      }
-      {
-        __unkeyed-1 = "<leader>bs";
-        group = "󰒺 Sort";
-      }
-      {
-        __unkeyed-1 = "<leader>g";
-        group = "󰊢 Git";
-      }
-      {
-        __unkeyed-1 = "<leader>f";
-        group = " Find";
-      }
-      {
-        __unkeyed-1 = "<leader>r";
-        group = " Refactor";
-      }
-      {
-        __unkeyed-1 = "<leader>t";
-        group = " Terminal";
-      }
-      {
-        __unkeyed-1 = "<leader>u";
-        group = " UI/UX";
-      }
-    ];
+    spec = specExamples;
 
     replace = {
       desc = [

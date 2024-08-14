@@ -251,6 +251,42 @@
               desc = "Vim cmd KeyMapping Test";
               inherit mode;
             }
+            # Nested mapping
+            {
+              mode = [
+                "n"
+                "v"
+              ];
+              __unkeyed-1 = [
+                {
+                  __unkeyed-1 = "<leader>f";
+                  group = "Group Test";
+                }
+                {
+                  __unkeyed-1 = "<leader>f<tab>";
+                  group = "Group in Group Test";
+                }
+              ];
+            }
+            # Create mapping
+            {
+              __unkeyed-1 = "<leader>cS";
+              __unkeyed-2 = "<cmd>CodeSnapSave<CR>";
+              mode = "v";
+              desc = "Save";
+            }
+            # Function mapping
+            {
+              __unkeyed-1 = "<leader>db";
+              __unkeyed-2.__raw = ''
+                function()
+                  require("dap").toggle_breakpoint()
+                end
+              '';
+              mode = "n";
+              desc = "Breakpoint toggle";
+              silent = true;
+            }
           ];
       };
     };
