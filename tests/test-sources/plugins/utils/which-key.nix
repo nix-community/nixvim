@@ -197,7 +197,7 @@
   };
 
   # Testing for registrations
-  mappings = {
+  spec-mappings = {
     plugins.which-key = {
       enable = true;
       settings = {
@@ -253,6 +253,66 @@
             }
           ];
       };
+    };
+  };
+
+  # Testing for mappings
+  mappings = {
+    plugins.which-key = {
+      enable = true;
+
+      mappings = [
+        # With opts
+        {
+          spec = [
+            {
+              __unkeyed-1 = "<leader>f";
+              group = "Group Test";
+            }
+            {
+              __unkeyed-1 = "<leader>f<tab>";
+              group = "Group in Group Test";
+            }
+          ];
+          settings = {
+            mode = "v";
+          };
+        }
+        # Optional opts attribute
+        {
+          spec = [
+            {
+              __unkeyed-1 = "<leader>f";
+              group = "Group Test";
+            }
+            {
+              __unkeyed-1 = "<leader>f<tab>";
+              group = "Group in Group Test";
+            }
+          ];
+        }
+        # Nested mapping
+        {
+          spec = [
+            {
+              mode = [
+                "n"
+                "v"
+              ];
+              __unkeyed-1 = [
+                {
+                  __unkeyed-1 = "<leader>f";
+                  group = "Group Test";
+                }
+                {
+                  __unkeyed-1 = "<leader>f<tab>";
+                  group = "Group in Group Test";
+                }
+              ];
+            }
+          ];
+        }
+      ];
     };
   };
 }

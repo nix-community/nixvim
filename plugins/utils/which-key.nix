@@ -559,26 +559,82 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       '';
       visible = false;
     };
+
+    mappings = mkOption {
+      type =
+        with types;
+        listOf (submodule {
+          options = {
+            spec = mkOption {
+              type = listOf (attrsOf anything);
+              description = ''
+                WhichKey mappings following the same format as `plugins.which-key.settings.spec`.
+
+                Mappings can also be defined in `plugins.which-key.settings.spec`.
+              '';
+            };
+            settings = mkOption {
+              type = nullOr (attrsOf anything);
+              default = null;
+              description = ''
+                WhichKey mapping options to apply to all the mapping in corresponding `plugins.which-key.mappings.spec`.
+              '';
+            };
+          };
+        });
+      default = [ ];
+      description = ''
+        Allows setting mappings with shared opts.
+      '';
+      example = [
+        {
+          spec = [
+            {
+              __unkeyed-1 = "<leader>f";
+              group = "Search";
+            }
+            {
+              __unkeyed-1 = "<leader>fb";
+              group = "Bindings";
+            }
+          ];
+          opts = {
+            mode = "v";
+          };
+        }
+      ];
+    };
   };
 
-  # TODO: introduced 2024-07-29: remove after 24.11
-  # NOTE: this may be upgraded to a mkRemoveOptionModule when which-key removes support
   extraConfig =
     cfg:
-    lib.mkIf opt.registrations.isDefined {
-      warnings = [
-        ''
-          nixvim (plugins.which-key):
-          The option definition `plugins.which-key.registrations' in ${showFiles opt.registrations.files} has been deprecated in which-key v3; please remove it.
-          You should use `plugins.which-key.settings.spec' instead.
+    mkMerge [
+      (lib.mkIf (cfg.mappings != [ ]) {
+        extraConfigLua = ''
+          do
+            local __whichKeyMappings = ${toLuaObject cfg.mappings}
+            for k,v in pairs(__whichKeyMappings) do
+              require('which-key').add(v.spec,v.settings)
+            end
+          end
+        '';
+      })
+      # TODO: introduced 2024-07-29: remove after 24.11
+      # NOTE: this may be upgraded to a mkRemoveOptionModule when which-key removes support
+      (lib.mkIf opt.registrations.isDefined {
+        warnings = [
+          ''
+            nixvim (plugins.which-key):
+            The option definition `plugins.which-key.registrations' in ${showFiles opt.registrations.files} has been deprecated in which-key v3; please remove it.
+            You should use `plugins.which-key.settings.spec' instead.
+            Note: the spec format has changed in which-key v3
+            See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
+          ''
+        ];
 
-          Note: the spec format has changed in which-key v3
-          See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
-        ''
-      ];
-
-      extraConfigLua = lib.optionalString opt.registrations.isDefined ''
-        require("which-key").register(${toLuaObject cfg.registrations})
-      '';
-    };
+        extraConfigLua = lib.optionalString opt.registrations.isDefined ''
+          require("which-key").register(${toLuaObject cfg.registrations})
+        '';
+      })
+    ];
 }
