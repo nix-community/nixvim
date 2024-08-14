@@ -372,11 +372,6 @@ rec {
       originalName,
       lazyLoadDefaults ? { },
     }:
-    let
-      pluginDefault = {
-        enable = false;
-      } // lazyLoadDefaults;
-    in
     mkOption {
       description = ''
         Lazy-load settings for ${originalName}.
@@ -393,65 +388,71 @@ rec {
         submodule {
           options = with defaultNullOpts; {
 
-            enable = mkOption {
-              type = bool;
-              default = pluginDefault.enable;
-              description = ''
-                Enable lazy-loading for ${originalName}
-              '';
-            };
+            enable = mkEnableOption ''
+              lazy-loading for ${originalName}
+            '';
 
             # Spec loading:
-            enabled = mkStrLuaFnOr bool pluginDefault.enabledInSpec or null ''
+            enabled = mkStrLuaFnOr bool (lazyLoadDefaults.enabledInSpec or null) ''
               When false, or if the function returns false, then ${originalName} will not be included in the spec.
+
               Equivalence: lz.n => enabled; lazy.nvim => enabled
             '';
 
-            priority = mkNullable number pluginDefault.priority or null ''
+            priority = mkNullable number (lazyLoadDefaults.priority or null) ''
               Only useful for start plugins (not lazy-loaded) to force loading certain plugins first.
+
               Equivalence: lz.n => priority; lazy.nvim => priority
             '';
 
             # Spec setup
             # Actions
-            beforeAll = mkLuaFn pluginDefault.beforeAll or null ''
+            beforeAll = mkLuaFn (lazyLoadDefaults.beforeAll or null) ''
               Always executed before any plugins are loaded.
+
               Equivalence: lz.n => beforeAll; lazy.nvim => init
             '';
 
-            before = mkLuaFn pluginDefault.before or null ''
+            before = mkLuaFn (lazyLoadDefaults.before or null) ''
               Executed before ${originalName} is loaded.
+
               Equivalence: lz.n => before; lazy.nvim => None
             '';
 
-            after = mkLuaFn pluginDefault.after or null ''
+            after = mkLuaFn (lazyLoadDefaults.after or null) ''
               Executed after ${originalName} is loaded.
+
               Equivalence: lz.n => after; lazy.nvim => config
             '';
 
             # Triggers
-            event = mkNullable triggerType pluginDefault.event or null ''
+            event = mkNullable triggerType (lazyLoadDefaults.event or null) ''
               Lazy-load on event. Events can be specified as `BufEnter` or with a pattern like `BufEnter *.lua`
+
               Equivalence: lz.n => event; lazy.nvim => event
             '';
 
-            cmd = mkNullable triggerType pluginDefault.cmd or null ''
+            cmd = mkNullable triggerType (lazyLoadDefaults.cmd or null) ''
               Lazy-load on command.
+
               Equivalence: lz.n => cmd; lazy.nvim => cmd
             '';
 
-            ft = mkNullable triggerType pluginDefault.ft or null ''
+            ft = mkNullable triggerType (lazyLoadDefaults.ft or null) ''
               Lazy-load on filetype.
+
               Equivalence: lz.n => ft; lazy.nvim => ft
             '';
 
-            keys = mkNullable (listOf helpers.keymaps.mapOptionSubmodule) pluginDefault.keys or null ''
+            keys = mkNullable (listOf helpers.keymaps.mapOptionSubmodule) (lazyLoadDefaults.keys or null) ''
               Lazy-load on key mapping. Use the same format as `config.keymaps`.
+
               Equivalence: lz.n => keys; lazy.nvim => keys
             '';
 
-            colorscheme = mkNullable triggerType pluginDefault.colorscheme or null ''
+            colorscheme = mkNullable triggerType (lazyLoadDefaults.colorscheme or null) ''
               Lazy-load on colorscheme.
+
               Equivalence: lz.n => colorscheme; lazy.nvim => None
             '';
 
@@ -468,6 +469,6 @@ rec {
             };
           };
         };
-      default = pluginDefault;
+      default = lazyLoadDefaults;
     };
 }
