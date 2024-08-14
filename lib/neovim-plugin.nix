@@ -43,9 +43,14 @@ with lib;
       extraPackages ? [ ],
       callSetup ? true,
       installPackage ? true,
+      # lazyLoad
+      allowLazyLoad ? true,
+      packageName ? originalName, # Name of the package folder created in {runtimepath}/pack/start or {runtimepath}/pack/opt
+      lazyLoadDefaults ? { },
     }:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
+      cfg = config.${namespace}.${name};
     in
     {
       meta = {
@@ -94,25 +99,90 @@ with lib;
             example = settingsExample;
           };
         }
+        // optionalAttrs allowLazyLoad {
+          lazyLoad = helpers.mkLazyLoadOption {
+            inherit originalName;
+            lazyLoadDefaults =
+              (optionalAttrs (isColorscheme && colorscheme != null) { inherit colorscheme; }) // lazyLoadDefaults;
+          };
+        }
         // extraOptions;
 
       config =
         let
-          cfg = config.${namespace}.${name};
           extraConfigNamespace = if isColorscheme then "extraConfigLuaPre" else "extraConfigLua";
+          lazyLoaded = cfg.lazyLoad.enable or false;
+
+          # lz-n lazyLoad backend
+          # Transform plugin into attrset and set optional to true
+          # See `tests/test-sources/plugins/pluginmanagers/lz-n.nix`
+          optionalPlugin =
+            x:
+            if isColorscheme then x else ((if x ? plugin then x else { plugin = x; }) // { optional = true; });
+          mkFn = str: if str != "" then "function()\n" + str + "end" else null;
         in
         mkIf cfg.enable (mkMerge [
-          {
-            extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
-            inherit extraPackages;
-          }
-          (optionalAttrs callSetup {
-            ${extraConfigNamespace} = ''
-              require('${luaName}')${setup}(${optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)})
-            '';
-          })
+          # Always set
           (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
-          (extraConfig cfg)
+
+          # Normal loading
+          (mkIf (!lazyLoaded) (mkMerge [
+            (extraConfig cfg)
+            {
+              extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
+              inherit extraPackages;
+            }
+            (optionalAttrs callSetup {
+              ${extraConfigNamespace} = ''
+                require('${luaName}')${setup}(${optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)})
+              '';
+            })
+          ]))
+
+          # Lazy loading with lz-n
+          (mkIf (lazyLoaded && config.plugins.lz-n.enable) (mkMerge [
+            (lib.removeAttrs (extraConfig cfg) [
+              "extraConfigLua"
+              "extraConfigLuaPre"
+            ])
+            {
+              extraPlugins = (optional installPackage (optionalPlugin cfg.package)) ++ extraPlugins;
+              inherit extraPackages;
+            }
+            {
+              plugins.lz-n.plugins = [
+                {
+                  __unkeyed-1 = packageName;
+                  after =
+                    if cfg.lazyLoad.after == null then
+                      mkFn (
+                        (extraConfig cfg).extraConfigLuaPre or ""
+                        + optionalString callSetup ''require('${luaName}')${setup}(${
+                          optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)
+                        }) ''
+                        + (extraConfig cfg).extraConfigLua or ""
+                      )
+                    else
+                      cfg.lazyLoad.after;
+                  inherit (cfg.lazyLoad)
+                    enabled
+                    priority
+                    before
+                    beforeAll
+                    # after defined above
+                    event
+                    cmd
+                    ft
+                    keys
+                    colorscheme
+                    extraSettings
+                    ;
+                }
+              ];
+            }
+          ]))
+
+          # Lazy loading with lazy.nvim
         ]);
     };
 }
