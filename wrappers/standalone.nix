@@ -8,8 +8,12 @@ default_pkgs: self:
   extraSpecialArgs ? { },
   _nixvimTests ? false,
   module,
-}:
+}@args:
 let
+  # FIXME: by passing a pkgs to helpers here we are potentially evaluating two nixpkgs instances...
+  # i.e. if the `nixpkgs.*` module options are used to configure a different pkgs instance
+  #
+  # I think the only solution is to move any function that needs pkgs into a separate lib?
   helpers = import ../lib { inherit pkgs lib _nixvimTests; };
 
   inherit (helpers.modules) evalNixvim;
@@ -22,6 +26,7 @@ let
           mod
           ./modules/standalone.nix
           { nixpkgs.hostPlatform = lib.mkDefault system; }
+          (lib.optionalAttrs (args ? pkgs) { nixpkgs.pkgs = pkgs; })
         ];
         extraSpecialArgs = {
           defaultPkgs = pkgs;
