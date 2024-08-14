@@ -38,23 +38,11 @@ lib.fix (
     extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
+    modules = call ./modules.nix { };
     neovim-plugin = call ./neovim-plugin.nix { };
     options = call ./options.nix { };
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
-
-    # Handle modules, which currently requires a `defaultPkgs` specialArg
-    # FIXME: our minimal specialArgs should not need `pkgs`
-    modules = call ./modules.nix { } // {
-      # Minimal specialArgs required to evaluate nixvim modules
-      specialArgs = self.modules.specialArgsWith {
-        defaultPkgs =
-          if pkgs == null then
-            throw "`modules.specialArgs` cannot currently be used when nixvim's lib is built without a `pkgs` instance. This will be resolved in the future."
-          else
-            pkgs;
-      };
-    };
 
     # Handle builders, which has some deprecated stuff that depends on `pkgs`
     builders = builders // deprecatedBuilders;

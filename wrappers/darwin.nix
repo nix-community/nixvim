@@ -18,7 +18,6 @@ let
   cfg = config.programs.nixvim;
   nixvimConfig = config.lib.nixvim.modules.evalNixvim {
     extraSpecialArgs = {
-      defaultPkgs = pkgs;
       darwinConfig = config;
     };
     modules = [

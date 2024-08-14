@@ -3,6 +3,7 @@
   perSystem =
     {
       pkgs,
+      lib,
       makeNixvimWithModule,
       ...
     }:
@@ -12,9 +13,12 @@
         makeNixvim = module: makeNixvimWithModule { inherit module; };
 
         nixvimConfiguration = helpers.modules.evalNixvim {
-          extraSpecialArgs = {
-            defaultPkgs = pkgs;
-          };
+          modules = [
+            {
+              _file = ./legacy-packages.nix;
+              nixpkgs.pkgs = lib.mkDefault pkgs;
+            }
+          ];
         };
       };
     };

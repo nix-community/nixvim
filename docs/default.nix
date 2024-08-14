@@ -34,11 +34,11 @@ let
     };
 
   evaledModules = helpers.modules.evalNixvim {
-    extraSpecialArgs = {
-      defaultPkgs = pkgs;
-    };
     modules = [
-      { isDocs = true; }
+      {
+        isDocs = true;
+        nixpkgs.pkgs = pkgs;
+      }
     ];
   };
 

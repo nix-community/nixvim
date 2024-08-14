@@ -1,5 +1,6 @@
 default_pkgs: self:
 {
+  # TODO: Deprecate this arg in favour of using module options
   pkgs ? default_pkgs,
   lib ? pkgs.lib,
   extraSpecialArgs ? { },
@@ -18,10 +19,13 @@ let
       nixvimConfig = evalNixvim {
         modules = [
           mod
+          # TODO: only include this when `args?pkgs`:
+          {
+            _file = ./standalone.nix;
+            nixpkgs.pkgs = lib.mkDefault pkgs;
+          }
         ];
-        extraSpecialArgs = {
-          defaultPkgs = pkgs;
-        } // extraSpecialArgs;
+        inherit extraSpecialArgs;
       };
       inherit (nixvimConfig.config) enableMan build;
     in

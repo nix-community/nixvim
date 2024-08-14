@@ -55,6 +55,10 @@ in
       _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
     }
 
+    # Use global packages by default in nixvim's submodule
+    # TODO: `useGlobalPackages` option and/or deprecate using host packages?
+    { programs.nixvim.nixpkgs.pkgs = lib.mkDefault pkgs; }
+
     # Propagate nixvim's assertions to the host modules
     (lib.mkIf cfg.enable { inherit (cfg) warnings assertions; })
 

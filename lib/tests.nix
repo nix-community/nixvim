@@ -62,10 +62,11 @@ let
               { config.test.runNvim = !dontRun; }
           ))
           { wrapRc = true; }
+          # TODO: Only do this when `args?pkgs`
+          # Consider deprecating the `pkgs` arg too...
+          { nixpkgs.pkgs = lib.mkDefault pkgs; }
         ];
-        extraSpecialArgs = {
-          defaultPkgs = pkgs;
-        } // extraSpecialArgs;
+        inherit extraSpecialArgs;
       };
     in
     result.config.build.test;

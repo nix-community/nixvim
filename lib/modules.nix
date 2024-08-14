@@ -3,13 +3,14 @@
   self,
 }:
 rec {
+  # Minimal specialArgs required to evaluate nixvim modules
+  specialArgs = specialArgsWith { };
+
   # Build specialArgs for evaluating nixvim modules
   specialArgsWith =
-    # TODO: switch defaultPkgs -> pkgsPath (i.e. pkgs.path or inputs.nixvim)
-    # FIXME: Ideally, we should not require callers to pass in _anything_ specific
-    { defaultPkgs, ... }@extraSpecialArgs:
+    extraSpecialArgs:
     {
-      inherit lib defaultPkgs;
+      inherit lib;
       # TODO: deprecate `helpers`
       helpers = self;
     }
