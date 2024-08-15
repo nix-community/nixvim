@@ -37,6 +37,7 @@
                   launchTest = pkgs.writeShellApplication {
                     name = "launch-tests";
                     runtimeInputs = with pkgs; [
+                      getopt
                       jq
                       fzf
                     ];
