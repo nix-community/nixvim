@@ -41,7 +41,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     ];
 
   settingsExample = {
-    telescope_borders = true;
+    telescope_borders = false;
     indentblankline = false;
     dapui = false;
   };
@@ -51,7 +51,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       Whether to enable telescope integration.
     '';
 
-    telescope_borders = helpers.defaultNullOpts.mkBool false ''
+    telescope_borders = helpers.defaultNullOpts.mkBool true ''
       Whether to display borders around telescope's panel.
     '';
 

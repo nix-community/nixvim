@@ -12,7 +12,7 @@
 
       settings = {
         telescope = true;
-        telescope_borders = false;
+        telescope_borders = true;
         indentblankline = true;
         notify = true;
         ts_rainbow = true;
