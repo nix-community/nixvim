@@ -251,7 +251,7 @@ in
             name = "neovim-byte-compiled-${lib.getVersion config.package}";
             paths = [ config.package ];
             # Required attributes from original neovim package
-            inherit (config.package) lua;
+            inherit (config.package) lua meta;
             nativeBuildInputs = [ helpers.byteCompileLuaHook ];
             postBuild = ''
               # Replace Nvim's binary symlink with a regular file,
