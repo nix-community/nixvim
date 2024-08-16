@@ -1,25 +1,25 @@
 {
   # Test that nothing is configured by default
   default.module =
-    { config, ... }:
+    { config, lib, ... }:
     {
       files."files_test.lua" = { };
 
       assertions = [
         {
-          assertion = builtins.match ".*vim\.loader.*" config.content == null;
+          assertion = !lib.hasInfix "vim.loader" config.content;
           message = "No luaLoader configuration is expected in init.lua by default.";
         }
         {
-          assertion = builtins.match ".*vim\.loader.*" config.files."files_test.lua".content == null;
+          assertion = !lib.hasInfix "vim.loader" config.files."files_test.lua".content;
           message = "No luaLoader configuration is expected in 'files' submodules.";
         }
       ];
     };
 
-  # Test lua loader enabled
+  # Test Lua loader enabled
   enabled.module =
-    { config, ... }:
+    { config, lib, ... }:
     {
       luaLoader.enable = true;
 
@@ -27,19 +27,19 @@
 
       assertions = [
         {
-          assertion = builtins.match ".*vim\.loader\.enable\(\).*" config.content != null;
+          assertion = lib.hasInfix "vim.loader.enable()" config.content;
           message = "luaLoader is expected to be explicitly enabled.";
         }
         {
-          assertion = builtins.match ".*vim\.loader.*" config.files."files_test.lua".content == null;
+          assertion = !lib.hasInfix "vim.loader" config.files."files_test.lua".content;
           message = "No luaLoader configuration is expected in 'files' submodules.";
         }
       ];
     };
 
-  # Test lua loader disabled
+  # Test Lua loader disabled
   disabled.module =
-    { config, ... }:
+    { config, lib, ... }:
     {
       luaLoader.enable = false;
 
@@ -47,11 +47,11 @@
 
       assertions = [
         {
-          assertion = builtins.match ".*vim\.loader\.disable\(\).*" config.content != null;
+          assertion = lib.hasInfix "vim.loader.disable()" config.content;
           message = "luaLoader is expected to be explicitly disabled.";
         }
         {
-          assertion = builtins.match ".*vim\.loader.*" config.files."files_test.lua".content == null;
+          assertion = !lib.hasInfix "vim.loader." config.files."files_test.lua".content;
           message = "No luaLoader configuration is expected in 'files' submodules.";
         }
       ];
