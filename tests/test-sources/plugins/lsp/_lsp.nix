@@ -85,7 +85,7 @@
           autostart = false;
         };
         # rootDir
-        typst-lsp = {
+        tinymist = {
           enable = true;
           rootDir = ''
             require 'lspconfig.util'.root_pattern('.git', 'main.typ')
