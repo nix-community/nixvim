@@ -206,7 +206,10 @@
             tinymist.enable = true;
             tsserver.enable = true;
             typos-lsp.enable = true;
-            typst-lsp.enable = true;
+            # As of 2024-08-17, pkgs.typst-lsp is broken
+            # https://github.com/NixOS/nixpkgs/pull/335263
+            # TODO: re-enable this test when fixed
+            typst-lsp.enable = false;
             # As of 2024-04-03, pkgs.vala-language-server is broken on linux
             # TODO: re-enable this test when fixed
             vala-ls.enable = !pkgs.stdenv.isLinux;
