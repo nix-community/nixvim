@@ -153,4 +153,75 @@
       };
     };
   };
+
+  byte-compiled-empty = {
+    colorschemes.catppuccin = {
+      enable = true;
+      byteCompile = true;
+    };
+
+    extraConfigLuaPost = ''
+      assert(
+        vim.g.colors_name == "catppuccin-mocha",
+        "Expected catppuccin-mocha colorscheme, got " .. vim.g.colors_name
+      )
+
+      assert(
+        not pcall(require, "catppuccin"),
+        "catppuccin module is not expected to be available when the colorscheme is byte compiled"
+      )
+
+      -- Can switch flavours without errors
+      vim.cmd.colorscheme("catppuccin")
+      vim.cmd.colorscheme("catppuccin-latte")
+      vim.cmd.colorscheme("catppuccin-frappe")
+      vim.cmd.colorscheme("catppuccin-macchiato")
+      vim.cmd.colorscheme("catppuccin-mocha")
+    '';
+  };
+
+  byte-compilation-disabled-by-default = {
+    colorschemes.catppuccin.enable = true;
+
+    extraConfigLuaPost = ''
+      assert(
+        pcall(require, "catppuccin"),
+        "catppuccin module is expected to be available when the colorscheme is not byte compiled"
+      )
+    '';
+  };
+
+  byte-compiled-settings = {
+    colorschemes.catppuccin = {
+      enable = true;
+      byteCompile = true;
+      settings = {
+        flavour = "macchiato";
+        term_colors = true;
+        custom_highlights = {
+          TestHL = {
+            fg = "#ffffff";
+          };
+        };
+      };
+    };
+
+    extraConfigLuaPost = ''
+      -- Flavour is set in settings
+      assert(
+        vim.g.colors_name == "catppuccin-macchiato",
+        "Expected catppuccin-macchiato colorscheme, got " .. vim.g.colors_name
+      )
+
+      -- Terminal colors
+      assert(vim.g.terminal_color_15, "Terminal colors are not set, even though enabled in settings")
+
+      -- Custom highlight
+      test_hl = vim.api.nvim_get_hl(0, { name = "TestHL" })
+      assert(
+        vim.deep_equal(test_hl, { fg = 0xffffff }),
+        "Expected TestHL to be set and equal to { fg = '#ffffff' }, got " .. vim.inspect(test_hl)
+      )
+    '';
+  };
 }
