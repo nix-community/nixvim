@@ -35,9 +35,18 @@ in
 
       keymaps = mapAttrs (
         action: defaults:
-        helpers.mkNullOrOption (
-          with types; either str (helpers.keymaps.mkMapOptionSubmodule { inherit defaults; })
-        ) "Keymap for the ${action} action."
+        helpers.mkNullOrOption' {
+          type =
+            with types;
+            coercedTo str (key: defaultKeymaps.${action} // { inherit key; }) (
+              helpers.keymaps.mkMapOptionSubmodule {
+                inherit defaults;
+                lua = true;
+              }
+            );
+          apply = v: if v == null then null else helpers.keymaps.removeDeprecatedMapAttrs v;
+          description = "Keymap for the ${action} action.";
+        }
       ) defaultKeymaps;
 
       popupType =
@@ -106,11 +115,7 @@ in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
-      keymaps = filter (keymap: keymap != null) (
-        mapAttrsToList (
-          action: value: if isString value then defaultKeymaps.${action} // { key = value; } else value
-        ) cfg.keymaps
-      );
+      keymaps = filter (keymap: keymap != null) (attrValues cfg.keymaps);
 
       extraConfigLua = ''
         require("wtf").setup(${helpers.toLuaObject setupOptions})

@@ -47,7 +47,8 @@ in
         };
 
         extra = mkOption {
-          type = with types; listOf helpers.keymaps.mapOptionSubmodule;
+          type = with types; listOf helpers.keymaps.deprecatedMapOptionSubmodule;
+          apply = map helpers.keymaps.removeDeprecatedMapAttrs;
           description = ''
             Extra keymaps to register when an LSP is attached.
             This can be used to customise LSP behaviour, for example with "telescope" or the "Lspsaga" plugin, as seen in the examples.

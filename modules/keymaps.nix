@@ -9,7 +9,7 @@ with lib;
 {
   options = {
     keymaps = mkOption {
-      type = types.listOf helpers.keymaps.mapOptionSubmodule;
+      type = types.listOf helpers.keymaps.deprecatedMapOptionSubmodule;
       default = [ ];
       description = "Nixvim keymaps.";
       example = [
@@ -22,7 +22,7 @@ with lib;
     };
 
     keymapsOnEvents = mkOption {
-      type = types.attrsOf (types.listOf helpers.keymaps.mapOptionSubmodule);
+      type = types.attrsOf (types.listOf helpers.keymaps.deprecatedMapOptionSubmodule);
       default = { };
       example = {
         "InsertEnter" = [
@@ -43,82 +43,71 @@ with lib;
     };
   };
 
-  config =
-    let
-      # TODO remove `normalizeMapping` once `lua` option is gone
-      normalizeMapping = keyMapping: {
-        inherit (keyMapping) mode key options;
+  config = {
+    # Deprecate `lua` keymap option
+    # TODO upgrade to an assertion (removal notice) in 24.11
+    # TODO remove entirely in 25.05?
+    warnings =
+      let
+        # All keymap options that have historically supported the `lua` sub-option
+        keymapOptions =
+          [
+            options.keymaps
+            options.keymapsOnEvents
+            options.plugins.wtf.keymaps.ai
+            options.plugins.wtf.keymaps.search
+            # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
+            # So we only need `lua` deprecation in lsp's `extra` option
+            options.plugins.lsp.keymaps.extra
+            # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
+            options.plugins.tmux-navigator.keymaps
+          ]
+          # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
+          ++ builtins.attrValues (builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]);
+      in
+      lib.pipe keymapOptions [
+        (map (opt: (opt.type.getSubOptions opt.loc).lua))
+        (filter (opt: opt.isDefined))
+        (map (opt: ''
+          ${"\n"}
+          The `${lib.showOption opt.loc}' option is deprecated and will be removed in 24.11.
 
-        action =
-          if keyMapping.lua != null && keyMapping.lua then
-            helpers.mkRaw keyMapping.action
-          else
-            keyMapping.action;
-      };
-    in
-    {
-      # Deprecate `lua` keymap option
-      # TODO upgrade to an assertion (removal notice) in 24.11
-      # TODO remove entirely in 25.05?
-      warnings =
-        let
-          luaDefs = pipe options.keymaps.definitionsWithLocations [
-            (map (def: {
-              inherit (def) file;
-              value = filter (v: (v.lua or null) != null) def.value;
-            }))
-            (filter (def: def.value != [ ]))
-            (map (
-              def:
-              let
-                count = length def.value;
-                plural = count > 1;
-              in
-              ''
-                Found ${toString count} use${optionalString plural "s"} in ${def.file}:
-                ${generators.toPretty { } def.value}
-              ''
-            ))
-          ];
-        in
-        optional (luaDefs != [ ]) ''
-          Nixvim (keymaps): the `lua` keymap option is deprecated.
-
-          This option will be removed in 24.11. You should use a "raw" `action` instead;
+          You should use a "raw" `action` instead;
           e.g. `action.__raw = "<lua code>"` or `action = helpers.mkRaw "<lua code>"`.
 
-          ${concatStringsSep "\n" luaDefs}
-        '';
+          ${lib.options.showDefs opt.definitionsWithLocations}
+        ''))
+      ];
 
-      extraConfigLua = mkIf (config.keymaps != [ ]) ''
-        -- Set up keybinds {{{
-        do
-          local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping config.keymaps)}
-          for i, map in ipairs(__nixvim_binds) do
-            vim.keymap.set(map.mode, map.key, map.action, map.options)
-          end
+    extraConfigLua = mkIf (config.keymaps != [ ]) ''
+      -- Set up keybinds {{{
+      do
+        local __nixvim_binds = ${helpers.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs config.keymaps)}
+        for i, map in ipairs(__nixvim_binds) do
+          vim.keymap.set(map.mode, map.key, map.action, map.options)
         end
-        -- }}}
-      '';
+      end
+      -- }}}
+    '';
 
-      autoGroups = mapAttrs' (
-        event: mappings: nameValuePair "nixvim_binds_${event}" { clear = true; }
-      ) config.keymapsOnEvents;
+    autoGroups = mapAttrs' (
+      event: mappings: nameValuePair "nixvim_binds_${event}" { clear = true; }
+    ) config.keymapsOnEvents;
 
-      autoCmd = mapAttrsToList (event: mappings: {
-        inherit event;
-        group = "nixvim_binds_${event}";
-        callback = helpers.mkRaw ''
-          function()
-            do
-              local __nixvim_binds = ${helpers.toLuaObject (map normalizeMapping mappings)}
-              for i, map in ipairs(__nixvim_binds) do
-                vim.keymap.set(map.mode, map.key, map.action, map.options)
-              end
+    autoCmd = mapAttrsToList (event: mappings: {
+      inherit event;
+      group = "nixvim_binds_${event}";
+      callback = helpers.mkRaw ''
+        function()
+          do
+            local __nixvim_binds = ${helpers.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs mappings)}
+            for i, map in ipairs(__nixvim_binds) do
+              vim.keymap.set(map.mode, map.key, map.action, map.options)
             end
           end
-        '';
-        desc = "Load keymaps for ${event}";
-      }) config.keymapsOnEvents;
-    };
+        end
+      '';
+      desc = "Load keymaps for ${event}";
+    }) config.keymapsOnEvents;
+  };
 }

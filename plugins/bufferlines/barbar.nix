@@ -193,12 +193,17 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   extraOptions = {
     keymaps = mapAttrs (
       optionName: funcName:
-      helpers.mkNullOrOption (helpers.keymaps.mkMapOptionSubmodule {
-        defaults = {
-          mode = "n";
-          action = "<Cmd>Buffer${funcName}<CR>";
+      helpers.mkNullOrOption' {
+        type = helpers.keymaps.mkMapOptionSubmodule {
+          defaults = {
+            mode = "n";
+            action = "<Cmd>Buffer${funcName}<CR>";
+          };
+          lua = true;
         };
-      }) "Keymap for function Buffer${funcName}"
+        apply = v: if v == null then null else helpers.keymaps.removeDeprecatedMapAttrs v;
+        description = "Keymap for function Buffer${funcName}";
+      }
     ) keymapsActions;
   };
 

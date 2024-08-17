@@ -179,8 +179,10 @@ helpers.vim-plugin.mkVimPlugin config {
             ];
             example = "left";
           };
+          lua = true;
         }
       );
+      apply = map helpers.keymaps.removeDeprecatedMapAttrs;
     };
   };
 

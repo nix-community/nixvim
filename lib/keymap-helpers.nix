@@ -58,6 +58,12 @@ rec {
 
   mapOptionSubmodule = mkMapOptionSubmodule { };
 
+  # NOTE: options that have the deprecated `lua` sub-option must use `removeDeprecatedMapAttrs`
+  # to ensure `lua` isn't evaluated when (e.g.) generating lua code.
+  # Failure to do so will result in "option used but not defined" errors!
+  deprecatedMapOptionSubmodule = mkMapOptionSubmodule { lua = true; };
+  removeDeprecatedMapAttrs = v: builtins.removeAttrs v [ "lua" ];
+
   mkModeOption =
     default:
     mkOption {
@@ -81,13 +87,12 @@ rec {
       # or an attrset to enable the option and add/override mkOption args.
       key ? true,
       action ? true,
+      lua ? false, # WARNING: for historic use only - do not use in new options!
     }:
-    # TODO remove assert once `lua` option is gone
-    # This is here to ensure no uses of `mkMapOptionSubmodule` set a `lua` default
-    assert !(defaults ? lua);
-    (
-      with types;
-      submodule {
+    with types;
+    submodule (
+      { config, options, ... }:
+      {
         options =
           (optionalAttrs (isAttrs key || key) {
             key = mkOption (
@@ -105,27 +110,31 @@ rec {
               {
                 type = helpers.nixvimTypes.maybeRaw str;
                 description = "The action to execute.";
+                apply = v: if options.lua.isDefined or false && config.lua then helpers.mkRaw v else v;
               }
               // (optionalAttrs (isAttrs action) action)
               // (optionalAttrs (defaults ? action) { default = defaults.action; })
             );
           })
+          // optionalAttrs (isAttrs lua || lua) {
+            lua = mkOption (
+              {
+                type = bool;
+                description = ''
+                  If true, `action` is considered to be lua code.
+                  Thus, it will not be wrapped in `""`.
+
+                  This option is deprecated and will be removed in 24.11.
+                  You should use a "raw" action instead, e.g. `action.__raw = ""`.
+                '';
+                visible = false;
+              }
+              // optionalAttrs (isAttrs lua) lua
+            );
+          }
           // {
             mode = mkModeOption defaults.mode or "";
             options = mapConfigOptions;
-
-            lua = mkOption {
-              type = nullOr bool;
-              description = ''
-                If true, `action` is considered to be lua code.
-                Thus, it will not be wrapped in `""`.
-
-                This option is deprecated and will be removed in 24.11.
-                You should use a "raw" action instead, e.g. `action.__raw = ""`.
-              '';
-              default = null;
-              visible = false;
-            };
           };
       }
     );
