@@ -147,4 +147,23 @@ rec {
       ${string}
       EOF
     '';
+
+  # Split a list into a several sub-list, each with a max-size of `size`
+  groupListBySize =
+    size: list:
+    reverseList (
+      foldl' (
+        lists: item:
+        let
+          first = head lists;
+          rest = drop 1 lists;
+        in
+        if lists == [ ] then
+          [ [ item ] ]
+        else if length first < size then
+          [ (first ++ [ item ]) ] ++ rest
+        else
+          [ [ item ] ] ++ lists
+      ) [ ] list
+    );
 }

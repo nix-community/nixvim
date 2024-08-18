@@ -71,6 +71,7 @@ let
       concatNonEmptyLines
       emptyTable
       enableExceptInTests
+      groupListBySize
       hasContent
       ifNonNull'
       listToUnkeyedAttrs

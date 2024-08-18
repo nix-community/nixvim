@@ -333,6 +333,47 @@ let
         "MIxEd"
       ];
     };
+
+    testGroupListBySize = {
+      expr = {
+        empty = helpers.groupListBySize 5 [ ];
+        "5/5" = helpers.groupListBySize 5 (lib.genList lib.id 5);
+        "13/5" = helpers.groupListBySize 5 (lib.genList lib.id 13);
+      };
+      expected = {
+        empty = [ ];
+        "5/5" = [
+          [
+            0
+            1
+            2
+            3
+            4
+          ]
+        ];
+        "13/5" = [
+          [
+            0
+            1
+            2
+            3
+            4
+          ]
+          [
+            5
+            6
+            7
+            8
+            9
+          ]
+          [
+            10
+            11
+            12
+          ]
+        ];
+      };
+    };
   };
 in
 if results == [ ] then
