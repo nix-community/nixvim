@@ -82,17 +82,26 @@ rec {
 
   mkMapOptionSubmodule =
     {
+      # Allow overriding defaults for key, action, mode, etc
       defaults ? { },
+
       # key and action can be true/false to enable/disable adding the option,
       # or an attrset to enable the option and add/override mkOption args.
       key ? true,
       action ? true,
       lua ? false, # WARNING: for historic use only - do not use in new options!
+
+      # Allow passing additional options or modules to the submodule
+      # Useful for plugin-specific features
+      extraOptions ? { },
+      extraModules ? [ ],
     }:
     with types;
     submodule (
       { config, options, ... }:
       {
+        imports = extraModules;
+
         options =
           (optionalAttrs (isAttrs key || key) {
             key = mkOption (
@@ -135,7 +144,8 @@ rec {
           // {
             mode = mkModeOption defaults.mode or "";
             options = mapConfigOptions;
-          };
+          }
+          // extraOptions;
       }
     );
 
