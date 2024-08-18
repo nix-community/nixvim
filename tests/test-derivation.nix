@@ -38,6 +38,7 @@ let
       buildPhase = lib.optionalString (!dontRun) (
         ''
           mkdir -p .cache/nvim
+          mkdir $out
         ''
         + lib.concatStringsSep "\n" (
           builtins.map (
@@ -47,6 +48,8 @@ let
               dontRun ? false,
             }:
             lib.optionalString (!dontRun) ''
+              ln -s ${derivation} $out/${name}
+
               echo "Running test for ${name}"
 
               output=$(HOME=$(realpath .) ${lib.getExe derivation} -mn --headless "+q" 2>&1 >/dev/null)
@@ -58,11 +61,6 @@ let
           ) testList
         )
       );
-
-      # If we don't do this nix is not happy
-      installPhase = ''
-        mkdir $out
-      '';
     };
 
   # Create a nix derivation from a nixvim configuration.
