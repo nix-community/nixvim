@@ -343,8 +343,8 @@ else
       results = pkgs.lib.concatStringsSep "\n" (
         builtins.map (result: ''
           ${result.name}:
-            expected: ${result.expected}
-            result: ${result.result}
+            expected: ${lib.generators.toPretty { } result.expected}
+            result: ${lib.generators.toPretty { } result.result}
         '') results
       );
     }
