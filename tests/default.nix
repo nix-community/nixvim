@@ -46,23 +46,21 @@ builtins.listToAttrs (
       # or a child attr named `module`.
       prepareModule = case: case.module or (lib.removeAttrs case [ "tests" ]);
       dontRunModule = case: case.tests.dontRun or false;
-    in
-    {
-      name = "test-${name}";
-      value = mkTestDerivationFromNixvimModule {
-        inherit name;
-        tests = builtins.map (
-          { name, case }:
-          {
+      mkTest =
+        { name, case }:
+        {
+          inherit name;
+          path = mkTestDerivationFromNixvimModule {
             inherit name;
             module = prepareModule case;
             dontRun = dontRunModule case;
-          }
-        ) cases;
-        # Use the global dontRun only if we don't have a list of modules
-        dontRun = dontRunModule cases;
-        pkgs = pkgsUnfree;
-      };
+            pkgs = pkgsUnfree;
+          };
+        };
+    in
+    {
+      name = "test-${name}";
+      value = pkgs.linkFarm "test-${name}" (lib.map mkTest cases);
     }
   ) (testFiles ++ [ exampleFiles ])
 )
