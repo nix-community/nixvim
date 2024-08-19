@@ -10,7 +10,7 @@
       { pkgs, config, ... }:
       import ../lib {
         inherit pkgs lib;
-        inherit (config.legacyPackages) makeNixvim makeNixvimWithModule;
+        inherit (config.legacyPackages) makeNixvimWithModule;
       }
     )
   );

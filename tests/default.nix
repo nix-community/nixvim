@@ -7,7 +7,7 @@
 }:
 let
   fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ./test-derivation.nix { inherit pkgs makeNixvimWithModule; };
+  test-derivation = import ./test-derivation.nix { inherit pkgs lib makeNixvimWithModule; };
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   # List of files containing configurations
@@ -43,16 +43,29 @@ lib.pipe (testFiles ++ [ exampleFiles ]) [
     let
       # The test case can either be the actual definition,
       # or a child attr named `module`.
-      prepareModule = case: case.module or (lib.removeAttrs case [ "tests" ]);
-      dontRunModule = case: case.tests.dontRun or false;
+      prepareModule =
+        case: if lib.isFunction case then case else case.module or (lib.removeAttrs case [ "tests" ]);
+
+      # Convert legacy `dontRun` definitions into `test.runNvim` option defs
+      dontRunModule =
+        case:
+        let
+          dontRun = case.tests.dontRun or false;
+        in
+        lib.optionalAttrs dontRun { test.runNvim = false; };
+
       mkTest =
         { name, case }:
         {
           inherit name;
           path = mkTestDerivationFromNixvimModule {
             inherit name;
-            module = prepareModule case;
-            dontRun = dontRunModule case;
+            module = {
+              imports = [
+                (dontRunModule case)
+                (prepareModule case)
+              ];
+            };
             pkgs = pkgsUnfree;
           };
         };
