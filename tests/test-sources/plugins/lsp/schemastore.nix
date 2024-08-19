@@ -5,7 +5,9 @@
         enable = true;
 
         servers = {
-          jsonls.enable = true;
+          # TODO: re-enable when pkg is fixed and available
+          # https://github.com/NixOS/nixpkgs/pull/335559
+          # jsonls.enable = true;
           yamlls.enable = true;
         };
       };
@@ -20,7 +22,9 @@
         enable = true;
 
         servers = {
-          jsonls.enable = true;
+          # TODO: re-enable when pkg is fixed and available
+          # https://github.com/NixOS/nixpkgs/pull/335559
+          # jsonls.enable = true;
           yamlls.enable = true;
         };
       };
@@ -68,7 +72,9 @@
     plugins = {
       lsp = {
         enable = true;
-        servers.jsonls.enable = true;
+        # TODO: re-enable when pkg is fixed and available
+        # https://github.com/NixOS/nixpkgs/pull/335559
+        # servers.jsonls.enable = true;
       };
 
       schemastore = {

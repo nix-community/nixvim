@@ -117,7 +117,9 @@
             clojure-lsp.enable = true;
             cmake.enable = true;
             csharp-ls.enable = true;
-            cssls.enable = true;
+            # TODO: re-enable when pkg is fixed and available
+            # https://github.com/NixOS/nixpkgs/pull/335559
+            # cssls.enable = true;
             dagger.enable = true;
             dartls.enable = true;
             denols.enable = true;
@@ -128,7 +130,9 @@
             efm.enable = true;
             elmls.enable = true;
             emmet-ls.enable = true;
-            eslint.enable = true;
+            # TODO: re-enable when pkg is fixed and available
+            # https://github.com/NixOS/nixpkgs/pull/335559
+            # eslint.enable = true;
             elixirls.enable = true;
             fortls.enable = true;
             # pkgs.fsautocomplete only supports linux platforms
@@ -140,11 +144,15 @@
             graphql.enable = true;
             helm-ls.enable = true;
             hls.enable = true;
-            html.enable = true;
+            # TODO: re-enable when pkg is fixed and available
+            # https://github.com/NixOS/nixpkgs/pull/335559
+            # html.enable = true;
             htmx.enable = true;
             java-language-server.enable = true;
             jdt-language-server.enable = true;
-            jsonls.enable = true;
+            # TODO: re-enable when pkg is fixed and available
+            # https://github.com/NixOS/nixpkgs/pull/335559
+            # jsonls.enable = true;
             jsonnet-ls.enable = true;
             julials.enable = true;
             kotlin-language-server.enable = true;
