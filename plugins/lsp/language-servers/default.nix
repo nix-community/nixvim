@@ -505,7 +505,10 @@ let
     {
       name = "ruff-lsp";
       description = "ruff-lsp, for Python";
-      package = pkgs.python3Packages.ruff-lsp;
+      # TODO: Added 2024-08-19; remove 2024-11-19
+      # Ruff-lsp was moved out of python3Packages set without alias
+      # Using fallback as a transition period
+      package = pkgs.ruff-lsp or pkgs.python3Packages.ruff-lsp;
       serverName = "ruff_lsp";
     }
     {
