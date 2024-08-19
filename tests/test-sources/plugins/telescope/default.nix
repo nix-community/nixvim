@@ -18,18 +18,16 @@
     };
   };
 
-  combine-plugins.module =
-    { config, ... }:
-    {
-      plugins.telescope.enable = true;
+  combine-plugins = {
+    plugins.telescope.enable = true;
 
-      performance.combinePlugins.enable = true;
+    performance.combinePlugins.enable = true;
 
-      extraConfigLuaPost = # lua
-        ''
-          -- I don't know how run telescope properly in test environment,
-          -- so just check that files exist
-          assert(vim.api.nvim_get_runtime_file("data/memes/planets/earth", false)[1], "telescope planets aren't found in runtime")
-        '';
-    };
+    extraConfigLuaPost = # lua
+      ''
+        -- I don't know how run telescope properly in test environment,
+        -- so just check that files exist
+        assert(vim.api.nvim_get_runtime_file("data/memes/planets/earth", false)[1], "telescope planets aren't found in runtime")
+      '';
+  };
 }

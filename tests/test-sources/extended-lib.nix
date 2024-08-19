@@ -15,9 +15,7 @@ let
     };
 in
 {
-  top-level = {
-    inherit module;
-  };
+  top-level = module;
 
   files-module = {
     files."libtest.lua" = module;

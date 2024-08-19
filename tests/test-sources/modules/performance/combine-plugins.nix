@@ -9,7 +9,7 @@ let
 in
 {
   # Test basic functionality
-  default.module =
+  default =
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
@@ -40,7 +40,7 @@ in
     };
 
   # Test disabled option
-  disabled.module =
+  disabled =
     { config, ... }:
     {
       performance.combinePlugins.enable = false;
@@ -57,7 +57,7 @@ in
     };
 
   # Test that plugin dependencies are handled
-  dependencies.module =
+  dependencies =
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
@@ -84,7 +84,7 @@ in
     };
 
   # Test that pathsToLink option works
-  paths-to-link.module =
+  paths-to-link =
     { config, ... }:
     {
       performance.combinePlugins = {
@@ -112,7 +112,7 @@ in
     };
 
   # Test that plugin python3 dependencies are handled
-  python-dependencies.module =
+  python-dependencies =
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
@@ -139,7 +139,7 @@ in
     };
 
   # Test that optional plugins are handled
-  optional-plugins.module =
+  optional-plugins =
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
@@ -197,7 +197,7 @@ in
     };
 
   # Test that plugin configs are handled
-  configs.module =
+  configs =
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
@@ -240,7 +240,7 @@ in
     };
 
   # Test that config.filesPlugin is not combined
-  files-plugin.module =
+  files-plugin =
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
@@ -310,7 +310,7 @@ in
     };
 
   # Test that standalonePlugins option works
-  standalone-plugins.module =
+  standalone-plugins =
     { config, ... }:
     {
       performance.combinePlugins = {

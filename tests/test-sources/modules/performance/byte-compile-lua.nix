@@ -24,7 +24,7 @@ let
   '';
 in
 {
-  default.module =
+  default =
     { config, ... }:
     {
       performance.byteCompileLua.enable = true;
@@ -107,7 +107,7 @@ in
 
     };
 
-  disabled.module =
+  disabled =
     { config, ... }:
     {
       performance.byteCompileLua.enable = false;

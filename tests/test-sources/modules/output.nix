@@ -6,7 +6,7 @@
   };
 
   # Test that all extraConfigs are present in output
-  all-configs.module =
+  all-configs =
     {
       config,
       pkgs,
@@ -64,7 +64,7 @@
         ++ mkConfigAssertions "test.vim" config.files."test.vim".content;
     };
 
-  files-default-empty.module =
+  files-default-empty =
     { config, helpers, ... }:
     {
       files = {

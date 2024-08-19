@@ -64,7 +64,7 @@ let
     { namespace, cases }:
     {
       name = lib.strings.concatStringsSep "-" namespace;
-      cases = lib.mapAttrsToList (name: case: { inherit case name; }) cases;
+      cases = lib.mapAttrsToList (name: module: { inherit module name; }) cases;
     };
 in
 # A list of the form [ { name = "..."; modules = [ /* test cases */ ]; } ]

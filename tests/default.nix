@@ -25,7 +25,7 @@ let
       [
         {
           name = "main";
-          case = builtins.removeAttrs config.programs.nixvim [
+          module = builtins.removeAttrs config.programs.nixvim [
             # This is not available to standalone modules, only HM & NixOS Modules
             "enable"
             # This is purely an example, it does not reflect a real usage
@@ -41,17 +41,12 @@ lib.pipe (testFiles ++ [ exampleFiles ]) [
   (builtins.map (
     file:
     let
-      # The test case can either be the actual definition,
-      # or a child attr named `module`.
-      prepareModule = case: if lib.isFunction case then case else case.module or case;
-
       mkTest =
-        { name, case }:
+        { name, module }:
         {
           inherit name;
           path = mkTestDerivationFromNixvimModule {
-            inherit name;
-            module = prepareModule case;
+            inherit name module;
             pkgs = pkgsUnfree;
           };
         };

@@ -26,7 +26,7 @@
     };
   };
 
-  check-alias.module =
+  check-alias =
     { config, ... }:
     {
       assertions = [

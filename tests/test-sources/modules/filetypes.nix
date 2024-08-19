@@ -39,7 +39,7 @@
     };
   };
 
-  default-empty.module =
+  default-empty =
     { config, ... }:
     {
       files.test = { };

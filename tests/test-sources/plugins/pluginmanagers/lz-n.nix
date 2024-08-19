@@ -26,145 +26,141 @@ in
   };
 
   # single-plugin and priority of plugins.lz-n.settings to globals.lz-n
-  example-single-plugin = {
-    module =
-      { pkgs, lib, ... }:
-      {
-        extraPlugins = optionalPlugins [ pkgs.vimPlugins.neo-tree-nvim ];
+  example-single-plugin =
+    { pkgs, lib, ... }:
+    {
+      extraPlugins = optionalPlugins [ pkgs.vimPlugins.neo-tree-nvim ];
 
-        plugins.lz-n = {
-          enable = true;
-          settings = {
-            load = lib.mkDefault "vim.cmd.packadd";
-          };
-          plugins = [
-            # enabled, on keys as rawLua
-            {
-              __unkeyed-1 = "neo-tree.nvim";
-              enabled = ''
-                function()
-                return true
-                end
-              '';
-              keys = [
-                {
-                  __unkeyed-1 = "<leader>ft";
-                  __unkeyed-2 = "<CMD>Neotree toggle<CR>";
-                  desc = "NeoTree toggle";
-                }
-              ];
-              after = # lua
-                ''
-                  function()
-                    require("neo-tree").setup()
-                  end
-                '';
-            }
-          ];
+      plugins.lz-n = {
+        enable = true;
+        settings = {
+          load = lib.mkDefault "vim.cmd.packadd";
         };
-      };
-  };
-
-  example-multiple-plugin = {
-    module =
-      { pkgs, lib, ... }:
-      {
-        extraPlugins =
-          with pkgs.vimPlugins;
-          [ onedarker-nvim ]
-          ++ (optionalPlugins [
-            neo-tree-nvim
-            dial-nvim
-            vimtex
-            telescope-nvim
-            nvim-biscuits
-            crates-nvim
-          ]);
-
-        plugins.treesitter.enable = true;
-
-        plugins.lz-n = {
-          enable = true;
-          plugins = [
-            # enabled, on keys
-            {
-              __unkeyed-1 = "neo-tree.nvim";
-              enabled = ''
+        plugins = [
+          # enabled, on keys as rawLua
+          {
+            __unkeyed-1 = "neo-tree.nvim";
+            enabled = ''
+              function()
+              return true
+              end
+            '';
+            keys = [
+              {
+                __unkeyed-1 = "<leader>ft";
+                __unkeyed-2 = "<CMD>Neotree toggle<CR>";
+                desc = "NeoTree toggle";
+              }
+            ];
+            after = # lua
+              ''
                 function()
-                return true
+                  require("neo-tree").setup()
                 end
               '';
-              keys = [
-                {
-                  __unkeyed-1 = "<leader>ft";
-                  __unkeyed-2 = "<CMD>Neotree toggle<CR>";
-                  desc = "NeoTree toggle";
-                }
-              ];
-              after = # lua
-                ''
-                  function()
-                    require("neo-tree").setup()
-                  end
-                '';
-            }
-            # on keys as list of str and rawLua
-            {
-              __unkeyed-1 = "dial.nvim";
-              keys = [
-                "<C-a>"
-                { __raw = "{ '<C-x>'; mode = 'n' }"; }
-              ];
-            }
-            # beforeAll, before, on filetype
-            {
-              __unkeyed-1 = "vimtex";
-              ft = [ "plaintex" ];
-              beforeAll = # lua
-                ''
-                  function()
-                    vim.g.vimtex_compiler_method = "latexrun"
-                  end
-                '';
-              before = # lua
-                ''
-                  function()
-                    vim.g.vimtex_compiler_method = "latexmk"
-                  end
-                '';
-            }
-            # On event
-            {
-              __unkeyed-1 = "nvim-biscuits";
-              event.__raw = "{ 'BufEnter *.lua' }";
-              after.__raw = ''
+          }
+        ];
+      };
+    };
+
+  example-multiple-plugin =
+    { pkgs, lib, ... }:
+    {
+      extraPlugins =
+        with pkgs.vimPlugins;
+        [ onedarker-nvim ]
+        ++ (optionalPlugins [
+          neo-tree-nvim
+          dial-nvim
+          vimtex
+          telescope-nvim
+          nvim-biscuits
+          crates-nvim
+        ]);
+
+      plugins.treesitter.enable = true;
+
+      plugins.lz-n = {
+        enable = true;
+        plugins = [
+          # enabled, on keys
+          {
+            __unkeyed-1 = "neo-tree.nvim";
+            enabled = ''
+              function()
+              return true
+              end
+            '';
+            keys = [
+              {
+                __unkeyed-1 = "<leader>ft";
+                __unkeyed-2 = "<CMD>Neotree toggle<CR>";
+                desc = "NeoTree toggle";
+              }
+            ];
+            after = # lua
+              ''
                 function()
-                require('nvim-biscuits').setup({})
+                  require("neo-tree").setup()
                 end
               '';
-            }
-            # On command no setup function, priority
-            {
-              __unkeyed-1 = "telescope.nvim";
-              cmd = [ "Telescope" ];
-              priority = 500;
-            }
-            # On colorschme
-            {
-              __unkeyed-1 = "onedarker.nvim";
-              colorscheme = [ "onedarker" ];
-            }
-            # raw value
-            {
-              __raw = ''
-                {
-                    "crates.nvim",
-                    ft = "toml",
-                }
+          }
+          # on keys as list of str and rawLua
+          {
+            __unkeyed-1 = "dial.nvim";
+            keys = [
+              "<C-a>"
+              { __raw = "{ '<C-x>'; mode = 'n' }"; }
+            ];
+          }
+          # beforeAll, before, on filetype
+          {
+            __unkeyed-1 = "vimtex";
+            ft = [ "plaintex" ];
+            beforeAll = # lua
+              ''
+                function()
+                  vim.g.vimtex_compiler_method = "latexrun"
+                end
               '';
-            }
-          ];
-        };
+            before = # lua
+              ''
+                function()
+                  vim.g.vimtex_compiler_method = "latexmk"
+                end
+              '';
+          }
+          # On event
+          {
+            __unkeyed-1 = "nvim-biscuits";
+            event.__raw = "{ 'BufEnter *.lua' }";
+            after.__raw = ''
+              function()
+              require('nvim-biscuits').setup({})
+              end
+            '';
+          }
+          # On command no setup function, priority
+          {
+            __unkeyed-1 = "telescope.nvim";
+            cmd = [ "Telescope" ];
+            priority = 500;
+          }
+          # On colorschme
+          {
+            __unkeyed-1 = "onedarker.nvim";
+            colorscheme = [ "onedarker" ];
+          }
+          # raw value
+          {
+            __raw = ''
+              {
+                  "crates.nvim",
+                  ft = "toml",
+              }
+            '';
+          }
+        ];
       };
-  };
+    };
 }

@@ -98,71 +98,69 @@
     };
   };
 
-  with-sources = {
-    module =
-      {
-        config,
-        options,
-        lib,
-        pkgs,
-        ...
-      }:
-      {
-        plugins.none-ls = {
-          # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
-          enable = !pkgs.stdenv.isDarwin;
+  with-sources =
+    {
+      config,
+      options,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      plugins.none-ls = {
+        # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
+        enable = !pkgs.stdenv.isDarwin;
 
-          sources =
-            let
-              disabled =
-                [
-                  # As of 2024-03-22, pkgs.d2 is broken
-                  # TODO: re-enable this test when fixed
-                  "d2_fmt"
-                  # TODO: can this be re-enabled?
-                  "yamlfix"
-                ]
-                ++ (lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64) [
-                  # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
-                  # TODO: re-enable this test when fixed
-                  "clj_kondo"
-                ])
-                ++ (lib.optionals pkgs.stdenv.isDarwin [
-                  # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
-                  # TODO: re-enable this test when fixed
-                  "ansible_lint"
-                  "clazy"
-                  "gdformat"
-                  "gdlint"
-                  "haml_lint"
-                  # As of 2024-06-29, pkgs.rubyfmt is broken on darwin
-                  # TODO: re-enable this test when fixed
-                  "rubyfmt"
-                  "verilator"
-                  "verible_verilog_format"
-                ])
-                ++ (lib.optionals pkgs.stdenv.isAarch64 [
-                  "semgrep"
-                  "smlfmt"
-                  # As of 2024-03-11, swift-format is broken on aarch64
-                  # TODO: re-enable this test when fixed
-                  "swift_format"
-                ]);
-            in
-            # Enable every none-ls source that has an option
+        sources =
+          let
+            disabled =
+              [
+                # As of 2024-03-22, pkgs.d2 is broken
+                # TODO: re-enable this test when fixed
+                "d2_fmt"
+                # TODO: can this be re-enabled?
+                "yamlfix"
+              ]
+              ++ (lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64) [
+                # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
+                # TODO: re-enable this test when fixed
+                "clj_kondo"
+              ])
+              ++ (lib.optionals pkgs.stdenv.isDarwin [
+                # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
+                # TODO: re-enable this test when fixed
+                "ansible_lint"
+                "clazy"
+                "gdformat"
+                "gdlint"
+                "haml_lint"
+                # As of 2024-06-29, pkgs.rubyfmt is broken on darwin
+                # TODO: re-enable this test when fixed
+                "rubyfmt"
+                "verilator"
+                "verible_verilog_format"
+              ])
+              ++ (lib.optionals pkgs.stdenv.isAarch64 [
+                "semgrep"
+                "smlfmt"
+                # As of 2024-03-11, swift-format is broken on aarch64
+                # TODO: re-enable this test when fixed
+                "swift_format"
+              ]);
+          in
+          # Enable every none-ls source that has an option
+          lib.mapAttrs (
+            _:
             lib.mapAttrs (
-              _:
-              lib.mapAttrs (
-                sourceName: opts:
-                {
-                  # Enable unless disabled above
-                  enable = !(lib.elem sourceName disabled);
-                }
-                # Some sources have a package option with no default
-                // lib.optionalAttrs (opts ? package && !(opts.package ? default)) { package = null; }
-              )
-            ) options.plugins.none-ls.sources;
-        };
+              sourceName: opts:
+              {
+                # Enable unless disabled above
+                enable = !(lib.elem sourceName disabled);
+              }
+              # Some sources have a package option with no default
+              // lib.optionalAttrs (opts ? package && !(opts.package ? default)) { package = null; }
+            )
+          ) options.plugins.none-ls.sources;
       };
-  };
+    };
 }

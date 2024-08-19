@@ -1,6 +1,6 @@
 {
   # Test that nothing is configured by default
-  default.module =
+  default =
     { config, lib, ... }:
     {
       files."files_test.lua" = { };
@@ -18,7 +18,7 @@
     };
 
   # Test Lua loader enabled
-  enabled.module =
+  enabled =
     { config, lib, ... }:
     {
       luaLoader.enable = true;
@@ -38,7 +38,7 @@
     };
 
   # Test Lua loader disabled
-  disabled.module =
+  disabled =
     { config, lib, ... }:
     {
       luaLoader.enable = false;
