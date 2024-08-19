@@ -120,6 +120,8 @@
                 "d2_fmt"
                 # TODO: can this be re-enabled?
                 "yamlfix"
+                # TODO: re-enable when package is fixed
+                "prisma_format"
               ]
               ++ (lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64) [
                 # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
@@ -148,6 +150,7 @@
                 "swift_format"
               ]);
           in
+
           # Enable every none-ls source that has an option
           lib.mapAttrs (
             _:
