@@ -37,10 +37,9 @@ let
   };
 in
 # We attempt to build & execute all configurations
-builtins.listToAttrs (
-  builtins.map (
-    { name, cases }:
-
+lib.pipe (testFiles ++ [ exampleFiles ]) [
+  (builtins.map (
+    file:
     let
       # The test case can either be the actual definition,
       # or a child attr named `module`.
@@ -59,8 +58,16 @@ builtins.listToAttrs (
         };
     in
     {
-      name = "test-${name}";
-      value = pkgs.linkFarm "test-${name}" (lib.map mkTest cases);
+      inherit (file) name;
+      path = pkgs.linkFarm file.name (builtins.map mkTest file.cases);
     }
-  ) (testFiles ++ [ exampleFiles ])
-)
+  ))
+  (helpers.groupListBySize 10)
+  (lib.imap1 (
+    i: group: rec {
+      name = "test-${toString i}";
+      value = pkgs.linkFarm name group;
+    }
+  ))
+  builtins.listToAttrs
+]
