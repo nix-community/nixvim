@@ -1,7 +1,7 @@
 {
   empty = {
     # A warning is displayed on stdout
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.telescope = {
       enable = true;
@@ -11,7 +11,7 @@
 
   defaults = {
     # A warning is displayed on stdout
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.telescope = {
       enable = true;
@@ -46,7 +46,7 @@
 
   example = {
     # A warning is displayed on stdout
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.telescope = {
       enable = true;

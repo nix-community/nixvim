@@ -2,7 +2,7 @@
   empty = {
     # Harpoon expects to access `~/.local/share/nvim/harpoon.json` which is not available in the
     # test environment
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.harpoon.enable = true;
   };
@@ -10,7 +10,7 @@
   telescopeEnabled = {
     # Harpoon expects to access `~/.local/share/nvim/harpoon.json` which is not available in the
     # test environment
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.telescope = {
       enable = true;
@@ -75,7 +75,7 @@
   telescopeDisabled = {
     # Harpoon expects to access `~/.local/share/nvim/harpoon.json` which is not available in the
     # test environment
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.harpoon = {
       enable = true;

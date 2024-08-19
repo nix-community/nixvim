@@ -43,16 +43,7 @@ lib.pipe (testFiles ++ [ exampleFiles ]) [
     let
       # The test case can either be the actual definition,
       # or a child attr named `module`.
-      prepareModule =
-        case: if lib.isFunction case then case else case.module or (lib.removeAttrs case [ "tests" ]);
-
-      # Convert legacy `dontRun` definitions into `test.runNvim` option defs
-      dontRunModule =
-        case:
-        let
-          dontRun = case.tests.dontRun or false;
-        in
-        lib.optionalAttrs dontRun { test.runNvim = false; };
+      prepareModule = case: if lib.isFunction case then case else case.module or case;
 
       mkTest =
         { name, case }:
@@ -60,12 +51,7 @@ lib.pipe (testFiles ++ [ exampleFiles ]) [
           inherit name;
           path = mkTestDerivationFromNixvimModule {
             inherit name;
-            module = {
-              imports = [
-                (dontRunModule case)
-                (prepareModule case)
-              ];
-            };
+            module = prepareModule case;
             pkgs = pkgsUnfree;
           };
         };

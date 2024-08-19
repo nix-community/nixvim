@@ -3,7 +3,7 @@
     # neorg should be re-packaged in nixpkgs from the luarocks `neorg` package.
     # In the meantime, disable the test.
     # TODO: re-enable when this will have been fixed upstream.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.neorg.enable = true;
   };
@@ -12,7 +12,7 @@
     # neorg should be re-packaged in nixpkgs from the luarocks `neorg` package.
     # In the meantime, disable the test.
     # TODO: re-enable when this will have been fixed upstream.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins = {
       # Treesitter is required when using the "core.defaults" module.

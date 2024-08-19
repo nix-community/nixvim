@@ -1,13 +1,13 @@
 {
   empty = {
     # don't run tests as they try to access the network.
-    tests.dontRun = true;
+    test.runNvim = false;
     plugins.neocord.enable = true;
   };
 
   defaults = {
     # don't run tests as they try to access the network.
-    tests.dontRun = true;
+    test.runNvim = false;
     plugins.neocord = {
       enable = true;
 
@@ -39,7 +39,7 @@
 
   example = {
     # don't run tests as they try to access the network.
-    tests.dontRun = true;
+    test.runNvim = false;
     plugins.neocord = {
       enable = true;
 

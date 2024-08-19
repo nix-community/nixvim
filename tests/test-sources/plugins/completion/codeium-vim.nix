@@ -1,14 +1,14 @@
 {
   empty = {
     # For some reason, nvim hangs when using codeium-vim. After checking, it doesn't look like a bug though.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.codeium-vim.enable = true;
   };
 
   example = {
     # For some reason, nvim hangs when using codeium-vim. After checking, it doesn't look like a bug though.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.codeium-vim = {
       enable = true;

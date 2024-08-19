@@ -3,7 +3,7 @@
     # As of 2024-05-07, the lua dependencies of luaPackage.rest-nvim are not correctly propagated to
     # the vim plugin.
     # TODO: re-enable this test when this issue will have been fixed
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.rest.enable = true;
   };
@@ -12,7 +12,7 @@
     # As of 2024-05-07, the lua dependencies of luaPackage.rest-nvim are not correctly propagated to
     # the vim plugin.
     # TODO: re-enable this test when this issue will have been fixed
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.rest = {
       enable = true;

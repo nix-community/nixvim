@@ -1,7 +1,7 @@
 {
   empty = {
     # We do not provide the required HF_API_KEY environment variable.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.cmp = {
       enable = true;
@@ -11,7 +11,7 @@
 
   example = {
     # We do not provide the required HF_API_KEY environment variable.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins = {
       cmp = {

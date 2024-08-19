@@ -2,7 +2,7 @@
   empty = {
     # At runtime, the plugin tries to get the size of the terminal which doesn't exist in the
     # headless environment.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.image.enable = true;
   };
@@ -10,7 +10,7 @@
   defaults = {
     # At runtime, the plugin tries to get the size of the terminal which doesn't exist in the
     # headless environment.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.image = {
       enable = true;
@@ -67,7 +67,7 @@
   ueberzug-backend = {
     # At runtime, the plugin tries to get the size of the terminal which doesn't exist in the
     # headless environment.
-    tests.dontRun = true;
+    test.runNvim = false;
 
     plugins.image = {
       enable = true;

@@ -1,12 +1,12 @@
 # We cannot run the test as loading the plugin requires a valid OPENAI_API_KEY
 {
   empty = {
-    tests.dontRun = true;
+    test.runNvim = false;
     plugins.chatgpt.enable = true;
   };
 
   defaults = {
-    tests.dontRun = true;
+    test.runNvim = false;
     plugins.chatgpt = {
       enable = true;
 
@@ -198,7 +198,7 @@
   };
 
   example = {
-    tests.dontRun = true;
+    test.runNvim = false;
     plugins.chatgpt = {
       enable = true;
 
