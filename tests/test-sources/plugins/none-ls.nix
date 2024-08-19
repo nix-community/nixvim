@@ -115,11 +115,6 @@
           let
             disabled =
               [
-                # As of 2024-03-22, pkgs.d2 is broken
-                # TODO: re-enable this test when fixed
-                "d2_fmt"
-                # TODO: can this be re-enabled?
-                "yamlfix"
                 # TODO: re-enable when package is fixed
                 "prisma_format"
               ]
@@ -150,7 +145,6 @@
                 "swift_format"
               ]);
           in
-
           # Enable every none-ls source that has an option
           lib.mapAttrs (
             _:
