@@ -70,7 +70,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
-    extraConfigLua =
+    plugins.cmp.luaConfig.content =
       ''
         local cmp = require('cmp')
         cmp.setup(${helpers.toLuaObject cfg.settings})

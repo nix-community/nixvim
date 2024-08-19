@@ -431,7 +431,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   installPackage = false;
 
   extraConfig = cfg: {
-    extraConfigLua =
+    plugins.treesitter.luaConfig.content =
       # NOTE: Upstream state that the parser MUST be at the beginning of runtimepath.
       # Otherwise the parsers from Neovim takes precedent, which may be incompatible with some queries.
       (optionalString (cfg.settings.parser_install_dir != null) ''

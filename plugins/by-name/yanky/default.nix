@@ -373,7 +373,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       }
     ];
 
-    extraConfigLua = ''
+    plugins.yanky.luaConfig.content = ''
       do
         local utils = require('yanky.utils')
         ${optionalString config.plugins.telescope.enable "local mapping = require('yanky.telescope.mapping')"}

@@ -99,7 +99,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         '';
       }
     ];
-    extraConfigLua =
+    plugins.mini.luaConfig.content =
       lib.foldlAttrs (lines: name: config: ''
         ${lines}
         require(${lib.nixvim.toLuaObject "mini.${name}"}).setup(${lib.nixvim.toLuaObject config})

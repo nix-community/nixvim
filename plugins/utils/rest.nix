@@ -434,7 +434,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       }
     ];
 
-    extraConfigLua = lib.mkIf cfg.enableTelescope ''require("telescope").load_extension("rest")'';
+    # TODO: There may be some interactions between this & telescope, maybe requiring #2292
+    plugins.rest.luaConfig.post = lib.mkIf cfg.enableTelescope ''require("telescope").load_extension("rest")'';
 
     extraPackages = [ cfg.curlPackage ];
 

@@ -78,6 +78,12 @@ rec {
     lib.concatStrings (map processWord words);
 
   /**
+    Those helpers control the lua sections split in `pre, content, post`
+  */
+  mkBeforeSection = lib.mkOrder 300;
+  mkAfterSection = lib.mkOrder 2000;
+
+  /**
     Capitalize a string by making the first character uppercase.
 
     # Example

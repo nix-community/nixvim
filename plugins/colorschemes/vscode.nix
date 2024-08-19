@@ -31,7 +31,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    extraConfigLuaPre = ''
+    colorschemes.vscode.luaConfig.content = ''
       local _vscode = require("vscode")
       _vscode.setup(${toLuaObject cfg.settings})
       _vscode.load()

@@ -122,7 +122,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       }
     ) cfg.keymaps;
 
-    extraConfigLua = ''
+    plugins.telescope.luaConfig.content = ''
       require('telescope').setup(${toLuaObject cfg.settings})
 
       local __telescopeExtensions = ${toLuaObject cfg.enabledExtensions}

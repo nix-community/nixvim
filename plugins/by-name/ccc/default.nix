@@ -246,7 +246,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     # ccc requires `termguicolors` to be enabled.
     opts.termguicolors = lib.mkDefault true;
 
-    extraConfigLua = ''
+    plugins.ccc.luaConfig.content = ''
       ccc = require('ccc')
       ccc.setup(${helpers.toLuaObject cfg.settings})
     '';

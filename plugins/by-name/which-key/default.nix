@@ -596,7 +596,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         ''
       ];
 
-      extraConfigLua = lib.optionalString opt.registrations.isDefined ''
+      plugins.which-key.luaConfig.content = lib.optionalString opt.registrations.isDefined ''
         require("which-key").register(${toLuaObject cfg.registrations})
       '';
     };

@@ -34,7 +34,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   callSetup = false;
   colorscheme = null;
   extraConfig = cfg: {
-    extraConfigLuaPre = ''
+    colorschemes.onedark.luaConfig.content = ''
       _onedark = require('onedark')
       _onedark.setup(${lib.nixvim.toLuaObject cfg.settings})
       _onedark.load()

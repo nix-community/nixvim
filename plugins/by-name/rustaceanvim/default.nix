@@ -48,6 +48,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   callSetup = false;
+  hasConfigAttrs = false;
+  configLocation = null;
   extraConfig =
     cfg:
     mkMerge [

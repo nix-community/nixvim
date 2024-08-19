@@ -39,7 +39,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    extraConfigLuaPre = ''
+    colorschemes.ayu.luaConfig.content = ''
       local ayu = require("ayu")
       ayu.setup(${toLuaObject cfg.settings})
       ayu.colorscheme()

@@ -113,4 +113,38 @@ rec {
         types.optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
       }";
     };
+
+  pluginLuaConfig = types.submodule (
+    { config, ... }:
+    {
+      options = {
+        pre = lib.mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Lua code inserted at the start of the plugin's configuration.
+            This is the same as using `lib.nixvim.utils.mkBeforeSection` when defining `content`.
+          '';
+        };
+        post = lib.mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Lua code inserted at the end of the plugin's configuration.
+            This is the same as using `lib.nixvim.utils.mkAfterSection` when defining `content`.
+          '';
+        };
+        content = lib.mkOption {
+          type = types.lines;
+          default = "";
+          description = "Configuration of the plugin";
+        };
+      };
+
+      config.content = lib.mkMerge [
+        (lib.nixvim.utils.mkBeforeSection config.pre)
+        (lib.nixvim.utils.mkAfterSection config.post)
+      ];
+    }
+  );
 }
