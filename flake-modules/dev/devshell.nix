@@ -7,6 +7,7 @@
       lib,
       pkgs,
       config,
+      self',
       system,
       ...
     }:
@@ -44,9 +45,27 @@
 
                     text = builtins.readFile ./launch-test.sh;
                   };
+
+                  tests =
+                    let
+                      checks' = self'.checks;
+                      names = builtins.filter (n: builtins.match "test-.*" n != null) (builtins.attrNames checks');
+                    in
+                    builtins.listToAttrs (
+                      builtins.concatMap (
+                        checkName:
+                        map (testName: {
+                          name = testName;
+                          value = "${checkName}.passthru.entries.${testName}";
+                        }) (builtins.attrNames checks'.${checkName}.passthru.entries)
+                      ) names
+                    );
                 in
                 ''
-                  NIXVIM_SYSTEM=${system} NIXVIM_NIX_COMMAND=${nix} ${lib.getExe launchTest} "$@"
+                  export NIXVIM_SYSTEM=${system}
+                  export NIXVIM_NIX_COMMAND=${nix}
+                  export NIXVIM_TESTS=${pkgs.writers.writeJSON "tests.json" tests}
+                  ${lib.getExe launchTest} "$@"
                 '';
             }
             {

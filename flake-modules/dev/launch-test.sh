@@ -36,8 +36,7 @@ nix_args=()
 interactive=false
 
 mk_test_list() {
-  nix eval ".#checks.${system}" --apply builtins.attrNames --json |
-    jq -r 'map(select(startswith("test-")))[]'
+  jq -r 'keys[]' "${NIXVIM_TESTS}"
 }
 
 while true; do
@@ -72,9 +71,26 @@ while true; do
   esac
 done
 
+get_tests() {
+  # Convert bash array to jq query
+  # e.g. (foo bar baz) => ."foo",."bar",."baz"
+  readarray -t queries < <(
+    for test in "$@"; do
+      echo '."'"$test"'"'
+    done
+  )
+  query=$(
+    IFS=,
+    echo "${queries[*]}"
+  )
+  for test in $(jq -r "${query}" "${NIXVIM_TESTS}"); do
+    echo "checks.${system}.${test}"
+  done
+}
+
 run_tests() {
-  # Add the prefix "checks.${system}." to each argument
-  if ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "${@/#/checks.${system}.}"; then
+  readarray -t test_list < <(get_tests "$@")
+  if ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "${test_list[@]}"; then
     echo "Test failure" >&2
     exit 1
   fi
