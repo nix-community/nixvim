@@ -175,7 +175,9 @@
             openscad-lsp.enable = true;
             perlpls.enable = true;
             pest-ls.enable = true;
-            prismals.enable = true;
+            # TODO: As of 2024-08-19 is broken
+            # re-enable this test when fixed
+            # prismals.enable = true;
             prolog-ls.enable = true;
             purescriptls.enable = true;
             pylsp.enable = true;
