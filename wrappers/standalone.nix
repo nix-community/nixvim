@@ -3,11 +3,10 @@ default_pkgs: self:
   pkgs ? default_pkgs,
   lib ? pkgs.lib,
   extraSpecialArgs ? { },
-  _nixvimTests ? false,
   module,
 }:
 let
-  helpers = import ../lib/helpers.nix { inherit pkgs lib _nixvimTests; };
+  helpers = import ../lib/helpers.nix { inherit pkgs lib; };
 
   inherit (helpers.modules) evalNixvim;
 

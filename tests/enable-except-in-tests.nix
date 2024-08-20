@@ -5,9 +5,9 @@
 }:
 let
   module =
-    { helpers, ... }:
+    { config, ... }:
     {
-      plugins.image.enable = helpers.enableExceptInTests;
+      plugins.image.enable = !config.isTest;
     };
 
   inTest = mkTestDerivationFromNixvimModule {

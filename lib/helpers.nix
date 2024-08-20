@@ -1,7 +1,6 @@
 {
   pkgs,
   lib ? pkgs.lib,
-  _nixvimTests ? false,
   ...
 }:
 let
@@ -24,7 +23,7 @@ let
     neovim-plugin = call ./neovim-plugin.nix { };
     nixvimTypes = call ./types.nix { };
     options = call ./options.nix { };
-    utils = call ./utils.nix { inherit _nixvimTests; };
+    utils = call ./utils.nix { };
     vim-plugin = call ./vim-plugin.nix { };
 
     # Top-level helper aliases:
@@ -70,7 +69,6 @@ let
     inherit (helpers.utils)
       concatNonEmptyLines
       emptyTable
-      enableExceptInTests
       groupListBySize
       hasContent
       ifNonNull'
@@ -94,6 +92,9 @@ let
 
     toLuaObject = helpers.lua.toLua;
     mkLuaInline = helpers.lua.mkInline;
+
+    # TODO: Removed 2024-08-20
+    enableExceptInTests = throw "enableExceptInTests has been removed, please use the `isTest` module option instead.";
   };
 in
 helpers

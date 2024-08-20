@@ -1,8 +1,4 @@
-{
-  lib,
-  helpers,
-  _nixvimTests,
-}:
+{ lib, helpers }:
 with lib;
 rec {
   # Whether a string contains something other than whitespaces
@@ -15,8 +11,6 @@ rec {
   listToUnkeyedAttrs =
     list:
     builtins.listToAttrs (lib.lists.imap0 (idx: lib.nameValuePair "__unkeyed-${toString idx}") list);
-
-  enableExceptInTests = !_nixvimTests;
 
   emptyTable = {
     "__empty" = null;
