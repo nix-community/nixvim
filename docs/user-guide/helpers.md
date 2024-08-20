@@ -1,16 +1,17 @@
 # Helpers
 
-If Nixvim is built using the standalone method, you can access our `helpers` as a module arg:
+If Nixvim is built using the standalone method, you can access our "helpers" as part of the `lib` module arg:
 
 ```nix
-{ helpers, ... }:
+{ lib, ... }:
 {
-  # Your config
+  # You can use lib.nixvim in your config
+  fooOption = lib.nixvim.mkRaw "print('hello')";
 }
 ```
 
 If Nixvim is being used as as a home-manager module, a nixos module, or as a dawwin module,
-helpers can be accessed via the `config.lib` option:
+our "helpers" can be accessed via the `config.lib` option:
 
 ```nix
 { config, ... }:
@@ -21,6 +22,8 @@ in
   # Your config
 }
 ```
+
+**Note:** the `lib` argument passed to modules is entirely unrelated to the `lib` _option_ accessed as `config.lib`!
 
 A certain number of helpers are defined that can be useful:
 
