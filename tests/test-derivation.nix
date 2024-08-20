@@ -16,7 +16,8 @@ let
       ...
     }@args:
     let
-      cfg = nvim.config.test;
+      result = nvim.extend { isTest = true; };
+      cfg = result.config.test;
       runNvim =
         lib.warnIf (args ? dontRun)
           "mkTestDerivationFromNvim: the `dontRun` argument is deprecated. You should use the `test.runNvim` module option instead."
@@ -26,7 +27,7 @@ let
       inherit name;
 
       nativeBuildInputs = [
-        nvim
+        result
         pkgs.docker-client
       ];
 
@@ -65,7 +66,6 @@ let
     let
       nvim = makeNixvimWithModule {
         inherit pkgs extraSpecialArgs;
-        _nixvimTests = true;
         module =
           if args ? dontRun then
             lib.warn
