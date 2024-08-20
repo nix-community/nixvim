@@ -9,18 +9,12 @@ let
   inherit (lib.nixvim)
     defaultNullOpts
     keymaps
+    mkNullOrOption'
     mkPackageOption
-    mkCompositeOption
     transitionType
     ;
   types = lib.nixvim.nixvimTypes;
 
-  keymapsActions = {
-    todoQuickFix = "TodoQuickFix";
-    todoLocList = "TodoLocList";
-    todoTrouble = "TodoTrouble";
-    todoTelescope = "TodoTelescope";
-  };
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "todo-comments";
@@ -372,37 +366,44 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
 
   extraOptions = {
     keymaps =
-      let
-        mkKeymapOption =
-          optionName: funcName:
-          mkCompositeOption "Keymap settings for the `:${funcName}` function." {
-            key = mkOption {
-              type = types.str;
-              default = null;
-              description = "Key for the `${funcName}` function.";
-            };
+      mapAttrs
+        (
+          optionName: action:
+          mkNullOrOption' {
+            type = keymaps.mkMapOptionSubmodule {
+              defaults = {
+                inherit action;
+                mode = "n";
+              };
 
-            cwd = mkOption {
-              type = types.nullOr types.str;
-              description = "Specify the directory to search for comments";
-              default = null;
-              example = "~/projects/foobar";
-            };
+              extraOptions = {
+                cwd = mkOption {
+                  type = types.nullOr types.str;
+                  description = "Specify the directory to search for comments";
+                  default = null;
+                  example = "~/projects/foobar";
+                };
 
-            keywords = mkOption {
-              type = with types; transitionType str (splitString ",") (nullOr (listOf str));
-              description = ''
-                Comma separated list of keywords to filter results by.
-                Keywords are case-sensitive.
-              '';
-              default = null;
-              example = "TODO,FIX";
+                keywords = mkOption {
+                  type = with types; transitionType str (splitString ",") (nullOr (listOf str));
+                  description = ''
+                    Comma separated list of keywords to filter results by.
+                    Keywords are case-sensitive.
+                  '';
+                  default = null;
+                  example = "TODO,FIX";
+                };
+              };
             };
-
-            options = keymaps.mapConfigOptions;
-          };
-      in
-      mapAttrs mkKeymapOption keymapsActions;
+            description = "Keymap for function ${action}";
+          }
+        )
+        {
+          todoQuickFix = "TodoQuickFix";
+          todoLocList = "TodoLocList";
+          todoTrouble = "TodoTrouble";
+          todoTelescope = "TodoTelescope";
+        };
 
     ripgrepPackage = mkPackageOption {
       name = "ripgrep";
@@ -431,20 +432,18 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     extraPackages = [ cfg.ripgrepPackage ];
 
     keymaps = lib.pipe cfg.keymaps [
-      (filterAttrs (n: v: v != null))
+      (filterAttrs (n: keymap: keymap != null))
       (mapAttrsToList (
         name: keymap: {
-          inherit (keymap) key options;
-          mode = "n";
+          inherit (keymap) key mode options;
           action =
             let
-              cmd = keymapsActions.${name};
               cwd = optionalString (keymap.cwd != null) " cwd=${keymap.cwd}";
               keywords = optionalString (
                 keymap.keywords != null && keymap.keywords != [ ]
               ) " keywords=${concatStringsSep "," keymap.keywords}";
             in
-            "<cmd>${cmd}${cwd}${keywords}<cr>";
+            "<cmd>${keymap.action}${cwd}${keywords}<cr>";
         }
       ))
     ];
