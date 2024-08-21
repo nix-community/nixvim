@@ -84,6 +84,6 @@ in
           ) optionsAttrs
         );
       in
-      mkIf (content != "") content;
+      mkIf (content != "") (mkOrder 600 content); # Move options to top of file below global table
   };
 }
