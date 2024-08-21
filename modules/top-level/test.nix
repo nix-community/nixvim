@@ -36,10 +36,7 @@ in
       inherit (cfg) name;
       dontUnpack = true;
 
-      nativeBuildInputs = [
-        config.finalPackage
-        pkgs.docker-client
-      ];
+      nativeBuildInputs = [ config.finalPackage ];
 
       # We need to set HOME because neovim will try to create some files
       #
