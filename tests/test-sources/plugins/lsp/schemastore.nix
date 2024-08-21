@@ -1,5 +1,8 @@
 {
   empty = {
+    # TODO: remove once json is re-enabled
+    test.checkWarnings = false;
+
     plugins = {
       lsp = {
         enable = true;
@@ -17,6 +20,9 @@
   };
 
   example = {
+    # TODO: remove once json is re-enabled
+    test.checkWarnings = false;
+
     plugins = {
       lsp = {
         enable = true;
@@ -69,6 +75,9 @@
   };
 
   withJson = {
+    # TODO: remove once json is re-enabled
+    test.checkWarnings = false;
+
     plugins = {
       lsp = {
         enable = true;
