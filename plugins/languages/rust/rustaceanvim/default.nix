@@ -52,14 +52,12 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   callSetup = false;
   extraConfig =
     cfg:
-    let
-      configStr = ''
-        vim.g.rustaceanvim = ${helpers.toLuaObject cfg.settings}
-      '';
-    in
     mkMerge [
       {
         extraPackages = [ cfg.rustAnalyzerPackage ];
+
+        globals.rustaceanvim = cfg.settings;
+
         # TODO: remove after 24.11
         warnings =
           optional
@@ -78,13 +76,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # If nvim-lspconfig is enabled:
       (mkIf config.plugins.lsp.enable {
         # Use the same `on_attach` callback as for the other LSP servers
-        plugins.rustaceanvim.settings.server.on_attach = mkDefault "__lspOnAttach";
-
-        # Ensure the plugin config is placed **after** the rest of the LSP configuration
-        # (and thus after the declaration of `__lspOnAttach`)
-        plugins.lsp.postConfig = configStr;
+        plugins.rustaceanvim.settings.server.on_attach = mkDefault ''
+          function(client, bufnr)
+            return _M.lspOnAttach(client, bufnr)
+          end
+        '';
       })
-      # Else, just put the plugin config anywhere
-      (mkIf (!config.plugins.lsp.enable) { extraConfigLua = configStr; })
     ];
 }
