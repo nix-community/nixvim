@@ -285,12 +285,21 @@ in
         '';
       };
 
-      extraConfigLuaPre = lib.mkIf config.wrapRc ''
-        -- Ignore the user lua configuration
-        vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
-        vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
-        vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
-      '';
+      extraConfigLuaPre = lib.mkOrder 100 (
+        # Add a global table at start of init
+        ''
+          -- Nixvim's internal module table
+          -- Can be used to share code throughout init.lua
+          local _M = {}
+        ''
+        + lib.optionalString config.wrapRc ''
+
+          -- Ignore the user lua configuration
+          vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
+          vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
+          vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
+        ''
+      );
 
       extraPlugins = lib.mkIf config.wrapRc [ config.filesPlugin ];
     };
