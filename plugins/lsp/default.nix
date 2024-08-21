@@ -225,7 +225,8 @@ in
           ${cfg.preConfig}
 
           local __lspServers = ${helpers.toLuaObject cfg.enabledServers}
-          local __lspOnAttach = function(client, bufnr)
+          -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
+          _M.lspOnAttach = function(client, bufnr)
             ${updateCapabilities}
 
             ${cfg.onAttach}
@@ -239,7 +240,7 @@ in
           end
 
           local __setup = ${runWrappers cfg.setupWrappers "{
-            on_attach = __lspOnAttach,
+            on_attach = _M.lspOnAttach,
             capabilities = __lspCapabilities()
           }"}
 
