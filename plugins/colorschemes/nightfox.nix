@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   pkgs,
   config,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "nightfox";
   isColorscheme = true;
   originalName = "nightfox.nvim";
@@ -35,39 +37,37 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     options = {
-      compile_path =
-        helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('cache') .. '/nightfox'"; }
-          ''
-            The output directory path where the compiled results will be written to.
-          '';
+      compile_path = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('cache') .. '/nightfox'"; } ''
+        The output directory path where the compiled results will be written to.
+      '';
 
-      compile_file_suffix = helpers.defaultNullOpts.mkStr "_compiled" ''
+      compile_file_suffix = defaultNullOpts.mkStr "_compiled" ''
         The string appended to the compiled file.
         Each `style` outputs to its own file.
         These files will append the suffix to the end of the file.
       '';
 
-      transparent = helpers.defaultNullOpts.mkBool false ''
+      transparent = defaultNullOpts.mkBool false ''
         A boolean value that if set will disable setting the background of `Normal`, `NormalNC` and
         other highlight groups.
         This lets you use the colors of the colorscheme but use the background of your terminal.
       '';
 
-      terminal_colors = helpers.defaultNullOpts.mkBool true ''
+      terminal_colors = defaultNullOpts.mkBool true ''
         A boolean value that if set will define the terminal colors for the builtin `terminal`
         (`vim.g.terminal_color_*`).
       '';
 
-      dim_inactive = helpers.defaultNullOpts.mkBool false ''
+      dim_inactive = defaultNullOpts.mkBool false ''
         A boolean value that if set will set the background of Non current windows to be darker.
         See `:h hl-NormalNC`.
       '';
 
-      module_default = helpers.defaultNullOpts.mkBool true ''
+      module_default = defaultNullOpts.mkBool true ''
         The default value of a module that has not been overridden in the modules table.
       '';
 
-      styles = helpers.defaultNullOpts.mkAttrsOf' {
+      styles = defaultNullOpts.mkAttrsOf' {
         type = types.str;
         description = ''
           A table that contains a list of syntax components and their corresponding style.
@@ -106,7 +106,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       inverse =
-        helpers.defaultNullOpts.mkAttrsOf types.bool
+        defaultNullOpts.mkAttrsOf types.bool
           {
             match_paren = false;
             visual = false;
@@ -123,11 +123,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           '';
 
       colorblind = {
-        enable = helpers.defaultNullOpts.mkBool false ''
+        enable = defaultNullOpts.mkBool false ''
           Whether to enable nightfox’s _color vision deficiency_ (cdv) mode.
         '';
 
-        simulate_only = helpers.defaultNullOpts.mkBool false ''
+        simulate_only = defaultNullOpts.mkBool false ''
           Only show simulated colorblind colors and not diff shifted.
         '';
 
@@ -135,7 +135,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           mapAttrs
             (
               name: color:
-              helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''
+              defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''
                 Severity [0, 1] for ${name} (${color}).
               ''
             )
@@ -147,7 +147,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       modules =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
+        defaultNullOpts.mkAttrsOf types.anything
           {
             coc = {
               background = true;
@@ -180,7 +180,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
 
     palettes =
-      helpers.mkNullOrOption
+      mkNullOrOption
         (
           with types;
           attrsOf
@@ -230,7 +230,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
 
     specs =
-      helpers.mkNullOrOption
+      mkNullOrOption
         (
           with types;
           attrsOf
@@ -274,7 +274,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
 
     groups =
-      helpers.mkNullOrOption
+      mkNullOrOption
         (
           with types;
           attrsOf

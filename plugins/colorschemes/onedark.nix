@@ -1,11 +1,10 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "onedark";
   isColorscheme = true;
   originalName = "onedark.nvim";
@@ -39,7 +38,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   extraConfig = cfg: {
     extraConfigLuaPre = ''
       _onedark = require('onedark')
-      _onedark.setup(${helpers.toLuaObject cfg.settings})
+      _onedark.setup(${lib.nixvim.toLuaObject cfg.settings})
       _onedark.load()
     '';
   };

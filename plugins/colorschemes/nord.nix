@@ -1,11 +1,13 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.vim-plugin.mkVimPlugin config {
   name = "nord";
   isColorscheme = true;
   originalName = "nord.nvim";
@@ -27,31 +29,31 @@ helpers.vim-plugin.mkVimPlugin config {
   ];
 
   settingsOptions = {
-    contrast = helpers.defaultNullOpts.mkBool false ''
+    contrast = defaultNullOpts.mkBool false ''
       Make sidebars and popup menus like nvim-tree and telescope have a different background.
     '';
 
-    borders = helpers.defaultNullOpts.mkBool false ''
+    borders = defaultNullOpts.mkBool false ''
       Enable the border between vertically split windows.
     '';
 
-    disable_background = helpers.defaultNullOpts.mkBool false ''
+    disable_background = defaultNullOpts.mkBool false ''
       Disable the setting of background color so that NeoVim can use your terminal background.
     '';
 
-    cursorline_transparent = helpers.defaultNullOpts.mkBool false ''
+    cursorline_transparent = defaultNullOpts.mkBool false ''
       Set the cursorline transparent/visible.
     '';
 
-    enable_sidebar_background = helpers.defaultNullOpts.mkBool false ''
+    enable_sidebar_background = defaultNullOpts.mkBool false ''
       Re-enables the background of the sidebar if you disabled the background of everything.
     '';
 
-    italic = helpers.defaultNullOpts.mkBool true ''
+    italic = defaultNullOpts.mkBool true ''
       Enables/disables italics.
     '';
 
-    uniform_diff_background = helpers.defaultNullOpts.mkBool false ''
+    uniform_diff_background = defaultNullOpts.mkBool false ''
       Enables/disables colorful backgrounds when used in _diff_ mode.
     '';
   };

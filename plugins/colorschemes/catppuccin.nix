@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStrLuaFnOr;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "catppuccin";
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.catppuccin-nvim;
@@ -124,11 +126,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       ];
     in
     {
-      compile_path = helpers.defaultNullOpts.mkStr {
+      compile_path = defaultNullOpts.mkStr {
         __raw = "vim.fn.stdpath 'cache' .. '/catppuccin'";
       } "Set the compile cache directory.";
 
-      flavour = helpers.mkNullOrOption (types.enum (flavours ++ [ "auto" ])) ''
+      flavour = mkNullOrOption (types.enum (flavours ++ [ "auto" ])) ''
         Theme flavour.
       '';
 
@@ -136,7 +138,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         let
           mkBackgroundStyle =
             name:
-            helpers.defaultNullOpts.mkEnumFirstDefault flavours ''
+            defaultNullOpts.mkEnumFirstDefault flavours ''
               Background for `${name}` background.
             '';
         in
@@ -146,97 +148,97 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           dark = mkBackgroundStyle "dark";
         };
 
-      transparent_background = helpers.defaultNullOpts.mkBool false ''
+      transparent_background = defaultNullOpts.mkBool false ''
         Enable Transparent background.
       '';
 
-      show_end_of_buffer = helpers.defaultNullOpts.mkBool false ''
+      show_end_of_buffer = defaultNullOpts.mkBool false ''
         Show the '~' characters after the end of buffers.
       '';
 
-      term_colors = helpers.defaultNullOpts.mkBool false ''
+      term_colors = defaultNullOpts.mkBool false ''
         Configure the colors used when opening a :terminal in Neovim.
       '';
 
       dim_inactive = {
-        enabled = helpers.defaultNullOpts.mkBool false ''
+        enabled = defaultNullOpts.mkBool false ''
           If true, dims the background color of inactive window or buffer or split.
         '';
 
-        shade = helpers.defaultNullOpts.mkStr "dark" ''
+        shade = defaultNullOpts.mkStr "dark" ''
           Sets the shade to apply to the inactive split or window or buffer.
         '';
 
-        percentage = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.15 ''
+        percentage = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.15 ''
           percentage of the shade to apply to the inactive window, split or buffer.
         '';
       };
 
-      no_italic = helpers.defaultNullOpts.mkBool false ''
+      no_italic = defaultNullOpts.mkBool false ''
         Force no italic.
       '';
 
-      no_bold = helpers.defaultNullOpts.mkBool false ''
+      no_bold = defaultNullOpts.mkBool false ''
         Force no bold.
       '';
 
-      no_underline = helpers.defaultNullOpts.mkBool false ''
+      no_underline = defaultNullOpts.mkBool false ''
         Force no underline.
       '';
 
       styles = {
-        comments = helpers.defaultNullOpts.mkListOf types.str [ "italic" ] ''
+        comments = defaultNullOpts.mkListOf types.str [ "italic" ] ''
           Define comments highlight properties.
         '';
 
-        conditionals = helpers.defaultNullOpts.mkListOf types.str [ "italic" ] ''
+        conditionals = defaultNullOpts.mkListOf types.str [ "italic" ] ''
           Define conditionals highlight properties.
         '';
 
-        loops = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        loops = defaultNullOpts.mkListOf types.str [ ] ''
           Define loops highlight properties.
         '';
 
-        functions = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        functions = defaultNullOpts.mkListOf types.str [ ] ''
           Define functions highlight properties.
         '';
 
-        keywords = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        keywords = defaultNullOpts.mkListOf types.str [ ] ''
           Define keywords highlight properties.
         '';
 
-        strings = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        strings = defaultNullOpts.mkListOf types.str [ ] ''
           Define strings highlight properties.
         '';
 
-        variables = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        variables = defaultNullOpts.mkListOf types.str [ ] ''
           Define variables highlight properties.
         '';
 
-        numbers = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        numbers = defaultNullOpts.mkListOf types.str [ ] ''
           Define numbers highlight properties.
         '';
 
-        booleans = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        booleans = defaultNullOpts.mkListOf types.str [ ] ''
           Define booleans highlight properties.
         '';
 
-        properties = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        properties = defaultNullOpts.mkListOf types.str [ ] ''
           Define properties highlight properties.
         '';
 
-        types = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        types = defaultNullOpts.mkListOf types.str [ ] ''
           Define types highlight properties.
         '';
 
-        operators = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        operators = defaultNullOpts.mkListOf types.str [ ] ''
           Define operators highlight properties.
         '';
       };
 
       color_overrides = genAttrs (flavours ++ [ "all" ]) (
         flavour:
-        helpers.defaultNullOpts.mkAttrsOf types.str { } (
+        defaultNullOpts.mkAttrsOf types.str { } (
           if flavour == "all" then
             "Override colors for all the flavours."
           else
@@ -244,7 +246,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         )
       );
 
-      custom_highlights = helpers.mkNullOrStrLuaFnOr (with types; attrsOf anything) ''
+      custom_highlights = mkNullOrStrLuaFnOr (with types; attrsOf anything) ''
         Override specific highlight groups to use other groups or a hex color.
         You can provide either a lua function or directly an attrs.
 
@@ -262,11 +264,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         Default: `{}`
       '';
 
-      default_integrations = helpers.defaultNullOpts.mkBool true ''
+      default_integrations = defaultNullOpts.mkBool true ''
         Some integrations are enabled by default, you can control this behaviour with this option.
       '';
 
-      integrations = helpers.mkNullOrOption (with types; attrsOf anything) ''
+      integrations = mkNullOrOption (with types; attrsOf anything) ''
         Catppuccin provides theme support for other plugins in the Neovim ecosystem and extended
         Neovim functionality through _integrations_.
 

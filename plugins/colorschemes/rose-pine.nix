@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   pkgs,
   config,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "rose-pine";
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.rose-pine;
@@ -61,7 +63,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     variant =
-      helpers.mkNullOrOption
+      lib.nixvim.mkNullOrOption
         (types.enum [
           "auto"
           "main"
@@ -74,7 +76,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
 
     dark_variant =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "main"
           "moon"
@@ -84,42 +86,42 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Set the desired dark variant when `settings.variant` is set to "auto".
         '';
 
-    dim_inactive_windows = helpers.defaultNullOpts.mkBool false ''
+    dim_inactive_windows = defaultNullOpts.mkBool false ''
       Differentiate between active and inactive windows and panels.
     '';
 
-    extend_background_behind_borders = helpers.defaultNullOpts.mkBool true ''
+    extend_background_behind_borders = defaultNullOpts.mkBool true ''
       Extend background behind borders.
       Appearance differs based on which border characters you are using.
     '';
 
     enable = {
-      legacy_highlights = helpers.defaultNullOpts.mkBool true "Enable legacy highlights.";
+      legacy_highlights = defaultNullOpts.mkBool true "Enable legacy highlights.";
 
-      migrations = helpers.defaultNullOpts.mkBool true "Enable migrations.";
+      migrations = defaultNullOpts.mkBool true "Enable migrations.";
 
-      terminal = helpers.defaultNullOpts.mkBool true "Enable terminal.";
+      terminal = defaultNullOpts.mkBool true "Enable terminal.";
     };
 
     styles = {
-      bold = helpers.defaultNullOpts.mkBool true "Enable bold.";
+      bold = defaultNullOpts.mkBool true "Enable bold.";
 
-      italic = helpers.defaultNullOpts.mkBool true "Enable italic.";
+      italic = defaultNullOpts.mkBool true "Enable italic.";
 
-      transparency = helpers.defaultNullOpts.mkBool true "Enable transparency.";
+      transparency = defaultNullOpts.mkBool true "Enable transparency.";
     };
 
-    groups = helpers.mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
+    groups = mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
       Highlight groups.
 
       default: see [source](https://github.com/rose-pine/neovim/blob/main/lua/rose-pine/config.lua)
     '';
 
-    highlight_groups = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight { } ''
+    highlight_groups = defaultNullOpts.mkAttrsOf types.highlight { } ''
       Custom highlight groups.
     '';
 
-    before_highlight = helpers.defaultNullOpts.mkLuaFn "function(group, highlight, palette) end" ''
+    before_highlight = defaultNullOpts.mkLuaFn "function(group, highlight, palette) end" ''
       Called before each highlight group, before setting the highlight.
 
       `function(group, highlight, palette)`

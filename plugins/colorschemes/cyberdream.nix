@@ -1,42 +1,44 @@
 {
   config,
   lib,
-  helpers,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "cyberdream";
   isColorscheme = true;
   originalName = "cyberdream.nvim";
   defaultPackage = pkgs.vimPlugins.cyberdream-nvim;
 
-  maintainers = [ helpers.maintainers.AndresBermeoMarinelli ];
+  maintainers = [ lib.nixvim.maintainers.AndresBermeoMarinelli ];
 
   settingsOptions = {
-    transparent = helpers.defaultNullOpts.mkBool false ''
+    transparent = defaultNullOpts.mkBool false ''
       Enable transparent background.
     '';
 
-    italic_comments = helpers.defaultNullOpts.mkBool false ''
+    italic_comments = defaultNullOpts.mkBool false ''
       Enable italics comments.
     '';
 
-    hide_fillchars = helpers.defaultNullOpts.mkBool false ''
+    hide_fillchars = defaultNullOpts.mkBool false ''
       Replace all fillchars with ' ' for the ultimate clean look.
     '';
 
-    borderless_telescope = helpers.defaultNullOpts.mkBool true ''
+    borderless_telescope = defaultNullOpts.mkBool true ''
       Modern borderless telescope theme.
     '';
 
-    terminal_colors = helpers.defaultNullOpts.mkBool true ''
+    terminal_colors = defaultNullOpts.mkBool true ''
       Set terminal colors used in `:terminal`.
     '';
 
     theme = {
-      highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight { } ''
+      highlights = defaultNullOpts.mkAttrsOf types.highlight { } ''
         Highlight groups to override, adding new groups is also possible.
         See `:h highlight-groups` for a list of highlight groups.
 
@@ -55,7 +57,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         Complete list can be found in `lua/cyberdream/theme.lua` in upstream repository.
       '';
 
-      colors = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+      colors = defaultNullOpts.mkAttrsOf types.str { } ''
         Override the default colors used.
 
         For a full list of colors, see upstream documentation.

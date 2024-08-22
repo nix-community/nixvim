@@ -1,11 +1,10 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "gruvbox";
   isColorscheme = true;
   originalName = "gruvbox.nvim";
@@ -23,7 +22,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           "colorschemes"
           "gruvbox"
           optionName
-        ] "Please use `colorschemes.gruvbox.settings.${helpers.toSnakeCase optionName}` instead."
+        ] "Please use `colorschemes.gruvbox.settings.${lib.nixvim.toSnakeCase optionName}` instead."
       )
       [
         "italics"

@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts toLuaObject;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "ayu";
   isColorscheme = true;
   originalName = "neovim-ayu";
@@ -24,11 +26,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   ];
 
   settingsOptions = {
-    mirage = helpers.defaultNullOpts.mkBool false ''
+    mirage = defaultNullOpts.mkBool false ''
       Set to `true` to use `mirage` variant instead of `dark` for dark background.
     '';
 
-    overrides = helpers.defaultNullOpts.mkStrLuaOr (with helpers.nixvimTypes; attrsOf highlight) { } ''
+    overrides = defaultNullOpts.mkStrLuaOr (with types; attrsOf highlight) { } ''
       A dictionary of group names, each associated with a dictionary of parameters
       (`bg`, `fg`, `sp` and `style`) and colors in hex.
 
@@ -42,7 +44,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   extraConfig = cfg: {
     extraConfigLuaPre = ''
       local ayu = require("ayu")
-      ayu.setup(${helpers.toLuaObject cfg.settings})
+      ayu.setup(${toLuaObject cfg.settings})
       ayu.colorscheme()
     '';
   };

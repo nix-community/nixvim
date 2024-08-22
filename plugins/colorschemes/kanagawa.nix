@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   pkgs,
   config,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "kanagawa";
   isColorscheme = true;
   originalName = "kanagawa.nvim";
@@ -78,49 +80,49 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     ];
 
   settingsOptions = {
-    compile = helpers.defaultNullOpts.mkBool false ''
+    compile = defaultNullOpts.mkBool false ''
       Enable compiling the colorscheme.
     '';
 
-    undercurl = helpers.defaultNullOpts.mkBool true ''
+    undercurl = defaultNullOpts.mkBool true ''
       Enable undercurls.
     '';
 
-    commentStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { italic = true; } ''
+    commentStyle = defaultNullOpts.mkAttrsOf types.anything { italic = true; } ''
       Highlight options for comments.
     '';
 
-    functionStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+    functionStyle = defaultNullOpts.mkAttrsOf types.anything { } ''
       Highlight options for functions.
     '';
 
-    keywordStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { italic = true; } ''
+    keywordStyle = defaultNullOpts.mkAttrsOf types.anything { italic = true; } ''
       Highlight options for keywords.
     '';
 
-    statementStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { bold = true; } ''
+    statementStyle = defaultNullOpts.mkAttrsOf types.anything { bold = true; } ''
       Highlight options for statements.
     '';
 
-    typeStyle = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+    typeStyle = defaultNullOpts.mkAttrsOf types.anything { } ''
       Highlight options for types.
     '';
 
-    transparent = helpers.defaultNullOpts.mkBool false ''
+    transparent = defaultNullOpts.mkBool false ''
       Whether to set a background color.
     '';
 
-    dimInactive = helpers.defaultNullOpts.mkBool false ''
+    dimInactive = defaultNullOpts.mkBool false ''
       Whether dim inactive window `:h hl-NormalNC`.
     '';
 
-    terminalColors = helpers.defaultNullOpts.mkBool true ''
+    terminalColors = defaultNullOpts.mkBool true ''
       If true, defines `vim.g.terminal_color_{0,17}`.
     '';
 
     colors = {
       theme =
-        helpers.defaultNullOpts.mkAttrsOf types.attrs
+        defaultNullOpts.mkAttrsOf types.attrs
           {
             wave = { };
             lotus = { };
@@ -154,7 +156,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
             ```
           '';
 
-      palette = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+      palette = defaultNullOpts.mkAttrsOf types.str { } ''
         Change all usages of these colors.
 
         Example:
@@ -168,7 +170,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
 
     overrides =
-      helpers.defaultNullOpts.mkLuaFn
+      defaultNullOpts.mkLuaFn
         ''
           function(colors)
             return {}
@@ -198,16 +200,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ```
         '';
 
-    theme = helpers.defaultNullOpts.mkStr "wave" ''
+    theme = defaultNullOpts.mkStr "wave" ''
       The theme to load when background is not set.
     '';
 
     background = {
-      light = helpers.defaultNullOpts.mkStr "lotus" ''
+      light = defaultNullOpts.mkStr "lotus" ''
         The theme to use when `vim.o.background = "light"`.
       '';
 
-      dark = helpers.defaultNullOpts.mkStr "wave" ''
+      dark = defaultNullOpts.mkStr "wave" ''
         The theme to use when `vim.o.background = "dark"`.
       '';
     };

@@ -1,17 +1,18 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
 let
+  inherit (lib.nixvim) defaultNullOpts toLuaObject;
+
   name = "base16";
   luaName = "base16-colorscheme";
   originalName = "base16.nvim";
 in
-helpers.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   inherit name luaName originalName;
   setup = ".with_config";
   defaultPackage = pkgs.vimPlugins.base16-nvim;
@@ -47,43 +48,43 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   };
 
   settingsOptions = {
-    telescope = helpers.defaultNullOpts.mkBool true ''
+    telescope = defaultNullOpts.mkBool true ''
       Whether to enable telescope integration.
     '';
 
-    telescope_borders = helpers.defaultNullOpts.mkBool false ''
+    telescope_borders = defaultNullOpts.mkBool false ''
       Whether to display borders around telescope's panel.
     '';
 
-    indentblankline = helpers.defaultNullOpts.mkBool true ''
+    indentblankline = defaultNullOpts.mkBool true ''
       Whether to enable indentblankline integration.
     '';
 
-    notify = helpers.defaultNullOpts.mkBool true ''
+    notify = defaultNullOpts.mkBool true ''
       Whether to enable notify integration.
     '';
 
-    ts_rainbow = helpers.defaultNullOpts.mkBool true ''
+    ts_rainbow = defaultNullOpts.mkBool true ''
       Whether to enable ts_rainbow integration.
     '';
 
-    cmp = helpers.defaultNullOpts.mkBool true ''
+    cmp = defaultNullOpts.mkBool true ''
       Whether to enable cmp integration.
     '';
 
-    illuminate = helpers.defaultNullOpts.mkBool true ''
+    illuminate = defaultNullOpts.mkBool true ''
       Whether to enable illuminate integration.
     '';
 
-    lsp_semantic = helpers.defaultNullOpts.mkBool true ''
+    lsp_semantic = defaultNullOpts.mkBool true ''
       Whether to enable lsp_semantic integration.
     '';
 
-    mini_completion = helpers.defaultNullOpts.mkBool true ''
+    mini_completion = defaultNullOpts.mkBool true ''
       Whether to enable mini_completion integration.
     '';
 
-    dapui = helpers.defaultNullOpts.mkBool true ''
+    dapui = defaultNullOpts.mkBool true ''
       Whether to enable dapui integration.
     '';
   };
@@ -95,7 +96,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           options = mapAttrs (
             name: example:
             mkOption {
-              type = with helpers.nixvimTypes; maybeRaw str;
+              type = with types; maybeRaw str;
               description = "The value for color `${name}`.";
               inherit example;
             }
@@ -123,11 +124,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
         builtinColorschemeExamples = import ./theme-list.nix;
       in
-      helpers.defaultNullOpts.mkNullable' {
+      defaultNullOpts.mkNullable' {
         type = types.oneOf [
           types.str
           customColorschemeType
-          helpers.nixvimTypes.rawLua
+          types.rawLua
         ];
         pluginDefault = literalMD ''`vim.env.BASE16_THEME` or `"schemer-dark"`'';
         description = ''
@@ -182,8 +183,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     extraConfigLuaPre = ''
       do
         local base16 = require('${luaName}')
-        base16.with_config(${helpers.toLuaObject cfg.settings})
-        base16.setup(${helpers.toLuaObject cfg.colorscheme})
+        base16.with_config(${toLuaObject cfg.settings})
+        base16.setup(${toLuaObject cfg.colorscheme})
       end
     '';
   };

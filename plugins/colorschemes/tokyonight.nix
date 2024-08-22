@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   pkgs,
   config,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "tokyonight";
   isColorscheme = true;
   originalName = "tokyonight.nvim";
@@ -54,7 +56,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     style =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "storm"
           "night"
@@ -64,15 +66,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           The theme comes in three styles, `storm`, a darker variant `night` and `day`.
         '';
 
-    light_style = helpers.defaultNullOpts.mkStr "day" ''
+    light_style = defaultNullOpts.mkStr "day" ''
       The theme to use when the background is set to `light`.
     '';
 
-    transparent = helpers.defaultNullOpts.mkBool false ''
+    transparent = defaultNullOpts.mkBool false ''
       Disable setting the background color.
     '';
 
-    terminal_colors = helpers.defaultNullOpts.mkBool true ''
+    terminal_colors = defaultNullOpts.mkBool true ''
       Configure the colors used when opening a :terminal in Neovim
     '';
 
@@ -80,26 +82,26 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       let
         mkBackgroundStyle =
           name:
-          helpers.defaultNullOpts.mkEnumFirstDefault [
+          defaultNullOpts.mkEnumFirstDefault [
             "dark"
             "transparent"
             "normal"
           ] "Background style for ${name}";
       in
       {
-        comments = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
+        comments = defaultNullOpts.mkHighlight { italic = true; } "" ''
           Define comments highlight properties.
         '';
 
-        keywords = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
+        keywords = defaultNullOpts.mkHighlight { italic = true; } "" ''
           Define keywords highlight properties.
         '';
 
-        functions = helpers.defaultNullOpts.mkHighlight { } "" ''
+        functions = defaultNullOpts.mkHighlight { } "" ''
           Define functions highlight properties.
         '';
 
-        variables = helpers.defaultNullOpts.mkHighlight { } "" ''
+        variables = defaultNullOpts.mkHighlight { } "" ''
           Define variables highlight properties.
         '';
 
@@ -109,7 +111,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
     sidebars =
-      helpers.defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf types.str
         [
           "qf"
           "help"
@@ -118,31 +120,31 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           Set a darker background on sidebar-like windows.
         '';
 
-    day_brightness = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
+    day_brightness = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
       Adjusts the brightness of the colors of the **Day** style.
       Number between 0 and 1, from dull to vibrant colors.
     '';
 
-    hide_inactive_statusline = helpers.defaultNullOpts.mkBool false ''
+    hide_inactive_statusline = defaultNullOpts.mkBool false ''
       Enabling this option will hide inactive statuslines and replace them with a thin border instead.
       Should work with the standard **StatusLine** and **LuaLine**.
     '';
 
-    dim_inactive = helpers.defaultNullOpts.mkBool false ''
+    dim_inactive = defaultNullOpts.mkBool false ''
       Dims inactive windows.
     '';
 
-    lualine_bold = helpers.defaultNullOpts.mkBool false ''
+    lualine_bold = defaultNullOpts.mkBool false ''
       When true, section headers in the lualine theme will be bold.
     '';
 
-    on_colors = helpers.defaultNullOpts.mkLuaFn "function(colors) end" ''
+    on_colors = defaultNullOpts.mkLuaFn "function(colors) end" ''
       Override specific color groups to use other groups or a hex color.
       Function will be called with a `ColorScheme` table.
       `@param colors ColorScheme`
     '';
 
-    on_highlights = helpers.defaultNullOpts.mkLuaFn "function(highlights, colors) end" ''
+    on_highlights = defaultNullOpts.mkLuaFn "function(highlights, colors) end" ''
       Override specific highlights to use other groups or a hex color.
       Function will be called with a `Highlights` and `ColorScheme` table.
       `@param highlights Highlights`

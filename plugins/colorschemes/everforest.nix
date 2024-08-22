@@ -1,30 +1,31 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
+  inherit (lib.nixvim) defaultNullOpts;
+
   mkEverforestBool =
     pluginDefault: desc:
-    helpers.defaultNullOpts.mkEnum [
+    defaultNullOpts.mkEnum [
       0
       1
     ] pluginDefault desc;
 
 in
-helpers.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin config {
   name = "everforest";
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.everforest;
   globalPrefix = "everforest_";
 
-  maintainers = [ helpers.maintainers.sheemap ];
+  maintainers = [ lib.nixvim.maintainers.sheemap ];
 
   settingsOptions = {
     background =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "hard"
           "medium"
@@ -44,7 +45,7 @@ helpers.vim-plugin.mkVimPlugin config {
     '';
 
     cursor =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "auto"
           "red"
@@ -60,7 +61,7 @@ helpers.vim-plugin.mkVimPlugin config {
         '';
 
     transparent_background =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           0
           1
@@ -83,7 +84,7 @@ helpers.vim-plugin.mkVimPlugin config {
     '';
 
     sign_column_background =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "none"
           "grey"
@@ -94,7 +95,7 @@ helpers.vim-plugin.mkVimPlugin config {
         '';
 
     spell_foreground =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "none"
           "colored"
@@ -106,7 +107,7 @@ helpers.vim-plugin.mkVimPlugin config {
         '';
 
     ui_contrast =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "low"
           "high"
@@ -120,7 +121,7 @@ helpers.vim-plugin.mkVimPlugin config {
     '';
 
     float_style =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "bright"
           "dim"
@@ -165,7 +166,7 @@ helpers.vim-plugin.mkVimPlugin config {
     '';
 
     diagnostic_virtual_text =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "grey"
           "colored"
@@ -187,7 +188,7 @@ helpers.vim-plugin.mkVimPlugin config {
         '';
 
     current_word =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "grey background"
           "bold"
@@ -211,7 +212,7 @@ helpers.vim-plugin.mkVimPlugin config {
         '';
 
     inlay_hints_background =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "none"
           "dimmed"
@@ -240,7 +241,7 @@ helpers.vim-plugin.mkVimPlugin config {
       lightline color scheme, set this option to `1`.
     '';
 
-    colors_override = helpers.defaultNullOpts.mkAttrsOf (lib.types.listOf lib.types.str) { } ''
+    colors_override = defaultNullOpts.mkAttrsOf (lib.types.listOf lib.types.str) { } ''
       Override color palette. The available keys can be found in the plugin's [source code](https://github.com/sainnhe/everforest/blob/master/autoload/everforest.vim)
     '';
 

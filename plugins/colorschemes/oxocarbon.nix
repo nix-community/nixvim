@@ -1,11 +1,10 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin config {
   name = "oxocarbon";
   isColorscheme = true;
   originalName = "oxocarbon.nvim";

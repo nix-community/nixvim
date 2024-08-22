@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "palette";
   isColorscheme = true;
   originalName = "palette.nvim";
@@ -34,15 +36,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   settingsOptions = {
     palettes = {
-      main = helpers.defaultNullOpts.mkStr "dark" ''
+      main = defaultNullOpts.mkStr "dark" ''
         Palette for the main colors.
       '';
 
-      accent = helpers.defaultNullOpts.mkStr "pastel" ''
+      accent = defaultNullOpts.mkStr "pastel" ''
         Palette for the accent colors.
       '';
 
-      state = helpers.defaultNullOpts.mkStr "pastel" ''
+      state = defaultNullOpts.mkStr "pastel" ''
         Palette for the state colors.
       '';
     };
@@ -51,7 +53,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       mapAttrs
         (
           name: colorNames:
-          helpers.defaultNullOpts.mkAttrsOf
+          defaultNullOpts.mkAttrsOf
             (types.submodule {
               options = genAttrs colorNames (
                 colorName:
@@ -98,19 +100,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           ];
         };
 
-    italics = helpers.defaultNullOpts.mkBool true ''
+    italics = defaultNullOpts.mkBool true ''
       Whether to use italics.
     '';
 
-    transparent_background = helpers.defaultNullOpts.mkBool false ''
+    transparent_background = defaultNullOpts.mkBool false ''
       Whether to use transparent background.
     '';
 
-    caching = helpers.defaultNullOpts.mkBool true ''
+    caching = defaultNullOpts.mkBool true ''
       Whether to enable caching.
     '';
 
-    cache_dir = helpers.defaultNullOpts.mkStr {
+    cache_dir = defaultNullOpts.mkStr {
       __raw = "vim.fn.stdpath('cache') .. '/palette'";
     } "Cache directory.";
   };

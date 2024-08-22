@@ -1,12 +1,11 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin config {
   name = "melange";
   isColorscheme = true;
   originalName = "melange-nvim";

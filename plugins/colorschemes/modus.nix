@@ -1,22 +1,24 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "modus";
   luaName = "modus-themes";
   originalName = "modus-themes.nvim";
   defaultPackage = pkgs.vimPlugins.modus-themes-nvim;
   isColorscheme = true;
 
-  maintainers = [ helpers.maintainers.nwjsmith ];
+  maintainers = [ lib.nixvim.maintainers.nwjsmith ];
 
   settingsOptions = {
     style =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "modus_operandi"
           "modus_vivendi"
@@ -26,7 +28,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
 
     variant =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "default"
           "tinted"
@@ -42,33 +44,33 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           - `tritanopia` is optimized for users with blue-yellow color deficiency.
         '';
 
-    transparent = helpers.defaultNullOpts.mkBool false ''
+    transparent = defaultNullOpts.mkBool false ''
       Disable setting the background color.
     '';
 
-    dim_inactive = helpers.defaultNullOpts.mkBool false ''
+    dim_inactive = defaultNullOpts.mkBool false ''
       Dims inactive windows.
     '';
 
     styles = {
-      comments = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
+      comments = defaultNullOpts.mkHighlight { italic = true; } "" ''
         Define comments highlight properties.
       '';
 
-      keywords = helpers.defaultNullOpts.mkHighlight { italic = true; } "" ''
+      keywords = defaultNullOpts.mkHighlight { italic = true; } "" ''
         Define keywords highlight properties.
       '';
 
-      functions = helpers.defaultNullOpts.mkHighlight { } "" ''
+      functions = defaultNullOpts.mkHighlight { } "" ''
         Define functions highlight properties.
       '';
 
-      variables = helpers.defaultNullOpts.mkHighlight { } "" ''
+      variables = defaultNullOpts.mkHighlight { } "" ''
         Define variables highlight properties.
       '';
     };
 
-    on_colors = helpers.defaultNullOpts.mkLuaFn "function(colors) end" ''
+    on_colors = defaultNullOpts.mkLuaFn "function(colors) end" ''
       Override specific color groups to use other groups or a hex color.
       Function will be called with a `ColorScheme` table.
 
@@ -77,7 +79,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       ```
     '';
 
-    on_highlights = helpers.defaultNullOpts.mkLuaFn "function(highlights, colors) end" ''
+    on_highlights = defaultNullOpts.mkLuaFn "function(highlights, colors) end" ''
       Override specific highlights to use other groups or a hex color.
       Function will be called with a `Highlights` and `ColorScheme` table.
 

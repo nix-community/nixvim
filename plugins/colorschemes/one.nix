@@ -1,11 +1,10 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin config {
   name = "one";
   isColorscheme = true;
   originalName = "vim-one";
@@ -15,7 +14,7 @@ helpers.vim-plugin.mkVimPlugin config {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    allow_italics = helpers.defaultNullOpts.mkBool false ''
+    allow_italics = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to enable _italic_ (as long as your terminal supports it).
     '';
   };
