@@ -1,10 +1,9 @@
-{ pkgs, ... }:
 {
   empty = {
     plugins.nvim-osc52.enable = true;
 
     # Hide warnings, since this plugin is deprecated
-    warnings = pkgs.lib.mkForce [ ];
+    test.checkWarnings = false;
   };
 
   defaults = {
@@ -22,6 +21,6 @@
     };
 
     # Hide warnings, since this plugin is deprecated
-    warnings = pkgs.lib.mkForce [ ];
+    test.checkWarnings = false;
   };
 }
