@@ -1,10 +1,8 @@
-{
-  lib,
-  config,
-  helpers,
-  ...
-}:
+{ lib, config, ... }:
 with lib;
+let
+  inherit (lib.nixvim) mkPluginPackageOption mkSettingsOption toSnakeCase;
+in
 rec {
   mkExtension =
     {
@@ -36,7 +34,7 @@ rec {
           let
             optionPath = if isString option then [ option ] else option; # option is already a path (i.e. a list)
 
-            optionPathSnakeCase = map helpers.toSnakeCase optionPath;
+            optionPathSnakeCase = map toSnakeCase optionPath;
           in
           mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
         ) optionsRenamedToSettings);
@@ -44,9 +42,9 @@ rec {
       options.plugins.telescope.extensions.${name} = {
         enable = mkEnableOption "the `${name}` telescope extension";
 
-        package = helpers.mkPluginPackageOption name defaultPackage;
+        package = mkPluginPackageOption name defaultPackage;
 
-        settings = helpers.mkSettingsOption {
+        settings = mkSettingsOption {
           description = "settings for the `${name}` telescope extension.";
           options = settingsOptions;
           example = settingsExample;
@@ -73,7 +71,7 @@ rec {
   mkModeMappingsOption =
     mode: defaults:
     mkOption {
-      type = with helpers.nixvimTypes; attrsOf strLuaFn;
+      type = with types; attrsOf strLuaFn;
       default = { };
       description = ''
         Keymaps in ${mode} mode.
@@ -83,7 +81,7 @@ rec {
           ${defaults}
         ```
       '';
-      apply = mapAttrs (_: helpers.mkRaw);
+      apply = mapAttrs (_: mkRaw);
     };
 
   mkMappingsOption =

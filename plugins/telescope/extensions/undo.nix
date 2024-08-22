@@ -1,20 +1,13 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
 let
-  telescopeHelpers = import ./_helpers.nix {
-    inherit
-      lib
-      helpers
-      config
-      pkgs
-      ;
-  };
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+  telescopeHelpers = import ./_helpers.nix { inherit lib config pkgs; };
 in
 telescopeHelpers.mkExtension {
   name = "undo";
@@ -60,34 +53,34 @@ telescopeHelpers.mkExtension {
   ];
 
   settingsOptions = {
-    use_delta = helpers.defaultNullOpts.mkBool true ''
+    use_delta = defaultNullOpts.mkBool true ''
       When set to true, [delta](https://github.com/dandavison/delta) is used for fancy diffs in
       the preview section.
       If set to false, `telescope-undo` will not use `delta` even when available and fall back to a
       plain diff with treesitter highlights.
     '';
 
-    use_custom_command = helpers.mkNullOrOption (with types; listOf str) ''
+    use_custom_command = mkNullOrOption (with types; listOf str) ''
       Should be in this format: `[ "bash" "-c" "echo '$DIFF' | delta" ]`
     '';
 
-    side_by_side = helpers.defaultNullOpts.mkBool false ''
+    side_by_side = defaultNullOpts.mkBool false ''
       If set to true tells `delta` to render diffs side-by-side. Thus, requires `delta` to be used.
       Be aware that `delta` always uses its own configuration, so it might be that you're getting
       the side-by-side view even if this is set to false.
     '';
 
     vim_diff_opts = {
-      ctxlen = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.scrolloff" ''
+      ctxlen = defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.scrolloff" ''
         Defaults to the scrolloff.
       '';
     };
 
-    entry_format = helpers.defaultNullOpts.mkStr "state #$ID, $STAT, $TIME" ''
+    entry_format = defaultNullOpts.mkStr "state #$ID, $STAT, $TIME" ''
       The format to show on telescope for the different versions of the file.
     '';
 
-    time_format = helpers.defaultNullOpts.mkStr "" ''
+    time_format = defaultNullOpts.mkStr "" ''
       Can be set to a [Lua date format string](https://www.lua.org/pil/22.1.html).
     '';
 

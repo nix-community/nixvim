@@ -1,13 +1,15 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
+let
+  inherit (lib.nixvim) keymaps mkNullOrOption toLuaObject;
+in
 # TODO:add support for additional filetypes. This requires autocommands!
-helpers.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "telescope";
   originalName = "telescope.nvim";
   defaultPackage = pkgs.vimPlugins.telescope-nvim;
@@ -45,8 +47,8 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 type = types.str;
                 description = "The telescope action to run.";
               };
-              mode = helpers.keymaps.mkModeOption "n";
-              options = helpers.keymaps.mapConfigOptions;
+              mode = keymaps.mkModeOption "n";
+              options = keymaps.mapConfigOptions;
             };
           })
         );
@@ -105,9 +107,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     ) cfg.keymaps;
 
     extraConfigLua = ''
-      require('telescope').setup(${helpers.toLuaObject cfg.settings})
+      require('telescope').setup(${toLuaObject cfg.settings})
 
-      local __telescopeExtensions = ${helpers.toLuaObject cfg.enabledExtensions}
+      local __telescopeExtensions = ${toLuaObject cfg.enabledExtensions}
       for i, extension in ipairs(__telescopeExtensions) do
         require('telescope').load_extension(extension)
       end
@@ -118,11 +120,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   };
 
   settingsOptions = {
-    defaults = helpers.mkNullOrOption (with types; attrsOf anything) ''
+    defaults = mkNullOrOption (with types; attrsOf anything) ''
       Default configuration for telescope.
     '';
 
-    pickers = helpers.mkNullOrOption (with types; attrsOf anything) ''
+    pickers = mkNullOrOption (with types; attrsOf anything) ''
       Default configuration for builtin pickers.
     '';
 
