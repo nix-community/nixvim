@@ -1,19 +1,22 @@
-{ lib, helpers }:
+{ lib }:
 with lib;
+let
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrLuaFn;
+in
 {
   #################################################
   # CoreConfig
 
   discovery = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable discovery.";
+    enabled = defaultNullOpts.mkBool true "Enable discovery.";
 
-    concurrent = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+    concurrent = defaultNullOpts.mkUnsignedInt 0 ''
       Number of workers to parse files concurrently.
       0 automatically assigns number based on CPU.
       Set to 1 if experiencing lag.
     '';
 
-    filter_dir = helpers.mkNullOrLuaFn ''
+    filter_dir = mkNullOrLuaFn ''
       `fun(name: string, rel_path: string, root: string): boolean`
 
       A function to filter directories when searching for test files.
@@ -22,28 +25,28 @@ with lib;
   };
 
   running = {
-    concurrent = helpers.defaultNullOpts.mkBool true ''
+    concurrent = defaultNullOpts.mkBool true ''
       Run tests concurrently when an adapter provides multiple commands to run.
     '';
   };
 
-  default_strategy = helpers.defaultNullOpts.mkStr "integrated" ''
+  default_strategy = defaultNullOpts.mkStr "integrated" ''
     The default strategy.
   '';
 
   #################################################
   # Config
 
-  log_level = helpers.defaultNullOpts.mkLogLevel "warn" ''
+  log_level = defaultNullOpts.mkLogLevel "warn" ''
     Minimum log levels.
   '';
 
-  consumers = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.strLuaFn { } ''
+  consumers = defaultNullOpts.mkAttrsOf types.strLuaFn { } ''
     key: string
     value: lua function
   '';
 
-  icons = helpers.defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) {
+  icons = defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) {
     child_indent = "│";
     child_prefix = "├";
     collapsed = "─";
@@ -69,7 +72,7 @@ with lib;
     watching = "";
   } "Icons used throughout the UI. Defaults use VSCode's codicons.";
 
-  highlights = helpers.defaultNullOpts.mkAttrsOf types.str {
+  highlights = defaultNullOpts.mkAttrsOf types.str {
     adapter_name = "NeotestAdapterName";
     border = "NeotestBorder";
     dir = "NeotestDir";
@@ -91,43 +94,43 @@ with lib;
   } "";
 
   floating = {
-    border = helpers.defaultNullOpts.mkStr "rounded" "Border style.";
+    border = defaultNullOpts.mkStr "rounded" "Border style.";
 
-    max_height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+    max_height = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
       Max height of window as proportion of NeoVim window.
     '';
 
-    max_width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+    max_width = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
       Max width of window as proportion of NeoVim window.
     '';
 
-    options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+    options = defaultNullOpts.mkAttrsOf types.anything { } ''
       Window local options to set on floating windows (e.g. winblend).
     '';
   };
 
   strategies = {
     integrated = {
-      height = helpers.defaultNullOpts.mkUnsignedInt 40 ''
+      height = defaultNullOpts.mkUnsignedInt 40 ''
         height to pass to the pty running commands.
       '';
 
-      width = helpers.defaultNullOpts.mkUnsignedInt 120 ''
+      width = defaultNullOpts.mkUnsignedInt 120 ''
         Width to pass to the pty running commands.
       '';
     };
   };
 
   summary = {
-    enabled = helpers.defaultNullOpts.mkBool true "Whether to enable summary.";
+    enabled = defaultNullOpts.mkBool true "Whether to enable summary.";
 
-    animated = helpers.defaultNullOpts.mkBool true "Enable/disable animation of icons.";
+    animated = defaultNullOpts.mkBool true "Enable/disable animation of icons.";
 
-    follow = helpers.defaultNullOpts.mkBool true "Expand user's current file.";
+    follow = defaultNullOpts.mkBool true "Expand user's current file.";
 
-    expandErrors = helpers.defaultNullOpts.mkBool true "Expand all failed positions.";
+    expandErrors = defaultNullOpts.mkBool true "Expand all failed positions.";
 
-    mappings = helpers.defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) {
+    mappings = defaultNullOpts.mkAttrsOf (with types; either str (listOf str)) {
       attach = "a";
       clear_marked = "M";
       clear_target = "T";
@@ -151,60 +154,60 @@ with lib;
       watch = "w";
     } "Buffer mappings for summary window.";
 
-    open = helpers.defaultNullOpts.mkStr "botright vsplit | vertical resize 50" ''
+    open = defaultNullOpts.mkStr "botright vsplit | vertical resize 50" ''
       A command or function to open a window for the summary.
       Either a string or a function that returns an integer.
     '';
   };
 
   output = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable output.";
+    enabled = defaultNullOpts.mkBool true "Enable output.";
 
-    open_on_run = helpers.defaultNullOpts.mkNullable (with types; either str bool) "short" ''
+    open_on_run = defaultNullOpts.mkNullable (with types; either str bool) "short" ''
       Open nearest test result after running.
     '';
   };
 
   output_panel = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable output panel.";
+    enabled = defaultNullOpts.mkBool true "Enable output panel.";
 
-    open = helpers.defaultNullOpts.mkStr "botright split | resize 15" ''
+    open = defaultNullOpts.mkStr "botright split | resize 15" ''
       A command or function to open a window for the output panel.
       Either a string or a function that returns an integer.
     '';
   };
 
   quickfix = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable quickfix.";
+    enabled = defaultNullOpts.mkBool true "Enable quickfix.";
 
-    open = helpers.defaultNullOpts.mkNullable (with types; either bool str) false ''
+    open = defaultNullOpts.mkNullable (with types; either bool str) false ''
       Set to true to open quickfix on startup, or a function to be called when the quickfix
       results are set.
     '';
   };
 
   status = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable status.";
+    enabled = defaultNullOpts.mkBool true "Enable status.";
 
-    virtual_text = helpers.defaultNullOpts.mkBool false "Display status using virtual text.";
+    virtual_text = defaultNullOpts.mkBool false "Display status using virtual text.";
 
-    signs = helpers.defaultNullOpts.mkBool true "Display status using signs.";
+    signs = defaultNullOpts.mkBool true "Display status using signs.";
   };
 
   state = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable state.";
+    enabled = defaultNullOpts.mkBool true "Enable state.";
   };
 
   watch = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable watch.";
+    enabled = defaultNullOpts.mkBool true "Enable watch.";
 
-    symbol_queries = helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf (maybeRaw str)) ''
+    symbol_queries = mkNullOrOption (with types; attrsOf (maybeRaw str)) ''
       Treesitter queries or functions to capture symbols that are used for querying the LSP
       server for definitions to link files.
       If it is a function then the return value should be a list of node ranges.
     '';
 
-    filter_path = helpers.mkNullOrLuaFn ''
+    filter_path = mkNullOrLuaFn ''
       `(fun(path: string, root: string): boolean)`
 
       Returns whether the watcher should inspect a path for dependencies.
@@ -213,9 +216,9 @@ with lib;
   };
 
   diagnostic = {
-    enabled = helpers.defaultNullOpts.mkBool true "Enable diagnostic.";
+    enabled = defaultNullOpts.mkBool true "Enable diagnostic.";
 
-    severity = helpers.defaultNullOpts.mkSeverity "error" ''
+    severity = defaultNullOpts.mkSeverity "error" ''
       Diagnostic severity, one of `vim.diagnostic.severity`.
     '';
   };

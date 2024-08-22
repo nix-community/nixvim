@@ -1,12 +1,14 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+let
+  inherit (lib.nixvim) mkRaw;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "neotest";
   defaultPackage = pkgs.vimPlugins.neotest;
 
@@ -14,11 +16,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   imports = [ ./adapters.nix ];
 
-  settingsOptions = (import ./options.nix { inherit lib helpers; }) // {
+  settingsOptions = (import ./options.nix { inherit lib; }) // {
     adapters = mkOption {
-      type = with helpers.nixvimTypes; listOf strLua;
+      type = with types; listOf strLua;
       default = [ ];
-      apply = map helpers.mkRaw;
+      apply = map mkRaw;
       # NOTE: We hide this option from the documentation as users should use the top-level
       # `adapters` option.
       # They can still directly append raw lua code to this `settings.adapters` option.
