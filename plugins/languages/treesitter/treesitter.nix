@@ -12,6 +12,98 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   luaName = "nvim-treesitter.configs";
   defaultPackage = pkgs.vimPlugins.nvim-treesitter;
 
+  description = ''
+    Provides an interface to [tree-sitter]
+
+    ### Installing Your Own Grammars with Nixvim
+
+    The grammars you want will usually be included in `nixGrammars` by default.
+    But, in the rare case it isn't, you can build your own and use it with Nixvim like so:
+
+    ```nix
+    { pkgs, ... }:
+    let
+      # Example of building your own grammar
+      treesitter-nu-grammar = pkgs.tree-sitter.buildGrammar {
+        language = "nu";
+        version = "0.0.0+rev=0bb9a60";
+        src = pkgs.fetchFromGitHub {
+          owner = "nushell";
+          repo = "tree-sitter-nu";
+          rev = "0bb9a602d9bc94b66fab96ce51d46a5a227ab76c";
+          hash = "sha256-A5GiOpITOv3H0wytCv6t43buQ8IzxEXrk3gTlOrO0K0=";
+        };
+        meta.homepage = "https://github.com/nushell/tree-sitter-nu";
+      };
+
+      # or you can yoink any grammars in tree-sitter.grammars.''${grammar-name}
+      # treesitter-nu-grammar = pkgs.tree-sitter-grammars.tree-sitter-nu;
+    in
+    {
+
+      programs.nixvim.plugins = {
+        treesitter = {
+          enable = true;
+          settings.indent.enable = true;
+          grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [
+            treesitter-nu-grammar
+          ];
+        };
+
+        extraConfigLua =
+          '''
+            do
+              local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+              -- change the following as needed
+              parser_config.nu = {
+                install_info = {
+                  url = "''${treesitter-nu-grammar}", -- local path or git repo
+                  files = {"src/parser.c"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
+                  -- optional entries:
+                  --  branch = "main", -- default branch in case of git repo if different from master
+                  -- generate_requires_npm = false, -- if stand-alone parser without npm dependencies
+                  -- requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
+                },
+                filetype = "nu", -- if filetype does not match the parser name
+              }
+            end
+          ''';
+
+        # Add as extra plugins so that their `queries/{language}/*.scm` get
+        # installed and can be picked up by `tree-sitter`
+        extraPlugins = [
+          treesitter-nu-grammar
+        ];
+
+      };
+
+    }
+    ```
+
+    The queries for the grammar should be added to one of the runtime directories under `queries/{language}` but sometimes plugins do not conform to this structure.
+
+    In such cases, you can override the source derivation (or the grammar derivation) to move the queries to the appropriate folder: ```nix
+    (
+      (pkgs.fetchFromGitLab {
+        owner = "joncoole";
+        repo = "tree-sitter-nginx";
+        rev = "b4b61db443602b69410ab469c122c01b1e685aa0";
+        hash = "sha256-Sa7audtwH8EgrHJ5XIUKTdveZU2pDPoUq70InQ6qcKA=";
+      }).overrideAttrs
+      (drv: {
+        fixupPhase = '''
+          mkdir -p $out/queries/nginx
+          mv $out/queries/*.scm $out/queries/nginx/
+        ''';
+      })
+    )
+    ```
+
+    Verify if the queries were picked up by running `:TSModuleInfo`.
+
+    [tree-sitter]: https://github.com/tree-sitter/tree-sitter
+  '';
+
   maintainers = [ lib.maintainers.khaneliman ];
 
   # TODO introduced 2024-07-06: remove after 24.11
