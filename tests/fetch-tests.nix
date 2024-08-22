@@ -41,21 +41,8 @@ let
   testsList = lib.lists.flatten (parseDirectories root [ ]);
 
   testsListEvaluated = builtins.map (
-    { cases, namespace }@args:
-    if builtins.isAttrs cases then
-      args
-    else
-      {
-        # cases is a function
-        cases = cases {
-          inherit pkgs helpers;
-          efmls-options = import ../plugins/lsp/language-servers/efmls-configs.nix {
-            inherit pkgs lib helpers;
-            config = { };
-          };
-        };
-        inherit namespace;
-      }
+    { cases, ... }@args:
+    if builtins.isFunction cases then args // { cases = cases { inherit pkgs lib helpers; }; } else args
   ) testsList;
 
   # Take a list of test cases (i.e the content of a file) and prepare a test case that can be
