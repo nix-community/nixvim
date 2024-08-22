@@ -4,9 +4,9 @@
   config,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "kanagawa";
@@ -20,7 +20,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     - Set `colorschemes.kanagawa.settings.background` (the active theme will depend on the value of `vim.o.background`).
   '';
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-03-15: remove 2024-05-15
   deprecateExtraOptions = true;
@@ -34,7 +34,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     (map
       (
         optionPath:
-        mkRenamedOptionModule (basePluginPath ++ optionPath) (
+        lib.mkRenamedOptionModule (basePluginPath ++ optionPath) (
           basePluginPath ++ [ "settings" ] ++ optionPath
         )
       )
@@ -69,7 +69,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       ]
     )
     ++ [
-      (mkRemovedOptionModule (basePluginPath ++ [ "overrides" ]) ''
+      (lib.mkRemovedOptionModule (basePluginPath ++ [ "overrides" ]) ''
         Use `colorschemes.kanagawa.settings.overrides` but you now have to add the full function definition:
         ```
           function(colors)

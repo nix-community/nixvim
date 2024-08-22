@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -38,7 +37,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     '';
 
     theme = {
-      highlights = defaultNullOpts.mkAttrsOf types.highlight { } ''
+      highlights = defaultNullOpts.mkAttrsOf lib.types.highlight { } ''
         Highlight groups to override, adding new groups is also possible.
         See `:h highlight-groups` for a list of highlight groups.
 
@@ -57,7 +56,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         Complete list can be found in `lua/cyberdream/theme.lua` in upstream repository.
       '';
 
-      colors = defaultNullOpts.mkAttrsOf types.str { } ''
+      colors = defaultNullOpts.mkAttrsOf lib.types.str { } ''
         Override the default colors used.
 
         For a full list of colors, see upstream documentation.

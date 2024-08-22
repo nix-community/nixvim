@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -14,7 +13,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   originalName = "tokyonight.nvim";
   defaultPackage = pkgs.vimPlugins.tokyonight-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-04-15: remove 2024-06-15
   optionsRenamedToSettings = [
@@ -111,7 +110,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       };
 
     sidebars =
-      defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf lib.types.str
         [
           "qf"
           "help"
@@ -120,7 +119,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
           Set a darker background on sidebar-like windows.
         '';
 
-    day_brightness = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
+    day_brightness = defaultNullOpts.mkNullable (lib.types.numbers.between 0.0 1.0) 0.3 ''
       Adjusts the brightness of the colors of the **Day** style.
       Number between 0 and 1, from dull to vibrant colors.
     '';
@@ -179,5 +178,5 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     on_highlights = "function(highlights, colors) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = mkDefault true; };
+  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
 }

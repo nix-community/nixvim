@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 in
@@ -17,7 +16,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   colorscheme = null;
   callSetup = false;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   deprecateExtraOptions = true;
   optionsRenamedToSettings = [
@@ -30,7 +29,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       Set to `true` to use `mirage` variant instead of `dark` for dark background.
     '';
 
-    overrides = defaultNullOpts.mkStrLuaOr (with types; attrsOf highlight) { } ''
+    overrides = defaultNullOpts.mkStrLuaOr (with lib.types; attrsOf highlight) { } ''
       A dictionary of group names, each associated with a dictionary of parameters
       (`bg`, `fg`, `sp` and `style`) and colors in hex.
 

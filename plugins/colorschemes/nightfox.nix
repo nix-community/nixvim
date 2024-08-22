@@ -4,9 +4,9 @@
   config,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+  inherit (lib) types;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "nightfox";
@@ -14,11 +14,11 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   originalName = "nightfox.nvim";
   defaultPackage = pkgs.vimPlugins.nightfox-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   colorscheme = null;
   extraOptions = {
-    flavor = mkOption {
+    flavor = lib.mkOption {
       type = types.enum [
         "carbonfox"
         "dawnfox"
@@ -33,7 +33,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       description = "Which palette/flavor to use as the colorscheme.";
     };
   };
-  extraConfig = cfg: { colorscheme = mkDefault cfg.flavor; };
+  extraConfig = cfg: { colorscheme = lib.mkDefault cfg.flavor; };
 
   settingsOptions = {
     options = {
@@ -132,7 +132,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         '';
 
         severity =
-          mapAttrs
+          lib.mapAttrs
             (
               name: color:
               defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''

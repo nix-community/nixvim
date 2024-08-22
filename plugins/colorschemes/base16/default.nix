@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 
@@ -18,7 +17,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   defaultPackage = pkgs.vimPlugins.base16-nvim;
   isColorscheme = true;
 
-  maintainers = with maintainers; [
+  maintainers = with lib.maintainers; [
     GaetanLepage
     MattSturgeon
   ];
@@ -32,10 +31,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       ];
     in
     [
-      (mkRenamedOptionModule (basePluginPath ++ [ "customColorScheme" ]) (
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "customColorScheme" ]) (
         basePluginPath ++ [ "colorscheme" ]
       ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "useTruecolor" ]) [
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "useTruecolor" ]) [
         "options"
         "termguicolors"
       ])
@@ -92,11 +91,11 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   extraOptions = {
     colorscheme =
       let
-        customColorschemeType = types.submodule {
-          options = mapAttrs (
+        customColorschemeType = lib.types.submodule {
+          options = lib.mapAttrs (
             name: example:
-            mkOption {
-              type = with types; maybeRaw str;
+            lib.mkOption {
+              type = with lib.types; maybeRaw str;
               description = "The value for color `${name}`.";
               inherit example;
             }
@@ -125,19 +124,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         builtinColorschemeExamples = import ./theme-list.nix;
       in
       defaultNullOpts.mkNullable' {
-        type = types.oneOf [
-          types.str
-          customColorschemeType
-          types.rawLua
-        ];
-        pluginDefault = literalMD ''`vim.env.BASE16_THEME` or `"schemer-dark"`'';
+        type =
+          with lib.types;
+          oneOf [
+            str
+            customColorschemeType
+            rawLua
+          ];
+        pluginDefault = lib.literalMD ''`vim.env.BASE16_THEME` or `"schemer-dark"`'';
         description = ''
           The base16 colorscheme to use.
 
           You may use the name of a builtin colorscheme or an attrs that specifies the colors explicitly.
 
           Examples of builtin themes include:
-          ${concatStrings (
+          ${lib.concatStrings (
             map (e: ''
               - "${e}"
             '') builtinColorschemeExamples
@@ -158,8 +159,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         example = customColorschemeExample;
       };
 
-    setUpBar = mkOption {
-      type = types.bool;
+    setUpBar = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       example = false;
       description = "Whether to set your status bar theme to 'base16'.";
@@ -171,11 +172,11 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   callSetup = false;
 
   extraConfig = cfg: {
-    plugins.airline.settings.theme = mkIf cfg.setUpBar (mkDefault name);
-    plugins.lualine.theme = mkIf cfg.setUpBar (mkDefault name);
-    plugins.lightline.colorscheme = mkDefault null;
+    plugins.airline.settings.theme = lib.mkIf cfg.setUpBar (lib.mkDefault name);
+    plugins.lualine.theme = lib.mkIf cfg.setUpBar (lib.mkDefault name);
+    plugins.lightline.colorscheme = lib.mkDefault null;
 
-    opts.termguicolors = mkDefault true;
+    opts.termguicolors = lib.mkDefault true;
 
     # `settings` can either be passed to `with_config` before calling `setup`,
     # or it can be passed as `setup`'s 2nd argument.

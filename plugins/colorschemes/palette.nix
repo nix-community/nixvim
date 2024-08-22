@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -14,7 +13,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   originalName = "palette.nvim";
   defaultPackage = pkgs.vimPlugins.palette-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraPlugins = [
     # Annoyingly, lspconfig is required, otherwise this line is breaking:
@@ -50,15 +49,15 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     };
 
     customPalettes =
-      mapAttrs
+      lib.mapAttrs
         (
           name: colorNames:
           defaultNullOpts.mkAttrsOf
-            (types.submodule {
-              options = genAttrs colorNames (
+            (lib.types.submodule {
+              options = lib.genAttrs colorNames (
                 colorName:
-                mkOption {
-                  type = types.str;
+                lib.mkOption {
+                  type = lib.types.str;
                   description = "Definition of color '${colorName}'";
                 }
               );
@@ -121,19 +120,19 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
 
   extraConfig = cfg: {
     assertions =
-      mapAttrsToList
+      lib.mapAttrsToList
         (
           name: defaultPaletteNames:
           let
-            customPalettesNames = attrNames cfg.settings.custom_palettes.${name};
+            customPalettesNames = lib.attrNames cfg.settings.custom_palettes.${name};
             allowedPaletteNames = customPalettesNames ++ defaultPaletteNames;
 
             palette = cfg.settings.palettes.${name};
           in
           {
-            assertion = isString palette -> elem palette allowedPaletteNames;
+            assertion = lib.isString palette -> lib.elem palette allowedPaletteNames;
             message = ''
-              Nixvim (colorschemes.palette): `settings.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${concatStringsSep " " allowedPaletteNames}).
+              Nixvim (colorschemes.palette): `settings.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${lib.concatStringsSep " " allowedPaletteNames}).
             '';
           }
         )

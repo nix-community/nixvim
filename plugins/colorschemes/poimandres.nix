@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
 in
@@ -14,7 +13,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   originalName = "poimandres.nvim";
   defaultPackage = pkgs.vimPlugins.poimandres-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-04-15: remove 2024-06-15
   deprecateExtraOptions = true;
@@ -54,13 +53,13 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       Dark variant.
     '';
 
-    groups = mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
+    groups = mkNullOrOption (with lib.types; attrsOf (either str (attrsOf str))) ''
       Which color to use for each group.
 
       default: see [source](https://github.com/olivercederborg/poimandres.nvim/blob/main/lua/poimandres/init.lua)
     '';
 
-    highlight_groups = defaultNullOpts.mkAttrsOf types.str { } ''
+    highlight_groups = defaultNullOpts.mkAttrsOf lib.types.str { } ''
       Highlight groups.
     '';
   };

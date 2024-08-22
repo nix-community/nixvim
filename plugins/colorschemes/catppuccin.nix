@@ -4,16 +4,16 @@
   pkgs,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStrLuaFnOr;
+  inherit (lib) types;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "catppuccin";
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.catppuccin-nvim;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-03-27: remove 2024-05-27
   optionsRenamedToSettings = [
@@ -92,10 +92,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     "integrations"
   ];
   imports =
-    mapAttrsToList
+    lib.mapAttrsToList
       (
         old: new:
-        mkRenamedOptionModule
+        lib.mkRenamedOptionModule
           [
             "colorschemes"
             "catppuccin"
@@ -236,7 +236,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         '';
       };
 
-      color_overrides = genAttrs (flavours ++ [ "all" ]) (
+      color_overrides = lib.genAttrs (flavours ++ [ "all" ]) (
         flavour:
         defaultNullOpts.mkAttrsOf types.str { } (
           if flavour == "all" then
@@ -318,5 +318,5 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     };
   };
 
-  extraConfig = cfg: { opts.termguicolors = mkDefault true; };
+  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
 }

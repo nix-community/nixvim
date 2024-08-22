@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
 in
@@ -13,7 +12,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.rose-pine;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-04-15: remove 2024-06-15
   optionsRenamedToSettings = [
@@ -28,30 +27,30 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       ];
     in
     [
-      (mkRenamedOptionModule (basePluginPath ++ [ "style" ]) (
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "style" ]) (
         basePluginPath
         ++ [
           "settings"
           "dark_variant"
         ]
       ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "dimInactive" ]) (
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "dimInactive" ]) (
         basePluginPath
         ++ [
           "settings"
           "dim_inactive_windows"
         ]
       ))
-      (mkRemovedOptionModule (
+      (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "disableItalics" ]
       ) "Use `colorschemes.rose-pine.settings.enable.italics` instead.")
-      (mkRemovedOptionModule (
+      (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "boldVerticalSplit" ]
       ) "Use `colorschemes.rose-pine.settings.highlight_groups` instead.")
-      (mkRemovedOptionModule (
+      (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "transparentFloat" ]
       ) "Use `colorschemes.rose-pine.settings.highlight_groups.NormalFloat` instead.")
-      (mkRenamedOptionModule (basePluginPath ++ [ "transparentBackground" ]) (
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "transparentBackground" ]) (
         basePluginPath
         ++ [
           "settings"
@@ -64,7 +63,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   settingsOptions = {
     variant =
       lib.nixvim.mkNullOrOption
-        (types.enum [
+        (lib.types.enum [
           "auto"
           "main"
           "moon"
@@ -111,13 +110,13 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       transparency = defaultNullOpts.mkBool true "Enable transparency.";
     };
 
-    groups = mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
+    groups = mkNullOrOption (with lib.types; attrsOf (either str (attrsOf str))) ''
       Highlight groups.
 
       default: see [source](https://github.com/rose-pine/neovim/blob/main/lua/rose-pine/config.lua)
     '';
 
-    highlight_groups = defaultNullOpts.mkAttrsOf types.highlight { } ''
+    highlight_groups = defaultNullOpts.mkAttrsOf lib.types.highlight { } ''
       Custom highlight groups.
     '';
 
@@ -158,5 +157,5 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     before_highlight = "function(group, highlight, palette) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = mkDefault true; };
+  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
 }
