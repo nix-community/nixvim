@@ -1,12 +1,18 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 with lib;
 let
+  inherit (lib.nixvim)
+    defaultNullOpts
+    keymaps
+    mkNullOrOption
+    mkNullOrOption'
+    mkNullOrStr
+    ;
   keymapsActions = {
     previous = "Previous";
     next = "Next";
@@ -45,7 +51,7 @@ let
     orderByWindowNumber = "OrderByWindowNumber";
   };
 in
-helpers.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "barbar";
   originalName = "barbar.nvim";
   defaultPackage = pkgs.vimPlugins.barbar-nvim;
@@ -193,15 +199,15 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   extraOptions = {
     keymaps = mapAttrs (
       optionName: funcName:
-      helpers.mkNullOrOption' {
-        type = helpers.keymaps.mkMapOptionSubmodule {
+      mkNullOrOption' {
+        type = keymaps.mkMapOptionSubmodule {
           defaults = {
             mode = "n";
             action = "<Cmd>Buffer${funcName}<CR>";
           };
           lua = true;
         };
-        apply = v: if v == null then null else helpers.keymaps.removeDeprecatedMapAttrs v;
+        apply = v: if v == null then null else keymaps.removeDeprecatedMapAttrs v;
         description = "Keymap for function Buffer${funcName}";
       }
     ) keymapsActions;
@@ -215,34 +221,32 @@ helpers.neovim-plugin.mkNeovimPlugin config {
   };
 
   settingsOptions = {
-    animation = helpers.defaultNullOpts.mkBool true ''
+    animation = defaultNullOpts.mkBool true ''
       Enable/disable animations.
     '';
 
-    auto_hide =
-      helpers.defaultNullOpts.mkNullableWithRaw (with types; either int (enum [ false ])) (-1)
-        ''
-          Automatically hide the 'tabline' when there are this many buffers left.
-          Set to any value less than `0` to disable.
+    auto_hide = defaultNullOpts.mkNullableWithRaw (with types; either int (enum [ false ])) (-1) ''
+      Automatically hide the 'tabline' when there are this many buffers left.
+      Set to any value less than `0` to disable.
 
-          For example: `auto_hide = 0` hides the 'tabline' when there would be zero buffers shown,
-          `auto_hide  = 1` hides the 'tabline' when there would only be one, etc.
-        '';
+      For example: `auto_hide = 0` hides the 'tabline' when there would be zero buffers shown,
+      `auto_hide  = 1` hides the 'tabline' when there would only be one, etc.
+    '';
 
-    clickable = helpers.defaultNullOpts.mkBool true ''
+    clickable = defaultNullOpts.mkBool true ''
       If set, you can left-click on a tab to switch to that buffer, and middle-click to delete it.
     '';
 
-    exclude_ft = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    exclude_ft = defaultNullOpts.mkListOf types.str [ ] ''
       Excludes filetypes from appearing in the tabs.
     '';
 
-    exclude_name = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    exclude_name = defaultNullOpts.mkListOf types.str [ ] ''
       Excludes buffers matching name from appearing in the tabs.
     '';
 
     focus_on_close =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "left"
           "previous"
@@ -258,44 +262,44 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         '';
 
     hide = {
-      alternate = helpers.defaultNullOpts.mkBool false ''
+      alternate = defaultNullOpts.mkBool false ''
         Controls the visibility of the `|alternate-file|`.
         `highlight_alternate` must be `true`.
       '';
 
-      current = helpers.defaultNullOpts.mkBool false ''
+      current = defaultNullOpts.mkBool false ''
         Controls the visibility of the current buffer.
       '';
 
-      extensions = helpers.defaultNullOpts.mkBool false ''
+      extensions = defaultNullOpts.mkBool false ''
         Controls the visibility of file extensions.
       '';
 
-      inactive = helpers.defaultNullOpts.mkBool false ''
+      inactive = defaultNullOpts.mkBool false ''
         Controls visibility of `|hidden-buffer|`s and `|inactive-buffer|`s.
       '';
 
-      visible = helpers.defaultNullOpts.mkBool false ''
+      visible = defaultNullOpts.mkBool false ''
         Controls visibility of `|active-buffer|`s.
         `highlight_visible` must be `true`.
       '';
     };
 
-    highlight_alternate = helpers.defaultNullOpts.mkBool false ''
+    highlight_alternate = defaultNullOpts.mkBool false ''
       Enables highlighting of alternate buffers.
     '';
 
-    highlight_inactive_file_icons = helpers.defaultNullOpts.mkBool false ''
+    highlight_inactive_file_icons = defaultNullOpts.mkBool false ''
       Enables highlighting the file icons of inactive buffers.
     '';
 
-    highlight_visible = helpers.defaultNullOpts.mkBool true ''
+    highlight_visible = defaultNullOpts.mkBool true ''
       Enables highlighting of visible buffers.
     '';
 
     icons = {
       buffer_index =
-        helpers.defaultNullOpts.mkNullableWithRaw
+        defaultNullOpts.mkNullableWithRaw
           (
             with types;
             either bool (enum [
@@ -306,7 +310,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           false
           "If `true`, show the index of the buffer with respect to the ordering of the buffers in the tabline.";
 
-      buffer_number = helpers.defaultNullOpts.mkNullableWithRaw (
+      buffer_number = defaultNullOpts.mkNullableWithRaw (
         with types;
         either bool (enum [
           "superscript"
@@ -314,7 +318,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
         ])
       ) false "If `true`, show the `bufnr` for the associated buffer.";
 
-      button = helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ])) "" ''
+      button = defaultNullOpts.mkNullableWithRaw (with types; either str (enum [ false ])) "" ''
         The button which is clicked to close / save a buffer, or indicate that it is pinned.
         Use `false` to disable it.
       '';
@@ -325,11 +329,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           options =
             let
               mkDiagnosticIconOptions = iconDefault: {
-                enabled = helpers.defaultNullOpts.mkBool false ''
+                enabled = defaultNullOpts.mkBool false ''
                   Enable showing diagnostics of this `|diagnostic-severity|` in the 'tabline'.
                 '';
 
-                icon = helpers.defaultNullOpts.mkStr iconDefault ''
+                icon = defaultNullOpts.mkStr iconDefault ''
                   The icon which accompanies the number of diagnostics.
                 '';
               };
@@ -341,9 +345,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
               "vim.diagnostic.severity.WARN" = mkDiagnosticIconOptions " ";
             };
         };
-        apply = helpers.toRawKeys;
+        apply = lib.nixvim.toRawKeys;
         default = { };
-        defaultText = helpers.pluginDefaultText {
+        defaultText = lib.nixvim.pluginDefaultText {
           inherit default;
           pluginDefault = {
             "vim.diagnostic.severity.ERROR" = {
@@ -386,18 +390,18 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       };
 
       gitsigns =
-        helpers.defaultNullOpts.mkAttrsOf
+        defaultNullOpts.mkAttrsOf
           (
             with types;
             submodule {
               freeformType = with types; attrsOf anything;
               options = {
-                enabled = helpers.defaultNullOpts.mkBool true ''
+                enabled = defaultNullOpts.mkBool true ''
                   Enables showing git changes of this type.
                   Requires `|gitsigns.nvim|`.
                 '';
 
-                icon = helpers.mkNullOrStr ''
+                icon = mkNullOrStr ''
                   The icon which accompanies the number of git status.
 
                   To disable the icon but still show the count, set to an empty string.
@@ -421,30 +425,30 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           }
           "Gitsigns icons.";
 
-      filename = helpers.defaultNullOpts.mkBool true ''
+      filename = defaultNullOpts.mkBool true ''
         If `true`, show the name of the file.
       '';
 
       filetype = {
-        custom_colors = helpers.defaultNullOpts.mkBool false ''
+        custom_colors = defaultNullOpts.mkBool false ''
           If `true`, the `Buffer<status>Icon` color will be used for icon colors.
         '';
 
-        enabled = helpers.defaultNullOpts.mkBool true ''
+        enabled = defaultNullOpts.mkBool true ''
           Filetype `true`, show the `devicons` for the associated buffer's `filetype`.
         '';
       };
 
       separator = {
-        left = helpers.defaultNullOpts.mkStr "▎" ''
+        left = defaultNullOpts.mkStr "▎" ''
           The left separator between buffers in the tabline.
         '';
 
-        right = helpers.defaultNullOpts.mkStr "" ''
+        right = defaultNullOpts.mkStr "" ''
           The right separator between buffers in the tabline.
         '';
 
-        separator_at_end = helpers.defaultNullOpts.mkBool true ''
+        separator_at_end = defaultNullOpts.mkBool true ''
           If true, add an additional separator at the end of the buffer list.
           Can be used to create a visual separation when the inactive buffer background color is the
           same as the fill region background color.
@@ -455,7 +459,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # - It would make the module way more complex
       # - Most users will not be setting a lot of options under this category
       # -> `attrsOf anything`
-      modified = helpers.defaultNullOpts.mkAttrsOf types.anything { button = "●"; } ''
+      modified = defaultNullOpts.mkAttrsOf types.anything { button = "●"; } ''
         The icons which should be used for a 'modified' buffer.
         Supports all the base options (e.g. `buffer_index`, `filetype.enabled`, etc).
       '';
@@ -465,7 +469,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # - Most users will not be setting a lot of options under this category
       # -> `attrsOf anything`
       pinned =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
+        defaultNullOpts.mkAttrsOf types.anything
           {
             button = false;
             filename = false;
@@ -480,7 +484,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # - It would make the module way more complex
       # - Most users will not be setting a lot of options under this category
       # -> `attrsOf anything`
-      alternate = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf anything)) ''
+      alternate = mkNullOrOption (with types; maybeRaw (attrsOf anything)) ''
         The icons which should be used for the `|alternate-file|`.
         Supports all the base options (e.g. `buffer_index`, `filetype.enabled`, etc) as well as
         `modified` and `pinned`.
@@ -490,7 +494,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # - It would make the module way more complex
       # - Most users will not be setting a lot of options under this category
       # -> `attrsOf anything`
-      current = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf anything)) ''
+      current = mkNullOrOption (with types; maybeRaw (attrsOf anything)) ''
         The icons which should be used for current buffer.
         Supports all the base options (e.g. `buffer_index`, `filetype.enabled`, etc) as well as
         `modified` and `pinned`.
@@ -501,7 +505,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # - Most users will not be setting a lot of options under this category
       # -> `attrsOf anything`
       inactive =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
+        defaultNullOpts.mkAttrsOf types.anything
           {
             separator = {
               left = "▎";
@@ -518,14 +522,14 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       # - It would make the module way more complex
       # - Most users will not be setting a lot of options under this category
       # -> `attrsOf anything`
-      visible = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf anything)) ''
+      visible = mkNullOrOption (with types; maybeRaw (attrsOf anything)) ''
         The icons which should be used for `|active-buffer|`s.
         Supports all the base options (e.g. `buffer_index`, `filetype.enabled`, etc) as well as
         `modified` and `pinned`.
       '';
 
       preset =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        defaultNullOpts.mkEnumFirstDefault
           [
             "default"
             "powerline"
@@ -540,60 +544,60 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           '';
     };
 
-    insert_at_start = helpers.defaultNullOpts.mkBool false ''
+    insert_at_start = defaultNullOpts.mkBool false ''
       If `true`, new buffers appear at the start of the list.
       Default is to open after the current buffer.
 
       Has priority over `insert_at_end`.
     '';
 
-    insert_at_end = helpers.defaultNullOpts.mkBool false ''
+    insert_at_end = defaultNullOpts.mkBool false ''
       If `true`, new buffers appear at the end of the list.
       Default is to open after the current buffer.
     '';
 
-    letters = helpers.defaultNullOpts.mkStr "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP" ''
+    letters = defaultNullOpts.mkStr "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP" ''
       New buffer letters are assigned in this order.
       This order is optimal for the QWERTY keyboard layout but might need adjustment for other layouts.
     '';
 
-    maximum_padding = helpers.defaultNullOpts.mkUnsignedInt 4 ''
+    maximum_padding = defaultNullOpts.mkUnsignedInt 4 ''
       Sets the maximum padding width with which to surround each tab.
     '';
 
-    maximum_length = helpers.defaultNullOpts.mkUnsignedInt 30 ''
+    maximum_length = defaultNullOpts.mkUnsignedInt 30 ''
       Sets the maximum buffer name length.
     '';
 
-    minimum_length = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+    minimum_length = defaultNullOpts.mkUnsignedInt 0 ''
       Sets the minimum buffer name length.
     '';
 
-    minimum_padding = helpers.defaultNullOpts.mkUnsignedInt 1 ''
+    minimum_padding = defaultNullOpts.mkUnsignedInt 1 ''
       Sets the minimum padding width with which to surround each tab.
     '';
 
-    no_name_title = helpers.defaultNullOpts.mkStr null ''
+    no_name_title = defaultNullOpts.mkStr null ''
       Sets the name of unnamed buffers.
 
       By default format is `'[Buffer X]'` where `X` is the buffer number.
       However, only a static string is accepted here.
     '';
 
-    semantic_letters = helpers.defaultNullOpts.mkBool true ''
+    semantic_letters = defaultNullOpts.mkBool true ''
       If `true`, the letters for each buffer in buffer-pick mode will be assigned based on their name.
 
       Otherwise (or in case all letters are already assigned), the behavior is to assign letters in
       the order of provided to `letters`.
     '';
 
-    sidebar_filetypes = helpers.defaultNullOpts.mkAttrsOf (
+    sidebar_filetypes = defaultNullOpts.mkAttrsOf (
       with types;
       either (enum [ true ]) (submodule {
         freeformType = with types; attrsOf anything;
         options = {
           align =
-            helpers.defaultNullOpts.mkEnumFirstDefault
+            defaultNullOpts.mkEnumFirstDefault
               [
                 "left"
                 "center"
@@ -603,19 +607,19 @@ helpers.neovim-plugin.mkNeovimPlugin config {
                 Aligns the `sidebar_filetypes.<name>.text`.
               '';
 
-          event = helpers.defaultNullOpts.mkStr "BufWinLeave" ''
+          event = defaultNullOpts.mkStr "BufWinLeave" ''
             The event which the sidebar executes when leaving.
             The `event` which is `|autocmd-execute|`d when the sidebar closes.
           '';
 
-          text = helpers.defaultNullOpts.mkStr null ''
+          text = defaultNullOpts.mkStr null ''
             The text which will fill the offset.
           '';
         };
       })
     ) { } "Control which filetypes will cause barbar to add an offset.";
 
-    tabpages = helpers.defaultNullOpts.mkBool true ''
+    tabpages = defaultNullOpts.mkBool true ''
       Enable/disable current/total tabpages indicator (top right corner).
     '';
   };
