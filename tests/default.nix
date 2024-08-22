@@ -9,6 +9,16 @@ let
   test-derivation = import ../lib/tests.nix { inherit pkgs lib; };
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
+  mkTest =
+    { name, module }:
+    {
+      inherit name;
+      path = mkTestDerivationFromNixvimModule {
+        inherit name module;
+        pkgs = pkgsUnfree;
+      };
+    };
+
   # List of files containing configurations
   testFiles = fetchTests {
     inherit lib pkgs helpers;
@@ -17,7 +27,7 @@ let
 
   exampleFiles = {
     name = "examples";
-    cases =
+    modules =
       let
         config = import ../example.nix { inherit pkgs; };
       in
@@ -37,24 +47,10 @@ let
 in
 # We attempt to build & execute all configurations
 lib.pipe (testFiles ++ [ exampleFiles ]) [
-  (builtins.map (
-    file:
-    let
-      mkTest =
-        { name, module }:
-        {
-          inherit name;
-          path = mkTestDerivationFromNixvimModule {
-            inherit name module;
-            pkgs = pkgsUnfree;
-          };
-        };
-    in
-    {
-      inherit (file) name;
-      path = pkgs.linkFarm file.name (builtins.map mkTest file.cases);
-    }
-  ))
+  (builtins.map (file: {
+    inherit (file) name;
+    path = pkgs.linkFarm file.name (builtins.map mkTest file.modules);
+  }))
   (helpers.groupListBySize 10)
   (lib.imap1 (
     i: group: rec {

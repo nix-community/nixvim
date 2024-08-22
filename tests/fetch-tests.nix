@@ -5,54 +5,50 @@
   helpers,
 }:
 let
-  # Handle an entry from readDir and either extract the configuration if its a regular file,
-  # or continue to recurse if it's a directory. While recursing maintain a list of the traversed
-  # directories
-  handleEntry =
-    relativePath: namespace: name: type:
+  # Import a test file into the form { name = ""; file = ""; modules = []; }
+  handleTestFile =
+    file: namespace:
     let
-      file = "${root}/${relativePath}/${name}";
+      fnOrAttrs = import file;
+      cases =
+        if builtins.isFunction fnOrAttrs then
+          # Call the function
+          fnOrAttrs { inherit pkgs lib helpers; }
+        else
+          fnOrAttrs;
     in
-    if type == "regular" then
-      lib.optional (lib.hasSuffix ".nix" name) [
-        {
-          namespace = namespace ++ [ (lib.strings.removeSuffix ".nix" name) ];
-          cases = import file;
-        }
-      ]
-    else
-      parseDirectories file (namespace ++ [ name ]);
+    {
+      inherit file;
+      name = lib.strings.concatStringsSep "-" namespace;
+      modules = lib.mapAttrsToList (name: module: { inherit name module; }) cases;
+    };
 
-  # Recurse into all directories, extracting files as we find them. This returns a deeply nested
-  # list, where each non list element is a set of test cases.
-  parseDirectories =
+  # Recurse into all directories, extracting files as we find them.
+  # This returns a list of { name; file; modules;  } attrsets.
+  fetchTests =
     path: namespace:
     let
-      relativePath = lib.removePrefix "${root}" "${path}";
-
-      children = builtins.readDir path;
-      childrenFiltered = lib.attrsets.filterAttrs (n: v: v != "symlink") children;
-
-      childrenRecursed = lib.attrsets.mapAttrsToList (handleEntry relativePath namespace) childrenFiltered;
+      # Handle an entry from readDir
+      # - If it is a regular nix file, import its content
+      # - If it is a directory, continue recursively
+      handleEntry =
+        name: type:
+        let
+          file = "${path}/${name}";
+        in
+        if type == "regular" then
+          lib.optional (lib.hasSuffix ".nix" name) (
+            handleTestFile file (namespace ++ [ (lib.removeSuffix ".nix" name) ])
+          )
+        else
+          fetchTests file (namespace ++ [ name ]);
     in
-    childrenRecursed;
-
-  # Remove the nesting
-  testsList = lib.lists.flatten (parseDirectories root [ ]);
-
-  testsListEvaluated = builtins.map (
-    { cases, ... }@args:
-    if builtins.isFunction cases then args // { cases = cases { inherit pkgs lib helpers; }; } else args
-  ) testsList;
-
-  # Take a list of test cases (i.e the content of a file) and prepare a test case that can be
-  # handled by mkTestDerivation
-  handleTestFile =
-    { namespace, cases }:
-    {
-      name = lib.strings.concatStringsSep "-" namespace;
-      cases = lib.mapAttrsToList (name: module: { inherit module name; }) cases;
-    };
+    lib.pipe path [
+      builtins.readDir
+      (lib.filterAttrs (n: v: v != "symlink"))
+      (lib.mapAttrsToList handleEntry)
+      builtins.concatLists
+    ];
 in
-# A list of the form [ { name = "..."; modules = [ /* test cases */ ]; } ]
-builtins.map handleTestFile testsListEvaluated
+# A list of the form [ { name = "..."; modules = [ /* test case modules */ ]; } ]
+fetchTests root [ ]
