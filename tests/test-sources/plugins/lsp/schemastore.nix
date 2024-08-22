@@ -1,16 +1,11 @@
 {
   empty = {
-    # TODO: remove once json is re-enabled
-    test.checkWarnings = false;
-
     plugins = {
       lsp = {
         enable = true;
 
         servers = {
-          # TODO: re-enable when pkg is fixed and available
-          # https://github.com/NixOS/nixpkgs/pull/335559
-          # jsonls.enable = true;
+          jsonls.enable = true;
           yamlls.enable = true;
         };
       };
@@ -20,17 +15,12 @@
   };
 
   example = {
-    # TODO: remove once json is re-enabled
-    test.checkWarnings = false;
-
     plugins = {
       lsp = {
         enable = true;
 
         servers = {
-          # TODO: re-enable when pkg is fixed and available
-          # https://github.com/NixOS/nixpkgs/pull/335559
-          # jsonls.enable = true;
+          jsonls.enable = true;
           yamlls.enable = true;
         };
       };
@@ -75,15 +65,10 @@
   };
 
   withJson = {
-    # TODO: remove once json is re-enabled
-    test.checkWarnings = false;
-
     plugins = {
       lsp = {
         enable = true;
-        # TODO: re-enable when pkg is fixed and available
-        # https://github.com/NixOS/nixpkgs/pull/335559
-        # servers.jsonls.enable = true;
+        servers.jsonls.enable = true;
       };
 
       schemastore = {

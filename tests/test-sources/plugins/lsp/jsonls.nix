@@ -4,9 +4,7 @@
       enable = true;
 
       servers.jsonls = {
-        # TODO: re-enable when pkg is fixed and available
-        # https://github.com/NixOS/nixpkgs/pull/335559
-        # enable = true;
+        enable = true;
 
         settings = {
           format = {
