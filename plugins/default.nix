@@ -159,6 +159,7 @@
     ./utils/cloak.nix
     ./utils/codesnap.nix
     ./utils/comment.nix
+    ./utils/comment-box.nix
     ./utils/commentary.nix
     ./utils/competitest.nix
     ./utils/conjure.nix

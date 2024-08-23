@@ -20,6 +20,12 @@
     name = "Daniel Laing";
     keys = [ { fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8"; } ];
   };
+  elythh = {
+    email = "gwen@omg.lol";
+    github = "elythh";
+    githubId = 50964650;
+    name = "gwen";
+  };
   GGORG = {
     email = "GGORG0@protonmail.com";
     matrix = "@ggorg:matrix.org";
