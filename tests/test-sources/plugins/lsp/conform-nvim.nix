@@ -1,3 +1,4 @@
+{ lib, pkgs, ... }:
 {
   empty = {
     plugins.conform-nvim.enable = true;
@@ -7,69 +8,107 @@
     plugins.conform-nvim = {
       enable = true;
 
-      formattersByFt = {
-        lua = [ "stylua" ];
-        python = [
-          "isort"
-          "black"
-        ];
-        javascript = [
-          [
-            "prettierd"
-            "prettier"
-          ]
-        ];
-        "*" = [ "codespell" ];
-        "_" = [ "trimWhitespace" ];
-      };
-      formatOnSave = {
-        lspFallback = true;
-        timeoutMs = 500;
-      };
-      formatAfterSave = {
-        lspFallback = true;
-      };
-      logLevel = "error";
-      notifyOnError = true;
-      formatters = {
-        myFormatter = {
-          command = "myCmd";
-          args = [
-            "--stdin-from-filename"
-            "$FILENAME"
-          ];
-          rangeArgs = ''
-            function(ctx)
-              return { "--line-start", ctx.range.start[1], "--line-end", ctx.range["end"][1] }
-            end;
-          '';
-          stdin = true;
-          cwd = ''
-            require("conform.util").rootFile({ ".editorconfig", "package.json" });
-          '';
-          requireCwd = true;
-          condition = ''
-            function(ctx)
-              return vim.fs.basename(ctx.filename) ~= "README.md"
-            end;
-          '';
-          exitCodes = [
-            0
-            1
-          ];
-          env = {
-            VAR = "value";
-          };
-          "inherit" = true;
-          prependArgs = [ "--use-tabs" ];
+      settings = {
+        formatters_by_ft = { };
+        format_on_save = {
+          lsp_format = "never";
+          timeout_ms = 1000;
+          quiet = false;
+          stop_after_first = false;
         };
-        otherFormatter = ''
-          function(bufnr)
-            return {
-              command = "myCmd";
-            }
-          end;
-        '';
+        default_format_opts = {
+          lsp_format = "never";
+          timeout_ms = 1000;
+          quiet = false;
+          stop_after_first = false;
+        };
+        format_after_save = {
+          lsp_format = "never";
+          timeout_ms = 1000;
+          quiet = false;
+          stop_after_first = false;
+        };
+        log_level = "error";
+        notify_on_error = true;
+        notify_no_formatters = true;
+        formatters = { };
+      };
+    };
+  };
+
+  example = {
+    plugins.conform-nvim = {
+      enable = true;
+
+      settings = {
+        formatters_by_ft = {
+          lua = [ "stylua" ];
+          python = [
+            "isort"
+            "black"
+          ];
+          javascript = {
+            __unkeyed-1 = "prettierd";
+            __unkeyed-2 = "prettier";
+            timeout_ms = 2000;
+            stop_after_first = true;
+          };
+          "*" = [ "codespell" ];
+          "_" = [ "trimWhitespace" ];
+        };
+        format_on_save = {
+          lsp_format = "fallback";
+          timeout_ms = 500;
+        };
+        format_after_save = {
+          lsp_format = "fallback";
+        };
+        log_level = "error";
+        notify_on_error = false;
+        notify_no_formatters = false;
+        formatters = {
+          nixfmt = {
+            command = lib.getExe pkgs.nixfmt-rfc-style;
+          };
+          myFormatter = {
+            command = "myCmd";
+            args = [
+              "--stdin-from-filename"
+              "$FILENAME"
+            ];
+            rangeArgs = ''
+              function(ctx)
+                return { "--line-start", ctx.range.start[1], "--line-end", ctx.range["end"][1] }
+              end;
+            '';
+            stdin = true;
+            cwd = ''
+              require("conform.util").rootFile({ ".editorconfig", "package.json" });
+            '';
+            requireCwd = true;
+            condition = ''
+              function(ctx)
+                return vim.fs.basename(ctx.filename) ~= "README.md"
+              end;
+            '';
+            exitCodes = [
+              0
+              1
+            ];
+            env = {
+              VAR = "value";
+            };
+            "inherit" = true;
+            prependArgs = [ "--use-tabs" ];
+          };
+          otherFormatter = ''
+            function(bufnr)
+              return {
+                command = "myCmd";
+              }
+            end;
+          '';
+        };
       };
     };
   };
@@ -78,42 +117,28 @@
     plugins.conform-nvim = {
       enable = true;
 
-      formattersByFt = {
-        lua = [ "stylua" ];
-        python = [
-          "isort"
-          "black"
-        ];
-        javascript = [
-          [
-            "prettierd"
-            "prettier"
-          ]
-        ];
-        "*" = [ "codespell" ];
-        "_" = [ "trimWhitespace" ];
+      settings = {
+        format_on_save = ''
+          function(bufnr)
+            local ignore_filetypes = { "helm" }
+            if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
+              return
+            end
+
+            -- Disable with a global or buffer-local variable
+            if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+              return
+            end
+
+            -- Disable autoformat for files in a certain path
+            local bufname = vim.api.nvim_buf_get_name(bufnr)
+            if bufname:match("/node_modules/") then
+              return
+            end
+            return { timeout_ms = 500, lsp_fallback = true }
+          end
+        '';
       };
-
-      formatOnSave = ''
-        function(bufnr)
-          local ignore_filetypes = { "helm" }
-          if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
-            return
-          end
-
-          -- Disable with a global or buffer-local variable
-          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-            return
-          end
-
-          -- Disable autoformat for files in a certain path
-          local bufname = vim.api.nvim_buf_get_name(bufnr)
-          if bufname:match("/node_modules/") then
-            return
-          end
-          return { timeout_ms = 500, lsp_fallback = true }
-        end
-      '';
     };
   };
 
@@ -121,33 +146,19 @@
     plugins.conform-nvim = {
       enable = true;
 
-      formattersByFt = {
-        lua = [ "stylua" ];
-        python = [
-          "isort"
-          "black"
-        ];
-        javascript = [
-          [
-            "prettierd"
-            "prettier"
-          ]
-        ];
-        "*" = [ "codespell" ];
-        "_" = [ "trimWhitespace" ];
+      settings = {
+        format_after_save = ''
+          function(bufnr)
+            if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+              return
+            end
+            if not _conform_slow_format_filetypes[vim.bo[bufnr].filetype] then
+              return
+            end
+            return { lsp_fallback = true }
+          end
+        '';
       };
-
-      formatAfterSave = ''
-        function(bufnr)
-          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-            return
-          end
-          if not _conform_slow_format_filetypes[vim.bo[bufnr].filetype] then
-            return
-          end
-          return { lsp_fallback = true }
-        end
-      '';
     };
   };
 }
