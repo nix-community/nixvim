@@ -1,117 +1,215 @@
 {
   lib,
-  helpers,
   config,
+  options,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.lightline;
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  options = {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+  name = "lightline";
+  originalName = "lightline.vim";
+  defaultPackage = pkgs.vimPlugins.lightline-vim;
+
+  maintainers = [ lib.maintainers.khaneliman ];
+
+  description = ''
+    ### Example of defining your own component_function
+
     plugins.lightline = {
-      enable = mkEnableOption "lightline";
+       enable = true;
+       settings.component_function = {
+         readonly = "LightlineReadonly";
+       };
+     };
 
-      package = helpers.mkPluginPackageOption "lightline" pkgs.vimPlugins.lightline-vim;
+     extraConfigLua = '''
+       function LightlineReadonly()
+         local is_readonly = vim.bo.readonly == 1
+         local filetype = vim.bo.filetype
 
-      colorscheme = mkOption {
-        type = with types; nullOr str;
-        default = config.colorscheme;
-        description = "The colorscheme to use for lightline. Defaults to .colorscheme.";
-        example = "gruvbox";
-      };
+         if is_readonly and filetype ~= "help" then
+           return "RO"
+         else
+           return ""
+         end
+       end
+     ''';
+  '';
 
-      componentFunction = mkOption {
-        default = null;
-        type = with types; nullOr (attrsOf str);
-        description = ''
-          A list of function component definitions.
+  # TODO: Added 2024-08-23, remove after 24.11
+  optionsRenamedToSettings = [
+    "colorscheme"
+    "componentFunction"
+    "component"
+    "active"
+    "inactive"
+    "modeMap"
+  ];
 
-          You should define the functions themselves in extraConfig
+  settingsOptions = {
+    colorscheme = defaultNullOpts.mkStr "default" ''
+      The colorscheme to use for lightline.
+      Default theme is equal to `powerline`.
+    '';
+
+    component_function = defaultNullOpts.mkAttrsOf types.str { } ''
+      A list of function component definitions.
+
+      You can use the name of a function defined elsewhere.
+    '';
+
+    component =
+      defaultNullOpts.mkAttrsOf types.str
+        {
+          mode = ''%{lightline#mode()}'';
+          absolutepath = "%F";
+          relativepath = "%f";
+          filename = "%t";
+          modified = "%M";
+          bufnum = "%n";
+          paste = ''%{&paste?"PASTE"=""}'';
+          readonly = "%R";
+          charvalue = "%b";
+          charvaluehex = "%B";
+          fileencoding = ''%{&fenc!=#" "?&fenc=&enc}'';
+          fileformat = "%{&ff}";
+          filetype = ''%{&ft!=#""?&ft="no ft"}'';
+          percent = "%3p%%";
+          percentwin = "%P";
+          spell = ''%{&spell?&spelllang=" "}'';
+          lineinfo = "%3l=%-2c";
+          line = "%l";
+          column = "%c";
+          close = "%999X X ";
+          winnr = ''%{winnr()}'';
+        }
+        ''
+          Lightline component definitions. Uses 'statusline' syntax.
+
+          Consult `:h 'statusline'` for a list of what's available.
         '';
-        example = ''
-          plugins.lightline = {
-            enable = true;
-            componentFunction = {
-              readonly = "LightlineReadonly";
-            };
 
-            extraConfig = '''
-              function! LightlineReadonly()
-                return &readonly && &filetype !=# 'help' ? 'RO' : '''
-              endfunction
-            ''';
-          };
+    active =
+      defaultNullOpts.mkAttrsOf (with types; listOf (listOf str))
+        {
+          left = [
+            [
+              "mode"
+              "paste"
+            ]
+            [
+              "readonly"
+              "filename"
+              "modified"
+            ]
+          ];
+          right = [
+            [ "lineinfo" ]
+            [ "percent" ]
+            [
+              "fileformat"
+              "fileencoding"
+              "filetype"
+            ]
+          ];
+        }
+        ''
+          Components placement for the active window.
         '';
-      };
 
-      component = mkOption {
-        default = null;
-        type = with types; nullOr (attrsOf str);
-        description = "Lightline component definitions. Uses 'statusline' syntax. Consult :h 'statusline' for a list of what's available.";
-      };
+    inactive =
+      defaultNullOpts.mkAttrsOf (with types; listOf (listOf str))
+        {
+          left = [ "filename" ];
+          right = [
+            [ "lineinfo" ]
+            [ "percent" ]
+          ];
+        }
+        ''
+          Components placement for inactive windows.
+        '';
 
-      active = mkOption {
-        default = null;
-        description = "List of components for the active window.";
-        type = types.nullOr (
-          types.submodule {
-            options =
-              let
-                listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
-              in
-              {
-                left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
+    tabline =
+      defaultNullOpts.mkAttrsOf (with types; listOf (listOf str))
+        {
+          left = [ [ "tabs" ] ];
+          right = [ [ "close" ] ];
+        }
+        ''
+          Components placement for tabline.
+        '';
 
-                right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
-              };
-          }
-        );
-      };
+    tab = defaultNullOpts.mkAttrsOf (with types; listOf str) {
+      active = [
+        "tabnum"
+        "filename"
+        "modified"
+      ];
+      inactive = [
+        "tabnum"
+        "filename"
+        "modified"
+      ];
+    } ''A dictionary to store the tab components in each tabs.'';
 
-      inactive = mkOption {
-        default = null;
-        description = "List of components for inactive windows.";
-        type = types.nullOr (
-          types.submodule {
-            options =
-              let
-                listType = with helpers.nixvimTypes; maybeRaw (listOf (listOf str));
-              in
-              {
-                left = helpers.mkNullOrOption listType "List of components that will show up on the left side of the bar";
+    mode_map =
+      defaultNullOpts.mkAttrsOf types.str
+        {
+          "n" = "NORMAL";
+          "i" = "INSERT";
+          "R" = "REPLACE";
+          "v" = "VISUAL";
+          "V" = "V-LINE";
+          "\<C-v>" = "V-BLOCK";
+          "c" = "COMMAND";
+          "s" = "SELECT";
+          "S" = "S-LINE";
+          "\<C-s>" = "S-BLOCK";
+          "t" = "TERMINAL";
+        }
+        ''
+          Mode name mappings
+        '';
+  };
 
-                right = helpers.mkNullOrOption listType "List of components that will show up on the right side of the bar";
-              };
-          }
-        );
-      };
-
-      modeMap = mkOption {
-        type = with types; nullOr (attrsOf str);
-        description = "Mode name mappings";
-        default = null;
-      };
+  settingsExample = {
+    colorscheme = "gruvbox";
+    component_function = {
+      gitbranch = "FugitiveHead";
+    };
+    component = {
+      charvaluehex = "0x%B";
+      lineinfo = "%3l:%-2v%<";
+    };
+    active = {
+      right = [
+        [ "lineinfo" ]
+        [ "percent" ]
+        [
+          "fileformat"
+          "fileencoding"
+          "filetype"
+          "charvaluehex"
+        ]
+      ];
+    };
+    inactive = [ ];
+    mode_map = {
+      "n" = "N";
+      "i" = "I";
+      "v" = "V";
+      "<C-v>" = "VB";
+      "<C-s>" = "SB";
     };
   };
 
-  config =
-    let
-      configAttrs = filterAttrs (_: v: v != null) {
-        inherit (cfg)
-          colorscheme
-          active
-          inactive
-          component
-          componentFunction
-          modeMap
-          ;
-      };
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      globals.lightline = mkIf (configAttrs != { }) configAttrs;
-    };
+  callSetup = false;
+  extraConfig = cfg: {
+    globals.lightline = lib.modules.mkAliasAndWrapDefsWithPriority lib.id options.plugins.lightline.settings;
+  };
 }

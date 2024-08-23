@@ -56,26 +56,28 @@
         enable = true;
 
         # This is optional - it will default to your enabled colorscheme
-        colorscheme = "wombat";
+        settings = {
+          colorscheme = "wombat";
 
-        # This is one of lightline's example configurations
-        active = {
-          left = [
-            [
-              "mode"
-              "paste"
-            ]
-            [
-              "readonly"
-              "filename"
-              "modified"
-              "helloworld"
-            ]
-          ];
-        };
+          # This is one of lightline's example configurations
+          active = {
+            left = [
+              [
+                "mode"
+                "paste"
+              ]
+              [
+                "readonly"
+                "filename"
+                "modified"
+                "helloworld"
+              ]
+            ];
+          };
 
-        component = {
-          helloworld = "Hello, world!";
+          component = {
+            helloworld = "Hello, world!";
+          };
         };
       };
 
