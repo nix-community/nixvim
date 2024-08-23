@@ -6,7 +6,7 @@
 }:
 with lib;
 let
-  inherit (lib.nixvim) mkPluginPackageOption mkSettingsOption;
+  inherit (lib.nixvim) mkPluginPackageOption mkSettingsOption toLuaObject;
   supportedAdapters = import ./adapters-list.nix;
 
   mkAdapter =
