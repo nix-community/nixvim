@@ -60,6 +60,7 @@ let
               "mkTestDerivationFromNixvimModule: the `dontRun` argument is deprecated. You should use the `test.runNvim` module option instead."
               { config.test.runNvim = !dontRun; }
           ))
+          { wrapRc = true; }
         ];
         extraSpecialArgs = {
           defaultPkgs = pkgs;
