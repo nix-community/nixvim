@@ -20,6 +20,7 @@
         projectRootFile = "flake.nix";
 
         programs = {
+          isort.enable = true;
           nixfmt = {
             enable = true;
             package = fmt;
