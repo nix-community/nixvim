@@ -54,6 +54,9 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     colorscheme = defaultNullOpts.mkStr "default" ''
       The colorscheme to use for lightline.
       Default theme is equal to `powerline`.
+
+      List of supported colorschemes can be found at
+      https://github.com/itchyny/lightline.vim/blob/master/colorscheme.md.
     '';
 
     component_function = defaultNullOpts.mkAttrsOf types.str { } ''
@@ -178,7 +181,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   };
 
   settingsExample = {
-    colorscheme = "gruvbox";
+    colorscheme = "one";
     component_function = {
       gitbranch = "FugitiveHead";
     };

@@ -113,7 +113,7 @@
       enable = true;
 
       settings = {
-        colorscheme = "gruvbox";
+        colorscheme = "one";
         component_function = {
           gitbranch = "FugitiveHead";
           readonly = "LightlineReadOnly";
