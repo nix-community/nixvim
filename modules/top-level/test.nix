@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  options,
   lib,
   ...
 }:
@@ -66,7 +67,20 @@ in
     in
     {
       test.derivation =
-        pkgs.runCommandNoCCLocal cfg.name { nativeBuildInputs = [ config.finalPackage ]; }
+        pkgs.runCommandNoCCLocal cfg.name
+          {
+            nativeBuildInputs = [ config.finalPackage ];
+
+            # Allow inspecting the test's module a little from the repl
+            # e.g.
+            # :lf .
+            # :p checks.x86_64-linux.test-1.passthru.entries.modules-autocmd.passthru.entries.example.passthru.config.extraConfigLua
+            #
+            # Yes, three levels of passthru is cursed.
+            passthru = {
+              inherit config options;
+            };
+          }
           (
             # First check warnings/assertions, then run nvim
             lib.optionalString (errors != "") ''
