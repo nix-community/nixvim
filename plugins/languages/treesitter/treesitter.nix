@@ -82,7 +82,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     The queries for the grammar should be added to one of the runtime directories under `queries/{language}` but sometimes plugins do not conform to this structure.
 
-    In such cases, you can override the source derivation (or the grammar derivation) to move the queries to the appropriate folder: ```nix
+    In such cases, you can override the source derivation (or the grammar derivation) to move the queries to the appropriate folder: 
+
+    ```nix
     (
       (pkgs.fetchFromGitLab {
         owner = "joncoole";
