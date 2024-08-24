@@ -46,54 +46,49 @@ in
     };
   };
 
-  config = {
-    test.derivation = pkgs.stdenv.mkDerivation {
-      inherit (cfg) name;
-      dontUnpack = true;
-
-      nativeBuildInputs = [ config.finalPackage ];
-
-      # First check warnings/assertions, then run nvim
-      buildPhase =
-        let
-          showErr =
-            name: lines:
-            lib.optionalString (lines != [ ]) ''
-              Unexpected ${name}:
-              ${lib.concatStringsSep "\n" (lib.map (v: "- ${v}") lines)}
-            '';
-
-          toCheck =
-            lib.optionalAttrs cfg.checkWarnings { inherit warnings; }
-            // lib.optionalAttrs cfg.checkAssertions { inherit assertions; };
-
-          errors = lib.foldlAttrs (
-            err: name: lines:
-            err + showErr name lines
-          ) "" toCheck;
-        in
-        lib.optionalString (errors != "") ''
-          echo -n ${lib.escapeShellArg errors}
-          exit 1
-        ''
-        # We need to set HOME because neovim will try to create some files
-        #
-        # Because neovim does not return an exitcode when quitting we need to check if there are
-        # errors on stderr
-        + lib.optionalString cfg.runNvim ''
-          mkdir -p .cache/nvim
-
-          output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
-          if [[ -n $output ]]; then
-            echo "ERROR: $output"
-            exit 1
-          fi
+  config =
+    let
+      showErr =
+        name: lines:
+        lib.optionalString (lines != [ ]) ''
+          Unexpected ${name}:
+          ${lib.concatStringsSep "\n" (lib.map (v: "- ${v}") lines)}
         '';
 
-      # If we don't do this nix is not happy
-      installPhase = ''
-        touch $out
-      '';
+      toCheck =
+        lib.optionalAttrs cfg.checkWarnings { inherit warnings; }
+        // lib.optionalAttrs cfg.checkAssertions { inherit assertions; };
+
+      errors = lib.foldlAttrs (
+        err: name: lines:
+        err + showErr name lines
+      ) "" toCheck;
+    in
+    {
+      test.derivation =
+        pkgs.runCommandNoCCLocal cfg.name { nativeBuildInputs = [ config.finalPackage ]; }
+          (
+            # First check warnings/assertions, then run nvim
+            lib.optionalString (errors != "") ''
+              echo -n ${lib.escapeShellArg errors}
+              exit 1
+            ''
+            # We need to set HOME because neovim will try to create some files
+            #
+            # Because neovim does not return an exitcode when quitting we need to check if there are
+            # errors on stderr
+            + lib.optionalString cfg.runNvim ''
+              mkdir -p .cache/nvim
+
+              output=$(HOME=$(realpath .) nvim -mn --headless "+q" 2>&1 >/dev/null)
+              if [[ -n $output ]]; then
+                echo "ERROR: $output"
+                exit 1
+              fi
+            ''
+            + ''
+              touch $out
+            ''
+          );
     };
-  };
 }
