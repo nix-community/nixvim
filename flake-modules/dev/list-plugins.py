@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-from enum import Enum
-from dataclasses import dataclass
-from typing import Optional
 import glob
 import re
+from argparse import ArgumentParser, RawTextHelpFormatter
+from dataclasses import dataclass
+from enum import Enum
+from typing import Optional
 
 QUESTION_MARK = "❔"
 
@@ -65,7 +66,7 @@ class Plugin:
                 kind_icon = "\033[92m" + " "
             case _:
                 assert False
-        deprecation_icon: str = "⚠️" if self.dep_warnings else "  "
+        deprecation_icon: str = "⚠️ " if self.dep_warnings else "  "
 
         return (
             f"| {kind_icon}\033[0m  | {state_icon}  | {deprecation_icon} | {self.path}"
@@ -129,25 +130,52 @@ def _is_excluded(path: str) -> bool:
     return True
 
 
-if __name__ == "__main__":
-    paths: list[str] = glob.glob(
-        pathname="plugins/**/*.nix",
-        recursive=True,
-    )
-
-    filtered_paths: list[str] = list(
-        filter(
-            _is_excluded,
-            paths,
-        )
-    )
+def main(args):
+    paths: list[str] = glob.glob(pathname="plugins/**/*.nix", recursive=True)
+    filtered_paths: list[str] = list(filter(_is_excluded, paths))
     filtered_paths.sort()
 
     print("| Typ | Sty | DW | path")
     print("|-----|-----|----|--------------------------------------------------------")
     for plugin_path in filtered_paths:
-        plugin: Optional[Plugin] = parse_file(
-            path=plugin_path,
-        )
+        plugin: Optional[Plugin] = parse_file(path=plugin_path)
         if plugin is not None:
-            print(plugin)
+            if (
+                (args.kind is None or plugin.kind.name.lower() == args.kind)
+                and (args.state is None or plugin.state.name.lower() == args.state)
+                and (not args.deprecation_warnings or plugin.dep_warnings)
+            ):
+                print(plugin)
+
+
+if __name__ == "__main__":
+    parser: ArgumentParser = ArgumentParser(
+        description="""
+    Analyze Nixvim plugin files
+    Output formats a table showing:
+        If a plugin is written for Neovim or Vim.
+        If the plugin has been updated to latest style standards.
+        If a plugin contains any deprecation warnings.
+    """,
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "-k",
+        "--kind",
+        choices=[k.name.lower() for k in Kind],
+        help="Filter plugins by kind (neovim, vim, misc, unknown)",
+    )
+    parser.add_argument(
+        "-s",
+        "--state",
+        choices=[s.name.lower() for s in State],
+        help="Filter plugins by state (new, old, unknown)",
+    )
+    parser.add_argument(
+        "-d",
+        "--deprecation-warnings",
+        action="store_true",
+        help="Show only plugins with deprecation warnings",
+    )
+
+    main(parser.parse_args())

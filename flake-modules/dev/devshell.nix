@@ -108,7 +108,7 @@
             }
             {
               name = "list-plugins";
-              command = "${pkgs.python3.interpreter} ${./list-plugins.py}";
+              command = ''${pkgs.python3.interpreter} ${./list-plugins.py} "$@"'';
               help = "List plugins and get implementation infos";
             }
           ];
