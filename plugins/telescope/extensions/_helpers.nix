@@ -1,5 +1,4 @@
 { lib, config, ... }:
-with lib;
 let
   inherit (lib.nixvim) mkPluginPackageOption mkSettingsOption toSnakeCase;
 in
@@ -32,15 +31,15 @@ rec {
         ++ (map (
           option:
           let
-            optionPath = if isString option then [ option ] else option; # option is already a path (i.e. a list)
+            optionPath = lib.toList option;
 
             optionPathSnakeCase = map toSnakeCase optionPath;
           in
-          mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
+          lib.mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
         ) optionsRenamedToSettings);
 
       options.plugins.telescope.extensions.${name} = {
-        enable = mkEnableOption "the `${name}` telescope extension";
+        enable = lib.mkEnableOption "the `${name}` telescope extension";
 
         package = mkPluginPackageOption name defaultPackage;
 
@@ -55,23 +54,27 @@ rec {
         let
           cfg = config.plugins.telescope.extensions.${name};
         in
-        mkIf cfg.enable (mkMerge [
-          {
-            extraPlugins = [ cfg.package ];
+        lib.mkIf cfg.enable (
+          lib.mkMerge [
+            {
+              extraPlugins = [ cfg.package ];
 
-            plugins.telescope = {
-              enabledExtensions = [ extensionName ];
-              settings.extensions.${extensionName} = cfg.settings;
-            };
-          }
-          (extraConfig cfg)
-        ]);
+              plugins.telescope = {
+                enabledExtensions = [ extensionName ];
+                settings.extensions.${extensionName} = cfg.settings;
+              };
+            }
+            (extraConfig cfg)
+          ]
+        );
     };
 
+  # FIXME: don't manually put Default in the description
+  # TODO: Comply with #603
   mkModeMappingsOption =
     mode: defaults:
-    mkOption {
-      type = with types; attrsOf strLuaFn;
+    lib.mkOption {
+      type = with lib.types; attrsOf strLuaFn;
       default = { };
       description = ''
         Keymaps in ${mode} mode.
@@ -81,7 +84,7 @@ rec {
           ${defaults}
         ```
       '';
-      apply = mapAttrs (_: mkRaw);
+      apply = lib.mapAttrs (_: lib.nixvim.mkRaw);
     };
 
   mkMappingsOption =
