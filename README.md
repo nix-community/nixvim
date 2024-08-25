@@ -26,14 +26,14 @@ lightline plugin:
   programs.nixvim = {
     enable = true;
 
-    colorschemes.gruvbox.enable = true;
-    plugins.lightline.enable = true;
+    colorschemes.catppuccin.enable = true;
+    plugins.lualine.enable = true;
   };
 }
 ```
 
-When we do this, lightline will be set up to a sensible default, and will use
-gruvbox as the colorscheme, no extra configuration required!
+When we do this, lualine will be set up to a sensible default, and will use
+catppuccin as the colorscheme, no extra configuration required!
 
 Check out [this list of real world nixvim configs](https://nix-community.github.io/nixvim/user-guide/config-examples.html)!
 
