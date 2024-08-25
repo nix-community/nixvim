@@ -4,6 +4,8 @@
   ...
 }:
 let
+  defaultPkgs = pkgs;
+
   # Create a nix derivation from a nixvim executable.
   # The build phase simply consists in running the provided nvim binary.
   mkTestDerivationFromNvim =
@@ -35,7 +37,7 @@ let
   mkTestDerivationFromNixvimModule =
     {
       name ? null,
-      pkgs ? pkgs,
+      pkgs ? defaultPkgs,
       module,
       extraSpecialArgs ? { },
       # TODO: Deprecated 2024-08-20, remove after 24.11
