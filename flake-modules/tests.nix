@@ -25,6 +25,11 @@
           inherit (self.lib.${system}.check) mkTestDerivationFromNixvimModule;
         };
 
+        failing-tests = import ../tests/failing-tests.nix {
+          inherit pkgs;
+          inherit (self.lib.${system}.check) mkTestDerivationFromNixvimModule;
+        };
+
         no-flake = import ../tests/no-flake.nix {
           inherit system;
           inherit (self.lib.${system}.check) mkTestDerivationFromNvim;
