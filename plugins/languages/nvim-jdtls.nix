@@ -44,7 +44,7 @@ in
     '';
 
     data = mkOption {
-      type = types.nullOr types.str;
+      type = helpers.nixvimTypes.maybeRaw (with types; nullOr str);
       default = null;
       example = "/home/YOUR_USERNAME/.cache/jdtls/workspace";
       description = ''
