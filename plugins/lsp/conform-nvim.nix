@@ -97,7 +97,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
 
         ```nix
           # Map of filetype to formatters
-          formattersByFt =
+          formatters_by_ft =
             {
               lua = [ "stylua" ];
               # Conform will run multiple formatters sequentially
@@ -165,7 +165,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   settingsExample = lib.literalMD ''
     ```nix
       {
-        formattersByFt = {
+        formatters_by_ft = {
           bash = [
             "shellcheck"
             "shellharden"
