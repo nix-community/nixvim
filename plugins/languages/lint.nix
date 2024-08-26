@@ -144,25 +144,18 @@ in
       default = { };
       description = ''
         Configure the linters you want to run per file type.
-
-        Default:
-        ```nix
-          {
-            text = ["vale"];
-            json = ["jsonlint"];
-            markdown = ["vale"];
-            rst = ["vale"];
-            ruby = ["ruby"];
-            janet = ["janet"];
-            inko = ["inko"];
-            clojure = ["clj-kondo"];
-            dockerfile = ["hadolint"];
-            terraform = ["tflint"];
-          }
-        ```
       '';
       example = {
+        text = [ "vale" ];
+        json = [ "jsonlint" ];
         markdown = [ "vale" ];
+        rst = [ "vale" ];
+        ruby = [ "ruby" ];
+        janet = [ "janet" ];
+        inko = [ "inko" ];
+        clojure = [ "clj-kondo" ];
+        dockerfile = [ "hadolint" ];
+        terraform = [ "tflint" ];
       };
     };
 
