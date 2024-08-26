@@ -208,10 +208,7 @@
             tinymist.enable = true;
             tsserver.enable = true;
             typos-lsp.enable = true;
-            # As of 2024-08-17, pkgs.typst-lsp is broken
-            # https://github.com/NixOS/nixpkgs/pull/335263
-            # TODO: re-enable this test when fixed
-            typst-lsp.enable = false;
+            typst-lsp.enable = true;
             vala-ls.enable = true;
             vhdl-ls.enable = true;
             vls.enable = true;
