@@ -6,6 +6,12 @@
 #
 # Nixpkgs maintainers: https://github.com/NixOS/nixpkgs/blob/0212bde005b3335b2665c1476c36b3936e113b15/maintainers/maintainer-list.nix
 {
+  thubrecht = {
+    email = "nixpkgs@mail.hubrecht.ovh";
+    github = "Tom-Hubrecht";
+    githubId = 26650391;
+    name = "Tom Hubrecht";
+  };
   alisonjenkins = {
     email = "alison.juliet.jenkins@gmail.com";
     github = "alisonjenkins";
