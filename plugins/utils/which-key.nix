@@ -13,21 +13,24 @@ let
   opt = options.plugins.which-key;
 
   specExamples = [
-    # Basic group
+    # Basic group with custom icon
     {
       __unkeyed-1 = "<leader>b";
-      group = "󰓩 Buffers";
+      group = "Buffers";
+      icon = "󰓩 ";
     }
     # Non-default mode
     {
       __unkeyed = "<leader>c";
       mode = "v";
-      group = "󰄄 Codesnap";
+      group = "Codesnap";
+      icon = "󰄄 ";
     }
     # Group within group
     {
       __unkeyed-1 = "<leader>bs";
-      group = "󰒺 Sort";
+      group = "Sort";
+      icon = "󰒺 ";
     }
     # Nested mappings for inheritance
     {
