@@ -25,8 +25,7 @@
           inherit (self.lib.${system}.check) mkTestDerivationFromNixvimModule;
         };
 
-        failing-tests = import ../tests/failing-tests.nix {
-          inherit pkgs;
+        failing-tests = pkgs.callPackage ../tests/failing-tests.nix {
           inherit (self.lib.${system}.check) mkTestDerivationFromNixvimModule;
         };
 
