@@ -1,9 +1,10 @@
 # For shorter test iterations run the following in the root of the repo:
 #   `echo ':b checks.${builtins.currentSystem}.lib-tests' | nix repl .`
 {
-  lib,
-  pkgs,
   helpers,
+  lib,
+  runCommandNoCCLocal,
+  writeText,
 }:
 let
   luaNames = {
@@ -45,9 +46,9 @@ let
     ];
   };
 
-  drv = pkgs.writeText "example-derivation" "hello, world!";
+  drv = writeText "example-derivation" "hello, world!";
 
-  results = pkgs.lib.runTests {
+  results = lib.runTests {
     testToLuaObject = {
       expr = helpers.toLuaObject {
         foo = "bar";
@@ -377,11 +378,11 @@ let
   };
 in
 if results == [ ] then
-  pkgs.runCommand "lib-tests-success" { } "touch $out"
+  runCommandNoCCLocal "lib-tests-success" { } "touch $out"
 else
-  pkgs.runCommand "lib-tests-failure"
+  runCommandNoCCLocal "lib-tests-failure"
     {
-      results = pkgs.lib.concatStringsSep "\n" (
+      results = lib.concatStringsSep "\n" (
         builtins.map (result: ''
           ${result.name}:
             expected: ${lib.generators.toPretty { } result.expected}

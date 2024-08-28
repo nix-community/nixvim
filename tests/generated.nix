@@ -1,7 +1,7 @@
 {
   lib,
-  runCommand,
   pkgs,
+  runCommandNoCCLocal,
 }:
 let
   # Format a list of errors with an error message and trailing newline
@@ -68,7 +68,7 @@ let
     }
   );
 in
-runCommand "generated-sources-test" { inherit errors; } ''
+runCommandNoCCLocal "generated-sources-test" { inherit errors; } ''
   if [ -n "$errors" ]; then
     echo -n "$errors"
     exit 1

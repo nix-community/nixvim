@@ -1,13 +1,13 @@
 {
-  lib ? pkgs.lib,
   helpers,
+  lib,
+  linkFarm,
   pkgs,
   pkgsUnfree,
+  mkTestDerivationFromNixvimModule,
 }:
 let
-  fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ../lib/tests.nix { inherit pkgs lib; };
-  inherit (test-derivation) mkTestDerivationFromNixvimModule;
+  fetchTests = import ./fetch-tests.nix { inherit lib pkgs helpers; };
 
   moduleToTest =
     name: module:
@@ -17,10 +17,7 @@ let
     };
 
   # List of files containing configurations
-  testFiles = fetchTests {
-    inherit lib pkgs helpers;
-    root = ./test-sources;
-  };
+  testFiles = fetchTests ./test-sources;
 
   exampleFiles = {
     name = "examples";
@@ -44,13 +41,13 @@ in
 lib.pipe (testFiles ++ [ exampleFiles ]) [
   (builtins.map (file: {
     inherit (file) name;
-    path = pkgs.linkFarm file.name (builtins.mapAttrs moduleToTest file.cases);
+    path = linkFarm file.name (builtins.mapAttrs moduleToTest file.cases);
   }))
   (helpers.groupListBySize 10)
   (lib.imap1 (
     i: group: rec {
       name = "test-${toString i}";
-      value = pkgs.linkFarm name group;
+      value = linkFarm name group;
     }
   ))
   builtins.listToAttrs
