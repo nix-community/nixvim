@@ -1,5 +1,7 @@
 {
   pkgs,
+  linkFarm,
+  runCommandNoCCLocal,
   mkTestDerivationFromNixvimModule,
   makeNixvimWithModule,
 }:
@@ -19,7 +21,7 @@ let
     let
       nvim = makeNixvimWithModule { inherit pkgs module; };
     in
-    pkgs.runCommand "enable-except-in-tests-not-in-test"
+    runCommandNoCCLocal "enable-except-in-tests-not-in-test"
       { printConfig = "${nvim}/bin/nixvim-print-init"; }
       ''
         if ! "$printConfig" | grep 'require("image").setup'; then
@@ -31,7 +33,7 @@ let
         touch $out
       '';
 in
-pkgs.linkFarm "enable-except-in-tests" [
+linkFarm "enable-except-in-tests" [
   {
     name = "in-test";
     path = inTest;

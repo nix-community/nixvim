@@ -4,6 +4,7 @@
   callTest,
   helpers,
   lib ? pkgs.lib,
+  linkFarm,
   pkgs,
   pkgsUnfree,
 }:
@@ -54,14 +55,14 @@ lib.pipe (testFiles ++ [ exampleFiles ]) [
     }:
     {
       inherit name;
-      path = pkgs.linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
+      path = linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
     }
   ))
   (helpers.groupListBySize 10)
   (lib.imap1 (
     i: group: rec {
       name = "test-${toString i}";
-      value = pkgs.linkFarm name group;
+      value = linkFarm name group;
     }
   ))
   builtins.listToAttrs
