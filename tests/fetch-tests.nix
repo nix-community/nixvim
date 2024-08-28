@@ -5,26 +5,25 @@
   helpers,
 }:
 let
-  # Import a test file into the form { name = ""; file = ""; modules = []; }
+  # Import a test file into the form { name = ""; file = ""; cases = {}; }
   handleTestFile =
     file: namespace:
     let
       fnOrAttrs = import file;
+    in
+    {
+      inherit file;
+      name = lib.strings.concatStringsSep "-" namespace;
       cases =
         if builtins.isFunction fnOrAttrs then
           # Call the function
           fnOrAttrs { inherit pkgs lib helpers; }
         else
           fnOrAttrs;
-    in
-    {
-      inherit file;
-      name = lib.strings.concatStringsSep "-" namespace;
-      modules = lib.mapAttrsToList (name: module: { inherit name module; }) cases;
     };
 
   # Recurse into all directories, extracting files as we find them.
-  # This returns a list of { name; file; modules;  } attrsets.
+  # This returns a list of { name; file; cases;  } attrsets.
   fetchTests =
     path: namespace:
     let
@@ -50,5 +49,4 @@ let
       builtins.concatLists
     ];
 in
-# A list of the form [ { name = "..."; modules = [ /* test case modules */ ]; } ]
 fetchTests root [ ]
