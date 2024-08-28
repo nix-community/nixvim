@@ -1,5 +1,5 @@
 {
-  pkgs ? import <nixpkgs> { config.enableUnfree = true; },
+  pkgs ? import <nixpkgs> { config.allowUnfree = true; },
   nuschtosSearch,
 }:
 let
