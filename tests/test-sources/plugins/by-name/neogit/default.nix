@@ -295,6 +295,7 @@
     plugins.neogit = {
       enable = true;
       gitPackage = null;
+      whichPackage = null;
     };
   };
 }

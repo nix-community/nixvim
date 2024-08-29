@@ -104,6 +104,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
     gitPackage = lib.mkPackageOption pkgs "git" {
       nullable = true;
     };
+
+    whichPackage = lib.mkPackageOption pkgs "which" {
+      nullable = true;
+    };
   };
 
   extraConfig = cfg: {
@@ -126,9 +130,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
           "fzf-lua"
         ];
 
-    extraPackages = [
-      cfg.gitPackage
-    ] ++ optional (hasInfix "which" (cfg.settings.commit_view.verify_commit.__raw or "")) pkgs.which;
+    extraPackages =
+      [
+        cfg.gitPackage
+      ]
+      ++ optional (hasInfix "which" (
+        cfg.settings.commit_view.verify_commit.__raw or ""
+      )) cfg.whichPackage;
 
   };
 }
