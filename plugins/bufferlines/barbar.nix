@@ -55,7 +55,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "barbar";
   originalName = "barbar.nvim";
   defaultPackage = pkgs.vimPlugins.barbar-nvim;
-  extraPlugins = [ pkgs.vimPlugins.nvim-web-devicons ];
 
   maintainers = [ maintainers.GaetanLepage ];
 
@@ -197,6 +196,11 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     );
 
   extraOptions = {
+    iconsPackage = lib.nixvim.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
+
     keymaps = mapAttrs (
       optionName: funcName:
       mkNullOrOption' {
@@ -214,6 +218,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   };
 
   extraConfig = cfg: {
+    extraPlugins = mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
+
     keymaps = filter (keymap: keymap != null) (
       # TODO: switch to `attrValues cfg.keymaps` when removing the deprecation warnings above:
       attrValues (filterAttrs (n: v: n != "silent") cfg.keymaps)
