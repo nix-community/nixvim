@@ -76,7 +76,7 @@ In either case, you don't need to bother implementing this part. It is done auto
 > Declaring `settingsOptions` is therefore optional and just adds type-checking and documentation.
 
 ### Add to lib/default.nix
-As a final step, please add your plugin to `/lib/default.nix`. Please maintain the file hierarchy.
+As a final step, please add your plugin to `lib/default.nix`. Please maintain the file hierarchy.
 
 
 ### Tests
