@@ -256,4 +256,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.nvim-tree = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

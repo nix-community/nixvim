@@ -41,6 +41,11 @@ in
 
     package = helpers.mkPluginPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
 
+    iconsPackage = helpers.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
+
     disableNetrw = helpers.defaultNullOpts.mkBool false "Disable netrw";
 
     hijackNetrw = helpers.defaultNullOpts.mkBool true "Hijack netrw";
@@ -1154,10 +1159,9 @@ in
       '';
     in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [
+      extraPlugins = [
         cfg.package
-        nvim-web-devicons
-      ];
+      ] ++ lib.optional (cfg.iconsPackage != null) cfg.iconsPackage;
 
       autoCmd =
         (optional autoOpenEnabled {
