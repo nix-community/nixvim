@@ -88,6 +88,11 @@ in
 
       package = helpers.mkPluginPackageOption "diffview" pkgs.vimPlugins.diffview-nvim;
 
+      iconsPackage = helpers.mkPackageOption {
+        name = "nvim-web-devicons";
+        default = pkgs.vimPlugins.nvim-web-devicons;
+      };
+
       diffBinaries = mkBool false ''
         Show diffs for binaries
       '';
@@ -817,7 +822,10 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ] ++ (optional cfg.useIcons pkgs.vimPlugins.nvim-web-devicons);
+      extraPlugins = [
+        cfg.package
+      ] ++ (optional (cfg.iconsPackage != null && cfg.useIcons) cfg.iconsPackage);
+
       extraConfigLua = ''
         require("diffview").setup(${helpers.toLuaObject setupOptions})
       '';
