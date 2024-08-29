@@ -162,7 +162,7 @@ in
       extraPlugins =
         [ cfg.package ]
         ++ lib.optional (
-          cfg.iconsPackage != null && (opt.iconsEnabled.isDefined && cfg.iconsEnabled)
+          cfg.iconsPackage != null && (opt.iconsEnabled.isDefined -> cfg.iconsEnabled)
         ) cfg.iconsPackage;
 
       assertions = [
