@@ -132,4 +132,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.chadtree = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }
