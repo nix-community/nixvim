@@ -46,6 +46,11 @@ in
       default = pkgs.vimPlugins.nvim-web-devicons;
     };
 
+    gitPackage = helpers.mkPackageOption {
+      name = "git";
+      default = pkgs.git;
+    };
+
     disableNetrw = helpers.defaultNullOpts.mkBool false "Disable netrw";
 
     hijackNetrw = helpers.defaultNullOpts.mkBool true "Hijack netrw";
@@ -1180,6 +1185,7 @@ in
 
           require('nvim-tree').setup(${helpers.toLuaObject options})
         '';
-      extraPackages = [ pkgs.git ];
+
+      extraPackages = [ cfg.gitPackage ];
     };
 }

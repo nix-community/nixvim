@@ -261,6 +261,7 @@
     plugins.nvim-tree = {
       enable = true;
       iconsPackage = null;
+      gitPackage = null;
     };
   };
 }
