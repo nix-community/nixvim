@@ -437,4 +437,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.neo-tree = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

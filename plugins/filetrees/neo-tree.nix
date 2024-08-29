@@ -57,6 +57,11 @@ in
 
       package = helpers.mkPluginPackageOption "neo-tree" pkgs.vimPlugins.neo-tree-nvim;
 
+      iconsPackage = helpers.mkPackageOption {
+        name = "nvim-web-devicons";
+        default = pkgs.vimPlugins.nvim-web-devicons;
+      };
+
       sources =
         helpers.defaultNullOpts.mkListOf types.str
           [
@@ -1116,10 +1121,9 @@ in
         // cfg.extraOptions;
     in
     mkIf cfg.enable {
-      extraPlugins = with pkgs.vimPlugins; [
+      extraPlugins = [
         cfg.package
-        nvim-web-devicons
-      ];
+      ] ++ lib.optional (cfg.iconsPackage != null) cfg.iconsPackage;
 
       extraConfigLua = ''
         require('neo-tree').setup(${helpers.toLuaObject setupOptions})
