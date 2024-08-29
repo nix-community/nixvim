@@ -114,4 +114,11 @@
       extensions = [ "nvim-tree" ];
     };
   };
+
+  no-packages = {
+    plugins.lualine = {
+      enable = true;
+      gitPackage = null;
+    };
+  };
 }

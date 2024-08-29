@@ -108,6 +108,11 @@ in
 
       package = helpers.mkPluginPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
 
+      gitPackage = helpers.mkPackageOption {
+        name = "git";
+        default = pkgs.git;
+      };
+
       iconsEnabled = mkOption {
         type = types.bool;
         description = "Whether to enable/disable icons for all components.";
@@ -245,7 +250,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ] ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
-      extraPackages = [ pkgs.git ];
+      extraPackages = [ cfg.gitPackage ];
       extraConfigLua = ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
     };
 }
