@@ -16,6 +16,11 @@ in
 
       package = helpers.mkPluginPackageOption "git-worktree" pkgs.vimPlugins.git-worktree-nvim;
 
+      gitPackage = helpers.mkPackageOption {
+        name = "git";
+        default = pkgs.git;
+      };
+
       enableTelescope = mkEnableOption "telescope integration";
 
       changeDirectoryCommand = helpers.defaultNullOpts.mkStr "cd" ''
@@ -69,7 +74,7 @@ in
         plenary-nvim
       ];
 
-      extraPackages = [ pkgs.git ];
+      extraPackages = [ cfg.gitPackage ];
 
       extraConfigLua =
         let
