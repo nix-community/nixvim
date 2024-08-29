@@ -41,6 +41,11 @@ in
     plugins.lazy = {
       enable = mkEnableOption "lazy.nvim";
 
+      package = lib.mkPackageOption pkgs [
+        "vimPlugins"
+        "lazy-nvim"
+      ] { };
+
       gitPackage = lib.mkPackageOption pkgs "git" {
         nullable = true;
       };
@@ -155,7 +160,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [ pkgs.vimPlugins.lazy-nvim ];
+    extraPlugins = [ cfg.package ];
 
     extraPackages = [ cfg.gitPackage ];
 
