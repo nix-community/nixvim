@@ -126,7 +126,7 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       ];
 
       extraPlugins = lib.mkIf (
-        cfg.iconsPackage != null && (opt.iconsEnabled.isDefined && cfg.iconsEnabled)
+        cfg.iconsPackage != null && (opt.iconsEnabled.isDefined -> cfg.iconsEnabled)
       ) [ cfg.iconsPackage ];
 
       extraPackages = [ cfg.fzfPackage ];
