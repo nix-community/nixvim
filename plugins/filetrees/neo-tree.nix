@@ -62,6 +62,11 @@ in
         default = pkgs.vimPlugins.nvim-web-devicons;
       };
 
+      gitPackage = helpers.mkPackageOption {
+        name = "git";
+        default = pkgs.git;
+      };
+
       sources =
         helpers.defaultNullOpts.mkListOf types.str
           [
@@ -1128,6 +1133,7 @@ in
       extraConfigLua = ''
         require('neo-tree').setup(${helpers.toLuaObject setupOptions})
       '';
-      extraPackages = [ pkgs.git ];
+
+      extraPackages = [ cfg.gitPackage ];
     };
 }
