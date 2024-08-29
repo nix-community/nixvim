@@ -14,6 +14,11 @@ in
     plugins.packer = {
       enable = mkEnableOption "packer.nvim";
 
+      package = lib.mkPackageOption pkgs [
+        "vimPlugins"
+        "packer-nvim"
+      ] { };
+
       gitPackage = lib.mkPackageOption pkgs "git" {
         nullable = true;
       };
@@ -108,11 +113,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [
-      (pkgs.vimPlugins.packer-nvim.overrideAttrs (_: {
-        pname = "packer.nvim";
-      }))
-    ];
+    extraPlugins = [ cfg.package ];
 
     extraPackages = [ cfg.gitPackage ];
 
