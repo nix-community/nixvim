@@ -654,8 +654,15 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       };
   };
 
+  extraOptions = {
+    iconsPackage = lib.nixvim.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
+  };
+
   extraConfig = cfg: {
-    extraPlugins = with pkgs.vimPlugins; [ nvim-web-devicons ];
+    extraPlugins = lib.mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
 
     opts.termguicolors = true;
   };
