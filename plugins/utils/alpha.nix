@@ -2,6 +2,7 @@
   lib,
   helpers,
   config,
+  options,
   pkgs,
   ...
 }:
@@ -55,10 +56,16 @@ in
 
       package = helpers.mkPluginPackageOption "alpha-nvim" pkgs.vimPlugins.alpha-nvim;
 
+      # TODO: deprecated 2024-08-29 remove after 24.11
       iconsEnabled = mkOption {
         type = types.bool;
         description = "Toggle icon support. Installs nvim-web-devicons.";
-        default = true;
+        visible = false;
+      };
+
+      iconsPackage = helpers.mkPackageOption {
+        name = "nvim-web-devicons";
+        default = pkgs.vimPlugins.nvim-web-devicons;
       };
 
       theme = mkOption {
@@ -139,9 +146,24 @@ in
     let
       layoutDefined = cfg.layout != [ ];
       themeDefined = cfg.theme != null;
+
+      opt = options.plugins.alpha;
     in
     mkIf cfg.enable {
-      extraPlugins = [ cfg.package ] ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
+      # TODO: deprecated 2024-08-29 remove after 24.11
+      warnings = lib.mkIf opt.iconsEnabled.isDefined [
+        ''
+          nixvim (plugins.alpha):
+          The option definition `plugins.alpha.iconsEnabled' in ${showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
+          You should use `plugins.alpha.iconsPackage' instead.
+        ''
+      ];
+
+      extraPlugins =
+        [ cfg.package ]
+        ++ lib.optional (
+          cfg.iconsPackage != null && (opt.iconsEnabled.isDefined && cfg.iconsEnabled)
+        ) cfg.iconsPackage;
 
       assertions = [
         {

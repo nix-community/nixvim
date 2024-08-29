@@ -34,7 +34,6 @@
     plugins.alpha = {
       enable = true;
 
-      iconsEnabled = true;
       layout = [
         {
           type = "padding";
@@ -98,6 +97,14 @@
           press_queue = "<M-CR>";
         };
       };
+    };
+  };
+
+  no-packages = {
+    plugins.alpha = {
+      enable = true;
+      theme = "dashboard";
+      iconsPackage = null;
     };
   };
 }
