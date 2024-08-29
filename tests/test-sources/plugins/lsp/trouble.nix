@@ -77,4 +77,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.trouble = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }
