@@ -49,7 +49,9 @@
   blade = {
     formatter = {
       lang = "blade";
-      possible = [ "blade_formatter" ];
+      possible = [
+        "blade_formatter"
+      ];
     };
     linter = {
       lang = "blade";
@@ -178,7 +180,9 @@
   cmake = {
     formatter = {
       lang = "cmake";
-      possible = [ "gersemi" ];
+      possible = [
+        "gersemi"
+      ];
     };
     linter = {
       lang = "cmake";
@@ -220,7 +224,9 @@
   csh = {
     formatter = {
       lang = "csh";
-      possible = [ "beautysh" ];
+      possible = [
+        "beautysh"
+      ];
     };
     linter = {
       lang = "csh";
@@ -290,7 +296,9 @@
   dart = {
     formatter = {
       lang = "dart";
-      possible = [ "dartfmt" ];
+      possible = [
+        "dartfmt"
+      ];
     };
     linter = {
       lang = "dart";
@@ -332,7 +340,9 @@
   fennel = {
     formatter = {
       lang = "fennel";
-      possible = [ "fnlfmt" ];
+      possible = [
+        "fnlfmt"
+      ];
     };
     linter = {
       lang = "fennel";
@@ -352,7 +362,9 @@
   fish = {
     formatter = {
       lang = "fish";
-      possible = [ "fish_indent" ];
+      possible = [
+        "fish_indent"
+      ];
     };
     linter = {
       lang = "fish";
@@ -424,7 +436,9 @@
   haskell = {
     formatter = {
       lang = "haskell";
-      possible = [ "fourmolu" ];
+      possible = [
+        "fourmolu"
+      ];
     };
     linter = {
       lang = "haskell";
@@ -531,7 +545,9 @@
   javascriptreact = {
     formatter = {
       lang = "javascriptreact";
-      possible = [ "deno_fmt" ];
+      possible = [
+        "deno_fmt"
+      ];
     };
     linter = {
       lang = "javascriptreact";
@@ -580,7 +596,9 @@
   jsonc = {
     formatter = {
       lang = "jsonc";
-      possible = [ "biome" ];
+      possible = [
+        "biome"
+      ];
     };
     linter = {
       lang = "jsonc";
@@ -600,7 +618,9 @@
   ksh = {
     formatter = {
       lang = "ksh";
-      possible = [ "beautysh" ];
+      possible = [
+        "beautysh"
+      ];
     };
     linter = {
       lang = "ksh";
@@ -769,7 +789,9 @@
   objective-c = {
     formatter = {
       lang = "objective-c";
-      possible = [ "uncrustify" ];
+      possible = [
+        "uncrustify"
+      ];
     };
     linter = {
       lang = "objective-c";
@@ -789,7 +811,9 @@
   "objective-c++" = {
     formatter = {
       lang = "objective-c++";
-      possible = [ "uncrustify" ];
+      possible = [
+        "uncrustify"
+      ];
     };
     linter = {
       lang = "objective-c++";
@@ -809,7 +833,9 @@
   pawn = {
     formatter = {
       lang = "pawn";
-      possible = [ "uncrustify" ];
+      possible = [
+        "uncrustify"
+      ];
     };
     linter = {
       lang = "pawn";
@@ -915,7 +941,9 @@
   roslyn = {
     formatter = {
       lang = "roslyn";
-      possible = [ "dprint" ];
+      possible = [
+        "dprint"
+      ];
     };
     linter = {
       lang = "roslyn";
@@ -1007,7 +1035,9 @@
   scala = {
     formatter = {
       lang = "scala";
-      possible = [ "scalafmt" ];
+      possible = [
+        "scalafmt"
+      ];
     };
     linter = {
       lang = "scala";
@@ -1098,7 +1128,9 @@
   sml = {
     formatter = {
       lang = "sml";
-      possible = [ "smlfmt" ];
+      possible = [
+        "smlfmt"
+      ];
     };
     linter = {
       lang = "sml";
@@ -1118,7 +1150,9 @@
   solidity = {
     formatter = {
       lang = "solidity";
-      possible = [ "forge_fmt" ];
+      possible = [
+        "forge_fmt"
+      ];
     };
     linter = {
       lang = "solidity";
@@ -1140,7 +1174,9 @@
   sql = {
     formatter = {
       lang = "sql";
-      possible = [ "sql-formatter" ];
+      possible = [
+        "sql-formatter"
+      ];
     };
     linter = {
       lang = "sql";
@@ -1161,7 +1197,9 @@
   swift = {
     formatter = {
       lang = "swift";
-      possible = [ "swiftformat" ];
+      possible = [
+        "swiftformat"
+      ];
     };
     linter = {
       lang = "swift";
@@ -1182,7 +1220,9 @@
   terraform = {
     formatter = {
       lang = "terraform";
-      possible = [ "terraform_fmt" ];
+      possible = [
+        "terraform_fmt"
+      ];
     };
     linter = {
       lang = "terraform";
@@ -1202,7 +1242,9 @@
   tex = {
     formatter = {
       lang = "tex";
-      possible = [ "latexindent" ];
+      possible = [
+        "latexindent"
+      ];
     };
     linter = {
       lang = "tex";
@@ -1282,7 +1324,9 @@
   typescriptreact = {
     formatter = {
       lang = "typescriptreact";
-      possible = [ "deno_fmt" ];
+      possible = [
+        "deno_fmt"
+      ];
     };
     linter = {
       lang = "typescriptreact";
@@ -1326,7 +1370,9 @@
   vala = {
     formatter = {
       lang = "vala";
-      possible = [ "uncrustify" ];
+      possible = [
+        "uncrustify"
+      ];
     };
     linter = {
       lang = "vala";
@@ -1393,7 +1439,9 @@
   zsh = {
     formatter = {
       lang = "zsh";
-      possible = [ "beautysh" ];
+      possible = [
+        "beautysh"
+      ];
     };
     linter = {
       lang = "zsh";

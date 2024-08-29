@@ -253,7 +253,9 @@
       subTypes = [
         {
           kind = "enum";
-          values = [ "all" ];
+          values = [
+            "all"
+          ];
         }
         {
           item = {
@@ -321,8 +323,12 @@
     type = {
       kind = "oneOf";
       subTypes = [
-        { kind = "boolean"; }
-        { kind = "string"; }
+        {
+          kind = "boolean";
+        }
+        {
+          kind = "string";
+        }
       ];
     };
   };
@@ -383,7 +389,9 @@
       subTypes = [
         {
           kind = "enum";
-          values = [ "all" ];
+          values = [
+            "all"
+          ];
         }
         {
           item = {
@@ -512,7 +520,9 @@
     type = {
       kind = "oneOf";
       subTypes = [
-        { kind = "string"; }
+        {
+          kind = "string";
+        }
         {
           item = {
             kind = "string";
@@ -1611,8 +1621,12 @@
       item = {
         kind = "oneOf";
         subTypes = [
-          { kind = "string"; }
-          { kind = "object"; }
+          {
+            kind = "string";
+          }
+          {
+            kind = "object";
+          }
         ];
       };
       kind = "list";
@@ -1762,7 +1776,9 @@
       they will end up being interpreted as options to
       [`rustc`’s built-in test harness (“libtest”)](https://doc.rust-lang.org/rustc/tests/index.html#cli-arguments).
     '';
-    pluginDefault = [ "--show-output" ];
+    pluginDefault = [
+      "--show-output"
+    ];
     type = {
       item = {
         kind = "string";
