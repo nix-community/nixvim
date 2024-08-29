@@ -75,8 +75,8 @@ In either case, you don't need to bother implementing this part. It is done auto
 > `settings` has a "freeform" type `attrsOf anything`, meaning it can be configured with _anything_.
 > Declaring `settingsOptions` is therefore optional and just adds type-checking and documentation.
 
-#### Add to lib/default.nix
-As a final step, please add your plugin to `lib/default.nix`. Please maintain the file hierarchy.
+#### Add to plugins/default.nix
+As a final step, please add your plugin to plugins/default.nix`. Please maintain the file hierarchy.
 
 
 ### Tests
