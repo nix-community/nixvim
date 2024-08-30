@@ -1,11 +1,10 @@
 { lib, ... }:
-with lib;
 {
   options = {
-    defaultEditor = mkEnableOption "nixvim as the default editor";
+    defaultEditor = lib.mkEnableOption "nixvim as the default editor";
 
-    vimdiffAlias = mkOption {
-      type = types.bool;
+    vimdiffAlias = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Alias `vimdiff` to `nvim -d`.
