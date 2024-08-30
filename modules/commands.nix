@@ -4,18 +4,17 @@
   config,
   ...
 }:
-with lib;
 let
-  commandAttributes = types.submodule {
+  commandAttributes = lib.types.submodule {
     options = {
-      command = mkOption {
+      command = lib.mkOption {
         type = with helpers.nixvimTypes; either str rawLua;
         description = "The command to run.";
       };
 
       nargs =
         helpers.mkNullOrOption
-          (types.enum [
+          (lib.types.enum [
             0
             1
             "*"
@@ -25,13 +24,13 @@ let
           ''
             The number of arguments to expect, see :h command-nargs.
           '';
-      complete = helpers.mkNullOrOption (with types; either str helpers.nixvimTypes.rawLua) ''
+      complete = helpers.mkNullOrOption (with lib.types; either str helpers.nixvimTypes.rawLua) ''
         Tab-completion behaviour, see :h command-complete.
       '';
       range =
         helpers.mkNullOrOption
           (
-            with types;
+            with lib.types;
             oneOf [
               bool
               int
@@ -41,10 +40,10 @@ let
           ''
             Whether the command accepts a range, see :h command-range.
           '';
-      count = helpers.mkNullOrOption (with types; either bool int) ''
+      count = helpers.mkNullOrOption (with lib.types; either bool int) ''
         Whether the command accepts a count, see :h command-range.
       '';
-      addr = helpers.mkNullOrOption types.str ''
+      addr = helpers.mkNullOrOption lib.types.str ''
         Whether special characters relate to other things, see :h command-addr.
       '';
       bang = helpers.defaultNullOpts.mkBool false "Whether this command can take a bang (!).";
@@ -59,8 +58,8 @@ let
   };
 in
 {
-  options.userCommands = mkOption {
-    type = types.attrsOf commandAttributes;
+  options.userCommands = lib.mkOption {
+    type = lib.types.attrsOf commandAttributes;
     default = { };
     description = "A list of user commands to add to the configuration.";
   };
@@ -69,12 +68,12 @@ in
     let
       cleanupCommand = _: cmd: {
         inherit (cmd) command;
-        options = filterAttrs (name: _: name != "command") cmd;
+        options = lib.filterAttrs (name: _: name != "command") cmd;
       };
     in
-    mkIf (config.userCommands != { }) {
+    lib.mkIf (config.userCommands != { }) {
       extraConfigLua = helpers.wrapDo ''
-        local cmds = ${helpers.toLuaObject (mapAttrs cleanupCommand config.userCommands)};
+        local cmds = ${helpers.toLuaObject (lib.mapAttrs cleanupCommand config.userCommands)};
         for name,cmd in pairs(cmds) do
           vim.api.nvim_create_user_command(name, cmd.command, cmd.options or {})
         end

@@ -1,5 +1,4 @@
 { lib, config, ... }:
-with lib;
 {
   imports = [
     (lib.mkRenamedOptionModule
@@ -21,14 +20,14 @@ with lib;
   ];
 
   options.editorconfig = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "editorconfig plugin for neovim";
     };
 
-    properties = mkOption {
-      type = types.attrsOf types.str;
+    properties = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       description = ''
         The table key is a property name and the value is a callback function which accepts the
@@ -55,7 +54,7 @@ with lib;
       cfg = config.editorconfig;
     in
     {
-      globals.editorconfig = mkIf (!cfg.enable) false;
+      globals.editorconfig = lib.mkIf (!cfg.enable) false;
 
       extraConfigLua =
         let
@@ -64,7 +63,7 @@ with lib;
           '';
           propertiesString = lib.concatLines (lib.mapAttrsToList mkProperty cfg.properties);
         in
-        mkIf (propertiesString != "" && cfg.enable) ''
+        lib.mkIf (propertiesString != "" && cfg.enable) ''
           do
             local __editorconfig = require('editorconfig')
 

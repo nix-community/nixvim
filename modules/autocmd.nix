@@ -4,11 +4,10 @@
   config,
   ...
 }:
-with lib;
 {
   options = {
-    autoGroups = mkOption {
-      type = types.attrsOf helpers.autocmd.autoGroupOption;
+    autoGroups = lib.mkOption {
+      type = lib.types.attrsOf helpers.autocmd.autoGroupOption;
       default = { };
       description = "augroup definitions";
       example = {
@@ -18,8 +17,8 @@ with lib;
       };
     };
 
-    autoCmd = mkOption {
-      type = types.listOf helpers.autocmd.autoCmdOption;
+    autoCmd = lib.mkOption {
+      type = lib.types.listOf helpers.autocmd.autoCmdOption;
       default = [ ];
       description = "autocmd definitions";
       example = [
@@ -42,12 +41,12 @@ with lib;
     let
       inherit (config) autoGroups autoCmd;
     in
-    mkIf (autoGroups != { } || autoCmd != [ ]) {
+    lib.mkIf (autoGroups != { } || autoCmd != [ ]) {
       # Introduced early October 2023.
       # TODO remove in early December 2023.
       assertions = [
         {
-          assertion = all (x: x.description == null) autoCmd;
+          assertion = lib.all (x: x.description == null) autoCmd;
           message = ''
             RENAMED OPTION: `autoCmd[].description` has been renamed `autoCmd[].desc`.
             Please update your configuration.
@@ -56,7 +55,7 @@ with lib;
       ];
 
       extraConfigLuaPost =
-        (optionalString (autoGroups != { }) ''
+        (lib.optionalString (autoGroups != { }) ''
           -- Set up autogroups {{
           do
             local __nixvim_autogroups = ${helpers.toLuaObject autoGroups}
@@ -67,7 +66,7 @@ with lib;
           end
           -- }}
         '')
-        + (optionalString (autoCmd != [ ]) ''
+        + (lib.optionalString (autoCmd != [ ]) ''
           -- Set up autocommands {{
           do
             local __nixvim_autocommands = ${helpers.toLuaObject autoCmd}

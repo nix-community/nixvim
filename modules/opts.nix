@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   optionsAttrs = {
     opts = {
@@ -37,18 +36,18 @@ let
   };
 in
 {
-  options = mapAttrs (
+  options = lib.mapAttrs (
     _:
     { description, ... }:
-    mkOption {
-      type = with types; attrsOf anything;
+    lib.mkOption {
+      type = with lib.types; attrsOf anything;
       default = { };
       inherit description;
     }
   ) optionsAttrs;
 
   # Added 2024-03-29 (do not remove)
-  imports = mapAttrsToList (old: new: mkRenamedOptionModule [ old ] [ new ]) {
+  imports = lib.mapAttrsToList (old: new: lib.mkRenamedOptionModule [ old ] [ new ]) {
     options = "opts";
     globalOptions = "globalOpts";
     localOptions = "localOpts";
@@ -58,7 +57,7 @@ in
     extraConfigLuaPre =
       let
         content = helpers.concatNonEmptyLines (
-          mapAttrsToList (
+          lib.mapAttrsToList (
             optionName:
             {
               prettyName,
@@ -70,7 +69,7 @@ in
               varName = "nixvim_${luaVariableName}";
               optionDefinitions = config.${optionName};
             in
-            optionalString (optionDefinitions != { }) ''
+            lib.optionalString (optionDefinitions != { }) ''
               -- Set up ${prettyName} {{{
               do
                 local ${varName} = ${helpers.toLuaObject optionDefinitions}
@@ -84,6 +83,6 @@ in
           ) optionsAttrs
         );
       in
-      mkIf (content != "") (mkOrder 600 content); # Move options to top of file below global table
+      lib.mkIf (content != "") (lib.mkOrder 600 content); # Move options to top of file below global table
   };
 }

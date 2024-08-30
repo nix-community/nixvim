@@ -4,8 +4,9 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) types;
+
   cfg = config.filetype;
 
   filetypeDefinition = helpers.mkNullOrOption (
@@ -19,7 +20,7 @@ let
       (listOf (
         either str (submodule {
           options = {
-            priority = mkOption {
+            priority = lib.mkOption {
               type = ints.unsigned;
               description = ''
                 Filename patterns can specify an optional priority to resolve cases when a file path

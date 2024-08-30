@@ -4,11 +4,10 @@
   config,
   ...
 }:
-with lib;
 {
   options = {
-    highlight = mkOption {
-      type = types.attrsOf helpers.nixvimTypes.highlight;
+    highlight = lib.mkOption {
+      type = lib.types.attrsOf helpers.nixvimTypes.highlight;
       default = { };
       description = "Define new highlight groups";
       example = {
@@ -16,8 +15,8 @@ with lib;
       };
     };
 
-    highlightOverride = mkOption {
-      type = types.attrsOf helpers.nixvimTypes.highlight;
+    highlightOverride = lib.mkOption {
+      type = lib.types.attrsOf helpers.nixvimTypes.highlight;
       default = { };
       description = "Define highlight groups to override existing highlight";
       example = {
@@ -25,8 +24,8 @@ with lib;
       };
     };
 
-    match = mkOption {
-      type = types.attrsOf types.str;
+    match = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       description = "Define match groups";
       example = {
@@ -35,10 +34,10 @@ with lib;
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     {
       extraConfigLuaPre =
-        mkIf (config.highlight != { })
+        lib.mkIf (config.highlight != { })
           # lua
           ''
             -- Highlight groups {{
@@ -52,7 +51,7 @@ with lib;
             -- }}
           '';
       extraConfigLuaPost =
-        mkIf (config.highlightOverride != { })
+        lib.mkIf (config.highlightOverride != { })
           # lua
           ''
             -- Highlight groups {{
@@ -68,7 +67,7 @@ with lib;
     }
     {
       extraConfigLuaPre =
-        mkIf (config.match != { })
+        lib.mkIf (config.match != { })
           # lua
           ''
             -- Match groups {{

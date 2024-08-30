@@ -4,8 +4,9 @@
   helpers,
   ...
 }:
-with lib;
 let
+  inherit (lib) types mkOption;
+
   pluginWithConfigType = types.submodule {
     options = {
       config = mkOption {
@@ -14,7 +15,7 @@ let
         default = "";
       };
 
-      optional = mkEnableOption "optional" // {
+      optional = lib.mkEnableOption "optional" // {
         description = "Don't load by default (load with :packadd)";
       };
 
@@ -43,7 +44,7 @@ in
     extraPython3Packages = mkOption {
       type = with types; functionTo (listOf package);
       default = p: [ ];
-      defaultText = literalExpression "p: with p; [ ]";
+      defaultText = lib.literalExpression "p: with p; [ ]";
       description = "Python packages to add to the `PYTHONPATH` of neovim.";
       example = lib.literalExpression ''
         p: [ p.numpy ]

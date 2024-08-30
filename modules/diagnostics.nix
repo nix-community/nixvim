@@ -4,11 +4,10 @@
   config,
   ...
 }:
-with lib;
 {
   options = {
-    diagnostics = mkOption {
-      type = with types; attrsOf anything;
+    diagnostics = lib.mkOption {
+      type = with lib.types; attrsOf anything;
       default = { };
       description = "The configuration diagnostic options, provided to `vim.diagnostic.config`.";
       example = {
@@ -19,7 +18,7 @@ with lib;
   };
 
   config = {
-    extraConfigLuaPre = mkIf (config.diagnostics != { }) ''
+    extraConfigLuaPre = lib.mkIf (config.diagnostics != { }) ''
       vim.diagnostic.config(${helpers.toLuaObject config.diagnostics})
     '';
   };

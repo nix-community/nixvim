@@ -4,30 +4,29 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.clipboard;
 in
 {
   options = {
     clipboard = {
-      register = mkOption {
+      register = lib.mkOption {
         description = ''
           Sets the register to use for the clipboard.
           Learn more in [`:h 'clipboard'`](https://neovim.io/doc/user/options.html#'clipboard').
         '';
-        type = with types; nullOr (either str (listOf str));
+        type = with lib.types; nullOr (either str (listOf str));
         default = null;
         example = "unnamedplus";
       };
 
-      providers = mkOption {
-        type = types.submodule {
+      providers = lib.mkOption {
+        type = lib.types.submodule {
           options =
-            mapAttrs
+            lib.mapAttrs
               (name: packageName: {
-                enable = mkEnableOption name;
-                package = mkPackageOption pkgs packageName { };
+                enable = lib.mkEnableOption name;
+                package = lib.mkPackageOption pkgs packageName { };
               })
               {
                 wl-copy = "wl-clipboard";
@@ -45,8 +44,10 @@ in
   };
 
   config = {
-    opts.clipboard = mkIf (cfg.register != null) cfg.register;
+    opts.clipboard = lib.mkIf (cfg.register != null) cfg.register;
 
-    extraPackages = mapAttrsToList (n: v: v.package) (filterAttrs (n: v: v.enable) cfg.providers);
+    extraPackages = lib.mapAttrsToList (n: v: v.package) (
+      lib.filterAttrs (n: v: v.enable) cfg.providers
+    );
   };
 }

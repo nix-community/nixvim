@@ -1,15 +1,14 @@
 { config, lib, ... }:
-with lib;
 {
   options = {
-    colorscheme = mkOption {
-      type = types.nullOr types.str;
+    colorscheme = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       description = "The name of the colorscheme to use";
       default = null;
     };
   };
 
-  config = mkIf (config.colorscheme != "" && config.colorscheme != null) {
+  config = lib.mkIf (config.colorscheme != "" && config.colorscheme != null) {
     extraConfigVim = ''
       colorscheme ${config.colorscheme}
     '';

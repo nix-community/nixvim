@@ -1,5 +1,4 @@
 { lib, ... }:
-with lib;
 {
   # Attribute may contain the following fields:
   #  - path: Path to the module, e.g. [ "plugins" "<name>" ]
@@ -7,8 +6,8 @@ with lib;
   #  - url: Url for the plugin
   #
   # We need to use an attrs instead of a submodule to handle the merge.
-  options.meta.nixvimInfo = mkOption {
-    type = (types.nullOr types.attrs) // {
+  options.meta.nixvimInfo = lib.mkOption {
+    type = (lib.types.nullOr lib.types.attrs) // {
       # This will create an attrset of the form:
       #
       # { path.to.plugin.name = <info>; }
@@ -26,7 +25,7 @@ with lib;
           (
             acc: def:
             lib.recursiveUpdate acc (
-              setAttrByPath def.value.path {
+              lib.setAttrByPath def.value.path {
                 inherit (def) file;
                 url = def.value.url or null;
                 description = def.value.description or null;

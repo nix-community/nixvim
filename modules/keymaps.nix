@@ -5,11 +5,10 @@
   options,
   ...
 }:
-with lib;
 {
   options = {
-    keymaps = mkOption {
-      type = types.listOf helpers.keymaps.deprecatedMapOptionSubmodule;
+    keymaps = lib.mkOption {
+      type = lib.types.listOf helpers.keymaps.deprecatedMapOptionSubmodule;
       default = [ ];
       description = "Nixvim keymaps.";
       example = [
@@ -21,8 +20,8 @@ with lib;
       ];
     };
 
-    keymapsOnEvents = mkOption {
-      type = types.attrsOf (types.listOf helpers.keymaps.deprecatedMapOptionSubmodule);
+    keymapsOnEvents = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.listOf helpers.keymaps.deprecatedMapOptionSubmodule);
       default = { };
       example = {
         "InsertEnter" = [
@@ -67,7 +66,7 @@ with lib;
       in
       lib.pipe keymapOptions [
         (map (opt: (opt.type.getSubOptions opt.loc).lua))
-        (filter (opt: opt.isDefined))
+        (lib.filter (opt: opt.isDefined))
         (map (opt: ''
           ${"\n"}
           The `${lib.showOption opt.loc}' option is deprecated and will be removed in 24.11.
@@ -79,7 +78,7 @@ with lib;
         ''))
       ];
 
-    extraConfigLua = mkIf (config.keymaps != [ ]) ''
+    extraConfigLua = lib.mkIf (config.keymaps != [ ]) ''
       -- Set up keybinds {{{
       do
         local __nixvim_binds = ${helpers.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs config.keymaps)}
@@ -90,11 +89,11 @@ with lib;
       -- }}}
     '';
 
-    autoGroups = mapAttrs' (
-      event: mappings: nameValuePair "nixvim_binds_${event}" { clear = true; }
+    autoGroups = lib.mapAttrs' (
+      event: mappings: lib.nameValuePair "nixvim_binds_${event}" { clear = true; }
     ) config.keymapsOnEvents;
 
-    autoCmd = mapAttrsToList (event: mappings: {
+    autoCmd = lib.mapAttrsToList (event: mappings: {
       inherit event;
       group = "nixvim_binds_${event}";
       callback = helpers.mkRaw ''
