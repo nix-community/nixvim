@@ -7,7 +7,6 @@
   hmOptions,
   search,
 }:
-with lib;
 let
   inherit (evaledModules.config.meta) nixvimInfo;
 
@@ -31,17 +30,17 @@ let
   removeWhitespace = builtins.replaceStrings [ " " ] [ "" ];
 
   getSubOptions =
-    opts: path: optionalAttrs (isVisible opts) (removeUnwanted (opts.type.getSubOptions path));
+    opts: path: lib.optionalAttrs (isVisible opts) (removeUnwanted (opts.type.getSubOptions path));
 
   isVisible =
     opts:
-    if isOption opts then
+    if lib.isOption opts then
       opts.visible or true
     else if opts.isOption then
       opts.index.options.visible or true
     else
       let
-        filterFunc = filterAttrs (_: v: if isAttrs v then isVisible v else true);
+        filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisible v else true);
 
         hasEmptyIndex = (filterFunc opts.index.options) == { };
         hasEmptyComponents = (filterFunc opts.components) == { };
@@ -54,11 +53,11 @@ let
         if isOpt then
           opts
         else
-          filterAttrs (_: component: component.isOption && (isVisible component)) opts;
-      path = removeWhitespace (concatStringsSep "/" path);
+          lib.filterAttrs (_: component: component.isOption && (isVisible component)) opts;
+      path = removeWhitespace (lib.concatStringsSep "/" path);
       moduleDoc =
         let
-          info = optionalAttrs (hasAttrByPath path nixvimInfo) (getAttrFromPath path nixvimInfo);
+          info = lib.attrByPath path { } nixvimInfo;
           maintainers = lib.unique (evaledModules.config.meta.maintainers.${info.file} or [ ]);
           maintainersNames = builtins.map maintToMD maintainers;
           maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
@@ -85,7 +84,7 @@ let
       if isOpt then
         { }
       else
-        filterAttrs (_: component: !component.isOption && (isVisible component)) opts;
+        lib.filterAttrs (_: component: !component.isOption && (isVisible component)) opts;
 
     hasComponents = components != { };
 
@@ -100,7 +99,7 @@ let
         let
           g =
             name: opts:
-            if !isOption opts then
+            if !lib.isOption opts then
               wrapModule (path ++ [ name ]) (recurse (path ++ [ name ]) opts) false
             else
               let
@@ -113,7 +112,7 @@ let
                     # This is necessary to include the submodule option's definition in the docs (description, type, etc.)
                     # For instance, this helps submodules like "autoCmd" to include their base definitions and examples in the docs
                     # Though there might be a better, less "hacky" solution than this.
-                    ${name} = recursiveUpdate opts {
+                    ${name} = lib.recursiveUpdate opts {
                       isOption = true;
                       type.getSubOptions = _: _: { }; # Used to exclude suboptions from the submodule definition itself
                     };
@@ -122,9 +121,9 @@ let
               else
                 wrapModule (path ++ [ name ]) opts true;
         in
-        mapAttrs g mods;
+        lib.mapAttrs g mods;
     in
-    foldlAttrs (
+    lib.foldlAttrs (
       acc: name: opts:
       let
         group = if !opts.hasComponents then "Neovim Options" else "none";
@@ -141,17 +140,17 @@ let
             hasComponents = false;
           };
 
-        isOpt = !opts.hasComponents && (isOption opts.index.options);
+        isOpt = !opts.hasComponents && (lib.isOption opts.index.options);
       in
       acc
       // {
-        ${group} = recursiveUpdate last {
-          index.options = optionalAttrs isOpt { ${name} = opts.index.options; };
+        ${group} = lib.recursiveUpdate last {
+          index.options = lib.optionalAttrs isOpt { ${name} = opts.index.options; };
 
-          components = optionalAttrs (!isOpt) {
-            ${name} = recursiveUpdate opts {
+          components = lib.optionalAttrs (!isOpt) {
+            ${name} = lib.recursiveUpdate opts {
               index.path = removeWhitespace (
-                concatStringsSep "/" ((optional (group != "none") group) ++ [ opts.index.path ])
+                lib.concatStringsSep "/" ((lib.optional (group != "none") group) ++ [ opts.index.path ])
               );
               hasComponents = true;
             };
@@ -177,7 +176,7 @@ let
             else
               f name opts;
         in
-        concatStringsSep "\n" (mapAttrsToList g mods);
+        lib.concatStringsSep "\n" (lib.mapAttrsToList g mods);
     in
     recurse modules;
 
@@ -186,10 +185,10 @@ let
     commands = mapModulesToString (
       name: opts:
       let
-        isBranch = if (hasSuffix "index" opts.index.path) then true else opts.hasComponents;
+        isBranch = if (lib.hasSuffix "index" opts.index.path) then true else opts.hasComponents;
         path = if isBranch then "${opts.index.path}/index.md" else "${opts.index.path}.md";
       in
-      (optionalString isBranch "mkdir -p ${opts.index.path}\n")
+      (lib.optionalString isBranch "mkdir -p ${opts.index.path}\n")
       + (
         if opts.index.moduleDoc == null then
           "cp ${mkMDDoc opts.index.options} ${path}"
@@ -222,7 +221,7 @@ let
 
         indentLevel = with builtins; length (filter isString (split "/" opts.index.path)) - 1;
 
-        padding = concatStrings (builtins.genList (_: "\t") indentLevel);
+        padding = lib.concatStrings (builtins.genList (_: "\t") indentLevel);
       in
       "${padding}- [${name}](${path})"
     ) docs.modules;
@@ -254,7 +253,7 @@ pkgs.stdenv.mkDerivation {
   phases = [ "buildPhase" ];
 
   buildInputs = [ pkgs.mdbook ];
-  inputs = sourceFilesBySuffices ./. [
+  inputs = lib.sourceFilesBySuffices ./. [
     ".md"
     ".toml"
     ".js"
