@@ -1,5 +1,4 @@
 { lib, helpers }:
-with lib;
 {
   mkVimPlugin =
     {
@@ -34,9 +33,9 @@ with lib;
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
 
-      createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
+      createSettingsOption = (lib.isString globalPrefix) && (globalPrefix != "");
 
-      settingsOption = optionalAttrs createSettingsOption {
+      settingsOption = lib.optionalAttrs createSettingsOption {
         settings = helpers.mkSettingsOption {
           options = settingsOptions;
           example = settingsExample;
@@ -77,7 +76,7 @@ with lib;
           };
 
           options.${namespace}.${name} = {
-            enable = mkEnableOption originalName;
+            enable = lib.mkEnableOption originalName;
             package =
               if lib.isOption package then
                 package
@@ -94,16 +93,20 @@ with lib;
                 };
           } // settingsOption // extraOptions;
 
-          config = mkIf cfg.enable (mkMerge [
-            {
-              inherit extraPackages;
-              globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) (cfg.settings or { });
-              # does this evaluate package? it would not be desired to evaluate package if we use another package.
-              extraPlugins = extraPlugins ++ optional (cfg.package != null) cfg.package;
-            }
-            (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
-            (extraConfig cfg)
-          ]);
+          config = lib.mkIf cfg.enable (
+            lib.mkMerge [
+              {
+                inherit extraPackages;
+                globals = lib.mapAttrs' (n: lib.nameValuePair (globalPrefix + n)) (cfg.settings or { });
+                # does this evaluate package? it would not be desired to evaluate package if we use another package.
+                extraPlugins = extraPlugins ++ lib.optional (cfg.package != null) cfg.package;
+              }
+              (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+                colorscheme = lib.mkDefault colorscheme;
+              })
+              (extraConfig cfg)
+            ]
+          );
         };
     in
     {
@@ -117,9 +120,9 @@ with lib;
         in
         imports
         ++ [ module ]
-        ++ (optional (deprecateExtraConfig && createSettingsOption) (
-          mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) settingsPath
+        ++ (lib.optional (deprecateExtraConfig && createSettingsOption) (
+          lib.mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) settingsPath
         ))
-        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
     };
 }

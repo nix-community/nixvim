@@ -1,11 +1,10 @@
 { lib, helpers }:
-with lib;
 {
   # TODO: DEPRECATED: use the `settings` option instead
   extraOptionsOptions = {
-    extraOptions = mkOption {
+    extraOptions = lib.mkOption {
       default = { };
-      type = with types; attrsOf anything;
+      type = with lib.types; attrsOf anything;
       description = ''
         These attributes will be added to the table parameter for the setup function.
         Typically, it can override NixVim's default settings.
@@ -78,7 +77,7 @@ with lib;
 
           options.${namespace}.${name} =
             {
-              enable = mkEnableOption originalName;
+              enable = lib.mkEnableOption originalName;
               package =
                 if lib.isOption package then
                   package
@@ -94,7 +93,7 @@ with lib;
                         ];
                   };
             }
-            // optionalAttrs hasSettings {
+            // lib.optionalAttrs hasSettings {
               settings = helpers.mkSettingsOption {
                 description = settingsDescription;
                 options = settingsOptions;
@@ -103,19 +102,25 @@ with lib;
             }
             // extraOptions;
 
-          config = mkIf cfg.enable (mkMerge [
-            {
-              extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
-              inherit extraPackages;
-            }
-            (optionalAttrs callSetup {
-              ${extraConfigNamespace} = ''
-                require('${luaName}')${setup}(${optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)})
-              '';
-            })
-            (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
-            (extraConfig cfg)
-          ]);
+          config = lib.mkIf cfg.enable (
+            lib.mkMerge [
+              {
+                extraPlugins = (lib.optional installPackage cfg.package) ++ extraPlugins;
+                inherit extraPackages;
+              }
+              (lib.optionalAttrs callSetup {
+                ${extraConfigNamespace} = ''
+                  require('${luaName}')${setup}(${
+                    lib.optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)
+                  })
+                '';
+              })
+              (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+                colorscheme = lib.mkDefault colorscheme;
+              })
+              (extraConfig cfg)
+            ]
+          );
         };
     in
     {
@@ -129,9 +134,9 @@ with lib;
         in
         imports
         ++ [ module ]
-        ++ (optional deprecateExtraOptions (
-          mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
+        ++ (lib.optional deprecateExtraOptions (
+          lib.mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
         ))
-        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
     };
 }

@@ -1,10 +1,9 @@
 { lib }:
-with lib;
 rec {
   # Whether the string is a reserved keyword in lua
   isKeyword =
     s:
-    elem s [
+    lib.elem s [
       "and"
       "break"
       "do"
@@ -150,18 +149,18 @@ rec {
           value
         else if isInline value then
           value
-        else if isDerivation value then
+        else if lib.isDerivation value then
           value
-        else if isList value then
+        else if lib.isList value then
           let
             needsFiltering = removeNullListEntries || removeEmptyListEntries;
             fn =
               v: (removeNullListEntries -> (v != null)) && (removeEmptyListEntries -> (v != [ ] && v != { }));
             v' = map removeEmptiesRecursive value;
           in
-          if needsFiltering then filter fn v' else v'
-        else if isAttrs value then
-          concatMapAttrs (
+          if needsFiltering then lib.filter fn v' else v'
+        else if lib.isAttrs value then
+          lib.concatMapAttrs (
             n: v:
             let
               v' = removeEmptiesRecursive v;
@@ -184,12 +183,12 @@ rec {
       # Return the dict-style table key, formatted as per the config
       toTableKey =
         s:
-        if allowRawAttrKeys && hasPrefix "__rawKey__" s then
-          "[${removePrefix "__rawKey__" s}]"
+        if allowRawAttrKeys && lib.hasPrefix "__rawKey__" s then
+          "[${lib.removePrefix "__rawKey__" s}]"
         else if allowUnquotedAttrKeys && isIdentifier s then
           s
         else if allowLegacyEmptyStringAttr && s == "__emptyString" then
-          trace ''nixvim(toLua): __emptyString is deprecated, just use an attribute named "".'' (
+          lib.trace ''nixvim(toLua): __emptyString is deprecated, just use an attribute named "".'' (
             toTableKey ""
           )
         else
@@ -208,17 +207,17 @@ rec {
         in
         if v == null then
           "nil"
-        else if isInt v then
+        else if lib.isInt v then
           toString v
-        # toString loses precision on floats, so we use toJSON instead. 
+        # toString loses precision on floats, so we use toJSON instead.
         # It can output an exponent form supported by lua.
-        else if isFloat v then
+        else if lib.isFloat v then
           builtins.toJSON v
-        else if isBool v then
-          boolToString v
-        else if isPath v || isDerivation v then
+        else if lib.isBool v then
+          lib.boolToString v
+        else if lib.isPath v || lib.isDerivation v then
           go indent "${v}"
-        else if isString v then
+        else if lib.isString v then
           # TODO: support lua's escape sequences, literal string, and content-appropriate quote style
           # See https://www.lua.org/pil/2.4.html
           # and https://www.lua.org/manual/5.1/manual.html#2.1
@@ -226,11 +225,15 @@ rec {
           builtins.toJSON v
         else if v == [ ] || v == { } then
           "{ }"
-        else if isFunction v then
-          abort "nixvim(toLua): Unexpected function: " + generators.toPretty { } v
-        else if isList v then
-          "{" + introSpace + concatMapStringsSep ("," + introSpace) (go (indent + "  ")) v + outroSpace + "}"
-        else if isAttrs v then
+        else if lib.isFunction v then
+          abort "nixvim(toLua): Unexpected function: " + lib.generators.toPretty { } v
+        else if lib.isList v then
+          "{"
+          + introSpace
+          + lib.concatMapStringsSep ("," + introSpace) (go (indent + "  ")) v
+          + outroSpace
+          + "}"
+        else if lib.isAttrs v then
           # apply pretty values if allowed
           if allowPrettyValues && v ? __pretty && v ? val then
             v.__pretty v.val
@@ -244,11 +247,11 @@ rec {
           else
             "{"
             + introSpace
-            + concatStringsSep ("," + introSpace) (
-              mapAttrsToList (
+            + lib.concatStringsSep ("," + introSpace) (
+              lib.mapAttrsToList (
                 name: value:
-                (if allowExplicitEmpty && hasPrefix "__unkeyed" name then "" else toTableKey name + " = ")
-                + addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
+                (if allowExplicitEmpty && lib.hasPrefix "__unkeyed" name then "" else toTableKey name + " = ")
+                + lib.addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
               ) v
             )
             + outroSpace

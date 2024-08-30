@@ -1,5 +1,7 @@
 { lib, helpers }:
-with lib;
+let
+  inherit (lib) optionalAttrs isAttrs types;
+in
 rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
@@ -17,7 +19,7 @@ rec {
 
     remap = helpers.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
 
-    desc = helpers.mkNullOrOption types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
+    desc = helpers.mkNullOrOption lib.types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
 
     buffer = helpers.defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
   };
@@ -52,9 +54,9 @@ rec {
   };
 
   modeEnum =
-    types.enum
+    lib.types.enum
       # ["" "n" "v" ...]
-      (map ({ short, ... }: short) (attrValues modes));
+      (map ({ short, ... }: short) (lib.attrValues modes));
 
   mapOptionSubmodule = mkMapOptionSubmodule { };
 
@@ -66,8 +68,8 @@ rec {
 
   mkModeOption =
     default:
-    mkOption {
-      type = with types; either modeEnum (listOf modeEnum);
+    lib.mkOption {
+      type = with lib.types; either modeEnum (listOf modeEnum);
       description = ''
         One or several modes.
         Use the short-names (`"n"`, `"v"`, ...).
@@ -96,17 +98,16 @@ rec {
       extraOptions ? { },
       extraModules ? [ ],
     }:
-    with types;
-    submodule (
+    types.submodule (
       { config, options, ... }:
       {
         imports = extraModules;
 
         options =
-          (optionalAttrs (isAttrs key || key) {
-            key = mkOption (
+          (lib.optionalAttrs (isAttrs key || key) {
+            key = lib.mkOption (
               {
-                type = str;
+                type = types.str;
                 description = "The key to map.";
                 example = "<C-m>";
               }
@@ -115,9 +116,9 @@ rec {
             );
           })
           // (optionalAttrs (isAttrs action || action) {
-            action = mkOption (
+            action = lib.mkOption (
               {
-                type = maybeRaw str;
+                type = types.maybeRaw types.str;
                 description = "The action to execute.";
                 apply = v: if options.lua.isDefined or false && config.lua then helpers.mkRaw v else v;
               }
@@ -126,9 +127,9 @@ rec {
             );
           })
           // optionalAttrs (isAttrs lua || lua) {
-            lua = mkOption (
+            lua = lib.mkOption (
               {
-                type = bool;
+                type = types.bool;
                 description = ''
                   If true, `action` is considered to be lua code.
                   Thus, it will not be wrapped in `""`.

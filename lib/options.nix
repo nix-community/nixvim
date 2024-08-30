@@ -1,6 +1,7 @@
 { lib, helpers }:
-with lib;
 let
+  inherit (lib) types;
+
   # Render a plugin default string
   pluginDefaultText =
     {
@@ -9,7 +10,7 @@ let
       # nix option default value, used if `defaultText` is missing
       default ? null,
       # nix option default string or literal expression
-      defaultText ? options.renderOptionValue default // {
+      defaultText ? lib.options.renderOptionValue default // {
         __lang = "nix";
       },
       ...
@@ -20,15 +21,15 @@ let
         if pluginDefault ? _type && pluginDefault ? text then
           pluginDefault
         else
-          options.renderOptionValue pluginDefault // { __lang = "nix"; };
+          lib.options.renderOptionValue pluginDefault // { __lang = "nix"; };
 
       # Format text using markdown code block or inline code
       # Handle `v` being a literalExpression or literalMD type
       toMD =
         v:
         let
-          value = options.renderOptionValue v;
-          multiline = hasInfix "\n" value.text;
+          value = lib.options.renderOptionValue v;
+          multiline = lib.hasInfix "\n" value.text;
           lang = value.__lang or ""; # `__lang` is added internally when parsed in argument defaults
         in
         if value._type == "literalMD" then
@@ -38,7 +39,7 @@ let
         else
           " `${value.text}`";
     in
-    literalMD ''
+    lib.literalMD ''
       ${toMD defaultText}
 
       _Plugin default:_${toMD pluginDefaultText}
@@ -52,7 +53,7 @@ let
   processNixvimArgs =
     args:
     (removeAttrs args [ "pluginDefault" ])
-    // (optionalAttrs (args ? pluginDefault) { defaultText = pluginDefaultText args; });
+    // (lib.optionalAttrs (args ? pluginDefault) { defaultText = pluginDefaultText args; });
 in
 rec {
   inherit pluginDefaultText;
@@ -76,7 +77,7 @@ rec {
   mkCompositeOption' =
     { options, ... }@args:
     mkNullOrOption' (
-      (filterAttrs (n: _: n != "options") args) // { type = types.submodule { inherit options; }; }
+      (lib.filterAttrs (n: _: n != "options") args) // { type = types.submodule { inherit options; }; }
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
@@ -111,7 +112,7 @@ rec {
       args
       // {
         type = with types; either strLua type;
-        apply = v: if isString v then helpers.mkRaw v else v;
+        apply = v: if lib.isString v then helpers.mkRaw v else v;
       }
     );
   mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
@@ -122,7 +123,7 @@ rec {
       args
       // {
         type = with types; either strLuaFn type;
-        apply = v: if isString v then helpers.mkRaw v else v;
+        apply = v: if lib.isString v then helpers.mkRaw v else v;
       }
     );
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
@@ -203,18 +204,18 @@ rec {
       mkEnum' =
         { values, ... }@args:
         let
-          showInline = generators.toPretty { multiline = false; };
+          showInline = lib.generators.toPretty { multiline = false; };
           # Check `v` is either null, one of `values`, or a literal type
           assertIsValid =
             v:
             v == null
-            || elem v values
+            || lib.elem v values
             || (v ? _type && v ? text)
-            || (v ? __raw && isString v.__raw)
+            || (v ? __raw && lib.isString v.__raw)
             || throw "Default value ${showInline v} is not valid for enum ${showInline values}.";
         in
         # Ensure `values` is a list and `pluginDefault` is valid if present
-        assert isList values;
+        assert lib.isList values;
         assert args ? pluginDefault -> assertIsValid args.pluginDefault;
         mkNullableWithRaw' (removeAttrs args [ "values" ] // { type = types.enum values; });
       mkEnum =
@@ -224,7 +225,7 @@ rec {
         values: description:
         mkEnum' {
           inherit values description;
-          pluginDefault = head values;
+          pluginDefault = lib.head values;
         };
 
       mkBorder' =
@@ -234,11 +235,11 @@ rec {
           ...
         }@args:
         mkNullableWithRaw' (
-          (filterAttrs (n: v: n != "name") args)
+          (lib.filterAttrs (n: v: n != "name") args)
           // {
             type = types.border;
-            description = concatStringsSep "\n" (
-              (optional (description != "") description)
+            description = lib.concatStringsSep "\n" (
+              (lib.optional (description != "") description)
               ++ [
                 "Defines the border to use for ${name}."
                 "Accepts same border values as `nvim_open_win()`. See `:help nvim_open_win()` for more info."
@@ -263,9 +264,12 @@ rec {
                 "info"
                 "hint"
               ]);
-            apply = mapNullable (
+            apply = lib.mapNullable (
               value:
-              if isInt value then value else helpers.mkRaw "vim.diagnostic.severity.${strings.toUpper value}"
+              if lib.isInt value then
+                value
+              else
+                helpers.mkRaw "vim.diagnostic.severity.${lib.strings.toUpper value}"
             );
           }
         );
@@ -277,8 +281,9 @@ rec {
           args
           // {
             type = with types; either ints.unsigned logLevel;
-            apply = mapNullable (
-              value: if isInt value then value else helpers.mkRaw "vim.log.levels.${strings.toUpper value}"
+            apply = lib.mapNullable (
+              value:
+              if lib.isInt value then value else helpers.mkRaw "vim.log.levels.${lib.strings.toUpper value}"
             );
           }
         );
@@ -304,7 +309,7 @@ rec {
           {
             inherit pluginDefault;
           }
-          // (optionalAttrs (description != null && description != "") { inherit description; })
+          // (lib.optionalAttrs (description != null && description != "") { inherit description; })
         );
     };
 
@@ -316,7 +321,7 @@ rec {
     # `name` must be present if `description` is missing
     assert (!args ? description) -> args ? name;
     mkNullOrOption' (
-      (filterAttrs (n: _: n != "name") args)
+      (lib.filterAttrs (n: _: n != "name") args)
       // {
         type = types.package;
         description =
@@ -330,7 +335,7 @@ rec {
   # TODO: Deprecated 2024-09-02; remove once all internal uses are gone
   mkPluginPackageOption =
     name: default:
-    mkOption {
+    lib.mkOption {
       type = types.package;
       inherit default;
       description = "Which package to use for the ${name} plugin.";
@@ -342,7 +347,7 @@ rec {
       description,
       example ? null,
     }:
-    mkOption {
+    lib.mkOption {
       type =
         with types;
         submodule {

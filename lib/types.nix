@@ -1,30 +1,30 @@
 # Custom types to be included in `lib.types`
 { lib, helpers }:
-with lib;
-with helpers;
-with lib.types;
 let
+  inherit (lib) types;
+  inherit (lib.nixvim) mkNullOrStr mkNullOrOption;
+
   strLikeType =
     description:
-    mkOptionType {
+    lib.mkOptionType {
       name = "str";
       inherit description;
       descriptionClass = "noun";
-      check = v: isString v || isRawType v;
+      check = v: lib.isString v || isRawType v;
       merge = lib.options.mergeEqualOption;
     };
-  isRawType = v: v ? __raw && isString v.__raw;
+  isRawType = v: v ? __raw && lib.isString v.__raw;
 in
 rec {
   # TODO: deprecate in favor of types.rawLua.check
   # Or move to utils, lua, etc?
   inherit isRawType;
 
-  rawLua = mkOptionType {
+  rawLua = lib.mkOptionType {
     name = "rawLua";
     description = "raw lua code";
     descriptionClass = "noun";
-    merge = mergeEqualOption;
+    merge = lib.options.mergeEqualOption;
     check = v: (isRawType v) || (v ? __empty);
   };
 
@@ -83,14 +83,14 @@ rec {
   strLuaFn = strLikeType "lua function string";
 
   # Overridden when building the documentation
-  eitherRecursive = either;
+  eitherRecursive = types.either;
 
   listOfLen =
     elemType: len:
-    addCheck (listOf elemType) (v: builtins.length v == len)
+    types.addCheck (types.listOf elemType) (v: builtins.length v == len)
     // {
       description = "list of ${toString len} ${
-        optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+        types.optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
       }";
     };
 }

@@ -1,5 +1,4 @@
 { lib }:
-with lib;
 rec {
   # Get a (sub)option by walking the path,
   # checking for submodules along the way
@@ -7,14 +6,14 @@ rec {
     opt: prefix: optionPath:
     if optionPath == [ ] then
       opt
-    else if isOption opt then
+    else if lib.isOption opt then
       getOptionRecursive (opt.type.getSubOptions prefix) prefix optionPath
     else
       let
-        name = head optionPath;
-        opt' = getAttr name opt;
+        name = lib.head optionPath;
+        opt' = lib.getAttr name opt;
         prefix' = prefix ++ [ name ];
-        optionPath' = drop 1 optionPath;
+        optionPath' = lib.drop 1 optionPath;
       in
       getOptionRecursive opt' prefix' optionPath';
 
@@ -24,24 +23,26 @@ rec {
     optionPath: replacementInstructions:
     { options, ... }:
     {
-      options = setAttrByPath optionPath (mkOption {
-        # When (e.g.) `mkAttrs` is used on a submodule, this option will be evaluated.
-        # Therefore we have to apply _something_ (null) when there's no definition.
-        apply =
-          v:
-          let
-            # Avoid "option used but not defined" errors
-            res = builtins.tryEval v;
-          in
-          if res.success then res.value else null;
-        visible = false;
-      });
+      options = lib.setAttrByPath optionPath (
+        lib.mkOption {
+          # When (e.g.) `mkAttrs` is used on a submodule, this option will be evaluated.
+          # Therefore we have to apply _something_ (null) when there's no definition.
+          apply =
+            v:
+            let
+              # Avoid "option used but not defined" errors
+              res = builtins.tryEval v;
+            in
+            if res.success then res.value else null;
+          visible = false;
+        }
+      );
       config.warnings =
         let
           opt = getOptionRecursive options [ ] optionPath;
         in
-        optional opt.isDefined ''
-          The option definition `${showOption optionPath}' in ${showFiles opt.files} is deprecated.
+        lib.optional opt.isDefined ''
+          The option definition `${lib.showOption optionPath}' in ${lib.showFiles opt.files} is deprecated.
           ${replacementInstructions}
         '';
     };
@@ -51,11 +52,11 @@ rec {
     map (
       option':
       let
-        option = toList option';
+        option = lib.toList option';
         oldPath = oldPrefix ++ option;
-        newPath = newPrefix ++ map nixvim.toSnakeCase option;
+        newPath = newPrefix ++ map lib.nixvim.toSnakeCase option;
       in
-      mkRenamedOptionModule oldPath newPath
+      lib.mkRenamedOptionModule oldPath newPath
     );
 
   # A clone of types.coercedTo, but it prints a warning when oldType is used.

@@ -1,9 +1,11 @@
 { lib, helpers }:
-with lib;
+let
+  inherit (lib) types;
+in
 rec {
   autoGroupOption = types.submodule {
     options = {
-      clear = mkOption {
+      clear = lib.mkOption {
         type = types.bool;
         description = "Clear existing commands if the group already exists.";
         default = true;
