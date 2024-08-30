@@ -324,11 +324,6 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       description = "Grammar packages to install";
     };
 
-    iconsPackage = helpers.mkPackageOption {
-      name = "nvim-web-devicons";
-      default = pkgs.vimPlugins.nvim-web-devicons;
-    };
-
     # TODO: Implement rawLua support to be passed into extraConfigLua.
     languageRegister = mkOption {
       type = with types; attrsOf (coercedTo str toList (listOf str));
@@ -416,11 +411,10 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
     extraFiles = mkIf cfg.nixvimInjections { "queries/nix/injections.scm".source = ./injections.scm; };
 
-    extraPlugins =
-      lib.optional (cfg.iconsPackage != null) cfg.iconsPackage
-      ++ lib.optional (cfg.package != null) (
-        if cfg.nixGrammars then cfg.package.withPlugins (_: cfg.grammarPackages) else cfg.package
-      );
+    extraPlugins = mkIf (cfg.package != null) [
+      (mkIf cfg.nixGrammars (cfg.package.withPlugins (_: cfg.grammarPackages)))
+      (mkIf (!cfg.nixGrammars) cfg.package)
+    ];
 
     extraPackages = [
       cfg.gccPackage
