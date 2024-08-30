@@ -6,7 +6,12 @@
 }:
 with lib;
 let
-  inherit (lib.nixvim) keymaps mkNullOrOption toLuaObject;
+  inherit (lib.nixvim)
+    keymaps
+    mkNullOrOption
+    mkPackageOption
+    toLuaObject
+    ;
 in
 # TODO:add support for additional filetypes. This requires autocommands!
 lib.nixvim.neovim-plugin.mkNeovimPlugin config {
@@ -85,10 +90,17 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
         added to `extraPackages`.
       '';
     };
+
+    iconsPackage = mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
   };
 
   callSetup = false;
   extraConfig = cfg: {
+    extraPlugins = mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
+
     extraConfigVim = mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
