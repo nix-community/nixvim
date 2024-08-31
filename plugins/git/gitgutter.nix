@@ -193,7 +193,7 @@ in
         foldtext = "gitgutter#fold#foldtext";
       };
 
-      extraPackages = [ cfg.gitPackage ] ++ [ grepPackage ];
+      extraPackages = [ cfg.gitPackage ] ++ grepPackage;
 
       globals = {
         gitgutter_max_signs = mkIf (cfg.maxSigns != null) cfg.maxSigns;
