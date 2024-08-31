@@ -1,3 +1,4 @@
+{ lib, pkgs, ... }:
 {
   # Empty configuration
   empty = {
@@ -136,10 +137,19 @@
     };
   };
 
-  no-packages = {
+  no-packages = cfg: {
     plugins.packer = {
       enable = true;
       gitPackage = null;
     };
+
+    assertions = [
+      {
+        assertion = lib.all (
+          x: lib.trace "${x.pname or ""}" x.pname or null != "git"
+        ) cfg.config.extraPackages;
+        message = "A git package found when it wasn't expected";
+      }
+    ];
   };
 }
