@@ -74,4 +74,15 @@
       backend = "ueberzug";
     };
   };
+
+  no-packages = {
+    test.runNvim = false;
+
+    plugins.image = {
+      enable = true;
+      backend = "kitty";
+      curlPackage = null;
+      ueberzugPackage = null;
+    };
+  };
 }

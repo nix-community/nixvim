@@ -22,6 +22,14 @@ in
       ];
     };
 
+    curlPackage = lib.mkPackageOption pkgs "curl" {
+      nullable = true;
+    };
+
+    ueberzugPackage = lib.mkPackageOption pkgs "ueberzug" {
+      nullable = true;
+    };
+
     backend =
       helpers.defaultNullOpts.mkEnumFirstDefault
         [
@@ -125,8 +133,8 @@ in
     extraPackages = [
       # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
       # all integrations but shipping `curl` is not too heavy.
-      pkgs.curl
-    ] ++ optional (cfg.backend == "ueberzug") pkgs.ueberzugpp;
+      cfg.curlPackage
+    ] ++ optional (cfg.backend == "ueberzug") cfg.ueberzugPackage;
 
     extraConfigLua =
       let
