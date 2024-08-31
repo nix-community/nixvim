@@ -220,6 +220,7 @@
     ./utils/refactoring.nix
     ./utils/rest.nix
     ./utils/sandwich.nix
+    ./utils/scope.nix
     ./utils/sleuth.nix
     ./utils/smart-splits.nix
     ./utils/spectre.nix
