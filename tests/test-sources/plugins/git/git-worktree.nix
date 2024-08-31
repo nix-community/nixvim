@@ -28,7 +28,7 @@
   };
 
   no-packages = {
-    plugins.neogit = {
+    plugins.git-worktree = {
       enable = true;
       gitPackage = null;
     };
