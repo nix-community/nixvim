@@ -21,8 +21,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraPackages = [ pkgs.bat ];
-
   # TODO introduced 2024-03-24: remove 2024-05-24
   deprecateExtraOptions = true;
   optionsRenamedToSettings = [ "defaults" ];
@@ -95,6 +93,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       "vimPlugins"
       "nvim-web-devicons"
     ] { nullable = true; };
+
+    batPackage = lib.mkPackageOption pkgs "bat" {
+      nullable = true;
+    };
   };
 
   callSetup = false;
@@ -104,6 +106,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     extraConfigVim = mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
+
+    extraPackages = [ cfg.batPackage ];
 
     keymaps = mapAttrsToList (
       key: mapping:

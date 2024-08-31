@@ -34,6 +34,7 @@
   no-packages = {
     plugins.telescope = {
       enable = true;
+      batPackage = null;
       iconsPackage = null;
     };
   };
