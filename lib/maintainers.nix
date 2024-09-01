@@ -107,4 +107,10 @@
     githubId = 6452260;
     name = "Andrew Plaza";
   };
+  my7h3le = {
+    email = "mandate-word-dupe@duck.com";
+    github = "my7h3le";
+    githubId = 7899547;
+    name = "Tash";
+  };
 }
