@@ -111,7 +111,18 @@
           }
         ];
       };
-      extensions = [ "nvim-tree" ];
+      extensions = [
+        "nvim-tree"
+        {
+          sections = {
+            lualine_a = [ "filename" ];
+          };
+          inactive_sections = {
+            lualine_x = [ "location" ];
+          };
+          filetypes = [ "markdown" ];
+        }
+      ];
     };
   };
 

@@ -196,7 +196,7 @@ in
       inactiveWinbar = mkEmptySectionOption "Inactive Winbar configuration";
 
       extensions = mkOption {
-        type = types.nullOr (types.listOf types.str);
+        type = with lib.types; nullOr (listOf (either str (attrsOf anything)));
         default = null;
         example = ''[ "fzf" ]'';
         description = "list of enabled extensions";
