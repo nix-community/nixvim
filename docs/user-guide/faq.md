@@ -29,6 +29,8 @@ The [nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#managing-plugins-w
 
 When using NixVim it is possible to encounter an error of the type `attribute 'name' missing`, for example it could look like:
 
+<!-- TODO: Update example now that we use `mkPackageOption` -->
+
 ```
        (stack trace truncated; use '--show-trace' to show the full trace)
 

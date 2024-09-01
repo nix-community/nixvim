@@ -44,7 +44,8 @@ The vast majority of plugins fall into one of those two categories:
   - `name`: The name of the plugin. The resulting nixvim module will have `plugins.<name>` as a path.\
     For a plugin named `foo-bar.nvim`, set this to `foo-bar` (subject to exceptions).
   - `originalName`: The "real" name of the plugin (i.e. `foo-bar.nvim`). This is used mostly in documentation.
-  - `defaultPackage`: The nixpkgs package for this plugin (e.g. `pkgs.vimPlugins.foo-bar-nvim`).
+  - `package`: The nixpkgs package attr for this plugin
+     e.g. `"foo-bar-nvim` for `pkgs.vimPlugins.foo-bar-nvim`, or `[ "hello" "world" ]` for `pkgs.hello.world`.
   - `maintainers`: Register yourself as a maintainer for this plugin:
     - `[lib.maintainers.JosephFourier]` if you are already registered as a [`nixpkgs` maintainer](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix)
     - `[helpers.maintainers.GaspardMonge]` otherwise. (Also add yourself to [`maintainers.nix`](lib/maintainers.nix))

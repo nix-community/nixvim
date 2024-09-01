@@ -308,6 +308,7 @@ rec {
         );
     };
 
+  # TODO: Deprecated 2024-09-02; remove once all internal uses are gone
   mkPackageOption =
     args:
     # A default package is required
@@ -326,6 +327,7 @@ rec {
       }
     );
 
+  # TODO: Deprecated 2024-09-02; remove once all internal uses are gone
   mkPluginPackageOption =
     name: default:
     mkOption {

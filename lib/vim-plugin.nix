@@ -4,7 +4,7 @@ with lib;
   mkVimPlugin =
     {
       name,
-      url ? if defaultPackage != null then defaultPackage.meta.homepage else null,
+      url ? throw "default",
       maintainers,
       imports ? [ ],
       description ? null,
@@ -16,7 +16,13 @@ with lib;
       colorscheme ? name,
       # options
       originalName ? name,
-      defaultPackage ? null,
+      # WARNING: `defaultPackage` is deprecated by `package`,
+      defaultPackage ? throw "mkVimPlugin called without either `package` or `defaultPackage`.",
+      # Can be a string, a list of strings, or a module option:
+      # - A string will be intrpreted as `pkgs.vimPlugins.${package}`
+      # - A list will be interpreted as a "pkgs path", e.g. `pkgs.${elem1}.${elem2}.${etc...}`
+      # - An option will be used as-is, but should be built using `lib.mkPackageOption`
+      package ? helpers.mkPluginPackageOption originalName defaultPackage,
       settingsOptions ? { },
       settingsExample ? null,
       globalPrefix ? "",
@@ -25,16 +31,9 @@ with lib;
       extraConfig ? cfg: { },
       extraPlugins ? [ ],
       extraPackages ? [ ],
-    }:
+    }@args:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
-
-      # does this evaluate package?
-      packageOption =
-        if defaultPackage == null then
-          { }
-        else
-          { package = helpers.mkPluginPackageOption name defaultPackage; };
 
       createSettingsOption = (isString globalPrefix) && (globalPrefix != "");
 
@@ -54,42 +53,61 @@ with lib;
         };
       };
 
-      modules = [
-        (
-          { config, ... }:
-          let
-            cfg = config.${namespace}.${name};
-          in
-          {
-            config = mkIf cfg.enable (mkMerge [
-              {
-                inherit extraPackages;
-                globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) (cfg.settings or { });
-                # does this evaluate package? it would not be desired to evaluate package if we use another package.
-                extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
-              }
-              (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
-              (extraConfig cfg)
-            ]);
-          }
-        )
-      ];
+      module =
+        {
+          config,
+          options,
+          pkgs,
+          ...
+        }:
+        let
+          cfg = config.${namespace}.${name};
+          opt = options.${namespace}.${name};
+        in
+        {
+          meta = {
+            inherit maintainers;
+            nixvimInfo = {
+              inherit description;
+              url = args.url or opt.package.default.meta.homepage;
+              path = [
+                namespace
+                name
+              ];
+            };
+          };
+
+          options.${namespace}.${name} = {
+            enable = mkEnableOption originalName;
+            package =
+              if lib.isOption package then
+                package
+              else
+                lib.mkPackageOption pkgs originalName {
+                  default =
+                    if builtins.isList package then
+                      package
+                    else
+                      [
+                        "vimPlugins"
+                        package
+                      ];
+                };
+          } // settingsOption // extraOptions;
+
+          config = mkIf cfg.enable (mkMerge [
+            {
+              inherit extraPackages;
+              globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) (cfg.settings or { });
+              # does this evaluate package? it would not be desired to evaluate package if we use another package.
+              extraPlugins = extraPlugins ++ optional (cfg.package != null) cfg.package;
+            }
+            (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
+            (extraConfig cfg)
+          ]);
+        };
     in
     {
-      meta = {
-        inherit maintainers;
-        nixvimInfo = {
-          inherit description url;
-          path = [
-            namespace
-            name
-          ];
-        };
-      };
-      options.${namespace}.${name} = {
-        enable = mkEnableOption originalName;
-      } // settingsOption // packageOption // extraOptions;
-
       imports =
         let
           basePluginPath = [
@@ -99,11 +117,10 @@ with lib;
           settingsPath = basePluginPath ++ [ "settings" ];
         in
         imports
+        ++ [ module ]
         ++ (optional (deprecateExtraConfig && createSettingsOption) (
           mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) settingsPath
         ))
-        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings)
-        ++ modules;
-
+        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
     };
 }
