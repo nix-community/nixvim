@@ -1,11 +1,10 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "my-plugin";
   originalName = "my-plugin.nvim"; # TODO replace (or remove entirely if it is the same as `name`)
   defaultPackage = pkgs.vimPlugins.my-plugin-nvim; # TODO replace
@@ -14,11 +13,11 @@ helpers.neovim-plugin.mkNeovimPlugin config {
 
   # Optionally, explicitly declare some options. You don't have to.
   settingsOptions = {
-    foo = helpers.defaultNullOpts.mkUnsignedInt 97 ''
+    foo = lib.nixvim.defaultNullOpts.mkUnsignedInt 97 ''
       The best birth year.
     '';
 
-    great_feature = helpers.defaultNullOpts.mkBool false ''
+    great_feature = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to enable the great feature.
     '';
   };
