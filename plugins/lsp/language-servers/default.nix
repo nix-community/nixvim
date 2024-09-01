@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
@@ -11,7 +10,7 @@ let
     {
       name = "ansiblels";
       description = "ansiblels for Ansible";
-      package = pkgs.ansible-language-server;
+      package = "ansible-language-server";
       cmd = cfg: [
         "${cfg.package}/bin/ansible-language-server"
         "--stdio"
@@ -28,7 +27,7 @@ let
     {
       name = "astro";
       description = "astrols for Astro";
-      package = pkgs.astro-language-server;
+      package = "astro-language-server";
       cmd = cfg: [
         "${cfg.package}/bin/astro-ls"
         "--stdio"
@@ -37,12 +36,12 @@ let
     {
       name = "bashls";
       description = "bashls for bash";
-      package = pkgs.bash-language-server;
+      package = "bash-language-server";
     }
     {
       name = "beancount";
       description = "beancount-language-server";
-      package = pkgs.beancount-language-server;
+      package = "beancount-language-server";
     }
     {
       name = "biome";
@@ -51,7 +50,7 @@ let
     {
       name = "bufls";
       description = "Prototype for a Protobuf language server compatible with Buf.";
-      package = pkgs.buf-language-server;
+      package = "buf-language-server";
     }
     {
       name = "ccls";
@@ -60,29 +59,27 @@ let
     {
       name = "clangd";
       description = "clangd LSP for C/C++";
-      package = pkgs.clang-tools;
+      package = "clang-tools";
     }
     {
       name = "clojure-lsp";
       description = "clojure-lsp for Clojure";
       serverName = "clojure_lsp";
-      package = pkgs.clojure-lsp;
     }
     {
       name = "cmake";
       description = "cmake language server";
-      package = pkgs.cmake-language-server;
+      package = "cmake-language-server";
     }
     {
       name = "csharp-ls";
       description = "csharp-ls for C#";
-      package = pkgs.csharp-ls;
       serverName = "csharp_ls";
     }
     {
       name = "cssls";
       description = "cssls for CSS";
-      package = pkgs.vscode-langservers-extracted;
+      package = "vscode-langservers-extracted";
       cmd = cfg: [
         "${cfg.package}/bin/vscode-css-language-server"
         "--stdio"
@@ -91,19 +88,19 @@ let
     {
       name = "dagger";
       description = "dagger for Cuelang";
-      package = pkgs.cuelsp;
+      package = "cuelsp";
     }
     {
       name = "dartls";
       description = "dart language-server";
-      package = pkgs.dart;
+      package = "dart";
       settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
       settings = cfg: { dart = cfg; };
     }
     {
       name = "denols";
       description = "denols for Deno";
-      package = pkgs.deno;
+      package = "deno";
     }
     {
       name = "dhall-lsp-server";
@@ -114,7 +111,10 @@ let
       name = "digestif";
       description = "digestif for LaTeX";
       # luaPackages.digestif is currently broken, using lua54Packages instead
-      package = pkgs.lua54Packages.digestif;
+      package = [
+        "lua54Packages"
+        "digestif"
+      ];
     }
     {
       name = "docker-compose-language-service";
@@ -124,7 +124,7 @@ let
     {
       name = "dockerls";
       description = "dockerls for Dockerfile";
-      package = pkgs.dockerfile-language-server-nodejs;
+      package = "dockerfile-language-server-nodejs";
       cmd = cfg: [
         "${cfg.package}/bin/docker-langserver"
         "--stdio"
@@ -133,22 +133,24 @@ let
     {
       name = "efm";
       description = "efm-langserver for misc tools";
-      package = pkgs.efm-langserver;
+      package = "efm-langserver";
     }
     {
       name = "elmls";
       description = "elmls for Elm";
-      package = pkgs.elmPackages.elm-language-server;
+      package = [
+        "elmPackages"
+        "elm-language-server"
+      ];
     }
     {
       name = "emmet-ls";
       description = "emmet_ls, emmet support based on LSP";
-      package = pkgs.emmet-ls;
       serverName = "emmet_ls";
     }
     {
       name = "eslint";
-      package = pkgs.vscode-langservers-extracted;
+      package = "vscode-langservers-extracted";
       cmd = cfg: [
         "${cfg.package}/bin/vscode-eslint-language-server"
         "--stdio"
@@ -156,7 +158,7 @@ let
     }
     {
       name = "elixirls";
-      package = pkgs.elixir-ls;
+      package = "elixir-ls";
       cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
     }
     {
@@ -172,12 +174,11 @@ let
     {
       name = "fsautocomplete";
       description = "fsautocomplete for F#";
-      package = pkgs.fsautocomplete;
     }
     {
       name = "futhark-lsp";
       description = "futhark-lsp for Futhark";
-      package = pkgs.futhark;
+      package = "futhark";
       serverName = "futhark_lsp";
     }
     {
@@ -197,12 +198,15 @@ let
       name = "golangci-lint-ls";
       description = "golangci-lint-ls for Go";
       serverName = "golangci_lint_ls";
-      package = pkgs.golangci-lint-langserver;
+      package = "golangci-lint-langserver";
     }
     {
       name = "graphql";
       description = "graphql for GraphQL";
-      package = pkgs.nodePackages.graphql-language-service-cli;
+      package = [
+        "nodePackages"
+        "graphql-language-service-cli"
+      ];
     }
     {
       name = "helm-ls";
@@ -212,7 +216,7 @@ let
     {
       name = "hls";
       description = "haskell language server";
-      package = pkgs.haskell-language-server;
+      package = "haskell-language-server";
       cmd = cfg: [
         "haskell-language-server-wrapper"
         "--lsp"
@@ -221,7 +225,7 @@ let
     {
       name = "html";
       description = "HTML language server from `vscode-langservers-extracted`";
-      package = pkgs.vscode-langservers-extracted;
+      package = "vscode-langservers-extracted";
       cmd = cfg: [
         "${cfg.package}/bin/vscode-html-language-server"
         "--stdio"
@@ -230,12 +234,15 @@ let
     {
       name = "htmx";
       description = "htmx for HTMX";
-      package = pkgs.htmx-lsp;
+      package = "htmx-lsp";
     }
     {
       name = "intelephense";
       description = "intelephense for PHP";
-      package = pkgs.nodePackages.intelephense;
+      package = [
+        "nodePackages"
+        "intelephense"
+      ];
     }
     {
       name = "java-language-server";
@@ -252,7 +259,7 @@ let
     {
       name = "jsonls";
       description = "jsonls for JSON";
-      package = pkgs.vscode-langservers-extracted;
+      package = "vscode-langservers-extracted";
       cmd = cfg: [
         "${cfg.package}/bin/vscode-json-language-server"
         "--stdio"
@@ -262,7 +269,7 @@ let
     {
       name = "jsonnet-ls";
       description = "jsonnet language server";
-      package = pkgs.jsonnet-language-server;
+      package = "jsonnet-language-server";
       serverName = "jsonnet_ls";
       settingsOptions = import ./jsonnet-ls-settings.nix { inherit lib helpers; };
     }
@@ -281,7 +288,7 @@ let
     {
       name = "leanls";
       description = "leanls for Lean";
-      package = pkgs.lean4;
+      package = "lean4";
     }
     {
       name = "lemminx";
@@ -294,14 +301,14 @@ let
     {
       name = "ltex";
       description = "ltex-ls for LanguageTool";
-      package = pkgs.ltex-ls;
+      package = "ltex-ls";
       settingsOptions = import ./ltex-settings.nix { inherit lib helpers; };
       settings = cfg: { ltex = cfg; };
     }
     {
       name = "lua-ls";
       description = "lua-ls for Lua";
-      package = pkgs.lua-language-server;
+      package = "lua-language-server";
       serverName = "lua_ls";
       settingsOptions = import ./lua-ls-settings.nix { inherit lib helpers; };
       settings = cfg: { Lua = cfg; };
@@ -309,7 +316,6 @@ let
     {
       name = "marksman";
       description = "marksman for Markdown";
-      package = pkgs.marksman;
     }
     {
       name = "metals";
@@ -318,7 +324,7 @@ let
     {
       name = "nextls";
       description = "The language server for Elixir that just works.";
-      package = pkgs.next-ls;
+      package = "next-ls";
       cmd = cfg: [
         "nextls"
         "--stdio"
@@ -332,13 +338,13 @@ let
     {
       name = "nickel-ls";
       description = "nls for Nickel";
-      package = pkgs.nls;
+      package = "nls";
       serverName = "nickel_ls";
     }
     {
       name = "nil-ls";
       description = "nil for Nix";
-      package = pkgs.nil;
+      package = "nil";
       serverName = "nil_ls";
       settingsOptions = import ./nil-ls-settings.nix { inherit lib helpers; };
       settings = cfg: { nil = cfg; };
@@ -346,12 +352,11 @@ let
     {
       name = "nimls";
       description = "nimls for Nim";
-      package = pkgs.nimlsp;
+      package = "nimlsp";
     }
     {
       name = "nixd";
       description = "nixd for Nix";
-      package = pkgs.nixd;
       settings = cfg: { nixd = cfg; };
       settingsOptions = import ./nixd-settings.nix { inherit lib helpers; };
       extraConfig = cfg: {
@@ -369,17 +374,19 @@ let
     {
       name = "ocamllsp";
       description = "ocamllsp for OCaml";
-      package = pkgs.ocamlPackages.ocaml-lsp;
+      package = [
+        "ocamlPackages"
+        "ocaml-lsp"
+      ];
     }
     {
       name = "ols";
       description = "ols for the Odin programming language";
-      package = pkgs.ols;
     }
     {
       name = "omnisharp";
       description = "OmniSharp language server for C#";
-      package = pkgs.omnisharp-roslyn;
+      package = "omnisharp-roslyn";
       cmd = cfg: [ "${cfg.package}/bin/OmniSharp" ];
       settings = cfg: { omnisharp = cfg; };
       settingsOptions = {
@@ -438,39 +445,51 @@ let
     {
       name = "perlpls";
       description = "PLS for Perl";
-      package = pkgs.perlPackages.PLS;
+      package = [
+        "perlPackages"
+        "PLS"
+      ];
     }
     {
       name = "pest-ls";
       description = "pest_ls for pest";
-      package = pkgs.pest-ide-tools;
+      package = "pest-ide-tools";
       serverName = "pest_ls";
     }
     {
       name = "phpactor";
       description = "phpactor for PHP";
-      package = pkgs.phpactor;
+      package = "phpactor";
     }
     {
       name = "prismals";
       description = "prismals for Prisma";
-      package = pkgs.nodePackages."@prisma/language-server";
+      package = [
+        "nodePackages"
+        "@prisma/language-server"
+      ];
     }
     {
       name = "prolog-ls";
       description = "prolog_ls for SWI-Prolog";
       serverName = "prolog_ls";
-      package = pkgs.swiProlog;
+      package = "swiProlog";
     }
     {
       name = "purescriptls";
       description = "purescriptls for PureScript";
-      package = pkgs.nodePackages.purescript-language-server;
+      package = [
+        "nodePackages"
+        "purescript-language-server"
+      ];
     }
     {
       name = "pylsp";
       description = "pylsp for Python";
-      package = pkgs.python3Packages.python-lsp-server;
+      package = [
+        "python3Packages"
+        "python-lsp-server"
+      ];
       settings = cfg: { pylsp = cfg; };
     }
     {
@@ -484,7 +503,10 @@ let
     {
       name = "r-language-server";
       description = "languageserver for R";
-      package = pkgs.rPackages.languageserver;
+      package = [
+        "rPackages"
+        "languageserver"
+      ];
       serverName = "r_language_server";
     }
     {
@@ -505,10 +527,6 @@ let
     {
       name = "ruff-lsp";
       description = "ruff-lsp, for Python";
-      # TODO: Added 2024-08-19; remove 2024-11-19
-      # Ruff-lsp was moved out of python3Packages set without alias
-      # Using fallback as a transition period
-      package = pkgs.ruff-lsp or pkgs.python3Packages.ruff-lsp;
       serverName = "ruff_lsp";
     }
     {
@@ -527,12 +545,15 @@ let
     {
       name = "solargraph";
       description = "solargraph for Ruby";
-      package = pkgs.rubyPackages.solargraph;
+      package = [
+        "rubyPackages"
+        "solargraph"
+      ];
     }
     {
       name = "sourcekit";
       description = "sourcekit language server for Swift and C/C++/Objective-C";
-      package = pkgs.sourcekit-lsp;
+      package = "sourcekit-lsp";
     }
     {
       name = "sqls";
@@ -541,17 +562,22 @@ let
     {
       name = "svelte";
       description = "svelte language server for Svelte";
-      package = pkgs.nodePackages.svelte-language-server;
+      package = [
+        "nodePackages"
+        "svelte-language-server"
+      ];
     }
     {
       name = "tailwindcss";
       description = "tailwindcss language server for tailwindcss";
-      package = pkgs.nodePackages."@tailwindcss/language-server";
+      package = [
+        "nodePackages"
+        "@tailwindcss/language-server"
+      ];
     }
     {
       name = "taplo";
       description = "taplo for TOML";
-      package = pkgs.taplo;
     }
     {
       name = "templ";
@@ -560,7 +586,7 @@ let
     {
       name = "terraformls";
       description = "terraform-ls for terraform";
-      package = pkgs.terraform-ls;
+      package = "terraform-ls";
     }
     {
       name = "texlab";
@@ -578,7 +604,7 @@ let
     {
       name = "tsserver";
       description = "tsserver for TypeScript";
-      package = pkgs.typescript-language-server;
+      package = "typescript-language-server";
     }
     {
       name = "typos-lsp";
@@ -589,13 +615,12 @@ let
       name = "typst-lsp";
       serverName = "typst_lsp";
       description = "typst-lsp for typst";
-      package = pkgs.typst-lsp;
     }
     {
       name = "vala-ls";
       description = "vala_ls for Vala";
       serverName = "vala_ls";
-      package = pkgs.vala-language-server;
+      package = "vala-language-server";
     }
     {
       name = "vhdl-ls";
@@ -626,17 +651,23 @@ let
     {
       name = "vuels";
       description = "vuels for Vue";
-      package = pkgs.nodePackages.vls;
+      package = [
+        "nodePackages"
+        "vls"
+      ];
     }
     {
       name = "volar";
       description = "@volar/vue-language-server for Vue";
-      package = pkgs.nodePackages."@volar/vue-language-server";
+      package = [
+        "nodePackages"
+        "@volar/vue-language-server"
+      ];
     }
     {
       name = "yamlls";
       description = "yamlls for YAML";
-      package = pkgs.yaml-language-server;
+      package = "yaml-language-server";
       settings = cfg: { yaml = cfg; };
     }
     {
@@ -648,7 +679,7 @@ in
 {
   imports =
     let
-      mkLsp = import ./_mk-lsp.nix { inherit lib config pkgs; };
+      mkLsp = import ./_mk-lsp.nix;
       lspModules = map mkLsp servers;
     in
     lspModules

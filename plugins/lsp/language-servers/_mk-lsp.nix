@@ -4,24 +4,24 @@
 #
 # Helper function that returns the Nix module `plugins.lsp.servers.<name>`.
 #
-{ pkgs, ... }:
 {
   name,
   description ? "Enable ${name}.",
   serverName ? name,
-  package ? pkgs.${name},
-  url ? package.meta.homepage or null,
+  package ? name,
+  url ? null,
   cmd ? (cfg: null),
   settings ? (cfg: cfg),
   settingsOptions ? { },
   extraConfig ? cfg: { },
   extraOptions ? { },
   ...
-}:
+}@args:
 # returns a module
 {
   pkgs,
   config,
+  options,
   helpers,
   lib,
   ...
@@ -29,11 +29,12 @@
 with lib;
 let
   cfg = config.plugins.lsp.servers.${name};
+  opt = options.plugins.lsp.servers.${name};
 in
 {
   meta.nixvimInfo = {
     # TODO: description
-    inherit url;
+    url = args.url or opt.package.default.meta.homepage or null;
     path = [
       "plugins"
       "lsp"
@@ -46,11 +47,14 @@ in
     plugins.lsp.servers.${name} = {
       enable = mkEnableOption description;
 
-      package = mkOption {
-        default = package;
-        type = types.nullOr types.package;
-        description = "Which package to use for ${name}.";
-      };
+      package =
+        if lib.isOption package then
+          package
+        else
+          lib.mkPackageOption pkgs name {
+            nullable = true;
+            default = package;
+          };
 
       cmd = mkOption {
         type = with types; nullOr (listOf str);
