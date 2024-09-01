@@ -7,7 +7,10 @@
 {
   pluginName,
   sourceName,
-  defaultPackage ? pkgs.vimPlugins.${pluginName},
+  package ? lib.mkPackageOption pkgs [
+    "vimPlugins"
+    pluginName
+  ] { },
   maintainers ? [ lib.maintainers.GaetanLepage ],
   imports ? [ ],
   ...
@@ -18,7 +21,7 @@ helpers.vim-plugin.mkVimPlugin (
     "sourceName"
   ]
   // {
-    inherit defaultPackage maintainers;
+    inherit package maintainers;
     name = pluginName;
 
     imports = imports ++ [
