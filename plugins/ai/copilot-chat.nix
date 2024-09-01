@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "copilot-chat";
   originalName = "CopilotChat.nvim";
   luaName = "CopilotChat";

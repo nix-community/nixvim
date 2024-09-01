@@ -1,10 +1,9 @@
 {
   helpers,
   pkgs,
-  config,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "baleia";
   originalName = "baleia.nvim";
   defaultPackage = pkgs.vimPlugins.baleia-nvim;

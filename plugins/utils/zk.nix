@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "zk";
   originalName = "zk.nvim";
   defaultPackage = pkgs.vimPlugins.zk-nvim;

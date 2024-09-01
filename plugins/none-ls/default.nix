@@ -7,7 +7,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "none-ls";
   originalName = "none-ls.nvim";
   luaName = "null-ls";

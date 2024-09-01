@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "gitsigns";
   originalName = "gitsigns.nvim";
   defaultPackage = pkgs.vimPlugins.gitsigns-nvim;

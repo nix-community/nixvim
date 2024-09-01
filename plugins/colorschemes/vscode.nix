@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "vscode";
   isColorscheme = true;
   originalName = "vscode-nvim";

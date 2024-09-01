@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "obsidian";
   originalName = "obsidian.nvim";
   defaultPackage = pkgs.vimPlugins.obsidian-nvim;

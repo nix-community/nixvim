@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -51,7 +50,7 @@ let
     orderByWindowNumber = "OrderByWindowNumber";
   };
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "barbar";
   originalName = "barbar.nvim";
   defaultPackage = pkgs.vimPlugins.barbar-nvim;

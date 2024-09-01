@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "debugprint";
   originalName = "debugprint.nvim";
   defaultPackage = pkgs.vimPlugins.debugprint-nvim;

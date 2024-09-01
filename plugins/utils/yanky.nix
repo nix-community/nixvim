@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "yanky";
   originalName = "yanky.nvim";
   defaultPackage = pkgs.vimPlugins.yanky-nvim;

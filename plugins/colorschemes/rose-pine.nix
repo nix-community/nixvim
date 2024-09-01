@@ -1,13 +1,12 @@
 {
   lib,
   pkgs,
-  config,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "rose-pine";
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.rose-pine;

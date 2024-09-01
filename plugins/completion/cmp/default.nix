@@ -2,14 +2,13 @@
   lib,
   helpers,
   pkgs,
-  config,
   ...
-}@args:
+}:
 let
   cmpOptions = import ./options { inherit lib helpers; };
 in
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "cmp";
   originalName = "nvim-cmp";
   defaultPackage = pkgs.vimPlugins.nvim-cmp;

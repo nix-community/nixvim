@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "modus";
   luaName = "modus-themes";
   originalName = "modus-themes.nvim";

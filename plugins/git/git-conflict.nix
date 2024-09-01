@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "git-conflict";
   originalName = "git-conflict.nvim";
   defaultPackage = pkgs.vimPlugins.git-conflict-nvim;

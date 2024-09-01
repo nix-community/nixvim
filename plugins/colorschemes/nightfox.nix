@@ -1,14 +1,13 @@
 {
   lib,
   pkgs,
-  config,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "nightfox";
   isColorscheme = true;
   originalName = "nightfox.nvim";

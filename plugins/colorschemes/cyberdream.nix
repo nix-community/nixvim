@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -7,7 +6,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cyberdream";
   isColorscheme = true;
   originalName = "cyberdream.nvim";

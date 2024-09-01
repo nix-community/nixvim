@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "zen-mode";
   originalName = "zen-mode.nvim";
   defaultPackage = pkgs.vimPlugins.zen-mode-nvim;

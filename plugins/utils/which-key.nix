@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  config,
   options,
   ...
 }:
@@ -77,7 +76,7 @@ let
   ];
 
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "which-key";
   originalName = "which-key.nvim";
   defaultPackage = pkgs.vimPlugins.which-key-nvim;

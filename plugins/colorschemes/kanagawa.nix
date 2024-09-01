@@ -1,14 +1,13 @@
 {
   lib,
   pkgs,
-  config,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "kanagawa";
   isColorscheme = true;
   originalName = "kanagawa.nvim";

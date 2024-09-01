@@ -1,10 +1,9 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "onedark";
   isColorscheme = true;
   originalName = "onedark.nvim";

@@ -5,7 +5,7 @@
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "otter";
   originalName = "otter.nvim";
   defaultPackage = pkgs.vimPlugins.otter-nvim;

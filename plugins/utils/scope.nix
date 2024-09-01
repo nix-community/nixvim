@@ -1,10 +1,9 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "scope";
   originalName = "scope.nvim";
   defaultPackage = pkgs.vimPlugins.scope-nvim;

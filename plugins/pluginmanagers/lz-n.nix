@@ -1,7 +1,6 @@
 {
   lib,
   options,
-  config,
   pkgs,
   ...
 }:
@@ -9,7 +8,7 @@ with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-nixvim.neovim-plugin.mkNeovimPlugin config {
+nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lz-n";
   originalName = "lz.n";
   maintainers = [ maintainers.psfloyd ];

@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -8,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "markview";
   originalName = "markview.nvim";
   defaultPackage = pkgs.vimPlugins.markview-nvim;

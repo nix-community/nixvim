@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "lsp-status";
   originalName = "lsp-status.nvim";
   defaultPackage = pkgs.vimPlugins.lsp-status-nvim;
