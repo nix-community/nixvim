@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "haskell-scope-highlighting";
   originalName = "haskell-scope-highlighting.nvim";
   defaultPackage = pkgs.vimPlugins.haskell-scope-highlighting-nvim;

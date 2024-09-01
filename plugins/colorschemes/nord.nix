@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "nord";
   isColorscheme = true;
   originalName = "nord.nvim";

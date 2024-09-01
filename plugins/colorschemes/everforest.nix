@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -15,7 +14,7 @@ let
     ] pluginDefault desc;
 
 in
-lib.nixvim.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "everforest";
   isColorscheme = true;
   defaultPackage = pkgs.vimPlugins.everforest;

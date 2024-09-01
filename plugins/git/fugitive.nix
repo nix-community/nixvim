@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   helpers,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "fugitive";
   originalName = "vim-fugitive";
   defaultPackage = pkgs.vimPlugins.vim-fugitive;

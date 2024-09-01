@@ -1,12 +1,11 @@
 {
-  config,
   lib,
   helpers,
   pkgs,
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "godot";
   originalName = "vim-godot";
   defaultPackage = pkgs.vimPlugins.vim-godot;

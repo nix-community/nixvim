@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "instant";
   originalName = "instant.nvim";
   defaultPackage = pkgs.vimPlugins.instant-nvim;

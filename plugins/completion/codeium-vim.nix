@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
@@ -35,7 +34,7 @@ let
     };
   };
 in
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "codeium-vim";
   originalName = "codeium.vim";
   defaultPackage = pkgs.vimPlugins.codeium-vim;

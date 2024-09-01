@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "wakatime";
   originalName = "vim-wakatime";
   defaultPackage = pkgs.vimPlugins.vim-wakatime;

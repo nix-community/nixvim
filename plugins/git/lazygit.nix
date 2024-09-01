@@ -1,12 +1,11 @@
 {
-  config,
   lib,
   helpers,
   pkgs,
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "lazygit";
   originalName = "lazygit.nvim";
   defaultPackage = pkgs.vimPlugins.lazygit-nvim;

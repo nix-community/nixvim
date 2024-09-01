@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "schemastore";
   originalName = "SchemaStore.nvim";
   defaultPackage = pkgs.vimPlugins.SchemaStore-nvim;

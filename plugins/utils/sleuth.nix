@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   helpers,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "sleuth";
   originalName = "vim-sleuth";
   defaultPackage = pkgs.vimPlugins.vim-sleuth;

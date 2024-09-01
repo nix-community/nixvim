@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "magma-nvim";
   originalName = "magma-nvim";
   defaultPackage = pkgs.vimPlugins.magma-nvim-goose;

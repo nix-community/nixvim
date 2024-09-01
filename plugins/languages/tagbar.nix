@@ -1,11 +1,10 @@
 {
   helpers,
-  config,
   pkgs,
   lib,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "tagbar";
   defaultPackage = pkgs.vimPlugins.tagbar;
   globalPrefix = "tagbar_";

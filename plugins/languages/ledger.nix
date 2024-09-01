@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "ledger";
   originalName = "vim-ledger";
   defaultPackage = pkgs.vimPlugins.vim-ledger;

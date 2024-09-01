@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
@@ -37,7 +36,7 @@ let
   };
 in
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "julia-cell";
   originalName = "vim-julia-cell";
   defaultPackage = pkgs.vimPlugins.vim-julia-cell;

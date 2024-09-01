@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
 # We use `mkVimPlugin` to avoid having a `settings` option.
 # Indeed, this plugin is not configurable in the common sense (no `setup` function).
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "gitignore";
   originalName = "gitignore.nvim";
   defaultPackage = pkgs.vimPlugins.gitignore-nvim;

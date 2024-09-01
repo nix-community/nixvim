@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "markdown-preview";
   originalName = "markdown-preview.nvim";
   defaultPackage = pkgs.vimPlugins.markdown-preview-nvim;

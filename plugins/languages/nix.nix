@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   helpers,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "nix";
   originalName = "vim-nix";
   defaultPackage = pkgs.vimPlugins.vim-nix;

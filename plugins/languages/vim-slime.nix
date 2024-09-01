@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "vim-slime";
   defaultPackage = pkgs.vimPlugins.vim-slime;
   globalPrefix = "slime_";

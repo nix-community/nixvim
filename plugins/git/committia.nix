@@ -1,10 +1,9 @@
 {
-  config,
   helpers,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "committia";
   originalName = "committia.vim";
   defaultPackage = pkgs.vimPlugins.committia-vim;

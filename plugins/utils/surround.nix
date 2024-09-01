@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   helpers,
   pkgs,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "surround";
   originalName = "surround.vim";
   defaultPackage = pkgs.vimPlugins.vim-surround;
