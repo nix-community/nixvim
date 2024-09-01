@@ -89,7 +89,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 >
 > If you want to use NixVim with nixpkgs 24.05 you should use the `nixos-24.05` branch.
 
-For more detail, see the [Installation](https://nix-community.github.io/nixvim/install.html#installation) section of our documentation.
+For more detail, see the [Installation](https://nix-community.github.io/nixvim) section of our documentation.
 
 <details>
   <summary><strong>Without flakes</strong></summary>
