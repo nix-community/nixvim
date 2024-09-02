@@ -6,7 +6,7 @@
 helpers.vim-plugin.mkVimPlugin {
   name = "committia";
   originalName = "committia.vim";
-  defaultPackage = pkgs.vimPlugins.committia-vim;
+  package = "committia-vim";
   globalPrefix = "committia_";
 
   maintainers = [ helpers.maintainers.alisonjenkins ];

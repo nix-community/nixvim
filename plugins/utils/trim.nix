@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "trim";
   originalName = "trim.nvim";
-  defaultPackage = pkgs.vimPlugins.trim-nvim;
+  package = "trim-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

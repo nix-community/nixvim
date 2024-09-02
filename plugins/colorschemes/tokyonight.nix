@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "tokyonight";
   isColorscheme = true;
   originalName = "tokyonight.nvim";
-  defaultPackage = pkgs.vimPlugins.tokyonight-nvim;
+  package = "tokyonight-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

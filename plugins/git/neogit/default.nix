@@ -8,7 +8,6 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "neogit";
-  defaultPackage = pkgs.vimPlugins.neogit;
 
   maintainers = [ maintainers.GaetanLepage ];
 

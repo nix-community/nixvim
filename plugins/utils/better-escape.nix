@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "better-escape";
   originalName = "better-escape.nvim";
   luaName = "better_escape";
-  defaultPackage = pkgs.vimPlugins.better-escape-nvim;
+  package = "better-escape-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

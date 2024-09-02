@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -10,7 +9,7 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "improved-search";
   originalName = "improved-search.nvim";
-  defaultPackage = pkgs.vimPlugins.improved-search-nvim;
+  package = "improved-search-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

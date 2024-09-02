@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "qmk";
   originalName = "qmk.nvim";
-  defaultPackage = pkgs.vimPlugins.qmk-nvim;
+  package = "qmk-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -6,7 +6,6 @@
 }:
 helpers.vim-plugin.mkVimPlugin {
   name = "tagbar";
-  defaultPackage = pkgs.vimPlugins.tagbar;
   globalPrefix = "tagbar_";
   extraPackages = [ pkgs.ctags ];
 

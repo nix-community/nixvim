@@ -8,7 +8,6 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "rustaceanvim";
-  defaultPackage = pkgs.vimPlugins.rustaceanvim;
 
   maintainers = [ maintainers.GaetanLepage ];
 

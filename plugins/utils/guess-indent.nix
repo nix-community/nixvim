@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "guess-indent";
   originalName = "guess-indent.nvim";
-  defaultPackage = pkgs.vimPlugins.guess-indent-nvim;
+  package = "guess-indent-nvim";
 
   maintainers = [ helpers.maintainers.GGORG ];
 

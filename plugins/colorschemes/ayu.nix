@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ayu";
   isColorscheme = true;
   originalName = "neovim-ayu";
-  defaultPackage = pkgs.vimPlugins.neovim-ayu;
+  package = "neovim-ayu";
   # The colorscheme option is set by the `setup` function.
   colorscheme = null;
   callSetup = false;

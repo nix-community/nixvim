@@ -3,7 +3,6 @@
   helpers,
   config,
   options,
-  pkgs,
   ...
 }:
 with lib;
@@ -11,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "none-ls";
   originalName = "none-ls.nvim";
   luaName = "null-ls";
-  defaultPackage = pkgs.vimPlugins.none-ls-nvim;
+  package = "none-ls-nvim";
 
   maintainers = [ maintainers.MattSturgeon ];
 

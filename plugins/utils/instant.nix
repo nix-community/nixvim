@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "instant";
   originalName = "instant.nvim";
-  defaultPackage = pkgs.vimPlugins.instant-nvim;
+  package = "instant-nvim";
   globalPrefix = "instant_";
 
   maintainers = [ maintainers.GaetanLepage ];

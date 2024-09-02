@@ -8,7 +8,6 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "typst-vim";
   originalName = "typst.vim";
-  defaultPackage = pkgs.vimPlugins.typst-vim;
   globalPrefix = "typst_";
 
   # Add the typst compiler to nixvim packages

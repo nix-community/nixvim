@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cyberdream";
   isColorscheme = true;
   originalName = "cyberdream.nvim";
-  defaultPackage = pkgs.vimPlugins.cyberdream-nvim;
+  package = "cyberdream-nvim";
 
   maintainers = [ lib.nixvim.maintainers.AndresBermeoMarinelli ];
 

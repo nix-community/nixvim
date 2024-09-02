@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -10,7 +9,7 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "gitignore";
   originalName = "gitignore.nvim";
-  defaultPackage = pkgs.vimPlugins.gitignore-nvim;
+  package = "gitignore-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

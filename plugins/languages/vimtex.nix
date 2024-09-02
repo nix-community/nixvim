@@ -7,7 +7,6 @@
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "vimtex";
-  defaultPackage = pkgs.vimPlugins.vimtex;
   globalPrefix = "vimtex_";
 
   maintainers = [ maintainers.GaetanLepage ];

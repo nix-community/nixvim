@@ -1,13 +1,12 @@
 {
   lib,
-  pkgs,
   ...
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "onedark";
   isColorscheme = true;
   originalName = "onedark.nvim";
-  defaultPackage = pkgs.vimPlugins.onedark-nvim;
+  package = "onedark-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

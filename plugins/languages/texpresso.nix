@@ -10,7 +10,7 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "texpresso";
   originalName = "texpresso.vim";
-  defaultPackage = pkgs.vimPlugins.texpresso-vim;
+  package = "texpresso-vim";
 
   maintainers = [ maintainers.nickhu ];
 

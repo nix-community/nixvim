@@ -8,7 +8,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "octo";
   originalName = "octo.nvim";
-  defaultPackage = pkgs.vimPlugins.octo-nvim;
+  package = "octo-nvim";
 
   maintainers = [ helpers.maintainers.svl ];
 

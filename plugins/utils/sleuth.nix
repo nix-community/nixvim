@@ -1,13 +1,12 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 helpers.vim-plugin.mkVimPlugin {
   name = "sleuth";
   originalName = "vim-sleuth";
-  defaultPackage = pkgs.vimPlugins.vim-sleuth;
+  package = "vim-sleuth";
   globalPrefix = "sleuth_";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

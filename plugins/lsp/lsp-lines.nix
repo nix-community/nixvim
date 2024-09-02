@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "lsp-lines";
   luaName = "lsp_lines";
   originalName = "lsp_lines.nvim";
-  defaultPackage = pkgs.vimPlugins.lsp_lines-nvim;
+  package = "lsp_lines-nvim";
 
   # This plugin has no settings; it is configured via vim.diagnostic.config
   hasSettings = false;

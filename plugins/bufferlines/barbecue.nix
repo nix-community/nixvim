@@ -1,15 +1,11 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "barbecue";
   originalName = "barbecue.nvim";
-  defaultPackage = pkgs.vimPlugins.barbecue-nvim;
+  package = "barbecue-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

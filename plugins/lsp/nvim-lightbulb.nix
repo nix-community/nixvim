@@ -1,13 +1,11 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "nvim-lightbulb";
-  defaultPackage = pkgs.vimPlugins.nvim-lightbulb;
 
   maintainers = [ maintainers.GaetanLepage ];
 

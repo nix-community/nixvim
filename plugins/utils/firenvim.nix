@@ -2,7 +2,6 @@
   lib,
   config,
   options,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,6 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "firenvim";
-  defaultPackage = pkgs.vimPlugins.firenvim;
 
   maintainers = with lib.maintainers; [ GaetanLepage ];
 

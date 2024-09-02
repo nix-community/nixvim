@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "modus";
   luaName = "modus-themes";
   originalName = "modus-themes.nvim";
-  defaultPackage = pkgs.vimPlugins.modus-themes-nvim;
+  package = "modus-themes-nvim";
   isColorscheme = true;
 
   maintainers = [ lib.nixvim.maintainers.nwjsmith ];

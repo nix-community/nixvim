@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -9,7 +8,6 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "orgmode";
   originalName = "nvim-orgmode";
-  defaultPackage = pkgs.vimPlugins.orgmode;
 
   maintainers = [ lib.nixvim.maintainers.refaelsh ];
 

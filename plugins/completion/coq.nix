@@ -8,7 +8,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "coq-nvim";
   originalName = "coq_nvim";
-  defaultPackage = pkgs.vimPlugins.coq_nvim;
+  package = "coq_nvim";
 
   maintainers = [
     maintainers.traxys

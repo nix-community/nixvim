@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "virt-column";
   originalName = "virt-column.nvim";
-  defaultPackage = pkgs.vimPlugins.virt-column-nvim;
+  package = "virt-column-nvim";
 
   maintainers = [ helpers.maintainers.alisonjenkins ];
 

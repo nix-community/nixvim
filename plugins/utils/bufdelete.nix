@@ -1,6 +1,5 @@
 {
   helpers,
-  pkgs,
   lib,
   ...
 }:
@@ -8,7 +7,7 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "bufdelete";
   originalName = "bufdelete.nvim";
-  defaultPackage = pkgs.vimPlugins.bufdelete-nvim;
+  package = "bufdelete-nvim";
   globalPrefix = "bufdelete_";
 
   maintainers = [ maintainers.MattSturgeon ];

@@ -2,14 +2,13 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "treesitter-context";
   originalName = "nvim-treesitter-context";
-  defaultPackage = pkgs.vimPlugins.nvim-treesitter-context;
+  package = "nvim-treesitter-context";
 
   maintainers = [ maintainers.GaetanLepage ];
 

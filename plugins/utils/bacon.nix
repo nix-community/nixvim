@@ -1,11 +1,10 @@
 {
   helpers,
-  pkgs,
   ...
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "bacon";
-  defaultPackage = pkgs.vimPlugins.nvim-bacon;
+  package = "nvim-bacon";
   maintainers = [ helpers.maintainers.alisonjenkins ];
 
   settingsOptions = {

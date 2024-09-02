@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "nightfox";
   isColorscheme = true;
   originalName = "nightfox.nvim";
-  defaultPackage = pkgs.vimPlugins.nightfox-nvim;
+  package = "nightfox-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

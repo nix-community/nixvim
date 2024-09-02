@@ -1,12 +1,10 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 helpers.vim-plugin.mkVimPlugin {
   name = "parinfer-rust";
-  defaultPackage = pkgs.vimPlugins.parinfer-rust;
   globalPrefix = "parinfer_";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

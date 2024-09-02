@@ -1,12 +1,11 @@
 {
   lib,
-  pkgs,
   ...
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "scope";
   originalName = "scope.nvim";
-  defaultPackage = pkgs.vimPlugins.scope-nvim;
+  package = "scope-nvim";
 
   maintainers = [ lib.maintainers.insipx ];
 

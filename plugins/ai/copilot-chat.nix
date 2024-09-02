@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "copilot-chat";
   originalName = "CopilotChat.nvim";
   luaName = "CopilotChat";
-  defaultPackage = pkgs.vimPlugins.CopilotChat-nvim;
+  package = "CopilotChat-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

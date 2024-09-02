@@ -9,7 +9,6 @@ with helpers.vim-plugin;
 helpers.vim-plugin.mkVimPlugin {
   name = "copilot-vim";
   originalName = "copilot.vim";
-  defaultPackage = pkgs.vimPlugins.copilot-vim;
   globalPrefix = "copilot_";
 
   maintainers = [ maintainers.GaetanLepage ];

@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "competitest";
   originalName = "competitest.nvim";
-  defaultPackage = pkgs.vimPlugins.competitest-nvim;
+  package = "competitest-nvim";
 
   maintainers = [ helpers.maintainers.svl ];
 

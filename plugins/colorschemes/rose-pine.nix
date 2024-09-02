@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -9,7 +8,6 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "rose-pine";
   isColorscheme = true;
-  defaultPackage = pkgs.vimPlugins.rose-pine;
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

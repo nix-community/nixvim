@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "catppuccin";
   isColorscheme = true;
-  defaultPackage = pkgs.vimPlugins.catppuccin-nvim;
+  package = "catppuccin-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

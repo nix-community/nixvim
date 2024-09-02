@@ -1,13 +1,11 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "neocord";
-  defaultPackage = pkgs.vimPlugins.neocord;
 
   maintainers = [ ];
 

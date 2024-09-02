@@ -1,13 +1,12 @@
 {
   lib,
-  pkgs,
   ...
 }:
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "one";
   isColorscheme = true;
   originalName = "vim-one";
-  defaultPackage = pkgs.vimPlugins.vim-one;
+  package = "vim-one";
   globalPrefix = "one_";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "cmp";
   originalName = "nvim-cmp";
-  defaultPackage = pkgs.vimPlugins.nvim-cmp;
+  package = "nvim-cmp";
 
   maintainers = [ maintainers.GaetanLepage ];
 

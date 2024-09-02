@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "dashboard";
   originalName = "dashboard-nvim";
-  defaultPackage = pkgs.vimPlugins.dashboard-nvim;
+  package = "dashboard-nvim";
 
   maintainers = [ maintainers.MattSturgeon ];
 

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
   name = "nord";
   isColorscheme = true;
   originalName = "nord.nvim";
-  defaultPackage = pkgs.vimPlugins.nord-nvim;
+  package = "nord-nvim";
   globalPrefix = "nord_";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

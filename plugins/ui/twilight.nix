@@ -2,14 +2,13 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "twilight";
   originalName = "twilight.nvim";
-  defaultPackage = pkgs.vimPlugins.twilight-nvim;
+  package = "twilight-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

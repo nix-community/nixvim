@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "specs";
   originalName = "specs.nvim";
-  defaultPackage = pkgs.vimPlugins.specs-nvim;
+  package = "specs-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

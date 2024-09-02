@@ -2,14 +2,13 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "schemastore";
   originalName = "SchemaStore.nvim";
-  defaultPackage = pkgs.vimPlugins.SchemaStore-nvim;
+  package = "SchemaStore-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

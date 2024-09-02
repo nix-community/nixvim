@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "magma-nvim";
   originalName = "magma-nvim";
-  defaultPackage = pkgs.vimPlugins.magma-nvim-goose;
+  package = "magma-nvim-goose";
   globalPrefix = "magma_";
 
   maintainers = [ maintainers.GaetanLepage ];

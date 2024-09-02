@@ -1,7 +1,6 @@
 {
   lib,
   options,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lightline";
   originalName = "lightline.vim";
-  defaultPackage = pkgs.vimPlugins.lightline-vim;
+  package = "lightline-vim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,6 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "nvim-snippets";
   luaName = "snippets";
-  defaultPackage = pkgs.vimPlugins.nvim-snippets;
 
   maintainers = [ lib.maintainers.psfloyd ];
 

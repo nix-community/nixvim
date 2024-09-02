@@ -1,13 +1,12 @@
 {
   lib,
-  pkgs,
   helpers,
   ...
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "smart-splits";
   originalName = "smart-splits.nvim";
-  defaultPackage = pkgs.vimPlugins.smart-splits-nvim;
+  package = "smart-splits-nvim";
 
   maintainers = [ lib.maintainers.foo-dogsquared ];
 

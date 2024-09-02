@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "markview";
   originalName = "markview.nvim";
-  defaultPackage = pkgs.vimPlugins.markview-nvim;
+  package = "markview-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

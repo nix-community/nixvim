@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "tmux-navigator";
   originalName = "vim-tmux-navigator";
-  defaultPackage = pkgs.vimPlugins.vim-tmux-navigator;
+  package = "vim-tmux-navigator";
   globalPrefix = "tmux_navigator_";
 
   maintainers = [ maintainers.MattSturgeon ];

@@ -2,7 +2,6 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
@@ -10,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "ts-autotag";
   originalName = "nvim-ts-autotag";
   luaName = "nvim-ts-autotag";
-  defaultPackage = pkgs.vimPlugins.nvim-ts-autotag;
+  package = "nvim-ts-autotag";
 
   maintainers = [ maintainers.GaetanLepage ];
 

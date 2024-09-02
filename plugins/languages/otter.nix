@@ -2,13 +2,12 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "otter";
   originalName = "otter.nvim";
-  defaultPackage = pkgs.vimPlugins.otter-nvim;
+  package = "otter-nvim";
 
   maintainers = [ lib.maintainers.perchun ];
 

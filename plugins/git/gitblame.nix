@@ -10,7 +10,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "gitblame";
   originalName = "git-blame.nvim";
-  defaultPackage = pkgs.vimPlugins.git-blame-nvim;
+  package = "git-blame-nvim";
 
   maintainers = with lib.maintainers; [ GaetanLepage ];
 

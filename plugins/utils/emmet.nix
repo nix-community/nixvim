@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "emmet";
   originalName = "emmet-vim";
-  defaultPackage = pkgs.vimPlugins.emmet-vim;
+  package = "emmet-vim";
   globalPrefix = "user_emmet_";
 
   maintainers = [ maintainers.GaetanLepage ];

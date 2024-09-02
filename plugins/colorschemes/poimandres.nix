@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "poimandres";
   isColorscheme = true;
   originalName = "poimandres.nvim";
-  defaultPackage = pkgs.vimPlugins.poimandres-nvim;
+  package = "poimandres-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

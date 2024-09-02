@@ -28,13 +28,12 @@ with lib;
       colorscheme ? name,
       # options
       originalName ? name,
-      # WARNING: `defaultPackage` is deprecated by `package`,
-      defaultPackage ? throw "mkVimPlugin called without either `package` or `defaultPackage`.",
       # Can be a string, a list of strings, or a module option:
       # - A string will be intrpreted as `pkgs.vimPlugins.${package}`
       # - A list will be interpreted as a "pkgs path", e.g. `pkgs.${elem1}.${elem2}.${etc...}`
       # - An option will be used as-is, but should be built using `lib.mkPackageOption`
-      package ? helpers.mkPluginPackageOption originalName defaultPackage,
+      # Defaults to `name`, i.e. `pkgs.vimPlugins.${name}`
+      package ? name,
       settingsOptions ? { },
       settingsExample ? null,
       settingsDescription ? "Options provided to the `require('${luaName}')${setup}` function.",

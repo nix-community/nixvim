@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "codesnap";
   originalName = "codesnap.nvim";
-  defaultPackage = pkgs.vimPlugins.codesnap-nvim;
+  package = "codesnap-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

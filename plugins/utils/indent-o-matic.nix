@@ -1,13 +1,11 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "indent-o-matic";
-  defaultPackage = pkgs.vimPlugins.indent-o-matic;
   maintainers = [ helpers.maintainers.alisonjenkins ];
   settingsOptions = {
     max_lines =

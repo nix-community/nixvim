@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "dressing";
   originalName = "dressing.nvim";
-  defaultPackage = pkgs.vimPlugins.dressing-nvim;
+  package = "dressing-nvim";
 
   maintainers = [ helpers.maintainers.AndresBermeoMarinelli ];
 

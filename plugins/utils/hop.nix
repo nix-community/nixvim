@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "hop";
   originalName = "hop.nvim";
-  defaultPackage = pkgs.vimPlugins.hop-nvim;
+  package = "hop-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

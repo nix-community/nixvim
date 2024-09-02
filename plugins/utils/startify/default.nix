@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "startify";
   originalName = "vim-startify";
-  defaultPackage = pkgs.vimPlugins.vim-startify;
+  package = "vim-startify";
   globalPrefix = "startify_";
 
   maintainers = [ maintainers.GaetanLepage ];

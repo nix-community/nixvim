@@ -7,7 +7,7 @@
 helpers.vim-plugin.mkVimPlugin {
   name = "fugitive";
   originalName = "vim-fugitive";
-  defaultPackage = pkgs.vimPlugins.vim-fugitive;
+  package = "vim-fugitive";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

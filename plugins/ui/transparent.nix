@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "transparent";
   originalName = "transparent.nvim";
-  defaultPackage = pkgs.vimPlugins.transparent-nvim;
+  package = "transparent-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

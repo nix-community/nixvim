@@ -10,7 +10,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "palette";
   isColorscheme = true;
   originalName = "palette.nvim";
-  defaultPackage = pkgs.vimPlugins.palette-nvim;
+  package = "palette-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

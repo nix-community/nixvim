@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "yazi";
   originalName = "yazi.nvim";
-  defaultPackage = pkgs.vimPlugins.yazi-nvim;
+  package = "yazi-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

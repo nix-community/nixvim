@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "auto-save";
   originalName = "auto-save.nvim";
-  defaultPackage = pkgs.vimPlugins.auto-save-nvim;
+  package = "auto-save-nvim";
 
   maintainers = [ helpers.maintainers.braindefender ];
 

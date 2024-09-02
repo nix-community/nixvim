@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "statuscol";
   originalName = "statuscol.nvim";
-  defaultPackage = pkgs.vimPlugins.statuscol-nvim;
+  package = "statuscol-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

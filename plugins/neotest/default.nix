@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "neotest";
-  defaultPackage = pkgs.vimPlugins.neotest;
 
   maintainers = [ maintainers.GaetanLepage ];
 

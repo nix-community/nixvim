@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "conform-nvim";
   luaName = "conform";
   originalName = "conform.nvim";
-  defaultPackage = pkgs.vimPlugins.conform-nvim;
 
   maintainers = [ lib.maintainers.khaneliman ];
 

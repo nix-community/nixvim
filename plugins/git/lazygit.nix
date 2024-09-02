@@ -8,7 +8,7 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "lazygit";
   originalName = "lazygit.nvim";
-  defaultPackage = pkgs.vimPlugins.lazygit-nvim;
+  package = "lazygit-nvim";
   globalPrefix = "lazygit_";
 
   maintainers = [ helpers.maintainers.AndresBermeoMarinelli ];

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "vscode";
   isColorscheme = true;
   originalName = "vscode-nvim";
-  defaultPackage = pkgs.vimPlugins.vscode-nvim;
+  package = "vscode-nvim";
   colorscheme = null; # Color scheme is set by `require.("vscode").load()`
   callSetup = false;
 

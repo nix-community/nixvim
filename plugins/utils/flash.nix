@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "flash";
   originalName = "flash.nvim";
-  defaultPackage = pkgs.vimPlugins.flash-nvim;
+  package = "flash-nvim";
 
   maintainers = with maintainers; [
     traxys

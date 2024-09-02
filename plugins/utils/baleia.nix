@@ -1,12 +1,11 @@
 {
   helpers,
-  pkgs,
   ...
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "baleia";
   originalName = "baleia.nvim";
-  defaultPackage = pkgs.vimPlugins.baleia-nvim;
+  package = "baleia-nvim";
 
   maintainers = [ helpers.maintainers.alisonjenkins ];
 

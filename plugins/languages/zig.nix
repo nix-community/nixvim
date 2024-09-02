@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "zig";
   originalName = "zig.vim";
-  defaultPackage = pkgs.vimPlugins.zig-vim;
+  package = "zig-vim";
   globalPrefix = "zig_";
 
   maintainers = [ maintainers.GaetanLepage ];

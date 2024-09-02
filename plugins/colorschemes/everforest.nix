@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -17,7 +16,6 @@ in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "everforest";
   isColorscheme = true;
-  defaultPackage = pkgs.vimPlugins.everforest;
   globalPrefix = "everforest_";
 
   maintainers = [ lib.nixvim.maintainers.sheemap ];

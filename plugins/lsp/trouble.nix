@@ -8,7 +8,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "trouble";
   originalName = "trouble-nvim";
-  defaultPackage = pkgs.vimPlugins.trouble-nvim;
+  package = "trouble-nvim";
 
   maintainers = [ maintainers.loicreynier ];
 

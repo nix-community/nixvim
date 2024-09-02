@@ -1,14 +1,12 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
 mkVimPlugin {
   name = "undotree";
-  defaultPackage = pkgs.vimPlugins.undotree;
   globalPrefix = "undotree_";
 
   maintainers = [ maintainers.GaetanLepage ];

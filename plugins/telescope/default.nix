@@ -17,7 +17,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "telescope";
   originalName = "telescope.nvim";
-  defaultPackage = pkgs.vimPlugins.telescope-nvim;
+  package = "telescope-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -1,13 +1,12 @@
 {
   lib,
-  pkgs,
   ...
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "gruvbox";
   isColorscheme = true;
   originalName = "gruvbox.nvim";
-  defaultPackage = pkgs.vimPlugins.gruvbox-nvim;
+  package = "gruvbox-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

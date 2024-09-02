@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "ccc";
   originalName = "ccc.nvim";
-  defaultPackage = pkgs.vimPlugins.ccc-nvim;
+  package = "ccc-nvim";
 
   maintainers = [ helpers.maintainers.JanKremer ];
 

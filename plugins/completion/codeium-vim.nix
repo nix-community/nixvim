@@ -37,7 +37,6 @@ in
 helpers.vim-plugin.mkVimPlugin {
   name = "codeium-vim";
   originalName = "codeium.vim";
-  defaultPackage = pkgs.vimPlugins.codeium-vim;
   globalPrefix = "codeium_";
 
   maintainers = [ maintainers.GaetanLepage ];

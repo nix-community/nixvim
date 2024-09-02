@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "airline";
   originalName = "vim-airline";
-  defaultPackage = pkgs.vimPlugins.vim-airline;
+  package = "vim-airline";
   globalPrefix = "airline_";
 
   maintainers = [ maintainers.GaetanLepage ];

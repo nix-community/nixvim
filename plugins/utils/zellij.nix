@@ -1,13 +1,12 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "zellij";
   originalName = "zellij.nvim";
-  defaultPackage = pkgs.vimPlugins.zellij-nvim;
+  package = "zellij-nvim";
 
   maintainers = [ lib.maintainers.hmajid2301 ];
 

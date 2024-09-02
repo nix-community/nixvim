@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "comment";
   originalName = "Comment.nvim";
   luaName = "Comment";
-  defaultPackage = pkgs.vimPlugins.comment-nvim;
+  package = "comment-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

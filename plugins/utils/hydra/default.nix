@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "hydra";
   originalName = "hydra.nvim";
-  defaultPackage = pkgs.vimPlugins.hydra-nvim;
+  package = "hydra-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -9,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "molten";
   originalName = "molten-nvim";
-  defaultPackage = pkgs.vimPlugins.molten-nvim;
+  package = "molten-nvim";
   globalPrefix = "molten_";
 
   maintainers = [ maintainers.GaetanLepage ];

@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "oil";
   originalName = "oil.nvim";
-  defaultPackage = pkgs.vimPlugins.oil-nvim;
+  package = "oil-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

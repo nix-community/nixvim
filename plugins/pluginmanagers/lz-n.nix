@@ -1,7 +1,6 @@
 {
   lib,
   options,
-  pkgs,
   ...
 }:
 with lib;
@@ -12,7 +11,6 @@ nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lz-n";
   originalName = "lz.n";
   maintainers = [ maintainers.psfloyd ];
-  defaultPackage = pkgs.vimPlugins.lz-n;
 
   settingsDescription = ''
     Options provided to `vim.g.lz_n`.

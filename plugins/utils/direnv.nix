@@ -8,7 +8,7 @@ with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "direnv";
   originalName = "direnv.vim";
-  defaultPackage = pkgs.vimPlugins.direnv-vim;
+  package = "direnv-vim";
   globalPrefix = "direnv_";
   extraPackages = [ pkgs.direnv ];
 

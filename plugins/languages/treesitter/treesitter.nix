@@ -10,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "treesitter";
   originalName = "nvim-treesitter";
   luaName = "nvim-treesitter.configs";
-  defaultPackage = pkgs.vimPlugins.nvim-treesitter;
+  package = "nvim-treesitter";
 
   description = ''
     Provides an interface to [tree-sitter]

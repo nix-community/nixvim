@@ -7,7 +7,7 @@
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "glow";
   originalName = "glow.nvim";
-  defaultPackage = pkgs.vimPlugins.glow-nvim;
+  package = "glow-nvim";
 
   maintainers = [ lib.maintainers.getchoo ];
 

@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "project-nvim";
   originalName = "project.nvim";
   luaName = "project_nvim";
-  defaultPackage = pkgs.vimPlugins.project-nvim;
 
   maintainers = [ lib.maintainers.khaneliman ];
 

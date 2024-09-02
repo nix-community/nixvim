@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -10,7 +6,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "navic";
   originalName = "nvim-navic";
   luaName = "nvim-navic";
-  defaultPackage = pkgs.vimPlugins.nvim-navic;
+  package = "nvim-navic";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

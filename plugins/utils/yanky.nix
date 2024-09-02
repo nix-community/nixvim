@@ -9,7 +9,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "yanky";
   originalName = "yanky.nvim";
-  defaultPackage = pkgs.vimPlugins.yanky-nvim;
+  package = "yanky-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

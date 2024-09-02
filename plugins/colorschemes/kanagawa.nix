@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -11,7 +10,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "kanagawa";
   isColorscheme = true;
   originalName = "kanagawa.nvim";
-  defaultPackage = pkgs.vimPlugins.kanagawa-nvim;
+  package = "kanagawa-nvim";
 
   description = ''
     You can select the theme in two ways:

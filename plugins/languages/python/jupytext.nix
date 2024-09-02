@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "jupytext";
   originalName = "jupytext.nvim";
-  defaultPackage = pkgs.vimPlugins.jupytext-nvim;
+  package = "jupytext-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

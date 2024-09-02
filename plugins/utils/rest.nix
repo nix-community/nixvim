@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "rest";
   originalName = "rest.nvim";
   luaName = "rest-nvim";
-  defaultPackage = pkgs.vimPlugins.rest-nvim;
+  package = "rest-nvim";
 
   extraPackages = [ pkgs.curl ];
 

@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "cloak";
   originalName = "cloak.nvim";
-  defaultPackage = pkgs.vimPlugins.cloak-nvim;
+  package = "cloak-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -32,7 +32,6 @@ let
 in
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "fzf-lua";
-  defaultPackage = pkgs.vimPlugins.fzf-lua;
 
   extraPackages = [ pkgs.fzf ];
 
