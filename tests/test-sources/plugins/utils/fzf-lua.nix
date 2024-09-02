@@ -54,4 +54,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.fzf-lua = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

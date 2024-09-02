@@ -155,7 +155,10 @@ pkgs: {
       phpcbf = pkgs.phpPackages.php-codesniffer;
       phpcsfixer = pkgs.phpPackages.php-cs-fixer;
       phpcs = pkgs.phpPackages.php-codesniffer;
-      prisma_format = pkgs.nodePackages.prisma;
+      # TODO: Added 2024-08-31; remove 2024-11-31
+      # prisma was moved out of nodePackages set without alias
+      # Using fallback as a transition period
+      prisma_format = pkgs.prisma or pkgs.nodePackages.prisma;
       ptop = pkgs.fpc;
       puppet_lint = pkgs.puppet-lint;
       qmlformat = pkgs.qt6.qtdeclarative;

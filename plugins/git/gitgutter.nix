@@ -16,6 +16,11 @@ in
 
       package = helpers.mkPluginPackageOption "gitgutter" pkgs.vimPlugins.gitgutter;
 
+      gitPackage = helpers.mkPackageOption {
+        name = "git";
+        default = pkgs.git;
+      };
+
       recommendedSettings = mkOption {
         type = types.bool;
         default = true;
@@ -188,7 +193,7 @@ in
         foldtext = "gitgutter#fold#foldtext";
       };
 
-      extraPackages = [ pkgs.git ] ++ grepPackage;
+      extraPackages = [ cfg.gitPackage ] ++ grepPackage;
 
       globals = {
         gitgutter_max_signs = mkIf (cfg.maxSigns != null) cfg.maxSigns;

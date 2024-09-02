@@ -134,11 +134,4 @@
       };
     };
   };
-
-  no-icons = {
-    plugins.treesitter = {
-      enable = true;
-      iconsPackage = null;
-    };
-  };
 }

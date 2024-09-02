@@ -9,7 +9,6 @@ helpers.vim-plugin.mkVimPlugin config {
   originalName = "committia.vim";
   defaultPackage = pkgs.vimPlugins.committia-vim;
   globalPrefix = "committia_";
-  extraPackages = [ pkgs.git ];
 
   maintainers = [ helpers.maintainers.alisonjenkins ];
 
@@ -46,5 +45,16 @@ helpers.vim-plugin.mkVimPlugin config {
     status_window_min_height = helpers.defaultNullOpts.mkUnsignedInt 0 ''
       Minimum height of a status window.
     '';
+  };
+
+  extraOptions = {
+    gitPackage = helpers.mkPackageOption {
+      name = "git";
+      default = pkgs.git;
+    };
+  };
+
+  extraConfig = cfg: {
+    extraPackages = [ cfg.gitPackage ];
   };
 }

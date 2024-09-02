@@ -18,8 +18,8 @@ NixVim is a [Neovim](https://neovim.io) distribution built around
 configured through Nix, all while leaving room for your plugins and your vimrc.
 
 ## What does it look like?
-Here is a simple configuration that uses gruvbox as the colorscheme and uses the
-lightline plugin:
+Here is a simple configuration that uses catppuccin as the colorscheme and uses the
+lualine plugin:
 
 ```nix
 {
@@ -89,7 +89,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 >
 > If you want to use NixVim with nixpkgs 24.05 you should use the `nixos-24.05` branch.
 
-For more detail, see the [Installation](https://nix-community.github.io/nixvim/install.html#installation) section of our documentation.
+For more detail, see the [Installation](https://nix-community.github.io/nixvim) section of our documentation.
 
 <details>
   <summary><strong>Without flakes</strong></summary>

@@ -219,4 +219,12 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.barbar = {
+      enable = true;
+      iconsPackage = null;
+      settings.icons.filetype.enabled = false;
+    };
+  };
 }

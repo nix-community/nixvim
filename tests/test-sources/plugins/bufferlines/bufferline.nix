@@ -123,4 +123,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.bufferline = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

@@ -41,6 +41,7 @@
 
         settings = {
           global.excludes = [
+            ".editorconfig"
             ".envrc"
             ".git-blame-ignore-revs"
             ".gitignore"

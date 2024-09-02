@@ -89,4 +89,11 @@
       ];
     };
   };
+
+  no-packages = {
+    plugins.lazy = {
+      enable = true;
+      gitPackage = null;
+    };
+  };
 }

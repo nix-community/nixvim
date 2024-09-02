@@ -30,4 +30,11 @@
         assert(vim.api.nvim_get_runtime_file("data/memes/planets/earth", false)[1], "telescope planets aren't found in runtime")
       '';
   };
+
+  no-packages = {
+    plugins.telescope = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

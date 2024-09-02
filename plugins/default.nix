@@ -76,6 +76,7 @@
     ./languages/markdown/preview.nix
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
+    ./languages/nvim-orgmode.nix
     ./languages/openscad.nix
     ./languages/otter.nix
     ./languages/parinfer-rust.nix

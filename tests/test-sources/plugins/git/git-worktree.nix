@@ -26,4 +26,11 @@
       enableTelescope = false;
     };
   };
+
+  no-packages = {
+    plugins.git-worktree = {
+      enable = true;
+      gitPackage = null;
+    };
+  };
 }

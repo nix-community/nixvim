@@ -14,6 +14,11 @@ in
     plugins.packer = {
       enable = mkEnableOption "packer.nvim";
 
+      gitPackage = helpers.mkPackageOption {
+        name = "git";
+        default = pkgs.git;
+      };
+
       plugins =
         with types;
         let
@@ -109,7 +114,8 @@ in
         pname = "packer.nvim";
       }))
     ];
-    extraPackages = [ pkgs.git ];
+
+    extraPackages = [ cfg.gitPackage ];
 
     extraConfigLua =
       let
