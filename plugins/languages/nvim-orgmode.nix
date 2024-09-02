@@ -21,10 +21,16 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
     org_default_notes_file = defaultNullOpts.mkStr "" ''
       A path to the default notes file.
     '';
+    org_startup_indented = defaultNullOpts.mkBool false ''
+      When set to true, uses Virtual indents to align content visually.
+      The indents are only visual, they are not saved to the file.
+      When set to false, does not add any Virtual indentation.
+    '';
   };
 
   settingsExample = {
     org_agenda_files = "~/orgfiles/**/*";
     org_default_notes_file = "~/orgfiles/refile.org";
+    org_startup_indented = true;
   };
 }
