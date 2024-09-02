@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "zig";
   originalName = "zig.vim";
   defaultPackage = pkgs.vimPlugins.zig-vim;

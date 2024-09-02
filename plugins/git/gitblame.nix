@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -8,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkPackageOption;
   types = lib.nixvim.nixvimTypes;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "gitblame";
   originalName = "git-blame.nvim";
   defaultPackage = pkgs.vimPlugins.git-blame-nvim;

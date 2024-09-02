@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "startify";
   originalName = "vim-startify";
   defaultPackage = pkgs.vimPlugins.vim-startify;

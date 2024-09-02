@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   pkgs,
   helpers,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "endwise";
   originalName = "vim-endwise";
   defaultPackage = pkgs.vimPlugins.vim-endwise;

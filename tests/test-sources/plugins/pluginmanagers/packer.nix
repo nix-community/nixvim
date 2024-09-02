@@ -135,4 +135,11 @@
       ];
     };
   };
+
+  no-packages = {
+    plugins.packer = {
+      enable = true;
+      gitPackage = null;
+    };
+  };
 }

@@ -170,4 +170,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.lspsaga = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

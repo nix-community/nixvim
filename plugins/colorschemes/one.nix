@@ -1,10 +1,9 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin config {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "one";
   isColorscheme = true;
   originalName = "vim-one";

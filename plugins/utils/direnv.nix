@@ -1,12 +1,11 @@
 {
-  config,
   helpers,
   pkgs,
   lib,
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "direnv";
   originalName = "direnv.vim";
   defaultPackage = pkgs.vimPlugins.direnv-vim;

@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with helpers.vim-plugin;
 with lib;
-mkVimPlugin config {
+mkVimPlugin {
   name = "goyo";
   originalName = "goyo.vim";
   defaultPackage = pkgs.vimPlugins.goyo-vim;

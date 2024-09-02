@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -8,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   types = lib.nixvim.nixvimTypes;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "yazi";
   originalName = "yazi.nvim";
   defaultPackage = pkgs.vimPlugins.yazi-nvim;

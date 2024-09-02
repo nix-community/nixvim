@@ -2,11 +2,10 @@
   lib,
   helpers,
   pkgs,
-  config,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "indent-o-matic";
   defaultPackage = pkgs.vimPlugins.indent-o-matic;
   maintainers = [ helpers.maintainers.alisonjenkins ];

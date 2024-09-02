@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   options,
   pkgs,
   ...
@@ -9,7 +8,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lightline";
   originalName = "lightline.vim";
   defaultPackage = pkgs.vimPlugins.lightline-vim;

@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "emmet";
   originalName = "emmet-vim";
   defaultPackage = pkgs.vimPlugins.emmet-vim;

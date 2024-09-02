@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "ltex-extra";
   originalName = "ltex_extra.nvim";
   defaultPackage = pkgs.vimPlugins.ltex_extra-nvim;

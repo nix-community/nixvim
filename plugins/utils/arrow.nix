@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "arrow";
   originalName = "arrow.nvim";
   defaultPackage = pkgs.vimPlugins.arrow-nvim;

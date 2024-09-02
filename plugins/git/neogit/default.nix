@@ -6,10 +6,9 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "neogit";
   defaultPackage = pkgs.vimPlugins.neogit;
-  extraPackages = [ pkgs.git ];
 
   maintainers = [ maintainers.GaetanLepage ];
 
@@ -102,6 +101,13 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
   };
 
+  extraOptions = {
+    gitPackage = helpers.mkPackageOption {
+      name = "git";
+      default = pkgs.git;
+    };
+  };
+
   extraConfig = cfg: {
     assertions =
       map
@@ -122,8 +128,9 @@ helpers.neovim-plugin.mkNeovimPlugin config {
           "fzf-lua"
         ];
 
-    extraPackages = optional (hasInfix "which" (
-      cfg.settings.commit_view.verify_commit.__raw or ""
-    )) pkgs.which;
+    extraPackages = [
+      cfg.gitPackage
+    ] ++ optional (hasInfix "which" (cfg.settings.commit_view.verify_commit.__raw or "")) pkgs.which;
+
   };
 }

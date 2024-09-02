@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "sniprun";
   defaultPackage = pkgs.vimPlugins.sniprun;
   url = "https://github.com/michaelb/sniprun";

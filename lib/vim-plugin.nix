@@ -2,7 +2,6 @@
 with lib;
 {
   mkVimPlugin =
-    config:
     {
       name,
       url ? if defaultPackage != null then defaultPackage.meta.homepage else null,
@@ -30,10 +29,6 @@ with lib;
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
 
-      cfg = config.${namespace}.${name};
-
-      globals = cfg.settings or { };
-
       # does this evaluate package?
       packageOption =
         if defaultPackage == null then
@@ -58,6 +53,27 @@ with lib;
           '';
         };
       };
+
+      modules = [
+        (
+          { config, ... }:
+          let
+            cfg = config.${namespace}.${name};
+          in
+          {
+            config = mkIf cfg.enable (mkMerge [
+              {
+                inherit extraPackages;
+                globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) (cfg.settings or { });
+                # does this evaluate package? it would not be desired to evaluate package if we use another package.
+                extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
+              }
+              (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
+              (extraConfig cfg)
+            ]);
+          }
+        )
+      ];
     in
     {
       meta = {
@@ -86,17 +102,8 @@ with lib;
         ++ (optional (deprecateExtraConfig && createSettingsOption) (
           mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) settingsPath
         ))
-        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings)
+        ++ modules;
 
-      config = mkIf cfg.enable (mkMerge [
-        {
-          inherit extraPackages;
-          globals = mapAttrs' (n: nameValuePair (globalPrefix + n)) globals;
-          # does this evaluate package? it would not be desired to evaluate package if we use another package.
-          extraPlugins = extraPlugins ++ optional (defaultPackage != null) cfg.package;
-        }
-        (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
-        (extraConfig cfg)
-      ]);
     };
 }

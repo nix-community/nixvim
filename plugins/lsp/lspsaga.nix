@@ -51,6 +51,11 @@ in
 
       package = helpers.mkPluginPackageOption "lspsaga" pkgs.vimPlugins.lspsaga-nvim;
 
+      iconsPackage = helpers.mkPackageOption {
+        name = "nvim-web-devicons";
+        default = pkgs.vimPlugins.nvim-web-devicons;
+      };
+
       ui = {
         border = helpers.defaultNullOpts.mkBorder "single" "lspsaga" "";
 
@@ -451,9 +456,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    extraPlugins = [
-      cfg.package
-    ] ++ (optional (cfg.ui.devicon == null || cfg.ui.devicon) pkgs.vimPlugins.nvim-web-devicons);
+    extraPlugins =
+      [ cfg.package ]
+      ++ optional (
+        cfg.iconsPackage != null && (cfg.ui.devicon == null || cfg.ui.devicon)
+      ) cfg.iconsPackage;
 
     warnings = mkIf (
       # https://nvimdev.github.io/lspsaga/implement/#default-options

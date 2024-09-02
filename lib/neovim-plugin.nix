@@ -14,7 +14,6 @@ with lib;
   };
 
   mkNeovimPlugin =
-    config:
     {
       name,
       maintainers,
@@ -71,7 +70,32 @@ with lib;
         ++ (optional deprecateExtraOptions (
           mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
         ))
-        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ (nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings)
+        ++ [
+          (
+            { config, ... }:
+            {
+              config =
+                let
+                  cfg = config.${namespace}.${name};
+                  extraConfigNamespace = if isColorscheme then "extraConfigLuaPre" else "extraConfigLua";
+                in
+                mkIf cfg.enable (mkMerge [
+                  {
+                    extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
+                    inherit extraPackages;
+                  }
+                  (optionalAttrs callSetup {
+                    ${extraConfigNamespace} = ''
+                      require('${luaName}')${setup}(${optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)})
+                    '';
+                  })
+                  (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
+                  (extraConfig cfg)
+                ]);
+            }
+          )
+        ];
 
       options.${namespace}.${name} =
         {
@@ -87,24 +111,5 @@ with lib;
           };
         }
         // extraOptions;
-
-      config =
-        let
-          cfg = config.${namespace}.${name};
-          extraConfigNamespace = if isColorscheme then "extraConfigLuaPre" else "extraConfigLua";
-        in
-        mkIf cfg.enable (mkMerge [
-          {
-            extraPlugins = (optional installPackage cfg.package) ++ extraPlugins;
-            inherit extraPackages;
-          }
-          (optionalAttrs callSetup {
-            ${extraConfigNamespace} = ''
-              require('${luaName}')${setup}(${optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)})
-            '';
-          })
-          (optionalAttrs (isColorscheme && (colorscheme != null)) { colorscheme = mkDefault colorscheme; })
-          (extraConfig cfg)
-        ]);
     };
 }

@@ -19,4 +19,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.committia = {
+      enable = true;
+      gitPackage = null;
+    };
+  };
 }

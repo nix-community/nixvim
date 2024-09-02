@@ -76,6 +76,7 @@
     ./languages/markdown/preview.nix
     ./languages/nix.nix
     ./languages/nvim-jdtls.nix
+    ./languages/nvim-orgmode.nix
     ./languages/openscad.nix
     ./languages/otter.nix
     ./languages/parinfer-rust.nix
@@ -219,6 +220,7 @@
     ./utils/refactoring.nix
     ./utils/rest.nix
     ./utils/sandwich.nix
+    ./utils/scope.nix
     ./utils/sleuth.nix
     ./utils/smart-splits.nix
     ./utils/spectre.nix

@@ -1,11 +1,10 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "glow";
   originalName = "glow.nvim";
   defaultPackage = pkgs.vimPlugins.glow-nvim;

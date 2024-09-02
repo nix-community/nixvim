@@ -95,4 +95,16 @@
     githubId = 30784060;
     name = "Pedro Sánchez";
   };
+  refaelsh = {
+    email = "refaelsh@pm.me";
+    github = "refaelsh";
+    githubId = 2750775;
+    name = "Refael Sheinker";
+  };
+  insipx = {
+    email = "github.tech@liquidthink.net";
+    github = "insipx";
+    githubId = 6452260;
+    name = "Andrew Plaza";
+  };
 }

@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "headlines";
   originalName = "headlines.nvim";
   defaultPackage = pkgs.vimPlugins.headlines-nvim;

@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "molten";
   originalName = "molten-nvim";
   defaultPackage = pkgs.vimPlugins.molten-nvim;

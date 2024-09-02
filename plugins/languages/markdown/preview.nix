@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "preview";
   originalName = "Preview.nvim";
   defaultPackage = pkgs.vimPlugins.Preview-nvim;

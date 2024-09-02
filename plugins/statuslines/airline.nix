@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
 with helpers.vim-plugin;
-mkVimPlugin config {
+mkVimPlugin {
   name = "airline";
   originalName = "vim-airline";
   defaultPackage = pkgs.vimPlugins.vim-airline;

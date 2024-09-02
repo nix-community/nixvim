@@ -1,12 +1,11 @@
 {
   lib,
-  config,
   helpers,
   pkgs,
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "sandwich";
   originalName = "vim-sandwich";
   defaultPackage = pkgs.vimPlugins.vim-sandwich;

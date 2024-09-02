@@ -16,7 +16,7 @@ let
   types = lib.nixvim.nixvimTypes;
 
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "todo-comments";
   originalName = "todo-comments.nvim";
   defaultPackage = pkgs.vimPlugins.todo-comments-nvim;

@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "spectre";
   originalName = "nvim-spectre";
   defaultPackage = pkgs.vimPlugins.nvim-spectre;

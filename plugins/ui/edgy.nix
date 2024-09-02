@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "edgy";
   originalName = "edgy.nvim";
   defaultPackage = pkgs.vimPlugins.edgy-nvim;

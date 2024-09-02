@@ -1,13 +1,12 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "comment-box";
   originalName = "comment-box.nvim";
   defaultPackage = pkgs.vimPlugins.comment-box-nvim;

@@ -1,11 +1,10 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "cmake-tools";
   originalName = "cmake-tools.nvim";
   defaultPackage = pkgs.vimPlugins.cmake-tools-nvim;

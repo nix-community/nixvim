@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -11,7 +10,7 @@ let
   luaName = "base16-colorscheme";
   originalName = "base16.nvim";
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   inherit name luaName originalName;
   setup = ".with_config";
   defaultPackage = pkgs.vimPlugins.base16-nvim;

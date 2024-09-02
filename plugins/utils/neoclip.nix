@@ -1,12 +1,11 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "neoclip";
   originalName = "nvim-neoclip.lua";
   defaultPackage = pkgs.vimPlugins.nvim-neoclip-lua;

@@ -1,7 +1,7 @@
 {
   lib,
   helpers,
-  config,
+  options,
   pkgs,
   ...
 }:
@@ -30,7 +30,7 @@ let
     };
   };
 in
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "fzf-lua";
   defaultPackage = pkgs.vimPlugins.fzf-lua;
 
@@ -47,10 +47,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
       example = pkgs.skim;
     };
 
+    # TODO: deprecated 2024-08-29 remove after 24.11
     iconsEnabled = mkOption {
       type = types.bool;
       description = "Toggle icon support. Installs nvim-web-devicons.";
-      default = true;
+      visible = false;
+    };
+
+    iconsPackage = helpers.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
     };
 
     profile = helpers.defaultNullOpts.mkEnumFirstDefault [
@@ -103,28 +109,44 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     };
   };
 
-  extraConfig = cfg: {
-    extraPlugins = optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons;
+  extraConfig =
+    cfg:
+    let
+      opt = options.plugins.fzf-lua;
+    in
+    {
+      # TODO: deprecated 2024-08-29 remove after 24.11
+      warnings = lib.mkIf opt.iconsEnabled.isDefined [
+        ''
+          nixvim (plugins.fzf-lua):
+          The option definition `plugins.fzf-lua.iconsEnabled' in ${showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
+          You should use `plugins.fzf-lua.iconsPackage' instead.
+        ''
+      ];
 
-    extraPackages = optional (cfg.fzfPackage != null) cfg.fzfPackage;
+      extraPlugins = lib.mkIf (
+        cfg.iconsPackage != null && (opt.iconsEnabled.isDefined -> cfg.iconsEnabled)
+      ) [ cfg.iconsPackage ];
 
-    plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
+      extraPackages = [ cfg.fzfPackage ];
 
-    keymaps = mapAttrsToList (
-      key: mapping:
-      let
-        actionStr =
-          if isString mapping then
-            "${mapping}()"
-          else
-            "${mapping.action}(${helpers.toLuaObject mapping.settings})";
-      in
-      {
-        inherit key;
-        mode = mapping.mode or "n";
-        action.__raw = "function() require('fzf-lua').${actionStr} end";
-        options = mapping.options or { };
-      }
-    ) cfg.keymaps;
-  };
+      plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
+
+      keymaps = mapAttrsToList (
+        key: mapping:
+        let
+          actionStr =
+            if isString mapping then
+              "${mapping}()"
+            else
+              "${mapping.action}(${helpers.toLuaObject mapping.settings})";
+        in
+        {
+          inherit key;
+          mode = mapping.mode or "n";
+          action.__raw = "function() require('fzf-lua').${actionStr} end";
+          options = mapping.options or { };
+        }
+      ) cfg.keymaps;
+    };
 }

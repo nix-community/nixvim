@@ -290,4 +290,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.neogit = {
+      enable = true;
+      gitPackage = null;
+    };
+  };
 }

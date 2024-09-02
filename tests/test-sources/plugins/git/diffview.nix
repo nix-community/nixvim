@@ -161,4 +161,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.diffview = {
+      enable = true;
+      iconsPackage = null;
+    };
+  };
 }

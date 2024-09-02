@@ -1,14 +1,13 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
 # This plugin is only configured through keymaps, so we use `mkVimPlugin` without the
 # `globalPrefix` argument to avoid the creation of the `settings` option.
-helpers.vim-plugin.mkVimPlugin config {
+helpers.vim-plugin.mkVimPlugin {
   name = "improved-search";
   originalName = "improved-search.nvim";
   defaultPackage = pkgs.vimPlugins.improved-search-nvim;

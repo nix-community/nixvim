@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "refactoring";
   originalName = "refactoring.nvim";
   defaultPackage = pkgs.vimPlugins.refactoring-nvim;

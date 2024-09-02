@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -8,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts nixvimTypes mkSettingsRenamedOptionModules;
   types = nixvimTypes;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "bufferline";
   originalName = "bufferline.nvim";
   defaultPackage = pkgs.vimPlugins.bufferline-nvim;
@@ -654,8 +653,15 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin config {
       };
   };
 
+  extraOptions = {
+    iconsPackage = lib.nixvim.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
+  };
+
   extraConfig = cfg: {
-    extraPlugins = with pkgs.vimPlugins; [ nvim-web-devicons ];
+    extraPlugins = lib.mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
 
     opts.termguicolors = true;
   };

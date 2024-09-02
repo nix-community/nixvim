@@ -16,6 +16,11 @@ in
 
     package = helpers.mkPluginPackageOption "chadtree" pkgs.vimPlugins.chadtree;
 
+    iconsPackage = helpers.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
+
     options = {
       follow = helpers.defaultNullOpts.mkBool true ''
         CHADTree will highlight currently open file, and open all its parents.
@@ -495,8 +500,8 @@ in
       extraPlugins =
         [ cfg.package ]
         ++ (optional (
-          cfg.theme == null || cfg.theme.iconGlyphSet == "devicons"
-        ) pkgs.vimPlugins.nvim-web-devicons);
+          cfg.iconsPackage != null && (cfg.theme == null || cfg.theme.iconGlyphSet == "devicons")
+        ) cfg.iconsPackage);
 
       extraConfigLua = ''
         vim.api.nvim_set_var("chadtree_settings", ${helpers.toLuaObject setupOptions})

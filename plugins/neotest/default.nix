@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -8,7 +7,7 @@ with lib;
 let
   inherit (lib.nixvim) mkRaw;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin config {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "neotest";
   defaultPackage = pkgs.vimPlugins.neotest;
 

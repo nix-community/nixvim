@@ -1,17 +1,14 @@
 {
   lib,
   helpers,
-  config,
   pkgs,
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin config {
+helpers.neovim-plugin.mkNeovimPlugin {
   name = "trouble";
   originalName = "trouble-nvim";
   defaultPackage = pkgs.vimPlugins.trouble-nvim;
-
-  extraPlugins = with pkgs.vimPlugins; [ nvim-web-devicons ];
 
   maintainers = [ maintainers.loicreynier ];
 
@@ -301,5 +298,16 @@ helpers.neovim-plugin.mkNeovimPlugin config {
     use_diagnostic_signs = helpers.defaultNullOpts.mkBool false ''
       Enabling this will use the signs defined in your lsp client
     '';
+  };
+
+  extraOptions = {
+    iconsPackage = helpers.mkPackageOption {
+      name = "nvim-web-devicons";
+      default = pkgs.vimPlugins.nvim-web-devicons;
+    };
+  };
+
+  extraConfig = cfg: {
+    extraPlugins = mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
   };
 }

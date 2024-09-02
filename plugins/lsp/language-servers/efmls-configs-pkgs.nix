@@ -94,7 +94,6 @@ pkgs: {
       vulture
       ;
     inherit (nodePackages)
-      eslint
       eslint_d
       prettier
       alex
@@ -113,6 +112,10 @@ pkgs: {
     cmake_lint = cmake-format;
     dartfmt = dart;
     dotnet_format = dotnet-runtime;
+    # TODO: Added 2024-08-31; remove 2024-11-31
+    # eslint was moved out of nodePackages set without alias
+    # Using fallback as a transition period
+    eslint = pkgs.eslint or pkgs.nodePackages.eslint;
     fish_indent = fish;
     gofmt = go;
     goimports = go-tools;
