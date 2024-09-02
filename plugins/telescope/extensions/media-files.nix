@@ -11,7 +11,7 @@ in
 (import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
   name = "media-files";
   extensionName = "media_files";
-  defaultPackage = pkgs.vimPlugins.telescope-media-files-nvim;
+  package = "telescope-media-files-nvim";
 
   # TODO: introduced 2024-03-24, remove on 2024-05-24
   imports =

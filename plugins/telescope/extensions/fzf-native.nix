@@ -10,7 +10,7 @@ in
 (import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
   name = "fzf-native";
   extensionName = "fzf";
-  defaultPackage = pkgs.vimPlugins.telescope-fzf-native-nvim;
+  package = "telescope-fzf-native-nvim";
 
   # TODO: introduced 2024-03-24, remove on 2024-05-24
   optionsRenamedToSettings = [

@@ -10,7 +10,7 @@ in
 (import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
   name = "fzy-native";
   extensionName = "fzy_native";
-  defaultPackage = pkgs.vimPlugins.telescope-fzy-native-nvim;
+  package = "telescope-fzy-native-nvim";
 
   # TODO: introduced 2024-03-24, remove on 2024-05-24
   optionsRenamedToSettings = [

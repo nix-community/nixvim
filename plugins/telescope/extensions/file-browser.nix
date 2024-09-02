@@ -12,7 +12,7 @@ in
 telescopeHelpers.mkExtension {
   name = "file-browser";
   extensionName = "file_browser";
-  defaultPackage = pkgs.vimPlugins.telescope-file-browser-nvim;
+  package = "telescope-file-browser-nvim";
 
   # TODO: introduced 2024-03-24, remove on 2024-05-24
   optionsRenamedToSettings = [

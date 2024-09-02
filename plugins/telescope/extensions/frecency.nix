@@ -10,7 +10,7 @@ let
 in
 (import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
   name = "frecency";
-  defaultPackage = pkgs.vimPlugins.telescope-frecency-nvim;
+  package = "telescope-frecency-nvim";
 
   # TODO: introduced 2024-03-24, remove on 2024-05-24
   optionsRenamedToSettings = [

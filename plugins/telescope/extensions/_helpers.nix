@@ -1,12 +1,18 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib.nixvim) mkPluginPackageOption mkSettingsOption toSnakeCase;
+  inherit (lib.nixvim) mkSettingsOption toSnakeCase;
+  inherit (lib) mkPackageOption;
 in
 rec {
   mkExtension =
     {
       name,
-      defaultPackage,
+      package,
       extensionName ? name,
       settingsOptions ? { },
       settingsExample ? null,
@@ -41,7 +47,12 @@ rec {
       options.plugins.telescope.extensions.${name} = {
         enable = lib.mkEnableOption "the `${name}` telescope extension";
 
-        package = mkPluginPackageOption name defaultPackage;
+        package = mkPackageOption pkgs name {
+          default = [
+            "vimPlugins"
+            package
+          ];
+        };
 
         settings = mkSettingsOption {
           description = "settings for the `${name}` telescope extension.";

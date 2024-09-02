@@ -11,7 +11,7 @@ let
 in
 telescopeHelpers.mkExtension {
   name = "undo";
-  defaultPackage = pkgs.vimPlugins.telescope-undo-nvim;
+  package = "telescope-undo-nvim";
 
   # TODO: introduced 2024-03-24, remove on 2024-05-24
   optionsRenamedToSettings = [
