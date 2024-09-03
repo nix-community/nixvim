@@ -53,7 +53,7 @@ in
           {
             name,
             desc,
-            package ? pkgs.${name},
+            package ? name,
             enabledByDefault ? false,
           }:
           {
@@ -66,11 +66,7 @@ in
               '';
             };
 
-            package = mkOption {
-              type = types.package;
-              default = package;
-              description = "The package to use for the ${name} dependency.";
-            };
+            package = mkPackageOption pkgs name { default = package; };
           };
       in
       {
@@ -82,7 +78,7 @@ in
 
         imageMagick = mkDepOption {
           name = "ImageMagick";
-          package = pkgs.imagemagick;
+          package = "imagemagick";
           desc = "Required for svg previews.";
         };
 
@@ -93,7 +89,7 @@ in
 
         pdftoppm = mkDepOption {
           name = "pdmtoppm";
-          package = pkgs.poppler_utils;
+          package = "poppler_utils";
           desc = "Required for pdf preview support.";
         };
 
