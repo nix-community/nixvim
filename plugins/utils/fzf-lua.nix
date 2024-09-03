@@ -53,10 +53,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
       visible = false;
     };
 
-    iconsPackage = helpers.mkPackageOption {
-      name = "nvim-web-devicons";
-      default = pkgs.vimPlugins.nvim-web-devicons;
-    };
+    iconsPackage = lib.mkPackageOption pkgs [
+      "vimPlugins"
+      "nvim-web-devicons"
+    ] { nullable = true; };
 
     profile = helpers.defaultNullOpts.mkEnumFirstDefault [
       "default"

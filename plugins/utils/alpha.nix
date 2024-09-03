@@ -63,10 +63,10 @@ in
         visible = false;
       };
 
-      iconsPackage = helpers.mkPackageOption {
-        name = "nvim-web-devicons";
-        default = pkgs.vimPlugins.nvim-web-devicons;
-      };
+      iconsPackage = lib.mkPackageOption pkgs [
+        "vimPlugins"
+        "nvim-web-devicons"
+      ] { nullable = true; };
 
       theme = mkOption {
         type = with helpers.nixvimTypes; nullOr (maybeRaw str);

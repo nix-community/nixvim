@@ -301,10 +301,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   extraOptions = {
-    iconsPackage = helpers.mkPackageOption {
-      name = "nvim-web-devicons";
-      default = pkgs.vimPlugins.nvim-web-devicons;
-    };
+    iconsPackage = lib.mkPackageOption pkgs [
+      "vimPlugins"
+      "nvim-web-devicons"
+    ] { nullable = true; };
   };
 
   extraConfig = cfg: {

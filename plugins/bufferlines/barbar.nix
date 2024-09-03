@@ -195,10 +195,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     );
 
   extraOptions = {
-    iconsPackage = lib.nixvim.mkPackageOption {
-      name = "nvim-web-devicons";
-      default = pkgs.vimPlugins.nvim-web-devicons;
-    };
+    iconsPackage = lib.mkPackageOption pkgs [
+      "vimPlugins"
+      "nvim-web-devicons"
+    ] { nullable = true; };
 
     keymaps = mapAttrs (
       optionName: funcName:

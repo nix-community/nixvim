@@ -16,10 +16,10 @@ in
 
     package = helpers.mkPluginPackageOption "chadtree" pkgs.vimPlugins.chadtree;
 
-    iconsPackage = helpers.mkPackageOption {
-      name = "nvim-web-devicons";
-      default = pkgs.vimPlugins.nvim-web-devicons;
-    };
+    iconsPackage = lib.mkPackageOption pkgs [
+      "vimPlugins"
+      "nvim-web-devicons"
+    ] { nullable = true; };
 
     options = {
       follow = helpers.defaultNullOpts.mkBool true ''

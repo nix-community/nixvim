@@ -57,10 +57,10 @@ in
 
       package = helpers.mkPluginPackageOption "neo-tree" pkgs.vimPlugins.neo-tree-nvim;
 
-      iconsPackage = helpers.mkPackageOption {
-        name = "nvim-web-devicons";
-        default = pkgs.vimPlugins.nvim-web-devicons;
-      };
+      iconsPackage = lib.mkPackageOption pkgs [
+        "vimPlugins"
+        "nvim-web-devicons"
+      ] { nullable = true; };
 
       gitPackage = helpers.mkPackageOption {
         name = "git";
