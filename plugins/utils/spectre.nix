@@ -229,39 +229,54 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   extraOptions =
     let
-      userCommandSettings = config.plugins.spectre.settings.default;
+      defaults = config.plugins.spectre.settings.default;
 
+      # NOTE: changes here should also be reflected in the `defaultText` below
       findPackages = {
         rg = pkgs.ripgrep;
       };
 
+      # NOTE: changes here should also be reflected in the `defaultText` below
       replacePackages = {
         sed = pkgs.gnused;
         inherit (pkgs) sd;
       };
-
-      # `toString` will turn `null` into `"null"` to allow for the attrs indexation.
-      findDefaultPackage = findPackages.${toString userCommandSettings.find.cmd} or null;
-      replaceDefaultPackage = replacePackages.${toString userCommandSettings.replace.cmd} or null;
     in
     {
-      findPackage = helpers.mkPackageOption {
-        default = findDefaultPackage;
-        description = ''
-          Which package to install for the find command.
-          Defaults to `pkgs.$\{settings.default.find.cmd}`.
+      findPackage = lib.mkOption {
+        type = with lib.types; nullOr package;
+        default = findPackages.${toString defaults.find.cmd} or null;
+        defaultText = literalMD ''
+          Based on the value defined in `config.plugins.spectre.settings.default.find.cmd`,
+          if the value defined there is a key in the attrset below, then the corresponding value is used. Otherwise the default will be `null`.
 
-          Set to `null` to prevent the installation.
+          ```nix
+          {
+            rg = pkgs.ripgrep;
+          }
+          ```
+        '';
+        description = ''
+          The package to use for the find command.
         '';
       };
 
-      replacePackage = helpers.mkPackageOption {
-        default = replaceDefaultPackage;
-        description = ''
-          Which package to install for the find command.
-          Defaults to `pkgs.$\{settings.default.replace.cmd}`.
+      replacePackage = lib.mkOption {
+        type = with lib.types; nullOr package;
+        default = replacePackages.${toString defaults.replace.cmd} or null;
+        defaultText = literalMD ''
+          Based on the value defined in `config.plugins.spectre.settings.default.replace.cmd`,
+          if the value defined there is a key in the attrset below, then the corresponding value is used. Otherwise the default will be `null`.
 
-          Set to `null` to prevent the installation.
+          ```nix
+          {
+            sd = pkgs.sd;
+            sed = pkgs.gnused;
+          }
+          ```
+        '';
+        description = ''
+          The package to use for the replace command.
         '';
       };
     };
