@@ -18,11 +18,8 @@ in
       description = "Whether to install `cargo`.";
     };
 
-    cargoPackage = mkOption {
-      type = types.package;
-      default = pkgs.cargo;
-      description = "Which package to use for `cargo`.";
-    };
+    # TODO: make nullable?
+    cargoPackage = mkPackageOption pkgs "cargo" { };
 
     installRustc = mkOption {
       type = with types; nullOr bool;
@@ -31,11 +28,8 @@ in
       description = "Whether to install `rustc`.";
     };
 
-    rustcPackage = mkOption {
-      type = types.package;
-      default = pkgs.rustc;
-      description = "Which package to use for `rustc`.";
-    };
+    # TODO: make nullable
+    rustcPackage = mkPackageOption pkgs "rustc" { };
   };
   config = mkIf cfg.enable {
     warnings =

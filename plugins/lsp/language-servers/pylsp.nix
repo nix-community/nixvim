@@ -11,10 +11,8 @@ let
 in
 {
   options.plugins.lsp.servers.pylsp = {
-    pythonPackage = mkOption {
-      type = lib.types.package;
-      description = "Python package to use for lsp.";
-      default = pkgs.python3;
+    pythonPackage = mkPackageOption pkgs "python" {
+      default = "python3";
     };
 
     # All settings are documented here:
