@@ -41,9 +41,8 @@ in
     plugins.lazy = {
       enable = mkEnableOption "lazy.nvim";
 
-      gitPackage = helpers.mkPackageOption {
-        name = "git";
-        default = pkgs.git;
+      gitPackage = lib.mkPackageOption pkgs "git" {
+        nullable = true;
       };
 
       plugins =

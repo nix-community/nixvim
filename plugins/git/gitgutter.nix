@@ -16,9 +16,8 @@ in
 
       package = helpers.mkPluginPackageOption "gitgutter" pkgs.vimPlugins.gitgutter;
 
-      gitPackage = helpers.mkPackageOption {
-        name = "git";
-        default = pkgs.git;
+      gitPackage = lib.mkPackageOption pkgs "git" {
+        nullable = true;
       };
 
       recommendedSettings = mkOption {

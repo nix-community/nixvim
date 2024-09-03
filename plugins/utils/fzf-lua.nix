@@ -40,10 +40,9 @@ helpers.neovim-plugin.mkNeovimPlugin {
   inherit settingsOptions settingsExample;
 
   extraOptions = {
-    fzfPackage = helpers.mkPackageOption {
-      name = "fzf";
-      default = pkgs.fzf;
-      example = pkgs.skim;
+    fzfPackage = lib.mkPackageOption pkgs "fzf" {
+      nullable = true;
+      example = "pkgs.skim";
     };
 
     # TODO: deprecated 2024-08-29 remove after 24.11

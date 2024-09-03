@@ -14,9 +14,9 @@ helpers.vim-plugin.mkVimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   extraOptions = {
-    godotPackage = helpers.mkPackageOption {
-      name = "godot";
-      default = pkgs.godot_4;
+    godotPackage = lib.mkPackageOption pkgs "godot" {
+      nullable = true;
+      default = "godot_4";
     };
   };
 

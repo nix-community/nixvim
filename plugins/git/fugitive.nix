@@ -13,9 +13,8 @@ helpers.vim-plugin.mkVimPlugin {
 
   # In typical tpope fashion, this plugin has no config options
   extraOptions = {
-    gitPackage = helpers.mkPackageOption {
-      name = "git";
-      default = pkgs.git;
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
   };
 

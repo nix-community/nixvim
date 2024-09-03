@@ -4,7 +4,7 @@
   ...
 }:
 let
-  inherit (lib.nixvim) defaultNullOpts mkPackageOption;
+  inherit (lib.nixvim) defaultNullOpts;
   types = lib.nixvim.nixvimTypes;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
@@ -128,9 +128,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   extraOptions = {
-    gitPackage = mkPackageOption {
-      name = "git";
-      default = pkgs.git;
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
   };
 

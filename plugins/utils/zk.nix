@@ -108,9 +108,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   extraOptions = {
-    zkPackage = helpers.mkPackageOption {
-      name = "zk";
-      default = pkgs.zk;
+    zkPackage = lib.mkPackageOption pkgs "zk" {
+      nullable = true;
     };
   };
   extraConfig = cfg: {

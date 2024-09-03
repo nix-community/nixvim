@@ -13,9 +13,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   extraOptions = {
-    curlPackage = helpers.mkPackageOption {
-      name = "curl";
-      default = pkgs.curl;
+    curlPackage = lib.mkPackageOption pkgs "curl" {
+      nullable = true;
     };
   };
 

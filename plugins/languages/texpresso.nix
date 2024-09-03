@@ -15,9 +15,8 @@ helpers.vim-plugin.mkVimPlugin {
   maintainers = [ maintainers.nickhu ];
 
   extraOptions = {
-    texpressoPackage = helpers.mkPackageOption {
-      name = "texpresso";
-      default = pkgs.texpresso;
+    texpressoPackage = lib.mkPackageOption pkgs "texpresso" {
+      nullable = true;
     };
   };
 

@@ -72,13 +72,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   extraOptions = {
-    glowPackage = helpers.mkPackageOption {
-      description = ''
-        Which package to use for `glow` in your `$PATH`.
-        Set to `null` to disable its automatic installation.
-      '';
-      default = pkgs.glow;
-      defaultText = lib.literalExpression "pkgs.glow";
+    glowPackage = lib.mkPackageOption pkgs "glow" {
+      nullable = true;
     };
   };
 

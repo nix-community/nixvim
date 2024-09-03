@@ -14,9 +14,8 @@ in
     plugins.packer = {
       enable = mkEnableOption "packer.nvim";
 
-      gitPackage = helpers.mkPackageOption {
-        name = "git";
-        default = pkgs.git;
+      gitPackage = lib.mkPackageOption pkgs "git" {
+        nullable = true;
       };
 
       plugins =

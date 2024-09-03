@@ -1,5 +1,6 @@
 {
   helpers,
+  lib,
   pkgs,
   ...
 }:
@@ -47,9 +48,8 @@ helpers.vim-plugin.mkVimPlugin {
   };
 
   extraOptions = {
-    gitPackage = helpers.mkPackageOption {
-      name = "git";
-      default = pkgs.git;
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
   };
 

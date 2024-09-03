@@ -54,9 +54,13 @@ helpers.vim-plugin.mkVimPlugin {
   };
 
   extraOptions = {
-    texlivePackage = helpers.mkPackageOption {
-      name = "texlive";
-      default = pkgs.texlive.combined.scheme-medium;
+    texlivePackage = lib.mkPackageOption pkgs "texlive" {
+      nullable = true;
+      default = [
+        "texlive"
+        "combined"
+        "scheme-medium"
+      ];
     };
   };
 

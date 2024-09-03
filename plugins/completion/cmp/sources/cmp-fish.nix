@@ -13,9 +13,8 @@ in
   meta.maintainers = [ maintainers.GaetanLepage ];
 
   options.plugins.cmp-fish = {
-    fishPackage = helpers.mkPackageOption {
-      name = "fish";
-      default = pkgs.fish;
+    fishPackage = lib.mkPackageOption pkgs "fish" {
+      nullable = true;
     };
   };
 

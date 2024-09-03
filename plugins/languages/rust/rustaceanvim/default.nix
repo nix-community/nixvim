@@ -16,9 +16,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
   optionsRenamedToSettings = import ./renamed-options.nix;
 
   extraOptions = {
-    rustAnalyzerPackage = helpers.mkPackageOption {
-      name = "rust-analyzer";
-      default = pkgs.rust-analyzer;
+    rustAnalyzerPackage = lib.mkPackageOption pkgs "rust-analyzer" {
+      nullable = true;
     };
   };
 

@@ -45,9 +45,8 @@ mkVimPlugin {
     ];
 
   extraOptions = {
-    ledgerPackage = helpers.mkPackageOption {
-      name = "ledger";
-      default = pkgs.ledger;
+    ledgerPackage = lib.mkPackageOption pkgs "ledger" {
+      nullable = true;
     };
   };
 

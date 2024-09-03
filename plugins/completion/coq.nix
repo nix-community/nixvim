@@ -16,11 +16,14 @@ helpers.neovim-plugin.mkNeovimPlugin {
   ];
 
   extraOptions = {
+    # TODO: should this enable option be replaced with `nullable = true` in the package option?
     installArtifacts = mkEnableOption "and install coq-artifacts";
-    artifactsPackage = mkOption {
-      type = types.package;
-      description = "Package to use for coq-artifacts (when enabled with installArtifacts)";
-      default = pkgs.vimPlugins.coq-artifacts;
+    artifactsPackage = mkPackageOption pkgs "coq-artifacts" {
+      extraDescription = "Installed when `installArtifacts` is enabled.";
+      default = [
+        "vimPlugins"
+        "coq-artifacts"
+      ];
     };
   };
 

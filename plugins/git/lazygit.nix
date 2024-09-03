@@ -70,14 +70,12 @@ helpers.vim-plugin.mkVimPlugin {
   };
 
   extraOptions = {
-    gitPackage = helpers.mkPackageOption {
-      name = "git";
-      default = pkgs.git;
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
 
-    lazygitPackage = helpers.mkPackageOption {
-      name = "lazygit";
-      default = pkgs.lazygit;
+    lazygitPackage = lib.mkPackageOption pkgs "lazygit" {
+      nullable = true;
     };
   };
 

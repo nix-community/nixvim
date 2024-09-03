@@ -62,9 +62,8 @@ in
         "nvim-web-devicons"
       ] { nullable = true; };
 
-      gitPackage = helpers.mkPackageOption {
-        name = "git";
-        default = pkgs.git;
+      gitPackage = lib.mkPackageOption pkgs "git" {
+        nullable = true;
       };
 
       sources =

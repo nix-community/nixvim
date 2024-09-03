@@ -15,9 +15,9 @@ in
 
     package = helpers.mkPluginPackageOption "lean-nvim" pkgs.vimPlugins.lean-nvim;
 
-    leanPackage = helpers.mkPackageOption {
-      name = "lean";
-      default = pkgs.lean4;
+    leanPackage = lib.mkPackageOption pkgs "lean" {
+      nullable = true;
+      default = "lean4";
     };
 
     lsp = helpers.defaultNullOpts.mkNullable (

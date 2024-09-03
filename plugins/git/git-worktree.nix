@@ -16,9 +16,8 @@ in
 
       package = helpers.mkPluginPackageOption "git-worktree" pkgs.vimPlugins.git-worktree-nvim;
 
-      gitPackage = helpers.mkPackageOption {
-        name = "git";
-        default = pkgs.git;
+      gitPackage = lib.mkPackageOption pkgs "git" {
+        nullable = true;
       };
 
       enableTelescope = mkEnableOption "telescope integration";

@@ -13,9 +13,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   extraOptions = {
-    gitPackage = helpers.mkPackageOption {
-      name = "git";
-      default = pkgs.git;
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
   };
 

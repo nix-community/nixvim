@@ -10,7 +10,6 @@ let
     defaultNullOpts
     keymaps
     mkNullOrOption'
-    mkPackageOption
     transitionType
     ;
   types = lib.nixvim.nixvimTypes;
@@ -405,9 +404,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           todoTelescope = "TodoTelescope";
         };
 
-    ripgrepPackage = mkPackageOption {
-      name = "ripgrep";
-      default = pkgs.ripgrep;
+    ripgrepPackage = lib.mkPackageOption pkgs "ripgrep" {
+      nullable = true;
     };
   };
 

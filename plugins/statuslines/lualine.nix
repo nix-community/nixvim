@@ -108,9 +108,8 @@ in
 
       package = helpers.mkPluginPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
 
-      gitPackage = helpers.mkPackageOption {
-        name = "git";
-        default = pkgs.git;
+      gitPackage = lib.mkPackageOption pkgs "git" {
+        nullable = true;
       };
 
       iconsEnabled = mkOption {
