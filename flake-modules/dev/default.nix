@@ -37,7 +37,8 @@
           statix.enable = true;
           stylua.enable = true;
           shfmt.enable = true;
-          taplo.enable = true;
+          # FIXME: currently broken: taplo with options '[format]' failed to apply: exit status 101
+          # taplo.enable = true;
         };
 
         settings = {
