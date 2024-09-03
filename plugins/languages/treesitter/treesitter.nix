@@ -303,16 +303,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
   extraOptions = {
     folding = mkEnableOption "tree-sitter based folding";
 
-    gccPackage = helpers.mkPackageOption {
-      name = "gcc";
-      default = pkgs.gcc;
-      defaultText = literalExpression "pkgs.gcc";
-      example = literalExpression "pkgs.gcc14";
-      description = ''
-        Which package (if any) to be added as the GCC compiler.
-
+    gccPackage = lib.mkPackageOption pkgs "gcc" {
+      nullable = true;
+      example = "pkgs.gcc14";
+      extraDescription = ''
         This is required to build grammars if you are not using `nixGrammars`.
-        To disable the installation of GCC, set this option to `null`.
       '';
     };
 
@@ -358,28 +353,18 @@ helpers.neovim-plugin.mkNeovimPlugin {
       description = "Whether to enable Nixvim injections, e.g. highlighting `extraConfigLua` as lua.";
     };
 
-    nodejsPackage = helpers.mkPackageOption {
-      name = "nodejs";
-      default = pkgs.nodejs;
-      defaultText = literalExpression "pkgs.nodejs";
-      example = literalExpression "pkgs.nodejs_22";
-      description = ''
-        Which package (if any) to be added as the nodejs package.
-
+    nodejsPackage = lib.mkPackageOption pkgs "nodejs" {
+      nullable = true;
+      example = "pkgs.nodejs_22";
+      extraDescription = ''
         This is required to build grammars if you are not using `nixGrammars`.
-        To disable the installation of NodeJS, set this option to `null`.
       '';
     };
 
-    treesitterPackage = helpers.mkPackageOption {
-      name = "tree-sitter";
-      default = pkgs.tree-sitter;
-      defaultText = literalExpression "pkgs.tree-sitter";
-      description = ''
-        Which package (if any) to be added as the tree-sitter binary.
-
+    treesitterPackage = lib.mkPackageOption pkgs "tree-sitter" {
+      nullable = true;
+      extraDescription = ''
         This is required to build grammars if you are not using `nixGrammars`.
-        To disable the installation of tree-sitter, set this option to `null`.
       '';
     };
   };
