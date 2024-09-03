@@ -1,4 +1,4 @@
-pkgs: {
+lib: {
   # builtin sources that don't require a package
   noPackage = [
     "gitrebase"
@@ -19,172 +19,217 @@ pkgs: {
 
   # nixpkgs packages for a given source
   packaged =
-    {
-      inherit (pkgs)
-        actionlint
-        alejandra
-        asmfmt
-        astyle
-        bibclean
-        biome
-        buf
-        cbfmt
-        checkmake
-        checkstyle
-        clazy
-        codespell
-        commitlint
-        cppcheck
-        csharpier
-        deadnix
-        dfmt
-        djhtml
-        djlint
-        erlfmt
-        fantomas
-        fish
-        fnlfmt
-        fprettify
-        gitlint
-        gofumpt
-        golines
-        hadolint
-        hclfmt
-        isort
-        joker
-        just
-        ktlint
-        leptosfmt
-        mdformat
-        mdl
-        mypy
-        pmd
-        prettierd
-        proselint
-        protolint
-        pylint
-        revive
-        rstcheck
-        rubocop
-        rubyfmt
-        rufo
-        rustywind
-        scalafmt
-        selene
-        semgrep
-        shellharden
-        shfmt
-        smlfmt
-        sqlfluff
-        statix
-        stylelint
-        stylua
-        tfsec
-        topiary
-        trivy
-        typstfmt
-        typstyle
-        uncrustify
-        usort
-        vale
-        verilator
-        yamlfix
-        yamlfmt
-        yamllint
-        yapf
-        zprint
-        zsh
-        ;
-      inherit (pkgs.nodePackages) alex prettier;
-      inherit (pkgs.python3.pkgs) black;
-      inherit (pkgs.phpPackages) phpmd phpstan;
-      inherit (pkgs.rubyPackages) htmlbeautifier;
-      inherit (pkgs.ocamlPackages) ocamlformat;
-      ansiblelint = pkgs.ansible-lint;
-      bean_check = pkgs.beancount;
-      bean_format = pkgs.beancount;
-      blackd = pkgs.black;
-      buildifier = pkgs.bazel-buildtools;
-      cfn_lint = pkgs.python3.pkgs.cfn-lint;
-      clang_format = pkgs.clang-tools;
-      clj_kondo = pkgs.clj-kondo;
-      cmake_format = pkgs.cmake-format;
-      cmake_lint = pkgs.cmake-format;
-      credo = pkgs.elixir;
-      crystal_format = pkgs.crystal;
-      cue_fmt = pkgs.cue;
-      d2_fmt = pkgs.d2;
-      dart_format = pkgs.dart;
-      dictionary = pkgs.curl;
-      dotenv_linter = pkgs.dotenv-linter;
-      dxfmt = pkgs.dioxus-cli;
-      editorconfig_checker = pkgs.editorconfig-checker;
-      elm_format = pkgs.elmPackages.elm-format;
-      emacs_scheme_mode = pkgs.emacs;
-      emacs_vhdl_mode = pkgs.emacs;
-      erb_format = pkgs.rubyPackages.erb-formatter;
-      fish_indent = pkgs.fish;
-      format_r = pkgs.R;
-      # TODO: Added 2024-06-13; remove 2024-09-13
-      # Nixpkgs renamed to _3 & _4 without maintaining an alias
-      # Out of sync lock files could be using either attr name...
-      gdformat = pkgs.gdtoolkit_4 or pkgs.gdtoolkit;
-      gdlint = pkgs.gdtoolkit_4 or pkgs.gdtoolkit;
-      gitsigns = pkgs.git;
-      gleam_format = pkgs.gleam;
-      glslc = pkgs.shaderc;
-      gn_format = pkgs.gn;
-      gofmt = pkgs.go;
-      goimports = pkgs.gotools;
-      goimports_reviser = pkgs.goimports-reviser;
-      golangci_lint = pkgs.golangci-lint;
-      google_java_format = pkgs.google-java-format;
-      haml_lint = pkgs.mastodon;
-      haxe_formatter = pkgs.haxe;
-      isortd = pkgs.isort;
-      ltrs = pkgs.languagetool-rust;
-      markdownlint_cli2 = pkgs.markdownlint-cli2;
-      markdownlint = pkgs.markdownlint-cli;
-      mix = pkgs.elixir;
-      nimpretty = pkgs.nim;
-      nixfmt = pkgs.nixfmt-classic;
-      nixpkgs_fmt = pkgs.nixpkgs-fmt;
-      opacheck = pkgs.open-policy-agent;
-      opentofu_fmt = pkgs.opentofu;
-      pg_format = pkgs.pgformatter;
-      phpcbf = pkgs.phpPackages.php-codesniffer;
-      phpcsfixer = pkgs.phpPackages.php-cs-fixer;
-      phpcs = pkgs.phpPackages.php-codesniffer;
-      # TODO: Added 2024-08-31; remove 2024-11-31
-      # prisma was moved out of nodePackages set without alias
-      # Using fallback as a transition period
-      prisma_format = pkgs.prisma or pkgs.nodePackages.prisma;
-      ptop = pkgs.fpc;
-      puppet_lint = pkgs.puppet-lint;
-      qmlformat = pkgs.qt6.qtdeclarative;
-      qmllint = pkgs.qt6.qtdeclarative;
-      racket_fixw = pkgs.racket;
-      raco_fmt = pkgs.racket;
-      rego = pkgs.open-policy-agent;
-      rpmspec = pkgs.rpm;
-      sqlformat = pkgs.python3.pkgs.sqlparse;
-      staticcheck = pkgs.go-tools;
-      surface = pkgs.elixir;
-      swift_format = pkgs.swift-format;
-      teal = pkgs.luaPackages.tl;
-      terraform_fmt = pkgs.terraform;
-      terraform_validate = pkgs.terraform;
-      terragrunt_fmt = pkgs.terragrunt;
-      terragrunt_validate = pkgs.terragrunt;
-      tidy = pkgs.html-tidy;
-      treefmt = pkgs.treefmt2;
-      verible_verilog_format = pkgs.verible;
-      vint = pkgs.vim-vint;
-      write_good = pkgs.write-good;
-      xmllint = pkgs.libxml2;
+    # Top-level packages
+    lib.genAttrs [
+      "actionlint"
+      "alejandra"
+      "asmfmt"
+      "astyle"
+      "bibclean"
+      "biome"
+      "buf"
+      "cbfmt"
+      "checkmake"
+      "checkstyle"
+      "clazy"
+      "codespell"
+      "commitlint"
+      "cppcheck"
+      "csharpier"
+      "deadnix"
+      "dfmt"
+      "djhtml"
+      "djlint"
+      "erlfmt"
+      "fantomas"
+      "fish"
+      "fnlfmt"
+      "fprettify"
+      "gitlint"
+      "gofumpt"
+      "golines"
+      "hadolint"
+      "hclfmt"
+      "isort"
+      "joker"
+      "just"
+      "ktlint"
+      "leptosfmt"
+      "mdformat"
+      "mdl"
+      "mypy"
+      "pmd"
+      "prettierd"
+      "proselint"
+      "protolint"
+      "pylint"
+      "revive"
+      "rstcheck"
+      "rubocop"
+      "rubyfmt"
+      "rufo"
+      "rustywind"
+      "scalafmt"
+      "selene"
+      "semgrep"
+      "shellharden"
+      "shfmt"
+      "smlfmt"
+      "sqlfluff"
+      "statix"
+      "stylelint"
+      "stylua"
+      "tfsec"
+      "topiary"
+      "trivy"
+      "typstfmt"
+      "typstyle"
+      "uncrustify"
+      "usort"
+      "vale"
+      "verilator"
+      "yamlfix"
+      "yamlfmt"
+      "yamllint"
+      "yapf"
+      "zprint"
+      "zsh"
+    ] lib.id
+    # Scoped packages
+    //
+      lib.concatMapAttrs
+        (
+          scope: names:
+          lib.genAttrs names (name: [
+            scope
+            name
+          ])
+        )
+        {
+          nodePackages = [
+            "alex"
+            "prettier"
+          ];
+          phpPackages = [
+            "phpmd"
+            "phpstan"
+          ];
+          rubyPackages = [ "htmlbeautifier" ];
+          ocamlPackages = [ "ocamlformat" ];
+        }
+    # Packages where the name is different
+    // {
+      ansiblelint = "ansible-lint";
+      bean_check = "beancount";
+      bean_format = "beancount";
+      black = [
+        "python3"
+        "pkgs"
+        "black"
+      ];
+      blackd = "black";
+      buildifier = "bazel-buildtools";
+      cfn_lint = "python3.pkgs.cfn-lint";
+      clang_format = "clang-tools";
+      clj_kondo = "clj-kondo";
+      cmake_format = "cmake-format";
+      cmake_lint = "cmake-format";
+      credo = "elixir";
+      crystal_format = "crystal";
+      cue_fmt = "cue";
+      d2_fmt = "d2";
+      dart_format = "dart";
+      dictionary = "curl";
+      dotenv_linter = "dotenv-linter";
+      dxfmt = "dioxus-cli";
+      editorconfig_checker = "editorconfig-checker";
+      elm_format = [
+        "elmPackages"
+        "elm-format"
+      ];
+      emacs_scheme_mode = "emacs";
+      emacs_vhdl_mode = "emacs";
+      erb_format = [
+        "rubyPackages"
+        "erb-formatterpkgs"
+      ];
+      fish_indent = "fish";
+      format_r = "R";
+      # FIXME: Can't have transition fallbacks anymore
+      gdformat = "gdtoolkit_4";
+      gdlint = "gdtoolkit_4";
+      gitsigns = "git";
+      gleam_format = "gleam";
+      glslc = "shaderc";
+      gn_format = "gn";
+      gofmt = "go";
+      goimports = "gotools";
+      goimports_reviser = "goimports-reviser";
+      golangci_lint = "golangci-lint";
+      google_java_format = "google-java-format";
+      haml_lint = "mastodon";
+      haxe_formatter = "haxe";
+      isortd = "isort";
+      ltrs = "languagetool-rust";
+      markdownlint_cli2 = "markdownlint-cli2";
+      markdownlint = "markdownlint-cli";
+      mix = "elixir";
+      nimpretty = "nim";
+      nixfmt = "nixfmt-classic";
+      nixpkgs_fmt = "nixpkgs-fmt";
+      opacheck = "open-policy-agent";
+      opentofu_fmt = "opentofu";
+      pg_format = "pgformatter";
+      phpcbf = [
+        "phpPackages"
+        "php-codesnifferpkgs"
+      ];
+      phpcsfixer = [
+        "phpPackages"
+        "php-cs-fixerpkgs"
+      ];
+      phpcs = [
+        "phpPackages"
+        "php-codesnifferpkgs"
+      ];
+      # FIXME: Can't have transition fallbacks anymore
+      prisma_format = "prisma";
+      ptop = "fpc";
+      puppet_lint = "puppet-lint";
+      qmlformat = [
+        "qt6"
+        "qtdeclarativepkgs"
+      ];
+      qmllint = [
+        "qt6"
+        "qtdeclarativepkgs"
+      ];
+      racket_fixw = "racket";
+      raco_fmt = "racket";
+      rego = "open-policy-agent";
+      rpmspec = "rpm";
+      sqlformat = [
+        "python3"
+        "pkgs"
+        "sqlparse"
+      ];
+      staticcheck = "go-tools";
+      surface = "elixir";
+      swift_format = "swift-format";
+      teal = "luaPackages.tl";
+      terraform_fmt = "terraform";
+      terraform_validate = "terraform";
+      terragrunt_fmt = "terragrunt";
+      terragrunt_validate = "terragrunt";
+      tidy = "html-tidy";
+      treefmt = "treefmt2";
+      verible_verilog_format = "verible";
+      vint = "vim-vint";
+      write_good = "write-good";
+      xmllint = "libxml2";
     }
     # builtin sources that are not packaged in nixpkgs
-    // pkgs.lib.genAttrs [
+    // lib.genAttrs [
       "blade_formatter"
       "bsfmt"
       "bslint"

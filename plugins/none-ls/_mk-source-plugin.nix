@@ -8,8 +8,9 @@ sourceType: sourceName:
   ...
 }:
 let
-  inherit (import ./packages.nix pkgs) packaged;
+  inherit (import ./packages.nix lib) packaged;
   pkg = packaged.${sourceName};
+  loc = lib.toList pkg;
 
   cfg = config.plugins.none-ls;
   cfg' = config.plugins.none-ls.sources.${sourceType}.${sourceName};
@@ -55,7 +56,12 @@ in
               ''
             ));
         }
-        // lib.optionalAttrs (pkg != null) { default = pkg; }
+        // lib.optionalAttrs (pkg != null) {
+          default =
+            lib.attrByPath loc (lib.warn "${lib.concatStringsSep "." loc} cannot be found in pkgs!" null)
+              pkgs;
+          defaultText = lib.literalExpression "pkgs.${lib.concatStringsSep "." loc}";
+        }
       );
     };
 

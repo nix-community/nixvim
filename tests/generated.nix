@@ -37,7 +37,7 @@ let
 
       declared =
         let
-          inherit (import ../plugins/none-ls/packages.nix pkgs) noPackage packaged;
+          inherit (import ../plugins/none-ls/packages.nix lib) noPackage packaged;
         in
         noPackage ++ lib.attrsets.attrNames packaged;
 
