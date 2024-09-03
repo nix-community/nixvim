@@ -139,6 +139,7 @@
             gopls.enable = true;
             golangci-lint-ls.enable = true;
             graphql.enable = true;
+            harper-ls.enable = true;
             helm-ls.enable = true;
             hls.enable = true;
             html.enable = true;

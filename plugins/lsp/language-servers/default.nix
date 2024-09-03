@@ -213,6 +213,12 @@ let
       ];
     }
     {
+      name = "harper-ls";
+      description = "The Grammar Checker for Developers";
+      serverName = "harper_ls";
+      package = "harper";
+    }
+    {
       name = "helm-ls";
       description = "helm_ls for Helm";
       serverName = "helm_ls";
