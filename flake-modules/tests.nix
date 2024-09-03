@@ -9,6 +9,9 @@
       makeNixvimWithModule,
       ...
     }:
+    let
+      evaluatedNixvim = helpers.modules.evalNixvim { check = false; };
+    in
     {
       checks = {
         extra-args-tests = import ../tests/extra-args.nix {
@@ -43,6 +46,8 @@
         maintainers = import ../tests/maintainers.nix { inherit pkgs; };
 
         generated = pkgs.callPackage ../tests/generated.nix { };
+
+        package-options = pkgs.callPackage ../tests/package-options.nix { inherit evaluatedNixvim; };
       } // import ../tests { inherit pkgs pkgsUnfree helpers; };
     };
 }
