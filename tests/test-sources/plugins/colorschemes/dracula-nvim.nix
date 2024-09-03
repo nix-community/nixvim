@@ -1,16 +1,16 @@
 {
   empty = {
-    plugins.dracula.enable = true;
+    colorschemes.dracula-nvim.enable = true;
   };
 
   default = {
-    plugins.dracula = {
+    colorschemes.dracula-nvim = {
       enable = true;
     };
   };
 
   example = {
-    plugins.dracula = {
+    colorschemes.dracula-nvim = {
       enable = true;
       settings = {
         italic_comment = true;
