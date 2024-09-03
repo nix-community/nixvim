@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) types mkOption;
+  inherit (lib) types mkOption mkPackageOption;
   inherit (lib) optional optionalString optionalAttrs;
 in
 {
@@ -39,10 +39,8 @@ in
       description = "Enable Node provider.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.neovim-unwrapped;
-      description = "Neovim to use for NixVim.";
+    package = mkPackageOption pkgs "Neovim" {
+      default = "neovim-unwrapped";
     };
 
     wrapRc = mkOption {
