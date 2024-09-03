@@ -7,7 +7,7 @@
 }:
 let
   tools = import ../../../generated/efmls-configs.nix;
-  inherit (import ./efmls-configs-pkgs.nix pkgs) packaged;
+  inherit (import ./efmls-configs-pkgs.nix lib) packaged;
 in
 {
   options.plugins.efmls-configs = {
@@ -26,10 +26,10 @@ in
     toolPackages = lib.pipe packaged [
       # Produce package a option for each tool
       (lib.attrsets.mapAttrs (
-        tool: pkg:
-        helpers.mkPackageOption {
-          name = tool;
-          default = pkg;
+        name: loc:
+        lib.mkPackageOption pkgs name {
+          nullable = true;
+          default = loc;
         }
       ))
       # Filter package defaults that are not compatible with the current platform
@@ -38,7 +38,7 @@ in
         if lib.meta.availableOn pkgs.stdenv.hostPlatform opt.default then
           opt
         else
-          opt // { default = null; }
+          builtins.removeAttrs opt [ "defaultText" ] // { default = null; }
       ))
     ];
 

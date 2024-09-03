@@ -54,7 +54,7 @@ let
 
       declared =
         let
-          inherit (import ../plugins/lsp/language-servers/efmls-configs-pkgs.nix pkgs) packaged unpackaged;
+          inherit (import ../plugins/lsp/language-servers/efmls-configs-pkgs.nix lib) packaged unpackaged;
         in
         unpackaged ++ lib.attrsets.attrNames packaged;
 
