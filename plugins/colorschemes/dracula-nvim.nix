@@ -1,9 +1,10 @@
 {
   lib,
+  config,
   pkgs,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin config {
   name = "dracula";
   originalName = "dracula.nvim ";
   defaultPackage = pkgs.vimPlugins.dracula-nvim;
