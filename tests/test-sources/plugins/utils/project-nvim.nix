@@ -7,7 +7,6 @@
     plugins.telescope = {
       enable = true;
     };
-
     plugins.project-nvim = {
       enable = true;
       enableTelescope = true;
@@ -17,27 +16,28 @@
   defaults = {
     plugins.project-nvim = {
       enable = true;
-
-      manualMode = false;
-      detectionMethods = [
-        "lsp"
-        "pattern"
-      ];
-      patterns = [
-        ".git"
-        "_darcs"
-        ".hg"
-        ".bzr"
-        ".svn"
-        "Makefile"
-        "package.json"
-      ];
-      ignoreLsp = [ ];
-      excludeDirs = [ ];
-      showHidden = false;
-      silentChdir = true;
-      scopeChdir = "global";
-      dataPath.__raw = "vim.fn.stdpath('data')";
+      settings = {
+        manual_mode = false;
+        detection_methods = [
+          "lsp"
+          "pattern"
+        ];
+        patterns = [
+          ".git"
+          "_darcs"
+          ".hg"
+          ".bzr"
+          ".svn"
+          "Makefile"
+          "package.json"
+        ];
+        ignore_lsp = [ ];
+        exclude_dirs = [ ];
+        show_hidden = false;
+        silent_chdir = true;
+        scope_chdir = "global";
+        data_path.__raw = "vim.fn.stdpath('data')";
+      };
     };
   };
 }

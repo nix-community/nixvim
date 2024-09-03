@@ -1,16 +1,35 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.project-nvim;
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "project-nvim";
+  originalName = "project.nvim";
+  luaName = "project_nvim";
+  defaultPackage = pkgs.vimPlugins.project-nvim;
+
+  maintainers = [ lib.maintainers.khaneliman ];
+
+  # TODO: added 2024-09-03 remove after 24.11
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "manualMode"
+    "detectionMethods"
+    "patterns"
+    "ignoreLsp"
+    "excludeDirs"
+    "showHidden"
+    "silentChdir"
+    "scopeChdir"
+    "dataPath"
+  ];
   imports = [
+    # TODO: added 2024-03-13 remove after 24.11
     (lib.mkRenamedOptionModule
       [
         "plugins"
@@ -27,18 +46,14 @@ in
     )
   ];
 
-  options.plugins.project-nvim = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "project.nvim";
-
-    package = helpers.mkPluginPackageOption "project-nvim" pkgs.vimPlugins.project-nvim;
-
-    manualMode = helpers.defaultNullOpts.mkBool false ''
+  settingsOptions = {
+    manual_mode = defaultNullOpts.mkBool false ''
       Manual mode doesn't automatically change your root directory, so you have the option to
       manually do so using `:ProjectRoot` command.
     '';
 
-    detectionMethods =
-      helpers.defaultNullOpts.mkListOf types.str
+    detection_methods =
+      defaultNullOpts.mkListOf lib.types.str
         [
           "lsp"
           "pattern"
@@ -52,7 +67,7 @@ in
         '';
 
     patterns =
-      helpers.defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf lib.types.str
         [
           ".git"
           "_darcs"
@@ -66,22 +81,20 @@ in
           All the patterns used to detect root dir, when **"pattern"** is in `detectionMethods`.
         '';
 
-    ignoreLsp =
-      helpers.defaultNullOpts.mkListOf types.str [ ]
-        "Table of lsp clients to ignore by name.";
+    ignore_lsp = defaultNullOpts.mkListOf lib.types.str [ ] "Table of lsp clients to ignore by name.";
 
-    excludeDirs =
-      helpers.defaultNullOpts.mkListOf types.str [ ]
+    exclude_dirs =
+      defaultNullOpts.mkListOf lib.types.str [ ]
         "Don't calculate root dir on specific directories.";
 
-    showHidden = helpers.defaultNullOpts.mkBool false "Show hidden files in telescope.";
+    show_hidden = defaultNullOpts.mkBool false "Show hidden files in telescope.";
 
-    silentChdir = helpers.defaultNullOpts.mkBool true ''
+    silent_chdir = defaultNullOpts.mkBool true ''
       When set to false, you will get a message when `project.nvim` changes your directory.
     '';
 
-    scopeChdir =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+    scope_chdir =
+      defaultNullOpts.mkEnumFirstDefault
         [
           "global"
           "tab"
@@ -91,41 +104,29 @@ in
           What scope to change the directory.
         '';
 
-    dataPath = helpers.defaultNullOpts.mkStr {
+    data_path = defaultNullOpts.mkStr {
       __raw = "vim.fn.stdpath('data')";
     } "Path where project.nvim will store the project history for use in telescope.";
-
-    enableTelescope = mkEnableOption "project-nvim telescope integration";
   };
 
-  config = mkIf cfg.enable {
-    warnings = optional (cfg.enableTelescope && (!config.plugins.telescope.enable)) ''
+  settingsExample = {
+    detection_methods = [ "lsp" ];
+    patterns = [ ".git" ];
+    ignore_lsp = [ "tsserver" ];
+    excludeDirs = [ "/home/user/secret-directory" ];
+    showHidden = true;
+    silent_chdir = false;
+  };
+
+  extraOptions = {
+    enableTelescope = lib.mkEnableOption "project-nvim telescope integration";
+  };
+
+  extraConfig = cfg: {
+    warnings = lib.optional (cfg.enableTelescope && (!config.plugins.telescope.enable)) ''
       Telescope support for project-nvim is enabled but the telescope plugin is not.
     '';
 
-    extraPlugins = [ cfg.package ];
-
-    extraConfigLua =
-      let
-        setupOptions =
-          with cfg;
-          {
-            manual_mode = manualMode;
-            detection_methods = detectionMethods;
-            inherit patterns;
-            ignore_lsp = ignoreLsp;
-            exclude_dirs = excludeDirs;
-            show_hidden = showHidden;
-            silent_chdir = silentChdir;
-            scope_schdir = scopeChdir;
-            data_path = dataPath;
-          }
-          // cfg.extraOptions;
-      in
-      ''
-        require('project_nvim').setup(${helpers.toLuaObject setupOptions})
-      '';
-
-    plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "projects" ];
+    plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "projects" ];
   };
 }
