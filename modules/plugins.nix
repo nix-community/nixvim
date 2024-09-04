@@ -1,17 +1,15 @@
 { lib, ... }:
 let
-  inherit (builtins) readDir pathExists;
+  inherit (builtins) readDir;
   inherit (lib.attrsets) foldlAttrs;
-  inherit (lib.lists) optional optionals;
+  inherit (lib.lists) optional;
   by-name = ../plugins/by-name;
 in
 {
   imports =
     [ ../plugins ]
-    ++ optionals (pathExists by-name) (
-      foldlAttrs (
-        prev: name: type:
-        prev ++ optional (type == "directory") (by-name + "/${name}")
-      ) [ ] (readDir by-name)
-    );
+    ++ foldlAttrs (
+      prev: name: type:
+      prev ++ optional (type == "directory") (by-name + "/${name}")
+    ) [ ] (readDir by-name);
 }
