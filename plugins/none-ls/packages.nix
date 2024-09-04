@@ -1,4 +1,8 @@
-lib: {
+lib:
+let
+  inherit (import ../../lib/pkg-lists.nix lib) topLevel scoped nullAttrs;
+in
+{
   # builtin sources that don't require a package
   noPackage = [
     "gitrebase"
@@ -20,7 +24,7 @@ lib: {
   # nixpkgs packages for a given source
   packaged =
     # Top-level packages
-    lib.genAttrs [
+    topLevel [
       "actionlint"
       "alejandra"
       "asmfmt"
@@ -94,29 +98,20 @@ lib: {
       "yapf"
       "zprint"
       "zsh"
-    ] lib.id
+    ]
     # Scoped packages
-    //
-      lib.concatMapAttrs
-        (
-          scope: names:
-          lib.genAttrs names (name: [
-            scope
-            name
-          ])
-        )
-        {
-          nodePackages = [
-            "alex"
-            "prettier"
-          ];
-          phpPackages = [
-            "phpmd"
-            "phpstan"
-          ];
-          rubyPackages = [ "htmlbeautifier" ];
-          ocamlPackages = [ "ocamlformat" ];
-        }
+    // scoped {
+      nodePackages = [
+        "alex"
+        "prettier"
+      ];
+      phpPackages = [
+        "phpmd"
+        "phpstan"
+      ];
+      rubyPackages = "htmlbeautifier";
+      ocamlPackages = "ocamlformat";
+    }
     # Packages where the name is different
     // {
       ansiblelint = "ansible-lint";
@@ -229,7 +224,7 @@ lib: {
       xmllint = "libxml2";
     }
     # builtin sources that are not packaged in nixpkgs
-    // lib.genAttrs [
+    // nullAttrs [
       "blade_formatter"
       "bsfmt"
       "bslint"
@@ -268,5 +263,5 @@ lib: {
       "textlint"
       "twigcs"
       "vacuum"
-    ] (_: null);
+    ];
 }

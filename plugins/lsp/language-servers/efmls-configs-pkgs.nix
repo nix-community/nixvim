@@ -1,4 +1,8 @@
-lib: {
+lib:
+let
+  inherit (import ../../../lib/pkg-lists.nix lib) topLevel scoped;
+in
+{
   # efmls-configs tools that have no corresponding nixpkgs package
   unpackaged = [
     "blade_formatter"
@@ -28,20 +32,6 @@ lib: {
 
   # Mapping from a efmls-configs tool name to the corresponding nixpkgs package
   packaged =
-    let
-      # TODO: move these helpers to a shared location so that none-ls can also use them
-      topLevel = names: lib.genAttrs names lib.id;
-      scoped = lib.concatMapAttrs (
-        scope: v:
-        if builtins.isAttrs v then
-          lib.mapAttrs (_: loc: [ scope ] ++ loc) (scoped v)
-        else
-          lib.genAttrs (lib.toList v) (name: [
-            scope
-            name
-          ])
-      );
-    in
     # Top-level packages
     topLevel [
       "actionlint"
