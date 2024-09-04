@@ -53,6 +53,7 @@ in
       "djlint"
       "dmd"
       "dprint"
+      "eslint"
       "fish"
       "flawfinder"
       "fnlfmt"
@@ -101,7 +102,6 @@ in
         "vulture"
       ];
       nodePackages = [
-        "eslint" # FIXME: No way to have a transition fallback...
         "eslint_d"
         "prettier"
         "alex"
