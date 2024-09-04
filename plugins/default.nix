@@ -100,17 +100,6 @@
     ./languages/zig.nix
 
     ./lsp
-    ./lsp/conform-nvim.nix
-    ./lsp/fidget.nix
-    ./lsp/inc-rename.nix
-    ./lsp/lspsaga.nix
-    ./lsp/lsp-format.nix
-    ./lsp/lsp-lines.nix
-    ./lsp/lsp-status.nix
-    ./lsp/nvim-lightbulb.nix
-    ./lsp/schemastore.nix
-    ./lsp/trouble.nix
-    ./lsp/wtf.nix
 
     ./neotest
 
