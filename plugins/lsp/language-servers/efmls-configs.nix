@@ -7,12 +7,7 @@
 }:
 let
   tools = import ../../../generated/efmls-configs.nix;
-  packagingStatus = import ./efmls-configs-pkgs.nix pkgs;
-
-  # Filter packages that are not compatible with the current platform
-  toolPkgs = lib.filterAttrs (
-    a: pkg: lib.meta.availableOn pkgs.stdenv.hostPlatform pkg
-  ) packagingStatus.packaged;
+  inherit (import ./efmls-configs-pkgs.nix pkgs) packaged;
 in
 {
   options.plugins.efmls-configs = {
@@ -28,13 +23,24 @@ in
       default = [ ];
     };
 
-    toolPackages = lib.attrsets.mapAttrs (
-      tool: pkg:
-      helpers.mkPackageOption {
-        name = tool;
-        default = pkg;
-      }
-    ) toolPkgs;
+    toolPackages = lib.pipe packaged [
+      # Produce package a option for each tool
+      (lib.attrsets.mapAttrs (
+        tool: pkg:
+        helpers.mkPackageOption {
+          name = tool;
+          default = pkg;
+        }
+      ))
+      # Filter package defaults that are not compatible with the current platform
+      (lib.attrsets.mapAttrs (
+        _: opt:
+        if lib.meta.availableOn pkgs.stdenv.hostPlatform opt.default then
+          opt
+        else
+          opt // { default = null; }
+      ))
+    ];
 
     /*
       Users can set the options as follows:
@@ -54,7 +60,7 @@ in
         freeformType = lib.types.attrsOf lib.types.anything;
 
         options = lib.mapAttrs (
-          _: value:
+          _:
           lib.mapAttrs (
             kind:
             { lang, possible }:
@@ -66,7 +72,7 @@ in
               default = [ ];
               description = "${kind} tools for ${lang}";
             }
-          ) value
+          )
         ) tools;
       };
       description = "Configuration for each filetype. Use `all` to match any filetype.";
@@ -80,15 +86,13 @@ in
       # Tools that have been selected by the user
       tools = lib.lists.unique (
         lib.filter lib.isString (
-          lib.concatLists (
-            map (
-              {
-                linter ? [ ],
-                formatter ? [ ],
-              }:
-              (lib.toList linter) ++ (lib.toList formatter)
-            ) (lib.attrValues cfg.setup)
-          )
+          lib.concatMap (
+            {
+              linter ? [ ],
+              formatter ? [ ],
+            }:
+            (lib.toList linter) ++ (lib.toList formatter)
+          ) (lib.attrValues cfg.setup)
         )
       );
 
@@ -132,9 +136,9 @@ in
       extraPlugins = [ cfg.package ];
 
       # TODO: print the location of the offending options
-      warnings = lib.optional ((lib.length nixvimPkgs.wrong) > 0) ''
-        Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to externallyManagedPackages to silence this:
-          ${lib.concatStringsSep " " nixvimPkgs.wrong}
+      warnings = lib.optional (nixvimPkgs.wrong != [ ]) ''
+        Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to `externallyManagedPackages` to silence this:
+        ${lib.concatMapStringsSep "\n" (tool: "  - ${tool}") nixvimPkgs.wrong}
       '';
 
       plugins.lsp.servers.efm = {
