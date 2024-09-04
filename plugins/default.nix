@@ -130,19 +130,6 @@
 
     ./telescope
 
-    ./ui/edgy.nix
-    ./ui/headlines.nix
-    ./ui/image.nix
-    ./ui/neoscroll.nix
-    ./ui/noice.nix
-    ./ui/numbertoggle.nix
-    ./ui/specs.nix
-    ./ui/statuscol.nix
-    ./ui/transparent.nix
-    ./ui/twilight.nix
-    ./ui/virt-column.nix
-    ./ui/zen-mode.nix
-
     ./deprecation.nix
   ];
 }
