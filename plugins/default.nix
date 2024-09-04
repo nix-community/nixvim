@@ -39,8 +39,6 @@
     ./completion/lspkind.nix
     ./completion/cmp
 
-    ./dap
-
     ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix
     ./filetrees/nvim-tree.nix
