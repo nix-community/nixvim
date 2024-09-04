@@ -22,7 +22,12 @@ with dapHelpers;
   options.plugins.dap = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "dap";
 
-    package = helpers.mkPluginPackageOption "dap" pkgs.vimPlugins.nvim-dap;
+    package = lib.mkPackageOption pkgs "dap" {
+      default = [
+        "vimPlugins"
+        "nvim-dap"
+      ];
+    };
 
     adapters = helpers.mkCompositeOption "Dap adapters." {
       executables = mkAdapterOption "executable" executableAdapterOption;

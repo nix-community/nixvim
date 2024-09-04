@@ -13,7 +13,12 @@ in
   options.plugins.dap.extensions.dap-virtual-text = {
     enable = mkEnableOption "dap-virtual-text";
 
-    package = helpers.mkPluginPackageOption "dap-virtual-text" pkgs.vimPlugins.nvim-dap-virtual-text;
+    package = lib.mkPackageOption pkgs "dap-virtual-text" {
+      default = [
+        "vimPlugins"
+        "nvim-dap-virtual-text"
+      ];
+    };
 
     enabledCommands = helpers.defaultNullOpts.mkBool true ''
       Create commands `DapVirtualTextEnable`, `DapVirtualTextDisable`, `DapVirtualTextToggle`.

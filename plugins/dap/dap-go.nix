@@ -14,7 +14,12 @@ in
   options.plugins.dap.extensions.dap-go = {
     enable = mkEnableOption "dap-go";
 
-    package = helpers.mkPluginPackageOption "dap-go" pkgs.vimPlugins.nvim-dap-go;
+    package = lib.mkPackageOption pkgs "dap-go" {
+      default = [
+        "vimPlugins"
+        "nvim-dap-go"
+      ];
+    };
 
     dapConfigurations = helpers.mkNullOrOption (types.listOf dapHelpers.configurationOption) ''
       Additional dap configurations.
