@@ -45,6 +45,8 @@
 
         maintainers = import ../tests/maintainers.nix { inherit pkgs; };
 
+        plugins-by-name = pkgs.callPackage ../tests/plugins-by-name.nix { inherit evaluatedNixvim; };
+
         generated = pkgs.callPackage ../tests/generated.nix { };
 
         package-options = pkgs.callPackage ../tests/package-options.nix { inherit evaluatedNixvim; };

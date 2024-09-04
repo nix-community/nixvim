@@ -30,9 +30,14 @@ This is done by making most of the options of the type `types.nullOr ....`, and 
 Most of nixvim is dedicated to wrapping neovim plugins such that we can configure them in Nix.
 To add a new plugin you need to do the following.
 
-1. Add a file in the correct sub-directory of [plugins](plugins). This depends on your exact plugin.
+1. Add a file in the correct sub-directory of [`plugins`](plugins).
+  - Most plugins should be added to [`plugins/by-name/<name>`](plugins/by-name).
+    Plugins in `by-name` are automatically imported 🚀
+  - Occasionally, you may wish to add a plugin to a directory outside of `by-name`, such as [`plugins/colorschemes`](plugins/colorschemes).
+    If so, you will also need to add your plugin to [`plugins/default.nix`](plugins/default.nix) to ensure it gets imported.
+    Note: the imports list is sorted and grouped. In vim, you can usually use `V` (visual-line mode) with the `:sort` command to achieve the desired result.
 
-The vast majority of plugins fall into one of those two categories:
+2. The vast majority of plugins fall into one of those two categories:
 - _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
   For those, you should use the `lib.nixvim.vim-plugin.mkVimPlugin`.\
   -> See [this plugin](plugins/utils/direnv.nix) for an example.
@@ -40,7 +45,7 @@ The vast majority of plugins fall into one of those two categories:
   For those, you should use the `lib.nixvim.neovim-plugin.mkNeovimPlugin`.\
   -> See the [template](plugins/TEMPLATE.nix).
 
-2. Add the necessary parameters for the `mkNeovimPlugin`/`mkVimPlugin`:
+3. Add the necessary parameters for the `mkNeovimPlugin`/`mkVimPlugin`:
   - `name`: The name of the plugin. The resulting nixvim module will have `plugins.<name>` as a path.\
     For a plugin named `foo-bar.nvim`, set this to `foo-bar` (subject to exceptions).
   - `originalName`: The "real" name of the plugin (i.e. `foo-bar.nvim`). This is used mostly in documentation.
@@ -54,10 +59,6 @@ The vast majority of plugins fall into one of those two categories:
   - `settingsOptions`: All or some (only the most important ones) option declarations for this plugin settings.\
     See below for more information
   - `settingsExample`: An example of what could the `settings` attrs look like.
-
-3. Add to plugins/default.nix
-  - As a final step, please add your plugin to `plugins/default.nix` to ensure it gets imported.
-  - Note: the imports list is sorted and grouped. In vim, you can usually use `V` (visual-line mode) with the `:sort` command to achieve the desired result.
 
 [nixpkgs-maintainers]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix
 

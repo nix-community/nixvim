@@ -77,6 +77,16 @@
             args = [ ".#checks.${system}.maintainers" ];
             pass_filenames = false;
           };
+          plugins-by-name = {
+            enable = true;
+            name = "plugins-by-name";
+            description = "Check `plugins/by-name` when it's modified.";
+            files = "^(?:tests/test-sources/)?plugins/by-name/";
+            package = pkgs.nix;
+            entry = "nix build --no-link --print-build-logs";
+            args = [ ".#checks.${system}.plugins-by-name" ];
+            pass_filenames = false;
+          };
         };
       };
     };
