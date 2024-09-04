@@ -26,7 +26,7 @@ let
         for more information.
       '';
 
-      config = import ./hydra-config-opts.nix { inherit lib helpers; };
+      config = import ./settings-options.nix { inherit lib helpers; };
 
       heads =
         let

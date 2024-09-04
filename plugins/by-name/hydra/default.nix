@@ -16,7 +16,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     hydras = import ./hydras-option.nix { inherit lib helpers; };
   };
 
-  settingsOptions = import ./hydra-config-opts.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
 
   settingsExample = {
     exit = false;
