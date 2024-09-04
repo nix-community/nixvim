@@ -1,35 +1,71 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.barbecue;
-  mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  options.plugins.barbecue = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "barbecue-nvim";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "barbecue";
+  originalName = "barbecue.nvim";
+  defaultPackage = pkgs.vimPlugins.barbecue-nvim;
 
-    package = helpers.mkPluginPackageOption "barbecue-nvim" pkgs.vimPlugins.barbecue-nvim;
+  maintainers = [ lib.maintainers.khaneliman ];
 
-    attachNavic = helpers.defaultNullOpts.mkBool true ''
+  # TODO: added 2024-09-03 remove after 24.11
+  optionsRenamedToSettings = [
+    "attachNavic"
+    "createAutocmd"
+    "includeBuftypes"
+    "excludeFiletypes"
+    [
+      "modifiers"
+      "dirname"
+    ]
+    [
+      "modifiers"
+      "basename"
+    ]
+    "showDirname"
+    "showBasename"
+    "showModified"
+    "modified"
+    "showNavic"
+    "leadCustomSection"
+    "customSection"
+    "theme"
+    "contextFollowIconColor"
+    [
+      "symbols"
+      "modified"
+    ]
+    [
+      "symbols"
+      "ellipsis"
+    ]
+    [
+      "symbols"
+      "separator"
+    ]
+    "kinds"
+  ];
+
+  settingsOptions = {
+    attach_navic = defaultNullOpts.mkBool true ''
       Whether to attach navic to language servers automatically.
     '';
 
-    createAutocmd = helpers.defaultNullOpts.mkBool true ''
+    create_autocmd = defaultNullOpts.mkBool true ''
       Whether to create winbar updater autocmd.
     '';
 
-    includeBuftypes = mkListStr [ "" ] ''
+    include_buftypes = defaultNullOpts.mkListOf lib.types.str [ "" ] ''
       Buftypes to enable winbar in.
     '';
 
-    excludeFiletypes =
-      mkListStr
+    exclude_filetypes =
+      defaultNullOpts.mkListOf lib.types.str
         [
           "netrw"
           "toggleterm"
@@ -39,33 +75,33 @@ in
         '';
 
     modifiers = {
-      dirname = helpers.defaultNullOpts.mkStr ":~:." ''
+      dirname = defaultNullOpts.mkStr ":~:." ''
         Filename modifiers applied to dirname.
 
         See: `:help filename-modifiers`
       '';
 
-      basename = helpers.defaultNullOpts.mkStr "" ''
+      basename = defaultNullOpts.mkStr "" ''
         Filename modifiers applied to basename.
 
         See: `:help filename-modifiers`
       '';
     };
 
-    showDirname = helpers.defaultNullOpts.mkBool true ''
+    show_dirname = defaultNullOpts.mkBool true ''
       Whether to display path to file.
     '';
 
-    showBasename = helpers.defaultNullOpts.mkBool true ''
+    show_basename = defaultNullOpts.mkBool true ''
       Whether to display file name.
     '';
 
-    showModified = helpers.defaultNullOpts.mkBool false ''
+    show_modified = defaultNullOpts.mkBool false ''
       Whether to replace file icon with the modified symbol when buffer is modified.
     '';
 
     modified =
-      helpers.defaultNullOpts.mkLuaFn
+      defaultNullOpts.mkLuaFn
         ''
           function(bufnr)
           	return vim.bo[bufnr].modified
@@ -76,12 +112,12 @@ in
           NOTE: This can be used to get file modified status from SCM (e.g. git)
         '';
 
-    showNavic = helpers.defaultNullOpts.mkBool true ''
+    show_navic = defaultNullOpts.mkBool true ''
       Whether to show/use navic in the winbar.
     '';
 
-    leadCustomSection =
-      helpers.defaultNullOpts.mkLuaFn
+    lead_custom_section =
+      defaultNullOpts.mkLuaFn
         ''
           function()
             return " "
@@ -92,8 +128,8 @@ in
           NOTE: This function shouldn't do any expensive actions as it is run on each render.
         '';
 
-    customSection =
-      helpers.defaultNullOpts.mkLuaFn
+    custom_section =
+      defaultNullOpts.mkLuaFn
         ''
           function()
             return " "
@@ -104,29 +140,29 @@ in
           NOTE: This function shouldn't do any expensive actions as it is run on each render.
         '';
 
-    theme = helpers.defaultNullOpts.mkStr "auto" ''
+    theme = defaultNullOpts.mkStr "auto" ''
       Theme to be used for generating highlight groups dynamically.
     '';
 
-    contextFollowIconColor = helpers.defaultNullOpts.mkBool false ''
+    context_follow_icon_color = defaultNullOpts.mkBool false ''
       Whether context text should follow its icon's color.
     '';
 
     symbols = {
-      modified = helpers.defaultNullOpts.mkStr "●" ''
+      modified = defaultNullOpts.mkStr "●" ''
         Modification indicator.
       '';
 
-      ellipsis = helpers.defaultNullOpts.mkStr "…" ''
+      ellipsis = defaultNullOpts.mkStr "…" ''
         Truncation indicator.
       '';
 
-      separator = helpers.defaultNullOpts.mkStr "" ''
+      separator = defaultNullOpts.mkStr "" ''
         Entry separator.
       '';
     };
 
-    kinds = mapAttrs (name: default: helpers.defaultNullOpts.mkStr default "icon for ${name}.") {
+    kinds = lib.mapAttrs (name: default: defaultNullOpts.mkStr default "icon for ${name}.") {
       File = "";
       Module = "";
       Namespace = "";
@@ -155,40 +191,4 @@ in
       TypeParameter = "";
     };
   };
-
-  config =
-    let
-      setupOptions =
-        with cfg;
-        {
-          attach_navic = attachNavic;
-          create_autocmd = createAutocmd;
-          include_buftypes = includeBuftypes;
-          exclude_filetypes = excludeFiletypes;
-          modifiers = {
-            inherit (modifiers) dirname basename;
-          };
-          show_dirname = showDirname;
-          show_basename = showBasename;
-          show_modified = showModified;
-          inherit modified;
-          show_navic = showNavic;
-          lead_custom_section = leadCustomSection;
-          custom_section = customSection;
-          inherit theme;
-          context_follow_icon_color = contextFollowIconColor;
-          symbols = {
-            inherit (symbols) modified ellipsis separator;
-          };
-          inherit kinds;
-        }
-        // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        require('barbecue').setup(${helpers.toLuaObject setupOptions})
-      '';
-    };
 }
