@@ -27,7 +27,12 @@ with lib;
       '';
     };
 
-    package = helpers.mkPluginPackageOption "nvim-osc52" pkgs.vimPlugins.nvim-osc52;
+    package = lib.mkPackageOption pkgs "nvim-osc52" {
+      default = [
+        "vimPlugins"
+        "nvim-osc52"
+      ];
+    };
 
     maxLength = helpers.defaultNullOpts.mkInt 0 "Maximum length of selection (0 for no limit)";
     silent = helpers.defaultNullOpts.mkBool false "Disable message on successful copy";

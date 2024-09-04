@@ -14,7 +14,12 @@ in
     plugins.git-worktree = {
       enable = mkEnableOption "git-worktree";
 
-      package = helpers.mkPluginPackageOption "git-worktree" pkgs.vimPlugins.git-worktree-nvim;
+      package = lib.mkPackageOption pkgs "git-worktree" {
+        default = [
+          "vimPlugins"
+          "git-worktree-nvim"
+        ];
+      };
 
       gitPackage = lib.mkPackageOption pkgs "git" {
         nullable = true;

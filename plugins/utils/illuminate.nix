@@ -87,7 +87,12 @@ in
     // {
       enable = mkEnableOption "vim-illuminate";
 
-      package = mkPluginPackageOption "vim-illuminate" pkgs.vimPlugins.vim-illuminate;
+      package = lib.mkPackageOption pkgs "vim-illuminate" {
+        default = [
+          "vimPlugins"
+          "vim-illuminate"
+        ];
+      };
 
       filetypeOverrides =
         helpers.defaultNullOpts.mkAttrsOf (types.submodule { options = commonOptions; }) { }

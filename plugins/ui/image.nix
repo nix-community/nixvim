@@ -15,7 +15,12 @@ in
   options.plugins.image = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "image.nvim";
 
-    package = helpers.mkPluginPackageOption "image.nvim" pkgs.vimPlugins.image-nvim;
+    package = lib.mkPackageOption pkgs "image.nvim" {
+      default = [
+        "vimPlugins"
+        "image-nvim"
+      ];
+    };
 
     backend =
       helpers.defaultNullOpts.mkEnumFirstDefault

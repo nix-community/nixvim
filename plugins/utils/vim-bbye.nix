@@ -13,7 +13,12 @@ in
   options.plugins.vim-bbye = {
     enable = mkEnableOption "vim-bbye";
 
-    package = helpers.mkPluginPackageOption "vim-bbye" pkgs.vimPlugins.vim-bbye;
+    package = lib.mkPackageOption pkgs "vim-bbye" {
+      default = [
+        "vimPlugins"
+        "vim-bbye"
+      ];
+    };
 
     keymapsSilent = mkOption {
       type = types.bool;

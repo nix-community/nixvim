@@ -10,7 +10,12 @@ with lib;
   options.plugins.ts-context-commentstring = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-ts-context-commentstring";
 
-    package = helpers.mkPluginPackageOption "ts-context-commentstring" pkgs.vimPlugins.nvim-ts-context-commentstring;
+    package = lib.mkPackageOption pkgs "ts-context-commentstring" {
+      default = [
+        "vimPlugins"
+        "nvim-ts-context-commentstring"
+      ];
+    };
 
     skipTsContextCommentStringModule = mkOption {
       type = types.bool;

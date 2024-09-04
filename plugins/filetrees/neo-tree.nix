@@ -55,7 +55,12 @@ in
     // {
       enable = mkEnableOption "neo-tree";
 
-      package = helpers.mkPluginPackageOption "neo-tree" pkgs.vimPlugins.neo-tree-nvim;
+      package = lib.mkPackageOption pkgs "neo-tree" {
+        default = [
+          "vimPlugins"
+          "neo-tree-nvim"
+        ];
+      };
 
       iconsPackage = lib.mkPackageOption pkgs [
         "vimPlugins"

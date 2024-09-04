@@ -14,7 +14,12 @@ in
   options.plugins.chadtree = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "chadtree";
 
-    package = helpers.mkPluginPackageOption "chadtree" pkgs.vimPlugins.chadtree;
+    package = lib.mkPackageOption pkgs "chadtree" {
+      default = [
+        "vimPlugins"
+        "chadtree"
+      ];
+    };
 
     iconsPackage = lib.mkPackageOption pkgs [
       "vimPlugins"

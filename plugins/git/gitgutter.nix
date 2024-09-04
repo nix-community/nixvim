@@ -14,7 +14,12 @@ in
     plugins.gitgutter = {
       enable = mkEnableOption "gitgutter";
 
-      package = helpers.mkPluginPackageOption "gitgutter" pkgs.vimPlugins.gitgutter;
+      package = lib.mkPackageOption pkgs "gitgutter" {
+        default = [
+          "vimPlugins"
+          "gitgutter"
+        ];
+      };
 
       gitPackage = lib.mkPackageOption pkgs "git" {
         nullable = true;

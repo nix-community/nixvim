@@ -14,7 +14,12 @@ in
     plugins.easyescape = {
       enable = mkEnableOption "easyescape";
 
-      package = helpers.mkPluginPackageOption "easyescape" pkgs.vimPlugins.vim-easyescape;
+      package = lib.mkPackageOption pkgs "easyescape" {
+        default = [
+          "vimPlugins"
+          "vim-easyescape"
+        ];
+      };
     };
   };
   config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };

@@ -13,7 +13,12 @@ in
   options.plugins.nvim-jdtls = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-jdtls";
 
-    package = helpers.mkPluginPackageOption "nvim-jdtls" pkgs.vimPlugins.nvim-jdtls;
+    package = lib.mkPackageOption pkgs "nvim-jdtls" {
+      default = [
+        "vimPlugins"
+        "nvim-jdtls"
+      ];
+    };
 
     cmd = helpers.mkNullOrOption (types.listOf types.str) ''
       The command that starts the language server.

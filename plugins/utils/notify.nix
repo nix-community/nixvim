@@ -13,7 +13,12 @@ in
   options.plugins.notify = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-notify";
 
-    package = helpers.mkPluginPackageOption "nvim-notify" pkgs.vimPlugins.nvim-notify;
+    package = lib.mkPackageOption pkgs "nvim-notify" {
+      default = [
+        "vimPlugins"
+        "nvim-notify"
+      ];
+    };
 
     level = helpers.defaultNullOpts.mkLogLevel "info" ''
       Minimum log level to display. See `vim.log.levels`.

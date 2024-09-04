@@ -54,7 +54,12 @@ in
     plugins.alpha = {
       enable = mkEnableOption "alpha-nvim";
 
-      package = helpers.mkPluginPackageOption "alpha-nvim" pkgs.vimPlugins.alpha-nvim;
+      package = lib.mkPackageOption pkgs "alpha-nvim" {
+        default = [
+          "vimPlugins"
+          "alpha-nvim"
+        ];
+      };
 
       # TODO: deprecated 2024-08-29 remove after 24.11
       iconsEnabled = mkOption {

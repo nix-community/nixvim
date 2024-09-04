@@ -13,7 +13,12 @@ with lib;
   options.plugins.lastplace = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "lastplace";
 
-    package = helpers.mkPluginPackageOption "lastplace" pkgs.vimPlugins.nvim-lastplace;
+    package = lib.mkPackageOption pkgs "lastplace" {
+      default = [
+        "vimPlugins"
+        "nvim-lastplace"
+      ];
+    };
 
     ignoreBuftype = helpers.defaultNullOpts.mkListOf types.str [
       "quickfix"

@@ -66,7 +66,12 @@ in
   options.plugins.wilder = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "wilder-nvim";
 
-    package = helpers.mkPluginPackageOption "wilder-nvim" pkgs.vimPlugins.wilder-nvim;
+    package = lib.mkPackageOption pkgs "wilder-nvim" {
+      default = [
+        "vimPlugins"
+        "wilder-nvim"
+      ];
+    };
 
     ### Setup options ###
     enableCmdlineEnter = helpers.defaultNullOpts.mkBool true ''

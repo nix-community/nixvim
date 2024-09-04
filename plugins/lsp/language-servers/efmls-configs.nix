@@ -13,7 +13,12 @@ in
   options.plugins.efmls-configs = {
     enable = lib.mkEnableOption "efmls-configs, premade configurations for efm-langserver";
 
-    package = helpers.mkPluginPackageOption "efmls-configs-nvim" pkgs.vimPlugins.efmls-configs-nvim;
+    package = lib.mkPackageOption pkgs "efmls-configs-nvim" {
+      default = [
+        "vimPlugins"
+        "efmls-configs-nvim"
+      ];
+    };
 
     externallyManagedPackages = lib.mkOption {
       type = with lib.types; either (enum [ "all" ]) (listOf str);

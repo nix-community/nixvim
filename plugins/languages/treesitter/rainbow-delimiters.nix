@@ -10,7 +10,12 @@ with lib;
   options.plugins.rainbow-delimiters = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "rainbow-delimiters.nvim";
 
-    package = helpers.mkPluginPackageOption "rainbow-delimiters.nvim" pkgs.vimPlugins.rainbow-delimiters-nvim;
+    package = lib.mkPackageOption pkgs "rainbow-delimiters.nvim" {
+      default = [
+        "vimPlugins"
+        "rainbow-delimiters-nvim"
+      ];
+    };
 
     strategy = helpers.defaultNullOpts.mkAttrsOf' {
       type = types.enum [

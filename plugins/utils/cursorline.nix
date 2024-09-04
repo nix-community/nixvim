@@ -13,7 +13,12 @@ in
   options.plugins.cursorline = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-cursorline";
 
-    package = helpers.mkPluginPackageOption "nvim-cursorline" pkgs.vimPlugins.nvim-cursorline;
+    package = lib.mkPackageOption pkgs "nvim-cursorline" {
+      default = [
+        "vimPlugins"
+        "nvim-cursorline"
+      ];
+    };
 
     cursorline = {
       enable = helpers.defaultNullOpts.mkBool true "Show / hide cursorline in connection with cursor moving.";

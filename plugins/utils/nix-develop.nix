@@ -13,7 +13,12 @@ in
   options.plugins.nix-develop = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nix-develop.nvim";
 
-    package = helpers.mkPluginPackageOption "nix-develop.nvim" pkgs.vimPlugins.nix-develop-nvim;
+    package = lib.mkPackageOption pkgs "nix-develop.nvim" {
+      default = [
+        "vimPlugins"
+        "nix-develop-nvim"
+      ];
+    };
 
     ignoredVariables = mkOption {
       type = with types; attrsOf bool;

@@ -39,7 +39,12 @@ in
   options.plugins.nvim-tree = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-tree";
 
-    package = helpers.mkPluginPackageOption "nvim-tree" pkgs.vimPlugins.nvim-tree-lua;
+    package = lib.mkPackageOption pkgs "nvim-tree" {
+      default = [
+        "vimPlugins"
+        "nvim-tree-lua"
+      ];
+    };
 
     iconsPackage = lib.mkPackageOption pkgs [
       "vimPlugins"

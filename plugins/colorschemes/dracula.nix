@@ -13,7 +13,12 @@ in
     colorschemes.dracula = {
       enable = lib.mkEnableOption "dracula";
 
-      package = lib.nixvim.mkPluginPackageOption "dracula" pkgs.vimPlugins.dracula-vim;
+      package = lib.mkPackageOption pkgs "dracula" {
+        default = [
+          "vimPlugins"
+          "dracula-vim"
+        ];
+      };
 
       bold = lib.mkOption {
         type = types.bool;

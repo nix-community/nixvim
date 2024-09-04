@@ -10,7 +10,12 @@ with lib;
   options.plugins.persistence = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "persistence.nvim";
 
-    package = helpers.mkPluginPackageOption "persistence.nvim" pkgs.vimPlugins.persistence-nvim;
+    package = lib.mkPackageOption pkgs "persistence.nvim" {
+      default = [
+        "vimPlugins"
+        "persistence-nvim"
+      ];
+    };
 
     dir = helpers.defaultNullOpts.mkStr {
       __raw = ''vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/")'';

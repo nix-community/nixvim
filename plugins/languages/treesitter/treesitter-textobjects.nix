@@ -41,7 +41,12 @@ with lib;
     // {
       enable = mkEnableOption "treesitter-textobjects (requires plugins.treesitter.enable to be true)";
 
-      package = helpers.mkPluginPackageOption "treesitter-textobjects" pkgs.vimPlugins.nvim-treesitter-textobjects;
+      package = lib.mkPackageOption pkgs "treesitter-textobjects" {
+        default = [
+          "vimPlugins"
+          "nvim-treesitter-textobjects"
+        ];
+      };
 
       select = {
         enable = helpers.defaultNullOpts.mkBool false ''

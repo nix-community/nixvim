@@ -14,7 +14,12 @@ in
   options.plugins.${pluginName} = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption pluginName;
 
-    package = helpers.mkPluginPackageOption pluginName pkgs.vimPlugins.nvim-spider;
+    package = lib.mkPackageOption pkgs pluginName {
+      default = [
+        "vimPlugins"
+        "nvim-spider"
+      ];
+    };
 
     skipInsignificantPunctuation = helpers.defaultNullOpts.mkBool true "Whether to skip insignificant punctuation.";
 

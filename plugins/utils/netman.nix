@@ -10,7 +10,12 @@ with lib;
   options.plugins.netman = {
     enable = mkEnableOption "netman.nvim, a framework to access remote resources";
 
-    package = helpers.mkPluginPackageOption "netman.nvim" pkgs.vimPlugins.netman-nvim;
+    package = lib.mkPackageOption pkgs "netman.nvim" {
+      default = [
+        "vimPlugins"
+        "netman-nvim"
+      ];
+    };
 
     neoTreeIntegration = mkEnableOption "support for netman as a neo-tree source";
   };

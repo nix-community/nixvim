@@ -137,7 +137,12 @@ in
   options.plugins.lint = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-lint";
 
-    package = helpers.mkPluginPackageOption "nvim-lint" pkgs.vimPlugins.nvim-lint;
+    package = lib.mkPackageOption pkgs "nvim-lint" {
+      default = [
+        "vimPlugins"
+        "nvim-lint"
+      ];
+    };
 
     lintersByFt = mkOption {
       type = with types; attrsOf (listOf str);

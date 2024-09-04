@@ -14,7 +14,12 @@ in
     plugins.hardtime = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "hardtime";
 
-      package = helpers.mkPluginPackageOption "hardtime" pkgs.vimPlugins.hardtime-nvim;
+      package = lib.mkPackageOption pkgs "hardtime" {
+        default = [
+          "vimPlugins"
+          "hardtime-nvim"
+        ];
+      };
 
       maxTime = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
         Maximum time (in milliseconds) to consider key presses as repeated.

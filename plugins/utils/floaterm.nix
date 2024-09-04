@@ -200,7 +200,12 @@ in
     {
       enable = mkEnableOption "floaterm";
 
-      package = helpers.mkPluginPackageOption "floaterm" pkgs.vimPlugins.vim-floaterm;
+      package = lib.mkPackageOption pkgs "floaterm" {
+        default = [
+          "vimPlugins"
+          "vim-floaterm"
+        ];
+      };
 
       keymaps = keymapOptions;
     }

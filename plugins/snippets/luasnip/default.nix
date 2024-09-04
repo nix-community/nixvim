@@ -65,7 +65,12 @@ in
   options.plugins.luasnip = {
     enable = mkEnableOption "luasnip";
 
-    package = helpers.mkPluginPackageOption "luasnip" pkgs.vimPlugins.luasnip;
+    package = lib.mkPackageOption pkgs "luasnip" {
+      default = [
+        "vimPlugins"
+        "luasnip"
+      ];
+    };
 
     settings = mkOption {
       type = with types; attrsOf anything;

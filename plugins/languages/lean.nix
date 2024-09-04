@@ -13,7 +13,12 @@ in
   options.plugins.lean = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "lean-nvim";
 
-    package = helpers.mkPluginPackageOption "lean-nvim" pkgs.vimPlugins.lean-nvim;
+    package = lib.mkPackageOption pkgs "lean-nvim" {
+      default = [
+        "vimPlugins"
+        "lean-nvim"
+      ];
+    };
 
     leanPackage = lib.mkPackageOption pkgs "lean" {
       nullable = true;

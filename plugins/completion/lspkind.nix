@@ -13,7 +13,12 @@ in
   options.plugins.lspkind = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "lspkind.nvim";
 
-    package = helpers.mkPluginPackageOption "lspkind" pkgs.vimPlugins.lspkind-nvim;
+    package = lib.mkPackageOption pkgs "lspkind" {
+      default = [
+        "vimPlugins"
+        "lspkind-nvim"
+      ];
+    };
 
     mode = helpers.defaultNullOpts.mkEnum [
       "text"

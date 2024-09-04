@@ -31,7 +31,12 @@ in
     plugins.wtf = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "wtf.nvim";
 
-      package = helpers.mkPluginPackageOption "wtf.nvim" pkgs.vimPlugins.wtf-nvim;
+      package = lib.mkPackageOption pkgs "wtf.nvim" {
+        default = [
+          "vimPlugins"
+          "wtf-nvim"
+        ];
+      };
 
       keymaps = mapAttrs (
         action: defaults:

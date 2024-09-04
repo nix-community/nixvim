@@ -63,7 +63,12 @@ in
   options.plugins.ollama = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "ollama.nvim";
 
-    package = helpers.mkPluginPackageOption "ollama.nvim" pkgs.vimPlugins.ollama-nvim;
+    package = lib.mkPackageOption pkgs "ollama.nvim" {
+      default = [
+        "vimPlugins"
+        "ollama-nvim"
+      ];
+    };
 
     model = helpers.defaultNullOpts.mkStr "mistral" ''
       The default model to use.

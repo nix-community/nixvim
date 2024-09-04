@@ -63,7 +63,12 @@ in
   options.plugins.coverage = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-coverage";
 
-    package = helpers.mkPluginPackageOption "nvim-coverage" pkgs.vimPlugins.nvim-coverage;
+    package = lib.mkPackageOption pkgs "nvim-coverage" {
+      default = [
+        "vimPlugins"
+        "nvim-coverage"
+      ];
+    };
 
     keymapsSilent = mkOption {
       type = types.bool;

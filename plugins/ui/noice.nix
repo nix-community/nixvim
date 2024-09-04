@@ -17,7 +17,12 @@ with lib;
         vim, regex, lua, bash, markdown, markdown_inline
     '';
 
-    package = helpers.mkPluginPackageOption "noice" pkgs.vimPlugins.noice-nvim;
+    package = lib.mkPackageOption pkgs "noice" {
+      default = [
+        "vimPlugins"
+        "noice-nvim"
+      ];
+    };
 
     cmdline = {
       enabled = helpers.defaultNullOpts.mkBool true "enables Noice cmdline UI";

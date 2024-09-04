@@ -106,7 +106,12 @@ in
     plugins.lualine = {
       enable = mkEnableOption "lualine";
 
-      package = helpers.mkPluginPackageOption "lualine" pkgs.vimPlugins.lualine-nvim;
+      package = lib.mkPackageOption pkgs "lualine" {
+        default = [
+          "vimPlugins"
+          "lualine-nvim"
+        ];
+      };
 
       gitPackage = lib.mkPackageOption pkgs "git" {
         nullable = true;

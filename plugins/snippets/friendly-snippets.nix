@@ -15,7 +15,12 @@ in
   options.plugins.friendly-snippets = {
     enable = mkEnableOption "friendly-snippets";
 
-    package = helpers.mkPluginPackageOption "friendly-snippets" pkgs.vimPlugins.friendly-snippets;
+    package = lib.mkPackageOption pkgs "friendly-snippets" {
+      default = [
+        "vimPlugins"
+        "friendly-snippets"
+      ];
+    };
   };
 
   config = mkIf cfg.enable {

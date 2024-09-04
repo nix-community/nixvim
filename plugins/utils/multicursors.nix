@@ -48,7 +48,12 @@ in
     plugins.multicursors = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "multicursors.nvim";
 
-      package = helpers.mkPluginPackageOption "multicursors.nvim" pkgs.vimPlugins.multicursors-nvim;
+      package = lib.mkPackageOption pkgs "multicursors.nvim" {
+        default = [
+          "vimPlugins"
+          "multicursors-nvim"
+        ];
+      };
 
       debugMode = helpers.defaultNullOpts.mkBool false "Enable debug mode.";
 

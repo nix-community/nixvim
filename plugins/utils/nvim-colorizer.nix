@@ -104,7 +104,12 @@ in
     plugins.nvim-colorizer = {
       enable = mkEnableOption "nvim-colorizer";
 
-      package = helpers.mkPluginPackageOption "nvim-colorizer" pkgs.vimPlugins.nvim-colorizer-lua;
+      package = lib.mkPackageOption pkgs "nvim-colorizer" {
+        default = [
+          "vimPlugins"
+          "nvim-colorizer-lua"
+        ];
+      };
 
       fileTypes = mkOption {
         description = "Enable and/or configure highlighting for certain filetypes";

@@ -13,7 +13,12 @@ in
   options.plugins.mkdnflow = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "mkdnflow.nvim";
 
-    package = helpers.mkPluginPackageOption "mkdnflow.nvim" pkgs.vimPlugins.mkdnflow-nvim;
+    package = lib.mkPackageOption pkgs "mkdnflow.nvim" {
+      default = [
+        "vimPlugins"
+        "mkdnflow-nvim"
+      ];
+    };
 
     modules =
       mapAttrs

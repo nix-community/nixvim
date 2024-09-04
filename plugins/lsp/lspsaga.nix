@@ -49,7 +49,12 @@ in
     plugins.lspsaga = helpers.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "lspsaga.nvim";
 
-      package = helpers.mkPluginPackageOption "lspsaga" pkgs.vimPlugins.lspsaga-nvim;
+      package = lib.mkPackageOption pkgs "lspsaga" {
+        default = [
+          "vimPlugins"
+          "lspsaga-nvim"
+        ];
+      };
 
       iconsPackage = lib.mkPackageOption pkgs [
         "vimPlugins"

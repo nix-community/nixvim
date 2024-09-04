@@ -16,7 +16,12 @@ in
     plugins.commentary = {
       enable = mkEnableOption "commentary";
 
-      package = helpers.mkPluginPackageOption "commentary" pkgs.vimPlugins.vim-commentary;
+      package = lib.mkPackageOption pkgs "commentary" {
+        default = [
+          "vimPlugins"
+          "vim-commentary"
+        ];
+      };
     };
   };
 

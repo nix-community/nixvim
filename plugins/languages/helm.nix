@@ -15,7 +15,12 @@ in
   options.plugins.helm = {
     enable = mkEnableOption "vim-helm";
 
-    package = helpers.mkPluginPackageOption "vim-helm" pkgs.vimPlugins.vim-helm;
+    package = lib.mkPackageOption pkgs "vim-helm" {
+      default = [
+        "vimPlugins"
+        "vim-helm"
+      ];
+    };
   };
 
   config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };

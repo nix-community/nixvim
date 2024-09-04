@@ -15,7 +15,12 @@ in
   options.plugins.startup = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "startup.nvim";
 
-    package = helpers.mkPluginPackageOption "startup.nvim" pkgs.vimPlugins.startup-nvim;
+    package = lib.mkPackageOption pkgs "startup.nvim" {
+      default = [
+        "vimPlugins"
+        "startup-nvim"
+      ];
+    };
 
     theme = helpers.defaultNullOpts.mkStr "dashboard" ''
       Use a pre-defined theme.

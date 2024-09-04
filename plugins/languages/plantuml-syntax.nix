@@ -10,7 +10,12 @@ with lib;
   options.plugins.plantuml-syntax = {
     enable = mkEnableOption "plantuml syntax support";
 
-    package = helpers.mkPluginPackageOption "plantuml-syntax" pkgs.vimPlugins.plantuml-syntax;
+    package = lib.mkPackageOption pkgs "plantuml-syntax" {
+      default = [
+        "vimPlugins"
+        "plantuml-syntax"
+      ];
+    };
 
     setMakeprg = mkOption {
       type = types.bool;

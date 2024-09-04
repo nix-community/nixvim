@@ -10,7 +10,12 @@ with lib;
   options.plugins.gitlinker = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "gitlinker.nvim";
 
-    package = helpers.mkPluginPackageOption "gitlinker.nvim" pkgs.vimPlugins.gitlinker-nvim;
+    package = lib.mkPackageOption pkgs "gitlinker.nvim" {
+      default = [
+        "vimPlugins"
+        "gitlinker-nvim"
+      ];
+    };
 
     remote = helpers.mkNullOrOption types.str "Force the use of a specific remote.";
 

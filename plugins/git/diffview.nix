@@ -86,7 +86,12 @@ in
     // {
       enable = mkEnableOption "diffview";
 
-      package = helpers.mkPluginPackageOption "diffview" pkgs.vimPlugins.diffview-nvim;
+      package = lib.mkPackageOption pkgs "diffview" {
+        default = [
+          "vimPlugins"
+          "diffview-nvim"
+        ];
+      };
 
       iconsPackage = lib.mkPackageOption pkgs [
         "vimPlugins"
