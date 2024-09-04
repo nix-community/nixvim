@@ -54,10 +54,6 @@ let
       sourceName = "cmp_tabnine";
     }
     {
-      pluginName = "codeium-nvim";
-      sourceName = "codeium";
-    }
-    {
       pluginName = "cmp-conventionalcommits";
       sourceName = "conventionalcommits";
     }
