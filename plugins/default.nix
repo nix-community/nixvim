@@ -1,8 +1,5 @@
 {
   imports = [
-    ./ai/chatgpt.nix
-    ./ai/copilot-chat.nix
-
     ./bufferlines/barbar.nix
     ./bufferlines/barbecue.nix
     ./bufferlines/bufferline.nix
