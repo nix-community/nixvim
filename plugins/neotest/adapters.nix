@@ -6,7 +6,7 @@
 }:
 with lib;
 let
-  inherit (lib.nixvim) mkPluginPackageOption mkSettingsOption toLuaObject;
+  inherit (lib.nixvim) mkSettingsOption toLuaObject;
   supportedAdapters = import ./adapters-list.nix;
 
   mkAdapter =
@@ -20,7 +20,12 @@ let
       options.plugins.neotest.adapters.${name} = {
         enable = mkEnableOption name;
 
-        package = mkPluginPackageOption name pkgs.vimPlugins.${packageName};
+        package = lib.mkPackageOption pkgs name {
+          default = [
+            "vimPlugins"
+            packageName
+          ];
+        };
 
         settings = mkSettingsOption { description = "settings for the `${name}` adapter."; };
       };
