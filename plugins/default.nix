@@ -85,14 +85,6 @@
     ./languages/sniprun.nix
     ./languages/tagbar.nix
     ./languages/texpresso.nix
-    ./languages/treesitter/hmts.nix
-    ./languages/treesitter/rainbow-delimiters.nix
-    ./languages/treesitter/treesitter-context.nix
-    ./languages/treesitter/treesitter-refactor.nix
-    ./languages/treesitter/treesitter-textobjects.nix
-    ./languages/treesitter/treesitter.nix
-    ./languages/treesitter/ts-autotag.nix
-    ./languages/treesitter/ts-context-commentstring.nix
     ./languages/typescript-tools.nix
     ./languages/typst/typst-vim.nix
     ./languages/vim-slime.nix
