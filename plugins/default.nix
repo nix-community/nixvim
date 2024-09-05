@@ -31,6 +31,7 @@
     ./colorschemes/vscode.nix
 
     ./completion/codeium-vim.nix
+    ./completion/codeium-nvim.nix
     ./completion/copilot-lua.nix
     ./completion/copilot-vim.nix
     ./completion/coq.nix
