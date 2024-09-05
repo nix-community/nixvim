@@ -2,6 +2,12 @@
 let
   inherit (lib) types;
 
+  removed = lib.mapAttrs (name: msg: throw "${name} is removed. ${msg}") {
+    # Removed 2024-09-05
+    mkPackageOption = "Use `lib.mkPackageOption` instead.";
+    mkPluginPackageOption = "Use `lib.mkPackageOption` instead.";
+  };
+
   # Render a plugin default string
   pluginDefaultText =
     {
@@ -313,34 +319,6 @@ rec {
         );
     };
 
-  # TODO: Deprecated 2024-09-02; remove once all internal uses are gone
-  mkPackageOption =
-    args:
-    # A default package is required
-    assert args ? default;
-    # `name` must be present if `description` is missing
-    assert (!args ? description) -> args ? name;
-    mkNullOrOption' (
-      (lib.filterAttrs (n: _: n != "name") args)
-      // {
-        type = types.package;
-        description =
-          args.description or ''
-            Which package to use for `${args.name}`.
-            Set to `null` to disable its automatic installation.
-          '';
-      }
-    );
-
-  # TODO: Deprecated 2024-09-02; remove once all internal uses are gone
-  mkPluginPackageOption =
-    name: default:
-    lib.mkOption {
-      type = types.package;
-      inherit default;
-      description = "Which package to use for the ${name} plugin.";
-    };
-
   mkSettingsOption =
     {
       options ? { },
@@ -371,3 +349,4 @@ rec {
           example;
     };
 }
+// removed

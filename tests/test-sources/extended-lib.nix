@@ -8,7 +8,7 @@ let
           message = "lib.nixvim should be defined";
         }
         {
-          assertion = lib.nixvim == helpers;
+          assertion = builtins.attrNames lib.nixvim == builtins.attrNames helpers;
           message = "lib.nixvim and helpers should be aliases";
         }
       ];
