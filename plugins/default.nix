@@ -1,10 +1,5 @@
 {
   imports = [
-    ./bufferlines/barbar.nix
-    ./bufferlines/barbecue.nix
-    ./bufferlines/bufferline.nix
-    ./bufferlines/navic.nix
-
     ./colorschemes/ayu.nix
     ./colorschemes/base16
     ./colorschemes/catppuccin.nix
