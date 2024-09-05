@@ -141,6 +141,7 @@
     ./ui/image.nix
     ./ui/neoscroll.nix
     ./ui/noice.nix
+    ./ui/numbertoggle.nix
     ./ui/specs.nix
     ./ui/statuscol.nix
     ./ui/transparent.nix
