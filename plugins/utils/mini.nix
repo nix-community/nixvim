@@ -1,51 +1,90 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
-let
-  cfg = config.plugins.mini;
-in
-{
-  options.plugins.mini = {
-    enable = mkEnableOption "mini.nvim";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "mini";
+  originalName = "mini.nvim";
 
-    package = lib.mkPackageOption pkgs "mini.nvim" {
-      default = [
-        "vimPlugins"
-        "mini-nvim"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-    modules = mkOption {
-      type = with types; attrsOf attrs;
+  package = "mini-nvim";
+
+  extraOptions = {
+    modules = lib.mkOption {
+      type = with lib.types; attrsOf (attrsOf anything);
       default = { };
       description = ''
         Enable and configure the mini modules.
-        The keys are the names of the modules (without the `mini.` prefix).
-        The value is an attrs of configuration options for the module.
-        Leave the attrs empty to use the module's default configuration.
+
+        The attr name represent mini's module names, without the `"mini."` prefix.
+        The attr value is an attrset of options provided to the module's `setup` function.
+
+        See the [plugin documentation] for available modules to configure:
+
+        [plugin documentation]: https://github.com/echasnovski/mini.nvim?tab=readme-ov-file#modules
       '';
       example = {
         ai = {
           n_lines = 50;
           search_method = "cover_or_next";
         };
-        surround = { };
+        diff = {
+          view = {
+            style = "sign";
+          };
+        };
+        comment = {
+          mappings = {
+            comment = "<leader>/";
+            comment_line = "<leader>/";
+            comment_visual = "<leader>/";
+            textobject = "<leader>/";
+          };
+        };
+        surround = {
+          mappings = {
+            add = "gsa";
+            delete = "gsd";
+            find = "gsf";
+            find_left = "gsF";
+            highlight = "gsh";
+            replace = "gsr";
+            update_n_lines = "gsn";
+          };
+        };
+        starter = {
+          header = ''
+            ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗
+            ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║
+            ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║
+            ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║
+            ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║
+          '';
+          evaluate_single = true;
+          items = {
+            "__unkeyed-1.buildtin_actions".__raw = "require('mini.starter').sections.builtin_actions()";
+            "__unkeyed-2.recent_files_current_directory".__raw = "require('mini.starter').sections.recent_files(10, false)";
+            "__unkeyed-3.recent_files".__raw = "require('mini.starter').sections.recent_files(10, true)";
+            "__unkeyed-4.sessions".__raw = "require('mini.starter').sections.sessions(5, true)";
+          };
+          content_hooks = {
+            "__unkeyed-1.adding_bullet".__raw = "require('mini.starter').gen_hook.adding_bullet()";
+            "__unkeyed-2.indexing".__raw = "require('mini.starter').gen_hook.indexing('all', { 'Builtin actions' })";
+            "__unkeyed-3.padding".__raw = "require('mini.starter').gen_hook.aligning('center', 'center')";
+          };
+        };
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
-    extraConfigLua = concatLines (
-      mapAttrsToList (
-        name: config: "require('mini.${name}').setup(${helpers.toLuaObject config})"
-      ) cfg.modules
-    );
+  # NOTE: We handle each module explicitly and not a parent settings table
+  callSetup = false;
+  hasSettings = false;
+  extraConfig = cfg: {
+    extraConfigLua = lib.foldlAttrs (lines: name: config: ''
+      ${lines}
+      require(${lib.nixvim.toLuaObject "mini.${name}"}).setup(${lib.nixvim.toLuaObject config})
+    '') "" cfg.modules;
   };
 }
