@@ -220,6 +220,7 @@
     ./utils/project-nvim.nix
     ./utils/quickmath.nix
     ./utils/refactoring.nix
+    ./utils/repeat.nix
     ./utils/rest.nix
     ./utils/sandwich.nix
     ./utils/scope.nix
