@@ -59,6 +59,7 @@
           background = "#351721";
           foreground = "#cdc4c6";
         };
+        icons = { };
         indentscope = { };
         jump = { };
         jump2d = { };
@@ -75,6 +76,14 @@
         test = { };
         trailspace = { };
       };
+    };
+  };
+
+  icons-mock = {
+    plugins.mini = {
+      enable = true;
+      mockDevIcons = true;
+      modules.icons = { };
     };
   };
 }

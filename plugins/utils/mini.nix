@@ -11,6 +11,14 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   package = "mini-nvim";
 
   extraOptions = {
+    mockDevIcons = lib.mkEnableOption "mockDevIcons" // {
+      defaultText = lib.literalMD "`false` **NOTE**: This option is experimental and the default value may change without notice.";
+      description = ''
+        Whether to tell `mini.icons` to emulate `nvim-web-devicons` for plugins that don't natively support it.
+
+        When enabled, you don't need to set `plugins.web-devicons.enable`. This will replace the need for it.
+      '';
+    };
     modules = lib.mkOption {
       type = with lib.types; attrsOf (attrsOf anything);
       default = { };
@@ -82,9 +90,23 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   callSetup = false;
   hasSettings = false;
   extraConfig = cfg: {
-    extraConfigLua = lib.foldlAttrs (lines: name: config: ''
-      ${lines}
-      require(${lib.nixvim.toLuaObject "mini.${name}"}).setup(${lib.nixvim.toLuaObject config})
-    '') "" cfg.modules;
+    assertions = [
+      {
+        assertion = cfg.mockDevIcons -> cfg.modules ? icons;
+        message = ''
+          You have enabled `plugins.mini.mockDevIcons` but have not defined `plugins.mini.modules.icons`.
+          This setting will have no effect without it.
+        '';
+      }
+    ];
+    extraConfigLua =
+      lib.foldlAttrs (lines: name: config: ''
+        ${lines}
+        require(${lib.nixvim.toLuaObject "mini.${name}"}).setup(${lib.nixvim.toLuaObject config})
+      '') "" cfg.modules
+      # `MiniIcons` is only in scope if we've called `require('mini.icons')` above
+      + lib.optionalString ((cfg.modules ? icons) && cfg.mockDevIcons) ''
+        MiniIcons.mock_nvim_web_devicons()
+      '';
   };
 }
