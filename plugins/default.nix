@@ -1,5 +1,7 @@
 {
   imports = [
+    ./cmp
+
     ./colorschemes/ayu.nix
     ./colorschemes/base16
     ./colorschemes/catppuccin.nix
@@ -21,15 +23,6 @@
     ./colorschemes/rose-pine.nix
     ./colorschemes/tokyonight.nix
     ./colorschemes/vscode.nix
-
-    ./completion/codeium-vim.nix
-    ./completion/codeium-nvim.nix
-    ./completion/copilot-lua.nix
-    ./completion/copilot-vim.nix
-    ./completion/coq.nix
-    ./completion/coq-thirdparty.nix
-    ./completion/lspkind.nix
-    ./completion/cmp
 
     ./filetrees/chadtree.nix
     ./filetrees/neo-tree.nix
