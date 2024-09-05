@@ -24,21 +24,6 @@
     ./colorschemes/tokyonight.nix
     ./colorschemes/vscode.nix
 
-    ./git/committia.nix
-    ./git/diffview.nix
-    ./git/fugitive.nix
-    ./git/git-conflict.nix
-    ./git/git-worktree.nix
-    ./git/gitblame.nix
-    ./git/gitgutter.nix
-    ./git/gitignore.nix
-    ./git/gitlinker.nix
-    ./git/gitmessenger.nix
-    ./git/gitsigns
-    ./git/lazygit.nix
-    ./git/neogit
-    ./git/octo.nix
-
     ./languages/clangd-extensions.nix
     ./languages/cmake-tools.nix
     ./languages/debugprint.nix
