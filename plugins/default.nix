@@ -69,8 +69,6 @@
     ./pluginmanagers/lazy.nix
     ./pluginmanagers/lz-n.nix
 
-    ./telescope
-
     ./deprecation.nix
   ];
 }
