@@ -34,10 +34,10 @@ To add a new plugin you need to do the following.
 
 The vast majority of plugins fall into one of those two categories:
 - _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
-  For those, you should use the `helpers.vim-plugin.mkVimPlugin`.\
+  For those, you should use the `lib.nixvim.vim-plugin.mkVimPlugin`.\
   -> See [this plugin](plugins/utils/direnv.nix) for an example.
 - _neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
-  For those, you should use the `helpers.neovim-plugin.mkNeovimPlugin`.\
+  For those, you should use the `lib.nixvim.neovim-plugin.mkNeovimPlugin`.\
   -> See the [template](plugins/TEMPLATE.nix).
 
 2. Add the necessary parameters for the `mkNeovimPlugin`/`mkVimPlugin`:
@@ -47,38 +47,49 @@ The vast majority of plugins fall into one of those two categories:
   - `package`: The nixpkgs package attr for this plugin
      e.g. `"foo-bar-nvim` for `pkgs.vimPlugins.foo-bar-nvim`, or `[ "hello" "world" ]` for `pkgs.hello.world`.
   - `maintainers`: Register yourself as a maintainer for this plugin:
-    - `[lib.maintainers.JosephFourier]` if you are already registered as a [`nixpkgs` maintainer](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix)
-    - `[helpers.maintainers.GaspardMonge]` otherwise. (Also add yourself to [`maintainers.nix`](lib/maintainers.nix))
+    - e.g. `maintainers = [ lib.maintainers.JosephFourier ]`
+    - If you are already registered as a [`nixpkgs` maintainer][nixpkgs-maintainers], there is nothing more to do.
+    - Otherwise, you should add yourself to our [`maintainers.nix`](lib/maintainers.nix) list.
+    - See the documentation at the top of the [`nixpkgs` maintainers list][nixpkgs-maintainers] for more detail.
   - `settingsOptions`: All or some (only the most important ones) option declarations for this plugin settings.\
     See below for more information
   - `settingsExample`: An example of what could the `settings` attrs look like.
 
+3. Add to plugins/default.nix
+  - As a final step, please add your plugin to `plugins/default.nix` to ensure it gets imported.
+  - Note: the imports list is sorted and grouped. In vim, you can usually use `V` (visual-line mode) with the `:sort` command to achieve the desired result.
+
+[nixpkgs-maintainers]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix
+
 #### Declaring plugin options
 
-You will then need to add Nix options for all (or some) of the upstream plugin options.
-These option declarations should be in `settingsOptions` and their names should match exactly the upstream plugin.
-There are a number of helpers to help you correctly implement them:
-
-- `helpers.defaultNullOpts.{mkBool,mkInt,mkStr,...}`: This family of helpers takes a default value and a description, and sets the Nix default to `null`. These are the main functions you should use to define options.
-- `helpers.defaultNullOpts.mkNullable`: This takes a type, a default and a description. This is useful for more complex options.
-- `helpers.nixvimTypes.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`. This should not be used if the option can only be raw lua code, `mkLua`/`mkLuaFn` should be used in this case.
-
-The resulting `settings` attrs will be directly translated to `lua` and will be forwarded the plugin:
-- Using globals (`vim.g.<globalPrefix><option-name>`) for plugins using `mkVimPlugin`
-- Using the `require('<plugin>').setup()` function for the plugins using `mkNeovimPlugin`
-
-In either case, you don't need to bother implementing this part. It is done automatically.
+> [!CAUTION]
+> Declaring `settings`-options is **not required**, because the `settings` option is a freeform type.
+>
+> While `settings` options can be helpful for documentation and type-checking purposes, this is a double-edged sword because we have to ensure the options are correctly typed and documented to avoid unnecessary restrictions or confusion.
 
 > [!TIP]
 > Learn more about the [RFC 42](https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md) which motivated this new approach.
 
-> [!NOTE]
-> `settings` has a "freeform" type `attrsOf anything`, meaning it can be configured with _anything_.
-> Declaring `settingsOptions` is therefore optional and just adds type-checking and documentation.
+If you feel having nix options for some of the upstream plugin options adds value and is worth the maintenance cost, you can declare these in `settingsOptions`.
 
-#### Add to plugins/default.nix
-As a final step, please add your plugin to `plugins/default.nix`. Please maintain the file hierarchy.
+Take care to ensure option names exactly match the upstream plugin's option names (without `globalsPrefix`, if used).
+You must also ensure that the option type is permissive enough to avoid unnecessarily restricting config definitions.
+If unsure, you can forego declaring the option or use a permissive type such as `lib.types.anything`.
 
+There are a number of helpers added into `lib` that can help you correctly implement them:
+
+- `lib.nixvim.defaultNullOpts.{mkBool,mkInt,mkStr,...}`: This family of helpers takes a default value and a description, and sets the Nix default to `null`.
+  These are the main functions you should use to define options.
+- `lib.nixvim.defaultNullOpts.<name>'`: These "prime" variants of the above helpers do the same thing, but expect a "structured" attrs argument.
+  This allows more flexibility in what arguments are passed through to the underlying `lib.mkOption` call.
+- `lib.types.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`.
+
+The resulting `settings` attrs will be directly translated to `lua` and will be forwarded the plugin:
+- Using globals (`vim.g.<globalPrefix><option-name>`) for plugins using `mkVimPlugin`
+- Using the `require('<plugin>').setup(<options>)` function for the plugins using `mkNeovimPlugin`
+
+In either case, you don't need to bother implementing this part. It is done automatically.
 
 ### Tests
 
