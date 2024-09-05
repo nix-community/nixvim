@@ -69,10 +69,6 @@
     ./pluginmanagers/lazy.nix
     ./pluginmanagers/lz-n.nix
 
-    ./statuslines/airline.nix
-    ./statuslines/lightline.nix
-    ./statuslines/lualine.nix
-
     ./telescope
 
     ./deprecation.nix
