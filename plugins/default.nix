@@ -140,6 +140,7 @@
     ./ui/image.nix
     ./ui/neoscroll.nix
     ./ui/noice.nix
+    ./ui/nvim-highlight-colors.nix
     ./ui/specs.nix
     ./ui/statuscol.nix
     ./ui/transparent.nix
