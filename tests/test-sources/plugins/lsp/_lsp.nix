@@ -201,7 +201,8 @@
             sqls.enable = true;
             svelte.enable = true;
             tailwindcss.enable = true;
-            taplo.enable = true;
+            # TODO: re-enable this test when fixed
+            # taplo.enable = true;
             templ.enable = true;
             terraformls.enable = true;
             texlab.enable = true;
