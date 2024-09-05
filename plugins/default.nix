@@ -152,6 +152,7 @@
     ./utils/auto-save.nix
     ./utils/auto-session.nix
     ./utils/autoclose.nix
+    ./utils/autosource.nix
     ./utils/bacon.nix
     ./utils/baleia.nix
     ./utils/better-escape.nix
