@@ -239,6 +239,7 @@
     ./utils/vim-css-color.nix
     ./utils/vim-matchup.nix
     ./utils/wakatime.nix
+    ./utils/web-devicons.nix
     ./utils/which-key.nix
     ./utils/wilder.nix
     ./utils/yanky.nix
