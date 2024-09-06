@@ -93,7 +93,6 @@
     ./languages/treesitter/hmts.nix
     ./languages/treesitter/rainbow-delimiters.nix
     ./languages/treesitter/treesitter-context.nix
-    ./languages/treesitter/treesitter-playground.nix
     ./languages/treesitter/treesitter-refactor.nix
     ./languages/treesitter/treesitter-textobjects.nix
     ./languages/treesitter/treesitter.nix
@@ -248,5 +247,7 @@
     ./utils/yanky.nix
     ./utils/zellij.nix
     ./utils/zk.nix
+
+    ./deprecation.nix
   ];
 }
