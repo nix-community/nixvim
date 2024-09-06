@@ -87,6 +87,45 @@ linkFarmFromDrvs "plugins-by-name" [
     ''
   )
 
+  # Check default.nix files exist for each directory
+  (runCommandNoCCLocal "default-nix-exists"
+    {
+      __structuredAttrs = true;
+      missingPlugins = builtins.filter (
+        name: !(builtins.pathExists "${by-name}/${name}/default.nix")
+      ) children.directory;
+      missingTests = builtins.filter (
+        name: !(builtins.pathExists "${./test-sources/plugins/by-name}/${name}/default.nix")
+      ) children.directory;
+    }
+    ''
+      declare -i errs=0
+
+      if (( ''${#missingPlugins[@]} > 0 )); then
+        ((++errs))
+        echo "The following (''${#missingPlugins[@]}) directories do not have a default.nix file:"
+        for name in "''${missingPlugins[@]}"; do
+          echo "  - plugins/by-name/$name"
+        done
+        echo
+      fi
+
+      if (( ''${#missingTests[@]} > 0 )); then
+        ((++errs))
+        echo "The following (''${#missingTests[@]}) test files do not exist:"
+        for name in "''${missingTests[@]}"; do
+          echo "  - tests/test-sources/plugins/by-name/$name/default.nix"
+        done
+        echo
+      fi
+
+      if (( $errs > 0 )); then
+        exit 1
+      fi
+      touch $out
+    ''
+  )
+
   # Ensures all plugin enable options are declared in a directory matching the plugin name
   (runCommandNoCCLocal "mismatched-plugin-names"
     {
