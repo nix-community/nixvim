@@ -18,6 +18,7 @@
     lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
       treefmt.config = {
         projectRootFile = "flake.nix";
+        flakeCheck = true;
 
         programs = {
           isort.enable = true;
@@ -58,6 +59,9 @@
     }
     // lib.optionalAttrs (inputs.git-hooks ? flakeModule) {
       pre-commit = {
+        # We have a treefmt check already, so this is redundant.
+        check.enable = false;
+
         settings.hooks = {
           treefmt.enable = true;
           typos.enable = true;
