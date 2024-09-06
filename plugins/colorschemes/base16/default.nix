@@ -171,7 +171,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   extraConfig = cfg: {
     plugins.airline.settings.theme = lib.mkIf cfg.setUpBar (lib.mkDefault name);
-    plugins.lualine.theme = lib.mkIf cfg.setUpBar (lib.mkDefault name);
+    plugins.lualine.settings.options.theme = lib.mkIf cfg.setUpBar (lib.mkDefault name);
     plugins.lightline.settings.colorscheme = lib.mkDefault null;
 
     opts.termguicolors = lib.mkDefault true;

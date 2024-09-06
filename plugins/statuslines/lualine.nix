@@ -1,177 +1,270 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.lualine;
+  inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;
+  inherit (lib) types;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "lualine";
+  originalName = "lualine.nvim";
+  package = "lualine-nvim";
 
-  mkSeparatorsOption =
-    {
-      leftDefault ? " ",
-      rightDefault ? " ",
-    }:
-    {
-      left = helpers.defaultNullOpts.mkStr leftDefault "Left separator";
-      right = helpers.defaultNullOpts.mkStr rightDefault "Right separator";
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-  mkComponentOptions =
-    defaultName:
-    helpers.mkNullOrOption (
-      with types;
-      listOf (
-        either str (submodule {
-          options = {
-            name = mkOption {
-              type = types.either types.str helpers.nixvimTypes.rawLua;
-              description = "Component name or function";
-              default = defaultName;
-            };
+  # TODO: Added 2024-09-05, remove after 24.11
+  optionsRenamedToSettings = [
+    "extensions"
+    "sections"
+    "inactiveSections"
+    "tabline"
+    "winbar"
+    "inactiveWinbar"
+  ];
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "lualine"
+      ];
+      settingsPath = basePluginPath ++ [ "settings" ];
+      optionsPath = settingsPath ++ [ "options" ];
+      oldOptions = [
+        "theme"
+        "globalstatus"
+        "refresh"
+        "iconsEnabled"
+        "sectionSeparators"
+        "componentSeparators"
+        "disabledFiletypes"
+        "ignoreFocus"
+        "alwaysDivideMiddle"
+      ];
+    in
+    mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions;
 
-            icons_enabled = helpers.defaultNullOpts.mkBool true ''
-              Enables the display of icons alongside the component.
-            '';
+  settingsOptions =
+    let
+      mkSeparatorsOption =
+        { left, right }:
+        defaultNullOpts.mkNullableWithRaw' {
+          description = ''
+            Filetypes in which to disable lualine.
+            Allows you to specify filetypes that you want to only disable on specific components.
+          '';
+          pluginDefault = {
+            inherit left right;
+          };
+          type =
+            with types;
+            either str (submodule {
+              freeformType = attrsOf anything;
 
-            icon = helpers.mkNullOrOption (
-              with types;
-              either str (submodule {
+              options = {
+                left = defaultNullOpts.mkStr left "Left separator";
+                right = defaultNullOpts.mkStr right "Right separator";
+              };
+            });
+        };
+
+      # NOTE: This option is used for the shared component section definitions.
+      # We used to transform several options for the user to handle unkeying inside an attribute set and
+      # merging in undefined options into the final option. Now that we have freeformType support the user can
+      # manage this configuration exactly as the plugin expects without us transforming the values for them.
+      mkComponentOptions =
+        description:
+        lib.nixvim.mkNullOrOption' {
+          type =
+            with types;
+            let
+              # TODO: added 2024-09-05 remove after 24.11
+              oldAttrs = [
+                [ "name" ]
+                [
+                  "icon"
+                  "icon"
+                ]
+                [ "extraConfig" ]
+              ];
+              isOldType = x: lib.any (loc: lib.hasAttrByPath loc x) oldAttrs;
+              oldType = addCheck (attrsOf anything) isOldType // {
+                description = "attribute set containing ${lib.concatMapStringsSep ", " lib.showOption oldAttrs}";
+              };
+              coerceFn =
+                attrs:
+                lib.pipe attrs [
+                  # Transform old `name` attr to `__unkeyed`
+                  (
+                    x:
+                    if x ? name then
+                      lib.removeAttrs x [ "name" ]
+                      // {
+                        __unkeyed-1 = x.name;
+                      }
+                    else
+                      x
+                  )
+                  # Transform old `icon.icon` attr to `__unkeyed`
+                  (
+                    x:
+                    if x.icon or null ? icon then
+                      x
+                      // {
+                        icon = removeAttrs x.icon [ "icon" ] // {
+                          __unkeyed-1 = x.icon.icon;
+                        };
+                      }
+                    else
+                      x
+                  )
+                  # Merge in old `extraConfig` attr
+                  (x: removeAttrs x [ "extraConfig" ] // x.extraConfig or { })
+                ];
+              newType = submodule {
                 freeformType = attrsOf anything;
 
                 options = {
-                  icon = mkOption {
-                    type = str;
-                    description = "Icon character.";
+                  icons_enabled = defaultNullOpts.mkBool true ''
+                    Whether to display icons alongside the component.
+                  '';
+
+                  icon = lib.nixvim.mkNullOrOption' {
+                    type = either str (attrsOf anything);
+                    description = "The icon to be displayed in the component.";
+                  };
+
+                  separator = mkSeparatorsOption {
+                    left = " ";
+                    right = " ";
+                  };
+
+                  color = defaultNullOpts.mkNullable' {
+                    type = either attrs str;
+                    pluginDefault = lib.literalMD "The color defined by your theme, for the respective section & mode.";
+                    description = "Defines a custom color for the component.";
+                  };
+
+                  padding = defaultNullOpts.mkNullable (oneOf [
+                    int
+                    (submodule {
+                      # In case they add support for top/bottom padding
+                      freeformType = attrsOf (maybeRaw int);
+
+                      options = {
+                        left = defaultNullOpts.mkInt null "Left padding.";
+                        right = defaultNullOpts.mkInt null "Right padding.";
+                      };
+                    })
+                    rawLua
+                  ]) 1 "Amount of padding added to components.";
+
+                  fmt = lib.nixvim.mkNullOrLuaFn' {
+                    description = ''
+                      A lua function to format the component string.
+                    '';
+                    example = ''
+                      function(text)
+                        return text .. "!!!"
+                      end
+                    '';
                   };
                 };
-              })
-            ) "Defines the icon to be displayed in front of the component.";
+              };
+            in
+            maybeRaw (listOf (either str (lib.nixvim.transitionType oldType coerceFn (maybeRaw newType))));
+          inherit description;
+        };
 
-            separator = mkSeparatorsOption { };
-
-            color = helpers.mkNullOrOption (types.attrsOf types.str) ''
-              Defines a custom color for the component.
-            '';
-
-            padding = helpers.defaultNullOpts.mkNullable (types.either types.int (
-              types.submodule {
-                options = {
-                  left = mkOption {
-                    type = types.int;
-                    description = "left padding";
-                  };
-                  right = mkOption {
-                    type = types.int;
-                    description = "left padding";
-                  };
-                };
-              }
-            )) 1 "Adds padding to the left and right of components.";
-
-            fmt = helpers.mkNullOrLuaFn ''
-              A lua function to format the component string.
-
-              Example:
-              ```lua
-                function(text)
-                  return text .. "!!!"
-                end
-              ```
-            '';
-
-            extraConfig = mkOption {
-              type = types.attrs;
-              default = { };
-              description = "extra options for the component";
-            };
-          };
-        })
-      )
-    ) "";
-
-  mkEmptySectionOption = name: {
-    lualine_a = mkComponentOptions "";
-    lualine_b = mkComponentOptions "";
-    lualine_c = mkComponentOptions "";
-    lualine_x = mkComponentOptions "";
-    lualine_y = mkComponentOptions "";
-    lualine_z = mkComponentOptions "";
-  };
-in
-{
-  options = {
-    plugins.lualine = {
-      enable = mkEnableOption "lualine";
-
-      package = lib.mkPackageOption pkgs "lualine" {
-        default = [
-          "vimPlugins"
-          "lualine-nvim"
-        ];
+      mkEmptySectionOption = name: {
+        lualine_a = mkComponentOptions "Left section on left side.";
+        lualine_b = mkComponentOptions "Middle section on left side.";
+        lualine_c = mkComponentOptions "Right section on left side.";
+        lualine_x = mkComponentOptions "Left section on right side.";
+        lualine_y = mkComponentOptions "Middle section on right side.";
+        lualine_z = mkComponentOptions "Right section on right side.";
       };
 
-      gitPackage = lib.mkPackageOption pkgs "git" {
-        nullable = true;
-      };
+    in
+    {
+      options = {
+        icons_enabled = defaultNullOpts.mkBool true ''
+          Whether to enable icons for all components.
 
-      iconsEnabled = mkOption {
-        type = types.bool;
-        description = "Whether to enable/disable icons for all components.";
-        default = true;
-      };
-
-      theme = helpers.defaultNullOpts.mkNullable (
-        with types; either str attrs
-      ) "auto" "The theme to use for lualine-nvim.";
-
-      componentSeparators = mkSeparatorsOption {
-        leftDefault = "";
-        rightDefault = "";
-      };
-
-      sectionSeparators = mkSeparatorsOption {
-        leftDefault = "";
-        rightDefault = "";
-      };
-
-      disabledFiletypes = {
-        statusline = helpers.defaultNullOpts.mkListOf types.str [ ] ''
-          Only ignores the ft for statusline.
+          This option is also available on individual components to control whether they should display icons.
         '';
 
-        winbar = helpers.defaultNullOpts.mkListOf types.str [ ] ''
-          Only ignores the ft for winbar.
+        theme = defaultNullOpts.mkNullable (
+          with types; either str attrs
+        ) "auto" "The theme to use for lualine-nvim.";
+
+        component_separators = mkSeparatorsOption {
+          left = "";
+          right = "";
+        };
+
+        section_separators = mkSeparatorsOption {
+          left = "";
+          right = "";
+        };
+
+        disabled_filetypes = defaultNullOpts.mkNullableWithRaw' {
+          description = ''
+            Filetypes in which to disable lualine.
+            Allows you to specify filetypes that you want to only disable on specific components.
+          '';
+          pluginDefault = { };
+          type =
+            with types;
+            either (listOf (maybeRaw str)) (submodule {
+              freeformType = attrsOf anything;
+
+              options = {
+                statusline = defaultNullOpts.mkListOf str [ ] ''
+                  Hide the statusline component on specified filetypes.
+                '';
+
+                winbar = defaultNullOpts.mkListOf str [ ] ''
+                  Hide the winbar component on specified filetypes.
+                '';
+              };
+            });
+        };
+
+        ignore_focus = defaultNullOpts.mkNullableWithRaw' {
+          type = types.listOf types.str;
+          pluginDefault = [ ];
+          description = ''
+            A list of filetypes that should always show an "unfocused" statusline.
+
+            If the focused window's filetype is in this list, then the most
+            recently focused window will be drawn as the active statusline.
+          '';
+          example = [
+            "neo-tree"
+            "nvim-tree"
+            "mini-files"
+          ];
+        };
+
+        always_divide_middle = defaultNullOpts.mkBool true ''
+          Whether to prevent left sections i.e. 'a','b' and 'c' from taking over the entire statusline
+          even if neither of 'x', 'y' or 'z' are present.
         '';
-      };
 
-      ignoreFocus = helpers.defaultNullOpts.mkListOf types.str [ ] ''
-        If current filetype is in this list it'll always be drawn as inactive statusline and the
-        last window will be drawn as active statusline.
+        globalstatus = defaultNullOpts.mkBool false ''
+          Whether to enable "global" statusline.
+          I.e. having a single statusline at bottom of neovim, instead of one for each individual window.
+        '';
 
-        For example if you don't want statusline of your file tree / sidebar window to have active
-        statusline you can add their filetypes here.
-      '';
+        refresh = {
+          statusline = defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
 
-      alwaysDivideMiddle = helpers.defaultNullOpts.mkBool true ''
-        When set to true, left sections i.e. 'a','b' and 'c' can't take over the entire statusline
-        even if neither of 'x', 'y' or 'z' are present.
-      '';
+          tabline = defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
 
-      globalstatus = helpers.defaultNullOpts.mkBool false ''
-        Enable global statusline (have a single statusline at bottom of neovim instead of one for
-        every window).
-        This feature is only available in neovim 0.7 and higher.
-      '';
-
-      refresh = {
-        statusline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the status line (ms)";
-
-        tabline = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the tabline (ms)";
-
-        winbar = helpers.defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
+          winbar = defaultNullOpts.mkInt 1000 "Refresh time for the winbar (ms)";
+        };
       };
 
       sections = {
@@ -184,7 +277,7 @@ in
         lualine_z = mkComponentOptions "location";
       };
 
-      inactiveSections = {
+      inactive_sections = {
         lualine_a = mkComponentOptions "";
         lualine_b = mkComponentOptions "";
         lualine_c = mkComponentOptions "filename";
@@ -195,66 +288,126 @@ in
 
       tabline = mkEmptySectionOption "Tabline configuration";
 
-      winbar = mkEmptySectionOption "Winbar configuration";
+      winbar = mkEmptySectionOption "Winbar configuration.";
 
-      inactiveWinbar = mkEmptySectionOption "Inactive Winbar configuration";
+      inactive_winbar = mkEmptySectionOption "Winbar configuration used when inactive.";
 
-      extensions = mkOption {
-        type = with lib.types; nullOr (listOf (either str (attrsOf anything)));
-        default = null;
-        example = ''[ "fzf" ]'';
-        description = "list of enabled extensions";
+      extensions = defaultNullOpts.mkListOf (
+        with lib.types; either str (attrsOf anything)
+      ) [ ] "List of enabled extensions.";
+    };
+
+  settingsExample = {
+    options = {
+      disabled_filetypes = {
+        __unkeyed-1 = "startify";
+        __unkeyed-2 = "neo-tree";
+        statusline = [
+          "dap-repl"
+        ];
+        winbar = [
+          "aerial"
+          "dap-repl"
+          "neotest-summary"
+        ];
       };
+      globalstatus = true;
+    };
+    sections = {
+      lualine_a = [ "mode" ];
+      lualine_b = [ "branch" ];
+      lualine_c = [
+        "filename"
+        "diff"
+      ];
+      lualine_x = [
+        "diagnostics"
+        {
+          __unkeyed-1.__raw = ''
+            function()
+                local msg = ""
+                local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+                local clients = vim.lsp.get_active_clients()
+                if next(clients) == nil then
+                    return msg
+                end
+                for _, client in ipairs(clients) do
+                    local filetypes = client.config.filetypes
+                    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+                        return client.name
+                    end
+                end
+                return msg
+            end
+          '';
+          icon = "";
+          color.fg = "#ffffff";
+        }
+        "encoding"
+        "fileformat"
+        "filetype"
+      ];
+      lualine_y = [
+        {
+          __unkeyed-1 = "aerial";
+          cond.__raw = ''
+            function()
+              local buf_size_limit = 1024 * 1024
+              if vim.api.nvim_buf_get_offset(0, vim.api.nvim_buf_line_count(0)) > buf_size_limit then
+                return false
+              end
+
+              return true
+            end
+          '';
+          sep = " ) ";
+          depth.__raw = "nil";
+          dense = false;
+          dense_sep = ".";
+          colored = true;
+        }
+      ];
+      lualine_z = [
+        {
+          __unkeyed-1 = "location";
+        }
+      ];
+    };
+    tabline = {
+      lualine_a = [
+        {
+          __unkeyed-1 = "buffers";
+          symbols = {
+            alternate_file = "";
+          };
+        }
+      ];
+      lualine_z = [ "tabs" ];
+    };
+    winbar = {
+      lualine_c = [
+        {
+          __unkeyed-1 = "navic";
+        }
+      ];
+      lualine_x = [
+        {
+          __unkeyed-1 = "filename";
+          newfile_status = true;
+          path = 3;
+          shorting_target = 150;
+        }
+      ];
     };
   };
-  config =
-    let
-      processComponent = x: (if isAttrs x then processTableComponent else id) x;
-      processTableComponent =
-        {
-          name,
-          icons_enabled,
-          icon,
-          separator,
-          color,
-          padding,
-          extraConfig,
-          fmt,
-        }:
-        mergeAttrs {
-          "__unkeyed" = name;
-          icon = if isAttrs icon then removeAttrs (icon // { "__unkeyed" = icon.icon; }) [ "icon" ] else icon;
-          inherit
-            icons_enabled
-            separator
-            color
-            padding
-            fmt
-            ;
-        } extraConfig;
-      processSections = mapAttrs (_: mapNullable (map processComponent));
-      setupOptions = {
-        options = {
-          inherit (cfg) theme globalstatus refresh;
-          icons_enabled = cfg.iconsEnabled;
-          section_separators = cfg.sectionSeparators;
-          component_separators = cfg.componentSeparators;
-          disabled_filetypes = cfg.disabledFiletypes;
-          ignore_focus = cfg.ignoreFocus;
-          always_divide_middle = cfg.alwaysDivideMiddle;
-        };
 
-        inherit (cfg) extensions;
-        sections = processSections cfg.sections;
-        inactive_sections = processSections cfg.inactiveSections;
-        tabline = processSections cfg.tabline;
-        winbar = processSections cfg.winbar;
-        inactive_winbar = processSections cfg.inactiveWinbar;
-      };
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ] ++ (optional cfg.iconsEnabled pkgs.vimPlugins.nvim-web-devicons);
-      extraPackages = [ cfg.gitPackage ];
-      extraConfigLua = ''require("lualine").setup(${helpers.toLuaObject setupOptions})'';
+  extraOptions = {
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
+  };
+
+  extraConfig = cfg: {
+    extraPackages = [ cfg.gitPackage ];
+  };
 }

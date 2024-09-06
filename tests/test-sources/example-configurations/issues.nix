@@ -8,17 +8,19 @@
       lualine = {
         enable = true;
 
-        sectionSeparators = {
-          left = "";
-          right = "";
+        settings = {
+          options = {
+            section_separators = {
+              left = "";
+              right = "";
+            };
+            component_separators = {
+              left = "";
+              right = "";
+            };
+            theme = "auto";
+          };
         };
-
-        componentSeparators = {
-          left = "";
-          right = "";
-        };
-
-        theme = "auto";
       };
 
       goyo = {
