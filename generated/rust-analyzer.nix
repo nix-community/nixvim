@@ -112,39 +112,19 @@
       kind = "boolean";
     };
   };
-  "rust-analyzer.cargo.buildScripts.invocationLocation" = {
-    description = ''
-      Specifies the working directory for running build scripts.
-      - "workspace": run build scripts for a workspace in the workspace's root directory.
-          This is incompatible with `#rust-analyzer.cargo.buildScripts.invocationStrategy#` set to `once`.
-      - "root": run build scripts in the project's root directory.
-      This config only has an effect when `#rust-analyzer.cargo.buildScripts.overrideCommand#`
-      is set.
-
-      Values:
-      - workspace: The command will be executed in the corresponding workspace root.
-      - root: The command will be executed in the project root.
-    '';
-    pluginDefault = "workspace";
-    type = {
-      kind = "enum";
-      values = [
-        "workspace"
-        "root"
-      ];
-    };
-  };
   "rust-analyzer.cargo.buildScripts.invocationStrategy" = {
     description = ''
       Specifies the invocation strategy to use when running the build scripts command.
-      If `per_workspace` is set, the command will be executed for each workspace.
-      If `once` is set, the command will be executed once.
+      If `per_workspace` is set, the command will be executed for each Rust workspace with the
+      workspace as the working directory.
+      If `once` is set, the command will be executed once with the opened project as the
+      working directory.
       This config only has an effect when `#rust-analyzer.cargo.buildScripts.overrideCommand#`
       is set.
 
       Values:
-      - per_workspace: The command will be executed for each workspace.
-      - once: The command will be executed once.
+      - per_workspace: The command will be executed for each Rust workspace with the workspace as the working directory.
+      - once: The command will be executed once with the opened project as the working directory.
     '';
     pluginDefault = "per_workspace";
     type = {
@@ -165,8 +145,7 @@
       If there are multiple linked projects/workspaces, this command is invoked for
       each of them, with the working directory being the workspace root
       (i.e., the folder containing the `Cargo.toml`). This can be overwritten
-      by changing `#rust-analyzer.cargo.buildScripts.invocationStrategy#` and
-      `#rust-analyzer.cargo.buildScripts.invocationLocation#`.
+      by changing `#rust-analyzer.cargo.buildScripts.invocationStrategy#`.
 
       By default, a cargo invocation will be constructed for the configured
       targets and features, with the following base command line:
@@ -416,28 +395,6 @@
       kind = "list";
     };
   };
-  "rust-analyzer.check.invocationLocation" = {
-    description = ''
-      Specifies the working directory for running checks.
-      - "workspace": run checks for workspaces in the corresponding workspaces' root directories.
-          This falls back to "root" if `#rust-analyzer.check.invocationStrategy#` is set to `once`.
-      - "root": run checks in the project's root directory.
-      This config only has an effect when `#rust-analyzer.check.overrideCommand#`
-      is set.
-
-      Values:
-      - workspace: The command will be executed in the corresponding workspace root.
-      - root: The command will be executed in the project root.
-    '';
-    pluginDefault = "workspace";
-    type = {
-      kind = "enum";
-      values = [
-        "workspace"
-        "root"
-      ];
-    };
-  };
   "rust-analyzer.check.invocationStrategy" = {
     description = ''
       Specifies the invocation strategy to use when running the check command.
@@ -447,8 +404,8 @@
       is set.
 
       Values:
-      - per_workspace: The command will be executed for each workspace.
-      - once: The command will be executed once.
+      - per_workspace: The command will be executed for each Rust workspace with the workspace as the working directory.
+      - once: The command will be executed once with the opened project as the working directory.
     '';
     pluginDefault = "per_workspace";
     type = {
@@ -484,8 +441,7 @@
       If there are multiple linked projects/workspaces, this command is invoked for
       each of them, with the working directory being the workspace root
       (i.e., the folder containing the `Cargo.toml`). This can be overwritten
-      by changing `#rust-analyzer.check.invocationStrategy#` and
-      `#rust-analyzer.check.invocationLocation#`.
+      by changing `#rust-analyzer.check.invocationStrategy#`.
 
       If `$saved_file` is part of the command, rust-analyzer will pass
       the absolute path of the saved file to the provided command. This is
@@ -593,6 +549,15 @@
   "rust-analyzer.completion.fullFunctionSignatures.enable" = {
     description = ''
       Whether to show full function/method signatures in completion docs.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.completion.hideDeprecated" = {
+    description = ''
+      Whether to omit deprecated items from autocompletion. By default they are marked as deprecated but not hidden.
     '';
     pluginDefault = false;
     type = {
