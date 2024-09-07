@@ -373,7 +373,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
               defaults = {
                 inherit action;
                 mode = "n";
+                key = null;
               };
+
+              key.type = with types; nullOr str;
 
               extraOptions = {
                 cwd = mkOption {
@@ -430,7 +433,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     extraPackages = [ cfg.ripgrepPackage ];
 
     keymaps = lib.pipe cfg.keymaps [
-      (filterAttrs (n: keymap: keymap != null))
+      (filterAttrs (n: keymap: keymap != null && keymap.key != null))
       (mapAttrsToList (
         name: keymap: {
           inherit (keymap) key mode options;
