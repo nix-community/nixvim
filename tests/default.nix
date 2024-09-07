@@ -5,7 +5,7 @@
   pkgsUnfree,
 }:
 let
-  fetchTests = import ./fetch-tests.nix;
+  fetchTests = import ./fetch-tests.nix { inherit lib pkgs helpers; };
   test-derivation = import ../lib/tests.nix { inherit pkgs lib; };
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
@@ -17,10 +17,7 @@ let
     };
 
   # List of files containing configurations
-  testFiles = fetchTests {
-    inherit lib pkgs helpers;
-    root = ./test-sources;
-  };
+  testFiles = fetchTests ./test-sources;
 
   exampleFiles = {
     name = "examples";
