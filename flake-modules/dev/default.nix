@@ -9,7 +9,7 @@
     {
       lib,
       pkgs,
-      config,
+      system,
       ...
     }:
     let
@@ -60,11 +60,23 @@
     // lib.optionalAttrs (inputs.git-hooks ? flakeModule) {
       pre-commit = {
         # We have a treefmt check already, so this is redundant.
+        # We also can't run the test if it includes running `nix build`,
+        # since the nix CLI can't build within a derivation builder.
         check.enable = false;
 
         settings.hooks = {
           treefmt.enable = true;
           typos.enable = true;
+          maintainers = {
+            enable = true;
+            name = "maintainers";
+            description = "Check maintainers when it is modified.";
+            files = "^lib/maintainers[.]nix$";
+            package = pkgs.nix;
+            entry = "nix build --no-link --print-build-logs";
+            args = [ ".#checks.${system}.maintainers" ];
+            pass_filenames = false;
+          };
         };
       };
     };
