@@ -10,9 +10,13 @@ let
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   moduleToTest =
-    name: module:
+    file: name: module:
     mkTestDerivationFromNixvimModule {
-      inherit name module;
+      inherit name;
+      module = {
+        _file = file;
+        imports = [ module ];
+      };
       pkgs = pkgsUnfree;
     };
 
@@ -39,10 +43,17 @@ let
 in
 # We attempt to build & execute all configurations
 lib.pipe (testFiles ++ [ exampleFiles ]) [
-  (builtins.map (file: {
-    inherit (file) name;
-    path = pkgs.linkFarm file.name (builtins.mapAttrs moduleToTest file.cases);
-  }))
+  (builtins.map (
+    {
+      name,
+      file,
+      cases,
+    }:
+    {
+      inherit name;
+      path = pkgs.linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
+    }
+  ))
   (helpers.groupListBySize 10)
   (lib.imap1 (
     i: group: rec {
