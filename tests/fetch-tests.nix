@@ -1,5 +1,4 @@
 {
-  root,
   lib,
   pkgs,
   helpers,
@@ -49,4 +48,4 @@ let
       builtins.concatLists
     ];
 in
-fetchTests root [ ]
+root: fetchTests root [ ]

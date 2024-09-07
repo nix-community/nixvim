@@ -3,10 +3,6 @@
   perSystem =
     { system, pkgs, ... }:
     {
-      _module.args = {
-        makeNixvimWithModule = import ../wrappers/standalone.nix pkgs self;
-      };
-
       checks =
         {
           home-manager-module =

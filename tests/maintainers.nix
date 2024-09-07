@@ -1,6 +1,6 @@
 {
-  pkgs ? import <nixpkgs> { },
-  lib ? pkgs.lib,
+  lib,
+  runCommandNoCCLocal,
 }:
 let
   inherit (lib) attrNames filter length;
@@ -9,7 +9,7 @@ let
   duplicates = filter (name: nixpkgsList ? ${name}) (attrNames nixvimList);
   count = length duplicates;
 in
-pkgs.runCommand "maintainers-test" { inherit count duplicates; } ''
+runCommandNoCCLocal "maintainers-test" { inherit count duplicates; } ''
   if [ $count -gt 0 ]; then
     echo "$count nixvim maintainers are also nixpkgs maintainers:"
     for name in $duplicates; do
