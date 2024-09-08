@@ -10,15 +10,15 @@
       settings = {
         target = "screen";
         vimterminal_cmd = null;
-        no_mappings = false;
+        no_mappings = 0;
         paste_file = "$HOME/.slime_paste";
-        preserve_curpos = true;
+        preserve_curpos = 1;
         default_config = {
           socket_name = "default";
           target_pane = "{last}";
         };
-        dont_ask_default = false;
-        bracketed_paste = false;
+        dont_ask_default = 0;
+        bracketed_paste = 0;
       };
     };
   };

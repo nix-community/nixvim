@@ -10,8 +10,8 @@
       settings = {
         cmd = "typst";
         pdf_viewer = "zathura";
-        conceal_math = false;
-        auto_close_toc = false;
+        conceal_math = 0;
+        auto_close_toc = 0;
       };
 
       keymaps = {

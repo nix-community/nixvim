@@ -13,10 +13,10 @@
 
       settings = {
         save_on_switch = 2;
-        disable_when_zoomed = true;
-        preserve_zoom = true;
-        no_wrap = true;
-        no_mappings = true;
+        disable_when_zoomed = 1;
+        preserve_zoom = 1;
+        no_wrap = 1;
+        no_mappings = 1;
       };
     };
   };
@@ -48,7 +48,7 @@
         }
       ];
 
-      settings.no_mappings = true;
+      settings.no_mappings = 1;
     };
   };
 }

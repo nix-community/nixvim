@@ -8,9 +8,9 @@
       enable = true;
 
       settings = {
-        no_default_key_mappings = true;
-        no_tex_ftplugin = true;
-        no_vim_ftplugin = true;
+        no_default_key_mappings = 1;
+        no_tex_ftplugin = 1;
+        no_vim_ftplugin = 1;
       };
     };
 

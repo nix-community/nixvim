@@ -40,7 +40,7 @@ mkVimPlugin {
 
     height = helpers.mkNullOrOption types.ints.unsigned "height";
 
-    linenr = helpers.defaultNullOpts.mkBool false ''
+    linenr = helpers.defaultNullOpts.mkFlagInt 0 ''
       Show line numbers when in Goyo mode.
     '';
   };

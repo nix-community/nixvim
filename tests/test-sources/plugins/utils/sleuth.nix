@@ -8,9 +8,9 @@
       enable = true;
 
       settings = {
-        heuristics = true;
-        gitcommit_heuristics = false;
-        no_filetype_indent_on = true;
+        heuristics = 1;
+        gitcommit_heuristics = 0;
+        no_filetype_indent_on = 1;
       };
     };
   };

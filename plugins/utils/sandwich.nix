@@ -28,14 +28,14 @@ helpers.vim-plugin.mkVimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    no_default_key_mappings = helpers.defaultNullOpts.mkBool false ''
+    no_default_key_mappings = helpers.defaultNullOpts.mkFlagInt 0 ''
       Whether to disable the default mappings.
     '';
   };
 
   settingsExample = {
-    no_default_key_mappings = true;
-    no_tex_ftplugin = true;
-    no_vim_ftplugin = true;
+    no_default_key_mappings = 1;
+    no_tex_ftplugin = 1;
+    no_vim_ftplugin = 1;
   };
 }

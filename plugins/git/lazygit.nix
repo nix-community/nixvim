@@ -33,16 +33,16 @@ helpers.vim-plugin.mkVimPlugin {
       "│"
     ] "Customize lazygit popup window border characters.";
 
-    floating_window_use_plenary = helpers.defaultNullOpts.mkBool false ''
+    floating_window_use_plenary = helpers.defaultNullOpts.mkFlagInt 0 ''
       Whether to use plenary.nvim to manage floating window if available.
     '';
 
-    use_neovim_remote = helpers.defaultNullOpts.mkBool true ''
-      Whether to use neovim remote. Will fallback to `false` if neovim-remote is not installed.
+    use_neovim_remote = helpers.defaultNullOpts.mkFlagInt 1 ''
+      Whether to use neovim remote. Will fallback to `0` if neovim-remote is not installed.
     '';
 
-    use_custom_config_file_path = helpers.defaultNullOpts.mkBool false ''
-      Config file path is evaluated if this value is `true`.
+    use_custom_config_file_path = helpers.defaultNullOpts.mkFlagInt 0 ''
+      Config file path is evaluated if this value is `1`.
     '';
 
     config_file_path = helpers.defaultNullOpts.mkNullable (
@@ -63,9 +63,9 @@ helpers.vim-plugin.mkVimPlugin {
       "╰"
       "│"
     ];
-    floating_window_use_plenary = false;
-    use_neovim_remote = true;
-    use_custom_config_file_path = false;
+    floating_window_use_plenary = 0;
+    use_neovim_remote = 1;
+    use_custom_config_file_path = 0;
     config_file_path = [ ];
   };
 

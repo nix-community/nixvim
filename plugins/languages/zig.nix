@@ -32,13 +32,13 @@ mkVimPlugin {
   ];
 
   settingsOptions = {
-    fmt_autosave = helpers.defaultNullOpts.mkBool true ''
+    fmt_autosave = helpers.defaultNullOpts.mkFlagInt 1 ''
       This plugin enables automatic code formatting on save by default using zig fmt.
-      To disable it, you can set this option to `false`.
+      To disable it, you can set this option to `0`.
     '';
   };
 
   settingsExample = {
-    fmt_autosave = false;
+    fmt_autosave = 0;
   };
 }

@@ -62,20 +62,20 @@ helpers.vim-plugin.mkVimPlugin {
       Specifies pdf viewer that `typst watch --open` will use.
     '';
 
-    conceal_math = helpers.defaultNullOpts.mkBool false ''
+    conceal_math = helpers.defaultNullOpts.mkFlagInt 0 ''
       Enable concealment for math symbols in math mode (i.e. replaces symbols with their actual
       unicode character).
       Warning: this can affect performance
     '';
 
-    auto_close_toc = helpers.defaultNullOpts.mkBool false ''
+    auto_close_toc = helpers.defaultNullOpts.mkFlagInt 0 ''
       Specifies whether TOC will be automatically closed after using it.
     '';
   };
 
   settingsExample = {
     cmd = "typst";
-    conceal_math = true;
-    auto_close_toc = true;
+    conceal_math = 1;
+    auto_close_toc = 1;
   };
 }

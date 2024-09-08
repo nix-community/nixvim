@@ -12,7 +12,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    allow_italics = lib.nixvim.defaultNullOpts.mkBool false ''
+    allow_italics = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''
       Whether to enable _italic_ (as long as your terminal supports it).
     '';
   };

@@ -42,7 +42,7 @@ mkVimPlugin {
       The vim terminal command to execute.
     '';
 
-    no_mappings = helpers.defaultNullOpts.mkBool false ''
+    no_mappings = helpers.defaultNullOpts.mkFlagInt 0 ''
       Whether to disable the default mappings.
     '';
 
@@ -52,7 +52,7 @@ mkVimPlugin {
       whimrepl does not require or support this setting.
     '';
 
-    preserve_curpos = helpers.defaultNullOpts.mkBool true ''
+    preserve_curpos = helpers.defaultNullOpts.mkFlagInt 1 ''
       Whether to preserve cursor position when sending a line or paragraph.
     '';
 
@@ -76,11 +76,11 @@ mkVimPlugin {
           ```
     '';
 
-    dont_ask_default = helpers.defaultNullOpts.mkBool false ''
+    dont_ask_default = helpers.defaultNullOpts.mkFlagInt 0 ''
       Whether to bypass the prompt and use the specified default configuration options.
     '';
 
-    bracketed_paste = helpers.defaultNullOpts.mkBool false ''
+    bracketed_paste = helpers.defaultNullOpts.mkFlagInt 0 ''
       Sometimes REPL are too smart for their own good, e.g. autocompleting a bracket that should
       not be autocompleted when pasting code from a file.
       In this case it can be useful to rely on bracketed-paste
@@ -92,14 +92,14 @@ mkVimPlugin {
   settingsExample = {
     target = "screen";
     vimterminal_cmd = null;
-    no_mappings = false;
+    no_mappings = 0;
     paste_file = "$HOME/.slime_paste";
-    preserve_curpos = true;
+    preserve_curpos = 1;
     default_config = {
       socket_name = "default";
       target_pane = "{last}";
     };
-    dont_ask_default = false;
-    bracketed_paste = false;
+    dont_ask_default = 0;
+    bracketed_paste = 0;
   };
 }

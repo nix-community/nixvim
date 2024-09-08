@@ -13,9 +13,9 @@ helpers.vim-plugin.mkVimPlugin {
   maintainers = [ helpers.maintainers.alisonjenkins ];
 
   settingsOptions = {
-    open_only_vim_starting = helpers.defaultNullOpts.mkBool true ''
-      If `false`, committia.vim always attempts to open committia's buffer when `COMMIT_EDITMSG` buffer is opened.
-      If you use `vim-fugitive`, I recommend to set this value to `true`.
+    open_only_vim_starting = helpers.defaultNullOpts.mkFlagInt 1 ''
+      If `0`, committia.vim always attempts to open committia's buffer when `COMMIT_EDITMSG` buffer is opened.
+      If you use `vim-fugitive`, I recommend to set this value to `1`.
     '';
 
     use_singlecolumn = helpers.defaultNullOpts.mkStr "always" ''

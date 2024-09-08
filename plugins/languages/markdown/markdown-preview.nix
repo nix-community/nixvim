@@ -49,25 +49,25 @@ mkVimPlugin {
   ];
 
   settingsOptions = {
-    auto_start = helpers.defaultNullOpts.mkBool false ''
+    auto_start = helpers.defaultNullOpts.mkFlagInt 0 ''
       Open the preview window after entering the markdown buffer.
     '';
 
-    auto_close = helpers.defaultNullOpts.mkBool true ''
+    auto_close = helpers.defaultNullOpts.mkFlagInt 1 ''
       Auto close current preview window when change from markdown buffer to another buffer.
     '';
 
-    refresh_slow = helpers.defaultNullOpts.mkBool false ''
-      Refresh markdown when save the buffer or leave from insert mode, default false is auto
+    refresh_slow = helpers.defaultNullOpts.mkFlagInt 0 ''
+      Refresh markdown when save the buffer or leave from insert mode, default `0` is auto
       refresh markdown as you edit or move the cursor.
     '';
 
-    command_for_global = helpers.defaultNullOpts.mkBool false ''
+    command_for_global = helpers.defaultNullOpts.mkFlagInt 0 ''
       Enable markdown preview for all files (by default, the plugin is only enabled for markdown
       files).
     '';
 
-    open_to_the_world = helpers.defaultNullOpts.mkBool false ''
+    open_to_the_world = helpers.defaultNullOpts.mkFlagInt 0 ''
       Make the preview server available to others in your network.
       By default, the server listens on localhost (127.0.0.1).
     '';
@@ -82,7 +82,7 @@ mkVimPlugin {
       The browser to open the preview page.
     '';
 
-    echo_preview_url = helpers.defaultNullOpts.mkBool false ''
+    echo_preview_url = helpers.defaultNullOpts.mkFlagInt 0 ''
       Echo preview page url in command line when opening the preview page.
     '';
 
@@ -111,7 +111,7 @@ mkVimPlugin {
           `mermaid` options.
         '';
 
-        disable_sync_scroll = helpers.defaultNullOpts.mkBool false ''
+        disable_sync_scroll = helpers.defaultNullOpts.mkFlagInt 0 ''
           Disable sync scroll.
         '';
 
@@ -129,7 +129,7 @@ mkVimPlugin {
               - "relative": The cursor position is always shown at the relative position of the preview page.
             '';
 
-        hide_yaml_meta = helpers.defaultNullOpts.mkBool true ''
+        hide_yaml_meta = helpers.defaultNullOpts.mkFlagInt 1 ''
           Hide yaml metadata.
         '';
 
@@ -141,11 +141,11 @@ mkVimPlugin {
           `flowcharts` diagrams options.
         '';
 
-        content_editable = helpers.defaultNullOpts.mkBool false ''
+        content_editable = helpers.defaultNullOpts.mkFlagInt 0 ''
           Content editable from the preview page.
         '';
 
-        disable_filename = helpers.defaultNullOpts.mkBool false ''
+        disable_filename = helpers.defaultNullOpts.mkFlagInt 0 ''
           Disable filename header for the preview page.
         '';
 
@@ -195,27 +195,27 @@ mkVimPlugin {
       pluginDefault = literalMD "chosen based on system preferences";
     };
 
-    combine_preview = helpers.defaultNullOpts.mkBool false ''
+    combine_preview = helpers.defaultNullOpts.mkFlagInt 0 ''
       Combine preview window.
       If enable it will reuse previous opened preview window when you preview markdown file.
-      Ensure to set `auto_close = false` if you have enable this option.
+      Ensure to set `auto_close = 0` if you have enable this option.
     '';
 
-    combine_preview_auto_refresh = helpers.defaultNullOpts.mkBool true ''
+    combine_preview_auto_refresh = helpers.defaultNullOpts.mkFlagInt 1 ''
       Auto refetch combine preview contents when change markdown buffer only when
-      `combine_preview` is `true`.
+      `combine_preview` is `1`.
     '';
   };
 
   settingsExample = {
-    auto_start = true;
-    auto_close = true;
+    auto_start = 1;
+    auto_close = 1;
     browser = "firefox";
-    echo_preview_url = true;
+    echo_preview_url = 1;
     preview_options = {
-      disable_sync_scroll = true;
+      disable_sync_scroll = 1;
       sync_scroll_type = "middle";
-      disable_filename = true;
+      disable_filename = 1;
     };
     markdown_css = "/Users/username/markdown.css";
     highlight_css.__raw = "vim.fn.expand('~/highlight.css')";

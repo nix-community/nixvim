@@ -96,16 +96,16 @@ mkVimPlugin {
       Set this to get some kind of lines or visual aid.
     '';
 
-    detailed_first = helpers.defaultNullOpts.mkBool true ''
+    detailed_first = helpers.defaultNullOpts.mkFlagInt 1 ''
       If you want the account completion to be sorted by level of detail/depth instead of
-      alphabetical, set this option to `true`.
+      alphabetical, set this option to `1`.
     '';
 
-    fold_blanks = helpers.defaultNullOpts.mkBool false ''
+    fold_blanks = helpers.defaultNullOpts.mkFlagInt 0 ''
       By default vim will fold ledger transactions, leaving surrounding blank lines unfolded.
       You can use this option to hide blank lines following a transaction.
 
-      A value of `false` will disable folding of blank lines, `true` will allow folding of a
+      A value of `0` will disable folding of blank lines, `1` will allow folding of a
       single blank line between transactions; any larger value will enable folding
       unconditionally.
 
@@ -117,7 +117,7 @@ mkVimPlugin {
       Decimal separator.
     '';
 
-    align_last = helpers.defaultNullOpts.mkBool false ''
+    align_last = helpers.defaultNullOpts.mkFlagInt 0 ''
       Specify alignment on first or last matching separator.
     '';
 
@@ -129,11 +129,11 @@ mkVimPlugin {
       Default commodity used by `ledger#align_amount_at_cursor()`.
     '';
 
-    align_commodity = helpers.defaultNullOpts.mkBool false ''
+    align_commodity = helpers.defaultNullOpts.mkFlagInt 0 ''
       Align on the commodity location instead of the amount
     '';
 
-    commodity_before = helpers.defaultNullOpts.mkBool true ''
+    commodity_before = helpers.defaultNullOpts.mkFlagInt 1 ''
       Flag that tells whether the commodity should be prepended or appended to the amount.
     '';
 
@@ -141,7 +141,7 @@ mkVimPlugin {
       String to be put between the commodity and the amount:
     '';
 
-    commodity_spell = helpers.defaultNullOpts.mkBool false ''
+    commodity_spell = helpers.defaultNullOpts.mkFlagInt 0 ''
       Flag that enable the spelling of the amount.
     '';
 
@@ -171,15 +171,15 @@ mkVimPlugin {
       The format is specified using the standard Ledger syntax for `--format`.
     '';
 
-    use_location_list = helpers.defaultNullOpts.mkBool false ''
+    use_location_list = helpers.defaultNullOpts.mkFlagInt 0 ''
       Flag that tells whether a location list or a quickfix list should be used:
       The default is to use the quickfix window.
-      Set to `true` to use a location list.
+      Set to `1` to use a location list.
     '';
 
-    qf_vertical = helpers.defaultNullOpts.mkBool false ''
+    qf_vertical = helpers.defaultNullOpts.mkFlagInt 0 ''
       Position of the quickfix/location list.
-      Set to `true` to open the quickfix window in a vertical split.
+      Set to `1` to open the quickfix window in a vertical split.
     '';
 
     qf_size = helpers.defaultNullOpts.mkUnsignedInt 10 ''
@@ -189,7 +189,7 @@ mkVimPlugin {
       vertical quickfix window.
     '';
 
-    qf_hide_file = helpers.defaultNullOpts.mkBool true ''
+    qf_hide_file = helpers.defaultNullOpts.mkFlagInt 1 ''
       Flag to show or hide filenames in the quickfix window:
 
       Filenames in the quickfix window are hidden by default. Set this to 1 is
@@ -210,8 +210,8 @@ mkVimPlugin {
   };
 
   settingsExample = {
-    detailed_first = true;
-    fold_blanks = false;
+    detailed_first = 1;
+    fold_blanks = 0;
     maxwidth = 80;
     fillstring = " ";
   };

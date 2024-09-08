@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        open_only_vim_starting = true;
+        open_only_vim_starting = 1;
         use_singlecolumn = "always";
         min_window_width = 160;
         status_window_opencmd = "belowright split";

@@ -10,7 +10,7 @@
       settings = {
         width = 80;
         height = 85;
-        linenr = false;
+        linenr = 0;
       };
     };
   };

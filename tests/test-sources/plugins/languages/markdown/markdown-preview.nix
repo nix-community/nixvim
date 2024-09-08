@@ -8,27 +8,27 @@
       enable = true;
 
       settings = {
-        auto_start = true;
-        auto_close = true;
-        refresh_slow = false;
-        command_for_global = false;
-        open_to_the_world = false;
+        auto_start = 1;
+        auto_close = 1;
+        refresh_slow = 0;
+        command_for_global = 0;
+        open_to_the_world = 0;
         open_ip = "";
         browser = "firefox";
-        echo_preview_url = true;
+        echo_preview_url = 1;
         browser_func = "";
         preview_options = {
           mkit = [ ];
           katex = [ ];
           uml = [ ];
           maid = [ ];
-          disable_sync_scroll = false;
+          disable_sync_scroll = 0;
           sync_scroll_type = "middle";
-          hide_yaml_meta = true;
+          hide_yaml_meta = 1;
           sequence_diagrams = [ ];
           flowchart_diagrams = [ ];
-          content_editable = false;
-          disable_filename = false;
+          content_editable = 0;
+          disable_filename = 0;
           toc = [ ];
         };
         markdown_css = "/Users/username/markdown.css";
@@ -38,8 +38,8 @@
         images_path = "";
         filetypes = [ "markdown" ];
         theme = "dark";
-        combine_preview = false;
-        combine_preview_auto_refresh = true;
+        combine_preview = 0;
+        combine_preview_auto_refresh = 1;
       };
     };
   };

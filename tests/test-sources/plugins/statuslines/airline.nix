@@ -14,21 +14,21 @@
         section_x = "foo";
         section_y = "foo";
         section_z = "foo";
-        experimental = true;
+        experimental = 1;
         left_sep = ">";
         right_sep = "<";
-        detect_modified = true;
-        detect_paste = true;
-        detect_crypt = true;
-        detect_spell = true;
-        detect_spelllang = true;
-        detect_iminsert = false;
-        inactive_collapse = true;
-        inactive_alt_sep = true;
+        detect_modified = 1;
+        detect_paste = 1;
+        detect_crypt = 1;
+        detect_spell = 1;
+        detect_spelllang = 1;
+        detect_iminsert = 0;
+        inactive_collapse = 1;
+        inactive_alt_sep = 1;
         theme = "dark";
         theme_patch_func = null;
-        powerline_fonts = false;
-        symbols_ascii = false;
+        powerline_fonts = 0;
+        symbols_ascii = 0;
         mode_map = {
           __ = "-";
           c = "C";
@@ -95,14 +95,14 @@
             "%{b:vaffle.dir}"
           ];
         };
-        exclude_preview = false;
-        disable_statusline = false;
-        skip_empty_sections = true;
-        highlighting_cache = false;
-        focuslost_inactive = false;
-        statusline_ontop = false;
+        exclude_preview = 0;
+        disable_statusline = 0;
+        skip_empty_sections = 1;
+        highlighting_cache = 0;
+        focuslost_inactive = 0;
+        statusline_ontop = 0;
         stl_path_style = "short";
-        section_c_only_filename = true;
+        section_c_only_filename = 1;
         symbols = {
           branch = "";
           colnr = " ℅:";

@@ -79,7 +79,7 @@ mkVimPlugin {
         ]
     ))
     // {
-      experimental = helpers.defaultNullOpts.mkBool true ''
+      experimental = helpers.defaultNullOpts.mkFlagInt 1 ''
         Enable experimental features.
         Currently: Enable Vim9 Script implementation.
       '';
@@ -92,19 +92,19 @@ mkVimPlugin {
         The separator used on the right side.
       '';
 
-      detect_modified = helpers.defaultNullOpts.mkBool true ''
+      detect_modified = helpers.defaultNullOpts.mkFlagInt 1 ''
         Enable modified detection.
       '';
 
-      detect_paste = helpers.defaultNullOpts.mkBool true ''
+      detect_paste = helpers.defaultNullOpts.mkFlagInt 1 ''
         Enable paste detection.
       '';
 
-      detect_crypt = helpers.defaultNullOpts.mkBool true ''
+      detect_crypt = helpers.defaultNullOpts.mkFlagInt 1 ''
         Enable crypt detection.
       '';
 
-      detect_spell = helpers.defaultNullOpts.mkBool true ''
+      detect_spell = helpers.defaultNullOpts.mkFlagInt 1 ''
         Enable spell detection.
       '';
 
@@ -114,11 +114,11 @@ mkVimPlugin {
             with helpers.nixvimTypes;
             oneOf [
               rawLua
-              bool
+              intFlag
               (enum [ "flag" ])
             ]
           )
-          true
+          1
           ''
             Display spelling language when spell detection is enabled (if enough space is
             available).
@@ -127,16 +127,16 @@ mkVimPlugin {
             'spelllang' itself.
           '';
 
-      detect_iminsert = helpers.defaultNullOpts.mkBool false ''
+      detect_iminsert = helpers.defaultNullOpts.mkFlagInt 0 ''
         Enable iminsert detection.
       '';
 
-      inactive_collapse = helpers.defaultNullOpts.mkBool true ''
+      inactive_collapse = helpers.defaultNullOpts.mkFlagInt 1 ''
         Determine whether inactive windows should have the left section collapsed to only the
         filename of that buffer.
       '';
 
-      inactive_alt_sep = helpers.defaultNullOpts.mkBool true ''
+      inactive_alt_sep = helpers.defaultNullOpts.mkFlagInt 1 ''
         Use alternative separators for the statusline of inactive windows.
       '';
 
@@ -169,12 +169,12 @@ mkVimPlugin {
         ```
       '';
 
-      powerline_fonts = helpers.defaultNullOpts.mkBool false ''
+      powerline_fonts = helpers.defaultNullOpts.mkFlagInt 0 ''
         By default, airline will use unicode symbols if your encoding matches utf-8.
-        If you want the powerline symbols set this variable to `true`.
+        If you want the powerline symbols set this variable to `1`.
       '';
 
-      symbols_ascii = helpers.defaultNullOpts.mkBool false ''
+      symbols_ascii = helpers.defaultNullOpts.mkFlagInt 0 ''
         By default, airline will use unicode symbols if your encoding matches utf-8.
         If you want to use plain ascii symbols, set this variable: >
       '';
@@ -221,12 +221,12 @@ mkVimPlugin {
             ```
           '';
 
-      exclude_preview = helpers.defaultNullOpts.mkBool false ''
+      exclude_preview = helpers.defaultNullOpts.mkFlagInt 0 ''
         Defines whether the preview window should be excluded from having its window statusline
         modified (may help with plugins which use the preview window heavily).
       '';
 
-      disable_statusline = helpers.defaultNullOpts.mkBool false ''
+      disable_statusline = helpers.defaultNullOpts.mkFlagInt 0 ''
         Disable the Airline statusline customization globally.
 
         This setting disables setting the 'statusline' option.
@@ -234,20 +234,20 @@ mkVimPlugin {
         'statusline' option totally configurable by a custom configuration.
       '';
 
-      skip_empty_sections = helpers.defaultNullOpts.mkBool true ''
+      skip_empty_sections = helpers.defaultNullOpts.mkFlagInt 1 ''
         Do not draw separators for empty sections (only for the active window).
       '';
 
-      highlighting_cache = helpers.defaultNullOpts.mkBool false ''
+      highlighting_cache = helpers.defaultNullOpts.mkFlagInt 0 ''
         Caches the changes to the highlighting groups, should therefore be faster.
         Set this to one, if you experience a sluggish Vim.
       '';
 
-      focuslost_inactive = helpers.defaultNullOpts.mkBool false ''
+      focuslost_inactive = helpers.defaultNullOpts.mkFlagInt 0 ''
         Disable airline on FocusLost autocommand (e.g. when Vim loses focus).
       '';
 
-      statusline_ontop = helpers.defaultNullOpts.mkBool false ''
+      statusline_ontop = helpers.defaultNullOpts.mkFlagInt 0 ''
         Display the statusline in the tabline (first top line).
 
         Setting this option, allows to use the statusline option to be used by a custom function
@@ -266,7 +266,7 @@ mkVimPlugin {
         Display a short path in statusline.
       '';
 
-      section_c_only_filename = helpers.defaultNullOpts.mkBool true ''
+      section_c_only_filename = helpers.defaultNullOpts.mkFlagInt 1 ''
         Display a only file name in statusline.
       '';
 
@@ -288,8 +288,8 @@ mkVimPlugin {
     };
 
   settingsExample = {
-    powerline_fonts = true;
+    powerline_fonts = 1;
     theme = "base16";
-    skip_empty_sections = true;
+    skip_empty_sections = 1;
   };
 }

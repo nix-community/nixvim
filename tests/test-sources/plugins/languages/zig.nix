@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        fmt_autosave = false;
+        fmt_autosave = 0;
       };
     };
   };

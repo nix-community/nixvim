@@ -8,9 +8,9 @@
       enable = true;
 
       settings = {
-        direnv_auto = false;
+        direnv_auto = 0;
         direnv_edit_mode = "vsplit";
-        direnv_silent_load = false;
+        direnv_silent_load = 0;
       };
     };
   };

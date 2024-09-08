@@ -15,8 +15,8 @@ helpers.vim-plugin.mkVimPlugin {
   maintainers = [ helpers.maintainers.alisonjenkins ];
 
   settingsOptions = {
-    direnv_auto = helpers.defaultNullOpts.mkBool true ''
-      It will not execute :DirenvExport automatically if the value is false. Default: true.
+    direnv_auto = helpers.defaultNullOpts.mkFlagInt 1 ''
+      It will not execute `:DirenvExport` automatically if the value is `0`.
     '';
 
     direnv_edit_mode =
@@ -32,8 +32,8 @@ helpers.vim-plugin.mkVimPlugin {
           Select the command to open buffers to edit. Default: 'edit'.
         '';
 
-    direnv_silent_load = helpers.defaultNullOpts.mkBool true ''
-      Stop echoing output from Direnv command. Default: true
+    direnv_silent_load = helpers.defaultNullOpts.mkFlagInt 1 ''
+      Stop echoing output from Direnv command.
     '';
   };
 }
