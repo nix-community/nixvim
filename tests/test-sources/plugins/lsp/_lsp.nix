@@ -108,6 +108,7 @@
             ansiblels.enable = true;
             ast-grep.enable = true;
             astro.enable = true;
+            basedpyright.enable = true;
             bashls.enable = true;
             beancount.enable = true;
             biome.enable = true;

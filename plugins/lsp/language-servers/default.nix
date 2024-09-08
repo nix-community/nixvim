@@ -34,6 +34,10 @@ let
       ];
     }
     {
+      name = "basedpyright";
+      description = "basedpyright, a static type checker and language server for python";
+    }
+    {
       name = "bashls";
       description = "bashls for bash";
       package = "bash-language-server";
