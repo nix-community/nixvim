@@ -25,7 +25,7 @@
 
       goyo = {
         enable = true;
-        settings.linenr = false;
+        settings.linenr = 0;
       };
 
       lsp = {
