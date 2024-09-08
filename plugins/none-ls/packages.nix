@@ -146,7 +146,7 @@ in
       emacs_vhdl_mode = "emacs";
       erb_format = [
         "rubyPackages"
-        "erb-formatterpkgs"
+        "erb-formatter"
       ];
       fish_indent = "fish";
       format_r = "R";
@@ -177,15 +177,15 @@ in
       pg_format = "pgformatter";
       phpcbf = [
         "phpPackages"
-        "php-codesnifferpkgs"
+        "php-codesniffer"
       ];
       phpcsfixer = [
         "phpPackages"
-        "php-cs-fixerpkgs"
+        "php-cs-fixer"
       ];
       phpcs = [
         "phpPackages"
-        "php-codesnifferpkgs"
+        "php-codesniffer"
       ];
       # FIXME: Can't have transition fallbacks anymore
       prisma_format = "prisma";
@@ -193,11 +193,11 @@ in
       puppet_lint = "puppet-lint";
       qmlformat = [
         "qt6"
-        "qtdeclarativepkgs"
+        "qtdeclarative"
       ];
       qmllint = [
         "qt6"
-        "qtdeclarativepkgs"
+        "qtdeclarative"
       ];
       racket_fixw = "racket";
       raco_fmt = "racket";
