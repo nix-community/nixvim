@@ -4,14 +4,6 @@
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
-
-  mkEverforestBool =
-    pluginDefault: desc:
-    defaultNullOpts.mkEnum [
-      0
-      1
-    ] pluginDefault desc;
-
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "everforest";
@@ -33,11 +25,11 @@ lib.nixvim.vim-plugin.mkVimPlugin {
           The background contrast used in this color scheme.
         '';
 
-    enable_italic = mkEverforestBool 0 ''
+    enable_italic = defaultNullOpts.mkFlagInt 0 ''
       To enable italic in this color scheme, set this option to `1`.
     '';
 
-    disable_italic_comment = mkEverforestBool 0 ''
+    disable_italic_comment = defaultNullOpts.mkFlagInt 0 ''
       By default, italic is enabled in `Comment`. To disable italic in `Comment`, set this option to `1`
     '';
 
@@ -71,7 +63,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
           background), set this option to `2`.
         '';
 
-    dim_inactive_windows = mkEverforestBool 0 ''
+    dim_inactive_windows = defaultNullOpts.mkFlagInt 0 ''
       Dim inactive windows. Only works in Neovim currently.
 
       When this option is used in conjunction with |g:everforest_show_eob| set to 0,
@@ -113,7 +105,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
           The contrast of line numbers, indent lines, etc.
         '';
 
-    show_eob = mkEverforestBool 1 ''
+    show_eob = defaultNullOpts.mkFlagInt 1 ''
       Whether to show |hl-EndOfBuffer|.
     '';
 
@@ -133,7 +125,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
           installers, etc.
         '';
 
-    diagnostic_text_highlight = mkEverforestBool 0 ''
+    diagnostic_text_highlight = defaultNullOpts.mkFlagInt 0 ''
       Some plugins support highlighting error/warning/info/hint texts, by default
       these texts are only underlined, but you can use this option to also highlight
       the background of them.
@@ -149,7 +141,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
       - [syntastic](https://github.com/vim-syntastic/syntastic)
     '';
 
-    diagnostic_line_highlight = mkEverforestBool 0 ''
+    diagnostic_line_highlight = defaultNullOpts.mkFlagInt 0 ''
       Some plugins support highlighting error/warning/info/hint lines, but this
       feature is disabled by default in this color scheme. To enable this feature,
       set this option to `1`.
@@ -227,13 +219,13 @@ lib.nixvim.vim-plugin.mkVimPlugin {
           - [YouCompleteMe](https://github.com/ycm-core/YouCompleteMe)
         '';
 
-    disable_terminal_colors = mkEverforestBool 0 ''
+    disable_terminal_colors = defaultNullOpts.mkFlagInt 0 ''
       Setting this option to `1` will disable terminal colors provided by this color
       scheme so you can remain terminal colors the same when using |:terminal| in
       vim and outside of vim.
     '';
 
-    lightline_disable_bold = mkEverforestBool 0 ''
+    lightline_disable_bold = defaultNullOpts.mkFlagInt 0 ''
       By default, bold is enabled in lightline color scheme. To disable bold in
       lightline color scheme, set this option to `1`.
     '';
