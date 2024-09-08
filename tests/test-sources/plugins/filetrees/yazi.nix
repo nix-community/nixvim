@@ -14,11 +14,12 @@
         use_yazi_client_id_flag = false;
         enable_mouse_support = false;
 
-        open_file_function.__raw = ''
-          function(chosen_file)
-            vim.cmd(string.format("edit %s", vim.fn.fnameescape(chosen_file)))
-          end
-        '';
+        open_file_function = # Lua
+          ''
+            function(chosen_file)
+              vim.cmd(string.format("edit %s", vim.fn.fnameescape(chosen_file)))
+            end
+          '';
 
         clipboard_register = "*";
 
@@ -37,21 +38,24 @@
         set_keymappings_function = null;
 
         hooks = {
-          yazi_opened.__raw = ''
-            function(preselected_path, yazi_buffer_id, config)
-            end
-          '';
+          yazi_opened = # Lua
+            ''
+              function(preselected_path, yazi_buffer_id, config)
+              end
+            '';
 
-          yazi_closed_successfully.__raw = ''
-            function(chosen_file, config, state)
-            end
-          '';
+          yazi_closed_successfully = # Lua
+            ''
+              function(chosen_file, config, state)
+              end
+            '';
 
-          yazi_opened_multiple_files.__raw = ''
-            function(chosen_files)
-              vim.cmd("args" .. table.concat(chosen_files, " "))
-            end
-          '';
+          yazi_opened_multiple_files = # Lua
+            ''
+              function(chosen_files)
+                vim.cmd("args" .. table.concat(chosen_files, " "))
+              end
+            '';
         };
 
         highlight_groups = {
