@@ -1,7 +1,29 @@
+{ lib, pkgs, ... }:
 {
-  empty = {
-    plugins.bufferline.enable = true;
-  };
+  empty =
+    { config, ... }:
+    {
+      plugins.bufferline.enable = true;
+
+      assertions = [
+        {
+          assertion =
+            config.extraPlugins != [ ]
+            && lib.any (
+              x: lib.trace "${x.pname or ""}" x.pname or null == "bufferline.nvim"
+            ) config.extraPlugins;
+          message = "bufferline package wasn't found when it was expected";
+        }
+        {
+          assertion =
+            config.extraPlugins != [ ]
+            && lib.any (
+              x: lib.trace "${x.pname or ""}" x.pname or null == "nvim-web-devicons"
+            ) config.extraPlugins;
+          message = "nvim-web-devicons package wasn't found when it was expected";
+        }
+      ];
+    };
 
   example = {
     plugins.bufferline = {
@@ -124,10 +146,45 @@
     };
   };
 
-  no-packages = {
-    plugins.bufferline = {
-      enable = true;
-      iconsPackage = null;
+  no-packages =
+    { config, ... }:
+    {
+      plugins.bufferline = {
+        enable = true;
+        iconsPackage = null;
+      };
+
+      assertions = [
+        {
+          assertion = lib.all (
+            x: lib.trace "${x.pname or ""}" x.pname or null != "nvim-web-devicons"
+          ) config.extraPlugins;
+          message = "nvim-web-devicons package was found when it wasn't expected";
+        }
+      ];
     };
-  };
+
+  package-overrides =
+    { config, ... }:
+    {
+      plugins.bufferline = {
+        enable = true;
+        iconsPackage = pkgs.vimPlugins.mini-nvim;
+      };
+
+      assertions = [
+        {
+          assertion =
+            config.extraPlugins != [ ]
+            && lib.any (x: lib.trace "${x.pname or ""}" x.pname or null == "mini.nvim") config.extraPlugins;
+          message = "mini-nvim package wasn't found when it was expected";
+        }
+        {
+          assertion = lib.all (
+            x: lib.trace "${x.pname or ""}" x.pname or null != "nvim-web-devicons"
+          ) config.extraPlugins;
+          message = "nvim-web-devicons package was found when it wasn't expected";
+        }
+      ];
+    };
 }
