@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        allow_italics = false;
+        allow_italics = 0;
       };
     };
   };
