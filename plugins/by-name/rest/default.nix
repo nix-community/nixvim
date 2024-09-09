@@ -1,12 +1,14 @@
 {
   config,
   lib,
-  helpers,
   pkgs,
   ...
 }:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+let
+  inherit (lib) mkRemovedOptionModule mkRenamedOptionModule types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "rest";
   originalName = "rest.nvim";
   luaName = "rest-nvim";
@@ -14,7 +16,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   extraPackages = [ pkgs.curl ];
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-04-07: remove 2024-06-07
   deprecateExtraOptions = true;
@@ -191,32 +193,32 @@ helpers.neovim-plugin.mkNeovimPlugin {
     ];
 
   settingsOptions = {
-    client = helpers.defaultNullOpts.mkStr "curl" ''
+    client = defaultNullOpts.mkStr "curl" ''
       The HTTP client to be used when running requests.
     '';
 
-    env_file = helpers.defaultNullOpts.mkStr ".env" ''
+    env_file = defaultNullOpts.mkStr ".env" ''
       Environment variables file to be used for the request variables in the document.
     '';
 
-    env_pattern = helpers.defaultNullOpts.mkStr "\\.env$" ''
+    env_pattern = defaultNullOpts.mkStr "\\.env$" ''
       Environment variables file pattern for `telescope.nvim`.
     '';
 
-    env_edit_command = helpers.defaultNullOpts.mkStr "tabedit" ''
+    env_edit_command = defaultNullOpts.mkStr "tabedit" ''
       Neovim command to edit an environment file.
     '';
 
-    encode_url = helpers.defaultNullOpts.mkBool true ''
+    encode_url = defaultNullOpts.mkBool true ''
       Encode URL before making request.
     '';
 
-    skip_ssl_verification = helpers.defaultNullOpts.mkBool false ''
+    skip_ssl_verification = defaultNullOpts.mkBool false ''
       Skip SSL verification, useful for unknown certificates.
     '';
 
-    custom_dynamic_variables = mkOption {
-      type = with helpers.nixvimTypes; nullOr (maybeRaw (attrsOf strLuaFn));
+    custom_dynamic_variables = lib.mkOption {
+      type = with types; nullOr (maybeRaw (attrsOf strLuaFn));
       default = null;
       example = {
         "$timestamp" = "os.time";
@@ -231,63 +233,63 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
         default: `{}`
       '';
-      apply = v: if isAttrs v then mapAttrs (_: helpers.mkRaw) v else v;
+      apply = v: if lib.isAttrs v then lib.mapAttrs (_: lib.nixvim.mkRaw) v else v;
     };
 
     logs = {
-      level = helpers.defaultNullOpts.mkNullable helpers.nixvimTypes.logLevel "info" ''
+      level = defaultNullOpts.mkNullable types.logLevel "info" ''
         The logging level name, see `:h vim.log.levels`.
       '';
 
-      save = helpers.defaultNullOpts.mkBool true ''
+      save = defaultNullOpts.mkBool true ''
         Whether to save log messages into a `.log` file.
       '';
     };
 
     result = {
       split = {
-        horizontal = helpers.defaultNullOpts.mkBool false ''
+        horizontal = defaultNullOpts.mkBool false ''
           Open request results in a horizontal split.
         '';
 
-        in_place = helpers.defaultNullOpts.mkBool false ''
+        in_place = defaultNullOpts.mkBool false ''
           Keep the HTTP file buffer above|left when split horizontal|vertical.
         '';
 
-        stay_in_current_window_after_split = helpers.defaultNullOpts.mkBool true ''
+        stay_in_current_window_after_split = defaultNullOpts.mkBool true ''
           Stay in the current window (HTTP file) or change the focus to the results window.
         '';
       };
 
       behavior = {
         show_info = {
-          url = helpers.defaultNullOpts.mkBool true ''
+          url = defaultNullOpts.mkBool true ''
             Display the request URL.
           '';
 
-          headers = helpers.defaultNullOpts.mkBool true ''
+          headers = defaultNullOpts.mkBool true ''
             Display the request headers.
           '';
 
-          http_info = helpers.defaultNullOpts.mkBool true ''
+          http_info = defaultNullOpts.mkBool true ''
             Display the request HTTP information.
           '';
 
-          curl_command = helpers.defaultNullOpts.mkBool true ''
+          curl_command = defaultNullOpts.mkBool true ''
             Display the cURL command that was used for the request.
           '';
         };
 
-        decode_url = helpers.defaultNullOpts.mkBool true ''
+        decode_url = defaultNullOpts.mkBool true ''
           Whether to decode the request URL query parameters to improve readability.
         '';
 
         statistics = {
-          enable = helpers.defaultNullOpts.mkBool true ''
+          enable = defaultNullOpts.mkBool true ''
             Whether to enable statistics or not.
           '';
 
-          stats = helpers.defaultNullOpts.mkListOf (with types; attrsOf str) [
+          stats = defaultNullOpts.mkListOf (with types; attrsOf str) [
             {
               __unkeyed = "total_time";
               title = "Time taken:";
@@ -300,11 +302,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
         };
 
         formatters = {
-          json = helpers.defaultNullOpts.mkStr "jq" ''
+          json = defaultNullOpts.mkStr "jq" ''
             JSON formatter.
           '';
 
-          html = helpers.defaultNullOpts.mkStr {
+          html = defaultNullOpts.mkStr {
             __raw = ''
               function(body)
                 if vim.fn.executable("tidy") == 0 then
@@ -329,32 +331,32 @@ helpers.neovim-plugin.mkNeovimPlugin {
       };
 
       keybinds = {
-        buffer_local = helpers.defaultNullOpts.mkBool false ''
+        buffer_local = defaultNullOpts.mkBool false ''
           Enable keybinds only in request result buffer.
         '';
 
-        prev = helpers.defaultNullOpts.mkStr "H" ''
+        prev = defaultNullOpts.mkStr "H" ''
           Mapping for cycle to previous result pane.
         '';
 
-        next = helpers.defaultNullOpts.mkStr "L" ''
+        next = defaultNullOpts.mkStr "L" ''
           Mapping for cycle to next result pane.
         '';
       };
     };
 
     highlight = {
-      enable = helpers.defaultNullOpts.mkBool true ''
+      enable = defaultNullOpts.mkBool true ''
         Whether current request highlighting is enabled or not.
       '';
 
-      timeout = helpers.defaultNullOpts.mkUnsignedInt 750 ''
+      timeout = defaultNullOpts.mkUnsignedInt 750 ''
         Duration time of the request highlighting in milliseconds.
       '';
     };
 
     keybinds =
-      helpers.defaultNullOpts.mkListOf (with types; listOf str)
+      defaultNullOpts.mkListOf (with types; listOf str)
         [
           [
             "<localleader>rr"
