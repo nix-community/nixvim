@@ -124,7 +124,11 @@ in
       ];
       blackd = "black";
       buildifier = "bazel-buildtools";
-      cfn_lint = "python3.pkgs.cfn-lint";
+      cfn_lint = [
+        "python3"
+        "pkgs"
+        "cfn-lint"
+      ];
       clang_format = "clang-tools";
       clj_kondo = "clj-kondo";
       cmake_format = "cmake-format";
@@ -188,7 +192,12 @@ in
         "php-codesniffer"
       ];
       # FIXME: Can't have transition fallbacks anymore
-      prisma_format = "prisma";
+      # TODO: replace after flake.lock update
+      # prisma_format = "prisma";
+      prisma_format = [
+        "nodePackages"
+        "prisma"
+      ];
       ptop = "fpc";
       puppet_lint = "puppet-lint";
       qmlformat = [
@@ -211,7 +220,10 @@ in
       staticcheck = "go-tools";
       surface = "elixir";
       swift_format = "swift-format";
-      teal = "luaPackages.tl";
+      teal = [
+        "luaPackages"
+        "tl"
+      ];
       terraform_fmt = "terraform";
       terraform_validate = "terraform";
       terragrunt_fmt = "terragrunt";
