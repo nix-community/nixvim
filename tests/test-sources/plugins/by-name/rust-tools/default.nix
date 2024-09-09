@@ -71,4 +71,13 @@
       };
     };
   };
+
+  rust-analyzer-options = {
+    plugins.rust-tools = {
+      enable = true;
+      server = {
+        assist.expressionFillDefault = "default";
+      };
+    };
+  };
 }
