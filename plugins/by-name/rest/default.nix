@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   helpers,
   pkgs,
@@ -401,21 +402,33 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   extraOptions = {
+    curlPackage = lib.mkPackageOption pkgs "curl" {
+      nullable = true;
+    };
+
     enableHttpFiletypeAssociation = lib.mkOption {
       type = types.bool;
       default = true;
       description = ''
-        Sets up the filetype association of `.http` files to trigger treesitter support.
+        Sets up the filetype association of `.http` files to trigger treesitter support to enable `rest` functionality.
       '';
     };
   };
 
   extraConfig = cfg: {
+    assertions = [
+      {
+        assertion = config.plugins.treesitter.enable;
+        message = ''
+          Nixvim (plugins.rest): Requires the `http` parser from `plugins.treesitter`, please set `plugins.treesitter.enable`.
+        '';
+      }
+    ];
+
+    extraPackages = [ cfg.curlPackage ];
 
     filetype = lib.mkIf cfg.enableHttpFiletypeAssociation {
-      extension = {
-        "http" = "http";
-      };
+      extension.http = "http";
     };
   };
 }
