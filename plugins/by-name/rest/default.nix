@@ -399,4 +399,23 @@ helpers.neovim-plugin.mkNeovimPlugin {
       ]
     ];
   };
+
+  extraOptions = {
+    enableHttpFiletypeAssociation = lib.mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Sets up the filetype association of `.http` files to trigger treesitter support.
+      '';
+    };
+  };
+
+  extraConfig = cfg: {
+
+    filetype = lib.mkIf cfg.enableHttpFiletypeAssociation {
+      extension = {
+        "http" = "http";
+      };
+    };
+  };
 }
