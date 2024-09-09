@@ -1,6 +1,6 @@
 {
   lib,
-  runCommand,
+  runCommandNoCCLocal,
   pkgs,
 }:
 let
@@ -81,10 +81,15 @@ let
     )
   );
 in
-runCommand "generated-sources-test" { inherit errors; } ''
-  if [ -n "$errors" ]; then
-    echo -n "$errors"
-    exit 1
-  fi
-  touch "$out"
-''
+runCommandNoCCLocal "generated-sources-test"
+  {
+    __structuredAttrs = true;
+    inherit errors;
+  }
+  ''
+    if [ -n "$errors" ]; then
+      echo -n "$errors"
+      exit 1
+    fi
+    touch "$out"
+  ''
