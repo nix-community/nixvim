@@ -252,7 +252,10 @@ pkgs.stdenv.mkDerivation {
 
   phases = [ "buildPhase" ];
 
-  buildInputs = [ pkgs.mdbook ];
+  buildInputs = [
+    pkgs.mdbook
+    pkgs.mdbook-alerts
+  ];
   inputs = lib.sourceFilesBySuffices ./. [
     ".md"
     ".toml"
