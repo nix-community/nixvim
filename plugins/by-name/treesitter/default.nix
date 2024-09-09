@@ -15,6 +15,62 @@ helpers.neovim-plugin.mkNeovimPlugin {
   description = ''
     Provides an interface to [tree-sitter]
 
+    ### Installing tree-sitter grammars from Nixpkgs
+
+    By default, **all** available grammars packaged in the `nvim-treesitter` package are installed.
+
+    If you'd like more control, you could instead specify which packages to install. For example:
+
+    ```nix
+      plugins.treesitter = {
+        enable = true;
+
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          bash
+          json
+          lua
+          make
+          markdown
+          nix
+          regex
+          toml
+          vim
+          vimdoc
+          xml
+          yaml
+        ];
+      };
+    ```
+
+    ### Installing tree-sitter grammars from nvim-treesitter
+
+    The default behavior is **not** to install any grammars through the plugin.
+    We usually recommend installing grammars through nixpkgs instead (see above).
+
+    If you'd like to install a grammar through nvim-treesitter, you can run `:TSInstall <grammar>` within vim
+    or use the `plugins.treesitter.settings.ensure_installed` option to specify grammars you want the plugin to fetch and install.
+
+    ```nix
+      plugins.treesitter = {
+        enable = true;
+
+        settings = {
+          # NOTE: You can set whether `nvim-treesitter` should automatically install the grammars.
+          auto_install = false;
+          ensure_installed = [
+            "git_config"
+            "git_rebase"
+            "gitattributes"
+            "gitcommit"
+            "gitignore"
+          ];
+        };
+      };
+    ```
+
+    NOTE: You can combine the functionality of `plugins.treesitter.nixGrammars` and `plugins.treesitter.settings.ensure_installed`.
+    This may be useful if a grammar isn't available from nixpkgs or you prefer to have specific grammars managed by nvim-treesitter.
+
     ### Installing Your Own Grammars with Nixvim
 
     The grammars you want will usually be included in `nixGrammars` by default.
