@@ -75,33 +75,36 @@
             };
           };
 
-          options.${namespace}.${name} = {
-            enable = lib.mkEnableOption originalName;
-            package =
-              if lib.isOption package then
-                package
-              else
-                lib.mkPackageOption pkgs originalName {
-                  default =
-                    if builtins.isList package then
-                      package
-                    else
-                      [
-                        "vimPlugins"
+          options.${namespace}.${name} =
+            {
+              enable = lib.mkEnableOption originalName;
+              package =
+                if lib.isOption package then
+                  package
+                else
+                  lib.mkPackageOption pkgs originalName {
+                    default =
+                      if builtins.isList package then
                         package
-                      ];
-                };
-            packageDecorator = lib.mkOption {
-              type = lib.types.functionTo lib.types.package;
-              default = lib.id;
-              defaultText = lib.literalExpression "x: x";
-              description = ''
-                Additional transformations to apply to the final installed package.
-                The result of these transformations is **not** visible in the `package` option's value.
-              '';
-              internal = true;
-            };
-          } // settingsOption // extraOptions;
+                      else
+                        [
+                          "vimPlugins"
+                          package
+                        ];
+                  };
+              packageDecorator = lib.mkOption {
+                type = lib.types.functionTo lib.types.package;
+                default = lib.id;
+                defaultText = lib.literalExpression "x: x";
+                description = ''
+                  Additional transformations to apply to the final installed package.
+                  The result of these transformations is **not** visible in the `package` option's value.
+                '';
+                internal = true;
+              };
+            }
+            // settingsOption
+            // extraOptions;
 
           config = lib.mkIf cfg.enable (
             lib.mkMerge [

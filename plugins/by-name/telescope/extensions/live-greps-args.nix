@@ -48,7 +48,8 @@ mkExtension {
     mappings = {
       i = {
         "<C-k>".__raw = ''require("telescope-live-grep-args.actions").quote_prompt()'';
-        "<C-i>".__raw = ''require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob " })'';
+        "<C-i>".__raw =
+          ''require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob " })'';
         "<C-space>".__raw = ''require("telescope.actions").to_fuzzy_refine'';
       };
     };

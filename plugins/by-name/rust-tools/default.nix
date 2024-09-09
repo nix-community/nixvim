@@ -48,15 +48,11 @@ in
 
       maxLenAlign = lib.nixvim.defaultNullOpts.mkBool false "whether to align to the length of the longest line in the file";
 
-      maxLenAlignPadding =
-        lib.nixvim.defaultNullOpts.mkUnsignedInt 1
-          "padding from the left if max_len_align is true";
+      maxLenAlignPadding = lib.nixvim.defaultNullOpts.mkUnsignedInt 1 "padding from the left if max_len_align is true";
 
       rightAlign = lib.nixvim.defaultNullOpts.mkBool false "whether to align to the extreme right or not";
 
-      rightAlignPadding =
-        lib.nixvim.defaultNullOpts.mkInt 7
-          "padding from the right if right_align is true";
+      rightAlignPadding = lib.nixvim.defaultNullOpts.mkInt 7 "padding from the right if right_align is true";
 
       highlight = lib.nixvim.defaultNullOpts.mkStr "Comment" "The color of the hints";
     };

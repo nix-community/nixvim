@@ -138,9 +138,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       NOTE: this only works if `use_ya_for_events_reading` is enabled, etc.
     '';
 
-    floating_window_scaling_factor =
-      defaultNullOpts.mkNum 0.9
-        "The floating window scaling factor. 1 means 100%, 0.9 means 90%, etc.";
+    floating_window_scaling_factor = defaultNullOpts.mkNum 0.9 "The floating window scaling factor. 1 means 100%, 0.9 means 90%, etc.";
 
     yazi_floating_window_winblend = defaultNullOpts.mkNullableWithRaw' {
       type = types.ints.between 0 100;

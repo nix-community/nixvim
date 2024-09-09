@@ -317,13 +317,13 @@ in
           Auto save file when the rename is done.
         '';
 
-        projectMaxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
-          1.0
-        ) 0.5 "Width for the `project_replace` float window.";
+        projectMaxWidth =
+          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
+            "Width for the `project_replace` float window.";
 
-        projectMaxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0
-          1.0
-        ) 0.5 "Height for the `project_replace` float window.";
+        projectMaxHeight =
+          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
+            "Height for the `project_replace` float window.";
 
         keys = {
           quit = mkKeymapOption "<C-k>" "Quit rename window or `project_replace` window.";

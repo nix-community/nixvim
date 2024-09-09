@@ -192,9 +192,7 @@ in
 
       maxTypeLength = helpers.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
 
-      maxValueLines =
-        helpers.defaultNullOpts.mkInt 100
-          "Maximum number of lines to allow a value to fill before trimming.";
+      maxValueLines = helpers.defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
     };
 
     selectWindow = helpers.defaultNullOpts.mkLuaFn null ''
