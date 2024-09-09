@@ -24,41 +24,6 @@
     ./colorschemes/tokyonight.nix
     ./colorschemes/vscode.nix
 
-    ./languages/clangd-extensions.nix
-    ./languages/cmake-tools.nix
-    ./languages/debugprint.nix
-    ./languages/godot.nix
-    ./languages/haskell-scope-highlighting.nix
-    ./languages/helm.nix
-    ./languages/julia/julia-cell.nix
-    ./languages/lean.nix
-    ./languages/ledger.nix
-    ./languages/lint.nix
-    ./languages/ltex-extra.nix
-    ./languages/markdown/glow.nix
-    ./languages/markdown/markdown-preview.nix
-    ./languages/markdown/markview.nix
-    ./languages/markdown/preview.nix
-    ./languages/nix.nix
-    ./languages/nvim-jdtls.nix
-    ./languages/nvim-orgmode.nix
-    ./languages/openscad.nix
-    ./languages/otter.nix
-    ./languages/parinfer-rust.nix
-    ./languages/plantuml-syntax.nix
-    ./languages/python/jupytext.nix
-    ./languages/qmk.nix
-    ./languages/rust/rust-tools.nix
-    ./languages/rust/rustaceanvim
-    ./languages/sniprun.nix
-    ./languages/tagbar.nix
-    ./languages/texpresso.nix
-    ./languages/typescript-tools.nix
-    ./languages/typst/typst-vim.nix
-    ./languages/vim-slime.nix
-    ./languages/vimtex.nix
-    ./languages/zig.nix
-
     ./lsp
 
     ./none-ls
