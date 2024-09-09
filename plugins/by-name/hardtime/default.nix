@@ -16,6 +16,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   # TODO: Added 2024-09-07; remove after 24.11
   deprecateExtraOptions = true;
   optionsRenamedToSettings = [
+    "enabled"
     "hint"
     "notification"
     "hints"
