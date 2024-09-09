@@ -61,8 +61,6 @@
 
     ./lsp
 
-    ./neotest
-
     ./none-ls
 
     ./pluginmanagers/packer.nix
