@@ -31,9 +31,21 @@ let
     }
   );
 
-  pkgsDoc = pkgs // {
-    inherit lib;
-  };
+  # Extended nixpkgs instance, with patches to nixos-render-docs
+  pkgsDoc = pkgs.extend (
+    final: prev: {
+      inherit lib;
+
+      nixos-render-docs = prev.nixos-render-docs.overrideAttrs (old: {
+        patches = old.patches or [ ] ++ [
+          # Adds support for GFM-style admonitions in rendered commonmark
+          ./0001-Output-GFM-admonition.patch
+          # TODO:add support for _parsing_ GFM admonitions too
+          # https://github.com/nix-community/nixvim/issues/2217
+        ];
+      });
+    }
+  );
 
   helpers = import ../lib/helpers.nix {
     inherit lib;

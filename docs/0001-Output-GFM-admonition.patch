@@ -1,0 +1,48 @@
+From 4545eca44e0865f4ccab518d8e1591f714cb333c Mon Sep 17 00:00:00 2001
+From: Matt Sturgeon <matt@sturgeon.me.uk>
+Date: Tue, 10 Sep 2024 15:37:56 +0100
+Subject: [PATCH] Output GFM admonition
+
+---
+ nixos_render_docs/commonmark.py | 5 +++--
+ tests/test_commonmark.py        | 8 +++++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/nixos_render_docs/commonmark.py b/nixos_render_docs/commonmark.py
+index 6287b60f0a51..b39bff625314 100644
+--- a/nixos_render_docs/commonmark.py
++++ b/nixos_render_docs/commonmark.py
+@@ -45,8 +45,9 @@ class CommonMarkRenderer(Renderer):
+ 
+     def _admonition_open(self, kind: str) -> str:
+         pbreak = self._maybe_parbreak()
+-        self._enter_block("")
+-        return f"{pbreak}**{kind}:** "
++        lbreak = self._break()
++        self._enter_block("> ")
++        return f"{pbreak}> [!{kind}]{lbreak}> "
+     def _admonition_close(self) -> str:
+         self._leave_block()
+         return ""
+diff --git a/tests/test_commonmark.py b/tests/test_commonmark.py
+index 4ff0bc3095c3..e151325338ca 100644
+--- a/tests/test_commonmark.py
++++ b/tests/test_commonmark.py
+@@ -27,9 +27,11 @@ def test_indented_fence() -> None:
+ def test_full() -> None:
+     c = Converter({ 'man(1)': 'http://example.org' })
+     assert c._render(sample1) == """\
+-**Warning:** foo
+-
+-**Note:** nested
++> [!Warning]
++> foo
++> 
++> > [!Note]
++> > nested
+ 
+ [
+ multiline
+-- 
+2.46.0
+
