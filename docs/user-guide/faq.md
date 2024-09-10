@@ -25,28 +25,47 @@ extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
 
 The [nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#managing-plugins-with-vim-packages) has more information on this.
 
-## How do I solve `<name>` missing
+## How do I solve "`<name>` cannot be found in `pkgs`"
 
-When using NixVim it is possible to encounter an error of the type `attribute 'name' missing`, for example it could look like:
-
-<!-- TODO: Update example now that we use `mkPackageOption` -->
+When using Nixvim, it is possible to encounter errors about something not being found in `pkgs`. For example:
 
 ```
-       (stack trace truncated; use '--show-trace' to show the full trace)
+ … while evaluating the attribute 'optionalValue.value'
 
-       error: attribute 'haskell-scope-highlighting-nvim' missing
+   at /nix/store/XXX-source/lib/modules.nix:868:5:
+    867|
+    868|     optionalValue =
+       |     ^
+    869|       if isDefined then { value = mergedValue; }
 
-       at /nix/store/k897af00nzlz4ylxr5vakzpcvh6m3rnn-source/plugins/languages/haskell-scope-highlighting.nix:12:22:
+ … while evaluating a branch condition
 
-           11|     originalName = "haskell-scope-highlighting.nvim";
-           12|     defaultPackage = pkgs.vimPlugins.haskell-scope-highlighting-nvim;
-             |                      ^
-           13|
+   at /nix/store/XXX-source/lib/modules.nix:869:7:
+    868|     optionalValue =
+    869|       if isDefined then { value = mergedValue; }
+       |       ^
+    870|       else {};
+
+ … while evaluating the option `plugins.<name>.package':
+
+ (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+ error: <name> cannot be found in pkgs
 ```
 
 This usually means one of two things:
 - The nixpkgs version is not in line with NixVim (for example nixpkgs nixos-24.05 is used with NixVim master)
 - The nixpkgs unstable version used with NixVim is not recent enough.
+
+When building nixvim using flakes and our ["standalone mode"][standalone], we usually recommend _not_ declaring a "follows" for `inputs.nixvim`.
+This is so that nixvim is built against the same nixpkgs revision we're using in our test suite.
+
+If you are building nixvim using the NixOS, home-manager, or nix-darwin modules then we advise that you keep your nixpkgs lock as close as possible to ours.
+
+> [!TIP]
+> Once [#1784](https://github.com/nix-community/nixvim/issues/1784) is implemented, there will be alternative ways to achieve this using the module system.
+
+[standalone]: ./modules/standalone.md
 
 ## How do I create multiple aliases for a single keymap
 
