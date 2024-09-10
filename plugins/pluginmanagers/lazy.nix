@@ -13,6 +13,12 @@ let
   processPlugin =
     plugin:
     let
+      hasNonNullAttr = str: attrs: (builtins.hasAttr str attrs) && (attrs."${str}" != null);
+      hasNonNullName = plugin: hasNonNullAttr "name" plugin;
+      hasNonNullPkg = plugin: hasNonNullAttr "pkg" plugin;
+      hasNonNullPackages = plugin: hasNonNullAttr "packages" plugin;
+      hasNonNullDependencies = plugin: hasNonNullAttr "dependencies" plugin;
+
       mkEntryFromDrv =
         p:
         if lib.isDerivation p then
@@ -22,16 +28,27 @@ let
           }
         else
           {
-            name = "${lib.getName p.pkg}";
-            path = p.pkg;
+            name =
+              if hasNonNullName p then
+                p.name
+              else if hasNonNullPkg p then
+                "${lib.getName p.pkg}"
+              else
+                "${lib.getName p.path}";
+            path = if p ? path then p.path else p.pkg;
           };
-      processDependencies =
-        if plugin ? dependencies && plugin.dependencies != null then
-          builtins.concatMap processPlugin plugin.dependencies
+      processPackages =
+        if hasNonNullPackages plugin then
+          if lib.isList plugin.packages then
+            builtins.concatMap processPlugin plugin.packages
+          else
+            builtins.concatMap processPlugin [ plugin.packages ]
         else
           [ ];
+      processDependencies =
+        if hasNonNullDependencies plugin then builtins.concatMap processPlugin plugin.dependencies else [ ];
     in
-    [ (mkEntryFromDrv plugin) ] ++ processDependencies;
+    [ (mkEntryFromDrv plugin) ] ++ processPackages ++ processDependencies;
 
   processedPlugins = builtins.concatLists (builtins.map processPlugin lazyPlugins);
   lazyPath = pkgs.linkFarm "lazy-plugins" processedPlugins;
@@ -77,6 +94,8 @@ in
                 then this plugin will not be loaded. Useful to disable some plugins in vscode,
                 or firenvim for example. (accepts fun(LazyPlugin):boolean)
               '';
+
+              packages = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive types.package listOfPackages) "Additional packages to be made available in the `lazy-plugins` path";
 
               dependencies = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str listOfPlugins) "Plugin dependencies";
 
@@ -142,6 +161,7 @@ in
             };
           });
 
+          listOfPackages = types.listOf (helpers.nixvimTypes.eitherRecursive types.package types.attrs);
           listOfPlugins = types.listOf pluginType;
         in
         mkOption {
