@@ -12,6 +12,7 @@
         variant = "default";
         transparent = false;
         dim_inactive = false;
+        hide_inactive_statusline = false;
         styles = {
           comments.italic = true;
           keywords.italic = true;

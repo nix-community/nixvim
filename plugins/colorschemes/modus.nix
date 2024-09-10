@@ -46,6 +46,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       Disable setting the background color.
     '';
 
+    hide_inactive_statusline = defaultNullOpts.mkBool false ''
+      Hide statuslines in inactive windows.
+    '';
+
     dim_inactive = defaultNullOpts.mkBool false ''
       Dims inactive windows.
     '';
@@ -93,6 +97,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     variant = "default";
     transparent = false;
     dim_inactive = false;
+    hide_inactive_statusline = false;
     styles = {
       comments.italic = true;
       keywords.italic = true;
