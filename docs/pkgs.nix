@@ -28,11 +28,18 @@ let
     lib = prev.lib.extend libOverlay;
 
     nixos-render-docs = prev.nixos-render-docs.overrideAttrs (old: {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+        (final.python3.pkgs.callPackage ./gfm-alerts-to-admonitions {
+          # Use the same override as `nixos-render-docs` does, to avoid "duplicate dependency" errors
+          markdown-it-py = final.python3.pkgs.markdown-it-py.overridePythonAttrs { doCheck = false; };
+        })
+      ];
+
       patches = old.patches or [ ] ++ [
         # Adds support for GFM-style admonitions in rendered commonmark
-        ./0001-Output-GFM-admonition.patch
-        # TODO:add support for _parsing_ GFM admonitions too
-        # https://github.com/nix-community/nixvim/issues/2217
+        ./0001-nixos-render-docs-Output-GFM-admonition.patch
+        # Adds support for parsing GFM-style admonitions
+        ./0002-nixos-render-docs-Support-gfm-style-admonitions.patch
       ];
     });
   };

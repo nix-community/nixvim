@@ -10,3 +10,7 @@ Highligt = "Highligt"     # TODO: ./plugins/utils/neogen.nix
 Annote = "Annote"         # TODO: ./plugins/lsp/fidget.nix
 ket = "ket"               # ./plugins/utils/sandwich.nix
 tro = "tro"               # ./plugins/utils/spectre.nix
+
+[type.patch]
+extend-glob = ["*.patch"]
+check-file = false

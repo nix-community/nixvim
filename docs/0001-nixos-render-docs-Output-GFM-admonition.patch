@@ -1,7 +1,7 @@
-From 4545eca44e0865f4ccab518d8e1591f714cb333c Mon Sep 17 00:00:00 2001
+From a6565b5e6c967ca90a3bbf00515bdffd6f8ffb27 Mon Sep 17 00:00:00 2001
 From: Matt Sturgeon <matt@sturgeon.me.uk>
 Date: Tue, 10 Sep 2024 15:37:56 +0100
-Subject: [PATCH] Output GFM admonition
+Subject: [PATCH 1/2] nixos-render-docs: Output GFM admonition
 
 ---
  nixos_render_docs/commonmark.py | 5 +++--

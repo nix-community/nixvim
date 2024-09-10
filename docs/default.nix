@@ -54,6 +54,7 @@ let
 in
 {
   inherit options-json;
+  inherit (pkgs) nixos-render-docs;
 
   gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
 

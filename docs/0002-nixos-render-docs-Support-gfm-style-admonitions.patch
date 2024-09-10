@@ -1,0 +1,112 @@
+From cf462a681089ead8ac747b24116c78db0cc1df40 Mon Sep 17 00:00:00 2001
+From: Quentin Boyer <quentin+dev@familleboyer.net>
+Date: Wed, 11 Sep 2024 19:21:12 +0200
+Subject: [PATCH 2/2] nixos-render-docs: Support gfm-style admonitions
+
+---
+ nixos_render_docs/md.py  | 2 ++
+ tests/sample_md.py       | 3 +++
+ tests/test_asciidoc.py   | 6 ++++++
+ tests/test_commonmark.py | 3 +++
+ tests/test_html.py       | 4 ++++
+ tests/test_manpage.py    | 6 ++++++
+ 6 files changed, 24 insertions(+)
+
+diff --git a/nixos_render_docs/md.py b/nixos_render_docs/md.py
+index 894daf9ca9c7..e0aca42ebd14 100644
+--- a/nixos_render_docs/md.py
++++ b/nixos_render_docs/md.py
+@@ -14,6 +14,7 @@ from mdit_py_plugins.container import container_plugin # type: ignore[attr-defin
+ from mdit_py_plugins.deflist import deflist_plugin # type: ignore[attr-defined]
+ from mdit_py_plugins.footnote import footnote_plugin # type: ignore[attr-defined]
+ from mdit_py_plugins.myst_role import myst_role_plugin # type: ignore[attr-defined]
++from gfm_alerts_to_admonitions import gfm_alert_to_admonition
+ 
+ _md_escape_table = {
+     ord('*'): '\\*',
+@@ -588,6 +589,7 @@ class Converter(ABC, Generic[TR]):
+             renderer_cls=self.ForbiddenRenderer
+         )
+         self._md.enable('table')
++        self._md.use(gfm_alert_to_admonition)
+         self._md.use(
+             container_plugin,
+             name="blockattr",
+diff --git a/tests/sample_md.py b/tests/sample_md.py
+index 73a64fde8364..1648c4d9453e 100644
+--- a/tests/sample_md.py
++++ b/tests/sample_md.py
+@@ -1,4 +1,7 @@
+ sample1 = """\
++> [!NOTE]
++> This is a *note*
++
+ :::: {.warning}
+ foo
+ ::: {.note}
+diff --git a/tests/test_asciidoc.py b/tests/test_asciidoc.py
+index 3cf5b208f392..c9b39f4e47f9 100644
+--- a/tests/test_asciidoc.py
++++ b/tests/test_asciidoc.py
+@@ -45,6 +45,12 @@ f
+ def test_full() -> None:
+     c = Converter({ 'man(1)': 'http://example.org' })
+     assert c._render(sample1) == """\
++[NOTE]
++====
++This is a __note__
++====
++
++
+ [WARNING]
+ ====
+ foo
+diff --git a/tests/test_commonmark.py b/tests/test_commonmark.py
+index e151325338ca..ca137ce8cc48 100644
+--- a/tests/test_commonmark.py
++++ b/tests/test_commonmark.py
+@@ -27,6 +27,9 @@ def test_indented_fence() -> None:
+ def test_full() -> None:
+     c = Converter({ 'man(1)': 'http://example.org' })
+     assert c._render(sample1) == """\
++> [!Note]
++> This is a *note*
++
+ > [!Warning]
+ > foo
+ > 
+diff --git a/tests/test_html.py b/tests/test_html.py
+index 9a3e07cb24c7..b51bc47ec557 100644
+--- a/tests/test_html.py
++++ b/tests/test_html.py
+@@ -149,6 +149,10 @@ def test_footnotes() -> None:
+ def test_full() -> None:
+     c = Converter({ 'man(1)': 'http://example.org' }, {})
+     assert c._render(sample1) == unpretty("""
++        <div class="note">
++          <h3 class="title">Note</h3>
++          <p>This is a <span class="emphasis"><em>note</em></span></p>
++        </div>
+         <div class="warning">
+          <h3 class="title">Warning</h3>
+          <p>foo</p>
+diff --git a/tests/test_manpage.py b/tests/test_manpage.py
+index b6e4a94ef1c6..1943bb17f339 100644
+--- a/tests/test_manpage.py
++++ b/tests/test_manpage.py
+@@ -41,6 +41,12 @@ def test_full() -> None:
+     assert c._render(sample1) == """\
+ .sp
+ .RS 4
++\\fBNote\\fP
++.br
++This is a \\fInote\\fR
++.RE
++.sp
++.RS 4
+ \\fBWarning\\fP
+ .br
+ foo
+-- 
+2.46.0
+
