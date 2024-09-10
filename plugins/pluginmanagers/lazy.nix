@@ -55,6 +55,8 @@ in
 
               name = helpers.mkNullOrOption str "Name of the plugin to install";
 
+              import = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str (listOf str)) "Name of additional plugin module/modules to import";
+
               dev = helpers.defaultNullOpts.mkBool false ''
                 When true, a local plugin directory will be used instead.
                 See config.dev
@@ -160,42 +162,48 @@ in
           plugin:
           let
             keyExists = keyToCheck: attrSet: lib.elem keyToCheck (lib.attrNames attrSet);
+            pluginImportToLua = pluginImport: { import = pluginImport; };
           in
           if isDerivation plugin then
             { dir = "${lazyPath}/${lib.getName plugin}"; }
           else
-            {
-              "__unkeyed" = plugin.name;
+            [
+              {
+                "__unkeyed" = plugin.name;
 
-              inherit (plugin)
-                cmd
-                cond
-                config
-                dev
-                enabled
-                event
-                ft
-                init
-                keys
-                lazy
-                main
-                module
-                name
-                optional
-                opts
-                priority
-                submodules
-                ;
+                inherit (plugin)
+                  cmd
+                  cond
+                  config
+                  dev
+                  enabled
+                  event
+                  ft
+                  init
+                  keys
+                  lazy
+                  main
+                  module
+                  name
+                  optional
+                  opts
+                  priority
+                  submodules
+                  ;
 
-              dependencies = helpers.ifNonNull' plugin.dependencies (
-                if isList plugin.dependencies then (pluginListToLua plugin.dependencies) else plugin.dependencies
-              );
+                import = helpers.ifNonNull' plugin.import (if isList plugin.import then null else plugin.import);
 
-              dir =
-                if plugin ? dir && plugin.dir != null then plugin.dir else "${lazyPath}/${lib.getName plugin.pkg}";
-            };
+                dependencies = helpers.ifNonNull' plugin.dependencies (
+                  if isList plugin.dependencies then (pluginListToLua plugin.dependencies) else plugin.dependencies
+                );
 
-        pluginListToLua = map pluginToLua;
+                dir =
+                  if plugin ? dir && plugin.dir != null then plugin.dir else "${lazyPath}/${lib.getName plugin.pkg}";
+              }
+            ]
+            ++ (if isList plugin.import then (map pluginImportToLua plugin.import) else [ ]);
+
+        pluginListToLua = pluginList: flatten (map pluginToLua pluginList);
 
         plugins = pluginListToLua cfg.plugins;
 
