@@ -191,30 +191,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     ];
 
   settingsOptions = {
-    client = defaultNullOpts.mkStr "curl" ''
-      The HTTP client to be used when running requests.
-    '';
-
-    env_file = defaultNullOpts.mkStr ".env" ''
-      Environment variables file to be used for the request variables in the document.
-    '';
-
-    env_pattern = defaultNullOpts.mkStr "\\.env$" ''
-      Environment variables file pattern for `telescope.nvim`.
-    '';
-
-    env_edit_command = defaultNullOpts.mkStr "tabedit" ''
-      Neovim command to edit an environment file.
-    '';
-
-    encode_url = defaultNullOpts.mkBool true ''
-      Encode URL before making request.
-    '';
-
-    skip_ssl_verification = defaultNullOpts.mkBool false ''
-      Skip SSL verification, useful for unknown certificates.
-    '';
-
     custom_dynamic_variables = lib.mkOption {
       type = with types; nullOr (maybeRaw (attrsOf strLuaFn));
       default = null;
@@ -234,113 +210,77 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       apply = v: if lib.isAttrs v then lib.mapAttrs (_: lib.nixvim.mkRaw) v else v;
     };
 
-    logs = {
-      level = defaultNullOpts.mkNullable types.logLevel "info" ''
-        The logging level name, see `:h vim.log.levels`.
+    request = {
+      skip_ssl_verification = defaultNullOpts.mkBool false ''
+        Skip SSL verification, useful for unknown certificates.
       '';
 
-      save = defaultNullOpts.mkBool true ''
-        Whether to save log messages into a `.log` file.
+      hooks = {
+        encode_url = defaultNullOpts.mkBool true ''
+          Encode URL before making request.
+        '';
+
+        user_agent = defaultNullOpts.mkStr (lib.nixvim.mkRaw ''"rest.nvim v" .. require("rest-nvim.api").VERSION'') ''
+          Set `User-Agent` header when it is empty.
+        '';
+
+        set_content_type = defaultNullOpts.mkBool true ''
+          Set `Content-Type` header when it is empty and body is provided.
+        '';
+      };
+    };
+
+    response = {
+      hooks = {
+        decode_url = defaultNullOpts.mkBool true ''
+          Encode URL before making request.
+        '';
+
+        format = defaultNullOpts.mkBool true ''
+          Format the response body using `gq` command.
+        '';
+      };
+
+    };
+
+    clients = defaultNullOpts.mkAttrsOf types.anything {
+      curl = {
+        statistics = [
+          {
+            id = "time_total";
+            winbar = "take";
+            title = "Time taken";
+          }
+          {
+            id = "size_download";
+            winbar = "size";
+            title = "Download size";
+          }
+        ];
+        opts = {
+          set_compressed = false;
+        };
+      };
+    } ''Table of client configurations.'';
+
+    cookies = {
+      enable = defaultNullOpts.mkBool true ''
+        Whether to enable cookies support or not.
+      '';
+
+      path = defaultNullOpts.mkStr (lib.nixvim.mkRaw ''vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "rest-nvim.cookies")'') ''
+        Environment variables file pattern for `telescope.nvim`.
       '';
     };
 
-    result = {
-      split = {
-        horizontal = defaultNullOpts.mkBool false ''
-          Open request results in a horizontal split.
-        '';
+    env = {
+      enable = defaultNullOpts.mkBool true ''
+        Whether to enable env file support or not.
+      '';
 
-        in_place = defaultNullOpts.mkBool false ''
-          Keep the HTTP file buffer above|left when split horizontal|vertical.
-        '';
-
-        stay_in_current_window_after_split = defaultNullOpts.mkBool true ''
-          Stay in the current window (HTTP file) or change the focus to the results window.
-        '';
-      };
-
-      behavior = {
-        show_info = {
-          url = defaultNullOpts.mkBool true ''
-            Display the request URL.
-          '';
-
-          headers = defaultNullOpts.mkBool true ''
-            Display the request headers.
-          '';
-
-          http_info = defaultNullOpts.mkBool true ''
-            Display the request HTTP information.
-          '';
-
-          curl_command = defaultNullOpts.mkBool true ''
-            Display the cURL command that was used for the request.
-          '';
-        };
-
-        decode_url = defaultNullOpts.mkBool true ''
-          Whether to decode the request URL query parameters to improve readability.
-        '';
-
-        statistics = {
-          enable = defaultNullOpts.mkBool true ''
-            Whether to enable statistics or not.
-          '';
-
-          stats = defaultNullOpts.mkListOf (with types; attrsOf str) [
-            {
-              __unkeyed = "total_time";
-              title = "Time taken:";
-            }
-            {
-              __unkeyed = "size_download_t";
-              title = "Download size:";
-            }
-          ] "See https://curl.se/libcurl/c/curl_easy_getinfo.html.";
-        };
-
-        formatters = {
-          json = defaultNullOpts.mkStr "jq" ''
-            JSON formatter.
-          '';
-
-          html = defaultNullOpts.mkStr {
-            __raw = ''
-              function(body)
-                if vim.fn.executable("tidy") == 0 then
-                  return body, { found = false, name = "tidy" }
-                end
-                local fmt_body = vim.fn.system({
-                  "tidy",
-                  "-i",
-                  "-q",
-                  "--tidy-mark",      "no",
-                  "--show-body-only", "auto",
-                  "--show-errors",    "0",
-                  "--show-warnings",  "0",
-                  "-",
-                }, body):gsub("\n$", "")
-
-                return fmt_body, { found = true, name = "tidy" }
-              end
-            '';
-          } "HTML formatter.";
-        };
-      };
-
-      keybinds = {
-        buffer_local = defaultNullOpts.mkBool false ''
-          Enable keybinds only in request result buffer.
-        '';
-
-        prev = defaultNullOpts.mkStr "H" ''
-          Mapping for cycle to previous result pane.
-        '';
-
-        next = defaultNullOpts.mkStr "L" ''
-          Mapping for cycle to next result pane.
-        '';
-      };
+      pattern = defaultNullOpts.mkStr "\\.env$" ''
+        Environment variables file pattern for `telescope.nvim`.
+      '';
     };
 
     highlight = {
@@ -352,6 +292,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         Duration time of the request highlighting in milliseconds.
       '';
     };
+
+    _log_level = defaultNullOpts.mkNullableWithRaw types.logLevel "warn" ''
+      The logging level name, see `:h vim.log.levels`.
+    '';
 
     keybinds =
       defaultNullOpts.mkListOf (with types; listOf str)
@@ -374,31 +318,31 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   settingsExample = {
-    client = "curl";
-    env_file = ".env";
-    logs = {
-      level = "info";
-      save = true;
+    request = {
+      skip_ssl_verification = true;
     };
-    result = {
-      split = {
-        horizontal = false;
-        in_place = false;
-        stay_in_current_window_after_split = true;
+    response = {
+      hooks = {
+        format = false;
       };
     };
-    keybinds = [
-      [
-        "<localleader>rr"
-        "<cmd>Rest run<cr>"
-        "Run request under the cursor"
-      ]
-      [
-        "<localleader>rl"
-        "<cmd>Rest run last<cr>"
-        "Re-run latest request"
-      ]
-    ];
+    clients = {
+      curl = {
+        opts = {
+          set_compressed = true;
+        };
+      };
+    };
+    cookies = {
+      enable = false;
+    };
+    env = {
+      enable = false;
+    };
+    ui = {
+      winbar = false;
+    };
+    _log_level = "info";
   };
 
   extraOptions = {
@@ -417,6 +361,9 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     enableTelescope = lib.mkEnableOption "telescope integration";
   };
 
+  # NOTE: plugin uses globals table for configuration
+  callSetup = false;
+
   extraConfig = cfg: {
     assertions = [
       {
@@ -434,8 +381,59 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       }
     ];
 
+    # TODO: introduced 2024-09-23: remove after 24.11
+    warnings =
+      let
+        definedOpts = lib.filter (opt: lib.hasAttrByPath (lib.toList opt) cfg.settings) [
+          "client"
+          "env_file"
+          "env_pattern"
+          "env_edit_command"
+          "encode_url"
+          "skip_ssl_verification"
+          [
+            "logs"
+            "level"
+          ]
+          [
+            "logs"
+            "save"
+          ]
+          [
+            "result"
+            "split"
+          ]
+          [
+            "result"
+            "behavior"
+          ]
+          [
+            "result"
+            "statistics"
+          ]
+          [
+            "result"
+            "decode_url"
+          ]
+          [
+            "result"
+            "formatters"
+          ]
+          [
+            "result"
+            "keybinds"
+          ]
+        ];
+      in
+      lib.optional (definedOpts != [ ]) ''
+        Nixvim(plugins.rest): The following v2 settings options are no longer supported in v3:
+        ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
+      '';
+
     # TODO: There may be some interactions between this & telescope, maybe requiring #2292
     plugins.rest.luaConfig.post = lib.mkIf cfg.enableTelescope ''require("telescope").load_extension("rest")'';
+
+    globals.rest_nvim = cfg.settings;
 
     extraPackages = [ cfg.curlPackage ];
 
