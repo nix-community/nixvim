@@ -100,4 +100,15 @@
       };
     };
   };
+
+  telescope = {
+    plugins = {
+      rest = {
+        enable = true;
+        enableTelescope = true;
+      };
+      treesitter.enable = true;
+      telescope.enable = true;
+    };
+  };
 }

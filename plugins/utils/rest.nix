@@ -415,6 +415,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         Sets up the filetype association of `.http` files to trigger treesitter support to enable `rest` functionality.
       '';
     };
+
+    enableTelescope = lib.mkEnableOption "telescope integration";
   };
 
   extraConfig = cfg: {
@@ -425,7 +427,16 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           Nixvim (plugins.rest): Requires the `http` parser from `plugins.treesitter`, please set `plugins.treesitter.enable`.
         '';
       }
+      {
+        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+        message = ''
+          Nixvim (plugins.rest): You have `plugins.rest.enableTelescope` set to true, but `plugins.telescope.enable` is false.
+          Either disable the telescope integration or enable telescope.
+        '';
+      }
     ];
+
+    extraConfigLua = lib.mkIf cfg.enableTelescope ''require("telescope").load_extension("rest")'';
 
     extraPackages = [ cfg.curlPackage ];
 
