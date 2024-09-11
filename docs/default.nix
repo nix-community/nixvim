@@ -55,6 +55,8 @@ in
 {
   inherit options-json;
 
+  gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
+
   man-docs = pkgs.callPackage ./man { inherit options-json; };
 }
 // lib.optionalAttrs (!pkgs.stdenv.isDarwin) (

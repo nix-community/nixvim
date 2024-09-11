@@ -1,0 +1,124 @@
+- attrs: null
+  block: true
+  children: null
+  content: ''
+  hidden: false
+  info: ''
+  level: 0
+  map:
+  - 0
+  - 2
+  markup: '>'
+  meta:
+    kind: caution
+  nesting: 1
+  tag: blockquote
+  type: admonition_open
+- attrs: null
+  block: true
+  children: null
+  content: ''
+  hidden: false
+  info: ''
+  level: 1
+  map:
+  - 0
+  - 2
+  markup: ''
+  meta: {}
+  nesting: 1
+  tag: p
+  type: paragraph_open
+- attrs: null
+  block: true
+  children:
+  - attrs: null
+    block: false
+    children: null
+    content: 'This is an '
+    hidden: false
+    info: ''
+    level: 0
+    map: null
+    markup: ''
+    meta: {}
+    nesting: 0
+    tag: ''
+    type: text
+  - attrs: null
+    block: false
+    children: null
+    content: ''
+    hidden: false
+    info: ''
+    level: 0
+    map: null
+    markup: '*'
+    meta: {}
+    nesting: 1
+    tag: em
+    type: em_open
+  - attrs: null
+    block: false
+    children: null
+    content: alert
+    hidden: false
+    info: ''
+    level: 1
+    map: null
+    markup: ''
+    meta: {}
+    nesting: 0
+    tag: ''
+    type: text
+  - attrs: null
+    block: false
+    children: null
+    content: ''
+    hidden: false
+    info: ''
+    level: 0
+    map: null
+    markup: '*'
+    meta: {}
+    nesting: -1
+    tag: em
+    type: em_close
+  content: This is an *alert*
+  hidden: false
+  info: ''
+  level: 2
+  map:
+  - 0
+  - 2
+  markup: ''
+  meta: {}
+  nesting: 0
+  tag: ''
+  type: inline
+- attrs: null
+  block: true
+  children: null
+  content: ''
+  hidden: false
+  info: ''
+  level: 1
+  map: null
+  markup: ''
+  meta: {}
+  nesting: -1
+  tag: p
+  type: paragraph_close
+- attrs: null
+  block: true
+  children: null
+  content: ''
+  hidden: false
+  info: ''
+  level: 0
+  map: null
+  markup: '>'
+  meta: {}
+  nesting: -1
+  tag: blockquote
+  type: admonition_close

@@ -1,0 +1,15 @@
+[project]
+name = "gfm-alerts-to-admonitions"
+version = "0.0"
+description = "MarkdownIt plugin to convert gfm alerts to nixos-render-docs admonitions"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[build-system]
+requires = ["setuptools"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
