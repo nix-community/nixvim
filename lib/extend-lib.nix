@@ -13,6 +13,6 @@ lib.extend (
     maintainers = prev.maintainers // import ./maintainers.nix;
 
     # Merge in our custom types
-    types = call ./types.nix { } // prev.types;
+    types = prev.types // call ./types.nix { };
   }
 )

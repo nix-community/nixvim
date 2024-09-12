@@ -95,8 +95,15 @@ rec {
   strLua = strLikeType "lua code string";
   strLuaFn = strLikeType "lua function string";
 
-  # Overridden when building the documentation
-  eitherRecursive = types.either;
+  # When building the documentation `either` is extended to return the nestedType's sub-options
+  # This type can be used to avoid infinite recursion when evaluating the docs
+  # TODO: consider deprecating this in favor of using `config.isDocs` in option declarations
+  eitherRecursive =
+    t1: t2:
+    types.either t1 t2
+    // {
+      getSubOptions = _: { };
+    };
 
   listOfLen =
     elemType: len:

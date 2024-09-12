@@ -13,8 +13,6 @@ let
           // {
             getSubOptions = prefix: (t1.getSubOptions prefix) // (t2.getSubOptions prefix);
           };
-
-        eitherRecursive = t1: t2: (final.types.either t1 t2) // { getSubOptions = _: { }; };
       };
     }
   );
