@@ -1,42 +1,13 @@
 {
-  pkgs ? import <nixpkgs> { config.allowUnfree = true; },
+  system,
+  nixpkgs,
   nuschtosSearch,
 }:
 let
-  # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
-  lib = pkgs.lib.extend (
-    final: prev: {
-      types = prev.types // {
-        either =
-          t1: t2:
-          (prev.types.either t1 t2)
-          // {
-            getSubOptions = prefix: (t1.getSubOptions prefix) // (t2.getSubOptions prefix);
-          };
-      };
-    }
-  );
-
-  # Extended nixpkgs instance, with patches to nixos-render-docs
-  pkgsDoc = pkgs.extend (
-    final: prev: {
-      inherit lib;
-
-      nixos-render-docs = prev.nixos-render-docs.overrideAttrs (old: {
-        patches = old.patches or [ ] ++ [
-          # Adds support for GFM-style admonitions in rendered commonmark
-          ./0001-Output-GFM-admonition.patch
-          # TODO:add support for _parsing_ GFM admonitions too
-          # https://github.com/nix-community/nixvim/issues/2217
-        ];
-      });
-    }
-  );
-
-  helpers = import ../lib/helpers.nix {
-    inherit lib;
-    pkgs = pkgsDoc;
-  };
+  # We overlay a few tweaks into pkgs, for use in the docs
+  pkgs = import ./pkgs.nix { inherit system nixpkgs; };
+  inherit (pkgs) lib;
+  helpers = import ../lib/helpers.nix { inherit lib pkgs; };
 
   nixvimPath = toString ./..;
 
@@ -74,7 +45,7 @@ let
     .options [ "_module" ];
 
   options-json =
-    (pkgsDoc.nixosOptionsDoc {
+    (pkgs.nixosOptionsDoc {
       inherit (evaledModules) options;
       inherit transformOptions;
       warningsAreErrors = false;
@@ -84,9 +55,9 @@ in
 {
   inherit options-json;
 
-  man-docs = pkgsDoc.callPackage ./man { inherit options-json; };
+  man-docs = pkgs.callPackage ./man { inherit options-json; };
 }
-// lib.optionalAttrs (!pkgsDoc.stdenv.isDarwin) (
+// lib.optionalAttrs (!pkgs.stdenv.isDarwin) (
   let
     mkSearch =
       baseHref:
@@ -102,7 +73,7 @@ in
 
     # Do not check if documentation builds fine on darwin as it fails:
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
-    docs = pkgsDoc.callPackage ./mdbook {
+    docs = pkgs.callPackage ./mdbook {
       inherit evaledModules hmOptions transformOptions;
       # TODO: Find how to handle stable when 24.11 lands
       search = mkSearch "/nixvim/search/";

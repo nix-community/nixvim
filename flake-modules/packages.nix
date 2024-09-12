@@ -1,15 +1,16 @@
+{ inputs, ... }:
 {
   perSystem =
     {
-      pkgsUnfree,
       config,
       inputs',
+      system,
       ...
     }:
     {
       packages = import ../docs {
-        # Building the docs evaluates each plugin's default package, some of which are unfree
-        pkgs = pkgsUnfree;
+        inherit system;
+        inherit (inputs) nixpkgs;
         inherit (inputs') nuschtosSearch;
       };
 
