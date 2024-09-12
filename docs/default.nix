@@ -15,18 +15,6 @@ let
           };
 
         eitherRecursive = t1: t2: (final.types.either t1 t2) // { getSubOptions = _: { }; };
-
-        oneOfRecursive =
-          ts:
-          let
-            head' =
-              if ts == [ ] then
-                throw "types.oneOfRecursive needs to get at least one type in its argument"
-              else
-                builtins.head ts;
-            tail' = builtins.tail ts;
-          in
-          builtins.foldl' final.types.eitherRecursive head' tail';
       };
     }
   );
