@@ -1,4 +1,4 @@
-{ pkgs, helpers, ... }:
+{ pkgs, ... }:
 let
   isByteCompiledFun = ''
     local function is_byte_compiled(filename)
@@ -25,7 +25,15 @@ let
 in
 {
   default =
-    { config, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      writeLua = lib.nixvim.builders.writeLuaWith pkgs;
+    in
     {
       performance.byteCompileLua.enable = true;
 
@@ -33,7 +41,7 @@ in
         # By text
         "plugin/file_text.lua".text = "vim.opt.tabstop = 2";
         # By simple source derivation using buildCommand
-        "plugin/file_source.lua".source = helpers.writeLua "file_source.lua" "vim.opt.tabstop = 2";
+        "plugin/file_source.lua".source = writeLua "file_source.lua" "vim.opt.tabstop = 2";
         # By standard derivation, it needs to execute fixupPhase
         "plugin/file_drv.lua".source = pkgs.stdenvNoCC.mkDerivation {
           name = "file_drv.lua";
@@ -48,13 +56,13 @@ in
         "plugin/file_string.lua".source = builtins.toFile "file_path.lua" "vim.opt.tabstop = 2";
         # By derivation converted to string
         "plugin/file_drv_string.lua".source = toString (
-          helpers.writeLua "file_drv_string.lua" "vim.opt.tabstop = 2"
+          writeLua "file_drv_string.lua" "vim.opt.tabstop = 2"
         );
         # Non-lua files
         "plugin/test.vim".text = "set tabstop=2";
         "plugin/test.json".text = builtins.toJSON { a = 1; };
         # Lua file with txt extension won't be byte compiled
-        "test.txt".source = helpers.writeLua "test.txt" "vim.opt.tabstop = 2";
+        "test.txt".source = writeLua "test.txt" "vim.opt.tabstop = 2";
       };
 
       files = {

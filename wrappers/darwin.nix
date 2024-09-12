@@ -23,7 +23,10 @@ in
       default = { };
       type = types.submoduleWith {
         shorthandOnlyDefinesConfig = true;
-        specialArgs = config.lib.nixvim.modules.specialArgsWith { darwinConfig = config; };
+        specialArgs = config.lib.nixvim.modules.specialArgsWith {
+          defaultPkgs = pkgs;
+          darwinConfig = config;
+        };
         modules = [
           ./modules/darwin.nix
           ../modules/top-level

@@ -6,6 +6,8 @@
   ...
 }:
 let
+  builders = lib.nixvim.builders.withPkgs pkgs;
+
   fileTypeModule =
     {
       name,
@@ -73,10 +75,10 @@ let
             then
               if lib.isDerivation config.source then
                 # Source is a derivation
-                helpers.byteCompileLuaDrv config.source
+                builders.byteCompileLuaDrv config.source
               else
                 # Source is a path or string
-                helpers.byteCompileLuaFile derivationName config.source
+                builders.byteCompileLuaFile derivationName config.source
             else
               config.source;
         };

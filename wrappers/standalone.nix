@@ -19,7 +19,9 @@ let
           mod
           ./modules/standalone.nix
         ];
-        inherit extraSpecialArgs;
+        extraSpecialArgs = {
+          defaultPkgs = pkgs;
+        } // extraSpecialArgs;
       };
       inherit (evaledModule.config) enableMan finalPackage printInitPackage;
     in

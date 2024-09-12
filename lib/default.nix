@@ -1,5 +1,5 @@
 {
-  pkgs,
+  pkgs ? null,
   lib ? pkgs.lib,
   _nixvimTests ? false,
   ...
@@ -14,10 +14,48 @@ lib.fix (
       helpers = self; # TODO: stop using `helpers` in the subsections
       lib = self.extendedLib;
     };
-  in
-  {
-    autocmd = call ./autocmd-helpers.nix { };
+
+    # Define this outside of the attrs to avoid infinite recursion,
+    # since the final value will have been merged from two places
     builders = call ./builders.nix { };
+
+    # Merge in deprecated functions that require a nixpkgs instance
+    # Does shallow recursion, only one level deeper than normal
+    # Does nothing when `pkgs` is null
+    withOptionalFns =
+      if pkgs == null then
+        lib.id
+      else
+        lib.recursiveUpdateUntil
+          (
+            path: lhs: rhs:
+            builtins.length path > 1
+          )
+          {
+            # Minimal specialArgs required to evaluate nixvim modules
+            # FIXME: our minimal specialArgs should not need `pkgs`
+            modules.specialArgs = self.modules.specialArgsWith {
+              defaultPkgs = pkgs;
+            };
+
+            # We used to provide top-level access to the "builder" functions, with `pkgs` already baked in
+            # TODO: deprecated 2024-09-13; remove after 24.11
+            builders = lib.mapAttrs (
+              name:
+              lib.warn "`${name}` is deprecated. You should either use `${name}With` or access `${name}` via `builders.withPkgs`."
+            ) (builders.withPkgs pkgs);
+
+            inherit (self.builders)
+              writeLua
+              writeByteCompiledLua
+              byteCompileLuaFile
+              byteCompileLuaHook
+              byteCompileLuaDrv
+              ;
+          };
+  in
+  withOptionalFns {
+    autocmd = call ./autocmd-helpers.nix { };
     deprecation = call ./deprecation.nix { };
     extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
@@ -27,17 +65,10 @@ lib.fix (
     options = call ./options.nix { };
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
+    inherit builders;
 
     # Top-level helper aliases:
     # TODO: deprecate some aliases
-
-    inherit (self.builders)
-      writeLua
-      writeByteCompiledLua
-      byteCompileLuaFile
-      byteCompileLuaHook
-      byteCompileLuaDrv
-      ;
 
     inherit (self.deprecation)
       getOptionRecursive

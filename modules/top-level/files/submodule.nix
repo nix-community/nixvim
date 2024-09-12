@@ -3,7 +3,6 @@
   config,
   lib,
   pkgs,
-  helpers,
   ...
 }:
 {
@@ -18,7 +17,8 @@
   config =
     let
       derivationName = "nvim-" + lib.replaceStrings [ "/" ] [ "-" ] name;
-      writeContent = if config.type == "lua" then helpers.writeLua else pkgs.writeText;
+      writeContent =
+        if config.type == "lua" then lib.nixvim.builders.writeLuaWith pkgs else pkgs.writeText;
     in
     {
       path = lib.mkDefault name;

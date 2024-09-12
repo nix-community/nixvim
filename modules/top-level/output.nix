@@ -8,6 +8,7 @@
 let
   inherit (lib) types mkOption mkPackageOption;
   inherit (lib) optional optionalString optionalAttrs;
+  builders = lib.nixvim.builders.withPkgs pkgs;
 in
 {
   options = {
@@ -91,7 +92,7 @@ in
         let
           byteCompile =
             p:
-            (helpers.byteCompileLuaDrv p).overrideAttrs (
+            (builders.byteCompileLuaDrv p).overrideAttrs (
               prev: lib.optionalAttrs (prev ? dependencies) { dependencies = map byteCompile prev.dependencies; }
             );
         in
@@ -223,8 +224,8 @@ in
         config.content
       ];
 
-      textInit = helpers.writeLua "init.lua" customRC;
-      byteCompiledInit = helpers.writeByteCompiledLua "init.lua" customRC;
+      textInit = builders.writeLua "init.lua" customRC;
+      byteCompiledInit = builders.writeByteCompiledLua "init.lua" customRC;
       init =
         if
           config.type == "lua"
@@ -250,7 +251,7 @@ in
             paths = [ config.package ];
             # Required attributes from original neovim package
             inherit (config.package) lua meta;
-            nativeBuildInputs = [ helpers.byteCompileLuaHook ];
+            nativeBuildInputs = [ builders.byteCompileLuaHook ];
             postBuild = ''
               # Replace Nvim's binary symlink with a regular file,
               # or Nvim will use original runtime directory

@@ -10,7 +10,12 @@
       ...
     }:
     let
-      evaluatedNixvim = helpers.modules.evalNixvim { check = false; };
+      evaluatedNixvim = helpers.modules.evalNixvim {
+        extraSpecialArgs = {
+          defaultPkgs = pkgs;
+        };
+        check = false;
+      };
     in
     {
       checks = {
