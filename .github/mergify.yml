@@ -17,8 +17,15 @@ queue_rules:
           # Allow queuing PRs that have been approved
           - "#approved-reviews-by >= 1"
 
-          # Allow queuing flake.lock updates without approval
+          # Allow queuing update PRs without approval
           - and:
-              - "#files = 1"
-              - files = flake.lock
-              - author = GaetanLepage
+              # We need a double-negative, because mergify only has "any" conditions on list types...
+              #
+              # So we check if "any file does not match the regex", using the `-` prefix operator.
+              # The regex matches anything except `flake.lock` and `generated`, using a negative lookahead `(?!)`
+              #
+              # After canceling out the double-negative, the condition below is true when
+              # _all_ files match either `^flake\.lock$` or `^generated/`
+              - "-files ~= ^(?!flake[.]lock$|generated/)"
+              # Also check the PR was opened by the github-actions bot
+              - author = github-actions
