@@ -24,6 +24,18 @@ let
       mode = "n";
       action.__raw = "require('wtf').search";
     };
+
+    history = {
+      key = "wh";
+      mode = "n";
+      action.__raw = "require('wtf').history";
+    };
+
+    grep_history = {
+      key = "wg";
+      mode = "n";
+      action.__raw = "require('wtf').grep_history";
+    };
   };
 in
 {

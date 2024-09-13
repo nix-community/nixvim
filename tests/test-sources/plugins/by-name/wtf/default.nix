@@ -8,7 +8,7 @@
       enable = true;
 
       keymaps = {
-        ai = "gw";
+        ai.key = "gw";
         search = {
           mode = [
             "n"
