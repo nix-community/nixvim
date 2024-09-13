@@ -117,6 +117,11 @@
               [
                 # TODO: re-enable when package is fixed
                 "prisma_format"
+                # TODO: added 2024-09-13
+                # Swift broken everywhere atm
+                "swiftformat"
+                "swift_format"
+                "swiftlint"
               ]
               ++ (lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64) [
                 # As of 2024-03-27, pkgs.graalvm-ce (a dependency of pkgs.clj-kondo) is broken on x86_64-darwin
@@ -140,9 +145,6 @@
               ++ (lib.optionals pkgs.stdenv.isAarch64 [
                 "semgrep"
                 "smlfmt"
-                # As of 2024-03-11, swift-format is broken on aarch64
-                # TODO: re-enable this test when fixed
-                "swift_format"
               ]);
           in
           # Enable every none-ls source that has an option
