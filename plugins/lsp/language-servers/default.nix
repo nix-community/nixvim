@@ -247,6 +247,15 @@ let
       package = "htmx-lsp";
     }
     {
+      name = "idris2-lsp";
+      description = "Idris 2 Language Server";
+      serverName = "idris2_lsp";
+      package = [
+        "idris2Packages"
+        "idris2Lsp"
+      ];
+    }
+    {
       name = "intelephense";
       description = "intelephense for PHP";
       package = [

@@ -144,6 +144,7 @@
             hls.enable = true;
             html.enable = true;
             htmx.enable = true;
+            idris2-lsp.enable = true;
             java-language-server.enable = true;
             jdt-language-server.enable = true;
             jsonls.enable = true;
