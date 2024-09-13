@@ -27,6 +27,10 @@
           # Broken as of 2024-07-08
           # TODO: re-enable this tests when fixed
           "cpplint"
+          # TODO: added 2024-09-13
+          # Swift broken everywhere atm
+          "swiftformat"
+          "swiftlint"
         ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13
@@ -71,8 +75,6 @@
           "slim_lint"
           "solhint"
           "sorbet"
-          "swiftformat"
-          "swiftlint"
           "xo"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [ "clazy" ]
