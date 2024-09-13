@@ -2,12 +2,12 @@
 {
   call,
   lib,
-  helpers,
+  self,
 }:
 lib.extend (
   final: prev: {
     # Include our custom lib
-    nixvim = helpers;
+    nixvim = self;
 
     # Merge in our maintainers
     maintainers = prev.maintainers // import ./maintainers.nix;

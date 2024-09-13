@@ -4,16 +4,18 @@
   _nixvimTests ? false,
   ...
 }:
-let
-  # Used when importing parts of helpers
-  call = lib.callPackageWith {
-    # TODO: deprecate/remove using `helpers` in the subsections
-    inherit call pkgs helpers;
-    lib = helpers.extendedLib;
-  };
-
-  # Build helpers recursively
-  helpers = {
+# Build helpers recursively
+lib.fix (
+  self:
+  let
+    # Used when importing parts of helpers
+    call = lib.callPackageWith {
+      inherit call pkgs self;
+      helpers = self; # TODO: stop using `helpers` in the subsections
+      lib = self.extendedLib;
+    };
+  in
+  {
     autocmd = call ./autocmd-helpers.nix { };
     builders = call ./builders.nix { };
     deprecation = call ./deprecation.nix { };
@@ -29,7 +31,7 @@ let
     # Top-level helper aliases:
     # TODO: deprecate some aliases
 
-    inherit (helpers.builders)
+    inherit (self.builders)
       writeLua
       writeByteCompiledLua
       byteCompileLuaFile
@@ -37,14 +39,14 @@ let
       byteCompileLuaDrv
       ;
 
-    inherit (helpers.deprecation)
+    inherit (self.deprecation)
       getOptionRecursive
       mkDeprecatedSubOptionModule
       mkSettingsRenamedOptionModules
       transitionType
       ;
 
-    inherit (helpers.options)
+    inherit (self.options)
       defaultNullOpts
       mkCompositeOption
       mkCompositeOption'
@@ -66,7 +68,7 @@ let
       pluginDefaultText
       ;
 
-    inherit (helpers.utils)
+    inherit (self.utils)
       concatNonEmptyLines
       emptyTable
       enableExceptInTests
@@ -89,13 +91,12 @@ let
       ;
 
     # TODO: Deprecate this `maintainers` alias
-    inherit (helpers.extendedLib) maintainers;
+    inherit (self.extendedLib) maintainers;
 
     # TODO: Deprecate the old `nixvimTypes` alias?
-    nixvimTypes = helpers.extendedLib.types;
+    nixvimTypes = self.extendedLib.types;
 
-    toLuaObject = helpers.lua.toLua;
-    mkLuaInline = helpers.lua.mkInline;
-  };
-in
-helpers
+    toLuaObject = self.lua.toLua;
+    mkLuaInline = self.lua.mkInline;
+  }
+)
