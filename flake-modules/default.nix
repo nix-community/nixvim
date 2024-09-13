@@ -2,7 +2,6 @@
 {
   imports = [
     ./dev
-    ./helpers.nix
     ./lib.nix
     ./legacy-packages.nix
     ./overlays.nix

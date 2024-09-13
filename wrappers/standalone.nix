@@ -7,7 +7,7 @@ default_pkgs: self:
   module,
 }:
 let
-  helpers = import ../lib/helpers.nix { inherit pkgs lib _nixvimTests; };
+  helpers = import ../lib { inherit pkgs lib _nixvimTests; };
 
   inherit (helpers.modules) evalNixvim;
 

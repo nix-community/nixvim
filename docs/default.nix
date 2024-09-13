@@ -7,7 +7,7 @@ let
   # We overlay a few tweaks into pkgs, for use in the docs
   pkgs = import ./pkgs.nix { inherit system nixpkgs; };
   inherit (pkgs) lib;
-  helpers = import ../lib/helpers.nix { inherit lib pkgs; };
+  helpers = import ../lib { inherit lib pkgs; };
 
   nixvimPath = toString ./..;
 

@@ -44,7 +44,7 @@ let
       dontRun ? false,
     }@args:
     let
-      helpers = import ../lib/helpers.nix {
+      helpers = import ../lib {
         inherit pkgs lib;
         # TODO: deprecate helpers.enableExceptInTests,
         # add a context option e.g. `config.isTest`?
@@ -72,6 +72,7 @@ let
     in
     result.config.test.derivation;
 in
+# NOTE: this is exported publicly in the flake outputs as `lib.<system>.check`
 {
   inherit mkTestDerivationFromNvim mkTestDerivationFromNixvimModule;
 }
