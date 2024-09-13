@@ -195,9 +195,9 @@
             };
             slint-lsp.enable = true;
             solargraph.enable = true;
-            # As of 2024-03-11, sourcekit-lsp is broken on aarch64
+            # As of 2024-09-13, sourcekit-lsp is broken due to swift dependency
             # TODO: re-enable this test when fixed
-            sourcekit.enable = !pkgs.stdenv.isAarch64;
+            # sourcekit.enable = !pkgs.stdenv.isAarch64;
             sqls.enable = true;
             svelte.enable = true;
             tailwindcss.enable = true;
