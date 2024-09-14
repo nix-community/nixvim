@@ -20,6 +20,10 @@ in
       ];
     };
 
+    efmLangServerPackage = lib.mkPackageOption pkgs "efm-langserver" {
+      nullable = true;
+    };
+
     externallyManagedPackages = lib.mkOption {
       type = with lib.types; either (enum [ "all" ]) (listOf str);
       description = ''
@@ -151,6 +155,6 @@ in
         extraOptions.settings.languages = setupOptions;
       };
 
-      extraPackages = [ pkgs.efm-langserver ] ++ (map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
+      extraPackages = [ cfg.efmLangServerPackage ] ++ (map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
     };
 }

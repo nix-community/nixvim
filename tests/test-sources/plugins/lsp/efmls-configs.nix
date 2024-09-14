@@ -145,4 +145,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.efmls-configs = {
+      enable = true;
+      efmLangServerPackage = null;
+    };
+  };
 }
