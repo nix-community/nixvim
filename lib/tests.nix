@@ -61,6 +61,8 @@ let
               { config.test.runNvim = !dontRun; }
           ))
           { wrapRc = true; }
+          # FIXME: don't do this by default
+          { nixpkgs.pkgs = pkgs; }
         ];
         extraSpecialArgs = {
           defaultPkgs = pkgs;
