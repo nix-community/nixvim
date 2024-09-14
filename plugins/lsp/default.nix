@@ -16,6 +16,11 @@ in
     plugins.lsp = {
       enable = mkEnableOption "neovim's built-in LSP";
 
+      package = lib.mkPackageOption pkgs [
+        "vimPlugins"
+        "nvim-lspconfig"
+      ] { };
+
       keymaps = {
         silent = mkOption {
           type = types.bool;
@@ -182,7 +187,7 @@ in
         ) servers;
     in
     mkIf cfg.enable {
-      extraPlugins = [ pkgs.vimPlugins.nvim-lspconfig ];
+      extraPlugins = [ cfg.package ];
 
       keymapsOnEvents.LspAttach =
         let
