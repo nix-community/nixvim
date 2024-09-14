@@ -14,8 +14,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   luaName = "rest-nvim";
   package = "rest-nvim";
 
-  extraPackages = [ pkgs.curl ];
-
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-04-07: remove 2024-06-07
