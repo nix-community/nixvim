@@ -38,6 +38,7 @@ let
     modules = [
       ../modules/top-level
       { isDocs = true; }
+      { nixpkgs.pkgs = pkgs; }
     ];
   };
 
