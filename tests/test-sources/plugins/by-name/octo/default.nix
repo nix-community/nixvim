@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   empty = {
     # This test is flaky and fails non-deterministically
@@ -82,6 +83,15 @@
           direction = "DESC";
         };
       };
+    };
+  };
+
+  no-packages = {
+    # Need to add gh executable to runtime path for plugin
+    test.runNvim = false;
+    plugins.octo = {
+      enable = true;
+      ghPackage = null;
     };
   };
 }

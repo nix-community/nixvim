@@ -12,8 +12,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   maintainers = [ helpers.maintainers.svl ];
 
-  extraPackages = [ pkgs.gh ];
-
   settingsOptions = {
     use_local_fs = helpers.defaultNullOpts.mkBool false ''
       Use local files on right side of reviews.
@@ -167,9 +165,17 @@ helpers.neovim-plugin.mkNeovimPlugin {
     };
   };
 
+  extraOptions = {
+    ghPackage = lib.mkPackageOption pkgs "GitHub CLI" {
+      default = "gh";
+      nullable = true;
+    };
+  };
+
   extraConfig =
     cfg:
     mkMerge [
+      { extraPackages = [ cfg.ghPackage ]; }
       (mkIf (cfg.settings.picker == null || cfg.settings.picker == "telescope") {
         plugins.telescope.enable = mkDefault true;
       })
