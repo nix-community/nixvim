@@ -24,7 +24,6 @@ mkVimPlugin {
     "openIp"
     "browser"
     "echoPreviewUrl"
-    "browserFunc"
     "previewOptions"
     "markdownCss"
     "highlightCss"
@@ -44,6 +43,19 @@ mkVimPlugin {
         "markdown-preview"
         "settings"
         "filetypes"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "plugins"
+        "markdown-preview"
+        "browserFunc"
+      ]
+      [
+        "plugins"
+        "markdown-preview"
+        "settings"
+        "browserfunc"
       ]
     )
   ];
@@ -86,7 +98,7 @@ mkVimPlugin {
       Echo preview page url in command line when opening the preview page.
     '';
 
-    browser_func = helpers.defaultNullOpts.mkStr "" ''
+    browserfunc = helpers.defaultNullOpts.mkStr "" ''
       A custom vim function name to open preview page.
       This function will receive url as param.
     '';
