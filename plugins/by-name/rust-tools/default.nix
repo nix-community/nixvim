@@ -130,8 +130,8 @@ in
     } // (import ../../lsp/language-servers/rust-analyzer-config.nix lib helpers);
   };
   config = mkIf cfg.enable {
-    extraPlugins = with pkgs.vimPlugins; [
-      nvim-lspconfig
+    extraPlugins = [
+      config.plugins.lsp.package
       cfg.package
     ];
     extraPackages = [ cfg.serverPackage ];
