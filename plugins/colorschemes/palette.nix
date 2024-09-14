@@ -1,6 +1,6 @@
 {
+  config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -18,7 +18,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     # Annoyingly, lspconfig is required, otherwise this line is breaking:
     # https://github.com/roobert/palette.nvim/blob/a808c190a4f74f73782302152ebf323660d8db5f/lua/palette/init.lua#L45
     # An issue has been opened upstream to warn the maintainer: https://github.com/roobert/palette.nvim/issues/2
-    pkgs.vimPlugins.nvim-lspconfig
+    config.plugins.lsp.package
   ];
 
   # TODO introduced 2024-04-07: remove 2024-06-07
