@@ -11,6 +11,8 @@ nix-darwin.lib.darwinSystem {
       programs.nixvim = {
         enable = true;
       };
+
+      system.stateVersion = 5;
     }
     nixvim.nixDarwinModules.nixvim
   ];
