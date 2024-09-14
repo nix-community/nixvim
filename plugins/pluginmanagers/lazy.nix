@@ -41,8 +41,18 @@ in
     plugins.lazy = {
       enable = mkEnableOption "lazy.nvim";
 
-      gitPackage = lib.mkPackageOption pkgs "git" {
-        nullable = true;
+      gitPackage = lib.mkPackageOption pkgs "git" { nullable = true; };
+
+      performance.rtp = {
+        reset = helpers.defaultNullOpts.mkBool true ''
+          reset the runtime path to $VIMRUNTIME and your config directory.
+        '';
+        paths = helpers.defaultNullOpts.mkListOf lib.types.str [ ] ''
+          add any custom paths here that you want to includes in the rtp
+        '';
+        disabled_plugins = helpers.defaultNullOpts.mkListOf lib.types.str [ ] ''
+          list any plugins you want to disable here
+        '';
       };
 
       plugins =
@@ -214,7 +224,8 @@ in
               patterns = {"."},
               fallback = false
             },
-            spec = ${helpers.toLuaObject packedPlugins}
+            spec = ${helpers.toLuaObject packedPlugins},
+            performance = ${helpers.toLuaObject cfg.performance},
           }
         )
       '';
