@@ -11,8 +11,6 @@ helpers.vim-plugin.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraPackages = [ pkgs.pstree ];
-
   # TODO introduced 2024-02-20: remove 2024-04-20
   deprecateExtraConfig = true;
   optionsRenamedToSettings = [ "viewMethod" ];
@@ -62,6 +60,22 @@ helpers.vim-plugin.mkVimPlugin {
         "scheme-medium"
       ];
     };
+
+    xdotoolPackage = lib.mkPackageOption pkgs "xdotool" {
+      nullable = true;
+    };
+
+    zathuraPackage = lib.mkPackageOption pkgs "zathura" {
+      nullable = true;
+    };
+
+    mupdfPackage = lib.mkPackageOption pkgs "mupdf" {
+      nullable = true;
+    };
+
+    pstreePackage = lib.mkPackageOption pkgs "pstree" {
+      nullable = true;
+    };
   };
 
   extraConfig = cfg: {
@@ -73,16 +87,20 @@ helpers.vim-plugin.mkVimPlugin {
     extraPackages =
       let
         # xdotool does not exist on darwin
-        xdotool = optional pkgs.stdenv.isLinux pkgs.xdotool;
+        xdotool = optional pkgs.stdenv.isLinux cfg.xdotoolPackage;
         viewerPackages =
           {
             general = xdotool;
-            zathura = xdotool ++ [ pkgs.zathura ];
-            zathura_simple = [ pkgs.zathura ];
-            mupdf = xdotool ++ [ pkgs.mupdf ];
+            zathura = xdotool ++ [ cfg.zathuraPackage ];
+            zathura_simple = [ cfg.zathuraPackage ];
+            mupdf = xdotool ++ [ cfg.mupdfPackage ];
           }
           .${cfg.settings.view_method} or [ ];
       in
-      [ cfg.texlivePackage ] ++ viewerPackages;
+      [
+        cfg.pstreePackage
+        cfg.texlivePackage
+      ]
+      ++ viewerPackages;
   };
 }

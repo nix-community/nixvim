@@ -69,4 +69,13 @@ in
       };
     };
   };
+
+  no-packages = {
+    plugins.vimtex = disableTexlivePackageOnDarwin // {
+      enable = true;
+      xdotoolPackage = null;
+      zathuraPackage = null;
+      mupdfPackage = null;
+    };
+  };
 }
