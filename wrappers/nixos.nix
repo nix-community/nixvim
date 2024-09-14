@@ -28,9 +28,10 @@ in
           nixosConfig = config;
         };
         modules = [
-          # TODO: include a module that allows setting pkgs to host pkgs
           ./modules/nixos.nix
           ../modules/top-level
+          # TODO: maybe don't do this by default?
+          { nixpkgs.pkgs = pkgs; }
         ];
       };
     };

@@ -30,6 +30,8 @@ in
         modules = [
           ./modules/darwin.nix
           ../modules/top-level
+          # TODO: maybe don't do this by default?
+          { nixpkgs.pkgs = pkgs; }
         ];
       };
     };

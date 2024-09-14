@@ -26,7 +26,8 @@ let
           mod
           ./modules/standalone.nix
           { nixpkgs.hostPlatform = lib.mkDefault system; }
-          (lib.optionalAttrs (args ? pkgs) { nixpkgs.pkgs = pkgs; })
+          # TODO: maybe don't do this by default?
+          { nixpkgs.pkgs = pkgs; }
         ];
         extraSpecialArgs = {
           defaultPkgs = pkgs;
