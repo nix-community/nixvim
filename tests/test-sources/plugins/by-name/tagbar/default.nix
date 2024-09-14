@@ -51,4 +51,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.tagbar = {
+      enable = true;
+      tagsPackage = null;
+    };
+  };
 }

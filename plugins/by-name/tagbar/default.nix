@@ -7,7 +7,6 @@
 helpers.vim-plugin.mkVimPlugin {
   name = "tagbar";
   globalPrefix = "tagbar_";
-  extraPackages = [ pkgs.ctags ];
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
@@ -29,5 +28,15 @@ helpers.vim-plugin.mkVimPlugin {
       protected = "󱗤 ";
       private = "󰛑 ";
     };
+  };
+
+  extraOptions = {
+    tagsPackage = lib.mkPackageOption pkgs "ctags" {
+      nullable = true;
+    };
+  };
+
+  extraConfig = cfg: {
+    extraPackages = [ cfg.tagsPackage ];
   };
 }
