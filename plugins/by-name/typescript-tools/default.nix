@@ -159,11 +159,7 @@ in
     };
   };
   config = mkIf cfg.enable {
-    extraPlugins = with pkgs.vimPlugins; [
-      cfg.package
-      plenary-nvim
-      nvim-lspconfig
-    ];
+    extraPlugins = [ cfg.package ];
 
     plugins.lsp.postConfig =
       with cfg;
