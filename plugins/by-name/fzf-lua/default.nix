@@ -33,8 +33,6 @@ in
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "fzf-lua";
 
-  extraPackages = [ pkgs.fzf ];
-
   maintainers = [ maintainers.GaetanLepage ];
 
   inherit settingsOptions settingsExample;
