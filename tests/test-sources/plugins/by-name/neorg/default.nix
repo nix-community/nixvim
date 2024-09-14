@@ -75,13 +75,24 @@
   };
 
   telescope-integration = {
+    # TODO: re-enable when this will have been fixed upstream.
+    test.runNvim = false;
     plugins = {
-      telescope.enable = false;
+      telescope.enable = true;
 
       neorg = {
-        enable = false;
+        enable = true;
         modules."core.integrations.telescope".__empty = null;
       };
+    };
+  };
+
+  no-packages = {
+    # TODO: re-enable when this will have been fixed upstream.
+    test.runNvim = false;
+    plugins.neorg = {
+      enable = true;
+      neorgTelescopePackage = null;
     };
   };
 }

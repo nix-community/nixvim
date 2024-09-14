@@ -20,6 +20,11 @@ with lib;
       ];
     };
 
+    neorgTelescopePackage = lib.mkPackageOption pkgs [
+      "vimPlugins"
+      "neorg-telescope"
+    ] { nullable = true; };
+
     lazyLoading = helpers.defaultNullOpts.mkBool false '''';
 
     logger =
@@ -148,12 +153,18 @@ with lib;
           Telescope support for neorg (`core.integrations.telescope`) is enabled but the
           telescope plugin is not.
         '')
+        ++ (optional (telescopeSupport && (cfg.neorgTelescopePackage == null)) ''
+          Telescope support for neorg (`core.integrations.telescope`) is enabled but the
+          `neorgTelescopePackage` package is not set.
+        '')
         ++ (optional ((hasAttr "core.defaults" cfg.modules) && (!config.plugins.treesitter.enable)) ''
           Neorg's `core.defaults` module is enabled but `plugins.treesitter` is not.
           Treesitter is required when using the `core.defaults`.
         '');
 
-      extraPlugins = [ cfg.package ] ++ (optional telescopeSupport pkgs.vimPlugins.neorg-telescope);
+      extraPlugins = [
+        cfg.package
+      ] ++ (optional (telescopeSupport && cfg.neorgTelescopePackage != null) cfg.neorgTelescopePackage);
 
       extraConfigLua = ''
         require('neorg').setup(${helpers.toLuaObject setupOptions})
