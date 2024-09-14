@@ -20,6 +20,10 @@ in
       ];
     };
 
+    jdtLanguageServerPackage = lib.mkPackageOption pkgs "jdt-language-server" {
+      nullable = true;
+    };
+
     cmd = helpers.mkNullOrOption (types.listOf types.str) ''
       The command that starts the language server.
 
@@ -94,21 +98,11 @@ in
   config =
     let
       cmd =
-        if (cfg.cmd == null) then
-          let
-            data =
-              if (cfg.data == null) then
-                throw ''
-                  You have to either set the 'plugins.nvim-jdtls.data' or the 'plugins.nvim-jdtls.cmd'
-                  option.
-                ''
-              else
-                cfg.data;
-          in
-          [ (lib.getExe pkgs.jdt-language-server) ]
+        if (cfg.cmd == null && cfg.jdtLanguageServerPackage != null) then
+          [ (lib.getExe cfg.jdtLanguageServerPackage) ]
           ++ [
             "-data"
-            data
+            cfg.data
           ]
           ++ (optionals (cfg.configuration != null) [
             "-configuration"
@@ -125,9 +119,23 @@ in
       } // cfg.extraOptions;
     in
     mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = cfg.cmd != null || cfg.data != null;
+          message = "You have to either set the `plugins.nvim-jdtls.data` or the `plugins.nvim-jdtls.cmd` option.";
+        }
+        {
+          assertion = cfg.cmd == null -> cfg.jdtLanguageServerPackage != null;
+          message = ''
+            Nixvim (plugins.nvim-jdtls) You haven't defined a `cmd` or `jdtLanguageServerPackage`.
+
+            The default `cmd` requires `plugins.nvim-jdtls.jdtLanguageServerPackage` to be set.
+          '';
+        }
+      ];
       extraPlugins = [ cfg.package ];
 
-      extraPackages = [ pkgs.jdt-language-server ];
+      extraPackages = [ cfg.jdtLanguageServerPackage ];
 
       autoCmd = [
         {

@@ -3,7 +3,7 @@
   example = {
     plugins.nvim-jdtls = {
       enable = true;
-
+      jdtLanguageServerPackage = null;
       cmd = [
         "${pkgs.jdt-language-server}/bin/jdt-language-server"
         "-data"
