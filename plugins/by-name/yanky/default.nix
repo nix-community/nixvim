@@ -1,8 +1,8 @@
 {
   lib,
-  helpers,
   config,
-  pkgs,
+  helpers,
+  options,
   ...
 }:
 with lib;
@@ -347,11 +347,28 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
+    # TODO: Added 2024-09-14 remove after 24.11
+    plugins.sqlite-lua.enable = mkOverride 1490 true;
+    warnings =
+      optional
+        (cfg.settings.ring.storage == "sqlite" && options.plugins.sqlite-lua.enable.highestPrio == 1490)
+        ''
+          Nixvim (plugins.yanky) `sqlite-lua` automatic installation is deprecated.
+          Please use `plugins.sqlite-lua.enable`.
+        '';
+
     assertions = [
       {
         assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
         message = ''
           Nixvim (plugins.yanky): The telescope integration needs telescope to function as intended
+        '';
+      }
+      {
+        assertion = cfg.settings.ring.storage == "sqlite" -> config.plugins.sqlite-lua.enable;
+        message = ''
+          Nixvim (plugins.yanky): The sqlite storage backend needs `sqlite-lua` to function as intended.
+          You can enable it by setting `plugins.sqlite-lua.enable` to `true`.
         '';
       }
     ];
@@ -364,8 +381,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
         require('yanky').setup(${helpers.toLuaObject cfg.settings})
       end
     '';
-
-    extraPlugins = mkIf (cfg.settings.ring.storage == "sqlite") [ pkgs.vimPlugins.sqlite-lua ];
 
     plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "yank_history" ];
   };

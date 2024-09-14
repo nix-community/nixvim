@@ -63,6 +63,7 @@
     test.runNvim = false;
 
     plugins = {
+      sqlite-lua.enable = true;
       telescope.enable = true;
 
       yanky = {
