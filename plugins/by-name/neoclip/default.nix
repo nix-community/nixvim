@@ -1,7 +1,8 @@
 {
   lib,
+  config,
   helpers,
-  pkgs,
+  options,
   ...
 }:
 with lib;
@@ -235,8 +236,30 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    extraPlugins = mkIf (
-      isBool cfg.settings.enable_persistent_history && cfg.settings.enable_persistent_history
-    ) [ pkgs.vimPlugins.sqlite-lua ];
+    # TODO: added 2024-09-14 remove after 24.11
+    plugins.sqlite-lua.enable = mkOverride 1490 true;
+    warnings =
+      optional
+        (
+          isBool cfg.settings.enable_persistent_history
+          && cfg.settings.enable_persistent_history
+          && options.plugins.sqlite-lua.enable.highestPrio == 1490
+        )
+        ''
+          Nixvim (plugins.neoclip) `sqlite-lua` automatic installation is deprecated.
+          Please use `plugins.sqlite-lua.enable`.
+        '';
+
+    assertions = [
+      {
+        assertion =
+          isBool cfg.settings.enable_persistent_history && cfg.settings.enable_persistent_history
+          -> config.plugins.sqlite-lua.enable;
+        message = ''
+          Nixvim (plugins.neoclip): The persistent history sqlite storage backend needs `sqlite-lua` to function as intended.
+          You can enable it by setting `plugins.sqlite-lua.enable` to `true`.
+        '';
+      }
+    ];
   };
 }

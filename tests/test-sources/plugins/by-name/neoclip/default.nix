@@ -8,11 +8,13 @@
     # re-enable when sqlite fixed
     test.runNvim = false;
 
-    plugins.neoclip = {
-      enable = true;
+    plugins = {
+      sqlite-lua.enable = true;
+      neoclip = {
+        enable = true;
 
-      # This triggers the addition of `pkgs.vimPlugins.sqlite-lua` to `extraPlugins`
-      settings.enable_persistent_history = true;
+        settings.enable_persistent_history = true;
+      };
     };
   };
 
