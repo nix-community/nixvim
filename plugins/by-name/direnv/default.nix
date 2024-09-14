@@ -10,7 +10,6 @@ helpers.vim-plugin.mkVimPlugin {
   originalName = "direnv.vim";
   package = "direnv-vim";
   globalPrefix = "direnv_";
-  extraPackages = [ pkgs.direnv ];
 
   maintainers = [ helpers.maintainers.alisonjenkins ];
 
@@ -35,5 +34,15 @@ helpers.vim-plugin.mkVimPlugin {
     direnv_silent_load = helpers.defaultNullOpts.mkFlagInt 1 ''
       Stop echoing output from Direnv command.
     '';
+  };
+
+  extraOptions = {
+    direnvPackage = lib.mkPackageOption pkgs "direnv" {
+      nullable = true;
+    };
+  };
+
+  extraConfig = cfg: {
+    extraPackages = [ cfg.direnvPackage ];
   };
 }

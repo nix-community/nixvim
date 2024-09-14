@@ -14,4 +14,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.direnv = {
+      enable = true;
+      direnvPackage = null;
+    };
+  };
 }
