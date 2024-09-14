@@ -10,9 +10,6 @@ helpers.vim-plugin.mkVimPlugin {
   originalName = "typst.vim";
   globalPrefix = "typst_";
 
-  # Add the typst compiler to nixvim packages
-  extraPackages = [ pkgs.typst ];
-
   maintainers = [ maintainers.GaetanLepage ];
 
   # TODO introduced 2024-02-20: remove 2024-04-20
@@ -25,6 +22,11 @@ helpers.vim-plugin.mkVimPlugin {
   ];
 
   extraOptions = {
+    # Add the typst compiler to nixvim packages
+    typstPackage = lib.mkPackageOption pkgs "typst" {
+      nullable = true;
+    };
+
     keymaps = {
       silent = mkOption {
         type = types.bool;
@@ -37,6 +39,8 @@ helpers.vim-plugin.mkVimPlugin {
   };
 
   extraConfig = cfg: {
+    extraPackages = [ cfg.typstPackage ];
+
     keymaps =
       with cfg.keymaps;
       helpers.keymaps.mkKeymaps

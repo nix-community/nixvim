@@ -20,4 +20,11 @@
       };
     };
   };
+
+  no-packages = {
+    plugins.typst-vim = {
+      enable = true;
+      typstPackage = null;
+    };
+  };
 }
