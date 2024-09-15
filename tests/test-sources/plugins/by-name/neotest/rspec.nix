@@ -1,5 +1,8 @@
+{ lib, pkgs, ... }:
 {
-  defaults = {
+  # TODO: added 2024-09-15
+  # TODO: Re-enable when upstream builds in darwin sandbox
+  defaults = lib.mkIf pkgs.stdenv.isLinux {
     plugins = {
       treesitter.enable = true;
       neotest = {

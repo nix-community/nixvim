@@ -1,9 +1,14 @@
+{ lib, pkgs, ... }:
 {
-  empty = {
+  # TODO: added 2024-09-15
+  # TODO: Re-enable when upstream builds in darwin sandbox
+  example = lib.mkIf pkgs.stdenv.isLinux {
     plugins.neotest.enable = true;
   };
 
-  all-adapters = {
+  # TODO: added 2024-09-15
+  # TODO: Re-enable when upstream builds in darwin sandbox
+  all-adapters = lib.mkIf pkgs.stdenv.isLinux {
     plugins = {
       treesitter.enable = true;
       neotest = {
@@ -43,7 +48,9 @@
     };
   };
 
-  defaults = {
+  # TODO: added 2024-09-15
+  # TODO: Re-enable when upstream builds in darwin sandbox
+  defaults = lib.mkIf pkgs.stdenv.isLinux {
     plugins.neotest = {
       enable = true;
 
