@@ -1,12 +1,12 @@
 {
   lib,
-  evaluatedNixvim,
+  nixvimConfiguration,
   linkFarmFromDrvs,
   runCommandNoCCLocal,
 }:
 let
   by-name = ../plugins/by-name;
-  options = lib.collect lib.isOption evaluatedNixvim.options;
+  options = lib.collect lib.isOption nixvimConfiguration.options;
 
   # Option namespaces that we allow by-name plugins to declare
   knownPluginNamespaces = [
@@ -137,7 +137,7 @@ linkFarmFromDrvs "plugins-by-name" [
       ];
 
       passthru = {
-        inherit evaluatedNixvim;
+        inherit nixvimConfiguration;
       };
     }
     ''
@@ -172,7 +172,7 @@ linkFarmFromDrvs "plugins-by-name" [
       ];
 
       passthru = {
-        inherit evaluatedNixvim;
+        inherit nixvimConfiguration;
       };
     }
     ''

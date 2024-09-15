@@ -7,15 +7,11 @@
       system,
       helpers,
       makeNixvimWithModule,
+      self',
       ...
     }:
     let
-      evaluatedNixvim = helpers.modules.evalNixvim {
-        extraSpecialArgs = {
-          defaultPkgs = pkgs;
-        };
-        check = false;
-      };
+      inherit (self'.legacyPackages) nixvimConfiguration;
     in
     {
       checks = {
@@ -50,11 +46,11 @@
 
         maintainers = import ../tests/maintainers.nix { inherit pkgs; };
 
-        plugins-by-name = pkgs.callPackage ../tests/plugins-by-name.nix { inherit evaluatedNixvim; };
+        plugins-by-name = pkgs.callPackage ../tests/plugins-by-name.nix { inherit nixvimConfiguration; };
 
         generated = pkgs.callPackage ../tests/generated.nix { };
 
-        package-options = pkgs.callPackage ../tests/package-options.nix { inherit evaluatedNixvim; };
+        package-options = pkgs.callPackage ../tests/package-options.nix { inherit nixvimConfiguration; };
       } // import ../tests { inherit pkgs pkgsUnfree helpers; };
     };
 }

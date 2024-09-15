@@ -1,7 +1,7 @@
 # This test ensures "package" options use a "literalExpression" in their defaultText
 # I.e. it validates `lib.mkPackageOption` was used to build the package options.
 {
-  evaluatedNixvim,
+  nixvimConfiguration,
   lib,
   runCommandNoCCLocal,
 }:
@@ -22,7 +22,7 @@ let
 
   # This doesn't collect any submodule sub-options,
   # but that's fine since most of our "package" options are in the top level module eval
-  options = lib.collect isOption evaluatedNixvim.options;
+  options = lib.collect isOption nixvimConfiguration.options;
 
   # All visible non-sub options that default to a derivation
   drvOptions = filter (
@@ -51,7 +51,7 @@ runCommandNoCCLocal "validate-package-options"
 
     # Passthroughs for debugging purposes
     passthru = {
-      inherit evaluatedNixvim drvOptions badOptions;
+      inherit nixvimConfiguration drvOptions badOptions;
     };
 
     # Error strings to print
@@ -60,7 +60,7 @@ runCommandNoCCLocal "validate-package-options"
         # A little hack to get the flake's source in the nix store
         # We will use this to make the option declaration sources more readable
         src = removeSuffix "modules/top-level/output.nix" (
-          head evaluatedNixvim.options.package.declarations
+          head nixvimConfiguration.options.package.declarations
         );
       in
       map (
