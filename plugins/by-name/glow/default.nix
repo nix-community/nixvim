@@ -1,10 +1,12 @@
 {
   lib,
-  helpers,
   pkgs,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "glow";
   originalName = "glow.nvim";
   package = "glow-nvim";
@@ -12,7 +14,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.getchoo ];
 
   settingsOptions = {
-    glow_path = helpers.defaultNullOpts.mkStr (helpers.mkRaw "vim.fn.exepath('glow')") ''
+    glow_path = defaultNullOpts.mkStr (lib.nixvim.mkRaw "vim.fn.exepath('glow')") ''
       Path to `glow` binary.
 
       If null or `""`, `glow` in your `$PATH` with be used if available.
@@ -20,13 +22,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
       Using `glowPackage` is the recommended way to make `glow` available in your `$PATH`.
     '';
 
-    install_path = helpers.defaultNullOpts.mkStr "~/.local/bin" ''
+    install_path = defaultNullOpts.mkStr "~/.local/bin" ''
       Path for installing `glow` binary if one is not found at `glow_path` or in your `$PATH`.
 
       Consider using `glowPackage` instead.
     '';
 
-    border = helpers.defaultNullOpts.mkEnumFirstDefault [
+    border = defaultNullOpts.mkEnumFirstDefault [
       "shadow"
       "none"
       "double"
@@ -35,28 +37,28 @@ helpers.neovim-plugin.mkNeovimPlugin {
       "single"
     ] "Style of the floating window's border.";
 
-    style = helpers.defaultNullOpts.mkEnum [
+    style = defaultNullOpts.mkEnum [
       "dark"
       "light"
-    ] (helpers.mkRaw "vim.opt.background") "Glow style.";
+    ] (lib.nixvim.mkRaw "vim.opt.background") "Glow style.";
 
-    pager = helpers.defaultNullOpts.mkBool false ''
+    pager = defaultNullOpts.mkBool false ''
       Display output in a pager style.
     '';
 
-    width = helpers.defaultNullOpts.mkInt 100 ''
+    width = defaultNullOpts.mkInt 100 ''
       Width of the floating window.
     '';
 
-    height = helpers.defaultNullOpts.mkInt 100 ''
+    height = defaultNullOpts.mkInt 100 ''
       Height of the floating window.
     '';
 
-    width_ratio = helpers.defaultNullOpts.mkNum 0.7 ''
+    width_ratio = defaultNullOpts.mkNum 0.7 ''
       Maximum width of the floating window relative to the window size.
     '';
 
-    height_ratio = helpers.defaultNullOpts.mkNum 0.7 ''
+    height_ratio = defaultNullOpts.mkNum 0.7 ''
       Maximum height of the floating window relative to the window size.
     '';
   };
