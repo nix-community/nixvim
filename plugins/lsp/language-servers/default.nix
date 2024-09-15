@@ -256,12 +256,20 @@ let
     }
     {
       name = "idris2-lsp";
-      description = "Idris 2 Language Server";
+      description = ''
+        Idris 2 Language Server.
+        Enabling this also enables the required `idris2` plugin.
+      '';
       serverName = "idris2_lsp";
       package = [
         "idris2Packages"
         "idris2Lsp"
       ];
+      extraConfig =
+        cfg:
+        mkIf cfg.enable {
+          plugins.idris2.enable = lib.mkDefault true;
+        };
     }
     {
       name = "intelephense";
