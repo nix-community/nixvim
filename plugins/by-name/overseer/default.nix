@@ -14,9 +14,11 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   settingsOptions = {
-    strategy = defaultNullOpts.mkStr "terminal" ''
-      Default task strategy.
-    '';
+    strategy =
+      defaultNullOpts.mkNullableWithRaw (with types; either str (attrsOf anything)) "terminal"
+        ''
+          Default task strategy.
+        '';
 
     templates = defaultNullOpts.mkListOf types.str [ "builtin" ] ''
       Template modules to load.

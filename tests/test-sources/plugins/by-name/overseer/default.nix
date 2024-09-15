@@ -174,4 +174,21 @@
       };
     };
   };
+
+  example = {
+    plugins.overseer = {
+      enable = true;
+
+      settings = {
+        strategy = {
+          __unkeyed-1 = "toggleterm";
+          use_shell = false;
+          close_on_exit = false;
+          quit_on_exit = "never";
+          open_on_start = true;
+          hidden = false;
+        };
+      };
+    };
+  };
 }
