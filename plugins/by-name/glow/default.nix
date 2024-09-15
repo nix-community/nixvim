@@ -37,10 +37,13 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       "single"
     ] "Style of the floating window's border.";
 
-    style = defaultNullOpts.mkEnum [
-      "dark"
-      "light"
-    ] (lib.nixvim.mkRaw "vim.opt.background") "Glow style.";
+    style = defaultNullOpts.mkNullable (
+      with lib.types;
+      either (maybeRaw str) (enum [
+        "dark"
+        "light"
+      ])
+    ) (lib.nixvim.mkRaw "vim.opt.background") "Glow style.";
 
     pager = defaultNullOpts.mkBool false ''
       Display output in a pager style.

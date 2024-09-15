@@ -23,4 +23,14 @@
       };
     };
   };
+
+  example = {
+    plugins.glow = {
+      enable = true;
+      settings = {
+        border = "single";
+        style = "/path/to/catppuccin.json";
+      };
+    };
+  };
 }
