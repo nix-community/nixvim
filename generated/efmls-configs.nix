@@ -81,6 +81,7 @@
     linter = {
       lang = "c";
       possible = [
+        "clang_format"
         "clang_tidy"
         "cppcheck"
         "cpplint"
@@ -135,6 +136,7 @@
     linter = {
       lang = "c++";
       possible = [
+        "clang_format"
         "clang_tidy"
         "clazy"
         "cppcheck"
