@@ -210,6 +210,7 @@
             texlab.enable = true;
             tflint.enable = true;
             tinymist.enable = true;
+            ts-ls.enable = true;
             typos-lsp.enable = true;
             typst-lsp.enable = true;
             vala-ls.enable = true;

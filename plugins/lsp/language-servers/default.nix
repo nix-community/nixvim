@@ -621,8 +621,9 @@ let
       settingsOptions = import ./tinymist-settings.nix { inherit lib helpers; };
     }
     {
-      name = "tsserver";
-      description = "tsserver for TypeScript";
+      name = "ts-ls";
+      serverName = "ts_ls";
+      description = "ts_ls for TypeScript";
       package = "typescript-language-server";
     }
     {
@@ -694,14 +695,26 @@ let
       description = "zls for Zig";
     }
   ];
+  renamedServers = {
+    tsserver = "ts-ls";
+  };
 in
 {
   imports =
     let
       mkLsp = import ./_mk-lsp.nix;
       lspModules = map mkLsp servers;
+      baseLspPath = [
+        "plugins"
+        "lsp"
+        "servers"
+      ];
+      renameModules = mapAttrsToList (
+        old: new: lib.mkRenamedOptionModule (baseLspPath ++ [ old ]) (baseLspPath ++ [ new ])
+      ) renamedServers;
     in
     lspModules
+    ++ renameModules
     ++ [
       ./ccls.nix
       ./efmls-configs.nix
