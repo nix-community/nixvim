@@ -37,49 +37,11 @@ jobs:
       - name: Get plugins info
         id: get_info
         run: |
-          # Use `nix eval` to get json arrays containing plugins available on the pushed commit, and the previous commit
-          OLD_PLUGINS=$(
-            nix eval 'github:${{ github.repository }}/${{ github.event.before }}#nixvimConfiguration.options.plugins' \
-              --apply 'builtins.attrNames' \
-              --json
-          )
-          NEW_PLUGINS=$(
-            nix eval '.#nixvimConfiguration.options.plugins' \
-              --apply 'builtins.attrNames' \
-              --json
-          )
-          OLD_COLORSCHEMES=$(
-            nix eval 'github:${{ github.repository }}/${{ github.event.before }}#nixvimConfiguration.options.colorschemes' \
-              --apply 'builtins.attrNames' \
-              --json
-          )
-          NEW_COLORSCHEMES=$(
-            nix eval '.#nixvimConfiguration.options.colorschemes' \
-              --apply 'builtins.attrNames' \
-              --json
-          )
-          PLUGIN_JSON="{ \"old\": $OLD_PLUGINS, \"new\": $NEW_PLUGINS }"
-          COLORSCHEME_JSON="{ \"old\": $OLD_COLORSCHEMES, \"new\": $NEW_COLORSCHEMES }"
-
-          # Collect added/removed plugins by subtracting old/new arrays
-          GROUPED="{
-            \"added\": {
-              \"plugin\": $(echo "$PLUGIN_JSON" | jq '.new-.old'),
-              \"colorscheme\": $(echo "$COLORSCHEME_JSON" | jq '.new-.old')
-            },
-            \"removed\": {
-              \"plugin\": $(echo "$PLUGIN_JSON" | jq '.old-.new'),
-              \"colorscheme\": $(echo "$COLORSCHEME_JSON" | jq '.old-.new')
-            }
-          }"
-
-          # Un-group types to `{ "added": [ { "type": "plugin", "name": "foo" } ], "removed": [] }`
-          GROUPED_BY_CHANGE=$(echo "$GROUPED" | jq -c 'map_values(to_entries | map(.key as $type | .value[] | { type: $type, name: . }))')
-          # TODO: When plugins are removed, try to detect renames heuristically
-
-          # Write to GITHUB_OUTPUT
-          JSON=$(echo "$GROUPED_BY_CHANGE" | jq -c 'to_entries | map(.key as $change | .value[] | . += { change: $change })')
-          echo "json=$JSON" >> $GITHUB_OUTPUT
+          # Run the `plugin-info` tool, printing the result to write to GITHUB_OUTPUT
+          echo "json=$(
+            nix run .#plugin-info -- \
+              --old 'github:${{ github.repository }}/${{ github.event.before }}'
+          )" >> $GITHUB_OUTPUT
 
       - name: Get PR info
         id: get_pr
@@ -136,7 +98,11 @@ jobs:
           # TODO: format as-per existing announcements
           # See available env-vars above
           msg="Hello, world!"
-          html_msg="Hello, <b>world!</b>"
+          html_msg="
+          <p>[💾 NEW PLUGIN]</p>
+          <p><a href=\"https://github.com/OXY2DEV/helpview.nvim\">helpview.nvim</a> support has been added !</p>
+          <p>Description:  Decorations for vimdoc/help files in Neovim.<br><a href=\"https://nix-community.github.io/nixvim/plugins/helpview/index.html\">Documentation</a><br><a href=\"https://github.com/nix-community/nixvim/pull/2259\">PR</a> by <a href=\"https://github.com/khaneliman\">khaneliman</a></p>
+          "
 
           # stdout
           echo "$msg"
