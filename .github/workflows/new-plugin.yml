@@ -1,7 +1,7 @@
 name: new-plugin
 on:
   push:
-    branch:
+    branches:
       - "main"
     paths:
       - "plugins/**"
