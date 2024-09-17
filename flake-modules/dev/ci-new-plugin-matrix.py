@@ -1,12 +1,17 @@
+import argparse
 import json
 import subprocess
 
 
 def get_plugins(flake: str) -> list[str]:
-    # TODO: shorten line length so we can keep flake8 E501
     expr = (
-        "x: with builtins; listToAttrs (map (name: { inherit name; value = attrNames x."
-        '${name}; }) [ "plugins" "colorschemes" ])'
+        'x: '
+        'with builtins; '
+        'listToAttrs ('
+        '  map'
+        '    (name: { inherit name; value = attrNames x.${name}; })'
+        '    [ "plugins" "colorschemes" ]'
+        ')'
     )
     cmd = [
         "nix",
@@ -36,8 +41,10 @@ def main(args) -> None:
         },
     }
 
-    # Flatten the above dict into a list of entries; each with a 'name', 'namespace', & 'action' key
-    # TODO: add additional metadata to each entry, such as the `originalName`, `pkg.meta.description`, etc
+    # Flatten the above dict into a list of entries; each with a 'name',
+    # 'namespace', & 'action' key
+    # TODO: add additional metadata to each entry, such as the `originalName`,
+    # `pkg.meta.description`, etc
     plugin_entries = [
         {"name": name, "namespace": namespace, "action": action}
         for action, namespaces in plugin_diff.items()
@@ -58,8 +65,14 @@ def main(args) -> None:
 
 if __name__ == "__main__":
     # FIXME: get args from argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('old')
+    parser.add_argument('--compact', '-c')
     args = {
-        "old": "github:nix-community/nixvim/336ba155ffcb20902b93873ad84527a833f57dc8",
+        "old": (
+            "github:nix-community/nixvim/"
+            "336ba155ffcb20902b93873ad84527a833f57dc8"
+        ),
         "compact": True,
     }
     main(args)
