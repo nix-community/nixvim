@@ -40,12 +40,13 @@ jobs:
           # Run the `plugin-info` tool, printing the result to write to GITHUB_OUTPUT
           echo "json=$(
             nix run .#plugin-info -- \
-              --old 'github:${{ github.repository }}/${{ github.event.before }}'
+              -c \
+              'github:${{ github.repository }}/${{ github.event.before }}'
           )" >> $GITHUB_OUTPUT
 
       - name: Get PR info
         id: get_pr
-        if: steps.get_info.outputs.json != '[]'
+        if: steps.get_info.outputs.json != '{}'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -71,13 +72,15 @@ jobs:
     name: Send matrix message
     runs-on: ubuntu-latest
     needs: setup
+    if: ${{ fromJSON(needs.setup.outputs.plugins).removed == [] && fromJSON(needs.setup.outputs.plugins).added != [] }}
     strategy:
       matrix:
-        plugins: ${{ fromJSON(needs.setup.outputs.plugins) }}
+        added: ${{ fromJSON(needs.setup.outputs.plugins).added }}
     env:
-      name: ${{ matrix.plugins.name }}
-      type: ${{ matrix.plugins.type }}
-      change: ${{ matrix.plugins.change }}
+      name: ${{ matrix.added.name }}
+      plain: ${{ matrix.added.plain }}
+      html: ${{ matrix.added.html }}
+      markdown: ${{ matrix.added.markdown }}
       pr_number: ${{ needs.setup.outputs.pr_number }}
       pr_url: ${{ needs.setupt_pr.outputs.pr_url }}
       pr_author_name: ${{ needs.setupt_pr.outputs.pr_author_name }}
@@ -98,18 +101,37 @@ jobs:
           # TODO: format as-per existing announcements
           # See available env-vars above
           msg="Hello, world!"
-          html_msg="
-          <p>[💾 NEW PLUGIN]</p>
-          <p><a href=\"https://github.com/OXY2DEV/helpview.nvim\">helpview.nvim</a> support has been added !</p>
-          <p>Description:  Decorations for vimdoc/help files in Neovim.<br><a href=\"https://nix-community.github.io/nixvim/plugins/helpview/index.html\">Documentation</a><br><a href=\"https://github.com/nix-community/nixvim/pull/2259\">PR</a> by <a href=\"https://github.com/khaneliman\">khaneliman</a></p>
-          "
 
           # stdout
-          echo "$msg"
+          echo "$plain"
 
           # markdown summary
-          echo "$html_msg" >> $GITHUG_STEP_SUMMARY
+          echo "$markdown" >> $GITHUG_STEP_SUMMARY
 
           # matrix message
-          matrix-msg "$msg" "$html_msg"
+          matrix-msg "$plain" "$html"
           # TODO: update stdout/step_summary with msg success/failure
+
+  report:
+    name: Report removed plugins
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ fromJSON(needs.setup.outputs.plugins).removed != [] }}
+    env:
+      json: ${{ needs.setup.outputs.plugins }}
+      pr_number: ${{ needs.setup.outputs.pr_number }}
+      pr_url: ${{ needs.setupt_pr.outputs.pr_url }}
+      pr_author_name: ${{ needs.setupt_pr.outputs.pr_author_name }}
+      pr_author_url: ${{ needs.setupt_pr.outputs.pr_author_url }}
+
+    steps:
+      - name: Comment on PR
+        if: ${{ needs.setup.outputs.pr_number }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BODY: |
+            Hi from new-plugin workflow!
+        run: |
+          gh pr comment '${{ needs.setup.outputs.pr_number }}' \
+            --repo '${{ github.repository }}' \
+            --body "$BODY"

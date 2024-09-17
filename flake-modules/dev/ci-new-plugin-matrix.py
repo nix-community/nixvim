@@ -1,16 +1,32 @@
 import argparse
+import enum
 import json
 import re
 import subprocess
 
+# TODO: use this example as a template
+html_msg = """
+<p>[💾 NEW PLUGIN]</p>
+<p><a href="https://github.com/OXY2DEV/helpview.nvim">helpview.nvim</a> support has been added !</p>
+<p>Description:  Decorations for vimdoc/help files in Neovim.<br><a href="https://nix-community.github.io/nixvim/plugins/helpview/index.html">Documentation</a><br><a href="https://github.com/nix-community/nixvim/pull/2259">PR</a> by <a href="https://github.com/khaneliman">khaneliman</a></p>
+"""
 
+
+class Format(enum.Enum):
+    PLAIN = "plain"
+    HTML = "html"
+    MARKDOWN = "markdown"
+
+
+# Gets a list of plugins that exist in the flake.
+# Grouped as "plugins" and "colorschemes"
 def get_plugins(flake: str) -> list[str]:
     expr = (
-        "x: "
+        "options: "
         "with builtins; "
         "listToAttrs ("
         "  map"
-        "    (name: { inherit name; value = attrNames x.${name}; })"
+        "    (name: { inherit name; value = attrNames options.${name}; })"
         '    [ "plugins" "colorschemes" ]'
         ")"
     )
@@ -25,6 +41,16 @@ def get_plugins(flake: str) -> list[str]:
     out = subprocess.check_output(cmd)
     # Parse as json, converting the lists to sets
     return {k: set(v) for k, v in json.loads(out).items()}
+
+
+def render_added_plugin(plugin: dict, format: Format) -> str:
+    match format:
+        case Format.PLAIN:
+            return f"{plugin['name']} was added!"
+        case Format.HTML:
+            return f"<code>{plugin['name']}</code> was added!"
+        case Format.MARKDOWN:
+            return f"`{plugin['name']}` was added!"
 
 
 def main(args) -> None:
@@ -46,17 +72,29 @@ def main(args) -> None:
     # each with 'name' and 'namespace' keys
     # TODO: add additional metadata to each entry, such as the `originalName`,
     # `pkg.meta.description`, etc
+    # Maybe we can use a `Plugin` class for this?
     plugin_entries = {
-        action: {"name": name, "namespace": namespace}
+        action: [
+            {"name": name, "namespace": namespace}
+            for namespace, plugins in namespaces.items()
+            for name in plugins
+        ]
         for action, namespaces in plugin_diff.items()
-        for namespace, plugins in namespaces.items()
-        for name in plugins
     }
 
-    # Unless `--raw`, we should produce formatted message text
-    if not args.raw:
-        # TODO: convert entries to message strings
-        plugin_entries = plugin_entries
+    # Unless `--raw`, we should produce formatted text for added plugins
+    if not args.raw and "added" in plugin_entries:
+        plugin_entries.update(
+            added=[
+                {
+                    "name": plugin["name"],
+                    "plain": render_added_plugin(plugin, Format.PLAIN),
+                    "html": render_added_plugin(plugin, Format.HTML),
+                    "markdown": render_added_plugin(plugin, Format.MARKDOWN)
+                }
+                for plugin in plugin_entries["added"]
+            ]
+        )
 
     # Print json for use in CI matrix
     print(
@@ -76,7 +114,7 @@ def flakeref(arg):
     default_repo = "nix-community/nixvim"
     sha_rxp = re.compile(r"^[A-Fa-f0-9]{6,40}$")
     repo_rxp = re.compile(
-        r"^(?P<protocol>[^:/]+:)?(?P<repo>(:?[^/]+)/(:?[^/]+))(?P<sha>/[A-Fa-f0-9]{6,40})?$"  # noqa: E501
+        r"^(?P<protocol>[^:/]+:)?(?P<repo>(:?[^/]+)/(:?[^/]+))(?P<sha>/[A-Fa-f0-9]{6,40})?$"
     )
     if sha_rxp.match(arg):
         return f"{default_protocol}{default_repo}/{arg}"
@@ -92,9 +130,7 @@ def flakeref(arg):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="ci-new-plugin-matrix",
-        description=(
-            "Generate a JSON matrix for use in CI, " "describing newly added plugins."
-        ),
+        description="Generate a JSON matrix for use in CI, describing newly added plugins.",
     )
     parser.add_argument(
         "old",
