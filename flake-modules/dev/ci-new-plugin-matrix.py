@@ -232,7 +232,7 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
     name = plugin["name"]
     namespace = plugin["namespace"]
     kind = namespace[:-1]
-    plugin_url = "TODO"  # TODO
+    plugin_url = plugin["url"]
     docs_url = f"https://nix-community.github.io/nixvim/{namespace}/{name}/index.html"
 
     match format:
@@ -240,8 +240,12 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
             return (
                 f"[{icons[kind]} NEW {kind.upper()}]\n\n"
                 f"{name} support has been added!\n\n"
-                # TODO: f"Description: {plugin_description}"
-                f"URL: {plugin_url}"
+                + (
+                    f"Description: {desc}\n"
+                    if (desc := plugin.get("description"))
+                    else ""
+                )
+                + f"URL: {plugin_url}"
                 f"Docs: {docs_url}\n"
                 + (
                     f"PR #{pr['number']} by {pr['author_name']}: {pr['url']}\n"
@@ -255,8 +259,12 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
                 f"<p>&#91;{icons[kind]} NEW {kind.upper()}&#93;</p>\n"
                 f'<p><a href="{plugin_url}">{name}</a> support has been added!</p>\n'
                 "<p>\n"
-                # TODO: f"Description: {plugin_description}<br>\n"
-                f'<a href="{docs_url}>Documentation</a>\n'
+                + (
+                    f"Description: {desc}<br>\n"
+                    if (desc := plugin.get("description"))
+                    else ""
+                )
+                + f'<a href="{docs_url}>Documentation</a>\n'
                 + (
                     f'<br><a href="{pr['url']}>PR &#35;{pr['number']}</a> by <a href="{pr['author_url']}">{pr['author_name']}</a>\n'
                     if pr
@@ -268,8 +276,12 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
             return (
                 f"\\[{icons[kind]} NEW {kind.upper()}\\]\n\n"
                 f"[{name}]({plugin_url}) support has been added!\n\n"
-                # TODO: f"Description: {plugin_description}\n"
-                f"[Documentation]({docs_url})\n"
+                + (
+                    f"Description: {desc}\n"
+                    if (desc := plugin.get("description"))
+                    else ""
+                )
+                + f"[Documentation]({docs_url})\n"
                 + (
                     f'[PR \\#{pr['number']}]({pr['url']}) by [{pr['author_name']}]({pr['author_url']})\n'
                     if pr
