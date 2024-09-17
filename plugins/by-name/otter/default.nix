@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "otter.nvim";
   package = "otter-nvim";
 
-  maintainers = [ lib.maintainers.perchun ];
+  maintainers = [ ];
 
   imports = [
     # TODO: introduced 2024-06-29; remove after 24.11
