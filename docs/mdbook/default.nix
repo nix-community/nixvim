@@ -63,13 +63,13 @@ let
           maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
         in
         # Make sure this path has a valid info attrset
-        if info ? file && info ? description && info ? url then
+        if info._type or null == "nixvimInfo" then
           "# ${lib.last path}\n\n"
-          + (lib.optionalString (info.url != null) "**URL:** [${info.url}](${info.url})\n\n")
+          + (lib.optionalString (info.url or null != null) "**URL:** [${info.url}](${info.url})\n\n")
           + (lib.optionalString (
             maintainers != [ ]
           ) "**Maintainers:** ${lib.concatStringsSep ", " maintainersNames}\n\n")
-          + lib.optionalString (info.description != null) ''
+          + lib.optionalString (info.description or null != null) ''
 
             ---
 

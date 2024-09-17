@@ -134,7 +134,7 @@ def get_plugin_meta(plugins: list[dict]) -> list[dict]:
         "  package = cfg.options.${namespace}.${name}.package.default; "
         "in {"
         "  inherit name namespace;"
-        "  inherit (nixvimInfo) url;"
+        "  inherit (nixvimInfo) originalName url;"
         '  description = package.meta.description or null;'
         "}) plugins"
     )
@@ -230,6 +230,7 @@ def get_pr(sha: str, repo: str, token: str = None) -> dict:
 
 def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
     name = plugin["name"]
+    display_name = plugin["originalName"]
     namespace = plugin["namespace"]
     kind = namespace[:-1]
     plugin_url = plugin["url"]
@@ -239,7 +240,7 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
         case Format.PLAIN:
             return (
                 f"[{icons[kind]} NEW {kind.upper()}]\n\n"
-                f"{name} support has been added!\n\n"
+                f"{display_name} support has been added!\n\n"
                 + (
                     f"Description: {desc}\n"
                     if (desc := plugin.get("description"))
@@ -257,7 +258,7 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
             # TODO: render from the markdown below?
             return (
                 f"<p>&#91;{icons[kind]} NEW {kind.upper()}&#93;</p>\n"
-                f'<p><a href="{plugin_url}">{name}</a> support has been added!</p>\n'
+                f'<p><a href="{plugin_url}">{display_name}</a> support has been added!</p>\n'
                 "<p>\n"
                 + (
                     f"Description: {desc}<br>\n"
@@ -275,7 +276,7 @@ def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
         case Format.MARKDOWN:
             return (
                 f"\\[{icons[kind]} NEW {kind.upper()}\\]\n\n"
-                f"[{name}]({plugin_url}) support has been added!\n\n"
+                f"[{display_name}]({plugin_url}) support has been added!\n\n"
                 + (
                     f"Description: {desc}\n"
                     if (desc := plugin.get("description"))
