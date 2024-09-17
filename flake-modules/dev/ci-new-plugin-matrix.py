@@ -130,7 +130,7 @@ def get_plugin_meta(plugins: list[dict]) -> list[dict]:
         '  namespaces = ["plugins" "colorschemes"];'
         "in "
         "map ({name, namespace}: let "
-        "  nixvimInfo = cfg.config.meta.nixvimInfo.${namespace}.${name} or {};"
+        "  nixvimInfo = cfg.config.meta.nixvimInfo.${namespace}.${name};"
         "  package = cfg.options.${namespace}.${name}.package.default; "
         "in {"
         "  inherit name namespace;"
