@@ -64,7 +64,7 @@ in
     };
 
     configuration = mkOption {
-      type = types.nullOr types.str;
+      type = helpers.nixvimTypes.maybeRaw (with types; nullOr str);
       default = null;
       example = "/home/YOUR_USERNAME/.cache/jdtls/config";
       description = "Path to the configuration file.";
