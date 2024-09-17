@@ -69,6 +69,7 @@ jobs:
 
           # markdown summary
           echo "$markdown" >> $GITHUG_STEP_SUMMARY
+          echo -e "\n---\n" >> $GITHUG_STEP_SUMMARY
 
           # matrix message
           if matrix-msg "$plain" "$html"
