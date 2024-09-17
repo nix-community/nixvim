@@ -1,8 +1,12 @@
 import argparse
 import enum
 import json
+import os
 import re
 import subprocess
+from sys import stderr
+
+import requests
 
 
 class Format(enum.Enum):
@@ -46,15 +50,31 @@ def main(args) -> None:
         for action, namespaces in plugin_diff.items()
     }
 
+    # Only lookup PR if something was added or removed
+    if plugin_entries["added"] or plugin_entries["removed"]:
+        if pr := get_pr(
+            sha=args.head,
+            # TODO: should this be configurable?
+            repo="nix-community/nixvim",
+            token=args.token,
+        ):
+            plugin_entries["pr"] = {
+                "number": pr["number"],
+                "url": pr["html_url"],
+                "author_name": pr["user"]["login"],
+                "author_url": pr["user"]["html_url"],
+            }
+
     # Unless `--raw`, we should produce formatted text for added plugins
     if not args.raw and "added" in plugin_entries:
+        pr = plugin_entries.get("pr") or None
         plugin_entries.update(
             added=[
                 {
                     "name": plugin["name"],
-                    "plain": render_added_plugin(plugin, Format.PLAIN),
-                    "html": render_added_plugin(plugin, Format.HTML),
-                    "markdown": render_added_plugin(plugin, Format.MARKDOWN),
+                    "plain": render_added_plugin(plugin, pr, Format.PLAIN),
+                    "html": render_added_plugin(plugin, pr, Format.HTML),
+                    "markdown": render_added_plugin(plugin, pr, Format.MARKDOWN),
                 }
                 for plugin in plugin_entries["added"]
             ]
@@ -96,7 +116,38 @@ def get_plugins(flake: str) -> list[str]:
     return {k: set(v) for k, v in json.loads(out).items()}
 
 
-def render_added_plugin(plugin: dict, format: Format) -> str:
+def get_head_sha() -> str:
+    return subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("ascii").strip()
+
+
+def get_pr(sha: str, repo: str, token: str = None) -> dict:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    res = requests.get(
+        url=f"https://api.github.com/repos/{repo}/commits/{sha}/pulls", headers=headers
+    )
+
+    if res.status_code != 200:
+        try:
+            message = res.json()["message"]
+        except requests.exceptions.JSONDecodeError:
+            message = res.text
+        # FIXME: Maybe we should panic and fail CI?
+        print(f"{message} (HTTP {res.status_code})", file=stderr)
+        return None
+
+    # If no matching PR exists, an empty list is returned
+    if data := res.json():
+        return data[0]
+    return None
+
+
+def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
     name = plugin["name"]
     namespace = plugin["namespace"]
     kind = namespace[:-1]
@@ -111,7 +162,11 @@ def render_added_plugin(plugin: dict, format: Format) -> str:
                 # TODO: f"Description: {plugin_description}"
                 f"URL: {plugin_url}"
                 f"Docs: {docs_url}\n"
-                # TODO: f"PR by {pr_author}: {pr_url}\n"
+                + (
+                    f"PR #{pr['number']} by {pr['author_name']}: {pr['url']}\n"
+                    if pr
+                    else "No PR\n"
+                )
             )
         case Format.HTML:
             # TODO: render from the markdown below?
@@ -120,9 +175,13 @@ def render_added_plugin(plugin: dict, format: Format) -> str:
                 f'<p><a href="{plugin_url}">{name}</a> support has been added!</p>\n'
                 "<p>\n"
                 # TODO: f"Description: {plugin_description}<br>\n"
-                f'<a href="{docs_url}>Documentation</a><br>\n'
-                # TODO: f'<a href="{pr_url}>PR</a> by <a href="https://github.com/{pr_author}">{pr_author}</a>\n'
-                "</p>\n"
+                f'<a href="{docs_url}>Documentation</a>\n'
+                + (
+                    f'<br><a href="{pr['url']}>PR &#35;{pr['number']}</a> by <a href="{pr['author_url']}">{pr['author_name']}</a>\n'
+                    if pr
+                    else "<br>No PR\n"
+                )
+                + "</p>\n"
             )
         case Format.MARKDOWN:
             return (
@@ -130,7 +189,11 @@ def render_added_plugin(plugin: dict, format: Format) -> str:
                 f"[{name}]({plugin_url}) support has been added!\n\n"
                 # TODO: f"Description: {plugin_description}\n"
                 f"[Documentation]({docs_url})\n"
-                # TODO: f'[PR]({pr_url}) by [{pr_author}](https://github.com/{pr_author})\n'
+                + (
+                    f'[PR \\#{pr['number']}]({pr['url']}) by [{pr['author_name']}]({pr['author_url']})\n'
+                    if pr
+                    else "No PR\n"
+                )
             )
 
 
@@ -166,6 +229,15 @@ if __name__ == "__main__":
         type=flakeref,
     )
     parser.add_argument(
+        "--head",
+        help="(optional) the current git commit, will default to using `git rev-parse HEAD`",
+    )
+    parser.add_argument(
+        "--github-token",
+        dest="token",
+        help="(optional) github token, the GITHUB_TOKEN environment variable is used as a fallback",
+    )
+    parser.add_argument(
         "--compact",
         "-c",
         help="produce compact json instead of prettifying",
@@ -177,4 +249,12 @@ if __name__ == "__main__":
         help="produce raw data instead of message strings",
         action="store_true",
     )
-    main(parser.parse_args())
+    args = parser.parse_args()
+
+    # Handle defaults lazily
+    if not args.token:
+        args.token = os.getenv("GITHUB_TOKEN")
+    if not args.head:
+        args.head = get_head_sha()
+
+    main(args)
