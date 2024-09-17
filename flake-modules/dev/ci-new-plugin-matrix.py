@@ -134,7 +134,8 @@ def get_plugin_meta(plugins: list[dict]) -> list[dict]:
         "  package = cfg.options.${namespace}.${name}.package.default; "
         "in {"
         "  inherit name namespace;"
-        "  inherit (nixvimInfo) originalName url;"
+        "  inherit (nixvimInfo) url;"
+        "  display_name = nixvimInfo.originalName or name;"
         '  description = package.meta.description or null;'
         "}) plugins"
     )
@@ -230,7 +231,7 @@ def get_pr(sha: str, repo: str, token: str = None) -> dict:
 
 def render_added_plugin(plugin: dict, pr: dict, format: Format) -> str:
     name = plugin["name"]
-    display_name = plugin["originalName"]
+    display_name = plugin["display_name"]
     namespace = plugin["namespace"]
     kind = namespace[:-1]
     plugin_url = plugin["url"]
