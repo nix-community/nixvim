@@ -4,13 +4,6 @@ import json
 import re
 import subprocess
 
-# TODO: use this example as a template
-html_msg = """
-<p>[💾 NEW PLUGIN]</p>
-<p><a href="https://github.com/OXY2DEV/helpview.nvim">helpview.nvim</a> support has been added !</p>
-<p>Description:  Decorations for vimdoc/help files in Neovim.<br><a href="https://nix-community.github.io/nixvim/plugins/helpview/index.html">Documentation</a><br><a href="https://github.com/nix-community/nixvim/pull/2259">PR</a> by <a href="https://github.com/khaneliman">khaneliman</a></p>
-"""
-
 
 class Format(enum.Enum):
     PLAIN = "plain"
@@ -18,39 +11,10 @@ class Format(enum.Enum):
     MARKDOWN = "markdown"
 
 
-# Gets a list of plugins that exist in the flake.
-# Grouped as "plugins" and "colorschemes"
-def get_plugins(flake: str) -> list[str]:
-    expr = (
-        "options: "
-        "with builtins; "
-        "listToAttrs ("
-        "  map"
-        "    (name: { inherit name; value = attrNames options.${name}; })"
-        '    [ "plugins" "colorschemes" ]'
-        ")"
-    )
-    cmd = [
-        "nix",
-        "eval",
-        f"{flake}#nixvimConfiguration.options",
-        "--apply",
-        expr,
-        "--json",
-    ]
-    out = subprocess.check_output(cmd)
-    # Parse as json, converting the lists to sets
-    return {k: set(v) for k, v in json.loads(out).items()}
-
-
-def render_added_plugin(plugin: dict, format: Format) -> str:
-    match format:
-        case Format.PLAIN:
-            return f"{plugin['name']} was added!"
-        case Format.HTML:
-            return f"<code>{plugin['name']}</code> was added!"
-        case Format.MARKDOWN:
-            return f"`{plugin['name']}` was added!"
+icons = {
+    "plugin": "💾",
+    "colorscheme": "🎨",
+}
 
 
 def main(args) -> None:
@@ -90,7 +54,7 @@ def main(args) -> None:
                     "name": plugin["name"],
                     "plain": render_added_plugin(plugin, Format.PLAIN),
                     "html": render_added_plugin(plugin, Format.HTML),
-                    "markdown": render_added_plugin(plugin, Format.MARKDOWN)
+                    "markdown": render_added_plugin(plugin, Format.MARKDOWN),
                 }
                 for plugin in plugin_entries["added"]
             ]
@@ -105,6 +69,69 @@ def main(args) -> None:
             sort_keys=(not args.compact),
         )
     )
+
+
+# Gets a list of plugins that exist in the flake.
+# Grouped as "plugins" and "colorschemes"
+def get_plugins(flake: str) -> list[str]:
+    expr = (
+        "options: "
+        "with builtins; "
+        "listToAttrs ("
+        "  map"
+        "    (name: { inherit name; value = attrNames options.${name}; })"
+        '    [ "plugins" "colorschemes" ]'
+        ")"
+    )
+    cmd = [
+        "nix",
+        "eval",
+        f"{flake}#nixvimConfiguration.options",
+        "--apply",
+        expr,
+        "--json",
+    ]
+    out = subprocess.check_output(cmd)
+    # Parse as json, converting the lists to sets
+    return {k: set(v) for k, v in json.loads(out).items()}
+
+
+def render_added_plugin(plugin: dict, format: Format) -> str:
+    name = plugin["name"]
+    namespace = plugin["namespace"]
+    kind = namespace[:-1]
+    plugin_url = "TODO"  # TODO
+    docs_url = f"https://nix-community.github.io/nixvim/{namespace}/{name}/index.html"
+
+    match format:
+        case Format.PLAIN:
+            return (
+                f"[{icons[kind]} NEW {kind.upper()}]\n\n"
+                f"{name} support has been added!\n\n"
+                # TODO: f"Description: {plugin_description}"
+                f"URL: {plugin_url}"
+                f"Docs: {docs_url}\n"
+                # TODO: f"PR by {pr_author}: {pr_url}\n"
+            )
+        case Format.HTML:
+            # TODO: render from the markdown below?
+            return (
+                f"<p>&#91;{icons[kind]} NEW {kind.upper()}&#93;</p>\n"
+                f'<p><a href="{plugin_url}">{name}</a> support has been added!</p>\n'
+                "<p>\n"
+                # TODO: f"Description: {plugin_description}<br>\n"
+                f'<a href="{docs_url}>Documentation</a><br>\n'
+                # TODO: f'<a href="{pr_url}>PR</a> by <a href="https://github.com/{pr_author}">{pr_author}</a>\n'
+                "</p>\n"
+            )
+        case Format.MARKDOWN:
+            return (
+                f"\\[{icons[kind]} NEW {kind.upper()}\\]\n\n"
+                f"[{name}]({plugin_url}) support has been added!\n\n"
+                # TODO: f"Description: {plugin_description}\n"
+                f"[Documentation]({docs_url})\n"
+                # TODO: f'[PR]({pr_url}) by [{pr_author}](https://github.com/{pr_author})\n'
+            )
 
 
 # Describes an argparse type that should represent a flakeref,
