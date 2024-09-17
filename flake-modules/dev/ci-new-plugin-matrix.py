@@ -65,6 +65,12 @@ def main(args) -> None:
                 "author_url": pr["user"]["html_url"],
             }
 
+    # Expand the added plugins with additional metadata from the flake
+    if "added" in plugin_entries:
+        print("About to add meta to added plugins")
+        plugin_entries["added"] = get_plugin_meta(plugin_entries["added"])
+        apply_fallback_descriptions(plugin_entries["added"], token=args.token)
+
     # Unless `--raw`, we should produce formatted text for added plugins
     if not args.raw and "added" in plugin_entries:
         pr = plugin_entries.get("pr") or None
@@ -116,10 +122,86 @@ def get_plugins(flake: str) -> list[str]:
     return {k: set(v) for k, v in json.loads(out).items()}
 
 
+# Map a list of plugin entries, populating them with additional metadata
+def get_plugin_meta(plugins: list[dict]) -> list[dict]:
+    expr = (
+        "cfg: "
+        "with builtins; "
+        "let "
+        # Assume the json won't include any double-single-quotes:
+        f" plugins = fromJSON ''{json.dumps(plugins, separators=(",", ":"))}'';"
+        '  namespaces = ["plugins" "colorschemes"];'
+        "in "
+        "map ({name, namespace}: let "
+        "  nixvimInfo = cfg.config.meta.nixvimInfo.${namespace}.${name} or {};"
+        "  package = cfg.options.${namespace}.${name}.package.default; "
+        "in {"
+        "  inherit name namespace;"
+        "  inherit (nixvimInfo) url;"
+        '  description = package.meta.description or null;'
+        "}) plugins"
+    )
+    cmd = [
+        "nix",
+        "eval",
+        ".#nixvimConfiguration",
+        "--apply",
+        expr,
+        "--json",
+    ]
+    out = subprocess.check_output(cmd)
+    return json.loads(out)
+
+
+# Walks the plugin list, fetching descriptions from github if missing
+def apply_fallback_descriptions(plugins: list[dict], token: str):
+    gh_rxp = re.compile(r"^https?://github.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)(?:[/#?].*)?$")
+    for plugin in plugins:
+        if plugin.get("description"):
+            continue
+        if m := gh_rxp.match(plugin["url"]):
+            plugin["description"] = (
+                get_github_description(
+                    owner=m.group("owner"), repo=m.group("repo"), token=token
+                )
+                or None
+            )
+            continue
+        plugin["description"] = None
+
+
+# TODO: extract the HTTP request logic into a shared function
+def get_github_description(owner: str, repo: str, token: str) -> str:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    res = requests.get(
+        url=f"https://api.github.com/repos/{owner}/{repo}", headers=headers
+    )
+
+    if res.status_code != 200:
+        try:
+            message = res.json()["message"]
+        except requests.exceptions.JSONDecodeError:
+            message = res.text
+        # FIXME: Maybe we should panic and fail CI?
+        print(f"{message} (HTTP {res.status_code})", file=stderr)
+        return None
+
+    if data := res.json():
+        return data["description"]
+    return None
+
+
 def get_head_sha() -> str:
     return subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("ascii").strip()
 
 
+# TODO: extract the HTTP request logic into a shared function
 def get_pr(sha: str, repo: str, token: str = None) -> dict:
     headers = {
         "Accept": "application/vnd.github+json",

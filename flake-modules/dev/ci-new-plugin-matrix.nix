@@ -8,6 +8,7 @@
         ];
         flakeIgnore = [
           "E501" # Line length
+          "W503" # Line break before binary operator
         ];
       } (builtins.readFile ./ci-new-plugin-matrix.py);
     };
