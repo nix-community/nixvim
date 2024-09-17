@@ -110,6 +110,10 @@ jobs:
           $(echo "$json" | jq -r '.removed[] | "- \(.)"')
           "
 
+          # Markdown summary
+          echo "$body" >> $GITHUG_STEP_SUMMARY
+
+          # PR comment
           gh pr comment "$num" \
             --repo '${{ github.repository }}' \
             --body "$body"
