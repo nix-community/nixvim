@@ -127,7 +127,6 @@ def get_plugin_meta(plugins: list[dict]) -> list[dict]:
         "let "
         # Assume the json won't include any double-single-quotes:
         f" plugins = fromJSON ''{json.dumps(plugins, separators=(",", ":"))}'';"
-        '  namespaces = ["plugins" "colorschemes"];'
         "in "
         "map ({name, namespace}: let "
         "  nixvimInfo = cfg.config.meta.nixvimInfo.${namespace}.${name};"
