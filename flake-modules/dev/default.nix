@@ -2,8 +2,8 @@
 {
   imports =
     [
+      ./ci-new-plugin-matrix.nix
       ./devshell.nix
-      ./plugin-info.nix
     ]
     ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule
     ++ lib.optional (inputs.treefmt-nix ? flakeModule) inputs.treefmt-nix.flakeModule;
