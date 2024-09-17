@@ -133,7 +133,7 @@ def get_plugin_meta(plugins: list[dict]) -> list[dict]:
         "  package = cfg.options.${namespace}.${name}.package.default; "
         "in {"
         "  inherit name namespace;"
-        "  inherit (nixvimInfo) url;"
+        "  url = nixvimInfo.url or package.meta.homepage or null;"
         "  display_name = nixvimInfo.originalName or name;"
         '  description = package.meta.description or null;'
         "}) plugins"
