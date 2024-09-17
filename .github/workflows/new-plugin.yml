@@ -52,10 +52,6 @@ jobs:
       plain: ${{ matrix.added.plain }}
       html: ${{ matrix.added.html }}
       markdown: ${{ matrix.added.markdown }}
-      pr_number: ${{ fromJSON(needs.setup.outputs.json).pr.number }}
-      pr_url: ${{ fromJSON(needs.setup.outputs.json).pr.url }}
-      pr_author_name: ${{ fromJSON(needs.setup.outputs.json).pr.author_name }}
-      pr_author_url: ${{ fromJSON(needs.setup.outputs.json).pr.author_url }}
 
     steps:
       - name: Install matrix-msg tool
@@ -68,11 +64,6 @@ jobs:
 
       - name: Send message and print summary
         run: |
-          # Message text; plain-text & html
-          # TODO: format as-per existing announcements
-          # See available env-vars above
-          msg="Hello, world!"
-
           # stdout
           echo "$plain"
 
@@ -80,8 +71,12 @@ jobs:
           echo "$markdown" >> $GITHUG_STEP_SUMMARY
 
           # matrix message
-          matrix-msg "$plain" "$html"
-          # TODO: update stdout/step_summary with msg success/failure
+          if matrix-msg "$plain" "$html"
+          then
+            echo "Matrix message sent successfully" >> $GITHUG_STEP_SUMMARY
+          else
+            echo "Matrix message failed" >> $GITHUG_STEP_SUMMARY
+          fi
 
   report:
     name: Report removed plugins
