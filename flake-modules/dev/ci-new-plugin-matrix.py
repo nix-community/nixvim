@@ -38,9 +38,6 @@ def main(args) -> None:
 
     # Flatten the above dict into a list of entries;
     # each with 'name' and 'namespace' keys
-    # TODO: add additional metadata to each entry, such as the `originalName`,
-    # `pkg.meta.description`, etc
-    # Maybe we can use a `Plugin` class for this?
     plugin_entries = {
         action: [
             {"name": name, "namespace": namespace}
@@ -155,7 +152,9 @@ def get_plugin_meta(plugins: list[dict]) -> list[dict]:
 
 # Walks the plugin list, fetching descriptions from github if missing
 def apply_fallback_descriptions(plugins: list[dict], token: str):
-    gh_rxp = re.compile(r"^https?://github.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)(?:[/#?].*)?$")
+    gh_rxp = re.compile(
+        r"^https?://github.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)(?:[/#?].*)?$"
+    )
     for plugin in plugins:
         if plugin.get("description"):
             continue
