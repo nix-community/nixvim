@@ -31,6 +31,6 @@ telescopeHelpers.mkExtension {
   };
 
   extraConfig = cfg: {
-    extraPackages = [ pkgs.manix ];
+    extraPackages = [ cfg.manixPackage ];
   };
 }
