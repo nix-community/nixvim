@@ -125,27 +125,98 @@ rec {
     end
   '';
 
+  /**
+    Convert the given String to a Lua [long literal].
+    For example, you could use this to safely pass a Vimscript string to the
+    `vim.cmd` function.
+
+    [long literal]: https://www.lua.org/manual/5.4/manual.html#3.1
+
+    # Examples
+
+    ```nix
+    nix-repl> toLuaLongLiteral "simple"
+    "[[simple]]"
+    ```
+
+    ```nix
+    nix-repl> toLuaLongLiteral "]]"
+    "[=[]]]=]"
+    ```
+
+    # Type
+
+    ```
+    toLuaLongLiteral :: String -> String
+    ```
+  */
+  toLuaLongLiteral =
+    string:
+    let
+      findTokens =
+        depth:
+        let
+          infix = lib.strings.replicate depth "=";
+          tokens.open = "[${infix}[";
+          tokens.close = "]${infix}]";
+        in
+        if lib.hasInfix tokens.close string then findTokens (depth + 1) else tokens;
+
+      tokens = findTokens 0;
+    in
+    tokens.open + string + tokens.close;
+
+  /**
+    Convert the given String into a Vimscript [:let-heredoc].
+    For example, you could use this to invoke [:lua].
+
+    [:let-heredoc]: https://neovim.io/doc/user/eval.html#%3Alet-heredoc
+    [:lua]: https://neovim.io/doc/user/lua.html#%3Alua-heredoc
+
+    # Examples
+
+    ```nix
+    toVimscriptHeredoc "simple"
+    => "<< EOF\nsimple\nEOF"
+    ```
+
+    ```nix
+    toVimscriptHeredoc "EOF"
+    => "<< EOFF\nEOF\nEOFF"
+    ```
+
+    # Type
+
+    ```
+    toVimscriptHeredoc :: String -> String
+    ```
+  */
+  toVimscriptHeredoc =
+    string:
+    let
+      findToken =
+        depth:
+        let
+          token = "EOF" + lib.strings.replicate depth "F";
+        in
+        if lib.hasInfix token string then findToken (depth + 1) else token;
+
+      token = findToken 0;
+    in
+    ''
+      << ${token}
+      ${string}
+      ${token}'';
+
   # Wrap Vimscript for using in lua,
   # but only if the string contains something other than whitespaces
-  # TODO: account for a possible ']]' in the string
   wrapVimscriptForLua =
-    string:
-    lib.optionalString (hasContent string) ''
-      vim.cmd([[
-      ${string}
-      ]])
-    '';
+    string: lib.optionalString (hasContent string) "vim.cmd(${toLuaLongLiteral string})";
 
   # Wrap lua script for using in Vimscript,
   # but only if the string contains something other than whitespaces
-  # TODO: account for a possible 'EOF' if the string
   wrapLuaForVimscript =
-    string:
-    lib.optionalString (hasContent string) ''
-      lua << EOF
-      ${string}
-      EOF
-    '';
+    string: lib.optionalString (hasContent string) "lua ${toVimscriptHeredoc string}";
 
   # Split a list into a several sub-list, each with a max-size of `size`
   groupListBySize =

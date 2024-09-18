@@ -374,6 +374,41 @@ let
         ];
       };
     };
+
+    testEscapeStringForLua = {
+      expr = lib.mapAttrs (_: helpers.utils.toLuaLongLiteral) {
+        simple = "simple";
+        depth-one = " ]] ";
+        depth-two = " ]] ]=] ";
+      };
+      expected = {
+        simple = "[[simple]]";
+        depth-one = "[=[ ]] ]=]";
+        depth-two = "[==[ ]] ]=] ]==]";
+      };
+    };
+
+    testEscapeStringForVimscript = {
+      expr = lib.mapAttrs (_: helpers.utils.toVimscriptHeredoc) {
+        simple = "simple";
+        depth-one = "EOF";
+        depth-two = "EOF EOFF";
+      };
+      expected = {
+        simple = ''
+          << EOF
+          simple
+          EOF'';
+        depth-one = ''
+          << EOFF
+          EOF
+          EOFF'';
+        depth-two = ''
+          << EOFFF
+          EOF EOFF
+          EOFFF'';
+      };
+    };
   };
 in
 if results == [ ] then
