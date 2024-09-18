@@ -28,4 +28,15 @@
       };
     };
   };
+
+  with-telescope = {
+    plugins = {
+      telescope.enable = true;
+
+      package-info = {
+        enable = true;
+        enableTelescope = true;
+      };
+    };
+  };
 }

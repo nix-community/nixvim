@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }:
 let
@@ -91,6 +92,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   extraOptions = {
+    enableTelescope = lib.mkEnableOption "the `package_info` telescope picker.";
+
     packageManagerPackage =
       lib.mkPackageOption pkgs
         [
@@ -104,5 +107,18 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         };
   };
 
-  extraConfig = cfg: { extraPackages = [ cfg.packageManagerPackage ]; };
+  extraConfig = cfg: {
+    assertions = [
+      {
+        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+        message = ''
+          Nixvim (plugins.package-info): The telescope integration needs telescope to function as intended.
+        '';
+      }
+    ];
+
+    extraPackages = [ cfg.packageManagerPackage ];
+
+    plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "package_info" ];
+  };
 }
