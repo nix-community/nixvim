@@ -10,13 +10,31 @@ let
       - `:PreviewQuery` to open the Query Editor (Nvim 0.10+)
     '';
   };
+  renamed = {
+    # Added 2024-09-17
+    surround = "vim-surround";
+  };
 in
 {
-  imports = lib.mapAttrsToList (
-    name:
-    lib.mkRemovedOptionModule [
-      "plugins"
-      name
-    ]
-  ) removed;
+
+  imports =
+    (lib.mapAttrsToList (
+      name:
+      lib.mkRemovedOptionModule [
+        "plugins"
+        name
+      ]
+    ) removed)
+    ++ (lib.mapAttrsToList (
+      old: new:
+      lib.mkRenamedOptionModule
+        [
+          "plugins"
+          old
+        ]
+        [
+          "plugins"
+          new
+        ]
+    ) renamed);
 }

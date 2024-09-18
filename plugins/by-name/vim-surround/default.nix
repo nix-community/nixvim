@@ -4,7 +4,7 @@
   ...
 }:
 helpers.vim-plugin.mkVimPlugin {
-  name = "surround";
+  name = "vim-surround";
   originalName = "surround.vim";
   package = "vim-surround";
 
