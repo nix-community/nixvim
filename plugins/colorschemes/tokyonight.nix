@@ -55,12 +55,13 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     style =
       defaultNullOpts.mkEnumFirstDefault
         [
+          "moon"
           "storm"
           "night"
           "day"
         ]
         ''
-          The theme comes in three styles, `storm`, a darker variant `night` and `day`.
+          The theme comes in four styles, `moon`, `storm`, a darker variant `night`, and `day`.
         '';
 
     light_style = defaultNullOpts.mkStr "day" ''
