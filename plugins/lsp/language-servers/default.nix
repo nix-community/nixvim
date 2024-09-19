@@ -197,6 +197,14 @@ let
     {
       name = "gopls";
       description = "gopls for Go";
+      extraOptions = {
+        goPackage = lib.mkPackageOption pkgs "go" {
+          nullable = true;
+        };
+      };
+      extraConfig = cfg: {
+        extraPackages = [ cfg.goPackage ];
+      };
     }
     {
       name = "golangci-lint-ls";
