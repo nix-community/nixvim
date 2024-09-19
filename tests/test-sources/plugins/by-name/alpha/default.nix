@@ -19,7 +19,7 @@
       layout = [
         {
           type = "terminal";
-          command = "thisisfine";
+          command = "echo 'Welcome to Nixvim!'";
           width = 46;
           height = 25;
           opts = {

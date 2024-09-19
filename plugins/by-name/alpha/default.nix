@@ -199,6 +199,7 @@ in
         in
         ''
           require('alpha').setup(${lib.nixvim.toLuaObject setupOptions})
+          require('alpha.term')
         '';
     };
 }
