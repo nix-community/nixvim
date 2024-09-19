@@ -27,8 +27,9 @@ let
       val = helpers.mkNullOrOption (
         with helpers.nixvimTypes;
         nullOr (oneOf [
+
           # "button", "text"
-          str
+          (maybeRaw str)
           # "padding"
           int
           (listOf (
@@ -82,7 +83,7 @@ in
       };
 
       layout = mkOption {
-        type = types.listOf sectionType;
+        type = with types; either (maybeRaw str) (listOf sectionType);
         default = [ ];
         description = "List of sections to layout for the dashboard";
         example = [
