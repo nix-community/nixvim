@@ -1,13 +1,13 @@
 {
   lib,
-  helpers,
   config,
   options,
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) types mkOption;
+
   cfg = config.plugins.alpha;
 
   sectionType = types.submodule {
@@ -24,8 +24,8 @@ let
         description = "Type of section";
       };
 
-      val = helpers.mkNullOrOption (
-        with helpers.nixvimTypes;
+      val = lib.nixvim.mkNullOrOption (
+        with types;
         nullOr (oneOf [
 
           # "button", "text"
@@ -53,7 +53,7 @@ in
 {
   options = {
     plugins.alpha = {
-      enable = mkEnableOption "alpha-nvim";
+      enable = lib.mkEnableOption "alpha-nvim";
 
       package = lib.mkPackageOption pkgs "alpha-nvim" {
         default = [
@@ -75,8 +75,8 @@ in
       ] { nullable = true; };
 
       theme = mkOption {
-        type = with helpers.nixvimTypes; nullOr (maybeRaw str);
-        apply = v: if isString v then helpers.mkRaw "require'alpha.themes.${v}'.config" else v;
+        type = with types; nullOr (maybeRaw str);
+        apply = v: if lib.isString v then lib.nixvim.mkRaw "require'alpha.themes.${v}'.config" else v;
         default = null;
         example = "dashboard";
         description = "You can directly use a pre-defined theme.";
@@ -142,7 +142,7 @@ in
         ];
       };
 
-      opts = helpers.mkNullOrOption (with types; attrsOf anything) ''
+      opts = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
         Optional global options.
       '';
     };
@@ -155,12 +155,12 @@ in
 
       opt = options.plugins.alpha;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       # TODO: deprecated 2024-08-29 remove after 24.11
       warnings = lib.mkIf opt.iconsEnabled.isDefined [
         ''
           nixvim (plugins.alpha):
-          The option definition `plugins.alpha.iconsEnabled' in ${showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
+          The option definition `plugins.alpha.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
           You should use `plugins.alpha.iconsPackage' instead.
         ''
       ];
@@ -198,7 +198,7 @@ in
               });
         in
         ''
-          require('alpha').setup(${helpers.toLuaObject setupOptions})
+          require('alpha').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
     };
 }
