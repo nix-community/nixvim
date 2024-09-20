@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.web-devicons.enable = true;
     plugins.diffview.enable = true;
   };
 
   example = {
+    plugins.web-devicons.enable = true;
     plugins.diffview = {
       enable = true;
 
@@ -162,10 +164,10 @@
     };
   };
 
-  no-packages = {
+  no-icons = {
+    plugins.web-devicons.enable = false;
     plugins.diffview = {
       enable = true;
-      iconsPackage = null;
     };
   };
 }
