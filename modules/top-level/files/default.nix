@@ -16,6 +16,11 @@ let
     modules = lib.optionals (!config.isDocs) [
       ../../.
       ./submodule.nix
+      # Pass module args through to the submodule
+      {
+        _file = ./.;
+        _module.args = lib.mkAliasAndWrapDefinitions lib.id options._module.args;
+      }
     ];
     description = "Nixvim configuration";
   };

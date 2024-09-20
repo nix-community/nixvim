@@ -7,6 +7,7 @@
   imports = [
     ../.
     ./files
+    ./nixpkgs.nix
     ./output.nix
     ./test.nix
   ];
