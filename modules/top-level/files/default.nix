@@ -19,7 +19,13 @@ let
       # Pass module args through to the submodule
       {
         _file = ./.;
-        _module.args = lib.mkAliasAndWrapDefinitions lib.id options._module.args;
+        _module.args =
+          let
+            wrappedArgs = lib.mkAliasAndWrapDefinitions lib.id options._module.args;
+          in
+          builtins.removeAttrs wrappedArgs [
+            "name"
+          ];
       }
     ];
     description = "Nixvim configuration";
