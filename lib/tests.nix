@@ -45,6 +45,7 @@ let
     }@args:
     let
       helpers = import ../lib {
+        # NOTE: must match the user-facing functions, so we still include the `pkgs` argument
         inherit pkgs lib;
         # TODO: deprecate helpers.enableExceptInTests,
         # add a context option e.g. `config.isTest`?

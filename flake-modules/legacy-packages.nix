@@ -1,8 +1,8 @@
+{ helpers, ... }:
 {
   perSystem =
     {
       pkgs,
-      helpers,
       makeNixvimWithModule,
       ...
     }:

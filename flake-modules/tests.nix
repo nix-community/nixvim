@@ -1,11 +1,10 @@
-{ self, ... }:
+{ self, helpers, ... }:
 {
   perSystem =
     {
       pkgs,
       pkgsUnfree,
       system,
-      helpers,
       makeNixvimWithModule,
       self',
       ...

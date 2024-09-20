@@ -7,7 +7,7 @@ let
   # We overlay a few tweaks into pkgs, for use in the docs
   pkgs = import ./pkgs.nix { inherit system nixpkgs; };
   inherit (pkgs) lib;
-  helpers = import ../lib { inherit lib pkgs; };
+  helpers = import ../lib { inherit lib; };
 
   nixvimPath = toString ./..;
 
@@ -34,7 +34,9 @@ let
     };
 
   evaledModules = lib.evalModules {
-    inherit (helpers.modules) specialArgs;
+    specialArgs = helpers.modules.specialArgsWith {
+      defaultPkgs = pkgs;
+    };
     modules = [
       ../modules/top-level
       { isDocs = true; }
