@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.web-devicons.enable = true;
     plugins.neo-tree.enable = true;
   };
 
   defaults = {
+    plugins.web-devicons.enable = true;
     plugins.neo-tree = {
       enable = true;
 
@@ -439,10 +441,17 @@
   };
 
   no-packages = {
+    plugins.web-devicons.enable = false;
     plugins.neo-tree = {
       enable = true;
-      iconsPackage = null;
       gitPackage = null;
+    };
+  };
+
+  no-icons = {
+    plugins = {
+      web-devicons.enable = false;
+      neo-tree.enable = true;
     };
   };
 }

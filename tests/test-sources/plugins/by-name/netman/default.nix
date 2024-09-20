@@ -12,5 +12,6 @@ pkgs.lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
       enable = true;
       neoTreeIntegration = true;
     };
+    plugins.web-devicons.enable = true;
   };
 }
