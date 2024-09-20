@@ -1,7 +1,8 @@
 {
+  config,
   lib,
   helpers,
-  pkgs,
+  options,
   ...
 }:
 with lib;
@@ -11,6 +12,20 @@ helpers.neovim-plugin.mkNeovimPlugin {
   package = "trouble-nvim";
 
   maintainers = [ maintainers.loicreynier ];
+
+  # TODO: added 2024-09-20 remove after 24.11
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "plugins"
+        "trouble"
+        "iconsPackage"
+      ]
+      ''
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+      ''
+    )
+  ];
 
   # TODO introduced 2024-03-15: remove 2024-05-15
   optionsRenamedToSettings = [
@@ -300,14 +315,18 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
   };
 
-  extraOptions = {
-    iconsPackage = lib.mkPackageOption pkgs [
-      "vimPlugins"
-      "nvim-web-devicons"
-    ] { nullable = true; };
-  };
-
   extraConfig = cfg: {
-    extraPlugins = mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
+    # TODO: added 2024-09-20 remove after 24.11
+    plugins.web-devicons = mkIf (
+      !(
+        config.plugins.mini.enable
+        && config.plugins.mini.modules ? icons
+        && config.plugins.mini.mockDevIcons
+      )
+    ) { enable = mkOverride 1490 true; };
+    warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
+      Nixvim (plugins.trouble) `web-devicons` automatic installation is deprecated.
+      Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+    '';
   };
 }

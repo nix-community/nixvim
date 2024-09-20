@@ -164,6 +164,7 @@
           };
         };
       };
+      web-devicons.enable = true;
     };
   };
 

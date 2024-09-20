@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.web-devicons.enable = true;
     plugins.trouble.enable = true;
   };
 
   lsp = {
+    plugins.web-devicons.enable = true;
     plugins.lsp = {
       enable = true;
       servers.clangd.enable = true;
@@ -13,6 +15,7 @@
   };
 
   defaults = {
+    plugins.web-devicons.enable = true;
     plugins.trouble = {
       enable = true;
 
@@ -78,10 +81,10 @@
     };
   };
 
-  no-packages = {
+  no-icons = {
+    plugins.web-devicons.enable = false;
     plugins.trouble = {
       enable = true;
-      iconsPackage = null;
     };
   };
 }
