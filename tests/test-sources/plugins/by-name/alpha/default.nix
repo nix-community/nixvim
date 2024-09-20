@@ -100,11 +100,11 @@
     };
   };
 
-  no-packages = {
+  no-icons = {
+    plugins.web-devicons.enable = false;
     plugins.alpha = {
       enable = true;
       theme = "dashboard";
-      iconsPackage = null;
     };
   };
 }

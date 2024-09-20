@@ -51,6 +51,20 @@ let
   };
 in
 {
+  # TODO: added 2024-09-20 remove after 24.11
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "plugins"
+        "alpha"
+        "iconsPackage"
+      ]
+      ''
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+      ''
+    )
+  ];
+
   options = {
     plugins.alpha = {
       enable = lib.mkEnableOption "alpha-nvim";
@@ -68,11 +82,6 @@ in
         description = "Toggle icon support. Installs nvim-web-devicons.";
         visible = false;
       };
-
-      iconsPackage = lib.mkPackageOption pkgs [
-        "vimPlugins"
-        "nvim-web-devicons"
-      ] { nullable = true; };
 
       theme = mkOption {
         type = with types; nullOr (maybeRaw str);
@@ -156,20 +165,41 @@ in
       opt = options.plugins.alpha;
     in
     lib.mkIf cfg.enable {
-      # TODO: deprecated 2024-08-29 remove after 24.11
-      warnings = lib.mkIf opt.iconsEnabled.isDefined [
-        ''
-          nixvim (plugins.alpha):
-          The option definition `plugins.alpha.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
-          You should use `plugins.alpha.iconsPackage' instead.
-        ''
-      ];
 
-      extraPlugins =
-        [ cfg.package ]
-        ++ lib.optional (
-          cfg.iconsPackage != null && (opt.iconsEnabled.isDefined -> cfg.iconsEnabled)
-        ) cfg.iconsPackage;
+      # TODO: added 2024-09-20 remove after 24.11
+      warnings = lib.optionals opt.iconsEnabled.isDefined (
+        [
+          ''
+            The option definition `plugins.alpha.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
+          ''
+        ]
+        ++
+          lib.optional
+            (
+              (opt.iconsEnabled.isDefined -> cfg.iconsEnabled)
+              && options.plugins.web-devicons.enable.highestPrio == 1490
+            )
+            ''
+              Nixvim (plugins.alpha) `web-devicons` automatic installation is deprecated.
+              Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+            ''
+      );
+      plugins.web-devicons =
+        lib.mkIf
+          (
+            opt.iconsEnabled.isDefined
+            && cfg.iconsEnabled
+            && !(
+              config.plugins.mini.enable
+              && config.plugins.mini.modules ? icons
+              && config.plugins.mini.mockDevIcons
+            )
+          )
+          {
+            enable = lib.mkOverride 1490 true;
+          };
+
+      extraPlugins = [ cfg.package ];
 
       assertions = [
         {
