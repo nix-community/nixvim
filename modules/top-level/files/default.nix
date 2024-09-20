@@ -21,7 +21,7 @@ let
         _file = ./.;
         _module.args =
           let
-            wrappedArgs = lib.mkAliasAndWrapDefinitions lib.id options._module.args;
+            wrappedArgs = lib.modules.mergeAttrDefinitionsWithPrio options._module.args;
           in
           builtins.removeAttrs wrappedArgs [
             "name"
