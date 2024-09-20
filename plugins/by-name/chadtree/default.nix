@@ -3,6 +3,7 @@
   helpers,
   config,
   pkgs,
+  options,
   ...
 }:
 with lib;
@@ -11,6 +12,20 @@ let
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in
 {
+  # TODO: added 2024-09-20 remove after 24.11
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "plugins"
+        "chadtree"
+        "iconsPackage"
+      ]
+      ''
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+      ''
+    )
+  ];
+
   options.plugins.chadtree = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "chadtree";
 
@@ -20,11 +35,6 @@ in
         "chadtree"
       ];
     };
-
-    iconsPackage = lib.mkPackageOption pkgs [
-      "vimPlugins"
-      "nvim-web-devicons"
-    ] { nullable = true; };
 
     options = {
       follow = helpers.defaultNullOpts.mkBool true ''
@@ -415,7 +425,7 @@ in
     let
       setupOptions = with cfg; {
         xdg = true;
-        options = with options; {
+        options = with cfg.options; {
           inherit follow;
           inherit lang;
           mimetypes = with mimetypes; {
@@ -502,11 +512,33 @@ in
       };
     in
     mkIf cfg.enable {
-      extraPlugins =
-        [ cfg.package ]
-        ++ (optional (
-          cfg.iconsPackage != null && (cfg.theme == null || cfg.theme.iconGlyphSet == "devicons")
-        ) cfg.iconsPackage);
+      # TODO: added 2024-09-20 remove after 24.11
+      plugins.web-devicons =
+        lib.mkIf
+          (
+            (cfg.theme == null || cfg.theme.iconGlyphSet == "devicons")
+            && !(
+              config.plugins.mini.enable
+              && config.plugins.mini.modules ? icons
+              && config.plugins.mini.mockDevIcons
+            )
+          )
+          {
+            enable = lib.mkOverride 1490 false;
+          };
+      warnings =
+        optional
+          (
+            (cfg.theme == null || cfg.theme.iconGlyphSet == "devicons")
+
+            && options.plugins.web-devicons.enable.highestPrio == 1490
+          )
+          ''
+            Nixvim (plugins.chadtree) `web-devicons` automatic installation is deprecated.
+            Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+          '';
+
+      extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
         vim.api.nvim_set_var("chadtree_settings", ${helpers.toLuaObject setupOptions})
