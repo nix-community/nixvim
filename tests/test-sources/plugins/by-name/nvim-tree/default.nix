@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.web-devicons.enable = true;
     plugins.nvim-tree.enable = true;
   };
 
   defaults = {
+    plugins.web-devicons.enable = true;
     plugins.nvim-tree = {
       enable = true;
 
@@ -258,9 +260,9 @@
   };
 
   no-packages = {
+    plugins.web-devicons.enable = true;
     plugins.nvim-tree = {
       enable = true;
-      iconsPackage = null;
       gitPackage = null;
     };
   };

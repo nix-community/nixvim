@@ -3,12 +3,12 @@
   helpers,
   pkgs,
   config,
+  options,
   ...
 }:
 with lib;
 let
   cfg = config.plugins.nvim-tree;
-  inherit (helpers) ifNonNull';
 
   openWinConfigOption =
     helpers.defaultNullOpts.mkAttributeSet
@@ -45,11 +45,6 @@ in
         "nvim-tree-lua"
       ];
     };
-
-    iconsPackage = lib.mkPackageOption pkgs [
-      "vimPlugins"
-      "nvim-web-devicons"
-    ] { nullable = true; };
 
     gitPackage = lib.mkPackageOption pkgs "git" {
       nullable = true;
@@ -929,7 +924,7 @@ in
 
   config =
     let
-      options =
+      setupOptions =
         with cfg;
         {
           disable_netrw = disableNetrw;
@@ -1168,9 +1163,22 @@ in
       '';
     in
     mkIf cfg.enable {
+      # TODO: added 2024-09-20 remove after 24.11
+      plugins.web-devicons = mkIf (
+        !(
+          config.plugins.mini.enable
+          && config.plugins.mini.modules ? icons
+          && config.plugins.mini.mockDevIcons
+        )
+      ) { enable = mkOverride 1490 true; };
+      warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
+        Nixvim (plugins.nvim-tree) `web-devicons` automatic installation is deprecated.
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+      '';
+
       extraPlugins = [
         cfg.package
-      ] ++ lib.optional (cfg.iconsPackage != null) cfg.iconsPackage;
+      ];
 
       autoCmd =
         (optional autoOpenEnabled {
@@ -1187,7 +1195,7 @@ in
         (optionalString autoOpenEnabled openNvimTreeFunction)
         + ''
 
-          require('nvim-tree').setup(${helpers.toLuaObject options})
+          require('nvim-tree').setup(${helpers.toLuaObject setupOptions})
         '';
 
       extraPackages = [ cfg.gitPackage ];
