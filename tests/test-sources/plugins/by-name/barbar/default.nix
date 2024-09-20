@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.web-devicons.enable = true;
     plugins.barbar.enable = true;
   };
 
   keymappings = {
+    plugins.web-devicons.enable = true;
     plugins.barbar = {
       enable = true;
 
@@ -20,6 +22,7 @@
   };
 
   defaults = {
+    plugins.web-devicons.enable = true;
     plugins.barbar = {
       enable = true;
 
@@ -113,6 +116,7 @@
   };
 
   readme-example = {
+    plugins.web-devicons.enable = true;
     plugins.barbar = {
       enable = true;
 
@@ -220,10 +224,10 @@
     };
   };
 
-  no-packages = {
+  no-icons = {
+    plugins.web-devicons.enable = false;
     plugins.barbar = {
       enable = true;
-      iconsPackage = null;
       settings.icons.filetype.enabled = false;
     };
   };
