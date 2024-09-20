@@ -33,12 +33,11 @@ let
       ) opt.declarations;
     };
 
-  evaledModules = lib.evalModules {
-    specialArgs = helpers.modules.specialArgsWith {
+  evaledModules = helpers.modules.evalNixvim {
+    extraSpecialArgs = {
       defaultPkgs = pkgs;
     };
     modules = [
-      ../modules/top-level
       { isDocs = true; }
     ];
   };
