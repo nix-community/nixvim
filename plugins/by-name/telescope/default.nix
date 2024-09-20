@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  options,
   ...
 }:
 with lib;
@@ -9,7 +10,6 @@ let
   inherit (lib.nixvim)
     keymaps
     mkNullOrOption
-    mkPackageOption
     toLuaObject
     ;
 in
@@ -36,6 +36,17 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "keymapsSilent"
       ]
       "This option no longer has any effect now that the `plugin.telescope.keymaps` implementation uses `<cmd>`."
+    )
+    # TODO: added 2024-09-20 remove after 24.11
+    (lib.mkRemovedOptionModule
+      [
+        "plugins"
+        "telescope"
+        "iconsPackage"
+      ]
+      ''
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+      ''
     )
   ];
 
@@ -89,11 +100,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       '';
     };
 
-    iconsPackage = lib.mkPackageOption pkgs [
-      "vimPlugins"
-      "nvim-web-devicons"
-    ] { nullable = true; };
-
     batPackage = lib.mkPackageOption pkgs "bat" {
       nullable = true;
     };
@@ -101,7 +107,18 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
-    extraPlugins = mkIf (cfg.iconsPackage != null) [ cfg.iconsPackage ];
+    # TODO: added 2024-09-20 remove after 24.11
+    plugins.web-devicons = mkIf (
+      !(
+        config.plugins.mini.enable
+        && config.plugins.mini.modules ? icons
+        && config.plugins.mini.mockDevIcons
+      )
+    ) { enable = mkOverride 1490 true; };
+    warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
+      Nixvim (plugins.telescope) `web-devicons` automatic installation is deprecated.
+      Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+    '';
 
     extraConfigVim = mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'

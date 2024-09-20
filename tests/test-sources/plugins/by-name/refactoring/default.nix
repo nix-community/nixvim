@@ -35,6 +35,8 @@
       enable = true;
       enableTelescope = true;
     };
+
+    plugins.web-devicons.enable = true;
   };
 
   defaults = {

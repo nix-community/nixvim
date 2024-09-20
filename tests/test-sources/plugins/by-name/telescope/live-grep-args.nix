@@ -5,6 +5,7 @@
       enable = true;
       extensions.live-grep-args.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   default = {
@@ -20,6 +21,7 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   example = {
@@ -42,6 +44,7 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   custom-packages = {
@@ -53,6 +56,7 @@
         grepPackage = pkgs.gnugrep;
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   no-packages = {
@@ -64,5 +68,6 @@
         grepPackage = null;
       };
     };
+    plugins.web-devicons.enable = false;
   };
 }

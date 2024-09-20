@@ -70,6 +70,8 @@
         ];
       };
     };
+
+    plugins.web-devicons.enable = true;
   };
 
   telescopeDisabled = {

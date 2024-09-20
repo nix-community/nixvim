@@ -109,6 +109,7 @@
       };
       treesitter.enable = true;
       telescope.enable = true;
+      web-devicons.enable = true;
     };
   };
 }

@@ -4,6 +4,7 @@
       enable = true;
       extensions.file-browser.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   defaults = {
@@ -82,5 +83,6 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 }

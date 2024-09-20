@@ -187,6 +187,7 @@
           };
         };
       };
+      plugins.web-devicons.enable = true;
     };
 
   without-ripgrep = {

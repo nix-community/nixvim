@@ -17,6 +17,8 @@
       updateOnChangeCommand = "e .";
       clearJumpsOnChange = true;
     };
+
+    plugins.web-devicons.enable = true;
   };
 
   telescopeDisabled = {

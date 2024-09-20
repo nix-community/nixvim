@@ -4,6 +4,7 @@
       enable = true;
       extensions.manix.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   default = {
@@ -19,6 +20,7 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   example = {
@@ -34,6 +36,7 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   no-packages = {
@@ -45,5 +48,6 @@
         manixPackage = null;
       };
     };
+    plugins.web-devicons.enable = false;
   };
 }

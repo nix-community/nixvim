@@ -3,6 +3,7 @@
     # This test is flaky and fails non-deterministically
     test.runNvim = false;
 
+    plugins.web-devicons.enable = true;
     plugins.octo.enable = true;
   };
 
@@ -10,6 +11,7 @@
     # This test is flaky and fails non-deterministically
     test.runNvim = false;
 
+    plugins.web-devicons.enable = true;
     plugins.octo = {
       enable = true;
 
@@ -30,12 +32,10 @@
     # This test is flaky and fails non-deterministically
     test.runNvim = false;
 
-    plugins = {
-      octo = {
-        enable = true;
-        settings.picker = "fzf-lua";
-      };
-      web-devicons.enable = true;
+    plugins.web-devicons.enable = true;
+    plugins.octo = {
+      enable = true;
+      settings.picker = "fzf-lua";
     };
   };
 
@@ -43,6 +43,7 @@
     # This test is flaky and fails non-deterministically
     test.runNvim = false;
 
+    plugins.web-devicons.enable = true;
     plugins.octo = {
       enable = true;
 
@@ -91,6 +92,7 @@
   no-packages = {
     # Need to add gh executable to runtime path for plugin
     test.runNvim = false;
+    plugins.web-devicons.enable = false;
     plugins.octo = {
       enable = true;
       ghPackage = null;

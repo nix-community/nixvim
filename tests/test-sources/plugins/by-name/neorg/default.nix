@@ -84,6 +84,8 @@
         enable = true;
         modules."core.integrations.telescope".__empty = null;
       };
+
+      web-devicons.enable = true;
     };
   };
 

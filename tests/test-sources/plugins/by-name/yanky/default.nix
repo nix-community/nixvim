@@ -11,6 +11,8 @@
         enable = true;
         enableTelescope = true;
       };
+
+      web-devicons.enable = true;
     };
   };
 
@@ -66,6 +68,7 @@
       sqlite-lua.enable = true;
       telescope.enable = true;
 
+      web-devicons.enable = true;
       yanky = {
         enable = true;
 

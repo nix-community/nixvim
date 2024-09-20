@@ -4,6 +4,7 @@
       enable = true;
       extensions.undo.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   example = {
@@ -39,5 +40,6 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 }

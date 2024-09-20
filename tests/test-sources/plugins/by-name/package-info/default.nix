@@ -37,6 +37,8 @@
         enable = true;
         enableTelescope = true;
       };
+
+      web-devicons.enable = true;
     };
   };
 }

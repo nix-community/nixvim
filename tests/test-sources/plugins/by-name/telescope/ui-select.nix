@@ -4,6 +4,7 @@
       enable = true;
       extensions.ui-select.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   example = {
@@ -18,5 +19,6 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 }

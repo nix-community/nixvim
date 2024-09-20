@@ -4,6 +4,7 @@
       enable = true;
       extensions.fzy-native.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   example = {
@@ -19,6 +20,7 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   combine-plugins = {
@@ -27,6 +29,7 @@
       extensions.fzy-native.enable = true;
     };
 
+    plugins.web-devicons.enable = true;
     performance.combinePlugins.enable = true;
   };
 }

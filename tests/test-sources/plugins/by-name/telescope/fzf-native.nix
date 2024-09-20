@@ -4,6 +4,7 @@
       enable = true;
       extensions.fzf-native.enable = true;
     };
+    plugins.web-devicons.enable = true;
   };
 
   defaults = {
@@ -21,6 +22,7 @@
         };
       };
     };
+    plugins.web-devicons.enable = true;
   };
 
   combine-plugins = {
@@ -28,6 +30,7 @@
       enable = true;
       extensions.fzf-native.enable = true;
     };
+    plugins.web-devicons.enable = true;
 
     performance.combinePlugins.enable = true;
   };
