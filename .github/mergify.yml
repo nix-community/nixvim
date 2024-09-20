@@ -11,7 +11,7 @@ queue_rules:
     update_method: rebase
     merge_method: fast-forward
     merge_conditions:
-      - check-success = buildbot/nix-eval
+      - check-success = buildbot/nix-build
     queue_conditions:
       - or:
           # Allow queuing PRs that have been approved
