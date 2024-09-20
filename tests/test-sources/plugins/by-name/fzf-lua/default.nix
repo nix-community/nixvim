@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.web-devicons.enable = true;
     plugins.fzf-lua.enable = true;
   };
 
   example = {
+    plugins.web-devicons.enable = true;
     plugins.fzf-lua = {
       enable = true;
 
@@ -55,10 +57,10 @@
     };
   };
 
-  no-packages = {
+  no-icons = {
+    plugins.web-devicons.enable = true;
     plugins.fzf-lua = {
       enable = true;
-      iconsPackage = null;
     };
   };
 }

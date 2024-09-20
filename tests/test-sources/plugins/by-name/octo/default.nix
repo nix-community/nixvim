@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 {
   empty = {
     # This test is flaky and fails non-deterministically
@@ -31,9 +30,12 @@
     # This test is flaky and fails non-deterministically
     test.runNvim = false;
 
-    plugins.octo = {
-      enable = true;
-      settings.picker = "fzf-lua";
+    plugins = {
+      octo = {
+        enable = true;
+        settings.picker = "fzf-lua";
+      };
+      web-devicons.enable = true;
     };
   };
 
