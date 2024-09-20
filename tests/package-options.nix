@@ -32,7 +32,11 @@ let
       internal ? false,
       ...
     }:
-    visible && !internal && isDerivation default
+    let
+      # Some options have defaults that throw when evaluated
+      default' = (builtins.tryEval default).value;
+    in
+    visible && !internal && isDerivation default'
   ) options;
 
   # Bad options do not use `literalExpression` in their `defaultText`,
