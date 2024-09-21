@@ -83,6 +83,14 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
   };
 
+  extraOptions = {
+    autoActivate = lib.mkOption {
+      type = lib.types.bool;
+      description = "When enabled, activate otter automatically when lsp is attached.";
+      default = true;
+    };
+  };
+
   extraConfig = cfg: {
     warnings =
       lib.optional (cfg.enable && config.plugins.treesitter.settings.highlight.enable == null)
@@ -90,6 +98,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
           NixVim(plugins.otter): you have enabled otter, but `plugins.treesitter.settings.highlight.enable` is not enabled.
           Otter functionality might not work as expected without it and `plugins.treesitter.enable` enabled.
         '';
+
+    plugins.lsp.onAttach = lib.mkIf cfg.autoActivate ''
+      require('otter').activate()
+    '';
   };
 
 }
