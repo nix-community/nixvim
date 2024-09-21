@@ -691,6 +691,32 @@ let
         "nodePackages"
         "@volar/vue-language-server"
       ];
+      extraOptions = {
+        tslsIntegration = mkOption {
+          type = types.bool;
+          description = ''
+            Enable integration with TypeScript language server.
+          '';
+          default = true;
+          example = false;
+        };
+      };
+      extraConfig = cfg: {
+        plugins.lsp.servers.ts-ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
+          filetypes = [ "vue" ];
+          extraOptions = {
+            init_options = {
+              plugins = [
+                {
+                  name = "@vue/typescript-plugin";
+                  location = "${lib.getBin cfg.package}/lib/node_modules/@vue/language-server";
+                  languages = [ "vue" ];
+                }
+              ];
+            };
+          };
+        };
+      };
     }
     {
       name = "yamlls";
