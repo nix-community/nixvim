@@ -44,20 +44,7 @@ in
         "keys"
         "borderStyle"
         "renamePromptPrefix"
-      ]
-    ++ [
-      # TODO: added 2024-09-20 remove after 24.11
-      (lib.mkRemovedOptionModule
-        [
-          "plugins"
-          "lspsaga"
-          "iconsPackage"
-        ]
-        ''
-          Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-        ''
-      )
-    ];
+      ];
 
   options = {
     plugins.lspsaga = helpers.neovim-plugin.extraOptionsOptions // {
@@ -484,21 +471,11 @@ in
         {
           enable = mkOverride 1490 true;
         };
-    warnings =
-      lib.optional
-        (
-          (cfg.ui.devicon == null || cfg.ui.devicon)
-          && options.plugins.web-devicons.enable.highestPrio == 1490
-        )
-        ''
-          Nixvim (plugins.lspsaga) `web-devicons` automatic installation is deprecated.
-          Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-        ''
-      ++ lib.optional (
-        # https://nvimdev.github.io/lspsaga/implement/#default-options
-        (isBool cfg.implement.enable && cfg.implement.enable)
-        && (isBool cfg.symbolInWinbar.enable && !cfg.symbolInWinbar.enable)
-      ) "You have enabled the `implement` module but it requires `symbolInWinbar` to be enabled.";
+    warnings = lib.optional (
+      # https://nvimdev.github.io/lspsaga/implement/#default-options
+      (isBool cfg.implement.enable && cfg.implement.enable)
+      && (isBool cfg.symbolInWinbar.enable && !cfg.symbolInWinbar.enable)
+    ) "You have enabled the `implement` module but it requires `symbolInWinbar` to be enabled.";
 
     extraPlugins = [ cfg.package ];
     extraConfigLua =

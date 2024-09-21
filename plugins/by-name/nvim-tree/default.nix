@@ -1171,10 +1171,6 @@ in
           && config.plugins.mini.mockDevIcons
         )
       ) { enable = mkOverride 1490 true; };
-      warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
-        Nixvim (plugins.nvim-tree) `web-devicons` automatic installation is deprecated.
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      '';
 
       extraPlugins = [
         cfg.package

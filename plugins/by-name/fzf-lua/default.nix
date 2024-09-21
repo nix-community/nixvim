@@ -38,20 +38,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   inherit settingsOptions settingsExample;
 
-  # TODO: added 2024-09-20 remove after 24.11
-  imports = [
-    (lib.mkRemovedOptionModule
-      [
-        "plugins"
-        "fzf-lua"
-        "iconsPackage"
-      ]
-      ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      ''
-    )
-  ];
-
   extraOptions = {
     fzfPackage = lib.mkPackageOption pkgs "fzf" {
       nullable = true;
@@ -122,23 +108,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
     in
     {
       # TODO: deprecated 2024-08-29 remove after 24.11
-      warnings = lib.optionals opt.iconsEnabled.isDefined (
-        [
-          ''
-            The option definition `plugins.fzf-lua.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
-          ''
-        ]
-        ++
-          lib.optional
-            (
-              (opt.iconsEnabled.isDefined -> cfg.iconsEnabled)
-              && options.plugins.web-devicons.enable.highestPrio == 1490
-            )
-            ''
-              Nixvim (plugins.fzf-lua) `web-devicons` automatic installation is deprecated.
-              Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-            ''
-      );
+      warnings = lib.optionals opt.iconsEnabled.isDefined [
+        ''
+          The option definition `plugins.fzf-lua.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
+        ''
+      ];
       # TODO: added 2024-09-20 remove after 24.11
       plugins.web-devicons =
         lib.mkIf

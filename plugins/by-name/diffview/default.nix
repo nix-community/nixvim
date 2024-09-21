@@ -81,19 +81,6 @@ let
     };
 in
 {
-  # TODO: added 2024-09-20 remove after 24.11
-  imports = [
-    (lib.mkRemovedOptionModule
-      [
-        "plugins"
-        "diffview"
-        "iconsPackage"
-      ]
-      ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      ''
-    )
-  ];
   options.plugins.diffview =
     with helpers.defaultNullOpts;
     helpers.neovim-plugin.extraOptionsOptions
@@ -844,10 +831,6 @@ in
           && config.plugins.mini.mockDevIcons
         )
       ) { enable = mkOverride 1490 true; };
-      warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
-        Nixvim (plugins.diffview) `web-devicons` automatic installation is deprecated.
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      '';
 
       extraPlugins = [ cfg.package ];
 

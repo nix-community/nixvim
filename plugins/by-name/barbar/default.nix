@@ -173,17 +173,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           ]
         )
       )
-      # TODO: added 2024-09-20 remove after 24.11
-      (lib.mkRemovedOptionModule
-        [
-          "plugins"
-          "barbar"
-          "iconsPackage"
-        ]
-        ''
-          Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-        ''
-      )
     ]
     ++ (map
       (
@@ -232,10 +221,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         && config.plugins.mini.mockDevIcons
       )
     ) { enable = mkOverride 1490 true; };
-    warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
-      Nixvim (plugins.barbar) `web-devicons` automatic installation is deprecated.
-      Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-    '';
 
     keymaps = filter (keymap: keymap != null) (
       # TODO: switch to `attrValues cfg.keymaps` when removing the deprecation warnings above:

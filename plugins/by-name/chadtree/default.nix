@@ -12,20 +12,6 @@ let
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in
 {
-  # TODO: added 2024-09-20 remove after 24.11
-  imports = [
-    (lib.mkRemovedOptionModule
-      [
-        "plugins"
-        "chadtree"
-        "iconsPackage"
-      ]
-      ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      ''
-    )
-  ];
-
   options.plugins.chadtree = helpers.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "chadtree";
 
@@ -526,17 +512,6 @@ in
           {
             enable = lib.mkOverride 1490 false;
           };
-      warnings =
-        optional
-          (
-            (cfg.theme == null || cfg.theme.iconGlyphSet == "devicons")
-
-            && options.plugins.web-devicons.enable.highestPrio == 1490
-          )
-          ''
-            Nixvim (plugins.chadtree) `web-devicons` automatic installation is deprecated.
-            Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-          '';
 
       extraPlugins = [ cfg.package ];
 

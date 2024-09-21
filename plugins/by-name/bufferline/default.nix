@@ -162,9 +162,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       (lib.mkRenamedOptionModule (oldHighlightsPath ++ [ "trunkMarker" ]) (
         newHighlightsPath ++ [ "trunc_marker" ]
       ))
-      (lib.mkRemovedOptionModule (basePluginPath ++ [ "iconsPackage" ]) ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      '')
     ]
     ++ mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions
     ++ mkSettingsRenamedOptionModules oldHighlightsPath newHighlightsPath oldHighlightOptions;
@@ -666,10 +663,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         && config.plugins.mini.mockDevIcons
       )
     ) { enable = lib.mkOverride 1490 true; };
-    warnings = lib.optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
-      Nixvim (plugins.bufferline) `web-devicons` automatic installation is deprecated.
-      Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-    '';
+
     opts.termguicolors = true;
   };
 }

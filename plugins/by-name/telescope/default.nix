@@ -37,17 +37,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       ]
       "This option no longer has any effect now that the `plugin.telescope.keymaps` implementation uses `<cmd>`."
     )
-    # TODO: added 2024-09-20 remove after 24.11
-    (lib.mkRemovedOptionModule
-      [
-        "plugins"
-        "telescope"
-        "iconsPackage"
-      ]
-      ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-      ''
-    )
   ];
 
   extraOptions = {
@@ -115,10 +104,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         && config.plugins.mini.mockDevIcons
       )
     ) { enable = mkOverride 1490 true; };
-    warnings = optional (options.plugins.web-devicons.enable.highestPrio == 1490) ''
-      Nixvim (plugins.telescope) `web-devicons` automatic installation is deprecated.
-      Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-    '';
 
     extraConfigVim = mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
