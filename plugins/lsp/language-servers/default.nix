@@ -633,6 +633,20 @@ let
       serverName = "ts_ls";
       description = "ts_ls for TypeScript";
       package = "typescript-language-server";
+      # NOTE: Provide the plugin default filetypes so that
+      # `plugins.lsp.servers.volar.tslsIntegration` doesn't wipe out the default filetypes
+      extraConfig = cfg: {
+        plugins.lsp.servers.ts-ls = {
+          filetypes = [
+            "javascript"
+            "javascriptreact"
+            "javascript.jsx"
+            "typescript"
+            "typescriptreact"
+            "typescript.tsx"
+          ];
+        };
+      };
     }
     {
       name = "typos-lsp";
