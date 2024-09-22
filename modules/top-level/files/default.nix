@@ -16,6 +16,16 @@ let
     modules = lib.optionals (!config.isDocs) [
       ../../.
       ./submodule.nix
+      # Pass module args through to the submodule (except `name`)
+      # Wrap each arg with the correct priority
+      {
+        _file = ./.;
+        _module.args = lib.pipe options._module.args [
+          lib.modules.mergeAttrDefinitionsWithPrio
+          (lib.flip builtins.removeAttrs [ "name" ])
+          (lib.mapAttrs (_: { highestPrio, value }: lib.mkOverride highestPrio value))
+        ];
+      }
     ];
     description = "Nixvim configuration";
   };

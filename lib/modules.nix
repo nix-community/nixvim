@@ -12,6 +12,7 @@ rec {
       inherit lib defaultPkgs;
       # TODO: deprecate `helpers`
       helpers = self;
+      pkgsPath = defaultPkgs.path;
     }
     // extraSpecialArgs;
 

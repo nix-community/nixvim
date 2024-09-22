@@ -12,6 +12,9 @@
         makeNixvim = module: makeNixvimWithModule { inherit module; };
 
         nixvimConfiguration = helpers.modules.evalNixvim {
+          modules = [
+            { nixpkgs.pkgs = pkgs; }
+          ];
           extraSpecialArgs = {
             defaultPkgs = pkgs;
           };

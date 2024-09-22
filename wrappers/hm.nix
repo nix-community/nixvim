@@ -29,6 +29,8 @@ in
         modules = [
           ./modules/hm.nix
           ../modules/top-level
+          # TODO: maybe don't do this by default?
+          { nixpkgs.pkgs = pkgs; }
         ];
       };
     };
