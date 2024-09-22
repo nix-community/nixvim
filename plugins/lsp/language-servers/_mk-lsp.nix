@@ -30,11 +30,14 @@ with lib;
 let
   cfg = config.plugins.lsp.servers.${name};
   opt = options.plugins.lsp.servers.${name};
+  # `package.default` will throw "not found in pkgs" if the nixpkgs channel is mismatched
+  pkg = (builtins.tryEval opt.package.default).value;
+  url = args.url or pkg.meta.homepage or null;
 in
 {
   meta.nixvimInfo = {
     # TODO: description
-    url = args.url or opt.package.default.meta.homepage or null;
+    inherit url;
     path = [
       "plugins"
       "lsp"

@@ -61,13 +61,15 @@
         let
           cfg = config.${namespace}.${name};
           opt = options.${namespace}.${name};
+          # `package.default` will throw "not found in pkgs" if the nixpkgs channel is mismatched
+          pkg = (builtins.tryEval opt.package.default).value;
+          url = args.url or pkg.meta.homepage or null;
         in
         {
           meta = {
             inherit maintainers;
             nixvimInfo = {
-              inherit description;
-              url = args.url or opt.package.default.meta.homepage;
+              inherit url description;
               path = [
                 namespace
                 name
