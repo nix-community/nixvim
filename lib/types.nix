@@ -151,10 +151,10 @@ rec {
         };
       };
 
-      config.content = lib.mkMerge [
-        (lib.mkIf (config.pre != null) (mkBeforeSection config.pre))
-        (lib.mkIf (config.post != null) (mkAfterSection config.post))
-      ];
+      config.content = lib.mkMerge (
+        lib.optional (config.pre != null) (mkBeforeSection config.pre)
+        ++ lib.optional (config.post != null) (mkAfterSection config.post)
+      );
     }
   );
 }
