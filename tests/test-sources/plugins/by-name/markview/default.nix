@@ -9,7 +9,7 @@
 
       settings = {
         buf_ignore = [ "nofile" ];
-        mode = [
+        modes = [
           "n"
           "no"
         ];

@@ -25,7 +25,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       Buftypes to disable markview-nvim.
     '';
 
-    mode =
+    modes =
       defaultNullOpts.mkListOf types.str
         [
           "n"
@@ -86,7 +86,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   settingsExample = {
     buf_ignore = [ ];
-    mode = [
+    modes = [
       "n"
       "x"
     ];
