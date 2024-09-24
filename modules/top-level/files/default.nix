@@ -10,7 +10,6 @@ let
   inherit (lib) types;
 
   fileModuleType = types.submoduleWith {
-    shorthandOnlyDefinesConfig = true;
     inherit specialArgs;
     # Don't include the modules in the docs, as that'd be redundant
     modules = lib.optionals (!config.isDocs) [
