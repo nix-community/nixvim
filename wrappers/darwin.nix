@@ -41,8 +41,8 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      cfg.finalPackage
-      cfg.printInitPackage
+      cfg.build.package
+      cfg.build.printInitPackage
     ] ++ lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
   };
 }

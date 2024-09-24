@@ -14,7 +14,7 @@ let
 in
 pkgs.runCommand "extra-files-test"
   {
-    root = build.config.filesPlugin;
+    root = build.config.build.extraFiles;
     files = builtins.attrNames extraFiles;
   }
   ''

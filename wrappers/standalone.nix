@@ -23,13 +23,13 @@ let
           defaultPkgs = pkgs;
         } // extraSpecialArgs;
       };
-      inherit (nixvimConfig.config) enableMan finalPackage printInitPackage;
+      inherit (nixvimConfig.config) enableMan build;
     in
     (pkgs.symlinkJoin {
       name = "nixvim";
       paths = [
-        finalPackage
-        printInitPackage
+        build.package
+        build.printInitPackage
       ] ++ pkgs.lib.optional enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
       meta.mainProgram = "nvim";
     })

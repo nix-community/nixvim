@@ -30,7 +30,7 @@ let
           );
       };
     in
-    result.config.test.derivation;
+    result.config.build.test;
 
   # Create a nix derivation from a nixvim configuration.
   # The build phase simply consists in running neovim with the given configuration.
@@ -71,7 +71,7 @@ let
         check = false;
       };
     in
-    result.config.test.derivation;
+    result.config.build.test;
 in
 # NOTE: this is exported publicly in the flake outputs as `lib.<system>.check`
 {

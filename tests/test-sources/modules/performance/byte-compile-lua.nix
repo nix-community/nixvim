@@ -90,7 +90,7 @@ in
         assert(is_byte_compiled(init), "MYVIMRC is expected to be byte compiled, but it's not")
 
         -- nixvim-print-init prints text
-        local init_content = vim.fn.system("${config.printInitPackage}/bin/nixvim-print-init")
+        local init_content = vim.fn.system("${lib.getExe config.build.printInitPackage}")
         assert(init_content:find("VALIDATING_STRING"), "nixvim-print-init's output is byte compiled")
 
         -- lua extraFiles are byte compiled
@@ -116,7 +116,11 @@ in
     };
 
   disabled =
-    { config, ... }:
+    {
+      config,
+      lib,
+      ...
+    }:
     {
       performance.byteCompileLua.enable = false;
 
@@ -140,7 +144,7 @@ in
         assert(not is_byte_compiled(init), "MYVIMRC is not expected to be byte compiled, but it is")
 
         -- nixvim-print-init prints text
-        local init_content = vim.fn.system("${config.printInitPackage}/bin/nixvim-print-init")
+        local init_content = vim.fn.system("${lib.getExe config.build.printInitPackage}")
         assert(init_content:find("VALIDATING_STRING"), "nixvim-print-init's output is byte compiled")
 
         -- Nothing is byte compiled

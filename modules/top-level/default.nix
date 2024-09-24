@@ -8,6 +8,7 @@
     ../.
     ./files
     ./output.nix
+    ./readonly-renames.nix
     ./test.nix
   ];
 

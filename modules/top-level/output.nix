@@ -68,24 +68,31 @@ in
       '';
     };
 
-    finalPackage = mkOption {
-      type = types.package;
-      description = "Wrapped Neovim.";
-      readOnly = true;
-    };
+    build = {
+      # TODO: `standalonePackage`; i.e. package + printInitPackage + man-docs bundled together
 
-    initPath = mkOption {
-      type = types.str;
-      description = "The path to the `init.lua` file.";
-      readOnly = true;
-      visible = false;
-    };
+      package = mkOption {
+        type = types.package;
+        description = "Wrapped Neovim.";
+        readOnly = true;
+      };
 
-    printInitPackage = mkOption {
-      type = types.package;
-      description = "A tool to show the content of the generated `init.lua` file.";
-      readOnly = true;
-      visible = false;
+      initFile = mkOption {
+        type = types.path;
+        description = "The generated `init.lua` file.";
+        readOnly = true;
+        visible = false;
+      };
+
+      printInitPackage = mkOption {
+        type = types.package;
+        description = ''
+          A tool to show the content of the generated `init.lua` file.
+          Run using `${config.build.printInitPackage.meta.mainProgram}`.
+        '';
+        readOnly = true;
+        visible = false;
+      };
     };
   };
 
@@ -208,7 +215,7 @@ in
       # Combined plugins
       combinedPlugins = [ pluginPack ] ++ standaloneStartPlugins ++ optPlugins;
 
-      # Plugins to use in finalPackage
+      # Plugins to use in build.package
       plugins = if config.performance.combinePlugins.enable then combinedPlugins else normalizedPlugins;
 
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig (
@@ -244,7 +251,7 @@ in
 
       textInit = builders.writeLua "init.lua" customRC;
       byteCompiledInit = builders.writeByteCompiledLua "init.lua" customRC;
-      init =
+      initFile =
         if
           config.type == "lua"
           && config.performance.byteCompileLua.enable
@@ -258,7 +265,7 @@ in
         (optional (
           config.extraPackages != [ ]
         ) ''--prefix PATH : "${lib.makeBinPath config.extraPackages}"'')
-        ++ (optional config.wrapRc ''--add-flags -u --add-flags "${init}"'')
+        ++ (optional config.wrapRc ''--add-flags -u --add-flags "${initFile}"'')
       );
 
       package =
@@ -291,15 +298,17 @@ in
       );
     in
     {
-      finalPackage = wrappedNeovim;
-      initPath = "${init}";
+      build = {
+        package = wrappedNeovim;
+        inherit initFile;
 
-      printInitPackage = pkgs.writeShellApplication {
-        name = "nixvim-print-init";
-        runtimeInputs = [ pkgs.bat ];
-        text = ''
-          bat --language=lua "${textInit}"
-        '';
+        printInitPackage = pkgs.writeShellApplication {
+          name = "nixvim-print-init";
+          runtimeInputs = [ pkgs.bat ];
+          text = ''
+            bat --language=lua "${textInit}"
+          '';
+        };
       };
 
       # Set `wrapRc` and `impureRtp`s option defaults with even lower priority than `mkOptionDefault`
@@ -322,6 +331,6 @@ in
         )
       );
 
-      extraPlugins = lib.mkIf config.wrapRc [ config.filesPlugin ];
+      extraPlugins = lib.mkIf config.wrapRc [ config.build.extraFiles ];
     };
 }

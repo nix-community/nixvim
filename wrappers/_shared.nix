@@ -74,7 +74,7 @@ in
             ) extraFiles
           )
           // {
-            ${filesPrefix + initName}.source = cfg.initPath;
+            ${filesPrefix + initName}.source = cfg.build.initFile;
           }
         )
       )

@@ -36,7 +36,7 @@ in
       };
     };
 
-    filesPlugin = lib.mkOption {
+    build.extraFiles = lib.mkOption {
       type = types.package;
       description = "A derivation with all the files inside.";
       internal = true;
@@ -68,7 +68,7 @@ in
 
       # A directory with all the files in it
       # Implementation based on NixOS's /etc module
-      filesPlugin = pkgs.runCommandLocal "nvim-config" { } ''
+      build.extraFiles = pkgs.runCommandLocal "nvim-config" { } ''
         set -euo pipefail
 
         makeEntry() {
@@ -91,6 +91,6 @@ in
       '';
 
       # Never combine user files with the rest of the plugins
-      performance.combinePlugins.standalonePlugins = [ config.filesPlugin ];
+      performance.combinePlugins.standalonePlugins = [ config.build.extraFiles ];
     };
 }
