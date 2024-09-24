@@ -43,21 +43,18 @@ in
     })
   ];
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      home.packages = [
-        cfg.finalPackage
-        cfg.printInitPackage
-      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs);
-    }
-    {
-      inherit (cfg) warnings assertions;
-      home.sessionVariables = mkIf cfg.defaultEditor { EDITOR = "nvim"; };
-    }
-    {
-      programs.bash.shellAliases = mkIf cfg.vimdiffAlias { vimdiff = "nvim -d"; };
-      programs.fish.shellAliases = mkIf cfg.vimdiffAlias { vimdiff = "nvim -d"; };
-      programs.zsh.shellAliases = mkIf cfg.vimdiffAlias { vimdiff = "nvim -d"; };
-    }
-  ]);
+  config = mkIf cfg.enable {
+    home.packages = [
+      cfg.finalPackage
+      cfg.printInitPackage
+    ] ++ lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
+
+    home.sessionVariables = mkIf cfg.defaultEditor { EDITOR = "nvim"; };
+
+    programs = mkIf cfg.vimdiffAlias {
+      bash.shellAliases.vimdiff = "nvim -d";
+      fish.shellAliases.vimdiff = "nvim -d";
+      zsh.shellAliases.vimdiff = "nvim -d";
+    };
+  };
 }

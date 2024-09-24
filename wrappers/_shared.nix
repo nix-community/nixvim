@@ -53,6 +53,9 @@ in
       _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
     }
 
+    # Propagate nixvim's assertions to the host modules
+    (lib.mkIf cfg.enable { inherit (cfg) warnings assertions; })
+
     # Propagate extraFiles to the host modules
     (optionalAttrs (filesOpt != null) (
       mkIf (!cfg.wrapRc) (

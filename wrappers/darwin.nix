@@ -37,13 +37,10 @@ in
 
   imports = [ (import ./_shared.nix { }) ];
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      environment.systemPackages = [
-        cfg.finalPackage
-        cfg.printInitPackage
-      ] ++ (lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs);
-    }
-    { inherit (cfg) warnings assertions; }
-  ]);
+  config = mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.finalPackage
+      cfg.printInitPackage
+    ] ++ lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
+  };
 }
