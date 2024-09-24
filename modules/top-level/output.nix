@@ -79,7 +79,25 @@ in
 
       initFile = mkOption {
         type = types.path;
-        description = "The generated `init.lua` file.";
+        description = ''
+          The generated `init.lua` file.
+
+          > [!NOTE]
+          > If `performance.byteCompileLua` is enabled, this file may not contain human-readable lua source code.
+          > Consider using `build.initSource` instead.
+        '';
+        readOnly = true;
+        visible = false;
+      };
+
+      initSource = mkOption {
+        type = types.path;
+        description = ''
+          The generated `init.lua` source file.
+
+          This is usually identical to `build.initFile`, however if `performance.byteCompileLua` is enabled,
+          this option will refer to the un-compiled lua source file.
+        '';
         readOnly = true;
         visible = false;
       };
@@ -249,17 +267,17 @@ in
         config.content
       ];
 
-      textInit = builders.writeLua "init.lua" customRC;
-      byteCompiledInit = builders.writeByteCompiledLua "init.lua" customRC;
+      initSource = builders.writeLua "init.lua" customRC;
+      initByteCompiled = builders.writeByteCompiledLua "init.lua" customRC;
       initFile =
         if
           config.type == "lua"
           && config.performance.byteCompileLua.enable
           && config.performance.byteCompileLua.initLua
         then
-          byteCompiledInit
+          initByteCompiled
         else
-          textInit;
+          initSource;
 
       extraWrapperArgs = builtins.concatStringsSep " " (
         (optional (
@@ -300,13 +318,16 @@ in
     {
       build = {
         package = wrappedNeovim;
-        inherit initFile;
+        inherit initFile initSource;
 
         printInitPackage = pkgs.writeShellApplication {
           name = "nixvim-print-init";
           runtimeInputs = [ pkgs.bat ];
+          runtimeEnv = {
+            init = config.build.initSource;
+          };
           text = ''
-            bat --language=lua "${textInit}"
+            bat --language=lua "$init"
           '';
         };
       };
