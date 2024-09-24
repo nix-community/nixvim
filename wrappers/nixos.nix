@@ -24,7 +24,6 @@ let
     modules = [
       ./modules/nixos.nix
     ];
-    check = false;
   };
 in
 {

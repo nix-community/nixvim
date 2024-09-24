@@ -15,7 +15,6 @@
           extraSpecialArgs = {
             defaultPkgs = pkgs;
           };
-          check = false;
         };
       };
     };

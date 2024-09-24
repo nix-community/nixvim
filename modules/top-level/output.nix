@@ -73,7 +73,30 @@ in
 
       package = mkOption {
         type = types.package;
-        description = "Wrapped Neovim.";
+        description = ''
+          Wrapped Neovim.
+
+          > [!NOTE]
+          > Evaluating this option will also check `assertions` and print any `warnings`.
+          > If this is not desired, you can use `build.packageUnchecked` instead.
+        '';
+        readOnly = true;
+        defaultText = lib.literalExpression "config.build.packageUnchecked";
+        apply =
+          let
+            assertions = builtins.concatMap (x: lib.optional (!x.assertion) x.message) config.assertions;
+          in
+          if assertions != [ ] then
+            throw "\nFailed assertions:\n${lib.concatMapStringsSep "\n" (msg: "- ${msg}") assertions}"
+          else
+            lib.showWarnings config.warnings;
+      };
+
+      packageUnchecked = mkOption {
+        type = types.package;
+        description = ''
+          Wrapped Neovim (without checking warnings or assertions).
+        '';
         readOnly = true;
       };
 
@@ -317,7 +340,8 @@ in
     in
     {
       build = {
-        package = wrappedNeovim;
+        package = config.build.packageUnchecked;
+        packageUnchecked = wrappedNeovim;
         inherit initFile initSource;
 
         printInitPackage = pkgs.writeShellApplication {

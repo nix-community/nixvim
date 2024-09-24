@@ -9,7 +9,7 @@ let
   cfg = config.test;
 
   inherit (config) warnings;
-  assertions = lib.nixvim.modules.getAssertionMessages config.assertions;
+  assertions = builtins.concatMap (x: lib.optional (!x.assertion) x.message) config.assertions;
 in
 {
   options.test = {
@@ -70,7 +70,7 @@ in
       build.test =
         pkgs.runCommandNoCCLocal cfg.name
           {
-            nativeBuildInputs = [ config.build.package ];
+            nativeBuildInputs = [ config.build.packageUnchecked ];
 
             # Allow inspecting the test's module a little from the repl
             # e.g.

@@ -24,7 +24,6 @@ let
     modules = [
       ./modules/darwin.nix
     ];
-    check = false;
   };
 in
 {

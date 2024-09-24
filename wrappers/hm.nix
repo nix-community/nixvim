@@ -31,7 +31,6 @@ let
         };
       }
     ];
-    check = false;
   };
 in
 {
