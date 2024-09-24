@@ -58,7 +58,7 @@ in
 
     # Propagate extraFiles to the host modules
     (optionalAttrs (filesOpt != null) (
-      mkIf (!cfg.wrapRc) (
+      mkIf (cfg.enable && !cfg.wrapRc) (
         setAttrByPath filesOpt (
           listToAttrs (
             map (
