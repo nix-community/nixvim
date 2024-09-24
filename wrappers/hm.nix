@@ -15,22 +15,22 @@ let
     types
     ;
   cfg = config.programs.nixvim;
+  nixvimConfig = config.lib.nixvim.modules.evalNixvim {
+    extraSpecialArgs = {
+      defaultPkgs = pkgs;
+      hmConfig = config;
+    };
+    modules = [
+      ./modules/hm.nix
+    ];
+    check = false;
+  };
 in
 {
   options = {
     programs.nixvim = mkOption {
+      inherit (nixvimConfig) type;
       default = { };
-      type = types.submoduleWith {
-        shorthandOnlyDefinesConfig = true;
-        specialArgs = config.lib.nixvim.modules.specialArgsWith {
-          defaultPkgs = pkgs;
-          hmConfig = config;
-        };
-        modules = [
-          ./modules/hm.nix
-          ../modules/top-level
-        ];
-      };
     };
   };
 

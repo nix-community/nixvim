@@ -15,7 +15,7 @@ let
   mkNvim =
     mod:
     let
-      evaledModule = evalNixvim {
+      nixvimConfig = evalNixvim {
         modules = [
           mod
           ./modules/standalone.nix
@@ -24,7 +24,7 @@ let
           defaultPkgs = pkgs;
         } // extraSpecialArgs;
       };
-      inherit (evaledModule.config) enableMan finalPackage printInitPackage;
+      inherit (nixvimConfig.config) enableMan finalPackage printInitPackage;
     in
     (pkgs.symlinkJoin {
       name = "nixvim";
@@ -35,7 +35,7 @@ let
       meta.mainProgram = "nvim";
     })
     // rec {
-      inherit (evaledModule) config options;
+      inherit (nixvimConfig) config options;
       extend =
         extension:
         mkNvim {
