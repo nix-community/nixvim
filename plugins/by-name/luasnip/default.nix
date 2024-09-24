@@ -192,7 +192,7 @@ in
           ];
 
       filetypeExtendConfig = mapAttrsToList (n: v: ''
-        require("luasnip").extend_filetypes("${n}", ${helpers.toLuaObject v})
+        require("luasnip").filetype_extend("${n}", ${helpers.toLuaObject v})
       '') cfg.filetypeExtend;
 
       extraConfig = [
