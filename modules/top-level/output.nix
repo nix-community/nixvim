@@ -46,8 +46,14 @@ in
 
     wrapRc = mkOption {
       type = types.bool;
-      description = "Should the config be included in the wrapper script.";
-      default = false;
+      description = ''
+        Whether the config will be included in the wrapper script.
+
+        When enabled, the nixvim config will be passed to `nvim` using the `-u` option.
+      '';
+      defaultText = lib.literalMD ''
+        Configured by your installation method: `false` when using the home-manager module, `true` otherwise.
+      '';
     };
 
     finalPackage = mkOption {
@@ -284,20 +290,24 @@ in
         '';
       };
 
-      extraConfigLuaPre = lib.mkOrder 100 (
-        # Add a global table at start of init
-        ''
-          -- Nixvim's internal module table
-          -- Can be used to share code throughout init.lua
-          local _M = {}
-        ''
-        + lib.optionalString config.wrapRc ''
+      # Set `wrapRc`s option default with even lower priority than `mkOptionDefault`
+      wrapRc = lib.mkOverride 1501 true;
 
-          -- Ignore the user lua configuration
-          vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
-          vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
-          vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
-        ''
+      extraConfigLuaPre = lib.mkOrder 100 (
+        lib.concatStringsSep "\n" (
+          lib.optional config.wrapRc ''
+            -- Ignore the user lua configuration
+            vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
+            vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
+            vim.opt.runtimepath:remove(vim.fn.stdpath('data') .. "/site")     -- ~/.local/share/nvim/site
+          ''
+          # Add a global table at start of init
+          ++ lib.singleton ''
+            -- Nixvim's internal module table
+            -- Can be used to share code throughout init.lua
+            local _M = {}
+          ''
+        )
       );
 
       extraPlugins = lib.mkIf config.wrapRc [ config.filesPlugin ];

@@ -22,6 +22,13 @@ let
     };
     modules = [
       ./modules/hm.nix
+      # FIXME: this can't go in ./modules/hm.nix because we eval that module in the docs _without_ nixvim's modules
+      {
+        _file = ./hm.nix;
+        config = {
+          wrapRc = lib.mkOptionDefault false;
+        };
+      }
     ];
     check = false;
   };

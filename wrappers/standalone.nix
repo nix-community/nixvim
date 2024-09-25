@@ -18,7 +18,6 @@ let
       nixvimConfig = evalNixvim {
         modules = [
           mod
-          ./modules/standalone.nix
         ];
         extraSpecialArgs = {
           defaultPkgs = pkgs;
