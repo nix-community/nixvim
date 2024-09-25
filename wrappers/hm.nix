@@ -27,6 +27,7 @@ let
         _file = ./hm.nix;
         config = {
           wrapRc = lib.mkOptionDefault false;
+          impureRtp = lib.mkOptionDefault true;
         };
       }
     ];

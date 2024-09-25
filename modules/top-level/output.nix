@@ -56,6 +56,18 @@ in
       '';
     };
 
+    impureRtp = mkOption {
+      type = types.bool;
+      description = ''
+        Whether to keep the (impure) nvim config directory in the runtimepath.
+
+        If disabled, the XDG config dirs `nvim` and `nvim/after` will be removed from the runtimepath.
+      '';
+      defaultText = lib.literalMD ''
+        Configured by your installation method: `true` when using the home-manager module, `false` otherwise.
+      '';
+    };
+
     finalPackage = mkOption {
       type = types.package;
       description = "Wrapped Neovim.";
@@ -290,12 +302,13 @@ in
         '';
       };
 
-      # Set `wrapRc`s option default with even lower priority than `mkOptionDefault`
+      # Set `wrapRc` and `impureRtp`s option defaults with even lower priority than `mkOptionDefault`
       wrapRc = lib.mkOverride 1501 true;
+      impureRtp = lib.mkOverride 1501 false;
 
       extraConfigLuaPre = lib.mkOrder 100 (
         lib.concatStringsSep "\n" (
-          lib.optional config.wrapRc ''
+          lib.optional (!config.impureRtp) ''
             -- Ignore the user lua configuration
             vim.opt.runtimepath:remove(vim.fn.stdpath('config'))              -- ~/.config/nvim
             vim.opt.runtimepath:remove(vim.fn.stdpath('config') .. "/after")  -- ~/.config/nvim/after
