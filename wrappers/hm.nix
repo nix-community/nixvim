@@ -27,6 +27,8 @@ let
   };
 in
 {
+  _file = ./hm.nix;
+
   options = {
     programs.nixvim = mkOption {
       inherit (nixvimConfig) type;

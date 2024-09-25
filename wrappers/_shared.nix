@@ -29,6 +29,8 @@ let
   extraFiles = lib.filter (file: file.enable) (lib.attrValues cfg.extraFiles);
 in
 {
+  _file = ./_shared.nix;
+
   # TODO: Added 2024-07-24; remove after 24.11
   imports = [
     (lib.mkRenamedOptionModule

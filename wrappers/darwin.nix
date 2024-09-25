@@ -28,6 +28,8 @@ let
   };
 in
 {
+  _file = ./darwin.nix;
+
   options = {
     programs.nixvim = mkOption {
       inherit (nixvimConfig) type;
