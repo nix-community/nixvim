@@ -2,20 +2,16 @@
   lib,
   self,
 }:
-rec {
-  # Minimal specialArgs required to evaluate nixvim modules
-  specialArgs = specialArgsWith { };
-
-  # Build specialArgs for evaluating nixvim modules
-  specialArgsWith =
-    extraSpecialArgs:
-    {
-      inherit lib;
-      # TODO: deprecate `helpers`
-      helpers = self;
-    }
-    // extraSpecialArgs;
-
+let
+  removed = {
+    # Removed 2024-09-24
+    getAssertionMessages = "";
+    # Removed 2024-09-27
+    specialArgs = "It has been integrated into `evalNixvim`";
+    specialArgsWith = "It has been integrated into `evalNixvim`";
+  };
+in
+{
   # Evaluate nixvim modules, checking warnings and assertions
   evalNixvim =
     {
@@ -29,9 +25,14 @@ rec {
       "`evalNixvim`: passing `check` is no longer supported. Checks are now done when evaluating `config.build.package` and can be avoided by using `config.build.packageUnchecked` instead.";
     lib.evalModules {
       modules = [ ../modules/top-level ] ++ modules;
-      specialArgs = specialArgsWith extraSpecialArgs;
+      specialArgs = {
+        inherit lib;
+        # TODO: deprecate `helpers`
+        helpers = self;
+      } // extraSpecialArgs;
     };
-
-  # TODO: Removed 2024-09-24
-  getAssertionMessages = throw "`modules.getAssertionMessages` has been removed.";
 }
+// lib.mapAttrs (
+  name: msg:
+  throw ("`modules.${name}` has been removed." + lib.optionalString (msg != "") (" " + msg))
+) removed
