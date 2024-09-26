@@ -172,9 +172,7 @@
               # As of 2024-01-04, ols is broken on darwin
               # TODO: re-enable this test when fixed
               && !pkgs.stdenv.isDarwin;
-            # As of 2024-03-05, omnisharp-roslyn is broken on darwin
-            # TODO: re-enable this test when fixed
-            omnisharp.enable = !pkgs.stdenv.isDarwin;
+            omnisharp.enable = true;
             openscad-lsp.enable = true;
             perlpls.enable = true;
             pest-ls.enable = true;
