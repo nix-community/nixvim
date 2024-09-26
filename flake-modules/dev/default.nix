@@ -37,8 +37,8 @@
           statix.enable = true;
           stylua.enable = true;
           shfmt.enable = true;
-          # FIXME: currently broken: taplo with options '[format]' failed to apply: exit status 101
-          # taplo.enable = true;
+          # FIXME: re-enable on darwin, currently broken: taplo with options '[format]' failed to apply: exit status 101
+          taplo.enable = pkgs.stdenv.isLinux;
         };
 
         settings = {
