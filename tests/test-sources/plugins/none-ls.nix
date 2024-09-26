@@ -115,8 +115,6 @@
           let
             disabled =
               [
-                # TODO: re-enable when package is fixed
-                "prisma_format"
                 # TODO: added 2024-09-13
                 # Swift broken everywhere atm
                 "swiftformat"
