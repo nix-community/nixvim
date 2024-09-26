@@ -168,10 +168,7 @@
             ocamllsp.enable = true;
             ols.enable =
               # ols is not supported on aarch64-linux
-              (pkgs.stdenv.hostPlatform.system != "aarch64-linux")
-              # As of 2024-01-04, ols is broken on darwin
-              # TODO: re-enable this test when fixed
-              && !pkgs.stdenv.isDarwin;
+              pkgs.stdenv.hostPlatform.system != "aarch64-linux";
             omnisharp.enable = true;
             openscad-lsp.enable = true;
             perlpls.enable = true;
