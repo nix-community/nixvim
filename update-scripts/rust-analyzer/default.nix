@@ -2,7 +2,7 @@
 # This derivation creates a Nix file that describes the Nix module that needs to be instantiated
 #
 # The create file is of the form:
-# 
+#
 # {
 #   "<rust-analyzer.option.name>" = {
 #      description = "<option description>";
