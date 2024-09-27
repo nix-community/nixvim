@@ -11,7 +11,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
   package = "vim-autosource";
   globalPrefix = "autosource_";
 
-  maintainers = [ lib.nixvim.maintainers.refaelsh ];
+  maintainers = [ lib.maintainers.refaelsh ];
 
   settingsOptions = {
     prompt_for_new_file = defaultNullOpts.mkFlagInt 1 ''

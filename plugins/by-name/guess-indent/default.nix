@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "guess-indent.nvim";
   package = "guess-indent-nvim";
 
-  maintainers = [ helpers.maintainers.GGORG ];
+  maintainers = [ lib.maintainers.GGORG ];
 
   settingsOptions = {
     auto_cmd = helpers.defaultNullOpts.mkBool true ''

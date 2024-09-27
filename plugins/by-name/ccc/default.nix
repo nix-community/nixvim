@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "ccc.nvim";
   package = "ccc-nvim";
 
-  maintainers = [ helpers.maintainers.JanKremer ];
+  maintainers = [ lib.maintainers.JanKremer ];
 
   settingsOptions =
     let

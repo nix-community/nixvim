@@ -6,7 +6,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   colorscheme = "dracula";
   isColorscheme = true;
 
-  maintainers = [ lib.nixvim.maintainers.refaelsh ];
+  maintainers = [ lib.maintainers.refaelsh ];
 
   settingsExample = {
     italic_comment = true;

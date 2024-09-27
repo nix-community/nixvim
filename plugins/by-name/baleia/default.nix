@@ -1,4 +1,5 @@
 {
+  lib,
   helpers,
   ...
 }:
@@ -7,7 +8,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "baleia.nvim";
   package = "baleia-nvim";
 
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
     async = helpers.defaultNullOpts.mkBool true ''

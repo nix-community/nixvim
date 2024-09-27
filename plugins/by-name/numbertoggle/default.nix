@@ -7,5 +7,5 @@ lib.nixvim.vim-plugin.mkVimPlugin {
   originalName = "vim-numbertoggle";
   package = "vim-numbertoggle";
 
-  maintainers = [ lib.nixvim.maintainers.refaelsh ];
+  maintainers = [ lib.maintainers.refaelsh ];
 }

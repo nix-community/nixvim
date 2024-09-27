@@ -8,7 +8,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "cmake-tools.nvim";
   package = "cmake-tools-nvim";
 
-  maintainers = [ helpers.maintainers.NathanFelber ];
+  maintainers = [ lib.maintainers.NathanFelber ];
 
   settingsOptions = {
     cmake_command = helpers.defaultNullOpts.mkStr "cmake" ''

@@ -11,7 +11,7 @@ helpers.vim-plugin.mkVimPlugin {
   package = "lazygit-nvim";
   globalPrefix = "lazygit_";
 
-  maintainers = [ helpers.maintainers.AndresBermeoMarinelli ];
+  maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 
   settingsOptions = {
     floating_window_winblend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) 0 ''

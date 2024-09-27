@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "lsp-status";
   originalName = "lsp-status.nvim";
   package = "lsp-status-nvim";
-  maintainers = [ helpers.maintainers.b3nb5n ];
+  maintainers = [ lib.maintainers.b3nb5n ];
 
   settingsOptions =
     let

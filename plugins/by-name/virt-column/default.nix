@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "virt-column.nvim";
   package = "virt-column-nvim";
 
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
     enabled = helpers.defaultNullOpts.mkBool true ''

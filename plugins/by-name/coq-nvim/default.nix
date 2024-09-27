@@ -10,9 +10,9 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "coq_nvim";
   package = "coq_nvim";
 
-  maintainers = [
-    maintainers.traxys
-    helpers.maintainers.Kareem-Medhat
+  maintainers = with lib.maintainers; [
+    traxys
+    Kareem-Medhat
   ];
 
   extraOptions = {

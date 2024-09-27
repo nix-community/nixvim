@@ -10,7 +10,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
   isColorscheme = true;
   globalPrefix = "everforest_";
 
-  maintainers = [ lib.nixvim.maintainers.sheemap ];
+  maintainers = [ lib.maintainers.sheemap ];
 
   settingsOptions = {
     background =

@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "indent-o-matic";
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [ lib.maintainers.alisonjenkins ];
   settingsOptions = {
     max_lines =
       helpers.defaultNullOpts.mkInt 2048

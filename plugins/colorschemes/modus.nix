@@ -12,7 +12,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   package = "modus-themes-nvim";
   isColorscheme = true;
 
-  maintainers = [ lib.nixvim.maintainers.nwjsmith ];
+  maintainers = [ lib.maintainers.nwjsmith ];
 
   settingsOptions = {
     style =

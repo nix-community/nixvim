@@ -7,5 +7,5 @@ lib.nixvim.vim-plugin.mkVimPlugin {
   originalName = "vim-repeat";
   package = "vim-repeat";
 
-  maintainers = [ lib.nixvim.maintainers.refaelsh ];
+  maintainers = [ lib.maintainers.refaelsh ];
 }

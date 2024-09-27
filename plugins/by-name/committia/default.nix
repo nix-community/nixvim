@@ -10,7 +10,7 @@ helpers.vim-plugin.mkVimPlugin {
   package = "committia-vim";
   globalPrefix = "committia_";
 
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
     open_only_vim_starting = helpers.defaultNullOpts.mkFlagInt 1 ''

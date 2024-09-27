@@ -120,8 +120,8 @@ lib.fix (
       wrapVimscriptForLua
       ;
 
-    # TODO: Deprecate this `maintainers` alias
-    inherit (self.extendedLib) maintainers;
+    # TODO: Removed 2024-09-27
+    maintainers = throw "The `maintainers` alias has been removed. Use `lib.maintainers` on a lib with nixvim's extensions.";
 
     # TODO: Deprecate the old `nixvimTypes` alias?
     nixvimTypes = self.extendedLib.types;

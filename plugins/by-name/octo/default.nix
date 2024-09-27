@@ -10,7 +10,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "octo.nvim";
   package = "octo-nvim";
 
-  maintainers = [ helpers.maintainers.svl ];
+  maintainers = [ lib.maintainers.svl ];
 
   settingsOptions = {
     use_local_fs = helpers.defaultNullOpts.mkBool false ''

@@ -9,7 +9,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "orgmode";
   originalName = "nvim-orgmode";
 
-  maintainers = [ lib.nixvim.maintainers.refaelsh ];
+  maintainers = [ lib.maintainers.refaelsh ];
 
   settingsOptions = {
     org_agenda_files = defaultNullOpts.mkNullable (with lib.types; either str (listOf str)) "" ''

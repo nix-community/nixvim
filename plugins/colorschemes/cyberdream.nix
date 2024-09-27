@@ -11,7 +11,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   originalName = "cyberdream.nvim";
   package = "cyberdream-nvim";
 
-  maintainers = [ lib.nixvim.maintainers.AndresBermeoMarinelli ];
+  maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 
   settingsOptions = {
     transparent = defaultNullOpts.mkBool false ''

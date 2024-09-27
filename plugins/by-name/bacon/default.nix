@@ -1,11 +1,12 @@
 {
+  lib,
   helpers,
   ...
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "bacon";
   package = "nvim-bacon";
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
     quickfix = {

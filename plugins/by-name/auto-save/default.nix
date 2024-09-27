@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "auto-save.nvim";
   package = "auto-save-nvim";
 
-  maintainers = [ helpers.maintainers.braindefender ];
+  maintainers = [ lib.maintainers.braindefender ];
 
   # TODO: introduced 2024-06-21, remove after 24.11
   deprecateExtraOptions = true;

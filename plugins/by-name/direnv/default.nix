@@ -4,14 +4,13 @@
   lib,
   ...
 }:
-with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "direnv";
   originalName = "direnv.vim";
   package = "direnv-vim";
   globalPrefix = "direnv_";
 
-  maintainers = [ helpers.maintainers.alisonjenkins ];
+  maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
     direnv_auto = helpers.defaultNullOpts.mkFlagInt 1 ''

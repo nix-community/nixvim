@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "competitest.nvim";
   package = "competitest-nvim";
 
-  maintainers = [ helpers.maintainers.svl ];
+  maintainers = [ lib.maintainers.svl ];
 
   settingsOptions = {
     local_config_file_name = helpers.defaultNullOpts.mkStr ".competitest.lua" ''

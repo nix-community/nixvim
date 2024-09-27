@@ -9,7 +9,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   originalName = "dressing.nvim";
   package = "dressing-nvim";
 
-  maintainers = [ helpers.maintainers.AndresBermeoMarinelli ];
+  maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 
   settingsOptions =
     let
