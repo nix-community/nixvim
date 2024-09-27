@@ -1,4 +1,8 @@
-{ inputs, ... }:
+{
+  self,
+  inputs,
+  ...
+}:
 {
   imports = [ inputs.flake-parts.flakeModules.easyOverlay ];
   perSystem =
@@ -15,4 +19,10 @@
         };
       };
     };
+  flake.overlays = {
+    # Export our lib extension overlay
+    # Note: this is an overlay for nixpkg's lib, not for nixpkgs itself
+    # You can pass the overlay to `lib.extend`
+    lib = import ../lib/overlay.nix { };
+  };
 }
