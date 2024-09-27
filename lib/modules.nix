@@ -23,6 +23,11 @@ in
     # NOTE: this argument was always marked as experimental
     assert lib.assertMsg (!args ? "check")
       "`evalNixvim`: passing `check` is no longer supported. Checks are now done when evaluating `config.build.package` and can be avoided by using `config.build.packageUnchecked` instead.";
+    # Ensure a suitable `lib` is used
+    # TODO: offer a lib overlay that end-users could use to apply nixvim's extensions to their own `lib`
+    assert lib.assertMsg (extraSpecialArgs ? lib -> extraSpecialArgs.lib ? nixvim) ''
+      Nixvim requires a lib that includes some custom extensions, however the `lib` from `specialArgs` does not have a `nixvim` attr.
+      Remove `lib` from nixvim's `specialArgs` or ensure you apply nixvim's extensions to your `lib`.'';
     lib.evalModules {
       modules = [ ../modules/top-level ] ++ modules;
       specialArgs = {
