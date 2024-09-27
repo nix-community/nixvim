@@ -92,7 +92,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     update_in_insert = false;
   };
 
-  settingsOptions = import ./settings.nix { inherit helpers; };
+  settingsOptions = import ./settings.nix lib;
 
   extraOptions = {
     enableLspFormat = mkOption {

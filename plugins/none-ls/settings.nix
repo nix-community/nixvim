@@ -1,10 +1,11 @@
-{ helpers }:
+lib:
 let
-  types = helpers.nixvimTypes;
-  applyListOfLua = x: map (v: if builtins.isString v then helpers.mkRaw v else v) x;
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+  applyListOfLua = x: map (v: if builtins.isString v then lib.nixvim.mkRaw v else v) x;
 in
 {
-  border = helpers.defaultNullOpts.mkNullable' {
+  border = defaultNullOpts.mkNullable' {
     type =
       with types;
       oneOf [
@@ -23,13 +24,13 @@ in
     '';
   };
 
-  cmd = helpers.defaultNullOpts.mkListOf types.str [ "nvim" ] ''
+  cmd = defaultNullOpts.mkListOf types.str [ "nvim" ] ''
     Defines the command used to start the null-ls server.
     If you do not have an `nvim` binary available on your `$PATH`,
     you should change this to an absolute path to the binary.
   '';
 
-  debounce = helpers.defaultNullOpts.mkUnsignedInt 250 ''
+  debounce = defaultNullOpts.mkUnsignedInt 250 ''
     The `debounce` setting controls the amount of time between the last change to a
     buffer and the next `textDocument/didChange` notification. These notifications
     cause null-ls to generate diagnostics, so this setting indirectly controls the
@@ -41,7 +42,7 @@ in
     without unnecessary resource usage.
   '';
 
-  debug = helpers.defaultNullOpts.mkBool false ''
+  debug = defaultNullOpts.mkBool false ''
     Displays all possible log messages and writes them to the null-ls log, which you
     can view with the command `:NullLsLog`. This option can slow down Neovim, so
     it's strongly recommended to disable it for normal use.
@@ -49,7 +50,7 @@ in
     `debug = true` is the same as setting `log_level` to `"trace"`.
   '';
 
-  default_timeout = helpers.defaultNullOpts.mkUnsignedInt 5000 ''
+  default_timeout = defaultNullOpts.mkUnsignedInt 5000 ''
     Sets the amount of time (in milliseconds) after which built-in sources will time out.
     Note that built-in sources can define their own timeout period and that users can override the
     timeout period on a per-source basis, too
@@ -58,7 +59,7 @@ in
     Specifying a timeout with a value less than zero will prevent commands from timing out.
   '';
 
-  diagnostic_config = helpers.defaultNullOpts.mkNullable' {
+  diagnostic_config = defaultNullOpts.mkNullable' {
     type =
       with types;
       oneOf [
@@ -78,7 +79,7 @@ in
     '';
   };
 
-  diagnostics_format = helpers.defaultNullOpts.mkStr "#{m}" ''
+  diagnostics_format = defaultNullOpts.mkStr "#{m}" ''
     Sets the default format used for diagnostics. The plugin will replace the following special
     components with the relevant diagnostic information:
 
@@ -102,15 +103,13 @@ in
       method, described in [BUILTIN_CONFIG](https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md).
   '';
 
-  fallback_severity =
-    helpers.defaultNullOpts.mkUnsignedInt { __raw = "vim.diagnostic.severity.ERROR"; }
-      ''
-        Defines the severity used when a diagnostic source does not explicitly define a severity.
-        See `:help diagnostic-severity` for available values.
-      '';
+  fallback_severity = defaultNullOpts.mkUnsignedInt { __raw = "vim.diagnostic.severity.ERROR"; } ''
+    Defines the severity used when a diagnostic source does not explicitly define a severity.
+    See `:help diagnostic-severity` for available values.
+  '';
 
   log_level =
-    helpers.defaultNullOpts.mkEnum
+    defaultNullOpts.mkEnum
       [
         "off"
         "error"
@@ -128,29 +127,29 @@ in
         - neovim's notification area.
       '';
 
-  notify_format = helpers.defaultNullOpts.mkStr "[null-ls] %s" ''
+  notify_format = defaultNullOpts.mkStr "[null-ls] %s" ''
     Sets the default format for `vim.notify()` messages.
     Can be used to customize 3rd party notification plugins like
     [nvim-notify](https://github.com/rcarriga/nvim-notify).
   '';
 
-  on_attach = helpers.defaultNullOpts.mkLuaFn null ''
+  on_attach = defaultNullOpts.mkLuaFn null ''
     Defines an `on_attach` callback to run whenever null-ls attaches to a buffer.
     If you have a common `on_attach` you're using for LSP servers, you can reuse that here,
     use a custom callback for null-ls, or leave this undefined.
   '';
 
-  on_init = helpers.defaultNullOpts.mkLuaFn null ''
+  on_init = defaultNullOpts.mkLuaFn null ''
     Defines an `on_init` callback to run when null-ls initializes.
     From here, you can make changes to the client (the first argument)
     or `initialize_result` (the second argument, which as of now is not used).
   '';
 
-  on_exit = helpers.defaultNullOpts.mkLuaFn null ''
+  on_exit = defaultNullOpts.mkLuaFn null ''
     Defines an `on_exit` callback to run when the null-ls client exits.
   '';
 
-  root_dir = helpers.defaultNullOpts.mkLuaFn' {
+  root_dir = defaultNullOpts.mkLuaFn' {
     pluginDefault = "require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git')";
     description = ''
       Determines the root of the null-ls server. On startup, null-ls will call
@@ -165,7 +164,7 @@ in
     '';
   };
 
-  root_dir_async = helpers.defaultNullOpts.mkLuaFn' {
+  root_dir_async = defaultNullOpts.mkLuaFn' {
     pluginDefault = null;
     description = ''
       Like `root_dir` but also accepts a callback parameter allowing it to be
@@ -180,7 +179,7 @@ in
     '';
   };
 
-  should_attach = helpers.defaultNullOpts.mkLuaFn' {
+  should_attach = defaultNullOpts.mkLuaFn' {
     pluginDefault = null;
     description = ''
       A user-defined function that controls whether to enable null-ls for a given
@@ -197,7 +196,7 @@ in
   };
 
   # Not using mkListOf because I want `strLua` instead of `rawLua`
-  sources = helpers.defaultNullOpts.mkNullable' {
+  sources = defaultNullOpts.mkNullable' {
     # TODO: support custom & third-party sources.
     # Need a "source" submodule type:
     # https://github.com/nvimtools/none-ls.nvim/blob/main/doc/MAIN.md#sources
@@ -225,7 +224,7 @@ in
     visible = false;
   };
 
-  temp_dir = helpers.defaultNullOpts.mkStr null ''
+  temp_dir = defaultNullOpts.mkStr null ''
     Defines the directory used to create temporary files for sources that rely on
     them (a workaround used for command-based sources that do not support `stdio`).
 
@@ -241,7 +240,7 @@ in
     described in [BUILTIN_CONFIG](https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md).
   '';
 
-  update_in_insert = helpers.defaultNullOpts.mkBool false ''
+  update_in_insert = defaultNullOpts.mkBool false ''
     Controls whether diagnostic sources run in insert mode. If set to `false`,
     diagnostic sources will run upon exiting insert mode, which greatly improves
     performance but can create a slight delay before diagnostics show up. Set this
