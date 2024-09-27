@@ -1,11 +1,13 @@
 {
   lib,
-  helpers,
   pkgs,
   ...
 }:
-with lib;
-helpers.vim-plugin.mkVimPlugin {
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "lazygit";
   originalName = "lazygit.nvim";
   package = "lazygit-nvim";
@@ -14,15 +16,15 @@ helpers.vim-plugin.mkVimPlugin {
   maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 
   settingsOptions = {
-    floating_window_winblend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) 0 ''
+    floating_window_winblend = defaultNullOpts.mkNullable (types.ints.between 0 100) 0 ''
       Set the transparency of the floating window.
     '';
 
     floating_window_scaling_factor =
-      helpers.defaultNullOpts.mkNullable types.numbers.nonnegative 0.9
+      defaultNullOpts.mkNullable types.numbers.nonnegative 0.9
         "Set the scaling factor for floating window.";
 
-    floating_window_border_chars = helpers.defaultNullOpts.mkListOf types.str [
+    floating_window_border_chars = defaultNullOpts.mkListOf types.str [
       "╭"
       "─"
       "╮"
@@ -33,19 +35,19 @@ helpers.vim-plugin.mkVimPlugin {
       "│"
     ] "Customize lazygit popup window border characters.";
 
-    floating_window_use_plenary = helpers.defaultNullOpts.mkFlagInt 0 ''
+    floating_window_use_plenary = defaultNullOpts.mkFlagInt 0 ''
       Whether to use plenary.nvim to manage floating window if available.
     '';
 
-    use_neovim_remote = helpers.defaultNullOpts.mkFlagInt 1 ''
+    use_neovim_remote = defaultNullOpts.mkFlagInt 1 ''
       Whether to use neovim remote. Will fallback to `0` if neovim-remote is not installed.
     '';
 
-    use_custom_config_file_path = helpers.defaultNullOpts.mkFlagInt 0 ''
+    use_custom_config_file_path = defaultNullOpts.mkFlagInt 0 ''
       Config file path is evaluated if this value is `1`.
     '';
 
-    config_file_path = helpers.defaultNullOpts.mkNullable (
+    config_file_path = defaultNullOpts.mkNullable (
       with types; either str (listOf str)
     ) [ ] "Custom config file path or list of custom config file paths.";
   };

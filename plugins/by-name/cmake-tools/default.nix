@@ -1,9 +1,8 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cmake-tools";
   originalName = "cmake-tools.nvim";
   package = "cmake-tools-nvim";
@@ -11,51 +10,51 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.NathanFelber ];
 
   settingsOptions = {
-    cmake_command = helpers.defaultNullOpts.mkStr "cmake" ''
+    cmake_command = defaultNullOpts.mkStr "cmake" ''
       This is used to specify cmake command path.
     '';
 
-    ctest_command = helpers.defaultNullOpts.mkStr "ctest" ''
+    ctest_command = defaultNullOpts.mkStr "ctest" ''
       This is used to specify ctest command path.
     '';
 
-    cmake_regenerate_on_save = helpers.defaultNullOpts.mkBool true ''
+    cmake_regenerate_on_save = defaultNullOpts.mkBool true ''
       Auto generate when save CMakeLists.txt.
     '';
 
     cmake_generate_options =
-      helpers.defaultNullOpts.mkAttrsOf lib.types.anything { "-DCMAKE_EXPORT_COMPILE_COMMANDS" = 1; }
+      defaultNullOpts.mkAttrsOf lib.types.anything { "-DCMAKE_EXPORT_COMPILE_COMMANDS" = 1; }
         ''
           This will be passed when invoke `CMakeGenerate`.
         '';
 
-    cmake_build_options = helpers.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
+    cmake_build_options = defaultNullOpts.mkAttrsOf lib.types.anything { } ''
       This will be passed when invoke `CMakeBuild`.
     '';
 
-    cmake_build_directory = helpers.defaultNullOpts.mkStr "out/\${variant:buildType}" ''
+    cmake_build_directory = defaultNullOpts.mkStr "out/\${variant:buildType}" ''
       This is used to specify generate directory for cmake, allows macro expansion, relative to vim.loop.cwd().
     '';
 
-    cmake_soft_link_compile_commands = helpers.defaultNullOpts.mkBool true ''
+    cmake_soft_link_compile_commands = defaultNullOpts.mkBool true ''
       This will automatically make a soft link from compile commands file to project root dir.
     '';
 
-    cmake_compile_commands_from_lsp = helpers.defaultNullOpts.mkBool false ''
+    cmake_compile_commands_from_lsp = defaultNullOpts.mkBool false ''
       This will automatically set compile commands file location using lsp, to use it, please set `cmake_soft_link_compile_commands` to false.
     '';
 
-    cmake_kits_path = helpers.defaultNullOpts.mkStr null ''
+    cmake_kits_path = defaultNullOpts.mkStr null ''
       This is used to specify global cmake kits path, see CMakeKits for detailed usage.
     '';
 
     cmake_variants_message = {
-      short = helpers.defaultNullOpts.mkAttrsOf lib.types.anything { show = true; } ''
+      short = defaultNullOpts.mkAttrsOf lib.types.anything { show = true; } ''
         Whether to show short message.
       '';
 
       long =
-        helpers.defaultNullOpts.mkAttrsOf lib.types.anything
+        defaultNullOpts.mkAttrsOf lib.types.anything
           {
             show = true;
             max_length = 40;
@@ -66,46 +65,46 @@ helpers.neovim-plugin.mkNeovimPlugin {
     };
 
     cmake_dap_configuration = {
-      name = helpers.defaultNullOpts.mkStr "cpp" ''
+      name = defaultNullOpts.mkStr "cpp" ''
         Name of the launch configuration.
       '';
 
-      type = helpers.defaultNullOpts.mkStr "codelldb" ''
+      type = defaultNullOpts.mkStr "codelldb" ''
         Debug adapter to use.
       '';
 
-      request = helpers.defaultNullOpts.mkStr "launch" ''
+      request = defaultNullOpts.mkStr "launch" ''
         Session initiation method.
       '';
     };
 
     cmake_executor = {
-      name = helpers.defaultNullOpts.mkStr "quickfix" ''
+      name = defaultNullOpts.mkStr "quickfix" ''
         Name of the executor.
       '';
 
-      opts = helpers.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
+      opts = defaultNullOpts.mkAttrsOf lib.types.anything { } ''
         The options the executor will get, possible values depend on the executor type.
       '';
     };
 
     cmake_runner = {
-      name = helpers.defaultNullOpts.mkStr "terminal" ''
+      name = defaultNullOpts.mkStr "terminal" ''
         Name of the runner.
       '';
 
-      opts = helpers.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
+      opts = defaultNullOpts.mkAttrsOf lib.types.anything { } ''
         The options the runner will get, possible values depend on the runner type.
       '';
     };
 
     cmake_notifications = {
-      runner.enabled = helpers.defaultNullOpts.mkBool true "";
+      runner.enabled = defaultNullOpts.mkBool true "";
 
-      executor.enabled = helpers.defaultNullOpts.mkBool true "";
+      executor.enabled = defaultNullOpts.mkBool true "";
 
       spinner =
-        helpers.defaultNullOpts.mkListOf lib.types.str
+        defaultNullOpts.mkListOf lib.types.str
           [
             "⠋"
             "⠙"
@@ -122,7 +121,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
             Icons used for progress display.
           '';
 
-      refresh_rate_ms = helpers.defaultNullOpts.mkPositiveInt 100 ''
+      refresh_rate_ms = defaultNullOpts.mkPositiveInt 100 ''
         How often to iterate icons.
       '';
     };

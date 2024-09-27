@@ -1,9 +1,8 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "baleia";
   originalName = "baleia.nvim";
   package = "baleia-nvim";
@@ -11,20 +10,20 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
-    async = helpers.defaultNullOpts.mkBool true ''
+    async = defaultNullOpts.mkBool true ''
       Highlight asynchronously.
     '';
 
-    colors = helpers.defaultNullOpts.mkStr "NR_8" ''
+    colors = defaultNullOpts.mkStr "NR_8" ''
       Table mapping 256 color codes to vim colors.
     '';
 
-    line_starts_at = helpers.defaultNullOpts.mkInt 1 ''
+    line_starts_at = defaultNullOpts.mkInt 1 ''
       At which column start colorizing.
     '';
 
     log =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "ERROR"
           "WARN"
@@ -36,11 +35,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
           Log level, possible values are ERROR, WARN, INFO or DEBUG.
         '';
 
-    name = helpers.defaultNullOpts.mkStr "BaleiaColors" ''
+    name = defaultNullOpts.mkStr "BaleiaColors" ''
       Prefix used to name highlight groups.
     '';
 
-    strip_ansi_codes = helpers.defaultNullOpts.mkBool true ''
+    strip_ansi_codes = defaultNullOpts.mkBool true ''
       Remove ANSI color codes from text.
     '';
   };

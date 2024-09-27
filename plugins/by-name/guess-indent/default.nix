@@ -1,10 +1,9 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "guess-indent";
   originalName = "guess-indent.nvim";
   package = "guess-indent-nvim";
@@ -12,16 +11,16 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GGORG ];
 
   settingsOptions = {
-    auto_cmd = helpers.defaultNullOpts.mkBool true ''
+    auto_cmd = defaultNullOpts.mkBool true ''
       Whether to create autocommand to automatically detect indentation
     '';
 
-    override_editorconfig = helpers.defaultNullOpts.mkBool false ''
+    override_editorconfig = defaultNullOpts.mkBool false ''
       Whether or not to override indentation set by Editorconfig
     '';
 
     filetype_exclude =
-      helpers.defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf types.str
         [
           "netrw"
           "tutor"
@@ -31,7 +30,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         '';
 
     buftype_exclude =
-      helpers.defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf types.str
         [
           "help"
           "nofile"
@@ -42,12 +41,12 @@ helpers.neovim-plugin.mkNeovimPlugin {
           Buffer types to ignore indentation detection in
         '';
 
-    on_tab_options = helpers.defaultNullOpts.mkAttrsOf types.anything { expandtab = false; } ''
+    on_tab_options = defaultNullOpts.mkAttrsOf types.anything { expandtab = false; } ''
       A table of vim options when tabs are detected
     '';
 
     on_space_options =
-      helpers.defaultNullOpts.mkAttrsOf types.anything
+      defaultNullOpts.mkAttrsOf types.anything
         {
           expandtab = true;
           tabstop = "detected";

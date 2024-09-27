@@ -1,10 +1,9 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "auto-save";
   originalName = "auto-save.nvim";
   package = "auto-save-nvim";
@@ -40,8 +39,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
       settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
-      (mkRenamedOptionModule (basePluginPath ++ [ "enableAutoSave" ]) (settingsPath ++ [ "enabled" ]))
-      (mkRemovedOptionModule (basePluginPath ++ [ "keymaps" ]) ''
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "enableAutoSave" ]) (settingsPath ++ [ "enabled" ]))
+      (lib.mkRemovedOptionModule (basePluginPath ++ [ "keymaps" ]) ''
         Use the top-level `keymaps` option to create a keymap that runs :ASToggle
 
         keymaps = [
@@ -51,17 +50,17 @@ helpers.neovim-plugin.mkNeovimPlugin {
     ];
 
   settingsOptions = {
-    enabled = helpers.defaultNullOpts.mkBool true ''
+    enabled = defaultNullOpts.mkBool true ''
       Whether to start auto-save when the plugin is loaded.
     '';
 
     execution_message = {
-      enabled = helpers.defaultNullOpts.mkBool true ''
+      enabled = defaultNullOpts.mkBool true ''
         Show execution message after successful auto-save.
       '';
 
       message =
-        helpers.defaultNullOpts.mkStr
+        defaultNullOpts.mkStr
           {
             __raw = ''
               function()
@@ -74,11 +73,9 @@ helpers.neovim-plugin.mkNeovimPlugin {
             This can be a lua function that returns a string.
           '';
 
-      dim = helpers.defaultNullOpts.mkNullable (types.numbers.between 0
-        1
-      ) 0.18 "Dim the color of `message`.";
+      dim = defaultNullOpts.mkNullable (types.numbers.between 0 1) 0.18 "Dim the color of `message`.";
 
-      cleaning_interval = helpers.defaultNullOpts.mkUnsignedInt 1250 ''
+      cleaning_interval = defaultNullOpts.mkUnsignedInt 1250 ''
         Time (in milliseconds) to wait before automatically cleaning MsgArea after displaying
         `message`.
         See `:h MsgArea`.
@@ -87,7 +84,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     trigger_events = {
       immediate_save =
-        helpers.defaultNullOpts.mkListOf types.str
+        defaultNullOpts.mkListOf types.str
           [
             "BufLeave"
             "FocusLost"
@@ -98,7 +95,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
           '';
 
       defer_save =
-        helpers.defaultNullOpts.mkListOf types.str
+        defaultNullOpts.mkListOf types.str
           [
             "InsertLeave"
             "TextChanged"
@@ -108,13 +105,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
             See `:h events` for events description.
           '';
 
-      cancel_defered_save = helpers.defaultNullOpts.mkListOf types.str [ "InsertEnter" ] ''
+      cancel_defered_save = defaultNullOpts.mkListOf types.str [ "InsertEnter" ] ''
         Vim events that cancel a pending deferred save.\
         See `:h events` for events description.
       '';
     };
 
-    condition = helpers.defaultNullOpts.mkLuaFn' {
+    condition = defaultNullOpts.mkLuaFn' {
       pluginDefault = null;
       description = ''
         Function that determines whether to save the current buffer or not.
@@ -139,23 +136,23 @@ helpers.neovim-plugin.mkNeovimPlugin {
       '';
     };
 
-    write_all_buffers = helpers.defaultNullOpts.mkBool false ''
+    write_all_buffers = defaultNullOpts.mkBool false ''
       Write all buffers when the current one meets `condition`.
     '';
 
-    noautocmd = helpers.defaultNullOpts.mkBool false ''
+    noautocmd = defaultNullOpts.mkBool false ''
       Do not execute autocmds when saving.
     '';
 
-    lockmarks = helpers.defaultNullOpts.mkBool false ''
+    lockmarks = defaultNullOpts.mkBool false ''
       Lock marks when saving, see `:h lockmarks` for more details.
     '';
 
-    debounce_delay = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
+    debounce_delay = defaultNullOpts.mkUnsignedInt 1000 ''
       Saves the file at most every `debounce_delay` milliseconds.
     '';
 
-    debug = helpers.defaultNullOpts.mkBool false ''
+    debug = defaultNullOpts.mkBool false ''
       Log debug messages to `auto-save.log` file in NeoVim cache directory.
     '';
   };

@@ -1,11 +1,13 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lsp-status";
   originalName = "lsp-status.nvim";
   package = "lsp-status-nvim";
@@ -15,27 +17,27 @@ helpers.neovim-plugin.mkNeovimPlugin {
     let
       mkIndicatorOption =
         default:
-        helpers.defaultNullOpts.mkStr default ''
+        defaultNullOpts.mkStr default ''
           The string to show as diagnostics.
           If you don't have Nerd/Awesome Fonts you can replace defaults with ASCII chars.
         '';
     in
     {
-      kind_labels = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+      kind_labels = defaultNullOpts.mkAttrsOf types.str { } ''
         An optional map from LSP symbol kinds to label symbols. Used to decorate the current function name.
       '';
 
-      select_symbol = helpers.defaultNullOpts.mkStr "" ''
+      select_symbol = defaultNullOpts.mkStr "" ''
         An optional handler of the form `function(cursor_pos, document_symbol)` that should return
         `true` if `document_symbol` (a `DocumentSymbol`) should be accepted as the symbol currently
         containing the cursor.
       '';
 
-      current_function = helpers.defaultNullOpts.mkBool true ''
+      current_function = defaultNullOpts.mkBool true ''
         True if the current function should be updated and displayed in the default statusline component.
       '';
 
-      show_filename = helpers.defaultNullOpts.mkBool true ''
+      show_filename = defaultNullOpts.mkBool true ''
         True if the current function should be updated and displayed in the default statusline component.
       '';
 
@@ -45,15 +47,15 @@ helpers.neovim-plugin.mkNeovimPlugin {
       indicator_info = mkIndicatorOption "🛈";
       indicator_hint = mkIndicatorOption "❗";
 
-      indicator_separator = helpers.defaultNullOpts.mkStr " " ''
+      indicator_separator = defaultNullOpts.mkStr " " ''
         A string which goes between each diagnostic group symbol and its count.
       '';
 
-      component_separator = helpers.defaultNullOpts.mkStr " " ''
+      component_separator = defaultNullOpts.mkStr " " ''
         A string which goes between each "chunk" of the statusline component (i.e. different diagnostic groups, messages).
       '';
 
-      diagnostics = helpers.defaultNullOpts.mkBool true ''
+      diagnostics = defaultNullOpts.mkBool true ''
         If false, the default statusline component does not display LSP diagnostics.
       '';
     };
@@ -73,7 +75,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       preConfig = ''
         do
           local lsp_status = require('lsp-status')
-          lsp_status.config(${helpers.toLuaObject cfg.settings})
+          lsp_status.config(${lib.nixvim.toLuaObject cfg.settings})
           lsp_status.register_progress()
         end
       '';

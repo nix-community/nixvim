@@ -1,11 +1,13 @@
 {
   lib,
-  helpers,
   pkgs,
   ...
 }:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "coq-nvim";
   originalName = "coq_nvim";
   package = "coq_nvim";
@@ -17,8 +19,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   extraOptions = {
     # TODO: should this enable option be replaced with `nullable = true` in the package option?
-    installArtifacts = mkEnableOption "and install coq-artifacts";
-    artifactsPackage = mkPackageOption pkgs "coq-artifacts" {
+    installArtifacts = lib.mkEnableOption "and install coq-artifacts";
+    artifactsPackage = lib.mkPackageOption pkgs "coq-artifacts" {
       extraDescription = "Installed when `installArtifacts` is enabled.";
       default = [
         "vimPlugins"
@@ -41,7 +43,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       settingsPath = basePath ++ [ "settings" ];
     in
     [
-      (mkRenamedOptionModule (basePath ++ [ "recommendedKeymaps" ]) (
+      (lib.mkRenamedOptionModule (basePath ++ [ "recommendedKeymaps" ]) (
         settingsPath
         ++ [
           "keymap"
@@ -49,7 +51,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         ]
       ))
 
-      (mkRenamedOptionModule (basePath ++ [ "alwaysComplete" ]) (
+      (lib.mkRenamedOptionModule (basePath ++ [ "alwaysComplete" ]) (
         settingsPath
         ++ [
           "completion"
@@ -60,23 +62,23 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   callSetup = false;
   settingsOptions = {
-    auto_start = helpers.mkNullOrOption (
-      with helpers.nixvimTypes; maybeRaw (either bool (enum [ "shut-up" ]))
+    auto_start = lib.nixvim.mkNullOrOption (
+      with types; maybeRaw (either bool (enum [ "shut-up" ]))
     ) "Auto-start or shut up";
 
-    xdg = mkOption {
+    xdg = lib.mkOption {
       type = types.bool;
       default = true;
       description = "Use XDG paths. May be required when installing coq with Nix.";
     };
 
-    keymap.recommended = helpers.defaultNullOpts.mkBool true "Use the recommended keymaps";
+    keymap.recommended = defaultNullOpts.mkBool true "Use the recommended keymaps";
 
-    completion.always = helpers.defaultNullOpts.mkBool true "Always trigger completion on keystroke";
+    completion.always = defaultNullOpts.mkBool true "Always trigger completion on keystroke";
   };
 
   extraConfig = cfg: {
-    extraPlugins = mkIf cfg.installArtifacts [ cfg.artifactsPackage ];
+    extraPlugins = lib.mkIf cfg.installArtifacts [ cfg.artifactsPackage ];
 
     globals = {
       coq_settings = cfg.settings;

@@ -1,10 +1,9 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ccc";
   originalName = "ccc.nvim";
   package = "ccc-nvim";
@@ -13,15 +12,15 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   settingsOptions =
     let
-      listOfRawLua = with helpers.nixvimTypes; listOf strLua;
-      mapToRawLua = map helpers.mkRaw;
+      listOfRawLua = with types; listOf strLua;
+      mapToRawLua = map lib.nixvim.mkRaw;
     in
     {
-      default_color = helpers.defaultNullOpts.mkStr "#000000" ''
+      default_color = defaultNullOpts.mkStr "#000000" ''
         The default color used when a color cannot be picked. It must be HEX format.
       '';
 
-      inputs = mkOption {
+      inputs = lib.mkOption {
         type = listOfRawLua;
         apply = mapToRawLua;
         default = [ ];
@@ -57,7 +56,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         '';
       };
 
-      outputs = mkOption {
+      outputs = lib.mkOption {
         type = listOfRawLua;
         apply = mapToRawLua;
         default = [ ];
@@ -93,7 +92,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         '';
       };
 
-      pickers = mkOption {
+      pickers = lib.mkOption {
         type = listOfRawLua;
         apply = mapToRawLua;
         default = [ ];
@@ -128,7 +127,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       };
 
       highlight_mode =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        defaultNullOpts.mkEnumFirstDefault
           [
             "bg"
             "fg"
@@ -140,46 +139,46 @@ helpers.neovim-plugin.mkNeovimPlugin {
             It is used to `output_line` and `highlighter`.
           '';
 
-      lsp = helpers.defaultNullOpts.mkBool true ''
+      lsp = defaultNullOpts.mkBool true ''
         Whether to enable LSP support.
         The color information is updated in the background and the result is used by `:CccPick` and
         highlighter.
       '';
 
       highlighter = {
-        auto_enable = helpers.defaultNullOpts.mkBool false ''
+        auto_enable = defaultNullOpts.mkBool false ''
           Whether to enable automatically on `BufEnter`.
         '';
 
-        filetypes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        filetypes = defaultNullOpts.mkListOf types.str [ ] ''
           File types for which highlighting is enabled.
           It is only used for automatic highlighting by `ccc-option-highlighter-auto-enable`, and is
           ignored for manual activation.
           An empty table means all file types.
         '';
 
-        excludes = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        excludes = defaultNullOpts.mkListOf types.str [ ] ''
           Used only when `ccc-option-highlighter-filetypes` is empty table.
           You can specify file types to be excludes.
         '';
 
-        lsp = helpers.defaultNullOpts.mkBool true ''
+        lsp = defaultNullOpts.mkBool true ''
           If true, highlight using LSP.
           If language server with the color provider is not attached to a buffer, it falls back to
           highlight with pickers.
           See also `:help ccc-option-lsp`.
         '';
 
-        update_insert = helpers.defaultNullOpts.mkBool true ''
+        update_insert = defaultNullOpts.mkBool true ''
           If true, highlights will be updated during insert mode.
           If false, highlights will not be updated during editing in insert mode, but will be
           updated on `InsertLeave`.
         '';
       };
 
-      convert = mkOption {
+      convert = lib.mkOption {
         type =
-          with helpers.nixvimTypes;
+          with types;
           nullOr (
             maybeRaw (
               listOf
@@ -187,7 +186,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
                 (listOf strLua)
             )
           );
-        apply = map mapToRawLua;
+        apply = builtins.map mapToRawLua;
         default = [ ];
         example = [
           [
@@ -248,7 +247,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     plugins.ccc.luaConfig.content = ''
       ccc = require('ccc')
-      ccc.setup(${helpers.toLuaObject cfg.settings})
+      ccc.setup(${lib.nixvim.toLuaObject cfg.settings})
     '';
   };
 }

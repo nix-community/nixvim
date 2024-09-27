@@ -1,10 +1,9 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "dressing";
   originalName = "dressing.nvim";
   package = "dressing-nvim";
@@ -17,20 +16,20 @@ helpers.neovim-plugin.mkNeovimPlugin {
     in
     {
       input = {
-        enabled = helpers.defaultNullOpts.mkBool true ''
+        enabled = defaultNullOpts.mkBool true ''
           Enable the `vim.ui.input` implementation.
         '';
 
-        default_prompt = helpers.defaultNullOpts.mkStr "Input" ''
+        default_prompt = defaultNullOpts.mkStr "Input" ''
           Default prompt string for `vim.ui.input`.
         '';
 
-        trim_prompt = helpers.defaultNullOpts.mkBool true ''
+        trim_prompt = defaultNullOpts.mkBool true ''
           Trim trailing `:` from prompt.
         '';
 
         title_pos =
-          helpers.defaultNullOpts.mkEnumFirstDefault
+          defaultNullOpts.mkEnumFirstDefault
             [
               "left"
               "right"
@@ -40,18 +39,18 @@ helpers.neovim-plugin.mkNeovimPlugin {
               Position of title.
             '';
 
-        insert_only = helpers.defaultNullOpts.mkBool true ''
+        insert_only = defaultNullOpts.mkBool true ''
           When true, `<Esc>` will close the modal.
         '';
 
-        start_in_insert = helpers.defaultNullOpts.mkBool true ''
+        start_in_insert = defaultNullOpts.mkBool true ''
           When true, input will start in insert mode.
         '';
 
-        border = helpers.defaultNullOpts.mkBorder "rounded" "the input window" "";
+        border = defaultNullOpts.mkBorder "rounded" "the input window" "";
 
         relative =
-          helpers.defaultNullOpts.mkEnumFirstDefault
+          defaultNullOpts.mkEnumFirstDefault
             [
               "cursor"
               "win"
@@ -62,16 +61,16 @@ helpers.neovim-plugin.mkNeovimPlugin {
               If 'editor' or 'win', will default to being centered.
             '';
 
-        prefer_width = helpers.defaultNullOpts.mkNullable intOrRatio 40 ''
+        prefer_width = defaultNullOpts.mkNullable intOrRatio 40 ''
           Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
         '';
 
-        width = helpers.defaultNullOpts.mkNullable intOrRatio null ''
+        width = defaultNullOpts.mkNullable intOrRatio null ''
           Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
         '';
 
         max_width =
-          helpers.defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
+          defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
             [
               140
               0.9
@@ -84,7 +83,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
             '';
 
         min_width =
-          helpers.defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
+          defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
             [
               20
               0.2
@@ -96,11 +95,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
               total."
             '';
 
-        buf_options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+        buf_options = defaultNullOpts.mkAttrsOf types.anything { } ''
           An attribute set of neovim buffer options.
         '';
 
-        win_options = helpers.defaultNullOpts.mkAttrsOf types.anything {
+        win_options = defaultNullOpts.mkAttrsOf types.anything {
           wrap = false;
           list = true;
           listchars = "precedes:...,extends:...";
@@ -108,7 +107,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         } "An attribute set of window options.";
 
         mappings =
-          helpers.defaultNullOpts.mkAttrsOf (with types; attrsOf (either str (enum [ false ])))
+          defaultNullOpts.mkAttrsOf (with types; attrsOf (either str (enum [ false ])))
             {
               n = {
                 "<Esc>" = "Close";
@@ -127,12 +126,12 @@ helpers.neovim-plugin.mkNeovimPlugin {
               To disable a default mapping in a specific mode, set it to `false`.
             '';
 
-        override = helpers.defaultNullOpts.mkLuaFn "function(conf) return conf end" ''
+        override = defaultNullOpts.mkLuaFn "function(conf) return conf end" ''
           Lua function that takes config that is passed to nvim_open_win.
           Used to customize the layout.
         '';
 
-        get_config = helpers.defaultNullOpts.mkLuaFn null ''
+        get_config = defaultNullOpts.mkLuaFn null ''
           This can be a function that accepts the opts parameter that is passed in to 'vim.select'
           or 'vim.input'. It must return either nil or config values to use in place of the global
           config values for that module.
@@ -142,11 +141,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
       };
 
       select = {
-        enabled = helpers.defaultNullOpts.mkBool true ''
+        enabled = defaultNullOpts.mkBool true ''
           Enable the vim.ui.select implementation.
         '';
 
-        backend = helpers.defaultNullOpts.mkListOf types.str [
+        backend = defaultNullOpts.mkListOf types.str [
           "telescope"
           "fzf_lua"
           "fzf"
@@ -154,34 +153,32 @@ helpers.neovim-plugin.mkNeovimPlugin {
           "nui"
         ] "Priority list of preferred vim.select implementations. ";
 
-        trim_prompt = helpers.defaultNullOpts.mkBool true ''
+        trim_prompt = defaultNullOpts.mkBool true ''
           Trim trailing `:` from prompt.
         '';
 
-        telescope =
-          helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; either strLua (attrsOf anything)) null
-            ''
-              Options for telescope selector.
+        telescope = defaultNullOpts.mkNullable (with types; either strLua (attrsOf anything)) null ''
+          Options for telescope selector.
 
-              Can be a raw lua string like:
+          Can be a raw lua string like:
 
-              `telescope = \'\'require("telescope.themes").get_ivy({})\'\'`
+          `telescope = \'\'require("telescope.themes").get_ivy({})\'\'`
 
-              or an attribute set of telescope settings.
-            '';
+          or an attribute set of telescope settings.
+        '';
 
         fzf = {
-          window = helpers.defaultNullOpts.mkAttrsOf types.anything {
+          window = defaultNullOpts.mkAttrsOf types.anything {
             width = 0.5;
             height = 0.4;
           } "Window options for fzf selector. ";
         };
 
-        fzf_lua = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+        fzf_lua = defaultNullOpts.mkAttrsOf types.anything { } ''
           Options for fzf-lua selector.
         '';
 
-        nui = helpers.defaultNullOpts.mkAttrsOf types.anything {
+        nui = defaultNullOpts.mkAttrsOf types.anything {
           position = "50%";
           size = null;
           relative = "editor";
@@ -202,14 +199,14 @@ helpers.neovim-plugin.mkNeovimPlugin {
         } "Options for nui selector. ";
 
         builtin = {
-          show_numbers = helpers.defaultNullOpts.mkBool true ''
+          show_numbers = defaultNullOpts.mkBool true ''
             Display numbers for options and set up keymaps.
           '';
 
-          border = helpers.defaultNullOpts.mkBorder "rounded" "the select window" "";
+          border = defaultNullOpts.mkBorder "rounded" "the select window" "";
 
           relative =
-            helpers.defaultNullOpts.mkEnumFirstDefault
+            defaultNullOpts.mkEnumFirstDefault
               [
                 "editor"
                 "win"
@@ -220,21 +217,21 @@ helpers.neovim-plugin.mkNeovimPlugin {
                 If 'editor' or 'win', will default to being centered.
               '';
 
-          buf_options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+          buf_options = defaultNullOpts.mkAttrsOf types.anything { } ''
             An attribute set of buffer options.
           '';
 
-          win_options = helpers.defaultNullOpts.mkAttrsOf types.anything {
+          win_options = defaultNullOpts.mkAttrsOf types.anything {
             cursorline = true;
             cursorlineopt = "both";
           } "An attribute set of window options.";
 
-          width = helpers.defaultNullOpts.mkNullable intOrRatio null ''
+          width = defaultNullOpts.mkNullable intOrRatio null ''
             Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
           '';
 
           max_width =
-            helpers.defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
+            defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
               [
                 140
                 0.8
@@ -247,7 +244,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
               '';
 
           min_width =
-            helpers.defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
+            defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
               [
                 40
                 0.2
@@ -259,21 +256,19 @@ helpers.neovim-plugin.mkNeovimPlugin {
                 of total."
               '';
 
-          height = helpers.defaultNullOpts.mkNullable intOrRatio null ''
+          height = defaultNullOpts.mkNullable intOrRatio null ''
             Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
           '';
 
-          max_height =
-            helpers.defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio)) 0.9
-              ''
-                Max height of window.
+          max_height = defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio)) 0.9 ''
+            Max height of window.
 
-                Can be a list of mixed types, e.g. `[140 0.8]` means "less than 140 rows or 80%
-                of total."
-              '';
+            Can be a list of mixed types, e.g. `[140 0.8]` means "less than 140 rows or 80%
+            of total."
+          '';
 
           min_height =
-            helpers.defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
+            defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
               [
                 10
                 0.2
@@ -286,7 +281,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
               '';
 
           mappings =
-            helpers.defaultNullOpts.mkAttrsOf (with types; either str (enum [ false ]))
+            defaultNullOpts.mkAttrsOf (with types; either str (enum [ false ]))
               {
                 "<Esc>" = "Close";
                 "<C-c>" = "Close";
@@ -298,13 +293,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
                 To disable a default mapping in a specific mode, set it to `false`.
               '';
 
-          override = helpers.defaultNullOpts.mkLuaFn "function(conf) return conf end" ''
+          override = defaultNullOpts.mkLuaFn "function(conf) return conf end" ''
             Lua function that takes config that is passed to nvim_open_win.
             Used to customize the layout.
           '';
         };
 
-        format_item_override = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.strLuaFn { } ''
+        format_item_override = defaultNullOpts.mkAttrsOf types.strLuaFn { } ''
           Override the formatting/display for a specific "kind" when using vim.ui.select.
           For example, code actions from vim.lsp.buf.code_action use a kind="codeaction".
           You can override the format function when selecting for that kind, e.g.
@@ -322,7 +317,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
           ```
         '';
 
-        get_config = helpers.defaultNullOpts.mkLuaFn null ''
+        get_config = defaultNullOpts.mkLuaFn null ''
           This can be a function that accepts the opts parameter that is passed in to 'vim.select'
           or 'vim.input'. It must return either nil or config values to use in place of the global
           config values for that module.

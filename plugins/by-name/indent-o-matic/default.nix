@@ -1,18 +1,17 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "indent-o-matic";
   maintainers = [ lib.maintainers.alisonjenkins ];
   settingsOptions = {
     max_lines =
-      helpers.defaultNullOpts.mkInt 2048
+      defaultNullOpts.mkInt 2048
         "Number of lines without indentation before giving up (use -1 for infinite)";
-    skip_multiline = helpers.defaultNullOpts.mkBool false "Skip multi-line comments and strings (more accurate detection but less performant)";
-    standard_widths = helpers.defaultNullOpts.mkListOf types.ints.unsigned [
+    skip_multiline = defaultNullOpts.mkBool false "Skip multi-line comments and strings (more accurate detection but less performant)";
+    standard_widths = defaultNullOpts.mkListOf types.ints.unsigned [
       2
       4
       8

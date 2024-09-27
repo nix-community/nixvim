@@ -1,10 +1,9 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+{ lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "virt-column";
   originalName = "virt-column.nvim";
   package = "virt-column-nvim";
@@ -12,25 +11,25 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.alisonjenkins ];
 
   settingsOptions = {
-    enabled = helpers.defaultNullOpts.mkBool true ''
+    enabled = defaultNullOpts.mkBool true ''
       Enables or disables virt-column.
     '';
 
-    char = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) [ "┃" ] ''
+    char = defaultNullOpts.mkNullable (with types; either str (listOf str)) [ "┃" ] ''
       Character, or list of characters, that get used to display the virtual column.
       Each character has to have a display width of 0 or 1.
     '';
 
-    virtcolumn = helpers.defaultNullOpts.mkStr "" ''
+    virtcolumn = defaultNullOpts.mkStr "" ''
       Comma-separated list of screen columns same syntax as `:help colorcolumn`.
     '';
 
-    highlight = helpers.defaultNullOpts.mkNullable (with types; either str (listOf str)) "NonText" ''
+    highlight = defaultNullOpts.mkNullable (with types; either str (listOf str)) "NonText" ''
       Highlight group, or list of highlight groups, that get applied to the virtual column.
     '';
 
     exclude = {
-      filetypes = helpers.defaultNullOpts.mkListOf types.str [
+      filetypes = defaultNullOpts.mkListOf types.str [
         "lspinfo"
         "packer"
         "checkhealth"
@@ -40,7 +39,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         "TelescopeResults"
       ] "List of `filetype`s for which virt-column is disabled.";
 
-      buftypes = helpers.defaultNullOpts.mkListOf types.str [
+      buftypes = defaultNullOpts.mkListOf types.str [
         "nofile"
         "quickfix"
         "terminal"
