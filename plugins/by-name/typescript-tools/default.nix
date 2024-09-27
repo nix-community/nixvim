@@ -21,7 +21,7 @@ in
 
     onAttach = helpers.defaultNullOpts.mkLuaFn "__lspOnAttach" "Lua code to run when tsserver attaches to a buffer.";
     handlers = mkOption {
-      type = with helpers.nixvimTypes; nullOr (attrsOf strLuaFn);
+      type = with lib.types; nullOr (attrsOf strLuaFn);
       apply = v: helpers.ifNonNull' v (mapAttrs (_: helpers.mkRaw) v);
       default = null;
       description = "How tsserver should respond to LSP requests";
@@ -72,14 +72,14 @@ in
       '';
 
       tsserverPlugins =
-        with helpers.nixvimTypes;
+        with lib.types;
         helpers.mkNullOrOption (listOf (maybeRaw str)) ''
           List of plugins for tsserver to load. See this plugins's README
           at https://github.com/pmizio/typescript-tools.nvim/#-styled-components-support
         '';
 
       tsserverMaxMemory =
-        helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (either ints.unsigned (enum [ "auto" ])))
+        helpers.mkNullOrOption (with lib.types; maybeRaw (either ints.unsigned (enum [ "auto" ])))
           ''
             This value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
             Memory limit in megabytes or "auto"(basically no limit)

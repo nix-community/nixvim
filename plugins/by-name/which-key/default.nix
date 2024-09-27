@@ -5,8 +5,8 @@
 }:
 with lib;
 let
+  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts mkRaw toLuaObject;
-  types = lib.nixvim.nixvimTypes;
 
   opt = options.plugins.which-key;
 

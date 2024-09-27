@@ -327,7 +327,7 @@ with lib;
             executable = {
               command = helpers.mkNullOrStr "The command for the executable.";
 
-              args = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf str)) ''
+              args = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
                 Its arguments.
               '';
             };

@@ -129,7 +129,7 @@ with lib;
           '';
 
           funcs = mkOption {
-            type = with helpers.nixvimTypes; attrsOf strLuaFn;
+            type = with lib.types; attrsOf strLuaFn;
             description = ''
               Table from function names to function.
               Functions should return a string.

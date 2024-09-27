@@ -131,7 +131,7 @@ nixvim.neovim-plugin.mkNeovimPlugin {
       plugins = mkOption {
         description = ''
           List of plugin specs provided to the `require('lz.n').load` function.
-          Plugin specs can be ${nixvim.nixvimTypes.rawLua.description}.
+          Plugin specs can be ${types.rawLua.description}.
         '';
         default = [ ];
         type = types.listOf lzPluginType;

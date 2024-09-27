@@ -44,7 +44,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   settingsOptions = {
     keymaps =
-      helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; attrsOf (either str rawLua))
+      helpers.defaultNullOpts.mkAttrsOf (with lib.types; attrsOf (either str rawLua))
         {
           normal = {
             plain_below = "g?p";

@@ -59,7 +59,7 @@ mkVimPlugin {
           name:
           nameValuePair "section_${name}" (
             helpers.mkNullOrOption (
-              with helpers.nixvimTypes;
+              with lib.types;
               oneOf [
                 rawLua
                 str
@@ -111,7 +111,7 @@ mkVimPlugin {
       detect_spelllang =
         helpers.defaultNullOpts.mkNullable
           (
-            with helpers.nixvimTypes;
+            with lib.types;
             oneOf [
               rawLua
               intFlag
@@ -179,47 +179,45 @@ mkVimPlugin {
         If you want to use plain ascii symbols, set this variable: >
       '';
 
-      mode_map = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf str)) ''
+      mode_map = helpers.mkNullOrOption (with lib.types; maybeRaw (attrsOf str)) ''
         Define the set of text to display for each mode.
 
         Default: see source
       '';
 
-      exclude_filenames = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf str)) ''
+      exclude_filenames = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
         Define the set of filename match queries which excludes a window from having its
         statusline modified.
 
         Default: see source for current list
       '';
 
-      exclude_filetypes = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf str)) ''
+      exclude_filetypes = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
         Define the set of filetypes which are excluded from having its window statusline modified.
 
         Default: see source for current list
       '';
 
-      filetype_overrides =
-        helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (attrsOf (listOf str)))
-          ''
-            Define the set of names to be displayed instead of a specific filetypes.
+      filetype_overrides = helpers.mkNullOrOption (with lib.types; maybeRaw (attrsOf (listOf str))) ''
+        Define the set of names to be displayed instead of a specific filetypes.
 
-            Example:
-            ```nix
-              {
-                coc-explorer =  ["CoC Explorer" ""];
-                defx = ["defx" "%{b:defx.paths[0]}"];
-                fugitive = ["fugitive" "%{airline#util#wrap(airline#extensions#branch#get_head(),80)}"];
-                gundo = ["Gundo" "" ];
-                help = ["Help" "%f"];
-                minibufexpl = ["MiniBufExplorer" ""];
-                startify = ["startify" ""];
-                vim-plug = ["Plugins" ""];
-                vimfiler = ["vimfiler" "%{vimfiler#get_status_string()}"];
-                vimshell = ["vimshell" "%{vimshell#get_status_string()}"];
-                vaffle = ["Vaffle" "%{b:vaffle.dir}"];
-              }
-            ```
-          '';
+        Example:
+        ```nix
+          {
+            coc-explorer =  ["CoC Explorer" ""];
+            defx = ["defx" "%{b:defx.paths[0]}"];
+            fugitive = ["fugitive" "%{airline#util#wrap(airline#extensions#branch#get_head(),80)}"];
+            gundo = ["Gundo" "" ];
+            help = ["Help" "%f"];
+            minibufexpl = ["MiniBufExplorer" ""];
+            startify = ["startify" ""];
+            vim-plug = ["Plugins" ""];
+            vimfiler = ["vimfiler" "%{vimfiler#get_status_string()}"];
+            vimshell = ["vimshell" "%{vimshell#get_status_string()}"];
+            vaffle = ["Vaffle" "%{b:vaffle.dir}"];
+          }
+        ```
+      '';
 
       exclude_preview = helpers.defaultNullOpts.mkFlagInt 0 ''
         Defines whether the preview window should be excluded from having its window statusline

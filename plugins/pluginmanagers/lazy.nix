@@ -85,7 +85,7 @@ in
                 or firenvim for example. (accepts fun(LazyPlugin):boolean)
               '';
 
-              dependencies = helpers.mkNullOrOption (helpers.nixvimTypes.eitherRecursive str listOfPlugins) "Plugin dependencies";
+              dependencies = helpers.mkNullOrOption (eitherRecursive str listOfPlugins) "Plugin dependencies";
 
               init = helpers.mkNullOrLuaFn "init functions are always executed during startup";
 
@@ -107,19 +107,19 @@ in
               '';
 
               event =
-                with helpers.nixvimTypes;
+                with lib.types;
                 helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on event. Events can be specified as BufEnter or with a pattern like BufEnter *.lua";
 
               cmd =
-                with helpers.nixvimTypes;
+                with lib.types;
                 helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on command";
 
               ft =
-                with helpers.nixvimTypes;
+                with lib.types;
                 helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on filetype";
 
               keys =
-                with helpers.nixvimTypes;
+                with lib.types;
                 helpers.mkNullOrOption (maybeRaw (either str (listOf str))) "Lazy-load on key mapping";
 
               module = helpers.mkNullOrOption (enum [ false ]) ''
@@ -139,7 +139,7 @@ in
               '';
 
               opts =
-                with helpers.nixvimTypes;
+                with lib.types;
                 helpers.mkNullOrOption (maybeRaw (attrsOf anything)) ''
                   opts should be a table (will be merged with parent specs),
                   return a table (replaces parent specs) or should change a table.

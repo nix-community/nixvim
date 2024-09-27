@@ -31,7 +31,7 @@ with lib;
     '';
 
     substitutions = helpers.defaultNullOpts.mkAttrsOf (
-      with helpers.nixvimTypes; either str rawLua
+      with lib.types; either str rawLua
     ) { } "A map for custom variables, the key should be the variable and the value a function.";
   };
 
@@ -224,7 +224,7 @@ with lib;
         attrsOf (submodule {
           options = {
             action = mkOption {
-              type = helpers.nixvimTypes.strLua;
+              type = lib.types.strLua;
               description = "The lua code for this keymap action.";
               apply = helpers.mkRaw;
             };
@@ -372,12 +372,12 @@ with lib;
           submodule {
             options = {
               char = mkOption {
-                type = with helpers.nixvimTypes; maybeRaw str;
+                type = with lib.types; maybeRaw str;
                 description = "The character to use for this checkbox.";
               };
 
               hl_group = mkOption {
-                type = with helpers.nixvimTypes; maybeRaw str;
+                type = with lib.types; maybeRaw str;
                 description = "The name of the highlight group to use for this checkbox.";
               };
             };
@@ -447,7 +447,7 @@ with lib;
       '';
     };
 
-    hl_groups = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight {
+    hl_groups = helpers.defaultNullOpts.mkAttrsOf lib.types.highlight {
       ObsidianTodo = {
         bold = true;
         fg = "#f78c6c";

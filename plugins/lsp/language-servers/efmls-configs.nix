@@ -74,7 +74,7 @@ in
             kind:
             { lang, possible }:
             let
-              toolType = helpers.nixvimTypes.maybeRaw (lib.types.enum possible);
+              toolType = lib.types.maybeRaw (lib.types.enum possible);
             in
             lib.mkOption {
               type = lib.types.either toolType (lib.types.listOf toolType);

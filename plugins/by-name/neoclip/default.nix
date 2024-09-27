@@ -75,7 +75,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
 
     default_register =
-      helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; either str (listOf str)) "\""
+      helpers.defaultNullOpts.mkNullable (with lib.types; either str (listOf str)) "\""
         ''
           What register to use by default when not specified (e.g. `Telescope neoclip`).
           Can be a string such as `"\""` (single register) or a table of strings such as

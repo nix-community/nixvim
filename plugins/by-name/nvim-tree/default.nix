@@ -323,9 +323,7 @@ in
     };
 
     onAttach =
-      helpers.defaultNullOpts.mkNullable
-        (with types; either (enum [ "default" ]) helpers.nixvimTypes.rawLua)
-        "default"
+      helpers.defaultNullOpts.mkNullable (with types; either (enum [ "default" ]) rawLua) "default"
         ''
           Function ran when creating the nvim-tree buffer.
           This can be used to attach keybindings to the tree buffer.
@@ -387,7 +385,7 @@ in
                     '';
 
                     padding =
-                      helpers.defaultNullOpts.mkNullable (either ints.unsigned helpers.nixvimTypes.rawLua) "1"
+                      helpers.defaultNullOpts.mkNullable (either ints.unsigned rawLua) "1"
                         "Extra padding to the right.";
                   };
               })
@@ -503,7 +501,7 @@ in
             oneOf [
               str
               bool
-              helpers.nixvimTypes.rawLua
+              rawLua
             ]
           )
           # Default

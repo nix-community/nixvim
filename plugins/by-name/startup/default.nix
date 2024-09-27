@@ -84,7 +84,7 @@ in
                     oneOf [
                       # for "text" "mapping"
                       (listOf (either str (listOf str)))
-                      helpers.nixvimTypes.rawLua
+                      rawLua
                       # for "oldfiles" sections
                       (enum [ "" ])
                     ]

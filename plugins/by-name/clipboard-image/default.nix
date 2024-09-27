@@ -13,7 +13,7 @@ let
     imgDir =
       helpers.defaultNullOpts.mkNullable
         (
-          with helpers.nixvimTypes;
+          with lib.types;
           oneOf [
             str
             (listOf str)
@@ -29,7 +29,7 @@ let
         '';
 
     imgDirTxt = helpers.defaultNullOpts.mkNullable (
-      with helpers.nixvimTypes;
+      with lib.types;
       oneOf [
         str
         (listOf str)

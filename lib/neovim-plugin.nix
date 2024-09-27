@@ -114,7 +114,7 @@
             }
             // lib.optionalAttrs hasConfigAttrs {
               luaConfig = lib.mkOption {
-                type = lib.nixvim.nixvimTypes.pluginLuaConfig;
+                type = lib.types.pluginLuaConfig;
                 default = { };
                 description = "The plugin's lua configuration";
               };

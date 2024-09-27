@@ -15,7 +15,7 @@ let
       # Raw filetype
       str
       # Function to set the filetype
-      helpers.nixvimTypes.rawLua
+      rawLua
       # ["filetype" {priority = xx;}]
       (listOf (
         either str (submodule {

@@ -156,7 +156,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       opened.
     '';
 
-    highlights = helpers.defaultNullOpts.mkAttrsOf helpers.nixvimTypes.highlight {
+    highlights = helpers.defaultNullOpts.mkAttrsOf lib.types.highlight {
       NormalFloat.link = "Normal";
       FloatBorder.link = "Normal";
       StatusLine.gui = "NONE";
@@ -217,7 +217,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
 
     float_opts = {
-      border = helpers.mkNullOrOption helpers.nixvimTypes.border ''
+      border = helpers.mkNullOrOption lib.types.border ''
         `border` = "single" | "double" | "shadow" | "curved" | ... other options supported by
         `win open`.
         The border key is *almost* the same as 'nvim_open_win'.

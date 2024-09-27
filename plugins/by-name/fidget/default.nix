@@ -16,7 +16,7 @@ let
         with types;
         oneOf [
           str
-          helpers.nixvimTypes.rawLua
+          rawLua
           (listOf str)
           (attrsOf (either str ints.unsigned))
         ]

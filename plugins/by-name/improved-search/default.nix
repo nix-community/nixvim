@@ -21,7 +21,7 @@ helpers.vim-plugin.mkVimPlugin {
         See [here](https://github.com/backdround/improved-search.nvim?tab=readme-ov-file#functions-and-operators) for the list of available callbacks.
       '';
       type =
-        with helpers.nixvimTypes;
+        with lib.types;
         listOf (submodule {
           options = {
             key = mkOption {
@@ -34,7 +34,7 @@ helpers.vim-plugin.mkVimPlugin {
 
             action = mkOption {
               type =
-                with helpers.nixvimTypes;
+                with lib.types;
                 maybeRaw (
                   # https://github.com/backdround/improved-search.nvim?tab=readme-ov-file#functions-and-operators
                   enum [

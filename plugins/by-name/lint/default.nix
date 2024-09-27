@@ -41,7 +41,7 @@ let
     };
 
     args = {
-      type = listOf (either str helpers.nixvimTypes.rawLua);
+      type = listOf (either str rawLua);
       description = ''
         List of arguments.
         Can contain functions with zero arguments that will be evaluated once the linter is used.
@@ -86,7 +86,7 @@ let
     };
 
     parser = {
-      type = helpers.nixvimTypes.strLuaFn;
+      type = lib.types.strLuaFn;
       description = "The code for your parser function.";
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
@@ -211,7 +211,7 @@ in
               };
 
               callback = mkOption {
-                type = with types; nullOr (either str helpers.nixvimTypes.rawLua);
+                type = with types; nullOr (either str rawLua);
                 default = defaultCallback;
                 description = "What action to perform for linting";
               };

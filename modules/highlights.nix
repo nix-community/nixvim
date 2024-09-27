@@ -7,7 +7,7 @@
 {
   options = {
     highlight = lib.mkOption {
-      type = lib.types.attrsOf helpers.nixvimTypes.highlight;
+      type = lib.types.attrsOf lib.types.highlight;
       default = { };
       description = "Define new highlight groups";
       example = {
@@ -16,7 +16,7 @@
     };
 
     highlightOverride = lib.mkOption {
-      type = lib.types.attrsOf helpers.nixvimTypes.highlight;
+      type = lib.types.attrsOf lib.types.highlight;
       default = { };
       description = "Define highlight groups to override existing highlight";
       example = {

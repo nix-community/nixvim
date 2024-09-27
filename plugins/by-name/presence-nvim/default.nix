@@ -119,7 +119,7 @@ in
 
       # Rich presence text options.
       editingText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Editing %s"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Editing %s"
           ''
             String rendered when an editable file is loaded in the buffer.
 
@@ -128,7 +128,7 @@ in
           '';
 
       fileExplorerText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Browsing %s"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Browsing %s"
           ''
             String rendered when browsing a file explorer.
 
@@ -137,8 +137,7 @@ in
           '';
 
       gitCommitText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Committing changes"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Committing changes"
           ''
             String rendered when committing changes in git.
 
@@ -147,8 +146,7 @@ in
           '';
 
       pluginManagerText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Managing plugins"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Managing plugins"
           ''
             String rendered when managing plugins.
 
@@ -157,7 +155,7 @@ in
           '';
 
       readingText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua) "Reading %s"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Reading %s"
           ''
             String rendered when a read-only/unmodifiable file is loaded into the buffer.
 
@@ -166,8 +164,7 @@ in
           '';
 
       workspaceText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Working on %s"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Working on %s"
           ''
             String rendered when in a git repository.
 
@@ -176,8 +173,7 @@ in
           '';
 
       lineNumberText =
-        helpers.defaultNullOpts.mkNullable (types.either types.str helpers.nixvimTypes.rawLua)
-          "Line %s out of %s"
+        helpers.defaultNullOpts.mkNullable (types.either types.str types.rawLua) "Line %s out of %s"
           ''
             String rendered when `enableLineNumber` is set to `true` to display the current line number.
 

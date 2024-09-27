@@ -233,8 +233,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     highlight = {
       additional_vim_regex_highlighting =
-        helpers.defaultNullOpts.mkNullableWithRaw
-          (with helpers.nixvimTypes; either bool (listOf (maybeRaw str)))
+        helpers.defaultNullOpts.mkNullableWithRaw (with lib.types; either bool (listOf (maybeRaw str)))
           false
           ''
             Setting this to true will run `syntax` and tree-sitter at the same time. \
@@ -249,12 +248,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
         Whether to enable treesitter highlighting.
       '';
 
-      disable =
-        helpers.defaultNullOpts.mkStrLuaFnOr (with helpers.nixvimTypes; listOf (maybeRaw str)) null
-          ''
-            Can either be a list of the names of parsers you wish to disable or
-            a lua function that returns a boolean indicating the parser should be disabled.
-          '';
+      disable = helpers.defaultNullOpts.mkStrLuaFnOr (with lib.types; listOf (maybeRaw str)) null ''
+        Can either be a list of the names of parsers you wish to disable or
+        a lua function that returns a boolean indicating the parser should be disabled.
+      '';
 
       custom_captures = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
         Custom capture group highlighting.
@@ -290,7 +287,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     ensure_installed = helpers.defaultNullOpts.mkNullable' {
       type =
-        with helpers.nixvimTypes;
+        with lib.types;
         oneOf [
           (enum [ "all" ])
           (listOf (maybeRaw str))
@@ -307,7 +304,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
 
     parser_install_dir = helpers.mkNullOrOption' {
-      type = with helpers.nixvimTypes; maybeRaw str;
+      type = with lib.types; maybeRaw str;
       # Backport the default from nvim-treesitter 1.0
       # The current default doesn't work on nix, as it is readonly
       default.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";

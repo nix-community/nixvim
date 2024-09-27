@@ -17,7 +17,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
 
     patterns = mkOption {
-      type = with helpers.nixvimTypes; listOf strLua;
+      type = with lib.types; listOf strLua;
       apply = map helpers.mkRaw;
       default = [ ];
       example = [ "[[%s/\(\n\n\)\n\+/\1/]]" ];

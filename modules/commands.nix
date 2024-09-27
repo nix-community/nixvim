@@ -8,7 +8,7 @@ let
   commandAttributes = lib.types.submodule {
     options = {
       command = lib.mkOption {
-        type = with helpers.nixvimTypes; either str rawLua;
+        type = with lib.types; either str rawLua;
         description = "The command to run.";
       };
 
@@ -24,7 +24,7 @@ let
           ''
             The number of arguments to expect, see :h command-nargs.
           '';
-      complete = helpers.mkNullOrOption (with lib.types; either str helpers.nixvimTypes.rawLua) ''
+      complete = helpers.mkNullOrOption (with lib.types; either str rawLua) ''
         Tab-completion behaviour, see :h command-complete.
       '';
       range =

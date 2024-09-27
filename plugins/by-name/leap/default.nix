@@ -90,7 +90,7 @@ in
     };
 
     safeLabels =
-      helpers.defaultNullOpts.mkNullable (with helpers.nixvimTypes; maybeRaw (listOf str))
+      helpers.defaultNullOpts.mkNullable (with lib.types; maybeRaw (listOf str))
         (stringToCharacters "sfnut/SFNLHMUGT?Z")
         ''
           When the number of matches does not exceed the number of these "safe" labels plus one, the

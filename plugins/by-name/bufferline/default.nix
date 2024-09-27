@@ -5,8 +5,8 @@
   ...
 }:
 let
-  inherit (lib.nixvim) defaultNullOpts nixvimTypes mkSettingsRenamedOptionModules;
-  types = nixvimTypes;
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "bufferline";

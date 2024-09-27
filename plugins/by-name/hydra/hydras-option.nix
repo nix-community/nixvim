@@ -10,7 +10,7 @@ let
       '';
 
       mode = helpers.defaultNullOpts.mkNullable (
-        with helpers.nixvimTypes; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
+        with lib.types; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
       ) "n" "Modes where the hydra exists, same as `vim.keymap.set()` accepts.";
 
       body = helpers.mkNullOrStr ''
@@ -75,12 +75,12 @@ let
               '';
 
               mode = helpers.mkNullOrOption (
-                with helpers.nixvimTypes; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
+                with lib.types; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
               ) "Override `mode` for this head.";
             };
           };
           headType =
-            with helpers.nixvimTypes;
+            with lib.types;
             # More precisely, a tuple: [head action opts]
             listOf (
               nullOr (

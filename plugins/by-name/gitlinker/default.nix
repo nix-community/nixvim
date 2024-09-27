@@ -24,8 +24,7 @@ with lib;
     '';
 
     actionCallback =
-      helpers.defaultNullOpts.mkNullable (with types; either str helpers.nixvimTypes.rawLua)
-        "copy_to_clipboard"
+      helpers.defaultNullOpts.mkNullable (with types; either str rawLua) "copy_to_clipboard"
         ''
           Callback for what to do with the url.
 

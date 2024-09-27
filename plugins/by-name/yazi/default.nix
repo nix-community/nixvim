@@ -3,8 +3,8 @@
   ...
 }:
 let
+  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
-  types = lib.nixvim.nixvimTypes;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "yazi";

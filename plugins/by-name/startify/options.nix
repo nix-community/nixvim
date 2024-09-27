@@ -7,7 +7,7 @@ with lib;
 
   lists = mkOption {
     type =
-      with helpers.nixvimTypes;
+      with lib.types;
       listOf (
         either strLua (submodule {
           freeformType = with types; attrsOf anything;
@@ -18,12 +18,12 @@ with lib;
               example = "files";
             };
 
-            header = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf (maybeRaw str)) ''
+            header = helpers.mkNullOrOption (with lib.types; listOf (maybeRaw str)) ''
               The 'header' is a list of strings, whereas each string will be put on its own
               line in the header.
             '';
 
-            indices = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf (maybeRaw str)) ''
+            indices = helpers.mkNullOrOption (with lib.types; listOf (maybeRaw str)) ''
               The 'indices' is a list of strings, which act as indices for the current list.
               Opposed to the global `custom_indices`, this is limited to the current list.
             '';
@@ -67,7 +67,7 @@ with lib;
   bookmarks =
     helpers.defaultNullOpts.mkListOf
       (
-        with helpers.nixvimTypes;
+        with lib.types;
         oneOf [
           str
           rawLua
@@ -227,7 +227,7 @@ with lib;
     The number of spaces used for left padding.
   '';
 
-  skiplist_server = helpers.defaultNullOpts.mkListOf (with helpers.nixvimTypes; maybeRaw str) [ ] ''
+  skiplist_server = helpers.defaultNullOpts.mkListOf (with lib.types; maybeRaw str) [ ] ''
     Do not create the startify buffer, if this is a Vim server instance with a name contained in
     this list.
 

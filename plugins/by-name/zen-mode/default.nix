@@ -22,7 +22,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       width =
         helpers.defaultNullOpts.mkNullable
           (
-            with helpers.nixvimTypes;
+            with lib.types;
             oneOf [
               ints.positive
               (numbers.between 0.0 1.0)
@@ -42,7 +42,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       height =
         helpers.defaultNullOpts.mkNullable
           (
-            with helpers.nixvimTypes;
+            with lib.types;
             oneOf [
               ints.positive
               (numbers.between 0.0 1.0)

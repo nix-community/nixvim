@@ -38,7 +38,7 @@ with lib;
         };
       };
     in
-    helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf (maybeRaw provider)) ''
+    helpers.mkNullOrOption (with lib.types; attrsOf (maybeRaw provider)) ''
       Tell the language server your desired option set, for completion.
       This is lazily evaluated.
     '';
@@ -54,7 +54,7 @@ with lib;
         };
       };
     in
-    helpers.mkNullOrOption (helpers.nixvimTypes.maybeRaw provider) ''
+    helpers.mkNullOrOption (lib.types.maybeRaw provider) ''
       This expression will be interpreted as "nixpkgs" toplevel
       Nixd provides package, lib completion/information from it.
     '';

@@ -210,7 +210,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
       columns = mkOption {
         type =
-          with helpers.nixvimTypes;
+          with lib.types;
           listOf (oneOf [
             str
             (attrsOf anything)

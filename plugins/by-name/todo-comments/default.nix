@@ -6,13 +6,13 @@
 }:
 with lib;
 let
+  inherit (lib) types;
   inherit (lib.nixvim)
     defaultNullOpts
     keymaps
     mkNullOrOption'
     transitionType
     ;
-  types = lib.nixvim.nixvimTypes;
 
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {

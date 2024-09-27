@@ -53,7 +53,7 @@ in
     '';
 
     data = mkOption {
-      type = helpers.nixvimTypes.maybeRaw (with types; nullOr str);
+      type = with types; nullOr (maybeRaw str);
       default = null;
       example = "/home/YOUR_USERNAME/.cache/jdtls/workspace";
       description = ''
@@ -64,7 +64,7 @@ in
     };
 
     configuration = mkOption {
-      type = helpers.nixvimTypes.maybeRaw (with types; nullOr str);
+      type = with types; nullOr (maybeRaw str);
       default = null;
       example = "/home/YOUR_USERNAME/.cache/jdtls/config";
       description = "Path to the configuration file.";

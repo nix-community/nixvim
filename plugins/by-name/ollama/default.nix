@@ -10,7 +10,7 @@ let
   cfg = config.plugins.ollama;
 
   actionOptionType =
-    with helpers.nixvimTypes;
+    with lib.types;
     oneOf [
       rawLua
       (enum [
@@ -78,7 +78,7 @@ in
       let
         promptOptions = {
           prompt = mkOption {
-            type = with helpers.nixvimTypes; maybeRaw str;
+            type = with lib.types; maybeRaw str;
             description = ''
               The prompt to send to the model.
 
@@ -112,8 +112,7 @@ in
           '';
 
           extract =
-            helpers.defaultNullOpts.mkNullable
-              (with helpers.nixvimTypes; maybeRaw (either str (enum [ false ])))
+            helpers.defaultNullOpts.mkNullable (with lib.types; maybeRaw (either str (enum [ false ])))
               "```$ftype\n(.-)```"
               ''
                 A `string.match` pattern to use for an Action to extract the output from the response

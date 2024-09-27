@@ -23,7 +23,7 @@ let
       paths =
         helpers.mkNullOrOption
           (
-            with helpers.nixvimTypes;
+            with lib.types;
             oneOf [
               str
               path
@@ -39,11 +39,11 @@ let
             List of paths to load.
           '';
 
-      exclude = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str))) ''
+      exclude = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf (maybeRaw str))) ''
         List of languages to exclude, by default is empty.
       '';
 
-      include = helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (listOf (maybeRaw str))) ''
+      include = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf (maybeRaw str))) ''
         List of languages to include, by default is not set.
       '';
     };

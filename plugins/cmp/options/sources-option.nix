@@ -81,7 +81,7 @@ let
 in
 mkOption {
   default = [ ];
-  type = with helpers.nixvimTypes; maybeRaw (listOf sourceType);
+  type = with lib.types; maybeRaw (listOf sourceType);
   description = ''
     The sources to use.
     Can either be a list of `sourceConfigs` which will be made directly to a Lua object.

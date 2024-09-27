@@ -120,13 +120,18 @@ lib.fix (
       wrapVimscriptForLua
       ;
 
-    # TODO: Removed 2024-09-27
-    maintainers = throw "The `maintainers` alias has been removed. Use `lib.maintainers` on a lib with nixvim's extensions.";
-
-    # TODO: Deprecate the old `nixvimTypes` alias?
-    nixvimTypes = self.extendedLib.types;
-
     toLuaObject = self.lua.toLua;
     mkLuaInline = self.lua.mkInline;
   }
+  //
+    # TODO: Removed 2024-09-27; remove after 24.11
+    lib.mapAttrs
+      (
+        old: new:
+        throw "The `${old}` alias has been removed. Use `${new}` on a lib with nixvim's extensions."
+      )
+      {
+        maintainers = "lib.maintainers";
+        nixvimTypes = "lib.types";
+      }
 )

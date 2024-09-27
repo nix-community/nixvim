@@ -61,7 +61,7 @@ in
     {
       warnings =
         # TODO: expand this warning to ft & cmd sources lists and `showDefs` the offending definitions
-        optional (helpers.nixvimTypes.isRawType cfg.settings.sources) ''
+        optional (lib.types.isRawType cfg.settings.sources) ''
           Nixvim (plugins.cmp): You have enabled `autoEnableSources` that tells Nixvim to automatically
           enable the source plugins with respect to the list of sources provided in `settings.sources`.
           However, the latter is proveded as a raw lua string which is not parseable by Nixvim.

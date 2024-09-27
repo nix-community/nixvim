@@ -42,13 +42,13 @@ in
       By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
     '';
 
-    testRunner = helpers.mkNullOrOption (types.either types.str helpers.nixvimTypes.rawLua) ''
+    testRunner = helpers.mkNullOrOption (types.either types.str types.rawLua) ''
       The name of test runner to use by default.
       The default value is dynamic and depends on `pytest.ini` or `manage.py` markers.
       If neither is found "unittest" is used.
     '';
 
-    testRunners = helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf strLuaFn) ''
+    testRunners = helpers.mkNullOrOption (with lib.types; attrsOf strLuaFn) ''
       Set to register test runners.
       Built-in are test runners for unittest, pytest and django.
       The key is the test runner name, the value a function to generate the

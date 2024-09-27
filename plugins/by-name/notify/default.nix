@@ -26,11 +26,11 @@ in
 
     timeout = helpers.defaultNullOpts.mkUnsignedInt 5000 "Default timeout for notification.";
 
-    maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned helpers.nixvimTypes.rawLua) ''
+    maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned rawLua) ''
       Max number of columns for messages.
     '';
 
-    maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned helpers.nixvimTypes.rawLua) ''
+    maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned rawLua) ''
       Max number of lines for a message.
     '';
 

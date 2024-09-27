@@ -56,7 +56,7 @@ mkVimPlugin {
       Whether to preserve cursor position when sending a line or paragraph.
     '';
 
-    default_config = helpers.mkNullOrOption (with helpers.nixvimTypes; attrsOf (either str rawLua)) ''
+    default_config = helpers.mkNullOrOption (with lib.types; attrsOf (either str rawLua)) ''
       Pre-filled prompt answer.
 
       Examples:

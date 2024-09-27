@@ -161,7 +161,7 @@ in
               };
 
               action = mkOption {
-                type = helpers.nixvimTypes.strLuaFn;
+                type = lib.types.strLuaFn;
                 apply = helpers.mkRaw;
                 description = ''
                   The parameters to the action function are the different sources (currently `git`,

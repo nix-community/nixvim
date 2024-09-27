@@ -156,7 +156,7 @@ in
       Setting the option after the first run has no effect.
     '';
 
-    pipeline = helpers.mkNullOrOption (with helpers.nixvimTypes; listOf strLua) ''
+    pipeline = helpers.mkNullOrOption (with lib.types; listOf strLua) ''
       Sets the pipeline to use to get completions.
       See `|wilder-pipeline|`.
 

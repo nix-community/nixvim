@@ -41,7 +41,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
           freeformType = with types; attrsOf anything;
           options = {
             text = mkOption {
-              type = with helpers.nixvimTypes; nullOr (listOf (either str rawLua));
+              type = with lib.types; nullOr (listOf (either str rawLua));
               default = null;
               description = "Segment text.";
               example = [ "%C" ];
@@ -56,7 +56,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
             '';
 
             condition = helpers.mkNullOrOption (
-              with helpers.nixvimTypes; listOf (either bool rawLua)
+              with lib.types; listOf (either bool rawLua)
             ) "Table of booleans or functions returning a boolean.";
 
             sign = {
@@ -124,7 +124,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     '';
 
     clickhandlers = mkOption {
-      type = with helpers.nixvimTypes; attrsOf strLuaFn;
+      type = with lib.types; attrsOf strLuaFn;
       default = { };
       description = ''
         Builtin click handlers.

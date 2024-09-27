@@ -216,7 +216,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         '';
 
         mappings = helpers.defaultNullOpts.mkAttrsOf' {
-          type = with helpers.nixvimTypes; either strLuaFn (attrsOf strLuaFn);
+          type = with lib.types; either strLuaFn (attrsOf strLuaFn);
           apply =
             mappings:
             helpers.ifNonNull' mappings (

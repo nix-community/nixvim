@@ -39,7 +39,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "refactoring" ];
   };
 
-  settingsOptions = with helpers.nixvimTypes; {
+  settingsOptions = with lib.types; {
     prompt_func_return_type =
       helpers.defaultNullOpts.mkAttrsOf bool
         {

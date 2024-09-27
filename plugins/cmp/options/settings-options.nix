@@ -38,7 +38,7 @@ with lib;
 
   mapping = mkOption {
     default = { };
-    type = with helpers.nixvimTypes; maybeRaw (attrsOf strLua);
+    type = with lib.types; maybeRaw (attrsOf strLua);
     description = ''
       cmp mappings declaration.
       See `:h cmp-mapping` for more information.
@@ -46,7 +46,7 @@ with lib;
     apply =
       v:
       # Handle the raw case first
-      if helpers.nixvimTypes.isRawType v then
+      if lib.types.isRawType v then
         v
       # When v is an attrs **but not {__raw = ...}**
       else
@@ -64,7 +64,7 @@ with lib;
 
   snippet = {
     expand = mkOption {
-      type = with helpers.nixvimTypes; nullOr strLuaFn;
+      type = with lib.types; nullOr strLuaFn;
       default = null;
       description = ''
         The snippet expansion function. That's how nvim-cmp interacts with a particular snippet
@@ -115,8 +115,7 @@ with lib;
     keyword_pattern = helpers.defaultNullOpts.mkLua ''[[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]]'' "The default keyword pattern.";
 
     autocomplete =
-      helpers.defaultNullOpts.mkNullable
-        (with helpers.nixvimTypes; either (enum [ false ]) (listOf strLua))
+      helpers.defaultNullOpts.mkNullable (with lib.types; either (enum [ false ]) (listOf strLua))
         [ "require('cmp.types').cmp.TriggerEvent.TextChanged" ]
         ''
           The event to trigger autocompletion.
@@ -210,7 +209,7 @@ with lib;
     '';
 
     comparators = mkOption {
-      type = with helpers.nixvimTypes; nullOr (listOf strLuaFn);
+      type = with lib.types; nullOr (listOf strLuaFn);
       apply = v: helpers.ifNonNull' v (map helpers.mkRaw v);
       default = null;
       description = ''

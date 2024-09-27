@@ -18,20 +18,20 @@ helpers.vim-plugin.mkVimPlugin {
         freeformType = with types; attrsOf anything;
         options = {
           name = mkOption {
-            type = with helpers.nixvimTypes; maybeRaw str;
+            type = with lib.types; maybeRaw str;
             description = "The name of the schema.";
           };
 
           description = helpers.mkNullOrStr "A description for this schema.";
 
           fileMatch =
-            helpers.mkNullOrOption (with helpers.nixvimTypes; maybeRaw (either str (listOf (maybeRaw str))))
+            helpers.mkNullOrOption (with lib.types; maybeRaw (either str (listOf (maybeRaw str))))
               ''
                 Which filename to match against for this schema.
               '';
 
           url = mkOption {
-            type = with helpers.nixvimTypes; maybeRaw str;
+            type = with lib.types; maybeRaw str;
             description = "The URL of this schema.";
           };
         };

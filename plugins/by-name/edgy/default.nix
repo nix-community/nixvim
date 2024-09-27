@@ -136,7 +136,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
           in
           helpers.mkNullOrOption' {
             type =
-              with helpers.nixvimTypes;
+              with lib.types;
               either strLua (submodule {
                 freeformType = attrsOf anything;
                 options = {
@@ -181,7 +181,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       # This option accepts an attrs or a lua string.
       # Hence, we convert the string to raw lua in `apply`.
       keys = helpers.defaultNullOpts.mkAttrsOf' {
-        type = with helpers.nixvimTypes; either strLuaFn (enum [ false ]);
+        type = with lib.types; either strLuaFn (enum [ false ]);
         apply = x: if x == null then null else mapAttrs (_: v: if isString v then helpers.mkRaw v else v) x;
         description = ''
           Buffer-local keymaps to be added to edgebar buffers.

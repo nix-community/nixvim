@@ -2,8 +2,7 @@
 with lib;
 {
   enabled =
-    helpers.defaultNullOpts.mkNullableWithRaw
-      (with helpers.nixvimTypes; either bool (listOf (maybeRaw str)))
+    helpers.defaultNullOpts.mkNullableWithRaw (with lib.types; either bool (listOf (maybeRaw str)))
       [
         "bibtex"
         "context"
@@ -102,125 +101,119 @@ with lib;
     - "zh-CN": Chinese
   '';
 
-  dictionary =
-    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
-      ''
-        Lists of additional words that should not be counted as spelling errors.
-        This setting is language-specific, so use an attrs of the format
-        ```nix
-          {
-            "<LANGUAGE1>" = [
-              "<WORD1>"
-              "<WORD2>"
-              ...
-            ];
-            "<LANGUAGE2>" = [
-              "<WORD1>"
-              "<WORD2>"
-            ];
-            ...
-          };
-        ```
-        where <LANGUAGE> denotes the language code in `settings.language`.
+  dictionary = helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { } ''
+    Lists of additional words that should not be counted as spelling errors.
+    This setting is language-specific, so use an attrs of the format
+    ```nix
+      {
+        "<LANGUAGE1>" = [
+          "<WORD1>"
+          "<WORD2>"
+          ...
+        ];
+        "<LANGUAGE2>" = [
+          "<WORD1>"
+          "<WORD2>"
+        ];
+        ...
+      };
+    ```
+    where <LANGUAGE> denotes the language code in `settings.language`.
 
-        This setting is a multi-scope setting. See the documentation for details.
-        This setting supports external files. See the documentation for details.
-        By default, no additional spelling errors will be ignored.
+    This setting is a multi-scope setting. See the documentation for details.
+    This setting supports external files. See the documentation for details.
+    By default, no additional spelling errors will be ignored.
 
-        Example:
-        ```nix
-        {
-          "en-US" = [
-            "adaptivity"
-            "precomputed"
-            "subproblem"
-          ];
-          "de-DE" = [
-            "B-Splines"
-            ":/path/to/externalFile.txt"
-          ];
-        }
-        ```
-      '';
+    Example:
+    ```nix
+    {
+      "en-US" = [
+        "adaptivity"
+        "precomputed"
+        "subproblem"
+      ];
+      "de-DE" = [
+        "B-Splines"
+        ":/path/to/externalFile.txt"
+      ];
+    }
+    ```
+  '';
 
-  disabledRules =
-    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
-      ''
-        Lists of rules that should be disabled (if enabled by default by LanguageTool).
-        This setting is language-specific, so use an attrs of the format
-        ```nix
-          {
-            "<LANGUAGE1>" = [
-              "<WORD1>"
-              "<WORD2>"
-              ...
-            ];
-            "<LANGUAGE2>" = [
-              "<WORD1>"
-              "<WORD2>"
-            ];
-            ...
-          };
-        ```
-        where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
-        the LanguageTool rule.
+  disabledRules = helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { } ''
+    Lists of rules that should be disabled (if enabled by default by LanguageTool).
+    This setting is language-specific, so use an attrs of the format
+    ```nix
+      {
+        "<LANGUAGE1>" = [
+          "<WORD1>"
+          "<WORD2>"
+          ...
+        ];
+        "<LANGUAGE2>" = [
+          "<WORD1>"
+          "<WORD2>"
+        ];
+        ...
+      };
+    ```
+    where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
+    the LanguageTool rule.
 
-        This setting is a multi-scope setting. See the documentation for details.
-        This setting supports external files. See the documentation for details.
-        By default, no additional rules will be disabled.
+    This setting is a multi-scope setting. See the documentation for details.
+    This setting supports external files. See the documentation for details.
+    By default, no additional rules will be disabled.
 
-        Example:
-        ```nix
-        {
-          "en-US" = [
-            "EN_QUOTES"
-            "UPPERCASE_SENTENCE_START"
-            ":/path/to/externalFile.txt"
-          ];
-        }
-        ```
-      '';
+    Example:
+    ```nix
+    {
+      "en-US" = [
+        "EN_QUOTES"
+        "UPPERCASE_SENTENCE_START"
+        ":/path/to/externalFile.txt"
+      ];
+    }
+    ```
+  '';
 
-  enabledRules =
-    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
-      ''
-        Lists of rules that should be enabled (if disabled by default by LanguageTool).
-        This setting is language-specific, so use an attrs of the format
-        ```nix
-          {
-            "<LANGUAGE1>" = [
-              "<WORD1>"
-              "<WORD2>"
-              ...
-            ];
-            "<LANGUAGE2>" = [
-              "<WORD1>"
-              "<WORD2>"
-            ];
-            ...
-          };
-        ```
-        where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
-        the LanguageTool rule.
+  enabledRules = helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { } ''
+    Lists of rules that should be enabled (if disabled by default by LanguageTool).
+    This setting is language-specific, so use an attrs of the format
+    ```nix
+      {
+        "<LANGUAGE1>" = [
+          "<WORD1>"
+          "<WORD2>"
+          ...
+        ];
+        "<LANGUAGE2>" = [
+          "<WORD1>"
+          "<WORD2>"
+        ];
+        ...
+      };
+    ```
+    where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
+    the LanguageTool rule.
 
-        This setting is a multi-scope setting. See the documentation for details.
-        This setting supports external files. See the documentation for details.
-        By default, no additional rules will be enabled.
+    This setting is a multi-scope setting. See the documentation for details.
+    This setting supports external files. See the documentation for details.
+    By default, no additional rules will be enabled.
 
-        Example:
-        ```nix
-          {
-            "en-GB" = [
-              "PASSIVE_VOICE"
-              "OXFORD_SPELLING_NOUNS"
-              ":/path/to/externalFile.txt"
-            ];
-          }
-        ```
-      '';
+    Example:
+    ```nix
+      {
+        "en-GB" = [
+          "PASSIVE_VOICE"
+          "OXFORD_SPELLING_NOUNS"
+          ":/path/to/externalFile.txt"
+        ];
+      }
+    ```
+  '';
 
   hiddenFalsePositives =
-    helpers.defaultNullOpts.mkAttrsOf (with helpers.nixvimTypes; listOf (maybeRaw str)) { }
+    helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { }
       ''
         Lists of false-positive diagnostics to hide (by hiding all diagnostics of a specific rule
         within a specific sentence).
@@ -571,8 +564,7 @@ with lib;
   '';
 
   diagnosticSeverity =
-    helpers.defaultNullOpts.mkNullableWithRaw
-      (with helpers.nixvimTypes; either str (attrsOf (maybeRaw str)))
+    helpers.defaultNullOpts.mkNullableWithRaw (with lib.types; either str (attrsOf (maybeRaw str)))
       "information"
       ''
         Severity of the diagnostics corresponding to the grammar and spelling errors.
