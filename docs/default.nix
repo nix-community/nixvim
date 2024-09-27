@@ -42,8 +42,12 @@ let
     ];
   };
 
-  hmOptions = builtins.removeAttrs (lib.evalModules { modules = [ ../wrappers/modules/hm.nix ]; })
-    .options [ "_module" ];
+  hmOptions = builtins.removeAttrs (lib.evalModules {
+    modules = [
+      ../wrappers/modules/hm.nix
+      { _module.check = false; } # Ignore missing option declarations
+    ];
+  }).options [ "_module" ];
 
   options-json =
     (pkgs.nixosOptionsDoc {

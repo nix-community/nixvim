@@ -13,4 +13,9 @@
   };
 
   imports = [ ./enable.nix ];
+
+  config = {
+    wrapRc = lib.mkOptionDefault false;
+    impureRtp = lib.mkOptionDefault true;
+  };
 }
