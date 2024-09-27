@@ -10,14 +10,14 @@ lib.fix (
   let
     # Used when importing parts of helpers
     call = lib.callPackageWith {
-      inherit
-        call
-        lib
-        pkgs
-        self
-        ;
+      inherit call pkgs self;
+      lib = extendedLib;
       helpers = self; # TODO: stop using `helpers` in the subsections
     };
+
+    # Handle "extended" lib
+    # FIXME: We probably don't need this internally within out lib...
+    extendedLib = if lib ? nixvim then lib else lib.extend (import ./overlay.nix { inherit self; });
 
     # Define this outside of the attrs to avoid infinite recursion,
     # since the final value will have been merged from two places
@@ -46,10 +46,6 @@ lib.fix (
     options = call ./options.nix { };
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
-
-    # Handle "extended" lib
-    # TODO: Remove and use the overlay instead
-    extendedLib = if lib ? nixvim then lib else lib.extend (import ./overlay.nix { inherit self; });
 
     # Handle builders, which has some deprecated stuff that depends on `pkgs`
     builders = builders // deprecatedBuilders;
