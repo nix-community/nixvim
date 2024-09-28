@@ -11,9 +11,13 @@ lib.fix (
     # Used when importing parts of helpers
     call = lib.callPackageWith {
       inherit call pkgs self;
+      lib = extendedLib;
       helpers = self; # TODO: stop using `helpers` in the subsections
-      lib = self.extendedLib;
     };
+
+    # Handle "extended" lib
+    # FIXME: We probably don't need this internally within out lib...
+    extendedLib = if lib ? nixvim then lib else lib.extend (import ./overlay.nix { inherit self; });
 
     # Define this outside of the attrs to avoid infinite recursion,
     # since the final value will have been merged from two places
@@ -35,7 +39,6 @@ lib.fix (
   {
     autocmd = call ./autocmd-helpers.nix { };
     deprecation = call ./deprecation.nix { };
-    extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
     modules = call ./modules.nix { };

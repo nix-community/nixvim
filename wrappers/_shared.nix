@@ -52,7 +52,7 @@ in
       lib.nixvim = lib.mkDefault (import ../lib { inherit pkgs lib; });
 
       # Make nixvim's "extended" lib available to the host's module args
-      _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
+      _module.args.nixvimLib = lib.mkDefault (lib.extend (import ../lib/overlay.nix { }));
     }
 
     # Use global packages by default in nixvim's submodule
