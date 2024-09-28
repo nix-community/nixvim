@@ -305,7 +305,7 @@ rec {
         mkNullable' (
           args
           // {
-            type = types.highlight;
+            type = types'.highlight;
             inherit description;
           }
         );
