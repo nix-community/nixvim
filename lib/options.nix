@@ -249,7 +249,7 @@ rec {
         mkNullableWithRaw' (
           (lib.filterAttrs (n: v: n != "name") args)
           // {
-            type = types.border;
+            type = types'.border;
             description = lib.concatStringsSep "\n" (
               (lib.optional (description != "") description)
               ++ [

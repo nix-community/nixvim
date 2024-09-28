@@ -6,7 +6,7 @@
 lib.extend (
   final: prev: {
     # Include our custom lib
-    nixvim = self;
+    nixvim = self.public;
 
     # Merge in our maintainers
     maintainers = prev.maintainers // import ./maintainers.nix;

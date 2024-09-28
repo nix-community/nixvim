@@ -1,5 +1,6 @@
 {
   lib,
+  self,
   _nixvimTests,
 }:
 rec {
@@ -119,7 +120,7 @@ rec {
       null
     else if lib.isString r then
       { __raw = r; }
-    else if lib.types.isRawType r then
+    else if self.types.isRawType r then
       r
     else
       throw "mkRaw: invalid input: ${lib.generators.toPretty { multiline = false; } r}";

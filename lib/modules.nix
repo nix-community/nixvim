@@ -33,7 +33,7 @@ in
       specialArgs = {
         lib = self.extendedLib;
         # TODO: deprecate `helpers`
-        helpers = self;
+        helpers = self.public;
       } // extraSpecialArgs;
     };
 }

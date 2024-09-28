@@ -48,6 +48,14 @@ lib.fix (
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
 
+    # Our public API
+    # NOTE: internal attrs should be removed here
+    public = builtins.removeAttrs self [
+      "extendedLib"
+      "types" # Causes issues if someone does `with lib.nixvim;`
+      "public"
+    ];
+
     # Handle builders, which has some deprecated stuff that depends on `pkgs`
     builders = builders // deprecatedBuilders;
     inherit (self.builders)
