@@ -1,27 +1,30 @@
-{ lib, helpers }:
+{
+  lib,
+  self,
+}:
 let
   inherit (lib) optionalAttrs isAttrs types;
 in
 rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
-    silent = helpers.defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding `<silent>` to a map.";
+    silent = self.defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding `<silent>` to a map.";
 
-    nowait = helpers.defaultNullOpts.mkBool false "Whether to wait for extra input on ambiguous mappings. Equivalent to adding `<nowait>` to a map.";
+    nowait = self.defaultNullOpts.mkBool false "Whether to wait for extra input on ambiguous mappings. Equivalent to adding `<nowait>` to a map.";
 
-    script = helpers.defaultNullOpts.mkBool false "Equivalent to adding `<script>` to a map.";
+    script = self.defaultNullOpts.mkBool false "Equivalent to adding `<script>` to a map.";
 
-    expr = helpers.defaultNullOpts.mkBool false "Means that the action is actually an expression. Equivalent to adding `<expr>` to a map.";
+    expr = self.defaultNullOpts.mkBool false "Means that the action is actually an expression. Equivalent to adding `<expr>` to a map.";
 
-    unique = helpers.defaultNullOpts.mkBool false "Whether to fail if the map is already defined. Equivalent to adding `<unique>` to a map.";
+    unique = self.defaultNullOpts.mkBool false "Whether to fail if the map is already defined. Equivalent to adding `<unique>` to a map.";
 
-    noremap = helpers.defaultNullOpts.mkBool true "Whether to use the `noremap` variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
+    noremap = self.defaultNullOpts.mkBool true "Whether to use the `noremap` variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
 
-    remap = helpers.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
+    remap = self.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
 
-    desc = helpers.mkNullOrOption lib.types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
+    desc = self.mkNullOrOption lib.types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
 
-    buffer = helpers.defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
+    buffer = self.defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
   };
 
   modes = {
@@ -118,9 +121,9 @@ rec {
           // (optionalAttrs (isAttrs action || action) {
             action = lib.mkOption (
               {
-                type = types.maybeRaw types.str;
+                type = self.types.maybeRaw types.str;
                 description = "The action to execute.";
-                apply = v: if options.lua.isDefined or false && config.lua then helpers.mkRaw v else v;
+                apply = v: if options.lua.isDefined or false && config.lua then self.mkRaw v else v;
               }
               // (optionalAttrs (isAttrs action) action)
               // (optionalAttrs (defaults ? action) { default = defaults.action; })

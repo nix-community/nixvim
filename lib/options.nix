@@ -1,6 +1,10 @@
-{ lib, helpers }:
+{
+  lib,
+  self,
+}:
 let
   inherit (lib) types;
+  types' = self.types;
 
   removed = lib.mapAttrs (name: msg: throw "${name} is removed. ${msg}") {
     # Removed 2024-09-05
@@ -87,7 +91,7 @@ rec {
     );
   mkCompositeOption = description: options: mkCompositeOption' { inherit description options; };
 
-  mkNullOrStr' = args: mkNullOrOption' (args // { type = with types; maybeRaw str; });
+  mkNullOrStr' = args: mkNullOrOption' (args // { type = types'.maybeRaw types.str; });
   mkNullOrStr = description: mkNullOrStr' { inherit description; };
 
   mkNullOrLua' =
@@ -95,8 +99,8 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = types.strLua;
-        apply = helpers.mkRaw;
+        type = types'.strLua;
+        apply = self.mkRaw;
       }
     );
   mkNullOrLua = description: mkNullOrLua' { inherit description; };
@@ -106,8 +110,8 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = types.strLuaFn;
-        apply = helpers.mkRaw;
+        type = types'.strLuaFn;
+        apply = self.mkRaw;
       }
     );
   mkNullOrLuaFn = description: mkNullOrLua' { inherit description; };
@@ -117,8 +121,8 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = with types; either strLua type;
-        apply = v: if lib.isString v then helpers.mkRaw v else v;
+        type = types.either types'.strLua type;
+        apply = v: if lib.isString v then self.mkRaw v else v;
       }
     );
   mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
@@ -128,8 +132,8 @@ rec {
     mkNullOrOption' (
       args
       // {
-        type = with types; either strLuaFn type;
-        apply = v: if lib.isString v then helpers.mkRaw v else v;
+        type = types.either types'.strLuaFn type;
+        apply = v: if lib.isString v then self.mkRaw v else v;
       }
     );
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
@@ -149,14 +153,14 @@ rec {
     in
     rec {
       # TODO: removed 2024-06-14; remove stub 2024-09-01
-      mkDesc = abort "mkDesc has been removed. Use the `pluginDefault` argument or `helpers.pluginDefaultText`.";
+      mkDesc = abort "mkDesc has been removed. Use the `pluginDefault` argument or `self.pluginDefaultText`.";
 
       mkNullable' = args: mkNullOrOption' (processDefaultNullArgs args);
       mkNullable =
         type: pluginDefault: description:
         mkNullable' { inherit type pluginDefault description; };
 
-      mkNullableWithRaw' = { type, ... }@args: mkNullable' (args // { type = types.maybeRaw type; });
+      mkNullableWithRaw' = { type, ... }@args: mkNullable' (args // { type = types'.maybeRaw type; });
       mkNullableWithRaw =
         type: pluginDefault: description:
         mkNullableWithRaw' { inherit type pluginDefault description; };
@@ -188,7 +192,7 @@ rec {
       mkUnsignedInt' = args: mkNullableWithRaw' (args // { type = types.ints.unsigned; });
       mkUnsignedInt = pluginDefault: description: mkUnsignedInt' { inherit pluginDefault description; };
       mkFlagInt = pluginDefault: description: mkFlagInt' { inherit pluginDefault description; };
-      mkFlagInt' = args: mkNullableWithRaw' (args // { type = types.intFlag; });
+      mkFlagInt' = args: mkNullableWithRaw' (args // { type = types'.intFlag; });
       mkBool' = args: mkNullableWithRaw' (args // { type = types.bool; });
       mkBool = pluginDefault: description: mkBool' { inherit pluginDefault description; };
       mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });
@@ -198,13 +202,13 @@ rec {
       mkAttributeSet = pluginDefault: description: mkAttributeSet' { inherit pluginDefault description; };
 
       mkListOf' =
-        { type, ... }@args: mkNullable' (args // { type = with types; listOf (maybeRaw type); });
+        { type, ... }@args: mkNullable' (args // { type = types.listOf (types'.maybeRaw type); });
       mkListOf =
         type: pluginDefault: description:
         mkListOf' { inherit type pluginDefault description; };
 
       mkAttrsOf' =
-        { type, ... }@args: mkNullable' (args // { type = with types; attrsOf (maybeRaw type); });
+        { type, ... }@args: mkNullable' (args // { type = types.attrsOf (types'.maybeRaw type); });
       mkAttrsOf =
         type: pluginDefault: description:
         mkAttrsOf' { inherit type pluginDefault description; };
@@ -274,10 +278,7 @@ rec {
               ]);
             apply = lib.mapNullable (
               value:
-              if lib.isInt value then
-                value
-              else
-                helpers.mkRaw "vim.diagnostic.severity.${lib.strings.toUpper value}"
+              if lib.isInt value then value else self.mkRaw "vim.diagnostic.severity.${lib.strings.toUpper value}"
             );
           }
         );
@@ -288,10 +289,9 @@ rec {
         mkNullOrOption' (
           args
           // {
-            type = with types; either ints.unsigned logLevel;
+            type = with types; either ints.unsigned types'.logLevel;
             apply = lib.mapNullable (
-              value:
-              if lib.isInt value then value else helpers.mkRaw "vim.log.levels.${lib.strings.toUpper value}"
+              value: if lib.isInt value then value else self.mkRaw "vim.log.levels.${lib.strings.toUpper value}"
             );
           }
         );

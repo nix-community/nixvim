@@ -1,4 +1,7 @@
-{ lib, helpers }:
+{
+  lib,
+  self,
+}:
 let
   inherit (lib) types;
 in
@@ -14,34 +17,34 @@ rec {
   };
 
   autoCmdOptions = {
-    event = helpers.mkNullOrOption (with types; either str (listOf str)) ''
+    event = self.mkNullOrOption (with types; either str (listOf str)) ''
       The event or events to register this autocommand.
     '';
 
-    group = helpers.mkNullOrOption (with types; either str int) ''
+    group = self.mkNullOrOption (with types; either str int) ''
       The autocommand group name or id to match against.
     '';
 
-    pattern = helpers.mkNullOrOption (with types; either str (listOf str)) ''
+    pattern = self.mkNullOrOption (with types; either str (listOf str)) ''
       Pattern or patterns to match literally against.
     '';
 
-    buffer = helpers.mkNullOrOption types.int ''
+    buffer = self.mkNullOrOption types.int ''
       Buffer number for buffer local autocommands |autocmd-buflocal|.
       Cannot be used with `pattern`.
     '';
 
     # Introduced early October 2023.
     # TODO remove in early December 2023.
-    description = helpers.mkNullOrOption types.str ''
+    description = self.mkNullOrOption types.str ''
       DEPRECATED, please use `desc`.
     '';
 
-    desc = helpers.mkNullOrOption types.str ''
+    desc = self.mkNullOrOption types.str ''
       A textual description of this autocommand.
     '';
 
-    callback = helpers.mkNullOrOption (with types; either str rawLua) ''
+    callback = self.mkNullOrOption (with types; either str self.types.rawLua) ''
       A function or a string.
       - if a string, the name of a Vimscript function to call when this autocommand is triggered.
       - Otherwise, a Lua function which is called when this autocommand is triggered.
@@ -65,13 +68,13 @@ rec {
         }
     '';
 
-    command = helpers.defaultNullOpts.mkStr "" ''
+    command = self.defaultNullOpts.mkStr "" ''
       Vim command to execute on event. Cannot be used with `callback`.
     '';
 
-    once = helpers.defaultNullOpts.mkBool false "Run the autocommand only once.";
+    once = self.defaultNullOpts.mkBool false "Run the autocommand only once.";
 
-    nested = helpers.defaultNullOpts.mkBool false "Run nested autocommands.";
+    nested = self.defaultNullOpts.mkBool false "Run nested autocommands.";
   };
 
   autoCmdOption = types.submodule { options = autoCmdOptions; };

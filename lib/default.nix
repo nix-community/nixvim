@@ -10,9 +10,12 @@ lib.fix (
   let
     # Used when importing parts of helpers
     call = lib.callPackageWith {
-      inherit call pkgs self;
-      helpers = self; # TODO: stop using `helpers` in the subsections
-      lib = self.extendedLib;
+      inherit
+        call
+        lib
+        pkgs
+        self
+        ;
     };
 
     # Define this outside of the attrs to avoid infinite recursion,
@@ -35,12 +38,13 @@ lib.fix (
   {
     autocmd = call ./autocmd-helpers.nix { };
     deprecation = call ./deprecation.nix { };
-    extendedLib = call ./extend-lib.nix { inherit lib; };
+    extendedLib = call ./extend-lib.nix { }; # TODO: provide an overlay instead
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
     modules = call ./modules.nix { };
     neovim-plugin = call ./neovim-plugin.nix { };
     options = call ./options.nix { };
+    types = call ./types.nix { }; # NOTE: you should usually prefer the extended `lib.types`
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
 

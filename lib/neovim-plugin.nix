@@ -1,4 +1,7 @@
-{ lib, helpers }:
+{
+  lib,
+  self,
+}:
 {
   # TODO: DEPRECATED: use the `settings` option instead
   extraOptionsOptions = {
@@ -68,7 +71,7 @@
 
           setupCode = ''
             require('${luaName}')${setup}(${
-              lib.optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)
+              lib.optionalString (cfg ? settings) (self.toLuaObject cfg.settings)
             })
           '';
 
@@ -106,7 +109,7 @@
                   };
             }
             // lib.optionalAttrs hasSettings {
-              settings = helpers.mkSettingsOption {
+              settings = self.mkSettingsOption {
                 description = settingsDescription;
                 options = settingsOptions;
                 example = settingsExample;
@@ -114,7 +117,7 @@
             }
             // lib.optionalAttrs hasConfigAttrs {
               luaConfig = lib.mkOption {
-                type = lib.types.pluginLuaConfig;
+                type = self.types.pluginLuaConfig;
                 default = { };
                 description = "The plugin's lua configuration";
               };
@@ -162,6 +165,6 @@
         ++ (lib.optional deprecateExtraOptions (
           lib.mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
         ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ self.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings;
     };
 }
