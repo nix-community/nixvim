@@ -90,48 +90,18 @@ rec {
   mkNullOrStr' = args: mkNullOrOption' (args // { type = with types; maybeRaw str; });
   mkNullOrStr = description: mkNullOrStr' { inherit description; };
 
-  mkNullOrLua' =
-    args:
-    mkNullOrOption' (
-      args
-      // {
-        type = types.strLua;
-        apply = lib.nixvim.mkRaw;
-      }
-    );
+  mkNullOrLua' = args: mkNullOrOption' (args // { type = types.strLua; });
   mkNullOrLua = description: mkNullOrLua' { inherit description; };
 
-  mkNullOrLuaFn' =
-    args:
-    mkNullOrOption' (
-      args
-      // {
-        type = types.strLuaFn;
-        apply = lib.nixvim.mkRaw;
-      }
-    );
+  mkNullOrLuaFn' = args: mkNullOrOption' (args // { type = types.strLuaFn; });
   mkNullOrLuaFn = description: mkNullOrLua' { inherit description; };
 
   mkNullOrStrLuaOr' =
-    { type, ... }@args:
-    mkNullOrOption' (
-      args
-      // {
-        type = with types; either strLua type;
-        apply = v: if lib.isString v then lib.nixvim.mkRaw v else v;
-      }
-    );
+    { type, ... }@args: mkNullOrOption' (args // { type = with types; either strLua type; });
   mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
 
   mkNullOrStrLuaFnOr' =
-    { type, ... }@args:
-    mkNullOrOption' (
-      args
-      // {
-        type = with types; either strLuaFn type;
-        apply = v: if lib.isString v then lib.nixvim.mkRaw v else v;
-      }
-    );
+    { type, ... }@args: mkNullOrOption' (args // { type = with types; either strLuaFn type; });
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
 
   defaultNullOpts =
