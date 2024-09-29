@@ -250,7 +250,7 @@ rec {
             + lib.concatStringsSep ("," + introSpace) (
               lib.mapAttrsToList (
                 name: value:
-                (if allowExplicitEmpty && lib.hasPrefix "__unkeyed" name then "" else toTableKey name + " = ")
+                (if allowUnkeyedAttrs && lib.hasPrefix "__unkeyed" name then "" else toTableKey name + " = ")
                 + lib.addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
               ) v
             )
