@@ -8,14 +8,21 @@ let
     mkNullOrOption
     ;
 
-  strLikeType =
+  mkStrLuaType =
     description:
     lib.mkOptionType {
-      name = "str";
+      name = "strLua";
       inherit description;
       descriptionClass = "noun";
       check = v: lib.isString v || isRawType v;
-      merge = lib.options.mergeEqualOption;
+      merge =
+        loc: defs:
+        lib.pipe defs [
+          # Coerce strings to rawLua
+          # TODO: consider deprecating this behaviour
+          (lib.map (def: def // { value = lib.nixvim.mkRaw def.value; }))
+          (lib.options.mergeEqualOption loc)
+        ];
     };
   isRawType = v: v ? __raw && lib.isString v.__raw;
 in
@@ -107,8 +114,8 @@ rec {
     };
   };
 
-  strLua = strLikeType "lua code string";
-  strLuaFn = strLikeType "lua function string";
+  strLua = mkStrLuaType "lua code string";
+  strLuaFn = mkStrLuaType "lua function string";
 
   # When building the documentation `either` is extended to return the nestedType's sub-options
   # This type can be used to avoid infinite recursion when evaluating the docs
