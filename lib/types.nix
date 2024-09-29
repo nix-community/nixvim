@@ -1,8 +1,11 @@
 # Custom types to be included in `lib.types`
-{ lib }:
+{
+  lib,
+  self,
+}:
 let
   inherit (lib) types;
-  inherit (lib.nixvim)
+  inherit (self)
     deprecation
     mkNullOrStr
     mkNullOrOption
@@ -118,7 +121,7 @@ rec {
     { config, ... }:
     let
       inherit (builtins) toString;
-      inherit (lib.nixvim.utils) mkBeforeSection mkAfterSection;
+      inherit (self.utils) mkBeforeSection mkAfterSection;
     in
     {
       options = {

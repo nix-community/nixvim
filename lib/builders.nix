@@ -1,6 +1,6 @@
 { lib }:
-# NOTE: use local recursion instead of accessing `lib.nixvim.builders`.
-# The latter isn't a fixed shape since it may get the deprecated functions meregd in,
+# NOTE: use local recursion instead of accessing `self.builders`.
+# The latter isn't a fixed shape since it may get the deprecated functions merged in,
 # which would lead to infinite recursion.
 lib.fix (builders: {
   # Curry a nixpkgs instance into the *With functions below, dropping the `With` suffix
@@ -147,7 +147,7 @@ lib.fix (builders: {
       prev:
       {
         nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [
-          (lib.nixvim.builders.byteCompileLuaHookWith pkgs)
+          (builders.byteCompileLuaHookWith pkgs)
         ];
       }
       // lib.optionalAttrs (prev ? buildCommand) {

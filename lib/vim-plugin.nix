@@ -1,4 +1,7 @@
-{ lib, helpers }:
+{
+  lib,
+  self,
+}:
 {
   mkVimPlugin =
     {
@@ -36,7 +39,7 @@
       createSettingsOption = (lib.isString globalPrefix) && (globalPrefix != "");
 
       settingsOption = lib.optionalAttrs createSettingsOption {
-        settings = helpers.mkSettingsOption {
+        settings = self.mkSettingsOption {
           options = settingsOptions;
           example = settingsExample;
           description = ''
@@ -123,6 +126,6 @@
         ++ (lib.optional (deprecateExtraConfig && createSettingsOption) (
           lib.mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) settingsPath
         ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ self.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings;
     };
 }

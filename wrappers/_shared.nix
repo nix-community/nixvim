@@ -27,6 +27,9 @@ let
     ;
   cfg = config.programs.nixvim;
   extraFiles = lib.filter (file: file.enable) (lib.attrValues cfg.extraFiles);
+
+  # NOTE: user-facing so we must include the legacy `pkgs` argument
+  nixvimLib = import ../lib { inherit pkgs lib; };
 in
 {
   _file = ./_shared.nix;
@@ -48,11 +51,10 @@ in
   config = mkMerge [
     {
       # Make our lib available to the host modules
-      # NOTE: user-facing so we must include the legacy `pkgs` argument
-      lib.nixvim = lib.mkDefault (import ../lib { inherit pkgs lib; });
+      lib.nixvim = lib.mkDefault nixvimLib.public;
 
       # Make nixvim's "extended" lib available to the host's module args
-      _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
+      _module.args.nixvimLib = lib.mkDefault nixvimLib.extendedLib;
     }
 
     # Use global packages by default in nixvim's submodule

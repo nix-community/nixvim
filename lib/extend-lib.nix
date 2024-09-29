@@ -1,18 +1,17 @@
 # Extends nixpkg's lib with our functions, as expected by our modules
 {
-  call,
   lib,
-  self,
+  self ? import ./. { inherit lib; },
 }:
 lib.extend (
   final: prev: {
     # Include our custom lib
-    nixvim = self;
+    nixvim = self.public;
 
     # Merge in our maintainers
     maintainers = prev.maintainers // import ./maintainers.nix;
 
     # Merge in our custom types
-    types = prev.types // call ./types.nix { };
+    types = prev.types // self.types;
   }
 )

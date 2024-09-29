@@ -1,4 +1,7 @@
-{ lib }:
+{
+  lib,
+  self,
+}:
 rec {
   # Get a (sub)option by walking the path,
   # checking for submodules along the way
@@ -54,7 +57,7 @@ rec {
       let
         option = lib.toList option';
         oldPath = oldPrefix ++ option;
-        newPath = newPrefix ++ map lib.nixvim.toSnakeCase option;
+        newPath = newPrefix ++ map self.toSnakeCase option;
       in
       lib.mkRenamedOptionModule oldPath newPath
     );

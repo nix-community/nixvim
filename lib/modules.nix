@@ -31,9 +31,9 @@ in
     lib.evalModules {
       modules = [ ../modules/top-level ] ++ modules;
       specialArgs = {
-        inherit lib;
+        lib = self.extendedLib;
         # TODO: deprecate `helpers`
-        helpers = self;
+        helpers = self.public;
       } // extraSpecialArgs;
     };
 }
