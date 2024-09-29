@@ -61,7 +61,6 @@ in
                 lua = true;
               }
             );
-          apply = v: if v == null then null else helpers.keymaps.removeDeprecatedMapAttrs v;
           description = "Keymap for the ${action} action.";
         }
       ) defaultKeymaps;
