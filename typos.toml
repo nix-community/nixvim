@@ -1,3 +1,6 @@
+[files]
+extend-exclude = ["**/lspconfig-servers.json"]
+
 [default.extend-words]
 tabe = "tabe"
 noice = "noice"

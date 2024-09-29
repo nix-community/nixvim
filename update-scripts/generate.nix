@@ -3,12 +3,17 @@
   rust-analyzer-options,
   efmls-configs-sources,
   none-ls-builtins,
+  lspconfig-servers,
   nixfmt-rfc-style,
+  nodePackages,
 }:
 writeShellApplication {
   name = "generate";
 
-  runtimeInputs = [ nixfmt-rfc-style ];
+  runtimeInputs = [
+    nixfmt-rfc-style
+    nodePackages.prettier
+  ];
 
   text = ''
     repo_root=$(git rev-parse --show-toplevel)
@@ -37,6 +42,8 @@ writeShellApplication {
     generate "${rust-analyzer-options}" "rust-analyzer"
     generate "${efmls-configs-sources}" "efmls-configs"
     generate "${none-ls-builtins}" "none-ls"
+    echo "lspconfig servers"
+    prettier --parser=json "${lspconfig-servers}" >"$generated_dir/lspconfig-servers.json"
 
     if [ -n "$commit" ]; then
       cd "$generated_dir"
