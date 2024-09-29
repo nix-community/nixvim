@@ -1,27 +1,28 @@
-{ lib, helpers }:
+{ lib }:
 let
   inherit (lib) optionalAttrs isAttrs types;
+  inherit (lib.nixvim) defaultNullOpts;
 in
 rec {
   # These are the configuration options that change the behavior of each mapping.
   mapConfigOptions = {
-    silent = helpers.defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding `<silent>` to a map.";
+    silent = defaultNullOpts.mkBool false "Whether this mapping should be silent. Equivalent to adding `<silent>` to a map.";
 
-    nowait = helpers.defaultNullOpts.mkBool false "Whether to wait for extra input on ambiguous mappings. Equivalent to adding `<nowait>` to a map.";
+    nowait = defaultNullOpts.mkBool false "Whether to wait for extra input on ambiguous mappings. Equivalent to adding `<nowait>` to a map.";
 
-    script = helpers.defaultNullOpts.mkBool false "Equivalent to adding `<script>` to a map.";
+    script = defaultNullOpts.mkBool false "Equivalent to adding `<script>` to a map.";
 
-    expr = helpers.defaultNullOpts.mkBool false "Means that the action is actually an expression. Equivalent to adding `<expr>` to a map.";
+    expr = defaultNullOpts.mkBool false "Means that the action is actually an expression. Equivalent to adding `<expr>` to a map.";
 
-    unique = helpers.defaultNullOpts.mkBool false "Whether to fail if the map is already defined. Equivalent to adding `<unique>` to a map.";
+    unique = defaultNullOpts.mkBool false "Whether to fail if the map is already defined. Equivalent to adding `<unique>` to a map.";
 
-    noremap = helpers.defaultNullOpts.mkBool true "Whether to use the `noremap` variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
+    noremap = defaultNullOpts.mkBool true "Whether to use the `noremap` variant of the command, ignoring any custom mappings on the defined action. It is highly advised to keep this on, which is the default.";
 
-    remap = helpers.defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
+    remap = defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
 
-    desc = helpers.mkNullOrOption lib.types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
+    desc = lib.nixvim.mkNullOrOption lib.types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
 
-    buffer = helpers.defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
+    buffer = defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
   };
 
   modes = {
@@ -120,7 +121,7 @@ rec {
               {
                 type = types.maybeRaw types.str;
                 description = "The action to execute.";
-                apply = v: if options.lua.isDefined or false && config.lua then helpers.mkRaw v else v;
+                apply = v: if options.lua.isDefined or false && config.lua then lib.nixvim.mkRaw v else v;
               }
               // (optionalAttrs (isAttrs action) action)
               // (optionalAttrs (defaults ? action) { default = defaults.action; })

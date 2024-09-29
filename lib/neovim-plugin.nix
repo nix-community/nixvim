@@ -1,4 +1,4 @@
-{ lib, helpers }:
+{ lib }:
 {
   # TODO: DEPRECATED: use the `settings` option instead
   extraOptionsOptions = {
@@ -68,7 +68,7 @@
 
           setupCode = ''
             require('${luaName}')${setup}(${
-              lib.optionalString (cfg ? settings) (helpers.toLuaObject cfg.settings)
+              lib.optionalString (cfg ? settings) (lib.nixvim.toLuaObject cfg.settings)
             })
           '';
 
@@ -106,7 +106,7 @@
                   };
             }
             // lib.optionalAttrs hasSettings {
-              settings = helpers.mkSettingsOption {
+              settings = lib.nixvim.mkSettingsOption {
                 description = settingsDescription;
                 options = settingsOptions;
                 example = settingsExample;

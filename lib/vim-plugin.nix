@@ -1,4 +1,4 @@
-{ lib, helpers }:
+{ lib }:
 {
   mkVimPlugin =
     {
@@ -36,7 +36,7 @@
       createSettingsOption = (lib.isString globalPrefix) && (globalPrefix != "");
 
       settingsOption = lib.optionalAttrs createSettingsOption {
-        settings = helpers.mkSettingsOption {
+        settings = lib.nixvim.mkSettingsOption {
           options = settingsOptions;
           example = settingsExample;
           description = ''

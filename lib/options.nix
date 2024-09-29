@@ -1,4 +1,4 @@
-{ lib, helpers }:
+{ lib }:
 let
   inherit (lib) types;
 
@@ -96,7 +96,7 @@ rec {
       args
       // {
         type = types.strLua;
-        apply = helpers.mkRaw;
+        apply = lib.nixvim.mkRaw;
       }
     );
   mkNullOrLua = description: mkNullOrLua' { inherit description; };
@@ -107,7 +107,7 @@ rec {
       args
       // {
         type = types.strLuaFn;
-        apply = helpers.mkRaw;
+        apply = lib.nixvim.mkRaw;
       }
     );
   mkNullOrLuaFn = description: mkNullOrLua' { inherit description; };
@@ -118,7 +118,7 @@ rec {
       args
       // {
         type = with types; either strLua type;
-        apply = v: if lib.isString v then helpers.mkRaw v else v;
+        apply = v: if lib.isString v then lib.nixvim.mkRaw v else v;
       }
     );
   mkNullOrStrLuaOr = type: description: mkNullOrStrLuaOr' { inherit type description; };
@@ -129,7 +129,7 @@ rec {
       args
       // {
         type = with types; either strLuaFn type;
-        apply = v: if lib.isString v then helpers.mkRaw v else v;
+        apply = v: if lib.isString v then lib.nixvim.mkRaw v else v;
       }
     );
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
@@ -149,7 +149,7 @@ rec {
     in
     rec {
       # TODO: removed 2024-06-14; remove stub 2024-09-01
-      mkDesc = abort "mkDesc has been removed. Use the `pluginDefault` argument or `helpers.pluginDefaultText`.";
+      mkDesc = abort "mkDesc has been removed. Use the `pluginDefault` argument or `lib.nixvim.pluginDefaultText`.";
 
       mkNullable' = args: mkNullOrOption' (processDefaultNullArgs args);
       mkNullable =
@@ -277,7 +277,7 @@ rec {
               if lib.isInt value then
                 value
               else
-                helpers.mkRaw "vim.diagnostic.severity.${lib.strings.toUpper value}"
+                lib.nixvim.mkRaw "vim.diagnostic.severity.${lib.strings.toUpper value}"
             );
           }
         );
@@ -291,7 +291,7 @@ rec {
             type = with types; either ints.unsigned logLevel;
             apply = lib.mapNullable (
               value:
-              if lib.isInt value then value else helpers.mkRaw "vim.log.levels.${lib.strings.toUpper value}"
+              if lib.isInt value then value else lib.nixvim.mkRaw "vim.log.levels.${lib.strings.toUpper value}"
             );
           }
         );

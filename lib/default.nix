@@ -4,14 +4,12 @@
   _nixvimTests ? false,
   ...
 }:
-# Build helpers recursively
 lib.fix (
   self:
   let
-    # Used when importing parts of helpers
+    # Used when importing parts of our lib
     call = lib.callPackageWith {
       inherit call pkgs self;
-      helpers = self; # TODO: stop using `helpers` in the subsections
       lib = self.extendedLib;
     };
 
