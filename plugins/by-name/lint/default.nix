@@ -91,7 +91,6 @@ let
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
       '';
-      apply = helpers.mkRaw;
       mandatory = true;
     };
   };

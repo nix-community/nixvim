@@ -18,7 +18,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     patterns = mkOption {
       type = with lib.types; listOf strLua;
-      apply = map helpers.mkRaw;
       default = [ ];
       example = [ "[[%s/\(\n\n\)\n\+/\1/]]" ];
       description = ''

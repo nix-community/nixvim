@@ -95,7 +95,6 @@ rec {
           ${defaults}
         ```
       '';
-      apply = lib.mapAttrs (_: lib.nixvim.mkRaw);
     };
 
   mkMappingsOption =

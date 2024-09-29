@@ -30,7 +30,6 @@ with lib;
           };
         })
       );
-    apply = v: map (listElem: if isString listElem then helpers.mkRaw listElem else listElem) v;
     default = [ ];
     description = ''
       Startify displays lists. Each list consists of a `type` and optionally a `header` and

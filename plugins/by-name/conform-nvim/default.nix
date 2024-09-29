@@ -125,7 +125,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
           See `:help conform.format` for details.
         '';
-        apply = v: if lib.isString v then mkRaw v else v;
       };
 
       default_format_opts = defaultNullOpts.mkNullable defaultFormatSubmodule { } ''
@@ -143,7 +142,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
           See `:help conform.format` for details.
         '';
-        apply = v: if lib.isString v then mkRaw v else v;
       };
 
       log_level = defaultNullOpts.mkLogLevel "error" ''

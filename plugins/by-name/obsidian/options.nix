@@ -226,7 +226,6 @@ with lib;
             action = mkOption {
               type = lib.types.strLua;
               description = "The lua code for this keymap action.";
-              apply = helpers.mkRaw;
             };
             opts = helpers.keymaps.mapConfigOptions // {
               buffer = helpers.defaultNullOpts.mkBool false ''

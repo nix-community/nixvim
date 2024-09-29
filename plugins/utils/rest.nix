@@ -207,7 +207,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
         default: `{}`
       '';
-      apply = v: if lib.isAttrs v then lib.mapAttrs (_: lib.nixvim.mkRaw) v else v;
     };
 
     request = {

@@ -43,14 +43,6 @@ with lib;
       cmp mappings declaration.
       See `:h cmp-mapping` for more information.
     '';
-    apply =
-      v:
-      # Handle the raw case first
-      if lib.types.isRawType v then
-        v
-      # When v is an attrs **but not {__raw = ...}**
-      else
-        mapAttrs (_: helpers.mkRaw) v;
     example = {
       "<C-d>" = "cmp.mapping.scroll_docs(-4)";
       "<C-f>" = "cmp.mapping.scroll_docs(4)";
@@ -98,7 +90,6 @@ with lib;
           end
         ```
       '';
-      apply = helpers.mkRaw;
       example = ''
         function(args)
           require('luasnip').lsp_expand(args.body)
@@ -210,7 +201,6 @@ with lib;
 
     comparators = mkOption {
       type = with lib.types; nullOr (listOf strLuaFn);
-      apply = v: helpers.ifNonNull' v (map helpers.mkRaw v);
       default = null;
       description = ''
         The function to customize the sorting behavior.

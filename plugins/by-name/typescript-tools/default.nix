@@ -22,7 +22,6 @@ in
     onAttach = helpers.defaultNullOpts.mkLuaFn "__lspOnAttach" "Lua code to run when tsserver attaches to a buffer.";
     handlers = mkOption {
       type = with lib.types; nullOr (attrsOf strLuaFn);
-      apply = v: helpers.ifNonNull' v (mapAttrs (_: helpers.mkRaw) v);
       default = null;
       description = "How tsserver should respond to LSP requests";
       example = {

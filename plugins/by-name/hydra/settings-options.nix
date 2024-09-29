@@ -156,7 +156,6 @@ with lib;
                 end
               '';
             };
-            apply = mapAttrs (_: helpers.mkRaw);
           };
         };
       };

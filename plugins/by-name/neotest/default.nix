@@ -17,7 +17,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     adapters = mkOption {
       type = with types; listOf strLua;
       default = [ ];
-      apply = map mkRaw;
       # NOTE: We hide this option from the documentation as users should use the top-level
       # `adapters` option.
       # They can still directly append raw lua code to this `settings.adapters` option.

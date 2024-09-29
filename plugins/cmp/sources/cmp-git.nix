@@ -162,7 +162,6 @@ in
 
               action = mkOption {
                 type = lib.types.strLuaFn;
-                apply = helpers.mkRaw;
                 description = ''
                   The parameters to the action function are the different sources (currently `git`,
                   `gitlab` and `github`), the completion callback, the trigger character, the

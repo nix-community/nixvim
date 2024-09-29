@@ -129,7 +129,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
       description = ''
         Builtin click handlers.
       '';
-      apply = mapAttrs (_: helpers.mkRaw);
       example = {
         Lnum = "require('statuscol.builtin').lnum_click";
         FoldClose = "require('statuscol.builtin').foldclose_click";

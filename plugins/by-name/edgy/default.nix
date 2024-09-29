@@ -151,7 +151,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
               });
             default = null;
             example = "require('noice.util.spinners').spinners.circleFull";
-            apply = v: if isString v then helpers.mkRaw v else v;
             description = "Spinner for pinned views that are loading.";
             pluginDefault = {
               frames = defaultFrames;
@@ -182,7 +181,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
       # Hence, we convert the string to raw lua in `apply`.
       keys = helpers.defaultNullOpts.mkAttrsOf' {
         type = with lib.types; either strLuaFn (enum [ false ]);
-        apply = x: if x == null then null else mapAttrs (_: v: if isString v then helpers.mkRaw v else v) x;
         description = ''
           Buffer-local keymaps to be added to edgebar buffers.
           Existing buffer-local keymaps will never be overridden.

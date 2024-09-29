@@ -55,7 +55,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
                 For "static" delimiter pairs it can be a list of strings representing the value
                 of the delimiter pair.
               '';
-              apply = v: if lib.isString v then lib.nixvim.mkRaw v else v;
               example = [
                 "( "
                 " )"
