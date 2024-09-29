@@ -32,7 +32,22 @@ rec {
     check = v: (isRawType v) || (v ? __empty);
   };
 
-  maybeRaw = type: types.either type rawLua;
+  maybeRaw =
+    elemType:
+    let
+      luaFirst = types.either rawLua elemType;
+      elemFirst = types.either elemType rawLua;
+    in
+    luaFirst
+    // {
+      name = "maybeRaw";
+      inherit (elemFirst) description;
+      nestedTypes = {
+        left = lib.warn "maybeRaw.nestedTypes: `left` is a deprecated alias for `elemType`." elemType;
+        right = lib.warn "maybeRaw.nestedTypes: `right` is a deprecated alias for `rawLua`." rawLua;
+        inherit rawLua elemType;
+      };
+    };
 
   # Describes an boolean-like integer flag that is either 0 or 1
   # Has legacy support for boolean definitions, added 2024-09-08

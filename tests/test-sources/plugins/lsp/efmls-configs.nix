@@ -92,7 +92,7 @@
           toolType = opt.type.nestedTypes.left;
           # toolType is a `either (enum possible) rawLua
           # Look into `nestedTypes.left` for the enum
-          possible = toolType.nestedTypes.left;
+          possible = toolType.nestedTypes.elemType;
           # possible is an enum, look into functor.payload for the variants
           toolList = possible.functor.payload;
         in
