@@ -24,9 +24,6 @@
 
       brokenTools =
         [
-          # Broken as of 2024-07-08
-          # TODO: re-enable this tests when fixed
-          "cpplint"
           # TODO: added 2024-09-13
           # Swift broken everywhere atm
           "swiftformat"
