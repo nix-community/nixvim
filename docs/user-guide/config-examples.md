@@ -10,27 +10,28 @@ Take a look at these configuration examples below.
 Most of those configurations are using a [standalone build](../modules/standalone.html), however,
 all of the nixvim options are accessible no matter how you are using it (flake, NixOS/HM module, nix-darwin...).
 
-| Config | Comment |
-|-|-|
-| [ahwxorg/nixvim-config] | |
-| [alisonjenkins/neovim-nix-flake] | |
-| [dc-tec/nixvim] | NixVim config, inspired by some of the contributors in this list and LazyVIM |
-| [elythh/nixvim] | |
-| [GaetanLepage/nix-config] | Home-manager |
-| [gwg313/nvim-nix] | |
-| [hbjydev/hvim] | |
-| [JMartJonesy/kickstart.nixvim] | An implementation of kickstart.nvim using nixvim |
-| [khaneliman/khanelivim] | Constantly tweaked jack of all trades development focused configuration. |
-| [MikaelFangel/nixvim-config] | An easy-setup configuration for NixVim, focused on straightforward customization |
-| [nicolas-goudry/nixvim-config] | Heavily inspired by AstroNvim |
-| [niksingh710/nvix] | Ported from a lazy-based lua config. Contains examples of most use cases, including custom, nixpkgs, & nixvim plugins. |
-| [pete3n/nixvim-flake] | |
-| [redyf/Neve] | Meticulously crafted custom configuration for Nixvim |
-| [siph/nixvim-flake] | |
-| [Tanish2002/neovim-config] | |
-| [traxys/Nixfiles] | |
-| [veeronniecaw/ronvim] | |
-| [zainkergaye/nixosdotfiles] | NixVim editor primarily for Java and Asciidoc | 
+| Config                           | Comment                                                                                                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [ahwxorg/nixvim-config]          |                                                                                                                        |
+| [alisonjenkins/neovim-nix-flake] |                                                                                                                        |
+| [dc-tec/nixvim]                  | NixVim config, inspired by some of the contributors in this list and LazyVIM                                           |
+| [elythh/nixvim]                  |                                                                                                                        |
+| [fred-drake/neovim]              | NixVim config, with format/lsp/debug configurations for Rust, Go, Python and more                                      |
+| [GaetanLepage/nix-config]        | Home-manager                                                                                                           |
+| [gwg313/nvim-nix]                |                                                                                                                        |
+| [hbjydev/hvim]                   |                                                                                                                        |
+| [JMartJonesy/kickstart.nixvim]   | An implementation of kickstart.nvim using nixvim                                                                       |
+| [khaneliman/khanelivim]          | Constantly tweaked jack of all trades development focused configuration.                                               |
+| [MikaelFangel/nixvim-config]     | An easy-setup configuration for NixVim, focused on straightforward customization                                       |
+| [nicolas-goudry/nixvim-config]   | Heavily inspired by AstroNvim                                                                                          |
+| [niksingh710/nvix]               | Ported from a lazy-based lua config. Contains examples of most use cases, including custom, nixpkgs, & nixvim plugins. |
+| [pete3n/nixvim-flake]            |                                                                                                                        |
+| [redyf/Neve]                     | Meticulously crafted custom configuration for Nixvim                                                                   |
+| [siph/nixvim-flake]              |                                                                                                                        |
+| [Tanish2002/neovim-config]       |                                                                                                                        |
+| [traxys/Nixfiles]                |                                                                                                                        |
+| [veeronniecaw/ronvim]            |                                                                                                                        |
+| [zainkergaye/nixosdotfiles]      | NixVim editor primarily for Java and Asciidoc                                                                          |
 
 <!-- WARNING: Please ensure entries are alphabetically sorted ! -->
 
@@ -57,5 +58,6 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 ## Share your config !
 
 To add a configuration to this list, either:
+
 - Edit [this file](https://github.com/nix-community/nixvim/blob/main/docs/user-guide/config-examples.md) and make a PR on the [nixvim repo](https://github.com/nix-community/nixvim).
 - Send a message to the [matrix _Documentation_ room](https://matrix.to/#/#nixvim-documentation:matrix.org)
