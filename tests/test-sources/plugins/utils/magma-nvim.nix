@@ -1,11 +1,12 @@
 {
+  # NOTE: broken package
   empty = {
-    plugins.magma-nvim.enable = true;
+    plugins.magma-nvim.enable = false;
   };
 
   defaults = {
     plugins.magma-nvim = {
-      enable = true;
+      enable = false;
 
       settings = {
         image_provider = "none";
