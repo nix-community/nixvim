@@ -26,7 +26,7 @@
 
       pre-commit = {
         settings.hooks = {
-          nixfmt = {
+          nixfmt-rfc-style = {
             enable = true;
             package = fmt;
           };
