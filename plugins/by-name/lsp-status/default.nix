@@ -58,6 +58,30 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       diagnostics = defaultNullOpts.mkBool true ''
         If false, the default statusline component does not display LSP diagnostics.
       '';
+
+      spinner_frames =
+        defaultNullOpts.mkListOf types.str
+          [
+            "⣾"
+            "⣽"
+            "⣻"
+            "⢿"
+            "⡿"
+            "⣟"
+            "⣯"
+            "⣷"
+          ]
+          ''
+            Animation frames of the spinner displayed while lsp is processing.
+          '';
+
+      status_symbol = defaultNullOpts.mkStr " 🇻" ''
+        Symbol displayed at the beginning of the status message.
+      '';
+
+      update_interval = defaultNullOpts.mkInt 100 ''
+        The interval, in milliseconds, to update the status message.
+      '';
     };
 
   callSetup = false;
