@@ -11,12 +11,7 @@ pkgs.lib.optionalAttrs
       servers =
         let
           disabled =
-            [
-              # As of 2024-09-13, sourcekit-lsp is broken due to swift dependency
-              # TODO: re-enable this test when fixed
-              "sourcekit"
-            ]
-            ++ (lib.optionals pkgs.stdenv.isDarwin [
+            (lib.optionals pkgs.stdenv.isDarwin [
               "fsautocomplete"
             ])
             ++ (lib.optionals pkgs.stdenv.isAarch64 [
