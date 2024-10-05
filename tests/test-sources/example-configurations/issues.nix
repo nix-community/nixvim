@@ -31,7 +31,7 @@
       lsp = {
         enable = true;
         servers = {
-          rust-analyzer = {
+          rust_analyzer = {
             enable = true;
             installCargo = true;
             installRustc = true;
@@ -84,7 +84,7 @@
         enable = true;
         servers = {
           nixd.enable = true;
-          rust-analyzer = {
+          rust_analyzer = {
             enable = true;
             installCargo = true;
             installRustc = true;

@@ -58,7 +58,8 @@ in
 
       cmd = mkOption {
         type = with types; nullOr (listOf str);
-        default = if (cfg.package or null) != null then cmd cfg else null;
+        default =
+          if (cfg.package or null) != null then if builtins.isFunction cmd then cmd cfg else cmd else null;
         description = ''
           A list where each entry corresponds to the blankspace delimited part of the command that
           launches the server.

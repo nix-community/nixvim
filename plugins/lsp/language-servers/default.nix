@@ -6,197 +6,14 @@
 }:
 with lib;
 let
-  servers = [
-    {
-      name = "ansiblels";
-      description = "ansiblels for Ansible";
-      package = "ansible-language-server";
-      cmd = cfg: [
-        "${cfg.package}/bin/ansible-language-server"
-        "--stdio"
-      ];
-    }
-    {
-      name = "ast-grep";
-      description = ''
-        ast-grep(sg) is a fast and polyglot tool for code structural search, lint, rewriting at large scale.
-        ast-grep LSP only works in projects that have `sgconfig.y[a]ml` in their root directories.
-      '';
-      serverName = "ast_grep";
-    }
-    {
-      name = "astro";
-      description = "astrols for Astro";
-      package = "astro-language-server";
-      cmd = cfg: [
-        "${cfg.package}/bin/astro-ls"
-        "--stdio"
-      ];
-    }
-    {
-      name = "basedpyright";
-      description = "basedpyright, a static type checker and language server for python";
-    }
-    {
-      name = "bashls";
-      description = "bashls for bash";
-      package = "bash-language-server";
-    }
-    {
-      name = "beancount";
-      description = "beancount-language-server";
-      package = "beancount-language-server";
-    }
-    {
-      name = "biome";
-      description = "Biome, Toolchain of the Web";
-    }
-    {
-      name = "bufls";
-      description = "Prototype for a Protobuf language server compatible with Buf.";
-      package = "buf-language-server";
-    }
-    {
-      name = "ccls";
-      description = "ccls for C/C++";
-    }
-    {
-      name = "clangd";
-      description = "clangd LSP for C/C++";
-      package = "clang-tools";
-    }
-    {
-      name = "clojure-lsp";
-      description = "clojure-lsp for Clojure";
-      serverName = "clojure_lsp";
-    }
-    {
-      name = "cmake";
-      description = "cmake language server";
-      package = "cmake-language-server";
-    }
-    {
-      name = "csharp-ls";
-      description = "csharp-ls for C#";
-      serverName = "csharp_ls";
-    }
-    {
-      name = "cssls";
-      description = "cssls for CSS";
-      package = "vscode-langservers-extracted";
-      cmd = cfg: [
-        "${cfg.package}/bin/vscode-css-language-server"
-        "--stdio"
-      ];
-    }
-    {
-      name = "dagger";
-      description = "dagger for Cuelang";
-      package = "cuelsp";
-    }
-    {
-      name = "dartls";
-      description = "dart language-server";
-      package = "dart";
+  renamedServers = import ./_renamed.nix;
+
+  lspExtraArgs = {
+    dartls = {
       settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
       settings = cfg: { dart = cfg; };
-    }
-    {
-      name = "denols";
-      description = "denols for Deno";
-      package = "deno";
-    }
-    {
-      name = "dhall-lsp-server";
-      description = "dhall-lsp-server for Dhall";
-      serverName = "dhall_lsp_server";
-    }
-    {
-      name = "digestif";
-      description = "digestif for LaTeX";
-      # luaPackages.digestif is currently broken, using lua54Packages instead
-      package = [
-        "lua54Packages"
-        "digestif"
-      ];
-    }
-    {
-      name = "docker-compose-language-service";
-      description = "docker-compose-language-service for Docker Compose";
-      serverName = "docker_compose_language_service";
-    }
-    {
-      name = "dockerls";
-      description = "dockerls for Dockerfile";
-      package = "dockerfile-language-server-nodejs";
-      cmd = cfg: [
-        "${cfg.package}/bin/docker-langserver"
-        "--stdio"
-      ];
-    }
-    {
-      name = "efm";
-      description = "efm-langserver for misc tools";
-      package = "efm-langserver";
-    }
-    {
-      name = "elmls";
-      description = "elmls for Elm";
-      package = [
-        "elmPackages"
-        "elm-language-server"
-      ];
-    }
-    {
-      name = "emmet-ls";
-      description = "emmet_ls, emmet support based on LSP";
-      serverName = "emmet_ls";
-    }
-    {
-      name = "eslint";
-      package = "vscode-langservers-extracted";
-      cmd = cfg: [
-        "${cfg.package}/bin/vscode-eslint-language-server"
-        "--stdio"
-      ];
-    }
-    {
-      name = "elixirls";
-      package = "elixir-ls";
-      cmd = cfg: [ "${cfg.package}/bin/elixir-ls" ];
-    }
-    {
-      name = "fortls";
-      description = "fortls for Fortran";
-      cmd = cfg: [
-        "${cfg.package}/bin/fortls"
-        "--hover_signature"
-        "--hover_language=fortran"
-        "--use_signature_help"
-      ];
-    }
-    {
-      name = "fsautocomplete";
-      description = "fsautocomplete for F#";
-    }
-    {
-      name = "futhark-lsp";
-      description = "futhark-lsp for Futhark";
-      package = "futhark";
-      serverName = "futhark_lsp";
-    }
-    {
-      name = "gdscript";
-      description = "gdscript for Godot";
-      package = null;
-    }
-    {
-      name = "gleam";
-      description = "gleam for gleam";
-    }
-    {
-      name = "gopls";
-      description = "gopls for Go";
+    };
+    gopls = {
       extraOptions = {
         goPackage = lib.mkPackageOption pkgs "go" {
           nullable = true;
@@ -205,224 +22,40 @@ let
       extraConfig = cfg: {
         extraPackages = [ cfg.goPackage ];
       };
-    }
-    {
-      name = "golangci-lint-ls";
-      description = "golangci-lint-ls for Go";
-      serverName = "golangci_lint_ls";
-      package = "golangci-lint-langserver";
-    }
-    {
-      name = "graphql";
-      description = "graphql for GraphQL";
-      package = [
-        "nodePackages"
-        "graphql-language-service-cli"
-      ];
-    }
-    {
-      name = "harper-ls";
-      description = "The Grammar Checker for Developers";
-      serverName = "harper_ls";
-      package = "harper";
-    }
-    {
-      name = "helm-ls";
-      description = "helm_ls for Helm";
-      serverName = "helm_ls";
-    }
-    {
-      name = "hls";
-      description = "haskell language server";
-      package = "haskell-language-server";
-      cmd = cfg: [
-        "haskell-language-server-wrapper"
-        "--lsp"
-      ];
-    }
-    {
-      name = "html";
-      description = "HTML language server from `vscode-langservers-extracted`";
-      package = "vscode-langservers-extracted";
-      cmd = cfg: [
-        "${cfg.package}/bin/vscode-html-language-server"
-        "--stdio"
-      ];
-    }
-    {
-      name = "htmx";
-      description = "htmx for HTMX";
-      package = "htmx-lsp";
-    }
-    {
-      name = "idris2-lsp";
-      description = ''
-        Idris 2 Language Server.
-        Enabling this also enables the required `idris2` plugin.
-      '';
-      serverName = "idris2_lsp";
-      package = [
-        "idris2Packages"
-        "idris2Lsp"
-      ];
+    };
+    idris2_lsp = {
       extraConfig =
         cfg:
         mkIf cfg.enable {
           plugins.idris2.enable = lib.mkDefault true;
         };
-    }
-    {
-      name = "intelephense";
-      description = "intelephense for PHP";
-      package = [
-        "nodePackages"
-        "intelephense"
-      ];
-    }
-    {
-      name = "java-language-server";
-      description = "Java language server";
-      serverName = "java_language_server";
-      cmd = cfg: [ "${cfg.package}/bin/java-language-server" ];
-    }
-    {
-      name = "jdt-language-server";
-      description = "Eclipse JDT Language Server for Java";
-      serverName = "jdtls";
-      cmd = cfg: [ (lib.getExe cfg.package) ];
-    }
-    {
-      name = "jsonls";
-      description = "jsonls for JSON";
-      package = "vscode-langservers-extracted";
-      cmd = cfg: [
-        "${cfg.package}/bin/vscode-json-language-server"
-        "--stdio"
-      ];
+    };
+    jsonls = {
       settings = cfg: { json = cfg; };
-    }
-    {
-      name = "jsonnet-ls";
-      description = "jsonnet language server";
-      package = "jsonnet-language-server";
-      serverName = "jsonnet_ls";
+    };
+    jsonnet_ls = {
       settingsOptions = import ./jsonnet-ls-settings.nix { inherit lib helpers; };
-    }
-    {
-      name = "julials";
-      description = "julials for Julia";
-      # The julia language server has to be installed from julia and thus is not packaged "as is" in
-      # nixpkgs.
-      package = null;
-    }
-    {
-      name = "kotlin-language-server";
-      description = "Kotlin language server";
-      serverName = "kotlin_language_server";
-    }
-    {
-      name = "leanls";
-      description = "leanls for Lean";
-      package = "lean4";
-    }
-    {
-      name = "lemminx";
-      description = "lemminx for XML";
-    }
-    {
-      name = "lexical";
-      description = "lexical for Elixir";
-    }
-    {
-      name = "ltex";
-      description = "ltex-ls for LanguageTool";
-      package = "ltex-ls";
+    };
+    ltex = {
       settingsOptions = import ./ltex-settings.nix { inherit lib helpers; };
       settings = cfg: { ltex = cfg; };
-    }
-    {
-      name = "lua-ls";
-      description = "lua-ls for Lua";
-      package = "lua-language-server";
-      serverName = "lua_ls";
+    };
+    lua_ls = {
       settingsOptions = import ./lua-ls-settings.nix { inherit lib helpers; };
       settings = cfg: { Lua = cfg; };
-    }
-    {
-      name = "marksman";
-      description = "marksman for Markdown";
-    }
-    {
-      name = "metals";
-      description = "metals for Scala";
-    }
-    {
-      name = "nextls";
-      description = "The language server for Elixir that just works.";
-      package = "next-ls";
-      cmd = cfg: [
-        "nextls"
-        "--stdio"
-      ];
-    }
-    {
-      name = "nginx-language-server";
-      description = "nginx-language-server for `nginx.conf`";
-      serverName = "nginx_language_server";
-    }
-    {
-      name = "nickel-ls";
-      description = "nls for Nickel";
-      package = "nls";
-      serverName = "nickel_ls";
-    }
-    {
-      name = "nil-ls";
-      description = "nil for Nix";
-      package = "nil";
-      serverName = "nil_ls";
+    };
+    nil_ls = {
       settingsOptions = import ./nil-ls-settings.nix { inherit lib helpers; };
       settings = cfg: { nil = cfg; };
-    }
-    {
-      name = "nimls";
-      description = "nimls for Nim";
-      package = "nimlsp";
-    }
-    {
-      name = "nixd";
-      description = "nixd for Nix";
+    };
+    nixd = {
       settings = cfg: { nixd = cfg; };
       settingsOptions = import ./nixd-settings.nix { inherit lib helpers; };
       extraConfig = cfg: {
         extraPackages = optional (cfg.settings.formatting.command == [ "nixpkgs-fmt" ]) pkgs.nixpkgs-fmt;
       };
-    }
-    {
-      name = "nushell";
-      description = "Nushell language server";
-      cmd = cfg: [
-        "${cfg.package}/bin/nu"
-        "--lsp"
-      ];
-    }
-    {
-      name = "ocamllsp";
-      description = "ocamllsp for OCaml";
-      package = [
-        "ocamlPackages"
-        "ocaml-lsp"
-      ];
-    }
-    {
-      name = "ols";
-      description = "ols for the Odin programming language";
-    }
-    {
-      name = "omnisharp";
-      description = "OmniSharp language server for C#";
-      package = "omnisharp-roslyn";
-      cmd = cfg: [ "${cfg.package}/bin/OmniSharp" ];
+    };
+    omnisharp = {
       settings = cfg: { omnisharp = cfg; };
       settingsOptions = {
         enableEditorConfigSupport = helpers.defaultNullOpts.mkBool true ''
@@ -471,180 +104,19 @@ let
           Only run analyzers against open files when 'enableRoslynAnalyzers' is true.
         '';
       };
-    }
-    {
-      name = "openscad-lsp";
-      description = "A Language Server Protocol server for OpenSCAD";
-      serverName = "openscad_lsp";
-    }
-    {
-      name = "perlpls";
-      description = "PLS for Perl";
-      package = [
-        "perlPackages"
-        "PLS"
-      ];
-    }
-    {
-      name = "pest-ls";
-      description = "pest_ls for pest";
-      package = "pest-ide-tools";
-      serverName = "pest_ls";
-    }
-    {
-      name = "phpactor";
-      description = "phpactor for PHP";
-      package = "phpactor";
-    }
-    {
-      name = "prismals";
-      description = "prismals for Prisma";
-      package = [
-        "nodePackages"
-        "@prisma/language-server"
-      ];
-    }
-    {
-      name = "prolog-ls";
-      description = "prolog_ls for SWI-Prolog";
-      serverName = "prolog_ls";
-      package = "swi-prolog";
-    }
-    {
-      name = "purescriptls";
-      description = "purescriptls for PureScript";
-      package = [
-        "nodePackages"
-        "purescript-language-server"
-      ];
-    }
-    {
-      name = "pylsp";
-      description = "pylsp for Python";
-      package = [
-        "python3Packages"
-        "python-lsp-server"
-      ];
+    };
+    pylsp = {
       settings = cfg: { pylsp = cfg; };
-    }
-    {
-      name = "pylyzer";
-      description = "pylyzer for Python";
-    }
-    {
-      name = "pyright";
-      description = "pyright for Python";
-    }
-    {
-      name = "r-language-server";
-      description = "languageserver for R";
-      package = [
-        "rPackages"
-        "languageserver"
-      ];
-      serverName = "r_language_server";
-    }
-    {
-      name = "rnix-lsp";
-      description = "rnix LSP for Nix";
-      serverName = "rnix";
-      package = null;
-    }
-    {
-      name = "ruby-lsp";
-      description = "ruby-lsp for Ruby";
-      serverName = "ruby_lsp";
-    }
-    {
-      name = "ruff";
-      description = "Official ruff language server (Rust) for Python";
-    }
-    {
-      name = "ruff-lsp";
-      description = "ruff-lsp, for Python";
-      serverName = "ruff_lsp";
-    }
-    {
-      name = "rust-analyzer";
-      description = "rust-analyzer for Rust";
-      serverName = "rust_analyzer";
-
+    };
+    rust_analyzer = {
       settingsOptions = import ./rust-analyzer-config.nix lib helpers;
       settings = cfg: { rust-analyzer = cfg; };
-    }
-    {
-      name = "slint-lsp";
-      description = "slint_lsp for Slint GUI language";
-      serverName = "slint_lsp";
-    }
-    {
-      name = "solargraph";
-      description = "solargraph for Ruby";
-      package = [
-        "rubyPackages"
-        "solargraph"
-      ];
-    }
-    {
-      name = "sourcekit";
-      description = "sourcekit language server for Swift and C/C++/Objective-C";
-      package = "sourcekit-lsp";
-    }
-    {
-      name = "sqls";
-      description = "sqls for SQL";
-    }
-    {
-      name = "svelte";
-      description = "svelte language server for Svelte";
-      package = [
-        "nodePackages"
-        "svelte-language-server"
-      ];
-    }
-    {
-      name = "tailwindcss";
-      description = "tailwindcss language server for tailwindcss";
-      package = [
-        "nodePackages"
-        "@tailwindcss/language-server"
-      ];
-    }
-    {
-      name = "taplo";
-      description = "taplo for TOML";
-    }
-    {
-      name = "templ";
-      description = "templ language server for the templ HTML templating language";
-    }
-    {
-      name = "terraformls";
-      description = "terraform-ls for terraform";
-      package = "terraform-ls";
-    }
-    {
-      name = "texlab";
-      description = "texlab language server for LaTeX";
-    }
-    {
-      name = "tflint";
-      description = "tflint, a terraform linter";
-    }
-    {
-      name = "tinymist";
-      description = "tinymist for Typst";
-      settingsOptions = import ./tinymist-settings.nix { inherit lib helpers; };
-    }
-    {
-      name = "ts-ls";
-      serverName = "ts_ls";
-      description = "ts_ls for TypeScript";
-      package = "typescript-language-server";
+    };
+    ts_ls = {
       # NOTE: Provide the plugin default filetypes so that
       # `plugins.lsp.servers.volar.tslsIntegration` doesn't wipe out the default filetypes
       extraConfig = cfg: {
-        plugins.lsp.servers.ts-ls = {
+        plugins.lsp.servers.ts_ls = {
           filetypes = [
             "javascript"
             "javascriptreact"
@@ -655,34 +127,8 @@ let
           ];
         };
       };
-    }
-    {
-      name = "typos-lsp";
-      serverName = "typos_lsp";
-      description = "Source code spell checker for Visual Studio Code and LSP clients";
-    }
-    {
-      name = "typst-lsp";
-      serverName = "typst_lsp";
-      description = "typst-lsp for typst";
-    }
-    {
-      name = "vala-ls";
-      description = "vala_ls for Vala";
-      serverName = "vala_ls";
-      package = "vala-language-server";
-    }
-    {
-      name = "vhdl-ls";
-      description = "vhdl_ls for VHDL";
-      serverName = "vhdl_ls";
-    }
-    {
-      name = "vls";
-      description = "vls for V";
-      # The v language server has to be installed from v and thus is not packaged "as is" in
-      # nixpkgs.
-      package = null;
+    };
+    vls = {
       extraOptions = {
         autoSetFiletype = mkOption {
           type = types.bool;
@@ -697,22 +143,8 @@ let
       extraConfig = cfg: {
         filetype.extension = mkIf (cfg.enable && cfg.autoSetFiletype) { v = "vlang"; };
       };
-    }
-    {
-      name = "vuels";
-      description = "vuels for Vue";
-      package = [
-        "nodePackages"
-        "vls"
-      ];
-    }
-    {
-      name = "volar";
-      description = "@volar/vue-language-server for Vue";
-      package = [
-        "nodePackages"
-        "@volar/vue-language-server"
-      ];
+    };
+    volar = {
       extraOptions = {
         tslsIntegration = mkOption {
           type = types.bool;
@@ -724,7 +156,7 @@ let
         };
       };
       extraConfig = cfg: {
-        plugins.lsp.servers.ts-ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
+        plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
           filetypes = [ "vue" ];
           extraOptions = {
             init_options = {
@@ -739,27 +171,48 @@ let
           };
         };
       };
-    }
-    {
-      name = "yamlls";
-      description = "yamlls for YAML";
-      package = "yaml-language-server";
+    };
+    yamlls = {
       settings = cfg: { yaml = cfg; };
-    }
-    {
-      name = "zls";
-      description = "zls for Zig";
-    }
-  ];
-  renamedServers = {
-    tsserver = "ts-ls";
+    };
   };
+
+  lspPackages = import ../lsp-packages.nix;
+
+  getLspPackage =
+    name:
+    if lib.hasAttr name lspPackages.packages then
+      { package = lspPackages.packages.${name}; }
+    else if lib.hasAttr name lspPackages.customCmd then
+      { inherit (lspPackages.customCmd.${name}) package cmd; }
+    else
+      assert lib.assertMsg (lib.elem name lspPackages.unpackaged) "LSP server ${name} is unknown";
+      {
+        package = null;
+      };
+
+  generatedServers = lib.pipe ../../../generated/lspconfig-servers.json [
+    lib.importJSON
+    (lib.map (
+      {
+        name,
+        desc ? "${name} language server",
+        ...
+      }:
+      {
+        inherit name;
+        description = desc;
+      }
+      // (getLspPackage name)
+      // (lspExtraArgs.${name} or { })
+    ))
+  ];
 in
 {
   imports =
     let
       mkLsp = import ./_mk-lsp.nix;
-      lspModules = map mkLsp servers;
+      lspModules = map mkLsp generatedServers;
       baseLspPath = [
         "plugins"
         "lsp"

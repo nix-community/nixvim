@@ -3,7 +3,7 @@
     plugins.lsp = {
       enable = true;
 
-      servers.jsonnet-ls = {
+      servers.jsonnet_ls = {
         enable = true;
 
         settings = {

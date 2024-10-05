@@ -3,7 +3,7 @@
     plugins.lsp = {
       enable = true;
 
-      servers.nil-ls = {
+      servers.nil_ls = {
         enable = true;
 
         settings = {

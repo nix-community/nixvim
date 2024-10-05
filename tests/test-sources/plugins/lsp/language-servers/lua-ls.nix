@@ -3,7 +3,7 @@
     plugins.lsp = {
       enable = true;
 
-      servers.lua-ls = {
+      servers.lua_ls = {
         enable = true;
 
         settings = {

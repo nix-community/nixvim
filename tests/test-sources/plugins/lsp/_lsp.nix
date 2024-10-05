@@ -67,13 +67,13 @@
           enable = true;
           package = null;
         };
-        nil-ls.enable = true;
-        rust-analyzer = {
+        nil_ls.enable = true;
+        rust_analyzer = {
           enable = true;
           installCargo = true;
           installRustc = true;
         };
-        ruff-lsp = {
+        ruff_lsp = {
           enable = true;
           extraOptions = {
             init_options.settings.args = [ "--config=/path/to/config.toml" ];
@@ -102,7 +102,7 @@
         enable = true;
         servers = {
           volar.enable = true;
-          ts-ls = {
+          ts_ls = {
             enable = true;
             filetypes = [ "typescript" ];
           };
@@ -111,17 +111,17 @@
 
       assertions = [
         {
-          assertion = lib.any (x: x == "vue") config.plugins.lsp.servers.ts-ls.filetypes;
+          assertion = lib.any (x: x == "vue") config.plugins.lsp.servers.ts_ls.filetypes;
           message = "Expected `vue` filetype configuration.";
         }
         {
           assertion = lib.any (
             x: x.name == "@vue/typescript-plugin"
-          ) config.plugins.lsp.servers.ts-ls.extraOptions.init_options.plugins;
+          ) config.plugins.lsp.servers.ts_ls.extraOptions.init_options.plugins;
           message = "Expected `@vue/typescript-plugin` plugin.";
         }
         {
-          assertion = lib.any (x: x == "typescript") config.plugins.lsp.servers.ts-ls.filetypes;
+          assertion = lib.any (x: x == "typescript") config.plugins.lsp.servers.ts_ls.filetypes;
           message = "Expected `typescript` filetype configuration.";
         }
       ];
@@ -133,7 +133,7 @@
       plugins.lsp = {
         enable = true;
         servers = {
-          ts-ls = {
+          ts_ls = {
             enable = true;
           };
         };
@@ -141,17 +141,17 @@
 
       assertions = [
         {
-          assertion = lib.all (x: x != "vue") config.plugins.lsp.servers.ts-ls.filetypes;
+          assertion = lib.all (x: x != "vue") config.plugins.lsp.servers.ts_ls.filetypes;
           message = "Did not expect `vue` filetype configuration.";
         }
-        (lib.mkIf (config.plugins.lsp.servers.ts-ls.extraOptions ? init_options) {
+        (lib.mkIf (config.plugins.lsp.servers.ts_ls.extraOptions ? init_options) {
           assertion = lib.all (
             x: x.name != "@vue/typescript-plugin"
-          ) config.plugins.lsp.servers.ts-ls.extraOptions.init_options.plugins;
+          ) config.plugins.lsp.servers.ts_ls.extraOptions.init_options.plugins;
           message = "Did not expect `@vue/typescript-plugin` plugin.";
         })
         {
-          assertion = lib.any (x: x == "typescript") config.plugins.lsp.servers.ts-ls.filetypes;
+          assertion = lib.any (x: x == "typescript") config.plugins.lsp.servers.ts_ls.filetypes;
           message = "Expected `typescript` filetype configuration.";
         }
       ];
