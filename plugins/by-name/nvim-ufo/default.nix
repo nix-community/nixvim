@@ -1,87 +1,133 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
-
-  cfg = config.plugins.nvim-ufo;
 in
-{
-  options.plugins.nvim-ufo = lib.nixvim.neovim-plugin.extraOptionsOptions // {
-    enable = lib.mkEnableOption "nvim-ufo";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "nvim-ufo";
+  luaName = "ufo";
+  package = "nvim-ufo";
 
-    package = lib.mkPackageOption pkgs "nvim-ufo" {
-      default = [
-        "vimPlugins"
-        "nvim-ufo"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-    openFoldHlTimeout = defaultNullOpts.mkInt 400 ''
+  # TODO: added 2024-10-05 remove after 24.11
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "openFoldHlTimeout"
+    "providerSelector"
+    "closeFoldKinds"
+    "foldVirtTextHandler"
+    "enableGetFoldVirtText"
+    [
+      "preview"
+      "winConfig"
+      "border"
+    ]
+    [
+      "preview"
+      "winConfig"
+      "winblend"
+    ]
+    [
+      "preview"
+      "winConfig"
+      "winhighlight"
+    ]
+    [
+      "preview"
+      "winConfig"
+      "maxheight"
+    ]
+    [
+      "preview"
+      "mappings"
+    ]
+  ];
+
+  settingsOptions = {
+    open_fold_hl_timeout = defaultNullOpts.mkUnsignedInt 400 ''
       Time in millisecond between the range to be highlgihted and to be cleared
-      while opening the folded line, `0` value will disable the highlight
+      while opening the folded line, `0` value will disable the highlight.
     '';
 
-    providerSelector = defaultNullOpts.mkLuaFn null ''
+    provider_selector = defaultNullOpts.mkLuaFn null ''
       A lua function as a selector for fold providers.
     '';
 
-    closeFoldKinds = lib.nixvim.mkNullOrOption lib.types.attrs ''
+    close_fold_kinds_for_ft = defaultNullOpts.mkAttrsOf lib.types.anything { default = { }; } ''
       After the buffer is displayed (opened for the first time), close the
       folds whose range with `kind` field is included in this option. For now,
       'lsp' provider's standardized kinds are 'comment', 'imports' and 'region',
       run `UfoInspect` for details if your provider has extended the kinds.
     '';
 
-    foldVirtTextHandler = defaultNullOpts.mkLuaFn null "A lua function to customize fold virtual text";
+    fold_virt_text_handler = defaultNullOpts.mkLuaFn null "A lua function to customize fold virtual text.";
 
-    enableGetFoldVirtText = defaultNullOpts.mkBool false ''
+    enable_get_fold_virt_text = defaultNullOpts.mkBool false ''
       Enable a function with `lnum` as a parameter to capture the virtual text
       for the folded lines and export the function to `get_fold_virt_text` field of
       ctx table as 6th parameter in `fold_virt_text_handler`
     '';
 
     preview = {
-      winConfig = {
+      win_config = {
         border = defaultNullOpts.mkBorder "rounded" "preview window" "";
 
-        winblend = defaultNullOpts.mkInt 12 "The winblend for preview window, `:h winblend`";
+        winblend = defaultNullOpts.mkUnsignedInt 12 "The winblend for preview window, `:h winblend`.";
 
-        winhighlight = defaultNullOpts.mkStr "Normal:Normal" "The winhighlight for preview window, `:h winhighlight`";
+        winhighlight = defaultNullOpts.mkStr "Normal:Normal" "The winhighlight for preview window, `:h winhighlight`.";
 
-        maxheight = defaultNullOpts.mkInt 20 "The max height of preview window";
+        maxheight = defaultNullOpts.mkUnsignedInt 20 "The max height of preview window.";
       };
 
-      mappings = lib.nixvim.mkNullOrOption lib.types.attrs "Mappings for preview window";
+      mappings = lib.nixvim.mkNullOrOption lib.types.attrs "Mappings for preview window.";
     };
   };
 
-  config =
-    let
-      options =
-        with cfg;
-        {
-          open_fold_hl_timeout = openFoldHlTimeout;
-          provider_selector = providerSelector;
-          close_fold_kinds = closeFoldKinds;
-          fold_virt_text_handler = foldVirtTextHandler;
-          enable_get_fold_virt_text = enableGetFoldVirtText;
+  settingsExample = {
+    provider_selector = # Lua
+      ''
+        function(bufnr, filetype, buftype)
+          local ftMap = {
+            vim = "indent",
+            python = {"indent"},
+            git = ""
+          }
 
-          preview = with preview; {
-            inherit mappings;
-            win_config = winConfig;
-          };
-        }
-        // cfg.extraOptions;
-    in
-    lib.mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        require("ufo").setup(${lib.nixvim.toLuaObject options})
+         return ftMap[filetype]
+        end
       '';
-    };
+    fold_virt_text_handler = # Lua
+      ''
+        function(virtText, lnum, endLnum, width, truncate)
+          local newVirtText = {}
+          local suffix = ('  %d '):format(endLnum - lnum)
+          local sufWidth = vim.fn.strdisplaywidth(suffix)
+          local targetWidth = width - sufWidth
+          local curWidth = 0
+          for _, chunk in ipairs(virtText) do
+            local chunkText = chunk[1]
+            local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            if targetWidth > curWidth + chunkWidth then
+              table.insert(newVirtText, chunk)
+            else
+              chunkText = truncate(chunkText, targetWidth - curWidth)
+              local hlGroup = chunk[2]
+              table.insert(newVirtText, {chunkText, hlGroup})
+              chunkWidth = vim.fn.strdisplaywidth(chunkText)
+              -- str width returned from truncate() may less than 2nd argument, need padding
+              if curWidth + chunkWidth < targetWidth then
+                suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+              end
+              break
+            end
+            curWidth = curWidth + chunkWidth
+          end
+          table.insert(newVirtText, {suffix, 'MoreMsg'})
+          return newVirtText
+        end
+      '';
+  };
 }
