@@ -3,44 +3,50 @@
     plugins.auto-session.enable = true;
   };
 
-  example = {
+  defaults = {
     plugins.auto-session = {
       enable = true;
 
-      logLevel = "error";
-      autoSession = {
+      settings = {
         enabled = true;
-        enableLastSession = false;
-        rootDir = {
-          __raw = "vim.fn.stdpath 'data' .. '/sessions/'";
-        };
-        createEnabled = true;
-        suppressDirs = null;
-        allowedDirs = [ ];
-        useGitBranch = true;
-      };
-      autoSave = {
-        enabled = true;
-      };
-      autoRestore = {
-        enabled = true;
-      };
-      cwdChangeHandling = {
-        restoreUpcomingSession = true;
-        preCwdChangedHook = null;
-        postCwdChangedHook = null;
-      };
-      bypassSessionSaveFileTypes = [ ];
-      sessionLens = {
-        loadOnSetup = true;
-        themeConf = {
-          winblend = 10;
-          border = true;
-        };
-        previewer = false;
-        sessionControl = {
-          controlDir = "vim.fn.stdpath 'data' .. '/auto_session/'";
-          controlFilename = "session_control.json";
+        root_dir.__raw = ''vim.fn.stdpath "data" .. "/sessions/"'';
+        auto_save = true;
+        auto_restore = true;
+        auto_create = true;
+        suppressed_dirs = null;
+        allowed_dirs = null;
+        auto_restore_last_session = false;
+        use_git_branch = false;
+        lazy_support = true;
+        bypass_save_filetypes = null;
+        close_unsupported_windows = true;
+        args_allow_single_directory = true;
+        args_allow_files_auto_save = false;
+        continue_restore_on_error = true;
+        cwd_change_handling = false;
+        log_level = "error";
+        session_lens = {
+          load_on_setup = true;
+          theme_conf = { };
+          previewer = false;
+          mappings = {
+            delete_session = {
+              __unkeyed-1 = "i";
+              __unkeyed-2 = "<C-D>";
+            };
+            alternate_session = [
+              "i"
+              "<C-S>"
+            ];
+            copy_session = [
+              "i"
+              "<C-Y>"
+            ];
+          };
+          session_control = {
+            control_dir.__raw = ''vim.fn.stdpath "data" .. "/auto_session/"'';
+            control_filename = "session_control.json";
+          };
         };
       };
     };

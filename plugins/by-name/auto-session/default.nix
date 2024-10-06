@@ -1,120 +1,191 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
 let
+  inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
-  cfg = config.plugins.auto-session;
 in
-{
-  options.plugins.auto-session = lib.nixvim.neovim-plugin.extraOptionsOptions // {
-    enable = lib.mkEnableOption "auto-session";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "auto-session";
+  package = "auto-session";
 
-    package = lib.mkPackageOption pkgs "auto-session" {
-      default = [
-        "vimPlugins"
+  maintainers = [ lib.maintainers.khaneliman ];
+
+  # TODO: added 204-10-05 remove after 24.11
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "logLevel"
+    [
+      "sessionLens"
+      "loadOnSetup"
+    ]
+    [
+      "sessionLens"
+      "themeConf"
+    ]
+    [
+      "sessionLens"
+      "previewer"
+    ]
+    [
+      "sessionControl"
+      "controlDir"
+    ]
+    [
+      "sessionControl"
+      "controlFilename"
+    ]
+  ];
+  # NOTE: rename the old settings to use the correct variables
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
         "auto-session"
       ];
-    };
+      settingsPath = basePluginPath ++ [ "settings" ];
+      nestedAutoSessionPluginPath = basePluginPath ++ [ "autoSession" ];
+    in
+    [
+      (lib.mkRenamedOptionModule (
+        basePluginPath
+        ++ [
+          "autoSave"
+          "enabled"
+        ]
+      ) (settingsPath ++ [ "auto_save" ]))
+      (lib.mkRenamedOptionModule (
+        basePluginPath
+        ++ [
+          "autoRestore"
+          "enabled"
+        ]
+      ) (settingsPath ++ [ "auto_restore" ]))
 
-    logLevel = lib.nixvim.defaultNullOpts.mkEnum [
+      (lib.mkRenamedOptionModule (
+        basePluginPath
+        ++ [
+          "bypassSessionSaveFileTypes"
+        ]
+      ) (settingsPath ++ [ "bypass_save_filetypes" ]))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "enableLastSession" ]) (
+        settingsPath
+        ++ [
+          "auto_restore_last_session"
+        ]
+      ))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "rootDir" ]) (
+        settingsPath
+        ++ [
+          "root_dir"
+        ]
+      ))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "enabled" ]) (
+        settingsPath
+        ++ [
+          "enabled"
+        ]
+      ))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "createEnabled" ]) (
+        settingsPath
+        ++ [
+          "auto_create"
+        ]
+      ))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "suppressDirs" ]) (
+        settingsPath
+        ++ [
+          "suppressed_dirs"
+        ]
+      ))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "allowedDirs" ]) (
+        settingsPath
+        ++ [
+          "allowed_dirs"
+        ]
+      ))
+      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "useGitBranch" ]) (
+        settingsPath
+        ++ [
+          "use_git_branch"
+        ]
+      ))
+      (lib.mkRemovedOptionModule (
+        basePluginPath
+        ++ [
+          "cwdChangeHandling"
+        ]
+      ) ''Please switch to `cwd_change_handling` with just a boolean value.'')
+    ];
+
+  settingsOptions = {
+    enabled = defaultNullOpts.mkBool true ''
+      Enables/disables auto creating, saving and restoring.
+    '';
+
+    root_dir = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/sessions/'"; } ''
+      Root directory for session files.
+      Can be either a string or lua code (using `{__raw = 'foo';}`).
+    '';
+
+    auto_save = defaultNullOpts.mkBool true ''
+      Whether to enable auto saving session.
+    '';
+
+    auto_restore = defaultNullOpts.mkBool true ''
+      Whether to enable auto restoring session.
+    '';
+
+    auto_create = defaultNullOpts.mkBool true ''
+      Whether to enable auto creating new sessions
+    '';
+
+    suppressed_dirs = defaultNullOpts.mkListOf types.str null ''
+      Suppress session create/restore if in one of the list of dirs.
+    '';
+
+    allowed_dirs = defaultNullOpts.mkListOf types.str null ''
+      Allow session create/restore if in one of the list of dirs.
+    '';
+
+    auto_restore_last_session = defaultNullOpts.mkBool false ''
+      On startup, loads the last saved session if session for cwd does not exist.
+    '';
+
+    use_git_branch = defaultNullOpts.mkBool false ''
+      Include git branch name in session name to differentiate between sessions for different
+      git branches.
+    '';
+
+    bypass_save_filetypes = defaultNullOpts.mkListOf types.str null ''
+      List of file types to bypass auto save when the only buffer open is one of the file types
+      listed.
+    '';
+
+    cwd_change_handling = defaultNullOpts.mkBool false ''
+      Follow cwd changes, saving a session before change and restoring after.
+    '';
+
+    log_level = defaultNullOpts.mkEnum [
       "debug"
       "info"
       "warn"
       "error"
     ] "error" "Sets the log level of the plugin.";
 
-    autoSession = {
-      enabled = lib.nixvim.defaultNullOpts.mkBool true ''
-        Enables/disables auto creating, saving and restoring.
-      '';
-
-      enableLastSession = lib.nixvim.defaultNullOpts.mkBool false ''
-        Whether to enable the "last session" feature.
-      '';
-
-      rootDir = lib.nixvim.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/sessions/'"; } ''
-        Root directory for session files.
-        Can be either a string or lua code (using `{__raw = 'foo';}`).
-      '';
-
-      createEnabled = lib.nixvim.mkNullOrOption types.bool ''
-        Whether to enable auto creating new sessions
-      '';
-
-      suppressDirs = lib.nixvim.mkNullOrOption (with types; listOf str) ''
-        Suppress session create/restore if in one of the list of dirs.
-      '';
-
-      allowedDirs = lib.nixvim.mkNullOrOption (with types; listOf str) ''
-        Allow session create/restore if in one of the list of dirs.
-      '';
-
-      useGitBranch = lib.nixvim.mkNullOrOption types.bool ''
-        Include git branch name in session name to differentiate between sessions for different
-        git branches.
-      '';
-    };
-
-    autoSave = {
-      enabled = lib.nixvim.defaultNullOpts.mkNullable types.bool null ''
-        Whether to enable auto saving session.
-      '';
-    };
-
-    autoRestore = {
-      enabled = lib.nixvim.defaultNullOpts.mkNullable types.bool null ''
-        Whether to enable auto restoring session.
-      '';
-    };
-
-    cwdChangeHandling =
-      lib.nixvim.defaultNullOpts.mkNullable
-        (
-          with types;
-          either (enum [ false ]) (submodule {
-            options = {
-              restoreUpcomingSession = lib.nixvim.defaultNullOpts.mkBool true ''
-                Restore session for upcoming cwd on cwd change.
-              '';
-
-              preCwdChangedHook = lib.nixvim.defaultNullOpts.mkLuaFn "nil" ''
-                lua function hook.
-                This is called after auto_session code runs for the `DirChangedPre` autocmd.
-              '';
-
-              postCwdChangedHook = lib.nixvim.defaultNullOpts.mkLuaFn "nil" ''
-                lua function hook.
-                This is called after auto_session code runs for the `DirChanged` autocmd.
-              '';
-            };
-          })
-        )
-        false
-        ''
-          Config for handling the DirChangePre and DirChanged autocmds.
-          Set to `false` to disable the feature.
-        '';
-
-    bypassSessionSaveFileTypes = lib.nixvim.mkNullOrOption (with types; listOf str) ''
-      List of file types to bypass auto save when the only buffer open is one of the file types
-      listed.
-    '';
-
-    sessionLens = {
-      loadOnSetup = lib.nixvim.defaultNullOpts.mkBool true ''
-        If `loadOnSetup` is set to false, one needs to eventually call
+    session_lens = {
+      load_on_setup = defaultNullOpts.mkBool true ''
+        If `load_on_setup` is set to false, one needs to eventually call
         `require("auto-session").setup_session_lens()` if they want to use session-lens.
       '';
 
-      themeConf = lib.nixvim.defaultNullOpts.mkAttrsOf types.anything {
+      theme_conf = defaultNullOpts.mkAttrsOf types.anything {
         winblend = 10;
         border = true;
       } "Theme configuration.";
 
-      previewer = lib.nixvim.defaultNullOpts.mkBool false ''
+      previewer = defaultNullOpts.mkBool false ''
         Use default previewer config by setting the value to `null` if some sets previewer to
         true in the custom config.
         Passing in the boolean value errors out in the telescope code with the picker trying to
@@ -123,61 +194,16 @@ in
         configs if they want to.
       '';
 
-      sessionControl = {
-        controlDir =
-          lib.nixvim.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/auto_session/'"; }
-            ''
-              Auto session control dir, for control files, like alternating between two sessions
-              with session-lens.
-            '';
+      session_control = {
+        control_dir = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/auto_session/'"; } ''
+          Auto session control dir, for control files, like alternating between two sessions
+          with session-lens.
+        '';
 
-        controlFilename = lib.nixvim.defaultNullOpts.mkStr "session_control.json" ''
+        control_filename = defaultNullOpts.mkStr "session_control.json" ''
           File name of the session control file.
         '';
       };
     };
   };
-
-  config =
-    let
-      setupOptions = {
-        log_level = cfg.logLevel;
-        auto_session_enable_last_session = cfg.autoSession.enableLastSession;
-        auto_session_root_dir = cfg.autoSession.rootDir;
-        auto_session_enabled = cfg.autoSession.enabled;
-        auto_session_create_enabled = cfg.autoSession.createEnabled;
-        auto_save_enabled = cfg.autoSave.enabled;
-        auto_restore_enabled = cfg.autoRestore.enabled;
-        auto_session_suppress_dirs = cfg.autoSession.suppressDirs;
-        auto_session_allowed_dirs = cfg.autoSession.allowedDirs;
-        auto_session_use_git_branch = cfg.autoSession.useGitBranch;
-        cwd_change_handling =
-          if lib.isAttrs cfg.cwdChangeHandling then
-            with cfg.cwdChangeHandling;
-            {
-              restore_upcoming_session = restoreUpcomingSession;
-              pre_cwd_changed_hook = preCwdChangedHook;
-              post_cwd_changed_hook = postCwdChangedHook;
-            }
-          else
-            cfg.cwdChangeHandling;
-        bypass_session_save_file_types = cfg.bypassSessionSaveFileTypes;
-        session_lens = with cfg.sessionLens; {
-          load_on_setup = loadOnSetup;
-          theme_conf = themeConf;
-          inherit previewer;
-          session_control = with sessionControl; {
-            control_dir = controlDir;
-            control_filename = controlFilename;
-          };
-        };
-      } // cfg.extraOptions;
-    in
-    lib.mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        require('auto-session').setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
-    };
 }
