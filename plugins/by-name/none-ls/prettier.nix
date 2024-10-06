@@ -1,13 +1,12 @@
 { lib, config, ... }:
-with lib;
 let
   cfg = config.plugins.none-ls.sources.formatting.prettier;
   ts-ls-cfg = config.plugins.lsp.servers.ts-ls;
 in
 {
   options.plugins.none-ls.sources.formatting.prettier = {
-    disableTsServerFormatter = mkOption {
-      type = with types; nullOr bool;
+    disableTsServerFormatter = lib.mkOption {
+      type = with lib.types; nullOr bool;
       description = ''
         Disables the formatting capability of the `ts-ls` language server if it is enabled.
       '';
@@ -16,8 +15,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    warnings = optional ((cfg.disableTsServerFormatter == null) && ts-ls-cfg.enable) ''
+  config = lib.mkIf cfg.enable {
+    warnings = lib.optional ((cfg.disableTsServerFormatter == null) && ts-ls-cfg.enable) ''
       You have enabled the `prettier` formatter in none-ls.
       You have also enabled the `ts-ls` language server which also brings a formatting feature.
 
@@ -27,11 +26,11 @@ in
     '';
 
     plugins.lsp.servers.ts-ls =
-      mkIf
+      lib.mkIf
         (
           cfg.enable
           && ts-ls-cfg.enable
-          && (isBool cfg.disableTsServerFormatter)
+          && (lib.isBool cfg.disableTsServerFormatter)
           && cfg.disableTsServerFormatter
         )
         {

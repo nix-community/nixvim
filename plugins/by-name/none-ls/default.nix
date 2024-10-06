@@ -1,18 +1,16 @@
 {
   lib,
-  helpers,
   config,
   options,
   ...
 }:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "none-ls";
   originalName = "none-ls.nvim";
   luaName = "null-ls";
   package = "none-ls-nvim";
 
-  maintainers = [ maintainers.MattSturgeon ];
+  maintainers = [ lib.maintainers.MattSturgeon ];
 
   # TODO: introduced 2024-06-18, remove after 24.11
   deprecateExtraOptions = true;
@@ -51,8 +49,8 @@ helpers.neovim-plugin.mkNeovimPlugin {
     in
     [
       ./sources.nix
-      (mkRenamedOptionModule oldPluginPath basePluginPath)
-      (mkRenamedOptionModule (basePluginPath ++ [ "sourcesItems" ]) (settingsPath ++ [ "sources" ]))
+      (lib.mkRenamedOptionModule oldPluginPath basePluginPath)
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "sourcesItems" ]) (settingsPath ++ [ "sources" ]))
     ];
 
   settingsExample = {
@@ -95,11 +93,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
   settingsOptions = import ./settings.nix lib;
 
   extraOptions = {
-    enableLspFormat = mkOption {
-      type = types.bool;
+    enableLspFormat = lib.mkOption {
+      type = lib.types.bool;
       # TODO: consider default = false and enabling lsp-format automatically instead?
       default = config.plugins.lsp-format.enable;
-      defaultText = literalExpression "plugins.lsp-format.enable";
+      defaultText = lib.literalExpression "plugins.lsp-format.enable";
       example = false;
       description = ''
         Automatically configure `none-ls` to use the `lsp-format` plugin.
@@ -119,19 +117,19 @@ helpers.neovim-plugin.mkNeovimPlugin {
       # but that'd make it difficult to implement the "has no effect" warning.
       setupOptions =
         cfg.settings
-        // optionalAttrs (cfg.enableLspFormat && cfg.settings.on_attach == null) {
+        // lib.optionalAttrs (cfg.enableLspFormat && cfg.settings.on_attach == null) {
           on_attach.__raw = ''
             require('lsp-format').on_attach
           '';
         };
     in
     {
-      warnings = optional (cfg.enableLspFormat && cfg.settings.on_attach != null) ''
+      warnings = lib.optional (cfg.enableLspFormat && cfg.settings.on_attach != null) ''
         You have enabled the lsp-format integration with none-ls.
         However, you have provided a custom value to `plugins.none-ls.settings.on_attach`.
         This means the `enableLspFormat` option will have no effect.
         Final value is:
-        ${generators.toPretty { } cfg.settings.on_attach}
+        ${lib.generators.toPretty { } cfg.settings.on_attach}
       '';
 
       assertions = [
@@ -148,7 +146,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
       # We only do this here because of enableLspFormat
       plugins.none-ls.luaConfig.content = ''
-        require("null-ls").setup(${helpers.toLuaObject setupOptions})
+        require("null-ls").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

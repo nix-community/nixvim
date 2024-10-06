@@ -4,7 +4,6 @@ sourceType: sourceName:
   config,
   pkgs,
   lib,
-  helpers,
   ...
 }:
 let
@@ -20,7 +19,7 @@ in
     {
       enable = lib.mkEnableOption "the ${sourceName} ${sourceType} source for none-ls";
       # Support strLua for compatibility with the old withArgs option
-      settings = helpers.defaultNullOpts.mkStrLuaOr' {
+      settings = lib.nixvim.defaultNullOpts.mkStrLuaOr' {
         type = with lib.types; attrsOf anything;
         description = ''
           Options provided to the `require('null-ls').builtins.${sourceType}.${sourceName}.with` function.
@@ -82,7 +81,7 @@ in
     plugins.none-ls.settings.sources = lib.mkDefault [
       (
         "require('null-ls').builtins.${sourceType}.${sourceName}"
-        + lib.optionalString (cfg'.settings != null) ".with(${helpers.toLuaObject cfg'.settings})"
+        + lib.optionalString (cfg'.settings != null) ".with(${lib.nixvim.toLuaObject cfg'.settings})"
       )
     ];
 
