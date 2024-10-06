@@ -1,17 +1,17 @@
 {
   lib,
-  helpers,
   ...
 }:
-with lib;
-with helpers.vim-plugin;
-mkVimPlugin {
+let
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+in
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "airline";
   originalName = "vim-airline";
   package = "vim-airline";
   globalPrefix = "airline_";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-03-02: remove 2024-05-02
   deprecateExtraConfig = true;
@@ -53,12 +53,12 @@ mkVimPlugin {
   ];
 
   settingsOptions =
-    (listToAttrs (
+    (lib.listToAttrs (
       map
         (
           name:
-          nameValuePair "section_${name}" (
-            helpers.mkNullOrOption (
+          lib.nameValuePair "section_${name}" (
+            mkNullOrOption (
               with lib.types;
               oneOf [
                 rawLua
@@ -79,37 +79,37 @@ mkVimPlugin {
         ]
     ))
     // {
-      experimental = helpers.defaultNullOpts.mkFlagInt 1 ''
+      experimental = defaultNullOpts.mkFlagInt 1 ''
         Enable experimental features.
         Currently: Enable Vim9 Script implementation.
       '';
 
-      left_sep = helpers.defaultNullOpts.mkStr ">" ''
+      left_sep = defaultNullOpts.mkStr ">" ''
         The separator used on the left side.
       '';
 
-      right_sep = helpers.defaultNullOpts.mkStr "<" ''
+      right_sep = defaultNullOpts.mkStr "<" ''
         The separator used on the right side.
       '';
 
-      detect_modified = helpers.defaultNullOpts.mkFlagInt 1 ''
+      detect_modified = defaultNullOpts.mkFlagInt 1 ''
         Enable modified detection.
       '';
 
-      detect_paste = helpers.defaultNullOpts.mkFlagInt 1 ''
+      detect_paste = defaultNullOpts.mkFlagInt 1 ''
         Enable paste detection.
       '';
 
-      detect_crypt = helpers.defaultNullOpts.mkFlagInt 1 ''
+      detect_crypt = defaultNullOpts.mkFlagInt 1 ''
         Enable crypt detection.
       '';
 
-      detect_spell = helpers.defaultNullOpts.mkFlagInt 1 ''
+      detect_spell = defaultNullOpts.mkFlagInt 1 ''
         Enable spell detection.
       '';
 
       detect_spelllang =
-        helpers.defaultNullOpts.mkNullable
+        defaultNullOpts.mkNullable
           (
             with lib.types;
             oneOf [
@@ -127,20 +127,20 @@ mkVimPlugin {
             'spelllang' itself.
           '';
 
-      detect_iminsert = helpers.defaultNullOpts.mkFlagInt 0 ''
+      detect_iminsert = defaultNullOpts.mkFlagInt 0 ''
         Enable iminsert detection.
       '';
 
-      inactive_collapse = helpers.defaultNullOpts.mkFlagInt 1 ''
+      inactive_collapse = defaultNullOpts.mkFlagInt 1 ''
         Determine whether inactive windows should have the left section collapsed to only the
         filename of that buffer.
       '';
 
-      inactive_alt_sep = helpers.defaultNullOpts.mkFlagInt 1 ''
+      inactive_alt_sep = defaultNullOpts.mkFlagInt 1 ''
         Use alternative separators for the statusline of inactive windows.
       '';
 
-      theme = helpers.defaultNullOpts.mkStr "dark" ''
+      theme = defaultNullOpts.mkStr "dark" ''
         Themes are automatically selected based on the matching colorscheme.
         This can be overridden by defining a value.
 
@@ -149,7 +149,7 @@ mkVimPlugin {
         (https://github.com/vim-airline/vim-airline-themes)
       '';
 
-      theme_patch_func = helpers.mkNullOrStr ''
+      theme_patch_func = lib.nixvim.mkNullOrStr ''
         If you want to patch the airline theme before it gets applied, you can supply the name of
         a function where you can modify the palette.
 
@@ -169,36 +169,36 @@ mkVimPlugin {
         ```
       '';
 
-      powerline_fonts = helpers.defaultNullOpts.mkFlagInt 0 ''
+      powerline_fonts = defaultNullOpts.mkFlagInt 0 ''
         By default, airline will use unicode symbols if your encoding matches utf-8.
         If you want the powerline symbols set this variable to `1`.
       '';
 
-      symbols_ascii = helpers.defaultNullOpts.mkFlagInt 0 ''
+      symbols_ascii = defaultNullOpts.mkFlagInt 0 ''
         By default, airline will use unicode symbols if your encoding matches utf-8.
         If you want to use plain ascii symbols, set this variable: >
       '';
 
-      mode_map = helpers.mkNullOrOption (with lib.types; maybeRaw (attrsOf str)) ''
+      mode_map = mkNullOrOption (with lib.types; maybeRaw (attrsOf str)) ''
         Define the set of text to display for each mode.
 
         Default: see source
       '';
 
-      exclude_filenames = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
+      exclude_filenames = mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
         Define the set of filename match queries which excludes a window from having its
         statusline modified.
 
         Default: see source for current list
       '';
 
-      exclude_filetypes = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
+      exclude_filetypes = mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
         Define the set of filetypes which are excluded from having its window statusline modified.
 
         Default: see source for current list
       '';
 
-      filetype_overrides = helpers.mkNullOrOption (with lib.types; maybeRaw (attrsOf (listOf str))) ''
+      filetype_overrides = mkNullOrOption (with lib.types; maybeRaw (attrsOf (listOf str))) ''
         Define the set of names to be displayed instead of a specific filetypes.
 
         Example:
@@ -219,12 +219,12 @@ mkVimPlugin {
         ```
       '';
 
-      exclude_preview = helpers.defaultNullOpts.mkFlagInt 0 ''
+      exclude_preview = defaultNullOpts.mkFlagInt 0 ''
         Defines whether the preview window should be excluded from having its window statusline
         modified (may help with plugins which use the preview window heavily).
       '';
 
-      disable_statusline = helpers.defaultNullOpts.mkFlagInt 0 ''
+      disable_statusline = defaultNullOpts.mkFlagInt 0 ''
         Disable the Airline statusline customization globally.
 
         This setting disables setting the 'statusline' option.
@@ -232,20 +232,20 @@ mkVimPlugin {
         'statusline' option totally configurable by a custom configuration.
       '';
 
-      skip_empty_sections = helpers.defaultNullOpts.mkFlagInt 1 ''
+      skip_empty_sections = defaultNullOpts.mkFlagInt 1 ''
         Do not draw separators for empty sections (only for the active window).
       '';
 
-      highlighting_cache = helpers.defaultNullOpts.mkFlagInt 0 ''
+      highlighting_cache = defaultNullOpts.mkFlagInt 0 ''
         Caches the changes to the highlighting groups, should therefore be faster.
         Set this to one, if you experience a sluggish Vim.
       '';
 
-      focuslost_inactive = helpers.defaultNullOpts.mkFlagInt 0 ''
+      focuslost_inactive = defaultNullOpts.mkFlagInt 0 ''
         Disable airline on FocusLost autocommand (e.g. when Vim loses focus).
       '';
 
-      statusline_ontop = helpers.defaultNullOpts.mkFlagInt 0 ''
+      statusline_ontop = defaultNullOpts.mkFlagInt 0 ''
         Display the statusline in the tabline (first top line).
 
         Setting this option, allows to use the statusline option to be used by a custom function
@@ -260,15 +260,15 @@ mkVimPlugin {
         tabline on mode changes.
       '';
 
-      stl_path_style = helpers.defaultNullOpts.mkStr "short" ''
+      stl_path_style = defaultNullOpts.mkStr "short" ''
         Display a short path in statusline.
       '';
 
-      section_c_only_filename = helpers.defaultNullOpts.mkFlagInt 1 ''
+      section_c_only_filename = defaultNullOpts.mkFlagInt 1 ''
         Display a only file name in statusline.
       '';
 
-      symbols = helpers.mkNullOrOption (with types; attrsOf str) ''
+      symbols = mkNullOrOption (with lib.types; attrsOf str) ''
         Customize airline symbols.
 
         Example:
