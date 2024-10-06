@@ -32,8 +32,6 @@
     ./pluginmanagers/lazy.nix
     ./pluginmanagers/lz-n.nix
 
-    ./utils/rest.nix
-
     ./deprecation.nix
   ];
 }
