@@ -1,6 +1,6 @@
 lib:
 let
-  inherit (import ../../lib/pkg-lists.nix lib) topLevel scoped nullAttrs;
+  inherit (import ../../../lib/pkg-lists.nix lib) topLevel scoped nullAttrs;
 in
 {
   # builtin sources that don't require a package

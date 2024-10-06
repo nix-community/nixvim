@@ -40,11 +40,11 @@ let
   errors = lib.concatStringsSep "\n" (
     checkDeclarations (
       let
-        inherit (import ../plugins/none-ls/packages.nix lib) noPackage packaged;
+        inherit (import ../plugins/by-name/none-ls/packages.nix lib) noPackage packaged;
       in
       {
         name = "none-ls";
-        declarationFile = "plugins/none-ls/packages.nix";
+        declarationFile = "plugins/by-name/none-ls/packages.nix";
 
         packages = builtins.filter (pkg: pkg != null) (builtins.attrValues packaged);
 

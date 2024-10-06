@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  noneLsBuiltins = import ../../generated/none-ls.nix;
+  noneLsBuiltins = import ../../../generated/none-ls.nix;
   mkSourcePlugin = import ./_mk-source-plugin.nix;
 in
 {
