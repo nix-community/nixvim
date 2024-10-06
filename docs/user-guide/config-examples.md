@@ -16,6 +16,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [alisonjenkins/neovim-nix-flake] | |
 | [dc-tec/nixvim] | NixVim config, inspired by some of the contributors in this list and LazyVIM |
 | [elythh/nixvim] | |
+| [fred-drake/neovim] | NixVim config, with format/lsp/debug configurations for Rust, Go, Python and more |
 | [GaetanLepage/nix-config] | Home-manager |
 | [gwg313/nvim-nix] | |
 | [hbjydev/hvim] | |
@@ -38,6 +39,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
 [dc-tec/nixvim]: https://github.com/dc-tec/nixvim
 [elythh/nixvim]: https://github.com/elythh/nixvim
+[fred-drake/neovim]: https://github.com/fred-drake/neovim
 [GaetanLepage/nix-config]: https://github.com/GaetanLepage/nix-config/tree/master/home/modules/tui/neovim
 [gwg313/nvim-nix]: https://github.com/gwg313/nvim-nix
 [hbjydev/hvim]: https://github.com/hbjydev/hvim
