@@ -508,7 +508,7 @@ let
       name = "prolog-ls";
       description = "prolog_ls for SWI-Prolog";
       serverName = "prolog_ls";
-      package = "swiProlog";
+      package = "swi-prolog";
     }
     {
       name = "purescriptls";
