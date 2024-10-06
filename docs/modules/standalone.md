@@ -24,7 +24,7 @@ The example assumes your standalone config is the `default` package of a flake, 
 
 ## Extending an existing configuration
 
-Given a `<nixvim>` derivation obtained from `makeNixvim` or `makeNivxmiWithModule` it is possible to create a new derivation with additional options.
+Given a `<nixvim>` derivation obtained from `makeNixvim` or `makeNixvimWithModule` it is possible to create a new derivation with additional options.
 
 This is done through the `<nixvim>.extend` function. This function takes a Nixvim module that is merged with the options used to build `<nixvim>`.
 
