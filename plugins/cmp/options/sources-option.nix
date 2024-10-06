@@ -1,6 +1,7 @@
-{ lib, helpers }:
+{ lib }:
 let
   inherit (lib) types;
+  inherit (lib.nixvim) mkNullOrOption;
 
   sourceType = types.submodule {
     freeformType = with types; attrsOf anything;
@@ -11,29 +12,29 @@ let
         example = "buffer";
       };
 
-      option = helpers.mkNullOrOption (with types; attrsOf anything) ''
+      option = mkNullOrOption (with types; attrsOf anything) ''
         Any specific options defined by the source itself.
 
-        If direct lua code is needed use `helpers.mkRaw`.
+        If direct lua code is needed use `lib.nixvim.mkRaw`.
       '';
 
-      keyword_length = helpers.mkNullOrOption types.ints.unsigned ''
+      keyword_length = mkNullOrOption types.ints.unsigned ''
         The source-specific keyword length to trigger auto completion.
       '';
 
-      keyword_pattern = helpers.mkNullOrLua ''
+      keyword_pattern = lib.nixvim.mkNullOrLua ''
         The source-specific keyword pattern.
       '';
 
-      trigger_characters = helpers.mkNullOrOption (with types; listOf str) ''
+      trigger_characters = mkNullOrOption (with types; listOf str) ''
         Trigger characters.
       '';
 
-      priority = helpers.mkNullOrOption types.ints.unsigned ''
+      priority = mkNullOrOption types.ints.unsigned ''
         The source-specific priority value.
       '';
 
-      group_index = helpers.mkNullOrOption types.ints.unsigned ''
+      group_index = mkNullOrOption types.ints.unsigned ''
         The source group index.
 
         For instance, you can set the `buffer`'s source `group_index` to a larger number
@@ -53,7 +54,7 @@ let
         ```
       '';
 
-      entry_filter = helpers.mkNullOrLuaFn ''
+      entry_filter = lib.nixvim.mkNullOrLuaFn ''
         A source-specific entry filter, with the following function signature:
 
         `function(entry: cmp.Entry, ctx: cmp.Context): boolean`

@@ -1,17 +1,18 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
 let
+  inherit (lib.nixvim) defaultNullOpts;
+
   copilot-lua-cfg = config.plugins.copilot-lua;
   cfg = config.plugins.copilot-cmp;
 in
 {
-  options.plugins.copilot-cmp = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.copilot-cmp = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     event =
-      helpers.defaultNullOpts.mkListOf lib.types.str
+      defaultNullOpts.mkListOf lib.types.str
         [
           "InsertEnter"
           "LspAttach"
@@ -22,7 +23,7 @@ in
           to touch this.
         '';
 
-    fixPairs = helpers.defaultNullOpts.mkBool true ''
+    fixPairs = defaultNullOpts.mkBool true ''
       Suppose you have the following code: `print('h')`.
       Copilot might try to account for the `'` and `)` and complete it with this: `print('hello`.
 
@@ -60,7 +61,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('copilot_cmp').setup(${helpers.toLuaObject setupOptions})
+        require('copilot_cmp').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

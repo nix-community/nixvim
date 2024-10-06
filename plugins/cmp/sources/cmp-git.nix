@@ -1,40 +1,41 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
 let
   inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+
   cfg = config.plugins.cmp-git;
 
   mkAction =
     action: target:
-    helpers.defaultNullOpts.mkLuaFn "require('cmp_git.${action}').git.${target}" ''
+    defaultNullOpts.mkLuaFn "require('cmp_git.${action}').git.${target}" ''
       Function used to ${action} the ${lib.replaceStrings [ "_" ] [ " " ] target}.
     '';
 in
 {
-  options.plugins.cmp-git.settings = helpers.mkSettingsOption {
+  options.plugins.cmp-git.settings = lib.nixvim.mkSettingsOption {
     description = "Options provided to the `require('cmp_git').setup` function.";
     options = {
-      filetypes = helpers.defaultNullOpts.mkListOf types.str [
+      filetypes = defaultNullOpts.mkListOf types.str [
         "gitcommit"
         "octo"
       ] "Filetypes for which to trigger.";
 
-      remotes = helpers.defaultNullOpts.mkListOf types.str [
+      remotes = defaultNullOpts.mkListOf types.str [
         "upstream"
         "origin"
       ] "List of git remotes.";
 
-      enableRemoteUrlRewrites = helpers.defaultNullOpts.mkBool false ''
+      enableRemoteUrlRewrites = defaultNullOpts.mkBool false ''
         Whether to enable remote URL rewrites.
       '';
 
       git = {
         commits = {
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of git commits to fetch.
           '';
 
@@ -44,12 +45,12 @@ in
       };
 
       github = {
-        hosts = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        hosts = defaultNullOpts.mkListOf types.str [ ] ''
           List of private instances of github.
         '';
 
         issues = {
-          fields = helpers.defaultNullOpts.mkListOf types.str [
+          fields = defaultNullOpts.mkListOf types.str [
             "title"
             "number"
             "body"
@@ -57,15 +58,15 @@ in
             "state"
           ] "The fields used for issues.";
 
-          filter = helpers.defaultNullOpts.mkStr "all" ''
+          filter = defaultNullOpts.mkStr "all" ''
             The filter to use when fetching issues.
           '';
 
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of issues to fetch.
           '';
 
-          state = helpers.defaultNullOpts.mkStr "open" ''
+          state = defaultNullOpts.mkStr "open" ''
             Which issues to fetch (`"open"`, `"closed"` or `"all"`).
           '';
 
@@ -74,7 +75,7 @@ in
         };
 
         mentions = {
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of mentions to fetch.
           '';
 
@@ -83,7 +84,7 @@ in
         };
 
         pull_requests = {
-          fields = helpers.defaultNullOpts.mkListOf types.str [
+          fields = defaultNullOpts.mkListOf types.str [
             "title"
             "number"
             "body"
@@ -91,11 +92,11 @@ in
             "state"
           ] "The fields used for pull requests.";
 
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of pull requests to fetch.
           '';
 
-          state = helpers.defaultNullOpts.mkStr "open" ''
+          state = defaultNullOpts.mkStr "open" ''
             Which issues to fetch (`"open"`, `"closed"`, `"merged"` or `"all"`).
           '';
 
@@ -105,16 +106,16 @@ in
       };
 
       gitlab = {
-        hosts = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        hosts = defaultNullOpts.mkListOf types.str [ ] ''
           List of private instances of gitlab.
         '';
 
         issues = {
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of issues to fetch.
           '';
 
-          state = helpers.defaultNullOpts.mkStr "open" ''
+          state = defaultNullOpts.mkStr "open" ''
             Which issues to fetch (`"open"`, `"closed"` or `"all"`).
           '';
 
@@ -123,7 +124,7 @@ in
         };
 
         mentions = {
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of mentions to fetch.
           '';
 
@@ -132,11 +133,11 @@ in
         };
 
         merge_requests = {
-          limit = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+          limit = defaultNullOpts.mkUnsignedInt 100 ''
             Max number of merge requests to fetch.
           '';
 
-          state = helpers.defaultNullOpts.mkStr "open" ''
+          state = defaultNullOpts.mkStr "open" ''
             Which issues to fetch (`"open"`, `"closed"`, `"locked"` or `"merged"`).
           '';
 
@@ -146,10 +147,10 @@ in
       };
 
       trigger_actions =
-        helpers.defaultNullOpts.mkListOf
+        defaultNullOpts.mkListOf
           (types.submodule {
             options = {
-              debug_name = helpers.mkNullOrStr "Debug name.";
+              debug_name = lib.nixvim.mkNullOrStr "Debug name.";
 
               trigger_character = lib.mkOption {
                 type = types.str;
@@ -291,7 +292,7 @@ in
 
   config = lib.mkIf cfg.enable {
     extraConfigLua = ''
-      require('cmp_git').setup(${helpers.toLuaObject cfg.settings})
+      require('cmp_git').setup(${lib.nixvim.toLuaObject cfg.settings})
     '';
   };
 }

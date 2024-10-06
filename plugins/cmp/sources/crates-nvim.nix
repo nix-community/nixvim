@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -8,11 +7,11 @@ let
   cfg = config.plugins.crates-nvim;
 in
 {
-  options.plugins.crates-nvim = helpers.neovim-plugin.extraOptionsOptions;
+  options.plugins.crates-nvim = lib.nixvim.neovim-plugin.extraOptionsOptions;
 
   config = lib.mkIf cfg.enable {
     extraConfigLua = ''
-      require('crates').setup(${helpers.toLuaObject cfg.extraOptions})
+      require('crates').setup(${lib.nixvim.toLuaObject cfg.extraOptions})
     '';
   };
 }

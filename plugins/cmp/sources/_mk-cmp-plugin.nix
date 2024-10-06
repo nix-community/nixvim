@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   pkgs,
   ...
 }:
@@ -15,7 +14,7 @@
   imports ? [ ],
   ...
 }@args:
-helpers.vim-plugin.mkVimPlugin (
+lib.nixvim.vim-plugin.mkVimPlugin (
   builtins.removeAttrs args [
     "pluginName"
     "sourceName"

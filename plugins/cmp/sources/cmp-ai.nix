@@ -1,45 +1,46 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
 let
+  inherit (lib.nixvim) defaultNullOpts;
+
   cfg = config.plugins.cmp-ai;
 in
 {
   meta.maintainers = [ lib.maintainers.GaetanLepage ];
 
   options.plugins.cmp-ai = {
-    settings = helpers.mkSettingsOption {
+    settings = lib.nixvim.mkSettingsOption {
       description = "Options provided to the `require('cmp_ai.config'):setup` function.";
 
       options = {
-        max_lines = helpers.defaultNullOpts.mkUnsignedInt 50 ''
+        max_lines = defaultNullOpts.mkUnsignedInt 50 ''
           How many lines of buffer context to use.
         '';
 
-        run_on_every_keystroke = helpers.defaultNullOpts.mkBool true ''
+        run_on_every_keystroke = defaultNullOpts.mkBool true ''
           Generate new completion items on every keystroke.
         '';
 
-        provider = helpers.defaultNullOpts.mkStr "HF" ''
+        provider = defaultNullOpts.mkStr "HF" ''
           Which AI provider to use.
 
           Check the [README](https://github.com/tzachar/cmp-ai/blob/main/README.md) to learn about
           available options.
         '';
 
-        provider_options = helpers.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
+        provider_options = defaultNullOpts.mkAttrsOf lib.types.anything { } ''
           Options to forward to the provider.
         '';
 
-        notify = helpers.defaultNullOpts.mkBool true ''
+        notify = defaultNullOpts.mkBool true ''
           As some completion sources can be quit slow, setting this to `true` will trigger a
           notification when a completion starts and ends using `vim.notify`.
         '';
 
-        notify_callback = helpers.defaultNullOpts.mkLuaFn' {
+        notify_callback = defaultNullOpts.mkLuaFn' {
           description = ''
             The default notify function uses `vim.notify`, but an override can be configured.
           '';
@@ -58,7 +59,7 @@ in
           '';
         };
 
-        ignored_file_types = helpers.defaultNullOpts.mkAttrsOf' {
+        ignored_file_types = defaultNullOpts.mkAttrsOf' {
           type = lib.types.bool;
           description = "Which filetypes to ignore.";
           pluginDefault = { };
@@ -88,7 +89,7 @@ in
 
   config = lib.mkIf cfg.enable {
     extraConfigLua = ''
-      require('cmp_ai.config'):setup(${helpers.toLuaObject cfg.settings})
+      require('cmp_ai.config'):setup(${lib.nixvim.toLuaObject cfg.settings})
     '';
   };
 }

@@ -1,6 +1,6 @@
-{ lib, helpers }:
+{ lib }:
 rec {
-  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib; };
 
   settingsExample = {
     snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
