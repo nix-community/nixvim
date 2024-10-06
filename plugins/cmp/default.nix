@@ -6,13 +6,12 @@
 let
   cmpOptions = import ./options { inherit lib helpers; };
 in
-with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "cmp";
   originalName = "nvim-cmp";
   package = "nvim-cmp";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   description = ''
     ### Completion Source Installation
@@ -76,13 +75,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
         cmp.setup(${helpers.toLuaObject cfg.settings})
 
       ''
-      + (concatStringsSep "\n" (
-        mapAttrsToList (
+      + (lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
           filetype: settings: "cmp.setup.filetype('${filetype}', ${helpers.toLuaObject settings})\n"
         ) cfg.filetype
       ))
-      + (concatStringsSep "\n" (
-        mapAttrsToList (
+      + (lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
           cmdtype: settings: "cmp.setup.cmdline('${cmdtype}', ${helpers.toLuaObject settings})\n"
         ) cfg.cmdline
       ));

@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   copilot-lua-cfg = config.plugins.copilot-lua;
   cfg = config.plugins.copilot-cmp;
@@ -12,7 +11,7 @@ in
 {
   options.plugins.copilot-cmp = helpers.neovim-plugin.extraOptionsOptions // {
     event =
-      helpers.defaultNullOpts.mkListOf types.str
+      helpers.defaultNullOpts.mkListOf lib.types.str
         [
           "InsertEnter"
           "LspAttach"
@@ -35,13 +34,15 @@ in
     '';
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     warnings =
-      optional ((!isBool copilot-lua-cfg.suggestion.enabled) || copilot-lua-cfg.suggestion.enabled) ''
-        It is recommended to disable copilot's `suggestion` module, as it can interfere with
-        completions properly appearing in copilot-cmp.
-      ''
-      ++ optional ((!isBool copilot-lua-cfg.panel.enabled) || copilot-lua-cfg.panel.enabled) ''
+      lib.optional
+        ((!lib.isBool copilot-lua-cfg.suggestion.enabled) || copilot-lua-cfg.suggestion.enabled)
+        ''
+          It is recommended to disable copilot's `suggestion` module, as it can interfere with
+          completions properly appearing in copilot-cmp.
+        ''
+      ++ lib.optional ((!lib.isBool copilot-lua-cfg.panel.enabled) || copilot-lua-cfg.panel.enabled) ''
         It is recommended to disable copilot's `panel` module, as it can interfere with completions
         properly appearing in copilot-cmp.
       '';

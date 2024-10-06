@@ -1,5 +1,4 @@
 { lib, helpers }:
-with lib;
 rec {
   settingsOptions = import ./settings-options.nix { inherit lib helpers; };
 
@@ -28,13 +27,13 @@ rec {
   };
 
   attrsOfOptions =
-    with types;
+    with lib.types;
     attrsOf (submodule {
       freeformType = attrsOf anything;
       options = settingsOptions;
     });
 
-  filetype = mkOption {
+  filetype = lib.mkOption {
     type = attrsOfOptions;
     default = { };
     description = "Options provided to the `require('cmp').setup.filetype` function.";
@@ -45,7 +44,7 @@ rec {
     };
   };
 
-  cmdline = mkOption {
+  cmdline = lib.mkOption {
     type = attrsOfOptions;
     default = { };
     description = "Options provided to the `require('cmp').setup.cmdline` function.";

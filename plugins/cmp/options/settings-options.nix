@@ -1,5 +1,7 @@
 { lib, helpers }:
-with lib;
+let
+  inherit (lib) mkOption types;
+in
 {
   performance = {
     debounce = helpers.defaultNullOpts.mkUnsignedInt 60 ''
@@ -261,7 +263,9 @@ with lib;
     in
     {
       completion = {
-        border = helpers.defaultNullOpts.mkBorder (genList (_: "") 8) "nvim-cmp completion popup menu" "";
+        border = helpers.defaultNullOpts.mkBorder (lib.genList (
+          _: ""
+        ) 8) "nvim-cmp completion popup menu" "";
 
         winhighlight = mkWinhighlightOption "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None";
 
@@ -286,7 +290,7 @@ with lib;
       };
 
       documentation = {
-        border = helpers.defaultNullOpts.mkBorder (genList (
+        border = helpers.defaultNullOpts.mkBorder (lib.genList (
           _: ""
         ) 8) "nvim-cmp documentation popup menu" "";
 

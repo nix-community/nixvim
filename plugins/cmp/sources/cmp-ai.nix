@@ -4,12 +4,11 @@
   config,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.cmp-ai;
 in
 {
-  meta.maintainers = [ maintainers.GaetanLepage ];
+  meta.maintainers = [ lib.maintainers.GaetanLepage ];
 
   options.plugins.cmp-ai = {
     settings = helpers.mkSettingsOption {
@@ -31,7 +30,7 @@ in
           available options.
         '';
 
-        provider_options = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+        provider_options = helpers.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
           Options to forward to the provider.
         '';
 
@@ -60,7 +59,7 @@ in
         };
 
         ignored_file_types = helpers.defaultNullOpts.mkAttrsOf' {
-          type = types.bool;
+          type = lib.types.bool;
           description = "Which filetypes to ignore.";
           pluginDefault = { };
           example = {
@@ -87,7 +86,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     extraConfigLua = ''
       require('cmp_ai.config'):setup(${helpers.toLuaObject cfg.settings})
     '';

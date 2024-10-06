@@ -1,10 +1,11 @@
 { lib, helpers }:
-with lib;
 let
+  inherit (lib) types;
+
   sourceType = types.submodule {
     freeformType = with types; attrsOf anything;
     options = {
-      name = mkOption {
+      name = lib.mkOption {
         type = types.str;
         description = "The name of the source.";
         example = "buffer";
@@ -79,7 +80,7 @@ let
     };
   };
 in
-mkOption {
+lib.mkOption {
   default = [ ];
   type = with lib.types; maybeRaw (listOf sourceType);
   description = ''

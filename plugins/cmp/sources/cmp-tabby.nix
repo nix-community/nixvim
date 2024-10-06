@@ -4,12 +4,12 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkRenamedOptionModule types;
   cfg = config.plugins.cmp-tabby;
 in
 {
-  meta.maintainers = [ maintainers.GaetanLepage ];
+  meta.maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO: introduced 24-06-18, remove after 24.11
   imports =
@@ -61,7 +61,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     extraConfigLua = ''
       require('cmp_tabby.config'):setup(${helpers.toLuaObject cfg.settings})
     '';

@@ -1,6 +1,7 @@
 { lib, ... }:
-with lib;
 let
+  inherit (lib) mkRenamedOptionModule mkRemovedOptionModule;
+
   oldPluginBasePath = [
     "plugins"
     "nvim-cmp"
