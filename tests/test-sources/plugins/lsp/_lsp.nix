@@ -158,6 +158,7 @@
             lua-ls.enable = true;
             marksman.enable = true;
             metals.enable = true;
+            neocmake.enable = true;
             nextls.enable = true;
             nginx-language-server.enable = true;
             nickel-ls.enable = true;

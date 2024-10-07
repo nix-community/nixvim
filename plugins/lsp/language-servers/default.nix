@@ -357,6 +357,11 @@ let
       description = "metals for Scala";
     }
     {
+      name = "neocmake";
+      description = "CMake LSP implementation based on Tower and Tree-sitter";
+      package = "neocmakelsp";
+    }
+    {
       name = "nextls";
       description = "The language server for Elixir that just works.";
       package = "next-ls";
