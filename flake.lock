@@ -162,16 +162,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1728018373,
-        "narHash": "sha256-NOiTvBbRLIOe5F6RbHaAh6++BNjsb149fGZd1T4+KBg=",
-        "owner": "NixOS",
+        "lastModified": 1728336990,
+        "narHash": "sha256-GYej+CE1FGIFca0Ua6ArjUHRd6fmc4I6tYR6NYRZQtQ=",
+        "owner": "GaetanLepage",
         "repo": "nixpkgs",
-        "rev": "bc947f541ae55e999ffdb4013441347d83b00feb",
+        "rev": "9c211a52a7801277f88eb4438105b84bb6d83d46",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "owner": "GaetanLepage",
+        "ref": "teto-rebased",
         "repo": "nixpkgs",
         "type": "github"
       }
