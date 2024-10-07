@@ -79,7 +79,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         Symbol displayed at the beginning of the status message.
       '';
 
-      update_interval = defaultNullOpts.mkInt 100 ''
+      update_interval = defaultNullOpts.mkUnsignedInt 100 ''
         The interval, in milliseconds, to update the status message.
       '';
     };
