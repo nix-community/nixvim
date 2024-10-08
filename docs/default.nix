@@ -72,6 +72,7 @@ in
       nuschtosSearch.packages.mkSearch {
         optionsJSON = options-json + "/share/doc/nixos/options.json";
         urlPrefix = "https://github.com/nix-community/nixvim/tree/main";
+        title = "Nixvim options search";
         inherit baseHref;
       };
   in
