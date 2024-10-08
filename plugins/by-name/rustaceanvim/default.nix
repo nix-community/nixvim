@@ -60,9 +60,9 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
         assertions = [
           {
-            assertion = cfg.enable -> !config.plugins.lsp.servers.rust-analyzer.enable;
+            assertion = cfg.enable -> !config.plugins.lsp.servers.rust_analyzer.enable;
             message = ''
-              Nixvim (plugins.rustaceanvim): Both `plugins.rustaceanvim.enable` and `plugins.lsp.servers.rust-analyzer.enable` are true.
+              Nixvim (plugins.rustaceanvim): Both `plugins.rustaceanvim.enable` and `plugins.lsp.servers.rust_analyzer.enable` are true.
               Disable one of them otherwise you will have multiple clients attached to each buffer.
             '';
           }
