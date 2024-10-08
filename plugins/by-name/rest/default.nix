@@ -282,6 +282,22 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       '';
     };
 
+    ui = {
+      winbar = defaultNullOpts.mkBool true ''
+        Whether to set winbar to result panes.
+      '';
+
+      keybinds =
+        defaultNullOpts.mkAttrsOf types.anything
+          {
+            prev = "H";
+            next = "L";
+          }
+          ''
+            Mappings for result panes.
+          '';
+    };
+
     highlight = {
       enable = defaultNullOpts.mkBool true ''
         Whether current request highlighting is enabled or not.
@@ -295,25 +311,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     _log_level = defaultNullOpts.mkNullableWithRaw types.logLevel "warn" ''
       The logging level name, see `:h vim.log.levels`.
     '';
-
-    keybinds =
-      defaultNullOpts.mkListOf (with types; listOf str)
-        [
-          [
-            "<localleader>rr"
-            "<cmd>Rest run<cr>"
-            "Run request under the cursor"
-          ]
-          [
-            "<localleader>rl"
-            "<cmd>Rest run last<cr>"
-            "Re-run latest request"
-          ]
-        ]
-        ''
-          Declare some keybindings.
-          Format: list of 3 strings lists: key, action and description.
-        '';
   };
 
   settingsExample = {
@@ -389,6 +386,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "env_pattern"
           "env_edit_command"
           "encode_url"
+          "keybinds"
           "skip_ssl_verification"
           [
             "logs"
