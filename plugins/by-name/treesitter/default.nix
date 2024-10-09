@@ -15,6 +15,12 @@ helpers.neovim-plugin.mkNeovimPlugin {
   description = ''
     Provides an interface to [tree-sitter]
 
+    > [!NOTE]
+    > This plugin defaults to all functionality disabled.
+    >
+    > Please explicitly enable the features you would like to use in `plugins.treesitter.settings`.
+    > For example, to enable syntax highlighting use the `plugins.treesitter.settings.highlight.enable` option.
+
     ### Installing tree-sitter grammars from Nixpkgs
 
     By default, **all** available grammars packaged in the `nvim-treesitter` package are installed.
