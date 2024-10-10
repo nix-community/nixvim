@@ -272,7 +272,7 @@ in
 
         -- nvim-lspconfig
         test_rtp_file("lua/lspconfig.lua", true)
-        test_rtp_file("lua/lspconfig/server_configurations/nixd.lua", true)
+        test_rtp_file("lua/lspconfig/configs/nixd.lua", true)
         test_rtp_file("plugin/lspconfig.lua", true)
         test_rtp_file("doc/lspconfig.txt", false)
 
