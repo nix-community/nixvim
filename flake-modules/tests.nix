@@ -50,6 +50,8 @@
         generated = pkgs.callPackage ../tests/generated.nix { };
 
         package-options = pkgs.callPackage ../tests/package-options.nix { inherit nixvimConfiguration; };
+
+        lsp-all-servers = pkgs.callPackage ../tests/lsp-servers.nix { inherit nixvimConfiguration; };
       } // import ../tests { inherit pkgs pkgsUnfree helpers; };
     };
 }

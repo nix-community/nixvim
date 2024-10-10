@@ -42,37 +42,24 @@ let
   };
 in
 # We attempt to build & execute all configurations
-(lib.pipe
-  (
-    testFiles
-    ++ [
-      exampleFiles
-    ]
-  )
-  [
-    (builtins.map (
-      {
-        name,
-        file,
-        cases,
-      }:
-      {
-        inherit name;
-        path = pkgs.linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
-      }
-    ))
-    (helpers.groupListBySize 10)
-    (lib.imap1 (
-      i: group: rec {
-        name = "test-${toString i}";
-        value = pkgs.linkFarm name group;
-      }
-    ))
-    builtins.listToAttrs
-  ]
-)
-// {
-  all-lsp-servers = moduleToTest ./lsp-servers.nix "all-lsp-servers" (
-    import ./lsp-servers.nix { inherit pkgs; }
-  );
-}
+lib.pipe (testFiles ++ [ exampleFiles ]) [
+  (builtins.map (
+    {
+      name,
+      file,
+      cases,
+    }:
+    {
+      inherit name;
+      path = pkgs.linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
+    }
+  ))
+  (helpers.groupListBySize 10)
+  (lib.imap1 (
+    i: group: rec {
+      name = "test-${toString i}";
+      value = pkgs.linkFarm name group;
+    }
+  ))
+  builtins.listToAttrs
+]
