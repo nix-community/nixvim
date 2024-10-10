@@ -4,9 +4,9 @@ local configs = require("lspconfig.configs")
 local util = require("lspconfig.util")
 
 local function require_all_configs()
-	for _, v in ipairs(vim.fn.glob(vim.env.lspconfig .. "/lua/lspconfig/server_configurations/*.lua", 1, 1)) do
+	for _, v in ipairs(vim.fn.glob(vim.env.lspconfig .. "/lua/lspconfig/configs/*.lua", 1, 1)) do
 		local module_name = v:gsub(".*/", ""):gsub("%.lua$", "")
-		configs[module_name] = require("lspconfig.server_configurations." .. module_name)
+		configs[module_name] = require("lspconfig.configs." .. module_name)
 	end
 end
 
