@@ -180,7 +180,6 @@ helpers.vim-plugin.mkVimPlugin {
           lua = true;
         }
       );
-      apply = map helpers.keymaps.removeDeprecatedMapAttrs;
     };
   };
 
