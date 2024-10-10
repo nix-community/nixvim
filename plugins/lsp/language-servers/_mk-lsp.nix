@@ -8,7 +8,7 @@
   name,
   description ? "Enable ${name}.",
   serverName ? name,
-  package ? name,
+  package ? null,
   url ? null,
   cmd ? (cfg: null),
   settings ? (cfg: cfg),
@@ -50,16 +50,32 @@ in
       package =
         if lib.isOption package then
           package
-        else
+        else if args ? package then
           lib.mkPackageOption pkgs name {
             nullable = true;
             default = package;
+          }
+        else
+          # If we're not provided a package, we should provide a no-default option
+          lib.mkOption {
+            type = types.nullOr types.package;
+            description = ''
+              The package to use for ${name}. Has no default, but can be set to null.
+            '';
           };
 
       cmd = mkOption {
         type = with types; nullOr (listOf str);
         default =
-          if (cfg.package or null) != null then if builtins.isFunction cmd then cmd cfg else cmd else null;
+          # TODO: do we really only want the default `cmd` when `package` is non-null?
+          if !(opt.package.isDefined or false) then
+            null
+          else if cfg.package == null then
+            null
+          else if builtins.isFunction cmd then
+            cmd cfg
+          else
+            cmd;
         description = ''
           A list where each entry corresponds to the blankspace delimited part of the command that
           launches the server.

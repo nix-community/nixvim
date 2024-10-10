@@ -179,15 +179,6 @@ let
 
   lspPackages = import ../lsp-packages.nix;
 
-  getLspPackage =
-    name:
-    if lib.hasAttr name lspPackages.packages then
-      { package = lspPackages.packages.${name}; }
-    else if lib.hasAttr name lspPackages.customCmd then
-      { inherit (lspPackages.customCmd.${name}) package cmd; }
-    else
-      { package = null; };
-
   generatedServers = lib.pipe ../../../generated/lspconfig-servers.json [
     lib.importJSON
     (lib.map (
@@ -200,8 +191,13 @@ let
         inherit name;
         description = desc;
       }
-      // (getLspPackage name)
-      // (lspExtraArgs.${name} or { })
+      // lib.optionalAttrs (lspPackages.packages ? ${name}) {
+        package = lspPackages.packages.${name};
+      }
+      // lib.optionalAttrs (lspPackages.customCmd ? ${name}) {
+        inherit (lspPackages.customCmd.${name}) package cmd;
+      }
+      // lspExtraArgs.${name} or { }
     ))
   ];
 in
