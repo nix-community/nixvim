@@ -1,11 +1,14 @@
+{ pkgs, ... }:
 {
   empty = {
-    plugins.magma-nvim.enable = true;
+    # NOTE: 2024-10-10 when marked as linux specific platform
+    plugins.magma-nvim.enable = pkgs.stdenv.isLinux;
   };
 
   defaults = {
     plugins.magma-nvim = {
-      enable = true;
+      # NOTE: 2024-10-10 when marked as linux specific platform
+      enable = pkgs.stdenv.isLinux;
 
       settings = {
         image_provider = "none";
