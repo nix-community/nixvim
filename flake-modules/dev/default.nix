@@ -70,7 +70,10 @@
 
         settings.hooks = {
           treefmt.enable = true;
-          typos.enable = true;
+          typos = {
+            enable = true;
+            excludes = [ "generated/*" ];
+          };
           maintainers = {
             enable = true;
             name = "maintainers";
