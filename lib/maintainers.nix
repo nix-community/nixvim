@@ -12,6 +12,12 @@
     githubId = 1176328;
     name = "Alison Jenkins";
   };
+  balssh = {
+    email = "george.bals25@gmail.com";
+    github = "balssh";
+    githubId = 82440615;
+    name = "George Bals";
+  };
   DanielLaing = {
     email = "daniel@daniellaing.com";
     matrix = "@bodleum:matrix.org";
