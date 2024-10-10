@@ -40,6 +40,25 @@ let
   errors = lib.concatStringsSep "\n" (
     checkDeclarations (
       let
+        inherit (import ../plugins/lsp/lsp-packages.nix) unpackaged packages customCmd;
+      in
+      {
+        name = "lsp";
+        declarationFile = "plugins/lsp/lsp-packages.nix";
+
+        packages = builtins.attrValues packages;
+
+        declared = unpackaged ++ lib.attrsets.attrNames (packages // customCmd);
+
+        generated = lib.pipe ../generated/lspconfig-servers.json [
+          lib.importJSON
+          (builtins.map (lib.getAttr "name"))
+          lib.lists.unique
+        ];
+      }
+    )
+    ++ checkDeclarations (
+      let
         inherit (import ../plugins/by-name/none-ls/packages.nix lib) noPackage packaged;
       in
       {

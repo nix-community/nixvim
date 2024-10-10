@@ -186,10 +186,7 @@ let
     else if lib.hasAttr name lspPackages.customCmd then
       { inherit (lspPackages.customCmd.${name}) package cmd; }
     else
-      assert lib.assertMsg (lib.elem name lspPackages.unpackaged) "LSP server ${name} is unknown";
-      {
-        package = null;
-      };
+      { package = null; };
 
   generatedServers = lib.pipe ../../../generated/lspconfig-servers.json [
     lib.importJSON
