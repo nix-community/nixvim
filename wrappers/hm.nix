@@ -15,7 +15,7 @@ let
     types
     ;
   cfg = config.programs.nixvim;
-  nixvimConfig = config.lib.nixvim.modules.evalNixvim {
+  evalArgs = {
     extraSpecialArgs = {
       hmConfig = config;
     };
@@ -27,15 +27,9 @@ in
 {
   _file = ./hm.nix;
 
-  options = {
-    programs.nixvim = mkOption {
-      inherit (nixvimConfig) type;
-      default = { };
-    };
-  };
-
   imports = [
     (import ./_shared.nix {
+      inherit evalArgs;
       filesOpt = [
         "xdg"
         "configFile"

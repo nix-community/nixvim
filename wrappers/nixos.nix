@@ -16,7 +16,7 @@ let
     types
     ;
   cfg = config.programs.nixvim;
-  nixvimConfig = config.lib.nixvim.modules.evalNixvim {
+  evalArgs = {
     extraSpecialArgs = {
       nixosConfig = config;
     };
@@ -28,15 +28,9 @@ in
 {
   _file = ./nixos.nix;
 
-  options = {
-    programs.nixvim = mkOption {
-      inherit (nixvimConfig) type;
-      default = { };
-    };
-  };
-
   imports = [
     (import ./_shared.nix {
+      inherit evalArgs;
       filesOpt = [
         "environment"
         "etc"

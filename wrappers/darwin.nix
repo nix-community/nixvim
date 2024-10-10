@@ -16,7 +16,7 @@ let
     types
     ;
   cfg = config.programs.nixvim;
-  nixvimConfig = config.lib.nixvim.modules.evalNixvim {
+  evalArgs = {
     extraSpecialArgs = {
       darwinConfig = config;
     };
@@ -28,14 +28,7 @@ in
 {
   _file = ./darwin.nix;
 
-  options = {
-    programs.nixvim = mkOption {
-      inherit (nixvimConfig) type;
-      default = { };
-    };
-  };
-
-  imports = [ (import ./_shared.nix { }) ];
+  imports = [ (import ./_shared.nix { inherit evalArgs; }) ];
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
