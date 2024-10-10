@@ -28,7 +28,19 @@ let
     setAttrByPath
     ;
   cfg = config.programs.nixvim;
-  nixvimConfiguration = config.lib.nixvim.modules.evalNixvim evalArgs;
+  nixvimConfiguration = config.lib.nixvim.modules.evalNixvim (
+    evalArgs
+    // {
+      modules = evalArgs.modules or [ ] ++ [
+        # Use global packages by default in nixvim's submodule
+        # TODO: `useGlobalPackages` option and/or deprecate using host packages?
+        {
+          _file = ./_shared.nix;
+          nixpkgs.pkgs = lib.mkDefault pkgs;
+        }
+      ];
+    }
+  );
   extraFiles = lib.filter (file: file.enable) (lib.attrValues cfg.extraFiles);
 in
 {
@@ -62,10 +74,6 @@ in
       # Make nixvim's "extended" lib available to the host's module args
       _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
     }
-
-    # Use global packages by default in nixvim's submodule
-    # TODO: `useGlobalPackages` option and/or deprecate using host packages?
-    { programs.nixvim.nixpkgs.pkgs = lib.mkDefault pkgs; }
 
     # Propagate nixvim's assertions to the host modules
     (lib.mkIf cfg.enable { inherit (cfg) warnings assertions; })
