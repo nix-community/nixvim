@@ -1,10 +1,8 @@
 {
   lib,
-  helpers,
   ...
 }:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cord-nvim";
   originalName = "cord.nvim";
   luaName = "cord";
@@ -12,22 +10,13 @@ helpers.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.eveeifyeve ];
 
   settingsOptions = {
-    usercmds = helpers.defaultNullOpts.mkBool false ''
+    usercmds = lib.nixvim.defaultNullOpts.mkBool false ''
       Enables user commands
     '';
-    log_level =
-      helpers.defaultNullOpts.mkEnum
-        [
-          "trace"
-          "debug"
-          "info"
-          "warn"
-          "off"
-        ]
-        null
-        ''
-          Log messages at or above this level.
-        '';
+
+    log_level = lib.nixvim.defaultNullOpts.mkLogLevel "error" ''
+      Log messages at or above this level.
+    '';
   };
 
   settingsExample = {
