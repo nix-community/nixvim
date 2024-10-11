@@ -1,17 +1,17 @@
 {
   config,
   lib,
-  helpers,
-  options,
   ...
 }:
-with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "trouble";
   originalName = "trouble-nvim";
   package = "trouble-nvim";
 
-  maintainers = [ maintainers.loicreynier ];
+  maintainers = [ lib.maintainers.loicreynier ];
 
   # TODO introduced 2024-03-15: remove 2024-05-15
   optionsRenamedToSettings = [
@@ -116,7 +116,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   settingsOptions = {
     position =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "top"
           "left"
@@ -128,17 +128,17 @@ helpers.neovim-plugin.mkNeovimPlugin {
           Position of the list.
         '';
 
-    height = helpers.defaultNullOpts.mkInt 10 ''
+    height = defaultNullOpts.mkInt 10 ''
       Height of the trouble list when position is top or bottom.
     '';
 
-    width = helpers.defaultNullOpts.mkInt 50 ''
+    width = defaultNullOpts.mkInt 50 ''
       Width of the list when position is left or right.
     '';
 
-    icons = helpers.defaultNullOpts.mkBool true "Use devicons for filenames";
+    icons = defaultNullOpts.mkBool true "Use devicons for filenames";
 
-    mode = helpers.defaultNullOpts.mkEnum [
+    mode = defaultNullOpts.mkEnum [
       "workspace_diagnostics"
       "document_diagnostics"
       "quickfix"
@@ -146,22 +146,22 @@ helpers.neovim-plugin.mkNeovimPlugin {
       "loclist"
     ] "workspace_diagnostics" "Mode for default list";
 
-    fold_open = helpers.defaultNullOpts.mkStr "" "Icon used for open folds";
+    fold_open = defaultNullOpts.mkStr "" "Icon used for open folds";
 
-    fold_closed = helpers.defaultNullOpts.mkStr "" "Icon used for closed folds";
+    fold_closed = defaultNullOpts.mkStr "" "Icon used for closed folds";
 
-    group = helpers.defaultNullOpts.mkBool true "Group results by file";
+    group = defaultNullOpts.mkBool true "Group results by file";
 
-    padding = helpers.defaultNullOpts.mkBool true "Add an extra new line on top of the list";
+    padding = defaultNullOpts.mkBool true "Add an extra new line on top of the list";
 
-    cycle_results = helpers.defaultNullOpts.mkBool true "Whether to cycle item list when reaching beginning or end of list";
+    cycle_results = defaultNullOpts.mkBool true "Whether to cycle item list when reaching beginning or end of list";
 
     action_keys =
-      mapAttrs
+      lib.mapAttrs
         (
           action: config:
-          helpers.defaultNullOpts.mkNullable (
-            with types; either str (listOf str)
+          defaultNullOpts.mkNullable (
+            with lib.types; either str (listOf str)
           ) config.default config.description
         )
         {
@@ -247,47 +247,40 @@ helpers.neovim-plugin.mkNeovimPlugin {
           };
         };
 
-    indent_lines = helpers.defaultNullOpts.mkBool true ''
+    indent_lines = defaultNullOpts.mkBool true ''
       Add an indent guide below the fold icons.
     '';
 
-    win_config = helpers.defaultNullOpts.mkAttrsOf types.anything {
+    win_config = defaultNullOpts.mkAttrsOf lib.types.anything {
       border = "single";
     } "Configuration for floating windows. See `|nvim_open_win()|`.";
 
-    auto_open = helpers.defaultNullOpts.mkBool false ''
-      Automatically open the list when you have diagnostics.
-    '';
-
-    auto_close = helpers.defaultNullOpts.mkBool false ''
+    auto_close = defaultNullOpts.mkBool false ''
       Automatically close the list when you have no diagnostics.
     '';
 
-    auto_preview = helpers.defaultNullOpts.mkBool true ''
+    auto_preview = defaultNullOpts.mkBool true ''
       Automatically preview the location of the diagnostic.
       <esc> to close preview and go back to last window.
     '';
 
-    auto_fold = helpers.defaultNullOpts.mkBool false ''
+    auto_fold = defaultNullOpts.mkBool false ''
       Automatically fold a file trouble list at creation.
     '';
 
-    auto_jump = helpers.defaultNullOpts.mkListOf types.str [ "lsp_definitions" ] ''
+    auto_jump = defaultNullOpts.mkListOf lib.types.str [ "lsp_definitions" ] ''
       For the given modes, automatically jump if there is only a single result.
     '';
 
-    include_declaration = helpers.defaultNullOpts.mkListOf types.str [
+    include_declaration = defaultNullOpts.mkListOf lib.types.str [
       "lsp_references"
       "lsp_implementations"
       "lsp_definitions"
     ] "For the given modes, include the declaration of the current symbol in the results.";
 
     signs =
-      mapAttrs
-        (
-          diagnostic: default:
-          helpers.defaultNullOpts.mkStr default "Icon/text for ${diagnostic} diagnostics."
-        )
+      lib.mapAttrs
+        (diagnostic: default: defaultNullOpts.mkStr default "Icon/text for ${diagnostic} diagnostics.")
         {
           error = "";
           warning = "";
@@ -296,19 +289,19 @@ helpers.neovim-plugin.mkNeovimPlugin {
           other = "﫠";
         };
 
-    use_diagnostic_signs = helpers.defaultNullOpts.mkBool false ''
+    use_diagnostic_signs = defaultNullOpts.mkBool false ''
       Enabling this will use the signs defined in your lsp client
     '';
   };
 
   extraConfig = cfg: {
     # TODO: added 2024-09-20 remove after 24.11
-    plugins.web-devicons = mkIf (
+    plugins.web-devicons = lib.mkIf (
       !(
         config.plugins.mini.enable
         && config.plugins.mini.modules ? icons
         && config.plugins.mini.mockDevIcons
       )
-    ) { enable = mkOverride 1490 true; };
+    ) { enable = lib.mkOverride 1490 true; };
   };
 }
