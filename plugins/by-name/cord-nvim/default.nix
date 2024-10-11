@@ -7,6 +7,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "cord-nvim";
   originalName = "cord.nvim";
+  luaName = "cord";
   package = "cord-nvim";
   maintainers = [ lib.maintainers.eveeifyeve ];
 
