@@ -8,11 +8,11 @@ helpers.neovim-plugin.mkNeovimPlugin {
   name = "cord-nvim";
   originalName = "cord.nvim";
   package = "cord-nvim";
-  maintainers = [ ];
+  maintainers = [ lib.maintainers.eveeifyeve ];
 
   settingsOptions = {
     usercmds = helpers.defaultNullOpts.mkBool false ''
-      	Enables user commands
+      Enables user commands
     '';
     log_level =
       helpers.defaultNullOpts.mkEnum
@@ -25,7 +25,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         ]
         null
         ''
-          	Log messages at or above this level.
+          Log messages at or above this level.
         '';
   };
 
