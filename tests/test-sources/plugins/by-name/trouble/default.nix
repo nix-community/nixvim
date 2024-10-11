@@ -81,6 +81,58 @@
     };
   };
 
+  split-right-preview = {
+    plugins.web-devicons.enable = true;
+    plugins.trouble = {
+      enable = true;
+
+      settings = {
+        modes = {
+          test = {
+            mode = "diagnostics";
+            preview = {
+              type = "split";
+              relative = "win";
+              position = "right";
+              size = 0.3;
+            };
+          };
+        };
+      };
+    };
+  };
+
+  top-right-preview = {
+    plugins.web-devicons.enable = true;
+    plugins.trouble = {
+      enable = true;
+
+      settings = {
+        modes = {
+          preview_float = {
+            mode = "diagnostics";
+            preview = {
+              type = "float";
+              relative = "editor";
+              border = "rounded";
+              title = "Preview";
+              title_pos = "center";
+              position = [
+                0
+                (-2)
+              ];
+              size = {
+                width = 0.3;
+                height = 0.3;
+              };
+              zindex = 200;
+            };
+          };
+        };
+      };
+    };
+  };
+
   no-icons = {
     plugins.web-devicons.enable = false;
     plugins.trouble = {
