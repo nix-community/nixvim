@@ -113,6 +113,30 @@
                 '';
                 internal = true;
               };
+
+              lazyLoad = lib.mkOption {
+                default = {
+                  enable = false;
+                };
+                description = ''
+                  Lazy load configuration settings.
+                '';
+                type = lib.types.submodule {
+                  options = {
+                    enable = lib.mkOption {
+                      default = false;
+                      type = lib.types.bool;
+                      description = ''
+                        Whether to lazy load the plugin.
+
+                        If you enable this, the plugin's lua configuration will need to be manually loaded by other means.
+
+                        A usage would be passing the plugin's luaConfig to the `plugins.lz-n.plugins` configuration.
+                      '';
+                    };
+                  };
+                };
+              };
             }
             // lib.optionalAttrs hasSettings {
               settings = lib.nixvim.mkSettingsOption {
@@ -157,7 +181,9 @@
                 ])
                 ++ (lib.optionals hasConfigAttrs [
                   (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
-                  (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
+                  (lib.mkIf (!cfg.lazyLoad.enable) (
+                    lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content)
+                  ))
                 ])
               )
             );
