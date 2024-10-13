@@ -7,7 +7,7 @@
 }:
 let
   inherit (lib) types mkOption mkPackageOption;
-  inherit (lib) optional optionalString optionalAttrs;
+  inherit (lib) optional optionalAttrs;
   builders = lib.nixvim.builders.withPkgs pkgs;
 in
 {
