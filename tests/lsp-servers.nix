@@ -16,9 +16,14 @@ let
     plugins.lsp = {
       enable = true;
 
-      servers.rust_analyzer = {
-        installCargo = true;
-        installRustc = true;
+      servers = {
+        hls = {
+          installGhc = true;
+        };
+        rust_analyzer = {
+          installCargo = true;
+          installRustc = true;
+        };
       };
     };
   };
