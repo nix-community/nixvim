@@ -2,7 +2,7 @@
   description = "A neovim configuration system for NixOS";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/master";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
