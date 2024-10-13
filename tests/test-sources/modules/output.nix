@@ -48,7 +48,7 @@
 
       extraPlugins = [
         {
-          config = "let g:var = 'neovimRcContent5'";
+          config = "let g:var = 'wrappedNeovim.initRc5'";
 
           # Test that final init.lua contains all config sections
           plugin = pkgs.runCommandLocal "init-lua-content-test" { } ''
@@ -63,7 +63,7 @@
             test_content extraConfigLua2 extraConfigLua
             test_content extraConfigLuaPost3 extraConfigLuaPost
             test_content extraConfigVim4 extraConfigVim4
-            test_content neovimRcContent5 neovimRcContent
+            test_content wrappedNeovim.initRc5 wrappedNeovim.initRc
 
             touch $out
           '';

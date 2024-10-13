@@ -285,8 +285,10 @@ in
         }
       );
 
+      wrappedNeovim' = pkgs.wrapNeovimUnstable package neovimConfig;
+
       customRC = helpers.concatNonEmptyLines [
-        (helpers.wrapVimscriptForLua neovimConfig.neovimRcContent)
+        (helpers.wrapVimscriptForLua wrappedNeovim'.initRc)
         config.content
       ];
 
@@ -330,13 +332,13 @@ in
         else
           config.package;
 
-      wrappedNeovim = pkgs.wrapNeovimUnstable package (
-        neovimConfig
-        // {
-          wrapperArgs = lib.escapeShellArgs neovimConfig.wrapperArgs + " " + extraWrapperArgs;
-          wrapRc = false;
-        }
-      );
+      wrappedNeovim = wrappedNeovim'.override (prev: {
+        wrapperArgs =
+          (if lib.isString prev.wrapperArgs then prev.wrapperArgs else lib.escapeShellArgs prev.wrapperArgs)
+          + " "
+          + extraWrapperArgs;
+        wrapRc = false;
+      });
     in
     {
       build = {
