@@ -46,13 +46,27 @@
         "test.vim" = configs;
       };
 
-      # Plugin configs
-      # TODO: Test this makes it to the nvim configuration
-      # NOTE: config.content currently does not contain extraPlugins config
       extraPlugins = [
         {
-          plugin = pkgs.emptyDirectory;
           config = "let g:var = 'neovimRcContent5'";
+
+          # Test that final init.lua contains all config sections
+          plugin = pkgs.runCommandLocal "init-lua-content-test" { } ''
+            test_content() {
+                if ! grep -qF "$1" "${config.build.initFile}"; then
+                    echo "init.lua should contain $2" >&2
+                    exit 1
+                fi
+            }
+
+            test_content extraConfigLuaPre1 extraConfigLuaPre
+            test_content extraConfigLua2 extraConfigLua
+            test_content extraConfigLuaPost3 extraConfigLuaPost
+            test_content extraConfigVim4 extraConfigVim4
+            test_content neovimRcContent5 neovimRcContent
+
+            touch $out
+          '';
         }
       ];
 
