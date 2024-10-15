@@ -54,34 +54,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       Whether to start auto-save when the plugin is loaded.
     '';
 
-    execution_message = {
-      enabled = defaultNullOpts.mkBool true ''
-        Show execution message after successful auto-save.
-      '';
-
-      message =
-        defaultNullOpts.mkStr
-          {
-            __raw = ''
-              function()
-                return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
-              end
-            '';
-          }
-          ''
-            The message to print on save.
-            This can be a lua function that returns a string.
-          '';
-
-      dim = defaultNullOpts.mkNullable (types.numbers.between 0 1) 0.18 "Dim the color of `message`.";
-
-      cleaning_interval = defaultNullOpts.mkUnsignedInt 1250 ''
-        Time (in milliseconds) to wait before automatically cleaning MsgArea after displaying
-        `message`.
-        See `:h MsgArea`.
-      '';
-    };
-
     trigger_events = {
       immediate_save =
         defaultNullOpts.mkListOf types.str
@@ -105,7 +77,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
             See `:h events` for events description.
           '';
 
-      cancel_defered_save = defaultNullOpts.mkListOf types.str [ "InsertEnter" ] ''
+      cancel_deferred_save = defaultNullOpts.mkListOf types.str [ "InsertEnter" ] ''
         Vim events that cancel a pending deferred save.\
         See `:h events` for events description.
       '';
@@ -171,5 +143,38 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     '';
     write_all_buffers = true;
     debounce_delay = 1000;
+  };
+  extraConfig = cfg: {
+    # TODO: introduced 2024-10-15: remove after 24.11
+    warnings =
+      let
+        definedOpts = lib.filter (opt: lib.hasAttrByPath (lib.toList opt) cfg.settings) [
+          [
+            "execution_message"
+            "enabled"
+          ]
+          [
+            "execution_message"
+            "message"
+          ]
+          [
+            "execution_message"
+            "dim"
+          ]
+          [
+            "execution_message"
+            "cleaning_interval"
+          ]
+          [
+            "trigger_events"
+            "cancel_defered_save"
+          ]
+        ];
+      in
+      lib.optional (definedOpts != [ ]) ''
+        Nixvim(plugins.auto-save): The following settings options are no longer supported.
+        Check the plugin documentation for more details.:
+        ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
+      '';
   };
 }

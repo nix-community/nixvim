@@ -31,16 +31,6 @@
 
       settings = {
         enabled = true;
-        execution_message = {
-          enabled = true;
-          dim = 0.18;
-          cleaning_interval = 1250;
-          message.__raw = ''
-            function()
-              return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
-            end
-          '';
-        };
         trigger_events = {
           immediate_save = [
             "BufLeave"
@@ -50,7 +40,7 @@
             "InsertLeave"
             "TextChanged"
           ];
-          cancel_defered_save = [ "InsertEnter" ];
+          cancel_deferred_save = [ "InsertEnter" ];
         };
         condition = null;
         write_all_buffers = false;
