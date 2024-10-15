@@ -42,15 +42,6 @@
           # TODO: re-enable those tests when fixed
           "chktex"
           "latexindent"
-          # TODO: added 2024-10-01 re-enable when fixed
-          # broken https://github.com/NixOS/nixpkgs/issues/345331
-          "php"
-          "phan"
-          "phpstan"
-          "psalm"
-          "phpcbf"
-          "php_cs_fixer"
-          "phpcs"
         ]
         ++ lib.optionals (system == "x86_64-darwin") [
           # As of 2024-07-31, dmd is broken on x86_64-darwin
