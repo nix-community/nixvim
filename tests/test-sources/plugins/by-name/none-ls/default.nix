@@ -120,6 +120,11 @@
                 "swiftformat"
                 "swift_format"
                 "swiftlint"
+                # TODO: added 2024-10-15
+                # broken package
+                "opacheck"
+                "rego"
+                "prisma_format"
               ]
               ++ (lib.optionals pkgs.stdenv.isDarwin [
                 # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
