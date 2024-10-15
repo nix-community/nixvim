@@ -110,6 +110,10 @@ let
       sourceName = "luasnip";
     }
     {
+      pluginName = "cmp-nixpkgs-maintainers";
+      sourceName = "nixpkgs_maintainers";
+    }
+    {
       pluginName = "cmp-nvim-lsp";
       sourceName = "nvim_lsp";
     }
