@@ -21,6 +21,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [gwg313/nvim-nix] | |
 | [hbjydev/hvim] | |
 | [JMartJonesy/kickstart.nixvim] | An implementation of kickstart.nvim using nixvim |
+| [JMartJonesy/kickstart.nixvim/tree/standalone] | An implementation of kickstart.nvim using nixvim in a standalone flake |
 | [khaneliman/khanelivim] | Constantly tweaked jack of all trades development focused configuration. |
 | [MikaelFangel/nixvim-config] | An easy-setup configuration for NixVim, focused on straightforward customization |
 | [nicolas-goudry/nixvim-config] | Heavily inspired by AstroNvim |
@@ -44,6 +45,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [gwg313/nvim-nix]: https://github.com/gwg313/nvim-nix
 [hbjydev/hvim]: https://github.com/hbjydev/hvim
 [JMartJonesy/kickstart.nixvim]: https://github.com/JMartJonesy/kickstart.nixvim
+[JMartJonesy/kickstart.nixvim/tree/standalone]: https://github.com/JMartJonesy/kickstart.nixvim/tree/standalone
 [khaneliman/khanelivim]: https://github.com/khaneliman/khanelivim
 [MikaelFangel/nixvim-config]: https://github.com/MikaelFangel/nixvim-config
 [nicolas-goudry/nixvim-config]: https://github.com/nicolas-goudry/nixvim-config
