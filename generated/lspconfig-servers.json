@@ -96,6 +96,11 @@
     "name": "bashls"
   },
   {
+    "cmd": ["basics-language-server"],
+    "desc": "https://github.com/antonk52/basics-language-server/\n\nBuffer, path, and snippet completion\n\n```sh\nnpm install -g basics-language-server\n```\n",
+    "name": "basics_ls"
+  },
+  {
     "cmd": ["bazelrc-lsp"],
     "desc": "https://github.com/salesforce-misc/bazelrc-lsp\n\n`bazelrc-lsp` is a LSP for `.bazelrc` configuration files.\n\nThe `.bazelrc` file type is not detected automatically, you can register it manually (see below) or override the filetypes:\n\n```lua\nvim.filetype.add {\n  pattern = {\n    ['.*.bazelrc'] = 'bazelrc',\n  },\n}\n```\n",
     "name": "bazelrc_lsp"
@@ -195,7 +200,7 @@
   },
   {
     "cmd": ["clangd"],
-    "desc": "https://clangd.llvm.org/installation.html\n\n-   **NOTE:** Clang \\>= 11 is recommended! See\n    [#23](https://github.com/neovim/nvim-lsp/issues/23).\n\n-   If `compile_commands.json` lives in a build directory, you should\n    symlink it to the root of your source tree.\n\n        ln -s /path/to/myproject/build/compile_commands.json /path/to/myproject/\n\n-   clangd relies on a [JSON compilation\n    database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)\n    specified as compile_commands.json, see\n    https://clangd.llvm.org/installation#compile_commandsjson\n",
+    "desc": "https://clangd.llvm.org/installation.html\n\n-   **NOTE:** Clang \\>= 11 is recommended! See\n    [#23](https://github.com/neovim/nvim-lspconfig/issues/23).\n\n-   If `compile_commands.json` lives in a build directory, you should\n    symlink it to the root of your source tree.\n\n        ln -s /path/to/myproject/build/compile_commands.json /path/to/myproject/\n\n-   clangd relies on a [JSON compilation\n    database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)\n    specified as compile_commands.json, see\n    https://clangd.llvm.org/installation#compile_commandsjson\n",
     "name": "clangd"
   },
   {
@@ -779,6 +784,11 @@
     "name": "lexical"
   },
   {
+    "cmd": ["lsp-ai"],
+    "desc": "https://github.com/SilasMarvin/lsp-ai\n\nLSP-AI is an open source language server that serves as a backend for AI-powered functionality in your favorite code\neditors. It offers features like in-editor chatting with LLMs and code completions.\n\n\nYou will need to provide configuration for the inference backends and models you want to use, as well as configure\ncompletion/code actions. See the [wiki docs](https://github.com/SilasMarvin/lsp-ai/wiki/Configuration) and\n[examples](https://github.com/SilasMarvin/lsp-ai/blob/main/examples/nvim) for more information.\n",
+    "name": "lsp_ai"
+  },
+  {
     "cmd": ["ltex-ls"],
     "desc": "https://github.com/valentjn/ltex-ls\n\nLTeX Language Server: LSP language server for LanguageTool \ud83d\udd0d\u2714\ufe0f with support for LaTeX \ud83c\udf93, Markdown \ud83d\udcdd, and others\n\nTo install, download the latest [release](https://github.com/valentjn/ltex-ls/releases) and ensure `ltex-ls` is on your path.\n\nThis server accepts configuration via the `settings` key.\n\n```lua\n  settings = {\n\t\tltex = {\n\t\t\tlanguage = \"en-GB\",\n\t\t},\n\t},\n```\n\nTo support org files or R sweave, users can define a custom filetype autocommand (or use a plugin which defines these filetypes):\n\n```lua\nvim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]\n```\n",
     "name": "ltex"
@@ -1063,6 +1073,11 @@
     "cmd": ["plz", "tool", "lps"],
     "desc": "https://github.com/thought-machine/please\n\nHigh-performance extensible build system for reproducible multi-language builds.\n\nThe `plz` binary will automatically install the LSP for you on first run\n",
     "name": "please"
+  },
+  {
+    "cmd": ["poryscript-pls"],
+    "desc": "https://github.com/huderlem/poryscript-pls\n\nLanguage server for poryscript (a high level scripting language for GBA-era Pok\u00e9mon decompilation projects)\n    ",
+    "name": "poryscript_pls"
   },
   {
     "cmd": ["postgres_lsp"],

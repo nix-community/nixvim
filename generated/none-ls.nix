@@ -10,6 +10,7 @@
     "refactoring"
     "regal"
     "statix"
+    "textlint"
     "ts_node_action"
   ];
   completion = [

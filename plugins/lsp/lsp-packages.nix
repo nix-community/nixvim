@@ -8,6 +8,7 @@
     "awk_ls"
     "azure_pipelines_ls"
     "bacon_ls"
+    "basics_ls"
     "bazelrc_lsp"
     "bicep" # Bicep.Cli is packaged, but not Bicep.LangServer
     "bitbake_ls"
@@ -105,6 +106,7 @@
     "pico8_ls"
     "pkgbuild_language_server"
     "please"
+    "poryscript_pls"
     "powershell_es"
     "prismals"
     "prolog_ls"
@@ -262,6 +264,7 @@
     kotlin_language_server = "kotlin-language-server";
     leanls = "lean4";
     lemminx = "lemminx";
+    lsp_ai = "lsp-ai";
     ltex = "ltex-ls";
     lua_ls = "lua-language-server";
     markdown_oxide = "markdown-oxide";
