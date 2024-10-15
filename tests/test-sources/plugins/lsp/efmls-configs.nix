@@ -28,6 +28,9 @@
           # Swift broken everywhere atm
           "swiftformat"
           "swiftlint"
+          # TODO: added 2024-10-15
+          # re-enable after fixed
+          "dmd"
         ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13
