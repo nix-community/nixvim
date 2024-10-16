@@ -16,12 +16,17 @@
           settings.sources =
             with pkgs.lib;
             let
-              disabledSources = [
-                # We do not provide the required HF_API_KEY environment variable.
-                "cmp_ai"
-                # Triggers the warning complaining about treesitter highlighting being disabled
-                "otter"
-              ] ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
+              disabledSources =
+                [
+                  # We do not provide the required HF_API_KEY environment variable.
+                  "cmp_ai"
+                  # Triggers the warning complaining about treesitter highlighting being disabled
+                  "otter"
+                ]
+                ++ optionals pkgs.stdenv.hostPlatform.isDarwin [
+                  "nixpkgs_maintainers"
+                ]
+                ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
             in
             pipe config.cmpSourcePlugins [
               # All known source names
