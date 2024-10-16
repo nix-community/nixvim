@@ -785,7 +785,9 @@
   },
   {
     "cmd": ["lsp-ai"],
-    "desc": "https://github.com/SilasMarvin/lsp-ai\n\nLSP-AI is an open source language server that serves as a backend for AI-powered functionality in your favorite code\neditors. It offers features like in-editor chatting with LLMs and code completions.\n\n\nYou will need to provide configuration for the inference backends and models you want to use, as well as configure\ncompletion/code actions. See the [wiki docs](https://github.com/SilasMarvin/lsp-ai/wiki/Configuration) and\n[examples](https://github.com/SilasMarvin/lsp-ai/blob/main/examples/nvim) for more information.\n",
+    "desc": [
+      "https://github.com/SilasMarvin/lsp-ai\n\nLSP-AI is an open source language server that serves as a backend for AI-powered functionality in your favorite code\neditors. It offers features like in-editor chatting with LLMs and code completions.\n\n\nYou will need to provide configuration for the inference backends and models you want to use, as well as configure\ncompletion/code actions. See the [wiki docs](https://github.com/SilasMarvin/lsp-ai/wiki/Configuration) and\n[examples](https://github.com/SilasMarvin/lsp-ai/blob/main/examples/nvim) for more information.\n"
+    ],
     "name": "lsp_ai"
   },
   {
