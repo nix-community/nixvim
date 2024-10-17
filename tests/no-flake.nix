@@ -1,6 +1,7 @@
 {
+  nixvim ? "${self}",
+  self ? throw "either supply `self` or `nixvim`",
   system,
-  nixvim,
   mkTestDerivationFromNvim,
 }:
 let

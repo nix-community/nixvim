@@ -1,13 +1,15 @@
 # Collects the various test modules in tests/test-sources/ and groups them into a number of test derivations
 {
-  lib ? pkgs.lib,
+  callPackage,
+  callTest,
   helpers,
+  lib ? pkgs.lib,
   pkgs,
   pkgsUnfree,
 }:
 let
-  fetchTests = import ./fetch-tests.nix { inherit lib pkgs helpers; };
-  test-derivation = import ../lib/tests.nix { inherit pkgs lib; };
+  fetchTests = callTest ./fetch-tests.nix { };
+  test-derivation = callPackage ../lib/tests.nix { };
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   moduleToTest =
