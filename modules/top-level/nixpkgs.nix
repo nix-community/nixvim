@@ -57,29 +57,28 @@ in
     };
   };
 
-  config = {
-    # For now we only set this when `nixpkgs.pkgs` is defined
-    # TODO: construct a default pkgs instance from pkgsPath and cfg options
-    # https://github.com/nix-community/nixvim/issues/1784
-    _module.args = lib.optionalAttrs opt.pkgs.isDefined {
+  config =
+    let
+      # TODO: construct a default pkgs instance from pkgsPath and cfg options
+      # https://github.com/nix-community/nixvim/issues/1784
+
+      finalPkgs =
+        if opt.pkgs.isDefined then
+          cfg.pkgs
+        else
+          # TODO: Remove once pkgs can be constructed internally
+          throw ''
+            nixvim: `nixpkgs.pkgs` is not defined. In the future, this option will be optional.
+            Currently a pkgs instance must be evaluated externally and assigned to `nixpkgs.pkgs` option.
+          '';
+    in
+    {
       # We explicitly set the default override priority, so that we do not need
       # to evaluate finalPkgs in case an override is placed on `_module.args.pkgs`.
       # After all, to determine a definition priority, we need to evaluate `._type`,
       # which is somewhat costly for Nixpkgs. With an explicit priority, we only
       # evaluate the wrapper to find out that the priority is lower, and then we
       # don't need to evaluate `finalPkgs`.
-      pkgs = lib.mkOverride lib.modules.defaultOverridePriority cfg.pkgs.__splicedPackages;
+      _module.args.pkgs = lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
     };
-
-    assertions = [
-      {
-        # TODO: Remove or rephrase once pkgs can be constructed internally
-        assertion = config._module.args ? pkgs;
-        message = ''
-          `nixpkgs.pkgs` is not defined. In the future, this option will be optional.
-          Currently a pkgs instance must be evaluated externally and assigned to `nixpkgs.pkgs` option.
-        '';
-      }
-    ];
-  };
 }
