@@ -55,6 +55,47 @@ in
         > Use this option with care.
       '';
     };
+
+    overlays = lib.mkOption {
+      type =
+        let
+          overlayType = lib.mkOptionType {
+            name = "nixpkgs-overlay";
+            description = "nixpkgs overlay";
+            check = lib.isFunction;
+            merge = lib.mergeOneOption;
+          };
+        in
+        lib.types.listOf overlayType;
+      default = [ ];
+      # FIXME: use an example that is topical for vim
+      example = lib.literalExpression ''
+        [
+          (self: super: {
+            openssh = super.openssh.override {
+              hpnSupport = true;
+              kerberos = self.libkrb5;
+            };
+          })
+        ]
+      '';
+      description = ''
+        List of overlays to apply to Nixpkgs.
+        This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
+
+        For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+        <!-- TODO: Remove -->
+        Overlays specified using the {option}`nixpkgs.overlays` option will be
+        applied after the overlays that were already included in `nixpkgs.pkgs`.
+
+        <!--
+          TODO:
+          If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays`
+          will be applied after the overlays that were already included in `nixpkgs.pkgs`.
+        -->
+      '';
+    };
   };
 
   config =
@@ -64,7 +105,7 @@ in
 
       finalPkgs =
         if opt.pkgs.isDefined then
-          cfg.pkgs
+          cfg.pkgs.appendOverlays cfg.overlays
         else
           # TODO: Remove once pkgs can be constructed internally
           throw ''
