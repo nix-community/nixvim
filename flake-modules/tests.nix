@@ -1,4 +1,9 @@
-{ self, helpers, ... }:
+{
+  self,
+  lib,
+  helpers,
+  ...
+}:
 {
   perSystem =
     {
@@ -11,6 +16,21 @@
     }:
     let
       inherit (self'.legacyPackages) nixvimConfiguration;
+
+      autoArgs = pkgs // {
+        inherit
+          helpers
+          lib
+          makeNixvimWithModule
+          nixvimConfiguration
+          pkgsUnfree
+          self
+          system
+          ;
+      };
+
+      callTest = lib.callPackageWith autoArgs;
+      callTests = lib.callPackagesWith autoArgs;
     in
     {
       checks = {
@@ -52,6 +72,6 @@
         package-options = pkgs.callPackage ../tests/package-options.nix { inherit nixvimConfiguration; };
 
         lsp-all-servers = pkgs.callPackage ../tests/lsp-servers.nix { inherit nixvimConfiguration; };
-      } // import ../tests { inherit pkgs pkgsUnfree helpers; };
+      } // callTests ../tests { };
     };
 }
