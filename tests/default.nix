@@ -1,4 +1,6 @@
 {
+  self, # This flake
+  system,
   lib ? pkgs.lib,
   helpers,
   pkgs,
@@ -16,6 +18,11 @@ let
       module = {
         _file = file;
         imports = [ module ];
+        _module.args = {
+          # Give tests access to the flake
+          inherit self system;
+          inherit (self) inputs;
+        };
       };
       pkgs = pkgsUnfree;
     };
