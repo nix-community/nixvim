@@ -55,6 +55,76 @@ in
         > Use this option with care.
       '';
     };
+
+    overlays = lib.mkOption {
+      type =
+        let
+          overlayType = lib.mkOptionType {
+            name = "nixpkgs-overlay";
+            description = "nixpkgs overlay";
+            check = lib.isFunction;
+            merge = lib.mergeOneOption;
+          };
+        in
+        lib.types.listOf overlayType;
+      default = [ ];
+      # First example from https://nixos.org/manual/nixpkgs/unstable/#what-if-your-favourite-vim-plugin-isnt-already-packaged
+      # Second example from https://github.com/nix-community/nixvim/pull/2430#discussion_r1805700738
+      # Third example from https://github.com/atimofeev/nixos-config/blob/0b1c1c47c4359d6a2aa9a5eeecb32fa89ad08c88/overlays/neovim-unwrapped.nix
+      example = lib.literalExpression ''
+        [
+
+          # Add a vim plugin that isn't packaged in nixpkgs
+          (final: prev: {
+            easygrep = final.vimUtils.buildVimPlugin {
+              name = "vim-easygrep";
+              src = final.fetchFromGitHub {
+                owner = "dkprice";
+                repo = "vim-easygrep";
+                rev = "d0c36a77cc63c22648e792796b1815b44164653a";
+                hash = "sha256-bL33/S+caNmEYGcMLNCanFZyEYUOUmSsedCVBn4tV3g=";
+              };
+            };
+          })
+
+          # Override neovim-unwrapped with one from a flake input
+          # Using `stdenv.hostPlatform` to access `system`
+          (final: prev: {
+            neovim-unwrapped =
+              inputs.neovim-nightly-overlay.packages.''${final.stdenv.hostPlatform.system}.default;
+          })
+
+          # Override neovim-unwrapped to tweak its desktop entry
+          (final: prev: {
+            neovim-unwrapped = prev.neovim-unwrapped.overrideAttrs (old: {
+              postInstall = old.postInstall or "" + '''
+                substituteInPlace $out/share/applications/nvim.desktop \
+                  --replace "TryExec=nvim" "" \
+                  --replace "Terminal=true" "Terminal=false" \
+                  --replace "Exec=nvim %F" "Exec=kitty -e nvim %F"
+              ''';
+            });
+          })
+
+        ]
+      '';
+      description = ''
+        List of overlays to apply to Nixpkgs.
+        This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
+
+        For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+        <!-- TODO: Remove -->
+        Overlays specified using the {option}`nixpkgs.overlays` option will be
+        applied after the overlays that were already included in `nixpkgs.pkgs`.
+
+        <!--
+          TODO:
+          If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays`
+          will be applied after the overlays that were already included in `nixpkgs.pkgs`.
+        -->
+      '';
+    };
   };
 
   config =
@@ -64,7 +134,7 @@ in
 
       finalPkgs =
         if opt.pkgs.isDefined then
-          cfg.pkgs
+          cfg.pkgs.appendOverlays cfg.overlays
         else
           # TODO: Remove once pkgs can be constructed internally
           throw ''

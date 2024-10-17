@@ -7,6 +7,8 @@
   linkFarm,
   pkgs,
   pkgsUnfree,
+  self,
+  system,
 }:
 let
   fetchTests = callTest ./fetch-tests.nix { };
@@ -20,6 +22,11 @@ let
       module = {
         _file = file;
         imports = [ module ];
+        _module.args = {
+          # Give tests access to the flake
+          inherit self system;
+          inherit (self) inputs;
+        };
       };
       pkgs = pkgsUnfree;
     };
