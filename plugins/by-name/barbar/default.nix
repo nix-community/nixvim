@@ -206,7 +206,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           };
           lua = true;
         };
-        apply = v: if v == null then null else keymaps.removeDeprecatedMapAttrs v;
         description = "Keymap for function Buffer${funcName}";
       }
     ) keymapsActions;
