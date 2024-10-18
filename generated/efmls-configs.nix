@@ -1,6 +1,48 @@
 # WARNING: DO NOT EDIT
 # This file is generated with packages.<system>.efmls-configs-sources, which is run automatically by CI
 {
+  HTML = {
+    formatter = {
+      lang = "HTML";
+      possible = [ ];
+    };
+    linter = {
+      lang = "HTML";
+      possible = [
+        "markuplint"
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
+  JSON = {
+    formatter = {
+      lang = "JSON";
+      possible = [ ];
+    };
+    linter = {
+      lang = "JSON";
+      possible = [
+        "jsonlint"
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
   all = {
     formatter = {
       lang = "all languages";
@@ -327,6 +369,28 @@
       lang = "docker";
       possible = [
         "hadolint"
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
+  elixir = {
+    formatter = {
+      lang = "elixir";
+      possible = [
+        "mix"
+      ];
+    };
+    linter = {
+      lang = "elixir";
+      possible = [
         "alex"
         "codespell"
         "cspell"
@@ -916,6 +980,7 @@
         "black"
         "isort"
         "ruff"
+        "ruff_sort"
         "yapf"
       ];
     };
@@ -1178,6 +1243,7 @@
       lang = "sql";
       possible = [
         "sql-formatter"
+        "sqlfluff"
       ];
     };
     linter = {
