@@ -28,25 +28,45 @@ let
     setAttrByPath
     ;
   cfg = config.programs.nixvim;
+
+  # TODO: Find a way to document the options declared here
+  nixpkgsModule =
+    { config, ... }:
+    {
+      _file = ./_shared.nix;
+
+      options.nixpkgs = {
+        useGlobalPackages = lib.mkOption {
+          type = lib.types.bool;
+          default = true; # TODO: Added 2024-10-20; switch to false one release after adding a deprecation warning
+          description = ''
+            Whether Nixvim should use the host configuration's `pkgs` instance.
+
+            The host configuration is usually home-manager, nixos, or nix-darwin.
+
+            When false, an instance of nixpkgs will be constructed by nixvim.
+          '';
+        };
+      };
+
+      config = {
+        nixpkgs = {
+          # Use global packages by default in nixvim's submodule
+          pkgs = lib.mkIf config.nixpkgs.useGlobalPackages (lib.mkForce pkgs);
+
+          # Inherit platform spec
+          # FIXME: buildPlatform can't use option-default because it already has a default
+          #        (it defaults to hostPlatform)...
+          hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
+          buildPlatform = lib.mkDefault pkgs.stdenv.buildPlatform;
+        };
+      };
+    };
   nixvimConfiguration = config.lib.nixvim.modules.evalNixvim (
     evalArgs
     // {
       modules = evalArgs.modules or [ ] ++ [
-        {
-          _file = ./_shared.nix;
-
-          nixpkgs = {
-            # Use global packages by default in nixvim's submodule
-            # TODO: `useGlobalPackages` option and/or deprecate using host packages?
-            pkgs = lib.mkDefault pkgs;
-
-            # Inherit platform spec
-            # FIXME: buildPlatform can't use option-default because it already has a default
-            #        (it defaults to hostPlatform)...
-            hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
-            buildPlatform = lib.mkDefault pkgs.stdenv.buildPlatform;
-          };
-        }
+        nixpkgsModule
       ];
     }
   );
