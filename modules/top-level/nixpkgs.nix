@@ -41,8 +41,9 @@ in
       #   }
       # '';
       defaultText = lib.literalMD ''
-        The `pkgs` inherited from your host config (i.e. NixOS, home-manager, or nix-darwin),
-        or the `pkgs` supplied to `makeNixvimWithModule` when building a standalone nixvim.
+        If `useGlobalPackages` is true, `pkgs` is inherited from your host config
+        (i.e. NixOS, home-manager, or nix-darwin).
+        Or the `pkgs` supplied to `makeNixvimWithModule` when building a standalone nixvim.
 
         > [!CAUTION]
         > This default will be removed in a future version of nixvim
