@@ -23,30 +23,33 @@ let
     map
     mkIf
     mkMerge
-    mkOption
     optionalAttrs
     setAttrByPath
     ;
   cfg = config.programs.nixvim;
+
+  # FIXME: buildPlatform can't use mkOptionDefault because it already defaults to hostPlatform
+  buildPlatformPrio = (lib.mkOptionDefault null).priority - 1;
+
+  nixpkgsModule =
+    { config, ... }:
+    {
+      _file = ./_shared.nix;
+      nixpkgs = {
+        # Use global packages in nixvim's submodule
+        pkgs = lib.mkIf config.nixpkgs.useGlobalPackages (lib.mkDefault pkgs);
+
+        # Inherit platform spec
+        hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
+        buildPlatform = lib.mkOverride buildPlatformPrio pkgs.stdenv.buildPlatform;
+      };
+    };
+
   nixvimConfiguration = config.lib.nixvim.modules.evalNixvim (
     evalArgs
     // {
       modules = evalArgs.modules or [ ] ++ [
-        {
-          _file = ./_shared.nix;
-
-          nixpkgs = {
-            # Use global packages by default in nixvim's submodule
-            # TODO: `useGlobalPackages` option and/or deprecate using host packages?
-            pkgs = lib.mkDefault pkgs;
-
-            # Inherit platform spec
-            # FIXME: buildPlatform can't use option-default because it already has a default
-            #        (it defaults to hostPlatform)...
-            hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
-            buildPlatform = lib.mkDefault pkgs.stdenv.buildPlatform;
-          };
-        }
+        nixpkgsModule
       ];
     }
   );

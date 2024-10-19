@@ -33,6 +33,49 @@ let
 
   testModule = name: module: (evalModule name module).config.build.test;
 
+  # Unlike above, this imports the full nixvimConfiguration,
+  # allowing us to integration test the wrapper module
+  #
+  # This means `pkgs` probably gets used "for real", e.g. in the `files` module
+  testWrappers =
+    name: pkgs: module:
+    linkFarmFromDrvs name (
+      lib.mapAttrsToList
+        (
+          name': wrapper:
+          let
+            wrapperConfiguration = lib.evalModules {
+              modules = lib.toList module ++ [
+                wrapper
+                { _module.check = false; }
+                { _module.args.pkgs = pkgs; }
+                {
+                  # Stub `lib` option, required for bootstrapping wrapper module
+                  options.lib = lib.mkOption {
+                    type = with lib.types; attrsOf attrs;
+                    default = { };
+                  };
+                }
+                {
+                  programs.nixvim.test = {
+                    name = "${name}-${name'}";
+                    buildNixvim = false;
+                    runNvim = false;
+                    runCommand = runCommandLocal;
+                  };
+                }
+              ];
+            };
+          in
+          wrapperConfiguration.config.programs.nixvim.build.test
+        )
+        {
+          nixos = self.nixosModules.default;
+          hm = self.homeManagerModules.default;
+          nix-darwin = self.nixDarwinModules.default;
+        }
+    );
+
 in
 linkFarmFromDrvs "nixpkgs-module-test" [
 
@@ -147,5 +190,38 @@ linkFarmFromDrvs "nixpkgs-module-test" [
       ];
     }
   ))
+
+  (testWrappers "useGlobalPackages-empty" pkgs { })
+  (testWrappers "useGlobalPackages-true" pkgs {
+    programs.nixvim.nixpkgs.useGlobalPackages = true;
+  })
+  (testWrappers "useGlobalPackages-false" pkgs {
+    programs.nixvim.nixpkgs.useGlobalPackages = false;
+  })
+  (testWrappers "useGlobalPackages-with-pkgs" pkgs {
+    _file = "test-file";
+    programs.nixvim = {
+      nixpkgs.useGlobalPackages = true;
+      nixpkgs.pkgs = pkgs;
+      test.assertions = expect: [
+        (expect "count" 1)
+        (expect "any" "`programs.nixvim.nixpkgs.useGlobalPackages' is enabled, but `programs.nixvim.nixpkgs.pkgs' is overridden.")
+        (expect "any" "- In `test-file'")
+      ];
+    };
+  })
+  (testWrappers "useGlobalPackages-with-pkgs-arg" pkgs {
+    _file = "test-file";
+    programs.nixvim = {
+      _module.args.pkgs = lib.mkForce pkgs;
+      nixpkgs.useGlobalPackages = true;
+      test.assertions = expect: [
+        (expect "count" 1)
+        (expect "any" "`programs.nixvim.nixpkgs.useGlobalPackages' is enabled, but `programs.nixvim._module.args.pkgs' is overridden.")
+        # FIXME: can't showDefs for an attrOf an option
+        # (expect "any" "- In `test-file'")
+      ];
+    };
+  })
 
 ]

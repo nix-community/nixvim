@@ -11,4 +11,8 @@
       };
     };
   };
+
+  imports = [
+    ./nixpkgs.nix
+  ];
 }
