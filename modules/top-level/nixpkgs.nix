@@ -54,17 +54,7 @@ in
       description = ''
         If set, the `pkgs` argument to all Nixvim modules is the value of this option.
 
-        <!-- TODO: remove -->
-        If unset, an assertion will trigger. In the future a `pkgs` instance will be constructed.
-
-        <!--
-          TODO:
-          If unset, the pkgs argument is determined as shown in the default value for this option.
-
-          TODO:
-          The default value imports the Nixpkgs input specified in Nixvim's `flake.lock`.
-          The `config`, `overlays`, `localSystem`, and `crossSystem` come from this option's siblings.
-        -->
+        If unset, the `pkgs` argument is determined by importing `nixpkgs.source`.
 
         This option can be used by external applications to increase the performance of evaluation,
         or to create packages that depend on a container that should be built with the exact same
@@ -160,15 +150,8 @@ in
 
         For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
 
-        <!-- TODO: Remove -->
-        Overlays specified using the {option}`nixpkgs.overlays` option will be
-        applied after the overlays that were already included in `nixpkgs.pkgs`.
-
-        <!--
-          TODO:
-          If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays`
-          will be applied after the overlays that were already included in `nixpkgs.pkgs`.
-        -->
+        If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays`
+        will be applied after the overlays that were already included in `nixpkgs.pkgs`.
       '';
     };
 
@@ -228,26 +211,33 @@ in
 
         Ignored when `nixpkgs.pkgs` is set.
       '';
-
-      # FIXME: This is a stub option for now
-      internal = true;
     };
   };
 
   config =
     let
-      # TODO: construct a default pkgs instance from pkgsPath and cfg options
-      # https://github.com/nix-community/nixvim/issues/1784
-
       finalPkgs =
         if opt.pkgs.isDefined then
           cfg.pkgs.appendOverlays cfg.overlays
         else
-          # TODO: Remove once pkgs can be constructed internally
-          throw ''
-            nixvim: `nixpkgs.pkgs` is not defined. In the future, this option will be optional.
-            Currently a pkgs instance must be evaluated externally and assigned to `nixpkgs.pkgs` option.
-          '';
+          let
+            args = {
+              inherit (cfg) config overlays;
+            };
+
+            # Configure `localSystem` and `crossSystem` as required
+            systemArgs =
+              if cfg.buildPlatform == cfg.hostPlatform then
+                {
+                  localSystem = cfg.hostPlatform;
+                }
+              else
+                {
+                  localSystem = cfg.buildPlatform;
+                  crossSystem = cfg.hostPlatform;
+                };
+          in
+          import cfg.source (args // systemArgs);
     in
     {
       # We explicitly set the default override priority, so that we do not need
@@ -257,11 +247,6 @@ in
       # evaluate the wrapper to find out that the priority is lower, and then we
       # don't need to evaluate `finalPkgs`.
       _module.args.pkgs = lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
-
-      # FIXME: This is a stub option for now
-      warnings = lib.optional (
-        opt.source.isDefined && opt.source.highestPrio < (lib.mkOptionDefault null).priority
-      ) "Defining the option `nixpkgs.source` currently has no effect";
 
       assertions = [
         {
