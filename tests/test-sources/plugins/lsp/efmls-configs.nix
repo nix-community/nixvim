@@ -50,11 +50,12 @@
           "dmd"
         ];
 
+      # TODO: respect unpackaged from generated
       unpackaged =
         [
           "blade_formatter"
-          "cspell"
           "cljstyle"
+          "cspell"
           "dartanalyzer"
           "debride"
           "deno_fmt"
@@ -63,12 +64,15 @@
           "forge_fmt"
           "gersemi"
           "js_standard"
+          "markuplint"
+          "mix"
           "pint"
           "prettier_eslint"
           "prettier_standard"
           "redpen"
           "reek"
           "rome"
+          "ruff_sort"
           "slim_lint"
           "solhint"
           "sorbet"
