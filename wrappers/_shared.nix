@@ -1,4 +1,6 @@
 {
+  # Nixvim's flake
+  self,
   # Extra args for the `evalNixvim` call that produces the type for `programs.nixvim`
   evalArgs ? { },
   # Option path where extraFiles should go
@@ -32,11 +34,17 @@ let
     evalArgs
     // {
       modules = evalArgs.modules or [ ] ++ [
-        # Use global packages by default in nixvim's submodule
-        # TODO: `useGlobalPackages` option and/or deprecate using host packages?
         {
           _file = ./_shared.nix;
-          nixpkgs.pkgs = lib.mkDefault pkgs;
+
+          nixpkgs = {
+            # Use global packages by default in nixvim's submodule
+            # TODO: `useGlobalPackages` option and/or deprecate using host packages?
+            pkgs = lib.mkDefault pkgs;
+
+            # TODO: Handle this in evalNixvim
+            source = lib.mkOptionDefault self.inputs.nixpkgs;
+          };
         }
       ];
     }

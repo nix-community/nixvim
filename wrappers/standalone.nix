@@ -23,6 +23,8 @@ let
           {
             _file = ./standalone.nix;
             nixpkgs.pkgs = lib.mkDefault pkgs;
+            # TODO: Handle this in evalNixvim
+            nixpkgs.source = lib.mkOptionDefault self.inputs.nixpkgs;
           }
         ];
         inherit extraSpecialArgs;

@@ -125,6 +125,24 @@ in
         -->
       '';
     };
+
+    # NOTE:Custom nixvim option, not present in nixos
+    source = lib.mkOption {
+      type = lib.types.path;
+      defaultText = lib.literalMD "Nixvim's flake `input.nixpkgs`";
+      description = ''
+        The path to import Nixpkgs from.
+
+        <!--
+          TODO:
+          If you're setting a custom [](#opt-nixpkgs.pkgs) or `_module.args.pkgs`, setting this to something with `rev` and
+          `shortRev` attributes (such as a flake input or `builtins.fetchGit` result) will also set `system.nixpkgsRevision`
+          and related options.
+        -->
+
+        Ignored when `nixpkgs.pkgs` is set.
+      '';
+    };
   };
 
   config =
