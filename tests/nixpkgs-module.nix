@@ -36,7 +36,51 @@ let
 in
 linkFarmFromDrvs "nixpkgs-module-test" [
 
-  # TODO: expect not setting `nixpkgs.pkgs` to throw
+  # Test that pkgs-config is affected by `nixpkgs.config`
+  (testModule "nixpkgs-config" (
+    { pkgs, ... }:
+    {
+      nixpkgs.config = {
+        permittedInsecurePackages = [
+          "foobar123"
+        ];
+      };
+
+      nixpkgs.hostPlatform = {
+        inherit (stdenv.hostPlatform) system;
+      };
+
+      assertions = [
+        {
+          assertion = pkgs.config.permittedInsecurePackages == [ "foobar123" ];
+          message = ''
+            Expected `pkgs.config.permittedInsecurePackages` to match [ "foobar123" ], but found:
+            ${lib.generators.toPretty { } pkgs.config.permittedInsecurePackages}'';
+        }
+      ];
+    }
+  ))
+
+  # Test that a nixpkgs revision can be specified using `nixpkgs.source`
+  (testModule "nixpkgs-source" (
+    { pkgs, ... }:
+    {
+      nixpkgs.source = ./nixpkgs-mock.nix;
+
+      nixpkgs.hostPlatform = {
+        inherit (stdenv.hostPlatform) system;
+      };
+
+      assertions = [
+        {
+          assertion = pkgs.mock or false;
+          message = "Expected `pkgs.mock` to be true, but ${
+            if pkgs ? mock then "found " + lib.generators.toPretty { } pkgs.mock else "isn't present"
+          }";
+        }
+      ];
+    }
+  ))
 
   (testModule "nixpkgs-overlays" (
     { pkgs, ... }:
