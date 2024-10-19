@@ -44,6 +44,12 @@ let
 
             # TODO: Handle this in evalNixvim
             source = lib.mkOptionDefault self.inputs.nixpkgs;
+
+            # Inherit platform spec
+            # FIXME: buildPlatform can't use option-default because it already has a default
+            #        (it defaults to hostPlatform)...
+            hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
+            buildPlatform = lib.mkDefault pkgs.stdenv.buildPlatform;
           };
         }
       ];
