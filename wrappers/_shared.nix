@@ -32,10 +32,11 @@ let
     evalArgs
     // {
       modules = evalArgs.modules or [ ] ++ [
-        # Use global packages by default in nixvim's submodule
-        # TODO: `useGlobalPackages` option and/or deprecate using host packages?
         {
           _file = ./_shared.nix;
+
+          # Use global packages by default in nixvim's submodule
+          # TODO: `useGlobalPackages` option and/or deprecate using host packages?
           nixpkgs.pkgs = lib.mkDefault pkgs;
         }
       ];
