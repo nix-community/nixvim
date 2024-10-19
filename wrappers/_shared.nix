@@ -35,9 +35,17 @@ let
         {
           _file = ./_shared.nix;
 
-          # Use global packages by default in nixvim's submodule
-          # TODO: `useGlobalPackages` option and/or deprecate using host packages?
-          nixpkgs.pkgs = lib.mkDefault pkgs;
+          nixpkgs = {
+            # Use global packages by default in nixvim's submodule
+            # TODO: `useGlobalPackages` option and/or deprecate using host packages?
+            pkgs = lib.mkDefault pkgs;
+
+            # Inherit platform spec
+            # FIXME: buildPlatform can't use option-default because it already has a default
+            #        (it defaults to hostPlatform)...
+            hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
+            buildPlatform = lib.mkDefault pkgs.stdenv.buildPlatform;
+          };
         }
       ];
     }
