@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   ...
 }:
 let
@@ -20,6 +21,16 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     Some default keybindings have additional dependencies you may need to install or enable.
     See the [upstream docs](https://github.com/mikavilpas/yazi.nvim?tab=readme-ov-file#%EF%B8%8F-keybindings) for details.
   '';
+
+  extraOptions = {
+    yaziPackage = lib.mkPackageOption pkgs "yazi" {
+      nullable = true;
+    };
+  };
+
+  extraConfig = cfg: {
+    extraPackages = [ cfg.yaziPackage ];
+  };
 
   settingsOptions = {
     log_level = defaultNullOpts.mkLogLevel' {
