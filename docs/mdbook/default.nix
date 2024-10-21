@@ -208,7 +208,7 @@ let
     nixvimOptions = mapModulesToString (
       name: opts:
       let
-        isBranch = if name == "index" then true else opts.hasComponents && opts.index.options != { };
+        isBranch = name == "index" || (opts.hasComponents && opts.index.options != { });
 
         path =
           if isBranch then
@@ -218,9 +218,9 @@ let
           else
             "";
 
-        indentLevel = with builtins; length (filter isString (split "/" opts.index.path)) - 1;
+        indentLevel = lib.count (c: c == "/") (lib.stringToCharacters opts.index.path);
 
-        padding = lib.concatStrings (builtins.genList (_: "\t") indentLevel);
+        padding = lib.strings.replicate indentLevel "\t";
       in
       "${padding}- [${name}](${path})"
     ) docs.modules;
