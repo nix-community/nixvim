@@ -42,13 +42,6 @@ let
     ];
   };
 
-  hmOptions = builtins.removeAttrs (lib.evalModules {
-    modules = [
-      ../wrappers/modules/hm.nix
-      { _module.check = false; } # Ignore missing option declarations
-    ];
-  }).options [ "_module" ];
-
   options-json =
     (pkgs.nixosOptionsDoc {
       inherit (evaledModules) options;
@@ -83,7 +76,7 @@ in
     # Do not check if documentation builds fine on darwin as it fails:
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgs.callPackage ./mdbook {
-      inherit evaledModules hmOptions transformOptions;
+      inherit evaledModules transformOptions;
       # TODO: Find how to handle stable when 24.11 lands
       search = mkSearch "/nixvim/search/";
     };

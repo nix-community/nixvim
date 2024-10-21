@@ -4,7 +4,6 @@
   evaledModules,
   nixosOptionsDoc,
   transformOptions,
-  hmOptions,
   search,
 }:
 let
@@ -227,6 +226,29 @@ let
     ) docs.modules;
   };
 
+  wrapperOptions =
+    lib.genAttrs
+      [
+        "hm"
+        "nixos"
+        "darwin"
+      ]
+      (
+        name:
+        let
+          configuration = lib.evalModules {
+            modules = [
+              ../../wrappers/modules/${name}.nix
+              {
+                # Ignore definitions for missing options
+                _module.check = false;
+              }
+            ];
+          };
+        in
+        removeUnwanted configuration.options
+      );
+
   prepareMD = ''
     # Copy inputs into the build directory
     cp -r --no-preserve=all $inputs/* ./
@@ -243,8 +265,10 @@ let
     substituteInPlace ./SUMMARY.md \
       --replace-fail "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
 
-    substituteInPlace ./modules/hm.md \
-      --replace-fail "@HM_OPTIONS@" "$(cat ${mkMDDoc hmOptions})"
+    substituteInPlace ./modules/wrapper-options.md \
+      --replace-fail "@NIXOS_OPTIONS@" "$(cat ${mkMDDoc wrapperOptions.nixos})" \
+      --replace-fail "@HM_OPTIONS@" "$(cat ${mkMDDoc wrapperOptions.hm})" \
+      --replace-fail "@DARWIN_OPTIONS@" "$(cat ${mkMDDoc wrapperOptions.darwin})"
   '';
 in
 pkgs.stdenv.mkDerivation {

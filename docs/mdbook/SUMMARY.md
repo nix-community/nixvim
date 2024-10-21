@@ -11,7 +11,7 @@
 
 # Platforms
 
-- [Home Manager Usage](./modules/hm.md)
+- [Platform-specific options](./modules/wrapper-options.md)
 - [Standalone Usage](./modules/standalone.md)
 
 # Options
