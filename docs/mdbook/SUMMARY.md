@@ -1,5 +1,7 @@
 # Structure for nixvim docs
 
+- [Home](./index.md)
+
 # User guide
 
 - [Installation](./user-guide/install.md)
