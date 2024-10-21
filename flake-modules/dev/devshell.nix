@@ -13,6 +13,7 @@
     }:
     lib.optionalAttrs (inputs.devshell ? flakeModule) {
       devshells.default = {
+        packages = [ pkgs.python3 ];
         devshell.startup.pre-commit.text = config.pre-commit.installationScript;
 
         commands =
