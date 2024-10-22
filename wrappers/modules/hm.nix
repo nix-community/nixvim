@@ -17,5 +17,6 @@
   config = {
     wrapRc = lib.mkOptionDefault false;
     impureRtp = lib.mkOptionDefault true;
+    meta.wrapper.name = "home-manager";
   };
 }

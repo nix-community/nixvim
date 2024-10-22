@@ -5,4 +5,8 @@
   };
 
   imports = [ ./shared.nix ];
+
+  config = {
+    meta.wrapper.name = "NixOS";
+  };
 }

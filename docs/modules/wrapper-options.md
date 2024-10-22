@@ -8,17 +8,5 @@ See [Standalone Usage](./standalone.md) for more info.
 
 There are a few wrapper specific options that are documented below:
 
-## NixOS
-
-@NIXOS_OPTIONS@
-
-## home-manager
-
-@HM_OPTIONS@
-
-## nix-darwin
-
-@DARWIN_OPTIONS@
-
-<!-- TODO: Add @STANDALONE_OPTIONS@ if we ever have standalone-specific options -->
+@WRAPPER_OPTIONS@
 
