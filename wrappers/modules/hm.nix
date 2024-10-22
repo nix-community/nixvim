@@ -12,7 +12,7 @@
     };
   };
 
-  imports = [ ./enable.nix ];
+  imports = [ ./shared.nix ];
 
   config = {
     wrapRc = lib.mkOptionDefault false;

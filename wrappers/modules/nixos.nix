@@ -4,5 +4,5 @@
     defaultEditor = lib.mkEnableOption "nixvim as the default editor";
   };
 
-  imports = [ ./enable.nix ];
+  imports = [ ./shared.nix ];
 }

@@ -1,3 +1,3 @@
 {
-  imports = [ ./enable.nix ];
+  imports = [ ./shared.nix ];
 }
