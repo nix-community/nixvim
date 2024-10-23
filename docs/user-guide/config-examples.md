@@ -7,7 +7,7 @@ Take a look at these configuration examples below.
 <!-- TODO: add info about `kickstart.nixvim` -->
 
 **Note:**\
-Most of those configurations are using a [standalone build](../modules/standalone.html), however,
+Most of those configurations are using a [standalone build](../platforms/standalone.html), however,
 all of the nixvim options are accessible no matter how you are using it (flake, NixOS/HM module, nix-darwin...).
 
 | Config | Comment |

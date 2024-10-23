@@ -11,8 +11,8 @@
 
 # Platforms
 
-- [Platform-specific options](./modules/wrapper-options.md)
-- [Standalone Usage](./modules/standalone.md)
+- [Platform-specific options](./platforms/wrapper-options.md)
+- [Standalone Usage](./platforms/standalone.md)
 
 # Options
 

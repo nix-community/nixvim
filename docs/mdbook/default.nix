@@ -228,7 +228,7 @@ let
     wrapperOptionFiles = lib.mapAttrs' (name: options: {
       name = options.meta.wrapper.name.value;
       # TODO:
-      # value.path = "./modules/${name}.md";
+      # value.path = "./platforms/${name}.md";
       value.file = mkMDDoc options;
     }) wrapperOptions;
 
@@ -298,7 +298,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     root = ../../.;
     fileset = lib.fileset.unions [
       ../user-guide
-      ../modules
+      ../platforms
       ../../CONTRIBUTING.md
       (lib.fileset.fileFilter (
         { type, hasExt, ... }:
@@ -328,7 +328,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./SUMMARY.md \
       --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
 
-    substituteInPlace ./modules/wrapper-options.md \
+    substituteInPlace ./platforms/wrapper-options.md \
       --replace-fail "@WRAPPER_OPTIONS@" "$(cat ${finalAttrs.passthru.wrapperOptionDocs})"
 
     mdbook build

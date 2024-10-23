@@ -65,7 +65,7 @@ If you are building nixvim using the NixOS, home-manager, or nix-darwin modules 
 > [!TIP]
 > Once [#1784](https://github.com/nix-community/nixvim/issues/1784) is implemented, there will be alternative ways to achieve this using the module system.
 
-[standalone]: ./modules/standalone.md
+[standalone]: ../platforms/standalone.md
 
 ## How do I create multiple aliases for a single keymap
 

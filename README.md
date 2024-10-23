@@ -256,7 +256,7 @@ It takes a set with the following keys:
 - `extraSpecialArgs`: Extra arguments to pass to the modules when using functions.
   Can be `self` in a flake, for example.
 
-For more detail, see the [Standalone Usage](https://nix-community.github.io/nixvim/modules/standalone.html) section of our documentation.
+For more detail, see the [Standalone Usage](https://nix-community.github.io/nixvim/platforms/standalone.html) section of our documentation.
 
 ### With a `devShell`
 
