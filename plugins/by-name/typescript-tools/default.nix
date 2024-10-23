@@ -1,17 +1,16 @@
 {
   lib,
   pkgs,
-  helpers,
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib.nixvim) defaultNullOpts;
   cfg = config.plugins.typescript-tools;
 in
 {
   options.plugins.typescript-tools = {
-    enable = mkEnableOption "typescript-tools";
+    enable = lib.mkEnableOption "typescript-tools";
     package = lib.mkPackageOption pkgs "typescript-tools" {
       default = [
         "vimPlugins"
@@ -19,8 +18,8 @@ in
       ];
     };
 
-    onAttach = helpers.defaultNullOpts.mkLuaFn "__lspOnAttach" "Lua code to run when tsserver attaches to a buffer.";
-    handlers = mkOption {
+    onAttach = defaultNullOpts.mkLuaFn "__lspOnAttach" "Lua code to run when tsserver attaches to a buffer.";
+    handlers = lib.mkOption {
       type = with lib.types; nullOr (attrsOf strLuaFn);
       default = null;
       description = "How tsserver should respond to LSP requests";
@@ -35,10 +34,10 @@ in
     };
 
     settings = {
-      separateDiagnosticServer = helpers.defaultNullOpts.mkBool true "Spawns an additional tsserver instance to calculate diagnostics";
+      separateDiagnosticServer = defaultNullOpts.mkBool true "Spawns an additional tsserver instance to calculate diagnostics";
 
       publishDiagnosticOn =
-        helpers.defaultNullOpts.mkEnum
+        defaultNullOpts.mkEnum
           [
             "change"
             "insert_leave"
@@ -48,9 +47,9 @@ in
             Either "change" or "insert_leave". Determines when the client asks the server about diagnostics
           '';
 
-      exposeAsCodeAction = mkOption {
+      exposeAsCodeAction = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           either (enum [ "all" ]) (
             listOf (enum [
               "fix_all"
@@ -65,27 +64,27 @@ in
         description = "Specify what to expose as code actions.";
       };
 
-      tsserverPath = helpers.mkNullOrStr ''
+      tsserverPath = lib.nixvim.mkNullOrStr ''
         Specify a custom path to `tsserver.js` file, if this is nil or file under path
         doesn't exist then standard path resolution strategy is applied
       '';
 
       tsserverPlugins =
         with lib.types;
-        helpers.mkNullOrOption (listOf (maybeRaw str)) ''
+        lib.nixvim.mkNullOrOption (listOf (maybeRaw str)) ''
           List of plugins for tsserver to load. See this plugins's README
           at https://github.com/pmizio/typescript-tools.nvim/#-styled-components-support
         '';
 
       tsserverMaxMemory =
-        helpers.mkNullOrOption (with lib.types; maybeRaw (either ints.unsigned (enum [ "auto" ])))
+        lib.nixvim.mkNullOrOption (with lib.types; maybeRaw (either ints.unsigned (enum [ "auto" ])))
           ''
             This value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
             Memory limit in megabytes or "auto"(basically no limit)
           '';
 
-      tsserverFormatOptions = mkOption {
-        type = with types; nullOr (attrsOf anything);
+      tsserverFormatOptions = lib.mkOption {
+        type = with lib.types; nullOr (attrsOf anything);
         default = null;
         description = "Configuration options that well be passed to the tsserver instance. Find available options [here](https://github.com/microsoft/TypeScript/blob/v5.0.4/src/server/protocol.ts#L3418)";
         example = {
@@ -100,8 +99,8 @@ in
         };
       };
 
-      tsserverFilePreferences = mkOption {
-        type = with types; nullOr (attrsOf anything);
+      tsserverFilePreferences = lib.mkOption {
+        type = with lib.types; nullOr (attrsOf anything);
         default = null;
         description = "Configuration options that well be passed to the tsserver instance. Find available options [here](https://github.com/microsoft/TypeScript/blob/v5.0.4/src/server/protocol.ts#L3439)";
         example = {
@@ -114,20 +113,20 @@ in
         };
       };
 
-      tsserverLocale = helpers.defaultNullOpts.mkStr "en" ''
+      tsserverLocale = defaultNullOpts.mkStr "en" ''
         Locale of all tsserver messages. Supported locales here: https://github.com/microsoft/TypeScript/blob/3c221fc086be52b19801f6e8d82596d04607ede6/src/compiler/utilitiesPublic.ts#L620
       '';
 
-      completeFunctionCalls = helpers.defaultNullOpts.mkBool false ''
+      completeFunctionCalls = defaultNullOpts.mkBool false ''
         Mirror of VSCode's `typescript.suggest.completeFunctionCalls`
       '';
 
-      includeCompletionsWithInsertText = helpers.defaultNullOpts.mkBool true ''
+      includeCompletionsWithInsertText = defaultNullOpts.mkBool true ''
         Mirror of VSCode's `typescript.suggest.completeFunctionCalls`
       '';
 
       codeLens =
-        helpers.defaultNullOpts.mkEnum
+        defaultNullOpts.mkEnum
           [
             "off"
             "all"
@@ -137,16 +136,16 @@ in
           "off"
           "WARNING: Experimental feature also in VSCode, disabled by default because it might impact server performance.";
 
-      disableMemberCodeLens = helpers.defaultNullOpts.mkBool true ''
+      disableMemberCodeLens = defaultNullOpts.mkBool true ''
         By default code lenses are displayed on all referenceable values. Display less by removing member references from lenses.
       '';
 
       jsxCloseTag = {
-        enable = helpers.defaultNullOpts.mkBool false ''
+        enable = defaultNullOpts.mkBool false ''
           Functions similarly to `nvim-ts-autotag`. This is disabled by default to avoid conflicts.
         '';
         filetypes =
-          helpers.defaultNullOpts.mkListOf types.str
+          defaultNullOpts.mkListOf lib.types.str
             [
               "javascriptreact"
               "typescriptreact"
@@ -157,7 +156,7 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     extraPlugins = [ cfg.package ];
 
     plugins.lsp.postConfig =
@@ -188,7 +187,7 @@ in
         };
       in
       ''
-        require('typescript-tools').setup(${helpers.toLuaObject options})
+        require('typescript-tools').setup(${lib.nixvim.toLuaObject options})
       '';
   };
 }
