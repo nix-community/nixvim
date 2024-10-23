@@ -1,9 +1,13 @@
 {
   empty = {
+    # Plugin deprecated
+    test.checkWarnings = false;
     plugins.rust-tools.enable = true;
   };
 
   defaults = {
+    # Plugin deprecated
+    test.checkWarnings = false;
     plugins.rust-tools = {
       enable = true;
       executor = "termopen";
@@ -73,6 +77,8 @@
   };
 
   rust-analyzer-options = {
+    # Plugin deprecated
+    test.checkWarnings = false;
     plugins.rust-tools = {
       enable = true;
       server = {

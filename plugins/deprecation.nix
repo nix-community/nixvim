@@ -1,5 +1,12 @@
 { lib, ... }:
 let
+  deprecated = {
+    # TODO: added 10-23-2024, move to removed after 24.11
+    "rust-tools" = ''
+      The `rust-tools` project has been abandoned.
+      It is recommended to use `rustaceanvim` instead.
+    '';
+  };
   removed = {
     # Added 2023-08-29
     treesitter-playground = ''
@@ -64,22 +71,30 @@ in
           Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
         ''
     ) iconsPackagePlugins
-    # Show a warning when web-devicons is auto-enabled
     ++ [
       (
         { config, options, ... }:
         {
-          config = lib.mkIf (options.plugins.web-devicons.enable.highestPrio == 1490) {
-            warnings = [
-              ''
-                Nixvim: `plugins.web-devicons` was enabled automatically because the following plugins are enabled.
-                This behaviour is deprecated. Please explicitly define `plugins.web-devicons.enable` or alternatively
-                enable `plugins.mini.enable` with `plugins.mini.modules.icons` and `plugins.mini.mockDevIcons`.
-                ${lib.concatMapStringsSep "\n" (name: "plugins.${name}") (
-                  builtins.filter (name: config.plugins.${name}.enable) iconsPackagePlugins
-                )}
-              ''
-            ];
+          config = {
+            warnings =
+              lib.optionals (options.plugins.web-devicons.enable.highestPrio == 1490) [
+                ''
+                  Nixvim: `plugins.web-devicons` was enabled automatically because the following plugins are enabled.
+                  This behaviour is deprecated. Please explicitly define `plugins.web-devicons.enable` or alternatively
+                  enable `plugins.mini.enable` with `plugins.mini.modules.icons` and `plugins.mini.mockDevIcons`.
+                  ${lib.concatMapStringsSep "\n" (name: "plugins.${name}") (
+                    builtins.filter (name: config.plugins.${name}.enable) iconsPackagePlugins
+                  )}
+                ''
+              ]
+              ++ lib.foldlAttrs (
+                warnings: plugin: msg:
+                warnings
+                ++ lib.optional config.plugins.${plugin}.enable ''
+                  Nixvim Warning: The `${plugin}` plugin has been deprecated.
+                  ${msg}
+                ''
+              ) [ ] deprecated;
           };
         }
       )
