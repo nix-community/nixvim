@@ -1,17 +1,15 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.lsp-format;
 in
 {
-  options.plugins.lsp-format = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "lsp-format.nvim";
+  options.plugins.lsp-format = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+    enable = lib.mkEnableOption "lsp-format.nvim";
 
     package = lib.mkPackageOption pkgs "lsp-format.nvim" {
       default = [
@@ -20,29 +18,29 @@ in
       ];
     };
 
-    setup = mkOption {
+    setup = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         attrsOf (submodule {
           # Allow the user to provide other options
           freeformType = types.attrs;
 
           options = {
-            exclude = helpers.mkNullOrOption (listOf str) "List of client names to exclude from formatting.";
+            exclude = lib.nixvim.mkNullOrOption (listOf str) "List of client names to exclude from formatting.";
 
-            order = helpers.mkNullOrOption (listOf str) ''
+            order = lib.nixvim.mkNullOrOption (listOf str) ''
               List of client names. Formatting is requested from clients in the following
               order: first all clients that are not in the `order` table, then the remaining
               clients in the order as they occur in the `order` table.
               (same logic as |vim.lsp.buf.formatting_seq_sync()|).
             '';
 
-            sync = helpers.defaultNullOpts.mkBool false ''
+            sync = lib.nixvim.defaultNullOpts.mkBool false ''
               Whether to turn on synchronous formatting.
               The editor will block until formatting is done.
             '';
 
-            force = helpers.defaultNullOpts.mkBool false ''
+            force = lib.nixvim.defaultNullOpts.mkBool false ''
               If true, the format result will always be written to the buffer, even if the
               buffer changed.
             '';
@@ -63,9 +61,9 @@ in
       default = { };
     };
 
-    lspServersToEnable = mkOption {
+    lspServersToEnable = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         either (enum [
           "none"
           "all"
@@ -93,21 +91,21 @@ in
     let
       setupOptions = cfg.setup // cfg.extraOptions;
     in
-    mkIf cfg.enable {
-      warnings = mkIf (!config.plugins.lsp.enable) [
+    lib.mkIf cfg.enable {
+      warnings = lib.mkIf (!config.plugins.lsp.enable) [
         "You have enabled `plugins.lsp-format` but have `plugins.lsp` disabled."
       ];
 
       extraPlugins = [ cfg.package ];
 
       plugins.lsp = {
-        onAttach = mkIf (cfg.lspServersToEnable == "all") ''
+        onAttach = lib.mkIf (cfg.lspServersToEnable == "all") ''
           require("lsp-format").on_attach(client)
         '';
 
         servers =
-          if (isList cfg.lspServersToEnable) then
-            genAttrs cfg.lspServersToEnable (serverName: {
+          if (lib.isList cfg.lspServersToEnable) then
+            lib.genAttrs cfg.lspServersToEnable (serverName: {
               onAttach.function = ''
                 require("lsp-format").on_attach(client)
               '';
@@ -117,7 +115,7 @@ in
       };
 
       extraConfigLua = ''
-        require("lsp-format").setup(${helpers.toLuaObject setupOptions})
+        require("lsp-format").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }
