@@ -1,17 +1,15 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.rust-tools;
 in
 {
-  options.plugins.rust-tools = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "rust tools plugins";
+  options.plugins.rust-tools = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+    enable = lib.mkEnableOption "rust tools plugins";
     package = lib.mkPackageOption pkgs "rust-tools" {
       default = [
         "vimPlugins"
@@ -22,47 +20,49 @@ in
       nullable = true;
     };
 
-    executor = helpers.defaultNullOpts.mkEnumFirstDefault [
+    executor = lib.nixvim.defaultNullOpts.mkEnumFirstDefault [
       "termopen"
       "quickfix"
     ] "how to execute terminal commands";
 
-    onInitialized = helpers.defaultNullOpts.mkLuaFn null ''
+    onInitialized = lib.nixvim.defaultNullOpts.mkLuaFn null ''
       Callback to execute once rust-analyzer is done initializing the workspace
       The callback receives one parameter indicating the `health` of the server:
       "ok" | "warning" | "error"
     '';
 
-    reloadWorkspaceFromCargoToml = helpers.defaultNullOpts.mkBool true ''
+    reloadWorkspaceFromCargoToml = lib.nixvim.defaultNullOpts.mkBool true ''
       Automatically call RustReloadWorkspace when writing to a Cargo.toml file.
     '';
 
     inlayHints = {
-      auto = helpers.defaultNullOpts.mkBool true "automatically set inlay hints (type hints)";
+      auto = lib.nixvim.defaultNullOpts.mkBool true "automatically set inlay hints (type hints)";
 
-      onlyCurrentLine = helpers.defaultNullOpts.mkBool false "Only show for current line";
+      onlyCurrentLine = lib.nixvim.defaultNullOpts.mkBool false "Only show for current line";
 
-      showParameterHints = helpers.defaultNullOpts.mkBool true "whether to show parameter hints with the inlay hints or not";
+      showParameterHints = lib.nixvim.defaultNullOpts.mkBool true "whether to show parameter hints with the inlay hints or not";
 
-      parameterHintsPrefix = helpers.defaultNullOpts.mkStr "<- " "prefix for parameter hints";
+      parameterHintsPrefix = lib.nixvim.defaultNullOpts.mkStr "<- " "prefix for parameter hints";
 
-      otherHintsPrefix = helpers.defaultNullOpts.mkStr "=> " "prefix for all the other hints (type, chaining)";
+      otherHintsPrefix = lib.nixvim.defaultNullOpts.mkStr "=> " "prefix for all the other hints (type, chaining)";
 
-      maxLenAlign = helpers.defaultNullOpts.mkBool false "whether to align to the length of the longest line in the file";
+      maxLenAlign = lib.nixvim.defaultNullOpts.mkBool false "whether to align to the length of the longest line in the file";
 
       maxLenAlignPadding =
-        helpers.defaultNullOpts.mkUnsignedInt 1
+        lib.nixvim.defaultNullOpts.mkUnsignedInt 1
           "padding from the left if max_len_align is true";
 
-      rightAlign = helpers.defaultNullOpts.mkBool false "whether to align to the extreme right or not";
+      rightAlign = lib.nixvim.defaultNullOpts.mkBool false "whether to align to the extreme right or not";
 
-      rightAlignPadding = helpers.defaultNullOpts.mkInt 7 "padding from the right if right_align is true";
+      rightAlignPadding =
+        lib.nixvim.defaultNullOpts.mkInt 7
+          "padding from the right if right_align is true";
 
-      highlight = helpers.defaultNullOpts.mkStr "Comment" "The color of the hints";
+      highlight = lib.nixvim.defaultNullOpts.mkStr "Comment" "The color of the hints";
     };
 
     hoverActions = {
-      border = helpers.defaultNullOpts.mkBorder [
+      border = lib.nixvim.defaultNullOpts.mkBorder [
         [
           "╭"
           "FloatBorder"
@@ -97,39 +97,41 @@ in
         ]
       ] "rust-tools hover window" "";
 
-      maxWidth = helpers.defaultNullOpts.mkUnsignedInt null "Maximal width of the hover window. null means no max.";
+      maxWidth = lib.nixvim.defaultNullOpts.mkUnsignedInt null "Maximal width of the hover window. null means no max.";
 
-      maxHeight = helpers.defaultNullOpts.mkUnsignedInt null "Maximal height of the hover window. null means no max.";
+      maxHeight = lib.nixvim.defaultNullOpts.mkUnsignedInt null "Maximal height of the hover window. null means no max.";
 
-      autoFocus = helpers.defaultNullOpts.mkBool false "whether the hover action window gets automatically focused";
+      autoFocus = lib.nixvim.defaultNullOpts.mkBool false "whether the hover action window gets automatically focused";
     };
 
     crateGraph = {
-      backend = helpers.defaultNullOpts.mkStr "x11" ''
+      backend = lib.nixvim.defaultNullOpts.mkStr "x11" ''
         Backend used for displaying the graph
         see: https://graphviz.org/docs/outputs/
       '';
 
-      output = helpers.defaultNullOpts.mkStr null "where to store the output, nil for no output stored";
+      output = lib.nixvim.defaultNullOpts.mkStr null "where to store the output, nil for no output stored";
 
-      full = helpers.defaultNullOpts.mkBool true ''
+      full = lib.nixvim.defaultNullOpts.mkBool true ''
         true for all crates.io and external crates, false only the local crates
       '';
 
-      enabledGraphvizBackends = helpers.defaultNullOpts.mkNullable (types.listOf types.str) null ''
-        List of backends found on: https://graphviz.org/docs/outputs/
-        Is used for input validation and autocompletion
-      '';
+      enabledGraphvizBackends =
+        lib.nixvim.defaultNullOpts.mkNullable (lib.types.listOf lib.types.str) null
+          ''
+            List of backends found on: https://graphviz.org/docs/outputs/
+            Is used for input validation and autocompletion
+          '';
     };
 
     server = {
-      standalone = helpers.defaultNullOpts.mkBool true ''
+      standalone = lib.nixvim.defaultNullOpts.mkBool true ''
         standalone file support
         setting it to false may improve startup time
       '';
-    } // (import ../../lsp/language-servers/rust-analyzer-config.nix lib helpers);
+    } // import ../../lsp/language-servers/rust-analyzer-config.nix lib;
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     extraPlugins = [
       config.plugins.lsp.package
       cfg.package
@@ -140,8 +142,8 @@ in
       let
         options = {
           tools = {
-            executor = helpers.ifNonNull' cfg.executor (
-              helpers.mkRaw "require(${rust-tools.executors}).${cfg.executor}"
+            executor = lib.nixvim.ifNonNull' cfg.executor (
+              lib.nixvim.mkRaw "require(${lib.rust-tools.executors}).${cfg.executor}"
             );
 
             on_initialized = cfg.onInitialized;
@@ -175,12 +177,12 @@ in
           server = {
             inherit (cfg.server) standalone;
             settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
-            on_attach = helpers.mkRaw "__lspOnAttach";
+            on_attach = lib.nixvim.mkRaw "__lspOnAttach";
           };
         } // cfg.extraOptions;
       in
       ''
-        require('rust-tools').setup(${helpers.toLuaObject options})
+        require('rust-tools').setup(${lib.nixvim.toLuaObject options})
       '';
   };
 }

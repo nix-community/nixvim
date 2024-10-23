@@ -109,7 +109,7 @@ let
       settings = cfg: { pylsp = cfg; };
     };
     rust_analyzer = {
-      settingsOptions = import ./rust-analyzer-config.nix lib helpers;
+      settingsOptions = import ./rust-analyzer-config.nix lib;
       settings = cfg: { rust-analyzer = cfg; };
     };
     ts_ls = {

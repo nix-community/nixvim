@@ -257,7 +257,7 @@ with lib;
     default_settings =
       helpers.mkNullOrStrLuaFnOr
         (types.submodule {
-          options.rust-analyzer = import ../../lsp/language-servers/rust-analyzer-config.nix lib helpers;
+          options.rust-analyzer = import ../../lsp/language-servers/rust-analyzer-config.nix lib;
           freeformType = with types; attrsOf anything;
         })
         ''
