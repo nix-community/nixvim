@@ -205,7 +205,7 @@ let
   };
 
   mdbook = {
-    nixvimOptions = mapModulesToString (
+    nixvimOptionsSummary = mapModulesToString (
       name: opts:
       let
         isBranch = name == "index" || (opts.hasComponents && opts.index.options != { });
@@ -277,29 +277,13 @@ let
         in
         removeUnwanted configuration.options
       );
-
-  prepareMD = ''
-    # Copy inputs into the build directory
-    cp -r --no-preserve=all $inputs/* ./
-    cp ${../../CONTRIBUTING.md} ./CONTRIBUTING.md
-    cp -r ${../user-guide} ./user-guide
-    cp -r ${../modules} ./modules
-
-    # Copy the generated MD docs into the build directory
-    # Using pkgs.writeShellScript helps to avoid the "bash: argument list too long" error
-    bash -e ${pkgs.writeShellScript "copy_docs" docs.commands}
-
-    # Prepare SUMMARY.md for mdBook
-    # Using pkgs.writeText helps to avoid the same error as above
-    substituteInPlace ./SUMMARY.md \
-      --replace-fail "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
-
-    substituteInPlace ./modules/wrapper-options.md \
-      --replace-fail "@WRAPPER_OPTIONS@" "$(cat ${mdbook.wrapperOptionDocs})"
-  '';
 in
-pkgs.stdenv.mkDerivation {
+
+pkgs.stdenv.mkDerivation (finalAttrs: {
   name = "nixvim-docs";
+
+  # Use structured attrs to avoid "bash: argument list too long" errors
+  __structuredAttrs = true;
 
   phases = [ "buildPhase" ];
 
@@ -307,6 +291,7 @@ pkgs.stdenv.mkDerivation {
     pkgs.mdbook
     pkgs.mdbook-alerts
   ];
+
   inputs = lib.sourceFilesBySuffices ./. [
     ".md"
     ".toml"
@@ -316,10 +301,33 @@ pkgs.stdenv.mkDerivation {
   buildPhase = ''
     dest=$out/share/doc/nixvim
     mkdir -p $dest
-    ${prepareMD}
+
+    # Copy inputs into the build directory
+    cp -r --no-preserve=all $inputs/* ./
+    cp ${../../CONTRIBUTING.md} ./CONTRIBUTING.md
+    cp -r ${../user-guide} ./user-guide
+    cp -r ${../modules} ./modules
+
+    # Copy the generated MD docs into the build directory
+    bash -e ${finalAttrs.passthru.copy-docs}
+
+    # Patch SUMMARY.md - which defiens mdBook's table of contents
+    substituteInPlace ./SUMMARY.md \
+      --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
+
+    substituteInPlace ./modules/wrapper-options.md \
+      --replace-fail "@WRAPPER_OPTIONS@" "$(cat ${finalAttrs.passthru.wrapperOptionDocs})"
+
     mdbook build
     cp -r ./book/* $dest
     mkdir -p $dest/search
     cp -r ${search}/* $dest/search
   '';
-}
+
+  inherit (mdbook) nixvimOptionsSummary;
+
+  passthru = {
+    inherit (mdbook) wrapperOptionDocs;
+    copy-docs = pkgs.writeShellScript "copy-docs" docs.commands;
+  };
+})
