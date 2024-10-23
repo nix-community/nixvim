@@ -292,21 +292,34 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     pkgs.mdbook-alerts
   ];
 
-  inputs = lib.sourceFilesBySuffices ./. [
-    ".md"
-    ".toml"
-    ".js"
-  ];
+  # Build a source from the fileset containing the following paths,
+  # as well as all .md, .toml, & .js files in this directory
+  src = lib.fileset.toSource {
+    root = ../../.;
+    fileset = lib.fileset.unions [
+      ../user-guide
+      ../modules
+      ../../CONTRIBUTING.md
+      (lib.fileset.fileFilter (
+        { type, hasExt, ... }:
+        type == "regular"
+        && lib.any hasExt [
+          "md"
+          "toml"
+          "js"
+        ]
+      ) ./.)
+    ];
+  };
 
   buildPhase = ''
     dest=$out/share/doc/nixvim
     mkdir -p $dest
 
-    # Copy inputs into the build directory
-    cp -r --no-preserve=all $inputs/* ./
-    cp ${../../CONTRIBUTING.md} ./CONTRIBUTING.md
-    cp -r ${../user-guide} ./user-guide
-    cp -r ${../modules} ./modules
+    # Copy (and flatten) src into the build directory
+    cp -r --no-preserve=all $src/* ./
+    mv ./docs/* ./ && rmdir ./docs
+    mv ./mdbook/* ./ && rmdir ./mdbook
 
     # Copy the generated MD docs into the build directory
     bash -e ${finalAttrs.passthru.copy-docs}
