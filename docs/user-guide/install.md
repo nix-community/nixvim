@@ -70,7 +70,7 @@ options as `programs.nixvim.<path>.<to>.<option> = <value>`.
 When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for home-manager, NixOS, and nix-darwin respectively.
 This is useful is you use nixvim both as part of an environment and as standalone.
 
-For more information on module-specific options, see [Platform-specific options](../platforms/wrapper-options.md).
+For more platform-specific options and information, see [Nixvim Platforms](../platforms/index.md).
 
 ### Standalone usage
 

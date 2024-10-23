@@ -11,8 +11,8 @@
 
 # Platforms
 
-- [Platform-specific options](./platforms/wrapper-options.md)
-- [Standalone Usage](./platforms/standalone.md)
+- [Nixvim Platforms](./platforms/index.md)
+	- [Standalone](./platforms/standalone.md)
 
 # Options
 

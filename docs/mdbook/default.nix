@@ -328,7 +328,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./SUMMARY.md \
       --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
 
-    substituteInPlace ./platforms/wrapper-options.md \
+    substituteInPlace ./platforms/index.md \
       --replace-fail "@WRAPPER_OPTIONS@" "$(cat ${finalAttrs.passthru.wrapperOptionDocs})"
 
     mdbook build
