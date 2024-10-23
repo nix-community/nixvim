@@ -225,58 +225,48 @@ let
       "${padding}- [${name}](${path})"
     ) docs.modules;
 
-    wrapperOptionFiles = lib.mapAttrs' (name: options: {
-      name = options.meta.wrapper.name.value;
-      # TODO:
-      # value.path = "./platforms/${name}.md";
-      value.file = mkMDDoc options;
-    }) wrapperOptions;
-
-    wrapperOptionDocs =
-      pkgs.runCommandNoCCLocal "wrapper-option-doc"
-        {
-          __structuredAttrs = true;
-          files = lib.mapAttrs (name: value: value.file) mdbook.wrapperOptionFiles;
-          # TODO:
-          # paths = lib.mapAttrs (name: value: value.path) mdbook.wrapperOptionFiles;
-        }
-        ''
-          for name in "''${!files[@]}"
-          do
-            # $file contains the docs built by mkMDDoc
-            file="''${files[$name]}"
-            # TODO: consider putting wrapper docs in separate files:
-            # path="''${paths[$name]}"
-            echo >> "$out"
-            echo "## $name" >> "$out"
-            echo >> "$out"
-            cat "$file" >> $out
-          done
-        '';
-  };
-
-  wrapperOptions =
-    lib.genAttrs
-      [
-        "hm"
-        "nixos"
-        "darwin"
-      ]
-      (
-        name:
-        let
+    # A list of platform-specific docs
+    # [ { name, file, path, configuration } ]
+    wrapperOptions =
+      builtins.map
+        (filename: rec {
+          # Eval a configuration for the platform's module
           configuration = lib.evalModules {
             modules = [
-              ../../wrappers/modules/${name}.nix
+              ../../wrappers/modules/${filename}.nix
               {
                 # Ignore definitions for missing options
                 _module.check = false;
               }
             ];
           };
-        in
-        removeUnwanted configuration.options
-      );
+          # Also include display name, filepath, and rendered docs
+          inherit (configuration.config.meta.wrapper) name;
+          file = mkMDDoc (removeUnwanted configuration.options);
+          path = "./platforms/${filename}.md";
+        })
+        [
+          "nixos"
+          "hm"
+          "darwin"
+        ];
+
+    # Markdown summary for the table of contents
+    wrapperOptionsSummary = lib.foldl (
+      text: { name, path, ... }: text + "\n\t- [${name}](${path})"
+    ) "" mdbook.wrapperOptions;
+
+    # Attrset of { filePath = renderedDocs; }
+    wrapperOptionsFiles = lib.listToAttrs (
+      builtins.map (
+        { path, file, ... }:
+        {
+          name = path;
+          value = file;
+        }
+      ) mdbook.wrapperOptions
+    );
+  };
 in
 
 pkgs.stdenv.mkDerivation (finalAttrs: {
@@ -324,12 +314,17 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     # Copy the generated MD docs into the build directory
     bash -e ${finalAttrs.passthru.copy-docs}
 
+    # Copy the generated MD docs for the wrapper options
+    for path in "''${!wrapperOptionsFiles[@]}"
+    do
+      file="''${wrapperOptionsFiles[$path]}"
+      cp "$file" "$path"
+    done
+
     # Patch SUMMARY.md - which defiens mdBook's table of contents
     substituteInPlace ./SUMMARY.md \
+      --replace-fail "@PLATFORM_OPTIONS@" "$wrapperOptionsSummary" \
       --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
-
-    substituteInPlace ./platforms/index.md \
-      --replace-fail "@WRAPPER_OPTIONS@" "$(cat ${finalAttrs.passthru.wrapperOptionDocs})"
 
     mdbook build
     cp -r ./book/* $dest
@@ -337,10 +332,13 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     cp -r ${search}/* $dest/search
   '';
 
-  inherit (mdbook) nixvimOptionsSummary;
+  inherit (mdbook)
+    nixvimOptionsSummary
+    wrapperOptionsSummary
+    wrapperOptionsFiles
+    ;
 
   passthru = {
-    inherit (mdbook) wrapperOptionDocs;
     copy-docs = pkgs.writeShellScript "copy-docs" docs.commands;
   };
 })
