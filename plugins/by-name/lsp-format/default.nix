@@ -1,66 +1,68 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
-let
-  cfg = config.plugins.lsp-format;
-in
-{
-  options.plugins.lsp-format = lib.nixvim.neovim-plugin.extraOptionsOptions // {
-    enable = lib.mkEnableOption "lsp-format.nvim";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "lsp-format";
+  originalName = "lsp-format.nvim";
+  package = "lsp-format-nvim";
 
-    package = lib.mkPackageOption pkgs "lsp-format.nvim" {
-      default = [
-        "vimPlugins"
-        "lsp-format-nvim"
+  maintainers = [ lib.maintainers.khaneliman ];
+
+  # TODO: added 10-22-2024 remove after 24.11
+  deprecateExtraOptions = true;
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "plugins"
+        "lsp-format"
+        "setup"
+      ]
+      [
+        "plugins"
+        "lsp-format"
+        "settings"
+      ]
+    )
+  ];
+
+  description = ''
+    ## Configuring a Language
+
+    `lsp-format` uses a table defining which lsp servers to use for each language.
+
+
+    - `exclude` is a table of LSP servers that should not format the buffer.
+      - Alternatively, you can also just not call `on_attach` for the clients you don't want to use for
+        formatting.
+    - `order` is a table that determines the order formatting is requested from the LSP server.
+    - `sync` turns on synchronous formatting. The editor will block until the formatting is done.
+    - `force` will write the format result to the buffer, even if the buffer changed after the format request started.
+  '';
+
+  settingsExample = {
+    go = {
+      exclude = [ "gopls" ];
+      order = [
+        "gopls"
+        "efm"
       ];
+      sync = true;
+      force = true;
     };
-
-    setup = lib.mkOption {
-      type =
-        with lib.types;
-        attrsOf (submodule {
-          # Allow the user to provide other options
-          freeformType = types.attrs;
-
-          options = {
-            exclude = lib.nixvim.mkNullOrOption (listOf str) "List of client names to exclude from formatting.";
-
-            order = lib.nixvim.mkNullOrOption (listOf str) ''
-              List of client names. Formatting is requested from clients in the following
-              order: first all clients that are not in the `order` table, then the remaining
-              clients in the order as they occur in the `order` table.
-              (same logic as |vim.lsp.buf.formatting_seq_sync()|).
-            '';
-
-            sync = lib.nixvim.defaultNullOpts.mkBool false ''
-              Whether to turn on synchronous formatting.
-              The editor will block until formatting is done.
-            '';
-
-            force = lib.nixvim.defaultNullOpts.mkBool false ''
-              If true, the format result will always be written to the buffer, even if the
-              buffer changed.
-            '';
-          };
-        });
-      description = "The setup option maps |filetypes| to format options.";
-      example = {
-        go = {
-          exclude = [ "gopls" ];
-          order = [
-            "gopls"
-            "efm"
-          ];
-          sync = true;
-          force = true;
-        };
-      };
-      default = { };
+    typescript = {
+      tab_width.__raw = ''
+        function()
+          return vim.opt.shiftwidth:get()
+        end'';
     };
+    yaml = {
+      tab_width = 2;
+    };
+  };
 
+  extraOptions = {
     lspServersToEnable = lib.mkOption {
       type =
         with lib.types;
@@ -87,35 +89,27 @@ in
     };
   };
 
-  config =
-    let
-      setupOptions = cfg.setup // cfg.extraOptions;
-    in
-    lib.mkIf cfg.enable {
-      warnings = lib.mkIf (!config.plugins.lsp.enable) [
-        "You have enabled `plugins.lsp-format` but have `plugins.lsp` disabled."
-      ];
+  extraConfig = cfg: {
+    warnings = lib.mkIf (!config.plugins.lsp.enable) [
+      "You have enabled `plugins.lsp-format` but have `plugins.lsp` disabled."
+    ];
 
-      extraPlugins = [ cfg.package ];
+    plugins.lsp = {
+      onAttach =
+        lib.mkIf (cfg.lspServersToEnable == "all") # Lua
+          ''
+            require("lsp-format").on_attach(client)
+          '';
 
-      plugins.lsp = {
-        onAttach = lib.mkIf (cfg.lspServersToEnable == "all") ''
-          require("lsp-format").on_attach(client)
-        '';
+      servers = lib.optionalAttrs (lib.isList cfg.lspServersToEnable) (
+        lib.genAttrs cfg.lspServersToEnable (serverName: {
+          onAttach.function = # Lua
+            ''
+              require("lsp-format").on_attach(client)
+            '';
+        })
+      );
 
-        servers =
-          if (lib.isList cfg.lspServersToEnable) then
-            lib.genAttrs cfg.lspServersToEnable (serverName: {
-              onAttach.function = ''
-                require("lsp-format").on_attach(client)
-              '';
-            })
-          else
-            { };
-      };
-
-      extraConfigLua = ''
-        require("lsp-format").setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
     };
+  };
 }
