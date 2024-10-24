@@ -13,7 +13,6 @@ let
     options:
     (nixosOptionsDoc {
       inherit options transformOptions;
-      warningsAreErrors = false;
     }).optionsCommonMark;
 
   removeUnwanted =
