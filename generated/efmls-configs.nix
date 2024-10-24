@@ -473,6 +473,7 @@
     formatter = {
       lang = "go";
       possible = [
+        "djlint"
         "gofmt"
         "gofumpt"
         "goimports"
@@ -525,6 +526,7 @@
     formatter = {
       lang = "html";
       possible = [
+        "djlint"
         "fecs"
         "prettier"
         "prettier_d"
@@ -922,6 +924,7 @@
     formatter = {
       lang = "php";
       possible = [
+        "djlint"
         "php_cs_fixer"
         "phpcbf"
         "pint"
@@ -978,6 +981,7 @@
       possible = [
         "autopep8"
         "black"
+        "djlint"
         "isort"
         "ruff"
         "ruff_sort"
