@@ -73,7 +73,7 @@ in
             }
             {
               key = "gd";
-              action.__raw = "require('telescope.builtin').lsp_definitions()";
+              action.__raw = "require('telescope.builtin').lsp_definitions";
             }
             {
               key = "K";
