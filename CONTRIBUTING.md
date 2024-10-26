@@ -31,13 +31,15 @@ Most of nixvim is dedicated to wrapping neovim plugins such that we can configur
 To add a new plugin you need to do the following.
 
 1. Add a file in the correct sub-directory of [`plugins`](plugins).
-  - Most plugins should be added to [`plugins/by-name/<name>`](plugins/by-name).
-    Plugins in `by-name` are automatically imported 🚀
-  - Occasionally, you may wish to add a plugin to a directory outside of `by-name`, such as [`plugins/colorschemes`](plugins/colorschemes).
-    If so, you will also need to add your plugin to [`plugins/default.nix`](plugins/default.nix) to ensure it gets imported.
-    Note: the imports list is sorted and grouped. In vim, you can usually use `V` (visual-line mode) with the `:sort` command to achieve the desired result.
+
+- Most plugins should be added to [`plugins/by-name/<name>`](plugins/by-name).
+  Plugins in `by-name` are automatically imported 🚀
+- Occasionally, you may wish to add a plugin to a directory outside of `by-name`, such as [`plugins/colorschemes`](plugins/colorschemes).
+  If so, you will also need to add your plugin to [`plugins/default.nix`](plugins/default.nix) to ensure it gets imported.
+  Note: the imports list is sorted and grouped. In vim, you can usually use `V` (visual-line mode) with the `:sort` command to achieve the desired result.
 
 2. The vast majority of plugins fall into one of those two categories:
+
 - _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
   For those, you should use the `lib.nixvim.vim-plugin.mkVimPlugin`.\
   -> See [this plugin](plugins/utils/direnv.nix) for an example.
@@ -45,22 +47,135 @@ To add a new plugin you need to do the following.
   For those, you should use the `lib.nixvim.neovim-plugin.mkNeovimPlugin`.\
   -> See the [template](plugins/TEMPLATE.nix).
 
-3. Add the necessary parameters for the `mkNeovimPlugin`/`mkVimPlugin`:
-  - `name`: The name of the plugin. The resulting nixvim module will have `plugins.<name>` as a path.\
-    For a plugin named `foo-bar.nvim`, set this to `foo-bar` (subject to exceptions).
-  - `originalName`: The "real" name of the plugin (i.e. `foo-bar.nvim`). This is used mostly in documentation.
-  - `package`: The nixpkgs package attr for this plugin
-     e.g. `"foo-bar-nvim` for `pkgs.vimPlugins.foo-bar-nvim`, or `[ "hello" "world" ]` for `pkgs.hello.world`.
-  - `maintainers`: Register yourself as a maintainer for this plugin:
-    - e.g. `maintainers = [ lib.maintainers.JosephFourier ]`
-    - If you are already registered as a [`nixpkgs` maintainer][nixpkgs-maintainers], there is nothing more to do.
-    - Otherwise, you should add yourself to our [`maintainers.nix`](lib/maintainers.nix) list.
-    - See the documentation at the top of the [`nixpkgs` maintainers list][nixpkgs-maintainers] for more detail.
-  - `settingsOptions`: All or some (only the most important ones) option declarations for this plugin settings.\
-    See below for more information
-  - `settingsExample`: An example of what could the `settings` attrs look like.
+3. Add the necessary arguments when calling either [`mkNeovimPlugin`](#mkneovimplugin) or [`mkVimPlugin`](#mkvimplugin)
 
-[nixpkgs-maintainers]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix
+#### `mkNeovimPlugin`
+
+The `mkNeovimPlugin` function provides a standardize way to create a `Neovim` plugin.
+This is intended to be used with lua plugins that have a `setup` function,
+although it is flexible enough to be used with similar variants of plugins.
+A template plugin can be found in (plugins/TEMPLATE.nix)[https://github.com/nix-community/nixvim/blob/main/plugins/TEMPLATE.nix].
+
+| Parameter                    | Description                                                                                                                                                                                                                                          | Required | Default Value                                                                                   |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------- |
+| **name**                     | The name of the plugin.                                                                                                                                                                                                                              | Yes      | N/A                                                                                             |
+| **url**                      | The URL of the plugin's repository.                                                                                                                                                                                                                  | Yes      | `package` parameter's `meta.homepage`                                                           |
+| **callSetup**                | Indicating whether to call the setup function. Useful when `setup` function needs customizations.                                                                                                                                                    | No       | `true`                                                                                          |
+| **colorscheme**              | The name of the colorscheme.                                                                                                                                                                                                                         | No       | `name` parameter                                                                                |
+| **configLocation**           | The location for the Lua configuration.                                                                                                                                                                                                              | No       | `"extraConfigLuaPre"` if `isColorscheme` then `extraConfigLuaPre`, otherwise `"extraConfigLua"` |
+| **deprecateExtraOptions**    | Indicating whether to deprecate the `extraOptions` attribute. Mainly used for old plugins.                                                                                                                                                           | No       | `false`                                                                                         |
+| **description**              | A brief description of the plugin. Can also be used for non-normative documentation, warnings, tips and tricks.                                                                                                                                      | No       | `null`                                                                                          |
+| **extraConfig**              | Additional configuration for the plugin.                                                                                                                                                                                                             | No       | `{}`                                                                                            |
+| **extraOptions**             | Module options for the plugin, to be added _outside_ of the `settings` option. These should be Nixvim-specific options.                                                                                                                              | No       | `{}`                                                                                            |
+| **extraPackages**            | Extra packages to include.                                                                                                                                                                                                                           | No       | `[]`                                                                                            |
+| **extraPlugins**             | Extra plugins to include.                                                                                                                                                                                                                            | No       | `[]`                                                                                            |
+| **hasConfigAttrs**           | Indicating whether the plugin has configuration attributes.                                                                                                                                                                                          | No       | `true`                                                                                          |
+| **hasSettings**              | Indicating whether the plugin has settings. A `settings` option will be created if true.                                                                                                                                                             | No       | `true`                                                                                          |
+| **imports**                  | Additional modules to import.                                                                                                                                                                                                                        | No       | `[]`                                                                                            |
+| **isColorscheme**            | Indicating whether the plugin is a colorscheme.                                                                                                                                                                                                      | No       | `false`                                                                                         |
+| **luaName**                  | The Lua name for the plugin.                                                                                                                                                                                                                         | No       | `name` parameter                                                                                |
+| **maintainers**              | Maintainers for the plugin.                                                                                                                                                                                                                          | No       | `[]`                                                                                            |
+| **optionsRenamedToSettings** | Options that have been renamed and move to the `settings` attribute.                                                                                                                                                                                 | No       | `[]`                                                                                            |
+| **originalName**             | The original name of the plugin, usually the plugin's github repo name. E.g. `"foo-bar.nvim"`.                                                                                                                                                       | No       | `name` parameter                                                                                |
+| **package**                  | The nixpkgs package attr for this plugin. Can be a string, a list of strings, a module option, or any derivation. For example, "foo-bar-nvim" for `pkgs.vimPlugins.foo-bar-nvim`, or `[ "hello" "world" ]` will be referenced as `pkgs.hello.world`. | No       | `name` parameter                                                                                |
+| **settingsDescription**      | A description of the settings provided to the `setup` function.                                                                                                                                                                                      | No       | `"Options provided to the require('${luaName}')${setup} function."`                             |
+| **settingsExample**          | An example configuration for the plugin's settings.                                                                                                                                                                                                  | No       | `null`                                                                                          |
+| **settingsOptions**          | Options representing the plugin's settings. This is optional because `settings` is a "freeform" option. See [Declaring plugin options](#declaring-plugin-options).                                                                                   | No       | `{}`                                                                                            |
+| **setup**                    | The setup function for the plugin.                                                                                                                                                                                                                   | No       | `".setup"`                                                                                      |
+
+##### Functionality
+
+The `mkNeovimPlugin` function generates a Nix module that:
+
+1. Defines the plugin's metadata, including maintainers, description, and URL.
+2. Sets up options for enabling the plugin, specifying the package, and configuring settings and Lua configuration.
+
+##### Example Usage
+
+```nix
+mkNeovimPlugin {
+  name = "example-plugin";
+  maintainers = [ lib.maintainers.user ];
+  url = "https://github.com/example/example-plugin";
+  description = "An example Neovim plugin";
+  settingsOptions = {
+    option1 = lib.mkOption {
+      type = lib.types.str;
+      default = "default-value";
+      description = "An example option";
+    };
+  };
+}
+```
+
+Here's an example plugin: [lsp_lines.nvim](https://github.com/nix-community/nixvim/commit/8815180c625e9766b2cb3126756b97e994998228)
+
+This example defines a Neovim plugin named `example-plugin` with specified maintainers, URL, description, settings options, and additional configuration. `package` will be 'example-plugin'
+thanks to package referring to the `name` attribute.
+
+#### `mkVimPlugin`
+
+The `mkVimPlugin` function provides a standardized way to create a `Vim` plugin.
+This is intended to be used with traditional vim plugins, usually written in viml.
+Such plugins are usually configured via vim globals, but often have no configurable options at all.
+
+| Parameter                    | Description                                                                                                                                                                                                                                        | Required | Default Value                         |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------- |
+| **name**                     | The name of the Vim plugin.                                                                                                                                                                                                                        | Yes      | N/A                                   |
+| **url**                      | The URL of the plugin repository.                                                                                                                                                                                                                  | Yes      | `package` parameter's `meta.homepage` |
+| **colorscheme**              | The name of the colorscheme.                                                                                                                                                                                                                       | No       | `name` parameter                      |
+| **deprecateExtraConfig**     | Flag to deprecate extra configuration.                                                                                                                                                                                                             | No       | `false`                               |
+| **description**              | A description of the plugin. Can also be used for non-normative documentation, warnings, tips and tricks.                                                                                                                                          | No       | `null`                                |
+| **extraConfig**              | Extra configuration for the plugin.                                                                                                                                                                                                                | No       | `cfg: {}`                             |
+| **extraOptions**             | Extra options for the plugin.                                                                                                                                                                                                                      | No       | `{}`                                  |
+| **extraPackages**            | Extra packages to include.                                                                                                                                                                                                                         | No       | `[]`                                  |
+| **extraPlugins**             | Extra plugins to include.                                                                                                                                                                                                                          | No       | `[]`                                  |
+| **globalPrefix**             | Global prefix for the settings.                                                                                                                                                                                                                    | No       | `""`                                  |
+| **imports**                  | A list of imports for the plugin.                                                                                                                                                                                                                  | No       | `[]`                                  |
+| **isColorscheme**            | Flag to indicate if the plugin is a colorscheme.                                                                                                                                                                                                   | No       | `false`                               |
+| **maintainers**              | The maintainers of the plugin.                                                                                                                                                                                                                     | No       | `[]`                                  |
+| **optionsRenamedToSettings** | List of options renamed to settings.                                                                                                                                                                                                               | No       | `[]`                                  |
+| **originalName**             | The original name of the plugin, usually the plugin's github repo name. E.g. `"foo-bar.vim"`.                                                                                                                                                      | No       | `name` parameter                      |
+| **package**                  | The nixpkgs package attr for this plugin. Can be a string, a list of strings, a module option, or any derivation. For example, "foo-bar-vim" for `pkgs.vimPlugins.foo-bar-vim`, or `[ "hello" "world" ]` will be referenced as `pkgs.hello.world`. | No       | `name` parameter                      |
+| **settingsExample**          | Example settings for the plugin.                                                                                                                                                                                                                   | No       | `null`                                |
+| **settingsOptions**          | Options representing the plugin's settings. This is optional because `settings` is a "freeform" option. See [Declaring plugin options](#declaring-plugin-options).                                                                                 | No       | `{}`                                  |
+
+##### Functionality
+
+The `mkVimPlugin` function generates a Nix module that:
+
+1. Defines the plugin's metadata, including maintainers, description, and URL.
+2. Sets up options for enabling the plugin, specifying the package, and configuring settings and extra configuration.
+
+##### Example Usage
+
+```nix
+mkVimPlugin {
+  name = "example-plugin";
+  url = "https://github.com/example/plugin";
+  maintainers = [ lib.maintainers.user ];
+  description = "An example Vim plugin.";
+  globalPrefix = "example_";
+}
+```
+
+Simple vim plugins already implemented:
+
+- [earthly.vim](https://github.com/nix-community/nixvim/blob/6f210158b03b01a1fd44bf3968165e6da80635ce/plugins/by-name/earthly/default.nix)
+- [vim-nix](https://github.com/nix-community/nixvim/blob/6f210158b03b01a1fd44bf3968165e6da80635ce/plugins/by-name/nix/default.nix)
+
+All the plugins are located under the `plugins` folder. If you want which plugins are defined as vim plugins, follow these steps:
+
+```bash
+# Ensure you are in the nixvim directory
+cd nixvim
+
+# Either setup nix-direnv, or manually enter a devshell using:
+nix develop
+
+# List all created plugins with `mkVimPlugin`
+list-plugins -k vim
+```
 
 #### Declaring plugin options
 
@@ -87,6 +202,7 @@ There are a number of helpers added into `lib` that can help you correctly imple
 - `lib.types.rawLua`: A type to represent raw lua code. The values are of the form `{ __raw = "<code>";}`.
 
 The resulting `settings` attrs will be directly translated to `lua` and will be forwarded the plugin:
+
 - Using globals (`vim.g.<globalPrefix><option-name>`) for plugins using `mkVimPlugin`
 - Using the `require('<plugin>').setup(<options>)` function for the plugins using `mkNeovimPlugin`
 
