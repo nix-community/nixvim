@@ -100,9 +100,9 @@ The tests are located in the [tests/test-sources](tests/test-sources) directory,
 
 Tests can either be a simple attribute set, or a function taking `{pkgs}` as an input. The keys of the set are configuration names, and the values are a nixvim configuration.
 
-You can specify the special `tests` attribute in the configuration that will not be interpreted by nixvim, but only the test runner. The following keys are available:
+You can specify the special `test` attribute in the configuration that will not be interpreted by nixvim, but only the test runner. The following keys are available:
 
-- `tests.dontRun`: avoid launching this test, simply build the configuration.
+- `test.runNvim`: Set to `false` to avoid launching nvim with this configuration and simply build the configuration.
 
 The tests are then runnable with `nix flake check --all-systems`.
 
