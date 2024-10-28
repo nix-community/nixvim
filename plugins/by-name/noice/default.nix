@@ -1,35 +1,100 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
-# TODO: This uses a lot of types.anything because noice.nvim types are quite complex.
-# It should be possible to map them to nix, but they would not map really well through
-# toLuaObject, we would maybe need some ad-hoc pre-processing functions.
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  options.plugins.noice = lib.nixvim.neovim-plugin.extraOptionsOptions // {
-    enable = lib.mkEnableOption ''
-      noice.nvim, an experimental nvim UI.
-      Note that if treesitter is enabled you need the following parsers:
-        vim, regex, lua, bash, markdown, markdown_inline
-    '';
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "noice";
+  originalName = "noice.nvim";
+  package = "noice-nvim";
 
-    package = lib.mkPackageOption pkgs "noice" {
-      default = [
-        "vimPlugins"
-        "noice-nvim"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
+  description = ''
+    `noice.nvim`, an experimental Neovim UI.
+
+    > [!NOTE]
+    > If treesitter is enabled you need the following parsers:
+    >  vim, regex, lua, bash, markdown, markdown_inline
+  '';
+
+  # TODO: added 2024-10-27 remove after 24.11
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings =
+    let
+      mkOptionPaths = map (lib.splitString ".");
+    in
+    mkOptionPaths [
+      "cmdline.enabled"
+      "cmdline.view"
+      "cmdline.opts"
+      "cmdline.format"
+      "messages.enabled"
+      "messages.view"
+      "messages.viewError"
+      "messages.viewWarn"
+      "messages.viewHistory"
+      "messages.viewSearch"
+      "popupmenu.enabled"
+      "popupmenu.backend"
+      "popupmenu.kindIcons"
+      "redirect"
+      "commands"
+      "notify.enabled"
+      "notify.view"
+      "lsp.progress.enabled"
+      "lsp.progress.format"
+      "lsp.progress.formatDone"
+      "lsp.progress.throttle"
+      "lsp.progress.view"
+      "lsp.override"
+      "lsp.hover.enabled"
+      "lsp.hover.view"
+      "lsp.hover.opts"
+      "lsp.signature.enabled"
+      "lsp.signature.autoOpen.enabled"
+      "lsp.signature.autoOpen.trigger"
+      "lsp.signature.autoOpen.luasnip"
+      "lsp.signature.autoOpen.throttle"
+      "lsp.signature.view"
+      "lsp.signature.opts"
+      "lsp.message.enabled"
+      "lsp.message.view"
+      "lsp.message.opts"
+      "lsp.documentation.view"
+      "lsp.documentation.opts"
+      "markdown.hover"
+      "markdown.highlights"
+      "health.checker"
+      "smartMove.enabled"
+      "smartMove.excludedFiletypes"
+      "presets"
+      "throttle"
+      "views"
+      "routes"
+      "status"
+      "format"
+    ];
+
+  settingsOptions = {
     cmdline = {
-      enabled = defaultNullOpts.mkBool true "enables Noice cmdline UI";
-      view = defaultNullOpts.mkStr "cmdline_popup" "";
-      opts = defaultNullOpts.mkAttrsOf types.anything { } "";
+      enabled = defaultNullOpts.mkBool true "Enables `Noice` cmdline UI.";
+
+      view = defaultNullOpts.mkStr "cmdline_popup" ''
+        View for rendering the cmdline.
+
+        Change to `cmdline` to get a classic cmdline at the bottom.
+      '';
+
+      opts = defaultNullOpts.mkAttrsOf types.anything { } ''
+        Global options for the cmdline. See section on [views].
+
+        [views] https://github.com/folke/noice.nvim?tab=readme-ov-file#-views
+      '';
+
       format =
         defaultNullOpts.mkAttrsOf types.anything
           {
@@ -66,6 +131,7 @@ in
             };
             input = { };
           }
+          # TODO: cleanup
           ''
             conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
             view: (default is cmdline view)
@@ -79,24 +145,30 @@ in
     messages = {
       enabled = defaultNullOpts.mkBool true ''
         Enables the messages UI.
-        NOTE: If you enable messages, then the cmdline is enabled automatically.
+
+        > [!NOTE] If you enable messages, then the cmdline is enabled automatically.
       '';
-      view = defaultNullOpts.mkStr "notify" "default view for messages";
-      viewError = defaultNullOpts.mkStr "notify" "default view for errors";
-      viewWarn = defaultNullOpts.mkStr "notify" "default view for warnings";
-      viewHistory = defaultNullOpts.mkStr "messages" "view for :messages";
-      viewSearch = defaultNullOpts.mkStr "virtualtext" "view for search count messages";
+
+      view = defaultNullOpts.mkStr "notify" "Default view for messages.";
+
+      view_error = defaultNullOpts.mkStr "notify" "Default view for errors.";
+
+      view_warn = defaultNullOpts.mkStr "notify" "Default view for warnings.";
+
+      view_history = defaultNullOpts.mkStr "messages" "View for `:messages`.";
+
+      view_search = defaultNullOpts.mkStr "virtualtext" "View for search count messages.";
     };
 
     popupmenu = {
-      enabled = defaultNullOpts.mkBool true "enables the Noice popupmenu UI";
+      enabled = defaultNullOpts.mkBool true "Enable the Noice popupmenu UI.";
       backend = defaultNullOpts.mkEnumFirstDefault [
         "nui"
         "cmp"
-      ] "";
-      kindIcons = defaultNullOpts.mkNullable (
+      ] "Backend to use to show regular cmdline completions.";
+      kindIcons = defaultNullOpts.mkNullableWithRaw (
         with types; either bool (attrsOf anything)
-      ) { } "Icons for completion item kinds. set to `false` to disable icons";
+      ) { } "Icons for completion item kinds. Set to `false` to disable icons.";
     };
 
     redirect = defaultNullOpts.mkAttrsOf types.anything {
@@ -104,7 +176,7 @@ in
       filter = {
         event = "msg_show";
       };
-    } "default options for require('noice').redirect";
+    } "Default options for `require('noice').redirect`.";
 
     commands = defaultNullOpts.mkAttrsOf types.anything {
       history = {
@@ -167,72 +239,91 @@ in
           reverse = true;
         };
       };
-    } "You can add any custom commands that will be available with `:Noice command`";
+    } "You can add any custom commands that will be available with `:Noice` command.";
 
     notify = {
       enabled = defaultNullOpts.mkBool true ''
         Enable notification handling.
 
         Noice can be used as `vim.notify` so you can route any notification like other messages.
+
         Notification messages have their level and other properties set.
         event is always "notify" and kind can be any log level as a string.
+
         The default routes will forward notifications to nvim-notify.
         Benefit of using Noice for this is the routing and consistent history view.
       '';
-      view = defaultNullOpts.mkStr "notify" "";
+
+      view = defaultNullOpts.mkStr "notify" "Notify backend to use.";
     };
 
     lsp = {
       progress = {
-        enabled = defaultNullOpts.mkBool true "enable LSP progress";
+        enabled = defaultNullOpts.mkBool true "Enable LSP progress.";
 
-        format = defaultNullOpts.mkNullable (with types; either str anything) "lsp_progress" ''
-          Lsp Progress is formatted using the builtins for lsp_progress
+        format = defaultNullOpts.mkNullableWithRaw (with types; either str anything) "lsp_progress" ''
+          Lsp Progress is formatted using the builtins for lsp_progress.
         '';
-        formatDone = defaultNullOpts.mkNullable (with types; either str anything) "lsp_progress" "";
 
-        throttle = defaultNullOpts.mkNum (lib.literalExpression "1000 / 30") "frequency to update lsp progress message";
+        format_done =
+          defaultNullOpts.mkNullableWithRaw (with types; either str anything) "lsp_progress_done"
+            ''
+              Lsp Progress is formatted using the builtins for lsp_progress.
+            '';
 
-        view = defaultNullOpts.mkStr "mini" "";
+        throttle = defaultNullOpts.mkNum (lib.literalExpression "1000 / 30") "Frequency to update lsp progress message.";
+
+        view = defaultNullOpts.mkStr "mini" "Lsp progress view backend.";
       };
 
       override = defaultNullOpts.mkAttrsOf types.bool {
         "vim.lsp.util.convert_input_to_markdown_lines" = false;
         "vim.lsp.util.stylize_markdown" = false;
         "cmp.entry.get_documentation" = false;
-      } "";
+      } "Functions to override and use Noice.";
 
       hover = {
-        enabled = defaultNullOpts.mkBool true "enable hover UI";
-        view = defaultNullOpts.mkStr (lib.literalMD "use defaults from documentation") ""; # TODO: description
-        opts = defaultNullOpts.mkAttrsOf types.anything { } "merged with defaults from documentation";
+        enabled = defaultNullOpts.mkBool true "Enable hover UI.";
+
+        view = defaultNullOpts.mkStr (lib.literalMD "Use defaults from documentation") "When null, use defaults from documentation.";
+
+        opts =
+          defaultNullOpts.mkAttrsOf types.anything { }
+            "Options merged with defaults from documentation.";
       };
 
       signature = {
-        enabled = defaultNullOpts.mkBool true "enable signature UI";
+        enabled = defaultNullOpts.mkBool true "Enable signature UI.";
 
-        autoOpen = {
-          enabled = defaultNullOpts.mkBool true "";
-          trigger = defaultNullOpts.mkBool true "Automatically show signature help when typing a trigger character from the LSP";
-          luasnip = defaultNullOpts.mkBool true "Will open signature help when jumping to Luasnip insert nodes";
+        auto_open = {
+          enabled = defaultNullOpts.mkBool true "Enable automatic opening of signature help.";
+
+          trigger = defaultNullOpts.mkBool true "Automatically show signature help when typing a trigger character from the LSP.";
+
+          luasnip = defaultNullOpts.mkBool true "Will open signature help when jumping to Luasnip insert nodes.";
+
           throttle = defaultNullOpts.mkNum 50 ''
-            Debounce lsp signature help request by 50ms
+            Debounce lsp signature help request by 50ms.
           '';
         };
 
-        view = defaultNullOpts.mkStr null "when null, use defaults from documentation";
-        opts = defaultNullOpts.mkAttrsOf types.anything { } "merged with defaults from documentation";
+        view = defaultNullOpts.mkStr null "When null, use defaults from documentation.";
+
+        opts =
+          defaultNullOpts.mkAttrsOf types.anything { }
+            "Options merged with defaults from documentation.";
       };
 
       message = {
-        enabled = defaultNullOpts.mkBool true "enable display of messages";
+        enabled = defaultNullOpts.mkBool true "Enable display of messages.";
 
-        view = defaultNullOpts.mkStr "notify" "";
-        opts = defaultNullOpts.mkAttrsOf types.anything { } "";
+        view = defaultNullOpts.mkStr "notify" "Message backend to use.";
+
+        opts = defaultNullOpts.mkAttrsOf types.anything { } "Options for message backend.";
       };
 
       documentation = {
-        view = defaultNullOpts.mkStr "hover" "";
+        view = defaultNullOpts.mkStr "hover" "Documentation backend to use.";
 
         opts = defaultNullOpts.mkAttrsOf types.anything {
           lang = "markdown";
@@ -243,7 +334,7 @@ in
             concealcursor = "n";
             conceallevel = 3;
           };
-        } "";
+        } "Options for documentation backend.";
       };
     };
 
@@ -251,7 +342,7 @@ in
       hover = defaultNullOpts.mkAttrsOf types.str {
         "|(%S-)|".__raw = "vim.cmd.help"; # vim help links
         "%[.-%]%((%S-)%)".__raw = "require('noice.util').open"; # markdown links
-      } "set handlers for hover (lua code)";
+      } "Set handlers for hover.";
 
       highlights = defaultNullOpts.mkAttrsOf types.str {
         "|%S-|" = "@text.reference";
@@ -260,19 +351,20 @@ in
         "^%s*(Return:)" = "@text.title";
         "^%s*(See also:)" = "@text.title";
         "{%S-}" = "@parameter";
-      } "set highlight groups";
+      } "Set highlight groups.";
     };
 
     health = {
-      checker = defaultNullOpts.mkBool true "Disable if you don't want health checks to run";
+      checker = defaultNullOpts.mkBool true "Enables running health checks.";
     };
 
-    smartMove = {
+    smart_move = {
       enabled = defaultNullOpts.mkBool true ''
         Noice tries to move out of the way of existing floating windows.
-        You can disable this behaviour here
+        You can disable this behaviour here.
       '';
-      excludedFiletypes =
+
+      excluded_filetypes =
         defaultNullOpts.mkListOf types.str
           [
             "cmp_menu"
@@ -280,7 +372,7 @@ in
             "notify"
           ]
           ''
-            add any filetypes here, that shouldn't trigger smart move
+            Filetypes that shouldn't trigger smart move.
           '';
     };
 
@@ -293,129 +385,69 @@ in
           inc_rename = false;
           lsp_doc_border = false;
         }
-        "
-        you can enable a preset by setting it to true, or a table that will override the preset
-        config. you can also add custom presets that you can enable/disable with enabled=true
-      ";
+        ''
+          You can enable a preset by setting it to `true`, or a table that will override
+          the preset config.
+
+          You can also add custom presets that you can enable/disable with `enabled=true`.
+        '';
 
     throttle = defaultNullOpts.mkNum (lib.literalExpression "1000 / 30") ''
-      how frequently does Noice need to check for ui updates? This has no effect when in blocking
-      mode
+      How frequently does Noice need to check for ui updates?
+
+      This has no effect when in blocking mode.
     '';
 
-    views = defaultNullOpts.mkAttrsOf types.anything { } "";
-    routes = defaultNullOpts.mkListOf (types.attrsOf types.anything) [ ] "";
-    status = defaultNullOpts.mkAttrsOf types.anything { } "";
-    format = defaultNullOpts.mkAttrsOf types.anything { } "";
-  };
+    views = defaultNullOpts.mkAttrsOf types.anything { } ''
+      A view is a combination of a backend and options.
 
-  config =
-    let
-      cfg = config.plugins.noice;
-      setupOptions = {
-        inherit (cfg)
-          presets
-          views
-          routes
-          status
-          format
-          ;
-        cmdline = {
-          inherit (cfg.cmdline)
-            enabled
-            view
-            opts
-            format
-            ;
-        };
-        messages =
-          let
-            cfgM = cfg.messages;
-          in
-          {
-            inherit (cfgM) enabled view;
-            view_error = cfgM.viewError;
-            view_warn = cfgM.viewWarn;
-            view_history = cfgM.viewHistory;
-            view_search = cfgM.viewSearch;
-          };
-        popupmenu =
-          let
-            cfgP = cfg.popupmenu;
-          in
-          {
-            inherit (cfgP) enabled backend;
-            kind_icons = cfgP.kindIcons;
-          };
-        inherit (cfg) redirect commands;
-        notify = {
-          inherit (cfg.notify) enabled view;
-        };
-        lsp =
-          let
-            cfgL = cfg.lsp;
-          in
-          {
-            progress =
-              let
-                cfgLP = cfgL.progress;
-              in
-              {
-                inherit (cfgLP)
-                  enabled
-                  format
-                  throttle
-                  view
-                  ;
-                format_done = cfgLP.formatDone;
-              };
-            inherit (cfgL) override;
-            hover = {
-              inherit (cfgL.hover) enabled view opts;
-            };
-            signature =
-              let
-                cfgLS = cfgL.signature;
-              in
-              {
-                inherit (cfgLS) enabled view opts;
-                auto_open = {
-                  inherit (cfgLS.autoOpen)
-                    enabled
-                    trigger
-                    luasnip
-                    throttle
-                    ;
-                };
-              };
-            message = {
-              inherit (cfgL.message) enabled view opts;
-            };
-            documentation = {
-              inherit (cfgL.documentation) view opts;
-            };
-          };
-        markdown = {
-          inherit (cfg.markdown) hover highlights;
-        };
-        health = {
-          inherit (cfg.health) checker;
-        };
-        smart_move =
-          let
-            cfgS = cfg.smartMove;
-          in
-          {
-            inherit (cfgS) enabled;
-            excluded_filetypes = cfgS.excludedFiletypes;
-          };
-      };
-    in
-    lib.mkIf cfg.enable {
-      # nui-nvim & nvim-notify are dependencies of the vimPlugins.noice-nvim package
-      extraPlugins = [ cfg.package ];
-      extraConfigLua = ''
-        require("noice").setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
-    };
+      Noice comes with the following built-in backends:
+
+       - `popup`: powered by nui.nvim
+       - `split`: powered by nui.nvim
+       - `notify`: powered by nvim-notify
+       - `virtualtext`: shows the message as virtualtext (for example for search_count)
+       - `mini`: similar to notifier.nvim & fidget.nvim
+       - `notify_send`: generate a desktop notification
+    '';
+
+    routes = defaultNullOpts.mkListOf (types.attrsOf types.anything) [ ] ''
+      Route options can be any of the view options or `skip` or `stop`.
+
+      A route has a filter, view and optional opts attribute.
+
+      - `view`: one of the views (built-in or custom)
+      - `filter` a filter for messages matching this route
+      - `opts`: options for the view and the route
+    '';
+
+    status = defaultNullOpts.mkAttrsOf types.anything { } ''
+      Noice comes with the following statusline components:
+
+      - `ruler`
+      - `message`: last line of the last message (event=show_msg)
+      - `command`: showcmd
+      - `mode`: showmode (@recording messages)
+      - `search`: search count messages
+    '';
+
+    format = defaultNullOpts.mkAttrsOf types.anything { } ''
+      Formatters are used in format definitions.
+
+      Noice includes the following formatters:
+
+      - `level`: message level with optional icon and hl_group per level
+      - `text`: any text with optional hl_group
+      - `title`: message title with optional hl_group
+      - `event`: message event with optional hl_group
+      - `kind`: message kind with optional hl_group
+      - `date`: formatted date with optional date format string
+      - `message`: message content itself with optional hl_group to override message highlights
+      - `confirm`: only useful for confirm messages. Will format the choices as buttons.
+      - `cmdline`: will render the cmdline in the message that generated the message.
+      - `progress`: progress bar used by lsp progress
+      - `spinner`: spinners used by lsp progress
+      - `data`: render any custom data from Message.opts. Useful in combination with the opts passed to vim.notify
+    '';
+  };
 }
