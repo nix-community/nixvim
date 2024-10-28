@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
@@ -8,10 +7,13 @@
 # TODO: This uses a lot of types.anything because noice.nvim types are quite complex.
 # It should be possible to map them to nix, but they would not map really well through
 # toLuaObject, we would maybe need some ad-hoc pre-processing functions.
-with lib;
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
 {
-  options.plugins.noice = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption ''
+  options.plugins.noice = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+    enable = lib.mkEnableOption ''
       noice.nvim, an experimental nvim UI.
       Note that if treesitter is enabled you need the following parsers:
         vim, regex, lua, bash, markdown, markdown_inline
@@ -25,11 +27,11 @@ with lib;
     };
 
     cmdline = {
-      enabled = helpers.defaultNullOpts.mkBool true "enables Noice cmdline UI";
-      view = helpers.defaultNullOpts.mkStr "cmdline_popup" "";
-      opts = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
+      enabled = defaultNullOpts.mkBool true "enables Noice cmdline UI";
+      view = defaultNullOpts.mkStr "cmdline_popup" "";
+      opts = defaultNullOpts.mkAttrsOf types.anything { } "";
       format =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
+        defaultNullOpts.mkAttrsOf types.anything
           {
             cmdline = {
               pattern = "^:";
@@ -75,36 +77,36 @@ with lib;
     };
 
     messages = {
-      enabled = helpers.defaultNullOpts.mkBool true ''
+      enabled = defaultNullOpts.mkBool true ''
         Enables the messages UI.
         NOTE: If you enable messages, then the cmdline is enabled automatically.
       '';
-      view = helpers.defaultNullOpts.mkStr "notify" "default view for messages";
-      viewError = helpers.defaultNullOpts.mkStr "notify" "default view for errors";
-      viewWarn = helpers.defaultNullOpts.mkStr "notify" "default view for warnings";
-      viewHistory = helpers.defaultNullOpts.mkStr "messages" "view for :messages";
-      viewSearch = helpers.defaultNullOpts.mkStr "virtualtext" "view for search count messages";
+      view = defaultNullOpts.mkStr "notify" "default view for messages";
+      viewError = defaultNullOpts.mkStr "notify" "default view for errors";
+      viewWarn = defaultNullOpts.mkStr "notify" "default view for warnings";
+      viewHistory = defaultNullOpts.mkStr "messages" "view for :messages";
+      viewSearch = defaultNullOpts.mkStr "virtualtext" "view for search count messages";
     };
 
     popupmenu = {
-      enabled = helpers.defaultNullOpts.mkBool true "enables the Noice popupmenu UI";
-      backend = helpers.defaultNullOpts.mkEnumFirstDefault [
+      enabled = defaultNullOpts.mkBool true "enables the Noice popupmenu UI";
+      backend = defaultNullOpts.mkEnumFirstDefault [
         "nui"
         "cmp"
       ] "";
-      kindIcons = helpers.defaultNullOpts.mkNullable (
+      kindIcons = defaultNullOpts.mkNullable (
         with types; either bool (attrsOf anything)
       ) { } "Icons for completion item kinds. set to `false` to disable icons";
     };
 
-    redirect = helpers.defaultNullOpts.mkAttrsOf types.anything {
+    redirect = defaultNullOpts.mkAttrsOf types.anything {
       view = "popup";
       filter = {
         event = "msg_show";
       };
     } "default options for require('noice').redirect";
 
-    commands = helpers.defaultNullOpts.mkAttrsOf types.anything {
+    commands = defaultNullOpts.mkAttrsOf types.anything {
       history = {
         view = "split";
         opts = {
@@ -168,7 +170,7 @@ with lib;
     } "You can add any custom commands that will be available with `:Noice command`";
 
     notify = {
-      enabled = helpers.defaultNullOpts.mkBool true ''
+      enabled = defaultNullOpts.mkBool true ''
         Enable notification handling.
 
         Noice can be used as `vim.notify` so you can route any notification like other messages.
@@ -177,66 +179,62 @@ with lib;
         The default routes will forward notifications to nvim-notify.
         Benefit of using Noice for this is the routing and consistent history view.
       '';
-      view = helpers.defaultNullOpts.mkStr "notify" "";
+      view = defaultNullOpts.mkStr "notify" "";
     };
 
     lsp = {
       progress = {
-        enabled = helpers.defaultNullOpts.mkBool true "enable LSP progress";
+        enabled = defaultNullOpts.mkBool true "enable LSP progress";
 
-        format = helpers.defaultNullOpts.mkNullable (with types; either str anything) "lsp_progress" ''
+        format = defaultNullOpts.mkNullable (with types; either str anything) "lsp_progress" ''
           Lsp Progress is formatted using the builtins for lsp_progress
         '';
-        formatDone = helpers.defaultNullOpts.mkNullable (with types; either str anything) "lsp_progress" "";
+        formatDone = defaultNullOpts.mkNullable (with types; either str anything) "lsp_progress" "";
 
-        throttle = helpers.defaultNullOpts.mkNum (literalExpression "1000 / 30") "frequency to update lsp progress message";
+        throttle = defaultNullOpts.mkNum (lib.literalExpression "1000 / 30") "frequency to update lsp progress message";
 
-        view = helpers.defaultNullOpts.mkStr "mini" "";
+        view = defaultNullOpts.mkStr "mini" "";
       };
 
-      override = helpers.defaultNullOpts.mkAttrsOf types.bool {
+      override = defaultNullOpts.mkAttrsOf types.bool {
         "vim.lsp.util.convert_input_to_markdown_lines" = false;
         "vim.lsp.util.stylize_markdown" = false;
         "cmp.entry.get_documentation" = false;
       } "";
 
       hover = {
-        enabled = helpers.defaultNullOpts.mkBool true "enable hover UI";
-        view = helpers.defaultNullOpts.mkStr (literalMD "use defaults from documentation") ""; # TODO: description
-        opts =
-          helpers.defaultNullOpts.mkAttrsOf types.anything { }
-            "merged with defaults from documentation";
+        enabled = defaultNullOpts.mkBool true "enable hover UI";
+        view = defaultNullOpts.mkStr (lib.literalMD "use defaults from documentation") ""; # TODO: description
+        opts = defaultNullOpts.mkAttrsOf types.anything { } "merged with defaults from documentation";
       };
 
       signature = {
-        enabled = helpers.defaultNullOpts.mkBool true "enable signature UI";
+        enabled = defaultNullOpts.mkBool true "enable signature UI";
 
         autoOpen = {
-          enabled = helpers.defaultNullOpts.mkBool true "";
-          trigger = helpers.defaultNullOpts.mkBool true "Automatically show signature help when typing a trigger character from the LSP";
-          luasnip = helpers.defaultNullOpts.mkBool true "Will open signature help when jumping to Luasnip insert nodes";
-          throttle = helpers.defaultNullOpts.mkNum 50 ''
+          enabled = defaultNullOpts.mkBool true "";
+          trigger = defaultNullOpts.mkBool true "Automatically show signature help when typing a trigger character from the LSP";
+          luasnip = defaultNullOpts.mkBool true "Will open signature help when jumping to Luasnip insert nodes";
+          throttle = defaultNullOpts.mkNum 50 ''
             Debounce lsp signature help request by 50ms
           '';
         };
 
-        view = helpers.defaultNullOpts.mkStr null "when null, use defaults from documentation";
-        opts =
-          helpers.defaultNullOpts.mkAttrsOf types.anything { }
-            "merged with defaults from documentation";
+        view = defaultNullOpts.mkStr null "when null, use defaults from documentation";
+        opts = defaultNullOpts.mkAttrsOf types.anything { } "merged with defaults from documentation";
       };
 
       message = {
-        enabled = helpers.defaultNullOpts.mkBool true "enable display of messages";
+        enabled = defaultNullOpts.mkBool true "enable display of messages";
 
-        view = helpers.defaultNullOpts.mkStr "notify" "";
-        opts = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
+        view = defaultNullOpts.mkStr "notify" "";
+        opts = defaultNullOpts.mkAttrsOf types.anything { } "";
       };
 
       documentation = {
-        view = helpers.defaultNullOpts.mkStr "hover" "";
+        view = defaultNullOpts.mkStr "hover" "";
 
-        opts = helpers.defaultNullOpts.mkAttrsOf types.anything {
+        opts = defaultNullOpts.mkAttrsOf types.anything {
           lang = "markdown";
           replace = true;
           render = "plain";
@@ -250,12 +248,12 @@ with lib;
     };
 
     markdown = {
-      hover = helpers.defaultNullOpts.mkAttrsOf types.str {
+      hover = defaultNullOpts.mkAttrsOf types.str {
         "|(%S-)|".__raw = "vim.cmd.help"; # vim help links
         "%[.-%]%((%S-)%)".__raw = "require('noice.util').open"; # markdown links
       } "set handlers for hover (lua code)";
 
-      highlights = helpers.defaultNullOpts.mkAttrsOf types.str {
+      highlights = defaultNullOpts.mkAttrsOf types.str {
         "|%S-|" = "@text.reference";
         "@%S+" = "@parameter";
         "^%s*(Parameters:)" = "@text.title";
@@ -266,16 +264,16 @@ with lib;
     };
 
     health = {
-      checker = helpers.defaultNullOpts.mkBool true "Disable if you don't want health checks to run";
+      checker = defaultNullOpts.mkBool true "Disable if you don't want health checks to run";
     };
 
     smartMove = {
-      enabled = helpers.defaultNullOpts.mkBool true ''
+      enabled = defaultNullOpts.mkBool true ''
         Noice tries to move out of the way of existing floating windows.
         You can disable this behaviour here
       '';
       excludedFiletypes =
-        helpers.defaultNullOpts.mkListOf types.str
+        defaultNullOpts.mkListOf types.str
           [
             "cmp_menu"
             "cmp_docs"
@@ -287,7 +285,7 @@ with lib;
     };
 
     presets =
-      helpers.defaultNullOpts.mkNullable (with types; either bool anything)
+      defaultNullOpts.mkNullable (with types; either bool anything)
         {
           bottom_search = false;
           command_palette = false;
@@ -300,15 +298,15 @@ with lib;
         config. you can also add custom presets that you can enable/disable with enabled=true
       ";
 
-    throttle = helpers.defaultNullOpts.mkNum (literalExpression "1000 / 30") ''
+    throttle = defaultNullOpts.mkNum (lib.literalExpression "1000 / 30") ''
       how frequently does Noice need to check for ui updates? This has no effect when in blocking
       mode
     '';
 
-    views = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
-    routes = helpers.defaultNullOpts.mkListOf (types.attrsOf types.anything) [ ] "";
-    status = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
-    format = helpers.defaultNullOpts.mkAttrsOf types.anything { } "";
+    views = defaultNullOpts.mkAttrsOf types.anything { } "";
+    routes = defaultNullOpts.mkListOf (types.attrsOf types.anything) [ ] "";
+    status = defaultNullOpts.mkAttrsOf types.anything { } "";
+    format = defaultNullOpts.mkAttrsOf types.anything { } "";
   };
 
   config =
@@ -413,11 +411,11 @@ with lib;
           };
       };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       # nui-nvim & nvim-notify are dependencies of the vimPlugins.noice-nvim package
       extraPlugins = [ cfg.package ];
       extraConfigLua = ''
-        require("noice").setup(${helpers.toLuaObject setupOptions})
+        require("noice").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }
