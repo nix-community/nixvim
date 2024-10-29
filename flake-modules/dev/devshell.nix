@@ -111,6 +111,11 @@
               command = ''${pkgs.python3.interpreter} ${./list-plugins.py} "$@"'';
               help = "List plugins and get implementation infos";
             }
+            {
+              name = "init";
+              command = lib.getExe (pkgs.callPackage ./init-script { });
+              help = "Initialize a new plugin in nixvim";
+            }
           ];
       };
     };
