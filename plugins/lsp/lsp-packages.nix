@@ -1,5 +1,6 @@
 {
   unpackaged = [
+    "ada_ls"
     "agda_ls"
     "anakin_language_server"
     "angularls"
@@ -154,6 +155,7 @@
     "theme_check"
     "thriftls"
     "tsp_server"
+    "ts_query_ls"
     "turtle_ls"
     "tvm_ffi_navigator"
     "twiggy_language_server"
