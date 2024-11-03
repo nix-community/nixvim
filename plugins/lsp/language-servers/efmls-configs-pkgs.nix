@@ -86,6 +86,7 @@ in
       "shfmt"
       "smlfmt"
       "sqlfluff"
+      "sql-formatter"
       "statix"
       "stylua"
       "taplo"
@@ -109,7 +110,6 @@ in
         "eslint_d"
         "jsonlint"
         "prettier"
-        "sql-formatter"
         "stylelint"
         "textlint"
       ];
