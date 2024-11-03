@@ -1,11 +1,16 @@
+{ pkgs, ... }:
 {
   empty = {
-    plugins.yazi.enable = true;
+    # TODO: pkgs.yazi is unavailable because its dependency _7zz is broken (as of 2024-11-03)
+    # Re-enable when https://github.com/NixOS/nixpkgs/pull/353272 lands on `nixos-unstable`
+    plugins.yazi.enable = pkgs.stdenv.hostPlatform.system != "x86_64-linux";
   };
 
   defaults = {
     plugins.yazi = {
-      enable = true;
+      # TODO: pkgs.yazi is unavailable because its dependency _7zz is broken (as of 2024-11-03)
+      # Re-enable when https://github.com/NixOS/nixpkgs/pull/353272 lands on `nixos-unstable`
+      enable = pkgs.stdenv.hostPlatform.system != "x86_64-linux";
 
       settings = {
         log_level = "off";

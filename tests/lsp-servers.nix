@@ -46,6 +46,13 @@ let
           # Broken
           "scheme_langserver"
         ]
+        ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-linux") [
+          # Those LSP servers depend on pkgs._7zz which is broken as of 2024-11-03
+          # Re-enable when https://github.com/NixOS/nixpkgs/pull/353272 lands on `nixos-unstable`
+          "phpactor"
+          "psalm"
+          "phan"
+        ]
         ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
           # Binary package not available for this architecture
           "starpls"
