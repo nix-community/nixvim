@@ -96,14 +96,15 @@
   };
 
   volar-tsls-integration =
-    { config, ... }:
+    { config, pkgs, ... }:
     {
       plugins.lsp = {
         enable = true;
         servers = {
           volar.enable = true;
           ts_ls = {
-            enable = true;
+            # TODO typescript-language-server's dependency git-lfs is broken as of 2024-11-03
+            enable = !pkgs.stdenv.isDarwin;
             filetypes = [ "typescript" ];
           };
         };
@@ -128,13 +129,14 @@
     };
 
   tsls-filetypes =
-    { config, ... }:
+    { config, pkgs, ... }:
     {
       plugins.lsp = {
         enable = true;
         servers = {
           ts_ls = {
-            enable = true;
+            # TODO typescript-language-server's dependency git-lfs is broken as of 2024-11-03
+            enable = !pkgs.stdenv.isDarwin;
           };
         };
       };

@@ -39,6 +39,8 @@ let
       disabled =
         lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
+          # typescript-language-server's dependency git-lfs is broken as of 2024-11-03
+          "ts_ls"
         ]
         ++ lib.optionals pkgs.stdenv.isAarch64 [
           # Broken
