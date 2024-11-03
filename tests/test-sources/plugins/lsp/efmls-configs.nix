@@ -48,6 +48,8 @@
           # https://github.com/NixOS/nixpkgs/pull/331373
           # TODO: re-enable this test when fixed
           "dmd"
+          # As of 2024-11-03, graalvm-ce (dependency of clj-kondo) is broken on x86_64-darwin
+          "clj_kondo"
         ];
 
       # TODO: respect unpackaged from generated

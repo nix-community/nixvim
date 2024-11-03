@@ -140,6 +140,10 @@
                 "verilator"
                 "verible_verilog_format"
               ])
+              ++ (lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64) [
+                # As of 2024-11-03, graalvm-ce (dependency of clj-kondo) is broken on x86_64-darwin
+                "clj_kondo"
+              ])
               ++ (lib.optionals pkgs.stdenv.isAarch64 [
                 "semgrep"
                 "smlfmt"
