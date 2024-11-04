@@ -10,26 +10,18 @@
       enable = true;
       settings = {
         keymap = {
-          show = "<C-space>";
-          hide = "<C-e>";
-          accept = "<Tab>";
-          select_prev = "<C-p>";
-          select_next = "<C-n>";
-          show_documentation = "<C-space>";
-          hide_documentation = "<C-space>";
-          scroll_documentation_up = "<C-b>";
-          scroll_documentation_down = "<C-f>";
-          snippet_forward = "<Tab>";
-          snippet_backward = "<S-Tab>";
+          preset = "default";
         };
         highlight = {
           use_nvim_cmp_as_default = false;
         };
         nerd_font_variant = "normal";
-        documentation = {
-          auto_show = false;
-          auto_show_delay_ms = 500;
-          update_delay_ms = 50;
+        windows = {
+          documentation = {
+            auto_show = false;
+            auto_show_delay_ms = 500;
+            update_delay_ms = 50;
+          };
         };
         accept = {
           auto_brackets = {
@@ -61,6 +53,82 @@
           };
         };
       };
+    };
+  };
+
+  example = {
+    plugins.blink-cmp = {
+      enable = true;
+      settings = {
+        fuzzy = {
+          prebuilt_binaries = {
+            download = false;
+          };
+        };
+        keymap = {
+          "<C-space>" = [
+            "show"
+            "show_documentation"
+            "hide_documentation"
+          ];
+          "<C-e>" = [ "hide" ];
+          "<C-y>" = [ "select_and_accept" ];
+
+          "<Up>" = [
+            "select_prev"
+            "fallback"
+          ];
+          "<Down>" = [
+            "select_next"
+            "fallback"
+          ];
+          "<C-p>" = [
+            "select_prev"
+            "fallback"
+          ];
+          "<C-n>" = [
+            "select_next"
+            "fallback"
+          ];
+
+          "<C-b>" = [
+            "scroll_documentation_up"
+            "fallback"
+          ];
+          "<C-f>" = [
+            "scroll_documentation_down"
+            "fallback"
+          ];
+
+          "<Tab>" = [
+            "snippet_forward"
+            "fallback"
+          ];
+          "<S-Tab>" = [
+            "snippet_backward"
+            "fallback"
+          ];
+        };
+        highlight = {
+          use_nvim_cmp_as_default = true;
+        };
+        windows = {
+          documentation = {
+            auto_show = true;
+          };
+        };
+        accept = {
+          auto_brackets = {
+            enabled = true;
+          };
+        };
+        trigger = {
+          signature_help = {
+            enabled = true;
+          };
+        };
+      };
+
     };
   };
 }
