@@ -128,7 +128,7 @@ in
         Load lua snippets with the lua loader.
         Check <https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#lua> for the necessary file structure.
       '';
-      example = ''
+      example = literalExpression ''
         [
           {}
           {
