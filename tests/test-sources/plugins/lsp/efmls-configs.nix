@@ -32,16 +32,6 @@
           # re-enable after fixed
           "dmd"
         ]
-        ++ lib.optionals (system == "x86_64-linux") [
-          # TODO: phpPackages.php-cs-fixer is unavailable because its dependency _7zz is broken (as of 2024-11-03)
-          # Re-enable when https://github.com/NixOS/nixpkgs/pull/353272 lands on `nixos-unstable`
-          "phan"
-          "phpcbf"
-          "phpcs"
-          "php_cs_fixer"
-          "phpstan"
-          "psalm"
-        ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13
           # TODO: re-enable this tests when fixed

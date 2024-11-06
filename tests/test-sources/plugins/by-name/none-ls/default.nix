@@ -144,15 +144,6 @@
                 # As of 2024-11-03, graalvm-ce (dependency of clj-kondo) is broken on x86_64-darwin
                 "clj_kondo"
               ])
-              ++ (lib.optionals (pkgs.stdenv.isLinux && pkgs.stdenv.isx86_64) [
-                # TODO: phpPackages.php-cs-fixer is unavailable because its dependency _7zz is broken (as of 2024-11-03)
-                # Re-enable when https://github.com/NixOS/nixpkgs/pull/353272 lands on `nixos-unstable`
-                "phpcbf"
-                "phpcs"
-                "phpcsfixer"
-                "phpmd"
-                "phpstan"
-              ])
               ++ (lib.optionals pkgs.stdenv.isAarch64 [
                 "semgrep"
                 "smlfmt"
