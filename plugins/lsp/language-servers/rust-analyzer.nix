@@ -30,6 +30,16 @@ in
 
     # TODO: make nullable
     rustcPackage = mkPackageOption pkgs "rustc" { };
+
+    installRustfmt = mkOption {
+      type = with types; nullOr bool;
+      default = null;
+      example = true;
+      description = "Whether to install `rustfmt`.";
+    };
+
+    # TODO: make nullable
+    rustfmtPackage = mkPackageOption pkgs "rustfmt" { };
   };
   config = mkIf cfg.enable {
     warnings =
@@ -56,7 +66,8 @@ in
 
     extraPackages =
       with pkgs;
-      (optional ((isBool cfg.installCargo) && cfg.installCargo) cfg.cargoPackage)
-      ++ (optional ((isBool cfg.installRustc) && cfg.installRustc) cfg.rustcPackage);
+      optional (isBool cfg.installCargo && cfg.installCargo) cfg.cargoPackage
+      ++ optional (isBool cfg.installRustc && cfg.installRustc) cfg.rustcPackage
+      ++ optional (isBool cfg.installRustfmt && cfg.installRustfmt) cfg.rustfmtPackage;
   };
 }
