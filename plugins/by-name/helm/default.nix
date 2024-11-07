@@ -1,27 +1,12 @@
 {
   lib,
   helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
-let
-  cfg = config.plugins.helm;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+helpers.vim-plugin.mkVimPlugin {
+  name = "helm";
+  originalName = "vim-helm";
+  package = "vim-helm";
 
-  options.plugins.helm = {
-    enable = mkEnableOption "vim-helm";
-
-    package = lib.mkPackageOption pkgs "vim-helm" {
-      default = [
-        "vimPlugins"
-        "vim-helm"
-      ];
-    };
-  };
-
-  config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 }
