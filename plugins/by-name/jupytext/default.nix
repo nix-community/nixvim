@@ -78,4 +78,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
     };
   };
 
+  extraConfig = cfg: { extraPython3Packages = cfg.python3Dependencies; };
+
 }
