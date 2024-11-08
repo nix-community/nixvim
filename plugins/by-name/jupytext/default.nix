@@ -61,4 +61,21 @@ helpers.neovim-plugin.mkNeovimPlugin {
       };
     };
   };
+
+  extraOptions = {
+    python3Dependencies = mkOption {
+      type = with types; functionTo (listOf package);
+      default =
+        p: with p; [
+          jupytext
+        ];
+      defaultText = literalExpression ''
+        p: with p; [
+          jupytext
+        ]
+      '';
+      description = "Python packages to add to the `PYTHONPATH` of neovim.";
+    };
+  };
+
 }
