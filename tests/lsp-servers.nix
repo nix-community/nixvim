@@ -50,6 +50,10 @@ let
           # TODO: 2024-10-05 build failure
           "fstar"
         ]
+        ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") [
+          # TODO: 2024-11-10 fixed in https://github.com/NixOS/nixpkgs/pull/355032
+          "lua-language-server"
+        ]
         ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-darwin") [
           # Binary package not available for this architecture
           "starpls"

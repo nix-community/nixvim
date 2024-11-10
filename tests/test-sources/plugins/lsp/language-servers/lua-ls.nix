@@ -5,8 +5,8 @@
       enable = true;
 
       servers.lua_ls = {
-        # TODO: re-enable when x86_64-darwin build is stable
-        enable = pkgs.stdenv.isLinux || pkgs.stdenv.hostPlatform.isAarch64;
+        # TODO: 2024-11-10 fixed in https://github.com/NixOS/nixpkgs/pull/355032
+        enable = pkgs.stdenv.isLinux || pkgs.stdenv.hostPlatform.isx86_64;
 
         settings = {
           addonManager = {
