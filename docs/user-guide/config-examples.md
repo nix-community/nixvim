@@ -33,7 +33,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
 | [veeronniecaw/ronvim] | |
-| [zainkergaye/nixosdotfiles] | NixVim editor primarily for Java and Asciidoc | 
+| [zainkergaye/nixosdotfiles] | NixVim editor primarily for Java and Asciidoc |
 
 <!-- WARNING: Please ensure entries are alphabetically sorted ! -->
 
