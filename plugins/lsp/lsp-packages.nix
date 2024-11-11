@@ -3,7 +3,6 @@
     "ada_ls"
     "agda_ls"
     "anakin_language_server"
-    "angularls"
     "antlersls"
     "apex_ls"
     "awk_ls"
@@ -180,6 +179,7 @@
 
   packages = {
     aiken = "aiken";
+    angularls = "angular-language-server";
     ansiblels = "ansible-language-server";
     arduino_language_server = "arduino-language-server";
     asm_lsp = "asm-lsp";
