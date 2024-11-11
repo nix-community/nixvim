@@ -6,6 +6,8 @@
   nixosOptionsDoc,
   transformOptions,
   hmOptions,
+  # The root directory of the site
+  baseHref ? "/",
 }:
 with lib;
 let
@@ -237,6 +239,10 @@ let
     # Copy the generated MD docs into the build directory
     # Using pkgs.writeShellScript helps to avoid the "bash: argument list too long" error
     bash -e ${pkgs.writeShellScript "copy_docs" docs.commands}
+
+    # Patch book.toml
+    substituteInPlace ./book.toml \
+      --replace-fail "@SITE_URL@" "${baseHref}"
 
     # Prepare SUMMARY.md for mdBook
     # Using pkgs.writeText helps to avoid the same error as above
