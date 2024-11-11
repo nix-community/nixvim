@@ -321,6 +321,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
       cp "$file" "$path"
     done
 
+    # Patch book.toml
+    substituteInPlace ./book.toml \
+      --replace-fail "@SITE_URL@" "$siteURL"
+
     # Patch SUMMARY.md - which defiens mdBook's table of contents
     substituteInPlace ./SUMMARY.md \
       --replace-fail "@PLATFORM_OPTIONS@" "$wrapperOptionsSummary" \
@@ -331,6 +335,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     mkdir -p $dest/search
     cp -r ${search}/* $dest/search
   '';
+
+  # The root directory of the site
+  # Can be overridden, e.g. by CI
+  siteURL = "/nixvim/";
 
   inherit (mdbook)
     nixvimOptionsSummary
