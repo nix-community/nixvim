@@ -104,7 +104,13 @@ You can specify the special `test` attribute in the configuration that will not 
 
 - `test.runNvim`: Set to `false` to avoid launching nvim with this configuration and simply build the configuration.
 
-The tests are then runnable with `nix flake check --all-systems`.
+> [!TIP]
+> A single test can be run with `nix develop --command tests --interactive`. This launches the testing suite in interactive mode, allowing you to easily search for and select specific tests to run.
+
+> [!WARNING]
+> Running the entire test suite locally is not necessary in most cases. Instead, you may find it more efficient to focus on specific tests relevant to your changes, as Continuous Integration (CI) will run the full test suite on any Pull Requests (PRs) you open. This ensures comprehensive coverage without requiring the full suite to be run locally every time.
+
+The full test suite can still be run locally with `nix flake check --all-systems` if needed.
 
 There are a second set of tests, unit tests for nixvim itself, defined in `tests/lib-tests.nix` that use the `pkgs.lib.runTests` framework.
 
