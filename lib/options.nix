@@ -147,6 +147,19 @@ rec {
       mkLuaFn' = args: mkNullOrLuaFn' (processDefaultNullArgs args);
       mkLuaFn = pluginDefault: description: mkLuaFn' { inherit pluginDefault description; };
 
+      mkRaw' =
+        args:
+        mkNullable' (
+          args
+          // {
+            type = types.rawLua;
+          }
+          // lib.optionalAttrs (args ? pluginDefault) {
+            pluginDefault = lib.nixvim.mkRaw args.pluginDefault;
+          }
+        );
+      mkRaw = pluginDefault: description: mkRaw' { inherit pluginDefault description; };
+
       mkNum' = args: mkNullableWithRaw' (args // { type = types.number; });
       mkNum = pluginDefault: description: mkNum' { inherit pluginDefault description; };
       mkInt' = args: mkNullableWithRaw' (args // { type = types.int; });

@@ -140,7 +140,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           Keys to use to dismiss the popup.
         '';
 
-    override_function = defaultNullOpts.mkNullable types.rawLua { __raw = "function(_) end"; } ''
+    override_function = defaultNullOpts.mkRaw "function(_) end" ''
       Override function to map keys to actions.
 
       ```lua
