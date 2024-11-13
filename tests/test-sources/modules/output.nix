@@ -99,4 +99,54 @@
         }
       ];
     };
+
+  with-providers = {
+    withNodeJs = true;
+    withPerl = true;
+    withPython3 = true;
+    withRuby = true;
+
+    extraConfigLua = ''
+      if vim.fn.executable("nvim-node") ~= 1 then
+        print("Unable to find Node.js provider.")
+      end
+
+      if vim.fn.executable("nvim-perl") ~= 1 then
+        print("Unable to find Perl provider.")
+      end
+
+      if vim.fn.executable("nvim-python3") ~= 1 then
+        print("Unable to find Python3 provider.")
+      end
+
+      if vim.fn.executable("nvim-ruby") ~= 1 then
+        print("Unable to find Ruby provider.")
+      end
+    '';
+  };
+
+  without-providers = {
+    withNodeJs = false;
+    withPerl = false;
+    withPython3 = false;
+    withRuby = false;
+
+    extraConfigLua = ''
+      if vim.fn.executable("nvim-node") == 1 then
+        print("Node.js provider was found.")
+      end
+
+      if vim.fn.executable("nvim-perl") == 1 then
+        print("Perl provider was found.")
+      end
+
+      if vim.fn.executable("nvim-python3") == 1 then
+        print("Python3 provider was found.")
+      end
+
+      if vim.fn.executable("nvim-ruby") == 1 then
+        print("Ruby provider was found.")
+      end
+    '';
+  };
 }
