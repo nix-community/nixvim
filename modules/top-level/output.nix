@@ -40,6 +40,12 @@ in
       description = "Enable Node provider.";
     };
 
+    withPerl = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable Perl provider.";
+    };
+
     package = mkPackageOption pkgs "Neovim" {
       default = "neovim-unwrapped";
     };
@@ -268,6 +274,7 @@ in
             vimAlias
             withRuby
             withNodeJs
+            withPerl
             ;
           # inherit customRC;
           inherit plugins;
