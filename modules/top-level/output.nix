@@ -46,6 +46,12 @@ in
       description = "Enable Perl provider.";
     };
 
+    withPython3 = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Python 3 provider.";
+    };
+
     package = mkPackageOption pkgs "Neovim" {
       default = "neovim-unwrapped";
     };
@@ -275,6 +281,7 @@ in
             withRuby
             withNodeJs
             withPerl
+            withPython3
             ;
           # inherit customRC;
           inherit plugins;
