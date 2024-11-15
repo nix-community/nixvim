@@ -15,7 +15,7 @@ in
           Sets the register to use for the clipboard.
           Learn more in [`:h 'clipboard'`](https://neovim.io/doc/user/options.html#'clipboard').
         '';
-        type = with lib.types; nullOr (either str (listOf str));
+        type = with lib.types; nullOr (maybeRaw (either str (listOf (maybeRaw str))));
         default = null;
         example = "unnamedplus";
       };
