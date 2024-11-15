@@ -97,6 +97,8 @@ lib.fix (
       mkIfNonNull'
       mkRaw
       mkRawKey
+      nestedLiteral
+      nestedLiteralLua
       override
       overrideDerivation
       toRawKeys

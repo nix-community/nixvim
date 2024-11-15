@@ -155,6 +155,64 @@ rec {
     in
     lib.literalExpression exp;
 
+  /**
+    Convert the given string into a `__pretty` printed mkRaw expression.
+
+    For use in nested values that will be printed by `lib.generators.toPretty`,
+    or `lib.options.renderOptionValue`.
+
+    # Example
+
+    ```nix
+    nestedLiteralLua "print('hi')"
+    => nestedLiteral (literalLua "print('hi')")
+    => {
+      __pretty = lib.getAttr "text";
+      val = literalLua "print('hi')";
+    }
+    ```
+
+    # Type
+    ```
+    nestedLiteralLua :: String -> AttrSet
+    ```
+  */
+  nestedLiteralLua = r: nestedLiteral (literalLua r);
+
+  /**
+    Convert the given string or literalExpression into a `__pretty` printed expression.
+
+    For use in nested values that will be printed by `lib.generators.toPretty`,
+    or `lib.options.renderOptionValue`.
+
+    # Examples
+
+    ```nix
+    nestedLiteral "example"
+    => {
+      __pretty = lib.getAttr "text";
+      val = literalExpression "example";
+    }
+    ```
+
+    ```nix
+    nestedLiteral (literalExpression ''"hello, world"'')
+    => {
+      __pretty = lib.getAttr "text";
+      val = literalExpression ''"hello, world"'';
+    }
+    ```
+
+    # Type
+    ```
+    nestedLiteral :: (String | literalExpression) -> AttrSet
+    ```
+  */
+  nestedLiteral = val: {
+    __pretty = lib.getAttr "text";
+    val = if val._type or null == "literalExpression" then val else lib.literalExpression val;
+  };
+
   wrapDo = string: ''
     do
       ${string}

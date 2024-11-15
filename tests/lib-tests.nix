@@ -331,6 +331,34 @@ let
       };
     };
 
+    # Integration test for nestedLiteral and renderOptionValue
+    testNestedLiteral_withRenderOptionValue = {
+      expr =
+        builtins.mapAttrs
+          (
+            _: v:
+            (lib.options.renderOptionValue {
+              literal = helpers.nestedLiteral v;
+            }).text
+          )
+          {
+            empty = "";
+            sum = "1 + 1";
+            print = ''lib.mkRaw "print('hi')"'';
+          };
+      expected =
+        builtins.mapAttrs
+          (_: literal: ''
+            {
+              literal = ${literal};
+            }'')
+          {
+            empty = "";
+            sum = "1 + 1";
+            print = ''lib.mkRaw "print('hi')"'';
+          };
+    };
+
     testUpperFirstChar = {
       expr = map helpers.upperFirstChar [
         "foo"
