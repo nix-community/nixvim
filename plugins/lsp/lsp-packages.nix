@@ -16,6 +16,7 @@
     "bright_script"
     "bsl_ls"
     "buddy_ls"
+    "bufls"
     "bzl"
     "c3_lsp"
     "cadence"
@@ -194,7 +195,6 @@
     bitbake_language_server = "bitbake-language-server";
     blueprint_ls = "blueprint-compiler";
     buck2 = "buck2";
-    bufls = "buf-language-server";
     ccls = "ccls";
     clangd = "clang-tools";
     clojure_lsp = "clojure-lsp";
