@@ -50,7 +50,6 @@
       extraPlugins ? [ ],
       extraPackages ? [ ],
       callSetup ? true,
-      installPackage ? true,
     }@args:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
@@ -104,6 +103,16 @@
                           package
                         ];
                   };
+              packageDecorator = lib.mkOption {
+                type = lib.types.functionTo lib.types.package;
+                default = lib.id;
+                defaultText = lib.literalExpression "x: x";
+                description = ''
+                  Additional transformations to apply to the final installed package.
+                  The result of these transformations is **not** visible in the `package` option's value.
+                '';
+                internal = true;
+              };
             }
             // lib.optionalAttrs hasSettings {
               settings = lib.nixvim.mkSettingsOption {
@@ -129,8 +138,10 @@
               lib.mkMerge (
                 [
                   {
-                    extraPlugins = (lib.optional installPackage cfg.package) ++ extraPlugins;
                     inherit extraPackages;
+                    extraPlugins = extraPlugins ++ [
+                      (cfg.packageDecorator cfg.package)
+                    ];
                   }
                   (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                     colorscheme = lib.mkDefault colorscheme;

@@ -91,15 +91,26 @@
                         package
                       ];
                 };
+            packageDecorator = lib.mkOption {
+              type = lib.types.functionTo lib.types.package;
+              default = lib.id;
+              defaultText = lib.literalExpression "x: x";
+              description = ''
+                Additional transformations to apply to the final installed package.
+                The result of these transformations is **not** visible in the `package` option's value.
+              '';
+              internal = true;
+            };
           } // settingsOption // extraOptions;
 
           config = lib.mkIf cfg.enable (
             lib.mkMerge [
               {
                 inherit extraPackages;
+                extraPlugins = extraPlugins ++ [
+                  (cfg.packageDecorator cfg.package)
+                ];
                 globals = lib.mapAttrs' (n: lib.nameValuePair (globalPrefix + n)) (cfg.settings or { });
-                # does this evaluate package? it would not be desired to evaluate package if we use another package.
-                extraPlugins = extraPlugins ++ lib.optional (cfg.package != null) cfg.package;
               }
               (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                 colorscheme = lib.mkDefault colorscheme;
