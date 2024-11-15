@@ -124,6 +124,37 @@ rec {
     else
       throw "mkRaw: invalid input: ${lib.generators.toPretty { multiline = false; } r}";
 
+  /**
+    Convert the given string into a literalExpression mkRaw.
+
+    For use in option documentation, such as examples and defaults.
+
+    # Example
+
+    ```nix
+    literalLua "print('hi')"
+    => literalExpression ''lib.nixvim.mkRaw "print('hi')"''
+    => {
+      _type = "literalExpression";
+      text = ''lib.nixvim.mkRaw "print('hi')"'';
+    }
+    ```
+
+    # Type
+    ```
+    literalLua :: String -> AttrSet
+    ```
+  */
+  literalLua =
+    r:
+    let
+      # Pass the value through mkRaw for validation
+      raw = mkRaw r;
+      # TODO: consider switching to lib.generators.mkLuaInline ?
+      exp = "lib.nixvim.mkRaw " + builtins.toJSON raw.__raw;
+    in
+    lib.literalExpression exp;
+
   wrapDo = string: ''
     do
       ${string}

@@ -318,6 +318,19 @@ let
       };
     };
 
+    testLiteralLua = {
+      expr = builtins.mapAttrs (_: helpers.literalLua) {
+        print = "print('hi')";
+        nil = "nil";
+        table = "{}";
+      };
+      expected = builtins.mapAttrs (_: lib.literalExpression) {
+        print = ''lib.nixvim.mkRaw "print('hi')"'';
+        nil = ''lib.nixvim.mkRaw "nil"'';
+        table = ''lib.nixvim.mkRaw "{}"'';
+      };
+    };
+
     testUpperFirstChar = {
       expr = map helpers.upperFirstChar [
         "foo"

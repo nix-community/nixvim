@@ -92,6 +92,7 @@ lib.fix (
       hasContent
       ifNonNull'
       listToUnkeyedAttrs
+      literalLua
       mkIfNonNull
       mkIfNonNull'
       mkRaw
