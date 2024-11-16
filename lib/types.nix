@@ -14,7 +14,7 @@ let
       name = "strLua";
       inherit description;
       descriptionClass = "noun";
-      check = v: lib.isString v || isRawType v;
+      check = v: lib.isString v || types.rawLua.check v;
       merge =
         loc: defs:
         lib.pipe defs [
@@ -24,7 +24,8 @@ let
           (lib.options.mergeEqualOption loc)
         ];
     };
-  isRawType = v: v ? __raw && lib.isString v.__raw;
+
+  isRawType = v: lib.isString (v.__raw or null);
 in
 rec {
   # TODO: deprecate in favor of types.rawLua.check
@@ -36,7 +37,7 @@ rec {
     description = "raw lua code";
     descriptionClass = "noun";
     merge = lib.options.mergeEqualOption;
-    check = v: (isRawType v) || (v ? __empty);
+    check = v: isRawType v || lib.nixvim.lua.isInline v || v ? __empty;
   };
 
   maybeRaw =
