@@ -15,7 +15,8 @@ helpers.vim-plugin.mkVimPlugin {
   description = ''
     When combined with a set of tmux key bindings, the plugin will allow you to navigate seamlessly between vim splits and tmux panes using a consistent set of hotkeys.
 
-    **WARNING:** to work correctly, you must configure tmux separately.
+    > [!WARNING]
+    > To work correctly, you must configure tmux separately.
 
     ## Usage
 
