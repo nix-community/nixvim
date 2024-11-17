@@ -1,12 +1,10 @@
-{ pkgs, ... }:
 {
   defaults = {
     plugins.lsp = {
       enable = true;
 
       servers.lua_ls = {
-        # TODO: 2024-11-10 fixed in https://github.com/NixOS/nixpkgs/pull/355032
-        enable = pkgs.stdenv.isLinux || pkgs.stdenv.hostPlatform.isx86_64;
+        enable = true;
 
         settings = {
           addonManager = {
