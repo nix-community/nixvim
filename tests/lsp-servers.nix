@@ -37,7 +37,12 @@ let
     }:
     let
       disabled =
-        lib.optionals pkgs.stdenv.isDarwin [
+        [
+          # TODO: added 2024-11-17
+          # Fixed in https://github.com/NixOS/nixpkgs/pull/356704
+          "psalm"
+        ]
+        ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
         ]
         ++ lib.optionals pkgs.stdenv.isAarch64 [

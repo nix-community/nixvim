@@ -34,6 +34,9 @@
           # TODO: added 2024-11-17
           # Fixed in https://github.com/NixOS/nixpkgs/pull/356691
           "phpstan"
+          # TODO: added 2024-11-17
+          # Fixed in https://github.com/NixOS/nixpkgs/pull/356704
+          "psalm"
         ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13
