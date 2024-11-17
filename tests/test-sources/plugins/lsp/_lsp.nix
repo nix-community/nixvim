@@ -73,7 +73,7 @@
           installCargo = true;
           installRustc = true;
         };
-        ruff_lsp = {
+        ruff = {
           enable = true;
           extraOptions = {
             init_options.settings.args = [ "--config=/path/to/config.toml" ];
