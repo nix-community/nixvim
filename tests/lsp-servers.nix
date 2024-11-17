@@ -41,6 +41,11 @@ let
           # TODO: added 2024-11-17
           # Fixed in https://github.com/NixOS/nixpkgs/pull/356704
           "psalm"
+
+          # DEPRECATED SERVERS
+          # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
+          "ruff_lsp"
+          "bufls"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
