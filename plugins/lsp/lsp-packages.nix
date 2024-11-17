@@ -92,6 +92,7 @@
     "msbuild_project_tools_server"
     "mutt_ls"
     "nelua_lsp"
+    "nextflow_ls"
     "nomad_lsp"
     "ntt"
     "nxls"
@@ -126,6 +127,7 @@
     "remark_ls"
     "rescriptls"
     "rnix"
+    "robotcode"
     "robotframework_ls"
     "roc_ls"
     "rome"
@@ -195,6 +197,7 @@
     bitbake_language_server = "bitbake-language-server";
     blueprint_ls = "blueprint-compiler";
     buck2 = "buck2";
+    buf_ls = "buf";
     ccls = "ccls";
     clangd = "clang-tools";
     clojure_lsp = "clojure-lsp";
