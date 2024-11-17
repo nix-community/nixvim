@@ -31,6 +31,9 @@
           # TODO: added 2024-10-15
           # re-enable after fixed
           "dmd"
+          # TODO: added 2024-11-30
+          # Fixed in https://github.com/NixOS/nixpkgs/pull/360544
+          "psalm"
         ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13

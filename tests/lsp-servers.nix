@@ -48,6 +48,9 @@ let
           "dafny"
           "fsautocomplete"
           "omnisharp"
+          # TODO: added 2024-11-30
+          # Fixed in https://github.com/NixOS/nixpkgs/pull/360544
+          "psalm"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
