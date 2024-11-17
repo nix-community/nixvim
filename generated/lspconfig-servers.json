@@ -164,6 +164,11 @@
     "name": "buddy_ls"
   },
   {
+    "cmd": ["buf", "beta", "lsp", "--timeout=0", "--log-format=text"],
+    "desc": "https://github.com/bufbuild/buf\n\nbuf beta lsp included in the cli itself\n\nbuf beta lsp is a Protobuf language server compatible with Buf modules and workspaces\n",
+    "name": "buf_ls"
+  },
+  {
     "cmd": ["bufls", "serve"],
     "desc": "https://github.com/bufbuild/buf-language-server\n\n`buf-language-server` can be installed via `go install`:\n```sh\ngo install github.com/bufbuild/buf-language-server/cmd/bufls@latest\n```\n\nbufls is a Protobuf language server compatible with Buf modules and workspaces\n",
     "name": "bufls"
@@ -909,6 +914,11 @@
     "name": "neocmake"
   },
   {
+    "cmd": ["java", "-jar", "nextflow-language-server-all.jar"],
+    "desc": "https://github.com/nextflow-io/language-server\n\nRequirements: - Java 17+\n\n`nextflow_ls` can be installed by following the instructions\n[here](https://github.com/nextflow-io/language-server#development).\n\nIf you have installed nextflow language server, you can set the `cmd`\ncustom path as follow:\n\n``` lua\nrequire'lspconfig'.nextflow_ls.setup{\n    cmd = { 'java', '-jar', 'nextflow-language-server-all.jar' },\n    filetypes = { 'nextflow' },\n    root_dir = util.root_pattern('nextflow.config', '.git'),\n    settings = {\n      nextflow = {\n        files = {\n          exclude = { '.git', '.nf-test', 'work' },\n        },\n      },\n    },\n}\n```\n",
+    "name": "nextflow_ls"
+  },
+  {
     "desc": "https://github.com/elixir-tools/next-ls\n\n**By default, next-ls does not set its `cmd`. Please see the following [detailed instructions](https://www.elixir-tools.dev/docs/next-ls/installation/) for possible installation methods.**\n",
     "name": "nextls"
   },
@@ -1232,6 +1242,11 @@
     "cmd": ["rnix-lsp"],
     "desc": "https://github.com/nix-community/rnix-lsp\n\nA language server for Nix providing basic completion and formatting via nixpkgs-fmt.\n\nTo install manually, run `cargo install rnix-lsp`. If you are using nix, rnix-lsp is in nixpkgs.\n\nThis server accepts configuration via the `settings` key.\n\n    ",
     "name": "rnix"
+  },
+  {
+    "cmd": ["robotcode", "language-server"],
+    "desc": "https://robotcode.io\n\nRobotCode - Language Server Protocol implementation for Robot Framework.\n",
+    "name": "robotcode"
   },
   {
     "cmd": ["robotframework_ls"],
