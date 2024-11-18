@@ -54,8 +54,9 @@ jobs:
           # 2: dest-dir (relative to /nixvim/)
           build() {
             flake="github:${repo}${1:+/$1}"
-            baseHref="/${repoName}/${2:+$2/}"
-            destDir="${out}${baseHref}"
+            dir="${2:+/$2}"
+            baseHref="/${repoName}${dir}/"
+            installDir="${out}${dir}"
 
             # Build docs for the given flake ref, overriding baseHref in the derivation args
             nix build --impure --expr '(builtins.getFlake "'"$flake"'").outputs.packages.${builtins.currentSystem}.docs.override {
@@ -64,7 +65,7 @@ jobs:
 
             # Copy the result to the dest-dir
             mkdir -p "$destDir"
-            cp -r result/share/doc/* "$destDir"
+            cp -r result/share/doc/* "$installDir"
           }
 
           # Install main-branch docs at the top-level
