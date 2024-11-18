@@ -6,7 +6,7 @@
   transformOptions,
   search,
   # The root directory of the site
-  baseHref ? "/nixvim/",
+  baseHref ? "/",
 }:
 let
   inherit (evaledModules.config.meta) nixvimInfo;
@@ -305,7 +305,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
   };
 
   buildPhase = ''
-    dest=$out/share/doc/nixvim
+    dest=$out/share/doc
     mkdir -p $dest
 
     # Copy (and flatten) src into the build directory
