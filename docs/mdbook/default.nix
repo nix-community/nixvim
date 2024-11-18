@@ -5,6 +5,8 @@
   nixosOptionsDoc,
   transformOptions,
   search,
+  # The root directory of the site
+  baseHref ? "/nixvim/",
 }:
 let
   inherit (evaledModules.config.meta) nixvimInfo;
@@ -323,7 +325,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
     # Patch book.toml
     substituteInPlace ./book.toml \
-      --replace-fail "@SITE_URL@" "$siteURL"
+      --replace-fail "@SITE_URL@" "$baseHref"
 
     # Patch SUMMARY.md - which defiens mdBook's table of contents
     substituteInPlace ./SUMMARY.md \
@@ -333,12 +335,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     mdbook build
     cp -r ./book/* $dest
     mkdir -p $dest/search
-    cp -r ${search}/* $dest/search
+    cp -r ${finalAttrs.passthru.search}/* $dest/search
   '';
 
-  # The root directory of the site
-  # Can be overridden, e.g. by CI
-  siteURL = "/nixvim/";
+  inherit baseHref;
 
   inherit (mdbook)
     nixvimOptionsSummary
@@ -348,5 +348,8 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     copy-docs = pkgs.writeShellScript "copy-docs" docs.commands;
+    search = search.override {
+      baseHref = finalAttrs.baseHref + "search/";
+    };
   };
 })
