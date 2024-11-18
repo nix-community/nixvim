@@ -26,11 +26,14 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      repo: "${{ github.repository }}"
-      repoName: "${{ github.event.repository.name }}"
-      out: docs-build
     runs-on: ubuntu-latest
     timeout-minutes: 40
+
+    env:
+      repo: ${{ github.repository }}
+      repoName: ${{ github.event.repository.name }}
+      out: docs-build
+
     steps:
       - name: Install nix
         uses: cachix/install-nix-action@v26
