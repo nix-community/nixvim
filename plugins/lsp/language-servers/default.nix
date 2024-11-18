@@ -20,7 +20,7 @@ let
         };
       };
       extraConfig = cfg: {
-        extraPackages = [ cfg.goPackage ];
+        extraPackages = optionals cfg.enable [ cfg.goPackage ];
       };
     };
     idris2_lsp = {
