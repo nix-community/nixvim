@@ -51,7 +51,7 @@ jobs:
           set -ex
 
           # 1: branch
-          # 2: dest-dir (relative to /nixvim/)
+          # 2: install dir (relative to /nixvim/)
           build() {
             flake="github:${repo}${1:+/$1}"
             dir="${2:+/$2}"
@@ -63,8 +63,8 @@ jobs:
               baseHref = "'"$baseHref"'";
             }'
 
-            # Copy the result to the dest-dir
-            mkdir -p "$destDir"
+            # Copy the result to the install dir
+            mkdir -p "$installDir"
             cp -r result/share/doc/* "$installDir"
           }
 
