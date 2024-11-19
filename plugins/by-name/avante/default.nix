@@ -78,7 +78,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     };
   };
 
-  extraConfig = _: {
+  extraConfig = {
     plugins.avante.luaConfig.pre = ''
       require('avante_lib').load()
     '';

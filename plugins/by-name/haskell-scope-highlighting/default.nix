@@ -12,7 +12,7 @@ helpers.vim-plugin.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraConfig = _: {
+  extraConfig = {
     warnings = optional (!config.plugins.treesitter.enable) ''
       Nixvim (plugins.haskell-scope-highlighting): haskell-scope-highlighting needs treesitter to function as intended.
       Please, enable it by setting `plugins.treesitter.enable` to `true`.

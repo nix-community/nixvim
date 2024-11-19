@@ -177,5 +177,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     on_highlights = "function(highlights, colors) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

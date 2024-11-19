@@ -11,7 +11,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraConfig = cfg: {
+  extraConfig = {
     # Those options are strongly recommended by the plugin author:
     # https://github.com/folke/edgy.nvim?tab=readme-ov-file#-installation
     opts = {

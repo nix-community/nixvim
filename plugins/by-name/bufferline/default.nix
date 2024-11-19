@@ -654,7 +654,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       };
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     # TODO: added 2024-09-20 remove after 24.11
     plugins.web-devicons = lib.mkIf (
       !(

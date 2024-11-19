@@ -96,7 +96,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     zindex = 20;
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     warnings = mkIf (!config.plugins.treesitter.enable) [
       "Nixvim: treesitter-context needs treesitter to function as intended"
     ];

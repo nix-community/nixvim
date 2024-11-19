@@ -101,53 +101,48 @@ helpers.neovim-plugin.mkNeovimPlugin {
     };
   };
 
-  extraConfig =
-    cfg:
-    let
-      opt = options.plugins.fzf-lua;
-    in
-    {
-      # TODO: deprecated 2024-08-29 remove after 24.11
-      warnings = lib.optionals opt.iconsEnabled.isDefined [
-        ''
-          The option definition `plugins.fzf-lua.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
-        ''
-      ];
-      # TODO: added 2024-09-20 remove after 24.11
-      plugins.web-devicons =
-        lib.mkIf
-          (
-            opt.iconsEnabled.isDefined
-            && cfg.iconsEnabled
-            && !(
-              config.plugins.mini.enable
-              && config.plugins.mini.modules ? icons
-              && config.plugins.mini.mockDevIcons
-            )
+  extraConfig = cfg: opts: {
+    # TODO: deprecated 2024-08-29 remove after 24.11
+    warnings = lib.optionals opts.iconsEnabled.isDefined [
+      ''
+        The option definition `plugins.fzf-lua.iconsEnabled' in ${lib.showFiles opts.iconsEnabled.files} has been deprecated; please remove it.
+      ''
+    ];
+    # TODO: added 2024-09-20 remove after 24.11
+    plugins.web-devicons =
+      lib.mkIf
+        (
+          opts.iconsEnabled.isDefined
+          && cfg.iconsEnabled
+          && !(
+            config.plugins.mini.enable
+            && config.plugins.mini.modules ? icons
+            && config.plugins.mini.mockDevIcons
           )
-          {
-            enable = lib.mkOverride 1490 true;
-          };
-
-      extraPackages = [ cfg.fzfPackage ];
-
-      plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
-
-      keymaps = mapAttrsToList (
-        key: mapping:
-        let
-          actionStr =
-            if isString mapping then
-              "${mapping}()"
-            else
-              "${mapping.action}(${helpers.toLuaObject mapping.settings})";
-        in
+        )
         {
-          inherit key;
-          mode = mapping.mode or "n";
-          action.__raw = "function() require('fzf-lua').${actionStr} end";
-          options = mapping.options or { };
-        }
-      ) cfg.keymaps;
-    };
+          enable = lib.mkOverride 1490 true;
+        };
+
+    extraPackages = [ cfg.fzfPackage ];
+
+    plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
+
+    keymaps = mapAttrsToList (
+      key: mapping:
+      let
+        actionStr =
+          if isString mapping then
+            "${mapping}()"
+          else
+            "${mapping.action}(${helpers.toLuaObject mapping.settings})";
+      in
+      {
+        inherit key;
+        mode = mapping.mode or "n";
+        action.__raw = "function() require('fzf-lua').${actionStr} end";
+        options = mapping.options or { };
+      }
+    ) cfg.keymaps;
+  };
 }

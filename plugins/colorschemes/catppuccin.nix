@@ -316,5 +316,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     };
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

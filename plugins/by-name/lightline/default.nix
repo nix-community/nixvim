@@ -210,7 +210,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   callSetup = false;
-  extraConfig = cfg: {
+  extraConfig = {
     globals.lightline = lib.modules.mkAliasAndWrapDefsWithPriority lib.id options.plugins.lightline.settings;
   };
 }

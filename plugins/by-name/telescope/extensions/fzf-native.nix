@@ -43,7 +43,7 @@ mkExtension {
     case_mode = "ignore_case";
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     # Native library is in build/libfzf.so
     performance.combinePlugins.pathsToLink = [ "/build" ];
   };

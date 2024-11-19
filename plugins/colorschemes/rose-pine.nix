@@ -154,5 +154,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     before_highlight = "function(group, highlight, palette) end";
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

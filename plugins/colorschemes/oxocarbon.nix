@@ -10,5 +10,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

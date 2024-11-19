@@ -31,7 +31,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     )
   ];
 
-  extraConfig = cfg: {
+  extraConfig = {
     # Strongly recommended by the plugin, to avoid duplication.
     diagnostics.virtual_text = mkDefault false;
   };
