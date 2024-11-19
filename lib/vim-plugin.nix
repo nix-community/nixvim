@@ -60,14 +60,14 @@
         }:
         let
           cfg = config.${namespace}.${name};
-          opt = options.${namespace}.${name};
+          opts = options.${namespace}.${name};
         in
         {
           meta = {
             inherit maintainers;
             nixvimInfo = {
               inherit description;
-              url = args.url or opt.package.default.meta.homepage;
+              url = args.url or opts.package.default.meta.homepage;
               path = [
                 namespace
                 name
@@ -115,7 +115,11 @@
               (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                 colorscheme = lib.mkDefault colorscheme;
               })
-              (extraConfig cfg)
+              (lib.optionalAttrs (args ? extraConfig) (
+                lib.nixvim.modules.applyExtraConfig {
+                  inherit extraConfig cfg opts;
+                }
+              ))
             ]
           );
         };

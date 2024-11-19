@@ -74,7 +74,18 @@ let
       };
     };
 
-  extraConfigModule = { config, ... }: extraConfig (getPluginAttr config);
+  extraConfigModule =
+    {
+      lib,
+      config,
+      options,
+      ...
+    }:
+    lib.nixvim.modules.applyExtraConfig {
+      inherit extraConfig;
+      cfg = getPluginAttr config;
+      opts = getPluginAttr options;
+    };
 in
 {
   imports = imports ++ [
