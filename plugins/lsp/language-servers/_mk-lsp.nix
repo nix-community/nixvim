@@ -168,7 +168,7 @@ in
       (mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
-      (extraConfig cfg)
+      (lib.mkIf cfg.enable (extraConfig cfg))
     ]
     # Add an alias (with warning) for the lspconfig server name, if different to `name`.
     # Note: users may use lspconfig's docs to guess the `plugins.lsp.servers.*` name
