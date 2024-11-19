@@ -1,15 +1,14 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
-  telescopeHelpers = import ./_helpers.nix { inherit lib config pkgs; };
+  mkExtension = import ./_mk-extension.nix;
 in
-telescopeHelpers.mkExtension {
+mkExtension {
   name = "live-grep-args";
   extensionName = "live_grep_args";
   package = "telescope-live-grep-args-nvim";

@@ -1,15 +1,11 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 with lib;
 let
-  telescopeHelpers = import ./_helpers.nix { inherit lib config pkgs; };
+  inherit (import ./_helpers.nix lib) mkMappingsOption;
+  mkExtension = import ./_mk-extension.nix;
   inherit (lib.nixvim) defaultNullOpts mkNullOrStr;
 in
-telescopeHelpers.mkExtension {
+mkExtension {
   name = "file-browser";
   extensionName = "file_browser";
   package = "telescope-file-browser-nvim";
@@ -183,7 +179,7 @@ telescopeHelpers.mkExtension {
       Show the current relative path from cwd as the prompt prefix.
     '';
 
-    mappings = telescopeHelpers.mkMappingsOption {
+    mappings = mkMappingsOption {
       insertDefaults = ''
         {
           "<A-c>" = "require('telescope._extensions.file_browser.actions').create";
