@@ -30,6 +30,8 @@ with lib;
 let
   cfg = config.plugins.lsp.servers.${name};
   opt = options.plugins.lsp.servers.${name};
+
+  enabled = config.plugins.lsp.enable && cfg.enable;
 in
 {
   meta.nixvimInfo = {
@@ -131,7 +133,7 @@ in
     } // extraOptions;
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf enabled {
     extraPackages = [ cfg.package ];
 
     plugins.lsp.enabledServers = [
@@ -168,7 +170,7 @@ in
       (mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
-      (lib.mkIf cfg.enable (extraConfig cfg))
+      (lib.mkIf enabled (extraConfig cfg))
     ]
     # Add an alias (with warning) for the lspconfig server name, if different to `name`.
     # Note: users may use lspconfig's docs to guess the `plugins.lsp.servers.*` name
