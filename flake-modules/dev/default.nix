@@ -1,7 +1,10 @@
 { lib, inputs, ... }:
 {
   imports =
-    [ ./devshell.nix ]
+    [
+      ./ci-new-plugin-matrix.nix
+      ./devshell.nix
+    ]
     ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule
     ++ lib.optional (inputs.treefmt-nix ? flakeModule) inputs.treefmt-nix.flakeModule;
 

@@ -1,0 +1,115 @@
+name: new-plugin
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "plugins/**"
+
+# Prevent running this workflow concurrently
+concurrency:
+  group: "matrix-messages"
+
+jobs:
+  setup:
+    name: Collect metadata and setup job matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    if: github.repository == 'nix-community/nixvim'
+    outputs:
+      json: ${{ steps.get_info.outputs.json }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v26
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get plugins info
+        id: get_info
+        run: |
+          # Run the `plugin-info` tool, printing the result to write to GITHUB_OUTPUT
+          echo "json=$(
+            nix run .#plugin-info -- \
+              -c \
+              'github:${{ github.repository }}/${{ github.event.before }}'
+          )" >> $GITHUB_OUTPUT
+
+  send:
+    name: Send matrix message
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ fromJSON(needs.setup.outputs.json).removed == [] && fromJSON(needs.setup.outputs.json).added != [] }}
+    strategy:
+      matrix:
+        added: ${{ fromJSON(needs.setup.outputs.json).added }}
+    env:
+      name: ${{ matrix.added.name }}
+      plain: ${{ matrix.added.plain }}
+      html: ${{ matrix.added.html }}
+      markdown: ${{ matrix.added.markdown }}
+
+    steps:
+      - name: Install matrix-msg tool
+        uses: lkiesow/matrix-notification@v1
+        with:
+          token: ${{ secrets.CI_MATRIX_TOKEN }}
+          server: ${{ secrets.CI_MATRIX_SERVER }}
+          room: ${{ secrets.CI_MATRIX_ROOM }}
+          tool: true
+
+      - name: Send message and print summary
+        run: |
+          # stdout
+          echo "$plain"
+
+          # markdown summary
+          echo "$markdown" >> $GITHUG_STEP_SUMMARY
+          echo -e "\n---\n" >> $GITHUG_STEP_SUMMARY
+
+          # matrix message
+          if matrix-msg "$plain" "$html"
+          then
+            echo "Matrix message sent successfully" >> $GITHUG_STEP_SUMMARY
+          else
+            echo "Matrix message failed" >> $GITHUG_STEP_SUMMARY
+          fi
+
+  report:
+    name: Report removed plugins
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ fromJSON(needs.setup.outputs.json).removed != [] }}
+    env:
+      json: ${{ needs.setup.outputs.json }}
+
+    steps:
+      - name: Comment on PR
+        if: ${{ fromJSON(needs.setup.outputs.json).pr }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          num: ${{ fromJSON(needs.setup.outputs.json).pr.number }}
+        run: |
+          body="
+          > [!WARNING]
+          > Not posting announcements to Matrix because plugins were removed in this PR.
+          > Please post announcements manually.
+
+          Added:
+          $(echo "$json" | jq -r '.added[] | "- \(.name)"')
+
+          Removed:
+          $(echo "$json" | jq -r '.removed[] | "- \(.)"')
+          "
+
+          # Markdown summary
+          echo "$body" >> $GITHUG_STEP_SUMMARY
+
+          # PR comment
+          gh pr comment "$num" \
+            --repo '${{ github.repository }}' \
+            --body "$body"
