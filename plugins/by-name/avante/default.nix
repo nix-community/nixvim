@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib.nixvim) defaultNullOpts mkNullOrOption' toLuaObject;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption';
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "avante";
