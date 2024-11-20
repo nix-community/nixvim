@@ -2,7 +2,7 @@
 
 You must use a `nixpkgs` version compatible with the nixvim version you choose.
 
-The `master` branch requires to use a _very recent_ version of nixpkgs unstable.
+The `main` branch requires to use a _very recent_ version of nixpkgs unstable.
 In order to guarantee the compatibility between nixvim & nixpkgs it is recommended to always update both at the same time.
 
 When using a `stable` version you must use the corresponding nixvim branch, for example `nixos-24.05` when using NixOS 24.05.
