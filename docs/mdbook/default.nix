@@ -1,5 +1,6 @@
 {
   pkgs,
+  runCommand,
   lib,
   evaledModules,
   nixosOptionsDoc,
@@ -7,6 +8,9 @@
   search,
   # The root directory of the site
   baseHref ? "/",
+  # A list of all available docs that should be linked to
+  # Each element should contain { branch; nixpkgsBranch; baseHref; }
+  availableVersions ? [ ],
 }:
 let
   inherit (evaledModules.config.meta) nixvimInfo;
@@ -269,6 +273,15 @@ let
       ) mdbook.wrapperOptions
     );
   };
+
+  # Zip the list of attrs into an attr of lists, for use as bash arrays
+  zippedVersions =
+    assert lib.assertMsg
+      (lib.all (o: o ? branch && o ? nixpkgsBranch && o ? baseHref) availableVersions)
+      ''
+        Expected all "availableVersions" docs entries to contain { branch, nixpkgsBranch, baseHref } attrs!
+      '';
+    lib.zipAttrs availableVersions;
 in
 
 pkgs.stdenv.mkDerivation (finalAttrs: {
@@ -332,6 +345,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@PLATFORM_OPTIONS@" "$wrapperOptionsSummary" \
       --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
 
+    # Patch index.md
+    substituteInPlace ./index.md \
+      --replace-fail "@DOCS_VERSIONS@" "$(cat ${finalAttrs.passthru.docs-versions})"
+
     mdbook build
     cp -r ./book/* $dest
     mkdir -p $dest/search
@@ -351,5 +368,35 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     search = search.override {
       baseHref = finalAttrs.baseHref + "search/";
     };
+    docs-versions =
+      runCommand "docs-versions"
+        {
+          __structuredAttrs = true;
+          branches = zippedVersions.branch or [ ];
+          nixpkgsBranches = zippedVersions.nixpkgsBranch or [ ];
+          baseHrefs = zippedVersions.baseHref or [ ];
+          current = baseHref;
+        }
+        ''
+          touch "$out"
+          for i in ''${!branches[@]}; do
+            branch="''${branches[i]}"
+            nixpkgs="''${nixpkgsBranches[i]}"
+            baseHref="''${baseHrefs[i]}"
+            linkText="\`$branch\` branch"
+
+            link=
+            suffix=
+            if [ "$baseHref" = "$current" ]; then
+              # Don't bother linking to ourselves
+              link="$linkText"
+              suffix=" _(this page)_"
+            else
+              link="[$linkText]($baseHref)"
+            fi
+
+            echo "- The $link, for use with nixpkgs \`$nixpkgs\`$suffix" >> "$out"
+          done
+        '';
   };
 })
