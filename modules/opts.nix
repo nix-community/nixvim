@@ -67,12 +67,12 @@ in
             }:
             let
               varName = "nixvim_${luaVariableName}";
-              optionDefinitions = config.${optionName};
+              optionDefinitions = helpers.toLuaObject config.${optionName};
             in
-            lib.optionalString (optionDefinitions != { }) ''
+            lib.optionalString (optionDefinitions != "{}") ''
               -- Set up ${prettyName} {{{
               do
-                local ${varName} = ${helpers.toLuaObject optionDefinitions}
+                local ${varName} = ${optionDefinitions}
 
                 for k,v in pairs(${varName}) do
                   vim.${luaApi}[k] = v
