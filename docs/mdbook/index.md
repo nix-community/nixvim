@@ -1,5 +1,13 @@
 # NixVim - A Neovim configuration system for nix
 
+## Other versions of these docs
+
+Please ensure you are referencing documentation that corresponds to the Nixvim version you are using!
+
+Documentation is currently available for the following versions:
+
+@DOCS_VERSIONS@
+
 ## What is it?
 NixVim is a [Neovim](https://neovim.io) distribution built around
 [Nix](https://nixos.org) modules. It is distributed as a Nix flake, and

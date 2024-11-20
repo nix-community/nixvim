@@ -50,23 +50,54 @@ jobs:
         run: |
           set -ex
 
-          # 1: branch
-          # 2: install dir (relative to /nixvim/)
-          build() {
-            branch="$1"
-            dir="${2:+/$2}"
-            flakeref="github:${repo}${branch:+/$branch}"
-            baseHref="/${repoName}${dir}/"
-            installDir="${out}${dir}"
+          # A list of all doc versions to be built,
+          # (Written to versions.json)
+          echo '
+            [
+              {
+                "branch": "main",
+                "nixpkgsBranch": "nixos-unstable"
+              },
+              {
+                "branch": "nixos-24.05",
+                "nixpkgsBranch": "nixos-24.05",
+                "subPath": "stable"
+                // TODO: consider having 24.05 instead of stable?
+              }
+            ]
+          ' | sed 's/^ *\/\/.*//' | jq \
+              --arg repoName "$repoName" \
+              'map(
+                  .
+                  # Ensure subPath is a string
+                  | .subPath = (.subPath // "")
+                  # Construct baseHref from $repoName and .subPath
+                  | .baseHref = (
+                       .subPath
+                       | if . == "" then "" else "/\(.)" end
+                       | $repoName + .
+                       | "/\(.)/"
+                  )
+              )' > versions.json
 
-            # Build docs for the given flake ref, overriding baseHref in the derivation args
+          # 1: branch
+          # 2: baseHref
+          # 3: install dir
+          build() {
+            flakeref="github:${repo}${1:+/$1}"
+            baseHref="$2"
+            installDir="${out}${3:+/$3}"
+
+            # Build docs for the given flake ref, overriding the relevant derivation args
             nix build --impure \
                 --argstr flakeref "$flakeref" \
                 --argstr baseHref "$baseHref" \
+                --arg-from-file versionsJson versions.json \
                 --expr '
                   {
                     flakeref,
                     baseHref,
+                    versionsJson,
                     system ? builtins.currentSystem,
                   }:
                   let
@@ -75,6 +106,7 @@ jobs:
                   in
                   packages.docs.override {
                     inherit baseHref;
+                    availableVersions = builtins.fromJSON versionsJson;
                   }
                 '
 
@@ -83,12 +115,16 @@ jobs:
             cp -r result/share/doc/* "$installDir"
           }
 
-          # Install main-branch docs at the top-level
-          build 'main' ''
+          # For each version of the docs...
+          jq -c '.[]' versions.json |
+          while IFS=$"\n" read -r entry; do
+              branch=$(echo "$entry" | jq -r '.branch')
+              baseHref=$(echo "$entry" | jq -r '.baseHref')
+              installDir=$(echo "$entry" | jq -r '.subPath')
 
-          # Install 24.05 docs under 'stable'
-          # TODO: consider having `<release>` instead of `stable`
-          build 'nixos-24.05' 'stable'
+              # Build this version of the docs
+              build "$branch" "$baseHref" "$installDir"
+          done
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

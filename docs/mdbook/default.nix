@@ -1,5 +1,6 @@
 {
   pkgs,
+  runCommand,
   lib,
   modules,
   helpers,
@@ -8,6 +9,9 @@
   hmOptions,
   # The root directory of the site
   baseHref ? "/",
+  # A list of all available docs that should be linked to
+  # Each element should contain { branch; nixpkgsBranch; baseHref; }
+  availableVersions ? [ ],
 }:
 with lib;
 let
@@ -229,6 +233,46 @@ let
     ) docs.modules;
   };
 
+  # Zip the list of attrs into an attr of lists, for use as bash arrays
+  zippedVersions =
+    assert lib.assertMsg
+      (lib.all (o: o ? branch && o ? nixpkgsBranch && o ? baseHref) availableVersions)
+      ''
+        Expected all "availableVersions" docs entries to contain { branch, nixpkgsBranch, baseHref } attrs!
+      '';
+    lib.zipAttrs availableVersions;
+
+  docs-versions =
+    runCommand "docs-versions"
+      {
+        __structuredAttrs = true;
+        branches = zippedVersions.branch or [ ];
+        nixpkgsBranches = zippedVersions.nixpkgsBranch or [ ];
+        baseHrefs = zippedVersions.baseHref or [ ];
+        current = baseHref;
+      }
+      ''
+        touch "$out"
+        for i in ''${!branches[@]}; do
+          branch="''${branches[i]}"
+          nixpkgs="''${nixpkgsBranches[i]}"
+          baseHref="''${baseHrefs[i]}"
+          linkText="\`$branch\` branch"
+
+          link=
+          suffix=
+          if [ "$baseHref" = "$current" ]; then
+            # Don't bother linking to ourselves
+            link="$linkText"
+            suffix=" _(this page)_"
+          else
+            link="[$linkText]($baseHref)"
+          fi
+
+          echo "- The $link, for use with nixpkgs \`$nixpkgs\`$suffix" >> "$out"
+        done
+      '';
+
   prepareMD = ''
     # Copy inputs into the build directory
     cp -r --no-preserve=all $inputs/* ./
@@ -248,6 +292,10 @@ let
     # Using pkgs.writeText helps to avoid the same error as above
     substituteInPlace ./SUMMARY.md \
       --replace-fail "@NIXVIM_OPTIONS@" "$(cat ${pkgs.writeText "nixvim-options-summary.md" mdbook.nixvimOptions})"
+
+    # Patch index.md
+    substituteInPlace ./index.md \
+      --replace-fail "@DOCS_VERSIONS@" "$(cat ${docs-versions})"
 
     substituteInPlace ./modules/hm.md \
       --replace-fail "@HM_OPTIONS@" "$(cat ${mkMDDoc hmOptions})"
