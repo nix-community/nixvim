@@ -11,7 +11,7 @@ home-manager.lib.homeManagerConfiguration {
       home.username = "nixvim";
       home.homeDirectory = "/invalid/dir";
 
-      home.stateVersion = "24.05";
+      home.stateVersion = "24.11";
 
       programs.nixvim = {
         enable = true;
