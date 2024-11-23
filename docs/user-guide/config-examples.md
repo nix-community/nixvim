@@ -30,7 +30,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [pete3n/nixvim-flake] | |
 | [redyf/Neve] | Meticulously crafted custom configuration for Nixvim |
 | [siph/nixvim-flake] | |
-| [spector700/Akari] | Inspired from LazyVim with parts yoinked from other NixVim configs|
+| [spector700/Akari] | Inspired from LazyVim with parts yoinked from other NixVim configs |
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
 | [veeronniecaw/ronvim] | |
