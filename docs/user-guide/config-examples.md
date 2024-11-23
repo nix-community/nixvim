@@ -30,6 +30,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [pete3n/nixvim-flake] | |
 | [redyf/Neve] | Meticulously crafted custom configuration for Nixvim |
 | [siph/nixvim-flake] | |
+| [spector700/Akari] | Inspired from LazyVim with parts yoinked from other NixVim configs|
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
 | [veeronniecaw/ronvim] | |
@@ -55,6 +56,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [pete3n/nixvim-flake]: https://github.com/pete3n/nixvim-flake
 [redyf/Neve]: https://github.com/redyf/Neve
 [siph/nixvim-flake]: https://github.com/siph/nixvim-flake
+[spector700/Akari]: https://github.com/spector700/Akari
 [Tanish2002/neovim-config]: https://github.com/Tanish2002/neovim-config
 [traxys/Nixfiles]: https://github.com/traxys/Nixfiles/tree/master/neovim
 [veeronniecaw/ronvim]: https://codeberg.org/veeronniecaw/ronvim
