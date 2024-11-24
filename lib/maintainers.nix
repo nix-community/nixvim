@@ -118,4 +118,10 @@
     githubId = 60232782;
     name = "Boney Patel";
   };
+  KatieJanzen = {
+    email = "katiejanzen@347online.me";
+    github = "347Online";
+    githubId = 38228372;
+    name = "Katie Janzen";
+  };
 }
