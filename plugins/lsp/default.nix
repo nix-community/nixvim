@@ -29,7 +29,7 @@ in
         };
 
         diagnostic = mkOption {
-          type = with types; attrsOf (either str attrs);
+          type = with types; attrsOf (either str (attrsOf anything));
           description = "Mappings for `vim.diagnostic.<action>` functions to be added when an LSP is attached.";
           example = {
             "<leader>k" = "goto_prev";
@@ -39,7 +39,7 @@ in
         };
 
         lspBuf = mkOption {
-          type = with types; attrsOf (either str attrs);
+          type = with types; attrsOf (either str (attrsOf anything));
           description = "Mappings for `vim.lsp.buf.<action>` functions to be added when an LSP it attached.";
           example = {
             "gd" = "definition";
@@ -106,7 +106,7 @@ in
                 };
 
                 extraOptions = mkOption {
-                  type = attrs;
+                  type = attrsOf anything;
                   description = "Extra options for the server";
                 };
               };
