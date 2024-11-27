@@ -26,7 +26,7 @@ in
       nullable = true;
     };
 
-    ueberzugPackage = lib.mkPackageOption pkgs "ueberzug" {
+    ueberzugPackage = lib.mkPackageOption pkgs "ueberzugpp" {
       nullable = true;
     };
 
