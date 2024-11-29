@@ -48,28 +48,13 @@ in
       ]
     ) removed)
     ++ (lib.mapAttrsToList (
-      old: new:
-      lib.mkRenamedOptionModule
-        [
-          "plugins"
-          old
-        ]
-        [
-          "plugins"
-          new
-        ]
+      old: new: lib.mkRenamedOptionModule [ "plugins" old ] [ "plugins" new ]
     ) renamed)
     ++ builtins.map (
       name:
-      lib.mkRemovedOptionModule
-        [
-          "plugins"
-          name
-          "iconsPackage"
-        ]
-        ''
-          Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
-        ''
+      lib.mkRemovedOptionModule [ "plugins" name "iconsPackage" ] ''
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+      ''
     ) iconsPackagePlugins
     ++ [
       (

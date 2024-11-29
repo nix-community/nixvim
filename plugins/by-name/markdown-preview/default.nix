@@ -33,30 +33,12 @@ mkVimPlugin {
   ];
   imports = [
     (mkRenamedOptionModule
-      [
-        "plugins"
-        "markdown-preview"
-        "fileTypes"
-      ]
-      [
-        "plugins"
-        "markdown-preview"
-        "settings"
-        "filetypes"
-      ]
+      [ "plugins" "markdown-preview" "fileTypes" ]
+      [ "plugins" "markdown-preview" "settings" "filetypes" ]
     )
     (mkRenamedOptionModule
-      [
-        "plugins"
-        "markdown-preview"
-        "browserFunc"
-      ]
-      [
-        "plugins"
-        "markdown-preview"
-        "settings"
-        "browserfunc"
-      ]
+      [ "plugins" "markdown-preview" "browserFunc" ]
+      [ "plugins" "markdown-preview" "settings" "browserfunc" ]
     )
   ];
 
