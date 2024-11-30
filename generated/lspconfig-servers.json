@@ -612,7 +612,7 @@
   },
   {
     "cmd": ["harper-ls", "--stdio"],
-    "desc": "https://github.com/chilipepperhott/harper\n\nThe language server for Harper, the slim, clean language checker for\ndevelopers.\n\nSee\n[docs](https://github.com/chilipepperhott/harper/tree/master/harper-ls#configuration)\nfor more information on settings.\n\nIn short, however, they should look something like this:\n\n``` lua\nlspconfig.harper_ls.setup {\n  settings = {\n    [\"harper-ls\"] = {\n      userDictPath = \"~/dict.txt\"\n    }\n  },\n}\n```\n",
+    "desc": "https://github.com/elijah-potter/harper\n\nThe language server for Harper, the slim, clean language checker for\ndevelopers.\n\nSee\n[docs](https://github.com/elijah-potter/harper/blob/master/harper-ls/README.md#configuration)\nfor more information on settings.\n\nIn short, however, they should look something like this:\n\n``` lua\nlspconfig.harper_ls.setup {\n  settings = {\n    [\"harper-ls\"] = {\n      userDictPath = \"~/dict.txt\"\n    }\n  },\n}\n```\n",
     "name": "harper_ls"
   },
   {

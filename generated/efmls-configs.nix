@@ -683,6 +683,28 @@
       ];
     };
   };
+  kdl = {
+    formatter = {
+      lang = "kdl";
+      possible = [
+        "kdlfmt"
+      ];
+    };
+    linter = {
+      lang = "kdl";
+      possible = [
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
   ksh = {
     formatter = {
       lang = "ksh";
