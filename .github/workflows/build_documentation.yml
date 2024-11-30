@@ -60,11 +60,10 @@ jobs:
               {
                 "branch": "nixos-24.05",
                 "nixpkgsBranch": "nixos-24.05",
-                "subPath": "stable"
-                // TODO: consider having 24.05 instead of stable?
+                "subPath": "24.05"
               }
             ]
-          ' | sed 's/^ *\/\/.*//' | jq \
+          ' | jq \
               --arg repoName "$repoName" \
               'map(
                   .
