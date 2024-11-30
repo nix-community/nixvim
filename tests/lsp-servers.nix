@@ -42,6 +42,12 @@ let
           # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
           "ruff_lsp"
           "bufls"
+          # Package ‘dotnet-core-combined’ is marked as insecure, refusing to evaluate.
+          # Dotnet SDK 6.0.428 is EOL, please use 8.0 (LTS) or 9.0 (Current)
+          # https://github.com/NixOS/nixpkgs/pull/358533
+          "dafny"
+          "fsautocomplete"
+          "omnisharp"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
