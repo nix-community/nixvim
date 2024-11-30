@@ -281,7 +281,7 @@ in pkgs.mkShell {
 Documentation is available on this project's GitHub Pages page:
 [https://nix-community.github.io/nixvim](https://nix-community.github.io/nixvim)
 
-The stable documentation is also available at [https://nix-community.github.io/nixvim/stable](https://nix-community.github.io/nixvim/stable).
+The stable documentation is also available at [https://nix-community.github.io/nixvim/24.05](https://nix-community.github.io/nixvim/24.05).
 
 If the option `enableMan` is set to `true` (by default it is), man pages will also
 be installed containing the same information, they can be viewed with `man nixvim`.
