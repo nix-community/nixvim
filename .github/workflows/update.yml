@@ -14,6 +14,9 @@ on:
         type: boolean
         default: true
         description: Update generated files
+      nixos-24.11:
+        type: boolean
+        description: Also update nixos-24.11
       nixos-24.05:
         type: boolean
         description: Also update nixos-24.05
@@ -43,6 +46,13 @@ jobs:
           ssh-key: ${{ secrets.CI_UPDATE_SSH_KEY }}
 
       # NOTE: If additional "inputs" are added, copy this step
+      - name: Update nixos-24.11
+        if: inputs['nixos-24.11'] || github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run update.yml --ref nixos-24.11
+
       - name: Update nixos-24.05
         if: inputs['nixos-24.05'] || github.event_name == 'schedule'
         env:
