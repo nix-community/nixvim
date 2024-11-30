@@ -298,7 +298,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
           type = types.listOf (mkActionType {
             group = helpers.defaultNullOpts.mkStr "" ''
-              Highlight group used with the "hyper" theme, 
+              Highlight group used with the "hyper" theme,
             '';
           });
         };
