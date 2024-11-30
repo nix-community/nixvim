@@ -246,7 +246,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         };
 
         header =
-          helpers.defaultNullOpts.mkListOf types.str
+          helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf (maybeRaw str)))
             [
               ""
               " ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  "
