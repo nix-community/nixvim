@@ -192,20 +192,12 @@ in
       keymapsOnEvents.LspAttach =
         let
           mkMaps =
-            prefix:
+            prefix: descPrefix:
             mapAttrsToList (
               key: action:
               let
                 actionStr = action.action or action;
                 actionProps = optionalAttrs (isAttrs action) (removeAttrs action [ "action" ]);
-                desc =
-                  let
-                    split = splitString "." prefix;
-                    splitlen = length split;
-                    prefixFinal = (elemAt split (splitlen - 2)) + " ";
-                    optPrefix = optionalString (splitlen > 2) prefixFinal;
-                  in
-                  "Lsp " + optPrefix + actionStr;
               in
               {
                 mode = "n";
@@ -214,13 +206,13 @@ in
 
                 options = {
                   inherit (cfg.keymaps) silent;
-                  inherit desc;
+                  desc = "${descPrefix} ${actionStr}";
                 } // actionProps;
               }
             );
         in
-        mkMaps "vim.diagnostic." cfg.keymaps.diagnostic
-        ++ mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf
+        mkMaps "vim.diagnostic." "Lsp diagnostic" cfg.keymaps.diagnostic
+        ++ mkMaps "vim.lsp.buf." "Lsp buf" cfg.keymaps.lspBuf
         ++ cfg.keymaps.extra;
 
       # Enable inlay-hints
