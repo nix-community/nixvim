@@ -198,6 +198,14 @@ in
               let
                 actionStr = action.action or action;
                 actionProps = optionalAttrs (isAttrs action) (removeAttrs action [ "action" ]);
+                desc =
+                  let
+                    split = splitString "." prefix;
+                    splitlen = length split;
+                    prefixFinal = (elemAt split (splitlen - 2)) + " ";
+                    optPrefix = optionalString (splitlen > 2) prefixFinal;
+                  in
+                  "Lsp " + optPrefix + actionStr;
               in
               {
                 mode = "n";
@@ -206,6 +214,7 @@ in
 
                 options = {
                   inherit (cfg.keymaps) silent;
+                  inherit desc;
                 } // actionProps;
               }
             );
