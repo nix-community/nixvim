@@ -412,13 +412,11 @@ rec {
               Equivalence: lz.n => ft; lazy.nvim => ft
             '';
 
-            keys =
-              mkNullable (types.listOf lib.nixvim.keymaps.mapOptionSubmodule) (lazyLoadDefaults.keys or null)
-                ''
-                  Lazy-load on key mapping. Use the same format as `config.keymaps`.
+            keys = mkListOf (types.attrsOf types.anything) (lazyLoadDefaults.keys or null) ''
+              Lazy-load on key mapping.
 
-                  Equivalence: lz.n => keys; lazy.nvim => keys
-                '';
+              Equivalence: lz.n => keys; lazy.nvim => keys
+            '';
 
             colorscheme = mkNullable triggerType (lazyLoadDefaults.colorscheme or null) ''
               Lazy-load on colorscheme.
