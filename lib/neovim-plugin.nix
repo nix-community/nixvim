@@ -116,9 +116,9 @@
 
               lazyLoad = lib.nixvim.mkLazyLoadOption {
                 inherit originalName;
-                lazyLoadDefaults = (
-                  lib.optionalAttrs (isColorscheme && colorscheme != null) { inherit colorscheme; }
-                );
+                lazyLoadDefaults = lib.optionalAttrs (isColorscheme && colorscheme != null) {
+                  inherit colorscheme;
+                };
               };
             }
             // lib.optionalAttrs hasSettings {
@@ -167,6 +167,34 @@
                   (lib.mkIf (!cfg.lazyLoad.enable) (
                     lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content)
                   ))
+                ])
+                ++ (lib.optionals hasConfigAttrs [
+                  (lib.mkIf (cfg.lazyLoad.backend == "lz.n") {
+                    plugins.lz-n = {
+                      # infinite recursion?
+                      # enable = true;
+                      plugins = [
+                        {
+                          # TODO: handle this for every plugin properly
+                          __unkeyed-1 = originalName;
+                          # Use provided after, otherwise fallback to normal lua content
+                          after = if cfg.lazyLoad.after != null then cfg.lazyLoad.after else cfg.luaConfig.content;
+                          inherit (cfg.lazyLoad)
+                            enabled
+                            priority
+                            before
+                            beforeAll
+                            event
+                            cmd
+                            ft
+                            keys
+                            colorscheme
+                            extraSettings
+                            ;
+                        }
+                      ];
+                    };
+                  })
                 ])
               )
             );
