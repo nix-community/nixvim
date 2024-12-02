@@ -360,6 +360,15 @@ rec {
               lazy-loading for ${originalName}
             '';
 
+            backend =
+              mkEnumFirstDefault
+                [
+                  "lz.n"
+                ]
+                ''
+                  The lazy-loading backend to use.
+                '';
+
             # Spec loading:
             enabled = mkStrLuaFnOr types.bool (lazyLoadDefaults.enabledInSpec or null) ''
               When false, or if the function returns false, then ${originalName} will not be included in the spec.
