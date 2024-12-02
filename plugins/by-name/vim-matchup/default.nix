@@ -19,9 +19,8 @@ with lib;
 
     treesitterIntegration = {
       enable = mkEnableOption "treesitter integration";
-      disable =
-        helpers.defaultNullOpts.mkListOf types.str [ ]
-          "Languages for each to disable this module";
+      disable = helpers.defaultNullOpts.mkListOf types.str [
+      ] "Languages for each to disable this module";
 
       disableVirtualText = helpers.defaultNullOpts.mkBool false ''
         Do not use virtual text to highlight the virtual end of a block, for languages without

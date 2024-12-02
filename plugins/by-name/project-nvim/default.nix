@@ -81,9 +81,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
     ignore_lsp = defaultNullOpts.mkListOf lib.types.str [ ] "Table of lsp clients to ignore by name.";
 
-    exclude_dirs =
-      defaultNullOpts.mkListOf lib.types.str [ ]
-        "Don't calculate root dir on specific directories.";
+    exclude_dirs = defaultNullOpts.mkListOf lib.types.str [
+    ] "Don't calculate root dir on specific directories.";
 
     show_hidden = defaultNullOpts.mkBool false "Show hidden files in telescope.";
 
