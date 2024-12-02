@@ -89,6 +89,7 @@
           options.${namespace}.${name} =
             {
               enable = lib.mkEnableOption originalName;
+              lazyLoad = lib.nixvim.mkLazyLoadOption originalName;
               package =
                 if lib.isOption package then
                   package
@@ -112,13 +113,6 @@
                   The result of these transformations is **not** visible in the `package` option's value.
                 '';
                 internal = true;
-              };
-
-              lazyLoad = lib.nixvim.mkLazyLoadOption {
-                inherit originalName;
-                lazyLoadDefaults = lib.optionalAttrs (isColorscheme && colorscheme != null) {
-                  inherit colorscheme;
-                };
               };
             }
             // lib.optionalAttrs hasSettings {
@@ -168,33 +162,42 @@
                   # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
                   (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
 
-                  # Write the lua configuration `luaConfig.content` to the config file
+                  # Write the lua configuration `luaConfig.content` to the config file when lazy loading is not enabled
                   (lib.mkIf (!cfg.lazyLoad.enable) (setLuaConfig cfg.luaConfig.content))
-                ])
-                ++ (lib.optionals hasConfigAttrs [
-                  (lib.mkIf (cfg.lazyLoad.backend == "lz.n") {
+
+                  # When lazy loading is enabled for this plugin, route its configuration to the enabled provider
+                  (lib.mkIf cfg.lazyLoad.enable {
+                    assertions = [
+                      {
+                        assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
+                        message = "You have enabled lazy loading for ${originalName} but have not provided any configuration.";
+                      }
+                    ];
                     plugins.lz-n = {
-                      # infinite recursion?
-                      # enable = true;
                       plugins = [
-                        {
-                          # TODO: handle this for every plugin properly
-                          __unkeyed-1 = originalName;
-                          # Use provided after, otherwise fallback to normal lua content
-                          after = if cfg.lazyLoad.after != null then cfg.lazyLoad.after else cfg.luaConfig.content;
-                          inherit (cfg.lazyLoad)
-                            enabled
-                            priority
-                            before
-                            beforeAll
-                            event
-                            cmd
-                            ft
-                            keys
-                            colorscheme
-                            extraSettings
-                            ;
-                        }
+                        (
+                          {
+                            __unkeyed-1 = originalName;
+                            # Use provided after, otherwise fallback to normal lua content
+                            after =
+                              if cfg.lazyLoad.settings.after != null then
+                                cfg.lazyLoad.settings.after
+                              else
+                                # We need to wrap it in a function so it doesn't execute immediately
+                                "function()\n " + cfg.luaConfig.content + " \nend";
+                            colorscheme =
+                              if cfg.lazyLoad.settings.colorscheme != null then
+                                cfg.lazyLoad.settings.colorscheme
+                              else if (isColorscheme && colorscheme != null) then
+                                colorscheme
+                              else
+                                null;
+                          }
+                          // lib.removeAttrs cfg.lazyLoad.settings [
+                            "after"
+                            "colorscheme"
+                          ]
+                        )
                       ];
                     };
                   })
