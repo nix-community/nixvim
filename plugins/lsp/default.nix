@@ -196,8 +196,8 @@ in
             mapAttrsToList (
               key: action:
               let
-                actionStr = if isString action then action else action.action;
-                actionProps = if isString action then { } else filterAttrs (n: v: n != "action") action;
+                actionStr = action.action or action;
+                actionProps = optionalAttrs (isAttrs action) (removeAttrs action [ "action" ]);
               in
               {
                 mode = "n";
@@ -210,8 +210,8 @@ in
               }
             );
         in
-        (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
-        ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
+        mkMaps "vim.diagnostic." cfg.keymaps.diagnostic
+        ++ mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf
         ++ cfg.keymaps.extra;
 
       # Enable inlay-hints
