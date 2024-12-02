@@ -467,9 +467,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       group = defaultNullOpts.mkStr "+" "Symbol prepended to a group.";
       ellipsis = defaultNullOpts.mkStr "…" "Symbol used for overflow.";
       mappings = defaultNullOpts.mkBool true "Set to false to disable all mapping icons.";
-      rules = defaultNullOpts.mkNullable (
-        with types; either (listOf attrs) bool
-      ) [ ] "Icon rules. Set to false to disable all icons.";
+      rules = defaultNullOpts.mkNullable (with types; either (listOf attrs) bool) [
+      ] "Icon rules. Set to false to disable all icons.";
       colors = defaultNullOpts.mkBool true ''
         Use the highlights from mini.icons.
 
