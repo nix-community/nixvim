@@ -16,7 +16,6 @@ in
     "forge_fmt"
     "gersemi"
     "js_standard"
-    "kdlfmt"
     "markuplint"
     "mix"
     "pint"
