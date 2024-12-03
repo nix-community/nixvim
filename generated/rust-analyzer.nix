@@ -311,15 +311,6 @@
       ];
     };
   };
-  "rust-analyzer.cfg.setTest" = {
-    description = ''
-      Set `cfg(test)` for local crates. Defaults to true.
-    '';
-    pluginDefault = true;
-    type = {
-      kind = "boolean";
-    };
-  };
   "rust-analyzer.check.allTargets" = {
     description = ''
       Check all targets and tests (`--all-targets`). Defaults to
@@ -510,17 +501,6 @@
   "rust-analyzer.checkOnSave" = {
     description = ''
       Run the check command for diagnostics on save.
-    '';
-    pluginDefault = true;
-    type = {
-      kind = "boolean";
-    };
-  };
-  "rust-analyzer.completion.addSemicolonToUnit" = {
-    description = ''
-      Whether to automatically add a semicolon when completing unit-returning functions.
-
-      In `match` arms it completes a comma instead.
     '';
     pluginDefault = true;
     type = {
@@ -1722,7 +1702,7 @@
   };
   "rust-analyzer.references.excludeTests" = {
     description = ''
-      Exclude tests from find-all-references and call-hierarchy.
+      Exclude tests from find-all-references.
     '';
     pluginDefault = false;
     type = {
