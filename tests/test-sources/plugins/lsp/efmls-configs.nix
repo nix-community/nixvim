@@ -32,9 +32,6 @@
           # re-enable after fixed
           "dmd"
           # TODO: added 2024-11-30
-          # Fixed in https://github.com/NixOS/nixpkgs/pull/360546
-          "phpstan"
-          # TODO: added 2024-11-30
           # Fixed in https://github.com/NixOS/nixpkgs/pull/360544
           "psalm"
         ]

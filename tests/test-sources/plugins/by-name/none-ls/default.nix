@@ -125,9 +125,6 @@
                 "opacheck"
                 "rego"
                 "prisma_format"
-                # TODO: added 2024-11-30
-                # Fixed in https://github.com/NixOS/nixpkgs/pull/360546
-                "phpstan"
               ]
               ++ (lib.optionals pkgs.stdenv.isDarwin [
                 # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
