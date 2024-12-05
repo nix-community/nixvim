@@ -22,6 +22,9 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     '';
 
     mappings = mkNullOrOption' {
+      description = ''
+        Key mappings for various functionalities within avante.
+      '';
       type = with lib.types; attrsOf (either str (attrsOf str));
       example = {
         diff = {
