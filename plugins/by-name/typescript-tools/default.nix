@@ -221,6 +221,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       ];
     in
     {
+      # TODO: handle lazy loading properly
       plugins.lsp.postConfig =
         let
           # TODO:: introduced 10-22-2024: remove after 24.11
