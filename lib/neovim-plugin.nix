@@ -201,14 +201,11 @@
                             name = originalName;
                             main = luaName;
                             pkg = cfg.package;
-                            # Use provided config, otherwise fallback to normal lua content
-                            config =
-                              cfg.lazyLoad.settings.config or
-                              # We need to wrap it in a function so it doesn't execute immediately
-                              ("function()\n " + cfg.luaConfig.content + " \nend");
+                            # Use provided opts, otherwise fallback to settings
+                            opts = cfg.lazyLoad.settings.opts or cfg.settings;
                           }
                           // (lib.removeAttrs cfg.lazyLoad.settings [
-                            "config"
+                            "opts"
                           ])
                         )
                       ];
