@@ -45,13 +45,14 @@ in
         ) (builtins.attrNames config.plugins);
         count = builtins.length pluginsWithLazyLoad;
       in
-      lib.optionals (count > 0 && !config.plugins.lz-n.enable) [
+      lib.optionals (count > 0 && !config.plugins.lz-n.enable && !config.plugins.lazy.enable) [
         ''
           You have enabled lazy loading support for the following plugins but have not enabled a lazy loading provider.
             ${lib.concatImapStringsSep "\n" (i: x: "${toString i}. plugins.${x}") pluginsWithLazyLoad}
 
           Currently supported lazy providers:
             - lz-n
+            - lazy
         ''
       ];
   };

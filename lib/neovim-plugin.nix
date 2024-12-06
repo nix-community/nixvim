@@ -194,6 +194,25 @@
                         )
                       ];
                     };
+                    plugins.lazy = lib.mkIf config.plugins.lazy.enable {
+                      plugins = [
+                        (
+                          {
+                            name = originalName;
+                            main = luaName;
+                            pkg = cfg.package;
+                            # Use provided config, otherwise fallback to normal lua content
+                            config =
+                              cfg.lazyLoad.settings.config or
+                              # We need to wrap it in a function so it doesn't execute immediately
+                              ("function()\n " + cfg.luaConfig.content + " \nend");
+                          }
+                          // (lib.removeAttrs cfg.lazyLoad.settings [
+                            "config"
+                          ])
+                        )
+                      ];
+                    };
                   })
                 ])
               )
