@@ -11,6 +11,7 @@ in
     # TODO: Requires the go tree-sitter parser
     "impl"
     "luasnip"
+    "nvim_snippets"
     "printenv"
     "refactoring"
     "spell"
@@ -81,6 +82,7 @@ in
       "shfmt"
       "smlfmt"
       "sqlfluff"
+      "sqruff"
       "statix"
       "stylelint"
       "stylua"
@@ -243,6 +245,7 @@ in
       "bslint"
       "cljstyle"
       "cueimports"
+      "duster"
       "erb_lint"
       "findent"
       "forge_fmt"
