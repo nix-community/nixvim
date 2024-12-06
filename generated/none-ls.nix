@@ -15,6 +15,7 @@
   ];
   completion = [
     "luasnip"
+    "nvim_snippets"
     "spell"
     "tags"
     "vsnip"
@@ -83,6 +84,7 @@
     "solhint"
     "spectral"
     "sqlfluff"
+    "sqruff"
     "staticcheck"
     "statix"
     "stylelint"
@@ -134,6 +136,7 @@
     "dfmt"
     "djhtml"
     "djlint"
+    "duster"
     "dxfmt"
     "elm_format"
     "emacs_scheme_mode"
@@ -210,6 +213,7 @@
     "sqlfluff"
     "sqlfmt"
     "sqlformat"
+    "sqruff"
     "stylelint"
     "styler"
     "stylua"
