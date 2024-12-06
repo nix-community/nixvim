@@ -175,18 +175,10 @@
                             __unkeyed-1 = originalName;
                             # Use provided after, otherwise fallback to normal lua content
                             after =
-                              if cfg.lazyLoad.settings.after != null then
-                                cfg.lazyLoad.settings.after
-                              else
-                                # We need to wrap it in a function so it doesn't execute immediately
-                                "function()\n " + cfg.luaConfig.content + " \nend";
-                            colorscheme =
-                              if cfg.lazyLoad.settings.colorscheme != null then
-                                cfg.lazyLoad.settings.colorscheme
-                              else if (isColorscheme && colorscheme != null) then
-                                colorscheme
-                              else
-                                null;
+                              cfg.lazyLoad.settings.after or
+                              # We need to wrap it in a function so it doesn't execute immediately
+                              ("function()\n " + cfg.luaConfig.content + " \nend");
+                            colorscheme = lib.mkIf isColorscheme (cfg.lazyLoad.settings.colorscheme or colorscheme);
                           }
                           // (lib.removeAttrs cfg.lazyLoad.settings [
                             "after"
