@@ -339,108 +339,47 @@ rec {
     lib.mkOption {
       description = ''
         Lazy-load settings for ${originalName}.
+
+        > [!WARNING]
+        > This is an experimental option and may not work as expected with all plugins.
+        > The API may change without notice.
+        > Please report any issues you encounter.
       '';
-      default = {
-        enable = false;
-      };
-      type =
-        let
-          triggerType =
-            with types;
-            oneOf [
-              rawLua
-              str
-              (listOf str)
-            ];
-        in
-        types.submodule (
-          { config, ... }:
-          {
-            options = with defaultNullOpts; {
-              enable = lib.mkOption {
-                default = lib.any (x: x != null) (builtins.attrValues config.settings);
-                description = ''
-                  lazy-loading for ${originalName}
-                '';
-              };
+      default = { };
+      type = types.submodule (
+        { config, ... }:
+        {
+          options = {
+            enable = lib.mkOption {
+              default = lib.any (x: x != null) (builtins.attrValues config.settings);
+              defaultText = lib.literalMD ''
+                `true` when `settings` has a non-null attribute
+              '';
+              description = ''
+                lazy-loading for ${originalName}
+              '';
+            };
 
-              settings = lib.mkOption {
-                description = '''';
-                default = { };
-                type =
-                  with types;
-                  submodule {
-                    freeformType = attrsOf anything;
-                    options = {
-                      # Spec loading:
-                      enabled = mkStrLuaFnOr types.bool null ''
-                        When false, or if the function returns false, then ${originalName} will not be included in the spec.
+            settings = lib.nixvim.mkSettingsOption {
+              description = ''
+                Lazy provider configuration settings.
 
-                        Equivalence: lz.n => enabled; lazy.nvim => enabled
-                      '';
-
-                      priority = mkNullable types.number null ''
-                        Only useful for start plugins (not lazy-loaded) to force loading certain plugins first.
-
-                        Equivalence: lz.n => priority; lazy.nvim => priority
-                      '';
-
-                      # Spec setup
-                      # Actions
-                      beforeAll = mkLuaFn null ''
-                        Always executed before any plugins are loaded.
-
-                        Equivalence: lz.n => beforeAll; lazy.nvim => init
-                      '';
-
-                      before = mkLuaFn null ''
-                        Executed before ${originalName} is loaded.
-
-                        Equivalence: lz.n => before; lazy.nvim => None
-                      '';
-
-                      after = mkLuaFn null ''
-                        Executed after ${originalName} is loaded.
-
-                        Equivalence: lz.n => after; lazy.nvim => config
-                      '';
-
-                      # Triggers
-                      event = mkNullable triggerType null ''
-                        Lazy-load on event. Events can be specified as `BufEnter` or with a pattern like `BufEnter *.lua`
-
-                        Equivalence: lz.n => event; lazy.nvim => event
-                      '';
-
-                      cmd = mkNullable triggerType null ''
-                        Lazy-load on command.
-
-                        Equivalence: lz.n => cmd; lazy.nvim => cmd
-                      '';
-
-                      ft = mkNullable triggerType null ''
-                        Lazy-load on filetype.
-
-                        Equivalence: lz.n => ft; lazy.nvim => ft
-                      '';
-
-                      keys = mkListOf (types.attrsOf types.anything) null ''
-                        Lazy-load on key mapping.
-
-                        Equivalence: lz.n => keys; lazy.nvim => keys
-                      '';
-
-                      colorscheme = mkNullable triggerType null ''
-                        Lazy-load on colorscheme.
-
-                        Equivalence: lz.n => colorscheme; lazy.nvim => None
-                      '';
-                    };
-                  };
+                Check your lazy loading provider's documentation on settings to configure.
+              '';
+              example = {
+                cmd = "Neotest";
+                keys = [
+                  {
+                    __unkeyed-1 = "<leader>nt";
+                    __unkeyed-3 = "<CMD>Neotest summary<CR>";
+                    desc = "Summary toggle";
+                  }
+                ];
               };
             };
-          }
-        );
+          };
+        }
+      );
     };
 }
 // removed

@@ -32,8 +32,8 @@
         {
           assertion =
             let
-              plugins = config.plugins.lz-n.plugins or [ ];
-              plugin = if builtins.length plugins > 0 then builtins.head plugins else null;
+              inherit (config.plugins.lz-n) plugins;
+              plugin = if plugins == [ ] then null else builtins.head plugins;
               keys = if plugin != null && builtins.isList plugin.keys then plugin.keys else [ ];
             in
             (builtins.length keys) == 1;
@@ -42,8 +42,8 @@
         {
           assertion =
             let
-              plugins = config.plugins.lz-n.plugins or [ ];
-              plugin = if builtins.length plugins > 0 then builtins.head plugins else null;
+              inherit (config.plugins.lz-n) plugins;
+              plugin = if plugins == [ ] then null else builtins.head plugins;
             in
             plugin != null && lib.hasInfix config.plugins.neotest.luaConfig.content plugin.after.__raw;
           message = "`lz-n.plugins[0].after` should have contained `neotest` lua content.";
@@ -126,9 +126,10 @@
           assertion =
             let
               plugin = builtins.head config.plugins.lz-n.plugins;
-              cmd = if builtins.isList plugin.cmd then plugin.cmd else [ ];
+              cmd = plugin.cmd or null;
+              cmd' = lib.optionals (builtins.isList cmd) cmd;
             in
-            (builtins.length cmd) == 4;
+            (builtins.length cmd') == 4;
           message =
             let
               plugin = builtins.head config.plugins.lz-n.plugins;
@@ -260,8 +261,8 @@
         {
           assertion =
             let
-              plugins = config.plugins.lz-n.plugins or [ ];
-              plugin = if builtins.length plugins > 0 then builtins.head plugins else null;
+              inherit (config.plugins.lz-n) plugins;
+              plugin = if plugins == [ ] then null else builtins.head plugins;
               keys = if plugin != null && builtins.isList plugin.keys then plugin.keys else [ ];
             in
             (builtins.length keys) == 1;
@@ -282,6 +283,9 @@
           enable = true;
           lazyLoad = {
             enable = true;
+            settings = {
+              cmd = [ "Telescope" ];
+            };
           };
         };
       };
@@ -301,4 +305,52 @@
         }
       ];
     };
+
+  use-provided-raw-after =
+    { config, ... }:
+    {
+      plugins = {
+        lz-n = {
+          enable = true;
+        };
+        web-devicons.enable = false;
+        telescope = {
+          enable = true;
+          lazyLoad = {
+            enable = true;
+            settings = {
+              after.__raw = ''
+                function()
+                  -- test string
+                  ${config.plugins.telescope.luaConfig.content}
+                end
+              '';
+              cmd = [ "Telescope" ];
+            };
+          };
+        };
+      };
+
+      assertions =
+        let
+          plugin = getFirstLznPlugin config;
+        in
+        [
+          {
+            assertion = (builtins.length config.plugins.lz-n.plugins) == 1;
+            message = "`lz-n.plugins` should have contained a single plugin configuration, but contained ${builtins.toJSON config.plugins.lz-n.plugins}";
+          }
+          {
+            assertion =
+              plugin.after.__raw == ''
+                function()
+                  -- test string
+                  ${config.plugins.telescope.luaConfig.content}
+                end
+              '';
+            message = "`lz-n.plugins[0].after` should have contained a function wrapped `telescope` lua content.";
+          }
+        ];
+    };
+
 }
