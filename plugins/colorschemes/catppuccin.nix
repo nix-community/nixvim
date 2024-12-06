@@ -94,17 +94,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       (
         old: new:
         lib.mkRenamedOptionModule
-          [
-            "colorschemes"
-            "catppuccin"
-            old
-          ]
-          [
-            "colorschemes"
-            "catppuccin"
-            "settings"
-            new
-          ]
+          [ "colorschemes" "catppuccin" old ]
+          [ "colorschemes" "catppuccin" "settings" new ]
       )
       {
         showBufferEnd = "show_end_of_buffer";

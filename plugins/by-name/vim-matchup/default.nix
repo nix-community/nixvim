@@ -77,13 +77,9 @@ with lib;
         Set this conservatively since high values may cause performance issues.
       '';
 
-      timeout =
-        helpers.defaultNullOpts.mkInt 300
-          "Adjust timeouts in milliseconds for matchparen highlighting";
+      timeout = helpers.defaultNullOpts.mkInt 300 "Adjust timeouts in milliseconds for matchparen highlighting";
 
-      insertTimeout =
-        helpers.defaultNullOpts.mkInt 60
-          "Adjust timeouts in milliseconds for matchparen highlighting";
+      insertTimeout = helpers.defaultNullOpts.mkInt 60 "Adjust timeouts in milliseconds for matchparen highlighting";
 
       deferred = {
         enable = helpers.defaultNullOpts.mkBool false ''

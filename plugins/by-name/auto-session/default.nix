@@ -62,61 +62,33 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "enabled"
         ]
       ) (settingsPath ++ [ "auto_restore" ]))
-
-      (lib.mkRenamedOptionModule (
-        basePluginPath
-        ++ [
-          "bypassSessionSaveFileTypes"
-        ]
-      ) (settingsPath ++ [ "bypass_save_filetypes" ]))
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "bypassSessionSaveFileTypes" ]) (
+        settingsPath ++ [ "bypass_save_filetypes" ]
+      ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "enableLastSession" ]) (
-        settingsPath
-        ++ [
-          "auto_restore_last_session"
-        ]
+        settingsPath ++ [ "auto_restore_last_session" ]
       ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "rootDir" ]) (
-        settingsPath
-        ++ [
-          "root_dir"
-        ]
+        settingsPath ++ [ "root_dir" ]
       ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "enabled" ]) (
-        settingsPath
-        ++ [
-          "enabled"
-        ]
+        settingsPath ++ [ "enabled" ]
       ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "createEnabled" ]) (
-        settingsPath
-        ++ [
-          "auto_create"
-        ]
+        settingsPath ++ [ "auto_create" ]
       ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "suppressDirs" ]) (
-        settingsPath
-        ++ [
-          "suppressed_dirs"
-        ]
+        settingsPath ++ [ "suppressed_dirs" ]
       ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "allowedDirs" ]) (
-        settingsPath
-        ++ [
-          "allowed_dirs"
-        ]
+        settingsPath ++ [ "allowed_dirs" ]
       ))
       (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "useGitBranch" ]) (
-        settingsPath
-        ++ [
-          "use_git_branch"
-        ]
+        settingsPath ++ [ "use_git_branch" ]
       ))
-      (lib.mkRemovedOptionModule (
-        basePluginPath
-        ++ [
-          "cwdChangeHandling"
-        ]
-      ) ''Please switch to `cwd_change_handling` with just a boolean value.'')
+      (lib.mkRemovedOptionModule (basePluginPath ++ [ "cwdChangeHandling" ]) ''
+        Please switch to `cwd_change_handling` with just a boolean value.
+      '')
     ];
 
   settingsOptions = {
