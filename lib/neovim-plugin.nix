@@ -172,6 +172,10 @@
                         assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
                         message = "You have enabled lazy loading for ${originalName} but have not provided any configuration.";
                       }
+                      {
+                        assertion = cfg.lazyLoad.enable && (config.plugins.lz-n.enable || config.plugins.lazy.enable);
+                        message = "You have enabled lazy loading for ${originalName} but have not enabled any lazy loading plugins.";
+                      }
                     ];
                     plugins.lz-n = lib.mkIf config.plugins.lz-n.enable {
                       plugins = [
