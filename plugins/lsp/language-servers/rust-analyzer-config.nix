@@ -1,5 +1,5 @@
 # TODO: make all the types support raw lua
-lib: helpers:
+lib:
 let
   rustAnalyzerOptions = import ../../../generated/rust-analyzer.nix;
 
@@ -60,7 +60,7 @@ let
       pluginDefault,
       type,
     }:
-    helpers.defaultNullOpts.mkNullable' {
+    lib.nixvim.defaultNullOpts.mkNullable' {
       inherit description pluginDefault;
       type = mkRustAnalyzerType type;
     };

@@ -1,5 +1,7 @@
 # Structure for nixvim docs
 
+- [Home](./index.md)
+
 # User guide
 
 - [Installation](./user-guide/install.md)
@@ -9,8 +11,9 @@
 
 # Platforms
 
-- [Home Manager Usage](./modules/hm.md)
-- [Standalone Usage](./modules/standalone.md)
+- [Nixvim Platforms](./platforms/index.md)
+@PLATFORM_OPTIONS@
+	- [Standalone](./platforms/standalone.md)
 
 # Options
 

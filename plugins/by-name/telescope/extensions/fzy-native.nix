@@ -1,13 +1,9 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
+  mkExtension = import ./_mk-extension.nix;
 in
-(import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
+mkExtension {
   name = "fzy-native";
   extensionName = "fzy_native";
   package = "telescope-fzy-native-nvim";

@@ -1,15 +1,14 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 
-  telescopeHelpers = import ./_helpers.nix { inherit lib config pkgs; };
+  mkExtension = import ./_mk-extension.nix;
 in
-telescopeHelpers.mkExtension {
+mkExtension {
   name = "manix";
   package = "telescope-manix";
 

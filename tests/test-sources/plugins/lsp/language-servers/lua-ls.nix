@@ -1,12 +1,10 @@
-{ pkgs, ... }:
 {
   defaults = {
     plugins.lsp = {
       enable = true;
 
       servers.lua_ls = {
-        # TODO: re-enable when x86_64-darwin build is stable
-        enable = pkgs.stdenv.isLinux || pkgs.stdenv.hostPlatform.isAarch64;
+        enable = true;
 
         settings = {
           addonManager = {

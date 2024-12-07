@@ -2,10 +2,10 @@
 
 You must use a `nixpkgs` version compatible with the nixvim version you choose.
 
-The `master` branch requires to use a _very recent_ version of nixpkgs unstable.
+The `main` branch requires to use a _very recent_ version of nixpkgs unstable.
 In order to guarantee the compatibility between nixvim & nixpkgs it is recommended to always update both at the same time.
 
-When using a `stable` version you must use the corresponding nixvim branch, for example `nixos-24.05` when using NixOS 24.05.
+When using a `stable` version you must use the corresponding nixvim branch, for example `nixos-24.11` when using NixOS 24.11.
 
 Failure to use the correct branch, or an old revision of nixpkgs will likely result in errors of the form `vimPlugins.<name> attribute not found`.
 
@@ -70,7 +70,7 @@ options as `programs.nixvim.<path>.<to>.<option> = <value>`.
 When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for home-manager, NixOS, and nix-darwin respectively.
 This is useful is you use nixvim both as part of an environment and as standalone.
 
-If using the home-manager module, see [Home Manager Usage](./modules/hm.md) for more information.
+For more platform-specific options and information, see [Nixvim Platforms](../platforms/index.md).
 
 ### Standalone usage
 
@@ -88,4 +88,4 @@ The nixvim derivation can then be used like any other package!
 
 For an example, see the [nixvim standalone flake template](https://github.com/nix-community/nixvim/blob/main/templates/simple/flake.nix).
 
-For more information see [Standalone Usage](./modules/standalone.md).
+For more information see [Standalone Usage](../platforms/standalone.md).

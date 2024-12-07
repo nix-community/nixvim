@@ -17,4 +17,11 @@
       providers.xsel.enable = true;
     };
   };
+
+  example-with-raw-lua = {
+    clipboard = {
+      register.__raw = ''vim.env.SSH_TTY and "" or "unnamedplus"'';
+      providers.wl-copy.enable = true;
+    };
+  };
 }

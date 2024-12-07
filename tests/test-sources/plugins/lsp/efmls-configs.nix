@@ -48,13 +48,16 @@
           # https://github.com/NixOS/nixpkgs/pull/331373
           # TODO: re-enable this test when fixed
           "dmd"
+          # As of 2024-11-03, graalvm-ce (dependency of clj-kondo) is broken on x86_64-darwin
+          "clj_kondo"
         ];
 
+      # TODO: respect unpackaged from generated
       unpackaged =
         [
           "blade_formatter"
-          "cspell"
           "cljstyle"
+          "cspell"
           "dartanalyzer"
           "debride"
           "deno_fmt"
@@ -63,12 +66,16 @@
           "forge_fmt"
           "gersemi"
           "js_standard"
+          "kdlfmt"
+          "markuplint"
+          "mix"
           "pint"
           "prettier_eslint"
           "prettier_standard"
           "redpen"
           "reek"
           "rome"
+          "ruff_sort"
           "slim_lint"
           "solhint"
           "sorbet"

@@ -92,10 +92,13 @@ lib.fix (
       hasContent
       ifNonNull'
       listToUnkeyedAttrs
+      literalLua
       mkIfNonNull
       mkIfNonNull'
       mkRaw
       mkRawKey
+      nestedLiteral
+      nestedLiteralLua
       override
       overrideDerivation
       toRawKeys

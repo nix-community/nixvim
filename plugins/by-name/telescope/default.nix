@@ -85,7 +85,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         more than just provide Telescope extensions may use `plugins.<name>.enableTelescope` instead.
 
         If you add an extension to this list manually, it is your responsibility to ensure the relevant plugin is also
-        added to `extraPackages`.
+        added to `extraPlugins`.
       '';
     };
 

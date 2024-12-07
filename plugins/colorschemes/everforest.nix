@@ -251,5 +251,7 @@ lib.nixvim.vim-plugin.mkVimPlugin {
     };
   };
 
-  extraConfig = cfg: { opts.termguicolors = lib.mkDefault true; };
+  extraConfig = {
+    opts.termguicolors = lib.mkDefault true;
+  };
 }

@@ -1,6 +1,48 @@
 # WARNING: DO NOT EDIT
 # This file is generated with packages.<system>.efmls-configs-sources, which is run automatically by CI
 {
+  HTML = {
+    formatter = {
+      lang = "HTML";
+      possible = [ ];
+    };
+    linter = {
+      lang = "HTML";
+      possible = [
+        "markuplint"
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
+  JSON = {
+    formatter = {
+      lang = "JSON";
+      possible = [ ];
+    };
+    linter = {
+      lang = "JSON";
+      possible = [
+        "jsonlint"
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
   all = {
     formatter = {
       lang = "all languages";
@@ -339,6 +381,28 @@
       ];
     };
   };
+  elixir = {
+    formatter = {
+      lang = "elixir";
+      possible = [
+        "mix"
+      ];
+    };
+    linter = {
+      lang = "elixir";
+      possible = [
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
   fennel = {
     formatter = {
       lang = "fennel";
@@ -409,6 +473,7 @@
     formatter = {
       lang = "go";
       possible = [
+        "djlint"
         "gofmt"
         "gofumpt"
         "goimports"
@@ -461,6 +526,7 @@
     formatter = {
       lang = "html";
       possible = [
+        "djlint"
         "fecs"
         "prettier"
         "prettier_d"
@@ -604,6 +670,28 @@
     };
     linter = {
       lang = "jsonc";
+      possible = [
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
+  kdl = {
+    formatter = {
+      lang = "kdl";
+      possible = [
+        "kdlfmt"
+      ];
+    };
+    linter = {
+      lang = "kdl";
       possible = [
         "alex"
         "codespell"
@@ -858,6 +946,7 @@
     formatter = {
       lang = "php";
       possible = [
+        "djlint"
         "php_cs_fixer"
         "phpcbf"
         "pint"
@@ -914,8 +1003,10 @@
       possible = [
         "autopep8"
         "black"
+        "djlint"
         "isort"
         "ruff"
+        "ruff_sort"
         "yapf"
       ];
     };
@@ -1178,6 +1269,7 @@
       lang = "sql";
       possible = [
         "sql-formatter"
+        "sqlfluff"
       ];
     };
     linter = {

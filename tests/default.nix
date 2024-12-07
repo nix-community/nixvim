@@ -1,65 +1,49 @@
 {
-  lib ? pkgs.lib,
-  helpers,
   pkgs,
   pkgsUnfree,
+  helpers,
+  lib,
+  system,
+  self, # The flake instance
 }:
 let
-  fetchTests = import ./fetch-tests.nix { inherit lib pkgs helpers; };
-  test-derivation = import ../lib/tests.nix { inherit pkgs lib; };
-  inherit (test-derivation) mkTestDerivationFromNixvimModule;
-
-  moduleToTest =
-    file: name: module:
-    mkTestDerivationFromNixvimModule {
-      inherit name;
-      module = {
-        _file = file;
-        imports = [ module ];
-      };
-      pkgs = pkgsUnfree;
-    };
-
-  # List of files containing configurations
-  testFiles = fetchTests ./test-sources;
-
-  exampleFiles = {
-    name = "examples";
-    file = ../example.nix;
-    cases =
-      let
-        config = import ../example.nix { inherit pkgs; };
-      in
-      {
-        main = builtins.removeAttrs config.programs.nixvim [
-          # This is not available to standalone modules, only HM & NixOS Modules
-          "enable"
-          # This is purely an example, it does not reflect a real usage
-          "extraConfigLua"
-          "extraConfigVim"
-        ];
-      };
+  autoArgs = pkgs // {
+    inherit
+      helpers
+      lib
+      pkgsUnfree
+      self
+      system
+      ;
+    inherit (self.legacyPackages.${system})
+      makeNixvimWithModule
+      nixvimConfiguration
+      ;
+    inherit (self.lib.${system}.check)
+      mkTestDerivationFromNvim
+      mkTestDerivationFromNixvimModule
+      ;
+    # Recursive:
+    inherit callTest callTests;
   };
+
+  callTest = lib.callPackageWith autoArgs;
+  callTests = lib.callPackagesWith autoArgs;
 in
-# We attempt to build & execute all configurations
-lib.pipe (testFiles ++ [ exampleFiles ]) [
-  (builtins.map (
-    {
-      name,
-      file,
-      cases,
-    }:
-    {
-      inherit name;
-      path = pkgs.linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
-    }
-  ))
-  (helpers.groupListBySize 10)
-  (lib.imap1 (
-    i: group: rec {
-      name = "test-${toString i}";
-      value = pkgs.linkFarm name group;
-    }
-  ))
-  builtins.listToAttrs
-]
+{
+  extra-args-tests = callTest ./extra-args.nix { };
+  extend = callTest ./extend.nix { };
+  extra-files = callTest ./extra-files.nix { };
+  enable-except-in-tests = callTest ./enable-except-in-tests.nix { };
+  failing-tests = callTest ./failing-tests.nix { };
+  no-flake = callTest ./no-flake.nix { };
+  lib-tests = callTest ./lib-tests.nix { };
+  maintainers = callTest ./maintainers.nix { };
+  plugins-by-name = callTest ./plugins-by-name.nix { };
+  generated = callTest ./generated.nix { };
+  package-options = callTest ./package-options.nix { };
+  lsp-all-servers = callTest ./lsp-servers.nix { };
+}
+# Tests generated from ./test-sources
+# Grouped as a number of link-farms in the form { test-1, test-2, ... test-N }
+// callTests ./main.nix { }

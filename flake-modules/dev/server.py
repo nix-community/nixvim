@@ -12,5 +12,5 @@ class UncachedHTTPHandler(http.server.SimpleHTTPRequestHandler):
 
 
 with http.server.HTTPServer(("", PORT), UncachedHTTPHandler) as httpd:
-    print(f"Serving documentation at http://localhost:{PORT}/nixvim")
+    print(f"Serving documentation at http://localhost:{PORT}")
     httpd.serve_forever()

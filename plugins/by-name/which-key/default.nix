@@ -1,14 +1,8 @@
-{
-  lib,
-  options,
-  ...
-}:
+{ lib, ... }:
 with lib;
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts mkRaw toLuaObject;
-
-  opt = options.plugins.which-key;
 
   specExamples = [
     # Basic group with custom icon
@@ -383,9 +377,9 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       zindex = defaultNullOpts.mkUnsignedInt 1000 "Layer depth on the popup window.";
 
       wo = {
-        winblend = defaultNullOpts.mkNullableWithRaw (types.ints.between 0
-          100
-        ) 0 "`0` for fully opaque and `100` for fully transparent.";
+        winblend =
+          defaultNullOpts.mkNullableWithRaw (types.ints.between 0 100) 0
+            "`0` for fully opaque and `100` for fully transparent.";
       };
     };
 
@@ -473,9 +467,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       group = defaultNullOpts.mkStr "+" "Symbol prepended to a group.";
       ellipsis = defaultNullOpts.mkStr "…" "Symbol used for overflow.";
       mappings = defaultNullOpts.mkBool true "Set to false to disable all mapping icons.";
-      rules = defaultNullOpts.mkNullable (
-        with types; either (listOf attrs) bool
-      ) [ ] "Icon rules. Set to false to disable all icons.";
+      rules = defaultNullOpts.mkNullable (with types; either (listOf attrs) bool) [
+      ] "Icon rules. Set to false to disable all icons.";
       colors = defaultNullOpts.mkBool true ''
         Use the highlights from mini.icons.
 
@@ -583,12 +576,12 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   # TODO: introduced 2024-07-29: remove after 24.11
   # NOTE: this may be upgraded to a mkRemoveOptionModule when which-key removes support
   extraConfig =
-    cfg:
-    lib.mkIf opt.registrations.isDefined {
+    cfg: opts:
+    lib.mkIf opts.registrations.isDefined {
       warnings = [
         ''
           nixvim (plugins.which-key):
-          The option definition `plugins.which-key.registrations' in ${showFiles opt.registrations.files} has been deprecated in which-key v3; please remove it.
+          The option definition `plugins.which-key.registrations' in ${showFiles opts.registrations.files} has been deprecated in which-key v3; please remove it.
           You should use `plugins.which-key.settings.spec' instead.
 
           Note: the spec format has changed in which-key v3
@@ -596,7 +589,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         ''
       ];
 
-      plugins.which-key.luaConfig.content = lib.optionalString opt.registrations.isDefined ''
+      plugins.which-key.luaConfig.content = lib.optionalString opts.registrations.isDefined ''
         require("which-key").register(${toLuaObject cfg.registrations})
       '';
     };

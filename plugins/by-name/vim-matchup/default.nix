@@ -19,9 +19,8 @@ with lib;
 
     treesitterIntegration = {
       enable = mkEnableOption "treesitter integration";
-      disable =
-        helpers.defaultNullOpts.mkListOf types.str [ ]
-          "Languages for each to disable this module";
+      disable = helpers.defaultNullOpts.mkListOf types.str [
+      ] "Languages for each to disable this module";
 
       disableVirtualText = helpers.defaultNullOpts.mkBool false ''
         Do not use virtual text to highlight the virtual end of a block, for languages without
@@ -78,13 +77,9 @@ with lib;
         Set this conservatively since high values may cause performance issues.
       '';
 
-      timeout =
-        helpers.defaultNullOpts.mkInt 300
-          "Adjust timeouts in milliseconds for matchparen highlighting";
+      timeout = helpers.defaultNullOpts.mkInt 300 "Adjust timeouts in milliseconds for matchparen highlighting";
 
-      insertTimeout =
-        helpers.defaultNullOpts.mkInt 60
-          "Adjust timeouts in milliseconds for matchparen highlighting";
+      insertTimeout = helpers.defaultNullOpts.mkInt 60 "Adjust timeouts in milliseconds for matchparen highlighting";
 
       deferred = {
         enable = helpers.defaultNullOpts.mkBool false ''

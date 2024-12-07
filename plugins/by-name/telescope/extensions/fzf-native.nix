@@ -1,13 +1,9 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
+  mkExtension = import ./_mk-extension.nix;
 in
-(import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
+mkExtension {
   name = "fzf-native";
   extensionName = "fzf";
   package = "telescope-fzf-native-nvim";
@@ -47,7 +43,7 @@ in
     case_mode = "ignore_case";
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     # Native library is in build/libfzf.so
     performance.combinePlugins.pathsToLink = [ "/build" ];
   };

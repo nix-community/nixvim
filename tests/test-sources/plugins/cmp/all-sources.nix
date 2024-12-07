@@ -21,6 +21,8 @@
                 "cmp_ai"
                 # Triggers the warning complaining about treesitter highlighting being disabled
                 "otter"
+                # Invokes the `nix` command at startup which is not available in the sandbox
+                "nixpkgs_maintainers"
               ] ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
             in
             pipe config.cmpSourcePlugins [

@@ -1,10 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
-(import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
+let
+  mkExtension = import ./_mk-extension.nix;
+in
+mkExtension {
   name = "ui-select";
   package = "telescope-ui-select-nvim";
 

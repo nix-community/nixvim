@@ -1,27 +1,29 @@
 {
   lib,
   helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
-let
-  cfg = config.plugins.helm;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+helpers.vim-plugin.mkVimPlugin {
+  name = "helm";
+  originalName = "vim-helm";
+  package = "vim-helm";
 
-  options.plugins.helm = {
-    enable = mkEnableOption "vim-helm";
+  description = ''
+    To ensure that `helm_ls` (and not `yamlls`) is used on helm files, add the following autocmd:
 
-    package = lib.mkPackageOption pkgs "vim-helm" {
-      default = [
-        "vimPlugins"
-        "vim-helm"
+    ```nix
+      autoCmd = [
+        {
+          event = "FileType";
+          pattern = "helm";
+          command = "LspRestart";
+        }
       ];
-    };
-  };
+    ```
 
-  config = mkIf cfg.enable { extraPlugins = [ cfg.package ]; };
+    See [nix-community/nixvim#989](https://github.com/nix-community/nixvim/issues/989#issuecomment-2333728503)
+    for details.
+  '';
+
+  maintainers = [ lib.maintainers.GaetanLepage ];
 }

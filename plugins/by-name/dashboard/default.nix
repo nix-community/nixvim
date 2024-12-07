@@ -246,7 +246,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         };
 
         header =
-          helpers.defaultNullOpts.mkListOf types.str
+          helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf (maybeRaw str)))
             [
               ""
               " ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  "
@@ -298,7 +298,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
           type = types.listOf (mkActionType {
             group = helpers.defaultNullOpts.mkStr "" ''
-              Highlight group used with the "hyper" theme, 
+              Highlight group used with the "hyper" theme,
             '';
           });
         };

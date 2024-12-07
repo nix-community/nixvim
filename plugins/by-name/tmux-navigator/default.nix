@@ -15,7 +15,8 @@ helpers.vim-plugin.mkVimPlugin {
   description = ''
     When combined with a set of tmux key bindings, the plugin will allow you to navigate seamlessly between vim splits and tmux panes using a consistent set of hotkeys.
 
-    **WARNING:** to work correctly, you must configure tmux separately.
+    > [!WARNING]
+    > To work correctly, you must configure tmux separately.
 
     ## Usage
 
@@ -31,7 +32,34 @@ helpers.vim-plugin.mkVimPlugin {
 
     ## Configure tmux
 
-    There are two main ways to configure tmux. Either install the `tmuxPlugins.vim-tmux-navigator` plugin or add a snippet to your tmux config:
+    > [!NOTE]
+    > There are two main ways to configure tmux.
+
+    #### Option 1: using a plugin
+
+    You can install the `vim-tmux-navigator` plugin.
+
+    If you're using TPM, add this to your tmux config:
+
+    ```shell
+      set -g @plugin 'christoomey/vim-tmux-navigator'
+    ```
+
+    If you're using nixos or home-manager to manager tmux, you can use the `programs.tmux.plugins` option for this:
+
+    ```nix
+      plugins.tmux.plugins = [
+        pkgs.tmuxPlugins.vim-tmux-navigator
+      ];
+    ```
+
+    #### Option 2: manually specify keybindings
+
+    Alternatively, you can specify the keybinding in your tmux config.
+
+    If you're using nixos or home-manager to manager tmux, you can use the `programs.tmux.extraConfig` option for this.
+
+    Example config from the [upstream docs]:
 
     ```shell
       # Smart pane switching with awareness of vim splits.

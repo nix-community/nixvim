@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib.nixvim) defaultNullOpts mkNullOrOption' toLuaObject;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption';
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "avante";
@@ -22,6 +22,9 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     '';
 
     mappings = mkNullOrOption' {
+      description = ''
+        Key mappings for various functionalities within avante.
+      '';
       type = with lib.types; attrsOf (either str (attrsOf str));
       example = {
         diff = {
@@ -78,7 +81,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     };
   };
 
-  extraConfig = _: {
+  extraConfig = {
     plugins.avante.luaConfig.pre = ''
       require('avante_lib').load()
     '';

@@ -430,8 +430,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   # NOTE: We call setup manually below.
   callSetup = false;
-  # NOTE: We install cfg.package manually so we can install grammars using it.
-  installPackage = false;
 
   extraConfig = cfg: {
     plugins.treesitter.luaConfig.content =
@@ -455,10 +453,10 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
     extraFiles = mkIf cfg.nixvimInjections { "queries/nix/injections.scm".source = ./injections.scm; };
 
-    extraPlugins = mkIf (cfg.package != null) [
-      (mkIf cfg.nixGrammars (cfg.package.withPlugins (_: cfg.grammarPackages)))
-      (mkIf (!cfg.nixGrammars) cfg.package)
-    ];
+    # Install the grammar packages if enabled
+    plugins.treesitter.packageDecorator = lib.mkIf cfg.nixGrammars (
+      pkg: pkg.withPlugins (_: cfg.grammarPackages)
+    );
 
     extraPackages = [
       cfg.gccPackage

@@ -50,7 +50,6 @@
       extraPlugins ? [ ],
       extraPackages ? [ ],
       callSetup ? true,
-      installPackage ? true,
     }@args:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
@@ -64,7 +63,7 @@
         }:
         let
           cfg = config.${namespace}.${name};
-          opt = options.${namespace}.${name};
+          opts = options.${namespace}.${name};
 
           setupCode = ''
             require('${luaName}')${setup}(${
@@ -79,7 +78,7 @@
             inherit maintainers;
             nixvimInfo = {
               inherit description;
-              url = args.url or opt.package.default.meta.homepage;
+              url = args.url or opts.package.default.meta.homepage;
               path = [
                 namespace
                 name
@@ -104,6 +103,16 @@
                           package
                         ];
                   };
+              packageDecorator = lib.mkOption {
+                type = lib.types.functionTo lib.types.package;
+                default = lib.id;
+                defaultText = lib.literalExpression "x: x";
+                description = ''
+                  Additional transformations to apply to the final installed package.
+                  The result of these transformations is **not** visible in the `package` option's value.
+                '';
+                internal = true;
+              };
             }
             // lib.optionalAttrs hasSettings {
               settings = lib.nixvim.mkSettingsOption {
@@ -129,13 +138,19 @@
               lib.mkMerge (
                 [
                   {
-                    extraPlugins = (lib.optional installPackage cfg.package) ++ extraPlugins;
                     inherit extraPackages;
+                    extraPlugins = extraPlugins ++ [
+                      (cfg.packageDecorator cfg.package)
+                    ];
                   }
                   (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                     colorscheme = lib.mkDefault colorscheme;
                   })
-                  (extraConfig cfg)
+                  (lib.optionalAttrs (args ? extraConfig) (
+                    lib.nixvim.modules.applyExtraConfig {
+                      inherit extraConfig cfg opts;
+                    }
+                  ))
                 ]
                 ++ (lib.optionals (!hasConfigAttrs) [
                   (lib.optionalAttrs callSetup (setLuaConfig setupCode))

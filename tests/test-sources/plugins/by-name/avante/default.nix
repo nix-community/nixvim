@@ -21,7 +21,6 @@
           timeout = 30000;
           temperature = 0;
           max_tokens = 4096;
-          local = false;
         };
         copilot = {
           endpoint = "https://api.githubcopilot.com";
@@ -39,7 +38,6 @@
           timeout = 30000;
           temperature = 0;
           max_tokens = 4096;
-          local = false;
         };
         claude = {
           endpoint = "https://api.anthropic.com";
@@ -47,7 +45,6 @@
           timeout = 30000;
           temperature = 0;
           max_tokens = 8000;
-          local = false;
         };
         gemini = {
           endpoint = "https://generativelanguage.googleapis.com/v1beta/models";
@@ -55,7 +52,6 @@
           timeout = 30000;
           temperature = 0;
           max_tokens = 4096;
-          local = false;
         };
         cohere = {
           endpoint = "https://api.cohere.com/v1";
@@ -63,7 +59,6 @@
           timeout = 30000;
           temperature = 0;
           max_tokens = 4096;
-          local = false;
         };
         vendors = { };
         behaviour = {

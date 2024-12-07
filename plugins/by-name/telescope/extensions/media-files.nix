@@ -1,14 +1,14 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
+  mkExtension = import ./_mk-extension.nix;
 in
-(import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
+mkExtension {
   name = "media-files";
   extensionName = "media_files";
   package = "telescope-media-files-nvim";

@@ -5,7 +5,6 @@ on:
     # Runs on pushes targeting the release branches
     branches:
       - main
-      - nixos-24.05
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,9 +27,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
+
+    env:
+      repo: ${{ github.repository }}
+      repoName: ${{ github.event.repository.name }}
+      out: docs-build
+
     steps:
       - name: Install nix
-        uses: cachix/install-nix-action@v26
+        uses: cachix/install-nix-action@v30
         with:
           nix_path: nixpkgs=channel:nixos-unstable
 
@@ -40,14 +45,89 @@ jobs:
           name: nix-community
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
-      - run: |
+      - name: Build docs
+        run: |
           set -ex
-          mkdir -p docs-build
-          nix build github:nix-community/nixvim#docs
-          cp -r result/share/doc/nixvim/* docs-build
-          nix build github:nix-community/nixvim/nixos-24.05#docs
-          # TODO: use the new path when 24.11 hits
-          cp -r result/share/doc docs-build/stable
+
+          # A list of all doc versions to be built,
+          # (Written to versions.json)
+          echo '
+            [
+              {
+                "branch": "main",
+                "nixpkgsBranch": "nixos-unstable"
+              },
+              {
+                "branch": "nixos-24.11",
+                "nixpkgsBranch": "nixos-24.11",
+                "subPath": "24.11"
+              },
+              {
+                "branch": "nixos-24.05",
+                "nixpkgsBranch": "nixos-24.05",
+                "subPath": "24.05"
+              }
+            ]
+          ' | jq \
+              --arg repoName "$repoName" \
+              'map(
+                  .
+                  # Ensure subPath is a string
+                  | .subPath = (.subPath // "")
+                  # Construct baseHref from $repoName and .subPath
+                  | .baseHref = (
+                       .subPath
+                       | if . == "" then "" else "/\(.)" end
+                       | $repoName + .
+                       | "/\(.)/"
+                  )
+              )' > versions.json
+
+          # 1: branch
+          # 2: baseHref
+          # 3: install dir
+          build() {
+            flakeref="github:${repo}${1:+/$1}"
+            baseHref="$2"
+            installDir="${out}${3:+/$3}"
+
+            # Build docs for the given flake ref, overriding the relevant derivation args
+            nix build --impure \
+                --argstr flakeref "$flakeref" \
+                --argstr baseHref "$baseHref" \
+                --arg-from-file versionsJson versions.json \
+                --expr '
+                  {
+                    flakeref,
+                    baseHref,
+                    versionsJson,
+                    system ? builtins.currentSystem,
+                  }:
+                  let
+                    flake = builtins.getFlake flakeref;
+                    packages = flake.outputs.packages.${system};
+                  in
+                  packages.docs.override {
+                    inherit baseHref;
+                    availableVersions = builtins.fromJSON versionsJson;
+                  }
+                '
+
+            # Copy the result to the install dir
+            mkdir -p "$installDir"
+            cp -r result/share/doc/* "$installDir"
+          }
+
+          # For each version of the docs...
+          jq -c '.[]' versions.json |
+          while IFS=$"\n" read -r entry; do
+              branch=$(echo "$entry" | jq -r '.branch')
+              baseHref=$(echo "$entry" | jq -r '.baseHref')
+              installDir=$(echo "$entry" | jq -r '.subPath')
+
+              # Build this version of the docs
+              build "$branch" "$baseHref" "$installDir"
+          done
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

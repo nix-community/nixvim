@@ -87,7 +87,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 > NixVim needs to be installed with a compatible nixpkgs version.
 > This means that the `main` branch of NixVim requires to be installed with `nixos-unstable`.
 >
-> If you want to use NixVim with nixpkgs 24.05 you should use the `nixos-24.05` branch.
+> If you want to use NixVim with nixpkgs 24.11 you should use the `nixos-24.11` branch.
 
 For more detail, see the [Installation](https://nix-community.github.io/nixvim) section of our documentation.
 
@@ -104,7 +104,7 @@ let
   nixvim = import (builtins.fetchGit {
     url = "https://github.com/nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-    # ref = "nixos-24.05";
+    # ref = "nixos-24.11";
   });
 in
 {
@@ -147,7 +147,7 @@ flakes, just add the nixvim input:
   inputs.nixvim = {
     url = "github:nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-    # url = "github:nix-community/nixvim/nixos-24.05";
+    # url = "github:nix-community/nixvim/nixos-24.11";
 
     inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -256,7 +256,7 @@ It takes a set with the following keys:
 - `extraSpecialArgs`: Extra arguments to pass to the modules when using functions.
   Can be `self` in a flake, for example.
 
-For more detail, see the [Standalone Usage](https://nix-community.github.io/nixvim/modules/standalone.html) section of our documentation.
+For more detail, see the [Standalone Usage](https://nix-community.github.io/nixvim/platforms/standalone.html) section of our documentation.
 
 ### With a `devShell`
 
@@ -281,7 +281,7 @@ in pkgs.mkShell {
 Documentation is available on this project's GitHub Pages page:
 [https://nix-community.github.io/nixvim](https://nix-community.github.io/nixvim)
 
-The stable documentation is also available at [https://nix-community.github.io/nixvim/stable](https://nix-community.github.io/nixvim/stable).
+The stable documentation is also available at [https://nix-community.github.io/nixvim/24.11](https://nix-community.github.io/nixvim/24.11).
 
 If the option `enableMan` is set to `true` (by default it is), man pages will also
 be installed containing the same information, they can be viewed with `man nixvim`.

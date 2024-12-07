@@ -78,6 +78,9 @@ in
     render = helpers.defaultNullOpts.mkEnumFirstDefault [
       "default"
       "minimal"
+      "simple"
+      "compact"
+      "wrapped-compact"
     ] "Function to render a notification buffer or a built-in renderer name.";
 
     minimumWidth = helpers.defaultNullOpts.mkUnsignedInt 50 ''

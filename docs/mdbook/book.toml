@@ -5,6 +5,9 @@ multilingual = false
 src = "."
 title = "nixvim docs"
 
+[output.html]
+site-url = "@SITE_URL@"
+
 [output.html.fold]
 enable = true
 level = 0

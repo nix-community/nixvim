@@ -21,7 +21,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
     markdown.headline_highlights = [ "Headline1" ];
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     warnings = optional (!config.plugins.treesitter.enable) ''
       Nixvim (plugins.headlines): headlines requires `plugins.treesitter` to be enabled with the relevant grammars installed.
     '';

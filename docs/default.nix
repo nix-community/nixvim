@@ -42,13 +42,6 @@ let
     ];
   };
 
-  hmOptions = builtins.removeAttrs (lib.evalModules {
-    modules = [
-      ../wrappers/modules/hm.nix
-      { _module.check = false; } # Ignore missing option declarations
-    ];
-  }).options [ "_module" ];
-
   options-json =
     (pkgs.nixosOptionsDoc {
       inherit (evaledModules) options;
@@ -57,35 +50,30 @@ let
     }).optionsJSON;
 
 in
-{
-  inherit options-json;
-  inherit (pkgs) nixos-render-docs;
-
-  gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
-
-  man-docs = pkgs.callPackage ./man { inherit options-json; };
-}
-// lib.optionalAttrs (!pkgs.stdenv.isDarwin) (
-  let
-    mkSearch =
-      baseHref:
-      nuschtosSearch.packages.mkSearch {
-        optionsJSON = options-json + "/share/doc/nixos/options.json";
-        urlPrefix = "https://github.com/nix-community/nixvim/tree/main";
-        title = "Nixvim options search";
-        inherit baseHref;
-      };
-  in
+lib.fix (
+  self:
   {
+    inherit options-json;
+    inherit (pkgs) nixos-render-docs;
+
+    gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
+
+    man-docs = pkgs.callPackage ./man { inherit options-json; };
+  }
+  // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
     # NuschtOS/search does not seem to work on darwin
-    search = mkSearch "/";
+    search = nuschtosSearch.packages.mkSearch {
+      optionsJSON = options-json + "/share/doc/nixos/options.json";
+      urlPrefix = "https://github.com/nix-community/nixvim/tree/main";
+      title = "Nixvim options search";
+      baseHref = "/";
+    };
 
     # Do not check if documentation builds fine on darwin as it fails:
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgs.callPackage ./mdbook {
-      inherit evaledModules hmOptions transformOptions;
-      # TODO: Find how to handle stable when 24.11 lands
-      search = mkSearch "/nixvim/search/";
+      inherit evaledModules transformOptions;
+      inherit (self) search;
     };
   }
 )

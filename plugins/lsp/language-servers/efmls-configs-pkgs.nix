@@ -6,8 +6,8 @@ in
   # efmls-configs tools that have no corresponding nixpkgs package
   unpackaged = [
     "blade_formatter"
-    "cspell"
     "cljstyle"
+    "cspell"
     "dartanalyzer"
     "debride"
     "deno_fmt"
@@ -16,12 +16,16 @@ in
     "forge_fmt"
     "gersemi"
     "js_standard"
+    "kdlfmt"
+    "markuplint"
+    "mix"
     "pint"
     "prettier_eslint"
     "prettier_standard"
     "redpen"
     "reek"
     "rome"
+    "ruff_sort"
     "slim_lint"
     "solhint"
     "sorbet"
@@ -83,6 +87,7 @@ in
       "shfmt"
       "smlfmt"
       "sqlfluff"
+      "sql-formatter"
       "statix"
       "stylua"
       "taplo"
@@ -102,10 +107,10 @@ in
         "vulture"
       ];
       nodePackages = [
-        "eslint_d"
-        "prettier"
         "alex"
-        "sql-formatter"
+        "eslint_d"
+        "jsonlint"
+        "prettier"
         "stylelint"
         "textlint"
       ];

@@ -16,6 +16,7 @@
     ./filetype.nix
     ./highlights.nix
     ./keymaps.nix
+    ./lazyload.nix
     ./lua-loader.nix
     ./opts.nix
     ./output.nix

@@ -8,7 +8,7 @@ nixpkgs.lib.nixosSystem {
 
   modules = [
     {
-      system.stateVersion = "24.05";
+      system.stateVersion = "24.11";
       boot.loader.systemd-boot.enable = true;
       fileSystems."/" = {
         device = "/non/existent/device";

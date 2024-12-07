@@ -36,7 +36,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
         "skipTags"
       ];
 
-  extraConfig = cfg: {
+  extraConfig = {
     warnings = mkIf (!config.plugins.treesitter.enable) [
       "Nixvim: ts-autotag needs treesitter to function as intended"
     ];

@@ -29,12 +29,14 @@
 with lib;
 let
   cfg = config.plugins.lsp.servers.${name};
-  opt = options.plugins.lsp.servers.${name};
+  opts = options.plugins.lsp.servers.${name};
+
+  enabled = config.plugins.lsp.enable && cfg.enable;
 in
 {
   meta.nixvimInfo = {
     # TODO: description
-    url = args.url or opt.package.default.meta.homepage or null;
+    url = args.url or opts.package.default.meta.homepage or null;
     path = [
       "plugins"
       "lsp"
@@ -68,7 +70,7 @@ in
         type = with types; nullOr (listOf str);
         default =
           # TODO: do we really only want the default `cmd` when `package` is non-null?
-          if !(opt.package.isDefined or false) then
+          if !(opts.package.isDefined or false) then
             null
           else if cfg.package == null then
             null
@@ -131,7 +133,7 @@ in
     } // extraOptions;
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf enabled {
     extraPackages = [ cfg.package ];
 
     plugins.lsp.enabledServers = [
@@ -148,7 +150,12 @@ in
               end
             ''
           );
-          settings = settings cfg.settings;
+          settings = lib.nixvim.modules.applyExtraConfig {
+            extraConfig = settings;
+            cfg = cfg.settings;
+            opts = opts.settings;
+            enabled = true;
+          };
         } // cfg.extraOptions;
       }
     ];
@@ -168,8 +175,17 @@ in
       (mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
-      (extraConfig cfg)
     ]
+    ++ lib.optional (args ? extraConfig) (
+      lib.nixvim.modules.applyExtraConfig {
+        inherit
+          extraConfig
+          cfg
+          opts
+          enabled
+          ;
+      }
+    )
     # Add an alias (with warning) for the lspconfig server name, if different to `name`.
     # Note: users may use lspconfig's docs to guess the `plugins.lsp.servers.*` name
     ++ (optional (name != serverName) (

@@ -5,7 +5,10 @@ let
 in
 {
   imports =
-    [ ./prettier.nix ]
+    [
+      ./prettier.nix
+      ./prettierd.nix
+    ]
     ++ (lib.flatten (
       lib.mapAttrsToList (category: (lib.map (mkSourcePlugin category))) noneLsBuiltins
     ));

@@ -8,7 +8,7 @@ with helpers.vim-plugin;
 mkVimPlugin {
   name = "magma-nvim";
   originalName = "magma-nvim";
-  package = "magma-nvim-goose";
+  package = "magma-nvim";
   globalPrefix = "magma_";
 
   maintainers = [ maintainers.GaetanLepage ];

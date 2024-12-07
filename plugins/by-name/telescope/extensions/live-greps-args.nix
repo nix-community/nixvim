@@ -1,15 +1,14 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
-  telescopeHelpers = import ./_helpers.nix { inherit lib config pkgs; };
+  mkExtension = import ./_mk-extension.nix;
 in
-telescopeHelpers.mkExtension {
+mkExtension {
   name = "live-grep-args";
   extensionName = "live_grep_args";
   package = "telescope-live-grep-args-nvim";
@@ -49,7 +48,8 @@ telescopeHelpers.mkExtension {
     mappings = {
       i = {
         "<C-k>".__raw = ''require("telescope-live-grep-args.actions").quote_prompt()'';
-        "<C-i>".__raw = ''require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob " })'';
+        "<C-i>".__raw =
+          ''require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob " })'';
         "<C-space>".__raw = ''require("telescope.actions").to_fuzzy_refine'';
       };
     };

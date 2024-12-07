@@ -7,13 +7,14 @@ Take a look at these configuration examples below.
 <!-- TODO: add info about `kickstart.nixvim` -->
 
 **Note:**\
-Most of those configurations are using a [standalone build](../modules/standalone.html), however,
+Most of those configurations are using a [standalone build](../platforms/standalone.html), however,
 all of the nixvim options are accessible no matter how you are using it (flake, NixOS/HM module, nix-darwin...).
 
 | Config | Comment |
 |-|-|
 | [ahwxorg/nixvim-config] | |
 | [alisonjenkins/neovim-nix-flake] | |
+| [bkp5190/home-manager-configs] | Home-manager |
 | [dc-tec/nixvim] | NixVim config, inspired by some of the contributors in this list and LazyVIM |
 | [elythh/nixvim] | |
 | [fred-drake/neovim] | NixVim config, with format/lsp/debug configurations for Rust, Go, Python and more |
@@ -29,15 +30,17 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 | [pete3n/nixvim-flake] | |
 | [redyf/Neve] | Meticulously crafted custom configuration for Nixvim |
 | [siph/nixvim-flake] | |
+| [spector700/Akari] | Inspired from LazyVim with parts yoinked from other NixVim configs |
 | [Tanish2002/neovim-config] | |
 | [traxys/Nixfiles] | |
 | [veeronniecaw/ronvim] | |
-| [zainkergaye/nixosdotfiles] | NixVim editor primarily for Java and Asciidoc | 
+| [zainkergaye/nixosdotfiles] | NixVim editor primarily for Java and Asciidoc |
 
 <!-- WARNING: Please ensure entries are alphabetically sorted ! -->
 
 [ahwxorg/nixvim-config]: https://github.com/ahwxorg/nixvim-config
 [alisonjenkins/neovim-nix-flake]: https://github.com/alisonjenkins/neovim-nix-flake
+[bkp5190/home-manager-configs]: https://github.com/bkp5190/Home-Manager-Configs
 [dc-tec/nixvim]: https://github.com/dc-tec/nixvim
 [elythh/nixvim]: https://github.com/elythh/nixvim
 [fred-drake/neovim]: https://github.com/fred-drake/neovim
@@ -53,6 +56,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [pete3n/nixvim-flake]: https://github.com/pete3n/nixvim-flake
 [redyf/Neve]: https://github.com/redyf/Neve
 [siph/nixvim-flake]: https://github.com/siph/nixvim-flake
+[spector700/Akari]: https://github.com/spector700/Akari
 [Tanish2002/neovim-config]: https://github.com/Tanish2002/neovim-config
 [traxys/Nixfiles]: https://github.com/traxys/Nixfiles/tree/master/neovim
 [veeronniecaw/ronvim]: https://codeberg.org/veeronniecaw/ronvim

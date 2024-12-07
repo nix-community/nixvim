@@ -1,15 +1,11 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 with lib;
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
-  telescopeHelpers = import ./_helpers.nix { inherit lib config pkgs; };
+  inherit (import ./_helpers.nix lib) mkMappingsOption;
+  mkExtension = import ./_mk-extension.nix;
 in
-telescopeHelpers.mkExtension {
+mkExtension {
   name = "undo";
   package = "telescope-undo-nvim";
 
@@ -84,7 +80,7 @@ telescopeHelpers.mkExtension {
       Can be set to a [Lua date format string](https://www.lua.org/pil/22.1.html).
     '';
 
-    mappings = telescopeHelpers.mkMappingsOption {
+    mappings = mkMappingsOption {
       insertDefaults = ''
         {
           "<cr>" = "require('telescope-undo.actions').yank_additions";

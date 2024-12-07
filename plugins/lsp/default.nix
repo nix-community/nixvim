@@ -29,7 +29,7 @@ in
         };
 
         diagnostic = mkOption {
-          type = with types; attrsOf (either str attrs);
+          type = with types; attrsOf (either str (attrsOf anything));
           description = "Mappings for `vim.diagnostic.<action>` functions to be added when an LSP is attached.";
           example = {
             "<leader>k" = "goto_prev";
@@ -39,7 +39,7 @@ in
         };
 
         lspBuf = mkOption {
-          type = with types; attrsOf (either str attrs);
+          type = with types; attrsOf (either str (attrsOf anything));
           description = "Mappings for `vim.lsp.buf.<action>` functions to be added when an LSP it attached.";
           example = {
             "gd" = "definition";
@@ -73,7 +73,7 @@ in
             }
             {
               key = "gd";
-              action.__raw = "require('telescope.builtin').lsp_definitions()";
+              action.__raw = "require('telescope.builtin').lsp_definitions";
             }
             {
               key = "K";
@@ -106,7 +106,7 @@ in
                 };
 
                 extraOptions = mkOption {
-                  type = attrs;
+                  type = attrsOf anything;
                   description = "Extra options for the server";
                 };
               };
@@ -192,12 +192,12 @@ in
       keymapsOnEvents.LspAttach =
         let
           mkMaps =
-            prefix:
+            prefix: descPrefix:
             mapAttrsToList (
               key: action:
               let
-                actionStr = if isString action then action else action.action;
-                actionProps = if isString action then { } else filterAttrs (n: v: n != "action") action;
+                actionStr = action.action or action;
+                actionProps = optionalAttrs (isAttrs action) (removeAttrs action [ "action" ]);
               in
               {
                 mode = "n";
@@ -206,12 +206,13 @@ in
 
                 options = {
                   inherit (cfg.keymaps) silent;
+                  desc = "${descPrefix} ${actionStr}";
                 } // actionProps;
               }
             );
         in
-        (mkMaps "vim.diagnostic." cfg.keymaps.diagnostic)
-        ++ (mkMaps "vim.lsp.buf." cfg.keymaps.lspBuf)
+        mkMaps "vim.diagnostic." "Lsp diagnostic" cfg.keymaps.diagnostic
+        ++ mkMaps "vim.lsp.buf." "Lsp buf" cfg.keymaps.lspBuf
         ++ cfg.keymaps.extra;
 
       # Enable inlay-hints

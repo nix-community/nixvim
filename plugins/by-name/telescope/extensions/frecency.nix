@@ -1,14 +1,10 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 with lib;
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStr;
+  mkExtension = import ./_mk-extension.nix;
 in
-(import ./_helpers.nix { inherit lib config pkgs; }).mkExtension {
+mkExtension {
   name = "frecency";
   package = "telescope-frecency-nvim";
 
