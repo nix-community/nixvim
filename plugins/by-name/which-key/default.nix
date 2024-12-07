@@ -377,9 +377,9 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       zindex = defaultNullOpts.mkUnsignedInt 1000 "Layer depth on the popup window.";
 
       wo = {
-        winblend = defaultNullOpts.mkNullableWithRaw (types.ints.between 0
-          100
-        ) 0 "`0` for fully opaque and `100` for fully transparent.";
+        winblend =
+          defaultNullOpts.mkNullableWithRaw (types.ints.between 0 100) 0
+            "`0` for fully opaque and `100` for fully transparent.";
       };
     };
 

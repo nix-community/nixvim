@@ -145,9 +145,12 @@ in
 
     extraConfigLua =
       let
-        setupOptions = {
-          default = processPluginOptions cfg.default;
-        } // cfg.filetypes // cfg.extraOptions;
+        setupOptions =
+          {
+            default = processPluginOptions cfg.default;
+          }
+          // cfg.filetypes
+          // cfg.extraOptions;
       in
       ''
         require('clipboard-image').setup(${helpers.toLuaObject setupOptions})

@@ -104,13 +104,9 @@ in
       gitStatusAsync = helpers.defaultNullOpts.mkBool true "";
 
       gitStatusAsyncOptions = {
-        batchSize =
-          helpers.defaultNullOpts.mkInt 1000
-            "How many lines of git status results to process at a time";
+        batchSize = helpers.defaultNullOpts.mkInt 1000 "How many lines of git status results to process at a time";
 
-        batchDelay =
-          helpers.defaultNullOpts.mkInt 10
-            "delay in ms between batches. Spreads out the workload to let other processes run.";
+        batchDelay = helpers.defaultNullOpts.mkInt 10 "delay in ms between batches. Spreads out the workload to let other processes run.";
 
         maxLines = helpers.defaultNullOpts.mkInt 10000 ''
           How many lines of git status results to process. Anything after this will be dropped.
