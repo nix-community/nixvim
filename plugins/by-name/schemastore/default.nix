@@ -136,7 +136,7 @@ helpers.vim-plugin.mkVimPlugin {
     plugins.lsp.servers = {
       jsonls.settings = mkIf cfg.json.enable {
         schemas.__raw = ''
-          require('schemastore').json.schemas({${helpers.toLuaObject cfg.json.settings}})
+          require('schemastore').json.schemas(${helpers.toLuaObject cfg.json.settings})
         '';
 
         # The plugin recommends to enable this option in its README.
@@ -155,7 +155,7 @@ helpers.vim-plugin.mkVimPlugin {
         };
 
         schemas.__raw = ''
-          require('schemastore').yaml.schemas({${helpers.toLuaObject cfg.yaml.settings}})
+          require('schemastore').yaml.schemas(${helpers.toLuaObject cfg.yaml.settings})
         '';
       };
     };
