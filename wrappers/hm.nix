@@ -29,7 +29,7 @@ in
 
   imports = [
     (import ./_shared.nix {
-      inherit evalArgs;
+      inherit self evalArgs;
       filesOpt = [
         "xdg"
         "configFile"
