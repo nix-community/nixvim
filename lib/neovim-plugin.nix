@@ -125,33 +125,29 @@
             }
             // extraOptions;
 
-          config =
-            assert lib.assertMsg (
-              callSetup -> configLocation != null
-            ) "When a plugin has a setup function it must have a config location";
-            lib.mkIf cfg.enable (
-              lib.mkMerge [
-                {
-                  inherit extraPackages;
-                  extraPlugins = extraPlugins ++ [
-                    (cfg.packageDecorator cfg.package)
-                  ];
+          config = lib.mkIf cfg.enable (
+            lib.mkMerge [
+              {
+                inherit extraPackages;
+                extraPlugins = extraPlugins ++ [
+                  (cfg.packageDecorator cfg.package)
+                ];
+              }
+              (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+                colorscheme = lib.mkDefault colorscheme;
+              })
+              # Apply any additional configuration added `extraConfig`
+              (lib.optionalAttrs (args ? extraConfig) (
+                lib.nixvim.modules.applyExtraConfig {
+                  inherit extraConfig cfg opts;
                 }
-                (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
-                  colorscheme = lib.mkDefault colorscheme;
-                })
-                # Apply any additional configuration added `extraConfig`
-                (lib.optionalAttrs (args ? extraConfig) (
-                  lib.nixvim.modules.applyExtraConfig {
-                    inherit extraConfig cfg opts;
-                  }
-                ))
-                # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
-                (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
-                # Write the lua configuration `luaConfig.content` to the config file
-                (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
-              ]
-            );
+              ))
+              # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
+              (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
+              # Write the lua configuration `luaConfig.content` to the config file
+              (setLuaConfig cfg.luaConfig.content)
+            ]
+          );
         };
     in
     {
