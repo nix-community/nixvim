@@ -97,6 +97,26 @@ let
       type = types.nullOr types.str;
       default = null;
     };
+    virtualtext_inline = mkOption {
+      description = "Display virtualtext inline with color";
+      type = types.nullOr types.bool;
+      default = null;
+    };
+    virtualtext_mode = mkOption {
+      description = "virtualtext highlighting mode";
+      type = types.nullOr (
+        types.enum [
+          "foreground"
+          "background"
+        ]
+      );
+      default = null;
+    };
+    always_update = mkOption {
+      description = "update color values even if buffer is not focused";
+      type = types.nullOr types.bool;
+      default = null;
+    };
   };
 in
 {
