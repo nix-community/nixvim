@@ -66,7 +66,7 @@
           meta = {
             inherit maintainers;
             nixvimInfo = {
-              inherit description;
+              inherit description originalName;
               url = args.url or opts.package.default.meta.homepage;
               path = [
                 namespace
