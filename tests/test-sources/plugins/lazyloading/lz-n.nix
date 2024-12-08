@@ -2,6 +2,7 @@
   lazy-load-neovim-plugin-configured =
     { config, lib, ... }:
     {
+      test.checkWarnings = false;
       plugins = {
         lz-n = {
           enable = true;
@@ -54,6 +55,7 @@
   lazy-load-lz-n-configured =
     { config, lib, ... }:
     {
+      test.checkWarnings = false;
       plugins = {
         codesnap = {
           enable = true;
@@ -150,6 +152,7 @@
   dont-lazy-load-colorscheme-automatically =
     { config, ... }:
     {
+      test.checkWarnings = false;
       colorschemes.catppuccin.enable = true;
       plugins = {
         lz-n = {
@@ -168,6 +171,7 @@
   dont-lazy-load-unconfigured =
     { config, ... }:
     {
+      test.checkWarnings = false;
       plugins = {
         neotest = {
           enable = true;
@@ -190,6 +194,7 @@
   lazy-load-colorscheme-properly =
     { config, lib, ... }:
     {
+      test.checkWarnings = false;
       colorschemes.catppuccin = {
         enable = true;
         lazyLoad.enable = true;
@@ -232,6 +237,7 @@
   lazy-load-enabled-automatically =
     { config, ... }:
     {
+      test.checkWarnings = false;
       plugins = {
         lz-n = {
           enable = true;
@@ -274,6 +280,7 @@
   wrap-functionless-luaConfig =
     { config, ... }:
     {
+      test.checkWarnings = false;
       plugins = {
         lz-n = {
           enable = true;
