@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   ...
 }:
 let
@@ -25,6 +26,32 @@ in
             Please ensure only one is enabled at a time.
           '';
         }
+      ];
+    warnings =
+      let
+        ignoredPackages = [
+          # removed
+          "treesitter-playground"
+          # renamed
+          "surround"
+          "null-ls"
+          "wilder-nvim"
+        ];
+
+        pluginsWithLazyLoad = builtins.filter (
+          x:
+          !(lib.elem x ignoredPackages)
+          && lib.hasAttr "lazyLoad" config.plugins.${x}
+          && config.plugins.${x}.lazyLoad.enable
+        ) (builtins.attrNames config.plugins);
+        count = builtins.length pluginsWithLazyLoad;
+      in
+      lib.optionals (count > 0) [
+        ''
+          You have enabled experimental lazy loading support.
+          ${lib.concatImapStringsSep "\n" (i: x: "${toString i}. plugins.${x}") pluginsWithLazyLoad}
+          This is not a stable API and may have breaking changes.
+        ''
       ];
   };
 }

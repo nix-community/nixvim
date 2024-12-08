@@ -89,6 +89,7 @@
           options.${namespace}.${name} =
             {
               enable = lib.mkEnableOption originalName;
+              lazyLoad = lib.nixvim.mkLazyLoadOption originalName;
               package =
                 if lib.isOption package then
                   package
@@ -152,13 +153,62 @@
                     }
                   ))
                 ]
-                ++ (lib.optionals (!hasConfigAttrs) [
+                ++ lib.optionals (!hasConfigAttrs) [
                   (lib.optionalAttrs callSetup (setLuaConfig setupCode))
-                ])
-                ++ (lib.optionals hasConfigAttrs [
+                ]
+                ++ lib.optionals hasConfigAttrs [
                   (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
-                  (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
-                ])
+                  (lib.mkIf (!cfg.lazyLoad.enable) (
+                    lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content)
+                  ))
+                  (lib.mkIf cfg.lazyLoad.enable {
+                    assertions = [
+                      {
+                        assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
+                        message = "You have enabled lazy loading for ${originalName} but have not provided any configuration.";
+                      }
+                      {
+                        assertion = cfg.lazyLoad.enable && (config.plugins.lz-n.enable || config.plugins.lazy.enable);
+                        message = "You have enabled lazy loading for ${originalName} but have not enabled any lazy loading plugins.";
+                      }
+                    ];
+                    plugins.lz-n = lib.mkIf config.plugins.lz-n.enable {
+                      plugins = [
+                        (
+                          {
+                            __unkeyed-1 = originalName;
+                            # Use provided after, otherwise fallback to normal lua content
+                            after =
+                              cfg.lazyLoad.settings.after or
+                              # We need to wrap it in a function so it doesn't execute immediately
+                              ("function()\n " + cfg.luaConfig.content + " \nend");
+                            colorscheme = lib.mkIf isColorscheme (cfg.lazyLoad.settings.colorscheme or colorscheme);
+                          }
+                          // (lib.removeAttrs cfg.lazyLoad.settings [
+                            "after"
+                            "colorscheme"
+                          ])
+                        )
+                      ];
+                    };
+                    plugins.lazy = lib.mkIf config.plugins.lazy.enable {
+                      plugins = [
+                        (
+                          {
+                            name = originalName;
+                            main = luaName;
+                            pkg = cfg.package;
+                            # Use provided opts, otherwise fallback to settings
+                            opts = cfg.lazyLoad.settings.opts or cfg.settings;
+                          }
+                          // (lib.removeAttrs cfg.lazyLoad.settings [
+                            "opts"
+                          ])
+                        )
+                      ];
+                    };
+                  })
+                ]
               )
             );
         };
