@@ -27,9 +27,6 @@
       colorscheme ? name,
       # luaConfig
       configLocation ? if isColorscheme then "extraConfigLuaPre" else "extraConfigLua",
-      # For some plugins it may not make sense to have a configuration attribute, as they are
-      # configured through some other mean, like global variables
-      hasConfigAttrs ? true,
       # options
       originalName ? name,
       # Can be a string, a list of strings, or a module option:
@@ -113,6 +110,11 @@
                 '';
                 internal = true;
               };
+              luaConfig = lib.mkOption {
+                type = lib.types.pluginLuaConfig;
+                default = { };
+                description = "The plugin's lua configuration";
+              };
             }
             // lib.optionalAttrs hasSettings {
               settings = lib.nixvim.mkSettingsOption {
@@ -121,45 +123,31 @@
                 example = settingsExample;
               };
             }
-            // lib.optionalAttrs hasConfigAttrs {
-              luaConfig = lib.mkOption {
-                type = lib.types.pluginLuaConfig;
-                default = { };
-                description = "The plugin's lua configuration";
-              };
-            }
             // extraOptions;
 
           config =
             assert lib.assertMsg (
               callSetup -> configLocation != null
-            ) "When a plugin has no config attrs and has a setup function it must have a config location";
+            ) "When a plugin has a setup function it must have a config location";
             lib.mkIf cfg.enable (
-              lib.mkMerge (
-                [
-                  {
-                    inherit extraPackages;
-                    extraPlugins = extraPlugins ++ [
-                      (cfg.packageDecorator cfg.package)
-                    ];
+              lib.mkMerge [
+                {
+                  inherit extraPackages;
+                  extraPlugins = extraPlugins ++ [
+                    (cfg.packageDecorator cfg.package)
+                  ];
+                }
+                (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+                  colorscheme = lib.mkDefault colorscheme;
+                })
+                (lib.optionalAttrs (args ? extraConfig) (
+                  lib.nixvim.modules.applyExtraConfig {
+                    inherit extraConfig cfg opts;
                   }
-                  (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
-                    colorscheme = lib.mkDefault colorscheme;
-                  })
-                  (lib.optionalAttrs (args ? extraConfig) (
-                    lib.nixvim.modules.applyExtraConfig {
-                      inherit extraConfig cfg opts;
-                    }
-                  ))
-                ]
-                ++ (lib.optionals (!hasConfigAttrs) [
-                  (lib.optionalAttrs callSetup (setLuaConfig setupCode))
-                ])
-                ++ (lib.optionals hasConfigAttrs [
-                  (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
-                  (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
-                ])
-              )
+                ))
+                (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
+                (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
+              ]
             );
         };
     in
