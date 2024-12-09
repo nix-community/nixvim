@@ -123,7 +123,7 @@
             }
             // lib.optionalAttrs hasConfigAttrs {
               luaConfig = lib.mkOption {
-                type = lib.types.pluginLuaConfig;
+                type = lib.types.pluginLuaConfig { hasContent = true; };
                 default = { };
                 description = "The plugin's lua configuration";
               };
