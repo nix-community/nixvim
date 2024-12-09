@@ -48,8 +48,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
   };
 
   callSetup = false;
-  hasConfigAttrs = false;
-  configLocation = null;
+  hasLuaConfig = false;
   extraConfig =
     cfg:
     mkMerge [

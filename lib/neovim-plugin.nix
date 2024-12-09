@@ -27,9 +27,9 @@
       colorscheme ? name,
       # luaConfig
       configLocation ? if isColorscheme then "extraConfigLuaPre" else "extraConfigLua",
-      # For some plugins it may not make sense to have a configuration attribute, as they are
-      # configured through some other mean, like global variables
-      hasConfigAttrs ? true,
+      # Some plugin are not supposed to generate lua configuration code.
+      # For example, they might just be configured through some other mean, like global variables
+      hasLuaConfig ? true,
       # options
       originalName ? name,
       # Can be a string, a list of strings, or a module option:
@@ -121,7 +121,7 @@
                 example = settingsExample;
               };
             }
-            // lib.optionalAttrs hasConfigAttrs {
+            // lib.optionalAttrs hasLuaConfig {
               luaConfig = lib.mkOption {
                 type = lib.types.pluginLuaConfig;
                 default = { };
@@ -132,8 +132,8 @@
 
           config =
             assert lib.assertMsg (
-              callSetup -> configLocation != null
-            ) "When a plugin has no config attrs and has a setup function it must have a config location";
+              callSetup -> hasLuaConfig
+            ) "This plugin is supposed to call the `setup()` function but has `hasLuaConfig` set to false";
             lib.mkIf cfg.enable (
               lib.mkMerge (
                 [
@@ -143,21 +143,26 @@
                       (cfg.packageDecorator cfg.package)
                     ];
                   }
+
                   (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                     colorscheme = lib.mkDefault colorscheme;
                   })
+
+                  # Apply any additional configuration added to `extraConfig`
                   (lib.optionalAttrs (args ? extraConfig) (
                     lib.nixvim.modules.applyExtraConfig {
                       inherit extraConfig cfg opts;
                     }
                   ))
                 ]
-                ++ (lib.optionals (!hasConfigAttrs) [
-                  (lib.optionalAttrs callSetup (setLuaConfig setupCode))
-                ])
-                ++ (lib.optionals hasConfigAttrs [
+                # Lua configuration code generation
+                ++ (lib.optionals hasLuaConfig [
+
+                  # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
                   (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
-                  (lib.optionalAttrs (configLocation != null) (setLuaConfig cfg.luaConfig.content))
+
+                  # Write the lua configuration `luaConfig.content` to the config file
+                  (setLuaConfig cfg.luaConfig.content)
                 ])
               )
             );
