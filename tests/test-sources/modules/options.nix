@@ -23,10 +23,20 @@
   };
 
   globals = {
+    globalsPre = ''
+      dummy = 45
+    '';
     globals = {
+      with_pre.__raw = "dummy";
       loaded_ruby_provider = 0;
       loaded_perl_provider = 0;
       loaded_python_provider = 0;
     };
+    globalsPost = # lua
+      ''
+        if vim.g.with_pre ~= dummy then
+          print("Mismatch for vim.g.with_pre, expected " .. dummy .. " got " .. vim.g.with_pre)
+        end
+      '';
   };
 }
