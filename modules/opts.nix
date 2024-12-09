@@ -84,23 +84,25 @@ in
               optionDefinitions = helpers.toLuaObject config.${optionName};
               ifGlobals = lib.optionalString (optionName == "globals");
             in
-            lib.optionalString (optionDefinitions != "{ }") ''
-              -- Set up ${prettyName} {{{
-            ''
-            + (ifGlobals config.globalsPre)
-            + ''
-              do
-                local ${varName} = ${optionDefinitions}
+            lib.optionalString (optionDefinitions != "{ }") (
+              ''
+                -- Set up ${prettyName} {{{
+              ''
+              + (ifGlobals config.globalsPre)
+              + ''
+                do
+                  local ${varName} = ${optionDefinitions}
 
-                for k,v in pairs(${varName}) do
-                  vim.${luaApi}[k] = v
+                  for k,v in pairs(${varName}) do
+                    vim.${luaApi}[k] = v
+                  end
                 end
-              end
-            ''
-            + (ifGlobals config.globalsPost)
-            + ''
-              -- }}}
-            ''
+              ''
+              + (ifGlobals config.globalsPost)
+              + ''
+                -- }}}
+              ''
+            )
           ) optionsAttrs
         );
       in
