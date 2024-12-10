@@ -111,6 +111,11 @@
               command = ''${pkgs.python3.interpreter} ${./list-plugins.py} "$@"'';
               help = "List plugins and get implementation infos";
             }
+            {
+              name = "new-plugin";
+              command = ''${pkgs.python3.interpreter} ${./new-plugin.py} "$@"'';
+              help = "Create a new plugin";
+            }
           ];
       };
     };
