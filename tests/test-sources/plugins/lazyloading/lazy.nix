@@ -1,3 +1,14 @@
+let
+  getFirstLazyPlugin =
+    config:
+    let
+      inherit (config.plugins.lazy) plugins;
+    in
+    if plugins == [ ] then null else builtins.head plugins;
+
+  getPluginKeys = plugin: if plugin != null && builtins.isList plugin.keys then plugin.keys else [ ];
+  getPluginCmd = plugin: if plugin != null && builtins.isList plugin.cmd then plugin.cmd else [ ];
+in
 {
   lazy-load-neovim-plugin-configured =
     { config, lib, ... }:
@@ -18,31 +29,25 @@
         };
       };
 
-      assertions = [
-        {
-          assertion = (builtins.length config.plugins.lazy.plugins) == 1;
-          message = "`lazy.plugins` should have contained a single plugin configuration, but contained ${builtins.toJSON config.plugins.lz-n.plugins}";
-        }
-        {
-          assertion =
-            let
-              plugins = config.plugins.lazy.plugins or [ ];
-              plugin = if builtins.length plugins > 0 then builtins.head plugins else null;
-              cmd = if plugin != null && builtins.isList plugin.cmd then plugin.cmd else [ ];
-            in
-            (builtins.length cmd) == 1;
-          message = "`lazy.plugins[0].cmd` should have contained a configuration.";
-        }
-        {
-          assertion =
-            let
-              plugins = config.plugins.lazy.plugins or [ ];
-              plugin = if builtins.length plugins > 0 then builtins.head plugins else null;
-            in
-            plugin != null && config.plugins.neotest.settings == plugin.opts;
-          message = "`lazy.plugins[0].opts` should have contained `neotest` settings.";
-        }
-      ];
+      assertions =
+        let
+          plugin = getFirstLazyPlugin config;
+          cmd = getPluginCmd plugin;
+        in
+        [
+          {
+            assertion = (builtins.length config.plugins.lazy.plugins) == 1;
+            message = "`lazy.plugins` should have contained a single plugin configuration, but contained ${builtins.toJSON config.plugins.lz-n.plugins}";
+          }
+          {
+            assertion = (builtins.length cmd) == 1;
+            message = "`lazy.plugins[0].cmd` should have contained a configuration.";
+          }
+          {
+            assertion = plugin != null && config.plugins.neotest.settings == plugin.opts;
+            message = "`lazy.plugins[0].opts` should have contained `neotest` settings.";
+          }
+        ];
     };
 
   dont-lazy-load-unconfigured =
@@ -85,21 +90,20 @@
         };
       };
 
-      assertions = [
-        {
-          assertion = (builtins.length config.plugins.lazy.plugins) == 1;
-          message = "`lazy.plugins` should have contained a single plugin configuration, but contained ${builtins.toJSON config.plugins.lz-n.plugins}";
-        }
-        {
-          assertion =
-            let
-              plugins = config.plugins.lazy.plugins or [ ];
-              plugin = if builtins.length plugins > 0 then builtins.head plugins else null;
-              cmd = if plugin != null && builtins.isList plugin.cmd then plugin.cmd else [ ];
-            in
-            (builtins.length cmd) == 1;
-          message = "`lazy.plugins[0].cmd` should have contained a configuration.";
-        }
-      ];
+      assertions =
+        let
+          plugin = getFirstLazyPlugin config;
+          cmd = getPluginCmd plugin;
+        in
+        [
+          {
+            assertion = (builtins.length config.plugins.lazy.plugins) == 1;
+            message = "`lazy.plugins` should have contained a single plugin configuration, but contained ${builtins.toJSON config.plugins.lz-n.plugins}";
+          }
+          {
+            assertion = (builtins.length cmd) == 1;
+            message = "`lazy.plugins[0].cmd` should have contained a configuration.";
+          }
+        ];
     };
 }
