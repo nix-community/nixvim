@@ -166,6 +166,10 @@ let
       sourceName = "vim_lsp";
     }
     {
+      pluginName = "cmp-vimtex";
+      sourceName = "vimtex";
+    }
+    {
       pluginName = "cmp-vimwiki-tags";
       sourceName = "vimwiki-tags";
     }
