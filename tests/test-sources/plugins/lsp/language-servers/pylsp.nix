@@ -1,7 +1,8 @@
+{ pkgs, ... }:
 {
   example = {
     plugins.lsp = {
-      enable = true;
+      enable = !pkgs.stdenv.isDarwin;
 
       servers.pylsp = {
         enable = true;

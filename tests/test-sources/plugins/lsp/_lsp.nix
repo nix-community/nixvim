@@ -79,7 +79,7 @@
           };
         };
         pylsp = {
-          enable = true;
+          enable = !pkgs.stdenv.isDarwin;
           filetypes = [ "python" ];
           autostart = false;
         };
