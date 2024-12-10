@@ -12,6 +12,7 @@ in
   lazy-load-neovim-plugin-configured =
     { config, lib, ... }:
     {
+      test.runNvim = false;
       plugins = {
         lz-n = {
           enable = true;
@@ -59,6 +60,7 @@ in
   lazy-load-lz-n-configured =
     { config, lib, ... }:
     {
+      test.runNvim = false;
       plugins = {
         codesnap = {
           enable = true;
@@ -139,6 +141,7 @@ in
   dont-lazy-load-colorscheme-automatically =
     { config, ... }:
     {
+      test.runNvim = false;
       colorschemes.catppuccin.enable = true;
       plugins = {
         lz-n = {
@@ -157,6 +160,7 @@ in
   dont-lazy-load-unconfigured =
     { config, ... }:
     {
+      test.runNvim = false;
       plugins = {
         neotest = {
           enable = true;
@@ -179,6 +183,7 @@ in
   lazy-load-colorscheme-properly =
     { config, lib, ... }:
     {
+      test.runNvim = false;
       colorschemes.catppuccin = {
         enable = true;
         lazyLoad.enable = true;
@@ -213,6 +218,7 @@ in
   lazy-load-enabled-automatically =
     { config, ... }:
     {
+      test.runNvim = false;
       plugins = {
         lz-n = {
           enable = true;
@@ -254,6 +260,7 @@ in
   wrap-functionless-luaConfig =
     { config, ... }:
     {
+      test.runNvim = false;
       plugins = {
         lz-n = {
           enable = true;
@@ -290,6 +297,7 @@ in
   use-provided-raw-after =
     { config, ... }:
     {
+      test.runNvim = false;
       plugins = {
         lz-n = {
           enable = true;
