@@ -7,7 +7,22 @@
 }:
 let
   fetchTests = import ./fetch-tests.nix;
-  test-derivation = import ./test-derivation.nix { inherit pkgs makeNixvim makeNixvimWithModule; };
+  test-derivation = import ./test-derivation.nix {
+    inherit makeNixvim makeNixvimWithModule;
+    # Overlay pkgs to disable failing tests
+    pkgs = pkgs.extend (
+      final: prev: {
+        python311 = prev.python311.override {
+          self = final.python311;
+          packageOverrides = pyfinal: pyprev: {
+            # On darwin, a test fails to access /etc/localtime
+            pydantic-extra-types = pyprev.pydantic-extra-types.overridePythonAttrs { doCheck = false; };
+          };
+        };
+        python311Packages = final.python311.pkgs;
+      }
+    );
+  };
   inherit (test-derivation) mkTestDerivation;
 
   # List of files containing configurations
