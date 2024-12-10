@@ -25,11 +25,13 @@
           (
             acc: def:
             lib.recursiveUpdate acc (
-              lib.setAttrByPath def.value.path {
-                inherit (def) file;
-                url = def.value.url or null;
-                description = def.value.description or null;
-              }
+              lib.setAttrByPath def.value.path (
+                {
+                  inherit (def) file;
+                  _type = "nixvimInfo";
+                }
+                // builtins.removeAttrs def.value [ "path" ]
+              )
             )
           )
           {
