@@ -8,6 +8,7 @@
 - [Helpers](./user-guide/helpers.md)
 - [FAQ](./user-guide/faq.md)
 - [Configuration examples](./user-guide/config-examples.md)
+- [Lazy Loading](./user-guide/lazy-loading.md)
 
 # Platforms
 
