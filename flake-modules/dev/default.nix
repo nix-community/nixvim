@@ -12,9 +12,6 @@
       system,
       ...
     }:
-    let
-      fmt = pkgs.nixfmt-rfc-style;
-    in
     lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
       treefmt.config = {
         projectRootFile = "flake.nix";
@@ -24,7 +21,7 @@
           isort.enable = true;
           nixfmt = {
             enable = true;
-            package = fmt;
+            package = pkgs.nixfmt-rfc-style;
           };
           prettier = {
             enable = true;
