@@ -116,6 +116,11 @@
               command = ''${pkgs.python3.interpreter} ${./locate-lsp-packages.py}'';
               help = "Locate (with nix-index) LSP servers in nixpkgs";
             }
+            {
+              name = "new-plugin";
+              command = ''${pkgs.python3.interpreter} ${./new-plugin.py} "$@"'';
+              help = "Create a new plugin";
+            }
           ];
       };
     };
