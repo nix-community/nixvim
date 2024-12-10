@@ -10,6 +10,10 @@ let
   # and register their source-name association using the `cmpSourcePlugins` option.
   sources = [
     {
+      pluginName = "cmp-ai";
+      sourceName = "cmp_ai";
+    }
+    {
       pluginName = "cmp-async-path";
       sourceName = "async_path";
     }
@@ -22,48 +26,24 @@ let
       sourceName = "calc";
     }
     {
-      pluginName = "cmp-dap";
-      sourceName = "dap";
+      pluginName = "cmp-clippy";
+      sourceName = "cmp-clippy";
     }
     {
       pluginName = "cmp-cmdline";
       sourceName = "cmdline";
     }
     {
-      pluginName = "cmp-ai";
-      sourceName = "cmp_ai";
-    }
-    {
-      pluginName = "cmp-clippy";
-      sourceName = "cmp-clippy";
-    }
-    {
       pluginName = "cmp-cmdline-history";
       sourceName = "cmp-cmdline-history";
-    }
-    {
-      pluginName = "cmp-pandoc-nvim";
-      sourceName = "cmp_pandoc";
-    }
-    {
-      pluginName = "cmp-tabby";
-      sourceName = "cmp_tabby";
-    }
-    {
-      pluginName = "cmp-tabnine";
-      sourceName = "cmp_tabnine";
     }
     {
       pluginName = "cmp-conventionalcommits";
       sourceName = "conventionalcommits";
     }
     {
-      pluginName = "copilot-cmp";
-      sourceName = "copilot";
-    }
-    {
-      pluginName = "crates-nvim";
-      sourceName = "crates";
+      pluginName = "cmp-dap";
+      sourceName = "dap";
     }
     {
       pluginName = "cmp-dictionary";
@@ -114,6 +94,10 @@ let
       sourceName = "nixpkgs_maintainers";
     }
     {
+      pluginName = "cmp-npm";
+      sourceName = "npm";
+    }
+    {
       pluginName = "cmp-nvim-lsp";
       sourceName = "nvim_lsp";
     }
@@ -130,12 +114,16 @@ let
       sourceName = "nvim_lua";
     }
     {
-      pluginName = "cmp-npm";
-      sourceName = "npm";
+      pluginName = "cmp-nvim-ultisnips";
+      sourceName = "ultisnips";
     }
     {
       pluginName = "cmp-omni";
       sourceName = "omni";
+    }
+    {
+      pluginName = "cmp-pandoc-nvim";
+      sourceName = "cmp_pandoc";
     }
     {
       pluginName = "cmp-pandoc-references";
@@ -158,16 +146,20 @@ let
       sourceName = "spell";
     }
     {
+      pluginName = "cmp-tabby";
+      sourceName = "cmp_tabby";
+    }
+    {
+      pluginName = "cmp-tabnine";
+      sourceName = "cmp_tabnine";
+    }
+    {
       pluginName = "cmp-tmux";
       sourceName = "tmux";
     }
     {
       pluginName = "cmp-treesitter";
       sourceName = "treesitter";
-    }
-    {
-      pluginName = "cmp-nvim-ultisnips";
-      sourceName = "ultisnips";
     }
     {
       pluginName = "cmp-vim-lsp";
@@ -188,6 +180,14 @@ let
     {
       pluginName = "cmp-zsh";
       sourceName = "zsh";
+    }
+    {
+      pluginName = "copilot-cmp";
+      sourceName = "copilot";
+    }
+    {
+      pluginName = "crates-nvim";
+      sourceName = "crates";
     }
   ];
 
