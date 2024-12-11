@@ -1,31 +1,21 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
-let
-  cfg = config.plugins.hmts;
-in
-{
-  meta.maintainers = [ lib.maintainers.GaetanLepage ];
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "hmts";
+  originalName = "hmts.nvim";
+  package = "hmts-nvim";
 
-  options.plugins.hmts = {
-    enable = lib.mkEnableOption "hmts.nvim";
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    package = lib.mkPackageOption pkgs "hmts.nvim" {
-      default = [
-        "vimPlugins"
-        "hmts-nvim"
-      ];
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
+  callSetup = false;
+  hasSettings = false;
+  hasLuaConfig = false;
+  extraConfig = {
     warnings = lib.optional (
       !config.plugins.treesitter.enable
     ) "Nixvim: hmts needs treesitter to function as intended";
-
-    extraPlugins = [ cfg.package ];
   };
 }
