@@ -3,14 +3,20 @@
     plugins = {
       otter.enable = true;
       # Avoid the warning
-      treesitter.settings.highlight.enable = true;
+      treesitter = {
+        enable = true;
+        settings.highlight.enable = true;
+      };
     };
   };
 
   defaults = {
     plugins = {
       # Avoid the warning
-      treesitter.settings.highlight.enable = true;
+      treesitter = {
+        enable = true;
+        settings.highlight.enable = true;
+      };
 
       otter = {
         enable = true;
