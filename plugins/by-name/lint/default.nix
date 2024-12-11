@@ -1,11 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib)
-    mkOption
-    mkRemovedOptionModule
-    mkRenamedOptionModule
-    types
-    ;
+  inherit (lib) mkOption types;
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 
   linterOptions = with types; {
@@ -194,13 +189,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   };
 
   imports = [
-    # Deprecations
-    (mkRenamedOptionModule [ "plugins" "lint" "lintersByFt" ] [ "plugins" "lint" "linters_by_ft" ])
-    (mkRemovedOptionModule [
-      "plugins"
-      "lint"
-      "customLinters"
-    ] "plugins.lint.customLinters option was removed, use linters instead.")
+    ./deprecations.nix
   ];
 
   extraConfig = cfg: {
