@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
@@ -24,9 +23,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = optional (!config.plugins.treesitter.enable) [
-      "Nixvim: hmts needs treesitter to function as intended"
-    ];
+    warnings = optional (
+      !config.plugins.treesitter.enable
+    ) "Nixvim: hmts needs treesitter to function as intended";
 
     extraPlugins = [ cfg.package ];
   };
