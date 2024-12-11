@@ -204,12 +204,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       + (lib.optionalString (cfg.linters != null) (
         lib.concatLines (
           lib.mapAttrsToList (
-            linter: linterConfig:
-            let
-              linterConfig' =
-                if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
-            in
-            ''lint.linters.${linter} = ${toLuaObject linterConfig'}''
+            linter: linterConfig: ''lint.linters.${linter} = ${toLuaObject linterConfig}''
           ) cfg.linters
         )
       ));
