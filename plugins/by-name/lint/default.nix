@@ -5,8 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkOption types;
+
   cfg = config.plugins.lint;
 
   linterOptions = with types; {
@@ -86,7 +87,7 @@ let
     };
 
     parser = {
-      type = lib.types.strLuaFn;
+      type = strLuaFn;
       description = "The code for your parser function.";
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
@@ -100,7 +101,7 @@ let
     types.submodule {
       freeformType = types.attrs;
 
-      options = mapAttrs (
+      options = builtins.mapAttrs (
         optionName:
         (
           {
@@ -134,7 +135,7 @@ let
 in
 {
   options.plugins.lint = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "nvim-lint";
+    enable = lib.mkEnableOption "nvim-lint";
 
     package = lib.mkPackageOption pkgs "nvim-lint" {
       default = [
@@ -227,7 +228,7 @@ in
       };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     extraPlugins = [ cfg.package ];
 
     extraConfigLua =
@@ -235,14 +236,14 @@ in
         __lint = require('lint')
         __lint.linters_by_ft = ${helpers.toLuaObject cfg.lintersByFt}
       ''
-      + (optionalString (cfg.linters != { }) (
-        concatLines (
-          flatten (
-            mapAttrsToList (
+      + (lib.optionalString (cfg.linters != { }) (
+        lib.concatLines (
+          lib.flatten (
+            lib.mapAttrsToList (
               linter: linterConfig:
-              mapAttrsToList (
+              lib.mapAttrsToList (
                 propName: propValue:
-                optionalString (
+                lib.optionalString (
                   propValue != null
                 ) ''__lint.linters["${linter}"]["${propName}"] = ${helpers.toLuaObject propValue}''
               ) linterConfig
@@ -250,18 +251,18 @@ in
           )
         )
       ))
-      + (optionalString (cfg.customLinters != { }) (
-        concatLines (
-          mapAttrsToList (
+      + (lib.optionalString (cfg.customLinters != { }) (
+        lib.concatLines (
+          lib.mapAttrsToList (
             customLinter: linterConfig:
             let
-              linterConfig' = if isString linterConfig then helpers.mkRaw linterConfig else linterConfig;
+              linterConfig' = if builtins.isString linterConfig then helpers.mkRaw linterConfig else linterConfig;
             in
             ''__lint.linters["${customLinter}"] = ${helpers.toLuaObject linterConfig'}''
           ) cfg.customLinters
         )
       ));
 
-    autoCmd = optional (cfg.autoCmd != null) cfg.autoCmd;
+    autoCmd = lib.optional (cfg.autoCmd != null) cfg.autoCmd;
   };
 }
