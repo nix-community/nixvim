@@ -87,7 +87,7 @@ let
     };
   };
 
-  mkLinterOpts = types.submodule {
+  linterType = types.submodule {
     freeformType = types.attrs;
 
     options = builtins.mapAttrs (
@@ -156,7 +156,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       };
 
     linters =
-      defaultNullOpts.mkAttrsOf mkLinterOpts
+      defaultNullOpts.mkAttrsOf linterType
         {
           phpcs.args = [
             "-q"
