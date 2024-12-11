@@ -1,21 +1,18 @@
-{
-  lib,
-  helpers,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 let
-  inherit (lib) mkOption types;
-
-  cfg = config.plugins.lint;
+  inherit (lib)
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    types
+    ;
+  inherit (lib.nixvim) defaultNullOpts toLuaObject;
 
   linterOptions = with types; {
     cmd = {
       type = str;
       description = "The command to call the linter";
       example = "linter_cmd";
-      mandatory = true;
     };
 
     stdin = {
@@ -92,108 +89,44 @@ let
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
       '';
-      mandatory = true;
     };
   };
 
-  mkLinterOpts =
-    noDefaults:
-    types.submodule {
-      freeformType = types.attrs;
+  mkLinterOpts = types.submodule {
+    freeformType = types.attrs;
 
-      options = builtins.mapAttrs (
-        optionName:
-        (
-          {
-            mandatory ? false,
-            apply ? x: x,
-            example ? null,
-            type,
-            description,
-          }:
-          mkOption (
-            {
-              inherit apply description example;
-            }
-            // (
-              if
-                noDefaults && mandatory
-              # Make this option mandatory
-              then
-                { inherit type; }
-              # make it optional
-              else
-                {
-                  type = types.nullOr type;
-                  default = null;
-                }
-            )
-          )
-        )
-      ) linterOptions;
-    };
+    options = builtins.mapAttrs (
+      optionName:
+      (
+        {
+          apply ? x: x,
+          example ? null,
+          type,
+          description,
+        }:
+        mkOption {
+          inherit apply description example;
+          type = types.nullOr type;
+          default = null;
+        }
+      )
+    ) linterOptions;
+  };
 in
-{
-  options.plugins.lint = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = lib.mkEnableOption "nvim-lint";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "lint";
+  originalName = "nvim-lint";
+  package = "nvim-lint";
+  callSetup = false;
+  hasSettings = false;
 
-    package = lib.mkPackageOption pkgs "nvim-lint" {
-      default = [
-        "vimPlugins"
-        "nvim-lint"
-      ];
-    };
+  maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
-    lintersByFt = mkOption {
-      type = with types; attrsOf (listOf str);
-      default = { };
-      description = ''
-        Configure the linters you want to run per file type.
-      '';
-      example = {
-        text = [ "vale" ];
-        json = [ "jsonlint" ];
-        markdown = [ "vale" ];
-        rst = [ "vale" ];
-        ruby = [ "ruby" ];
-        janet = [ "janet" ];
-        inko = [ "inko" ];
-        clojure = [ "clj-kondo" ];
-        dockerfile = [ "hadolint" ];
-        terraform = [ "tflint" ];
-      };
-    };
-
-    linters = mkOption {
-      type = with types; attrsOf (mkLinterOpts false);
-      default = { };
-      description = ''
-        Customize the existing linters by overriding some of their properties.
-      '';
-      example = {
-        phpcs.args = [
-          "-q"
-          "--report=json"
-          "-"
-        ];
-      };
-    };
-
-    customLinters = mkOption {
-      type = with types; attrsOf (either str (mkLinterOpts true));
-      default = { };
-      description = ''
-        Configure the linters you want to run per file type.
-        It can be both an attrs or a string containing the lua code that returns the appropriate
-        table.
-      '';
-      example = { };
-    };
-
+  extraOptions = {
     autoCmd =
       let
         defaultEvent = "BufWritePost";
-        defaultCallback = helpers.mkRaw ''
+        defaultCallback = lib.nixvim.mkRaw ''
           function()
             require('lint').try_lint()
           end
@@ -203,17 +136,17 @@ in
         type =
           with types;
           nullOr (submodule {
-            options = helpers.autocmd.autoCmdOptions // {
-              event = mkOption {
-                type = with types; nullOr (either str (listOf str));
-                default = defaultEvent;
-                description = "The event or events that should trigger linting.";
-              };
-
+            options = lib.nixvim.autocmd.autoCmdOptions // {
               callback = mkOption {
                 type = with types; nullOr (either str rawLua);
                 default = defaultCallback;
                 description = "What action to perform for linting";
+              };
+
+              event = mkOption {
+                type = with types; nullOr (either str (listOf str));
+                default = defaultEvent;
+                description = "The event or events that should trigger linting.";
               };
             };
           });
@@ -226,43 +159,70 @@ in
           callback = defaultCallback;
         };
       };
+
+    linters =
+      defaultNullOpts.mkAttrsOf mkLinterOpts
+        {
+          phpcs.args = [
+            "-q"
+            "--report=json"
+            "-"
+          ];
+        }
+        ''
+          Configure the linters you want to run.
+          You can also add custom linters here.
+        '';
+
+    linters_by_ft =
+      defaultNullOpts.mkAttrsOf (types.listOf types.str)
+        {
+          text = [ "vale" ];
+          json = [ "jsonlint" ];
+          markdown = [ "vale" ];
+          rst = [ "vale" ];
+          ruby = [ "ruby" ];
+          janet = [ "janet" ];
+          inko = [ "inko" ];
+          clojure = [ "clj-kondo" ];
+          dockerfile = [ "hadolint" ];
+          terraform = [ "tflint" ];
+        }
+        ''
+          Configure the linters you want to run per file type.
+        '';
   };
 
-  config = lib.mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
+  imports = [
+    # Deprecations
+    (mkRenamedOptionModule [ "plugins" "lint" "lintersByFt" ] [ "plugins" "lint" "linters_by_ft" ])
+    (mkRemovedOptionModule [
+      "plugins"
+      "lint"
+      "customLinters"
+    ] "plugins.lint.customLinters option was removed, use linters instead.")
+  ];
 
-    extraConfigLua =
+  extraConfig = cfg: {
+    autoCmd = lib.optionals (cfg.autoCmd != null) [ cfg.autoCmd ];
+    plugins.lint.luaConfig.content =
       ''
-        __lint = require('lint')
-        __lint.linters_by_ft = ${helpers.toLuaObject cfg.lintersByFt}
+        local lint = require('lint')
       ''
-      + (lib.optionalString (cfg.linters != { }) (
-        lib.concatLines (
-          lib.flatten (
-            lib.mapAttrsToList (
-              linter: linterConfig:
-              lib.mapAttrsToList (
-                propName: propValue:
-                lib.optionalString (
-                  propValue != null
-                ) ''__lint.linters["${linter}"]["${propName}"] = ${helpers.toLuaObject propValue}''
-              ) linterConfig
-            ) cfg.linters
-          )
-        )
-      ))
-      + (lib.optionalString (cfg.customLinters != { }) (
+      + (lib.optionalString (cfg.linters_by_ft != null) ''
+        lint.linters_by_ft = ${toLuaObject cfg.linters_by_ft}
+      '')
+      + (lib.optionalString (cfg.linters != null) (
         lib.concatLines (
           lib.mapAttrsToList (
-            customLinter: linterConfig:
+            linter: linterConfig:
             let
-              linterConfig' = if builtins.isString linterConfig then helpers.mkRaw linterConfig else linterConfig;
+              linterConfig' =
+                if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
             in
-            ''__lint.linters["${customLinter}"] = ${helpers.toLuaObject linterConfig'}''
-          ) cfg.customLinters
+            ''lint.linters.${linter} = ${toLuaObject linterConfig'}''
+          ) cfg.linters
         )
       ));
-
-    autoCmd = lib.optional (cfg.autoCmd != null) cfg.autoCmd;
   };
 }
