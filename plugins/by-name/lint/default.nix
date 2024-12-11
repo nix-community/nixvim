@@ -3,15 +3,15 @@ let
   inherit (lib) mkOption types;
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 
-  linterOptions = with types; {
+  linterOptions = {
     cmd = {
-      type = str;
+      type = types.str;
       description = "The command to call the linter";
       example = "linter_cmd";
     };
 
     stdin = {
-      type = bool;
+      type = types.bool;
       description = ''
         Whether this parser supports content input via stdin.
         In that case the filename is automatically added to the arguments.
@@ -22,7 +22,7 @@ let
     };
 
     append_fname = {
-      type = bool;
+      type = types.bool;
       description = ''
         Automatically append the file name to `args` if `stdin = false`
         Whether this parser supports content input via stdin.
@@ -34,7 +34,7 @@ let
     };
 
     args = {
-      type = listOf (either str rawLua);
+      type = with types; listOf (either str rawLua);
       description = ''
         List of arguments.
         Can contain functions with zero arguments that will be evaluated once the linter is used.
@@ -44,7 +44,7 @@ let
     };
 
     stream = {
-      type = enum [
+      type = types.enum [
         "stdout"
         "stderr"
         "both"
@@ -58,7 +58,7 @@ let
     };
 
     ignore_exitcode = {
-      type = bool;
+      type = types.bool;
       description = ''
         Whether the linter exiting with a code !=0 should be considered normal.
 
@@ -68,7 +68,7 @@ let
     };
 
     env = {
-      type = attrsOf str;
+      type = with types; attrsOf str;
       description = ''
         Custom environment table to use with the external process.
         Note that this replaces the **entire** environment, it is not additive.
@@ -79,7 +79,7 @@ let
     };
 
     parser = {
-      type = strLuaFn;
+      type = types.strLuaFn;
       description = "The code for your parser function.";
       example = ''
         require('lint.parser').from_pattern(pattern, groups, severity_map, defaults, opts)
