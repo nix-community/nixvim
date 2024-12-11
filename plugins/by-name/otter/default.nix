@@ -101,10 +101,12 @@ helpers.neovim-plugin.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings =
-      lib.optional (cfg.enable && config.plugins.treesitter.settings.highlight.enable == null)
+      lib.optional
+        (config.plugins.treesitter.enable -> config.plugins.treesitter.settings.highlight.enable == null)
+
         ''
-          NixVim(plugins.otter): you have enabled otter, but `plugins.treesitter.settings.highlight.enable` is not enabled.
-          Otter functionality might not work as expected without it and `plugins.treesitter.enable` enabled.
+          NixVim(plugins.otter): you have enabled otter, but treesitter syntax highlighting is not enabled.
+          Otter functionality might not work as expected without it. Make sure `plugins.treesitter.settings.highlight.enable` and `plugins.treesitter.enable` are enabled.
         '';
 
     plugins.lsp.onAttach = lib.mkIf cfg.autoActivate ''
