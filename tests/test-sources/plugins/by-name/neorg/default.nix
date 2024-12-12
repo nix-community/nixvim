@@ -5,56 +5,83 @@
     plugins.neorg.enable = true;
   };
 
-  example = {
+  defaults = {
     plugins = {
+
       # Treesitter is required when using the "core.defaults" module.
       treesitter.enable = true;
 
       neorg = {
         enable = true;
 
-        lazyLoading = false;
-        logger = {
-          plugin = "neorg";
-          useConsole = true;
-          highlights = true;
-          useFile = true;
-          level = "warn";
-          modes = {
-            trace = {
-              hl = "Comment";
-              level = "trace";
-            };
-            debug = {
-              hl = "Comment";
-              level = "debug";
-            };
-            info = {
-              hl = "None";
-              level = "info";
-            };
-            warn = {
-              hl = "WarningMsg";
-              level = "warn";
-            };
-            error = {
-              hl = "ErrorMsg";
-              level = "error";
-            };
-            fatal = {
-              hl = "ErrorMsg";
-              level = 5;
-            };
-          };
-          floatPrecision = 1.0e-2;
-        };
+        settings = {
+          hook = null;
+          lazy_loading = false;
+          load = { };
+          logger = {
+            plugin = "neorg";
+            use_console = true;
+            highlights = true;
+            use_file = true;
+            level = "warn";
+            modes = [
+              {
+                name = "trace";
+                hl = "Comment";
+                level.__raw = "vim.log.levels.TRACE";
+              }
+              {
+                name = "debug";
+                hl = "Comment";
+                level.__raw = "vim.log.levels.DEBUG";
+              }
+              {
+                name = "info";
+                hl = "None";
+                level.__raw = "vim.log.levels.INFO";
+              }
+              {
+                name = "warn";
+                hl = "WarningMsg";
+                level.__raw = "vim.log.levels.WARN";
+              }
+              {
+                name = "error";
+                hl = "ErrorMsg";
+                level.__raw = "vim.log.levels.ERROR";
+              }
+              {
+                name = "fatal";
+                hl = "ErrorMsg";
+                level = 5;
+              }
+            ];
 
-        modules = {
-          "core.defaults" = {
-            __empty = null;
+            float_precision = 0.01;
           };
-          "core.dirman" = {
-            config = {
+        };
+      };
+    };
+  };
+
+  example = {
+    plugins = {
+
+      # Treesitter is required when using the "core.defaults" module.
+      treesitter.enable = true;
+
+      neorg = {
+        enable = true;
+
+        settings = {
+          lazy_loading = true;
+
+          load = {
+            "core.defaults".__empty = null;
+            "core.concealer".config = {
+              icon_preset = "varied";
+            };
+            "core.dirman".config = {
               workspaces = {
                 work = "~/notes/work";
                 home = "~/notes/home";
@@ -74,20 +101,11 @@
 
       neorg = {
         enable = true;
-        modules."core.integrations.telescope".__empty = null;
+        settings.load."core.integrations.telescope".__empty = null;
+        telescopeIntegration.enable = true;
       };
 
       web-devicons.enable = true;
-    };
-  };
-
-  no-packages = {
-    # Treesitter is required when using the "core.defaults" module.
-    plugins.treesitter.enable = true;
-
-    plugins.neorg = {
-      enable = true;
-      neorgTelescopePackage = null;
     };
   };
 }

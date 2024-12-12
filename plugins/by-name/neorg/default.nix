@@ -1,173 +1,222 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
-  cfg = config.plugins.neorg;
+  inherit (lib.nixvim)
+    defaultNullOpts
+    mkNullOrStr
+    mkNullOrOption
+    mkNullOrOption'
+    ;
+  inherit (lib) types;
 in
-with lib;
-{
-  options.plugins.neorg = helpers.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "neorg";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "neorg";
 
-    package = lib.mkPackageOption pkgs "neorg" {
-      default = [
-        "vimPlugins"
-        "neorg"
-      ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
+
+  # TODO introduced 2024-12-12: remove after 25.05
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "lazyLoading"
+    [
+      "logger"
+      "plugin"
+    ]
+    [
+      "logger"
+      "useConsole"
+    ]
+    [
+      "logger"
+      "highlights"
+    ]
+    [
+      "logger"
+      "useFile"
+    ]
+    [
+      "logger"
+      "level"
+    ]
+    [
+      "logger"
+      "floatPrecision"
+    ]
+  ];
+  imports = [
+    ./deprecations.nix
+  ];
+
+  extraOptions = {
+    telescopeIntegration = {
+      enable = lib.mkEnableOption "`neorg-telescope` plugin for telescope integration.";
+
+      package = lib.mkPackageOption pkgs "neorg-telescope" {
+        default = [
+          "vimPlugins"
+          "neorg-telescope"
+        ];
+      };
+    };
+  };
+
+  settingsOptions = {
+    hook = mkNullOrOption types.rawLua ''
+      A user-defined function that is invoked whenever Neorg starts up. May be used to e.g. set custom keybindings.
+
+      ```lua
+      fun(manual: boolean, arguments?: string)
+      ```
+    '';
+
+    lazy_loading = defaultNullOpts.mkBool false ''
+      Whether to defer loading the Neorg core until after the user has entered a `.norg` file.
+    '';
+
+    load = defaultNullOpts.mkAttrsOf' {
+      description = ''
+        A list of modules to load, alongside their configurations.
+      '';
+      example = {
+        "core.defaults".__empty = null;
+        "core.concealer".config = {
+          icon_preset = "varied";
+        };
+        "core.dirman".config = {
+          workspaces = {
+            work = "~/notes/work";
+            home = "~/notes/home";
+          };
+        };
+      };
+      pluginDefault = { };
+      type = types.anything;
     };
 
-    neorgTelescopePackage = lib.mkPackageOption pkgs [
-      "vimPlugins"
-      "neorg-telescope"
-    ] { nullable = true; };
+    logger = {
+      plugin = defaultNullOpts.mkStr "neorg" ''
+        Name of the plugin.
+        Prepended to log messages.
+      '';
 
-    lazyLoading = helpers.defaultNullOpts.mkBool false '''';
+      use_console = defaultNullOpts.mkBool true ''
+        Whether to print the output to Neovim while running.
+      '';
 
-    logger =
-      let
-        modes = {
-          trace = {
-            hl = "Comment";
-            level = "trace";
-          };
-          debug = {
-            hl = "Comment";
-            level = "debug";
-          };
-          info = {
-            hl = "None";
-            level = "info";
-          };
-          warn = {
-            hl = "WarningMsg";
-            level = "warn";
-          };
-          error = {
-            hl = "ErrorMsg";
-            level = "error";
-          };
-          fatal = {
-            hl = "ErrorMsg";
-            level = 5;
-          };
-        };
-      in
-      {
-        plugin = helpers.defaultNullOpts.mkStr "neorg" ''
-          Name of the plugin. Prepended to log messages
+      highlights = defaultNullOpts.mkBool true ''
+        Whether highlighting should be used in console (using `:echohl`).
+      '';
+
+      use_file = defaultNullOpts.mkBool true ''
+        Whether to write output to a file.
+      '';
+
+      level = defaultNullOpts.mkStr "warn" ''
+        Any messages above this level will be logged.
+      '';
+
+      modes = defaultNullOpts.mkListOf' {
+        description = ''
+          Level configuration.
         '';
-
-        useConsole = helpers.defaultNullOpts.mkBool true ''
-          Should print the output to neovim while running
-        '';
-
-        highlights = helpers.defaultNullOpts.mkBool true ''
-          Should highlighting be used in console (using echohl)
-        '';
-
-        useFile = helpers.defaultNullOpts.mkBool true ''
-          Should write to a file
-        '';
-
-        level = helpers.defaultNullOpts.mkEnum (attrNames modes) "warn" ''
-          Any messages above this level will be logged
-        '';
-
-        modes = mapAttrs (
-          mode: defaults:
-          helpers.mkCompositeOption "Settings for mode ${mode}." {
-            hl = helpers.defaultNullOpts.mkStr defaults.hl ''
-              Highlight for mode ${mode}.
+        type = types.submodule {
+          freeformType = with types; attrsOf anything;
+          options = {
+            name = mkNullOrStr ''
+              Name for this log level.
             '';
 
-            level = helpers.defaultNullOpts.mkLogLevel defaults.level ''
-              Level for mode ${mode}.
+            hl = mkNullOrStr ''
+              highlight group.
             '';
-          }
-        ) modes;
 
-        floatPrecision = helpers.defaultNullOpts.mkNullable types.float 1.0e-2 ''
-          Can limit the number of decimals displayed for floats
-        '';
-      };
-
-    modules = mkOption {
-      type = with types; attrsOf attrs;
-      description = "Modules configuration.";
-      default = { };
-      example = {
-        "core.defaults" = {
-          __empty = null;
-        };
-        "core.dirman" = {
-          config = {
-            workspaces = {
-              work = "~/notes/work";
-              home = "~/notes/home";
+            level = mkNullOrOption' {
+              type = with types; maybeRaw (either ints.unsigned str);
+              description = ''
+                Log level value.
+              '';
+              example.__raw = "vim.log.levels.TRACE";
             };
           };
+        };
+        pluginDefault = [
+          {
+            name = "trace";
+            hl = "Comment";
+            level.__raw = "vim.log.levels.TRACE";
+          }
+          {
+            name = "debug";
+            hl = "Comment";
+            level.__raw = "vim.log.levels.DEBUG";
+          }
+          {
+            name = "info";
+            hl = "None";
+            level.__raw = "vim.log.levels.INFO";
+          }
+          {
+            name = "warn";
+            hl = "WarningMsg";
+            level.__raw = "vim.log.levels.WARN";
+          }
+          {
+            name = "error";
+            hl = "ErrorMsg";
+            level.__raw = "vim.log.levels.ERROR";
+          }
+          {
+            name = "fatal";
+            hl = "ErrorMsg";
+            level = 5;
+          }
+        ];
+      };
+
+      float_precision = defaultNullOpts.mkNullable types.float 0.01 ''
+        Can limit the number of decimals displayed for floats.
+      '';
+    };
+  };
+
+  settingsExample = {
+    load = {
+      "core.defaults".__empty = null;
+      "core.concealer".config = {
+        icon_preset = "varied";
+      };
+      "core.dirman".config = {
+        workspaces = {
+          work = "~/notes/work";
+          home = "~/notes/home";
         };
       };
     };
   };
 
-  config =
-    let
-      setupOptions =
-        with cfg;
-        {
-          lazy_loading = lazyLoading;
+  extraConfig = cfg: {
 
-          logger = with logger; {
-            inherit plugin;
-            use_console = useConsole;
-            inherit highlights;
-            use_file = useFile;
-            inherit level;
+    extraPlugins = lib.mkIf cfg.telescopeIntegration.enable [ cfg.telescopeIntegration.package ];
 
-            modes = filter (v: v != null) (
-              mapAttrsToList (
-                mode: modeConfig:
-                helpers.ifNonNull' modeConfig {
-                  name = mode;
-                  inherit (modeConfig) hl level;
-                }
-              ) modes
-            );
-            float_precision = floatPrecision;
-          };
-
-          load = modules;
-        }
-        // cfg.extraOptions;
-
-      telescopeSupport = hasAttr "core.integrations.telescope" cfg.modules;
-    in
-    mkIf cfg.enable {
-      warnings =
-        (optional (telescopeSupport && (!config.plugins.telescope.enable)) ''
-          Telescope support for neorg (`core.integrations.telescope`) is enabled but the
-          telescope plugin is not.
-        '')
-        ++ (optional (telescopeSupport && (cfg.neorgTelescopePackage == null)) ''
-          Telescope support for neorg (`core.integrations.telescope`) is enabled but the
-          `neorgTelescopePackage` package is not set.
-        '')
-        ++ (optional ((hasAttr "core.defaults" cfg.modules) && (!config.plugins.treesitter.enable)) ''
-          Neorg's `core.defaults` module is enabled but `plugins.treesitter` is not.
-          Treesitter is required when using the `core.defaults`.
-        '');
-
-      extraPlugins = [
-        cfg.package
-      ] ++ (optional (telescopeSupport && cfg.neorgTelescopePackage != null) cfg.neorgTelescopePackage);
-
-      extraConfigLua = ''
-        require('neorg').setup(${helpers.toLuaObject setupOptions})
-      '';
-    };
+    warnings =
+      let
+        modules = cfg.settings.load or { };
+        telescopeModuleEnabled = (modules."core.integrations.telescope" or null) != null;
+      in
+      (lib.optional (telescopeModuleEnabled && (!cfg.telescopeIntegration.enable)) ''
+        You have enabled the telescope neorg module (`core.integrations.telescope`) but have not enabled `plugins.neorg.telescopeIntegration.enable`.
+        The latter will install the `neorg-telescope` plugin necessary for this integration to work.
+      '')
+      ++ (lib.optional (cfg.telescopeIntegration.enable && (!config.plugins.telescope.enable)) ''
+        Telescope support for neorg is enabled but the telescope plugin is not.
+      '')
+      ++ (lib.optional ((modules ? "core.defaults") && (!config.plugins.treesitter.enable)) ''
+        Neorg's `core.defaults` module is enabled but `plugins.treesitter` is not.
+        Treesitter is required when using the `core.defaults`.
+      '');
+  };
 }
