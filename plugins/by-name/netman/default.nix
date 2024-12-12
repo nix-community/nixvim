@@ -1,33 +1,26 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
-{
-  options.plugins.netman = {
-    enable = lib.mkEnableOption "netman.nvim, a framework to access remote resources";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "netman";
+  originalName = "netman.nvim";
+  package = "netman-nvim";
 
-    package = lib.mkPackageOption pkgs "netman.nvim" {
-      default = [
-        "vimPlugins"
-        "netman-nvim"
-      ];
-    };
+  hasSettings = false;
+  callSetup = false;
 
+  maintainers = [ lib.maintainers.khaneliman ];
+
+  extraOptions = {
     neoTreeIntegration = lib.mkEnableOption "support for netman as a neo-tree source";
   };
 
-  config =
-    let
-      cfg = config.plugins.netman;
-    in
-    lib.mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraConfigLua = ''
-        require("netman")
-      '';
+  extraConfig = cfg: {
+    plugins.netman.luaConfig.content = ''
+      require("netman")
+    '';
 
-      plugins.neo-tree.extraSources = lib.mkIf cfg.neoTreeIntegration [ "netman.ui.neo-tree" ];
-    };
+    plugins.neo-tree.extraSources = lib.mkIf cfg.neoTreeIntegration [ "netman.ui.neo-tree" ];
+  };
 }
