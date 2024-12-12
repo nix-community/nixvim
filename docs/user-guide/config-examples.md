@@ -52,6 +52,7 @@ all of the nixvim options are accessible no matter how you are using it (flake, 
 [khaneliman/khanelivim]: https://github.com/khaneliman/khanelivim
 [MikaelFangel/nixvim-config]: https://github.com/MikaelFangel/nixvim-config
 [nicolas-goudry/nixvim-config]: https://github.com/nicolas-goudry/nixvim-config
+[NikolayGalkin/gnvim]: https://github.com/NikolayGalkin/gnvim
 [niksingh710/nvix]: https://github.com/niksingh710/nvix
 [pete3n/nixvim-flake]: https://github.com/pete3n/nixvim-flake
 [redyf/Neve]: https://github.com/redyf/Neve
