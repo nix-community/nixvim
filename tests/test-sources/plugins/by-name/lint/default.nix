@@ -7,7 +7,7 @@
     plugins.lint = {
       enable = true;
 
-      lintersByFt = {
+      linters_by_ft = {
         text = [ "vale" ];
         json = [ "jsonlint" ];
         markdown = [ "vale" ];
@@ -19,14 +19,17 @@
         dockerfile = [ "hadolint" ];
         terraform = [ "tflint" ];
       };
+
       linters = {
-        phpcs.args = [
-          "-q"
-          "--report=json"
-          "-"
-        ];
-      };
-      customLinters = {
+        phpcs = {
+          cmd = "phpcs";
+          args = [
+            "-q"
+            "--report=json"
+            "-"
+          ];
+        };
+
         foo = {
           cmd = "foo_cmd";
           stdin = true;
