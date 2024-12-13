@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "modus";
-  luaName = "modus-themes";
+  moduleName = "modus-themes";
   packPathName = "modus-themes.nvim";
   package = "modus-themes-nvim";
   isColorscheme = true;

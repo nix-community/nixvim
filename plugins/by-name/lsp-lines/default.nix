@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "lsp-lines";
-  luaName = "lsp_lines";
+  moduleName = "lsp_lines";
   packPathName = "lsp_lines.nvim";
   package = "lsp_lines-nvim";
 

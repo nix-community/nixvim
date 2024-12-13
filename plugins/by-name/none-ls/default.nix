@@ -7,7 +7,7 @@
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "none-ls";
   packPathName = "none-ls.nvim";
-  luaName = "null-ls";
+  moduleName = "null-ls";
   package = "none-ls-nvim";
 
   maintainers = [ lib.maintainers.MattSturgeon ];

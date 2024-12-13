@@ -5,7 +5,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "navic";
   packPathName = "nvim-navic";
-  luaName = "nvim-navic";
+  moduleName = "nvim-navic";
   package = "nvim-navic";
 
   maintainers = [ lib.maintainers.khaneliman ];

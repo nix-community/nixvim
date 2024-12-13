@@ -6,11 +6,11 @@ let
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 
   name = "base16";
-  luaName = "base16-colorscheme";
+  moduleName = "base16-colorscheme";
   packPathName = "base16.nvim";
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
-  inherit name luaName packPathName;
+  inherit name moduleName packPathName;
   setup = ".with_config";
   package = "base16-nvim";
   isColorscheme = true;
@@ -145,7 +145,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           `:h nvim-base16-builtin-colorschemes` includes a full list of builtin themes,
           however the [plugin's source code] may be more up to date.
 
-          You can access `require('${luaName}')` as `base16` in any raw lua,
+          You can access `require('${moduleName}')` as `base16` in any raw lua,
           for example, you could reuse some colors from the builtin colorschemes:
 
           ```nix
@@ -181,7 +181,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     # See https://github.com/RRethy/base16-nvim/blob/6ac181b5733518040a33017dde654059cd771b7c/lua/base16-colorscheme.lua#L107-L125
     colorschemes.base16.luaConfig.content = ''
       do
-        local base16 = require('${luaName}')
+        local base16 = require('${moduleName}')
         base16.with_config(${toLuaObject cfg.settings})
         base16.setup(${toLuaObject cfg.colorscheme})
       end

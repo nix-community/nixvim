@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "nvim-snippets";
-  luaName = "snippets";
+  moduleName = "snippets";
 
   maintainers = [ lib.maintainers.psfloyd ];
 

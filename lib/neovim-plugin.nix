@@ -40,11 +40,11 @@
       package ? name,
       settingsOptions ? { },
       settingsExample ? null,
-      settingsDescription ? "Options provided to the `require('${luaName}')${setup}` function.",
+      settingsDescription ? "Options provided to the `require('${moduleName}')${setup}` function.",
       hasSettings ? true,
       extraOptions ? { },
       # config
-      luaName ? name,
+      moduleName ? name,
       setup ? ".setup",
       extraConfig ? cfg: { },
       extraPlugins ? [ ],
@@ -66,7 +66,7 @@
           opts = options.${namespace}.${name};
 
           setupCode = ''
-            require('${luaName}')${setup}(${
+            require('${moduleName}')${setup}(${
               lib.optionalString (cfg ? settings) (lib.nixvim.toLuaObject cfg.settings)
             })
           '';

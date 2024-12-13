@@ -11,7 +11,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "rest";
   packPathName = "rest.nvim";
-  luaName = "rest-nvim";
+  moduleName = "rest-nvim";
   package = "rest-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "nvim-ufo";
-  luaName = "ufo";
+  moduleName = "ufo";
   package = "nvim-ufo";
 
   maintainers = [ lib.maintainers.khaneliman ];

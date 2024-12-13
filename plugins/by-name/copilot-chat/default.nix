@@ -7,7 +7,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "copilot-chat";
   packPathName = "CopilotChat.nvim";
-  luaName = "CopilotChat";
+  moduleName = "CopilotChat";
   package = "CopilotChat-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

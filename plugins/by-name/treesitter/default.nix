@@ -9,7 +9,7 @@ with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "treesitter";
   packPathName = "nvim-treesitter";
-  luaName = "nvim-treesitter.configs";
+  moduleName = "nvim-treesitter.configs";
   package = "nvim-treesitter";
 
   description = ''
