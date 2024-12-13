@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "oil";
-  originalName = "oil.nvim";
+  packPathName = "oil.nvim";
   package = "oil-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

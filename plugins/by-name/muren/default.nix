@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "muren";
-  originalName = "muren.nvim";
+  packPathName = "muren.nvim";
   package = "muren-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

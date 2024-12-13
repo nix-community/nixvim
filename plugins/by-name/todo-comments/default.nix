@@ -17,7 +17,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "todo-comments";
-  originalName = "todo-comments.nvim";
+  packPathName = "todo-comments.nvim";
   package = "todo-comments-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

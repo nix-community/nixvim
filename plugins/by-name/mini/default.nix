@@ -4,7 +4,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "mini";
-  originalName = "mini.nvim";
+  packPathName = "mini.nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

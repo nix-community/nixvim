@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "hardtime";
-  originalName = "hardtime.nvim";
+  packPathName = "hardtime.nvim";
   package = "hardtime-nvim";
 
   maintainers = [ lib.maintainers.refaelsh ];

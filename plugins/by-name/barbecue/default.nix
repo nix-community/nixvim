@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "barbecue";
-  originalName = "barbecue.nvim";
+  packPathName = "barbecue.nvim";
   package = "barbecue-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

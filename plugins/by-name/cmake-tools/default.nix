@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cmake-tools";
-  originalName = "cmake-tools.nvim";
+  packPathName = "cmake-tools.nvim";
   package = "cmake-tools-nvim";
 
   maintainers = [ lib.maintainers.NathanFelber ];

@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "comment";
-  originalName = "Comment.nvim";
+  packPathName = "Comment.nvim";
   luaName = "Comment";
   package = "comment-nvim";
 

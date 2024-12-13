@@ -7,7 +7,7 @@ with lib;
 with helpers.vim-plugin;
 mkVimPlugin {
   name = "emmet";
-  originalName = "emmet-vim";
+  packPathName = "emmet-vim";
   package = "emmet-vim";
   globalPrefix = "user_emmet_";
 

@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lsp-signature";
-  originalName = "lsp_signature.nvim";
+  packPathName = "lsp_signature.nvim";
   package = "lsp_signature-nvim";
   luaName = "lsp_signature";
 
@@ -40,7 +40,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       Will show two lines of comment/doc(if there are more than two lines in the doc, will be truncated).
 
       Set to zero if you DO NOT want any API comments be shown.
-      This setting only take effect in insert mode, it does not affect signature help in nornal mode.
+      This setting only take effect in insert mode, it does not affect signature help in normal mode.
     '';
 
     max_height = defaultNullOpts.mkUnsignedInt 12 ''
@@ -189,7 +189,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     # TODO: figure out the types
     keymaps = defaultNullOpts.mkListOf lib.types.anything [ ] ''
       Related to move_cursor_key. 
-      The keymaps inside floating window with arguements of bufnr. 
+      The keymaps inside floating window with arguments of bufnr. 
       It can be a function that sets keymaps.
       `<M-d>` and `<M-u>` are default keymaps for moving the cursor up and down.
     '';

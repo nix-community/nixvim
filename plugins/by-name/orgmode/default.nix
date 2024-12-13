@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "orgmode";
-  originalName = "nvim-orgmode";
+  packPathName = "nvim-orgmode";
 
   maintainers = [ lib.maintainers.refaelsh ];
 

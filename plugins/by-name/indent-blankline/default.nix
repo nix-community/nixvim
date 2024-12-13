@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "indent-blankline";
-  originalName = "indent-blankline.nvim";
+  packPathName = "indent-blankline.nvim";
   luaName = "ibl";
   package = "indent-blankline-nvim";
 

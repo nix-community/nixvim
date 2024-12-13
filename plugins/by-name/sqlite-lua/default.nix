@@ -4,7 +4,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "sqlite-lua";
-  originalName = "sqlite.lua";
+  packPathName = "sqlite.lua";
   luaName = "sqlite.lua";
   package = "sqlite-lua";
 

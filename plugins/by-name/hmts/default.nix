@@ -5,7 +5,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "hmts";
-  originalName = "hmts.nvim";
+  packPathName = "hmts.nvim";
   package = "hmts-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

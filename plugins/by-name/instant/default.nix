@@ -7,7 +7,7 @@ with lib;
 with helpers.vim-plugin;
 mkVimPlugin {
   name = "instant";
-  originalName = "instant.nvim";
+  packPathName = "instant.nvim";
   package = "instant-nvim";
   globalPrefix = "instant_";
 

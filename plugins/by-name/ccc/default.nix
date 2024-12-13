@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ccc";
-  originalName = "ccc.nvim";
+  packPathName = "ccc.nvim";
   package = "ccc-nvim";
 
   maintainers = [ lib.maintainers.JanKremer ];

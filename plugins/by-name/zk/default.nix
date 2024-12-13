@@ -8,7 +8,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "zk";
-  originalName = "zk.nvim";
+  packPathName = "zk.nvim";
   package = "zk-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

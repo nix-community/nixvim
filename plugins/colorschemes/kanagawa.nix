@@ -9,7 +9,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "kanagawa";
   isColorscheme = true;
-  originalName = "kanagawa.nvim";
+  packPathName = "kanagawa.nvim";
   package = "kanagawa-nvim";
 
   description = ''

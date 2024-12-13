@@ -10,7 +10,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "bufferline";
-  originalName = "bufferline.nvim";
+  packPathName = "bufferline.nvim";
   package = "bufferline-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

@@ -1,7 +1,7 @@
 { lib, ... }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "dotnet";
-  originalName = "dotnet.nvim";
+  packPathName = "dotnet.nvim";
   package = "dotnet-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "hydra";
-  originalName = "hydra.nvim";
+  packPathName = "hydra.nvim";
   package = "hydra-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

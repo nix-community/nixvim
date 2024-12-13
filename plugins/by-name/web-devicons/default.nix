@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "web-devicons";
-  originalName = "nvim-web-devicons";
+  packPathName = "nvim-web-devicons";
   luaName = "nvim-web-devicons";
   package = "nvim-web-devicons";
 

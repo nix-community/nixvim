@@ -8,7 +8,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "gitsigns";
-  originalName = "gitsigns.nvim";
+  packPathName = "gitsigns.nvim";
   package = "gitsigns-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "competitest";
-  originalName = "competitest.nvim";
+  packPathName = "competitest.nvim";
   package = "competitest-nvim";
 
   maintainers = [ lib.maintainers.svl ];

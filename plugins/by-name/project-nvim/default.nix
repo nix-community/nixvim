@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "project-nvim";
-  originalName = "project.nvim";
+  packPathName = "project.nvim";
   luaName = "project_nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

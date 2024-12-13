@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "guess-indent";
-  originalName = "guess-indent.nvim";
+  packPathName = "guess-indent.nvim";
   package = "guess-indent-nvim";
 
   maintainers = [ lib.maintainers.GGORG ];

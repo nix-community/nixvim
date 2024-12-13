@@ -4,7 +4,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ts-comments";
-  originalName = "ts-comments.nvim";
+  packPathName = "ts-comments.nvim";
   package = "ts-comments-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

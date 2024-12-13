@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "precognition";
-  originalName = "precognition.nvim";
+  packPathName = "precognition.nvim";
   package = "precognition-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

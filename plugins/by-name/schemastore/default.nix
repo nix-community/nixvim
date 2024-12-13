@@ -7,7 +7,7 @@
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "schemastore";
-  originalName = "SchemaStore.nvim";
+  packPathName = "SchemaStore.nvim";
   package = "SchemaStore-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

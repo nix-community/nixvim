@@ -7,7 +7,7 @@ with lib;
 with helpers.vim-plugin;
 mkVimPlugin {
   name = "startify";
-  originalName = "vim-startify";
+  packPathName = "vim-startify";
   package = "vim-startify";
   globalPrefix = "startify_";
 

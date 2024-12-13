@@ -7,7 +7,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "treesitter-context";
-  originalName = "nvim-treesitter-context";
+  packPathName = "nvim-treesitter-context";
   package = "nvim-treesitter-context";
 
   maintainers = [ maintainers.GaetanLepage ];

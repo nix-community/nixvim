@@ -8,7 +8,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ayu";
   isColorscheme = true;
-  originalName = "neovim-ayu";
+  packPathName = "neovim-ayu";
   package = "neovim-ayu";
   # The colorscheme option is set by the `setup` function.
   colorscheme = null;

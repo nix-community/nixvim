@@ -1,7 +1,7 @@
 { lib, ... }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "remote-nvim";
-  originalName = "remote-nvim.nvim";
+  packPathName = "remote-nvim.nvim";
   package = "remote-nvim-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

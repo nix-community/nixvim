@@ -7,7 +7,7 @@ with helpers.vim-plugin;
 with lib;
 mkVimPlugin {
   name = "goyo";
-  originalName = "goyo.vim";
+  packPathName = "goyo.vim";
   package = "goyo-vim";
   globalPrefix = "goyo_";
 

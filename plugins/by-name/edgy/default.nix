@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "edgy";
-  originalName = "edgy.nvim";
+  packPathName = "edgy.nvim";
   package = "edgy-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

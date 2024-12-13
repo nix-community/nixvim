@@ -4,7 +4,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "scope";
-  originalName = "scope.nvim";
+  packPathName = "scope.nvim";
   package = "scope-nvim";
 
   maintainers = [ lib.maintainers.insipx ];

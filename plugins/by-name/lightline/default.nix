@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lightline";
-  originalName = "lightline.vim";
+  packPathName = "lightline.vim";
   package = "lightline-vim";
 
   maintainers = [ lib.maintainers.khaneliman ];

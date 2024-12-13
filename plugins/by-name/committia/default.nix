@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "committia";
-  originalName = "committia.vim";
+  packPathName = "committia.vim";
   package = "committia-vim";
   globalPrefix = "committia_";
 

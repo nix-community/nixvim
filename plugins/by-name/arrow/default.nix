@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "arrow";
-  originalName = "arrow.nvim";
+  packPathName = "arrow.nvim";
   package = "arrow-nvim";
 
   maintainers = [ maintainers.hmajid2301 ];

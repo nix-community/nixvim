@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "quarto";
-  originalName = "quarto-nvim";
+  packPathName = "quarto-nvim";
   package = "quarto-nvim";
 
   maintainers = [ lib.maintainers.BoneyPatel ];

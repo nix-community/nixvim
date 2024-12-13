@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "snacks";
-  originalName = "snacks.nvim";
+  packPathName = "snacks.nvim";
   package = "snacks-nvim";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];

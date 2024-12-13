@@ -1,7 +1,7 @@
 { lib, ... }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "grug-far";
-  originalName = "grug-far.nvim";
+  packPathName = "grug-far.nvim";
   package = "grug-far-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

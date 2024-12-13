@@ -7,10 +7,10 @@ let
 
   name = "base16";
   luaName = "base16-colorscheme";
-  originalName = "base16.nvim";
+  packPathName = "base16.nvim";
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
-  inherit name luaName originalName;
+  inherit name luaName packPathName;
   setup = ".with_config";
   package = "base16-nvim";
   isColorscheme = true;

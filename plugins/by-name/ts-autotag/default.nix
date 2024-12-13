@@ -7,7 +7,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "ts-autotag";
-  originalName = "nvim-ts-autotag";
+  packPathName = "nvim-ts-autotag";
   luaName = "nvim-ts-autotag";
   package = "nvim-ts-autotag";
 

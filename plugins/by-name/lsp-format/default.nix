@@ -5,7 +5,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lsp-format";
-  originalName = "lsp-format.nvim";
+  packPathName = "lsp-format.nvim";
   package = "lsp-format-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

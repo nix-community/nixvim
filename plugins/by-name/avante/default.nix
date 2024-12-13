@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "avante";
-  originalName = "avante.nvim";
+  packPathName = "avante.nvim";
   package = "avante-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

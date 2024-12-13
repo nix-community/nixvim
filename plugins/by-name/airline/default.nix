@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "airline";
-  originalName = "vim-airline";
+  packPathName = "vim-airline";
   package = "vim-airline";
   globalPrefix = "airline_";
 

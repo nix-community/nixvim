@@ -7,7 +7,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "obsidian";
-  originalName = "obsidian.nvim";
+  packPathName = "obsidian.nvim";
   package = "obsidian-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

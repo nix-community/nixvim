@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "neoconf";
-  originalName = "neoconf.nvim";
+  packPathName = "neoconf.nvim";
   package = "neoconf-nvim";
 
   maintainers = [ lib.maintainers.BoneyPatel ];

@@ -31,7 +31,7 @@
       # For example, they might just be configured through some other mean, like global variables
       hasLuaConfig ? true,
       # options
-      originalName ? name,
+      packPathName ? name,
       # Can be a string, a list of strings, or a module option:
       # - A string will be intrpreted as `pkgs.vimPlugins.${package}`
       # - A list will be interpreted as a "pkgs path", e.g. `pkgs.${elem1}.${elem2}.${etc...}`
@@ -88,13 +88,13 @@
 
           options.${namespace}.${name} =
             {
-              enable = lib.mkEnableOption originalName;
-              lazyLoad = lib.nixvim.mkLazyLoadOption originalName;
+              enable = lib.mkEnableOption packPathName;
+              lazyLoad = lib.nixvim.mkLazyLoadOption packPathName;
               package =
                 if lib.isOption package then
                   package
                 else
-                  lib.mkPackageOption pkgs originalName {
+                  lib.mkPackageOption pkgs packPathName {
                     default =
                       if builtins.isList package then
                         package
@@ -170,14 +170,14 @@
                     assertions = [
                       {
                         assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
-                        message = "You have enabled lazy loading for ${originalName} but have not provided any configuration.";
+                        message = "You have enabled lazy loading for ${packPathName} but have not provided any configuration.";
                       }
                     ];
                     plugins.lz-n = {
                       plugins = [
                         (
                           {
-                            __unkeyed-1 = originalName;
+                            __unkeyed-1 = packPathName;
                             # Use provided after, otherwise fallback to normal function wrapped lua content
                             after =
                               let

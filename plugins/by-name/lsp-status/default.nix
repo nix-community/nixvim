@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lsp-status";
-  originalName = "lsp-status.nvim";
+  packPathName = "lsp-status.nvim";
   package = "lsp-status-nvim";
   maintainers = [ lib.maintainers.b3nb5n ];
 

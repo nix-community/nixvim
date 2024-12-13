@@ -7,7 +7,7 @@
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "typst-vim";
-  originalName = "typst.vim";
+  packPathName = "typst.vim";
   globalPrefix = "typst_";
 
   maintainers = [ maintainers.GaetanLepage ];

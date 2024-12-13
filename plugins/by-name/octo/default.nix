@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "octo";
-  originalName = "octo.nvim";
+  packPathName = "octo.nvim";
   package = "octo-nvim";
 
   maintainers = [ lib.maintainers.svl ];

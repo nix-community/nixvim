@@ -8,7 +8,7 @@ with lib;
 with helpers.vim-plugin;
 mkVimPlugin {
   name = "ledger";
-  originalName = "vim-ledger";
+  packPathName = "vim-ledger";
   package = "vim-ledger";
   globalPrefix = "ledger_";
 

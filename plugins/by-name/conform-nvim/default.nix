@@ -9,7 +9,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "conform-nvim";
   luaName = "conform";
-  originalName = "conform.nvim";
+  packPathName = "conform.nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

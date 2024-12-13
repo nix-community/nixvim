@@ -8,7 +8,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "yanky";
-  originalName = "yanky.nvim";
+  packPathName = "yanky.nvim";
   package = "yanky-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "qmk";
-  originalName = "qmk.nvim";
+  packPathName = "qmk.nvim";
   package = "qmk-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

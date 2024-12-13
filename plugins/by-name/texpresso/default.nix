@@ -9,7 +9,7 @@ with lib;
 # avoid the creation of the `settings` option.
 helpers.vim-plugin.mkVimPlugin {
   name = "texpresso";
-  originalName = "texpresso.vim";
+  packPathName = "texpresso.vim";
   package = "texpresso-vim";
 
   maintainers = [ maintainers.nickhu ];

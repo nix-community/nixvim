@@ -7,7 +7,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "headlines";
-  originalName = "headlines.nvim";
+  packPathName = "headlines.nvim";
   package = "headlines-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

@@ -7,7 +7,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "git-conflict";
-  originalName = "git-conflict.nvim";
+  packPathName = "git-conflict.nvim";
   package = "git-conflict-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

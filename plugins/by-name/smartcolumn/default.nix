@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "smartcolumn";
-  originalName = "smartcolumn.nvim";
+  packPathName = "smartcolumn.nvim";
   package = "smartcolumn-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

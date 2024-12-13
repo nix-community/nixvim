@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "scrollview";
-  originalName = "nvim-scrollview";
+  packPathName = "nvim-scrollview";
   package = "nvim-scrollview";
   globalPrefix = "scrollview_";
 

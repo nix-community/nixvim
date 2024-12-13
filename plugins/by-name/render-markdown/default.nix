@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "render-markdown";
-  originalName = "render-markdown.nvim";
+  packPathName = "render-markdown.nvim";
   package = "render-markdown-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

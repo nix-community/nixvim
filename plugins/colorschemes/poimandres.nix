@@ -8,7 +8,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "poimandres";
   isColorscheme = true;
-  originalName = "poimandres.nvim";
+  packPathName = "poimandres.nvim";
   package = "poimandres-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

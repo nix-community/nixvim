@@ -7,7 +7,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "ltex-extra";
-  originalName = "ltex_extra.nvim";
+  packPathName = "ltex_extra.nvim";
   package = "ltex_extra-nvim";
 
   maintainers = [ maintainers.loicreynier ];

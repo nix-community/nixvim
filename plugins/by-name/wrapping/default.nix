@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "wrapping";
-  originalName = "wrapping.nvim";
+  packPathName = "wrapping.nvim";
   package = "wrapping-nvim";
 
   maintainers = [ lib.maintainers.ZainKergaye ];

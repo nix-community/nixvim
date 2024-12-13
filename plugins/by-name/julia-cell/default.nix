@@ -37,7 +37,7 @@ in
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "julia-cell";
-  originalName = "vim-julia-cell";
+  packPathName = "vim-julia-cell";
   package = "vim-julia-cell";
   globalPrefix = "julia_cell_";
 

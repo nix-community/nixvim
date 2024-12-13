@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "overseer";
-  originalName = "overseer.nvim";
+  packPathName = "overseer.nvim";
   package = "overseer-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "persisted";
-  originalName = "persisted.nvim";
+  packPathName = "persisted.nvim";
   package = "persisted-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

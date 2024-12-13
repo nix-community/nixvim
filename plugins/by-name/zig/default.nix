@@ -7,7 +7,7 @@ with lib;
 with helpers.vim-plugin;
 mkVimPlugin {
   name = "zig";
-  originalName = "zig.vim";
+  packPathName = "zig.vim";
   package = "zig-vim";
   globalPrefix = "zig_";
 

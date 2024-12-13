@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "nvim-surround";
-  originalName = "nvim-surround";
+  packPathName = "nvim-surround";
   package = "nvim-surround";
 
   maintainers = with lib.maintainers; [

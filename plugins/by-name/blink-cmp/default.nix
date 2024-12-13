@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "blink-cmp";
-  originalName = "blink.cmp";
+  packPathName = "blink.cmp";
   package = "blink-cmp";
 
   maintainers = [ lib.maintainers.balssh ];

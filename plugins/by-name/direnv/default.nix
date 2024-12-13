@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "direnv";
-  originalName = "direnv.vim";
+  packPathName = "direnv.vim";
   package = "direnv-vim";
   globalPrefix = "direnv_";
 

@@ -8,7 +8,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "neoclip";
-  originalName = "nvim-neoclip.lua";
+  packPathName = "nvim-neoclip.lua";
   package = "nvim-neoclip-lua";
 
   maintainers = [ maintainers.GaetanLepage ];

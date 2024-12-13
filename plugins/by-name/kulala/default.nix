@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "kulala";
-  originalName = "kulala.nvim";
+  packPathName = "kulala.nvim";
   package = "kulala-nvim";
 
   maintainers = [ lib.maintainers.BoneyPatel ];

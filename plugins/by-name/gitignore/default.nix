@@ -8,7 +8,7 @@ with lib;
 # Indeed, this plugin is not configurable in the common sense (no `setup` function).
 helpers.vim-plugin.mkVimPlugin {
   name = "gitignore";
-  originalName = "gitignore.nvim";
+  packPathName = "gitignore.nvim";
   package = "gitignore-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

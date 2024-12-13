@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "aerial";
-  originalName = "aerial.nvim";
+  packPathName = "aerial.nvim";
   package = "aerial-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

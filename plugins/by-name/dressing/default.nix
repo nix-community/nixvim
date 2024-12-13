@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "dressing";
-  originalName = "dressing.nvim";
+  packPathName = "dressing.nvim";
   package = "dressing-nvim";
 
   maintainers = [ lib.maintainers.AndresBermeoMarinelli ];

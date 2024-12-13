@@ -8,7 +8,7 @@ in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "tokyonight";
   isColorscheme = true;
-  originalName = "tokyonight.nvim";
+  packPathName = "tokyonight.nvim";
   package = "tokyonight-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

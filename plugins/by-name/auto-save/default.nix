@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "auto-save";
-  originalName = "auto-save.nvim";
+  packPathName = "auto-save.nvim";
   package = "auto-save-nvim";
 
   maintainers = [ lib.maintainers.braindefender ];

@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "gitlab";
-  originalName = "gitlab.vim";
+  packPathName = "gitlab.vim";
   package = "gitlab-vim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "navic";
-  originalName = "nvim-navic";
+  packPathName = "nvim-navic";
   luaName = "nvim-navic";
   package = "nvim-navic";
 

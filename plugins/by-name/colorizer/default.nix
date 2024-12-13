@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "colorizer";
-  originalName = "nvim-colorizer.lua";
+  packPathName = "nvim-colorizer.lua";
   package = "nvim-colorizer-lua";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

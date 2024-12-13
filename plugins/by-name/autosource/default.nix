@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "autosource";
-  originalName = "vim-autosource";
+  packPathName = "vim-autosource";
   package = "vim-autosource";
   globalPrefix = "autosource_";
 

@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "jupytext";
-  originalName = "jupytext.nvim";
+  packPathName = "jupytext.nvim";
   package = "jupytext-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

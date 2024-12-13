@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "baleia";
-  originalName = "baleia.nvim";
+  packPathName = "baleia.nvim";
   package = "baleia-nvim";
 
   maintainers = [ lib.maintainers.alisonjenkins ];

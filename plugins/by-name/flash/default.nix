@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "flash";
-  originalName = "flash.nvim";
+  packPathName = "flash.nvim";
   package = "flash-nvim";
 
   maintainers = with maintainers; [

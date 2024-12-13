@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "package-info";
-  originalName = "package-info.nvim";
+  packPathName = "package-info.nvim";
   package = "package-info-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

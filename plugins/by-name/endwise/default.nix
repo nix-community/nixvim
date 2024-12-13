@@ -5,7 +5,7 @@
 }:
 helpers.vim-plugin.mkVimPlugin {
   name = "endwise";
-  originalName = "vim-endwise";
+  packPathName = "vim-endwise";
   package = "vim-endwise";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

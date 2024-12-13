@@ -5,7 +5,7 @@
 }:
 helpers.vim-plugin.mkVimPlugin {
   name = "nix";
-  originalName = "vim-nix";
+  packPathName = "vim-nix";
   package = "vim-nix";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

@@ -10,7 +10,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "rest";
-  originalName = "rest.nvim";
+  packPathName = "rest.nvim";
   luaName = "rest-nvim";
   package = "rest-nvim";
 

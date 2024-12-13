@@ -335,10 +335,10 @@ rec {
     };
 
   mkLazyLoadOption =
-    originalName:
+    packPathName:
     lib.mkOption {
       description = ''
-        Lazy-load settings for ${originalName}.
+        Lazy-load settings for ${packPathName}.
 
         > [!WARNING]
         > This is an experimental option and may not work as expected with all plugins.
@@ -356,7 +356,7 @@ rec {
                 `true` when `settings` has a non-null attribute
               '';
               description = ''
-                lazy-loading for ${originalName}
+                lazy-loading for ${packPathName}
               '';
             };
 

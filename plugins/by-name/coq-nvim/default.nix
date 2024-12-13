@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "coq-nvim";
-  originalName = "coq_nvim";
+  packPathName = "coq_nvim";
   package = "coq_nvim";
 
   maintainers = with lib.maintainers; [

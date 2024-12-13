@@ -4,7 +4,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "netman";
-  originalName = "netman.nvim";
+  packPathName = "netman.nvim";
   package = "netman-nvim";
 
   hasSettings = false;

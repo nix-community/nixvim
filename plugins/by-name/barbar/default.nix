@@ -53,7 +53,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "barbar";
-  originalName = "barbar.nvim";
+  packPathName = "barbar.nvim";
   package = "barbar-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

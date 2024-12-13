@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "virt-column";
-  originalName = "virt-column.nvim";
+  packPathName = "virt-column.nvim";
   package = "virt-column-nvim";
 
   maintainers = [ lib.maintainers.alisonjenkins ];

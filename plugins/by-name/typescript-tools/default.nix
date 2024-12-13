@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "typescript-tools";
-  originalName = "typescript-tools.nvim";
+  packPathName = "typescript-tools.nvim";
   package = "typescript-tools-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

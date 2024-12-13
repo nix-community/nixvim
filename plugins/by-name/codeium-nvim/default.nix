@@ -7,7 +7,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "codeium-nvim";
-  originalName = "codeium.nvim";
+  packPathName = "codeium.nvim";
   luaName = "codeium";
 
   maintainers = with lib.maintainers; [

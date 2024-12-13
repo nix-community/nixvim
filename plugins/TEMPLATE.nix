@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "my-plugin";
-  originalName = "my-plugin.nvim"; # TODO replace (or remove entirely if it is the same as `name`)
+  packPathName = "my-plugin.nvim"; # TODO replace (or remove entirely if it is the same as `name`)
   package = "my-plugin-nvim"; # TODO replace
 
   maintainers = [ lib.maintainers.MyName ]; # TODO replace with your name

@@ -4,7 +4,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "hex";
-  originalName = "hex.nvim";
+  packPathName = "hex.nvim";
   package = "hex-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

@@ -8,7 +8,7 @@ with lib;
 # `globalPrefix` argument to avoid the creation of the `settings` option.
 helpers.vim-plugin.mkVimPlugin {
   name = "improved-search";
-  originalName = "improved-search.nvim";
+  packPathName = "improved-search.nvim";
   package = "improved-search-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "trouble";
-  originalName = "trouble.nvim";
+  packPathName = "trouble.nvim";
   package = "trouble-nvim";
 
   maintainers = [ lib.maintainers.loicreynier ];

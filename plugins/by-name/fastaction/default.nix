@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "fastaction";
-  originalName = "fastaction.nvim";
+  packPathName = "fastaction.nvim";
   package = "fastaction-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

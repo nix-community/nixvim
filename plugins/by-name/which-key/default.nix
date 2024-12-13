@@ -71,7 +71,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "which-key";
-  originalName = "which-key.nvim";
+  packPathName = "which-key.nvim";
   package = "which-key-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

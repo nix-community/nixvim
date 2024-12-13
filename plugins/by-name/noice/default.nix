@@ -8,7 +8,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "noice";
-  originalName = "noice.nvim";
+  packPathName = "noice.nvim";
   package = "noice-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

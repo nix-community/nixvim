@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "better-escape";
-  originalName = "better-escape.nvim";
+  packPathName = "better-escape.nvim";
   luaName = "better_escape";
   package = "better-escape-nvim";
 

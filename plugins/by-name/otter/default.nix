@@ -6,7 +6,7 @@
 }:
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "otter";
-  originalName = "otter.nvim";
+  packPathName = "otter.nvim";
   package = "otter-nvim";
 
   maintainers = [ ];

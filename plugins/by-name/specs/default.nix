@@ -6,7 +6,7 @@
 with lib;
 helpers.neovim-plugin.mkNeovimPlugin {
   name = "specs";
-  originalName = "specs.nvim";
+  packPathName = "specs.nvim";
   package = "specs-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

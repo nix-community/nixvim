@@ -5,7 +5,7 @@
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "melange";
   isColorscheme = true;
-  originalName = "melange-nvim";
+  packPathName = "melange-nvim";
   package = "melange-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

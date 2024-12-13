@@ -5,7 +5,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "notebook-navigator";
-  originalName = "NotebookNavigator-nvim";
+  packPathName = "NotebookNavigator-nvim";
   package = "NotebookNavigator-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.vim-plugin.mkVimPlugin {
   name = "lazygit";
-  originalName = "lazygit.nvim";
+  packPathName = "lazygit.nvim";
   package = "lazygit-nvim";
   globalPrefix = "lazygit_";
 

@@ -7,7 +7,7 @@
 with lib;
 helpers.vim-plugin.mkVimPlugin {
   name = "godot";
-  originalName = "vim-godot";
+  packPathName = "vim-godot";
   package = "vim-godot";
   globalPrefix = "godot_";
 

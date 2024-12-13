@@ -9,7 +9,7 @@ let
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "codecompanion";
-  originalName = "codecompanion.nvim";
+  packPathName = "codecompanion.nvim";
   package = "codecompanion-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

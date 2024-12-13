@@ -6,7 +6,7 @@
 }:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "telekasten";
-  originalName = "telekasten.nvim";
+  packPathName = "telekasten.nvim";
   package = "telekasten-nvim";
 
   maintainers = [ lib.maintainers.onemoresuza ];

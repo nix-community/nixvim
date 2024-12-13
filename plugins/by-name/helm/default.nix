@@ -5,7 +5,7 @@
 }:
 helpers.vim-plugin.mkVimPlugin {
   name = "helm";
-  originalName = "vim-helm";
+  packPathName = "vim-helm";
   package = "vim-helm";
 
   description = ''
