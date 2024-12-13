@@ -2,6 +2,10 @@
   lib,
   ...
 }:
+let
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
+in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "cord-nvim";
   originalName = "cord.nvim";
