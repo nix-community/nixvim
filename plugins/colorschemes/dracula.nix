@@ -1,87 +1,75 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
 let
-  inherit (lib) types;
-  cfg = config.colorschemes.dracula;
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  options = {
-    colorschemes.dracula = {
-      enable = lib.mkEnableOption "dracula";
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "dracula";
+  package = "dracula-vim";
+  isColorscheme = true;
+  globalPrefix = "dracula_";
 
-      package = lib.mkPackageOption pkgs "dracula" {
-        default = [
-          "vimPlugins"
-          "dracula-vim"
-        ];
-      };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-      bold = lib.mkOption {
-        type = types.bool;
-        default = true;
-        description = "Include bold attributes in highlighting";
-      };
-      italic = lib.mkOption {
-        type = types.bool;
-        default = true;
-        description = "Include italic attributes in highlighting";
-      };
-      underline = lib.mkOption {
-        type = types.bool;
-        default = true;
-        description = "Include underline attributes in highlighting";
-      };
-      undercurl = lib.mkOption {
-        type = types.bool;
-        default = true;
-        description = "Include undercurl attributes in highlighting (only if underline enabled)";
-      };
+  optionsRenamedToSettings = [
+    "bold"
+    "italic"
+    "underline"
+    "undercurl"
+    "fullSpecialAttrsSupport"
+    "highContrastDiff"
+    "inverse"
+    "colorterm"
+  ];
 
-      fullSpecialAttrsSupport = lib.mkOption {
-        type = types.bool;
-        default = false;
-        description = "Explicitly declare full support for special attributes. On terminal emulators, set to 1 to allow underline/undercurl highlights without changing the foreground color";
-      };
+  settingsOptions = {
+    bold = defaultNullOpts.mkBool true ''
+      Include bold attributes in highlighting.
+    '';
 
-      highContrastDiff = lib.mkOption {
-        type = types.bool;
-        default = false;
-        description = "Use high-contrast color when in diff mode";
-      };
+    italic = defaultNullOpts.mkBool true ''
+      Include italic attributes in highlighting.
+    '';
 
-      inverse = lib.mkOption {
-        type = types.bool;
-        default = true;
-        description = "Include inverse attributes in highlighting";
-      };
+    strikethrough = defaultNullOpts.mkBool true ''
+      Include strikethrough attributes in highlighting.
+    '';
 
-      colorterm = lib.mkOption {
-        type = types.bool;
-        default = true;
-        description = "Include background fill colors";
-      };
-    };
+    underline = defaultNullOpts.mkBool true ''
+      Include underline attributes in highlighting.
+    '';
+
+    undercurl = defaultNullOpts.mkBool true ''
+      Include undercurl attributes in highlighting (only if `underline` is enabled).
+    '';
+
+    full_special_attrs_support = defaultNullOpts.mkBool false ''
+      Explicitly declare full support for special attributes.
+      On terminal emulators, set to `true` to allow `underline`/`undercurl` highlights without
+      changing the foreground color.
+    '';
+
+    high_contrast_diff = defaultNullOpts.mkBool false ''
+      Use high-contrast color when in diff mode.
+    '';
+
+    inverse = defaultNullOpts.mkBool true ''
+      Include inverse attributes in highlighting.
+    '';
+
+    colorterm = defaultNullOpts.mkBool true ''
+      Include background fill colors.
+    '';
   };
 
-  config = lib.mkIf cfg.enable {
-    colorscheme = "dracula";
-    extraPlugins = [ cfg.package ];
+  settingsExample = {
+    italic = false;
+    colorterm = false;
+  };
 
-    globals = {
-      dracula_bold = lib.mkIf (!cfg.bold) 0;
-      dracula_italic = lib.mkIf (!cfg.italic) 0;
-      dracula_underline = lib.mkIf (!cfg.underline) 0;
-      dracula_undercurl = lib.mkIf (!cfg.undercurl) 0;
-      dracula_full_special_attrs_support = lib.mkIf cfg.fullSpecialAttrsSupport 1;
-      dracula_high_contrast_diff = lib.mkIf cfg.highContrastDiff 1;
-      dracula_inverse = lib.mkIf (!cfg.inverse) 0;
-      dracula_colorterm = lib.mkIf (!cfg.colorterm) 0;
-    };
-
+  extraConfig = {
     opts.termguicolors = lib.mkDefault true;
   };
 }
