@@ -102,7 +102,6 @@ helpers.neovim-plugin.mkNeovimPlugin {
       # treesitter-nu-grammar = pkgs.tree-sitter-grammars.tree-sitter-nu;
     in
     {
-
       programs.nixvim.plugins = {
         treesitter = {
           enable = true;
@@ -110,9 +109,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
           grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [
             treesitter-nu-grammar
           ];
-        };
-
-        extraConfigLua =
+          luaConfig.post=
           '''
             do
               local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -130,15 +127,14 @@ helpers.neovim-plugin.mkNeovimPlugin {
               }
             end
           ''';
+        };
 
         # Add as extra plugins so that their `queries/{language}/*.scm` get
         # installed and can be picked up by `tree-sitter`
         extraPlugins = [
           treesitter-nu-grammar
         ];
-
       };
-
     }
     ```
 
