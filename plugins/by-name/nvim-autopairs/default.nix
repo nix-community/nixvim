@@ -46,7 +46,7 @@ helpers.neovim-plugin.mkNeovimPlugin {
       ))
       (mkRemovedOptionModule (basePluginPaths ++ [ "pairs" ]) ''
         This option was having no effect.
-        If you want to customize pairs, please use `extraConfigLua` to define them as described in the plugin documentation.
+        If you want to customize pairs, please use `luaConfig` to define them as described in the plugin documentation.
       '')
     ];
 
