@@ -17,13 +17,11 @@
 }:
 let
   inherit (lib)
-    isAttrs
     listToAttrs
     map
     mkIf
     mkMerge
     mkOption
-    mkOptionType
     optionalAttrs
     setAttrByPath
     ;

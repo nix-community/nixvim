@@ -3,9 +3,6 @@
   ...
 }:
 with lib;
-let
-  inherit (lib.nixvim) mkRaw;
-in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "neotest";
 

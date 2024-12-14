@@ -4,7 +4,7 @@
 }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts mkRaw;
+  inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "conform-nvim";

@@ -168,9 +168,6 @@ in
       let
         pluginToLua =
           plugin:
-          let
-            keyExists = keyToCheck: attrSet: lib.elem keyToCheck (lib.attrNames attrSet);
-          in
           if isDerivation plugin then
             { dir = "${lazyPath}/${lib.getName plugin}"; }
           else
