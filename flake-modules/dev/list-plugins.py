@@ -11,10 +11,38 @@ QUESTION_MARK = "❔"
 
 EXCLUDES: list[str] = [
     # Not plugin files
-    "colorschemes/base16/theme-list.nix",
-    "helpers.nix",
-    "Helpers.nix",
     "TEMPLATE.nix",
+    "colorschemes/base16/theme-list.nix",
+    "deprecations.nix",
+    "helpers.nix",
+    "plugins/by-name/dap/dapHelpers.nix",
+    "plugins/by-name/efmls-configs/packages.nix",
+    "plugins/by-name/gitsigns/options.nix",
+    "plugins/by-name/hydra/hydras-option.nix",
+    "plugins/by-name/hydra/settings-options.nix",
+    "plugins/by-name/neogit/options.nix",
+    "plugins/by-name/neotest/adapters-list.nix",
+    "plugins/by-name/neotest/adapters.nix",
+    "plugins/by-name/neotest/options.nix",
+    "plugins/by-name/none-ls/_mk-source-plugin.nix",
+    "plugins/by-name/none-ls/packages.nix",
+    "plugins/by-name/none-ls/prettier.nix",
+    "plugins/by-name/none-ls/prettierd.nix",
+    "plugins/by-name/none-ls/settings.nix",
+    "plugins/by-name/none-ls/sources.nix",
+    "plugins/by-name/rustaceanvim/renamed-options.nix",
+    "plugins/by-name/rustaceanvim/settings-options.nix",
+    "plugins/by-name/startify/options.nix",
+    "plugins/by-name/telescope/extensions/_mk-extension.nix",
+    "plugins/by-name/telescope/extensions/default.nix",
+    "plugins/cmp/auto-enable.nix",
+    "plugins/cmp/options/",
+    "plugins/cmp/sources/cmp-fish.nix",
+    "plugins/cmp/sources/default.nix",
+    "plugins/default.nix",
+    "plugins/deprecation.nix",
+    "plugins/lsp/language-servers/",
+    "plugins/lsp/lsp-packages.nix",
 ]
 
 
@@ -31,10 +59,71 @@ class State(Enum):
     OLD = "❌"
 
 
-KNOWN_PATHS: dict[str, tuple[State, Kind, bool]] = {
-    # "plugins/utils/mkdnflow.nix": (True, Kind.NEOVIM),
+KNOWN_PATHS: dict[
+    str,
+    tuple[
+        State,  # If the implem is "legacy" or up to date
+        Kind,  # Vim / Neovim / misc
+        bool,  # Has deprecation warnings
+    ],
+] = {
+    "plugins/by-name/chadtree/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/commentary/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/conjure/default.nix": (
+        State.OLD,
+        Kind.VIM,  # configured with weird globals `vim.g["conjure#mapping#doc_word"] = "gk"`
+        False,
+    ),
+    "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/dap/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/easyescape/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/floaterm/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/friendly-snippets/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/gitgutter/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/gitmessenger/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/intellitab/default.nix": (
+        State.OLD,
+        Kind.VIM,
+        False,
+    ),  # No options
+    "plugins/by-name/leap/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/lint/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/lspkind/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/nix-develop/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/openscad/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/plantuml-syntax/default.nix": (State.OLD, Kind.VIM, False),
+    "plugins/by-name/quickmath/default.nix": (State.OLD, Kind.VIM, False),  # No options
+    "plugins/by-name/rainbow-delimiters/default.nix": (State.OLD, Kind.NEOVIM, False),
+    "plugins/by-name/treesitter-refactor/default.nix": (State.OLD, Kind.MISC, True),
+    "plugins/by-name/treesitter-textobjects/default.nix": (
+        State.OLD,
+        Kind.NEOVIM,
+        True,
+    ),
+    "plugins/by-name/vim-bbye/default.nix": (State.OLD, Kind.VIM, False),  # No options
+    "plugins/by-name/vim-matchup/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/colorschemes/base16/default.nix": (State.NEW, Kind.VIM, True),
+    "plugins/lsp/default.nix": (State.NEW, Kind.MISC, False),
 }
+for telescope_extension_name, has_depr_warnings in {
+    "file-browser": True,
+    "frecency": True,
+    "fzf-native": True,
+    "fzy-native": True,
+    "live-greps-args": False,
+    "manix": False,
+    "media-files": True,
+    "ui-select": False,
+    "undo": True,
+}.items():
+    KNOWN_PATHS[
+        f"plugins/by-name/telescope/extensions/{telescope_extension_name}.nix"
+    ] = (
+        State.NEW,
+        Kind.MISC,
+        has_depr_warnings,
+    )
+
 
 DEPRECATION_REGEX: list[re.Pattern] = [
     re.compile(rf".*{pattern}", re.DOTALL)
