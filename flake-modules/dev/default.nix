@@ -66,6 +66,15 @@
         check.enable = false;
 
         settings.hooks = {
+          deadnix = {
+            enable = true;
+
+            settings = {
+              noLambdaArg = true;
+              noLambdaPatternNames = true;
+              edit = true;
+            };
+          };
           treefmt.enable = true;
           typos = {
             enable = true;
