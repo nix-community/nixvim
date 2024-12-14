@@ -79,11 +79,11 @@ let
     )
     ++ checkDeclarations (
       let
-        inherit (import ../plugins/lsp/language-servers/efmls-configs-pkgs.nix lib) packaged unpackaged;
+        inherit (import ../plugins/by-name/efmls-configs/packages.nix lib) packaged unpackaged;
       in
       {
         name = "efmls";
-        declarationFile = "efmls-configs-pkgs.nix";
+        declarationFile = "plugins/by-name/efmls-configs/packages.nix";
 
         packages = builtins.attrValues packaged;
 

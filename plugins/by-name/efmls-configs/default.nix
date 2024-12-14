@@ -7,7 +7,7 @@
 }:
 let
   tools = import ../../../generated/efmls-configs.nix;
-  inherit (import ./efmls-configs-pkgs.nix lib) packaged;
+  inherit (import ./packages.nix lib) packaged;
 in
 {
   options.plugins.efmls-configs = {

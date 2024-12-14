@@ -217,7 +217,6 @@ in
     ++ renameModules
     ++ [
       ./ccls.nix
-      ./efmls-configs.nix
       ./hls.nix
       ./pylsp.nix
       ./rust-analyzer.nix
