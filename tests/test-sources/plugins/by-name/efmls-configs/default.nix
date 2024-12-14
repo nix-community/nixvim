@@ -99,7 +99,7 @@
           # Look into `nestedTypes.left` for the enum
           possible = toolType.nestedTypes.elemType;
           # possible is an enum, look into functor.payload for the variants
-          toolList = possible.functor.payload;
+          toolList = possible.functor.payload.values;
         in
         builtins.filter (t: !builtins.elem t (brokenTools ++ unpackaged)) toolList;
     in
