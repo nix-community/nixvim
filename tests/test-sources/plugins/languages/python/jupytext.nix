@@ -1,4 +1,5 @@
-{
+{ pkgs, ... }:
+pkgs.lib.optionalAttrs (pkgs.stdenv.hostPlatform.system != "aarch64-darwin") {
   empty = {
     plugins.jupytext.enable = true;
   };
