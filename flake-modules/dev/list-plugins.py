@@ -160,6 +160,9 @@ class Plugin:
             f"| {kind_icon}\033[0m  | {state_icon}  | {deprecation_icon} | {self.path}"
         )
 
+    def print_markdown(self) -> None:
+        print(f"- [ ] {self.path} ({self.kind.name.lower()})")
+
 
 def has_deprecation_warnings(string: str) -> bool:
     for regex in DEPRECATION_REGEX:
@@ -218,13 +221,17 @@ def _is_excluded(path: str) -> bool:
     return True
 
 
-def main(args):
+def main(args) -> None:
     paths: list[str] = glob.glob(pathname="plugins/**/*.nix", recursive=True)
     filtered_paths: list[str] = list(filter(_is_excluded, paths))
     filtered_paths.sort()
 
-    print("| Typ | Sty | DW | path")
-    print("|-----|-----|----|--------------------------------------------------------")
+    if not args.markdown:
+        print("| Typ | Sty | DW | path")
+        print(
+            "|-----|-----|----|--------------------------------------------------------"
+        )
+
     for plugin_path in filtered_paths:
         plugin: Optional[Plugin] = parse_file(path=plugin_path)
         if plugin is not None:
@@ -233,7 +240,10 @@ def main(args):
                 and (args.state is None or plugin.state.name.lower() == args.state)
                 and (not args.deprecation_warnings or plugin.dep_warnings)
             ):
-                print(plugin)
+                if args.markdown:
+                    plugin.print_markdown()
+                else:
+                    print(plugin)
 
 
 if __name__ == "__main__":
@@ -264,6 +274,12 @@ if __name__ == "__main__":
         "--deprecation-warnings",
         action="store_true",
         help="Show only plugins with deprecation warnings",
+    )
+    parser.add_argument(
+        "-m",
+        "--markdown",
+        action="store_true",
+        help="Markdown output",
     )
 
     main(parser.parse_args())
