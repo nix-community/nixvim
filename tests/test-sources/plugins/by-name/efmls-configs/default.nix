@@ -65,6 +65,7 @@
           "fixjson"
           "forge_fmt"
           "gersemi"
+          "gleam_format"
           "js_standard"
           "kdlfmt"
           "markuplint"
