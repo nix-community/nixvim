@@ -47,10 +47,9 @@ EXCLUDES: list[str] = [
 
 
 class Kind(Enum):
-    UNKNOWN = 1
-    NEOVIM = 2
-    VIM = 3
-    MISC = 4
+    NEOVIM = 1
+    VIM = 2
+    MISC = 3
 
 
 class State(Enum):
@@ -147,8 +146,6 @@ class Plugin:
         state_icon: str = self.state.value
         kind_icon: str
         match self.kind:
-            case Kind.UNKNOWN:
-                kind_icon = "\033[93m" + QUESTION_MARK
             case Kind.NEOVIM:
                 kind_icon = "\033[94m" + " "
             case Kind.VIM:
@@ -186,7 +183,7 @@ def parse_file(path: str) -> Optional[Plugin]:
         )
 
     state: State = State.UNKNOWN
-    kind: Kind = Kind.UNKNOWN
+    kind: Kind
     if re.match(
         re.compile(r".*mkNeovimPlugin", re.DOTALL),
         file_content,
@@ -254,7 +251,7 @@ if __name__ == "__main__":
         "-k",
         "--kind",
         choices=[k.name.lower() for k in Kind],
-        help="Filter plugins by kind (neovim, vim, misc, unknown)",
+        help="Filter plugins by kind (neovim, vim, misc)",
     )
     parser.add_argument(
         "-s",
