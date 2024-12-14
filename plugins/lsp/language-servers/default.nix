@@ -126,6 +126,9 @@ let
         };
       };
     };
+    tinymist = {
+      settingsOptions = import ./tinymist-settings.nix { inherit lib; };
+    };
     vls = {
       extraOptions = {
         autoSetFiletype = mkOption {

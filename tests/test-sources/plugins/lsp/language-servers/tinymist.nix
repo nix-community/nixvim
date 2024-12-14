@@ -13,12 +13,17 @@
           semanticTokens = "enable";
           systemFonts = true;
           fontPaths = [ ];
-          compileStatus = "enable";
+          compileStatus = "disable";
           typstExtraArgs = [ ];
-          serverPath = null;
-          "trace.server" = "off";
           formatterMode = "disable";
           formatterPrintWidth = 120;
+          completion = {
+            triggerOnSnippetPlaceholders = null;
+            postfix = true;
+            postfixUfcs = true;
+            postfixUfcsLeft = true;
+            postfixUfcsRight = true;
+          };
         };
       };
     };
