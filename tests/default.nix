@@ -3,8 +3,8 @@
   pkgsUnfree,
   helpers,
   lib,
-  system,
   self, # The flake instance
+  system ? pkgs.stdenv.hostPlatform.system,
 }:
 let
   autoArgs = pkgs // {

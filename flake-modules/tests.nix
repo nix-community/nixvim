@@ -1,6 +1,5 @@
 {
   self,
-  lib,
   helpers,
   ...
 }:
@@ -9,18 +8,14 @@
     {
       pkgs,
       pkgsUnfree,
-      system,
       ...
     }:
     {
-      checks = import ../tests {
+      checks = pkgs.callPackages ../tests {
         inherit
           helpers
-          lib
-          pkgs
           pkgsUnfree
           self
-          system
           ;
       };
     };
