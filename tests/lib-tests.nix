@@ -451,6 +451,34 @@ let
           EOFFF'';
       };
     };
+
+    testMkLuaConfig = {
+      expr = lib.mapAttrs (_: loc: helpers.modules.mkConfigAt loc "Hello!") {
+        "simple string" = "foo";
+        "simple list" = [
+          "foo"
+          "bar"
+        ];
+        "mkBefore string" = lib.mkBefore "foo";
+        "mkBefore list" = lib.mkBefore [
+          "foo"
+          "bar"
+        ];
+        "mkAfter string" = lib.mkAfter "foo";
+        "mkAfter list" = lib.mkAfter [
+          "foo"
+          "bar"
+        ];
+      };
+      expected = {
+        "simple string".foo = "Hello!";
+        "simple list".foo.bar = "Hello!";
+        "mkBefore string".foo = lib.mkBefore "Hello!";
+        "mkBefore list".foo.bar = lib.mkBefore "Hello!";
+        "mkAfter string".foo = lib.mkAfter "Hello!";
+        "mkAfter list".foo.bar = lib.mkAfter "Hello!";
+      };
+    };
   };
 in
 if results == [ ] then

@@ -58,6 +58,15 @@ in
       (maybeApply opts)
       (lib.mkIf enabled)
     ];
+
+  mkConfigAt =
+    loc: def:
+    let
+      isOrder = loc._type or null == "order";
+      withOrder = if isOrder then lib.modules.mkOrder loc.priority else lib.id;
+      loc' = lib.toList (if isOrder then loc.content else loc);
+    in
+    lib.setAttrByPath loc' (withOrder def);
 }
 // lib.mapAttrs (
   name: msg:

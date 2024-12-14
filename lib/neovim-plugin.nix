@@ -71,7 +71,7 @@
             })
           '';
 
-          setLuaConfig = lib.setAttrByPath (lib.toList configLocation);
+          luaConfigAtLocation = lib.nixvim.modules.mkConfigAt configLocation cfg.luaConfig.content;
         in
         {
           meta = {
@@ -162,8 +162,8 @@
                   # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
                   (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
 
-                  # Write the lua configuration `luaConfig.content` to the config file when lazy loading is not enabled
-                  (lib.mkIf (!cfg.lazyLoad.enable) (setLuaConfig cfg.luaConfig.content))
+                  # When NOT lazy loading, write `luaConfig.content` to `configLocation`
+                  (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
 
                   # When lazy loading is enabled for this plugin, route its configuration to the enabled provider
                   (lib.mkIf cfg.lazyLoad.enable {
