@@ -1,25 +1,28 @@
-{ lib, helpers }:
+{ lib, ... }:
 # Options:
 #  - https://github.com/grafana/jsonnet-language-server/tree/main/editor/vim
 #  - https://github.com/grafana/jsonnet-language-server/blob/main/pkg/server/configuration.go
 #  - https://github.com/google/go-jsonnet/blob/master/internal/formatter/jsonnetfmt.go#L55
-with lib;
+let
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
+in
 {
-  ext_vars = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+  ext_vars = defaultNullOpts.mkAttrsOf types.str { } ''
     External variables.
   '';
 
   formatting = {
-    Indent = helpers.defaultNullOpts.mkUnsignedInt 2 ''
+    Indent = defaultNullOpts.mkUnsignedInt 2 ''
       The number of spaces for each level of indenation.
     '';
 
-    MaxBlankLines = helpers.defaultNullOpts.mkUnsignedInt 2 ''
+    MaxBlankLines = defaultNullOpts.mkUnsignedInt 2 ''
       Max allowed number of consecutive blank lines.
     '';
 
     StringStyle =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "double"
           "single"
@@ -31,7 +34,7 @@ with lib;
         '';
 
     CommentStyle =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "hash"
           "slash"
@@ -42,35 +45,35 @@ with lib;
           Whether comments should use hash `#`, slash `//`, or be left as-is.
         '';
 
-    PrettyFieldNames = helpers.defaultNullOpts.mkBool true ''
+    PrettyFieldNames = defaultNullOpts.mkBool true ''
       Causes fields to only be wrapped in `'''` when needed.
     '';
 
-    PadArrays = helpers.defaultNullOpts.mkBool false ''
+    PadArrays = defaultNullOpts.mkBool false ''
       Causes arrays to be written like `[ this ]` instead of `[this]`.
     '';
 
-    PadObjects = helpers.defaultNullOpts.mkBool true ''
+    PadObjects = defaultNullOpts.mkBool true ''
       Causes objects to be written like `{ this }` instead of `{this}`.
     '';
 
-    SortImports = helpers.defaultNullOpts.mkBool true ''
+    SortImports = defaultNullOpts.mkBool true ''
       Causes imports at the top of the file to be sorted in groups by filename.
     '';
 
-    UseImplicitPlus = helpers.defaultNullOpts.mkBool true ''
+    UseImplicitPlus = defaultNullOpts.mkBool true ''
       Removes plus sign where it is not required.
     '';
 
-    StripEverything = helpers.defaultNullOpts.mkBool false ''
+    StripEverything = defaultNullOpts.mkBool false ''
       Removes all comments and newlines.
     '';
 
-    StripComments = helpers.defaultNullOpts.mkBool false ''
+    StripComments = defaultNullOpts.mkBool false ''
       Removes all comments.
     '';
 
-    StripAllButComments = helpers.defaultNullOpts.mkBool false ''
+    StripAllButComments = defaultNullOpts.mkBool false ''
       Removes everything, other than comments.
     '';
   };

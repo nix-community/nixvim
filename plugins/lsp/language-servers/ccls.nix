@@ -1,18 +1,18 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.lsp.servers.ccls;
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
 in
 {
   # Options: https://github.com/MaskRay/ccls/wiki/Customization#initialization-options
   options.plugins.lsp.servers.ccls.initOptions = {
     cache = {
-      directory = helpers.defaultNullOpts.mkStr ".ccls-cache" ''
+      directory = defaultNullOpts.mkStr ".ccls-cache" ''
         If your project is `/a/b`, cache directories will be created at `/a/b/.ccls-cache/@a@b/`
         (files under the project root) `/a/b/.ccls-cache/@@a@b/` (files outside the project root,
         e.g. /usr/include/stdio.h).
@@ -36,7 +36,7 @@ in
         Example: `"/tmp/ccls-cache"`
       '';
 
-      format = helpers.defaultNullOpts.mkStr "binary" ''
+      format = defaultNullOpts.mkStr "binary" ''
         Specify the format of the cached index files.
         Binary is a compact binary serialization format.
 
@@ -45,7 +45,7 @@ in
       '';
 
       retainInMemory =
-        helpers.defaultNullOpts.mkEnum
+        defaultNullOpts.mkEnum
           [
             0
             1
@@ -69,13 +69,13 @@ in
     };
 
     clang = {
-      extraArgs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+      extraArgs = defaultNullOpts.mkListOf types.str [ ] ''
         Additional arguments for `compile_commands.json` entries.
 
         Example: `["-frounding-math"]`
       '';
 
-      excludeArgs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+      excludeArgs = defaultNullOpts.mkListOf types.str [ ] ''
         Excluded arguments for `compile_commands.json` entries.
 
         If your compiler is not Clang and it supports arguments which Clang doesn't understand, then
@@ -84,7 +84,7 @@ in
         Example: `["-frounding-math"]`
       '';
 
-      pathMappings = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+      pathMappings = defaultNullOpts.mkListOf types.str [ ] ''
         A list of `src>dest` path conversions used to remap the paths of files in the project.
         This can be used to move a project to a new location without re-indexing.
 
@@ -104,7 +104,7 @@ in
         `/tmp/remote` paths any more.
       '';
 
-      resourceDir = helpers.defaultNullOpts.mkStr "" ''
+      resourceDir = defaultNullOpts.mkStr "" ''
         The clang resource directory (something like `.../lib/clang/9.0.0`) is hard-coded into ccls
         at compile time.
         You should be able to find `<resourceDir>/include/stddef.h`.
@@ -115,7 +115,7 @@ in
     };
 
     client = {
-      snippetSupport = helpers.defaultNullOpts.mkBool true ''
+      snippetSupport = defaultNullOpts.mkBool true ''
         `client.snippetSupport` and `completion.placeholder` (default: true) decide the completion
         style.
 
@@ -130,7 +130,7 @@ in
     };
 
     completion = {
-      placeholder = helpers.defaultNullOpts.mkBool false ''
+      placeholder = defaultNullOpts.mkBool false ''
         `client.snippetSupport` and `completion.placeholder` (default: true) decide the completion
         style.
 
@@ -143,7 +143,7 @@ in
         forced to `false`.
       '';
 
-      detailedLabel = helpers.defaultNullOpts.mkBool true ''
+      detailedLabel = defaultNullOpts.mkBool true ''
         When this option is enabled, `label` and `detailed` are re-purposed:
 
         - `label`: detailed function signature, e.g. `foo(int a, int b) -> bool`
@@ -151,7 +151,7 @@ in
           context is `S`.
       '';
 
-      filterAndSort = helpers.defaultNullOpts.mkBool true ''
+      filterAndSort = defaultNullOpts.mkBool true ''
         `ccls` filters and sorts completions to try to be nicer to clients that can't handle big
         numbers of completion candidates.
         This behaviour can be disabled by specifying `false` for the option.
@@ -160,7 +160,7 @@ in
       '';
     };
 
-    compilationDatabaseDirectory = helpers.defaultNullOpts.mkStr "" ''
+    compilationDatabaseDirectory = defaultNullOpts.mkStr "" ''
       If not empty, look for `compile_commands.json` in it, otherwise the file is retrieved in the
       project root.
 
@@ -171,12 +171,12 @@ in
     '';
 
     diagnostics = {
-      onOpen = helpers.defaultNullOpts.mkInt 0 ''
+      onOpen = defaultNullOpts.mkInt 0 ''
         Time (in milliseconds) to wait before computing diagnostics for `textDocument/didOpen`.
         How long to wait before diagnostics are emitted when a document is opened.
       '';
 
-      onChange = helpers.defaultNullOpts.mkInt 1000 ''
+      onChange = defaultNullOpts.mkInt 1000 ''
         Time (in milliseconds) to wait before computing diagnostics for `textDocument/didChange`.
         After receiving a `textDocument/didChange`, wait up to this long before reporting
         diagnostics.
@@ -186,21 +186,21 @@ in
         If `1000` makes you feel slow, consider setting this to `1`.
       '';
 
-      onSave = helpers.defaultNullOpts.mkInt 0 ''
+      onSave = defaultNullOpts.mkInt 0 ''
         Time (in milliseconds) to wait before computing diagnostics for `textDocument/didSave`.
         How long to wait before diagnostics are emitted after a document is saved.
       '';
     };
 
     index = {
-      threads = helpers.defaultNullOpts.mkInt 0 ''
+      threads = defaultNullOpts.mkInt 0 ''
         How many threads to start when indexing a project.
         `0` means use `std::thread::hardware_concurrency()` (the number of cores the system has).
         If you want to reduce peak CPU and memory usage, set it to a small integer.
       '';
 
       comments =
-        helpers.defaultNullOpts.mkEnum
+        defaultNullOpts.mkEnum
           [
             0
             1
@@ -218,7 +218,7 @@ in
           '';
 
       multiVersion =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        defaultNullOpts.mkEnumFirstDefault
           [
             0
             1
@@ -238,7 +238,7 @@ in
             Also consider using `index.multiVersionBlacklist` to exclude system headers.
           '';
 
-      multiVersionBlacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+      multiVersionBlacklist = defaultNullOpts.mkListOf types.str [ ] ''
         A list of regular expressions matching files that should not be indexed via multi-version
         if `index.multiVersion` is set to `1`.
 
@@ -248,7 +248,7 @@ in
         Example: `["^/usr/include"]`
       '';
 
-      initialBlacklist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+      initialBlacklist = defaultNullOpts.mkListOf types.str [ ] ''
         A list of regular expressions matching files that should not be indexed when the `ccls`
         server starts up, but will still be indexed if a client opens them.
         If there are areas of the project that you have no interest in indexing you can use this to
@@ -265,7 +265,7 @@ in
         Example: `["."]` (matches all files)
       '';
 
-      onChange = helpers.defaultNullOpts.mkBool false ''
+      onChange = defaultNullOpts.mkBool false ''
         If `false`, a file is re-indexed when saved, updating the global index incrementally.
 
         If set to `true`, a document is re-indexed for every (unsaved) change.
@@ -275,7 +275,7 @@ in
       '';
 
       trackDependency =
-        helpers.defaultNullOpts.mkEnum
+        defaultNullOpts.mkEnum
           [
             0
             1
@@ -297,5 +297,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable { plugins.lsp.servers.ccls.extraOptions.init_options = cfg.initOptions; };
+  config = lib.mkIf cfg.enable {
+    plugins.lsp.servers.ccls.extraOptions.init_options = cfg.initOptions;
+  };
 }

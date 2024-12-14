@@ -1,8 +1,11 @@
-{ lib, helpers }:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
+in
 {
   enabled =
-    helpers.defaultNullOpts.mkNullableWithRaw (with lib.types; either bool (listOf (maybeRaw str)))
+    defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf (maybeRaw str)))
       [
         "bibtex"
         "context"
@@ -41,7 +44,7 @@ with lib;
         - ["latex" "markdown"]
       '';
 
-  language = helpers.defaultNullOpts.mkStr "en-US" ''
+  language = defaultNullOpts.mkStr "en-US" ''
     The language (e.g., "en-US") LanguageTool should check against.
     Use a specific variant like "en-US" or "de-DE" instead of the generic language code like "en" or
     "de" to obtain spelling corrections (in addition to grammar corrections).
@@ -101,250 +104,239 @@ with lib;
     - "zh-CN": Chinese
   '';
 
-  dictionary = helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { } ''
-    Lists of additional words that should not be counted as spelling errors.
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<WORD1>"
-          "<WORD2>"
-          ...
-        ];
-        "<LANGUAGE2>" = [
-          "<WORD1>"
-          "<WORD2>"
-        ];
-        ...
-      };
-    ```
-    where <LANGUAGE> denotes the language code in `settings.language`.
+  dictionary = defaultNullOpts.mkAttrsOf' {
+    type = with types; listOf (maybeRaw str);
+    pluginDefault = { };
+    example = {
 
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    By default, no additional spelling errors will be ignored.
-
-    Example:
-    ```nix
-    {
-      "en-US" = [
-        "adaptivity"
-        "precomputed"
-        "subproblem"
+      "<LANGUAGE1>" = [
+        "<WORD1>"
+        "<WORD2>"
       ];
-      "de-DE" = [
-        "B-Splines"
-        ":/path/to/externalFile.txt"
+      "<LANGUAGE2>" = [
+        "<WORD1>"
+        "<WORD2>"
       ];
-    }
-    ```
-  '';
-
-  disabledRules = helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { } ''
-    Lists of rules that should be disabled (if enabled by default by LanguageTool).
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<WORD1>"
-          "<WORD2>"
+    };
+    description = ''
+      Lists of additional words that should not be counted as spelling errors.
+      This setting is language-specific, so use an attrs of the format
+      ```nix
+        {
           ...
-        ];
-        "<LANGUAGE2>" = [
-          "<WORD1>"
-          "<WORD2>"
-        ];
-        ...
-      };
-    ```
-    where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
-    the LanguageTool rule.
+        };
+      ```
+      where <LANGUAGE> denotes the language code in `settings.language`.
 
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    By default, no additional rules will be disabled.
+      This setting is a multi-scope setting. See the documentation for details.
+      This setting supports external files. See the documentation for details.
+      By default, no additional spelling errors will be ignored.
+    '';
+  };
 
-    Example:
-    ```nix
-    {
+  disabledRules = defaultNullOpts.mkAttrsOf' {
+    type = with types; listOf (maybeRaw str);
+    pluginDefault = { };
+    example = {
       "en-US" = [
         "EN_QUOTES"
         "UPPERCASE_SENTENCE_START"
         ":/path/to/externalFile.txt"
       ];
-    }
-    ```
-  '';
-
-  enabledRules = helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { } ''
-    Lists of rules that should be enabled (if disabled by default by LanguageTool).
-    This setting is language-specific, so use an attrs of the format
-    ```nix
-      {
-        "<LANGUAGE1>" = [
-          "<WORD1>"
-          "<WORD2>"
-          ...
-        ];
-        "<LANGUAGE2>" = [
-          "<WORD1>"
-          "<WORD2>"
-        ];
-        ...
-      };
-    ```
-    where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
-    the LanguageTool rule.
-
-    This setting is a multi-scope setting. See the documentation for details.
-    This setting supports external files. See the documentation for details.
-    By default, no additional rules will be enabled.
-
-    Example:
-    ```nix
-      {
-        "en-GB" = [
-          "PASSIVE_VOICE"
-          "OXFORD_SPELLING_NOUNS"
-          ":/path/to/externalFile.txt"
-        ];
-      }
-    ```
-  '';
-
-  hiddenFalsePositives =
-    helpers.defaultNullOpts.mkAttrsOf (with lib.types; listOf (maybeRaw str)) { }
-      ''
-        Lists of false-positive diagnostics to hide (by hiding all diagnostics of a specific rule
-        within a specific sentence).
-        This setting is language-specific, so use an attrs of the format
-        ```nix
-          {
-            "<LANGUAGE1>" = [
-              "<JSON1>"
-              "<JSON2>"
-              ...
-            ];
-            "<LANGUAGE2>" = [
-              "<JSON1>"
-              "<JSON2>"
-            ];
+    };
+    description = ''
+      Lists of rules that should be disabled (if enabled by default by LanguageTool).
+      This setting is language-specific, so use an attrs of the format
+      ```nix
+        {
+          "<LANGUAGE1>" = [
+            "<WORD1>"
+            "<WORD2>"
             ...
-          };
-        ```
-        where `<LANGUAGE>` denotes the language code in `settings.language` and `<JSON>` is a JSON
-        string containing information about the rule and sentence.
+          ];
+          "<LANGUAGE2>" = [
+            "<WORD1>"
+            "<WORD2>"
+          ];
+          ...
+        };
+      ```
+      where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
+      the LanguageTool rule.
 
-        Although it is possible to manually edit this setting, the intended way is the
-        `Hide false positive` quick fix.
+      This setting is a multi-scope setting. See the documentation for details.
+      This setting supports external files. See the documentation for details.
+      By default, no additional rules will be disabled.
+    '';
+  };
 
-        The JSON string currently has the form `{"rule": "<RULE>", "sentence": "<SENTENCE>"}`, where
-        `<RULE>` is the ID of the LanguageTool rule and `<SENTENCE>` is a Java-compatible regular
-        expression.
-        All occurrences of the given rule are hidden in sentences (as determined by the LanguageTool
-        tokenizer) that match the regular expression.
-        See the documentation for details.
+  enabledRules = defaultNullOpts.mkAttrsOf' {
+    type = with types; listOf (maybeRaw str);
+    pluginDefault = { };
+    example = {
+      "en-GB" = [
+        "PASSIVE_VOICE"
+        "OXFORD_SPELLING_NOUNS"
+        ":/path/to/externalFile.txt"
+      ];
+    };
+    description = ''
+      Lists of rules that should be enabled (if disabled by default by LanguageTool).
+      This setting is language-specific, so use an attrs of the format
+      ```nix
+        {
+          "<LANGUAGE1>" = [
+            "<WORD1>"
+            "<WORD2>"
+            ...
+          ];
+          "<LANGUAGE2>" = [
+            "<WORD1>"
+            "<WORD2>"
+          ];
+          ...
+        };
+      ```
+      where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
+      the LanguageTool rule.
 
-        This setting is a multi-scope setting. See the documentation for details.
-        This setting supports external files. See the documentation for details.
-        If this list is very large, performance may suffer.
+      This setting is a multi-scope setting. See the documentation for details.
+      This setting supports external files. See the documentation for details.
+      By default, no additional rules will be enabled.
+    '';
+  };
 
-        Example:
-        ```nix
-          {
-            "en-US" = [ ":/path/to/externalFile.txt" ];
-          }
-        ```
-      '';
+  hiddenFalsePositives = defaultNullOpts.mkAttrsOf' {
+    type = with types; listOf (maybeRaw str);
+    pluginDefault = { };
+    example = {
+      "en-US" = [ ":/path/to/externalFile.txt" ];
+    };
+    description = ''
+      Lists of false-positive diagnostics to hide (by hiding all diagnostics of a specific rule
+      within a specific sentence).
+      This setting is language-specific, so use an attrs of the format
+      ```nix
+        {
+          "<LANGUAGE1>" = [
+            "<JSON1>"
+            "<JSON2>"
+            ...
+          ];
+          "<LANGUAGE2>" = [
+            "<JSON1>"
+            "<JSON2>"
+          ];
+          ...
+        };
+      ```
+      where `<LANGUAGE>` denotes the language code in `settings.language` and `<JSON>` is a JSON
+      string containing information about the rule and sentence.
 
-  fields = helpers.defaultNullOpts.mkAttrsOf types.bool { } ''
-    List of BibTEX fields whose values are to be checked in BibTEX files.
+      Although it is possible to manually edit this setting, the intended way is the
+      `Hide false positive` quick fix.
 
-    This setting is an attrs with the field names as keys (not restricted to classical BibTEX
-    fields) and booleans as values, where `true` means that the field value should be checked and
-    `false` means that the field value should be ignored.
+      The JSON string currently has the form `{"rule": "<RULE>", "sentence": "<SENTENCE>"}`, where
+      `<RULE>` is the ID of the LanguageTool rule and `<SENTENCE>` is a Java-compatible regular
+      expression.
+      All occurrences of the given rule are hidden in sentences (as determined by the LanguageTool
+      tokenizer) that match the regular expression.
+      See the documentation for details.
 
-    Some common fields are already ignored, even if you set this setting to an empty attrs.
+      This setting is a multi-scope setting. See the documentation for details.
+      This setting supports external files. See the documentation for details.
+      If this list is very large, performance may suffer.
+    '';
+  };
 
-    Example:
-    ```nix
-      {
-        maintitle = false;
-        seealso = true;
-      }
-    ```
-  '';
+  fields = defaultNullOpts.mkAttrsOf' {
+    type = types.bool;
+    pluginDefault = { };
+    example = {
+      maintitle = false;
+      seealso = true;
+    };
+    description = ''
+      List of BibTEX fields whose values are to be checked in BibTEX files.
+
+      This setting is an attrs with the field names as keys (not restricted to classical BibTEX
+      fields) and booleans as values, where `true` means that the field value should be checked and
+      `false` means that the field value should be ignored.
+
+      Some common fields are already ignored, even if you set this setting to an empty attrs.
+    '';
+  };
 
   latex = {
-    commands = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
-      List of LATEX commands to be handled by the LATEX parser, listed together with empty arguments
-      (e.g., `"ref{}"`, `"\documentclass[]{}"`).
+    commands = defaultNullOpts.mkAttrsOf' {
+      type = types.str;
+      pluginDefault = { };
+      example = {
+        "\\label{}" = "ignore";
+        "\\documentclass[]{}" = "ignore";
+        "\\cite{}" = "dummy";
+        "\\cite[]{}" = "dummy";
+      };
+      description = ''
+        List of LATEX commands to be handled by the LATEX parser, listed together with empty arguments
+        (e.g., `"ref{}"`, `"\documentclass[]{}"`).
 
-      This setting is an attrs with the commands as keys and corresponding actions as values.
+        This setting is an attrs with the commands as keys and corresponding actions as values.
 
-      If you edit the `settings.json` file directly, don’t forget to escape the initial backslash by
-      replacing it with two backslashes.
+        If you edit the `settings.json` file directly, don’t forget to escape the initial backslash by
+        replacing it with two backslashes.
 
-      Many common commands are already handled by default, even if you set this setting to an empty
-      attrs.
+        Many common commands are already handled by default, even if you set this setting to an empty
+        attrs.
+      '';
+    };
 
-      Example:
-      ```nix
-        {
-          "\\label{}" = "ignore";
-          "\\documentclass[]{}" = "ignore";
-          "\\cite{}" = "dummy";
-          "\\cite[]{}" = "dummy";
-        }
-      ```
-    '';
+    environments = defaultNullOpts.mkAttrsOf' {
+      type = types.str;
+      pluginDefault = { };
+      example = {
+        lstlisting = "ignore";
+        verbatim = "ignore";
+      };
+      description = ''
+        List of names of LATEX environments to be handled by the LATEX parser.
 
-    environments = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
-      List of names of LATEX environments to be handled by the LATEX parser.
+        This setting is an attrs with the environment names as keys and corresponding actions as
+        values.
 
-      This setting is an attrs with the environment names as keys and corresponding actions as
-      values.
-
-      Some environments are already handled by default, even if you set this setting to an empty
-      attrs.
-
-      Example:
-      ```nix
-        {
-          lstlisting = "ignore";
-          verbatim = "ignore";
-        }
-      ```
-    '';
+        Some environments are already handled by default, even if you set this setting to an empty
+        attrs.
+      '';
+    };
   };
 
   markdown = {
-    nodes = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
-      List of Markdown node types to be handled by the Markdown parser.
+    nodes = defaultNullOpts.mkAttrsOf' {
+      type = types.str;
+      pluginDefault = { };
+      example = {
+        CodeBlock = "ignore";
+        FencedCodeBlock = "ignore";
+        AutoLink = "dummy";
+        Code = "dummy";
+      };
+      description = ''
+        List of Markdown node types to be handled by the Markdown parser.
 
-      This setting is an attrs with the node types as keys and corresponding actions as values.
+        This setting is an attrs with the node types as keys and corresponding actions as values.
 
-      The Markdown parser constructs an AST (abstract syntax tree) for the Markdown document, in
-      which all leaves have node type Text.
-      The possible node types are listed in the documentation of flexmark-java.
+        The Markdown parser constructs an AST (abstract syntax tree) for the Markdown document, in
+        which all leaves have node type Text.
+        The possible node types are listed in the documentation of flexmark-java.
 
-      Some common node types are already handled by default, even if you set this setting to an
-      empty attrs.
-
-      Example:
-      ```nix
-        {
-          CodeBlock = "ignore";
-          FencedCodeBlock = "ignore";
-          AutoLink = "dummy";
-          Code = "dummy";
-        }
-      ```
-    '';
+        Some common node types are already handled by default, even if you set this setting to an
+        empty attrs.
+      '';
+    };
   };
 
   configurationTarget =
-    helpers.defaultNullOpts.mkAttrsOf types.str
+    defaultNullOpts.mkAttrsOf types.str
       {
         dictionary = "workspaceFolderExternalFile";
         disabledRules = "workspaceFolderExternalFile";
@@ -356,12 +348,12 @@ with lib;
       '';
 
   additionalRules = {
-    enablePickyRules = helpers.defaultNullOpts.mkBool false ''
+    enablePickyRules = defaultNullOpts.mkBool false ''
       Enable LanguageTool rules that are marked as picky and that are disabled by default, e.g.,
       rules about passive voice, sentence length, etc., at the cost of more false positives.
     '';
 
-    motherTongue = helpers.defaultNullOpts.mkStr "" ''
+    motherTongue = defaultNullOpts.mkStr "" ''
       Optional mother tongue of the user (e.g., "de-DE").
 
       If set, additional rules will be checked to detect false friends.
@@ -421,47 +413,49 @@ with lib;
       - "zh-CN": Chinese
     '';
 
-    languageModel = helpers.defaultNullOpts.mkStr "" ''
+    languageModel = defaultNullOpts.mkStr "" ''
       Optional path to a directory with rules of a language model with n-gram occurrence counts.
       Set this setting to the parent directory that contains subdirectories for languages (e.g.,
       en).
     '';
 
-    neuralNetworkModel = helpers.defaultNullOpts.mkStr "" ''
+    neuralNetworkModel = defaultNullOpts.mkStr "" ''
       Optional path to a directory with rules of a pretrained neural network model.
     '';
 
-    word2VecModel = helpers.defaultNullOpts.mkStr "" ''
+    word2VecModel = defaultNullOpts.mkStr "" ''
       Optional path to a directory with rules of a word2vec language model.
     '';
   };
 
-  languageToolHttpServerUri = helpers.defaultNullOpts.mkStr "" ''
-    If set to a non-empty string, LTEX will not use the bundled, built-in version of LanguageTool.
-    Instead, LTEX will connect to an external LanguageTool HTTP server.
-    Set this setting to the root URI of the server, and do not append v2/check or similar.
+  languageToolHttpServerUri = defaultNullOpts.mkStr' {
+    pluginDefault = "";
+    example = "http://localhost:8081/";
+    description = ''
+      If set to a non-empty string, LTEX will not use the bundled, built-in version of LanguageTool.
+      Instead, LTEX will connect to an external LanguageTool HTTP server.
+      Set this setting to the root URI of the server, and do not append v2/check or similar.
 
-    Note that in this mode, the settings `settings.additionalRules.languageModel`,
-    `settings.additionalRules.neuralNetworkModel`, and `settings.additionalRules.word2VecModel` will
-    not take any effect.
-
-    Example: `"http://localhost:8081/"`
-  '';
+      Note that in this mode, the settings `settings.additionalRules.languageModel`,
+      `settings.additionalRules.neuralNetworkModel`, and `settings.additionalRules.word2VecModel` will
+      not take any effect.
+    '';
+  };
 
   languageToolOrg = {
-    username = helpers.defaultNullOpts.mkStr "" ''
+    username = defaultNullOpts.mkStr "" ''
       Username/email as used to log in at `languagetool.org` for Premium API access.
       Only relevant if `settings.languageToolHttpServerUri` is set.
     '';
 
-    apiKey = helpers.defaultNullOpts.mkStr "" ''
+    apiKey = defaultNullOpts.mkStr "" ''
       API key for Premium API access.
       Only relevant if `settings.languageToolHttpServerUri` is set.
     '';
   };
 
   ltex-ls = {
-    path = helpers.defaultNullOpts.mkStr "" ''
+    path = defaultNullOpts.mkStr "" ''
       If set to an empty string, LTEX automatically downloads `ltex-ls` from GitHub, stores it in
       the folder of the extension, and uses it for the checking process.
       You can point this setting to an ltex-ls release you downloaded by yourself.
@@ -472,7 +466,7 @@ with lib;
     '';
 
     logLevel =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "severe"
           "warning"
@@ -504,7 +498,7 @@ with lib;
   };
 
   java = {
-    path = helpers.defaultNullOpts.mkStr "" ''
+    path = defaultNullOpts.mkStr "" ''
       If set to an empty string, LTEX uses a Java distribution that is bundled with `ltex-ls`.
       You can point this setting to an existing Java installation on your computer to use that
       installation instead.
@@ -515,7 +509,7 @@ with lib;
       Changes require restarting LTEX to take effect.
     '';
 
-    initialHeapSize = helpers.defaultNullOpts.mkUnsignedInt 64 ''
+    initialHeapSize = defaultNullOpts.mkUnsignedInt 64 ''
       Initial size of the Java heap memory in megabytes (corresponds to Java’s -Xms option, must be
       a positive integer).
 
@@ -524,7 +518,7 @@ with lib;
       Changes require restarting LTEX to take effect.
     '';
 
-    maximumHeapSize = helpers.defaultNullOpts.mkUnsignedInt 512 ''
+    maximumHeapSize = defaultNullOpts.mkUnsignedInt 512 ''
       Maximum size of the Java heap memory in megabytes (corresponds to Java’s -Xmx option, must be
       a positive integer).
 
@@ -536,7 +530,7 @@ with lib;
     '';
   };
 
-  sentenceCacheSize = helpers.defaultNullOpts.mkUnsignedInt 2000 ''
+  sentenceCacheSize = defaultNullOpts.mkUnsignedInt 2000 ''
     Size of the LanguageTool ResultCache in sentences (must be a positive integer).
 
     If only a small portion of the text changed (e.g., a single key press in the editor),
@@ -550,7 +544,7 @@ with lib;
     Changes require restarting LTEX to take effect.
   '';
 
-  completionEnabled = helpers.defaultNullOpts.mkBool false ''
+  completionEnabled = defaultNullOpts.mkBool false ''
     Controls whether completion is enabled (also known as auto-completion, quick suggestions, and
     IntelliSense).
 
@@ -563,29 +557,34 @@ with lib;
     It is recommended to enable this setting.
   '';
 
-  diagnosticSeverity =
-    helpers.defaultNullOpts.mkNullableWithRaw (with lib.types; either str (attrsOf (maybeRaw str)))
-      "information"
-      ''
-        Severity of the diagnostics corresponding to the grammar and spelling errors.
+  diagnosticSeverity = defaultNullOpts.mkNullableWithRaw' {
+    type = with types; either str (attrsOf (maybeRaw str));
+    pluginDefault = "information";
+    description = ''
+      Severity of the diagnostics corresponding to the grammar and spelling errors.
 
-        Controls how and where the diagnostics appear.
-        The possible severities are "error", "warning", "information", and "hint".
+      Controls how and where the diagnostics appear.
+      The possible severities are "error", "warning", "information", and "hint".
 
-        This setting can either be a string with the severity to use for all diagnostics, or an attrs
-        with rule-dependent severities.
-        If an attrs is used, each key is the ID of a LanguageTool rule and each value is one of the
-        possible severities.
-        In this case, the severity of other rules, which don’t match any of the keys, has to be
-        specified with the special key "default".
+      This setting can either be a string with the severity to use for all diagnostics, or an attrs
+      with rule-dependent severities.
+      If an attrs is used, each key is the ID of a LanguageTool rule and each value is one of the
+      possible severities.
+      In this case, the severity of other rules, which don’t match any of the keys, has to be
+      specified with the special key "default".
 
-        Examples:
-        - `"information"`
-        - `{PASSIVE_VOICE = "hint"; default = "information";}`
-      '';
+      Examples:
+      - `"information"`
+      - `{PASSIVE_VOICE = "hint"; default = "information";}`
+    '';
+    example = {
+      PASSIVE_VOICE = "hint";
+      default = "information";
+    };
+  };
 
   checkFrequency =
-    helpers.defaultNullOpts.mkEnumFirstDefault
+    defaultNullOpts.mkEnumFirstDefault
       [
         "edit"
         "save"
@@ -602,17 +601,17 @@ with lib;
           Use commands such as LTeX: Check Current Document to manually trigger checks.
       '';
 
-  clearDiagnosticsWhenClosingFile = helpers.defaultNullOpts.mkBool true ''
+  clearDiagnosticsWhenClosingFile = defaultNullOpts.mkBool true ''
     If set to true, diagnostics of a file are cleared when the file is closed.
   '';
 
-  statusBarItem = helpers.defaultNullOpts.mkBool false ''
+  statusBarItem = defaultNullOpts.mkBool false ''
     If set to true, an item about the status of LTEX is shown permanently in the status bar.
   '';
 
   trace = {
     server =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "off"
           "messages"

@@ -1,11 +1,14 @@
-{ lib, helpers }:
+{ lib, ... }:
 # Options:
 #  - https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md
 #  - https://github.com/nix-community/nixd/blob/main/nixd/include/nixd/Controller/Configuration.h
-with lib;
+let
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+  inherit (lib) types;
+in
 {
   diagnostic = {
-    suppress = helpers.defaultNullOpts.mkListOf' {
+    suppress = defaultNullOpts.mkListOf' {
       type = types.str;
       description = ''
         Disable specific LSP warnings, etc.
@@ -20,7 +23,7 @@ with lib;
   };
 
   formatting = {
-    command = helpers.defaultNullOpts.mkListOf types.str [ "nixpkgs-fmt" ] ''
+    command = defaultNullOpts.mkListOf types.str [ "nixpkgs-fmt" ] ''
       Which command you would like to do formatting.
       Explicitly setting to `["nixpkgs-fmt"]` will automatically add `pkgs.nixpkgs-fmt` to the nixvim
       environment.
@@ -31,14 +34,14 @@ with lib;
     let
       provider = types.submodule {
         options = {
-          expr = mkOption {
+          expr = lib.mkOption {
             type = types.str;
             description = "Expression to eval. Select this attrset as eval .options";
           };
         };
       };
     in
-    helpers.mkNullOrOption (with lib.types; attrsOf (maybeRaw provider)) ''
+    mkNullOrOption (with types; attrsOf (maybeRaw provider)) ''
       Tell the language server your desired option set, for completion.
       This is lazily evaluated.
     '';
@@ -47,14 +50,14 @@ with lib;
     let
       provider = types.submodule {
         options = {
-          expr = mkOption {
+          expr = lib.mkOption {
             type = types.str;
             description = "Expression to eval. Treat it as `import <nixpkgs> { }`";
           };
         };
       };
     in
-    helpers.mkNullOrOption (lib.types.maybeRaw provider) ''
+    mkNullOrOption (types.maybeRaw provider) ''
       This expression will be interpreted as "nixpkgs" toplevel
       Nixd provides package, lib completion/information from it.
     '';

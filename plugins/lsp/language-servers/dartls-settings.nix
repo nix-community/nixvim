@@ -1,32 +1,35 @@
-{ lib, helpers }:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib.nixvim) mkNullOrOption;
+  inherit (lib) types;
+in
 {
-  analysisExcludedFolders = helpers.mkNullOrOption (with types; listOf str) ''
+  analysisExcludedFolders = mkNullOrOption (with types; listOf str) ''
     An array of paths (absolute or relative to each workspace folder) that should be excluded from
     analysis.
   '';
 
-  enableSdkFormatter = helpers.mkNullOrOption types.bool ''
+  enableSdkFormatter = mkNullOrOption types.bool ''
     When set to false, prevents registration (or unregisters) the SDK formatter.
     When set to true or not supplied, will register/reregister the SDK formatter
   '';
 
-  lineLength = helpers.mkNullOrOption types.ints.unsigned ''
+  lineLength = mkNullOrOption types.ints.unsigned ''
     The number of characters the formatter should wrap code at.
     If unspecified, code will be wrapped at 80 characters.
   '';
 
-  completeFunctionCalls = helpers.mkNullOrOption types.bool ''
+  completeFunctionCalls = mkNullOrOption types.bool ''
     When set to true, completes functions/methods with their required parameters.
   '';
 
-  showTodos = helpers.mkNullOrOption types.bool ''
+  showTodos = mkNullOrOption types.bool ''
     Whether to generate diagnostics for TODO comments.
     If unspecified, diagnostics will not be generated.
   '';
 
   renameFilesWithClasses =
-    helpers.mkNullOrOption
+    mkNullOrOption
       (types.enum [
         "always"
         "prompt"
@@ -41,18 +44,18 @@ with lib;
         included in the resulting `WorkspaceEdit` and must be handled by the client.
       '';
 
-  enableSnippets = helpers.mkNullOrOption types.bool ''
+  enableSnippets = mkNullOrOption types.bool ''
     Whether to include code snippets (such as class, stful, switch) in code completion.
     When unspecified, snippets will be included.
   '';
 
-  updateImportsOnRename = helpers.mkNullOrOption types.bool ''
+  updateImportsOnRename = mkNullOrOption types.bool ''
     Whether to update imports and other directives when files are renamed.
     When unspecified, imports will be updated if the client supports `willRenameFiles` requests.
   '';
 
   documentation =
-    helpers.mkNullOrOption
+    mkNullOrOption
       (types.enum [
         "none"
         "summary"
@@ -64,7 +67,7 @@ with lib;
         If not set, defaults to `"full"`.
       '';
 
-  includeDependenciesInWorkspaceSymbols = helpers.mkNullOrOption types.bool ''
+  includeDependenciesInWorkspaceSymbols = mkNullOrOption types.bool ''
     Whether to include symbols from dependencies and Dart/Flutter SDKs in Workspace Symbol results.
     If not set, defaults to true.
   '';

@@ -1,44 +1,47 @@
 # TODO: make all the types support raw lua
 lib:
 let
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
+
   rustAnalyzerOptions = import ../../../generated/rust-analyzer.nix;
 
   mkRustAnalyzerType =
     { kind, ... }@typeInfo:
     if kind == "enum" then
-      lib.types.enum typeInfo.values
+      types.enum typeInfo.values
     else if kind == "oneOf" then
-      lib.types.oneOf (lib.map mkRustAnalyzerType typeInfo.subTypes)
+      types.oneOf (lib.map mkRustAnalyzerType typeInfo.subTypes)
     else if kind == "list" then
-      lib.types.listOf (mkRustAnalyzerType typeInfo.item)
+      types.listOf (mkRustAnalyzerType typeInfo.item)
     else if kind == "number" then
       let
         inherit (typeInfo) minimum maximum;
       in
       if minimum != null && maximum != null then
-        lib.types.numbers.between minimum maximum
+        types.numbers.between minimum maximum
       else if minimum != null then
-        lib.types.addCheck lib.types.number (x: x >= minimum)
+        types.addCheck types.number (x: x >= minimum)
       else if maximum != null then
-        lib.types.addCheck lib.types.number (x: x <= maximum)
+        types.addCheck types.number (x: x <= maximum)
       else
-        lib.types.number
+        types.number
     else if kind == "integer" then
       let
         inherit (typeInfo) minimum maximum;
       in
       if minimum != null && maximum != null then
-        lib.types.ints.between minimum maximum
+        types.ints.between minimum maximum
       else if minimum != null then
-        lib.types.addCheck lib.types.int (x: x >= minimum)
+        types.addCheck types.int (x: x >= minimum)
       else if maximum != null then
-        lib.types.addCheck lib.types.int (x: x <= maximum)
+        types.addCheck types.int (x: x <= maximum)
       else
-        lib.types.int
+        types.int
     else if kind == "object" then
-      lib.types.attrsOf lib.types.anything
+      types.attrsOf types.anything
     else if kind == "submodule" then
-      lib.types.submodule {
+      types.submodule {
         options = lib.mapAttrs (
           _: ty:
           lib.mkOption {
@@ -48,9 +51,9 @@ let
         ) typeInfo.options;
       }
     else if kind == "string" then
-      lib.types.str
+      types.str
     else if kind == "boolean" then
-      lib.types.bool
+      types.bool
     else
       throw "Unknown type: ${kind}";
 
@@ -60,7 +63,7 @@ let
       pluginDefault,
       type,
     }:
-    lib.nixvim.defaultNullOpts.mkNullable' {
+    defaultNullOpts.mkNullable' {
       inherit description pluginDefault;
       type = mkRustAnalyzerType type;
     };
@@ -72,8 +75,8 @@ let
     in
     lib.setAttrByPath parts value;
 
-  nestedNixOptions = lib.attrsets.mapAttrsToList (
+  nestedNixOptions = lib.mapAttrsToList (
     name: value: nestOpt name (mkNixOption value)
   ) rustAnalyzerOptions;
 in
-(builtins.foldl' lib.attrsets.recursiveUpdate { } nestedNixOptions).rust-analyzer
+(builtins.foldl' lib.recursiveUpdate { } nestedNixOptions).rust-analyzer

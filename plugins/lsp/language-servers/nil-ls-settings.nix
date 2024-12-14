@@ -1,10 +1,13 @@
-{ lib, helpers }:
+{ lib, ... }:
 # All available settings are documented here:
 # https://github.com/oxalica/nil/blob/main/docs/configuration.md
-with lib;
+let
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
+in
 {
   formatting = {
-    command = helpers.defaultNullOpts.mkListOf' {
+    command = defaultNullOpts.mkListOf' {
       type = types.str;
       pluginDefault = null;
       description = ''
@@ -17,13 +20,13 @@ with lib;
   };
 
   diagnostics = {
-    ignored = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    ignored = defaultNullOpts.mkListOf types.str [ ] ''
       Ignored diagnostic kinds.
       The kind identifier is a snake_cased_string usually shown together
       with the diagnostic message.
     '';
 
-    excludedFiles = helpers.defaultNullOpts.mkListOf' {
+    excludedFiles = defaultNullOpts.mkListOf' {
       type = types.str;
       pluginDefault = [ ];
       description = ''
@@ -37,13 +40,13 @@ with lib;
   };
 
   nix = {
-    binary = helpers.defaultNullOpts.mkStr' {
+    binary = defaultNullOpts.mkStr' {
       pluginDefault = "nix";
       description = "The path to the `nix` binary.";
       example = "/run/current-system/sw/bin/nix";
     };
 
-    maxMemoryMB = helpers.defaultNullOpts.mkUnsignedInt' {
+    maxMemoryMB = defaultNullOpts.mkUnsignedInt' {
       pluginDefault = 2560;
       example = 1024;
       description = ''
@@ -59,19 +62,19 @@ with lib;
     };
 
     flake = {
-      autoArchive = helpers.defaultNullOpts.mkBool false ''
+      autoArchive = defaultNullOpts.mkBool false ''
         Auto-archiving behavior which may use network.
          - `null`: Ask every time.
          - `true`: Automatically run `nix flake archive` when necessary.
          - `false`: Do not archive. Only load inputs that are already on disk.
       '';
 
-      autoEvalInputs = helpers.defaultNullOpts.mkBool false ''
+      autoEvalInputs = defaultNullOpts.mkBool false ''
         Whether to auto-eval flake inputs.
         The evaluation result is used to improve completion, but may cost lots of time and/or memory.
       '';
 
-      nixpkgsInputName = helpers.defaultNullOpts.mkStr' {
+      nixpkgsInputName = defaultNullOpts.mkStr' {
         pluginDefault = "nixpkgs";
         example = "nixos";
         description = ''

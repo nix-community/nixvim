@@ -1,22 +1,25 @@
 # All available settings are documented here:
 # https://luals.github.io/wiki/settings/
-{ lib, helpers }:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
+in
 {
   addonManager = {
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Set the on/off state of the addon manager.
       Disabling the addon manager prevents it from registering its command.
     '';
   };
 
   completion = {
-    autoRequire = helpers.defaultNullOpts.mkBool true ''
+    autoRequire = defaultNullOpts.mkBool true ''
       When the input looks like a file name, automatically require the file.
     '';
 
     callSnippet =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "Disable"
           "Both"
@@ -32,21 +35,21 @@ with lib;
           When enabled, a "more complete" snippet will be offered.
         '';
 
-    displayContext = helpers.defaultNullOpts.mkUnsignedInt 0 ''
+    displayContext = defaultNullOpts.mkUnsignedInt 0 ''
       When a snippet is being suggested, this setting will set the amount of lines around the
       snippet to preview to help you better understand its usage.
 
       Setting to `0` will disable this feature.
     '';
 
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Enable/disable completion.
       Completion works like any autocompletion you already know of.
       It helps you type less and get more done.
     '';
 
     keywordSnippet =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "Disable"
           "Both"
@@ -61,7 +64,7 @@ with lib;
           Whether to show a snippet for key words like `if`, `while`, etc. When disabled, only the keyword will be completed. When enabled, a "more complete" snippet will be offered.
         '';
 
-    postfix = helpers.defaultNullOpts.mkStr "@" ''
+    postfix = defaultNullOpts.mkStr "@" ''
       The character to use for triggering a "postfix suggestion".
       A postfix allows you to write some code and then trigger a snippet after (post) to "fix" the
       code you have written.
@@ -69,17 +72,17 @@ with lib;
       `myTable@`.
     '';
 
-    requireSeparator = helpers.defaultNullOpts.mkStr "." ''
+    requireSeparator = defaultNullOpts.mkStr "." ''
       The separator to use when `require`-ing a file.
     '';
 
-    showParams = helpers.defaultNullOpts.mkBool true ''
+    showParams = defaultNullOpts.mkBool true ''
       Display a function's parameters in the list of completions.
       When a function has multiple definitions, they will be displayed separately.
     '';
 
     showWord =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "Enable"
           "Fallback"
@@ -95,7 +98,7 @@ with lib;
           usefulness in the current semantic context.
         '';
 
-    workspaceWord = helpers.defaultNullOpts.mkBool true ''
+    workspaceWord = defaultNullOpts.mkBool true ''
       Whether words from other files in the workspace should be suggested as "contextual words".
       This can be useful for completing similar strings.
       `completion.showWord` must not be disabled for this to have an effect.
@@ -103,26 +106,26 @@ with lib;
   };
 
   diagnostics = {
-    disable = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    disable = defaultNullOpts.mkListOf types.str [ ] ''
       Disable certain diagnostics globally.
       For example, if you want all warnings for `lowercase-global` to be disabled, the value for
       `diagnostics.disable` would be `["lowercase-global"]`.
     '';
 
-    disableScheme = helpers.defaultNullOpts.mkListOf types.str [ "git" ] ''
+    disableScheme = defaultNullOpts.mkListOf types.str [ "git" ] ''
       Disable diagnosis of Lua files that have the set schemes.
     '';
 
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Whether all diagnostics should be enabled or not.
     '';
 
-    globals = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    globals = defaultNullOpts.mkListOf types.str [ ] ''
       An array of variable names that will be declared as global.
     '';
 
     groupFileStatus =
-      helpers.defaultNullOpts.mkAttrsOf
+      defaultNullOpts.mkAttrsOf
         (types.enum [
           "Any"
           "Opened"
@@ -157,7 +160,7 @@ with lib;
         '';
 
     groupSeverity =
-      helpers.defaultNullOpts.mkAttrsOf
+      defaultNullOpts.mkAttrsOf
         (types.enum [
           "Error"
           "Warning"
@@ -191,7 +194,7 @@ with lib;
         '';
 
     ignoredFiles =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "Enable"
           "Opened"
@@ -207,7 +210,7 @@ with lib;
         '';
 
     libraryFiles =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "Enable"
           "Opened"
@@ -223,7 +226,7 @@ with lib;
         '';
 
     neededFileStatus =
-      helpers.defaultNullOpts.mkAttrsOf
+      defaultNullOpts.mkAttrsOf
         (types.enum [
           "Any"
           "Opened"
@@ -301,7 +304,7 @@ with lib;
         '';
 
     severity =
-      helpers.defaultNullOpts.mkAttrsOf
+      defaultNullOpts.mkAttrsOf
         (types.enum [
           "Error"
           "Warning"
@@ -380,12 +383,12 @@ with lib;
           - `"Hint!"` - Like `"Hint"` but overrides `diagnostics.groupSeverity`
         '';
 
-    unusedLocalExclude = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    unusedLocalExclude = defaultNullOpts.mkListOf types.str [ ] ''
       Define variable names that will not be reported as an unused local by
       [`unused-local`](https://github.com/LuaLS/lua-language-server/wiki/Diagnostics#unused-local).
     '';
 
-    workspaceDelay = helpers.defaultNullOpts.mkUnsignedInt 3000 ''
+    workspaceDelay = defaultNullOpts.mkUnsignedInt 3000 ''
       Define the delay between diagnoses of the workspace in milliseconds.
       Every time a file is edited, created, deleted, etc. the workspace will be re-diagnosed in the
       background after this delay.
@@ -393,7 +396,7 @@ with lib;
     '';
 
     workspaceEvent =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "OnChange"
           "OnSave"
@@ -410,7 +413,7 @@ with lib;
           - `"None"`
         '';
 
-    workspaceRate = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+    workspaceRate = defaultNullOpts.mkUnsignedInt 100 ''
       Define the rate at which the workspace will be diagnosed as a percentage.
       `100` is 100% speed so the workspace will be diagnosed as fast as possible.
       The rate can be lowered to reduce CPU usage, but the diagnosis speed will also become slower.
@@ -419,37 +422,37 @@ with lib;
   };
 
   doc = {
-    packageName = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    packageName = defaultNullOpts.mkListOf types.str [ ] ''
       The pattern used for matching field names as a package-private field.
       Fields that match any of the patterns provided will be package-private.
     '';
 
-    privateName = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    privateName = defaultNullOpts.mkListOf types.str [ ] ''
       The pattern used for matching field names as a private field.
       Fields that match any of the patterns provided will be private to that class.
     '';
 
-    protectedName = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    protectedName = defaultNullOpts.mkListOf types.str [ ] ''
       The pattern used for matching field names as a protected field.
       Fields that match any of the patterns provided will be private to that class and its child classes.
     '';
   };
 
   format = {
-    defaultConfig = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+    defaultConfig = defaultNullOpts.mkAttrsOf types.str { } ''
       The default configuration for the formatter.
       If there is a `.editorconfig` in the workspace, it will take priority.
       Read more on the [formatter's GitHub page](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/docs).
     '';
 
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Whether the built-in formatted should be enabled or not.
     '';
   };
 
   hint = {
     arrayIndex =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "Enable"
           "Auto"
@@ -462,17 +465,17 @@ with lib;
           - `"Disable"` - Disable array index hints
         '';
 
-    await = helpers.defaultNullOpts.mkBool true ''
+    await = defaultNullOpts.mkBool true ''
       If a function has been defined as [`@async`](https://github.com/LuaLS/lua-language-server/wiki/Annotations#async),
       display an `await` hint when it is being called.
     '';
 
-    enable = helpers.defaultNullOpts.mkBool false ''
+    enable = defaultNullOpts.mkBool false ''
       Whether inline hints should be enabled or not.
     '';
 
     paramName =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "All"
           "Literal"
@@ -486,13 +489,13 @@ with lib;
           - `"Disable"` - No parameter hints are shown
         '';
 
-    paramType = helpers.defaultNullOpts.mkBool true ''
+    paramType = defaultNullOpts.mkBool true ''
       Show a hint for parameter types at a function definition.
       Requires the parameters to be defined with [`@param`](https://github.com/LuaLS/lua-language-server/wiki/Annotations#param).
     '';
 
     semicolon =
-      helpers.defaultNullOpts.mkEnum
+      defaultNullOpts.mkEnum
         [
           "All"
           "SameLine"
@@ -507,63 +510,63 @@ with lib;
           - `"Disable"` - Never hint a semicolon
         '';
 
-    setType = helpers.defaultNullOpts.mkBool false ''
+    setType = defaultNullOpts.mkBool false ''
       Show a hint to display the type being applied at assignment operations.
     '';
   };
 
   hover = {
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Whether to enable hover tooltips or not.
     '';
 
-    enumsLimit = helpers.defaultNullOpts.mkUnsignedInt 5 ''
+    enumsLimit = defaultNullOpts.mkUnsignedInt 5 ''
       When a value has multiple possible types, hovering it will display them.
       This setting limits how many will be displayed in the tooltip before they are truncated.
     '';
 
-    expandAlias = helpers.defaultNullOpts.mkBool true ''
+    expandAlias = defaultNullOpts.mkBool true ''
       When hovering a value with an [`@alias`](https://github.com/LuaLS/lua-language-server/wiki/Annotations#alias)
       for its type, should the alias be expanded into its values.
       When enabled, `---@alias myType boolean|number` appears as `boolean|number`, otherwise it will
       appear as `myType`.
     '';
 
-    previewFields = helpers.defaultNullOpts.mkUnsignedInt 50 ''
+    previewFields = defaultNullOpts.mkUnsignedInt 50 ''
       When a table is hovered, its fields will be displayed in the tooltip.
       This setting limits how many fields can be seen in the tooltip.
       Setting to `0` will disable this feature.
     '';
 
-    viewNumber = helpers.defaultNullOpts.mkBool true ''
+    viewNumber = defaultNullOpts.mkBool true ''
       Enable hovering a non-decimal value to see its numeric value.
     '';
 
-    viewString = helpers.defaultNullOpts.mkBool true ''
+    viewString = defaultNullOpts.mkBool true ''
       Enable hovering a string that contains an escape character to see its true string value.
       For example, hovering `"\x48"` will display `"H"`.
     '';
 
-    viewStringMax = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
+    viewStringMax = defaultNullOpts.mkUnsignedInt 1000 ''
       The maximum number of characters that can be previewed by hovering a string before it is
       truncated.
     '';
   };
 
   misc = {
-    parameters = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    parameters = defaultNullOpts.mkListOf types.str [ ] ''
       [Command line parameters](https://github.com/LuaLS/lua-language-server/wiki/Getting-Started#run)
       to be passed along to the server `exe` when starting through Visual Studio Code.
     '';
 
-    executablePath = helpers.defaultNullOpts.mkStr "" ''
+    executablePath = defaultNullOpts.mkStr "" ''
       Manually specify the path for the Lua Language Server executable file.
     '';
   };
 
   runtime = {
     builtin =
-      helpers.defaultNullOpts.mkAttrsOf
+      defaultNullOpts.mkAttrsOf
         (types.enum [
           "default"
           "enable"
@@ -617,7 +620,7 @@ with lib;
         '';
 
     fileEncoding =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "utf8"
           "ansi"
@@ -631,13 +634,13 @@ with lib;
           - `"utf16be"`
         '';
 
-    meta = helpers.defaultNullOpts.mkStr "$\{version} $\{language} $\{encoding}" ''
+    meta = defaultNullOpts.mkStr "$\{version} $\{language} $\{encoding}" ''
       Specify the template that should be used for naming the folders that contain the generated
       definitions for the various Lua versions, languages, and encodings.
     '';
 
     nonstandardSymbol =
-      helpers.defaultNullOpts.mkListOf
+      defaultNullOpts.mkListOf
         (types.enum [
           "//"
           "/**/"
@@ -667,7 +670,7 @@ with lib;
         '';
 
     path =
-      helpers.defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf types.str
         [
           "?.lua"
           "?/init.lua"
@@ -682,71 +685,71 @@ with lib;
           [`workspace.library`](https://github.com/LuaLS/lua-language-server/wiki/Settings#workspacelibrary).
         '';
 
-    pathStrict = helpers.defaultNullOpts.mkBool false ''
+    pathStrict = defaultNullOpts.mkBool false ''
       When enabled, [`runtime.path`](https://github.com/LuaLS/lua-language-server/wiki/Settings#runtimepath)
       will only search the first level of directories.
       See the description of `runtime.path` for more info.
     '';
 
-    plugin = helpers.defaultNullOpts.mkStr "" ''
+    plugin = defaultNullOpts.mkStr "" ''
       The path to the [plugin](https://github.com/LuaLS/lua-language-server/wiki/Plugins) to use.
       Blank by default for security reasons.
     '';
 
-    pluginArgs = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    pluginArgs = defaultNullOpts.mkListOf types.str [ ] ''
       Additional arguments that will be passed to the active
       [plugin](https://github.com/LuaLS/lua-language-server/wiki/Plugins).
     '';
 
-    special = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+    special = defaultNullOpts.mkAttrsOf types.str { } ''
       Special variables can be set to be treated as other variables. For example, specifying `"include" : "require"` will result in `include` being treated like `require`.
     '';
 
-    unicodeName = helpers.defaultNullOpts.mkBool false ''
+    unicodeName = defaultNullOpts.mkBool false ''
       Whether unicode characters should be allowed in variable names or not.
     '';
 
-    version = helpers.defaultNullOpts.mkStr "Lua 5.4" ''
+    version = defaultNullOpts.mkStr "Lua 5.4" ''
       The Lua runtime version to use in this environment.
     '';
   };
 
   semantic = {
-    annotation = helpers.defaultNullOpts.mkBool true ''
+    annotation = defaultNullOpts.mkBool true ''
       Whether semantic colouring should be enabled for type annotations.
     '';
 
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Whether semantic colouring should be enabled.
       You may need to set `editor.semanticHighlighting.enabled` to true in order for this setting to
       take effect.
     '';
 
-    keyword = helpers.defaultNullOpts.mkBool false ''
+    keyword = defaultNullOpts.mkBool false ''
       Whether the server should provide semantic colouring of keywords, literals, and operators.
       You should only need to enable this setting if your editor is unable to highlight Lua's syntax.
     '';
 
-    variable = helpers.defaultNullOpts.mkBool true ''
+    variable = defaultNullOpts.mkBool true ''
       Whether the server should provide semantic colouring of variables, fields, and parameters.
     '';
   };
 
   signatureHelp = {
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       The signatureHelp group contains settings for helping understand signatures.
     '';
   };
 
   spell = {
-    dict = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    dict = defaultNullOpts.mkListOf types.str [ ] ''
       A custom dictionary of words that you know are spelt correctly but are being reported as incorrect.
       Adding words to this dictionary will make them exempt from spell checking.
     '';
   };
 
   telemetry = {
-    enable = helpers.defaultNullOpts.mkBool null ''
+    enable = defaultNullOpts.mkBool null ''
       The language server comes with opt-in telemetry to help improve the language server.
       It would be greatly appreciated if you enable this setting.
       Read the [privacy policy](https://github.com/LuaLS/lua-language-server/wiki/Home#privacy)
@@ -755,11 +758,11 @@ with lib;
   };
 
   type = {
-    castNumberToInteger = helpers.defaultNullOpts.mkBool false ''
+    castNumberToInteger = defaultNullOpts.mkBool false ''
       Whether casting a `number` to an `integer` is allowed.
     '';
 
-    weakNilCheck = helpers.defaultNullOpts.mkBool false ''
+    weakNilCheck = defaultNullOpts.mkBool false ''
        Whether it is permitted to assign a union type that contains `nil` to a variable that does not
        permit it.
        When `false`, the following will throw an error because `number|nil` cannot be assigned to
@@ -775,7 +778,7 @@ with lib;
       ```
     '';
 
-    weakUnionCheck = helpers.defaultNullOpts.mkBool false ''
+    weakUnionCheck = defaultNullOpts.mkBool false ''
       Whether it is permitted to assign a union type which only has one matching type to a variable.
       When `false`, the following will throw an error because `string|boolean` cannot be assigned to
       `string`.
@@ -790,18 +793,18 @@ with lib;
   };
 
   window = {
-    progressBar = helpers.defaultNullOpts.mkBool true ''
+    progressBar = defaultNullOpts.mkBool true ''
       Show a progress bar in the bottom status bar that shows how the workspace loading is progressing.
     '';
 
-    statusBar = helpers.defaultNullOpts.mkBool true ''
+    statusBar = defaultNullOpts.mkBool true ''
       Show a `Lua 😺` entry in the bottom status bar that can be clicked to manually perform a
       workspace diagnosis.
     '';
   };
 
   workspace = {
-    checkThirdParty = helpers.defaultNullOpts.mkBool true ''
+    checkThirdParty = defaultNullOpts.mkBool true ''
       Whether [third party libraries](https://github.com/LuaLS/lua-language-server/wiki/Libraries)
       can be automatically detected and applied.
       Third party libraries can set up the environment to be as close as possible to your target
@@ -810,17 +813,17 @@ with lib;
       to view what third party libraries are currently supported.
     '';
 
-    ignoreDir = helpers.defaultNullOpts.mkListOf types.str [ ".vscode" ] ''
+    ignoreDir = defaultNullOpts.mkListOf types.str [ ".vscode" ] ''
       An array of paths that will be ignored and not included in the workspace diagnosis.
       Uses `.gitignore` grammar. Can be a file or directory.
     '';
 
-    ignoreSubmodules = helpers.defaultNullOpts.mkBool true ''
+    ignoreSubmodules = defaultNullOpts.mkBool true ''
       Whether [git submodules](https://github.blog/2016-02-01-working-with-submodules/)
       should be ignored and not included in the workspace diagnosis.
     '';
 
-    library = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    library = defaultNullOpts.mkListOf types.str [ ] ''
       An array of abosolute or workspace-relative paths that will be added to the workspace
       diagnosis - meaning you will get completion and context from these library files.
       Can be a file or directory.
@@ -829,17 +832,17 @@ with lib;
       Read more on the [Libraries page](https://github.com/LuaLS/lua-language-server/wiki/Libraries).
     '';
 
-    maxPreload = helpers.defaultNullOpts.mkUnsignedInt 5000 ''
+    maxPreload = defaultNullOpts.mkUnsignedInt 5000 ''
       The maximum amount of files that can be diagnosed.
       More files will require more RAM.
     '';
 
-    preloadFileSize = helpers.defaultNullOpts.mkUnsignedInt 500 ''
+    preloadFileSize = defaultNullOpts.mkUnsignedInt 500 ''
       Files larger than this value (in KB) will be skipped when loading for workspace diagnosis.
     '';
 
     supportScheme =
-      helpers.defaultNullOpts.mkListOf types.str
+      defaultNullOpts.mkListOf types.str
         [
           "file"
           "untitled"
@@ -849,12 +852,12 @@ with lib;
           Lua file schemes to enable the language server for.
         '';
 
-    useGitIgnore = helpers.defaultNullOpts.mkBool true ''
+    useGitIgnore = defaultNullOpts.mkBool true ''
       Whether files that are in `.gitignore` should be ignored by the language server when
       performing workspace diagnosis.
     '';
 
-    userThirdParty = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    userThirdParty = defaultNullOpts.mkListOf types.str [ ] ''
       An array of paths to
       [custom third party libraries](https://github.com/LuaLS/lua-language-server/wiki/Libraries#custom).
       This path should point to a directory where **all** of your custom libraries are, not just to
