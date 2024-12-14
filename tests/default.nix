@@ -3,6 +3,7 @@
   pkgsUnfree,
   helpers,
   lib,
+  linkFarm,
   self, # The flake instance
   system ? pkgs.stdenv.hostPlatform.system,
 }:
@@ -29,6 +30,8 @@ let
 
   callTest = lib.callPackageWith autoArgs;
   callTests = lib.callPackagesWith autoArgs;
+
+  selfPackages = self.packages.${system};
 in
 {
   extra-args-tests = callTest ./extra-args.nix { };
@@ -43,6 +46,11 @@ in
   generated = callTest ./generated.nix { };
   package-options = callTest ./package-options.nix { };
   lsp-all-servers = callTest ./lsp-servers.nix { };
+}
+# Expose some tests from the docs as flake-checks too
+// lib.optionalAttrs (selfPackages ? docs) {
+  # Individual tests can be run using: nix build .#docs.user-configs.tests.<test>
+  docs-user-configs = linkFarm "user-configs-tests" selfPackages.docs.user-configs.tests;
 }
 # Tests generated from ./test-sources
 # Grouped as a number of link-farms in the form { test-1, test-2, ... test-N }

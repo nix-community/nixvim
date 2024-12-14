@@ -1,5 +1,6 @@
 {
   pkgs,
+  callPackage,
   runCommand,
   lib,
   evaledModules,
@@ -349,6 +350,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./index.md \
       --replace-fail "@DOCS_VERSIONS@" "$(cat ${finalAttrs.passthru.docs-versions})"
 
+    # Patch user-configs
+    substituteInPlace ./user-guide/config-examples.md \
+      --replace-fail "@USER_CONFIGS@" "$(cat ${finalAttrs.passthru.user-configs})"
+
     mdbook build
     cp -r ./book/* $dest
     mkdir -p $dest/search
@@ -398,5 +403,6 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
             echo "- The $link, for use with nixpkgs \`$nixpkgs\`$suffix" >> "$out"
           done
         '';
+    user-configs = callPackage ../user-configs { };
   };
 })
