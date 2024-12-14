@@ -64,6 +64,8 @@ class Plugin:
                 kind_icon = "\033[94m" + " "
             case Kind.VIM:
                 kind_icon = "\033[92m" + " "
+            case Kind.MISC:
+                kind_icon = "\033[92m" + "🟢"
             case _:
                 assert False
         deprecation_icon: str = "⚠️ " if self.dep_warnings else "  "
