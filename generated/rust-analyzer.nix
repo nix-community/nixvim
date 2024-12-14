@@ -268,6 +268,24 @@
       kind = "string";
     };
   };
+  "rust-analyzer.cargo.sysrootQueryMetadata" = {
+    description = ''
+      How to query metadata for the sysroot crate. Using cargo metadata allows rust-analyzer
+      to analyze third-party dependencies of the standard libraries.
+
+      Values:
+      - none: Do not query sysroot metadata, always use stitched sysroot.
+      - cargo_metadata: Use `cargo metadata` to query sysroot metadata.
+    '';
+    pluginDefault = "cargo_metadata";
+    type = {
+      kind = "enum";
+      values = [
+        "none"
+        "cargo_metadata"
+      ];
+    };
+  };
   "rust-analyzer.cargo.sysrootSrc" = {
     description = ''
       Relative path to the sysroot library sources. If left unset, this will default to
