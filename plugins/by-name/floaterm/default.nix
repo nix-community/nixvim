@@ -1,235 +1,240 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.floaterm;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrStr;
+  inherit (lib) types;
+in
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "floaterm";
+  packPathName = "vim-floaterm";
+  package = "vim-floaterm";
+  globalPrefix = "floaterm_";
 
-  settings = {
-    shell = {
-      type = types.str;
-      description = "";
-    };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    title = {
-      type = types.str;
-      description = ''
-        Show floaterm info (e.g., 'floaterm: 1/3' implies there are 3 floaterms in total and the
-        current is the first one) at the top left corner of floaterm window.
-
-        Default: 'floaterm: $1/$2'($1 and $2 will be substituted by 'the index of the current
-        floaterm' and 'the count of all floaterms' respectively)
-
-        Example: 'floaterm($1|$2)'
-      '';
-    };
-
-    wintype = {
-      type = types.enum [
-        "float"
-        "split"
-        "vsplit"
+  # TODO: Added 2024-12-16; remove after 25.05
+  optionsRenamedToSettings =
+    [
+      "autoclose"
+      "autohide"
+      "autoinsert"
+      "borderchars"
+      "giteditor"
+      "height"
+      "opener"
+      "position"
+      "rootmarkers"
+      "shell"
+      "title"
+      "width"
+      "wintype"
+    ]
+    ++ map
+      (name: {
+        old = [
+          "keymaps"
+          name
+        ];
+        new = "keymap_${name}";
+      })
+      [
+        "first"
+        "hide"
+        "kill"
+        "last"
+        "new"
+        "next"
+        "prev"
+        "show"
+        "toggle"
       ];
+
+  settingsOptions = {
+    shell = mkNullOrStr ''
+      Which shell should floaterm use.
+      Default value is the same as your `shell` option.
+    '';
+
+    title = defaultNullOpts.mkStr "floaterm: $1/$2" ''
+      Title format in the floating/popup terminal window.
+      If empty, the title won't be show.
+    '';
+
+    wintype = defaultNullOpts.mkStr "float" ''
+      Set it to `"split"` or `"vsplit"` if you don't want to use floating or popup window.
+    '';
+
+    width =
+      defaultNullOpts.mkNullable (with types; either ints.unsigned (numbers.between 0.0 1.0)) 0.6
+        ''
+          Width of the floaterm window.
+          It can be either an integer (number of columns) or a float between `0.0` and `1.0`.
+          In this case, the width is relative to `columns`.
+        '';
+
+    height =
+      defaultNullOpts.mkNullable (with types; either ints.unsigned (numbers.between 0.0 1.0)) 0.6
+        ''
+          Width of the floaterm window.
+          It can be either an integer (number of lines) or a float between `0.0` and `1.0`.
+          In this case, the width is relative to `lines`.
+        '';
+
+    position = mkNullOrStr ''
+      The position of the floaterm window.
+
+      It's recommended to have a look at those options meanings, e.g. `:help :leftabove`.
+
+      - If `wintype` is `"split"` or `"vsplit"`:
+        - `"leftabove"`
+        - `"aboveleft"`
+        - `"rightbelow"`
+        - `"belowright"`
+        - `"topleft"`
+        - `"botright"` (default)
+      - If `wintype` is `"float"`:
+        - `"top"`
+        - `"bottom"`
+        - `"left"`
+        - `"right"`
+        - `"topleft"`
+        - `"topright"`
+        - `"bottomleft"`
+        - `"bottomright"`
+        - `"center"` (default)
+        - `"auto"` (at the cursor place)
+    '';
+
+    borderchars = defaultNullOpts.mkStr "─│─│┌┐┘└" ''
+      8 characters of the floating window border (top, right, bottom, left, topleft, topright,
+      botright, botleft).
+    '';
+
+    rootmarkers =
+      defaultNullOpts.mkListOf types.str
+        [
+          ".project"
+          ".git"
+          ".hg"
+          ".svn"
+          ".root"
+        ]
+        ''
+          Markers used to detect the project root directory when running.
+          ```
+          :FloatermNew --cwd=<root>
+          ```
+        '';
+
+    opener = defaultNullOpts.mkStr "split" ''
+      Command used for opening a file in the outside nvim from within `:terminal`.
+
+      Available: `"edit"`, `"split"`, `"vsplit"`, `"tabe"`, `"drop"` or user-defined commands.
+    '';
+
+    autoclose = defaultNullOpts.mkEnum [ 0 1 2 ] 1 ''
+      Whether to close floaterm window once a job gets finished.
+
+      - `0` - Always do NOT close floaterm window.
+      - `1` - Close window only if the job exits normally
+      - `2` - Always close floaterm window.
+    '';
+
+    autohide = defaultNullOpts.mkEnum [ 0 1 2 ] 1 ''
+      Whether to hide previous floaterms before switching to or opening a another
+      one.
+
+      - `0` - Always do NOT hide previous floaterm windows
+      - `1` - Only hide those whose position (`b:floaterm_position`) is identical to that of the
+        floaterm which will be opened
+      - `2` - Always hide them
+    '';
+
+    autoinsert = defaultNullOpts.mkBool true ''
+      	Whether to enter `|Terminal-mode|` after opening a floaterm.
+    '';
+
+    titleposition = defaultNullOpts.mkEnumFirstDefault [ "left" "center" "right" ] ''
+      The position of the floaterm title.
+    '';
+
+    giteditor = defaultNullOpts.mkBool true ''
+      Whether to override $GIT_EDITOR in floaterm terminals so git commands can open open an
+      editor in the same neovim instance.
+    '';
+
+    keymap_new = defaultNullOpts.mkStr' {
+      pluginDefault = "";
       description = ''
-        'float'(nvim's floating or vim's popup) by default.
-        Set it to 'split' or 'vsplit' if you don't want to use floating or popup window.
+        Keyboard shortcut to open the floaterm window.
       '';
+      example = "<F7>";
     };
 
-    width = {
-      type = types.either types.int types.float;
+    keymap_prev = defaultNullOpts.mkStr' {
+      pluginDefault = "";
       description = ''
-        Int (number of columns) or float (between 0 and 1).
-        if float, the width is relative to &columns.
-
-        Default: 0.6
+        Keyboard shortcut to navigate to the previous terminal.
       '';
+      example = "<F8>";
     };
 
-    height = {
-      type = types.either types.int types.float;
+    keymap_next = defaultNullOpts.mkStr' {
+      pluginDefault = "";
       description = ''
-        Int (number of columns) or float (between 0 and 1).
-        if float, the height is relative to &lines.
-
-        Default: 0.6
+        Keyboard shortcut to navigate to the next terminal.
       '';
+      example = "<F9>";
     };
 
-    position = {
-      type = types.str;
+    keymap_first = defaultNullOpts.mkStr "" ''
+      Keyboard shortcut to navigate to the first terminal.
+    '';
+
+    keymap_last = defaultNullOpts.mkStr "" ''
+      Keyboard shortcut to navigate to the last terminal.
+    '';
+
+    keymap_hide = defaultNullOpts.mkStr "" ''
+      Keyboard shortcut to hide the floaterm window.
+    '';
+
+    keymap_show = defaultNullOpts.mkStr "" ''
+      Keyboard shortcut to show the floaterm window.
+    '';
+
+    keymap_kill = defaultNullOpts.mkStr "" ''
+      Keyboard shortcut to kill the floaterm window.
+    '';
+
+    keymap_toggle = defaultNullOpts.mkStr' {
+      pluginDefault = "";
       description = ''
-        The position of the floating window.
-
-        Available values:
-        - If wintype is `split`/`vsplit`: 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'topleft', 'botright'.
-          Default: 'botright'.
-
-        - If wintype is float: 'top', 'bottom', 'left', 'right', 'topleft', 'topright', 'bottomleft', 'bottomright', 'center', 'auto' (at the cursor place).
-        Default: 'center'
-
-        In addition, there is another option 'random' which allows to pick a random position from
-        above when (re)opening a floaterm window.
+        Keyboard shortcut to toggle the floaterm window.
       '';
-    };
-
-    borderchars = {
-      type = types.str;
-      description = ''
-        The position of the floating window.
-
-        8 characters of the floating window border (top, right, bottom, left, topleft, topright, botright, botleft).
-
-        Default: "─│─│┌┐┘└"
-      '';
-    };
-
-    rootmarkers = {
-      type = types.listOf types.str;
-      description = ''
-
-        Markers used to detect the project root directory for --cwd=<root>
-
-        Default: [".project" ".git" ".hg" ".svn" ".root"]
-      '';
-    };
-
-    giteditor = {
-      type = types.bool;
-      description = ''
-        Whether to override $GIT_EDITOR in floaterm terminals so git commands can open open an
-        editor in the same neovim instance.
-
-        Default: true
-      '';
-    };
-
-    opener = {
-      type = types.enum [
-        "edit"
-        "split"
-        "vsplit"
-        "tabe"
-        "drop"
-      ];
-      description = ''
-        Command used for opening a file in the outside nvim from within `:terminal`.
-
-        Default: 'split'
-      '';
-    };
-
-    autoclose = {
-      type = types.enum [
-        0
-        1
-        2
-      ];
-      description = ''
-        Whether to close floaterm window once the job gets finished.
-
-        - 0: Always do NOT close floaterm window
-        - 1: Close window if the job exits normally, otherwise stay it with messages like [Process exited 101]
-        - 2: Always close floaterm window
-
-        Default: 1
-      '';
-    };
-
-    autohide = {
-      type = types.enum [
-        0
-        1
-        2
-      ];
-      description = ''
-        Whether to hide previous floaterms before switching to or opening a another one.
-
-        - 0: Always do NOT hide previous floaterm windows
-        - 1: Only hide those whose position (b:floaterm_position) is identical to that of the floaterm which will be opened
-        - 2: Always hide them
-
-        Default: 1
-      '';
-    };
-
-    autoinsert = {
-      type = types.bool;
-      description = ''
-        Whether to enter Terminal-mode after opening a floaterm.
-
-        Default: true
-      '';
+      example = "<F12>";
     };
   };
-in
-{
-  options.plugins.floaterm =
-    let
-      # Misc options
-      # `OPTION = VALUE`
-      # which will translate to `globals.floaterm_OPTION = VALUE;`
-      miscOptions = mapAttrs (name: value: helpers.mkNullOrOption value.type value.description) settings;
 
-      # Keymaps options
-      # `keymaps.ACTION = KEY`
-      # which will translate to `globals.floaterm_keymap_ACTION = KEY;`
-      keymapOptions = listToAttrs (
-        map
-          (name: {
-            inherit name;
-            value = helpers.mkNullOrOption types.str "Key to map to ${name}";
-          })
-          [
-            "new"
-            "prev"
-            "next"
-            "first"
-            "last"
-            "hide"
-            "show"
-            "kill"
-            "toggle"
-          ]
-      );
-    in
-    {
-      enable = mkEnableOption "floaterm";
-
-      package = lib.mkPackageOption pkgs "floaterm" {
-        default = [
-          "vimPlugins"
-          "vim-floaterm"
-        ];
-      };
-
-      keymaps = keymapOptions;
-    }
-    // miscOptions;
-
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
-    globals =
-      let
-        # misc options
-        optionGlobals = listToAttrs (
-          map (optionName: {
-            name = "floaterm_${optionName}";
-            value = cfg.${optionName};
-          }) (attrNames settings)
-        );
-
-        # keymaps options
-        keymapGlobals = mapAttrs' (name: key: {
-          name = "floaterm_keymap_${name}";
-          value = key;
-        }) cfg.keymaps;
-      in
-      optionGlobals // keymapGlobals;
+  settingsExample = {
+    width = 0.9;
+    height = 0.9;
+    opener = "edit ";
+    title = "";
+    rootmarkers = [
+      "build/CMakeFiles"
+      ".project"
+      ".git"
+      ".hg"
+      ".svn"
+      ".root"
+    ];
+    keymap_new = "<Leader>ft";
+    keymap_prev = "<Leader>fp";
+    keymap_next = "<Leader>fn";
+    keymap_toggle = "<Leader>t";
+    keymap_kill = "<Leader>fk";
   };
 }
