@@ -67,15 +67,8 @@ KNOWN_PATHS: dict[
     ],
 ] = {
     "plugins/by-name/chadtree/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/commentary/default.nix": (State.OLD, Kind.VIM, False),
-    "plugins/by-name/conjure/default.nix": (
-        State.OLD,
-        Kind.VIM,  # configured with weird globals `vim.g["conjure#mapping#doc_word"] = "gk"`
-        False,
-    ),
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/dap/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/easyescape/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/floaterm/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/friendly-snippets/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/gitgutter/default.nix": (State.OLD, Kind.VIM, False),
