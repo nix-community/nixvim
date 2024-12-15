@@ -158,3 +158,18 @@ lib.fix (builders: {
       }
     );
 })
+# Removed because it depended on `pkgs`
+# Deprecated 2024-09-13; Removed 2024-12-15
+//
+  lib.genAttrs
+    [
+      "byteCompileLuaDrv"
+      "byteCompileLuaFile"
+      "byteCompileLuaHook"
+      "writeByteCompiledLua"
+      "writeLua"
+    ]
+    (
+      name:
+      throw "`${name}` is no longer available directly. You can access it via `withPkgs` or use `${name}With`."
+    )

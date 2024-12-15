@@ -1,37 +1,19 @@
 {
-  pkgs ? null,
-  lib ? pkgs.lib,
+  lib,
   _nixvimTests ? false,
-  ...
 }:
 lib.fix (
   self:
   let
     # Used when importing parts of our lib
     call = lib.callPackageWith {
-      inherit call pkgs self;
+      inherit call self;
       lib = self.extendedLib;
     };
-
-    # Define this outside of the attrs to avoid infinite recursion,
-    # since the final value will have been merged from two places
-    builders = call ./builders.nix { };
-
-    # We used to provide top-level access to the "builder" functions, with `pkgs` already baked in
-    # TODO: deprecated 2024-09-13; after 24.11 this can be simplified to always throw
-    deprecatedBuilders = lib.mapAttrs (
-      name: value:
-      let
-        notice = "`${name}` is deprecated";
-        opt = lib.optionalString (pkgs == null) " and not available in this instance of nixvim's lib";
-        advice = "You should either use `${name}With` or access `${name}` via `builders.withPkgs`";
-        msg = "${notice}${opt}. ${advice}.";
-      in
-      if pkgs == null then throw msg else lib.warn msg value
-    ) (builders.withPkgs pkgs);
   in
   {
     autocmd = call ./autocmd-helpers.nix { };
+    builders = call ./builders.nix { };
     deprecation = call ./deprecation.nix { };
     extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
@@ -42,8 +24,9 @@ lib.fix (
     utils = call ./utils.nix { inherit _nixvimTests; };
     vim-plugin = call ./vim-plugin.nix { };
 
-    # Handle builders, which has some deprecated stuff that depends on `pkgs`
-    builders = builders // deprecatedBuilders;
+    # Top-level helper aliases:
+    # TODO: deprecate some aliases
+
     inherit (self.builders)
       writeLua
       writeByteCompiledLua
@@ -51,9 +34,6 @@ lib.fix (
       byteCompileLuaHook
       byteCompileLuaDrv
       ;
-
-    # Top-level helper aliases:
-    # TODO: deprecate some aliases
 
     inherit (self.deprecation)
       getOptionRecursive

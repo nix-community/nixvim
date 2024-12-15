@@ -44,9 +44,9 @@ let
       dontRun ? false,
     }@args:
     let
+      # NOTE: we are importing this just for evalNixvim
       helpers = import ../lib {
-        # NOTE: must match the user-facing functions, so we still include the `pkgs` argument
-        inherit pkgs lib;
+        inherit lib;
         # TODO: deprecate helpers.enableExceptInTests,
         # add a context option e.g. `config.isTest`?
         _nixvimTests = true;

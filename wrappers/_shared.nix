@@ -57,8 +57,7 @@ in
   config = mkMerge [
     {
       # Make our lib available to the host modules
-      # NOTE: user-facing so we must include the legacy `pkgs` argument
-      lib.nixvim = lib.mkDefault (import ../lib { inherit pkgs lib; });
+      lib.nixvim = lib.mkDefault (import ../lib { inherit lib; });
 
       # Make nixvim's "extended" lib available to the host's module args
       _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
