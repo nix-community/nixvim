@@ -125,6 +125,21 @@ in
         -->
       '';
     };
+
+    # NOTE: This is a nixvim-specific option; there's no equivalent in nixos
+    source = lib.mkOption {
+      type = lib.types.path;
+      # NOTE: default is only set if `flake` is passed to our lib
+      defaultText = lib.literalMD "Nixvim's flake `input.nixpkgs`";
+      description = ''
+        The path to import Nixpkgs from.
+
+        Ignored when `nixpkgs.pkgs` is set.
+      '';
+
+      # FIXME: This is a stub option for now
+      internal = true;
+    };
   };
 
   config =
@@ -150,5 +165,10 @@ in
       # evaluate the wrapper to find out that the priority is lower, and then we
       # don't need to evaluate `finalPkgs`.
       _module.args.pkgs = lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
+
+      # FIXME: This is a stub option for now
+      warnings = lib.optional (
+        opt.source.isDefined && opt.source.highestPrio < (lib.mkOptionDefault null).priority
+      ) "Defining the option `nixpkgs.source` currently has no effect";
     };
 }

@@ -12,7 +12,7 @@
 }:
 let
   fetchTests = callTest ./fetch-tests.nix { };
-  test-derivation = callPackage ../lib/tests.nix { };
+  test-derivation = callPackage ../lib/tests.nix { inherit self; };
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   moduleToTest =

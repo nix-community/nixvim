@@ -1,5 +1,6 @@
 {
   lib,
+  flake ? null, # Optionally, provide the lib with access to the flake
   _nixvimTests ? false,
 }:
 lib.fix (
@@ -18,7 +19,7 @@ lib.fix (
     extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
-    modules = call ./modules.nix { };
+    modules = call ./modules.nix { inherit flake; };
     neovim-plugin = call ./neovim-plugin.nix { };
     options = call ./options.nix { };
     utils = call ./utils.nix { inherit _nixvimTests; };

@@ -1,4 +1,6 @@
 {
+  # The nixvim flake
+  self,
   # Extra args for the `evalNixvim` call that produces the type for `programs.nixvim`
   evalArgs ? { },
   # Option path where extraFiles should go
@@ -57,7 +59,13 @@ in
   config = mkMerge [
     {
       # Make our lib available to the host modules
-      lib.nixvim = lib.mkDefault (import ../lib { inherit lib; });
+      # NOTE: user-facing so we must include the legacy `pkgs` argument
+      lib.nixvim = lib.mkDefault (
+        import ../lib {
+          inherit lib;
+          flake = self;
+        }
+      );
 
       # Make nixvim's "extended" lib available to the host's module args
       _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;

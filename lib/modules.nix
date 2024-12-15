@@ -1,6 +1,7 @@
 {
   lib,
   self,
+  flake ? null,
 }:
 let
   removed = {
@@ -29,7 +30,15 @@ in
       Nixvim requires a lib that includes some custom extensions, however the `lib` from `specialArgs` does not have a `nixvim` attr.
       Remove `lib` from nixvim's `specialArgs` or ensure you apply nixvim's extensions to your `lib`.'';
     lib.evalModules {
-      modules = [ ../modules/top-level ] ++ modules;
+      modules = modules ++ [
+        ../modules/top-level
+
+        # Pass our locked nixpkgs into the configuration
+        (lib.optionalAttrs (flake != null) {
+          _file = "<nixvim-flake>";
+          nixpkgs.source = lib.mkOptionDefault flake.inputs.nixpkgs;
+        })
+      ];
       specialArgs = {
         inherit lib;
         # TODO: deprecate `helpers`
