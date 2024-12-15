@@ -23,4 +23,24 @@
       end
     '';
   };
+  lua-config-vim-plugin = {
+    plugins.typst-vim = {
+      enable = true;
+      luaConfig.pre = # lua
+        ''
+          local command = "typst-wrapped" -- Let's say we got it through env vars 
+        '';
+      settings.cmd.__raw = "command";
+      luaConfig.post = # lua
+        ''
+          local globals_cmd = vim.g.typst_cmd
+        '';
+    };
+
+    extraConfigLuaPost = ''
+      if globals_cmd ~= command then
+        print("globals_cmd different than command: " .. globals_cmd .. ", " .. command)
+      end
+    '';
+  };
 }

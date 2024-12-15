@@ -49,6 +49,12 @@
             - `other_toggle = false` -> `:setglobal no${globalPrefix}other_toggle`
           '';
         };
+
+        luaConfig = lib.mkOption {
+          type = lib.types.pluginLuaConfig { hasContent = false; };
+          default = { };
+          description = "The plugin's lua configuration";
+        };
       };
 
       module =
@@ -115,6 +121,10 @@
                 ];
                 globals = lib.mapAttrs' (n: lib.nameValuePair (globalPrefix + n)) (cfg.settings or { });
               }
+              (lib.optionalAttrs createSettingsOption {
+                globalsPre = lib.nixvim.mkIfNonNull cfg.luaConfig.pre;
+                globalsPost = lib.nixvim.mkIfNonNull cfg.luaConfig.post;
+              })
               (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                 colorscheme = lib.mkDefault colorscheme;
               })
