@@ -58,6 +58,6 @@ in
   config.extraConfigLua =
     lib.mkIf (cfg != null && (builtins.any (v: v != null) (builtins.attrValues cfg)))
       ''
-        vim.filetype.add(${helpers.toLuaObject cfg})
+        vim.filetype.add(${lib.nixvim.toLuaObject cfg})
       '';
 }

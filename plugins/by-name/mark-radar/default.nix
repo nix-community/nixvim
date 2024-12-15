@@ -42,7 +42,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("mark-radar").setup(${helpers.toLuaObject setupOptions})
+        require("mark-radar").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

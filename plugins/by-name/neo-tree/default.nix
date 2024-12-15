@@ -1136,7 +1136,7 @@ in
       ];
 
       extraConfigLua = ''
-        require('neo-tree').setup(${helpers.toLuaObject setupOptions})
+        require('neo-tree').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
 
       extraPackages = [ cfg.gitPackage ];

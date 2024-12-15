@@ -67,7 +67,7 @@ in
             }:
             let
               varName = "nixvim_${luaVariableName}";
-              optionDefinitions = helpers.toLuaObject config.${optionName};
+              optionDefinitions = lib.nixvim.toLuaObject config.${optionName};
             in
             lib.optionalString (optionDefinitions != "{ }") ''
               -- Set up ${prettyName} {{{

@@ -55,7 +55,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require('nvim-cursorline').setup(${helpers.toLuaObject options})
+        require('nvim-cursorline').setup(${lib.nixvim.toLuaObject options})
       '';
     };
 }

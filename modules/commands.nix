@@ -73,7 +73,7 @@ in
     in
     lib.mkIf (config.userCommands != { }) {
       extraConfigLua = helpers.wrapDo ''
-        local cmds = ${helpers.toLuaObject (lib.mapAttrs cleanupCommand config.userCommands)};
+        local cmds = ${lib.nixvim.toLuaObject (lib.mapAttrs cleanupCommand config.userCommands)};
         for name,cmd in pairs(cmds) do
           vim.api.nvim_create_user_command(name, cmd.command, cmd.options or {})
         end

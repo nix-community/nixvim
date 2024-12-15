@@ -677,7 +677,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require("fidget").setup${helpers.toLuaObject setupOptions}
+        require("fidget").setup${lib.nixvim.toLuaObject setupOptions}
       '';
   };
 }

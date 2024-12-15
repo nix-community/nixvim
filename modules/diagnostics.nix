@@ -19,7 +19,7 @@
 
   config = {
     extraConfigLuaPre = lib.mkIf (config.diagnostics != { }) ''
-      vim.diagnostic.config(${helpers.toLuaObject config.diagnostics})
+      vim.diagnostic.config(${lib.nixvim.toLuaObject config.diagnostics})
     '';
   };
 }

@@ -184,7 +184,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('marks').setup(${helpers.toLuaObject setupOptions})
+        require('marks').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

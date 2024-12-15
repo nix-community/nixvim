@@ -233,7 +233,7 @@ in
     extraConfigLua =
       ''
         __lint = require('lint')
-        __lint.linters_by_ft = ${helpers.toLuaObject cfg.lintersByFt}
+        __lint.linters_by_ft = ${lib.nixvim.toLuaObject cfg.lintersByFt}
       ''
       + (optionalString (cfg.linters != { }) (
         concatLines (
@@ -244,7 +244,7 @@ in
                 propName: propValue:
                 optionalString (
                   propValue != null
-                ) ''__lint.linters["${linter}"]["${propName}"] = ${helpers.toLuaObject propValue}''
+                ) ''__lint.linters["${linter}"]["${propName}"] = ${lib.nixvim.toLuaObject propValue}''
               ) linterConfig
             ) cfg.linters
           )
@@ -257,7 +257,7 @@ in
             let
               linterConfig' = if isString linterConfig then helpers.mkRaw linterConfig else linterConfig;
             in
-            ''__lint.linters["${customLinter}"] = ${helpers.toLuaObject linterConfig'}''
+            ''__lint.linters["${customLinter}"] = ${lib.nixvim.toLuaObject linterConfig'}''
           ) cfg.customLinters
         )
       ));

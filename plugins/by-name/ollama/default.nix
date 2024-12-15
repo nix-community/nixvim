@@ -226,7 +226,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('ollama').setup(${helpers.toLuaObject setupOptions})
+        require('ollama').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

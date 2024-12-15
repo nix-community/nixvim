@@ -47,12 +47,12 @@ in
   config = mkIf cfg.enable {
     extraPlugins = [ cfg.package ];
     extraConfigLua = ''
-      local __ignored_variables = ${helpers.toLuaObject cfg.ignoredVariables}
+      local __ignored_variables = ${lib.nixvim.toLuaObject cfg.ignoredVariables}
       for ignoredVariable, shouldIgnore in ipairs(__ignored_variables) do
       	require("nix-develop").ignored_variables[ignoredVariable] = shouldIgnore
       end
 
-      local __separated_variables = ${helpers.toLuaObject cfg.separatedVariables}
+      local __separated_variables = ${lib.nixvim.toLuaObject cfg.separatedVariables}
       for variable, separator in ipairs(__separated_variables) do
       	require("nix-develop").separated_variables[variable] = separator
       end

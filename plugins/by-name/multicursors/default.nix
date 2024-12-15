@@ -243,7 +243,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("multicursors").setup(${helpers.toLuaObject setupOptions})
+        require("multicursors").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

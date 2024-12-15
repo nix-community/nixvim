@@ -239,7 +239,7 @@ in
         enable = true;
 
         extensionConfigLua = ''
-          require("dapui").setup(${helpers.toLuaObject options});
+          require("dapui").setup(${lib.nixvim.toLuaObject options});
         '';
       };
     };

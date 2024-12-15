@@ -212,7 +212,7 @@ in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
       extraConfigLua = ''
-        require("presence").setup${helpers.toLuaObject setupOptions}
+        require("presence").setup${lib.nixvim.toLuaObject setupOptions}
       '';
     };
 }

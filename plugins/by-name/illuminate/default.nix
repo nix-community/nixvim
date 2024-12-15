@@ -150,7 +150,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("illuminate").configure(${helpers.toLuaObject setupOptions})
+        require("illuminate").configure(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

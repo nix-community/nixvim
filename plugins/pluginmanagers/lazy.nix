@@ -216,7 +216,7 @@ in
               patterns = {"."},
               fallback = false
             },
-            spec = ${helpers.toLuaObject packedPlugins}
+            spec = ${lib.nixvim.toLuaObject packedPlugins}
           }
         )
       '';

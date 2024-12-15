@@ -48,7 +48,7 @@ with lib;
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require('nvim-lastplace').setup(${helpers.toLuaObject options})
+        require('nvim-lastplace').setup(${lib.nixvim.toLuaObject options})
       '';
     };
 }

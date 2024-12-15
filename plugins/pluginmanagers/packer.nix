@@ -183,11 +183,11 @@ in
         luaRockPlugins = luaRockListToLua cfg.rockPlugins;
         luaRocksString = optionalString (
           cfg.rockPlugins != [ ]
-        ) "use_rocks ${helpers.toLuaObject luaRockPlugins}";
+        ) "use_rocks ${lib.nixvim.toLuaObject luaRockPlugins}";
       in
       mkIf (cfg.plugins != [ ]) ''
         require('packer').startup(function()
-          use ${helpers.toLuaObject packedPlugins}
+          use ${lib.nixvim.toLuaObject packedPlugins}
           ${luaRocksString}
         end)
       '';

@@ -85,7 +85,7 @@ in
           telescopeCfg = ''require("telescope").load_extension("git_worktree")'';
         in
         ''
-          require('git-worktree').setup(${helpers.toLuaObject setupOptions})
+          require('git-worktree').setup(${lib.nixvim.toLuaObject setupOptions})
           ${if cfg.enableTelescope then telescopeCfg else ""}
         '';
     };

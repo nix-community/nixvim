@@ -55,7 +55,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         enable = true;
 
         onAttach.function = ''
-          require("ltex_extra").setup(${helpers.toLuaObject cfg.settings})
+          require("ltex_extra").setup(${lib.nixvim.toLuaObject cfg.settings})
         '';
       };
     };

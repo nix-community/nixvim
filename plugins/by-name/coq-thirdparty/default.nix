@@ -66,7 +66,7 @@ in
     extraPlugins = [ cfg.package ];
 
     extraConfigLua = ''
-      require('coq_3p')(${helpers.toLuaObject cfg.sources})
+      require('coq_3p')(${lib.nixvim.toLuaObject cfg.sources})
     '';
   };
 }

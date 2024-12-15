@@ -645,7 +645,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("mkdnflow").setup(${helpers.toLuaObject setupOptions})
+        require("mkdnflow").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

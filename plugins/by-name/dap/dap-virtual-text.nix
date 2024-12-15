@@ -94,7 +94,7 @@ in
         enable = true;
 
         extensionConfigLua = ''
-          require("nvim-dap-virtual-text").setup(${helpers.toLuaObject options});
+          require("nvim-dap-virtual-text").setup(${lib.nixvim.toLuaObject options});
         '';
       };
     };

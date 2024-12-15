@@ -58,7 +58,7 @@ with lib;
           setupOptions = with cfg; { inherit languages; } // cfg.extraOptions;
         in
         ''
-          require('ts_context_commentstring').setup(${helpers.toLuaObject setupOptions})
+          require('ts_context_commentstring').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
     };
 }

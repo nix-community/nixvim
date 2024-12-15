@@ -260,9 +260,9 @@ in
 
       extraConfigLua = ''
         wilder = require("wilder")
-        wilder.setup(${helpers.toLuaObject setupOptions})
+        wilder.setup(${lib.nixvim.toLuaObject setupOptions})
 
-        local __wilderOptions = ${helpers.toLuaObject options}
+        local __wilderOptions = ${lib.nixvim.toLuaObject options}
         for key, value in pairs(__wilderOptions) do
           wilder.set_option(key, value)
         end

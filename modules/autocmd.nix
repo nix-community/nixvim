@@ -58,7 +58,7 @@
         (lib.optionalString (autoGroups != { }) ''
           -- Set up autogroups {{
           do
-            local __nixvim_autogroups = ${helpers.toLuaObject autoGroups}
+            local __nixvim_autogroups = ${lib.nixvim.toLuaObject autoGroups}
 
             for group_name, options in pairs(__nixvim_autogroups) do
               vim.api.nvim_create_augroup(group_name, options)
@@ -69,7 +69,7 @@
         + (lib.optionalString (autoCmd != [ ]) ''
           -- Set up autocommands {{
           do
-            local __nixvim_autocommands = ${helpers.toLuaObject autoCmd}
+            local __nixvim_autocommands = ${lib.nixvim.toLuaObject autoCmd}
 
             for _, autocmd in ipairs(__nixvim_autocommands) do
               vim.api.nvim_create_autocmd(

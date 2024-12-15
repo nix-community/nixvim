@@ -164,7 +164,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require('bqf').setup(${helpers.toLuaObject options})
+        require('bqf').setup(${lib.nixvim.toLuaObject options})
       '';
     };
 }

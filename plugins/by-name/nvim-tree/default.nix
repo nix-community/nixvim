@@ -1113,7 +1113,7 @@ in
 
           -- Will automatically open the tree when running setup if startup buffer is a directory,
           -- is empty or is unnamed. nvim-tree window will be focused.
-          local open_on_setup = ${helpers.toLuaObject cfg.openOnSetup}
+          local open_on_setup = ${lib.nixvim.toLuaObject cfg.openOnSetup}
 
           if (directory or no_name) and open_on_setup then
             -- change to the directory
@@ -1131,7 +1131,7 @@ in
           -- Will automatically open the tree when running setup if startup buffer is a file.
           -- File window will be focused.
           -- File will be found if updateFocusedFile is enabled.
-          local open_on_setup_file = ${helpers.toLuaObject cfg.openOnSetupFile}
+          local open_on_setup_file = ${lib.nixvim.toLuaObject cfg.openOnSetupFile}
 
           -- buffer is a real file on the disk
           local real_file = vim.fn.filereadable(data.file) == 1
@@ -1140,7 +1140,7 @@ in
 
             -- skip ignored filetypes
             local filetype = vim.bo[data.buf].ft
-            local ignored_filetypes = ${helpers.toLuaObject cfg.ignoreFtOnSetup}
+            local ignored_filetypes = ${lib.nixvim.toLuaObject cfg.ignoreFtOnSetup}
 
             if not vim.tbl_contains(ignored_filetypes, filetype) then
               -- open the tree but don't focus it
@@ -1152,7 +1152,7 @@ in
           ------------------------------------------------------------------------------------------
 
           -- Will ignore the buffer, when deciding to open the tree on setup.
-          local ignore_buffer_on_setup = ${helpers.toLuaObject cfg.ignoreBufferOnSetup}
+          local ignore_buffer_on_setup = ${lib.nixvim.toLuaObject cfg.ignoreBufferOnSetup}
           if ignore_buffer_on_setup then
             require("nvim-tree.api").tree.open()
           end
@@ -1189,7 +1189,7 @@ in
         (optionalString autoOpenEnabled openNvimTreeFunction)
         + ''
 
-          require('nvim-tree').setup(${helpers.toLuaObject setupOptions})
+          require('nvim-tree').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
 
       extraPackages = [ cfg.gitPackage ];

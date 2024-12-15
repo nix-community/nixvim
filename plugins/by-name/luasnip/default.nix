@@ -186,18 +186,18 @@ in
                 ] loader;
               in
               ''
-                require("luasnip.loaders.from_${name}").${optionalString loader.lazyLoad "lazy_"}load(${helpers.toLuaObject options})
+                require("luasnip.loaders.from_${name}").${optionalString loader.lazyLoad "lazy_"}load(${lib.nixvim.toLuaObject options})
               ''
             ))
           ];
 
       filetypeExtendConfig = mapAttrsToList (n: v: ''
-        require("luasnip").filetype_extend("${n}", ${helpers.toLuaObject v})
+        require("luasnip").filetype_extend("${n}", ${lib.nixvim.toLuaObject v})
       '') cfg.filetypeExtend;
 
       extraConfig = [
         ''
-          require("luasnip").config.setup(${helpers.toLuaObject cfg.settings})
+          require("luasnip").config.setup(${lib.nixvim.toLuaObject cfg.settings})
         ''
       ];
     in

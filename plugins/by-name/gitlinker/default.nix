@@ -103,7 +103,7 @@ with lib;
             // cfg.extraOptions;
         in
         ''
-          require('gitlinker').setup(${helpers.toLuaObject setupOptions})
+          require('gitlinker').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
     };
 }

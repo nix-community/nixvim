@@ -61,7 +61,7 @@ in
       plugins.dap = {
         enable = true;
         extensionConfigLua = ''
-          require("dap-go").setup(${helpers.toLuaObject options})
+          require("dap-go").setup(${lib.nixvim.toLuaObject options})
         '';
       };
     };

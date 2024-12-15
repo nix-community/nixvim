@@ -117,7 +117,7 @@ with lib;
         ];
 
       extraConfigLua = ''
-        require('osc52').setup(${helpers.toLuaObject setupOptions})
+        require('osc52').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

@@ -135,7 +135,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           if isString mapping then
             "${mapping}()"
           else
-            "${mapping.action}(${helpers.toLuaObject mapping.settings})";
+            "${mapping.action}(${lib.nixvim.toLuaObject mapping.settings})";
       in
       {
         inherit key;

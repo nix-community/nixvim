@@ -166,7 +166,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('image').setup(${helpers.toLuaObject setupOptions})
+        require('image').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

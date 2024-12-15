@@ -125,7 +125,7 @@ in
 
       extraConfigLua = ''
         vim.notify = require('notify');
-        require('notify').setup(${helpers.toLuaObject setupOptions})
+        require('notify').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

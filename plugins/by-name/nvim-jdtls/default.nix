@@ -143,7 +143,7 @@ in
           pattern = "java";
           callback.__raw = ''
             function ()
-              require('jdtls').start_or_attach(${helpers.toLuaObject options})
+              require('jdtls').start_or_attach(${lib.nixvim.toLuaObject options})
             end
           '';
         }

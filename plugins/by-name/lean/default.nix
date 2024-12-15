@@ -301,7 +301,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require("lean").setup(${helpers.toLuaObject setupOptions})
+        require("lean").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

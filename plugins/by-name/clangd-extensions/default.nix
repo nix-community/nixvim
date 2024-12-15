@@ -265,7 +265,7 @@ in
       extraPlugins = [ cfg.package ];
 
       plugins.lsp.postConfig = ''
-        require("clangd_extensions").setup(${helpers.toLuaObject setupOptions})
+        require("clangd_extensions").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

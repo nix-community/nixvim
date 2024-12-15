@@ -176,7 +176,7 @@ in
           server:
           let
             updates = lib.concatMapStringsSep "\n" (name: ''
-              client.server_capabilities.${name} = ${helpers.toLuaObject server.capabilities.${name}}
+              client.server_capabilities.${name} = ${lib.nixvim.toLuaObject server.capabilities.${name}}
             '') (builtins.attrNames server.capabilities);
           in
           ''
@@ -230,7 +230,7 @@ in
         do
           ${cfg.preConfig}
 
-          local __lspServers = ${helpers.toLuaObject cfg.enabledServers}
+          local __lspServers = ${lib.nixvim.toLuaObject cfg.enabledServers}
           -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
           _M.lspOnAttach = function(client, bufnr)
             ${updateCapabilities}

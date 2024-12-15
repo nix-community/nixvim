@@ -135,7 +135,7 @@ in
       keymaps = filter (keymap: keymap != null) (attrValues cfg.keymaps);
 
       extraConfigLua = ''
-        require("wtf").setup(${helpers.toLuaObject setupOptions})
+        require("wtf").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

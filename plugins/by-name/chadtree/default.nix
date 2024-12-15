@@ -516,7 +516,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        vim.api.nvim_set_var("chadtree_settings", ${helpers.toLuaObject setupOptions})
+        vim.api.nvim_set_var("chadtree_settings", ${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

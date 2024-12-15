@@ -73,7 +73,7 @@ with lib;
           };
         in
         ''
-          require('persistence').setup(${helpers.toLuaObject opts})
+          require('persistence').setup(${lib.nixvim.toLuaObject opts})
         '';
     };
 }

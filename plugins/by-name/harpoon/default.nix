@@ -205,7 +205,7 @@ in
           telescopeCfg = ''require("telescope").load_extension("harpoon")'';
         in
         ''
-          require('harpoon').setup(${helpers.toLuaObject setupOptions})
+          require('harpoon').setup(${lib.nixvim.toLuaObject setupOptions})
           ${if cfg.enableTelescope then telescopeCfg else ""}
         '';
 

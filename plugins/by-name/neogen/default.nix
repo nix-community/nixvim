@@ -202,7 +202,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("neogen").setup(${helpers.toLuaObject setupOptions})
+        require("neogen").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
 
       keymaps = flatten (

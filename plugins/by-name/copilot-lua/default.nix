@@ -214,7 +214,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('copilot').setup(${helpers.toLuaObject setupOptions})
+        require('copilot').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

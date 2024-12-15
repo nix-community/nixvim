@@ -153,7 +153,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('clipboard-image').setup(${helpers.toLuaObject setupOptions})
+        require('clipboard-image').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

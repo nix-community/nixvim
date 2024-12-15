@@ -835,7 +835,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("diffview").setup(${helpers.toLuaObject setupOptions})
+        require("diffview").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

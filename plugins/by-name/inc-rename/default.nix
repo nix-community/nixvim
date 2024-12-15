@@ -55,7 +55,7 @@ with lib;
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("inc_rename").setup(${helpers.toLuaObject setupOptions})
+        require("inc_rename").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

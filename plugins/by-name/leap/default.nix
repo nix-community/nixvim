@@ -183,7 +183,7 @@ in
         + (optionalString (options != { }) ''
           require('leap').opts = vim.tbl_deep_extend(
             "keep",
-            ${helpers.toLuaObject options},
+            ${lib.nixvim.toLuaObject options},
             require('leap').opts
           )
         '');

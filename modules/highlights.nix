@@ -42,7 +42,7 @@
           ''
             -- Highlight groups {{
             do
-              local highlights = ${helpers.toLuaObject config.highlight}
+              local highlights = ${lib.nixvim.toLuaObject config.highlight}
 
               for k,v in pairs(highlights) do
                 vim.api.nvim_set_hl(0, k, v)
@@ -56,7 +56,7 @@
           ''
             -- Highlight groups {{
             do
-              local highlights = ${helpers.toLuaObject config.highlightOverride}
+              local highlights = ${lib.nixvim.toLuaObject config.highlightOverride}
 
               for k,v in pairs(highlights) do
                 vim.api.nvim_set_hl(0, k, v)
@@ -72,7 +72,7 @@
           ''
             -- Match groups {{
             do
-              local match = ${helpers.toLuaObject config.match}
+              local match = ${lib.nixvim.toLuaObject config.match}
 
               for k,v in pairs(match) do
                 vim.fn.matchadd(k, v)

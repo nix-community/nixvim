@@ -432,14 +432,14 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       # NOTE: Upstream state that the parser MUST be at the beginning of runtimepath.
       # Otherwise the parsers from Neovim takes precedent, which may be incompatible with some queries.
       (optionalString (cfg.settings.parser_install_dir != null) ''
-        vim.opt.runtimepath:prepend(${helpers.toLuaObject cfg.settings.parser_install_dir})
+        vim.opt.runtimepath:prepend(${lib.nixvim.toLuaObject cfg.settings.parser_install_dir})
       '')
       + ''
-        require('nvim-treesitter.configs').setup(${helpers.toLuaObject cfg.settings})
+        require('nvim-treesitter.configs').setup(${lib.nixvim.toLuaObject cfg.settings})
       ''
       + (optionalString (cfg.languageRegister != { }) ''
         do
-          local __parserFiletypeMappings = ${helpers.toLuaObject cfg.languageRegister}
+          local __parserFiletypeMappings = ${lib.nixvim.toLuaObject cfg.languageRegister}
 
           for parser_name, ft in pairs(__parserFiletypeMappings) do
             require('vim.treesitter.language').register(parser_name, ft)

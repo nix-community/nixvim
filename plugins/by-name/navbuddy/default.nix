@@ -267,7 +267,7 @@ in
 
       extraConfigLua = ''
         local actions = require("nvim-navbuddy.actions")
-        require('nvim-navbuddy').setup(${helpers.toLuaObject setupOptions})
+        require('nvim-navbuddy').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }

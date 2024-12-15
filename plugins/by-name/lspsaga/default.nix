@@ -636,7 +636,7 @@ in
           // cfg.extraOptions;
       in
       ''
-        require('lspsaga').setup(${helpers.toLuaObject setupOptions})
+        require('lspsaga').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

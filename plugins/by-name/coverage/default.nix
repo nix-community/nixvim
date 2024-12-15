@@ -267,7 +267,7 @@ in
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
-        require("coverage").setup(${helpers.toLuaObject setupOptions})
+        require("coverage").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
 
       keymaps = flatten (

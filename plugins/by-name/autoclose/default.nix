@@ -86,7 +86,7 @@ in
         };
       in
       ''
-        require('autoclose').setup(${helpers.toLuaObject setupOptions})
+        require('autoclose').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
   };
 }

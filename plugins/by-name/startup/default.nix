@@ -334,10 +334,10 @@ in
         } // sections;
       in
       ''
-        require('startup').setup(${helpers.toLuaObject setupOptions})
+        require('startup').setup(${lib.nixvim.toLuaObject setupOptions})
       ''
       + (optionalString (
         cfg.userMappings != { }
-      ) "require('startup').create_mappings(${helpers.toLuaObject cfg.userMappings})");
+      ) "require('startup').create_mappings(${lib.nixvim.toLuaObject cfg.userMappings})");
   };
 }

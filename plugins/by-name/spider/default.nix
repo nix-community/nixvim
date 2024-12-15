@@ -74,7 +74,7 @@ in
       keymaps = mappings;
 
       extraConfigLua = ''
-        require("${pluginName}").setup(${helpers.toLuaObject setupOptions})
+        require("${pluginName}").setup(${lib.nixvim.toLuaObject setupOptions})
       '';
     };
 }
