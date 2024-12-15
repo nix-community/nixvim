@@ -12,7 +12,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.image = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.image = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "image.nvim";
 
     package = lib.mkPackageOption pkgs "image.nvim" {

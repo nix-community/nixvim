@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "headlines";
   packPathName = "headlines.nvim";
   package = "headlines-nvim";

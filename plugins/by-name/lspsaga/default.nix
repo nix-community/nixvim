@@ -47,7 +47,7 @@ in
       ];
 
   options = {
-    plugins.lspsaga = helpers.neovim-plugin.extraOptionsOptions // {
+    plugins.lspsaga = lib.nixvim.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "lspsaga.nvim";
 
       package = lib.mkPackageOption pkgs "lspsaga" {

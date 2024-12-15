@@ -15,7 +15,7 @@ in
       let
         keymapOption = helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) str);
       in
-      helpers.neovim-plugin.extraOptionsOptions
+      lib.nixvim.neovim-plugin.extraOptionsOptions
       // {
         enable = mkEnableOption "copilot.lua";
 

@@ -4,7 +4,7 @@
   config,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "otter";
   packPathName = "otter.nvim";
   package = "otter-nvim";

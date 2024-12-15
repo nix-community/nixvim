@@ -83,7 +83,7 @@ in
   options.plugins.illuminate =
     with helpers;
     with defaultNullOpts;
-    helpers.neovim-plugin.extraOptionsOptions
+    lib.nixvim.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "vim-illuminate";
 

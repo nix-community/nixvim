@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "neoclip";
   packPathName = "nvim-neoclip.lua";
   package = "nvim-neoclip-lua";

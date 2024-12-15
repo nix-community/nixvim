@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "zellij";
   packPathName = "zellij.nvim";
   package = "zellij-nvim";

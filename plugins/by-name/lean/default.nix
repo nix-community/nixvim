@@ -10,7 +10,7 @@ let
   cfg = config.plugins.lean;
 in
 {
-  options.plugins.lean = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.lean = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "lean-nvim";
 
     package = lib.mkPackageOption pkgs "lean-nvim" {

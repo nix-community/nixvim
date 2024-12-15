@@ -12,7 +12,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.startup = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.startup = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "startup.nvim";
 
     package = lib.mkPackageOption pkgs "startup.nvim" {

@@ -10,7 +10,7 @@ let
 in
 with lib;
 {
-  options.plugins.lastplace = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.lastplace = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "lastplace";
 
     package = lib.mkPackageOption pkgs "lastplace" {

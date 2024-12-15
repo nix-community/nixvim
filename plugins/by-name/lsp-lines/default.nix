@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "lsp-lines";
   moduleName = "lsp_lines";
   packPathName = "lsp_lines.nvim";

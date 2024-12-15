@@ -52,7 +52,7 @@ in
         '';
       };
     in
-    helpers.neovim-plugin.extraOptionsOptions
+    lib.nixvim.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "neo-tree";
 

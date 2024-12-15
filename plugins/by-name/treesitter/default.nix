@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "treesitter";
   packPathName = "nvim-treesitter";
   moduleName = "nvim-treesitter.configs";

@@ -36,7 +36,7 @@ in
       "hideRootFolder"
     ] "Set `plugins.nvim-tree.renderer.rootFolderLabel` to `false` to hide the root folder.")
   ];
-  options.plugins.nvim-tree = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.nvim-tree = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-tree";
 
     package = lib.mkPackageOption pkgs "nvim-tree" {

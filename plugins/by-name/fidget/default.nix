@@ -142,7 +142,7 @@ in
       ];
 
   options = {
-    plugins.fidget = helpers.neovim-plugin.extraOptionsOptions // {
+    plugins.fidget = lib.nixvim.neovim-plugin.extraOptionsOptions // {
       enable = mkEnableOption "fidget-nvim";
 
       package = lib.mkPackageOption pkgs "fidget-nvim" {

@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "hop";
   packPathName = "hop.nvim";
   package = "hop-nvim";

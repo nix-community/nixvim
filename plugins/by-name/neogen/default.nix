@@ -44,7 +44,7 @@ let
   };
 in
 {
-  options.plugins.neogen = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.neogen = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "neogen";
 
     package = lib.mkPackageOption pkgs "neogen" {

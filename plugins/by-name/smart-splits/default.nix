@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "smart-splits";
   packPathName = "smart-splits.nvim";
   package = "smart-splits-nvim";

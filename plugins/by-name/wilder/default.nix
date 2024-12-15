@@ -63,7 +63,7 @@ in
     )
   ];
 
-  options.plugins.wilder = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.wilder = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "wilder-nvim";
 
     package = lib.mkPackageOption pkgs "wilder-nvim" {

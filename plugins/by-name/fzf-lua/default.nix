@@ -31,7 +31,7 @@ let
     };
   };
 in
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "fzf-lua";
 
   maintainers = [ maintainers.GaetanLepage ];

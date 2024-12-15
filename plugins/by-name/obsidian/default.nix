@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "obsidian";
   packPathName = "obsidian.nvim";
   package = "obsidian-nvim";

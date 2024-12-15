@@ -11,7 +11,7 @@ let
   cfg = config.plugins.${pluginName};
 in
 {
-  options.plugins.${pluginName} = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.${pluginName} = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption pluginName;
 
     package = lib.mkPackageOption pkgs pluginName {

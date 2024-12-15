@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-helpers.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
   name = "ltex-extra";
   packPathName = "ltex_extra.nvim";
   package = "ltex_extra-nvim";

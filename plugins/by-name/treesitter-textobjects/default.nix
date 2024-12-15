@@ -37,7 +37,7 @@ with lib;
           })
         ) { } desc;
     in
-    helpers.neovim-plugin.extraOptionsOptions
+    lib.nixvim.neovim-plugin.extraOptionsOptions
     // {
       enable = mkEnableOption "treesitter-textobjects (requires plugins.treesitter.enable to be true)";
 

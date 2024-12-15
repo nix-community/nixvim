@@ -13,7 +13,7 @@ let
   mkPercentageOpt = default: helpers.defaultNullOpts.mkNullable percentageType (toString default);
 in
 {
-  options.plugins.navbuddy = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.navbuddy = lib.nixvim.neovim-plugin.extraOptionsOptions // {
     enable = mkEnableOption "nvim-navbuddy";
 
     package = lib.mkPackageOption pkgs "nvim-navbuddy" {
