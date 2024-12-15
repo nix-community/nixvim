@@ -55,9 +55,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   '';
 
   imports = [
-    # Introduced on 2024 February 21
-    # TODO: remove ~June 2024
-    ./deprecations.nix
     ./auto-enable.nix
     ./sources
   ];
