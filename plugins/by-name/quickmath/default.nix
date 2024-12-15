@@ -1,29 +1,22 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.quickmath;
+  inherit (lib) types;
 in
-{
-  options.plugins.quickmath = {
-    enable = mkEnableOption "quickmath.nvim";
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "quickmath";
+  packPathName = "quickmath.nvim";
+  package = "quickmath-nvim";
 
-    package = lib.mkPackageOption pkgs "quickmath.nvim" {
-      default = [
-        "vimPlugins"
-        "quickmath-nvim"
-      ];
-    };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
+  extraOptions = {
     keymap = {
-      key = helpers.mkNullOrOption types.str "Keymap to run the `:Quickmath` command.";
+      key = lib.nixvim.mkNullOrOption types.str "Keymap to run the `:Quickmath` command.";
 
-      silent = mkOption {
+      silent = lib.mkOption {
         type = types.bool;
         description = "Whether the quickmath keymap should be silent.";
         default = false;
@@ -31,15 +24,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
+  extraConfig = cfg: {
     keymaps =
       with cfg.keymap;
-      optional (key != null) {
+      lib.optional (key != null) {
         mode = "n";
         inherit key;
-        action = ":Quickmath<CR>";
+        action = "<CMD>Quickmath<CR>";
         options.silent = cfg.keymap.silent;
       };
   };

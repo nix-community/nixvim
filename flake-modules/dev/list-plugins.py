@@ -84,7 +84,6 @@ KNOWN_PATHS: dict[
     "plugins/by-name/nix-develop/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/openscad/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/plantuml-syntax/default.nix": (State.OLD, Kind.VIM, False),
-    "plugins/by-name/quickmath/default.nix": (State.OLD, Kind.VIM, False),  # No options
     "plugins/by-name/rainbow-delimiters/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/treesitter-refactor/default.nix": (State.OLD, Kind.MISC, True),
     "plugins/by-name/treesitter-textobjects/default.nix": (
