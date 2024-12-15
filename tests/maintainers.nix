@@ -1,11 +1,12 @@
 {
   lib,
+  nixpkgsLib,
   runCommandNoCCLocal,
 }:
 let
   inherit (lib) attrNames filter length;
   nixvimList = import ../lib/maintainers.nix;
-  nixpkgsList = lib.maintainers;
+  nixpkgsList = nixpkgsLib.maintainers;
   duplicates = filter (name: nixpkgsList ? ${name}) (attrNames nixvimList);
   count = length duplicates;
 in
