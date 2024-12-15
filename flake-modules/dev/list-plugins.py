@@ -70,7 +70,6 @@ KNOWN_PATHS: dict[
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/dap/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/floaterm/default.nix": (State.OLD, Kind.VIM, False),
-    "plugins/by-name/friendly-snippets/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/gitgutter/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/gitmessenger/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/intellitab/default.nix": (

@@ -1,31 +1,13 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
-let
-  cfg = config.plugins.friendly-snippets;
-in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "friendly-snippets";
 
-  options.plugins.friendly-snippets = {
-    enable = mkEnableOption "friendly-snippets";
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    package = lib.mkPackageOption pkgs "friendly-snippets" {
-      default = [
-        "vimPlugins"
-        "friendly-snippets"
-      ];
-    };
-  };
-
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
+  extraConfig = {
     # Simply add an element to the `fromVscode` list to trigger the import of friendly-snippets
     plugins.luasnip.fromVscode = [ { } ];
   };
