@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "haskell-scope-highlighting";
   packPathName = "haskell-scope-highlighting.nvim";
   package = "haskell-scope-highlighting-nvim";

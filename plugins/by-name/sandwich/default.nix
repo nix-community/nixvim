@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "sandwich";
   packPathName = "vim-sandwich";
   package = "vim-sandwich";

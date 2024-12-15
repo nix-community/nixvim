@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "magma-nvim";
   packPathName = "magma-nvim";

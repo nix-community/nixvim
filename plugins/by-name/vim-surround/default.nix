@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "vim-surround";
   packPathName = "surround.vim";
   package = "vim-surround";

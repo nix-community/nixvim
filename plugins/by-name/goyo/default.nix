@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 with lib;
 mkVimPlugin {
   name = "goyo";

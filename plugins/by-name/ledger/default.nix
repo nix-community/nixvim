@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-with helpers.vim-plugin;
+with lib.nixvim.vim-plugin;
 mkVimPlugin {
   name = "ledger";
   packPathName = "vim-ledger";

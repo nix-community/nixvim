@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "typst-vim";
   packPathName = "typst.vim";
   globalPrefix = "typst_";

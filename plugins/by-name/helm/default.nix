@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-helpers.vim-plugin.mkVimPlugin {
+lib.nixvim.vim-plugin.mkVimPlugin {
   name = "helm";
   packPathName = "vim-helm";
   package = "vim-helm";
