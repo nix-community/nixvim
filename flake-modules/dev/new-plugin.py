@@ -91,6 +91,18 @@ def write_to_file(file_path, content: str):
         f.write(content)
 
 
+def find_project_root(root_identifier):
+    current_path = os.getcwd()
+    while True:
+        if root_identifier in os.listdir(current_path):
+            return current_path
+        parent_path = os.path.dirname(current_path)
+        if parent_path == current_path:
+            return None
+        os.chdir("..")
+        current_path = os.getcwd()
+
+
 # TODO: support interactive unmanaged args
 def main():
     """
@@ -109,8 +121,11 @@ def main():
     name = kebab_case(args.originalName)
 
     # Define paths
-    plugin_path = f"plugins/by-name/{name}/default.nix"
-    test_path = f"tests/test-sources/plugins/by-name/{name}/default.nix"
+    root_identifier = "flake.nix"
+    root_dir = find_project_root(root_identifier)
+
+    plugin_path = f"{root_dir}/plugins/by-name/{name}/default.nix"
+    test_path = f"{root_dir}/tests/test-sources/plugins/by-name/{name}/default.nix"
 
     # Create files
     create_nix_file(
