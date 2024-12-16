@@ -9,12 +9,15 @@ from typing import Optional
 
 QUESTION_MARK = "❔"
 
+# Ignore files that are not plugin definitions
 EXCLUDES: list[str] = [
-    # Not plugin files
+    # Patterns
     "TEMPLATE.nix",
-    "colorschemes/base16/theme-list.nix",
     "deprecations.nix",
+    "renamed-options",
     "helpers.nix",
+    # Specific files
+    "colorschemes/base16/theme-list.nix",
     "plugins/by-name/dap/dapHelpers.nix",
     "plugins/by-name/efmls-configs/packages.nix",
     "plugins/by-name/gitsigns/options.nix",
@@ -194,6 +197,10 @@ def parse_file(path: str) -> Optional[Plugin]:
     ):
         kind = Kind.VIM
         state = State.NEW
+    else:
+        raise ValueError(
+            f"I was not able to categorize `{path}`. Consider adding it to `EXCLUDES` or `KNOWN_PATHS`."
+        )
 
     return Plugin(
         path=path,
