@@ -1,31 +1,15 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
-let
-  cfg = config.plugins.intellitab;
-in
-{
-  options = {
-    plugins.intellitab = {
-      enable = mkEnableOption "intellitab.nvim";
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "intellitab";
+  packPathName = "intellitab.nvim";
+  package = "intellitab-nvim";
 
-      package = lib.mkPackageOption pkgs "intellitab.nvim" {
-        default = [
-          "vimPlugins"
-          "intellitab-nvim"
-        ];
-      };
-    };
-  };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
+  extraConfig = {
     keymaps = [
       {
         mode = "i";

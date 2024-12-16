@@ -1,5 +1,5 @@
 {
   empty = {
-    plugins.intellitab.enable = false;
+    plugins.intellitab.enable = true;
   };
 }

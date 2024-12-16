@@ -71,11 +71,6 @@ KNOWN_PATHS: dict[
     "plugins/by-name/chadtree/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/dap/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/intellitab/default.nix": (
-        State.OLD,
-        Kind.VIM,
-        False,
-    ),  # No options
     "plugins/by-name/leap/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/lint/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/lspkind/default.nix": (State.OLD, Kind.NEOVIM, False),
