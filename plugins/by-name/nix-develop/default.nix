@@ -1,61 +1,67 @@
-{
-  lib,
-  helpers,
-  config,
-  pkgs,
-  ...
-}:
-with lib;
+{ lib, ... }:
 let
-  cfg = config.plugins.nix-develop;
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts toLuaObject;
 in
-{
-  options.plugins.nix-develop = lib.nixvim.neovim-plugin.extraOptionsOptions // {
-    enable = mkEnableOption "nix-develop.nvim";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  name = "nix-develop";
+  packPathName = "nix-develop.nvim";
+  package = "nix-develop-nvim";
+  callSetup = false;
+  hasSettings = false;
 
-    package = lib.mkPackageOption pkgs "nix-develop.nvim" {
-      default = [
-        "vimPlugins"
-        "nix-develop-nvim"
-      ];
-    };
+  maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
-    ignoredVariables = mkOption {
-      type = with types; attrsOf bool;
-      default = { };
-      description = "An attrs specifying the variables should be ignored.";
-      example = {
-        BASHOPTS = true;
-        HOME = true;
-        NIX_BUILD_TOP = true;
-        SHELL = true;
-        TMP = true;
-      };
-    };
+  extraOptions = {
+    ignoredVariables =
+      defaultNullOpts.mkAttrsOf types.bool
+        {
+          BASHOPTS = true;
+          HOME = true;
+          NIX_BUILD_TOP = true;
+          NIX_ENFORCE_PURITY = true;
+          NIX_LOG_FD = true;
+          NIX_REMOTE = true;
+          PPID = true;
+          SHELL = true;
+          SHELLOPTS = true;
+          SSL_CERT_FILE = true;
+          TEMP = true;
+          TEMPDIR = true;
+          TERM = true;
+          TMP = true;
+          TMPDIR = true;
+          TZ = true;
+          UID = true;
+        }
+        ''
+          Variables that should be ignored when generating the environment.
+        '';
 
-    separatedVariables = mkOption {
-      type = with types; attrsOf str;
-      default = { };
-      description = "An attrs specifying the separator to use for particular environment variables.";
-      example = {
-        PATH = ":";
-        XDG_DATA_DIRS = ":";
-      };
-    };
+    separatedVariables =
+      defaultNullOpts.mkAttrsOf types.str
+        {
+          PATH = ":";
+          XDG_DATA_DIRS = ":";
+        }
+        ''
+          Specified separators to use for particular environment variables.
+        '';
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-    extraConfigLua = ''
-      local __ignored_variables = ${lib.nixvim.toLuaObject cfg.ignoredVariables}
-      for ignoredVariable, shouldIgnore in ipairs(__ignored_variables) do
-      	require("nix-develop").ignored_variables[ignoredVariable] = shouldIgnore
-      end
-
-      local __separated_variables = ${lib.nixvim.toLuaObject cfg.separatedVariables}
-      for variable, separator in ipairs(__separated_variables) do
-      	require("nix-develop").separated_variables[variable] = separator
-      end
-    '';
+  extraConfig = cfg: {
+    plugins.nix-develop.luaConfig.content =
+      lib.optionalString (cfg.ignoredVariables != null) ''
+        local ignored_variables = ${toLuaObject cfg.ignoredVariables}
+        for ignored_variable, should_ignore in pairs(ignored_variables) do
+          require("nix-develop").ignored_variables[ignored_variable] = should_ignore
+        end
+      ''
+      + lib.optionalString (cfg.separatedVariables != null) ''
+        local separated_variables = ${toLuaObject cfg.separatedVariables}
+        for separated_variable, separator in pairs(separated_variables) do
+          require("nix-develop").separated_variables[separated_variable] = separator
+        end
+      '';
   };
 }

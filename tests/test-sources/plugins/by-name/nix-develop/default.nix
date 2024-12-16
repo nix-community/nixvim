@@ -10,7 +10,7 @@
         HOME = true;
       };
       separatedVariables = {
-        "LUA_PATH" = ":";
+        LUA_PATH = ":";
       };
     };
   };
