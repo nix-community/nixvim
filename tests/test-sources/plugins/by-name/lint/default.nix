@@ -19,14 +19,17 @@
         dockerfile = [ "hadolint" ];
         terraform = [ "tflint" ];
       };
+
       linters = {
-        phpcs.args = [
-          "-q"
-          "--report=json"
-          "-"
-        ];
-      };
-      customLinters = {
+        phpcs = {
+          cmd = "phpcs";
+          args = [
+            "-q"
+            "--report=json"
+            "-"
+          ];
+        };
+
         foo = {
           cmd = "foo_cmd";
           stdin = true;
