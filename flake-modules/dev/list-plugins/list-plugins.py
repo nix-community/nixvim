@@ -1,4 +1,5 @@
 import glob
+import os
 import re
 from argparse import ArgumentParser, RawTextHelpFormatter
 from dataclasses import dataclass
@@ -166,14 +167,16 @@ def parse_file(path: str) -> Optional[Plugin]:
     with open(path, "r") as f:
         file_content = f.read()
 
-    if path in KNOWN_PATHS:
-        props: tuple[State, Kind, bool] = KNOWN_PATHS[path]
-        return Plugin(
-            path=path,
-            state=props[0],
-            kind=props[1],
-            dep_warnings=props[2],
-        )
+    known_path: str
+    props: tuple[State, Kind, bool]
+    for known_path, props in KNOWN_PATHS.items():
+        if known_path in path:
+            return Plugin(
+                path=path,
+                state=props[0],
+                kind=props[1],
+                dep_warnings=props[2],
+            )
 
     state: State = State.UNKNOWN
     kind: Kind
@@ -216,7 +219,8 @@ def _is_excluded(path: str) -> bool:
 
 
 def main(args) -> None:
-    paths: list[str] = glob.glob(pathname="plugins/**/*.nix", recursive=True)
+    pathname: str = os.path.join(args.root_path, "plugins/**/*.nix")
+    paths: list[str] = glob.glob(pathname=pathname, recursive=True)
     filtered_paths: list[str] = list(filter(_is_excluded, paths))
     filtered_paths.sort()
 
@@ -250,6 +254,13 @@ if __name__ == "__main__":
         If a plugin contains any deprecation warnings.
     """,
         formatter_class=RawTextHelpFormatter,
+    )
+    # TODO: consider automatically localizing the flake's root.
+    parser.add_argument(
+        "--root-path",
+        type=str,
+        default="./",
+        help="The path to the root of the nixvim repo",
     )
     parser.add_argument(
         "-k",
