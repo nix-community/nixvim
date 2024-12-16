@@ -1,59 +1,48 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.vim-bbye;
+  inherit (lib.nixvim) mkNullOrOption;
+  inherit (lib) types;
 in
-{
-  options.plugins.vim-bbye = {
-    enable = mkEnableOption "vim-bbye";
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "vim-bbye";
 
-    package = lib.mkPackageOption pkgs "vim-bbye" {
-      default = [
-        "vimPlugins"
-        "vim-bbye"
-      ];
-    };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    keymapsSilent = mkOption {
+  extraOptions = {
+    keymapsSilent = lib.mkOption {
       type = types.bool;
       description = "Whether vim-bbye keymaps should be silent.";
       default = false;
     };
 
     keymaps = {
-      bdelete = helpers.mkNullOrOption types.str ''
+      bdelete = mkNullOrOption types.str ''
         Keymap for deleting the current buffer.";
       '';
 
-      bwipeout = helpers.mkNullOrOption types.str ''
+      bwipeout = mkNullOrOption types.str ''
         Keymap for completely deleting the current buffer.";
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
+  extraConfig = cfg: {
     keymaps =
-      with cfg.keymaps;
-      helpers.keymaps.mkKeymaps
+      lib.nixvim.keymaps.mkKeymaps
         {
           mode = "n";
           options.silent = cfg.keymapsSilent;
         }
         (
-          (optional (bdelete != null) {
-            key = bdelete;
+          (lib.optional (cfg.keymaps.bdelete != null) {
+            key = cfg.keymaps.bdelete;
             action = ":Bdelete<CR>";
           })
-          ++ (optional (bwipeout != null) {
-            key = bwipeout;
+          ++ (lib.optional (cfg.keymaps.bwipeout != null) {
+            key = cfg.keymaps.bwipeout;
             action = ":Bwipeout<CR>";
           })
         );
