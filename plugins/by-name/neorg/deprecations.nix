@@ -7,13 +7,6 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule (basePluginPath ++ [ "modules" ]) (
-      basePluginPath
-      ++ [
-        "settings"
-        "load"
-      ]
-    ))
     (lib.mkRemovedOptionModule (
       basePluginPath
       ++ [

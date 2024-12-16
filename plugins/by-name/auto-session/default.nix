@@ -14,82 +14,12 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   # TODO: added 204-10-05 remove after 24.11
   deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "logLevel"
-    [
-      "sessionLens"
-      "loadOnSetup"
-    ]
-    [
-      "sessionLens"
-      "themeConf"
-    ]
-    [
-      "sessionLens"
-      "previewer"
-    ]
-    [
-      "sessionControl"
-      "controlDir"
-    ]
-    [
-      "sessionControl"
-      "controlFilename"
-    ]
+  optionsRenamedToSettings = import ./renamed-options.nix;
+  imports = [
+    (lib.mkRemovedOptionModule [ "plugins" "auto-session" "cwdChangeHandling" ] ''
+      Please switch to `cwd_change_handling` with just a boolean value.
+    '')
   ];
-  # NOTE: rename the old settings to use the correct variables
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "auto-session"
-      ];
-      settingsPath = basePluginPath ++ [ "settings" ];
-      nestedAutoSessionPluginPath = basePluginPath ++ [ "autoSession" ];
-    in
-    [
-      (lib.mkRenamedOptionModule (
-        basePluginPath
-        ++ [
-          "autoSave"
-          "enabled"
-        ]
-      ) (settingsPath ++ [ "auto_save" ]))
-      (lib.mkRenamedOptionModule (
-        basePluginPath
-        ++ [
-          "autoRestore"
-          "enabled"
-        ]
-      ) (settingsPath ++ [ "auto_restore" ]))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "bypassSessionSaveFileTypes" ]) (
-        settingsPath ++ [ "bypass_save_filetypes" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "enableLastSession" ]) (
-        settingsPath ++ [ "auto_restore_last_session" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "rootDir" ]) (
-        settingsPath ++ [ "root_dir" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "enabled" ]) (
-        settingsPath ++ [ "enabled" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "createEnabled" ]) (
-        settingsPath ++ [ "auto_create" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "suppressDirs" ]) (
-        settingsPath ++ [ "suppressed_dirs" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "allowedDirs" ]) (
-        settingsPath ++ [ "allowed_dirs" ]
-      ))
-      (lib.mkRenamedOptionModule (nestedAutoSessionPluginPath ++ [ "useGitBranch" ]) (
-        settingsPath ++ [ "use_git_branch" ]
-      ))
-      (lib.mkRemovedOptionModule (basePluginPath ++ [ "cwdChangeHandling" ]) ''
-        Please switch to `cwd_change_handling` with just a boolean value.
-      '')
-    ];
 
   settingsOptions = {
     enabled = defaultNullOpts.mkBool true ''

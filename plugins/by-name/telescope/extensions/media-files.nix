@@ -21,30 +21,27 @@ mkExtension {
         "telescope"
         "extensions"
       ];
+      oldPath = telescopeExtensionsPath ++ [ "media_files" ];
+      newPath = telescopeExtensionsPath ++ [ "media-files" ];
     in
-    mapAttrsToList
-      (
-        oldOptionName: newOptionPath:
-        mkRenamedOptionModule (
-          telescopeExtensionsPath
-          ++ [
-            "media_files"
-            oldOptionName
-          ]
-        ) (telescopeExtensionsPath ++ [ "media-files" ] ++ newOptionPath)
-      )
+    lib.nixvim.mkSettingsRenamedOptionModules oldPath newPath [
+      "enable"
+      "package"
       {
-        enable = [ "enable" ];
-        package = [ "package" ];
-        filetypes = [
+        old = "filetypes";
+        new = [
           "settings"
           "filetypes"
         ];
-        find_cmd = [
+      }
+      {
+        old = "find_cmd";
+        new = [
           "settings"
           "find_cmd"
         ];
-      };
+      }
+    ];
 
   extraOptions = {
     dependencies =

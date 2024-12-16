@@ -26,14 +26,7 @@ let
           ];
           settingsPath = basePluginPath ++ [ "settings" ];
         in
-        builtins.map (
-          option:
-          let
-            optionPath = lib.toList option;
-            optionPathSnakeCase = map lib.nixvim.toSnakeCase optionPath;
-          in
-          lib.mkRenamedOptionModule (basePluginPath ++ optionPath) (settingsPath ++ optionPathSnakeCase)
-        ) optionsRenamedToSettings;
+        lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings;
     };
 
   module =

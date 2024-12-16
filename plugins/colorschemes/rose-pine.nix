@@ -15,6 +15,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   optionsRenamedToSettings = [
     "groups"
     "highlightGroups"
+    {
+      old = "style";
+      new = "dark_variant";
+    }
+    {
+      old = "dimInactive";
+      new = "dim_inactive_windows";
+    }
+    {
+      old = "transparentBackground";
+      new = [
+        "enable"
+        "transparency"
+      ];
+    }
   ];
   imports =
     let
@@ -24,20 +39,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       ];
     in
     [
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "style" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "dark_variant"
-        ]
-      ))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "dimInactive" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "dim_inactive_windows"
-        ]
-      ))
       (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "disableItalics" ]
       ) "Use `colorschemes.rose-pine.settings.enable.italics` instead.")
@@ -47,14 +48,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "transparentFloat" ]
       ) "Use `colorschemes.rose-pine.settings.highlight_groups.NormalFloat` instead.")
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "transparentBackground" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "enable"
-          "transparency"
-        ]
-      ))
     ];
 
   settingsOptions = {

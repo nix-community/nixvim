@@ -15,21 +15,12 @@ mkVimPlugin {
 
   # TODO introduced 2024-03-01: remove 2024-05-01
   deprecateExtraConfig = true;
-  optionsRenamedToSettings = [ "mode" ];
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "emmet"
-        "leader"
-      ]
-      [
-        "plugins"
-        "emmet"
-        "settings"
-        "leader_key"
-      ]
-    )
+  optionsRenamedToSettings = [
+    "mode"
+    {
+      old = "leader";
+      new = "leader_key";
+    }
   ];
 
   settingsOptions = {

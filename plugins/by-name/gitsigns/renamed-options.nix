@@ -1,0 +1,156 @@
+[
+  [
+    "signs"
+    "add"
+    "text"
+  ]
+  [
+    "signs"
+    "add"
+    "showCount"
+  ]
+  [
+    "signs"
+    "change"
+    "text"
+  ]
+  [
+    "signs"
+    "change"
+    "showCount"
+  ]
+  [
+    "signs"
+    "topdelete"
+    "text"
+  ]
+  [
+    "signs"
+    "topdelete"
+    "showCount"
+  ]
+  [
+    "signs"
+    "changedelete"
+    "text"
+  ]
+  [
+    "signs"
+    "changedelete"
+    "showCount"
+  ]
+  [
+    "signs"
+    "untracked"
+    "text"
+  ]
+  [
+    "signs"
+    "untracked"
+    "showCount"
+  ]
+  "worktrees"
+  "signPriority"
+  "signcolumn"
+  "numhl"
+  "linehl"
+  "showDeleted"
+  [
+    "diffOpts"
+    "algorithm"
+  ]
+  [
+    "diffOpts"
+    "internal"
+  ]
+  [
+    "diffOpts"
+    "indentHeuristic"
+  ]
+  [
+    "diffOpts"
+    "vertical"
+  ]
+  [
+    "diffOpts"
+    "linematch"
+  ]
+  "base"
+  "countChars"
+  "maxFileLength"
+  "previewConfig"
+  "attachToUntracked"
+  "updateDebounce"
+  "currentLineBlame"
+  [
+    "currentLineBlameOpts"
+    "virtText"
+  ]
+  [
+    "currentLineBlameOpts"
+    "virtTextPos"
+  ]
+  [
+    "currentLineBlameOpts"
+    "delay"
+  ]
+  [
+    "currentLineBlameOpts"
+    "ignoreWhitespace"
+  ]
+  [
+    "currentLineBlameOpts"
+    "virtTextPriority"
+  ]
+  "trouble"
+  "wordDiff"
+  "debugMode"
+  {
+    old = [
+      "onAttach"
+      "function"
+    ];
+    new = "on_attach";
+  }
+  {
+    old = [
+      "watchGitDir"
+      "enable"
+    ];
+    new = [
+      "watch_gitdir"
+      "enable"
+    ];
+  }
+  {
+    old = [
+      "watchGitDir"
+      "followFiles"
+    ];
+    new = [
+      "watch_gitdir"
+      "follow_files"
+    ];
+  }
+  {
+    old = [
+      "statusFormatter"
+      "function"
+    ];
+    new = "status_formatter";
+  }
+  {
+    old = [
+      "currentLineBlameFormatter"
+      "normal"
+    ];
+    new = "current_line_blame_formatter";
+  }
+  {
+    old = [
+      "currentLineBlameFormatter"
+      "nonCommitted"
+    ];
+    new = "current_line_blame_formatter_nc";
+  }
+]

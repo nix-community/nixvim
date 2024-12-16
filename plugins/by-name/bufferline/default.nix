@@ -82,6 +82,13 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "logging"
         ]
         "customFilter"
+        {
+          old = "diagnosticsUpdateInInsert";
+          new = [
+            "diagnostics"
+            "update_in_insert"
+          ];
+        }
       ];
 
       oldHighlightOptions = [
@@ -142,6 +149,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "pickVisible"
         "pickSelected"
         "offsetSeparator"
+        {
+          old = "trunkMarker";
+          new = "trunc_marker";
+        }
       ];
 
       basePluginPath = [
@@ -155,13 +166,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     in
     [
       (lib.mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) optionsPath)
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "diagnosticsUpdateInInsert" ]) [
-        "diagnostics"
-        "update_in_insert"
-      ])
-      (lib.mkRenamedOptionModule (oldHighlightsPath ++ [ "trunkMarker" ]) (
-        newHighlightsPath ++ [ "trunc_marker" ]
-      ))
     ]
     ++ mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions
     ++ mkSettingsRenamedOptionModules oldHighlightsPath newHighlightsPath oldHighlightOptions;

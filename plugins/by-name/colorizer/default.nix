@@ -25,60 +25,61 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "colorizer"
       ];
 
-      optionsToRename = [
-        "RGB"
-        "RRGGBB"
-        "names"
-        "RRGGBBAA"
-        "AARRGGBB"
-        "rgb_fn"
-        "hsl_fn"
-        "tailwind"
-        "sass"
-        "virtualtext"
-        "virtualtext_inline"
-        "virtualtext_mode"
-        "always_update"
-      ];
-
-      renameOption =
-        optionName:
-        lib.mkRenamedOptionModule
-          (
-            oldPluginPath
-            ++ [
+      # {
+      #   old = ["userDefaultOptions" "RGB"]; }
+      #   new = ["settings" "user_default_options" "RGB"];
+      # }
+      userOptsRenames =
+        map
+          (name: {
+            old = [
               "userDefaultOptions"
-              optionName
-            ]
-          )
-          (
-            newPluginPath
-            ++ [
+              name
+            ];
+            new = [
               "settings"
               "user_default_options"
-              optionName
-            ]
-          );
+              name
+            ];
+          })
+          [
+            "RGB"
+            "RRGGBB"
+            "names"
+            "RRGGBBAA"
+            "AARRGGBB"
+            "rgb_fn"
+            "hsl_fn"
+            "tailwind"
+            "sass"
+            "virtualtext"
+            "virtualtext_inline"
+            "virtualtext_mode"
+            "always_update"
+          ];
+
     in
-    map renameOption optionsToRename
-    ++
-      lib.mapAttrsToList
-        (
-          oldOptionName: newPath:
-          lib.mkRenamedOptionModule (oldPluginPath ++ [ oldOptionName ]) (newPluginPath ++ newPath)
-        )
+    lib.nixvim.mkSettingsRenamedOptionModules oldPluginPath newPluginPath (
+      [
+        "enable"
+        "package"
         {
-          enable = [ "enable" ];
-          package = [ "package" ];
-          fileTypes = [
+          old = "fileTypes";
+          new = [
             "settings"
             "filetypes"
           ];
-          bufTypes = [
+        }
+        {
+          old = "bufTypes";
+          new = [
             "settings"
-            "bufTypes"
+            "buftypes"
           ];
-        };
+        }
+      ]
+      ++ userOptsRenames
+    );
 
   settingsOptions =
     let

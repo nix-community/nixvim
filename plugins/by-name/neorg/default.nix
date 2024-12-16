@@ -46,6 +46,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       "logger"
       "floatPrecision"
     ]
+    {
+      old = "modules";
+      new = "load";
+    }
   ];
   imports = [
     ./deprecations.nix

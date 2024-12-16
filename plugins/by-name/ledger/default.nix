@@ -19,30 +19,15 @@ mkVimPlugin {
   optionsRenamedToSettings = [
     "detailedFirst"
     "foldBlanks"
+    {
+      old = "maxWidth";
+      new = "maxwidth";
+    }
+    {
+      old = "fillString";
+      new = "fillstring";
+    }
   ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "ledger"
-      ];
-    in
-    [
-      (mkRenamedOptionModule (basePluginPath ++ [ "maxWidth" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "maxwidth"
-        ]
-      ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "fillString" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "fillstring"
-        ]
-      ))
-    ];
 
   extraOptions = {
     ledgerPackage = lib.mkPackageOption pkgs "ledger" {

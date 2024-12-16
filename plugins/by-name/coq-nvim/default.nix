@@ -33,32 +33,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   optionsRenamedToSettings = [
     "xdg"
     "autoStart"
-  ];
-  imports =
-    let
-      basePath = [
-        "plugins"
-        "coq-nvim"
+    {
+      old = "recommendedKeymaps";
+      new = [
+        "keymap"
+        "recommended"
       ];
-      settingsPath = basePath ++ [ "settings" ];
-    in
-    [
-      (lib.mkRenamedOptionModule (basePath ++ [ "recommendedKeymaps" ]) (
-        settingsPath
-        ++ [
-          "keymap"
-          "recommended"
-        ]
-      ))
-
-      (lib.mkRenamedOptionModule (basePath ++ [ "alwaysComplete" ]) (
-        settingsPath
-        ++ [
-          "completion"
-          "always"
-        ]
-      ))
-    ];
+    }
+    {
+      old = "alwaysComplete";
+      new = [
+        "completion"
+        "always"
+      ];
+    }
+  ];
 
   callSetup = false;
   settingsOptions = {

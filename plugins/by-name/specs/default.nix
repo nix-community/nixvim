@@ -15,45 +15,44 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   optionsRenamedToSettings = [
     "show_jumps"
     "min_jump"
+    {
+      old = "delay";
+      new = [
+        "popup"
+        "delay_ms"
+      ];
+    }
+    {
+      old = "increment";
+      new = [
+        "popup"
+        "inc_ms"
+      ];
+    }
+    {
+      old = "blend";
+      new = [
+        "popup"
+        "blend"
+      ];
+    }
+    {
+      old = "width";
+      new = [
+        "popup"
+        "width"
+      ];
+    }
   ];
   imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "specs"
-      ];
-      settingsPath = basePluginPath ++ [ "settings" ];
-      renameToPopup =
-        old: new:
-        mkRenamedOptionModule (basePluginPath ++ [ old ]) (
-          settingsPath
-          ++ [
-            "popup"
-            new
-          ]
-        );
-    in
-    [
-      (renameToPopup "delay" "delay_ms")
-      (renameToPopup "increment" "inc_ms")
-      (renameToPopup "blend" "blend")
-      (renameToPopup "width" "width")
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "color" ]
-      ) "Please, use `settings.popup.winhl` directly.")
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "fader" ]
-      ) "Please, use `settings.popup.fader` directly.")
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "resizer" ]
-      ) "Please, use `settings.popup.resizer` directly.")
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "ignored_filetypes" ]
-      ) "Please, use `settings.ignore_filetypes` instead.")
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "ignored_buffertypes" ]
-      ) "Please, use `settings.ignore_buftypes` instead.")
-    ];
+    lib.mapAttrsToList (old: message: mkRemovedOptionModule [ "plugins" "specs" old ] message)
+      {
+        color = "Please, use `settings.popup.winhl` directly.";
+        fader = "Please, use `settings.popup.fader` directly.";
+        resizer = "Please, use `settings.popup.resizer` directly.";
+        ignored_filetypes = "Please, use `settings.ignore_filetypes` instead.";
+        ignored_buffertypes = "Please, use `settings.ignore_buftypes` instead.";
+      };
 
   settingsOptions = {
     show_jumps = helpers.defaultNullOpts.mkBool true ''

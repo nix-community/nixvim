@@ -24,109 +24,12 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "comment"
       ];
       settingsPath = newPluginPath ++ [ "settings" ];
+
+      optionsRenamedToSettings = import ./renamed-options.nix;
     in
     [
       (mkRenamedOptionModule (oldPluginPath ++ [ "enable" ]) (newPluginPath ++ [ "enable" ]))
       (mkRenamedOptionModule (oldPluginPath ++ [ "package" ]) (newPluginPath ++ [ "package" ]))
-      (mkRenamedOptionModule (oldPluginPath ++ [ "padding" ]) (settingsPath ++ [ "padding" ]))
-      (mkRenamedOptionModule (oldPluginPath ++ [ "sticky" ]) (settingsPath ++ [ "sticky" ]))
-      (mkRenamedOptionModule (oldPluginPath ++ [ "ignore" ]) (settingsPath ++ [ "ignore" ]))
-      (mkRenamedOptionModule
-        (
-          oldPluginPath
-          ++ [
-            "toggler"
-            "line"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "toggler"
-            "line"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          oldPluginPath
-          ++ [
-            "toggler"
-            "block"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "toggler"
-            "block"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          oldPluginPath
-          ++ [
-            "opleader"
-            "line"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "opleader"
-            "line"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          oldPluginPath
-          ++ [
-            "opleader"
-            "block"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "opleader"
-            "block"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          oldPluginPath
-          ++ [
-            "mappings"
-            "basic"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "mappings"
-            "basic"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          oldPluginPath
-          ++ [
-            "mappings"
-            "extra"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "mappings"
-            "extra"
-          ]
-        )
-      )
       (mkRemovedOptionModule (
         oldPluginPath
         ++ [
@@ -134,9 +37,8 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "extended"
         ]
       ) "This option has been removed upstream.")
-      (mkRenamedOptionModule (oldPluginPath ++ [ "preHook" ]) (settingsPath ++ [ "pre_hook" ]))
-      (mkRenamedOptionModule (oldPluginPath ++ [ "postHook" ]) (settingsPath ++ [ "post_hook" ]))
-    ];
+    ]
+    ++ (lib.nixvim.mkSettingsRenamedOptionModules oldPluginPath settingsPath optionsRenamedToSettings);
 
   settingsOptions = {
     padding = helpers.defaultNullOpts.mkBool true ''

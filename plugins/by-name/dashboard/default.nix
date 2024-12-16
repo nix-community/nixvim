@@ -12,73 +12,84 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   maintainers = [ maintainers.MattSturgeon ];
 
   # TODO introduced 2024-05-30: remove 2024-09-01
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "dashboard"
+  optionsRenamedToSettings = [
+    {
+      old = "header";
+      new = [
+        "config"
+        "header"
       ];
-    in
+    }
+    {
+      old = "footer";
+      new = [
+        "config"
+        "footer"
+      ];
+    }
+    {
+      old = "center";
+      new = [
+        "config"
+        "shortcut"
+      ];
+    }
+    {
+      old = "hideStatusline";
+      new = [
+        "hide"
+        "statusline"
+      ];
+    }
+    {
+      old = "hideTabline";
+      new = [
+        "hide"
+        "tabline"
+      ];
+    }
     [
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "sessionDirectory" ]
-      ) "This plugin no longer has session support.")
+      "preview"
+      "command"
     ]
-    ++ (mapAttrsToList
-      (
-        old: new:
-        mkRenamedOptionModule (basePluginPath ++ [ old ]) (basePluginPath ++ [ "settings" ] ++ new)
-      )
-      {
-        header = [
-          "config"
-          "header"
-        ];
-        footer = [
-          "config"
-          "footer"
-        ];
-        center = [
-          "config"
-          "shortcut"
-        ];
-        hideStatusline = [
-          "hide"
-          "statusline"
-        ];
-        hideTabline = [
-          "hide"
-          "tabline"
-        ];
-      }
-    )
-    ++ (mapAttrsToList
-      (
-        old: new:
-        mkRenamedOptionModule
-          (
-            basePluginPath
-            ++ [
-              "preview"
-              old
-            ]
-          )
-          (
-            basePluginPath
-            ++ [
-              "settings"
-              "preview"
-              new
-            ]
-          )
-      )
-      {
-        command = "command";
-        file = "file_path";
-        height = "file_height";
-        width = "file_width";
-      }
-    );
+    {
+      old = [
+        "preview"
+        "file"
+      ];
+      new = [
+        "preview"
+        "file_path"
+      ];
+    }
+    {
+      old = [
+        "preview"
+        "height"
+      ];
+      new = [
+        "preview"
+        "file_height"
+      ];
+    }
+    {
+      old = [
+        "preview"
+        "width"
+      ];
+      new = [
+        "preview"
+        "file_width"
+      ];
+    }
+  ];
+  imports = [
+    (mkRemovedOptionModule [
+      "plugins"
+      "dashboard"
+      "sessionDirectory"
+    ] "This plugin no longer has session support.")
+  ];
 
   settingsExample = {
     theme = "hyper";

@@ -13,302 +13,158 @@ let
   settingsPath = newPluginBasePath ++ [ "settings" ];
 
   renamedOptions = [
-    {
-      old = [
-        "performance"
-        "debounce"
-      ];
-    }
-    {
-      old = [
-        "performance"
-        "throttle"
-      ];
-    }
-    {
-      old = [
-        "performance"
-        "fetchingTimeout"
-      ];
-      new = [
-        "performance"
-        "fetching_timeout"
-      ];
-    }
-    {
-      old = [
-        "performance"
-        "asyncBudget"
-      ];
-      new = [
-        "performance"
-        "async_budget"
-      ];
-    }
-    {
-      old = [
-        "performance"
-        "maxViewEntries"
-      ];
-      new = [
-        "performance"
-        "max_view_entries"
-      ];
-    }
-    { old = [ "mapping" ]; }
-    {
-      old = [
-        "completion"
-        "keywordLength"
-      ];
-      new = [
-        "completion"
-        "keyword_length"
-      ];
-    }
-    {
-      old = [
-        "completion"
-        "keywordPattern"
-      ];
-      new = [
-        "completion"
-        "keyword_pattern"
-      ];
-    }
-    {
-      old = [
-        "completion"
-        "autocomplete"
-      ];
-    }
-    {
-      old = [
-        "completion"
-        "completeopt"
-      ];
-    }
-    {
-      old = [
-        "confirmation"
-        "getCommitCharacters"
-      ];
-      new = [
-        "confirmation"
-        "get_commit_characters"
-      ];
-    }
-    {
-      old = [
-        "formatting"
-        "expandableIndicator"
-      ];
-      new = [
-        "formatting"
-        "expandable_indicator"
-      ];
-    }
-    {
-      old = [
-        "formatting"
-        "fields"
-      ];
-    }
-    {
-      old = [
-        "formatting"
-        "format"
-      ];
-    }
-    {
-      old = [
-        "matching"
-        "disallowFuzzyMatching"
-      ];
-      new = [
-        "matching"
-        "disallow_fuzzy_matching"
-      ];
-    }
-    {
-      old = [
-        "matching"
-        "disallowFullfuzzyMatching"
-      ];
-      new = [
-        "matching"
-        "disallow_fullfuzzy_matching"
-      ];
-    }
-    {
-      old = [
-        "matching"
-        "disallowPartialFuzzyMatching"
-      ];
-      new = [
-        "matching"
-        "disallow_partial_fuzzy_matching"
-      ];
-    }
-    {
-      old = [
-        "matching"
-        "disallowPartialMatching"
-      ];
-      new = [
-        "matching"
-        "disallow_partial_matching"
-      ];
-    }
-    {
-      old = [
-        "matching"
-        "disallowPrefixUnmatching"
-      ];
-      new = [
-        "matching"
-        "disallow_prefix_unmatching"
-      ];
-    }
-    {
-      old = [
-        "sorting"
-        "priorityWeight"
-      ];
-      new = [
-        "sorting"
-        "priority_weight"
-      ];
-    }
-    {
-      old = [
-        "view"
-        "entries"
-      ];
-    }
-    {
-      old = [
-        "view"
-        "docs"
-        "autoOpen"
-      ];
-      new = [
-        "view"
-        "docs"
-        "auto_open"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "border"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "winhighlight"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "zindex"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "scrolloff"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "colOffset"
-      ];
-      new = [
-        "window"
-        "completion"
-        "col_offset"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "sidePadding"
-      ];
-      new = [
-        "window"
-        "completion"
-        "side_padding"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "completion"
-        "scrollbar"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "documentation"
-        "border"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "documentation"
-        "winhighlight"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "documentation"
-        "zindex"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "documentation"
-        "maxWidth"
-      ];
-      new = [
-        "window"
-        "documentation"
-        "max_width"
-      ];
-    }
-    {
-      old = [
-        "window"
-        "documentation"
-        "maxHeight"
-      ];
-      new = [
-        "window"
-        "documentation"
-        "max_height"
-      ];
-    }
-    { old = [ "experimental" ]; }
+    [
+      "performance"
+      "debounce"
+    ]
+    [
+      "performance"
+      "throttle"
+    ]
+    [
+      "performance"
+      "fetchingTimeout"
+    ]
+    [
+      "performance"
+      "asyncBudget"
+    ]
+    [
+      "performance"
+      "maxViewEntries"
+    ]
+    "mapping"
+    [
+      "completion"
+      "keywordLength"
+    ]
+    [
+      "completion"
+      "keywordPattern"
+    ]
+    [
+      "completion"
+      "autocomplete"
+    ]
+    [
+      "completion"
+      "completeopt"
+    ]
+    [
+      "confirmation"
+      "getCommitCharacters"
+    ]
+    [
+      "formatting"
+      "expandableIndicator"
+    ]
+    [
+      "formatting"
+      "fields"
+    ]
+    [
+      "formatting"
+      "format"
+    ]
+    [
+      "matching"
+      "disallowFuzzyMatching"
+    ]
+    [
+      "matching"
+      "disallowFullfuzzyMatching"
+    ]
+    [
+      "matching"
+      "disallowPartialFuzzyMatching"
+    ]
+    [
+      "matching"
+      "disallowPartialMatching"
+    ]
+    [
+      "matching"
+      "disallowPrefixUnmatching"
+    ]
+    [
+      "sorting"
+      "priorityWeight"
+    ]
+    [
+      "view"
+      "entries"
+    ]
+    [
+      "view"
+      "docs"
+      "autoOpen"
+    ]
+    [
+      "window"
+      "completion"
+      "border"
+    ]
+    [
+      "window"
+      "completion"
+      "winhighlight"
+    ]
+    [
+      "window"
+      "completion"
+      "zindex"
+    ]
+    [
+      "window"
+      "completion"
+      "scrolloff"
+    ]
+    [
+      "window"
+      "completion"
+      "colOffset"
+    ]
+    [
+      "window"
+      "completion"
+      "sidePadding"
+    ]
+    [
+      "window"
+      "completion"
+      "scrollbar"
+    ]
+    [
+      "window"
+      "documentation"
+      "border"
+    ]
+    [
+      "window"
+      "documentation"
+      "winhighlight"
+    ]
+    [
+      "window"
+      "documentation"
+      "zindex"
+    ]
+    [
+      "window"
+      "documentation"
+      "maxWidth"
+    ]
+    [
+      "window"
+      "documentation"
+      "maxHeight"
+    ]
+    "experimental"
   ];
 
-  renameWarnings = map (
-    rename:
-    mkRenamedOptionModule (oldPluginBasePath ++ rename.old) (settingsPath ++ (rename.new or rename.old))
-  ) renamedOptions;
+  renameWarnings =
+    lib.nixvim.mkSettingsRenamedOptionModules oldPluginBasePath settingsPath
+      renamedOptions;
 in
 {
   imports = renameWarnings ++ [

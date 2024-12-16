@@ -13,42 +13,72 @@ mkVimPlugin {
 
   # TODO introduced 2024-02-22: remove 2024-04-22
   deprecateExtraConfig = true;
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "undotree"
-      ];
-    in
-    mapAttrsToList
-      (
-        old: new:
-        mkRenamedOptionModule (basePluginPath ++ [ old ]) (
-          basePluginPath
-          ++ [
-            "settings"
-            new
-          ]
-        )
-      )
-      {
-        windowLayout = "WindowLayout";
-        shortIndicators = "ShortIndicators";
-        windowWidth = "WindowWidth";
-        diffHeight = "DiffHeight";
-        autoOpenDiff = "AutoOpenDiff";
-        focusOnToggle = "FocusOnToggle";
-        treeNodeShape = "TreeNodeShape";
-        diffCommand = "DiffCommand";
-        relativeTimestamp = "RelativeTimestamp";
-        highlightChangedText = "HighlightChangedText";
-        highlightChangesWithSign = "HighlightChangesWithSign";
-        highlightSyntaxAdd = "HighlightSyntaxAdd";
-        highlightSyntaxChange = "HighlightSyntaxChange";
-        highlightSyntaxDel = "HighlightSyntaxDel";
-        showHelpLine = "ShowHelpLine";
-        showCursorLine = "ShowCursorLine";
-      };
+  optionsRenamedToSettings = [
+    {
+      old = "windowLayout";
+      new = "WindowLayout";
+    }
+    {
+      old = "shortIndicators";
+      new = "ShortIndicators";
+    }
+    {
+      old = "windowWidth";
+      new = "WindowWidth";
+    }
+    {
+      old = "diffHeight";
+      new = "DiffHeight";
+    }
+    {
+      old = "autoOpenDiff";
+      new = "AutoOpenDiff";
+    }
+    {
+      old = "focusOnToggle";
+      new = "FocusOnToggle";
+    }
+    {
+      old = "treeNodeShape";
+      new = "TreeNodeShape";
+    }
+    {
+      old = "diffCommand";
+      new = "DiffCommand";
+    }
+    {
+      old = "relativeTimestamp";
+      new = "RelativeTimestamp";
+    }
+    {
+      old = "highlightChangedText";
+      new = "HighlightChangedText";
+    }
+    {
+      old = "highlightChangesWithSign";
+      new = "HighlightChangesWithSign";
+    }
+    {
+      old = "highlightSyntaxAdd";
+      new = "HighlightSyntaxAdd";
+    }
+    {
+      old = "highlightSyntaxChange";
+      new = "HighlightSyntaxChange";
+    }
+    {
+      old = "highlightSyntaxDel";
+      new = "HighlightSyntaxDel";
+    }
+    {
+      old = "showHelpLine";
+      new = "ShowHelpLine";
+    }
+    {
+      old = "showCursorLine";
+      new = "ShowCursorLine";
+    }
+  ];
 
   settingsExample = {
     WindowLayout = 4;

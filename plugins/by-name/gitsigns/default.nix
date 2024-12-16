@@ -15,114 +15,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   # TODO: introduced 2024-03-12, remove on 2024-05-12
   deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    [
-      "signs"
-      "add"
-      "text"
-    ]
-    [
-      "signs"
-      "add"
-      "showCount"
-    ]
-    [
-      "signs"
-      "change"
-      "text"
-    ]
-    [
-      "signs"
-      "change"
-      "showCount"
-    ]
-    [
-      "signs"
-      "topdelete"
-      "text"
-    ]
-    [
-      "signs"
-      "topdelete"
-      "showCount"
-    ]
-    [
-      "signs"
-      "changedelete"
-      "text"
-    ]
-    [
-      "signs"
-      "changedelete"
-      "showCount"
-    ]
-    [
-      "signs"
-      "untracked"
-      "text"
-    ]
-    [
-      "signs"
-      "untracked"
-      "showCount"
-    ]
-    "worktrees"
-    "signPriority"
-    "signcolumn"
-    "numhl"
-    "linehl"
-    "showDeleted"
-    [
-      "diffOpts"
-      "algorithm"
-    ]
-    [
-      "diffOpts"
-      "internal"
-    ]
-    [
-      "diffOpts"
-      "indentHeuristic"
-    ]
-    [
-      "diffOpts"
-      "vertical"
-    ]
-    [
-      "diffOpts"
-      "linematch"
-    ]
-    "base"
-    "countChars"
-    "maxFileLength"
-    "previewConfig"
-    "attachToUntracked"
-    "updateDebounce"
-    "currentLineBlame"
-    [
-      "currentLineBlameOpts"
-      "virtText"
-    ]
-    [
-      "currentLineBlameOpts"
-      "virtTextPos"
-    ]
-    [
-      "currentLineBlameOpts"
-      "delay"
-    ]
-    [
-      "currentLineBlameOpts"
-      "ignoreWhitespace"
-    ]
-    [
-      "currentLineBlameOpts"
-      "virtTextPriority"
-    ]
-    "trouble"
-    "wordDiff"
-    "debugMode"
-  ];
+  optionsRenamedToSettings = import ./renamed-options.nix;
   imports =
     let
       basePluginPaths = [
@@ -165,29 +58,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       helpers.mkDeprecatedSubOptionModule optionPath "Please define the `${hlg}` highlight group instead."
     ) highlightRemovals)
     ++ [
-      (mkRenamedOptionModule (
-        basePluginPaths
-        ++ [
-          "onAttach"
-          "function"
-        ]
-      ) (settingsPath ++ [ "on_attach" ]))
-      (mkRenamedOptionModule
-        (
-          basePluginPaths
-          ++ [
-            "watchGitDir"
-            "enable"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "watch_gitdir"
-            "enable"
-          ]
-        )
-      )
       (mkRemovedOptionModule (
         basePluginPaths
         ++ [
@@ -195,43 +65,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "interval"
         ]
       ) "The option has been removed from upstream.")
-      (mkRenamedOptionModule
-        (
-          basePluginPaths
-          ++ [
-            "watchGitDir"
-            "followFiles"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "watch_gitdir"
-            "follow_files"
-          ]
-        )
-      )
-      (mkRenamedOptionModule (
-        basePluginPaths
-        ++ [
-          "statusFormatter"
-          "function"
-        ]
-      ) (settingsPath ++ [ "status_formatter" ]))
-      (mkRenamedOptionModule (
-        basePluginPaths
-        ++ [
-          "currentLineBlameFormatter"
-          "normal"
-        ]
-      ) (settingsPath ++ [ "current_line_blame_formatter" ]))
-      (mkRenamedOptionModule (
-        basePluginPaths
-        ++ [
-          "currentLineBlameFormatter"
-          "nonCommitted"
-        ]
-      ) (settingsPath ++ [ "current_line_blame_formatter_nc" ]))
       (helpers.mkDeprecatedSubOptionModule (
         settingsPath
         ++ [

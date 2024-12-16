@@ -116,6 +116,22 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       "imgTextFunc"
     ]
     "yamlParser"
+    {
+      old = "finder";
+      new = [
+        "settings"
+        "picker"
+        "name"
+      ];
+    }
+    # https://github.com/epwalsh/obsidian.nvim/blob/656d9c2c64528839db8b2d9a091843b3c90155a2/CHANGELOG.md?plain=1#L184
+    {
+      old = [
+        "completion"
+        "newNotesLocation"
+      ];
+      new = "new_notes_location";
+    }
   ];
   imports =
     let
@@ -130,32 +146,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         mkRemovedOptionModule (
           basePluginPath ++ [ "workspaces" ]
         ) "Please use `plugins.obsidian.settings.workspaces` instead."
-      )
-      (mkRenamedOptionModule (basePluginPath ++ [ "finder" ]) (
-        basePluginPath
-        ++ [
-          "settings"
-          "picker"
-          "name"
-        ]
-      ))
-      (
-        # https://github.com/epwalsh/obsidian.nvim/blob/656d9c2c64528839db8b2d9a091843b3c90155a2/CHANGELOG.md?plain=1#L184
-        mkRenamedOptionModule
-          (
-            basePluginPath
-            ++ [
-              "completion"
-              "newNotesLocation"
-            ]
-          )
-          (
-            basePluginPath
-            ++ [
-              "settings"
-              "new_notes_location"
-            ]
-          )
       )
       (
         # We have to remove the option here because the user could set old-style camelCase options in each checkbox element.

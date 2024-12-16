@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkRemovedOptionModule mkRenamedOptionModule types;
+  inherit (lib) mkRemovedOptionModule types;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.neovim-plugin.mkNeovimPlugin {
@@ -18,121 +18,15 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   # TODO introduced 2024-04-07: remove 2024-06-07
   deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "envFile"
-    "encodeUrl"
-    "skipSslVerification"
-    "customDynamicVariables"
-    [
-      "highlight"
-      "timeout"
-    ]
-  ];
+  optionsRenamedToSettings = import ./renamed-options.nix;
   imports =
     let
       basePluginPath = [
         "plugins"
         "rest"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
-      (mkRenamedOptionModule (basePluginPath ++ [ "resultSplitHorizontal" ]) (
-        settingsPath
-        ++ [
-          "result"
-          "split"
-          "horizontal"
-        ]
-      ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "resultSplitInPlace" ]) (
-        settingsPath
-        ++ [
-          "result"
-          "split"
-          "in_place"
-        ]
-      ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "stayInCurrentWindowAfterSplit" ]) (
-        settingsPath
-        ++ [
-          "result"
-          "split"
-          "stay_in_current_window_after_split"
-        ]
-      ))
-      (mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "result"
-            "showUrl"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "result"
-            "behavior"
-            "show_info"
-            "url"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "result"
-            "showHeaders"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "result"
-            "behavior"
-            "show_info"
-            "headers"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "result"
-            "showHttpInfo"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "result"
-            "behavior"
-            "show_info"
-            "http_info"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "result"
-            "showCurlCommand"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "result"
-            "behavior"
-            "show_info"
-            "curl_command"
-          ]
-        )
-      )
       (mkRemovedOptionModule
         (
           basePluginPath
@@ -146,49 +40,20 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           Refer to the documentation for more information.
         ''
       )
-      (mkRenamedOptionModule
+    ]
+    ++
+      map
         (
-          basePluginPath
-          ++ [
-            "result"
-            "formatters"
-          ]
+          option:
+          mkRemovedOptionModule (basePluginPath ++ [ option ]) ''
+            This option has been deprecated upstream.
+          ''
         )
-        (
-          settingsPath
-          ++ [
-            "result"
-            "behavior"
-            "formatters"
-          ]
-        )
-      )
-      (mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "highlight"
-            "enabled"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "highlight"
-            "enable"
-          ]
-        )
-      )
-      (mkRemovedOptionModule (basePluginPath ++ [ "jumpToRequest" ]) ''
-        This option has been deprecated upstream.
-      '')
-      (mkRemovedOptionModule (basePluginPath ++ [ "yankDryRun" ]) ''
-        This option has been deprecated upstream.
-      '')
-      (mkRemovedOptionModule (basePluginPath ++ [ "searchBack" ]) ''
-        This option has been deprecated upstream.
-      '')
-    ];
+        [
+          "jumpToRequest"
+          "yankDryRun"
+          "searchBack"
+        ];
 
   settingsOptions = {
     custom_dynamic_variables = lib.mkOption {

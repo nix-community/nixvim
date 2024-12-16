@@ -193,6 +193,27 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       "initSelection"
       "scopeIncremental"
     ]
+    {
+      old = "customCaptures";
+      new = [
+        "highlight"
+        "custom_captures"
+      ];
+    }
+    {
+      old = "disabledLanguages";
+      new = [
+        "highlight"
+        "disable"
+      ];
+    }
+    {
+      old = "indent";
+      new = [
+        "indent"
+        "enable"
+      ];
+    }
   ];
 
   imports =
@@ -201,30 +222,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "plugins"
         "treesitter"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "moduleConfig" ]) settingsPath)
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "customCaptures" ]) (
-        settingsPath
-        ++ [
-          "highlight"
-          "custom_captures"
-        ]
-      ))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "disabledLanguages" ]) (
-        settingsPath
-        ++ [
-          "highlight"
-          "disable"
-        ]
-      ))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "indent" ]) (
-        settingsPath
-        ++ [
-          "indent"
-          "enable"
-        ]
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "moduleConfig" ]) (
+        basePluginPath ++ [ "settings" ]
       ))
     ];
 

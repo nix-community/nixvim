@@ -32,6 +32,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     "shouldAttach"
     "tempDir"
     "updateInInsert"
+    {
+      old = "sourcesItems";
+      new = "sources";
+    }
   ];
 
   imports =
@@ -45,12 +49,10 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         namespace
         "none-ls"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
       ./sources.nix
       (lib.mkRenamedOptionModule oldPluginPath basePluginPath)
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "sourcesItems" ]) (settingsPath ++ [ "sources" ]))
     ];
 
   settingsExample = {

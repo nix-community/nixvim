@@ -28,27 +28,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     "mapBs"
     "mapCH"
     "mapCW"
+    {
+      old = "disabledFiletypes";
+      new = "disable_filetype";
+    }
+    {
+      old = "enableAfterQuote";
+      new = "enable_afterquote";
+    }
   ];
-  imports =
-    let
-      basePluginPaths = [
-        "plugins"
-        "nvim-autopairs"
-      ];
-      settingsPath = basePluginPaths ++ [ "settings" ];
-    in
-    [
-      (mkRenamedOptionModule (basePluginPaths ++ [ "disabledFiletypes" ]) (
-        settingsPath ++ [ "disable_filetype" ]
-      ))
-      (mkRenamedOptionModule (basePluginPaths ++ [ "enableAfterQuote" ]) (
-        settingsPath ++ [ "enable_afterquote" ]
-      ))
-      (mkRemovedOptionModule (basePluginPaths ++ [ "pairs" ]) ''
-        This option was having no effect.
-        If you want to customize pairs, please use `luaConfig` to define them as described in the plugin documentation.
-      '')
-    ];
+  imports = [
+    (mkRemovedOptionModule [ "plugins" "nvim-autopairs" "pairs" ] ''
+      This option was having no effect.
+      If you want to customize pairs, please use `luaConfig` to define them as described in the plugin documentation.
+    '')
+  ];
 
   settingsOptions = {
     disable_filetype = helpers.defaultNullOpts.mkListOf types.str [

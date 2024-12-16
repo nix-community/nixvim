@@ -15,20 +15,11 @@ mkVimPlugin {
 
   # TODO introduced 2024-03-02: remove 2024-05-02
   deprecateExtraConfig = true;
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "zig"
-        "formatOnSave"
-      ]
-      [
-        "plugins"
-        "zig"
-        "settings"
-        "fmt_autosave"
-      ]
-    )
+  optionsRenamedToSettings = [
+    {
+      old = "formatOnSave";
+      new = "fmt_autosave";
+    }
   ];
 
   settingsOptions = {

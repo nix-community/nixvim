@@ -22,60 +22,53 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
   # TODO introduced 2024-03-15: remove 2024-05-15
   deprecateExtraOptions = true;
-  imports =
-    let
-      basePluginPath = [
+  optionsRenamedToSettings = [
+    "compile"
+    "undercurl"
+    "commentStyle"
+    "functionStyle"
+    "keywordStyle"
+    "statementStyle"
+    "typeStyle"
+    "transparent"
+    "dimInactive"
+    "terminalColors"
+    [
+      "colors"
+      "palette"
+    ]
+    [
+      "colors"
+      "theme"
+    ]
+    "theme"
+    [
+      "background"
+      "dark"
+    ]
+    [
+      "background"
+      "light"
+    ]
+
+  ];
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
         "colorschemes"
         "kanagawa"
-      ];
-    in
-    (map
-      (
-        optionPath:
-        lib.mkRenamedOptionModule (basePluginPath ++ optionPath) (
-          basePluginPath ++ [ "settings" ] ++ optionPath
-        )
-      )
-      [
-        [ "compile" ]
-        [ "undercurl" ]
-        [ "commentStyle" ]
-        [ "functionStyle" ]
-        [ "keywordStyle" ]
-        [ "statementStyle" ]
-        [ "typeStyle" ]
-        [ "transparent" ]
-        [ "dimInactive" ]
-        [ "terminalColors" ]
-        [
-          "colors"
-          "palette"
-        ]
-        [
-          "colors"
-          "theme"
-        ]
-        [ "theme" ]
-        [
-          "background"
-          "dark"
-        ]
-        [
-          "background"
-          "light"
-        ]
+        "overrides"
       ]
-    )
-    ++ [
-      (lib.mkRemovedOptionModule (basePluginPath ++ [ "overrides" ]) ''
+      ''
         Use `colorschemes.kanagawa.settings.overrides` but you now have to add the full function definition:
         ```
           function(colors)
             ...
           end
         ```
-      '')
-    ];
+      ''
+    )
+  ];
 
   settingsOptions = {
     compile = defaultNullOpts.mkBool false ''

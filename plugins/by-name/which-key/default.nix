@@ -77,142 +77,15 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   # TODO: introduced 2024-08-05: remove after 24.11
-  optionsRenamedToSettings = [
-    "hidden"
-    "icons"
-    "ignoreMissing"
-    "keyLabels"
-    "layout"
-    "motions"
-    "operators"
-    [
-      "plugins"
-      "mark"
-    ]
-    [
-      "plugins"
-      "registers"
-    ]
-    [
-      "plugins"
-      "spelling"
-    ]
-    [
-      "plugins"
-      "presets"
-      "textObjects"
-    ]
-    [
-      "plugins"
-      "presets"
-      "operators"
-    ]
-    [
-      "plugins"
-      "presets"
-      "motions"
-    ]
-    [
-      "plugins"
-      "presets"
-      "windows"
-    ]
-    [
-      "plugins"
-      "presets"
-      "nav"
-    ]
-    [
-      "plugins"
-      "presets"
-      "z"
-    ]
-    [
-      "plugins"
-      "presets"
-      "g"
-    ]
-    "popupMappings"
-    "showHelp"
-    "showKeys"
-    "triggersBlackList"
-    "triggersNoWait"
-  ];
-
+  optionsRenamedToSettings = import ./renamed-options.nix;
   imports =
     let
       basePluginPath = [
         "plugins"
         "which-key"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
-      (lib.mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "disable"
-            "buftypes"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "disable"
-            "bt"
-          ]
-        )
-      )
-      (lib.mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "disable"
-            "filetypes"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "disable"
-            "ft"
-          ]
-        )
-      )
-      (lib.mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "window"
-            "winblend"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "win"
-            "wo"
-            "winblend"
-          ]
-        )
-      )
-      (lib.mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "window"
-            "border"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "win"
-            "border"
-          ]
-        )
-      )
       (lib.mkRemovedOptionModule (basePluginPath ++ [ "triggers" ]) ''
         Please use `plugins.which-key.settings.triggers` instead.
 

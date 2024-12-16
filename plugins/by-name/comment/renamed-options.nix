@@ -1,0 +1,31 @@
+[
+  "padding"
+  "sticky"
+  "ignore"
+  [
+    "toggler"
+    "line"
+  ]
+  [
+    "toggler"
+    "block"
+  ]
+  [
+    "opleader"
+    "line"
+  ]
+  [
+    "opleader"
+    "block"
+  ]
+  [
+    "mappings"
+    "basic"
+  ]
+  [
+    "mappings"
+    "extra"
+  ]
+  "preHook"
+  "postHook"
+]

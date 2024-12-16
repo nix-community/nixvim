@@ -1,0 +1,102 @@
+[
+  "hidden"
+  "icons"
+  "ignoreMissing"
+  "keyLabels"
+  "layout"
+  "motions"
+  "operators"
+  [
+    "plugins"
+    "mark"
+  ]
+  [
+    "plugins"
+    "registers"
+  ]
+  [
+    "plugins"
+    "spelling"
+  ]
+  [
+    "plugins"
+    "presets"
+    "textObjects"
+  ]
+  [
+    "plugins"
+    "presets"
+    "operators"
+  ]
+  [
+    "plugins"
+    "presets"
+    "motions"
+  ]
+  [
+    "plugins"
+    "presets"
+    "windows"
+  ]
+  [
+    "plugins"
+    "presets"
+    "nav"
+  ]
+  [
+    "plugins"
+    "presets"
+    "z"
+  ]
+  [
+    "plugins"
+    "presets"
+    "g"
+  ]
+  "popupMappings"
+  "showHelp"
+  "showKeys"
+  "triggersBlackList"
+  "triggersNoWait"
+  {
+    old = [
+      "disable"
+      "buftypes"
+    ];
+    new = [
+      "disable"
+      "bt"
+    ];
+  }
+  {
+    old = [
+      "disable"
+      "filetypes"
+    ];
+    new = [
+      "disable"
+      "ft"
+    ];
+  }
+  {
+    old = [
+      "window"
+      "winblend"
+    ];
+    new = [
+      "win"
+      "wo"
+      "winblend"
+    ];
+  }
+  {
+    old = [
+      "window"
+      "border"
+    ];
+    new = [
+      "win"
+      "border"
+    ];
+  }
+]

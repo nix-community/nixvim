@@ -18,21 +18,10 @@ mkVimPlugin {
   optionsRenamedToSettings = [
     "width"
     "height"
-  ];
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "goyo"
-        "showLineNumbers"
-      ]
-      [
-        "plugins"
-        "goyo"
-        "settings"
-        "linenr"
-      ]
-    )
+    {
+      old = "showLineNumbers";
+      new = "linenr";
+    }
   ];
 
   settingsOptions = {

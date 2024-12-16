@@ -125,6 +125,26 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     "sidebarFiletypes"
     "noNameTitle"
     "tabpages"
+    {
+      old = "excludeFileTypes";
+      new = "exclude_ft";
+    }
+    {
+      old = "excludeFileNames";
+      new = "exclude_name";
+    }
+    {
+      old = [
+        "icons"
+        "filetype"
+        "enable"
+      ];
+      new = [
+        "icons"
+        "filetype"
+        "enabled"
+      ];
+    }
   ];
   imports =
     let
@@ -132,7 +152,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         "plugins"
         "barbar"
       ];
-      settingsPath = basePluginPath ++ [ "settings" ];
     in
     [
       (mkRemovedOptionModule (
@@ -142,12 +161,6 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "silent"
         ]
       ) "Keymaps will be silent anyways. This option has always been useless.")
-      (mkRenamedOptionModule (basePluginPath ++ [ "excludeFileTypes" ]) (
-        settingsPath ++ [ "exclude_ft" ]
-      ))
-      (mkRenamedOptionModule (basePluginPath ++ [ "excludeFileNames" ]) (
-        settingsPath ++ [ "exclude_name" ]
-      ))
       (mkRemovedOptionModule (
         basePluginPath
         ++ [
@@ -155,45 +168,27 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           "diagnostics"
         ]
       ) "Use `settings.icons.diagnostics` instead, but pay attention as the keys have changed.")
-      (mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "icons"
-            "filetype"
-            "enable"
-          ]
-        )
-        (
-          settingsPath
-          ++ [
-            "icons"
-            "filetype"
-            "enabled"
-          ]
-        )
-      )
     ]
-    ++ (map
-      (
-        name:
-        mkRemovedOptionModule (
-          basePluginPath
-          ++ [
-            "icons"
-            name
-          ]
-        ) "Use `settings.icons.${name}` instead, but you should now use the real `snake_case` key names."
-      )
-      [
-        "alternate"
-        "current"
-        "inactive"
-        "modified"
-        "pinned"
-        "visible"
-      ]
-    );
+    ++
+      map
+        (
+          name:
+          mkRemovedOptionModule (
+            basePluginPath
+            ++ [
+              "icons"
+              name
+            ]
+          ) "Use `settings.icons.${name}` instead, but you should now use the real `snake_case` key names."
+        )
+        [
+          "alternate"
+          "current"
+          "inactive"
+          "modified"
+          "pinned"
+          "visible"
+        ];
 
   extraOptions = {
     keymaps = mapAttrs (
