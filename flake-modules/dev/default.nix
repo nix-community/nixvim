@@ -1,7 +1,10 @@
 { lib, inputs, ... }:
 {
   imports =
-    [ ./devshell.nix ]
+    [
+      ./devshell.nix
+      ./list-plugins
+    ]
     ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule
     ++ lib.optional (inputs.treefmt-nix ? flakeModule) inputs.treefmt-nix.flakeModule;
 
