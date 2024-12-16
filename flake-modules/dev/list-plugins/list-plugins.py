@@ -83,7 +83,6 @@ KNOWN_PATHS: dict[
         Kind.NEOVIM,
         True,
     ),
-    "plugins/by-name/vim-matchup/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/colorschemes/base16/default.nix": (State.NEW, Kind.VIM, True),
     "plugins/lsp/default.nix": (State.NEW, Kind.MISC, False),
 }
