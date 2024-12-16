@@ -47,16 +47,45 @@ rec {
         '';
     };
 
+  /*
+    Returns a function that maps
+      [
+        "someOption"
+        ["fooBar" "someSubOption"]
+        { old = "someOtherOption"; new = ["foo_bar" "some_other_option"]}
+      ]
+
+    to
+      [
+        (lib.mkRenamedOptionModule
+          (oldPath ++ ["someOption"])
+          (newPath ++ ["some_option"])
+        )
+        (lib.mkRenamedOptionModule
+          (oldPath ++ ["fooBar" "someSubOption"])
+          (newPath ++ ["foo_bar" "some_sub_option"])
+        )
+        (lib.mkRenamedOptionModule
+          (oldPath ++ ["someOtherOption"])
+          (newPath ++ ["foo_bar" "some_other_option"])
+        )
+      ]
+  */
   mkSettingsRenamedOptionModules =
     oldPrefix: newPrefix:
     map (
-      option':
+      spec:
       let
-        option = lib.toList option';
-        oldPath = oldPrefix ++ option;
-        newPath = newPrefix ++ map lib.nixvim.toSnakeCase option;
+        finalSpec =
+          if lib.isAttrs spec then
+            lib.mapAttrs (_: lib.toList) spec
+          else
+            {
+              old = lib.toList spec;
+              new = map lib.nixvim.toSnakeCase finalSpec.old;
+            };
       in
-      lib.mkRenamedOptionModule oldPath newPath
+      lib.mkRenamedOptionModule (oldPrefix ++ finalSpec.old) (newPrefix ++ finalSpec.new)
     );
 
   # A clone of types.coercedTo, but it prints a warning when oldType is used.
