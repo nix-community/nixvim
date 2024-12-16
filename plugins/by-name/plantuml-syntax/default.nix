@@ -1,44 +1,44 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
 }:
-with lib;
-{
-  options.plugins.plantuml-syntax = {
-    enable = mkEnableOption "plantuml syntax support";
+let
+  inherit (lib.nixvim) defaultNullOpts;
+in
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "plantuml-syntax";
+  globalPrefix = "plantuml_";
 
-    package = lib.mkPackageOption pkgs "plantuml-syntax" {
-      default = [
-        "vimPlugins"
-        "plantuml-syntax"
-      ];
-    };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    setMakeprg = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Set the makeprg to 'plantuml'";
-    };
-    executableScript = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Set the script to be called with makeprg, default to 'plantuml' in PATH";
+  # TODO introduced 2024-03-02: remove 2024-05-02
+  deprecateExtraConfig = true;
+  optionsRenamedToSettings = [
+    "setMakeprg"
+    "executableScript"
+  ];
+
+  extraOptions = {
+    plantumlPackage = lib.mkPackageOption pkgs "plantuml" {
+      nullable = true;
     };
   };
 
-  config =
-    let
-      cfg = config.plugins.plantuml-syntax;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+  extraConfig = cfg: { extraPackages = [ cfg.plantumlPackage ]; };
 
-      globals = {
-        plantuml_set_makeprg = cfg.setMakeprg;
-        plantuml_executable_script = cfg.executableScript;
-      };
-    };
+  settingsOptions = {
+    set_makeprg = defaultNullOpts.mkFlagInt 1 ''
+      Set the makeprg to `plantuml`.
+    '';
+
+    executable_script = defaultNullOpts.mkStr "plantuml" ''
+      Set the script to be called with makeprg, default to `plantuml` in `$PATH`.
+    '';
+  };
+
+  settingsExample = {
+    set_makeprg = true;
+    executable_script = "plantuml";
+  };
 }
