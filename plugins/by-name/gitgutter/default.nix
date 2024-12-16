@@ -1,239 +1,280 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.gitgutter;
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
 in
-{
-  options = {
-    plugins.gitgutter = {
-      enable = mkEnableOption "gitgutter";
+lib.nixvim.vim-plugin.mkVimPlugin {
+  name = "gitgutter";
+  packPathName = "vim-gitgutter";
+  package = "vim-gitgutter";
+  globalPrefix = "gitgutter_";
 
-      package = lib.mkPackageOption pkgs "gitgutter" {
-        default = [
-          "vimPlugins"
-          "gitgutter"
-        ];
-      };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-      gitPackage = lib.mkPackageOption pkgs "git" {
-        nullable = true;
-      };
+  # TODO introduced 2024-12-16: remove after 25.05
+  optionsRenamedToSettings = import ./renamed-options.nix lib;
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "gitgutter"
+      ];
+    in
+    [
+      (lib.mkRemovedOptionModule (
+        basePluginPath ++ [ "grep" ]
+      ) "Please, use `plugins.gitgutter.grepPackage` and/or `plugins.gitgutter.settings.grep`.")
+      (lib.mkRemovedOptionModule (
+        basePluginPath
+        ++ [
+          "signs"
+          "modifiedAbove"
+        ]
+      ) "This option has been removed from upstream")
+    ];
 
-      recommendedSettings = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Use recommended settings";
-      };
+  extraOptions = {
+    recommendedSettings = lib.mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Set recommended neovim option.
+      '';
+    };
 
-      maxSigns = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-        description = "Maximum number of signs to show on the screen. Unlimited by default.";
-      };
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
+    };
 
-      showMessageOnHunkJumping = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Show a message when jumping between hunks";
-      };
-
-      defaultMaps = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Let gitgutter set default mappings";
-      };
-
-      allowClobberSigns = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Don't preserve other signs on the sign column";
-      };
-
-      signPriority = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-        description = "GitGutter's sign priority on the sign column";
-      };
-
-      matchBackgrounds = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Make the background colors match the sign column";
-      };
-
-      signs = mkOption {
-        type =
-          let
-            signOption =
-              desc:
-              mkOption {
-                type = types.nullOr types.str;
-                default = null;
-                description = "Sign for ${desc}";
-              };
-          in
-          types.submodule {
-            options = {
-              added = signOption "added lines";
-              modified = signOption "modified lines";
-              removed = signOption "removed lines";
-              modifiedAbove = signOption "modified line above";
-              removedFirstLine = signOption "a removed first line";
-              removedAboveAndBelow = signOption "lines removed above and  below";
-              modifiedRemoved = signOption "modified and removed lines";
-            };
-          };
-        default = { };
-        description = "Custom signs for the sign column";
-      };
-
-      diffRelativeToWorkingTree = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Make diffs relative to the working tree instead of the index";
-      };
-
-      extraGitArgs = mkOption {
-        type = types.str;
-        default = "";
-        description = "Extra arguments to pass to git";
-      };
-
-      extraDiffArgs = mkOption {
-        type = types.str;
-        default = "";
-        description = "Extra arguments to pass to git diff";
-      };
-
-      grep = mkOption {
-        type = types.nullOr (
-          types.oneOf [
-            (types.submodule {
-              options = {
-                command = mkOption {
-                  type = types.str;
-                  description = "The command to use as a grep alternative";
-                };
-
-                package = mkOption {
-                  type = types.package;
-                  description = "The package of the grep alternative to use";
-                };
-              };
-            })
-            types.str
-          ]
-        );
-        default = null;
-        description = "A non-standard grep to use instead of the default";
-      };
-
-      enableByDefault = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable gitgutter by default";
-      };
-
-      signsByDefault = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Show signs by default";
-      };
-
-      highlightLines = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Highlight lines by default";
-      };
-
-      highlightLineNumbers = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Highlight line numbers by default";
-      };
-
-      runAsync = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Disable this to run git diff syncrhonously instead of asynchronously";
-      };
-
-      previewWinFloating = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Preview hunks on floating windows";
-      };
-
-      useLocationList = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Load chunks into windows's location list instead of the quickfix list";
-      };
-
-      terminalReportFocus = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Let the terminal report its focus status";
-      };
+    grepPackage = lib.mkPackageOption pkgs "gnugrep" {
+      nullable = true;
     };
   };
 
-  config =
-    let
-      grepPackage = if builtins.isAttrs cfg.grep then [ cfg.grep.package ] else [ ];
-      grepCommand = if builtins.isAttrs cfg.grep then cfg.grep.command else cfg.grep;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      opts = mkIf cfg.recommendedSettings {
-        updatetime = 100;
-        foldtext = "gitgutter#fold#foldtext";
-      };
-
-      extraPackages = [ cfg.gitPackage ] ++ grepPackage;
-
-      globals = {
-        gitgutter_max_signs = mkIf (cfg.maxSigns != null) cfg.maxSigns;
-        gitgutter_show_msg_on_hunk_jumping = mkIf (!cfg.showMessageOnHunkJumping) 0;
-        gitgutter_map_keys = mkIf (!cfg.defaultMaps) 0;
-        gitgutter_sign_allow_clobber = mkIf cfg.allowClobberSigns 1;
-        gitgutter_sign_priority = mkIf (cfg.signPriority != null) cfg.signPriority;
-        gitgutter_set_sign_backgrounds = mkIf cfg.matchBackgrounds 1;
-
-        gitgutter_sign_added = mkIf (cfg.signs.added != null) cfg.signs.added;
-        gitgutter_sign_modified = mkIf (cfg.signs.modified != null) cfg.signs.modified;
-        gitgutter_sign_removed = mkIf (cfg.signs.removed != null) cfg.signs.removed;
-        gitgutter_sign_removed_first_line = mkIf (
-          cfg.signs.removedFirstLine != null
-        ) cfg.signs.removedFirstLine;
-        gitgutter_sign_removed_above_and_bellow = mkIf (
-          cfg.signs.removedAboveAndBelow != null
-        ) cfg.signs.removedAboveAndBelow;
-        gitgutter_sign_modified_above = mkIf (cfg.signs.modifiedAbove != null) cfg.signs.modifiedAbove;
-
-        gitgutter_diff_relative_to = mkIf cfg.diffRelativeToWorkingTree "working_tree";
-        gitgutter_git_args = mkIf (cfg.extraGitArgs != "") cfg.extraGitArgs;
-        gitgutter_diff_args = mkIf (cfg.extraDiffArgs != "") cfg.extraDiffArgs;
-
-        gitgutter_grep = mkIf (grepCommand != null) grepCommand;
-
-        gitgutter_enabled = mkIf (!cfg.enableByDefault) 0;
-        gitgutter_signs = mkIf (!cfg.signsByDefault) 0;
-
-        gitgutter_highlight_lines = mkIf (!cfg.highlightLines) 0;
-        gitgutter_highlight_linenrs = mkIf (!cfg.highlightLineNumbers) 0;
-        gitgutter_async = mkIf (!cfg.runAsync) 0;
-        gitgutter_preview_win_floating = mkIf cfg.previewWinFloating 1;
-        gitgutter_use_location_list = mkIf cfg.useLocationList 1;
-
-        gitgutter_terminal_report_focus = mkIf (!cfg.terminalReportFocus) 0;
-      };
+  extraConfig = cfg: {
+    opts = lib.optionalAttrs cfg.recommendedSettings {
+      updatetime = 100;
+      foldtext = "gitgutter#fold#foldtext";
     };
+
+    extraPackages = [
+      cfg.gitPackage
+      cfg.grepPackage
+    ];
+  };
+
+  settingsOptions =
+    {
+      preview_win_location = defaultNullOpts.mkEnumFirstDefault [ "bo" "to" "bel" "abo" ] ''
+        This option determines where the preview window pops up as a result of the
+        `:GitGutterPreviewHunk` command.
+
+        See the end of the `|opening-window|` docs.
+      '';
+
+      git_executable = defaultNullOpts.mkStr' {
+        pluginDefault = "git";
+        example = lib.literalExpression "lib.getExe pkgs.git";
+        description = ''
+          This option determines what `git` binary to use.
+          Set this if git is not on your path.
+        '';
+      };
+
+      git_args = defaultNullOpts.mkStr' {
+        pluginDefault = "";
+        example = ''--gitdir=""'';
+        description = ''
+          Use this option to pass any extra arguments to `git` when running `git-diff`.
+        '';
+      };
+
+      diff_args = defaultNullOpts.mkStr' {
+        pluginDefault = "";
+        example = "-w";
+        description = ''
+          Use this option to pass any extra arguments to `git-diff`.
+        '';
+      };
+
+      diff_relative_to = defaultNullOpts.mkStr' {
+        pluginDefault = "index";
+        example = "working_tree";
+        description = ''
+          By default buffers are diffed against the index.
+          Use this option to diff against the working tree.
+        '';
+      };
+
+      diff_base = defaultNullOpts.mkStr' {
+        pluginDefault = "";
+        example = "";
+        description = ''
+          By default buffers are diffed against the index.
+          Use this option to diff against a revision instead.
+
+          If you are looking at a previous version of a file with _Fugitive_ (e.g. via `:0Gclog`),
+          gitgutter sets the diff base to the parent of the current revision.
+
+          This setting is ignore when the diff is relative to the working tree (`diff_relative_to`).
+        '';
+      };
+
+      grep = defaultNullOpts.mkStr' {
+        pluginDefault = "grep";
+        example = "grep --color=never";
+        description = ''
+          The plugin pipes the output of `git-diff` into `grep` to minimise the amount of data vim has
+          to process.
+          Set this option if `grep` is not on your path.
+
+          `grep` must produce plain-text output without any ANSI escape codes or colours.
+          Use this option to turn off colours if necessary (`grep --color=never` for example).
+
+          If you do not want to use `grep` at all (perhaps to debug why signs are not showing), set
+          this option to an empty string.
+        '';
+      };
+
+      signs = defaultNullOpts.mkBool true ''
+        Determines whether or not to show signs.
+      '';
+
+      highlight_lines = defaultNullOpts.mkBool false ''
+        Determines whether or not to show line highlights.
+      '';
+
+      highlight_linenrs = defaultNullOpts.mkBool false ''
+        Determines whether or not to show line number highlights.
+      '';
+
+      max_signs = defaultNullOpts.mkInt (-1) ''
+        Sets the maximum number of signs to show in a buffer.
+
+        To avoid slowing down the GUI the number of signs can be capped.
+        When the number of changed lines exceeds this value, the plugin removes all signs and displays
+        a warning message.
+
+        When set to `-1` the limit is not applied.
+      '';
+
+      sign_priority = defaultNullOpts.mkUnsignedInt 10 ''
+        Sets the `|sign-priority|` gitgutter assigns to its signs.
+      '';
+
+      sign_allow_clobber = defaultNullOpts.mkBool true ''
+        Determines whether gitgutter preserves non-gitgutter signs.
+        When `true`, gitgutter will not preserve non-gitgutter signs.
+      '';
+    }
+    // (lib.mapAttrs'
+      (n: default: {
+        name = "sign_${n}";
+        value = defaultNullOpts.mkStr default ''
+          Icon for the _${n}_ sign.
+
+          You can use unicode characters but not images.
+          Signs must not take up more than 2 columns.
+        '';
+      })
+      {
+        added = "+";
+        modified = "~";
+        removed = "_";
+        removed_first_line = "‾";
+        removed_above_and_below = "_¯";
+        modified_removed = "~_";
+      }
+    )
+    // {
+      set_sign_backgrounds = defaultNullOpts.mkBool false ''
+        Only applies to existing `GitGutter*` highlight groups.
+        See `|gitgutter-highlights|`.
+
+        Controls whether to override the signs' background colours to match the `|hl-SignColumn|`.
+      '';
+
+      preview_win_floating = defaultNullOpts.mkBool true ''
+        Whether to use floating/popup windows for hunk previews.
+
+        Note that if you use popup windows on Vim you will not be able to stage partial hunks via
+        the preview window.
+      '';
+
+      floating_window_options =
+        defaultNullOpts.mkAttrsOf types.anything
+          {
+            relative = "cursor";
+            row = 1;
+            col = 0;
+            width = 42;
+            height = "&previewheight";
+            style = "minimal";
+          }
+          ''
+            This dictionary is passed directly to `|nvim_open_win()|`.
+          '';
+
+      close_preview_on_escape = defaultNullOpts.mkBool false ''
+        Whether pressing <Esc> in a preview window closes it.
+      '';
+
+      terminal_reports_focus = defaultNullOpts.mkBool true ''
+        Normally the plugin uses `|FocusGained|` to force-update all buffers when Vim receives
+        focus.
+        However some terminals do not report focus events and so the `|FocusGained|` autocommand
+        never fires.
+
+        If this applies to you, either install something like
+        [Terminus](https://github.com/wincent/terminus) to make `|FocusGained|` work or set this
+        option to `false`.
+
+        If you use `tmux`, try this in your tmux.conf:
+        ```
+        set -g focus-events on
+        ```
+
+        When this option is `false`, the plugin force-updates the buffer on `|BufEnter|` (instead of
+        only updating if the buffer's contents has changed since the last update).
+
+      '';
+
+      enabled = defaultNullOpts.mkBool true ''
+        Controls whether or not the plugin is on at startup.
+      '';
+
+      map_keys = defaultNullOpts.mkBool true ''
+        Controls whether or not the plugin provides mappings.
+        See `|gitgutter-mappings|`.
+      '';
+
+      async = defaultNullOpts.mkBool true ''
+        Controls whether or not diffs are run in the background.
+      '';
+
+      log = defaultNullOpts.mkBool false ''
+        When switched on, the plugin logs to `gitgutter.log` in the directory where it is installed.
+        Additionally it logs channel activity to `channel.log`.
+      '';
+
+      use_location_list = defaultNullOpts.mkBool false ''
+        When switched on, the `:GitGutterQuickFix` command populates the location list of the
+        current window instead of the global quickfix list.
+      '';
+
+      show_msg_on_hunk_jumping = defaultNullOpts.mkBool true ''
+        When switched on, a message like "Hunk 4 of 11" is shown on hunk jumping.
+      '';
+    };
+
+  settingsExample = {
+    set_sign_backgrounds = true;
+    sign_modified_removed = "*";
+    sign_priority = 20;
+    preview_win_floating = true;
+  };
 }
