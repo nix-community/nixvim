@@ -32,7 +32,7 @@
             list-plugins --root-path ${self} > $out
           '';
 
-      devshells.default.commands = [
+      devShells.default.commands = [
         {
           name = "list-plugins";
           command = ''${lib.getExe config.packages.list-plugins} "$@"'';
