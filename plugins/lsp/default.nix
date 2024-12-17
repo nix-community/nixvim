@@ -163,13 +163,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
             key: action:
             let
               actionStr = action.action or action;
+              mode = action.mode or "n";
               actionProps = lib.optionalAttrs (builtins.isAttrs action) (
-                builtins.removeAttrs action [ "action" ]
+                builtins.removeAttrs action [
+                  "action"
+                  "mode"
+                ]
               );
             in
             {
-              inherit key;
-              mode = "n";
+              inherit key mode;
               action = lib.nixvim.mkRaw (prefix + actionStr);
 
               options = {
