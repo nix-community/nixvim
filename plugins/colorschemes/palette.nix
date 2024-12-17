@@ -123,7 +123,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
         (
           name: defaultPaletteNames:
           let
-            customPalettesNames = lib.attrNames cfg.settings.customPalettes.${name};
+            customPalettesNames = lib.attrNames cfg.settings.custom_palettes.${name};
             allowedPaletteNames = customPalettesNames ++ defaultPaletteNames;
 
             palette = cfg.settings.palettes.${name};
