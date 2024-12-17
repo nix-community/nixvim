@@ -1,5 +1,29 @@
 { lib }:
-{
+rec {
+  mkSettingsOptionDescription =
+    { name, globalPrefix }:
+    ''
+      The configuration options for **${name}** without the `${globalPrefix}` prefix.
+
+      For example, the following settings are equivialent to these `:setglobal` commands:
+      - `foo_bar = 1` -> `:setglobal ${globalPrefix}foo_bar=1`
+      - `hello = "world"` -> `:setglobal ${globalPrefix}hello="world"`
+      - `some_toggle = true` -> `:setglobal ${globalPrefix}some_toggle`
+      - `other_toggle = false` -> `:setglobal no${globalPrefix}other_toggle`
+    '';
+
+  mkSettingsOption =
+    {
+      options ? { },
+      example ? { },
+      name,
+      globalPrefix,
+    }:
+    lib.nixvim.mkSettingsOption {
+      inherit options example;
+      description = mkSettingsOptionDescription { inherit name globalPrefix; };
+    };
+
   mkVimPlugin =
     {
       name,
@@ -36,18 +60,10 @@
       createSettingsOption = (lib.isString globalPrefix) && (globalPrefix != "");
 
       settingsOption = lib.optionalAttrs createSettingsOption {
-        settings = lib.nixvim.mkSettingsOption {
+        settings = mkSettingsOption {
           options = settingsOptions;
           example = settingsExample;
-          description = ''
-            The configuration options for **${name}** without the `${globalPrefix}` prefix.
-
-            For example, the following settings are equivialent to these `:setglobal` commands:
-            - `foo_bar = 1` -> `:setglobal ${globalPrefix}foo_bar=1`
-            - `hello = "world"` -> `:setglobal ${globalPrefix}hello="world"`
-            - `some_toggle = true` -> `:setglobal ${globalPrefix}some_toggle`
-            - `other_toggle = false` -> `:setglobal no${globalPrefix}other_toggle`
-          '';
+          inherit name globalPrefix;
         };
       };
 
