@@ -47,7 +47,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
       '';
     };
 
-    customPalettes =
+    custom_palettes =
       lib.mapAttrs
         (
           name: colorNames:
