@@ -29,9 +29,10 @@ in
 {
   options = {
     extraPlugins = mkOption {
-      type = with types; listOf (either package pluginWithConfigType);
+      type = with types; listOf (nullOr (either package pluginWithConfigType));
       default = [ ];
       description = "List of vim plugins to install";
+      apply = builtins.filter (p: p != null);
     };
 
     extraPackages = mkOption {
