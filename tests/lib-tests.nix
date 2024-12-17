@@ -61,6 +61,17 @@ let
       expected = ''{ foo = "bar", qux = { 1, 2, 3 } }'';
     };
 
+    testApplyPrefixToAttrs = {
+      expr = lib.nixvim.applyPrefixToAttrs "prefix_" {
+        foo = 1;
+        bar = 2;
+      };
+      expected = {
+        prefix_foo = 1;
+        prefix_bar = 2;
+      };
+    };
+
     testToLuaObjectRawLua = {
       expr = lib.nixvim.toLuaObject { __raw = "<lua code>"; };
       expected = "<lua code>";

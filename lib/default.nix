@@ -67,6 +67,7 @@ lib.fix (
       ;
 
     inherit (self.utils)
+      applyPrefixToAttrs
       concatNonEmptyLines
       emptyTable
       enableExceptInTests

@@ -113,7 +113,7 @@
                 extraPlugins = extraPlugins ++ [
                   (cfg.packageDecorator cfg.package)
                 ];
-                globals = lib.mapAttrs' (n: lib.nameValuePair (globalPrefix + n)) (cfg.settings or { });
+                globals = lib.nixvim.applyPrefixToAttrs globalPrefix (cfg.settings or { });
               }
               (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
                 colorscheme = lib.mkDefault colorscheme;

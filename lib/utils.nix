@@ -21,6 +21,23 @@ rec {
   };
 
   /**
+    Add a prefix to the keys of an attrs.
+
+    # Example
+    ```nix
+    applyPrefixToAttrs "prefix_" { foo = 1; bar = 2; }
+    => { prefix_foo = 1; prefix_bar = 2; }
+    ```
+
+    # Type
+
+    ```
+    applyPrefixToAttrs :: String -> AttrSet -> AttrSet
+    ```
+  */
+  applyPrefixToAttrs = prefix: lib.mapAttrs' (n: lib.nameValuePair (prefix + n));
+
+  /**
     Turn all the keys of an attrs into raw lua.
 
     # Example
