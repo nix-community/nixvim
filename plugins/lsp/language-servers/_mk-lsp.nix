@@ -25,12 +25,13 @@
   lib,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.lsp.servers.${name};
   opts = options.plugins.lsp.servers.${name};
 
   enabled = config.plugins.lsp.enable && cfg.enable;
+
+  inherit (lib) mkOption types;
 in
 {
   meta.nixvimInfo = {
@@ -46,7 +47,7 @@ in
 
   options = {
     plugins.lsp.servers.${name} = {
-      enable = mkEnableOption description;
+      enable = lib.mkEnableOption description;
 
       package =
         if lib.isOption package then
@@ -132,7 +133,7 @@ in
     } // extraOptions;
   };
 
-  config = mkIf enabled {
+  config = lib.mkIf enabled {
     extraPackages = [ cfg.package ];
 
     plugins.lsp.enabledServers = [
@@ -144,7 +145,7 @@ in
           on_attach = lib.nixvim.ifNonNull' cfg.onAttach (
             lib.nixvim.mkRaw ''
               function(client, bufnr)
-                ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
+                ${lib.optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
                 ${cfg.onAttach.function}
               end
             ''
@@ -168,10 +169,10 @@ in
         "servers"
       ];
       basePluginPath = basePath ++ [ name ];
-      basePluginPathString = concatStringsSep "." basePluginPath;
+      basePluginPathString = builtins.concatStringsSep "." basePluginPath;
     in
     [
-      (mkRemovedOptionModule (
+      (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
     ]
@@ -187,7 +188,7 @@ in
     )
     # Add an alias (with warning) for the lspconfig server name, if different to `name`.
     # Note: users may use lspconfig's docs to guess the `plugins.lsp.servers.*` name
-    ++ (optional (name != serverName) (
-      mkRenamedOptionModule (basePath ++ [ serverName ]) basePluginPath
+    ++ (lib.optional (name != serverName) (
+      lib.mkRenamedOptionModule (basePath ++ [ serverName ]) basePluginPath
     ));
 }
