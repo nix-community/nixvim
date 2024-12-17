@@ -210,7 +210,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
 
                   path = mkOption {
                     type = with lib.types; maybeRaw str;
-                    description = "The of the workspace.";
+                    description = "The path of the workspace.";
                   };
 
                   overrides = opts;
