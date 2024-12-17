@@ -7,26 +7,30 @@
     plugins.openscad = {
       enable = true;
 
-      fuzzyFinder = "skim";
-      cheatsheetWindowBlend = 15;
-      loadSnippets = false;
-      autoOpen = false;
-
-      keymaps.enable = false;
+      settings = {
+        fuzzy_finder = "skim";
+        cheatsheet_window_blend = 15;
+        load_snippets = false;
+        auto_open = false;
+        default_mappings = true;
+        cheatsheet_toggle_key = "<Enter>";
+        help_trig_key = "<A-h>";
+        help_manual_trig_key = "<A-m>";
+        exec_openscad_trig_key = "<A-o>";
+        top_toggle = "<A-c>";
+      };
     };
   };
 
-  keymaps = {
+  example = {
     plugins.openscad = {
       enable = true;
 
-      keymaps = {
-        enable = true;
-        cheatsheetToggle = "<Enter>";
-        helpTrigger = "<A-h>";
-        helpManualTrigger = "<A-m>";
-        execOpenSCADTrigger = "<A-o>";
-        topToggle = "<A-c>";
+      settings = {
+        load_snippets = true;
+        fuzzy_finder = "fzf";
+        cheatsheet_window_blend = 15;
+        auto_open = true;
       };
     };
   };

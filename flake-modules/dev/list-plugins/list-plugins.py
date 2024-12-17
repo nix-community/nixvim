@@ -32,6 +32,7 @@ EXCLUDES: list[str] = [
     "plugins/by-name/none-ls/prettierd.nix",
     "plugins/by-name/none-ls/settings.nix",
     "plugins/by-name/none-ls/sources.nix",
+    "plugins/by-name/openscad/fuzzy-finder-plugin-option.nix",
     "plugins/by-name/rustaceanvim/renamed-options.nix",
     "plugins/by-name/rustaceanvim/settings-options.nix",
     "plugins/by-name/startify/options.nix",
@@ -75,7 +76,6 @@ KNOWN_PATHS: dict[
     "plugins/by-name/lint/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/lspkind/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/nix-develop/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/openscad/default.nix": (State.OLD, Kind.VIM, False),
     "plugins/by-name/rainbow-delimiters/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/treesitter-refactor/default.nix": (State.OLD, Kind.MISC, True),
     "plugins/by-name/treesitter-textobjects/default.nix": (

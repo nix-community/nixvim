@@ -1,81 +1,93 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-with lib;
 let
-  defaultFuzzyFinder = "skim";
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts applyPrefixToAttrs;
+  inherit (lib.nixvim.vim-plugin) mkSettingsOptionDescription;
+
+  name = "openscad";
+  globalPrefix = "openscad_";
 in
-{
-  options.plugins.openscad = {
-    enable = mkEnableOption "openscad.nvim, a plugin to manage OpenSCAD files";
+lib.nixvim.neovim-plugin.mkNeovimPlugin {
+  inherit name;
+  packPathName = "openscad.nvim";
+  package = "openscad-nvim";
 
-    package = lib.mkPackageOption pkgs "openscad.nvim" {
-      default = [
-        "vimPlugins"
-        "openscad-nvim"
-      ];
-    };
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    fuzzyFinder = helpers.defaultNullOpts.mkEnum [
-      "skim"
-      "fzf"
-    ] defaultFuzzyFinder "fuzzy finder to find documentation";
+  # TODO: Added 2024-12-17; remove after 25.05
+  optionsRenamedToSettings = import ./renamed-options.nix;
 
-    cheatsheetWindowBlend = helpers.defaultNullOpts.mkNullable (types.ints.between 0 100) 15 "";
+  settingsOptions = {
+    fuzzy_finder = defaultNullOpts.mkStr "skim" ''
+      Fuzzy finder to find documentation.
 
-    loadSnippets = helpers.defaultNullOpts.mkBool false "";
+      If you set this option explicitly, Nixvim will install the relevant finder plugin.
+    '';
 
-    autoOpen = helpers.defaultNullOpts.mkBool false "";
+    cheatsheet_window_blend = defaultNullOpts.mkNullable (types.ints.between 0 100) 15 ''
+      Transparency level of the cheatsheet window (in %).
+    '';
 
-    keymaps = {
-      enable = mkEnableOption "keymaps for openscad";
+    load_snippets = defaultNullOpts.mkBool false ''
+      Whether to load predefined snippets for OpenSCAD.
+    '';
 
-      cheatsheetToggle = helpers.defaultNullOpts.mkStr "<Enter>" "Toggle cheatsheet window";
+    auto_open = defaultNullOpts.mkBool false ''
+      Whether the openscad project automatically be opened on startup.
+    '';
 
-      helpTrigger = helpers.defaultNullOpts.mkStr "<A-h>" "Fuzzy find help resource";
+    default_mappings = defaultNullOpts.mkBool true ''
+      Whether to enable the default mappings.
+    '';
 
-      helpManualTrigger = helpers.defaultNullOpts.mkStr "<A-m>" "Open offline openscad manual in pdf via zathura";
+    cheatsheet_toggle_key = defaultNullOpts.mkStr "<Enter>" ''
+      Keyboard shortcut for toggling the cheatsheet.
+    '';
 
-      execOpenSCADTrigger = helpers.defaultNullOpts.mkStr "<A-o>" "Open file in OpenSCAD";
+    help_trig_key = defaultNullOpts.mkStr "<A-h>" ''
+      Keyboard shortcut for triggering the fuzzy-find help resource.
+    '';
 
-      topToggle = helpers.defaultNullOpts.mkStr "<A-c>" "toggle htop filtered for openscad processes";
-    };
+    help_manual_trig_key = defaultNullOpts.mkStr "<A-m>" ''
+      Keyboard shortcut for manually triggering the offline OpenSCAD manual.
+    '';
+
+    exec_openscad_trig_key = defaultNullOpts.mkStr "<A-o>" ''
+      Keyboard shortcut for opening the current file in OpenSCAD.
+    '';
+
+    top_toggle = defaultNullOpts.mkStr "<A-c>" ''
+      Keyboard shortcut for toggling `htop` filtered for OpenSCAD processes.
+    '';
   };
 
-  config =
-    let
-      cfg = config.plugins.openscad;
-      fuzzyFinder = if (cfg.fuzzyFinder == null) then defaultFuzzyFinder else cfg.fuzzyFinder;
-    in
-    mkIf cfg.enable {
-      extraPlugins =
-        with pkgs.vimPlugins;
-        [ cfg.package ]
-        ++ (optional (fuzzyFinder == "skim") skim-vim)
-        ++ (optional (fuzzyFinder == "fzf") fzf-vim);
+  settingsExample = {
+    load_snippets = true;
+    fuzzy_finder = "fzf";
+    cheatsheet_window_blend = 15;
+    auto_open = true;
+  };
 
-      extraConfigLua = ''
-        require('openscad')
-      '';
+  settingsDescription = mkSettingsOptionDescription { inherit name globalPrefix; };
 
-      globals = mkMerge [
-        {
-          openscad_fuzzy_finder = cfg.fuzzyFinder;
-          openscad_cheatsheet_window_blend = cfg.cheatsheetWindowBlend;
-          openscad_load_snippets = cfg.loadSnippets;
-        }
-        (mkIf cfg.keymaps.enable {
-          openscad_default_mappings = true;
-          openscad_cheatsheet_toggle_key = cfg.keymaps.cheatsheetToggle;
-          openscad_help_trig_key = cfg.keymaps.helpTrigger;
-          openscad_help_manual_trig_key = cfg.keymaps.helpManualTrigger;
-          openscad_exec_openscad_trig_key = cfg.keymaps.execOpenSCADTrigger;
-          openscad_top_toggle = cfg.keymaps.topToggle;
-        })
-      ];
-    };
+  callSetup = false;
+
+  extraOptions = {
+    fuzzyFinderPlugin = import ./fuzzy-finder-plugin-option.nix { inherit lib config pkgs; };
+  };
+
+  extraConfig = cfg: {
+    plugins.openscad.luaConfig.content = ''
+      require('openscad')
+    '';
+
+    globals = applyPrefixToAttrs globalPrefix cfg.settings;
+
+    extraPlugins = [ cfg.fuzzyFinderPlugin ];
+  };
 }
