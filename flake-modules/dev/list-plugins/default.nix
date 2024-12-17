@@ -23,6 +23,7 @@
     in
     {
       packages.list-plugins = package;
+
       checks.list-plugins-test =
         pkgs.runCommand "list-plugins-test"
           {
@@ -35,7 +36,7 @@
       devshells.default.commands = [
         {
           name = "list-plugins";
-          command = ''${lib.getExe config.packages.list-plugins} "$@"'';
+          command = ''${lib.getExe package} "$@"'';
           help = "List plugins and get implementation infos";
         }
       ];
