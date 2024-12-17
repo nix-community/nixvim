@@ -13,7 +13,7 @@
           accent = "pastel";
           state = "pastel";
         };
-        customPalettes = {
+        custom_palettes = {
           main = { };
           accent = { };
           state = { };
@@ -35,7 +35,7 @@
           main = "dust_dusk";
         };
 
-        customPalettes = {
+        custom_palettes = {
           main = {
             dust_dusk = {
               color0 = "#121527";
