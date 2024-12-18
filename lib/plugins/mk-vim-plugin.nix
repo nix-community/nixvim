@@ -116,7 +116,7 @@ let
             colorscheme = lib.mkDefault colorscheme;
           })
           (lib.optionalAttrs (args ? extraConfig) (
-            lib.nixvim.modules.applyExtraConfig {
+            lib.nixvim.plugins.utils.applyExtraConfig {
               inherit extraConfig cfg opts;
             }
           ))
