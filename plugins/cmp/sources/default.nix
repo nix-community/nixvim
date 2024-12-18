@@ -174,10 +174,6 @@ let
       sourceName = "zsh";
     }
     {
-      pluginName = "copilot-cmp";
-      sourceName = "copilot";
-    }
-    {
       pluginName = "crates-nvim";
       sourceName = "crates";
     }
@@ -189,7 +185,6 @@ in
 {
   # For extra cmp plugins
   imports = [
-    ./copilot-cmp.nix
     ./crates-nvim.nix
   ] ++ pluginModules;
 }

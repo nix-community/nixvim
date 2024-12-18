@@ -12,12 +12,12 @@
         suggestion.enabled = false;
       };
 
-      copilot-cmp = {
+      copilot-cmp.settings = {
         event = [
           "InsertEnter"
           "LspAttach"
         ];
-        fixPairs = true;
+        fix_pairs = true;
       };
 
       cmp = {
