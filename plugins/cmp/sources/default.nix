@@ -5,6 +5,7 @@
   ...
 }@args:
 let
+
   # A list of most cmp source plugins, passed to mkCmpSourcePlugin.
   # More complex cmp sources can instead be defined as their own plugin
   # and register their source-name association using the `cmpSourcePlugins` option.
@@ -146,10 +147,6 @@ let
       sourceName = "spell";
     }
     {
-      pluginName = "cmp-tabby";
-      sourceName = "cmp_tabby";
-    }
-    {
       pluginName = "cmp-tabnine";
       sourceName = "cmp_tabnine";
     }
@@ -205,7 +202,6 @@ in
     ./cmp-ai.nix
     ./cmp-fish.nix
     ./cmp-git.nix
-    ./cmp-tabby.nix
     ./cmp-tabnine.nix
     ./crates-nvim.nix
   ] ++ pluginModules;
