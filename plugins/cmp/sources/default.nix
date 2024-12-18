@@ -61,6 +61,9 @@ let
     {
       pluginName = "cmp-fish";
       sourceName = "fish";
+
+      extraOptions.fishPackage = lib.mkPackageOption pkgs "fish" { nullable = true; };
+      extraConfig = cfg: { extraPackages = [ cfg.fishPackage ]; };
     }
     {
       pluginName = "cmp-fuzzy-buffer";
@@ -200,7 +203,6 @@ in
   imports = [
     ./copilot-cmp.nix
     ./cmp-ai.nix
-    ./cmp-fish.nix
     ./cmp-git.nix
     ./cmp-tabnine.nix
     ./crates-nvim.nix
