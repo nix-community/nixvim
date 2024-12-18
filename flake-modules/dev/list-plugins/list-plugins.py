@@ -6,8 +6,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
-QUESTION_MARK = "❔"
-
 # Ignore files that are not plugin definitions
 EXCLUDES: list[str] = [
     # Patterns
@@ -56,7 +54,7 @@ class Kind(Enum):
 
 
 class State(Enum):
-    UNKNOWN = QUESTION_MARK
+    UNKNOWN = "❔"
     NEW = "✅"
     OLD = "❌"
 
