@@ -142,10 +142,6 @@ let
       sourceName = "spell";
     }
     {
-      pluginName = "cmp-tabnine";
-      sourceName = "cmp_tabnine";
-    }
-    {
       pluginName = "cmp-tmux";
       sourceName = "tmux";
     }
@@ -194,7 +190,6 @@ in
   # For extra cmp plugins
   imports = [
     ./copilot-cmp.nix
-    ./cmp-tabnine.nix
     ./crates-nvim.nix
   ] ++ pluginModules;
 }
