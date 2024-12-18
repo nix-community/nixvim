@@ -173,10 +173,6 @@ let
       pluginName = "cmp-zsh";
       sourceName = "zsh";
     }
-    {
-      pluginName = "crates-nvim";
-      sourceName = "crates";
-    }
   ];
 
   mkCmpSourcePlugin = import ./_mk-cmp-plugin.nix args;
@@ -184,7 +180,5 @@ let
 in
 {
   # For extra cmp plugins
-  imports = [
-    ./crates-nvim.nix
-  ] ++ pluginModules;
+  imports = pluginModules;
 }
