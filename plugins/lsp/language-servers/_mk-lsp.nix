@@ -150,7 +150,7 @@ in
               end
             ''
           );
-          settings = lib.nixvim.modules.applyExtraConfig {
+          settings = lib.nixvim.plugins.utils.applyExtraConfig {
             extraConfig = settings;
             cfg = cfg.settings;
             opts = opts.settings;
@@ -177,7 +177,7 @@ in
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
     ]
     ++ lib.optional (args ? extraConfig) (
-      lib.nixvim.modules.applyExtraConfig {
+      lib.nixvim.plugins.utils.applyExtraConfig {
         inherit
           extraConfig
           cfg

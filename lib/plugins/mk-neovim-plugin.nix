@@ -61,7 +61,7 @@ let
         })
       '';
 
-      luaConfigAtLocation = lib.nixvim.modules.mkConfigAt configLocation cfg.luaConfig.content;
+      luaConfigAtLocation = lib.nixvim.plugins.utils.mkConfigAt configLocation cfg.luaConfig.content;
     in
     {
       meta = {
@@ -139,7 +139,7 @@ let
 
               # Apply any additional configuration added to `extraConfig`
               (lib.optionalAttrs (args ? extraConfig) (
-                lib.nixvim.modules.applyExtraConfig {
+                lib.nixvim.plugins.utils.applyExtraConfig {
                   inherit extraConfig cfg opts;
                 }
               ))
