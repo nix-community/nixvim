@@ -97,11 +97,13 @@
       inherit event;
       group = "nixvim_binds_${event}";
       callback = helpers.mkRaw ''
-        function()
+        function(args)
           do
             local __nixvim_binds = ${lib.nixvim.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs mappings)}
+
             for i, map in ipairs(__nixvim_binds) do
-              vim.keymap.set(map.mode, map.key, map.action, map.options)
+              local options = vim.tbl_extend("error", map.options or {}, { buffer = args.buf })
+              vim.keymap.set(map.mode, map.key, map.action, options)
             end
           end
         end
