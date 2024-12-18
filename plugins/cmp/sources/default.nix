@@ -11,10 +11,6 @@ let
   # and register their source-name association using the `cmpSourcePlugins` option.
   sources = [
     {
-      pluginName = "cmp-ai";
-      sourceName = "cmp_ai";
-    }
-    {
       pluginName = "cmp-async-path";
       sourceName = "async_path";
     }
@@ -202,7 +198,6 @@ in
   # For extra cmp plugins
   imports = [
     ./copilot-cmp.nix
-    ./cmp-ai.nix
     ./cmp-git.nix
     ./cmp-tabnine.nix
     ./crates-nvim.nix
