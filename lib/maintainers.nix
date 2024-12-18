@@ -124,4 +124,10 @@
     githubId = 38228372;
     name = "Katie Janzen";
   };
+  samos667 = {
+    email = "sammyetur11@gmail.com";
+    github = "samos667";
+    githubId = 50653464;
+    name = "samos667";
+  };
 }
