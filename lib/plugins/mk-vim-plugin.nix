@@ -51,12 +51,7 @@ let
   };
 
   module =
-    {
-      config,
-      options,
-      pkgs,
-      ...
-    }:
+    { config, options, ... }:
     let
       cfg = lib.getAttrFromPath loc config;
       opts = lib.getAttrFromPath loc options;
@@ -74,30 +69,6 @@ let
       options = lib.setAttrByPath loc (
         {
           enable = lib.mkEnableOption packPathName;
-          package =
-            if lib.isOption package then
-              package
-            else
-              lib.mkPackageOption pkgs packPathName {
-                default =
-                  if builtins.isList package then
-                    package
-                  else
-                    [
-                      "vimPlugins"
-                      package
-                    ];
-              };
-          packageDecorator = lib.mkOption {
-            type = lib.types.functionTo lib.types.package;
-            default = lib.id;
-            defaultText = lib.literalExpression "x: x";
-            description = ''
-              Additional transformations to apply to the final installed package.
-              The result of these transformations is **not** visible in the `package` option's value.
-            '';
-            internal = true;
-          };
         }
         // settingsOption
         // extraOptions
@@ -106,10 +77,7 @@ let
       config = lib.mkIf cfg.enable (
         lib.mkMerge [
           {
-            inherit extraPackages;
-            extraPlugins = extraPlugins ++ [
-              (cfg.packageDecorator cfg.package)
-            ];
+            inherit extraPackages extraPlugins;
             globals = lib.nixvim.applyPrefixToAttrs globalPrefix (cfg.settings or { });
           }
           (lib.optionalAttrs (isColorscheme && colorscheme != null) {
@@ -130,7 +98,10 @@ in
       settingsPath = loc ++ [ "settings" ];
     in
     imports
-    ++ [ module ]
+    ++ [
+      module
+      (lib.nixvim.plugins.utils.mkPluginPackageModule { inherit loc packPathName package; })
+    ]
     ++ lib.optional (deprecateExtraConfig && createSettingsOption) (
       lib.mkRenamedOptionModule (loc ++ [ "extraConfig" ]) settingsPath
     )
