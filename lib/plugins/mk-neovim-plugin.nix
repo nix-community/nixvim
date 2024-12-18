@@ -1,4 +1,7 @@
-{ lib }:
+{
+  lib,
+  utils,
+}:
 {
   name,
   maintainers,
@@ -56,7 +59,7 @@ let
         })
       '';
 
-      luaConfigAtLocation = lib.nixvim.plugins.utils.mkConfigAt configLocation cfg.luaConfig.content;
+      luaConfigAtLocation = utils.mkConfigAt configLocation cfg.luaConfig.content;
     in
     {
       meta = {
@@ -105,7 +108,7 @@ let
 
               # Apply any additional configuration added to `extraConfig`
               (lib.optionalAttrs (args ? extraConfig) (
-                lib.nixvim.plugins.utils.applyExtraConfig {
+                utils.applyExtraConfig {
                   inherit extraConfig cfg opts;
                 }
               ))
@@ -162,7 +165,7 @@ in
     imports
     ++ [
       module
-      (lib.nixvim.plugins.utils.mkPluginPackageModule { inherit loc packPathName package; })
+      (utils.mkPluginPackageModule { inherit loc packPathName package; })
     ]
     ++ lib.optional deprecateExtraOptions (
       lib.mkRenamedOptionModule (loc ++ [ "extraOptions" ]) settingsPath

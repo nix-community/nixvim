@@ -1,9 +1,7 @@
-{ lib }:
-let
-  inherit (lib.nixvim.plugins.vim)
-    mkSettingsOption
-    ;
-in
+{
+  lib,
+  self,
+}:
 {
   name,
   url ? throw "default",
@@ -43,7 +41,7 @@ let
   createSettingsOption = lib.isString globalPrefix && globalPrefix != "";
 
   settingsOption = lib.optionalAttrs createSettingsOption {
-    settings = mkSettingsOption {
+    settings = self.vim.mkSettingsOption {
       options = settingsOptions;
       example = settingsExample;
       inherit name globalPrefix;

@@ -1,12 +1,8 @@
 {
   call,
   lib,
+  self,
 }:
-let
-  inherit (lib.nixvim.plugins.vim)
-    mkSettingsOptionDescription
-    ;
-in
 {
   mkVimPlugin = call ./mk-vim-plugin.nix { };
 
@@ -31,6 +27,6 @@ in
     }:
     lib.nixvim.mkSettingsOption {
       inherit options example;
-      description = mkSettingsOptionDescription { inherit name globalPrefix; };
+      description = self.vim.mkSettingsOptionDescription { inherit name globalPrefix; };
     };
 }
