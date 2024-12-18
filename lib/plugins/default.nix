@@ -1,13 +1,14 @@
-{
-  call,
-  lib,
-}:
+{ lib }:
+let
+  self = lib.nixvim.plugins;
+  call = lib.callPackageWith (self // { inherit call lib self; });
+in
 {
   utils = call ./utils.nix { };
   neovim = call ./neovim.nix { };
   vim = call ./vim.nix { };
 
   # Aliases
-  inherit (lib.nixvim.plugins.neovim) mkNeovimPlugin;
-  inherit (lib.nixvim.plugins.vim) mkVimPlugin;
+  inherit (self.neovim) mkNeovimPlugin;
+  inherit (self.vim) mkVimPlugin;
 }
