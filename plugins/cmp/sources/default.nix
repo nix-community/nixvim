@@ -70,10 +70,6 @@ let
       sourceName = "fuzzy_path";
     }
     {
-      pluginName = "cmp-git";
-      sourceName = "git";
-    }
-    {
       pluginName = "cmp-greek";
       sourceName = "greek";
     }
@@ -198,7 +194,6 @@ in
   # For extra cmp plugins
   imports = [
     ./copilot-cmp.nix
-    ./cmp-git.nix
     ./cmp-tabnine.nix
     ./crates-nvim.nix
   ] ++ pluginModules;

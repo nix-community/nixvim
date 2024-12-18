@@ -11,8 +11,9 @@ EXCLUDES: list[str] = [
     # Patterns
     "TEMPLATE.nix",
     "deprecations.nix",
-    "renamed-options",
     "helpers.nix",
+    "renamed-options",
+    "settings-options.nix",
     # Specific files
     "colorschemes/base16/theme-list.nix",
     "plugins/by-name/dap/dapHelpers.nix",
