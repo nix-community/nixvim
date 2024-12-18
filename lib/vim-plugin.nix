@@ -56,6 +56,10 @@ rec {
     }@args:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
+      loc = [
+        namespace
+        name
+      ];
 
       createSettingsOption = (lib.isString globalPrefix) && (globalPrefix != "");
 
@@ -75,8 +79,8 @@ rec {
           ...
         }:
         let
-          cfg = config.${namespace}.${name};
-          opts = options.${namespace}.${name};
+          cfg = lib.getAttrFromPath loc config;
+          opts = lib.getAttrFromPath loc options;
         in
         {
           meta = {
@@ -84,14 +88,11 @@ rec {
             nixvimInfo = {
               inherit description;
               url = args.url or opts.package.default.meta.homepage;
-              path = [
-                namespace
-                name
-              ];
+              path = loc;
             };
           };
 
-          options.${namespace}.${name} =
+          options = lib.setAttrByPath loc (
             {
               enable = lib.mkEnableOption packPathName;
               package =
@@ -120,7 +121,8 @@ rec {
               };
             }
             // settingsOption
-            // extraOptions;
+            // extraOptions
+          );
 
           config = lib.mkIf cfg.enable (
             lib.mkMerge [
@@ -146,17 +148,13 @@ rec {
     {
       imports =
         let
-          basePluginPath = [
-            namespace
-            name
-          ];
-          settingsPath = basePluginPath ++ [ "settings" ];
+          settingsPath = loc ++ [ "settings" ];
         in
         imports
         ++ [ module ]
         ++ (lib.optional (deprecateExtraConfig && createSettingsOption) (
-          lib.mkRenamedOptionModule (basePluginPath ++ [ "extraConfig" ]) settingsPath
+          lib.mkRenamedOptionModule (loc ++ [ "extraConfig" ]) settingsPath
         ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ (lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings);
     };
 }

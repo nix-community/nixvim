@@ -53,6 +53,10 @@
     }@args:
     let
       namespace = if isColorscheme then "colorschemes" else "plugins";
+      loc = [
+        namespace
+        name
+      ];
 
       module =
         {
@@ -62,8 +66,8 @@
           ...
         }:
         let
-          cfg = config.${namespace}.${name};
-          opts = options.${namespace}.${name};
+          cfg = lib.getAttrFromPath loc config;
+          opts = lib.getAttrFromPath loc options;
 
           setupCode = ''
             require('${moduleName}')${setup}(${
@@ -79,14 +83,11 @@
             nixvimInfo = {
               inherit description;
               url = args.url or opts.package.default.meta.homepage;
-              path = [
-                namespace
-                name
-              ];
+              path = loc;
             };
           };
 
-          options.${namespace}.${name} =
+          options = lib.setAttrByPath loc (
             {
               enable = lib.mkEnableOption packPathName;
               lazyLoad = lib.nixvim.mkLazyLoadOption packPathName;
@@ -129,7 +130,8 @@
                 description = "The plugin's lua configuration";
               };
             }
-            // extraOptions;
+            // extraOptions
+          );
 
           config =
             assert lib.assertMsg (
@@ -160,7 +162,7 @@
                 ++ (lib.optionals hasLuaConfig [
 
                   # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
-                  (lib.optionalAttrs callSetup { ${namespace}.${name}.luaConfig.content = setupCode; })
+                  (lib.optionalAttrs callSetup (lib.setAttrByPath loc { luaConfig.content = setupCode; }))
 
                   # When NOT lazy loading, write `luaConfig.content` to `configLocation`
                   (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
@@ -203,17 +205,13 @@
     {
       imports =
         let
-          basePluginPath = [
-            namespace
-            name
-          ];
-          settingsPath = basePluginPath ++ [ "settings" ];
+          settingsPath = loc ++ [ "settings" ];
         in
         imports
         ++ [ module ]
         ++ (lib.optional deprecateExtraOptions (
-          lib.mkRenamedOptionModule (basePluginPath ++ [ "extraOptions" ]) settingsPath
+          lib.mkRenamedOptionModule (loc ++ [ "extraOptions" ]) settingsPath
         ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules basePluginPath settingsPath optionsRenamedToSettings);
+        ++ (lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings);
     };
 }
