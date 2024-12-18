@@ -26,13 +26,13 @@ lib.makeExtensible (
 
     # plugin aliases
     neovim-plugin = {
-      inherit (self.plugins)
+      inherit (self.plugins.neovim)
         extraOptionsOptions
         mkNeovimPlugin
         ;
     };
     vim-plugin = {
-      inherit (self.plugins)
+      inherit (self.plugins.vim)
         mkSettingsOption
         mkSettingsOptionDescription
         mkVimPlugin
