@@ -147,7 +147,7 @@
                     ];
                   }
 
-                  (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+                  (lib.optionalAttrs (isColorscheme && colorscheme != null) {
                     colorscheme = lib.mkDefault colorscheme;
                   })
 
@@ -159,7 +159,7 @@
                   ))
                 ]
                 # Lua configuration code generation
-                ++ (lib.optionals hasLuaConfig [
+                ++ lib.optionals hasLuaConfig [
 
                   # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
                   (lib.optionalAttrs callSetup (lib.setAttrByPath loc { luaConfig.content = setupCode; }))
@@ -197,7 +197,7 @@
                       ];
                     };
                   })
-                ])
+                ]
               )
             );
         };
@@ -209,9 +209,9 @@
         in
         imports
         ++ [ module ]
-        ++ (lib.optional deprecateExtraOptions (
+        ++ lib.optional deprecateExtraOptions (
           lib.mkRenamedOptionModule (loc ++ [ "extraOptions" ]) settingsPath
-        ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings);
+        )
+        ++ lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings;
     };
 }

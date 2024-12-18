@@ -61,7 +61,7 @@ rec {
         name
       ];
 
-      createSettingsOption = (lib.isString globalPrefix) && (globalPrefix != "");
+      createSettingsOption = lib.isString globalPrefix && globalPrefix != "";
 
       settingsOption = lib.optionalAttrs createSettingsOption {
         settings = mkSettingsOption {
@@ -133,7 +133,7 @@ rec {
                 ];
                 globals = lib.nixvim.applyPrefixToAttrs globalPrefix (cfg.settings or { });
               }
-              (lib.optionalAttrs (isColorscheme && (colorscheme != null)) {
+              (lib.optionalAttrs (isColorscheme && colorscheme != null) {
                 colorscheme = lib.mkDefault colorscheme;
               })
               (lib.optionalAttrs (args ? extraConfig) (
@@ -152,9 +152,9 @@ rec {
         in
         imports
         ++ [ module ]
-        ++ (lib.optional (deprecateExtraConfig && createSettingsOption) (
+        ++ lib.optional (deprecateExtraConfig && createSettingsOption) (
           lib.mkRenamedOptionModule (loc ++ [ "extraConfig" ]) settingsPath
-        ))
-        ++ (lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings);
+        )
+        ++ lib.nixvim.mkSettingsRenamedOptionModules loc settingsPath optionsRenamedToSettings;
     };
 }
