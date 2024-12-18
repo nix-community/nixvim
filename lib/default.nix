@@ -20,10 +20,24 @@ lib.makeExtensible (
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
     modules = call ./modules.nix { inherit flake; };
-    neovim-plugin = call ./neovim-plugin.nix { };
     options = call ./options.nix { };
+    plugins = call ./plugins { };
     utils = call ./utils.nix { inherit _nixvimTests; };
-    vim-plugin = call ./vim-plugin.nix { };
+
+    # plugin aliases
+    neovim-plugin = {
+      inherit (self.plugins)
+        extraOptionsOptions
+        mkNeovimPlugin
+        ;
+    };
+    vim-plugin = {
+      inherit (self.plugins)
+        mkSettingsOption
+        mkSettingsOptionDescription
+        mkVimPlugin
+        ;
+    };
 
     # Top-level helper aliases:
     # TODO: deprecate some aliases
