@@ -14,12 +14,8 @@
   imports ? [ ],
   ...
 }@args:
-lib.nixvim.neovim-plugin.mkNeovimPlugin (
-  {
-    hasSettings = false;
-    callSetup = false;
-  }
-  // builtins.removeAttrs args [
+lib.nixvim.vim-plugin.mkVimPlugin (
+  builtins.removeAttrs args [
     "pluginName"
     "sourceName"
   ]
