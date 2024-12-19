@@ -74,7 +74,7 @@ let
       options,
       ...
     }:
-    lib.nixvim.modules.applyExtraConfig {
+    lib.nixvim.plugins.utils.applyExtraConfig {
       inherit extraConfig;
       cfg = getPluginAttr config;
       opts = getPluginAttr options;
