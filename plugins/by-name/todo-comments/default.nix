@@ -401,6 +401,7 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
           }
         )
         {
+          todoFzfLua = "TodoFzfLua";
           todoQuickFix = "TodoQuickFix";
           todoLocList = "TodoLocList";
           todoTrouble = "TodoTrouble";
