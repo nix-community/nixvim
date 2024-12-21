@@ -1,6 +1,7 @@
 {
   lib,
-  flake ? null, # Optionally, provide the lib with access to the flake
+  flake,
+  _isExtended ? false,
   _nixvimTests ? false,
 }:
 lib.makeExtensible (
@@ -9,14 +10,15 @@ lib.makeExtensible (
     # Used when importing parts of our lib
     call = lib.callPackageWith {
       inherit call self;
-      lib = self.extendedLib;
+      # TODO: this would be much simpler if `lib` & `self` were kept explicitly separate
+      # Doing so should also improve overridability and simplify bootstrapping.
+      lib = if _isExtended then lib else lib.extend flake.lib.overlay;
     };
   in
   {
     autocmd = call ./autocmd-helpers.nix { };
     builders = call ./builders.nix { };
     deprecation = call ./deprecation.nix { };
-    extendedLib = call ./extend-lib.nix { inherit lib; };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
     modules = call ./modules.nix { inherit flake; };
@@ -93,6 +95,9 @@ lib.makeExtensible (
 
     toLuaObject = self.lua.toLua;
     mkLuaInline = self.lua.mkInline;
+
+    # TODO: Removed 2024-12-21
+    extendedLib = throw "`extendedLib` has been removed. Use `lib.extend <nixvim>.lib.overlay` instead.";
   }
   //
     # TODO: Removed 2024-09-27; remove after 24.11

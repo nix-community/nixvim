@@ -18,6 +18,9 @@
         inherit lib;
         flake = self;
       };
+      overlay = lib.makeOverridable (import ../lib/overlay.nix) {
+        flake = self;
+      };
     }
     // lib.genAttrs config.systems (
       lib.flip withSystem (
