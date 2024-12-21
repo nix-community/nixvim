@@ -8,8 +8,6 @@
   system ? pkgs.stdenv.hostPlatform.system,
 }:
 let
-  nixvimLib = helpers.extendedLib;
-
   autoArgs = pkgs // {
     inherit
       helpers
@@ -18,7 +16,7 @@ let
       system
       ;
     nixpkgsLib = lib;
-    lib = nixvimLib;
+    lib = lib.extend self.lib.overlay;
     inherit (self.legacyPackages.${system})
       makeNixvimWithModule
       nixvimConfiguration

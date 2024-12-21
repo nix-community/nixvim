@@ -62,7 +62,7 @@ in
       lib.nixvim = lib.mkDefault self.lib.nixvim;
 
       # Make nixvim's "extended" lib available to the host's module args
-      _module.args.nixvimLib = lib.mkDefault config.lib.nixvim.extendedLib;
+      _module.args.nixvimLib = lib.mkDefault (lib.extend self.lib.overlay);
     }
 
     # Propagate nixvim's assertions to the host modules
