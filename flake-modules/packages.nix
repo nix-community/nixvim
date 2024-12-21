@@ -1,4 +1,8 @@
-{ inputs, ... }:
+{
+  inputs,
+  helpers,
+  ...
+}:
 {
   perSystem =
     {
@@ -9,6 +13,7 @@
     }:
     {
       packages = import ../docs {
+        inherit helpers;
         inherit system;
         inherit (inputs) nixpkgs;
         inherit (inputs') nuschtosSearch;

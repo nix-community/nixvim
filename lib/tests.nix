@@ -46,9 +46,7 @@ let
     }@args:
     let
       # NOTE: we are importing this just for evalNixvim
-      helpers = import ../lib {
-        inherit lib;
-        flake = self;
+      helpers = self.lib.nixvim.override {
         # TODO: deprecate helpers.enableExceptInTests,
         # add a context option e.g. `config.isTest`?
         _nixvimTests = true;

@@ -9,11 +9,7 @@ default_pkgs: self:
 }:
 let
   # NOTE: we are importing this just for evalNixvim
-  helpers = import ../lib {
-    inherit lib _nixvimTests;
-    flake = self;
-  };
-
+  helpers = self.lib.nixvim.override { inherit _nixvimTests; };
   inherit (helpers.modules) evalNixvim;
 
   mkNvim =

@@ -6,24 +6,29 @@
   ...
 }:
 {
-  _module.args.helpers = import ../lib {
-    inherit lib;
-    flake = self;
+  # Expose lib as a flake-parts module arg
+  _module.args = {
+    helpers = self.lib.nixvim;
   };
 
-  # TODO: output lib without pkgs at the top-level
-  flake.lib = lib.genAttrs config.systems (
-    lib.flip withSystem (
-      { pkgs, ... }:
-      {
-        # NOTE: this is the publicly documented flake output we've had for a while
-        check = import ../lib/tests.nix { inherit self lib pkgs; };
-        # TODO: no longer needs to be per-system
-        helpers = import ../lib {
-          inherit lib;
-          flake = self;
-        };
-      }
-    )
-  );
+  # Public `lib` flake output
+  flake.lib =
+    {
+      nixvim = lib.makeOverridable (import ../lib) {
+        inherit lib;
+        flake = self;
+      };
+    }
+    // lib.genAttrs config.systems (
+      lib.flip withSystem (
+        { pkgs, ... }:
+        {
+          # NOTE: this is the publicly documented flake output we've had for a while
+          check = pkgs.callPackage ../lib/tests.nix { inherit self; };
+
+          # NOTE: no longer needs to be per-system
+          helpers = self.lib.nixvim;
+        }
+      )
+    );
 }
