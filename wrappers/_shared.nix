@@ -59,9 +59,9 @@ in
   config = mkMerge [
     {
       # Make our lib available to the host modules
-      lib.nixvim = lib.mkDefault self.lib.nixvim;
-
-      # Make nixvim's "extended" lib available to the host's module args
+      # - the `config.lib.nixvim` option is the nixvim-lib
+      # - the `nixvimLib` arg is `lib` extended with our overlay
+      lib.nixvim = lib.mkDefault config._module.args.nixvimLib.nixvim;
       _module.args.nixvimLib = lib.mkDefault (lib.extend self.lib.overlay);
     }
 
