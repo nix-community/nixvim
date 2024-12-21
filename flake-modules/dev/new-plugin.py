@@ -9,7 +9,7 @@ from argparse import ArgumentParser
 default_nix_template = """{{ lib, ... }}:
 lib.nixvim.neovim-plugin.mkNeovimPlugin {{
   name = "{name}";
-  originalName = "{originalName}";
+  packPathName = "{originalName}";
   package = "{package}";
 
   maintainers = [ lib.maintainers.YOUR_NAME ];
