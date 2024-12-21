@@ -3,7 +3,7 @@
   flake ? null, # Optionally, provide the lib with access to the flake
   _nixvimTests ? false,
 }:
-lib.fix (
+lib.makeExtensible (
   self:
   let
     # Used when importing parts of our lib
