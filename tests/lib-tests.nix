@@ -464,7 +464,7 @@ let
     };
 
     testMkLuaConfig = {
-      expr = lib.mapAttrs (_: loc: helpers.modules.mkConfigAt loc "Hello!") {
+      expr = lib.mapAttrs (_: loc: helpers.plugins.utils.mkConfigAt loc "Hello!") {
         "simple string" = "foo";
         "simple list" = [
           "foo"
