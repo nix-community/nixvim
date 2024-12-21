@@ -21,13 +21,13 @@
     }
     // lib.genAttrs config.systems (
       lib.flip withSystem (
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         {
           # NOTE: this is the publicly documented flake output we've had for a while
           check = pkgs.callPackage ../lib/tests.nix { inherit self; };
 
           # NOTE: no longer needs to be per-system
-          helpers = self.lib.nixvim;
+          helpers = lib.warn "nixvim: `<nixvim>.lib.${system}.helpers` has been moved to `<nixvim>.lib.nixvim` and no longer depends on a specific system" self.lib.nixvim;
         }
       )
     );
