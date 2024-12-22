@@ -1,6 +1,6 @@
 { lib, helpers, ... }:
 
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "vim-suda";
   globalPrefix = "suda#";
   maintainers = [ lib.maintainers.marcel ];

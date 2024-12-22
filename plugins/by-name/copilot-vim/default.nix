@@ -5,8 +5,8 @@
   ...
 }:
 with lib;
-with lib.nixvim.vim-plugin;
-lib.nixvim.vim-plugin.mkVimPlugin {
+with lib.nixvim.plugins;
+lib.nixvim.plugins.mkVimPlugin {
   name = "copilot-vim";
   packPathName = "copilot.vim";
   globalPrefix = "copilot_";

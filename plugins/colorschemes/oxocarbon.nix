@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "oxocarbon";
   isColorscheme = true;
   packPathName = "oxocarbon.nvim";

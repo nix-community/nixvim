@@ -7,7 +7,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "lazygit";
   packPathName = "lazygit.nvim";
   package = "lazygit-nvim";

@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "nabla";
   packPathName = "nabla.nvim";
   package = "nabla-nvim";

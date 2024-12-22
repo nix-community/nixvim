@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "friendly-snippets";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

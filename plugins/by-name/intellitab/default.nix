@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "intellitab";
   packPathName = "intellitab.nvim";
   package = "intellitab-nvim";

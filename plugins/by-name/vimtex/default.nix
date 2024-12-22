@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "vimtex";
   globalPrefix = "vimtex_";
 

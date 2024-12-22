@@ -3,7 +3,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkNullOrStr mkNullOrOption;
   inherit (lib) types;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "scrollview";
   packPathName = "nvim-scrollview";
   package = "nvim-scrollview";

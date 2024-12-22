@@ -5,7 +5,7 @@
 let
   inherit (lib) types;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "quickmath";
   packPathName = "quickmath.nvim";
   package = "quickmath-nvim";

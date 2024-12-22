@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "earthly";
   packPathName = "earthly.vim";
   package = "earthly-vim";

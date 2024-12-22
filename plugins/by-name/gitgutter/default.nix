@@ -7,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "gitgutter";
   packPathName = "vim-gitgutter";
   package = "vim-gitgutter";

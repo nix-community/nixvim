@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "repeat";
   packPathName = "vim-repeat";
   package = "vim-repeat";

@@ -7,7 +7,7 @@
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts applyPrefixToAttrs;
-  inherit (lib.nixvim.vim-plugin) mkSettingsOptionDescription;
+  inherit (lib.nixvim.plugins.vim) mkSettingsOptionDescription;
 
   name = "openscad";
   globalPrefix = "openscad_";

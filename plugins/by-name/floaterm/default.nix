@@ -6,7 +6,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkNullOrStr;
   inherit (lib) types;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "floaterm";
   packPathName = "vim-floaterm";
   package = "vim-floaterm";

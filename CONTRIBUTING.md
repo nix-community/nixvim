@@ -41,7 +41,7 @@ To add a new plugin you need to do the following.
 2. The vast majority of plugins fall into one of those two categories:
 
 - _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
-  For those, you should use the `lib.nixvim.vim-plugin.mkVimPlugin`.\
+  For those, you should use the `lib.nixvim.plugins.mkVimPlugin`.\
   -> See [this plugin](plugins/utils/direnv.nix) for an example.
 - _neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
   For those, you should use the `lib.nixvim.plugins.mkNeovimPlugin`.\

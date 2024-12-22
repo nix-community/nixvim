@@ -6,7 +6,7 @@
 with lib;
 # This plugin is only configured through keymaps, so we use `mkVimPlugin` without the
 # `globalPrefix` argument to avoid the creation of the `settings` option.
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "improved-search";
   packPathName = "improved-search.nvim";
   package = "improved-search-nvim";

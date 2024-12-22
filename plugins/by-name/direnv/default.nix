@@ -6,7 +6,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "direnv";
   packPathName = "direnv.vim";
   package = "direnv-vim";

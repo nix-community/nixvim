@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "endwise";
   packPathName = "vim-endwise";
   package = "vim-endwise";

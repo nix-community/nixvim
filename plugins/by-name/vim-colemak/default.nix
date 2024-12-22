@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "vim-colemak";
   maintainers = [ lib.maintainers.kalbasit ];
 }

@@ -14,7 +14,7 @@
   imports ? [ ],
   ...
 }@args:
-lib.nixvim.vim-plugin.mkVimPlugin (
+lib.nixvim.plugins.mkVimPlugin (
   builtins.removeAttrs args [
     "pluginName"
     "sourceName"

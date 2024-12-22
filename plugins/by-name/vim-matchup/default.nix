@@ -7,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkNullOrStr';
   inherit (lib) types;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "vim-matchup";
   globalPrefix = "matchup_";
 

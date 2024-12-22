@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "tagbar";
   globalPrefix = "tagbar_";
 

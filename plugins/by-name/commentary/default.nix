@@ -3,7 +3,7 @@
   helpers,
   ...
 }:
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "commentary";
   packPathName = "vim-commentary";
   package = "vim-commentary";

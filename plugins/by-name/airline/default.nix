@@ -5,7 +5,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "airline";
   packPathName = "vim-airline";
   package = "vim-airline";

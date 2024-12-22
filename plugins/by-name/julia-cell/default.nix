@@ -35,7 +35,7 @@ let
   };
 in
 with lib;
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "julia-cell";
   packPathName = "vim-julia-cell";
   package = "vim-julia-cell";

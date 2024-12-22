@@ -6,7 +6,7 @@ let
   inherit (lib.nixvim) mkNullOrOption;
   inherit (lib) types;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "vim-bbye";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

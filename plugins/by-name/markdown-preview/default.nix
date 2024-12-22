@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-with lib.nixvim.vim-plugin;
+with lib.nixvim.plugins;
 mkVimPlugin {
   name = "markdown-preview";
   packPathName = "markdown-preview.nvim";

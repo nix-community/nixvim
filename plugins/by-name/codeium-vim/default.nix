@@ -34,7 +34,7 @@ let
     };
   };
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "codeium-vim";
   packPathName = "codeium.vim";
   globalPrefix = "codeium_";

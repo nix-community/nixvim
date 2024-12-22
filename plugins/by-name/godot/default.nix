@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "godot";
   packPathName = "vim-godot";
   package = "vim-godot";

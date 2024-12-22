@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "schemastore";
   packPathName = "SchemaStore.nvim";
   package = "SchemaStore-nvim";

@@ -6,7 +6,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "committia";
   packPathName = "committia.vim";
   package = "committia-vim";

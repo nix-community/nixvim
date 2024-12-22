@@ -5,7 +5,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.vim-plugin.mkVimPlugin {
+lib.nixvim.plugins.mkVimPlugin {
   name = "autosource";
   packPathName = "vim-autosource";
   package = "vim-autosource";
