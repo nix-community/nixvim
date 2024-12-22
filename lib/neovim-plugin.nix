@@ -196,6 +196,22 @@
                         )
                       ];
                     };
+                    plugins.lazy = lib.mkIf config.plugins.lazy.enable {
+                      plugins = [
+                        (
+                          {
+                            name = originalName;
+                            main = luaName;
+                            pkg = cfg.package;
+                            # Use provided opts, otherwise fallback to settings
+                            opts = cfg.lazyLoad.settings.opts or cfg.settings;
+                          }
+                          // (lib.removeAttrs cfg.lazyLoad.settings [
+                            "opts"
+                          ])
+                        )
+                      ];
+                    };
                   })
                 ]
               )
