@@ -24,21 +24,6 @@ lib.makeExtensible (
     plugins = call ./plugins { };
     utils = call ./utils.nix { inherit _nixvimTests; };
 
-    # plugin aliases
-    neovim-plugin = {
-      inherit (self.plugins.neovim)
-        extraOptionsOptions
-        mkNeovimPlugin
-        ;
-    };
-    vim-plugin = {
-      inherit (self.plugins.vim)
-        mkSettingsOption
-        mkSettingsOptionDescription
-        mkVimPlugin
-        ;
-    };
-
     # Top-level helper aliases:
     # TODO: deprecate some aliases
 
@@ -119,5 +104,27 @@ lib.makeExtensible (
       {
         maintainers = "lib.maintainers";
         nixvimTypes = "lib.types";
+      }
+  //
+    # TODO: neovim-plugin & vim-plugin aliases deprecated 2024-12-22; internal functions
+    lib.mapAttrs'
+      (scope: names: {
+        name = "${scope}-plugin";
+        value = lib.genAttrs names (
+          name:
+          lib.warn "`${scope}-plugin.${name}` has been moved to `plugins.${scope}.${name}`."
+            self.plugins.${scope}.${name}
+        );
+      })
+      {
+        neovim = [
+          "extraOptionsOptions"
+          "mkNeovimPlugin"
+        ];
+        vim = [
+          "mkSettingsOption"
+          "mkSettingsOptionDescription"
+          "mkVimPlugin"
+        ];
       }
 )
