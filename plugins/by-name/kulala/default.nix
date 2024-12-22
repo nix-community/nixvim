@@ -3,7 +3,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "kulala";
   packPathName = "kulala.nvim";
   package = "kulala-nvim";

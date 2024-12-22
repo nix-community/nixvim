@@ -14,7 +14,7 @@ let
     ;
 in
 # TODO:add support for additional filetypes. This requires autocommands!
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "telescope";
   packPathName = "telescope.nvim";
   package = "telescope-nvim";

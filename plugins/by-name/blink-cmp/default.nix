@@ -6,7 +6,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "blink-cmp";
   packPathName = "blink.cmp";
   package = "blink-cmp";

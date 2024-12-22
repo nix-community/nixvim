@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "onedark";
   isColorscheme = true;
   packPathName = "onedark.nvim";

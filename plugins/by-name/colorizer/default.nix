@@ -6,7 +6,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "colorizer";
   packPathName = "nvim-colorizer.lua";
   package = "nvim-colorizer-lua";

@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmp-git";
   moduleName = "cmp_git";
 

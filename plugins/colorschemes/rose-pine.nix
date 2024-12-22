@@ -5,7 +5,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "rose-pine";
   isColorscheme = true;
 

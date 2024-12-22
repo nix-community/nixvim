@@ -40,7 +40,7 @@ let
 in
 {
   options = {
-    plugins.wtf = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+    plugins.wtf = lib.nixvim.plugins.neovim.extraOptionsOptions // {
       enable = mkEnableOption "wtf.nvim";
 
       package = lib.mkPackageOption pkgs "wtf.nvim" {

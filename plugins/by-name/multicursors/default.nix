@@ -45,7 +45,7 @@ let
 in
 {
   options = {
-    plugins.multicursors = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+    plugins.multicursors = lib.nixvim.plugins.neovim.extraOptionsOptions // {
       enable = mkEnableOption "multicursors.nvim";
 
       package = lib.mkPackageOption pkgs "multicursors.nvim" {

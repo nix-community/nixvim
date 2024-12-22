@@ -3,7 +3,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkNullOrStr';
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "fastaction";
   packPathName = "fastaction.nvim";
   package = "fastaction-nvim";

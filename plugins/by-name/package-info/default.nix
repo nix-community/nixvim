@@ -7,7 +7,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "package-info";
   packPathName = "package-info.nvim";
   package = "package-info-nvim";

@@ -2,7 +2,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "tiny-devicons-auto-colors";
   packPathName = "tiny-devicons-auto-colors.nvim";
   package = "tiny-devicons-auto-colors-nvim";

@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 # Template for default.nix
 # TODO: conditionally include parts of the template based on args
 default_nix_template = """{{ lib, ... }}:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {{
+lib.nixvim.plugins.mkNeovimPlugin {{
   name = "{name}";
   packPathName = "{originalName}";
   package = "{package}";

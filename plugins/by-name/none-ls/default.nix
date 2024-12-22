@@ -4,7 +4,7 @@
   options,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "none-ls";
   packPathName = "none-ls.nvim";
   moduleName = "null-ls";

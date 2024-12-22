@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "ts-comments";
   packPathName = "ts-comments.nvim";
   package = "ts-comments-nvim";

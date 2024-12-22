@@ -8,7 +8,7 @@ let
   cfg = config.plugins.rust-tools;
 in
 {
-  options.plugins.rust-tools = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.rust-tools = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = lib.mkEnableOption "rust tools plugins";
     package = lib.mkPackageOption pkgs "rust-tools" {
       default = [

@@ -83,7 +83,7 @@ in
 {
   options.plugins.diffview =
     with helpers.defaultNullOpts;
-    lib.nixvim.neovim-plugin.extraOptionsOptions
+    lib.nixvim.plugins.neovim.extraOptionsOptions
     // {
       enable = mkEnableOption "diffview";
 

@@ -3,7 +3,7 @@
   config,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp-format";
   packPathName = "lsp-format.nvim";
   package = "lsp-format-nvim";

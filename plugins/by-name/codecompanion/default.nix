@@ -7,7 +7,7 @@ let
     ;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "codecompanion";
   packPathName = "codecompanion.nvim";
   package = "codecompanion-nvim";

@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "grug-far";
   packPathName = "grug-far.nvim";
   package = "grug-far-nvim";

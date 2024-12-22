@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "rustaceanvim";
 
   maintainers = [ maintainers.GaetanLepage ];

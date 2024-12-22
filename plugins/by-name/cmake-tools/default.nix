@@ -2,7 +2,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmake-tools";
   packPathName = "cmake-tools.nvim";
   package = "cmake-tools-nvim";

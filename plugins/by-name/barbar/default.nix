@@ -51,7 +51,7 @@ let
     orderByWindowNumber = "OrderByWindowNumber";
   };
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "barbar";
   packPathName = "barbar.nvim";
   package = "barbar-nvim";

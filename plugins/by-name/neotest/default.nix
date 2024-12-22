@@ -3,7 +3,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "neotest";
 
   maintainers = [ maintainers.GaetanLepage ];

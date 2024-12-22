@@ -10,7 +10,7 @@ let
   cfg = config.plugins.lspkind;
 in
 {
-  options.plugins.lspkind = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.lspkind = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "lspkind.nvim";
 
     package = lib.mkPackageOption pkgs "lspkind" {

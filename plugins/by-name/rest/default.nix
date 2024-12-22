@@ -8,7 +8,7 @@ let
   inherit (lib) mkRemovedOptionModule types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "rest";
   packPathName = "rest.nvim";
   moduleName = "rest-nvim";

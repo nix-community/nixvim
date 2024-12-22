@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "sqlite-lua";
   packPathName = "sqlite.lua";
   moduleName = "sqlite.lua";

@@ -6,7 +6,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitsigns";
   packPathName = "gitsigns.nvim";
   package = "gitsigns-nvim";

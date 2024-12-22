@@ -2,7 +2,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "baleia";
   packPathName = "baleia.nvim";
   package = "baleia-nvim";

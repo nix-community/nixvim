@@ -7,7 +7,7 @@ with lib;
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-nixvim.neovim-plugin.mkNeovimPlugin {
+nixvim.plugins.mkNeovimPlugin {
   name = "lz-n";
   packPathName = "lz.n";
   maintainers = [ maintainers.psfloyd ];

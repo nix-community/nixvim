@@ -133,7 +133,7 @@ let
     };
 in
 {
-  options.plugins.lint = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.lint = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-lint";
 
     package = lib.mkPackageOption pkgs "nvim-lint" {

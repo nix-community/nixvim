@@ -6,7 +6,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStrLuaFnOr;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "catppuccin";
   packPathName = "catppuccin-nvim";
   isColorscheme = true;

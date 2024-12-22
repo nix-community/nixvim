@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "oil";
   packPathName = "oil.nvim";
   package = "oil-nvim";

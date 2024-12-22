@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "copilot-chat";
   packPathName = "CopilotChat.nvim";
   moduleName = "CopilotChat";

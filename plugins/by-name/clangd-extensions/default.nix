@@ -95,7 +95,7 @@ in
       ]
     );
 
-  options.plugins.clangd-extensions = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.clangd-extensions = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "clangd_extensions, plugins implementing clangd LSP extensions";
 
     package = lib.mkPackageOption pkgs "clangd_extensions.nvim" {

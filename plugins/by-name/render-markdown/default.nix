@@ -3,7 +3,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "render-markdown";
   packPathName = "render-markdown.nvim";
   package = "render-markdown-nvim";

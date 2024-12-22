@@ -12,7 +12,7 @@ in
 {
   meta.maintainers = [ maintainers.GaetanLepage ];
 
-  options.plugins.marks = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.marks = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "marks.nvim";
 
     package = lib.mkPackageOption pkgs "marks.nvim" {

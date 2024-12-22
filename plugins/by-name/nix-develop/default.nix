@@ -3,7 +3,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "nix-develop";
   packPathName = "nix-develop.nvim";
   package = "nix-develop-nvim";

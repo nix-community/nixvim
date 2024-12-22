@@ -7,7 +7,7 @@ let
 
   cmpOptions = import ./options { inherit lib; };
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmp";
   packPathName = "nvim-cmp";
   package = "nvim-cmp";

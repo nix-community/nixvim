@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "crates";
   packPathName = "crates.nvim";
   package = "crates-nvim";

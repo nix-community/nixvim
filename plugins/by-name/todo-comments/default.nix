@@ -15,7 +15,7 @@ let
     ;
 
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "todo-comments";
   packPathName = "todo-comments.nvim";
   package = "todo-comments-nvim";

@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "bacon";
   package = "nvim-bacon";
   maintainers = [ lib.maintainers.alisonjenkins ];

@@ -13,7 +13,7 @@ let
     ;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "neorg";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

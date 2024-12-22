@@ -44,7 +44,7 @@ To add a new plugin you need to do the following.
   For those, you should use the `lib.nixvim.vim-plugin.mkVimPlugin`.\
   -> See [this plugin](plugins/utils/direnv.nix) for an example.
 - _neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
-  For those, you should use the `lib.nixvim.neovim-plugin.mkNeovimPlugin`.\
+  For those, you should use the `lib.nixvim.plugins.mkNeovimPlugin`.\
   -> See the [template](plugins/TEMPLATE.nix).
 
 3. Add the necessary arguments when calling either [`mkNeovimPlugin`](#mkneovimplugin) or [`mkVimPlugin`](#mkvimplugin)

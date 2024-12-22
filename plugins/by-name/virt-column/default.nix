@@ -3,7 +3,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "virt-column";
   packPathName = "virt-column.nvim";
   package = "virt-column-nvim";

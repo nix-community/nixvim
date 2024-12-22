@@ -3,7 +3,7 @@
   config,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "hmts";
   packPathName = "hmts.nvim";
   package = "hmts-nvim";

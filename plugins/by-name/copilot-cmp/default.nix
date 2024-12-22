@@ -3,7 +3,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "copilot-cmp";
   moduleName = "copilot_cmp";
 

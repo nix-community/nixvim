@@ -56,7 +56,7 @@ let
   };
 in
 {
-  options.plugins.dap.extensions.dap-ui = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.dap.extensions.dap-ui = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "dap-ui";
 
     package = lib.mkPackageOption pkgs "dap-ui" {

@@ -12,7 +12,7 @@ let
   mkListStr = helpers.defaultNullOpts.mkNullable (types.listOf types.str);
 in
 {
-  options.plugins.chadtree = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.chadtree = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "chadtree";
 
     package = lib.mkPackageOption pkgs "chadtree" {

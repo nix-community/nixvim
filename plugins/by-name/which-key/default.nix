@@ -69,7 +69,7 @@ let
   ];
 
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "which-key";
   packPathName = "which-key.nvim";
   package = "which-key-nvim";

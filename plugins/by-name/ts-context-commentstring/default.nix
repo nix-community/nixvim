@@ -7,7 +7,7 @@
 }:
 with lib;
 {
-  options.plugins.ts-context-commentstring = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.ts-context-commentstring = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-ts-context-commentstring";
 
     package = lib.mkPackageOption pkgs "ts-context-commentstring" {

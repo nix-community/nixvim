@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "telekasten";
   packPathName = "telekasten.nvim";
   package = "telekasten-nvim";

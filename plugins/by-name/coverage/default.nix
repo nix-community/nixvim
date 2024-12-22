@@ -60,7 +60,7 @@ let
   };
 in
 {
-  options.plugins.coverage = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.coverage = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-coverage";
 
     package = lib.mkPackageOption pkgs "nvim-coverage" {

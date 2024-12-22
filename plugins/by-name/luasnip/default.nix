@@ -43,7 +43,7 @@ let
     };
   };
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "luasnip";
   package = "luasnip";
   setup = ".config.setup";

@@ -7,7 +7,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitblame";
   packPathName = "git-blame.nvim";
   package = "git-blame-nvim";

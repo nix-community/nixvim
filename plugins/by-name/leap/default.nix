@@ -10,7 +10,7 @@ let
   cfg = config.plugins.leap;
 in
 {
-  options.plugins.leap = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.leap = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "leap.nvim";
 
     package = lib.mkPackageOption pkgs "leap.nvim" {

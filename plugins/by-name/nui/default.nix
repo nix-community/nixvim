@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "nui";
   packPathName = "nui.nvim";
   package = "nui-nvim";

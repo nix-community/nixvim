@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "treesitter-context";
   packPathName = "nvim-treesitter-context";
   package = "nvim-treesitter-context";

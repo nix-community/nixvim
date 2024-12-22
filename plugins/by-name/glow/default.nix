@@ -6,7 +6,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "glow";
   packPathName = "glow.nvim";
   package = "glow-nvim";

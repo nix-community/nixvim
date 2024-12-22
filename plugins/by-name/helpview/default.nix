@@ -6,7 +6,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "helpview";
   packPathName = "helpview.nvim";
   package = "helpview-nvim";

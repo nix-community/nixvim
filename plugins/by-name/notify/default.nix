@@ -10,7 +10,7 @@ let
   cfg = config.plugins.notify;
 in
 {
-  options.plugins.notify = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.notify = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-notify";
 
     package = lib.mkPackageOption pkgs "nvim-notify" {

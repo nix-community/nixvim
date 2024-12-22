@@ -2,7 +2,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrLuaFn;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "hex";
   packPathName = "hex.nvim";
   package = "hex-nvim";

@@ -22,7 +22,7 @@ let
   };
 in
 {
-  options.plugins.harpoon = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.harpoon = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "harpoon";
 
     package = lib.mkPackageOption pkgs "harpoon" {

@@ -10,7 +10,7 @@ let
   cfg = config.plugins.nvim-jdtls;
 in
 {
-  options.plugins.nvim-jdtls = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.nvim-jdtls = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-jdtls";
 
     package = lib.mkPackageOption pkgs "nvim-jdtls" {

@@ -11,7 +11,7 @@ let
 in
 {
   options = {
-    plugins.presence-nvim = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+    plugins.presence-nvim = lib.nixvim.plugins.neovim.extraOptionsOptions // {
       enable = mkEnableOption "presence-nvim";
       package = lib.mkPackageOption pkgs "presence-nvim" {
         default = [

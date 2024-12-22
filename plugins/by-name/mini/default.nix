@@ -2,7 +2,7 @@
   lib,
   ...
 }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini";
   packPathName = "mini.nvim";
   # Just want it before most other plugins for the icons provider.

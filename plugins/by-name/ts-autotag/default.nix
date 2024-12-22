@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "ts-autotag";
   packPathName = "nvim-ts-autotag";
   moduleName = "nvim-ts-autotag";

@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "chatgpt";
   packPathName = "ChatGPT.nvim";
   package = "ChatGPT-nvim";

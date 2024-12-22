@@ -4,7 +4,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "zen-mode";
   packPathName = "zen-mode.nvim";
   package = "zen-mode-nvim";

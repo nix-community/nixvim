@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "remote-nvim";
   packPathName = "remote-nvim.nvim";
   package = "remote-nvim-nvim";

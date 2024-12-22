@@ -12,7 +12,7 @@ let
   name = "openscad";
   globalPrefix = "openscad_";
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   inherit name;
   packPathName = "openscad.nvim";
   package = "openscad-nvim";

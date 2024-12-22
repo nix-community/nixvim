@@ -10,7 +10,7 @@ let
   cfg = config.plugins.nvim-bqf;
 in
 {
-  options.plugins.nvim-bqf = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.nvim-bqf = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-bqf";
 
     package = lib.mkPackageOption pkgs "nvim-bqf" {

@@ -19,7 +19,7 @@ with dapHelpers;
     ./dap-virtual-text.nix
   ];
 
-  options.plugins.dap = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.dap = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "dap";
 
     package = lib.mkPackageOption pkgs "dap" {

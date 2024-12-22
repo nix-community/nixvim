@@ -7,7 +7,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "octo";
   packPathName = "octo.nvim";
   package = "octo-nvim";

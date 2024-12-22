@@ -6,7 +6,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "conform-nvim";
   moduleName = "conform";
   packPathName = "conform.nvim";

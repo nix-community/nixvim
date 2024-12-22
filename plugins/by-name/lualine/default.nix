@@ -7,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "lualine";
   packPathName = "lualine.nvim";
   package = "lualine-nvim";

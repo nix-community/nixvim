@@ -2,7 +2,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp-signature";
   packPathName = "lsp_signature.nvim";
   package = "lsp_signature-nvim";

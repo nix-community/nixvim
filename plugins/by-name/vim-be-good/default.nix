@@ -1,5 +1,5 @@
 { lib, pkgs, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "vim-be-good";
   package = "vim-be-good";
 

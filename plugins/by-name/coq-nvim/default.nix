@@ -7,7 +7,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "coq-nvim";
   packPathName = "coq_nvim";
   package = "coq_nvim";

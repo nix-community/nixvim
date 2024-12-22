@@ -10,7 +10,7 @@ let
   cfg = config.plugins.mark-radar;
 in
 {
-  options.plugins.mark-radar = lib.nixvim.neovim-plugin.extraOptionsOptions // {
+  options.plugins.mark-radar = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "mark-radar";
 
     package = lib.mkPackageOption pkgs "mark-radar" {

@@ -5,7 +5,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "typescript-tools";
   packPathName = "typescript-tools.nvim";
   package = "typescript-tools-nvim";

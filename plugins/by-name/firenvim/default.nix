@@ -8,7 +8,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "firenvim";
 
   maintainers = with lib.maintainers; [ GaetanLepage ];

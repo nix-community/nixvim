@@ -5,7 +5,7 @@
   ...
 }:
 with lib;
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "git-conflict";
   packPathName = "git-conflict.nvim";
   package = "git-conflict-nvim";

@@ -1,5 +1,5 @@
 { lib, ... }:
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-lldb";
   packPathName = "nvim-dap-lldb";
   package = "nvim-dap-lldb";

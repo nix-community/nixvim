@@ -7,7 +7,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "persisted";
   packPathName = "persisted.nvim";
   package = "persisted-nvim";

@@ -2,7 +2,7 @@
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption toLuaObject;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "web-devicons";
   packPathName = "nvim-web-devicons";
   moduleName = "nvim-web-devicons";
