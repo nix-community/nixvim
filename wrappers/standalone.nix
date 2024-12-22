@@ -33,7 +33,7 @@ let
       paths = [
         build.package
         build.printInitPackage
-      ] ++ pkgs.lib.optional enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
+      ] ++ lib.optional enableMan build.manDocsPackage;
       meta.mainProgram = "nvim";
     })
     // rec {

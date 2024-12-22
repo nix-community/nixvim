@@ -9,6 +9,7 @@ let
   inherit (lib) types mkOption mkPackageOption;
   inherit (lib) optional optionalAttrs;
   builders = lib.nixvim.builders.withPkgs pkgs;
+  inherit (pkgs.stdenv.hostPlatform) system;
 in
 {
   options = {
@@ -142,6 +143,16 @@ in
         description = ''
           A tool to show the content of the generated `init.lua` file.
           Run using `${config.build.printInitPackage.meta.mainProgram}`.
+        '';
+        readOnly = true;
+        visible = false;
+      };
+
+      manDocsPackage = mkOption {
+        type = types.package;
+        defaultText = lib.literalMD "`packages.<system>.man-docs` from Nixvim's flake";
+        description = ''
+          Nixvim's manpage documentation.
         '';
         readOnly = true;
         visible = false;
@@ -370,6 +381,8 @@ in
             bat --language=lua "$init"
           '';
         };
+
+        manDocsPackage = config.flake.packages.${system}.man-docs;
       };
 
       # Set `wrapRc` and `impureRtp`s option defaults with even lower priority than `mkOptionDefault`

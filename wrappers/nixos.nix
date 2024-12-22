@@ -1,6 +1,5 @@
 self:
 {
-  pkgs,
   config,
   lib,
   ...
@@ -37,7 +36,7 @@ in
     environment.systemPackages = [
       cfg.build.package
       cfg.build.printInitPackage
-    ] ++ lib.optional cfg.enableMan self.packages.${pkgs.stdenv.hostPlatform.system}.man-docs;
+    ] ++ lib.optional cfg.enableMan cfg.build.manDocsPackage;
 
     environment.variables = {
       VIM = mkIf (!cfg.wrapRc) "/etc/nvim";
