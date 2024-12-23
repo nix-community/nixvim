@@ -6,7 +6,6 @@
   lib ? pkgs.lib,
   linkFarm,
   pkgs,
-  pkgsUnfree,
   self,
   system,
 }:
@@ -29,8 +28,10 @@ let
           inherit self system;
           inherit (self) inputs;
         };
+        nixpkgs.config = {
+          allowUnfree = true;
+        };
       };
-      pkgs = pkgsUnfree;
     };
 
   # List of files containing configurations
