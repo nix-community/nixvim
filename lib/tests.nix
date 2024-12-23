@@ -1,11 +1,10 @@
 {
   self,
-  pkgs,
-  lib ? pkgs.lib,
-  ...
+  system,
+  lib,
 }:
 let
-  defaultPkgs = pkgs;
+  defaultSystem = system;
 
   # Create a nix derivation from a nixvim executable.
   # The build phase simply consists in running the provided nvim binary.
@@ -31,7 +30,7 @@ let
     {
       name ? null,
       pkgs ? null,
-      system ? defaultPkgs.stdenv.hostPlatform.system,
+      system ? defaultSystem,
       module,
       extraSpecialArgs ? { },
     }:

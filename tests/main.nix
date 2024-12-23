@@ -8,10 +8,13 @@
   pkgs,
   pkgsUnfree,
   self,
+  system,
 }:
 let
   fetchTests = callTest ./fetch-tests.nix { };
-  test-derivation = callPackage ../lib/tests.nix { inherit self; };
+  test-derivation = callPackage ../lib/tests.nix {
+    inherit lib self system;
+  };
   inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   moduleToTest =
