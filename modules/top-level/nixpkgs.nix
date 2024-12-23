@@ -164,7 +164,8 @@ in
       apply = lib.systems.elaborate;
       defaultText = lib.literalMD ''
         - Inherited from the "host" configuration's `pkgs`
-        - Must be specified manually when building a standalone nixvim
+        - Or `evalNixvim`'s `system` argument
+        - Otherwise, must be specified manually
       '';
       description = ''
         Specifies the platform where the Nixvim configuration will run.

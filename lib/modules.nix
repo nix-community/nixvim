@@ -21,12 +21,16 @@ in
     {
       modules ? [ ],
       extraSpecialArgs ? { },
+      system ? null, # Can also be defined using the `nixpkgs.hostPlatform` option
     }:
     # Ensure a suitable `lib` is used
     assert lib.assertMsg (extraSpecialArgs ? lib -> extraSpecialArgs.lib ? nixvim) ''
       Nixvim requires a lib that includes some custom extensions, however the `lib` from `specialArgs` does not have a `nixvim` attr.
       Remove `lib` from nixvim's `specialArgs` or ensure you apply nixvim's extensions to your `lib`.
       See https://nix-community.github.io/nixvim/user-guide/helpers.html#using-a-custom-lib-with-nixvim'';
+    assert lib.assertMsg (system != null -> lib.isString system) ''
+      When `system` is supplied to `evalNixvim`, it must be a string.
+      To define a more complex system, please use nixvim's `nixpkgs.hostPlatform` option.'';
     lib.evalModules {
       modules = modules ++ [
         ../modules/top-level
@@ -34,6 +38,10 @@ in
           _file = "<nixvim-flake>";
           flake = lib.mkOptionDefault flake;
         }
+        (lib.optionalAttrs (system != null) {
+          _file = "evalNixvim";
+          nixpkgs.hostPlatform = lib.mkOptionDefault { inherit system; };
+        })
       ];
       specialArgs = {
         modulesPath = ../modules;
