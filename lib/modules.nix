@@ -1,7 +1,7 @@
 {
   lib,
   self,
-  flake ? null,
+  flake,
 }:
 let
   removed = {
@@ -32,10 +32,10 @@ in
         ../modules/top-level
 
         # Pass our locked nixpkgs into the configuration
-        (lib.optionalAttrs (flake != null) {
+        {
           _file = "<nixvim-flake>";
           nixpkgs.source = lib.mkOptionDefault flake.inputs.nixpkgs;
-        })
+        }
       ];
       specialArgs = {
         inherit lib;
