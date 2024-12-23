@@ -2,11 +2,34 @@
   config,
   options,
   lib,
+  pkgs,
   ...
 }:
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
+
+  isConfig = x: builtins.isAttrs x || lib.isFunction x;
+
+  mergeConfig =
+    lhs_: rhs_:
+    let
+      optCall = maybeFn: x: if lib.isFunction maybeFn then maybeFn x else maybeFn;
+      lhs = optCall lhs_ { inherit pkgs; };
+      rhs = optCall rhs_ { inherit pkgs; };
+    in
+    lib.recursiveUpdate lhs rhs
+    // lib.optionalAttrs (lhs ? packageOverrides) {
+      packageOverrides =
+        pkgs:
+        optCall lhs.packageOverrides pkgs // optCall (lib.attrByPath [ "packageOverrides" ] { } rhs) pkgs;
+    }
+    // lib.optionalAttrs (lhs ? perlPackageOverrides) {
+      perlPackageOverrides =
+        pkgs:
+        optCall lhs.perlPackageOverrides pkgs
+        // optCall (lib.attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
+    };
 in
 {
   options.nixpkgs = {
@@ -53,6 +76,29 @@ in
         > [!NOTE]
         > Using a distinct version of Nixpkgs with Nixvim may be an unexpected source of problems.
         > Use this option with care.
+      '';
+    };
+
+    config = lib.mkOption {
+      default = { };
+      example = {
+        allowBroken = true;
+        allowUnfree = true;
+      };
+      type = lib.mkOptionType {
+        name = "nixpkgs-config";
+        description = "nixpkgs config";
+        check = x: isConfig x || lib.traceSeqN 1 x false;
+        merge = loc: lib.foldr (def: mergeConfig def.value) { };
+      };
+      description = ''
+        Global configuration for Nixpkgs.
+        The complete list of [Nixpkgs configuration options] is in the [Nixpkgs manual section on global configuration].
+
+        Ignored when {option}`nixpkgs.pkgs` is set.
+
+        [Nixpkgs configuration options]: https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference
+        [Nixpkgs manual section on global configuration]: https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig
       '';
     };
 
@@ -170,5 +216,21 @@ in
       warnings = lib.optional (
         opt.source.isDefined && opt.source.highestPrio < (lib.mkOptionDefault null).priority
       ) "Defining the option `nixpkgs.source` currently has no effect";
+
+      assertions = [
+        {
+          assertion = opt.pkgs.isDefined -> cfg.config == { };
+          message = ''
+            Your system configures nixpkgs with an externally created instance.
+            `nixpkgs.config` options should be passed when creating the instance instead.
+
+            Current value:
+            ${lib.generators.toPretty { multiline = true; } cfg.config}
+
+            Defined in:
+            ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.config.files}
+          '';
+        }
+      ];
     };
 }
