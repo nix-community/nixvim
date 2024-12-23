@@ -1,10 +1,18 @@
-{ inputs, self, ... }:
+{
+  inputs,
+  self,
+  lib,
+  ...
+}:
 {
   perSystem =
     { system, pkgs, ... }:
     {
       _module.args = {
-        makeNixvimWithModule = import ../wrappers/standalone.nix pkgs self;
+        makeNixvimWithModule = import ../wrappers/standalone.nix {
+          inherit lib self;
+          defaultSystem = system;
+        };
       };
 
       checks =
