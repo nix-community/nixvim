@@ -30,11 +30,9 @@ in
     lib.evalModules {
       modules = modules ++ [
         ../modules/top-level
-
-        # Pass our locked nixpkgs into the configuration
         {
           _file = "<nixvim-flake>";
-          nixpkgs.source = lib.mkOptionDefault flake.inputs.nixpkgs;
+          flake = lib.mkOptionDefault flake;
         }
       ];
       specialArgs = {

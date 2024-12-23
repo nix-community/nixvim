@@ -129,7 +129,7 @@ in
     # NOTE: This is a nixvim-specific option; there's no equivalent in nixos
     source = lib.mkOption {
       type = lib.types.path;
-      # NOTE: default is only set if `flake` is passed to our lib
+      default = config.flake.inputs.nixpkgs;
       defaultText = lib.literalMD "Nixvim's flake `input.nixpkgs`";
       description = ''
         The path to import Nixpkgs from.
