@@ -113,15 +113,6 @@ let
                   inherit extraConfig cfg opts;
                 }
               ))
-            ]
-            # Lua configuration code generation
-            ++ lib.optionals hasLuaConfig [
-
-              # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
-              (lib.optionalAttrs callSetup (lib.setAttrByPath loc { luaConfig.content = setupCode; }))
-
-              # When NOT lazy loading, write `luaConfig.content` to `configLocation`
-              (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
 
               # When lazy loading is enabled for this plugin, route its configuration to the enabled provider
               (lib.mkIf cfg.lazyLoad.enable {
@@ -131,6 +122,7 @@ let
                     message = "You have enabled lazy loading for ${packPathName} but have not provided any configuration.";
                   }
                 ];
+
                 plugins.lz-n = {
                   plugins = [
                     (
@@ -140,7 +132,7 @@ let
                         after =
                           let
                             after = cfg.lazyLoad.settings.after or null;
-                            default = "function()\n " + cfg.luaConfig.content + " \nend";
+                            default = if hasLuaConfig then "function()\n " + cfg.luaConfig.content + " \nend" else null;
                           in
                           if (lib.isString after || lib.types.rawLua.check after) then after else default;
                         colorscheme = lib.mkIf isColorscheme (cfg.lazyLoad.settings.colorscheme or colorscheme);
@@ -153,6 +145,15 @@ let
                   ];
                 };
               })
+            ]
+            # Lua configuration code generation
+            ++ lib.optionals hasLuaConfig [
+
+              # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
+              (lib.optionalAttrs callSetup (lib.setAttrByPath loc { luaConfig.content = setupCode; }))
+
+              # When NOT lazy loading, write `luaConfig.content` to `configLocation`
+              (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
             ]
           )
         );
