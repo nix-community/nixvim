@@ -42,7 +42,7 @@ To add a new plugin you need to do the following.
 
 - _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
   For those, you should use the `lib.nixvim.plugins.mkVimPlugin`.\
-  -> See [this plugin](plugins/utils/direnv.nix) for an example.
+  -> See [this plugin](plugins/by-name/direnv/default.nix) for an example.
 - _neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
   For those, you should use the `lib.nixvim.plugins.mkNeovimPlugin`.\
   -> See the [template](plugins/TEMPLATE.nix).
@@ -108,10 +108,12 @@ mkNeovimPlugin {
 }
 ```
 
-Here's an example plugin: [lsp_lines.nvim](https://github.com/nix-community/nixvim/commit/8815180c625e9766b2cb3126756b97e994998228)
-
 This example defines a Neovim plugin named `example-plugin` with specified maintainers, URL, description, settings options, and additional configuration. `package` will be 'example-plugin'
 thanks to package referring to the `name` attribute.
+
+See the [template](plugins/TEMPLATE.nix) for a starting point.
+
+Here's a simple plugin using `mkNeovimPlugin` for reference: [lsp_lines.nvim](plugins/by-name/lsp-lines/default.nix).
 
 #### `mkVimPlugin`
 
