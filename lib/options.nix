@@ -155,7 +155,8 @@ rec {
             type = types.rawLua;
           }
           // lib.optionalAttrs (args ? pluginDefault) {
-            pluginDefault = lib.nixvim.literalLua args.pluginDefault;
+            pluginDefault =
+              if args.pluginDefault == null then null else lib.nixvim.literalLua args.pluginDefault;
           }
         );
       mkRaw = pluginDefault: description: mkRaw' { inherit pluginDefault description; };
