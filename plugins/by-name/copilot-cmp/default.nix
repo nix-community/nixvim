@@ -57,7 +57,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = {
     warnings =
       let
-        copilot-lua-cfg = config.plugins.copilot-lua;
+        copilot-lua-cfg = config.plugins.copilot-lua.settings;
         isEnabled = b: (lib.isBool b && b);
       in
       lib.optional (isEnabled copilot-lua-cfg.suggestion.enabled) ''

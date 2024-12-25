@@ -8,8 +8,10 @@
       copilot-lua = {
         enable = true;
 
-        panel.enabled = false;
-        suggestion.enabled = false;
+        settings = {
+          panel.enabled = false;
+          suggestion.enabled = false;
+        };
       };
 
       copilot-cmp.settings = {
@@ -31,53 +33,112 @@
     plugins.copilot-lua = {
       enable = true;
 
-      panel = {
-        enabled = true;
-        autoRefresh = false;
-        keymap = {
-          jumpPrev = "[[";
-          jumpNext = "]]";
-          accept = "<CR>";
-          refresh = "gr";
-          open = "<M-CR>";
+      settings = {
+        panel = {
+          enabled = true;
+          auto_refresh = false;
+          keymap = {
+            jump_prev = "[[";
+            jump_next = "]]";
+            accept = "<CR>";
+            refresh = "gr";
+            open = "<M-CR>";
+          };
+          layout = {
+            position = "bottom";
+            ratio = 0.4;
+          };
         };
-        layout = {
-          position = "bottom";
-          ratio = 0.4;
+        suggestion = {
+          enabled = true;
+          auto_trigger = false;
+          hide_during_completion = true;
+          debounce = 75;
+          keymap = {
+            accept = "<M-l>";
+            accept_word = false;
+            accept_line = false;
+            next = "<M-]>";
+            prev = "<M-[>";
+            dismiss = "<C-]>";
+          };
+        };
+        filetypes = {
+          yaml = false;
+          markdown = false;
+          help = false;
+          gitcommit = false;
+          gitrebase = false;
+          hgcommit = false;
+          svn = false;
+          cvs = false;
+          "." = false;
+        };
+        server_opts_overrides = {
+          trace = "verbose";
+          settings = {
+            advanced = {
+              listCount = 10; # number of completions for panel
+              inlineSuggestCount = 3; # number of completions for getCompletions
+            };
+          };
         };
       };
-      suggestion = {
-        enabled = true;
-        autoTrigger = false;
-        debounce = 75;
-        keymap = {
-          accept = "<M-l>";
-          acceptWord = false;
-          acceptLine = false;
-          next = "<M-]>";
-          prev = "<M-[>";
-          dismiss = "<C-]>";
+    };
+  };
+
+  examples = {
+    plugins.copilot-lua = {
+      enable = true;
+
+      settings = {
+        panel = {
+          enabled = true;
+          auto_refresh = true;
+          keymap = {
+            jump_prev = "[[";
+            jump_next = "]]";
+            accept = "<CR>";
+            refresh = "gr";
+            open = "<M-CR>";
+          };
+          layout = {
+            position = "top";
+            ratio = 0.5;
+          };
         };
-      };
-      filetypes = {
-        markdown = true;
-        terraform = false;
-        sh.__raw = ''
-          function ()
-            if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
-              -- disable for .env files
-              return false
-            end
-            return true
-          end
-        '';
-      };
-      serverOptsOverrides = {
-        trace = "verbose";
-        settings = {
-          advanced = {
-            listCount = 10; # number of completions for panel
-            inlineSuggestCount = 3; # number of completions for getCompletions
+        suggestion = {
+          enabled = true;
+          auto_trigger = false;
+          hide_during_completion = false;
+          debounce = 90;
+          keymap = {
+            accept = "<M-l>";
+            accept_word = false;
+            accept_line = false;
+            next = "<M-]>";
+            prev = "<M-[>";
+            dismiss = "<C-]>";
+          };
+        };
+        filetypes = {
+          yaml = true;
+          markdown = true;
+          help = true;
+          gitcommit = true;
+          gitrebase = true;
+          hgcommit = true;
+          svn = true;
+          cvs = true;
+          "." = true;
+        };
+        server_opts_overrides = {
+          trace = "verbose";
+          settings = {
+            advanced = {
+              listCount = 10; # number of completions for panel
+              inlineSuggestCount = 3; # number of completions for getCompletions
+            };
           };
         };
       };
