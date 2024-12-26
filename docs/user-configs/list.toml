@@ -102,6 +102,12 @@ owner = "pete3n"
 repo = "nixvim-flake"
 
 [[config]]
+owner = "r6t"
+title = "nixos-r6t"
+description = "Single-file nixvim config, uses home-manager module in a NixOS flake"
+url = "https://github.com/r6t/nixos-r6t/blob/main/modules/home/nixvim/default.nix"
+
+[[config]]
 owner = "redyf"
 repo = "Neve"
 description = "Meticulously crafted custom configuration for Nixvim"
