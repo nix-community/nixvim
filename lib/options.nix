@@ -381,5 +381,18 @@ rec {
         }
       );
     };
+
+  mkAutoLoadOption =
+    cfg: name:
+    lib.mkOption {
+      description = ''
+        Whether to automatically load ${name} when neovim starts.
+      '';
+      type = types.bool;
+      default = !(cfg.lazyLoad.enable or false);
+      defaultText =
+        if cfg ? lazyLoad then lib.literalMD "`false` when lazy-loading is enabled." else true;
+      example = false;
+    };
 }
 // removed

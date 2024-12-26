@@ -74,7 +74,12 @@
       };
 
       config = lib.mkIf cfg.enable {
-        extraPlugins = [ (cfg.packageDecorator cfg.package) ];
+        extraPlugins = [
+          {
+            plugin = cfg.packageDecorator cfg.package;
+            optional = !cfg.autoLoad;
+          }
+        ];
       };
     };
 }

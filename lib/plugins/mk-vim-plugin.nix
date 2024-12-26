@@ -67,6 +67,7 @@ let
       options = lib.setAttrByPath loc (
         {
           enable = lib.mkEnableOption packPathName;
+          autoLoad = lib.nixvim.mkAutoLoadOption cfg packPathName;
         }
         // settingsOption
         // extraOptions

@@ -46,6 +46,7 @@ lib.makeExtensible (
 
     inherit (self.options)
       defaultNullOpts
+      mkAutoLoadOption
       mkCompositeOption
       mkCompositeOption'
       mkLazyLoadOption
