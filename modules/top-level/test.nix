@@ -43,7 +43,14 @@ let
             if config.expect == null then
               lib.types.unspecified
               // {
-                description = "defined by `expect`";
+                description = ''
+                  Depends on `expect`:
+                  ${lib.concatStringsSep "\n" (
+                    lib.mapAttrsToList (
+                      name: spec: "- ${builtins.toJSON name}: ${spec.valueType.description}"
+                    ) cfg.namedExpectationPredicates
+                  )}
+                '';
               }
             else
               namedPredicate.valueType;
