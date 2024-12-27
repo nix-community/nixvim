@@ -36,7 +36,9 @@ let
         in
         if type == "regular" then
           lib.optional (lib.hasSuffix ".nix" name) (
-            handleTestFile file (namespace ++ [ (lib.removeSuffix ".nix" name) ])
+            handleTestFile file (
+              namespace ++ lib.optional (name != "default.nix") (lib.removeSuffix ".nix" name)
+            )
           )
         else
           fetchTests file (namespace ++ [ name ]);
