@@ -94,12 +94,15 @@ in
     checkWarnings = lib.mkOption {
       type = lib.types.bool;
       description = "Whether to check `config.warnings` in the test.";
+      apply = x: lib.warnIfNot x "`test.checkWarnings = false` is replaced with `test.warnings = [ ]`." x;
       default = true;
     };
 
     checkAssertions = lib.mkOption {
       type = lib.types.bool;
       description = "Whether to check `config.assertions` in the test.";
+      apply =
+        x: lib.warnIfNot x "`test.checkAssertions = false` is replaced with `test.assertions = [ ]`." x;
       default = true;
     };
 

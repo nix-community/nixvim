@@ -1,13 +1,20 @@
+let
+  expect = expect: value: { inherit expect value; };
+
+  # This plugin is deprecated
+  warnings = [
+    (expect "count" 1)
+    (expect "any" "The `rust-tools` project has been abandoned.")
+  ];
+in
 {
   empty = {
-    # Plugin deprecated
-    test.checkWarnings = false;
+    test = { inherit warnings; };
     plugins.rust-tools.enable = true;
   };
 
   defaults = {
-    # Plugin deprecated
-    test.checkWarnings = false;
+    test = { inherit warnings; };
     plugins.rust-tools = {
       enable = true;
       executor = "termopen";
@@ -77,8 +84,7 @@
   };
 
   rust-analyzer-options = {
-    # Plugin deprecated
-    test.checkWarnings = false;
+    test = { inherit warnings; };
     plugins.rust-tools = {
       enable = true;
       server = {

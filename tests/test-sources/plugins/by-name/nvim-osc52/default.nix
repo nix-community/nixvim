@@ -1,9 +1,17 @@
+let
+  expect = expect: value: { inherit expect value; };
+
+  # This plugin is deprecated
+  warnings = [
+    (expect "count" 1)
+    (expect "any" "this plugin is obsolete and will be removed after 24.11.")
+  ];
+in
 {
   empty = {
     plugins.nvim-osc52.enable = true;
 
-    # Hide warnings, since this plugin is deprecated
-    test.checkWarnings = false;
+    test = { inherit warnings; };
   };
 
   defaults = {
@@ -20,7 +28,6 @@
       };
     };
 
-    # Hide warnings, since this plugin is deprecated
-    test.checkWarnings = false;
+    test = { inherit warnings; };
   };
 }
