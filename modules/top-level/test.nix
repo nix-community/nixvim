@@ -39,7 +39,14 @@ let
           default = null;
         };
         value = lib.mkOption {
-          type = lib.types.anything;
+          type =
+            if config.expect == null then
+              lib.types.unspecified
+              // {
+                description = "defined by `expect`";
+              }
+            else
+              namedPredicate.valueType;
           description = ''
             If defined, will be used together with `expect` to define `predicate`.
           '';
@@ -137,6 +144,12 @@ in
                 Expectation message supplier, matching `(value) -> String` or `(value) -> [(message)] -> String`.
               '';
             };
+            valueType = lib.mkOption {
+              type = lib.types.optionType;
+              description = ''
+                The type to use for `value` when this expectation is used.
+              '';
+            };
           };
         });
       description = ''
@@ -196,14 +209,17 @@ in
           count = {
             predicate = v: l: builtins.length l == v;
             message = v: l: "Expected length to be ${toString v} but found ${toString (builtins.length l)}.";
+            valueType = lib.types.ints.unsigned;
           };
           any = {
             predicate = v: builtins.any (lib.hasInfix v);
             message = v: "Expected ${lib.toJSON v} infix to be present.";
+            valueType = lib.types.str;
           };
           anyExact = {
             predicate = builtins.elem;
             message = v: "Expected ${lib.toJSON v} to be present.";
+            valueType = lib.types.str;
           };
         };
       };
