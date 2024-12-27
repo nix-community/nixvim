@@ -41,9 +41,9 @@ let
   isVisible =
     opts:
     if lib.isOption opts then
-      opts.visible or true
+      opts.visible or true && !(opts.internal or false)
     else if opts.isOption then
-      opts.index.options.visible or true
+      opts.index.options.visible or true && !(opts.index.options.internal or false)
     else
       let
         filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisible v else true);
