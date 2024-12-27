@@ -19,10 +19,17 @@ in
       description = "The test derivation's name.";
     };
 
+    buildNixvim = lib.mkOption {
+      type = lib.types.bool;
+      description = "Whether to build the nixvim config in the test.";
+      default = true;
+    };
+
     runNvim = lib.mkOption {
       type = lib.types.bool;
       description = "Whether to run `nvim` in the test.";
-      default = true;
+      defaultText = lib.literalExpression "config.test.buildNixvim";
+      default = cfg.buildNixvim;
     };
 
     checkWarnings = lib.mkOption {
@@ -68,9 +75,12 @@ in
     in
     {
       build.test =
+        assert lib.assertMsg (cfg.runNvim -> cfg.buildNixvim) "`test.runNvim` requires `test.buildNixvim`.";
         pkgs.runCommandNoCCLocal cfg.name
           {
-            nativeBuildInputs = [ config.build.packageUnchecked ];
+            nativeBuildInputs = lib.optionals cfg.buildNixvim [
+              config.build.packageUnchecked
+            ];
 
             # Allow inspecting the test's module a little from the repl
             # e.g.
