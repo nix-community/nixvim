@@ -38,7 +38,9 @@ linkFarmFromDrvs "failing-tests" [
     }
     ''
       [[ 1 = $(cat "$failed/testBuildFailure.exit") ]]
-      grep -F 'Unexpected warnings:' "$failed/testBuildFailure.log"
+      grep -F 'Failed 1 expectation' "$failed/testBuildFailure.log"
+      grep -F 'Expected length to be 0 but found 1.' "$failed/testBuildFailure.log"
+      grep -F 'For warnings' "$failed/testBuildFailure.log"
       grep -F 'Hello, world!' "$failed/testBuildFailure.log"
       touch $out
     ''
@@ -59,7 +61,9 @@ linkFarmFromDrvs "failing-tests" [
     }
     ''
       [[ 1 = $(cat "$failed/testBuildFailure.exit") ]]
-      grep -F 'Unexpected assertions:' "$failed/testBuildFailure.log"
+      grep -F 'Failed 1 expectation' "$failed/testBuildFailure.log"
+      grep -F 'Expected length to be 0 but found 1.' "$failed/testBuildFailure.log"
+      grep -F 'For assertions' "$failed/testBuildFailure.log"
       grep -F 'Hello, world!' "$failed/testBuildFailure.log"
       touch $out
     ''
