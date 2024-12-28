@@ -8,7 +8,7 @@ let
     mkNullOrOption
     ;
 in
-lib.nixvim.neovim-plugin.mkNeovimPlugin {
+lib.nixvim.plugins.mkNeovimPlugin {
   name = "flutter-tools";
   packPathName = "flutter-tools.nvim";
   package = "flutter-tools-nvim";
