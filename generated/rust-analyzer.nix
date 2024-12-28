@@ -1962,13 +1962,13 @@
       kind = "boolean";
     };
   };
-  "rust-analyzer.typing.autoClosingAngleBrackets.enable" = {
+  "rust-analyzer.typing.excludeChars" = {
     description = ''
-      Whether to insert closing angle brackets when typing an opening angle bracket of a generic argument list.
+      Specify the characters to exclude from triggering typing assists. The default trigger characters are `.`, `=`, `<`, `>`, `{`, and `(`.
     '';
-    pluginDefault = false;
+    pluginDefault = "|<";
     type = {
-      kind = "boolean";
+      kind = "string";
     };
   };
   "rust-analyzer.workspace.discoverConfig" = {
