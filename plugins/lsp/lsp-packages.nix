@@ -5,6 +5,7 @@
     "anakin_language_server"
     "antlersls"
     "apex_ls"
+    "autohotkey_lsp"
     "awk_ls"
     "azure_pipelines_ls"
     "bacon_ls"
