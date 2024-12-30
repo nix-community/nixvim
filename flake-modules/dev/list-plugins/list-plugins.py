@@ -16,6 +16,7 @@ EXCLUDES: list[str] = [
     "settings-options.nix",
     # Specific files
     "colorschemes/base16/theme-list.nix",
+    "plugins/by-name/blink-cmp/provider-config.nix",
     "plugins/by-name/dap/dapHelpers.nix",
     "plugins/by-name/efmls-configs/packages.nix",
     "plugins/by-name/gitsigns/options.nix",
