@@ -49,6 +49,9 @@ let
           "dafny"
           "fsautocomplete"
           "omnisharp"
+          # ruby-lsp's dependency rubyPackages.prism is broken as of 2024-12-31
+          # https://github.com/NixOS/nixpkgs/issues/369508
+          "ruby_lsp"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
