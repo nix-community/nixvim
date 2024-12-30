@@ -158,6 +158,10 @@ rec {
             pluginDefault =
               if args.pluginDefault == null then null else lib.nixvim.literalLua args.pluginDefault;
           }
+          // lib.optionalAttrs (args ? example) {
+            example =
+              if builtins.isString args.example then lib.nixvim.literalLua args.example else args.example;
+          }
         );
       mkRaw = pluginDefault: description: mkRaw' { inherit pluginDefault description; };
 
