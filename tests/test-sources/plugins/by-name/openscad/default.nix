@@ -1,4 +1,7 @@
-{
+{ lib, pkgs, ... }:
+# Ad of 2024-31-12, openscad is broken on darwin
+# TODO: re-enable when fixed
+lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
   empty = {
     plugins.openscad.enable = true;
   };
