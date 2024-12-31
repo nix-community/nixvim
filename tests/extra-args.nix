@@ -1,6 +1,6 @@
 {
   makeNixvimWithModule,
-  runCommandNoCCLocal,
+  runCommandLocal,
 }:
 let
   defaultModule =
@@ -31,7 +31,7 @@ let
     };
   };
 in
-runCommandNoCCLocal "special-arg-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
+runCommandLocal "special-arg-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
   config=$($printConfig)
   if ! "$printConfig" | grep -- '-- regularArg=regularValue'; then
     echo "Missing regularArg in config"

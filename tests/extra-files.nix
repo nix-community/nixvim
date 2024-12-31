@@ -1,6 +1,6 @@
 {
   makeNixvimWithModule,
-  runCommandNoCCLocal,
+  runCommandLocal,
 }:
 let
   extraFiles = {
@@ -15,7 +15,7 @@ let
     };
   };
 in
-runCommandNoCCLocal "extra-files-test"
+runCommandLocal "extra-files-test"
   {
     root = build.config.build.extraFiles;
     files = builtins.attrNames extraFiles;

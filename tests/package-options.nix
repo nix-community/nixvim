@@ -3,7 +3,7 @@
 {
   nixvimConfiguration,
   lib,
-  runCommandNoCCLocal,
+  runCommandLocal,
 }:
 let
   inherit (builtins)
@@ -47,7 +47,7 @@ let
     || match ''pkgs[.].*'' (opt.defaultText.text or "") == null
   ) drvOptions;
 in
-runCommandNoCCLocal "validate-package-options"
+runCommandLocal "validate-package-options"
   {
     # Use structuredAttrs to avoid "Argument List Too Long" errors
     # and get proper bash array support.

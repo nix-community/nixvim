@@ -1,7 +1,7 @@
 {
   pkgs,
   linkFarmFromDrvs,
-  runCommandNoCCLocal,
+  runCommandLocal,
   mkTestDerivationFromNixvimModule,
 }:
 let
@@ -10,7 +10,7 @@ let
     args: pkgs.testers.testBuildFailure (mkTestDerivationFromNixvimModule ({ inherit pkgs; } // args));
 in
 linkFarmFromDrvs "failing-tests" [
-  (runCommandNoCCLocal "fail-running-nvim"
+  (runCommandLocal "fail-running-nvim"
     {
       failed = mkFailingNixvimTest {
         name = "prints-hello-world";
@@ -27,7 +27,7 @@ linkFarmFromDrvs "failing-tests" [
       touch $out
     ''
   )
-  (runCommandNoCCLocal "fail-on-warnings"
+  (runCommandLocal "fail-on-warnings"
     {
       failed = mkFailingNixvimTest {
         name = "warns-hello-world";
@@ -45,7 +45,7 @@ linkFarmFromDrvs "failing-tests" [
       touch $out
     ''
   )
-  (runCommandNoCCLocal "fail-on-assertions"
+  (runCommandLocal "fail-on-assertions"
     {
       failed = mkFailingNixvimTest {
         name = "asserts-hello-world";

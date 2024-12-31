@@ -1,7 +1,7 @@
 {
   pkgs,
   linkFarm,
-  runCommandNoCCLocal,
+  runCommandLocal,
   mkTestDerivationFromNixvimModule,
   makeNixvimWithModule,
 }:
@@ -21,7 +21,7 @@ let
     let
       nvim = makeNixvimWithModule { inherit pkgs module; };
     in
-    runCommandNoCCLocal "enable-except-in-tests-not-in-test"
+    runCommandLocal "enable-except-in-tests-not-in-test"
       { printConfig = "${nvim}/bin/nixvim-print-init"; }
       ''
         if ! "$printConfig" | grep 'require("image").setup'; then

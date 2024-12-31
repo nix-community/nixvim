@@ -238,7 +238,7 @@ in
 
       build.test =
         assert lib.assertMsg (cfg.runNvim -> cfg.buildNixvim) "`test.runNvim` requires `test.buildNixvim`.";
-        pkgs.runCommandNoCCLocal cfg.name
+        pkgs.runCommandLocal cfg.name
           {
             nativeBuildInputs = lib.optionals cfg.buildNixvim [
               config.build.packageUnchecked

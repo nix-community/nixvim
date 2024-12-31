@@ -1,6 +1,6 @@
 {
   makeNixvimWithModule,
-  runCommandNoCCLocal,
+  runCommandLocal,
 }:
 let
   firstStage = makeNixvimWithModule {
@@ -13,7 +13,7 @@ let
 
   generated = secondStage.extend { extraConfigLua = "-- third stage"; };
 in
-runCommandNoCCLocal "extend-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
+runCommandLocal "extend-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
   config=$($printConfig)
   for stage in "first" "second" "third"; do
     if ! "$printConfig" | grep -q -- "-- $stage stage"; then

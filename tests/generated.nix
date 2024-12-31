@@ -1,6 +1,6 @@
 {
   lib,
-  runCommandNoCCLocal,
+  runCommandLocal,
   pkgs,
 }:
 let
@@ -100,7 +100,7 @@ let
     )
   );
 in
-runCommandNoCCLocal "generated-sources-test"
+runCommandLocal "generated-sources-test"
   {
     __structuredAttrs = true;
     inherit errors;

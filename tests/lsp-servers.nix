@@ -2,7 +2,7 @@
   lib,
   nixvimConfiguration,
   stdenv,
-  runCommandNoCCLocal,
+  runCommandLocal,
   name ? "lsp-all-servers",
 }:
 let
@@ -101,7 +101,7 @@ in
 # This fails on darwin
 # See https://github.com/NixOS/nix/issues/4119
 if stdenv.isDarwin then
-  runCommandNoCCLocal name { } ''
+  runCommandLocal name { } ''
     touch $out
   ''
 else

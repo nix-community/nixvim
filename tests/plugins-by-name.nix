@@ -2,7 +2,7 @@
   lib,
   nixvimConfiguration,
   linkFarmFromDrvs,
-  runCommandNoCCLocal,
+  runCommandLocal,
 }:
 let
   by-name = ../plugins/by-name;
@@ -54,7 +54,7 @@ let
 in
 linkFarmFromDrvs "plugins-by-name" [
   # Ensures all files matching `plugins/by-name/*` are directories
-  (runCommandNoCCLocal "file-types"
+  (runCommandLocal "file-types"
     {
       __structuredAttrs = true;
       inherit (children) regular symlink unknown;
@@ -88,7 +88,7 @@ linkFarmFromDrvs "plugins-by-name" [
   )
 
   # Check default.nix files exist for each directory
-  (runCommandNoCCLocal "default-nix-exists"
+  (runCommandLocal "default-nix-exists"
     {
       __structuredAttrs = true;
       missingPlugins = builtins.filter (
@@ -127,7 +127,7 @@ linkFarmFromDrvs "plugins-by-name" [
   )
 
   # Ensures all plugin enable options are declared in a directory matching the plugin name
-  (runCommandNoCCLocal "mismatched-plugin-names"
+  (runCommandLocal "mismatched-plugin-names"
     {
       __structuredAttrs = true;
 
@@ -153,7 +153,7 @@ linkFarmFromDrvs "plugins-by-name" [
   )
 
   # Ensure all plugin enable option are declared under an expected namespace
-  (runCommandNoCCLocal "unknown-plugin-namespaces"
+  (runCommandLocal "unknown-plugin-namespaces"
     {
       __structuredAttrs = true;
 

@@ -3,7 +3,7 @@
 {
   helpers,
   lib,
-  runCommandNoCCLocal,
+  runCommandLocal,
   writeText,
 }:
 let
@@ -493,9 +493,9 @@ let
   };
 in
 if results == [ ] then
-  runCommandNoCCLocal "lib-tests-success" { } "touch $out"
+  runCommandLocal "lib-tests-success" { } "touch $out"
 else
-  runCommandNoCCLocal "lib-tests-failure"
+  runCommandLocal "lib-tests-failure"
     {
       results = lib.concatStringsSep "\n" (
         builtins.map (result: ''
