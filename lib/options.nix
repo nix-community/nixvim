@@ -182,17 +182,17 @@ rec {
       mkStr' = args: mkNullableWithRaw' (args // { type = types.str; });
       mkStr = pluginDefault: description: mkStr' { inherit pluginDefault description; };
 
-      mkAttributeSet' = args: mkNullable' (args // { type = types.attrs; });
+      mkAttributeSet' = args: mkNullableWithRaw' (args // { type = types.attrs; });
       mkAttributeSet = pluginDefault: description: mkAttributeSet' { inherit pluginDefault description; };
 
       mkListOf' =
-        { type, ... }@args: mkNullable' (args // { type = with types; listOf (maybeRaw type); });
+        { type, ... }@args: mkNullableWithRaw' (args // { type = with types; listOf (maybeRaw type); });
       mkListOf =
         type: pluginDefault: description:
         mkListOf' { inherit type pluginDefault description; };
 
       mkAttrsOf' =
-        { type, ... }@args: mkNullable' (args // { type = with types; attrsOf (maybeRaw type); });
+        { type, ... }@args: mkNullableWithRaw' (args // { type = with types; attrsOf (maybeRaw type); });
       mkAttrsOf =
         type: pluginDefault: description:
         mkAttrsOf' { inherit type pluginDefault description; };
