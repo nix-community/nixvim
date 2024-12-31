@@ -136,9 +136,52 @@ in
 
         Ignored when `nixpkgs.pkgs` is set.
       '';
+    };
 
-      # FIXME: This is a stub option for now
-      internal = true;
+    hostPlatform = lib.mkOption {
+      type = with lib.types; either str attrs;
+      example = {
+        system = "aarch64-linux";
+      };
+      apply = lib.systems.elaborate;
+      defaultText = lib.literalMD ''
+        Inherited from the "host" configuration's `pkgs`.
+        Must be specified manually when building a standalone nixvim.
+      '';
+      description = ''
+        Specifies the platform where the Nixvim configuration will run.
+
+        To cross-compile, also set `nixpkgs.buildPlatform`.
+
+        Ignored when `nixpkgs.pkgs` is set.
+      '';
+    };
+
+    buildPlatform = lib.mkOption {
+      type = with lib.types; either str attrs;
+      default = cfg.hostPlatform;
+      example = {
+        system = "x86_64-linux";
+      };
+      apply =
+        value:
+        let
+          elaborated = lib.systems.elaborate value;
+        in
+        # If equivalent to `hostPlatform`, make it actually identical so that `==` can be used
+        # See https://github.com/NixOS/nixpkgs/issues/278001
+        if lib.systems.equals elaborated cfg.hostPlatform then cfg.hostPlatform else elaborated;
+      defaultText = lib.literalMD ''
+        Inherited from the "host" configuration's `pkgs`.
+        Or `config.nixpkgs.hostPlatform` when building a standalone nixvim.
+      '';
+      description = ''
+        Specifies the platform on which Nixvim should be built.
+        By default, Nixvim is built on the system where it runs, but you can change where it's built.
+        Setting this option will cause Nixvim to be cross-compiled.
+
+        Ignored when `nixpkgs.pkgs` is set.
+      '';
     };
   };
 
@@ -165,10 +208,5 @@ in
       # evaluate the wrapper to find out that the priority is lower, and then we
       # don't need to evaluate `finalPkgs`.
       _module.args.pkgs = lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
-
-      # FIXME: This is a stub option for now
-      warnings = lib.optional (
-        opt.source.isDefined && opt.source.highestPrio < (lib.mkOptionDefault null).priority
-      ) "Defining the option `nixpkgs.source` currently has no effect";
     };
 }
