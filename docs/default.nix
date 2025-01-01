@@ -46,7 +46,6 @@ let
     (pkgs.nixosOptionsDoc {
       inherit (evaledModules) options;
       inherit transformOptions;
-      warningsAreErrors = false;
     }).optionsJSON;
 
 in
