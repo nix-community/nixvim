@@ -12,7 +12,7 @@ lib.nixvim.plugins.mkNeovimPlugin {{
   packPathName = "{originalName}";
   package = "{package}";
 
-  maintainers = [ lib.maintainers.YOUR_NAME ];
+  maintainers = [ lib.maintainers.YOUR_NAME ]; # TODO
 
   settingsOptions = {{
     exampleOption = lib.nixvim.defaultNullOpts.mkBool false ''
