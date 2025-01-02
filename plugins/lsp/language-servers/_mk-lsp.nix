@@ -22,16 +22,16 @@
   pkgs,
   config,
   options,
-  helpers,
   lib,
   ...
 }:
-with lib;
 let
   cfg = config.plugins.lsp.servers.${name};
   opts = options.plugins.lsp.servers.${name};
 
   enabled = config.plugins.lsp.enable && cfg.enable;
+
+  inherit (lib) mkOption types;
 in
 {
   meta.nixvimInfo = {
@@ -47,7 +47,7 @@ in
 
   options = {
     plugins.lsp.servers.${name} = {
-      enable = mkEnableOption description;
+      enable = lib.mkEnableOption description;
 
       package =
         if lib.isOption package then
@@ -87,24 +87,24 @@ in
         '';
       };
 
-      filetypes = helpers.mkNullOrOption (types.listOf types.str) ''
+      filetypes = lib.nixvim.mkNullOrOption (types.listOf types.str) ''
         Set of filetypes for which to attempt to resolve {root_dir}.
         May be empty, or server may specify a default value.
       '';
 
-      autostart = helpers.defaultNullOpts.mkBool true ''
+      autostart = lib.nixvim.defaultNullOpts.mkBool true ''
         Controls if the `FileType` autocommand that launches a language server is created.
         If `false`, allows for deferring language servers until manually launched with
         `:LspStart` (|lspconfig-commands|).
       '';
 
-      rootDir = helpers.defaultNullOpts.mkLuaFn "nil" ''
+      rootDir = lib.nixvim.defaultNullOpts.mkLuaFn "nil" ''
         A function (or function handle) which returns the root of the project used to
         determine if lspconfig should launch a new language server, or attach a previously
         launched server when you open a new buffer matching the filetype of the server.
       '';
 
-      onAttach = helpers.mkCompositeOption "Server specific on_attach behavior." {
+      onAttach = lib.nixvim.mkCompositeOption "Server specific on_attach behavior." {
         override = mkOption {
           type = types.bool;
           default = false;
@@ -120,7 +120,7 @@ in
         };
       };
 
-      settings = helpers.mkSettingsOption {
+      settings = lib.nixvim.mkSettingsOption {
         description = "The settings for this LSP.";
         options = settingsOptions;
       };
@@ -133,7 +133,7 @@ in
     } // extraOptions;
   };
 
-  config = mkIf enabled {
+  config = lib.mkIf enabled {
     extraPackages = [ cfg.package ];
 
     plugins.lsp.enabledServers = [
@@ -142,10 +142,10 @@ in
         extraOptions = {
           inherit (cfg) cmd filetypes autostart;
           root_dir = cfg.rootDir;
-          on_attach = helpers.ifNonNull' cfg.onAttach (
-            helpers.mkRaw ''
+          on_attach = lib.nixvim.ifNonNull' cfg.onAttach (
+            lib.nixvim.mkRaw ''
               function(client, bufnr)
-                ${optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
+                ${lib.optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
                 ${cfg.onAttach.function}
               end
             ''
@@ -169,10 +169,10 @@ in
         "servers"
       ];
       basePluginPath = basePath ++ [ name ];
-      basePluginPathString = concatStringsSep "." basePluginPath;
+      basePluginPathString = builtins.concatStringsSep "." basePluginPath;
     in
     [
-      (mkRemovedOptionModule (
+      (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
     ]
@@ -188,7 +188,7 @@ in
     )
     # Add an alias (with warning) for the lspconfig server name, if different to `name`.
     # Note: users may use lspconfig's docs to guess the `plugins.lsp.servers.*` name
-    ++ (optional (name != serverName) (
-      mkRenamedOptionModule (basePath ++ [ serverName ]) basePluginPath
+    ++ (lib.optional (name != serverName) (
+      lib.mkRenamedOptionModule (basePath ++ [ serverName ]) basePluginPath
     ));
 }
