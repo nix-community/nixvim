@@ -125,10 +125,6 @@
                 "opacheck"
                 "rego"
                 "prisma_format"
-                # TODO: added 2024-12-31
-                # ansible-compat is broken
-                # Fixed by https://github.com/NixOS/nixpkgs/pull/369664
-                "ansiblelint"
               ]
               ++ (lib.optionals pkgs.stdenv.isDarwin [
                 # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
