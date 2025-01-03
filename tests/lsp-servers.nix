@@ -52,10 +52,6 @@ let
           # ruby-lsp's dependency rubyPackages.prism is broken as of 2024-12-31
           # https://github.com/NixOS/nixpkgs/issues/369508
           "ruby_lsp"
-          # solc is broken as of 2024-12-31
-          # Fixed by https://github.com/NixOS/nixpkgs/pull/369643
-          # TODO: re-enabled when the fix will be in nixos-unstable
-          "solc"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
