@@ -546,9 +546,7 @@ in
       logger = {
         level = helpers.defaultNullOpts.mkLogLevel "warn" "Minimum logging level";
 
-        floatPrecision = helpers.defaultNullOpts.mkNullable (
-          with types; numbers.between 0.0 1.0
-        ) 1.0e-2 "Limit the number of decimals displayed for floats.";
+        floatPrecision = helpers.defaultNullOpts.mkProportion 1.0e-2 "Limit the number of decimals displayed for floats.";
 
         path =
           helpers.defaultNullOpts.mkStr

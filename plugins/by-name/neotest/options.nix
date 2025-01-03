@@ -96,11 +96,11 @@ in
   floating = {
     border = defaultNullOpts.mkStr "rounded" "Border style.";
 
-    max_height = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+    max_height = defaultNullOpts.mkProportion 0.6 ''
       Max height of window as proportion of NeoVim window.
     '';
 
-    max_width = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+    max_width = defaultNullOpts.mkProportion 0.6 ''
       Max width of window as proportion of NeoVim window.
     '';
 

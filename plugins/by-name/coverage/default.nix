@@ -183,13 +183,13 @@ in
     '';
 
     summary = {
-      widthPercentage =
-        helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.7
-          "Width of the pop-up window.";
+      widthPercentage = helpers.defaultNullOpts.mkProportion 0.7 ''
+        Width of the pop-up window.
+      '';
 
-      heightPercentage =
-        helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
-          "Height of the pop-up window.";
+      heightPercentage = helpers.defaultNullOpts.mkProportion 0.5 ''
+        Height of the pop-up window.
+      '';
 
       borders = mapAttrs (optionName: default: helpers.defaultNullOpts.mkStr default "") {
         topleft = "╭";

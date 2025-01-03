@@ -164,7 +164,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Sets the shade to apply to the inactive split or window or buffer.
         '';
 
-        percentage = defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.15 ''
+        percentage = defaultNullOpts.mkProportion 0.15 ''
           percentage of the shade to apply to the inactive window, split or buffer.
         '';
       };

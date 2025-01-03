@@ -33,7 +33,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       GPT model to use, 'gpt-3.5-turbo' or 'gpt-4'.
     '';
 
-    temperature = helpers.defaultNullOpts.mkNullableWithRaw (types.numbers.between 0.0 1.0) 0.1 ''
+    temperature = helpers.defaultNullOpts.mkProportion 0.1 ''
       GPT temperature.
     '';
 

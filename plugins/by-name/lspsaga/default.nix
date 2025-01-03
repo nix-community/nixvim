@@ -86,11 +86,11 @@ in
       };
 
       hover = {
-        maxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.9 ''
+        maxWidth = helpers.defaultNullOpts.mkProportion 0.9 ''
           Defines float window width.
         '';
 
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.8 ''
+        maxHeight = helpers.defaultNullOpts.mkProportion 0.8 ''
           Defines float window height.
         '';
 
@@ -117,19 +117,19 @@ in
           Enable number shortcuts to execute code action quickly.
         '';
 
-        maxWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.8 ''
+        maxWidth = helpers.defaultNullOpts.mkProportion 0.8 ''
           Diagnostic jump window max width.
         '';
 
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+        maxHeight = helpers.defaultNullOpts.mkProportion 0.6 ''
           Diagnostic jump window max height.
         '';
 
-        maxShowWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.9 ''
+        maxShowWidth = helpers.defaultNullOpts.mkProportion 0.9 ''
           Show window max width when layout is float.
         '';
 
-        maxShowHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+        maxShowHeight = helpers.defaultNullOpts.mkProportion 0.6 ''
           Show window max height when layout is float.
         '';
 
@@ -211,15 +211,15 @@ in
       };
 
       finder = {
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5 ''
+        maxHeight = helpers.defaultNullOpts.mkProportion 0.5 ''
           `max_height` of the finder window (float layout).
         '';
 
-        leftWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
+        leftWidth = helpers.defaultNullOpts.mkProportion 0.3 ''
           Width of the left finder window (float layout).
         '';
 
-        rightWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
+        rightWidth = helpers.defaultNullOpts.mkProportion 0.3 ''
           Width of the right finder window (float layout).
         '';
 
@@ -279,11 +279,11 @@ in
       };
 
       definition = {
-        width = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.6 ''
+        width = helpers.defaultNullOpts.mkProportion 0.6 ''
           Defines float window width.
         '';
 
-        height = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5 ''
+        height = helpers.defaultNullOpts.mkProportion 0.5 ''
           Defines float window height.
         '';
 
@@ -317,13 +317,9 @@ in
           Auto save file when the rename is done.
         '';
 
-        projectMaxWidth =
-          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
-            "Width for the `project_replace` float window.";
+        projectMaxWidth = helpers.defaultNullOpts.mkProportion 0.5 "Width for the `project_replace` float window.";
 
-        projectMaxHeight =
-          helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5
-            "Height for the `project_replace` float window.";
+        projectMaxHeight = helpers.defaultNullOpts.mkProportion 0.5 "Height for the `project_replace` float window.";
 
         keys = {
           quit = mkKeymapOption "<C-k>" "Quit rename window or `project_replace` window.";
@@ -383,11 +379,11 @@ in
               If set to float, above options will ignored.
             '';
 
-        maxHeight = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.5 ''
+        maxHeight = helpers.defaultNullOpts.mkProportion 0.5 ''
           Height of outline float layout.
         '';
 
-        leftWidth = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.3 ''
+        leftWidth = helpers.defaultNullOpts.mkProportion 0.3 ''
           Width of outline float layout left window.
         '';
 

@@ -14,7 +14,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     dimming = {
-      alpha = helpers.defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0.25 ''
+      alpha = helpers.defaultNullOpts.mkProportion 0.25 ''
         Amount of dimming.
       '';
 

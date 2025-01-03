@@ -133,7 +133,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           lib.mapAttrs
             (
               name: color:
-              defaultNullOpts.mkNullable (types.numbers.between 0.0 1.0) 0 ''
+              defaultNullOpts.mkProportion 0 ''
                 Severity [0, 1] for ${name} (${color}).
               ''
             )

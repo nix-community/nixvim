@@ -118,7 +118,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Set a darker background on sidebar-like windows.
         '';
 
-    day_brightness = defaultNullOpts.mkNullable (lib.types.numbers.between 0.0 1.0) 0.3 ''
+    day_brightness = defaultNullOpts.mkProportion 0.3 ''
       Adjusts the brightness of the colors of the **Day** style.
       Number between 0 and 1, from dull to vibrant colors.
     '';
