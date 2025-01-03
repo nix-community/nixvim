@@ -181,7 +181,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ];
       };
 
-      float_precision = defaultNullOpts.mkNullable types.float 0.01 ''
+      float_precision = defaultNullOpts.mkFloat 0.01 ''
         Can limit the number of decimals displayed for floats.
       '';
     };

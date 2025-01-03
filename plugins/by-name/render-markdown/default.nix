@@ -52,7 +52,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           as allowing this plugin to provide logical defaults for a "batteries included" experience.
         '';
 
-    max_file_size = defaultNullOpts.mkNullable types.float 10.0 ''
+    max_file_size = defaultNullOpts.mkFloat 10.0 ''
       The maximum file size that this plugin will attempt to render in megabytes.
 
       This plugin only does rendering for what is visible within the viewport so the size of the
