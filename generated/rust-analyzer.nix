@@ -518,7 +518,8 @@
   "rust-analyzer.check.workspace" = {
     description = ''
       Whether `--workspace` should be passed to `cargo check`.
-      If false, `-p <package>` will be passed instead.
+      If false, `-p <package>` will be passed instead if applicable. In case it is not, no
+      check will be performed.
     '';
     pluginDefault = true;
     type = {
