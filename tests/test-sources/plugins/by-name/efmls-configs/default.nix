@@ -35,9 +35,6 @@
           # ansible-compat is broken
           # Fixed by https://github.com/NixOS/nixpkgs/pull/369664
           "ansible_lint"
-          # TODO: added 2024-12-31
-          # Fixed by https://github.com/NixOS/nixpkgs/pull/369681
-          "clazy"
         ]
         ++ lib.optionals (system == "aarch64-linux") [
           # Broken as of 2024-07-13
