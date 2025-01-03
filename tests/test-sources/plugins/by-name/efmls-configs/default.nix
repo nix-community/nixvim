@@ -46,10 +46,6 @@
           # TODO: re-enable those tests when fixed
           "chktex"
           "latexindent"
-          # As of 2024-12-31, cppcheck is failing on darwin
-          # Fixed by https://github.com/NixOS/nixpkgs/pull/369673
-          # TODO: re-enable this test when fixed
-          "cppcheck"
         ]
         ++ lib.optionals (system == "x86_64-darwin") [
           # As of 2024-07-31, dmd is broken on x86_64-darwin
