@@ -6,6 +6,13 @@ let
       The `rust-tools` project has been abandoned.
       It is recommended to use `rustaceanvim` instead.
     '';
+    # TODO: added 2025-01-04, move to removed after 25.11
+    "project-nvim" = ''
+      The project-nvim project has not been updated in 2 years
+      and is broken on recent Neovim versions (it no longer adds projects
+      automatically and provides no manual method to add them) use either
+      telescope-project or projections-nvim.
+    '';
   };
   removed = {
     # Added 2023-08-29
