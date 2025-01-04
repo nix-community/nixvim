@@ -94,6 +94,7 @@ for telescope_extension_name, has_depr_warnings in {
     "live-greps-args": False,
     "manix": False,
     "media-files": True,
+    "project": False,
     "ui-select": False,
     "undo": True,
 }.items():

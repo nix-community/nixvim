@@ -7,6 +7,7 @@
     ./live-greps-args.nix
     ./manix.nix
     ./media-files.nix
+    ./project.nix
     ./ui-select.nix
     ./undo.nix
   ];
