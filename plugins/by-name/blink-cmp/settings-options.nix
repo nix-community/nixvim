@@ -490,7 +490,7 @@ in
       Default sources.
     '';
 
-    per_filetype = defaultNullOpts.mkAttrsOf (with types; attrsOf str) { } ''
+    per_filetype = defaultNullOpts.mkAttrsOf (with types; listOf str) { } ''
       Sources per filetype.
     '';
 
