@@ -42,7 +42,10 @@
           };
           list = {
             max_items = 200;
-            selection = "preselect";
+            selection = {
+              preselect = true;
+              auto_insert = true;
+            };
             cycle = {
               from_bottom = true;
               from_top = true;

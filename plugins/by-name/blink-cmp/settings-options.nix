@@ -164,10 +164,16 @@ in
         Maximum number of items to display.
       '';
 
-      selection = defaultNullOpts.mkEnumFirstDefault [ "preselect" "manual" "auto_insert" ] ''
-        Controls if completion items will be selected automatically, and whether selection
-        automatically inserts.
-      '';
+      selection =
+        defaultNullOpts.mkNullableWithRaw (types.either types.str (types.attrsOf types.anything))
+          {
+            preselect = true;
+            auto_insert = true;
+          }
+          ''
+            Controls if completion items will be selected automatically, and whether selection
+            automatically inserts.
+          '';
 
       cycle = {
         from_bottom = defaultNullOpts.mkBool true ''
