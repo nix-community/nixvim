@@ -7,7 +7,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "blink.cmp";
   package = "blink-cmp";
 
-  maintainers = [ lib.maintainers.balssh ];
+  maintainers = with lib.maintainers; [
+    balssh
+    khaneliman
+  ];
 
   description = ''
     Performant, batteries-included completion plugin for Neovim.
