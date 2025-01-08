@@ -1,271 +1,164 @@
-{
-  lib,
-  helpers,
-  config,
-  pkgs,
-  ...
-}:
-with lib;
+{ config, lib, ... }:
 let
-  cfg = config.plugins.clangd-extensions;
-
-  basePluginPath = [
-    "plugins"
-    "clangd-extensions"
-  ];
-
-  borderOpt = helpers.defaultNullOpts.mkBorder "none" "clangd-extensions" "";
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types mapAttrs;
 in
-{
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "clangd-extensions";
+  moduleName = "clangd_extensions";
+  packPathName = "clangd_extensions.nvim";
+  package = "clangd_extensions-nvim";
+  description = ''
+    Clangd's off-spec features for neovim's LSP client.
+  '';
+
+  maintainers = [ lib.maintainers.jolars ];
+
   # All of those warnings were introduced on 08/22/2023.
   # TODO: Remove them in ~2 months (Oct. 2023).
-  imports =
-    [
-      (mkRemovedOptionModule (basePluginPath ++ [ "server" ]) ''
-        To configure the `clangd` language server options, please use
-        `plugins.lsp.servers.clangd.extraSettings`.
-      '')
-      (mkRemovedOptionModule (
-        basePluginPath
-        ++ [
-          "extensions"
-          "autoSetHints"
-        ]
-      ) "")
-    ]
-    ++ (map
-      (
-        optionPath:
-        mkRenamedOptionModule (basePluginPath ++ [ "extensions" ] ++ optionPath) (
-          basePluginPath ++ optionPath
-        )
-      )
-      [
-        [
-          "inlayHints"
-          "inline"
-        ]
-        [
-          "inlayHints"
-          "onlyCurrentLine"
-        ]
-        [
-          "inlayHints"
-          "onlyCurrentLineAutocmd"
-        ]
-        [
-          "inlayHints"
-          "showParameterHints"
-        ]
-        [
-          "inlayHints"
-          "parameterHintsPrefix"
-        ]
-        [
-          "inlayHints"
-          "otherHintsPrefix"
-        ]
-        [
-          "inlayHints"
-          "maxLenAlign"
-        ]
-        [
-          "inlayHints"
-          "maxLenAlignPadding"
-        ]
-        [
-          "inlayHints"
-          "rightAlign"
-        ]
-        [
-          "inlayHints"
-          "rightAlignPadding"
-        ]
-        [
-          "inlayHints"
-          "highlight"
-        ]
-        [
-          "inlayHints"
-          "priority"
-        ]
-        [ "ast" ]
-        [ "memoryUsage" ]
-        [ "symbolInfo" ]
-      ]
-    );
+  imports = [ ./deprecations.nix ];
 
-  options.plugins.clangd-extensions = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "clangd_extensions, plugins implementing clangd LSP extensions";
+  # TODO: introduced 2025-01-08: remove after 25.05
+  optionsRenamedToSettings = import ./renamed-options.nix;
 
-    package = lib.mkPackageOption pkgs "clangd_extensions.nvim" {
-      default = [
-        "vimPlugins"
-        "clangd_extensions-nvim"
-      ];
-    };
-
-    enableOffsetEncodingWorkaround = mkEnableOption ''
-      utf-16 offset encoding. This is used to work around the warning:
-      "multiple different client offset_encodings detected for buffer, this is not supported yet"
-    '';
-
-    inlayHints = {
-      inline = helpers.defaultNullOpts.mkLua ''vim.fn.has("nvim-0.10") == 1'' ''
-        Show hints inline.
-      '';
-
-      onlyCurrentLine = helpers.defaultNullOpts.mkBool false "Only show inlay hints for the current line";
-
-      onlyCurrentLineAutocmd = helpers.defaultNullOpts.mkStr "CursorHold" ''
-        Event which triggers a refersh of the inlay hints.
-        You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-        not that this may cause  higher CPU usage.
-        This option is only respected when `onlyCurrentLine` is true.
-      '';
-
-      showParameterHints = helpers.defaultNullOpts.mkBool true ''
-        Whether to show parameter hints with the inlay hints or not.
-      '';
-
-      parameterHintsPrefix = helpers.defaultNullOpts.mkStr "<- " "Prefix for parameter hints.";
-
-      otherHintsPrefix = helpers.defaultNullOpts.mkStr "=> " "Prefix for all the other hints (type, chaining).";
-
-      maxLenAlign = helpers.defaultNullOpts.mkBool false ''
-        Whether to align to the length of the longest line in the file.
-      '';
-
-      maxLenAlignPadding = helpers.defaultNullOpts.mkInt 1 ''
-        Padding from the left if max_len_align is true.
-      '';
-
-      rightAlign = helpers.defaultNullOpts.mkBool false ''
-        Whether to align to the extreme right or not.
-      '';
-
-      rightAlignPadding = helpers.defaultNullOpts.mkInt 7 ''
-        Padding from the right if right_align is true.
-      '';
-
-      highlight = helpers.defaultNullOpts.mkStr "Comment" "The color of the hints.";
-
-      priority = helpers.defaultNullOpts.mkInt 100 "The highlight group priority for extmark.";
-    };
-
-    ast = {
-      roleIcons = mapAttrs (name: default: helpers.defaultNullOpts.mkStr default "") {
-        type = "🄣";
-        declaration = "🄓";
-        expression = "🄔";
-        statement = ";";
-        specifier = "🄢";
-        templateArgument = "🆃";
-      };
-
-      kindIcons = mapAttrs (name: default: helpers.defaultNullOpts.mkStr default "") {
-        compound = "🄲";
-        recovery = "🅁";
-        translationUnit = "🅄";
-        packExpansion = "🄿";
-        templateTypeParm = "🅃";
-        templateTemplateParm = "🅃";
-        templateParamObject = "🅃";
-      };
-
-      highlights = {
-        detail = helpers.defaultNullOpts.mkStr "Comment" "";
-      };
-    };
-
-    memoryUsage = {
-      border = borderOpt;
-    };
-
-    symbolInfo = {
-      border = borderOpt;
-    };
-  };
-
-  config =
+  settingsOptions =
     let
-      setupOptions =
-        with cfg;
-        {
-          inlay_hints = with inlayHints; {
-            inherit inline;
-            only_current_line = onlyCurrentLine;
-            only_current_line_autocmd = onlyCurrentLineAutocmd;
-            show_parameter_hints = showParameterHints;
-            parameter_hints_prefix = parameterHintsPrefix;
-            other_hints_prefix = otherHintsPrefix;
-            max_len_align = maxLenAlign;
-            max_len_align_padding = maxLenAlignPadding;
-            right_align = rightAlign;
-            right_align_padding = rightAlignPadding;
-            inherit highlight priority;
-          };
-          ast = with ast; {
-            role_icons = with roleIcons; {
-              inherit
-                type
-                declaration
-                expression
-                statement
-                specifier
-                ;
-              "template argument" = templateArgument;
-            };
-            kind_icons = with kindIcons; {
-              Compound = compound;
-              Recovery = recovery;
-              TranslationUnit = translationUnit;
-              PackExpansion = packExpansion;
-              TemplateTypeParm = templateTypeParm;
-              TemplateTemplateParm = templateTemplateParm;
-              TemplateParamObject = templateParamObject;
-            };
-            highlights = with highlights; {
-              inherit detail;
-            };
-          };
-          memory_usage = with memoryUsage; {
-            inherit border;
-          };
-          symbol_info = with symbolInfo; {
-            inherit border;
-          };
-        }
-        // cfg.extraOptions;
+      mkBorderOpt = defaultNullOpts.mkBorder "none" "clangd-extensions";
     in
-    mkIf cfg.enable {
-      warnings = optional (!config.plugins.lsp.enable) ''
-        You have enabled `clangd-extensions` but not the lsp (`plugins.lsp`).
-        You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
-      '';
+    {
+      inlay_hints = {
+        inline = defaultNullOpts.mkBool true ''
+          Show hints inline.
+        '';
 
-      plugins.lsp = {
-        servers.clangd = {
-          # Enable the clangd language server
-          enable = true;
+        only_current_line = defaultNullOpts.mkBool false ''
+          Only show inlay hints for the current line.
+        '';
 
-          extraOptions = mkIf cfg.enableOffsetEncodingWorkaround {
-            capabilities = {
-              __raw = "__clangdCaps";
+        only_current_line_autocmd = defaultNullOpts.mkListOf types.str [ "CursorHold" ] ''
+          Event which triggers a refresh of the inlay hints. You can make this
+          `[ "CursorMoved" ]` or `[ "CursorMoved" "CursorMovedI" ]` but not that this may cause
+          higher CPU usage. This option is only respected when `only_current_line`
+          is true.
+        '';
+
+        show_parameter_hints = defaultNullOpts.mkBool true ''
+          Whether to show parameter hints with the inlay hints or not.
+        '';
+
+        parameter_hints_prefix = defaultNullOpts.mkStr "<- " "Prefix for parameter hints.";
+
+        other_hints_prefix = defaultNullOpts.mkStr "=> " ''
+          Prefix for all the other hints (type, chaining).
+        '';
+
+        max_len_align = defaultNullOpts.mkBool false ''
+          Whether to align to the length of the longest line in the file.
+        '';
+
+        max_len_align_padding = defaultNullOpts.mkPositiveInt 1 ''
+          Padding from the left if max_len_align is true.
+        '';
+
+        right_align = defaultNullOpts.mkBool false ''
+          Whether to align to the extreme right or not.
+        '';
+
+        right_align_padding = defaultNullOpts.mkPositiveInt 7 ''
+          Padding from the right if `right_align` is true.
+        '';
+
+        highlight = defaultNullOpts.mkStr "Comment" "The color of the hints.";
+
+        priority = defaultNullOpts.mkUnsignedInt 100 "The highlight group priority for extmark.";
+      };
+
+      ast = {
+        role_icons =
+          mapAttrs (name: default: defaultNullOpts.mkStr default "Icon for the `${name}` role.")
+            {
+              type = "🄣";
+              declaration = "🄓";
+              expression = "🄔";
+              statement = ";";
+              specifier = "🄢";
+              "template argument" = "🆃";
             };
-          };
+
+        kind_icons = mapAttrs (name: default: defaultNullOpts.mkStr default "`${name}` icon.") {
+          Compound = "🄲";
+          Cecovery = "🅁";
+          TranslationUnit = "🅄";
+          PackExpansion = "🄿";
+          TemplateTypeParm = "🅃";
+          TemplateTemplateParm = "🅃";
+          TemplateParamObject = "🅃";
         };
 
-        preConfig = optionalString cfg.enableOffsetEncodingWorkaround ''
-          local __clangdCaps = vim.lsp.protocol.make_client_capabilities()
-          __clangdCaps.offsetEncoding = { "utf-16" }
+        highlights = {
+          detail = defaultNullOpts.mkStr "Comment" "The color of the hints.";
+        };
+      };
+
+      memory_usage = {
+        border = mkBorderOpt ''
+          Border character for memory usage window.
         '';
       };
 
-      extraPlugins = [ cfg.package ];
-
-      plugins.lsp.postConfig = ''
-        require("clangd_extensions").setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
+      symbol_info = {
+        border = mkBorderOpt ''
+          Border character for symbol info window.
+        '';
+      };
     };
+
+  extraOptions = {
+    enableOffsetEncodingWorkaround = lib.mkEnableOption ''
+      UTF-16 offset encoding. This is used to work around the warning:
+      "multiple different client offset_encodings detected for buffer, this is
+      not supported yet".
+    '';
+  };
+
+  extraConfig = cfg: {
+    warnings = lib.optionals (!config.plugins.lsp.enable) ''
+      Nixvim (plugins.clangd-extensions): You have enabled `clangd-extensions` but not the lsp (`plugins.lsp`).
+      You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
+    '';
+
+    plugins.lsp = {
+      servers.clangd = {
+        enable = lib.mkDefault true;
+
+        extraOptions = lib.mkIf cfg.enableOffsetEncodingWorkaround {
+          capabilities.__raw = ''
+            vim.tbl_deep_extend(
+              "force",
+              vim.lsp.protocol.make_client_capabilities(),
+              {
+                offsetEncoding = { "utf-16" }
+              }
+            )
+          '';
+        };
+      };
+    };
+  };
+
+  settingsExample = {
+    inlay_hints = {
+      inline = true;
+    };
+    ast = {
+      role_icons = {
+        type = "";
+        declaration = "";
+        expression = "";
+        specifier = "";
+        statement = "";
+        "template argument" = "";
+      };
+    };
+  };
 }
