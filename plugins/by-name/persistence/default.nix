@@ -1,79 +1,57 @@
-{
-  lib,
-  helpers,
-  config,
-  pkgs,
-  ...
-}:
-with lib;
-{
-  options.plugins.persistence = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "persistence.nvim";
+{ lib, ... }:
+let
+  inherit (lib.nixvim) defaultNullOpts literalLua;
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "persistence";
+  packPathName = "persistence.nvim";
+  package = "persistence-nvim";
+  description = "A simple lua plugin for automated session management.";
 
-    package = lib.mkPackageOption pkgs "persistence.nvim" {
-      default = [
-        "vimPlugins"
-        "persistence-nvim"
+  maintainers = [ lib.maintainers.jolars ];
+
+  # TODO: introduced 2025-01-08: remove after 25.05
+  optionsRenamedToSettings = [
+    "dir"
+  ];
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
+        "persistence"
       ];
-    };
+    in
+    map
+      (
+        option:
+        lib.mkRemovedOptionModule (basePluginPath ++ [ option ]) ''
+          This option has been deprecated upstream. The plugin now provides
+          user events to hook into instead.
+        ''
+      )
+      [
+        "options"
+        "preSave"
+        "saveEmpty"
+      ];
 
-    dir = helpers.defaultNullOpts.mkStr {
-      __raw = ''vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/")'';
-    } "directory where session files are saved";
+  settingsOptions = {
+    branch = defaultNullOpts.mkBool true ''
+      Use git branch to save session.
+    '';
 
-    options =
-      let
-        # https://neovim.io/doc/user/options.html#'sessionoptions'
-        sessionOpts = [
-          "blank"
-          "buffers"
-          "curdir"
-          "folds"
-          "globals"
-          "help"
-          "localoptions"
-          "options"
-          "skiprtp"
-          "resize"
-          "sesdir"
-          "tabpages"
-          "terminal"
-          "winpos"
-          "winsize"
-        ];
-      in
-      helpers.defaultNullOpts.mkListOf (types.enum sessionOpts) [
-        "buffers"
-        "curdir"
-        "tabpages"
-        "winsize"
-        "skiprtp"
-      ] "sessionoptions used for saving";
+    dir = defaultNullOpts.mkStr (literalLua "vim.fn.expand(vim.fn.stdpath('state') .. '/sessions/')") ''
+      Directory where session files are saved.
+    '';
 
-    preSave = helpers.defaultNullOpts.mkLuaFn "nil" "a function to call before saving the session";
-
-    saveEmpty = helpers.defaultNullOpts.mkBool false ''
-      don't save if there are no open file buffers
+    need = defaultNullOpts.mkUnsignedInt 1 ''
+      Minimum number of file buffers that need to be open to save. Set to
+      0 to always save.
     '';
   };
 
-  config =
-    let
-      cfg = config.plugins.persistence;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua =
-        let
-          opts = {
-            inherit (cfg) dir options;
-            pre_save = cfg.preSave;
-            save_empty = cfg.saveEmpty;
-          };
-        in
-        ''
-          require('persistence').setup(${lib.nixvim.toLuaObject opts})
-        '';
-    };
+  settingsExample = {
+    need = 0;
+    branch = false;
+  };
 }
