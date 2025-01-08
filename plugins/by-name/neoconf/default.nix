@@ -69,6 +69,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
+  # Attaching before lsp config
+  # Setup `require("neoconf").setup()` should be run **BEFORE** setting up any lsp server with lspconfig
+  configLocation = lib.mkOrder 900 "extraConfigLua";
+
   settingsExample = {
     local_settings = ".neoconf.json";
     global_settings = "neoconf.json";
