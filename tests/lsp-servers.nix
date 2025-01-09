@@ -58,6 +58,9 @@ let
           "scheme_langserver"
         ]
         ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
+          # TODO: 2025-01-09 python312Packages.tree-sitter (dependency of autotools-language-server) is broken
+          # https://github.com/NixOS/nixpkgs/issues/372375
+          "autotools_ls"
           # Binary package not available for this architecture
           "starpls"
           # TODO: 2024-10-05 build failure
