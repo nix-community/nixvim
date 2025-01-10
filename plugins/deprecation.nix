@@ -1,10 +1,17 @@
 { lib, ... }:
 let
   deprecated = {
-    # TODO: added 10-23-2024, move to removed after 24.11
+    # TODO: added 2024-10-23, move to removed after 24.11
     "rust-tools" = ''
       The `rust-tools` project has been abandoned.
       It is recommended to use `rustaceanvim` instead.
+    '';
+    # TODO: added 2025-01-04, move to removed after 25.11
+    "project-nvim" = ''
+      The project-nvim project has not been updated in 2 years
+      and is broken on recent Neovim versions (it no longer adds projects
+      automatically and provides no manual method to add them) use either
+      telescope-project or projections-nvim.
     '';
   };
   removed = {
