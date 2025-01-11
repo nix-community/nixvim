@@ -4,16 +4,17 @@ extend-exclude = ["**/lspconfig-servers.json"]
 [default.extend-words]
 tabe = "tabe"
 noice = "noice"
-darcula = "darcula"       # base16-list
-Parm = "Parm"             # clangd-extensions
-Definitons = "Definitons" # TODO: ./plugins/languages/treesitter/treesitter-refactor.nix
-deffered = "deffered"     # TODO: ./plugins/utils/vim-matchup.nix
-defered = "defered"       # ./plugins/utils/auto-save.nix
-Highligt = "Highligt"     # TODO: ./plugins/utils/neogen.nix
-Annote = "Annote"         # TODO: ./plugins/lsp/fidget.nix
-ket = "ket"               # ./plugins/utils/sandwich.nix
-tro = "tro"               # ./plugins/utils/spectre.nix
-protols = "protols"       # ./plugins/lsp/lsp-packages.nix
+darcula = "darcula"           # base16-list
+Parm = "Parm"                 # clangd-extensions
+Definitons = "Definitons"     # TODO: ./plugins/languages/treesitter/treesitter-refactor.nix
+deffered = "deffered"         # TODO: ./plugins/utils/vim-matchup.nix
+defered = "defered"           # ./plugins/utils/auto-save.nix
+Highligt = "Highligt"         # TODO: ./plugins/utils/neogen.nix
+Annote = "Annote"             # TODO: ./plugins/lsp/fidget.nix
+ket = "ket"                   # ./plugins/utils/sandwich.nix
+tro = "tro"                   # ./plugins/utils/spectre.nix
+protols = "protols"           # ./plugins/lsp/lsp-packages.nix
+compatibilty = "compatibilty" # ./plugins/by-name/visual-multi/default.nix
 
 [type.patch]
 extend-glob = ["*.patch"]
