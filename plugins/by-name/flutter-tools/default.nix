@@ -1,10 +1,24 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "flutter-tools";
   packPathName = "flutter-tools.nvim";
   package = "flutter-tools-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
+
+  extraOptions = {
+    flutterPackage = lib.mkPackageOption pkgs "flutter" {
+      nullable = true;
+    };
+  };
+  extraConfig = cfg: {
+    extraPackages = [ cfg.flutterPackage ];
+  };
 
   settingsOptions = import ./settings-options.nix lib;
 
