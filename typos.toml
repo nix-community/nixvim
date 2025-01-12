@@ -15,6 +15,7 @@ ket = "ket"                   # ./plugins/utils/sandwich.nix
 tro = "tro"                   # ./plugins/utils/spectre.nix
 protols = "protols"           # ./plugins/lsp/lsp-packages.nix
 compatibilty = "compatibilty" # ./plugins/by-name/visual-multi/default.nix
+Maco = "Maco"                 # ./plugins/by-name/femaco
 
 [type.patch]
 extend-glob = ["*.patch"]
