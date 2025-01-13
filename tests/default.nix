@@ -40,6 +40,7 @@ in
   extra-files = callTest ./extra-files.nix { };
   enable-except-in-tests = callTest ./enable-except-in-tests.nix { };
   failing-tests = callTest ./failing-tests.nix { };
+  nixpkgs-module = callTest ./nixpkgs-module.nix { };
   no-flake = callTest ./no-flake.nix { };
   lib-tests = callTest ./lib-tests.nix { };
   maintainers = callTest ./maintainers.nix { };
