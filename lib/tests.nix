@@ -1,11 +1,10 @@
 {
   self,
-  pkgs,
-  lib ? pkgs.lib,
-  ...
+  system,
+  lib,
 }:
 let
-  defaultPkgs = pkgs;
+  defaultSystem = system;
 
   # Create a nix derivation from a nixvim executable.
   # The build phase simply consists in running the provided nvim binary.
@@ -30,7 +29,8 @@ let
   mkTestDerivationFromNixvimModule =
     {
       name ? null,
-      pkgs ? defaultPkgs,
+      pkgs ? null,
+      system ? defaultSystem,
       module,
       extraSpecialArgs ? { },
     }:
@@ -42,14 +42,18 @@ let
         _nixvimTests = true;
       };
 
+      systemMod =
+        if pkgs == null then
+          { nixpkgs.hostPlatform = lib.mkDefault { inherit system; }; }
+        else
+          { nixpkgs.pkgs = lib.mkDefault pkgs; };
+
       result = helpers.modules.evalNixvim {
         modules = [
           module
           (lib.optionalAttrs (name != null) { test.name = name; })
           { wrapRc = true; }
-          # TODO: Only do this when `args?pkgs`
-          # Consider deprecating the `pkgs` arg too...
-          { nixpkgs.pkgs = lib.mkDefault pkgs; }
+          systemMod
         ];
         inherit extraSpecialArgs;
       };
