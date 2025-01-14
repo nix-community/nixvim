@@ -9,7 +9,7 @@
 
       settings = {
         ui = {
-          border = "rounded";
+          border = "single";
         };
         decorations = {
           statusline = {
@@ -20,20 +20,18 @@
         };
         debugger = {
           enabled = false;
-          exception_breakpoints = [ ];
+          exception_breakpoints = null;
           evaluate_to_string_in_debug_views = true;
-          register_configurations.__raw = ''
-            function(paths)
-              require("dap").configurations.dart = {
-                --put here config that you would find in .vscode/launch.json
-              }
-              -- If you want to load .vscode launch.json automatically run the following:
-            -- require("dap.ext.vscode").load_launchjs()
-            end
-          '';
+          register_configurations = null;
         };
         flutter_path = null;
-        flutter_lookup_cmd = null;
+        flutter_lookup_cmd.__raw = ''
+          (function()
+            local exepath = vim.fn.exepath("flutter")
+            local is_snap_installation = exepath and exepath:match("snap") or false
+            return (require'flutter-tools.utils.path'.is_linux and is_snap_installation) and "flutter sdk-path" or nil
+          end)()
+        '';
         root_patterns = [
           ".git"
           "pubspec.yaml"
@@ -43,8 +41,8 @@
           enabled = false;
         };
         closing_tags = {
-          highlight = "ErrorMsg";
-          prefix = ">";
+          highlight = "Comment";
+          prefix = "// ";
           priority = 10;
           enabled = true;
         };
@@ -52,7 +50,7 @@
           enabled = true;
           filter = null;
           notify_errors = false;
-          open_cmd = "15split";
+          open_cmd.__raw = "('botright %dvnew'):format(math.max(vim.o.columns * 0.4, 50))";
           focus_on_open = true;
         };
         dev_tools = {
@@ -60,7 +58,7 @@
           auto_open_browser = false;
         };
         outline = {
-          open_cmd = "30vnew";
+          open_cmd.__raw = "('botright %dvnew'):format(math.max(vim.o.columns * 0.3, 40))";
           auto_open = false;
         };
         lsp = {
@@ -74,7 +72,7 @@
           };
           on_attach = null;
           capabilities = null;
-          settings = { };
+          settings = null;
         };
       };
     };
