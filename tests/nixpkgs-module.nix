@@ -1,10 +1,40 @@
 {
+  pkgs,
+  lib,
+  linkFarmFromDrvs,
+  self,
+  stdenv,
+}:
+let
+
+  defaultPkgs = pkgs;
+
+  testModule =
+    name: module:
+    let
+      configuration = lib.nixvim.modules.evalNixvim {
+        modules = lib.toList module ++ [
+          {
+            test = {
+              inherit name;
+              buildNixvim = false;
+              runNvim = false;
+            };
+          }
+        ];
+      };
+    in
+    configuration.config.build.test;
+
+in
+linkFarmFromDrvs "nixpkgs-module-test" [
+
   # TODO: expect not setting `nixpkgs.pkgs` to throw
 
-  overlays =
+  (testModule "nixpkgs-overlays" (
     { pkgs, ... }:
     {
-      test.runNvim = false;
+      nixpkgs.pkgs = defaultPkgs;
 
       nixpkgs.overlays = [
         (final: prev: {
@@ -20,21 +50,15 @@
           '';
         }
       ];
-    };
+    }
+  ))
 
   # Test that overlays from both `nixpkgs.pkgs` _and_ `nixpkgs.overlays` are applied
-  stacked_overlays =
+  (testModule "nixpkgs-stacked-overlay" (
+    { pkgs, ... }:
     {
-      inputs,
-      system,
-      pkgs,
-      ...
-    }:
-    {
-      test.runNvim = false;
-
-      nixpkgs.pkgs = import inputs.nixpkgs {
-        inherit system;
+      nixpkgs.pkgs = import self.inputs.nixpkgs {
+        inherit (stdenv.hostPlatform) system;
         overlays = [
           (final: prev: {
             foobar = "foobar";
@@ -70,5 +94,7 @@
           '';
         }
       ];
-    };
-}
+    }
+  ))
+
+]

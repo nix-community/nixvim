@@ -8,7 +8,6 @@
   pkgs,
   pkgsUnfree,
   self,
-  system,
 }:
 let
   fetchTests = callTest ./fetch-tests.nix { };
@@ -19,14 +18,12 @@ let
     file: name: module:
     mkTestDerivationFromNixvimModule {
       inherit name;
+      # Use a single common instance of nixpkgs, with allowUnfree
+      # Having a single shared instance should speed up tests a little
       module = {
         _file = file;
         imports = [ module ];
-        _module.args = {
-          # Give tests access to the flake
-          inherit self system;
-          inherit (self) inputs;
-        };
+        nixpkgs.pkgs = pkgsUnfree;
       };
       pkgs = pkgsUnfree;
     };
