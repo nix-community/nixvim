@@ -225,12 +225,12 @@ in
           };
           any = {
             predicate = v: builtins.any (lib.hasInfix v);
-            message = v: "Expected ${lib.toJSON v} infix to be present.";
+            message = v: "Expected ${builtins.toJSON v} infix to be present.";
             valueType = lib.types.str;
           };
           anyExact = {
             predicate = builtins.elem;
-            message = v: "Expected ${lib.toJSON v} to be present.";
+            message = v: "Expected ${builtins.toJSON v} to be present.";
             valueType = lib.types.str;
           };
         };
