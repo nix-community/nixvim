@@ -10,23 +10,22 @@ let
 
   defaultPkgs = pkgs;
 
-  testModule =
+  evalModule =
     name: module:
-    let
-      configuration = lib.nixvim.modules.evalNixvim {
-        modules = lib.toList module ++ [
-          {
-            test = {
-              inherit name;
-              buildNixvim = false;
-              runNvim = false;
-              runCommand = runCommandLocal;
-            };
-          }
-        ];
-      };
-    in
-    configuration.config.build.test;
+    lib.nixvim.modules.evalNixvim {
+      modules = lib.toList module ++ [
+        {
+          test = {
+            inherit name;
+            buildNixvim = false;
+            runNvim = false;
+            runCommand = runCommandLocal;
+          };
+        }
+      ];
+    };
+
+  testModule = name: module: (evalModule name module).config.build.test;
 
 in
 linkFarmFromDrvs "nixpkgs-module-test" [
