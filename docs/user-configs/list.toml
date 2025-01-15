@@ -140,3 +140,8 @@ owner = "ZainKergaye"
 title = "nixosdotfiles"
 url = "https://github.com/ZainKergaye/nixosdotfiles/tree/master/user/programs/nixvim"
 description = "NixVim editor primarily for Java and Asciidoc"
+
+[[config]]
+owner = "Yohh"
+repo = "nix-confix"
+description = "Nix config with nixvim and home-manager, inspired by some of the contributors in this list"
