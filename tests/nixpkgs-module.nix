@@ -4,6 +4,7 @@
   linkFarmFromDrvs,
   self,
   stdenv,
+  runCommandLocal,
 }:
 let
 
@@ -19,6 +20,7 @@ let
               inherit name;
               buildNixvim = false;
               runNvim = false;
+              runCommand = runCommandLocal;
             };
           }
         ];

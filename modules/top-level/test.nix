@@ -169,6 +169,22 @@ in
       '';
       internal = true;
     };
+
+    # Primarily intended for internal use, allowing us to test `pkgs` while using a `runCommand` from a different nixpkgs instance.
+    runCommand = lib.mkOption {
+      type =
+        with lib.types;
+        addCheck unspecified builtins.isFunction
+        // {
+          description = "runCommand function";
+        };
+      description = ''
+        `runCommand` function used to construct `build.test`.
+      '';
+      defaultText = lib.literalExpression "pkgs.runCommandLocal";
+      default = pkgs.runCommandLocal;
+      internal = true;
+    };
   };
 
   options.build = {
@@ -238,7 +254,7 @@ in
 
       build.test =
         assert lib.assertMsg (cfg.runNvim -> cfg.buildNixvim) "`test.runNvim` requires `test.buildNixvim`.";
-        pkgs.runCommandLocal cfg.name
+        cfg.runCommand cfg.name
           {
             nativeBuildInputs = lib.optionals cfg.buildNixvim [
               config.build.packageUnchecked
