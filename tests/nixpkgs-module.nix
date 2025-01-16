@@ -10,11 +10,14 @@ let
 
   defaultPkgs = pkgs;
 
+  # Only imports the bare minimum modules, to ensure we are not accidentally evaluating `pkgs.*`
   evalModule =
     name: module:
-    lib.nixvim.modules.evalNixvim {
+    lib.evalModules {
       modules = lib.toList module ++ [
         {
+          _module.check = false;
+          flake = self;
           test = {
             inherit name;
             buildNixvim = false;
@@ -22,6 +25,9 @@ let
             runCommand = runCommandLocal;
           };
         }
+        ../modules/misc
+        ../modules/top-level/test.nix
+        ../modules/top-level/nixpkgs.nix
       ];
     };
 
