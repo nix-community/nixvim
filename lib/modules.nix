@@ -36,6 +36,7 @@ in
         }
       ];
       specialArgs = {
+        modulesPath = ../modules;
         # TODO: deprecate `helpers`
         helpers = self;
       } // extraSpecialArgs;
