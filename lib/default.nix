@@ -86,6 +86,7 @@ lib.makeExtensible (
       mkIfNonNull'
       mkRaw
       mkRawKey
+      mkWarnings
       nestedLiteral
       nestedLiteralLua
       override

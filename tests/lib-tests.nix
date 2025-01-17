@@ -490,6 +490,30 @@ let
         "mkAfter list".foo.bar = lib.mkAfter "Hello!";
       };
     };
+
+    testMkWarnings = {
+      expr =
+        (lib.nixvim.mkWarnings "foo-bar" [
+          {
+            when = true;
+            message = "This is the message";
+          }
+          {
+            when = false;
+            message = "This should not be included";
+          }
+          "This is an unconditional warning"
+        ])
+        ++ (lib.nixvim.mkWarnings "single-element") {
+          when = true;
+          message = "Hello";
+        };
+      expected = [
+        "Nixvim (foo-bar): This is the message"
+        "Nixvim (foo-bar): This is an unconditional warning"
+        "Nixvim (single-element): Hello"
+      ];
+    };
   };
 in
 if results == [ ] then

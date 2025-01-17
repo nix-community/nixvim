@@ -158,6 +158,7 @@ rec {
     ```
 
     # Type
+
     ```
     literalLua :: String -> AttrSet
     ```
@@ -171,6 +172,34 @@ rec {
       exp = "lib.nixvim.mkRaw " + builtins.toJSON raw.__raw;
     in
     lib.literalExpression exp;
+
+  /**
+    Convert one or several conditional warnings to a final warning list.
+    The second argument can either be a list of _conditional warnings_ or a single one.
+
+    # Example
+
+    ```nix
+    warnings = mkWarnings "plugins.foo" {
+      when = plugins.foo.settings.barIntegration && (!plugins.bar.enable);
+      message = "`barIntegration` is enabled but the `bar` plugin is not."
+    }
+    ```
+
+    # Type
+
+    ```
+    mkWarnings :: String -> List -> List
+    ```
+  */
+  mkWarnings =
+    scope: warnings:
+    let
+      processWarning =
+        warning:
+        lib.optional (warning.when or true) "Nixvim (${scope}): ${lib.trim (warning.message or warning)}";
+    in
+    builtins.concatMap processWarning (lib.toList warnings);
 
   /**
     Convert the given string into a `__pretty` printed mkRaw expression.
@@ -190,6 +219,7 @@ rec {
     ```
 
     # Type
+
     ```
     nestedLiteralLua :: String -> AttrSet
     ```
@@ -221,6 +251,7 @@ rec {
     ```
 
     # Type
+
     ```
     nestedLiteral :: (String | literalExpression) -> AttrSet
     ```
