@@ -1,5 +1,7 @@
 # Helpers
 
+## Accessing Nixvim's functions
+
 If Nixvim is built using the standalone method, you can access our "helpers" as part of the `lib` module arg:
 
 ```nix
@@ -36,6 +38,8 @@ Or you can access the extended `lib` used in standalone builds via the `nixvimLi
 This "extended" lib, includes everything normally in `lib`, along with some additions from nixvim.
 
 **Note:** the `lib` argument passed to modules is entirely unrelated to the `lib` _option_ accessed as `config.lib`!
+
+## Common helper functions
 
 A certain number of helpers are defined that can be useful:
 
