@@ -268,24 +268,6 @@
       kind = "string";
     };
   };
-  "rust-analyzer.cargo.sysrootQueryMetadata" = {
-    description = ''
-      How to query metadata for the sysroot crate. Using cargo metadata allows rust-analyzer
-      to analyze third-party dependencies of the standard libraries.
-
-      Values:
-      - none: Do not query sysroot metadata, always use stitched sysroot.
-      - cargo_metadata: Use `cargo metadata` to query sysroot metadata.
-    '';
-    pluginDefault = "cargo_metadata";
-    type = {
-      kind = "enum";
-      values = [
-        "none"
-        "cargo_metadata"
-      ];
-    };
-  };
   "rust-analyzer.cargo.sysrootSrc" = {
     description = ''
       Relative path to the sysroot library sources. If left unset, this will default to
@@ -300,7 +282,7 @@
   };
   "rust-analyzer.cargo.target" = {
     description = ''
-      Compilation target override (target triple).
+      Compilation target override (target tuple).
     '';
     pluginDefault = null;
     type = {
@@ -556,6 +538,57 @@
       kind = "boolean";
     };
   };
+  "rust-analyzer.completion.autoimport.exclude" = {
+    description = ''
+      A list of full paths to items to exclude from auto-importing completions.
+
+      Traits in this list won't have their methods suggested in completions unless the trait
+      is in scope.
+
+      You can either specify a string path which defaults to type "always" or use the more verbose
+      form `{ "path": "path::to::item", type: "always" }`.
+
+      For traits the type "methods" can be used to only exclude the methods but not the trait itself.
+
+      This setting also inherits `#rust-analyzer.completion.excludeTraits#`.
+    '';
+    pluginDefault = [
+      {
+        path = "core::borrow::Borrow";
+        type = "methods";
+      }
+      {
+        path = "core::borrow::BorrowMut";
+        type = "methods";
+      }
+    ];
+    type = {
+      item = {
+        kind = "oneOf";
+        subTypes = [
+          {
+            kind = "string";
+          }
+          {
+            kind = "submodule";
+            options = {
+              path = {
+                kind = "string";
+              };
+              type = {
+                kind = "enum";
+                values = [
+                  "always"
+                  "methods"
+                ];
+              };
+            };
+          }
+        ];
+      };
+      kind = "list";
+    };
+  };
   "rust-analyzer.completion.autoself.enable" = {
     description = ''
       Toggles the additional completions that automatically show method calls and field accesses
@@ -583,6 +616,22 @@
         "add_parentheses"
         "none"
       ];
+    };
+  };
+  "rust-analyzer.completion.excludeTraits" = {
+    description = ''
+      A list of full paths to traits whose methods to exclude from completion.
+
+      Methods from these traits won't be completed, even if the trait is in scope. However, they will still be suggested on expressions whose type is `dyn Trait`, `impl Trait` or `T where T: Trait`.
+
+      Note that the trait themselves can still be completed.
+    '';
+    pluginDefault = [ ];
+    type = {
+      item = {
+        kind = "string";
+      };
+      kind = "list";
     };
   };
   "rust-analyzer.completion.fullFunctionSignatures.enable" = {
@@ -916,6 +965,16 @@
       kind = "boolean";
     };
   };
+  "rust-analyzer.hover.actions.updateTest.enable" = {
+    description = ''
+      Whether to show `Update Test` action. Only applies when
+      `#rust-analyzer.hover.actions.enable#` and `#rust-analyzer.hover.actions.run.enable#` are set.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.hover.documentation.enable" = {
     description = ''
       Whether to show documentation on hover.
@@ -942,6 +1001,32 @@
     pluginDefault = true;
     type = {
       kind = "boolean";
+    };
+  };
+  "rust-analyzer.hover.maxSubstitutionLength" = {
+    description = ''
+      Whether to show what types are used as generic arguments in calls etc. on hover, and what is their max length to show such types, beyond it they will be shown with ellipsis.
+
+      This can take three values: `null` means "unlimited", the string `"hide"` means to not show generic substitutions at all, and a number means to limit them to X characters.
+
+      The default is 20 characters.
+    '';
+    pluginDefault = 20;
+    type = {
+      kind = "oneOf";
+      subTypes = [
+        {
+          kind = "enum";
+          values = [
+            "hide"
+          ];
+        }
+        {
+          kind = "integer";
+          maximum = null;
+          minimum = null;
+        }
+      ];
     };
   };
   "rust-analyzer.hover.memoryLayout.alignment" = {
@@ -1605,6 +1690,16 @@
     description = ''
       Whether to show `Run` lens. Only applies when
       `#rust-analyzer.lens.enable#` is set.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.lens.updateTest.enable" = {
+    description = ''
+      Whether to show `Update Test` lens. Only applies when
+      `#rust-analyzer.lens.enable#` and `#rust-analyzer.lens.run.enable#` are set.
     '';
     pluginDefault = true;
     type = {
