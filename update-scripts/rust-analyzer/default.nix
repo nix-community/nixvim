@@ -37,85 +37,91 @@ let
   ) options;
 
   mkRustAnalyzerOptionType =
-    nullable: property_name:
-    {
-      type,
-      enum ? null,
-      minimum ? null,
-      maximum ? null,
-      items ? null,
-      anyOf ? null,
-      properties ? null,
-      # Not used in the function, but anyOf values contain it
-      enumDescriptions ? null,
-    }@property:
-    if enum != null then
-      {
-        kind = "enum";
-        values = enum;
-      }
-    else if anyOf != null then
-      let
-        possibleTypes = lib.filter (sub: !(sub.type == "null" && nullable)) anyOf;
-      in
-      {
-        kind = "oneOf";
-        subTypes = builtins.map (
-          t: mkRustAnalyzerOptionType nullable "${property_name}-sub" t
-        ) possibleTypes;
-      }
-    else if lib.isList type then
-      (
-        if lib.head type == "null" then
-          assert lib.assertMsg (
-            lib.length type == 2
-          ) "Lists starting with null are assumed to mean nullOr, so length 2";
+    nullable: property_name: property:
+    let
+      inner =
+        {
+          type,
+          enum ? null,
+          minimum ? null,
+          maximum ? null,
+          items ? null,
+          anyOf ? null,
+          properties ? null,
+          # Not used in the function, but anyOf values contain it
+          enumDescriptions ? null,
+        }@property:
+        if enum != null then
+          {
+            kind = "enum";
+            values = enum;
+          }
+        else if anyOf != null then
           let
-            innerType = property // {
-              type = lib.elemAt type 1;
-            };
-            inner = mkRustAnalyzerOptionType nullable "${property_name}-inner" innerType;
-          in
-          assert lib.assertMsg nullable "nullOr types are not yet handled";
-          inner
-        else
-          let
-            innerTypes = builtins.map (
-              t: mkRustAnalyzerOptionType nullable "${property_name}-inner" (property // { type = t; })
-            ) type;
+            possibleTypes = lib.filter (sub: !(sub.type == "null" && nullable)) anyOf;
           in
           {
             kind = "oneOf";
-            subTypes = innerTypes;
+            subTypes = builtins.map (
+              t: mkRustAnalyzerOptionType nullable "${property_name}-sub" t
+            ) possibleTypes;
           }
-      )
-    else if type == "array" then
-      {
-        kind = "list";
-        item = mkRustAnalyzerOptionType false "${property_name}-item" items;
-      }
-    else if type == "number" || type == "integer" then
-      {
-        kind = type;
-        inherit minimum maximum;
-      }
-    else if type == "object" && properties != null then
-      {
-        kind = "submodule";
-        options = lib.mapAttrs (
-          name: value: mkRustAnalyzerOptionType false "${property_name}.${name}" value
-        ) properties;
-      }
-    else if
-      lib.elem type [
-        "object"
-        "string"
-        "boolean"
-      ]
-    then
-      { kind = type; }
-    else
-      throw "Unhandled value in ${property_name}: ${lib.generators.toPretty { } property}";
+        else if lib.isList type then
+          (
+            if lib.head type == "null" then
+              assert lib.assertMsg (
+                lib.length type == 2
+              ) "Lists starting with null are assumed to mean nullOr, so length 2";
+              let
+                innerType = property // {
+                  type = lib.elemAt type 1;
+                };
+                inner = mkRustAnalyzerOptionType nullable "${property_name}-inner" innerType;
+              in
+              assert lib.assertMsg nullable "nullOr types are not yet handled";
+              inner
+            else
+              let
+                innerTypes = builtins.map (
+                  t: mkRustAnalyzerOptionType nullable "${property_name}-inner" (property // { type = t; })
+                ) type;
+              in
+              {
+                kind = "oneOf";
+                subTypes = innerTypes;
+              }
+          )
+        else if type == "array" then
+          {
+            kind = "list";
+            item = mkRustAnalyzerOptionType false "${property_name}-item" items;
+          }
+        else if type == "number" || type == "integer" then
+          {
+            kind = type;
+            inherit minimum maximum;
+          }
+        else if type == "object" && properties != null then
+          {
+            kind = "submodule";
+            options = lib.mapAttrs (
+              name: value: mkRustAnalyzerOptionType false "${property_name}.${name}" value
+            ) properties;
+          }
+        else if
+          lib.elem type [
+            "object"
+            "string"
+            "boolean"
+          ]
+        then
+          { kind = type; }
+        else
+          throw "Unhandled value in ${property_name}: ${lib.generators.toPretty { } property}";
+    in
+    builtins.addErrorContext "While creating type for ${property_name}:\n${lib.generators.toPretty { } property}" (
+      inner property
+    );
 
   mkRustAnalyzerOption =
     property_name:
