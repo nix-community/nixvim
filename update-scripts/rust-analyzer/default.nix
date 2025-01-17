@@ -184,12 +184,15 @@ let
       };
       pluginDefault = default;
       description =
+        let
+          globalDescription = ''
+            ${filteredMarkdownDesc}
+          '';
+        in
         if
           enum == null && (anyOf == null || builtins.all (subProp: !(lib.hasAttr "enum" subProp)) anyOf)
         then
-          ''
-            ${filteredMarkdownDesc}
-          ''
+          globalDescription
         else if enum != null then
           assert lib.assertMsg (anyOf == null) "enum + anyOf types are not yet handled";
           enumDesc enum enumDescriptions
@@ -202,7 +205,11 @@ let
               ) "anyOf types may currently only contain a single enum";
               lib.head subEnums;
           in
-          enumDesc subEnum.enum subEnum.enumDescriptions;
+          if subEnum ? enumDescriptions then
+            enumDesc subEnum.enum subEnum.enumDescriptions
+          else
+            globalDescription;
+
     };
 
   rustAnalyzerOptions = builtins.map (
