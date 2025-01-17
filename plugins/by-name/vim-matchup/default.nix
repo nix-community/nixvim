@@ -84,11 +84,14 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = lib.optional (cfg.treesitter.enable && (!config.plugins.treesitter.enable)) ''
-      Nixvim (plugins.vim-matchup): `plugins.vim-matchup.treesitter.enable` is `true`, but the
-      treesitter plugin itself is not.
-      -> Set `plugins.treesitter.enable` to `true`.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.vim-matchup" {
+      when = cfg.treesitter.enable && (!config.plugins.treesitter.enable);
+
+      message = ''
+        `plugins.vim-matchup.treesitter.enable` is `true`, but the treesitter plugin itself is not.
+        -> Set `plugins.treesitter.enable` to `true`.
+      '';
+    };
 
     plugins.treesitter.settings.matchup = cfg.treesitter;
   };

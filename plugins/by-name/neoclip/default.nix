@@ -238,17 +238,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     # TODO: added 2024-09-14 remove after 24.11
     plugins.sqlite-lua.enable = mkOverride 1490 true;
-    warnings =
-      optional
-        (
-          isBool cfg.settings.enable_persistent_history
-          && cfg.settings.enable_persistent_history
-          && options.plugins.sqlite-lua.enable.highestPrio == 1490
-        )
-        ''
-          Nixvim (plugins.neoclip) `sqlite-lua` automatic installation is deprecated.
-          Please use `plugins.sqlite-lua.enable`.
-        '';
+    warnings = lib.nixvim.mkWarnings "plugins.neoclip" {
+      when =
+        isBool cfg.settings.enable_persistent_history
+        && cfg.settings.enable_persistent_history
+        && options.plugins.sqlite-lua.enable.highestPrio == 1490;
+
+      message = ''
+        `sqlite-lua` automatic installation is deprecated. Please use `plugins.sqlite-lua.enable`.
+      '';
+    };
 
     assertions = [
       {

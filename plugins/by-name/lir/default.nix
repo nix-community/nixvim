@@ -19,17 +19,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      lib.optional
-        (
-          (cfg.settings ? devicons.enable)
-          && (lib.isBool cfg.settings.devicons.enable)
-          && cfg.settings.devicons.enable
-          && (!config.plugins.web-devicons.enable)
-        )
-        ''
-          Nixvim (plugins.lir): You have enabled `settings.devicons.enable` but `plugins.web-devicons.enable` is `false`.
-          Consider enabling the plugin for proper devicons support.
-        '';
+    warnings = lib.nixvim.mkWarnings "plugins.lir" {
+      when =
+        (cfg.settings ? devicons.enable)
+        && (lib.isBool cfg.settings.devicons.enable)
+        && cfg.settings.devicons.enable
+        && (!config.plugins.web-devicons.enable);
+
+      message = ''
+        You have enabled `settings.devicons.enable` but `plugins.web-devicons.enable` is `false`.
+        Consider enabling the plugin for proper devicons support.
+      '';
+    };
   };
 }

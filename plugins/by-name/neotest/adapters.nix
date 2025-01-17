@@ -44,10 +44,14 @@ let
             }
           ];
 
-          warnings = optional (!config.plugins.treesitter.enable) ''
-            Nixvim (plugins.neotest.adapters.${name}): This adapter requires `treesitter` to be enabled.
-            You might want to set `plugins.treesitter.enable = true` and ensure that the `${treesitter-parser}` parser is enabled.
-          '';
+          warnings = lib.nixvim.mkWarnings "plugins.neotest.adapters.${name}" {
+            when = !config.plugins.treesitter.enable;
+
+            message = ''
+              This adapter requires `treesitter` to be enabled.
+              You might want to set `plugins.treesitter.enable = true` and ensure that the `${treesitter-parser}` parser is enabled.
+            '';
+          };
 
           plugins.neotest.settings.adapters =
             let

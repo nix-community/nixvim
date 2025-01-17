@@ -19,17 +19,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     extraPackages = [ cfg.flutterPackage ];
 
-    warnings =
-      lib.optional
-        (
-          (cfg.settings ? debugger.enable)
-          && (lib.isBool cfg.settings.debugger.enable)
-          && cfg.settings.debugger.enable
-          && (!config.plugins.dap.enable)
-        )
-        ''
-          Nixvim (plugins.flutter-tools): You have enabled the dap integration (`settings.debugger.enable`) but `plugins.dap` is disabled.
-        '';
+    warnings = lib.nixvim.mkWarnings "plugins.flutter-tools" {
+      when =
+        (cfg.settings ? debugger.enable)
+        && (lib.isBool cfg.settings.debugger.enable)
+        && cfg.settings.debugger.enable
+        && (!config.plugins.dap.enable);
+
+      message = ''
+        You have enabled the dap integration (`settings.debugger.enable`) but `plugins.dap` is disabled.
+      '';
+    };
   };
 
   settingsOptions = import ./settings-options.nix lib;

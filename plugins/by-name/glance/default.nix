@@ -16,14 +16,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      lib.optional
-        (
-          cfg.settings ? use_trouble_qf
-          && builtins.isBool cfg.settings.use_trouble_qf
-          && cfg.settings.use_trouble_qf
-          && !config.plugins.trouble.enable
-        )
-        "Nixvim (plugins.glance): The `trouble` plugin is not enabled, so the `glance` plugin's `use_trouble_qf` setting has no effect.";
+    warnings = lib.nixvim.mkWarnings "plugins.glance" {
+      when =
+        cfg.settings ? use_trouble_qf
+        && builtins.isBool cfg.settings.use_trouble_qf
+        && cfg.settings.use_trouble_qf
+        && !config.plugins.trouble.enable;
+
+      message = ''
+        The `trouble` plugin is not enabled, so the `glance` plugin's `use_trouble_qf` setting has no effect.
+      '';
+    };
   };
 }

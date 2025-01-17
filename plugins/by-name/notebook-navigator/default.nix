@@ -103,20 +103,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      (lib.optional ((cfg.settings.activate_hydra_keys != null) && (!config.plugins.hydra.enable)) ''
-        Nixvim (plugins.notebook-navigator): `plugins.notebook-navigator.settings.activate_hydra_keys` has been set to a non-`null`
-        value but `plugins.hydra.enable` is `false`.
-      '')
-      ++
-        (lib.optional ((cfg.settings.repl_provider == "toggleterm") && (!config.plugins.toggleterm.enable)))
-          ''
-            Nixvim (plugins.notebook-navigator): `plugins.notebook-navigator.settings.repl_provider` has been set to "toggleterm"
-            but `plugins.hydra.toggleterm.enable` is `false`.
-          ''
-      ++ (lib.optional ((cfg.settings.repl_provider == "molten") && (!config.plugins.molten.enable))) ''
-        Nixvim (plugins.notebook-navigator): `plugins.notebook-navigator.settings.repl_provider` has been set to "molten"
-        but `plugins.molten.enable` is `false`.
-      '';
+    warnings = lib.nixvim.mkWarnings "plugins.notebook-navigator" [
+      {
+        when = (cfg.settings.activate_hydra_keys != null) && (!config.plugins.hydra.enable);
+        message = ''
+          `settings.activate_hydra_keys` has been set to a non-`null` value but `plugins.hydra.enable` is `false`.
+        '';
+      }
+      {
+        when = (cfg.settings.repl_provider == "toggleterm") && (!config.plugins.toggleterm.enable);
+        message = ''
+          `settings.repl_provider` has been set to "toggleterm" but `plugins.hydra.toggleterm.enable` is `false`.
+        '';
+      }
+      {
+        when = (cfg.settings.repl_provider == "molten") && (!config.plugins.molten.enable);
+        message = ''
+          `settings.repl_provider` has been set to "molten" but `plugins.molten.enable` is `false`.
+        '';
+      }
+    ];
   };
 }

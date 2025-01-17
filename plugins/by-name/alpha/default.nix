@@ -153,11 +153,13 @@ in
     lib.mkIf cfg.enable {
 
       # TODO: added 2024-09-20 remove after 24.11
-      warnings = lib.optionals opt.iconsEnabled.isDefined [
-        ''
+      warnings = lib.nixvim.mkWarnings "plugins.alpha" {
+        when = opt.iconsEnabled.isDefined;
+        message = ''
           The option definition `plugins.alpha.iconsEnabled' in ${lib.showFiles opt.iconsEnabled.files} has been deprecated; please remove it.
-        ''
-      ];
+        '';
+      };
+
       plugins.web-devicons =
         lib.mkIf
           (

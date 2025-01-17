@@ -145,10 +145,14 @@ in
       extraPlugins = [ cfg.package ];
 
       # TODO: print the location of the offending options
-      warnings = lib.optional (nixvimPkgs.wrong != [ ]) ''
-        Nixvim (plugins.efmls-configs): Following tools are not handled by nixvim, please add them to `externallyManagedPackages` to silence this:
-        ${lib.concatMapStringsSep "\n" (tool: "  - ${tool}") nixvimPkgs.wrong}
-      '';
+      warnings = lib.nixvim.mkWarnings "plugins.efmls-configs" {
+        when = nixvimPkgs.wrong != [ ];
+
+        message = ''
+          Following tools are not handled by nixvim, please add them to `externallyManagedPackages` to silence this:
+          ${lib.concatMapStringsSep "\n" (tool: "  - ${tool}") nixvimPkgs.wrong}
+        '';
+      };
 
       plugins.lsp.servers.efm = {
         enable = true;

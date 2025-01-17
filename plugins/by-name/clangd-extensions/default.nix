@@ -122,10 +122,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = lib.optionals (!config.plugins.lsp.enable) ''
-      Nixvim (plugins.clangd-extensions): You have enabled `clangd-extensions` but not the lsp (`plugins.lsp`).
-      You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.clangd-extensions" {
+      when = !config.plugins.lsp.enable;
+
+      message = ''
+        You have enabled `clangd-extensions` but not the lsp (`plugins.lsp`).
+        You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
+      '';
+    };
 
     plugins.lsp = {
       servers.clangd = {

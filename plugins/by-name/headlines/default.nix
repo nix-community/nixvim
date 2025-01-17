@@ -22,8 +22,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = {
-    warnings = optional (!config.plugins.treesitter.enable) ''
-      Nixvim (plugins.headlines): headlines requires `plugins.treesitter` to be enabled with the relevant grammars installed.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.headlines" {
+      when = !config.plugins.treesitter.enable;
+
+      message = ''
+        headlines requires `plugins.treesitter` to be enabled with the relevant grammars installed.
+      '';
+    };
   };
 }

@@ -115,14 +115,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     extraPackages = [ cfg.zkPackage ];
 
-    warnings = flatten (
+    warnings = lib.nixvim.mkWarnings "plugins.zk" (
       mapAttrsToList
-        (
-          picker: pluginName:
-          optional ((cfg.settings.picker == picker) && !config.plugins.${pluginName}.enable) ''
-            Nixvim (plugins.zk): You have set `plugins.zk.settings.picker = "${picker}"` but `plugins.${pluginName}` is not enabled in your config.
-          ''
-        )
+        (picker: pluginName: {
+          when = (cfg.settings.picker == picker) && !config.plugins.${pluginName}.enable;
+          message = ''
+            You have set `plugins.zk.settings.picker = "${picker}"` but `plugins.${pluginName}` is not enabled in your config.
+          '';
+        })
         {
           fzf_lua = "fzf-lua";
           telescope = "telescope";

@@ -101,13 +101,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      optional ((isBool cfg.settings.trouble && cfg.settings.trouble) && !config.plugins.trouble.enable)
-        ''
-          Nixvim (plugins.gitsigns): You have enabled `plugins.gitsigns.settings.trouble` but
-          `plugins.trouble.enable` is `false`.
-          You should maybe enable the `trouble` plugin.
-        '';
+    warnings = lib.nixvim.mkWarnings "plugins.gitsigns" {
+      when = (isBool cfg.settings.trouble && cfg.settings.trouble) && !config.plugins.trouble.enable;
+
+      message = ''
+        You have enabled `plugins.gitsigns.settings.trouble` but `plugins.trouble.enable` is `false`.
+        You should maybe enable the `trouble` plugin.
+      '';
+    };
+
     extraPackages = [ cfg.gitPackage ];
   };
 }

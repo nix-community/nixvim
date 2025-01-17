@@ -241,10 +241,12 @@ mkVimPlugin {
   extraConfig = cfg: {
     extraPython3Packages = cfg.python3Dependencies;
 
-    warnings =
-      lib.optional (cfg.settings.image_provider == "wezterm" && !config.plugins.wezterm.enable)
-        ''
-          Nixvim (plugins.molten): The `wezterm` plugin is not enabled, so the `molten` plugin's `image_provider` setting will have no effect.
-        '';
+    warnings = lib.nixvim.mkWarnings "plugins.molten" {
+      when = cfg.settings.image_provider == "wezterm" && !config.plugins.wezterm.enable;
+
+      message = ''
+        The `wezterm` plugin is not enabled, so the `molten` plugin's `image_provider` setting will have no effect.
+      '';
+    };
   };
 }
