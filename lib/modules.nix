@@ -36,7 +36,6 @@ in
         }
       ];
       specialArgs = {
-        inherit lib;
         # TODO: deprecate `helpers`
         helpers = self;
       } // extraSpecialArgs;
