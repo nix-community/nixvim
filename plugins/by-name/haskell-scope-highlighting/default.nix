@@ -1,10 +1,8 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "haskell-scope-highlighting";
   packPathName = "haskell-scope-highlighting.nvim";
@@ -13,9 +11,12 @@ lib.nixvim.plugins.mkVimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraConfig = {
-    warnings = optional (!config.plugins.treesitter.enable) ''
-      Nixvim (plugins.haskell-scope-highlighting): haskell-scope-highlighting needs treesitter to function as intended.
-      Please, enable it by setting `plugins.treesitter.enable` to `true`.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.haskell-scope-highlighting" {
+      when = !config.plugins.treesitter.enable;
+      message = ''
+        haskell-scope-highlighting needs treesitter to function as intended.
+        Please, enable it by setting `plugins.treesitter.enable` to `true`.
+      '';
+    };
   };
 }

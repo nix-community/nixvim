@@ -116,14 +116,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      lib.optional
-        (
-          (lib.isBool cfg.settings.devicons) && cfg.settings.devicons && (!config.plugins.web-devicons.enable)
-        )
-        ''
-          Nixvim (colorschemes.monokai-pro): You have enabled `settings.devicons` but `plugins.web-devicons.enable` is `false`.
-          Consider enabling the plugin for proper devicons support.
-        '';
+    warnings = lib.nixvim.mkWarnings "colorschemes.monokai-pro" {
+      when =
+        (lib.isBool cfg.settings.devicons)
+        && cfg.settings.devicons
+        && (!config.plugins.web-devicons.enable);
+      message = ''
+        You have enabled `settings.devicons` but `plugins.web-devicons.enable` is `false`.
+        Consider enabling the plugin for proper devicons support.
+      '';
+    };
   };
 }

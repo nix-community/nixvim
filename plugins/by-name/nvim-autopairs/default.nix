@@ -189,12 +189,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      optional
-        ((isBool cfg.settings.check_ts) && cfg.settings.check_ts && !config.plugins.treesitter.enable)
-        ''
-          Nixvim (plugins.nvim-autopairs): You have set `settings.check_ts` to `true` but have not enabled the treesitter plugin.
-          We suggest you to set `plugins.treesitter.enable` to `true`.
-        '';
+    warnings = lib.nixvim.mkWarnings "plugins.nvim-autopairs" {
+      when = (isBool cfg.settings.check_ts) && cfg.settings.check_ts && !config.plugins.treesitter.enable;
+      message = ''
+        You have set `settings.check_ts` to `true` but have not enabled the treesitter plugin.
+        We suggest you to set `plugins.treesitter.enable` to `true`.
+      '';
+    };
   };
 }
