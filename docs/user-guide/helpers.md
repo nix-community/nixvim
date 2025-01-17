@@ -57,8 +57,7 @@ This can be achieved using the lib overlay, available via the `<nixvim>.lib.over
   outputs =
     { nixpkgs, ... }@inputs:
     let
-      lib = import (nixpkgs + "/lib");
-      myCustomLib = lib.extend (final: prev: {
+      myCustomLib = nixpkgs.lib.extend (final: prev: {
         # ...
       });
       myCustomLibForNixvim = myCustomLib.extend inputs.nixvim.lib.overlay;
