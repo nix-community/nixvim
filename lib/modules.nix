@@ -23,10 +23,10 @@ in
       extraSpecialArgs ? { },
     }:
     # Ensure a suitable `lib` is used
-    # TODO: offer a lib overlay that end-users could use to apply nixvim's extensions to their own `lib`
     assert lib.assertMsg (extraSpecialArgs ? lib -> extraSpecialArgs.lib ? nixvim) ''
       Nixvim requires a lib that includes some custom extensions, however the `lib` from `specialArgs` does not have a `nixvim` attr.
-      Remove `lib` from nixvim's `specialArgs` or ensure you apply nixvim's extensions to your `lib`.'';
+      Remove `lib` from nixvim's `specialArgs` or ensure you apply nixvim's extensions to your `lib`.
+      See https://nix-community.github.io/nixvim/user-guide/helpers.html#using-a-custom-lib-with-nixvim'';
     lib.evalModules {
       modules = modules ++ [
         ../modules/top-level

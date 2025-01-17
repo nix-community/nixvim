@@ -39,6 +39,36 @@ This "extended" lib, includes everything normally in `lib`, along with some addi
 
 **Note:** the `lib` argument passed to modules is entirely unrelated to the `lib` _option_ accessed as `config.lib`!
 
+## Using a custom `lib` with Nixvim
+
+When Nixvim is built in standalone mode, it expects `lib` to have Nixvim's extensions.
+If you'd like to use a `lib` with your own extensions, you must supply it via `specialArgs`,
+however you must ensure Nixvim's extensions are also present.
+
+This can be achieved using the lib overlay, available via the `<nixvim>.lib.overlay` flake output.
+
+```nix
+# Example flake
+{
+  inputs = {
+    # ...
+  };
+
+  outputs =
+    { nixpkgs, ... }@inputs:
+    let
+      lib = import (nixpkgs + "/lib");
+      myCustomLib = lib.extend (final: prev: {
+        # ...
+      });
+      myCustomLibForNixvim = myCustomLib.extend inputs.nixvim.lib.overlay;
+    in
+    {
+      # ...
+    };
+}
+```
+
 ## Common helper functions
 
 A certain number of helpers are defined that can be useful:
