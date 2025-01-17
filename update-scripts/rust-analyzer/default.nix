@@ -41,7 +41,7 @@ let
     let
       inner =
         {
-          type,
+          type ? null,
           enum ? null,
           minimum ? null,
           maximum ? null,
@@ -66,58 +66,62 @@ let
               t: mkRustAnalyzerOptionType nullable "${property_name}-sub" t
             ) possibleTypes;
           }
-        else if lib.isList type then
-          (
-            if lib.head type == "null" then
-              assert lib.assertMsg (
-                lib.length type == 2
-              ) "Lists starting with null are assumed to mean nullOr, so length 2";
-              let
-                innerType = property // {
-                  type = lib.elemAt type 1;
-                };
-                inner = mkRustAnalyzerOptionType nullable "${property_name}-inner" innerType;
-              in
-              assert lib.assertMsg nullable "nullOr types are not yet handled";
-              inner
-            else
-              let
-                innerTypes = builtins.map (
-                  t: mkRustAnalyzerOptionType nullable "${property_name}-inner" (property // { type = t; })
-                ) type;
-              in
-              {
-                kind = "oneOf";
-                subTypes = innerTypes;
-              }
-          )
-        else if type == "array" then
-          {
-            kind = "list";
-            item = mkRustAnalyzerOptionType false "${property_name}-item" items;
-          }
-        else if type == "number" || type == "integer" then
-          {
-            kind = type;
-            inherit minimum maximum;
-          }
-        else if type == "object" && properties != null then
-          {
-            kind = "submodule";
-            options = lib.mapAttrs (
-              name: value: mkRustAnalyzerOptionType false "${property_name}.${name}" value
-            ) properties;
-          }
-        else if
-          lib.elem type [
-            "object"
-            "string"
-            "boolean"
-          ]
-        then
-          { kind = type; }
         else
-          throw "Unhandled value in ${property_name}: ${lib.generators.toPretty { } property}";
+          (
+            assert lib.assertMsg (type != null) "property is neither anyOf nor enum, it must have a type";
+            if lib.isList type then
+              (
+                if lib.head type == "null" then
+                  assert lib.assertMsg (
+                    lib.length type == 2
+                  ) "Lists starting with null are assumed to mean nullOr, so length 2";
+                  let
+                    innerType = property // {
+                      type = lib.elemAt type 1;
+                    };
+                    inner = mkRustAnalyzerOptionType nullable "${property_name}-inner" innerType;
+                  in
+                  assert lib.assertMsg nullable "nullOr types are not yet handled";
+                  inner
+                else
+                  let
+                    innerTypes = builtins.map (
+                      t: mkRustAnalyzerOptionType nullable "${property_name}-inner" (property // { type = t; })
+                    ) type;
+                  in
+                  {
+                    kind = "oneOf";
+                    subTypes = innerTypes;
+                  }
+              )
+            else if type == "array" then
+              {
+                kind = "list";
+                item = mkRustAnalyzerOptionType false "${property_name}-item" items;
+              }
+            else if type == "number" || type == "integer" then
+              {
+                kind = type;
+                inherit minimum maximum;
+              }
+            else if type == "object" && properties != null then
+              {
+                kind = "submodule";
+                options = lib.mapAttrs (
+                  name: value: mkRustAnalyzerOptionType false "${property_name}.${name}" value
+                ) properties;
+              }
+            else if
+              lib.elem type [
+                "object"
+                "string"
+                "boolean"
+              ]
+            then
+              { kind = type; }
+            else
+              throw "Unhandled value in ${property_name}: ${lib.generators.toPretty { } property}"
+          );
     in
     builtins.addErrorContext "While creating type for ${property_name}:\n${lib.generators.toPretty { } property}" (
       inner property
