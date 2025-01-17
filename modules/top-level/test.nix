@@ -76,6 +76,19 @@ let
       };
     }
   );
+
+  expectationListType =
+    let
+      fnType = lib.mkOptionType {
+        name = "function";
+        description = "function";
+        descriptionClass = "noun";
+        check = builtins.isFunction;
+      };
+      # Supply the function with an `expect` function
+      coerceFn = fn: fn (expect: value: { inherit expect value; });
+    in
+    lib.types.coercedTo fnType coerceFn (lib.types.listOf expectationType);
 in
 {
   options.test = {
@@ -116,9 +129,22 @@ in
     };
 
     warnings = lib.mkOption {
-      type = lib.types.listOf expectationType;
-      description = "A list of expectations for `warnings`.";
-      defaultText = lib.literalMD "Expect `count == 0`";
+      type = expectationListType;
+      description = ''
+        A list of expectations for `warnings`.
+
+        Function definitions will be supplied a `mkExpectation` function that
+        enables defining simple expectations less verbosely.
+      '';
+      example = lib.literalExpression ''
+        expect: [
+          (expect "count" 1)
+          (expect "any" "Hello, world!")
+        ]
+      '';
+      defaultText = lib.literalExpression ''
+        expect: [ (expect "count" 0) ]
+      '';
       default = [
         {
           expect = "count";
@@ -128,9 +154,22 @@ in
     };
 
     assertions = lib.mkOption {
-      type = lib.types.listOf expectationType;
-      description = "A list of expectations for `assertions`.";
-      defaultText = lib.literalMD "Expect `count == 0`";
+      type = expectationListType;
+      description = ''
+        A list of expectations for `warnings`.
+
+        Function definitions will be supplied a `mkExpectation` function that
+        enables defining simple expectations less verbosely.
+      '';
+      example = lib.literalExpression ''
+        expect: [
+          (expect "count" 1)
+          (expect "any" "Hello, world!")
+        ]
+      '';
+      defaultText = lib.literalExpression ''
+        expect: [ (expect "count" 0) ]
+      '';
       default = [
         {
           expect = "count";

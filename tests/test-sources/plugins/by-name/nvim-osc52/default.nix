@@ -1,8 +1,6 @@
 let
-  expect = expect: value: { inherit expect value; };
-
   # This plugin is deprecated
-  warnings = [
+  warnings = expect: [
     (expect "count" 1)
     (expect "any" "this plugin is obsolete and will be removed after 24.11.")
   ];

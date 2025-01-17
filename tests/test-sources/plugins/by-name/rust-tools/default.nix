@@ -1,8 +1,6 @@
 let
-  expect = expect: value: { inherit expect value; };
-
   # This plugin is deprecated
-  warnings = [
+  warnings = expect: [
     (expect "count" 1)
     (expect "any" "The `rust-tools` project has been abandoned.")
   ];
