@@ -25,7 +25,7 @@
             args@{
               inputs,
               outputs,
-              sourceInfo,
+              sourceInfo ? { },
             }:
             let
               outputs = args.outputs (inputs // { self = result; });
@@ -39,18 +39,21 @@
             in
             result;
 
-          templateFlakeOutputs = callFlake {
-            inputs = {
-              inherit (inputs) flake-parts nixpkgs;
-              nixvim = self;
-            };
-            # Import and read the `outputs` field of the template flake.
-            inherit (import ../templates/simple/flake.nix) outputs;
-            sourceInfo = { };
-          };
-
-          templateChecks = templateFlakeOutputs.checks.${system};
+          flakes = lib.mapAttrs (
+            name: template:
+            callFlake {
+              # Use inputs from our flake
+              inputs = {
+                inherit (inputs) flake-parts nixpkgs;
+                nixvim = self;
+              };
+              # Use outputs from the template flake
+              inherit (import "${template.path}/flake.nix") outputs;
+            }
+          ) self.templates;
         in
-        lib.concatMapAttrs (checkName: check: { "template-${checkName}" = check; }) templateChecks;
+        lib.concatMapAttrs (name: flake: {
+          "template-${name}" = pkgs.linkFarm name flake.checks.${system};
+        }) flakes;
     };
 }
