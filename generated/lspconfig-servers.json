@@ -15,6 +15,11 @@
     "name": "aiken"
   },
   {
+    "cmd": ["alloy", "lsp"],
+    "desc": "https://github.com/AlloyTools/org.alloytools.alloy\n\nAlloy is a formal specification language for describing structures and a tool for exploring them.\n\nYou may also need to configure the filetype for Alloy (*.als) files:\n\n```\nautocmd BufNewFile,BufRead *.als set filetype=alloy\n```\n\nor\n\n```lua\nvim.filetype.add({\n  pattern = {\n    ['.*/*.als'] = 'alloy',\n  },\n})\n```\n\nAlternatively, you may use a syntax plugin like https://github.com/runoshun/vim-alloy.\n",
+    "name": "alloy_ls"
+  },
+  {
     "cmd": ["anakinls"],
     "desc": "https://pypi.org/project/anakin-language-server/\n\n`anakin-language-server` is yet another Jedi Python language server.\n\nAvailable options:\n\n-   Initialization:\n    https://github.com/muffinmad/anakin-language-server#initialization-option\n-   Configuration:\n    https://github.com/muffinmad/anakin-language-server#configuration-options\n",
     "name": "anakin_language_server"
@@ -52,7 +57,7 @@
   },
   {
     "cmd": ["asm-lsp"],
-    "desc": "https://github.com/bergercookie/asm-lsp\n\nLanguage Server for GAS/GO Assembly\n\n`asm-lsp` can be installed via cargo:\ncargo install asm-lsp\n",
+    "desc": "https://github.com/bergercookie/asm-lsp\n\nLanguage Server for NASM/GAS/GO Assembly\n\n`asm-lsp` can be installed via cargo:\ncargo install asm-lsp\n",
     "name": "asm_lsp"
   },
   {
@@ -64,6 +69,11 @@
     "cmd": ["astro-ls", "--stdio"],
     "desc": "https://github.com/withastro/language-tools/tree/main/packages/language-server\n\n`astro-ls` can be installed via `npm`:\n```sh\nnpm install -g @astrojs/language-server\n```\n",
     "name": "astro"
+  },
+  {
+    "cmd": ["atlas", "tool", "lsp", "--stdio"],
+    "desc": "https://github.com/ariga/atlas\n\nLanguage server for Atlas config and scheme files.\n\nYou may also need to configure the filetype for *.hcl files:\n\n`autocmd BufNewFile,BufRead atlas.hcl set filetype=atlas-config`\n`autocmd BufNewFile,BufRead *.my.hcl set filetype=atlas-schema-mysql`\n`autocmd BufNewFile,BufRead *.pg.hcl set filetype=atlas-schema-postgresql`\n`autocmd BufNewFile,BufRead *.lt.hcl set filetype=atlas-schema-sqlite`\n`autocmd BufNewFile,BufRead *.ch.hcl set filetype=atlas-schema-clickhouse`\n`autocmd BufNewFile,BufRead *.ms.hcl set filetype=atlas-schema-mssql`\n`autocmd BufNewFile,BufRead *.rs.hcl set filetype=atlas-schema-redshift`\n`autocmd BufNewFile,BufRead *.test.hcl set filetype=atlas-test`\n`autocmd BufNewFile,BufRead *.plan.hcl set filetype=atlas-plan`\n\nor\n\n```lua\nvim.filetype.add({\n  filename = {\n    ['atlas.hcl'] = 'atlas-config',\n  },\n  pattern = {\n    ['.*/*.my.hcl'] = 'atlas-schema-mysql',\n    ['.*/*.pg.hcl'] = 'atlas-schema-postgresql',\n    ['.*/*.lt.hcl'] = 'atlas-schema-sqlite',\n    ['.*/*.ch.hcl'] = 'atlas-schema-clickhouse',\n    ['.*/*.ms.hcl'] = 'atlas-schema-mssql',\n    ['.*/*.rs.hcl'] = 'atlas-schema-redshift',\n    ['.*/*.test.hcl'] = 'atlas-test',\n    ['.*/*.plan.hcl'] = 'atlas-plan',\n  },\n})\n```\n\n",
+    "name": "atlas"
   },
   {
     "cmd": ["autohotkey_lsp", "--stdio"],
@@ -294,6 +304,11 @@
     "cmd": ["cucumber-language-server", "--stdio"],
     "desc": "https://cucumber.io\nhttps://github.com/cucumber/common\nhttps://www.npmjs.com/package/@cucumber/language-server\n\nLanguage server for Cucumber.\n\n`cucumber-language-server` can be installed via `npm`:\n```sh\nnpm install -g @cucumber/language-server\n```\n    ",
     "name": "cucumber_language_server"
+  },
+  {
+    "cmd": ["cue", "lsp"],
+    "desc": "https://github.com/cue-lang/cue\n\nCUE makes it easy to validate data, write schemas, and ensure configurations align with policies.\n",
+    "name": "cue"
   },
   {
     "cmd": ["custom-elements-languageserver", "--stdio"],
@@ -534,6 +549,11 @@
     "cmd": ["gdshader-lsp", "--stdio"],
     "desc": "https://github.com/godofavacyn/gdshader-lsp\n\nA language server for the Godot Shading language.\n",
     "name": "gdshader_lsp"
+  },
+  {
+    "cmd": ["gh-actions-language-server", "--stdio"],
+    "desc": "https://github.com/lttb/gh-actions-language-server\n\nLanguage server for GitHub Actions.\n\n`gh-actions-language-server` can be installed via `npm`:\n\n```sh\nnpm install -g gh-actions-language-server\n```\n",
+    "name": "gh_actions_ls"
   },
   {
     "cmd": ["ghcide", "--lsp"],
@@ -1280,7 +1300,7 @@
   },
   {
     "cmd": ["ruby-lsp"],
-    "desc": "https://shopify.github.io/ruby-lsp/\n\nThis gem is an implementation of the language server protocol specification for\nRuby, used to improve editor features.\n\nInstall the gem. There's no need to require it, since the server is used as a\nstandalone executable.\n\n```sh\ngroup :development do\n  gem \"ruby-lsp\", require: false\nend\n```\n    ",
+    "desc": "https://shopify.github.io/ruby-lsp/\n\nThis gem is an implementation of the language server protocol specification for\nRuby, used to improve editor features.\n\nInstall the gem. There's no need to require it, since the server is used as a\nstandalone executable.\n\n```sh\ngem install ruby-lsp\n```\n    ",
     "name": "ruby_lsp"
   },
   {
@@ -1322,6 +1342,11 @@
     "cmd": ["scry"],
     "desc": "https://github.com/crystal-lang-tools/scry\n\nCrystal language server.\n",
     "name": "scry"
+  },
+  {
+    "cmd": ["selene-3p-language-server"],
+    "desc": "https://github.com/antonk52/lua-3p-language-servers\n\n3rd party Language Server for Selene lua linter\n",
+    "name": "selene3p_ls"
   },
   {
     "cmd": ["serve-d"],
@@ -1472,6 +1497,11 @@
     "cmd": ["stylelint-lsp", "--stdio"],
     "desc": "https://github.com/bmatcuk/stylelint-lsp\n\n`stylelint-lsp` can be installed via `npm`:\n\n```sh\nnpm i -g stylelint-lsp\n```\n\nCan be configured by passing a `settings.stylelintplus` object to `stylelint_lsp.setup`:\n\n```lua\nrequire'lspconfig'.stylelint_lsp.setup{\n  settings = {\n    stylelintplus = {\n      -- see available options in stylelint-lsp documentation\n    }\n  }\n}\n```\n",
     "name": "stylelint_lsp"
+  },
+  {
+    "cmd": ["stylua-3p-language-server"],
+    "desc": "https://github.com/antonk52/lua-3p-language-servers\n\n3rd party Language Server for Stylua lua formatter\n",
+    "name": "stylua3p_ls"
   },
   {
     "cmd": ["superhtml", "lsp"],
