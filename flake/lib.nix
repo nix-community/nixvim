@@ -21,6 +21,10 @@
       overlay = lib.makeOverridable (import ../lib/overlay.nix) {
         flake = self;
       };
+      # Top-top-level aliases
+      inherit (self.lib.nixvim)
+        evalNixvim
+        ;
     }
     // lib.genAttrs config.systems (
       lib.flip withSystem (

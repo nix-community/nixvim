@@ -44,6 +44,10 @@ lib.makeExtensible (
       transitionType
       ;
 
+    inherit (self.modules)
+      evalNixvim
+      ;
+
     inherit (self.options)
       defaultNullOpts
       mkAutoLoadOption
