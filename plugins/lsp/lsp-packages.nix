@@ -176,6 +176,7 @@
     asm_lsp = "asm-lsp";
     ast_grep = "ast-grep";
     astro = "astro-language-server";
+    atlas = "atlas";
     autotools_ls = "autotools-language-server";
     ballerina = "ballerina";
     basedpyright = "basedpyright";
@@ -197,6 +198,7 @@
     crystalline = "crystalline";
     csharp_ls = "csharp-ls";
     cssls = "vscode-langservers-extracted";
+    cue = "cue";
     dafny = "dafny";
     dagger = "cuelsp";
     dartls = "dart";
