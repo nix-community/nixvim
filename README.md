@@ -89,7 +89,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 
 > [!WARNING]
 > NixVim needs to be installed with a compatible nixpkgs version.
-> This means that the `main` branch of NixVim requires to be installed with `nixos-unstable`.
+> This means that the `main` branch of NixVim requires to be installed with `nixpkgs-unstable`.
 >
 > If you want to use NixVim with nixpkgs 24.11 you should use the `nixos-24.11` branch.
 
