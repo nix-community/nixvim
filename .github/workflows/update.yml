@@ -17,9 +17,6 @@ on:
       nixos-24.11:
         type: boolean
         description: Also update nixos-24.11
-      nixos-24.05:
-        type: boolean
-        description: Also update nixos-24.05
 
 # Allow one concurrent update per branch
 concurrency:
@@ -53,13 +50,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run update.yml --ref nixos-24.11
-
-      - name: Update nixos-24.05
-        if: inputs['nixos-24.05']
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run update.yml --ref nixos-24.05
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
