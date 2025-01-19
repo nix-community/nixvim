@@ -83,6 +83,6 @@
         "aarch64-darwin"
       ];
 
-      imports = [ ./flake-modules ];
+      imports = [ ./flake ];
     };
 }
