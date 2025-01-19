@@ -8,6 +8,14 @@ Documentation is currently available for the following versions:
 
 @DOCS_VERSIONS@
 
+## Recent Breaking Changes
+
+> [!CAUTION]
+> By default, Nixvim now constructs its own instance of nixpkgs, using the revision from our flake.lock.
+> This change was largely motivated by: [How do I solve "`<name>` cannot be found in `pkgs`"](./user-guide/faq.html#how-do-i-solve-name-cannot-be-found-in-pkgs)
+>
+> The old behaviour can be restored by enabling `nixpkgs.useGlobalPackages`.
+
 ## What is it?
 NixVim is a [Neovim](https://neovim.io) distribution built around
 [Nix](https://nixos.org) modules. It is distributed as a Nix flake, and
