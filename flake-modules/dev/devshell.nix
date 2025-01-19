@@ -116,6 +116,11 @@
               command = ''${pkgs.python3.interpreter} ${./new-plugin.py} "$@"'';
               help = "Create a new plugin";
             }
+            {
+              name = "init";
+              command = lib.getExe (pkgs.callPackage ./init-script { });
+              help = "Initialize a new plugin in nixvim";
+            }
           ];
       };
     };
