@@ -1,6 +1,5 @@
 {
   pkgs,
-  pkgsUnfree,
   helpers,
   lib,
   linkFarm,
@@ -11,7 +10,6 @@ let
   autoArgs = pkgs // {
     inherit
       helpers
-      pkgsUnfree
       self
       system
       ;

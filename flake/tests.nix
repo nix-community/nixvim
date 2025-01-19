@@ -5,18 +5,10 @@
 }:
 {
   perSystem =
-    {
-      pkgs,
-      pkgsUnfree,
-      ...
-    }:
+    { pkgs, ... }:
     {
       checks = pkgs.callPackages ../tests {
-        inherit
-          helpers
-          pkgsUnfree
-          self
-          ;
+        inherit helpers self;
       };
     };
 }

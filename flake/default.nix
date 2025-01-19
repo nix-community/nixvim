@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   imports = [
     ./dev
@@ -10,15 +9,4 @@
     ./tests.nix
     ./wrappers.nix
   ];
-
-  perSystem =
-    { system, ... }:
-    {
-      _module.args = {
-        pkgsUnfree = import inputs.nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      };
-    };
 }

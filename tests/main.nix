@@ -6,7 +6,6 @@
   lib ? pkgs.lib,
   linkFarm,
   pkgs,
-  pkgsUnfree,
   self,
   system,
 }:
@@ -21,14 +20,16 @@ let
     file: name: module:
     mkTestDerivationFromNixvimModule {
       inherit name;
-      # Use a single common instance of nixpkgs, with allowUnfree
-      # Having a single shared instance should speed up tests a little
       module = {
         _file = file;
         imports = [ module ];
-        nixpkgs.pkgs = pkgsUnfree;
       };
-      pkgs = pkgsUnfree;
+      # Use a single common instance of nixpkgs, with allowUnfree
+      # Having a single shared instance should speed up tests a little
+      pkgs = import self.inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
     };
 
   # List of files containing configurations
