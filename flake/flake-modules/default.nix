@@ -2,6 +2,7 @@
 let
   # Modules for the flakeModules output and the default module
   defaultModules = {
+    nixvimModules = ./nixvimModules.nix;
     nixvimConfigurations = ./nixvimConfigurations.nix;
   };
 
