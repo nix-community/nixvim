@@ -1,7 +1,9 @@
 { inputs, ... }:
 let
   # Modules for the flakeModules output and the default module
-  defaultModules = { };
+  defaultModules = {
+    nixvimConfigurations = ./nixvimConfigurations.nix;
+  };
 
   # Modules for the flakeModules output, but not the default module
   extraModules = {
