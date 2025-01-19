@@ -4,6 +4,7 @@ let
   defaultModules = {
     nixvimModules = ./nixvimModules.nix;
     nixvimConfigurations = ./nixvimConfigurations.nix;
+    auto = ./auto.nix;
   };
 
   # Modules for the flakeModules output, but not the default module
