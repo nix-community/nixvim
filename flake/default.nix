@@ -1,6 +1,7 @@
 {
   imports = [
     ./dev
+    ./flake-modules
     ./lib.nix
     ./legacy-packages.nix
     ./overlays.nix
