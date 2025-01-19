@@ -36,8 +36,7 @@ in
   options = {
     nixpkgs.useGlobalPackages = lib.mkOption {
       type = lib.types.bool;
-      default = true; # TODO: Added 2025-01-15; switch to false one release after adding a deprecation warning
-      defaultText = lib.literalMD ''`true`, but will change to `false` in a future version.'';
+      default = false;
       description = ''
         Whether Nixvim should use the ${config.meta.wrapper.name} configuration's `pkgs`,
         instead of constructing its own instance.
