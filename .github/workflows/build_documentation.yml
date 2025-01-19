@@ -61,11 +61,6 @@ jobs:
                 "branch": "nixos-24.11",
                 "nixpkgsBranch": "nixos-24.11",
                 "subPath": "24.11"
-              },
-              {
-                "branch": "nixos-24.05",
-                "nixpkgsBranch": "nixos-24.05",
-                "subPath": "24.05"
               }
             ]
           ' | jq \
