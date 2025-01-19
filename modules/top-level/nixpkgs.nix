@@ -50,9 +50,8 @@ in
         so user-provided configuration can override it without using `lib`.
         E.g. Nixvim's home-manager module can re-use the `pkgs` instance from the "host" modules.
 
-        > [!NOTE]
-        > Using a distinct version of Nixpkgs with Nixvim may be an unexpected source of problems.
-        > Use this option with care.
+        > [!CAUTION]
+        > Changing this option can lead to issues that may be difficult to debug.
       '';
     };
 
@@ -198,6 +197,9 @@ in
         The path to import Nixpkgs from.
 
         Ignored when `nixpkgs.pkgs` is set.
+
+        > [!CAUTION]
+        > Changing this option can lead to issues that may be difficult to debug.
       '';
     };
   };

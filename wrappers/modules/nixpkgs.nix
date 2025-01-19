@@ -40,6 +40,9 @@ in
       description = ''
         Whether Nixvim should use the ${config.meta.wrapper.name} configuration's `pkgs`,
         instead of constructing its own instance.
+
+        > [!CAUTION]
+        > Changing this option can lead to issues that may be difficult to debug.
       '';
     };
   };
