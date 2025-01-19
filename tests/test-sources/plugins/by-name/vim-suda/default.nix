@@ -10,7 +10,7 @@
         path = "sudo";
         noninteractive = 0;
         prompt = "Password: ";
-        #smart_edit = 0;
+        smart_edit = 0;
       };
     };
   };
@@ -22,7 +22,7 @@
         path = "doas";
         noninteractive = 1;
         prompt = "Pass: ";
-        #smart_edit = 1;
+        smart_edit = 1;
       };
     };
   };
