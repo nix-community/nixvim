@@ -16,30 +16,7 @@ Documentation is currently available for the following versions:
 >
 > The old behaviour can be restored by enabling `nixpkgs.useGlobalPackages`.
 
-## What is it?
-NixVim is a [Neovim](https://neovim.io) distribution built around
-[Nix](https://nixos.org) modules. It is distributed as a Nix flake, and
-configured through Nix, all while leaving room for your plugins and your vimrc.
-
-## What does it look like?
-Here is a simple configuration that uses catppuccin as the colorscheme and uses the
-lualine plugin:
-
-```nix
-{
-  programs.nixvim = {
-    enable = true;
-
-    colorschemes.catppuccin.enable = true;
-    plugins.lualine.enable = true;
-  };
-}
-```
-
-When we do this, lualine will be set up to a sensible default, and will use
-catppuccin as the colorscheme, no extra configuration required!
-
-Check out [this list of real world nixvim configs](./user-guide/config-examples.md)!
+@README@
 
 ## Welcome to the docs!
 

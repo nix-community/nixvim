@@ -347,6 +347,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
     # Patch index.md
     substituteInPlace ./index.md \
+      --replace-fail "@README@" "$(cat ${finalAttrs.passthru.readme})" \
       --replace-fail "@DOCS_VERSIONS@" "$(cat ${finalAttrs.passthru.docs-versions})"
 
     # Patch user-configs
@@ -369,6 +370,21 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     copy-docs = pkgs.writeShellScript "copy-docs" docs.commands;
+    readme =
+      runCommand "readme"
+        {
+          start = "<!-- START DOCS -->";
+          end = "<!-- STOP DOCS -->";
+          baseurl = "https://nix-community.github.io/nixvim/";
+          src = ../../README.md;
+        }
+        ''
+          # extract relevant section of the README
+          sed -n "/$start/,/$end/p" $src > $out
+          # replace absolute links
+          substituteInPlace $out --replace-quiet "$baseurl" "./"
+          # TODO: replace .html with .md
+        '';
     search = search.override {
       baseHref = finalAttrs.baseHref + "search/";
     };

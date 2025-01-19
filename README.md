@@ -12,6 +12,8 @@
 - [Quick set up tutorial](https://www.youtube.com/watch?v=b641h63lqy0) (by [@Vimjoyer](https://www.youtube.com/@vimjoyer))
 - [Nixvim: How to configure Neovim with the power of Nix](https://www.youtube.com/watch?v=GOe0C7Qtypk) (NeovimConf 2023 talk by [@GaetanLepage](https://glepage.com/))
 
+<!-- START DOCS -->
+
 ## What is it?
 NixVim is a [Neovim](https://neovim.io) distribution built around
 [Nix](https://nixos.org) modules. It is distributed as a Nix flake, and
@@ -36,6 +38,8 @@ When we do this, lualine will be set up to a sensible default, and will use
 catppuccin as the colorscheme, no extra configuration required!
 
 Check out [this list of real world nixvim configs](https://nix-community.github.io/nixvim/user-guide/config-examples.html)!
+
+<!-- STOP DOCS -->
 
 ## How does it work?
 When you build the module (probably using home-manager), it will install all
