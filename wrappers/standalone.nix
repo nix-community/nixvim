@@ -32,25 +32,19 @@ let
   mkNvim =
     mod:
     let
+      modules = lib.toList mod;
       nixvimConfig = evalNixvim {
-        modules = [
-          mod
+        modules = modules ++ [
           systemMod
         ];
         inherit extraSpecialArgs;
       };
+      extend = extension: mkNvim (modules ++ lib.toList extension);
     in
     nixvimConfig.config.build.package.overrideAttrs (old: {
-      passthru = old.passthru or { } // rec {
+      passthru = old.passthru or { } // {
         inherit (nixvimConfig) config options;
-        extend =
-          extension:
-          mkNvim {
-            imports = [
-              mod
-              extension
-            ];
-          };
+        inherit extend;
         nixvimExtend = lib.warn "<nixvim>.nixvimExtend has been renamed to <nixvim>.extend" extend;
       };
     });
