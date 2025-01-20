@@ -17,8 +17,8 @@ in
           String -> String
           ```
         '';
-        default = name: "nixvim-" + name;
-        defaultText = lib.literalExpression ''name: "nixvim-" + name'';
+        default = lib.id;
+        defaultText = lib.literalExpression "name: name";
         example = lib.literalExpression ''name: name + "-nvim"'';
       };
     };
@@ -35,8 +35,8 @@ in
           String -> String
           ```
         '';
-        default = name: "nixvim-" + name;
-        defaultText = lib.literalExpression ''name: "nixvim-" + name'';
+        default = lib.id;
+        defaultText = lib.literalExpression "name: name";
         example = lib.literalExpression ''name: "nixvim-" + name + "-test"'';
       };
     };
