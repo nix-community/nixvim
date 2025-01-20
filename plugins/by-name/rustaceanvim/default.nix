@@ -57,15 +57,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         globals.rustaceanvim = cfg.settings;
 
-        assertions = [
-          {
-            assertion = cfg.enable -> !config.plugins.lsp.servers.rust_analyzer.enable;
-            message = ''
-              Nixvim (plugins.rustaceanvim): Both `plugins.rustaceanvim.enable` and `plugins.lsp.servers.rust_analyzer.enable` are true.
-              Disable one of them otherwise you will have multiple clients attached to each buffer.
-            '';
-          }
-        ];
+        assertions = lib.nixvim.mkAssertions "plugins.rustaceanvim" {
+          assertion = cfg.enable -> !config.plugins.lsp.servers.rust_analyzer.enable;
+          message = ''
+            Both `plugins.rustaceanvim.enable` and `plugins.lsp.servers.rust_analyzer.enable` are true.
+            Disable one of them otherwise you will have multiple clients attached to each buffer.
+          '';
+        };
 
         # TODO: remove after 24.11
         warnings = lib.nixvim.mkWarnings "plugins.rustaceanvim" {

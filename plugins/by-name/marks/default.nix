@@ -152,14 +152,12 @@ in
   config = mkIf cfg.enable {
     extraPlugins = [ cfg.package ];
 
-    assertions = [
-      {
-        assertion = all (n: elem n (range 0 9)) (attrNames cfg.bookmarks);
-        message = ''
-          Nixvim (plugins.marks): The keys of the `bookmarks` option should be integers between 0 and 9.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.mark" {
+      assertion = all (n: elem n (range 0 9)) (attrNames cfg.bookmarks);
+      message = ''
+        The keys of the `bookmarks` option should be integers between 0 and 9.
+      '';
+    };
 
     extraConfigLua =
       let

@@ -24,14 +24,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # TODO: Remove once nixpkgs #349346 lands, since it will have telescope-nvim
   # as a dependency.
   extraConfig = cfg: {
-    assertions = [
-      {
-        assertion = config.plugins.telescope.enable;
-        message = ''
-          Nixvim (plugins.telekasten): The plugin needs telescope to function as intended.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.telekasten" {
+      assertion = config.plugins.telescope.enable;
+      message = ''
+        Nixvim (plugins.telekasten): The plugin needs telescope to function as intended.
+      '';
+    };
+
     extraPlugins = [ cfg.plenaryPackage ];
   };
 }

@@ -249,16 +249,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    assertions = [
-      {
-        assertion =
-          isBool cfg.settings.enable_persistent_history && cfg.settings.enable_persistent_history
-          -> config.plugins.sqlite-lua.enable;
-        message = ''
-          Nixvim (plugins.neoclip): The persistent history sqlite storage backend needs `sqlite-lua` to function as intended.
-          You can enable it by setting `plugins.sqlite-lua.enable` to `true`.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.neoclip" {
+      assertion =
+        isBool cfg.settings.enable_persistent_history && cfg.settings.enable_persistent_history
+        -> config.plugins.sqlite-lua.enable;
+      message = ''
+        The persistent history sqlite storage backend needs `sqlite-lua` to function as intended.
+        You can enable it by setting `plugins.sqlite-lua.enable` to `true`.
+      '';
+    };
   };
 }

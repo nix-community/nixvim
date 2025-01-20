@@ -267,11 +267,11 @@ in
         sectionNames = attrNames cfg.sections;
         numSections = length sectionNames;
       in
-      [
+      lib.nixvim.mkAssertions "plugins.startup" [
         {
           assertion = (cfg.options.paddings == null) || (length cfg.options.paddings) == numSections;
           message = ''
-            Nixvim (plugins.startup): Make sure that `plugins.startup.options.paddings` has the same
+            Make sure that `plugins.startup.options.paddings` has the same
             number of elements as there are sections.
           '';
         }
@@ -279,7 +279,7 @@ in
           assertion =
             ((length cfg.parts) <= numSections) && (all (part: hasAttr part cfg.sections) cfg.parts);
           message = ''
-            Nixvim (plugins.startup): You should not have more section names in `plugins.startup.parts` than you have sections defined.
+            You should not have more section names in `plugins.startup.parts` than you have sections defined.
           '';
         }
       ];

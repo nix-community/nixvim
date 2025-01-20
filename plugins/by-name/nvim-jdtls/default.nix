@@ -119,7 +119,7 @@ in
       } // cfg.extraOptions;
     in
     mkIf cfg.enable {
-      assertions = [
+      assertions = lib.nixvim.mkAssertions "plugins.nvim-jdtls" [
         {
           assertion = cfg.cmd != null || cfg.data != null;
           message = "You have to either set the `plugins.nvim-jdtls.data` or the `plugins.nvim-jdtls.cmd` option.";
@@ -127,7 +127,7 @@ in
         {
           assertion = cfg.cmd == null -> cfg.jdtLanguageServerPackage != null;
           message = ''
-            Nixvim (plugins.nvim-jdtls) You haven't defined a `cmd` or `jdtLanguageServerPackage`.
+            You haven't defined a `cmd` or `jdtLanguageServerPackage`.
 
             The default `cmd` requires `plugins.nvim-jdtls.jdtLanguageServerPackage` to be set.
           '';

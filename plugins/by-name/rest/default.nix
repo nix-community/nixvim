@@ -226,17 +226,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
   callSetup = false;
 
   extraConfig = cfg: {
-    assertions = [
+    assertions = lib.nixvim.mkAssertions "plugins.rest" [
       {
         assertion = config.plugins.treesitter.enable;
         message = ''
-          Nixvim (plugins.rest): Requires the `http` parser from `plugins.treesitter`, please set `plugins.treesitter.enable`.
+          Requires the `http` parser from `plugins.treesitter`, please set `plugins.treesitter.enable`.
         '';
       }
       {
         assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
         message = ''
-          Nixvim (plugins.rest): You have `plugins.rest.enableTelescope` set to true, but `plugins.telescope.enable` is false.
+          You have `plugins.rest.enableTelescope` set to true, but `plugins.telescope.enable` is false.
           Either disable the telescope integration or enable telescope.
         '';
       }

@@ -177,17 +177,17 @@ in
 
       extraPlugins = [ cfg.package ];
 
-      assertions = [
+      assertions = lib.nixvim.mkAssertions "plugins.alpha" [
         {
           assertion = themeDefined || layoutDefined;
           message = ''
-            Nixvim (plugins.alpha): You have to either set a `theme` or define some sections in `layout`.
+            You have to either set a `theme` or define some sections in `layout`.
           '';
         }
         {
           assertion = !(themeDefined && layoutDefined);
           message = ''
-            Nixvim (plugins.alpha): You can't define both a `theme` and custom options.
+            You can't define both a `theme` and custom options.
             Set `plugins.alpha.theme = null` if you want to configure alpha manually using the `layout` option.
           '';
         }

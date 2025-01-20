@@ -111,7 +111,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    assertions =
+    assertions = lib.nixvim.mkAssertions "plugins.neogit" (
       map
         (name: {
           assertion =
@@ -121,14 +121,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
             in
             isEnabled -> config.plugins.${name}.enable;
           message = ''
-            Nixvim (plugins.neogit): You have enabled the `${name}` integration, but `plugins.${name}.enable` is `false`.
+            You have enabled the `${name}` integration, but `plugins.${name}.enable` is `false`.
           '';
         })
         [
           "telescope"
           "diffview"
           "fzf-lua"
-        ];
+        ]
+    );
 
     extraPackages =
       [

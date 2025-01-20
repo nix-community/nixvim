@@ -108,14 +108,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    assertions = [
-      {
-        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-        message = ''
-          Nixvim (plugins.package-info): The telescope integration needs telescope to function as intended.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.package-info" {
+      assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+      message = ''
+        The telescope integration needs telescope to function as intended.
+      '';
+    };
 
     extraPackages = [ cfg.packageManagerPackage ];
 

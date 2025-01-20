@@ -359,17 +359,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    assertions = [
+    assertions = lib.nixvim.mkAssertions "plugins.yanky" [
       {
         assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
         message = ''
-          Nixvim (plugins.yanky): The telescope integration needs telescope to function as intended
+          The telescope integration needs telescope to function as intended
         '';
       }
       {
         assertion = cfg.settings.ring.storage == "sqlite" -> config.plugins.sqlite-lua.enable;
         message = ''
-          Nixvim (plugins.yanky): The sqlite storage backend needs `sqlite-lua` to function as intended.
+          The sqlite storage backend needs `sqlite-lua` to function as intended.
           You can enable it by setting `plugins.sqlite-lua.enable` to `true`.
         '';
       }

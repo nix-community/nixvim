@@ -86,14 +86,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
-    assertions = [
-      {
-        assertion = config.plugins.lsp.enable;
-        message = ''
-          Nixvim (plugins.lsp-status): `plugins.lsp` must be enabled to use lsp-status
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.lsp-status" {
+      assertion = config.plugins.lsp.enable;
+      message = ''
+        `plugins.lsp` must be enabled to use lsp-status
+      '';
+    };
 
     plugins.lsp = {
       preConfig = ''

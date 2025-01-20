@@ -118,7 +118,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsExample = { };
 
   extraConfig = cfg: {
-    assertions =
+    assertions = lib.nixvim.mkAssertions "colorschemes.palette" (
       lib.mapAttrsToList
         (
           name: defaultPaletteNames:
@@ -131,7 +131,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           {
             assertion = lib.isString palette -> lib.elem palette allowedPaletteNames;
             message = ''
-              Nixvim (colorschemes.palette): `settings.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${lib.concatStringsSep " " allowedPaletteNames}).
+              `settings.palettes.${name}` (${palette}") is not part of the allowed ${name} palette names (${lib.concatStringsSep " " allowedPaletteNames}).
             '';
           }
         )
@@ -150,6 +150,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             "dark"
             "bright"
           ];
-        };
+        }
+    );
   };
 }
