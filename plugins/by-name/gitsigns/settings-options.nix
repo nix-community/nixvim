@@ -1,14 +1,17 @@
-{ lib, helpers }:
-with lib;
+lib:
+let
+  inherit (lib) types mkOption;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrLuaFn;
+in
 {
   signs =
     let
       signOptions = defaults: {
-        text = helpers.defaultNullOpts.mkStr defaults.text ''
+        text = defaultNullOpts.mkStr defaults.text ''
           Specifies the character to use for the sign.
         '';
 
-        show_count = helpers.defaultNullOpts.mkBool false ''
+        show_count = defaultNullOpts.mkBool false ''
           Showing count of hunk, e.g. number of deleted lines.
         '';
       };
@@ -73,13 +76,13 @@ with lib;
         };
       };
     in
-    helpers.mkNullOrOption (types.listOf worktreeType) ''
+    mkNullOrOption (types.listOf worktreeType) ''
       Detached working trees.
       If normal attaching fails, then each entry in the table is attempted with the work tree
       details set.
     '';
 
-  on_attach = helpers.mkNullOrLuaFn ''
+  on_attach = mkNullOrLuaFn ''
     Callback called when attaching to a buffer. Mainly used to setup keymaps
     when `config.keymaps` is empty. The buffer number is passed as the first
     argument.
@@ -101,28 +104,28 @@ with lib;
   '';
 
   watch_gitdir = {
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       When opening a file, a `libuv` watcher is placed on the respective `.git` directory to detect
       when changes happen to use as a trigger to update signs.
     '';
 
-    follow_files = helpers.defaultNullOpts.mkBool true ''
+    follow_files = defaultNullOpts.mkBool true ''
       If a file is moved with `git mv`, switch the buffer to the new location.
     '';
   };
 
-  sign_priority = helpers.defaultNullOpts.mkUnsignedInt 6 ''
+  sign_priority = defaultNullOpts.mkUnsignedInt 6 ''
     Priority to use for signs.
   '';
 
-  signcolumn = helpers.defaultNullOpts.mkBool true ''
+  signcolumn = defaultNullOpts.mkBool true ''
     Enable/disable symbols in the sign column.
 
     When enabled the highlights defined in `signs.*.hl` and symbols defined in `signs.*.text` are
     used.
   '';
 
-  numhl = helpers.defaultNullOpts.mkBool false ''
+  numhl = defaultNullOpts.mkBool false ''
     Enable/disable line number highlights.
 
     When enabled the highlights defined in `signs.*.numhl` are used.
@@ -130,7 +133,7 @@ with lib;
     corresponding highlight group in `signs.*.hl`.
   '';
 
-  linehl = helpers.defaultNullOpts.mkBool false ''
+  linehl = defaultNullOpts.mkBool false ''
     Enable/disable line highlights.
 
     When enabled the highlights defined in `signs.*.linehl` are used.
@@ -138,7 +141,7 @@ with lib;
     corresponding highlight group in `signs.*.hl`.
   '';
 
-  show_deleted = helpers.defaultNullOpts.mkBool false ''
+  show_deleted = defaultNullOpts.mkBool false ''
     Show the old version of hunks inline in the buffer (via virtual lines).
 
     Note: Virtual lines currently use the highlight `GitSignsDeleteVirtLn`.
@@ -150,7 +153,7 @@ with lib;
         freeformType = with types; attrsOf anything;
         options = {
           algorithm =
-            helpers.defaultNullOpts.mkEnumFirstDefault
+            defaultNullOpts.mkEnumFirstDefault
               [
                 "myers"
                 "minimal"
@@ -165,54 +168,54 @@ with lib;
                 - "histogram"  histogram diff algorithm
               '';
 
-          internal = helpers.defaultNullOpts.mkBool false ''
+          internal = defaultNullOpts.mkBool false ''
             Use Neovim's built in `xdiff` library for running diffs.
           '';
 
-          indent_heuristic = helpers.defaultNullOpts.mkBool false ''
+          indent_heuristic = defaultNullOpts.mkBool false ''
             Use the indent heuristic for the internal diff library.
           '';
 
-          vertical = helpers.defaultNullOpts.mkBool true ''
+          vertical = defaultNullOpts.mkBool true ''
             Start diff mode with vertical splits.
           '';
 
-          linematch = helpers.mkNullOrOption types.int ''
+          linematch = mkNullOrOption types.int ''
             Enable second-stage diff on hunks to align lines.
             Requires `internal=true`.
           '';
 
-          ignore_blank_lines = helpers.defaultNullOpts.mkBool true ''
+          ignore_blank_lines = defaultNullOpts.mkBool true ''
             Ignore changes where lines are blank.
           '';
 
-          ignore_whitespace_change = helpers.defaultNullOpts.mkBool true ''
+          ignore_whitespace_change = defaultNullOpts.mkBool true ''
             Ignore changes in amount of white space.
             It should ignore adding trailing white space, but not leading white space.
           '';
 
-          ignore_whitespace = helpers.defaultNullOpts.mkBool true ''
+          ignore_whitespace = defaultNullOpts.mkBool true ''
             Ignore all white space changes.
           '';
 
-          ignore_whitespace_change_at_eol = helpers.defaultNullOpts.mkBool true ''
+          ignore_whitespace_change_at_eol = defaultNullOpts.mkBool true ''
             Ignore white space changes at end of line.
           '';
         };
       };
     in
-    helpers.mkNullOrOption diffOptType ''
+    mkNullOrOption diffOptType ''
       Diff options.
       If set to null they are derived from the vim `diffopt`.
     '';
 
-  base = helpers.mkNullOrOption types.str ''
+  base = mkNullOrOption types.str ''
     The object/revision to diff against.
     See `|gitsigns-revision|`.
   '';
 
   count_chars =
-    helpers.defaultNullOpts.mkAttrsOf types.str
+    defaultNullOpts.mkAttrsOf types.str
       {
         "__unkeyed_1" = "1";
         "__unkeyed_2" = "2";
@@ -235,7 +238,7 @@ with lib;
         - to define characters to be used for counts greater than 9.
       '';
 
-  status_formatter = helpers.defaultNullOpts.mkLuaFn ''
+  status_formatter = defaultNullOpts.mkLuaFn ''
     function(status)
       local added, changed, removed = status.added, status.changed, status.removed
       local status_txt = {}
@@ -252,12 +255,12 @@ with lib;
     end
   '' "Function used to format `b:gitsigns_status`.";
 
-  max_file_length = helpers.defaultNullOpts.mkUnsignedInt 40000 ''
+  max_file_length = defaultNullOpts.mkUnsignedInt 40000 ''
     Max file length (in lines) to attach to.
   '';
 
   preview_config =
-    helpers.defaultNullOpts.mkAttrsOf types.anything
+    defaultNullOpts.mkAttrsOf types.anything
       {
         border = "single";
         style = "minimal";
@@ -270,30 +273,30 @@ with lib;
         Table is passed directly to `nvim_open_win`.
       '';
 
-  auto_attach = helpers.defaultNullOpts.mkBool true ''
+  auto_attach = defaultNullOpts.mkBool true ''
     Automatically attach to files.
   '';
 
-  attach_to_untracked = helpers.defaultNullOpts.mkBool true ''
+  attach_to_untracked = defaultNullOpts.mkBool true ''
     Attach to untracked files.
   '';
 
-  update_debounce = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+  update_debounce = defaultNullOpts.mkUnsignedInt 100 ''
     Debounce time for updates (in milliseconds).
   '';
 
-  current_line_blame = helpers.defaultNullOpts.mkBool false ''
+  current_line_blame = defaultNullOpts.mkBool false ''
     Adds an unobtrusive and customisable blame annotation at the end of the current line.
     The highlight group used for the text is `GitSignsCurrentLineBlame`.
   '';
 
   current_line_blame_opts = {
-    virt_text = helpers.defaultNullOpts.mkBool true ''
+    virt_text = defaultNullOpts.mkBool true ''
       Whether to show a virtual text blame annotation
     '';
 
     virt_text_pos =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "eol"
           "overlay"
@@ -308,20 +311,20 @@ with lib;
           - `right_align` Display right aligned in the window.
         '';
 
-    delay = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
+    delay = defaultNullOpts.mkUnsignedInt 1000 ''
       Sets the delay (in milliseconds) before blame virtual text is displayed.
     '';
 
-    ignore_whitespace = helpers.defaultNullOpts.mkBool false ''
+    ignore_whitespace = defaultNullOpts.mkBool false ''
       Ignore whitespace when running blame.
     '';
 
-    virt_text_priority = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+    virt_text_priority = defaultNullOpts.mkUnsignedInt 100 ''
       Priority of virtual text.
     '';
   };
 
-  current_line_blame_formatter = helpers.defaultNullOpts.mkStr " <author>, <author_time> - <summary> " ''
+  current_line_blame_formatter = defaultNullOpts.mkStr " <author>, <author_time> - <summary> " ''
     String or function used to format the virtual text of `current_line_blame`.
 
     When a string, accepts the following format specifiers:
@@ -391,26 +394,26 @@ with lib;
       `|nvim_buf_set_extmark|` and thus must be a list of `[text, highlight]` tuples.
   '';
 
-  current_line_blame_formatter_nc = helpers.defaultNullOpts.mkStr " <author>" ''
+  current_line_blame_formatter_nc = defaultNullOpts.mkStr " <author>" ''
     String or function used to format the virtual text of `|gitsigns-config-current_line_blame|`
     for lines that aren't committed.
 
     See `|gitsigns-config-current_line_blame_formatter|` for more information.
   '';
 
-  trouble = helpers.mkNullOrOption types.bool ''
+  trouble = mkNullOrOption types.bool ''
     When using setqflist() or setloclist(), open Trouble instead of the
     quickfix/location list window.
 
     Default: `pcall(require, 'trouble')`
   '';
 
-  word_diff = helpers.defaultNullOpts.mkBool false ''
+  word_diff = defaultNullOpts.mkBool false ''
     Highlight intra-line word differences in the buffer.
     Requires `config.diff_opts.internal = true`.
   '';
 
-  debug_mode = helpers.defaultNullOpts.mkBool false ''
+  debug_mode = defaultNullOpts.mkBool false ''
     Enables debug logging and makes the following functions available: `dump_cache`,
     `debug_messages`, `clear_debug`.
   '';

@@ -1,17 +1,19 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
-with lib;
+let
+  inherit (lib) flatten mapAttrsToList mkRemovedOptionModule;
+  inherit (lib.nixvim) mkDeprecatedSubOptionModule;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitsigns";
   packPathName = "gitsigns.nvim";
   package = "gitsigns-nvim";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO: introduced 2024-03-12, remove on 2024-05-12
   deprecateExtraOptions = true;
@@ -55,7 +57,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     in
     (map (
       { optionPath, hlg }:
-      helpers.mkDeprecatedSubOptionModule optionPath "Please define the `${hlg}` highlight group instead."
+      mkDeprecatedSubOptionModule optionPath "Please define the `${hlg}` highlight group instead."
     ) highlightRemovals)
     ++ [
       (mkRemovedOptionModule (
@@ -65,7 +67,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "interval"
         ]
       ) "The option has been removed from upstream.")
-      (helpers.mkDeprecatedSubOptionModule (
+      (mkDeprecatedSubOptionModule (
         settingsPath
         ++ [
           "yadm"
@@ -80,7 +82,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  settingsOptions = import ./options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix lib;
 
   settingsExample = {
     signs = {
@@ -102,7 +104,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.gitsigns" {
-      when = (isBool cfg.settings.trouble && cfg.settings.trouble) && !config.plugins.trouble.enable;
+      when = (lib.isBool cfg.settings.trouble && cfg.settings.trouble) && !config.plugins.trouble.enable;
 
       message = ''
         You have enabled `plugins.gitsigns.settings.trouble` but `plugins.trouble.enable` is `false`.
