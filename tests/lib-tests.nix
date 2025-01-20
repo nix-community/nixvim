@@ -491,6 +491,38 @@ let
       };
     };
 
+    testMkAssertions = {
+      expr =
+        (lib.nixvim.mkAssertions "foo-bar" [
+          {
+            assertion = true;
+            message = "This is the message";
+          }
+          {
+            assertion = false;
+            message = "Another assertion";
+          }
+        ])
+        ++ (lib.nixvim.mkAssertions "single-element") {
+          assertion = true;
+          message = " Trailing whitespaces  ";
+        };
+      expected = [
+        {
+          assertion = true;
+          message = "Nixvim (foo-bar): This is the message";
+        }
+        {
+          assertion = false;
+          message = "Nixvim (foo-bar): Another assertion";
+        }
+        {
+          assertion = true;
+          message = "Nixvim (single-element): Trailing whitespaces";
+        }
+      ];
+    };
+
     testMkWarnings = {
       expr =
         (lib.nixvim.mkWarnings "foo-bar" [
@@ -506,12 +538,12 @@ let
         ])
         ++ (lib.nixvim.mkWarnings "single-element") {
           when = true;
-          message = "Hello";
+          message = " Trailing whitespaces  ";
         };
       expected = [
         "Nixvim (foo-bar): This is the message"
         "Nixvim (foo-bar): This is an unconditional warning"
-        "Nixvim (single-element): Hello"
+        "Nixvim (single-element): Trailing whitespaces"
       ];
     };
   };

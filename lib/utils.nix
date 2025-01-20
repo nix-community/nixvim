@@ -173,6 +173,37 @@ rec {
     in
     lib.literalExpression exp;
 
+  __messagePrefix = scope: "Nixvim (${scope}):";
+  /**
+    Process one or several assertions by prepending the common 'Nixvim (<scope>): ' prefix to messages.
+    The second argument can either be a list of assertions or a single one.
+
+    # Example
+
+    ```nix
+    warnings = mkAssertions "plugins.foo" {
+      assertion = plugins.foo.settings.barIntegration && (!plugins.bar.enable);
+      message = "`barIntegration` is enabled but the `bar` plugin is not."
+    }
+    ```
+
+    # Type
+
+    ```
+    mkAssertions :: String -> List -> List
+    ```
+  */
+  mkAssertions =
+    scope: assertions:
+    let
+      prefix = __messagePrefix scope;
+      processAssertion = a: {
+        inherit (a) assertion;
+        message = "${prefix} ${lib.trim a.message}";
+      };
+    in
+    builtins.map processAssertion (lib.toList assertions);
+
   /**
     Convert one or several conditional warnings to a final warning list.
     The second argument can either be a list of _conditional warnings_ or a single one.
@@ -195,9 +226,9 @@ rec {
   mkWarnings =
     scope: warnings:
     let
+      prefix = __messagePrefix scope;
       processWarning =
-        warning:
-        lib.optional (warning.when or true) "Nixvim (${scope}): ${lib.trim (warning.message or warning)}";
+        warning: lib.optional (warning.when or true) "${prefix} ${lib.trim (warning.message or warning)}";
     in
     builtins.concatMap processWarning (lib.toList warnings);
 

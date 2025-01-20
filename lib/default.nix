@@ -82,6 +82,7 @@ lib.makeExtensible (
       ifNonNull'
       listToUnkeyedAttrs
       literalLua
+      mkAssertions
       mkIfNonNull
       mkIfNonNull'
       mkRaw
