@@ -39,28 +39,20 @@ let
         ];
         inherit extraSpecialArgs;
       };
-      inherit (nixvimConfig.config) enableMan build;
-      inherit (nixvimConfig._module.args.pkgs) symlinkJoin;
     in
-    (symlinkJoin {
-      name = "nixvim";
-      paths = [
-        build.package
-        build.printInitPackage
-      ] ++ lib.optional enableMan build.manDocsPackage;
-      meta.mainProgram = "nvim";
-    })
-    // rec {
-      inherit (nixvimConfig) config options;
-      extend =
-        extension:
-        mkNvim {
-          imports = [
-            mod
-            extension
-          ];
-        };
-      nixvimExtend = lib.warn "<nixvim>.nixvimExtend has been renamed to <nixvim>.extend" extend;
-    };
+    nixvimConfig.config.build.package.overrideAttrs (old: {
+      passthru = old.passthru or { } // rec {
+        inherit (nixvimConfig) config options;
+        extend =
+          extension:
+          mkNvim {
+            imports = [
+              mod
+              extension
+            ];
+          };
+        nixvimExtend = lib.warn "<nixvim>.nixvimExtend has been renamed to <nixvim>.extend" extend;
+      };
+    });
 in
 mkNvim module

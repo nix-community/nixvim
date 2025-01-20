@@ -35,8 +35,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [
       cfg.build.package
-      cfg.build.printInitPackage
-    ] ++ lib.optional cfg.enableMan cfg.build.manDocsPackage;
+    ];
 
     environment.variables = {
       VIM = mkIf (!cfg.wrapRc) "/etc/nvim";

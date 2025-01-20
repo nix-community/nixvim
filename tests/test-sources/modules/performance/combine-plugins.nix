@@ -33,7 +33,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one plugin is defined in packpathDirs, expected one plugin pack.";
         }
       ];
@@ -50,7 +50,7 @@ in
       ];
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" >= 2;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" >= 2;
           message = "Only one plugin is defined in packpathDirs, expected at least two.";
         }
       ];
@@ -79,7 +79,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -107,7 +107,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -134,7 +134,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one plugin is defined in packpathDirs.";
         }
       ];
@@ -188,11 +188,11 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one start plugin is defined in packpathDirs";
         }
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "opt" == 2;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "opt" == 2;
           message = "Less than two opt plugins are defined in packpathDirs";
         }
       ];
@@ -235,7 +235,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one start plugin is defined in packpathDirs";
         }
       ];
@@ -305,7 +305,7 @@ in
       '';
       assertions = [
         {
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 1;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
           message = "More than one start plugin is defined in packpathDirs";
         }
       ];
@@ -373,7 +373,7 @@ in
       assertions = [
         {
           # plugin-pack, nvim-treesitter, nvim-lspconfig, telescope-nvim, nvim-cmp
-          assertion = pluginCount config.build.packageUnchecked config.build.extraFiles "start" == 5;
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 5;
           message = "Wrong number of plugins in packpathDirs";
         }
       ];

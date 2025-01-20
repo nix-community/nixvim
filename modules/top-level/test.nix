@@ -296,7 +296,7 @@ in
         cfg.runCommand cfg.name
           {
             nativeBuildInputs = lib.optionals cfg.buildNixvim [
-              config.build.packageUnchecked
+              config.build.nvimPackage
             ];
 
             inherit (failedExpectations) warnings assertions;

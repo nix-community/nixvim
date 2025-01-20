@@ -34,8 +34,7 @@ in
   config = mkIf cfg.enable {
     home.packages = [
       cfg.build.package
-      cfg.build.printInitPackage
-    ] ++ lib.optional cfg.enableMan cfg.build.manDocsPackage;
+    ];
 
     home.sessionVariables = mkIf cfg.defaultEditor { EDITOR = "nvim"; };
 

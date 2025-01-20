@@ -113,6 +113,15 @@ in
         readOnly = true;
       };
 
+      nvimPackage = mkOption {
+        type = types.package;
+        description = ''
+          Wrapped Neovim (without man-docs, printInitPackage, etc).
+        '';
+        readOnly = true;
+        internal = true;
+      };
+
       initFile = mkOption {
         type = types.path;
         description = ''
@@ -310,10 +319,10 @@ in
         }
       );
 
-      wrappedNeovim' = pkgs.wrapNeovimUnstable package neovimConfig;
+      wrappedNeovim = pkgs.wrapNeovimUnstable package neovimConfig;
 
       customRC = helpers.concatNonEmptyLines [
-        (helpers.wrapVimscriptForLua wrappedNeovim'.initRc)
+        (helpers.wrapVimscriptForLua wrappedNeovim.initRc)
         config.content
       ];
 
@@ -356,20 +365,33 @@ in
           }
         else
           config.package;
-
-      wrappedNeovim = wrappedNeovim'.override (prev: {
-        wrapperArgs =
-          (if lib.isString prev.wrapperArgs then prev.wrapperArgs else lib.escapeShellArgs prev.wrapperArgs)
-          + " "
-          + extraWrapperArgs;
-        wrapRc = false;
-      });
     in
     {
       build = {
-        package = config.build.packageUnchecked;
-        packageUnchecked = wrappedNeovim;
         inherit initFile initSource;
+        package = config.build.packageUnchecked;
+
+        nvimPackage = wrappedNeovim.override (prev: {
+          wrapperArgs =
+            (if lib.isString prev.wrapperArgs then prev.wrapperArgs else lib.escapeShellArgs prev.wrapperArgs)
+            + " "
+            + extraWrapperArgs;
+          wrapRc = false;
+        });
+
+        packageUnchecked = pkgs.symlinkJoin {
+          name = "nixvim";
+          paths =
+            with config.build;
+            [
+              nvimPackage
+              printInitPackage
+            ]
+            ++ lib.optionals config.enableMan [
+              manDocsPackage
+            ];
+          meta.mainProgram = "nvim";
+        };
 
         printInitPackage = pkgs.writeShellApplication {
           name = "nixvim-print-init";

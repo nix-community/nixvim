@@ -26,7 +26,6 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [
       cfg.build.package
-      cfg.build.printInitPackage
-    ] ++ lib.optional cfg.enableMan cfg.build.manDocsPackage;
+    ];
   };
 }
