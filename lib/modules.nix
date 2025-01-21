@@ -44,6 +44,9 @@ in
         })
       ];
       specialArgs = {
+        # NOTE: we shouldn't have to set `specialArgs.lib`,
+        # however see https://github.com/nix-community/nixvim/issues/2879
+        inherit lib;
         modulesPath = ../modules;
         # TODO: deprecate `helpers`
         helpers = self;
