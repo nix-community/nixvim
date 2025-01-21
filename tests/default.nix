@@ -52,6 +52,7 @@ in
   # Individual tests can be run using: nix build .#docs.user-configs.tests.<test>
   docs-user-configs = linkFarm "user-configs-tests" selfPackages.docs.user-configs.tests;
 }
+// callTests ./platforms { }
 # Tests generated from ./test-sources
 # Grouped as a number of link-farms in the form { test-1, test-2, ... test-N }
 // callTests ./main.nix { }

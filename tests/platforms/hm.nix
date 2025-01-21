@@ -1,9 +1,8 @@
 {
-  nixvim,
+  self,
   pkgs,
-  home-manager,
 }:
-home-manager.lib.homeManagerConfiguration {
+self.inputs.home-manager.lib.homeManagerConfiguration {
   inherit pkgs;
 
   modules = [
@@ -19,6 +18,6 @@ home-manager.lib.homeManagerConfiguration {
 
       programs.home-manager.enable = true;
     }
-    nixvim.homeManagerModules.nixvim
+    self.homeManagerModules.nixvim
   ];
 }

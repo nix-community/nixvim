@@ -1,9 +1,8 @@
 {
-  nixvim,
-  nixpkgs,
+  self,
   system,
 }:
-nixpkgs.lib.nixosSystem {
+self.inputs.nixpkgs.lib.nixosSystem {
   inherit system;
 
   modules = [
@@ -18,6 +17,6 @@ nixpkgs.lib.nixosSystem {
         enable = true;
       };
     }
-    nixvim.nixosModules.nixvim
+    self.nixosModules.nixvim
   ];
 }

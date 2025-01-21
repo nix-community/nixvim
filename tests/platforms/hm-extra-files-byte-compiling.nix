@@ -1,9 +1,12 @@
 {
-  nixvim,
+  self,
   pkgs,
-  home-manager,
 }:
 let
+  inherit (self.inputs.home-manager.lib)
+    homeManagerConfiguration
+    ;
+
   config = {
     home = {
       username = "nixvim";
@@ -32,22 +35,22 @@ let
   };
 
   homeFilesByteCompilingEnabled =
-    (home-manager.lib.homeManagerConfiguration {
+    (homeManagerConfiguration {
       inherit pkgs;
 
       modules = [
-        nixvim.homeManagerModules.nixvim
+        self.homeManagerModules.nixvim
         config
         { programs.nixvim.performance.byteCompileLua.configs = true; }
       ];
     }).config.home-files;
 
   homeFilesByteCompilingDisabled =
-    (home-manager.lib.homeManagerConfiguration {
+    (homeManagerConfiguration {
       inherit pkgs;
 
       modules = [
-        nixvim.homeManagerModules.nixvim
+        self.homeManagerModules.nixvim
         config
         { programs.nixvim.performance.byteCompileLua.configs = false; }
       ];

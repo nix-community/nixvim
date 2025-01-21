@@ -1,9 +1,8 @@
 {
-  nixvim,
+  self,
   system,
-  nix-darwin,
 }:
-nix-darwin.lib.darwinSystem {
+self.inputs.nix-darwin.lib.darwinSystem {
   modules = [
     {
       nixpkgs.hostPlatform = system;
@@ -14,6 +13,6 @@ nix-darwin.lib.darwinSystem {
 
       system.stateVersion = 5;
     }
-    nixvim.nixDarwinModules.nixvim
+    self.nixDarwinModules.nixvim
   ];
 }
