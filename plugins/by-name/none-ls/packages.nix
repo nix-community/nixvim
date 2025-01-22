@@ -11,8 +11,10 @@ in
     # TODO: Requires the go tree-sitter parser
     "impl"
     "luasnip"
+    "nix_flake_fmt"
     "nvim_snippets"
     "printenv"
+    "pydoclint"
     "refactoring"
     "spell"
     "tags"
@@ -118,6 +120,7 @@ in
     # Packages where the name is different
     // {
       ansiblelint = "ansible-lint";
+      atlas_fmt = "atlas";
       bean_check = "beancount";
       bean_format = "beancount";
       black = [
