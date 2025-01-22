@@ -37,8 +37,7 @@ in
   extend = callTest ./extend.nix { };
   extra-files = callTest ./extra-files.nix { };
   enable-except-in-tests = callTest ./enable-except-in-tests.nix { };
-  # TODO: re-enable when https://github.com/NixOS/nixpkgs/pull/375585 lands in nixos-unstable
-  # failing-tests = callTest ./failing-tests.nix { };
+  failing-tests = callTest ./failing-tests.nix { };
   no-flake = callTest ./no-flake.nix { };
   lib-tests = callTest ./lib-tests.nix { };
   maintainers = callTest ./maintainers.nix { };
