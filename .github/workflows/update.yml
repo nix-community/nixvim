@@ -1,8 +1,8 @@
 name: update
 on:
-  # Runs every Saturday at noon
+  # Runs everyday at noon
   schedule:
-    - cron: "0 12 * * SAT"
+    - cron: "0 12 * * *"
   # Allow manual triggering
   workflow_dispatch:
     inputs:
@@ -14,18 +14,14 @@ on:
         type: boolean
         default: true
         description: Update generated files
-      nixos-24.11:
-        type: boolean
-        description: Also update nixos-24.11
 
 # Allow one concurrent update per branch
 concurrency:
   group: "update-${{ github.ref_name }}"
   cancel-in-progress: true
 
-# Allow running workflows, pushing and creating PRs
+# Allow pushing and creating PRs
 permissions:
-  actions: write
   contents: write
   pull-requests: write
 
@@ -41,15 +37,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.CI_UPDATE_SSH_KEY }}
-
-      # NOTE: If additional "inputs" are added, copy this step
-      # Drop the `github.event_name` condition when a branch reaches end-of-life
-      - name: Update nixos-24.11
-        if: inputs['nixos-24.11'] || github.event_name == 'schedule'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run update.yml --ref nixos-24.11
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
