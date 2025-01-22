@@ -1,17 +1,18 @@
 {
   lib,
-  helpers,
   ...
 }:
-with lib;
-with lib.nixvim.plugins;
-mkVimPlugin {
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+in
+lib.nixvim.plugins.mkVimPlugin {
   name = "emmet";
   packPathName = "emmet-vim";
   package = "emmet-vim";
   globalPrefix = "user_emmet_";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-03-01: remove 2024-05-01
   deprecateExtraConfig = true;
@@ -24,7 +25,7 @@ mkVimPlugin {
   ];
 
   settingsOptions = {
-    mode = helpers.defaultNullOpts.mkStr "a" ''
+    mode = defaultNullOpts.mkStr "a" ''
       Choose modes, in which Emmet mappings will be created.
       Default value: 'a' - all modes.
       - 'n' - normal mode.
@@ -37,11 +38,11 @@ mkVimPlugin {
       - create Emmet mappings for all modes: `a`
     '';
 
-    leader_key = helpers.defaultNullOpts.mkStr "<C-y>" ''
+    leader_key = defaultNullOpts.mkStr "<C-y>" ''
       Leading keys to run Emmet functions.
     '';
 
-    settings = helpers.mkNullOrOption (with types; attrsOf anything) ''
+    settings = mkNullOrOption (with types; attrsOf anything) ''
       Emmet settings.
 
       Defaults: see https://github.com/mattn/emmet-vim/blob/master/autoload/emmet.vim
