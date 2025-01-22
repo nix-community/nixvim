@@ -1,5 +1,6 @@
 {
   lib,
+	helpers,
   ...
 }:
 let
@@ -21,6 +22,21 @@ lib.nixvim.neovim-plugin.mkNeovimPlugin {
     log_level = lib.nixvim.defaultNullOpts.mkLogLevel "error" ''
       Log messages at or above this level.
     '';
+
+		buttons = defaultNullOpts.mkListOf (
+			with types;
+			submodule {
+				options = {
+					label = helpers.mkNullOrStr "";
+					url = helpers.mkNullOrStr "";
+				};
+			}
+		)
+		[ ]
+		''
+			
+		'';
+
   };
 
   settingsExample = {
