@@ -49,6 +49,8 @@ let
           "dafny"
           "fsautocomplete"
           "omnisharp"
+          # TODO: 2025-01-22 python312Packages.anytree is broken (dependency of bitbake-language-server)
+          "bitbake_language_server"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           "fsautocomplete"
