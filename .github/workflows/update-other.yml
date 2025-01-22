@@ -1,4 +1,4 @@
-name: update
+name: Schedule update for other branches
 on:
   # Runs every Saturday at noon
   schedule:
@@ -13,8 +13,6 @@ jobs:
     name: Trigger updates for nixvim's stable branches
     runs-on: ubuntu-latest
     steps:
-      # NOTE: If additional "inputs" are added, copy this step
-      # Drop the `github.event_name` condition when a branch reaches end-of-life
       - name: Update nixos-24.11
         if: github.event_name == 'schedule'
         env:

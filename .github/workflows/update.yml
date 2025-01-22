@@ -1,4 +1,4 @@
-name: update
+name: Update
 on:
   # Runs everyday at noon
   schedule:
