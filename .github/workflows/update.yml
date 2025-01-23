@@ -62,6 +62,41 @@ jobs:
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check if nixpkgs input was changed
+        if: github.event_name == 'schedule'
+        env:
+          repo: ${{ github.repository }}
+          branch: update/${{ github.ref_name }}
+        run: |
+          getAttr() {
+            nix eval --raw --impure \
+              --expr '{ ref }: builtins.getFlake ref' \
+              --argstr ref "$1" "$2"
+          }
+          getNixpkgsRev() {
+            getAttr "$1" 'inputs.nixpkgs.rev'
+          }
+          old=$(
+            getNixpkgsRev "github:$repo/$branch" \
+            || echo "" # Could fail, e.g. if the branch is deleted
+          )
+          new=$(getNixpkgsRev '.')
+          if [[ "$old" = "$new" ]]; then
+            (
+              echo "nixpkgs rev has not changed ($new). Stopping..."
+              echo 'You can re-run the workflow manually to update anyway.'
+            ) >&2
+            (
+              echo '## Update cancelled'
+              echo
+              echo 'The `nixpkgs` rev has not changed (`'"$new"'`).'
+              echo
+              echo 'You can re-run the workflow manually to update anyway.'
+              echo
+            ) >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
       - name: Update generated files
         id: generate
         if: inputs.generate || github.event_name == 'schedule'
