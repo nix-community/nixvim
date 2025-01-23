@@ -23,4 +23,9 @@
     ./performance.nix
     ./plugins.nix
   ];
+
+  docs.options.options = {
+    enable = true;
+    optionScopes = [ ];
+  };
 }
