@@ -7,7 +7,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "git-conflict";
-  packPathName = "git-conflict.nvim";
   package = "git-conflict-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];
