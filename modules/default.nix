@@ -4,13 +4,13 @@
 # using this in a submodule nested within another nixvim config.
 {
   imports = [
+    ./docs
     ./misc
     ./autocmd.nix
     ./clipboard.nix
     ./colorscheme.nix
     ./commands.nix
     ./diagnostics.nix
-    ./doc.nix
     ./editorconfig.nix
     ./files.nix
     ./filetype.nix
