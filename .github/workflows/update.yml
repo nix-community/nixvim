@@ -80,7 +80,7 @@ jobs:
             getNixpkgsRev "github:$repo/$branch" \
             || echo "" # Could fail, e.g. if the branch is deleted
           )
-          new=$(getNixpkgsRev '.')
+          new=$(getNixpkgsRev "$PWD")
           if [[ "$old" = "$new" ]]; then
             (
               echo "nixpkgs rev has not changed ($new). Stopping..."
