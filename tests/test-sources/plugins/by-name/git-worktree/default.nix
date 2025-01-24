@@ -12,10 +12,13 @@
       enable = true;
 
       enableTelescope = true;
-      changeDirectoryCommand = "tcd";
-      updateOnChange = true;
-      updateOnChangeCommand = "e .";
-      clearJumpsOnChange = true;
+
+      settings = {
+        change_directory_command = "tcd";
+        update_on_change = true;
+        update_on_change_command = "e .";
+        clear_jumps_on_change = true;
+      };
     };
 
     plugins.web-devicons.enable = true;

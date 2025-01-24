@@ -5,64 +5,59 @@
   ...
 }:
 let
-  cfg = config.plugins.git-worktree;
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  options = {
-    plugins.git-worktree = {
-      enable = lib.mkEnableOption "git-worktree";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "git-worktree";
+  packPathName = "git-worktree.nvim";
+  package = "git-worktree-nvim";
 
-      package = lib.mkPackageOption pkgs "git-worktree" {
-        default = [
-          "vimPlugins"
-          "git-worktree-nvim"
-        ];
-      };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-      gitPackage = lib.mkPackageOption pkgs "git" {
-        nullable = true;
-      };
+  settingsOptions = {
+    change_directory_command = defaultNullOpts.mkStr "cd" ''
+      The vim command used to change to the new worktree directory.
+      Set this to `tcd` if you want to only change the `pwd` for the current vim Tab.
+    '';
 
-      enableTelescope = lib.mkEnableOption "telescope integration";
+    update_on_change = defaultNullOpts.mkBool true ''
+      If set to true updates the current buffer to point to the new work tree if the file is found in the new project.
+      Otherwise, the following command will be run.
+    '';
 
-      changeDirectoryCommand = lib.nixvim.defaultNullOpts.mkStr "cd" ''
-        The vim command used to change to the new worktree directory.
-        Set this to `tcd` if you want to only change the `pwd` for the current vim Tab.
-      '';
+    update_on_change_command = defaultNullOpts.mkStr "e ." ''
+      The vim command to run during the `update_on_change` event.
+      Note, that this command will only be run when the current file is not found in the new worktree.
+      This option defaults to `e .` which opens the root directory of the new worktree.
+    '';
 
-      updateOnChange = lib.nixvim.defaultNullOpts.mkBool true ''
-        If set to true updates the current buffer to point to the new work tree if the file is found in the new project.
-        Otherwise, the following command will be run.
-      '';
+    clear_jumps_on_change = defaultNullOpts.mkBool true ''
+      If set to true every time you switch branches, your jumplist will be cleared so that you don't
+      accidentally go backward to a different branch and edit the wrong files.
+    '';
 
-      updateOnChangeCommand = lib.nixvim.defaultNullOpts.mkStr "e ." ''
-        The vim command to run during the `update_on_change` event.
-        Note, that this command will only be run when the current file is not found in the new worktree.
-        This option defaults to `e .` which opens the root directory of the new worktree.
-      '';
+    autopush = defaultNullOpts.mkBool false ''
+      When creating a new worktree, it will push the branch to the upstream then perform a `git rebase`.
+    '';
+  };
 
-      clearJumpsOnChange = lib.nixvim.defaultNullOpts.mkBool true ''
-        If set to true every time you switch branches, your jumplist will be cleared so that you don't
-        accidentally go backward to a different branch and edit the wrong files.
-      '';
+  settingsExample = {
+    change_directory_command = "z";
+    update_on_change = false;
+    clear_jumps_on_change = false;
+    autopush = true;
+  };
 
-      autopush = lib.nixvim.defaultNullOpts.mkBool false ''
-        When creating a new worktree, it will push the branch to the upstream then perform a `git rebase`.
-      '';
+  extraOptions = {
+    enableTelescope = lib.mkEnableOption "telescope integration";
+
+    gitPackage = lib.mkPackageOption pkgs "git" {
+      nullable = true;
     };
   };
 
-  config =
-    let
-      setupOptions = with cfg; {
-        enabled = cfg.enable;
-        change_directory_command = cfg.changeDirectoryCommand;
-        update_on_change = cfg.updateOnChange;
-        update_on_change_command = cfg.updateOnChangeCommand;
-        clearjumps_on_change = cfg.clearJumpsOnChange;
-        inherit autopush;
-      };
-    in
+  extraConfig =
+    cfg:
     lib.mkIf cfg.enable {
       assertions = [
         {
@@ -71,20 +66,10 @@ in
         }
       ];
 
-      extraPlugins = with pkgs.vimPlugins; [
-        cfg.package
-        plenary-nvim
-      ];
-
       extraPackages = [ cfg.gitPackage ];
 
-      extraConfigLua =
-        let
-          telescopeCfg = ''require("telescope").load_extension("git_worktree")'';
-        in
-        ''
-          require('git-worktree').setup(${lib.nixvim.toLuaObject setupOptions})
-          ${if cfg.enableTelescope then telescopeCfg else ""}
-        '';
+      plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "git_worktree" ];
     };
+
+  inherit (import ./deprecations.nix) optionsRenamedToSettings;
 }
