@@ -72,8 +72,8 @@ jobs:
               }
             ' | jq --raw-output '
               .data.repository.pullRequests.nodes[]
-              | to_entries | map("\(.key)=\(.value)")
-              | .[]
+              | to_entries[]
+              | "\(.key)=\(.value)"
             '
           )
           if [[ -n "$info" ]]; then
