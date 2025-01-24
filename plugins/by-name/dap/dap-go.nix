@@ -5,14 +5,15 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) types;
+
   cfg = config.plugins.dap.extensions.dap-go;
   dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
 in
 {
   options.plugins.dap.extensions.dap-go = {
-    enable = mkEnableOption "dap-go";
+    enable = lib.mkEnableOption "dap-go";
 
     package = lib.mkPackageOption pkgs "dap-go" {
       default = [
@@ -55,7 +56,7 @@ in
         };
       };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
       plugins.dap = {

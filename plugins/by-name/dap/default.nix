@@ -5,12 +5,20 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    mkAdapterOption
+    mkEnableOption
+    mkOption
+    mkSignOption
+    optionalString
+    types
+    ;
+
   cfg = config.plugins.dap;
+
   dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
 in
-with dapHelpers;
 {
   imports = [
     ./dap-go.nix
@@ -30,8 +38,8 @@ with dapHelpers;
     };
 
     adapters = helpers.mkCompositeOption "Dap adapters." {
-      executables = mkAdapterOption "executable" executableAdapterOption;
-      servers = mkAdapterOption "server" serverAdapterOption;
+      executables = mkAdapterOption "executable" dapHelpers.executableAdapterOption;
+      servers = mkAdapterOption "server" dapHelpers.serverAdapterOption;
     };
 
     configurations =
@@ -85,7 +93,7 @@ with dapHelpers;
         }
         // cfg.extraOptions;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
       extraConfigLua =

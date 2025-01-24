@@ -5,14 +5,15 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) types;
+
   cfg = config.plugins.dap.extensions.dap-python;
   dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
 in
 {
   options.plugins.dap.extensions.dap-python = {
-    enable = mkEnableOption "dap-python";
+    enable = lib.mkEnableOption "dap-python";
 
     package = lib.mkPackageOption pkgs "dap-python" {
       default = [
@@ -21,7 +22,7 @@ in
       ];
     };
 
-    adapterPythonPath = mkOption {
+    adapterPythonPath = lib.mkOption {
       default = lib.getExe (pkgs.python3.withPackages (ps: with ps; [ debugpy ]));
       defaultText = lib.literalExpression ''
         lib.getExe (pkgs.python3.withPackages (ps: with ps; [ debugpy ]))
@@ -67,7 +68,7 @@ in
         include_configs = includeConfigs;
       };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
       plugins.dap = {

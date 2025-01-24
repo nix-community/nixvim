@@ -5,15 +5,16 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkOption types;
+
   cfg = config.plugins.dap.extensions.dap-ui;
 
   mkSizeOption = helpers.mkNullOrOption (with types; either int (numbers.between 0.0 1.0));
 
   mkKeymapOptions =
     name:
-    mapAttrs (
+    lib.mapAttrs (
       key: default:
       helpers.defaultNullOpts.mkNullable (
         with types; either str (listOf str)
@@ -57,7 +58,7 @@ let
 in
 {
   options.plugins.dap.extensions.dap-ui = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "dap-ui";
+    enable = lib.mkEnableOption "dap-ui";
 
     package = lib.mkPackageOption pkgs "dap-ui" {
       default = [
@@ -232,7 +233,7 @@ in
         }
         // cfg.extraOptions;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
 
       plugins.dap = {

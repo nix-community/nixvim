@@ -1,5 +1,7 @@
 { lib, helpers }:
-with lib;
+let
+  inherit (lib) types;
+in
 rec {
   mkAdapterType =
     attrs:
@@ -92,12 +94,12 @@ rec {
     freeformType = types.attrs;
 
     options = {
-      type = mkOption {
+      type = lib.mkOption {
         description = "Which debug adapter to use.";
         type = types.str;
       };
 
-      request = mkOption {
+      request = lib.mkOption {
         type = types.enum [
           "attach"
           "launch"
@@ -107,7 +109,7 @@ rec {
         '';
       };
 
-      name = mkOption {
+      name = lib.mkOption {
         type = types.str;
         description = "A user readable name for the configuration.";
       };
