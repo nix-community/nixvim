@@ -24,7 +24,8 @@ lib.nixvim.plugins.mkVimPlugin {
   settingsOptions = {
     node_command = mkOption {
       type = with types; nullOr str;
-      default = "${pkgs.nodejs-18_x}/bin/node";
+      default = lib.getExe pkgs.nodejs-18_x;
+      defaultText = lib.literalExpression "lib.getExe pkgs.nodejs-18_x";
       description = "Tell Copilot what `node` binary to use.";
     };
 
