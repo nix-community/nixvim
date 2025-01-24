@@ -94,7 +94,7 @@ jobs:
 
       - name: Check if nixpkgs input was changed
         # The check is run only on scheduled runs & when there is a PR already open
-        if: github.event_name == 'schedule' && steps.open_pr_info.outputs.number
+        if: steps.open_pr_info.outputs.number
         env:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           pr_url: ${{ steps.open_pr_info.outputs.url }}
