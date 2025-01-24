@@ -3,15 +3,16 @@
   helpers,
   ...
 }:
-with lib;
-with lib.nixvim.plugins;
-mkVimPlugin {
+let
+  inherit (lib) types;
+in
+lib.nixvim.plugins.mkVimPlugin {
   name = "markdown-preview";
   packPathName = "markdown-preview.nvim";
   package = "markdown-preview-nvim";
   globalPrefix = "mkdp_";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-03-02: remove 2024-05-02
   deprecateExtraConfig = true;
@@ -184,7 +185,7 @@ mkVimPlugin {
       description = ''
         Default theme (dark or light).
       '';
-      pluginDefault = literalMD "chosen based on system preferences";
+      pluginDefault = lib.literalMD "chosen based on system preferences";
     };
 
     combine_preview = helpers.defaultNullOpts.mkFlagInt 0 ''
