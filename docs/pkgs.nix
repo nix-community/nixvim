@@ -3,14 +3,6 @@
   nixpkgs,
 }:
 let
-  # FIXME:
-  # Building the docs evaluates many package-option defaults, some of which are unfree.
-  # This usually happens when we include the package option value in another option's default without
-  # using a literalExpression defaultText.
-  config = {
-    allowUnfree = true;
-  };
-
   # Extend nixpkg's lib, so that we can handle recursive leaf types such as `either`
   libOverlay = final: prev: {
     types = prev.types // {
@@ -46,6 +38,6 @@ let
 
 in
 import nixpkgs {
-  inherit config system;
+  inherit system;
   overlays = [ overlay ];
 }
