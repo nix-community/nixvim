@@ -31,6 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     if: github.event_name != 'schedule' || github.repository == 'nix-community/nixvim'
+    env:
+      repo: ${{ github.repository }}
+      branch: update/${{ github.ref_name }}
 
     steps:
       - name: Checkout repository
@@ -49,6 +52,38 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
+      - name: Get info on the current PR
+        id: open_pr_info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Query for info about the already open update PR
+          info=$(
+            gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$branch" -f query='
+              query($owner:String!, $repo:String!, $branch:String!){
+                repository(owner: $owner, name: $repo) {
+                  pullRequests(first: 1, states: OPEN, headRefName: $branch) {
+                    nodes {
+                      number
+                      url
+                    }
+                  }
+                }
+              }
+            ' | jq --raw-output '
+              .data.repository.pullRequests.nodes[]
+              | to_entries | map("\(.key)=\(.value)")
+              | .[]
+            '
+          )
+          if [[ -n "$info" ]]; then
+            echo "PR info:"
+            echo "$info"
+            echo "$info" >> $GITHUB_OUTPUT
+          else
+            echo "No PR is currently open"
+          fi
+
       - name: Update flake.lock
         id: flake_lock
         if: inputs.lock || github.event_name == 'schedule'
@@ -63,10 +98,12 @@ jobs:
           fi
 
       - name: Check if nixpkgs input was changed
-        if: github.event_name == 'schedule'
+        # The check is run only on scheduled runs & when there is a PR already open
+        if: github.event_name == 'schedule' && steps.open_pr_info.outputs.number
         env:
-          repo: ${{ github.repository }}
-          branch: update/${{ github.ref_name }}
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
+          pr_url: ${{ steps.open_pr_info.outputs.url }}
+          changes: ${{ steps.flake_lock.outputs.body || 'No changes' }}
         run: |
           getAttr() {
             nix eval --raw --impure \
@@ -76,10 +113,7 @@ jobs:
           getNixpkgsRev() {
             getAttr "$1" 'inputs.nixpkgs.rev'
           }
-          old=$(
-            getNixpkgsRev "github:$repo/$branch" \
-            || echo "" # Could fail, e.g. if the branch is deleted
-          )
+          old=$(getNixpkgsRev "github:$repo/$branch")
           new=$(getNixpkgsRev "$PWD")
           if [[ "$old" = "$new" ]]; then
             (
@@ -89,7 +123,13 @@ jobs:
             (
               echo '## Update cancelled'
               echo
-              echo 'The `nixpkgs` rev has not changed (`'"$new"'`).'
+              echo -n 'The `nixpkgs` rev has not changed (`'"$new"'`)'
+              echo " compared to the already open PR [#$pr_num]($pr_url)."
+              echo
+              echo 'The following changes would have been made:'
+              echo '```'
+              echo "$changes"
+              echo '```'
               echo
               echo 'You can re-run the workflow manually to update anyway.'
               echo
