@@ -57,7 +57,8 @@ lib.nixvim.plugins.mkVimPlugin {
   settingsOptions = {
     bin = mkOption {
       type = with types; nullOr str;
-      default = "${pkgs.codeium}/bin/codeium_language_server";
+      default = lib.getExe' pkgs.codeium "codeium_language_server";
+      defaultText = lib.literalExpression ''lib.getExe' pkgs.codeium "codeium_language_server"'';
       description = "The path to the codeium language server executable.";
     };
 
