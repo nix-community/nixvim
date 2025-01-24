@@ -95,17 +95,18 @@ in
       ];
     };
 
-    clipboardPackage = mkOption {
-      type = with types; nullOr package;
-      description = ''
-        Which clipboard provider to use.
+    clipboardPackage = lib.mkPackageOption pkgs "clipboard privider" {
+      nullable = true;
+      default = null;
+      example = [ "wl-clipboard" ];
+      extraDescription = ''
+        ${"\n\n"}
 
         Recommended:
           - X11: `pkgs.xclip`
           - Wayland: `pkgs.wl-clipboard`
           - MacOS: `pkgs.pngpaste`
       '';
-      example = pkgs.wl-clipboard;
     };
 
     default = pluginOptions;
