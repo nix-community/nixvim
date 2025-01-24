@@ -123,8 +123,8 @@ jobs:
             (
               echo '## Update cancelled'
               echo
-              echo -n 'The `nixpkgs` rev has not changed (`'"$new"'`)'
-              echo " compared to the already open PR [#$pr_num]($pr_url)."
+              echo -n 'The `nixpkgs` input has not changed compared to the already open PR: '
+              echo -n "[#$pr_num]($pr_url) (\`nixpkgs.rev: $new\`)."
               echo
               echo 'The following changes would have been made:'
               echo '```'
