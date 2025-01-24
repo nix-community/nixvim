@@ -60,7 +60,7 @@ jobs:
           # Query for info about the already open update PR
           info=$(
             gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$branch" -f query='
-              query($owner:String!, $repo:String!, $branch:String!){
+              query($owner:String!, $repo:String!, $branch:String!) {
                 repository(owner: $owner, name: $repo) {
                   pullRequests(first: 1, states: OPEN, headRefName: $branch) {
                     nodes {
