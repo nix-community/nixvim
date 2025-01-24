@@ -44,10 +44,13 @@ in
       # Filter package defaults that are not compatible with the current platform
       (lib.attrsets.mapAttrs (
         _: opt:
-        if lib.meta.availableOn pkgs.stdenv.hostPlatform opt.default then
-          opt
-        else
-          builtins.removeAttrs opt [ "defaultText" ] // { default = null; }
+        opt
+        // {
+          default = if lib.meta.availableOn pkgs.stdenv.hostPlatform opt.default then opt.default else null;
+          defaultText = lib.literalMD ''
+            `${opt.defaultText.text}` if available on the current system, otherwise null
+          '';
+        }
       ))
     ];
 
