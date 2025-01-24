@@ -84,20 +84,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
         );
       description = "Keymaps for Fzf-Lua.";
       default = { };
-      example = {
-        "<leader>fg" = "live_grep";
-        "<C-p>" = {
-          action = "git_files";
-          settings = {
-            previewers.cat.cmd = "${pkgs.coreutils}/bin/cat";
-            winopts.height = 0.5;
-          };
-          options = {
-            silent = true;
-            desc = "Fzf-Lua Git Files";
+      example = lib.literalExpression ''
+        {
+          "<leader>fg" = "live_grep";
+          "<C-p>" = {
+            action = "git_files";
+            settings = {
+              previewers.cat.cmd = lib.getExe' pkgs.coreutils "cat";
+              winopts.height = 0.5;
+            };
+            options = {
+              silent = true;
+              desc = "Fzf-Lua Git Files";
+            };
           };
         };
-      };
+      '';
     };
   };
 
