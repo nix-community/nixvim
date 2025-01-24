@@ -22,7 +22,10 @@ in
     };
 
     adapterPythonPath = mkOption {
-      default = "${pkgs.python3.withPackages (ps: with ps; [ debugpy ])}/bin/python3";
+      default = lib.getExe (pkgs.python3.withPackages (ps: with ps; [ debugpy ]));
+      defaultText = lib.literalExpression ''
+        lib.getExe (pkgs.python3.withPackages (ps: with ps; [ debugpy ]))
+      '';
       description = "Path to the python interpreter. Path must be absolute or in $PATH and needs to have the debugpy package installed.";
       type = types.str;
     };
