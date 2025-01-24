@@ -9,6 +9,56 @@ let
   pkgs = import ./pkgs.nix { inherit system nixpkgs; };
   inherit (pkgs) lib;
 
+  # A stub pkgs instance used while evaluating the nixvim modules for the docs
+  # If any non-meta attr is accessed, the eval will throw
+  noPkgs =
+    let
+      # Known suffixes for package sets
+      suffixes = [
+        "Plugins"
+        "Packages"
+      ];
+
+      # Predicate for whether an attr name looks like a package set
+      # Determines whether stubPackage should recurse
+      isPackageSet = name: builtins.any (lib.flip lib.strings.hasSuffix name) suffixes;
+
+      # Need to retain `meta.homepage` if present
+      stubPackage =
+        prefix: name: package:
+        let
+          loc = prefix ++ [ name ];
+        in
+        if isPackageSet name then
+          lib.mapAttrs (stubPackage loc) package
+        else
+          lib.mapAttrs (_: throwAccessError loc) package
+          // lib.optionalAttrs (package ? meta) { inherit (package) meta; };
+
+      throwAccessError =
+        loc:
+        throw "Attempted to access `${
+          lib.concatStringsSep "." ([ "pkgs" ] ++ loc)
+        }` while rendering the docs.";
+    in
+    lib.fix (
+      self:
+      lib.mapAttrs (stubPackage [ ]) pkgs
+      // {
+        pkgs = self;
+        # The following pkgs attrs are required to eval nixvim, even for the docs:
+        inherit (pkgs)
+          _type
+          stdenv
+          stdenvNoCC
+          symlinkJoin
+          runCommand
+          runCommandLocal
+          writeShellApplication
+          ;
+      }
+    );
+
   nixvimPath = toString ./..;
 
   gitHubDeclaration = user: repo: branch: subpath: {
@@ -37,7 +87,7 @@ let
     modules = [
       {
         isDocs = true;
-        nixpkgs.pkgs = pkgs;
+        _module.args.pkgs = lib.mkForce noPkgs;
       }
     ];
   };

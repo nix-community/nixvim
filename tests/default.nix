@@ -44,7 +44,6 @@ in
   nixpkgs-module = callTest ./nixpkgs-module.nix { };
   plugins-by-name = callTest ./plugins-by-name.nix { };
   generated = callTest ./generated.nix { };
-  package-options = callTest ./package-options.nix { };
   lsp-all-servers = callTest ./lsp-servers.nix { };
 }
 # Expose some tests from the docs as flake-checks too
