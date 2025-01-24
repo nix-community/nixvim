@@ -1,15 +1,22 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
-  inherit (lib) types;
+  inherit (lib)
+    optionalString
+    types
+    ;
+  inherit (lib.nixvim)
+    defaultNullOpts
+    mkNullOrOption
+    toLuaObject
+    ;
 
   cfg = config.plugins.dap.extensions.dap-python;
-  dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
+  dapHelpers = import ./dapHelpers.nix { inherit lib; };
 in
 {
   options.plugins.dap.extensions.dap-python = {
@@ -31,28 +38,28 @@ in
       type = types.str;
     };
 
-    console = helpers.defaultNullOpts.mkEnumFirstDefault [
+    console = defaultNullOpts.mkEnumFirstDefault [
       "integratedTerminal"
       "internalConsole"
       "externalTerminal"
     ] "Debugpy console.";
 
-    customConfigurations = helpers.mkNullOrOption (types.listOf dapHelpers.configurationOption) "Custom python configurations for dap.";
+    customConfigurations = mkNullOrOption (types.listOf dapHelpers.configurationOption) "Custom python configurations for dap.";
 
-    includeConfigs = helpers.defaultNullOpts.mkBool true "Add default configurations.";
+    includeConfigs = defaultNullOpts.mkBool true "Add default configurations.";
 
-    resolvePython = helpers.defaultNullOpts.mkLuaFn null ''
+    resolvePython = defaultNullOpts.mkLuaFn null ''
       Function to resolve path to python to use for program or test execution.
       By default the `VIRTUAL_ENV` and `CONDA_PREFIX` environment variables are used if present.
     '';
 
-    testRunner = helpers.mkNullOrOption (types.either types.str types.rawLua) ''
+    testRunner = mkNullOrOption (types.either types.str types.rawLua) ''
       The name of test runner to use by default.
       The default value is dynamic and depends on `pytest.ini` or `manage.py` markers.
       If neither is found "unittest" is used.
     '';
 
-    testRunners = helpers.mkNullOrOption (with lib.types; attrsOf strLuaFn) ''
+    testRunners = mkNullOrOption (with lib.types; attrsOf strLuaFn) ''
       Set to register test runners.
       Built-in are test runners for unittest, pytest and django.
       The key is the test runner name, the value a function to generate the
@@ -75,13 +82,12 @@ in
         enable = true;
 
         extensionConfigLua =
-          with helpers;
           ''
             require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject options})
           ''
           + (optionalString (cfg.testRunners != null) ''
             table.insert(require("dap-python").test_runners,
-            ${toLuaObject (builtins.mapAttrs (_: mkRaw) cfg.testRunners)})
+            ${toLuaObject (builtins.mapAttrs (_: lib.nixvim.mkRaw) cfg.testRunners)})
           '')
           + (optionalString (cfg.customConfigurations != null) ''
             table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})

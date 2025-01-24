@@ -1,23 +1,21 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
   inherit (lib)
-    mkAdapterOption
     mkEnableOption
     mkOption
-    mkSignOption
     optionalString
     types
     ;
 
   cfg = config.plugins.dap;
 
-  dapHelpers = import ./dapHelpers.nix { inherit lib helpers; };
+  dapHelpers = import ./dapHelpers.nix { inherit lib; };
+  inherit (dapHelpers) mkSignOption;
 in
 {
   imports = [
@@ -37,18 +35,18 @@ in
       ];
     };
 
-    adapters = helpers.mkCompositeOption "Dap adapters." {
-      executables = mkAdapterOption "executable" dapHelpers.executableAdapterOption;
-      servers = mkAdapterOption "server" dapHelpers.serverAdapterOption;
+    adapters = lib.nixvim.mkCompositeOption "Dap adapters." {
+      executables = dapHelpers.mkAdapterOption "executable" dapHelpers.executableAdapterOption;
+      servers = dapHelpers.mkAdapterOption "server" dapHelpers.serverAdapterOption;
     };
 
     configurations =
-      helpers.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationOption))
+      lib.nixvim.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationOption))
         ''
           Debuggee configurations, see `:h dap-configuration` for more info.
         '';
 
-    signs = helpers.mkCompositeOption "Signs for dap." {
+    signs = lib.nixvim.mkCompositeOption "Signs for dap." {
       dapBreakpoint = mkSignOption "B" "Sign for breakpoints.";
 
       dapBreakpointCondition = mkSignOption "C" "Sign for conditional breakpoints.";
@@ -79,9 +77,11 @@ in
 
           adapters =
             (lib.optionalAttrs (adapters.executables != null) (
-              processAdapters "executable" adapters.executables
+              dapHelpers.processAdapters "executable" adapters.executables
             ))
-            // (lib.optionalAttrs (adapters.servers != null) (processAdapters "server" adapters.servers));
+            // (lib.optionalAttrs (adapters.servers != null) (
+              dapHelpers.processAdapters "server" adapters.servers
+            ));
 
           signs = with signs; {
             DapBreakpoint = dapBreakpoint;

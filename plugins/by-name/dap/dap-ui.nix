@@ -1,29 +1,27 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
   inherit (lib) mkOption types;
+  inherit (lib.nixvim) defaultNullOpts;
 
   cfg = config.plugins.dap.extensions.dap-ui;
 
-  mkSizeOption = helpers.mkNullOrOption (with types; either int (numbers.between 0.0 1.0));
+  mkSizeOption = lib.nixvim.mkNullOrOption (with types; either int (numbers.between 0.0 1.0));
 
   mkKeymapOptions =
     name:
     lib.mapAttrs (
       key: default:
-      helpers.defaultNullOpts.mkNullable (
-        with types; either str (listOf str)
-      ) default "Map `${key}` for ${name}"
+      defaultNullOpts.mkNullable (with types; either str (listOf str)) default "Map `${key}` for ${name}"
     );
 
   elementOption = types.submodule {
     options = {
-      id = helpers.mkNullOrOption types.str "Element ID.";
+      id = lib.nixvim.mkNullOrOption types.str "Element ID.";
 
       size = mkSizeOption "Size of the element in lines/columns or as proportion of total editor size (0-1).";
     };
@@ -68,9 +66,9 @@ in
     };
 
     controls = {
-      enabled = helpers.defaultNullOpts.mkBool true "Enable controls";
+      enabled = defaultNullOpts.mkBool true "Enable controls";
 
-      element = helpers.defaultNullOpts.mkEnumFirstDefault [
+      element = defaultNullOpts.mkEnumFirstDefault [
         "repl"
         "scopes"
         "stacks"
@@ -80,19 +78,19 @@ in
       ] "Element to show the controls on.";
 
       icons = {
-        disconnect = helpers.defaultNullOpts.mkStr "" "";
-        pause = helpers.defaultNullOpts.mkStr "" "";
-        play = helpers.defaultNullOpts.mkStr "" "";
-        run_last = helpers.defaultNullOpts.mkStr "" "";
-        step_into = helpers.defaultNullOpts.mkStr "" "";
-        step_over = helpers.defaultNullOpts.mkStr "" "";
-        step_out = helpers.defaultNullOpts.mkStr "" "";
-        step_back = helpers.defaultNullOpts.mkStr "" "";
-        terminate = helpers.defaultNullOpts.mkStr "" "";
+        disconnect = defaultNullOpts.mkStr "" "";
+        pause = defaultNullOpts.mkStr "" "";
+        play = defaultNullOpts.mkStr "" "";
+        run_last = defaultNullOpts.mkStr "" "";
+        step_into = defaultNullOpts.mkStr "" "";
+        step_over = defaultNullOpts.mkStr "" "";
+        step_out = defaultNullOpts.mkStr "" "";
+        step_back = defaultNullOpts.mkStr "" "";
+        terminate = defaultNullOpts.mkStr "" "";
       };
     };
 
-    elementMappings = helpers.mkNullOrOption (types.attrsOf (
+    elementMappings = lib.nixvim.mkNullOrOption (types.attrsOf (
       types.submodule {
         options = mkKeymapOptions "element mapping overrides" {
           edit = "e";
@@ -108,16 +106,16 @@ in
       }
     )) "Per-element overrides of global mappings.";
 
-    expandLines = helpers.defaultNullOpts.mkBool true "Expand current line to hover window if larger than window size.";
+    expandLines = defaultNullOpts.mkBool true "Expand current line to hover window if larger than window size.";
 
     floating = {
       maxHeight = mkSizeOption "Maximum height of the floating window.";
 
       maxWidth = mkSizeOption "Maximum width of the floating window.";
 
-      border = helpers.defaultNullOpts.mkBorder "single" "dap-ui floating window" "";
+      border = defaultNullOpts.mkBorder "single" "dap-ui floating window" "";
 
-      mappings = helpers.mkNullOrOption (types.submodule {
+      mappings = lib.nixvim.mkNullOrOption (types.submodule {
         options = mkKeymapOptions "dap-ui floating" {
           close = [
             "<ESC>"
@@ -127,15 +125,15 @@ in
       }) "Keys to trigger actions in elements.";
     };
 
-    forceBuffers = helpers.defaultNullOpts.mkBool true "Prevents other buffers being loaded into dap-ui windows.";
+    forceBuffers = defaultNullOpts.mkBool true "Prevents other buffers being loaded into dap-ui windows.";
 
     icons = {
-      collapsed = helpers.defaultNullOpts.mkStr "" "";
-      current_frame = helpers.defaultNullOpts.mkStr "" "";
-      expanded = helpers.defaultNullOpts.mkStr "" "";
+      collapsed = defaultNullOpts.mkStr "" "";
+      current_frame = defaultNullOpts.mkStr "" "";
+      expanded = defaultNullOpts.mkStr "" "";
     };
 
-    layouts = helpers.defaultNullOpts.mkListOf layoutOption [
+    layouts = defaultNullOpts.mkListOf layoutOption [
       {
         elements = [
           {
@@ -174,7 +172,7 @@ in
       }
     ] "List of layouts for dap-ui.";
 
-    mappings = helpers.mkNullOrOption (types.submodule {
+    mappings = lib.nixvim.mkNullOrOption (types.submodule {
       options = mkKeymapOptions "dap-ui" {
         edit = "e";
         expand = [
@@ -189,14 +187,14 @@ in
     }) "Keys to trigger actions in elements.";
 
     render = {
-      indent = helpers.defaultNullOpts.mkInt 1 "Default indentation size.";
+      indent = defaultNullOpts.mkInt 1 "Default indentation size.";
 
-      maxTypeLength = helpers.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
+      maxTypeLength = lib.nixvim.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
 
-      maxValueLines = helpers.defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
+      maxValueLines = defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
     };
 
-    selectWindow = helpers.defaultNullOpts.mkLuaFn null ''
+    selectWindow = defaultNullOpts.mkLuaFn null ''
       A function which returns a window to be used for opening buffers such as a stack frame location.
     '';
   };

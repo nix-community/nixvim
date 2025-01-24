@@ -1,11 +1,12 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
+  inherit (lib.nixvim) defaultNullOpts;
+
   cfg = config.plugins.dap.extensions.dap-virtual-text;
 in
 {
@@ -19,30 +20,30 @@ in
       ];
     };
 
-    enabledCommands = helpers.defaultNullOpts.mkBool true ''
+    enabledCommands = defaultNullOpts.mkBool true ''
       Create commands `DapVirtualTextEnable`, `DapVirtualTextDisable`, `DapVirtualTextToggle`.
       (`DapVirtualTextForceRefresh` for refreshing when debug adapter did not notify its termination).
     '';
 
-    highlightChangedVariables = helpers.defaultNullOpts.mkBool true ''
+    highlightChangedVariables = defaultNullOpts.mkBool true ''
       Highlight changed values with `NvimDapVirtualTextChanged`, else always `NvimDapVirtualText`.
     '';
 
-    highlightNewAsChanged = helpers.defaultNullOpts.mkBool false ''
+    highlightNewAsChanged = defaultNullOpts.mkBool false ''
       Highlight new variables in the same way as changed variables (if highlightChangedVariables).
     '';
 
-    showStopReason = helpers.defaultNullOpts.mkBool true "Show stop reason when stopped for exceptions.";
+    showStopReason = defaultNullOpts.mkBool true "Show stop reason when stopped for exceptions.";
 
-    commented = helpers.defaultNullOpts.mkBool false "Prefix virtual text with comment string.";
+    commented = defaultNullOpts.mkBool false "Prefix virtual text with comment string.";
 
-    onlyFirstDefinition = helpers.defaultNullOpts.mkBool true "Only show virtual text at first definition (if there are multiple).";
+    onlyFirstDefinition = defaultNullOpts.mkBool true "Only show virtual text at first definition (if there are multiple).";
 
-    allReferences = helpers.defaultNullOpts.mkBool false "Show virtual text on all all references of the variable (not only definitions).";
+    allReferences = defaultNullOpts.mkBool false "Show virtual text on all all references of the variable (not only definitions).";
 
-    clearOnContinue = helpers.defaultNullOpts.mkBool false "Clear virtual text on `continue` (might cause flickering when stepping).";
+    clearOnContinue = defaultNullOpts.mkBool false "Clear virtual text on `continue` (might cause flickering when stepping).";
 
-    displayCallback = helpers.defaultNullOpts.mkLuaFn ''
+    displayCallback = defaultNullOpts.mkLuaFn ''
       function(variable, buf, stackframe, node, options)
         if options.virt_text_pos == 'inline' then
           return ' = ' .. variable.value
@@ -52,16 +53,16 @@ in
       end,
     '' "A callback that determines how a variable is displayed or whether it should be omitted.";
 
-    virtTextPos = helpers.defaultNullOpts.mkStr "vim.fn.has 'nvim-0.10' == 1 and 'inline' or 'eol'" ''
+    virtTextPos = defaultNullOpts.mkStr "vim.fn.has 'nvim-0.10' == 1 and 'inline' or 'eol'" ''
       Position of virtual text, see `:h nvim_buf_set_extmark()`.
       Default tries to inline the virtual text. Use 'eol' to set to end of line.
     '';
 
-    allFrames = helpers.defaultNullOpts.mkBool false "Show virtual text for all stack frames not only current.";
+    allFrames = defaultNullOpts.mkBool false "Show virtual text for all stack frames not only current.";
 
-    virtLines = helpers.defaultNullOpts.mkBool false "Show virtual lines instead of virtual text (will flicker!).";
+    virtLines = defaultNullOpts.mkBool false "Show virtual lines instead of virtual text (will flicker!).";
 
-    virtTextWinCol = helpers.mkNullOrOption lib.types.int ''
+    virtTextWinCol = lib.nixvim.mkNullOrOption lib.types.int ''
       Position the virtual text at a fixed window column (starting from the first text column).
       See `:h nvim_buf_set_extmark()`.
     '';
