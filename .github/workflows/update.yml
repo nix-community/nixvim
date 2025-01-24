@@ -56,23 +56,26 @@ jobs:
         id: open_pr_info
         run: |
           # Query for info about the already open update PR
-          # Sets `number` and `url` step outputs if a PR is open
-          gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$branch" -f query='
-            query($owner:String!, $repo:String!, $branch:String!){
-              repository(owner: $owner, name: $repo) {
-                pullRequests(first: 1, states: OPEN, headRefName: $branch) {
-                  nodes {
-                    number
-                    url
+          info=$(
+            gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$branch" -f query='
+              query($owner:String!, $repo:String!, $branch:String!){
+                repository(owner: $owner, name: $repo) {
+                  pullRequests(first: 1, states: OPEN, headRefName: $branch) {
+                    nodes {
+                      number
+                      url
+                    }
                   }
                 }
               }
-            }
-          ' | jq --raw-output '
-            .data.repository.pullRequests.nodes[]
-            | to_entries | map("\(.key)=\(.value)")
-            | .[]
-          ' >> $GITHUB_OUTPUT
+            ' | jq --raw-output '
+              .data.repository.pullRequests.nodes[]
+              | to_entries | map("\(.key)=\(.value)")
+              | .[]
+            '
+          )
+          echo "$info"
+          echo "$info" >> $GITHUB_OUTPUT
 
       - name: Update flake.lock
         id: flake_lock
