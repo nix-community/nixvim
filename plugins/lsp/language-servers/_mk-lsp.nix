@@ -10,7 +10,8 @@
   serverName ? name,
   package ? null,
   url ? null,
-  cmd ? (cfg: null),
+  cmd ? null,
+  cmdText ? throw "cmdText is required when cmd is a function",
   settings ? (cfg: cfg),
   settingsOptions ? { },
   extraConfig ? cfg: { },
@@ -78,6 +79,25 @@ in
             cmd cfg
           else
             cmd;
+        defaultText = lib.literalMD ''
+          null when `package` is null, otherwise ${
+            if args ? cmdText || builtins.isFunction cmd then
+              let
+                literal = lib.options.renderOptionValue cmdText;
+                inherit (literal) text;
+              in
+              if literal._type == "literalMD" then
+                text
+              else if lib.hasInfix "\n" text || lib.hasInfix "``" text then
+                "\n\n```\n${text}\n```"
+              else
+                "`` ${text} ``"
+            else if cmd == null then
+              "null"
+            else
+              "`[ ${lib.concatMapStringsSep " " builtins.toJSON cmd} ]`"
+          }
+        '';
         description = ''
           A list where each entry corresponds to the blankspace delimited part of the command that
           launches the server.
