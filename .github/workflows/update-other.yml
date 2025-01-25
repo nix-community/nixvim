@@ -12,11 +12,16 @@ jobs:
   update:
     name: Trigger updates for nixvim's stable branches
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branches:
+          - nixos-24.11
     steps:
-      - name: Update nixos-24.11
+      - name: Update ${{ matrix.branches }}
         env:
           GH_TOKEN: ${{ github.token }}
           repo: ${{ github.repository }}
+          branch: ${{ matrix.branches }}
         run: |
           gh --repo "$repo" workflow run \
-            update.yml --ref nixos-24.11
+            update.yml --ref "$branch"
