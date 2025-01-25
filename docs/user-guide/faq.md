@@ -25,6 +25,12 @@ extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
 
 The [nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#managing-plugins-with-vim-packages) has more information on this.
 
+## How do I solve `error: collision between .... and ....`
+
+This sort of issue can occur when the `performance.combinePlugins.enable` option is set and two plugins
+have a file with the same name. In order to fix this issue the `performance.combinePlugins.standalonePlugins`
+option may be used to isolate one of the conflicting plugins.
+
 ## How do I solve "`<name>` cannot be found in `pkgs`"
 
 When using Nixvim, it is possible to encounter errors about something not being found in `pkgs`. For example:
