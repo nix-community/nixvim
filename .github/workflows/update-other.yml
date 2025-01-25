@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update nixos-24.11
-        if: github.event_name == 'schedule'
         env:
           GH_TOKEN: ${{ github.token }}
           repo: ${{ github.repository }}
