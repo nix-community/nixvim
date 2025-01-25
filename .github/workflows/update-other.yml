@@ -17,5 +17,7 @@ jobs:
         if: github.event_name == 'schedule'
         env:
           GH_TOKEN: ${{ github.token }}
+          repo: ${{ github.repository }}
         run: |
-          gh workflow run update.yml --ref nixos-24.11
+          gh --repo "$repo" workflow run \
+            update.yml --ref nixos-24.11
