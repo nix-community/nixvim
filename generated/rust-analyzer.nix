@@ -187,12 +187,15 @@
     description = ''
       List of cfg options to enable with the given values.
     '';
-    pluginDefault = {
-      debug_assertions = null;
-      miri = null;
-    };
+    pluginDefault = [
+      "debug_assertions"
+      "miri"
+    ];
     type = {
-      kind = "object";
+      item = {
+        kind = "string";
+      };
+      kind = "list";
     };
   };
   "rust-analyzer.cargo.extraArgs" = {
@@ -1440,6 +1443,15 @@
       kind = "boolean";
     };
   };
+  "rust-analyzer.inlayHints.implicitSizedBoundHints.enable" = {
+    description = ''
+      Whether to show inlay hints for the implied type parameter `Sized` bound.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.inlayHints.lifetimeElisionHints.enable" = {
     description = ''
       Whether to show inlay type hints for elided lifetimes in function signatures.
@@ -2058,13 +2070,35 @@
       kind = "boolean";
     };
   };
-  "rust-analyzer.typing.excludeChars" = {
+  "rust-analyzer.typing.triggerChars" = {
     description = ''
-      Specify the characters to exclude from triggering typing assists. The default trigger characters are `.`, `=`, `<`, `>`, `{`, and `(`.
+      Specify the characters allowed to invoke special on typing triggers.
+      - typing `=` after `let` tries to smartly add `;` if `=` is followed by an existing expression
+      - typing `=` between two expressions adds `;` when in statement position
+      - typing `=` to turn an assignment into an equality comparison removes `;` when in expression position
+      - typing `.` in a chain method call auto-indents
+      - typing `{` or `(` in front of an expression inserts a closing `}` or `)` after the expression
+      - typing `{` in a use item adds a closing `}` in the right place
+      - typing `>` to complete a return type `->` will insert a whitespace after it
+      - typing `<` in a path or type position inserts a closing `>` after the path or type.
     '';
-    pluginDefault = "|<";
+    pluginDefault = "=.";
     type = {
       kind = "string";
+    };
+  };
+  "rust-analyzer.vfs.extraIncludes" = {
+    description = ''
+      Additional paths to include in the VFS. Generally for code that is
+      generated or otherwise managed by a build system outside of Cargo,
+      though Cargo might be the eventual consumer.
+    '';
+    pluginDefault = [ ];
+    type = {
+      item = {
+        kind = "string";
+      };
+      kind = "list";
     };
   };
   "rust-analyzer.workspace.discoverConfig" = {
