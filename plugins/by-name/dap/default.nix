@@ -12,10 +12,6 @@ let
   inherit (dapHelpers) mkSignOption;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
-  imports = [
-    ./dap-virtual-text.nix
-  ];
-
   name = "dap";
   package = "nvim-dap";
   packPathName = "nvim-dap";
