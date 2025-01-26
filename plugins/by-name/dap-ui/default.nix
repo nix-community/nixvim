@@ -1,14 +1,10 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
 let
   inherit (lib) mkOption types;
   inherit (lib.nixvim) defaultNullOpts;
-
-  cfg = config.plugins.dap.extensions.dap-ui;
 
   mkSizeOption = lib.nixvim.mkNullOrOption (with types; either int (numbers.between 0.0 1.0));
 
@@ -54,17 +50,15 @@ let
     };
   };
 in
-{
-  options.plugins.dap.extensions.dap-ui = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = lib.mkEnableOption "dap-ui";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "dap-ui";
+  moduleName = "dapui";
+  packPathName = "nvim-dap-ui";
+  package = "nvim-dap-ui";
 
-    package = lib.mkPackageOption pkgs "dap-ui" {
-      default = [
-        "vimPlugins"
-        "nvim-dap-ui"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
+  settingsOptions = {
     controls = {
       enabled = defaultNullOpts.mkBool true "Enable controls";
 
@@ -77,20 +71,20 @@ in
         "console"
       ] "Element to show the controls on.";
 
-      icons = {
-        disconnect = defaultNullOpts.mkStr "" "";
-        pause = defaultNullOpts.mkStr "" "";
-        play = defaultNullOpts.mkStr "" "";
-        run_last = defaultNullOpts.mkStr "" "";
-        step_into = defaultNullOpts.mkStr "" "";
-        step_over = defaultNullOpts.mkStr "" "";
-        step_out = defaultNullOpts.mkStr "" "";
-        step_back = defaultNullOpts.mkStr "" "";
-        terminate = defaultNullOpts.mkStr "" "";
+      icons = lib.mapAttrs (name: icon: defaultNullOpts.mkStr icon "The icon for ${name}.") {
+        disconnect = "";
+        pause = "";
+        play = "";
+        run_last = "";
+        step_into = "";
+        step_over = "";
+        step_out = "";
+        step_back = "";
+        terminate = "";
       };
     };
 
-    elementMappings = lib.nixvim.mkNullOrOption (types.attrsOf (
+    element_mappings = lib.nixvim.mkNullOrOption (types.attrsOf (
       types.submodule {
         options = mkKeymapOptions "element mapping overrides" {
           edit = "e";
@@ -106,12 +100,12 @@ in
       }
     )) "Per-element overrides of global mappings.";
 
-    expandLines = defaultNullOpts.mkBool true "Expand current line to hover window if larger than window size.";
+    expand_lines = defaultNullOpts.mkBool true "Expand current line to hover window if larger than window size.";
 
     floating = {
-      maxHeight = mkSizeOption "Maximum height of the floating window.";
+      max_height = mkSizeOption "Maximum height of the floating window.";
 
-      maxWidth = mkSizeOption "Maximum width of the floating window.";
+      max_width = mkSizeOption "Maximum width of the floating window.";
 
       border = defaultNullOpts.mkBorder "single" "dap-ui floating window" "";
 
@@ -125,7 +119,7 @@ in
       }) "Keys to trigger actions in elements.";
     };
 
-    forceBuffers = defaultNullOpts.mkBool true "Prevents other buffers being loaded into dap-ui windows.";
+    force_buffers = defaultNullOpts.mkBool true "Prevents other buffers being loaded into dap-ui windows.";
 
     icons = {
       collapsed = defaultNullOpts.mkStr "" "";
@@ -189,57 +183,17 @@ in
     render = {
       indent = defaultNullOpts.mkInt 1 "Default indentation size.";
 
-      maxTypeLength = lib.nixvim.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
+      max_type_length = lib.nixvim.mkNullOrOption types.int "Maximum number of characters to allow a type name to fill before trimming.";
 
-      maxValueLines = defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
+      max_value_lines = defaultNullOpts.mkInt 100 "Maximum number of lines to allow a value to fill before trimming.";
     };
 
-    selectWindow = defaultNullOpts.mkLuaFn null ''
+    select_window = defaultNullOpts.mkLuaFn null ''
       A function which returns a window to be used for opening buffers such as a stack frame location.
     '';
   };
 
-  config =
-    let
-      options =
-        with cfg;
-        {
-          inherit
-            controls
-            icons
-            layouts
-            mappings
-            ;
-
-          element_mappings = elementMappings;
-
-          floating = with floating; {
-            inherit border mappings;
-            max_height = maxHeight;
-            max_width = maxWidth;
-          };
-
-          force_buffers = forceBuffers;
-
-          render = with render; {
-            inherit indent;
-            max_type_length = maxTypeLength;
-            max_value_lines = maxValueLines;
-          };
-
-          select_window = selectWindow;
-        }
-        // cfg.extraOptions;
-    in
-    lib.mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      plugins.dap = {
-        enable = true;
-
-        extensionConfigLua = ''
-          require("dapui").setup(${lib.nixvim.toLuaObject options});
-        '';
-      };
-    };
+  # NOTE: Renames added in https://github.com/nix-community/nixvim/pull/2897 (2025-01-26)
+  deprecateExtraOptions = true;
+  imports = [ ./deprecations.nix ];
 }
