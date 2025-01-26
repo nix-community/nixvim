@@ -1,23 +1,17 @@
 {
   lib,
-  config,
-  pkgs,
   ...
 }:
 let
   inherit (lib)
-    mkEnableOption
     mkOption
-    optionalString
     types
     ;
-
-  cfg = config.plugins.dap;
 
   dapHelpers = import ./dapHelpers.nix { inherit lib; };
   inherit (dapHelpers) mkSignOption;
 in
-{
+lib.nixvim.plugins.mkNeovimPlugin {
   imports = [
     ./dap-go.nix
     ./dap-python.nix
@@ -25,16 +19,16 @@ in
     ./dap-virtual-text.nix
   ];
 
-  options.plugins.dap = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "dap";
+  name = "dap";
+  package = "nvim-dap";
+  packPathName = "nvim-dap";
 
-    package = lib.mkPackageOption pkgs "dap" {
-      default = [
-        "vimPlugins"
-        "nvim-dap"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
+  # Added 2025-01-26
+  deprecateExtraOptions = true;
+
+  extraOptions = {
     adapters = lib.nixvim.mkCompositeOption "Dap adapters." {
       executables = dapHelpers.mkAdapterOption "executable" dapHelpers.executableAdapterOption;
       servers = dapHelpers.mkAdapterOption "server" dapHelpers.serverAdapterOption;
@@ -43,7 +37,7 @@ in
     configurations =
       lib.nixvim.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationOption))
         ''
-          Debuggee configurations, see `:h dap-configuration` for more info.
+          Debugger configurations, see `:h dap-configuration` for more info.
         '';
 
     signs = lib.nixvim.mkCompositeOption "Signs for dap." {
@@ -68,47 +62,51 @@ in
     };
   };
 
-  config =
+  # Separate configuration and adapter configurations
+  callSetup = false;
+  extraConfig =
+    cfg:
     let
-      options =
-        with cfg;
-        {
-          inherit configurations;
+      options = {
+        inherit (cfg) configurations;
 
-          adapters =
-            (lib.optionalAttrs (adapters.executables != null) (
-              dapHelpers.processAdapters "executable" adapters.executables
-            ))
-            // (lib.optionalAttrs (adapters.servers != null) (
-              dapHelpers.processAdapters "server" adapters.servers
-            ));
+        adapters =
+          (lib.optionalAttrs (cfg.adapters.executables != null) (
+            dapHelpers.processAdapters "executable" cfg.adapters.executables
+          ))
+          // (lib.optionalAttrs (cfg.adapters.servers != null) (
+            dapHelpers.processAdapters "server" cfg.adapters.servers
+          ));
 
-          signs = with signs; {
-            DapBreakpoint = dapBreakpoint;
-            DapBreakpointCondition = dapBreakpointCondition;
-            DapLogPoint = dapLogPoint;
-            DapStopped = dapStopped;
-            DapBreakpointRejected = dapBreakpointRejected;
-          };
-        }
-        // cfg.extraOptions;
+        signs = with cfg.signs; {
+          DapBreakpoint = dapBreakpoint;
+          DapBreakpointCondition = dapBreakpointCondition;
+          DapLogPoint = dapLogPoint;
+          DapStopped = dapStopped;
+          DapBreakpointRejected = dapBreakpointRejected;
+        };
+      } // cfg.settings;
     in
-    lib.mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua =
-        (optionalString (cfg.adapters != null) ''
+    {
+      plugins.dap.luaConfig.content = lib.mkMerge [
+        (lib.mkIf (cfg.adapters != null) ''
           require("dap").adapters = ${lib.nixvim.toLuaObject options.adapters}
         '')
-        + (optionalString (options.configurations != null) ''
+        (lib.mkIf (options.configurations != null) ''
           require("dap").configurations = ${lib.nixvim.toLuaObject options.configurations}
         '')
-        + (optionalString (cfg.signs != null) ''
-          local __dap_signs = ${lib.nixvim.toLuaObject options.signs}
-          for sign_name, sign in pairs(__dap_signs) do
-            vim.fn.sign_define(sign_name, sign)
+        (lib.mkIf (cfg.signs != null) ''
+          do
+            local __dap_signs = ${lib.nixvim.toLuaObject options.signs}
+
+            for sign_name, sign in pairs(__dap_signs) do
+              vim.fn.sign_define(sign_name, sign)
+            end
           end
         '')
-        + cfg.extensionConfigLua;
+        ''
+          ${cfg.extensionConfigLua}
+        ''
+      ];
     };
 }
