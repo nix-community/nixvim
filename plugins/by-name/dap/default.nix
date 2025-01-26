@@ -13,7 +13,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   imports = [
-    ./dap-go.nix
     ./dap-python.nix
     ./dap-ui.nix
     ./dap-virtual-text.nix
