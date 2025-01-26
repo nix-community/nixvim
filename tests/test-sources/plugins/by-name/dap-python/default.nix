@@ -1,10 +1,10 @@
 {
   empty = {
-    plugins.dap.extensions.dap-python.enable = true;
+    plugins.dap-python.enable = true;
   };
 
   example = {
-    plugins.dap.extensions.dap-python = {
+    plugins.dap-python = {
       enable = true;
 
       customConfigurations = [
@@ -34,12 +34,14 @@
   };
 
   default = {
-    plugins.dap.extensions.dap-python = {
+    plugins.dap-python = {
       enable = true;
 
-      console = "integratedTerminal";
-      includeConfigs = true;
       adapterPythonPath = "python3";
+      settings = {
+        console = "integratedTerminal";
+        includeConfigs = true;
+      };
     };
   };
 }
