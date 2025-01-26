@@ -155,6 +155,8 @@
     "theme_check"
     "tsp_server"
     "turtle_ls"
+    # typst-lsp has been removed from nixpkgs as the project is archived
+    "typst_lsp"
     "tvm_ffi_navigator"
     "twiggy_language_server"
     "ungrammar_languageserver"
@@ -391,7 +393,6 @@
     ttags = "ttags";
     typeprof = "ruby";
     typos_lsp = "typos-lsp";
-    typst_lsp = "typst-lsp";
     uiua = "uiua";
     vacuum = "vacuum-go";
     vala_ls = "vala-language-server";
