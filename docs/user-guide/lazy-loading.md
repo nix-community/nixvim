@@ -42,6 +42,8 @@ a trigger condition is met.
 You need to define the trigger conditions in which a plugin will be loaded. This
 is done through the `lazyLoad.settings` option.
 
+Load on command:
+
 ```nix
 plugins = {
   grug-far = {
@@ -55,6 +57,8 @@ plugins = {
 };
 ```
 
+Load on file type:
+
 ```nix
 plugins = {
   glow = {
@@ -62,6 +66,8 @@ plugins = {
     lazyLoad.settings.ft = "markdown";
   };
 ```
+
+Different load conditions:
 
 ```nix
 plugins.toggleterm = {
@@ -76,6 +82,35 @@ plugins.toggleterm = {
     };
   };
 };
+```
+
+Load on keymap with dependency:
+
+```nix
+    plugins.dap-ui = {
+      enable = true;
+
+      lazyLoad.settings = {
+        # We need to access nvim-dap in the after function.
+        before.__raw = ''
+          function()
+            require('lz.n').trigger_load('nvim-dap')
+          end
+        '';
+        keys = [
+          {
+            __unkeyed-1 = "<leader>du";
+            __unkeyed-2.__raw = ''
+              function()
+                require('dap.ext.vscode').load_launchjs(nil, {})
+                require("dapui").toggle()
+              end
+            '';
+            desc = "Toggle Debugger UI";
+          }
+        ];
+      };
+    };
 ```
 
 ### Colorschemes
