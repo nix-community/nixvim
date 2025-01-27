@@ -5,7 +5,7 @@
 {
   name,
   maintainers,
-  url ? throw "default",
+  url ? null,
   imports ? [ ],
   description ? null,
   # deprecations
@@ -62,15 +62,6 @@ let
       luaConfigAtLocation = utils.mkConfigAt configLocation cfg.luaConfig.content;
     in
     {
-      meta = {
-        inherit maintainers;
-        nixvimInfo = {
-          inherit description;
-          url = args.url or opts.package.default.meta.homepage;
-          path = loc;
-        };
-      };
-
       options = lib.setAttrByPath loc (
         {
           enable = lib.mkEnableOption packPathName;
@@ -168,6 +159,14 @@ in
     ++ [
       module
       (utils.mkPluginPackageModule { inherit loc packPathName package; })
+      (utils.mkMetaModule {
+        inherit
+          loc
+          maintainers
+          description
+          url
+          ;
+      })
     ]
     ++ lib.optional deprecateExtraOptions (
       lib.mkRenamedOptionModule (loc ++ [ "extraOptions" ]) settingsPath

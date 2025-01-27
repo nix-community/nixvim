@@ -82,4 +82,33 @@
         ];
       };
     };
+
+  /**
+    Produce a module that defines a plugin's metadata.
+  */
+  mkMetaModule =
+    {
+      loc,
+      maintainers,
+      description,
+      url ? null,
+    }@args:
+    { options, ... }:
+    let
+      opts = lib.getAttrFromPath loc options;
+      url =
+        if args.url or null == null then
+          opts.package.default.meta.homepage or (throw "unable to get URL for `${lib.showOption loc}`.")
+        else
+          args.url;
+    in
+    {
+      meta = {
+        inherit maintainers;
+        nixvimInfo = {
+          inherit description url;
+          path = loc;
+        };
+      };
+    };
 }

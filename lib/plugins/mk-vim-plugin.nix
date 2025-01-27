@@ -4,7 +4,7 @@
 }:
 {
   name,
-  url ? throw "default",
+  url ? null,
   maintainers,
   imports ? [ ],
   description ? null,
@@ -55,15 +55,6 @@ let
       opts = lib.getAttrFromPath loc options;
     in
     {
-      meta = {
-        inherit maintainers;
-        nixvimInfo = {
-          inherit description;
-          url = args.url or opts.package.default.meta.homepage;
-          path = loc;
-        };
-      };
-
       options = lib.setAttrByPath loc (
         {
           enable = lib.mkEnableOption packPathName;
@@ -100,6 +91,14 @@ in
     ++ [
       module
       (lib.nixvim.plugins.utils.mkPluginPackageModule { inherit loc packPathName package; })
+      (lib.nixvim.plugins.utils.mkMetaModule {
+        inherit
+          loc
+          maintainers
+          description
+          url
+          ;
+      })
     ]
     ++ lib.optional (deprecateExtraConfig && createSettingsOption) (
       lib.mkRenamedOptionModule (loc ++ [ "extraConfig" ]) settingsPath
