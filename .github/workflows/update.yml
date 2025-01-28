@@ -33,7 +33,8 @@ jobs:
     if: github.event_name != 'schedule' || github.repository == 'nix-community/nixvim'
     env:
       repo: ${{ github.repository }}
-      branch: update/${{ github.ref_name }}
+      base_branch: ${{ github.ref_name }}
+      pr_branch: update/${{ github.ref_name }}
 
     steps:
       - name: Checkout repository
@@ -59,7 +60,7 @@ jobs:
         run: |
           # Query for info about the already open update PR
           info=$(
-            gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$branch" -f query='
+            gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$pr_branch" -f query='
               query($owner:String!, $repo:String!, $branch:String!) {
                 repository(owner: $owner, name: $repo) {
                   pullRequests(first: 1, states: OPEN, headRefName: $branch) {
@@ -98,8 +99,8 @@ jobs:
           fi
 
       - name: Check if nixpkgs input was changed
-        # The check is run only on scheduled runs & when there is a PR already open
-        if: github.event_name == 'schedule' && steps.open_pr_info.outputs.number
+        # The check is run only on scheduled runs
+        if: github.event_name == 'schedule'
         env:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           pr_url: ${{ steps.open_pr_info.outputs.url }}
@@ -113,8 +114,15 @@ jobs:
           getNixpkgsRev() {
             getAttr "$1" 'inputs.nixpkgs.rev'
           }
-          old=$(getNixpkgsRev "github:$repo/$branch")
+
+          if [[ -n "$pr_num" ]]; then
+            old_branch=$pr_branch
+          else
+            old_branch=$base_branch
+          fi
+          old=$(getNixpkgsRev "github:$repo/$old_branch")
           new=$(getNixpkgsRev "$PWD")
+
           if [[ "$old" = "$new" ]]; then
             (
               echo "nixpkgs rev has not changed ($new). Stopping..."
@@ -123,8 +131,13 @@ jobs:
             (
               echo '## Update cancelled'
               echo
-              echo -n 'The `nixpkgs` input has not changed compared to the already open PR: '
-              echo -n "[#$pr_num]($pr_url) (\`nixpkgs.rev: $new\`)."
+              if [[ -n "$pr_num" ]]; then
+                echo -n 'The `nixpkgs` input has not changed compared to the already open PR: '
+                echo "[#$pr_num]($pr_url) (\`nixpkgs.rev: $new\`)."
+              else
+                echo -n 'The `nixpkgs` input has not changed compared to the base branch: '
+                echo "\`$base_branch\`"
+              fi
               echo
               echo 'The following changes would have been made:'
               echo '```'
@@ -165,7 +178,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           add-paths: "!**"
-          branch: update/${{ github.ref_name }}
+          pr_branch: update/${{ github.ref_name }}
           delete-branch: true
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
