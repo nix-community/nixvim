@@ -14,6 +14,10 @@ on:
         type: boolean
         default: true
         description: Update generated files
+      check_for_changes:
+        type: boolean
+        default: false
+        description: Cancel if there are no changes to the `nixpkgs` input
 
 # Allow one concurrent update per branch
 concurrency:
@@ -99,8 +103,7 @@ jobs:
           fi
 
       - name: Check if nixpkgs input was changed
-        # The check is run only on scheduled runs
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || inputs.check_for_changes
         env:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           pr_url: ${{ steps.open_pr_info.outputs.url }}
