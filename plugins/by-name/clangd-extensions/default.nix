@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
-  inherit (lib) types mapAttrs;
+  inherit (lib) mapAttrs;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "clangd-extensions";
@@ -26,53 +26,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       mkBorderOpt = defaultNullOpts.mkBorder "none" "clangd-extensions";
     in
     {
-      inlay_hints = {
-        inline = defaultNullOpts.mkBool true ''
-          Show hints inline.
-        '';
-
-        only_current_line = defaultNullOpts.mkBool false ''
-          Only show inlay hints for the current line.
-        '';
-
-        only_current_line_autocmd = defaultNullOpts.mkListOf types.str [ "CursorHold" ] ''
-          Event which triggers a refresh of the inlay hints. You can make this
-          `[ "CursorMoved" ]` or `[ "CursorMoved" "CursorMovedI" ]` but not that this may cause
-          higher CPU usage. This option is only respected when `only_current_line`
-          is true.
-        '';
-
-        show_parameter_hints = defaultNullOpts.mkBool true ''
-          Whether to show parameter hints with the inlay hints or not.
-        '';
-
-        parameter_hints_prefix = defaultNullOpts.mkStr "<- " "Prefix for parameter hints.";
-
-        other_hints_prefix = defaultNullOpts.mkStr "=> " ''
-          Prefix for all the other hints (type, chaining).
-        '';
-
-        max_len_align = defaultNullOpts.mkBool false ''
-          Whether to align to the length of the longest line in the file.
-        '';
-
-        max_len_align_padding = defaultNullOpts.mkPositiveInt 1 ''
-          Padding from the left if max_len_align is true.
-        '';
-
-        right_align = defaultNullOpts.mkBool false ''
-          Whether to align to the extreme right or not.
-        '';
-
-        right_align_padding = defaultNullOpts.mkPositiveInt 7 ''
-          Padding from the right if `right_align` is true.
-        '';
-
-        highlight = defaultNullOpts.mkStr "Comment" "The color of the hints.";
-
-        priority = defaultNullOpts.mkUnsignedInt 100 "The highlight group priority for extmark.";
-      };
-
       ast = {
         role_icons =
           mapAttrs (name: default: defaultNullOpts.mkStr default "Icon for the `${name}` role.")
@@ -151,9 +104,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   settingsExample = {
-    inlay_hints = {
-      inline = true;
-    };
     ast = {
       role_icons = {
         type = "";
