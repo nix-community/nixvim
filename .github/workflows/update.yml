@@ -103,11 +103,11 @@ jobs:
           fi
 
       - name: Check if nixpkgs input was changed
+        id: changes
         if: github.event_name == 'schedule' || inputs.check_for_changes
         env:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           pr_url: ${{ steps.open_pr_info.outputs.url }}
-          changes: ${{ steps.flake_lock.outputs.body || 'No changes' }}
         run: |
           getAttr() {
             nix eval --raw --impure \
@@ -126,36 +126,15 @@ jobs:
           old=$(getNixpkgsRev "github:$repo/$old_branch")
           new=$(getNixpkgsRev "$PWD")
 
-          if [[ "$old" = "$new" ]]; then
-            (
-              echo "nixpkgs rev has not changed ($new). Stopping..."
-              echo 'You can re-run the workflow manually to update anyway.'
-            ) >&2
-            (
-              echo '## Update cancelled'
-              echo
-              if [[ -n "$pr_num" ]]; then
-                echo -n 'The `nixpkgs` input has not changed compared to the already open PR: '
-                echo "[#$pr_num]($pr_url) (\`nixpkgs.rev: $new\`)."
-              else
-                echo -n 'The `nixpkgs` input has not changed compared to the base branch: '
-                echo "\`$base_branch\`"
-              fi
-              echo
-              echo 'The following changes would have been made:'
-              echo '```'
-              echo "$changes"
-              echo '```'
-              echo
-              echo 'You can re-run the workflow manually to update anyway.'
-              echo
-            ) >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
+          (
+            echo "old_rev=$old"
+            echo "new_rev=$new"
+            [[ "$old" = "$new" ]] && echo 'cancelled=1'
+          ) >> $GITHUB_OUTPUT
 
       - name: Update generated files
         id: generate
-        if: inputs.generate || github.event_name == 'schedule'
+        if: (!steps.changes.outputs.cancelled) && (inputs.generate || github.event_name == 'schedule')
         run: |
           old=$(git show --no-patch --format=%h)
           nix-build ./update-scripts -A generate
@@ -178,6 +157,7 @@ jobs:
 
       - name: Create Pull Request
         id: pr
+        if: (!steps.changes.outputs.cancelled)
         uses: peter-evans/create-pull-request@v6
         with:
           add-paths: "!**"
@@ -195,7 +175,7 @@ jobs:
             ${{ steps.generate.outputs.body || 'No changes' }}
 
       - name: Print summary
-        if: ${{ steps.pr.outputs.pull-request-number }}
+        if: steps.pr.outputs.pull-request-number
         run: |
           num="${{ steps.pr.outputs.pull-request-number }}"
           pr_url="${{ steps.pr.outputs.pull-request-url }}"
@@ -214,3 +194,50 @@ jobs:
           echo >> $GITHUB_STEP_SUMMARY
           echo "[#${num}](${pr_url}) was ${operation}." >> $GITHUB_STEP_SUMMARY
           echo >> $GITHUB_STEP_SUMMARY
+
+      - name: Print cancellation summary
+        if: (!steps.pr.outputs.pull-request-number)
+        env:
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
+          pr_url: ${{ steps.open_pr_info.outputs.url }}
+          changes: ${{ steps.flake_lock.outputs.body || 'No changes' }}
+          cancelled: ${{ steps.changes.outputs.cancelled || '' }}
+          rev: ${{ steps.changes.outputs.new_rev || '' }}
+        run: |
+          if [[ -n "$cancelled" ]]; then
+            ( # stdout
+              echo "nixpkgs rev has not changed ($rev)."
+              echo 'You can re-run the workflow manually to update anyway.'
+            ) >&2
+            ( # markdown summary
+              echo '## Update cancelled'
+              echo
+              if [[ -n "$pr_num" ]]; then
+                echo -n 'The `nixpkgs` input has not changed compared to the already open PR: '
+                echo "[#$pr_num]($pr_url) (\`nixpkgs.rev: ${rev:0:6}\`)."
+              else
+                echo -n 'The `nixpkgs` input has not changed compared to the base branch: '
+                echo "\`$base_branch\`"
+              fi
+              echo
+              echo 'You can re-run the workflow manually to update anyway.'
+              echo
+            ) >> $GITHUB_STEP_SUMMARY
+          else
+            ( #stdout
+              echo "No PR was opened"
+            ) >&2
+            (
+              echo "## Not updated"
+              echo
+            ) >> $GITHUB_STEP_SUMMARY
+          fi
+          ( # markdown summary
+            echo
+            echo 'The following changes would have been made:'
+            echo
+            echo '```'
+            echo "$changes"
+            echo '```'
+            echo
+          ) >> $GITHUB_STEP_SUMMARY
