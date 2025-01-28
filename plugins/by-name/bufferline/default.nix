@@ -604,7 +604,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             -- This can be used to change how bufferline fetches the icon
             -- for an element e.g. a buffer or a tab.
             -- e.g.
-            local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(opts.filetype, { default = false })
+            local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
             return icon, hl
           end
         '';
