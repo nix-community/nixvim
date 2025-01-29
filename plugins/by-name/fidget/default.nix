@@ -471,10 +471,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.fidget" {
-      when =
-        (builtins.isBool cfg.settings.integration.nvim-tree.enable)
-        && cfg.settings.integration.nvim-tree.enable
-        && !config.plugins.nvim-tree.enable;
+      when = (cfg.settings.integration.nvim-tree.enable == true) && !config.plugins.nvim-tree.enable;
 
       message = ''
         You have set `plugins.fidget.settings.integrations.nvim-tree.enable` to true but have not enabled `plugins.nvim-tree`.

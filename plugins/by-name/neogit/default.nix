@@ -116,10 +116,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
         (name: {
           assertion =
             let
-              enabled = cfg.settings.integrations.${name};
-              isEnabled = (isBool enabled) && enabled;
+              extensionEnabled = cfg.settings.integrations.${name} == true;
+              pluginEnabled = config.plugins.${name}.enable;
             in
-            isEnabled -> config.plugins.${name}.enable;
+            extensionEnabled -> pluginEnabled;
+
           message = ''
             You have enabled the `${name}` integration, but `plugins.${name}.enable` is `false`.
           '';

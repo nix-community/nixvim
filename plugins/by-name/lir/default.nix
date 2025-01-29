@@ -22,8 +22,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     warnings = lib.nixvim.mkWarnings "plugins.lir" {
       when =
         (cfg.settings ? devicons.enable)
-        && (lib.isBool cfg.settings.devicons.enable)
-        && cfg.settings.devicons.enable
+        && (cfg.settings.devicons.enable == true)
         && (!config.plugins.web-devicons.enable);
 
       message = ''

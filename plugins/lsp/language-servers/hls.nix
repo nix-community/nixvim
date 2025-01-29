@@ -32,6 +32,6 @@ in
       '';
     };
 
-    extraPackages = lib.optional ((lib.isBool cfg.installGhc) && cfg.installGhc) cfg.ghcPackage;
+    extraPackages = lib.optional (cfg.installGhc == true) cfg.ghcPackage;
   };
 }

@@ -22,8 +22,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     warnings = lib.nixvim.mkWarnings "plugins.flutter-tools" {
       when =
         (cfg.settings ? debugger.enable)
-        && (lib.isBool cfg.settings.debugger.enable)
-        && cfg.settings.debugger.enable
+        && (cfg.settings.debugger.enable == true)
         && (!config.plugins.dap.enable);
 
       message = ''

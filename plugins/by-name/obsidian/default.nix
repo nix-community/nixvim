@@ -250,11 +250,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.obsidian" {
-      when =
-        let
-          nvimCmpEnabled = isBool cfg.settings.completion.nvim_cmp && cfg.settings.completion.nvim_cmp;
-        in
-        nvimCmpEnabled && (!config.plugins.cmp.enable);
+      when = (cfg.settings.completion.nvim_cmp == true) && (!config.plugins.cmp.enable);
       message = ''
         You have enabled `completion.nvim_cmp` but `plugins.cmp.enable` is `false`.
         You should probably enable `nvim-cmp`.

@@ -58,18 +58,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
     warnings =
       let
         copilot-lua-cfg = config.plugins.copilot-lua.settings;
-        isEnabled = b: (lib.isBool b && b);
       in
       lib.nixvim.mkWarnings "plugins.copilot-cmp" [
         {
-          when = isEnabled copilot-lua-cfg.suggestion.enabled;
+          when = copilot-lua-cfg.suggestion.enabled == true;
           message = ''
             It is recommended to disable copilot's `suggestion` module, as it can interfere with
             completions properly appearing in copilot-cmp.
           '';
         }
         {
-          when = isEnabled copilot-lua-cfg.panel.enabled;
+          when = copilot-lua-cfg.panel.enabled == true;
           message = ''
             It is recommended to disable copilot's `panel` module, as it can interfere with completions
             properly appearing in copilot-cmp.

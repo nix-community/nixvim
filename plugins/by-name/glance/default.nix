@@ -19,8 +19,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     warnings = lib.nixvim.mkWarnings "plugins.glance" {
       when =
         cfg.settings ? use_trouble_qf
-        && builtins.isBool cfg.settings.use_trouble_qf
-        && cfg.settings.use_trouble_qf
+        && (cfg.settings.use_trouble_qf == true)
         && !config.plugins.trouble.enable;
 
       message = ''

@@ -73,11 +73,8 @@ in
     ];
 
     extraPackages =
-      let
-        isEnabled = x: lib.isBool x && x;
-      in
-      lib.optional (isEnabled cfg.installCargo) cfg.cargoPackage
-      ++ lib.optional (isEnabled cfg.installRustc) cfg.rustcPackage
-      ++ lib.optional (isEnabled cfg.installRustfmt) cfg.rustfmtPackage;
+      lib.optional (cfg.installCargo == true) cfg.cargoPackage
+      ++ lib.optional (cfg.installRustc == true) cfg.rustcPackage
+      ++ lib.optional (cfg.installRustfmt == true) cfg.rustfmtPackage;
   };
 }

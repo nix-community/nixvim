@@ -236,11 +236,8 @@ in
         !(
           # leanls lsp server is disabled in nvim-lspconfig
           config.plugins.lsp.servers.leanls.enable
-          # lsp is not (!) disabled in the lean.nvim plugin
-          && !(
-            # lsp is explicitly set to `false`.
-            (isBool cfg.lsp.enable) && !cfg.lsp.enable
-          )
+          # lsp is not explicitly disabled in the lean.nvim plugin
+          && (cfg.lsp.enable != false)
         );
       message = ''
         You have not explicitly set `plugins.lean.lsp` to `false` while having `plugins.lsp.servers.leanls.enable` set to `true`.

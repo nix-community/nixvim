@@ -469,9 +469,7 @@ in
         };
     warnings = lib.nixvim.mkWarnings "plugins.ltex-extra" {
       # https://nvimdev.github.io/lspsaga/implement/#default-options
-      when =
-        (isBool cfg.implement.enable && cfg.implement.enable)
-        && (isBool cfg.symbolInWinbar.enable && !cfg.symbolInWinbar.enable);
+      when = (cfg.implement.enable == true) && (cfg.symbolInWinbar.enable == false);
 
       message = ''
         You have enabled the `implement` module but it requires `symbolInWinbar` to be enabled.

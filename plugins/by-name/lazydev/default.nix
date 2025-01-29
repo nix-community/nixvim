@@ -137,24 +137,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.lazydev" [
       {
-        when =
-          builtins.isBool cfg.settings.integrations.cmp
-          && !config.plugins.cmp.enable
-          && cfg.settings.integrations.cmp;
+        when = (cfg.settings.integrations.cmp == true) && !config.plugins.cmp.enable;
         message = "You have enabled nvim-cmp integration but plugins.cmp is not enabled.";
       }
       {
-        when =
-          builtins.isBool cfg.settings.integrations.lspconfig
-          && !config.plugins.lsp.enable
-          && cfg.settings.integrations.lspconfig;
+        when = (cfg.settings.integrations.lspconfig == true) && !config.plugins.lsp.enable;
         message = "You have enabled lspconfig integration but plugins.lsp is not enabled.";
       }
       {
-        when =
-          builtins.isBool cfg.settings.integrations.coq
-          && !config.plugins.coq-nvim.enable
-          && cfg.settings.integrations.coq;
+        when = (cfg.settings.integrations.coq == true) && !config.plugins.coq-nvim.enable;
         message = "You have enabled coq integration but plugins.coq-nvim is not enabled.";
       }
     ];
