@@ -35,18 +35,31 @@ let
   removeWhitespace = builtins.replaceStrings [ " " ] [ "" ];
 
   getSubOptions =
-    opts: path: lib.optionalAttrs (isVisible opts) (removeUnwanted (opts.type.getSubOptions path));
+    opts: path:
+    lib.optionalAttrs (isDeeplyVisible opts) (removeUnwanted (opts.type.getSubOptions path));
 
-  isVisible =
-    opts:
+  isVisible = isVisibleWith true;
+  isDeeplyVisible = isVisibleWith false;
+
+  isVisibleWith =
+    shallow: opts:
+    let
+      test =
+        opt:
+        let
+          internal = opt.internal or false;
+          visible = opt.visible or true;
+          visible' = if visible == "shallow" then shallow else visible;
+        in
+        visible' && !internal;
+    in
     if lib.isOption opts then
-      opts.visible or true && !(opts.internal or false)
+      test opts
     else if opts.isOption then
-      opts.index.options.visible or true && !(opts.index.options.internal or false)
+      test opts.index.options
     else
       let
-        filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisible v else true);
-
+        filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisibleWith shallow v else true);
         hasEmptyIndex = (filterFunc opts.index.options) == { };
         hasEmptyComponents = (filterFunc opts.components) == { };
       in
