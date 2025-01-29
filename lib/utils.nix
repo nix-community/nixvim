@@ -181,7 +181,7 @@ rec {
     # Example
 
     ```nix
-    warnings = mkAssertions "plugins.foo" {
+    assertions = mkAssertions "plugins.foo" {
       assertion = plugins.foo.settings.barIntegration && (!plugins.bar.enable);
       message = "`barIntegration` is enabled but the `bar` plugin is not."
     }
