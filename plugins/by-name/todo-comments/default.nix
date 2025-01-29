@@ -414,18 +414,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    assertions = [
+    assertions = lib.nixvim.mkAssertions "plugins.todo-comments" [
       {
         assertion = cfg.keymaps.todoTelescope.key or null != null -> config.plugins.telescope.enable;
         message = ''
-          Nixvim(plugins.todo-comments): You have enabled todo-comment's `telescope` integration.
+          You have enabled todo-comment's `telescope` integration.
           However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
         '';
       }
       {
         assertion = cfg.keymaps.todoTrouble.key or null != null -> config.plugins.trouble.enable;
         message = ''
-          Nixvim(plugins.todo-comments): You have enabled todo-comment's `trouble` integration.
+          You have enabled todo-comment's `trouble` integration.
           However, you have not enabled the `trouble` plugin itself (`plugins.trouble.enable = true`).
         '';
       }

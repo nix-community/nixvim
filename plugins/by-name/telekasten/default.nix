@@ -27,7 +27,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     assertions = lib.nixvim.mkAssertions "plugins.telekasten" {
       assertion = config.plugins.telescope.enable;
       message = ''
-        Nixvim (plugins.telekasten): The plugin needs telescope to function as intended.
+        You have to enable `plugins.telescope` as `enableTelescope` is activated.
       '';
     };
 

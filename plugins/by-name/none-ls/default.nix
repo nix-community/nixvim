@@ -137,17 +137,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
       };
 
-      assertions = [
-        {
-          assertion = cfg.enableLspFormat -> config.plugins.lsp-format.enable;
-          message = ''
-            Nixvim: You have enabled the lsp-format integration with none-ls.
-            However, you have not enabled `plugins.lsp-format` itself.
-            Note: `plugins.none-ls.enableLspFormat` is enabled by default when `plugins.lsp-format` is enabled.
-            `plugins.none-ls.enableLspFormat` definitions: ${lib.options.showDefs options.plugins.none-ls.enableLspFormat.definitionsWithLocations}
-          '';
-        }
-      ];
+      assertions = lib.nixvim.mkAssertions "plugins.none-ls" {
+        assertion = cfg.enableLspFormat -> config.plugins.lsp-format.enable;
+
+        message = ''
+          You have enabled the lsp-format integration with none-ls.
+          However, you have not enabled `plugins.lsp-format` itself.
+          Note: `plugins.none-ls.enableLspFormat` is enabled by default when `plugins.lsp-format` is enabled.
+          `plugins.none-ls.enableLspFormat` definitions: ${lib.options.showDefs options.plugins.none-ls.enableLspFormat.definitionsWithLocations}
+        '';
+      };
 
       # We only do this here because of enableLspFormat
       plugins.none-ls.luaConfig.content = ''

@@ -363,7 +363,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       {
         assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
         message = ''
-          The telescope integration needs telescope to function as intended
+          You have to enable `plugins.telescope` as `enableTelescope` is activated.
         '';
       }
       {

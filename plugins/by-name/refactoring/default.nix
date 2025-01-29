@@ -26,15 +26,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    assertions = [
-      {
-        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-        message = ''
-          Nixvim: You have enabled the `telescope` integration with refactoring-nvim.
-          However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.refactoring" {
+      assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+
+      message = ''
+        You have enabled the `telescope` integration with refactoring-nvim.
+        However, you have not enabled the `telescope` plugin itself (`plugins.telescope.enable = true`).
+      '';
+    };
 
     plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "refactoring" ];
   };

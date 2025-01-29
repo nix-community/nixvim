@@ -176,15 +176,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = {
-    assertions = [
-      {
-        assertion = !config.plugins.copilot-vim.enable;
-        message = ''
-          You currently have both `copilot-vim` and `copilot-lua` enabled.
-          Please disable one of them.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.copilot-lua" {
+      assertion = !config.plugins.copilot-vim.enable;
+      message = ''
+        You currently have both `copilot-vim` and `copilot-lua` enabled.
+        Please disable one of them.
+      '';
+    };
   };
 
   # TODO: introduced 2025-01-07: remove after 25.05

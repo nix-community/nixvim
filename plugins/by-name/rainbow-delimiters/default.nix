@@ -119,16 +119,15 @@ with lib;
         when = !config.plugins.treesitter.enable;
         message = "This plugin needs treesitter to function as intended.";
       };
-      assertions = [
-        {
-          assertion = (cfg.whitelist == null) || (cfg.blacklist == null);
-          message = ''
-            Both `rainbow-delimiters.whitelist` and `rainbow-delimiters.blacklist` should not be
-            set simultaneously.
-            Please remove one of them.
-          '';
-        }
-      ];
+      assertions = lib.nixvim.mkAssertions "plugins.rainbow-delimiters" {
+        assertion = (cfg.whitelist == null) || (cfg.blacklist == null);
+
+        message = ''
+          Both `rainbow-delimiters.whitelist` and `rainbow-delimiters.blacklist` should not be
+          set simultaneously.
+          Please remove one of them.
+        '';
+      };
 
       extraPlugins = [ cfg.package ];
 

@@ -231,29 +231,27 @@ in
   config = mkIf cfg.enable {
     extraPlugins = [ cfg.package ];
 
-    assertions = [
-      {
-        assertion =
-          !(
-            # leanls lsp server is disabled in nvim-lspconfig
-            config.plugins.lsp.servers.leanls.enable
-            # lsp is not (!) disabled in the lean.nvim plugin
-            && !(
-              # lsp is explicitly set to `false`.
-              (isBool cfg.lsp.enable) && !cfg.lsp.enable
-            )
-          );
-        message = ''
-          You have not explicitly set `plugins.lean.lsp` to `false` while having `plugins.lsp.servers.leanls.enable` set to `true`.
-          You need to either
+    assertions = lib.nixvim.mkAssertions "plugins.lean" {
+      assertion =
+        !(
+          # leanls lsp server is disabled in nvim-lspconfig
+          config.plugins.lsp.servers.leanls.enable
+          # lsp is not (!) disabled in the lean.nvim plugin
+          && !(
+            # lsp is explicitly set to `false`.
+            (isBool cfg.lsp.enable) && !cfg.lsp.enable
+          )
+        );
+      message = ''
+        You have not explicitly set `plugins.lean.lsp` to `false` while having `plugins.lsp.servers.leanls.enable` set to `true`.
+        You need to either
 
-            - Remove the configuration in `plugins.lsp.servers.leanls` and move it to `plugins.lean.lsp`.
-            - Explicitly disable the autoconfiguration of the lsp in the lean.nvim plugin by setting `plugins.lean.lsp` to `false`.
+          - Remove the configuration in `plugins.lsp.servers.leanls` and move it to `plugins.lean.lsp`.
+          - Explicitly disable the autoconfiguration of the lsp in the lean.nvim plugin by setting `plugins.lean.lsp` to `false`.
 
-          https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#leanls
-        '';
-      }
-    ];
+        https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#leanls
+      '';
+    };
 
     extraPackages = [ cfg.leanPackage ];
 

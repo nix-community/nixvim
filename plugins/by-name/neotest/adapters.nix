@@ -37,12 +37,12 @@ let
         mkIf cfg.enable {
           extraPlugins = [ cfg.package ];
 
-          assertions = [
-            {
-              assertion = config.plugins.neotest.enable;
-              message = "Nixvim: you have enabled `plugins.neotest.adapters.${name}` but `plugins.neotest.enable` is `false`.";
-            }
-          ];
+          assertions = lib.nixvim.mkAssertions "plugins.neotest.adapters.${name}" {
+            assertion = config.plugins.neotest.enable;
+            message = ''
+              You have to enable `plugins.telescope` as `enableTelescope` is activated.
+            '';
+          };
 
           warnings = lib.nixvim.mkWarnings "plugins.neotest.adapters.${name}" {
             when = !config.plugins.treesitter.enable;

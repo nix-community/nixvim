@@ -191,10 +191,10 @@ in
         // cfg.extraOptions;
     in
     mkIf cfg.enable {
-      assertions = [
+      assertions = lib.nixvim.mkAssertions "plugins.harpoon" [
         {
           assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-          message = ''Nixvim: The harpoon telescope integration needs telescope to function as intended'';
+          message = "The harpoon telescope integration needs telescope to function as intended.";
         }
       ];
 

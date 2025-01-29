@@ -59,12 +59,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig =
     cfg:
     lib.mkIf cfg.enable {
-      assertions = [
-        {
-          assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-          message = ''Nixvim: The git-worktree telescope integration needs telescope to function as intended'';
-        }
-      ];
+      assertions = lib.nixvim.mkAssertions "plugins.git-worktree" {
+        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+        message = ''
+          You have to enable `plugins.telescope` as `enableTelescope` is activated.
+        '';
+      };
 
       extraPackages = [ cfg.gitPackage ];
 

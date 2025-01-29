@@ -94,15 +94,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   callSetup = false;
   hasSettings = false;
   extraConfig = cfg: {
-    assertions = [
-      {
-        assertion = cfg.mockDevIcons -> cfg.modules ? icons;
-        message = ''
-          You have enabled `plugins.mini.mockDevIcons` but have not defined `plugins.mini.modules.icons`.
-          This setting will have no effect without it.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "pluhins.mini" {
+      assertion = cfg.mockDevIcons -> cfg.modules ? icons;
+      message = ''
+        You have enabled `plugins.mini.mockDevIcons` but have not defined `plugins.mini.modules.icons`.
+        This setting will have no effect without it.
+      '';
+    };
+
     plugins.mini.luaConfig.content =
       lib.foldlAttrs (lines: name: config: ''
         ${lines}

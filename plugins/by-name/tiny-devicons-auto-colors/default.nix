@@ -90,20 +90,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = {
-    assertions = [
-      {
-        assertion =
-          config.plugins.web-devicons.enable
-          || (
-            config.plugins.mini.enable
-            && config.plugins.mini.modules ? icons
-            && config.plugins.mini.mockDevIcons
-          );
-        message = ''
-          Nixvim: Either `plugins.web-devicons` or `plugins.mini`* must be enabled to use `tiny-devicons-auto-colors`.
-            *If using `plugins.mini`, you must enable the `icons` module and the `mockDevIcons` option.
-        '';
-      }
-    ];
+    assertions = lib.nixvim.mkAssertions "plugins.tiny-devicons-auto-colors" {
+      assertion =
+        config.plugins.web-devicons.enable
+        || (
+          config.plugins.mini.enable
+          && config.plugins.mini.modules ? icons
+          && config.plugins.mini.mockDevIcons
+        );
+      message = ''
+        Either `plugins.web-devicons` or `plugins.mini`* must be enabled to use `tiny-devicons-auto-colors`.
+        *If using `plugins.mini`, you must enable the `icons` module and the `mockDevIcons` option.
+      '';
+    };
   };
 }
