@@ -34,7 +34,13 @@
             check = true;
             format = true;
           };
-          statix.enable = true;
+          statix = {
+            enable = true;
+            disabled-lints = [
+              # We often use `nullable == true`
+              "bool_comparison"
+            ];
+          };
           stylua.enable = true;
           shfmt.enable = true;
           # FIXME: re-enable on darwin, currently broken: taplo with options '[format]' failed to apply: exit status 101
