@@ -546,6 +546,32 @@ let
         "Nixvim (single-element): Trailing whitespaces"
       ];
     };
+
+    testIsTrue = {
+      expr = {
+        true = lib.nixvim.isTrue true;
+        false = lib.nixvim.isTrue false;
+        null = lib.nixvim.isTrue null;
+      };
+      expected = {
+        inherit true;
+        inherit false;
+        null = false;
+      };
+    };
+
+    testIsFalse = {
+      expr = {
+        true = lib.nixvim.isFalse true;
+        false = lib.nixvim.isFalse false;
+        null = lib.nixvim.isFalse null;
+      };
+      expected = {
+        true = false;
+        false = true;
+        null = false;
+      };
+    };
   };
 in
 if results == [ ] then
