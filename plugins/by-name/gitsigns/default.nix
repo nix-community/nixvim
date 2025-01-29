@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) flatten mapAttrsToList mkRemovedOptionModule;
-  inherit (lib.nixvim) mkDeprecatedSubOptionModule;
+  inherit (lib.nixvim) mkDeprecatedSubOptionModule isTrue;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitsigns";
@@ -104,7 +104,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.gitsigns" {
-      when = (lib.isBool cfg.settings.trouble && cfg.settings.trouble) && !config.plugins.trouble.enable;
+      when = (isTrue cfg.settings.trouble) && !config.plugins.trouble.enable;
 
       message = ''
         You have enabled `plugins.gitsigns.settings.trouble` but `plugins.trouble.enable` is `false`.

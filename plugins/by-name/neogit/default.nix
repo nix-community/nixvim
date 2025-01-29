@@ -114,12 +114,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     assertions = lib.nixvim.mkAssertions "plugins.neogit" (
       map
         (name: {
-          assertion =
-            let
-              enabled = cfg.settings.integrations.${name};
-              isEnabled = (isBool enabled) && enabled;
-            in
-            isEnabled -> config.plugins.${name}.enable;
+          assertion = (lib.nixvim.isTrue cfg.settings.integrations.${name}) -> config.plugins.${name}.enable;
+
           message = ''
             You have enabled the `${name}` integration, but `plugins.${name}.enable` is `false`.
           '';

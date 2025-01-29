@@ -240,8 +240,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins.sqlite-lua.enable = mkOverride 1490 true;
     warnings = lib.nixvim.mkWarnings "plugins.neoclip" {
       when =
-        isBool cfg.settings.enable_persistent_history
-        && cfg.settings.enable_persistent_history
+        (lib.nixvim.isTrue cfg.settings.enable_persistent_history)
         && options.plugins.sqlite-lua.enable.highestPrio == 1490;
 
       message = ''
@@ -251,8 +250,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     assertions = lib.nixvim.mkAssertions "plugins.neoclip" {
       assertion =
-        isBool cfg.settings.enable_persistent_history && cfg.settings.enable_persistent_history
-        -> config.plugins.sqlite-lua.enable;
+        (lib.nixvim.isTrue cfg.settings.enable_persistent_history) -> config.plugins.sqlite-lua.enable;
       message = ''
         The persistent history sqlite storage backend needs `sqlite-lua` to function as intended.
         You can enable it by setting `plugins.sqlite-lua.enable` to `true`.

@@ -239,15 +239,15 @@ in
           # lsp is not (!) disabled in the lean.nvim plugin
           && !(
             # lsp is explicitly set to `false`.
-            (isBool cfg.lsp.enable) && !cfg.lsp.enable
+            lib.nixvim.isFalse cfg.lsp.enable
           )
         );
       message = ''
         You have not explicitly set `plugins.lean.lsp` to `false` while having `plugins.lsp.servers.leanls.enable` set to `true`.
         You need to either
 
-          - Remove the configuration in `plugins.lsp.servers.leanls` and move it to `plugins.lean.lsp`.
-          - Explicitly disable the autoconfiguration of the lsp in the lean.nvim plugin by setting `plugins.lean.lsp` to `false`.
+        - Remove the configuration in `plugins.lsp.servers.leanls` and move it to `plugins.lean.lsp`.
+        - Explicitly disable the autoconfiguration of the lsp in the lean.nvim plugin by setting `plugins.lean.lsp` to `false`.
 
         https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#leanls
       '';

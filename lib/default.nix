@@ -80,6 +80,8 @@ lib.makeExtensible (
       groupListBySize
       hasContent
       ifNonNull'
+      isFalse
+      isTrue
       listToUnkeyedAttrs
       literalLua
       mkAssertions

@@ -3,6 +3,7 @@ let
   inherit (lib) types;
   inherit (lib.nixvim)
     defaultNullOpts
+    isTrue
     literalLua
     mkNullOrOption'
     nestedLiteralLua
@@ -137,24 +138,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.lazydev" [
       {
-        when =
-          builtins.isBool cfg.settings.integrations.cmp
-          && !config.plugins.cmp.enable
-          && cfg.settings.integrations.cmp;
+        when = (isTrue cfg.settings.integrations.cmp) && !config.plugins.cmp.enable;
         message = "You have enabled nvim-cmp integration but plugins.cmp is not enabled.";
       }
       {
-        when =
-          builtins.isBool cfg.settings.integrations.lspconfig
-          && !config.plugins.lsp.enable
-          && cfg.settings.integrations.lspconfig;
+        when = (isTrue cfg.settings.integrations.lspconfig) && !config.plugins.lsp.enable;
         message = "You have enabled lspconfig integration but plugins.lsp is not enabled.";
       }
       {
-        when =
-          builtins.isBool cfg.settings.integrations.coq
-          && !config.plugins.coq-nvim.enable
-          && cfg.settings.integrations.coq;
+        when = (isTrue cfg.settings.integrations.coq) && !config.plugins.coq-nvim.enable;
         message = "You have enabled coq integration but plugins.coq-nvim is not enabled.";
       }
     ];

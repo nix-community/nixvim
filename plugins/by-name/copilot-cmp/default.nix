@@ -1,7 +1,7 @@
 { lib, config, ... }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib.nixvim) defaultNullOpts isTrue;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "copilot-cmp";
@@ -58,18 +58,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
     warnings =
       let
         copilot-lua-cfg = config.plugins.copilot-lua.settings;
-        isEnabled = b: (lib.isBool b && b);
       in
       lib.nixvim.mkWarnings "plugins.copilot-cmp" [
         {
-          when = isEnabled copilot-lua-cfg.suggestion.enabled;
+          when = isTrue copilot-lua-cfg.suggestion.enabled;
           message = ''
             It is recommended to disable copilot's `suggestion` module, as it can interfere with
             completions properly appearing in copilot-cmp.
           '';
         }
         {
-          when = isEnabled copilot-lua-cfg.panel.enabled;
+          when = isTrue copilot-lua-cfg.panel.enabled;
           message = ''
             It is recommended to disable copilot's `panel` module, as it can interfere with completions
             properly appearing in copilot-cmp.

@@ -3,11 +3,12 @@
   helpers,
   config,
   pkgs,
-  options,
   ...
 }:
 with lib;
 let
+  inherit (lib.nixvim) isTrue isFalse;
+
   cfg = config.plugins.lspsaga;
 
   mkKeymapOption =
@@ -469,9 +470,7 @@ in
         };
     warnings = lib.nixvim.mkWarnings "plugins.ltex-extra" {
       # https://nvimdev.github.io/lspsaga/implement/#default-options
-      when =
-        (isBool cfg.implement.enable && cfg.implement.enable)
-        && (isBool cfg.symbolInWinbar.enable && !cfg.symbolInWinbar.enable);
+      when = (isTrue cfg.implement.enable) && (isFalse cfg.symbolInWinbar.enable);
 
       message = ''
         You have enabled the `implement` module but it requires `symbolInWinbar` to be enabled.

@@ -1,7 +1,12 @@
 { config, lib, ... }:
 let
   inherit (lib) literalExpression types;
-  inherit (lib.nixvim) defaultNullOpts literalLua nestedLiteralLua;
+  inherit (lib.nixvim)
+    defaultNullOpts
+    isTrue
+    literalLua
+    nestedLiteralLua
+    ;
 
   mkIconOption =
     default: desc:
@@ -471,10 +476,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.fidget" {
-      when =
-        (builtins.isBool cfg.settings.integration.nvim-tree.enable)
-        && cfg.settings.integration.nvim-tree.enable
-        && !config.plugins.nvim-tree.enable;
+      when = (isTrue cfg.settings.integration.nvim-tree.enable) && !config.plugins.nvim-tree.enable;
 
       message = ''
         You have set `plugins.fidget.settings.integrations.nvim-tree.enable` to true but have not enabled `plugins.nvim-tree`.

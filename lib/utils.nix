@@ -130,6 +130,66 @@ rec {
 
   ifNonNull' = x: y: if (x == null) then null else y;
 
+  /**
+    A predicate that tests if a value is exactly true, i.e. `v == true`.
+
+    Useful when working with nullable booleans.
+
+    #Examples
+
+    ```
+    isTrue null
+    => false
+    ```
+
+    ```
+    isTrue true
+    => true
+    ```
+
+    ```
+    isTrue "true"
+    => false
+    ```
+
+    # Type
+
+    ```
+    Any -> Boolean
+    ```
+  */
+  isTrue = x: lib.isBool x && x;
+
+  /**
+    A predicate that tests if a value is exactly false, i.e. `v == false`.
+
+    Useful when working with nullable booleans.
+
+    #Examples
+
+    ```
+    isFalse null
+    => false
+    ```
+
+    ```
+    isFalse false
+    => true
+    ```
+
+    ```
+    isFalse "false"
+    => false
+    ```
+
+    # Type
+
+    ```
+    Any -> Boolean
+    ```
+  */
+  isFalse = x: lib.isBool x && !x;
+
   mkRaw =
     r:
     if r == null || r == "" then
