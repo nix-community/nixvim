@@ -467,11 +467,16 @@ in
         {
           enable = mkOverride 1490 true;
         };
-    warnings = lib.optional (
+    warnings = lib.nixvim.mkWarnings "plugins.ltex-extra" {
       # https://nvimdev.github.io/lspsaga/implement/#default-options
-      (isBool cfg.implement.enable && cfg.implement.enable)
-      && (isBool cfg.symbolInWinbar.enable && !cfg.symbolInWinbar.enable)
-    ) "You have enabled the `implement` module but it requires `symbolInWinbar` to be enabled.";
+      when =
+        (isBool cfg.implement.enable && cfg.implement.enable)
+        && (isBool cfg.symbolInWinbar.enable && !cfg.symbolInWinbar.enable);
+
+      message = ''
+        You have enabled the `implement` module but it requires `symbolInWinbar` to be enabled.
+      '';
+    };
 
     extraPlugins = [ cfg.package ];
     extraConfigLua =

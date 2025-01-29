@@ -115,9 +115,10 @@ with lib;
       cfg = config.plugins.rainbow-delimiters;
     in
     mkIf cfg.enable {
-      warnings = optional (
-        !config.plugins.treesitter.enable
-      ) "Nixvim: treesitter-rainbow needs treesitter to function as intended";
+      warnings = lib.nixvim.mkWarnings "plugins.rainbow-delimiters" {
+        when = !config.plugins.treesitter.enable;
+        message = "This plugin needs treesitter to function as intended.";
+      };
       assertions = [
         {
           assertion = (cfg.whitelist == null) || (cfg.blacklist == null);

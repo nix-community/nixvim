@@ -97,8 +97,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = {
-    warnings = mkIf (!config.plugins.treesitter.enable) [
-      "Nixvim: treesitter-context needs treesitter to function as intended"
-    ];
+    warnings = lib.nixvim.mkWarnings "plugins.treesitter-context" {
+      when = !config.plugins.treesitter.enable;
+      message = "This plugin needs treesitter to function as intended.";
+    };
   };
 }

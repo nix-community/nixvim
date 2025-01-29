@@ -44,8 +44,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = lib.optional (cfg.settings ? documentation) ''
-      Nixvim(plugins.blink): `settings.documentation` does not correspond to a known setting, use `settings.windows.documentation` instead.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.blink" {
+      when = cfg.settings ? documentation;
+      message = ''
+        `settings.documentation` does not correspond to a known setting, use `settings.windows.documentation` instead.
+      '';
+    };
   };
 }

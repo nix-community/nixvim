@@ -62,23 +62,28 @@ in
         {
           config = {
             warnings =
-              lib.optionals (options.plugins.web-devicons.enable.highestPrio == 1490) [
-                ''
-                  Nixvim: `plugins.web-devicons` was enabled automatically because the following plugins are enabled.
+              (lib.nixvim.mkWarnings "plugins.web-devicons" {
+                when = options.plugins.web-devicons.enable.highestPrio == 1490;
+
+                message = ''
+                  This plugin was enabled automatically because the following plugins are enabled.
                   This behaviour is deprecated. Please explicitly define `plugins.web-devicons.enable` or alternatively
                   enable `plugins.mini.enable` with `plugins.mini.modules.icons` and `plugins.mini.mockDevIcons`.
                   ${lib.concatMapStringsSep "\n" (name: "plugins.${name}") (
                     builtins.filter (name: config.plugins.${name}.enable) iconsPackagePlugins
                   )}
-                ''
-              ]
+                '';
+              })
               ++ lib.foldlAttrs (
                 warnings: plugin: msg:
                 warnings
-                ++ lib.optional config.plugins.${plugin}.enable ''
-                  Nixvim Warning: The `${plugin}` plugin has been deprecated.
-                  ${msg}
-                ''
+                ++ (lib.nixvim.mkWarnings "plugins.${plugin}" {
+                  when = config.plugins.${plugin}.enable;
+                  message = ''
+                    This plugin has been deprecated.
+                    ${msg}
+                  '';
+                })
               ) [ ] deprecated;
           };
         }

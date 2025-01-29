@@ -122,16 +122,20 @@ lib.nixvim.plugins.mkVimPlugin {
     };
 
   extraConfig = cfg: {
-    warnings =
-      (optional (!(cfg.json.enable || cfg.yaml.enable)) ''
-        NixVim(plugins.schemastore): you have enabled the plugin, but neither `json` or `yaml` schemas are enabled.
-      '')
-      ++ (optional (!(cfg.json.enable -> config.plugins.lsp.servers.jsonls.enable)) ''
-        NixVim(plugins.schemastore): you have enabled `json` schemas, but `plugins.lsp.servers.jsonls` is not enabled.
-      '')
-      ++ (optional (!(cfg.yaml.enable -> config.plugins.lsp.servers.yamlls.enable)) ''
-        NixVim(plugins.schemastore): you have enabled `yaml` schemas, but `plugins.lsp.servers.yamlls` is not enabled.
-      '');
+    warnings = lib.nixvim.mkWarnings "plugins.schemastore" [
+      {
+        when = !(cfg.json.enable || cfg.yaml.enable);
+        message = "You have enabled the plugin, but neither `json` or `yaml` schemas are enabled.";
+      }
+      {
+        when = !(cfg.json.enable -> config.plugins.lsp.servers.jsonls.enable);
+        message = "You have enabled `json` schemas, but `plugins.lsp.servers.jsonls` is not enabled.";
+      }
+      {
+        when = !(cfg.yaml.enable -> config.plugins.lsp.servers.yamlls.enable);
+        message = "You have enabled `yaml` schemas, but `plugins.lsp.servers.yamlls` is not enabled.";
+      }
+    ];
 
     plugins.lsp.servers = {
       jsonls.settings = mkIf cfg.json.enable {

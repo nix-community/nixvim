@@ -192,9 +192,10 @@ with lib;
       cfg = config.plugins.treesitter-textobjects;
     in
     mkIf cfg.enable {
-      warnings = mkIf (!config.plugins.treesitter.enable) [
-        "Nixvim: treesitter-textobjects needs treesitter to function as intended"
-      ];
+      warnings = lib.nixvim.mkWarnings "plugins.treesitter-textobjects" {
+        when = !config.plugins.treesitter.enable;
+        message = "This plugin needs treesitter to function as intended.";
+      };
 
       extraPlugins = [ cfg.package ];
 

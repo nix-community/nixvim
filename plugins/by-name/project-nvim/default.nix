@@ -120,9 +120,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = lib.optional (cfg.enableTelescope && (!config.plugins.telescope.enable)) ''
-      Telescope support for project-nvim is enabled but the telescope plugin is not.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.project-nvim" {
+      when = cfg.enableTelescope && (!config.plugins.telescope.enable);
+      message = ''
+        Telescope support (enableTelescope) is enabled but the telescope plugin is not.
+      '';
+    };
 
     plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "projects" ];
   };

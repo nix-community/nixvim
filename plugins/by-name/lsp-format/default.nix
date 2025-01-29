@@ -90,9 +90,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = lib.mkIf (!config.plugins.lsp.enable) [
-      "You have enabled `plugins.lsp-format` but have `plugins.lsp` disabled."
-    ];
+    warnings = lib.nixvim.mkWarnings "plugins.lsp-format" {
+      when = !config.plugins.lsp.enable;
+      message = ''
+        This plugin requires `plugins.lsp` to be enabled.
+      '';
+    };
 
     plugins.lsp = {
       onAttach =

@@ -211,16 +211,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
         modules = cfg.settings.load or { };
         telescopeModuleEnabled = (modules."core.integrations.telescope" or null) != null;
       in
-      (lib.optional (telescopeModuleEnabled && (!cfg.telescopeIntegration.enable)) ''
-        You have enabled the telescope neorg module (`core.integrations.telescope`) but have not enabled `plugins.neorg.telescopeIntegration.enable`.
-        The latter will install the `neorg-telescope` plugin necessary for this integration to work.
-      '')
-      ++ (lib.optional (cfg.telescopeIntegration.enable && (!config.plugins.telescope.enable)) ''
-        Telescope support for neorg is enabled but the telescope plugin is not.
-      '')
-      ++ (lib.optional ((modules ? "core.defaults") && (!config.plugins.treesitter.enable)) ''
-        Neorg's `core.defaults` module is enabled but `plugins.treesitter` is not.
-        Treesitter is required when using the `core.defaults`.
-      '');
+      lib.nixvim.mkWarnings "plugins.neorg" [
+        {
+          when = telescopeModuleEnabled && (!cfg.telescopeIntegration.enable);
+          message = ''
+            You have enabled the telescope neorg module (`core.integrations.telescope`) but have not enabled `plugins.neorg.telescopeIntegration.enable`.
+            The latter will install the `neorg-telescope` plugin necessary for this integration to work.
+          '';
+        }
+        {
+          when = cfg.telescopeIntegration.enable && (!config.plugins.telescope.enable);
+          message = ''
+            Telescope support for neorg is enabled but the telescope plugin is not.
+          '';
+        }
+        {
+          when = (modules ? "core.defaults") && (!config.plugins.treesitter.enable);
+          message = ''
+            Neorg's `core.defaults` module is enabled but `plugins.treesitter` is not.
+            Treesitter is required when using the `core.defaults`.
+          '';
+        }
+      ];
   };
 }

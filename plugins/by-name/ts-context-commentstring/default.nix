@@ -42,9 +42,10 @@ with lib;
       cfg = config.plugins.ts-context-commentstring;
     in
     mkIf cfg.enable {
-      warnings = mkIf (!config.plugins.treesitter.enable) [
-        "Nixvim: ts-context-commentstring needs treesitter to function as intended"
-      ];
+      warnings = lib.nixvim.mkWarnings "plugins.ts-context-commentstring" {
+        when = !config.plugins.treesitter.enable;
+        message = "This plugin needs treesitter to function as intended.";
+      };
 
       extraPlugins = [ cfg.package ];
 

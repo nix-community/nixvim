@@ -21,13 +21,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional (cfg.installGhc == null) ''
-      `hls` relies on `ghc` (the Glasgow Haskell Compiler).
-      - Set `plugins.lsp.servers.hls.installGhc = true` to install it automatically with Nixvim.
-        You can customize which package to install by changing `plugins.lsp.servers.hls.ghcPackage`.
-      - Set `plugins.lsp.servers.hls.installGhc = false` to not have it install through Nixvim.
-        By doing so, you will dismiss this warning.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.lsp.servers.hls" {
+      when = cfg.installGhc == null;
+      message = ''
+        `hls` relies on `ghc` (the Glasgow Haskell Compiler).
+        - Set `plugins.lsp.servers.hls.installGhc = true` to install it automatically with Nixvim.
+          You can customize which package to install by changing `plugins.lsp.servers.hls.ghcPackage`.
+        - Set `plugins.lsp.servers.hls.installGhc = false` to not have it install through Nixvim.
+          By doing so, you will dismiss this warning.
+      '';
+    };
 
     extraPackages = lib.optional ((lib.isBool cfg.installGhc) && cfg.installGhc) cfg.ghcPackage;
   };

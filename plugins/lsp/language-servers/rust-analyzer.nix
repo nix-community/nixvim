@@ -41,27 +41,36 @@ in
     rustfmtPackage = mkPackageOption pkgs "rustfmt" { };
   };
   config = lib.mkIf cfg.enable {
-    warnings =
-      (lib.optional (cfg.installCargo == null) ''
-        `rust_analyzer` relies on `cargo`.
-        - Set `plugins.lsp.servers.rust_analyzer.installCargo = true` to install it automatically
-          with Nixvim.
-          You can customize which package to install by changing
-          `plugins.lsp.servers.rust_analyzer.cargoPackage`.
-        - Set `plugins.lsp.servers.rust_analyzer.installCargo = false` to not have it install
-          through Nixvim.
-          By doing so, you will dismiss this warning.
-      '')
-      ++ (lib.optional (cfg.installRustc == null) ''
-        `rust_analyzer` relies on `rustc`.
-        - Set `plugins.lsp.servers.rust_analyzer.installRustc = true` to install it automatically
-          with Nixvim.
-          You can customize which package to install by changing
-          `plugins.lsp.servers.rust_analyzer.rustcPackage`.
-        - Set `plugins.lsp.servers.rust_analyzer.installRustc = false` to not have it install
-          through Nixvim.
-          By doing so, you will dismiss this warning.
-      '');
+    warnings = lib.nixvim.mkWarnings "plugins.lsp.servers.rust_analyzer" [
+      {
+        when = cfg.installCargo == null;
+
+        message = ''
+          `rust_analyzer` relies on `cargo`.
+          - Set `plugins.lsp.servers.rust_analyzer.installCargo = true` to install it automatically
+            with Nixvim.
+            You can customize which package to install by changing
+            `plugins.lsp.servers.rust_analyzer.cargoPackage`.
+          - Set `plugins.lsp.servers.rust_analyzer.installCargo = false` to not have it install
+            through Nixvim.
+            By doing so, you will dismiss this warning.
+        '';
+      }
+      {
+        when = cfg.installRustc == null;
+
+        message = ''
+          `rust_analyzer` relies on `rustc`.
+          - Set `plugins.lsp.servers.rust_analyzer.installRustc = true` to install it automatically
+            with Nixvim.
+            You can customize which package to install by changing
+            `plugins.lsp.servers.rust_analyzer.rustcPackage`.
+          - Set `plugins.lsp.servers.rust_analyzer.installRustc = false` to not have it install
+            through Nixvim.
+            By doing so, you will dismiss this warning.
+        '';
+      }
+    ];
 
     extraPackages =
       let

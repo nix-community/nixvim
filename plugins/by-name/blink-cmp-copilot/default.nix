@@ -50,18 +50,23 @@ lib.nixvim.plugins.mkNeovimPlugin {
         copilot-lua-cfg = config.plugins.copilot-lua.settings;
         isEnabled = b: builtins.isBool b && b;
       in
-      lib.optionals (isEnabled copilot-lua-cfg.suggestion.enabled) [
-        ''
-          It is recommended to disable copilot's `suggestion` module, as it can interfere with
-          completions properly appearing in blink-cmp-copilot.
-        ''
-      ]
-      ++ lib.optionals (isEnabled copilot-lua-cfg.panel.enabled) [
-        ''
-          It is recommended to disable copilot's `panel` module, as it can interfere with completions
-          properly appearing in blink-cmp-copilot.
-        ''
+      lib.nixvim.mkWarnings "plugins.blink-cmp-copilot" [
+        {
+          when = isEnabled copilot-lua-cfg.suggestion.enabled;
+          message = ''
+            It is recommended to disable copilot's `suggestion` module, as it can interfere with
+            completions properly appearing in blink-cmp-copilot.
+          '';
+        }
+        {
+          when = isEnabled copilot-lua-cfg.panel.enabled;
+          message = ''
+            It is recommended to disable copilot's `panel` module, as it can interfere with completions
+            properly appearing in blink-cmp-copilot.
+          '';
+        }
       ];
+
     plugins.copilot-lua.enable = lib.mkDefault true;
   };
 }

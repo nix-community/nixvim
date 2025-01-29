@@ -105,11 +105,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: opts: {
     # TODO: deprecated 2024-08-29 remove after 24.11
-    warnings = lib.optionals opts.iconsEnabled.isDefined [
-      ''
+    warnings = lib.nixvim.mkWarnings "plugins.fzf-lua" {
+      when = opts.iconsEnabled.isDefined;
+
+      message = ''
         The option definition `plugins.fzf-lua.iconsEnabled' in ${lib.showFiles opts.iconsEnabled.files} has been deprecated; please remove it.
-      ''
-    ];
+      '';
+    };
+
     # TODO: added 2024-09-20 remove after 24.11
     plugins.web-devicons =
       lib.mkIf

@@ -451,16 +451,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig =
     cfg: opts:
     lib.mkIf opts.registrations.isDefined {
-      warnings = [
-        ''
-          nixvim (plugins.which-key):
-          The option definition `plugins.which-key.registrations' in ${showFiles opts.registrations.files} has been deprecated in which-key v3; please remove it.
-          You should use `plugins.which-key.settings.spec' instead.
+      warnings = lib.nixvim.mkWarnings "plugins.which-key" ''
+        The option definition `plugins.which-key.registrations' in ${showFiles opts.registrations.files} has been deprecated in which-key v3; please remove it.
+        You should use `plugins.which-key.settings.spec' instead.
 
-          Note: the spec format has changed in which-key v3
-          See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
-        ''
-      ];
+        Note: the spec format has changed in which-key v3
+        See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
+      '';
 
       plugins.which-key.luaConfig.content = lib.optionalString opts.registrations.isDefined ''
         require("which-key").register(${toLuaObject cfg.registrations})

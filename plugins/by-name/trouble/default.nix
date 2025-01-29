@@ -371,10 +371,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "use_diagnostic_signs"
         ];
       in
-      lib.optional (definedOpts != [ ]) ''
-        Nixvim(plugins.trouble): The following v2 settings options are no longer supported in v3:
-        ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-      '';
+      lib.nixvim.mkWarnings "plugins.trouble" {
+        when = definedOpts != [ ];
+        message = ''
+          The following v2 settings options are no longer supported in v3:
+          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
+        '';
+      };
 
     # TODO: added 2024-09-20 remove after 24.11
     plugins.web-devicons = lib.mkIf (

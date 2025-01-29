@@ -265,9 +265,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       # TODO:: introduced 10-22-2024: remove after 24.11
       # Nested settings can't have normal mkRenamedOptionModule functionality so we can only
       # alert the user that they are using the old values
-      warnings = lib.optional (definedOpts != [ ]) ''
-        Nixvim(plugins.typescript-tools): The following settings have moved under `plugins.typescript-tools.settings.settings` with snake_case:
-        ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-      '';
+      warnings = lib.nixvim.mkWarnings "plugins.typescript-tools" {
+        when = definedOpts != [ ];
+        message = ''
+          The following settings have moved under `plugins.typescript-tools.settings.settings` with snake_case:
+          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
+        '';
+      };
     };
 }

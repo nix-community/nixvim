@@ -166,10 +166,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ]
         ];
       in
-      lib.optional (definedOpts != [ ]) ''
-        Nixvim(plugins.auto-save): The following settings options are no longer supported.
-        Check the plugin documentation for more details.:
-        ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-      '';
+      lib.nixvim.mkWarnings "plugins.auto-save" {
+        when = definedOpts != [ ];
+        message = ''
+          The following settings options are no longer supported.
+          Check the plugin documentation for more details.:
+          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
+        '';
+      };
   };
 }

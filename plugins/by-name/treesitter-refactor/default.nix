@@ -143,9 +143,10 @@ with lib;
       cfg = config.plugins.treesitter-refactor;
     in
     mkIf cfg.enable {
-      warnings = mkIf (!config.plugins.treesitter.enable) [
-        "Nixvim: treesitter-refactor needs treesitter to function as intended"
-      ];
+      warnings = lib.nixvim.mkWarnings "plugins.treesitter-refactor" {
+        when = !config.plugins.treesitter.enable;
+        message = "This plugin needs treesitter to function as intended.";
+      };
 
       extraPlugins = [ cfg.package ];
 

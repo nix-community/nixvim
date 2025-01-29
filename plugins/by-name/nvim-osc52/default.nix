@@ -76,14 +76,12 @@ with lib;
       };
     in
     mkIf cfg.enable {
-      warnings = [
-        ''
-          Nixvim(plugins.nvim-osc52): this plugin is obsolete and will be removed after 24.11.
-          As of Neovim 0.10, native support for OSC52 has been added.
-          See `:h clipboard-osc52` for more details: https://neovim.io/doc/user/provider.html#clipboard-osc52
-          Definitions: ${lib.options.showDefs options.plugins.nvim-osc52.enable.definitionsWithLocations}
-        ''
-      ];
+      warnings = lib.nixvim.mkWarnings "plugins.nvim-osc52" ''
+        This plugin is obsolete and will be removed after 24.11.
+        As of Neovim 0.10, native support for OSC52 has been added.
+        See `:h clipboard-osc52` for more details: https://neovim.io/doc/user/provider.html#clipboard-osc52
+        Definitions: ${lib.options.showDefs options.plugins.nvim-osc52.enable.definitionsWithLocations}
+      '';
 
       extraPlugins = [ cfg.package ];
 

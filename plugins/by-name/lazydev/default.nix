@@ -135,33 +135,28 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings =
-      lib.optionals
-        (
+    warnings = lib.nixvim.mkWarnings "plugins.lazydev" [
+      {
+        when =
           builtins.isBool cfg.settings.integrations.cmp
           && !config.plugins.cmp.enable
-          && cfg.settings.integrations.cmp
-        )
-        [ "Nixvim(plugins.lazydev): you have enabled nvim-cmp integration but plugins.cmp is not enabled." ]
-      ++
-        lib.optionals
-          (
-            builtins.isBool cfg.settings.integrations.lspconfig
-            && !config.plugins.lsp.enable
-            && cfg.settings.integrations.lspconfig
-          )
-          [
-            "Nixvim(plugins.lazydev): you have enabled lspconfig integration but plugins.lsp is not enabled."
-          ]
-      ++
-        lib.optionals
-          (
-            builtins.isBool cfg.settings.integrations.coq
-            && !config.plugins.coq-nvim.enable
-            && cfg.settings.integrations.coq
-          )
-          [
-            "Nixvim(plugins.lazydev): you have enabled coq integration but plugins.coq-nvim is not enabled."
-          ];
+          && cfg.settings.integrations.cmp;
+        message = "You have enabled nvim-cmp integration but plugins.cmp is not enabled.";
+      }
+      {
+        when =
+          builtins.isBool cfg.settings.integrations.lspconfig
+          && !config.plugins.lsp.enable
+          && cfg.settings.integrations.lspconfig;
+        message = "You have enabled lspconfig integration but plugins.lsp is not enabled.";
+      }
+      {
+        when =
+          builtins.isBool cfg.settings.integrations.coq
+          && !config.plugins.coq-nvim.enable
+          && cfg.settings.integrations.coq;
+        message = "You have enabled coq integration but plugins.coq-nvim is not enabled.";
+      }
+    ];
   };
 }

@@ -44,10 +44,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = optional (!config.plugins.lsp.enable) ''
-      You have enabled `ltex-extra` but not the lsp (`plugins.lsp`).
-      You should set `plugins.lsp.enable = true` to make use of the LTeX_extra plugin's features.
-    '';
+    warnings = lib.nixvim.mkWarnings "plugins.ltex-extra" {
+      when = !config.plugins.lsp.enable;
+      message = ''
+        You have enabled `ltex-extra` but not the lsp (`plugins.lsp`).
+        You should set `plugins.lsp.enable = true` to make use of the LTeX_extra plugin's features.
+      '';
+    };
 
     plugins.lsp = {
       servers.ltex = {

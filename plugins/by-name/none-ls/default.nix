@@ -126,13 +126,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
         };
     in
     {
-      warnings = lib.optional (cfg.enableLspFormat && cfg.settings.on_attach != null) ''
-        You have enabled the lsp-format integration with none-ls.
-        However, you have provided a custom value to `plugins.none-ls.settings.on_attach`.
-        This means the `enableLspFormat` option will have no effect.
-        Final value is:
-        ${lib.generators.toPretty { } cfg.settings.on_attach}
-      '';
+      warnings = lib.nixvim.mkWarnings "plugins.none-ls" {
+        when = cfg.enableLspFormat && cfg.settings.on_attach != null;
+        message = ''
+          You have enabled the lsp-format integration with none-ls.
+          However, you have provided a custom value to `plugins.none-ls.settings.on_attach`.
+          This means the `enableLspFormat` option will have no effect.
+          Final value is:
+          ${lib.generators.toPretty { } cfg.settings.on_attach}
+        '';
+      };
 
       assertions = [
         {
