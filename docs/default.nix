@@ -49,11 +49,13 @@ let
         # The following pkgs attrs are required to eval nixvim, even for the docs:
         inherit (pkgs)
           _type
+          callPackage
+          formats
+          runCommand
+          runCommandLocal
           stdenv
           stdenvNoCC
           symlinkJoin
-          runCommand
-          runCommandLocal
           writeShellApplication
           ;
       }
