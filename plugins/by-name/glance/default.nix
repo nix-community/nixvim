@@ -17,11 +17,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.glance" {
-      when =
-        cfg.settings ? use_trouble_qf
-        && builtins.isBool cfg.settings.use_trouble_qf
-        && cfg.settings.use_trouble_qf
-        && !config.plugins.trouble.enable;
+      when = lib.nixvim.isTrue (cfg.settings.use_trouble_qf or null) && !config.plugins.trouble.enable;
 
       message = ''
         The `trouble` plugin is not enabled, so the `glance` plugin's `use_trouble_qf` setting has no effect.

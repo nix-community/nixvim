@@ -7,7 +7,7 @@
 let
   cfg = config.plugins.lsp.servers.rust_analyzer;
   inherit (lib) mkPackageOption types;
-  inherit (lib.nixvim) mkNullOrOption';
+  inherit (lib.nixvim) mkNullOrOption' isTrue;
 
 in
 {
@@ -73,11 +73,8 @@ in
     ];
 
     extraPackages =
-      let
-        isEnabled = x: lib.isBool x && x;
-      in
-      lib.optional (isEnabled cfg.installCargo) cfg.cargoPackage
-      ++ lib.optional (isEnabled cfg.installRustc) cfg.rustcPackage
-      ++ lib.optional (isEnabled cfg.installRustfmt) cfg.rustfmtPackage;
+      lib.optional (isTrue cfg.installCargo) cfg.cargoPackage
+      ++ lib.optional (isTrue cfg.installRustc) cfg.rustcPackage
+      ++ lib.optional (isTrue cfg.installRustfmt) cfg.rustfmtPackage;
   };
 }

@@ -71,8 +71,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.twilight" {
-      when =
-        (isBool cfg.settings.treesitter) && cfg.settings.treesitter && (!config.plugins.treesitter.enable);
+      when = (lib.nixvim.isTrue cfg.settings.treesitter) && (!config.plugins.treesitter.enable);
       message = ''
         You have set `plugins.twilight.treesitter` to `true` but `plugins.treesitter.enable` is false.
       '';

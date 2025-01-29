@@ -7,6 +7,7 @@
 let
   cfg = config.plugins.lsp.servers.hls;
   inherit (lib) types;
+  inherit (lib.nixvim) isTrue;
 in
 {
   options.plugins.lsp.servers.hls = {
@@ -32,6 +33,6 @@ in
       '';
     };
 
-    extraPackages = lib.optional ((lib.isBool cfg.installGhc) && cfg.installGhc) cfg.ghcPackage;
+    extraPackages = lib.optional (isTrue cfg.installGhc) cfg.ghcPackage;
   };
 }
