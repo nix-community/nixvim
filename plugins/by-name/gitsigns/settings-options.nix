@@ -141,12 +141,6 @@ in
     corresponding highlight group in `signs.*.hl`.
   '';
 
-  show_deleted = defaultNullOpts.mkBool false ''
-    Show the old version of hunks inline in the buffer (via virtual lines).
-
-    Note: Virtual lines currently use the highlight `GitSignsDeleteVirtLn`.
-  '';
-
   diff_opts =
     let
       diffOptType = types.submodule {

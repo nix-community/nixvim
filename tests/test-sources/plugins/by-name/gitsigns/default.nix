@@ -40,7 +40,6 @@
         signcolumn = true;
         numhl = false;
         linehl = false;
-        show_deleted = false;
         diff_opts = {
           algorithm = "myers";
           internal = false;
