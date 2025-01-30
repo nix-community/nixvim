@@ -39,7 +39,6 @@ jobs:
       repo: ${{ github.repository }}
       base_branch: ${{ github.ref_name }}
       pr_branch: update/${{ github.ref_name }}
-      team: nix-community/nixvim
 
     steps:
       - name: Checkout repository
@@ -192,17 +191,14 @@ jobs:
           if [[ -n "$pr_num" ]]; then
             echo "Editing existing PR #$pr_num"
             operation=updated
-            gh pr edit "$pr_num" \
-              --body "$body" \
-              --add-reviewer "$team"
+            gh pr edit "$pr_num" --body "$body"
           else
             echo "Creating new PR"
             operation=created
             gh pr create \
               --base "$base_branch" \
               --title "$title" \
-              --body "$body" \
-              --reviewer "$team"
+              --body "$body"
           fi
 
           pr_info=$(
