@@ -300,6 +300,7 @@
     nushell = "nushell";
     ols = "ols";
     openscad_lsp = "openscad-lsp";
+    oxlint = "oxlint";
     perlnavigator = "perlnavigator";
     perlpls = [
       "perlPackages"
