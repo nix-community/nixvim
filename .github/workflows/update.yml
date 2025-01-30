@@ -14,6 +14,10 @@ on:
         type: boolean
         default: true
         description: Update generated files
+      re_apply:
+        type: boolean
+        default: true
+        description: Re-apply additional commits from the PR
 
 # Allow one concurrent update per branch
 concurrency:
@@ -134,7 +138,7 @@ jobs:
 
       - name: Apply commits from the open PR
         id: re_apply
-        if: steps.open_pr_info.outputs.number
+        if: (inputs.re_apply || github.event_name == 'schedule') && steps.open_pr_info.outputs.number
         run: |
           # The base is the most recent commit on the remote branch by github-actions[bot]
           # This should be a flake.lock bump or a generated-files update
