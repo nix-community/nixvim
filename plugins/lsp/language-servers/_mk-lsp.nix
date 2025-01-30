@@ -37,7 +37,8 @@ in
 {
   meta.nixvimInfo = {
     # TODO: description
-    url = args.url or opts.package.default.meta.homepage or null;
+    # The package default can throw when the server is unpackaged, so use tryEval
+    url = args.url or (builtins.tryEval opts.package.default).value.meta.homepage or null;
     path = [
       "plugins"
       "lsp"
@@ -51,21 +52,8 @@ in
       enable = lib.mkEnableOption description;
 
       package =
-        if lib.isOption package then
-          package
-        else if args ? package then
-          lib.mkPackageOption pkgs name {
-            nullable = true;
-            default = package;
-          }
-        else
-          # If we're not provided a package, we should provide a no-default option
-          lib.mkOption {
-            type = types.nullOr types.package;
-            description = ''
-              The package to use for ${name}. Has no default, but can be set to null.
-            '';
-          };
+        lib.nixvim.mkMaybeUnpackagedOption "plugins.lsp.servers.${name}.package" pkgs name
+          package;
 
       cmd = mkOption {
         type = with types; nullOr (listOf str);

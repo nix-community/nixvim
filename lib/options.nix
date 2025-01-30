@@ -403,5 +403,43 @@ rec {
         if cfg ? lazyLoad then lib.literalMD "`false` when lazy-loading is enabled." else true;
       example = false;
     };
+
+  /**
+    Create an option for a package not currently available in nixpkgs.
+
+    The option will throw an error if a value is not explicitly set by the end user.
+  */
+  mkUnpackagedOption =
+    optionName: packageName:
+    lib.mkOption {
+      type = types.nullOr types.package;
+      description = ''
+        Package to use for ${packageName}.
+        Nixpkgs does not include this package, and as such an external derivation or null must be provided.
+      '';
+      default = throw ''
+        Nixvim (${optionName}): No package is known for ${packageName}, to resolve this either:
+          - install externally and set this option to `null`
+          - or provide a derviation to install this package
+      '';
+      defaultText = lib.literalMD "No package, throws when undefined";
+    };
+
+  /**
+    Create an option for a package that may not be currently available in nixpkgs.
+
+    See `mkUnpackagedOption`
+  */
+  mkMaybeUnpackagedOption =
+    optionName: pkgs: packageName: package:
+    if lib.isOption package then
+      package
+    else if package != null then
+      lib.mkPackageOption pkgs packageName {
+        nullable = true;
+        default = package;
+      }
+    else
+      mkUnpackagedOption optionName packageName;
 }
 // removed

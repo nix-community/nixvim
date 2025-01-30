@@ -100,7 +100,6 @@
 
   with-sources =
     {
-      config,
       options,
       lib,
       pkgs,
@@ -158,8 +157,10 @@
                 # Enable unless disabled above
                 enable = !(lib.elem sourceName disabled);
               }
-              # Some sources have a package option with no default
-              // lib.optionalAttrs (opts ? package && !(opts.package ? default)) { package = null; }
+              # Some sources are defined using mkUnpackagedOption whose default will throw
+              // lib.optionalAttrs (opts ? package && !(builtins.tryEval opts.package.default).success) {
+                package = null;
+              }
             )
           ) options.plugins.none-ls.sources;
       };

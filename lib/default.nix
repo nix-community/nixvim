@@ -54,6 +54,7 @@ lib.makeExtensible (
       mkCompositeOption
       mkCompositeOption'
       mkLazyLoadOption
+      mkMaybeUnpackagedOption
       mkNullOrLua
       mkNullOrLua'
       mkNullOrLuaFn
@@ -69,6 +70,7 @@ lib.makeExtensible (
       mkPackageOption
       mkPluginPackageOption
       mkSettingsOption
+      mkUnpackagedOption
       pluginDefaultText
       ;
 

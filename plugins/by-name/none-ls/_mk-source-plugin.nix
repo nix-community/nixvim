@@ -9,7 +9,6 @@ sourceType: sourceName:
 let
   inherit (import ./packages.nix lib) packaged;
   pkg = packaged.${sourceName};
-  loc = lib.toList pkg;
 
   cfg = config.plugins.none-ls;
   cfg' = config.plugins.none-ls.sources.${sourceType}.${sourceName};
@@ -41,27 +40,11 @@ in
     }
     # Only declare a package option if a package is required
     // lib.optionalAttrs (packaged ? ${sourceName}) {
-      package = lib.mkOption (
-        {
-          type = lib.types.nullOr lib.types.package;
-          description =
-            "Package to use for ${sourceName}."
-            + (lib.optionalString (pkg == null) (
-              "\n\n"
-              + ''
-                Currently not packaged in nixpkgs.
-                Either set this to `null` and install ${sourceName} outside of nix,
-                or set this to a custom nix package.
-              ''
-            ));
-        }
-        // lib.optionalAttrs (pkg != null) {
-          default =
-            lib.attrByPath loc (lib.warn "${lib.concatStringsSep "." loc} cannot be found in pkgs!" null)
-              pkgs;
-          defaultText = lib.literalExpression "pkgs.${lib.concatStringsSep "." loc}";
-        }
-      );
+      package =
+        lib.nixvim.mkMaybeUnpackagedOption "plugins.none-ls.sources.${sourceType}.${sourceName}.package"
+          pkgs
+          sourceName
+          pkg;
     };
 
   # TODO: Added 2024-07-16; remove after 24.11

@@ -82,7 +82,10 @@ let
           {
             enable = !(lib.elem server disabled);
           }
-          // lib.optionalAttrs (opts ? package && !(opts.package ? default)) { package = null; }
+          # Some servers are defined using mkUnpackagedOption whose default will throw
+          // lib.optionalAttrs (opts ? package && !(builtins.tryEval opts.package.default).success) {
+            package = null;
+          }
         ))
         (lib.filterAttrs (server: _: !(lib.elem server renamed)))
       ];
