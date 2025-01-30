@@ -194,7 +194,6 @@ jobs:
             operation=updated
             gh pr edit "$pr_num" \
               --body "$body" \
-              --add-assignee "$team" \
               --add-reviewer "$team"
           else
             echo "Creating new PR"
@@ -203,7 +202,6 @@ jobs:
               --base "$base_branch" \
               --title "$title" \
               --body "$body" \
-              --assignee "$team" \
               --reviewer "$team"
           fi
 
