@@ -177,6 +177,7 @@ jobs:
         if: steps.diff.outputs.count
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
           body: |
