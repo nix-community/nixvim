@@ -142,7 +142,7 @@ jobs:
           remote="origin/$pr_branch"
           author_rxp='^github-actions\[bot\] <41898282+github-actions\[bot\]@users\.noreply\.github\.com>$'
           base=$(git rev-list --author="$author_rxp" --max-count=1 "$remote")
-          commits=( $(git rev-list "$base..$remote") )
+          commits=( $(git rev-list --reverse "$base..$remote") )
           if [[ -n "$commits" ]]; then
             echo "Applying ${#commits[@]} commits..."
             echo "count=${#commits[@]}" >> $GITHUB_OUTPUT
