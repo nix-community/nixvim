@@ -14,10 +14,6 @@ on:
         type: boolean
         default: true
         description: Update generated files
-      check_for_changes:
-        type: boolean
-        default: false
-        description: Cancel if there are no changes to the `nixpkgs` input
 
 # Allow one concurrent update per branch
 concurrency:
@@ -94,6 +90,12 @@ jobs:
             echo "No PR is currently open"
           fi
 
+      - name: Fetch current PR's branch
+        if: steps.open_pr_info.outputs.number
+        run: |
+          git fetch origin "$pr_branch"
+          git branch --set-upstream-to "origin/$pr_branch"
+
       - name: Update flake.lock
         id: flake_lock
         if: inputs.lock || github.event_name == 'schedule'
@@ -107,45 +109,9 @@ jobs:
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Check if nixpkgs input was changed
-        id: changes
-        if: github.event_name == 'schedule' || inputs.check_for_changes
-        env:
-          pr_num: ${{ steps.open_pr_info.outputs.number }}
-          pr_url: ${{ steps.open_pr_info.outputs.url }}
-        run: |
-          getAttr() {
-            nix eval --raw --impure \
-              --expr '{ ref }: builtins.getFlake ref' \
-              --argstr ref "$1" "$2"
-          }
-          getNixpkgsRev() {
-            getAttr "$1" 'inputs.nixpkgs.rev'
-          }
-
-          if [[ -n "$pr_num" ]]; then
-            old_branch=$pr_branch
-          else
-            old_branch=$base_branch
-          fi
-          old=$(getNixpkgsRev "github:$repo/$old_branch")
-          new=$(getNixpkgsRev "$PWD")
-
-          (
-            echo "old_rev=$old"
-            echo "new_rev=$new"
-          ) >> $GITHUB_OUTPUT
-
-          if [[ "$old" = "$new" ]]; then
-            echo "Old and new revisions are the same"
-            echo 'cancelled=1' >> $GITHUB_OUTPUT
-          else
-            echo "Old and new revisions are different"
-          fi
-
       - name: Update generated files
         id: generate
-        if: (!steps.changes.outputs.cancelled) && (inputs.generate || github.event_name == 'schedule')
+        if: inputs.generate || github.event_name == 'schedule'
         run: |
           old=$(git show --no-patch --format=%h)
           nix-build ./update-scripts -A generate
@@ -166,9 +132,49 @@ jobs:
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Apply commits from the open PR
+        id: re_apply
+        if: steps.open_pr_info.outputs.number
+        run: |
+          # The base is the most recent commit on the remote branch by github-actions[bot]
+          # This should be a flake.lock bump or a generated-files update
+          # We will cherry-pick all commits on the remote _after_ the $base commit
+          remote="origin/$pr_branch"
+          author_rxp='^github-actions\[bot\] <41898282+github-actions\[bot\]@users\.noreply\.github\.com>$'
+          base=$(git rev-list --author="$author_rxp" --max-count=1 "$remote")
+          commits=( $(git rev-list "$base..$remote") )
+          if [[ -n "$commits" ]]; then
+            echo "Applying ${#commits[@]} commits..."
+            echo "count=${#commits[@]}" >> $GITHUB_OUTPUT
+            git cherry-pick --strategy-option=theirs "${commits[@]}"
+          else
+            echo "Nothing to re-apply"
+          fi
+
+      - name: Check if there are differences to push
+        id: diff
+        env:
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
+        run: |
+          if [[ -n "$pr_num" ]]; then
+            remote="origin/$pr_branch"
+          else
+            remote="origin/$base_branch"
+          fi
+          diff=( $(git diff --cached --name-only "$remote") )
+          if [[ -n "$diff" ]]; then
+            echo "${#diff[@]} files different to $remote"
+            for file in "${diff[@]}"; do
+              echo "- $file"
+            done
+            echo "count=${#diff[@]}" >> $GITHUB_OUTPUT
+          else
+            echo "No files are different to $remote"
+          fi
+
       - name: Create or Update Pull Request
         id: updated_pr
-        if: (!steps.changes.outputs.cancelled)
+        if: steps.diff.outputs.count
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           title: |
@@ -182,9 +188,6 @@ jobs:
             ## Generate
             ${{ steps.generate.outputs.body || 'No changes' }}
         run: |
-          # TODO:
-          # - cherry-pick additional commits from already open PR
-          # - avoid pushing if there are no changes
           echo "Pushing to remote branch $pr_branch"
           git push --force --set-upstream origin "$pr_branch"
 
@@ -227,6 +230,7 @@ jobs:
           pr_branch: ${{ steps.updated_pr.outputs.branch }}
           head: ${{ steps.updated_pr.outputs.head }}
           operation: ${{ steps.updated_pr.outputs.operation }}
+          re_apply_count: ${{ steps.re_apply.outputs.count }}
         run: |
           short=${head:0:6}
           # stdout
@@ -239,6 +243,10 @@ jobs:
             echo
             echo "[#${pr_num}](${pr_url}) was ${operation}."
             echo
+            if [[ -n "$re_apply_count" ]]; then
+              echo "Re-applied $re_apply_count commits from the existing PR."
+            fi
+            echo
           ) >> $GITHUB_STEP_SUMMARY
 
       - name: Print cancellation summary
@@ -246,44 +254,21 @@ jobs:
         env:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           pr_url: ${{ steps.open_pr_info.outputs.url }}
-          changes: ${{ steps.flake_lock.outputs.body || 'No changes' }}
-          cancelled: ${{ steps.changes.outputs.cancelled || '' }}
-          rev: ${{ steps.changes.outputs.new_rev || '' }}
+          changes: ${{ steps.diff.outputs.count || '0' }}
+          re_apply_count: ${{ steps.re_apply.outputs.count }}
         run: |
-          if [[ -n "$cancelled" ]]; then
-            ( # stdout
-              echo "nixpkgs rev has not changed ($rev)."
-              echo 'You can re-run the workflow manually to update anyway.'
-            ) >&2
-            ( # markdown summary
-              echo '## Update cancelled'
-              echo
-              if [[ -n "$pr_num" ]]; then
-                echo -n 'The `nixpkgs` input has not changed compared to the already open PR: '
-                echo "[#$pr_num]($pr_url) (\`nixpkgs.rev: ${rev:0:6}\`)."
-              else
-                echo -n 'The `nixpkgs` input has not changed compared to the base branch: '
-                echo "\`$base_branch\`"
-              fi
-              echo
-              echo 'You can re-run the workflow manually to update anyway.'
-              echo
-            ) >> $GITHUB_STEP_SUMMARY
-          else
-            ( #stdout
-              echo "No PR was opened"
-            ) >&2
-            (
-              echo "## Not updated"
-              echo
-            ) >> $GITHUB_STEP_SUMMARY
-          fi
-          ( # markdown summary
+          (
+            echo "## Not updated"
             echo
-            echo 'The following changes would have been made:'
+            echo -n "$changes files with differences compared to "
+            if [[ -n "$pr_num" ]]; then
+              echo "[#$pr_num]($pr_url)."
+            else
+              echo "\`$base_branch\`"
+            fi
             echo
-            echo '```'
-            echo "$changes"
-            echo '```'
+            if [[ -n "$re_apply_count" ]]; then
+              echo "Re-applied $re_apply_count commits from the existing PR."
+            fi
             echo
           ) >> $GITHUB_STEP_SUMMARY
