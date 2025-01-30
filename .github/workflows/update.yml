@@ -129,8 +129,14 @@ jobs:
           (
             echo "old_rev=$old"
             echo "new_rev=$new"
-            [[ "$old" = "$new" ]] && echo 'cancelled=1'
           ) >> $GITHUB_OUTPUT
+
+          if [[ "$old" = "$new" ]]; then
+            echo "Old and new revisions are the same"
+            echo 'cancelled=1' >> $GITHUB_OUTPUT
+          else
+            echo "Old and new revisions are different"
+          fi
 
       - name: Update generated files
         id: generate
