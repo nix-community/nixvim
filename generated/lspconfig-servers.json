@@ -552,7 +552,7 @@
   },
   {
     "cmd": ["gh-actions-language-server", "--stdio"],
-    "desc": "https://github.com/lttb/gh-actions-language-server\n\nLanguage server for GitHub Actions.\n\n`gh-actions-language-server` can be installed via `npm`:\n\n```sh\nnpm install -g gh-actions-language-server\n```\n",
+    "desc": "https://github.com/lttb/gh-actions-language-server\n\nLanguage server for GitHub Actions.\n\nThe projects [forgejo](https://forgejo.org/) and\n[gitea](https://about.gitea.com/) design their actions to be as\ncompatible to github as possible with only [a few\ndifferences](https://docs.gitea.com/usage/actions/comparison#unsupported-workflows-syntax)\nbetween the systems. The `gh_actions_ls` is therefore enabled for those\n`yaml` files as well.\n\nThe `gh-actions-language-server` can be installed via `npm`:\n\n``` sh\nnpm install -g gh-actions-language-server\n```\n",
     "name": "gh_actions_ls"
   },
   {
@@ -1039,6 +1039,11 @@
     "cmd": ["openscad-lsp", "--stdio"],
     "desc": "https://github.com/Leathong/openscad-LSP\n\nA Language Server Protocol server for OpenSCAD\n\nYou can build and install `openscad-lsp` binary with `cargo`:\n```sh\ncargo install openscad-lsp\n```\n",
     "name": "openscad_lsp"
+  },
+  {
+    "cmd": ["oxc_language_server"],
+    "desc": "https://oxc.rs\n\nA collection of JavaScript tools written in Rust.\n\n```sh\nnpm install [-g] oxlint\n```\n",
+    "name": "oxlint"
   },
   {
     "cmd": ["pact-lsp"],
@@ -1769,7 +1774,7 @@
   },
   {
     "cmd": ["yaml-language-server", "--stdio"],
-    "desc": "https://github.com/redhat-developer/yaml-language-server\n\n`yaml-language-server` can be installed via `yarn`:\n\n``` sh\nyarn global add yaml-language-server\n```\n\nTo use a schema for validation, there are two options:\n\n1.  Add a modeline to the file. A modeline is a comment of the form:\n\n```{=html}\n<!-- -->\n```\n    # yaml-language-server: $schema=<urlToTheSchema|relativeFilePath|absoluteFilePath}>\n\nwhere the relative filepath is the path relative to the open yaml file,\nand the absolute filepath is the filepath relative to the filesystem\nroot ('/' on unix systems)\n\n2.  Associated a schema url, relative , or absolute (to root of project,\n    not to filesystem root) path to the a glob pattern relative to the\n    detected project root. Check `:LspInfo` to determine the resolved\n    project root.\n\n``` lua\nrequire('lspconfig').yamlls.setup {\n  ... -- other configuration for setup {}\n  settings = {\n    yaml = {\n      ... -- other settings. note this overrides the lspconfig defaults.\n      schemas = {\n        [\"https://json.schemastore.org/github-workflow.json\"] = \"/.github/workflows/*\",\n        [\"../path/relative/to/file.yml\"] = \"/.github/workflows/*\",\n        [\"/path/from/root/of/project\"] = \"/.github/workflows/*\",\n      },\n    },\n  }\n}\n```\n\nCurrently, kubernetes is special-cased in yammls, see the following\nupstream issues: \\*\n[#211](https://github.com/redhat-developer/yaml-language-server/issues/211).\n\\*\n[#307](https://github.com/redhat-developer/yaml-language-server/issues/307).\n\nTo override a schema to use a specific k8s schema version (for example,\nto use 1.18):\n\n``` lua\nrequire('lspconfig').yamlls.setup {\n  ... -- other configuration for setup {}\n  settings = {\n    yaml = {\n      ... -- other settings. note this overrides the lspconfig defaults.\n      schemas = {\n        [\"https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json\"] = \"/*.k8s.yaml\",\n        ... -- other schemas\n      },\n    },\n  }\n}\n```\n",
+    "desc": "https://github.com/redhat-developer/yaml-language-server\n\n`yaml-language-server` can be installed via `yarn`:\n\n``` sh\nyarn global add yaml-language-server\n```\n\nTo use a schema for validation, there are two options:\n\n1.  Add a modeline to the file. A modeline is a comment of the form:\n\n```{=html}\n<!-- -->\n```\n    # yaml-language-server: $schema=<urlToTheSchema|relativeFilePath|absoluteFilePath}>\n\nwhere the relative filepath is the path relative to the open yaml file,\nand the absolute filepath is the filepath relative to the filesystem\nroot ('/' on unix systems)\n\n2.  Associated a schema url, relative , or absolute (to root of project,\n    not to filesystem root) path to the a glob pattern relative to the\n    detected project root. Check `:LspInfo` to determine the resolved\n    project root.\n\n``` lua\nrequire('lspconfig').yamlls.setup {\n  ... -- other configuration for setup {}\n  settings = {\n    yaml = {\n      ... -- other settings. note this overrides the lspconfig defaults.\n      schemas = {\n        [\"https://json.schemastore.org/github-workflow.json\"] = \"/.github/workflows/*\",\n        [\"../path/relative/to/file.yml\"] = \"/.github/workflows/*\",\n        [\"/path/from/root/of/project\"] = \"/.github/workflows/*\",\n      },\n    },\n  }\n}\n```\n\nCurrently, kubernetes is special-cased in yammls, see the following\nupstream issues: \\*\n[#211](https://github.com/redhat-developer/yaml-language-server/issues/211).\n\\*\n[#307](https://github.com/redhat-developer/yaml-language-server/issues/307).\n\nTo override a schema to use a specific k8s schema version (for example,\nto use 1.18):\n\n``` lua\nrequire('lspconfig').yamlls.setup {\n  ... -- other configuration for setup {}\n  settings = {\n    yaml = {\n      ... -- other settings. note this overrides the lspconfig defaults.\n      schemas = {\n        [\"https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json\"] = \"/*.k8s.yaml\",\n        ... -- other schemas\n      },\n    },\n  }\n}\n```\n",
     "name": "yamlls"
   },
   {
