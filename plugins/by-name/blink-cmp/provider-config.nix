@@ -25,7 +25,7 @@ types.submodule {
     };
 
     enabled = mkNullOrOption' {
-      type = types.bool;
+      type = with types; maybeRaw bool;
       description = ''
         Whether or not to enable the provider.
       '';

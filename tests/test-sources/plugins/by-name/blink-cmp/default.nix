@@ -379,6 +379,13 @@
           providers = {
             buffer.score_offset = -7;
             lsp.fallbacks = [ ];
+            cmdline.enabled = {
+              __raw = ''
+                function()
+                  return true
+                end
+              '';
+            };
           };
           cmdline = [ ];
         };
