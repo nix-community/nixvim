@@ -96,11 +96,24 @@
     { options, ... }:
     let
       opts = lib.getAttrFromPath loc options;
+      docsfile = lib.concatStringsSep "/" loc;
       url =
         if args.url or null == null then
           opts.package.default.meta.homepage or (throw "unable to get URL for `${lib.showOption loc}`.")
         else
           args.url;
+      maintainersString =
+        let
+          toMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
+          names = builtins.map toMD (lib.unique maintainers);
+          count = builtins.length names;
+        in
+        if count == 1 then
+          builtins.head names
+        else if count == 2 then
+          lib.concatStringsSep " and " names
+        else
+          lib.concatMapStrings (name: "\n- ${name}") names;
     in
     {
       meta = {
@@ -109,6 +122,25 @@
           inherit description url;
           path = loc;
         };
+      };
+
+      docs.options.${docsfile} = {
+        title = lib.last loc;
+        description = lib.concatLines (
+          [
+            "**URL:** [${url}](${url})"
+            ""
+          ]
+          ++ lib.optionals (maintainers != [ ]) [
+            "**Maintainers:** ${maintainersString}"
+            ""
+          ]
+          ++ lib.optionals (description != null && description != "") [
+            "---"
+            ""
+            description
+          ]
+        );
       };
     };
 }

@@ -7,6 +7,7 @@
   nixosOptionsDoc,
   transformOptions,
   search,
+  beta-docs,
   # The root directory of the site
   baseHref ? "/",
   # A list of all available docs that should be linked to
@@ -371,6 +372,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     cp -r ./book/* $dest
     mkdir -p $dest/search
     cp -r ${finalAttrs.passthru.search}/* $dest/search
+
+    # Also build the beta docs
+    mkdir -p $dest/beta
+    cp -r ${finalAttrs.passthru.beta-docs}/* $dest/beta
   '';
 
   inherit baseHref;
@@ -401,6 +406,11 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     search = search.override {
       baseHref = finalAttrs.baseHref + "search/";
     };
+    beta-docs = beta-docs.override (old: {
+      settings = lib.recursiveUpdate old.settings {
+        output.html.site-url = "${baseHref}/beta";
+      };
+    });
     docs-versions =
       runCommand "docs-versions"
         {
@@ -430,6 +440,8 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
             echo "- The $link, for use with nixpkgs \`$nixpkgs\`$suffix" >> "$out"
           done
+          # link to beta-docs
+          echo "- The [beta-docs](./beta), for use with "
         '';
     user-configs = callPackage ../user-configs { };
   };
