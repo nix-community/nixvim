@@ -1,0 +1,37 @@
+{
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "level"
+    "timeout"
+    "maxWidth"
+    "maxHeight"
+    "stages"
+    "backgroundColour"
+    [
+      "icons"
+      "error"
+    ]
+    [
+      "icons"
+      "warn"
+    ]
+    [
+      "icons"
+      "info"
+    ]
+    [
+      "icons"
+      "debug"
+    ]
+    [
+      "icons"
+      "trace"
+    ]
+    "onOpen"
+    "onClose"
+    "render"
+    "minimumWidth"
+    "fps"
+    "topDown"
+  ];
+}

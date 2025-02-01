@@ -7,25 +7,27 @@
     plugins.notify = {
       enable = true;
 
-      level = "info";
-      timeout = 5000;
-      maxWidth = null;
-      maxHeight = null;
-      stages = "fade_in_slide_out";
-      backgroundColour = "NotifyBackground";
-      icons = {
-        error = "";
-        warn = "";
-        info = "";
-        debug = "";
-        trace = "✎";
+      settings = {
+        level = "info";
+        timeout = 5000;
+        max_width = null;
+        max_height = null;
+        stages = "fade_in_slide_out";
+        background_colour = "NotifyBackground";
+        icons = {
+          error = "";
+          warn = "";
+          info = "";
+          debug = "";
+          trace = "✎";
+        };
+        on_open = null;
+        on_close = null;
+        render = "default";
+        minimum_width = 50;
+        fps = 30;
+        top_down = true;
       };
-      onOpen = null;
-      onClose = null;
-      render = "default";
-      minimumWidth = 50;
-      fps = 30;
-      topDown = true;
     };
   };
 }

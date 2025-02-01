@@ -1,41 +1,37 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.notify;
+  inherit (lib.nixvim)
+    defaultNullOpts
+    mkNullOrOption
+    ;
+  inherit (lib) types;
 in
-{
-  options.plugins.notify = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "nvim-notify";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "notify";
+  packPathName = "nvim-notify";
+  package = "nvim-notify";
+  maintainers = [ lib.maintainers.khaneliman ];
 
-    package = lib.mkPackageOption pkgs "nvim-notify" {
-      default = [
-        "vimPlugins"
-        "nvim-notify"
-      ];
-    };
+  description = ''
+    A fancy, configurable, notification manager for Neovim.
+  '';
 
-    level = helpers.defaultNullOpts.mkLogLevel "info" ''
+  settingsOptions = {
+    level = defaultNullOpts.mkLogLevel "info" ''
       Minimum log level to display. See `vim.log.levels`.
     '';
-
-    timeout = helpers.defaultNullOpts.mkUnsignedInt 5000 "Default timeout for notification.";
-
-    maxWidth = helpers.mkNullOrOption (with types; either ints.unsigned rawLua) ''
+    timeout = defaultNullOpts.mkUnsignedInt 5000 "Default timeout for notification.";
+    max_width = mkNullOrOption (with types; either ints.unsigned rawLua) ''
       Max number of columns for messages.
     '';
-
-    maxHeight = helpers.mkNullOrOption (with types; either ints.unsigned rawLua) ''
+    max_height = mkNullOrOption (with types; either ints.unsigned rawLua) ''
       Max number of lines for a message.
     '';
-
     stages =
-      helpers.defaultNullOpts.mkNullable
+      defaultNullOpts.mkNullable
         (
           with types;
           either (enum [
@@ -50,82 +46,73 @@ in
           Animation stages.
           Can be either one of the builtin stages or an array of lua functions.
         '';
-
-    backgroundColour = helpers.defaultNullOpts.mkStr "NotifyBackground" ''
+    background_colour = defaultNullOpts.mkStr "NotifyBackground" ''
       For stages that change opacity this is treated as the highlight behind the window.
       Set this to either a highlight group, an RGB hex value e.g. "#000000" or a function
       returning an RGB code for dynamic values.
     '';
-
-    icons =
-      mapAttrs (name: default: helpers.defaultNullOpts.mkStr default "Icon for the ${name} level.")
-        {
-          error = "";
-          warn = "";
-          info = "";
-          debug = "";
-          trace = "✎";
-        };
-
-    onOpen = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    icons = lib.mapAttrs (name: default: defaultNullOpts.mkStr default "Icon for the ${name} level.") {
+      error = "";
+      warn = "";
+      info = "";
+      debug = "";
+      trace = "✎";
+    };
+    on_open = defaultNullOpts.mkLuaFn "nil" ''
       Function called when a new window is opened, use for changing win settings/config.
     '';
-
-    onClose = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    on_close = defaultNullOpts.mkLuaFn "nil" ''
       Function called when a new window is closed.
     '';
-
-    render = helpers.defaultNullOpts.mkEnumFirstDefault [
+    render = defaultNullOpts.mkEnumFirstDefault [
       "default"
       "minimal"
       "simple"
       "compact"
       "wrapped-compact"
     ] "Function to render a notification buffer or a built-in renderer name.";
-
-    minimumWidth = helpers.defaultNullOpts.mkUnsignedInt 50 ''
+    minimum_width = defaultNullOpts.mkUnsignedInt 50 ''
       Minimum width for notification windows.
     '';
-
-    fps = helpers.defaultNullOpts.mkPositiveInt 30 ''
+    fps = defaultNullOpts.mkPositiveInt 30 ''
       Frames per second for animation stages, higher value means smoother animations but more CPU
       usage.
     '';
-
-    topDown = helpers.defaultNullOpts.mkBool true ''
+    top_down = defaultNullOpts.mkBool true ''
       Whether or not to position the notifications at the top or not.
     '';
   };
 
-  config =
-    let
-      setupOptions =
-        with cfg;
-        {
-          inherit level timeout;
-          max_width = maxWidth;
-          max_height = maxHeight;
-          stages = helpers.ifNonNull' stages (if isString stages then stages else map helpers.mkRaw stages);
-          background_colour = backgroundColour;
-          icons = mapAttrs' (name: value: {
-            name = strings.toUpper name;
-            inherit value;
-          }) icons;
-          on_open = onOpen;
-          on_close = onClose;
-          inherit render;
-          minimum_width = minimumWidth;
-          inherit fps;
-          top_down = topDown;
-        }
-        // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        vim.notify = require('notify');
-        require('notify').setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
+  settingsExample = {
+    settings = {
+      level = "info";
+      timeout = 5000;
+      max_width = 80;
+      max_height = 10;
+      stages = "fade_in_slide_out";
+      background_colour = "#000000";
+      icons = {
+        error = "";
+        warn = "";
+        info = "";
+        debug = "";
+        trace = "✎";
+      };
+      on_open.__raw = "function() print('Window opened') end";
+      on_close.__raw = "function() print('Window closed') end";
+      render = "default";
+      minimum_width = 50;
+      fps = 30;
+      top_down = true;
     };
+  };
+
+  extraConfig = {
+    plugins.notify.luaConfig.pre = ''
+      vim.notify = require('notify');
+    '';
+  };
+
+  # TODO: Deprecated on 2025-02-01
+  inherit (import ./deprecations.nix) deprecateExtraOptions optionsRenamedToSettings;
 }
