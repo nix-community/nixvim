@@ -1,0 +1,30 @@
+{
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "keys"
+    [
+      "options"
+      "disabledFiletypes"
+    ]
+    [
+      "options"
+      "disableWhenTouch"
+    ]
+    [
+      "options"
+      "touchRegex"
+    ]
+    [
+      "options"
+      "pairSpaces"
+    ]
+    [
+      "options"
+      "autoIndent"
+    ]
+    [
+      "options"
+      "disableCommandMode"
+    ]
+  ];
+}

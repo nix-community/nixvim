@@ -1,92 +1,61 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.autoclose;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+  inherit (lib) types;
 in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "autoclose";
+  packPathName = "autoclose.nvim";
+  package = "autoclose-nvim";
 
-  options.plugins.autoclose = {
-    enable = mkEnableOption "autoclose.nvim";
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    package = lib.mkPackageOption pkgs "autoclose.nvim" {
-      default = [
-        "vimPlugins"
-        "autoclose-nvim"
-      ];
-    };
+  description = ''
+    Automatically close pairs in Neovim.
+  '';
 
-    keys = helpers.mkNullOrOption (with types; attrsOf anything) ''
-      Configures various options, such as shortcuts for pairs, what pair of characters to use in the
-      shortcut, etc.
-
-      See the plugin's [README](https://github.com/m4xshen/autoclose.nvim?tab=readme-ov-file#-configuration) for more info.";
-
-      Example:
-      ```nix
-        {
-          "(" = { escape = false; close = true; pair = "()"; };
-          "[" = { escape = false; close = true; pair = "[]"; };
-          "{" = { escape = false; close = true; pair = "{}"; };
-        }
-
-      ```
+  settingsOptions = {
+    keys = mkNullOrOption (types.attrsOf types.anything) ''
+      Configures various options, such as shortcuts for pairs, what pair of characters to use in the shortcut, etc.
     '';
-
     options = {
-      disabledFiletypes = helpers.defaultNullOpts.mkListOf types.str [ "text" ] ''
+      disabled_filetypes = defaultNullOpts.mkListOf types.str [ "text" ] ''
         The plugin will be disabled under the filetypes in this table.
       '';
-
-      disableWhenTouch = helpers.defaultNullOpts.mkBool false ''
-        Set this to true will disable the auto-close function when the cursor touches character that
-        matches touch_regex.
+      disable_when_touch = defaultNullOpts.mkBool false ''
+        Set this to true will disable the auto-close function when the cursor touches character that matches touch_regex.
       '';
-
-      touchRegex = helpers.defaultNullOpts.mkStr "[%w(%[{]" ''
-        See [README](https://github.com/m4xshen/autoclose.nvim?tab=readme-ov-file#options).
+      touch_regex = defaultNullOpts.mkStr "[%w(%[{]" ''
+        Regex to use in combination with `disable_when_touch`.
       '';
-
-      pairSpaces = helpers.defaultNullOpts.mkBool false ''
+      pair_spaces = defaultNullOpts.mkBool false ''
         Pair the spaces when cursor is inside a pair of keys.
-        See [README](https://github.com/m4xshen/autoclose.nvim?tab=readme-ov-file#options)
       '';
-
-      autoIndent = helpers.defaultNullOpts.mkBool true ''
+      auto_indent = defaultNullOpts.mkBool true ''
         Enable auto-indent feature.
       '';
-
-      disableCommandMode = helpers.defaultNullOpts.mkBool false ''
+      disable_command_mode = defaultNullOpts.mkBool false ''
         Disable autoclose for command mode globally.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
-    extraConfigLua =
-      let
-        setupOptions = with cfg; {
-          inherit keys;
-          options = with options; {
-            disabled_filetypes = disabledFiletypes;
-            disable_when_touch = disableWhenTouch;
-            touch_regex = touchRegex;
-            pair_spaces = pairSpaces;
-            auto_indent = autoIndent;
-            disable_command_mode = disableCommandMode;
-          };
-        };
-      in
-      ''
-        require('autoclose').setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
+  settingsExample = {
+    settings = {
+      options = {
+        disabled_filetypes = [ "text" ];
+        disable_when_touch = false;
+        touch_regex = "[%w(%[{]";
+        pair_spaces = false;
+        auto_indent = true;
+        disable_command_mode = false;
+      };
+    };
   };
+
+  # TODO: Deprecated in 2025-01-31
+  inherit (import ./deprecations.nix) deprecateExtraOptions optionsRenamedToSettings;
 }
