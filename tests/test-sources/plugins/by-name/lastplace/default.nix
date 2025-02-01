@@ -7,18 +7,20 @@
     plugins.lastplace = {
       enable = true;
 
-      ignoreBuftype = [
-        "quickfix"
-        "nofix"
-        "help"
-      ];
-      ignoreFiletype = [
-        "gitcommit"
-        "gitrebase"
-        "svn"
-        "hgcommit"
-      ];
-      openFolds = true;
+      settings = {
+        lastplace_ignore_buftype = [
+          "quickfix"
+          "nofix"
+          "help"
+        ];
+        lastplace_ignore_filetype = [
+          "gitcommit"
+          "gitrebase"
+          "svn"
+          "hgcommit"
+        ];
+        lastplace_open_folds = true;
+      };
     };
   };
 }

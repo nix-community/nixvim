@@ -1,54 +1,55 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
 let
-  cfg = config.plugins.lastplace;
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
 in
-with lib;
-{
-  options.plugins.lastplace = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "lastplace";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "lastplace";
+  moduleName = "nvim-lastplace";
+  packPathName = "nvim-lastplace";
+  package = "nvim-lastplace";
 
-    package = lib.mkPackageOption pkgs "lastplace" {
-      default = [
-        "vimPlugins"
-        "nvim-lastplace"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-    ignoreBuftype = helpers.defaultNullOpts.mkListOf types.str [
+  description = ''
+    A Neovim plugin that automatically opens files at your last edit position.
+  '';
+
+  settingsOptions = {
+    lastplace_ignore_buftype = defaultNullOpts.mkListOf types.str [
       "quickfix"
       "nofix"
       "help"
     ] "The list of buffer types to ignore by lastplace.";
 
-    ignoreFiletype = helpers.defaultNullOpts.mkListOf types.str [
+    lastplace_ignore_filetype = defaultNullOpts.mkListOf types.str [
       "gitcommit"
       "gitrebase"
       "svn"
       "hgcommit"
     ] "The list of file types to ignore by lastplace.";
 
-    openFolds = helpers.defaultNullOpts.mkBool true "Whether closed folds are automatically opened when jumping to the last edit position.";
+    lastplace_open_folds = defaultNullOpts.mkBool true "Whether closed folds are automatically opened when jumping to the last edit position.";
   };
 
-  config =
-    let
-      options = {
-        lastplace_ignore_buftype = cfg.ignoreBuftype;
-        lastplace_ignore_filetype = cfg.ignoreFiletype;
-        lastplace_open_folds = cfg.openFolds;
-      } // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        require('nvim-lastplace').setup(${lib.nixvim.toLuaObject options})
-      '';
+  settingsExample = {
+    settings = {
+      lastplace_ignore_buftype = [
+        "help"
+      ];
+      lastplace_ignore_filetype = [
+        "svn"
+      ];
+      lastplace_open_folds = false;
     };
+  };
+
+  # TODO: Deprecated 2025-02-01
+  inherit (import ./deprecations.nix { inherit lib; })
+    imports
+    deprecateExtraOptions
+    ;
 }
