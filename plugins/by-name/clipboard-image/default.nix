@@ -1,160 +1,117 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.clipboard-image;
-
-  pluginOptions = {
-    imgDir =
-      helpers.defaultNullOpts.mkNullable
-        (
-          with lib.types;
-          oneOf [
-            str
-            (listOf str)
-            rawLua
-          ]
-        )
-        "img"
-        ''
-          Dir name where the image will be pasted to.
-
-          Note: If you want to create nested dir, it is better to use table since windows and unix
-          have different path separator.
-        '';
-
-    imgDirTxt = helpers.defaultNullOpts.mkNullable (
-      with lib.types;
-      oneOf [
-        str
-        (listOf str)
-        rawLua
-      ]
-    ) "img" "Dir that will be inserted into text/buffer.";
-
-    imgName = helpers.defaultNullOpts.mkStr {
-      __raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";
-    } "Image's name.";
-
-    imgHandler = helpers.defaultNullOpts.mkLuaFn "function(img) end" ''
-      Function that will handle image after pasted.
-
-      Note: `img` is a table that contain pasted image's `{name}` and `{path}`.
-    '';
-
-    affix = helpers.mkNullOrStr ''
-      String that sandwiched the image's path.
-
-      Default:
-        - `default`: `"{img_path}"`
-        - `markdown`: `"![]({img_path})"`
-
-      Note:
-        Affix can be multi lines, like this:
-
-        ```nix
-        # You can use line break escape sequence
-        affix = "<\n  %s\n>";
-        ```
-
-        ```nix
-        # Or lua's double square brackets
-        affix.__raw = \'\'
-          [[<
-            %s
-          >]]
-        \'\'
-        ```
-    '';
-  };
-
-  processPluginOptions =
-    opts: with opts; {
-      img_dir = imgDir;
-      img_dir_txt = imgDirTxt;
-      img_name = imgName;
-      img_handler = imgHandler;
-      inherit affix;
-    };
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
 in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "clipboard-image";
+  packPathName = "clipboard-image.nvim";
+  package = "clipboard-image-nvim";
 
-  options.plugins.clipboard-image = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "clipboard-image.nvim";
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    package = lib.mkPackageOption pkgs "clipboard-image.nvim" {
-      default = [
-        "vimPlugins"
-        "clipboard-image-nvim"
-      ];
-    };
+  description = ''
+    Plugin to paste images from clipboard into Neovim.
+  '';
 
-    clipboardPackage = lib.mkPackageOption pkgs "clipboard privider" {
+  extraOptions = {
+    clipboardPackage = lib.mkPackageOption pkgs "clipboard provider" {
       nullable = true;
       default = null;
       example = [ "wl-clipboard" ];
       extraDescription = ''
         ${"\n\n"}
-
         Recommended:
           - X11: `pkgs.xclip`
           - Wayland: `pkgs.wl-clipboard`
           - MacOS: `pkgs.pngpaste`
       '';
     };
+  };
 
-    default = pluginOptions;
+  settingsOptions = {
+    default = {
+      img_dir =
+        defaultNullOpts.mkNullable
+          (types.oneOf [
+            types.str
+            (types.listOf types.str)
+            types.rawLua
+          ])
+          "img"
+          ''
+            Directory name where the image will be pasted to.
 
-    filetypes = mkOption {
-      type =
-        with types;
-        attrsOf (submodule {
-          options = pluginOptions;
-        });
-      apply = mapAttrs (_: processPluginOptions);
-      default = { };
-      description = "Override certain options for specific filetypes.";
-      example = {
-        markdown = {
-          imgDir = [
-            "src"
-            "assets"
-            "img"
-          ];
-          imgDirTxt = "/assets/img";
-          imgHandler = ''
-            function(img)
-              local script = string.format('./image_compressor.sh "%s"', img.path)
-              os.execute(script)
-            end
+            > [!Note]
+            > If you want to create nested dir, it is better to use table since windows and unix have different path separator.
           '';
-        };
+
+      img_dir_txt = defaultNullOpts.mkNullable (types.oneOf [
+        types.str
+        (types.listOf types.str)
+        types.rawLua
+      ]) "img" "Directory that will be inserted into text/buffer.";
+
+      img_name = defaultNullOpts.mkStr {
+        __raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";
+      } "Image's name.";
+
+      img_handler = defaultNullOpts.mkLuaFn "function(img) end" ''
+        Function that will handle image after pasted.
+
+        > [!Note]
+        > `img` is a table that contain pasted image's `{name}` and `{path}`.
+      '';
+
+      affix = defaultNullOpts.mkStr' {
+        pluginDefault = lib.literalMD ''
+          `default`: `"{img_path}"`
+          `markdown`: `"![]({img_path})"`
+        '';
+        description = "String that sandwiches the image's path.";
+        example = lib.literalExpression ''
+          > [!Note]
+
+          >  ```nix
+          >  # You can use line break escape sequence
+          >  affix = "<\n  %s\n>";
+          >  ```
+
+          >  ```nix
+          >  # Or lua's double square brackets
+          >  affix.__raw = \'\'
+          >    [[<
+          >      %s
+          >    >]]
+          >  \'\'
+          >  ```
+        '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
-    extraPackages = [ cfg.clipboardPackage ];
-
-    extraConfigLua =
-      let
-        setupOptions =
-          {
-            default = processPluginOptions cfg.default;
-          }
-          // cfg.filetypes
-          // cfg.extraOptions;
-      in
-      ''
-        require('clipboard-image').setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
+  settingsExample = {
+    settings = {
+      img_dir = "img";
+      img_dir_txt = "img";
+      img_name.__raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";
+      img_handler.__raw = "function(img) end";
+      affix = "![]({img_path})";
+    };
   };
+
+  extraConfig = cfg: {
+    extraPackages = [ cfg.clipboardPackage ];
+  };
+
+  # TODO: Deprecated in 2025-02-01
+  inherit (import ./deprecations.nix { inherit lib; })
+    imports
+    deprecateExtraOptions
+    optionsRenamedToSettings
+    ;
 }

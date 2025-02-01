@@ -12,22 +12,22 @@
       enable = true;
 
       clipboardPackage = pkgs.wl-clipboard;
-      default = {
-        imgDir = "img";
-        imgDirTxt = "img";
-        imgName.__raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";
-        imgHandler = "function(img) end";
-        affix = "{img_path}";
-      };
-      filetypes = {
+      settings = {
+        default = {
+          img_dir = "img";
+          img_dir_txt = "img";
+          img_name.__raw = "function() return os.date('%Y-%m-%d-%H-%M-%S') end";
+          img_handler.__raw = "function(img) end";
+          affix = "![]({img_path})";
+        };
         markdown = {
-          imgDir = [
+          img_dir = [
             "src"
             "assets"
             "img"
           ];
-          imgDirTxt = "/assets/img";
-          imgHandler = ''
+          img_dir_txt = "/assets/img";
+          img_handler.__raw = ''
             function(img) -- New feature from PR #22
               local script = string.format('./image_compressor.sh "%s"', img.path)
               os.execute(script)
