@@ -1,7 +1,6 @@
-{ pkgs, ... }:
 {
   empty = {
-    # texpresso is broken on darwin
-    plugins.texpresso.enable = !pkgs.stdenv.isDarwin;
+    # FIXME: texpresso is broken upstream
+    plugins.texpresso.enable = false;
   };
 }
