@@ -1,48 +1,41 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.mark-radar;
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  options.plugins.mark-radar = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "mark-radar";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "mark-radar";
+  packPathName = "mark-radar.nvim";
+  package = "mark-radar-nvim";
 
-    package = lib.mkPackageOption pkgs "mark-radar" {
-      default = [
-        "vimPlugins"
-        "mark-radar-nvim"
-      ];
-    };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-    setDefaultMappings = helpers.defaultNullOpts.mkBool true "Whether to set default mappings.";
+  description = ''
+    Provides visual markers for easier navigation.
+  '';
 
-    highlightGroup = helpers.defaultNullOpts.mkStr "RadarMark" "The name of the highlight group to use.";
-
-    backgroundHighlight = helpers.defaultNullOpts.mkBool true "Whether to highlight the background.";
-
-    backgroundHighlightGroup = helpers.defaultNullOpts.mkStr "RadarBackground" "The name of the highlight group to use for the background.";
+  settingsOptions = {
+    set_default_mappings = defaultNullOpts.mkBool true "Whether to set default mappings.";
+    highlight_group = defaultNullOpts.mkStr "RadarMark" "The name of the highlight group to use.";
+    background_highlight = defaultNullOpts.mkBool true "Whether to highlight the background.";
+    background_highlight_group = defaultNullOpts.mkStr "RadarBackground" "The name of the highlight group to use for the background.";
   };
 
-  config =
-    let
-      setupOptions = {
-        set_default_mappings = cfg.setDefaultMappings;
-        highlight_group = cfg.highlightGroup;
-        background_highlight = cfg.backgroundHighlight;
-        background_highlight_group = cfg.backgroundHighlightGroup;
-      } // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
+  settingsExample = {
+    set_default_mappings = true;
+    highlight_group = "RadarMark";
+    background_highlight = true;
+    background_highlight_group = "RadarBackground";
+  };
 
-      extraConfigLua = ''
-        require("mark-radar").setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
-    };
+  # TODO: Deprecated in 2025-02-01
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "setDefaultMappings"
+    "highlightGroup"
+    "backgroundHighlight"
+    "backgroundHighlightGroup"
+  ];
 }
