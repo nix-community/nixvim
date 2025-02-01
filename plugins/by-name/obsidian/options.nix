@@ -157,6 +157,19 @@ with lib;
     ```
   '';
 
+  follow_img_func = helpers.mkNullOrLuaFn ''
+    By default when you use `:ObsidianFollowLink` on a link to an image file it will be
+    ignored but you can customize this behavior here.
+
+    Example:
+    ```lua
+       function(img)
+         vim.fn.jobstart { "qlmanage", "-p", img }  -- Mac OS quick look preview
+         -- vim.fn.jobstart({"xdg-open", url})  -- linux
+         -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
+    ```
+  '';
+
   image_name_func = helpers.mkNullOrLuaFn ''
     Customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
 
