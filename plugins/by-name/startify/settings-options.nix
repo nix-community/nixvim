@@ -245,7 +245,7 @@ with lib;
     amount of syscalls to the underlying operating system, but sacrifices the precision of shown
     entries.
 
-    This could lead to inconsistences in the shown `:Startify` entries (e.g. the same file could be
+    This could lead to inconsistencies in the shown `:Startify` entries (e.g. the same file could be
     shown twice, because one time file was opened via absolute path and another time via symlink).
 
     Currently this option does this:

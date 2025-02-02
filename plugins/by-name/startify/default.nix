@@ -73,7 +73,7 @@ mkVimPlugin {
     }
   ];
 
-  settingsOptions = import ./options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
 
   # TODO
   settingsExample = {

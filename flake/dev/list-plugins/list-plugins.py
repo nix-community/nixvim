@@ -31,7 +31,6 @@ EXCLUDES: list[str] = [
     "plugins/by-name/none-ls/sources.nix",
     "plugins/by-name/openscad/fuzzy-finder-plugin-option.nix",
     "plugins/by-name/rustaceanvim/renamed-options.nix",
-    "plugins/by-name/startify/options.nix",
     "plugins/by-name/telescope/extensions/_mk-extension.nix",
     "plugins/by-name/telescope/extensions/default.nix",
     "plugins/cmp/auto-enable.nix",
