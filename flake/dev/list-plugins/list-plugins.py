@@ -23,7 +23,6 @@ EXCLUDES: list[str] = [
     "plugins/by-name/hydra/settings-options.nix",
     "plugins/by-name/neotest/adapters-list.nix",
     "plugins/by-name/neotest/adapters.nix",
-    "plugins/by-name/neotest/options.nix",
     "plugins/by-name/none-ls/_mk-source-plugin.nix",
     "plugins/by-name/none-ls/packages.nix",
     "plugins/by-name/none-ls/prettier.nix",

@@ -10,7 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   imports = [ ./adapters.nix ];
 
-  settingsOptions = (import ./options.nix { inherit lib; }) // {
+  settingsOptions = (import ./settings-options.nix { inherit lib; }) // {
     adapters = mkOption {
       type = with types; listOf strLua;
       default = [ ];
