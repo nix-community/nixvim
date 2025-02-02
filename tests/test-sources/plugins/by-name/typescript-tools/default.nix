@@ -34,6 +34,9 @@
   example = {
     plugins.typescript-tools = {
       enable = true;
+      luaConfig.pre = ''
+        local api = require("typescript-tools.api")
+      '';
       settings = {
         handlers = {
           "textDocument/publishDiagnostics" = ''

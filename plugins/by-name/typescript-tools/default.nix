@@ -191,8 +191,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  # NOTE: call setup in lsp config
+  # NOTE: call setup manually
   callSetup = false;
+  # Set up after lspconfig
+  configLocation = "extraConfigLuaPost";
   extraConfig =
     cfg:
     let
@@ -221,8 +223,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ];
     in
     {
-      # TODO: handle lazy loading properly
-      plugins.lsp.postConfig =
+      plugins.typescript-tools.luaConfig.content =
         let
           # TODO:: introduced 10-22-2024: remove after 24.11
           renamedSettings = lib.foldl' (
@@ -253,7 +254,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             );
 
           setupOptions =
-            filterAttrsRecursivePath (path: value: !builtins.elem path definedOpts) cfg.settings [ ]
+            filterAttrsRecursivePath (path: _: !builtins.elem path definedOpts) cfg.settings [ ]
             // {
               settings = lib.recursiveUpdate cfg.settings.settings renamedSettings;
             };
