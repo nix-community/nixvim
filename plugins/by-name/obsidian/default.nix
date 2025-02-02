@@ -183,7 +183,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions =
     let
-      opts = import ./options.nix { inherit lib helpers; };
+      opts = import ./options.nix { inherit lib; };
     in
     {
       dir = helpers.mkNullOrOption types.str ''

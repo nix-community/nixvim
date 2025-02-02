@@ -1,42 +1,45 @@
-{ lib, helpers }:
-with lib;
+{ lib }:
+let
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
+in
 {
   # https://github.com/epwalsh/obsidian.nvim/blob/main/lua/obsidian/config.lua
 
-  log_level = helpers.defaultNullOpts.mkLogLevel "info" ''
+  log_level = defaultNullOpts.mkLogLevel "info" ''
     Set the log level for obsidian.nvim.
   '';
 
-  notes_subdir = helpers.mkNullOrStr ''
+  notes_subdir = lib.nixvim.mkNullOrStr ''
     If you keep notes in a specific subdirectory of your vault.
   '';
 
   templates = {
-    subdir = helpers.mkNullOrStr ''
+    subdir = lib.nixvim.mkNullOrStr ''
       The name of the directory where templates are stored.
 
       Example: "templates"
     '';
 
-    date_format = helpers.mkNullOrStr ''
+    date_format = lib.nixvim.mkNullOrStr ''
       Which date format to use.
 
       Example: "%Y-%m-%d"
     '';
 
-    time_format = helpers.mkNullOrStr ''
+    time_format = lib.nixvim.mkNullOrStr ''
       Which time format to use.
 
       Example: "%H:%M"
     '';
 
-    substitutions = helpers.defaultNullOpts.mkAttrsOf (
+    substitutions = defaultNullOpts.mkAttrsOf (
       with lib.types; either str rawLua
     ) { } "A map for custom variables, the key should be the variable and the value a function.";
   };
 
   new_notes_location =
-    helpers.defaultNullOpts.mkEnumFirstDefault
+    defaultNullOpts.mkEnumFirstDefault
       [
         "current_dir"
         "notes_subdir"
@@ -49,7 +52,7 @@ with lib;
         - "notes_subdir" - put new notes in the default notes subdirectory.
       '';
 
-  note_id_func = helpers.mkNullOrLuaFn ''
+  note_id_func = lib.nixvim.mkNullOrLuaFn ''
     Customize how names/IDs for new notes are created.
 
     Example:
@@ -73,7 +76,7 @@ with lib;
     ```
   '';
 
-  note_path_func = helpers.mkNullOrLuaFn ''
+  note_path_func = lib.nixvim.mkNullOrLuaFn ''
     Customize how note file names are generated given the ID, target directory, and title.
 
     ```lua
@@ -91,7 +94,7 @@ with lib;
     ```
   '';
 
-  wiki_link_func = helpers.mkNullOrLuaFn ''
+  wiki_link_func = lib.nixvim.mkNullOrLuaFn ''
     Customize how wiki links are formatted.
 
     ```lua
@@ -115,7 +118,7 @@ with lib;
     Default: See source
   '';
 
-  markdown_link_func = helpers.mkNullOrLuaFn ''
+  markdown_link_func = lib.nixvim.mkNullOrLuaFn ''
     Customize how markdown links are formatted.
 
     ```lua
@@ -134,7 +137,7 @@ with lib;
   '';
 
   preferred_link_style =
-    helpers.defaultNullOpts.mkEnumFirstDefault
+    defaultNullOpts.mkEnumFirstDefault
       [
         "wiki"
         "markdown"
@@ -143,7 +146,7 @@ with lib;
         Either 'wiki' or 'markdown'.
       '';
 
-  follow_url_func = helpers.mkNullOrLuaFn ''
+  follow_url_func = lib.nixvim.mkNullOrLuaFn ''
     By default when you use `:ObsidianFollowLink` on a link to an external URL it will be
     ignored but you can customize this behavior here.
 
@@ -157,7 +160,7 @@ with lib;
     ```
   '';
 
-  image_name_func = helpers.mkNullOrLuaFn ''
+  image_name_func = lib.nixvim.mkNullOrLuaFn ''
     Customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
 
     Example:
@@ -169,7 +172,7 @@ with lib;
     ```
   '';
 
-  note_frontmatter_func = helpers.mkNullOrLuaFn ''
+  note_frontmatter_func = lib.nixvim.mkNullOrLuaFn ''
     You can customize the frontmatter data.
 
     Example:
@@ -195,7 +198,7 @@ with lib;
     ```
   '';
 
-  disable_frontmatter = helpers.mkNullOrStrLuaFnOr types.bool ''
+  disable_frontmatter = lib.nixvim.mkNullOrStrLuaFnOr types.bool ''
     Boolean or a function that takes a filename and returns a boolean.
     `true` indicates that you don't want obsidian.nvim to manage frontmatter.
 
@@ -204,37 +207,36 @@ with lib;
 
   completion = {
     # FIXME should this accept raw types?
-    nvim_cmp = helpers.mkNullOrOption' {
+    nvim_cmp = lib.nixvim.mkNullOrOption' {
       type = types.bool;
       description = ''
         Set to false to disable completion.
       '';
-      defaultText = literalMD "`true` if `plugins.cmp.enable` is enabled (otherwise `null`).";
+      defaultText = lib.literalMD "`true` if `plugins.cmp.enable` is enabled (otherwise `null`).";
     };
 
-    min_chars = helpers.defaultNullOpts.mkUnsignedInt 2 ''
+    min_chars = defaultNullOpts.mkUnsignedInt 2 ''
       Trigger completion at this many chars.
     '';
   };
 
   mappings =
-    helpers.defaultNullOpts.mkNullable
-      (
-        with types;
-        attrsOf (submodule {
+    defaultNullOpts.mkNullable
+      (types.attrsOf (
+        types.submodule {
           options = {
-            action = mkOption {
+            action = lib.mkOption {
               type = lib.types.strLua;
               description = "The lua code for this keymap action.";
             };
-            opts = helpers.keymaps.mapConfigOptions // {
-              buffer = helpers.defaultNullOpts.mkBool false ''
+            opts = lib.nixvim.keymaps.mapConfigOptions // {
+              buffer = defaultNullOpts.mkBool false ''
                 If true, the mapping will be effective in the current buffer only.
               '';
             };
           };
-        })
-      )
+        }
+      ))
       {
         gf = {
           action = "require('obsidian').util.gf_passthrough";
@@ -256,7 +258,7 @@ with lib;
 
   picker = {
     name =
-      helpers.mkNullOrOption
+      lib.nixvim.mkNullOrOption
         (types.enum [
           "telescope.nvim"
           "fzf-lua"
@@ -267,7 +269,7 @@ with lib;
         '';
 
     note_mappings =
-      helpers.defaultNullOpts.mkAttrsOf types.str
+      defaultNullOpts.mkAttrsOf types.str
         {
           new = "<C-x>";
           insert_link = "<C-l>";
@@ -278,7 +280,7 @@ with lib;
         '';
 
     tag_mappings =
-      helpers.defaultNullOpts.mkAttrsOf types.str
+      defaultNullOpts.mkAttrsOf types.str
         {
           tag_note = "<C-x>";
           insert_tag = "<C-l>";
@@ -290,38 +292,38 @@ with lib;
   };
 
   daily_notes = {
-    folder = helpers.mkNullOrStr ''
+    folder = lib.nixvim.mkNullOrStr ''
       Optional, if you keep daily notes in a separate directory.
     '';
 
-    date_format = helpers.mkNullOrStr ''
+    date_format = lib.nixvim.mkNullOrStr ''
       Optional, if you want to change the date format for the ID of daily notes.
 
       Example: "%Y-%m-%d"
     '';
 
-    alias_format = helpers.mkNullOrStr ''
+    alias_format = lib.nixvim.mkNullOrStr ''
       Optional, if you want to change the date format of the default alias of daily notes.
 
       Example: "%B %-d, %Y"
     '';
 
-    template = helpers.mkNullOrStr ''
+    template = lib.nixvim.mkNullOrStr ''
       Optional, if you want to automatically insert a template from your template directory like
       'daily.md'.
     '';
   };
 
-  use_advanced_uri = helpers.defaultNullOpts.mkBool false ''
+  use_advanced_uri = defaultNullOpts.mkBool false ''
     Set to true to force ':ObsidianOpen' to bring the app to the foreground.
   '';
 
-  open_app_foreground = helpers.defaultNullOpts.mkBool false ''
+  open_app_foreground = defaultNullOpts.mkBool false ''
     Set to true to force `:ObsidianOpen` to bring the app to the foreground.
   '';
 
   sort_by =
-    helpers.defaultNullOpts.mkEnum
+    defaultNullOpts.mkEnum
       [
         "path"
         "modified"
@@ -335,12 +337,12 @@ with lib;
         that `:ObsidianQuickSwitch` will show the notes sorted by latest modified time.
       '';
 
-  sort_reversed = helpers.defaultNullOpts.mkBool true ''
+  sort_reversed = defaultNullOpts.mkBool true ''
     Whether search results should be reversed.
   '';
 
   open_notes_in =
-    helpers.defaultNullOpts.mkEnumFirstDefault
+    defaultNullOpts.mkEnumFirstDefault
       [
         "current"
         "vsplit"
@@ -356,26 +358,26 @@ with lib;
       '';
 
   ui = {
-    enable = helpers.defaultNullOpts.mkBool true ''
+    enable = defaultNullOpts.mkBool true ''
       Set to false to disable all additional syntax features.
     '';
 
-    update_debounce = helpers.defaultNullOpts.mkUnsignedInt 200 ''
+    update_debounce = defaultNullOpts.mkUnsignedInt 200 ''
       Update delay after a text change (in milliseconds).
     '';
 
     checkboxes =
-      helpers.defaultNullOpts.mkAttrsOf
+      defaultNullOpts.mkAttrsOf
         (
           with types;
           submodule {
             options = {
-              char = mkOption {
+              char = lib.mkOption {
                 type = with lib.types; maybeRaw str;
                 description = "The character to use for this checkbox.";
               };
 
-              hl_group = mkOption {
+              hl_group = lib.mkOption {
                 type = with lib.types; maybeRaw str;
                 description = "The name of the highlight group to use for this checkbox.";
               };
@@ -409,44 +411,44 @@ with lib;
         '';
 
     bullets = {
-      char = helpers.defaultNullOpts.mkStr "•" ''
+      char = defaultNullOpts.mkStr "•" ''
         Which character to use for the bullets.
       '';
 
-      hl_group = helpers.defaultNullOpts.mkStr "ObsidianBullet" ''
+      hl_group = defaultNullOpts.mkStr "ObsidianBullet" ''
         The name of the highlight group to use for the bullets.
       '';
     };
 
     external_link_icon = {
-      char = helpers.defaultNullOpts.mkStr "" ''
+      char = defaultNullOpts.mkStr "" ''
         Which character to use for the external link icon.
       '';
 
-      hl_group = helpers.defaultNullOpts.mkStr "ObsidianExtLinkIcon" ''
+      hl_group = defaultNullOpts.mkStr "ObsidianExtLinkIcon" ''
         The name of the highlight group to use for the external link icon.
       '';
     };
 
     reference_text = {
-      hl_group = helpers.defaultNullOpts.mkStr "ObsidianRefText" ''
+      hl_group = defaultNullOpts.mkStr "ObsidianRefText" ''
         The name of the highlight group to use for reference text.
       '';
     };
 
     highlight_text = {
-      hl_group = helpers.defaultNullOpts.mkStr "ObsidianHighlightText" ''
+      hl_group = defaultNullOpts.mkStr "ObsidianHighlightText" ''
         The name of the highlight group to use for highlight text.
       '';
     };
 
     tags = {
-      hl_group = helpers.defaultNullOpts.mkStr "ObsidianTag" ''
+      hl_group = defaultNullOpts.mkStr "ObsidianTag" ''
         The name of the highlight group to use for tags.
       '';
     };
 
-    hl_groups = helpers.defaultNullOpts.mkAttrsOf lib.types.highlight {
+    hl_groups = defaultNullOpts.mkAttrsOf lib.types.highlight {
       ObsidianTodo = {
         bold = true;
         fg = "#f78c6c";
@@ -481,7 +483,7 @@ with lib;
   };
 
   attachments = {
-    img_folder = helpers.defaultNullOpts.mkStr "assets/imgs" ''
+    img_folder = defaultNullOpts.mkStr "assets/imgs" ''
       The default folder to place images in via `:ObsidianPasteImg`.
 
       If this is a relative path it will be interpreted as relative to the vault root.
@@ -490,7 +492,7 @@ with lib;
     '';
 
     img_text_func =
-      helpers.defaultNullOpts.mkLuaFn
+      defaultNullOpts.mkLuaFn
         ''
           function(client, path)
             ---@type string
@@ -518,37 +520,37 @@ with lib;
           ```
         '';
 
-    confirm_img_paste = helpers.defaultNullOpts.mkBool true ''
+    confirm_img_paste = defaultNullOpts.mkBool true ''
       Whether to prompt for confirmation when pasting an image.
     '';
   };
 
   callbacks = {
-    post_setup = helpers.mkNullOrLuaFn ''
+    post_setup = lib.nixvim.mkNullOrLuaFn ''
       `fun(client: obsidian.Client)`
 
       Runs right after the `obsidian.Client` is initialized.
     '';
 
-    enter_note = helpers.mkNullOrLuaFn ''
+    enter_note = lib.nixvim.mkNullOrLuaFn ''
       `fun(client: obsidian.Client, note: obsidian.Note)`
 
       Runs when entering a note buffer.
     '';
 
-    leave_note = helpers.mkNullOrLuaFn ''
+    leave_note = lib.nixvim.mkNullOrLuaFn ''
       `fun(client: obsidian.Client, note: obsidian.Note)`
 
       Runs when leaving a note buffer.
     '';
 
-    pre_write_note = helpers.mkNullOrLuaFn ''
+    pre_write_note = lib.nixvim.mkNullOrLuaFn ''
       `fun(client: obsidian.Client, note: obsidian.Note)`
 
       Runs right before writing a note buffer.
     '';
 
-    post_set_workspace = helpers.mkNullOrLuaFn ''
+    post_set_workspace = lib.nixvim.mkNullOrLuaFn ''
       `fun(client: obsidian.Client, workspace: obsidian.Workspace)`
 
       Runs anytime the workspace is set/changed.
@@ -556,7 +558,7 @@ with lib;
   };
 
   yaml_parser =
-    helpers.defaultNullOpts.mkEnumFirstDefault
+    defaultNullOpts.mkEnumFirstDefault
       [
         "native"
         "yq"
