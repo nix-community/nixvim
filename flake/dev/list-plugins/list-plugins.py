@@ -21,7 +21,6 @@ EXCLUDES: list[str] = [
     "plugins/by-name/efmls-configs/packages.nix",
     "plugins/by-name/hydra/hydras-option.nix",
     "plugins/by-name/hydra/settings-options.nix",
-    "plugins/by-name/neogit/options.nix",
     "plugins/by-name/neotest/adapters-list.nix",
     "plugins/by-name/neotest/adapters.nix",
     "plugins/by-name/neotest/options.nix",

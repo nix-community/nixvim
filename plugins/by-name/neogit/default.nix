@@ -73,7 +73,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     "mappings"
   ];
 
-  settingsOptions = import ./options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
 
   settingsExample = {
     kind = "floating";
