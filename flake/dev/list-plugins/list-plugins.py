@@ -67,9 +67,7 @@ KNOWN_PATHS: dict[
     "plugins/by-name/chadtree/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/leap/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/lint/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/lspkind/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/nix-develop/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/rainbow-delimiters/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/treesitter-refactor/default.nix": (State.OLD, Kind.MISC, True),
     "plugins/by-name/treesitter-textobjects/default.nix": (
@@ -77,8 +75,6 @@ KNOWN_PATHS: dict[
         Kind.NEOVIM,
         True,
     ),
-    "plugins/colorschemes/base16/default.nix": (State.NEW, Kind.VIM, True),
-    "plugins/lsp/default.nix": (State.NEW, Kind.MISC, False),
 }
 for telescope_extension_name, has_depr_warnings in {
     "file-browser": True,
