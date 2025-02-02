@@ -22,7 +22,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions =
     let
-      opts = import ./options.nix { inherit lib; };
+      opts = import ./settings-options.nix { inherit lib; };
     in
     {
       dir = helpers.mkNullOrOption types.str ''
