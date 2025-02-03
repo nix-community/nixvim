@@ -90,4 +90,12 @@
       };
     };
   };
+
+  lsp-compat = {
+    plugins.nvim-ufo = {
+      enable = true;
+      setupLspCapabilities = true;
+    };
+    plugins.lsp.enable = true;
+  };
 }

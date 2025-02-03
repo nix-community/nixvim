@@ -130,4 +130,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
         end
       '';
   };
+
+  extraOptions = {
+    setupLspCapabilities = lib.nixvim.options.mkEnabledOption "setup LSP capabilities for nvim-ufo";
+  };
+
+  extraConfig = cfg: {
+    plugins.lsp.capabilities =
+      lib.mkIf cfg.setupLspCapabilities # lua
+        ''
+          -- Capabilities configuration for nvim-ufo
+          capabilities.textDocument.foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true
+          }
+        '';
+  };
 }
