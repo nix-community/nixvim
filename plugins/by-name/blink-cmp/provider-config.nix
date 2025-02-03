@@ -1,31 +1,29 @@
 lib:
 let
   inherit (lib) types;
-  inherit (lib.nixvim)
-    mkNullOrOption
-    mkNullOrStr'
-    mkNullOrOption'
-    ;
+  inherit (lib.nixvim) defaultNullOpts;
 in
 types.submodule {
   freeformType = with types; attrsOf anything;
   options = {
-    name = mkNullOrStr' {
+    name = defaultNullOpts.mkStr' {
+      pluginDefault = null;
       description = ''
         The name of the source.
       '';
       example = "LSP";
     };
 
-    module = mkNullOrStr' {
+    module = defaultNullOpts.mkStr' {
+      pluginDefault = null;
       description = ''
         The module name to load.
       '';
       example = "blink.cmp.sources.lsp";
     };
 
-    enabled = mkNullOrOption' {
-      type = with types; maybeRaw bool;
+    enabled = defaultNullOpts.mkBool' {
+      pluginDefault = true;
       description = ''
         Whether or not to enable the provider.
       '';
@@ -36,25 +34,21 @@ types.submodule {
       '';
     };
 
-    opts = mkNullOrOption' {
-      type = with types; attrsOf anything;
-      description = ''
-        Options for this provider.
-      '';
-      example = { };
-    };
+    opts = defaultNullOpts.mkAttrsOf types.anything null ''
+      Options for this provider.
+    '';
 
-    async = mkNullOrOption types.bool ''
+    async = defaultNullOpts.mkBool false ''
       Whether blink should wait for the source to return before showing the completions.
     '';
 
-    timeout_ms = mkNullOrOption types.ints.unsigned ''
+    timeout_ms = defaultNullOpts.mkUnsignedInt 2000 ''
       How long to wait for the provider to return before showing completions and treating it as
       asynchronous.
     '';
 
-    transform_items = mkNullOrOption' {
-      type = types.rawLua;
+    transform_items = defaultNullOpts.mkRaw' {
+      pluginDefault = ''function(_, items) return items end'';
       description = ''
         Function to transform the items before they're returned.
       '';
@@ -76,40 +70,41 @@ types.submodule {
       '';
     };
 
-    should_show_items = mkNullOrOption types.bool ''
+    should_show_items = defaultNullOpts.mkBool true ''
       Whether or not to show the items.
     '';
 
-    max_items = mkNullOrOption types.ints.unsigned ''
+    max_items = defaultNullOpts.mkUnsignedInt null ''
       Maximum number of items to display in the menu.
     '';
 
-    min_keyword_length = mkNullOrOption types.ints.unsigned ''
+    min_keyword_length = defaultNullOpts.mkUnsignedInt 0 ''
       Minimum number of characters in the keyword to trigger the provider.
     '';
 
-    fallbacks = mkNullOrOption' {
-      type = with types; listOf str;
+    fallbacks = defaultNullOpts.mkListOf' {
+      type = types.str;
+      pluginDefault = [ ];
       description = ''
         If this provider returns `0` items, it will fallback to these providers.
       '';
       example = [ "buffer" ];
     };
 
-    score_offset = mkNullOrOption' {
-      type = types.int;
+    score_offset = defaultNullOpts.mkInt' {
+      pluginDefault = 0;
       description = ''
         Boost/penalize the score of the items.
       '';
       example = 3;
     };
 
-    deduplicate = mkNullOrOption types.anything ''
+    deduplicate = defaultNullOpts.mkNullableWithRaw types.anything null ''
       Warning: not yet implemented.
     '';
 
     # https://github.com/Saghen/blink.cmp/blob/main/lua/blink/cmp/sources/lib/types.lua#L22
-    override = mkNullOrOption (with types; attrsOf anything) ''
+    override = defaultNullOpts.mkAttrsOf types.anything null ''
       Override source options.
     '';
   };
