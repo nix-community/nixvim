@@ -146,7 +146,9 @@ in
       example = {
         system = "aarch64-linux";
       };
-      apply = lib.systems.elaborate;
+      # FIXME: An elaborated platform is not supported,
+      # but an `apply` function is probably still needed.
+      # See https://github.com/NixOS/nixpkgs/pull/376988
       defaultText = lib.literalMD ''
         - Inherited from the "host" configuration's `pkgs`
         - Or `evalNixvim`'s `system` argument
@@ -167,14 +169,9 @@ in
       example = {
         system = "x86_64-linux";
       };
-      apply =
-        value:
-        let
-          elaborated = lib.systems.elaborate value;
-        in
-        # If equivalent to `hostPlatform`, make it actually identical so that `==` can be used
-        # See https://github.com/NixOS/nixpkgs/issues/278001
-        if lib.systems.equals elaborated cfg.hostPlatform then cfg.hostPlatform else elaborated;
+      # FIXME: An elaborated platform is not supported,
+      # but an `apply` function is probably still needed.
+      # See https://github.com/NixOS/nixpkgs/pull/376988
       defaultText = lib.literalMD ''
         Inherited from the "host" configuration's `pkgs`.
         Or `config.nixpkgs.hostPlatform` when building a standalone nixvim.
@@ -215,9 +212,13 @@ in
               inherit (cfg) config overlays;
             };
 
+            elaborated = builtins.mapAttrs (_: lib.systems.elaborate) {
+              inherit (cfg) buildPlatform hostPlatform;
+            };
+
             # Configure `localSystem` and `crossSystem` as required
             systemArgs =
-              if cfg.buildPlatform == cfg.hostPlatform then
+              if lib.systems.equals elaborated.buildPlatform elaborated.hostPlatform then
                 {
                   localSystem = cfg.hostPlatform;
                 }
