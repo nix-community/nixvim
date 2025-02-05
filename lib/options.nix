@@ -64,6 +64,16 @@ in
 rec {
   inherit pluginDefaultText;
 
+  # Create an option declaration with a default value of `true`, and can be defined to `false`.
+  mkEnabledOption =
+    name:
+    lib.mkOption {
+      default = true;
+      example = false;
+      description = "Whether to enable ${name}.";
+      type = types.bool;
+    };
+
   # Creates an option with a nullable type that defaults to null.
   mkNullOrOption' =
     {
