@@ -9,6 +9,8 @@
 
 # NixVim - A Neovim configuration system for nix
 
+Example nonsense commit...
+
 - [Quick set up tutorial](https://www.youtube.com/watch?v=b641h63lqy0) (by [@Vimjoyer](https://www.youtube.com/@vimjoyer))
 - [Nixvim: How to configure Neovim with the power of Nix](https://www.youtube.com/watch?v=GOe0C7Qtypk) (NeovimConf 2023 talk by [@GaetanLepage](https://glepage.com/))
 
