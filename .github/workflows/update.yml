@@ -1,8 +1,8 @@
-name: update
+name: Update
 on:
-  # Runs every Saturday at noon
+  # Runs everyday at noon
   schedule:
-    - cron: "0 12 * * SAT"
+    - cron: "0 12 * * *"
   # Allow manual triggering
   workflow_dispatch:
     inputs:
@@ -14,18 +14,18 @@ on:
         type: boolean
         default: true
         description: Update generated files
-      nixos-24.05:
+      re_apply:
         type: boolean
-        description: Also update nixos-24.05
+        default: true
+        description: Re-apply additional commits from the PR
 
 # Allow one concurrent update per branch
 concurrency:
   group: "update-${{ github.ref_name }}"
   cancel-in-progress: true
 
-# Allow running workflows, pushing and creating PRs
+# Allow pushing and creating PRs
 permissions:
-  actions: write
   contents: write
   pull-requests: write
 
@@ -35,20 +35,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     if: github.event_name != 'schedule' || github.repository == 'nix-community/nixvim'
+    env:
+      repo: ${{ github.repository }}
+      base_branch: ${{ github.ref_name }}
+      pr_branch: update/${{ github.ref_name }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.CI_UPDATE_SSH_KEY }}
-
-      # NOTE: If additional "inputs" are added, copy this step
-      - name: Update nixos-24.05
-        if: inputs['nixos-24.05'] || github.event_name == 'schedule'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run update.yml --ref nixos-24.05
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
@@ -60,6 +56,49 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Create update branch
+        run: |
+          git branch -D "$pr_branch" || echo "Nothing to delete"
+          git switch -c "$pr_branch"
+
+      - name: Get info on the current PR
+        id: open_pr_info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Query for info about the already open update PR
+          info=$(
+            gh api graphql -F owner='{owner}' -F repo='{repo}' -F branch="$pr_branch" -f query='
+              query($owner:String!, $repo:String!, $branch:String!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequests(first: 1, states: OPEN, headRefName: $branch) {
+                    nodes {
+                      number
+                      url
+                    }
+                  }
+                }
+              }
+            ' | jq --raw-output '
+              .data.repository.pullRequests.nodes[]
+              | to_entries[]
+              | "\(.key)=\(.value)"
+            '
+          )
+          if [[ -n "$info" ]]; then
+            echo "PR info:"
+            echo "$info"
+            echo "$info" >> $GITHUB_OUTPUT
+          else
+            echo "No PR is currently open"
+          fi
+
+      - name: Fetch current PR's branch
+        if: steps.open_pr_info.outputs.number
+        run: |
+          git fetch origin "$pr_branch"
+          git branch --set-upstream-to "origin/$pr_branch"
 
       - name: Update flake.lock
         id: flake_lock
@@ -97,13 +136,52 @@ jobs:
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create Pull Request
-        id: pr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          add-paths: "!**"
-          branch: update/${{ github.ref_name }}
-          delete-branch: true
+      - name: Apply commits from the open PR
+        id: re_apply
+        if: (inputs.re_apply || github.event_name == 'schedule') && steps.open_pr_info.outputs.number
+        run: |
+          # The base is the most recent commit on the remote branch by github-actions[bot]
+          # This should be a flake.lock bump or a generated-files update
+          # We will cherry-pick all commits on the remote _after_ the $base commit
+          remote="origin/$pr_branch"
+          author_rxp='^github-actions\[bot\] <41898282+github-actions\[bot\]@users\.noreply\.github\.com>$'
+          base=$(git rev-list --author="$author_rxp" --max-count=1 "$remote")
+          commits=( $(git rev-list --reverse "$base..$remote") )
+          if [[ -n "$commits" ]]; then
+            echo "Applying ${#commits[@]} commits..."
+            echo "count=${#commits[@]}" >> $GITHUB_OUTPUT
+            git cherry-pick --strategy-option=theirs "${commits[@]}"
+          else
+            echo "Nothing to re-apply"
+          fi
+
+      - name: Check if there are differences to push
+        id: diff
+        env:
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
+        run: |
+          if [[ -n "$pr_num" ]]; then
+            remote="origin/$pr_branch"
+          else
+            remote="origin/$base_branch"
+          fi
+          diff=( $(git diff --cached --name-only "$remote") )
+          if [[ -n "$diff" ]]; then
+            echo "${#diff[@]} files different to $remote"
+            for file in "${diff[@]}"; do
+              echo "- $file"
+            done
+            echo "count=${#diff[@]}" >> $GITHUB_OUTPUT
+          else
+            echo "No files are different to $remote"
+          fi
+
+      - name: Create or Update Pull Request
+        id: updated_pr
+        if: steps.diff.outputs.count
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
           body: |
@@ -114,24 +192,88 @@ jobs:
 
             ## Generate
             ${{ steps.generate.outputs.body || 'No changes' }}
+        run: |
+          echo "Pushing to remote branch $pr_branch"
+          git push --force --set-upstream origin "$pr_branch"
+
+          if [[ -n "$pr_num" ]]; then
+            echo "Editing existing PR #$pr_num"
+            operation=updated
+            gh pr edit "$pr_num" --body "$body"
+          else
+            echo "Creating new PR"
+            operation=created
+            gh pr create \
+              --base "$base_branch" \
+              --title "$title" \
+              --body "$body"
+          fi
+
+          pr_info=$(
+            # Get info from `gh pr view`
+            gh pr view --json 'headRefName,number,url' --jq '
+              to_entries[]
+              | .key |=
+                  # Rename headRefName -> branch
+                  if . == "headRefName" then "branch"
+                  else . end
+              | "\(.key)=\(.value)"
+            '
+            # Get additional info locally
+            echo "head=$(git rev-parse HEAD)"
+            echo "operation=$operation"
+          )
+          echo "PR Info:"
+          echo "$pr_info"
+          echo "$pr_info" >> $GITHUB_OUTPUT
 
       - name: Print summary
-        if: ${{ steps.pr.outputs.pull-request-number }}
+        if: steps.updated_pr.outputs.number
+        env:
+          pr_num: ${{ steps.updated_pr.outputs.number }}
+          pr_url: ${{ steps.updated_pr.outputs.url }}
+          pr_branch: ${{ steps.updated_pr.outputs.branch }}
+          head: ${{ steps.updated_pr.outputs.head }}
+          operation: ${{ steps.updated_pr.outputs.operation }}
+          re_apply_count: ${{ steps.re_apply.outputs.count }}
         run: |
-          num="${{ steps.pr.outputs.pull-request-number }}"
-          pr_url="${{ steps.pr.outputs.pull-request-url }}"
-          pr_branch="${{ steps.pr.outputs.pull-request-branch }}"
-          head="${{ steps.pr.outputs.pull-request-head-sha }}"
-          operation="${{ steps.pr.outputs.pull-request-operation }}"
-
+          short=${head:0:6}
           # stdout
-          echo "${head:0:6} pushed to ${pr_branch}"
-          echo "${pr} was ${operation}."
+          echo "${short} pushed to ${pr_branch}"
+          echo "#${pr_num} was ${operation}: ${pr_url}"
+          ( # markdown summary
+            echo "## ${{ github.ref_name }}"
+            echo
+            echo "\`${short}\` pushed to \`${pr_branch}\`"
+            echo
+            echo "[#${pr_num}](${pr_url}) was ${operation}."
+            echo
+            if [[ -n "$re_apply_count" ]]; then
+              echo "Re-applied $re_apply_count commits from the existing PR."
+            fi
+            echo
+          ) >> $GITHUB_STEP_SUMMARY
 
-          # markdown summary
-          echo "## ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo >> $GITHUB_STEP_SUMMARY
-          echo "\`${head:0:6}\` pushed to \`${pr_branch}\`" >> $GITHUB_STEP_SUMMARY
-          echo >> $GITHUB_STEP_SUMMARY
-          echo "[#${num}](${pr_url}) was ${operation}." >> $GITHUB_STEP_SUMMARY
-          echo >> $GITHUB_STEP_SUMMARY
+      - name: Print cancellation summary
+        if: (!steps.updated_pr.outputs.number)
+        env:
+          pr_num: ${{ steps.open_pr_info.outputs.number }}
+          pr_url: ${{ steps.open_pr_info.outputs.url }}
+          changes: ${{ steps.diff.outputs.count || '0' }}
+          re_apply_count: ${{ steps.re_apply.outputs.count }}
+        run: |
+          (
+            echo "## Not updated"
+            echo
+            echo -n "$changes files with differences compared to "
+            if [[ -n "$pr_num" ]]; then
+              echo "[#$pr_num]($pr_url)."
+            else
+              echo "\`$base_branch\`"
+            fi
+            echo
+            if [[ -n "$re_apply_count" ]]; then
+              echo "Re-applied $re_apply_count commits from the existing PR."
+            fi
+            echo
+          ) >> $GITHUB_STEP_SUMMARY
