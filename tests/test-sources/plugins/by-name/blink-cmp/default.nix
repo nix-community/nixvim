@@ -406,4 +406,12 @@
       };
     };
   };
+
+  lsp-compat = {
+    plugins.blink-cmp = {
+      enable = true;
+      setupLspCapabilities = true;
+    };
+    plugins.lsp.enable = true;
+  };
 }

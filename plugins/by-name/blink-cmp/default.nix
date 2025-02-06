@@ -42,4 +42,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
     signature.enabled = true;
   };
+
+  extraOptions = {
+    setupLspCapabilities = lib.nixvim.options.mkEnabledOption "LSP capabilities for blink-cmp";
+  };
+
+  extraConfig = cfg: {
+    # TODO: On Neovim 0.11+ and Blink.cmp 0.10+ with vim.lsp.config, you may skip this step.
+    # This is still required when using nvim-lspconfig, until this issue is completed:
+    # https://github.com/neovim/nvim-lspconfig/issues/3494
+    plugins.lsp.capabilities =
+      lib.mkIf cfg.setupLspCapabilities # lua
+        ''
+          -- Capabilities configuration for blink-cmp
+          capabilities = require("blink-cmp").get_lsp_capabilities(capabilities)
+        '';
+  };
 }
