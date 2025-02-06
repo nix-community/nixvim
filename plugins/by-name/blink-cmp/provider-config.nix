@@ -1,9 +1,9 @@
-lib:
+{ lib, ... }:
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
-types.submodule {
+{
   freeformType = with types; attrsOf anything;
   options = {
     name = defaultNullOpts.mkStr' {

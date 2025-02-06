@@ -14,6 +14,7 @@ let
     applyExtraConfig = "It has been moved to `lib.plugins.utils`";
     mkConfigAt = "It has been moved to `lib.plugins.utils`";
   };
+  internal = lib.mkOption { internal = true; };
 in
 {
   # Evaluate nixvim modules, checking warnings and assertions
@@ -51,6 +52,143 @@ in
         # TODO: deprecate `helpers`
         helpers = self;
       } // extraSpecialArgs;
+    };
+
+  # Create a module configuring a plugin's integration with blink.cmp
+  mkBlinkPluginModule =
+    {
+      # The plugin's option location-path
+      loc ? [
+        "plugins"
+        pluginName
+      ],
+      # Name of the plugin, used in documentation
+      pluginName,
+      # Name of the module blink should import
+      # i.e. `sources.providers.<name>.module`
+      module ? pluginName,
+      # The default for `blink.settings.name`
+      # i.e. `sources.providers.<name>.name`
+      # TODO: consider doing some pre-processing to the default source name,
+      # e.g. removing `-cmp` or `blink-` prefix/suffix?
+      sourceName,
+      # The default for `blink.key`
+      # i.e. the attr name for `sources.providers.<name>`
+      key ? lib.strings.toLower sourceName,
+      # Whether to enable the blink completion provider by default
+      enableProvider ? true,
+      # Defaults for the corresponding source options
+      enableDefault ? true,
+      enableCmdline ? false,
+      enabledFiletypes ? { },
+      # Whether the plugin's settings should be used as the provider's `opts`
+      usePluginSettings ? true,
+      settingsExample ? {
+        score_offset = -7;
+        fallbacks = [ ];
+      },
+    }:
+    { config, options, ... }:
+    let
+      pluginCfg = lib.getAttrFromPath loc config;
+      cfg = pluginCfg.blink;
+      pluginOpts = lib.getAttrFromPath loc options;
+      opt = pluginOpts.blink;
+    in
+    {
+      options = lib.setAttrByPath loc {
+        blink = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = enableProvider;
+            example = !enableProvider;
+            description = ''
+              Whether to integrate this plugin with blink.cmp.
+            '';
+          };
+          key = lib.mkOption {
+            type = lib.types.str;
+            default = key;
+            description = ''
+              The key to use for ${pluginName}'s blink.cmp provider.
+              This is the id you should use when including this provider in completion source lists.
+              Must be unique.
+            '';
+          };
+          default = lib.mkOption {
+            type = lib.types.bool;
+            default = enableDefault;
+            example = !enableDefault;
+            description = ''
+              Whether to include this plugin in the `default` completion source list.
+            '';
+          };
+          cmdline = lib.mkOption {
+            type = lib.types.bool;
+            default = enableCmdline;
+            example = !enableCmdline;
+            description = ''
+              Whether to include this plugin in the `cmdline` completion source list.
+            '';
+          };
+          filetypes = lib.mkOption {
+            type = lib.types.attrsOf lib.types.bool;
+            # Only include `true` attrs in the final value
+            apply = lib.filterAttrs (_: lib.id);
+            default = enabledFiletypes;
+            # TODO: example
+            description = ''
+              Whether to include this plugin in the specific `per_filetype` completion source lists.
+            '';
+          };
+          settings = lib.mkOption {
+            default = { };
+            description = ''
+              Settings for the blink.cmp completion provider.
+            '';
+            example = settingsExample;
+            type = lib.types.submodule [
+              {
+                options.enabled = internal;
+                options.module = internal;
+              }
+              ../plugins/by-name/blink-cmp/provider-config.nix
+            ];
+          };
+        };
+      };
+      config = lib.mkMerge [
+        (lib.setAttrByPath loc {
+          # NOTE: this could be defined within the `blink.settings` submodule,
+          # but that would not populate the option's `definitions` list.
+          # Meaning we wouldn't be able to propagate the definitions further using `mkAliasDefinitions`.
+          blink.settings = {
+            name = lib.mkDefault sourceName;
+            inherit module;
+            opts = lib.mkIf usePluginSettings (lib.modules.mkAliasDefinitions pluginOpts.settings);
+          };
+        })
+        (lib.mkIf (pluginCfg.enable && cfg.enable) {
+          plugins.blink-cmp.settings.sources = {
+            # Use mkAliasDefinitions to preserve override priorities
+            providers.${cfg.key} = lib.modules.mkAliasDefinitions opt.settings;
+            default = lib.mkIf cfg.default [ cfg.key ];
+            # FIXME: the reference shows `cmdline` should/could be defined as a function
+            # https://cmp.saghen.dev/configuration/reference.html#sources
+            cmdline = lib.mkIf cfg.cmdline [ cfg.key ];
+            per_filetype = lib.mkIf (cfg.filetypes != { }) (
+              builtins.mapAttrs (_: _: [ cfg.key ]) cfg.filetypes
+            );
+          };
+          warnings = lib.nixvim.mkWarnings (lib.showOption loc) {
+            when = !config.plugins.blink-cmp.enable && options.plugins.blink-cmp.enable.highestPrio == 1500;
+            message = ''
+              You have enabled the blink.cmp provider, but `plugins.blink-cmp` is not enabled.
+              You can suppress this warning by explicitly setting `plugins.blink-cmp.enable = false`.
+            '';
+          };
+        })
+      ];
     };
 }
 // lib.mapAttrs (
