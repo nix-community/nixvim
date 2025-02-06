@@ -145,7 +145,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
         # The plugin recommends to enable this option in its README.
         # Learn more: https://github.com/b0o/SchemaStore.nvim/issues/8
-        validate = mkDefault true;
+        validate.enable = mkDefault true;
       };
 
       yamlls.settings = mkIf cfg.yaml.enable {
