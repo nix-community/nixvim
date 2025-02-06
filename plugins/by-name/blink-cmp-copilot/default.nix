@@ -1,48 +1,30 @@
 { config, lib, ... }:
-lib.nixvim.plugins.mkNeovimPlugin {
+let
   name = "blink-cmp-copilot";
-  package = "blink-cmp-copilot";
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  inherit name;
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
-  description = ''
-    This plugin should be configured through blink-cmp's source settings.
-
-    For example:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources = {
-        copilot = {
-          async = true;
-          module = "blink-cmp-copilot";
-          name = "copilot";
-          score_offset = 100;
-        };
-      };
-    };
-    ```
-
-    And then you can add it as a source for blink-cmp:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "copilot"
-      ];
-    };
-    ```
-  '';
-
   callSetup = false;
   hasLuaConfig = false;
-  hasSettings = false;
+
+  imports = [
+    (lib.nixvim.modules.mkBlinkPluginModule {
+      pluginName = name;
+      # TODO: compute a sane-default source name
+      sourceName = "copilot";
+      settingsExample = {
+        async = true;
+        score_offset = 100;
+      };
+    })
+  ];
+
+  settingsExample = {
+    max_completions = 3;
+  };
 
   extraConfig = {
     warnings =
