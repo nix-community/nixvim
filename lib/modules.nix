@@ -315,33 +315,24 @@ in
           };
         };
       };
-      config = lib.mkMerge [
-        {
-          # Backwards compatibility with autoEnableCmpSources
-          cmpSourcePlugins.${sourceName} =
-            assert lib.assertMsg (builtins.length loc == 2 && builtins.head loc == "plugins")
-              "autoEnableCmpSources assumes all cmp source plugins are in the `plugins` namespace. Unsupported plugin `${lib.showOption loc}`.";
-            pluginName;
-        }
-        (lib.mkIf (pluginCfg.enable && cfg.enable) {
-          # FIXME: even though we have the mkIf, we also need optionalAttrs
-          # to avoid inf-recursion caused by `autoEnableSources`
-          plugins.cmp = lib.optionalAttrs cfg.enable {
-            # TODO: consider setting:
-            # autoEnableSources = lib.mkDefault false;
-            settings = lib.mkIf (cfg.default != false) (toSources cfg.default);
-            cmdline = lib.mkIf (cfg.cmdline != { }) (builtins.mapAttrs (_: toSources) cfg.cmdline);
-            filetype = lib.mkIf (cfg.filetypes != { }) (builtins.mapAttrs (_: toSources) cfg.filetypes);
-          };
-          warnings = lib.nixvim.mkWarnings (lib.showOption loc) {
-            when = !config.plugins.cmp.enable && options.plugins.cmp.enable.highestPrio == 1500;
-            message = ''
-              You have enabled the nvim-cmp source, but `plugins.cmp` is not enabled.
-              You can suppress this warning by explicitly setting `plugins.cmp.enable = false`.
-            '';
-          };
-        })
-      ];
+      config = lib.mkIf (pluginCfg.enable && cfg.enable) {
+        # FIXME: even though we have the mkIf, we also need optionalAttrs
+        # to avoid inf-recursion caused by `autoEnableSources`
+        plugins.cmp = lib.optionalAttrs cfg.enable {
+          # TODO: consider setting:
+          # autoEnableSources = lib.mkDefault false;
+          settings = lib.mkIf (cfg.default != false) (toSources cfg.default);
+          cmdline = lib.mkIf (cfg.cmdline != { }) (builtins.mapAttrs (_: toSources) cfg.cmdline);
+          filetype = lib.mkIf (cfg.filetypes != { }) (builtins.mapAttrs (_: toSources) cfg.filetypes);
+        };
+        warnings = lib.nixvim.mkWarnings (lib.showOption loc) {
+          when = !config.plugins.cmp.enable && options.plugins.cmp.enable.highestPrio == 1500;
+          message = ''
+            You have enabled the nvim-cmp source, but `plugins.cmp` is not enabled.
+            You can suppress this warning by explicitly setting `plugins.cmp.enable = false`.
+          '';
+        };
+      };
     };
 }
 // lib.mapAttrs (

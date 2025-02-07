@@ -49,24 +49,12 @@ let
   ];
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "cmpSourcePlugins"
+    ] "Use `lib.nixvim.modules.mkCmpPluginModule` instead.")
+  ];
   options = {
-    # Note: this option must be outside of `plugins` to avoid infinite recursion
-    cmpSourcePlugins = lib.mkOption {
-      type = with lib.types; attrsOf str;
-      default = { };
-      description = ''
-        Internal option used to associate nvim-cmp source names with nixvim plugin module names.
-
-        Maps `<source-name> = <plugin-name>` where _plugin-name_ is the module name: `plugins.<plugin-name>.enable`.
-      '';
-      example = {
-        foo = "cmp-foo";
-        bar = "cmp-bar";
-      };
-      internal = true;
-      visible = false;
-    };
-
     plugins.cmp.autoEnableSources = lib.mkOption {
       type = lib.types.bool;
       default = true;

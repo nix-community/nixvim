@@ -1,11 +1,28 @@
 { pkgs, ... }:
+let
+  # TODO: move into the relevant module once we only have one "all" test
+  disabledSources =
+    [
+      # We do not provide the required HF_API_KEY environment variable.
+      "cmp-ai"
+      # Triggers the warning complaining about treesitter highlighting being disabled
+      "otter"
+      # Invokes the `nix` command at startup which is not available in the sandbox
+      "cmp-nixpkgs-maintainers"
+      # lspkind has its own `cmp` options, but isn't a nvim-cmp source
+      "lspkind"
+    ]
+    # TODO: why is this disabled?
+    ++ pkgs.lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
+      "cmp-tabnine"
+    ];
+in
 {
   all-sources =
     {
       config,
       options,
       lib,
-      pkgs,
       ...
     }:
     {
@@ -26,45 +43,32 @@
           };
         }
         {
-          plugins =
-            let
-              disabledSources =
-                [
-                  # We do not provide the required HF_API_KEY environment variable.
-                  "cmp-ai"
-                  # Triggers the warning complaining about treesitter highlighting being disabled
-                  "otter"
-                  # Invokes the `nix` command at startup which is not available in the sandbox
-                  "cmp-nixpkgs-maintainers"
-                  # lspkind has its own `cmp` options, but isn't a nvim-cmp source
-                  "lspkind"
-                ]
-                # TODO: why is this disabled?
-                ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
-                  "cmp-tabnine"
-                ];
-              cmpPluginNames = lib.pipe options.plugins [
-                # First, a manual blacklist
-                (lib.flip builtins.removeAttrs disabledSources)
-                # Filter for non-options (all plugins are plain attrsets, not options)
-                # i.e. remove rename aliases
-                (lib.filterAttrs (name: opt: !lib.isOption opt))
-                # Collect the plugin names
-                builtins.attrNames
-                # Filter for plugins that have a `cmp` option
-                (builtins.filter (name: config.plugins.${name} ? cmp))
-              ];
-            in
-            lib.genAttrs cmpPluginNames (name: {
+          plugins = lib.pipe options.plugins [
+            # First, a manual blacklist
+            (lib.flip builtins.removeAttrs disabledSources)
+            # Filter for non-options (all plugins are plain attrsets, not options)
+            # i.e. remove rename aliases
+            (lib.filterAttrs (name: opt: !lib.isOption opt))
+            # Collect the plugin names
+            builtins.attrNames
+            # Filter for plugins that have a `cmp` option
+            (builtins.filter (name: config.plugins.${name} ? cmp))
+            (lib.flip lib.genAttrs (name: {
               enable = true;
               cmp.enable = true;
-            });
+            }))
+          ];
         }
       ];
     };
 
   auto-enable-sources =
-    { config, ... }:
+    {
+      config,
+      options,
+      lib,
+      ...
+    }:
     {
       plugins = {
         copilot-lua = {
@@ -78,28 +82,23 @@
 
         cmp = {
           enable = true;
-          settings.sources =
-            with pkgs.lib;
-            let
-              disabledSources = [
-                # We do not provide the required HF_API_KEY environment variable.
-                "cmp_ai"
-                # Triggers the warning complaining about treesitter highlighting being disabled
-                "otter"
-                # Invokes the `nix` command at startup which is not available in the sandbox
-                "nixpkgs_maintainers"
-              ] ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
-            in
-            pipe config.cmpSourcePlugins [
-              # All known source names
-              attrNames
-              # Filter out disabled sources
-              (filter (name: !(elem name disabledSources)))
-              # Convert names to source attributes
-              (map (name: {
-                inherit name;
-              }))
-            ];
+          settings.sources = lib.pipe options.plugins [
+            # First, a manual blacklist
+            (lib.flip builtins.removeAttrs disabledSources)
+            # Filter for non-options (all plugins are plain attrsets, not options)
+            # i.e. remove rename aliases
+            (lib.filterAttrs (name: opt: !lib.isOption opt))
+            # Collect the plugin names
+            builtins.attrNames
+            # Filter for plugins that have a `cmp` option
+            (builtins.filter (name: config.plugins.${name} ? cmp))
+            # Map to the source name
+            (builtins.map (name: config.plugins.${name}.cmp.name))
+            # Map to a plugin definition
+            (builtins.map (name: {
+              inherit name;
+            }))
+          ];
         };
       };
     };
