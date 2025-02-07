@@ -4,9 +4,10 @@
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
+  name = "codeium-nvim";
 in
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "codeium-nvim";
+  inherit name;
   packPathName = "codeium.nvim";
   moduleName = "codeium";
 
@@ -51,9 +52,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     "wrapper"
   ];
 
-  # Register nvim-cmp association
   imports = [
-    { cmpSourcePlugins.codeium = "codeium-nvim"; }
+    # Register nvim-cmp association
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = "codeium";
+    })
   ];
 
   settingsOptions = {

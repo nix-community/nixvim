@@ -8,7 +8,7 @@ let
 
   # A list of most cmp source plugins, passed to mkCmpSourcePlugin.
   # More complex cmp sources can instead be defined as their own plugin
-  # and register their source-name association using the `cmpSourcePlugins` option.
+  # and import a module constructed by `lib.nixvim.modules.mkCmpPluginModule`.
   sources = [
     {
       pluginName = "cmp-async-path";

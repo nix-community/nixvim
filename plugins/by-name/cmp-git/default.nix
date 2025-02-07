@@ -2,12 +2,18 @@
   lib,
   ...
 }:
-lib.nixvim.plugins.mkNeovimPlugin {
+let
   name = "cmp-git";
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  inherit name;
   moduleName = "cmp_git";
 
   imports = [
-    { cmpSourcePlugins.git = "cmp-git"; }
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = "git";
+    })
   ];
 
   maintainers = [ lib.maintainers.GaetanLepage ];

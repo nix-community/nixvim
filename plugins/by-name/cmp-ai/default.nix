@@ -4,14 +4,18 @@
 }:
 let
   inherit (lib.nixvim) defaultNullOpts;
+  name = "cmp-ai";
 in
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "cmp-ai";
+  inherit name;
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
-    { cmpSourcePlugins.cmp_ai = "cmp-ai"; }
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = "cmp_ai";
+    })
   ];
 
   moduleName = "cmp_ai.config";

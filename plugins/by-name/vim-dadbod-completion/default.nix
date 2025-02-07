@@ -1,8 +1,14 @@
 { lib, ... }:
-lib.nixvim.plugins.mkVimPlugin {
+let
   name = "vim-dadbod-completion";
+in
+lib.nixvim.plugins.mkVimPlugin {
+  inherit name;
   maintainers = [ lib.maintainers.BoneyPatel ];
   imports = [
-    { cmpSourcePlugins.vim-dadbod-completion = "vim-dadbod-completion"; }
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = name;
+    })
   ];
 }
