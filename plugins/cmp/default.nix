@@ -17,21 +17,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = ''
     ### Completion Source Installation
 
-    If `plugins.cmp.autoEnableSources` is `true` Nixivm will automatically enable the corresponding source
-    plugins. This is the default behavior, but will work only when this option is set to a list.
+    By default, plugins that offer a cmp source will enable the source when they are enabled.
+    This can be configured or disabled using the `plugins.*.cmp` options.
 
-    If you use a raw lua string or set `plugins.cmp.autoEnableSources` to `false`, you will need to explicitly enable the relevant source plugins in
-    your nixvim configuration.
+    <!-- TODO:
+      How should the new system work with raw-lua `sources` options?
+      Maybe we should write our definitions to an internal option that can be easily read in the raw-lua and/or copied to `settings.sources`?
+    -->
 
     #### With auto-enabled sources
     ```nix
-    plugins.cmp = {
-      autoEnableSources = true;
-      settings.sources = [
-        { name = "nvim_lsp"; }
-        { name = "path"; }
-        { name = "buffer"; }
-      ];
+    plugins = {
+      cmp.enable = true;
+      cmp-nvim-lsp.enable = true;
+      cmp-path.enable = true;
+      cmp-buffer.enable = true;
     };
     ```
 
@@ -39,18 +39,26 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ```nix
     plugins = {
       cmp = {
-        autoEnableSources = false;
+        enable = true;
         settings.sources = [
           { name = "nvim_lsp"; }
           { name = "path"; }
           { name = "buffer"; }
         ];
       };
-      cmp-nvim-lsp.enable = true;
-      cmp-path.enable = true;
-      cmp-buffer.enable = true;
+      cmp-nvim-lsp = {
+        enable = true;
+        cmp.enable = false;
+      };
+      cmp-path = {
+        enable = true;
+        cmp.enable = false;
+      };
+      cmp-buffer = {
+        enable = true;
+        cmp.enable = false;
+      };
     };
-
     ```
   '';
 
@@ -58,7 +66,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     # Introduced on 2024 February 21
     # TODO: remove ~June 2024
     ./deprecations.nix
-    ./auto-enable.nix
     ./sources
   ];
   deprecateExtraOptions = true;

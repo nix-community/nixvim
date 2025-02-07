@@ -168,6 +168,8 @@ let
 in
 {
   imports = renameWarnings ++ [
+    # auto-enable was removed 2025-02-07
+    ./deprecated-auto-enable.nix
     (mkRenamedOptionModule (oldPluginBasePath ++ [ "enable" ]) (newPluginBasePath ++ [ "enable" ]))
     (mkRenamedOptionModule (oldPluginBasePath ++ [ "autoEnableSources" ]) (
       newPluginBasePath ++ [ "autoEnableSources" ]

@@ -266,9 +266,8 @@ in
         cmp = {
           enable = lib.mkOption {
             type = lib.types.bool;
-            # FIXME: this should default to true, but it is incompatible with autoEnableCmpSources
-            default = false;
-            example = true;
+            default = true;
+            example = false;
             description = ''
               Whether to integrate this plugin with nvim-cmp.
             '';
@@ -316,11 +315,7 @@ in
         };
       };
       config = lib.mkIf (pluginCfg.enable && cfg.enable) {
-        # FIXME: even though we have the mkIf, we also need optionalAttrs
-        # to avoid inf-recursion caused by `autoEnableSources`
-        plugins.cmp = lib.optionalAttrs cfg.enable {
-          # TODO: consider setting:
-          # autoEnableSources = lib.mkDefault false;
+        plugins.cmp = {
           settings = lib.mkIf (cfg.default != false) (toSources cfg.default);
           cmdline = lib.mkIf (cfg.cmdline != { }) (builtins.mapAttrs (_: toSources) cfg.cmdline);
           filetype = lib.mkIf (cfg.filetypes != { }) (builtins.mapAttrs (_: toSources) cfg.filetypes);

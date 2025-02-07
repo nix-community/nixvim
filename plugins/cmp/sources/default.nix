@@ -96,6 +96,11 @@ let
     {
       pluginName = "cmp-nvim-lsp";
       sourceName = "nvim_lsp";
+      extraConfig = cfg: {
+        plugins.lsp.capabilities = ''
+          capabilities = vim.tbl_deep_extend("force", capabilities, require('cmp_nvim_lsp').default_capabilities())
+        '';
+      };
     }
     {
       pluginName = "cmp-nvim-lsp-document-symbol";
