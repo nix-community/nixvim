@@ -103,4 +103,29 @@
         };
       };
     };
+
+  both-impl-used = {
+    plugins = {
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings.sources = [
+          { name = "cmp-emoji"; }
+        ];
+      };
+      cmp-git = {
+        enable = true;
+        cmp.enable = true;
+      };
+    };
+    test = {
+      buildNixvim = false;
+      warnings = expect: [
+        (expect "count" 1)
+        (expect "any" "Nixvim (plugins.cmp): You have enabled `autoEnableSources`")
+        (expect "any" "However, 1 plugins have cmp integration configured via `plugins.*.cmp`:")
+        (expect "any" "- `plugins.cmp-git`")
+      ];
+    };
+  };
 }
