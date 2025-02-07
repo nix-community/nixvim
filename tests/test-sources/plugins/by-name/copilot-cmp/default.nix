@@ -1,11 +1,15 @@
 {
   empty = {
-    plugins.copilot-cmp.enable = true;
+    plugins.copilot-cmp = {
+      enable = true;
+      cmp.enable = false;
+    };
   };
 
   defaults = {
-    plugins.copilot-cmp = {
-      enable = true;
+    plugins = {
+      cmp.enable = true;
+      copilot-cmp.enable = true;
     };
   };
 }

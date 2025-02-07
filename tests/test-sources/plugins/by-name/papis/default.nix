@@ -1,9 +1,11 @@
 {
   empty = {
     plugins.papis.enable = true;
+    plugins.papis.cmp.enable = false;
   };
 
   defaults = {
+    plugins.cmp.enable = true;
     plugins.papis = {
       enable = true;
 
@@ -328,6 +330,7 @@
   };
 
   example = {
+    plugins.cmp.enable = true;
     plugins.papis = {
       enable = true;
 

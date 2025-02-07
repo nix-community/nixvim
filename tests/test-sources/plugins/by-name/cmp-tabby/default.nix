@@ -1,17 +1,15 @@
 {
   empty = {
-    plugins.cmp = {
-      enable = true;
-      settings.sources = [ { name = "cmp_tabby"; } ];
-    };
+    plugins.cmp.enable = true;
+    plugins.cmp-tabby.enable = true;
   };
 
   defaults = {
     plugins = {
       cmp = {
         enable = true;
-        settings.sources = [ { name = "cmp_tabby"; } ];
       };
+      cmp-tabby.enable = true;
       cmp-tabby.settings = {
         host = "http://localhost:5000";
         max_lines = 100;
