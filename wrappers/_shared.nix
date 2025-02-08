@@ -39,9 +39,9 @@ let
         # Use global packages in nixvim's submodule
         pkgs = lib.mkIf config.nixpkgs.useGlobalPackages (lib.mkDefault pkgs);
 
-        # Inherit platforms
-        hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform.system;
-        buildPlatform = lib.mkOverride buildPlatformPrio pkgs.stdenv.buildPlatform.system;
+        # Inherit platform spec
+        hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
+        buildPlatform = lib.mkOverride buildPlatformPrio pkgs.stdenv.buildPlatform;
       };
     };
 
