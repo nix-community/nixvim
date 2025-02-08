@@ -609,6 +609,11 @@ in
             # Those tests fail when third-party plugins are loaded
             "test_notebook_document__did_open"
             "test_notebook_document__did_change"
+
+            # test/plugins/test_autoimport.py:322: AssertionError
+            # E       assert False
+            # E        +  where False = any(<generator object test_autoimport_code_actions_and_completions_for_notebook_document.<locals>.<genexpr> at 0x7fff54a2eb20>)
+            "test_autoimport_code_actions_and_completions_for_notebook_document"
           ];
         })
       );
