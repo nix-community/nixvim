@@ -7,7 +7,6 @@
 }:
 let
   inherit (config.docs._utils)
-    docsPageModule
     mkOptionList
     ;
 
@@ -42,35 +41,13 @@ let
   optionsPageModule =
     { name, config, ... }:
     {
-      imports = [
-        docsPageModule
-      ];
       options = {
         enable = lib.mkOption {
-          defaultText = lib.literalExpression ''required || optionsList != [ ]'';
-        };
-        title = lib.mkOption {
-          type = lib.types.str;
-          description = ''
-            The page title. Also used as text for the menu item link.
-          '';
-          default = lib.last config.menu.location;
-          defaultText = lib.literalMD "The last element in `menu.location`";
-        };
-        description = lib.mkOption {
-          type = lib.types.lines;
-          description = ''
-            An optional description included at the start of the index page.
-          '';
-          default = "";
-        };
-        required = lib.mkOption {
           type = lib.types.bool;
-          description = "Whether a page should be rendered, even when there are no visible options.";
-          default = config.description != "";
-          defaultText = lib.literalMD ''
-            true when `description` is not empty
-          '';
+          default = config.optionsList != [ ];
+          defaultText = lib.literalExpression ''optionsList != [ ]'';
+          example = true;
+          description = "Whether to define a page derived from this optionsPage.";
         };
         optionsList = lib.mkOption {
           type = with lib.types; listOf raw;
@@ -86,15 +63,21 @@ let
           '';
           readOnly = true;
         };
+        page = lib.mkOption {
+          type = lib.types.deferredModule;
+          description = ''
+            The `page` module, to be assigned to `docs.pages.<name>`.
+          '';
+          defaultText = lib.literalMD ''
+            Options derived from the outer options-page
+          '';
+        };
       };
 
       config =
         let
+          cfg = config;
           drvName = lib.replaceStrings [ "/" ] [ "-" ] name;
-          markdown = pkgs.callPackage ./render-page.nix {
-            inherit (config) title description optionsJSON;
-            name = drvName;
-          };
           # Convert the doc-options list into the structure required for options.json
           # See https://github.com/NixOS/nixpkgs/blob/e2078ef3/nixos/lib/make-options-doc/default.nix#L167-L176
           optionsSet = builtins.listToAttrs (
@@ -109,11 +92,30 @@ let
           );
         in
         {
-          enable = lib.mkDefault (config.required || config.optionsList != [ ]);
-          source = if config.required || config.optionsList != [ ] then markdown else null;
           optionsJSON = builtins.toFile "options-${drvName}.json" (
             builtins.unsafeDiscardStringContext (builtins.toJSON optionsSet)
           );
+
+          page =
+            { config, ... }:
+            {
+              # TODO: should this be conditional on something?
+              text = lib.mkMerge [
+                # TODO: title
+                # TODO: description
+              ];
+              # NOTE: use a _really_ high override priority because there will
+              # be another definition with the same prio as `text`
+              source = lib.mkIf (cfg.optionsList != [ ]) (
+                lib.mkOverride 1 (
+                  pkgs.callPackage ./render-page.nix {
+                    inherit (config) text;
+                    inherit (cfg) optionsJSON;
+                    name = drvName;
+                  }
+                )
+              );
+            };
         };
     };
 
@@ -123,18 +125,16 @@ let
       imports = [
         optionsPageModule
       ];
-      options = {
-        optionScopes = lib.mkOption {
-          type = with lib.types; coercedTo optionLocType lib.singleton (nonEmptyListOf optionLocType);
-          description = ''
-            A list of option-locations to be included in this page.
-          '';
-        };
-        menu.section = lib.mkOption {
-          default = "options";
-        };
+      options.optionScopes = lib.mkOption {
+        type = with lib.types; coercedTo optionLocType lib.singleton (nonEmptyListOf optionLocType);
+        description = ''
+          A list of option-locations to be included in this page.
+        '';
       };
-      config.optionsList = optionsLists.${name} or [ ];
+      config = {
+        optionsList = optionsLists.${name} or [ ];
+        page.menu.section = lib.mkDefault "options";
+      };
     }
   );
 
@@ -160,20 +160,24 @@ let
 in
 {
   options.docs = {
+    # TODO: can we name this something better than `options`?
+    # Maybe `optionsPages`?
     options = lib.mkOption {
       type = with lib.types; lazyAttrsOf optionsPageType;
       description = ''
         A set of option scopes to include in the docs.
+
+        Each enabled options page will produce a corresponding `pages` page.
       '';
       default = { };
       apply = checkDocs;
     };
   };
   config.docs = {
-    # Register for inclusion in `all`
-    _allInputs = [ "options" ];
     _utils = {
       inherit optionsPageModule;
     };
+    # Define pages for each "options" attr
+    pages = builtins.mapAttrs (_: cfg: cfg.page) (lib.filterAttrs (_: v: v.enable) config.docs.options);
   };
 }

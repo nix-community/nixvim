@@ -124,23 +124,22 @@
         };
       };
 
-      docs.options.${docsfile} = {
-        title = lib.last loc;
-        description = lib.concatLines (
-          [
-            "**URL:** [${url}](${url})"
-            ""
-          ]
-          ++ lib.optionals (maintainers != [ ]) [
-            "**Maintainers:** ${maintainersString}"
-            ""
-          ]
-          ++ lib.optionals (description != null && description != "") [
-            "---"
-            ""
-            description
-          ]
-        );
-      };
+      docs.pages.${docsfile}.text = lib.mkMerge (
+        [
+          "# ${lib.last loc}"
+          ""
+          "**URL:** [${url}](${url})"
+          ""
+        ]
+        ++ lib.optionals (maintainers != [ ]) [
+          "**Maintainers:** ${maintainersString}"
+          ""
+        ]
+        ++ lib.optionals (description != null && description != "") [
+          "---"
+          ""
+          description
+        ]
+      );
     };
 }

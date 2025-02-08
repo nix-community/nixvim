@@ -4,11 +4,9 @@
   ...
 }:
 let
-  inherit (config.docs._utils)
-    docsPageLiberalType
-    ;
-
-  pagesBySection = builtins.groupBy (page: page.menu.section) config.docs.all;
+  # A set of menu sections, each mapped to a list of pages
+  # { section = [page]; }
+  pagesBySection = builtins.groupBy (page: page.menu.section) (builtins.attrValues config.docs.pages);
 
   # Converts a list of pages into a tree that defines the shape of the menu
   mkPagesTree =
@@ -124,7 +122,9 @@ let
           default = true;
         };
         pages = lib.mkOption {
-          type = with lib.types; listOf docsPageLiberalType;
+          # NOTE: Use attrs here to avoid defaults & internal definitions from the docsPageType
+          # TODO: Maybe don't expose this as a module option at all? A privately scoped binding would be fine.
+          type = with lib.types; listOf attrs;
           description = "Pages that belong to this section.";
           visible = "shallow";
           readOnly = true;

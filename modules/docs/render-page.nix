@@ -3,16 +3,14 @@
   nixos-render-docs,
   runCommand,
   name,
-  title,
-  description ? "",
+  text,
   optionsJSON,
   revision ? "",
 }:
 runCommand "page-${name}.md"
   {
     inherit
-      title
-      description
+      text
       optionsJSON
       revision
       ;
@@ -34,9 +32,7 @@ runCommand "page-${name}.md"
       $optionsJSON options.md
 
     (
-      echo "# $title"
-      echo
-      echo "$description"
+      echo "$text"
       echo
       cat options.md
     ) > $out

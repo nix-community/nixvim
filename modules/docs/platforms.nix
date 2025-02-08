@@ -33,15 +33,15 @@ let
             The module containing platform-specific options.
           '';
         };
-        menu.section = lib.mkOption {
-          default = "platforms";
-        };
       };
-      config.optionsList = lib.pipe config.module [
-        evalModule
-        (lib.getAttr "options")
-        mkOptionList
-      ];
+      config = {
+        optionsList = lib.pipe config.module [
+          evalModule
+          (lib.getAttr "options")
+          mkOptionList
+        ];
+        page.menu.section = lib.mkDefault "platforms";
+      };
     }
   );
 in
@@ -51,6 +51,8 @@ in
       type = with lib.types; lazyAttrsOf platformPageType;
       description = ''
         A set of platform wrapper modules to include in the docs.
+
+        Each enabled platform page will produce a corresponding `pages` page.
       '';
       default = { };
     };
@@ -59,43 +61,44 @@ in
   config.docs = {
     platforms = {
       "platforms/nixos" = {
-        menu.location = [
+        page.menu.location = [
           "platforms"
           "NixOS"
         ];
         module = ../../wrappers/modules/nixos.nix;
       };
       "platforms/home-manager" = {
-        menu.location = [
+        page.menu.location = [
           "platforms"
           "home-manager"
         ];
         module = ../../wrappers/modules/hm.nix;
       };
       "platforms/nix-darwin" = {
-        menu.location = [
+        page.menu.location = [
           "platforms"
           "nix-darwin"
         ];
         module = ../../wrappers/modules/darwin.nix;
       };
     };
-    files = {
-      "platforms" = {
-        menu.section = "platforms";
-        menu.location = [ "platforms" ];
-        source = ../../docs/platforms/index.md;
-      };
-      "platforms/standalone" = {
-        menu.section = "platforms";
-        menu.location = [
-          "platforms"
-          "standalone"
-        ];
-        source = ../../docs/platforms/standalone.md;
-      };
-    };
-    # Register for inclusion in `all`
-    _allInputs = [ "platforms" ];
+    pages =
+      {
+        "platforms" = {
+          menu.section = "platforms";
+          menu.location = [ "platforms" ];
+          source = ../../docs/platforms/index.md;
+        };
+        "platforms/standalone" = {
+          menu.section = "platforms";
+          menu.location = [
+            "platforms"
+            "standalone"
+          ];
+          source = ../../docs/platforms/standalone.md;
+        };
+      }
+      # Define pages for each "platforms" attr
+      // builtins.mapAttrs (_: cfg: cfg.page) (lib.filterAttrs (_: v: v.enable) config.docs.platforms);
   };
 }

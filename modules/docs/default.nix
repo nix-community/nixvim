@@ -8,19 +8,19 @@
 
   imports = [
     ./_util.nix
-    ./all.nix
     ./files.nix
     ./mdbook
     ./menu
     ./options.nix
+    ./pages.nix
     ./platforms.nix
   ];
 
   config.docs.options = {
     docs = {
-      menu.location = [ "docs" ];
       optionScopes = [ "docs" ];
-      description = ''
+      page.menu.location = [ "docs" ];
+      page.text = ''
         Internal options used to construct these docs.
       '';
     };

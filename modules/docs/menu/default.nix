@@ -16,8 +16,7 @@ in
   options.docs.menu.src = lib.mkOption {
     type = lib.types.lines;
     description = ''
-      MDBook SUMMARY menu. Generated from pages defined in
-      ${lib.concatMapStringsSep ", " (name: "`docs.${name}`") config.docs._allInputs}.
+      MDBook SUMMARY menu. Generated from `docs.pages.<name>.menu`.
 
       See MDBook's [SUMMARY.md](https://rust-lang.github.io/mdBook/format/summary.html) docs.
     '';
