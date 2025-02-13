@@ -176,8 +176,9 @@ in
       inherit optionsPageModule;
     };
     # Define pages for each "optionPages" attr
-    pages = builtins.mapAttrs (_: cfg: cfg.page) (
-      lib.filterAttrs (_: v: v.enable) config.docs.optionPages
-    );
+    pages = lib.pipe config.docs.optionPages [
+      (lib.filterAttrs (_: v: v.enable))
+      (builtins.mapAttrs (_: cfg: cfg.page))
+    ];
   };
 }

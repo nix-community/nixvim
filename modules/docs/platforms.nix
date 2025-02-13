@@ -99,8 +99,9 @@ in
         };
       }
       # Define pages for each "platformPages" attr
-      // builtins.mapAttrs (_: cfg: cfg.page) (
-        lib.filterAttrs (_: v: v.enable) config.docs.platformPages
-      );
+      // lib.pipe config.docs.platformPages [
+        (lib.filterAttrs (_: v: v.enable))
+        (builtins.mapAttrs (_: cfg: cfg.page))
+      ];
   };
 }
