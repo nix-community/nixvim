@@ -317,7 +317,6 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     fileset = lib.fileset.unions [
       ../user-guide
       ../platforms
-      ../../CONTRIBUTING.md
       (lib.fileset.fileFilter (
         { type, hasExt, ... }:
         type == "regular"
@@ -330,6 +329,8 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  contributing = finalAttrs.passthru.fix-links ../../CONTRIBUTING.md;
+
   buildPhase = ''
     dest=$out/share/doc
     mkdir -p $dest
@@ -338,6 +339,9 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     cp -r --no-preserve=all $src/* ./
     mv ./docs/* ./ && rmdir ./docs
     mv ./mdbook/* ./ && rmdir ./mdbook
+
+    # Copy the contributing file
+    cp $contributing ./CONTRIBUTING.md
 
     # Copy the generated MD docs into the build directory
     bash -e ${finalAttrs.passthru.copy-docs}
@@ -382,21 +386,22 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     ;
 
   passthru = {
+    fix-links = callPackage ../fix-links {
+      # FIXME: determine values from availableVersions & baseHref
+      docsUrl = "https://nix-community.github.io/nixvim/";
+      githubUrl = "https://github.com/nix-community/nixvim/blob/main/";
+    };
     copy-docs = pkgs.writeShellScript "copy-docs" docs.commands;
     readme =
       runCommand "readme"
         {
           start = "<!-- START DOCS -->";
           end = "<!-- STOP DOCS -->";
-          baseurl = "https://nix-community.github.io/nixvim/";
-          src = ../../README.md;
+          src = finalAttrs.passthru.fix-links ../../README.md;
         }
         ''
           # extract relevant section of the README
           sed -n "/$start/,/$end/p" $src > $out
-          # replace absolute links
-          substituteInPlace $out --replace-quiet "$baseurl" "./"
-          # TODO: replace .html with .md
         '';
     search = search.override {
       baseHref = finalAttrs.baseHref + "search/";
