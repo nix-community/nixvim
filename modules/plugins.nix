@@ -13,7 +13,7 @@ in
       prev ++ optional (type == "directory") (by-name + "/${name}")
     ) [ ] (readDir by-name);
 
-  docs.options =
+  docs.optionPages =
     let
       mkPluginPages =
         scope:

@@ -18,7 +18,7 @@ let
   optionsLists = builtins.groupBy (opt: getPageFor opt.loc) (mkOptionList options);
 
   # A list of { page, scope } pairs, sorted by scope length (longest first)
-  pageScopePairs = lib.pipe config.docs.options [
+  pageScopePairs = lib.pipe config.docs.optionPages [
     (lib.mapAttrsToList (
       name: page: {
         page = name;
@@ -160,9 +160,7 @@ let
 in
 {
   options.docs = {
-    # TODO: can we name this something better than `options`?
-    # Maybe `optionsPages`?
-    options = lib.mkOption {
+    optionPages = lib.mkOption {
       type = with lib.types; lazyAttrsOf optionsPageType;
       description = ''
         A set of option scopes to include in the docs.
@@ -177,7 +175,9 @@ in
     _utils = {
       inherit optionsPageModule;
     };
-    # Define pages for each "options" attr
-    pages = builtins.mapAttrs (_: cfg: cfg.page) (lib.filterAttrs (_: v: v.enable) config.docs.options);
+    # Define pages for each "optionPages" attr
+    pages = builtins.mapAttrs (_: cfg: cfg.page) (
+      lib.filterAttrs (_: v: v.enable) config.docs.optionPages
+    );
   };
 }

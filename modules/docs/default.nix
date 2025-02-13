@@ -16,7 +16,7 @@
     ./platforms.nix
   ];
 
-  config.docs.options = {
+  config.docs.optionPages = {
     docs = {
       optionScopes = [ "docs" ];
       page.menu.location = [ "docs" ];

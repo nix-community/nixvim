@@ -24,7 +24,7 @@
     ./plugins.nix
   ];
 
-  docs.options.options = {
+  docs.optionPages.options = {
     enable = true;
     optionScopes = [ ];
   };

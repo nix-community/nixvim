@@ -47,7 +47,7 @@ let
 in
 {
   options.docs = {
-    platforms = lib.mkOption {
+    platformPages = lib.mkOption {
       type = with lib.types; lazyAttrsOf platformPageType;
       description = ''
         A set of platform wrapper modules to include in the docs.
@@ -59,7 +59,7 @@ in
   };
 
   config.docs = {
-    platforms = {
+    platformPages = {
       "platforms/nixos" = {
         page.menu.location = [
           "platforms"
@@ -98,7 +98,9 @@ in
           source = ../../docs/platforms/standalone.md;
         };
       }
-      # Define pages for each "platforms" attr
-      // builtins.mapAttrs (_: cfg: cfg.page) (lib.filterAttrs (_: v: v.enable) config.docs.platforms);
+      # Define pages for each "platformPages" attr
+      // builtins.mapAttrs (_: cfg: cfg.page) (
+        lib.filterAttrs (_: v: v.enable) config.docs.platformPages
+      );
   };
 }
