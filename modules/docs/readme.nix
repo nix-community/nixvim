@@ -21,15 +21,11 @@ runCommand "index.md"
         {
           start = "<!-- START DOCS -->";
           end = "<!-- STOP DOCS -->";
-          baseurl = "https://nix-community.github.io/nixvim/";
           src = ../../README.md;
         }
         ''
           # extract relevant section of the README
           sed -n "/$start/,/$end/p" $src > $out
-          # replace absolute links
-          substituteInPlace $out --replace-quiet "$baseurl" "./"
-          # TODO: replace .html with .md
         '';
 
     docs_versions =
