@@ -18,9 +18,13 @@ function Link(link)
 	local target = link.target
 	-- Check for relative links
 	-- TODO: handle ../
-	if hasPrefix("./", target) then
-		link.target = githubUrl .. sub(target, 3)
-		return link
+	while hasPrefix("./", target) do
+		-- strip leading ./
+		target = sub(target, 3)
+	end
+	if hasPrefix("#", target) then
+		-- No-op for anchor targets on the same page
+		return nil
 	end
 	if not hasPrefix("https://", target) then
 		link.target = githubUrl .. target
