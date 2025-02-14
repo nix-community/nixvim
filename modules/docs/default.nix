@@ -15,12 +15,12 @@ in
 
   imports = [
     ./_util.nix
-    ./files.nix
     ./mdbook
     ./menu
     ./options.nix
     ./pages.nix
     ./platforms.nix
+    ./user-guide.nix
   ];
 
   config.docs = {
