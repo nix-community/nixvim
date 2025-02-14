@@ -1,9 +1,9 @@
 { lib, pkgs, ... }:
 let
   # Replaces absolute links to the docs with relative links
-  fixLinks = pkgs.callPackage ../../docs/fix-linkx {
+  fixLinks = pkgs.callPackage ../../docs/fix-links {
     githubUrl = "https://github.com/nix-community/nixvim/blob/main/";
-    baseurlUrl = "https://nix-community.github.io/nixvim/";
+    docsUrl = "https://nix-community.github.io/nixvim/";
   };
 in
 {
