@@ -1,6 +1,7 @@
 {
   lib,
   runCommand,
+  fixLinks,
   availableVersions ? [ ],
   baseHref ? "/", # TODO: remove & get from module config
 }:
@@ -21,7 +22,7 @@ runCommand "index.md"
         {
           start = "<!-- START DOCS -->";
           end = "<!-- STOP DOCS -->";
-          src = ../../README.md;
+          src = fixLinks ../../README.md;
         }
         ''
           # extract relevant section of the README
