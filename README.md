@@ -412,19 +412,21 @@ nnoremap <leader>m <silent> <cmd>make<CR>
 This table describes all modes for the `keymaps` option.
 You can provide several modes to a single mapping by using a list of strings.
 
-| Short | Description                                      |
-|-------|--------------------------------------------------|
-| `"n"` | Normal mode                                      |
-| `"i"` | Insert mode                                      |
-| `"v"` | Visual and Select mode                           |
-| `"s"` | Select mode                                      |
-| `"t"` | Terminal mode                                    |
-| `"" ` | Normal, visual, select and operator-pending mode |
-| `"x"` | Visual mode only, without select                 |
-| `"o"` | Operator-pending mode                            |
-| `"!"` | Insert and command-line mode                     |
-| `"l"` | Insert, command-line and lang-arg mode           |
-| `"c"` | Command-line mode                                |
+<!-- Based on `:h map-table` https://neovim.io/doc/user/map.html#map-table -->
+
+| Mode   | Norm | Ins | Cmd | Vis | Sel | Opr | Term | Lang | Description |
+|--------|------|-----|-----|-----|-----|-----|------|------|-------------|
+| `""`   | yes  |  -  |  -  | yes | yes | yes |  -   |  -   | Equivalent to `:map` |
+| `"n"`  | yes  |  -  |  -  |  -  |  -  |  -  |  -   |  -   | Normal mode |
+| `"!"`  |  -   | yes | yes |  -  |  -  |  -  |  -   |  -   | Insert and command-line mode |
+| `"i"`  |  -   | yes |  -  |  -  |  -  |  -  |  -   |  -   | Insert mode |
+| `"c"`  |  -   |  -  | yes |  -  |  -  |  -  |  -   |  -   | Command-line mode |
+| `"v"`  |  -   |  -  |  -  | yes | yes |  -  |  -   |  -   | Visual and Select mode |
+| `"x"`  |  -   |  -  |  -  | yes |  -  |  -  |  -   |  -   | Visual mode only, without select |
+| `"s"`  |  -   |  -  |  -  |  -  | yes |  -  |  -   |  -   | Select mode |
+| `"o"`  |  -   |  -  |  -  |  -  |  -  | yes |  -   |  -   | Operator-pending mode |
+| `"t"`  |  -   |  -  |  -  |  -  |  -  |  -  | yes  |  -   | Terminal mode |
+| `"l"`  |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  | Insert, command-line and lang-arg mode |
 
 Each keymap can specify the following settings in the `options` attrs.
 
