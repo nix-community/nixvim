@@ -59,7 +59,9 @@ rec {
       description = ''
         One or several modes.
         Use the short-names (`"n"`, `"v"`, ...).
-        See `:h map-modes` to learn more.
+        See [`:h map-modes`] to learn more.
+
+        [`:h map-modes`]: https://neovim.io/doc/user/map.html#%3Amap-modes
       '';
       inherit default;
       example = [
