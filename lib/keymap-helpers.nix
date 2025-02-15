@@ -44,6 +44,15 @@ rec {
 
   modeEnum = lib.types.enum modes;
 
+  modeType =
+    with lib.types;
+    either modeEnum (nonEmptyListOf modeEnum)
+    // {
+      description =
+        "one of or non-empty list of" + lib.strings.removePrefix "one of" modeEnum.description;
+      descriptionClass = "conjunction";
+    };
+
   mapOptionSubmodule = mkMapOptionSubmodule { };
 
   # NOTE: options that have the deprecated `lua` sub-option must use `removeDeprecatedMapAttrs`
@@ -55,7 +64,7 @@ rec {
   mkModeOption =
     default:
     lib.mkOption {
-      type = with lib.types; either modeEnum (listOf modeEnum);
+      type = modeType;
       description = ''
         One or several modes.
         Use the short-names (`"n"`, `"v"`, ...).
