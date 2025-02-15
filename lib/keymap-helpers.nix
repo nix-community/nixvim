@@ -37,6 +37,9 @@ rec {
     "o" # operator-pending
     "t" # terminal
     "l" # insert, command-line and lang-arg
+    "!a" # abbreviation in insert and command-line
+    "ia" # abbreviation in insert
+    "ca" # abbreviation in command
   ];
 
   modeEnum = lib.types.enum modes;

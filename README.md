@@ -427,8 +427,13 @@ You can provide several modes to a single mapping by using a list of strings.
 | `"o"`  |  -   |  -  |  -  |  -  |  -  | yes |  -   |  -   | Operator-pending mode |
 | `"t"`  |  -   |  -  |  -  |  -  |  -  |  -  | yes  |  -   | Terminal mode |
 | `"l"`  |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  | Insert, command-line and lang-arg mode |
+| `"!a"` |  -   | abr | abr |  -  |  -  |  -  |  -   |  -   | [Abbreviation] in insert and command-line mode |
+| `"ia"` |  -   | abr |  -  |  -  |  -  |  -  |  -   |  -   | [Abbreviation] in insert mode |
+| `"ca"` |  -   |  -  | abr |  -  |  -  |  -  |  -   |  -   | [Abbreviation] in command-line mode |
 
 Each keymap can specify the following settings in the `options` attrs.
+
+[Abbreviation]: https://neovim.io/doc/user/usr_24.html#_abbreviations
 
 | NixVim  | Default | VimScript                                         |
 |---------|---------|---------------------------------------------------|
