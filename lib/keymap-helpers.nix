@@ -25,39 +25,21 @@ rec {
     buffer = defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
   };
 
-  modes = {
-    normal.short = "n";
-    insert.short = "i";
-    visual = {
-      desc = "visual and select";
-      short = "v";
-    };
-    visualOnly = {
-      desc = "visual only";
-      short = "x";
-    };
-    select.short = "s";
-    terminal.short = "t";
-    normalVisualOp = {
-      desc = "normal, visual, select and operator-pending (same as plain 'map')";
-      short = "";
-    };
-    operator.short = "o";
-    lang = {
-      desc = "normal, visual, select and operator-pending (same as plain 'map')";
-      short = "l";
-    };
-    insertCommand = {
-      desc = "insert and command-line";
-      short = "!";
-    };
-    command.short = "c";
-  };
+  modes = [
+    "" # normal, visual, select, and operator-pending (same as plain ':map')
+    "n" # normal
+    "!" # insert and command-line
+    "i" # insert
+    "c" # command
+    "v" # visual and select
+    "x" # visual only
+    "s" # select
+    "o" # operator-pending
+    "t" # terminal
+    "l" # insert, command-line and lang-arg
+  ];
 
-  modeEnum =
-    lib.types.enum
-      # ["" "n" "v" ...]
-      (map ({ short, ... }: short) (lib.attrValues modes));
+  modeEnum = lib.types.enum modes;
 
   mapOptionSubmodule = mkMapOptionSubmodule { };
 
