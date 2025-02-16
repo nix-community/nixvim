@@ -42,7 +42,6 @@
     "debputy"
     "delphi_ls"
     "djlsp"
-    "dolmenls"
     "drools_lsp"
     "ds_pinyin_lsp"
     "dts_lsp"
@@ -100,7 +99,6 @@
     "ntt"
     "nxls"
     "ocamlls"
-    "ocamllsp"
     "opencl_ls"
     "openedge_ls"
     "openscad_ls"
@@ -222,6 +220,10 @@
     ];
     docker_compose_language_service = "docker-compose-language-service";
     dockerls = "dockerfile-language-server-nodejs";
+    dolmenls = [
+      "ocamlPackages"
+      "dolmen_lsp"
+    ];
     dotls = "dot-language-server";
     dprint = "dprint";
     earthlyls = "earthlyls";
@@ -299,6 +301,10 @@
     nimls = "nimlsp";
     nixd = "nixd";
     nushell = "nushell";
+    ocamllsp = [
+      "ocamlPackages"
+      "ocaml-lsp"
+    ];
     ols = "ols";
     openscad_lsp = "openscad-lsp";
     oxlint = "oxlint";
