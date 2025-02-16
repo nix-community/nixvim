@@ -94,7 +94,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   callSetup = false;
   hasSettings = false;
   extraConfig = cfg: {
-    assertions = lib.nixvim.mkAssertions "pluhins.mini" {
+    assertions = lib.nixvim.mkAssertions "plugins.mini" {
       assertion = cfg.mockDevIcons -> cfg.modules ? icons;
       message = ''
         You have enabled `plugins.mini.mockDevIcons` but have not defined `plugins.mini.modules.icons`.
