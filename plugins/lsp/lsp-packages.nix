@@ -130,6 +130,7 @@
     "roc_ls"
     "rome"
     "salt_ls"
+    "scry" # deprecated and removed from nixpkgs
     "selene3p_ls"
     "sixtyfps"
     "slangd"
@@ -343,7 +344,6 @@
       "akkuPackages"
       "scheme-langserver"
     ];
-    scry = "scry";
     serve_d = "serve-d";
     shopify_theme_ls = "shopify-cli";
     slint_lsp = "slint-lsp";
