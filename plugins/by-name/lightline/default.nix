@@ -17,13 +17,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = ''
     ### Example of defining your own component_function
 
+    ```nix
     plugins.lightline = {
        enable = true;
        settings.component_function = {
          readonly = "LightlineReadonly";
        };
 
-       luaConfig.pre= '''
+       luaConfig.pre = '''
          function LightlineReadonly()
            local is_readonly = vim.bo.readonly == 1
            local filetype = vim.bo.filetype
@@ -36,6 +37,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
          end
        ''';
      };
+    ```
   '';
 
   # TODO: Added 2024-08-23, remove after 24.11
