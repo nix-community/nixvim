@@ -61,6 +61,7 @@
     "glint"
     "gradle_ls"
     "grammarly"
+    "graphql" # nodePackages.graphql-language-service-cli was removed in https://github.com/NixOS/nixpkgs/pull/382557
     "groovyls"
     "guile_ls"
     "haxe_language_server"
@@ -249,10 +250,6 @@
     gleam = "gleam";
     glsl_analyzer = "glsl_analyzer";
     glslls = "glslls";
-    graphql = [
-      "nodePackages"
-      "graphql-language-service-cli"
-    ];
     golangci_lint_ls = "golangci-lint-langserver";
     gopls = "gopls";
     harper_ls = "harper";
