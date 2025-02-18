@@ -40,7 +40,7 @@ let
           assertions = lib.nixvim.mkAssertions "plugins.neotest.adapters.${name}" {
             assertion = config.plugins.neotest.enable;
             message = ''
-              You have to enable `plugins.telescope` as `enableTelescope` is activated.
+              You have to enable `plugins.neotest` to enable neotest adapters.
             '';
           };
 
