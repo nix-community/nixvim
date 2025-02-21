@@ -21,78 +21,80 @@ lib.nixvim.plugins.mkNeovimPlugin {
   '';
 
   settingsOptions = {
-    buf_ignore = defaultNullOpts.mkListOf types.str [ "nofile" ] ''
-      Buftypes to disable markview-nvim.
-    '';
+    preview = {
+      enable = defaultNullOpts.mkBool true ''
+        Enable preview functionality.
+      '';
 
-    modes =
-      defaultNullOpts.mkListOf types.str
-        [
-          "n"
-          "no"
-        ]
-        ''
-          Modes where preview is enabled.
-        '';
+      enable_hybrid_mode = defaultNullOpts.mkBool true ''
+        Enable hybrid mode functionality.
+      '';
 
-    hybrid_modes = defaultNullOpts.mkListOf types.str null ''
-      Modes where hybrid mode is enabled.
-    '';
+      buf_ignore = defaultNullOpts.mkListOf types.str [ "nofile" ] ''
+        Buftypes to disable markview-nvim.
+      '';
 
-    callback = {
-      on_enable = defaultNullOpts.mkLuaFn' {
-        pluginDefault = # Lua
+      modes =
+        defaultNullOpts.mkListOf types.str
+          [
+            "n"
+            "no"
+            "c"
+          ]
           ''
-            function(buf, win)
-              vim.wo[window].conceallevel = 2;
-              vim.wo[window].concealcursor = "nc";
-            end
+            Modes where preview is enabled.
           '';
-        description = ''
-          Action to perform when markview is enabled.
-        '';
-      };
 
-      on_disable = defaultNullOpts.mkLuaFn' {
-        pluginDefault = # Lua
-          ''
-            function(buf, win)
-                vim.wo[window].conceallevel = 0;
-                vim.wo[window].concealcursor = "";
-            end
-          '';
-        description = ''
-          Action to perform when markview is disabled.
-        '';
-      };
+      hybrid_modes = defaultNullOpts.mkListOf types.str null ''
+        Modes where hybrid mode is enabled.
+      '';
 
-      on_mode_change = defaultNullOpts.mkLuaFn' {
-        pluginDefault = # Lua
-          ''
-            function(buf, win, mode)
-              if vim.list_contains(markview.configuration.modes, mode) then
-                vim.wo[window].conceallevel = 2;
-              else
-                vim.wo[window].conceallevel = 0;
-              end
-            end
-          '';
-        description = ''
-          Action to perform when mode is changed, while the plugin is enabled.
-        '';
-      };
+      icon_provider = defaultNullOpts.mkEnum [ "devicons" "internal" "mini" ] "internal" ''
+        Provider for icons.
+        Available options:
+          - "devicons": Use nvim-web-devicons
+          - "internal": Use internal icons (default)
+          - "mini": Use mini.icons
+      '';
     };
   };
 
   settingsExample = {
-    buf_ignore = [ ];
-    modes = [
-      "n"
-      "x"
-    ];
-    hybrid_modes = [
-      "i"
-      "r"
-    ];
+    preview = {
+      buf_ignore = [ ];
+      modes = [
+        "n"
+        "x"
+      ];
+      hybrid_modes = [
+        "i"
+        "r"
+      ];
+    };
+  };
+
+  extraConfig = cfg: {
+    # v25 migration warning added 2025-03-04
+    warnings = lib.nixvim.mkWarnings "plugins.markview" (
+      lib.map
+        (name: {
+          when = cfg.settings ? ${name};
+          message = ''
+            v25 had a complete spec redesign. `${name}` had been moved to `preview.${
+              if name == "callback" then "callbacks" else name
+            }`.
+            See https://github.com/OXY2DEV/markview.nvim/blob/v25.0.0/doc/migration.txt#L155
+          '';
+        })
+        [
+          "buf_ignore"
+          "callback"
+          "callbacks"
+          "debounce"
+          "filetypes"
+          "hybrid_modes"
+          "modes"
+        ]
+    );
   };
 }
