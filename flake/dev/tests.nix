@@ -7,7 +7,7 @@
   perSystem =
     { pkgs, ... }:
     {
-      checks = pkgs.callPackages ../tests {
+      checks = pkgs.callPackages ../../tests {
         inherit helpers self;
       };
     };

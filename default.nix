@@ -1,6 +1,6 @@
 (import (
   let
-    lock = builtins.fromJSON (builtins.readFile ./flake.lock);
+    lock = builtins.fromJSON (builtins.readFile ./flake/dev/flake.lock);
   in
   fetchTarball {
     url =

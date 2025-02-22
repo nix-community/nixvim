@@ -6,10 +6,14 @@ on:
   # Allow manual triggering
   workflow_dispatch:
     inputs:
-      lock:
+      root_lock:
         type: boolean
         default: true
-        description: Update flake.lock
+        description: Update root flake.lock
+      dev_lock:
+        type: boolean
+        default: true
+        description: Update dev flake.lock
       generate:
         type: boolean
         default: true
@@ -100,12 +104,28 @@ jobs:
           git fetch origin "$pr_branch"
           git branch --set-upstream-to "origin/$pr_branch"
 
-      - name: Update flake.lock
-        id: flake_lock
-        if: inputs.lock || github.event_name == 'schedule'
+      - name: Update root flake.lock
+        id: root_flake_lock
+        if: inputs.root_lock || github.event_name == 'schedule'
         run: |
           old=$(git show --no-patch --format=%h)
           nix flake update --commit-lock-file
+          new=$(git show --no-patch --format=%h)
+          if [ "$old" != "$new" ]; then
+            echo "body<<EOF" >> "$GITHUB_OUTPUT"
+            git show --no-patch --format=%b >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update dev flake.lock
+        id: dev_flake_lock
+        if: inputs.dev_lock || github.event_name == 'schedule'
+        run: |
+          root_nixpkgs=$(nix eval -f . 'inputs.nixpkgs.rev')
+          old=$(git show --no-patch --format=%h)
+          nix flake update --commit-lock-file \
+              --override-input nixpkgs "github:NixOS/nixpkgs/$root_nixpkgs" \
+              --flake './flake/dev'
           new=$(git show --no-patch --format=%h)
           if [ "$old" != "$new" ]; then
             echo "body<<EOF" >> "$GITHUB_OUTPUT"
@@ -185,9 +205,14 @@ jobs:
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
           body: |
-            ## Flake lockfile
+            ## Root lockfile
             ```
-            ${{ steps.flake_lock.outputs.body || 'No changes' }}
+            ${{ steps.root_flake_lock.outputs.body || 'No changes' }}
+            ```
+
+            ## Dev lockfile
+            ```
+            ${{ steps.dev_flake_lock.outputs.body || 'No changes' }}
             ```
 
             ## Generate

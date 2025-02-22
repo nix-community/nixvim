@@ -9,59 +9,9 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
-    /*
-      # NOTE: The inputs below this comment are optional
-      # You can remove them with `inputs.<input>.follows = ""`
-
-      For example:
-
-      ```
-      nixvim = {
-        url = "github:nix-community/nixvim";
-        inputs = {
-          nixpkgs.follows = "nixpkgs";
-          flake-parts.follows = "flake-parts";
-
-          devshell.follows = "";
-          flake-compat.follows = "";
-          git-hooks.follows = "";
-          home-manager.follows = "";
-          nix-darwin.follows = "";
-          treefmt-nix.follows = "";
-        };
-      };
-      ```
-    */
-
     nuschtosSearch = {
       url = "github:NuschtOS/search";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    devshell = {
-      url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
-
-    git-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
     };
   };
 

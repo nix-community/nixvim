@@ -6,7 +6,6 @@
 {
   perSystem =
     {
-      config,
       inputs',
       system,
       ...
@@ -18,8 +17,5 @@
         inherit (inputs) nixpkgs;
         inherit (inputs') nuschtosSearch;
       };
-
-      # Test that all packages build fine when running `nix flake check`.
-      checks = config.packages;
     };
 }

@@ -1,21 +1,22 @@
-{ lib, inputs, ... }:
+{ inputs, ... }:
 {
-  imports =
-    [
-      ./devshell.nix
-      ./list-plugins
-    ]
-    ++ lib.optional (inputs.git-hooks ? flakeModule) inputs.git-hooks.flakeModule
-    ++ lib.optional (inputs.treefmt-nix ? flakeModule) inputs.treefmt-nix.flakeModule;
+  imports = [
+    ./devshell.nix
+    ./list-plugins
+    ./package-tests.nix
+    ./template-tests.nix
+    ./tests.nix
+    inputs.git-hooks.flakeModule
+    inputs.treefmt-nix.flakeModule
+  ];
 
   perSystem =
     {
-      lib,
       pkgs,
       system,
       ...
     }:
-    lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
+    {
       treefmt.config = {
         projectRootFile = "flake.nix";
         flakeCheck = true;
@@ -66,8 +67,7 @@
           formatter.ruff-format.options = [ "--isolated" ];
         };
       };
-    }
-    // lib.optionalAttrs (inputs.git-hooks ? flakeModule) {
+
       pre-commit = {
         # We have a treefmt check already, so this is redundant.
         # We also can't run the test if it includes running `nix build`,

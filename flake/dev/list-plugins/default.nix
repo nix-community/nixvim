@@ -1,12 +1,8 @@
-{ inputs, self, ... }:
+{ self, ... }:
 {
   perSystem =
     {
-      self',
-      config,
       lib,
-      inputs',
-      system,
       pkgs,
       ...
     }:
@@ -33,8 +29,6 @@
             list-plugins --root-path ${self} > $out
           '';
 
-    }
-    // lib.optionalAttrs (inputs.devshell ? flakeModule) {
       devshells.default.commands = [
         {
           name = "list-plugins";
