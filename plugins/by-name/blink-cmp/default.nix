@@ -14,6 +14,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   description = ''
     Performant, batteries-included completion plugin for Neovim.
+
+    <!-- TODO: mention `plugins.*.blink` options -->
   '';
 
   settingsOptions = import ./settings-options.nix lib;
