@@ -16,16 +16,20 @@ end
 
 function Link(link)
 	local target = link.target
-	-- Check for relative links
+
+	-- Check for targets on the same page
 	-- TODO: handle ../
-	while hasPrefix("./", target) do
-		-- strip leading ./
-		target = sub(target, 3)
+	local bareTarget, _ = target:gsub("[#?].*$", "")
+	-- strip leading ./
+	while hasPrefix("./", bareTarget) do
+		bareTarget = sub(bareTarget, 3)
 	end
-	if hasPrefix("#", target) then
-		-- No-op for anchor targets on the same page
+	-- No-op for targets on the same page
+	if bareTarget == "" or bareTarget == "." then
 		return nil
 	end
+
+	-- Relative links should target the github repo
 	if not hasPrefix("https://", target) then
 		link.target = githubUrl .. target
 		return link
