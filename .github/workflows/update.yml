@@ -239,6 +239,23 @@ jobs:
               echo "$generated"
               echo
             fi
+            run_cmd='gh workflow run update.yml'
+            if [[ "$base_branch" != "main" ]]; then
+              run_cmd+=" --ref $base_branch"
+            fi
+            echo '---'
+            echo
+            echo -n 'You can re-run the update by going to the '
+            echo '[workflow'"'"'s page](https://github.com/nix-community/nixvim/actions/workflows/update.yml)'
+            echo 'or by using the `gh` command:'
+            echo '```sh'
+            echo "$run_cmd"
+            echo '```'
+            echo
+            echo -n 'If needed, you can also specify workflow inputs on the command line, '
+            echo 'using the `-F --field`, `-f --raw-field`, or `--json` flags.'
+            echo 'See `gh workflow run --help`.'
+            echo
           ) > body.md
 
           if [[ -n "$pr_num" ]]; then
