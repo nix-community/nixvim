@@ -207,34 +207,51 @@ jobs:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
-          body: |
-            ## Root lockfile
-            ```
-            ${{ steps.root_flake_lock.outputs.body || 'No changes' }}
-            ```
-
-            ## Dev lockfile
-            ```
-            ${{ steps.dev_flake_lock.outputs.body || 'No changes' }}
-            ```
-
-            ## Generate
-            ${{ steps.generate.outputs.body || 'No changes' }}
+          root_lock: ${{ steps.root_flake_lock.outputs.body }}
+          dev_lock: ${{ steps.dev_flake_lock.outputs.body }}
+          generated: ${{ steps.generate.outputs.body }}
         run: |
           echo "Pushing to remote branch $pr_branch"
           git push --force --set-upstream origin "$pr_branch"
 
+          echo "Writing PR body file"
+          (
+            if [[ -z "$root_lock$dev_lock$generated" ]]; then
+              echo '## No changes'
+              echo
+            fi
+            if [[ -n "$root_lock" ]]; then
+              echo '## Root lockfile'
+              echo '```'
+              echo "$root_lock"
+              echo '```'
+              echo
+            fi
+            if [[ -n "$dev_lock" ]]; then
+              echo '## Dev lockfile'
+              echo '```'
+              echo "$dev_lock"
+              echo '```'
+              echo
+            fi
+            if [[ -n "$generated" ]]; then
+              echo '## Generated files'
+              echo "$generated"
+              echo
+            fi
+          ) > body.md
+
           if [[ -n "$pr_num" ]]; then
             echo "Editing existing PR #$pr_num"
             operation=updated
-            gh pr edit "$pr_num" --body "$body"
+            gh pr edit "$pr_num" --body-file body.md
           else
             echo "Creating new PR"
             operation=created
             gh pr create \
               --base "$base_branch" \
               --title "$title" \
-              --body "$body"
+              --body-file body.md
           fi
 
           pr_info=$(
