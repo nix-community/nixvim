@@ -170,7 +170,10 @@ jobs:
           if [[ -n "$commits" ]]; then
             echo "Applying ${#commits[@]} commits..."
             echo "count=${#commits[@]}" >> $GITHUB_OUTPUT
-            git cherry-pick --strategy-option=theirs "${commits[@]}"
+            git cherry-pick \
+              --strategy-option=theirs \
+              --empty=drop \
+              "${commits[@]}"
           else
             echo "Nothing to re-apply"
           fi
