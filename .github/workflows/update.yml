@@ -43,6 +43,8 @@ jobs:
       repo: ${{ github.repository }}
       base_branch: ${{ github.ref_name }}
       pr_branch: update/${{ github.ref_name }}
+      workflow_run_id: ${{ github.run_id }}
+      workflow_run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     steps:
       - name: Checkout repository
@@ -244,6 +246,9 @@ jobs:
               run_cmd+=" --ref $base_branch"
             fi
             echo '---'
+            echo
+            echo -n 'This PR was most recently updated by workflow run '
+            echo "[$workflow_run_id]($workflow_run_url)."
             echo
             echo -n 'You can re-run the update by going to the '
             echo '[workflow'"'"'s page](https://github.com/nix-community/nixvim/actions/workflows/update.yml)'
