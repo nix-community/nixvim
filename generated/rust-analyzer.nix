@@ -531,6 +531,24 @@
       kind = "boolean";
     };
   };
+  "rust-analyzer.completion.autoAwait.enable" = {
+    description = ''
+      Toggles the additional completions that automatically show method calls and field accesses with `await` prefixed to them when completing on a future.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.completion.autoIter.enable" = {
+    description = ''
+      Toggles the additional completions that automatically show method calls with `iter()` or `into_iter()` prefixed to them when completing on a type that has them.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.completion.autoimport.enable" = {
     description = ''
       Toggles the additional completions that automatically add imports when completed.
@@ -1552,6 +1570,15 @@
     description = ''
       Whether to hide inlay type hints for `let` statements that initialize to a closure.
       Only applies to closures with blocks, same as `#rust-analyzer.inlayHints.closureReturnTypeHints.enable#`.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.inlayHints.typeHints.hideClosureParameter" = {
+    description = ''
+      Whether to hide inlay parameter type hints for closures.
     '';
     pluginDefault = false;
     type = {
