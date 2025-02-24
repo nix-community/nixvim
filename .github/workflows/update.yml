@@ -43,6 +43,8 @@ jobs:
       repo: ${{ github.repository }}
       base_branch: ${{ github.ref_name }}
       pr_branch: update/${{ github.ref_name }}
+      workflow_run_id: ${{ github.run_id }}
+      workflow_run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     steps:
       - name: Checkout repository
@@ -207,34 +209,71 @@ jobs:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
-          body: |
-            ## Root lockfile
-            ```
-            ${{ steps.root_flake_lock.outputs.body || 'No changes' }}
-            ```
-
-            ## Dev lockfile
-            ```
-            ${{ steps.dev_flake_lock.outputs.body || 'No changes' }}
-            ```
-
-            ## Generate
-            ${{ steps.generate.outputs.body || 'No changes' }}
+          root_lock: ${{ steps.root_flake_lock.outputs.body }}
+          dev_lock: ${{ steps.dev_flake_lock.outputs.body }}
+          generated: ${{ steps.generate.outputs.body }}
         run: |
           echo "Pushing to remote branch $pr_branch"
           git push --force --set-upstream origin "$pr_branch"
 
+          echo "Writing PR body file"
+          (
+            if [[ -z "$root_lock$dev_lock$generated" ]]; then
+              echo '## No changes'
+              echo
+            fi
+            if [[ -n "$root_lock" ]]; then
+              echo '## Root lockfile'
+              echo '```'
+              echo "$root_lock"
+              echo '```'
+              echo
+            fi
+            if [[ -n "$dev_lock" ]]; then
+              echo '## Dev lockfile'
+              echo '```'
+              echo "$dev_lock"
+              echo '```'
+              echo
+            fi
+            if [[ -n "$generated" ]]; then
+              echo '## Generated files'
+              echo "$generated"
+              echo
+            fi
+            run_cmd='gh workflow run update.yml'
+            if [[ "$base_branch" != "main" ]]; then
+              run_cmd+=" --ref $base_branch"
+            fi
+            echo '---'
+            echo
+            echo -n 'This PR was most recently updated by workflow run '
+            echo "[$workflow_run_id]($workflow_run_url)."
+            echo
+            echo -n 'You can re-run the update by going to the '
+            echo '[workflow'"'"'s page](https://github.com/nix-community/nixvim/actions/workflows/update.yml)'
+            echo 'or by using the `gh` command:'
+            echo '```sh'
+            echo "$run_cmd"
+            echo '```'
+            echo
+            echo -n 'If needed, you can also specify workflow inputs on the command line, '
+            echo 'using the `-F --field`, `-f --raw-field`, or `--json` flags.'
+            echo 'See `gh workflow run --help`.'
+            echo
+          ) > body.md
+
           if [[ -n "$pr_num" ]]; then
             echo "Editing existing PR #$pr_num"
             operation=updated
-            gh pr edit "$pr_num" --body "$body"
+            gh pr edit "$pr_num" --body-file body.md
           else
             echo "Creating new PR"
             operation=created
             gh pr create \
               --base "$base_branch" \
               --title "$title" \
-              --body "$body"
+              --body-file body.md
           fi
 
           pr_info=$(
