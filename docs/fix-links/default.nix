@@ -26,8 +26,8 @@ runCommand (src.name or (builtins.baseNameOf src))
 
     pandoc \
         --output $out \
-        --from markdown \
-        --to markdown-raw_attribute \
+        --from gfm \
+        --to gfm \
         --lua-filter filter.lua \
         $src
   ''
