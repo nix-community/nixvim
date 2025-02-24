@@ -121,7 +121,7 @@ jobs:
         id: dev_flake_lock
         if: inputs.dev_lock || github.event_name == 'schedule'
         run: |
-          root_nixpkgs=$(nix eval -f . 'inputs.nixpkgs.rev')
+          root_nixpkgs=$(nix eval --raw --file . 'inputs.nixpkgs.rev')
           old=$(git show --no-patch --format=%h)
           nix flake update --commit-lock-file \
               --override-input nixpkgs "github:NixOS/nixpkgs/$root_nixpkgs" \
