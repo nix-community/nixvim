@@ -525,7 +525,7 @@ in
     '';
 
     providers = mkNullOrOption' {
-      type = with types; attrsOf (import ./provider-config.nix lib);
+      type = with types; attrsOf (submodule ./provider-config.nix);
       description = ''
         Definition of completion providers.
       '';
