@@ -11,8 +11,10 @@ in
   };
 
   imports = [
+    ./_utils.nix
     ./mdbook
     ./menu
+    ./option-pages
     ./pages.nix
     ./user-guide
   ];
