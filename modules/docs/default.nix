@@ -14,6 +14,7 @@ in
     ./mdbook
     ./menu
     ./pages.nix
+    ./user-guide
   ];
 
   config.docs = {
