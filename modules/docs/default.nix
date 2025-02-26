@@ -16,6 +16,7 @@ in
     ./menu
     ./option-pages
     ./pages.nix
+    ./platforms.nix
     ./user-guide
   ];
 

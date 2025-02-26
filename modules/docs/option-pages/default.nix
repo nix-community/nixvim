@@ -172,6 +172,9 @@ in
     };
   };
   config.docs = {
+    _utils = {
+      inherit optionsPageModule;
+    };
     # Define pages for each "optionPages" attr
     pages = lib.pipe config.docs.optionPages [
       (lib.filterAttrs (_: v: v.enable))
