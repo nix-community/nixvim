@@ -33,5 +33,12 @@ in
       menu.location = [ "Contributing" ];
       source = fixLinks ../../CONTRIBUTING.md;
     };
+    optionPages.docs = {
+      optionScopes = [ "docs" ];
+      page.menu.location = [ "docs" ];
+      page.text = ''
+        Internal options used to construct these docs.
+      '';
+    };
   };
 }
