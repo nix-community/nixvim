@@ -58,9 +58,50 @@ in
     };
   };
 
-  # Define pages for each "platformPages" attr
-  config.docs.pages = lib.pipe config.docs.platformPages [
-    (lib.filterAttrs (_: v: v.enable))
-    (builtins.mapAttrs (_: cfg: cfg.page))
-  ];
+  config.docs = {
+    platformPages = {
+      "platforms/nixos" = {
+        page.menu.location = [
+          "platforms"
+          "NixOS"
+        ];
+        module = ../../wrappers/modules/nixos.nix;
+      };
+      "platforms/home-manager" = {
+        page.menu.location = [
+          "platforms"
+          "home-manager"
+        ];
+        module = ../../wrappers/modules/hm.nix;
+      };
+      "platforms/nix-darwin" = {
+        page.menu.location = [
+          "platforms"
+          "nix-darwin"
+        ];
+        module = ../../wrappers/modules/darwin.nix;
+      };
+    };
+    pages =
+      {
+        "platforms" = {
+          menu.section = "platforms";
+          menu.location = [ "platforms" ];
+          source = ../../docs/platforms/index.md;
+        };
+        "platforms/standalone" = {
+          menu.section = "platforms";
+          menu.location = [
+            "platforms"
+            "standalone"
+          ];
+          source = ../../docs/platforms/standalone.md;
+        };
+      }
+      # Define pages for each "platformPages" attr
+      // lib.pipe config.docs.platformPages [
+        (lib.filterAttrs (_: v: v.enable))
+        (builtins.mapAttrs (_: cfg: cfg.page))
+      ];
+  };
 }
