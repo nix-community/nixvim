@@ -1,22 +1,25 @@
+{ lib, ... }:
 {
   theme = {
     plugins.alpha = {
       enable = true;
+
       theme = "dashboard";
     };
   };
 
-  theme-lua = {
+  theme-raw-settings = {
     plugins.alpha = {
       enable = true;
-      theme.__raw = "require'alpha.themes.startify'.config";
+
+      settings = lib.nixvim.mkRaw "require('alpha.themes.dashboard').config";
     };
   };
 
   terminal = {
     plugins.alpha = {
       enable = true;
-      layout = [
+      settings.layout = [
         {
           type = "terminal";
           command = "echo 'Welcome to Nixvim!'";
@@ -34,7 +37,7 @@
     plugins.alpha = {
       enable = true;
 
-      layout = [
+      settings.layout = [
         {
           type = "padding";
           val = 2;
@@ -88,7 +91,7 @@
           };
         }
       ];
-      opts = {
+      settings.opts = {
         margin = 0;
         noautocmd = true;
 
@@ -104,7 +107,7 @@
     plugins.web-devicons.enable = false;
     plugins.alpha = {
       enable = true;
-      theme = "dashboard";
+      settings = lib.nixvim.mkRaw "require('alpha.themes.dashboard').config";
     };
   };
 }
