@@ -16,7 +16,7 @@
   terminal = {
     plugins.alpha = {
       enable = true;
-      layout = [
+      settings.layout = [
         {
           type = "terminal";
           command = "echo 'Welcome to Nixvim!'";
@@ -34,7 +34,7 @@
     plugins.alpha = {
       enable = true;
 
-      layout = [
+      settings.layout = [
         {
           type = "padding";
           val = 2;
@@ -88,7 +88,7 @@
           };
         }
       ];
-      opts = {
+      settings.opts = {
         margin = 0;
         noautocmd = true;
 
