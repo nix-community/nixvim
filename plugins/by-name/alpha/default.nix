@@ -1,177 +1,113 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
-let
-  inherit (lib) types mkOption;
+{ lib, ... }:
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "alpha";
+  package = "alpha-nvim";
 
-  cfg = config.plugins.alpha;
+  maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
-  sectionType = types.submodule {
-    freeformType = with types; attrsOf anything;
-    options = {
-      type = mkOption {
-        type = types.enum [
-          "button"
-          "group"
-          "padding"
-          "text"
-          "terminal"
+  # TODO Added 2025-10-26: remove after 26.05
+  optionsRenamedToSettings = [
+    "opts"
+    "layout"
+  ];
+
+  settingsExample = {
+    layout = [
+      {
+        type = "padding";
+        val = 2;
+      }
+      {
+        type = "text";
+        val = [
+          "███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
+          "████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
+          "██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
+          "██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
+          "██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
+          "╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
         ];
-        description = "Type of section";
-      };
+        opts = {
+          position = "center";
+          hl = "Type";
+        };
+      }
+      {
+        type = "padding";
+        val = 2;
+      }
+      {
+        type = "group";
+        val = [
+          {
+            type = "button";
+            val = "  New file";
+            on_press = lib.nixvim.nestedLiteralLua "function() vim.cmd[[ene]] end";
+            opts.shortcut = "n";
+          }
+          {
+            type = "button";
+            val = " Quit Neovim";
+            on_press = lib.nixvim.nestedLiteralLua "function() vim.cmd[[qa]] end";
+            opts.shortcut = "q";
+          }
+        ];
+      }
+      {
+        type = "padding";
+        val = 2;
+      }
+      {
+        type = "text";
+        val = "Inspiring quote here.";
+        opts = {
+          position = "center";
+          hl = "Keyword";
+        };
+      }
+    ];
+  };
 
-      val = lib.nixvim.mkNullOrOption (
-        with types;
-        nullOr (oneOf [
-
-          # "button", "text"
-          (maybeRaw str)
-          # "padding"
-          int
-          (listOf (
-            either
-              # "text" (list of strings)
-              str
-              # "group"
-              (attrsOf anything)
-          ))
-        ])
-      ) "Value for section";
-
-      opts = mkOption {
-        type = with types; attrsOf anything;
-        default = { };
-        description = "Additional options for the section";
-      };
+  extraOptions = {
+    theme = lib.mkOption {
+      type =
+        with lib.types;
+        let
+          # TODO: deprecated 2025-10-30, remove after 26.05
+          old = nullOr (maybeRaw str);
+          new = nullOr str;
+        in
+        old // { inherit (new) description; };
+      default = null;
+      example = "dashboard";
+      description = "You can directly use a pre-defined theme.";
     };
   };
-in
-{
-  options = {
+
+  callSetup = false;
+  extraConfig = cfg: opts: {
+    assertions = lib.nixvim.mkAssertions "plugins.alpha" {
+      assertion = cfg.theme != null -> builtins.isString cfg.theme;
+      message = ''
+        Defining `${opts.theme}` as raw lua is deprecated. You can define `${opts.settings}` as raw lua instead:
+        ${opts.settings} = lib.nixvim.mkRaw ${lib.generators.toPretty { } cfg.theme.__raw};
+      '';
+    };
     plugins.alpha = {
-      enable = lib.mkEnableOption "alpha-nvim";
+      settings = lib.mkIf (cfg.theme != null) (
+        lib.mkDerivedConfig opts.theme (
+          value:
+          if builtins.isString value then
+            lib.nixvim.mkRaw "require('alpha.themes.${value}').config"
+          else
+            value
+        )
+      );
 
-      package = lib.mkPackageOption pkgs "alpha-nvim" {
-        default = [
-          "vimPlugins"
-          "alpha-nvim"
-        ];
-      };
-
-      theme = mkOption {
-        type = with types; nullOr (maybeRaw str);
-        apply = v: if lib.isString v then lib.nixvim.mkRaw "require'alpha.themes.${v}'.config" else v;
-        default = null;
-        example = "dashboard";
-        description = "You can directly use a pre-defined theme.";
-      };
-
-      layout = mkOption {
-        type = with types; either (maybeRaw str) (listOf sectionType);
-        default = [ ];
-        description = "List of sections to layout for the dashboard";
-        example = [
-          {
-            type = "padding";
-            val = 2;
-          }
-          {
-            type = "text";
-            val = [
-              "███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗"
-              "████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║"
-              "██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║"
-              "██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║"
-              "██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║"
-              "╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
-            ];
-            opts = {
-              position = "center";
-              hl = "Type";
-            };
-          }
-          {
-            type = "padding";
-            val = 2;
-          }
-          {
-            type = "group";
-            val = [
-              {
-                type = "button";
-                val = "  New file";
-                on_press.__raw = "function() vim.cmd[[ene]] end";
-                opts.shortcut = "n";
-              }
-              {
-                type = "button";
-                val = " Quit Neovim";
-                on_press.__raw = "function() vim.cmd[[qa]] end";
-                opts.shortcut = "q";
-              }
-            ];
-          }
-          {
-            type = "padding";
-            val = 2;
-          }
-          {
-            type = "text";
-            val = "Inspiring quote here.";
-            opts = {
-              position = "center";
-              hl = "Keyword";
-            };
-          }
-        ];
-      };
-
-      opts = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
-        Optional global options.
+      luaConfig.content = ''
+        require('alpha').setup(${lib.nixvim.toLuaObject cfg.settings})
+        require('alpha.term')
       '';
     };
   };
-
-  config =
-    let
-      layoutDefined = cfg.layout != [ ];
-      themeDefined = cfg.theme != null;
-    in
-    lib.mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      assertions = lib.nixvim.mkAssertions "plugins.alpha" [
-        {
-          assertion = themeDefined || layoutDefined;
-          message = ''
-            You have to either set a `theme` or define some sections in `layout`.
-          '';
-        }
-        {
-          assertion = !(themeDefined && layoutDefined);
-          message = ''
-            You can't define both a `theme` and custom options.
-            Set `plugins.alpha.theme = null` if you want to configure alpha manually using the `layout` option.
-          '';
-        }
-      ];
-
-      extraConfigLua =
-        let
-          setupOptions =
-            if themeDefined then
-              cfg.theme
-            else
-              (with cfg; {
-                inherit layout opts;
-              });
-        in
-        ''
-          require('alpha').setup(${lib.nixvim.toLuaObject setupOptions})
-          require('alpha.term')
-        '';
-    };
 }
