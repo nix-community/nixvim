@@ -186,6 +186,10 @@
   "rust-analyzer.cargo.cfgs" = {
     description = ''
       List of cfg options to enable with the given values.
+
+      To enable a name without a value, use `"key"`.
+      To enable a name with a value, use `"key=value"`.
+      To disable, prefix the entry with a `!`.
     '';
     pluginDefault = [
       "debug_assertions"
@@ -531,6 +535,24 @@
       kind = "boolean";
     };
   };
+  "rust-analyzer.completion.autoAwait.enable" = {
+    description = ''
+      Toggles the additional completions that automatically show method calls and field accesses with `await` prefixed to them when completing on a future.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.completion.autoIter.enable" = {
+    description = ''
+      Toggles the additional completions that automatically show method calls with `iter()` or `into_iter()` prefixed to them when completing on a type that has them.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.completion.autoimport.enable" = {
     description = ''
       Toggles the additional completions that automatically add imports when completed.
@@ -833,9 +855,9 @@
       kind = "list";
     };
   };
-  "rust-analyzer.files.excludeDirs" = {
+  "rust-analyzer.files.exclude" = {
     description = ''
-      These directories will be ignored by rust-analyzer. They are
+      These paths (file/directories) will be ignored by rust-analyzer. They are
       relative to the workspace root, and globs are not supported. You may
       also need to add the folders to Code's `files.watcherExclude`.
     '';
@@ -991,6 +1013,15 @@
     description = ''
       Whether to show keyword hover popups. Only applies when
       `#rust-analyzer.hover.documentation.enable#` is set.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.hover.dropGlue.enable" = {
+    description = ''
+      Whether to show drop glue information on hover.
     '';
     pluginDefault = true;
     type = {
@@ -1552,6 +1583,15 @@
     description = ''
       Whether to hide inlay type hints for `let` statements that initialize to a closure.
       Only applies to closures with blocks, same as `#rust-analyzer.inlayHints.closureReturnTypeHints.enable#`.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
+  "rust-analyzer.inlayHints.typeHints.hideClosureParameter" = {
+    description = ''
+      Whether to hide inlay parameter type hints for closures.
     '';
     pluginDefault = false;
     type = {

@@ -1292,6 +1292,7 @@
       possible = [
         "sql-formatter"
         "sqlfluff"
+        "sqruff"
       ];
     };
     linter = {

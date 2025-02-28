@@ -123,7 +123,6 @@
     "reason_ls"
     "relay_lsp"
     "remark_ls"
-    "rescriptls"
     "rnix"
     "robotcode"
     "robotframework_ls"
@@ -154,6 +153,7 @@
     "textlsp"
     "theme_check"
     "tsp_server"
+    "turbo_ls"
     "turtle_ls"
     # typst-lsp has been removed from nixpkgs as the project is archived
     "typst_lsp"
@@ -176,6 +176,7 @@
 
   packages = {
     aiken = "aiken";
+    air = "air-formatter";
     angularls = "angular-language-server";
     ansiblels = "ansible-language-server";
     arduino_language_server = "arduino-language-server";
@@ -331,6 +332,7 @@
     quick_lint_js = "quick-lint-js";
     regal = "regal";
     regols = "regols";
+    rescriptls = "rescript-language-server";
     # This is not entirely true, but the server is deprecated
     rls = "rustup";
     rubocop = "rubocop";
@@ -371,6 +373,7 @@
       "rubyPackages"
       "syntax_tree"
     ];
+    systemd_ls = "systemd-language-server";
     tailwindcss = "tailwindcss-language-server";
     taplo = "taplo";
     tblgen_lsp_server = [

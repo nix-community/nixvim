@@ -126,6 +126,7 @@
     "buildifier"
     "cbfmt"
     "clang_format"
+    "cljfmt"
     "cljstyle"
     "cmake_format"
     "codespell"
