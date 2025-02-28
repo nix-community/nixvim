@@ -154,6 +154,7 @@
     "textlsp"
     "theme_check"
     "tsp_server"
+    "turbo_ls"
     "turtle_ls"
     # typst-lsp has been removed from nixpkgs as the project is archived
     "typst_lsp"
@@ -176,6 +177,7 @@
 
   packages = {
     aiken = "aiken";
+    air = "air-formatter";
     angularls = "angular-language-server";
     ansiblels = "ansible-language-server";
     arduino_language_server = "arduino-language-server";
@@ -371,6 +373,7 @@
       "rubyPackages"
       "syntax_tree"
     ];
+    systemd-language-server = "systemd-language-server";
     tailwindcss = "tailwindcss-language-server";
     taplo = "taplo";
     tblgen_lsp_server = [
