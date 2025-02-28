@@ -15,6 +15,11 @@
     "name": "aiken"
   },
   {
+    "cmd": ["air", "language-server"],
+    "desc": "https://github.com/posit-dev/air\n\nAir is an R formatter and language server, written in Rust.\n\nRefer to the [documentation](https://posit-dev.github.io/air/editors.html) for more details.\n\n  ",
+    "name": "air"
+  },
+  {
     "cmd": ["alloy", "lsp"],
     "desc": "https://github.com/AlloyTools/org.alloytools.alloy\n\nAlloy is a formal specification language for describing structures and a tool for exploring them.\n\nYou may also need to configure the filetype for Alloy (*.als) files:\n\n```\nautocmd BufNewFile,BufRead *.als set filetype=alloy\n```\n\nor\n\n```lua\nvim.filetype.add({\n  pattern = {\n    ['.*/*.als'] = 'alloy',\n  },\n})\n```\n\nAlternatively, you may use a syntax plugin like https://github.com/runoshun/vim-alloy.\n",
     "name": "alloy_ls"
@@ -31,6 +36,8 @@
       "--tsProbeLocations",
       "",
       "--ngProbeLocations",
+      "",
+      "--angularCoreVersion",
       ""
     ],
     "desc": "https://github.com/angular/vscode-ng-language-service\n\n`angular-language-server` can be installed via npm `npm install -g @angular/language-server`.\n\nNote, that if you override the default `cmd`, you must also update `on_new_config` to set `new_config.cmd` during startup.\n\n```lua\nlocal project_library_path = \"/path/to/project/lib\"\nlocal cmd = {\"ngserver\", \"--stdio\", \"--tsProbeLocations\", project_library_path , \"--ngProbeLocations\", project_library_path}\n\nrequire'lspconfig'.angularls.setup{\n  cmd = cmd,\n  on_new_config = function(new_config,new_root_dir)\n    new_config.cmd = cmd\n  end,\n}\n```\n    ",
@@ -72,7 +79,7 @@
   },
   {
     "cmd": ["atlas", "tool", "lsp", "--stdio"],
-    "desc": "https://github.com/ariga/atlas\n\nLanguage server for Atlas config and scheme files.\n\nYou may also need to configure the filetype for *.hcl files:\n\n`autocmd BufNewFile,BufRead atlas.hcl set filetype=atlas-config`\n`autocmd BufNewFile,BufRead *.my.hcl set filetype=atlas-schema-mysql`\n`autocmd BufNewFile,BufRead *.pg.hcl set filetype=atlas-schema-postgresql`\n`autocmd BufNewFile,BufRead *.lt.hcl set filetype=atlas-schema-sqlite`\n`autocmd BufNewFile,BufRead *.ch.hcl set filetype=atlas-schema-clickhouse`\n`autocmd BufNewFile,BufRead *.ms.hcl set filetype=atlas-schema-mssql`\n`autocmd BufNewFile,BufRead *.rs.hcl set filetype=atlas-schema-redshift`\n`autocmd BufNewFile,BufRead *.test.hcl set filetype=atlas-test`\n`autocmd BufNewFile,BufRead *.plan.hcl set filetype=atlas-plan`\n\nor\n\n```lua\nvim.filetype.add({\n  filename = {\n    ['atlas.hcl'] = 'atlas-config',\n  },\n  pattern = {\n    ['.*/*.my.hcl'] = 'atlas-schema-mysql',\n    ['.*/*.pg.hcl'] = 'atlas-schema-postgresql',\n    ['.*/*.lt.hcl'] = 'atlas-schema-sqlite',\n    ['.*/*.ch.hcl'] = 'atlas-schema-clickhouse',\n    ['.*/*.ms.hcl'] = 'atlas-schema-mssql',\n    ['.*/*.rs.hcl'] = 'atlas-schema-redshift',\n    ['.*/*.test.hcl'] = 'atlas-test',\n    ['.*/*.plan.hcl'] = 'atlas-plan',\n  },\n})\n```\n\n",
+    "desc": "https://github.com/ariga/atlas\n\nLanguage server for Atlas config and scheme files.\n\nYou may also need to configure the filetype for *.hcl files:\n\n`autocmd BufNewFile,BufRead atlas.hcl set filetype=atlas-config`\n`autocmd BufNewFile,BufRead *.my.hcl set filetype=atlas-schema-mysql`\n`autocmd BufNewFile,BufRead *.pg.hcl set filetype=atlas-schema-postgresql`\n`autocmd BufNewFile,BufRead *.lt.hcl set filetype=atlas-schema-sqlite`\n`autocmd BufNewFile,BufRead *.ch.hcl set filetype=atlas-schema-clickhouse`\n`autocmd BufNewFile,BufRead *.ms.hcl set filetype=atlas-schema-mssql`\n`autocmd BufNewFile,BufRead *.rs.hcl set filetype=atlas-schema-redshift`\n`autocmd BufNewFile,BufRead *.test.hcl set filetype=atlas-test`\n`autocmd BufNewFile,BufRead *.plan.hcl set filetype=atlas-plan`\n\nor\n\n```lua\nvim.filetype.add({\n  filename = {\n    ['atlas.hcl'] = 'atlas-config',\n  },\n  pattern = {\n    ['.*/*.my.hcl'] = 'atlas-schema-mysql',\n    ['.*/*.pg.hcl'] = 'atlas-schema-postgresql',\n    ['.*/*.lt.hcl'] = 'atlas-schema-sqlite',\n    ['.*/*.ch.hcl'] = 'atlas-schema-clickhouse',\n    ['.*/*.ms.hcl'] = 'atlas-schema-mssql',\n    ['.*/*.rs.hcl'] = 'atlas-schema-redshift',\n    ['.*/*.test.hcl'] = 'atlas-test',\n    ['.*/*.plan.hcl'] = 'atlas-plan',\n  },\n})\n```\n\nOptionally, tell treesitter to treat Atlas filetypes as HCL for better syntax highlighting:\n\n```lua\nvim.treesitter.language.register('hcl', 'atlas-config')\nvim.treesitter.language.register('hcl', 'atlas-schema-mysql')\nvim.treesitter.language.register('hcl', 'atlas-schema-postgresql')\nvim.treesitter.language.register('hcl', 'atlas-schema-sqlite')\nvim.treesitter.language.register('hcl', 'atlas-schema-clickhouse')\nvim.treesitter.language.register('hcl', 'atlas-schema-mssql')\nvim.treesitter.language.register('hcl', 'atlas-schema-redshift')\nvim.treesitter.language.register('hcl', 'atlas-test')\nvim.treesitter.language.register('hcl', 'atlas-plan')\n```\n\n",
     "name": "atlas"
   },
   {
@@ -97,7 +104,7 @@
   },
   {
     "cmd": ["bacon-ls"],
-    "desc": "https://github.com/crisidev/bacon-ls\n\nA Language Server Protocol wrapper for [bacon](https://dystroy.org/bacon/).\nIt offers textDocument/diagnostic and workspace/diagnostic capabilities for Rust\nworkspaces using the Bacon export locations file.\n\nIt requires `bacon` and `bacon-ls` to be installed on the system using\n[mason.nvim](https://github.com/williamboman/mason.nvim) or manually:util\n\n```sh\n$ cargo install --locked bacon bacon-ls\n```\n\nSettings can be changed using the `settings` dictionary:util\n\n```lua\nsettings = {\n    -- Bacon export filename, default .bacon-locations\n    locationsFile = \".bacon-locations\",\n    -- Maximum time in seconds the LSP server waits for Bacon to update the\n    -- export file before loading the new diagnostics\n    waitTimeSeconds = 10\n}\n```\n    ",
+    "desc": "https://github.com/crisidev/bacon-ls\n\nA Language Server Protocol wrapper for [bacon](https://dystroy.org/bacon/).\nIt offers textDocument/diagnostic and workspace/diagnostic capabilities for Rust\nworkspaces using the Bacon export locations file.\n\nIt requires `bacon` and `bacon-ls` to be installed on the system using\n[mason.nvim](https://github.com/williamboman/mason.nvim) or manually\n\n```sh\n$ cargo install --locked bacon bacon-ls\n```\n\nSettings can be changed using the `init_options` dictionary:util\n\n```lua\ninit_options = {\n    -- Bacon export filename (default: .bacon-locations).\n    locationsFile = \".bacon-locations\",\n    -- Try to update diagnostics every time the file is saved (default: true).\n    updateOnSave = true,\n    --  How many milliseconds to wait before updating diagnostics after a save (default: 1000).\n    updateOnSaveWaitMillis = 1000,\n    -- Try to update diagnostics every time the file changes (default: true).\n    updateOnChange = true,\n    -- Try to validate that bacon preferences are setup correctly to work with bacon-ls (default: true).\n    validateBaconPreferences = true,\n    -- f no bacon preferences file is found, create a new preferences file with the bacon-ls job definition (default: true).\n    createBaconPreferencesFile = true,\n    -- Run bacon in background for the bacon-ls job (default: true)\n    runBaconInBackground = true,\n    -- Command line arguments to pass to bacon running in background (default \"--headless -j bacon-ls\")\n    runBaconInBackgroundCommandArguments = \"--headless -j bacon-ls\",\n    -- How many milliseconds to wait between background diagnostics check to synchronize all open files (default: 2000).\n    synchronizeAllOpenFilesWaitMillis = 2000,\n}\n```\n    ",
     "name": "bacon_ls"
   },
   {
@@ -121,7 +128,7 @@
     "name": "basics_ls"
   },
   {
-    "cmd": ["bazelrc-lsp"],
+    "cmd": ["bazelrc-lsp", "lsp"],
     "desc": "https://github.com/salesforce-misc/bazelrc-lsp\n\n`bazelrc-lsp` is a LSP for `.bazelrc` configuration files.\n\nThe `.bazelrc` file type is not detected automatically, you can register it manually (see below) or override the filetypes:\n\n```lua\nvim.filetype.add {\n  pattern = {\n    ['.*.bazelrc'] = 'bazelrc',\n  },\n}\n```\n",
     "name": "bazelrc_lsp"
   },
@@ -411,6 +418,11 @@
     "name": "ds_pinyin_lsp"
   },
   {
+    "cmd": ["dts-lsp"],
+    "desc": "`dts-lsp` is an LSP for Devicetree files built on top of tree-sitter-devicetree grammar.\nLanguage servers can be used in many editors, such as Visual Studio Code, Emacs\nor Vim\n\nInstall `dts-lsp` from https://github.com/igor-prusov/dts-lsp and add it to path\n\n`dts-lsp` doesn't require any configuration.\n\nMore about Devicetree:\nhttps://www.devicetree.org/\nhttps://docs.zephyrproject.org/latest/build/dts/index.html\n\n",
+    "name": "dts_lsp"
+  },
+  {
     "cmd": ["earthlyls"],
     "desc": "https://github.com/glehmann/earthlyls\n\nA fast language server for earthly.\n",
     "name": "earthlyls"
@@ -582,7 +594,7 @@
   },
   {
     "cmd": ["gleam", "lsp"],
-    "desc": "https://github.com/gleam-lang/gleam\n\nA language server for Gleam Programming Language.\n[Installation](https://gleam.run/getting-started/installing/)\n\nIt can be i\n",
+    "desc": "https://github.com/gleam-lang/gleam\n\nA language server for Gleam Programming Language.\n\nIt comes with the Gleam compiler, for installation see: [Installing Gleam](https://gleam.run/getting-started/installing/)\n",
     "name": "gleam"
   },
   {
@@ -637,7 +649,7 @@
   },
   {
     "cmd": ["harper-ls", "--stdio"],
-    "desc": "https://github.com/elijah-potter/harper\n\nThe language server for Harper, the slim, clean language checker for\ndevelopers.\n\nSee\n[docs](https://github.com/elijah-potter/harper/blob/master/harper-ls/README.md#configuration)\nfor more information on settings.\n\nIn short, however, they should look something like this:\n\n``` lua\nlspconfig.harper_ls.setup {\n  settings = {\n    [\"harper-ls\"] = {\n      userDictPath = \"~/dict.txt\"\n    }\n  },\n}\n```\n",
+    "desc": "https://github.com/automattic/harper\n\nThe language server for Harper, the slim, clean language checker for developers.\n\nSee our [documentation](https://writewithharper.com/docs/integrations/neovim) for more information on settings.\n\nIn short, they should look something like this:\n```lua\nlspconfig.harper_ls.setup {\n  settings = {\n    [\"harper-ls\"] = {\n      userDictPath = \"~/dict.txt\"\n    }\n  },\n}\n```\n    ",
     "name": "harper_ls"
   },
   {
@@ -835,7 +847,7 @@
   },
   {
     "cmd": ["lua-language-server"],
-    "desc": "https://github.com/luals/lua-language-server\n\nLua language server.\n\n`lua-language-server` can be installed by following the instructions\n[here](https://luals.github.io/#neovim-install).\n\nThe default `cmd` assumes that the `lua-language-server` binary can be\nfound in `$PATH`.\n\nIf you primarily use `lua-language-server` for Neovim, and want to\nprovide completions, analysis, and location handling for plugins on\nruntime path, you can use the following settings.\n\n``` lua\nrequire'lspconfig'.lua_ls.setup {\n  on_init = function(client)\n    if client.workspace_folders then\n      local path = client.workspace_folders[1].name\n      if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then\n        return\n      end\n    end\n\n    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {\n      runtime = {\n        -- Tell the language server which version of Lua you're using\n        -- (most likely LuaJIT in the case of Neovim)\n        version = 'LuaJIT'\n      },\n      -- Make the server aware of Neovim runtime files\n      workspace = {\n        checkThirdParty = false,\n        library = {\n          vim.env.VIMRUNTIME\n          -- Depending on the usage, you might want to add additional paths here.\n          -- \"${3rd}/luv/library\"\n          -- \"${3rd}/busted/library\",\n        }\n        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower and will cause issues when working on your own configuration (see https://github.com/neovim/nvim-lspconfig/issues/3189)\n        -- library = vim.api.nvim_get_runtime_file(\"\", true)\n      }\n    })\n  end,\n  settings = {\n    Lua = {}\n  }\n}\n```\n\nSee `lua-language-server`'s\n[documentation](https://luals.github.io/wiki/settings/) for an\nexplanation of the above fields: \\*\n[Lua.runtime.path](https://luals.github.io/wiki/settings/#runtimepath)\n\\*\n[Lua.workspace.library](https://luals.github.io/wiki/settings/#workspacelibrary)\n",
+    "desc": "https://github.com/luals/lua-language-server\n\nLua language server.\n\n`lua-language-server` can be installed by following the instructions\n[here](https://luals.github.io/#neovim-install).\n\nThe default `cmd` assumes that the `lua-language-server` binary can be\nfound in `$PATH`.\n\nIf you primarily use `lua-language-server` for Neovim, and want to\nprovide completions, analysis, and location handling for plugins on\nruntime path, you can use the following settings.\n\n``` lua\nrequire'lspconfig'.lua_ls.setup {\n  on_init = function(client)\n    if client.workspace_folders then\n      local path = client.workspace_folders[1].name\n      if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc')) then\n        return\n      end\n    end\n\n    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {\n      runtime = {\n        -- Tell the language server which version of Lua you're using\n        -- (most likely LuaJIT in the case of Neovim)\n        version = 'LuaJIT'\n      },\n      -- Make the server aware of Neovim runtime files\n      workspace = {\n        checkThirdParty = false,\n        library = {\n          vim.env.VIMRUNTIME\n          -- Depending on the usage, you might want to add additional paths here.\n          -- \"${3rd}/luv/library\"\n          -- \"${3rd}/busted/library\",\n        }\n        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower and will cause issues when working on your own configuration (see https://github.com/neovim/nvim-lspconfig/issues/3189)\n        -- library = vim.api.nvim_get_runtime_file(\"\", true)\n      }\n    })\n  end,\n  settings = {\n    Lua = {}\n  }\n}\n```\n\nSee `lua-language-server`'s\n[documentation](https://luals.github.io/wiki/settings/) for an\nexplanation of the above fields: \\*\n[Lua.runtime.path](https://luals.github.io/wiki/settings/#runtimepath)\n\\*\n[Lua.workspace.library](https://luals.github.io/wiki/settings/#workspacelibrary)\n",
     "name": "lua_ls"
   },
   { "cmd": ["luau-lsp", "lsp"], "name": "luau_lsp" },
@@ -1130,7 +1142,7 @@
     "name": "poryscript_pls"
   },
   {
-    "cmd": ["postgres_lsp"],
+    "cmd": ["postgres_lsp", "lsp-proxy"],
     "desc": "https://github.com/supabase/postgres_lsp\n\nA Language Server for Postgres\n        ",
     "name": "postgres_lsp"
   },
@@ -1325,7 +1337,7 @@
   },
   {
     "cmd": ["rust-analyzer"],
-    "desc": "https://github.com/rust-lang/rust-analyzer\n\nrust-analyzer (aka rls 2.0), a language server for Rust\n\nSee\n[docs](https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc)\nfor extra settings. The settings can be used like this:\n\n``` lua\nrequire'lspconfig'.rust_analyzer.setup{\n  settings = {\n    ['rust-analyzer'] = {\n      diagnostics = {\n        enable = false;\n      }\n    }\n  }\n}\n```\n\nNote: do not set `init_options` for this LS config, it will be\nautomatically populated by the contents of settings\\[\"rust-analyzer\"\\]\nper\nhttps://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26.\n",
+    "desc": "https://github.com/rust-lang/rust-analyzer\n\nrust-analyzer (aka rls 2.0), a language server for Rust\n\nSee [docs](https://rust-analyzer.github.io/book/configuration.html) for\nextra settings. The settings can be used like this:\n\n``` lua\nrequire'lspconfig'.rust_analyzer.setup{\n  settings = {\n    ['rust-analyzer'] = {\n      diagnostics = {\n        enable = false;\n      }\n    }\n  }\n}\n```\n\nNote: do not set `init_options` for this LS config, it will be\nautomatically populated by the contents of settings\\[\"rust-analyzer\"\\]\nper\nhttps://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26.\n",
     "name": "rust_analyzer"
   },
   {
@@ -1539,6 +1551,11 @@
     "name": "syntax_tree"
   },
   {
+    "cmd": ["systemd-language-server"],
+    "desc": "https://github.com/psacawa/systemd-language-server\n\n`systemd-language-server` can be installed via `pip`:\n```sh\npip install systemd-language-server\n```\n\nLanguage Server for Systemd unit files\n",
+    "name": "systemd_ls"
+  },
+  {
     "cmd": ["tabby-agent", "--lsp", "--stdio"],
     "desc": "https://tabby.tabbyml.com/blog/running-tabby-as-a-language-server\n\nLanguage server for Tabby, an opensource, self-hosted AI coding assistant.\n\n`tabby-agent` can be installed via `npm`:\n\n```sh\nnpm install --global tabby-agent\n```\n",
     "name": "tabby_ml"
@@ -1634,6 +1651,11 @@
     "name": "ttags"
   },
   {
+    "cmd": ["turbo-language-server", "--stdio"],
+    "desc": "https://www.npmjs.com/package/turbo-language-server\n\n`turbo-language-server` can be installed via `npm`:\n\n```sh\nnpm install -g turbo-language-server\n```\n\nor via `yarn`:\n\n```sh\nyarn global add turbo-language-server\n```\n",
+    "name": "turbo_ls"
+  },
+  {
     "cmd": ["node", null, "--stdio"],
     "desc": "https://github.com/stardog-union/stardog-language-servers/tree/master/packages/turtle-language-server\n`turtle-language-server`, An editor-agnostic server providing language intelligence (diagnostics, hover tooltips, etc.) for the W3C standard Turtle RDF syntax via the Language Server Protocol.\ninstallable via npm install -g turtle-language-server or yarn global add turtle-language-server.\nrequires node.\n",
     "name": "turtle_ls"
@@ -1720,7 +1742,7 @@
   },
   {
     "cmd": ["veridian"],
-    "desc": "https://github.com/vivekmalneedi/veridian\n\nA SystemVerilog LanguageServer.\n\nDownload the latest release for your OS from the releases page\n\n**install with slang feature, if C++17 compiler is available**\n\ncargo install --git https://github.com/vivekmalneedi/veridian.git\n--all-features \\# install if C++17 compiler is not available cargo\ninstall --git https://github.com/vivekmalneedi/veridian.git\n",
+    "desc": "https://github.com/vivekmalneedi/veridian\n\nA SystemVerilog LanguageServer.\n\nDownload the latest release for your OS from the releases page\n\nInstall with slang feature, if C++17 compiler is available:\n```\ncargo install --git https://github.com/vivekmalneedi/veridian.git --all-features\n```\n\nInstall if C++17 compiler is not available:\n```\ncargo install --git https://github.com/vivekmalneedi/veridian.git\n```\n    ",
     "name": "veridian"
   },
   {
@@ -1766,6 +1788,11 @@
     "cmd": ["vls"],
     "desc": "https://github.com/vuejs/vetur/tree/master/server\n\nVue language server(vls)\n`vue-language-server` can be installed via `npm`:\n```sh\nnpm install -g vls\n```\n",
     "name": "vuels"
+  },
+  {
+    "cmd": ["wat_server"],
+    "desc": "https://github.com/g-plane/wasm-language-tools\n\nWebAssembly Language Tools aims to provide and improve the editing experience of WebAssembly Text Format.\nIt also provides an out-of-the-box formatter (a.k.a. pretty printer) for WebAssembly Text Format.\n",
+    "name": "wasm_language_tools"
   },
   {
     "cmd": ["wgsl_analyzer"],

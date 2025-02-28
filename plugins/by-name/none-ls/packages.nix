@@ -39,6 +39,7 @@ in
       "checkmake"
       "checkstyle"
       "clazy"
+      "cljfmt"
       "codespell"
       "commitlint"
       "cppcheck"
