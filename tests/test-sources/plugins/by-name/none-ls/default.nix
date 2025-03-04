@@ -4,16 +4,6 @@
     plugins.none-ls.enable = true;
   };
 
-  # Broken:
-  # error: The option `plugins.none-ls.sources.formatting.beautysh' does not exist.
-  #
-  # beautysh = {
-  #   plugins.none-ls = {
-  #     enable = true;
-  #     sources.formatting.beautysh.enable = true;
-  #   };
-  # };
-
   with-lsp-format = {
     plugins = {
       lsp.enable = true;
