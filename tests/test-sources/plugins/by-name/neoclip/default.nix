@@ -4,10 +4,6 @@
   };
 
   with-sqlite = {
-    # TODO: added 2024-09-13
-    # re-enable when sqlite fixed
-    test.runNvim = false;
-
     plugins = {
       sqlite-lua.enable = true;
       neoclip = {

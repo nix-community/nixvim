@@ -1,12 +1,4 @@
-{ lib, pkgs, ... }:
-let
-  platform = pkgs.stdenv.hostPlatform;
-
-  # TODO: `cadical`, one of `lean4`'s dependencies is broken on x86_64-darwin
-  # https://github.com/NixOS/nixpkgs/pull/371275
-  doRun = !(platform.isDarwin && platform.isx86_64);
-in
-lib.optionalAttrs doRun {
+{
   empty = {
     plugins.lean.enable = true;
   };

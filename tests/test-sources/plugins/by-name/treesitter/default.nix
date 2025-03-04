@@ -82,8 +82,6 @@
   };
 
   no-nix = {
-    # TODO: See if we can build parsers (legacy way)
-    test.runNvim = false;
     plugins.treesitter = {
       enable = true;
       nixGrammars = false;

@@ -105,48 +105,20 @@
       pkgs,
       ...
     }:
+    let
+      inherit (pkgs.stdenv) hostPlatform;
+    in
     {
       plugins.none-ls = {
         # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
-        enable = !pkgs.stdenv.isDarwin;
+        enable = !hostPlatform.isDarwin;
 
         sources =
           let
-            disabled =
-              [
-                # TODO: added 2024-09-13
-                # Swift broken everywhere atm
-                "swiftformat"
-                "swift_format"
-                "swiftlint"
-                # TODO: added 2024-10-15
-                # broken package
-                "opacheck"
-                "rego"
-                "prisma_format"
-              ]
-              ++ (lib.optionals pkgs.stdenv.isDarwin [
-                # As of 2024-05-22, python311Packages.k5test (one of ansible-lint's dependenvies) is broken on darwin
-                # TODO: re-enable this test when fixed
-                "ansible_lint"
-                "clazy"
-                "gdformat"
-                "gdlint"
-                "haml_lint"
-                # As of 2024-06-29, pkgs.rubyfmt is broken on darwin
-                # TODO: re-enable this test when fixed
-                "rubyfmt"
-                "verilator"
-                "verible_verilog_format"
-              ])
-              ++ (lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isx86_64) [
-                # As of 2024-11-03, graalvm-ce (dependency of clj-kondo) is broken on x86_64-darwin
-                "clj_kondo"
-              ])
-              ++ (lib.optionals pkgs.stdenv.isAarch64 [
-                "semgrep"
-                "smlfmt"
-              ]);
+            disabled = lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+              # Not available on aarch64-linux
+              "smlfmt"
+            ];
           in
           # Enable every none-ls source that has an option
           lib.mapAttrs (

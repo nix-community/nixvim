@@ -282,9 +282,6 @@
           };
         };
         fzf = {
-          keymaps = {
-            # TODO
-          };
           win_configs = {
             relative = "win";
             anchor = "NW";
