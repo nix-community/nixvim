@@ -23,21 +23,7 @@
       ];
 
       brokenTools =
-        [
-          # TODO: added 2024-09-13
-          # Swift broken everywhere atm
-          "swiftformat"
-          "swiftlint"
-          # TODO: added 2024-10-15
-          # re-enable after fixed
-          "dmd"
-        ]
-        ++ lib.optionals (system == "aarch64-linux") [
-          # Broken as of 2024-07-13
-          # TODO: re-enable this tests when fixed
-          "textlint"
-        ]
-        ++ lib.optionals pkgs.stdenv.isDarwin [
+        lib.optionals pkgs.stdenv.isDarwin [
           # As of 2024-01-04, texliveMedium is broken on darwin
           # TODO: re-enable those tests when fixed
           "chktex"
@@ -48,8 +34,6 @@
           # https://github.com/NixOS/nixpkgs/pull/331373
           # TODO: re-enable this test when fixed
           "dmd"
-          # As of 2024-11-03, graalvm-ce (dependency of clj-kondo) is broken on x86_64-darwin
-          "clj_kondo"
         ];
 
       # TODO: respect unpackaged from generated
@@ -80,6 +64,8 @@
           "slim_lint"
           "solhint"
           "sorbet"
+          "swiftformat"
+          "swiftlint"
           "xo"
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [ "clazy" ]

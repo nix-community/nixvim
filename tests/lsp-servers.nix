@@ -43,17 +43,9 @@ let
           "ruff_lsp"
           "bufls"
           "typst_lsp"
-          # Package ‘dotnet-core-combined’ is marked as insecure, refusing to evaluate.
-          # Dotnet SDK 6.0.428 is EOL, please use 8.0 (LTS) or 9.0 (Current)
-          # https://github.com/NixOS/nixpkgs/pull/358533
-          "dafny"
-          "fsautocomplete"
-          "omnisharp"
+
           # TODO: 2025-01-22 python312Packages.anytree is broken (dependency of bitbake-language-server)
           "bitbake_language_server"
-        ]
-        ++ lib.optionals pkgs.stdenv.isDarwin [
-          "fsautocomplete"
         ]
         ++ lib.optionals pkgs.stdenv.isAarch64 [
           # Broken
@@ -63,14 +55,8 @@ let
           # TODO: 2025-01-09 python312Packages.tree-sitter (dependency of autotools-language-server) is broken
           # https://github.com/NixOS/nixpkgs/issues/372375
           "autotools_ls"
-          # Binary package not available for this architecture
-          "starpls"
           # TODO: 2024-10-05 build failure
           "fstar"
-        ]
-        ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-darwin") [
-          # Binary package not available for this architecture
-          "starpls"
         ];
     in
     {
