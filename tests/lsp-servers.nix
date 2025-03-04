@@ -43,20 +43,13 @@ let
           "ruff_lsp"
           "bufls"
           "typst_lsp"
-
-          # TODO: 2025-01-22 python312Packages.anytree is broken (dependency of bitbake-language-server)
-          "bitbake_language_server"
-        ]
-        ++ lib.optionals pkgs.stdenv.isAarch64 [
-          # Broken
-          "scheme_langserver"
         ]
         ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
-          # TODO: 2025-01-09 python312Packages.tree-sitter (dependency of autotools-language-server) is broken
-          # https://github.com/NixOS/nixpkgs/issues/372375
-          "autotools_ls"
           # TODO: 2024-10-05 build failure
           "fstar"
+
+          # TODO: 2025-03-04 marked as broken
+          "nickel_ls"
         ];
     in
     {
