@@ -1,4 +1,5 @@
 {
+  self,
   inputs,
   helpers,
   ...
@@ -12,6 +13,7 @@
     }:
     {
       packages = import ../docs {
+        nixvim = self;
         inherit helpers;
         inherit system;
         inherit (inputs) nixpkgs;

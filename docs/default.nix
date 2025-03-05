@@ -1,6 +1,7 @@
 {
   helpers,
   system,
+  nixvim,
   nixpkgs,
   nuschtosSearch,
 }:
@@ -108,6 +109,10 @@ lib.fix (
     gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
 
     man-docs = pkgs.callPackage ./man { inherit options-json; };
+
+    lib-docs = pkgs.callPackage ./lib {
+      inherit nixvim lib;
+    };
   }
   // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
     # NuschtOS/search does not seem to work on darwin
