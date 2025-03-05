@@ -5,15 +5,27 @@
   writers,
   nixdoc,
   nixvim,
-  libsets ? [
+  functionSets ? [
     # TODO: all lib sections
     {
       name = "utils";
+      path = [
+        "nixvim"
+        "utils"
+      ];
       description = "utility functions";
     }
     {
       name = "options";
+      path = [
+        "nixvim"
+        "options"
+      ];
       description = "NixOS / nixpkgs option handling";
+    }
+    {
+      name = "types";
+      description = "NixOS / nixpkgs option types";
     }
   ],
 }:
@@ -26,28 +38,26 @@ runCommand "nixvim-lib-docs"
 
     locations = writers.writeJSON "locations.json" (
       import ./function-locations.nix {
-        inherit lib libsets;
+        inherit lib functionSets;
         root = nixvim;
-        libToDoc = nixvim.lib.nixvim;
+        functionSet = lib.extend nixvim.lib.overlay;
         revision = nixvim.rev or "main";
-        prefix = "lib.nixvim";
       }
     );
 
     passthru.menu = ''
       # Lib
       - [lib.nixvim](lib/index.md)
-      ${lib.concatMapStringsSep "\n" ({ name, ... }: "  - [${name}](lib/${name})") libsets}
+      ${lib.concatMapStringsSep "\n" ({ name, ... }: "  - [${name}](lib/${name})") functionSets}
     '';
 
   }
   ''
-    export RUST_BACKTRACE=1
-
     function docgen {
       name=$1
-      baseName=$2
-      description=$3
+      prefix="lib.$2"
+      baseName=$3
+      description=$4
 
       file="${nixvim}/lib/$baseName"
       if [[ -e "$file.nix" ]]; then
@@ -60,9 +70,9 @@ runCommand "nixvim-lib-docs"
       fi
 
       nixdoc \
-        --prefix "lib.nixvim" \
+        --prefix "$prefix" \
         --category "$name" \
-        --description "lib.nixvim.$name: $description" \
+        --description "$prefix.$name: $description" \
         --locs $locations \
         --file "$file" \
         > "$out/$name.md"
@@ -73,11 +83,12 @@ runCommand "nixvim-lib-docs"
     ${lib.concatMapStrings (
       {
         name,
+        path ? [ name ],
         baseName ? name,
         description,
       }:
       ''
-        docgen ${name} ${baseName} ${lib.escapeShellArg description}
+        docgen ${name} ${lib.escapeShellArg (lib.concatStringsSep "." (lib.lists.dropEnd 1 path))} ${baseName} ${lib.escapeShellArg description}
       ''
-    ) libsets}
+    ) functionSets}
   ''

@@ -1,91 +1,74 @@
 {
   root,
   lib,
-  libToDoc,
+  functionSet,
+  functionSets,
   revision,
-  libsets,
-  prefix ? "lib",
+  functionSetName ? "lib",
   url ? "https://github.com/nix-community/nixvim/blob",
 }:
 let
+  urlPrefix = "${url}/${revision}";
+
+  sanitizeId = builtins.replaceStrings [ "'" ] [ "-prime" ];
+
   tryIsAttrs = v: (builtins.tryEval (builtins.isAttrs v)).value;
 
-  libDefPos =
+  getDefPositions =
     prefix: set:
     builtins.concatMap (
       name:
       [
         {
-          name = builtins.concatStringsSep "." (prefix ++ [ name ]);
+          name = builtins.concatStringsSep "." ([ functionSetName ] ++ prefix ++ [ name ]);
           location = builtins.unsafeGetAttrPos name set;
         }
       ]
       ++ lib.optionals (builtins.length prefix == 0 && tryIsAttrs set.${name}) (
-        libDefPos (prefix ++ [ name ]) set.${name}
+        getDefPositions (prefix ++ [ name ]) set.${name}
       )
     ) (builtins.attrNames set);
 
-  libset =
-    toplib:
-    builtins.map (subsetname: {
-      inherit subsetname;
-      functions = libDefPos [ ] toplib.${subsetname};
-    }) (builtins.map (x: x.name) libsets);
+  getFnSubset =
+    set:
+    builtins.concatMap (
+      {
+        name,
+        path ? [ name ],
+        ...
+      }:
+      getDefPositions path (lib.getAttrFromPath path set)
+    ) functionSets;
 
-  flattenedLibSubset =
-    { subsetname, functions }:
-    builtins.map (fn: {
-      name = lib.concatStringsSep "." [
-        prefix
-        subsetname
-        fn.name
-      ];
-      value = fn.location;
-    }) functions;
-
-  locatedlibsets = libs: builtins.map flattenedLibSubset (libset libs);
   removeFilenamePrefix =
     prefix: filename:
     let
       prefixLen = (builtins.stringLength prefix) + 1; # +1 to remove the leading /
       filenameLen = builtins.stringLength filename;
-      substr = builtins.substring prefixLen filenameLen filename;
     in
-    substr;
+    builtins.substring prefixLen filenameLen filename;
 
-  removeNixvim = removeFilenamePrefix (builtins.toString root);
+  removeNixvimPrefix = removeFilenamePrefix (builtins.toString root);
 
-  liblocations = builtins.filter (elem: elem.value != null) (
-    lib.lists.flatten (locatedlibsets libToDoc)
-  );
-
-  fnLocationRelative =
-    { name, value }:
+  toEntry =
+    { name, location }:
     {
-      inherit name;
-      value = value // {
-        file = removeNixvim value.file;
-      };
+      name = sanitizeId name;
+      value =
+        let
+          file = removeNixvimPrefix location.file;
+          line = builtins.toString location.line;
+          text = "${file}:${line}";
+          target = "${urlPrefix}/${file}#L${line}";
+        in
+        "[${text}](${target}) in `<nixvim>`";
     };
-
-  relativeLocs = builtins.map fnLocationRelative liblocations;
-  sanitizeId = builtins.replaceStrings [ "'" ] [ "-prime" ];
-
-  urlPrefix = "${url}/${revision}";
-  jsonLocs = builtins.listToAttrs (
-    builtins.map (
-      { name, value }:
-      {
-        name = sanitizeId name;
-        value =
-          let
-            text = "${value.file}:${builtins.toString value.line}";
-            target = "${urlPrefix}/${value.file}#L${builtins.toString value.line}";
-          in
-          "[${text}](${target}) in `<nixvim>`";
-      }
-    ) relativeLocs
-  );
-
 in
-jsonLocs
+lib.pipe functionSet [
+  getFnSubset
+  (builtins.filter (elem: elem.location != null))
+  # We only want to document functions defined in our tree
+  (builtins.filter (elem: lib.strings.hasPrefix (builtins.toString root) elem.location.file))
+  (builtins.map toEntry)
+  builtins.listToAttrs
+]
