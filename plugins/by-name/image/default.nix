@@ -66,6 +66,20 @@ in
           filetypes = helpers.defaultNullOpts.mkListOf types.str filetypesDefault ''
             Markdown extensions (ie. quarto) can go here.
           '';
+
+          resolveImagePath = helpers.mkNullOrLuaFn' {
+            description = "Configures how to resolve image paths.";
+            example = lib.literalExpression ''
+              lib.nixvim.mkRaw '''
+                function(document_path, image_path, fallback)
+                  -- document_path is the path to the file that contains the image
+                  -- image_path is the potentially relative path to the image. For markdown, it's `![](this text)`
+                  -- fallback is the default behavior
+                  return fallback(document_path, image_path)
+                end
+              ''';
+            '';
+          };
         };
       in
       mapAttrs mkIntegrationOptions {
@@ -150,6 +164,7 @@ in
                   download_remote_images = v.downloadRemoteImages;
                   only_render_image_at_cursor = v.onlyRenderImageAtCursor;
                   inherit (v) filetypes;
+                  resolve_image_path = v.resolveImagePath;
                 };
               in
               mapAttrs (_: processIntegrationOptions) integrations;
