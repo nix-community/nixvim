@@ -40,7 +40,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Configure cachix
-        uses: cachix/cachix-action@v15
+        uses: cachix/cachix-action@v16
         with:
           name: nix-community
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
