@@ -51,7 +51,6 @@
     "flux_lsp"
     "foam_ls"
     "fsharp_language_server"
-    "gdscript"
     "gdshader_lsp"
     "gh_actions_ls"
     "ghdl_ls"
@@ -237,6 +236,7 @@
     fsautocomplete = "fsautocomplete";
     fstar = "fstar";
     futhark_lsp = "futhark";
+    gdscript = "gdtoolkit_4";
     ghcide = [
       "haskellPackages"
       "ghcide"
