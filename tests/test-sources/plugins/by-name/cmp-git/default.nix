@@ -1,11 +1,9 @@
 {
   defaults = {
     plugins = {
-      cmp = {
-        enable = true;
-        settings.sources = [ { name = "git"; } ];
-      };
+      cmp.enable = true;
 
+      cmp-git.enable = true;
       cmp-git.settings = {
         filetypes = [
           "gitcommit"
@@ -140,11 +138,9 @@
 
   example = {
     plugins = {
-      cmp = {
-        enable = true;
-        settings.sources = [ { name = "git"; } ];
-      };
+      cmp.enable = true;
 
+      cmp-git.enable = true;
       cmp-git.settings = {
         remotes = [
           "upstream"
