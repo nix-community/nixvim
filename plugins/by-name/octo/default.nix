@@ -124,6 +124,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         [
           "telescope"
           "fzf-lua"
+          "snacks"
         ]
         ''
           Picker to use.
@@ -182,5 +183,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
         plugins.telescope.enable = lib.mkDefault true;
       })
       (lib.mkIf (cfg.settings.picker == "fzf-lua") { plugins.fzf-lua.enable = lib.mkDefault true; })
+      (lib.mkIf (cfg.settings.picker == "snacks") {
+        plugins.snacks = {
+          enable = lib.mkDefault true;
+          settings.picker.enabled = lib.mkDefault true;
+        };
+      })
     ];
 }

@@ -39,6 +39,17 @@
     };
   };
 
+  withSnacksPicker = {
+    # This test is flaky and fails non-deterministically
+    test.runNvim = false;
+
+    plugins.web-devicons.enable = true;
+    plugins.octo = {
+      enable = true;
+      settings.picker = "snacks";
+    };
+  };
+
   defaults = {
     # This test is flaky and fails non-deterministically
     test.runNvim = false;
