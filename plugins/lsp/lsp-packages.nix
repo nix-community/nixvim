@@ -43,6 +43,7 @@
     "dolmenls"
     "drools_lsp"
     "ds_pinyin_lsp"
+    "dts_lsp"
     "ecsact"
     "ember"
     "esbonio"
@@ -60,6 +61,7 @@
     "glint"
     "gradle_ls"
     "grammarly"
+    "graphql" # nodePackages.graphql-language-service-cli was removed in https://github.com/NixOS/nixpkgs/pull/382557
     "groovyls"
     "guile_ls"
     "haxe_language_server"
@@ -130,6 +132,7 @@
     "roc_ls"
     "rome"
     "salt_ls"
+    "scry" # deprecated and removed from nixpkgs
     "selene3p_ls"
     "sixtyfps"
     "slangd"
@@ -154,6 +157,7 @@
     "textlsp"
     "theme_check"
     "tsp_server"
+    "turbo_ls"
     "turtle_ls"
     # typst-lsp has been removed from nixpkgs as the project is archived
     "typst_lsp"
@@ -168,6 +172,7 @@
     "veridian"
     "visualforce_ls"
     "vuels"
+    "wasm_language_tools"
     "yang_lsp"
     "yls"
     "ziggy"
@@ -176,6 +181,7 @@
 
   packages = {
     aiken = "aiken";
+    air = "air-formatter";
     angularls = "angular-language-server";
     ansiblels = "ansible-language-server";
     arduino_language_server = "arduino-language-server";
@@ -245,10 +251,6 @@
     gleam = "gleam";
     glsl_analyzer = "glsl_analyzer";
     glslls = "glslls";
-    graphql = [
-      "nodePackages"
-      "graphql-language-service-cli"
-    ];
     golangci_lint_ls = "golangci-lint-langserver";
     gopls = "gopls";
     harper_ls = "harper";
@@ -343,7 +345,6 @@
       "akkuPackages"
       "scheme-langserver"
     ];
-    scry = "scry";
     serve_d = "serve-d";
     shopify_theme_ls = "shopify-cli";
     slint_lsp = "slint-lsp";
@@ -371,6 +372,7 @@
       "rubyPackages"
       "syntax_tree"
     ];
+    systemd-language-server = "systemd-language-server";
     tailwindcss = "tailwindcss-language-server";
     taplo = "taplo";
     tblgen_lsp_server = [
