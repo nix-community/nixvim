@@ -91,6 +91,7 @@ in
       "stylua"
       "tfsec"
       "topiary"
+      "treefmt"
       "trivy"
       "typstfmt"
       "typstyle"
@@ -236,7 +237,6 @@ in
       terragrunt_fmt = "terragrunt";
       terragrunt_validate = "terragrunt";
       tidy = "html-tidy";
-      treefmt = "treefmt2";
       verible_verilog_format = "verible";
       vint = "vim-vint";
       write_good = "write-good";
