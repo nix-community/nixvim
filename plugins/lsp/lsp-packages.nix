@@ -30,6 +30,8 @@
     "codeqlls"
     "coffeesense"
     "contextive"
+    # coqPackages.coq-lsp is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
+    "coq_lsp"
     "css_variables"
     "cssmodules_ls"
     "cucumber_language_server"
@@ -170,6 +172,8 @@
     "vdmj"
     "veridian"
     "visualforce_ls"
+    # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
+    "vscoqtop"
     "vuels"
     "wasm_language_tools"
     "yang_lsp"
@@ -202,10 +206,6 @@
     clangd = "clang-tools";
     clojure_lsp = "clojure-lsp";
     cmake = "cmake-language-server";
-    coq_lsp = [
-      "coqPackages"
-      "coq-lsp"
-    ];
     crystalline = "crystalline";
     csharp_ls = "csharp-ls";
     cssls = "vscode-langservers-extracted";
@@ -406,13 +406,9 @@
     vimls = "vim-language-server";
     vls = "vlang";
     volar = "vue-language-server";
-    vscoqtop = [
-      "coqPackages"
-      "vscoq-language-server"
-    ];
     vtsls = "vtsls";
     wgsl_analyzer = "wgsl-analyzer";
-    yamlls = "yaml-language-server";
+    yamlls = "yaml-language-server"; # Not available in coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     zk = "zk";
     zls = "zls";
   };
