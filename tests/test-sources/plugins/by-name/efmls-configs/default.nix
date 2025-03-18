@@ -11,7 +11,7 @@
       ...
     }:
     let
-      inherit (pkgs.stdenv.hostPlatform) system;
+      inherit (pkgs.stdenv) hostPlatform;
       inherit (options.plugins.efmls-configs) setup;
 
       # toolOptions is an attrsets of the form:
@@ -23,13 +23,18 @@
       ];
 
       brokenTools =
-        lib.optionals pkgs.stdenv.isDarwin [
+        lib.optionals hostPlatform.isDarwin [
           # As of 2024-01-04, texliveMedium is broken on darwin
           # TODO: re-enable those tests when fixed
           "chktex"
           "latexindent"
         ]
-        ++ lib.optionals (system == "x86_64-darwin") [
+        ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+          # As of 2025-03-18, several python311Packages.* dependencies of bashate fail on aarch64-darwin
+          # TODO: re-enable this test when fixed
+          "bashate"
+        ]
+        ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
           # As of 2024-07-31, dmd is broken on x86_64-darwin
           # https://github.com/NixOS/nixpkgs/pull/331373
           # TODO: re-enable this test when fixed
