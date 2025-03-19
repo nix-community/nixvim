@@ -112,11 +112,6 @@
                 # TODO: re-enable when the fix lands in nixpkgs-unstable
                 # https://github.com/NixOS/nixpkgs/pull/389579
                 "semgrep"
-
-                # Added 2025-03-18
-                # TODO: re-enable at the next bump
-                "terragrunt_fmt"
-                "terragrunt_validate"
               ]
               ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
                 # Not available on aarch64-linux
