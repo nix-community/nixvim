@@ -1,6 +1,8 @@
 {
   empty = {
     plugins.crates.enable = true;
+    # Explicit disable to suppress warnings
+    plugins.cmp.enable = false;
   };
 
   defaults = {
@@ -202,6 +204,8 @@
         };
       };
     };
+    # Explicit disable to suppress warnings
+    plugins.cmp.enable = false;
   };
 
   example = {
@@ -214,5 +218,7 @@
         autoupdate = true;
       };
     };
+    # Explicit disable to suppress warnings
+    plugins.cmp.enable = false;
   };
 }

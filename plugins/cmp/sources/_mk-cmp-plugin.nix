@@ -1,3 +1,4 @@
+# TODO: Remove this legacy function in favor of using `mkCmpPluginModule` directly
 {
   lib,
   pkgs,
@@ -12,6 +13,8 @@
   ] { },
   maintainers ? [ lib.maintainers.GaetanLepage ],
   imports ? [ ],
+  # Whether to add a `plugin.*.blink` option, that uses blink.compat
+  mkCmpPluginModuleArgs ? { },
   ...
 }@args:
 lib.nixvim.plugins.mkVimPlugin (
@@ -24,8 +27,8 @@ lib.nixvim.plugins.mkVimPlugin (
     name = pluginName;
 
     imports = imports ++ [
-      # Register the source -> plugin name association
-      { cmpSourcePlugins.${sourceName} = pluginName; }
+      # Create the `plugin.*.cmp` option
+      (lib.nixvim.modules.mkCmpPluginModule (mkCmpPluginModuleArgs // { inherit pluginName sourceName; }))
     ];
   }
 )

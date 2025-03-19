@@ -89,11 +89,52 @@ lib.mkOption {
     Can either be a list of `sourceConfigs` which will be made directly to a Lua object.
     Or it can be a raw lua string which might be necessary for more advanced use cases.
 
-    WARNING:
-    If `plugins.cmp.autoEnableSources` Nixivm will automatically enable the corresponding source
-    plugins. This will work only when this option is set to a list.
-    If you use a raw lua string, you will need to explicitly enable the relevant source plugins in
-    your nixvim configuration.
+    > [!TIP]
+    > Most of the time, you should enable sources by enabling the respective plugin. E.g:
+    > ```nix
+    > plugins = {
+    >   cmp.enable = true;
+    >   cmp-nvim-lsp.enable = true;
+    >   cmp-path.enable = true;
+    >   cmp-buffer.enable = true;
+    > };
+    > ```
+
+    <!-- TODO:
+      How can we improve how the new system works with raw-lua `sources`?
+      Maybe we should write our definitions to an internal option that can be easily read in the raw-lua and/or copied to `settings.sources`?
+    -->
+
+    > [!WARNING]
+    > Automatic enabling will only work when `sources` is not defined or is defined as a list.
+    >
+    > If this option is defined as "raw lua", then you must take care to disable auto-enabling, e.g:
+    > ```nix
+    > plugins = {
+    >   cmp = {
+    >     enable = true;
+    >     settings.sources.__raw = '''
+    >       {
+    >         { name = "nvim_lsp" },
+    >         { name = "path" },
+    >         { name = "buffer" },
+    >       }
+    >     '''
+    >   };
+    >   cmp-nvim-lsp = {
+    >     enable = true;
+    >     cmp.enable = false;
+    >   };
+    >   cmp-path = {
+    >     enable = true;
+    >     cmp.enable = false;
+    >   };
+    >   cmp-buffer = {
+    >     enable = true;
+    >     cmp.enable = false;
+    >   };
+    > };
+    > ```
   '';
   example = [
     { name = "nvim_lsp"; }

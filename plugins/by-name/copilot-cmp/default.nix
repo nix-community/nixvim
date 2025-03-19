@@ -2,13 +2,17 @@
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
+  name = "copilot-cmp";
 in
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "copilot-cmp";
+  inherit name;
   moduleName = "copilot_cmp";
 
   imports = [
-    { cmpSourcePlugins.copilot = "copilot-cmp"; }
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = "copilot";
+    })
   ];
 
   maintainers = [ lib.maintainers.GaetanLepage ];
