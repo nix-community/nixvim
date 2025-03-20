@@ -146,7 +146,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
       cfg.curlPackage
 
     ] ++ lib.optional (cfg.settings.backend == "ueberzug") cfg.ueberzugPackage;
-
-    extraLuaPackages = ps: [ ps.magick ];
   };
 }
