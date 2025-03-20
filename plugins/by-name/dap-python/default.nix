@@ -35,7 +35,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       type = types.str;
     };
 
-    customConfigurations = mkNullOrOption (types.listOf dapHelpers.configurationOption) "Custom python configurations for dap.";
+    customConfigurations = mkNullOrOption (types.listOf dapHelpers.configurationType) "Custom python configurations for dap.";
 
     resolvePython = defaultNullOpts.mkLuaFn null ''
       Function to resolve path to python to use for program or test execution.
