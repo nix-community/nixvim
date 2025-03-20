@@ -28,7 +28,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     configurations =
-      lib.nixvim.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationOption))
+      lib.nixvim.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationType))
         ''
           Debugger configurations, see `:h dap-configuration` for more info.
         '';

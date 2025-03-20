@@ -15,7 +15,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   settingsOptions = {
-    dap_configurations = lib.nixvim.mkNullOrOption (types.listOf dapHelpers.configurationOption) ''
+    dap_configurations = lib.nixvim.mkNullOrOption (types.listOf dapHelpers.configurationType) ''
       Additional dap configurations.
       See `:h dap-configuration` for more detail.
     '';

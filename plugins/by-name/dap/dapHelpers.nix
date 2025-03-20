@@ -91,7 +91,7 @@ rec {
       is used. A use-case for this is starting an adapter asynchronous.
     '';
 
-  configurationOption = types.submodule {
+  configurationType = types.submodule {
     freeformType = types.attrs;
 
     options = {
