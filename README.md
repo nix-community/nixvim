@@ -201,40 +201,41 @@ can use the following:
 
 ```nix
 {
-  description = "A very basic flake";
+  description = "A nixvim configuration";
 
-  inputs.nixvim.url = "github:nix-community/nixvim";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixvim.url = "github:nix-community/nixvim";
+  };
 
-  outputs = {
-    self,
-    nixvim,
-    flake-parts,
-  } @ inputs: let
-    config = {
-      colorschemes.gruvbox.enable = true;
-    };
-  in
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    { nixpkgs, nixvim, ... }:
+    let
+      config = {
+        colorschemes.gruvbox.enable = true;
+      };
+
       systems = [
-        "aarch64-darwin"
+        "x86_64-linux"
         "aarch64-linux"
         "x86_64-darwin"
-        "x86_64-linux"
+        "aarch64-darwin"
       ];
 
-      perSystem = {
-        pkgs,
-        system,
-        ...
-      }: let
-        nixvim' = nixvim.legacyPackages."${system}";
-        nvim = nixvim'.makeNixvim config;
-      in {
-        packages = {
+      forAllSystems = fn: nixpkgs.lib.genAttrs systems fn;
+    in
+    {
+      packages = forAllSystems (
+        system:
+        let
+          nixvim' = nixvim.legacyPackages.${system};
+          nvim = nixvim'.makeNixvim config;
+        in
+        {
           inherit nvim;
           default = nvim;
-        };
-      };
+        }
+      );
     };
 }
 ```
