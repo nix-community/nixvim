@@ -91,31 +91,33 @@ rec {
       is used. A use-case for this is starting an adapter asynchronous.
     '';
 
-  configurationType = types.submodule {
-    freeformType = types.attrs;
+  configurationType = types.maybeRaw (
+    types.submodule {
+      freeformType = types.attrs;
 
-    options = {
-      type = lib.mkOption {
-        description = "Which debug adapter to use.";
-        type = types.str;
-      };
+      options = {
+        type = lib.mkOption {
+          description = "Which debug adapter to use.";
+          type = types.str;
+        };
 
-      request = lib.mkOption {
-        type = types.enum [
-          "attach"
-          "launch"
-        ];
-        description = ''
-          Indicates whether the debug adapter should launch a debuggee or attach to one that is already running.
-        '';
-      };
+        request = lib.mkOption {
+          type = types.enum [
+            "attach"
+            "launch"
+          ];
+          description = ''
+            Indicates whether the debug adapter should launch a debuggee or attach to one that is already running.
+          '';
+        };
 
-      name = lib.mkOption {
-        type = types.str;
-        description = "A user readable name for the configuration.";
+        name = lib.mkOption {
+          type = types.str;
+          description = "A user readable name for the configuration.";
+        };
       };
-    };
-  };
+    }
+  );
 
   mkSignOption = default: desc: {
     text = lib.nixvim.defaultNullOpts.mkStr default desc;
