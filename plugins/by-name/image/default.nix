@@ -1,37 +1,44 @@
 {
   lib,
-  helpers,
-  config,
   pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.image;
+  inherit (lib) types;
+  inherit (lib.nixvim) defaultNullOpts;
 in
-{
-  meta.maintainers = [ maintainers.GaetanLepage ];
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "image";
+  packPathName = "image.nvim";
+  package = "image-nvim";
 
-  options.plugins.image = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "image.nvim";
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    package = lib.mkPackageOption pkgs "image.nvim" {
-      default = [
-        "vimPlugins"
-        "image-nvim"
-      ];
-    };
+  # TODO: Added 2025-03-20. Remove after 25.05
+  inherit (import ./deprecations.nix lib)
+    deprecateExtraOptions
+    optionsRenamedToSettings
+    imports
+    ;
 
+  extraOptions = {
     curlPackage = lib.mkPackageOption pkgs "curl" {
       nullable = true;
     };
 
-    ueberzugPackage = lib.mkPackageOption pkgs "ueberzugpp" {
-      nullable = true;
+    ueberzugPackage = lib.mkOption {
+      type = with types; nullOr package;
+      default = pkgs.ueberzugpp;
+      defaultText = lib.literalExpression "pkgs.ueberzugpp";
+      description = ''
+        Package to automatically install if `settings.backend.backend` is set to `"ueberzug"`.
+      '';
     };
+  };
 
+  settingsOptions = {
     backend =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      defaultNullOpts.mkEnumFirstDefault
         [
           "kitty"
           "ueberzug"
@@ -42,146 +49,104 @@ in
           - kitty - best in class, works great and is very snappy
           - ueberzug - backed by ueberzugpp, supports any terminal, but has lower performance
             - Supports multiple images thanks to @jstkdng.
+
+          > [!Note]
+          > When choosing the `"ueberzug"` backend, nixvim will automatically add `ueberzugpp` as a dependency.
+          > Set `ueberzugPackage = null` to disable this behavior.
         '';
 
     integrations =
-      let
-        mkIntegrationOptions = integrationName: filetypesDefault: {
-          enabled = helpers.defaultNullOpts.mkBool true ''
-            Whether to enable the markdown integration.
-          '';
+      defaultNullOpts.mkAttrsOf types.anything
+        {
+          markdown.enabled = true;
+          typst.enabled = true;
+          neorg.enabled = true;
+          syslang.enabled = true;
+          html.enabled = false;
+          css.enabled = false;
+        }
+        ''
+          Per-filetype integrations.
+        '';
 
-          clearInInsertMode = helpers.defaultNullOpts.mkBool false ''
-            Clears the image when entering insert mode.
-          '';
+    max_width = defaultNullOpts.mkUnsignedInt null ''
+      Image maximum width.
+    '';
 
-          downloadRemoteImages = helpers.defaultNullOpts.mkBool true ''
-            Whether to download remote images.
-          '';
+    max_height = defaultNullOpts.mkUnsignedInt null ''
+      Image maximum height.
+    '';
 
-          onlyRenderImageAtCursor = helpers.defaultNullOpts.mkBool false ''
-            Whether to limit rendering to the image at the current cursor position.
-          '';
-
-          filetypes = helpers.defaultNullOpts.mkListOf types.str filetypesDefault ''
-            Markdown extensions (ie. quarto) can go here.
-          '';
-
-          resolveImagePath = helpers.mkNullOrLuaFn' {
-            description = "Configures how to resolve image paths.";
-            example = lib.literalExpression ''
-              lib.nixvim.mkRaw '''
-                function(document_path, image_path, fallback)
-                  -- document_path is the path to the file that contains the image
-                  -- image_path is the potentially relative path to the image. For markdown, it's `![](this text)`
-                  -- fallback is the default behavior
-                  return fallback(document_path, image_path)
-                end
-              ''';
-            '';
-          };
-        };
-      in
-      mapAttrs mkIntegrationOptions {
-        markdown = [
-          "markdown"
-          "vimwiki"
-        ];
-        neorg = [ "norg" ];
-        syslang = [ "syslang" ];
-      };
-
-    maxWidth = helpers.mkNullOrOption types.ints.unsigned "Image maximum width.";
-
-    maxHeight = helpers.mkNullOrOption types.ints.unsigned "Image maximum height.";
-
-    maxWidthWindowPercentage = helpers.mkNullOrOption types.ints.unsigned ''
+    max_width_window_percentage = defaultNullOpts.mkUnsignedInt 100 ''
       Image maximum width as a percentage of the window width.
     '';
 
-    maxHeightWindowPercentage = helpers.defaultNullOpts.mkUnsignedInt 50 ''
+    max_height_window_percentage = defaultNullOpts.mkUnsignedInt 50 ''
       Image maximum height as a percentage of the window height.
     '';
 
-    windowOverlapClearEnabled = helpers.defaultNullOpts.mkBool false ''
+    window_overlap_clear_enabled = defaultNullOpts.mkBool false ''
       Toggles images when windows are overlapped.
     '';
 
-    windowOverlapClearFtIgnore =
-      helpers.defaultNullOpts.mkListOf types.str
+    window_overlap_clear_ft_ignore =
+      defaultNullOpts.mkListOf types.str
         [
           "cmp_menu"
           "cmp_docs"
-          ""
+          "snacks_notif"
+          "scrollview"
+          "scrollview_sign"
         ]
         ''
           Toggles images when windows are overlapped.
         '';
 
-    editorOnlyRenderWhenFocused = helpers.defaultNullOpts.mkBool false ''
+    editor_only_render_when_focused = defaultNullOpts.mkBool false ''
       Auto show/hide images when the editor gains/looses focus.
     '';
 
-    tmuxShowOnlyInActiveWindow = helpers.defaultNullOpts.mkBool false ''
+    tmux_show_only_in_active_window = defaultNullOpts.mkBool false ''
       Auto show/hide images in the correct Tmux window (needs visual-activity off).
     '';
 
-    hijackFilePatterns =
-      helpers.defaultNullOpts.mkListOf types.str
+    hijack_file_patterns =
+      defaultNullOpts.mkListOf types.str
         [
           "*.png"
           "*.jpg"
           "*.jpeg"
           "*.gif"
           "*.webp"
+          "*.avif"
         ]
         ''
           Render image files as images when opened.
         '';
   };
 
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-    extraLuaPackages = ps: [ ps.magick ];
+  settingsExample = {
+    backend = "kitty";
+    max_width = 100;
+    max_height = 12;
+    max_height_window_percentage.__raw = "math.huge";
+    max_width_window_percentage.__raw = "math.huge";
+    window_overlap_clear_enabled = true;
+    window_overlap_clear_ft_ignore = [
+      "cmp_menu"
+      "cmp_docs"
+      ""
+    ];
+  };
 
+  extraConfig = cfg: {
     extraPackages = [
       # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
       # all integrations but shipping `curl` is not too heavy.
       cfg.curlPackage
-    ] ++ optional (cfg.backend == "ueberzug") cfg.ueberzugPackage;
 
-    extraConfigLua =
-      let
-        setupOptions =
-          with cfg;
-          {
-            inherit backend;
-            integrations =
-              let
-                processIntegrationOptions = v: {
-                  inherit (v) enabled;
-                  clear_in_insert_mode = v.clearInInsertMode;
-                  download_remote_images = v.downloadRemoteImages;
-                  only_render_image_at_cursor = v.onlyRenderImageAtCursor;
-                  inherit (v) filetypes;
-                  resolve_image_path = v.resolveImagePath;
-                };
-              in
-              mapAttrs (_: processIntegrationOptions) integrations;
-            max_width = maxWidth;
-            max_height = maxHeight;
-            max_width_window_percentage = maxWidthWindowPercentage;
-            max_height_window_percentage = maxHeightWindowPercentage;
-            window_overlap_clear_enabled = windowOverlapClearEnabled;
-            window_overlap_clear_ft_ignore = windowOverlapClearFtIgnore;
-            editor_only_render_when_focused = editorOnlyRenderWhenFocused;
-            tmux_show_only_in_active_window = tmuxShowOnlyInActiveWindow;
-            hijack_file_patterns = hijackFilePatterns;
-          }
-          // cfg.extraOptions;
-      in
-      ''
-        require('image').setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
+    ] ++ lib.optional (cfg.settings.backend == "ueberzug") cfg.ueberzugPackage;
+
+    extraLuaPackages = ps: [ ps.magick ];
   };
 }
