@@ -293,6 +293,7 @@
       "llvmPackages"
       "mlir"
     ];
+    muon = "muon";
     neocmake = "neocmakelsp";
     nginx_language_server = "nginx-language-server";
     nickel_ls = "nls";
