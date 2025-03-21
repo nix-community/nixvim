@@ -118,7 +118,6 @@
     "puppet"
     "purescriptls"
     "pyre"
-    "qml_lsp"
     "r_language_server"
     "racket_langserver"
     "raku_navigator"
