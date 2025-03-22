@@ -56,6 +56,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
+  callSetup = false;
+  hasLuaConfig = false;
+  settingsDescription = "Plugin configuration (`vim.g.git_worktree`).";
   extraConfig =
     cfg:
     lib.mkIf cfg.enable {
@@ -69,6 +72,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       extraPackages = [ cfg.gitPackage ];
 
       plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "git_worktree" ];
+
+      globals.git_worktree = cfg.settings;
     };
 
   inherit (import ./deprecations.nix) optionsRenamedToSettings;

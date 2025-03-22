@@ -942,6 +942,11 @@
     "name": "msbuild_project_tools_server"
   },
   {
+    "cmd": ["muon", "analyze", "lsp"],
+    "desc": "https://muon.build\n",
+    "name": "muon"
+  },
+  {
     "cmd": ["mutt-language-server"],
     "desc": "https://github.com/neomutt/mutt-language-server\n\nA language server for (neo)mutt's muttrc. It can be installed via pip.\n\n```sh\npip install mutt-language-server\n```\n  ",
     "name": "mutt_ls"
@@ -1221,13 +1226,8 @@
     "name": "pyright"
   },
   {
-    "cmd": ["qml-lsp"],
-    "desc": "https://invent.kde.org/sdk/qml-lsp\n\nLSP implementation for QML (autocompletion, live linting, etc. in editors)\n        ",
-    "name": "qml_lsp"
-  },
-  {
     "cmd": ["qmlls"],
-    "desc": "https://github.com/qt/qtdeclarative\n\nLSP implementation for QML (autocompletion, live linting, etc. in editors),\n        ",
+    "desc": "https://doc.qt.io/qt-6/qtqml-tooling-qmlls.html\n\n> QML Language Server is a tool shipped with Qt that helps you write code in your favorite (LSP-supporting) editor.\n\nSource in the [QtDeclarative repository](https://code.qt.io/cgit/qt/qtdeclarative.git/)\n        ",
     "name": "qmlls"
   },
   {

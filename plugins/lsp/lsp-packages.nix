@@ -118,7 +118,6 @@
     "puppet"
     "purescriptls"
     "pyre"
-    "qml_lsp"
     "r_language_server"
     "racket_langserver"
     "raku_navigator"
@@ -293,6 +292,7 @@
       "llvmPackages"
       "mlir"
     ];
+    muon = "muon";
     neocmake = "neocmakelsp";
     nginx_language_server = "nginx-language-server";
     nickel_ls = "nls";
