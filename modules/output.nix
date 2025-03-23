@@ -28,6 +28,26 @@ let
 in
 {
   options = {
+    env = mkOption {
+      type =
+        with types;
+        lazyAttrsOf (oneOf [
+          str
+          path
+          int
+          float
+        ]);
+      description = "Environment variables to set in the neovim wrapper.";
+      default = { };
+      example = {
+        FOO = 1;
+        PI = 3.14;
+        BAR_PATH = "/home/me/.local/share/bar";
+        INFER_MODE = "local";
+        BAZ_MAX_COUNT = 1000;
+      };
+    };
+
     extraPlugins = mkOption {
       type = with types; listOf (nullOr (either package pluginWithConfigType));
       default = [ ];

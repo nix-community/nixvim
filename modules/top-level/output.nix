@@ -339,7 +339,16 @@ in
           initSource;
 
       extraWrapperArgs = builtins.concatStringsSep " " (
-        (optional (
+        # Setting environment variables in the wrapper
+        (lib.mapAttrsToList (
+          name: value:
+          lib.escapeShellArgs [
+            "--set"
+            name
+            value
+          ]
+        ) config.env)
+        ++ (optional (
           config.extraPackages != [ ]
         ) ''--prefix PATH : "${lib.makeBinPath config.extraPackages}"'')
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${initFile}"'')
