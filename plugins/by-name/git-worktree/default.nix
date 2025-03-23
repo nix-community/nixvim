@@ -59,22 +59,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
   callSetup = false;
   hasLuaConfig = false;
   settingsDescription = "Plugin configuration (`vim.g.git_worktree`).";
-  extraConfig =
-    cfg:
-    lib.mkIf cfg.enable {
-      assertions = lib.nixvim.mkAssertions "plugins.git-worktree" {
-        assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
-        message = ''
-          You have to enable `plugins.telescope` as `enableTelescope` is activated.
-        '';
-      };
-
-      extraPackages = [ cfg.gitPackage ];
-
-      plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "git_worktree" ];
-
-      globals.git_worktree = cfg.settings;
+  extraConfig = cfg: {
+    assertions = lib.nixvim.mkAssertions "plugins.git-worktree" {
+      assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
+      message = ''
+        You have to enable `plugins.telescope` as `enableTelescope` is activated.
+      '';
     };
+
+    extraPackages = [ cfg.gitPackage ];
+
+    plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "git_worktree" ];
+
+    globals.git_worktree = cfg.settings;
+  };
 
   inherit (import ./deprecations.nix) optionsRenamedToSettings;
 }
