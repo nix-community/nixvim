@@ -266,10 +266,18 @@ in
             (builtins.zipAttrsWith (name: lib.lists.concatLists))
           ];
 
+          # Extract required lua modules from plugins
+          requiredLuaModules = lib.pipe toCombinePlugins [
+            (builtins.catAttrs "plugin")
+            (builtins.catAttrs "requiredLuaModules")
+            builtins.concatLists
+            lib.lists.unique
+          ];
+
           # Combine the plugins into a single pack
           pluginPack = pkgs.buildEnv {
             name = "plugin-pack";
-            paths = overriddenPlugins;
+            paths = overriddenPlugins ++ requiredLuaModules;
             inherit (config.performance.combinePlugins) pathsToLink;
             # Remove empty directories and activate vimGenDocHook
             postBuild = ''
@@ -277,7 +285,7 @@ in
               runHook preFixup
             '';
             passthru = {
-              inherit python3Dependencies;
+              inherit python3Dependencies requiredLuaModules;
             };
           };
 
