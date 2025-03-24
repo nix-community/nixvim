@@ -1,6 +1,5 @@
 # Collects the various test modules in tests/test-sources/ and groups them into a number of test derivations
 {
-  callPackage,
   callTest,
   helpers,
   lib ? pkgs.lib,
@@ -11,26 +10,31 @@
 }:
 let
   fetchTests = callTest ./fetch-tests.nix { };
-  test-derivation = callPackage ../lib/tests.nix {
-    inherit lib self system;
+
+  # Use a single common instance of nixpkgs, with allowUnfree
+  # Having a single shared instance should speed up tests a little
+  pkgsForTest = import self.inputs.nixpkgs {
+    inherit system;
+    config.allowUnfree = true;
   };
-  inherit (test-derivation) mkTestDerivationFromNixvimModule;
 
   moduleToTest =
     file: name: module:
-    mkTestDerivationFromNixvimModule {
-      inherit name;
-      module = {
-        _file = file;
-        imports = [ module ];
+    let
+      configuration = lib.nixvim.modules.evalNixvim {
+        modules = [
+          {
+            test.name = lib.mkDefault name;
+            _module.args.pkgs = lib.mkForce pkgsForTest;
+          }
+          {
+            _file = file;
+            imports = lib.toList module;
+          }
+        ];
       };
-      # Use a single common instance of nixpkgs, with allowUnfree
-      # Having a single shared instance should speed up tests a little
-      pkgs = import self.inputs.nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-    };
+    in
+    configuration.config.build.test;
 
   # List of files containing configurations
   testFiles = fetchTests ./test-sources;
