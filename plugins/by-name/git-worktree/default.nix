@@ -63,7 +63,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     assertions = lib.nixvim.mkAssertions "plugins.git-worktree" {
       assertion = cfg.enableTelescope -> config.plugins.telescope.enable;
       message = ''
-        You have to enable `plugins.telescope` as `enableTelescope` is activated.
+        Telescope support (enableTelescope) is enabled but the telescope plugin is not.
       '';
     };
 
