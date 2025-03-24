@@ -88,12 +88,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    warnings = lib.nixvim.mkWarnings "plugins.obsidian" {
-      when = (cfg.settings.completion.nvim_cmp == true) && (!config.plugins.cmp.enable);
-      message = ''
-        You have enabled `completion.nvim_cmp` but `plugins.cmp.enable` is `false`.
-        You should probably enable `nvim-cmp`.
-      '';
-    };
+    warnings = lib.nixvim.mkWarnings "plugins.obsidian" [
+      {
+        when = (cfg.settings.completion.nvim_cmp == true) && (!config.plugins.cmp.enable);
+        message = ''
+          You have enabled `completion.nvim_cmp` but `plugins.cmp.enable` is `false`.
+          You should probably enable `nvim-cmp`.
+        '';
+      }
+      {
+        when = (cfg.settings.completion.blink == true) && (!config.plugins.blink-cmp.enable);
+        message = ''
+          You have enabled `completion.blink` but `plugins.blink-cmp.enable` is `false`.
+          You should probably enable `blink-cmp`.
+        '';
+      }
+    ];
   };
 }

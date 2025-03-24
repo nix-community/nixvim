@@ -215,6 +215,10 @@ in
       defaultText = lib.literalMD "`true` if `plugins.cmp.enable` is enabled (otherwise `null`).";
     };
 
+    blink = defaultNullOpts.mkBool false ''
+      Enable completion using blink.cmp.
+    '';
+
     min_chars = defaultNullOpts.mkUnsignedInt 2 ''
       Trigger completion at this many chars.
     '';
@@ -263,6 +267,7 @@ in
           "telescope.nvim"
           "fzf-lua"
           "mini.pick"
+          "snacks.pick"
         ])
         ''
           Set your preferred picker.
