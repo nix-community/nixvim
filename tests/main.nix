@@ -34,7 +34,14 @@ let
         ];
       };
     in
-    configuration.config.build.test;
+    configuration.config.build.test.overrideAttrs (old: {
+      passthru =
+        old.passthru or { }
+        // builtins.removeAttrs configuration [ "_type" ]
+        // {
+          inherit file module;
+        };
+    });
 
   # List of files containing configurations
   testFiles = fetchTests ./test-sources;
