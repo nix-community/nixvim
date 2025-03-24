@@ -32,8 +32,31 @@
           new_notes_location = "current_dir";
           completion = {
             nvim_cmp = true;
+            blink = false;
             min_chars = 2;
           };
+        };
+      };
+    };
+  };
+
+  blink-cmp = {
+    # Issue within the obsidian.nvim plugin itself:
+    # ERROR: cmp.add_provider is deprecated, use cmp.add_source_provider instead.
+    test.runNvim = false;
+
+    plugins = {
+      blink-cmp.enable = true;
+      obsidian = {
+        enable = true;
+        settings = {
+          completion.blink = true;
+          workspaces = [
+            {
+              name = "foo";
+              path = "~/";
+            }
+          ];
         };
       };
     };
