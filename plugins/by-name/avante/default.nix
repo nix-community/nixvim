@@ -14,7 +14,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       The LLM provider (`"claude"`, `"openai"`, `"azure"`, ...)
     '';
 
-    auto_suggestions_frequency = defaultNullOpts.mkStr "claude" ''
+    auto_suggestions_provider = defaultNullOpts.mkStr "claude" ''
       The provider for automatic suggestions.
 
       Since auto-suggestions are a high-frequency operation and therefore expensive, it is
