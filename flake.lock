@@ -66,16 +66,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1742707865,
-        "narHash": "sha256-RVQQZy38O3Zb8yoRJhuFgWo/iDIDj0hEdRTVfhOtzRk=",
-        "owner": "NixOS",
+        "lastModified": 1742870943,
+        "narHash": "sha256-d8urpZlM0SJ7mcn57YsBcY+/6MwS+qb5SJV2YLQ5b/0=",
+        "owner": "khaneliman",
         "repo": "nixpkgs",
-        "rev": "dd613136ee91f67e5dba3f3f41ac99ae89c5406b",
+        "rev": "018224c474150264706f230acc40a213b8e607fa",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
+        "owner": "khaneliman",
+        "ref": "vim-refactor",
         "repo": "nixpkgs",
         "type": "github"
       }
