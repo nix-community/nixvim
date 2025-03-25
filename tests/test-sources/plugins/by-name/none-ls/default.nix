@@ -105,18 +105,10 @@
 
         sources =
           let
-            disabled =
-              [
-                # Added 2025-03-18
-                # Dependency python3Packages.click-option-group is broken
-                # TODO: re-enable when the fix lands in nixpkgs-unstable
-                # https://github.com/NixOS/nixpkgs/pull/389579
-                "semgrep"
-              ]
-              ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-                # Not available on aarch64-linux
-                "smlfmt"
-              ];
+            disabled = lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+              # Not available on aarch64-linux
+              "smlfmt"
+            ];
           in
           # Enable every none-ls source that has an option
           lib.mapAttrs (
