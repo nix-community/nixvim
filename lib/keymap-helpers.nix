@@ -1,7 +1,7 @@
 { lib }:
 let
   inherit (lib) optionalAttrs isAttrs types;
-  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrStr;
 in
 rec {
   # These are the configuration options that change the behavior of each mapping.
@@ -20,7 +20,7 @@ rec {
 
     remap = defaultNullOpts.mkBool false "Make the mapping recursive. Inverses `noremap`.";
 
-    desc = lib.nixvim.mkNullOrOption lib.types.str "A textual description of this keybind, to be shown in which-key, if you have it.";
+    desc = mkNullOrStr "A textual description of this keybind, to be shown in which-key, if you have it.";
 
     buffer = defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
   };
