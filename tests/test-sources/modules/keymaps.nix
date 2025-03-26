@@ -48,6 +48,12 @@
             key = "<C-z>";
             action = "bar";
           }
+          {
+            mode = "n";
+            key = "<C-h>";
+            action.__raw = "function() end";
+            options.replace_keycodes = false;
+          }
         ];
   };
 

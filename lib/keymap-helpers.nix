@@ -1,7 +1,7 @@
 { lib }:
 let
   inherit (lib) optionalAttrs isAttrs types;
-  inherit (lib.nixvim) defaultNullOpts mkNullOrStr;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStr;
 in
 rec {
   # These are the configuration options that change the behavior of each mapping.
@@ -23,6 +23,12 @@ rec {
     desc = mkNullOrStr "A textual description of this keybind, to be shown in which-key, if you have it.";
 
     buffer = defaultNullOpts.mkBool false "Make the mapping buffer-local. Equivalent to adding `<buffer>` to a map.";
+
+    replace_keycodes = mkNullOrOption types.bool ''
+      When `expr` is `true`, replace keycodes in the resulting string.
+
+      Returning `nil` from the Lua `callback` is equivalent to returning an empty string.
+    '';
   };
 
   modes = [
