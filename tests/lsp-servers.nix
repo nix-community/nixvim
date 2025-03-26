@@ -38,6 +38,11 @@ let
     let
       disabled =
         [
+          # TODO: 2025-03-26 build failure
+          # https://github.com/nametake/golangci-lint-langserver/issues/51
+          # https://github.com/nametake/golangci-lint-langserver/pull/52
+          "golangci_lint_ls"
+
           # DEPRECATED SERVERS
           # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
           "ruff_lsp"
