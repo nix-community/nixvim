@@ -258,21 +258,43 @@ in
             in
             ps: builtins.concatMap (f: f ps) deps;
 
-          # Combined plugin
+          getPropagatedAttrs = lib.filterAttrs (name: _: lib.strings.hasPrefix "propagated" name);
+
+          propagatedDependencies = lib.pipe toCombinePlugins [
+            (builtins.catAttrs "plugin")
+            (builtins.map getPropagatedAttrs)
+            (builtins.zipAttrsWith (name: lib.lists.concatLists))
+          ];
+
+          # Extract required lua modules from plugins
+          requiredLuaModules = lib.pipe toCombinePlugins [
+            (builtins.catAttrs "plugin")
+            (builtins.catAttrs "requiredLuaModules")
+            builtins.concatLists
+            lib.lists.unique
+          ];
+
+          # Combine the plugins into a single pack
+          pluginPack = pkgs.buildEnv {
+            name = "plugin-pack";
+            paths = overriddenPlugins ++ requiredLuaModules;
+            inherit (config.performance.combinePlugins) pathsToLink;
+            # Remove empty directories and activate vimGenDocHook
+            postBuild = ''
+              find $out -type d -empty -delete
+              runHook preFixup
+            '';
+            passthru = {
+              inherit python3Dependencies requiredLuaModules;
+            };
+          };
+
+          # Convert the combined plugin pack into an actual vim plugin package
           combinedPlugin = pkgs.vimUtils.toVimPlugin (
-            pkgs.buildEnv {
-              name = "plugin-pack";
-              paths = overriddenPlugins;
-              inherit (config.performance.combinePlugins) pathsToLink;
-              # Remove empty directories and activate vimGenDocHook
-              postBuild = ''
-                find $out -type d -empty -delete
-                runHook preFixup
-              '';
-              passthru = {
-                inherit python3Dependencies;
-              };
-            }
+            pluginPack.overrideAttrs (
+              # Propagate any propagated dependencies
+              old: builtins.mapAttrs (name: deps: old.${name} or [ ] ++ deps) propagatedDependencies
+            )
           );
 
           # Combined plugin configs
