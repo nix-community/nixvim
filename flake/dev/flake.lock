@@ -1,9 +1,25 @@
 {
   "nodes": {
+    "dev-nixpkgs": {
+      "locked": {
+        "lastModified": 1742800061,
+        "narHash": "sha256-oDJGK1UMArK52vcW9S5S2apeec4rbfNELgc50LqiPNs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1750f3c1c89488e2ffdd47cab9d05454dddfb734",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "dev-nixpkgs"
         ]
       },
       "locked": {
@@ -41,7 +57,7 @@
         ],
         "gitignore": "gitignore",
         "nixpkgs": [
-          "nixpkgs"
+          "dev-nixpkgs"
         ]
       },
       "locked": {
@@ -82,7 +98,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "dev-nixpkgs"
         ]
       },
       "locked": {
@@ -102,7 +118,7 @@
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "dev-nixpkgs"
         ]
       },
       "locked": {
@@ -119,37 +135,21 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
-      "locked": {
-        "lastModified": 1742800061,
-        "narHash": "sha256-oDJGK1UMArK52vcW9S5S2apeec4rbfNELgc50LqiPNs=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "1750f3c1c89488e2ffdd47cab9d05454dddfb734",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
+        "dev-nixpkgs": "dev-nixpkgs",
         "devshell": "devshell",
         "flake-compat": "flake-compat",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs",
         "treefmt-nix": "treefmt-nix"
       }
     },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "dev-nixpkgs"
         ]
       },
       "locked": {
