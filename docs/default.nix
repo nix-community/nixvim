@@ -49,11 +49,13 @@ let
         # The following pkgs attrs are required to eval nixvim, even for the docs:
         inherit (pkgs)
           _type
+          callPackage
+          formats
+          runCommand
+          runCommandLocal
           stdenv
           stdenvNoCC
           symlinkJoin
-          runCommand
-          runCommandLocal
           writeShellApplication
           ;
       }
@@ -122,7 +124,10 @@ lib.fix (
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgs.callPackage ./mdbook {
       inherit evaledModules transformOptions;
-      inherit (self) search;
+      inherit (self) search beta-docs;
     };
+
+    # Beta docs
+    beta-docs = evaledModules.config.docs.html.site;
   }
 )
