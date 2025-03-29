@@ -1147,8 +1147,8 @@
     "name": "poryscript_pls"
   },
   {
-    "cmd": ["postgres_lsp", "lsp-proxy"],
-    "desc": "https://github.com/supabase/postgres_lsp\n\nA Language Server for Postgres\n        ",
+    "cmd": ["postgrestools", "lsp-proxy"],
+    "desc": "https://pgtools.dev\n\nA collection of language tools and a Language Server Protocol (LSP) implementation for Postgres, focusing on developer experience and reliable SQL tooling.\n        ",
     "name": "postgres_lsp"
   },
   {
@@ -1734,6 +1734,11 @@
     "cmd": ["java"],
     "desc": "https://github.com/nickbattle/vdmj\n\nThe VDMJ language server can be installed by cloning the VDMJ repository and\nrunning `mvn clean install`.\n\nVarious options are provided to configure the language server (see below). In\nparticular:\n- `annotation_paths` is a list of folders and/or jar file paths for annotations\nthat should be used with the language server;\n- any value of `debugger_port` less than zero will disable the debugger; note\nthat if a non-zero value is used, only one instance of the server can be active\nat a time.\n\nMore settings for VDMJ can be changed in a file called `vdmj.properties` under\n`root_dir/.vscode`. For a description of the available settings, see\n[Section 7 of the VDMJ User Guide](https://raw.githubusercontent.com/nickbattle/vdmj/master/vdmj/documentation/UserGuide.pdf).\n\nNote: proof obligations and combinatorial testing are not currently supported\nby neovim.\n",
     "name": "vdmj"
+  },
+  {
+    "cmd": ["vectorcode-server"],
+    "desc": "https://github.com/Davidyz/VectorCode\n\nA Language Server Protocol implementation for VectorCode, a code repository indexing tool.\n    ",
+    "name": "vectorcode_server"
   },
   {
     "cmd": ["verible-verilog-ls"],

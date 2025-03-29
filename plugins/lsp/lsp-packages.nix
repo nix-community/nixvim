@@ -167,6 +167,7 @@
     "uvls"
     "v_analyzer"
     "vdmj"
+    "vectorcode_server" # TODO: PR submitted to nixpkgs https://github.com/NixOS/nixpkgs/pull/394565
     "veridian"
     "visualforce_ls"
     # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
