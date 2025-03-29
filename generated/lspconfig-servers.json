@@ -1147,8 +1147,8 @@
     "name": "poryscript_pls"
   },
   {
-    "cmd": ["postgres_lsp", "lsp-proxy"],
-    "desc": "https://github.com/supabase/postgres_lsp\n\nA Language Server for Postgres\n        ",
+    "cmd": ["postgrestools", "lsp-proxy"],
+    "desc": "https://pgtools.dev\n\nA collection of language tools and a Language Server Protocol (LSP) implementation for Postgres, focusing on developer experience and reliable SQL tooling.\n        ",
     "name": "postgres_lsp"
   },
   {
