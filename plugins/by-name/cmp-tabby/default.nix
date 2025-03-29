@@ -2,14 +2,18 @@
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
+  name = "cmp-tabby";
 in
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "cmp-tabby";
+  inherit name;
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
-    { cmpSourcePlugins.cmp_tabby = "cmp-tabby"; }
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = "cmp_tabby";
+    })
   ];
 
   deprecateExtraOptions = true;

@@ -161,14 +161,18 @@
         { name = "neorg"; }
       ];
     };
+
+    test.runNvim = false;
+    test.warnings = expect: [
+      # Expect a warning for each source in the list,
+      # other than neorg for _some_ reason...
+      (expect "count" 4)
+    ];
   };
 
   list-of-lists-of-sources = {
     plugins.cmp = {
       enable = true;
-
-      # Here we are setting sources with raw lua. This cannot be parsed by Nixvim.
-      autoEnableSources = false;
 
       settings.sources.__raw = ''
         cmp.config.sources({
@@ -214,9 +218,6 @@
   readme-example = {
     plugins.cmp = {
       enable = true;
-
-      # Here we are setting sources with raw lua. This cannot be parsed by Nixvim.
-      autoEnableSources = false;
 
       settings = {
         mapping.__raw = ''
