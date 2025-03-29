@@ -166,7 +166,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraOptions = {
     nodePackage = lib.mkPackageOption pkgs "nodejs" {
-      default = [ "nodejs-18_x" ];
+      default = [ "nodejs_20" ];
       example = [ "nodejs" ];
       nullable = true;
       extraDescription = ''
