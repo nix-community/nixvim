@@ -16,6 +16,12 @@ let
       - `:InspectTree` to show the parsed syntax tree ("TSPlayground")
       - `:PreviewQuery` to open the Query Editor (Nvim 0.10+)
     '';
+
+    # Added 2025-03-30
+    packer = ''
+      The `packer` plugin manager has been unmaintained for several years.
+      It is recommended to use `plugins.pckr` or `plugins.lazy` instead.
+    '';
   };
   renamed = {
     # Added 2024-09-17

@@ -30,6 +30,7 @@ in
       let
         ignoredPackages = [
           # removed
+          "packer"
           "treesitter-playground"
           # renamed
           "surround"
