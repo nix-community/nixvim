@@ -249,7 +249,7 @@ in
     '';
   };
 
-  fields = defaultNullOpts.mkAttrsOf' {
+  bibtex.fields = defaultNullOpts.mkAttrsOf' {
     type = types.bool;
     pluginDefault = { };
     example = {
