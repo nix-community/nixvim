@@ -27,7 +27,7 @@
 
       assertions = [
         {
-          assertion = lib.hasInfix "vim.loader.enable()" config.content;
+          assertion = lib.hasInfix "vim.loader.enable(true)" config.content;
           message = "luaLoader is expected to be explicitly enabled.";
         }
         {
@@ -47,7 +47,7 @@
 
       assertions = [
         {
-          assertion = lib.hasInfix "vim.loader.disable()" config.content;
+          assertion = lib.hasInfix "vim.loader.enable(false)" config.content;
           message = "luaLoader is expected to be explicitly disabled.";
         }
         {

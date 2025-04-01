@@ -1,14 +1,14 @@
 {
   lib,
   config,
-  helpers,
   ...
 }:
 let
   cfg = config.luaLoader;
+  inherit (lib.nixvim) mkNullOrOption mkIfNonNull' toLuaObject;
 in
 {
-  options.luaLoader.enable = helpers.mkNullOrOption lib.types.bool ''
+  options.luaLoader.enable = mkNullOrOption lib.types.bool ''
     Whether to enable/disable the experimental lua loader:
 
     If `true`: Enables the experimental Lua module loader:
@@ -24,7 +24,7 @@ in
     If `null`: Nothing is configured.
   '';
 
-  config = helpers.mkIfNonNull' cfg.enable {
-    extraConfigLuaPre = if cfg.enable then "vim.loader.enable()" else "vim.loader.disable()";
+  config = mkIfNonNull' cfg.enable {
+    extraConfigLuaPre = "vim.loader.enable(${toLuaObject cfg.enable})";
   };
 }
