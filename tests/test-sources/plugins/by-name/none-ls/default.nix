@@ -105,10 +105,16 @@
 
         sources =
           let
-            disabled = lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-              # Not available on aarch64-linux
-              "smlfmt"
-            ];
+            disabled =
+              [
+                #TODO Added 2025-04-01
+                # php-cs-fixer is marked as broken
+                "phpcsfixer"
+              ]
+              ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+                # Not available on aarch64-linux
+                "smlfmt"
+              ];
           in
           # Enable every none-ls source that has an option
           lib.mapAttrs (

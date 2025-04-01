@@ -23,7 +23,12 @@
       ];
 
       brokenTools =
-        lib.optionals hostPlatform.isDarwin [
+        [
+          #TODO Added 2025-04-01
+          # php-cs-fixer is marked as broken
+          "php_cs_fixer"
+        ]
+        ++ lib.optionals hostPlatform.isDarwin [
           # As of 2024-01-04, texliveMedium is broken on darwin
           # TODO: re-enable those tests when fixed
           "chktex"
