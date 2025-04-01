@@ -37,9 +37,13 @@ let
     configuration.config.build.test.overrideAttrs (old: {
       passthru =
         old.passthru or { }
-        // builtins.removeAttrs configuration [ "_type" ]
+        // builtins.removeAttrs configuration [
+          "_type"
+          "type"
+        ]
         // {
           inherit file module;
+          optionType = configuration.type;
         };
     });
 
