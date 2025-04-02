@@ -1,51 +1,32 @@
 { lib, ... }:
-lib.nixvim.plugins.mkNeovimPlugin {
+let
   name = "blink-emoji";
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  inherit name;
   packPathName = "blink-emoji.nvim";
   package = "blink-emoji-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  description = ''
-    This plugin should be configured through blink-cmp's `sources.providers` settings.
-
-    For example:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.providers = {
-        emoji = {
-          module = "blink-emoji";
-          name = "Emoji";
-          score_offset = 15;
-          # Optional configurations
-          opts = {
-            insert = true;
-          };
-        };
+  imports = [
+    (lib.nixvim.modules.mkBlinkPluginModule {
+      pluginName = name;
+      # TODO: compute a sane-default
+      key = "emoji";
+      sourceName = "Emoji";
+      module = "blink-emoji";
+      settingsExample = {
+        score_offset = 15;
       };
-    };
-    ```
+    })
+  ];
 
-    And then you can add it to blink-cmp's `sources.default` option:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "emoji"
-      ];
-    };
-    ```
-  '';
+  settingsExample = {
+    insert = true;
+  };
 
   # Configured through blink-cmp
   callSetup = false;
   hasLuaConfig = false;
-  hasSettings = false;
 }

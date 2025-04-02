@@ -2,15 +2,18 @@
   empty = {
     plugins.codeium-nvim = {
       enable = true;
+      cmp.enable = false;
       settings.enable_cmp_source = false;
     };
   };
 
   enabled-by-cmp = {
-    plugins.cmp = {
-      enable = true;
-
-      settings.sources = [ { name = "codeium"; } ];
+    plugins = {
+      cmp.enable = true;
+      codeium-nvim = {
+        enable = true;
+        settings.enable_cmp_source = false;
+      };
     };
   };
 
