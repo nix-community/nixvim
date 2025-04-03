@@ -32,16 +32,20 @@ writeShellApplication {
       shift
     done
 
+    ################################################################
+    # Generation
+
+    mkdir -p "$generated_dir"
+
     generate() {
       echo "$2"
       cp "$1" "$generated_dir/$2.nix"
       nixfmt "$generated_dir/$2.nix"
     }
-
-    mkdir -p "$generated_dir"
     generate "${rust-analyzer-options}" "rust-analyzer"
     generate "${efmls-configs-sources}" "efmls-configs"
     generate "${none-ls-builtins}" "none-ls"
+
     echo "lspconfig servers"
     prettier --parser=json "${lspconfig-servers}" >"$generated_dir/lspconfig-servers.json"
 
