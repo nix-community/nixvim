@@ -1,0 +1,682 @@
+{
+  "af.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/af.latin1.spl",
+    "hash": "sha256-F0vSWpJKbVKx9i16CXtIGertv57GMAGwWvmBlWutgfQ="
+  },
+  "af.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/af.latin1.sug",
+    "hash": "sha256-jcIClpTRqpJyg9+16MbrGNr8o9ajR0dxLYjsK9iVKuM="
+  },
+  "af.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/af.utf-8.spl",
+    "hash": "sha256-gVM4JPr7AiXVsYSKjcbKfRpRz2HT00ZcHEFqkDOCrME="
+  },
+  "af.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/af.utf-8.sug",
+    "hash": "sha256-Jj4q91Z6BRJRc8QUxYjVqyVRnp1DciGDaiH1a/z0qvc="
+  },
+  "am.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/am.utf-8.spl",
+    "hash": "sha256-uz93f+dSypGFDwc3QnE6AvNSvokv2dMdRmGfrpgAAdE="
+  },
+  "bg.cp1251.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/bg.cp1251.spl",
+    "hash": "sha256-QWMnsEFEVCRuWjoKfNpWdpdo1spTS2RdX9bndo2RkYY="
+  },
+  "bg.cp1251.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/bg.cp1251.sug",
+    "hash": "sha256-ZQy0VugK35CgpWH/TcSd27EeZbHqLorKw/VPC4+Q1Zc="
+  },
+  "bg.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/bg.utf-8.spl",
+    "hash": "sha256-0IEedBf2+PNQBP0kgGiwp842C39axgBheuxHpr6VkHY="
+  },
+  "bg.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/bg.utf-8.sug",
+    "hash": "sha256-AAhsJvGbaMg44rglI9MYhE4PGOIEY2wyY4a0Mvkszgw="
+  },
+  "br.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/br.latin1.spl",
+    "hash": "sha256-tkuEx2bcVWkAkBv8/dBHrny5Z3pUSsU16pkaeH9Q1Y4="
+  },
+  "br.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/br.utf-8.spl",
+    "hash": "sha256-FzRoGv/P8tHydwGJXOyG6kQSY6ICMJ3LSvLL228DX0w="
+  },
+  "ca.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ca.latin1.spl",
+    "hash": "sha256-4y/1wGtCC3NYK8v2UACMhGKrdjTXuFQRLaaSRoCBuug="
+  },
+  "ca.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ca.latin1.sug",
+    "hash": "sha256-YA5rVlVTcppfBxLX0KkJjwh1OaQK4iLjNnEMiAjSFkU="
+  },
+  "ca.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ca.utf-8.spl",
+    "hash": "sha256-G6f+DaTvBgNmw2MA89dbWfWIPt4T2ZsUxRzIadG7gRE="
+  },
+  "ca.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ca.utf-8.sug",
+    "hash": "sha256-RvXgxgKqLBsgMQXAVZSGJ+GN0+cuu/HBwlTbuGLDHk4="
+  },
+  "cs.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/cs.cp1250.spl",
+    "hash": "sha256-/OHfQvfi5fKgrjgBmEusrewJKkmQ9PRR+dSBoHyemRA="
+  },
+  "cs.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/cs.iso-8859-2.spl",
+    "hash": "sha256-1i7QoV1qyBsP1kna+VdmhGwkx1yK3GRkqHJ8ExuPhCI="
+  },
+  "cs.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/cs.utf-8.spl",
+    "hash": "sha256-vmcId4yx5DPWIYHccUpqgNZW4YhG4W52ofT16+IQ+4M="
+  },
+  "cy.iso-8859-14.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/cy.iso-8859-14.spl",
+    "hash": "sha256-ir+8YJAokrEN6t4peMnPVJg8PtvzbAQYLPlJZown9Ms="
+  },
+  "cy.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/cy.utf-8.spl",
+    "hash": "sha256-bq3PEmlTu9oYjlG0fVGMGMrhdkSbQXQIZet0Ykx7Y+Q="
+  },
+  "da.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/da.latin1.spl",
+    "hash": "sha256-HFpTgE2YQpYbIGHQvnLSQ4cdTvqnGZ76SbiN6d9iFMg="
+  },
+  "da.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/da.latin1.sug",
+    "hash": "sha256-ZhjpGdy+uUrQ9s+cGRz7PHdYoBKeVcyh3KT3M5PoGhs="
+  },
+  "da.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/da.utf-8.spl",
+    "hash": "sha256-kmorKLt1tRESopA8mLD1HfFvEMuDcvXugpH4Y2nAiTI="
+  },
+  "da.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/da.utf-8.sug",
+    "hash": "sha256-tbfPQEGlk+V3QMAXLkEhxe6uDAW40mx+MZT6gSG4tt0="
+  },
+  "de.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/de.latin1.spl",
+    "hash": "sha256-iedU+cMNolKlNP6aSzTeDV/72DlnuqWccb/yb/UAw0I="
+  },
+  "de.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/de.latin1.sug",
+    "hash": "sha256-lT+tH0Hx0ZnUhp8IdsPm26tlNyIl+LoT7dAho0A74Fc="
+  },
+  "de.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/de.utf-8.spl",
+    "hash": "sha256-c8cQfqM5hWzb6SHeuSpFk5xN5uucByYdobndGfaDo9E="
+  },
+  "de.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/de.utf-8.sug",
+    "hash": "sha256-E9Ds+Shj2J72DNSopesqWhOg6Pm6jRxqvkerqFcUqUg="
+  },
+  "el.iso-8859-7.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/el.iso-8859-7.spl",
+    "hash": "sha256-foUXQL9msjd8i+7r/qEQ1it70h6IzB4B40OTZdXsVWo="
+  },
+  "el.iso-8859-7.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/el.iso-8859-7.sug",
+    "hash": "sha256-w6uNonEMqjcTkqZJyBaIPMNxN0qoOO5BcZ2f8YR4Fx4="
+  },
+  "el.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/el.utf-8.spl",
+    "hash": "sha256-P93wqLJYoY7gW6VLb5gssADDs4iOo4Fn6RA8MjFx5Zc="
+  },
+  "el.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/el.utf-8.sug",
+    "hash": "sha256-Z1KlgBU0T+0Pb/9GZN/SdHq8kI4MtTfIvcmazzQPS5c="
+  },
+  "en.ascii.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.ascii.spl",
+    "hash": "sha256-zry6SJ1F2jNVlA80BYLiDONezc1E+cwWi+hz8I54JEk="
+  },
+  "en.ascii.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.ascii.sug",
+    "hash": "sha256-sNXQ7RlzX4NySO+XvMtEStcwNAsXhcj2qORFj2hyIWw="
+  },
+  "en.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.latin1.spl",
+    "hash": "sha256-Yg2e/Nec/J1jmBj7UoB+Pa5ho3yADWlKAQzVJaIWGEU="
+  },
+  "en.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.latin1.sug",
+    "hash": "sha256-5t6X5Lyz+bSq9+HrVKgbk5DVwjH0J/pL43mKJeRiKwI="
+  },
+  "en.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.spl",
+    "hash": "sha256-/sq9yUm2o50ywImfolReqyXmPy7QozxK0VEUJjhNMHA="
+  },
+  "en.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.sug",
+    "hash": "sha256-W25eYWVYLS/Xob+kH7zoJCxyR2IixV0XwqorqTPJMuw="
+  },
+  "eo.iso-8859-3.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/eo.iso-8859-3.spl",
+    "hash": "sha256-id7tmGQWmlh/yO4VSgH7PgjNJIr/xQH3kEA8uvDcU9w="
+  },
+  "eo.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/eo.utf-8.spl",
+    "hash": "sha256-KoFIh8eYDvXOLNzgogSBY2UgxGGj73UCMUQUwp50dN0="
+  },
+  "es.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/es.latin1.spl",
+    "hash": "sha256-B8MqkA9ceQ221VVldX6bYxQvpG5dWJmRZl9MD3KEFEE="
+  },
+  "es.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/es.latin1.sug",
+    "hash": "sha256-K6Vj3ym9HWFst7gR9q/DZdYOIEKhs0Fcdp7YQAf7Pks="
+  },
+  "es.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/es.utf-8.spl",
+    "hash": "sha256-ljY3rJJc+KUb8gf6w5LWtMaXlXEdzC1ICbeIRq42e+M="
+  },
+  "es.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/es.utf-8.sug",
+    "hash": "sha256-5w80eKplPCrpBQhjKPv/TkO9ZG12U0ZF9QplNEgBvWw="
+  },
+  "eu.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/eu.utf-8.spl",
+    "hash": "sha256-Uw/UFYZ0WnEQ20eJzZGLXC835tbCs1aEZPgG5btK6bc="
+  },
+  "fo.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fo.latin1.spl",
+    "hash": "sha256-nZsS+L5WSXXezCnNebv9TrtNLcXeYFcvReC1l7IBLjQ="
+  },
+  "fo.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fo.latin1.sug",
+    "hash": "sha256-BMJPqbrMmx8+D4rQNiqEgLNlJLoKBoPH11fsOkZN2cM="
+  },
+  "fo.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fo.utf-8.spl",
+    "hash": "sha256-eoGDhYBRZB1W0FBTSXKJXJ54M7bh0ahlSw7MmTvHvgQ="
+  },
+  "fo.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fo.utf-8.sug",
+    "hash": "sha256-enrNpiR/6F2Cz+VHffANonc5VslqalvrWMg1YIeMrEQ="
+  },
+  "fr.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fr.latin1.spl",
+    "hash": "sha256-CGzNoIkVlMk+qxQ6qD/7vSXQE8G4KGa7tIuxy3iMwv8="
+  },
+  "fr.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fr.latin1.sug",
+    "hash": "sha256-XLLJeQG5yoG/dlUyCZwDKeIiPBObqnZAWIIt69Lg0io="
+  },
+  "fr.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fr.utf-8.spl",
+    "hash": "sha256-q/uXArmNiHwXWs5Y8as5cz3AjQO2dNkU9WNE74bmO2E="
+  },
+  "fr.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/fr.utf-8.sug",
+    "hash": "sha256-ApS8MrQskLuyhqieI8o3c7fvUO/xq1I7FRPWolxrP1g="
+  },
+  "ga.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ga.latin1.spl",
+    "hash": "sha256-us2hS34mnyVrau5Bqj9H8hpsfWndxZlwpb/41FeNHZA="
+  },
+  "ga.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ga.latin1.sug",
+    "hash": "sha256-4kw9Qwzs0Z9IMzFGBuuFMsK4fuvQRCoLF2cgsbC16Bs="
+  },
+  "ga.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ga.utf-8.spl",
+    "hash": "sha256-aPjTPGDrC1hEl3yJ2ZqetZxrQEoEby5tkUAsJfU1mrA="
+  },
+  "ga.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ga.utf-8.sug",
+    "hash": "sha256-bh2GUn7p1gYJWYGSr0Zo/zJV/+hwV2KhttgyE9A15Og="
+  },
+  "gd.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gd.latin1.spl",
+    "hash": "sha256-qCcge51Bq2KBtaZiZ2Wl4opQm/MFYLLyCHKYmkbl9pE="
+  },
+  "gd.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gd.latin1.sug",
+    "hash": "sha256-Ah1xjvJxlYW3hxKb/XMPG6+8buiyc9HrH3Rztx+QmrA="
+  },
+  "gd.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gd.utf-8.spl",
+    "hash": "sha256-w7GamDiQRBSRs8eJ23FxtWyFSvcH3HN6H9SORvVzook="
+  },
+  "gd.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gd.utf-8.sug",
+    "hash": "sha256-EXPHxy1RgF1eAPeOdkunfbUXpCzIfk4AvaSPMTi1XQY="
+  },
+  "gl.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gl.latin1.spl",
+    "hash": "sha256-fkegkQHcpPPBMLE+6L6KMm8HBH2dkg8qQxJ6loKANFI="
+  },
+  "gl.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gl.latin1.sug",
+    "hash": "sha256-k+jsUJDrk5jW5svJsJVpfWEuAS15iQSO+XmE9cL8XSg="
+  },
+  "gl.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gl.utf-8.spl",
+    "hash": "sha256-1F30HTIIVs82wnvvwLnIpBsxxnqWUigeybb5yEr72GQ="
+  },
+  "gl.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/gl.utf-8.sug",
+    "hash": "sha256-TIfKPDA9+tmZ2RbzhkBeJukqOQCm9zmxN8s1IzVMFWc="
+  },
+  "he.iso-8859-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/he.iso-8859-8.spl",
+    "hash": "sha256-fIpnvw2tY1Ncqve2cln4NEi3Ok07jWYVcUI81YuoiHw="
+  },
+  "he.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/he.utf-8.spl",
+    "hash": "sha256-G5H9V4yqbuLFneDtgrVyTKoGmlrGNQQOd+fy6A7fB4s="
+  },
+  "hr.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hr.cp1250.spl",
+    "hash": "sha256-vxyWW5JMUCliISjxcJ+nOky+oZfkqCIX1ODNY5qvRtA="
+  },
+  "hr.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hr.iso-8859-2.spl",
+    "hash": "sha256-iXYU0cRqghk+vIh6+8qRpo5yel/A4STo3Ig82Xqmc/Q="
+  },
+  "hr.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hr.utf-8.spl",
+    "hash": "sha256-NuoT41YaT6zf8WEHlHiRpLLJcaHDCW8Wgfzuw1N9yZ8="
+  },
+  "hu.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hu.cp1250.spl",
+    "hash": "sha256-aRvQMvHWMUXTY7jwIS+odgYt/An9VApsBS37N1W/Gfk="
+  },
+  "hu.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hu.iso-8859-2.spl",
+    "hash": "sha256-ad+s78InXni3luVAU7wUAwpIVvYgX2gNWxEMAGEdfxI="
+  },
+  "hu.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hu.latin1.spl",
+    "hash": "sha256-/tYjr4cUYnZ3l9nfs4elAvULQWF5RqEKj3u5/BeAfp8="
+  },
+  "hu.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/hu.utf-8.spl",
+    "hash": "sha256-sCzDO/aayrJNmviP1RTk5NCMKZXaW/LoiMw4MGJE/2g="
+  },
+  "id.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/id.latin1.spl",
+    "hash": "sha256-RkbNfH/UC5NVQ3p8X3R29j5q2NrLEgg2LBMODmN4njU="
+  },
+  "id.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/id.latin1.sug",
+    "hash": "sha256-ZJQb41y4JeZ27ZXxu4CwgmHYNfpm7xuCbRccFIjoLxE="
+  },
+  "id.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/id.utf-8.spl",
+    "hash": "sha256-cdZJLEegWW8xUjm9Xh0iGGcWbe92AwnIgDLuLyQF60s="
+  },
+  "id.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/id.utf-8.sug",
+    "hash": "sha256-lCxB+1NsrlC052hIvyzqesN549LdJxt7SSwy0zFLtJg="
+  },
+  "it.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/it.latin1.spl",
+    "hash": "sha256-vyE34XqMsVSFCEuANYPGgTQJDi/8d5FT+7pq1bpzXRc="
+  },
+  "it.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/it.latin1.sug",
+    "hash": "sha256-vTrvQQwYeJZdvaCuzhIxI1ooszK4GR4uJfpAOMnmmqw="
+  },
+  "it.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/it.utf-8.spl",
+    "hash": "sha256-2AczkD6DbVN5DAq4wcLyn2Y8oqd67ns4Guprh2KudBM="
+  },
+  "it.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/it.utf-8.sug",
+    "hash": "sha256-4LsXYaeScJJrdaj69PTQ2EDVWis0UY/Y5RKSfCckzko="
+  },
+  "ku.iso-8859-9.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ku.iso-8859-9.spl",
+    "hash": "sha256-HY60YpHmTtZx8kugG+4+HUDqaK+2BBiXvbes2wekvMY="
+  },
+  "ku.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ku.utf-8.spl",
+    "hash": "sha256-FLajWqAzbMXY4XaB/z9Va58Zd5uEgb4e0hWG356P+V8="
+  },
+  "la.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/la.latin1.spl",
+    "hash": "sha256-vs5b8cRGEcX4A7vwKfYbdWOaxe33A1GDnr/0ZaU6wJ4="
+  },
+  "la.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/la.utf-8.spl",
+    "hash": "sha256-MQr0CpSQWbqcnm+Po3UgGV8Zs5/CKTN+pvHcf7+ivqc="
+  },
+  "lt.iso-8859-13.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/lt.iso-8859-13.spl",
+    "hash": "sha256-ickoeZSGGI3DfiRW/L7EDlzTqN+RgxZibYk2mWn4DEE="
+  },
+  "lt.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/lt.utf-8.spl",
+    "hash": "sha256-mq2n+5GmIqBYk3VDXlOPFnIXeHKAdxPNrgC2El05dgk="
+  },
+  "lv.iso-8859-13.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/lv.iso-8859-13.spl",
+    "hash": "sha256-eKHAYkXOADp0zoOxCr2ok38oUOcualyRcpLGUQ5N5DM="
+  },
+  "lv.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/lv.utf-8.spl",
+    "hash": "sha256-6tU6LxbMwN5ResSvmsKIR3lkfyeG+2jjVnFRG/nCiBc="
+  },
+  "mg.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/mg.latin1.spl",
+    "hash": "sha256-+lkVRRuQTGKTCqcR5mwPyYApOhRgtm/wXhJSxSVyWps="
+  },
+  "mg.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/mg.latin1.sug",
+    "hash": "sha256-mURFuCKl8qc/CJdZTlbSts3W7aue2B6P8pMk6K5Aq8Q="
+  },
+  "mg.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/mg.utf-8.spl",
+    "hash": "sha256-FGNAzTQVFo87C5Bpbvm2Lc6RD7/bS1luABsIsu48Cxg="
+  },
+  "mg.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/mg.utf-8.sug",
+    "hash": "sha256-BoQ60SCGRBjtQAj2Y9l6FGWnLLctucV2VjV6pShxWqk="
+  },
+  "mi.iso-8859-4.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/mi.iso-8859-4.spl",
+    "hash": "sha256-AxIOxtdk5UlDBKEBTJOVHblAVx2cjn2qEMEBhiKrlZo="
+  },
+  "mi.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/mi.utf-8.spl",
+    "hash": "sha256-nGiP28wkN2LWKF877RO9I+lix1JXfAEmSBW6ivTXIGM="
+  },
+  "ms.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ms.latin1.spl",
+    "hash": "sha256-1M2fkoOEkaSvXFrg3Jj6PYdSurJLO5Qod6XG3sv0Tmk="
+  },
+  "ms.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ms.latin1.sug",
+    "hash": "sha256-kJ1pN1BMRkq/A8HjzaMfOh09S/y8POiMKpwQDuvzUC4="
+  },
+  "ms.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ms.utf-8.spl",
+    "hash": "sha256-9MbXmYkFWxnhsZmTd16B45MS/wNnu8Be03eNVEmLG2A="
+  },
+  "ms.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ms.utf-8.sug",
+    "hash": "sha256-+WIq/5pCFSM4nqBRq/Nxufvb07LCsFRxg7gC/7dxwV8="
+  },
+  "nb.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nb.latin1.spl",
+    "hash": "sha256-S8yq3lr9gm6CFBHVmzHwgctV0Y5ll7ySGkoERgz7ipg="
+  },
+  "nb.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nb.latin1.sug",
+    "hash": "sha256-0OkBJyirvU5vkaOv4gWDZxcseyxI3zjNIdfQDKj1WiA="
+  },
+  "nb.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nb.utf-8.spl",
+    "hash": "sha256-PImo8hi6Wk9Lt+OO6O+yFezcE2/R4lFTIihEZ7JD/88="
+  },
+  "nb.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nb.utf-8.sug",
+    "hash": "sha256-BlcGNG9uB7mL6+mFwoeR8zcY5GUg+V75kcey79bhHig="
+  },
+  "nl.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nl.latin1.spl",
+    "hash": "sha256-eDZW5TxNqWk4yavXga4975eutF12LFC5JRnbuzb5LaI="
+  },
+  "nl.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nl.latin1.sug",
+    "hash": "sha256-g/XJEoLeCgmjNTbsESf+Qpeq8QB0ZLLAj817vmfu4KM="
+  },
+  "nl.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nl.utf-8.spl",
+    "hash": "sha256-0T5HiYZeh9hrinbpGIlUaT4KcO6wTssUpMN9ElOzk+w="
+  },
+  "nl.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nl.utf-8.sug",
+    "hash": "sha256-PgHEPifo0V3aMAnQHFuATCj56ViLZF3cwpFwUR6FmzI="
+  },
+  "nn.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nn.latin1.spl",
+    "hash": "sha256-NV3pIZ0yoDBc5b70z/ozG8rwFS7rmeEJsb5i9AwjV7c="
+  },
+  "nn.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nn.latin1.sug",
+    "hash": "sha256-+BeJh87QKcVgC7uaWkGAjMFrvPPSzyRUyWMSVG+DAZg="
+  },
+  "nn.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nn.utf-8.spl",
+    "hash": "sha256-PSnDZyF/Qur3wJHCBSr0hMWPimxa7dRjq+RDo86kS8A="
+  },
+  "nn.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/nn.utf-8.sug",
+    "hash": "sha256-zj6WwH0IvOT+qtrjBbGVSsBeKkL7ubGwBEleQdb6tRg="
+  },
+  "ny.ascii.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ny.ascii.spl",
+    "hash": "sha256-kjkkLg1nErWcV9WxYbpj2N8m5l8030O0thkqOij7CPs="
+  },
+  "ny.iso-8859-14.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ny.iso-8859-14.spl",
+    "hash": "sha256-IPIWII/a/gKmcL6Xwu/q3MWtpsiw7TgW4Xbff8d/ZhU="
+  },
+  "ny.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ny.utf-8.spl",
+    "hash": "sha256-rrkaS2VRullGVW7U5mUt72l2S7rnWEHJ3QlipB9RoeM="
+  },
+  "pl.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/pl.cp1250.spl",
+    "hash": "sha256-pWjX1DzT1EXYMefcwn7PWI3Mq3JAMbUP1xY6/3StMnI="
+  },
+  "pl.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/pl.iso-8859-2.spl",
+    "hash": "sha256-KcJkUDWQe11muo8lXkEHJiXUkUvz2xm+ZCHPiaiTQP8="
+  },
+  "pl.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/pl.utf-8.spl",
+    "hash": "sha256-FM5QZEzT9p1adhtptZOKbQMYIytctqgB3DTCPaWF5+k="
+  },
+  "pt.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/pt.latin1.spl",
+    "hash": "sha256-PBw2IzVCTIkOaD7JlnTfi2nccGsTZvvCBeOVVDZRhoA="
+  },
+  "pt.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/pt.utf-8.spl",
+    "hash": "sha256-Pl/BALaVG3g8+zOGraQ8s5g5VT4E+qQVr1z1vV1qtjs="
+  },
+  "ro.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ro.cp1250.spl",
+    "hash": "sha256-t8lvbQZA5IOyn3d4ajmWeRqo0TdMVgTQH8Y22P7jnDc="
+  },
+  "ro.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ro.iso-8859-2.spl",
+    "hash": "sha256-EGWyfAC1YkgpWGXz7XCAql7F20KiuxkF0tTUbUK1PRA="
+  },
+  "ro.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ro.utf-8.spl",
+    "hash": "sha256-q8HkBUlsbyPfpQwQPKUjsw6S9Pw9DbKhEFTZrh14WgE="
+  },
+  "ru.cp1251.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.cp1251.spl",
+    "hash": "sha256-UinsnRKAqbXXMTyOueC/Ouao570LXCdFXLM/74Yfzhk="
+  },
+  "ru.cp1251.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.cp1251.sug",
+    "hash": "sha256-Q/RkX4b5sdwd0H1qG4kNQqPsWw7KBhvTrza8MqXgalI="
+  },
+  "ru.koi8-r.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.koi8-r.spl",
+    "hash": "sha256-kqP7X1p0K3JRWfHZKYcLeKmDG0WHNr36XHOSrK8XxM8="
+  },
+  "ru.koi8-r.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.koi8-r.sug",
+    "hash": "sha256-V6sZoM82cx/wx4FP5SNOsr8l7KaKYR37ghNwHSLsq2c="
+  },
+  "ru.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.spl",
+    "hash": "sha256-6y0714ogILMLzAp8/r2s6/t6QnWBEU9muIpXeubaxU0="
+  },
+  "ru.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.sug",
+    "hash": "sha256-6r2GForYXVv7gGiAjPeYK6sDdK/CmctJ7MidcWFvOTs="
+  },
+  "rw.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/rw.latin1.spl",
+    "hash": "sha256-w4iN/YZKvP8PGy5hFnHPIdnIyj3tD+ie0m6e8wNWZWQ="
+  },
+  "rw.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/rw.latin1.sug",
+    "hash": "sha256-Hf6QqB07ycCikm7bSPgw8+cr52vdzZHfRWiKPQMCd/A="
+  },
+  "rw.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/rw.utf-8.spl",
+    "hash": "sha256-Hm0QNeZJCr0VfWSV6q64dxJboimP0PFpwUs/fpRImqA="
+  },
+  "rw.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/rw.utf-8.sug",
+    "hash": "sha256-7m7bvr/b/koABYDAILmElZqZ9odqkOO9kcvMTsC7GgQ="
+  },
+  "sk.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sk.cp1250.spl",
+    "hash": "sha256-uVTEk9UX1SbSNacxzdyq8VehF34oSNJvfHbG8HFlnA4="
+  },
+  "sk.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sk.iso-8859-2.spl",
+    "hash": "sha256-+m8K4XPc13aj6AuF/bqOpxaE1kHz3clGz6dp6Nyg4m4="
+  },
+  "sk.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sk.utf-8.spl",
+    "hash": "sha256-uJEzbkK28jOe6NUmfuk04gDAKdO8lCBM9LjFWaxgU3w="
+  },
+  "sl.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sl.cp1250.spl",
+    "hash": "sha256-7noO4uxROdHLLjuRj2js4zEIZtmV0j8ulKUsQponCa8="
+  },
+  "sl.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sl.iso-8859-2.spl",
+    "hash": "sha256-8av2xUXvEtib823Cj3VNaGiWk/VoZZ+OOilgYYxKfdY="
+  },
+  "sl.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sl.utf-8.spl",
+    "hash": "sha256-YK4+ro1L5d5BHDQ6SB8dz/bfcN/LXlA/clO9p83h43s="
+  },
+  "sr@latin.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sr%40latin.utf-8.spl",
+    "hash": "sha256-3s5N80xo6gtQKbREvvbwJ/wyZ7TNq0/os+AoQ+wcgDU="
+  },
+  "sr.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sr.utf-8.spl",
+    "hash": "sha256-Rn8drtoBN0mjgQnz+FfIk5U6cm3vErNKESl7cZxVCAc="
+  },
+  "sv.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sv.latin1.spl",
+    "hash": "sha256-qo/1RIHx7CC0Mv9fezU6P2rJAX2ABrUobZAtiNixl4c="
+  },
+  "sv.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sv.latin1.sug",
+    "hash": "sha256-PQv5lwyUBMdOzTR05QJX06i19MWeHBzjJbB+Rl4HO5c="
+  },
+  "sv.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sv.utf-8.spl",
+    "hash": "sha256-c+0oRaF2bKIdU4j8dm2SYHSpCnupIjRY/A0Nzsxyq1I="
+  },
+  "sv.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sv.utf-8.sug",
+    "hash": "sha256-HrEyxAD8OQOtE1OmzNLWKhvVF56aDxTqI+ZoHm/YCOs="
+  },
+  "sw.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sw.latin1.spl",
+    "hash": "sha256-aKxvgrVlUpVmdGBtYDi/GZaGtBe3MQc6Vxxwsue2mtk="
+  },
+  "sw.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sw.latin1.sug",
+    "hash": "sha256-CN/xDXDcFA4wfKeG69H1w6YJ1qvs7zNumLlHB+I60mM="
+  },
+  "sw.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sw.utf-8.spl",
+    "hash": "sha256-sostQRGJeae3cRVhzRobIFIGmQwywAibtpZLiE+Xd8M="
+  },
+  "sw.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sw.utf-8.sug",
+    "hash": "sha256-zr5ojl/1V7higne7pcdqgAixUnobuaryqMR2i0P5aqI="
+  },
+  "tet.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tet.latin1.spl",
+    "hash": "sha256-kjUpirg3oi0T3zVuFKgN+vmakzTBxzAwehK5ZR9IQEk="
+  },
+  "tet.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tet.latin1.sug",
+    "hash": "sha256-kl/o5LwhTQz351N3vdiIbq8A+gBqqtk90jE7Jlx2zVw="
+  },
+  "tet.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tet.utf-8.spl",
+    "hash": "sha256-ADBkboPJG2fLIDoD3bFpRRVJGVeyF6N0YgMA0QGhe/Q="
+  },
+  "tet.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tet.utf-8.sug",
+    "hash": "sha256-CYc8f5drRbwF8QVgAIJdRlhLm9otfHtRlYNbEXeWQC4="
+  },
+  "th.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/th.utf-8.spl",
+    "hash": "sha256-Fka93fFdunRGupXLCeCLPHkqD4JOrnMEXoHuZCkoKbY="
+  },
+  "tl.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tl.latin1.spl",
+    "hash": "sha256-J2CGLKJTkozwQenKlDAQRehlGr8zlc5VxXCQIBuyPao="
+  },
+  "tl.latin1.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tl.latin1.sug",
+    "hash": "sha256-37oJtE5fQeBS2SRV1hSkf34X69srC4TVlWZcJ+kzG1U="
+  },
+  "tl.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tl.utf-8.spl",
+    "hash": "sha256-SGpFupzIWDO+2egI2THIOM4gMNRiokwNUTuR3vDybqc="
+  },
+  "tl.utf-8.sug": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tl.utf-8.sug",
+    "hash": "sha256-gGwH16vYQ87VSBm1sd9rt0PMb561vFScUZLzrM8y2iU="
+  },
+  "tn.cp1250.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tn.cp1250.spl",
+    "hash": "sha256-b29uyMiwsTAI0mAywj6z2feVpXBHBJTZTQgwluMOmM8="
+  },
+  "tn.iso-8859-2.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tn.iso-8859-2.spl",
+    "hash": "sha256-pnAhHVqxRZSixYtdI0mioBZQ4klNhJR8X9BVfnVUs38="
+  },
+  "tn.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tn.utf-8.spl",
+    "hash": "sha256-xdZSgHlg1DOdSBEvQCVYltt6hgKZY0PX+eCsgnuAoU8="
+  },
+  "tr.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/tr.utf-8.spl",
+    "hash": "sha256-qlpcQbi9mXXMrZDNYbjLMAcHT4ls3zUPK+0Oz5xDP5Q="
+  },
+  "uk.koi8-u.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/uk.koi8-u.spl",
+    "hash": "sha256-ooXoTZt27P6Vt9CwyBllXn1VU7FDX7mhhmI1wSGDGZ0="
+  },
+  "uk.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/uk.utf-8.spl",
+    "hash": "sha256-4WhspKVNcGj+Zummkh87rSnMvxQEa/cEhZjL5uwHKBQ="
+  },
+  "yi.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/yi.latin1.spl",
+    "hash": "sha256-ewzM4qeHyDsDvmhCSNFN98GqKriwv/Z+xTbO3fLJyYU="
+  },
+  "yi-tr.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/yi-tr.utf-8.spl",
+    "hash": "sha256-xpghHoCxGUmlU579FEwZ2/SN+gVB7UGPNvayUGtGVxc="
+  },
+  "yi.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/yi.utf-8.spl",
+    "hash": "sha256-UXcPJC2iHCeSuvfCZxLagaroJ7XqY5jKL14uMVJWaq8="
+  },
+  "zu.ascii.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/zu.ascii.spl",
+    "hash": "sha256-LkAyI7Kg2lfrOS7oJ3rrNk9jcAhIxBAYAphnEpxlskk="
+  },
+  "zu.latin1.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/zu.latin1.spl",
+    "hash": "sha256-f47joVMctMHPtE5eeaQ/Z6b6oWINHc1a/znhgTqZ198="
+  },
+  "zu.utf-8.spl": {
+    "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/zu.utf-8.spl",
+    "hash": "sha256-0rWXH2PV317VxSnbgU0m2zH9T+nHAuFIFee6dERH6pY="
+  }
+}

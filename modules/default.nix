@@ -22,5 +22,6 @@
     ./output.nix
     ./performance.nix
     ./plugins.nix
+    ./spellfiles.nix
   ];
 }

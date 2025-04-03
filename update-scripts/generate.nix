@@ -1,9 +1,11 @@
 {
+  lib,
   writeShellApplication,
   rust-analyzer-options,
   efmls-configs-sources,
   none-ls-builtins,
   lspconfig-servers,
+  fetch-spellfiles,
   nixfmt-rfc-style,
   nodePackages,
 }:
@@ -48,6 +50,12 @@ writeShellApplication {
 
     echo "lspconfig servers"
     prettier --parser=json "${lspconfig-servers}" >"$generated_dir/lspconfig-servers.json"
+
+    echo "fetching spellfiles"
+    ${lib.getExe fetch-spellfiles} > "$generated_dir/spellfiles.json"
+    prettier --parser=json --write "$generated_dir/spellfiles.json"
+
+    ################################################################
 
     if [ -n "$commit" ]; then
       cd "$generated_dir"
