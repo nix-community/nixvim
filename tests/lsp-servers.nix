@@ -50,6 +50,9 @@ let
           "typst_lsp"
         ]
         ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
+          # pkgs.vectorcode is not available on this platform
+          "vectorcode_server"
+
           # TODO: 2024-10-05 build failure
           "fstar"
 
