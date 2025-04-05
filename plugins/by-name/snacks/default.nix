@@ -39,6 +39,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
           '';
     };
 
+		indent = {
+		  enabled = defaultNullOpts.mkBool true ''
+        Wether to enable `indent` plugin.
+			''
+		};
+
     notifier = {
       enabled = defaultNullOpts.mkBool true ''
         Whether to enable `notifier` plugin.
