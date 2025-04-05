@@ -130,4 +130,10 @@
     githubId = 13330620;
     name = "Kasper Seweryn";
   };
+  PoCo = {
+    email = "polniolino@gmail.com";
+    github = "polnio";
+    githubId = 85367527;
+    name = "Po Co";
+  };
 }
