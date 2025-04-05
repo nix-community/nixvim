@@ -10,5 +10,6 @@
     ./project.nix
     ./ui-select.nix
     ./undo.nix
+    ./zoxide.nix
   ];
 }

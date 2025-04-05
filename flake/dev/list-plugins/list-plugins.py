@@ -87,6 +87,7 @@ for telescope_extension_name, has_depr_warnings in {
     "project": False,
     "ui-select": False,
     "undo": True,
+    "zoxide": False,
 }.items():
     KNOWN_PATHS[
         f"plugins/by-name/telescope/extensions/{telescope_extension_name}.nix"
