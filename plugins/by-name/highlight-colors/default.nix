@@ -31,7 +31,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     warnings = lib.nixvim.mkWarnings "plugins.highlight-colors" {
       when = cfg.cmpIntegration && !config.plugins.cmp.enable;
       message = ''
-        You have enabled the cmp integration with highlight-colors but `plugins.highlight-colors` is not enabled.
+        You have enabled the cmp integration with highlight-colors but `plugins.cmp` is not enabled.
       '';
     };
   };
