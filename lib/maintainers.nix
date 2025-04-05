@@ -124,4 +124,10 @@
     githubId = 38228372;
     name = "Katie Janzen";
   };
+  PoCo = {
+    email = "polniolino@gmail.com";
+    github = "polnio";
+    githubId = 85367527;
+    name = "Po Co";
+  };
 }
