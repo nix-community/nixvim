@@ -1,12 +1,6 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib) types;
-  cfg = config.performance;
 in
 {
   options.performance = {
@@ -59,17 +53,6 @@ in
       };
     };
   };
-
-  # FIXME: The performance options do not correctly propagate lua module dependencies.
-  # We can explicitly specify 'plenary-nvim', as it is a very common dependency.
-  # While this is enough for our test suite to pass, end-users may be affected by other dependencies not covered by our test suite.
-  #
-  # See https://github.com/nix-community/nixvim/pull/3099
-  config.extraPlugins =
-    lib.mkIf (cfg.combinePlugins.enable || (cfg.byteCompileLua.enable && cfg.byteCompileLua.plugins))
-      [
-        pkgs.vimPlugins.plenary-nvim
-      ];
 
   config.performance = {
     # Set option value with default priority so that values are appended by default
