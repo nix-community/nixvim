@@ -296,8 +296,9 @@
   no-packages = {
     plugins.neogit = {
       enable = true;
-      gitPackage = null;
       whichPackage = null;
     };
+
+    dependencies.git.enable = false;
   };
 }

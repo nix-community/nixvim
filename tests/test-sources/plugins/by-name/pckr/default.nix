@@ -118,9 +118,8 @@
   };
 
   no-packages = {
-    plugins.pckr = {
-      enable = true;
-      gitPackage = null;
-    };
+    plugins.pckr.enable = true;
+
+    dependencies.git.enable = false;
   };
 }

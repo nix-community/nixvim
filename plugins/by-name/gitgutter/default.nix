@@ -35,6 +35,12 @@ lib.nixvim.plugins.mkVimPlugin {
           "modifiedAbove"
         ]
       ) "This option has been removed from upstream")
+
+      # TODO: added 2025-04-06, remove after 25.05
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "gitgutter";
+        packageName = "git";
+      })
     ];
 
   extraOptions = {
@@ -44,10 +50,6 @@ lib.nixvim.plugins.mkVimPlugin {
       description = ''
         Set recommended neovim option.
       '';
-    };
-
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
     };
 
     grepPackage = lib.mkPackageOption pkgs "gnugrep" {
@@ -61,8 +63,9 @@ lib.nixvim.plugins.mkVimPlugin {
       foldtext = "gitgutter#fold#foldtext";
     };
 
+    dependencies.git.enable = lib.mkDefault true;
+
     extraPackages = [
-      cfg.gitPackage
       cfg.grepPackage
     ];
   };

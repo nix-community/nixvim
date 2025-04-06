@@ -35,6 +35,12 @@ in
       "view"
       "hideRootFolder"
     ] "Set `plugins.nvim-tree.renderer.rootFolderLabel` to `false` to hide the root folder.")
+
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "nvim-tree";
+      packageName = "git";
+    })
   ];
   options.plugins.nvim-tree = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "nvim-tree";
@@ -44,10 +50,6 @@ in
         "vimPlugins"
         "nvim-tree-lua"
       ];
-    };
-
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
     };
 
     disableNetrw = helpers.defaultNullOpts.mkBool false "Disable netrw";
@@ -1192,6 +1194,6 @@ in
           require('nvim-tree').setup(${lib.nixvim.toLuaObject setupOptions})
         '';
 
-      extraPackages = [ cfg.gitPackage ];
+      dependencies.git.enable = lib.mkDefault true;
     };
 }

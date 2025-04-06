@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -25,6 +24,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
     "ignoredFiletypes"
     "delay"
     "virtualTextColumn"
+  ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "gitblame";
+      packageName = "git";
+    })
   ];
 
   settingsOptions = {
@@ -127,11 +133,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     use_blame_commit_file_urls = true;
   };
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
+  extraConfig = {
+    dependencies.git.enable = lib.mkDefault true;
   };
-
-  extraConfig = cfg: { extraPackages = [ cfg.gitPackage ]; };
 }

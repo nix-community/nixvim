@@ -3,7 +3,6 @@
   helpers,
   config,
   pkgs,
-  options,
   ...
 }:
 with lib;
@@ -26,6 +25,12 @@ in
     (mkRemovedOptionModule (
       basePluginPath ++ [ "closeFloatsOnEscapeKey" ]
     ) "This option has been removed from upstream.")
+
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "neo-tree";
+      packageName = "git";
+    })
   ];
   options.plugins.neo-tree =
     let
@@ -61,10 +66,6 @@ in
           "vimPlugins"
           "neo-tree-nvim"
         ];
-      };
-
-      gitPackage = lib.mkPackageOption pkgs "git" {
-        nullable = true;
       };
 
       sources =
@@ -1139,6 +1140,6 @@ in
         require('neo-tree').setup(${lib.nixvim.toLuaObject setupOptions})
       '';
 
-      extraPackages = [ cfg.gitPackage ];
+      dependencies.git.enable = lib.mkDefault true;
     };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -15,14 +14,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
-  };
-
-  extraConfig = cfg: {
-    extraPackages = [ cfg.gitPackage ];
+  extraConfig = {
+    dependencies.git.enable = lib.mkDefault true;
   };
 
   # TODO: Added 2024-12-16; remove after 25.05
@@ -41,6 +34,13 @@ lib.nixvim.plugins.mkVimPlugin {
     "concealWordDiffMarker"
     "floatingWinOps"
     "popupContentMargins"
+  ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "gitmessenger";
+      packageName = "git";
+    })
   ];
 
   settingsOptions = {

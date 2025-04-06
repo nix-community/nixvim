@@ -91,9 +91,7 @@
   };
 
   no-packages = {
-    plugins.lazy = {
-      enable = true;
-      gitPackage = null;
-    };
+    dependencies.git.enable = false;
+    plugins.lazy.enable = true;
   };
 }

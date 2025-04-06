@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,6 +12,14 @@ lib.nixvim.plugins.mkVimPlugin {
   globalPrefix = "committia_";
 
   maintainers = [ lib.maintainers.alisonjenkins ];
+
+  imports = [
+    # TODO: added 2025-04-06, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "committia";
+      packageName = "git";
+    })
+  ];
 
   settingsOptions = {
     open_only_vim_starting = defaultNullOpts.mkFlagInt 1 ''
@@ -49,13 +56,7 @@ lib.nixvim.plugins.mkVimPlugin {
     '';
   };
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
-  };
-
   extraConfig = cfg: {
-    extraPackages = [ cfg.gitPackage ];
+    dependencies.git.enable = lib.mkDefault true;
   };
 }

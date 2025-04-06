@@ -260,10 +260,11 @@
   };
 
   no-packages = {
-    plugins.web-devicons.enable = true;
-    plugins.nvim-tree = {
-      enable = true;
-      gitPackage = null;
+    plugins = {
+      web-devicons.enable = true;
+      nvim-tree.enable = true;
     };
+
+    dependencies.git.enable = false;
   };
 }

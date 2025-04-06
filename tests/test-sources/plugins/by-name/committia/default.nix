@@ -21,9 +21,8 @@
   };
 
   no-packages = {
-    plugins.committia = {
-      enable = true;
-      gitPackage = null;
-    };
+    plugins.committia.enable = true;
+
+    dependencies.git.enable = false;
   };
 }

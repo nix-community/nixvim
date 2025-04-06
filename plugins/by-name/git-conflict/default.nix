@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -11,13 +10,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "git-conflict";
+      packageName = "git";
+    })
+  ];
 
-  extraConfig = cfg: { extraPackages = [ cfg.gitPackage ]; };
+  extraConfig = {
+    dependencies.git.enable = lib.mkDefault true;
+  };
 
   settingsOptions = {
     default_mappings =

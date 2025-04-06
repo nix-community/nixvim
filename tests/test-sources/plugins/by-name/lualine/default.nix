@@ -152,9 +152,8 @@
   };
 
   no-packages = {
-    plugins.lualine = {
-      enable = true;
-      gitPackage = null;
-    };
+    plugins.lualine.enable = true;
+
+    dependencies.git.enable = false;
   };
 }

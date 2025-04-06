@@ -74,13 +74,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "enable"
         ]
       ) "yadm support was removed upstream.")
-    ];
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
-  };
+      # TODO: added 2025-04-06, remove after 25.05
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "gitsigns";
+        packageName = "git";
+      })
+    ];
 
   settingsOptions = import ./settings-options.nix lib;
 
@@ -112,6 +112,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    extraPackages = [ cfg.gitPackage ];
+    dependencies.git.enable = lib.mkDefault true;
   };
 }

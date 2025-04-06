@@ -14,7 +14,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # TODO introduced 2024-02-29: remove 2024-04-29
   deprecateExtraOptions = true;
   imports =
-    map
+    [
+      # TODO: added 2025-04-07, remove after 25.05
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "neogit";
+        packageName = "git";
+      })
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "neogit";
+        packageName = "which";
+      })
+    ]
+    ++ (map
       (
         optionPath:
         mkRemovedOptionModule
@@ -40,7 +51,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "sections"
           "unpulled"
         ]
-      ];
+      ]
+    );
   optionsRenamedToSettings = [
     "disableSigns"
     "disableHint"
@@ -101,10 +113,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
-
     whichPackage = lib.mkPackageOption pkgs "which" {
       nullable = true;
     };
@@ -132,13 +140,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ]
     );
 
-    extraPackages =
-      [
-        cfg.gitPackage
-      ]
-      ++ optional (hasInfix "which" (
-        cfg.settings.commit_view.verify_commit.__raw or ""
-      )) cfg.whichPackage;
+    dependencies.git.enable = lib.mkDefault true;
 
+    extraPackages = optional (hasInfix "which" (
+      cfg.settings.commit_view.verify_commit.__raw or ""
+    )) cfg.whichPackage;
   };
 }

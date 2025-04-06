@@ -33,9 +33,8 @@
   };
 
   no-packages = {
-    plugins.git-worktree = {
-      enable = true;
-      gitPackage = null;
-    };
+    dependencies.git.enable = false;
+
+    plugins.git-worktree.enable = true;
   };
 }

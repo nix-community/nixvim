@@ -43,7 +43,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
         "alwaysDivideMiddle"
       ];
     in
-    mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions;
+    (mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions)
+    ++ [
+      # TODO: added 2025-04-06, remove after 25.05
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "lualine";
+        packageName = "git";
+      })
+    ];
 
   settingsOptions =
     let
@@ -400,13 +407,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
-  };
-
-  extraConfig = cfg: {
-    extraPackages = [ cfg.gitPackage ];
+  extraConfig = {
+    dependencies.git.enable = lib.mkDefault true;
   };
 }

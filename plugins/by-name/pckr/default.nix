@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,11 +12,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "pckr";
+      packageName = "git";
+    })
+  ];
 
+  extraOptions = {
     plugins = lib.mkOption {
       default = [ ];
       type =
@@ -75,7 +78,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    extraPackages = [ cfg.gitPackage ];
+    dependencies.git.enable = lib.mkDefault true;
 
     plugins.pckr.luaConfig = {
       # Otherwise pckr can't find itself

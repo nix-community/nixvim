@@ -84,13 +84,15 @@
     {
       plugins.gitgutter = {
         enable = true;
-        gitPackage = null;
         grepPackage = null;
         settings = {
           git_executable = lib.getExe pkgs.git;
           grep = lib.getExe pkgs.gnugrep;
         };
       };
+
+      dependencies.git.enable = false;
+
       assertions = [
         {
           assertion = lib.all (x: x.pname or null != "git") config.extraPackages;

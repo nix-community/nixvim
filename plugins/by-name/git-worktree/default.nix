@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 let
@@ -13,6 +12,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "git-worktree-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];
+
+  # TODO: added 2025-04-06, remove after 25.05
+  imports = [
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "git-worktree";
+      packageName = "git";
+    })
+  ];
 
   settingsOptions = {
     change_directory_command = defaultNullOpts.mkStr "cd" ''
@@ -50,10 +57,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraOptions = {
     enableTelescope = lib.mkEnableOption "telescope integration";
-
-    gitPackage = lib.mkPackageOption pkgs "git" {
-      nullable = true;
-    };
   };
 
   callSetup = false;
@@ -67,7 +70,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    extraPackages = [ cfg.gitPackage ];
+    dependencies.git.enable = lib.mkDefault true;
 
     plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "git_worktree" ];
 

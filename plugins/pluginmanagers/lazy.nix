@@ -37,6 +37,14 @@ let
   lazyPath = pkgs.linkFarm "lazy-plugins" processedPlugins;
 in
 {
+  # TODO: added 2025-04-06, remove after 25.05
+  imports = [
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "lazy";
+      packageName = "git";
+    })
+  ];
+
   options = {
     plugins.lazy = {
       enable = mkEnableOption "lazy.nvim";
@@ -45,10 +53,6 @@ in
         "vimPlugins"
         "lazy-nvim"
       ] { };
-
-      gitPackage = lib.mkPackageOption pkgs "git" {
-        nullable = true;
-      };
 
       plugins =
         with types;
@@ -162,7 +166,7 @@ in
   config = mkIf cfg.enable {
     extraPlugins = [ cfg.package ];
 
-    extraPackages = [ cfg.gitPackage ];
+    dependencies.git.enable = lib.mkDefault true;
 
     extraConfigLua =
       let

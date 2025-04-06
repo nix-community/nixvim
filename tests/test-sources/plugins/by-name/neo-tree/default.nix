@@ -441,11 +441,12 @@
   };
 
   no-packages = {
-    plugins.web-devicons.enable = false;
-    plugins.neo-tree = {
-      enable = true;
-      gitPackage = null;
+    plugins = {
+      web-devicons.enable = true;
+      neo-tree.enable = true;
     };
+
+    dependencies.git.enable = false;
   };
 
   no-icons = {

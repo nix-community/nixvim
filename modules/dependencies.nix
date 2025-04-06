@@ -9,6 +9,10 @@ let
 
   packages = {
     curl.default = "curl";
+    git = {
+      default = "git";
+      example = [ "gitMinimal" ];
+    };
     ueberzug.default = "ueberzugpp";
   };
 
