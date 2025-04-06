@@ -11,10 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraOptions = {
-    curlPackage = lib.mkPackageOption pkgs "curl" {
-      nullable = true;
-    };
-
     gitPackage = lib.mkPackageOption pkgs "git" {
       nullable = true;
     };
@@ -22,9 +18,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     extraPackages = [
-      cfg.curlPackage
       cfg.gitPackage
     ];
+    dependencies.curl.enable = lib.mkDefault true;
   };
 
   settingsExample = {

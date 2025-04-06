@@ -92,10 +92,12 @@
   no-packages = {
     test.runNvim = false;
 
+    dependencies = {
+      curl.enable = false;
+    };
     plugins.image = {
       enable = true;
       settings.backend = "kitty";
-      curlPackage = null;
       ueberzugPackage = null;
     };
   };

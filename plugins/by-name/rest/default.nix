@@ -40,6 +40,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Refer to the documentation for more information.
         ''
       )
+
+      # TODO: added 2025-04-06: remove after 25.05
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "rest";
+        packageName = "curl";
+      })
     ]
     ++
       map
@@ -207,10 +213,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraOptions = {
-    curlPackage = lib.mkPackageOption pkgs "curl" {
-      nullable = true;
-    };
-
     enableHttpFiletypeAssociation = lib.mkOption {
       type = types.bool;
       default = true;
@@ -300,7 +302,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     globals.rest_nvim = cfg.settings;
 
-    extraPackages = [ cfg.curlPackage ];
+    dependencies.curl.enable = lib.mkDefault true;
 
     filetype = lib.mkIf cfg.enableHttpFiletypeAssociation {
       extension.http = "http";

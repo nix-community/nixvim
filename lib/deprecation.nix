@@ -122,4 +122,16 @@ rec {
       nestedTypes.coercedType = oldType;
       nestedTypes.finalType = newType;
     };
+
+  mkRemovedPackageOptionModule =
+    {
+      plugin,
+      packageName,
+      oldPackageName ? packageName,
+    }:
+    lib.mkRemovedOptionModule [ "plugins" plugin "${oldPackageName}Package" ] ''
+      Please use the `dependencies.${packageName}` top-level option instead:
+      - `dependencies.${packageName}.enable = false` to disable installing `${packageName}`
+      - `dependencies.${packageName}.package` to choose which package to install for `${packageName}`.
+    '';
 }

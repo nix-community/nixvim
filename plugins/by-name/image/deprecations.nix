@@ -17,5 +17,10 @@ lib: {
       Nixvim(plugins.image): The option `integrations` has been renamed to `settings.integrations`.
       Warning: sub-options now have the same name as upstream (`clear_in_insert_mode`...).
     '')
+
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "image";
+      packageName = "curl";
+    })
   ];
 }

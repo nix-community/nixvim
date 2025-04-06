@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -12,13 +11,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraOptions = {
-    curlPackage = lib.mkPackageOption pkgs "curl" {
-      nullable = true;
-    };
-  };
+  # TODO: added 2025-04-06, remove after 25.05
+  imports = [
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "chatgpt";
+      packageName = "curl";
+    })
+  ];
 
-  extraConfig = cfg: { extraPackages = [ cfg.curlPackage ]; };
+  extraConfig = cfg: { dependencies.curl.enable = lib.mkDefault true; };
 
   settingsOptions = {
     api_key_cmd = helpers.defaultNullOpts.mkStr null ''

@@ -9,6 +9,7 @@
     ./clipboard.nix
     ./colorscheme.nix
     ./commands.nix
+    ./dependencies.nix
     ./diagnostics.nix
     ./doc.nix
     ./editorconfig.nix

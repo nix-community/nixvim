@@ -40,6 +40,7 @@ lib.makeExtensible (
     inherit (self.deprecation)
       getOptionRecursive
       mkDeprecatedSubOptionModule
+      mkRemovedPackageOptionModule
       mkSettingsRenamedOptionModules
       transitionType
       ;
