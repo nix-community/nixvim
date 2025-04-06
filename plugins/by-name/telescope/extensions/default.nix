@@ -1,5 +1,6 @@
 {
   imports = [
+    ./advanced-git-search.nix
     ./file-browser.nix
     ./frecency.nix
     ./fzf-native.nix

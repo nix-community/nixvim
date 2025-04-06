@@ -77,6 +77,7 @@ KNOWN_PATHS: dict[
     ),
 }
 for telescope_extension_name, has_depr_warnings in {
+    "advanced-git-search": False,
     "file-browser": True,
     "frecency": True,
     "fzf-native": True,
