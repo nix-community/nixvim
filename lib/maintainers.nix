@@ -124,4 +124,10 @@
     githubId = 38228372;
     name = "Katie Janzen";
   };
+  wvffle = {
+    email = "nixvim@wvffle.net";
+    github = "wvffle";
+    githubId = 13330620;
+    name = "Kasper Seweryn";
+  };
 }
