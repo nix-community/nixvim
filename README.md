@@ -203,38 +203,39 @@ can use the following:
 {
   description = "A very basic flake";
 
-  inputs.nixvim.url = "github:nix-community/nixvim";
+  inputs = {
+    nixpkgs.follows = "nixvim/nixpkgs";
+    nixvim.url = "github:nix-community/nixvim";
+  };
 
-  outputs = {
-    self,
-    nixvim,
-    flake-parts,
-  } @ inputs: let
-    config = {
-      colorschemes.gruvbox.enable = true;
-    };
-  in
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    { nixpkgs, nixvim, ... }:
+    let
+      config = {
+        colorschemes.gruvbox.enable = true;
+      };
+
       systems = [
-        "aarch64-darwin"
+        "x86_64-linux"
         "aarch64-linux"
         "x86_64-darwin"
-        "x86_64-linux"
+        "aarch64-darwin"
       ];
 
-      perSystem = {
-        pkgs,
-        system,
-        ...
-      }: let
-        nixvim' = nixvim.legacyPackages."${system}";
-        nvim = nixvim'.makeNixvim config;
-      in {
-        packages = {
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      packages = forAllSystems (
+        system:
+        let
+          nixvim' = nixvim.legacyPackages.${system};
+          nvim = nixvim'.makeNixvim config;
+        in
+        {
           inherit nvim;
           default = nvim;
-        };
-      };
+        }
+      );
     };
 }
 ```
