@@ -22,5 +22,9 @@ lib: {
       plugin = "image";
       packageName = "curl";
     })
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "image";
+      packageName = "ueberzug";
+    })
   ];
 }

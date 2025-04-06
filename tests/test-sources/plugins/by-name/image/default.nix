@@ -94,11 +94,11 @@
 
     dependencies = {
       curl.enable = false;
+      ueberzug.enable = false;
     };
     plugins.image = {
       enable = true;
       settings.backend = "kitty";
-      ueberzugPackage = null;
     };
   };
 }

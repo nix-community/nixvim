@@ -9,6 +9,7 @@ let
 
   packages = {
     curl.default = "curl";
+    ueberzug.default = "ueberzugpp";
   };
 
   mkDependencyOption = name: properties: {

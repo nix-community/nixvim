@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -15,23 +14,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO: option deprecations added 2025-03-20. Remove after 25.05
-  # TODO: curlPackage deprecation added 2025-04-06. Remove after 25.05
+  # TODO: curlPackage and ueberzugPackage deprecations added 2025-04-06. Remove after 25.05
   inherit (import ./deprecations.nix lib)
     deprecateExtraOptions
     optionsRenamedToSettings
     imports
     ;
-
-  extraOptions = {
-    ueberzugPackage = lib.mkOption {
-      type = with types; nullOr package;
-      default = pkgs.ueberzugpp;
-      defaultText = lib.literalExpression "pkgs.ueberzugpp";
-      description = ''
-        Package to automatically install if `settings.backend.backend` is set to `"ueberzug"`.
-      '';
-    };
-  };
 
   settingsOptions = {
     backend =
@@ -139,8 +127,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
     # all integrations but shipping `curl` is not too heavy.
-    dependencies.curl.enable = lib.mkDefault true;
-
-    extraPackages = lib.optional (cfg.settings.backend == "ueberzug") cfg.ueberzugPackage;
+    dependencies = {
+      curl.enable = lib.mkDefault true;
+      ueberzug.enable = lib.mkIf (cfg.settings.backend == "ueberzug") (lib.mkDefault true);
+    };
   };
 }
