@@ -28,6 +28,8 @@ let
       example = "pkgs.nodejs_22";
     };
     ripgrep.default = "ripgrep";
+    sd.default = "sd";
+    sed.default = "gnused";
     texpresso.default = "texpresso";
     tinymist.default = "tinymist";
     tree-sitter.default = "tree-sitter";

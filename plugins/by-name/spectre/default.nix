@@ -1,8 +1,6 @@
 {
   lib,
   helpers,
-  config,
-  pkgs,
   ...
 }:
 with lib;
@@ -13,14 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  description = ''
-    You may want to set the package for your find/replace tool(s) like shown below:
-
-    ```nix
-      plugins.spectre.replacePackage = pkgs.gnused;
-    ```
-  '';
-
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -28,6 +18,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       packageName = "ripgrep";
       oldPackageName = "find";
     })
+    (lib.mkRemovedOptionModule [ "plugins" "spectre" "replacePackage" ] ''
+      If you have set `plugins.spectre.settings.default.find.cmd` to "sed" (or "sd" respectively), Nixvim will automatically enable `dependencies.sed.enable` (or `sd` respectively).
+
+      - If you want to disable automatic installation of the replace tool, set `dependencies.s[e]d.enable` to `false`.
+      - If you want to override which package is installed by Nixvim, set the `dependencies.s[e]d.package` option.
+    '')
   ];
 
   settingsOptions =
@@ -235,37 +231,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraOptions =
-    let
-      defaults = config.plugins.spectre.settings.default;
-
-      # NOTE: changes here should also be reflected in the `defaultText` below
-      replacePackages = {
-        sed = pkgs.gnused;
-        inherit (pkgs) sd;
-      };
-    in
-    {
-      replacePackage = lib.mkOption {
-        type = with lib.types; nullOr package;
-        default = replacePackages.${toString defaults.replace.cmd} or null;
-        defaultText = literalMD ''
-          Based on the value defined in `config.plugins.spectre.settings.default.replace.cmd`,
-          if the value defined there is a key in the attrset below, then the corresponding value is used. Otherwise the default will be `null`.
-
-          ```nix
-          {
-            sd = pkgs.sd;
-            sed = pkgs.gnused;
-          }
-          ```
-        '';
-        description = ''
-          The package to use for the replace command.
-        '';
-      };
-    };
-
   extraConfig = cfg: {
     dependencies =
       let
@@ -273,9 +238,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       in
       {
         ripgrep.enable = lib.mkIf (defaults.find.cmd == "rg") (lib.mkDefault true);
+        sed.enable = lib.mkIf (defaults.replace.cmd == "sed") (lib.mkDefault true);
+        sd.enable = lib.mkIf (defaults.replace.cmd == "sd") (lib.mkDefault true);
       };
-    extraPackages = [
-      cfg.replacePackage
-    ];
   };
 }

@@ -1,15 +1,6 @@
-{ pkgs, ... }:
 {
   empty = {
     plugins.spectre.enable = true;
-  };
-
-  package-options-manual = {
-    plugins.spectre = {
-      enable = true;
-
-      replacePackage = pkgs.gnused;
-    };
   };
 
   package-options-from-settings = {
