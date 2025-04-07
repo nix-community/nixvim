@@ -49,6 +49,10 @@ let
     websocat.default = "websocat";
     wezterm.default = "wezterm";
     which.default = "which";
+    xxd.default = [
+      "unixtools"
+      "xxd"
+    ];
     yazi.default = "yazi";
     yq.default = "yq";
     zk.default = "zk";

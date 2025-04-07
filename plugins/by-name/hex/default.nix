@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts mkNullOrLuaFn;
 in
@@ -9,14 +9,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    xxdPackage = lib.mkPackageOption pkgs [
-      "unixtools"
-      "xxd"
-    ] { nullable = true; };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "hex";
+      packageName = "xxd";
+    })
+  ];
 
-  extraConfig = cfg: { extraPackages = [ cfg.xxdPackage ]; };
+  extraConfig = {
+    dependencies.xxd.enable = lib.mkDefault true;
+  };
 
   settingsOptions = {
     dump_cmd = defaultNullOpts.mkStr "xxd -g 1 -u" ''
