@@ -2,7 +2,6 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
@@ -30,6 +29,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
       "autoAttach"
       "filetypes"
     ]
+  ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "zk";
+      packageName = "zk";
+    })
   ];
 
   settingsOptions = {
@@ -107,13 +113,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   };
 
-  extraOptions = {
-    zkPackage = lib.mkPackageOption pkgs "zk" {
-      nullable = true;
-    };
-  };
   extraConfig = cfg: {
-    extraPackages = [ cfg.zkPackage ];
+    dependencies.zk.enable = lib.mkDefault true;
 
     warnings = lib.nixvim.mkWarnings "plugins.zk" (
       mapAttrsToList

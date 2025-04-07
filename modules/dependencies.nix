@@ -46,6 +46,7 @@ let
     websocat.default = "websocat";
     which.default = "which";
     yazi.default = "yazi";
+    zk.default = "zk";
   };
 
   mkDependencyOption = name: properties: {
