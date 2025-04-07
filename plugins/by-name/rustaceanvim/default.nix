@@ -15,11 +15,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   deprecateExtraOptions = true;
   optionsRenamedToSettings = import ./renamed-options.nix;
 
-  extraOptions = {
-    rustAnalyzerPackage = lib.mkPackageOption pkgs "rust-analyzer" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "godot";
+      packageName = "rust-analyzer";
+      oldPackageName = "rustAnalyzer";
+    })
+  ];
 
   settingsOptions = import ./settings-options.nix { inherit lib helpers pkgs; };
 
@@ -53,7 +56,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     cfg:
     mkMerge [
       {
-        extraPackages = [ cfg.rustAnalyzerPackage ];
+        dependencies.rust-analyzer.enable = lib.mkDefault true;
 
         globals.rustaceanvim = cfg.settings;
 

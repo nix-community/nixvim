@@ -40,6 +40,7 @@ let
     };
     plantuml.default = "plantuml";
     ripgrep.default = "ripgrep";
+    rust-analyzer.default = "rust-analyzer";
     sd.default = "sd";
     sed.default = "gnused";
     texpresso.default = "texpresso";
