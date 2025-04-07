@@ -1,7 +1,7 @@
 [
   {
     "cmd": ["ada_language_server"],
-    "desc": "https://github.com/AdaCore/ada_language_server\n\nInstallation instructions can be found\n[here](https://github.com/AdaCore/ada_language_server#Install).\n\nCan be configured by passing a \"settings\" object to `ada_ls.setup{}`:\n\n``` lua\nrequire('lspconfig').ada_ls.setup{\n    settings = {\n      ada = {\n        projectFile = \"project.gpr\";\n        scenarioVariables = { ... };\n      }\n    }\n}\n```\n",
+    "desc": "https://github.com/AdaCore/ada_language_server\n\nInstallation instructions can be found\n[here](https://github.com/AdaCore/ada_language_server#Install).\n\nWorkspace-specific\n[settings](https://github.com/AdaCore/ada_language_server/blob/master/doc/settings.md)\nsuch as `projectFile` can be provided in a `.als.json` file at the root\nof the workspace.\n\nAlternatively, configuration may be passed as a \"settings\" object to\n`ada_ls.setup{}`:\n\n``` lua\nrequire('lspconfig').ada_ls.setup{\n    settings = {\n      ada = {\n        projectFile = \"project.gpr\";\n        scenarioVariables = { ... };\n      }\n    }\n}\n```\n",
     "name": "ada_ls"
   },
   {
@@ -1452,7 +1452,7 @@
   },
   {
     "cmd": ["sourcekit-lsp"],
-    "desc": "https://github.com/apple/sourcekit-lsp\n\nLanguage server for Swift and C/C++/Objective-C.\n    ",
+    "desc": "https://github.com/swiftlang/sourcekit-lsp\n\nLanguage server for Swift and C/C++/Objective-C.\n    ",
     "name": "sourcekit"
   },
   {
@@ -1800,8 +1800,8 @@
     "name": "wasm_language_tools"
   },
   {
-    "cmd": ["wgsl_analyzer"],
-    "desc": "https://github.com/wgsl-analyzer/wgsl-analyzer\n\n`wgsl_analyzer` can be installed via `cargo`:\n```sh\ncargo install --git https://github.com/wgsl-analyzer/wgsl-analyzer wgsl_analyzer\n```\n",
+    "cmd": ["wgsl-analyzer"],
+    "desc": "https://github.com/wgsl-analyzer/wgsl-analyzer\n\n`wgsl-analyzer` can be installed via `cargo`:\n```sh\ncargo install --git https://github.com/wgsl-analyzer/wgsl-analyzer wgsl-analyzer\n```\n",
     "name": "wgsl_analyzer"
   },
   {
