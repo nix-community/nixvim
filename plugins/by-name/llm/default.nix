@@ -1,4 +1,8 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "llm";
   packPathName = "llm.nvim";
@@ -6,19 +10,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    llmLsPackage = lib.mkPackageOption pkgs "llm-ls" {
-      nullable = true;
-    };
-  };
-  extraConfig = cfg: {
-    extraPackages = [ cfg.llmLsPackage ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "llm";
+      packageName = "llm-ls";
+      oldPackageName = "llmLs";
+    })
+  ];
 
-    # If not setting this option, llm.nvim will try to download the llm-ls binary from the internet.
-    plugins.llm.settings.lsp.bin_path = lib.mkIf (cfg.llmLsPackage != null) (
-      lib.mkDefault (lib.getExe cfg.llmLsPackage)
-    );
-  };
+  extraConfig =
+    let
+      llm-ls-dep = config.dependencies.llm-ls;
+    in
+    {
+      dependencies.llm-ls.enable = lib.mkDefault true;
+
+      # If not setting this option, llm.nvim will try to download the llm-ls binary from the internet.
+      plugins.llm.settings.lsp.bin_path = lib.mkIf llm-ls-dep.enable (
+        lib.mkDefault (lib.getExe llm-ls-dep.package)
+      );
+    };
 
   settingsOptions = import ./settings-options.nix lib;
 

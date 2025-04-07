@@ -30,6 +30,7 @@ let
     lazygit.default = "lazygit";
     lean.default = "lean4";
     ledger.default = "ledger";
+    llm-ls.default = "llm-ls";
     manix.default = "manix";
     nodejs = {
       default = "nodejs";

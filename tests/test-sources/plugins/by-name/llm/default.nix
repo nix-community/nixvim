@@ -9,9 +9,9 @@
     plugins.llm = {
       enable = true;
 
-      llmLsPackage = null;
       settings.lsp.bin_path = null;
     };
+    dependencies.llm-ls.enable = false;
   };
 
   defaults = {
