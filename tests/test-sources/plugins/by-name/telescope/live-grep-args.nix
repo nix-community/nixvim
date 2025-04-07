@@ -49,26 +49,26 @@
   };
 
   custom-packages = {
-    plugins.telescope = {
-      enable = true;
-
-      extensions.live-grep-args = {
+    plugins = {
+      telescope = {
         enable = true;
-        grepPackage = pkgs.gnugrep;
+
+        extensions.live-grep-args.enable = true;
       };
+      web-devicons.enable = true;
     };
-    plugins.web-devicons.enable = true;
+    dependencies.ripgrep.package = pkgs.gnugrep;
   };
 
   no-packages = {
-    plugins.telescope = {
-      enable = true;
-
-      extensions.live-grep-args = {
+    plugins = {
+      telescope = {
         enable = true;
-        grepPackage = null;
+
+        extensions.live-grep-args.enable = true;
       };
+      web-devicons.enable = false;
     };
-    plugins.web-devicons.enable = false;
+    dependencies.ripgrep.enable = false;
   };
 }

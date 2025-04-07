@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 with lib;
@@ -22,13 +21,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: Added 2023-11-06, remove after 24.11
   imports = [
+    # TODO: Added 2023-11-06, remove after 24.11
     (mkRemovedOptionModule [
       "plugins"
       "todo-comments"
       "keymapsSilent"
     ] "Use `plugins.todo-comments.keymaps.<COMMAND>.options.silent`.")
+
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "todo-comments";
+      packageName = "ripgrep";
+    })
   ];
 
   # TODO: Added 2024-08-16, remove after 24.11
@@ -407,10 +412,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
           todoTrouble = "TodoTrouble";
           todoTelescope = "TodoTelescope";
         };
-
-    ripgrepPackage = lib.mkPackageOption pkgs "ripgrep" {
-      nullable = true;
-    };
   };
 
   extraConfig = cfg: {
@@ -431,7 +432,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
     ];
 
-    extraPackages = [ cfg.ripgrepPackage ];
+    dependencies.ripgrep.enable = lib.mkDefault true;
 
     keymaps = lib.pipe cfg.keymaps [
       (filterAttrs (n: keymap: keymap != null && keymap.key != null))

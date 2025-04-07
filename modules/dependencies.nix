@@ -27,6 +27,7 @@ let
       default = "nodejs";
       example = "pkgs.nodejs_22";
     };
+    ripgrep.default = "ripgrep";
     texpresso.default = "texpresso";
     tinymist.default = "tinymist";
     tree-sitter.default = "tree-sitter";

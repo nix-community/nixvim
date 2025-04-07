@@ -17,10 +17,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
     You may want to set the package for your find/replace tool(s) like shown below:
 
     ```nix
-      plugins.spectre.findPackage = pkgs.rg;
       plugins.spectre.replacePackage = pkgs.gnused;
     ```
   '';
+
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "spectre";
+      packageName = "ripgrep";
+      oldPackageName = "find";
+    })
+  ];
 
   settingsOptions =
     let
@@ -232,35 +240,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       defaults = config.plugins.spectre.settings.default;
 
       # NOTE: changes here should also be reflected in the `defaultText` below
-      findPackages = {
-        rg = pkgs.ripgrep;
-      };
-
-      # NOTE: changes here should also be reflected in the `defaultText` below
       replacePackages = {
         sed = pkgs.gnused;
         inherit (pkgs) sd;
       };
     in
     {
-      findPackage = lib.mkOption {
-        type = with lib.types; nullOr package;
-        default = findPackages.${toString defaults.find.cmd} or null;
-        defaultText = literalMD ''
-          Based on the value defined in `config.plugins.spectre.settings.default.find.cmd`,
-          if the value defined there is a key in the attrset below, then the corresponding value is used. Otherwise the default will be `null`.
-
-          ```nix
-          {
-            rg = pkgs.ripgrep;
-          }
-          ```
-        '';
-        description = ''
-          The package to use for the find command.
-        '';
-      };
-
       replacePackage = lib.mkOption {
         type = with lib.types; nullOr package;
         default = replacePackages.${toString defaults.replace.cmd} or null;
@@ -282,8 +267,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
   extraConfig = cfg: {
+    dependencies =
+      let
+        defaults = cfg.settings.default;
+      in
+      {
+        ripgrep.enable = lib.mkIf (defaults.find.cmd == "rg") (lib.mkDefault true);
+      };
     extraPackages = [
-      cfg.findPackage
       cfg.replacePackage
     ];
   };

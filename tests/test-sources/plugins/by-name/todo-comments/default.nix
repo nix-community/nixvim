@@ -191,11 +191,9 @@
     };
 
   without-ripgrep = {
-    plugins.todo-comments = {
-      enable = true;
+    plugins.todo-comments.enable = true;
 
-      ripgrepPackage = null;
-    };
+    dependencies.ripgrep.enable = false;
   };
 
   highlight-pattern-list = {

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -12,6 +11,19 @@ mkExtension {
   name = "live-grep-args";
   extensionName = "live_grep_args";
   package = "telescope-live-grep-args-nvim";
+
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = [
+        "telescope"
+        "extensions"
+        "live-grep-args"
+      ];
+      packageName = "ripgrep";
+      oldPackageName = "grep";
+    })
+  ];
 
   settingsOptions = {
     auto_quoting = defaultNullOpts.mkBool true ''
@@ -56,14 +68,7 @@ mkExtension {
     theme = "dropdown";
   };
 
-  extraOptions = {
-    grepPackage = lib.mkPackageOption pkgs "ripgrep" {
-      nullable = true;
-      example = "pkgs.gnugrep";
-    };
-  };
-
-  extraConfig = cfg: {
-    extraPackages = [ cfg.grepPackage ];
+  extraConfig = {
+    dependencies.ripgrep.enable = lib.mkDefault true;
   };
 }
