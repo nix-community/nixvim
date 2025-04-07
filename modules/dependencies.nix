@@ -21,6 +21,7 @@ let
     go.default = "go";
     lean.default = "lean4";
     ledger.default = "ledger";
+    manix.default = "manix";
     nodejs = {
       default = "nodejs";
       example = "pkgs.nodejs_22";

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -11,6 +10,18 @@ in
 mkExtension {
   name = "manix";
   package = "telescope-manix";
+
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = [
+        "telescope"
+        "extensions"
+        "manix"
+      ];
+      packageName = "manix";
+    })
+  ];
 
   settingsOptions = {
     manix_args = defaultNullOpts.mkListOf lib.types.str [ ] "CLI arguments to pass to manix.";
@@ -24,13 +35,7 @@ mkExtension {
     cword = true;
   };
 
-  extraOptions = {
-    manixPackage = lib.mkPackageOption pkgs "manix" {
-      nullable = true;
-    };
-  };
-
-  extraConfig = cfg: {
-    extraPackages = [ cfg.manixPackage ];
+  extraConfig = {
+    dependencies.manix.enable = lib.mkDefault true;
   };
 }

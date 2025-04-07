@@ -40,14 +40,15 @@
   };
 
   no-packages = {
-    plugins.telescope = {
-      enable = true;
-
-      extensions.manix = {
+    plugins = {
+      telescope = {
         enable = true;
-        manixPackage = null;
+
+        extensions.manix.enable = true;
       };
+      web-devicons.enable = false;
     };
-    plugins.web-devicons.enable = false;
+
+    dependencies.manix.enable = false;
   };
 }
