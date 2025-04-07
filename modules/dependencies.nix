@@ -31,6 +31,7 @@ let
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";
     which.default = "which";
+    yazi.default = "yazi";
   };
 
   mkDependencyOption = name: properties: {
