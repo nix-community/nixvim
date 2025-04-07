@@ -19,6 +19,7 @@ let
       default = "nodejs";
       example = "pkgs.nodejs_22";
     };
+    texpresso.default = "texpresso";
     tree-sitter.default = "tree-sitter";
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";

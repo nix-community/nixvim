@@ -1,7 +1,5 @@
 {
   lib,
-  helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -14,11 +12,15 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.nickhu ];
 
-  extraOptions = {
-    texpressoPackage = lib.mkPackageOption pkgs "texpresso" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "texpresso";
+      packageName = "texpresso";
+    })
+  ];
 
-  extraConfig = cfg: { extraPackages = [ cfg.texpressoPackage ]; };
+  extraConfig = {
+    dependencies.texpresso.enable = lib.mkDefault true;
+  };
 }
