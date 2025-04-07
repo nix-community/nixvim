@@ -2,7 +2,6 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
@@ -229,6 +228,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       (lib.mkRenamedOptionModule (basePluginPath ++ [ "moduleConfig" ]) (
         basePluginPath ++ [ "settings" ]
       ))
+
+      # TODO: added 2025-04-07, remove after 25.05
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "treesitter";
+        packageName = "treesitter";
+      })
     ];
 
   settingsOptions = {
@@ -364,9 +369,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     gccPackage = lib.mkPackageOption pkgs "gcc" {
       nullable = true;
       example = "pkgs.gcc14";
-      extraDescription = ''
-        This is required to build grammars if you are not using `nixGrammars`.
-      '';
+      extraDescription = ''This is required to build grammars if you are not using `nixGrammars      '';
     };
 
     grammarPackages = mkOption {
@@ -418,13 +421,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         This is required to build grammars if you are not using `nixGrammars`.
       '';
     };
-
-    treesitterPackage = lib.mkPackageOption pkgs "tree-sitter" {
-      nullable = true;
-      extraDescription = ''
-        This is required to build grammars if you are not using `nixGrammars`.
-      '';
-    };
   };
 
   # NOTE: We call setup manually below.
@@ -460,8 +456,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
     extraPackages = [
       cfg.gccPackage
       cfg.nodejsPackage
-      cfg.treesitterPackage
     ];
+
+    dependencies.tree-sitter.enable = lib.mkIf (!cfg.nixGrammars) lib.mkDefault true;
+    warnings = lib.nixvim.mkWarnings "plugins.treesitter" {
+      when = !cfg.nixGrammars && (!config.dependencies.tree-sitter.enable);
+      message = ''
+        `tree-sitter` is required to build grammars as you are not using `nixGrammars`.
+        You may want to set `dependencies.tree-sitter.enable` to `true`.
+      '';
+    };
 
     opts = mkIf cfg.folding {
       foldmethod = mkDefault "expr";

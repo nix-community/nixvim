@@ -13,6 +13,7 @@ let
       default = "git";
       example = [ "gitMinimal" ];
     };
+    tree-sitter.default = "tree-sitter";
     ueberzug.default = "ueberzugpp";
     which.default = "which";
   };
