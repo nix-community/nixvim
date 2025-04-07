@@ -8,6 +8,7 @@ let
   cfg = config.dependencies;
 
   packages = {
+    bat.default = "bat";
     ctags.default = "ctags";
     curl.default = "curl";
     direnv.default = "direnv";

@@ -35,11 +35,11 @@
   };
 
   no-packages = {
-    plugins.web-devicons.enable = false;
-    plugins.telescope = {
-      enable = true;
-      batPackage = null;
+    plugins = {
+      web-devicons.enable = false;
+      telescope.enable = true;
     };
+    dependencies.bat.enable = false;
   };
 
   mini-icons = {

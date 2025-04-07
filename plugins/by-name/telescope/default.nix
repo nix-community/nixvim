@@ -37,6 +37,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ]
       "This option no longer has any effect now that the `plugin.telescope.keymaps` implementation uses `<cmd>`."
     )
+
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "telescope";
+      packageName = "bat";
+    })
   ];
 
   extraOptions = {
@@ -88,10 +94,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         added to `extraPlugins`.
       '';
     };
-
-    batPackage = lib.mkPackageOption pkgs "bat" {
-      nullable = true;
-    };
   };
 
   callSetup = false;
@@ -109,7 +111,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    extraPackages = [ cfg.batPackage ];
+    dependencies.bat.enable = lib.mkDefault true;
 
     keymaps = mapAttrsToList (
       key: mapping:
