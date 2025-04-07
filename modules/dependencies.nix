@@ -12,6 +12,7 @@ let
     curl.default = "curl";
     direnv.default = "direnv";
     gcc.default = "gcc";
+    gh.default = "gh";
     git = {
       default = "git";
       example = [ "gitMinimal" ];

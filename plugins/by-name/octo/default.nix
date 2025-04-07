@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,6 +12,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "octo-nvim";
 
   maintainers = [ lib.maintainers.svl ];
+
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "octo";
+      packageName = "gh";
+    })
+  ];
 
   settingsOptions = {
     use_local_fs = defaultNullOpts.mkBool false ''
@@ -168,17 +175,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraOptions = {
-    ghPackage = lib.mkPackageOption pkgs "GitHub CLI" {
-      default = "gh";
-      nullable = true;
-    };
-  };
-
   extraConfig =
     cfg:
     lib.mkMerge [
-      { extraPackages = [ cfg.ghPackage ]; }
+      { dependencies.gh.enable = lib.mkDefault true; }
       (lib.mkIf (cfg.settings.picker == null || cfg.settings.picker == "telescope") {
         plugins.telescope.enable = lib.mkDefault true;
       })

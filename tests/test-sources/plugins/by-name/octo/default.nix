@@ -103,10 +103,11 @@
   no-packages = {
     # Need to add gh executable to runtime path for plugin
     test.runNvim = false;
-    plugins.web-devicons.enable = false;
-    plugins.octo = {
-      enable = true;
-      ghPackage = null;
+
+    plugins = {
+      web-devicons.enable = false;
+      octo.enable = true;
     };
+    dependencies.gh.enable = false;
   };
 }
