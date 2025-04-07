@@ -9,6 +9,7 @@ let
 
   packages = {
     bat.default = "bat";
+    cornelis.default = "cornelis";
     ctags.default = "ctags";
     curl.default = "curl";
     direnv.default = "direnv";

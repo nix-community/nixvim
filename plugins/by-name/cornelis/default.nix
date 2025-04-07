@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -8,14 +8,16 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    cornelisPackage = lib.mkPackageOption pkgs "cornelis" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "cornelis";
+      packageName = "cornelis";
+    })
+  ];
 
-  extraConfig = cfg: {
-    extraPackages = [ cfg.cornelisPackage ];
+  extraConfig = {
+    dependencies.cornelis.enable = lib.mkDefault true;
   };
 
   settingsOptions = {
