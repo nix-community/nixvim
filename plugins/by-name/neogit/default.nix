@@ -2,7 +2,6 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
 with lib;
@@ -112,12 +111,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraOptions = {
-    whichPackage = lib.mkPackageOption pkgs "which" {
-      nullable = true;
-    };
-  };
-
   extraConfig = cfg: {
     assertions = lib.nixvim.mkAssertions "plugins.neogit" (
       map
@@ -140,10 +133,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ]
     );
 
-    dependencies.git.enable = lib.mkDefault true;
+    dependencies = {
+      git.enable = lib.mkDefault true;
 
-    extraPackages = optional (hasInfix "which" (
-      cfg.settings.commit_view.verify_commit.__raw or ""
-    )) cfg.whichPackage;
+      which.enable =
+        let
+          autoInstallWhich = hasInfix "which" (cfg.settings.commit_view.verify_commit.__raw or "");
+        in
+        lib.mkIf autoInstallWhich (lib.mkDefault true);
+    };
   };
 }

@@ -294,11 +294,11 @@
   };
 
   no-packages = {
-    plugins.neogit = {
-      enable = true;
-      whichPackage = null;
-    };
+    plugins.neogit.enable = true;
 
-    dependencies.git.enable = false;
+    dependencies = {
+      git.enable = false;
+      which.enable = false;
+    };
   };
 }

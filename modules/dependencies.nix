@@ -14,6 +14,7 @@ let
       example = [ "gitMinimal" ];
     };
     ueberzug.default = "ueberzugpp";
+    which.default = "which";
   };
 
   mkDependencyOption = name: properties: {
