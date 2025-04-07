@@ -27,6 +27,7 @@ let
       default = "nodejs";
       example = "pkgs.nodejs_22";
     };
+    plantuml.default = "plantuml";
     ripgrep.default = "ripgrep";
     sd.default = "sd";
     sed.default = "gnused";

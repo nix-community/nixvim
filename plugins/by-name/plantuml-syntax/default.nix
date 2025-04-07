@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -18,14 +17,17 @@ lib.nixvim.plugins.mkVimPlugin {
     "setMakeprg"
     "executableScript"
   ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "plantuml-syntax";
+      packageName = "plantuml";
+    })
+  ];
 
-  extraOptions = {
-    plantumlPackage = lib.mkPackageOption pkgs "plantuml" {
-      nullable = true;
-    };
+  extraConfig = {
+    dependencies.plantuml.enable = lib.mkDefault true;
   };
-
-  extraConfig = cfg: { extraPackages = [ cfg.plantumlPackage ]; };
 
   settingsOptions = {
     set_makeprg = defaultNullOpts.mkFlagInt 1 ''
