@@ -28,6 +28,7 @@ let
       example = "pkgs.nodejs_22";
     };
     texpresso.default = "texpresso";
+    tinymist.default = "tinymist";
     tree-sitter.default = "tree-sitter";
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";
