@@ -34,10 +34,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     assertions = lib.nixvim.mkAssertions "plugins.nvim-java" {
-      assertion = cfg.enable -> !config.plugins.nvim-jdtls.enable;
+      assertion = cfg.enable -> !config.plugins.jdtls.enable;
       message = ''
         You cannot use nvim-java alongside nvim-jdtls.
-        Please, disable `plugins.nvim-jdtls` if you wish to use this plugin.
+        Please, disable `plugins.jdtls` if you wish to use this plugin.
       '';
     };
   };
