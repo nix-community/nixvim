@@ -14,13 +14,19 @@ let
       settings = cfg: { dart = cfg; };
     };
     gopls = {
-      extraOptions = {
-        goPackage = lib.mkPackageOption pkgs "go" {
-          nullable = true;
-        };
-      };
-      extraConfig = cfg: {
-        extraPackages = [ cfg.goPackage ];
+      imports = [
+        # TODO: added 2025-04-07, remove after 25.05
+        (lib.nixvim.mkRemovedPackageOptionModule {
+          plugin = [
+            "lsp"
+            "servers"
+            "gopls"
+          ];
+          packageName = "go";
+        })
+      ];
+      extraConfig = {
+        dependencies.go.enable = lib.mkDefault true;
       };
     };
     idris2_lsp = {

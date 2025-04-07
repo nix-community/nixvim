@@ -129,7 +129,10 @@ rec {
       packageName,
       oldPackageName ? packageName,
     }:
-    lib.mkRemovedOptionModule [ "plugins" plugin "${oldPackageName}Package" ] ''
+    let
+      optionPath = [ "plugins" ] ++ (lib.toList plugin) ++ [ "${oldPackageName}Package" ];
+    in
+    lib.mkRemovedOptionModule optionPath ''
       Please use the `dependencies.${packageName}` top-level option instead:
       - `dependencies.${packageName}.enable = false` to disable installing `${packageName}`
       - `dependencies.${packageName}.package` to choose which package to install for `${packageName}`.

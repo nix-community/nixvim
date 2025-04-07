@@ -15,6 +15,7 @@ let
       default = "git";
       example = [ "gitMinimal" ];
     };
+    go.default = "go";
     nodejs = {
       default = "nodejs";
       example = "pkgs.nodejs_22";
