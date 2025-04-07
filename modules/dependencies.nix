@@ -12,6 +12,7 @@ let
     curl.default = "curl";
     direnv.default = "direnv";
     distant.default = "distant";
+    fish.default = "fish";
     gcc.default = "gcc";
     gh.default = "gh";
     git = {

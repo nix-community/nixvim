@@ -58,8 +58,16 @@ let
       pluginName = "cmp-fish";
       sourceName = "fish";
 
-      extraOptions.fishPackage = lib.mkPackageOption pkgs "fish" { nullable = true; };
-      extraConfig = cfg: { extraPackages = [ cfg.fishPackage ]; };
+      imports = [
+        # TODO: added 2025-04-07, remove after 25.05
+        (lib.nixvim.mkRemovedPackageOptionModule {
+          plugin = "cmp-fish";
+          packageName = "fish";
+        })
+      ];
+      extraConfig = {
+        dependencies.fish.enable = lib.mkDefault true;
+      };
     }
     {
       pluginName = "cmp-fuzzy-buffer";
