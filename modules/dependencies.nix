@@ -9,6 +9,7 @@ let
 
   packages = {
     curl.default = "curl";
+    gcc.default = "gcc";
     git = {
       default = "git";
       example = [ "gitMinimal" ];

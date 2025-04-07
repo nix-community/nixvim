@@ -232,6 +232,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
       # TODO: added 2025-04-07, remove after 25.05
       (lib.nixvim.mkRemovedPackageOptionModule {
         plugin = "treesitter";
+        packageName = "gcc";
+      })
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "treesitter";
         packageName = "nodejs";
       })
       (lib.nixvim.mkRemovedPackageOptionModule {
@@ -370,12 +374,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraOptions = {
     folding = mkEnableOption "tree-sitter based folding";
 
-    gccPackage = lib.mkPackageOption pkgs "gcc" {
-      nullable = true;
-      example = "pkgs.gcc14";
-      extraDescription = ''This is required to build grammars if you are not using `nixGrammars      '';
-    };
-
     grammarPackages = mkOption {
       type = with types; listOf package;
       default = config.plugins.treesitter.package.passthru.allGrammars;
@@ -449,11 +447,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       pkg: pkg.withPlugins (_: cfg.grammarPackages)
     );
 
-    extraPackages = [
-      cfg.gccPackage
-    ];
-
     dependencies = lib.mkIf (!cfg.nixGrammars) {
+      gcc.enable = lib.mkDefault true;
       nodejs.enable = lib.mkDefault true;
       tree-sitter.enable = lib.mkDefault true;
     };
@@ -467,6 +462,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           '';
         })
         [
+          "gcc"
           "nodejs"
           "tree-sitter"
         ]
