@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   ...
 }:
@@ -13,6 +12,14 @@ lib.nixvim.plugins.mkVimPlugin {
   globalPrefix = "direnv_";
 
   maintainers = [ lib.maintainers.alisonjenkins ];
+
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "direnv";
+      packageName = "direnv";
+    })
+  ];
 
   settingsOptions = {
     direnv_auto = defaultNullOpts.mkFlagInt 1 ''
@@ -37,13 +44,7 @@ lib.nixvim.plugins.mkVimPlugin {
     '';
   };
 
-  extraOptions = {
-    direnvPackage = lib.mkPackageOption pkgs "direnv" {
-      nullable = true;
-    };
-  };
-
-  extraConfig = cfg: {
-    extraPackages = [ cfg.direnvPackage ];
+  extraConfig = {
+    dependencies.direnv.enable = lib.mkDefault true;
   };
 }

@@ -16,9 +16,8 @@
   };
 
   no-packages = {
-    plugins.direnv = {
-      enable = true;
-      direnvPackage = null;
-    };
+    plugins.direnv.enable = true;
+
+    dependencies.direnv.enable = false;
   };
 }

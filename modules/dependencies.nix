@@ -10,6 +10,7 @@ let
   packages = {
     ctags.default = "ctags";
     curl.default = "curl";
+    direnv.default = "direnv";
     gcc.default = "gcc";
     git = {
       default = "git";
