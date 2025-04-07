@@ -2,8 +2,6 @@
   config,
   lib,
   helpers,
-  options,
-  pkgs,
   ...
 }:
 with lib;
@@ -38,12 +36,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   inherit settingsOptions settingsExample;
 
-  extraOptions = {
-    fzfPackage = lib.mkPackageOption pkgs "fzf" {
-      nullable = true;
-      example = "pkgs.skim";
-    };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "fzf-lua";
+      packageName = "fzf";
+    })
+  ];
 
+  extraOptions = {
     # TODO: deprecated 2024-08-29 remove after 24.11
     iconsEnabled = mkOption {
       type = types.bool;
@@ -129,7 +130,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           enable = lib.mkOverride 1490 true;
         };
 
-    extraPackages = [ cfg.fzfPackage ];
+    dependencies.fzf.enable = lib.mkDefault true;
 
     plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
 

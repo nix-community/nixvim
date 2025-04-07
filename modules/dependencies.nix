@@ -14,6 +14,10 @@ let
     direnv.default = "direnv";
     distant.default = "distant";
     fish.default = "fish";
+    fzf = {
+      default = "fzf";
+      example = "pkgs.skim";
+    };
     gcc.default = "gcc";
     gh.default = "gh";
     git = {
