@@ -15,6 +15,7 @@ let
     direnv.default = "direnv";
     distant.default = "distant";
     fish.default = "fish";
+    flutter.default = "flutter";
     fzf = {
       default = "fzf";
       example = "pkgs.skim";

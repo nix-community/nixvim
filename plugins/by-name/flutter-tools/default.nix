@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   ...
 }:
@@ -11,13 +10,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  extraOptions = {
-    flutterPackage = lib.mkPackageOption pkgs "flutter" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "flutter-tools";
+      packageName = "flutter";
+    })
+  ];
+
   extraConfig = cfg: {
-    extraPackages = [ cfg.flutterPackage ];
+    dependencies.flutter.enable = lib.mkDefault true;
 
     warnings = lib.nixvim.mkWarnings "plugins.flutter-tools" {
       when =
