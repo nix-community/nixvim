@@ -22,9 +22,7 @@
   };
 
   no-packages = {
-    plugins.typst-vim = {
-      enable = true;
-      typstPackage = null;
-    };
+    plugins.typst-vim.enable = true;
+    dependencies.typst.enable = false;
   };
 }

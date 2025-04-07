@@ -19,6 +19,7 @@ let
       example = "pkgs.nodejs_22";
     };
     tree-sitter.default = "tree-sitter";
+    typst.default = "typst";
     ueberzug.default = "ueberzugpp";
     which.default = "which";
   };

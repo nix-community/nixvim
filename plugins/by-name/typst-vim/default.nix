@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -20,13 +19,15 @@ lib.nixvim.plugins.mkVimPlugin {
     "concealMath"
     "autoCloseToc"
   ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "typst-vim";
+      packageName = "typst";
+    })
+  ];
 
   extraOptions = {
-    # Add the typst compiler to nixvim packages
-    typstPackage = lib.mkPackageOption pkgs "typst" {
-      nullable = true;
-    };
-
     keymaps = {
       silent = mkOption {
         type = types.bool;
@@ -39,7 +40,7 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraConfig = cfg: {
-    extraPackages = [ cfg.typstPackage ];
+    dependencies.typst.enable = lib.mkDefault true;
 
     keymaps =
       with cfg.keymaps;
