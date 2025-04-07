@@ -11,6 +11,7 @@ let
     ctags.default = "ctags";
     curl.default = "curl";
     direnv.default = "direnv";
+    distant.default = "distant";
     gcc.default = "gcc";
     gh.default = "gh";
     git = {

@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
   inherit (lib) types;
   inherit (lib.nixvim)
@@ -17,14 +17,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   setup = ":setup";
 
-  extraOptions = {
-    distantPackage = lib.mkPackageOption pkgs "distant" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "distant";
+      packageName = "distant";
+    })
+  ];
 
-  extraConfig = cfg: {
-    extraPackages = [ cfg.distantPackage ];
+  extraConfig = {
+    dependencies.distant.enable = lib.mkDefault true;
   };
 
   settingsOptions = {
