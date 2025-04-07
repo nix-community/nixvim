@@ -18,6 +18,7 @@ let
     };
     go.default = "go";
     lean.default = "lean4";
+    ledger.default = "ledger";
     nodejs = {
       default = "nodejs";
       example = "pkgs.nodejs_22";

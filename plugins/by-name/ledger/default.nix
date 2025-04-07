@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -28,14 +27,17 @@ mkVimPlugin {
       new = "fillstring";
     }
   ];
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "ledger";
+      packageName = "ledger";
+    })
+  ];
 
-  extraOptions = {
-    ledgerPackage = lib.mkPackageOption pkgs "ledger" {
-      nullable = true;
-    };
+  extraConfig = {
+    dependencies.ledger.enable = lib.mkDefault true;
   };
-
-  extraConfig = cfg: { extraPackages = [ cfg.ledgerPackage ]; };
 
   settingsOptions = {
     bin = helpers.mkNullOrStr ''
