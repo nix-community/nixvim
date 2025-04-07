@@ -1,7 +1,6 @@
 {
   lib,
   helpers,
-  pkgs,
   ...
 }:
 with lib;
@@ -13,12 +12,13 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  extraOptions = {
-    godotPackage = lib.mkPackageOption pkgs "godot" {
-      nullable = true;
-      default = "godot_4";
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "godot";
+      packageName = "godot";
+    })
+  ];
 
   settingsOptions = {
     executable = helpers.defaultNullOpts.mkStr "godot" ''
@@ -30,5 +30,7 @@ lib.nixvim.plugins.mkVimPlugin {
     executable = "godot";
   };
 
-  extraConfig = cfg: { extraPackages = [ cfg.godotPackage ]; };
+  extraConfig = {
+    dependencies.godot.enable = lib.mkDefault true;
+  };
 }

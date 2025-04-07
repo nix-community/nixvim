@@ -28,6 +28,7 @@ let
     };
     glow.default = "glow";
     go.default = "go";
+    godot.default = "godot_4";
     lazygit.default = "lazygit";
     lean.default = "lean4";
     ledger.default = "ledger";
