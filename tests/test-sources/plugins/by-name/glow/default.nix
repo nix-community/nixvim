@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 {
   empty = {
     plugins.glow.enable = true;
@@ -7,8 +6,6 @@
   defaults = {
     plugins.glow = {
       enable = true;
-
-      glowPackage = pkgs.glow;
 
       settings = {
         glow_path.__raw = "vim.fn.exepath('glow')";

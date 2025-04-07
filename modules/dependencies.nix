@@ -25,6 +25,7 @@ let
       default = "git";
       example = [ "gitMinimal" ];
     };
+    glow.default = "glow";
     go.default = "go";
     lazygit.default = "lazygit";
     lean.default = "lean4";

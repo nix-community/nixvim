@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,19 +12,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.getchoo ];
 
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "glow";
+      packageName = "glow";
+    })
+  ];
+
   settingsOptions = {
     glow_path = defaultNullOpts.mkStr (lib.nixvim.mkRaw "vim.fn.exepath('glow')") ''
       Path to `glow` binary.
 
       If null or `""`, `glow` in your `$PATH` with be used if available.
 
-      Using `glowPackage` is the recommended way to make `glow` available in your `$PATH`.
+      Using `dependencies.glow` is the recommended way to make `glow` available in your `$PATH`.
     '';
 
     install_path = defaultNullOpts.mkStr "~/.local/bin" ''
       Path for installing `glow` binary if one is not found at `glow_path` or in your `$PATH`.
 
-      Consider using `glowPackage` instead.
+      Consider using `dependencies.glow` instead.
     '';
 
     border = defaultNullOpts.mkEnumFirstDefault [
@@ -76,11 +83,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     height_ratio = 0.7;
   };
 
-  extraOptions = {
-    glowPackage = lib.mkPackageOption pkgs "glow" {
-      nullable = true;
-    };
+  extraConfig = {
+    dependencies.glow.enable = lib.mkDefault true;
   };
-
-  extraConfig = cfg: { extraPackages = [ cfg.glowPackage ]; };
 }
