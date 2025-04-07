@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   ...
 }:
@@ -17,19 +16,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
       plugin = "typst-preview";
       packageName = "tinymist";
     })
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "typst-preview";
+      packageName = "websocat";
+    })
   ];
 
-  extraOptions = {
-    websocatPackage = lib.mkPackageOption pkgs "websocat" {
-      nullable = true;
-    };
-  };
   extraConfig = cfg: {
-    extraPackages = [
-      cfg.websocatPackage
-    ];
-
-    dependencies.tinymist.enable = lib.mkDefault true;
+    dependencies = {
+      tinymist.enable = lib.mkDefault true;
+      websocat.enable = lib.mkDefault true;
+    };
 
     plugins.typst-preview.settings = {
       # Disable automatic downloading of binary dependencies
@@ -37,7 +34,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
         tinymist = lib.mkIf config.dependencies.tinymist.enable (
           lib.mkDefault (lib.getExe config.dependencies.tinymist.package)
         );
-        websocat = lib.mkIf (cfg.websocatPackage != null) (lib.mkDefault (lib.getExe cfg.websocatPackage));
+        websocat = lib.mkIf config.dependencies.websocat.enable (
+          lib.mkDefault (lib.getExe config.dependencies.websocat.package)
+        );
       };
     };
   };

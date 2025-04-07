@@ -32,6 +32,7 @@ let
     tree-sitter.default = "tree-sitter";
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";
+    websocat.default = "websocat";
     which.default = "which";
     yazi.default = "yazi";
   };
