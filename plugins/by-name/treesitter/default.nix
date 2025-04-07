@@ -232,6 +232,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
       # TODO: added 2025-04-07, remove after 25.05
       (lib.nixvim.mkRemovedPackageOptionModule {
         plugin = "treesitter";
+        packageName = "nodejs";
+      })
+      (lib.nixvim.mkRemovedPackageOptionModule {
+        plugin = "treesitter";
         packageName = "treesitter";
       })
     ];
@@ -413,14 +417,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       example = false;
       description = "Whether to enable Nixvim injections, e.g. highlighting `extraConfigLua` as lua.";
     };
-
-    nodejsPackage = lib.mkPackageOption pkgs "nodejs" {
-      nullable = true;
-      example = "pkgs.nodejs_22";
-      extraDescription = ''
-        This is required to build grammars if you are not using `nixGrammars`.
-      '';
-    };
   };
 
   # NOTE: We call setup manually below.
@@ -455,17 +451,26 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     extraPackages = [
       cfg.gccPackage
-      cfg.nodejsPackage
     ];
 
-    dependencies.tree-sitter.enable = lib.mkIf (!cfg.nixGrammars) lib.mkDefault true;
-    warnings = lib.nixvim.mkWarnings "plugins.treesitter" {
-      when = !cfg.nixGrammars && (!config.dependencies.tree-sitter.enable);
-      message = ''
-        `tree-sitter` is required to build grammars as you are not using `nixGrammars`.
-        You may want to set `dependencies.tree-sitter.enable` to `true`.
-      '';
+    dependencies = lib.mkIf (!cfg.nixGrammars) {
+      nodejs.enable = lib.mkDefault true;
+      tree-sitter.enable = lib.mkDefault true;
     };
+    warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
+      lib.map
+        (packageName: {
+          when = !cfg.nixGrammars && (!config.dependencies.${packageName}.enable);
+          message = ''
+            `${packageName}` is required to build grammars as you are not using `nixGrammars`.
+            You may want to set `dependencies.${packageName}.enable` to `true`.
+          '';
+        })
+        [
+          "nodejs"
+          "tree-sitter"
+        ]
+    );
 
     opts = mkIf cfg.folding {
       foldmethod = mkDefault "expr";

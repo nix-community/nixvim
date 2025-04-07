@@ -1,4 +1,8 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts literalLua;
@@ -10,15 +14,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    nodePackage = lib.mkPackageOption pkgs "nodejs" {
-      nullable = true;
-      default = null;
-    };
-  };
-  extraConfig = cfg: {
-    plugins.sg.settings.node_executable = lib.mkIf (cfg.nodePackage != null) (
-      lib.mkDefault (lib.getExe cfg.nodePackage)
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "sg";
+      packageName = "nodejs";
+      oldPackageName = "node";
+    })
+  ];
+
+  extraConfig = {
+    dependencies.nodejs.enable = lib.mkDefault true;
+
+    plugins.sg.settings.node_executable = lib.mkIf config.dependencies.nodejs.enable (
+      lib.mkDefault (lib.getExe config.dependencies.nodejs.package)
     );
   };
 

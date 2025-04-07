@@ -13,6 +13,10 @@ let
       default = "git";
       example = [ "gitMinimal" ];
     };
+    nodejs = {
+      default = "nodejs";
+      example = "pkgs.nodejs_22";
+    };
     tree-sitter.default = "tree-sitter";
     ueberzug.default = "ueberzugpp";
     which.default = "which";

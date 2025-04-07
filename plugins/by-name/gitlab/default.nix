@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -14,15 +13,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraOptions = {
-    nodePackage = lib.mkPackageOption pkgs "nodejs" {
-      nullable = true;
-      default = null;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "gitlab";
+      packageName = "nodejs";
+      oldPackageName = "node";
+    })
+  ];
 
-  extraConfig = cfg: {
-    extraPackages = [ cfg.nodePackage ];
+  extraConfig = {
+    dependencies.nodejs.enable = lib.mkDefault true;
   };
 
   settingsOptions = {
