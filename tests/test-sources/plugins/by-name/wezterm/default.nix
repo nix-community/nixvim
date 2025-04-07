@@ -1,23 +1,15 @@
 {
-  empty =
-    { pkgs, ... }:
-    {
-      plugins.wezterm = {
-        enable = true;
-        weztermPackage = pkgs.wezterm;
+  empty = {
+    plugins.wezterm.enable = true;
+  };
+
+  defaults = {
+    plugins.wezterm = {
+      enable = true;
+
+      settings = {
+        create_commands = true;
       };
     };
-
-  defaults =
-    { pkgs, ... }:
-    {
-      plugins.wezterm = {
-        enable = true;
-        weztermPackage = pkgs.wezterm;
-
-        settings = {
-          create_commands = true;
-        };
-      };
-    };
+  };
 }

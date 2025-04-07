@@ -44,6 +44,7 @@ let
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";
     websocat.default = "websocat";
+    wezterm.default = "wezterm";
     which.default = "which";
     yazi.default = "yazi";
     yq.default = "yq";

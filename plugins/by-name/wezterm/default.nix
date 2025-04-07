@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,11 +12,13 @@ lib.nixvim.plugins.neovim.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  extraOptions = {
-    weztermPackage = lib.mkPackageOption pkgs "wezterm" {
-      nullable = true;
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "wezterm";
+      packageName = "wezterm";
+    })
+  ];
 
   settingsOptions = {
     create_commands = defaultNullOpts.mkBool true ''
@@ -29,9 +30,7 @@ lib.nixvim.plugins.neovim.mkNeovimPlugin {
     create_commands = false;
   };
 
-  extraConfig = cfg: {
-    extraPackages = [
-      cfg.weztermPackage
-    ];
+  extraConfig = {
+    dependencies.wezterm.enable = lib.mkDefault true;
   };
 }
