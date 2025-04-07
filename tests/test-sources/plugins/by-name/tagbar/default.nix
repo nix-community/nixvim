@@ -53,9 +53,8 @@
   };
 
   no-packages = {
-    plugins.tagbar = {
-      enable = true;
-      tagsPackage = null;
-    };
+    plugins.tagbar.enable = true;
+
+    dependencies.ctags.enable = false;
   };
 }

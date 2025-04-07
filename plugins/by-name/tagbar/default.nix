@@ -1,6 +1,4 @@
 {
-  helpers,
-  pkgs,
   lib,
   ...
 }:
@@ -12,6 +10,14 @@ lib.nixvim.plugins.mkVimPlugin {
 
   # TODO introduced 2024-02-12: remove 2024-04-12
   deprecateExtraConfig = true;
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "tagbar";
+      packageName = "ctags";
+      oldPackageName = "tags";
+    })
+  ];
 
   settingsExample = {
     position = "right";
@@ -30,13 +36,7 @@ lib.nixvim.plugins.mkVimPlugin {
     };
   };
 
-  extraOptions = {
-    tagsPackage = lib.mkPackageOption pkgs "ctags" {
-      nullable = true;
-    };
-  };
-
-  extraConfig = cfg: {
-    extraPackages = [ cfg.tagsPackage ];
+  extraConfig = {
+    dependencies.ctags.enable = lib.mkDefault true;
   };
 }

@@ -8,6 +8,7 @@ let
   cfg = config.dependencies;
 
   packages = {
+    ctags.default = "ctags";
     curl.default = "curl";
     gcc.default = "gcc";
     git = {
