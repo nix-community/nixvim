@@ -26,6 +26,7 @@ let
       example = [ "gitMinimal" ];
     };
     go.default = "go";
+    lazygit.default = "lazygit";
     lean.default = "lean4";
     ledger.default = "ledger";
     manix.default = "manix";

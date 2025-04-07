@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -20,6 +19,10 @@ lib.nixvim.plugins.mkVimPlugin {
     (lib.nixvim.mkRemovedPackageOptionModule {
       plugin = "lazygit";
       packageName = "git";
+    })
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "lazygit";
+      packageName = "lazygit";
     })
   ];
 
@@ -78,17 +81,11 @@ lib.nixvim.plugins.mkVimPlugin {
     config_file_path = [ ];
   };
 
-  extraOptions = {
-    lazygitPackage = lib.mkPackageOption pkgs "lazygit" {
-      nullable = true;
-    };
-  };
-
   extraConfig = cfg: {
-    dependencies.git.enable = lib.mkDefault true;
+    dependencies = {
+      git.enable = lib.mkDefault true;
+      lazygit.enable = lib.mkDefault true;
+    };
 
-    extraPackages = [
-      cfg.lazygitPackage
-    ];
   };
 }
