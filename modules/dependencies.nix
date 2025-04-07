@@ -41,6 +41,7 @@ let
     sed.default = "gnused";
     texpresso.default = "texpresso";
     tinymist.default = "tinymist";
+    tmux.default = "tmux";
     tree-sitter.default = "tree-sitter";
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";
