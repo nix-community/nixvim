@@ -17,6 +17,7 @@ let
       example = [ "gitMinimal" ];
     };
     go.default = "go";
+    lean.default = "lean4";
     nodejs = {
       default = "nodejs";
       example = "pkgs.nodejs_22";

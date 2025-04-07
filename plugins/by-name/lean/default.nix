@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -14,12 +13,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  extraOptions = {
-    leanPackage = lib.mkPackageOption pkgs "lean" {
-      nullable = true;
-      default = "lean4";
-    };
-  };
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "lean";
+      packageName = "lean";
+    })
+  ];
 
   settingsOptions = {
     lsp = defaultNullOpts.mkNullable (types.submodule {
@@ -184,8 +184,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraConfig = cfg: {
-    extraPackages = [ cfg.leanPackage ];
+  extraConfig = {
+    dependencies.lean.enable = lib.mkDefault true;
   };
 
   # TODO: Deprecated in 2025-01-31
