@@ -1,13 +1,21 @@
 { lib, pkgs, ... }:
-lib.nixvim.plugins.mkNeovimPlugin {
+let
   name = "papis";
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  inherit name;
   packPathName = "papis.nvim";
   package = "papis-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # papis.nvim is an nvim-cmp source too
-  imports = [ { cmpSourcePlugins.papis = "papis"; } ];
+  imports = [
+    # papis.nvim is an nvim-cmp source too
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = name;
+    })
+  ];
 
   extraOptions = {
     yqPackage = lib.mkPackageOption pkgs "yq" {

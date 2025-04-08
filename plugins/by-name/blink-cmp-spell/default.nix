@@ -1,48 +1,25 @@
 { lib, ... }:
-lib.nixvim.plugins.mkNeovimPlugin {
+let
   name = "blink-cmp-spell";
-  package = "blink-cmp-spell";
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  inherit name;
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  description = ''
-    This plugin should be configured through blink-cmp's `sources.providers` settings.
-
-    For example:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.providers = {
-        spell = {
-          module = "blink-cmp-spell";
-          name = "Spell";
-          score_offset = 100;
-          opts = {
-          };
-        };
+  imports = [
+    (lib.nixvim.modules.mkBlinkPluginModule {
+      pluginName = name;
+      # TODO: compute a sane-default
+      key = "spell";
+      sourceName = "Spell";
+      settingsExample = {
+        score_offset = 100;
       };
-    };
-    ```
-
-    And then you can add it to blink-cmp's `sources.default` option:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "spell"
-      ];
-    };
-    ```
-  '';
+    })
+  ];
 
   # Configured through blink-cmp
   callSetup = false;
   hasLuaConfig = false;
-  hasSettings = false;
 }

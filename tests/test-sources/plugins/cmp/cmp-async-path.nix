@@ -1,16 +1,16 @@
 {
   example = {
-    plugins.cmp = {
-      enable = true;
-      settings.sources = [
-        {
-          name = "async_path";
+    plugins = {
+      cmp.enable = true;
+      cmp-async-path = {
+        enable = true;
+        cmp.default = {
           option = {
-            trailing_slash = false;
             label_trailing_slash = true;
+            trailing_slash = false;
           };
-        }
-      ];
+        };
+      };
     };
   };
 }

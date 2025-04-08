@@ -105,7 +105,6 @@
 
       cmp = {
         enable = true;
-        autoEnableSources = true;
 
         settings = {
           formatting = {
@@ -125,19 +124,20 @@
               end
             '';
           };
-          sources = [
-            { name = "nvim_lsp"; }
-            {
-              name = "luasnip";
-              option = {
-                show_autosnippets = true;
-              };
-            }
-            { name = "path"; }
-            { name = "buffer"; }
-          ];
         };
       };
+
+      # Completion sources
+      cmp-path.enable = true;
+      cmp-buffer.enable = true;
+      cmp-nvim-lsp.enable = true;
+      cmp_luasnip = {
+        enable = true;
+        cmp.default = {
+          option.show_autosnippets = true;
+        };
+      };
+
       barbar.enable = true;
       web-devicons.enable = true;
     };

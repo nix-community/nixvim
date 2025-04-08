@@ -1,50 +1,36 @@
 { lib, ... }:
-lib.nixvim.plugins.mkNeovimPlugin {
+let
   name = "blink-cmp-dictionary";
-  package = "blink-cmp-dictionary";
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  inherit name;
 
   maintainers = [ lib.maintainers.khaneliman ];
-
-  description = ''
-    This plugin should be configured through blink-cmp's `sources.providers` settings.
-
-    For example:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.providers = {
-        dictionary = {
-          module = "blink-cmp-dictionary";
-          name = "Dict";
-          score_offset = 100;
-          min_keyword_length = 3;
-          # Optional configurations
-          opts = {
-          };
-        };
-      };
-    };
-    ```
-
-    And then you can add it to blink-cmp's `sources.default` option:
-
-    ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "dictionary"
-      ];
-    };
-    ```
-  '';
 
   # Configured through blink-cmp
   callSetup = false;
   hasLuaConfig = false;
-  hasSettings = false;
+
+  imports = [
+    (lib.nixvim.modules.mkBlinkPluginModule {
+      pluginName = name;
+      # TODO: compute a sane-default key
+      key = "dictionary";
+      sourceName = "Dict";
+      settingsExample = {
+        sources.providers = {
+          dictionary = {
+            score_offset = 100;
+            min_keyword_length = 3;
+          };
+        };
+      };
+    })
+  ];
+
+  settingsExample = lib.literalExpression ''
+    {
+      # Optional configurations
+    }
+  '';
 }

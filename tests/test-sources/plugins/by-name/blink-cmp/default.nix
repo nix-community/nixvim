@@ -414,4 +414,47 @@
     };
     plugins.lsp.enable = true;
   };
+
+  # Test that a provider plugin's settings are propagated to `plugins.blink-cmp.settings.providers`
+  provider-settings =
+    { config, lib, ... }:
+    let
+      expectEqual = name: expected: actual: {
+        assertion = expected == actual;
+        message = ''
+          Expected ${name} to equal:
+          ${lib.generators.toPretty { } expected}
+          But found:
+          ${lib.generators.toPretty { } actual}
+        '';
+      };
+    in
+    {
+      test.buildNixvim = false;
+      assertions = [
+        (expectEqual "config.plugins.blink-cmp-git.blink.settings" {
+          name = "git";
+          module = "blink-cmp-git";
+          bar = "bar";
+          opts.foo = "foo";
+        } (lib.filterAttrs (_: v: v != null) config.plugins.blink-cmp-git.blink.settings))
+        (expectEqual "config.plugins.blink-cmp.settings.sources.providers.git" {
+          name = "git";
+          module = "blink-cmp-git";
+          bar = "bar";
+          opts.foo = "foo";
+        } (lib.filterAttrs (_: v: v != null) config.plugins.blink-cmp.settings.sources.providers.git))
+      ];
+
+      plugins.blink-cmp.enable = true;
+      plugins.blink-cmp-git = {
+        enable = true;
+        settings = {
+          foo = "foo";
+        };
+        blink.settings = {
+          bar = "bar";
+        };
+      };
+    };
 }

@@ -2,14 +2,18 @@
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
+  name = "cmp-tabnine";
 in
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "cmp-tabnine";
+  inherit name;
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
-    { cmpSourcePlugins.cmp_tabnine = "cmp-tabnine"; }
+    (lib.nixvim.modules.mkCmpPluginModule {
+      pluginName = name;
+      sourceName = "cmp_tabnine";
+    })
   ];
 
   deprecateExtraOptions = true;
