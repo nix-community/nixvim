@@ -40,7 +40,14 @@ let
       postBuild = ''
         find $out -type d -empty -delete
         runHook preFixup
+
+        # Propagate input plugins
+        mkdir -p $out/nix-support
+        printWords \
+          ${lib.escapeShellArgs overriddenPlugins} \
+          >> $out/nix-support/propagated-build-inputs
       '';
+
       passthru = {
         inherit python3Dependencies;
       };
