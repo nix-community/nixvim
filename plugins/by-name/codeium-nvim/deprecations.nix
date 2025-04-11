@@ -1,0 +1,36 @@
+{
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "configPath"
+    "binPath"
+    [
+      "api"
+      "host"
+    ]
+    [
+      "api"
+      "port"
+    ]
+    [
+      "tools"
+      "uname"
+    ]
+    [
+      "tools"
+      "uuidgen"
+    ]
+    [
+      "tools"
+      "curl"
+    ]
+    [
+      "tools"
+      "gzip"
+    ]
+    [
+      "tools"
+      "languageServer"
+    ]
+    "wrapper"
+  ];
+}
