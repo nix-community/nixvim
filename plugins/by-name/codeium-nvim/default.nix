@@ -12,6 +12,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     khaneliman
   ];
 
+  description = ''
+    By default, enabling this plugin will also install the `curl`, `gzip`, `coreutils`, `util-linux` and `codeium` packages (via the `dependencies.*.enable` options`).
+
+    You are free to configure `dependencies.*.enable` and `dependencies.*.package` to disable or customize this behavior, respectively.
+  '';
+
   # TODO: added 2024-09-03 remove after 24.11
   inherit (import ./deprecations.nix) deprecateExtraOptions optionsRenamedToSettings;
 
@@ -20,15 +26,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
     { cmpSourcePlugins.codeium = "codeium-nvim"; }
   ];
 
-  settingsExample = lib.literalExpression ''
-    {
-      enable_chat = true;
-      tools = {
-        curl = lib.getExe pkgs.curl;
-        gzip = lib.getExe pkgs.gzip;
-        uname = lib.getExe' pkgs.coreutils "uname";
-        uuidgen = lib.getExe' pkgs.util-linux "uuidgen";
-      };
-    }
-  '';
+  settingsExample = {
+    enable_chat = true;
+  };
+
+  extraConfig = {
+    dependencies =
+      lib.genAttrs
+        [
+          "curl"
+          "gzip"
+          "coreutils"
+          "util-linux"
+          "codeium"
+        ]
+        (_: {
+          enable = lib.mkDefault true;
+        });
+  };
 }
