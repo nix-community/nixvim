@@ -15,42 +15,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     khaneliman
   ];
 
-  # TODO: added 2024-09-03 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "configPath"
-    "binPath"
-    [
-      "api"
-      "host"
-    ]
-    [
-      "api"
-      "port"
-    ]
-    [
-      "tools"
-      "uname"
-    ]
-    [
-      "tools"
-      "uuidgen"
-    ]
-    [
-      "tools"
-      "curl"
-    ]
-    [
-      "tools"
-      "gzip"
-    ]
-    [
-      "tools"
-      "languageServer"
-    ]
-    "wrapper"
-  ];
-
   # Register nvim-cmp association
   imports = [
     { cmpSourcePlugins.codeium = "codeium-nvim"; }
