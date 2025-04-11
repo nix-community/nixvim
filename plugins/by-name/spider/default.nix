@@ -70,6 +70,7 @@ in
     in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];
+      extraLuaPackages = luaPkgs: [ luaPkgs.luautf8 ];
 
       keymaps = mappings;
 
