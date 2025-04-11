@@ -61,7 +61,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         In CodeCompanion, adapters are interfaces that act as a bridge between the plugin's
         functionality and an LLM.
 
-        Refer to the [documentation](https://github.com/olimorris/codecompanion.nvim/blob/main/doc/ADAPTERS.md)
+        Refer to the [documentation](https://github.com/olimorris/codecompanion.nvim/blob/main/doc/configuration/adapters.md)
         to learn about the adapters spec.
       '';
     };
