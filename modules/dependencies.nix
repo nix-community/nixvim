@@ -9,6 +9,11 @@ let
 
   packages = {
     bat.default = "bat";
+    codeium.default = "codeium";
+    coreutils = {
+      default = "coreutils";
+      example = "uutils-coreutils";
+    };
     cornelis.default = "cornelis";
     ctags.default = "ctags";
     curl.default = "curl";
@@ -29,6 +34,7 @@ let
     glow.default = "glow";
     go.default = "go";
     godot.default = "godot_4";
+    gzip.default = "gzip";
     lazygit.default = "lazygit";
     lean.default = "lean4";
     ledger.default = "ledger";
@@ -49,6 +55,7 @@ let
     tree-sitter.default = "tree-sitter";
     typst.default = "typst";
     ueberzug.default = "ueberzugpp";
+    util-linux.default = "util-linux";
     websocat.default = "websocat";
     wezterm.default = "wezterm";
     which.default = "which";
