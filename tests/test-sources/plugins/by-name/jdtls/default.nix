@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   example = {
     plugins.jdtls = {
@@ -38,6 +38,19 @@
         "-configuration"
         "/path/to/configuration"
       ];
+    };
+  };
+
+  rawStringInCmd = {
+    plugins.jdtls = {
+      enable = true;
+
+      settings = {
+        cmd = [
+          (lib.getExe pkgs.jdt-language-server)
+          { __raw = "'--jvm-arg='..vim.api.nvim_eval('g:NVIM_LOMBOK')"; }
+        ];
+      };
     };
   };
 }

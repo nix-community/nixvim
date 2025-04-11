@@ -5,7 +5,7 @@ let
 in
 {
   cmd = mkNullOrOption' {
-    type = with types; listOf str;
+    type = with types; listOf (maybeRaw str);
     example = [
       "java"
       "-data"
