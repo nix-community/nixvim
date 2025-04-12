@@ -129,12 +129,23 @@ rec {
       packageName,
       oldPackageName ? packageName,
     }:
+    { options, ... }:
     let
-      optionPath = [ "plugins" ] ++ (lib.toList plugin) ++ [ "${oldPackageName}Package" ];
+      oldOptionPath = builtins.concatMap lib.toList [
+        "plugins"
+        plugin
+        "${oldPackageName}Package"
+      ];
+      depOption = options.dependencies.${packageName};
+      depOptionLoc = lib.dropEnd 1 depOption.enable.loc;
+
+      instructions = ''
+        Please use the `${lib.showOption depOptionLoc}` top-level option instead:
+        - `${depOption.enable} = false` to disable installing `${packageName}`
+        - `${depOption.package}` to choose which package to install for `${packageName}`.
+      '';
     in
-    lib.mkRemovedOptionModule optionPath ''
-      Please use the `dependencies.${packageName}` top-level option instead:
-      - `dependencies.${packageName}.enable = false` to disable installing `${packageName}`
-      - `dependencies.${packageName}.package` to choose which package to install for `${packageName}`.
-    '';
+    {
+      imports = [ (lib.mkRemovedOptionModule oldOptionPath instructions) ];
+    };
 }
