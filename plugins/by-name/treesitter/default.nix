@@ -240,7 +240,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       })
       (lib.nixvim.mkRemovedPackageOptionModule {
         plugin = "treesitter";
-        packageName = "treesitter";
+        packageName = "tree-sitter";
+        oldPackageName = "treesitter";
       })
     ];
 
