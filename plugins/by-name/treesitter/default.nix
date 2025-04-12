@@ -2,9 +2,17 @@
   lib,
   helpers,
   config,
+  options,
   ...
 }:
 with lib;
+let
+  buildGrammarDeps = [
+    "gcc"
+    "nodejs"
+    "tree-sitter"
+  ];
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "treesitter";
   packPathName = "nvim-treesitter";
@@ -421,7 +429,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # NOTE: We call setup manually below.
   callSetup = false;
 
-  extraConfig = cfg: {
+  extraConfig = cfg: opt: {
     plugins.treesitter.luaConfig.content =
       # NOTE: Upstream state that the parser MUST be at the beginning of runtimepath.
       # Otherwise the parsers from Neovim takes precedent, which may be incompatible with some queries.
@@ -448,25 +456,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
       pkg: pkg.withPlugins (_: cfg.grammarPackages)
     );
 
-    dependencies = lib.mkIf (!cfg.nixGrammars) {
-      gcc.enable = lib.mkDefault true;
-      nodejs.enable = lib.mkDefault true;
-      tree-sitter.enable = lib.mkDefault true;
-    };
+    # These deps are required to build grammars when not using `nixGrammars`:
+    dependencies = lib.mkIf (!cfg.nixGrammars) (
+      lib.genAttrs buildGrammarDeps (_: {
+        enable = lib.mkDefault true;
+      })
+    );
+
     warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
-      lib.map
-        (packageName: {
-          when = !cfg.nixGrammars && (!config.dependencies.${packageName}.enable);
-          message = ''
-            `${packageName}` is required to build grammars as you are not using `nixGrammars`.
-            You may want to set `dependencies.${packageName}.enable` to `true`.
-          '';
-        })
-        [
-          "gcc"
-          "nodejs"
-          "tree-sitter"
-        ]
+      lib.map (packageName: {
+        when = !cfg.nixGrammars && !config.dependencies.${packageName}.enable;
+        message = ''
+          `${packageName}` is required to build grammars as you are not using `${opt.nixGrammars}`.
+          You may want to set `${options.dependencies.${packageName}.enable}` to `true`.
+        '';
+      }) buildGrammarDeps
     );
 
     opts = mkIf cfg.folding {
