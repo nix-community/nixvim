@@ -30,12 +30,14 @@
     }:
     {
       dependencies = lib.pipe options.dependencies [
-        (lib.filterAttrs (_: depOption: depOption.package ? example))
+        # We use a literalExpression example, with an additional `path` attr.
+        # This means we don't have to convert human readable paths back to list-paths for this test.
+        (lib.filterAttrs (_: depOption: depOption.package ? example.path))
         (lib.mapAttrs (
           _: depOption:
           let
-            packageName = depOption.package.example.text;
-            packagePath = lib.splitString "." packageName;
+            packagePath = depOption.package.example.path;
+            packageName = lib.showAttrPath packagePath;
             package = lib.attrByPath packagePath (throw "${packageName} not found in pkgs") pkgs;
           in
           {

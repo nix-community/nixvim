@@ -18,13 +18,13 @@ let
     flutter.default = "flutter";
     fzf = {
       default = "fzf";
-      example = "pkgs.skim";
+      example = "skim";
     };
     gcc.default = "gcc";
     gh.default = "gh";
     git = {
       default = "git";
-      example = [ "gitMinimal" ];
+      example = "gitMinimal";
     };
     glow.default = "glow";
     go.default = "go";
@@ -36,7 +36,7 @@ let
     manix.default = "manix";
     nodejs = {
       default = "nodejs";
-      example = "pkgs.nodejs_22";
+      example = "nodejs_22";
     };
     plantuml.default = "plantuml";
     ripgrep.default = "ripgrep";
@@ -64,7 +64,21 @@ let
   mkDependencyOption = name: properties: {
     enable = lib.mkEnableOption "Add ${name} to dependencies.";
 
-    package = lib.mkPackageOption pkgs name properties;
+    package =
+      lib.mkPackageOption pkgs name properties
+      # Handle example manually so that we can embed the original attr-path within
+      # the literalExpression object. This simplifies testing the examples.
+      // lib.optionalAttrs (properties ? example) {
+        example =
+          if properties.example._type or null == "literalExpression" then
+            properties.example
+          else
+            rec {
+              _type = "literalExpression";
+              text = "pkgs.${lib.showAttrPath path}";
+              path = lib.toList properties.example;
+            };
+      };
   };
 in
 {
