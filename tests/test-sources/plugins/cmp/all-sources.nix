@@ -25,6 +25,8 @@
                 "otter"
                 # Invokes the `nix` command at startup which is not available in the sandbox
                 "nixpkgs_maintainers"
+                # Needs internet access to download `sm-agent`
+                "supermaven"
               ] ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
             in
             pipe config.cmpSourcePlugins [
