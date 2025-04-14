@@ -129,23 +129,62 @@ rec {
       packageName,
       oldPackageName ? packageName,
     }:
-    { options, ... }:
+    { config, options, ... }:
     let
-      oldOptionPath = builtins.concatMap lib.toList [
+      cfg = config.dependencies.${packageName};
+      opt = options.dependencies.${packageName};
+      oldOptPath = builtins.concatMap lib.toList [
         "plugins"
         plugin
         "${oldPackageName}Package"
       ];
-      depOption = options.dependencies.${packageName};
-      depOptionLoc = lib.dropEnd 1 depOption.enable.loc;
+      oldOpt = lib.getAttrFromPath oldOptPath options;
 
-      instructions = ''
-        Please use the `${lib.showOption depOptionLoc}` top-level option instead:
-        - `${depOption.enable} = false` to disable installing `${packageName}`
-        - `${depOption.package}` to choose which package to install for `${packageName}`.
-      '';
+      # We can't use `oldOpt.value` because that will use our `apply`, so we merge the definitions ourselves:
+      oldDef = lib.modules.mergeDefinitions oldOpt.loc oldOpt.type oldOpt.definitionsWithLocations;
+
+      # Conceptually similar to `mkDerivedConfig`, but uses our manually merged definition
+      configFromOldDef =
+        {
+          predicate ? _: true,
+          apply ? lib.id,
+        }:
+        let
+          inherit (oldDef) mergedValue isDefined;
+          inherit (oldDef.defsFinal') highestPrio;
+          condition = isDefined && predicate mergedValue;
+          value = apply mergedValue;
+        in
+        lib.mkIf condition (lib.mkOverride highestPrio value);
     in
     {
-      imports = [ (lib.mkRemovedOptionModule oldOptionPath instructions) ];
+      options = lib.setAttrByPath oldOptPath (
+        lib.mkOption {
+          type = with lib.types; nullOr package;
+          description = "Alias of `${opt.enable}` and `${opt.package}`.";
+          visible = false;
+          apply =
+            let
+              value = if cfg.enable then cfg.package else null;
+              use = builtins.trace "Obsolete option `${oldOpt}' is used. It was replaced by `${opt.enable}' and `${opt.package}'.";
+            in
+            _: use value;
+        }
+      );
+
+      config = lib.mkIf oldOpt.isDefined {
+        warnings = [
+          "The option `${oldOpt}' defined in ${lib.showFiles oldOpt.files} has been replaced by `${opt.enable}' and `${opt.package}'."
+        ];
+
+        dependencies.${packageName} = {
+          enable = configFromOldDef {
+            apply = pkg: pkg != null;
+          };
+          package = configFromOldDef {
+            predicate = pkg: pkg != null;
+          };
+        };
+      };
     };
 }

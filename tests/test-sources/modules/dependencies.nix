@@ -47,4 +47,48 @@
         ))
       ];
     };
+
+  # Integration test for `lib.nixvim.deprecation.mkRemovedPackageOptionModule`
+  removed-package-options =
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      test = {
+        buildNixvim = false;
+        warnings = expect: [
+          (expect "count" 2)
+
+          (expect "any" "The option `plugins.chatgpt.curlPackage' defined in `")
+          (expect "any" "has been replaced by `dependencies.curl.enable' and `dependencies.curl.package'.")
+
+          (expect "any" "The option `plugins.glow.glowPackage' defined in `")
+        ];
+      };
+
+      plugins.chatgpt.curlPackage = null;
+      plugins.glow.glowPackage = pkgs.hello;
+
+      assertions = [
+        {
+          assertion = !lib.elem pkgs.curl config.extraPackages;
+          message = "Expected curl not to be installed.";
+        }
+        {
+          assertion = config.dependencies.glow.enable;
+          message = "Expected `dependencies.glow` to be enabled.";
+        }
+        {
+          assertion = lib.elem pkgs.hello config.extraPackages;
+          message = "Expected hello to be installed.";
+        }
+        {
+          assertion = !lib.elem pkgs.glow config.extraPackages;
+          message = "Expected glow not to be installed.";
+        }
+      ];
+    };
 }
