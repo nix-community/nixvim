@@ -224,6 +224,7 @@ mkVimPlugin {
           cairosvg
           ipython
           nbformat
+          ipykernel
         ];
       defaultText = literalExpression ''
         p: with p; [
@@ -232,6 +233,7 @@ mkVimPlugin {
           cairosvg
           ipython
           nbformat
+          ipykernel
         ]
       '';
       description = "Python packages to add to the `PYTHONPATH` of neovim.";
