@@ -47,9 +47,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "fzf_lua"
           "minipick"
           "telescope"
+          "snacks_picker"
         ]
         ''
-          It is recommended to use `"telescope"`, `"fzf"`, `"fzf_lua"`, or `"minipick"`.
+          It is recommended to use `"telescope"`, `"fzf"`, `"fzf_lua"`, `"minipick"` or `"snacks_picker"`.
         '';
 
     lsp = {
