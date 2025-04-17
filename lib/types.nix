@@ -55,6 +55,11 @@ rec {
         right = lib.warn "maybeRaw.nestedTypes: `right` is a deprecated alias for `rawLua`." rawLua;
         inherit rawLua elemType;
       };
+      inherit (elemType)
+        getSubModules
+        getSubOptions
+        substSubModules
+        ;
     };
 
   # Describes an boolean-like integer flag that is either 0 or 1
