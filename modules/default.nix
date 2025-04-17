@@ -4,6 +4,7 @@
 # using this in a submodule nested within another nixvim config.
 {
   imports = [
+    ./docs
     ./misc
     ./autocmd.nix
     ./clipboard.nix
@@ -11,7 +12,6 @@
     ./commands.nix
     ./dependencies.nix
     ./diagnostics.nix
-    ./doc.nix
     ./editorconfig.nix
     ./files.nix
     ./filetype.nix
@@ -24,4 +24,9 @@
     ./performance.nix
     ./plugins.nix
   ];
+
+  docs.optionPages.options = {
+    enable = true;
+    optionScopes = [ ];
+  };
 }
