@@ -263,7 +263,7 @@ in
       '';
 
       max_height = defaultNullOpts.mkUnsignedInt 10 ''
-        Maximum width of the completion menu.
+        Maximum height of the completion menu.
       '';
 
       border = defaultNullOpts.mkNullable types.anything "none" ''
