@@ -27,6 +27,13 @@
           #TODO Added 2025-04-01
           # php-cs-fixer is marked as broken
           "php_cs_fixer"
+          # TODO: Added 2025-04-19 broken dependency
+          "phan"
+          "php"
+          "phpcbf"
+          "phpcs"
+          "phpstan"
+          "psalm"
         ]
         ++ lib.optionals hostPlatform.isDarwin [
           # As of 2024-01-04, texliveMedium is broken on darwin
