@@ -35,24 +35,14 @@ let
   };
 in
 lib.nixvim.plugins.mkVimPlugin {
-  name = "codeium-vim";
-  packPathName = "codeium.vim";
+  name = "windsurf-vim";
+  packPathName = "windsurf.vim";
   globalPrefix = "codeium_";
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-19: remove 2024-03-19
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "bin"
-    "filetypes"
-    "manual"
-    "noMapTab"
-    "idleDelay"
-    "render"
-    "tabFallback"
-    "disableBindings"
-  ];
+  # TODO: introduced 2024-02-19: remove 2024-03-19
+  inherit ((import ./deprecations.nix { inherit lib; })) imports;
 
   settingsOptions = {
     bin = mkOption {
@@ -114,7 +104,7 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraConfig = cfg: {
-    plugins.codeium-vim.settings.enabled = true;
+    plugins.windsurf-vim.settings.enabled = true;
 
     keymaps =
       let

@@ -3,8 +3,8 @@
   ...
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "codeium-nvim";
-  packPathName = "codeium.nvim";
+  name = "windsurf-nvim";
+  packPathName = "windsurf.nvim";
   moduleName = "codeium";
 
   maintainers = with lib.maintainers; [
@@ -18,13 +18,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     You are free to configure `dependencies.*.enable` and `dependencies.*.package` to disable or customize this behavior, respectively.
   '';
 
-  # TODO: added 2024-09-03 remove after 24.11
-  inherit (import ./deprecations.nix) deprecateExtraOptions optionsRenamedToSettings;
-
-  # Register nvim-cmp association
   imports = [
-    { cmpSourcePlugins.codeium = "codeium-nvim"; }
-  ];
+    # Register nvim-cmp association
+    { cmpSourcePlugins.codeium = "windsurf-nvim"; }
+  ] ++ (import ./deprecations.nix { inherit lib; }).imports;
 
   settingsExample = {
     enable_chat = true;

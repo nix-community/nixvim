@@ -3,14 +3,14 @@
     # For some reason, nvim hangs when using codeium-vim. After checking, it doesn't look like a bug though.
     test.runNvim = false;
 
-    plugins.codeium-vim.enable = true;
+    plugins.windsurf-vim.enable = true;
   };
 
   example = {
     # For some reason, nvim hangs when using codeium-vim. After checking, it doesn't look like a bug though.
     test.runNvim = false;
 
-    plugins.codeium-vim = {
+    plugins.windsurf-vim = {
       enable = true;
 
       keymaps = {

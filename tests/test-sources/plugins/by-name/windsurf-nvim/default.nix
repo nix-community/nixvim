@@ -1,12 +1,16 @@
 {
   empty = {
-    plugins.codeium-nvim = {
+    # FIXME: codeium auth error sometimes
+    test.runNvim = false;
+    plugins.windsurf-nvim = {
       enable = true;
       settings.enable_cmp_source = false;
     };
   };
 
   enabled-by-cmp = {
+    # FIXME: codeium auth error sometimes
+    test.runNvim = false;
     plugins.cmp = {
       enable = true;
 
@@ -15,10 +19,12 @@
   };
 
   defaults = {
+    # FIXME: codeium auth error sometimes
+    test.runNvim = false;
     plugins = {
       cmp.enable = true;
 
-      codeium-nvim = {
+      windsurf-nvim = {
         enable = true;
 
         settings = {
