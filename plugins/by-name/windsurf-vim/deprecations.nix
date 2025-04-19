@@ -22,7 +22,6 @@
       lib.nixvim.deprecation.mkSettingsRenamedOptionModules [ "plugins" "codeium-vim" ]
         [ "plugins" "windsurf-vim" ]
         [
-          "enable"
           "package"
           "settings"
           "keymaps"

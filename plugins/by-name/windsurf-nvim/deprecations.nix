@@ -45,7 +45,6 @@
       lib.nixvim.deprecation.mkSettingsRenamedOptionModules [ "plugins" "codeium-nvim" ]
         [ "plugins" "windsurf-nvim" ]
         [
-          "enable"
           "package"
           "settings"
           {

@@ -56,6 +56,33 @@ in
     ++ (lib.mapAttrsToList (
       old: new: lib.mkRenamedOptionModule [ "plugins" old ] [ "plugins" new ]
     ) renamed)
+    # TODO: introduced 2025-04-19
+    ++ [
+      (lib.mkRenamedOptionModule
+        [
+          "plugins"
+          "codeium-nvim"
+          "enable"
+        ]
+        [
+          "plugins"
+          "windsurf-nvim"
+          "enable"
+        ]
+      )
+      (lib.mkRenamedOptionModule
+        [
+          "plugins"
+          "codeium-vim"
+          "enable"
+        ]
+        [
+          "plugins"
+          "windsurf-vim"
+          "enable"
+        ]
+      )
+    ]
     ++ builtins.map (
       name:
       lib.mkRemovedOptionModule [ "plugins" name "iconsPackage" ] ''
