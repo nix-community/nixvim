@@ -1,6 +1,6 @@
 {
   empty = {
-    plugins.codeium-nvim = {
+    plugins.windsurf-nvim = {
       enable = true;
       settings.enable_cmp_source = false;
     };
@@ -18,7 +18,7 @@
     plugins = {
       cmp.enable = true;
 
-      codeium-nvim = {
+      windsurf-nvim = {
         enable = true;
 
         settings = {
