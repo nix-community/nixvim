@@ -162,6 +162,11 @@
     "name": "blueprint_ls"
   },
   {
+    "cmd": ["bqls"],
+    "desc": "https://github.com/kitagry/bqls\n\nThe `bqls` BigQuery language server can be installed by running:\n\n```sh\n$ go install github.com/kitagry/bqls@latest\n```\n    ",
+    "name": "bqls"
+  },
+  {
     "cmd": ["bqnlsp"],
     "desc": "https://git.sr.ht/~detegr/bqnlsp\n\n\n`bqnlsp`, a language server for BQN.\n\nThe binary depends on the shared library of [CBQN](https://github.com/dzaima/CBQN) `libcbqn.so`.\nIf CBQN is installed system-wide (using `sudo make install` in its source directory) and `bqnlsp` errors that it can't find the shared library, update the linker cache by executing `sudo ldconfig`.\nIf CBQN has been installed in a non-standard directory or can't be installed globally pass `libcbqnPath = '/path/to/CBQN'` to the setup function.\nThis will set the environment variables `LD_LIBRARY_PATH` (Linux) or `DYLD_LIBRARY_PATH` (macOS) to the provided path.\n\n  ",
     "name": "bqnlsp"
@@ -779,6 +784,11 @@
     "name": "julials"
   },
   {
+    "cmd": ["just-lsp"],
+    "desc": "https://github.com/terror/just-lsp\n\n`just-lsp` is an LSP for just built on top of the tree-sitter-just parser.\n",
+    "name": "just"
+  },
+  {
     "cmd": ["kcl-language-server"],
     "desc": "https://github.com/kcl-lang/kcl.nvim\n\nLanguage server for the KCL configuration and policy language.\n\n",
     "name": "kcl"
@@ -1044,7 +1054,7 @@
     "name": "opencl_ls"
   },
   {
-    "desc": "[Language server](https://github.com/vscode-abl/vscode-abl) for Progress OpenEdge ABL.\n\nFor manual installation, download abl-lsp.jar from the [VSCode\nextension](https://github.com/vscode-abl/vscode-abl/releases/latest).\n\nConfiguration\n\n```lua\nrequire('lspconfig').['openedge_ls'].setup {\n  oe_jar_path = '/path/to/abl-lsp.jar',\n  dlc = '12.2:/path/to/dlc-12.2', -- Version number and OpenEdge root directory (colon separator)\n  debug = false, -- Set to true for debug logging\n  trace = false -- Set to true for trace logging (REALLY verbose)\n}\n```\n",
+    "desc": "[Language server](https://github.com/vscode-abl/vscode-abl) for Progress OpenEdge ABL.\n\nFor manual installation, download abl-lsda.jar from the [VSCode extension](https://github.com/vscode-abl/vscode-abl/releases/latest).\n\nConfiguration\n\n```lua\nrequire('lspconfig').openedge_ls.setup {\n  oe_jar_path = '/path/to/abl-lsda.jar',\n  debug = false, -- Set to true for debug logging\n  trace = false, -- Set to true for trace logging (REALLY verbose)\n  init_options = {\n    abl = {\n      configuration = {\n        runtimes = {\n          { name = '12.8', path = '/opt/progress/dlc' }\n        },\n        maxThreads = 1\n      },\n      completion = {\n        upperCase = false\n      },\n      buildMode = 1 -- Build all\n    }\n  }\n}\n```\n",
     "name": "openedge_ls"
   },
   {
@@ -1309,6 +1319,11 @@
     "cmd": ["rome", "lsp-proxy"],
     "desc": "https://rome.tools\n\nLanguage server for the Rome Frontend Toolchain.\n\n(Unmaintained, use [Biome](https://biomejs.dev/blog/annoucing-biome) instead.)\n\n```sh\nnpm install [-g] rome\n```\n",
     "name": "rome"
+  },
+  {
+    "cmd": ["python3", "-mrpm_lsp_server", "--stdio"],
+    "desc": "https://github.com/dcermak/rpm-spec-language-server\n\nLanguage server protocol (LSP) support for RPM Spec files.\n",
+    "name": "rpmspec"
   },
   {
     "cmd": ["rubocop", "--lsp"],
@@ -1627,7 +1642,7 @@
   },
   {
     "cmd": ["tinymist"],
-    "desc": "https://github.com/Myriad-Dreamin/tinymist\nAn integrated language service for Typst [ta\u026apst]. You can also call it \"\u5fae\u972d\" [w\u0113i \u01cei] in Chinese.\n    ",
+    "desc": "https://github.com/Myriad-Dreamin/tinymist\nAn integrated language service for Typst [ta\u026apst]. You can also call it \"\u5fae\u972d\" [w\u0113i \u01cei] in Chinese.\n\nCurrently some of Tinymist's workspace commands are supported, namely:\n`LspTinymistExportSvg`, `LspTinymistExportPng`, `LspTinymistExportPdf\n`LspTinymistExportMarkdown`, `LspTinymistExportText`, `LspTinymistExportQuery`,\n`LspTinymistExportAnsiHighlight`, `LspTinymistGetServerInfo`,\n`LspTinymistGetDocumentTrace`, `LspTinymistGetWorkspaceLabels`, and\n`LspTinymistGetDocumentMetrics`.\n    ",
     "name": "tinymist"
   },
   {
