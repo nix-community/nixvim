@@ -14,6 +14,7 @@
     "bazelrc_lsp"
     "bicep" # Bicep.Cli is packaged, but not Bicep.LangServer
     "bitbake_ls"
+    "bqls"
     "bqnlsp"
     "bright_script"
     "bsl_ls"
@@ -76,6 +77,7 @@
     "janet_lsp"
     "jinja_lsp"
     "julials"
+    "just"
     "kcl"
     "kulala_ls"
     "lean3ls"
@@ -129,6 +131,7 @@
     "robotframework_ls"
     "roc_ls"
     "rome"
+    "rpmspec"
     "salt_ls"
     "scry" # deprecated and removed from nixpkgs
     "selene3p_ls"
