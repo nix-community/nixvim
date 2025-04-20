@@ -35,6 +35,10 @@
           "phpstan"
           "psalm"
         ]
+        ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+          # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+          "swiftformat"
+        ]
         ++ lib.optionals hostPlatform.isDarwin [
           # As of 2024-01-04, texliveMedium is broken on darwin
           # TODO: re-enable those tests when fixed

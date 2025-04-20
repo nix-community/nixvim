@@ -114,6 +114,9 @@
               ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
                 # Not available on aarch64-linux
                 "smlfmt"
+
+                # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+                "swift_format"
               ];
           in
           # Enable every none-ls source that has an option

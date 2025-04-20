@@ -47,6 +47,9 @@ let
           "typst_lsp"
         ]
         ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+          # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+          "sourcekit"
+
           # pkgs.vectorcode is not available on this platform
           "vectorcode_server"
 
