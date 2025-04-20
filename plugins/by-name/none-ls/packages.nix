@@ -186,6 +186,7 @@ in
       nixpkgs_fmt = "nixpkgs-fmt";
       opacheck = "open-policy-agent";
       opentofu_fmt = "opentofu";
+      opentofu_validate = "opentofu";
       pg_format = "pgformatter";
       phpcbf = [
         "phpPackages"
