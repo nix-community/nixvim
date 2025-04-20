@@ -15,10 +15,23 @@
       options,
       ...
     }:
+    let
+      inherit (pkgs.stdenv) hostPlatform;
+
+      disabled = [
+      ];
+
+      enableDep = depName: depOption: {
+        enable =
+          # Filter disabled dependencies
+          (!lib.elem depName disabled)
+
+          # Disable if the package is not compatible with hostPlatform
+          && lib.meta.availableOn hostPlatform depOption.package.default;
+      };
+    in
     {
-      dependencies = lib.mapAttrs (_: depOption: {
-        enable = lib.meta.availableOn pkgs.stdenv.hostPlatform depOption.package.default;
-      }) options.dependencies;
+      dependencies = lib.mapAttrs enableDep options.dependencies;
     };
 
   all-examples =
