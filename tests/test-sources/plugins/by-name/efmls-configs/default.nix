@@ -44,6 +44,9 @@
           # TODO: re-enable those tests when fixed
           "chktex"
           "latexindent"
+
+          # TODO 2025-04-20 build failure
+          "ansible_lint"
         ]
         ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
           # As of 2025-03-18, several python311Packages.* dependencies of bashate fail on aarch64-darwin

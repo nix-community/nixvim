@@ -117,6 +117,10 @@
 
                 # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
                 "swift_format"
+              ]
+              ++ lib.optionals hostPlatform.isDarwin [
+                # TODO 2025-04-20 build failure
+                "ansiblelint"
               ];
           in
           # Enable every none-ls source that has an option
