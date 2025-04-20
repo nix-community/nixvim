@@ -117,6 +117,10 @@
 
                 # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
                 "swift_format"
+
+                # TODO: 2025-04-20 build failure (open-policy-agent)
+                "opacheck"
+                "rego"
               ]
               ++ lib.optionals hostPlatform.isDarwin [
                 # TODO 2025-04-20 build failure
