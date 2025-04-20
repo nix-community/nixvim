@@ -5,6 +5,10 @@
 }:
 let
   disabledDeps = [
+    # TODO: 2025-04-20: build failure of godot_4
+    # https://github.com/NixOS/nixpkgs/issues/399818
+    # https://github.com/NixOS/nixpkgs/pull/400347
+    "godot"
   ];
 
   inherit (pkgs.stdenv) hostPlatform;
