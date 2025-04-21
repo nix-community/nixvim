@@ -185,6 +185,8 @@ list-plugins -k vim
 > Declaring `settings`-options is **not required**, because the `settings` option is a freeform type.
 >
 > While `settings` options can be helpful for documentation and type-checking purposes, this is a double-edged sword because we have to ensure the options are correctly typed and documented to avoid unnecessary restrictions or confusion.
+>
+> We usually recommend **not** declaring `settings` options, however there are exceptions where the trade-off is worth it.
 
 > [!TIP]
 > Learn more about the [RFC 42](https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md) which motivated this new approach.
