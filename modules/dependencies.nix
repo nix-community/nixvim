@@ -58,6 +58,13 @@ in
         A set of dependency packages, used internally to construct the `dependencies.<name>` options.
       '';
       default = { };
+      example = {
+        curl.default = "curl";
+        git = {
+          default = "git";
+          example = "gitMinimal";
+        };
+      };
       internal = true;
       visible = false;
     };
