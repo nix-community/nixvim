@@ -54,6 +54,9 @@ in
           };
         }
       );
+      description = ''
+        A set of dependency packages, used internally to construct the `dependencies.<name>` options.
+      '';
       default = { };
       internal = true;
       visible = false;
