@@ -36,6 +36,8 @@ let
       ...
     }:
     let
+      inherit (pkgs.stdenv) hostPlatform;
+
       disabled =
         [
           # DEPRECATED SERVERS
@@ -44,7 +46,7 @@ let
           "bufls"
           "typst_lsp"
         ]
-        ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-linux") [
+        ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
           # pkgs.vectorcode is not available on this platform
           "vectorcode_server"
 

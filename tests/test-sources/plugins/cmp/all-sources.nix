@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   all-sources =
     { config, ... }:
@@ -18,18 +18,24 @@
           settings.sources =
             with pkgs.lib;
             let
-              disabledSources = [
-                # We do not provide the required HF_API_KEY environment variable.
-                "cmp_ai"
-                # Triggers the warning complaining about treesitter highlighting being disabled
-                "otter"
-                # Invokes the `nix` command at startup which is not available in the sandbox
-                "nixpkgs_maintainers"
-                # Needs internet access to download `sm-agent`
-                "supermaven"
-                # Sometimes get auth error
-                "codeium"
-              ] ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "cmp_tabnine";
+              inherit (pkgs.stdenv) hostPlatform;
+
+              disabledSources =
+                [
+                  # We do not provide the required HF_API_KEY environment variable.
+                  "cmp_ai"
+                  # Triggers the warning complaining about treesitter highlighting being disabled
+                  "otter"
+                  # Invokes the `nix` command at startup which is not available in the sandbox
+                  "nixpkgs_maintainers"
+                  # Needs internet access to download `sm-agent`
+                  "supermaven"
+                  # Sometimes get auth error
+                  "codeium"
+                ]
+                ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+                  "cmp_tabnine"
+                ];
             in
             pipe config.cmpSourcePlugins [
               # All known source names
