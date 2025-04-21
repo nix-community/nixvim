@@ -16,20 +16,27 @@ let
       lib.mkPackageOption pkgs name properties
       # Handle example manually so that we can embed the original attr-path within
       # the literalExpression object. This simplifies testing the examples.
-      // lib.optionalAttrs (properties.example != null) {
-        example =
-          if properties.example._type or null == "literalExpression" then
-            properties.example
-          else
-            {
-              _type = "literalExpression";
-              text = "pkgs.${lib.showAttrPath properties.example}";
-              path = properties.example;
-            };
+      // lib.optionalAttrs (builtins.isList properties.example) {
+        example = {
+          _type = "literalExpression";
+          text = "pkgs.${lib.showAttrPath properties.example}";
+          path = properties.example;
+        };
+      }
+      // lib.optionalAttrs (literalExpressionType.check properties.example) {
+        inherit (properties) example;
       };
   };
 
   attrPathType = with types; coercedTo str lib.toList (listOf str);
+
+  literalExpressionType = lib.types.mkOptionType {
+    name = "literal-expression";
+    description = "literal expression";
+    descriptionClass = "noun";
+    merge = lib.options.mergeEqualOption;
+    check = v: v ? _type && (v._type == "literalExpression" || v._type == "literalMD");
+  };
 in
 {
   options = {
@@ -46,7 +53,7 @@ in
             };
 
             example = lib.mkOption {
-              type = types.nullOr attrPathType;
+              type = types.nullOr (types.either attrPathType literalExpressionType);
               description = ''
                 Attribute path for an alternative package that provides dependency, relative to `pkgs`.
               '';
