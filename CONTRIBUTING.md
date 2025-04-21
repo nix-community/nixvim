@@ -79,8 +79,8 @@ A template plugin can be found in (plugins/TEMPLATE.nix)[https://github.com/nix-
 | **packPathName**             | The name of the plugin directory in [packpath](https://neovim.io/doc/user/options.html#'packpath'), usually the plugin's github repo name. E.g. `"foo-bar.nvim"`.                                                                                    | No       | `name` parameter                                                                                |
 | **package**                  | The nixpkgs package attr for this plugin. Can be a string, a list of strings, a module option, or any derivation. For example, "foo-bar-nvim" for `pkgs.vimPlugins.foo-bar-nvim`, or `[ "hello" "world" ]` will be referenced as `pkgs.hello.world`. | No       | `name` parameter                                                                                |
 | **settingsDescription**      | A description of the settings provided to the `setup` function.                                                                                                                                                                                      | No       | `"Options provided to the require('${moduleName}')${setup} function."`                          |
-| **settingsExample**          | An example configuration for the plugin's settings.                                                                                                                                                                                                  | No       | `null`                                                                                          |
-| **settingsOptions**          | Options representing the plugin's settings. This is optional because `settings` is a "freeform" option. See [Declaring plugin options](#declaring-plugin-options).                                                                                   | No       | `{}`                                                                                            |
+| **settingsExample**          | An example configuration for the plugin's settings. See [Writing option examples].                                                                                                                                                                   | No       | `null`                                                                                          |
+| **settingsOptions**          | Options representing the plugin's settings. This is optional because `settings` is a "freeform" option. See [Declaring plugin options].                                                                                                              | No       | `{}`                                                                                            |
 | **setup**                    | The setup function for the plugin.                                                                                                                                                                                                                   | No       | `".setup"`                                                                                      |
 
 ##### Functionality
@@ -139,8 +139,8 @@ Such plugins are usually configured via vim globals, but often have no configura
 | **optionsRenamedToSettings** | List of options renamed to settings.                                                                                                                                                                                                               | No       | `[]`                                  |
 | **packPathName**             | The name of the plugin directory in [packpath](https://neovim.io/doc/user/options.html#'packpath'), usually the plugin's github repo name. E.g. `"foo-bar.vim"`.                                                                                   | No       | `name` parameter                      |
 | **package**                  | The nixpkgs package attr for this plugin. Can be a string, a list of strings, a module option, or any derivation. For example, "foo-bar-vim" for `pkgs.vimPlugins.foo-bar-vim`, or `[ "hello" "world" ]` will be referenced as `pkgs.hello.world`. | No       | `name` parameter                      |
-| **settingsExample**          | Example settings for the plugin.                                                                                                                                                                                                                   | No       | `null`                                |
-| **settingsOptions**          | Options representing the plugin's settings. This is optional because `settings` is a "freeform" option. See [Declaring plugin options](#declaring-plugin-options).                                                                                 | No       | `{}`                                  |
+| **settingsExample**          | Example settings for the plugin. See [Writing option examples].                                                                                                                                                                                    | No       | `null`                                |
+| **settingsOptions**          | Options representing the plugin's settings. This is optional because `settings` is a "freeform" option. See [Declaring plugin options].                                                                                                            | No       | `{}`                                  |
 
 ##### Functionality
 
@@ -178,6 +178,80 @@ nix develop
 # List all created plugins with `mkVimPlugin`
 list-plugins -k vim
 ```
+
+#### Writing option examples
+
+Module options have first-class support for "examples" that are included automatically in documentation.
+
+For example this option will render something like:
+
+> # foo
+>
+> Some string
+>
+> **Default**: `null` \
+> **Example**: `"Hello, world!"`
+
+```nix
+foo = lib.mkOption {
+  type = lib.types.nullOr lib.types.str;
+  description = "Some string";
+  default = null;
+  example = "Hello, world!";
+}
+```
+
+Because [`mkVimPlugin`] and [`mkNeovimPlugin`] abstract away creation of the `settings` option, they provide a `settingsExample` argument. It is highly recommended to use this to provide an example for the plugin's `settings`.
+
+Although `lib.nixvim.defaultNullOpts` helper functions don't usually support defining an example, each function offers a "prime variant" (e.g. `defaultNullOpts.mkString` has `defaultNullOpts.mkString'`) which accept nearly any argument you could use with `lib.mkOption`.
+See [Declaring plugin options].
+
+Most of the time you will set `example` to a nix value and the module system will render it using `lib.generators.toPretty`.
+However, sometimes the example you wish to show would benefit from a specific formatting, may include function application or use of nix operators, or may benefit from some non-code explanation.
+In that scenario, you should use `lib.literalExpression` or `lib.literalMD`.
+
+You can use `lib.literalExpression` to write an example that is manually rendered by you. E.g. if your example needs to include expressions like `lib.nixvim.mkRaw "foo"`, you could use:
+
+```nix
+example = lib.literalExpression ''
+  {
+    foo = lib.nixvim.mkRaw "foo";
+  }
+''
+```
+
+Another example where `literalExpression` is beneficial is when your example includes multi-line strings.
+If you allow the module system to render your example itself using `lib.generators.toPretty`, then multi-line strings will be rendered as a "normal" string literal, with `\n` used to represent line-breaks.
+Note that to include a `''` literal within a nix indented string, you should use `'''`. E.g:
+
+```nix
+example = lib.literalExpression ''
+  {
+    long-string = '''
+      This string
+      spans over
+      several lines!
+    ''';
+  }
+''
+```
+
+On very rare occasions, you may wish to include some non-code text within your example. This can be done by wrapping a markdown string with `lib.literalMD`.
+E.g:
+
+`````nix
+example = lib.literalMD ''
+  This will render as normal text.
+
+  Markdown formatting is **supported**!
+
+  ```nix
+  This will render as nix code.
+  ```
+''
+`````
+
+See also: [Writing NixOS Modules: Option Declarations](https://nixos.org/manual/nixos/unstable/#sec-option-declarations) (NixOS Manual).
 
 #### Declaring plugin options
 
@@ -237,3 +311,8 @@ There are a second set of tests, unit tests for nixvim itself, defined in `tests
 If you want to speed up tests, we have set up a Cachix for nixvim.
 This way, only tests whose dependencies have changed will be re-run, speeding things up
 considerably. To use it, just install cachix and run `cachix use nix-community`.
+
+[`mkVimPlugin`]: #mkvimplugin
+[`mkNeovimPlugin`]: #mkneovimplugin
+[Writing option examples]: #writing-option-examples
+[Declaring plugin options]: #declaring-plugin-options
