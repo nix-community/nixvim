@@ -21,13 +21,15 @@ let
           if properties.example._type or null == "literalExpression" then
             properties.example
           else
-            rec {
+            {
               _type = "literalExpression";
-              text = "pkgs.${lib.showAttrPath path}";
-              path = lib.toList properties.example;
+              text = "pkgs.${lib.showAttrPath properties.example}";
+              path = properties.example;
             };
       };
   };
+
+  attrPathType = with types; coercedTo str lib.toList (listOf str);
 in
 {
   options = {
@@ -36,17 +38,17 @@ in
         types.submodule {
           options = {
             default = lib.mkOption {
-              type = with types; either str (listOf str);
+              type = attrPathType;
               description = ''
-                Default name (or path) for this package.
+                Attribute path for this dependency's default package, relative to `pkgs`.
               '';
               example = "git";
             };
 
             example = lib.mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr attrPathType;
               description = ''
-                Example of another package to use instead of the default.
+                Attribute path for an alternative package that provides dependency, relative to `pkgs`.
               '';
               example = "gitMinimal";
               default = null;
