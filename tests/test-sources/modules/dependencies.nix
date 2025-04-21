@@ -1,4 +1,23 @@
 {
+  lib,
+  pkgs,
+  ...
+}:
+let
+  disabledDeps = [
+  ];
+
+  inherit (pkgs.stdenv) hostPlatform;
+
+  isDepEnabled =
+    name: package:
+    # Filter disabled dependencies
+    (!lib.elem name disabledDeps)
+
+    # Disable if the package is not compatible with hostPlatform
+    && lib.meta.availableOn hostPlatform package;
+in
+{
   override =
     { pkgs, ... }:
     {
@@ -16,18 +35,8 @@
       ...
     }:
     let
-      inherit (pkgs.stdenv) hostPlatform;
-
-      disabled = [
-      ];
-
       enableDep = depName: depOption: {
-        enable =
-          # Filter disabled dependencies
-          (!lib.elem depName disabled)
-
-          # Disable if the package is not compatible with hostPlatform
-          && lib.meta.availableOn hostPlatform depOption.package.default;
+        enable = isDepEnabled depName depOption.package.default;
       };
     in
     {
@@ -47,14 +56,14 @@
         # This means we don't have to convert human readable paths back to list-paths for this test.
         (lib.filterAttrs (_: depOption: depOption.package ? example.path))
         (lib.mapAttrs (
-          _: depOption:
+          depName: depOption:
           let
             packagePath = depOption.package.example.path;
             packageName = lib.showAttrPath packagePath;
             package = lib.attrByPath packagePath (throw "${packageName} not found in pkgs") pkgs;
           in
           {
-            enable = lib.meta.availableOn pkgs.stdenv.hostPlatform package;
+            enable = isDepEnabled depName package;
             inherit package;
           }
         ))
