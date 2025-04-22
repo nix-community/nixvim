@@ -261,6 +261,16 @@
       kind = "boolean";
     };
   };
+  "rust-analyzer.cargo.noDeps" = {
+    description = ''
+      Whether to skip fetching dependencies. If set to "true", the analysis is performed
+      entirely offline, and Cargo metadata for dependencies is not fetched.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.cargo.sysroot" = {
     description = ''
       Relative path to the sysroot, or "discover" to try to automatically find it via

@@ -62,6 +62,7 @@
     "mypy"
     "npm_groovy_lint"
     "opacheck"
+    "opentofu_validate"
     "perlimports"
     "phpcs"
     "phpmd"
