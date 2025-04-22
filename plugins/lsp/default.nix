@@ -183,6 +183,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ++ mkMaps "vim.lsp.buf." "Lsp buf" cfg.keymaps.lspBuf
       ++ cfg.keymaps.extra;
 
+    # Since https://github.com/nix-community/nixvim/pull/3204, we are now using the native vim.lsp
+    # API for configuring language servers with nvim-lspconfig.
+    # For some mysterious reason, `performance.combinePlugins` now prevent language servers from
+    # being properly configured (missing some keys: `cmd`, `filetypes`, `root_markers` etc.)
+    performance.combinePlugins.standalonePlugins = [ cfg.package ];
+
     plugins.lsp.onAttach = lib.mkIf cfg.inlayHints ''
       -- LSP Inlay Hints {{{
       if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
@@ -242,15 +248,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
           }"}
 
           for i, server in ipairs(__lspServers) do
-            local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}
 
-            if options == nil then
-              options = __setup
-            else
-              options = vim.tbl_extend("keep", options, __setup)
+            vim.lsp.enable(server.name)
+
+            vim.lsp.config(server.name, __setup)
+
+            if server.extraOptions then
+              vim.lsp.config(server.name, server.extraOptions)
             end
-
-            require("lspconfig")[server.name].setup(options)
           end
 
           ${cfg.postConfig}
