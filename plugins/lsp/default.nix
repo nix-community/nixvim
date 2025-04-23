@@ -180,7 +180,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           if wrappers == [ ] then s else (builtins.head wrappers) (runWrappers (builtins.tail wrappers) s);
       in
       ''
-        -- LSP {{{
+        -- nvim-lspconfig {{{
         do
           ${cfg.preConfig}
 
