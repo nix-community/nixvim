@@ -81,31 +81,28 @@ lib.nixvim.plugins.mkNeovimPlugin {
     enabledServers = mkOption {
       type =
         with types;
-        listOf (oneOf [
-          str
-          (submodule {
-            options = {
-              name = mkOption {
-                type = str;
-                description = "The server's name";
-              };
+        listOf (submodule {
+          options = {
+            name = mkOption {
+              type = str;
+              description = "The server's name";
+            };
 
-              capabilities = mkOption {
-                type = nullOr (attrsOf bool);
-                description = "Control resolved capabilities for the language server.";
-                default = null;
-                example = {
-                  documentFormattingProvider = false;
-                };
-              };
-
-              extraOptions = mkOption {
-                type = attrsOf anything;
-                description = "Extra options for the server";
+            capabilities = mkOption {
+              type = nullOr (attrsOf bool);
+              description = "Control resolved capabilities for the language server.";
+              default = null;
+              example = {
+                documentFormattingProvider = false;
               };
             };
-          })
-        ]);
+
+            extraOptions = mkOption {
+              type = attrsOf anything;
+              description = "Extra options for the server";
+            };
+          };
+        });
       description = "A list of enabled LSP servers. Don't use this directly.";
       default = [ ];
       internal = true;
@@ -245,19 +242,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
           }"}
 
           for i, server in ipairs(__lspServers) do
-            if type(server) == "string" then
-              require("lspconfig")[server].setup(__setup)
+            local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}
+
+            if options == nil then
+              options = __setup
             else
-              local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}
-
-              if options == nil then
-                options = __setup
-              else
-                options = vim.tbl_extend("keep", options, __setup)
-              end
-
-              require("lspconfig")[server.name].setup(options)
+              options = vim.tbl_extend("keep", options, __setup)
             end
+
+            require("lspconfig")[server.name].setup(options)
           end
 
           ${cfg.postConfig}
