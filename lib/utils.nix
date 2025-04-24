@@ -169,7 +169,7 @@ rec {
       # Pass the value through mkRaw for validation
       raw = mkRaw r;
       # TODO: consider switching to lib.generators.mkLuaInline ?
-      exp = "lib.nixvim.mkRaw " + builtins.toJSON raw.__raw;
+      exp = "lib.nixvim.mkRaw " + lib.generators.toPretty { } raw.__raw;
     in
     lib.literalExpression exp;
 
