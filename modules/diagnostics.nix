@@ -12,7 +12,7 @@
       description = "The configuration diagnostic options, provided to `vim.diagnostic.config`.";
       example = {
         virtual_text = false;
-        virtual_lines.only_current_line = true;
+        virtual_lines.current_line = true;
       };
     };
   };

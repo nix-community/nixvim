@@ -2,7 +2,7 @@
   example = {
     diagnostics = {
       virtual_text = false;
-      virtual_lines.only_current_line = true;
+      virtual_lines.current_line = true;
     };
   };
 }
