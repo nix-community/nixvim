@@ -131,6 +131,7 @@
     "roc_ls"
     "rome"
     "rpmspec"
+    "ruff_lsp" # deprecated and removed from nixpkgs
     "salt_ls"
     "scry" # deprecated and removed from nixpkgs
     "selene3p_ls"
@@ -346,7 +347,6 @@
     rls = "rustup";
     rubocop = "rubocop";
     ruby_lsp = "ruby-lsp";
-    ruff_lsp = "ruff-lsp";
     ruff = "ruff";
     rune_languageserver = "rune-languageserver";
     rust_analyzer = "rust-analyzer";
