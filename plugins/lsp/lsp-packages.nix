@@ -77,7 +77,6 @@
     "janet_lsp"
     "jinja_lsp"
     "julials"
-    "just"
     "kcl"
     "kulala_ls"
     "lean3ls"
@@ -274,6 +273,7 @@
     jqls = "jq-lsp";
     jsonls = "vscode-langservers-extracted";
     jsonnet_ls = "jsonnet-language-server";
+    just = "just-lsp";
     koka = "koka";
     kotlin_language_server = "kotlin-language-server";
     leanls = "lean4";
