@@ -85,7 +85,7 @@ A certain number of helpers are defined that can be useful:
   This allows to define mixed table/list in lua:
 
   ```nix
-    (listToUnkeyedAttrs ["a", "b"]) // {foo = "bar";}
+    (listToUnkeyedAttrs ["a" "b"]) // {foo = "bar";}
   ```
 
   Resulting in the following lua:
