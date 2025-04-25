@@ -84,12 +84,13 @@
           filetypes = [ "python" ];
           autostart = false;
         };
-        # rootDir
+        # rootMarkers
         tinymist = {
           enable = true;
-          rootDir = ''
-            require 'lspconfig.util'.root_pattern('.git', 'main.typ')
-          '';
+          rootMarkers = [
+            ".git"
+            "main.typ"
+          ];
         };
       };
     };

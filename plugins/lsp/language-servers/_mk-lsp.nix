@@ -106,10 +106,16 @@ in
         `:LspStart` (|lspconfig-commands|).
       '';
 
-      rootDir = lib.nixvim.defaultNullOpts.mkLuaFn "nil" ''
-        A function (or function handle) which returns the root of the project used to
-        determine if lspconfig should launch a new language server, or attach a previously
-        launched server when you open a new buffer matching the filetype of the server.
+      rootMarkers = lib.nixvim.defaultNullOpts.mkListOf types.str null ''
+        A list of files that mark the root of the project/workspace.
+
+        Vim's LSP will try to share the same language server instance for all
+        buffers matching `filetypes` within the same project.
+
+        A new server instance is only spawned when opening a buffer with a
+        different project root.
+
+        See `:h lsp-config` and `:h vim.fs.root()`.
       '';
 
       onAttach = lib.nixvim.mkCompositeOption "Server specific on_attach behavior." {
@@ -149,7 +155,7 @@ in
         name = serverName;
         extraOptions = {
           inherit (cfg) cmd filetypes autostart;
-          root_dir = cfg.rootDir;
+          root_markers = cfg.rootMarkers;
           on_attach = lib.nixvim.ifNonNull' cfg.onAttach (
             lib.nixvim.mkRaw ''
               function(client, bufnr)
@@ -183,6 +189,13 @@ in
       (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
       ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
+      (lib.mkRemovedOptionModule (basePluginPath ++ [ "rootDir" ]) ''
+
+        nvim-lspconfig has switched from its own `root_dir` implementation to using neovim's built-in LSP API.
+
+        In most cases you can use `${opts.rootMarkers}` instead. It should be a list of files that mark the root of the project.
+        In more complex cases you can still use `${opts.extraOptions}.root_dir`.
+      '')
     ]
     ++ lib.optional (args ? extraConfig) (
       lib.nixvim.plugins.utils.applyExtraConfig {
