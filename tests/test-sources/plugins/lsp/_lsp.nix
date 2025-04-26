@@ -219,14 +219,12 @@
           secondServer = builtins.elemAt config.plugins.lsp.enabledServers 1;
           expectedSecondServer = {
             name = "second";
-            capabilities = null;
             extraOptions = { };
           };
 
           thirdServer = builtins.elemAt config.plugins.lsp.enabledServers 2;
           expectedThirdServer = {
             name = "third";
-            capabilities = null;
             extraOptions.settings.should.be = "present";
           };
         in

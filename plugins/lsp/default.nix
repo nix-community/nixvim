@@ -88,15 +88,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
               description = "The server's name";
             };
 
-            capabilities = mkOption {
-              type = nullOr (attrsOf bool);
-              description = "Control resolved capabilities for the language server.";
-              default = null;
-              example = {
-                documentFormattingProvider = false;
-              };
-            };
-
             extraOptions = mkOption {
               type = attrsOf anything;
               description = "Extra options for the server";
@@ -187,25 +178,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         runWrappers =
           wrappers: s:
           if wrappers == [ ] then s else (builtins.head wrappers) (runWrappers (builtins.tail wrappers) s);
-        updateCapabilities =
-          let
-            servers = builtins.filter (
-              server: server.capabilities != null && server.capabilities != { }
-            ) cfg.enabledServers;
-          in
-          lib.concatMapStringsSep "\n" (
-            server:
-            let
-              updates = lib.concatMapAttrsStringsSep "\n" (name: enabled: ''
-                client.server_capabilities.${name} = ${lib.nixvim.toLuaObject enabled}
-              '') server.capabilities;
-            in
-            ''
-              if client.name == "${server.name}" then
-                ${updates}
-              end
-            ''
-          ) servers;
       in
       ''
         -- LSP {{{
@@ -218,8 +190,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
           local __lspServers = ${lib.nixvim.toLuaObject cfg.enabledServers}
           -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
           _M.lspOnAttach = function(client, bufnr)
-            ${updateCapabilities}
-
             ${cfg.onAttach}
           end
           local __lspCapabilities = function()
