@@ -113,8 +113,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       type = types.bool;
       default = false;
       description = ''
-        Whether to enable LSP inlay-hints.
-        Only affects language servers with inlay-hints support.
+        Whether to enable LSP inlay-hints globally.
 
         See [`:h lsp-inlay_hint`](https://neovim.io/doc/user/lsp.html#lsp-inlay_hint).
       '';
@@ -189,14 +188,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     # being properly configured (missing some keys: `cmd`, `filetypes`, `root_markers` etc.)
     performance.combinePlugins.standalonePlugins = [ cfg.package ];
 
-    plugins.lsp.onAttach = lib.mkIf cfg.inlayHints ''
-      -- LSP Inlay Hints {{{
-      if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      end
-      -- }}}
-    '';
-
     plugins.lsp.luaConfig.content =
       let
         runWrappers =
@@ -226,6 +217,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
         -- LSP {{{
         do
           ${cfg.preConfig}
+
+          -- inlay hint
+          ${lib.optionalString cfg.inlayHints "vim.lsp.inlay_hint.enable(true)"}
 
           local __lspServers = ${lib.nixvim.toLuaObject cfg.enabledServers}
           -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
