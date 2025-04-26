@@ -202,9 +202,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
           lib.concatMapStringsSep "\n" (
             server:
             let
-              updates = lib.concatMapStringsSep "\n" (name: ''
-                client.server_capabilities.${name} = ${lib.nixvim.toLuaObject server.capabilities.${name}}
-              '') (builtins.attrNames server.capabilities);
+              updates = lib.concatMapAttrsStringsSep "\n" (name: enabled: ''
+                client.server_capabilities.${name} = ${lib.nixvim.toLuaObject enabled}
+              '') server.capabilities;
             in
             ''
               if client.name == "${server.name}" then
