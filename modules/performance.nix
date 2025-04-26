@@ -75,26 +75,33 @@ in
     # Set option value with default priority so that values are appended by default
     combinePlugins.pathsToLink = [
       # :h rtp
-      "/autoload"
-      "/colors"
-      "/compiler"
-      "/doc"
-      "/ftplugin"
-      "/indent"
-      "/keymap"
-      "/lang"
-      "/lua"
-      "/pack"
-      "/parser"
-      "/plugin"
-      "/queries"
-      "/rplugin"
-      "/spell"
-      "/syntax"
-      "/tutor"
+      # TODO: "/filetype.lua" # filetypes (:h new-filetype)
+      "/autoload" # automatically loaded scripts (:h autoload-functions)
+      "/colors" # color scheme files (:h :colorscheme)
+      "/compiler" # compiler files (:h :compiler)
+      "/doc" # documentation (:h write-local-help)
+      "/ftplugin" # filetype plugins (:h write-filetype-plugin)
+      "/indent" # indent scripts (:h indent-expression)
+      "/keymap" # key mapping files (:h mbyte-keymap)
+      "/lang" # menu translations (:h :menutrans)
+      "/lsp" # LSP client configurations (:h lsp-config)
+      "/lua" # Lua plugins (:h lua)
+      # TODO: "/menu.vim" # GUI menus (:h menu.vim)
+      "/pack" # packages (:h :packadd)
+      "/parser" # treesitter syntax parsers (:h treesitter)
+      "/plugin" # plugin scripts (:h write-plugin)
+      "/queries" # treesitter queries (:h treesitter)
+      "/rplugin" # remote-plugin scripts (:h remote-plugin)
+      "/spell" # spell checking files (:h spell)
+      "/syntax" # syntax files (:h mysyntaxfile)
+      "/tutor" # tutorial files (:h :Tutor)
+
+      # after
       "/after"
+
       # ftdetect
       "/ftdetect"
+
       # plenary.nvim
       "/data/plenary/filetypes"
     ];
