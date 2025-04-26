@@ -182,12 +182,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ++ mkMaps "vim.lsp.buf." "Lsp buf" cfg.keymaps.lspBuf
       ++ cfg.keymaps.extra;
 
-    # Since https://github.com/nix-community/nixvim/pull/3204, we are now using the native vim.lsp
-    # API for configuring language servers with nvim-lspconfig.
-    # For some mysterious reason, `performance.combinePlugins` now prevent language servers from
-    # being properly configured (missing some keys: `cmd`, `filetypes`, `root_markers` etc.)
-    performance.combinePlugins.standalonePlugins = [ cfg.package ];
-
     plugins.lsp.luaConfig.content =
       let
         runWrappers =
