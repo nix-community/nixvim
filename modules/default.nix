@@ -10,7 +10,7 @@
     ./colorscheme.nix
     ./commands.nix
     ./dependencies.nix
-    ./diagnostics.nix
+    ./diagnostic.nix
     ./doc.nix
     ./editorconfig.nix
     ./files.nix
