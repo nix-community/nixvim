@@ -62,17 +62,17 @@ in
     {
       performance.combinePlugins.enable = true;
       extraPlugins = with pkgs.vimPlugins; [
-        # Depends on nvim-cmp
-        cmp-dictionary
-        # Depends on telescope-nvim which itself depends on plenary-nvim
-        telescope-undo-nvim
+        # Depends on nui-nvim
+        noice-nvim
+        # Depends on null-ls-nvim which itself depends on plenary-nvim
+        mason-null-ls-nvim
       ];
       extraConfigLuaPost = ''
         -- Plugins and its dependencies are loadable
-        require("cmp_dictionary")
-        require("cmp")
-        require("telescope-undo")
-        require("telescope")
+        require("noice")
+        require("nui.popup")
+        require("mason-null-ls.settings") -- Avoid calling deprecated functions
+        require("null-ls.helpers") -- Avoid calling deprecated functions
         require("plenary")
       '';
       assertions = [
@@ -155,7 +155,7 @@ in
         # Optional plugin with dependency on plenary-nvim
         # Dependencies should not be duplicated
         {
-          plugin = telescope-nvim;
+          plugin = none-ls-nvim;
           optional = true;
         }
       ];
@@ -167,16 +167,16 @@ in
         -- Opt plugins are not loadable
         local ok = pcall(require, "nvim-treesitter")
         assert(not ok, "nvim-treesitter plugin is loadable")
-        ok = pcall(require, "telescope")
-        assert(not ok, "telescope-nvim plugin is loadable")
+        ok = pcall(require, "null-ls")
+        assert(not ok, "null-ls-nvim plugin is loadable")
 
         -- Load plugins
         vim.cmd.packadd("nvim-treesitter")
-        vim.cmd.packadd("telescope.nvim")
+        vim.cmd.packadd("none-ls.nvim")
 
         -- Now opt plugins are loadable
         require("nvim-treesitter")
-        require("telescope")
+        require("null-ls")
 
         -- Only one copy of plenary-nvim should be available
         assert(
@@ -321,17 +321,17 @@ in
           # By package itself
           nvim-lspconfig
           # Its dependency, plenary-nvim, not in this list, so will be combined
-          telescope-nvim
+          none-ls-nvim
           # Dependency of other plugin
-          "nvim-cmp"
+          "nui.nvim"
         ];
       };
       extraPlugins = with pkgs.vimPlugins; [
         nvim-treesitter
         nvim-lspconfig
-        telescope-nvim
-        # Only its dependency (nvim-cmp) won't be combined, but not the plugin itself
-        cmp-dictionary
+        none-ls-nvim
+        # Only its dependency (nui-nvim) won't be combined, but not the plugin itself
+        noice-nvim
         # More plugins
         gitsigns-nvim
         luasnip
@@ -340,10 +340,10 @@ in
         -- Plugins are loadable
         require("nvim-treesitter")
         require("lspconfig")
-        require("telescope")
+        require("null-ls")
         require("plenary")
-        require("cmp_dictionary")
-        require("cmp")
+        require("noice")
+        require("nui.popup")
         require("gitsigns")
         require("luasnip")
 
@@ -357,18 +357,17 @@ in
         -- Standalone plugins
         assert(is_standalone("nvim-treesitter"), "nvim-treesitter is combined, expected standalone")
         assert(is_standalone("lspconfig"), "nvim-lspconfig is combined, expected standalone")
-        assert(is_standalone("telescope"), "telescope-nvim is combined, expected standalone")
-        -- Add trailing slash to ensure that it doesn't match cmp_dictionary
-        assert(is_standalone("cmp/", "nvim-cmp"), "nvim-cmp is combined, expected standalone")
+        assert(is_standalone("null-ls", "none-ls.nvim"), "none-ls-nvim is combined, expected standalone")
+        assert(is_standalone("nui"), "nui-nvim is combined, expected standalone")
         -- Combined plugins
         assert(not is_standalone("plenary"), "plenary-nvim is standalone, expected combined")
-        assert(not is_standalone("cmp_dictionary", "cmp-dictionary"), "cmp-dictionary is standalone, expected combined")
+        assert(not is_standalone("noice"), "noice-nvim is standalone, expected combined")
         assert(not is_standalone("gitsigns"), "gitsigns-nvim is standalone, expected combined")
         assert(not is_standalone("luasnip"), "luasnip is standalone, expected combined")
       '';
       assertions = [
         {
-          # plugin-pack, nvim-treesitter, nvim-lspconfig, telescope-nvim, nvim-cmp
+          # plugin-pack, nvim-treesitter, nvim-lspconfig, none-ls-nvim, nui-nvim
           assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 5;
           message = "Wrong number of plugins in packpathDirs";
         }
