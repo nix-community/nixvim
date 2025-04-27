@@ -13,36 +13,6 @@ mkExtension {
   extensionName = "media_files";
   package = "telescope-media-files-nvim";
 
-  # TODO: introduced 2024-03-24, remove on 2024-05-24
-  imports =
-    let
-      telescopeExtensionsPath = [
-        "plugins"
-        "telescope"
-        "extensions"
-      ];
-      oldPath = telescopeExtensionsPath ++ [ "media_files" ];
-      newPath = telescopeExtensionsPath ++ [ "media-files" ];
-    in
-    lib.nixvim.mkSettingsRenamedOptionModules oldPath newPath [
-      "enable"
-      "package"
-      {
-        old = "filetypes";
-        new = [
-          "settings"
-          "filetypes"
-        ];
-      }
-      {
-        old = "find_cmd";
-        new = [
-          "settings"
-          "find_cmd"
-        ];
-      }
-    ];
-
   extraOptions = {
     dependencies =
       let
