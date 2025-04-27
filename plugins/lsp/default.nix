@@ -206,14 +206,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
           }"}
 
           for i, server in ipairs(__lspServers) do
+            local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}
 
-            vim.lsp.enable(server.name)
-
-            vim.lsp.config(server.name, __setup)
-
-            if server.extraOptions then
-              vim.lsp.config(server.name, server.extraOptions)
+            if options == nil then
+              options = __setup
+            else
+              options = vim.tbl_extend("keep", options, __setup)
             end
+
+            require("lspconfig")[server.name].setup(options)
           end
 
           ${cfg.postConfig}
