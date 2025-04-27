@@ -6,31 +6,99 @@ let
   pluginCount =
     pkg: files: type:
     builtins.length (builtins.filter (p: p != files) pkg.packpathDirs.myNeovimPackages.${type});
+
+  # Stub plugins
+  mkPlugin =
+    name: args:
+    pkgs.vimUtils.buildVimPlugin (
+      {
+        pname = name;
+        version = "2025-04-27";
+        src = pkgs.runCommand "${name}-source" { } ''
+          mkdir "$out"
+          # Add some colliding files
+          echo "# ${name}" > "$out/README.md"
+          echo "Copyright (c) ${name}" > "$out/LICENSE"
+          mkdir "$out/tests"
+          echo "return '${name}'" > "$out/tests/test.lua"
+          # Add import path
+          mkdir -p "$out/lua/${name}"
+          echo "return '${name}'" > "$out/lua/${name}/init.lua"
+          # Add doc
+          mkdir "$out/doc"
+          echo "*${name}.txt* ${name}" > "$out/doc/${name}.txt"
+        '';
+      }
+      // args
+    );
+  # Simple plugins without any features
+  simplePlugin1 = mkPlugin "simple-plugin-1" { };
+  simplePlugin2 = mkPlugin "simple-plugin-2" { };
+  simplePlugin3 = mkPlugin "simple-plugin-3" { };
+  # Plugins with dependencies
+  pluginWithDeps1 = mkPlugin "plugin-with-deps-1" {
+    dependencies = [ simplePlugin1 ];
+  };
+  pluginWithDeps2 = mkPlugin "plugin-with-deps-2" {
+    dependencies = [ simplePlugin2 ];
+  };
+  pluginWithDeps3 = mkPlugin "plugin-with-deps-3" {
+    dependencies = [ simplePlugin3 ];
+  };
+  # Plugin with recursive dependencies
+  pluginWithRecDeps = mkPlugin "plugin-with-rec-deps" {
+    dependencies = [
+      pluginWithDeps1
+      pluginWithDeps2
+    ];
+  };
+  # Plugin with non-standard files
+  pluginWithExtraFiles = mkPlugin "plugin-with-extra-files" {
+    postInstall = ''
+      mkdir "$out/_extra"
+      touch "$out/_extra/test"
+    '';
+  };
+  # Plugins with Python dependencies
+  pluginWithPyDeps1 = mkPlugin "plugin-with-py-deps-1" {
+    passthru.python3Dependencies = ps: [ ps.pyyaml ];
+  };
+  pluginWithPyDeps2 = mkPlugin "plugin-with-py-deps-2" {
+    passthru.python3Dependencies = ps: [ ps.pyyaml ];
+  };
+  pluginWithPyDeps3 = mkPlugin "plugin-with-py-deps-3" {
+    passthru.python3Dependencies = ps: [ ps.requests ];
+  };
 in
 {
   # Test basic functionality
   default =
     { config, ... }:
+    let
+      extraPlugins = [
+        simplePlugin1
+        simplePlugin2
+        simplePlugin3
+      ];
+    in
     {
       performance.combinePlugins.enable = true;
-      extraPlugins = with pkgs.vimPlugins; [
-        nvim-lspconfig
-        nvim-treesitter
-      ];
-      extraConfigLuaPost = ''
-        -- Plugins are loadable
-        require("lspconfig")
-        require("nvim-treesitter")
+      inherit extraPlugins;
+      extraConfigLuaPost = lib.concatMapStringsSep "\n" (
+        name:
+        # lua
+        ''
+          -- Plugin is loadable
+          require("${name}")
 
-        -- No separate plugin entries in nvim_list_runtime_paths
-        assert(not vim.iter(vim.api.nvim_list_runtime_paths()):any(function(entry)
-          return entry:find("treesitter") or entry:find("lspconfig")
-        end), "separate plugins are found in runtime")
+          -- No separate plugin entry in vim.api.nvim_list_runtime_paths()
+          assert(not vim.iter(vim.api.nvim_list_runtime_paths()):any(function(entry)
+            return entry:find("${name}", 1, true)
+          end), "plugin '${name}' found in runtime, expected to be combined")
 
-        -- Help tags are generated
-        assert(vim.fn.getcompletion("lspconfig", "help")[1], "no help tags for nvim-lspconfig")
-        assert(vim.fn.getcompletion("nvim-treesitter", "help")[1], "no help tags for nvim-treesitter")
-      '';
+          -- Help tags are generated
+          assert(vim.fn.getcompletion("${name}", "help")[1], "no help tags for '${name}'")
+        '') (map lib.getName extraPlugins);
       assertions = [
         {
           assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
@@ -42,12 +110,25 @@ in
   # Test disabled option
   disabled =
     { config, ... }:
+    let
+      extraPlugins = [
+        simplePlugin1
+        simplePlugin2
+        simplePlugin3
+      ];
+    in
     {
       performance.combinePlugins.enable = false;
-      extraPlugins = with pkgs.vimPlugins; [
-        nvim-lspconfig
-        nvim-treesitter
-      ];
+      inherit extraPlugins;
+      extraConfigLuaPost = lib.concatMapStringsSep "\n" (
+        name:
+        # lua
+        ''
+          -- Separate plugin entry in vim.api.nvim_list_runtime_paths()
+          assert(vim.iter(vim.api.nvim_list_runtime_paths()):any(function(entry)
+            return entry:find("${name}", 1, true)
+          end), "plugin '${name}' isn't found in runtime as a separate entry, expected not to be combined")
+        '') (map lib.getName extraPlugins);
       assertions = [
         {
           assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" >= 2;
@@ -61,19 +142,26 @@ in
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
-      extraPlugins = with pkgs.vimPlugins; [
-        # Depends on nui-nvim
-        noice-nvim
-        # Depends on null-ls-nvim which itself depends on plenary-nvim
-        mason-null-ls-nvim
+      extraPlugins = [
+        # Depends on pluginWithDeps1 and pluginWithDeps2 which themselves depend on simplePlugin1 and simplePlugin2
+        pluginWithRecDeps
+        # Depends on simplePlugin3
+        pluginWithDeps3
+        # Duplicated dependency
+        pluginWithDeps2
+        # Duplicated plugin
+        simplePlugin2
       ];
       extraConfigLuaPost = ''
-        -- Plugins and its dependencies are loadable
-        require("noice")
-        require("nui.popup")
-        require("mason-null-ls.settings") -- Avoid calling deprecated functions
-        require("null-ls.helpers") -- Avoid calling deprecated functions
-        require("plenary")
+        -- Plugin 'pluginWithRecDeps' and its dependencies are loadable
+        require("plugin-with-rec-deps")
+        require("plugin-with-deps-1")
+        require("plugin-with-deps-2")
+        require("simple-plugin-1")
+        require("simple-plugin-2")
+        -- Plugin 'pluginWithDeps3' and its dependencies are loadable
+        require("plugin-with-deps-3")
+        require("simple-plugin-3")
       '';
       assertions = [
         {
@@ -89,19 +177,15 @@ in
     {
       performance.combinePlugins = {
         enable = true;
-        # fzf native library is in build directory
-        pathsToLink = [ "/build" ];
+        pathsToLink = [ "/_extra" ];
       };
-      extraPlugins = [ pkgs.vimPlugins.telescope-fzf-native-nvim ];
+      extraPlugins = [ pluginWithExtraFiles ];
       extraConfigLuaPost = ''
-        -- Native library is in runtimepath
+        -- Test file is in runtime
         assert(
-          vim.api.nvim_get_runtime_file("build/libfzf.so", false)[1],
-          "build/libfzf.so is not found in runtimepath"
+          vim.api.nvim_get_runtime_file("_extra/test", false)[1],
+          "'_extra/test' file isn't found in runtime, expected to be found"
         )
-
-        -- Native library is loadable
-        require("fzf_lib")
       '';
       assertions = [
         {
@@ -116,14 +200,14 @@ in
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
-      extraPlugins = with pkgs.vimPlugins; [
+      extraPlugins = [
         # No python3 dependencies
-        plenary-nvim
-        # Duplicate python3 dependencies
-        (nvim-lspconfig.overrideAttrs { passthru.python3Dependencies = ps: [ ps.pyyaml ]; })
-        (nvim-treesitter.overrideAttrs { passthru.python3Dependencies = ps: [ ps.pyyaml ]; })
-        # Another python3 dependency
-        (nvim-cmp.overrideAttrs { passthru.python3Dependencies = ps: [ ps.requests ]; })
+        simplePlugin1
+        # Duplicated python3-pyyaml dependency
+        pluginWithPyDeps1
+        pluginWithPyDeps2
+        # Python3-requests dependency
+        pluginWithPyDeps3
       ];
       extraConfigLuaPost = ''
         -- Python modules are importable
@@ -143,46 +227,44 @@ in
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
-      extraPlugins = with pkgs.vimPlugins; [
+      extraPlugins = [
         # Start plugins
-        plenary-nvim
-        nvim-lspconfig
+        simplePlugin1
+        simplePlugin2
         # Optional plugin
         {
-          plugin = nvim-treesitter;
+          plugin = simplePlugin3;
           optional = true;
         }
-        # Optional plugin with dependency on plenary-nvim
+        # Optional plugin with dependency on simplePlugin1
         # Dependencies should not be duplicated
         {
-          plugin = none-ls-nvim;
+          plugin = pluginWithDeps1;
           optional = true;
         }
       ];
       extraConfigLuaPost = ''
         -- Start plugins are loadable
-        require("plenary")
-        require("lspconfig")
+        require("simple-plugin-1")
+        require("simple-plugin-2")
 
         -- Opt plugins are not loadable
-        local ok = pcall(require, "nvim-treesitter")
-        assert(not ok, "nvim-treesitter plugin is loadable")
-        ok = pcall(require, "null-ls")
-        assert(not ok, "null-ls-nvim plugin is loadable")
+        local ok = pcall(require, "simple-plugin-3")
+        assert(not ok, "simplePlugin3 is loadable, expected it to be an opt plugin")
+        ok = pcall(require, "plugin-with-deps-1")
+        assert(not ok, "pluginWithDeps1 is loadable, expected it to be an opt plugin")
 
         -- Load plugins
-        vim.cmd.packadd("nvim-treesitter")
-        vim.cmd.packadd("none-ls.nvim")
+        vim.cmd.packadd("simple-plugin-3")
+        vim.cmd.packadd("plugin-with-deps-1")
 
         -- Now opt plugins are loadable
-        require("nvim-treesitter")
-        require("null-ls")
+        require("simple-plugin-3")
+        require("plugin-with-deps-1")
 
-        -- Only one copy of plenary-nvim should be available
-        assert(
-          #vim.api.nvim_get_runtime_file("lua/plenary/init.lua", true) == 1,
-          "plenary-nvim is duplicated"
-        )
+        -- Only one copy of simplePlugin1 should be available
+        local num_plugins = #vim.api.nvim_get_runtime_file("lua/simple-plugin-1/init.lua", true)
+        assert(num_plugins == 1, "expected 1 copy of simplePlugin1, got " .. num_plugins)
       '';
       assertions = [
         {
@@ -201,35 +283,25 @@ in
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
-      extraPlugins = with pkgs.vimPlugins; [
+      extraPlugins = [
         # A plugin without config
-        plenary-nvim
-        # Plugins with configs
+        simplePlugin1
+        # Plugin with config
         {
-          plugin = nvim-treesitter;
-          config = "let g:treesitter_config = 1";
-        }
-        {
-          plugin = nvim-lspconfig;
-          config = "let g:lspconfig_config = 1";
+          plugin = simplePlugin2;
+          config = "let g:simple_plugin_2 = 1";
         }
         # Optional plugin with config
         {
-          plugin = telescope-nvim;
+          plugin = simplePlugin3;
           optional = true;
-          config = "let g:telescope_config = 1";
+          config = "let g:simple_plugin_3 = 1";
         }
       ];
       extraConfigLuaPost = ''
-        -- Plugins are loadable
-        require("plenary")
-        require("nvim-treesitter")
-        require("lspconfig")
-
         -- Configs are evaluated
-        assert(vim.g.treesitter_config == 1, "nvim-treesitter config isn't evaluated")
-        assert(vim.g.lspconfig_config == 1, "nvim-lspconfig config isn't evaluated")
-        assert(vim.g.telescope_config == 1, "telescope-nvim config isn't evaluated")
+        assert(vim.g.simple_plugin_2 == 1, "simplePlugin2's config isn't evaluated")
+        assert(vim.g.simple_plugin_3 == 1, "simplePlugin3's config isn't evaluated")
       '';
       assertions = [
         {
@@ -244,62 +316,36 @@ in
     { config, ... }:
     {
       performance.combinePlugins.enable = true;
-      extraPlugins = with pkgs.vimPlugins; [
-        nvim-treesitter
-        vim-nix
+      extraPlugins = [
+        simplePlugin1
+        simplePlugin2
       ];
-      # Ensure that build.extraFiles is added extraPlugins
+      # Ensure that build.extraFiles is added to extraPlugins
       wrapRc = true;
       # Extra user files colliding with plugins
       extraFiles = {
-        "ftplugin/nix.vim".text = "let b:test = 1";
-        "queries/nix/highlights.scm".text = ''
-          ;; extends
-          (comment) @comment
-        '';
+        "lua/simple-plugin-1/init.lua".text = "return 1";
       };
       # Another form of user files
       files = {
-        "ftdetect/nix.vim" = {
-          autoCmd = [
-            {
-              event = [
-                "BufRead"
-                "BufNewFile"
-              ];
-              pattern = "*.nix";
-              command = "setf nix";
-            }
-          ];
+        "lua/simple-plugin-2/init.lua" = {
+          extraConfigLua = "return 1";
         };
       };
       extraConfigLuaPost = ''
-        local function get_paths(name)
-          local paths = vim.api.nvim_get_runtime_file(name, true);
-          return vim.tbl_filter(function(v)
-            -- Skip paths from neovim runtime
-            return not v:find("/nvim/runtime/")
-          end, paths)
+        for _, file in ipairs({"lua/simple-plugin-1/init.lua", "lua/simple-plugin-2/init.lua"}) do
+          local paths_found = vim.api.nvim_get_runtime_file(file, true)
+          local num_found = #paths_found
+
+          -- Both plugin and user version are available
+          assert(num_found == 2, "expected exactly 2 versions of '" .. file .. "', got " .. num_found)
+
+          -- First found file is from build.extraFiles
+          assert(
+            paths_found[1]:find("${lib.getName config.build.extraFiles}", 1, true),
+            "expected first found '" .. file .. "' to be from build.extraFiles, got " .. paths_found[1]
+          )
         end
-
-        -- Both plugin and user version are available
-        assert(#get_paths("ftplugin/nix.vim") == 2, "only one version of ftplugin/nix.vim")
-        assert(#get_paths("ftdetect/nix.vim") == 2, "only one version of ftdetect/nix.vim")
-        assert(#get_paths("queries/nix/highlights.scm") == 2, "only one version of queries/nix/highlights.scm")
-
-        -- First found file is from build.extraFiles
-        assert(
-          get_paths("ftplugin/nix.vim")[1]:find("${lib.getName config.build.extraFiles}", 1, true),
-          "first found ftplugin/nix.vim isn't in build.extraFiles runtime path"
-        )
-        assert(
-          get_paths("queries/nix/highlights.scm")[1]:find("${lib.getName config.build.extraFiles}", 1, true),
-          "first found queries/nix/highlights.scm isn't in build.extraFiles runtime path"
-        )
-        assert(
-          get_paths("queries/nix/highlights.scm")[1]:find("${lib.getName config.build.extraFiles}", 1, true),
-          "first found queries/nix/highlights.scm isn't in build.extraFiles runtime path"
-        )
       '';
       assertions = [
         {
@@ -315,60 +361,53 @@ in
     {
       performance.combinePlugins = {
         enable = true;
-        standalonePlugins = with pkgs.vimPlugins; [
+        standalonePlugins = [
           # By plugin name
-          "nvim-treesitter"
-          # By package itself
-          nvim-lspconfig
-          # Its dependency, plenary-nvim, not in this list, so will be combined
-          none-ls-nvim
+          "simple-plugin-1"
+          # By package itself. Its dependency, simplePlugin2, not in this list, so will be combined
+          pluginWithDeps2
           # Dependency of other plugin
-          "nui.nvim"
+          "simple-plugin-3"
         ];
       };
-      extraPlugins = with pkgs.vimPlugins; [
-        nvim-treesitter
-        nvim-lspconfig
-        none-ls-nvim
-        # Only its dependency (nui-nvim) won't be combined, but not the plugin itself
-        noice-nvim
-        # More plugins
-        gitsigns-nvim
-        luasnip
+      extraPlugins = [
+        simplePlugin1
+        pluginWithDeps2
+        pluginWithDeps3
+        pluginWithExtraFiles
       ];
       extraConfigLuaPost = ''
-        -- Plugins are loadable
-        require("nvim-treesitter")
-        require("lspconfig")
-        require("null-ls")
-        require("plenary")
-        require("noice")
-        require("nui.popup")
-        require("gitsigns")
-        require("luasnip")
+        local tests = {
+          {"simple-plugin-1", true},
+          {"plugin-with-deps-2", true},
+          {"simple-plugin-2", false},
+          {"plugin-with-deps-3", false},
+          {"simple-plugin-3", true},
+          {"plugin-with-extra-files", false},
+        }
+        for _, test in ipairs(tests) do
+          local name = test[1]
+          local expected_standalone = test[2]
 
-        -- Verify if plugin is standalone or combined
-        local function is_standalone(name, dirname)
-          local paths = vim.api.nvim_get_runtime_file("lua/" .. name, true);
-          assert(#paths == 1, "more than one copy of " .. name .. " in runtime")
-          return paths[1]:match("^(.+)/lua/"):find(dirname or name, 1, true) ~= nil
+          -- Plugin is loadable
+          require(test[1])
+
+          local paths = vim.api.nvim_get_runtime_file("lua/" .. name, true)
+          -- Plugins shouldn't be duplicated
+          assert(#paths == 1, "expected exactly 1 copy of '" .. name .. "' in runtime, got ", #paths)
+          -- Test if plugin is standalone. This matches directory name before '/lua/'.
+          local is_standalone = paths[1]:match("^(.+)/lua/"):find(name, 1, true) ~= nil
+          local expected_text = expected_standalone and "standalone" or "combined"
+          assert(
+              is_standalone == expected_standalone,
+              "expected '" .. name .. "' to be " .. expected_text .. ", found path: " .. paths[1]
+          )
         end
-
-        -- Standalone plugins
-        assert(is_standalone("nvim-treesitter"), "nvim-treesitter is combined, expected standalone")
-        assert(is_standalone("lspconfig"), "nvim-lspconfig is combined, expected standalone")
-        assert(is_standalone("null-ls", "none-ls.nvim"), "none-ls-nvim is combined, expected standalone")
-        assert(is_standalone("nui"), "nui-nvim is combined, expected standalone")
-        -- Combined plugins
-        assert(not is_standalone("plenary"), "plenary-nvim is standalone, expected combined")
-        assert(not is_standalone("noice"), "noice-nvim is standalone, expected combined")
-        assert(not is_standalone("gitsigns"), "gitsigns-nvim is standalone, expected combined")
-        assert(not is_standalone("luasnip"), "luasnip is standalone, expected combined")
       '';
       assertions = [
         {
-          # plugin-pack, nvim-treesitter, nvim-lspconfig, none-ls-nvim, nui-nvim
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 5;
+          # plugin-pack, simplePlugin1, pluginWithDeps2, simplePlugin3
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 4;
           message = "Wrong number of plugins in packpathDirs";
         }
       ];
