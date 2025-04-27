@@ -27,6 +27,8 @@ lib.nixvim.plugins.mkVimPlugin {
     })
   ];
 
+  dependencies = [ "typst" ];
+
   extraOptions = {
     keymaps = {
       silent = mkOption {
@@ -40,8 +42,6 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraConfig = cfg: {
-    dependencies.typst.enable = lib.mkDefault true;
-
     keymaps =
       with cfg.keymaps;
       helpers.keymaps.mkKeymaps

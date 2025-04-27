@@ -1,8 +1,6 @@
 {
   lib,
   config,
-  pkgs,
-  options,
   ...
 }:
 with lib;
@@ -44,6 +42,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       packageName = "bat";
     })
   ];
+
+  dependencies = [ "bat" ];
 
   extraOptions = {
     keymaps = mkOption {
@@ -110,8 +110,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     extraConfigVim = mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
-
-    dependencies.bat.enable = lib.mkDefault true;
 
     keymaps = mapAttrsToList (
       key: mapping:

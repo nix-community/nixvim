@@ -7,14 +7,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.PoCo ];
 
+  dependencies = [ "curl" ];
+
   # Register nvim-cmp association
   imports = [
     { cmpSourcePlugins.supermaven = "supermaven"; }
   ];
-
-  extraConfig = {
-    dependencies.curl.enable = lib.mkDefault true;
-  };
 
   settingsExample = lib.literalExpression ''
     {

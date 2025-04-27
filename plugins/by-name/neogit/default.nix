@@ -84,6 +84,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
     "mappings"
   ];
 
+  dependencies = [
+    "git"
+    {
+      name = "which";
+      enable = hasInfix "which" (config.plugins.neogit.settings.commit_view.verify_commit.__raw or "");
+    }
+  ];
+
   settingsOptions = import ./settings-options.nix { inherit lib helpers; };
 
   settingsExample = {
@@ -132,15 +140,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "fzf-lua"
         ]
     );
-
-    dependencies = {
-      git.enable = lib.mkDefault true;
-
-      which.enable =
-        let
-          autoInstallWhich = hasInfix "which" (cfg.settings.commit_view.verify_commit.__raw or "");
-        in
-        lib.mkIf autoInstallWhich (lib.mkDefault true);
-    };
   };
 }

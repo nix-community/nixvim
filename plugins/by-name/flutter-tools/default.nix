@@ -10,6 +10,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  dependencies = [ "flutter" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -19,8 +21,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   extraConfig = cfg: {
-    dependencies.flutter.enable = lib.mkDefault true;
-
     warnings = lib.nixvim.mkWarnings "plugins.flutter-tools" {
       when =
         (cfg.settings ? debugger.enable)

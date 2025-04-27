@@ -12,6 +12,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "git" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -78,8 +80,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    dependencies.git.enable = lib.mkDefault true;
-
     plugins.pckr.luaConfig = {
       # Otherwise pckr can't find itself
       pre = ''

@@ -14,9 +14,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraConfig = {
-    dependencies.git.enable = lib.mkDefault true;
-  };
+  dependencies = [ "git" ];
 
   # TODO: Added 2024-12-16; remove after 25.05
   optionsRenamedToSettings = [

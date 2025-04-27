@@ -22,12 +22,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     })
   ];
 
-  extraConfig = cfg: {
-    dependencies = {
-      tinymist.enable = lib.mkDefault true;
-      websocat.enable = lib.mkDefault true;
-    };
+  dependencies = [
+    "tinymist"
+    "websocat"
+  ];
 
+  extraConfig = cfg: {
     plugins.typst-preview.settings = {
       # Disable automatic downloading of binary dependencies
       dependencies_bin = {

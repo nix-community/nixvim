@@ -17,9 +17,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     })
   ];
 
-  extraConfig = {
-    dependencies.yq.enable = lib.mkDefault true;
-  };
+  dependencies = [ "yq" ];
 
   settingsOptions = import ./settings-options.nix lib;
 

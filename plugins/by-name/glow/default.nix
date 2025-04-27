@@ -12,6 +12,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.getchoo ];
 
+  dependencies = [ "glow" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -81,9 +83,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
     height = 100;
     width_ratio = 0.7;
     height_ratio = 0.7;
-  };
-
-  extraConfig = {
-    dependencies.glow.enable = lib.mkDefault true;
   };
 }

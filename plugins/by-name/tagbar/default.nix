@@ -19,6 +19,8 @@ lib.nixvim.plugins.mkVimPlugin {
     })
   ];
 
+  dependencies = [ "ctags" ];
+
   settingsExample = {
     position = "right";
     autoclose = false;
@@ -34,9 +36,5 @@ lib.nixvim.plugins.mkVimPlugin {
       protected = "󱗤 ";
       private = "󰛑 ";
     };
-  };
-
-  extraConfig = {
-    dependencies.ctags.enable = lib.mkDefault true;
   };
 }

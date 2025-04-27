@@ -35,9 +35,7 @@ mkVimPlugin {
     })
   ];
 
-  extraConfig = {
-    dependencies.ledger.enable = lib.mkDefault true;
-  };
+  dependencies = [ "ledger" ];
 
   settingsOptions = {
     bin = helpers.mkNullOrStr ''

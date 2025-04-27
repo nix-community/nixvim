@@ -18,6 +18,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
     You are free to configure `dependencies.*.enable` and `dependencies.*.package` to disable or customize this behavior, respectively.
   '';
 
+  dependencies = [
+    "curl"
+    "gzip"
+    "coreutils"
+    "util-linux"
+    "codeium"
+  ];
+
   imports = [
     # Register nvim-cmp association
     { cmpSourcePlugins.codeium = "windsurf-nvim"; }
@@ -25,20 +33,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsExample = {
     enable_chat = true;
-  };
-
-  extraConfig = {
-    dependencies =
-      lib.genAttrs
-        [
-          "curl"
-          "gzip"
-          "coreutils"
-          "util-linux"
-          "codeium"
-        ]
-        (_: {
-          enable = lib.mkDefault true;
-        });
   };
 }

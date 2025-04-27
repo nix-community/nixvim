@@ -21,6 +21,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     See the [upstream docs](https://github.com/mikavilpas/yazi.nvim?tab=readme-ov-file#%EF%B8%8F-keybindings) for details.
   '';
 
+  dependencies = [ "yazi" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -28,10 +30,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       packageName = "yazi";
     })
   ];
-
-  extraConfig = {
-    dependencies.yazi.enable = lib.mkDefault true;
-  };
 
   settingsOptions = {
     log_level = defaultNullOpts.mkLogLevel' {

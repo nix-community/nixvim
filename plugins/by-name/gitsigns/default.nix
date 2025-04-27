@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 let
@@ -82,6 +81,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       })
     ];
 
+  dependencies = [ "git" ];
+
   settingsOptions = import ./settings-options.nix lib;
 
   settingsExample = {
@@ -111,7 +112,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
         You should maybe enable the `trouble` plugin.
       '';
     };
-
-    dependencies.git.enable = lib.mkDefault true;
   };
 }

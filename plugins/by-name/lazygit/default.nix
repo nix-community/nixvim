@@ -14,6 +14,11 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 
+  dependencies = [
+    "git"
+    "lazygit"
+  ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -79,13 +84,5 @@ lib.nixvim.plugins.mkVimPlugin {
     use_neovim_remote = 1;
     use_custom_config_file_path = 0;
     config_file_path = [ ];
-  };
-
-  extraConfig = cfg: {
-    dependencies = {
-      git.enable = lib.mkDefault true;
-      lazygit.enable = lib.mkDefault true;
-    };
-
   };
 }

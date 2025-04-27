@@ -12,6 +12,8 @@ mkExtension {
   extensionName = "live_grep_args";
   package = "telescope-live-grep-args-nvim";
 
+  dependencies = [ "ripgrep" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -66,9 +68,5 @@ mkExtension {
       };
     };
     theme = "dropdown";
-  };
-
-  extraConfig = {
-    dependencies.ripgrep.enable = lib.mkDefault true;
   };
 }

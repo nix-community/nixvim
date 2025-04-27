@@ -8,6 +8,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "cornelis" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -15,10 +17,6 @@ lib.nixvim.plugins.mkVimPlugin {
       packageName = "cornelis";
     })
   ];
-
-  extraConfig = {
-    dependencies.cornelis.enable = lib.mkDefault true;
-  };
 
   settingsOptions = {
     use_global_binary = defaultNullOpts.mkFlagInt 0 ''

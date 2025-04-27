@@ -9,6 +9,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "git" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -18,8 +20,4 @@ lib.nixvim.plugins.mkVimPlugin {
   ];
 
   # In typical tpope fashion, this plugin has no config options
-
-  extraConfig = {
-    dependencies.git.enable = lib.mkDefault true;
-  };
 }

@@ -13,6 +13,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "nodejs" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -21,10 +23,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       oldPackageName = "node";
     })
   ];
-
-  extraConfig = {
-    dependencies.nodejs.enable = lib.mkDefault true;
-  };
 
   settingsOptions = {
     gitlab_url = defaultNullOpts.mkStr "https://gitlab.com" ''

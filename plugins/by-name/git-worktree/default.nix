@@ -13,6 +13,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  dependencies = [ "git" ];
+
   # TODO: added 2025-04-06, remove after 25.05
   imports = [
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -69,8 +71,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Telescope support (enableTelescope) is enabled but the telescope plugin is not.
       '';
     };
-
-    dependencies.git.enable = lib.mkDefault true;
 
     plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "git_worktree" ];
 

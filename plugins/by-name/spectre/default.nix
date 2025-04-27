@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   helpers,
   ...
 }:
@@ -25,6 +26,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
       - If you want to override which package is installed by Nixvim, set the `dependencies.s[e]d.package` option.
     '')
   ];
+
+  dependencies =
+    let
+      defaults = config.plugins.spectre.settings.default;
+    in
+    [
+      {
+        name = "ripgrep";
+        enable = defaults.find.cmd == "rg";
+      }
+      {
+        name = "sed";
+        enable = defaults.replace.cmd == "sed";
+      }
+      {
+        name = "sd";
+        enable = defaults.replace.cmd == "sd";
+      }
+    ];
 
   settingsOptions =
     let
@@ -229,17 +249,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
         cmd = "sed";
       };
     };
-  };
-
-  extraConfig = cfg: {
-    dependencies =
-      let
-        defaults = cfg.settings.default;
-      in
-      {
-        ripgrep.enable = lib.mkIf (defaults.find.cmd == "rg") (lib.mkDefault true);
-        sed.enable = lib.mkIf (defaults.replace.cmd == "sed") (lib.mkDefault true);
-        sd.enable = lib.mkIf (defaults.replace.cmd == "sd") (lib.mkDefault true);
-      };
   };
 }

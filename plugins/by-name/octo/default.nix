@@ -13,6 +13,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.svl ];
 
+  dependencies = [ "gh" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -178,7 +180,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig =
     cfg:
     lib.mkMerge [
-      { dependencies.gh.enable = lib.mkDefault true; }
       (lib.mkIf (cfg.settings.picker == null || cfg.settings.picker == "telescope") {
         plugins.telescope.enable = lib.mkDefault true;
       })

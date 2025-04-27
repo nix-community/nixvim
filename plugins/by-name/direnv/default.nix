@@ -13,6 +13,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.alisonjenkins ];
 
+  dependencies = [ "direnv" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -42,9 +44,5 @@ lib.nixvim.plugins.mkVimPlugin {
     direnv_silent_load = defaultNullOpts.mkFlagInt 1 ''
       Stop echoing output from Direnv command.
     '';
-  };
-
-  extraConfig = {
-    dependencies.direnv.enable = lib.mkDefault true;
   };
 }

@@ -25,9 +25,7 @@ lib.nixvim.plugins.mkVimPlugin {
     })
   ];
 
-  extraConfig = {
-    dependencies.plantuml.enable = lib.mkDefault true;
-  };
+  dependencies = [ "plantuml" ];
 
   settingsOptions = {
     set_makeprg = defaultNullOpts.mkFlagInt 1 ''

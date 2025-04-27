@@ -6,9 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraConfig = {
-    dependencies.ripgrep.enable = lib.mkDefault true;
-  };
+  dependencies = [ "ripgrep" ];
 
   settingsExample = lib.literalExpression ''
     {

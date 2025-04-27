@@ -21,6 +21,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  dependencies = [ "ripgrep" ];
+
   imports = [
     # TODO: Added 2023-11-06, remove after 24.11
     (mkRemovedOptionModule [
@@ -431,8 +433,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
       }
     ];
-
-    dependencies.ripgrep.enable = lib.mkDefault true;
 
     keymaps = lib.pipe cfg.keymaps [
       (filterAttrs (n: keymap: keymap != null && keymap.key != null))

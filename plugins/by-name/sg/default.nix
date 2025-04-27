@@ -14,6 +14,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "nodejs" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -24,8 +26,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   extraConfig = {
-    dependencies.nodejs.enable = lib.mkDefault true;
-
     plugins.sg.settings.node_executable = lib.mkIf config.dependencies.nodejs.enable (
       lib.mkDefault (lib.getExe config.dependencies.nodejs.package)
     );

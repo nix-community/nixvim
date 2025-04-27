@@ -43,6 +43,8 @@ lib.nixvim.plugins.mkVimPlugin {
       })
     ];
 
+  dependencies = [ "git" ];
+
   extraOptions = {
     recommendedSettings = lib.mkOption {
       type = types.bool;
@@ -62,8 +64,6 @@ lib.nixvim.plugins.mkVimPlugin {
       updatetime = 100;
       foldtext = "gitgutter#fold#foldtext";
     };
-
-    dependencies.git.enable = lib.mkDefault true;
 
     extraPackages = [
       cfg.grepPackage

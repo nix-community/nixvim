@@ -33,6 +33,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     })
   ];
 
+  dependencies = [ "git" ];
+
   settingsOptions = {
     enabled = defaultNullOpts.mkBool true ''
       Enables the plugin on Neovim startup.
@@ -131,9 +133,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
     delay = 1000;
     virtual_text_column = 80;
     use_blame_commit_file_urls = true;
-  };
-
-  extraConfig = {
-    dependencies.git.enable = lib.mkDefault true;
   };
 }

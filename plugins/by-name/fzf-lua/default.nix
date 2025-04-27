@@ -36,6 +36,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   inherit settingsOptions settingsExample;
 
+  dependencies = [ "fzf" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -129,8 +131,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         {
           enable = lib.mkOverride 1490 true;
         };
-
-    dependencies.fzf.enable = lib.mkDefault true;
 
     plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
 

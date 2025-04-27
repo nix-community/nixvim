@@ -12,6 +12,8 @@ lib.nixvim.plugins.neovim.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  dependencies = [ "wezterm" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -28,9 +30,5 @@ lib.nixvim.plugins.neovim.mkNeovimPlugin {
 
   settingsExample = {
     create_commands = false;
-  };
-
-  extraConfig = {
-    dependencies.wezterm.enable = lib.mkDefault true;
   };
 }

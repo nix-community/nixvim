@@ -61,6 +61,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "searchBack"
         ];
 
+  dependencies = [ "curl" ];
+
   settingsOptions = {
     custom_dynamic_variables = lib.mkOption {
       type = with types; nullOr (maybeRaw (attrsOf strLuaFn));
@@ -301,8 +303,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins.rest.luaConfig.post = lib.mkIf cfg.enableTelescope ''require("telescope").load_extension("rest")'';
 
     globals.rest_nvim = cfg.settings;
-
-    dependencies.curl.enable = lib.mkDefault true;
 
     filetype = lib.mkIf cfg.enableHttpFiletypeAssociation {
       extension.http = "http";

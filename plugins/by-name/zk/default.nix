@@ -38,6 +38,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     })
   ];
 
+  dependencies = [ "zk" ];
+
   settingsOptions = {
     picker =
       helpers.defaultNullOpts.mkEnumFirstDefault
@@ -115,8 +117,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    dependencies.zk.enable = lib.mkDefault true;
-
     warnings = lib.nixvim.mkWarnings "plugins.zk" (
       mapAttrsToList
         (picker: pluginName: {

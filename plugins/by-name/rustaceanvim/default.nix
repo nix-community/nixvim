@@ -15,6 +15,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   deprecateExtraOptions = true;
   optionsRenamedToSettings = import ./renamed-options.nix;
 
+  dependencies = [ "rust-analyzer" ];
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -56,8 +57,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     cfg:
     mkMerge [
       {
-        dependencies.rust-analyzer.enable = lib.mkDefault true;
-
         globals.rustaceanvim = cfg.settings;
 
         assertions = lib.nixvim.mkAssertions "plugins.rustaceanvim" {

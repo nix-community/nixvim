@@ -13,6 +13,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  dependencies = [ "lean" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -182,10 +184,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         on_lines.__raw = "function(lines) vim.notify(lines) end";
       };
     };
-  };
-
-  extraConfig = {
-    dependencies.lean.enable = lib.mkDefault true;
   };
 
   # TODO: Deprecated in 2025-01-31

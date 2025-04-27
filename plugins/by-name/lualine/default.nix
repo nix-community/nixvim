@@ -52,6 +52,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       })
     ];
 
+  dependencies = [ "git" ];
+
   settingsOptions =
     let
       mkSeparatorsOption =
@@ -405,9 +407,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
         }
       ];
     };
-  };
-
-  extraConfig = {
-    dependencies.git.enable = lib.mkDefault true;
   };
 }

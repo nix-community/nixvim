@@ -13,6 +13,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.alisonjenkins ];
 
+  dependencies = [ "git" ];
+
   imports = [
     # TODO: added 2025-04-06, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -54,9 +56,5 @@ lib.nixvim.plugins.mkVimPlugin {
     status_window_min_height = defaultNullOpts.mkUnsignedInt 0 ''
       Minimum height of a status window.
     '';
-  };
-
-  extraConfig = cfg: {
-    dependencies.git.enable = lib.mkDefault true;
   };
 }

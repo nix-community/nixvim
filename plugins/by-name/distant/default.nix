@@ -17,6 +17,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   setup = ":setup";
 
+  dependencies = [ "distant" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -24,10 +26,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       packageName = "distant";
     })
   ];
-
-  extraConfig = {
-    dependencies.distant.enable = lib.mkDefault true;
-  };
 
   settingsOptions = {
     buffer = {

@@ -5,6 +5,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "tmux" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -12,10 +14,6 @@ lib.nixvim.plugins.mkVimPlugin {
       packageName = "tmux";
     })
   ];
-
-  extraConfig = {
-    dependencies.tmux.enable = lib.mkDefault true;
-  };
 
   settingsOptions = import ./settings-options.nix lib;
 

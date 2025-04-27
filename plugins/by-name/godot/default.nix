@@ -12,6 +12,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
+  dependencies = [ "godot" ];
+
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -28,9 +30,5 @@ lib.nixvim.plugins.mkVimPlugin {
 
   settingsExample = {
     executable = "godot";
-  };
-
-  extraConfig = {
-    dependencies.godot.enable = lib.mkDefault true;
   };
 }

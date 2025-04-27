@@ -9,12 +9,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  extraConfig = cfg: {
-    dependencies = {
-      curl.enable = lib.mkDefault true;
-      git.enable = lib.mkDefault true;
-    };
-  };
+  dependencies = [
+    "curl"
+    "git"
+  ];
 
   settingsExample = {
     stage.moveToNextHunkOnStagingToggle = true;

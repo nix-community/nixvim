@@ -11,6 +11,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
+  dependencies = [ "curl" ];
+
   # TODO: added 2025-04-06, remove after 25.05
   imports = [
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -18,8 +20,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       packageName = "curl";
     })
   ];
-
-  extraConfig = cfg: { dependencies.curl.enable = lib.mkDefault true; };
 
   settingsOptions = {
     api_key_cmd = helpers.defaultNullOpts.mkStr null ''

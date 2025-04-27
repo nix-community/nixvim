@@ -253,6 +253,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
       })
     ];
 
+  dependencies = lib.map (name: {
+    inherit name;
+    enable = !config.plugins.treesitter.nixGrammars;
+  }) buildGrammarDeps;
+
   settingsOptions = {
     auto_install = helpers.defaultNullOpts.mkBool false ''
       Whether to automatically install missing parsers when entering a buffer.
@@ -454,13 +459,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     # Install the grammar packages if enabled
     plugins.treesitter.packageDecorator = lib.mkIf cfg.nixGrammars (
       pkg: pkg.withPlugins (_: cfg.grammarPackages)
-    );
-
-    # These deps are required to build grammars when not using `nixGrammars`:
-    dependencies = lib.mkIf (!cfg.nixGrammars) (
-      lib.genAttrs buildGrammarDeps (_: {
-        enable = lib.mkDefault true;
-      })
     );
 
     warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
