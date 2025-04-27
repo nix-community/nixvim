@@ -58,11 +58,7 @@ mkExtension {
       }
     ];
 
-  extraConfig = cfg: {
-    dependencies = {
-      chafa.enable = lib.mkDefault true;
-    };
-  };
+  dependencies = [ "chafa" ];
 
   settingsOptions = {
     filetypes = defaultNullOpts.mkListOf types.str [

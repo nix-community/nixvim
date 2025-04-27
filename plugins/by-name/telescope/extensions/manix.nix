@@ -23,6 +23,8 @@ mkExtension {
     })
   ];
 
+  dependencies = [ "manix" ];
+
   settingsOptions = {
     manix_args = defaultNullOpts.mkListOf lib.types.str [ ] "CLI arguments to pass to manix.";
 
@@ -33,9 +35,5 @@ mkExtension {
 
   settingsExample = {
     cword = true;
-  };
-
-  extraConfig = {
-    dependencies.manix.enable = lib.mkDefault true;
   };
 }
