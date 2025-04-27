@@ -111,4 +111,18 @@
         };
       };
     };
+
+  enableDependencies = depsToEnable: {
+    dependencies =
+      let
+        enableDepConditionally = dep: {
+          name = dep.name or dep;
+          value.enable = lib.mkIf (dep.enable or true) (lib.mkDefault true);
+        };
+      in
+      lib.pipe depsToEnable [
+        (builtins.map enableDepConditionally)
+        lib.listToAttrs
+      ];
+  };
 }

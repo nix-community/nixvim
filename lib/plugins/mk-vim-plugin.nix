@@ -22,6 +22,8 @@
   # - An option will be used as-is, but should be built using `lib.mkPackageOption`
   # Defaults to `name`, i.e. `pkgs.vimPlugins.${name}`
   package ? name,
+  # Which dependencies to enable by default
+  dependencies ? [ ],
   settingsOptions ? { },
   settingsExample ? null,
   globalPrefix ? "",
@@ -78,6 +80,7 @@ let
               inherit extraConfig cfg opts;
             }
           ))
+          (lib.nixvim.plugins.utils.enableDependencies dependencies)
         ]
       );
     };
