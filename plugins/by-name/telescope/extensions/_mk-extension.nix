@@ -2,6 +2,7 @@
   name,
   package,
   extensionName ? name,
+  dependencies ? [ ],
   settingsOptions ? { },
   settingsExample ? null,
   extraOptions ? { },
@@ -57,14 +58,19 @@ let
         };
       } // extraOptions;
 
-      config = lib.mkIf cfg.enable {
-        extraPlugins = [ cfg.package ];
+      config = lib.mkIf cfg.enable (
+        lib.mkMerge [
+          {
+            extraPlugins = [ cfg.package ];
 
-        plugins.telescope = {
-          enabledExtensions = [ extensionName ];
-          settings.extensions.${extensionName} = cfg.settings;
-        };
-      };
+            plugins.telescope = {
+              enabledExtensions = [ extensionName ];
+              settings.extensions.${extensionName} = cfg.settings;
+            };
+          }
+          (lib.nixvim.plugins.utils.enableDependencies dependencies)
+        ]
+      );
     };
 
   extraConfigModule =
