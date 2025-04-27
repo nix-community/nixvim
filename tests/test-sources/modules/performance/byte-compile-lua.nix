@@ -248,8 +248,8 @@ in
 
       extraPlugins = with pkgs.vimPlugins; [
         nvim-lspconfig
-        # Depends on plenary-nvim
-        telescope-nvim
+        # Depends on nui-nvim
+        noice-nvim
         # buildCommand plugin with python3 dependency
         ((pkgs.writeTextDir "/plugin/test.lua" "vim.opt.tabstop = 2").overrideAttrs {
           passthru.python3Dependencies = ps: [ ps.pyyaml ];
@@ -263,8 +263,8 @@ in
 
         -- Plugins are loadable
         require("lspconfig")
-        require("telescope")
-        require("plenary")
+        require("noice")
+        require("nui.popup")
         require("nvim-treesitter")
 
         -- Python modules are importable
@@ -276,16 +276,13 @@ in
         test_rtp_file("plugin/lspconfig.lua", true)
         test_rtp_file("doc/lspconfig.txt", false)
 
-        -- telescope-nvim
-        test_rtp_file("lua/telescope/init.lua", true)
-        test_rtp_file("lua/telescope/builtin/init.lua", true)
-        test_rtp_file("plugin/telescope.lua", true)
-        test_rtp_file("autoload/health/telescope.vim", false)
-        test_rtp_file("doc/telescope.txt", false)
+        -- noice-nvim
+        test_rtp_file("lua/noice/init.lua", true)
+        test_rtp_file("lua/noice/config/init.lua", true)
+        test_rtp_file("doc/noice.nvim.txt", false)
 
-        -- Dependency of telescope-nvim (plenary-nvim)
-        test_rtp_file("lua/plenary/init.lua", true)
-        test_rtp_file("plugin/plenary.vim", false)
+        -- Dependency of noice-nvim (nui-nvim)
+        test_rtp_file("lua/nui/popup/init.lua", true)
 
         -- Test plugin
         test_rtp_file("plugin/test.lua", true)
