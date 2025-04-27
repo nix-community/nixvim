@@ -32,23 +32,23 @@
     plugins.web-devicons.enable = true;
   };
 
-  dependencies = {
-    plugins.telescope = {
-      enable = true;
-
-      extensions.media-files = {
+  withAllDependencies = {
+    plugins = {
+      telescope = {
         enable = true;
 
-        dependencies = {
-          chafa.enable = true;
-          imageMagick.enable = true;
-          ffmpegthumbnailer.enable = true;
-          pdftoppm.enable = true;
-          epub-thumbnailer.enable = pkgs.stdenv.isLinux;
-          fontpreview.enable = pkgs.stdenv.isLinux;
-        };
+        extensions.media-files.enable = true;
       };
+      web-devicons.enable = true;
     };
-    plugins.web-devicons.enable = true;
+
+    dependencies = {
+      chafa.enable = true;
+      epub-thumbnailer.enable = true;
+      ffmpegthumbnailer.enable = true;
+      fontpreview.enable = !pkgs.stdenv.hostPlatform.isDarwin;
+      imagemagick.enable = true;
+      poppler-utils.enable = true;
+    };
   };
 }

@@ -1,11 +1,10 @@
 {
   lib,
-  pkgs,
   ...
 }:
 with lib;
 let
-  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;
   mkExtension = import ./_mk-extension.nix;
 in
 mkExtension {
@@ -13,69 +12,56 @@ mkExtension {
   extensionName = "media_files";
   package = "telescope-media-files-nvim";
 
-  extraOptions = {
-    dependencies =
-      let
-        mkDepOption =
-          {
-            name,
-            desc,
-            package ? name,
-            enabledByDefault ? false,
-          }:
-          {
-            enable = mkOption {
-              type = types.bool;
-              default = enabledByDefault;
-              description = ''
-                Whether to install the ${name} dependency.
-                ${desc}
-              '';
-            };
-
-            package = mkPackageOption pkgs name { default = package; };
-          };
-      in
-      {
-        chafa = mkDepOption {
-          name = "chafa";
-          enabledByDefault = true;
-          desc = "Required for image support.";
-        };
-
-        imageMagick = mkDepOption {
-          name = "ImageMagick";
-          package = "imagemagick";
-          desc = "Required for svg previews.";
-        };
-
-        ffmpegthumbnailer = mkDepOption {
-          name = "ffmpegthumbnailer";
-          desc = "Required for video preview support.";
-        };
-
-        pdftoppm = mkDepOption {
-          name = "pdmtoppm";
-          package = "poppler_utils";
-          desc = "Required for pdf preview support.";
-        };
-
-        epub-thumbnailer = mkDepOption {
-          name = "epub-thumbnailer";
-          desc = "Required for epub preview support";
-        };
-
-        fontpreview = mkDepOption {
-          name = "fontpreview";
-          desc = "Required for font preview support.";
-        };
+  imports =
+    let
+      dependencies = {
+        chafa = "chafa";
+        imageMagick = "imagemagick";
+        ffmpegthumbnailer = "ffmpegthumbnailer";
+        pdftoppm = "poppler-utils";
+        epub-thumbnailer = "epub-thumbnailer";
+        fontpreview = "fontpreview";
       };
-  };
+
+      # TODO: Added 2025-04-27. Remove after 25.11
+      deprecations = lib.concatLists (
+        lib.mapAttrsToList (
+          oldName: newName:
+          mkSettingsRenamedOptionModules
+            [
+              "plugins"
+              "telescope"
+              "extensions"
+              "media-files"
+              "dependencies"
+              oldName
+            ]
+            [
+              "dependencies"
+              newName
+            ]
+            [ "enable" "package" ]
+        ) dependencies
+      );
+    in
+    deprecations
+    ++ [
+      {
+        __depPackages = {
+          chafa.default = "chafa";
+          epub-thumbnailer.default = "epub-thumbnailer";
+          ffmpegthumbnailer.default = "ffmpegthumbnailer";
+          fontpreview.default = "fontpreview";
+          imagemagick.default = "imagemagick";
+          poppler-utils.default = "poppler_utils";
+        };
+      }
+    ];
 
   extraConfig = cfg: {
-    extraPackages = flatten (
-      mapAttrsToList (name: { enable, package }: optional enable package) cfg.dependencies
-    );
+    dependencies = {
+      chafa.enable = lib.mkDefault true;
+    };
   };
 
   settingsOptions = {
