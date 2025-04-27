@@ -64,8 +64,6 @@ in
       extraPlugins = with pkgs.vimPlugins; [
         # Depends on nvim-cmp
         cmp-dictionary
-        # We have to manually add cmp-dictionary's dependence: nvim-cmp
-        nvim-cmp
         # Depends on telescope-nvim which itself depends on plenary-nvim
         telescope-undo-nvim
       ];
@@ -334,8 +332,6 @@ in
         telescope-nvim
         # Only its dependency (nvim-cmp) won't be combined, but not the plugin itself
         cmp-dictionary
-        # We have to manually add cmp-dictionary's dependence: nvim-cmp
-        nvim-cmp
         # More plugins
         gitsigns-nvim
         luasnip
