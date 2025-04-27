@@ -69,6 +69,17 @@ let
   pluginWithPyDeps3 = mkPlugin "plugin-with-py-deps-3" {
     passthru.python3Dependencies = ps: [ ps.requests ];
   };
+  # Plugins with Lua dependencies
+  ensureDep =
+    drv: dep:
+    drv.overrideAttrs (prev: {
+      propagatedBuildInputs = lib.unique (
+        prev.propagatedBuildInputs or [ ] ++ [ prev.passthru.lua.pkgs.${dep} ]
+      );
+    });
+  pluginWithLuaDeps1 = ensureDep pkgs.vimPlugins.telescope-nvim "plenary-nvim";
+  pluginWithLuaDeps2 = ensureDep pkgs.vimPlugins.nvim-cmp "plenary-nvim";
+  pluginWithLuaDeps3 = ensureDep pkgs.vimPlugins.gitsigns-nvim "nui-nvim";
 in
 {
   # Test basic functionality
@@ -213,6 +224,35 @@ in
         -- Python modules are importable
         vim.cmd.py3("import yaml")
         vim.cmd.py3("import requests")
+      '';
+      assertions = [
+        {
+          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
+          message = "More than one plugin is defined in packpathDirs.";
+        }
+      ];
+    };
+
+  # Test that plugin lua dependencies are handled
+  lua-dependencies =
+    { config, ... }:
+    {
+      performance.combinePlugins.enable = true;
+      extraPlugins = [
+        simplePlugin1
+        # Duplicated plenary-nvim dependency
+        pluginWithLuaDeps1
+        pluginWithLuaDeps2
+        # nui-nvim dependency
+        pluginWithLuaDeps3
+      ];
+      extraConfigLuaPost = ''
+        -- All packages and its dependencies are importable
+        require("telescope")
+        require("plenary")
+        require("cmp")
+        require("gitsigns")
+        require("nui.popup")
       '';
       assertions = [
         {

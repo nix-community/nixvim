@@ -28,24 +28,38 @@ let
       (builtins.concatMap (f: f ps))
     ];
 
-  # Combined plugin
-  combinedPlugin = pkgs.vimUtils.toVimPlugin (
-    pkgs.buildEnv {
-      name = "plugin-pack";
-      paths = overriddenPlugins;
-      inherit pathsToLink;
+  # propagatedBuildInputs contain lua dependencies
+  propagatedBuildInputs = lib.pipe pluginsToCombine [
+    (builtins.catAttrs "plugin")
+    (builtins.catAttrs "propagatedBuildInputs")
+    builtins.concatLists
+    lib.unique
+  ];
 
-      # Remove empty directories and activate vimGenDocHook
-      # TODO: figure out why we are running the `preFixup` hook in `postBuild`
-      postBuild = ''
-        find $out -type d -empty -delete
-        runHook preFixup
-      '';
-      passthru = {
-        inherit python3Dependencies;
-      };
-    }
-  );
+  # Combined plugin
+  combinedPlugin =
+    lib.pipe
+      {
+        name = "plugin-pack";
+        paths = overriddenPlugins;
+        inherit pathsToLink;
+
+        # buildEnv uses runCommand under the hood. runCommand doesn't run any build phases.
+        # To run custom commands buildEnv takes postBuild argument.
+        # fixupPhase is used for propagating build inputs and to trigger vimGenDocHook
+        postBuild = ''
+          find $out -type d -empty -delete
+          fixupPhase
+        '';
+        passthru = {
+          inherit python3Dependencies;
+        };
+      }
+      [
+        pkgs.buildEnv
+        pkgs.vimUtils.toVimPlugin
+        (drv: drv.overrideAttrs { inherit propagatedBuildInputs; })
+      ];
 
   # Combined plugin configs
   combinedConfig = lib.pipe pluginsToCombine [
