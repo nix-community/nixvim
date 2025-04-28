@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  options,
   ...
 }:
 let
@@ -29,7 +30,9 @@ in
         LSP servers to enable and/or configure.
 
         This option is implemented using neovim's `vim.lsp` lua API.
-        If you prefer to use [nvim-lspconfig], see [`plugins.lspconfig`].
+
+        You may also want to use [nvim-lspconfig] to install _default configs_ for many language servers.
+        This can be installed using [`${options.plugins.lspconfig.enable}`][`plugins.lspconfig`].
 
         [nvim-lspconfig]: https://github.com/neovim/nvim-lspconfig
         [`plugins.lspconfig`]: https://nix-community.github.io/nixvim/plugins/lspconfig/index.html
