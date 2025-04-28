@@ -4,6 +4,7 @@
 # using this in a submodule nested within another nixvim config.
 {
   imports = [
+    ./lsp
     ./misc
     ./autocmd.nix
     ./clipboard.nix
@@ -18,7 +19,6 @@
     ./highlights.nix
     ./keymaps.nix
     ./lazyload.nix
-    ./lsp.nix
     ./lua-loader.nix
     ./opts.nix
     ./output.nix
