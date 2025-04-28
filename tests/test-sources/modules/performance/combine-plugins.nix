@@ -2,10 +2,24 @@
 let
   inherit (pkgs) lib;
 
-  # Count plugins of given type excluding 'build.extraFiles'
-  pluginCount =
-    pkg: files: type:
-    builtins.length (builtins.filter (p: p != files) pkg.packpathDirs.myNeovimPackages.${type});
+  # Assertion for a number of plugins of given type defined in nvimPackage.packpathDirs
+  expectNPlugins =
+    config: type: n:
+    let
+      # 'build.extraFiles' must not be combined, so exclude it from counting
+      plugins = builtins.filter (
+        p: p != config.build.extraFiles
+      ) config.build.nvimPackage.packpathDirs.myNeovimPackages.${type};
+      numPlugins = builtins.length plugins;
+    in
+    {
+      assertion = numPlugins == n;
+      message = "Expected ${toString n} '${type}' plugins defined in 'nvimPackage.packpathDirs', got ${toString numPlugins}: ${
+        lib.concatMapStringsSep ", " lib.getName plugins
+      }.";
+    };
+  # Assertion that exactly one start plugin is defined in nvimPackage.packpathDirs
+  expectOneStartPlugin = config: expectNPlugins config "start" 1;
 
   # Stub plugins
   mkPlugin =
@@ -111,10 +125,7 @@ in
           assert(vim.fn.getcompletion("${name}", "help")[1], "no help tags for '${name}'")
         '') (map lib.getName extraPlugins);
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one plugin is defined in packpathDirs, expected one plugin pack.";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -141,10 +152,7 @@ in
           end), "plugin '${name}' isn't found in runtime as a separate entry, expected not to be combined")
         '') (map lib.getName extraPlugins);
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" >= 2;
-          message = "Only one plugin is defined in packpathDirs, expected at least two.";
-        }
+        (expectNPlugins config "start" (builtins.length extraPlugins))
       ];
     };
 
@@ -175,10 +183,7 @@ in
         require("simple-plugin-3")
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one plugin is defined in packpathDirs.";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -199,10 +204,7 @@ in
         )
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one plugin is defined in packpathDirs.";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -226,10 +228,7 @@ in
         vim.cmd.py3("import requests")
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one plugin is defined in packpathDirs.";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -255,10 +254,7 @@ in
         require("nui.popup")
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one plugin is defined in packpathDirs.";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -307,14 +303,9 @@ in
         assert(num_plugins == 1, "expected 1 copy of simplePlugin1, got " .. num_plugins)
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one start plugin is defined in packpathDirs";
-        }
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "opt" == 2;
-          message = "Less than two opt plugins are defined in packpathDirs";
-        }
+        (expectOneStartPlugin config)
+        # simplePlugin3 pluginWithDeps1
+        (expectNPlugins config "opt" 2)
       ];
     };
 
@@ -344,10 +335,7 @@ in
         assert(vim.g.simple_plugin_3 == 1, "simplePlugin3's config isn't evaluated")
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one start plugin is defined in packpathDirs";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -388,10 +376,7 @@ in
         end
       '';
       assertions = [
-        {
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 1;
-          message = "More than one start plugin is defined in packpathDirs";
-        }
+        (expectOneStartPlugin config)
       ];
     };
 
@@ -445,11 +430,8 @@ in
         end
       '';
       assertions = [
-        {
-          # plugin-pack, simplePlugin1, pluginWithDeps2, simplePlugin3
-          assertion = pluginCount config.build.nvimPackage config.build.extraFiles "start" == 4;
-          message = "Wrong number of plugins in packpathDirs";
-        }
+        # plugin-pack, simplePlugin1, pluginWithDeps2, simplePlugin3
+        (expectNPlugins config "start" 4)
       ];
     };
 
