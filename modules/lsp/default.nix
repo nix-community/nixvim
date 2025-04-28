@@ -35,7 +35,7 @@ in
         This can be installed using [`${options.plugins.lspconfig.enable}`][`plugins.lspconfig`].
 
         [nvim-lspconfig]: ${options.plugins.lspconfig.package.default.meta.homepage}
-        [`plugins.lspconfig`]: https://nix-community.github.io/nixvim/plugins/lspconfig/index.html
+        [`plugins.lspconfig`]: ../plugins/lspconfig/index.md
       '';
       default = { };
       example = {
