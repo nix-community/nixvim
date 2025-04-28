@@ -29,10 +29,10 @@ in
         LSP servers to enable and/or configure.
 
         This option is implemented using neovim's `vim.lsp` lua API.
-        If you prefer to use [nvim-lspconfig], see [`plugins.lsp`].
+        If you prefer to use [nvim-lspconfig], see [`plugins.lspconfig`].
 
         [nvim-lspconfig]: https://github.com/neovim/nvim-lspconfig
-        [`plugins.lsp`]: https://nix-community.github.io/nixvim/plugins/lsp/index.html
+        [`plugins.lspconfig`]: https://nix-community.github.io/nixvim/plugins/lspconfig/index.html
       '';
       default = { };
       example = {
