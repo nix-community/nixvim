@@ -34,7 +34,7 @@ in
         You may also want to use [nvim-lspconfig] to install _default configs_ for many language servers.
         This can be installed using [`${options.plugins.lspconfig.enable}`][`plugins.lspconfig`].
 
-        [nvim-lspconfig]: https://github.com/neovim/nvim-lspconfig
+        [nvim-lspconfig]: ${options.plugins.lspconfig.package.default.meta.homepage}
         [`plugins.lspconfig`]: https://nix-community.github.io/nixvim/plugins/lspconfig/index.html
       '';
       default = { };
