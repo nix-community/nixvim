@@ -399,7 +399,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '') cfg.filetypeExtend;
     in
     {
-      extraLuaPackages = ps: [ ps.jsregexp ];
       plugins.luasnip.luaConfig.content = lib.concatLines (loaderConfig ++ filetypeExtendConfig);
     };
 }
