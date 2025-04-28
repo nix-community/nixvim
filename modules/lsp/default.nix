@@ -66,31 +66,32 @@ in
 
   config =
     let
-      enabledServers = lib.filterAttrs (_: v: v.enable) cfg.servers;
+      enabledServers = lib.pipe cfg.servers [
+        builtins.attrValues
+        (builtins.filter (server: server.enable))
+      ];
     in
     {
-      extraPackages = lib.pipe enabledServers [
-        builtins.attrValues
-        (builtins.catAttrs "package")
-      ];
+      extraPackages = builtins.catAttrs "package" enabledServers;
 
       lsp.luaConfig.content =
         let
           mkServerConfig =
-            name: props:
+            server:
             let
-              luaName = toLuaObject name;
+              luaName = toLuaObject server.name;
+              luaCfg = toLuaObject server.config;
             in
             ''
-              vim.lsp.config(${luaName}, ${toLuaObject props.config})
+              vim.lsp.config(${luaName}, ${luaCfg})
             ''
-            + lib.optionalString props.activate ''
+            + lib.optionalString server.activate ''
               vim.lsp.enable(${luaName})
             '';
         in
         lib.mkMerge (
           lib.optional cfg.inlayHints.enable "vim.lsp.inlay_hint.enable(true)"
-          ++ lib.mapAttrsToList mkServerConfig enabledServers
+          ++ builtins.map mkServerConfig enabledServers
         );
 
       extraConfigLua = lib.mkIf (cfg.luaConfig.content != "") ''

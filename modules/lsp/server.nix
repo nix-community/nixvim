@@ -1,10 +1,19 @@
-{ lib, ... }:
+{ lib, name, ... }:
 let
   inherit (lib) types;
 in
 {
   options = {
     enable = lib.mkEnableOption "the language server";
+
+    name = lib.mkOption {
+      type = types.maybeRaw types.str;
+      description = ''
+        The name of the language server, supplied to functions like `vim.lsp.enable()`.
+      '';
+      default = name;
+      defaultText = lib.literalMD "the attribute name";
+    };
 
     activate = lib.mkOption {
       type = types.bool;
