@@ -17,6 +17,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = with lib.maintainers; [
     GaetanLepage
+    HeitorAugustoLN
     MattSturgeon
     khaneliman
     traxys
