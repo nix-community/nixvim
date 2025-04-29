@@ -1230,7 +1230,7 @@
   };
   "rust-analyzer.imports.group.enable" = {
     description = ''
-      Group inserted imports by the [following order](https://rust-analyzer.github.io/manual.html#auto-import). Groups are separated by newlines.
+      Group inserted imports by the [following order](https://rust-analyzer.github.io/book/features.html#auto-import). Groups are separated by newlines.
     '';
     pluginDefault = true;
     type = {
@@ -2238,9 +2238,11 @@
 
       Similarly, the JSON representation of `DiscoverArgument::Buildfile` is:
 
-          {
-                  "buildfile": "BUILD"
-          }
+      ``` json
+      {
+              "buildfile": "BUILD"
+      }
+      ```
 
       `DiscoverArgument::Path` is used to find and generate a
       `rust-project.json`, and therefore, a workspace, whereas

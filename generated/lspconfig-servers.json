@@ -1321,8 +1321,8 @@
     "name": "rome"
   },
   {
-    "cmd": ["python3", "-mrpm_lsp_server", "--stdio"],
-    "desc": "https://github.com/dcermak/rpm-spec-language-server\n\nLanguage server protocol (LSP) support for RPM Spec files.\n",
+    "cmd": ["rpm_lsp_server", "--stdio"],
+    "desc": "https://github.com/dcermak/rpm-spec-language-server\n\nLanguage server protocol (LSP) support for RPM Spec files.\n\n`rpm-spec-language-server` can be installed by running,\n\n```sh\npip install rpm-spec-language-server\n```\n",
     "name": "rpmspec"
   },
   {
@@ -1492,7 +1492,7 @@
   },
   {
     "cmd": ["sqls"],
-    "desc": "https://github.com/sqls-server/sqls\n\n```lua\nrequire'lspconfig'.sqls.setup{\n  cmd = {\"path/to/command\", \"-config\", \"path/to/config.yml\"};\n  ...\n}\n```\nSqls can be installed via `go get github.com/sqls-server/sqls`. Instructions for compiling Sqls from the source can be found at [sqls-server/sqls](https://github.com/sqls-server/sqls).\n\n    ",
+    "desc": "https://github.com/sqls-server/sqls\n\n```lua\nrequire'lspconfig'.sqls.setup{\n  cmd = {\"path/to/command\", \"-config\", \"path/to/config.yml\"};\n  ...\n}\n```\nSqls can be installed via `go install github.com/sqls-server/sqls@latest`. Instructions for compiling Sqls from the source can be found at [sqls-server/sqls](https://github.com/sqls-server/sqls).\n\n    ",
     "name": "sqls"
   },
   {
