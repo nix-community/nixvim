@@ -35,7 +35,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     > setup that relate to neovim's builtin LSP and are now being moved to the
     > new [`lsp`] module.
 
-    [`lsp`]: ../../lsp/servers.md
+    [`lsp`]: ../../lsp/servers/index.md
     [`plugins.lsp`]: ../lsp/index.md
     [nvim-lspconfig]: ${opts.package.default.meta.homepage}
   '';
