@@ -57,17 +57,19 @@ let
     }).config.home-files;
 in
 pkgs.runCommand "home-manager-extra-files-byte-compiling" { } ''
-  is_binary() {
-      ! grep -qI . "$1"
+  is_byte_compiled() {
+      # LuaJIT bytecode header is: ESC L J version
+      # https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/lj_bcdump.h
+      [[ $(head -c3 "$1") = $'\x1bLJ' ]]
   }
   test_byte_compiled() {
-      if ! is_binary "$home_files/.config/nvim/$1"; then
+      if ! is_byte_compiled "$home_files/.config/nvim/$1"; then
           echo "File $1 is expected to be byte compiled, but it's not"
           exit 1
       fi
   }
   test_not_byte_compiled() {
-      if is_binary "$home_files/.config/nvim/$1"; then
+      if is_byte_compiled "$home_files/.config/nvim/$1"; then
           echo "File $1 is not expected to be byte compiled, but it is"
           exit 1
       fi

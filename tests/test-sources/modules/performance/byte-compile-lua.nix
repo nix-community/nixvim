@@ -1,27 +1,27 @@
 { pkgs, ... }:
 let
-  isByteCompiledFun = ''
-    local function is_byte_compiled(filename)
-      local f = assert(io.open(filename, "rb"))
-      local data = assert(f:read("*a"))
-      -- Assume that file is binary if it contains null bytes
-      for i = 1, #data do
-        if data:byte(i) == 0 then
-          return true
+  isByteCompiledFun = # lua
+    ''
+      -- LuaJIT bytecode header is: ESC L J version
+      -- https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/lj_bcdump.h
+      -- We are comparing the first three bytes of the file (until version)
+      local expected_header = string.char(0x1b, 0x4c, 0x4a)
+      local function is_byte_compiled(filename)
+        local f = assert(io.open(filename, "rb"))
+        local data = assert(f:read(3))
+        f:close()
+        return data == expected_header
+      end
+
+      local function test_rtp_file(name, is_compiled)
+        local file = assert(vim.api.nvim_get_runtime_file(name, false)[1], "file " .. name .. " not found in runtime")
+        if is_compiled then
+          assert(is_byte_compiled(file), name .. " is expected to be byte compiled, but it's not")
+        else
+          assert(not is_byte_compiled(file), name .. " is not expected to be byte compiled, but it is")
         end
       end
-      return false
-    end
-
-    local function test_rtp_file(name, is_compiled)
-      local file = assert(vim.api.nvim_get_runtime_file(name, false)[1], "file " .. name .. " not found in runtime")
-      if is_compiled then
-        assert(is_byte_compiled(file), name .. " is expected to be byte compiled, but it's not")
-      else
-        assert(not is_byte_compiled(file), name .. " is not expected to be byte compiled, but it is")
-      end
-    end
-  '';
+    '';
 in
 {
   default =
