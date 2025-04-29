@@ -24,7 +24,19 @@ let
 
   removeUnwanted =
     attrs:
-    builtins.removeAttrs attrs [
+    # FIXME: We incorrectly remove _freeformOptions here.
+    #
+    # However we can't fix the bug because we derive page names from attrnames;
+    # the correct behaviour would be to ignore attrnames and use option locs.
+    #
+    # As a workaround, merge the freeform options at the top of these attrs,
+    # however this can run into name conflicts 😢
+    #
+    # We should move this workaround to where we decide the page name and
+    # whether to nest into a sub-page, so that we can keep the original
+    # _freeformOptions attr as intended.
+    attrs._freeformOptions or { }
+    // builtins.removeAttrs attrs [
       "_module"
       "_freeformOptions"
       "warnings"
