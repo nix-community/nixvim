@@ -216,7 +216,10 @@ let
       name: opts:
       let
         isBranch = if (lib.hasSuffix "index" opts.index.path) then true else opts.hasComponents;
-        path = if isBranch then "${opts.index.path}/index.md" else "${opts.index.path}.md";
+        # Ensure `path` is escaped because we use it in a shell script
+        path = lib.strings.escapeShellArg (
+          if isBranch then "${opts.index.path}/index.md" else "${opts.index.path}.md"
+        );
       in
       (lib.optionalString isBranch "mkdir -p ${opts.index.path}\n")
       + (
