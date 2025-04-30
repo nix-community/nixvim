@@ -45,10 +45,6 @@ let
           "ruff_lsp"
           "bufls"
           "typst_lsp"
-
-          # 2025-04-29: oelint-adv is broken
-          # TODO: re-enable when https://github.com/NixOS/nixpkgs/pull/402760 lands
-          "bitbake_language_server"
         ]
         ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
           # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
