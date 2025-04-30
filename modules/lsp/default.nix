@@ -179,16 +179,14 @@ in
               luaName = toLuaObject server.name;
               luaSettings = toLuaObject server.settings;
             in
-            ''
-              vim.lsp.config(${luaName}, ${luaSettings})
-            ''
-            + lib.optionalString (server.activate or false) ''
-              vim.lsp.enable(${luaName})
-            '';
+            [
+              (lib.mkIf (server.settings != { }) "vim.lsp.config(${luaName}, ${luaSettings})")
+              (lib.mkIf (server.activate or false) "vim.lsp.enable(${luaName})")
+            ];
         in
         lib.mkMerge (
           lib.optional cfg.inlayHints.enable "vim.lsp.inlay_hint.enable(true)"
-          ++ builtins.map mkServerConfig enabledServers
+          ++ builtins.concatMap mkServerConfig enabledServers
         );
 
       extraConfigLua = lib.mkIf (cfg.luaConfig.content != "") ''
