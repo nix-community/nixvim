@@ -93,6 +93,8 @@ in
             type = types.submodule (
               lib.modules.importApply ./server-base.nix {
                 displayName = "all servers";
+                enable.name = "the `*` server config";
+                enable.default = true;
                 settings.extraDescription = ''
                   Will be merged by neovim using the behaviour of [`vim.tbl_deep_extend()`](https://neovim.io/doc/user/lua.html#vim.tbl_deep_extend()).
                 '';
@@ -123,13 +125,10 @@ in
       '';
       default = { };
       example = {
-        "*" = {
-          enable = true;
-          settings = {
-            root_markers = [ ".git" ];
-            capabilities.textDocument.semanticTokens = {
-              multilineTokenSupport = true;
-            };
+        "*".settings = {
+          root_markers = [ ".git" ];
+          capabilities.textDocument.semanticTokens = {
+            multilineTokenSupport = true;
           };
         };
         luals.enable = true;

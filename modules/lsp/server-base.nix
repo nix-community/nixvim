@@ -2,6 +2,7 @@
 {
   displayName ? "the language server",
   settings ? null,
+  enable ? null,
 }:
 { lib, ... }:
 let
@@ -9,7 +10,12 @@ let
 in
 {
   options = {
-    enable = lib.mkEnableOption displayName;
+    enable = lib.mkOption rec {
+      type = types.bool;
+      description = "Whether to enable ${enable.name or displayName}. ${enable.extraDescription or ""}";
+      default = enable.default or false;
+      example = enable.example or (!default);
+    };
 
     settings = lib.mkOption {
       type = with types; attrsOf anything;

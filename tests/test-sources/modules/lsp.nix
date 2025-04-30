@@ -1,14 +1,11 @@
 {
   example = {
     lsp.servers = {
-      "*" = {
+      "*".settings = {
         enable = true;
-        settings = {
-          enable = true;
-          root_markers = [ ".git" ];
-          capabilities.textDocument.semanticTokens = {
-            multilineTokenSupport = true;
-          };
+        root_markers = [ ".git" ];
+        capabilities.textDocument.semanticTokens = {
+          multilineTokenSupport = true;
         };
       };
       luals.enable = true;
