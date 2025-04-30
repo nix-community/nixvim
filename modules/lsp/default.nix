@@ -93,10 +93,13 @@ in
       '';
       default = { };
       example = {
-        "*".settings = {
-          root_markers = [ ".git" ];
-          capabilities.textDocument.semanticTokens = {
-            multilineTokenSupport = true;
+        "*" = {
+          enable = true;
+          settings = {
+            root_markers = [ ".git" ];
+            capabilities.textDocument.semanticTokens = {
+              multilineTokenSupport = true;
+            };
           };
         };
         luals.enable = true;
