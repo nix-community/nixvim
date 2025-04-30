@@ -5,7 +5,12 @@
   settings ? null,
   pkgs ? { },
 }@args:
-{ lib, name, ... }:
+{
+  lib,
+  name,
+  config,
+  ...
+}:
 let
   inherit (lib) types;
   displayName = args.name or "the language server";
@@ -31,7 +36,10 @@ in
       description = ''
         Whether to call `vim.lsp.enable()` for ${displayName}.
       '';
-      default = true;
+      default = config.name != "*";
+      defaultText = lib.literalMD ''
+        `true`, unless the server's `name` is `*`
+      '';
       example = false;
     };
 
