@@ -1,7 +1,7 @@
 {
   example = {
     lsp.servers = {
-      "*".config = {
+      "*".settings = {
         root_markers = [ ".git" ];
         capabilities.textDocument.semanticTokens = {
           multilineTokenSupport = true;
@@ -10,7 +10,7 @@
       luals.enable = true;
       clangd = {
         enable = true;
-        config = {
+        settings = {
           cmd = [
             "clangd"
             "--background-index"

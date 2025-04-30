@@ -93,7 +93,7 @@ in
       '';
       default = { };
       example = {
-        "*".config = {
+        "*".settings = {
           root_markers = [ ".git" ];
           capabilities.textDocument.semanticTokens = {
             multilineTokenSupport = true;
@@ -102,7 +102,7 @@ in
         luals.enable = true;
         clangd = {
           enable = true;
-          config = {
+          settings = {
             cmd = [
               "clangd"
               "--background-index"
@@ -127,6 +127,13 @@ in
         builtins.attrValues
         (builtins.filter (server: server.enable))
       ];
+
+      # Collect per-server warnings
+      serverWarnings = lib.pipe cfg.servers [
+        builtins.attrValues
+        (builtins.catAttrs "warnings")
+        builtins.concatLists
+      ];
     in
     {
       extraPackages = builtins.catAttrs "package" enabledServers;
@@ -137,10 +144,10 @@ in
             server:
             let
               luaName = toLuaObject server.name;
-              luaCfg = toLuaObject server.config;
+              luaSettings = toLuaObject server.settings;
             in
             ''
-              vim.lsp.config(${luaName}, ${luaCfg})
+              vim.lsp.config(${luaName}, ${luaSettings})
             ''
             + lib.optionalString server.activate ''
               vim.lsp.enable(${luaName})
@@ -158,5 +165,8 @@ in
         end
         -- }}}
       '';
+
+      # Propagate per-server warnings
+      warnings = lib.mkIf (serverWarnings != [ ]) serverWarnings;
     };
 }
