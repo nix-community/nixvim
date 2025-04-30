@@ -75,10 +75,40 @@ in
     };
 
     servers = lib.mkOption {
-      type = types.submodule {
-        freeformType = types.attrsOf (mkServerType { });
-        options = builtins.mapAttrs mkServerOption serverPackages;
-      };
+      type = types.submodule [
+        {
+          freeformType = types.attrsOf (mkServerType { });
+        }
+        {
+          options = builtins.mapAttrs mkServerOption serverPackages;
+        }
+        {
+          # `*` is effectively a meta server, where shared config & defaults can be set.
+          # It shouldn't have options like `activate` or `package` which relate to "real" servers.
+          # Therefore, we'll use `server-base.nix` directly, instead of the full `server.nix` module.
+          options."*" = lib.mkOption {
+            description = ''
+              Global configuration applied to all language servers.
+            '';
+            type = types.submodule (
+              lib.modules.importApply ./server-base.nix {
+                displayName = "all servers";
+                settings.extraDescription = ''
+                  Will be merged by neovim using the behaviour of [`vim.tbl_deep_extend()`](https://neovim.io/doc/user/lua.html#vim.tbl_deep_extend()).
+                '';
+                settings.example = {
+                  root_markers = [ ".git" ];
+                  capabilities.textDocument.semanticTokens = {
+                    multilineTokenSupport = true;
+                  };
+                };
+              }
+            );
+            apply = value: value // { name = "*"; };
+            default = { };
+          };
+        }
+      ];
 
       description = ''
         LSP servers to enable and/or configure.
@@ -152,7 +182,7 @@ in
             ''
               vim.lsp.config(${luaName}, ${luaSettings})
             ''
-            + lib.optionalString server.activate ''
+            + lib.optionalString (server.activate or false) ''
               vim.lsp.enable(${luaName})
             '';
         in
