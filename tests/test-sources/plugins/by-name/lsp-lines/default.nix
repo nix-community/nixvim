@@ -6,7 +6,7 @@
   example = {
     plugins.lsp-lines.enable = true;
 
-    diagnostic.config.virtual_lines = {
+    diagnostic.settings.virtual_lines = {
       only_current_line = true;
       highlight_whole_line = false;
     };

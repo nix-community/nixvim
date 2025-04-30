@@ -25,7 +25,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ]
       [
         "diagnostic"
-        "config"
+        "settings"
         "virtual_lines"
         "only_current_line"
       ]
@@ -34,6 +34,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = {
     # Strongly recommended by the plugin, to avoid duplication.
-    diagnostic.config.virtual_text = mkDefault false;
+    diagnostic.settings.virtual_text = mkDefault false;
   };
 }
