@@ -145,3 +145,9 @@ description = "NixVim editor primarily for Java and Asciidoc"
 owner = "Yohh"
 repo = "nix-confix"
 description = "Nix config with nixvim and home-manager, inspired by some of the contributors in this list"
+
+[[config]]
+owner = "LudovicDeMatteis"
+title = ".dotfiles"
+url = "https://github.com/LudovicDeMatteis/.dotfiles/tree/master/modules/neovim"
+description = "NixVim with Home-manager"
