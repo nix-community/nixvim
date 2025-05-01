@@ -76,18 +76,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.clangd-extensions" {
-      when = !config.plugins.lsp.enable;
+      when = !(config.plugins.lsp.enable || config.lsp.servers.clangd.enable);
 
       message = ''
-        You have enabled `clangd-extensions` but not the lsp (`plugins.lsp`).
-        You should set `plugins.lsp.enable = true` to make use of the clangd-extensions' features.
+        You have enabled `clangd-extensions` but not the lsp (`plugins.lsp` or `lsp.servers.clangd`).
+        You should set `plugins.lsp.enable = true` or `lsp.servers.clangd.enable = true` to make use of the clangd-extensions' features.
       '';
+    };
+
+    lsp = {
+      servers.clangd = {
+        settings = lib.mkIf cfg.enableOffsetEncodingWorkaround {
+          capabilities = {
+            offsetEncoding = [ "utf-16" ];
+          };
+        };
+      };
     };
 
     plugins.lsp = {
       servers.clangd = {
         enable = lib.mkDefault true;
-
         extraOptions = lib.mkIf cfg.enableOffsetEncodingWorkaround {
           capabilities.__raw = ''
             vim.tbl_deep_extend(

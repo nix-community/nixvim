@@ -1,15 +1,16 @@
 {
   empty = {
+    lsp.servers.clangd.enable = true;
+
     plugins = {
-      lsp.enable = true;
       clangd-extensions.enable = true;
     };
   };
 
   default = {
-    plugins = {
-      lsp.enable = true;
+    lsp.servers.clangd.enable = true;
 
+    plugins = {
       clangd-extensions = {
         enable = true;
 
@@ -50,8 +51,9 @@
   };
 
   example = {
+    lsp.servers.clangd.enable = true;
+
     plugins = {
-      lsp.enable = true;
       clangd-extensions = {
         enable = true;
 
@@ -68,6 +70,13 @@
           };
         };
       };
+    };
+  };
+
+  emptyOld = {
+    plugins = {
+      lsp.enable = true;
+      clangd-extensions.enable = true;
     };
   };
 }
