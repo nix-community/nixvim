@@ -128,15 +128,22 @@ lib.nixvim.plugins.mkVimPlugin {
         message = "You have enabled the plugin, but neither `json` or `yaml` schemas are enabled.";
       }
       {
-        when = !(cfg.json.enable -> config.plugins.lsp.servers.jsonls.enable);
-        message = "You have enabled `json` schemas, but `plugins.lsp.servers.jsonls` is not enabled.";
+        when =
+          cfg.json.enable && !(config.plugins.lsp.servers.jsonls.enable || config.lsp.servers.jsonls.enable);
+        message = ''
+          You have enabled `json` schemas, but neither `plugins.lsp.servers.jsonls` nor `lsp.servers.jsonls` is enabled.
+        '';
       }
       {
-        when = !(cfg.yaml.enable -> config.plugins.lsp.servers.yamlls.enable);
-        message = "You have enabled `yaml` schemas, but `plugins.lsp.servers.yamlls` is not enabled.";
+        when =
+          cfg.yaml.enable && !(config.plugins.lsp.servers.yamlls.enable || config.lsp.servers.yamlls.enable);
+        message = ''
+          You have enabled `yaml` schemas, but neither `plugins.lsp.servers.yamlls` nor `lsp.servers.yamlls` is enabled.
+        '';
       }
     ];
 
+    # TODO: Remove once `plugins.lsp` is defunct.
     plugins.lsp.servers = {
       jsonls.settings = mkIf cfg.json.enable {
         schemas.__raw = ''
@@ -149,6 +156,33 @@ lib.nixvim.plugins.mkVimPlugin {
       };
 
       yamlls.settings = mkIf cfg.yaml.enable {
+        schemaStore = {
+          # From the README: "You must disable built-in schemaStore support if you want to use
+          # this plugin and its advanced options like `ignore`."
+          enable = mkDefault false;
+
+          # From the README: "Avoid TypeError: Cannot read properties of undefined (reading 'length')"
+          url = mkDefault "";
+        };
+
+        schemas.__raw = ''
+          require('schemastore').yaml.schemas(${lib.nixvim.toLuaObject cfg.yaml.settings})
+        '';
+      };
+    };
+
+    lsp.servers = {
+      jsonls.settings.settings = mkIf cfg.json.enable {
+        schemas.__raw = ''
+          require('schemastore').json.schemas(${lib.nixvim.toLuaObject cfg.json.settings})
+        '';
+
+        # The plugin recommends to enable this option in its README.
+        # Learn more: https://github.com/b0o/SchemaStore.nvim/issues/8
+        validate.enable = mkDefault true;
+      };
+
+      yamlls.settings.settings = mkIf cfg.yaml.enable {
         schemaStore = {
           # From the README: "You must disable built-in schemaStore support if you want to use
           # this plugin and its advanced options like `ignore`."
