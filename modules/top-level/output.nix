@@ -171,11 +171,18 @@ in
 
   config =
     let
+      # Optionally byte compile lua library
+      extraLuaPackages =
+        if config.performance.byteCompileLua.enable && config.performance.byteCompileLua.luaLib then
+          ps: map builders.byteCompileLuaDrv (config.extraLuaPackages ps)
+        else
+          config.extraLuaPackages;
+
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig (
         {
+          inherit extraLuaPackages;
           inherit (config)
             extraPython3Packages
-            extraLuaPackages
             viAlias
             vimAlias
             withRuby

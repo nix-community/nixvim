@@ -22,16 +22,29 @@ let
         end
       end
 
+      local function test_lualib_file(func, is_compiled)
+        -- Get the source of the func
+        local info = debug.getinfo(func, "S")
+        -- The source returned by debug.getinfo is prefixed with '@'
+        local file = info.source:sub(2)
+        assert(vim.uv.fs_stat(file))
+        if is_compiled then
+          assert(is_byte_compiled(file), file .. " is expected to be byte compiled, but it's not")
+        else
+          assert(not is_byte_compiled(file), file .. " is not expected to be byte compiled, but it is")
+        end
+      end
+
       local function assert_g_var(varname, filename)
-          assert(
-              vim.g[varname] == true or vim.g[varname] == 1,
-              string.format(
-                  "expected vim.g.%s to be truthy, got %s. File %s isn't executed?",
-                  varname,
-                  vim.g[varname],
-                  filename
-              )
+        assert(
+          vim.g[varname] == true or vim.g[varname] == 1,
+          string.format(
+            "expected vim.g.%s to be truthy, got %s. File %s isn't executed?",
+            varname,
+            vim.g[varname],
+            filename
           )
+        )
       end
     '';
 
@@ -130,6 +143,8 @@ in
 
       extraPlugins = [ stubDrvPlugin ];
 
+      extraLuaPackages = ps: [ ps.say ];
+
       extraConfigLua = ''
         -- The test will search for the next string in nixvim-print-init's output: VALIDATING_STRING.
         -- Since this is the comment, it won't appear in byte compiled file.
@@ -180,6 +195,9 @@ in
 
           -- Nvim runtime isn't byte compiled by default
           test_rtp_file("lua/vim/lsp.lua", false)
+
+          -- Lua library isn't byte compiled by default
+          test_lualib_file(require("say").set, false)
         '';
 
     };
@@ -192,6 +210,8 @@ in
     files."plugin/test2.lua".opts.tabstop = 2;
 
     extraPlugins = [ stubDrvPlugin ];
+
+    extraLuaPackages = ps: [ ps.say ];
 
     extraConfigLua = ''
       ${isByteCompiledFun}
@@ -208,6 +228,8 @@ in
       test_rtp_file("lua/stub_drv_plugin/init.lua", false)
       -- Neovim runtime
       test_rtp_file("lua/vim/lsp.lua", false)
+      -- Lua library
+      test_lualib_file(require("say").set, false)
     '';
   };
 
@@ -274,6 +296,29 @@ in
 
       -- Python3 packages are importable
       vim.cmd.py3("import yaml")
+    '';
+  };
+
+  lua-lib = {
+    performance.byteCompileLua = {
+      enable = true;
+      luaLib = true;
+    };
+
+    extraLuaPackages =
+      ps: with ps; [
+        say
+        argparse
+      ];
+
+    extraConfigLuaPost = ''
+      ${isByteCompiledFun}
+
+      -- Lua modules are importable and byte compiled
+      local say = require("say")
+      test_lualib_file(say.set, true)
+      local argparse = require("argparse")
+      test_lualib_file(argparse("test").parse, true)
     '';
   };
 }

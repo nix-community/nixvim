@@ -57,6 +57,9 @@ in
       nvimRuntime = lib.mkEnableOption "nvimRuntime" // {
         description = "Whether to byte compile lua files in Nvim runtime.";
       };
+      luaLib = lib.mkEnableOption "luaLib" // {
+        description = "Whether to byte compile lua library.";
+      };
     };
 
     combinePlugins = {
