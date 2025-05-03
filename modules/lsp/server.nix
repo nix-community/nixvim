@@ -18,6 +18,8 @@ let
 in
 {
   options = {
+    enable = lib.mkEnableOption displayName;
+
     name = lib.mkOption {
       type = types.maybeRaw types.str;
       description = ''
@@ -51,11 +53,32 @@ in
         Alternatively, ${displayName} should be installed on your `$PATH`.
       '';
     };
+
+    settings = lib.mkOption {
+      type = with types; attrsOf anything;
+      description = ''
+        Configurations for ${displayName}. ${settings.extraDescription or ""}
+      '';
+      default = { };
+      example =
+        settings.example or {
+          cmd = [
+            "clangd"
+            "--background-index"
+          ];
+          root_markers = [
+            "compile_commands.json"
+            "compile_flags.txt"
+          ];
+          filetypes = [
+            "c"
+            "cpp"
+          ];
+        };
+    };
   };
 
   imports = [
-    (lib.modules.importApply ./server-base.nix {
-      inherit displayName settings;
-    })
+    ./server-renames.nix
   ];
 }

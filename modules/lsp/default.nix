@@ -85,28 +85,12 @@ in
         {
           # `*` is effectively a meta server, where shared config & defaults can be set.
           # It shouldn't have options like `activate` or `package` which relate to "real" servers.
-          # Therefore, we'll use `server-base.nix` directly, instead of the full `server.nix` module.
+          # Therefore, we use a bespoke `global-server.nix`, which is inspired by the full `server.nix` module.
           options."*" = lib.mkOption {
             description = ''
               Global configuration applied to all language servers.
             '';
-            type = types.submodule (
-              lib.modules.importApply ./server-base.nix {
-                displayName = "all servers";
-                enable.name = "the `*` server config";
-                enable.default = true;
-                settings.extraDescription = ''
-                  Will be merged by neovim using the behaviour of [`vim.tbl_deep_extend()`](https://neovim.io/doc/user/lua.html#vim.tbl_deep_extend()).
-                '';
-                settings.example = {
-                  root_markers = [ ".git" ];
-                  capabilities.textDocument.semanticTokens = {
-                    multilineTokenSupport = true;
-                  };
-                };
-              }
-            );
-            apply = value: value // { name = "*"; };
+            type = types.submodule ./global-server.nix;
             default = { };
           };
         }
