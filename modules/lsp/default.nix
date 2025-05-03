@@ -20,6 +20,7 @@ in
   imports = [
     ./servers
     ./keymaps.nix
+    ./on-attach.nix
   ];
 
   config = {
