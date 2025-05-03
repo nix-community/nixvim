@@ -137,6 +137,10 @@ in
     };
   };
 
+  imports = [
+    ./keymaps.nix
+  ];
+
   config =
     let
       enabledServers = lib.pipe cfg.servers [
