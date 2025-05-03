@@ -22,8 +22,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     dir = "";
     direction = "float";
     border = "rounded";
-    height.__raw = "vim.fn.float2nr(vim.fn.round(0.75 * vim.o.lines))";
-    width.__raw = "vim.fn.float2nr(vim.fn.round(0.75 * vim.o.columns))";
+    height = lib.nixvim.nestedLiteralLua "vim.fn.float2nr(vim.fn.round(0.75 * vim.o.lines))";
+    width = lib.nixvim.nestedLiteralLua "vim.fn.float2nr(vim.fn.round(0.75 * vim.o.columns))";
     escape_quit = true;
     focus_on_open = true;
     tmux = false;
