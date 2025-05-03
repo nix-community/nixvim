@@ -21,6 +21,18 @@ let
           assert(not is_byte_compiled(file), name .. " is not expected to be byte compiled, but it is")
         end
       end
+
+      local function assert_g_var(varname, filename)
+          assert(
+              vim.g[varname] == true or vim.g[varname] == 1,
+              string.format(
+                  "expected vim.g.%s to be truthy, got %s. File %s isn't executed?",
+                  varname,
+                  vim.g[varname],
+                  filename
+              )
+          )
+      end
     '';
 
   # Stub plugin built with mkDerivation
@@ -31,7 +43,7 @@ let
       mkdir -p "$out/lua/$name"
       echo "return '$name'" >"$out/lua/$name/init.lua"
       mkdir $out/plugin
-      echo "_G['$name'] = true" >"$out/plugin/$name.lua"
+      echo "vim.g['$name'] = true" >"$out/plugin/$name.lua"
       echo "let g:$name = 1" >"$out/plugin/$name.vim"
     '';
     dependencies = [ stubBuildCommandPlugin ];
@@ -80,46 +92,49 @@ in
 
       extraFiles = {
         # By text
-        "plugin/file_text.lua".text = "vim.opt.tabstop = 2";
+        "plugin/extra_file_text.lua".text = "vim.g.extra_file_text = true";
         # By simple source derivation using buildCommand
-        "plugin/file_source.lua".source = writeLua "file_source.lua" "vim.opt.tabstop = 2";
+        "plugin/extra_file_source.lua".source =
+          writeLua "extra_file_source.lua" "vim.g.extra_file_source = true";
         # By standard derivation, it needs to execute fixupPhase
-        "plugin/file_drv.lua".source = pkgs.stdenvNoCC.mkDerivation {
-          name = "file_drv.lua";
+        "plugin/extra_file_drv.lua".source = pkgs.stdenvNoCC.mkDerivation {
+          name = "extra_file_drv.lua";
           src = pkgs.emptyDirectory;
           buildPhase = ''
-            echo "vim.opt.tabstop = 2" > $out
+            echo "vim.g.extra_file_drv = true" > $out
           '';
         };
         # By path
-        "plugin/file_path.lua".source = ./files/file.lua;
+        "plugin/extra_file_path.lua".source = ./files/file.lua;
         # By string
-        "plugin/file_string.lua".source = builtins.toFile "file_path.lua" "vim.opt.tabstop = 2";
+        "plugin/extra_file_string.lua".source =
+          builtins.toFile "extra_file_path.lua" "vim.g.extra_file_string = true";
         # By derivation converted to string
-        "plugin/file_drv_string.lua".source = toString (
-          writeLua "file_drv_string.lua" "vim.opt.tabstop = 2"
+        "plugin/extra_file_drv_string.lua".source = toString (
+          writeLua "extra_file_drv_string.lua" "vim.g.extra_file_drv_string = true"
         );
-        # Non-lua files
-        "plugin/test.vim".text = "set tabstop=2";
-        "plugin/test.json".text = builtins.toJSON { a = 1; };
+        # Non-lua file
+        "plugin/extra_file_non_lua.vim".text = "let g:extra_file_non_lua = 1";
         # Lua file with txt extension won't be byte compiled
-        "test.txt".source = writeLua "test.txt" "vim.opt.tabstop = 2";
+        "text.txt".source = writeLua "text.txt" "vim.g.text = true";
       };
 
       files = {
         "plugin/file.lua" = {
-          opts.tabstop = 2;
+          globals.file_lua = true;
         };
         "plugin/file.vim" = {
-          opts.tabstop = 2;
+          globals.file_vimscript = true;
         };
       };
 
       extraPlugins = [ stubDrvPlugin ];
 
       extraConfigLua = ''
-        -- The test will search for this string in nixvim-print-init output: VALIDATING_STRING.
+        -- The test will search for the next string in nixvim-print-init's output: VALIDATING_STRING.
         -- Since this is the comment, it won't appear in byte compiled file.
+
+        vim.g.init_lua = true
       '';
 
       # Using plugin for the test code to avoid infinite recursion
@@ -131,79 +146,70 @@ in
           -- vimrc is byte compiled
           local init = vim.env.MYVIMRC or vim.fn.getscriptinfo({name = "init.lua"})[1].name
           assert(is_byte_compiled(init), "MYVIMRC is expected to be byte compiled, but it's not")
+          assert_g_var("init_lua", "MYVIMRC")
 
           -- nixvim-print-init prints text
           local init_content = vim.fn.system("${lib.getExe config.build.printInitPackage}")
           assert(init_content:find("VALIDATING_STRING"), "nixvim-print-init's output is byte compiled")
 
-          -- lua extraFiles are byte compiled
-          test_rtp_file("plugin/file_text.lua", true)
-          test_rtp_file("plugin/file_source.lua", true)
-          test_rtp_file("plugin/file_drv.lua", true)
-          test_rtp_file("plugin/file_path.lua", true)
-          test_rtp_file("plugin/file_string.lua", true)
-          test_rtp_file("plugin/file_drv_string.lua", true)
-          test_rtp_file("plugin/test.vim", false)
-          test_rtp_file("plugin/test.json", false)
-          test_rtp_file("test.txt", false)
+          local runtime_lua_files = {
+            -- lua 'extraFiles' are byte compiled
+            { "plugin/extra_file_text.lua", true, "extra_file_text" },
+            { "plugin/extra_file_source.lua", true, "extra_file_source" },
+            { "plugin/extra_file_drv.lua", true, "extra_file_drv" },
+            { "plugin/extra_file_path.lua", true, "extra_file_path" },
+            { "plugin/extra_file_string.lua", true, "extra_file_string" },
+            { "plugin/extra_file_drv_string.lua", true, "extra_file_drv_string" },
+            -- other 'extraFiles'
+            { "plugin/extra_file_non_lua.vim", false, "extra_file_non_lua" },
+            -- lua 'files' are byte compiled
+            { "plugin/file.lua", true, "file_lua" },
+            -- other 'files'
+            { "plugin/file.vim", false, "file_vimscript" },
 
-          -- lua files are byte compiled
-          test_rtp_file("plugin/file.lua", true)
-          test_rtp_file("plugin/file.vim", false)
+            -- Plugins aren't byte compiled by default
+            { "plugin/stub_drv_plugin.lua", false, "stub_drv_plugin" }
+          }
+          for _, test in ipairs(runtime_lua_files) do
+            local file, expected_byte_compiled, varname = unpack(test)
+            test_rtp_file(file, expected_byte_compiled)
+            -- Runtime plugin scripts are loaded last, so activate each manually before a test
+            vim.cmd.runtime(file)
+            assert_g_var(varname, file)
+          end
 
-          -- Plugins and neovim runtime aren't byte compiled by default
-          test_rtp_file("lua/vim/lsp.lua", false)
-          test_rtp_file("lua/stub_drv_plugin/init.lua", false)
-        '';
-
-    };
-
-  disabled =
-    {
-      config,
-      lib,
-      ...
-    }:
-    {
-      performance.byteCompileLua.enable = false;
-
-      extraFiles."plugin/test1.lua".text = "vim.opt.tabstop = 2";
-
-      files."plugin/test2.lua".opts.tabstop = 2;
-
-      extraPlugins = [ stubDrvPlugin ];
-
-      extraConfigLua = ''
-        -- The test will search for this string in nixvim-print-init output: VALIDATING_STRING.
-        -- Since this is the comment, it won't appear in byte compiled file.
-      '';
-
-      # Using plugin for the test code to avoid infinite recursion
-      extraFiles."plugin/test.lua".text =
-        # lua
-        ''
-          ${isByteCompiledFun}
-
-          -- vimrc
-          local init = vim.env.MYVIMRC or vim.fn.getscriptinfo({name = "init.lua"})[1].name
-          assert(not is_byte_compiled(init), "MYVIMRC is not expected to be byte compiled, but it is")
-
-          -- nixvim-print-init prints text
-          local init_content = vim.fn.system("${lib.getExe config.build.printInitPackage}")
-          assert(init_content:find("VALIDATING_STRING"), "nixvim-print-init's output is byte compiled")
-
-          -- Nothing is byte compiled
-          -- extraFiles
-          test_rtp_file("plugin/test1.lua", false)
-          -- files
-          test_rtp_file("plugin/test2.lua", false)
-          -- Plugins
-          test_rtp_file("lua/stub_drv_plugin/init.lua", false)
-          -- Neovim runtime
+          -- Nvim runtime isn't byte compiled by default
           test_rtp_file("lua/vim/lsp.lua", false)
         '';
 
     };
+
+  disabled = {
+    performance.byteCompileLua.enable = false;
+
+    extraFiles."plugin/test1.lua".text = "vim.opt.tabstop = 2";
+
+    files."plugin/test2.lua".opts.tabstop = 2;
+
+    extraPlugins = [ stubDrvPlugin ];
+
+    extraConfigLua = ''
+      ${isByteCompiledFun}
+
+      -- Nothing is byte compiled
+      -- vimrc
+      local init = vim.env.MYVIMRC or vim.fn.getscriptinfo({name = "init.lua"})[1].name
+      assert(not is_byte_compiled(init), "MYVIMRC is not expected to be byte compiled, but it is")
+      -- extraFiles
+      test_rtp_file("plugin/test1.lua", false)
+      -- files
+      test_rtp_file("plugin/test2.lua", false)
+      -- Plugins
+      test_rtp_file("lua/stub_drv_plugin/init.lua", false)
+      -- Neovim runtime
+      test_rtp_file("lua/vim/lsp.lua", false)
+    '';
+  };
 
   init-lua-disabled = {
     performance.byteCompileLua = {
@@ -265,8 +271,6 @@ in
       test_rtp_file("lua/vim/treesitter/query.lua", true)
       test_rtp_file("lua/vim/lsp/buf.lua", true)
       test_rtp_file("plugin/editorconfig.lua", true)
-      test_rtp_file("plugin/tutor.vim", false)
-      test_rtp_file("ftplugin/vim.vim", false)
 
       -- Python3 packages are importable
       vim.cmd.py3("import yaml")
@@ -291,37 +295,40 @@ in
       };
 
       extraPlugins = [
-        # Depends on stubBuildCommandPlugin -> stubDependentPlugin
+        # Depends on stubBuildCommandPlugin, which itself depends on stubDependentPlugin
         stubDrvPlugin
-        # Plugin with invalid
+        # Plugin with invalid file
         stubInvalidFilePlugin
       ];
 
       extraConfigLuaPost = ''
         ${isByteCompiledFun}
 
-        -- Plugins are loadable
-        require("stub_drv_plugin")
-        require("stub_build_command_plugin")
-        require("stub_dependent_plugin")
-        require("stub_invalid_file_plugin")
+        local tests = {
+          "stub_drv_plugin",
+          "stub_build_command_plugin",
+          "stub_dependent_plugin",
+          "stub_invalid_file_plugin",
+        }
+        for _, test in ipairs(tests) do
+          -- Plugin is loadable
+          local val = require(test)
+          -- Valid lua code
+          assert(val == test, string.format([[expected require("%s") = "%s", got "%s"]], test, test, val))
+          -- Is byte compiled
+          test_rtp_file("lua/" .. test .. "/init.lua", true)
+        end
+
+        -- stubDrvPlugin's other files
+        test_rtp_file("plugin/stub_drv_plugin.lua", true)
+        -- non-lua file is valid
+        vim.cmd.runtime("plugin/stub_drv_plugin.vim")
+        assert_g_var("stub_drv_plugin", "plugin/stub_drv_plugin.vim")
 
         -- Python modules are importable
         vim.cmd.py3("import yaml")
 
-        -- stubDrvPlugin
-        test_rtp_file("lua/stub_drv_plugin/init.lua", true)
-        test_rtp_file("plugin/stub_drv_plugin.lua", true)
-        test_rtp_file("plugin/stub_drv_plugin.vim", false)
-
-        -- stubBuildCommandPlugin
-        test_rtp_file("lua/stub_build_command_plugin/init.lua", true)
-
-        -- stubDependentPlugin
-        test_rtp_file("lua/stub_dependent_plugin/init.lua", true)
-
-        -- stubInvalidFilePlugin
-        test_rtp_file("lua/stub_invalid_file_plugin/init.lua", true)
+        -- stubInvalidFilePlugin's invalid file exists, but isn't byte compiled
         test_rtp_file("ftplugin/invalid.lua", false)
       '';
     })

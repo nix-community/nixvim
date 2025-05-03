@@ -1,1 +1,1 @@
-vim.opt.tabstop = 2
+vim.g.extra_file_path = true
