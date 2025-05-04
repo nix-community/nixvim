@@ -8,6 +8,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = ''
     This plugin should be configured through blink-cmp's `sources.providers` settings.
 
+    `plugins.copilot-lua` will be enabled by default, to provide a working setup out-of-the-box.
+    You may disable it by explicitly adding `plugins.copilot-lua.enable = false` to your
+    configuration.
+
     For example:
 
     ```nix
