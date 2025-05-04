@@ -12,6 +12,7 @@
     ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/kanagawa.nix
+    ./colorschemes/kanagawa-paper.nix
     ./colorschemes/melange.nix
     ./colorschemes/modus.nix
     ./colorschemes/monokai-pro.nix
