@@ -78,8 +78,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         - "all" (default): Enable formatting for all language servers
         - "none": Do not enable formatting on any language server.
           You might choose this if for some reason you want to manually call
-          `require("lsp-format").on_attach(client)` in the `onAttach` function of your language
-          servers.
+          `require("lsp-format").on_attach(client)`.
         - list of LS names: Manually choose the servers by name
       '';
       example = [
@@ -91,28 +90,41 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.lsp-format" {
-      when = !config.plugins.lsp.enable;
+      when = !(config.plugins.lsp.enable || config.plugins.lspconfig.enable);
       message = ''
-        This plugin requires `plugins.lsp` to be enabled.
+        This plugin requires either `plugins.lsp` or `plugins.lspconfig` to be enabled.
       '';
     };
 
-    plugins.lsp = {
-      onAttach =
-        lib.mkIf (cfg.lspServersToEnable == "all") # Lua
-          ''
-            require("lsp-format").on_attach(client)
+    autoGroups.nixvim_lsp_fmt_setup.clear = false;
+
+    autoCmd = lib.optionals (cfg.lspServersToEnable != "none") [
+      {
+        desc = "set up autoformatting on LSP attach";
+        event = "LspAttach";
+        group = "nixvim_lsp_fmt_setup";
+        callback =
+          let
+            enableCondition =
+              if cfg.lspServersToEnable == "all" then
+                "true"
+              else if lib.isList cfg.lspServersToEnable then
+                # Lua
+                "vim.list_contains(${lib.nixvim.toLuaObject cfg.lspServersToEnable}, client.name)"
+              else
+                throw "Unhandled value for `lspServersToEnable`: ${
+                  lib.generators.toPretty { } cfg.lspServersToEnable
+                }";
+          in
+          lib.nixvim.mkRaw ''
+            function(args)
+              local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+              if ${enableCondition} then
+                require("lsp-format").on_attach(client, args.buf)
+              end
+            end
           '';
-
-      servers = lib.optionalAttrs (lib.isList cfg.lspServersToEnable) (
-        lib.genAttrs cfg.lspServersToEnable (serverName: {
-          onAttach.function = # Lua
-            ''
-              require("lsp-format").on_attach(client)
-            '';
-        })
-      );
-
-    };
+      }
+    ];
   };
 }
