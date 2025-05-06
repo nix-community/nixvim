@@ -96,35 +96,30 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    autoGroups.nixvim_lsp_fmt_setup.clear = false;
+    lsp.onAttach =
+      let
+        toLua = lib.nixvim.lua.toLua' {
+          multiline = false;
+        };
 
-    autoCmd = lib.optionals (cfg.lspServersToEnable != "none") [
-      {
-        desc = "set up autoformatting on LSP attach";
-        event = "LspAttach";
-        group = "nixvim_lsp_fmt_setup";
-        callback =
-          let
-            enableCondition =
-              if cfg.lspServersToEnable == "all" then
-                "true"
-              else if lib.isList cfg.lspServersToEnable then
-                # Lua
-                "vim.list_contains(${lib.nixvim.toLuaObject cfg.lspServersToEnable}, client.name)"
-              else
-                throw "Unhandled value for `lspServersToEnable`: ${
-                  lib.generators.toPretty { } cfg.lspServersToEnable
-                }";
-          in
-          lib.nixvim.mkRaw ''
-            function(args)
-              local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-              if ${enableCondition} then
-                require("lsp-format").on_attach(client, args.buf)
+        wrapLua =
+          lua:
+          if cfg.lspServersToEnable == "all" then
+            lua
+          else if lib.isList cfg.lspServersToEnable then
+            # lua
+            ''
+              if vim.list_contains(${toLua cfg.lspServersToEnable}, client.name) then
+                ${lib.removeSuffix "\n" lua}
               end
-            end
-          '';
-      }
-    ];
+            ''
+          else
+            throw "Unhandled value for `lspServersToEnable`: ${
+              lib.generators.toPretty { } cfg.lspServersToEnable
+            }";
+      in
+      lib.mkIf (cfg.lspServersToEnable != "none") (wrapLua ''
+        require("lsp-format").on_attach(client, bufnr)
+      '');
   };
 }
