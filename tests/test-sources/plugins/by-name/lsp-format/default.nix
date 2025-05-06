@@ -76,4 +76,19 @@
       };
     };
   };
+
+  listed-servers = {
+    plugins = {
+      lspconfig.enable = true;
+
+      lsp-format = {
+        enable = true;
+        lspServersToEnable = [
+          "foo"
+          "bar"
+          "baz"
+        ];
+      };
+    };
+  };
 }
