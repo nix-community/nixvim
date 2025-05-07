@@ -40,6 +40,10 @@ let
 
       disabled =
         [
+          # TODO: 2025-05-07: odin is broken
+          # Fixed in https://github.com/NixOS/nixpkgs/pull/404919
+          "ols"
+
           # DEPRECATED SERVERS
           # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
           "ruff_lsp"
