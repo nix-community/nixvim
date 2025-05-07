@@ -19,7 +19,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   settingsOptions = {
-    on_attach = defaultNullOpts.mkLuaFn "__lspOnAttach" "Lua code to run when tsserver attaches to a buffer.";
+    on_attach = defaultNullOpts.mkLuaFn null "Function to call when tsserver attaches to a buffer.";
 
     handlers = lib.mkOption {
       type = with lib.types; nullOr (attrsOf strLuaFn);

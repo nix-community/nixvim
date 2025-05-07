@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 let
   inherit (lib) mkOption types;
 in
@@ -114,6 +114,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
       type = types.lines;
       description = "A lua function to be run when a new LSP buffer is attached. The argument `client` and `bufnr` is provided.";
       default = "";
+      # When `plugins.lsp` is enabled, definitions are aliased to `lsp.onAttach`; so read that final value here.
+      # The other half of this two-way alias is below in `extraConfig`.
+      apply = value: if config.plugins.lsp.enable then config.lsp.onAttach else value;
     };
 
     capabilities = mkOption {
@@ -141,7 +144,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraConfig = cfg: {
+  extraConfig = cfg: opts: {
     keymapsOnEvents.LspAttach =
       let
         mkMaps =
@@ -173,6 +176,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ++ mkMaps "vim.lsp.buf." "Lsp buf" cfg.keymaps.lspBuf
       ++ cfg.keymaps.extra;
 
+    # Alias onAttach definitions to the new impl in the top-level lsp module.
+    #
+    # NOTE: While `mkDerivedConfig` creates an alias based on the final `value` and `highestPrio`,
+    # `mkAliasAndWrapDefinitions` and `mkAliasAndWrapDefsWithPriority` propagates the un-merged
+    # `definitions`.
+    #
+    # This assumes both options have compatible merge functions, but it allows override and order
+    # priorities to be merged correctly.
+    #
+    # E.g:
+    #    lsp.onAttach = mkAfter "world";
+    #    plugins.lsp.onAttach = mkBefore "hello"
+    # ⇒
+    #    hello
+    #    world
+    #
+    # This is equivalent to `mkAliasOptionModule`, except predicated on `plugins.lsp.enable`.
+    #
+    # The other half of this two-way alias is above in the option's `apply` function.
+    lsp.onAttach = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.onAttach;
+
     plugins.lsp.luaConfig.content =
       let
         runWrappers =
@@ -188,10 +212,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ${lib.optionalString cfg.inlayHints "vim.lsp.inlay_hint.enable(true)"}
 
           local __lspServers = ${lib.nixvim.toLuaObject cfg.enabledServers}
-          -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
-          _M.lspOnAttach = function(client, bufnr)
-            ${cfg.onAttach}
-          end
+
           local __lspCapabilities = function()
             capabilities = vim.lsp.protocol.make_client_capabilities()
 
@@ -200,10 +221,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             return capabilities
           end
 
-          local __setup = ${runWrappers cfg.setupWrappers "{
-            on_attach = _M.lspOnAttach,
-            capabilities = __lspCapabilities(),
-          }"}
+          local __setup = ${runWrappers cfg.setupWrappers "{ capabilities = __lspCapabilities() }"}
 
           for i, server in ipairs(__lspServers) do
             local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}

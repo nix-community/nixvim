@@ -173,7 +173,6 @@ in
           server = {
             inherit (cfg.server) standalone;
             settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
-            on_attach = lib.nixvim.mkRaw "__lspOnAttach";
           };
         } // cfg.extraOptions;
       in

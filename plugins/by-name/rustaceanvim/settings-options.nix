@@ -234,11 +234,7 @@ with lib;
       ```
     '';
 
-    on_attach = helpers.mkNullOrLuaFn ''
-      Function to call on attach.
-      If `plugins.lsp` is enabled, it defaults to the Nixvim global `__lspOnAttach` function.
-      Otherwise it defaults to `null`.
-    '';
+    on_attach = helpers.defaultNullOpts.mkLuaFn null "Function to call when rustaceanvim attaches to a buffer.";
 
     cmd = helpers.mkNullOrStrLuaFnOr (with types; listOf str) ''
       Command and arguments for starting rust-analyzer.
