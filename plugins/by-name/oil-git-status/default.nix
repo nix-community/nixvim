@@ -50,6 +50,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   extraConfig = cfg: {
+    # Set the required default for plugins.oil's signcolumn:
+    plugins.oil.settings.win_options.signcolumn = lib.mkDefault "yes:2";
+
     warnings = lib.nixvim.mkWarnings "plugins.oil-git-status" [
       {
         when = !config.plugins.oil.enable;
