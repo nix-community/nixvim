@@ -39,6 +39,19 @@ test_nix_template = """{{
 """
 
 
+def normalized_name(name) -> str:
+    """
+    Convert name to a normalized package name format.
+
+    Args:
+        name (str): The original name to normalize.
+
+    Returns:
+        str: The normalized package name.
+    """
+    return name.replace(".", "-")
+
+
 def kebab_case(input_string):
     """
     Convert a string to kebab-case.
@@ -122,11 +135,19 @@ def main():
     parser.add_argument(
         "originalName", type=str, help="Original name of the new plugin"
     )
-    parser.add_argument("package", type=str, help="Package name of the new plugin")
+    parser.add_argument(
+        "--package",
+        "-p",
+        type=str,
+        help="Package name of the new plugin (defaults to normalized version of originalName)",
+    )
     args = parser.parse_args()
 
     # Calculate name
     name = kebab_case(args.originalName)
+
+    # Use provided package name or default to normalized original name
+    package = args.package if args.package else normalized_name(args.originalName)
 
     # Define paths
     root_identifier = "flake.nix"
@@ -141,7 +162,7 @@ def main():
         default_nix_template,
         name,
         args.originalName,
-        args.package,
+        package,
     )
     create_test_file(
         test_path,
