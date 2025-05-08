@@ -39,20 +39,7 @@ test_nix_template = """{{
 """
 
 
-def normalized_name(name) -> str:
-    """
-    Convert name to a normalized package name format.
-
-    Args:
-        name (str): The original name to normalize.
-
-    Returns:
-        str: The normalized package name.
-    """
-    return name.replace(".", "-")
-
-
-def kebab_case(input_string):
+def to_kebab_case(input_string):
     """
     Convert a string to kebab-case.
 
@@ -65,6 +52,19 @@ def kebab_case(input_string):
     # Replace non-alphanumeric characters with hyphens
     input_string = re.sub(r"[\W_]+", "-", input_string).lower()
 
+    return input_string.strip("-")
+
+
+def strip_nvim(input_string):
+    """
+    Remove 'nvim' prefix or suffix from a string.
+
+    Args:
+        input_string (str): The input string to process.
+
+    Returns:
+        str: The string with 'nvim' removed from start or end.
+    """
     # Remove leading and trailing standalone 'nvim'
     input_string = re.sub(r"(^nvim-|-nvim$|^nvim$)", "", input_string)
 
@@ -143,11 +143,11 @@ def main():
     )
     args = parser.parse_args()
 
-    # Calculate name
-    name = kebab_case(args.originalName)
+    # Calculate name - convert to kebab case and strip nvim
+    name = strip_nvim(to_kebab_case(args.originalName))
 
     # Use provided package name or default to normalized original name
-    package = args.package if args.package else normalized_name(args.originalName)
+    package = args.package if args.package else to_kebab_case(args.originalName)
 
     # Define paths
     root_identifier = "flake.nix"
