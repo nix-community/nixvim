@@ -12,12 +12,11 @@ lib.nixvim.plugins.mkNeovimPlugin {{
   packPathName = "{originalName}";
   package = "{package}";
 
-  maintainers = [ lib.maintainers.YOUR_NAME ]; # TODO
+  # TODO
+  maintainers = [ lib.maintainers.YOUR_NAME ];
 
-  settingsOptions = {{
-    exampleOption = lib.nixvim.defaultNullOpts.mkBool false ''
-      Example option for the {name} plugin.
-    '';
+  settingsExample = {{
+    exampleOption = true;
   }};
 }}
 """
@@ -26,6 +25,15 @@ lib.nixvim.plugins.mkNeovimPlugin {{
 test_nix_template = """{{
   empty = {{
     plugins.{name}.enable = true;
+  }};
+
+  defaults = {{
+    plugins.{name} = {{
+      enable = true;
+      settings = {{
+        exampleOption = false;
+      }};
+    }};
   }};
 }}
 """
