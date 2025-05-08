@@ -21,7 +21,12 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lz-n";
   packPathName = "lz.n";
-  maintainers = [ lib.maintainers.psfloyd ];
+
+  maintainers = with lib.maintainers; [
+    HeitorAugustoLN
+    psfloyd
+  ];
+
   # NOTE: We want to load lz.n as early as possible so that triggers are respected
   configLocation = "extraConfigLuaPre";
 
