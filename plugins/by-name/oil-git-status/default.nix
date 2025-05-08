@@ -15,7 +15,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     Git status is added to the listing asynchronously after creating the oil directory
 
     listing so it won't slow oil down on big repositories. The plugin puts the status in two new sign columns
-
     the left being the status of the index, the right being the status of the working directory
 
     `win_options.signcolumn` needs to be configured in `plugins.oil.settings`:
