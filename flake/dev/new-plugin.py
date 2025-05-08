@@ -13,8 +13,7 @@ lib.nixvim.plugins.mkNeovimPlugin {{
   packPathName = "{originalName}";
   package = "{package}";
 
-  # TODO replace with your name
-  maintainers = [ lib.maintainers.YOUR_NAME ];
+  {maintainer_todo}maintainers = [ lib.maintainers.{maintainer} ]
 
   # TODO provide an example for the `settings` option (or remove entirely if there is no useful example)
   # NOTE you can use `lib.literalExpression` or `lib.literalMD` if needed
@@ -76,7 +75,15 @@ def strip_nvim(input_string):
     return input_string.strip("-")
 
 
-def create_nix_file(file_path, template, name, originalName, package):
+def create_nix_file(
+    file_path,
+    template,
+    name,
+    originalName,
+    package,
+    maintainer,
+    is_default_maintainer=False,
+):
     """
     Create a nix file from a template.
 
@@ -86,8 +93,21 @@ def create_nix_file(file_path, template, name, originalName, package):
         name (str): The name of the plugin.
         originalName (str): The original name of the plugin.
         package (str): The package name of the plugin.
+        maintainer (str): The maintainer name from lib.maintainers.
+        is_default_maintainer (bool): Whether the maintainer is the default value.
     """
-    content = template.format(name=name, originalName=originalName, package=package)
+    # Add a TODO comment if using the default maintainer
+    maintainer_todo = (
+        "# TODO replace with your name \n  " if is_default_maintainer else ""
+    )
+
+    content = template.format(
+        name=name,
+        originalName=originalName,
+        package=package,
+        maintainer=maintainer,
+        maintainer_todo=maintainer_todo,
+    )
     write_to_file(file_path, content)
 
 
@@ -134,6 +154,8 @@ def main():
     """
     Main function to generate default.nix and test files for a new plugin.
     """
+    DEFAULT_MAINTAINER = "YOUR_NAME"
+
     parser = ArgumentParser(
         description="Generate default.nix and test files for a new plugin"
     )
@@ -146,6 +168,13 @@ def main():
         type=str,
         help="Package name of the new plugin (defaults to normalized version of originalName)",
     )
+    parser.add_argument(
+        "--maintainer",
+        "-m",
+        type=str,
+        help="Maintainer name (from lib.maintainers)",
+        default=DEFAULT_MAINTAINER,
+    )
     args = parser.parse_args()
 
     # Calculate name - convert to kebab case and strip nvim
@@ -153,6 +182,9 @@ def main():
 
     # Use provided package name or default to normalized original name
     package = args.package if args.package else to_kebab_case(args.originalName)
+
+    # Check if user provided a maintainer or we're using the default
+    is_default_maintainer = args.maintainer == DEFAULT_MAINTAINER
 
     # Define paths
     root_identifier = "flake.nix"
@@ -168,6 +200,8 @@ def main():
         name,
         args.originalName,
         package,
+        args.maintainer,
+        is_default_maintainer,
     )
     create_test_file(
         test_path,
