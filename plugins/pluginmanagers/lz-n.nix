@@ -7,16 +7,19 @@ let
   inherit (lib)
     id
     literalMD
-    mkIf
+    mkMerge
     mkOption
+    optional
     types
     ;
   inherit (lib.nixvim)
     defaultNullOpts
     mkNullOrLuaFn
     mkNullOrOption'
+    nestedLiteralLua
     toLuaObject
     ;
+  inherit (lib.nixvim.keymaps) mkMapOptionSubmodule;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lz-n";
@@ -146,6 +149,40 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     in
     {
+      keymaps = mkOption {
+        type = types.listOf (mkMapOptionSubmodule {
+          extraOptions.plugin = mkOption {
+            type = with types; either str lzPluginType;
+            example = "telescope.nvim";
+            description = ''
+              The plugin (name or spec) to lazy-load when the keymap is triggered.
+
+              > [!NOTE]
+              > This must match the name used in the `plugins` list or be a valid plugin that can be loaded.
+            '';
+          };
+        });
+        default = [ ];
+        example = [
+          {
+            plugin = "telescope.nvim";
+            key = "<leader>ff";
+            action = nestedLiteralLua "function() require('telescope.builtin').find_files() end";
+            options.desc = "Find files";
+          }
+          {
+            plugin = "neo-tree.nvim";
+            key = "<leader>ft";
+            action = "<CMD>Neotree toggle<CR>";
+            options.desc = "NeoTree toggle";
+          }
+        ];
+        description = ''
+          Define keymaps that will use lz.n's `keymap(<plugin>).set` functionality.
+          This provides a more intuitive way to define lazy-loaded keymaps with the familiar `keymaps` option API style.
+        '';
+      };
+
       plugins = mkOption {
         description = ''
           List of plugin specs provided to the `require('lz.n').load` function.
@@ -158,7 +195,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             __unkeyed-1 = "neo-tree.nvim";
             enabled = ''
               function()
-              return true
+                return true
               end
             '';
             keys = [
@@ -208,8 +245,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     globals.lz_n = lib.modules.mkAliasAndWrapDefsWithPriority id options.plugins.lz-n.settings;
-    plugins.lz-n.luaConfig.content = mkIf (cfg.plugins != [ ]) ''
-      require('lz.n').load( ${toLuaObject cfg.plugins})
-    '';
+    plugins.lz-n.luaConfig.content = mkMerge (
+      optional (cfg.plugins != [ ]) "require('lz.n').load(${toLuaObject cfg.plugins})"
+      ++ map (
+        {
+          plugin,
+          mode,
+          key,
+          action,
+          options,
+          ...
+        }:
+        "require('lz.n').keymap(${toLuaObject plugin}).set(${toLuaObject mode}, ${toLuaObject key}, ${toLuaObject action}, ${toLuaObject options})"
+      ) cfg.keymaps
+    );
   };
 }
