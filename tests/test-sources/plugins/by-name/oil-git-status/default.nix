@@ -31,4 +31,19 @@
     plugins.oil-git-status.enable = true;
   };
 
+  bad-signcolumn_yes = {
+    test.buildNixvim = false;
+    test.warnings = expect: [
+      (expect "count" 1)
+      (expect "any" "Nixvim (plugins.oil-git-status): This plugin requires `plugins.oil` is configured to allow at least 2 sign columns.")
+      (expect "any" "`plugins.oil.settings.win_options.signcolumn` is currently set to \"yes\".")
+    ];
+
+    plugins.oil = {
+      enable = true;
+      # Should trigger the warning
+      settings.win_options.signcolumn = "yes";
+    };
+    plugins.oil-git-status.enable = true;
+  };
 }

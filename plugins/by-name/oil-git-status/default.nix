@@ -58,29 +58,46 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ${options.plugins.oil.enable} = true;
         '';
       }
-      {
-        when =
-          let
-            value = config.plugins.oil.settings.win_options.signcolumn or null;
-            isKnownBadStr = lib.lists.elem value [
-              "yes"
-              "yes:"
-              "yes:0"
-              "yes:1"
-            ];
-            hasYes = lib.strings.hasInfix "yes" value;
-          in
-          !(lib.strings.isString value && hasYes && !isKnownBadStr);
+      (
+        # The plugin requires the oil configuration allow at least 2 sign columns.
+        # They suggest `win_options.signcolumn = "yes:2"`, but valid options include
+        # any "yes" or "auto" with a max > 1: E.g. "auto:2", "auto:1-2", "yes:3", …
+        # See also `:h 'signcolumn'`
+        let
+          # Get `signcolumn` setting value
+          value = config.plugins.oil.settings.win_options.signcolumn or null;
 
-        message = ''
-          This plugin requires the following `plugins.oil` setting:
-            ${options.plugins.oil.settings} = {
-              win_options = {
-                signcolumn = "yes:2";
-              };
-            };`
-        '';
-      }
+          # These valid values do not allow the sign column to use more than one column,
+          # So they are incompatible with oil-git-status.
+          badValue = builtins.elem value [
+            "no"
+            "number"
+            "auto"
+            "auto:1"
+            "yes"
+            "yes:1"
+          ];
+
+          currentValueNote =
+            lib.optionalString (value != null)
+              "\n`${options.plugins.oil.settings}.win_options.signcolumn` is currently set to ${
+                lib.generators.toPretty { } value
+              }.";
+        in
+        {
+          when = builtins.isString value -> badValue;
+          message = ''
+            This plugin requires `plugins.oil` is configured to allow at least 2 sign columns.${currentValueNote}
+            E.g:
+              ${options.plugins.oil.settings} = {
+                win_options = {
+                  signcolumn = "yes:2";
+                };
+              };`
+            See :h 'signcolumn' for more options
+          '';
+        }
+      )
     ];
   };
 
