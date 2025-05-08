@@ -83,6 +83,7 @@ def create_nix_file(
     package,
     maintainer,
     is_default_maintainer=False,
+    dry_run=False,
 ):
     """
     Create a nix file from a template.
@@ -95,6 +96,7 @@ def create_nix_file(
         package (str): The package name of the plugin.
         maintainer (str): The maintainer name from lib.maintainers.
         is_default_maintainer (bool): Whether the maintainer is the default value.
+        dry_run (bool): If True, only print what would be written instead of actually writing.
     """
     # Add a TODO comment if using the default maintainer
     maintainer_todo = (
@@ -108,10 +110,10 @@ def create_nix_file(
         maintainer=maintainer,
         maintainer_todo=maintainer_todo,
     )
-    write_to_file(file_path, content)
+    write_to_file(file_path, content, dry_run)
 
 
-def create_test_file(file_path, template, name):
+def create_test_file(file_path, template, name, dry_run=False):
     """
     Create a test file from a template.
 
@@ -119,19 +121,28 @@ def create_test_file(file_path, template, name):
         file_path (str): The path to the file to create.
         template (str): The template string to use for the file content.
         name (str): The name of the plugin.
+        dry_run (bool): If True, only print what would be written instead of actually writing.
     """
     content = template.format(name=name)
-    write_to_file(file_path, content)
+    write_to_file(file_path, content, dry_run)
 
 
-def write_to_file(file_path, content: str):
+def write_to_file(file_path, content: str, dry_run=False):
     """
     Makes sure directories exist and write content to a file.
 
     Args:
     file_path (str): The path to the file to write.
     content (str): The content to write to the file.
+    dry_run (bool): If True, only print what would be written instead of actually writing.
     """
+    if dry_run:
+        print(f"Would write to {file_path}:")
+        print("=" * 40)
+        print(content)
+        print("=" * 40)
+        return
+
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open(file_path, "w") as f:
         f.write(content)
@@ -175,6 +186,12 @@ def main():
         help="Maintainer name (from lib.maintainers)",
         default=DEFAULT_MAINTAINER,
     )
+    parser.add_argument(
+        "--dry-run",
+        "-d",
+        action="store_true",
+        help="Show what would be written without actually creating files",
+    )
     args = parser.parse_args()
 
     # Calculate name - convert to kebab case and strip nvim
@@ -202,11 +219,13 @@ def main():
         package,
         args.maintainer,
         is_default_maintainer,
+        args.dry_run,
     )
     create_test_file(
         test_path,
         test_nix_template,
         name,
+        args.dry_run,
     )
 
 
