@@ -182,15 +182,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
     # `mkAliasAndWrapDefinitions` and `mkAliasAndWrapDefsWithPriority` propagates the un-merged
     # `definitions`.
     #
-    # This assumes both options have compatible merge functions, but it allows override and order
-    # priorities to be merged correctly.
-    #
-    # E.g:
-    #    lsp.onAttach = mkAfter "world";
-    #    plugins.lsp.onAttach = mkBefore "hello"
-    # ⇒
-    #    hello
-    #    world
+    # This assumes both options have compatible merge functions, but not using the final value allows
+    # implementing a two-way binding in the option's `apply` function. Using `mkDerivedConfig` for a
+    # two-way binding would result in infinite recursion.
     #
     # This is equivalent to `mkAliasOptionModule`, except predicated on `plugins.lsp.enable`.
     #
