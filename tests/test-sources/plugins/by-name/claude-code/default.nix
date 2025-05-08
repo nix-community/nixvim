@@ -1,4 +1,6 @@
-{
+{ pkgs, ... }:
+# TODO: Failing to compile on darwin CI atm
+pkgs.lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
   empty = {
     plugins.claude-code.enable = true;
   };
