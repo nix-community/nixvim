@@ -163,4 +163,73 @@ in
         ];
       };
     };
+
+  example-keymap-string =
+    { pkgs, ... }:
+    {
+      extraPlugins = optionalPlugins [ pkgs.vimPlugins.neo-tree-nvim ];
+
+      plugins.lz-n = {
+        enable = true;
+        plugins = [
+          {
+            __unkeyed-1 = "neo-tree.nvim";
+            enabled = ''
+              function()
+                return true
+              end
+            '';
+            after = # lua
+              ''
+                function()
+                  require("neo-tree").setup()
+                end
+              '';
+          }
+        ];
+
+        keymaps = [
+          {
+            action = "<CMD>Neotree toggle<CR>";
+            key = "<leader>ft";
+            mode = "";
+            options.desc = "NeoTree toggle";
+            plugin = "neo-tree.nvim";
+          }
+        ];
+      };
+    };
+
+  example-keymap-spec =
+    { pkgs, ... }:
+    {
+      extraPlugins = optionalPlugins [ pkgs.vimPlugins.neo-tree-nvim ];
+
+      plugins.lz-n = {
+        enable = true;
+
+        keymaps = [
+          {
+            action = "<CMD>Neotree toggle<CR>";
+            key = "<leader>ft";
+            mode = "";
+            options.desc = "NeoTree toggle";
+            plugin = {
+              __unkeyed-1 = "neo-tree.nvim";
+              enabled = ''
+                function()
+                  return true
+                end
+              '';
+              after = # lua
+                ''
+                  function()
+                    require("neo-tree").setup()
+                  end
+                '';
+            };
+          }
+        ];
+      };
+    };
 }
