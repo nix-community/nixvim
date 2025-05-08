@@ -6,6 +6,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  dependencies = [
+    "claude-code"
+  ];
+
   settingsExample = {
     window = {
       split_ratio = 0.4;

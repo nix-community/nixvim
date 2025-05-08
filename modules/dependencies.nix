@@ -90,6 +90,7 @@ in
 
     __depPackages = {
       bat.default = "bat";
+      claude-code.default = "claude-code";
       codeium.default = "codeium";
       coreutils = {
         default = "coreutils";
