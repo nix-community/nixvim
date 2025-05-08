@@ -1,8 +1,4 @@
-{
-  lib,
-  options,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib)
     id
@@ -243,8 +239,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     };
 
-  extraConfig = cfg: {
-    globals.lz_n = lib.modules.mkAliasAndWrapDefsWithPriority id options.plugins.lz-n.settings;
+  extraConfig = cfg: opts: {
+    globals.lz_n = lib.modules.mkAliasAndWrapDefsWithPriority id opts.settings;
     plugins.lz-n.luaConfig.content = mkMerge (
       optional (cfg.plugins != [ ]) "require('lz.n').load(${toLuaObject cfg.plugins})"
       ++ map (
