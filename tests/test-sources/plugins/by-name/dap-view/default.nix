@@ -27,32 +27,33 @@
             repl = "REPL [R]";
             console = "Console [C]";
           };
-          controls = {
-            enabled = false;
-            position = "right";
-            buttons = [
-              "play"
-              "step_into"
-              "step_over"
-              "step_out"
-              "step_back"
-              "run_last"
-              "terminate"
-              "disconnect"
-            ];
-            icons = {
-              pause = "";
-              play = "";
-              step_into = "";
-              step_over = "";
-              step_out = "";
-              step_back = "";
-              run_last = "";
-              terminate = "";
-              disconnect = "";
-            };
-            custom_buttons = { };
-          };
+          # TODO: Enable after plugin update
+          # controls = {
+          #   enabled = false;
+          #   position = "right";
+          #   buttons = [
+          #     "play"
+          #     "step_into"
+          #     "step_over"
+          #     "step_out"
+          #     "step_back"
+          #     "run_last"
+          #     "terminate"
+          #     "disconnect"
+          #   ];
+          #   icons = {
+          #     pause = "";
+          #     play = "";
+          #     step_into = "";
+          #     step_over = "";
+          #     step_out = "";
+          #     step_back = "";
+          #     run_last = "";
+          #     terminate = "";
+          #     disconnect = "";
+          #   };
+          #   custom_buttons = { };
+          # };
         };
         windows = {
           height = 12;
