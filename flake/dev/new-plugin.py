@@ -9,14 +9,18 @@ from argparse import ArgumentParser
 default_nix_template = """{{ lib, ... }}:
 lib.nixvim.plugins.mkNeovimPlugin {{
   name = "{name}";
+  moduleName = "LUA_MODULE_NAME"; # TODO replace (or remove entirely if it is the same as `name`)
   packPathName = "{originalName}";
   package = "{package}";
 
-  # TODO
+  # TODO replace with your name
   maintainers = [ lib.maintainers.YOUR_NAME ];
 
+  # TODO provide an example for the `settings` option (or remove entirely if there is no useful example)
+  # NOTE you can use `lib.literalExpression` or `lib.literalMD` if needed
   settingsExample = {{
-    exampleOption = true;
+    foo = 42;
+    bar.__raw = "function() print('hello') end";
   }};
 }}
 """
@@ -31,7 +35,8 @@ test_nix_template = """{{
     plugins.{name} = {{
       enable = true;
       settings = {{
-        exampleOption = false;
+        foo = 42;
+        bar.__raw = "function() print('hello') end";
       }};
     }};
   }};

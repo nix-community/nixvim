@@ -5,7 +5,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "my-plugin.nvim"; # TODO replace (or remove entirely if it is the same as `name`)
   package = "my-plugin-nvim"; # TODO replace
 
-  maintainers = [ lib.maintainers.MyName ]; # TODO replace with your name
+  # TODO replace with your name
+  maintainers = [ lib.maintainers.MyName ];
 
   # TODO provide an example for the `settings` option (or remove entirely if there is no useful example)
   # NOTE you can use `lib.literalExpression` or `lib.literalMD` if needed
