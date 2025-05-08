@@ -6,7 +6,7 @@
       enable = true;
       settings = {
         win_options = {
-          signcolumn = "yes:2,";
+          signcolumn = "yes:2";
         };
       };
     };
@@ -24,7 +24,7 @@
       enable = true;
       settings = {
         win_options = {
-          signcolumn = "yes:2,";
+          signcolumn = "yes:2";
         };
       };
     };

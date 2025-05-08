@@ -17,17 +17,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
     listing so it won't slow oil down on big repositories. The plugin puts the status in two new sign columns
     the left being the status of the index, the right being the status of the working directory
 
-    `win_options.signcolumn` needs to be configured in `plugins.oil.settings`:
-    ```nix
-    plugins.oil = {
-      enable = true;
-      settings = {
-        win_options = {
-          signcolumn = "yes:2,";
-        };
-      };
-    };
-    ```
+    > [!NOTE]
+    > This plugin requires you configure `plugins.oil` to allow at least 2 sign columns:
+    >
+    > ```nix
+    > plugins.oil = {
+    >   enable = true;
+    >   settings = {
+    >     win_options = {
+    >       signcolumn = "yes:2";
+    >     };
+    >   };
+    > };
+    > ```
+    >
+    > Valid values include `yes` or `auto` with a "max" of at least `2`.
+    > E.g. `"yes:2"` or `"auto:1-2"`.
+    >
+    > See [plugin docs][readme-configuration] and [`:h 'signcolumn'`]
+
+    [readme-configuration]: https://github.com/refractalize/oil-git-status.nvim#configuration
+    [`:h 'signcolumn'`]: https://neovim.io/doc/user/options.html#'signcolumn'
   '';
 
   maintainers = [ lib.maintainers.FKouhai ];
