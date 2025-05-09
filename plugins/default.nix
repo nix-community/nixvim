@@ -3,6 +3,7 @@
     ./cmp
 
     ./colorschemes/ayu.nix
+    ./colorschemes/bamboo.nix
     ./colorschemes/base16
     ./colorschemes/catppuccin.nix
     ./colorschemes/cyberdream.nix
