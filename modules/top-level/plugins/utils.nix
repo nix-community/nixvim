@@ -35,4 +35,7 @@ lib.fix (self: {
 
   # Remove dependencies from all plugins in a list
   removeDeps = map (p: p // { plugin = removeAttrs p.plugin [ "dependencies" ]; });
+
+  # Apply a map function to each 'plugin' attr of the normalized plugin list
+  mapNormalizedPlugins = f: map (p: p // { plugin = f p.plugin; });
 })

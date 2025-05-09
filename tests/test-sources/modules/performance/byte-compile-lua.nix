@@ -299,7 +299,8 @@ in
     '';
   };
 
-  lua-lib = {
+  # performance.byteCompileLua.luaLib for extraLuaPackages
+  lua-lib-extra-lua-packages = {
     performance.byteCompileLua = {
       enable = true;
       luaLib = true;
@@ -321,6 +322,77 @@ in
       test_lualib_file(argparse("test").parse, true)
     '';
   };
+
+  # performance.byteCompileLua.luaLib for propagatedBuildInputs
+  lua-lib-propagated-build-inputs =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      performance.byteCompileLua = {
+        enable = true;
+        luaLib = true;
+      };
+
+      extraPlugins =
+        let
+          inherit (config.package) lua;
+          setDeps =
+            drv: deps:
+            # 'toLuaModule' is used here for updating 'requiredLuaModules' attr
+            lua.pkgs.luaLib.toLuaModule (
+              drv.overrideAttrs {
+                propagatedBuildInputs = [ lua ] ++ deps;
+              }
+            );
+          # Add the 'argparse' dependency to the 'say' module
+          say = setDeps lua.pkgs.say [ lua.pkgs.argparse ];
+        in
+        [
+          # 'lz-n' depends on 'say' which itself depends on 'argparse'
+          (setDeps pkgs.vimPlugins.lz-n [ say ])
+          # 'nvim-cmp' depends on 'argparse'
+          (setDeps pkgs.vimPlugins.nvim-cmp [ lua.pkgs.argparse ])
+        ];
+
+      extraConfigLuaPost = ''
+        ${isByteCompiledFun}
+
+        -- Plugins themselves are importable
+        require("lz.n")
+        require("cmp")
+
+        -- Lua modules are importable and byte compiled
+        local say = require("say")
+        test_lualib_file(say.set, true)
+        local argparse = require("argparse")
+        test_lualib_file(argparse("test").parse, true)
+      '';
+
+      assertions =
+        let
+          requiredLuaModules = lib.pipe config.extraPlugins [
+            (builtins.catAttrs "requiredLuaModules")
+            builtins.concatLists
+            lib.unique
+          ];
+        in
+        [
+          # Ensure that propagatedBuildInputs are byte-compiled recursively
+          # by checking that every library is present only once
+          {
+            assertion = lib.allUnique (map lib.getName requiredLuaModules);
+            message = ''
+              Expected requiredLuaModules of all propagatedBuildInputs to have unique names.
+              Got the following derivations: ${builtins.concatStringsSep ", " requiredLuaModules}.
+              One possible reason is that not all dependencies are overridden the same way.
+            '';
+          }
+        ];
+    };
 }
 //
   # Two equal tests, one with combinePlugins.enable = true
