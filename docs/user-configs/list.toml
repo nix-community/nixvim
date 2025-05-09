@@ -13,7 +13,10 @@ But it still should not be _too_ long...
 
 Note: You can use markdown in both the title and description!
 """
-
+[[config]]
+owner = "cirius-nix"
+repo = "cirius-nix"
+description = "Managed by Nix, Snowfall Lib and SOPS to provide the best user experience"
 
 [[config]]
 owner = "ahwxorg"
