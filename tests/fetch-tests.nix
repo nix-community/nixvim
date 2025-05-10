@@ -32,7 +32,7 @@ let
       handleEntry =
         name: type:
         let
-          file = "${path}/${name}";
+          file = /${path}/${name};
         in
         if type == "regular" then
           lib.optional (lib.hasSuffix ".nix" name) (
