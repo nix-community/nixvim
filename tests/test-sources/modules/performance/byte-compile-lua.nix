@@ -1,5 +1,7 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
+  pluginStubs = pkgs.callPackage ../../../utils/plugin-stubs.nix { };
+
   isByteCompiledFun = # lua
     ''
       -- LuaJIT bytecode header is: ESC L J version
@@ -325,70 +327,63 @@ in
 
   # performance.byteCompileLua.luaLib for propagatedBuildInputs
   lua-lib-propagated-build-inputs =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { config, ... }:
     {
       performance.byteCompileLua = {
         enable = true;
         luaLib = true;
       };
 
-      extraPlugins =
-        let
-          inherit (config.package) lua;
-          setDeps =
-            drv: deps:
-            # 'toLuaModule' is used here for updating 'requiredLuaModules' attr
-            lua.pkgs.luaLib.toLuaModule (
-              drv.overrideAttrs {
-                propagatedBuildInputs = [ lua ] ++ deps;
-              }
-            );
-          # Add the 'argparse' dependency to the 'say' module
-          say = setDeps lua.pkgs.say [ lua.pkgs.argparse ];
-        in
-        [
-          # 'lz-n' depends on 'say' which itself depends on 'argparse'
-          (setDeps pkgs.vimPlugins.lz-n [ say ])
-          # 'nvim-cmp' depends on 'argparse'
-          (setDeps pkgs.vimPlugins.nvim-cmp [ lua.pkgs.argparse ])
-        ];
+      extraPlugins = pluginStubs.pluginPack;
 
       extraConfigLuaPost = ''
+        ${pluginStubs.pluginChecks}
+
         ${isByteCompiledFun}
 
-        -- Plugins themselves are importable
-        require("lz.n")
-        require("cmp")
+        -- Lua modules are byte-compiled
+        ${lib.concatMapStringsSep "\n" (
+          name: "test_lualib_file(require('${name}').name, true)"
+        ) pluginStubs.libNames}
 
-        -- Lua modules are importable and byte compiled
-        local say = require("say")
-        test_lualib_file(say.set, true)
-        local argparse = require("argparse")
-        test_lualib_file(argparse("test").parse, true)
+        -- Plugins themselves are not byte-compiled
+        ${lib.concatMapStringsSep "\n" (
+          name: "test_rtp_file('lua/${name}/init.lua', false)"
+        ) pluginStubs.pluginNames}
       '';
 
       assertions =
         let
-          requiredLuaModules = lib.pipe config.extraPlugins [
-            (builtins.catAttrs "requiredLuaModules")
-            builtins.concatLists
+          # Get plugins with all dependencies
+          getDeps = drv: [ drv ] ++ builtins.concatMap getDeps drv.dependencies or [ ];
+          plugins = lib.pipe config.build.plugins [
+            (builtins.catAttrs "plugin")
+            (builtins.concatMap getDeps)
             lib.unique
           ];
+          # Collect both propagatedBuildInputs and requiredLuaModules to one list
+          getAllRequiredLuaModules = lib.flip lib.pipe [
+            (
+              drvs: builtins.catAttrs "propagatedBuildInputs" drvs ++ builtins.catAttrs "requiredLuaModules" drvs
+            )
+            (builtins.concatMap (deps: deps ++ getAllRequiredLuaModules deps))
+            lib.unique
+          ];
+          allRequiredLuaModules = getAllRequiredLuaModules plugins;
         in
         [
-          # Ensure that propagatedBuildInputs are byte-compiled recursively
-          # by checking that every library is present only once
+          # Ensure that lua dependencies are byte-compiled recursively
+          # by checking that every library is present only once.
+          # If there are two different derivations with the same name,
+          # then one of them probably isn't byte-compiled.
           {
-            assertion = lib.allUnique (map lib.getName requiredLuaModules);
+            assertion = lib.allUnique (map lib.getName allRequiredLuaModules);
             message = ''
-              Expected requiredLuaModules of all propagatedBuildInputs to have unique names.
-              Got the following derivations: ${builtins.concatStringsSep ", " requiredLuaModules}.
-              One possible reason is that not all dependencies are overridden the same way.
+              Expected propagatedBuildInputs and requiredLuaModules of all plugins to have unique names.
+              Got the following derivations:''\n${lib.concatLines allRequiredLuaModules}
+              Possible reasons:
+              - not all dependencies are overridden the same way
+              - requiredLuaModules are not updated along with propagatedBuildInputs
             '';
           }
         ];
