@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    systems.url = "github:nix-systems/default";
+
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -26,13 +28,7 @@
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-
+      systems = import inputs.systems;
       imports = [ ./flake ];
     };
 }
