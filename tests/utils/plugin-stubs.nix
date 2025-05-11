@@ -236,6 +236,11 @@ let
     "lib_with_dep5"
     "lib5"
   ];
+  pythonNames = [
+    "yaml"
+    "requests"
+    "numpy"
+  ];
   pluginNames = [
     "plugin1"
     "plugin2"
@@ -246,76 +251,78 @@ let
     "plugin_with_dep5"
     "plugin5"
   ];
-  # Lua code to validate that everything works
-  libChecks = lib.concatMapStringsSep "\n" (
-    name:
-    # lua
-    ''
-      -- Lua dependencies require check
-      do
-        local mod = require("${name}")
-        assert(
-          mod.name() == "${name}",
-          string.format(
-            [[expected require("${name}").name() == "${name}", got %q. Invalid lua dependency?]],
-            mod.name()
-          )
+  # Lua code to validate lua libraries of the given names
+  libChecksFor = lib.concatMapStringsSep "\n" (name:
+  # lua
+  ''
+    -- Lua dependencies require check
+    do
+      local mod = require("${name}")
+      assert(
+        mod.name() == "${name}",
+        string.format(
+          [[expected require("${name}").name() == "${name}", got %q. Invalid lua dependency?]],
+          mod.name()
         )
-      end
-    '') libNames;
-  pluginChecks =
-    lib.concatMapStringsSep "\n" (
-      name:
-      # lua
-      ''
-        -- Require check
-        do
-          local name = require("${name}")
-          assert(
-            name == "${name}",
-            string.format([[expected require("${name}") == "${name}", got %q. Invalid plugin?]], name)
-          )
-        end
+      )
+    end
+  '');
+  # Lua code to validate all lua libraries
+  libChecks = libChecksFor libNames;
+  # Lua code to validate python dependencies of the given names
+  pythonChecksFor = lib.concatMapStringsSep "\n" (name:
+  # lua
+  ''
+    -- Python dependencies checks
+    vim.cmd.py3('import ${name}')
+  '');
+  # Lua code to validate all python dependencies
+  pythonChecks = pythonChecksFor pythonNames;
+  # Lua code to validate plugins of the given names
+  # Python and lua dependencies aren't checked
+  pluginChecksFor = lib.concatMapStringsSep "\n" (name:
+  # lua
+  ''
+    -- Require check
+    do
+      local name = require("${name}")
+      assert(
+        name == "${name}",
+        string.format([[expected require("${name}") == "${name}", got %q. Invalid plugin?]], name)
+      )
+    end
 
-        -- Lua plugin check
-        vim.cmd.runtime("plugin/${name}.lua")
-        assert(
-          _G["${name}"] == true,
-          string.format(
-            [[expected _G["${name}"] == true, got %s. File %q isn't executed?]],
-            _G["${name}"],
-            "plugin/${name}.lua"
-          )
-        )
+    -- Lua plugin check
+    vim.cmd.runtime("plugin/${name}.lua")
+    assert(
+      _G["${name}"] == true,
+      string.format(
+        [[expected _G["${name}"] == true, got %s. File %q isn't executed?]],
+        _G["${name}"],
+        "plugin/${name}.lua"
+      )
+    )
 
-        -- Vimscript plugin check
-        vim.cmd.runtime("plugin/${name}.vim")
-        assert(
-          vim.g["${name}"] == 1,
-          string.format(
-            [[expected vim.g["${name}"] == 1, got %s. File %q isn't executed?]],
-            vim.g["${name}"],
-            "plugin/${name}.vim"
-          )
-        )
+    -- Vimscript plugin check
+    vim.cmd.runtime("plugin/${name}.vim")
+    assert(
+      vim.g["${name}"] == 1,
+      string.format(
+        [[expected vim.g["${name}"] == 1, got %s. File %q isn't executed?]],
+        vim.g["${name}"],
+        "plugin/${name}.vim"
+      )
+    )
 
-        -- Doc check
-        do
-          local doc = vim.api.nvim_get_runtime_file("doc/${name}.txt", false)
-          assert(doc[1], [["doc/${name}.txt" not found in runtime]])
-          assert(vim.fn.getcompletion("${name}", "help")[1], [[no help tags for "${name}"]])
-        end
-      '') pluginNames
-    # lua
-    + ''
-
-      -- Python dependencies check
-      vim.cmd.py3("import yaml")
-      vim.cmd.py3("import requests")
-      vim.cmd.py3("import numpy")
-
-    ''
-    + libChecks;
+    -- Doc check
+    do
+      local doc = vim.api.nvim_get_runtime_file("doc/${name}.txt", false)
+      assert(doc[1], [["doc/${name}.txt" not found in runtime]])
+      assert(vim.fn.getcompletion("${name}", "help")[1], [[no help tags for "${name}"]])
+    end
+  '');
+  # Lua code to validate all plugins along with python and lua dependencies
+  pluginChecks = pluginChecksFor pluginNames + libChecks + pythonChecks;
 in
 {
   inherit
@@ -346,10 +353,15 @@ in
     libWithDeepDep
 
     # checks
+    pluginChecksFor
     pluginChecks
     pluginNames
+    libChecksFor
     libChecks
     libNames
+    pythonChecksFor
+    pythonChecks
+    pythonNames
     ;
 
   # a pack of top-level plugins

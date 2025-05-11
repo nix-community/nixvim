@@ -50,46 +50,41 @@ let
       end
     '';
 
-  # Stub plugin built with mkDerivation
-  stubDrvPlugin = pkgs.stdenvNoCC.mkDerivation {
-    name = "stub_drv_plugin";
-    src = pkgs.emptyDirectory;
-    buildPhase = ''
-      mkdir -p "$out/lua/$name"
-      echo "return '$name'" >"$out/lua/$name/init.lua"
-      mkdir $out/plugin
-      echo "vim.g['$name'] = true" >"$out/plugin/$name.lua"
-      echo "let g:$name = 1" >"$out/plugin/$name.vim"
-    '';
-    dependencies = [ stubBuildCommandPlugin ];
-  };
-  # Stub plugin built with buildCommand with python dependency
-  stubBuildCommandPlugin = pkgs.writeTextFile {
-    name = "stub_build_command_plugin";
-    text = ''
-      return "stub_build_command_plugin"
-    '';
-    destination = "/lua/stub_build_command_plugin/init.lua";
-    derivationArgs = {
-      dependencies = [ stubDependentPlugin ];
-      passthru.python3Dependencies = ps: [ ps.pyyaml ];
-    };
-  };
-  # Dependent stub plugin
-  stubDependentPlugin = pkgs.writeTextFile {
-    name = "stub_dependent_plugin";
-    text = ''
-      return "stub_dependent_plugin"
-    '';
-    destination = "/lua/stub_dependent_plugin/init.lua";
-  };
-  # Stub plugin with an invalid lua file
-  stubInvalidFilePlugin = pkgs.runCommand "stub_invalid_file_plugin" { } ''
-    mkdir -p "$out/lua/$name"
-    echo "return '$name'" >"$out/lua/$name/init.lua"
-    mkdir "$out/ftplugin"
-    echo "if true then" >"$out/ftplugin/invalid.lua"
-  '';
+  # In order to know where lua library come from
+  # split plugins and libs to avoid lua libraries intersection.
+  shortPluginList = with pluginStubs; [
+    plugin1
+    pluginWithDep4
+  ];
+  shortPluginNames = [
+    "plugin1"
+    "plugin_with_dep4"
+    "plugin4"
+    "plugin3"
+  ];
+  shortPluginLuaNames = [
+    "lib1"
+    "lib2"
+    # "lib3" # is in both
+  ];
+  shortLuaList = with pluginStubs; [
+    lib4
+    libWithDep5
+  ];
+  shortLuaNames = [
+    "lib4"
+    "lib_with_dep5"
+    "lib5"
+    # "lib3" # is in both
+  ];
+  shortLuaAllNames = shortPluginLuaNames ++ shortLuaNames ++ [ "lib3" ];
+  shortChecks =
+    pluginStubs.pluginChecksFor shortPluginNames
+    + pluginStubs.libChecksFor shortLuaAllNames
+    + pluginStubs.pythonChecksFor [
+      "yaml"
+      "numpy"
+    ];
 in
 {
   default =
@@ -143,9 +138,9 @@ in
         };
       };
 
-      extraPlugins = [ stubDrvPlugin ];
+      extraPlugins = shortPluginList;
 
-      extraLuaPackages = ps: [ ps.say ];
+      extraLuaPackages = _: shortLuaList;
 
       extraConfigLua = ''
         -- The test will search for the next string in nixvim-print-init's output: VALIDATING_STRING.
@@ -159,6 +154,8 @@ in
         # lua
         ''
           ${isByteCompiledFun}
+
+          ${shortChecks}
 
           -- vimrc is byte compiled
           local init = vim.env.MYVIMRC or vim.fn.getscriptinfo({name = "init.lua"})[1].name
@@ -183,9 +180,6 @@ in
             { "plugin/file.lua", true, "file_lua" },
             -- other 'files'
             { "plugin/file.vim", false, "file_vimscript" },
-
-            -- Plugins aren't byte compiled by default
-            { "plugin/stub_drv_plugin.lua", false, "stub_drv_plugin" }
           }
           for _, test in ipairs(runtime_lua_files) do
             local file, expected_byte_compiled, varname = unpack(test)
@@ -198,8 +192,16 @@ in
           -- Nvim runtime isn't byte compiled by default
           test_rtp_file("lua/vim/lsp.lua", false)
 
-          -- Lua library isn't byte compiled by default
-          test_lualib_file(require("say").set, false)
+          -- Plugins aren't byte-compiled by default
+          ${lib.concatMapStrings (name: ''
+            test_rtp_file("lua/${name}/init.lua", false)
+            test_rtp_file("plugin/${name}.lua", false)
+          '') shortPluginNames}
+
+          -- Lua library isn't byte-compiled by default
+          ${lib.concatMapStrings (name: ''
+            test_lualib_file(require("${name}").name, false)
+          '') shortLuaAllNames}
         '';
 
     };
@@ -211,9 +213,9 @@ in
 
     files."plugin/test2.lua".opts.tabstop = 2;
 
-    extraPlugins = [ stubDrvPlugin ];
+    extraPlugins = shortPluginList;
 
-    extraLuaPackages = ps: [ ps.say ];
+    extraLuaPackages = _: shortLuaList;
 
     extraConfigLua = ''
       ${isByteCompiledFun}
@@ -226,12 +228,13 @@ in
       test_rtp_file("plugin/test1.lua", false)
       -- files
       test_rtp_file("plugin/test2.lua", false)
-      -- Plugins
-      test_rtp_file("lua/stub_drv_plugin/init.lua", false)
       -- Neovim runtime
       test_rtp_file("lua/vim/lsp.lua", false)
-      -- Lua library
-      test_lualib_file(require("say").set, false)
+      -- plugins
+      test_rtp_file("lua/${builtins.elemAt shortPluginNames 0}/init.lua", false)
+      -- lua library
+      test_lualib_file(require("${builtins.elemAt shortLuaNames 0}").name, false)
+      test_lualib_file(require("${builtins.elemAt shortPluginLuaNames 0}").name, false)
     '';
   };
 
@@ -276,12 +279,13 @@ in
       nvimRuntime = true;
     };
 
-    extraPlugins = [
-      stubBuildCommandPlugin
-    ];
+    extraPlugins = shortPluginList;
+    extraLuaPackages = _: shortLuaList;
 
     extraConfigLuaPost = ''
       ${isByteCompiledFun}
+
+      ${shortChecks}
 
       -- vim namespace is working
       vim.opt.tabstop = 2
@@ -295,9 +299,6 @@ in
       test_rtp_file("lua/vim/treesitter/query.lua", true)
       test_rtp_file("lua/vim/lsp/buf.lua", true)
       test_rtp_file("plugin/editorconfig.lua", true)
-
-      -- Python3 packages are importable
-      vim.cmd.py3("import yaml")
     '';
   };
 
@@ -388,7 +389,7 @@ in
 }
 //
   # Two equal tests, one with combinePlugins.enable = true
-  pkgs.lib.genAttrs
+  lib.genAttrs
     [
       "plugins"
       "plugins-combined"
@@ -400,44 +401,38 @@ in
           plugins = true;
         };
 
-        combinePlugins.enable = pkgs.lib.hasSuffix "combined" name;
+        combinePlugins.enable = lib.hasSuffix "combined" name;
       };
 
-      extraPlugins = [
-        # Depends on stubBuildCommandPlugin, which itself depends on stubDependentPlugin
-        stubDrvPlugin
-        # Plugin with invalid file
-        stubInvalidFilePlugin
+      extraPlugins = pluginStubs.pluginPack ++ [
+        # A plugin with invalid lua file
+        (pluginStubs.mkPlugin "invalid" {
+          postInstall = ''
+            mkdir $out/ftplugin
+            echo "if true then" >$out/ftplugin/invalid.lua
+          '';
+        })
       ];
 
       extraConfigLuaPost = ''
+        ${pluginStubs.pluginChecks}
+
         ${isByteCompiledFun}
 
-        local tests = {
-          "stub_drv_plugin",
-          "stub_build_command_plugin",
-          "stub_dependent_plugin",
-          "stub_invalid_file_plugin",
-        }
-        for _, test in ipairs(tests) do
-          -- Plugin is loadable
-          local val = require(test)
-          -- Valid lua code
-          assert(val == test, string.format([[expected require("%s") = "%s", got "%s"]], test, test, val))
-          -- Is byte compiled
-          test_rtp_file("lua/" .. test .. "/init.lua", true)
-        end
+        -- Plugins are byte-compiled
+        ${lib.concatMapStrings (name: ''
+          test_rtp_file("lua/${name}/init.lua", true)
+          test_rtp_file("plugin/${name}.lua", true)
+        '') pluginStubs.pluginNames}
 
-        -- stubDrvPlugin's other files
-        test_rtp_file("plugin/stub_drv_plugin.lua", true)
-        -- non-lua file is valid
-        vim.cmd.runtime("plugin/stub_drv_plugin.vim")
-        assert_g_var("stub_drv_plugin", "plugin/stub_drv_plugin.vim")
+        -- Lua modules aren't byte-compiled
+        ${lib.concatMapStrings (name: ''
+          test_lualib_file(require("${name}").name, false)
+        '') pluginStubs.libNames}
 
-        -- Python modules are importable
-        vim.cmd.py3("import yaml")
-
-        -- stubInvalidFilePlugin's invalid file exists, but isn't byte compiled
+        -- A plugin with invalid file
+        ${pluginStubs.pluginChecksFor [ "invalid" ]}
+        -- invalid file exists, but isn't byte compiled
         test_rtp_file("ftplugin/invalid.lua", false)
       '';
     })
