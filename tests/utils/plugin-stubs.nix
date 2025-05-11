@@ -58,6 +58,7 @@ let
         prev:
         {
           inherit name;
+          pname = name;
           buildCommand = ''
             ${prev.buildCommand}
             # Activate vimGenDocHook for doc checks to pass
