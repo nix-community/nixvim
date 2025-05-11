@@ -1,9 +1,4 @@
-/*
-  Byte compiling of lua dependencies of normalized plugin list
-
-  Inputs: List of normalized plugins
-  Outputs: List of normalized plugins with all the propagatedBuildInputs byte-compiled
-*/
+# Utilities for byte compiling of lua dependencies
 { lib, pkgs }:
 let
   builders = lib.nixvim.builders.withPkgs pkgs;
@@ -40,4 +35,14 @@ let
   # Byte-compile derivation (but only if it's a lua module) and its dependencies
   byteCompile = drv: byteCompileDeps (mapLuaModule builders.byteCompileLuaDrv drv);
 in
-mapNormalizedPlugins byteCompileDeps
+{
+  # byteCompilePluginDeps compiles propagatedBuildInputs recursively
+  # Inputs: List of normalized plugins
+  # Outputs: List of normalized plugins with all the propagatedBuildInputs byte-compiled
+  byteCompilePluginDeps = mapNormalizedPlugins byteCompileDeps;
+
+  # byteCompileLuaPackages compiles packages and its propagatedBuildInputs
+  # Inputs: List of lua packages
+  # Outputs: List of byte-compiled packages along with all the propagatedBuildInputs
+  byteCompileLuaPackages = map byteCompile;
+}

@@ -308,20 +308,17 @@ in
       luaLib = true;
     };
 
-    extraLuaPackages =
-      ps: with ps; [
-        say
-        argparse
-      ];
+    extraLuaPackages = _: pluginStubs.libPack;
 
     extraConfigLuaPost = ''
+      ${pluginStubs.libChecks}
+
       ${isByteCompiledFun}
 
-      -- Lua modules are importable and byte compiled
-      local say = require("say")
-      test_lualib_file(say.set, true)
-      local argparse = require("argparse")
-      test_lualib_file(argparse("test").parse, true)
+      -- Lua modules are byte-compiled
+      ${lib.concatMapStringsSep "\n" (
+        name: "test_lualib_file(require('${name}').name, true)"
+      ) pluginStubs.libNames}
     '';
   };
 

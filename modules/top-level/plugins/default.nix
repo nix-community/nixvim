@@ -35,7 +35,7 @@ in
         byteCompilePlugins = import ./byte-compile-plugins.nix { inherit lib pkgs; };
 
         shouldCompileLuaLib = byteCompileCfg.enable && byteCompileCfg.luaLib;
-        byteCompileLuaLib = import ./byte-compile-lua-lib.nix { inherit lib pkgs; };
+        inherit (import ./byte-compile-lua-lib.nix { inherit lib pkgs; }) byteCompilePluginDeps;
 
         shouldCombinePlugins = config.performance.combinePlugins.enable;
         combinePlugins = import ./combine-plugins.nix {
@@ -50,7 +50,7 @@ in
       lib.pipe config.extraPlugins (
         [ normalizePlugins ]
         ++ lib.optionals shouldCompilePlugins [ byteCompilePlugins ]
-        ++ lib.optionals shouldCompileLuaLib [ byteCompileLuaLib ]
+        ++ lib.optionals shouldCompileLuaLib [ byteCompilePluginDeps ]
         ++ lib.optionals shouldCombinePlugins [ combinePlugins ]
       );
   };
