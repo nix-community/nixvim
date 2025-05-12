@@ -1,10 +1,14 @@
 # Utilities for byte compiling of lua dependencies
-{ lib, pkgs }:
+{
+  lib,
+  pkgs,
+  neovim-unwrapped,
+}:
 let
   builders = lib.nixvim.builders.withPkgs pkgs;
   inherit (import ./utils.nix lib) mapNormalizedPlugins;
 
-  luaPackages = pkgs.neovim-unwrapped.lua.pkgs;
+  luaPackages = neovim-unwrapped.lua.pkgs;
 
   # Applies a function to the derivation, but only if it's a lua module,
   # otherwise returns it as is

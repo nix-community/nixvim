@@ -1,4 +1,8 @@
-{ lib, pkgs }:
+{
+  lib,
+  buildEnv,
+  vimUtils,
+}:
 let
   inherit (import ./utils.nix lib) normalizePlugin;
 in
@@ -8,7 +12,7 @@ let
   overridePlugin =
     plugin:
     plugin.plugin.overrideAttrs (prev: {
-      nativeBuildInputs = lib.remove pkgs.vimUtils.vimGenDocHook prev.nativeBuildInputs or [ ];
+      nativeBuildInputs = lib.remove vimUtils.vimGenDocHook prev.nativeBuildInputs or [ ];
       configurePhase = ''
         ${prev.configurePhase or ""}
         rm -vf doc/tags'';
@@ -56,8 +60,8 @@ let
         };
       }
       [
-        pkgs.buildEnv
-        pkgs.vimUtils.toVimPlugin
+        buildEnv
+        vimUtils.toVimPlugin
         (drv: drv.overrideAttrs { inherit propagatedBuildInputs; })
       ];
 

@@ -172,7 +172,9 @@ in
   config =
     let
       # Optionally byte compile lua library
-      inherit (import ./plugins/byte-compile-lua-lib.nix { inherit lib pkgs; }) byteCompileLuaPackages;
+      inherit (pkgs.callPackage ./plugins/byte-compile-lua-lib.nix { inherit lib; })
+        byteCompileLuaPackages
+        ;
       extraLuaPackages =
         if config.performance.byteCompileLua.enable && config.performance.byteCompileLua.luaLib then
           ps: byteCompileLuaPackages (config.extraLuaPackages ps)

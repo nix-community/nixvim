@@ -1,6 +1,6 @@
 {
   lib,
-  pkgs,
+  callPackage,
   pathsToLink,
   standalonePlugins,
 }:
@@ -9,7 +9,7 @@ let
     getAndNormalizeDeps
     removeDeps
     ;
-  mkPluginPack = import ./mk-plugin-pack.nix { inherit lib pkgs; };
+  mkPluginPack = callPackage ./mk-plugin-pack.nix { inherit lib; };
 
 in
 /*

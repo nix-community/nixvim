@@ -32,14 +32,14 @@ in
     build.plugins =
       let
         shouldCompilePlugins = byteCompileCfg.enable && byteCompileCfg.plugins;
-        byteCompilePlugins = import ./byte-compile-plugins.nix { inherit lib pkgs; };
+        byteCompilePlugins = pkgs.callPackage ./byte-compile-plugins.nix { inherit lib; };
 
         shouldCompileLuaLib = byteCompileCfg.enable && byteCompileCfg.luaLib;
-        inherit (import ./byte-compile-lua-lib.nix { inherit lib pkgs; }) byteCompilePluginDeps;
+        inherit (pkgs.callPackage ./byte-compile-lua-lib.nix { inherit lib; }) byteCompilePluginDeps;
 
         shouldCombinePlugins = config.performance.combinePlugins.enable;
-        combinePlugins = import ./combine-plugins.nix {
-          inherit lib pkgs;
+        combinePlugins = pkgs.callPackage ./combine-plugins.nix {
+          inherit lib;
           inherit (config.performance.combinePlugins)
             standalonePlugins
             pathsToLink
