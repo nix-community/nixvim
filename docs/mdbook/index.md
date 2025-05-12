@@ -15,6 +15,8 @@ Documentation is currently available for the following versions:
 > This change was largely motivated by: [How do I solve "`<name>` cannot be found in `pkgs`"](./user-guide/faq.html#how-do-i-solve-name-cannot-be-found-in-pkgs)
 >
 > The old behaviour can be restored by enabling `nixpkgs.useGlobalPackages`.
+>
+> If your flake modifies the `nixpkgs` through `follows` this can still cause issues by changing the expected `nixpkg` `nixvim` was tested & built against.
 
 @README@
 
