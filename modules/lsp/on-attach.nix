@@ -29,14 +29,25 @@ in
       {
         event = "LspAttach";
         group = "nixvim_lsp_on_attach";
+        # `event` is documented in `:h event-args`:
+        #   • id:    (number)     autocommand id
+        #   • event: (string)     name of the triggered event
+        #   • group: (number|nil) autocommand group id, if any
+        #   • file:  (string)     <afile> (not expanded to a full path)
+        #   • match: (string)     <amatch> (expanded to a full path)
+        #   • buf:   (number)     <abuf>
+        #   • data:  (any)        arbitrary data passed from `:h nvim_exec_autocmds()`
+        #                         see `:h LspAttach`
+        #
+        # `:h event-args`: https://neovim.io/doc/user/api.html#event-args
+        # `:h LspAttach`: https://neovim.io/doc/user/lsp.html#LspAttach
         callback = lib.nixvim.mkRaw ''
-          function(args)
+          function(event)
             do
               -- client and bufnr are supplied to the builtin `on_attach` callback,
               -- so make them available in scope for our global `onAttach` impl
-              local client = vim.lsp.get_client_by_id(args.data.client_id)
-              local bufnr = args.bufnr
-
+              local client = vim.lsp.get_client_by_id(event.data.client_id)
+              local bufnr = event.buf
               ${cfg.onAttach}
             end
           end
