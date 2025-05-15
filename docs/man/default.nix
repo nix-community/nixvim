@@ -8,15 +8,12 @@
   pandoc,
 }:
 let
-  markdownSections =
-    [
-      "${lib-docs}/lib/index.md"
-    ]
-    ++ lib.mapAttrsToList (name: file: "${lib-docs}/${file}") lib-docs.pages
-    ++ [
-      ../user-guide/faq.md
-      ../user-guide/config-examples.md
-    ];
+  markdownSections = [
+    ../user-guide/faq.md
+    ../user-guide/config-examples.md
+    "${lib-docs}/lib/index.md"
+  ] ++ lib.mapAttrsToList (name: file: "${lib-docs}/${file}") lib-docs.pages;
+
   manHeader =
     runCommand "nixvim-general-doc-manpage"
       {
