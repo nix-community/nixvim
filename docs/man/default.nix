@@ -1,4 +1,5 @@
 {
+  lib,
   options-json,
   runCommand,
   installShellFiles,
@@ -6,42 +7,29 @@
   pandoc,
 }:
 let
-  manualFilter = ''
-    local text = pandoc.text
-
-    function Header(el)
-        if el.level == 1 then
-          return el:walk {
-            Str = function(el)
-                return pandoc.Str(text.upper(el.text))
-            end
-          }
-        end
-    end
-
-    function Link(el)
-      return el.content
-    end
-  '';
-
   manHeader =
-    let
-      mkMDSection = file: "<(pandoc --lua-filter <(echo \"$manualFilter\") -f gfm -t man ${file})";
-    in
     runCommand "nixvim-general-doc-manpage"
       {
         nativeBuildInputs = [ pandoc ];
-        inherit manualFilter;
       }
       ''
+        function mkMDSection {
+          file="$1"
+          pandoc --lua-filter ${./filter.lua} -f gfm -t man "$file"
+        }
         mkdir -p $out
-        cat \
-          ${./nixvim-header-start.5} \
-          ${mkMDSection ../user-guide/helpers.md} \
-          ${mkMDSection ../user-guide/faq.md} \
-          ${mkMDSection ../user-guide/config-examples.md} \
-          ${./nixvim-header-end.5} \
-          >$out/nixvim-header.5
+
+        (
+          cat ${./nixvim-header-start.5}
+
+          ${lib.concatMapStringsSep "\n" (file: "mkMDSection ${file}") [
+            ../user-guide/helpers.md
+            ../user-guide/faq.md
+            ../user-guide/config-examples.md
+          ]}
+
+          cat ${./nixvim-header-end.5}
+        ) >$out/nixvim-header.5
       '';
 in
 # FIXME add platform specific docs to manpage
