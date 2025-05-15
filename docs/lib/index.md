@@ -1,4 +1,4 @@
-# Helpers
+# Nixvim's functions
 
 ## Accessing Nixvim's functions
 
