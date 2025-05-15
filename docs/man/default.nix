@@ -1,6 +1,7 @@
 {
   lib,
   options-json,
+  lib-docs,
   runCommand,
   installShellFiles,
   nixos-render-docs,
@@ -23,7 +24,7 @@ let
           cat ${./nixvim-header-start.5}
 
           ${lib.concatMapStringsSep "\n" (file: "mkMDSection ${file}") [
-            ../user-guide/helpers.md
+            "${lib-docs}/lib/index.md"
             ../user-guide/faq.md
             ../user-guide/config-examples.md
           ]}

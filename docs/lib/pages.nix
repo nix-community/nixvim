@@ -4,5 +4,9 @@
 # If there is an issue parsing the file, the resulting markdown will not contain any function docs.
 
 {
-  # TODO
+  lib.pages = {
+    nixvim = {
+      markdown = ./index.md;
+    };
+  };
 }

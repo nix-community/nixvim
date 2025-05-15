@@ -27,7 +27,7 @@ in
     assert lib.assertMsg (extraSpecialArgs ? lib -> extraSpecialArgs.lib ? nixvim) ''
       Nixvim requires a lib that includes some custom extensions, however the `lib` from `specialArgs` does not have a `nixvim` attr.
       Remove `lib` from nixvim's `specialArgs` or ensure you apply nixvim's extensions to your `lib`.
-      See https://nix-community.github.io/nixvim/user-guide/helpers.html#using-a-custom-lib-with-nixvim'';
+      See https://nix-community.github.io/nixvim/lib/index.html#using-a-custom-lib-with-nixvim'';
     assert lib.assertMsg (system != null -> lib.isString system) ''
       When `system` is supplied to `evalNixvim`, it must be a string.
       To define a more complex system, please use nixvim's `nixpkgs.hostPlatform` option.'';
