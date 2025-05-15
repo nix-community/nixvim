@@ -7,6 +7,7 @@
   nixosOptionsDoc,
   transformOptions,
   search,
+  lib-docs,
   # The root directory of the site
   baseHref ? "/",
   # A list of all available docs that should be linked to
@@ -359,6 +360,13 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     # Copy the contributing file
     cp $contributing ./CONTRIBUTING.md
 
+    # Symlink the function docs
+    for path in ${lib-docs}/*
+    do
+      echo "symlinking \"$path\" to \"$(basename "$path")\""
+      ln -s "$path" $(basename "$path")
+    done
+
     # Copy the generated MD docs into the build directory
     bash -e ${finalAttrs.passthru.copy-docs}
 
@@ -375,6 +383,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
     # Patch SUMMARY.md - which defiens mdBook's table of contents
     substituteInPlace ./SUMMARY.md \
+      --replace-fail "@FUNCTIONS_MENU@" "$functionsSummary" \
       --replace-fail "@PLATFORM_OPTIONS@" "$wrapperOptionsSummary" \
       --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
 
@@ -400,6 +409,8 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     wrapperOptionsSummary
     wrapperOptionsFiles
     ;
+
+  functionsSummary = lib-docs.menu;
 
   passthru = {
     fix-links = callPackage ../fix-links {
