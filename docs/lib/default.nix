@@ -84,6 +84,16 @@ runCommand "nixvim-lib-docs"
       inherit lib;
       pageSpecs = elaboratedPageSpecs;
     };
+
+    passthru.pages = builtins.listToAttrs (
+      builtins.map (
+        { name, outFile, ... }:
+        {
+          inherit name;
+          value = outFile;
+        }
+      ) pagesToRender
+    );
   }
   ''
     function docgen {

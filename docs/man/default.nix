@@ -8,6 +8,12 @@
   pandoc,
 }:
 let
+  markdownSections =
+    lib.mapAttrsToList (name: file: "${lib-docs}/${file}") lib-docs.pages
+    ++ [
+      ../user-guide/faq.md
+      ../user-guide/config-examples.md
+    ];
   manHeader =
     runCommand "nixvim-general-doc-manpage"
       {
@@ -23,11 +29,7 @@ let
         (
           cat ${./nixvim-header-start.5}
 
-          ${lib.concatMapStringsSep "\n" (file: "mkMDSection ${file}") [
-            "${lib-docs}/lib/index.md"
-            ../user-guide/faq.md
-            ../user-guide/config-examples.md
-          ]}
+          ${lib.concatMapStringsSep "\n" (file: "mkMDSection ${file}") markdownSections}
 
           cat ${./nixvim-header-end.5}
         ) >$out/nixvim-header.5
