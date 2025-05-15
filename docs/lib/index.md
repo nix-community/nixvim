@@ -1,5 +1,3 @@
-# Helpers
-
 ## Accessing Nixvim's functions
 
 If Nixvim is built using the standalone method, you can access our "helpers" as part of the `lib` module arg:

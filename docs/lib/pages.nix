@@ -6,6 +6,7 @@
 {
   lib.pages = {
     nixvim = {
+      title = "Nixvim's functions";
       markdown = ./index.md;
     };
   };
