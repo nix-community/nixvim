@@ -38,6 +38,21 @@ rec {
   # Whether the value is a lua-inline type
   isInline = v: v._type or null == "lua-inline";
 
+  /**
+    Serialise a nix value as a lua object.
+
+    Useful for defining your own plugins or structured config.
+
+    # Type
+
+    ```
+    toLuaObject :: Any -> String
+    ```
+  */
+  toLuaObject =
+    # toLua' with backwards-compatible options
+    toLua' { };
+
   # toLua' with default options, aliased as toLuaObject at the top-level
   toLua = toLua' { };
 

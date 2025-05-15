@@ -103,7 +103,7 @@ lib.makeExtensible (
       wrapVimscriptForLua
       ;
 
-    toLuaObject = self.lua.toLua;
+    inherit (self.lua) toLuaObject;
     mkLuaInline = self.lua.mkInline;
 
     # TODO: Removed 2024-12-21
