@@ -14,6 +14,10 @@
           file = ../../lib/utils.nix;
           title = "utility functions";
         };
+        lua = {
+          file = ../../lib/to-lua.nix;
+          title = "lua functions";
+        };
       };
     };
   };
