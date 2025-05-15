@@ -7,3 +7,8 @@
 loc = ["nixvim", "utils"]
 file = "utils.nix"
 title = "utility functions"
+
+[[page]]
+loc = ["nixvim", "lua"]
+file = "to-lua.nix"
+title = "lua functions"
