@@ -3,4 +3,7 @@
 # Note: `nixdoc` uses `rnix` to parse the input file, so the file must return a fairly simple attrset.
 # If there is an issue parsing the file, the resulting markdown will not contain any function docs.
 
-# TODO
+[[page]]
+loc = ["nixvim", "utils"]
+file = "utils.nix"
+title = "utility functions"
