@@ -8,6 +8,13 @@
     nixvim = {
       title = "Nixvim's functions";
       markdown = ./index.md;
+
+      pages = {
+        utils = {
+          file = ../../lib/utils.nix;
+          title = "utility functions";
+        };
+      };
     };
   };
 }
