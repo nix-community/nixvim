@@ -36,11 +36,10 @@ runCommand "nixvim-lib-docs"
       }
     );
 
-    # TODO: make the `lib/index.md` link optional, based on whether that file exists.
     passthru.menu = ''
       # Library functions
 
-      - [`lib`](${lib.optionalString false (locToFile [ "index" ])})
+      - [`lib`](${locToFile [ "index" ]})
       ${lib.concatMapStringsSep "\n" (
         { loc, ... }: "  - [`${locToName loc}`](${locToFile loc})"
       ) pageSpecs}
@@ -75,9 +74,8 @@ runCommand "nixvim-lib-docs"
       # TODO: add preamble/summary/description to top of out_file
     }
 
-    mkdir -p "$out"
-
-    # TODO: also include index.md if it exists
+    mkdir -p "$out/lib"
+    cp ${./index.md} "$out/lib/index.md"
 
     ${lib.concatMapStringsSep "\n" (
       {

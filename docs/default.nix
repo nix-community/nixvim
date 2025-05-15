@@ -108,7 +108,10 @@ lib.fix (
 
     gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
 
-    man-docs = pkgs.callPackage ./man { inherit options-json; };
+    man-docs = pkgs.callPackage ./man {
+      inherit options-json;
+      inherit (self) lib-docs;
+    };
 
     lib-docs = pkgs.callPackage ./lib {
       inherit nixvim lib;
