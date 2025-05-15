@@ -45,6 +45,15 @@ runCommand "nixvim-lib-docs"
       ) pageSpecs}
     '';
 
+    passthru.pages = builtins.listToAttrs (
+      builtins.map (
+        { loc, ... }:
+        {
+          name = locToName loc;
+          value = locToFile loc;
+        }
+      ) pageSpecs
+    );
   }
   ''
     function docgen {
