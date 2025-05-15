@@ -127,7 +127,7 @@ lib.fix (
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgs.callPackage ./mdbook {
       inherit evaledModules transformOptions;
-      inherit (self) search;
+      inherit (self) search lib-docs;
     };
   }
 )

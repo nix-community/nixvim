@@ -10,6 +10,10 @@
 - [Configuration examples](./user-guide/config-examples.md)
 - [Lazy Loading](./user-guide/lazy-loading.md)
 
+# Functions
+
+@FUNCTIONS_MENU@
+
 # Platforms
 
 - [Nixvim Platforms](./platforms/index.md)
