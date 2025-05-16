@@ -16,6 +16,10 @@
       devshells.default = {
         devshell.startup.pre-commit.text = config.pre-commit.installationScript;
 
+        devshell.packages = [
+          config.formatter
+        ];
+
         commands =
           let
             # Thanks to this, the user can choose to use `nix-output-monitor` (`nom`) instead of plain `nix`
