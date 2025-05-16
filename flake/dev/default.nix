@@ -23,7 +23,9 @@
         flakeCheck = true;
 
         programs = {
+          # keep-sorted start block=yes newline_separated=no
           isort.enable = true;
+          keep-sorted.enable = true;
           nixfmt = {
             enable = true;
             package = pkgs.nixfmt-rfc-style;
@@ -36,6 +38,7 @@
             check = true;
             format = true;
           };
+          shfmt.enable = true;
           statix = {
             enable = true;
             disabled-lints = [
@@ -44,9 +47,9 @@
             ];
           };
           stylua.enable = true;
-          shfmt.enable = true;
           # FIXME: re-enable on darwin, currently broken: taplo with options '[format]' failed to apply: exit status 101
           taplo.enable = pkgs.stdenv.isLinux;
+          # keep-sorted end
         };
 
         settings = {
