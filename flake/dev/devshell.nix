@@ -81,7 +81,7 @@
             {
               name = "format";
               help = "Format the entire codebase";
-              command = "nix fmt";
+              command = lib.getExe config.formatter;
             }
             {
               name = "docs";
