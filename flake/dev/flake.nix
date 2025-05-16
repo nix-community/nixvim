@@ -7,6 +7,21 @@
     # TODO: Once nix 2.26 is more prevalent, follow the root flake's inputs using a "path:../.." input.
     dev-nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    # flake-compat is used by the root `default.nix` to allow non-flake users to import nixvim
+    flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
+
+    # keep-sorted start block=yes newline_separated=yes
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "dev-nixpkgs";
+    };
+
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "dev-nixpkgs";
+      inputs.flake-compat.follows = "flake-compat";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "dev-nixpkgs";
@@ -17,23 +32,12 @@
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
-    devshell = {
-      url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "dev-nixpkgs";
-    };
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
-    flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
-
-    git-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "dev-nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
-    };
+    # keep-sorted end
   };
 
   # This flake is only used for its inputs.
