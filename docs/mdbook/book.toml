@@ -7,9 +7,13 @@ title = "nixvim docs"
 
 [output.html]
 site-url = "@SITE_URL@"
+additional-js = ["theme/pagetoc.js"]
+additional-css = ["theme/pagetoc.css"]
 
 [output.html.fold]
 enable = true
 level = 0
 
 [preprocessor.alerts]
+
+[preprocessor.pagetoc]
