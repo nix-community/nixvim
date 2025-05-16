@@ -19,10 +19,11 @@ Options:
 	-l, --list: Display the list of tests and exit
 	-s, --system <system>: Launch checks for "<system>" instead of "${NIXVIM_SYSTEM}".
 	-i, --interactive: Pick interactively the tests. Can't be supplied if tests where passed.
+	-a, --attr: Print full attrpath of the tests, instead of running them.
 EOF
 }
 
-if ! OPTS=$(getopt -o "hlis:" -l "help,list,interactive,system:" -- "$@"); then
+if ! OPTS=$(getopt -o "hlis:a" -l "help,list,interactive,system:,attr" -- "$@"); then
   echo "Invalid options" >&2
   help
   exit 1
@@ -34,6 +35,7 @@ system=${NIXVIM_SYSTEM}
 specified_tests=()
 nix_args=()
 interactive=false
+print_attrpath=false
 
 mk_test_list() {
   jq -r 'keys[]' "${NIXVIM_TESTS}"
@@ -56,6 +58,10 @@ while true; do
   -s | --system)
     system=$2
     shift 2
+    ;;
+  -a | --attr)
+    print_attrpath=true
+    shift 1
     ;;
   --)
     shift
@@ -90,7 +96,13 @@ get_tests() {
 
 run_tests() {
   readarray -t test_list < <(get_tests "$@")
-  if ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "${test_list[@]}"; then
+  if [[ $print_attrpath == true ]]; then
+    echo
+    echo "Full attr paths:"
+    for test in "${test_list[@]}"; do
+      echo "- $test"
+    done
+  elif ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "${test_list[@]}"; then
     echo "Test failure" >&2
     exit 1
   fi
@@ -110,6 +122,10 @@ if [[ ${#specified_tests[@]} -eq 0 ]]; then
   readarray -t complete_test_list < <(mk_test_list)
   run_tests "${complete_test_list[@]}"
 else
-  echo "Running ${#specified_tests[@]} tests: ${specified_tests[*]}" >&2
+  verb="Running"
+  if [[ $print_attrpath == true ]]; then
+    verb="Printing"
+  fi
+  echo "$verb ${#specified_tests[@]} tests: ${specified_tests[*]}" >&2
   run_tests "${specified_tests[@]}"
 fi
