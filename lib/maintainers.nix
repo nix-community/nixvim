@@ -143,4 +143,10 @@
     name = "Jalil David Salamé Messina";
     keys = [ { fingerprint = "7D6B 4D8F EBC5 7CBC 09AC  331F DA33 17E7 5BE9 485C"; } ];
   };
+  my7h3le = {
+    email = "mandate-word-dupe@duck.com";
+    github = "my7h3le";
+    githubId = 7899547;
+    name = "Tash";
+  };
 }
