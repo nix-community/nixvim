@@ -13,6 +13,7 @@
   perSystem =
     {
       pkgs,
+      config,
       system,
       ...
     }:
@@ -84,7 +85,10 @@
               edit = true;
             };
           };
-          treefmt.enable = true;
+          treefmt = {
+            enable = true;
+            package = config.formatter;
+          };
           typos = {
             enable = true;
             excludes = [ "generated/*" ];
