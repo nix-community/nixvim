@@ -1,12 +1,19 @@
 {
   lib,
   options-json,
+  lib-docs,
   runCommand,
   installShellFiles,
   nixos-render-docs,
   pandoc,
 }:
 let
+  markdownSections = [
+    ../user-guide/faq.md
+    ../user-guide/config-examples.md
+    "${lib-docs}/lib/index.md"
+  ] ++ lib.mapAttrsToList (name: file: "${lib-docs}/${file}") lib-docs.pages;
+
   manHeader =
     runCommand "nixvim-general-doc-manpage"
       {
@@ -22,11 +29,7 @@ let
         (
           cat ${./nixvim-header-start.5}
 
-          ${lib.concatMapStringsSep "\n" (file: "mkMDSection ${file}") [
-            ../user-guide/helpers.md
-            ../user-guide/faq.md
-            ../user-guide/config-examples.md
-          ]}
+          ${lib.concatMapStringsSep "\n" (file: "mkMDSection ${file}") markdownSections}
 
           cat ${./nixvim-header-end.5}
         ) >$out/nixvim-header.5

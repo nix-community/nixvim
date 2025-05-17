@@ -10,6 +10,11 @@ site-url = "@SITE_URL@"
 additional-js = ["theme/pagetoc.js"]
 additional-css = ["theme/pagetoc.css"]
 
+# Redirect targets must be relative to their origin;
+# absolute paths can break with different baseHrefs.
+[output.html.redirect]
+"/user-guide/helpers.html" = "../lib/index.html" # Since #3049
+
 [output.html.fold]
 enable = true
 level = 0

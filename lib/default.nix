@@ -24,7 +24,7 @@ lib.makeExtensible (
     modules = call ./modules.nix { inherit flake; };
     options = call ./options.nix { };
     plugins = call ./plugins { };
-    utils = call ./utils.nix { inherit _nixvimTests; };
+    utils = call ./utils.nix { inherit _nixvimTests; } // call ./utils.internal.nix { };
 
     # Top-level helper aliases:
     # TODO: deprecate some aliases
@@ -103,7 +103,7 @@ lib.makeExtensible (
       wrapVimscriptForLua
       ;
 
-    toLuaObject = self.lua.toLua;
+    inherit (self.lua) toLuaObject;
     mkLuaInline = self.lua.mkInline;
 
     # TODO: Removed 2024-12-21

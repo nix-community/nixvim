@@ -1,6 +1,7 @@
 {
   helpers,
   system,
+  nixvim,
   nixpkgs,
   nuschtosSearch,
 }:
@@ -107,7 +108,14 @@ lib.fix (
 
     gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
 
-    man-docs = pkgs.callPackage ./man { inherit options-json; };
+    man-docs = pkgs.callPackage ./man {
+      inherit options-json;
+      inherit (self) lib-docs;
+    };
+
+    lib-docs = pkgs.callPackage ./lib {
+      inherit nixvim lib;
+    };
   }
   // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
     # NuschtOS/search does not seem to work on darwin
@@ -122,7 +130,7 @@ lib.fix (
     # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
     docs = pkgs.callPackage ./mdbook {
       inherit evaledModules transformOptions;
-      inherit (self) search;
+      inherit (self) search lib-docs;
     };
   }
 )
