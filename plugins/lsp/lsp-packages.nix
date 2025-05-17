@@ -79,6 +79,7 @@
     "julials"
     "kcl"
     "kulala_ls"
+    "laravel_ls"
     "lean3ls"
     "lelwel_ls"
     "ltex_plus"
