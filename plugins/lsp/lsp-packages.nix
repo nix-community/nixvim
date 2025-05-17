@@ -81,7 +81,6 @@
     "kulala_ls"
     "lean3ls"
     "lelwel_ls"
-    "ltex_plus"
     "luau_lsp"
     "lwc_ls"
     "m68k"
@@ -281,6 +280,7 @@
     lemminx = "lemminx";
     lsp_ai = "lsp-ai";
     ltex = "ltex-ls";
+    ltex_plus = "ltex-ls-plus";
     lua_ls = "lua-language-server";
     markdown_oxide = "markdown-oxide";
     marksman = "marksman";
