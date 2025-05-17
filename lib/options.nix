@@ -114,6 +114,7 @@ rec {
     { type, ... }@args: mkNullOrOption' (args // { type = with types; either strLuaFn type; });
   mkNullOrStrLuaFnOr = type: description: mkNullOrStrLuaFnOr' { inherit type description; };
 
+  # TODO: use lib.nixvim.lua-types
   defaultNullOpts =
     let
       # Ensures that default is null and defaultText is not set
