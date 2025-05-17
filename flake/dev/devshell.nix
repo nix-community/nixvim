@@ -61,8 +61,8 @@
                         checkName:
                         map (testName: {
                           name = testName;
-                          value = "${checkName}.passthru.entries.${testName}";
-                        }) (builtins.attrNames checks'.${checkName}.passthru.entries)
+                          value = "${checkName}.entries.${testName}";
+                        }) (builtins.attrNames checks'.${checkName}.entries)
                       ) names
                     );
                 in
