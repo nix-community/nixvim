@@ -15,6 +15,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
+  dependencies = [
+    "curl"
+    "nodejs"
+  ];
+
   settingsOptions =
     let
       mkKeymapOption = defaultNullOpts.mkNullableWithRaw (with types; either (enum [ false ]) str);
@@ -105,21 +110,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
       };
 
-      copilot_node_command =
-        let
-          inherit (config.plugins.copilot-lua) nodePackage;
-        in
-        lib.nixvim.mkNullOrOption' {
-          type = types.str;
-          default = if nodePackage == null then null else lib.getExe nodePackage;
-          defaultText = lib.literalMD "`lib.getExe nodePackage` if `nodePackage` is not null, otherwise `null`";
-          pluginDefault = "node";
-          example = lib.literalExpression "lib.getExe pkgs.nodejs";
-          description = ''
-            Define the node command to use for copilot-lua.
-            Node.js version must be 18.x or newer.
-          '';
-        };
+      copilot_node_command = defaultNullOpts.mkStr "node" ''
+        Define the node command to use for copilot-lua.
+        Node.js version must be 20.x or newer.
+      '';
 
       server_opts_overrides = defaultNullOpts.mkAttrsOf' {
         type = types.anything;
@@ -164,16 +158,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraOptions = {
-    nodePackage = lib.mkPackageOption pkgs "nodejs" {
-      default = [ "nodejs_20" ];
-      example = [ "nodejs" ];
-      nullable = true;
-      extraDescription = ''
-        If non-null, will provide a default for `settings.copilot_node_command`.
-      '';
-    };
-  };
+  # TODO: introduced 2025-05-17: remove after 25.11
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "plugins"
+      "copilot-lua"
+      "nodePackage"
+    ] "Use `dependencies.nodejs.package` instead to change the Node.js package.")
+  ];
 
   extraConfig = {
     assertions = lib.nixvim.mkAssertions "plugins.copilot-lua" {
