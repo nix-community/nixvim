@@ -15,6 +15,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
+  dependencies = [ "curl" ];
+
   settingsOptions =
     let
       mkKeymapOption = defaultNullOpts.mkNullableWithRaw (with types; either (enum [ false ]) str);
