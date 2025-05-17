@@ -82,7 +82,6 @@
     "lean3ls"
     "lelwel_ls"
     "ltex_plus"
-    "luau_lsp"
     "lwc_ls"
     "m68k"
     "marko-js"
@@ -282,6 +281,7 @@
     lsp_ai = "lsp-ai";
     ltex = "ltex-ls";
     lua_ls = "lua-language-server";
+    luau_lsp = "luau-lsp";
     markdown_oxide = "markdown-oxide";
     marksman = "marksman";
     matlab_ls = "matlab-language-server";
