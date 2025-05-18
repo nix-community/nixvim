@@ -35,6 +35,11 @@
                 ]
                 ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
                   "cmp_tabnine"
+                ]
+                ++ lib.optionals hostPlatform.isDarwin [
+                  # TODO: as of 2025-05-18, luajitPackages.luv is broken on darwin
+                  # https://github.com/NixOS/nixpkgs/issues/408528
+                  "papis"
                 ];
             in
             pipe config.cmpSourcePlugins [
