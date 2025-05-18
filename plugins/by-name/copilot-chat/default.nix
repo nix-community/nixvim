@@ -3,14 +3,16 @@
   helpers,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "copilot-chat";
   packPathName = "CopilotChat.nvim";
   moduleName = "CopilotChat";
   package = "CopilotChat-nvim";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     debug = helpers.defaultNullOpts.mkBool false ''
