@@ -11,6 +11,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  dependencies = [ "curl" ];
+
   settingsOptions = {
     debug = defaultNullOpts.mkBool false ''
       Enable debug logging.
