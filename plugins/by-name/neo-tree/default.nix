@@ -193,7 +193,7 @@ in
             [
               "start"
               "end"
-              "focus"
+              "center"
             ]
             ''
               Defines how the labels are placed inside a tab.
