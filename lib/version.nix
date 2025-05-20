@@ -121,4 +121,20 @@ in
       inherit (lib.nixvim.version) release;
     in
     if release == "unstable" then "main" else "nixos-" + release;
+
+  /**
+    Whether the nixpkgs input is correct for this release of nixvim.
+
+    Can be used to identify mismatched nixpkgs inputs, usually caused our input
+    following a user's input from another channel
+  */
+  correctNixpkgsChannel =
+    let
+      nixvimRelease = lib.nixvim.version.release;
+      nixpkgsRelease = lib.trivial.release;
+    in
+    if nixvimRelease == "unstable" then
+      true # TODO: how do we know what channel a nixpkgs instance is on?
+    else
+      nixvimRelease == nixpkgsRelease;
 }
