@@ -90,4 +90,35 @@ in
       locked = lockedInputs.${name}.locked.narHash;
     in
     real != locked;
+
+  /**
+    Nixvim's current commit, or the specified default when nixvim's repo is dirty.
+  */
+  revisionWithDefault = default: flake.sourceInfo.rev or default;
+
+  /**
+    Nixvim's current commit, defaulting to the canonical branch name for this release.
+  */
+  revision = with lib.nixvim.version; revisionWithDefault releaseBranch;
+
+  /**
+    Nixvim's release.
+
+    Derived from the nixpkgs branch targeted in `flake.lock`.
+  */
+  release =
+    let
+      inherit (lockedInputs.nixpkgs.original) ref;
+      parts = lib.splitString "-" ref;
+    in
+    lib.last parts;
+
+  /**
+    The canonical branch name associated with this release of nixvim.
+  */
+  releaseBranch =
+    let
+      inherit (lib.nixvim.version) release;
+    in
+    if release == "unstable" then "main" else "nixos-" + release;
 }
