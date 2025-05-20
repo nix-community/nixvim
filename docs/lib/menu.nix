@@ -1,31 +1,31 @@
 {
   lib,
-  pageSpecs,
+  pages,
   indentSize ? "  ",
 }:
 let
   pageToLines =
-    indent: parentName:
-    {
-      name,
-      outFile ? "",
-      pages ? { },
-      ...
-    }:
+    indent: parent: node:
     let
-      menuName = lib.strings.removePrefix (parentName + ".") name;
-      children = builtins.attrValues pages;
+
+      children = lib.pipe node [
+        (lib.flip builtins.removeAttrs [ "_page" ])
+        builtins.attrValues
+      ];
       # Only add node to the menu if it has content or multiple children
-      useNodeInMenu = outFile != "" || builtins.length children > 1;
-      parentOfChildren = if useNodeInMenu then name else parentName;
+      useNodeInMenu = node._page.target != "" || node._page.children > 1;
+      nextParent = if useNodeInMenu then node else parent;
+      nextIndent = if useNodeInMenu then indent + indentSize else indent;
+      loc = lib.lists.removePrefix (parent._page.loc or [ ]) node._page.loc;
+      menuName = lib.attrsets.showAttrPath loc;
     in
-    lib.optional useNodeInMenu "${indent}- [${menuName}](${outFile})"
+    lib.optional useNodeInMenu "${indent}- [${menuName}](${node._page.target})"
     ++ lib.optionals (children != [ ]) (
-      builtins.concatMap (pageToLines (indent + indentSize) parentOfChildren) children
+      builtins.concatMap (pageToLines nextIndent nextParent) children
     );
 in
-lib.pipe pageSpecs [
+lib.pipe pages [
   builtins.attrValues
-  (builtins.concatMap (pageToLines "" ""))
+  (builtins.concatMap (pageToLines "" null))
   lib.concatLines
 ]
