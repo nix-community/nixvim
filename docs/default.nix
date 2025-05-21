@@ -132,5 +132,9 @@ lib.fix (
       inherit evaledModules transformOptions;
       inherit (self) search lib-docs;
     };
+
+    serve-docs = pkgs.callPackage ./server {
+      inherit (self) docs;
+    };
   }
 )

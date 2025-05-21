@@ -101,14 +101,7 @@
               help = "Build and serve documentation locally";
               command = ''
                 echo -e "=> Building nixvim documentation...\n"
-
-                doc_derivation=$(${nix} build .#docs --no-link --print-out-paths)
-
-                echo -e "\n=> Documentation successfully built ('$doc_derivation')"
-
-                echo -e "\n=> You can then open your browser to view the doc\n"
-
-                (cd "$doc_derivation"/share/doc && ${pkgs.lib.getExe pkgs.python3} ${./server.py})
+                nix run .#docs
               '';
             }
             {
