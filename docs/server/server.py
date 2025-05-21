@@ -1,9 +1,16 @@
-import http.server
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 PORT = 8000
+URL = f"http://localhost:{PORT}"
 
 
-class UncachedHTTPHandler(http.server.SimpleHTTPRequestHandler):
+class AutoBrowseHTTPServer(HTTPServer):
+    def server_activate(self):
+        HTTPServer.server_activate(self)
+        print(f"Serving documentation at {URL}")
+
+
+class UncachedHTTPHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.send_header("Pragma", "no-cache")
@@ -11,6 +18,6 @@ class UncachedHTTPHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 
-with http.server.HTTPServer(("", PORT), UncachedHTTPHandler) as httpd:
-    print(f"Serving documentation at http://localhost:{PORT}")
-    httpd.serve_forever()
+if __name__ == "__main__":
+    with AutoBrowseHTTPServer(("", PORT), UncachedHTTPHandler) as httpd:
+        httpd.serve_forever()
