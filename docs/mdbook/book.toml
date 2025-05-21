@@ -13,7 +13,7 @@ additional-css = ["theme/pagetoc.css"]
 # Redirect targets must be relative to their origin;
 # absolute paths can break with different baseHrefs.
 [output.html.redirect]
-"/user-guide/helpers.html" = "../lib/index.html" # Since #3049
+"/user-guide/helpers.html" = "../lib/nixvim/index.html" # Since #3049
 
 [output.html.fold]
 enable = true
