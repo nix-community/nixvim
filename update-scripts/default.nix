@@ -17,4 +17,5 @@ lib.fix (self: {
   none-ls-builtins = pkgs.callPackage ./none-ls.nix { };
   rust-analyzer-options = pkgs.callPackage ./rust-analyzer { };
   lspconfig-servers = pkgs.callPackage ./nvim-lspconfig { };
+  version-info = pkgs.callPackage ./version-info { };
 })
