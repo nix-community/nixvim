@@ -6,14 +6,10 @@ on:
   # Allow manual triggering
   workflow_dispatch:
     inputs:
-      root_lock:
+      update_lock:
         type: boolean
         default: true
-        description: Update root flake.lock
-      dev_lock:
-        type: boolean
-        default: true
-        description: Update dev flake.lock
+        description: Update flake.lock files
       generate:
         type: boolean
         default: true
@@ -106,34 +102,12 @@ jobs:
           git fetch origin "$pr_branch"
           git branch --set-upstream-to "origin/$pr_branch"
 
-      - name: Update root flake.lock
-        id: root_flake_lock
-        if: inputs.root_lock || github.event_name == 'schedule'
+      - name: Update flake.lock files
+        id: update_flake_lock
+        if: inputs.update_lock || github.event_name == 'schedule'
         run: |
-          old=$(git show --no-patch --format=%h)
-          nix flake update --commit-lock-file
-          new=$(git show --no-patch --format=%h)
-          if [ "$old" != "$new" ]; then
-            echo "body<<EOF" >> "$GITHUB_OUTPUT"
-            git show --no-patch --format=%b >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Update dev flake.lock
-        id: dev_flake_lock
-        if: inputs.dev_lock || github.event_name == 'schedule'
-        run: |
-          root_nixpkgs=$(nix eval --raw --file . 'inputs.nixpkgs.rev')
-          old=$(git show --no-patch --format=%h)
-          nix flake update --commit-lock-file \
-              --override-input 'dev-nixpkgs' "github:NixOS/nixpkgs/$root_nixpkgs" \
-              --flake './flake/dev'
-          new=$(git show --no-patch --format=%h)
-          if [ "$old" != "$new" ]; then
-            echo "body<<EOF" >> "$GITHUB_OUTPUT"
-            git show --no-patch --format=%b >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
-          fi
+          nix-build ./update-scripts -A update
+          ./result/bin/update --commit --github-output
 
       - name: Update generated files
         id: generate
@@ -209,8 +183,8 @@ jobs:
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
-          root_lock: ${{ steps.root_flake_lock.outputs.body }}
-          dev_lock: ${{ steps.dev_flake_lock.outputs.body }}
+          root_lock: ${{ steps.update_flake_lock.outputs.root_lock_body }}
+          dev_lock: ${{ steps.update_flake_lock.outputs.dev_lock_body }}
           generated: ${{ steps.generate.outputs.body }}
         run: |
           echo "Pushing to remote branch $pr_branch"

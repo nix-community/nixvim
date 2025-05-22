@@ -9,6 +9,8 @@ lib.fix (self: {
   default = self.generate;
   generate = lib.callPackageWith (pkgs // self) ./generate.nix { };
 
+  update = lib.callPackageWith (pkgs // self) ./update.nix { };
+
   # A shell that has the generate script
   shell = pkgs.mkShell { nativeBuildInputs = [ self.generate ]; };
 
