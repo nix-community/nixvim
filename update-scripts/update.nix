@@ -41,12 +41,29 @@ writeShellApplication {
       fi
     }
 
+    versionInfo() {
+      nix-build ./update-scripts -A version-info
+      install -m 644 -T "$(realpath result)" ./version-info.toml
+      if [ -n "$commit" ]; then
+        git add version-info.toml
+        git commit "$@"
+      fi
+    }
+
+    # Initialise version-info.toml
+    if [ ! -f version-info.toml ]; then
+      echo "Creating version-info file"
+      versionInfo -m "version-info: init"
+    fi
+
     # Update the root lockfile
     old=$(git show --no-patch --format=%h)
     echo "Updating root lockfile"
     nix flake update "''${update_args[@]}"
     new=$(git show --no-patch --format=%h)
     if [ "$old" != "$new" ]; then
+      echo "Updating version-info"
+      versionInfo --amend --no-edit
       writeGitHubOutput root_lock_body
     fi
 
@@ -59,6 +76,8 @@ writeShellApplication {
         --flake './flake/dev'
     new=$(git show --no-patch --format=%h)
     if [ "$old" != "$new" ]; then
+      echo "Updating version-info"
+      versionInfo --amend --no-edit
       writeGitHubOutput dev_lock_body
     fi
   '';
