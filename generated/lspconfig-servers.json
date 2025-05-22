@@ -809,11 +809,6 @@
     "name": "kulala_ls"
   },
   {
-    "cmd": ["laravel-ls"],
-    "desc": "https://github.com/laravel-ls/laravel-ls\n\n`laravel-ls`, language server for laravel\n\nThe default `cmd` assumes that the `laravel-ls` binary can be found in `$PATH`.\n    ",
-    "name": "laravel_ls"
-  },
-  {
     "cmd": [
       "lean-language-server",
       "--stdio",
