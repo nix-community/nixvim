@@ -1,9 +1,11 @@
 {
+  lib,
   writeShellApplication,
   rust-analyzer-options,
   efmls-configs-sources,
   none-ls-builtins,
   lspconfig-servers,
+  fetch-spellfiles,
   nixfmt-rfc-style,
   nodePackages,
 }:
@@ -32,18 +34,28 @@ writeShellApplication {
       shift
     done
 
+    ################################################################
+    # Generation
+
+    mkdir -p "$generated_dir"
+
     generate() {
       echo "$2"
       cp "$1" "$generated_dir/$2.nix"
       nixfmt "$generated_dir/$2.nix"
     }
-
-    mkdir -p "$generated_dir"
     generate "${rust-analyzer-options}" "rust-analyzer"
     generate "${efmls-configs-sources}" "efmls-configs"
     generate "${none-ls-builtins}" "none-ls"
+
     echo "lspconfig servers"
     prettier --parser=json "${lspconfig-servers}" >"$generated_dir/lspconfig-servers.json"
+
+    echo "fetching spellfiles"
+    ${lib.getExe fetch-spellfiles} > "$generated_dir/spellfiles.json"
+    prettier --parser=json --write "$generated_dir/spellfiles.json"
+
+    ################################################################
 
     if [ -n "$commit" ]; then
       cd "$generated_dir"
