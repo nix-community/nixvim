@@ -13,6 +13,14 @@ In order to submit a change you must be careful of several points:
 - The commit title should be consistent with our style. This usually looks like "plugins/<name>: fixed some bug",
   you can browse the commit history of the files you're editing to see previous commit messages.
 
+### Testing the docs locally
+
+When making a change, you may wish to see how it looks in Nixvim's documentation.
+This can be done by running `nix run .#docs` from within a Nixvim repo.
+Alternatively, if you've entered a Nixvim dev shell, you can run `serve-docs`.
+
+Either command will start a HTTP server on port 8000 and open it in your browser using `xdg-open`.
+
 ## Nixvim Architecture
 
 Nixvim is mainly built around `pkgs.neovimUtils.makeNeovimConfig`.
