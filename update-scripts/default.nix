@@ -1,18 +1,8 @@
 {
-  # By default, import nixpkgs from flake.lock
-  pkgs ?
-    let
-      lock = (builtins.fromJSON (builtins.readFile ../flake.lock)).nodes.nixpkgs.locked;
-      nixpkgs = fetchTarball {
-        url =
-          assert lock.type == "github";
-          "https://github.com/${lock.owner}/${lock.repo}/archive/${lock.rev}.tar.gz";
-        sha256 = lock.narHash;
-      };
-    in
-    import nixpkgs { },
-  lib ? pkgs.lib,
-  ...
+  # By default, load nixvim using flake-compat
+  nixvim ? import ../.,
+  pkgs ? nixvim.inputs.nixpkgs.legacyPackages.${builtins.currentSystem},
+  lib ? nixvim.inputs.nixpkgs.lib,
 }:
 lib.fix (self: {
   # The main script
