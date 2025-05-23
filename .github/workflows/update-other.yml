@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         branches:
+          - nixos-25.05
           - nixos-24.11
     steps:
       - name: Update ${{ matrix.branches }}
