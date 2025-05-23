@@ -13,7 +13,7 @@ lib.nixvim.plugins.mkNeovimPlugin {{
   packPathName = "{originalName}";
   package = "{package}";
 
-  {maintainer_todo}maintainers = [ lib.maintainers.{maintainer} ]
+  {maintainer_todo}maintainers = [ lib.maintainers.{maintainer} ];
 
   # TODO provide an example for the `settings` option (or remove entirely if there is no useful example)
   # NOTE you can use `lib.literalExpression` or `lib.literalMD` if needed
