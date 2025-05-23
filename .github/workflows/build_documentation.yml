@@ -110,7 +110,7 @@ jobs:
 
             # Copy the result to the install dir
             mkdir -p "$installDir"
-            cp -r result/share/doc/* "$installDir"
+            cp -r result/* "$installDir"
           }
 
           # For each version of the docs...

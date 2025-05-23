@@ -108,7 +108,7 @@
 
                 echo -e "\n=> You can then open your browser to view the doc\n"
 
-                (cd "$doc_derivation"/share/doc && ${pkgs.lib.getExe pkgs.python3} ${./server.py})
+                (cd "$doc_derivation" && ${pkgs.lib.getExe pkgs.python3} ${./server.py})
               '';
             }
             {

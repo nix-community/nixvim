@@ -348,8 +348,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
   contributing = finalAttrs.passthru.fix-links ../../CONTRIBUTING.md;
 
   buildPhase = ''
-    dest=$out/share/doc
-    mkdir -p $dest
+    mkdir -p $out
 
     # Copy (and flatten) src into the build directory
     cp -r --no-preserve=all $src/* ./
@@ -388,9 +387,9 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@USER_CONFIGS@" "$(cat ${finalAttrs.passthru.user-configs})"
 
     mdbook build
-    cp -r ./book/* $dest
-    mkdir -p $dest/search
-    cp -r ${finalAttrs.passthru.search}/* $dest/search
+    cp -r ./book/* $out
+    mkdir -p $out/search
+    cp -r ${finalAttrs.passthru.search}/* $out/search
   '';
 
   inherit baseHref;
