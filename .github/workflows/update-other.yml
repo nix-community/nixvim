@@ -12,6 +12,7 @@ jobs:
   update:
     name: Trigger updates for nixvim's stable branches
     runs-on: ubuntu-latest
+    if: github.repository == 'nix-community/nixvim'
     strategy:
       matrix:
         branches:
