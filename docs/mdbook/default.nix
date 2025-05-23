@@ -318,8 +318,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
   };
 
   buildPhase = ''
-    dest=$out/share/doc
-    mkdir -p $dest
+    mkdir -p $out
 
     # Copy (and flatten) src into the build directory
     cp -r --no-preserve=all $src/* ./
@@ -350,9 +349,9 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@DOCS_VERSIONS@" "$(cat ${finalAttrs.passthru.docs-versions})"
 
     mdbook build
-    cp -r ./book/* $dest
-    mkdir -p $dest/search
-    cp -r ${finalAttrs.passthru.search}/* $dest/search
+    cp -r ./book/* $out
+    mkdir -p $out/search
+    cp -r ${finalAttrs.passthru.search}/* $out/search
   '';
 
   inherit baseHref;
