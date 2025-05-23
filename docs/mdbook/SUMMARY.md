@@ -28,4 +28,5 @@
 ---
 
 [Contributing](./CONTRIBUTING.md)
+[Maintaining](./MAINTAINING.md)
 [NixVim Options Search](./search/index.html)

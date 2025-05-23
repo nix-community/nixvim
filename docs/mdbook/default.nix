@@ -347,6 +347,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
   };
 
   contributing = finalAttrs.passthru.fix-links ../../CONTRIBUTING.md;
+  maintaining = finalAttrs.passthru.fix-links ../../MAINTAINING.md;
 
   buildPhase = ''
     mkdir -p $out
@@ -356,8 +357,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     mv ./docs/* ./ && rmdir ./docs
     mv ./mdbook/* ./ && rmdir ./mdbook
 
-    # Copy the contributing file
+    # Copy the contributing and maintaining files
     cp $contributing ./CONTRIBUTING.md
+    substitute $maintaining ./MAINTAINING.md \
+      --replace-fail 'This file' 'This page'
 
     # Symlink the function docs
     for path in ${lib-docs}/*
