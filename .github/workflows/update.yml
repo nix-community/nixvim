@@ -41,21 +41,34 @@ jobs:
       pr_branch: update/${{ github.ref_name }}
 
     steps:
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+
+      - name: Get GitHub App User ID
+        id: user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Configure git
+        run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.CI_UPDATE_SSH_KEY }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure git
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          github_access_token: ${{ steps.app-token.outputs.token }}
 
       - name: Create update branch
         run: |
@@ -65,7 +78,7 @@ jobs:
       - name: Get info on the current PR
         id: open_pr_info
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           # Query for info about the already open update PR
           info=$(
@@ -180,7 +193,7 @@ jobs:
         id: updated_pr
         if: steps.diff.outputs.count
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           pr_num: ${{ steps.open_pr_info.outputs.number }}
           title: |
             [${{ github.ref_name }}] Update flake.lock & generated files
