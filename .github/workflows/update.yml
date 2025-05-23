@@ -65,7 +65,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-          persist-credentials: false
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
