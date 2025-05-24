@@ -71,7 +71,7 @@ let
         )
         {
           nixos = self.nixosModules.default;
-          hm = self.homeManagerModules.default;
+          hm = self.homeModules.default;
           nix-darwin = self.nixDarwinModules.default;
         }
     );
