@@ -24,6 +24,7 @@
       nixvim = import ../wrappers/hm.nix self;
       default = self.homeManagerModules.nixvim;
     };
+    homeModules = self.homeManagerModules;
     nixDarwinModules = {
       nixvim = import ../wrappers/darwin.nix self;
       default = self.nixDarwinModules.nixvim;
