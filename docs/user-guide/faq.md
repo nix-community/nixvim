@@ -60,7 +60,7 @@ When using Nixvim, it is possible to encounter errors about something not being 
 ```
 
 This usually means one of two things:
-- The nixpkgs version is not in line with NixVim (for example nixpkgs nixos-24.11 is used with NixVim master)
+- The nixpkgs version is not in line with NixVim (for example nixpkgs nixos-25.05 is used with NixVim master)
 - The nixpkgs unstable version used with NixVim is not recent enough.
 
 When building nixvim using flakes and our ["standalone mode"][standalone], we usually recommend _not_ declaring a "follows" for `inputs.nixvim`.

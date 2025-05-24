@@ -11,7 +11,7 @@ let
     home = {
       username = "nixvim";
       homeDirectory = "/invalid/dir";
-      stateVersion = "24.11";
+      stateVersion = "25.05";
     };
 
     programs.nixvim = {
