@@ -58,6 +58,11 @@ jobs:
                 "nixpkgsBranch": "nixos-unstable"
               },
               {
+                "branch": "nixos-25.05",
+                "nixpkgsBranch": "nixos-25.05",
+                "subPath": "25.05"
+              },
+              {
                 "branch": "nixos-24.11",
                 "nixpkgsBranch": "nixos-24.11",
                 "subPath": "24.11"
