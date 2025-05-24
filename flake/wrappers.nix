@@ -20,11 +20,12 @@
       nixvim = import ../wrappers/nixos.nix self;
       default = self.nixosModules.nixvim;
     };
-    homeManagerModules = {
+    # For backward compatibility
+    homeManagerModules = self.homeModules;
+    homeModules = {
       nixvim = import ../wrappers/hm.nix self;
-      default = self.homeManagerModules.nixvim;
+      default = self.homeModules.nixvim;
     };
-    homeModules = self.homeModules;
     nixDarwinModules = {
       nixvim = import ../wrappers/darwin.nix self;
       default = self.nixDarwinModules.nixvim;
