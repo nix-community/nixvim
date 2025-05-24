@@ -18,6 +18,6 @@ self.inputs.home-manager.lib.homeManagerConfiguration {
 
       programs.home-manager.enable = true;
     }
-    self.homeManagerModules.nixvim
+    self.homeModules.nixvim
   ];
 }

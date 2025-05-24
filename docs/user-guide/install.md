@@ -56,7 +56,7 @@ When used as a module, NixVim can be enabled though `programs.nixvim.enable`.
 
 When using NixVim as a module you must import the NixVim module into your module system.
 The three imports are:
-- `<nixvim>.homeManagerModules.nixvim`
+- `<nixvim>.homeModules.nixvim`
 - `<nixvim>.nixosModules.nixvim`
 - `<nixvim>.nixDarwinModules.nixvim`
 

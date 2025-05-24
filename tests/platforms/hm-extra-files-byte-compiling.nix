@@ -39,7 +39,7 @@ let
       inherit pkgs;
 
       modules = [
-        self.homeManagerModules.nixvim
+        self.homeModules.nixvim
         config
         { programs.nixvim.performance.byteCompileLua.configs = true; }
       ];
@@ -50,7 +50,7 @@ let
       inherit pkgs;
 
       modules = [
-        self.homeManagerModules.nixvim
+        self.homeModules.nixvim
         config
         { programs.nixvim.performance.byteCompileLua.configs = false; }
       ];

@@ -114,7 +114,7 @@ in
 {
   imports = [
     # For home-manager
-    nixvim.homeManagerModules.nixvim
+    nixvim.homeModules.nixvim
     # For NixOS
     nixvim.nixosModules.nixvim
     # For nix-darwin
@@ -158,7 +158,7 @@ flakes, just add the nixvim input:
 }
 ```
 
-You can now access the module using `inputs.nixvim.homeManagerModules.nixvim`,
+You can now access the module using `inputs.nixvim.homeModules.nixvim`,
 for a home-manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
 and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 
@@ -167,7 +167,7 @@ and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 ## Usage
 NixVim can be used in four ways: through the home-manager, nix-darwin, NixOS modules,
 and standalone through the `makeNixvim` function. To use the modules, just import the
-`nixvim.homeManagerModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
+`nixvim.homeModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
 `nixvim.nixosModules.nixvim` modules, depending on which system
 you're using.
 

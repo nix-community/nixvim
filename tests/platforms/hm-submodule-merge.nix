@@ -50,7 +50,7 @@ let
           ];
         }
       )
-      self.homeManagerModules.nixvim
+      self.homeModules.nixvim
     ];
   };
 in
