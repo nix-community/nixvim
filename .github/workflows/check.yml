@@ -46,7 +46,9 @@ jobs:
       - build-matrix
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
+    timeout-minutes: 20
     steps:
       - name: Free disk space
         if: endsWith( '-linux', matrix.system )
