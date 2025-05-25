@@ -49,6 +49,7 @@ jobs:
       matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
     steps:
       - name: Free disk space
+        if: endsWith( '-linux', matrix.system )
         uses: wimpysworld/nothing-but-nix@main
         with:
           # Options: holster, carve, cleave (default), rampage
