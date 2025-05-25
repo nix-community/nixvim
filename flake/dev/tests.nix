@@ -28,7 +28,7 @@
           let
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             singleton = (builtins.head tests).value;
-            joined = pkgs.linkFarmFromDrvs group (builtins.listToAttrs tests);
+            joined = pkgs.linkFarm group (builtins.listToAttrs tests);
           in
           if builtins.length tests > 1 then joined else singleton
         ))
