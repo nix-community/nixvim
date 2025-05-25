@@ -53,8 +53,6 @@ jobs:
         with:
           # Options: holster, carve, cleave (default), rampage
           hatchet-protocol: rampage
-          root-safe-haven: "1024" # Default 2048MB
-          mnt-safe-haven: "512" # Default 1024MB
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install nix
