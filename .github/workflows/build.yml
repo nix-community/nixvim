@@ -22,7 +22,8 @@ jobs:
       - ${{ matrix.runner }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(inputs.builds) }}
+      matrix:
+        include: ${{ fromJSON(inputs.builds) }}
     timeout-minutes: ${{ inputs.timeout }}
     steps:
       - name: Free disk space
