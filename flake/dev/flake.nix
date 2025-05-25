@@ -32,6 +32,11 @@
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
+    nix-github-actions = {
+      url = "github:nix-community/nix-github-actions";
+      inputs.nixpkgs.follows = "dev-nixpkgs";
+    };
+
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "dev-nixpkgs";

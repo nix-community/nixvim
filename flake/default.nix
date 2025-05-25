@@ -34,6 +34,7 @@
     checks = "dev";
     devShells = "dev";
     formatter = "dev";
+    githubActions = "dev";
   };
 
   # For any output attrs normally defined by the root flake configuration,

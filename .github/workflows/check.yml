@@ -1,0 +1,74 @@
+name: Check
+
+on:
+  workflow_dispatch: # can be triggered manually
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches-ignore:
+      - update/*
+    paths-ignore:
+      - "LICENSE"
+
+jobs:
+  flake-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Run flake checker
+        uses: DeterminateSystems/flake-checker-action@main
+
+  build-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Generate Nix Matrix
+        id: set-matrix
+        run: |
+          set -Eeu
+          matrix="$(nix eval --json .#githubActions.matrix)"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: ${{ matrix.name }} (${{ matrix.system }})
+    needs:
+      - build-matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
+    steps:
+      - name: Free disk space
+        uses: wimpysworld/nothing-but-nix@main
+        with:
+          # Options: holster, carve, cleave (default), rampage
+          hatchet-protocol: rampage
+          root-safe-haven: "1024" # Default 2048MB
+          mnt-safe-haven: "512" # Default 1024MB
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Setup nix cache
+        uses: cachix/cachix-action@v16
+        with:
+          name: nix-community
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - name: Build ${{ matrix.attr }}
+        env:
+          attr: ${{ matrix.attr }}
+        run: |
+          nix build ".#$attr" \
+              --abort-on-warn \
+              --print-build-logs \
+              --log-format raw
