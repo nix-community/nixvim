@@ -14,7 +14,7 @@ on:
       - "LICENSE"
 
 jobs:
-  build-matrix:
+  prepare:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -31,35 +31,14 @@ jobs:
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   build:
-    name: ${{ matrix.name }} (${{ matrix.system }})
+    uses: ./.github/workflows/build.yml
     needs:
-      - build-matrix
-    runs-on: ${{ matrix.os }}
+      - prepare
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
-    timeout-minutes: 20
-    steps:
-      - name: Free disk space
-        if: endsWith( '-linux', matrix.system )
-        uses: wimpysworld/nothing-but-nix@main
-        with:
-          # Options: holster, carve, cleave (default), rampage
-          hatchet-protocol: rampage
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install nix
-        uses: cachix/install-nix-action@v31
-      - name: Setup nix cache
-        uses: cachix/cachix-action@v16
-        with:
-          name: nix-community
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Build ${{ matrix.attr }}
-        env:
-          attr: ${{ matrix.attr }}
-        run: |
-          nix build ".#$attr" \
-              --abort-on-warn \
-              --print-build-logs \
-              --log-format raw
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    with:
+      name: ${{ matrix.name }} (${{ matrix.system }})
+      system: ${{ matrix.system }}
+      os: ${{ matrix.os }}
+      attr: ${{ matrix.attr }}

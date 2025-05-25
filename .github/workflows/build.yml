@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      system:
+        required: true
+        type: string
+      os:
+        required: true
+        type: string
+      attr:
+        required: true
+        type: string
+      timeout:
+        required: false
+        type: number
+        default: 60
+
+jobs:
+  build:
+    name: ${{ inputs.name }}
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: ${{ inputs.timeout }}
+    steps:
+      - name: Free disk space
+        if: endsWith( '-linux', inputs.system )
+        uses: wimpysworld/nothing-but-nix@main
+        with:
+          # Options: holster, carve, cleave (default), rampage
+          hatchet-protocol: rampage
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Setup nix cache
+        uses: cachix/cachix-action@v16
+        with:
+          name: nix-community
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - name: Build ${{ inputs.attr }}
+        env:
+          attr: ${{ inputs.attr }}
+        run: |
+          nix build ".#$attr" \
+              --abort-on-warn \
+              --print-build-logs \
+              --log-format raw
