@@ -6,13 +6,8 @@ on:
       name:
         required: true
         type: string
-      system:
-        required: true
-        type: string
-      os:
-        required: true
-        type: string
-      attr:
+      builds:
+        description: "json array of builds: [ { system, runner, attr } ]"
         required: true
         type: string
       timeout:
@@ -22,13 +17,16 @@ on:
 
 jobs:
   build:
-    name: ${{ inputs.name }}
+    name: ${{ inputs.name }} (${{ matrix.attr }})
     runs-on:
-      - ${{ inputs.os }}
+      - ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.builds) }}
     timeout-minutes: ${{ inputs.timeout }}
     steps:
       - name: Free disk space
-        if: endsWith( '-linux', inputs.system )
+        if: endsWith( '-linux', matrix.system )
         uses: wimpysworld/nothing-but-nix@main
         with:
           # Options: holster, carve, cleave (default), rampage
@@ -42,9 +40,9 @@ jobs:
         with:
           name: nix-community
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Build ${{ inputs.attr }}
+      - name: Build ${{ matrix.attr }}
         env:
-          attr: ${{ inputs.attr }}
+          attr: ${{ matrix.attr }}
         run: |
           nix build ".#$attr" \
               --abort-on-warn \

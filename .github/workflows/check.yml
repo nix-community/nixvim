@@ -39,7 +39,5 @@ jobs:
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     secrets: inherit
     with:
-      name: ${{ matrix.name }} (${{ matrix.system }})
-      system: ${{ matrix.system }}
-      os: ${{ join( matrix.os, ' ' ) }} # FIXME: os is an array!
-      attr: ${{ matrix.attr }}
+      name: ${{ matrix.name }}
+      builds: ${{ toJSON(matrix.builds) }}

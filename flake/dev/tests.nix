@@ -15,24 +15,71 @@
     };
 
   # Output a build matrix for CI
-  flake.githubActions = inputs.nix-github-actions.lib.mkGithubMatrix {
-    checks = builtins.mapAttrs (
-      system: lib.filterAttrs (name: v: !lib.strings.hasPrefix "test-" name)
-      # lib.flip lib.pipe [
-      #   lib.attrsToList
-      #   # Group the "test-N" tests back into one drv
-      #   # FIXME: drop the entire test-grouping system
-      #   (builtins.groupBy ({ name, value }: if lib.strings.hasPrefix "test-" name then "test" else name))
-      #   (builtins.mapAttrs (
-      #     group: tests:
-      #     let
-      #       pkgs = inputs.nixpkgs.legacyPackages.${system};
-      #       singleton = (builtins.head tests).value;
-      #       joined = pkgs.linkFarm group (builtins.listToAttrs tests);
-      #     in
-      #     if builtins.length tests > 1 then joined else singleton
-      #   ))
-      # ]
-    ) self.checks;
-  };
+  flake.githubActions.matrix =
+    let
+      systemsByPrio = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      githubPlatforms = {
+        "x86_64-linux" = "ubuntu-24.04";
+        "x86_64-darwin" = "macos-13";
+        "aarch64-darwin" = "macos-14";
+        "aarch64-linux" = "ubuntu-24.04-arm";
+      };
+      toGithubBuild = system: {
+        inherit system;
+        runner = githubPlatforms.${system} or (throw "System not supported by GitHub Actions: ${system}");
+      };
+      getPrimaryBuild =
+        platforms:
+        let
+          systems = builtins.catAttrs "system" platforms;
+          system = lib.lists.findFirst (
+            system: builtins.elem system systems
+          ) (throw "No supported system found!") systemsByPrio;
+        in
+        toGithubBuild system;
+    in
+    lib.pipe self.checks [
+      (lib.mapAttrsRecursiveCond (x: !lib.isDerivation x) (
+        loc: _: {
+          _type = "check";
+          build = toGithubBuild (builtins.head loc);
+          name = lib.attrsets.showAttrPath (builtins.tail loc);
+        }
+      ))
+      (lib.collect (lib.isType "check"))
+      (lib.groupBy' (acc: x: acc ++ [ x.build ]) [ ] (x: x.attr))
+      (lib.mapAttrsToList (attr: builds: { inherit attr builds; }))
+
+      # Only build one one system for non-test attrs
+      # TODO: this is very heavy handed, maybe we want some exceptions?
+      (map (
+        matrix:
+        matrix
+        // lib.optionalAttrs (!lib.strings.hasPrefix "test-" matrix.name) {
+          builds = [
+            (getPrimaryBuild matrix.builds)
+          ];
+        }
+      ))
+
+      # Inject per-system attr
+      (map (
+        matrix:
+        matrix
+        // {
+          builds = map (
+            build:
+            build
+            // {
+              attr = "checks.${build.system}.${matrix.name}";
+            }
+          ) matrix.builds;
+        }
+      ))
+    ];
 }
