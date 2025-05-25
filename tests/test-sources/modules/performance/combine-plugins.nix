@@ -8,7 +8,7 @@ let
     let
       # 'build.extraFiles' must not be combined, so exclude it from counting
       plugins = builtins.filter (
-        p: p != config.build.extraFiles
+        p: lib.getName p != lib.getName config.build.extraFiles
       ) config.build.nvimPackage.packpathDirs.myNeovimPackages.${type};
       numPlugins = builtins.length plugins;
     in
@@ -203,11 +203,30 @@ in
       ];
     };
 
+  # Test if plenary.filetype is working
+  plenary-nvim = {
+    performance.combinePlugins.enable = true;
+    extraPlugins = [ pkgs.vimPlugins.plenary-nvim ];
+    extraConfigLuaPost = ''
+      -- Plenary filetype detection is usable
+      assert(require("plenary.filetype").detect(".bashrc") == "sh", "plenary.filetype is not working")
+    '';
+  };
+}
+//
   # Test that config.build.extraFiles is not combined
-  files-plugin =
+  # with or without byteCompileLua.enable = true
+  lib.genAttrs [ "files-plugin" "files-plugin-byte-compiled" ] (
+    name:
     { config, ... }:
     {
-      performance.combinePlugins.enable = true;
+      performance = {
+        combinePlugins.enable = true;
+        byteCompileLua = lib.optionalAttrs (lib.hasSuffix "byte-compiled" name) {
+          enable = true;
+          plugins = true;
+        };
+      };
       extraPlugins = with pluginStubs; [
         plugin1
         plugin2
@@ -242,10 +261,13 @@ in
       assertions = [
         (expectOneStartPlugin config)
       ];
-    };
-
+    }
+  )
+//
   # Test that standalonePlugins option works
-  standalone-plugins =
+  # with or without byteCompileLua.enable = true
+  lib.genAttrs [ "standalone-plugins" "standalone-plugins-byte-compiled" ] (
+    name:
     { config, ... }:
     let
       standalonePlugins = [
@@ -260,9 +282,15 @@ in
       ];
     in
     {
-      performance.combinePlugins = {
-        enable = true;
-        inherit standalonePlugins;
+      performance = {
+        combinePlugins = {
+          enable = true;
+          inherit standalonePlugins;
+        };
+        byteCompileLua = lib.optionalAttrs (lib.hasSuffix "byte-compiled" name) {
+          enable = true;
+          plugins = true;
+        };
       };
       extraPlugins = pluginStubs.pluginPack;
       extraConfigLuaPost = ''
@@ -295,15 +323,5 @@ in
         # plugin-pack and 'standalonePlugins'
         (expectNPlugins config "start" (builtins.length standalonePlugins + 1))
       ];
-    };
-
-  # Test if plenary.filetype is working
-  plenary-nvim = {
-    performance.combinePlugins.enable = true;
-    extraPlugins = [ pkgs.vimPlugins.plenary-nvim ];
-    extraConfigLuaPost = ''
-      -- Plenary filetype detection is usable
-      assert(require("plenary.filetype").detect(".bashrc") == "sh", "plenary.filetype is not working")
-    '';
-  };
-}
+    }
+  )

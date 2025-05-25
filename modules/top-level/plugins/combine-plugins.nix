@@ -33,9 +33,8 @@ let
   optPlugins = removeDeps partitionedOptStartPlugins.right;
 
   # Test if plugin shouldn't be included in plugin pack
-  isStandalone =
-    p:
-    builtins.elem p.plugin standalonePlugins || builtins.elem (lib.getName p.plugin) standalonePlugins;
+  standaloneNames = map (p: if builtins.isString p then p else lib.getName p) standalonePlugins;
+  isStandalone = p: builtins.elem (lib.getName p.plugin) standaloneNames;
 
   # Separated standalone and combined start plugins
   partitionedStandaloneStartPlugins = builtins.partition isStandalone startPlugins;
