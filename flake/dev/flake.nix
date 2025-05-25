@@ -5,7 +5,7 @@
     # NOTE: Use a different name to the root flake's inputs.nixpkgs to avoid shadowing it.
     # NOTE: The only reason we specify a nixpkgs input at all here, is so the other inputs can follow it.
     # TODO: Once nix 2.26 is more prevalent, follow the root flake's inputs using a "path:../.." input.
-    dev-nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    dev-nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     # flake-compat is used by the root `default.nix` to allow non-flake users to import nixvim
     flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
@@ -23,12 +23,12 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
     nix-darwin = {
-      url = "github:lnl7/nix-darwin";
+      url = "github:lnl7/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
