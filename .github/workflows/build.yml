@@ -7,6 +7,10 @@ on:
         description: "json array of builds: [ { system, runner, attr } ]"
         required: true
         type: string
+      systemAsName:
+        required: false
+        type: boolean
+        default: false
       timeout:
         required: false
         type: number
@@ -14,7 +18,7 @@ on:
 
 jobs:
   build:
-    name: (${{ matrix.system }})
+    name: ${{ inputs.systemAsName && matrix.system || matrix.attr }}
     runs-on:
       - ${{ matrix.runner }}
     strategy:

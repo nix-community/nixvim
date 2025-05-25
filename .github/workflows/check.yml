@@ -41,4 +41,5 @@ jobs:
         include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     secrets: inherit
     with:
+      systemAsName: true
       builds: ${{ toJSON(matrix.builds) }}
