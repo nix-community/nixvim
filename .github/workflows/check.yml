@@ -41,5 +41,4 @@ jobs:
         include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     secrets: inherit
     with:
-      name: ${{ matrix.name }}
       builds: ${{ toJSON(matrix.builds) }}

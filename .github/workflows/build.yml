@@ -3,9 +3,6 @@ name: Build
 on:
   workflow_call:
     inputs:
-      name:
-        required: true
-        type: string
       builds:
         description: "json array of builds: [ { system, runner, attr } ]"
         required: true
@@ -17,7 +14,7 @@ on:
 
 jobs:
   build:
-    name: ${{ inputs.name }} (${{ matrix.attr }})
+    name: (${{ matrix.system }})
     runs-on:
       - ${{ matrix.runner }}
     strategy:
