@@ -31,6 +31,7 @@ jobs:
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   build:
+    name: ${{ matrix.name }}
     uses: ./.github/workflows/build.yml
     needs:
       - prepare
