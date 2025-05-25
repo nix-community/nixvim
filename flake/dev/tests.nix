@@ -51,8 +51,8 @@
         }
       ))
       (lib.collect (lib.isType "check"))
-      (lib.groupBy' (acc: x: acc ++ [ x.build ]) [ ] (x: x.attr))
-      (lib.mapAttrsToList (attr: builds: { inherit attr builds; }))
+      (lib.groupBy' (builds: x: builds ++ [ x.build ]) [ ] (x: x.name))
+      (lib.mapAttrsToList (name: builds: { inherit name builds; }))
 
       # Only build one one system for non-test attrs
       # TODO: this is very heavy handed, maybe we want some exceptions?
@@ -71,13 +71,7 @@
         matrix:
         matrix
         // {
-          builds = map (
-            build:
-            build
-            // {
-              attr = "checks.${build.system}.${matrix.name}";
-            }
-          ) matrix.builds;
+          builds = map (build: build // { attr = "checks.${build.system}.${matrix.name}"; }) matrix.builds;
         }
       ))
     ];
