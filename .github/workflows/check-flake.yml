@@ -1,0 +1,25 @@
+name: Check Flake
+
+on:
+  workflow_dispatch: # can be triggered manually
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches-ignore:
+      - update/*
+    paths-ignore:
+      - "LICENSE"
+
+jobs:
+  flake-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Run flake checker
+        uses: DeterminateSystems/flake-checker-action@main

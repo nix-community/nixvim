@@ -14,16 +14,6 @@ on:
       - "LICENSE"
 
 jobs:
-  flake-checker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install nix
-        uses: cachix/install-nix-action@v31
-      - name: Run flake checker
-        uses: DeterminateSystems/flake-checker-action@main
-
   build-matrix:
     runs-on: ubuntu-latest
     outputs:
