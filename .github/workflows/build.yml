@@ -23,7 +23,8 @@ on:
 jobs:
   build:
     name: ${{ inputs.name }}
-    runs-on: ${{ inputs.os }}
+    runs-on:
+      - ${{ inputs.os }}
     timeout-minutes: ${{ inputs.timeout }}
     steps:
       - name: Free disk space
