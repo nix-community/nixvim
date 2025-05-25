@@ -1,7 +1,6 @@
 {
   lib,
   self,
-  inputs,
   helpers,
   ...
 }:
