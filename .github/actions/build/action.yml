@@ -77,8 +77,10 @@ runs:
               --print-build-logs \
               --log-format raw
           then
+            echo "incrementing ok from $ok"
             ((ok++))
           else
+            echo "incrementing error from $error"
             ((error++))
             if [ -z "$keep_going_flag" ]; then
               exit 1
