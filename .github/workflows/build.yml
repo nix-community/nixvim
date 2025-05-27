@@ -43,10 +43,6 @@ jobs:
           name: nix-community
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build ${{ matrix.attr }}
-        env:
-          attr: ${{ matrix.attr }}
-        run: |
-          nix build ".#$attr" \
-              --abort-on-warn \
-              --print-build-logs \
-              --log-format raw
+        uses: ./.github/actions/build
+        with:
+          attribute: ${{ matrix.attr }}

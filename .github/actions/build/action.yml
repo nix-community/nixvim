@@ -1,0 +1,96 @@
+name: Build
+
+description: Builds a flake attribute, list of attributes, or a list of lists of attributes.
+
+inputs:
+  attribute:
+    description: A single attribute to build
+    required: false
+  attributes:
+    description: A JSON array of attributes to build concurrently
+    required: false
+  attributeGroups:
+    description: A JSON object of attribute groups to build sequentially
+    required: false
+  abortOnWarn:
+    description: Whether to fail a build when `builtins.warn` is evaluated
+    type: boolean
+    required: false
+    default: true
+  keepGoing:
+    description: Whether to keep building after a failure
+    type: boolean
+    required: false
+    default: true
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare build list
+      id: builds
+      env:
+        attr: ${{ inputs.attribute }}
+        attrs: ${{ inputs.attributes || '[]' }}
+        groups: ${{ inputs.attributeGroups || '{}' }}
+      run: |
+        set -Eeu
+        builds=$(
+          jq \
+            --null-input \
+            --compact-output \
+            --arg attr "$attr" \
+            --argjson attrs "$attrs" \
+            --argjson groups "$groups" \
+            '
+              $groups
+              | ."" = ([$attr] + $attrs)
+              | with_entries(select(.value | type | . == "array"))
+              | map_values(. - [""])
+              | with_entries(select(.value != []))
+            '
+        )
+        echo "builds=$builds" >> "$GITHUB_OUTPUT"
+    - name: Build
+      if: inputs.attributeGroups
+      env:
+        builds_json: ${{ steps.builds.outputs.builds }}
+        keep_going_flag: ${{ inputs.keepGoing && '--keep-going' || '' }}
+        abort_on_warn_flag: ${{ inputs.abortOnWarn && '--abort-on-warn' || '' }}
+        fail_fast: ${{ inputs.keepGoing && '' || true }}
+      run: |
+        ok=0
+        error=0
+
+        while read group_json
+        do
+          name=$(echo "$group_json" | jq --raw-output '.key')
+          attrs=(
+            $(echo "$group_json" | jq --raw-output '.value[] | ".#\(.)"')
+          )
+          if [ -n "$name" ]; then
+            echo "Building $name"
+          fi
+          if nix build "${attrs[@]}" \
+              "$keep_going_flag" \
+              "$abort_on_warn_flag" \
+              --print-build-logs \
+              --log-format raw
+          then
+            ((ok++))
+          else
+            ((error++))
+            if [ -n "$fail_fast" ]; then
+              exit 1
+            fi
+          fi
+        done < <(
+          echo "$builds_json" | jq --compact-output 'to_entries | .[]'
+        )
+
+        (
+          echo "$ok build groups succeeded"
+          echo "$error build groups failed"
+        ) >&2
+        if [ $error ]; then
+          exit 1
+        fi
