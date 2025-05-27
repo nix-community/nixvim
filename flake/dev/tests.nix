@@ -14,7 +14,7 @@
     };
 
   # Output a build matrix for CI
-  flake.githubActions.matrix =
+  flake.githubActions =
     let
       systemsByPrio = [
         "x86_64-linux"
@@ -41,38 +41,42 @@
           ) (throw "No supported system found!") systemsByPrio;
         in
         toGithubBuild system;
+
+      checks = lib.pipe self.checks [
+        (lib.mapAttrsRecursiveCond (x: !lib.isDerivation x) (
+          loc: _: {
+            _type = "check";
+            build = toGithubBuild (builtins.head loc);
+            name = lib.attrsets.showAttrPath (builtins.tail loc);
+          }
+        ))
+        (lib.collect (lib.isType "check"))
+        (lib.groupBy' (builds: x: builds ++ [ x.build ]) [ ] (x: x.name))
+        (lib.mapAttrsToList (name: builds: { inherit name builds; }))
+
+        # Only build one one system for non-test attrs
+        # TODO: this is very heavy handed, maybe we want some exceptions?
+        (map (
+          matrix:
+          matrix
+          // lib.optionalAttrs (!lib.strings.hasPrefix "test-" matrix.name) {
+            builds = [
+              (getPrimaryBuild matrix.builds)
+            ];
+          }
+        ))
+
+        # Inject per-system attr
+        (map (
+          matrix:
+          matrix
+          // {
+            builds = map (build: build // { attr = "checks.${build.system}.${matrix.name}"; }) matrix.builds;
+          }
+        ))
+      ];
     in
-    lib.pipe self.checks [
-      (lib.mapAttrsRecursiveCond (x: !lib.isDerivation x) (
-        loc: _: {
-          _type = "check";
-          build = toGithubBuild (builtins.head loc);
-          name = lib.attrsets.showAttrPath (builtins.tail loc);
-        }
-      ))
-      (lib.collect (lib.isType "check"))
-      (lib.groupBy' (builds: x: builds ++ [ x.build ]) [ ] (x: x.name))
-      (lib.mapAttrsToList (name: builds: { inherit name builds; }))
-
-      # Only build one one system for non-test attrs
-      # TODO: this is very heavy handed, maybe we want some exceptions?
-      (map (
-        matrix:
-        matrix
-        // lib.optionalAttrs (!lib.strings.hasPrefix "test-" matrix.name) {
-          builds = [
-            (getPrimaryBuild matrix.builds)
-          ];
-        }
-      ))
-
-      # Inject per-system attr
-      (map (
-        matrix:
-        matrix
-        // {
-          builds = map (build: build // { attr = "checks.${build.system}.${matrix.name}"; }) matrix.builds;
-        }
-      ))
-    ];
+    {
+      checksMatrix.include = checks;
+    };
 }

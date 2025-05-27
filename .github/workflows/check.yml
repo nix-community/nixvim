@@ -27,7 +27,7 @@ jobs:
         id: set-matrix
         run: |
           set -Eeu
-          matrix=$(nix eval --json .#githubActions.matrix)
+          matrix=$(nix eval --json .#githubActions.checksMatrix)
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   build:
@@ -37,8 +37,7 @@ jobs:
       - prepare
     strategy:
       fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     secrets: inherit
     with:
       systemAsName: true
