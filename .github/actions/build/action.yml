@@ -92,6 +92,6 @@ runs:
           echo "$ok build groups succeeded"
           echo "$error build groups failed"
         ) >&2
-        if [ $error ]; then
+        if [ "$error" -gt 0 ]; then
           exit 1
         fi
