@@ -32,6 +32,7 @@ runs:
         attr: ${{ inputs.attribute }}
         attrs: ${{ inputs.attributes || '[]' }}
         groups: ${{ inputs.attributeGroups || '{}' }}
+      shell: bash
       run: |
         set -Eeu
         builds=$(
@@ -51,12 +52,12 @@ runs:
         )
         echo "builds=$builds" >> "$GITHUB_OUTPUT"
     - name: Build
-      if: inputs.attributeGroups
       env:
         builds_json: ${{ steps.builds.outputs.builds }}
         keep_going_flag: ${{ inputs.keepGoing && '--keep-going' || '' }}
         abort_on_warn_flag: ${{ inputs.abortOnWarn && '--abort-on-warn' || '' }}
         fail_fast: ${{ inputs.keepGoing && '' || true }}
+      shell: bash
       run: |
         ok=0
         error=0
