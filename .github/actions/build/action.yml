@@ -77,9 +77,9 @@ runs:
               --print-build-logs \
               --log-format raw
           then
-            ((ok++))
+            $((ok++))
           else
-            ((error++))
+            $((error++))
             if [ -z "$keep_going_flag" ]; then
               exit 1
             fi
