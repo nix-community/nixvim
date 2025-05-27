@@ -56,7 +56,6 @@ runs:
         builds_json: ${{ steps.builds.outputs.builds }}
         keep_going_flag: ${{ inputs.keepGoing && '--keep-going' || '' }}
         abort_on_warn_flag: ${{ inputs.abortOnWarn && '--abort-on-warn' || '' }}
-        fail_fast: ${{ inputs.keepGoing && '' || true }}
       shell: bash
       run: |
         ok=0
@@ -71,6 +70,7 @@ runs:
           if [ -n "$name" ]; then
             echo "Building $name"
           fi
+          echo "${attrs[*]}"
           if nix build "${attrs[@]}" \
               "$keep_going_flag" \
               "$abort_on_warn_flag" \
@@ -80,7 +80,7 @@ runs:
             ((ok++))
           else
             ((error++))
-            if [ -n "$fail_fast" ]; then
+            if [ -z "$keep_going_flag" ]; then
               exit 1
             fi
           fi
