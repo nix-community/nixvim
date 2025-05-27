@@ -78,11 +78,11 @@ runs:
               --log-format raw
           then
             echo "incrementing ok from $ok"
-            (( ok++ ))
+            ((++ok))
             echo "incremented ok to $ok"
           else
             echo "incrementing error from $error"
-            (( error++ ))
+            ((++error))
             echo "incremented error to $error"
             if [ -z "$keep_going_flag" ]; then
               echo "Failing fast!"
