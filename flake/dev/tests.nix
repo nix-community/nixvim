@@ -52,15 +52,17 @@
           }
         ))
         (lib.collect (lib.isType "check"))
+        # Tests are handled by a different workflow
+        (builtins.filter (x: !lib.strings.hasPrefix "test-" x.name))
         (lib.groupBy' (builds: x: builds ++ [ x.build ]) [ ] (x: x.name))
         (lib.mapAttrsToList (name: builds: { inherit name builds; }))
 
-        # Only build one one system for non-test attrs
+        # Only build one one system per check
         # TODO: this is very heavy handed, maybe we want some exceptions?
         (map (
           matrix:
           matrix
-          // lib.optionalAttrs (!lib.strings.hasPrefix "test-" matrix.name) {
+          // {
             builds = [
               (getPrimaryBuild matrix.builds)
             ];
