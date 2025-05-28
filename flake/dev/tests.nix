@@ -22,11 +22,12 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
+      # https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/choosing-the-runner-for-a-job#choosing-github-hosted-runners
       githubPlatforms = {
         "x86_64-linux" = "ubuntu-24.04";
-        "x86_64-darwin" = "macos-13";
-        "aarch64-darwin" = "macos-14";
         "aarch64-linux" = "ubuntu-24.04-arm";
+        "x86_64-darwin" = "macos-13";
+        "aarch64-darwin" = "macos-15";
       };
       toGithubBuild = system: {
         inherit system;
