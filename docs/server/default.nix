@@ -1,21 +1,22 @@
 {
-  lib,
-  runCommand,
-  makeBinaryWrapper,
-  python3,
-  xdg-utils,
   docs,
+  http-server,
+  writeShellApplication,
 }:
-runCommand "serve-docs"
-  {
-    nativeBuildInputs = [ makeBinaryWrapper ];
-    meta.mainProgram = "server";
-  }
-  ''
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe python3} \
-        $out/bin/server \
-        --add-flags ${./server.py} \
-        --chdir ${docs} \
-        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
-  ''
+writeShellApplication {
+  name = "serve-docs";
+  runtimeInputs = [ http-server ];
+  runtimeEnv.server_flags = [
+    # Search for available port
+    "--port=0"
+
+    # Disable browser cache
+    "-c-1"
+
+    # Open using xdg-open
+    "-o"
+  ];
+  text = ''
+    http-server ${docs} "''${server_flags[@]}"
+  '';
+}
