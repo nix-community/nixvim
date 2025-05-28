@@ -18,12 +18,13 @@ Options:
 	-h, --help: Display this help message and exit
 	-l, --list: Display the list of tests and exit
 	-s, --system <system>: Launch checks for "<system>" instead of "${NIXVIM_SYSTEM}".
+	-g, --group-size N: The maximum number of tests to build at once. Default 20.
 	-i, --interactive: Pick interactively the tests. Can't be supplied if tests where passed.
 	-a, --attr: Print full attrpath of the tests, instead of running them.
 EOF
 }
 
-if ! OPTS=$(getopt -o "hlis:a" -l "help,list,interactive,system:,attr" -- "$@"); then
+if ! OPTS=$(getopt -o "hlis:g:a" -l "help,list,interactive,system:,group-size:,attr" -- "$@"); then
   echo "Invalid options" >&2
   help
   exit 1
@@ -35,6 +36,7 @@ system=${NIXVIM_SYSTEM}
 specified_tests=()
 nix_args=()
 interactive=false
+group_size=20
 print_attrpath=false
 
 mk_test_list() {
@@ -54,6 +56,10 @@ while true; do
   -i | --interactive)
     interactive=true
     shift
+    ;;
+  -g | --group-size)
+    group_size=$2
+    shift 2
     ;;
   -s | --system)
     system=$2
@@ -94,6 +100,50 @@ get_tests() {
   done
 }
 
+build_group() {
+  if ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "$@"; then
+    echo "Test failure" >&2
+    return 1
+  fi
+}
+
+build_in_groups() {
+  # Count failures
+  failures=0
+
+  # $@ is weird and sometimes includes the script's filename, othertimes doesn't.
+  # Copying it to a normal array results in a consistent behaviour.
+  tests=("$@")
+  test_count=${#tests[@]}
+
+  # Calculate how many groups we need
+  if ((group_size > test_count)); then
+    group_size=$test_count
+  fi
+  group_count=$((test_count / group_size))
+
+  for ((group_idx = 0; group_idx <= group_count; group_idx++)); do
+    # The index pointing to the start of the group slice
+    start_idx=$((group_idx * group_size))
+
+    if ((group_idx == group_count)); then
+      group_slice=("${tests[@]:start_idx}")
+    else
+      group_slice=("${tests[@]:start_idx:group_size}")
+    fi
+
+    if ((group_count > 1)); then
+      echo "Building group $group_idx of $group_count"
+    fi
+
+    if ! build_group "${group_slice[@]}"; then
+      ((++failures))
+    fi
+  done
+
+  ((failures == 0))
+}
+
 run_tests() {
   readarray -t test_list < <(get_tests "$@")
   if [[ $print_attrpath == true ]]; then
@@ -102,7 +152,7 @@ run_tests() {
     for test in "${test_list[@]}"; do
       echo "- $test"
     done
-  elif ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "${test_list[@]}"; then
+  elif ! build_in_groups "${test_list[@]}"; then
     echo "Test failure" >&2
     exit 1
   fi
