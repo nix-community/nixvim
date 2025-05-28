@@ -1,0 +1,48 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+      - nixos-*
+      - test/**
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Test on ${{ matrix.system }}
+    runs-on: ${{ matrix.runs-on }}
+
+    # https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/choosing-the-runner-for-a-job#choosing-github-hosted-runners
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: aarch64-linux
+            runs-on: ubuntu-24.04-arm
+          - system: aarch64-darwin
+            runs-on: macos-15
+          - system: x86_64-linux
+            runs-on: ubuntu-24.04
+          - system: x86_64-darwin
+            runs-on: macos-13
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Setup nix cache
+        uses: cachix/cachix-action@v16
+        with:
+          name: nix-community
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+        continue-on-error: true
+
+      - name: Run tests
+        run: nix develop --command tests -- --abort-on-warn --keep-going
