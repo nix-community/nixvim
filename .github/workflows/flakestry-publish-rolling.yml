@@ -1,3 +1,4 @@
+name: Publish every git push to Flakestry
 on:
   push:
     branches:
