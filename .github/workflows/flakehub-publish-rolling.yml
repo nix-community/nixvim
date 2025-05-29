@@ -5,6 +5,7 @@ on:
       - "main"
 jobs:
   flakehub-publish:
+    if: github.repository == 'nix-community/nixvim'
     runs-on: "ubuntu-latest"
     permissions:
       id-token: "write"

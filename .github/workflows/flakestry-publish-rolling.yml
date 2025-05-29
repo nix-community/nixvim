@@ -10,6 +10,7 @@ on:
         required: true
 jobs:
   publish-flake:
+    if: github.event_name != 'push' || github.repository == 'nix-community/nixvim'
     runs-on: ubuntu-latest
     permissions:
       id-token: "write"
