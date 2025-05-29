@@ -15,6 +15,6 @@ jobs:
       - uses: "DeterminateSystems/nix-installer-action@main"
       - uses: "DeterminateSystems/flakehub-push@main"
         with:
-          name: "nix-community/nixvim"
+          name: ${{ github.repository }}
           rolling: true
           visibility: "public"
