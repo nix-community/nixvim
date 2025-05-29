@@ -29,6 +29,7 @@
             {
               name = "checks";
               help = "Run all nixvim checks";
+              # TODO: run tests from the `ci` flake output too?
               command = ''
                 echo "=> Running all nixvim checks..."
 
