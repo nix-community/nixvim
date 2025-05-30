@@ -3,3 +3,18 @@
 nixpkgs_rev = "3d1f29646e4b57ed468d60f9d286cde23a8d1707"
 release = "25.11"
 unstable = true
+
+[versions."24.11"]
+branch = "nixos-24.11"
+channel = "nixos-24.11"
+status = "deprecated"
+
+[versions."25.05"]
+branch = "nixos-25.05"
+channel = "nixos-25.05"
+status = "stable"
+
+[versions."25.11"]
+branch = "main"
+channel = "nixpkgs-unstable"
+status = "rolling"
