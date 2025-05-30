@@ -21,6 +21,7 @@ lib.makeExtensible (
     deprecation = call ./deprecation.nix { };
     keymaps = call ./keymap-helpers.nix { };
     lua = call ./to-lua.nix { };
+    lua-types = call ./lua-types.nix { };
     modules = call ./modules.nix { inherit flake; };
     options = call ./options.nix { };
     plugins = call ./plugins { };
