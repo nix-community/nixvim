@@ -8,6 +8,7 @@
 {
   imports = [
     ./flake-modules
+    ./ci.nix
     ./lib.nix
     ./legacy-packages.nix
     ./nixvim-configurations.nix
@@ -31,6 +32,7 @@
 
   # Specify which outputs are defined by which partitions
   partitionedAttrs = {
+    ci = "dev";
     checks = "dev";
     devShells = "dev";
     formatter = "dev";
