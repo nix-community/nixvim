@@ -57,11 +57,13 @@ jobs:
           slug: ${{ steps.app-token.outputs.app-slug }}
         run: |
           name="$slug[bot]"
+          name_regex="$slug"'\[bot\]'
           id=$(gh api "/users/$name" --jq .id)
           {
             echo "id=$id"
             echo "name=$name"
             echo "email=$id+$name@users.noreply.github.com"
+            echo 'author-regex=^'"$name_regex"' <'"$id+$name_regex"'@users\.noreply\.github\.com>$'
           } >> "$GITHUB_OUTPUT"
 
       - name: Configure git
@@ -159,13 +161,14 @@ jobs:
       - name: Apply commits from the open PR
         id: re_apply
         if: (inputs.re_apply || github.event_name == 'schedule') && steps.open_pr_info.outputs.number
+        env:
+          author_regex: ${{ steps.user-info.outputs.author-regex }}
         run: |
-          # The base is the most recent commit on the remote branch by github-actions[bot]
+          # The base is the most recent commit on the remote branch authored by nixvim-ci
           # This should be a flake.lock bump or a generated-files update
           # We will cherry-pick all commits on the remote _after_ the $base commit
           remote="origin/$pr_branch"
-          author_rxp='^github-actions\[bot\] <41898282+github-actions\[bot\]@users\.noreply\.github\.com>$'
-          base=$(git rev-list --author="$author_rxp" --max-count=1 "$remote")
+          base=$(git rev-list --author="$author_regex" --max-count=1 "$remote")
           commits=( $(git rev-list --reverse "$base..$remote") )
           if [[ -n "$commits" ]]; then
             echo "Applying ${#commits[@]} commits..."
