@@ -23,8 +23,7 @@
       ((string_fragment) @injection.content
         (#set! injection.language "lua")))
   ]
-  (#match? @_func "(^|\\.)mkRaw$")
-  (#set! injection.combined))
+  (#match? @_func "(^|\\.)mkRaw$"))
 
 (binding
   attrpath: (attrpath
