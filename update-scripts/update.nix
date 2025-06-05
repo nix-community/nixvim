@@ -31,22 +31,47 @@ writeShellApplication {
       update_args+=( "--commit-lock-file" )
     fi
 
+    currentCommit() {
+      git show --no-patch --format=%h
+    }
+
+    hasChanges() {
+      old="$1"
+      new="$2"
+      if [ -n "$commit" ]; then
+        [ "$old" != "$new" ]
+      elif git diff --quiet; then
+        return 1
+      else
+        return 0
+      fi
+    }
+
     writeGitHubOutput() {
-      if [ -n "$use_github_output" ]; then
-        (
+      if [ -n "$use_github_output" ] && [ -n "$commit" ]; then
+        {
           echo "$1<<EOF"
           git show --no-patch --format=%b
           echo "EOF"
-        ) >> "$GITHUB_OUTPUT"
+        } >> "$GITHUB_OUTPUT"
       fi
     }
 
     versionInfo() {
+      extra_args=( )
+      if [ "$1" = "--amend" ]; then
+        extra_args+=(
+          "--amend"
+          "--no-edit"
+        )
+      fi
+
       nix-build ./update-scripts -A version-info
       ./result/bin/version-info
+
       if [ -n "$commit" ]; then
         git add version-info.toml
-        git commit "$@"
+        git commit "''${extra_args[@]}"
       fi
     }
 
@@ -57,27 +82,27 @@ writeShellApplication {
     fi
 
     # Update the root lockfile
-    old=$(git show --no-patch --format=%h)
+    old=$(currentCommit)
     echo "Updating root lockfile"
     nix flake update "''${update_args[@]}"
-    new=$(git show --no-patch --format=%h)
-    if [ "$old" != "$new" ]; then
+    new=$(currentCommit)
+    if hasChanges "$old" "$new"; then
       echo "Updating version-info"
-      versionInfo --amend --no-edit
+      versionInfo --amend
       writeGitHubOutput root_lock_body
     fi
 
     # Update the dev lockfile
     root_nixpkgs=$(nix eval --raw --file . 'inputs.nixpkgs.rev')
-    old=$(git show --no-patch --format=%h)
+    old=$(currentCommit)
     echo "Updating dev lockfile"
     nix flake update "''${update_args[@]}" \
         --override-input 'dev-nixpkgs' "github:NixOS/nixpkgs/$root_nixpkgs" \
         --flake './flake/dev'
-    new=$(git show --no-patch --format=%h)
-    if [ "$old" != "$new" ]; then
+    new=$(currentCommit)
+    if hasChanges "$old" "$new"; then
       echo "Updating version-info"
-      versionInfo --amend --no-edit
+      versionInfo --amend
       writeGitHubOutput dev_lock_body
     fi
   '';
