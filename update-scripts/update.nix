@@ -43,7 +43,7 @@ writeShellApplication {
 
     versionInfo() {
       nix-build ./update-scripts -A version-info
-      ./result
+      ./result/bin/version-info
       if [ -n "$commit" ]; then
         git add version-info.toml
         git commit "$@"
