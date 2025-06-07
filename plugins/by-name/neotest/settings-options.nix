@@ -180,7 +180,7 @@ in
   quickfix = {
     enabled = defaultNullOpts.mkBool true "Enable quickfix.";
 
-    open = defaultNullOpts.mkNullable (with types; either bool str) false ''
+    open = defaultNullOpts.mkNullableWithRaw (with types; either bool str) false ''
       Set to true to open quickfix on startup, or a function to be called when the quickfix
       results are set.
     '';
