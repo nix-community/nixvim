@@ -9,6 +9,11 @@ let
   inherit (lib) mkPackageOption types;
   inherit (lib.nixvim) mkNullOrOption';
 
+  extraPackages =
+    lib.optional (cfg.installCargo == true) cfg.cargoPackage
+    ++ lib.optional (cfg.installRustc == true) cfg.rustcPackage
+    ++ lib.optional (cfg.installRustfmt == true) cfg.rustfmtPackage;
+
 in
 {
   options.plugins.lsp.servers.rust_analyzer = {
@@ -72,9 +77,7 @@ in
       }
     ];
 
-    extraPackages =
-      lib.optional (cfg.installCargo == true) cfg.cargoPackage
-      ++ lib.optional (cfg.installRustc == true) cfg.rustcPackage
-      ++ lib.optional (cfg.installRustfmt == true) cfg.rustfmtPackage;
+    extraPackages = lib.optionals (!cfg.packageFallback) extraPackages;
+    extraPackagesAfter = lib.optionals cfg.packageFallback extraPackages;
   };
 }

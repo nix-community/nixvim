@@ -265,4 +265,58 @@
           }
         ];
     };
+
+  package-fallback =
+    { config, ... }:
+    {
+      test.buildNixvim = false;
+
+      plugins.lsp = {
+        enable = true;
+        servers = {
+          nil_ls = {
+            enable = true;
+
+            packageFallback = true;
+          };
+          rust_analyzer = {
+            enable = true;
+
+            installCargo = true;
+            installRustc = true;
+
+            packageFallback = true;
+          };
+          hls = {
+            enable = true;
+
+            installGhc = true;
+            packageFallback = true;
+          };
+        };
+      };
+
+      assertions =
+        let
+          assertAfter = name: pkg: [
+            {
+              assertion = lib.all (x: x != pkg) config.extraPackages;
+              message = "Expected `${name}` not to be in extraPackages";
+            }
+            {
+              assertion = lib.any (x: x == pkg) config.extraPackagesAfter;
+              message = "Expected `${name}` to be in extraPackagesAfter";
+            }
+          ];
+        in
+        with config.plugins.lsp.servers;
+        (
+          assertAfter "nil" nil_ls.package
+          ++ assertAfter "rust-analyzer" rust_analyzer.package
+          ++ assertAfter "cargo" rust_analyzer.cargoPackage
+          ++ assertAfter "rustc" rust_analyzer.rustcPackage
+          ++ assertAfter "haskell-language-server" hls.package
+          ++ assertAfter "ghc" hls.ghcPackage
+        );
+    };
 }
