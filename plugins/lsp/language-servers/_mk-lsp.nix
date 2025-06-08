@@ -55,6 +55,16 @@ in
         lib.nixvim.mkMaybeUnpackagedOption "plugins.lsp.servers.${name}.package" pkgs name
           package;
 
+      packageFallback = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          When enabled, the language server package will be added to the end of the `PATH` _(suffix)_ instead of the beginning _(prefix)_.
+
+          This can be useful if you want local versions of the language server (e.g. from a devshell) to override the nixvim version.
+        '';
+      };
+
       cmd = mkOption {
         type = with types; nullOr (listOf str);
         default =
@@ -148,7 +158,8 @@ in
   };
 
   config = lib.mkIf enabled {
-    extraPackages = [ cfg.package ];
+    extraPackages = lib.optional (!cfg.packageFallback) cfg.package;
+    extraPackagesAfter = lib.optional cfg.packageFallback cfg.package;
 
     plugins.lsp.enabledServers = [
       {
