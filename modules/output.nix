@@ -58,7 +58,14 @@ in
     extraPackages = mkOption {
       type = with types; listOf (nullOr package);
       default = [ ];
-      description = "Extra packages to be made available to neovim";
+      description = "Extra packages to be made available to neovim, added to the start of `PATH`";
+      apply = builtins.filter (p: p != null);
+    };
+
+    extraPackagesAfter = mkOption {
+      type = with types; listOf (nullOr package);
+      default = [ ];
+      description = "Extra packages to be made available to neovim, added to the end of `PATH`";
       apply = builtins.filter (p: p != null);
     };
 

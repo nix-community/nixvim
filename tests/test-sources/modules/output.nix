@@ -149,4 +149,16 @@
       end
     '';
   };
+
+  extraPackagesAfter =
+    { pkgs, ... }:
+    {
+      extraPackagesAfter = [ pkgs.hello ];
+
+      extraConfigLua = ''
+        if vim.fn.executable("hello") ~= 1 then
+          print("Unable to find hello package.")
+        end
+      '';
+    };
 }

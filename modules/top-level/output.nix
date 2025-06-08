@@ -241,6 +241,9 @@ in
         ++ (optional (
           config.extraPackages != [ ]
         ) ''--prefix PATH : "${lib.makeBinPath config.extraPackages}"'')
+        ++ (optional (
+          config.extraPackagesAfter != [ ]
+        ) ''--suffix PATH : "${lib.makeBinPath config.extraPackagesAfter}"'')
         ++ (optional config.wrapRc ''--add-flags -u --add-flags "${initFile}"'')
       );
 
