@@ -1,6 +1,9 @@
 # Not including defaults are they are too big
 {
   minimal = {
+    # lua/parrot/provider/init.lua:11: config.api_key is required
+    test.runNvim = false;
+
     plugins.parrot = {
       enable = true;
 
@@ -9,6 +12,9 @@
   };
 
   example = {
+    # lua/parrot/provider/init.lua:11: config.api_key is required
+    test.runNvim = false;
+
     plugins.parrot = {
       enable = true;
 
