@@ -1139,6 +1139,30 @@
       ];
     };
   };
+  "rust-analyzer.hover.memoryLayout.padding" = {
+    description = ''
+      How to render the padding information in a memory layout hover.
+
+      Values:
+      - both: Render as 12 (0xC)
+      - decimal: Render as 12
+      - hexadecimal: Render as 0xC
+    '';
+    pluginDefault = null;
+    type = {
+      kind = "oneOf";
+      subTypes = [
+        {
+          kind = "enum";
+          values = [
+            "both"
+            "decimal"
+            "hexadecimal"
+          ];
+        }
+      ];
+    };
+  };
   "rust-analyzer.hover.memoryLayout.size" = {
     description = ''
       How to render the size information in a memory layout hover.
@@ -1273,7 +1297,7 @@
       - self: Insert import paths relative to the current module, using up to one `super` prefix if the parent module contains the requested item. Prefixes `self` in front of the path if it starts with a module.
       - crate: Force import paths to be absolute by always starting them with `crate` or the extern crate name they come from.
     '';
-    pluginDefault = "plain";
+    pluginDefault = "crate";
     type = {
       kind = "enum";
       values = [
