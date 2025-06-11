@@ -1,9 +1,11 @@
 {
   empty = {
+    test.runNvim = false;
     plugins.easy-dotnet.enable = true;
   };
 
   defaults = {
+    test.runNvim = false;
     plugins = {
       telescope.enable = true;
       web-devicons.enable = true;
@@ -146,6 +148,7 @@
   };
 
   example = {
+    test.runNvim = false;
     plugins = {
       fzf-lua.enable = true;
       easy-dotnet = {
