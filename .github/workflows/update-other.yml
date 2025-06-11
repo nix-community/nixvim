@@ -11,7 +11,7 @@ permissions:
 jobs:
   update:
     name: Trigger updates for nixvim's stable branches
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     if: github.repository == 'nix-community/nixvim'
     strategy:
       matrix:
