@@ -66,7 +66,7 @@ writeShellApplication {
         )
       fi
 
-      nix-build ./update-scripts -A version-info
+      nix-build ./ci -A version-info
       ./result/bin/version-info
 
       if [ -n "$commit" ]; then

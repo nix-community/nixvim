@@ -132,7 +132,7 @@ jobs:
         id: update_flake_lock
         if: inputs.update_lock || github.event_name == 'schedule'
         run: |
-          nix-build ./update-scripts -A update
+          nix-build ./ci -A update
           ./result/bin/update --commit --github-output
 
       - name: Update generated files
@@ -140,7 +140,7 @@ jobs:
         if: inputs.generate || github.event_name == 'schedule'
         run: |
           old=$(git show --no-patch --format=%h)
-          nix-build ./update-scripts -A generate
+          nix-build ./ci -A generate
           ./result/bin/generate --commit
           new=$(git show --no-patch --format=%h)
           if [ "$old" != "$new" ]; then
