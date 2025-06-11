@@ -161,3 +161,9 @@ owner = "XhuyZ"
 title = "nixvim"
 description = "Nixvim flake for neovim, inspired by LazyVim with keymaps almost the same"
 url = "https://github.com/XhuyZ/nixvim"
+
+[[config]]
+owner = "wverac"
+title = "BOFH NixVim"
+description = "Minimalist NixVim setup, featuring a curated set of essential plugins"
+url = "https://github.com/wverac/nixvim"
