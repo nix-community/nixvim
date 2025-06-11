@@ -34,16 +34,21 @@ lib.fix (builders: {
   */
   writeLuaWith =
     pkgs: name: text:
-    pkgs.runCommand name { inherit text; } ''
-      echo -n "$text" > "$out"
-
-      ${lib.getExe pkgs.stylua} \
-        --no-editorconfig \
-        --line-endings Unix \
-        --indent-type Spaces \
-        --indent-width 4 \
-        "$out"
-    '';
+    pkgs.runCommand name
+      {
+        nativeBuildInputs = [ pkgs.stylua ];
+        passAsFile = [ "text" ];
+        inherit text;
+      }
+      ''
+        install -m 644 -T "$textPath" "$out"
+        stylua \
+          --no-editorconfig \
+          --line-endings Unix \
+          --indent-type Spaces \
+          --indent-width 4 \
+          "$out"
+      '';
 
   /*
     Write a byte compiled lua file to the nix store.
@@ -62,11 +67,15 @@ lib.fix (builders: {
   */
   writeByteCompiledLuaWith =
     pkgs: name: text:
-    pkgs.runCommandLocal name { inherit text; } ''
-      echo -n "$text" > "$out"
-
-      ${lib.getExe' pkgs.luajit "luajit"} -bd -- "$out" "$out"
-    '';
+    pkgs.runCommandLocal name
+      {
+        nativeBuildInputs = [ pkgs.luajit ];
+        passAsFile = [ "text" ];
+        inherit text;
+      }
+      ''
+        luajit -bd -- "$textPath" "$out"
+      '';
 
   /*
     Get a source lua file and write a byte compiled copy of it
@@ -86,9 +95,14 @@ lib.fix (builders: {
   */
   byteCompileLuaFileWith =
     pkgs: name: src:
-    pkgs.runCommandLocal name { inherit src; } ''
-      ${lib.getExe' pkgs.luajit "luajit"} -bd -- "$src" "$out"
-    '';
+    pkgs.runCommandLocal name
+      {
+        nativeBuildInputs = [ pkgs.luajit ];
+        inherit src;
+      }
+      ''
+        luajit -bd -- "$src" "$out"
+      '';
 
   # Setup hook to byte compile all lua files in the output directory.
   # Invalid lua files are ignored.
