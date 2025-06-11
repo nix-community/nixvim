@@ -35,6 +35,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     needs: prepare
     strategy:
+      fail-fast: false
       matrix:
         branch: ${{ fromJSON(needs.prepare.outputs.branches) }}
     steps:
