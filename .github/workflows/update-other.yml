@@ -10,15 +10,29 @@ permissions:
   actions: write
 
 jobs:
+  prepare:
+    name: Compute list of branches
+    runs-on: ubuntu-24.04-arm
+    if: github.repository == 'nix-community/nixvim'
+    outputs:
+      branches: ${{ steps.list-branches.outputs.branches }}
+    steps:
+      - name: List stable branches
+        id: list-branches
+        run: |
+          echo 'branches<<EOF
+          [
+            "nixos-25.05",
+            "nixos-24.11"
+          ]
+          EOF' >> "$GITHUB_OUTPUT"
   update:
     name: Trigger update on ${{ matrix.branch }}
     runs-on: ubuntu-24.04-arm
-    if: github.repository == 'nix-community/nixvim'
+    needs: prepare
     strategy:
       matrix:
-        branch:
-          - nixos-25.05
-          - nixos-24.11
+        branch: ${{ fromJSON(needs.prepare.outputs.branches) }}
     steps:
       - name: workflow dispatch
         env:
