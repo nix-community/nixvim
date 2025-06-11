@@ -155,3 +155,9 @@ owner = "LudovicDeMatteis"
 title = ".dotfiles"
 url = "https://github.com/LudovicDeMatteis/.dotfiles/tree/master/modules/neovim"
 description = "NixVim with Home-manager"
+
+[[config]]
+owner = "XhuyZ"
+title = "nixvim"
+description = "Nixvim flake for neovim, inspired by LazyVim with keymaps almost the same"
+url = "https://github.com/XhuyZ/nixvim"
