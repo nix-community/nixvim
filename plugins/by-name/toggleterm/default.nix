@@ -279,7 +279,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   settingsExample = {
-    open_mapping = "[[<c-\>]]";
+    open_mapping = "[[<c-\\>]]";
     direction = "float";
     float_opts = {
       border = "curved";
