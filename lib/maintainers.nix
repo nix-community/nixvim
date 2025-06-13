@@ -72,6 +72,12 @@
     githubId = 62440012;
     name = "Zain Kergaye";
   };
+  adeci = {
+    email = "alex.decious@gmail.com";
+    github = "adeci";
+    githubId = 80290157;
+    name = "adeci";
+  };
   alisonjenkins = {
     email = "alison.juliet.jenkins@gmail.com";
     github = "alisonjenkins";
