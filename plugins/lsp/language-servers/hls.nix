@@ -7,6 +7,8 @@
 let
   cfg = config.plugins.lsp.servers.hls;
   inherit (lib) types;
+
+  ghcPackage = lib.optional (cfg.installGhc == true) cfg.ghcPackage;
 in
 {
   options.plugins.lsp.servers.hls = {
@@ -32,6 +34,7 @@ in
       '';
     };
 
-    extraPackages = lib.optional (cfg.installGhc == true) cfg.ghcPackage;
+    extraPackages = lib.optionals (!cfg.packageFallback) ghcPackage;
+    extraPackagesAfter = lib.optionals cfg.packageFallback ghcPackage;
   };
 }
