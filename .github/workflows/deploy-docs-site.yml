@@ -1,0 +1,114 @@
+name: Deploy website
+
+on:
+  # TODO: Consider running on schedule instead of on push
+  push:
+    branches:
+      - main
+  # Allow running manually
+  workflow_dispatch:
+
+# Allow one concurrent deployment
+concurrency:
+  group: deploy-docs-website
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: true
+      matrix:
+        # TODO: generate matrix from version-info.toml
+        include:
+          - name: main
+            ref: main
+            baseHref: /nixvim/
+          - name: "25.05"
+            ref: nixos-25.05
+            baseHref: /nixvim/25.05/
+          - name: "24.11"
+            ref: nixos-24.11
+            baseHref: /nixvim/24.11/
+    uses: ./.github/workflows/build-docs.yml
+    secrets: inherit
+    with:
+      name: ${{ matrix.name }}-docs
+      ref: ${{ matrix.ref }}
+      baseHref: ${{ matrix.baseHref }}
+      # TODO: generate JSON from version-info.toml
+      versions: >
+        [
+          {
+            "branch": "main",
+            "nixpkgsBranch": "nixos-unstable",
+            "baseHref": "/nixvim/"
+          },
+          {
+            "branch": "nixos-25.05",
+            "nixpkgsBranch": "nixos-25.05",
+            "baseHref": "/nixvim/25.05/"
+          },
+          {
+            "branch": "nixos-24.11",
+            "nixpkgsBranch": "nixos-24.11",
+            "baseHref": "/nixvim/24.11/"
+          }
+        ]
+
+  combine:
+    name: Combine builds
+    runs-on: ubuntu-latest
+    needs: build
+
+    env:
+      repo: ${{ github.repository }}
+      repoName: ${{ github.event.repository.name }}
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: result
+          pattern: "*-docs"
+          merge-multiple: false
+
+      - name: Coerce directory structure
+        working-directory: result
+        run: |
+          for old in *
+          do
+            new=${old%"-docs"}
+            if [ "$new" = "main" ]
+            then
+              mv "$old/"* .
+              rmdir "$old"
+            elif [ "$old" != "$new" ]
+            then
+              mv "$old" "$new"
+            fi
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: result
+
+  deploy:
+    name: Deploy
+    needs: combine
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

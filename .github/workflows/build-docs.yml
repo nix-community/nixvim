@@ -1,0 +1,88 @@
+name: Documentation
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: The name to use for the artifact.
+        required: true
+        type: string
+      ref:
+        description: The branch, tag, or ref, on which to build the docs.
+        required: false
+        type: string
+      baseHref:
+        description: The baseHref to use when building the docs.
+        required: false
+        type: string
+      versions:
+        description: JSON array describing the other nixvim versions that the docs should reference.
+        required: false
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: false
+  # TODO: also run on pull requests and/or merge queue
+  # pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    # timeout-minutes: 40
+
+    env:
+      has_cachix: ${{ secrets.CACHIX_AUTH_TOKEN && true }}
+
+    steps:
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Configure cachix
+        if: env.has_cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: nix-community
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: nix-build
+        env:
+          baseHref: ${{ inputs.baseHref || '/' }}
+          versions: ${{ inputs.versions || '[]' }}
+        run: |
+          nix-build \
+              --argstr baseHref "$baseHref" \
+              --argstr versionsJson "$versions" \
+              --expr '
+                {
+                  baseHref,
+                  versionsJson,
+                  system ? builtins.currentSystem,
+                }:
+                let
+                  # Import flake using flake-compat
+                  flake = import ./.;
+                  inherit (flake.outputs.packages.${system}) docs;
+                in
+                docs.override {
+                  inherit baseHref;
+                  availableVersions = builtins.fromJSON versionsJson;
+                }
+              '
+
+      - name: Upload artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.name || 'docs' }}
+          path: result/**
+          retention-days: 1
+          if-no-files-found: error
