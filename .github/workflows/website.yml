@@ -48,7 +48,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ matrix.ref }}
 
         # Uses the build-docs action from the checked-out nixvim branch
       - name: Build docs
