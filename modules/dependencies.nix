@@ -147,6 +147,7 @@ in
       ];
       yazi.default = "yazi";
       yq.default = "yq";
+      zf.default = "zf";
       zk.default = "zk";
     };
   };
