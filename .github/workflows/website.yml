@@ -79,7 +79,7 @@ jobs:
 
   combine:
     name: Combine builds
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     needs: build
 
     env:
@@ -111,7 +111,7 @@ jobs:
 
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     needs: combine
 
     permissions:
