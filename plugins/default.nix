@@ -12,8 +12,8 @@
     ./colorschemes/everforest.nix
     ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
-    ./colorschemes/kanagawa.nix
     ./colorschemes/kanagawa-paper.nix
+    ./colorschemes/kanagawa.nix
     ./colorschemes/melange.nix
     ./colorschemes/modus.nix
     ./colorschemes/monokai-pro.nix
@@ -25,6 +25,7 @@
     ./colorschemes/palette.nix
     ./colorschemes/poimandres.nix
     ./colorschemes/rose-pine.nix
+    ./colorschemes/solarized-osaka.nix
     ./colorschemes/tokyonight.nix
     ./colorschemes/vscode.nix
 
