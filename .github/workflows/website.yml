@@ -1,140 +1,128 @@
-name: Build and deploy documentation
+name: Documentation
 
 on:
   push:
-    # Runs on pushes targeting the release branches
     branches:
       - main
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Allow running manually
   workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: docs-website
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    if: github.repository == 'nix-community/nixvim'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    name: Build ${{ matrix.name }}
     runs-on: ubuntu-latest
-    timeout-minutes: 40
 
-    env:
-      repo: ${{ github.repository }}
-      repoName: ${{ github.event.repository.name }}
-      out: docs-build
+    strategy:
+      fail-fast: true
+      matrix:
+        # TODO: generate matrix from version-info.toml
+        include:
+          - name: unstable
+            ref: main
+            sub-path: ""
+            base-href: /nixvim/
+          - name: "25.05"
+            ref: nixos-25.05
+            sub-path: "25.05"
+            base-href: /nixvim/25.05/
+          - name: "24.11"
+            ref: nixos-24.11
+            sub-path: "24.11"
+            base-href: /nixvim/24.11/
 
     steps:
       - name: Install nix
         uses: cachix/install-nix-action@v31
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Configure cachix
         uses: cachix/cachix-action@v16
         with:
           name: nix-community
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+        # Uses the build-docs action from the checked-out nixvim branch
       - name: Build docs
-        run: |
-          set -ex
-
-          # A list of all doc versions to be built,
-          # (Written to versions.json)
-          echo '
+        uses: ./.github/actions/build-docs
+        with:
+          artifact-name: ${{ matrix.name }}-docs
+          sub-path: ${{ matrix.sub-path }}
+          base-href: ${{ matrix.base-href }}
+          # TODO: generate JSON from version-info.toml
+          versions: >
             [
               {
                 "branch": "main",
-                "nixpkgsBranch": "nixos-unstable"
+                "nixpkgsBranch": "nixos-unstable",
+                "baseHref": "/nixvim/"
               },
               {
                 "branch": "nixos-25.05",
                 "nixpkgsBranch": "nixos-25.05",
-                "subPath": "25.05"
+                "baseHref": "/nixvim/25.05/"
               },
               {
                 "branch": "nixos-24.11",
                 "nixpkgsBranch": "nixos-24.11",
-                "subPath": "24.11"
+                "baseHref": "/nixvim/24.11/"
               }
             ]
-          ' | jq \
-              --arg repoName "$repoName" \
-              'map(
-                  .
-                  # Ensure subPath is a string
-                  | .subPath = (.subPath // "")
-                  # Construct baseHref from $repoName and .subPath
-                  | .baseHref = (
-                       .subPath
-                       | if . == "" then "" else "/\(.)" end
-                       | $repoName + .
-                       | "/\(.)/"
-                  )
-              )' > versions.json
 
-          # 1: branch
-          # 2: baseHref
-          # 3: install dir
-          build() {
-            flakeref="github:${repo}${1:+/$1}"
-            baseHref="$2"
-            installDir="${out}${3:+/$3}"
+  combine:
+    name: Combine builds
+    runs-on: ubuntu-latest
+    needs: build
 
-            # Build docs for the given flake ref, overriding the relevant derivation args
-            nix build --impure \
-                --argstr flakeref "$flakeref" \
-                --argstr baseHref "$baseHref" \
-                --arg-from-file versionsJson versions.json \
-                --expr '
-                  {
-                    flakeref,
-                    baseHref,
-                    versionsJson,
-                    system ? builtins.currentSystem,
-                  }:
-                  let
-                    flake = builtins.getFlake flakeref;
-                    packages = flake.outputs.packages.${system};
-                  in
-                  packages.docs.override {
-                    inherit baseHref;
-                    availableVersions = builtins.fromJSON versionsJson;
-                  }
-                '
+    env:
+      in: artifacts
+      out: combined
 
-            # Copy the result to the install dir
-            mkdir -p "$installDir"
-            cp -r result/* "$installDir"
-          }
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.in }}
+          pattern: "*-docs"
+          merge-multiple: false
 
-          # For each version of the docs...
-          jq -c '.[]' versions.json |
-          while IFS=$"\n" read -r entry; do
-              branch=$(echo "$entry" | jq -r '.branch')
-              baseHref=$(echo "$entry" | jq -r '.baseHref')
-              installDir=$(echo "$entry" | jq -r '.subPath')
-
-              # Build this version of the docs
-              build "$branch" "$baseHref" "$installDir"
-          done
+      - name: Extract archives
+        run: |
+          mkdir -p "$out"
+          find "$in" -name artifact.tar \
+          | parallel tar \
+              --verbose \
+              --extract \
+              --file {} \
+              --directory "$out"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "docs-build"
+          path: ${{ env.out }}
 
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: combine
+
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
