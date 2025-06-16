@@ -13,27 +13,72 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  prepare:
+    name: Version info
+    runs-on: ubuntu-24.04-arm
+
+    outputs:
+      matrix: ${{ steps.matrix.outputs.result }}
+      versions: ${{ steps.versions.outputs.result }}
+
+    steps:
+      - name: Checkout version-info
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: version-info.toml
+          sparse-checkout-cone-mode: false
+
+      - name: Produce build matrix
+        id: matrix
+        uses: mikefarah/yq@master
+        with:
+          cmd: |
+            yq --no-colors --output-format=json '
+              [
+                .versions
+                | to_entries
+                | reverse
+                | .[]
+                | {
+                    "ref": .value.branch,
+                    "name": .key,
+                    "base-href": "/nixvim/"
+                  }
+                | select(.ref != "main").sub-path = .name
+                | select(.ref != "main").base-href += .name + "/"
+              ]
+            ' version-info.toml
+
+      - name: Produce "other versions" array
+        id: versions
+        uses: mikefarah/yq@master
+        with:
+          cmd: |
+            yq --no-colors --output-format=json '
+              [
+                .versions
+                | to_entries
+                | reverse
+                | .[]
+                | {
+                    "branch": .value.branch,
+                    "nixpkgsBranch": .value.channel,
+                    "baseHref": "/nixvim/\(.key)/"
+                  }
+                | select(.branch == "main").baseHref = "/nixvim/"
+              ]
+            ' version-info.toml
+            # TODO: add channel status
+
   build:
     name: Build ${{ matrix.name }}
     runs-on: ubuntu-latest
+    needs: prepare
 
     strategy:
       fail-fast: true
       matrix:
-        # TODO: generate matrix from version-info.toml
-        include:
-          - name: unstable
-            ref: main
-            sub-path: ""
-            base-href: /nixvim/
-          - name: "25.05"
-            ref: nixos-25.05
-            sub-path: "25.05"
-            base-href: /nixvim/25.05/
-          - name: "24.11"
-            ref: nixos-24.11
-            sub-path: "24.11"
-            base-href: /nixvim/24.11/
+        include: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     steps:
       - name: Install nix
@@ -57,25 +102,7 @@ jobs:
           artifact-name: ${{ matrix.name }}-docs
           sub-path: ${{ matrix.sub-path }}
           base-href: ${{ matrix.base-href }}
-          # TODO: generate JSON from version-info.toml
-          versions: >
-            [
-              {
-                "branch": "main",
-                "nixpkgsBranch": "nixos-unstable",
-                "baseHref": "/nixvim/"
-              },
-              {
-                "branch": "nixos-25.05",
-                "nixpkgsBranch": "nixos-25.05",
-                "baseHref": "/nixvim/25.05/"
-              },
-              {
-                "branch": "nixos-24.11",
-                "nixpkgsBranch": "nixos-24.11",
-                "baseHref": "/nixvim/24.11/"
-              }
-            ]
+          versions: ${{ needs.prepare.outputs.versions }}
 
   combine:
     name: Combine builds
