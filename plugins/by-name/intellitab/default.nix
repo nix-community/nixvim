@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "intellitab";
   packPathName = "intellitab.nvim";
   package = "intellitab-nvim";
+  description = "A neovim plugin to only press tab once.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

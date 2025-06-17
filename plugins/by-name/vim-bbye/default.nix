@@ -8,6 +8,7 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "vim-bbye";
+  description = "Delete buffers and close files in Vim without closing your windows or messing up your layout.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

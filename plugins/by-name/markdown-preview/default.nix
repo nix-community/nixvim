@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "markdown-preview.nvim";
   package = "markdown-preview-nvim";
   globalPrefix = "mkdp_";
+  description = "A markdown preview plugin for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -10,6 +10,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "firenvim";
+  description = "Embed Neovim in Chrome, Firefox & others.";
 
   maintainers = with lib.maintainers; [ GaetanLepage ];
 

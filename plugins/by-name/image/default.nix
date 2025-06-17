@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "image";
   packPathName = "image.nvim";
   package = "image-nvim";
+  description = "This plugin adds image support to Neovim using Kitty's Graphics Protocol or ueberzugpp.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

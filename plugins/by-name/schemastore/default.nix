@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "schemastore";
   packPathName = "SchemaStore.nvim";
   package = "SchemaStore-nvim";
+  description = "A Neovim plugin that provides the SchemaStore catalog for use with jsonls and yamlls.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

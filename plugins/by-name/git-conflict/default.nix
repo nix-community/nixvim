@@ -7,6 +7,7 @@ with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "git-conflict";
   package = "git-conflict-nvim";
+  description = "A plugin to visualise and resolve merge conflicts in neovim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

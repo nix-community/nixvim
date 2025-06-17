@@ -5,6 +5,7 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "tagbar";
   globalPrefix = "tagbar_";
+  description = "Vim plugin that displays tags in a window, ordered by scope.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "quicker";
   packPathName = "quicker.nvim";
   package = "quicker-nvim";
+  description = "Improved UI and workflow for the Neovim quickfix.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

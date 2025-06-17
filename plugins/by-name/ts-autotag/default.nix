@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "nvim-ts-autotag";
   moduleName = "nvim-ts-autotag";
   package = "nvim-ts-autotag";
+  description = "Use treesitter to auto close and auto rename a html tag.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

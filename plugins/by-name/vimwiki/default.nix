@@ -2,6 +2,7 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "vimwiki";
   globalPrefix = "vimwiki_";
+  description = "Personal Wiki for Vim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

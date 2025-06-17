@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "glow";
   packPathName = "glow.nvim";
   package = "glow-nvim";
+  description = "A markdown preview directly in your neovim.";
 
   maintainers = [ lib.maintainers.getchoo ];
 

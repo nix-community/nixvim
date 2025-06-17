@@ -10,6 +10,7 @@ mkVimPlugin {
   packPathName = "vim-ledger";
   package = "vim-ledger";
   globalPrefix = "ledger_";
+  description = "Filetype detection, syntax highlighting, auto-formatting, auto-completion, and other tools for working with ledger files.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

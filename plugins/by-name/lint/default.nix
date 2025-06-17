@@ -132,6 +132,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "nvim-lint";
   callSetup = false;
   hasSettings = false;
+  description = "An asynchronous linter plugin for Neovim complementary to the built-in Language Server Protocol support.";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

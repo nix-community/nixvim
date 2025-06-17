@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "nvim-highlight-colors";
   package = "nvim-highlight-colors";
   moduleName = "nvim-highlight-colors";
+  description = "Highlight colors in Neovim buffers.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

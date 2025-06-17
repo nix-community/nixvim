@@ -8,6 +8,7 @@ with lib.nixvim.plugins;
 mkVimPlugin {
   name = "vim-slime";
   globalPrefix = "slime_";
+  description = "Send text from Vim to a terminal or REPL. Inspired by Emacs' `slime`.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

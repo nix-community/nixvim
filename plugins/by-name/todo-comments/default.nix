@@ -18,6 +18,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "todo-comments";
   packPathName = "todo-comments.nvim";
   package = "todo-comments-nvim";
+  description = "Highlight, list and search todo comments in your projects.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

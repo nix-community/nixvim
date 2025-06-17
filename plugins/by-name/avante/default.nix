@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "avante";
   packPathName = "avante.nvim";
   package = "avante-nvim";
+  description = "A Neovim plugin designed to emulate the behaviour of the Cursor AI IDE.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

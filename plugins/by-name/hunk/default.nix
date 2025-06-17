@@ -12,6 +12,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = ''
     A tool for splitting diffs in Neovim.
 
+    ---
+
      If you wish to display icons in the file tree you should enable either
      `plugins.web-devicons` or `plugins.mini`. If using `plugins.mini`, you
      must enable the `icons` module.

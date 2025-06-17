@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "Comment.nvim";
   moduleName = "Comment";
   package = "comment-nvim";
+  description = "Smart and powerful comment plugin for Neovim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

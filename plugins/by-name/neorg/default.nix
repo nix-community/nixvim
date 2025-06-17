@@ -15,6 +15,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neorg";
+  description = "A modular, extensible, and feature-rich note-taking and organization tool for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "lualine";
   packPathName = "lualine.nvim";
   package = "lualine-nvim";
+  description = "A blazing fast and easy to configure neovim statusline written in lua.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

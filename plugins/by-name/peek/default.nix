@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "peek";
   packPathName = "peek.nvim";
   package = "peek-nvim";
+  description = "Markdown preview plugin for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

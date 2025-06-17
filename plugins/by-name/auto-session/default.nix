@@ -9,6 +9,7 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "auto-session";
   package = "auto-session";
+  description = "A small automated session manager for Neovim.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

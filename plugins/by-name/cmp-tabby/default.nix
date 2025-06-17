@@ -5,6 +5,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmp-tabby";
+  description = "[Tabby](https://tabbyml.com) completion source for the nvim-cmp.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

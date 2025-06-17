@@ -4,6 +4,7 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "goto-preview";
+  description = "A small Neovim plugin for previewing definitions using floating windows.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

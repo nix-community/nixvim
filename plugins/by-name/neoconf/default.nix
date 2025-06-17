@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "neoconf";
   packPathName = "neoconf.nvim";
   package = "neoconf-nvim";
+  description = "Neovim plugin to manage global and project-local settings.";
 
   maintainers = [ lib.maintainers.BoneyPatel ];
 

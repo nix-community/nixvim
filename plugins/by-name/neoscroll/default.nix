@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "neoscroll";
   packPathName = "neoscroll.nvim";
   package = "neoscroll-nvim";
+  description = "Smooth scrolling neovim plugin.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

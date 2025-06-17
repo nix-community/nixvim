@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "persisted";
   packPathName = "persisted.nvim";
   package = "persisted-nvim";
+  description = "Simple session management for Neovim with git branching, autoloading and Telescope support.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

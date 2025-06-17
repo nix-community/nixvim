@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "bacon";
   package = "nvim-bacon";
   maintainers = [ lib.maintainers.alisonjenkins ];
+  description = "View and jump to locations found in `.bacon-locations` files.";
 
   settingsOptions = {
     quickfix = {

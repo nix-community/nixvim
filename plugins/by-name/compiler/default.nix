@@ -10,6 +10,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   description = ''
+    Neovim compiler for building and running your code.
+
+    ---
+
     > [!Note]
     > Some languages require you manually install their compilers in your machine, so `compiler.nvim` is able to call them.
     > Please check [here], as the packages will be different depending your operative system.

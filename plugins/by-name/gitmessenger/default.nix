@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "git-messenger.vim";
   package = "git-messenger-vim";
   globalPrefix = "git_messenger_";
+  description = "Neovim plugin to reveal the commit messages under the cursor.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

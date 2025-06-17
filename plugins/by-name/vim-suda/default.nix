@@ -5,6 +5,7 @@ in
 lib.nixvim.plugins.mkVimPlugin {
   name = "vim-suda";
   globalPrefix = "suda#";
+  description = "suda is a plugin to read or write files with sudo command.";
   maintainers = [ lib.maintainers.marcel ];
 
   settingsOptions = {

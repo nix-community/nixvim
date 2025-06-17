@@ -10,6 +10,7 @@ mkVimPlugin {
   packPathName = "instant.nvim";
   package = "instant-nvim";
   globalPrefix = "instant_";
+  description = "A Neovim plugin for collaborative editing.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

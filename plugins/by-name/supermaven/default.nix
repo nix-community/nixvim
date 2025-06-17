@@ -4,6 +4,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "supermaven-nvim";
   moduleName = "supermaven-nvim";
   packPathName = "supermaven-nvim";
+  description = "The official Neovim plugin for Supermaven.";
 
   maintainers = [ lib.maintainers.PoCo ];
 

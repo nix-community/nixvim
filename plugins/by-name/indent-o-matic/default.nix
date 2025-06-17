@@ -5,6 +5,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "indent-o-matic";
+  description = "Dumb automatic fast indentation detection for Neovim.";
   maintainers = [ lib.maintainers.alisonjenkins ];
   settingsOptions = {
     max_lines = defaultNullOpts.mkInt 2048 "Number of lines without indentation before giving up (use -1 for infinite)";
