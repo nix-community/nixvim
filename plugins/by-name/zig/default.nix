@@ -10,6 +10,7 @@ mkVimPlugin {
   packPathName = "zig.vim";
   package = "zig-vim";
   globalPrefix = "zig_";
+  description = "Vim plugin for the Zig programming language.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

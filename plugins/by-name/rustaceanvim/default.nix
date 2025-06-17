@@ -8,6 +8,7 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "rustaceanvim";
+  description = "A Neovim plugin for Rust development, providing features like LSP support, code navigation, and more.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

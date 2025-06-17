@@ -15,6 +15,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   description = ''
+    A light and configurable statusline/tabline plugin for Vim.
+
+    ---
+
     ### Example of defining your own component_function
 
     ```nix

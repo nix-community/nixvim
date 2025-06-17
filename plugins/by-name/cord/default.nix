@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "cord";
   packPathName = "cord.nvim";
   package = "cord-nvim";
+  description = "A Neovim plugin that displays the current activity in Discord.";
   maintainers = [ lib.maintainers.eveeifyeve ];
 
   settingsExample = {

@@ -4,6 +4,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "smear-cursor.nvim";
   package = "smear-cursor-nvim";
   moduleName = "smear_cursor";
+  description = "A Neovim plugin that adds a smear effect to the cursor when moving quickly.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

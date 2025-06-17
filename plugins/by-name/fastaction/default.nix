@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "fastaction";
   packPathName = "fastaction.nvim";
   package = "fastaction-nvim";
+  description = "Efficiency plugin designed to optimize code actions in Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

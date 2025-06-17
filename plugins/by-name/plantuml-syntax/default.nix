@@ -8,6 +8,7 @@ in
 lib.nixvim.plugins.mkVimPlugin {
   name = "plantuml-syntax";
   globalPrefix = "plantuml_";
+  description = "Syntax highlighting for PlantUML files.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

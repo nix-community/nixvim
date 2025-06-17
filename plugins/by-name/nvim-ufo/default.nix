@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-ufo";
   moduleName = "ufo";
   package = "nvim-ufo";
+  description = "An Neovim plugin for managing folds with LSP support.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

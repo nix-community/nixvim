@@ -4,6 +4,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-visual-multi";
   package = "vim-visual-multi";
   globalPrefix = "VM_";
+  description = "Multiple cursors plugin for vim/neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

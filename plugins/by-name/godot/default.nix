@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-godot";
   package = "vim-godot";
   globalPrefix = "godot_";
+  description = "A Neovim plugin for Godot game engine integration.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

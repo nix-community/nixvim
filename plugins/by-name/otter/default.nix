@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "otter";
   packPathName = "otter.nvim";
   package = "otter-nvim";
+  description = "A Neovim plugin for writing and running embedded languages in your code.";
 
   maintainers = [ ];
 

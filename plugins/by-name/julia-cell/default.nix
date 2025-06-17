@@ -40,6 +40,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-julia-cell";
   package = "vim-julia-cell";
   globalPrefix = "julia_cell_";
+  description = "A Vim plugin for executing Julia code cells.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

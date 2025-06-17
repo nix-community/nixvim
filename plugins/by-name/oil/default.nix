@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "oil";
   packPathName = "oil.nvim";
   package = "oil-nvim";
+  description = "Neovim file explorer: edit your filesystem like a buffer.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "flutter-tools";
   packPathName = "flutter-tools.nvim";
   package = "flutter-tools-nvim";
+  description = "Build flutter and dart applications in neovim using the native LSP.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

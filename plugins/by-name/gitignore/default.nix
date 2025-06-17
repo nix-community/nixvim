@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "gitignore";
   packPathName = "gitignore.nvim";
   package = "gitignore-nvim";
+  description = "A Neovim plugin for generating .gitignore files.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

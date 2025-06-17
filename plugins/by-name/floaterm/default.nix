@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-floaterm";
   package = "vim-floaterm";
   globalPrefix = "floaterm_";
+  description = "A Neovim plugin for floating terminal windows.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

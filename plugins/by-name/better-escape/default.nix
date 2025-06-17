@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "better-escape.nvim";
   moduleName = "better_escape";
   package = "better-escape-nvim";
+  description = "A Neovim plugin to quickly exit insert mode without losing your typed text.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

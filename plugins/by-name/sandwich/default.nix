@@ -11,6 +11,11 @@ lib.nixvim.plugins.mkVimPlugin {
   globalPrefix = "sandwich_";
 
   description = ''
+    `sandwich.vim` is a plugin that makes it super easy to work with stuff that comes in
+    pairs, like brackets, quotes, and even HTML or XML tags.
+
+    ---
+
     The `settings` option will not let you define the options starting with `sandwich#`.
     For those, you can directly use the `globals` option:
     ```nix

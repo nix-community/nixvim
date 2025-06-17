@@ -15,6 +15,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   description = ''
+    A completion engine for Neovim written in Lua, designed to be fast and extensible.
+
+    ---
+
     ### Completion Source Installation
 
     If `plugins.cmp.autoEnableSources` is `true` Nixivm will automatically enable the corresponding source

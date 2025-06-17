@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "nvim-web-devicons";
   # Just want it before most other plugins for the icons provider.
   configLocation = lib.mkOrder 800 "extraConfigLua";
+  description = "Provides file type icons for Neovim.";
 
   maintainers = [ lib.maintainers.refaelsh ];
 

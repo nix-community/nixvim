@@ -8,6 +8,10 @@ lib.nixvim.plugins.mkVimPlugin {
   package = "nabla-nvim";
 
   description = ''
+    An ASCII math generator from LaTeX equations.
+
+    ---
+
     You can bind the popup action like so:
     ```nix
       keymaps = [

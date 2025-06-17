@@ -7,6 +7,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   description = ''
+    Ripgrep/gitgrep source for the blink.cmp.
+
+    ---
+
     This plugin should be configured through blink-cmp's `sources.providers` settings.
 
     For example:

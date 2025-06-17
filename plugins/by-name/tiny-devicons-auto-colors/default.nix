@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "tiny-devicons-auto-colors";
   packPathName = "tiny-devicons-auto-colors.nvim";
   package = "tiny-devicons-auto-colors-nvim";
+  description = "A Neovim plugin that automatically assigns colors to devicons based on their nearest color in a predefined color palette.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

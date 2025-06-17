@@ -1,6 +1,7 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "vimade";
+  description = "Vimade let's you dim, fade, tint, animate, and customize colors in your windows and buffers for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

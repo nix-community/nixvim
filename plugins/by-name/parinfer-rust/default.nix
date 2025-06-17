@@ -6,6 +6,7 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "parinfer-rust";
   globalPrefix = "parinfer_";
+  description = "Infer parentheses for Clojure, Lisp and Scheme.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "virt-column";
   packPathName = "virt-column.nvim";
   package = "virt-column-nvim";
+  description = "Display a character as the colorcolumn.";
 
   maintainers = [ lib.maintainers.alisonjenkins ];
 

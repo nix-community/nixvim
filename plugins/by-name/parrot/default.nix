@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "parrot";
   packPathName = "parrot.nvim";
   package = "parrot-nvim";
+  description = "A Neovim plugin for LLM text generation.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

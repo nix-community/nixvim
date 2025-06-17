@@ -13,6 +13,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "rest.nvim";
   moduleName = "rest-nvim";
   package = "rest-nvim";
+  description = "A very fast, powerful, extensible and asynchronous Neovim HTTP client.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

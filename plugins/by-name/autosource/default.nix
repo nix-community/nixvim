@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-autosource";
   package = "vim-autosource";
   globalPrefix = "autosource_";
+  description = "A Vim plugin that enables per project Vim configuration.";
 
   maintainers = [ lib.maintainers.refaelsh ];
 

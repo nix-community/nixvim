@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "baleia";
   packPathName = "baleia.nvim";
   package = "baleia-nvim";
+  description = "A Neovim plugin for colorizing text with ANSI escape sequences.";
 
   maintainers = [ lib.maintainers.alisonjenkins ];
 

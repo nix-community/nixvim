@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-airline";
   package = "vim-airline";
   globalPrefix = "airline_";
+  description = "Lean & mean status/tabline for vim that's light as air.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

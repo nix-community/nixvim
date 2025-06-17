@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "llm";
   packPathName = "llm.nvim";
   package = "llm-nvim";
+  description = "llm.nvim is a plugin for all things LLM. It uses `llm-ls` as a backend.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

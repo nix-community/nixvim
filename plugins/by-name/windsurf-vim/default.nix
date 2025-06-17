@@ -38,6 +38,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "windsurf-vim";
   packPathName = "windsurf.vim";
   globalPrefix = "codeium_";
+  description = "Free, ultrafast Copilot alternative for Vim and Neovim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

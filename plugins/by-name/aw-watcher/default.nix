@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   moduleName = "aw_watcher";
   packPathName = "aw-watcher.nvim";
   package = "aw-watcher-nvim";
+  description = "A neovim watcher for ActivityWatch time tracker.";
 
   maintainers = [ lib.maintainers.axka ];
 

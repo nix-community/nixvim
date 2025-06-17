@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-easyescape";
   package = "vim-easyescape";
   globalPrefix = "easyescape_";
+  description = "A plugin that makes exiting insert mode easy and distraction free!";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

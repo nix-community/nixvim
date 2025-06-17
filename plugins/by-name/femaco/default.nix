@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "femaco";
   packPathName = "nvim-FeMaco.lua";
   package = "nvim-FeMaco-lua";
+  description = "Catalyze your Fenced Markdown Code-block editing.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

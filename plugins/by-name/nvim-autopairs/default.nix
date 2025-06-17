@@ -7,6 +7,7 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-autopairs";
+  description = "Insert and delete brackets, parens, quotes in pair automatically.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

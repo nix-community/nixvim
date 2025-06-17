@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "treesitter-context";
   packPathName = "nvim-treesitter-context";
   package = "nvim-treesitter-context";
+  description = "Show code context.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "project-nvim";
   packPathName = "project.nvim";
   moduleName = "project_nvim";
+  description = "`project.nvim` is an all in one neovim plugin written in lua that provides superior project management.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

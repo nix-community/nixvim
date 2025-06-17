@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "coq-nvim";
   packPathName = "coq_nvim";
   package = "coq_nvim";
+  description = "A fast nvim completion engine.";
 
   maintainers = with lib.maintainers; [
     traxys

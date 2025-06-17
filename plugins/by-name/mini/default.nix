@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "mini.nvim";
   # Just want it before most other plugins for the icons provider.
   configLocation = lib.mkOrder 800 "extraConfigLua";
+  description = "A collection of Neovim plugins that are small, focused, and modular. They can be used individually or together to enhance your Neovim experience.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

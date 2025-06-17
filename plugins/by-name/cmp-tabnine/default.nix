@@ -5,6 +5,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmp-tabnine";
+  description = "[TabNine](https://tabnine.com) completion source for the nvim-cmp.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "colorizer";
   packPathName = "nvim-colorizer.lua";
   package = "nvim-colorizer-lua";
+  description = "A high-performance color highlighter for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

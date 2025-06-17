@@ -12,6 +12,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "vim-gitgutter";
   package = "vim-gitgutter";
   globalPrefix = "gitgutter_";
+  description = "A Vim plugin which shows a git diff in the sign column.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

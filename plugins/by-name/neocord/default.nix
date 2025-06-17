@@ -6,6 +6,7 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neocord";
+  description = "Discord Rich Presence for Neovim (Fork of presence.nvim).";
 
   maintainers = [ ];
 

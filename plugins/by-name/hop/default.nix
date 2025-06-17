@@ -12,6 +12,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   description = ''
+    A plugin allowing you to jump anywhere in a document with as few keystrokes as possible.
+
+    ---
+
     Hop doesn’t set any keybindings; you will have to define them by yourself.
     If you want to create a key binding from within nixvim:
     ```nix
