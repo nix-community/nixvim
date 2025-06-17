@@ -17,6 +17,7 @@
     ./colorschemes/melange.nix
     ./colorschemes/modus.nix
     ./colorschemes/monokai-pro.nix
+    ./colorschemes/moonfly.nix
     ./colorschemes/nightfox.nix
     ./colorschemes/nord.nix
     ./colorschemes/one.nix
