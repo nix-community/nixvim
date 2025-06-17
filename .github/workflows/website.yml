@@ -63,12 +63,12 @@ jobs:
                 | {
                     "branch": .value.branch,
                     "nixpkgsBranch": .value.channel,
-                    "baseHref": "/nixvim/\(.key)/"
+                    "baseHref": "/nixvim/\(.key)/",
+                    "status": .value.status
                   }
                 | select(.branch == "main").baseHref = "/nixvim/"
               ]
             ' version-info.toml
-            # TODO: add channel status
 
   build:
     name: Build ${{ matrix.name }}

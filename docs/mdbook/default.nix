@@ -10,7 +10,7 @@
   # The root directory of the site
   baseHref ? "/",
   # A list of all available docs that should be linked to
-  # Each element should contain { branch; nixpkgsBranch; baseHref; }
+  # Each element should contain { branch; nixpkgsBranch; baseHref; status; }
   availableVersions ? [ ],
 }:
 let
@@ -305,9 +305,9 @@ let
   # Zip the list of attrs into an attr of lists, for use as bash arrays
   zippedVersions =
     assert lib.assertMsg
-      (lib.all (o: o ? branch && o ? nixpkgsBranch && o ? baseHref) availableVersions)
+      (lib.all (o: o ? branch && o ? nixpkgsBranch && o ? baseHref && o ? status) availableVersions)
       ''
-        Expected all "availableVersions" docs entries to contain { branch, nixpkgsBranch, baseHref } attrs!
+        Expected all "availableVersions" docs entries to contain { branch, nixpkgsBranch, baseHref, status } attrs!
       '';
     lib.zipAttrs availableVersions;
 in
@@ -337,9 +337,10 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
         { type, hasExt, ... }:
         type == "regular"
         && lib.any hasExt [
+          "css"
+          "js"
           "md"
           "toml"
-          "js"
         ]
       ) ./.)
     ];
@@ -428,6 +429,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
           branches = zippedVersions.branch or [ ];
           nixpkgsBranches = zippedVersions.nixpkgsBranch or [ ];
           baseHrefs = zippedVersions.baseHref or [ ];
+          statuses = zippedVersions.status or [ ];
           current = baseHref;
         }
         ''
@@ -437,6 +439,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
             nixpkgs="''${nixpkgsBranches[i]}"
             baseHref="''${baseHrefs[i]}"
             linkText="\`$branch\` branch"
+            status="''${statuses[i]}"
 
             link=
             suffix=
@@ -448,7 +451,25 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
               link="[$linkText]($baseHref)"
             fi
 
-            echo "- The $link, for use with nixpkgs \`$nixpkgs\`$suffix" >> "$out"
+            statusClass=
+            statusText=
+            if [ "$status" = "beta" ]; then
+              statusClass="label label-info"
+              statusText=Beta
+            elif [ "$status" = "deprecated" ]; then
+              statusClass="label label-warning"
+              statusText=Deprecated
+            fi
+
+            {
+              echo -n '- '
+              if [ -n "$statusClass" ] && [ -n "$statusText" ]; then
+                echo -n '<span class="'"$statusClass"'">'"$statusText"'</span> '
+              fi
+              echo -n "The $link"
+              echo -n ", for use with nixpkgs \`$nixpkgs\`"
+              echo "$suffix"
+            } >> "$out"
           done
         '';
     user-configs = callPackage ../user-configs { };
