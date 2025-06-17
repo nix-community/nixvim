@@ -7,6 +7,12 @@
 # Nixpkgs maintainers: https://github.com/NixOS/nixpkgs/blob/0212bde005b3335b2665c1476c36b3936e113b15/maintainers/maintainer-list.nix
 {
   # keep-sorted start block=yes newline_separated=no
+  AidanWelch = {
+    email = "aidan@freedwave.com";
+    github = "AidanWelch";
+    githubId = 35280359;
+    name = "Aidan Welch";
+  };
   AndresBermeoMarinelli = {
     email = "andres_bermeo@outlook.com";
     github = "theabm";
