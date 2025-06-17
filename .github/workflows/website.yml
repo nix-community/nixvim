@@ -45,7 +45,7 @@ jobs:
                     "base-href": "/nixvim/"
                   }
                 | select(.ref != "main").sub-path = .name
-                | select(.ref != "main").base-href += .name + "/"
+                | select(.ref != "main").base-href = "\(.base-href)\(.name)/"
               ]
             ' version-info.toml
 
