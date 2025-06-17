@@ -1,0 +1,19 @@
+.label {
+  padding: 0.1rem 0.4em;
+  font-size: 0.8em;
+  font-weight: 600;
+  vertical-align: bottom;
+  background-color: #5a6165;
+  text-shadow: rgba(0, 0, 0, 0.25) 0px -1px 0px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.label-info {
+  background-color: #337798;
+}
+
+.label-warning {
+  background-color: #da8206;
+}
