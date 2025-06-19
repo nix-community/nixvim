@@ -9,7 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "otter.nvim";
   package = "otter-nvim";
 
-  maintainers = [ ];
+  maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
   imports = [
     # TODO: introduced 2024-06-29; remove after 24.11
@@ -111,6 +111,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     plugins.lsp.onAttach = lib.mkIf cfg.autoActivate ''
+      require('otter').activate()
+    '';
+
+    lsp.onAttach = lib.mkIf cfg.autoActivate ''
       require('otter').activate()
     '';
   };
