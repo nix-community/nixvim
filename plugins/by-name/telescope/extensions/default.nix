@@ -11,6 +11,7 @@
     ./project.nix
     ./ui-select.nix
     ./undo.nix
+    ./zf-native.nix
     ./zoxide.nix
   ];
 }
