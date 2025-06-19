@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "headlines";
   packPathName = "headlines.nvim";
   package = "headlines-nvim";
+  description = "A plugin that adds horizontal highlights for text filetypes, like markdown, orgmode, and neorg.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

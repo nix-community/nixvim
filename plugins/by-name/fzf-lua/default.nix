@@ -31,6 +31,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "fzf-lua";
+  description = "`fzf` powered fuzzy finder for Neovim written in Lua.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

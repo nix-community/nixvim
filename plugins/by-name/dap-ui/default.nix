@@ -55,6 +55,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   moduleName = "dapui";
   packPathName = "nvim-dap-ui";
   package = "nvim-dap-ui";
+  description = "A UI for nvim-dap.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

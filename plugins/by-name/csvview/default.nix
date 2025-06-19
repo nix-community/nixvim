@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "csvview";
   packPathName = "csvview.nvim";
   package = "csvview-nvim";
+  description = "A Neovim plugin for CSV file editing.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

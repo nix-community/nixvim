@@ -14,6 +14,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   description = ''
+    A hackable & fancy vimdoc/help file viewer for Neovim.
+
+    ---
+
     Decorations for vimdoc/help files in Neovim
 
     Supports a vast amount of rendering customization.

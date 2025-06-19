@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp-status";
   packPathName = "lsp-status.nvim";
   package = "lsp-status-nvim";
+  description = "Utility functions for getting diagnostic status and progress messages from LSP servers, for use in the Neovim statusline.";
   maintainers = [ lib.maintainers.b3nb5n ];
 
   settingsOptions =

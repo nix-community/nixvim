@@ -6,6 +6,7 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-lightbulb";
+  description = "The plugin shows a lightbulb in the sign column whenever a `textDocument/codeAction` is available at the current cursor position.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

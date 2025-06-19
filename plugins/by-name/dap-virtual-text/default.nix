@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   moduleName = "nvim-dap-virtual-text";
   packPathName = "nvim-dap-virtual-text";
   package = "nvim-dap-virtual-text";
+  description = "A plugin that adds virtual text support to the nvim-dap.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

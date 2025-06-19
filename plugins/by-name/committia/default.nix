@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "committia.vim";
   package = "committia-vim";
   globalPrefix = "committia_";
+  description = "A Vim plugin for more pleasant editing on commit messages.";
 
   maintainers = [ lib.maintainers.alisonjenkins ];
 

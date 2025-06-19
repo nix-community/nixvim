@@ -10,6 +10,7 @@ mkVimPlugin {
   packPathName = "magma-nvim";
   package = "magma-nvim";
   globalPrefix = "magma_";
+  description = "Interact with Jupyter from NeoVim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

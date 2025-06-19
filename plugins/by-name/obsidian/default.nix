@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "obsidian";
   packPathName = "obsidian.nvim";
   package = "obsidian-nvim";
+  description = "Neovim plugin for writing and navigating Obsidian vaults.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "emmet-vim";
   package = "emmet-vim";
   globalPrefix = "user_emmet_";
+  description = "Provides support for Emmet abbreviations and snippets.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

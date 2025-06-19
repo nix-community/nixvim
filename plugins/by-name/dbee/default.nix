@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "dbee";
   packPathName = "nvim-dbee";
   package = "nvim-dbee";
+  description = "Interactive database client for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

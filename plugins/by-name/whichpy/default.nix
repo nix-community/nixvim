@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "whichpy";
   packPathName = "whichpy.nvim";
   package = "whichpy-nvim";
+  description = "Python interpreter selector for Neovim. Switch interpreters without restarting LSP.";
 
   maintainers = [ lib.maintainers.wvffle ];
 

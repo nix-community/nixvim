@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "improved-search";
   packPathName = "improved-search.nvim";
   package = "improved-search-nvim";
+  description = "It's a Neovim plugin that improves the search experience.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

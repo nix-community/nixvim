@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "conform-nvim";
   moduleName = "conform";
   packPathName = "conform.nvim";
+  description = "Lightweight yet powerful formatter plugin for Neovim.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

@@ -9,6 +9,7 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-snippets";
   moduleName = "snippets";
+  description = "Allow vscode style snippets to be used with native neovim snippets `vim.snippet`.";
 
   maintainers = [ lib.maintainers.psfloyd ];
 

@@ -8,6 +8,7 @@ with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "vimtex";
   globalPrefix = "vimtex_";
+  description = "A modern Vim and Neovim plugin for writing LaTeX documents.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

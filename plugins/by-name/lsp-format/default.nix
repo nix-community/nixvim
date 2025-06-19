@@ -28,6 +28,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   description = ''
+    A wrapper around Neovims native LSP formatting.
+
+    ---
+
     ## Configuring a Language
 
     `lsp-format` uses a table defining which lsp servers to use for each language.

@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-rr";
   packPathName = "nvim-dap-rr";
   package = "nvim-dap-rr";
+  description = "Dap configuration for the record and replay debugger.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

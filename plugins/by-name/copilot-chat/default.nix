@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "CopilotChat.nvim";
   moduleName = "CopilotChat";
   package = "CopilotChat-nvim";
+  description = "Chat with Github Copilot in Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

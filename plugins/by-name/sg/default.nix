@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "sg";
   packPathName = "sg.nvim";
   package = "sg-nvim";
+  description = "Experimental Sourcegraph + Cody plugin for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

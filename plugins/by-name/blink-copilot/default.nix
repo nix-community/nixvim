@@ -6,6 +6,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.khaneliman ];
 
   description = ''
+    Configurable GitHub Copilot suggestions source for the blink-cmp.
+
+    ---
+
     This plugin should be configured through blink-cmp's `sources.providers` settings.
 
     `plugins.copilot-lua` will be enabled by default, to provide a working setup out-of-the-box.

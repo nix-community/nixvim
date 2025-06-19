@@ -4,6 +4,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "nvim-lilypond-suite";
   package = "nvim-lilypond-suite";
   moduleName = "nvls";
+  description = "Neovim plugin for writing LilyPond scores.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -4,6 +4,7 @@
 }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "friendly-snippets";
+  description = "Set of preconfigured snippets for different languages.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

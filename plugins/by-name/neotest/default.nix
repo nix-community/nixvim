@@ -5,6 +5,7 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neotest";
+  description = "An extensible framework for interacting with tests within NeoVim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

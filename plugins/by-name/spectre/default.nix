@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "spectre";
   packPathName = "nvim-spectre";
   package = "nvim-spectre";
+  description = "A search panel for neovim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

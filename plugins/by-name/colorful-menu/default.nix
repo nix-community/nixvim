@@ -5,6 +5,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "colorful-menu-nvim";
 
   description = ''
+    Colorful menu for the autocompletion engines in Neovim.
+
+    ---
+
     To use this in `nvim-cmp` for example,
     ```nix
     plugins.cmp.settings.formatting.format.__raw = \'\'

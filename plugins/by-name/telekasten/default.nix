@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "telekasten";
   packPathName = "telekasten.nvim";
   package = "telekasten-nvim";
+  description = "A Neovim plugin for working with a markdown zettelkasten/wiki and mixing it with a journal, based on telescope.nvim.";
 
   maintainers = [ lib.maintainers.onemoresuza ];
 

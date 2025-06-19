@@ -13,6 +13,10 @@ lib.nixvim.plugins.mkVimPlugin {
   maintainers = [ maintainers.MattSturgeon ];
 
   description = ''
+    Delete Neovim buffers without losing window layout.
+
+    ---
+
     This plugin provides two commands, `:Bdelete` and `:Bwipeout`.
     They work exactly the same as `:bdelete` and `:bwipeout`,
     except they keep your window layout intact.

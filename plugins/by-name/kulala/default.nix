@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "kulala";
   packPathName = "kulala.nvim";
   package = "kulala-nvim";
+  description = "A fully-featured REST Client Interface for Neovim.";
 
   maintainers = [ lib.maintainers.BoneyPatel ];
 

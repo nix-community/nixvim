@@ -6,6 +6,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
   description = ''
+    Copilot suggestions source for the blink-cmp.
+
+    ---
+
     This plugin should be configured through blink-cmp's source settings.
 
     For example:

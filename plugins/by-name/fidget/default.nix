@@ -114,6 +114,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "fidget";
   packPathName = "fidget.nvim";
   package = "fidget-nvim";
+  description = "Extensible UI for Neovim notifications and LSP progress messages.";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

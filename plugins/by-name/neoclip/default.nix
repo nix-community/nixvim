@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "neoclip";
   packPathName = "nvim-neoclip.lua";
   package = "nvim-neoclip-lua";
+  description = "Clipboard manager neovim plugin with telescope integration.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

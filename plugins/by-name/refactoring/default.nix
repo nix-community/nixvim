@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "refactoring";
   packPathName = "refactoring.nvim";
   package = "refactoring-nvim";
+  description = "The Refactoring library based off the Refactoring book by Martin Fowler.";
 
   maintainers = [ maintainers.MattSturgeon ];
 

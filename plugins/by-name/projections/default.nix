@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "projections";
   packPathName = "projections.nvim";
   package = "projections-nvim";
+  description = "A tiny project + sessions manager for neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

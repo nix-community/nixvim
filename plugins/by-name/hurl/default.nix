@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "hurl";
   packPathName = "hurl.nvim";
   package = "hurl-nvim";
+  description = "A Neovim plugin designed to run HTTP requests directly from `.hurl` files.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

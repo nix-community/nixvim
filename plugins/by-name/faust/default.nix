@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "faust";
   packPathName = "faust-nvim";
   package = "faust-nvim";
+  description = "NeoVim plugin for writing Faust DSP code.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

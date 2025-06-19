@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "fugitive";
   packPathName = "vim-fugitive";
   package = "vim-fugitive";
+  description = "Fugitive is the premier Vim plugin for Git management.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

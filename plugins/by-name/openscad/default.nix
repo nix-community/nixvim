@@ -16,6 +16,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   inherit name;
   packPathName = "openscad.nvim";
   package = "openscad-nvim";
+  description = "Syntax highlighting, cheatsheet, snippets, offline manual and fuzzy help plugin for the openscad language.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

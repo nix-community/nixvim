@@ -7,6 +7,7 @@ with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "sniprun";
   url = "https://github.com/michaelb/sniprun";
+  description = "A neovim plugin to run lines/blocs of code.";
 
   maintainers = with maintainers; [
     traxys

@@ -2,6 +2,7 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "vimux";
   globalPrefix = "Vimux";
+  description = "Easily interact with tmux from vim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "snacks";
   packPathName = "snacks.nvim";
   package = "snacks-nvim";
+  description = "A collection of small QoL plugins for Neovim.";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

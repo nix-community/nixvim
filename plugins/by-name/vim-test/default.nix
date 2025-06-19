@@ -2,6 +2,7 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "vim-test";
   globalPrefix = "test#";
+  description = "Run your tests at the speed of thought.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

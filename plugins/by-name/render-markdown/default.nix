@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "render-markdown";
   packPathName = "render-markdown.nvim";
   package = "render-markdown-nvim";
+  description = "Plugin to improve viewing Markdown files in Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

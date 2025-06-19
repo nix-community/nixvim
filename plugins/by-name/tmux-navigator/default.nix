@@ -13,6 +13,10 @@ lib.nixvim.plugins.mkVimPlugin {
   maintainers = [ maintainers.MattSturgeon ];
 
   description = ''
+    Seamless navigation between tmux panes and vim splits.
+
+    ---
+
     When combined with a set of tmux key bindings, the plugin will allow you to navigate seamlessly between vim splits and tmux panes using a consistent set of hotkeys.
 
     > [!WARNING]

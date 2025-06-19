@@ -12,6 +12,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "distant";
   packPathName = "distant.nvim";
   package = "distant-nvim";
+  description = "Edit files, run programs, and work with LSP on a remote machine from the comfort of your local environment.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

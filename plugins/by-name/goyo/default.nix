@@ -10,6 +10,7 @@ mkVimPlugin {
   packPathName = "goyo.vim";
   package = "goyo-vim";
   globalPrefix = "goyo_";
+  description = "Distraction-free writing in Vim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

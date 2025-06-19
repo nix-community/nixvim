@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "dressing";
   packPathName = "dressing.nvim";
   package = "dressing-nvim";
+  description = "Neovim plugin to improve the default `vim.ui` interfaces.";
 
   maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 

@@ -10,6 +10,7 @@ in
 lib.nixvim.plugins.mkVimPlugin {
   name = "vim-matchup";
   globalPrefix = "matchup_";
+  description = "`match-up` is a plugin that lets you highlight, navigate, and operate on sets of matching text.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

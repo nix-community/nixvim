@@ -73,6 +73,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "which-key";
   packPathName = "which-key.nvim";
   package = "which-key-nvim";
+  description = "Neovim plugin for displaying keybindings in a popup window.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

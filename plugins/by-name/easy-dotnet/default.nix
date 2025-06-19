@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "easy-dotnet";
   packPathName = "easy-dotnet.nvim";
   package = "easy-dotnet-nvim";
+  description = "Neovim plugin for working with .Net projects in Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

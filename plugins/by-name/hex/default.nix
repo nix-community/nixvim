@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "hex";
   packPathName = "hex.nvim";
   package = "hex-nvim";
+  description = "Hex editor for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

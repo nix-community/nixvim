@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "lazygit.nvim";
   package = "lazygit-nvim";
   globalPrefix = "lazygit_";
+  description = "A Neovim plugin for using lazygit, a TUI for git commands.";
 
   maintainers = [ lib.maintainers.AndresBermeoMarinelli ];
 

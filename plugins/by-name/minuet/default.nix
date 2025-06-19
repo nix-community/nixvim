@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "minuet";
   packPathName = "minuet-ai.nvim";
   package = "minuet-ai-nvim";
+  description = "A Neovim plugin that provides AI-powered code completion and suggestions.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -4,6 +4,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "lexima.vim";
   package = "lexima-vim";
   globalPrefix = "lexima_";
+  description = "Auto close parentheses (and other pairs) by pressing \"dot\"s.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

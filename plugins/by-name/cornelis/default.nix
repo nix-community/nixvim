@@ -5,6 +5,10 @@ in
 lib.nixvim.plugins.mkVimPlugin {
   name = "cornelis";
   globalPrefix = "cornelis_";
+  description = ''
+    Agda programming language support for Neovim.
+    Emacs [agda-mode](https://agda.readthedocs.io/en/latest/tools/emacs-mode.html) for Neovim.
+  '';
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

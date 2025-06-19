@@ -11,6 +11,7 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-go";
   package = "nvim-dap-go";
+  description = "An extension for nvim-dap providing configurations for launching go debugger.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

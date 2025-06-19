@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "nix-develop-nvim";
   callSetup = false;
   hasSettings = false;
+  description = "Run `nix develop` without restarting Neovim.";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

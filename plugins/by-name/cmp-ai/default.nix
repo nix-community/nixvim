@@ -7,6 +7,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmp-ai";
+  description = "AI completion source for the nvim-cmp, powered by various AI providers.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

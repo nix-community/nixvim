@@ -11,6 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "package-info";
   packPathName = "package-info.nvim";
   package = "package-info-nvim";
+  description = "A Neovim plugin to manage npm/yarn/pnpm dependencies, commands and more.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

@@ -19,6 +19,7 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-python";
   package = "nvim-dap-python";
+  description = "An extension for nvim-dap, providing default configurations for python.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

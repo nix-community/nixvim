@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkVimPlugin {
   name = "commentary";
   packPathName = "vim-commentary";
   package = "vim-commentary";
+  description = "Comment stuff out.";
 
   # TODO Add support for additional filetypes. This requires autocommands!
 

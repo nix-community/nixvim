@@ -9,6 +9,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "twilight";
   packPathName = "twilight.nvim";
   package = "twilight-nvim";
+  description = "Twilight is a Lua plugin for Neovim that dims inactive portions of the code you're editing using TreeSitter.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

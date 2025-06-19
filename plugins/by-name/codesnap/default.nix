@@ -8,6 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "codesnap";
   packPathName = "codesnap.nvim";
   package = "codesnap-nvim";
+  description = "Snapshot plugin with rich features that can make pretty code snapshots.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

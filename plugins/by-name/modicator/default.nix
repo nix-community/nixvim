@@ -3,6 +3,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "modicator";
   packPathName = "modicator.nvim";
   package = "modicator-nvim";
+  description = "Cursor line number mode indicator plugin for Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

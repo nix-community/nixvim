@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "yanky";
   packPathName = "yanky.nvim";
   package = "yanky-nvim";
+  description = "Improved Yank and Put functionalities for Neovim.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

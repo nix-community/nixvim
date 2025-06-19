@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkVimPlugin {
   packPathName = "direnv.vim";
   package = "direnv-vim";
   globalPrefix = "direnv_";
+  description = "A Neovim plugin for integrating Direnv with Neovim.";
 
   maintainers = [ lib.maintainers.alisonjenkins ];
 

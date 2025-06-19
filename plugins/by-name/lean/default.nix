@@ -10,6 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "lean";
   packPathName = "lean.nvim";
   package = "lean-nvim";
+  description = "Neovim support for the Lean theorem prover.";
 
   maintainers = [ lib.maintainers.khaneliman ];
 

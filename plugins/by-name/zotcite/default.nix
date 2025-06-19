@@ -5,6 +5,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "zotcite";
+  description = "Neovim plugin for integration with Zotero.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

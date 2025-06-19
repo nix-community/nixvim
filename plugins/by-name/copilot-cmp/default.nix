@@ -6,6 +6,7 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "copilot-cmp";
   moduleName = "copilot_cmp";
+  description = "Copilot completion source for the nvim-cmp.";
 
   imports = [
     { cmpSourcePlugins.copilot = "copilot-cmp"; }

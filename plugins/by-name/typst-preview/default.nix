@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "typst-preview";
   packPathName = "typst-preview.nvim";
   package = "typst-preview-nvim";
+  description = "A Neovim plugin for previewing Typst documents in a web browser, with support for live reloading.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

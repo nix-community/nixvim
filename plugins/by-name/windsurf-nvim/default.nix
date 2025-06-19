@@ -13,6 +13,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   description = ''
+    A native neovim extension for Codeium.
+
+    ---
+
     By default, enabling this plugin will also install the `curl`, `gzip`, `coreutils`, `util-linux` and `codeium` packages (via the `dependencies.*.enable` options`).
 
     You are free to configure `dependencies.*.enable` and `dependencies.*.package` to disable or customize this behavior, respectively.

@@ -7,6 +7,7 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neogit";
+  description = "An interactive and powerful Git interface for Neovim, inspired by Magit.";
 
   maintainers = [ maintainers.GaetanLepage ];
 

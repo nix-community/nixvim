@@ -5,6 +5,7 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cmp-git";
   moduleName = "cmp_git";
+  description = "Git source for the nvim-cmp.";
 
   imports = [
     { cmpSourcePlugins.git = "cmp-git"; }

@@ -47,6 +47,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "luasnip";
   package = "luasnip";
   setup = ".config.setup";
+  description = "Snippet Engine for Neovim.";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

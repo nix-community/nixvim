@@ -9,6 +9,10 @@ lib.nixvim.plugins.mkVimPlugin {
   package = "vim-helm";
 
   description = ''
+    A Vim plugin for editing Helm templates.
+
+    ---
+
     To ensure that `helm_ls` (and not `yamlls`) is used on helm files, add the following autocmd:
 
     ```nix

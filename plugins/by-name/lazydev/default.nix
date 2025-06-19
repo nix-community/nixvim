@@ -16,6 +16,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
   description = ''
+    A plugin that properly configures LuaLS for editing your Neovim config by lazily updating your workspace libraries.
+
+    ---
+
     ### lazydev.nvim as a blink.cmp source
 
     ```nix

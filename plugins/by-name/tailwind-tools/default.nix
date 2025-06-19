@@ -7,6 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "tailwind-tools";
   packPathName = "tailwind-tools.nvim";
   package = "tailwind-tools-nvim";
+  description = "A Neovim plugin that provides tools for working with Tailwind CSS.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 

@@ -11,6 +11,7 @@ mkVimPlugin {
   packPathName = "molten-nvim";
   package = "molten-nvim";
   globalPrefix = "molten_";
+  description = "A neovim plugin for interactively running code with the jupyter kernel. Fork of magma-nvim with improvements in image rendering, performance, and more.";
 
   maintainers = [ maintainers.GaetanLepage ];
 
