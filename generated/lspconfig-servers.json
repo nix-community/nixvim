@@ -913,7 +913,7 @@
   },
   {
     "cmd": ["millet"],
-    "desc": "https://github.com/azdavis/millet\n\nMillet, a language server for Standard ML\n\nTo use with nvim:\n\n1. Install a Rust toolchain: https://rustup.rs\n2. Clone the repo\n3. Run `cargo build --release --bin lang-srv`\n4. Move `target/release/lang-srv` to somewhere on your $PATH as `millet`\n    ",
+    "desc": "https://github.com/azdavis/millet\n\nMillet, a language server for Standard ML\n\nTo use with nvim:\n\n1. Install a Rust toolchain: https://rustup.rs\n2. Clone the repo\n3. Run `cargo build --release --bin millet-ls`\n4. Move `target/release/millet-ls` to somewhere on your $PATH as `millet`\n    ",
     "name": "millet"
   },
   {
