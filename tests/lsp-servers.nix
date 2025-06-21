@@ -45,15 +45,13 @@ let
           "ruff_lsp"
           "bufls"
           "typst_lsp"
-
-          # `vectorcode` fails its python dependency check, as the required dependency is dropped.
-          # See https://github.com/NixOS/nixpkgs/issues/415770
-          # and https://github.com/NixOS/nixpkgs/pull/416834#discussion_r2153315104
-          "vectorcode_server"
         ]
         ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
           # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
           "sourcekit"
+
+          # pkgs.vectorcode is not available on this platform
+          "vectorcode_server"
 
           # TODO: 2024-10-05 build failure
           "fstar"
