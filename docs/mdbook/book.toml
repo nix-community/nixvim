@@ -9,6 +9,7 @@ title = "nixvim docs"
 site-url = "@SITE_URL@"
 additional-js = ["theme/pagetoc.js"]
 additional-css = ["custom.css", "theme/pagetoc.css"]
+git-repository-url = "https://github.com/nix-community/nixvim"
 
 [output.html.fold]
 enable = true
