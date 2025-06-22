@@ -2303,6 +2303,15 @@
       ];
     };
   };
+  "rust-analyzer.workspace.symbol.search.excludeImports" = {
+    description = ''
+      Exclude imports from symbol search.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.workspace.symbol.search.kind" = {
     description = ''
       Workspace symbol search kind.
