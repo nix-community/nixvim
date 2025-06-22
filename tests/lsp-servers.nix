@@ -50,7 +50,7 @@ let
           # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
           "sourcekit"
 
-          # pkgs.vectorcode is not available on this platform
+          # pkgs.vectorcode cannot run in the build sandbox on this platform, due to issues with onnxruntime
           "vectorcode_server"
 
           # TODO: 2024-10-05 build failure
