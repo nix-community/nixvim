@@ -12,6 +12,7 @@
     ./colorschemes/everforest.nix
     ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
+    ./colorschemes/gruvbox-material.nix
     ./colorschemes/kanagawa.nix
     ./colorschemes/kanagawa-paper.nix
     ./colorschemes/melange.nix
