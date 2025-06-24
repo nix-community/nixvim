@@ -13,27 +13,34 @@ let
   miscFormatters = toLangTools' "misc" "formatters";
 
   sources =
-    (lib.listToAttrs (
-      lib.map (
-        lang:
+    let
+      # Group languages by lowercase name and merge their tools
+      groupedLanguages = builtins.groupBy (lang: lib.toLower lang) languages;
+      mergedLanguages = lib.mapAttrs (
+        lowerLang: langList:
         let
-          toLangTools = toLangTools' lang;
+          # Use the first language as the canonical name but prefer lowercase if available
+          canonicalLang = if lib.elem lowerLang langList then lowerLang else lib.head langList;
+          # Merge all tools from all case variations
+          allLinters = lib.unique (lib.concatMap (lang: toLangTools' lang "linters") langList);
+          allFormatters = lib.unique (lib.concatMap (lang: toLangTools' lang "formatters") langList);
         in
         {
-          name = lang;
+          name = canonicalLang;
           value = {
             linter = {
-              inherit lang;
-              possible = (toLangTools "linters") ++ miscLinters;
+              lang = canonicalLang;
+              possible = allLinters ++ miscLinters;
             };
             formatter = {
-              inherit lang;
-              possible = (toLangTools "formatters") ++ miscFormatters;
+              lang = canonicalLang;
+              possible = allFormatters ++ miscFormatters;
             };
           };
         }
-      ) languages
-    ))
+      ) groupedLanguages;
+    in
+    (lib.listToAttrs (lib.attrValues mergedLanguages))
     // {
       all = {
         linter = {
