@@ -100,8 +100,7 @@
     in
     {
       plugins.none-ls = {
-        # sandbox-exec: pattern serialization length 159032 exceeds maximum (65535)
-        enable = !hostPlatform.isDarwin;
+        enable = true;
 
         sources =
           let
@@ -125,6 +124,21 @@
               ++ lib.optionals hostPlatform.isDarwin [
                 # TODO 2025-04-20 build failure
                 "ansiblelint"
+                # TODO 2025-06-24 build failure
+                "elm_format"
+                # TODO 2025-06-24 marked broken / unsupported platform
+                "clazy"
+                "haml_lint"
+                "racket_fixw"
+                "raco_fmt"
+                "rubyfmt"
+              ]
+              ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+                # TODO: 2025-06-24 build failure
+                "gleam_format"
+                "ptop"
+                # NOTE: No hash for x86 darwin
+                "verible_verilog_format"
               ];
           in
           # Enable every none-ls source that has an option
