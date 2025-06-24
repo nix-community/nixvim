@@ -1,7 +1,6 @@
 { pkgs, ... }:
 let
-  # CI failure: When trying to build `pkgs.texlive.combined.scheme-medium` on darwin, it fails with
-  #  > sandbox-exec: pattern serialization length 75279 exceeds maximum (65535)
+  # TODO: Added 2025-06-24 texlive dependency broken
   disableTexlivePackageOnDarwin = pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
     texlivePackage = null;
   };
