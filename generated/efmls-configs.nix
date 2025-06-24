@@ -1,48 +1,6 @@
 # WARNING: DO NOT EDIT
 # This file is generated with packages.<system>.efmls-configs-sources, which is run automatically by CI
 {
-  HTML = {
-    formatter = {
-      lang = "HTML";
-      possible = [ ];
-    };
-    linter = {
-      lang = "HTML";
-      possible = [
-        "markuplint"
-        "alex"
-        "codespell"
-        "cspell"
-        "languagetool"
-        "proselint"
-        "redpen"
-        "textlint"
-        "vale"
-        "write_good"
-      ];
-    };
-  };
-  JSON = {
-    formatter = {
-      lang = "JSON";
-      possible = [ ];
-    };
-    linter = {
-      lang = "JSON";
-      possible = [
-        "jsonlint"
-        "alex"
-        "codespell"
-        "cspell"
-        "languagetool"
-        "proselint"
-        "redpen"
-        "textlint"
-        "vale"
-        "write_good"
-      ];
-    };
-  };
   all = {
     formatter = {
       lang = "all languages";
@@ -557,6 +515,7 @@
     linter = {
       lang = "html";
       possible = [
+        "markuplint"
         "djlint"
         "alex"
         "codespell"
@@ -670,6 +629,7 @@
     linter = {
       lang = "json";
       possible = [
+        "jsonlint"
         "jq"
         "alex"
         "codespell"
