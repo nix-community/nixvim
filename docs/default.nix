@@ -100,41 +100,34 @@ let
     }).optionsJSON;
 
 in
-lib.fix (
-  self:
-  {
+lib.fix (self: {
+  inherit options-json;
+  inherit (pkgs) nixos-render-docs;
+
+  gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
+
+  man-docs = pkgs.callPackage ./man {
     inherit options-json;
-    inherit (pkgs) nixos-render-docs;
+    inherit (self) lib-docs;
+  };
 
-    gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
+  lib-docs = pkgs.callPackage ./lib {
+    inherit nixvim lib;
+  };
 
-    man-docs = pkgs.callPackage ./man {
-      inherit options-json;
-      inherit (self) lib-docs;
-    };
+  search = nuschtosSearch.packages.mkSearch {
+    optionsJSON = options-json + "/share/doc/nixos/options.json";
+    urlPrefix = "https://github.com/nix-community/nixvim/tree/main";
+    title = "Nixvim options search";
+    baseHref = "/";
+  };
 
-    lib-docs = pkgs.callPackage ./lib {
-      inherit nixvim lib;
-    };
-  }
-  // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
-    # NuschtOS/search does not seem to work on darwin
-    search = nuschtosSearch.packages.mkSearch {
-      optionsJSON = options-json + "/share/doc/nixos/options.json";
-      urlPrefix = "https://github.com/nix-community/nixvim/tree/main";
-      title = "Nixvim options search";
-      baseHref = "/";
-    };
+  docs = pkgs.callPackage ./mdbook {
+    inherit evaledModules transformOptions;
+    inherit (self) search lib-docs;
+  };
 
-    # Do not check if documentation builds fine on darwin as it fails:
-    # > sandbox-exec: pattern serialization length 69298 exceeds maximum (65535)
-    docs = pkgs.callPackage ./mdbook {
-      inherit evaledModules transformOptions;
-      inherit (self) search lib-docs;
-    };
-
-    serve-docs = pkgs.callPackage ./server {
-      inherit (self) docs;
-    };
-  }
-)
+  serve-docs = pkgs.callPackage ./server {
+    inherit (self) docs;
+  };
+})
