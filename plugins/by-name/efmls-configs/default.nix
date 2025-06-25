@@ -86,6 +86,24 @@ in
             }
           )
         ) tools;
+
+        # Added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
+        imports =
+          map (name: lib.mkRenamedOptionModule [ name ] [ (lib.toLower name) ]) [
+            "HTML"
+            "JSON"
+          ]
+          ++ lib.singleton {
+            # NOTE: we need a warnings option for `mkRenamedOptionModule` to warn about unexpected definitions
+            # This can be removed when all rename aliases are gone
+            options.warnings = lib.mkOption {
+              type = with lib.types; listOf str;
+              description = "Warnings to propagate to nixvim's `warnings` option.";
+              default = [ ];
+              internal = true;
+              visible = false;
+            };
+          };
       };
       description = "Configuration for each filetype. Use `all` to match any filetype.";
       default = { };
@@ -98,13 +116,24 @@ in
       # Tools that have been selected by the user
       tools = lib.lists.unique (
         lib.filter lib.isString (
-          lib.concatMap (
-            {
-              linter ? [ ],
-              formatter ? [ ],
-            }:
-            (lib.toList linter) ++ (lib.toList formatter)
-          ) (lib.attrValues cfg.setup)
+          lib.concatMap
+            (
+              {
+                linter ? [ ],
+                formatter ? [ ],
+              }:
+              (lib.toList linter) ++ (lib.toList formatter)
+            )
+            (
+              lib.attrValues (
+                # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
+                builtins.removeAttrs cfg.setup [
+                  "warnings"
+                  "HTML"
+                  "JSON"
+                ]
+              )
+            )
         )
       );
 
@@ -131,14 +160,22 @@ in
         ) (lib.toList opt);
 
       setupOptions =
-        (lib.mapAttrs (
-          _:
-          {
-            linter ? [ ],
-            formatter ? [ ],
-          }:
-          (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
-        ) (lib.attrsets.filterAttrs (v: _: v != "all") cfg.setup))
+        (lib.mapAttrs
+          (
+            _:
+            {
+              linter ? [ ],
+              formatter ? [ ],
+            }:
+            (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
+          )
+          (
+            builtins.removeAttrs cfg.setup [
+              "all"
+              "warnings"
+            ]
+          )
+        )
         // {
           "=" =
             (mkToolValue "linters" cfg.setup.all.linter) ++ (mkToolValue "formatters" cfg.setup.all.formatter);
@@ -164,4 +201,9 @@ in
 
       extraPackages = [ cfg.efmLangServerPackage ] ++ (map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
     };
+
+  imports = lib.singleton {
+    # Propagate setup warnings
+    inherit (config.plugins.efmls-configs.setup) warnings;
+  };
 }

@@ -20,6 +20,11 @@
       toolOptions = builtins.removeAttrs (setup.type.getSubOptions setup.loc) [
         "_freeformOptions"
         "_module"
+
+        # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
+        "warnings"
+        "HTML"
+        "JSON"
       ];
 
       brokenTools =
