@@ -14,10 +14,19 @@ def main():
 
     parser = ArgumentParser(description="Compare nixvim plugins with another revision")
     parser.add_argument(
-        "flakeref",
-        metavar="old",
+        "base_flakeref",
+        metavar="before",
         help="the commit or flakeref to compare against",
         type=flakeref,
+    )
+    parser.add_argument(
+        "head_flakeref",
+        metavar="after",
+        help="the commit or flakeref to compare to (default .)",
+        type=flakeref,
+        nargs="?",
+        default=".",
+        const=".",
     )
     parser.add_argument(
         "--compact",
@@ -27,8 +36,8 @@ def main():
     )
     args = parser.parse_args()
 
-    after_plugins = list_plugins(".")
-    before_plugins = list_plugins(args.flakeref)
+    before_plugins = list_plugins(args.base_flakeref)
+    after_plugins = list_plugins(args.head_flakeref)
     print(
         json.dumps(
             diff(before_plugins, after_plugins),
@@ -51,7 +60,9 @@ def flakeref(arg):
     repo_rxp = re.compile(
         r"^(?P<protocol>[^:/]+:)?(?P<repo>(:?[^/]+)/(:?[^/]+))(?P<sha>/[A-Fa-f0-9]{6,40})?$"
     )
-    if sha_rxp.match(arg):
+    if arg.startswith("."):
+        return arg
+    elif sha_rxp.match(arg):
         return f"{default_protocol}{default_repo}/{arg}"
     elif m := repo_rxp.match(arg):
         protocol = m.group("protocol") or default_protocol
