@@ -1,0 +1,166 @@
+name: PR Merged
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  merged:
+    name: Show info
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-24.04-arm
+    steps:
+      # github.event.pull_request.base may not refer to the _actual_ parent commit of the PR,
+      # instead it is the commit that the PR was merged/rebased onto.
+      #
+      # Since we want to diff the PR's commits, query the first commit's first parent.
+      #
+      # Alternatively, we could compare
+      # github.event.pull_request.merge_commit_sha to github.event.pull_request.base.sha,
+      # however I'm unsure how that'll interact with grouped Merge Queue 🤔
+      - name: Get base commit
+        id: base
+        env:
+          GH_TOKEN: ${{ github.token }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          pr: ${{ github.event.pull_request.number }}
+        run: |
+          out=$(mktemp)
+          gh api graphql -F owner="$owner" -F repo="$repo" -F pr="$pr" -f query='
+              query($owner: String!, $repo: String!, $pr: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $pr) {
+                    commits(first: 1) {
+                      edges {
+                        node {
+                          commit {
+                            parents(first: 1) {
+                              edges {
+                                node {
+                                  oid
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              ' --jq '
+                .data
+                .repository
+                .pullRequest
+                .commits
+                .edges[0]
+                .node
+                .commit
+                .parents
+                .edges[0]
+                .node
+                .oid
+              ' > "$out"
+          echo "sha=$(cat "$out")" >> "$GITHUB_OUTPUT"
+
+      # Checkout CI scripts from the latest commit from the base branch.
+      # This ensures we get the latest scripts, even if the PR's base was outdated.
+      - name: Checkout base branch
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: flake/dev/diff-plugins.py
+          sparse-checkout-cone-mode: false
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+          extra_nix_config: |
+            accept-flake-config = true
+
+      # NOTE: This is here for debugging and gathering data
+      # TODO: Remove
+      - name: Print metadata
+        env:
+          checked_out: ${{ steps.checkout.outputs.commit }}
+          workflow_base: ${{ github.base_ref }}
+          workflow_head: ${{ github.head_ref }}
+          parent: ${{ steps.base.outputs.sha }}
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+          merge: ${{ github.event.pull_request.merge_commit_sha }}
+          pull_request: ${{ toJSON(github.event.pull_request) }}
+        run: |
+          {
+            echo '## Commits'
+            echo
+            echo "Checked out: $checked_out"
+            echo "Workflow base: $workflow_base"
+            echo "Workflow head: $workflow_head"
+            echo "PR parent: $parent"
+            echo "Base: $base"
+            echo "Head: $head"
+            echo "Merge: $merge"
+            echo
+            echo '<details><summary><code>pull_request</code> details</summary>'
+            echo
+            echo '```json'
+            echo "$pull_request" | jq .
+            echo '```'
+            echo
+            echo '</details>'
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Compare parent -> head
+        id: diff1
+        env:
+          base: ${{ steps.base.outputs.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+        run: |
+          out=$(mktemp)
+          ./flake/dev/diff-plugins.py --compact "$base" "$head" > "$out"
+          {
+            echo -n 'json='
+            jq -c . < "$out"
+          } >> "$GITHUB_OUTPUT"
+          jq . < "$out"
+
+      - name: Compare base -> merge
+        id: diff2
+        env:
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          out=$(mktemp)
+          ./flake/dev/diff-plugins.py --compact "$base" "$head" > "$out"
+          {
+            echo -n 'json='
+            jq -c . < "$out"
+          } >> "$GITHUB_OUTPUT"
+          jq . < "$out"
+
+      - name: Print summary
+        env:
+          json1: ${{ steps.diff1.outputs.json }}
+          json2: ${{ steps.diff2.outputs.json }}
+        run: |
+          {
+            echo '## JSON plugin diff: parent -> head'
+            echo
+            echo '```json'
+            echo "$json1" | jq .
+            echo '```'
+            echo
+            echo '## JSON plugin diff: base -> merge'
+            echo
+            echo '```json'
+            echo "$json2" | jq .
+            echo '```'
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
