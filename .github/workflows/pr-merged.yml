@@ -79,7 +79,6 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
-          nix_path: nixpkgs=channel:nixpkgs-unstable
           extra_nix_config: |
             accept-flake-config = true
 
@@ -124,7 +123,7 @@ jobs:
           head: ${{ github.event.pull_request.head.sha }}
         run: |
           out=$(mktemp)
-          ./flake/dev/diff-plugins.py --compact "$base" "$head" > "$out"
+          nix run .#diff-plugins --compact "$base" "$head" > "$out"
           {
             echo -n 'json='
             jq -c . < "$out"
@@ -138,7 +137,7 @@ jobs:
           head: ${{ github.event.pull_request.merge_commit_sha }}
         run: |
           out=$(mktemp)
-          ./flake/dev/diff-plugins.py --compact "$base" "$head" > "$out"
+          nix run .#diff-plugins --compact "$base" "$head" > "$out"
           {
             echo -n 'json='
             jq -c . < "$out"
