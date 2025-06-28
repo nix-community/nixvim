@@ -107,17 +107,17 @@
             }
             {
               name = "locate-lsp-packages";
-              command = ''${pkgs.python3.interpreter} ${./locate-lsp-packages.py}'';
+              command = ''${./locate-lsp-packages.py}'';
               help = "Locate (with nix-index) LSP servers in nixpkgs";
             }
             {
               name = "new-plugin";
-              command = ''${pkgs.python3.interpreter} ${./new-plugin.py} "$@"'';
+              command = ''${./new-plugin.py} "$@"'';
               help = "Create a new plugin";
             }
             {
               name = "diff-plugins";
-              command = ''${pkgs.python3.interpreter} ${./diff-plugins.py} "$@"'';
+              command = ''${./diff-plugins.py} "$@"'';
               help = "Compare available plugins with another nixvim commit";
             }
           ];
