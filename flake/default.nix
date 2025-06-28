@@ -51,6 +51,7 @@
       packages = lib.optionalAttrs (partitionStack == [ ]) {
         # Propagate `packages` from the `dev` partition:
         inherit (config.partitions.dev.module.flake.packages.${system})
+          diff-plugins
           list-plugins
           ;
       };
