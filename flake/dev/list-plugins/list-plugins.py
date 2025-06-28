@@ -36,6 +36,7 @@ EXCLUDES: list[str] = [
     "plugins/by-name/rustaceanvim/renamed-options.nix",
     "plugins/by-name/telescope/extensions/_mk-extension.nix",
     "plugins/by-name/telescope/extensions/default.nix",
+    "plugins/by-name/telescope/extensions/zf-native.nix",
     "plugins/cmp/auto-enable.nix",
     "plugins/cmp/options/",
     "plugins/cmp/sources/cmp-fish.nix",
