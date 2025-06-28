@@ -10,6 +10,8 @@
       package = pkgs.writers.writePython3Bin "list-plugins" {
         # Disable flake8 checks that are incompatible with the ruff ones
         flakeIgnore = [
+          # Thinks shebang is a block comment
+          "E265"
           # line too long
           "E501"
           # line break before binary operator

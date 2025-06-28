@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-# This script requires nix-locate
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p python3 nix-index
 
 import json
 import os
