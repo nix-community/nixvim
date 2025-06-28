@@ -115,11 +115,6 @@
               command = ''${./new-plugin.py} "$@"'';
               help = "Create a new plugin";
             }
-            {
-              name = "diff-plugins";
-              command = ''${./diff-plugins.py} "$@"'';
-              help = "Compare available plugins with another nixvim commit";
-            }
           ];
       };
     };
