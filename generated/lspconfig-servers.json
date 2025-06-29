@@ -1207,7 +1207,7 @@
   },
   {
     "cmd": ["pug-lsp"],
-    "desc": "https://github.com/opa-oz/pug-lsp\n\nAn implementation of the Language Protocol Server for [Pug.js](http://pugjs.org)\n\nPugLSP can be installed via `go get github.com/opa-oz/pug-lsp`, or manually downloaded from [releases page](https://github.com/opa-oz/pug-lsp/releases)\n    ",
+    "desc": "https://github.com/opa-oz/pug-lsp\n\nAn implementation of the Language Protocol Server for [Pug.js](http://pugjs.org)\n\nPugLSP can be installed via `go install github.com/opa-oz/pug-lsp@latest`, or manually downloaded from [releases page](https://github.com/opa-oz/pug-lsp/releases)\n    ",
     "name": "pug"
   },
   {
