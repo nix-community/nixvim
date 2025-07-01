@@ -55,13 +55,28 @@ let
   platforms = callTests ./platforms { };
 
   # Tests generated from ./test-sources
+  # As a list of { name, path } attrs
+  main = (callTests ./main.nix { }).tests;
+
+  # Combined into a single link-farm derivation
+  mainDrv.tests = linkFarm "tests" main;
+
   # Grouped as a number of link-farms in the form { test-1, test-2, ... test-N }
-  main = callTests ./main.nix { };
+  mainGrouped = lib.pipe main [
+    (helpers.groupListBySize 10)
+    (lib.imap1 (
+      i: group: rec {
+        name = "test-${toString i}";
+        value = linkFarm name group;
+      }
+    ))
+    builtins.listToAttrs
+  ];
 in
 {
   # TODO: consider whether all these tests are needed in the `checks` output
-  flakeCheck = misc // docs // platforms // main;
+  flakeCheck = misc // docs // platforms // mainDrv;
 
   # TODO: consider whether all these tests are needed to be built by buildbot
-  buildbot = lib.optionalAttrs (system == "x86_64-linux") (misc // docs) // platforms // main;
+  buildbot = lib.optionalAttrs (system == "x86_64-linux") (misc // docs) // platforms // mainGrouped;
 }
