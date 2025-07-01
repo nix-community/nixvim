@@ -40,7 +40,10 @@ group_size=20
 print_attrpath=false
 
 mk_test_list() {
-  jq -r 'keys[]' "${NIXVIM_TESTS}"
+  nix eval ".#checks.$system.tests.entries" \
+    --apply builtins.attrNames \
+    --json |
+    jq -r '.[]'
 }
 
 while true; do
@@ -82,23 +85,6 @@ while true; do
     ;;
   esac
 done
-
-get_tests() {
-  # Convert bash array to jq query
-  # e.g. (foo bar baz) => ."foo",."bar",."baz"
-  readarray -t queries < <(
-    for test in "$@"; do
-      echo '."'"$test"'"'
-    done
-  )
-  query=$(
-    IFS=,
-    echo "${queries[*]}"
-  )
-  for test in $(jq -r "${query}" "${NIXVIM_TESTS}"); do
-    echo "checks.${system}.${test}"
-  done
-}
 
 build_group() {
   if ! "${NIXVIM_NIX_COMMAND}" build "${nix_args[@]}" --no-link --file . "$@"; then
@@ -145,7 +131,11 @@ build_in_groups() {
 }
 
 run_tests() {
-  readarray -t test_list < <(get_tests "$@")
+  readarray -t test_list < <(
+    for test in "$@"; do
+      echo "checks.${system}.tests.entries.${test}"
+    done
+  )
   if [[ $print_attrpath == true ]]; then
     echo
     echo "Full attr paths:"
