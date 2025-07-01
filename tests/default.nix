@@ -61,12 +61,12 @@ let
   # Combined into a single link-farm derivation
   mainDrv.tests = linkFarm "tests" main;
 
-  # Grouped as a number of link-farms in the form { test-1, test-2, ... test-N }
-  mainGrouped = lib.pipe main [
+  # Grouped as a number of link-farms in the form { tests = { group-1, group-2, ... group-N }; }
+  mainGrouped.tests = lib.pipe main [
     (helpers.groupListBySize 10)
     (lib.imap1 (
       i: group: rec {
-        name = "test-${toString i}";
+        name = "group-${toString i}";
         value = linkFarm name group;
       }
     ))
