@@ -73,13 +73,24 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
         with:
-          sparse-checkout: flake/dev/diff-plugins.py
+          sparse-checkout: |
+            flake/dev/diff-plugins.py
+            flake.lock
           sparse-checkout-cone-mode: false
+
+      - name: Get nixpkgs
+        id: nixpkgs
+        run: |
+          jq --raw-output --exit-status '
+            .nodes[.nodes[.root].inputs.nixpkgs].locked
+            | "https://github.com/\(.owner)/\(.repo)/archive/\(.rev).tar.gz"
+            | "url=\(.)"
+          ' flake.lock >> "$GITHUB_OUTPUT"
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
-          nix_path: nixpkgs=channel:nixpkgs-unstable
+          nix_path: nixpkgs=${{ steps.nixpkgs.outputs.url }}
           extra_nix_config: |
             accept-flake-config = true
 
