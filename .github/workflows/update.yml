@@ -82,7 +82,6 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
           github_access_token: ${{ steps.app-token.outputs.token }}
 
       - name: Create update branch
