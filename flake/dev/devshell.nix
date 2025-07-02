@@ -20,6 +20,14 @@
           config.formatter
         ];
 
+        env = [
+          {
+            # Prefix NIX_PATH with nixvim's nixpkgs while in the devshell
+            name = "NIX_PATH";
+            eval = "nixpkgs=$NIXPKGS_PATH:\${NIX_PATH:-}";
+          }
+        ];
+
         commands =
           let
             # Thanks to this, the user can choose to use `nix-output-monitor` (`nom`) instead of plain `nix`
