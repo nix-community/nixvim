@@ -2,6 +2,7 @@
 {
   imports = [
     ./devshell.nix
+    ./generate-all-maintainers
     ./list-plugins
     ./package-tests.nix
     ./template-tests.nix
