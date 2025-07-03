@@ -53,6 +53,8 @@ jobs:
         run: |
           echo "📋 Generating updated all-maintainers.nix..."
           nix run .#generate-all-maintainers -- --root . --output ./all-maintainers.nix
+          echo "🎨 Formatting with nixfmt..."
+          nix fmt all-maintainers.nix
       - name: Check for changes
         id: check-changes
         run: |
