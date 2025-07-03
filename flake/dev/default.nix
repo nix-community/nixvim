@@ -95,7 +95,10 @@
           };
           typos = {
             enable = true;
-            excludes = [ "generated/*" ];
+            excludes = [
+              "generated/*"
+              "all-maintainers.nix"
+            ];
           };
           maintainers = {
             enable = true;
