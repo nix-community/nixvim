@@ -2,8 +2,7 @@
 # This script evaluates an empty nixvimConfiguration and extracts the merged maintainer information
 let
   nixvim = import ../../..;
-  pkgs = import <nixpkgs> { };
-  lib = pkgs.lib.extend nixvim.lib.overlay;
+  lib = nixvim.inputs.nixpkgs.lib.extend nixvim.lib.overlay;
 
   emptyConfig = lib.nixvim.evalNixvim {
     modules = [ ];
@@ -13,33 +12,69 @@ let
 
   inherit (emptyConfig.config.meta) maintainers;
 
-  extractMaintainerObjects = maintainerData: lib.unique (lib.flatten (lib.attrValues maintainerData));
+  extractMaintainerObjects =
+    maintainerData:
+    lib.pipe maintainerData [
+      lib.attrValues
+      lib.concatLists
+      lib.unique
+    ];
 
   allMaintainerObjects = extractMaintainerObjects maintainers;
 
-  getMaintainerName =
-    maintainer:
-    if lib.hasAttr "github" maintainer then
-      maintainer.github
-    else if lib.hasAttr "name" maintainer then
-      maintainer.name
-    else
-      null;
+  getMaintainerName = maintainer: maintainer.github or maintainer.name or null;
 
   allMaintainerNames = lib.filter (name: name != null) (map getMaintainerName allMaintainerObjects);
 
-  maintainerDetails = lib.listToAttrs (
-    map (obj: {
+  maintainerDetails = lib.pipe allMaintainerObjects [
+    (lib.filter (obj: getMaintainerName obj != null))
+    (map (obj: {
       name = getMaintainerName obj;
       value = obj;
-    }) (lib.filter (obj: getMaintainerName obj != null) allMaintainerObjects)
-  );
+    }))
+    lib.listToAttrs
+  ];
+
   nixvimMaintainers = import ../../../lib/maintainers.nix;
   nixvimMaintainerNames = lib.attrNames nixvimMaintainers;
+  partitionedMaintainers = lib.partition (nameValue: lib.elem nameValue.name nixvimMaintainerNames) (
+    lib.attrsToList maintainerDetails
+  );
   categorizedMaintainers = {
-    nixvim = lib.filterAttrs (name: _: lib.elem name nixvimMaintainerNames) maintainerDetails;
-    nixpkgs = lib.filterAttrs (name: _: !(lib.elem name nixvimMaintainerNames)) maintainerDetails;
+    nixvim = lib.listToAttrs partitionedMaintainers.right;
+    nixpkgs = lib.listToAttrs partitionedMaintainers.wrong;
   };
+
+  formatMaintainer =
+    name: info: source:
+    let
+      # Handle identifiers that start with numbers or contain invalid characters
+      quotedName =
+        if lib.match "[0-9].*" name != null || lib.match "[^a-zA-Z0-9_-].*" name != null then
+          ''"${name}"''
+        else
+          name;
+
+      # Filter out internal fields
+      filteredInfo = lib.filterAttrs (k: v: !lib.hasPrefix "_" k) info;
+    in
+    "  # ${source}\n  ${quotedName} = ${
+        lib.generators.toPretty {
+          multiline = true;
+          indent = "    ";
+        } filteredInfo
+      };";
+
+  formatAllMaintainers =
+    let
+      nixvimEntries = lib.mapAttrsToList (
+        name: info: formatMaintainer name info "nixvim"
+      ) categorizedMaintainers.nixvim;
+      nixpkgsEntries = lib.mapAttrsToList (
+        name: info: formatMaintainer name info "nixpkgs"
+      ) categorizedMaintainers.nixpkgs;
+    in
+    lib.concatStringsSep "\n" (nixvimEntries ++ nixpkgsEntries);
 
 in
 {
@@ -47,6 +82,7 @@ in
   names = allMaintainerNames;
   details = maintainerDetails;
   categorized = categorizedMaintainers;
+  formatted = formatAllMaintainers;
 
   stats = {
     totalFiles = lib.length (lib.attrNames maintainers);

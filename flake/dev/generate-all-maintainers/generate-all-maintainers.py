@@ -23,7 +23,13 @@ class MetaMaintainerGenerator:
         self.nixvim_root = nixvim_root
         self.nixvim_maintainers_file = nixvim_root / "lib" / "maintainers.nix"
         self.output_file = nixvim_root / "all-maintainers.nix"
-        self.extractor_script = nixvim_root / "flake" / "dev" / "generate-all-maintainers" / "extract-maintainers-meta.nix"
+        self.extractor_script = (
+            nixvim_root
+            / "flake"
+            / "dev"
+            / "generate-all-maintainers"
+            / "extract-maintainers-meta.nix"
+        )
 
     def extract_maintainers_from_meta(self) -> Dict:
         """Extract maintainer information using meta.maintainers."""
@@ -31,7 +37,14 @@ class MetaMaintainerGenerator:
 
         try:
             result = subprocess.run(
-                ["nix", "eval", "--impure", "--file", str(self.extractor_script), "--json"],
+                [
+                    "nix",
+                    "eval",
+                    "--impure",
+                    "--file",
+                    str(self.extractor_script),
+                    "--json",
+                ],
                 capture_output=True,
                 text=True,
                 timeout=60,
@@ -52,66 +65,6 @@ class MetaMaintainerGenerator:
             print(f"❌ Error extracting maintainers: {e}")
             sys.exit(1)
 
-    def format_maintainer_entry(self, name: str, info: Dict, source: str) -> str:
-        """Format a single maintainer entry with nix fmt compatible formatting."""
-        lines = [f"  # {source}"]
-
-        # Handle identifiers that start with numbers or contain invalid characters
-        quoted_name = f'"{name}"' if name[0].isdigit() or not name.replace("_", "").replace("-", "").isalnum() else name
-        lines.append(f"  {quoted_name} = {{")
-
-        key_order = ["name", "email", "github", "githubId", "matrix", "keys"]
-        sorted_keys = sorted(
-            info.keys(),
-            key=lambda k: key_order.index(k) if k in key_order else len(key_order),
-        )
-
-        for key in sorted_keys:
-            if key.startswith("_"):  # Skip internal fields
-                continue
-
-            value = info[key]
-            if isinstance(value, str):
-                lines.append(f'    {key} = "{value}";')
-            elif isinstance(value, int):
-                lines.append(f"    {key} = {value};")
-            elif isinstance(value, list) and value:
-                if all(isinstance(item, dict) for item in value):
-                    formatted_items = []
-                    for item in value:
-                        if isinstance(item, dict):
-                            item_parts = []
-                            for k, v in item.items():
-                                if isinstance(v, str):
-                                    item_parts.append(f'{k} = "{v}"')
-                                else:
-                                    item_parts.append(f"{k} = {v}")
-                            formatted_items.append("{ " + "; ".join(item_parts) + "; }")
-                        else:
-                            formatted_items.append(f'"{item}"')
-                    if len(formatted_items) == 1:
-                        lines.append(f"    {key} = [ {formatted_items[0]} ];")
-                    else:
-                        lines.append(f"    {key} = [")
-                        for item in formatted_items:
-                            lines.append(f"      {item}")
-                        lines.append("    ];")
-                else:
-                    items = [
-                        f'"{item}"' if isinstance(item, str) else str(item)
-                        for item in value
-                    ]
-                    if len(items) == 1:
-                        lines.append(f"    {key} = [ {items[0]} ];")
-                    else:
-                        lines.append(f"    {key} = [")
-                        for item in items:
-                            lines.append(f"      {item}")
-                        lines.append("    ];")
-
-        lines.append("  };")
-        return "\n".join(lines)
-
     def generate_maintainers_file(self) -> None:
         """Generate the complete all-maintainers.nix file."""
         print("📄 Generating all-maintainers.nix using meta.maintainers...")
@@ -121,6 +74,7 @@ class MetaMaintainerGenerator:
 
         nixvim_maintainers = maintainer_data["categorized"]["nixvim"]
         nixpkgs_maintainers = maintainer_data["categorized"]["nixpkgs"]
+        formatted_maintainers = maintainer_data["formatted"]
 
         print(f"🏠 Nixvim maintainers: {len(nixvim_maintainers)}")
         print(f"📦 Nixpkgs maintainers: {len(nixpkgs_maintainers)}")
@@ -140,19 +94,10 @@ class MetaMaintainerGenerator:
 {
 """)
 
-            # Add nixvim maintainers
-            print("🏠 Adding Nixvim maintainers...")
-            for maintainer in sorted(nixvim_maintainers.keys()):
-                info = nixvim_maintainers[maintainer]
-                entry = self.format_maintainer_entry(maintainer, info, "nixvim")
-                f.write(f"{entry}\n")
-
-            # Add nixpkgs maintainers
-            print("📦 Adding Nixpkgs maintainers...")
-            for maintainer in sorted(nixpkgs_maintainers.keys()):
-                info = nixpkgs_maintainers[maintainer]
-                entry = self.format_maintainer_entry(maintainer, info, "nixpkgs")
-                f.write(f"{entry}\n")
+            # Use the formatted maintainers from Nix evaluation
+            print("✨ Adding formatted maintainers using lib.generators.toPretty...")
+            f.write(formatted_maintainers)
+            f.write("\n")
 
             f.write("""}
 """)

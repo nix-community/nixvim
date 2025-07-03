@@ -12,344 +12,388 @@
 {
   # nixvim
   AidanWelch = {
-    name = "Aidan Welch";
-    email = "aidan@freedwave.com";
-    github = "AidanWelch";
-    githubId = 35280359;
-  };
+      email = "aidan@freedwave.com";
+      github = "AidanWelch";
+      githubId = 35280359;
+      name = "Aidan Welch";
+    };
   # nixvim
   Kareem-Medhat = {
-    name = "Kareem Medhat";
-    email = "kareemmedhatnabil@gmail.com";
-    github = "Kareem-Medhat";
-    githubId = 39652808;
-  };
+      email = "kareemmedhatnabil@gmail.com";
+      github = "Kareem-Medhat";
+      githubId = 39652808;
+      name = "Kareem Medhat";
+    };
   # nixvim
   alisonjenkins = {
-    name = "Alison Jenkins";
-    email = "alison.juliet.jenkins@gmail.com";
-    github = "alisonjenkins";
-    githubId = 1176328;
-  };
+      email = "alison.juliet.jenkins@gmail.com";
+      github = "alisonjenkins";
+      githubId = 1176328;
+      name = "Alison Jenkins";
+    };
   # nixvim
   b3nb5n = {
-    name = "Ben";
-    email = "benbaldwin000@gmail.com";
-    github = "b3nb5n";
-    githubId = 67534814;
-  };
+      email = "benbaldwin000@gmail.com";
+      github = "b3nb5n";
+      githubId = 67534814;
+      name = "Ben";
+    };
   # nixvim
   braindefender = {
-    name = "Nikita Shirokov";
-    email = "braindefender@gmail.com";
-    github = "braindefender";
-    githubId = 4646110;
-  };
+      email = "braindefender@gmail.com";
+      github = "braindefender";
+      githubId = 4646110;
+      name = "Nikita Shirokov";
+    };
   # nixvim
   elythh = {
-    name = "gwen";
-    email = "gwen@omg.lol";
-    github = "elythh";
-    githubId = 50964650;
-  };
+      email = "gwen@omg.lol";
+      github = "elythh";
+      githubId = 50964650;
+      name = "gwen";
+    };
   # nixvim
   insipx = {
-    name = "Andrew Plaza";
-    email = "github.tech@liquidthink.net";
-    github = "insipx";
-    githubId = 6452260;
-  };
+      email = "github.tech@liquidthink.net";
+      github = "insipx";
+      githubId = 6452260;
+      name = "Andrew Plaza";
+    };
   # nixvim
   jalil-salame = {
-    name = "Jalil David Salamé Messina";
-    email = "jalil.salame@gmail.com";
-    github = "jalil-salame";
-    githubId = 60845989;
-    keys = [ { fingerprint = "7D6B 4D8F EBC5 7CBC 09AC  331F DA33 17E7 5BE9 485C"; } ];
-  };
+      email = "jalil.salame@gmail.com";
+      github = "jalil-salame";
+      githubId = 60845989;
+      keys = [
+        {
+          fingerprint = "7D6B 4D8F EBC5 7CBC 09AC  331F DA33 17E7 5BE9 485C";
+        }
+      ];
+      name = "Jalil David Salamé Messina";
+    };
   # nixvim
   psfloyd = {
-    name = "Pedro Sánchez";
-    email = "peter.racoon@gmail.com";
-    github = "psfloyd";
-    githubId = 30784060;
-  };
+      email = "peter.racoon@gmail.com";
+      github = "psfloyd";
+      githubId = 30784060;
+      name = "Pedro Sánchez";
+    };
   # nixvim
   refaelsh = {
-    name = "Refael Sheinker";
-    email = "refaelsh@pm.me";
-    github = "refaelsh";
-    githubId = 2750775;
-  };
+      email = "refaelsh@pm.me";
+      github = "refaelsh";
+      githubId = 2750775;
+      name = "Refael Sheinker";
+    };
   # nixvim
   sheemap = {
-    name = "sheemap";
-    github = "sheemap";
-    githubId = 1442292;
-  };
+      github = "sheemap";
+      githubId = 1442292;
+      name = "sheemap";
+    };
   # nixvim
   wadsaek = {
-    name = "Esther";
-    email = "wadsaek@gmail.com";
-    github = "wadsaek";
-    githubId = 141351086;
-  };
+      email = "wadsaek@gmail.com";
+      github = "wadsaek";
+      githubId = 141351086;
+      name = "Esther";
+    };
   # nixvim
   wvffle = {
-    name = "Kasper Seweryn";
-    email = "nixvim@wvffle.net";
-    github = "wvffle";
-    githubId = 13330620;
-  };
+      email = "nixvim@wvffle.net";
+      github = "wvffle";
+      githubId = 13330620;
+      name = "Kasper Seweryn";
+    };
   # nixpkgs
   "347Online" = {
-    name = "Katie Janzen";
-    email = "katiejanzen@347online.me";
-    github = "347Online";
-    githubId = 38228372;
-  };
+      email = "katiejanzen@347online.me";
+      github = "347Online";
+      githubId = 38228372;
+      name = "Katie Janzen";
+    };
   # nixpkgs
   "4lxs" = {
-    name = "svl";
-    github = "4lxs";
-    githubId = 66408983;
-    matrix = "@gyn:matrix.org";
-  };
+      github = "4lxs";
+      githubId = 66408983;
+      matrix = "@gyn:matrix.org";
+      name = "svl";
+    };
   # nixpkgs
   Balssh = {
-    name = "George Bals";
-    email = "george.bals25@gmail.com";
-    github = "Balssh";
-    githubId = 82440615;
-  };
+      email = "george.bals25@gmail.com";
+      github = "Balssh";
+      githubId = 82440615;
+      name = "George Bals";
+    };
   # nixpkgs
   Bodleum = {
-    name = "Daniel Laing";
-    email = "daniel@daniellaing.com";
-    github = "Bodleum";
-    githubId = 60107449;
-    matrix = "@bodleum:matrix.org";
-    keys = [ { fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8"; } ];
-  };
+      email = "daniel@daniellaing.com";
+      github = "Bodleum";
+      githubId = 60107449;
+      keys = [
+        {
+          fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8";
+        }
+      ];
+      matrix = "@bodleum:matrix.org";
+      name = "Daniel Laing";
+    };
   # nixpkgs
   DataHearth = {
-    name = "DataHearth";
-    email = "dev@antoine-langlois.net";
-    github = "DataHearth";
-    githubId = 28595242;
-    keys = [ { fingerprint = "E8F9 0B80 908E 723D 0EDF  0916 5803 CDA5 9C26 A96A"; } ];
-  };
+      email = "dev@antoine-langlois.net";
+      github = "DataHearth";
+      githubId = 28595242;
+      keys = [
+        {
+          fingerprint = "E8F9 0B80 908E 723D 0EDF  0916 5803 CDA5 9C26 A96A";
+        }
+      ];
+      name = "DataHearth";
+    };
   # nixpkgs
   Eveeifyeve = {
-    name = "Eveeifyeve";
-    email = "eveeg1971@gmail.com";
-    github = "Eveeifyeve";
-    githubId = 88671402;
-    matrix = "@eveeifyeve:matrix.org";
-  };
+      email = "eveeg1971@gmail.com";
+      github = "Eveeifyeve";
+      githubId = 88671402;
+      matrix = "@eveeifyeve:matrix.org";
+      name = "Eveeifyeve";
+    };
   # nixpkgs
   FKouhai = {
-    name = "Fran Cirka";
-    email = "frandres00@gmail.com";
-    github = "FKouhai";
-    githubId = 24593008;
-  };
+      email = "frandres00@gmail.com";
+      github = "FKouhai";
+      githubId = 24593008;
+      name = "Fran Cirka";
+    };
   # nixpkgs
   GGORG0 = {
-    name = "GGORG";
-    email = "GGORG0@protonmail.com";
-    github = "GGORG0";
-    githubId = 51029895;
-    matrix = "@ggorg:matrix.org";
-  };
+      email = "GGORG0@protonmail.com";
+      github = "GGORG0";
+      githubId = 51029895;
+      matrix = "@ggorg:matrix.org";
+      name = "GGORG";
+    };
   # nixpkgs
   GaetanLepage = {
-    name = "Gaetan Lepage";
-    email = "gaetan@glepage.com";
-    github = "GaetanLepage";
-    githubId = 33058747;
-  };
+      email = "gaetan@glepage.com";
+      github = "GaetanLepage";
+      githubId = 33058747;
+      name = "Gaetan Lepage";
+    };
   # nixpkgs
   HeitorAugustoLN = {
-    name = "Heitor Augusto";
-    email = "IAm.HeitorALN@proton.me";
-    github = "HeitorAugustoLN";
-    githubId = 44377258;
-  };
+      email = "IAm.HeitorALN@proton.me";
+      github = "HeitorAugustoLN";
+      githubId = 44377258;
+      name = "Heitor Augusto";
+    };
   # nixpkgs
   MarcelCoding = {
-    name = "Marcel";
-    email = "me@m4rc3l.de";
-    github = "MarcelCoding";
-    githubId = 34819524;
-  };
+      email = "me@m4rc3l.de";
+      github = "MarcelCoding";
+      githubId = 34819524;
+      name = "Marcel";
+    };
   # nixpkgs
   MattSturgeon = {
-    name = "Matt Sturgeon";
-    email = "matt@sturgeon.me.uk";
-    github = "MattSturgeon";
-    githubId = 5046562;
-    matrix = "@mattsturg:matrix.org";
-    keys = [ { fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299"; } ];
-  };
+      email = "matt@sturgeon.me.uk";
+      github = "MattSturgeon";
+      githubId = 5046562;
+      keys = [
+        {
+          fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299";
+        }
+      ];
+      matrix = "@mattsturg:matrix.org";
+      name = "Matt Sturgeon";
+    };
   # nixpkgs
   NickHu = {
-    name = "Nick Hu";
-    email = "me@nickhu.co.uk";
-    github = "NickHu";
-    githubId = 450276;
-  };
+      email = "me@nickhu.co.uk";
+      github = "NickHu";
+      githubId = 450276;
+      name = "Nick Hu";
+    };
   # nixpkgs
   axelkar = {
-    name = "Axel Karjalainen";
-    email = "axel@axka.fi";
-    github = "axelkar";
-    githubId = 120189068;
-  };
+      email = "axel@axka.fi";
+      github = "axelkar";
+      githubId = 120189068;
+      name = "Axel Karjalainen";
+    };
   # nixpkgs
   bkp5190 = {
-    name = "Boney Patel";
-    email = "boneypatel37@yahoo.com";
-    github = "bkp5190";
-    githubId = 60232782;
-  };
+      email = "boneypatel37@yahoo.com";
+      github = "bkp5190";
+      githubId = 60232782;
+      name = "Boney Patel";
+    };
   # nixpkgs
   bpeetz = {
-    name = "Benedikt Peetz";
-    email = "benedikt.peetz@b-peetz.de";
-    github = "bpeetz";
-    githubId = 140968250;
-    matrix = "@soispha:vhack.eu";
-    keys = [ { fingerprint = "8321 ED3A 8DB9 99A5 1F3B  F80F F268 2914 EA42 DE26"; } ];
-  };
+      email = "benedikt.peetz@b-peetz.de";
+      github = "bpeetz";
+      githubId = 140968250;
+      keys = [
+        {
+          fingerprint = "8321 ED3A 8DB9 99A5 1F3B  F80F F268 2914 EA42 DE26";
+        }
+      ];
+      matrix = "@soispha:vhack.eu";
+      name = "Benedikt Peetz";
+    };
   # nixpkgs
   f4z3r = {
-    name = "Jakob Beckmann";
-    email = "f4z3r-github@pm.me";
-    github = "f4z3r";
-    githubId = 32326425;
-    keys = [ { fingerprint = "358A 6251 E2ED EDC1 9717  14A7 96A8 BA6E C871 2183"; } ];
-  };
+      email = "f4z3r-github@pm.me";
+      github = "f4z3r";
+      githubId = 32326425;
+      keys = [
+        {
+          fingerprint = "358A 6251 E2ED EDC1 9717  14A7 96A8 BA6E C871 2183";
+        }
+      ];
+      name = "Jakob Beckmann";
+    };
   # nixpkgs
   foo-dogsquared = {
-    name = "Gabriel Arazas";
-    email = "foodogsquared@foodogsquared.one";
-    github = "foo-dogsquared";
-    githubId = 34962634;
-    matrix = "@foodogsquared:matrix.org";
-    keys = [ { fingerprint = "DDD7 D0BD 602E 564B AA04  FC35 1431 0D91 4115 2B92"; } ];
-  };
+      email = "foodogsquared@foodogsquared.one";
+      github = "foo-dogsquared";
+      githubId = 34962634;
+      keys = [
+        {
+          fingerprint = "DDD7 D0BD 602E 564B AA04  FC35 1431 0D91 4115 2B92";
+        }
+      ];
+      matrix = "@foodogsquared:matrix.org";
+      name = "Gabriel Arazas";
+    };
   # nixpkgs
   getchoo = {
-    name = "Seth Flynn";
-    email = "getchoo@tuta.io";
-    github = "getchoo";
-    githubId = 48872998;
-    matrix = "@getchoo:matrix.org";
-  };
+      email = "getchoo@tuta.io";
+      github = "getchoo";
+      githubId = 48872998;
+      matrix = "@getchoo:matrix.org";
+      name = "Seth Flynn";
+    };
   # nixpkgs
   hmajid2301 = {
-    name = "Haseeb Majid";
-    email = "hello@haseebmajid.dev";
-    github = "hmajid2301";
-    githubId = 998807;
-    keys = [ { fingerprint = "A236 785D 59F1 9076 1E9C E8EC 7828 3DB3 D233 E1F9"; } ];
-  };
+      email = "hello@haseebmajid.dev";
+      github = "hmajid2301";
+      githubId = 998807;
+      keys = [
+        {
+          fingerprint = "A236 785D 59F1 9076 1E9C E8EC 7828 3DB3 D233 E1F9";
+        }
+      ];
+      name = "Haseeb Majid";
+    };
   # nixpkgs
   janurskremer = {
-    name = "Jan Kremer";
-    email = "mail@jankremer.eu";
-    github = "janurskremer";
-    githubId = 79042825;
-    matrix = "@jankremer:matrix.org";
-    keys = [ { fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC"; } ];
-  };
+      email = "mail@jankremer.eu";
+      github = "janurskremer";
+      githubId = 79042825;
+      keys = [
+        {
+          fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC";
+        }
+      ];
+      matrix = "@jankremer:matrix.org";
+      name = "Jan Kremer";
+    };
   # nixpkgs
   jolars = {
-    name = "Johan Larsson";
-    email = "jolars@posteo.com";
-    github = "jolars";
-    githubId = 13087841;
-    matrix = "@jola:mozilla.org";
-    keys = [ { fingerprint = "F0D6 BDE7 C7D1 6B3F 7883  73E7 2A41 C0FE DD6F F540"; } ];
-  };
+      email = "jolars@posteo.com";
+      github = "jolars";
+      githubId = 13087841;
+      keys = [
+        {
+          fingerprint = "F0D6 BDE7 C7D1 6B3F 7883  73E7 2A41 C0FE DD6F F540";
+        }
+      ];
+      matrix = "@jola:mozilla.org";
+      name = "Johan Larsson";
+    };
   # nixpkgs
   kalbasit = {
-    name = "Wael Nasreddine";
-    email = "wael.nasreddine@gmail.com";
-    github = "kalbasit";
-    githubId = 87115;
-    matrix = "@kalbasit:matrix.org";
-  };
+      email = "wael.nasreddine@gmail.com";
+      github = "kalbasit";
+      githubId = 87115;
+      matrix = "@kalbasit:matrix.org";
+      name = "Wael Nasreddine";
+    };
   # nixpkgs
   khaneliman = {
-    name = "Austin Horstman";
-    email = "khaneliman12@gmail.com";
-    github = "khaneliman";
-    githubId = 1778670;
-  };
+      email = "khaneliman12@gmail.com";
+      github = "khaneliman";
+      githubId = 1778670;
+      name = "Austin Horstman";
+    };
   # nixpkgs
   loicreynier = {
-    name = "Loïc Reynier";
-    email = "loic@loicreynier.fr";
-    github = "loicreynier";
-    githubId = 88983487;
-  };
+      email = "loic@loicreynier.fr";
+      github = "loicreynier";
+      githubId = 88983487;
+      name = "Loïc Reynier";
+    };
   # nixpkgs
   mitchmindtree = {
-    name = "Mitchell Nordine";
-    email = "mail@mitchellnordine.com";
-    github = "mitchmindtree";
-    githubId = 4587373;
-  };
+      email = "mail@mitchellnordine.com";
+      github = "mitchmindtree";
+      githubId = 4587373;
+      name = "Mitchell Nordine";
+    };
   # nixpkgs
   nfelber = {
-    name = "Nathan Felber";
-    email = "nathan@pascaline.org";
-    github = "nfelber";
-    githubId = 46248772;
-  };
+      email = "nathan@pascaline.org";
+      github = "nfelber";
+      githubId = 46248772;
+      name = "Nathan Felber";
+    };
   # nixpkgs
   nwjsmith = {
-    name = "Nate Smith";
-    email = "nate@theinternate.com";
-    github = "nwjsmith";
-    githubId = 1348;
-  };
+      email = "nate@theinternate.com";
+      github = "nwjsmith";
+      githubId = 1348;
+      name = "Nate Smith";
+    };
   # nixpkgs
   onemoresuza = {
-    name = "Coutinho de Souza";
-    email = "dev@onemoresuza.com";
-    github = "onemoresuza";
-    githubId = 106456302;
-    keys = [ { fingerprint = "6FD3 7E64 11C5 C659 2F34  EDBC 4352 D15F B177 F2A8"; } ];
-  };
+      email = "dev@onemoresuza.com";
+      github = "onemoresuza";
+      githubId = 106456302;
+      keys = [
+        {
+          fingerprint = "6FD3 7E64 11C5 C659 2F34  EDBC 4352 D15F B177 F2A8";
+        }
+      ];
+      name = "Coutinho de Souza";
+    };
   # nixpkgs
   polnio = {
-    name = "Po Co";
-    email = "polniolino@gmail.com";
-    github = "polnio";
-    githubId = 85367527;
-  };
+      email = "polniolino@gmail.com";
+      github = "polnio";
+      githubId = 85367527;
+      name = "Po Co";
+    };
   # nixpkgs
   theabm = {
-    name = "Andres Bermeo Marinelli";
-    email = "andres_bermeo@outlook.com";
-    github = "theabm";
-    githubId = 72303015;
-  };
+      email = "andres_bermeo@outlook.com";
+      github = "theabm";
+      githubId = 72303015;
+      name = "Andres Bermeo Marinelli";
+    };
   # nixpkgs
   traxys = {
-    name = "Quentin Boyer";
-    email = "quentin+dev@familleboyer.net";
-    github = "traxys";
-    githubId = 5623227;
-  };
+      email = "quentin+dev@familleboyer.net";
+      github = "traxys";
+      githubId = 5623227;
+      name = "Quentin Boyer";
+    };
   # nixpkgs
   zainkergaye = {
-    name = "Zain Kergaye";
-    email = "zain@zkergaye.me";
-    github = "zainkergaye";
-    githubId = 62440012;
-  };
+      email = "zain@zkergaye.me";
+      github = "zainkergaye";
+      githubId = 62440012;
+      name = "Zain Kergaye";
+    };
 }

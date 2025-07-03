@@ -14,6 +14,8 @@
           "E265"
           # line too long
           "E501"
+          # line break before binary operator
+          "W503"
         ];
       } (builtins.readFile ./generate-all-maintainers.py);
     in
