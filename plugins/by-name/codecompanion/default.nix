@@ -178,7 +178,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         Of course, you can create your own prompts and add them to the Action Palette or even to the
         slash command completion menu in the chat buffer.
-        Please see the [RECIPES](https://github.com/olimorris/codecompanion.nvim/blob/main/doc/RECIPES.md)
+        Please see the [Creating Prompts](https://github.com/olimorris/codecompanion.nvim/blob/main/doc/extending/prompts.md)
         guide for more information.
       '';
     };
