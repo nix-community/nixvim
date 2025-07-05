@@ -2,6 +2,7 @@
 {
   imports = [
     ./devshell.nix
+    ./generate-all-maintainers
     ./list-plugins
     ./package-tests.nix
     ./template-tests.nix
@@ -94,7 +95,10 @@
           };
           typos = {
             enable = true;
-            excludes = [ "generated/*" ];
+            excludes = [
+              "generated/*"
+              "all-maintainers.nix"
+            ];
           };
           maintainers = {
             enable = true;
