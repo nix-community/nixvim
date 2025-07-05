@@ -6,7 +6,7 @@ let
     ;
 
   buildbotOpt = lib.mkOption {
-    type = types.lazyAttrsOf types.package;
+    type = types.lazyAttrsOf types.raw;
     default = { };
     description = ''
       A set of tests for [buildbot] to run.

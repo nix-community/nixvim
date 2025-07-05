@@ -1,7 +1,6 @@
 # Collects the various test modules in tests/test-sources/ and groups them into a number of test derivations
 {
   callTest,
-  helpers,
   lib ? pkgs.lib,
   linkFarm,
   pkgs,
@@ -69,8 +68,8 @@ let
   };
 in
 # We attempt to build & execute all configurations
-lib.pipe (testFiles ++ [ exampleFiles ]) [
-  (builtins.map (
+{
+  tests = map (
     {
       name,
       file,
@@ -80,13 +79,5 @@ lib.pipe (testFiles ++ [ exampleFiles ]) [
       inherit name;
       path = linkFarm name (builtins.mapAttrs (moduleToTest file) cases);
     }
-  ))
-  (helpers.groupListBySize 10)
-  (lib.imap1 (
-    i: group: rec {
-      name = "test-${toString i}";
-      value = linkFarm name group;
-    }
-  ))
-  builtins.listToAttrs
-]
+  ) (testFiles ++ [ exampleFiles ]);
+}
