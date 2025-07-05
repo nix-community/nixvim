@@ -81,6 +81,17 @@ in
       '';
     };
 
+    enablePrintInit = mkOption {
+      type = types.bool;
+      default = true;
+      example = false;
+      description = ''
+        Install a tool that shows the content of the generated `init.lua` file.
+
+        Run it using `${config.build.printInitPackage.meta.mainProgram}`.
+      '';
+    };
+
     build = {
       # TODO: `standalonePackage`; i.e. package + printInitPackage + man-docs bundled together
 
@@ -287,10 +298,12 @@ in
             with config.build;
             [
               nvimPackage
-              printInitPackage
             ]
             ++ lib.optionals config.enableMan [
               manDocsPackage
+            ]
+            ++ lib.optionals config.enablePrintInit [
+              printInitPackage
             ];
           meta.mainProgram = "nvim";
         };
