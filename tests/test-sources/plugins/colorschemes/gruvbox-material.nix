@@ -22,7 +22,8 @@
           background_color = null;
         };
         signs = {
-          highlight = true;
+          force_background = false;
+          background_color = null;
         };
         customize = null;
       };
@@ -46,7 +47,8 @@
           force_background = false;
         };
         signs = {
-          highlight = true;
+          force_background = false;
+          background_color = null;
         };
         customize = lib.nixvim.mkRaw ''
           function(g, o)
