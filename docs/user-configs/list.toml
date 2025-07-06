@@ -167,3 +167,9 @@ owner = "wverac"
 title = "BOFH NixVim"
 description = "Minimalist NixVim setup, featuring a curated set of essential plugins"
 url = "https://github.com/wverac/nixvim"
+
+[[config]]
+owner = "r17x"
+title = "development universe"
+description = "Nix configuration for development, including NixVim"
+url = "https://github.com/r17x/universe/tree/main/nix/nvim.nix"
