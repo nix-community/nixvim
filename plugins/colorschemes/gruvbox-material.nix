@@ -24,7 +24,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       force_background = false;
     };
     signs = {
-      highlight = true;
+      force_background = false;
     };
     customize = lib.nixvim.nestedLiteralLua ''
       function(g, o)
