@@ -1,9 +1,17 @@
 {
   empty = {
+    # The plugin tries to install a treesitter grammar at startup
+    # https://github.com/mistweaverco/kulala.nvim/blob/9d3206dda077d24ef3e6a2e3578bc0c914b4944c/lua/kulala/config/init.lua#L75
+    test.runNvim = false;
+
     plugins.kulala.enable = true;
   };
 
   default = {
+    # The plugin tries to install a treesitter grammar at startup
+    # https://github.com/mistweaverco/kulala.nvim/blob/9d3206dda077d24ef3e6a2e3578bc0c914b4944c/lua/kulala/config/init.lua#L75
+    test.runNvim = false;
+
     plugins.kulala = {
       enable = true;
 
