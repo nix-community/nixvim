@@ -7,12 +7,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # Ensures `nvim-ufo` (if enabled) is loaded before `origami`
-  # Default priority is 1000, mkBefore is 500 and mkAfter is 1500
-  configLocation = lib.mkOrder 1100 "extraConfigLua";
-
   settingsExample = {
-    keepFoldsAcrossSessions = true;
     pauseFoldsOnSearch = true;
     setupFoldKeymaps = false;
   };
