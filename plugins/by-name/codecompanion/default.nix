@@ -22,16 +22,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
         anthropic = "anthropic";
         azure_openai = "azure_openai";
         copilot = "copilot";
+        deepseek = "deepseek";
         gemini = "gemini";
+        githubmodels = "githubmodels";
+        huggingface = "huggingface";
+        novita = "novita";
+        mistral = "mistral";
         ollama = "ollama";
         openai = "openai";
         xai = "xai";
         non_llms = {
           jina = "jina";
+          tavily = "tavily";
         };
         opts = {
           allow_insecure = false;
+          cache_models_for = 1800;
           proxy = null;
+          show_defaults = true;
+          show_model_choices = true;
         };
       };
       example = {
@@ -130,10 +139,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   )
                 end
               '';
-              opts = {
-                visible = false;
-                tag = "system_tag";
-              };
             }
           ];
         };
