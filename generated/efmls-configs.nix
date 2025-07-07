@@ -1513,6 +1513,27 @@
       ];
     };
   };
+  zig = {
+    formatter = {
+      lang = "zig";
+      possible = [ ];
+    };
+    linter = {
+      lang = "zig";
+      possible = [
+        "ZLint"
+        "alex"
+        "codespell"
+        "cspell"
+        "languagetool"
+        "proselint"
+        "redpen"
+        "textlint"
+        "vale"
+        "write_good"
+      ];
+    };
+  };
   zsh = {
     formatter = {
       lang = "zsh";
