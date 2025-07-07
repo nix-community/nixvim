@@ -8,40 +8,40 @@
       enable = true;
 
       settings = {
-        keepFoldsAcrossSessions.__raw = "package.loaded['ufo'] ~= nil";
+        useLspFoldsWithTreesitterFallback = true;
         pauseFoldsOnSearch = true;
-        foldtextWithLineCount = {
-          enabled.__raw = "package.loaded['ufo'] == nil";
-          template = "   %s lines";
-          hlgroupForCount = "Comment";
-        };
-        foldKeymaps = {
-          setup = true;
-          hOnlyOpensOnFirstColumn = false;
+        foldtext = {
+          enabled = true;
+          padding = 3;
+          lineCount = {
+            template = "%d lines";
+            hlgroup = "Comment";
+          };
+          diagnosticsCount = true;
+          gitsignsCount = true;
         };
         autoFold = {
-          enabled = false;
+          enabled = true;
           kinds = [
             "comment"
             "imports"
           ];
+        };
+        foldKeymaps = {
+          setup = true;
+          hOnlyOpensOnFirstColumn = false;
         };
       };
     };
   };
 
   example = {
-    plugins = {
-      nvim-ufo.enable = true;
+    plugins.origami = {
+      enable = true;
 
-      origami = {
-        enable = true;
-
-        settings = {
-          keepFoldsAcrossSessions = true;
-          pauseFoldsOnSearch = true;
-          setupFoldKeymaps = false;
-        };
+      settings = {
+        pauseFoldsOnSearch = true;
+        setupFoldKeymaps = false;
       };
     };
   };
