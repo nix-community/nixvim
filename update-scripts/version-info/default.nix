@@ -1,5 +1,6 @@
 {
   lib,
+  path,
   callPackage,
   writeShellApplication,
   stdenv,
@@ -15,6 +16,7 @@ writeShellApplication {
     NIX_CONFIG = ''
       experimental-features = nix-command flakes pipe-operators
     '';
+    NIX_PATH = "nixpkgs=${toString path}";
   };
 
   text = ''
@@ -23,7 +25,6 @@ writeShellApplication {
 
     # Use channels.nix to build channels.toml
     nix build --impure \
-      --inputs-from ${toString ../..} \
       --file ${./supported-versions.nix} \
       --argstr system ${stdenv.hostPlatform.system} \
       --arg-from-file channelsJSON channels.json \
