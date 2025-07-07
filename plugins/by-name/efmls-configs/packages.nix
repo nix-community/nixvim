@@ -168,5 +168,6 @@ in
       vint = "vim-vint";
       write_good = "write-good";
       yq = "yq-go";
+      ZLint = "zig-zlint";
     };
 }
