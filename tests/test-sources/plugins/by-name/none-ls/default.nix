@@ -132,6 +132,10 @@
                 "racket_fixw"
                 "raco_fmt"
                 "rubyfmt"
+
+                # TODO 2025-07-07 open-policy-agent is broken on darwin
+                "opacheck"
+                "rego"
               ]
               ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
                 # TODO: 2025-06-24 build failure
