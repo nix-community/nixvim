@@ -102,10 +102,10 @@ in
       default = { };
       example = lib.literalExpression ''
         {
-          "ftplugin/nix.lua".text = '''
-            vim.opt.tabstop = 2
-            vim.opt.shiftwidth = 2
-            vim.opt.expandtab = true
+          "after/ftplugin/nix.lua".text = '''
+            vim.opt_local.tabstop = 2
+            vim.opt_local.shiftwidth = 2
+            vim.opt_local.expandtab = true
           ''';
         }
       '';
