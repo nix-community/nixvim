@@ -10,7 +10,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "otter-nvim";
   description = "A Neovim plugin for writing and running embedded languages in your code.";
 
-  maintainers = [ ];
+  maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
   imports = [
     # TODO: introduced 2024-06-29; remove after 24.11
