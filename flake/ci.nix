@@ -4,38 +4,40 @@ let
     mapAttrs
     types
     ;
-
-  buildbotOpt = lib.mkOption {
-    type = types.lazyAttrsOf types.package;
-    default = { };
-    description = ''
-      A set of tests for [buildbot] to run.
-
-      [buildbot]: https://buildbot.nix-community.org
-    '';
-  };
 in
 {
   perSystem = {
-    # Declare per-system CI options
+    # per-system CI options
     options.ci = {
-      buildbot = buildbotOpt;
+      buildbot = lib.mkOption {
+        type = types.lazyAttrsOf types.raw;
+        default = { };
+        description = ''
+          A set of tests for [buildbot] to run.
+
+          [buildbot]: https://buildbot.nix-community.org
+        '';
+      };
     };
   };
 
   flake = {
-    # Declare top-level CI options
-    options.ci = {
-      buildbot = lib.mkOption {
-        type = types.lazyAttrsOf buildbotOpt.type;
-        default = { };
-        description = ''
-          See `perSystem.ci.buildbot` for description and examples.
-        '';
-      };
+    # top-level CI option
+    #
+    # NOTE:
+    #   This must be an actual option, NOT a set of options.
+    #   Otherwise, flake partitions will not be lazy.
+    options.ci = lib.mkOption {
+      type = types.lazyAttrsOf (types.lazyAttrsOf types.raw);
+      default = { };
+      description = ''
+        Outputs related to CI.
+
+        Usually defined via the `perSystem.ci` options.
+      '';
     };
 
-    # Transpose per-system CI outputs to the top-level
+    # Transpose per-system definitions to the top-level
     config.ci = {
       buildbot = mapAttrs (_: sysCfg: sysCfg.ci.buildbot) config.allSystems;
     };
