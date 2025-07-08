@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   example-with-str = {
     clipboard = {
@@ -21,7 +22,9 @@
   example-with-raw-lua = {
     clipboard = {
       register.__raw = ''vim.env.SSH_TTY and "" or "unnamedplus"'';
-      providers.wl-copy.enable = true;
+
+      # wl-copy is only available on linux
+      providers.wl-copy.enable = pkgs.stdenv.hostPlatform.isLinux;
     };
   };
 }
