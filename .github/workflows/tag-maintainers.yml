@@ -1,0 +1,233 @@
+name: Sync Plugin Maintainer Reviewers
+
+on:
+  pull_request_target:
+    types: [opened, ready_for_review, reopened, synchronize]
+
+# Concurrency settings to ensure that only one instance of this workflow runs per PR.
+# If a new commit is pushed, it cancels the previous run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # To checkout code
+  pull-requests: write # To add/remove reviewers and comment
+
+jobs:
+  tag-maintainers:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.state == 'open'
+    steps:
+      # Generate a GitHub App token if configured, so we can use custom `bot`.
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        if: vars.CI_APP_ID
+        id: app-token
+        with:
+          app-id: ${{ vars.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-members: read
+
+      # Checkout the code from the base branch.
+      # This is a security measure for `pull_request_target` to run trusted code.
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+
+      # Install Nix
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      # Identify which plugin files have changed in the PR.
+      - name: Get changed plugin files
+        id: changed-files
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          CHANGED_FILES=$(gh pr diff "$PR_NUM" --name-only || true)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          {
+            echo "changed_files<<EOF"
+            echo "$CHANGED_FILES"
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      # Evaluate Nix code to find maintainers for the changed files.
+      - name: Extract maintainers from changed files
+        id: extract-maintainers
+        env:
+          PR_AUTHOR: "${{ github.event.pull_request.user.login }}"
+          CHANGED_FILES: '${{ steps.changed-files.outputs.changed_files }}'
+        run: |
+          if [[ -z "$CHANGED_FILES" ]]; then
+            echo "No plugin files changed. No maintainers to tag."
+            echo "maintainers=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Evaluating nixvim meta system for all maintainers..."
+          # Get a JSON object mapping plugin paths to maintainer data.
+          ALL_MAINTAINERS=$(nix eval --impure --expr "
+            let
+              nixvim = import ./.;
+              lib = nixvim.inputs.nixpkgs.lib.extend nixvim.lib.overlay;
+              emptyConfig = lib.nixvim.evalNixvim {
+                modules = [ { _module.check = false; } ];
+                extraSpecialArgs = { pkgs = null; };
+              };
+              inherit (emptyConfig.config.meta) maintainers;
+            in
+              maintainers
+          " --json 2>/dev/null || echo "{}")
+
+          echo "Finding maintainers for changed files..."
+          FOUND_MAINTAINERS=$(
+            echo "$CHANGED_FILES" | while IFS= read -r FILE; do
+              [[ -z "$FILE" ]] && continue
+              PLUGIN_DIR=$(dirname "$FILE")
+
+              # Use jq to find maintainers whose path key ends with the plugin directory.
+              echo "$ALL_MAINTAINERS" | jq -r --arg plugindir "$PLUGIN_DIR" '
+                to_entries[] |
+                select(.key | endswith($plugindir)) |
+                .value[] |
+                select(has("github")) |
+                .github
+              ' 2>/dev/null
+            done
+          )
+
+          # De-duplicate the list, remove the PR author, and format as a space-separated string.
+          MAINTAINERS_LIST=$(echo "$FOUND_MAINTAINERS" | grep -v -w -F "$PR_AUTHOR" | sort -u | tr '\n' ' ' | sed 's/ *$//')
+
+          if [[ -z "$MAINTAINERS_LIST" ]]; then
+            echo "No maintainers found for changed files (or only the PR author is a maintainer)."
+          else
+            echo "Found maintainers to notify: $MAINTAINERS_LIST"
+          fi
+
+          echo "maintainers=$MAINTAINERS_LIST" >> "$GITHUB_OUTPUT"
+
+      # Get lists of existing reviewers to avoid duplicates.
+      - name: Get current reviewers
+        id: current-reviewers
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          PENDING_REVIEWERS=$(gh pr view "$PR_NUM" --json reviewRequests --jq '.reviewRequests[].login')
+          PAST_REVIEWERS=$(gh api "repos/$REPO/pulls/$PR_NUM/reviews" --jq '.[].user.login')
+          USERS_TO_EXCLUDE=$(printf "%s\n%s" "$PENDING_REVIEWERS" "$PAST_REVIEWERS" | sort -u)
+
+          {
+            echo "pending_reviewers<<EOF"
+            echo "$PENDING_REVIEWERS"
+            echo EOF
+            echo "users_to_exclude<<EOF"
+            echo "$USERS_TO_EXCLUDE"
+            echo EOF
+          } >> $GITHUB_OUTPUT
+
+          echo "Current pending reviewers: $PENDING_REVIEWERS"
+          echo "Complete list of users to exclude: $USERS_TO_EXCLUDE"
+
+      # Filter the maintainer list to only include repository collaborators.
+      # You can only request reviews from users with at least triage permissions.
+      - name: Check maintainer collaborator status
+        id: check-collaborators
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          MAINTAINERS: ${{ steps.extract-maintainers.outputs.maintainers }}
+          USERS_TO_EXCLUDE: ${{ steps.current-reviewers.outputs.users_to_exclude }}
+          REPO: "${{ github.repository }}"
+        run: |
+          NEW_REVIEWERS=()
+
+          # If there are no maintainers, exit early.
+          if [[ -z "$MAINTAINERS" ]]; then
+            echo "No maintainers to check."
+            echo "new_reviewers=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          for MAINTAINER in $MAINTAINERS; do
+            if echo "$USERS_TO_EXCLUDE" | grep -q -w "$MAINTAINER"; then
+              echo "$MAINTAINER is already involved in the review, skipping."
+              continue
+            fi
+
+            echo "Checking if $MAINTAINER is a collaborator..."
+            if gh api "/repos/$REPO/collaborators/$MAINTAINER" --silent; then
+              echo "User $MAINTAINER is a collaborator, adding to new reviewers list."
+              NEW_REVIEWERS+=("$MAINTAINER")
+            else
+              echo "User $MAINTAINER is not a repository collaborator, skipping."
+            fi
+          done
+
+          NEW_REVIEWERS_LIST=$(printf "%s " "${NEW_REVIEWERS[@]}")
+          echo "new_reviewers=${NEW_REVIEWERS_LIST% }" >> "$GITHUB_OUTPUT"
+          echo "New reviewers to add: ${NEW_REVIEWERS_LIST% }"
+
+      # Remove reviewers who are no longer maintainers of the changed files.
+      - name: Remove outdated reviewers
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          MAINTAINERS: ${{ steps.extract-maintainers.outputs.maintainers }}
+          PENDING_REVIEWERS: ${{ steps.current-reviewers.outputs.pending_reviewers }}
+          REPO: ${{ github.repository }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          remove_reviewers() {
+            local reviewers_to_remove="$1"
+            local reason="$2"
+            for REVIEWER in $reviewers_to_remove; do
+              echo "Removing review request from $REVIEWER ($reason)"
+              REVIEWER_JSON=$(jq -n -c --arg r "$REVIEWER" '{reviewers: [$r]}')
+              gh api --method DELETE "/repos/$REPO/pulls/$PR_NUM/requested_reviewers" \
+                --input - <<< "$REVIEWER_JSON" > /dev/null
+            done
+          }
+
+          # If no maintainers were found for the current set of files, remove all pending reviewers.
+          if [[ -z "$MAINTAINERS" ]]; then
+            if [[ -n "$PENDING_REVIEWERS" ]]; then
+              echo "No plugin maintainers found, removing all pending reviewers."
+              remove_reviewers "$PENDING_REVIEWERS" "no longer a maintainer of changed files"
+            fi
+            exit 0
+          fi
+
+          # Find reviewers who are in the pending list but NOT in the current maintainer list.
+          CURRENT_MAINTAINERS=$(echo "$MAINTAINERS" | tr ' ' '\n' | sort -u)
+          OUTDATED_REVIEWERS=$(comm -23 <(echo "$PENDING_REVIEWERS" | tr ' ' '\n' | sort -u) <(echo "$CURRENT_MAINTAINERS"))
+
+          if [[ -n "$OUTDATED_REVIEWERS" ]]; then
+            remove_reviewers "$OUTDATED_REVIEWERS" "no longer a maintainer of changed files"
+          else
+            echo "No outdated reviewers to remove."
+          fi
+
+      # Add the new, filtered list of maintainers as reviewers to the PR.
+      - name: Add new reviewers
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          NEW_REVIEWERS: ${{ steps.check-collaborators.outputs.new_reviewers }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          if [[ -n "$NEW_REVIEWERS" ]]; then
+            REVIEWERS_CSV=$(echo "$NEW_REVIEWERS" | tr ' ' ',')
+            echo "Requesting reviews from: $REVIEWERS_CSV"
+            gh pr edit "$PR_NUM" --add-reviewer "$REVIEWERS_CSV"
+          else
+            echo "No new reviewers to add."
+          fi
