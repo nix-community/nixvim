@@ -65,7 +65,7 @@ jobs:
         id: extract-maintainers
         env:
           PR_AUTHOR: "${{ github.event.pull_request.user.login }}"
-          CHANGED_FILES: '${{ steps.changed-files.outputs.changed_files }}'
+          CHANGED_FILES: "${{ steps.changed-files.outputs.changed_files }}"
         run: |
           MAINTAINERS_LIST=$(./ci/tag-maintainers/extract-maintainers.py \
             --changed-files "$CHANGED_FILES" \
