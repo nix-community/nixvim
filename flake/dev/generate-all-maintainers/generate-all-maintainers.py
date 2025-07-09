@@ -104,7 +104,8 @@ class MetaMaintainerGenerator:
         print(f"📦 Nixpkgs maintainers: {len(nixpkgs_maintainers)}")
 
         with open(self.output_file, "w") as f:
-            f.write(inspect.cleandoc("""
+            f.write(
+                inspect.cleandoc("""
               # Nixvim all maintainers list.
               #
               # This file lists all referenced maintainers in Nixvim.
@@ -114,7 +115,8 @@ class MetaMaintainerGenerator:
               #
               # To regenerate: nix run .#generate-all-maintainers
               #
-            """))
+            """)
+            )
 
             # Use the formatted maintainers from Nix evaluation
             print(

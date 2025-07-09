@@ -37,7 +37,7 @@ def extract_maintainers(changed_files: List[str], pr_author: str) -> List[str]:
 
     print("Finding maintainers for changed files...", file=sys.stderr)
 
-    changed_files_nix = '[ ' + ' '.join(f'"{f}"' for f in changed_files) + ' ]'
+    changed_files_nix = "[ " + " ".join(f'"{f}"' for f in changed_files) + " ]"
 
     nix_expr = f"""
     let
@@ -83,10 +83,16 @@ def extract_maintainers(changed_files: List[str], pr_author: str) -> List[str]:
     filtered_maintainers = [m for m in maintainers if m != pr_author]
 
     if not filtered_maintainers:
-        print("No maintainers found for changed files (or only the PR author is a maintainer).", file=sys.stderr)
+        print(
+            "No maintainers found for changed files (or only the PR author is a maintainer).",
+            file=sys.stderr,
+        )
         return []
     else:
-        print(f"Found maintainers to notify: {' '.join(filtered_maintainers)}", file=sys.stderr)
+        print(
+            f"Found maintainers to notify: {' '.join(filtered_maintainers)}",
+            file=sys.stderr,
+        )
         return filtered_maintainers
 
 
@@ -107,9 +113,9 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-    changed_files = [f.strip() for f in args.changed_files.split('\n') if f.strip()]
+    changed_files = [f.strip() for f in args.changed_files.split("\n") if f.strip()]
     maintainers = extract_maintainers(changed_files, args.pr_author)
-    print(' '.join(maintainers))
+    print(" ".join(maintainers))
 
 
 if __name__ == "__main__":
