@@ -10,14 +10,15 @@ import argparse
 import json
 import subprocess
 import sys
+from pathlib import Path
 from typing import List
 
 
-def run_nix_eval(expr: str) -> str:
+def run_nix_eval(file: str, *args: str) -> str:
     """Run a Nix evaluation expression and return the result."""
     try:
         result = subprocess.run(
-            ["nix", "eval", "--impure", "--json", "--expr", expr],
+            ["nix-instantiate", "--eval", "--strict", "--json", file] + list(args),
             capture_output=True,
             text=True,
             check=True,
@@ -37,42 +38,9 @@ def extract_maintainers(changed_files: List[str], pr_author: str) -> List[str]:
 
     print("Finding maintainers for changed files...", file=sys.stderr)
 
+    file = Path(__file__).parent / "extract-maintainers.nix"
     changed_files_nix = "[ " + " ".join(f'"{f}"' for f in changed_files) + " ]"
-
-    nix_expr = f"""
-    let
-      nixvim = import ./.;
-      lib = nixvim.inputs.nixpkgs.lib;
-      emptyConfig = nixvim.lib.nixvim.evalNixvim {{
-        modules = [ {{ _module.check = false; }} ];
-        extraSpecialArgs.pkgs = null;
-      }};
-      inherit (emptyConfig.config.meta) maintainers;
-
-      changedFiles = {changed_files_nix};
-
-      # Find maintainers for files that match changed plugin directories
-      relevantMaintainers = lib.concatLists (
-        lib.mapAttrsToList (path: maintainerList:
-          let
-            matchingFiles = lib.filter (file:
-              lib.hasSuffix (dirOf file) path
-            ) changedFiles;
-          in
-            if matchingFiles != [] then maintainerList else []
-        ) maintainers
-      );
-
-      # Extract GitHub usernames
-      githubUsers = lib.concatMap (maintainer:
-        if maintainer ? github then [ maintainer.github ] else []
-      ) relevantMaintainers;
-
-    in
-      lib.unique githubUsers
-    """
-
-    result = run_nix_eval(nix_expr)
+    result = run_nix_eval(file, "--arg", "changedFiles", changed_files_nix)
 
     try:
         maintainers = json.loads(result)
