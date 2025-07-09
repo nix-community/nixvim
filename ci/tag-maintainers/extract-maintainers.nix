@@ -12,20 +12,19 @@ let
   inherit (emptyConfig.config.meta) maintainers;
 
   # Find maintainers for files that match changed plugin directories
-  relevantMaintainers = lib.concatLists (
-    lib.mapAttrsToList (
-      path: maintainerList:
-      let
-        matchingFiles = lib.filter (file: lib.hasSuffix (dirOf file) path) changedFiles;
-      in
-      if matchingFiles != [ ] then maintainerList else [ ]
-    ) maintainers
-  );
+  relevantMaintainers = lib.pipe maintainers [
+    (lib.filterAttrs (path: _: lib.any (file: lib.hasSuffix (dirOf file) path) changedFiles))
+    lib.attrValues
+    lib.concatLists
+    lib.unique
+  ];
 
   # Extract GitHub usernames
-  githubUsers = lib.concatMap (
-    maintainer: if maintainer ? github then [ maintainer.github ] else [ ]
-  ) relevantMaintainers;
+  githubUsers = lib.pipe relevantMaintainers [
+    (lib.filter (maintainer: maintainer ? github))
+    (map (maintainer: maintainer.github))
+    lib.unique
+  ];
 
 in
-lib.unique githubUsers
+githubUsers
