@@ -67,52 +67,9 @@ jobs:
           PR_AUTHOR: "${{ github.event.pull_request.user.login }}"
           CHANGED_FILES: '${{ steps.changed-files.outputs.changed_files }}'
         run: |
-          if [[ -z "$CHANGED_FILES" ]]; then
-            echo "No plugin files changed. No maintainers to tag."
-            echo "maintainers=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "Evaluating nixvim meta system for all maintainers..."
-          # Get a JSON object mapping plugin paths to maintainer data.
-          ALL_MAINTAINERS=$(nix eval --impure --expr "
-            let
-              nixvim = import ./.;
-              lib = nixvim.inputs.nixpkgs.lib.extend nixvim.lib.overlay;
-              emptyConfig = lib.nixvim.evalNixvim {
-                modules = [ { _module.check = false; } ];
-                extraSpecialArgs = { pkgs = null; };
-              };
-              inherit (emptyConfig.config.meta) maintainers;
-            in
-              maintainers
-          " --json 2>/dev/null || echo "{}")
-
-          echo "Finding maintainers for changed files..."
-          FOUND_MAINTAINERS=$(
-            echo "$CHANGED_FILES" | while IFS= read -r FILE; do
-              [[ -z "$FILE" ]] && continue
-              PLUGIN_DIR=$(dirname "$FILE")
-
-              # Use jq to find maintainers whose path key ends with the plugin directory.
-              echo "$ALL_MAINTAINERS" | jq -r --arg plugindir "$PLUGIN_DIR" '
-                to_entries[] |
-                select(.key | endswith($plugindir)) |
-                .value[] |
-                select(has("github")) |
-                .github
-              ' 2>/dev/null
-            done
-          )
-
-          # De-duplicate the list, remove the PR author, and format as a space-separated string.
-          MAINTAINERS_LIST=$(echo "$FOUND_MAINTAINERS" | grep -v -w -F "$PR_AUTHOR" | sort -u | tr '\n' ' ' | sed 's/ *$//')
-
-          if [[ -z "$MAINTAINERS_LIST" ]]; then
-            echo "No maintainers found for changed files (or only the PR author is a maintainer)."
-          else
-            echo "Found maintainers to notify: $MAINTAINERS_LIST"
-          fi
+          MAINTAINERS_LIST=$(./ci/tag-maintainers/extract-maintainers.py \
+            --changed-files "$CHANGED_FILES" \
+            --pr-author "$PR_AUTHOR")
 
           echo "maintainers=$MAINTAINERS_LIST" >> "$GITHUB_OUTPUT"
 
