@@ -39,8 +39,9 @@ def extract_maintainers(changed_files: List[str], pr_author: str) -> List[str]:
     print("Finding maintainers for changed files...", file=sys.stderr)
 
     file = Path(__file__).parent / "extract-maintainers.nix"
-    changed_files_nix = "[ " + " ".join(f'"{f}"' for f in changed_files) + " ]"
-    result = run_nix_eval(file, "--arg", "changedFiles", changed_files_nix)
+    result = run_nix_eval(
+        file, "--argstr", "changedFilesJson", json.dumps(changed_files)
+    )
 
     try:
         maintainers = json.loads(result)
