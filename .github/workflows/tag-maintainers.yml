@@ -135,45 +135,6 @@ jobs:
           echo "new_reviewers=${NEW_REVIEWERS_LIST% }" >> "$GITHUB_OUTPUT"
           echo "New reviewers to add: ${NEW_REVIEWERS_LIST% }"
 
-      # Remove reviewers who are no longer maintainers of the changed files.
-      - name: Remove outdated reviewers
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
-          MAINTAINERS: ${{ steps.extract-maintainers.outputs.maintainers }}
-          PENDING_REVIEWERS: ${{ steps.current-reviewers.outputs.pending_reviewers }}
-          REPO: ${{ github.repository }}
-          PR_NUM: ${{ github.event.pull_request.number }}
-        run: |
-          remove_reviewers() {
-            local reviewers_to_remove="$1"
-            local reason="$2"
-            for REVIEWER in $reviewers_to_remove; do
-              echo "Removing review request from $REVIEWER ($reason)"
-              REVIEWER_JSON=$(jq -n -c --arg r "$REVIEWER" '{reviewers: [$r]}')
-              gh api --method DELETE "/repos/$REPO/pulls/$PR_NUM/requested_reviewers" \
-                --input - <<< "$REVIEWER_JSON" > /dev/null
-            done
-          }
-
-          # If no maintainers were found for the current set of files, remove all pending reviewers.
-          if [[ -z "$MAINTAINERS" ]]; then
-            if [[ -n "$PENDING_REVIEWERS" ]]; then
-              echo "No plugin maintainers found, removing all pending reviewers."
-              remove_reviewers "$PENDING_REVIEWERS" "no longer a maintainer of changed files"
-            fi
-            exit 0
-          fi
-
-          # Find reviewers who are in the pending list but NOT in the current maintainer list.
-          CURRENT_MAINTAINERS=$(echo "$MAINTAINERS" | tr ' ' '\n' | sort -u)
-          OUTDATED_REVIEWERS=$(comm -23 <(echo "$PENDING_REVIEWERS" | tr ' ' '\n' | sort -u) <(echo "$CURRENT_MAINTAINERS"))
-
-          if [[ -n "$OUTDATED_REVIEWERS" ]]; then
-            remove_reviewers "$OUTDATED_REVIEWERS" "no longer a maintainer of changed files"
-          else
-            echo "No outdated reviewers to remove."
-          fi
-
       # Add the new, filtered list of maintainers as reviewers to the PR.
       - name: Add new reviewers
         env:
