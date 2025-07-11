@@ -73,79 +73,23 @@ jobs:
 
           echo "maintainers=$MAINTAINERS_LIST" >> "$GITHUB_OUTPUT"
 
-      # Get lists of existing reviewers to avoid duplicates.
-      - name: Get current reviewers
-        id: current-reviewers
+      # Manage reviewers
+      - name: Manage reviewers
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
-          PR_NUM: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-        run: |
-          PENDING_REVIEWERS=$(gh pr view "$PR_NUM" --json reviewRequests --jq '.reviewRequests[].login')
-          PAST_REVIEWERS=$(gh api "repos/$REPO/pulls/$PR_NUM/reviews" --jq '.[].user.login')
-          USERS_TO_EXCLUDE=$(printf "%s\n%s" "$PENDING_REVIEWERS" "$PAST_REVIEWERS" | sort -u)
-
-          {
-            echo "pending_reviewers<<EOF"
-            echo "$PENDING_REVIEWERS"
-            echo EOF
-            echo "users_to_exclude<<EOF"
-            echo "$USERS_TO_EXCLUDE"
-            echo EOF
-          } >> $GITHUB_OUTPUT
-
-          echo "Current pending reviewers: $PENDING_REVIEWERS"
-          echo "Complete list of users to exclude: $USERS_TO_EXCLUDE"
-
-      # Filter the maintainer list to only include repository collaborators.
-      # You can only request reviews from users with at least triage permissions.
-      - name: Check maintainer collaborator status
-        id: check-collaborators
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           MAINTAINERS: ${{ steps.extract-maintainers.outputs.maintainers }}
-          USERS_TO_EXCLUDE: ${{ steps.current-reviewers.outputs.users_to_exclude }}
-          REPO: "${{ github.repository }}"
+          CHANGED_FILES: ${{ steps.changed-files.outputs.changed_files }}
+          BOT_NAME: ${{ steps.app-token.outputs.app-slug || 'github-actions' }}
         run: |
-          NEW_REVIEWERS=()
-
-          # If there are no maintainers, exit early.
-          if [[ -z "$MAINTAINERS" ]]; then
-            echo "No maintainers to check."
-            echo "new_reviewers=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          for MAINTAINER in $MAINTAINERS; do
-            if echo "$USERS_TO_EXCLUDE" | grep -q -w "$MAINTAINER"; then
-              echo "$MAINTAINER is already involved in the review, skipping."
-              continue
-            fi
-
-            echo "Checking if $MAINTAINER is a collaborator..."
-            if gh api "/repos/$REPO/collaborators/$MAINTAINER" --silent; then
-              echo "User $MAINTAINER is a collaborator, adding to new reviewers list."
-              NEW_REVIEWERS+=("$MAINTAINER")
-            else
-              echo "User $MAINTAINER is not a repository collaborator, skipping."
-            fi
-          done
-
-          NEW_REVIEWERS_LIST=$(printf "%s " "${NEW_REVIEWERS[@]}")
-          echo "new_reviewers=${NEW_REVIEWERS_LIST% }" >> "$GITHUB_OUTPUT"
-          echo "New reviewers to add: ${NEW_REVIEWERS_LIST% }"
-
-      # Add the new, filtered list of maintainers as reviewers to the PR.
-      - name: Add new reviewers
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
-          NEW_REVIEWERS: ${{ steps.check-collaborators.outputs.new_reviewers }}
-          PR_NUM: ${{ github.event.pull_request.number }}
-        run: |
-          if [[ -n "$NEW_REVIEWERS" ]]; then
-            REVIEWERS_CSV=$(echo "$NEW_REVIEWERS" | tr ' ' ',')
-            echo "Requesting reviews from: $REVIEWERS_CSV"
-            gh pr edit "$PR_NUM" --add-reviewer "$REVIEWERS_CSV"
-          else
-            echo "No new reviewers to add."
-          fi
+          ./ci/tag-maintainers/manage-reviewers.py \
+            --owner "$OWNER" \
+            --repo "$REPO" \
+            --pr-number "$PR_NUMBER" \
+            --pr-author "$PR_AUTHOR" \
+            --current-maintainers "$MAINTAINERS" \
+            --changed-files "$CHANGED_FILES" \
+            --bot-user-name "$BOT_NAME"
