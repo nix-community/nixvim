@@ -173,3 +173,9 @@ owner = "r17x"
 title = "development universe"
 description = "Nix configuration for development, including NixVim"
 url = "https://github.com/r17x/universe/tree/main/nix/nvim.nix"
+
+[[config]]
+owner = "c4patino"
+title = "yumevim"
+description = "nixvim flake, rather minimalist translation of my lua configuration"
+url = "https://github.com/c4patino/nixvim"
