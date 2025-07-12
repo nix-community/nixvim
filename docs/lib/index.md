@@ -10,7 +10,7 @@ If Nixvim is built using the standalone method, you can access our "helpers" as 
 }
 ```
 
-If Nixvim is being used as as a home-manager module, a nixos module, or as a dawwin module,
+If Nixvim is being used as as a home-manager module, a nixos module, or as a darwin module,
 our "helpers" can be accessed via the `config.lib` option:
 
 ```nix
