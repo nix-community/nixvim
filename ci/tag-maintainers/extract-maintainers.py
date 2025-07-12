@@ -27,7 +27,7 @@ def run_nix_eval(file: str, *args: str) -> str:
     except subprocess.CalledProcessError as e:
         print(f"Error running Nix evaluation: {e}", file=sys.stderr)
         print(f"Stderr: {e.stderr}", file=sys.stderr)
-        return "[]"
+        sys.exit()
 
 
 def extract_maintainers(changed_files: List[str], pr_author: str) -> List[str]:
