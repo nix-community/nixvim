@@ -8,7 +8,9 @@
     dev-nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     # flake-compat is used by the root `default.nix` to allow non-flake users to import nixvim
-    flake-compat.url = "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz";
+    #
+    # The pinned PR resolves an issue with shallow clones, such as those used by CI.
+    flake-compat.url = "github:edolstra/flake-compat?ref=pull/75/merge";
 
     # keep-sorted start block=yes newline_separated=yes
     devshell = {
