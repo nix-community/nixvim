@@ -1,145 +1,138 @@
 {
   lib,
-  helpers,
   config,
-  pkgs,
-  options,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.diffview;
-  mkWinConfig =
-    {
-      type ? null,
-      width ? null,
-      height ? null,
-      position ? null,
-    }:
-    with helpers.defaultNullOpts;
-    {
-      type =
-        mkEnum
-          [
-            "split"
-            "float"
-          ]
-          type
-          ''
-            Determines whether the window should be a float or a normal
-            split.
-          '';
-
-      width = mkInt width ''
-        The width of the window (in character cells). If `type` is
-        `"split"` then this is only applicable when `position` is
-        `"left"|"right"`.
-      '';
-
-      height = mkInt height ''
-        The height of the window (in character cells). If `type` is
-        `"split"` then this is only applicable when `position` is
-        `"top"|"bottom"`.
-      '';
-
-      position =
-        mkEnum
-          [
-            "left"
-            "top"
-            "right"
-            "bottom"
-          ]
-          position
-          ''
-            Determines where the panel is positioned (only when
-            `type="split"`).
-          '';
-
-      relative =
-        mkEnum
-          [
-            "editor"
-            "win"
-          ]
-          "editor"
-          ''
-            Determines what the `position` is relative to (when
-            `type="split"`).
-          '';
-
-      win = mkInt 0 ''
-        The window handle of the target relative window (when
-        `type="split"`. Only when `relative="win"`). Use `0` for
-        current window.
-      '';
-
-      winOpts = mkAttributeSet { } ''
-        Table of window local options (see |vim.opt_local|).
-        These options are applied whenever the window is opened.
-      '';
-    };
+  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib) types;
 in
-{
-  options.plugins.diffview =
-    with helpers.defaultNullOpts;
-    lib.nixvim.plugins.neovim.extraOptionsOptions
-    // {
-      enable = mkEnableOption "diffview";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "diffview";
+  packPathName = "diffview.nvim";
+  package = "diffview-nvim";
 
-      package = lib.mkPackageOption pkgs "diffview" {
-        default = [
-          "vimPlugins"
-          "diffview-nvim"
-        ];
-      };
+  maintainers = [ lib.maintainers.khaneliman ];
 
-      diffBinaries = mkBool false ''
+  settingsOptions =
+    let
+      mkWinConfig =
+        {
+          type ? null,
+          width ? null,
+          height ? null,
+          position ? null,
+        }:
+        {
+          type =
+            defaultNullOpts.mkEnum
+              [
+                "split"
+                "float"
+              ]
+              type
+              ''
+                Determines whether the window should be a float or a normal
+                split.
+              '';
+
+          width = defaultNullOpts.mkInt width ''
+            The width of the window (in character cells). If `type` is
+            `"split"` then this is only applicable when `position` is
+            `"left"|"right"`.
+          '';
+
+          height = defaultNullOpts.mkInt height ''
+            The height of the window (in character cells). If `type` is
+            `"split"` then this is only applicable when `position` is
+            `"top"|"bottom"`.
+          '';
+
+          position =
+            defaultNullOpts.mkEnum
+              [
+                "left"
+                "top"
+                "right"
+                "bottom"
+              ]
+              position
+              ''
+                Determines where the panel is positioned (only when
+                `type="split"`).
+              '';
+
+          relative =
+            defaultNullOpts.mkEnum
+              [
+                "editor"
+                "win"
+              ]
+              "editor"
+              ''
+                Determines what the `position` is relative to (when
+                `type="split"`).
+              '';
+
+          win = defaultNullOpts.mkInt 0 ''
+            The window handle of the target relative window (when
+            `type="split"`. Only when `relative="win"`). Use `0` for
+            current window.
+          '';
+
+          win_opts = defaultNullOpts.mkAttributeSet { } ''
+            Table of window local options (see |vim.opt_local|).
+            These options are applied whenever the window is opened.
+          '';
+        };
+    in
+    {
+      diff_binaries = defaultNullOpts.mkBool false ''
         Show diffs for binaries
       '';
 
-      enhancedDiffHl = mkBool false ''
+      enhanced_diff_hl = defaultNullOpts.mkBool false ''
         See ':h diffview-config-enhanced_diff_hl'
       '';
 
-      gitCmd = mkListOf types.str [ "git" ] ''
+      git_cmd = defaultNullOpts.mkListOf types.str [ "git" ] ''
         The git executable followed by default args.
       '';
 
-      hgCmd = mkListOf types.str [ "hg" ] ''
+      hg_cmd = defaultNullOpts.mkListOf types.str [ "hg" ] ''
         The hg executable followed by default args.
       '';
 
-      useIcons = mkOption {
+      use_icons = lib.lib.mkOption {
         type = types.bool;
         description = "Requires nvim-web-devicons";
         default = true;
       };
 
-      showHelpHints = mkBool true ''
+      show_help_hints = defaultNullOpts.mkBool true ''
         Show hints for how to open the help panel
       '';
 
-      watchIndex = mkBool true ''
+      watch_index = defaultNullOpts.mkBool.true ''
         Update views and index buffers when the git index changes.
       '';
 
       icons = {
-        folderClosed = mkStr "" ''
+        folder_closed = defaultNullOpts.mkStr "" ''
           Only applies when use_icons is true.
         '';
 
-        folderOpen = mkStr "" ''
+        folder_open = defaultNullOpts.mkStr "" ''
           Only applies when use_icons is true.
         '';
       };
 
       signs = {
-        foldClosed = mkStr "" "";
+        fold_closed = defaultNullOpts.mkStr "" "";
 
-        foldOpen = mkStr "" "";
+        fold_open = defaultNullOpts.mkStr "" "";
 
-        done = mkStr "✓" "";
+        done = defaultNullOpts.mkStr "✓" "";
       };
 
       view =
@@ -167,7 +160,7 @@ in
         {
           default = {
             layout =
-              mkEnum
+              defaultNullOpts.mkEnum
                 [
                   "diff2_horizontal"
                   "diff2_vertical"
@@ -184,14 +177,14 @@ in
                   ${diff2VerticalDescription}
                 '';
 
-            winbarInfo = mkBool false ''
+            winbarInfo = defaultNullOpts.mkBool.false ''
               See ':h diffview-config-view.x.winbar_info'
             '';
           };
 
-          mergeTool = {
+          merge_tool = {
             layout =
-              mkEnum
+              defaultNullOpts.mkEnum
                 [
                   "diff1_plain"
                   "diff3_horizontal"
@@ -238,18 +231,18 @@ in
 
                 '';
 
-            disableDiagnostics = mkBool true ''
+            disable_diagnostics = defaultNullOpts.mkBool.true ''
               Temporarily disable diagnostics for conflict buffers while in the view.
             '';
 
-            winbarInfo = mkBool true ''
+            winbar_info = defaultNullOpts.mkBool.true ''
               See ':h diffview-config-view.x.winbar_info'
             '';
           };
 
-          fileHistory = {
+          file_history = {
             layout =
-              mkEnum
+              defaultNullOpts.mkEnum
                 [
                   "diff2_horizontal"
                   "diff2_vertical"
@@ -266,15 +259,15 @@ in
                   ${diff2VerticalDescription}
                 '';
 
-            winbarInfo = mkBool false ''
+            winbar_info = defaultNullOpts.mkBool.false ''
               See ':h diffview-config-view.x.winbar_info'
             '';
           };
         };
 
-      filePanel = {
-        listingStyle =
-          mkEnum
+      file_panel = {
+        listing_style =
+          defaultNullOpts.mkEnum
             [
               "list"
               "tree"
@@ -284,18 +277,18 @@ in
               One of 'list' or 'tree'
             '';
 
-        treeOptions =
+        tree_options =
           let
             commonDesc = "Only applies when listing_style is 'tree'";
           in
           {
-            flattenDirs = mkBool true ''
+            flattenDirs = defaultNullOpts.mkBool.true ''
               Flatten dirs that only contain one single dir
               ${commonDesc}
             '';
 
             folderStatuses =
-              mkEnum
+              defaultNullOpts.mkEnum
                 [
                   "never"
                   "only_folded"
@@ -307,17 +300,17 @@ in
                   ${commonDesc}
                 '';
           };
-        winConfig = mkWinConfig {
+        win_config = mkWinConfig {
           type = "split";
           width = 35;
           position = "left";
         };
       };
-      fileHistoryPanel = {
+      file_history_panel = {
         logOptions =
           let
-            mkNullStr = helpers.mkNullOrOption types.str;
-            mkNullBool = helpers.mkNullOrOption types.bool;
+            mkNullStr = lib.nixvim.mkNullOrOption types.str;
+            mkNullBool = lib.nixvim.mkNullOrOption types.bool;
             logOptions = {
               base = mkNullStr ''
                 Specify a base git rev from which the right side of the diff
@@ -325,11 +318,11 @@ in
                 local version of the file.
               '';
 
-              revRange = mkNullStr ''
+              rev_range = mkNullStr ''
                 List only the commits in the specified revision range.
               '';
 
-              pathArgs = mkListOf types.str [ ] ''
+              path_args = defaultNullOpts.mkListOf.types.str [ ] ''
                 Limit the target files to only the files matching the given
                 path arguments (git pathspec is supported).
               '';
@@ -338,11 +331,11 @@ in
                 Follow renames (only for single file).
               '';
 
-              firstParent = mkNullBool ''
+              first_parent = mkNullBool ''
                 Follow only the first parent upon seeing a merge commit.
               '';
 
-              showPulls = mkNullBool ''
+              show_pulls = mkNullBool ''
                 Show merge commits that are not TREESAME to its first parent,
                 but are to a later parent.
               '';
@@ -359,7 +352,7 @@ in
                 List only merge commits.
               '';
 
-              noMerges = mkNullBool ''
+              no_merges = mkNullBool ''
                 List no merge commits.
               '';
 
@@ -367,35 +360,35 @@ in
                 List commits in reverse order.
               '';
 
-              cherryPick = mkNullBool ''
+              cherry_pick = mkNullBool ''
                 Omit commits that introduce the same change as another commit
                 on the "other side" when the set of commits are limited with
                 symmetric difference.
               '';
 
-              leftOnly = mkNullBool ''
+              left_only = mkNullBool ''
                 List only the commits on the left side of a symmetric
                 difference.
               '';
 
-              rightOnly = mkNullBool ''
+              right_only = mkNullBool ''
                 List only the commits on the right side of a symmetric
                 difference.
               '';
 
-              maxCount = helpers.mkNullOrOption types.int ''
+              max_count = lib.nixvim.mkNullOrOption types.int ''
                 Limit the number of commits.
               '';
 
-              l = mkListOf types.str [ ] ''
+              l = defaultNullOpts.mkListOf.types.str [ ] ''
                 `{ ("<start>,<end>:<file>" | ":<funcname>:<file>")... }`
 
                 Trace the evolution of the line range given by <start>,<end>,
                 or by the function name regex <funcname>, within the <file>.
               '';
 
-              diffMerges =
-                helpers.mkNullOrOption
+              diff_merges =
+                lib.nixvim.mkNullOrOption
                   (types.enum [
                     "off"
                     "on"
@@ -434,43 +427,43 @@ in
           in
           {
             git = {
-              singleFile = logOptions;
+              single_file = logOptions;
 
-              multiFile = logOptions;
+              multi_file = logOptions;
             };
             hg = {
-              singleFile = logOptions;
+              single_file = logOptions;
 
-              multiFile = logOptions;
+              multi_file = logOptions;
             };
           };
-        winConfig = mkWinConfig {
+        win_config = mkWinConfig {
           type = "split";
           height = 16;
           position = "bottom";
         };
       };
 
-      commitLogPanel = {
+      commit_log_panel = {
         winConfig = mkWinConfig { type = "float"; };
       };
 
-      defaultArgs =
+      default_args =
         let
           commonDesc = "Default args prepended to the arg-list for the listed commands";
         in
         {
-          diffviewOpen = mkListOf types.str [ ] commonDesc;
+          DiffviewOpen = defaultNullOpts.mkListOf.types.str [ ] commonDesc;
 
-          diffviewFileHistory = mkListOf types.str [ ] commonDesc;
+          DiffviewFileHistory = defaultNullOpts.mkListOf.types.str [ ] commonDesc;
         };
 
       hooks =
         let
-          mkNullStr = helpers.mkNullOrOption types.str;
+          mkNullStr = lib.nixvim.mkNullOrOption types.str;
         in
         {
-          viewOpened = mkNullStr ''
+          view_opened = mkNullStr ''
             {view_opened} (`fun(view: View)`)
 
               Emitted after a new view has been opened. It's called after
@@ -482,7 +475,7 @@ in
                       The `View` instance that was opened.
           '';
 
-          viewClosed = mkNullStr ''
+          view_closed = mkNullStr ''
             {view_closed} (`fun(view: View)`)
 
                 Emitted after closing a view.
@@ -492,7 +485,7 @@ in
                         The `View` instance that was closed.
           '';
 
-          viewEnter = mkNullStr ''
+          view_enter = mkNullStr ''
             {view_enter} (`fun(view: View)`)
 
                 Emitted just after entering the tabpage of a view.
@@ -502,7 +495,7 @@ in
                         The `View` instance that was entered.
           '';
 
-          viewLeave = mkNullStr ''
+          view_leave = mkNullStr ''
             {view_leave} (`fun(view: View)`)
 
                 Emitted just before leaving the tabpage of a view.
@@ -512,7 +505,7 @@ in
                         The `View` instance that's about to be left.
           '';
 
-          viewPostLayout = mkNullStr ''
+          view_post_layout = mkNullStr ''
             {view_post_layout} (`fun(view: View)`)
 
                 Emitted after the window layout in a view has been adjusted.
@@ -522,7 +515,7 @@ in
                         The `View` whose layout was adjusted.
           '';
 
-          diffBufRead = mkNullStr ''
+          diff_buf_read = mkNullStr ''
             {diff_buf_read} (`fun(bufnr: integer, ctx: table)`)
 
                 Emitted after a new diff buffer is ready (the first time it's
@@ -547,7 +540,7 @@ in
                           The name of the current layout.
           '';
 
-          diffBufWinEnter = mkNullStr ''
+          diff_buf_win_enter = mkNullStr ''
             {diff_buf_win_enter} (`fun(bufnr: integer, winid: integer, ctx: table)`)
 
                 Emitted after a diff buffer is displayed in a window.
@@ -577,26 +570,26 @@ in
         let
           keymapList =
             desc:
-            mkOption {
+            lib.mkOption {
               type = types.listOf (
                 types.submodule {
                   options = {
-                    mode = mkOption {
+                    mode = lib.mkOption {
                       type = types.str;
                       description = "mode to bind keybinding to";
                       example = "n";
                     };
-                    key = mkOption {
+                    key = lib.mkOption {
                       type = types.str;
                       description = "key to bind keybinding to";
                       example = "<tab>";
                     };
-                    action = mkOption {
+                    action = lib.mkOption {
                       type = types.str;
                       description = "action for keybinding";
                       example = "action.select_next_entry";
                     };
-                    description = mkOption {
+                    description = lib.mkOption {
                       type = types.nullOr types.str;
                       description = "description for keybinding";
                       default = null;
@@ -620,7 +613,7 @@ in
             };
         in
         {
-          disableDefaults = mkBool false ''
+          disable_defaults = defaultNullOpts.mkBool.false ''
             Disable the default keymaps.
           '';
 
@@ -642,163 +635,29 @@ in
           diff4 = keymapList ''
             Mappings in 4-way diff layouts
           '';
-          filePanel = keymapList ''
+          file_panel = keymapList ''
             Mappings in file panel.
           '';
-          fileHistoryPanel = keymapList ''
+          file_history_panel = keymapList ''
             Mappings in file history panel.
           '';
-          optionPanel = keymapList ''
+          option_panel = keymapList ''
             Mappings in options panel.
           '';
-          helpPanel = keymapList ''
+          help_panel = keymapList ''
             Mappings in help panel.
           '';
         };
 
-      disableDefaultKeymaps = mkBool false ''
+      disable_default_keymaps = defaultNullOpts.mkBool.false ''
         Disable the default keymaps;
       '';
     };
 
-  config =
+  extraConfig =
+    cfg:
     let
       setupOptions = with cfg; {
-        diff_binaries = diffBinaries;
-        enhanced_diff_hl = enhancedDiffHl;
-        git_cmd = gitCmd;
-        hg_cmd = hgCmd;
-        use_icons = useIcons;
-        show_help_hints = showHelpHints;
-        watch_index = watchIndex;
-
-        icons = {
-          folder_closed = icons.folderClosed;
-          folder_open = icons.folderOpen;
-        };
-
-        signs = with signs; {
-          fold_closed = foldClosed;
-          fold_open = foldOpen;
-          inherit done;
-        };
-
-        view = with view; {
-          default = with default; {
-            inherit layout;
-            winbar_info = winbarInfo;
-          };
-
-          merge_tool = with mergeTool; {
-            inherit layout;
-            disable_diagnostics = disableDiagnostics;
-            winbar_info = winbarInfo;
-          };
-
-          file_history = with fileHistory; {
-            inherit layout;
-            winbar_info = winbarInfo;
-          };
-        };
-
-        file_panel = with filePanel; {
-          listing_style = listingStyle;
-
-          tree_options = with treeOptions; {
-            flatten_dirs = flattenDirs;
-            folder_statuses = folderStatuses;
-          };
-
-          win_config = with winConfig; {
-            inherit type;
-            inherit width;
-            inherit height;
-            inherit position;
-            inherit relative;
-            inherit win;
-            win_opts = winOpts;
-          };
-        };
-
-        file_history_panel = with fileHistoryPanel; {
-          log_options =
-            with logOptions;
-            let
-              setupLogOptions =
-                opts: with opts; {
-                  inherit base;
-                  rev_range = revRange;
-                  path_args = pathArgs;
-                  inherit follow;
-                  first_parent = firstParent;
-                  show_pulls = showPulls;
-                  inherit reflog;
-                  inherit all;
-                  inherit merges;
-                  no_merges = noMerges;
-                  inherit reverse;
-                  cherry_pick = cherryPick;
-                  left_only = leftOnly;
-                  right_only = rightOnly;
-                  max_count = maxCount;
-                  L = l;
-                  diff_merges = diffMerges;
-                  inherit author;
-                  inherit grep;
-                  G = g;
-                  S = s;
-                };
-            in
-            {
-              git = with git; {
-                single_file = setupLogOptions singleFile;
-                multi_file = setupLogOptions multiFile;
-              };
-
-              hg = with hg; {
-                single_file = setupLogOptions singleFile;
-                multi_file = setupLogOptions multiFile;
-              };
-            };
-
-          win_config = with winConfig; {
-            inherit type;
-            inherit width;
-            inherit height;
-            inherit position;
-            inherit relative;
-            inherit win;
-            win_opts = winOpts;
-          };
-        };
-
-        commit_log_panel = with commitLogPanel; {
-          win_config = with winConfig; {
-            inherit type;
-            inherit width;
-            inherit height;
-            inherit position;
-            inherit relative;
-            inherit win;
-            win_opts = winOpts;
-          };
-        };
-
-        default_args = with defaultArgs; {
-          DiffviewOpen = diffviewOpen;
-          DiffviewFileHistory = diffviewFileHistory;
-        };
-
-        hooks = with hooks; {
-          view_opened = viewOpened;
-          view_closed = viewClosed;
-          view_enter = viewEnter;
-          view_leave = viewLeave;
-          view_post_layout = viewPostLayout;
-          diff_buf_read = diffBufRead;
-          diff_buf_win_enter = diffBufWinEnter;
-        };
-
         keymaps =
           with keymaps;
           let
@@ -822,20 +681,12 @@ in
           };
       };
     in
-    mkIf cfg.enable {
-      # TODO: added 2024-09-20 remove after 24.11
-      plugins.web-devicons = mkIf (
-        !(
-          config.plugins.mini.enable
-          && config.plugins.mini.modules ? icons
-          && config.plugins.mini.mockDevIcons
-        )
-      ) { enable = mkOverride 1490 true; };
-
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = ''
-        require("diffview").setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
+    {
     };
+
+  inherit (import ./deprecations.nix { inherit lib; })
+    imports
+    optionsRenamedToSettings
+    deprecateExtraOptions
+    ;
 }
