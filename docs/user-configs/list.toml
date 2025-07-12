@@ -50,7 +50,7 @@ description = "NixVim config, with format/lsp/debug configurations for Rust, Go,
 owner = "GaetanLepage"
 title = "nix-config"
 description = "Home-manager"
-url = "https://github.com/GaetanLepage/nix-config/tree/master/home/modules/tui/neovim"
+url = "https://github.com/GaetanLepage/nix-config/tree/master/modules/home/core/programs/neovim"
 
 [[config]]
 owner = "gwg313"
