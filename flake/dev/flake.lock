@@ -38,16 +38,18 @@
     },
     "flake-compat": {
       "locked": {
-        "lastModified": 1733328505,
-        "narHash": "sha256-NeCCThCEP3eCl2l/+27kNNK7QrwZB1IJCrXfrbv5oqU=",
-        "rev": "ff81ac966bb2cae68946d5ed5fc4994f96d0ffec",
-        "revCount": 69,
-        "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/edolstra/flake-compat/1.1.0/01948eb7-9cba-704f-bbf3-3fa956735b52/source.tar.gz"
+        "lastModified": 1752326326,
+        "narHash": "sha256-JtdaTv+1VIiZpLsULCSQte6Qg3ew5axbdpOYjo+8D2U=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "b70558fcb45e248abd2a0add41cfb6464c94eb03",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz"
+        "owner": "edolstra",
+        "ref": "pull/75/merge",
+        "repo": "flake-compat",
+        "type": "github"
       }
     },
     "git-hooks": {
