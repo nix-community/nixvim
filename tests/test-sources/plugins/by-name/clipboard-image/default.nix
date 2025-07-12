@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
+let
+  inherit (pkgs.stdenv) hostPlatform;
+in
 {
   empty = {
     plugins.clipboard-image = {
@@ -11,7 +14,10 @@
     plugins.clipboard-image = {
       enable = true;
 
-      clipboardPackage = pkgs.wl-clipboard;
+      clipboardPackage = lib.mkMerge [
+        (lib.mkIf hostPlatform.isLinux pkgs.wl-clipboard)
+        (lib.mkIf hostPlatform.isDarwin pkgs.pngpaste)
+      ];
       settings = {
         default = {
           img_dir = "img";
