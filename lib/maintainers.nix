@@ -127,6 +127,11 @@
     githubId = 2750775;
     name = "Refael Sheinker";
   };
+  saygo-png = {
+    github = "saygo-png";
+    githubId = 131687037;
+    name = "Saygo";
+  };
   sheemap = {
     github = "sheemap";
     githubId = 1442292;
