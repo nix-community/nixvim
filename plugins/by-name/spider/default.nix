@@ -1,36 +1,26 @@
 {
   lib,
-  helpers,
-  config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  pluginName = "spider";
-  cfg = config.plugins.${pluginName};
+  inherit (lib) types;
 in
-{
-  options.plugins.${pluginName} = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption pluginName;
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "spider";
+  packPathName = "nvim-spider";
+  package = "nvim-spider";
+  maintainers = [ lib.maintainers.saygo-png ];
+  description = "Use the w, e, b motions like a spider. Move by subwords and skip insignificant punctuation.";
 
-    package = lib.mkPackageOption pkgs pluginName {
-      default = [
-        "vimPlugins"
-        "nvim-spider"
-      ];
-    };
-
-    skipInsignificantPunctuation = helpers.defaultNullOpts.mkBool true "Whether to skip insignificant punctuation.";
-
+  extraOptions = {
     keymaps = {
-      silent = mkOption {
-        type = types.bool;
-        description = "Whether ${pluginName} keymaps should be silent.";
+      silent = lib.mkOption {
+        type = lib.types.bool;
+        description = "Whether spider keymaps should be silent.";
         default = false;
       };
 
-      motions = mkOption {
+      motions = lib.mkOption {
         type = types.attrsOf types.str;
         description = ''
           Mappings for spider motions.
@@ -48,34 +38,24 @@ in
     };
   };
 
-  config =
-    let
-      setupOptions = {
-        inherit (cfg) skipInsignificantPunctuation;
-      } // cfg.extraOptions;
+  # TODO: introduced 2025-07-13: remove after 25.11
+  inherit (import ./deprecations.nix lib) deprecateExtraOptions imports;
 
-      mappings = mapAttrsToList (motion: key: {
-        mode = [
-          "n"
-          "o"
-          "x"
-        ];
-        inherit key;
-        action.__raw = "function() require('spider').motion('${motion}') end";
-        options = {
-          inherit (cfg.keymaps) silent;
-          desc = "Spider-${motion}";
-        };
-      }) cfg.keymaps.motions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-      extraLuaPackages = luaPkgs: [ luaPkgs.luautf8 ];
+  extraConfig = cfg: {
+    extraLuaPackages = luaPkgs: [ luaPkgs.luautf8 ];
 
-      keymaps = mappings;
-
-      extraConfigLua = ''
-        require("${pluginName}").setup(${lib.nixvim.toLuaObject setupOptions})
-      '';
-    };
+    keymaps = lib.mapAttrsToList (motion: key: {
+      mode = [
+        "n"
+        "o"
+        "x"
+      ];
+      inherit key;
+      action.__raw = "function() require('spider').motion('${motion}') end";
+      options = {
+        inherit (cfg.keymaps) silent;
+        desc = "Spider-${motion}";
+      };
+    }) cfg.keymaps.motions;
+  };
 }
