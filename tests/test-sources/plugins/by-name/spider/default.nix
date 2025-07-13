@@ -7,7 +7,7 @@
     plugins.spider = {
       enable = true;
 
-      skipInsignificantPunctuation = true;
+      settings.skipInsignificantPunctuation = true;
       keymaps = {
         silent = true;
         motions = {
