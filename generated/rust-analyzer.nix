@@ -28,6 +28,15 @@
       ];
     };
   };
+  "rust-analyzer.assist.preferSelf" = {
+    description = ''
+      When inserting a type (e.g. in "fill match arms" assist), prefer to use `Self` over the type name where possible.
+    '';
+    pluginDefault = false;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.assist.termSearch.borrowcheck" = {
     description = ''
       Enable borrow checking for term search code assists. If set to false, also there will be more suggestions, but some of them may not borrow-check.
@@ -894,6 +903,15 @@
         "client"
         "server"
       ];
+    };
+  };
+  "rust-analyzer.highlightRelated.branchExitPoints.enable" = {
+    description = ''
+      Enables highlighting of related return values while the cursor is on any `match`, `if`, or match arm arrow (`=>`).
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
     };
   };
   "rust-analyzer.highlightRelated.breakPoints.enable" = {
@@ -2305,7 +2323,11 @@
   };
   "rust-analyzer.workspace.symbol.search.excludeImports" = {
     description = ''
-      Exclude imports from symbol search.
+      Exclude all imports from workspace symbol search.
+
+      In addition to regular imports (which are always excluded),
+      this option removes public imports (better known as re-exports)
+      and removes imports that rename the imported symbol.
     '';
     pluginDefault = false;
     type = {
