@@ -45,6 +45,7 @@ query($owner: String!, $repo: String!, $prNumber: Int!) {
 
 class GHError(Exception):
     """Custom exception for errors related to 'gh' CLI commands."""
+
     pass
 
 
@@ -75,20 +76,35 @@ def get_manually_requested_reviewers(
 ) -> set[str]:
     """Fetches a set of reviewers who were manually requested by someone other than the bot."""
     try:
-        result = run_gh_command([
-            "api", "graphql",
-            "-f", f"query={MANUAL_REVIEW_REQUEST_QUERY}",
-            "-F", f"owner={owner}",
-            "-F", f"repo={repo}",
-            "-F", f"prNumber={pr_number}",
-        ])
+        result = run_gh_command(
+            [
+                "api",
+                "graphql",
+                "-f",
+                f"query={MANUAL_REVIEW_REQUEST_QUERY}",
+                "-F",
+                f"owner={owner}",
+                "-F",
+                f"repo={repo}",
+                "-F",
+                f"prNumber={pr_number}",
+            ]
+        )
         data = json.loads(result.stdout)
-        nodes = data.get("data", {}).get("repository", {}).get("pullRequest", {}).get("timelineItems", {}).get("nodes", [])
+        nodes = (
+            data.get("data", {})
+            .get("repository", {})
+            .get("pullRequest", {})
+            .get("timelineItems", {})
+            .get("nodes", [])
+        )
 
         manually_requested = {
             node["requestedReviewer"]["login"]
             for node in nodes
-            if node and node.get("requestedReviewer") and node.get("actor", {}).get("login") != bot_user_name
+            if node
+            and node.get("requestedReviewer")
+            and node.get("actor", {}).get("login") != bot_user_name
         }
         return manually_requested
     except (GHError, json.JSONDecodeError, KeyError) as e:
@@ -109,7 +125,15 @@ def get_users_from_gh(args: list[str], error_message: str) -> set[str]:
 def get_pending_reviewers(pr_number: int) -> set[str]:
     """Gets the set of currently pending reviewers for a PR."""
     return get_users_from_gh(
-        ["pr", "view", str(pr_number), "--json", "reviewRequests", "--jq", ".reviewRequests[].login"],
+        [
+            "pr",
+            "view",
+            str(pr_number),
+            "--json",
+            "reviewRequests",
+            "--jq",
+            ".reviewRequests[].login",
+        ],
         "Error getting pending reviewers",
     )
 
@@ -117,7 +141,12 @@ def get_pending_reviewers(pr_number: int) -> set[str]:
 def get_past_reviewers(owner: str, repo: str, pr_number: int) -> set[str]:
     """Gets the set of users who have already reviewed the PR."""
     return get_users_from_gh(
-        ["api", f"repos/{owner}/{repo}/pulls/{pr_number}/reviews", "--jq", ".[].user.login"],
+        [
+            "api",
+            f"repos/{owner}/{repo}/pulls/{pr_number}/reviews",
+            "--jq",
+            ".[].user.login",
+        ],
         "Error getting past reviewers",
     )
 
@@ -128,17 +157,14 @@ def is_collaborator(owner: str, repo: str, username: str) -> bool:
     Handles 404 as a non-collaborator, while other errors are raised.
     """
     result = run_gh_command(
-        ["api", f"repos/{owner}/{repo}/collaborators/{username}"],
-        check=False
+        ["api", f"repos/{owner}/{repo}/collaborators/{username}"], check=False
     )
 
     if result.returncode == 0:
         return True
 
     if "HTTP 404" in result.stderr:
-        logging.error(
-            "'%s' is not a collaborator in this repository.", username
-        )
+        logging.error("'%s' is not a collaborator in this repository.", username)
         return False
     else:
         logging.error(
@@ -161,22 +187,32 @@ def update_reviewers(
     if reviewers_to_add:
         logging.info("Requesting reviews from: %s", ", ".join(reviewers_to_add))
         try:
-            run_gh_command([
-                "pr", "edit", str(pr_number),
-                "--add-reviewer", ",".join(reviewers_to_add)
-            ])
+            run_gh_command(
+                [
+                    "pr",
+                    "edit",
+                    str(pr_number),
+                    "--add-reviewer",
+                    ",".join(reviewers_to_add),
+                ]
+            )
         except GHError as e:
             logging.error("Failed to add reviewers: %s", e)
 
     if reviewers_to_remove and owner and repo:
-        logging.info("Removing review requests from: %s", ", ".join(reviewers_to_remove))
+        logging.info(
+            "Removing review requests from: %s", ", ".join(reviewers_to_remove)
+        )
         payload = json.dumps({"reviewers": list(reviewers_to_remove)})
         try:
             run_gh_command(
                 [
-                    "api", "--method", "DELETE",
+                    "api",
+                    "--method",
+                    "DELETE",
                     f"repos/{owner}/{repo}/pulls/{pr_number}/requested_reviewers",
-                    "--input", "-",
+                    "--input",
+                    "-",
                 ],
                 input_data=payload,
             )
@@ -186,14 +222,28 @@ def update_reviewers(
 
 def main() -> None:
     """Main function to handle command-line arguments and manage reviewers."""
-    parser = argparse.ArgumentParser(description="Manage pull request reviewers for Nixvim.")
+    parser = argparse.ArgumentParser(
+        description="Manage pull request reviewers for Nixvim."
+    )
     parser.add_argument("--owner", required=True, help="Repository owner.")
     parser.add_argument("--repo", required=True, help="Repository name.")
-    parser.add_argument("--pr-number", type=int, required=True, help="Pull request number.")
+    parser.add_argument(
+        "--pr-number", type=int, required=True, help="Pull request number."
+    )
     parser.add_argument("--pr-author", required=True, help="PR author's username.")
-    parser.add_argument("--current-maintainers", default="", help="Space-separated list of current maintainers.")
-    parser.add_argument("--changed-files", default="", help="Newline-separated list of changed files.")
-    parser.add_argument("--bot-user-name", default="", help="Bot user name to distinguish manual vs automated review requests.")
+    parser.add_argument(
+        "--current-maintainers",
+        default="",
+        help="Space-separated list of current maintainers.",
+    )
+    parser.add_argument(
+        "--changed-files", default="", help="Newline-separated list of changed files."
+    )
+    parser.add_argument(
+        "--bot-user-name",
+        default="",
+        help="Bot user name to distinguish manual vs automated review requests.",
+    )
     args = parser.parse_args()
 
     no_plugin_files = not args.changed_files.strip()
@@ -202,12 +252,14 @@ def main() -> None:
     maintainers: set[str] = set(args.current_maintainers.split())
     pending_reviewers = get_pending_reviewers(args.pr_number)
     past_reviewers = get_past_reviewers(args.owner, args.repo, args.pr_number)
-    manually_requested = get_manually_requested_reviewers(args.owner, args.repo, args.pr_number, args.bot_user_name)
+    manually_requested = get_manually_requested_reviewers(
+        args.owner, args.repo, args.pr_number, args.bot_user_name
+    )
 
-    logging.info("Current Maintainers: %s", ' '.join(maintainers) or "None")
-    logging.info("Pending Reviewers: %s", ' '.join(pending_reviewers) or "None")
-    logging.info("Past Reviewers: %s", ' '.join(past_reviewers) or "None")
-    logging.info("Manually Requested: %s", ' '.join(manually_requested) or "None")
+    logging.info("Current Maintainers: %s", " ".join(maintainers) or "None")
+    logging.info("Pending Reviewers: %s", " ".join(pending_reviewers) or "None")
+    logging.info("Past Reviewers: %s", " ".join(past_reviewers) or "None")
+    logging.info("Manually Requested: %s", " ".join(manually_requested) or "None")
 
     # --- 2. Determine reviewers to remove ---
     reviewers_to_remove: set[str] = set()
@@ -224,7 +276,7 @@ def main() -> None:
             args.pr_number,
             owner=args.owner,
             repo=args.repo,
-            reviewers_to_remove=reviewers_to_remove
+            reviewers_to_remove=reviewers_to_remove,
         )
     else:
         logging.info("No reviewers to remove.")
@@ -236,12 +288,16 @@ def main() -> None:
         potential_reviewers = maintainers - users_to_exclude
 
         reviewers_to_add = {
-            user for user in potential_reviewers if is_collaborator(args.owner, args.repo, user)
+            user
+            for user in potential_reviewers
+            if is_collaborator(args.owner, args.repo, user)
         }
 
         non_collaborators = potential_reviewers - reviewers_to_add
         if non_collaborators:
-            logging.warning("Ignoring non-collaborators: %s", ", ".join(non_collaborators))
+            logging.warning(
+                "Ignoring non-collaborators: %s", ", ".join(non_collaborators)
+            )
 
     if reviewers_to_add:
         update_reviewers(args.pr_number, reviewers_to_add=reviewers_to_add)
