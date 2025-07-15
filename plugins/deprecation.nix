@@ -59,28 +59,12 @@ in
     # TODO: introduced 2025-04-19
     ++ [
       (lib.mkRenamedOptionModule
-        [
-          "plugins"
-          "codeium-nvim"
-          "enable"
-        ]
-        [
-          "plugins"
-          "windsurf-nvim"
-          "enable"
-        ]
+        [ "plugins" "codeium-nvim" "enable" ]
+        [ "plugins" "windsurf-nvim" "enable" ]
       )
       (lib.mkRenamedOptionModule
-        [
-          "plugins"
-          "codeium-vim"
-          "enable"
-        ]
-        [
-          "plugins"
-          "windsurf-vim"
-          "enable"
-        ]
+        [ "plugins" "codeium-vim" "enable" ]
+        [ "plugins" "windsurf-vim" "enable" ]
       )
     ]
     ++ builtins.map (
