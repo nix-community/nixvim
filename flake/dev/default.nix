@@ -19,6 +19,10 @@
       ...
     }:
     {
+      ci.buildbot = {
+        inherit (config.checks) treefmt;
+      };
+
       treefmt.config = {
         projectRootFile = "flake.nix";
         flakeCheck = true;
