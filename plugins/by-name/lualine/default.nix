@@ -61,8 +61,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         { left, right }:
         defaultNullOpts.mkNullableWithRaw' {
           description = ''
-            Filetypes in which to disable lualine.
-            Allows you to specify filetypes that you want to only disable on specific components.
+            The left and right separators to use.
           '';
           pluginDefault = {
             inherit left right;
