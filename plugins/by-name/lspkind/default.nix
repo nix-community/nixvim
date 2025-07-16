@@ -2,93 +2,61 @@
   lib,
   helpers,
   config,
-  pkgs,
   ...
 }:
-with lib;
 let
-  cfg = config.plugins.lspkind;
+  inherit (lib) types;
 in
-{
-  options.plugins.lspkind = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "lspkind.nvim";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "lspkind";
+  packPathName = "lspkind.nvim";
+  package = "lspkind-nvim";
+  maintainers = [ lib.maintainers.saygo-png ];
+  description = "VS Code-like pictograms for Neovim LSP completion items.";
 
-    package = lib.mkPackageOption pkgs "lspkind" {
-      default = [
-        "vimPlugins"
-        "lspkind-nvim"
-      ];
-    };
+  # The plugin does not call setup when integrating with cmp, so it has to be conditional.
+  callSetup = false;
 
-    mode = helpers.defaultNullOpts.mkEnum [
-      "text"
-      "text_symbol"
-      "symbol_text"
-      "symbol"
-    ] "symbol_text" "Defines how annotations are shown";
+  # TODO: introduced 2025-07-16: remove after 25.11
+  inherit (import ./deprecations.nix lib) deprecateExtraOptions optionsRenamedToSettings;
 
-    preset = helpers.defaultNullOpts.mkEnum [
-      "default"
-      "codicons"
-    ] "codicons" "Default symbol map";
-
-    symbolMap = helpers.mkNullOrOption (types.attrsOf types.str) "Override preset symbols";
-
+  extraOptions = {
     cmp = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = types.bool;
         default = true;
         description = "Integrate with nvim-cmp";
       };
 
-      maxWidth = helpers.mkNullOrOption types.int "Maximum number of characters to show in the popup";
-
-      ellipsisChar = helpers.mkNullOrOption types.str "Character to show when the popup exceeds maxwidth";
-
-      menu = helpers.mkNullOrOption (types.attrsOf types.str) "Show source names in the popup";
-
       after = helpers.mkNullOrOption types.str "Function to run after calculating the formatting. function(entry, vim_item, kind)";
     };
   };
 
-  config =
-    let
-      doCmp = cfg.cmp.enable && config.plugins.cmp.enable;
-      options = {
-        inherit (cfg) mode preset;
-        symbol_map = cfg.symbolMap;
-      }
-      // (
-        if doCmp then
-          {
-            maxwidth = cfg.cmp.maxWidth;
-            ellipsis_char = cfg.cmp.ellipsisChar;
-            inherit (cfg.cmp) menu;
-          }
-        else
-          { }
-      )
-      // cfg.extraOptions;
-    in
-    mkIf cfg.enable {
-      extraPlugins = [ cfg.package ];
-
-      extraConfigLua = optionalString (!doCmp) ''
-        require('lspkind').init(${lib.nixvim.toLuaObject options})
+  extraConfig = cfg: {
+    assertions = lib.nixvim.mkAssertions "plugins.lspkind" {
+      assertion = cfg.cmp.enable -> config.plugins.cmp.enable;
+      message = ''
+        Cmp integration (cmp.enable) is enabled but the cmp plugin is not.
       '';
-
-      plugins.cmp.settings.formatting.format =
-        if cfg.cmp.after != null then
-          ''
-            function(entry, vim_item)
-              local kind = require('lspkind').cmp_format(${lib.nixvim.toLuaObject options})(entry, vim_item)
-
-              return (${cfg.cmp.after})(entry, vim_item, kind)
-            end
-          ''
-        else
-          ''
-            require('lspkind').cmp_format(${lib.nixvim.toLuaObject options})
-          '';
     };
+
+    plugins.lspkind.luaConfig.content = lib.mkIf (!cfg.cmp.enable) ''
+      require('lspkind').init(${lib.nixvim.toLuaObject cfg.settings})
+    '';
+
+    plugins.cmp.settings.formatting.format = lib.mkIf cfg.cmp.enable (
+      if cfg.cmp.after != null then
+        ''
+          function(entry, vim_item)
+            local kind = require('lspkind').cmp_format(${lib.nixvim.toLuaObject cfg.settings})(entry, vim_item)
+
+            return (${cfg.cmp.after})(entry, vim_item, kind)
+          end
+        ''
+      else
+        ''
+          require('lspkind').cmp_format(${lib.nixvim.toLuaObject cfg.settings})
+        ''
+    );
+  };
 }
