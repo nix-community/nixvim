@@ -1,6 +1,9 @@
 {
   empty = {
-    plugins.lspkind.enable = true;
+    plugins.lspkind = {
+      enable = true;
+      cmp.enable = false;
+    };
   };
 
   example = {
@@ -17,14 +20,13 @@
   defaults = {
     plugins.lspkind = {
       enable = true;
-      mode = "symbol_text";
-      preset = "codicons";
-      symbolMap = null;
+      settings = {
+        mode = "symbol_text";
+        preset = "codicons";
+        symbol_map = null;
+      };
       cmp = {
-        enable = true;
-        maxWidth = 50;
-        ellipsisChar = "...";
-        menu = null;
+        enable = false;
         after = null;
       };
     };
