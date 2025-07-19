@@ -16,7 +16,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsOptions = {
     preset = defaultNullOpts.mkStr "none" ''
       Allows you to set many different non default options with a single value.
-      You can view the values for these [here](https://github.com/MeanderingProgrammer/render-markdown.nvim/blob/main/lua/render-markdown/presets.lua).
+      You can view the values for these [here](https://github.com/MeanderingProgrammer/render-markdown.nvim/blob/main/lua/render-markdown/lib/presets.lua).
     '';
 
     enabled = defaultNullOpts.mkBool true ''
