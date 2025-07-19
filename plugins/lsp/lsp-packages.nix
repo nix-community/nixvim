@@ -371,7 +371,7 @@
       "standard"
     ];
     starlark_rust = "starlark-rust";
-    starpls = "starpls-bin";
+    starpls = "starpls";
     statix = "statix";
     stylelint_lsp = "stylelint-lsp";
     superhtml = "superhtml";
