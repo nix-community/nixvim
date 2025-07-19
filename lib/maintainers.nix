@@ -25,6 +25,12 @@
     githubId = 60232782;
     name = "Boney Patel";
   };
+  ChelseaWilkinson = {
+    email = "mail@chelseawilkinson.me";
+    github = "chelsea6502";
+    githubId = 122856043;
+    name = "Chelsea Wilkinson";
+  };
   DanielLaing = {
     email = "daniel@daniellaing.com";
     matrix = "@bodleum:matrix.org";
