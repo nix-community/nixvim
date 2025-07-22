@@ -397,6 +397,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
               ${requiresTheme "hyper"}
             ''
             {
+              enable = helpers.defaultNullOpts.mkBool true ''
+                Whether to display the recent file list.
+              '';
+
               limit = helpers.defaultNullOpts.mkInt 10 ''
                 The maximum number of files to list.
               '';
