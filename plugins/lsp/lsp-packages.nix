@@ -335,6 +335,7 @@
       "python-lsp-server"
     ];
     pylyzer = "pylyzer";
+    pyrefly = "pyrefly";
     pyright = "pyright";
     qmlls = [
       "kdePackages"
