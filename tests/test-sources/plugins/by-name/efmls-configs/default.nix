@@ -53,6 +53,9 @@
         "bashate"
       ]
       ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+        # TODO: 2025-07-25 rustfmt is broken (https://github.com/NixOS/nixpkgs/pull/427702)
+        "rustfmt"
+
         # As of 2024-07-31, dmd is broken on x86_64-darwin
         # https://github.com/NixOS/nixpkgs/pull/331373
         # TODO: re-enable this test when fixed
