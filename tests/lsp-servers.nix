@@ -39,6 +39,14 @@ let
       inherit (pkgs.stdenv) hostPlatform;
 
       disabled = [
+        # TODO: 2025-07-25 python313Packages.lsp-tree-sitter marked as broken
+        "autotools_ls"
+
+        # TODO: 2025-07-25 build failure
+        "mint"
+        "nextls"
+        "ts_query_ls"
+
         # DEPRECATED SERVERS
         # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
         "ruff_lsp"
