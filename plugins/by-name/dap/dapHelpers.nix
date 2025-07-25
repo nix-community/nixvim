@@ -34,7 +34,8 @@ rec {
             The filetype to use for content retrieved via a source request.
           '';
         };
-      } // attrs;
+      }
+      // attrs;
     };
 
   executableAdapterOption = mkAdapterType {

@@ -50,7 +50,8 @@ in
         modulesPath = ../modules;
         # TODO: deprecate `helpers`
         helpers = self;
-      } // extraSpecialArgs;
+      }
+      // extraSpecialArgs;
     };
 }
 // lib.mapAttrs (

@@ -214,39 +214,38 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     autoCmd = lib.optionals (cfg.autoCmd != null) [ cfg.autoCmd ];
-    plugins.lint.luaConfig.content =
-      ''
-        local __lint = require('lint')
-      ''
-      + (lib.optionalString (cfg.lintersByFt != null) ''
-        __lint.linters_by_ft = ${toLuaObject cfg.lintersByFt}
-      '')
-      + (lib.optionalString (cfg.customLinters != null) (
-        lib.concatLines (
+    plugins.lint.luaConfig.content = ''
+      local __lint = require('lint')
+    ''
+    + (lib.optionalString (cfg.lintersByFt != null) ''
+      __lint.linters_by_ft = ${toLuaObject cfg.lintersByFt}
+    '')
+    + (lib.optionalString (cfg.customLinters != null) (
+      lib.concatLines (
+        lib.mapAttrsToList (
+          customLinter: linterConfig:
+          let
+            linterConfig' =
+              if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
+          in
+          "__lint.linters.${customLinter} = ${toLuaObject linterConfig'}"
+        ) cfg.customLinters
+      )
+    ))
+    + (lib.optionalString (cfg.linters != null) (
+      lib.concatLines (
+        lib.flatten (
           lib.mapAttrsToList (
-            customLinter: linterConfig:
-            let
-              linterConfig' =
-                if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
-            in
-            "__lint.linters.${customLinter} = ${toLuaObject linterConfig'}"
-          ) cfg.customLinters
-        )
-      ))
-      + (lib.optionalString (cfg.linters != null) (
-        lib.concatLines (
-          lib.flatten (
+            linter: linterConfig:
             lib.mapAttrsToList (
-              linter: linterConfig:
-              lib.mapAttrsToList (
-                propName: propValue:
-                lib.optionalString (
-                  propValue != null
-                ) "__lint.linters.${linter}.${propName} = ${toLuaObject propValue}"
-              ) linterConfig
-            ) cfg.linters
-          )
+              propName: propValue:
+              lib.optionalString (
+                propValue != null
+              ) "__lint.linters.${linter}.${propName} = ${toLuaObject propValue}"
+            ) linterConfig
+          ) cfg.linters
         )
-      ));
+      )
+    ));
   };
 }

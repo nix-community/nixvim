@@ -125,7 +125,8 @@ in
         standalone file support
         setting it to false may improve startup time
       '';
-    } // import ../../lsp/language-servers/rust-analyzer-config.nix lib;
+    }
+    // import ../../lsp/language-servers/rust-analyzer-config.nix lib;
   };
   config = lib.mkIf cfg.enable {
     extraPlugins = [
@@ -174,7 +175,8 @@ in
             inherit (cfg.server) standalone;
             settings.rust-analyzer = lib.filterAttrs (n: v: n != "standalone") cfg.server;
           };
-        } // cfg.extraOptions;
+        }
+        // cfg.extraOptions;
       in
       ''
         require('rust-tools').setup(${lib.nixvim.toLuaObject options})

@@ -78,23 +78,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins.dap = {
       enable = true;
 
-      extensionConfigLua =
-        ''
-          require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject cfg.settings})
-        ''
-        + (optionalString (cfg.testRunners != null) ''
-          table.insert(require("dap-python").test_runners,
-          ${toLuaObject (builtins.mapAttrs (_: lib.nixvim.mkRaw) cfg.testRunners)})
-        '')
-        + (optionalString (cfg.customConfigurations != null) ''
-          table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
-        '')
-        + (optionalString (cfg.resolvePython != null) ''
-          require("dap-python").resolve_python = ${toLuaObject cfg.resolvePython}
-        '')
-        + (optionalString (cfg.testRunner != null) ''
-          require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
-        '');
+      extensionConfigLua = ''
+        require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject cfg.settings})
+      ''
+      + (optionalString (cfg.testRunners != null) ''
+        table.insert(require("dap-python").test_runners,
+        ${toLuaObject (builtins.mapAttrs (_: lib.nixvim.mkRaw) cfg.testRunners)})
+      '')
+      + (optionalString (cfg.customConfigurations != null) ''
+        table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
+      '')
+      + (optionalString (cfg.resolvePython != null) ''
+        require("dap-python").resolve_python = ${toLuaObject cfg.resolvePython}
+      '')
+      + (optionalString (cfg.testRunner != null) ''
+        require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
+      '');
     };
   };
 

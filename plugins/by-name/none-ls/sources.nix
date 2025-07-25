@@ -4,14 +4,13 @@ let
   mkSourcePlugin = import ./_mk-source-plugin.nix;
 in
 {
-  imports =
-    [
-      ./prettier.nix
-      ./prettierd.nix
-    ]
-    ++ (lib.flatten (
-      lib.mapAttrsToList (category: (lib.map (mkSourcePlugin category))) noneLsBuiltins
-    ));
+  imports = [
+    ./prettier.nix
+    ./prettierd.nix
+  ]
+  ++ (lib.flatten (
+    lib.mapAttrsToList (category: (lib.map (mkSourcePlugin category))) noneLsBuiltins
+  ));
 
   config =
     let

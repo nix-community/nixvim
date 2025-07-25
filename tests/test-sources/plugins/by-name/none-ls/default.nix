@@ -105,27 +105,26 @@
 
         sources =
           let
-            disabled =
-              [
-                #TODO Added 2025-04-01
-                # php-cs-fixer is marked as broken
-                "phpcsfixer"
-              ]
-              ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-                # Not available on aarch64-linux
-                "smlfmt"
+            disabled = [
+              #TODO Added 2025-04-01
+              # php-cs-fixer is marked as broken
+              "phpcsfixer"
+            ]
+            ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+              # Not available on aarch64-linux
+              "smlfmt"
 
-                # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
-                "swift_format"
+              # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+              "swift_format"
 
-                # TODO: 2025-04-20 build failure (open-policy-agent)
-                "opacheck"
-                "rego"
-              ]
-              ++ lib.optionals hostPlatform.isDarwin [
-                # TODO 2025-04-20 build failure
-                "ansiblelint"
-              ];
+              # TODO: 2025-04-20 build failure (open-policy-agent)
+              "opacheck"
+              "rego"
+            ]
+            ++ lib.optionals hostPlatform.isDarwin [
+              # TODO 2025-04-20 build failure
+              "ansiblelint"
+            ];
           in
           # Enable every none-ls source that has an option
           lib.mapAttrs (

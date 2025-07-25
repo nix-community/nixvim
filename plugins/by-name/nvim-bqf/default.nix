@@ -158,7 +158,8 @@ in
             extra_opts = extraOpts;
           };
         };
-      } // cfg.extraOptions;
+      }
+      // cfg.extraOptions;
     in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];

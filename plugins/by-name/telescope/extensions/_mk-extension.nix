@@ -56,7 +56,8 @@ let
           options = settingsOptions;
           example = settingsExample;
         };
-      } // extraOptions;
+      }
+      // extraOptions;
 
       config = lib.mkIf cfg.enable (
         lib.mkMerge [

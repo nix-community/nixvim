@@ -144,7 +144,8 @@ in
         type = types.attrsOf types.anything;
         description = "Extra options for the ${name} language server.";
       };
-    } // extraOptions;
+    }
+    // extraOptions;
   };
 
   config = lib.mkIf enabled {
@@ -170,7 +171,8 @@ in
             opts = opts.settings;
             enabled = true;
           };
-        } // cfg.extraOptions;
+        }
+        // cfg.extraOptions;
       }
     ];
   };
