@@ -53,6 +53,9 @@
         "ansible_lint"
       ]
       ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+        # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
+        "ZLint"
+
         # As of 2025-03-18, several python311Packages.* dependencies of bashate fail on aarch64-darwin
         # TODO: re-enable this test when fixed
         "bashate"
