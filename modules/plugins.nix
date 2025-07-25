@@ -6,10 +6,11 @@ let
   by-name = ../plugins/by-name;
 in
 {
-  imports =
-    [ ../plugins ]
-    ++ foldlAttrs (
-      prev: name: type:
-      prev ++ optional (type == "directory") (by-name + "/${name}")
-    ) [ ] (readDir by-name);
+  imports = [
+    ../plugins
+  ]
+  ++ foldlAttrs (
+    prev: name: type:
+    prev ++ optional (type == "directory") (by-name + "/${name}")
+  ) [ ] (readDir by-name);
 }

@@ -65,15 +65,14 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraOptions = {
-    keymaps =
-      {
-        silent = mkOption {
-          type = types.bool;
-          description = "Whether julia-cell keymaps should be silent";
-          default = false;
-        };
-      }
-      // (mapAttrs (name: value: helpers.mkNullOrOption types.str "Keymap for ${value.desc}.") mappings);
+    keymaps = {
+      silent = mkOption {
+        type = types.bool;
+        description = "Whether julia-cell keymaps should be silent";
+        default = false;
+      };
+    }
+    // (mapAttrs (name: value: helpers.mkNullOrOption types.str "Keymap for ${value.desc}.") mappings);
   };
 
   extraConfig = cfg: {

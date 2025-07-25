@@ -331,7 +331,8 @@ in
             folded_section = foldedSection;
           };
           inherit (cfg) parts;
-        } // sections;
+        }
+        // sections;
       in
       ''
         require('startup').setup(${lib.nixvim.toLuaObject setupOptions})

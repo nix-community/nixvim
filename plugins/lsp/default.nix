@@ -168,7 +168,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
               options = {
                 inherit (cfg.keymaps) silent;
                 desc = "${descPrefix} ${actionStr}";
-              } // actionProps;
+              }
+              // actionProps;
             }
           );
       in

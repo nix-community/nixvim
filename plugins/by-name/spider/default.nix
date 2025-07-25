@@ -52,7 +52,8 @@ in
     let
       setupOptions = {
         inherit (cfg) skipInsignificantPunctuation;
-      } // cfg.extraOptions;
+      }
+      // cfg.extraOptions;
 
       mappings = mapAttrsToList (motion: key: {
         mode = [
