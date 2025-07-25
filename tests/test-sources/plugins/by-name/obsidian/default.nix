@@ -4,6 +4,10 @@
   empty = {
     plugins.obsidian = {
       enable = true;
+
+      # TODO 2025-07-25 explicitly disable legacy commands to suppress deprecation warning
+      settings.legacy_commands = false;
+
       # At least one workspaces is needed for the plugin to work
       settings.workspaces = [
         {
@@ -22,6 +26,9 @@
         enable = true;
 
         settings = {
+          # TODO 2025-07-25 explicitly disable legacy commands to suppress deprecation warning
+          legacy_commands = false;
+
           dir = null;
           workspaces = [
             {
