@@ -207,7 +207,8 @@ in
         reading_text = cfg.readingText;
         workspace_text = cfg.workspaceText;
         line_number_text = cfg.lineNumberText;
-      } // cfg.extraOptions;
+      }
+      // cfg.extraOptions;
     in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];

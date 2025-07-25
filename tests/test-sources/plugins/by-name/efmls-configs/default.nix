@@ -27,81 +27,79 @@
         "JSON"
       ];
 
-      brokenTools =
-        [
-          #TODO Added 2025-04-01
-          # php-cs-fixer is marked as broken
-          "php_cs_fixer"
-          # TODO: Added 2025-04-19 broken dependency
-          "phan"
-          "php"
-          "phpcbf"
-          "phpcs"
-          "phpstan"
-          "psalm"
-        ]
-        ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-          # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
-          "swiftformat"
-        ]
-        ++ lib.optionals hostPlatform.isDarwin [
-          # As of 2024-01-04, texliveMedium is broken on darwin
-          # TODO: re-enable those tests when fixed
-          "chktex"
-          "latexindent"
+      brokenTools = [
+        #TODO Added 2025-04-01
+        # php-cs-fixer is marked as broken
+        "php_cs_fixer"
+        # TODO: Added 2025-04-19 broken dependency
+        "phan"
+        "php"
+        "phpcbf"
+        "phpcs"
+        "phpstan"
+        "psalm"
+      ]
+      ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+        # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+        "swiftformat"
+      ]
+      ++ lib.optionals hostPlatform.isDarwin [
+        # As of 2024-01-04, texliveMedium is broken on darwin
+        # TODO: re-enable those tests when fixed
+        "chktex"
+        "latexindent"
 
-          # TODO 2025-04-20 build failure
-          "ansible_lint"
-        ]
-        ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
-          # As of 2025-03-18, several python311Packages.* dependencies of bashate fail on aarch64-darwin
-          # TODO: re-enable this test when fixed
-          "bashate"
-        ]
-        ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
-          # As of 2024-07-31, dmd is broken on x86_64-darwin
-          # https://github.com/NixOS/nixpkgs/pull/331373
-          # TODO: re-enable this test when fixed
-          "dmd"
-        ];
+        # TODO 2025-04-20 build failure
+        "ansible_lint"
+      ]
+      ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+        # As of 2025-03-18, several python311Packages.* dependencies of bashate fail on aarch64-darwin
+        # TODO: re-enable this test when fixed
+        "bashate"
+      ]
+      ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+        # As of 2024-07-31, dmd is broken on x86_64-darwin
+        # https://github.com/NixOS/nixpkgs/pull/331373
+        # TODO: re-enable this test when fixed
+        "dmd"
+      ];
 
       # TODO: respect unpackaged from generated
-      unpackaged =
-        [
-          "blade_formatter"
-          "cljstyle"
-          "cspell"
-          "dartanalyzer"
-          "debride"
-          "deno_fmt"
-          "fecs"
-          "fixjson"
-          "forge_fmt"
-          "gersemi"
-          "gleam_format"
-          "js_standard"
-          "kdlfmt"
-          "markuplint"
-          "mix"
-          "pint"
-          "prettier_eslint"
-          "prettier_standard"
-          "redpen"
-          "reek"
-          "rome"
-          "ruff_sort"
-          "slim_lint"
-          "solhint"
-          "sorbet"
-          "swiftformat"
-          "swiftlint"
-          "xo"
-        ]
-        ++ lib.optionals pkgs.stdenv.isDarwin [ "clazy" ]
-        ++ lib.optionals pkgs.stdenv.isAarch64 [
-          "dmd"
-          "smlfmt"
-        ];
+      unpackaged = [
+        "blade_formatter"
+        "cljstyle"
+        "cspell"
+        "dartanalyzer"
+        "debride"
+        "deno_fmt"
+        "fecs"
+        "fixjson"
+        "forge_fmt"
+        "gersemi"
+        "gleam_format"
+        "js_standard"
+        "kdlfmt"
+        "markuplint"
+        "mix"
+        "pint"
+        "prettier_eslint"
+        "prettier_standard"
+        "redpen"
+        "reek"
+        "rome"
+        "ruff_sort"
+        "slim_lint"
+        "solhint"
+        "sorbet"
+        "swiftformat"
+        "swiftlint"
+        "xo"
+      ]
+      ++ lib.optionals pkgs.stdenv.isDarwin [ "clazy" ]
+      ++ lib.optionals pkgs.stdenv.isAarch64 [
+        "dmd"
+        "smlfmt"
+      ];
 
       # Fetch the valid enum members from the tool options
       toolsFromOptions =
