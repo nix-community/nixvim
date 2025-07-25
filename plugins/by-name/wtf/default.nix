@@ -39,6 +39,12 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "plugins" "wtf" "context" ] ''
+      context is no longer supported, please remove it from your config
+    '')
+  ];
+
   options = {
     plugins.wtf = lib.nixvim.plugins.neovim.extraOptionsOptions // {
       enable = mkEnableOption "wtf.nvim";
@@ -83,8 +89,6 @@ in
 
       openaiModelId = helpers.defaultNullOpts.mkStr "gpt-3.5-turbo" "ChatGPT Model.";
 
-      context = helpers.defaultNullOpts.mkBool true "Send code as well as diagnostics.";
-
       language = helpers.defaultNullOpts.mkStr "english" ''
         Set your preferred language for the response.
       '';
@@ -117,8 +121,12 @@ in
         {
           popup_type = popupType;
           openai_api_key = openaiApiKey;
-          openai_model_id = openaiModelId;
-          inherit context language;
+          providers = {
+            openai = {
+              model_id = openaiModelId;
+            };
+          };
+          inherit language;
           additional_instructions = additionalInstructions;
           search_engine = searchEngine;
           hooks = {

@@ -20,7 +20,6 @@
       popupType = "popup";
       openaiApiKey = null;
       openaiModelId = "gpt-3.5-turbo";
-      context = true;
       language = "english";
       additionalInstructions = "Hello world !";
       searchEngine = "google";
