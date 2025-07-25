@@ -1,5 +1,9 @@
-{ lib, ... }:
-{
+{ lib, pkgs, ... }:
+let
+  inherit (pkgs.stdenv) hostPlatform;
+in
+# TODO: 2025-07-25 duckdb is broken on aarch64-linux
+lib.optionalAttrs (!(hostPlatform.isLinux && hostPlatform.isAarch64)) {
   empty = {
     plugins.dbee.enable = true;
   };
