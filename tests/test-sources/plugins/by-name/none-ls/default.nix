@@ -121,6 +121,9 @@
               "rego"
             ]
             ++ lib.optionals hostPlatform.isDarwin [
+              # TODO 2025-07-25 prisma build failure
+              "prisma_format"
+              "puppet_lint"
               # TODO 2025-04-20 build failure
               "ansiblelint"
               # TODO 2025-06-24 build failure
