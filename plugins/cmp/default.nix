@@ -74,21 +74,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
-    plugins.cmp.luaConfig.content =
-      ''
-        local cmp = require('cmp')
-        cmp.setup(${toLuaObject cfg.settings})
+    plugins.cmp.luaConfig.content = ''
+      local cmp = require('cmp')
+      cmp.setup(${toLuaObject cfg.settings})
 
-      ''
-      + (lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (
-          filetype: settings: "cmp.setup.filetype('${filetype}', ${toLuaObject settings})\n"
-        ) cfg.filetype
-      ))
-      + (lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (
-          cmdtype: settings: "cmp.setup.cmdline('${cmdtype}', ${toLuaObject settings})\n"
-        ) cfg.cmdline
-      ));
+    ''
+    + (lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        filetype: settings: "cmp.setup.filetype('${filetype}', ${toLuaObject settings})\n"
+      ) cfg.filetype
+    ))
+    + (lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        cmdtype: settings: "cmp.setup.cmdline('${cmdtype}', ${toLuaObject settings})\n"
+      ) cfg.cmdline
+    ));
   };
 }

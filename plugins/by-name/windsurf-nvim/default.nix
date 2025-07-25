@@ -33,7 +33,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
   imports = [
     # Register nvim-cmp association
     { cmpSourcePlugins.codeium = "windsurf-nvim"; }
-  ] ++ (import ./deprecations.nix { inherit lib; }).imports;
+  ]
+  ++ (import ./deprecations.nix { inherit lib; }).imports;
 
   settingsExample = {
     enable_chat = true;

@@ -79,7 +79,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           DapStopped = dapStopped;
           DapBreakpointRejected = dapBreakpointRejected;
         };
-      } // cfg.settings;
+      }
+      // cfg.settings;
     in
     {
       plugins.dap.luaConfig.content = lib.mkMerge [

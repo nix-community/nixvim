@@ -49,20 +49,19 @@
     warnings =
       let
         # All keymap options that have historically supported the `lua` sub-option
-        keymapOptions =
-          [
-            options.keymaps
-            options.keymapsOnEvents
-            options.plugins.wtf.keymaps.ai
-            options.plugins.wtf.keymaps.search
-            # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
-            # So we only need `lua` deprecation in lsp's `extra` option
-            options.plugins.lsp.keymaps.extra
-            # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
-            options.plugins.tmux-navigator.keymaps
-          ]
-          # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
-          ++ builtins.attrValues (builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]);
+        keymapOptions = [
+          options.keymaps
+          options.keymapsOnEvents
+          options.plugins.wtf.keymaps.ai
+          options.plugins.wtf.keymaps.search
+          # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
+          # So we only need `lua` deprecation in lsp's `extra` option
+          options.plugins.lsp.keymaps.extra
+          # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
+          options.plugins.tmux-navigator.keymaps
+        ]
+        # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
+        ++ builtins.attrValues (builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]);
       in
       lib.pipe keymapOptions [
         (map (opt: (opt.type.getSubOptions opt.loc).lua))

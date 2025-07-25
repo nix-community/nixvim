@@ -104,46 +104,45 @@
 
         sources =
           let
-            disabled =
-              [
-                #TODO Added 2025-04-01
-                # php-cs-fixer is marked as broken
-                "phpcsfixer"
-              ]
-              ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-                # Not available on aarch64-linux
-                "smlfmt"
+            disabled = [
+              #TODO Added 2025-04-01
+              # php-cs-fixer is marked as broken
+              "phpcsfixer"
+            ]
+            ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+              # Not available on aarch64-linux
+              "smlfmt"
 
-                # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
-                "swift_format"
+              # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+              "swift_format"
 
-                # TODO: 2025-04-20 build failure (open-policy-agent)
-                "opacheck"
-                "rego"
-              ]
-              ++ lib.optionals hostPlatform.isDarwin [
-                # TODO 2025-04-20 build failure
-                "ansiblelint"
-                # TODO 2025-06-24 build failure
-                "elm_format"
-                # TODO 2025-06-24 marked broken / unsupported platform
-                "clazy"
-                "haml_lint"
-                "racket_fixw"
-                "raco_fmt"
-                "rubyfmt"
+              # TODO: 2025-04-20 build failure (open-policy-agent)
+              "opacheck"
+              "rego"
+            ]
+            ++ lib.optionals hostPlatform.isDarwin [
+              # TODO 2025-04-20 build failure
+              "ansiblelint"
+              # TODO 2025-06-24 build failure
+              "elm_format"
+              # TODO 2025-06-24 marked broken / unsupported platform
+              "clazy"
+              "haml_lint"
+              "racket_fixw"
+              "raco_fmt"
+              "rubyfmt"
 
-                # TODO 2025-07-07 open-policy-agent is broken on darwin
-                "opacheck"
-                "rego"
-              ]
-              ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
-                # TODO: 2025-06-24 build failure
-                "gleam_format"
-                "ptop"
-                # NOTE: No hash for x86 darwin
-                "verible_verilog_format"
-              ];
+              # TODO 2025-07-07 open-policy-agent is broken on darwin
+              "opacheck"
+              "rego"
+            ]
+            ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+              # TODO: 2025-06-24 build failure
+              "gleam_format"
+              "ptop"
+              # NOTE: No hash for x86 darwin
+              "verible_verilog_format"
+            ];
           in
           # Enable every none-ls source that has an option
           lib.mapAttrs (
