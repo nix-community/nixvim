@@ -31,7 +31,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Max number of lines for a message.
     '';
     stages =
-      defaultNullOpts.mkNullable
+      defaultNullOpts.mkNullableWithRaw
         (
           with types;
           either (enum [
@@ -39,7 +39,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             "slide"
             "fade_in_slide_out"
             "static"
-          ]) (listOf str)
+          ]) (listOf (types.maybeRaw str))
         )
         "fade_in_slide_out"
         ''
