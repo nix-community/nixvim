@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, config, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
@@ -97,6 +97,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
     codeRunner = {
       enabled = false;
       default_method = "vim-slime";
+    };
+  };
+
+  extraConfig = cfg: {
+    assertions = lib.nixvim.mkAssertions "plugins.quarto" {
+      assertion = (cfg.settings.codeRunner.enable or false) -> config.plugins.otter.enable;
+      message = ''
+        Quarto requires `plugins.otter` to be enabled when `settings.codeRunner.enable` is true.
+      '';
     };
   };
 }

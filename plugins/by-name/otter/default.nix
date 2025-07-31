@@ -12,6 +12,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
+  # `require("otter").setup()` must run **BEFORE** quarto
+  # https://github.com/quarto-dev/quarto-nvim/issues/187
+  configLocation = lib.mkOrder 900 "extraConfigLua";
+
   imports = [
     # TODO: introduced 2024-06-29; remove after 24.11
     (lib.mkRemovedOptionModule
