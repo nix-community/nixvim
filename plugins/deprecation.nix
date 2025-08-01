@@ -7,7 +7,7 @@ let
       It is recommended to use `rustaceanvim` instead.
     '';
   };
-  removed = {
+  removed.plugins = {
     # Added 2023-08-29
     treesitter-playground = ''
       The `treesitter-playground` plugin has been deprecated since the functionality is included in Neovim.
@@ -23,7 +23,13 @@ let
       It is recommended to use `plugins.pckr` or `plugins.lazy` instead.
     '';
   };
-  renamed = {
+  renamed.colorschemes = {
+    # Added 2025-07-15
+    # NOTE: The old name is not in a stable version and was only in unstable for a few weeks,
+    # so we can remove this alias more quickly than usual.
+    gruvbox-material = "gruvbox-material-nvim";
+  };
+  renamed.plugins = {
     # Added 2024-09-17
     surround = "vim-surround";
   };
@@ -46,43 +52,25 @@ in
 {
 
   imports =
-    (lib.mapAttrsToList (
-      name:
-      lib.mkRemovedOptionModule [
-        "plugins"
-        name
-      ]
-    ) removed)
-    ++ (lib.mapAttrsToList (
-      old: new: lib.mkRenamedOptionModule [ "plugins" old ] [ "plugins" new ]
-    ) renamed)
     # TODO: introduced 2025-04-19
-    ++ [
+    [
       (lib.mkRenamedOptionModule
-        [
-          "plugins"
-          "codeium-nvim"
-          "enable"
-        ]
-        [
-          "plugins"
-          "windsurf-nvim"
-          "enable"
-        ]
+        [ "plugins" "codeium-nvim" "enable" ]
+        [ "plugins" "windsurf-nvim" "enable" ]
       )
       (lib.mkRenamedOptionModule
-        [
-          "plugins"
-          "codeium-vim"
-          "enable"
-        ]
-        [
-          "plugins"
-          "windsurf-vim"
-          "enable"
-        ]
+        [ "plugins" "codeium-vim" "enable" ]
+        [ "plugins" "windsurf-vim" "enable" ]
       )
     ]
+    ++ lib.foldlAttrs (
+      acc: scope: removed':
+      acc ++ lib.mapAttrsToList (name: msg: lib.mkRemovedOptionModule [ scope name ] msg) removed'
+    ) [ ] removed
+    ++ lib.foldlAttrs (
+      acc: scope: renamed':
+      acc ++ lib.mapAttrsToList (old: new: lib.mkRenamedOptionModule [ scope old ] [ scope new ]) renamed'
+    ) [ ] renamed
     ++ builtins.map (
       name:
       lib.mkRemovedOptionModule [ "plugins" name "iconsPackage" ] ''
