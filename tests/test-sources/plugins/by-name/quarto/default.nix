@@ -1,6 +1,13 @@
 {
   empty = {
-    plugins.quarto.enable = true;
+    plugins = {
+      quarto.enable = true;
+      otter.enable = true;
+      treesitter = {
+        enable = true;
+        settings.highlight.enable = true;
+      };
+    };
   };
 
   defaults = {
@@ -39,35 +46,43 @@
   };
 
   example = {
-    plugins.quarto = {
-      enable = true;
+    plugins = {
+      otter.enable = true;
+      treesitter = {
+        enable = true;
+        settings.highlight.enable = true;
+      };
 
-      settings = {
-        debug = true;
-        closePreviewOnExit = false;
-        lspFeatures = {
-          enabled = true;
-          chunks = "curly";
-          languages = [
-            "r"
-            "python"
-            "julia"
-          ];
-          diagnostics = {
+      quarto = {
+        enable = true;
+
+        settings = {
+          debug = true;
+          closePreviewOnExit = false;
+          lspFeatures = {
             enabled = true;
-            triggers = [ "BufWritePost" ];
+            chunks = "curly";
+            languages = [
+              "r"
+              "python"
+              "julia"
+            ];
+            diagnostics = {
+              enabled = true;
+              triggers = [ "BufWritePost" ];
+            };
+            completion = {
+              enabled = true;
+            };
           };
-          completion = {
+          codeRunner = {
             enabled = true;
+            default_method = "molten";
+            ft_runners = {
+              python = "molten";
+            };
+            never_run = [ "yaml" ];
           };
-        };
-        codeRunner = {
-          enabled = true;
-          default_method = "molten";
-          ft_runners = {
-            python = "molten";
-          };
-          never_run = [ "yaml" ];
         };
       };
     };
