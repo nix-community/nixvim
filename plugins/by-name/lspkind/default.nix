@@ -54,22 +54,21 @@ in
   config =
     let
       doCmp = cfg.cmp.enable && config.plugins.cmp.enable;
-      options =
-        {
-          inherit (cfg) mode preset;
-          symbol_map = cfg.symbolMap;
-        }
-        // (
-          if doCmp then
-            {
-              maxwidth = cfg.cmp.maxWidth;
-              ellipsis_char = cfg.cmp.ellipsisChar;
-              inherit (cfg.cmp) menu;
-            }
-          else
-            { }
-        )
-        // cfg.extraOptions;
+      options = {
+        inherit (cfg) mode preset;
+        symbol_map = cfg.symbolMap;
+      }
+      // (
+        if doCmp then
+          {
+            maxwidth = cfg.cmp.maxWidth;
+            ellipsis_char = cfg.cmp.ellipsisChar;
+            inherit (cfg.cmp) menu;
+          }
+        else
+          { }
+      )
+      // cfg.extraOptions;
     in
     mkIf cfg.enable {
       extraPlugins = [ cfg.package ];

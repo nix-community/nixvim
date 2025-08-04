@@ -20,27 +20,26 @@
             let
               inherit (pkgs.stdenv) hostPlatform;
 
-              disabledSources =
-                [
-                  # We do not provide the required HF_API_KEY environment variable.
-                  "cmp_ai"
-                  # Triggers the warning complaining about treesitter highlighting being disabled
-                  "otter"
-                  # Invokes the `nix` command at startup which is not available in the sandbox
-                  "nixpkgs_maintainers"
-                  # Needs internet access to download `sm-agent`
-                  "supermaven"
-                  # Sometimes get auth error
-                  "codeium"
-                ]
-                ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-                  "cmp_tabnine"
-                ]
-                ++ lib.optionals hostPlatform.isDarwin [
-                  # TODO: as of 2025-05-18, luajitPackages.luv is broken on darwin
-                  # https://github.com/NixOS/nixpkgs/issues/408528
-                  "papis"
-                ];
+              disabledSources = [
+                # We do not provide the required HF_API_KEY environment variable.
+                "cmp_ai"
+                # Triggers the warning complaining about treesitter highlighting being disabled
+                "otter"
+                # Invokes the `nix` command at startup which is not available in the sandbox
+                "nixpkgs_maintainers"
+                # Needs internet access to download `sm-agent`
+                "supermaven"
+                # Sometimes get auth error
+                "codeium"
+              ]
+              ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+                "cmp_tabnine"
+              ]
+              ++ lib.optionals hostPlatform.isDarwin [
+                # TODO: as of 2025-05-18, luajitPackages.luv is broken on darwin
+                # https://github.com/NixOS/nixpkgs/issues/408528
+                "papis"
+              ];
             in
             pipe config.cmpSourcePlugins [
               # All known source names

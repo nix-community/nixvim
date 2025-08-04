@@ -1,0 +1,51 @@
+---
+name: Bug Report
+description: Report a bug to help us improve
+title: "[BUG] <BUG>"
+labels: ["bug"]
+body:
+  - type: input
+    attributes:
+      label: Plugin
+      description: The affected NixVim plugin(s)
+  - type: dropdown
+    attributes:
+      label: Nixpkgs Release
+      multiple: false
+      options:
+        - "unstable"
+        - "25.05"
+        - "24.11"
+        - "other"
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Home Manager Release
+      multiple: false
+      options:
+        - "unstable"
+        - "25.05"
+        - "24.11"
+        - "other"
+  - type: checkboxes
+    attributes:
+      label: I have read the FAQ
+      options:
+        - label: >-
+            I have read the [FAQ](https://nix-community.github.io/nixvim/user-guide/faq.html)
+            and my bug is not listed there.
+          required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: See [How can I write good bug reports?](https://stackoverflow.com/questions/29416909)
+  - type: textarea
+    attributes:
+      label: Minimal, Reproducible Example (MRE)
+      description: See [How to create a Minimal, Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example)
+      render: nix
+      placeholder: |
+        programs.nixvim = {
+
+        }

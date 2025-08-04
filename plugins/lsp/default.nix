@@ -108,6 +108,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         See [`:h lsp-inlay_hint`](https://neovim.io/doc/user/lsp.html#lsp-inlay_hint).
       '';
+      # When `plugins.lsp` is enabled, definitions are aliased to `lsp.inlayHints.enable`; so read that final value here.
+      # The other half of this two-way alias is below in `extraConfig`.
+      apply = value: if config.plugins.lsp.enable then config.lsp.inlayHints.enable else value;
     };
 
     onAttach = mkOption {
@@ -168,7 +171,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
               options = {
                 inherit (cfg.keymaps) silent;
                 desc = "${descPrefix} ${actionStr}";
-              } // actionProps;
+              }
+              // actionProps;
             }
           );
       in
@@ -176,7 +180,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ++ mkMaps "vim.lsp.buf." "Lsp buf" cfg.keymaps.lspBuf
       ++ cfg.keymaps.extra;
 
-    # Alias onAttach definitions to the new impl in the top-level lsp module.
+    # Alias onAttach and inlayHints definitions to the new impl in the top-level lsp module.
     #
     # NOTE: While `mkDerivedConfig` creates an alias based on the final `value` and `highestPrio`,
     # `mkAliasAndWrapDefinitions` and `mkAliasAndWrapDefsWithPriority` propagates the un-merged
@@ -189,7 +193,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     # This is equivalent to `mkAliasOptionModule`, except predicated on `plugins.lsp.enable`.
     #
     # The other half of this two-way alias is above in the option's `apply` function.
-    lsp.onAttach = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.onAttach;
+    lsp = {
+      onAttach = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.onAttach;
+      inlayHints.enable = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.inlayHints;
+    };
 
     plugins.lsp.luaConfig.content =
       let
@@ -201,9 +208,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         -- nvim-lspconfig {{{
         do
           ${cfg.preConfig}
-
-          -- inlay hint
-          ${lib.optionalString cfg.inlayHints "vim.lsp.inlay_hint.enable(true)"}
 
           local __lspServers = ${lib.nixvim.toLuaObject cfg.enabledServers}
 

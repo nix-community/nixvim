@@ -1,0 +1,30 @@
+---
+name: Plugin Request
+description: Request support for a new plugin
+title: "[PLUGIN REQUEST] <PLUGIN>"
+labels: ["enhancement"]
+body:
+  - type: input
+    attributes:
+      label: Plugin
+      description: Plugin NixVim should support
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Homepage
+      description: URL to the plugin repository
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Nixpkgs URL
+      description: URL to the package for this plugin in Nixpkgs
+  - type: textarea
+    attributes:
+      label: Extra Information
+      description: >-
+        Provide extra information about the plugin,
+        and any ideas regarding NixVim-specific options.
+    validations:
+      required: true

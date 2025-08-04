@@ -191,7 +191,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 action = "Telescope find_files cwd=";
               ```
             '';
-          } // extraOptions;
+          }
+          // extraOptions;
         };
     in
     {

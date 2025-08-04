@@ -13,46 +13,45 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   # TODO introduced 2024-02-29: remove 2024-04-29
   deprecateExtraOptions = true;
-  imports =
+  imports = [
+    # TODO: added 2025-04-07, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "neogit";
+      packageName = "git";
+    })
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "neogit";
+      packageName = "which";
+    })
+  ]
+  ++ (map
+    (
+      optionPath:
+      mkRemovedOptionModule
+        (
+          [
+            "plugins"
+            "neogit"
+          ]
+          ++ optionPath
+        )
+        "This option has been removed upstream. Please refer to the plugin documentation to update your configuration."
+    )
     [
-      # TODO: added 2025-04-07, remove after 25.05
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "neogit";
-        packageName = "git";
-      })
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "neogit";
-        packageName = "which";
-      })
-    ]
-    ++ (map
-      (
-        optionPath:
-        mkRemovedOptionModule
-          (
-            [
-              "plugins"
-              "neogit"
-            ]
-            ++ optionPath
-          )
-          "This option has been removed upstream. Please refer to the plugin documentation to update your configuration."
-      )
+      [ "disableCommitConfirmation" ]
+      [ "disableBuiltinNotifications" ]
+      [ "useMagitKeybindings " ]
+      [ "commitPopup" ]
       [
-        [ "disableCommitConfirmation" ]
-        [ "disableBuiltinNotifications" ]
-        [ "useMagitKeybindings " ]
-        [ "commitPopup" ]
-        [
-          "sections"
-          "unmerged"
-        ]
-        [
-          "sections"
-          "unpulled"
-        ]
+        "sections"
+        "unmerged"
       ]
-    );
+      [
+        "sections"
+        "unpulled"
+      ]
+    ]
+  );
   optionsRenamedToSettings = [
     "disableSigns"
     "disableHint"

@@ -548,49 +548,37 @@ in
               with cfg.pythonPackage.pkgs;
               {
                 pylsp_mypy = pylsp-mypy.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      substituteInPlace setup.cfg \
-                        --replace-fail "python-lsp-server >=1.7.0" ""
-                    '';
+                  postPatch = old.postPatch or '''' + ''
+                    substituteInPlace setup.cfg \
+                      --replace-fail "python-lsp-server >=1.7.0" ""
+                  '';
                 });
                 isort = pyls-isort.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      substituteInPlace setup.py \
-                        --replace-fail 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
-                    '';
+                  postPatch = old.postPatch or '''' + ''
+                    substituteInPlace setup.py \
+                      --replace-fail 'install_requires=["python-lsp-server", "isort"],' 'install_requires=["isort"],'
+                  '';
                 });
                 black = python-lsp-black.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      substituteInPlace setup.cfg \
-                        --replace-fail "python-lsp-server>=1.4.0" ""
-                    '';
+                  postPatch = old.postPatch or '''' + ''
+                    substituteInPlace setup.cfg \
+                      --replace-fail "python-lsp-server>=1.4.0" ""
+                  '';
                 });
                 memestra = pyls-memestra.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      sed -i '/python-lsp-server/d' requirements.txt
-                    '';
+                  postPatch = old.postPatch or '''' + ''
+                    sed -i '/python-lsp-server/d' requirements.txt
+                  '';
                 });
                 rope = pylsp-rope.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      sed -i '/python-lsp-server/d' setup.cfg
-                    '';
+                  postPatch = old.postPatch or '''' + ''
+                    sed -i '/python-lsp-server/d' setup.cfg
+                  '';
                 });
                 ruff = python-lsp-ruff.overridePythonAttrs (old: {
-                  postPatch =
-                    old.postPatch or ''''
-                    + ''
-                      sed -i '/python-lsp-server/d' pyproject.toml
-                    '';
+                  postPatch = old.postPatch or '''' + ''
+                    sed -i '/python-lsp-server/d' pyproject.toml
+                  '';
 
                   build-system = [ setuptools ] ++ (old.build-system or [ ]);
                 });

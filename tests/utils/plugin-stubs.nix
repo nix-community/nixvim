@@ -90,7 +90,7 @@ let
               end
               return M
             '';
-        # Create a simple rockspec manifiest
+        # Create a simple rockspec manifest
         postPatch = ''
           luarocks write-rockspec "${name}" "${version}" .
         '';

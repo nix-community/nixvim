@@ -38,27 +38,34 @@ let
     let
       inherit (pkgs.stdenv) hostPlatform;
 
-      disabled =
-        [
-          # DEPRECATED SERVERS
-          # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
-          "ruff_lsp"
-          "bufls"
-          "typst_lsp"
-        ]
-        ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-          # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
-          "sourcekit"
+      disabled = [
+        # TODO: 2025-07-25 python313Packages.lsp-tree-sitter marked as broken
+        "autotools_ls"
 
-          # pkgs.vectorcode cannot run in the build sandbox on this platform, due to issues with onnxruntime
-          "vectorcode_server"
+        # TODO: 2025-07-25 build failure
+        "mint"
+        "nextls"
+        "ts_query_ls"
 
-          # TODO: 2024-10-05 build failure
-          "fstar"
+        # DEPRECATED SERVERS
+        # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
+        "ruff_lsp"
+        "bufls"
+        "typst_lsp"
+      ]
+      ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+        # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
+        "sourcekit"
 
-          # TODO: 2025-03-04 marked as broken
-          "nickel_ls"
-        ];
+        # pkgs.vectorcode cannot run in the build sandbox on this platform, due to issues with onnxruntime
+        "vectorcode_server"
+
+        # TODO: 2024-10-05 build failure
+        "fstar"
+
+        # TODO: 2025-03-04 marked as broken
+        "nickel_ls"
+      ];
     in
     {
       inherit _file;

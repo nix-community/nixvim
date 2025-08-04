@@ -1186,12 +1186,10 @@ in
           nested = true;
         });
 
-      extraConfigLua =
-        (optionalString autoOpenEnabled openNvimTreeFunction)
-        + ''
+      extraConfigLua = (optionalString autoOpenEnabled openNvimTreeFunction) + ''
 
-          require('nvim-tree').setup(${lib.nixvim.toLuaObject setupOptions})
-        '';
+        require('nvim-tree').setup(${lib.nixvim.toLuaObject setupOptions})
+      '';
 
       dependencies.git.enable = lib.mkDefault true;
     };
