@@ -1,11 +1,9 @@
-{
-  lib,
-  config,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "gruvbox-material";
+  name = "gruvbox-material-nvim";
   isColorscheme = true;
+  colorscheme = "gruvbox-material";
+  moduleName = "gruvbox-material";
   packPathName = "gruvbox-material.nvim";
   package = "gruvbox-material-nvim";
 

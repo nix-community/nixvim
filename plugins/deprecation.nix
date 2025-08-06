@@ -23,6 +23,12 @@ let
       It is recommended to use `plugins.pckr` or `plugins.lazy` instead.
     '';
   };
+  renamed.colorschemes = {
+    # Added 2025-08-06
+    # NOTE: The old name is not in a stable version and was only in unstable for a few weeks,
+    # so we can remove this alias more quickly than usual.
+    gruvbox-material = "gruvbox-material-nvim";
+  };
   renamed.plugins = {
     # Added 2024-09-17
     surround = "vim-surround";
