@@ -1,11 +1,11 @@
 { lib, ... }:
 {
   empty = {
-    colorschemes.gruvbox-material.enable = true;
+    colorschemes.gruvbox-material-nvim.enable = true;
   };
 
   defaults = {
-    colorschemes.gruvbox-material = {
+    colorschemes.gruvbox-material-nvim = {
       enable = true;
 
       settings = {
@@ -31,7 +31,7 @@
   };
 
   example = {
-    colorschemes.gruvbox-material = {
+    colorschemes.gruvbox-material-nvim = {
       enable = true;
 
       settings = {
