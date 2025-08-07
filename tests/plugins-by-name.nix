@@ -5,8 +5,11 @@
   runCommandLocal,
 }:
 let
+  nixvim-root = ../.;
   by-name = ../plugins/by-name;
   options = lib.collect lib.isOption nixvimConfiguration.options;
+
+  toRelative = lib.removePrefix (toString nixvim-root);
 
   # Option namespace expect by-name plugins to use
   namespace = "plugins";
@@ -30,15 +33,16 @@ let
   # Find plugins by looking for `*.*.enable` options that are declared in `plugins/by-name`
   by-name-enable-opts =
     let
-      regex = ''/nix/store/[^/]+/plugins/by-name/(.*)'';
       optionalPair =
         opt: file:
         let
-          result = builtins.match regex file;
-        in
-        lib.optional (result != null) {
+          relative = toRelative file;
           # Use the file name relative to `plugins/by-name/`
-          name = builtins.head result;
+          name = lib.removePrefix "plugins/by-name/" relative;
+          hasPrefix = name != relative;
+        in
+        lib.optional hasPrefix {
+          inherit name;
           # Use only the first two parts of the option location
           value = lib.genList (builtins.elemAt opt.loc) 2;
         };
