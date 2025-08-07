@@ -92,10 +92,10 @@ linkFarmFromDrvs "plugins-by-name" [
     {
       __structuredAttrs = true;
       missingPlugins = builtins.filter (
-        name: !(builtins.pathExists "${by-name}/${name}/default.nix")
+        name: !(builtins.pathExists (by-name + "/${name}/default.nix"))
       ) children.directory;
       missingTests = builtins.filter (
-        name: !(builtins.pathExists "${./test-sources/plugins/by-name}/${name}/default.nix")
+        name: !(builtins.pathExists ./test-sources/plugins/by-name/${name}/default.nix)
       ) children.directory;
     }
     ''
