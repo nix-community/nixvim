@@ -8,11 +8,8 @@ let
   by-name = ../plugins/by-name;
   options = lib.collect lib.isOption nixvimConfiguration.options;
 
-  # Option namespaces that we allow by-name plugins to declare
-  knownPluginNamespaces = [
-    "colorschemes"
-    "plugins"
-  ];
+  # Option namespace expect by-name plugins to use
+  namespace = "plugins";
 
   # Group by-name children by filetype; "regular", "directory", "symlink" and "unknown".
   children =
@@ -157,17 +154,10 @@ linkFarmFromDrvs "plugins-by-name" [
     {
       __structuredAttrs = true;
 
-      # I'm sorry, I couldn't help implementing oxford-comma...
-      expected =
-        let
-          len = builtins.length knownPluginNamespaces;
-        in
-        lib.concatImapStringsSep ", " (
-          i: str: lib.optionalString (i > 1 && i == len) "or " + "`${str}`"
-        ) knownPluginNamespaces;
+      inherit namespace;
 
       options = lib.pipe by-name-enable-opts [
-        (lib.filterAttrs (file: loc: !(builtins.elem (builtins.head loc) knownPluginNamespaces)))
+        (lib.filterAttrs (file: loc: builtins.head loc != namespace))
         (lib.mapAttrs (file: loc: "`${lib.showOption loc}`"))
       ];
 
@@ -178,7 +168,7 @@ linkFarmFromDrvs "plugins-by-name" [
     ''
       if (( ''${#options[@]} > 0 )); then
         echo "Found plugin modules with unknown option namespaces (''${#options[@]})"
-        echo "Expected all plugins to be scoped as $expected"
+        echo "Expected all plugins to be scoped as $namespace"
         for file in "''${!options[@]}"; do
           echo "- ''${options[$file]} is declared in '$file'"
         done
