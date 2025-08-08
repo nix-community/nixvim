@@ -177,6 +177,7 @@ in
       haml_lint = "mastodon";
       haxe_formatter = "haxe";
       isortd = "isort";
+      kube_linter = "kube-linter";
       ltrs = "languagetool-rust";
       markdownlint_cli2 = "markdownlint-cli2";
       markdownlint = "markdownlint-cli";
