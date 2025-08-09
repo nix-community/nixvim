@@ -1,0 +1,31 @@
+name: Formatting
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "**.svg"
+      - ".gitignore"
+      - "LICENSE"
+      - "flake.lock"
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - "**.svg"
+      - ".gitignore"
+      - "LICENSE"
+      - "flake.lock"
+
+jobs:
+  treefmt:
+    name: Check formatting with treefmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+      - name: Run treefmt check
+        run: nix build .#checks.x86_64-linux.treefmt
