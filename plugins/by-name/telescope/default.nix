@@ -77,6 +77,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       type = types.nullOr types.str;
       description = "The colorscheme to use for syntax highlighting";
       default = config.colorscheme;
+      defaultText = literalExpression "config.colorscheme";
     };
 
     enabledExtensions = mkOption {
