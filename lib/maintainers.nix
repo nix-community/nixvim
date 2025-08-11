@@ -49,7 +49,7 @@
   JanKremer = {
     email = "mail@jankremer.eu";
     matrix = "@jankremer:matrix.org";
-    github = "janurskremer";
+    github = "jukremer";
     githubId = 79042825;
     name = "Jan Kremer";
     keys = [ { fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC"; } ];
