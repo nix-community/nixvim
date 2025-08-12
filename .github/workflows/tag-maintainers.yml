@@ -36,7 +36,7 @@ jobs:
       # Checkout the code from the base branch.
       # This is a security measure for `pull_request_target` to run trusted code.
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.base_ref }}
 
