@@ -443,6 +443,7 @@ in
     sorts =
       defaultNullOpts.mkListOf
         (types.enum [
+          "exact"
           "label"
           "sort_text"
           "kind"
@@ -450,7 +451,7 @@ in
         ])
         [ "score" "sort_text" ]
         ''
-          Controls which sorts to use and in which order, these three are currently the only allowed options
+          Controls which sorts to use and in which order, these five are currently the only allowed options
         '';
 
     prebuilt_binaries = {
