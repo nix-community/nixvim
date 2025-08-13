@@ -82,7 +82,6 @@
     "laravel_ls"
     "lean3ls"
     "lelwel_ls"
-    "ltex_plus"
     "lwc_ls"
     "m68k"
     "marko-js"
@@ -281,6 +280,7 @@
     lemminx = "lemminx";
     lsp_ai = "lsp-ai";
     ltex = "ltex-ls";
+    ltex_plus = "ltex-ls-plus";
     lua_ls = "lua-language-server";
     luau_lsp = "luau-lsp";
     markdown_oxide = "markdown-oxide";
