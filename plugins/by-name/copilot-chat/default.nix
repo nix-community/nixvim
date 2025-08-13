@@ -31,8 +31,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
       System prompt to use.
     '';
 
-    model = defaultNullOpts.mkStr "gpt-4" ''
-      GPT model to use, 'gpt-3.5-turbo' or 'gpt-4'.
+    model = defaultNullOpts.mkStr "gpt-4.1" ''
+      GPT model to use, 'gpt-3.5-turbo' or 'gpt-4.1'.
     '';
 
     temperature = defaultNullOpts.mkProportion 0.1 ''
