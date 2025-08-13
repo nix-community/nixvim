@@ -170,7 +170,7 @@ let
               plugins = [
                 {
                   name = "@vue/typescript-plugin";
-                  location = "${lib.getBin cfg.package}/lib/node_modules/@vue/language-server";
+                  location = "${lib.getBin cfg.package}/lib/language-tools/packages/language-server";
                   languages = [ "vue" ];
                 }
               ];
