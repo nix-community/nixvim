@@ -53,6 +53,7 @@
     "hadolint"
     "haml_lint"
     "ktlint"
+    "kube_linter"
     "ltrs"
     "markdownlint"
     "markdownlint_cli2"
