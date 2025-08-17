@@ -77,6 +77,25 @@ rec {
     '';
   };
 
+  pipeAdapterOption = mkAdapterType {
+    pipe = lib.nixvim.defaultNullOpts.mkStr "$\{pipe}" "Pipe name.";
+
+    executable = {
+      command = mkNullOrOption types.str "Command that spawns the adapter.";
+
+      args = mkNullOrOption (types.listOf types.str) "Command arguments.";
+
+      detached = lib.nixvim.defaultNullOpts.mkBool true "Spawn the debug adapter in detached state.";
+
+      cwd = mkNullOrOption types.str "Working directory.";
+    };
+
+    options.timeout = lib.nixvim.defaultNullOpts.mkInt 5000 ''
+      Max amount of time in ms to wait between spaning the executable and connecting to the pipe.
+      This gives the executable time to create the pipe
+    '';
+  };
+
   mkAdapterOption =
     name: type:
     mkNullOrOption (with types; attrsOf (either str type)) ''

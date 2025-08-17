@@ -26,6 +26,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     adapters = lib.nixvim.mkCompositeOption "Dap adapters." {
       executables = dapHelpers.mkAdapterOption "executable" dapHelpers.executableAdapterOption;
       servers = dapHelpers.mkAdapterOption "server" dapHelpers.serverAdapterOption;
+      pipes = dapHelpers.mkAdapterOption "pipe" dapHelpers.pipeAdapterOption;
     };
 
     configurations =
@@ -70,6 +71,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ))
           // (lib.optionalAttrs (cfg.adapters.servers != null) (
             dapHelpers.processAdapters "server" cfg.adapters.servers
+          ))
+          // (lib.optionalAttrs (cfg.adapters.pipes != null) (
+            dapHelpers.processAdapters "pipe" cfg.adapters.pipes
           ));
 
         signs = with cfg.signs; {
