@@ -21,7 +21,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     ### Completion Source Installation
 
-    If `plugins.cmp.autoEnableSources` is `true` Nixivm will automatically enable the corresponding source
+    If `plugins.cmp.autoEnableSources` is `true` Nixvim will automatically enable the corresponding source
     plugins. This is the default behavior, but will work only when this option is set to a list.
 
     If you use a raw lua string or set `plugins.cmp.autoEnableSources` to `false`, you will need to explicitly enable the relevant source plugins in
