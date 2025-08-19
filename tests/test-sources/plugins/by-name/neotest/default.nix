@@ -11,6 +11,7 @@
 
         adapters = {
           bash.enable = true;
+          ctest.enable = true;
           dart.enable = true;
           deno.enable = true;
           dotnet.enable = true;

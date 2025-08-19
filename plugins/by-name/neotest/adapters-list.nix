@@ -7,6 +7,10 @@
   bash = {
     treesitter-parser = "bash";
   };
+  ctest = {
+    treesitter-parser = "cpp";
+    settingsSuffix = settingsLua: ".setup(${settingsLua})";
+  };
   dart = {
     treesitter-parser = "dart";
   };
