@@ -181,6 +181,7 @@ in
       ltrs = "languagetool-rust";
       markdownlint_cli2 = "markdownlint-cli2";
       markdownlint = "markdownlint-cli";
+      meson_format = "meson";
       mix = "elixir";
       nimpretty = "nim";
       nixfmt = "nixfmt-classic";
