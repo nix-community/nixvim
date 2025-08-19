@@ -6,6 +6,7 @@
   defaults = {
     plugins.dap-view = {
       enable = true;
+
       settings = {
         winbar = {
           show = true;
@@ -25,7 +26,7 @@
               short_label = " [B]";
               action.__raw = ''
                 function()
-                  views.switch_to_view("breakpoints")
+                    require("dap-view.views").switch_to_view("breakpoints")
                 end
               '';
             };
@@ -35,7 +36,7 @@
               short_label = "󰂥 [S]";
               action.__raw = ''
                 function()
-                  views.switch_to_view("scopes")
+                  require("dap-view.views").switch_to_view("scopes")
                 end
               '';
             };
@@ -45,7 +46,7 @@
               short_label = "󰢃 [E]";
               action.__raw = ''
                 function()
-                  views.switch_to_view("exceptions")
+                    require("dap-view.views").switch_to_view("exceptions")
                 end
               '';
             };
@@ -55,7 +56,7 @@
               short_label = "󰛐 [W]";
               action.__raw = ''
                 function()
-                    views.switch_to_view("watches")
+                  require("dap-view.views").switch_to_view("watches")
                 end
               '';
             };
@@ -65,7 +66,7 @@
               short_label = "󱉯 [T]";
               action.__raw = ''
                 function()
-                  views.switch_to_view("threads")
+                  require("dap-view.views").switch_to_view("threads")
                 end
               '';
             };
@@ -79,18 +80,28 @@
                 end
               '';
             };
+            sessions = {
+              keymap = "K";
+              label = "Sessions [K]";
+              short_label = " [K]";
+              action.__raw = ''
+                function()
+                  require("dap-view.views").switch_to_view("sessions")
+                end
+              '';
+            };
             console = {
               keymap = "C";
               label = "Console [C]";
               short_label = "󰆍 [C]";
               action.__raw = ''
                 function()
-                    require("dap-view.term").show()
+                  require("dap-view.term").show()
                 end
               '';
             };
           };
-          custom_sections = { };
+          custom_sections = [ ];
           controls = {
             enabled = false;
             position = "right";
@@ -104,18 +115,7 @@
               "terminate"
               "disconnect"
             ];
-            icons = {
-              pause = "";
-              play = "";
-              step_into = "";
-              step_over = "";
-              step_out = "";
-              step_back = "";
-              run_last = "";
-              terminate = "";
-              disconnect = "";
-            };
-            custom_buttons = { };
+            custom_buttons = [ ];
           };
         };
         windows = {
@@ -124,15 +124,31 @@
           terminal = {
             width = 0.5;
             position = "left";
-            hide = [ ];
+            hide = { };
             start_hidden = false;
           };
+        };
+        icons = {
+          disabled = "";
+          disconnect = "";
+          enabled = "";
+          filter = "󰈲";
+          negate = " ";
+          pause = "";
+          play = "";
+          run_last = "";
+          step_back = "";
+          step_into = "";
+          step_out = "";
+          step_over = "";
+          terminate = "";
         };
         help = {
           border = null;
         };
         switchbuf = "usetab";
         auto_toggle = false;
+        follow_tab = false;
       };
     };
   };
