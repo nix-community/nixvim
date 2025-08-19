@@ -152,4 +152,20 @@
       };
     };
   };
+
+  example = {
+    plugins.dap-view = {
+      enable = true;
+
+      settings = {
+        winbar = {
+          controls.enabled = true;
+        };
+        windows.terminal = {
+          position = "right";
+          start_hidden = true;
+        };
+      };
+    };
+  };
 }
