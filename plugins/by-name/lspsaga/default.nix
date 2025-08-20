@@ -467,7 +467,7 @@ in
         {
           enable = mkOverride 1490 true;
         };
-    warnings = lib.nixvim.mkWarnings "plugins.ltex-extra" {
+    warnings = lib.nixvim.mkWarnings "plugins.lspsaga" {
       # https://nvimdev.github.io/lspsaga/implement/#default-options
       when = (cfg.implement.enable == true) && (cfg.symbolInWinbar.enable == false);
 
