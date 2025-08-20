@@ -3,8 +3,7 @@
 {
   "rust-analyzer.assist.emitMustUse" = {
     description = ''
-      Whether to insert #[must_use] when generating `as_` methods
-      for enum variants.
+      Insert #[must_use] when generating `as_` methods for enum variants.
     '';
     pluginDefault = false;
     type = {
@@ -30,7 +29,7 @@
   };
   "rust-analyzer.assist.preferSelf" = {
     description = ''
-      When inserting a type (e.g. in "fill match arms" assist), prefer to use `Self` over the type name where possible.
+      Prefer to use `Self` over the type name when inserting a type (e.g. in "fill match arms" assist).
     '';
     pluginDefault = false;
     type = {
@@ -39,7 +38,8 @@
   };
   "rust-analyzer.assist.termSearch.borrowcheck" = {
     description = ''
-      Enable borrow checking for term search code assists. If set to false, also there will be more suggestions, but some of them may not borrow-check.
+      Enable borrow checking for term search code assists. If set to false, also there will be
+      more suggestions, but some of them may not borrow-check.
     '';
     pluginDefault = true;
     type = {
@@ -68,7 +68,8 @@
   };
   "rust-analyzer.cachePriming.numThreads" = {
     description = ''
-      How many worker threads to handle priming caches. The default `0` means to pick automatically.
+      How many worker threads to handle priming caches. The default `0` means to pick
+      automatically.
 
       Values:
       - physical: Use the number of physical cores
@@ -162,7 +163,9 @@
       ```bash
       cargo check --quiet --workspace --message-format=json --all-targets --keep-going
       ```
-      .
+
+      Note: The option must be specified as an array of command line arguments, with
+      the first argument being the name of the command to run.
     '';
     pluginDefault = null;
     type = {
@@ -488,7 +491,9 @@
       ```bash
       cargo check --workspace --message-format=json --all-targets
       ```
-      .
+
+      Note: The option must be specified as an array of command line arguments, with
+      the first argument being the name of the command to run.
     '';
     pluginDefault = null;
     type = {
@@ -545,7 +550,7 @@
   };
   "rust-analyzer.completion.addSemicolonToUnit" = {
     description = ''
-      Whether to automatically add a semicolon when completing unit-returning functions.
+      Automatically add a semicolon when completing unit-returning functions.
 
       In `match` arms it completes a comma instead.
     '';
@@ -556,7 +561,8 @@
   };
   "rust-analyzer.completion.autoAwait.enable" = {
     description = ''
-      Toggles the additional completions that automatically show method calls and field accesses with `await` prefixed to them when completing on a future.
+      Show method calls and field accesses completions with `await` prefixed to them when
+      completing on a future.
     '';
     pluginDefault = true;
     type = {
@@ -565,7 +571,8 @@
   };
   "rust-analyzer.completion.autoIter.enable" = {
     description = ''
-      Toggles the additional completions that automatically show method calls with `iter()` or `into_iter()` prefixed to them when completing on a type that has them.
+      Show method call completions with `iter()` or `into_iter()` prefixed to them when
+      completing on a type that has them.
     '';
     pluginDefault = true;
     type = {
@@ -574,8 +581,10 @@
   };
   "rust-analyzer.completion.autoimport.enable" = {
     description = ''
-      Toggles the additional completions that automatically add imports when completed.
-      Note that your client must specify the `additionalTextEdits` LSP client capability to truly have this feature enabled.
+      Show completions that automatically add imports when completed.
+
+      Note that your client must specify the `additionalTextEdits` LSP client capability to
+      truly have this feature enabled.
     '';
     pluginDefault = true;
     type = {
@@ -589,10 +598,11 @@
       Traits in this list won't have their methods suggested in completions unless the trait
       is in scope.
 
-      You can either specify a string path which defaults to type "always" or use the more verbose
-      form `{ "path": "path::to::item", type: "always" }`.
+      You can either specify a string path which defaults to type "always" or use the more
+      verbose form `{ "path": "path::to::item", type: "always" }`.
 
-      For traits the type "methods" can be used to only exclude the methods but not the trait itself.
+      For traits the type "methods" can be used to only exclude the methods but not the trait
+      itself.
 
       This setting also inherits `#rust-analyzer.completion.excludeTraits#`.
     '';
@@ -635,8 +645,8 @@
   };
   "rust-analyzer.completion.autoself.enable" = {
     description = ''
-      Toggles the additional completions that automatically show method calls and field accesses
-      with `self` prefixed to them when inside a method.
+      Show method calls and field access completions with `self` prefixed to them when
+      inside a method.
     '';
     pluginDefault = true;
     type = {
@@ -645,7 +655,7 @@
   };
   "rust-analyzer.completion.callable.snippets" = {
     description = ''
-      Whether to add parenthesis and argument snippets when completing function.
+      Add parenthesis and argument snippets when completing function.
 
       Values:
       - fill_arguments: Add call parentheses and pre-fill arguments.
@@ -666,7 +676,9 @@
     description = ''
       A list of full paths to traits whose methods to exclude from completion.
 
-      Methods from these traits won't be completed, even if the trait is in scope. However, they will still be suggested on expressions whose type is `dyn Trait`, `impl Trait` or `T where T: Trait`.
+      Methods from these traits won't be completed, even if the trait is in scope. However,
+      they will still be suggested on expressions whose type is `dyn Trait`, `impl Trait` or
+      `T where T: Trait`.
 
       Note that the trait themselves can still be completed.
     '';
@@ -680,7 +692,7 @@
   };
   "rust-analyzer.completion.fullFunctionSignatures.enable" = {
     description = ''
-      Whether to show full function/method signatures in completion docs.
+      Show full function / method signatures in completion docs.
     '';
     pluginDefault = false;
     type = {
@@ -689,7 +701,8 @@
   };
   "rust-analyzer.completion.hideDeprecated" = {
     description = ''
-      Whether to omit deprecated items from autocompletion. By default they are marked as deprecated but not hidden.
+      Omit deprecated items from completions. By default they are marked as deprecated but not
+      hidden.
     '';
     pluginDefault = false;
     type = {
@@ -709,7 +722,7 @@
   };
   "rust-analyzer.completion.postfix.enable" = {
     description = ''
-      Whether to show postfix snippets like `dbg`, `if`, `not`, etc.
+      Show postfix snippets like `dbg`, `if`, `not`, etc.
     '';
     pluginDefault = true;
     type = {
@@ -718,7 +731,8 @@
   };
   "rust-analyzer.completion.privateEditable.enable" = {
     description = ''
-      Enables completions of private items and fields that are defined in the current workspace even if they are not visible at the current position.
+      Show completions of private items and fields that are defined in the current workspace
+      even if they are not visible at the current position.
     '';
     pluginDefault = false;
     type = {
@@ -776,7 +790,7 @@
   };
   "rust-analyzer.completion.termSearch.enable" = {
     description = ''
-      Whether to enable term search based snippets like `Some(foo.bar().baz())`.
+      Enable term search based snippets like `Some(foo.bar().baz())`.
     '';
     pluginDefault = false;
     type = {
@@ -808,7 +822,7 @@
   };
   "rust-analyzer.diagnostics.enable" = {
     description = ''
-      Whether to show native rust-analyzer diagnostics.
+      Show native rust-analyzer diagnostics.
     '';
     pluginDefault = true;
     type = {
@@ -817,8 +831,8 @@
   };
   "rust-analyzer.diagnostics.experimental.enable" = {
     description = ''
-      Whether to show experimental rust-analyzer diagnostics that might
-      have more false positives than usual.
+      Show experimental rust-analyzer diagnostics that might have more false positives than
+      usual.
     '';
     pluginDefault = false;
     type = {
@@ -827,8 +841,8 @@
   };
   "rust-analyzer.diagnostics.remapPrefix" = {
     description = ''
-      Map of prefixes to be substituted when parsing diagnostic file paths.
-      This should be the reverse mapping of what is passed to `rustc` as `--remap-path-prefix`.
+      Map of prefixes to be substituted when parsing diagnostic file paths. This should be the
+      reverse mapping of what is passed to `rustc` as `--remap-path-prefix`.
     '';
     pluginDefault = { };
     type = {
@@ -837,7 +851,7 @@
   };
   "rust-analyzer.diagnostics.styleLints.enable" = {
     description = ''
-      Whether to run additional style lints.
+      Run additional style lints.
     '';
     pluginDefault = false;
     type = {
@@ -848,8 +862,8 @@
     description = ''
       List of warnings that should be displayed with hint severity.
 
-      The warnings will be indicated by faded text or three dots in code
-      and will not show up in the `Problems Panel`.
+      The warnings will be indicated by faded text or three dots in code and will not show up
+      in the `Problems Panel`.
     '';
     pluginDefault = [ ];
     type = {
@@ -863,8 +877,8 @@
     description = ''
       List of warnings that should be displayed with info severity.
 
-      The warnings will be indicated by a blue squiggly underline in code
-      and a blue icon in the `Problems Panel`.
+      The warnings will be indicated by a blue squiggly underline in code and a blue icon in
+      the `Problems Panel`.
     '';
     pluginDefault = [ ];
     type = {
@@ -874,11 +888,22 @@
       kind = "list";
     };
   };
+  "rust-analyzer.document.symbol.search.excludeLocals" = {
+    description = ''
+      Exclude all locals from document symbol search.
+    '';
+    pluginDefault = true;
+    type = {
+      kind = "boolean";
+    };
+  };
   "rust-analyzer.files.exclude" = {
     description = ''
-      These paths (file/directories) will be ignored by rust-analyzer. They are
-      relative to the workspace root, and globs are not supported. You may
-      also need to add the folders to Code's `files.watcherExclude`.
+      List of files to ignore
+
+      These paths (file/directories) will be ignored by rust-analyzer. They are relative to
+      the workspace root, and globs are not supported. You may also need to add the folders to
+      Code's `files.watcherExclude`.
     '';
     pluginDefault = [ ];
     type = {
@@ -907,7 +932,8 @@
   };
   "rust-analyzer.highlightRelated.branchExitPoints.enable" = {
     description = ''
-      Enables highlighting of related return values while the cursor is on any `match`, `if`, or match arm arrow (`=>`).
+      Highlight related return values while the cursor is on any `match`, `if`, or match arm
+      arrow (`=>`).
     '';
     pluginDefault = true;
     type = {
@@ -916,7 +942,8 @@
   };
   "rust-analyzer.highlightRelated.breakPoints.enable" = {
     description = ''
-      Enables highlighting of related references while the cursor is on `break`, `loop`, `while`, or `for` keywords.
+      Highlight related references while the cursor is on `break`, `loop`, `while`, or `for`
+      keywords.
     '';
     pluginDefault = true;
     type = {
@@ -925,7 +952,7 @@
   };
   "rust-analyzer.highlightRelated.closureCaptures.enable" = {
     description = ''
-      Enables highlighting of all captures of a closure while the cursor is on the `|` or move keyword of a closure.
+      Highlight all captures of a closure while the cursor is on the `|` or move keyword of a closure.
     '';
     pluginDefault = true;
     type = {
@@ -934,7 +961,8 @@
   };
   "rust-analyzer.highlightRelated.exitPoints.enable" = {
     description = ''
-      Enables highlighting of all exit points while the cursor is on any `return`, `?`, `fn`, or return type arrow (`->`).
+      Highlight all exit points while the cursor is on any `return`, `?`, `fn`, or return type
+      arrow (`->`).
     '';
     pluginDefault = true;
     type = {
@@ -943,7 +971,7 @@
   };
   "rust-analyzer.highlightRelated.references.enable" = {
     description = ''
-      Enables highlighting of related references while the cursor is on any identifier.
+      Highlight related references while the cursor is on any identifier.
     '';
     pluginDefault = true;
     type = {
@@ -952,7 +980,8 @@
   };
   "rust-analyzer.highlightRelated.yieldPoints.enable" = {
     description = ''
-      Enables highlighting of all break points for a loop or block context while the cursor is on any `async` or `await` keywords.
+      Highlight all break points for a loop or block context while the cursor is on any
+      `async` or `await` keywords.
     '';
     pluginDefault = true;
     type = {
@@ -961,8 +990,7 @@
   };
   "rust-analyzer.hover.actions.debug.enable" = {
     description = ''
-      Whether to show `Debug` action. Only applies when
-      `#rust-analyzer.hover.actions.enable#` is set.
+      Show `Debug` action. Only applies when `#rust-analyzer.hover.actions.enable#` is set.
     '';
     pluginDefault = true;
     type = {
@@ -971,7 +999,7 @@
   };
   "rust-analyzer.hover.actions.enable" = {
     description = ''
-      Whether to show HoverActions in Rust files.
+      Show HoverActions in Rust files.
     '';
     pluginDefault = true;
     type = {
@@ -980,7 +1008,7 @@
   };
   "rust-analyzer.hover.actions.gotoTypeDef.enable" = {
     description = ''
-      Whether to show `Go to Type Definition` action. Only applies when
+      Show `Go to Type Definition` action. Only applies when
       `#rust-analyzer.hover.actions.enable#` is set.
     '';
     pluginDefault = true;
@@ -990,8 +1018,8 @@
   };
   "rust-analyzer.hover.actions.implementations.enable" = {
     description = ''
-      Whether to show `Implementations` action. Only applies when
-      `#rust-analyzer.hover.actions.enable#` is set.
+      Show `Implementations` action. Only applies when `#rust-analyzer.hover.actions.enable#`
+      is set.
     '';
     pluginDefault = true;
     type = {
@@ -1000,8 +1028,8 @@
   };
   "rust-analyzer.hover.actions.references.enable" = {
     description = ''
-      Whether to show `References` action. Only applies when
-      `#rust-analyzer.hover.actions.enable#` is set.
+      Show `References` action. Only applies when `#rust-analyzer.hover.actions.enable#` is
+      set.
     '';
     pluginDefault = false;
     type = {
@@ -1010,8 +1038,7 @@
   };
   "rust-analyzer.hover.actions.run.enable" = {
     description = ''
-      Whether to show `Run` action. Only applies when
-      `#rust-analyzer.hover.actions.enable#` is set.
+      Show `Run` action. Only applies when `#rust-analyzer.hover.actions.enable#` is set.
     '';
     pluginDefault = true;
     type = {
@@ -1020,8 +1047,8 @@
   };
   "rust-analyzer.hover.actions.updateTest.enable" = {
     description = ''
-      Whether to show `Update Test` action. Only applies when
-      `#rust-analyzer.hover.actions.enable#` and `#rust-analyzer.hover.actions.run.enable#` are set.
+      Show `Update Test` action. Only applies when `#rust-analyzer.hover.actions.enable#` and
+      `#rust-analyzer.hover.actions.run.enable#` are set.
     '';
     pluginDefault = true;
     type = {
@@ -1030,7 +1057,7 @@
   };
   "rust-analyzer.hover.documentation.enable" = {
     description = ''
-      Whether to show documentation on hover.
+      Show documentation on hover.
     '';
     pluginDefault = true;
     type = {
@@ -1039,7 +1066,7 @@
   };
   "rust-analyzer.hover.documentation.keywords.enable" = {
     description = ''
-      Whether to show keyword hover popups. Only applies when
+      Show keyword hover popups. Only applies when
       `#rust-analyzer.hover.documentation.enable#` is set.
     '';
     pluginDefault = true;
@@ -1049,7 +1076,7 @@
   };
   "rust-analyzer.hover.dropGlue.enable" = {
     description = ''
-      Whether to show drop glue information on hover.
+      Show drop glue information on hover.
     '';
     pluginDefault = true;
     type = {
@@ -1067,9 +1094,11 @@
   };
   "rust-analyzer.hover.maxSubstitutionLength" = {
     description = ''
-      Whether to show what types are used as generic arguments in calls etc. on hover, and what is their max length to show such types, beyond it they will be shown with ellipsis.
+      Show what types are used as generic arguments in calls etc. on hover, and limit the max
+      length to show such types, beyond which they will be shown with ellipsis.
 
-      This can take three values: `null` means "unlimited", the string `"hide"` means to not show generic substitutions at all, and a number means to limit them to X characters.
+      This can take three values: `null` means "unlimited", the string `"hide"` means to not
+      show generic substitutions at all, and a number means to limit them to X characters.
 
       The default is 20 characters.
     '';
@@ -1117,7 +1146,7 @@
   };
   "rust-analyzer.hover.memoryLayout.enable" = {
     description = ''
-      Whether to show memory layout data on hover.
+      Show memory layout data on hover.
     '';
     pluginDefault = true;
     type = {
@@ -1218,7 +1247,8 @@
   };
   "rust-analyzer.hover.show.fields" = {
     description = ''
-      How many fields of a struct, variant or union to display when hovering on. Show none if empty.
+      How many fields of a struct, variant or union to display when hovering on. Show none if
+      empty.
     '';
     pluginDefault = 5;
     type = {
@@ -1240,7 +1270,8 @@
   };
   "rust-analyzer.imports.granularity.enforce" = {
     description = ''
-      Whether to enforce the import granularity setting for all files. If set to false rust-analyzer will try to keep import styles consistent per file.
+      Enforce the import granularity setting for all files. If set to false rust-analyzer will
+      try to keep import styles consistent per file.
     '';
     pluginDefault = false;
     type = {
@@ -1272,7 +1303,9 @@
   };
   "rust-analyzer.imports.group.enable" = {
     description = ''
-      Group inserted imports by the [following order](https://rust-analyzer.github.io/book/features.html#auto-import). Groups are separated by newlines.
+      Group inserted imports by the [following
+      order](https://rust-analyzer.github.io/book/features.html#auto-import). Groups are
+      separated by newlines.
     '';
     pluginDefault = true;
     type = {
@@ -1281,7 +1314,8 @@
   };
   "rust-analyzer.imports.merge.glob" = {
     description = ''
-      Whether to allow import insertion to merge new imports into single path glob imports like `use std::fmt::*;`.
+      Allow import insertion to merge new imports into single path glob imports like `use
+      std::fmt::*;`.
     '';
     pluginDefault = true;
     type = {
@@ -1299,7 +1333,7 @@
   };
   "rust-analyzer.imports.preferPrelude" = {
     description = ''
-      Whether to prefer import paths containing a `prelude` module.
+      Prefer import paths containing a `prelude` module.
     '';
     pluginDefault = false;
     type = {
@@ -1327,7 +1361,9 @@
   };
   "rust-analyzer.imports.prefixExternPrelude" = {
     description = ''
-      Whether to prefix external (including std, core) crate imports with `::`. e.g. "use ::std::io::Read;".
+      Prefix external (including std, core) crate imports with `::`.
+
+      E.g. `use ::std::io::Read;`.
     '';
     pluginDefault = false;
     type = {
@@ -1336,7 +1372,7 @@
   };
   "rust-analyzer.inlayHints.bindingModeHints.enable" = {
     description = ''
-      Whether to show inlay type hints for binding modes.
+      Show inlay type hints for binding modes.
     '';
     pluginDefault = false;
     type = {
@@ -1345,7 +1381,7 @@
   };
   "rust-analyzer.inlayHints.chainingHints.enable" = {
     description = ''
-      Whether to show inlay type hints for method chains.
+      Show inlay type hints for method chains.
     '';
     pluginDefault = true;
     type = {
@@ -1354,7 +1390,7 @@
   };
   "rust-analyzer.inlayHints.closingBraceHints.enable" = {
     description = ''
-      Whether to show inlay hints after a closing `}` to indicate what item it belongs to.
+      Show inlay hints after a closing `}` to indicate what item it belongs to.
     '';
     pluginDefault = true;
     type = {
@@ -1375,7 +1411,7 @@
   };
   "rust-analyzer.inlayHints.closureCaptureHints.enable" = {
     description = ''
-      Whether to show inlay hints for closure captures.
+      Show inlay hints for closure captures.
     '';
     pluginDefault = false;
     type = {
@@ -1384,7 +1420,7 @@
   };
   "rust-analyzer.inlayHints.closureReturnTypeHints.enable" = {
     description = ''
-      Whether to show inlay type hints for return types of closures.
+      Show inlay type hints for return types of closures.
 
       Values:
       - always: Always show type hints for return types of closures.
@@ -1424,7 +1460,7 @@
   };
   "rust-analyzer.inlayHints.discriminantHints.enable" = {
     description = ''
-      Whether to show enum variant discriminant hints.
+      Show enum variant discriminant hints.
 
       Values:
       - always: Always show all discriminant hints.
@@ -1443,7 +1479,7 @@
   };
   "rust-analyzer.inlayHints.expressionAdjustmentHints.enable" = {
     description = ''
-      Whether to show inlay hints for type adjustments.
+      Show inlay hints for type adjustments.
 
       Values:
       - always: Always show all adjustment hints.
@@ -1462,7 +1498,7 @@
   };
   "rust-analyzer.inlayHints.expressionAdjustmentHints.hideOutsideUnsafe" = {
     description = ''
-      Whether to hide inlay hints for type adjustments outside of `unsafe` blocks.
+      Hide inlay hints for type adjustments outside of `unsafe` blocks.
     '';
     pluginDefault = false;
     type = {
@@ -1471,7 +1507,7 @@
   };
   "rust-analyzer.inlayHints.expressionAdjustmentHints.mode" = {
     description = ''
-      Whether to show inlay hints as postfix ops (`.*` instead of `*`, etc).
+      Show inlay hints as postfix ops (`.*` instead of `*`, etc).
 
       Values:
       - prefix: Always show adjustment hints as prefix (`*expr`).
@@ -1492,7 +1528,7 @@
   };
   "rust-analyzer.inlayHints.genericParameterHints.const.enable" = {
     description = ''
-      Whether to show const generic parameter name inlay hints.
+      Show const generic parameter name inlay hints.
     '';
     pluginDefault = true;
     type = {
@@ -1501,7 +1537,7 @@
   };
   "rust-analyzer.inlayHints.genericParameterHints.lifetime.enable" = {
     description = ''
-      Whether to show generic lifetime parameter name inlay hints.
+      Show generic lifetime parameter name inlay hints.
     '';
     pluginDefault = false;
     type = {
@@ -1510,7 +1546,7 @@
   };
   "rust-analyzer.inlayHints.genericParameterHints.type.enable" = {
     description = ''
-      Whether to show generic type parameter name inlay hints.
+      Show generic type parameter name inlay hints.
     '';
     pluginDefault = false;
     type = {
@@ -1519,7 +1555,7 @@
   };
   "rust-analyzer.inlayHints.implicitDrops.enable" = {
     description = ''
-      Whether to show implicit drop hints.
+      Show implicit drop hints.
     '';
     pluginDefault = false;
     type = {
@@ -1528,7 +1564,7 @@
   };
   "rust-analyzer.inlayHints.implicitSizedBoundHints.enable" = {
     description = ''
-      Whether to show inlay hints for the implied type parameter `Sized` bound.
+      Show inlay hints for the implied type parameter `Sized` bound.
     '';
     pluginDefault = false;
     type = {
@@ -1537,7 +1573,7 @@
   };
   "rust-analyzer.inlayHints.lifetimeElisionHints.enable" = {
     description = ''
-      Whether to show inlay type hints for elided lifetimes in function signatures.
+      Show inlay type hints for elided lifetimes in function signatures.
 
       Values:
       - always: Always show lifetime elision hints.
@@ -1556,7 +1592,7 @@
   };
   "rust-analyzer.inlayHints.lifetimeElisionHints.useParameterNames" = {
     description = ''
-      Whether to prefer using parameter names as the name for elided lifetime hints if possible.
+      Prefer using parameter names as the name for elided lifetime hints if possible.
     '';
     pluginDefault = false;
     type = {
@@ -1576,8 +1612,7 @@
   };
   "rust-analyzer.inlayHints.parameterHints.enable" = {
     description = ''
-      Whether to show function parameter name inlay hints at the call
-      site.
+      Show function parameter name inlay hints at the call site.
     '';
     pluginDefault = true;
     type = {
@@ -1586,7 +1621,7 @@
   };
   "rust-analyzer.inlayHints.rangeExclusiveHints.enable" = {
     description = ''
-      Whether to show exclusive range inlay hints.
+      Show exclusive range inlay hints.
     '';
     pluginDefault = false;
     type = {
@@ -1595,8 +1630,10 @@
   };
   "rust-analyzer.inlayHints.reborrowHints.enable" = {
     description = ''
-      Whether to show inlay hints for compiler inserted reborrows.
-      This setting is deprecated in favor of #rust-analyzer.inlayHints.expressionAdjustmentHints.enable#.
+      Show inlay hints for compiler inserted reborrows.
+
+      This setting is deprecated in favor of
+      #rust-analyzer.inlayHints.expressionAdjustmentHints.enable#.
 
       Values:
       - always: Always show reborrow hints.
@@ -1624,7 +1661,7 @@
   };
   "rust-analyzer.inlayHints.typeHints.enable" = {
     description = ''
-      Whether to show inlay type hints for variables.
+      Show inlay type hints for variables.
     '';
     pluginDefault = true;
     type = {
@@ -1633,8 +1670,10 @@
   };
   "rust-analyzer.inlayHints.typeHints.hideClosureInitialization" = {
     description = ''
-      Whether to hide inlay type hints for `let` statements that initialize to a closure.
-      Only applies to closures with blocks, same as `#rust-analyzer.inlayHints.closureReturnTypeHints.enable#`.
+      Hide inlay type hints for `let` statements that initialize to a closure.
+
+      Only applies to closures with blocks, same as
+      `#rust-analyzer.inlayHints.closureReturnTypeHints.enable#`.
     '';
     pluginDefault = false;
     type = {
@@ -1643,7 +1682,7 @@
   };
   "rust-analyzer.inlayHints.typeHints.hideClosureParameter" = {
     description = ''
-      Whether to hide inlay parameter type hints for closures.
+      Hide inlay parameter type hints for closures.
     '';
     pluginDefault = false;
     type = {
@@ -1652,7 +1691,7 @@
   };
   "rust-analyzer.inlayHints.typeHints.hideNamedConstructor" = {
     description = ''
-      Whether to hide inlay type hints for constructors.
+      Hide inlay type hints for constructors.
     '';
     pluginDefault = false;
     type = {
@@ -1661,7 +1700,7 @@
   };
   "rust-analyzer.interpret.tests" = {
     description = ''
-      Enables the experimental support for interpreting tests.
+      Enable the experimental support for interpreting tests.
     '';
     pluginDefault = false;
     type = {
@@ -1706,8 +1745,7 @@
   };
   "rust-analyzer.lens.debug.enable" = {
     description = ''
-      Whether to show `Debug` lens. Only applies when
-      `#rust-analyzer.lens.enable#` is set.
+      Show `Debug` lens. Only applies when `#rust-analyzer.lens.enable#` is set.
     '';
     pluginDefault = true;
     type = {
@@ -1716,7 +1754,7 @@
   };
   "rust-analyzer.lens.enable" = {
     description = ''
-      Whether to show CodeLens in Rust files.
+      Show CodeLens in Rust files.
     '';
     pluginDefault = true;
     type = {
@@ -1725,8 +1763,7 @@
   };
   "rust-analyzer.lens.implementations.enable" = {
     description = ''
-      Whether to show `Implementations` lens. Only applies when
-      `#rust-analyzer.lens.enable#` is set.
+      Show `Implementations` lens. Only applies when `#rust-analyzer.lens.enable#` is set.
     '';
     pluginDefault = true;
     type = {
@@ -1752,8 +1789,8 @@
   };
   "rust-analyzer.lens.references.adt.enable" = {
     description = ''
-      Whether to show `References` lens for Struct, Enum, and Union.
-      Only applies when `#rust-analyzer.lens.enable#` is set.
+      Show `References` lens for Struct, Enum, and Union. Only applies when
+      `#rust-analyzer.lens.enable#` is set.
     '';
     pluginDefault = false;
     type = {
@@ -1762,8 +1799,8 @@
   };
   "rust-analyzer.lens.references.enumVariant.enable" = {
     description = ''
-      Whether to show `References` lens for Enum Variants.
-      Only applies when `#rust-analyzer.lens.enable#` is set.
+      Show `References` lens for Enum Variants. Only applies when
+      `#rust-analyzer.lens.enable#` is set.
     '';
     pluginDefault = false;
     type = {
@@ -1772,8 +1809,7 @@
   };
   "rust-analyzer.lens.references.method.enable" = {
     description = ''
-      Whether to show `Method References` lens. Only applies when
-      `#rust-analyzer.lens.enable#` is set.
+      Show `Method References` lens. Only applies when `#rust-analyzer.lens.enable#` is set.
     '';
     pluginDefault = false;
     type = {
@@ -1782,8 +1818,8 @@
   };
   "rust-analyzer.lens.references.trait.enable" = {
     description = ''
-      Whether to show `References` lens for Trait.
-      Only applies when `#rust-analyzer.lens.enable#` is set.
+      Show `References` lens for Trait. Only applies when `#rust-analyzer.lens.enable#` is
+      set.
     '';
     pluginDefault = false;
     type = {
@@ -1792,8 +1828,7 @@
   };
   "rust-analyzer.lens.run.enable" = {
     description = ''
-      Whether to show `Run` lens. Only applies when
-      `#rust-analyzer.lens.enable#` is set.
+      Show `Run` lens. Only applies when `#rust-analyzer.lens.enable#` is set.
     '';
     pluginDefault = true;
     type = {
@@ -1802,8 +1837,8 @@
   };
   "rust-analyzer.lens.updateTest.enable" = {
     description = ''
-      Whether to show `Update Test` lens. Only applies when
-      `#rust-analyzer.lens.enable#` and `#rust-analyzer.lens.run.enable#` are set.
+      Show `Update Test` lens. Only applies when `#rust-analyzer.lens.enable#` and
+      `#rust-analyzer.lens.run.enable#` are set.
     '';
     pluginDefault = true;
     type = {
@@ -1812,12 +1847,10 @@
   };
   "rust-analyzer.linkedProjects" = {
     description = ''
-      Disable project auto-discovery in favor of explicitly specified set
-      of projects.
+      Disable project auto-discovery in favor of explicitly specified set of projects.
 
-      Elements must be paths pointing to `Cargo.toml`,
-      `rust-project.json`, `.rs` files (which will be treated as standalone files) or JSON
-      objects in `rust-project.json` format.
+      Elements must be paths pointing to `Cargo.toml`, `rust-project.json`, `.rs` files (which
+      will be treated as standalone files) or JSON objects in `rust-project.json` format.
     '';
     pluginDefault = [ ];
     type = {
@@ -1848,7 +1881,7 @@
   };
   "rust-analyzer.lru.query.capacities" = {
     description = ''
-      Sets the LRU capacity of the specified queries.
+      The LRU capacity of the specified queries.
     '';
     pluginDefault = { };
     type = {
@@ -1857,7 +1890,7 @@
   };
   "rust-analyzer.notifications.cargoTomlNotFound" = {
     description = ''
-      Whether to show `can't find Cargo.toml` error message.
+      Show `can't find Cargo.toml` error message.
     '';
     pluginDefault = true;
     type = {
@@ -1866,7 +1899,8 @@
   };
   "rust-analyzer.numThreads" = {
     description = ''
-      How many worker threads in the main loop. The default `null` means to pick automatically.
+      The number of worker threads in the main loop. The default `null` means to pick
+      automatically.
 
       Values:
       - physical: Use the number of physical cores
@@ -2024,6 +2058,9 @@
       not that of `cargo fmt`. The file contents will be passed on the
       standard input and the formatted result will be read from the
       standard output.
+
+      Note: The option must be specified as an array of command line arguments, with
+      the first argument being the name of the command to run.
     '';
     pluginDefault = null;
     type = {
@@ -2058,7 +2095,10 @@
   };
   "rust-analyzer.semanticHighlighting.nonStandardTokens" = {
     description = ''
-      Whether the server is allowed to emit non-standard tokens and modifiers.
+      Emit non-standard tokens and modifiers
+
+      When enabled, rust-analyzer will emit tokens and modifiers that are not part of the
+      standard set of semantic tokens.
     '';
     pluginDefault = true;
     type = {
@@ -2165,11 +2205,15 @@
   "rust-analyzer.typing.triggerChars" = {
     description = ''
       Specify the characters allowed to invoke special on typing triggers.
-      - typing `=` after `let` tries to smartly add `;` if `=` is followed by an existing expression
+
+      - typing `=` after `let` tries to smartly add `;` if `=` is followed by an existing
+          expression
       - typing `=` between two expressions adds `;` when in statement position
-      - typing `=` to turn an assignment into an equality comparison removes `;` when in expression position
+      - typing `=` to turn an assignment into an equality comparison removes `;` when in
+          expression position
       - typing `.` in a chain method call auto-indents
-      - typing `{` or `(` in front of an expression inserts a closing `}` or `)` after the expression
+      - typing `{` or `(` in front of an expression inserts a closing `}` or `)` after the
+          expression
       - typing `{` in a use item adds a closing `}` in the right place
       - typing `>` to complete a return type `->` will insert a whitespace after it
       - typing `<` in a path or type position inserts a closing `>` after the path or type.
