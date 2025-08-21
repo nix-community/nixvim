@@ -57,11 +57,6 @@ owner = "gwg313"
 repo = "nvim-nix"
 
 [[config]]
-owner = "HeitorAugustoLN"
-repo = "nvim-config"
-description = "HeitorAugustoLN's personal Neovim configuration made with Nixvim"
-
-[[config]]
 owner = "hbjydev"
 repo = "hvim"
 
