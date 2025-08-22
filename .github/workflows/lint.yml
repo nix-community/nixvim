@@ -9,6 +9,9 @@ on:
       - "LICENSE"
       - "flake.lock"
 
+permissions:
+  contents: read
+
 jobs:
   treefmt:
     runs-on: ubuntu-latest
