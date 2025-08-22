@@ -24,14 +24,20 @@ in
         type = lib.types.submodule {
           options =
             lib.mapAttrs
-              (name: packageName: {
-                enable = lib.mkEnableOption name;
-                package = lib.mkPackageOption pkgs packageName { };
-              })
+              (
+                name: packageName:
+                {
+                  enable = lib.mkEnableOption name;
+                }
+                // lib.optionalAttrs (packageName != null) {
+                  package = lib.mkPackageOption pkgs packageName { };
+                }
+              )
               {
                 wl-copy = "wl-clipboard";
                 xclip = "xclip";
                 xsel = "xsel";
+                pbcopy = null;
               };
         };
         default = { };
@@ -47,7 +53,7 @@ in
     opts.clipboard = lib.mkIf (cfg.register != null) cfg.register;
 
     extraPackages = lib.mapAttrsToList (n: v: v.package) (
-      lib.filterAttrs (n: v: v.enable) cfg.providers
+      lib.filterAttrs (n: v: v.enable && v ? package) cfg.providers
     );
   };
 }

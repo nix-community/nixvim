@@ -27,4 +27,11 @@
       providers.wl-copy.enable = pkgs.stdenv.hostPlatform.isLinux;
     };
   };
+
+  example-with-builtin = {
+    clipboard = {
+      # pbcopy is only available on darwin, and is built-in
+      providers.pbcopy.enable = pkgs.stdenv.hostPlatform.isDarwin;
+    };
+  };
 }
