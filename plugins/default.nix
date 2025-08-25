@@ -13,6 +13,7 @@
     ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/gruvbox-baby.nix
+    ./colorschemes/gruvbox-material.nix
     ./colorschemes/gruvbox-material-nvim.nix
     ./colorschemes/kanagawa.nix
     ./colorschemes/kanagawa-paper.nix
