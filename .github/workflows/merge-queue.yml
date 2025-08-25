@@ -1,0 +1,39 @@
+name: Merge Queue
+
+on:
+  merge_group:
+
+permissions: {}
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+    with:
+      ref: ${{ github.event.merge_group.head_sha }}
+
+  # This job posts the "Required Status Checks" to satisfy our ruleset.
+  required-checks:
+    # It "needs" all the jobs that should block the Merge Queue.
+    # Modify this list to add or remove jobs from required status checks.
+    needs:
+      - lint
+
+    name: Required checks
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      statuses: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { serverUrl, repo, runId, payload } = context
+            await github.rest.repos.createCommitStatus({
+              ...repo,
+              sha: payload.merge_group.head_sha,
+              target_url: `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}`,
+              // WARNING:
+              // Do NOT change the context name or it will not match the ruleset.
+              // This would prevent all PRs from merging.
+              context: 'PR checks successful',
+              state: 'success',
+            })
