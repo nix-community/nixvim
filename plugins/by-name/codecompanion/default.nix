@@ -231,7 +231,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsExample = {
     adapters = {
-      ollama.__raw = ''
+      http.ollama.__raw = ''
         function()
           return require('codecompanion.adapters').extend('ollama', {
               env = {
