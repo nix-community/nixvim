@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        adapters = {
+        adapters.http = {
           anthropic = "anthropic";
           azure_openai = "azure_openai";
           copilot = "copilot";
@@ -948,7 +948,7 @@
       enable = true;
 
       settings = {
-        adapters = {
+        adapters.http = {
           ollama.__raw = ''
             function()
               return require('codecompanion.adapters').extend('ollama', {
