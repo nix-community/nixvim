@@ -24,11 +24,9 @@ jobs:
     # Permissions required for workflow
     # `contents`: to update maintainers file
     # `pull-requests`: to create pr
-    # `issues`: to label pr
     permissions:
       contents: write
       pull-requests: write
-      issues: write
     env:
       pr_branch: update/maintainers-${{ github.ref_name }}
     steps:
@@ -41,7 +39,6 @@ jobs:
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
-          permission-issues: write
 
       - name: Get GitHub App user info
         id: user-info
