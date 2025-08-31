@@ -174,3 +174,9 @@ owner = "c4patino"
 title = "yumevim"
 description = "nixvim flake, rather minimalist translation of my lua configuration"
 url = "https://github.com/c4patino/nixvim"
+
+[[config]]
+owner = "nicklundin08"
+title = "dots"
+description = "Nicks dotfiles"
+url = "https://github.com/nicklundin08/dots/blob/main/home-manager/home.nix"
