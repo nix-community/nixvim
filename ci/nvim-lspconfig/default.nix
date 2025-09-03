@@ -19,7 +19,10 @@ let
     ];
   };
 
-  nvim = wrapNeovimUnstable neovim-unwrapped nvimConfig;
+  nvim = (wrapNeovimUnstable neovim-unwrapped nvimConfig).overrideAttrs {
+    dontFixup = true;
+  };
+
 in
 runCommand "lspconfig-servers"
   {
