@@ -220,7 +220,13 @@ in
         }
       );
 
-      wrappedNeovim = pkgs.wrapNeovimUnstable package neovimConfig;
+      # TODO: 2025-01-06
+      # Wait for user feedback on disabling the fixup phase.
+      # Ideally this will be upstreamed to nixpkgs.
+      # See https://github.com/nix-community/nixvim/pull/3660#discussion_r2326250439
+      wrappedNeovim = (pkgs.wrapNeovimUnstable package neovimConfig).overrideAttrs {
+        dontFixup = true;
+      };
 
       customRC = helpers.concatNonEmptyLines [
         (helpers.wrapVimscriptForLua wrappedNeovim.initRc)
