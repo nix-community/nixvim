@@ -2,12 +2,15 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "rhubarb";
   packPathName = "vim-rhubarb";
-  package = "vim-fugitive";
+  package = "vim-rhubarb";
   description = "Rhubarb is a GitHub extension for fugitive.vim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  dependencies = [ "git" ];
+  dependencies = [
+    "git"
+    "fugitive"
+  ];
 
   imports = [
     (lib.nixvim.mkRemovedPackageOptionModule {
