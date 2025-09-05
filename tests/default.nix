@@ -7,7 +7,15 @@
   system ? pkgs.stdenv.hostPlatform.system,
 }:
 let
-  autoArgs = pkgs // {
+
+  # Use a single common instance of nixpkgs, with allowUnfree
+  # Having a single shared instance should speed up tests a little
+  pkgsForTest = import self.inputs.nixpkgs {
+    inherit system;
+    config.allowUnfree = true;
+  };
+
+  autoArgs = pkgsForTest // {
     inherit
       helpers
       self
@@ -25,6 +33,7 @@ let
       ;
     # Recursive:
     inherit callTest callTests;
+    inherit pkgsForTest;
   };
 
   callTest = lib.callPackageWith autoArgs;
