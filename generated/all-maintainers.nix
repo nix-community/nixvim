@@ -36,19 +36,6 @@
     name = "George Bals";
     source = "nixpkgs";
   };
-  Bodleum = {
-    email = "daniel@daniellaing.com";
-    github = "Bodleum";
-    githubId = 60107449;
-    keys = [
-      {
-        fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8";
-      }
-    ];
-    matrix = "@bodleum:matrix.org";
-    name = "Daniel Laing";
-    source = "nixpkgs";
-  };
   DataHearth = {
     email = "dev@antoine-langlois.net";
     github = "DataHearth";
@@ -74,6 +61,13 @@
     github = "FKouhai";
     githubId = 24593008;
     name = "Fran Cirka";
+    source = "nixpkgs";
+  };
+  FredeHoey = {
+    email = "frederikbraendstrup@gmail.com";
+    github = "FredeHoey";
+    githubId = 7551358;
+    name = "Frede Emil";
     source = "nixpkgs";
   };
   GGORG0 = {
@@ -180,6 +174,41 @@
     name = "Nikita Shirokov";
     source = "nixvim";
   };
+  c4patino = {
+    email = "c4patino@gmail.com";
+    github = "c4patino";
+    githubId = 79673111;
+    keys = [
+      {
+        fingerprint = "EA60 D516 A926 7532 369D  3E67 E161 DF22 9EC1 280E";
+      }
+      {
+        fingerprint = "D088 A5AF C45B 78D1 CD4F  457C 6957 B3B6 46F2 BB4E";
+      }
+    ];
+    name = "Ceferino Patino";
+    source = "nixpkgs";
+  };
+  chelsea6502 = {
+    email = "mail@chelseawilkinson.me";
+    github = "chelsea6502";
+    githubId = 122856043;
+    name = "Chelsea Wilkinson";
+    source = "nixpkgs";
+  };
+  daniellaing = {
+    email = "daniel@daniellaing.com";
+    github = "daniellaing";
+    githubId = 60107449;
+    keys = [
+      {
+        fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8";
+      }
+    ];
+    matrix = "@bodleum:matrix.org";
+    name = "Daniel Laing";
+    source = "nixpkgs";
+  };
   elythh = {
     email = "gwen@omg.lol";
     github = "elythh";
@@ -251,19 +280,6 @@
     name = "Jalil David Salamé Messina";
     source = "nixvim";
   };
-  janurskremer = {
-    email = "mail@jankremer.eu";
-    github = "janurskremer";
-    githubId = 79042825;
-    keys = [
-      {
-        fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC";
-      }
-    ];
-    matrix = "@jankremer:matrix.org";
-    name = "Jan Kremer";
-    source = "nixpkgs";
-  };
   jolars = {
     email = "jolars@posteo.com";
     github = "jolars";
@@ -275,6 +291,19 @@
     ];
     matrix = "@jola:mozilla.org";
     name = "Johan Larsson";
+    source = "nixpkgs";
+  };
+  jukremer = {
+    email = "mail@jankremer.eu";
+    github = "jukremer";
+    githubId = 79042825;
+    keys = [
+      {
+        fingerprint = "20AF 0A65 9F2B 93AD 9184  15D1 A7DA 689C B3B0 78EC";
+      }
+    ];
+    matrix = "@jankremer:matrix.org";
+    name = "Jan Kremer";
     source = "nixpkgs";
   };
   kalbasit = {
@@ -351,6 +380,12 @@
     github = "refaelsh";
     githubId = 2750775;
     name = "Refael Sheinker";
+    source = "nixvim";
+  };
+  saygo-png = {
+    github = "saygo-png";
+    githubId = 131687037;
+    name = "Saygo";
     source = "nixvim";
   };
   sheemap = {
