@@ -6,16 +6,10 @@
   pkgs,
   self,
   system,
+  pkgsForTest,
 }:
 let
   fetchTests = callTest ./fetch-tests.nix { };
-
-  # Use a single common instance of nixpkgs, with allowUnfree
-  # Having a single shared instance should speed up tests a little
-  pkgsForTest = import self.inputs.nixpkgs {
-    inherit system;
-    config.allowUnfree = true;
-  };
 
   moduleToTest =
     file: name: module:
