@@ -105,7 +105,7 @@
         sources =
           let
             disabled = [
-              #TODO Added 2025-04-01
+              # TODO Added 2025-04-01
               # php-cs-fixer is marked as broken
               "phpcsfixer"
             ]
