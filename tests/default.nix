@@ -41,6 +41,7 @@ let
   selfPackages = self.packages.${system};
 
   misc = {
+    all-package-defaults = callTest ./all-package-defaults.nix { };
     extra-args-tests = callTest ./extra-args.nix { };
     extend = callTest ./extend.nix { };
     extra-files = callTest ./extra-files.nix { };
