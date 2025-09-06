@@ -88,5 +88,8 @@ in
   flakeCheck = misc // docs // platforms // mainDrv;
 
   # TODO: consider whether all these tests are needed to be built by buildbot
-  buildbot = lib.optionalAttrs (system == "x86_64-linux") (misc // docs) // platforms // mainGrouped;
+  buildbot =
+    lib.optionalAttrs (system == "x86_64-linux") (misc // docs)
+    // platforms
+    // lib.optionalAttrs (system != "x86_64-darwin") mainGrouped;
 }

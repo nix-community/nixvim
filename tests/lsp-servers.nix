@@ -65,6 +65,10 @@ let
 
         # TODO: 2025-03-04 marked as broken
         "nickel_ls"
+      ]
+      ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+        # TODO: 2025-09-01 build failure
+        "verible"
       ];
     in
     {

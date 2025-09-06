@@ -139,6 +139,10 @@
               "opacheck"
               "rego"
             ]
+            ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+              # TODO: 2025-09-01 build failure
+              "verible_verilog_format"
+            ]
             ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
               # TODO: 2025-06-24 build failure
               "gleam_format"
