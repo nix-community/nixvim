@@ -22,7 +22,7 @@ let
       nvim = makeNixvimWithModule { inherit pkgs module; };
     in
     runCommandLocal "enable-except-in-tests-not-in-test"
-      { printConfig = "${nvim}/bin/nixvim-print-init"; }
+      { printConfig = ''PATH="${nvim}:$PATH" ${nvim}/bin/nixvim-print-init''; }
       ''
         if ! "$printConfig" | grep 'require("image").setup'; then
           echo "image.nvim is not present in the configuration"

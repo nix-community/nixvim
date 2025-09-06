@@ -14,7 +14,7 @@ let
   generated = secondStage.extend { extraConfigLua = "-- third stage"; };
 in
 runCommandLocal "extend-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
-  config=$($printConfig)
+  config=$(PATH="${generated}:$PATH" $printConfig)
   for stage in "first" "second" "third"; do
     if ! "$printConfig" | grep -q -- "-- $stage stage"; then
       echo "Missing $stage stage in config"

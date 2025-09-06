@@ -32,7 +32,7 @@ let
   };
 in
 runCommandLocal "special-arg-test" { printConfig = "${generated}/bin/nixvim-print-init"; } ''
-  config=$($printConfig)
+  config=$(PATH="${generated}:$PATH" $printConfig)
   if ! "$printConfig" | grep -- '-- regularArg=regularValue'; then
     echo "Missing regularArg in config"
     exit 1

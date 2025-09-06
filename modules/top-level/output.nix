@@ -316,12 +316,27 @@ in
 
         printInitPackage = pkgs.writeShellApplication {
           name = "nixvim-print-init";
-          runtimeInputs = [ pkgs.bat ];
-          runtimeEnv = {
-            init = config.build.initSource;
-          };
+          runtimeInputs = [
+            pkgs.bat
+            pkgs.coreutils
+            pkgs.which
+            pkgs.gnused
+            pkgs.gnugrep
+          ];
           text = ''
-            bat --language=lua "$init"
+            INIT_PATH=$(tail -n1 "$(which nvim)" | sed "s/ /\n/g" | grep "init.lua") ||
+              {
+                echo "init.lua not found";
+                exit 1;
+              }
+            readonly INIT_PATH
+
+            grep "Nixvim's internal module table" "$INIT_PATH" > /dev/null || {
+              echo "init.lua found, but it was not made by Nixvim";
+              exit 1;
+            };
+
+            bat --language=lua "$INIT_PATH"
           '';
         };
 
