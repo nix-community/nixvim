@@ -41,7 +41,6 @@ let
   selfPackages = self.packages.${system};
 
   misc = {
-    all-package-defaults = callTest ./all-package-defaults.nix { };
     extra-args-tests = callTest ./extra-args.nix { };
     extend = callTest ./extend.nix { };
     extra-files = callTest ./extra-files.nix { };
@@ -59,6 +58,11 @@ let
   docs = lib.optionalAttrs (selfPackages ? docs) {
     # Individual tests can be run using: nix build .#docs.user-configs.tests.<test>
     docs-user-configs = linkFarm "user-configs-tests" selfPackages.docs.user-configs.tests;
+  };
+
+  packages = {
+    # Checks that all package defaults we specify can actually be built
+    all-package-defaults = callTest ./all-package-defaults.nix { };
   };
 
   # These are always built on all systems, even when `allSystems = false`
@@ -85,8 +89,9 @@ let
 in
 {
   # TODO: consider whether all these tests are needed in the `checks` output
-  flakeCheck = misc // docs // platforms // mainDrv;
+  flakeCheck = misc // docs // platforms // packages // mainDrv;
 
   # TODO: consider whether all these tests are needed to be built by buildbot
-  buildbot = lib.optionalAttrs (system == "x86_64-linux") (misc // docs) // platforms // mainGrouped;
+  buildbot =
+    lib.optionalAttrs (system == "x86_64-linux") (misc // docs) // platforms // packages // mainGrouped;
 }
