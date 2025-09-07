@@ -56,6 +56,10 @@ let
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
     # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
     "zig-zlint"
+
+    # 2025-09-08, build failure
+    # https://github.com/NixOS/nixpkgs/pull/441058
+    "verible"
   ];
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledTests);
