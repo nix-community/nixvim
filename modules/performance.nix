@@ -60,6 +60,17 @@ in
       luaLib = lib.mkEnableOption "luaLib" // {
         description = "Whether to byte compile lua library.";
       };
+      excludedPlugins = lib.mkOption {
+        type = with types; listOf (either str package);
+        default = [ ];
+        example = lib.literalExpression ''
+          [
+            "faster.nvim"
+             pkgs.vimPlugins.conform-nvim
+          ];
+        '';
+        description = "List of plugins (names or packages) to exclude from byte compilation.";
+      };
     };
 
     combinePlugins = {
