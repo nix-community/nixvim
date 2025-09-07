@@ -1,11 +1,4 @@
-{ lib, pkgs, ... }:
-let
-  platform = pkgs.stdenv.hostPlatform;
-
-  # tabnine is not available on aarch64-linux.
-  doRun = !(platform.isLinux && platform.isAarch64);
-in
-lib.optionalAttrs doRun {
+{
   empty = {
     plugins = {
       cmp.enable = true;

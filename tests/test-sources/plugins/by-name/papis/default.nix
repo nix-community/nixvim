@@ -1,7 +1,4 @@
-{ lib, pkgs, ... }:
-# TODO: as of 2025-05-18, luajitPackages.luv is broken on darwin
-# https://github.com/NixOS/nixpkgs/issues/408528
-lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) {
+{
   empty = {
     plugins.papis.enable = true;
   };

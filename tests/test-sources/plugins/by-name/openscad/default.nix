@@ -1,8 +1,4 @@
-{ lib, pkgs, ... }:
-# TODO: Added 2025-05-28
-# `opencsg` fails to build on darwin
-# https://github.com/NixOS/nixpkgs/issues/411700
-lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) {
+{
   empty = {
     plugins.openscad.enable = true;
   };

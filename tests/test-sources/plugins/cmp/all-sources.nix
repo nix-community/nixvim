@@ -1,7 +1,6 @@
-{ lib, pkgs, ... }:
 {
   all-sources =
-    { config, ... }:
+    { lib, config, ... }:
     {
       plugins = {
         copilot-lua = {
@@ -16,10 +15,7 @@
         cmp = {
           enable = true;
           settings.sources =
-            with pkgs.lib;
             let
-              inherit (pkgs.stdenv) hostPlatform;
-
               disabledSources = [
                 # We do not provide the required HF_API_KEY environment variable.
                 "cmp_ai"
@@ -31,16 +27,9 @@
                 "supermaven"
                 # Sometimes get auth error
                 "codeium"
-              ]
-              ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-                "cmp_tabnine"
-              ]
-              ++ lib.optionals hostPlatform.isDarwin [
-                # TODO: as of 2025-05-18, luajitPackages.luv is broken on darwin
-                # https://github.com/NixOS/nixpkgs/issues/408528
-                "papis"
               ];
             in
+            with lib;
             pipe config.cmpSourcePlugins [
               # All known source names
               attrNames
