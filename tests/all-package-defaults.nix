@@ -64,6 +64,10 @@ let
     # 2025-09-08, build failure
     # https://github.com/NixOS/nixpkgs/pull/441058
     "verible"
+
+    # 2025-09-08 ttfautohint hangs forever
+    "texlive-combined-medium"
+    "texlive"
   ];
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledTests);
