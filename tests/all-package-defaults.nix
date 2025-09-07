@@ -27,6 +27,10 @@ let
     # xdotool is not available on darwin
     "fontpreview"
 
+    # 2025-09-08 build failure
+    # https://github.com/NixOS/nixpkgs/pull/441063
+    "buck2"
+
     # Marked as broken
     "akku-scheme-langserver"
     "muon"
