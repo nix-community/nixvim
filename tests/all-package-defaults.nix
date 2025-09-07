@@ -32,6 +32,27 @@ let
     "muon"
     "rubyfmt"
   ]
+  ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # As of 2024-07-31, dmd is broken on x86_64-darwin
+    # https://github.com/NixOS/nixpkgs/pull/331373
+    "dmd"
+
+    # Marked as broken
+    "mesonlsp"
+
+    # No hash for system
+    "verible"
+
+    # 2025-06-24 build failure
+    "gleam"
+
+    # 2024-01-04 build failure
+    "texlive-combined-medium"
+    "texlive"
+
+    # python3Packages.sentence-transformers hangs forever
+    "vectorcode"
+  ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
     # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
     "zig-zlint"
