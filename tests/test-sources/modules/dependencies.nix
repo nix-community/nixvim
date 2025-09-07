@@ -6,13 +6,7 @@
 let
   inherit (pkgs.stdenv) hostPlatform;
 
-  disabledDeps = lib.optionals hostPlatform.isDarwin [
-    # One of its dependencies is not available on darwin
-    "fontpreview"
-
-    # TODO: Failing to compile on darwin CI atm
-    "claude-code"
-  ];
+  disabledDeps = [ ];
 
   isDepEnabled =
     name: package:

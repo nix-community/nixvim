@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 {
   empty = {
     plugins.telescope = {
@@ -46,7 +45,7 @@
       chafa.enable = true;
       epub-thumbnailer.enable = true;
       ffmpegthumbnailer.enable = true;
-      fontpreview.enable = !pkgs.stdenv.hostPlatform.isDarwin;
+      fontpreview.enable = true;
       imagemagick.enable = true;
       poppler-utils.enable = true;
     };

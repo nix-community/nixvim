@@ -93,5 +93,5 @@ in
 
   # TODO: consider whether all these tests are needed to be built by buildbot
   buildbot =
-    lib.optionalAttrs (system == "x86_64-linux") (misc // docs) // platforms // packages // mainGrouped;
+    lib.optionalAttrs (system == "x86_64-linux") (misc // docs // mainGrouped) // platforms // packages;
 }

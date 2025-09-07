@@ -1,8 +1,5 @@
 {
-  lib,
   nixvimConfiguration,
-  stdenv,
-  runCommandLocal,
   name ? "lsp-all-servers",
 }:
 let
@@ -32,11 +29,9 @@ let
     {
       lib,
       options,
-      pkgs,
       ...
     }:
     let
-      inherit (pkgs.stdenv) hostPlatform;
 
       disabled = [
         # TODO: 2025-07-25 python313Packages.lsp-tree-sitter marked as broken
@@ -52,19 +47,6 @@ let
         "ruff_lsp"
         "bufls"
         "typst_lsp"
-      ]
-      ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-        # TODO: 2025-04-20 build failure (swift-corelibs-xctest)
-        "sourcekit"
-
-        # pkgs.vectorcode cannot run in the build sandbox on this platform, due to issues with onnxruntime
-        "vectorcode_server"
-
-        # TODO: 2024-10-05 build failure
-        "fstar"
-
-        # TODO: 2025-03-04 marked as broken
-        "nickel_ls"
       ];
     in
     {
@@ -93,11 +75,4 @@ let
     ];
   };
 in
-# This fails on darwin
-# See https://github.com/NixOS/nix/issues/4119
-if stdenv.isDarwin then
-  runCommandLocal name { } ''
-    touch $out
-  ''
-else
-  result.config.build.test
+result.config.build.test
