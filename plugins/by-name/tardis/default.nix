@@ -8,8 +8,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = ''
     Timetravel for neovim
   '';
-  # TODO: Remove after https://github.com/NixOS/nixpkgs/pull/438707
-  url = "https://github.com/FredeHoey/tardis.nvim";
 
   maintainers = [ lib.maintainers.fredeb ];
 

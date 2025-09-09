@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "bullets";
-  url = "https://github.com/bullets-vim/bullets.vim";
   description = ''
     Bullets.vim is a Vim plugin for automated bullet lists.
   '';
