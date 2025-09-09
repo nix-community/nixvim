@@ -66,12 +66,6 @@ repo = "kickstart.nixvim"
 description = "An implementation of kickstart.nvim using nixvim"
 
 [[config]]
-owner = "JMartJonesy"
-title = "kickstart.nixvim standalone"
-description = "An implementation of kickstart.nvim using nixvim in a standalone flake"
-url = "https://github.com/JMartJonesy/kickstart.nixvim/tree/standalone"
-
-[[config]]
 owner = "khaneliman"
 repo = "khanelivim"
 description = "Constantly tweaked jack of all trades development focused configuration."
