@@ -92,21 +92,38 @@
       maintainers,
       description,
       url ? null,
-    }@args:
+    }:
     { options, ... }:
     let
       opts = lib.getAttrFromPath loc options;
-      url =
-        if args.url or null == null then
-          opts.package.default.meta.homepage or (throw "unable to get URL for `${lib.showOption loc}`.")
-        else
-          args.url;
+
+      # We merge the url from the plugin definition and the url from the
+      # package's meta.homepage using the module system.
+      # This validates things like conflicting definitions.
+      urls = lib.modules.mergeDefinitions (loc ++ [ "url" ]) lib.types.str [
+        {
+          value = lib.mkIf (url != null) url;
+          file = builtins.head opts.package.declarations;
+        }
+        {
+          value = lib.mkIf (opts.package ? default.meta.homepage) opts.package.default.meta.homepage;
+          file =
+            let
+              pos = builtins.unsafeGetAttrPos "homepage" (opts.package.default.meta or { });
+            in
+            if pos == null then
+              opts.package.defaultText.text or "package"
+            else
+              pos.file + ":" + toString pos.line;
+        }
+      ];
     in
     {
       meta = {
         inherit maintainers;
         nixvimInfo = {
-          inherit description url;
+          inherit description;
+          url = urls.mergedValue;
           path = loc;
         };
       };
