@@ -29,6 +29,13 @@ in
       '';
     };
 
+    waylandSupport = mkOption {
+      type = types.bool;
+      default = pkgs.stdenv.hostPlatform.isLinux;
+      defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isLinux";
+      description = "Enable additional wayland support, such as wl-clipboard for wayland clipboard syncing.";
+    };
+
     withRuby = mkOption {
       type = types.bool;
       default = true;
@@ -199,6 +206,7 @@ in
             extraPython3Packages
             viAlias
             vimAlias
+            waylandSupport
             withRuby
             withNodeJs
             withPerl
