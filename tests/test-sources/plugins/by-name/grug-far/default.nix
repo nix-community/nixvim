@@ -1,4 +1,6 @@
-{
+{ lib, ... }:
+# Disable as luajitPackages.grug-far-nvim is flaky
+lib.optionalAttrs false {
   empty = {
     plugins.grug-far.enable = true;
   };
