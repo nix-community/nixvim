@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   ...
 }:
 let
@@ -234,4 +235,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
     ```
   '';
+
+  extraConfig =
+    cfg:
+    let
+      inherit (import ./formatter-pkgs.nix { inherit pkgs lib; }) getPkgFromConformName collectFormatters;
+      names = collectFormatters (builtins.attrValues cfg.settings.formatters_by_ft);
+    in
+    {
+      extraPackages = builtins.concatMap (getPkgFromConformName [ ]) names;
+    };
 }
