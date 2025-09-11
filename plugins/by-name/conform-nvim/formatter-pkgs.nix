@@ -9,6 +9,8 @@ let
     filter
     isString
     isAttrs
+    attrValues
+    concatMap
     partition
     ;
 
@@ -141,22 +143,17 @@ let
   };
 in
 rec {
-  # String -> [Package]
   getPkgFromConformName =
-    customFormatters: cn:
-    lib.optionals (!(elem cn customFormatters)) [ (pkgs.${cn} or specialCases.${cn}) ];
+    ignoredFormatters: cn:
+    lib.optionals (!(elem cn ignoredFormatters)) [ (pkgs.${cn} or specialCases.${cn}) ];
 
-  # [ String | Attrset ] -> [String]
   collectFormatters =
     a:
     let
-      filteredAttrs = filter (x: isString x || isAttrs x) a;
+      filteredAttrs = filter (x: isString x || isAttrs x) (lib.flatten a);
       partitioned = partition isString filteredAttrs;
     in
-    if (a == [ ]) then
-      [ ]
-    else
-      partitioned.right
-      ++ (builtins.concatMap (attrs: collectFormatters (builtins.attrValues attrs)) partitioned.wrong);
-
+    lib.optionals (a != [ ]) (
+      partitioned.right ++ concatMap (a: collectFormatters (attrValues a)) partitioned.wrong
+    );
 }

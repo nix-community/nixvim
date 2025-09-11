@@ -5,6 +5,7 @@
 }:
 let
   inherit (lib) types;
+  inherit (builtins) concatMap attrValues;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -43,6 +44,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
         "formatAfterSave"
         "formatOnSave"
       ];
+
+  extraOptions = {
+    autoInstallFormatters = {
+      enable = lib.mkEnableOption ''
+        Whether to automatically install formatters listed in `formatters_by_ft`.
+      '';
+      exclude = lib.mkOption {
+        type = with types; listOf str;
+        default = [ ];
+        example = [ "treefmt" ];
+        description = "List of formatters (Conform names) to exclude from automatic installation.";
+      };
+    };
+  };
 
   settingsOptions =
     let
@@ -240,9 +255,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
     cfg:
     let
       inherit (import ./formatter-pkgs.nix { inherit pkgs lib; }) getPkgFromConformName collectFormatters;
-      names = collectFormatters (builtins.attrValues cfg.settings.formatters_by_ft);
+      names = collectFormatters (attrValues cfg.settings.formatters_by_ft);
+      getPkgFromConformName' = getPkgFromConformName cfg.autoInstallFormatters.exclude;
+      autoInstall = cfg.autoInstallFormatters.enable;
     in
     {
-      extraPackages = builtins.concatMap (getPkgFromConformName [ ]) names;
+      extraPackages = lib.optionals autoInstall (concatMap getPkgFromConformName' names);
     };
 }
