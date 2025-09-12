@@ -145,7 +145,7 @@ in
 rec {
   getPkgFromConformName =
     ignoredFormatters: cn:
-    lib.optionals (!(elem cn ignoredFormatters)) [ (pkgs.${cn} or specialCases.${cn}) ];
+    lib.optionals (!(elem cn ignoredFormatters)) [ (specialCases.${cn} or pkgs.${cn}) ];
 
   collectFormatters =
     a:
