@@ -6,19 +6,13 @@
 
   all-formatters =
     let
-      formattersDir = "${pkgs.vimPlugins.conform-nvim}/lua/conform/formatters";
-      formatterFiles = builtins.attrNames (builtins.readDir formattersDir);
-      supportedFormatters =
-        let
-          luaFiles = builtins.filter (lib.hasSuffix ".lua") formatterFiles;
-        in
-        map (lib.removeSuffix ".lua") luaFiles;
+      allFormatters = import ../../../../../generated/conform-formatters.nix;
     in
     {
       plugins.conform-nvim = {
         enable = true;
         autoInstallFormatters.enable = true;
-        settings.formatters_by_ft."*" = supportedFormatters;
+        settings.formatters_by_ft."*" = allFormatters;
       };
     };
 
