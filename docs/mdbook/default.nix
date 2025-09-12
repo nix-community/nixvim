@@ -3,7 +3,7 @@
   callPackage,
   runCommand,
   lib,
-  evaledModules,
+  configuration,
   nixosOptionsDoc,
   transformOptions,
   search,
@@ -15,9 +15,9 @@
   availableVersions ? [ ],
 }:
 let
-  inherit (evaledModules.config.meta) nixvimInfo;
+  inherit (configuration.config.meta) nixvimInfo;
 
-  mkMDDoc =
+  mkOptionsDocMD =
     options:
     (nixosOptionsDoc {
       inherit options transformOptions;
@@ -78,18 +78,20 @@ let
       in
       !hasEmptyIndex || !hasEmptyComponents;
 
-  wrapModule = path: opts: isOpt: rec {
+  wrapOptionDocPage = path: opts: isOpt: rec {
     index = {
+      # We split pages into "options" and "components".
+      # Options are shown on this page, while components create their own sub-pages.
       options =
         if isOpt then
           opts
         else
-          lib.filterAttrs (_: component: component.isOption && (isVisible component)) opts;
+          lib.filterAttrs (_: component: component.isOption && isVisible component) opts;
       path = removeWhitespace (lib.concatStringsSep "/" path);
-      moduleDoc =
+      docSummaryMD =
         let
           info = lib.attrByPath path { } nixvimInfo;
-          maintainers = lib.unique (evaledModules.config.meta.maintainers.${info.file} or [ ]);
+          maintainers = lib.unique (configuration.config.meta.maintainers.${info.file} or [ ]);
           maintainersNames = builtins.map maintToMD maintainers;
           maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
         in
@@ -115,44 +117,50 @@ let
       if isOpt then
         { }
       else
-        lib.filterAttrs (_: component: !component.isOption && (isVisible component)) opts;
+        lib.filterAttrs (_: component: !component.isOption && isVisible component) opts;
 
     hasComponents = components != { };
 
     isOption = isOpt;
   };
 
-  processModulesRec =
-    modules:
+  processOptionsRec =
+    options:
     let
-      recurse =
-        path: mods:
-        let
-          g =
-            name: opts:
-            if !lib.isOption opts then
-              wrapModule (path ++ [ name ]) (recurse (path ++ [ name ]) opts) false
+      go =
+        path:
+        lib.mapAttrs (
+          name: opts:
+          # This node is not an option, keep recursing
+          if !lib.isOption opts then
+            wrapOptionDocPage (path ++ [ name ]) (go (path ++ [ name ]) opts) false
+          else
+            let
+              subOpts = getSubOptions opts (path ++ [ name ]);
+            in
+            # If this node is an option with sub-options...
+            # Pass wrapOptionDocPage a set containing it and its sub-options.
+            # In practice, this creates a dedicated page for the option and its sub-options.
+            if subOpts != { } then
+              wrapOptionDocPage (path ++ [ name ]) (
+                (go (path ++ [ name ]) subOpts)
+                // {
+                  # This is necessary to include the option itself in the docs.
+                  # For instance, this helps submodules like "autoCmd" to include their base declaration in the docs.
+                  # Though there must be a better, less "hacky" solution than this.
+                  ${name} = lib.recursiveUpdate opts {
+                    # FIXME: why do we need this?????
+                    isOption = true;
+                    # Exclude suboptions from the submodule definition itself,
+                    # as they are already part of this set.
+                    type.getSubOptions = _: _: { };
+                  };
+                }
+              ) false
+            # This node is an option without sub-options
             else
-              let
-                subOpts = getSubOptions opts (path ++ [ name ]);
-              in
-              if subOpts != { } then
-                wrapModule (path ++ [ name ]) (
-                  (recurse (path ++ [ name ]) subOpts)
-                  // {
-                    # This is necessary to include the submodule option's definition in the docs (description, type, etc.)
-                    # For instance, this helps submodules like "autoCmd" to include their base definitions and examples in the docs
-                    # Though there might be a better, less "hacky" solution than this.
-                    ${name} = lib.recursiveUpdate opts {
-                      isOption = true;
-                      type.getSubOptions = _: _: { }; # Used to exclude suboptions from the submodule definition itself
-                    };
-                  }
-                ) false
-              else
-                wrapModule (path ++ [ name ]) opts true;
-        in
-        lib.mapAttrs g mods;
+              wrapOptionDocPage (path ++ [ name ]) opts true
+        );
     in
     lib.foldlAttrs (
       acc: name: opts:
@@ -164,7 +172,7 @@ let
             index = {
               options = { };
               path = removeWhitespace "${group}";
-              moduleDoc = null;
+              docSummaryMD = null;
             };
             components = { };
             isGroup = true;
@@ -190,30 +198,28 @@ let
           hasComponents = last.components != { };
         };
       }
-    ) { } (recurse [ ] modules);
+    ) { } (go [ ] options);
 
-  mapModulesToString =
-    f: modules:
+  mapOptionsToStringRecursive =
+    set: f:
     let
-      recurse =
+      go =
         mods:
-        let
-          g =
-            name: opts:
-            if (opts ? "isGroup") then
-              if name != "none" then (f name opts) + ("\n" + recurse opts.components) else recurse opts.components
-            else if opts.hasComponents then
-              (f name opts) + ("\n" + recurse opts.components)
-            else
-              f name opts;
-        in
-        lib.concatStringsSep "\n" (lib.mapAttrsToList g mods);
+        lib.concatMapAttrsStringSep "\n" (
+          name: opts:
+          if (opts ? "isGroup") then
+            if name != "none" then (f name opts) + ("\n" + go opts.components) else go opts.components
+          else if opts.hasComponents then
+            (f name opts) + ("\n" + go opts.components)
+          else
+            f name opts
+        ) mods;
     in
-    recurse modules;
+    go set;
 
   docs = rec {
-    modules = processModulesRec (removeUnwanted evaledModules.options);
-    commands = mapModulesToString (
+    optionSet = processOptionsRec (removeUnwanted configuration.options);
+    commands = mapOptionsToStringRecursive optionSet (
       name: opts:
       let
         isBranch = if (lib.hasSuffix "index" opts.index.path) then true else opts.hasComponents;
@@ -224,23 +230,24 @@ let
       in
       (lib.optionalString isBranch "mkdir -p ${opts.index.path}\n")
       + (
-        if opts.index.moduleDoc == null then
-          "cp ${mkMDDoc opts.index.options} ${path}"
+        if opts.index.docSummaryMD == null then
+          "cp ${mkOptionsDocMD opts.index.options} ${path}"
         else
-          # Including moduleDoc's text directly will result in bash interpreting special chars,
+          # Including docSummaryMD's text directly will result in bash interpreting special chars,
           # write it to the nix store and `cat` the file instead.
+          # FIXME: avoid an extra derivation using something like `escapeShellArg`?
           ''
             {
-            cat ${pkgs.writeText "module-doc" opts.index.moduleDoc}
-            cat ${mkMDDoc opts.index.options}
+            cat ${pkgs.writeText "doc-summary-${name}" opts.index.docSummaryMD}
+            cat ${mkOptionsDocMD opts.index.options}
             } > ${path}
           ''
       )
-    ) modules;
+    );
   };
 
   mdbook = {
-    nixvimOptionsSummary = mapModulesToString (
+    nixvimOptionsSummary = mapOptionsToStringRecursive docs.optionSet (
       name: opts:
       let
         isBranch = name == "index" || (opts.hasComponents && opts.index.options != { });
@@ -258,12 +265,17 @@ let
         padding = lib.strings.replicate indentLevel "\t";
       in
       "${padding}- [${name}](${path})"
-    ) docs.modules;
+    );
 
     # A list of platform-specific docs
     # [ { name, file, path, configuration } ]
-    wrapperOptions =
-      builtins.map
+    platformOptions =
+      lib.forEach
+        [
+          "nixos"
+          "hm"
+          "darwin"
+        ]
         (filename: rec {
           # Eval a configuration for the platform's module
           configuration = lib.evalModules {
@@ -277,29 +289,24 @@ let
           };
           # Also include display name, filepath, and rendered docs
           inherit (configuration.config.meta.wrapper) name;
-          file = mkMDDoc (removeUnwanted configuration.options);
+          file = mkOptionsDocMD (removeUnwanted configuration.options);
           path = "./platforms/${filename}.md";
-        })
-        [
-          "nixos"
-          "hm"
-          "darwin"
-        ];
+        });
 
     # Markdown summary for the table of contents
-    wrapperOptionsSummary = lib.foldl (
+    platformOptionsSummary = lib.foldl (
       text: { name, path, ... }: text + "\n\t- [${name}](${path})"
-    ) "" mdbook.wrapperOptions;
+    ) "" mdbook.platformOptions;
 
     # Attrset of { filePath = renderedDocs; }
-    wrapperOptionsFiles = lib.listToAttrs (
+    platformOptionsFiles = lib.listToAttrs (
       builtins.map (
         { path, file, ... }:
         {
           name = path;
           value = file;
         }
-      ) mdbook.wrapperOptions
+      ) mdbook.platformOptions
     );
   };
 
@@ -374,9 +381,9 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     bash -e ${finalAttrs.passthru.copy-docs}
 
     # Copy the generated MD docs for the wrapper options
-    for path in "''${!wrapperOptionsFiles[@]}"
+    for path in "''${!platformOptionsFiles[@]}"
     do
-      file="''${wrapperOptionsFiles[$path]}"
+      file="''${platformOptionsFiles[$path]}"
       cp "$file" "$path"
     done
 
@@ -387,7 +394,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     # Patch SUMMARY.md - which defiens mdBook's table of contents
     substituteInPlace ./SUMMARY.md \
       --replace-fail "@FUNCTIONS_MENU@" "$functionsSummary" \
-      --replace-fail "@PLATFORM_OPTIONS@" "$wrapperOptionsSummary" \
+      --replace-fail "@PLATFORM_OPTIONS@" "$platformOptionsSummary" \
       --replace-fail "@NIXVIM_OPTIONS@" "$nixvimOptionsSummary"
 
     # Patch index.md
@@ -409,8 +416,8 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
   inherit (mdbook)
     nixvimOptionsSummary
-    wrapperOptionsSummary
-    wrapperOptionsFiles
+    platformOptionsSummary
+    platformOptionsFiles
     ;
 
   functionsSummary = lib-docs.menu;
