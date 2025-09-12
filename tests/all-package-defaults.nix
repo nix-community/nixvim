@@ -28,10 +28,6 @@ let
     "fontpreview"
 
     # 2025-09-08 build failure
-    # https://github.com/NixOS/nixpkgs/pull/441063
-    "buck2"
-
-    # 2025-09-08 build failure
     "mint"
 
     # Marked as broken
