@@ -4,6 +4,7 @@
   efmls-configs-sources,
   none-ls-builtins,
   lspconfig-servers,
+  conform-formatters,
   nixfmt-rfc-style,
   nodePackages,
 }:
@@ -42,6 +43,7 @@ writeShellApplication {
     generate "${rust-analyzer-options}" "rust-analyzer"
     generate "${efmls-configs-sources}" "efmls-configs"
     generate "${none-ls-builtins}" "none-ls"
+    generate "${conform-formatters}" "conform-formatters"
     echo "lspconfig servers"
     prettier --parser=json "${lspconfig-servers}" >"$generated_dir/lspconfig-servers.json"
 
