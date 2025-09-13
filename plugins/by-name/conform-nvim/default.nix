@@ -50,18 +50,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraOptions = {
     autoInstall = {
-      enable = lib.mkEnableOption ''
-        Whether to automatically install formatters listed in `formatters_by_ft`.
-      '';
+      enable = lib.mkEnableOption "
+        automatic installation of formatters listed in `settings.formatters_by_ft` and `settings.formatters`
+      ";
       overrides = lib.mkOption {
         type = with types; attrsOf (nullOr package);
         default = { };
         example = {
           "treefmt" = null;
-          "pyproject-fmt" = pkgs.python312Packages.pyproject-parser;
+          "pyproject-fmt" = lib.literalExpression "pkgs.python312Packages.pyproject-parser";
         };
         description = ''
-          Attribute set of conform formatter names to nix packages.
+          Attribute set of formatter names to nix packages.
           Can be set to null to disable auto-installing of a specific formatter.
         '';
       };
