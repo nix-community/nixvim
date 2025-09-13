@@ -22,6 +22,38 @@ let
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
     "cmp-tabnine"
+
+    # luajitPackages.neotest is flaky: (temporarily?) disable tests that depend on it
+    "compiler.nvim"
+    "neotest-bash"
+    "neotest-ctest"
+    "neotest-dart"
+    "neotest-deno"
+    "neotest-dotnet"
+    "neotest-elixir"
+    "neotest-foundry"
+    "neotest-go"
+    "neotest-golang"
+    "neotest-gradle"
+    "neotest-gtest"
+    "neotest-haskell"
+    "neotest-java"
+    "neotest-jest"
+    "neotest-minitest"
+    "neotest-pest"
+    "neotest-phpunit"
+    "neotest-playwright"
+    "neotest-plenary"
+    "neotest-python"
+    "neotest-rspec"
+    "neotest-rust"
+    "neotest-scala"
+    "neotest-testthat"
+    "neotest-vitest"
+    "neotest-zig"
+    "nvim-coverage"
+    "overseer.nvim"
+    "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
     # xdotool is not available on darwin
