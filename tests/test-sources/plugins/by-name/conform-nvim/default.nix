@@ -11,7 +11,7 @@
     {
       plugins.conform-nvim = {
         enable = true;
-        autoInstallFormatters.enable = true;
+        autoInstall.enable = true;
         settings.formatters_by_ft."*" = allFormatters;
       };
     };

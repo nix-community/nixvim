@@ -49,7 +49,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ];
 
   extraOptions = {
-    autoInstallFormatters = {
+    autoInstall = {
       enable = lib.mkEnableOption ''
         Whether to automatically install formatters listed in `formatters_by_ft`.
       '';
@@ -266,11 +266,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
       inherit (import ./auto-install.nix { inherit pkgs lib; }) getPkgFromConformName collectFormatters;
       getPkgFromConformName' = getPkgFromConformName {
         customFormatters = mapAttrs (_: _: null) cfg.settings.formatters;
-        inherit (cfg.autoInstallFormatters) overrides;
+        inherit (cfg.autoInstall) overrides;
       };
       names = collectFormatters (attrValues cfg.settings.formatters_by_ft);
     in
     {
-      extraPackages = lib.optionals cfg.autoInstallFormatters.enable (map getPkgFromConformName' names);
+      extraPackages = lib.optionals cfg.autoInstall.enable (map getPkgFromConformName' names);
     };
 }
