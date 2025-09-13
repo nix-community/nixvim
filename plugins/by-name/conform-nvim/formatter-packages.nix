@@ -5,9 +5,15 @@
 let
   unpackaged = null;
   ignore = null;
+  broken = null;
 in
 with pkgs;
 {
+  # 2025-09-13 build failure
+  inko = broken;
+  # 2025-09-13 build failure
+  commitmsgfmt = broken;
+
   format-queries = ignore; # Uses neovim itself
   init = ignore; # Internal thingamajig
   injected = ignore; # Internal formatter
