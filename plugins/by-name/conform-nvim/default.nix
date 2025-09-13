@@ -14,7 +14,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "conform.nvim";
   description = "Lightweight yet powerful formatter plugin for Neovim.";
 
-  maintainers = [ lib.maintainers.khaneliman ];
+  maintainers = with lib.maintainers; [
+    khaneliman
+    saygo-png
+  ];
 
   # TODO: added 2024-08-23 remove after 24.11
   deprecateExtraOptions = true;
