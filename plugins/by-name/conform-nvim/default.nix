@@ -5,7 +5,7 @@
 }:
 let
   inherit (lib) types;
-  inherit (builtins) concatMap attrValues;
+  inherit (builtins) attrValues mapAttrs;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -50,11 +50,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
       enable = lib.mkEnableOption ''
         Whether to automatically install formatters listed in `formatters_by_ft`.
       '';
-      exclude = lib.mkOption {
-        type = with types; listOf str;
-        default = [ ];
-        example = [ "treefmt" ];
-        description = "List of formatters (Conform names) to exclude from automatic installation.";
+      overrides = lib.mkOption {
+        type = with types; attrsOf (nullOr package);
+        default = { };
+        example = {
+          "treefmt" = null;
+          "pyproject-fmt" = pkgs.python312Packages.pyproject-parser;
+        };
+        description = ''
+          Attribute set of conform formatter names to nix packages.
+          Can be set to null to disable auto-installing of a specific formatter.
+        '';
       };
     };
   };
@@ -254,12 +260,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig =
     cfg:
     let
-      inherit (import ./formatter-pkgs.nix { inherit pkgs lib; }) getPkgFromConformName collectFormatters;
+      inherit (import ./auto-install.nix { inherit pkgs lib; }) getPkgFromConformName collectFormatters;
+      getPkgFromConformName' = getPkgFromConformName {
+        customFormatters = mapAttrs (_: _: null) cfg.settings.formatters;
+        inherit (cfg.autoInstallFormatters) overrides;
+      };
       names = collectFormatters (attrValues cfg.settings.formatters_by_ft);
-      getPkgFromConformName' = getPkgFromConformName cfg.autoInstallFormatters.exclude;
-      autoInstall = cfg.autoInstallFormatters.enable;
     in
     {
-      extraPackages = lib.optionals autoInstall (concatMap getPkgFromConformName' names);
+      extraPackages = lib.optionals cfg.autoInstallFormatters.enable (map getPkgFromConformName' names);
     };
 }
