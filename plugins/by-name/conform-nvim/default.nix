@@ -1,9 +1,11 @@
 {
   lib,
+  pkgs,
   ...
 }:
 let
   inherit (lib) types;
+  inherit (builtins) attrValues;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -12,7 +14,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   packPathName = "conform.nvim";
   description = "Lightweight yet powerful formatter plugin for Neovim.";
 
-  maintainers = [ lib.maintainers.khaneliman ];
+  maintainers = with lib.maintainers; [
+    khaneliman
+    saygo-png
+  ];
 
   # TODO: added 2024-08-23 remove after 24.11
   deprecateExtraOptions = true;
@@ -42,6 +47,36 @@ lib.nixvim.plugins.mkNeovimPlugin {
         "formatAfterSave"
         "formatOnSave"
       ];
+
+  extraOptions = {
+    autoInstall = {
+      enable = lib.mkEnableOption ''
+        automatic installation of formatters listed in `settings.formatters_by_ft` and `settings.formatters`
+      '';
+
+      enableWarnings = lib.mkOption {
+        default = true;
+        example = false;
+        description = "Whether to enable warnings.";
+        type = lib.types.bool;
+      };
+
+      overrides = lib.mkOption {
+        type = with types; attrsOf (nullOr package);
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "treefmt" = null;
+            "pyproject-fmt" = pkgs.python312Packages.pyproject-parser;
+          };
+        '';
+        description = ''
+          Attribute set of formatter names to nix packages.
+          You can set a formatter to `null` to disable auto-installing its package.
+        '';
+      };
+    };
+  };
 
   settingsOptions =
     let
@@ -234,4 +269,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
     ```
   '';
+
+  extraConfig =
+    cfg: opts:
+    let
+      inherit (cfg.autoInstall) enable enableWarnings;
+      inherit (import ./auto-install.nix { inherit pkgs lib; })
+        getPackageByName
+        collectFormatters
+        cleanMaybePackageList
+        mkWarnsFromMaybePackageList
+        ;
+      getPackageByNameWith = getPackageByName {
+        configuredFormatters = cfg.settings.formatters;
+        inherit (cfg.autoInstall) overrides;
+      };
+      names = collectFormatters (attrValues cfg.settings.formatters_by_ft);
+      packageList = map getPackageByNameWith names;
+      warns = (mkWarnsFromMaybePackageList opts) packageList;
+    in
+    {
+      warnings = lib.mkIf (enable && warns != [ ] && enableWarnings) warns;
+      extraPackages = lib.mkIf enable (cleanMaybePackageList packageList);
+    };
 }
