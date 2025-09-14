@@ -126,10 +126,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ];
   };
 
-  # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
-  # all integrations but shipping `curl` is not too heavy.
   dependencies = [
+    # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
+    # all integrations but shipping `curl` is not too heavy.
     "curl"
+
     {
       name = "ueberzug";
       enable = config.plugins.image.settings.backend == "ueberzug";
