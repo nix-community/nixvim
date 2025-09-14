@@ -125,6 +125,7 @@ in
       go.default = "go";
       godot.default = "godot_4";
       gzip.default = "gzip";
+      imagemagick.default = "imagemagick";
       lazygit.default = "lazygit";
       lean.default = "lean4";
       ledger.default = "ledger";
