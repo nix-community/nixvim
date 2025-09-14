@@ -4,6 +4,21 @@
     plugins.conform-nvim.enable = true;
   };
 
+  all-formatters =
+    let
+      allFormatters = lib.importJSON ../../../../../generated/conform-formatters.json;
+    in
+    {
+      plugins.conform-nvim = {
+        enable = true;
+        autoInstall = {
+          enable = true;
+          enableWarnings = false;
+        };
+        settings.formatters_by_ft."*" = allFormatters;
+      };
+    };
+
   default = {
     plugins.conform-nvim = {
       enable = true;
