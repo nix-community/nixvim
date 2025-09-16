@@ -72,6 +72,10 @@ let
     # https://github.com/NixOS/nixpkgs/pull/331373
     "dmd"
 
+    # 2025-09-16 marked as broken
+    # https://github.com/NixOS/nixpkgs/pull/440273/commits/e71ade9ba7c5feca1160acb68c643812e14e67f3
+    "fpc"
+
     # Marked as broken
     "mesonlsp"
 
