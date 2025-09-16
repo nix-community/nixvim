@@ -221,7 +221,7 @@
       "digestif"
     ];
     docker_compose_language_service = "docker-compose-language-service";
-    dockerls = "dockerfile-language-server-nodejs";
+    dockerls = "dockerfile-language-server";
     dolmenls = [
       "ocamlPackages"
       "dolmen_lsp"
