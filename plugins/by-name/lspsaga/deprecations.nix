@@ -40,9 +40,12 @@ lib: {
               cfg.enable
               && (cfg.settings.ui.devicon or true)
               && !(
-                config.plugins.mini.enable
-                && config.plugins.mini.modules ? icons
-                && config.plugins.mini.mockDevIcons
+                (
+                  config.plugins.mini.enable
+                  && config.plugins.mini.modules ? icons
+                  && config.plugins.mini.mockDevIcons
+                )
+                || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
               )
             )
             {
