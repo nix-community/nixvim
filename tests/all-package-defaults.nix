@@ -91,6 +91,10 @@ let
 
     # python3Packages.sentence-transformers hangs forever
     "vectorcode"
+
+    # 2025-09-16 zig/zig-hook is marked as broken
+    # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
+    "zls"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
     # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
