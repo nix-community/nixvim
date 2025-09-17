@@ -4,14 +4,15 @@
   efmls-configs-sources,
   none-ls-builtins,
   lspconfig-servers,
-  nixfmt-rfc-style,
+  conform-formatters,
+  nixfmt,
   nodePackages,
 }:
 writeShellApplication {
   name = "generate";
 
   runtimeInputs = [
-    nixfmt-rfc-style
+    nixfmt
     nodePackages.prettier
   ];
 
@@ -32,18 +33,23 @@ writeShellApplication {
       shift
     done
 
-    generate() {
+    generate_nix() {
       echo "$2"
       cp "$1" "$generated_dir/$2.nix"
       nixfmt "$generated_dir/$2.nix"
     }
 
+    generate_json() {
+      echo "$2"
+      prettier --parser=json "$1" >"$generated_dir/$2.json"
+    }
+
     mkdir -p "$generated_dir"
-    generate "${rust-analyzer-options}" "rust-analyzer"
-    generate "${efmls-configs-sources}" "efmls-configs"
-    generate "${none-ls-builtins}" "none-ls"
-    echo "lspconfig servers"
-    prettier --parser=json "${lspconfig-servers}" >"$generated_dir/lspconfig-servers.json"
+    generate_nix "${rust-analyzer-options}" "rust-analyzer"
+    generate_nix "${efmls-configs-sources}" "efmls-configs"
+    generate_nix "${none-ls-builtins}" "none-ls"
+
+    generate_json "${lspconfig-servers}" "lspconfig-servers"
 
     if [ -n "$commit" ]; then
       cd "$generated_dir"
