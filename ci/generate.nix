@@ -49,6 +49,7 @@ writeShellApplication {
     generate_nix "${efmls-configs-sources}" "efmls-configs"
     generate_nix "${none-ls-builtins}" "none-ls"
 
+    generate_json "${conform-formatters}" "conform-formatters"
     generate_json "${lspconfig-servers}" "lspconfig-servers"
 
     if [ -n "$commit" ]; then
