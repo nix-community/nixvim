@@ -29,6 +29,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         [
           "kitty"
           "ueberzug"
+          "sixel"
         ]
         ''
           All the backends support rendering inside Tmux.
@@ -36,6 +37,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
           - kitty - best in class, works great and is very snappy
           - ueberzug - backed by ueberzugpp, supports any terminal, but has lower performance
             - Supports multiple images thanks to @jstkdng.
+          - sixel - uses the Sixel graphics protocol, widely supported by many terminals
+            - Works with XTerm, WezTerm, foot, and other Sixel-compatible terminals
+            - ImageMagick is required for Sixel encoding
 
           > [!Note]
           > When choosing the `"ueberzug"` backend, nixvim will automatically add `ueberzugpp` as a dependency.
@@ -126,13 +130,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ];
   };
 
-  # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
-  # all integrations but shipping `curl` is not too heavy.
   dependencies = [
+    # In theory, we could remove that if the user explicitly disables `downloadRemoteImages` for
+    # all integrations but shipping `curl` is not too heavy.
     "curl"
+
     {
       name = "ueberzug";
       enable = config.plugins.image.settings.backend == "ueberzug";
+    }
+    {
+      name = "imagemagick";
+      enable = config.plugins.image.settings.backend == "sixel";
     }
   ];
 }

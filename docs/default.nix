@@ -84,7 +84,7 @@ let
       ) opt.declarations;
     };
 
-  evaledModules = helpers.modules.evalNixvim {
+  configuration = helpers.modules.evalNixvim {
     modules = [
       {
         isDocs = true;
@@ -95,7 +95,7 @@ let
 
   options-json =
     (pkgs.nixosOptionsDoc {
-      inherit (evaledModules) options;
+      inherit (configuration) options;
       inherit transformOptions;
     }).optionsJSON;
 
@@ -123,7 +123,7 @@ lib.fix (self: {
   };
 
   docs = pkgs.callPackage ./mdbook {
-    inherit evaledModules transformOptions;
+    inherit configuration transformOptions;
     inherit (self) search lib-docs;
   };
 

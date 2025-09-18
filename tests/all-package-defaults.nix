@@ -22,14 +22,42 @@ let
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
     "cmp-tabnine"
+
+    # luajitPackages.neotest is flaky: (temporarily?) disable tests that depend on it
+    "compiler.nvim"
+    "neotest-bash"
+    "neotest-ctest"
+    "neotest-dart"
+    "neotest-deno"
+    "neotest-dotnet"
+    "neotest-elixir"
+    "neotest-foundry"
+    "neotest-go"
+    "neotest-golang"
+    "neotest-gradle"
+    "neotest-gtest"
+    "neotest-haskell"
+    "neotest-java"
+    "neotest-jest"
+    "neotest-minitest"
+    "neotest-pest"
+    "neotest-phpunit"
+    "neotest-playwright"
+    "neotest-plenary"
+    "neotest-python"
+    "neotest-rspec"
+    "neotest-rust"
+    "neotest-scala"
+    "neotest-testthat"
+    "neotest-vitest"
+    "neotest-zig"
+    "nvim-coverage"
+    "overseer.nvim"
+    "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
     # xdotool is not available on darwin
     "fontpreview"
-
-    # 2025-09-08 build failure
-    # https://github.com/NixOS/nixpkgs/pull/441063
-    "buck2"
 
     # 2025-09-08 build failure
     "mint"
@@ -44,6 +72,10 @@ let
     # https://github.com/NixOS/nixpkgs/pull/331373
     "dmd"
 
+    # 2025-09-16 marked as broken
+    # https://github.com/NixOS/nixpkgs/pull/440273/commits/e71ade9ba7c5feca1160acb68c643812e14e67f3
+    "fpc"
+
     # Marked as broken
     "mesonlsp"
 
@@ -57,8 +89,9 @@ let
     "texlive-combined-medium"
     "texlive"
 
-    # python3Packages.sentence-transformers hangs forever
-    "vectorcode"
+    # 2025-09-16 zig/zig-hook is marked as broken
+    # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
+    "zls"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
     # As of 2025-07-25, zig-zlint is failing on aarch64-darwin

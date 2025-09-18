@@ -28,7 +28,15 @@ let
       };
   };
 
-  attrPathType = with types; coercedTo str lib.toList (listOf str);
+  # Motivation:
+  # If one were to define `__depPackages.foo.default = "gzip";` in two places (by accident),
+  # the module system would merge the two definitions as `["gzip" "gzip"]`.
+  #
+  # Solution:
+  # -> Make attrPathType unique so the option can only be set once.
+  attrPathType =
+    with types;
+    unique { message = "attrPathType must be unique"; } (coercedTo str lib.toList (listOf str));
 
   literalExpressionType = lib.types.mkOptionType {
     name = "literal-expression";
@@ -117,6 +125,7 @@ in
       go.default = "go";
       godot.default = "godot_4";
       gzip.default = "gzip";
+      imagemagick.default = "imagemagick";
       lazygit.default = "lazygit";
       lean.default = "lean4";
       ledger.default = "ledger";

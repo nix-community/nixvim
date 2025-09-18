@@ -1,6 +1,11 @@
 {
   empty = {
-    plugins.project-nvim.enable = true;
+    plugins.project-nvim = {
+      enable = true;
+
+      # The default datapath is unwritable in the sandbox
+      settings.datapath.__raw = "os.getenv('TMPDIR')";
+    };
   };
 
   telescopeEnabled = {
@@ -10,11 +15,18 @@
     plugins.project-nvim = {
       enable = true;
       enableTelescope = true;
+
+      # The default datapath is unwritable in the sandbox
+      settings.datapath.__raw = "os.getenv('TMPDIR')";
     };
     plugins.web-devicons.enable = true;
   };
 
   defaults = {
+    # Attempts at writing to `datapath`:
+    # ERROR: Invalid `datapath`, reverting to default.
+    test.runNvim = false;
+
     plugins.project-nvim = {
       enable = true;
       settings = {
@@ -37,7 +49,7 @@
         show_hidden = false;
         silent_chdir = true;
         scope_chdir = "global";
-        data_path.__raw = "vim.fn.stdpath('data')";
+        datapath.__raw = "vim.fn.stdpath('data')";
       };
     };
   };

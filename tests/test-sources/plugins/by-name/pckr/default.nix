@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        pack_dir.__raw = "require('pckr.util').join_paths(vim.fn.stdpath('data'), 'site')";
+        pack_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
         max_jobs = null;
         autoremove = false;
         autoinstall = true;
@@ -21,7 +21,7 @@
           level = "warn";
         };
         lockfile = {
-          path.__raw = "require('pckr.util').join_paths(vim.fn.stdpath('config'), 'pckr', 'lockfile.lua')";
+          path.__raw = "vim.fs.joinpath(vim.fn.stdpath('config'), 'pckr', 'lockfile.lua')";
         };
       };
     };

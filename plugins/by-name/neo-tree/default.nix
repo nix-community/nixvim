@@ -924,7 +924,7 @@ in
 
   config =
     let
-      inherit (helpers) ifNonNull' mkRaw;
+      inherit (helpers) ifNonNull';
 
       processRendererComponent =
         component:
@@ -1126,9 +1126,12 @@ in
       # TODO: added 2024-09-20 remove after 24.11
       plugins.web-devicons = mkIf (
         !(
-          config.plugins.mini.enable
-          && config.plugins.mini.modules ? icons
-          && config.plugins.mini.mockDevIcons
+          (
+            config.plugins.mini.enable
+            && config.plugins.mini.modules ? icons
+            && config.plugins.mini.mockDevIcons
+          )
+          || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
         )
       ) { enable = mkOverride 1490 true; };
 

@@ -54,6 +54,18 @@ in
         "lazy-nvim"
       ] { };
 
+      performance.rtp = {
+        reset = helpers.defaultNullOpts.mkBool true ''
+          reset the runtime path to $VIMRUNTIME and your config directory.
+        '';
+        paths = helpers.defaultNullOpts.mkListOf lib.types.str [ ] ''
+          add any custom paths here that you want to includes in the rtp
+        '';
+        disabled_plugins = helpers.defaultNullOpts.mkListOf lib.types.str [ ] ''
+          list any plugins you want to disable here
+        '';
+      };
+
       plugins =
         with types;
         let
@@ -220,7 +232,8 @@ in
               patterns = {"."},
               fallback = false
             },
-            spec = ${lib.nixvim.toLuaObject packedPlugins}
+            spec = ${lib.nixvim.toLuaObject packedPlugins},
+            performance = ${lib.nixvim.toLuaObject cfg.performance},
           }
         )
       '';

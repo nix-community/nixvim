@@ -32,7 +32,10 @@ in
     build.plugins =
       let
         shouldCompilePlugins = byteCompileCfg.enable && byteCompileCfg.plugins;
-        byteCompilePlugins = pkgs.callPackage ./byte-compile-plugins.nix { inherit lib; };
+        byteCompilePlugins = pkgs.callPackage ./byte-compile-plugins.nix {
+          inherit lib;
+          inherit (config.performance.byteCompileLua) excludedPlugins;
+        };
 
         shouldCompileLuaLib = byteCompileCfg.enable && byteCompileCfg.luaLib;
         inherit (pkgs.callPackage ./byte-compile-lua-lib.nix { inherit lib; }) byteCompilePluginDeps;
