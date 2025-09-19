@@ -149,6 +149,10 @@ in
       util-linux.default = "util-linux";
       websocat.default = "websocat";
       wezterm.default = "wezterm";
+      fugitive.default = [
+        "vimPlugins"
+        "vim-fugitive"
+      ];
       which.default = "which";
       xxd.default = [
         "unixtools"
