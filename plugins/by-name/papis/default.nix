@@ -20,8 +20,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "yq" ];
 
-  settingsOptions = import ./settings-options.nix lib;
-
   settingsExample = {
     enable_keymaps = true;
     papis_python = {
