@@ -15,7 +15,7 @@ lib.nixvim.plugins.mkVimPlugin {
   extraConfig = {
     assertions = lib.nixvim.mkAssertions "plugins.rhubarb" [
       {
-        assertions = config.plugins.fugitive.enable;
+        assertion = config.plugins.fugitive.enable;
         message = "You must enable `plugins.fugitive` when using `rhubarb`.";
       }
     ];
