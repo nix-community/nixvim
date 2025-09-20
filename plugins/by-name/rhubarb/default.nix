@@ -1,0 +1,23 @@
+{ lib, config, ... }:
+lib.nixvim.plugins.mkVimPlugin {
+  name = "rhubarb";
+  packPathName = "vim-rhubarb";
+  package = "vim-rhubarb";
+  description = "Rhubarb is a GitHub extension for fugitive.vim.";
+
+  maintainers = [ lib.maintainers.santoshxshrestha ];
+
+  dependencies = [
+    "git"
+    "fugitive"
+  ];
+
+  extraConfig = {
+    assertions = lib.nixvim.mkAssertions "plugins.rhubarb" [
+      {
+        assertion = config.plugins.fugitive.enable;
+        message = "You must enable `plugins.fugitive` when using `rhubarb`.";
+      }
+    ];
+  };
+}

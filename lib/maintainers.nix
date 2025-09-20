@@ -138,6 +138,11 @@
     githubId = 131687037;
     name = "Saygo";
   };
+  santoshxshrestha = {
+    github = "santoshxshrestha";
+    githubId = 182977126;
+    name = "Santosh Shrestha";
+  };
   sheemap = {
     github = "sheemap";
     githubId = 1442292;
