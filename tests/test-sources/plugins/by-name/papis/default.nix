@@ -8,15 +8,13 @@
       enable = true;
 
       settings = {
-        enable_modules = {
-          search = true;
-          completion = true;
-          at-cursor = true;
-          formatter = true;
-          colors = true;
-          base = true;
-          debug = false;
-        };
+        search.enable = true;
+        completion.enable = true;
+        at-cursor.enable = true;
+        formatter.enable = true;
+        colors.enable = true;
+        base.enable = true;
+        debug.enable = true;
         cite_formats = {
           tex = {
             start_str = "[[\cite{]]";
@@ -338,15 +336,13 @@
           info_name = "info.yaml";
           notes_name.__raw = "[[notes.norg]]";
         };
-        enable_modules = {
-          search = true;
-          completion = true;
-          cursor-actions = true;
-          formatter = true;
-          colors = true;
-          base = true;
-          debug = false;
-        };
+        search.enable = true;
+        completion.enable = true;
+        cursor-actions.enable = true;
+        formatter.enable = true;
+        colors.enable = true;
+        base.enable = true;
+        debug.enable = true;
         cite_formats = {
           tex = [
             "\\cite{%s}"
