@@ -20,10 +20,6 @@ let
     "php-cs-fixer"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-    # 2025-09-19 build failure
-    # https://github.com/NixOS/nixpkgs/pull/444018
-    "aider.nvim"
-
     # "tabnine"
     "cmp-tabnine"
 
