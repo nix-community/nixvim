@@ -6,16 +6,16 @@
 {
   lib.nixvim = {
     _page = {
-      title = "Nixvim's functions";
+      title = "lib.nixvim: Nixvim's functions";
       source = ./index.md;
     };
 
     utils._page = {
-      title = "utility functions";
+      title = "lib.nixvim.utils: utility functions";
       functions.file = ../../lib/utils.nix;
     };
     lua._page = {
-      title = "lua functions";
+      title = "lib.nixvim.lua: lua functions";
       functions.file = ../../lib/to-lua.nix;
     };
   };
