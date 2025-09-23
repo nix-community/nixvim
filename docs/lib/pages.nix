@@ -4,19 +4,23 @@
 # If there is an issue parsing the file, the resulting markdown will not contain any function docs.
 
 {
-  lib.nixvim = {
-    _page = {
-      title = "lib.nixvim: Nixvim's functions";
-      source = ./index.md;
-    };
+  functions = {
+    _category.name = "Functions";
 
-    utils._page = {
-      title = "lib.nixvim.utils: utility functions";
-      functions.file = ../../lib/utils.nix;
-    };
-    lua._page = {
-      title = "lib.nixvim.lua: lua functions";
-      functions.file = ../../lib/to-lua.nix;
+    lib.nixvim = {
+      _page = {
+        title = "lib.nixvim: Nixvim's functions";
+        source = ./index.md;
+      };
+
+      utils._page = {
+        title = "lib.nixvim.utils: utility functions";
+        functions.file = ../../lib/utils.nix;
+      };
+      lua._page = {
+        title = "lib.nixvim.lua: lua functions";
+        functions.file = ../../lib/to-lua.nix;
+      };
     };
   };
 }
