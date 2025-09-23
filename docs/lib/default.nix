@@ -72,13 +72,13 @@ let
         function docgen {
           md_file="$1"
           in_file="$2"
-          name="$3"
+          category="$3"
           out_file="$out/$4"
           title="$5"
 
           if [[ -z "$in_file" ]]; then
             if [[ -z "$md_file" ]]; then
-              >&2 echo "No markdown or nix file for $name"
+              >&2 echo "No markdown or nix file for $category"
               exit 1
             fi
           elif [[ -f "$in_file/default.nix" ]]; then
@@ -92,7 +92,7 @@ let
             nixdoc \
               --file "$in_file" \
               --locs "$locations" \
-              --category "$name" \
+              --category "$category" \
               --description "REMOVED BY TAIL" \
               --prefix "lib" \
               --anchor-prefix "" \
@@ -103,7 +103,7 @@ let
           print_title=true
           if [[ -f "$md_file" ]] && [[ "$(head --lines 1 "$md_file")" == '# '* ]]; then
             if [[ -n "$title" ]]; then
-              >&2 echo "NOTE: markdown file for $name starts with a <h1> heading. Skipping title \"$title\"."
+              >&2 echo "NOTE: markdown file for $category starts with a <h1> heading. Skipping title \"$title\"."
               >&2 echo "      Found \"$(head --lines 1 "$md_file")\" in: $md_file"
             fi
             print_title=false
@@ -139,7 +139,7 @@ let
             "docgen"
             "${lib.optionalString (source != null) source}" # md_file
             "${lib.optionalString (functions.file != null) functions.file}" # in_file
-            (lib.showAttrPath functions.loc) # name
+            (lib.showAttrPath functions.loc) # category
             target # out_file
             title # title
           ]
