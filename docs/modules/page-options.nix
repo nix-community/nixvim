@@ -49,7 +49,7 @@ in
     };
     functions.loc = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = lib.lists.removePrefix [ "lib" ] cfg.loc;
+      default = if lib.lists.hasPrefix [ "lib" ] cfg.loc then builtins.tail cfg.loc else cfg.loc;
       defaultText = lib.literalMD ''
         `loc`'s attrpath, without any leading "lib"
       '';
@@ -70,6 +70,30 @@ in
         Optional set of options or list of option docs-templates.
 
         If an attrset is provided, it will be coerced using `lib.options.optionAttrSetToDocList`.
+      '';
+    };
+    toMenu = lib.mkOption {
+      type = lib.types.functionTo lib.types.str;
+      description = ''
+        A function to render the menu for this sub-tree.
+
+        Typically, this involves invoking `_page.toMenu` for all children.
+
+        **Inputs**
+
+        `settings`
+        : `nested`
+          : Whether this menu category supports nesting.
+
+          `indent`
+          : The indentation to use before non-empty lines.
+
+          `page`
+          : This page node.
+
+          `prefix`
+          : The menu loc prefix, to be omitted from menu entry text.
+            Usually the `loc` of the parent page node.
       '';
     };
     children = lib.mkOption {
@@ -100,5 +124,10 @@ in
       cfg.functions.file # doc-comments
       cfg.options # module options
     ];
+
+    toMenu = import ./to-menu.nix {
+      inherit lib;
+      optionNames = builtins.attrNames options;
+    };
   };
 }

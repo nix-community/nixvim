@@ -10,19 +10,14 @@
 }:
 
 let
-  pageConfiguration = lib.evalModules {
+  menuConfiguration = lib.evalModules {
     modules = [
       pageSpecs
-      {
-        freeformType = lib.types.attrsOf (
-          lib.types.submoduleWith {
-            modules = [ ../modules/page.nix ];
-          }
-        );
-      }
+      ../modules/menu.nix
     ];
   };
-  pages = pageConfiguration.config;
+  cfg = menuConfiguration.config;
+  pages = cfg.functions;
 
   # Collect all page nodes into a list of page entries
   collectPages =
@@ -33,7 +28,7 @@ let
         children = builtins.removeAttrs node [ "_page" ];
       in
       lib.optional (node ? _page) node._page ++ lib.optionals (children != { }) (collectPages children)
-    ) (builtins.attrValues pages);
+    ) (builtins.attrValues (builtins.removeAttrs pages [ "_category" ]));
 
   # Normalised page specs
   pageList = collectPages pages;
@@ -60,11 +55,9 @@ let
           }
         );
 
-        passthru.config = pageConfiguration;
+        passthru.config = menuConfiguration;
 
-        passthru.menu = import ./menu.nix {
-          inherit lib pages;
-        };
+        passthru.menu = cfg._menu.text;
 
         passthru.pages = map (page: "${result}/${page.target}") pagesToRender;
       }
