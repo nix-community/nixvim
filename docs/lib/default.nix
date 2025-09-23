@@ -100,22 +100,19 @@ let
             > functions.md
           fi
 
-          default_heading="# $name"
-          if [[ -n "$title" ]]; then
-            default_heading+=": $title"
-          fi
-
-          print_heading=true
+          print_title=true
           if [[ -f "$md_file" ]] && [[ "$(head --lines 1 "$md_file")" == '# '* ]]; then
-            >&2 echo "NOTE: markdown file for $name starts with a <h1> heading. Skipping default heading \"$default_heading\"."
-            >&2 echo "      Found \"$(head --lines 1 "$md_file")\" in: $md_file"
-            print_heading=false
+            if [[ -n "$title" ]]; then
+              >&2 echo "NOTE: markdown file for $name starts with a <h1> heading. Skipping title \"$title\"."
+              >&2 echo "      Found \"$(head --lines 1 "$md_file")\" in: $md_file"
+            fi
+            print_title=false
           fi
 
           mkdir -p $(dirname "$out_file")
           (
-            if [[ "$print_heading" = true ]]; then
-              echo "$default_heading"
+            if [[ "$print_title" = true ]]; then
+              echo "# $title"
               echo
             fi
             if [[ -f "$md_file" ]]; then
