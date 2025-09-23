@@ -25,16 +25,16 @@
           session = true;
           showHidden = false;
           versionControl = true;
-          ignore = {
-            nameExact = [
-              ".DS_Store"
-              ".directory"
-              "thumbs.db"
-              ".git"
-            ];
-            nameGlob = [ ];
-            pathGlob = [ ];
-          };
+        };
+        ignore = {
+          nameExact = [
+            ".DS_Store"
+            ".directory"
+            "thumbs.db"
+            ".git"
+          ];
+          nameGlob = [ ];
+          pathGlob = [ ];
         };
         view = {
           openDirection = "left";

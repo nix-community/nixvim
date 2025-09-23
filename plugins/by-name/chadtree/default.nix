@@ -70,31 +70,29 @@ in
       versionControl = helpers.defaultNullOpts.mkBool true ''
         Enable version control. This can also be toggled. But unlike `show_hidden`, does not have a default keybind.
       '';
-
-      ignore = {
-        nameExact =
-          mkListStr
-            [
-              ".DS_Store"
-              ".directory"
-              "thumbs.db"
-              ".git"
-            ]
-            ''
-              Files whose name match these exactly will be ignored.
-            '';
-
-        nameGlob = mkListStr [ ] ''
-          Files whose name match these glob patterns will be ignored.
-          ie. `*.py` will match all python files
-        '';
-
-        pathGlob = mkListStr [ ] ''
-          Files whose full path match these glob patterns will be ignored.
-        '';
-      };
     };
+    ignore = {
+      nameExact =
+        mkListStr
+          [
+            ".DS_Store"
+            ".directory"
+            "thumbs.db"
+            ".git"
+          ]
+          ''
+            Files whose name match these exactly will be ignored.
+          '';
 
+      nameGlob = mkListStr [ ] ''
+        Files whose name match these glob patterns will be ignored.
+        ie. `*.py` will match all python files
+      '';
+
+      pathGlob = mkListStr [ ] ''
+        Files whose full path match these glob patterns will be ignored.
+      '';
+    };
     view = {
       openDirection =
         helpers.defaultNullOpts.mkEnum
@@ -423,11 +421,11 @@ in
           inherit session;
           show_hidden = showHidden;
           version_control = versionControl;
-          ignore = with ignore; {
-            name_exact = nameExact;
-            name_glob = nameGlob;
-            path_glob = pathGlob;
-          };
+        };
+        ignore = with cfg.ignore; {
+          name_exact = nameExact;
+          name_glob = nameGlob;
+          path_glob = pathGlob;
         };
         view = with view; {
           open_direction = openDirection;
