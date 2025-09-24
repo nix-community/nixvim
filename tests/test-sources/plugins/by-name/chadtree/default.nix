@@ -44,16 +44,16 @@
             session = true;
             show_hidden = false;
             version_control = true;
-            ignore = {
-              name_exact = [
-                ".DS_Store"
-                ".directory"
-                "thumbs.db"
-                ".git"
-              ];
-              name_glob = [ ];
-              path_glob = [ ];
-            };
+          };
+          ignore = {
+            name_exact = [
+              ".DS_Store"
+              ".directory"
+              "thumbs.db"
+              ".git"
+            ];
+            name_glob = [ ];
+            path_glob = [ ];
           };
           view = {
             open_direction = "left";
