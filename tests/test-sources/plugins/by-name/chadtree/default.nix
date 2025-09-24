@@ -6,130 +6,150 @@
   example = {
     plugins = {
       web-devicons.enable = true;
+
       chadtree = {
         enable = true;
 
-        options = {
-          follow = true;
-          mimetypes = {
-            warn = [
-              "audio"
-              "font"
-              "image"
-              "video"
-            ];
-            allowExts = [ ".ts" ];
-          };
-          pageIncrement = 5;
-          pollingRate = 2.0;
-          session = true;
-          showHidden = false;
-          versionControl = true;
-          ignore = {
-            nameExact = [
-              ".DS_Store"
-              ".directory"
-              "thumbs.db"
-              ".git"
-            ];
-            nameGlob = [ ];
-            pathGlob = [ ];
+        settings = {
+          view.window_options.relativenumber = true;
+          theme = {
+            icon_glyph_set = "devicons";
+            text_colour_set = "nerdtree_syntax_dark";
           };
         };
-        view = {
-          openDirection = "left";
-          sortBy = [
-            "is_folder"
-            "ext"
-            "file_name"
-          ];
-          width = 40;
-          windowOptions = {
-            cursorline = true;
-            number = false;
-            relativenumber = false;
-            signcolumn = "no";
-            winfixwidth = true;
-            wrap = false;
+      };
+    };
+  };
+
+  bigExample = {
+    plugins = {
+      web-devicons.enable = true;
+      chadtree = {
+        enable = true;
+
+        settings = {
+          options = {
+            follow = true;
+            mimetypes = {
+              warn = [
+                "audio"
+                "font"
+                "image"
+                "video"
+              ];
+              allowExts = [ ".ts" ];
+            };
+            page_increment = 5;
+            polling_rate = 2.0;
+            session = true;
+            show_hidden = false;
+            version_control = true;
+            ignore = {
+              name_exact = [
+                ".DS_Store"
+                ".directory"
+                "thumbs.db"
+                ".git"
+              ];
+              name_glob = [ ];
+              path_glob = [ ];
+            };
           };
-        };
-        theme = {
-          highlights = {
-            ignored = "Comment";
-            bookmarks = "Title";
-            quickfix = "Label";
-            versionControl = "Comment";
-          };
-          iconGlyphSet = "devicons";
-          textColourSet = "env";
-          iconColourSet = "github";
-        };
-        keymap = {
-          windowManagement = {
-            quit = [ "q" ];
-            bigger = [
-              "+"
-              "="
+          view = {
+            open_direction = "left";
+            sort_by = [
+              "is_folder"
+              "ext"
+              "file_name"
             ];
-            smaller = [
-              "-"
-              "_"
-            ];
-            refresh = [ "<c-r>" ];
+            width = 40;
+            window_options = {
+              cursorline = true;
+              number = false;
+              relativenumber = false;
+              signcolumn = "no";
+              winfixwidth = true;
+              wrap = false;
+            };
           };
-          rerooting = {
-            changeDir = [ "b" ];
-            changeFocus = [ "c" ];
-            changeFocusUp = [ "C" ];
+          theme = {
+            highlights = {
+              ignored = "Comment";
+              bookmarks = "Title";
+              quickfix = "Label";
+              versionControl = "Comment";
+            };
+            icon_glyph_set = "devicons";
+            text_colour_set = "env";
+            icon_colour_set = "github";
           };
-          openFileFolder = {
-            primary = [ "<enter>" ];
-            secondary = [
-              "<tab>"
-              "<2-leftmouse>"
-            ];
-            tertiary = [
-              "<m-enter>"
-              "<middlemouse>"
-            ];
-            vSplit = [ "w" ];
-            hSplit = [ "W" ];
-            openSys = [ "o" ];
-            collapse = [ "o" ];
-          };
-          cursor = {
-            refocus = [ "~" ];
-            jumpToCurrent = [ "J" ];
-            stat = [ "K" ];
-            copyName = [ "y" ];
-            copyBasename = [ "Y" ];
-            copyRelname = [ "<c-y>" ];
-          };
-          filtering = {
-            filter = [ "f" ];
-            clearFilter = [ "F" ];
-          };
-          bookmarks = {
-            bookmarkGoto = [ "m" ];
-          };
-          selecting = {
-            select = [ "s" ];
-            clearSelection = [ "S" ];
-          };
-          fileOperations = {
-            new = [ "a" ];
-            link = [ "A" ];
-            rename = [ "r" ];
-            toggleExec = [ "X" ];
-            copy = [ "p" ];
-            cut = [ "x" ];
-            delete = [ "d" ];
-            trash = [ "t" ];
-          };
-          toggles = {
-            toggleHidden = [ "." ];
-            toggleFollow = [ "u" ];
-            toggleVersionControl = [ "i" ];
+          keymap = {
+            window_management = {
+              quit = [ "q" ];
+              bigger = [
+                "+"
+                "="
+              ];
+              smaller = [
+                "-"
+                "_"
+              ];
+              refresh = [ "<c-r>" ];
+            };
+            rerooting = {
+              change_dir = [ "b" ];
+              change_focus = [ "c" ];
+              change_focus_up = [ "C" ];
+            };
+            open_file_folder = {
+              primary = [ "<enter>" ];
+              secondary = [
+                "<tab>"
+                "<2-leftmouse>"
+              ];
+              tertiary = [
+                "<m-enter>"
+                "<middlemouse>"
+              ];
+              v_split = [ "w" ];
+              h_split = [ "W" ];
+              open_sys = [ "o" ];
+              collapse = [ "o" ];
+            };
+            cursor = {
+              refocus = [ "~" ];
+              jump_to_current = [ "J" ];
+              stat = [ "K" ];
+              copy_name = [ "y" ];
+              copy_basename = [ "Y" ];
+              copy_relname = [ "<c-y>" ];
+            };
+            filtering = {
+              filter = [ "f" ];
+              clear_filter = [ "F" ];
+            };
+            bookmarks = {
+              bookmark_goto = [ "m" ];
+            };
+            selecting = {
+              select = [ "s" ];
+              clear_selection = [ "S" ];
+            };
+            file_operations = {
+              new = [ "a" ];
+              link = [ "A" ];
+              rename = [ "r" ];
+              toggle_exec = [ "X" ];
+              copy = [ "p" ];
+              cut = [ "x" ];
+              delete = [ "d" ];
+              trash = [ "t" ];
+            };
+            toggles = {
+              toggle_hidden = [ "." ];
+              toggle_follow = [ "u" ];
+              toggle_version_control = [ "i" ];
+            };
           };
         };
       };
