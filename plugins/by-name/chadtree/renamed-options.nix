@@ -38,21 +38,44 @@
     "options"
     "versionControl"
   ]
-  [
-    "options"
-    "ignore"
-    "nameExact"
-  ]
-  [
-    "options"
-    "ignore"
-    "nameGlob"
-  ]
-  [
-    "options"
-    "ignore"
-    "pathGlob"
-  ]
+
+  # IGNORE
+  # `ignore.*` was wrongly declared as an `options` suboption.
+  # The following declares correct renamed warnings that account for this prior mistake
+  # Initially reported in https://github.com/nix-community/nixvim/pull/3705
+  {
+    old = [
+      "options"
+      "ignore"
+      "nameExact"
+    ];
+    new = [
+      "ignore"
+      "name_exact"
+    ];
+  }
+  {
+    old = [
+      "options"
+      "ignore"
+      "nameGlob"
+    ];
+    new = [
+      "ignore"
+      "name_glob"
+    ];
+  }
+  {
+    old = [
+      "options"
+      "ignore"
+      "pathGlob"
+    ];
+    new = [
+      "ignore"
+      "path_glob"
+    ];
+  }
 
   # VIEW
   [
