@@ -3,7 +3,6 @@
   helpers,
   config,
   pkgs,
-  options,
   ...
 }:
 with lib;
@@ -498,21 +497,6 @@ in
       };
     in
     mkIf cfg.enable {
-      # TODO: added 2024-09-20 remove after 24.11
-      plugins.web-devicons =
-        lib.mkIf
-          (
-            (cfg.theme == null || cfg.theme.iconGlyphSet == "devicons")
-            && !(
-              config.plugins.mini.enable
-              && config.plugins.mini.modules ? icons
-              && config.plugins.mini.mockDevIcons
-            )
-          )
-          {
-            enable = lib.mkOverride 1490 false;
-          };
-
       extraPlugins = [ cfg.package ];
 
       extraConfigLua = ''
