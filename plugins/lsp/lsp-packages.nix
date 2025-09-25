@@ -5,6 +5,7 @@
     "alloy_ls"
     "anakin_language_server"
     "antlersls"
+    "ansiblels"
     "apex_ls"
     "autohotkey_lsp"
     "awk_ls"
@@ -186,7 +187,6 @@
     aiken = "aiken";
     air = "air-formatter";
     angularls = "angular-language-server";
-    ansiblels = "ansible-language-server";
     arduino_language_server = "arduino-language-server";
     asm_lsp = "asm-lsp";
     ast_grep = "ast-grep";
