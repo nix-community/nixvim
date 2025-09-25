@@ -382,6 +382,13 @@
     name = "Refael Sheinker";
     source = "nixvim";
   };
+  santoshxshrestha = {
+    email = "santoshxshrestha@gmail.com";
+    github = "santoshxshrestha";
+    githubId = 182977126;
+    name = "Santosh Shrestha";
+    source = "nixpkgs";
+  };
   saygo-png = {
     github = "saygo-png";
     githubId = 131687037;
