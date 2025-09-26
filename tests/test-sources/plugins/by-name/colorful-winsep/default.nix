@@ -7,55 +7,38 @@
     plugins.colorful-winsep = {
       enable = true;
       settings = {
-        symbols = [
-          "━"
-          "┃"
-          "┏"
-          "┓"
-          "┗"
-          "┛"
-        ];
-        no_exec_files = [
+        border = "bold";
+        excluded_ft = [
           "packer"
           "TelescopePrompt"
           "mason"
-          "CompetiTest"
         ];
-        hi = {
-          fg = "#957CC6";
-          bg.__raw = ''vim.api.nvim_get_hl_by_name("Normal", true)["background"]'';
-        };
-        events = [
-          "WinEnter"
-          "WinResized"
-          "SessionLoadPost"
-        ];
-        smooth = true;
-        exponential_smoothing = true;
-        only_line_seq = true;
-        anchor = {
-          left = {
-            height = 1;
-            x = -1;
-            y = -1;
+        highlight.__raw = "nil";
+        animate = {
+          enabled = "shift";
+          shift = {
+            delta_time = 0.1;
+            smooth_speed = 1;
+            delay = 3;
           };
-          right = {
-            height = 1;
-            x = -1;
-            y = 0;
-          };
-          up = {
-            width = 0;
-            x = -1;
-            y = 0;
-          };
-          bottom = {
-            width = 0;
-            x = 1;
-            y = 0;
+          progressive = {
+            vertical_delay = 20;
+            horizontal_delay = 2;
           };
         };
-        light_pollution.__raw = "function(lines) end";
+        indicator_for_2wins = {
+          position = "center";
+          symbols = {
+            start_left = "󱞬";
+            end_left = "󱞪";
+            start_down = "󱞾";
+            end_down = "󱟀";
+            start_up = "󱞢";
+            end_up = "󱞤";
+            start_right = "󱞨";
+            end_right = "󱞦";
+          };
+        };
       };
     };
   };
@@ -64,19 +47,9 @@
     plugins.colorful-winsep = {
       enable = true;
       settings = {
-        hi = {
-          bg = "#7d8618";
-          fg = "#b8bb26";
-        };
-        only_line_seq = true;
-        no_exec_files = [
-          "packer"
-          "TelescopePrompt"
-          "mason"
-          "CompetiTest"
-          "NvimTree"
-        ];
-        symbols = [
+        highlight = "#b8bb26";
+        excluded_ft = [ "NvimTree" ];
+        border = [
           "━"
           "┃"
           "┏"

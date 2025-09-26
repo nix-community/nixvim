@@ -7,19 +7,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.saygo-png ];
 
   settingsExample = {
-    hi = {
-      bg = "#7d8618";
-      fg = "#b8bb26";
-    };
-    only_line_seq = true;
-    no_exec_files = [
-      "packer"
-      "TelescopePrompt"
-      "mason"
-      "CompetiTest"
-      "NvimTree"
-    ];
-    symbols = [
+    highlight = "#b8bb26";
+    excluded_ft = [ "NvimTree" ];
+    border = [
       "━"
       "┃"
       "┏"
