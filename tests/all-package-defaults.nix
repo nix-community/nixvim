@@ -59,6 +59,9 @@ let
     # xdotool is not available on darwin
     "fontpreview"
 
+    # 2025-09-26 build failure
+    "verilator"
+
     # 2025-09-08 build failure
     "mint"
 
