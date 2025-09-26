@@ -133,12 +133,6 @@
     githubId = 2750775;
     name = "Refael Sheinker";
   };
-  santosh = {
-    email = "santoshxshrestha@gmail.com";
-    github = "santoshxshrestha";
-    githubId = 182977126;
-    name = "Santosh Shrestha";
-  };
   saygo-png = {
     github = "saygo-png";
     githubId = 131687037;
