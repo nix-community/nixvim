@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-git";
   moduleName = "mini.git";
-  packPathName = "mini.git";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

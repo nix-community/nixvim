@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "smartcolumn";
-  packPathName = "smartcolumn.nvim";
   package = "smartcolumn-nvim";
   description = "A Neovim plugin hiding your colorcolumn when unneeded.";
 

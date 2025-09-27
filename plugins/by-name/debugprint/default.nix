@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "debugprint";
-  packPathName = "debugprint.nvim";
   package = "debugprint-nvim";
   description = "A Neovim plugin for inserting debug print statements.";
 

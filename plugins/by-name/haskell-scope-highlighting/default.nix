@@ -5,7 +5,6 @@
 }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "haskell-scope-highlighting";
-  packPathName = "haskell-scope-highlighting.nvim";
   package = "haskell-scope-highlighting-nvim";
   description = "Haskell syntax highlighting that considers variable scopes.";
 

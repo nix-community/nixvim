@@ -9,7 +9,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "clipboard-image";
-  packPathName = "clipboard-image.nvim";
   package = "clipboard-image-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

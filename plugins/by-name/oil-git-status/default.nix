@@ -6,7 +6,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "oil-git-status";
-  packPathName = "oil-git-status.nvim";
   package = "oil-git-status-nvim";
 
   description = ''

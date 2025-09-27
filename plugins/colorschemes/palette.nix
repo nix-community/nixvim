@@ -9,7 +9,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "palette";
   isColorscheme = true;
-  packPathName = "palette.nvim";
   package = "palette-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

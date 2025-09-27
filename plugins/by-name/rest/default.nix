@@ -10,7 +10,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "rest";
-  packPathName = "rest.nvim";
   moduleName = "rest-nvim";
   package = "rest-nvim";
   description = "A very fast, powerful, extensible and asynchronous Neovim HTTP client.";

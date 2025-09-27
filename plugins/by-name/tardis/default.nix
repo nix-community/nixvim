@@ -3,7 +3,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "tardis";
   moduleName = "tardis-nvim";
-  packPathName = "tardis.nvim";
   package = "tardis-nvim";
   description = ''
     Timetravel for neovim

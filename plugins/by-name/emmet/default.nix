@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "emmet";
-  packPathName = "emmet-vim";
   package = "emmet-vim";
   globalPrefix = "user_emmet_";
   description = "Provides support for Emmet abbreviations and snippets.";

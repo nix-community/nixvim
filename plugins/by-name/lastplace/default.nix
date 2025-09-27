@@ -9,7 +9,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lastplace";
   moduleName = "nvim-lastplace";
-  packPathName = "nvim-lastplace";
   package = "nvim-lastplace";
 
   maintainers = [ lib.maintainers.khaneliman ];

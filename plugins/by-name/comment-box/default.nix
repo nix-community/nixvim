@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "comment-box";
-  packPathName = "comment-box.nvim";
   package = "comment-box-nvim";
   description = ''
     Clarify and beautify your comments and plain text files using boxes and lines.

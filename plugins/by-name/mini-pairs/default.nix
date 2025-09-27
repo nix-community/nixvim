@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-pairs";
   moduleName = "mini.pairs";
-  packPathName = "mini.pairs";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cloak";
-  packPathName = "cloak.nvim";
   package = "cloak-nvim";
   description = "Cloak allows you to overlay *'s over defined patterns.";
 

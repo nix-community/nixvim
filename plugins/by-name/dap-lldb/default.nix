@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-lldb";
-  packPathName = "nvim-dap-lldb";
   package = "nvim-dap-lldb";
   description = "An extension for nvim-dap to provide C, C++, and Rust debugging support.";
 

@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "aider";
   package = "aider-nvim";
-  packPathName = "aider.nvim";
 
   maintainers = with lib.maintainers; [
     c4patino

@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "remote-nvim";
-  packPathName = "remote-nvim.nvim";
   package = "remote-nvim-nvim";
   description = "Adds support for remote development and devcontainers to Neovim.";
 

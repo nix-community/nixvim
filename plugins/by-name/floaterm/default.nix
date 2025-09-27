@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "floaterm";
-  packPathName = "vim-floaterm";
   package = "vim-floaterm";
   globalPrefix = "floaterm_";
   description = "A Neovim plugin for floating terminal windows.";

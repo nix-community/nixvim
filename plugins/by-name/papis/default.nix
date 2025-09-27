@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "papis";
-  packPathName = "papis.nvim";
   package = "papis-nvim";
   description = "Manage your bibliography from within your favourite editor.";
 

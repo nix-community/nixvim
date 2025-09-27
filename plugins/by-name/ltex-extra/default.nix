@@ -7,7 +7,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "ltex-extra";
-  packPathName = "ltex_extra.nvim";
   package = "ltex_extra-nvim";
   description = "LTeX_extra is a companion plugin for LTeX language server.";
 

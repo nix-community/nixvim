@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cutlass-nvim";
   moduleName = "cutlass";
-  packPathName = "cutlass.nvim";
 
   maintainers = [ lib.maintainers.saygo-png ];
 

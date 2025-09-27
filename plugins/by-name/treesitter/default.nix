@@ -15,7 +15,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "treesitter";
-  packPathName = "nvim-treesitter";
   moduleName = "nvim-treesitter.configs";
   package = "nvim-treesitter";
 

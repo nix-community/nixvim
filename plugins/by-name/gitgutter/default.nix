@@ -9,7 +9,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "gitgutter";
-  packPathName = "vim-gitgutter";
   package = "vim-gitgutter";
   globalPrefix = "gitgutter_";
   description = "A Vim plugin which shows a git diff in the sign column.";

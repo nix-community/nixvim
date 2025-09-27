@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "img-clip";
-  packPathName = "img-clip.nvim";
   package = "img-clip-nvim";
   description = "Embed images into any markup language, like LaTeX, Markdown or Typst";
   maintainers = [ lib.maintainers.saygo-png ];

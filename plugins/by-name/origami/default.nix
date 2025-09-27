@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "origami";
-  packPathName = "nvim-origami";
   package = "nvim-origami";
   description = "A Neovim plugin for managing folds with ease.";
 

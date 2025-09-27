@@ -5,7 +5,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "jdtls";
-  packPathName = "nvim-jdtls";
   package = "nvim-jdtls";
   description = "Neovim plugin for the Java Development Tools Language Server (JDT LS).";
 

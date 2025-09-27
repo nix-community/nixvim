@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "typst-vim";
-  packPathName = "typst.vim";
   globalPrefix = "typst_";
   description = "A Neovim plugin for Typst, a modern typesetting system.";
 

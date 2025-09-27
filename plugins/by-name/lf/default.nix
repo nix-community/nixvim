@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lf";
-  packPathName = "lf.nvim";
   package = "lf-nvim";
 
   description = ''

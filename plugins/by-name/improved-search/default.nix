@@ -8,7 +8,6 @@ with lib;
 # `globalPrefix` argument to avoid the creation of the `settings` option.
 lib.nixvim.plugins.mkVimPlugin {
   name = "improved-search";
-  packPathName = "improved-search.nvim";
   package = "improved-search-nvim";
   description = "It's a Neovim plugin that improves the search experience.";
 

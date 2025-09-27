@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-view";
-  packPathName = "nvim-dap-view";
   moduleName = "dap-view";
   package = "nvim-dap-view";
   description = "Visualize debugging sessions in Neovim.";

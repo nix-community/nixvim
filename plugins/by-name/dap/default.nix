@@ -14,7 +14,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap";
   package = "nvim-dap";
-  packPathName = "nvim-dap";
   description = "Debug Adapter Protocol client implementation for Neovim.";
 
   maintainers = [ lib.maintainers.khaneliman ];

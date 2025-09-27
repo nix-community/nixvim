@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "autoclose";
-  packPathName = "autoclose.nvim";
   package = "autoclose-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

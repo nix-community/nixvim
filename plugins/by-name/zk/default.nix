@@ -7,7 +7,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "zk";
-  packPathName = "zk.nvim";
   package = "zk-nvim";
   description = "Neovim extension for the [`zk`](https://github.com/zk-org/zk) plain text note-taking assistant.";
 

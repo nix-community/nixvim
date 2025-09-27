@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "faster";
-  packPathName = "faster.nvim";
   package = "faster-nvim";
   description = "Selectively disable some features when a big file is opened or macro is executed.";
   maintainers = [ lib.maintainers.saygo-png ];

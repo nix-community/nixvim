@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-surround";
   moduleName = "mini.surround";
-  packPathName = "mini.surround";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

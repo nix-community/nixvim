@@ -10,7 +10,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lazydev";
-  packPathName = "lazydev.nvim";
   package = "lazydev-nvim";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];

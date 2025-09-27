@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dial";
-  packPathName = "dial.nvim";
   package = "dial-nvim";
   description = "Extended increment/decrement plugin for Neovim.";
 

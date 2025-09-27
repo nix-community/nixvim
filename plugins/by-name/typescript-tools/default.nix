@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "typescript-tools";
-  packPathName = "typescript-tools.nvim";
   package = "typescript-tools-nvim";
   description = "A collection of tools for working with TypeScript and JavaScript in Neovim, including LSP support, code actions, and more.";
 

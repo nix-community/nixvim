@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "indent-blankline";
-  packPathName = "indent-blankline.nvim";
   moduleName = "ibl";
   package = "indent-blankline-nvim";
   description = "This plugin adds indentation guides to Neovim.";

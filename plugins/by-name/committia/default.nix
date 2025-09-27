@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "committia";
-  packPathName = "committia.vim";
   package = "committia-vim";
   globalPrefix = "committia_";
   description = "A Vim plugin for more pleasant editing on commit messages.";

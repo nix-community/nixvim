@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "toggleterm";
-  packPathName = "toggleterm.nvim";
   package = "toggleterm-nvim";
   description = "A neovim lua plugin to help easily manage multiple terminal windows.";
 

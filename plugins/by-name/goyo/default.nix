@@ -7,7 +7,6 @@ with lib.nixvim.plugins;
 with lib;
 mkVimPlugin {
   name = "goyo";
-  packPathName = "goyo.vim";
   package = "goyo-vim";
   globalPrefix = "goyo_";
   description = "Distraction-free writing in Vim.";

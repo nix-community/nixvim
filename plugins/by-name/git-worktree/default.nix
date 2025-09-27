@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "git-worktree";
-  packPathName = "git-worktree.nvim";
   package = "git-worktree-nvim";
   description = "A Neovim plugin to manage git worktrees.";
 

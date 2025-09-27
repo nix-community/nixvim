@@ -9,7 +9,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lspkind";
-  packPathName = "lspkind.nvim";
   package = "lspkind-nvim";
   maintainers = [ lib.maintainers.saygo-png ];
   description = "VS Code-like pictograms for Neovim LSP completion items.";

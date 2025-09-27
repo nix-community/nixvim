@@ -14,7 +14,6 @@ in
 # TODO:add support for additional filetypes. This requires autocommands!
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "telescope";
-  packPathName = "telescope.nvim";
   package = "telescope-nvim";
   description = "Find, Filter, Preview, Pick. All lua, all the time.";
 

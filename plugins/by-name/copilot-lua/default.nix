@@ -11,7 +11,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "copilot-lua";
   moduleName = "copilot";
-  packPathName = "copilot.lua";
   description = "Fully featured & enhanced replacement for copilot.vim.";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
