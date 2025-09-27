@@ -15,7 +15,6 @@
   isColorscheme ? false,
   colorscheme ? name,
   # options
-  packPathName ? name,
   # Can be a string, a list of strings, or a module option:
   # - A string will be intrpreted as `pkgs.vimPlugins.${package}`
   # - A list will be interpreted as a "pkgs path", e.g. `pkgs.${elem1}.${elem2}.${etc...}`
@@ -59,8 +58,8 @@ let
     {
       options = lib.setAttrByPath loc (
         {
-          enable = lib.mkEnableOption packPathName;
-          autoLoad = lib.nixvim.mkAutoLoadOption cfg packPathName;
+          enable = lib.mkEnableOption name;
+          autoLoad = lib.nixvim.mkAutoLoadOption cfg name;
         }
         // settingsOption
         // extraOptions
@@ -93,7 +92,7 @@ in
     imports
     ++ [
       module
-      (lib.nixvim.plugins.utils.mkPluginPackageModule { inherit loc packPathName package; })
+      (lib.nixvim.plugins.utils.mkPluginPackageModule { inherit loc name package; })
       (lib.nixvim.plugins.utils.mkMetaModule {
         inherit
           loc

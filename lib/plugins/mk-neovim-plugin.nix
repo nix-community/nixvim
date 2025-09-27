@@ -20,7 +20,6 @@
   # For example, they might just be configured through some other mean, like global variables
   hasLuaConfig ? true,
   # options
-  packPathName ? name,
   # Can be a string, a list of strings, or a module option:
   # - A string will be intrpreted as `pkgs.vimPlugins.${package}`
   # - A list will be interpreted as a "pkgs path", e.g. `pkgs.${elem1}.${elem2}.${etc...}`
@@ -66,9 +65,9 @@ let
     {
       options = lib.setAttrByPath loc (
         {
-          enable = lib.mkEnableOption packPathName;
-          autoLoad = lib.nixvim.mkAutoLoadOption cfg packPathName;
-          lazyLoad = lib.nixvim.mkLazyLoadOption packPathName;
+          enable = lib.mkEnableOption name;
+          autoLoad = lib.nixvim.mkAutoLoadOption cfg name;
+          lazyLoad = lib.nixvim.mkLazyLoadOption name;
         }
         // lib.optionalAttrs hasSettings {
           settings = lib.nixvim.mkSettingsOption {
@@ -114,7 +113,7 @@ let
                 assertions = [
                   {
                     assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
-                    message = "You have enabled lazy loading for ${packPathName} but have not provided any configuration.";
+                    message = "You have enabled lazy loading for ${name} but have not provided any configuration.";
                   }
                 ];
 
@@ -122,7 +121,8 @@ let
                   plugins = [
                     (
                       {
-                        __unkeyed-1 = packPathName;
+                        # The packpath name is always the derivation name
+                        __unkeyed-1 = lib.getName cfg.package;
                         # Use provided after, otherwise fallback to normal function wrapped lua content
                         after =
                           let
@@ -162,7 +162,7 @@ in
     imports
     ++ [
       module
-      (utils.mkPluginPackageModule { inherit loc packPathName package; })
+      (utils.mkPluginPackageModule { inherit loc name package; })
       (utils.mkMetaModule {
         inherit
           loc
