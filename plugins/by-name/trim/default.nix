@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "trim";
-  packPathName = "trim.nvim";
   package = "trim-nvim";
   description = "This plugin trims trailing whitespace and lines.";
 

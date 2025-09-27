@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "jupytext";
-  packPathName = "jupytext.nvim";
   package = "jupytext-nvim";
   description = "Jupyter notebooks on Neovim powered by Jupytext.";
 

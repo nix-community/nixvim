@@ -5,7 +5,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hmts";
-  packPathName = "hmts.nvim";
   package = "hmts-nvim";
   description = "Custom treesitter queries for Home Manager nix files, in Neovim.";
 

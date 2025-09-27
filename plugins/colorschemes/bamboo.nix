@@ -8,7 +8,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "bamboo";
   isColorscheme = true;
-  packPathName = "bamboo.nvim";
   package = "bamboo-nvim";
 
   maintainers = [ lib.maintainers.alisonjenkins ];

@@ -9,7 +9,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-tree";
-  packPathName = "nvim-tree.lua";
   package = "nvim-tree-lua";
   maintainers = [ lib.maintainers.saygo-png ];
   description = "A file explorer tree for neovim written in lua.";

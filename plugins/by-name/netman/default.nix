@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "netman";
-  packPathName = "netman.nvim";
   package = "netman-nvim";
   description = "Neovim (Lua powered) Network Resource Manager.";
 

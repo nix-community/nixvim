@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "competitest";
-  packPathName = "competitest.nvim";
   package = "competitest-nvim";
   description = "Competitive programming plugin for Neovim.";
 

@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "my-plugin";
   moduleName = "my-plugin"; # TODO replace (or remove entirely if it is the same as `name`)
-  packPathName = "my-plugin.nvim"; # TODO replace (or remove entirely if it is the same as `name`)
   package = "my-plugin-nvim"; # TODO replace
 
   # TODO replace with your name

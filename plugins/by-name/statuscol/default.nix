@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "statuscol";
-  packPathName = "statuscol.nvim";
   package = "statuscol-nvim";
   description = "Status column plugin that provides a configurable `statuscolumn` and click handlers.";
 

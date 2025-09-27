@@ -53,7 +53,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "barbar";
-  packPathName = "barbar.nvim";
   package = "barbar-nvim";
   description = "A neovim tabline plugin.";
 

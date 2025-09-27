@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "markview";
-  packPathName = "markview.nvim";
   package = "markview-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

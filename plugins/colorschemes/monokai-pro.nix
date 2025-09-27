@@ -10,7 +10,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "monokai-pro";
   isColorscheme = true;
-  packPathName = "monokai-pro.nvim";
   package = "monokai-pro-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

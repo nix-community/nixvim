@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "flit";
-  packPathName = "flit.nvim";
   package = "flit-nvim";
   description = "f/F/t/T motions on steroids, building on the Leap interface.";
 

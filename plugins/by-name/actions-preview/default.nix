@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "actions-preview";
-  packPathName = "actions-preview.nvim";
   package = "actions-preview-nvim";
   description = "Fully customizable previewer for LSP code actions.";
 

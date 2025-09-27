@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hydra";
-  packPathName = "hydra.nvim";
   package = "hydra-nvim";
   description = "Create custom submodes and menus, inspired by the Hydra Emacs package.";
 

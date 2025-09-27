@@ -7,7 +7,6 @@ with lib;
 # avoid the creation of the `settings` option.
 lib.nixvim.plugins.mkVimPlugin {
   name = "texpresso";
-  packPathName = "texpresso.vim";
   package = "texpresso-vim";
   description = "Neovim mode for TeXpresso.";
 

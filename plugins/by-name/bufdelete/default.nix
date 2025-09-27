@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "bufdelete";
-  packPathName = "bufdelete.nvim";
   package = "bufdelete-nvim";
   globalPrefix = "bufdelete_";
 

@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dropbar";
-  packPathName = "dropbar.nvim";
   package = "dropbar-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

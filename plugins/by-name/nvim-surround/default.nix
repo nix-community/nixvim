@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-surround";
-  packPathName = "nvim-surround";
   package = "nvim-surround";
   description = "Add/change/delete surrounding delimiter pairs with ease.";
 

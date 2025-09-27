@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hlchunk";
-  packPathName = "hlchunk.nvim";
   package = "hlchunk-nvim";
   description = "A plugin that can highlight the indent line, and highlight the code chunk according to the current cursor position.";
 

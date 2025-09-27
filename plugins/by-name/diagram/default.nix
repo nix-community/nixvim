@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "diagram";
-  packPathName = "diagram.nvim";
   package = "diagram-nvim";
   description = "A Neovim plugin for rendering diagrams, powered by [image.nvim](https://github.com/3rd/image.nvim).";
 

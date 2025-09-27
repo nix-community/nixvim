@@ -128,7 +128,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lint";
-  packPathName = "nvim-lint";
   package = "nvim-lint";
   callSetup = false;
   hasSettings = false;

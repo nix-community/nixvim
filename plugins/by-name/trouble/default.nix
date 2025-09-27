@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "trouble";
-  packPathName = "trouble.nvim";
   package = "trouble-nvim";
   description = "A pretty list for showing diagnostics, references, telescope results, quickfix and location lists to help you solve all the trouble your code is causing.";
 

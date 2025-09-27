@@ -5,7 +5,6 @@
 }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "sleuth";
-  packPathName = "vim-sleuth";
   package = "vim-sleuth";
   globalPrefix = "sleuth_";
   description = "This plugin automatically adjusts 'shiftwidth' and 'expandtab' heuristically based on the current file.";

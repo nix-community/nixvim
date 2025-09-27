@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "wrapping";
-  packPathName = "wrapping.nvim";
   package = "wrapping-nvim";
   description = "Plugin to make it easier to switch between 'soft' and 'hard' line wrapping in NeoVim.";
 

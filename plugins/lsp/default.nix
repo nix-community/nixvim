@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp";
-  packPathName = "nvim-lspconfig";
   package = "nvim-lspconfig";
 
   callSetup = false;

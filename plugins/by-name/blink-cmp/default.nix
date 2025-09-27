@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "blink-cmp";
-  packPathName = "blink.cmp";
   package = "blink-cmp";
 
   maintainers = with lib.maintainers; [

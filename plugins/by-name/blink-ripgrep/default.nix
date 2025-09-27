@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "blink-ripgrep";
-  packPathName = "blink-ripgrep.nvim";
   package = "blink-ripgrep-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

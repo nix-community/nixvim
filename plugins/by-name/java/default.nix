@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "java";
-  packPathName = "nvim-java";
   package = "nvim-java";
   description = "Neovim plugin for Java development, providing LSP support and more.";
 

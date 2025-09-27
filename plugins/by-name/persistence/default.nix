@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "persistence";
-  packPathName = "persistence.nvim";
   package = "persistence-nvim";
   description = "A simple lua plugin for automated session management.";
 

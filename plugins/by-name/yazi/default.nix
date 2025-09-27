@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "yazi";
-  packPathName = "yazi.nvim";
   package = "yazi-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

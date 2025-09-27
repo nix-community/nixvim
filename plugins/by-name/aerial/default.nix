@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "aerial";
-  packPathName = "aerial.nvim";
   package = "aerial-nvim";
   description = "A code outline window for skimming and quick navigation.";
 

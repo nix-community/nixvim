@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "markdown-preview";
-  packPathName = "markdown-preview.nvim";
   package = "markdown-preview-nvim";
   globalPrefix = "mkdp_";
   description = "A markdown preview plugin for Neovim.";

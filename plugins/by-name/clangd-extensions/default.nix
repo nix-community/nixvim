@@ -6,7 +6,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "clangd-extensions";
   moduleName = "clangd_extensions";
-  packPathName = "clangd_extensions.nvim";
   package = "clangd_extensions-nvim";
   description = ''
     Clangd's off-spec features for neovim's LSP client.

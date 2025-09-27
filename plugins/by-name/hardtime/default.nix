@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hardtime";
-  packPathName = "hardtime.nvim";
   package = "hardtime-nvim";
   description = "A Neovim plugin that helps you to avoid repeating mistakes with key presses.";
 

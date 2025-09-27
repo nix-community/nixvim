@@ -6,7 +6,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hunk";
-  packPathName = "hunk.nvim";
   package = "hunk-nvim";
 
   description = ''

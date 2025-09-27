@@ -6,7 +6,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "none-ls";
-  packPathName = "none-ls.nvim";
   moduleName = "null-ls";
   package = "none-ls-nvim";
   description = "Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua.";

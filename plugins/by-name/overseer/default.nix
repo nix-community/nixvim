@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "overseer";
-  packPathName = "overseer.nvim";
   package = "overseer-nvim";
   description = "A task runner and job management plugin for Neovim.";
 

@@ -4,7 +4,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   isColorscheme = true;
   colorscheme = "gruvbox-material";
   moduleName = "gruvbox-material";
-  packPathName = "gruvbox-material.nvim";
   package = "gruvbox-material-nvim";
 
   maintainers = [ lib.maintainers.f4z3r ];

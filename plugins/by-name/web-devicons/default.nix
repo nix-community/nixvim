@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "web-devicons";
-  packPathName = "nvim-web-devicons";
   moduleName = "nvim-web-devicons";
   package = "nvim-web-devicons";
   # Just want it before most other plugins for the icons provider.

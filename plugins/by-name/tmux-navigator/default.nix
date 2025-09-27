@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "tmux-navigator";
-  packPathName = "vim-tmux-navigator";
   package = "vim-tmux-navigator";
   globalPrefix = "tmux_navigator_";
 

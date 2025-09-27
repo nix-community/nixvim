@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-ai";
   moduleName = "mini.ai";
-  packPathName = "mini.ai";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

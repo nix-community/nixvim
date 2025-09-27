@@ -9,7 +9,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cursorline";
   moduleName = "nvim-cursorline";
-  packPathName = "nvim-cursorline";
   package = "nvim-cursorline";
 
   maintainers = [ lib.maintainers.khaneliman ];

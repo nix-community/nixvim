@@ -7,7 +7,6 @@ with lib;
 with lib.nixvim.plugins;
 mkVimPlugin {
   name = "zig";
-  packPathName = "zig.vim";
   package = "zig-vim";
   globalPrefix = "zig_";
   description = "Vim plugin for the Zig programming language.";

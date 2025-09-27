@@ -2,7 +2,6 @@
 
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "perfanno";
-  packPathName = "perfanno.nvim";
   package = "perfanno-nvim";
   description = "NeoVim lua plugin that annotates source code with profiling information from perf, LuaJIT, or other profilers.";
 

@@ -5,7 +5,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "onedark";
   isColorscheme = true;
-  packPathName = "onedark.nvim";
   package = "onedark-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

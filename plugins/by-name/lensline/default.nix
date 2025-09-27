@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lensline";
-  packPathName = "lensline.nvim";
   package = "lensline-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

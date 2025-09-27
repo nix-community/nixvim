@@ -5,7 +5,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "kanagawa-paper";
   isColorscheme = true;
-  packPathName = "kanagawa-paper.nvim";
   package = "kanagawa-paper-nvim";
 
   description = ''

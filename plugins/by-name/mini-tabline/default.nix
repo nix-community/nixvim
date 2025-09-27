@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-tabline";
   moduleName = "mini.tabline";
-  packPathName = "mini.tabline";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
