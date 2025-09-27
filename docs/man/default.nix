@@ -12,7 +12,8 @@ let
     ../user-guide/faq.md
     ../user-guide/config-examples.md
   ]
-  ++ lib.mapAttrsToList (name: file: "${lib-docs}/${file}") lib-docs.pages;
+  ++ lib-docs.pages;
+
   manHeader =
     runCommand "nixvim-general-doc-manpage"
       {
