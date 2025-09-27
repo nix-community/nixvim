@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "zen-mode";
-  packPathName = "zen-mode.nvim";
   package = "zen-mode-nvim";
   description = "Distraction-free coding for Neovim.";
 

@@ -7,7 +7,6 @@ with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp-lines";
   moduleName = "lsp_lines";
-  packPathName = "lsp_lines.nvim";
   package = "lsp_lines-nvim";
   description = "A simple neovim plugin that renders diagnostics using virtual lines on top of the real line of code.";
 

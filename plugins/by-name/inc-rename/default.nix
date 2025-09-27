@@ -6,7 +6,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "inc-rename";
   moduleName = "inc_rename";
-  packPathName = "inc-rename.nvim";
   package = "inc-rename-nvim";
   description = ''
     A small Neovim plugin that provides a command for LSP renaming with

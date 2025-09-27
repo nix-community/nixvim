@@ -5,7 +5,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "zellij";
-  packPathName = "zellij.nvim";
   package = "zellij-nvim";
   description = "Zellij integration for Neovim.";
 

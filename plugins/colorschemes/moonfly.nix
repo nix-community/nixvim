@@ -5,7 +5,6 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "moonfly";
   colorscheme = "moonfly";
-  packPathName = "vim-moonfly-colors";
   package = "vim-moonfly-colors";
   isColorscheme = true;
 

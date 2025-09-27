@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "scope";
-  packPathName = "scope.nvim";
   package = "scope-nvim";
   description = "Seamlessly navigate through buffers within each tab using commands like `:bnext` and `:bprev`.";
 

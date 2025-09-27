@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "tiny-inline-diagnostic";
-  packPathName = "tiny-inline-diagnostic.nvim";
   package = "tiny-inline-diagnostic-nvim";
   description = "A Neovim plugin that display prettier diagnostic messages.";
 

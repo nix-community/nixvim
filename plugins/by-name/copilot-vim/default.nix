@@ -8,7 +8,6 @@ with lib;
 with lib.nixvim.plugins;
 lib.nixvim.plugins.mkVimPlugin {
   name = "copilot-vim";
-  packPathName = "copilot.vim";
   globalPrefix = "copilot_";
   description = "Official Neovim plugin for GitHub Copilot.";
 

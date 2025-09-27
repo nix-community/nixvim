@@ -12,7 +12,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lspconfig";
-  packPathName = "nvim-lspconfig";
   package = "nvim-lspconfig";
 
   maintainers = with lib.maintainers; [

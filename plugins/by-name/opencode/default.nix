@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "opencode";
-  packPathName = "opencode.nvim";
   package = "opencode-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

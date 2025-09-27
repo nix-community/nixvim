@@ -5,7 +5,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gruvbox";
   isColorscheme = true;
-  packPathName = "gruvbox.nvim";
   package = "gruvbox-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

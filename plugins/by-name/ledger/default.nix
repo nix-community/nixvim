@@ -7,7 +7,6 @@ with lib;
 with lib.nixvim.plugins;
 mkVimPlugin {
   name = "ledger";
-  packPathName = "vim-ledger";
   package = "vim-ledger";
   globalPrefix = "ledger_";
   description = "Filetype detection, syntax highlighting, auto-formatting, auto-completion, and other tools for working with ledger files.";

@@ -8,7 +8,6 @@ in
 lib.nixvim.plugins.mkVimPlugin {
   name = "nord";
   isColorscheme = true;
-  packPathName = "nord.nvim";
   package = "nord-nvim";
   globalPrefix = "nord_";
 

@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "project-nvim";
-  packPathName = "project.nvim";
   moduleName = "project";
   description = "`project.nvim` is an all in one neovim plugin written in lua that provides superior project management.";
 

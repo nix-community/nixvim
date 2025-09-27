@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "patterns";
-  packPathName = "patterns.nvim";
   package = "patterns-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

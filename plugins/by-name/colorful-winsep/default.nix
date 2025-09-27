@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "colorful-winsep";
-  packPathName = "colorful-winsep.nvim";
   package = "colorful-winsep-nvim";
 
   maintainers = [ lib.maintainers.saygo-png ];

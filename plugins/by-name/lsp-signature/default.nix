@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp-signature";
-  packPathName = "lsp_signature.nvim";
   package = "lsp_signature-nvim";
   moduleName = "lsp_signature";
   description = "A Neovim plugin for showing function signatures as you type.";

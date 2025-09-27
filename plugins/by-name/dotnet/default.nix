@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dotnet";
-  packPathName = "dotnet.nvim";
   package = "dotnet-nvim";
   description = ".NET Neovim plugin for improving the .NET dev experience.";
 

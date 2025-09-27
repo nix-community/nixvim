@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "whitespace";
-  packPathName = "whitespace.nvim";
   moduleName = "whitespace-nvim";
   package = "whitespace-nvim";
   description = "A simple neovim plugin to highlight and remove trailing whitespace.";

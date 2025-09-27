@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "scrollview";
-  packPathName = "nvim-scrollview";
   package = "nvim-scrollview";
   globalPrefix = "scrollview_";
   description = "A Neovim plugin that displays interactive vertical scrollbars and signs.";

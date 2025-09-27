@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "precognition";
-  packPathName = "precognition.nvim";
   package = "precognition-nvim";
   description = "Precognition uses virtual text and gutter signs to show available motions.";
 

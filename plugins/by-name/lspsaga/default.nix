@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lspsaga";
-  packPathName = "lspsaga.nvim";
   package = "lspsaga-nvim";
   maintainers = [ lib.maintainers.saygo-png ];
   description = "Improve the Neovim lsp experience.";

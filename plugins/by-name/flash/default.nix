@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "flash";
-  packPathName = "flash.nvim";
   package = "flash-nvim";
   description = "`flash.nvim` lets you navigate your code with search labels, enhanced character motions, and Treesitter integration.";
 

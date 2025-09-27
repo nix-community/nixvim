@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nix-develop";
-  packPathName = "nix-develop.nvim";
   package = "nix-develop-nvim";
   callSetup = false;
   hasSettings = false;

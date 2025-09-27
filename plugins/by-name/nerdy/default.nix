@@ -1,7 +1,6 @@
 { lib, config, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nerdy";
-  packPathName = "nerdy.nvim";
   package = "nerdy-nvim";
   description = "A Neovim plugin for searching, previewing, and inserting Nerd Font glyphs.";
 

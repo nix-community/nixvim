@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "quarto";
-  packPathName = "quarto-nvim";
   package = "quarto-nvim";
   description = "Quarto-nvim provides tools for working on Quarto manuscripts in Neovim.";
 

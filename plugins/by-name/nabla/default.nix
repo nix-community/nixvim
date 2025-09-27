@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "nabla";
-  packPathName = "nabla.nvim";
   package = "nabla-nvim";
 
   description = ''

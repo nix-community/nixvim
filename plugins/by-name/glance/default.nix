@@ -1,7 +1,6 @@
 { config, lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "glance";
-  packPathName = "glance.nvim";
   package = "glance-nvim";
   description = "Peek preview window for LSP locations in Neovim.";
 

@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gx";
-  packPathName = "gx.nvim";
   package = "gx-nvim";
   description = ''
     Implementation of gx without the need of netrw.

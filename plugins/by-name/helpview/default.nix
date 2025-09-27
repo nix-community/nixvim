@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "helpview";
-  packPathName = "helpview.nvim";
   package = "helpview-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

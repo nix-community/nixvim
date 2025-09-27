@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "notebook-navigator";
-  packPathName = "NotebookNavigator-nvim";
   package = "NotebookNavigator-nvim";
   description = "A Neovim plugin for navigating and managing Jupyter code cells in notebooks.";
 

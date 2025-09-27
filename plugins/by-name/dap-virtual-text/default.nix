@@ -8,7 +8,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-virtual-text";
   moduleName = "nvim-dap-virtual-text";
-  packPathName = "nvim-dap-virtual-text";
   package = "nvim-dap-virtual-text";
   description = "A plugin that adds virtual text support to the nvim-dap.";
 

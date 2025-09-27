@@ -5,7 +5,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "solarized-osaka";
   isColorscheme = true;
-  packPathName = "solarized-osaka.nvim";
   package = "solarized-osaka-nvim";
   colorscheme = "solarized-osaka";
 

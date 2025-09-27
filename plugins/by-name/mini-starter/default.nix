@@ -5,7 +5,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-starter";
   moduleName = "mini.starter";
-  packPathName = "mini.starter";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 

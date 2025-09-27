@@ -9,7 +9,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitsigns";
-  packPathName = "gitsigns.nvim";
   package = "gitsigns-nvim";
   description = "Git integration for buffers.";
 

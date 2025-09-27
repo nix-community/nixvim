@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "crates";
-  packPathName = "crates.nvim";
   package = "crates-nvim";
   description = "A neovim plugin that helps managing crates.io dependencies.";
 

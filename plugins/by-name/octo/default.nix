@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "octo";
-  packPathName = "octo.nvim";
   package = "octo-nvim";
   description = "Edit and review GitHub issues and pull requests from the comfort of your favorite editor.";
 

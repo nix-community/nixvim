@@ -8,7 +8,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "cyberdream";
   isColorscheme = true;
-  packPathName = "cyberdream.nvim";
   package = "cyberdream-nvim";
 
   maintainers = [ lib.maintainers.AndresBermeoMarinelli ];

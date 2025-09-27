@@ -11,7 +11,6 @@ default_nix_template = """{{ lib, ... }}:
 lib.nixvim.plugins.mkNeovimPlugin {{
   name = "{name}";
   moduleName = "LUA_MODULE_NAME"; # TODO replace (or remove entirely if it is the same as `name`)
-  packPathName = "{originalName}";
   package = "{package}";
 
   {maintainer_todo}maintainers = [ lib.maintainers.{maintainer} ];

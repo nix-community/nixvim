@@ -10,7 +10,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "bufferline";
-  packPathName = "bufferline.nvim";
   package = "bufferline-nvim";
   description = "A snazzy bufferline plugin for Neovim.";
 

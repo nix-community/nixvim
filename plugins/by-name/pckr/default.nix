@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "pckr";
-  packPathName = "pckr.nvim";
   package = "pckr-nvim";
   description = "A Neovim plugin manager that allows you to install plugins from various sources. Spiritual successor to packer.nvim.";
 

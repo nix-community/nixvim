@@ -6,7 +6,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "yaml-schema-detect";
-  packPathName = "yaml-schema-detect.nvim";
   package = "yaml-schema-detect-nvim";
 
   maintainers = [ lib.maintainers.FKouhai ];

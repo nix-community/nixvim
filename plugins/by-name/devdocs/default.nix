@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "devdocs";
-  packPathName = "devdocs.nvim";
   package = "devdocs-nvim";
   description = "A Neovim plugin for accessing DevDocs documentation.";
 

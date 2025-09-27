@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "easyescape";
-  packPathName = "vim-easyescape";
   package = "vim-easyescape";
   globalPrefix = "easyescape_";
   description = "A plugin that makes exiting insert mode easy and distraction free!";

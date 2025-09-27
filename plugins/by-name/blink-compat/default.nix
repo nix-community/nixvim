@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "blink-compat";
-  packPathName = "blink.compat";
   package = "blink-compat";
   description = "Compatibility layer for using nvim-cmp sources on blink.cmp";
 

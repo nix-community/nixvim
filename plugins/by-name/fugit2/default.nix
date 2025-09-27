@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "fugit2";
-  packPathName = "fugit2.nvim";
   package = "fugit2-nvim";
   description = "Neovim git GUI powered by libgit2.";
 

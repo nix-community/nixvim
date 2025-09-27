@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "chatgpt";
-  packPathName = "ChatGPT.nvim";
   package = "ChatGPT-nvim";
   description = "Effortless Natural Language Generation with OpenAI's ChatGPT API";
 

@@ -4,7 +4,6 @@ lib.nixvim.plugins.mkVimPlugin {
   description = ''
     Bullets.vim is a Vim plugin for automated bullet lists.
   '';
-  packPathName = "bullets.vim";
   package = "bullets-vim";
   globalPrefix = "bullets_";
   maintainers = [ lib.maintainers.DanielLaing ];

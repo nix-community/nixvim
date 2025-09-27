@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "navic";
-  packPathName = "nvim-navic";
   moduleName = "nvim-navic";
   package = "nvim-navic";
   description = "Simple winbar/statusline plugin that shows your current code context.";

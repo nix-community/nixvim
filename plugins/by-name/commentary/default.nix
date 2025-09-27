@@ -5,7 +5,6 @@
 }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "commentary";
-  packPathName = "vim-commentary";
   package = "vim-commentary";
   description = "Comment stuff out.";
 

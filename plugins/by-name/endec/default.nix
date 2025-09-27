@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "endec";
-  packPathName = "endec.nvim";
   package = "endec-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

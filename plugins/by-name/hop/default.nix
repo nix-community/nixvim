@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hop";
-  packPathName = "hop.nvim";
   package = "hop-nvim";
 
   maintainers = [ maintainers.GaetanLepage ];

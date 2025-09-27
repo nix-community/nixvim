@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "blink-emoji";
-  packPathName = "blink-emoji.nvim";
   package = "blink-emoji-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

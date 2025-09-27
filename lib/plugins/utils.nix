@@ -35,7 +35,7 @@
   mkPluginPackageModule =
     {
       loc,
-      packPathName,
+      name,
       package,
     }:
     # Return a module
@@ -49,7 +49,7 @@
           if lib.isOption package then
             package
           else
-            lib.mkPackageOption pkgs packPathName {
+            lib.mkPackageOption pkgs name {
               default =
                 if builtins.isList package then
                   package

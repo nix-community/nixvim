@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mark-radar";
-  packPathName = "mark-radar.nvim";
   package = "mark-radar-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

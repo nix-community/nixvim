@@ -9,7 +9,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "harpoon";
   package = "harpoon2";
-  packPathName = "harpoon2";
   description = "Quickly access files and marks in Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

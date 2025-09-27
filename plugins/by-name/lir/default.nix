@@ -1,7 +1,6 @@
 { lib, config, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lir";
-  packPathName = "lir.nvim";
   package = "lir-nvim";
   description = "A simple file explorer for Neovim.";
 

@@ -4,7 +4,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "barbecue";
-  packPathName = "barbecue.nvim";
   package = "barbecue-nvim";
   description = "Visual Studio Code inspired breadcrumbs plugin.";
 

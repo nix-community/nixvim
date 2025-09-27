@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "compiler";
-  packPathName = "compiler.nvim";
   package = "compiler-nvim";
 
   maintainers = [ lib.maintainers.khaneliman ];

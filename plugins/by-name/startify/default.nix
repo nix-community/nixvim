@@ -7,7 +7,6 @@ with lib;
 with lib.nixvim.plugins;
 mkVimPlugin {
   name = "startify";
-  packPathName = "vim-startify";
   package = "vim-startify";
   globalPrefix = "startify_";
   description = "The fancy start screen for Vim.";

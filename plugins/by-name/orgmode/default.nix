@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "orgmode";
-  packPathName = "nvim-orgmode";
   description = "Nvim orgmode is a clone of Emacs Orgmode for Neovim.";
 
   maintainers = [ lib.maintainers.refaelsh ];

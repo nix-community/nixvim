@@ -3,7 +3,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "iron";
   moduleName = "iron.core";
-  packPathName = "iron.nvim";
   package = "iron-nvim";
   description = ''
     Interactive Repls Over Neovim.

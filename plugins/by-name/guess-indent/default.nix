@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "guess-indent";
-  packPathName = "guess-indent.nvim";
   package = "guess-indent-nvim";
   description = "Automatic indentation style detection for Neovim.";
 

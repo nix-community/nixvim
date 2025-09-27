@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "autosource";
-  packPathName = "vim-autosource";
   package = "vim-autosource";
   globalPrefix = "autosource_";
   description = "A Vim plugin that enables per project Vim configuration.";

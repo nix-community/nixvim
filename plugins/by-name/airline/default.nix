@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "airline";
-  packPathName = "vim-airline";
   package = "vim-airline";
   globalPrefix = "airline_";
   description = "Lean & mean status/tabline for vim that's light as air.";

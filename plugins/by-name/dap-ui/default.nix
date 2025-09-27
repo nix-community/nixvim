@@ -53,7 +53,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-ui";
   moduleName = "dapui";
-  packPathName = "nvim-dap-ui";
   package = "nvim-dap-ui";
   description = "A UI for nvim-dap.";
 

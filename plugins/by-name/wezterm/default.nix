@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.neovim.mkNeovimPlugin {
   name = "wezterm";
-  packPathName = "wezterm.nvim";
   package = "wezterm-nvim";
   description = "Neovim plugin for WezTerm, a GPU-accelerated terminal emulator and multiplexer.";
 

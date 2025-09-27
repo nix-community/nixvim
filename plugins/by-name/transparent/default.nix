@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "transparent";
-  packPathName = "transparent.nvim";
   package = "transparent-nvim";
   description = "Remove all background colors to make Neovim transparent.";
 

@@ -5,7 +5,6 @@
 lib.nixvim.plugins.mkVimPlugin {
   name = "one";
   isColorscheme = true;
-  packPathName = "vim-one";
   package = "vim-one";
   globalPrefix = "one_";
 

@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitlab";
-  packPathName = "gitlab.vim";
   package = "gitlab-vim";
   description = "A Neovim plugin that integrates GitLab Duo with Neovim.";
 

@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "ts-comments";
-  packPathName = "ts-comments.nvim";
   package = "ts-comments-nvim";
   description = "A Neovim plugin that provides comment strings for various languages using Treesitter.";
 

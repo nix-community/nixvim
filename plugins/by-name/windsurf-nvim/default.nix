@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "windsurf-nvim";
-  packPathName = "windsurf.nvim";
   moduleName = "codeium";
 
   maintainers = with lib.maintainers; [

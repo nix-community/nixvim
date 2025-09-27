@@ -19,7 +19,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lz-n";
-  packPathName = "lz.n";
 
   maintainers = with lib.maintainers; [
     HeitorAugustoLN

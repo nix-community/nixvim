@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "catppuccin";
-  packPathName = "catppuccin-nvim";
   isColorscheme = true;
   package = "catppuccin-nvim";
 

@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "sandwich";
-  packPathName = "vim-sandwich";
   package = "vim-sandwich";
   globalPrefix = "sandwich_";
 

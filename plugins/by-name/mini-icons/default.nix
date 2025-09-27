@@ -2,7 +2,6 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-icons";
   moduleName = "mini.icons";
-  packPathName = "mini.icons";
   configLocation = lib.mkOrder 800 "extraConfigLua";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];

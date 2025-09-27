@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "specs";
-  packPathName = "specs.nvim";
   package = "specs-nvim";
   description = "A fast and lightweight Neovim lua plugin to keep an eye on where your cursor has jumped.";
 

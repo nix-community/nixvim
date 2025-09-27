@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dracula-nvim";
-  packPathName = "dracula.nvim ";
   moduleName = "dracula";
   colorscheme = "dracula";
   isColorscheme = true;

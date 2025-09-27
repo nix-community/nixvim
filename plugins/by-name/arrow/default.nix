@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "arrow";
-  packPathName = "arrow.nvim";
   package = "arrow-nvim";
   description = "A Neovim plugin to bookmark and navigate through files.";
 

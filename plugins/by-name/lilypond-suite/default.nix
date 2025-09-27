@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lilypond-suite";
-  packPathName = "nvim-lilypond-suite";
   package = "nvim-lilypond-suite";
   moduleName = "nvls";
   description = "Neovim plugin for writing LilyPond scores.";

@@ -4,7 +4,6 @@
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "tinygit";
-  packPathName = "nvim-tinygit";
   package = "nvim-tinygit";
   description = "A lightweight bundle of commands focused on quick and streamlined git operations.";
 

@@ -8,7 +8,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "vscode";
   isColorscheme = true;
-  packPathName = "vscode-nvim";
   package = "vscode-nvim";
   colorscheme = null; # Color scheme is set by `require.("vscode").load()`
   callSetup = false;

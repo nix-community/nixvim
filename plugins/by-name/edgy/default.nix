@@ -6,7 +6,6 @@
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "edgy";
-  packPathName = "edgy.nvim";
   package = "edgy-nvim";
   description = "A Neovim plugin to easily create and manage predefined window layouts.";
 

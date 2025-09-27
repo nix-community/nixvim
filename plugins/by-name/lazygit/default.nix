@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "lazygit";
-  packPathName = "lazygit.nvim";
   package = "lazygit-nvim";
   globalPrefix = "lazygit_";
   description = "A Neovim plugin for using lazygit, a TUI for git commands.";

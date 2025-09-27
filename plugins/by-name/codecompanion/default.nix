@@ -9,7 +9,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "codecompanion";
-  packPathName = "codecompanion.nvim";
   package = "codecompanion-nvim";
   description = "AI-powered coding, seamlessly in Neovim.";
 

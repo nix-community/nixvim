@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "spider";
-  packPathName = "nvim-spider";
   package = "nvim-spider";
   maintainers = [ lib.maintainers.saygo-png ];
   description = "Use the w, e, b motions like a spider. Move by subwords and skip insignificant punctuation.";

@@ -9,7 +9,6 @@ in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nightfox";
   isColorscheme = true;
-  packPathName = "nightfox.nvim";
   package = "nightfox-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];

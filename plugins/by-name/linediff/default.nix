@@ -1,7 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "linediff";
-  packPathName = "linediff.vim";
   package = "linediff-vim";
 
   globalPrefix = "linediff_";

@@ -5,7 +5,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "ccc";
-  packPathName = "ccc.nvim";
   package = "ccc-nvim";
   description = "Color picker and highlighter plugin for Neovim.";
 

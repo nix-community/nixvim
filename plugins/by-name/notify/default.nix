@@ -11,7 +11,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "notify";
-  packPathName = "nvim-notify";
   package = "nvim-notify";
   maintainers = [ lib.maintainers.khaneliman ];
 

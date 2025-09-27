@@ -8,7 +8,6 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "muren";
-  packPathName = "muren.nvim";
   package = "muren-nvim";
   description = "Neovim plugin for doing multiple search and replace with ease.";
 

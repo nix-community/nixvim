@@ -7,7 +7,6 @@ let
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "quickmath";
-  packPathName = "quickmath.nvim";
   package = "quickmath-nvim";
   description = "A simple plugin to do live calculations in Neovim.";
 
