@@ -1,6 +1,6 @@
-# Contributing (and hacking onto) nixvim
+# Contributing (and hacking onto) Nixvim
 
-This document is mainly for contributors to nixvim, but it can also be useful for extending nixvim.
+This document is mainly for contributors to Nixvim, but it can also be useful for extending Nixvim.
 
 ## Submitting a change
 
@@ -24,18 +24,18 @@ Either command will start a HTTP server on port 8000 and open it in your browser
 ## Nixvim Architecture
 
 Nixvim is mainly built around `pkgs.neovimUtils.makeNeovimConfig`.
-This function takes a list of plugins (and a few other misc options), and generates a configuration for neovim.
+This function takes a list of plugins (and a few other misc options), and generates a configuration for Neovim.
 This can then be passed to `pkgs.wrapNeovimUnstable` to generate a derivation that bundles the plugins, extra programs and the lua configuration.
 
-All the options that nixvim expose end up in those three places. This is done in the `modules/output.nix` file.
+All the options that Nixvim exposes end up in those three places. This is done in the `modules/output.nix` file.
 
-The guiding principle of nixvim is to only add to the `init.lua` what the user added to the configuration. This means that we must trim out all the options that were not set.
+The guiding principle of Nixvim is to only add to the `init.lua` what the user added to the configuration. This means that we must trim out all the options that were not set.
 
-This is done by making most of the options of the type `types.nullOr ....`, and not setting any option that is null.
+This is done by making most of the options of the type `types.nullOr ....`, and not setting any option that is `null`.
 
 ### Plugin configurations
 
-Most of nixvim is dedicated to wrapping neovim plugins such that we can configure them in Nix.
+Most of Nixvim is dedicated to wrapping Neovim plugins such that we can configure them in Nix.
 To add a new plugin you need to do the following.
 
 1. Add a file in the correct sub-directory of [`plugins`](plugins).
@@ -48,10 +48,10 @@ To add a new plugin you need to do the following.
 
 2. The vast majority of plugins fall into one of those two categories:
 
-- _vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
+- _Vim plugins_: They are configured through **global variables** (`g:plugin_foo_option` in vimscript and `vim.g.plugin_foo_option` in lua).\
   For those, you should use the `lib.nixvim.plugins.mkVimPlugin`.\
   -> See [this plugin](plugins/by-name/direnv/default.nix) for an example.
-- _neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
+- _Neovim plugins_: They are configured through a `setup` function (`require('plugin').setup({opts})`).\
   For those, you should use the `lib.nixvim.plugins.mkNeovimPlugin`.\
   -> See the [template](plugins/TEMPLATE.nix).
 
@@ -59,7 +59,7 @@ To add a new plugin you need to do the following.
 
 #### `mkNeovimPlugin`
 
-The `mkNeovimPlugin` function provides a standardize way to create a `Neovim` plugin.
+The `mkNeovimPlugin` function provides a standardize way to create a Neovim plugin.
 This is intended to be used with lua plugins that have a `setup` function,
 although it is flexible enough to be used with similar variants of plugins.
 A template plugin can be found in (plugins/TEMPLATE.nix)[https://github.com/nix-community/nixvim/blob/main/plugins/TEMPLATE.nix].
@@ -296,15 +296,15 @@ In either case, you don't need to bother implementing this part. It is done auto
 
 ### Tests
 
-Most of the tests of nixvim consist of creating a neovim derivation with the supplied nixvim configuration, and then try to execute neovim to check for any output. All output is considered to be an error.
+Most of the tests of Nixvim consist of creating a Neovim derivation with the supplied Nixvim configuration, and then try to execute Neovim to check for any output. All output is considered to be an error.
 
 The tests are located in the [tests/test-sources](tests/test-sources) directory, and should be added to a file in the same hierarchy than the repository. For example if a plugin is defined in `./plugins/ui/foo.nix` the test should be added in `./tests/test-sources/ui/foo.nix`.
 
-Tests can either be a simple attribute set, or a function taking `{pkgs}` as an input. The keys of the set are configuration names, and the values are a nixvim configuration.
+Tests can either be a simple attribute set, or a function taking `{pkgs}` as an input. The keys of the set are configuration names, and the values are a Nixvim configuration.
 
-You can specify the special `test` attribute in the configuration that will not be interpreted by nixvim, but only the test runner. The following keys are available:
+You can specify the special `test` attribute in the configuration that will not be interpreted by Nixvim, but only the test runner. The following keys are available:
 
-- `test.runNvim`: Set to `false` to avoid launching nvim with this configuration and simply build the configuration.
+- `test.runNvim`: Set to `false` to avoid launching Neovim with this configuration and simply build the configuration.
 
 > [!TIP]
 > A single test can be run with `nix develop --command tests --interactive`. This launches the testing suite in interactive mode, allowing you to easily search for and select specific tests to run.
@@ -314,9 +314,9 @@ You can specify the special `test` attribute in the configuration that will not 
 
 The full test suite can still be run locally with `nix flake check --all-systems` if needed.
 
-There are a second set of tests, unit tests for nixvim itself, defined in `tests/lib-tests.nix` that use the `pkgs.lib.runTests` framework.
+There are a second set of tests, unit tests for Nixvim itself, defined in `tests/lib-tests.nix` that use the `pkgs.lib.runTests` framework.
 
-If you want to speed up tests, we have set up a Cachix for nixvim.
+If you want to speed up tests, we have set up a Cachix for Nixvim.
 This way, only tests whose dependencies have changed will be re-run, speeding things up
 considerably. To use it, just install cachix and run `cachix use nix-community`.
 
