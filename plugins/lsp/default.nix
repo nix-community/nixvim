@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption types;
 in
@@ -11,7 +16,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
-  imports = [ ./language-servers ];
+  imports = [
+    ./language-servers
+    (lib.mkRemovedOptionModule [ "plugins" "lsp" "enabledServers" ] "Internal option has been removed.")
+  ];
 
   extraOptions = {
     keymaps = {
@@ -77,28 +85,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     };
 
-    enabledServers = mkOption {
-      type =
-        with types;
-        listOf (submodule {
-          options = {
-            name = mkOption {
-              type = str;
-              description = "The server's name";
-            };
-
-            extraOptions = mkOption {
-              type = attrsOf anything;
-              description = "Extra options for the server";
-            };
-          };
-        });
-      description = "A list of enabled LSP servers. Don't use this directly.";
-      default = [ ];
-      internal = true;
-      visible = false;
-    };
-
     inlayHints = mkOption {
       type = types.bool;
       default = false;
@@ -136,13 +122,33 @@ lib.nixvim.plugins.mkNeovimPlugin {
     preConfig = mkOption {
       type = types.lines;
       description = "Code to be run before loading the LSP. Useful for requiring plugins";
-      default = "";
+      # When `plugins.lsp` is enabled, definitions are aliased to `lsp.luaConfig.pre`; so read that final value here.
+      # This is slightly complicated because `lsp.luaConfig.pre` is nullable, unlike this option.
+      # The other half of this two-way alias is below in `extraConfig`.
+      apply =
+        value:
+        if config.plugins.lsp.enable then
+          if config.lsp.luaConfig.pre == null then "" else config.lsp.luaConfig.pre
+        else if options.plugins.lsp.preConfig.isDefined then
+          value
+        else
+          "";
     };
 
     postConfig = mkOption {
       type = types.lines;
       description = "Code to be run after loading the LSP. This is an internal option";
-      default = "";
+      # When `plugins.lsp` is enabled, definitions are aliased to `lsp.luaConfig.post`; so read that final value here.
+      # This is slightly complicated because `lsp.luaConfig.post` is nullable, unlike this option.
+      # The other half of this two-way alias is below in `extraConfig`.
+      apply =
+        value:
+        if config.plugins.lsp.enable then
+          if config.lsp.luaConfig.post == null then "" else config.lsp.luaConfig.post
+        else if options.plugins.lsp.postConfig.isDefined then
+          value
+        else
+          "";
     };
   };
 
@@ -195,46 +201,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     lsp = {
       onAttach = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.onAttach;
       inlayHints.enable = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.inlayHints;
+      luaConfig.pre = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.preConfig;
+      luaConfig.post = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.postConfig;
     };
-
-    plugins.lsp.luaConfig.content =
-      let
-        runWrappers =
-          wrappers: s:
-          if wrappers == [ ] then s else (builtins.head wrappers) (runWrappers (builtins.tail wrappers) s);
-      in
-      ''
-        -- nvim-lspconfig {{{
-        do
-          ${cfg.preConfig}
-
-          local __lspServers = ${lib.nixvim.toLuaObject cfg.enabledServers}
-
-          local __lspCapabilities = function()
-            capabilities = vim.lsp.protocol.make_client_capabilities()
-
-            ${cfg.capabilities}
-
-            return capabilities
-          end
-
-          local __setup = ${runWrappers cfg.setupWrappers "{ capabilities = __lspCapabilities() }"}
-
-          for i, server in ipairs(__lspServers) do
-            local options = ${runWrappers cfg.setupWrappers "server.extraOptions"}
-
-            if options == nil then
-              options = __setup
-            else
-              options = vim.tbl_extend("keep", options, __setup)
-            end
-
-            require("lspconfig")[server.name].setup(options)
-          end
-
-          ${cfg.postConfig}
-        end
-        -- }}}
-      '';
   };
 }

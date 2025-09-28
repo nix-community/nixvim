@@ -20,7 +20,6 @@
 }@args:
 # returns a module
 {
-  pkgs,
   config,
   options,
   lib,
@@ -51,9 +50,41 @@ in
     plugins.lsp.servers.${name} = {
       enable = lib.mkEnableOption description;
 
+      # alias to lsp.servers.${name}.package
       package =
-        lib.nixvim.mkMaybeUnpackagedOption "plugins.lsp.servers.${name}.package" pkgs name
-          package;
+        let
+          getSubOptions = opt: opt.type.getSubOptions opt.loc;
+          serverOpts = getSubOptions options.lsp.servers;
+          opt = lib.pipe serverOpts [
+            (lib.getAttr serverName)
+            getSubOptions
+            (lib.getAttr "package")
+          ];
+          pkg = config.lsp.servers.${serverName}.package;
+          self = options.plugins.lsp.servers.${name}.package;
+        in
+        if serverOpts ? ${serverName} then
+          lib.mkOption (
+            {
+              inherit (opt) type default description;
+              apply =
+                v:
+                if enabled then
+                  pkg
+                else if self.isDefined then
+                  v
+                else
+                  opt.default or v;
+            }
+            // lib.optionalAttrs (opt ? example) { inherit (opt) example; }
+            // lib.optionalAttrs (opt ? defaultText) { inherit (opt) defaultText; }
+          )
+        else
+          # If there's no explicit option, that means there isn't a known package, so the server uses freeformType
+          lib.nixvim.mkUnpackagedOption options.plugins.lsp.servers.${name}.package name
+          // {
+            apply = v: if enabled then config.lsp.servers.${serverName}.packageFallback else v;
+          };
 
       packageFallback = mkOption {
         type = types.bool;
@@ -63,6 +94,7 @@ in
 
           This can be useful if you want local versions of the language server (e.g. from a devshell) to override the nixvim version.
         '';
+        apply = v: if enabled then config.lsp.servers.${serverName}.packageFallback else v;
       };
 
       cmd = mkOption {
@@ -159,16 +191,40 @@ in
   };
 
   config = lib.mkIf enabled {
-    extraPackages = lib.optional (!cfg.packageFallback) cfg.package;
-    extraPackagesAfter = lib.optional cfg.packageFallback cfg.package;
+    # The server submodule is using `shorthandOnlyDefinesConfig`,
+    # so define a "longhand" function module.
+    lsp.servers.${serverName} = _: {
+      # Top-secret internal option that only exists when the server is enabled via the old API.
+      # The new API checks if this attr exists and uses it to wrap the server's settings string.
+      options.__settingsWrapper = lib.mkOption {
+        type = lib.types.functionTo lib.types.str;
+        description = ''
+          This internal option exists to preserve the old `plugins.lsp` behaviour.
 
-    plugins.lsp.enabledServers = [
-      {
-        name = serverName;
-        extraOptions = {
-          inherit (cfg) cmd filetypes autostart;
-          root_markers = cfg.rootMarkers;
-          on_attach = lib.nixvim.ifNonNull' cfg.onAttach (
+          > [!IMPORTANT]
+          > This option should not be used by end-users!
+          > It will be removed when `plugins.lsp` is dropped.
+        '';
+        readOnly = true;
+        internal = true;
+        visible = false;
+      };
+
+      # Propagate definitions to the new lsp module
+      config = {
+        enable = true;
+        package = lib.mkIf (opts.package.highestPrio < 1500) (
+          lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.package
+        );
+        packageFallback = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.packageFallback;
+        __settingsWrapper =
+          settings: "__wrapSettings(${lib.foldr lib.id settings config.plugins.lsp.setupWrappers})";
+        settings = {
+          autostart = lib.mkIf (cfg.autostart != null) cfg.autostart;
+          cmd = lib.mkIf (cfg.cmd != null) cfg.cmd;
+          filetypes = lib.mkIf (cfg.filetypes != null) cfg.filetypes;
+          root_markers = lib.mkIf (cfg.rootMarkers != null) cfg.rootMarkers;
+          on_attach = lib.mkIf (cfg.onAttach != null) (
             lib.nixvim.mkRaw ''
               function(client, bufnr)
                 ${lib.optionalString (!cfg.onAttach.override) config.plugins.lsp.onAttach}
@@ -184,8 +240,8 @@ in
           };
         }
         // cfg.extraOptions;
-      }
-    ];
+      };
+    };
   };
 
   imports =
