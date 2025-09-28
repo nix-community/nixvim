@@ -76,6 +76,21 @@ in
           ];
         };
     };
+
+    __internalCapabilities = lib.mkOption {
+      type = lib.types.nullOr lib.types.lines;
+      description = ''
+        This internal option exists to preserve the old `plugins.lsp.servers.*.capabilities` behaviour.
+        It should be non-null when the old system is needed.
+
+        Any lines of lua will be able to mutate a table named `capabilities`.
+
+        > [!IMPORTANT]
+        > This option should not be defined by end-users!
+      '';
+      internal = true;
+      visible = false;
+    };
   };
 
   imports = [

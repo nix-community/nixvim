@@ -149,9 +149,27 @@ in
             let
               luaName = toLuaObject server.name;
               luaSettings = toLuaObject server.settings;
+
+              # We need to maintain the old behaviour from `plugins.lsp.servers.*.capabilities`,
+              # which allowed users to mutate the `capabilities` using arbitrary lua code.
+              capabilities = ''
+                -- Support old capabilities system
+                -- We allow users to mutate the `capabilities` table with arbitrary code
+                do
+                  local capabilities = vim.lsp.protocol.make_client_capabilities()
+                  capabilities = vim.tbl_deep_extend(capabilities, vim.lsp.config[${luaName}])
+
+                  do
+                    ${server.__internalCapabilities}
+                  end
+
+                  vim.lsp.config[${luaName}].capabilities = capabilities
+                end
+              '';
             in
             [
               (lib.mkIf (server.settings != { }) "vim.lsp.config(${luaName}, ${luaSettings})")
+              (lib.mkIf (server.__internalCapabilities != null) capabilities)
               (lib.mkIf (server.activate or false) "vim.lsp.enable(${luaName})")
             ];
         in
