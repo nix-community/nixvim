@@ -196,12 +196,11 @@ in
         "servers"
       ];
       basePluginPath = basePath ++ [ name ];
-      basePluginPathString = builtins.concatStringsSep "." basePluginPath;
     in
     [
       (lib.mkRemovedOptionModule (
         basePluginPath ++ [ "extraSettings" ]
-      ) "You can use `${basePluginPathString}.extraOptions.settings` instead.")
+      ) "You can use `${opts.extraOptions}.settings` instead.")
       (lib.mkRemovedOptionModule (basePluginPath ++ [ "rootDir" ]) ''
 
         nvim-lspconfig has switched from its own `root_dir` implementation to using neovim's built-in LSP API.
