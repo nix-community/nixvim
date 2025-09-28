@@ -7,7 +7,7 @@
   <a href="https://matrix.to/#/#nixvim:matrix.org">Chat</a>
 </h2>
 
-# NixVim - A Neovim configuration system for nix
+# Nixvim - A Neovim configuration system for nix
 
 - [Quick set up tutorial](https://www.youtube.com/watch?v=b641h63lqy0) (by [@Vimjoyer](https://www.youtube.com/@vimjoyer))
 - [Nixvim: How to configure Neovim with the power of Nix](https://www.youtube.com/watch?v=GOe0C7Qtypk) (NeovimConf 2023 talk by [@GaetanLepage](https://glepage.com/))
@@ -15,7 +15,7 @@
 <!-- START DOCS -->
 
 ## What is it?
-NixVim is a [Neovim](https://neovim.io) distribution built around
+Nixvim is a [Neovim](https://neovim.io) distribution built around
 [Nix](https://nixos.org) modules. It is distributed as a Nix flake, and
 configured through Nix, all while leaving room for your plugins and your vimrc.
 
@@ -37,13 +37,13 @@ lualine plugin:
 When we do this, lualine will be set up to a sensible default, and will use
 catppuccin as the colorscheme, no extra configuration required!
 
-Check out [this list of real world nixvim configs](https://nix-community.github.io/nixvim/user-guide/config-examples.html)!
+Check out [this list of real world Nixvim configs](https://nix-community.github.io/nixvim/user-guide/config-examples.html)!
 
 <!-- STOP DOCS -->
 
 ## How does it work?
 When you build the module (probably using home-manager), it will install all
-your plugins and generate a lua config for NeoVim with all the options
+your plugins and generate a lua config for Neovim with all the options
 specified. Because it uses lua, this ensures that your configuration will load
 as fast as possible.
 
@@ -62,7 +62,7 @@ If you just want to add additional lines of lua to your `init.lua`, you can use
 `extraConfigLua`, `extraConfigLuaPre`, and `extraConfigLuaPost`.
 
 If you want to assign lua code to an option that'd normally accept another type
-(string, int, etc), you can use nixvim's "raw type", `{ __raw = "lua code"; }`.
+(string, int, etc), you can use Nixvim's "raw type", `{ __raw = "lua code"; }`.
 
 <details>
   <summary>Example</summary>
@@ -88,17 +88,17 @@ If you have any question, please use the [discussions page](https://github.com/n
 ## Installation
 
 > [!WARNING]
-> NixVim needs to be installed with a compatible nixpkgs version.
-> This means that the `main` branch of NixVim requires to be installed with `nixpkgs-unstable`.
+> Nixvim needs to be installed with a compatible nixpkgs version.
+> This means that the `main` branch of Nixvim requires to be installed with `nixpkgs-unstable`.
 >
-> If you want to use NixVim with nixpkgs 25.05 you should use the `nixos-25.05` branch.
+> If you want to use Nixvim with nixpkgs 25.05 you should use the `nixos-25.05` branch.
 
 For more detail, see the [Installation](https://nix-community.github.io/nixvim) section of our documentation.
 
 <details>
   <summary><strong>Without flakes</strong></summary>
 
-NixVim now ships with `flake-compat`, which makes it usable from any system.
+Nixvim now ships with `flake-compat`, which makes it usable from any system.
 
 To install it, edit your home-manager (or NixOS) configuration:
 
@@ -107,7 +107,7 @@ To install it, edit your home-manager (or NixOS) configuration:
 let
   nixvim = import (builtins.fetchGit {
     url = "https://github.com/nix-community/nixvim";
-    # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
+    # If you are not running an unstable channel of nixpkgs, select the corresponding branch of Nixvim.
     # ref = "nixos-25.05";
   });
 in
@@ -143,14 +143,14 @@ system. To enable flakes, add this to `/etc/nixos/configuration.nix`
 ```
 
 Now, you need to import the module. If your system is already configured using
-flakes, just add the nixvim input:
+flakes, just add the `nixvim` input:
 
 ```nix
 {
   # ...
   inputs.nixvim = {
     url = "github:nix-community/nixvim";
-    # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
+    # If you are not running an unstable channel of nixpkgs, select the corresponding branch of Nixvim.
     # url = "github:nix-community/nixvim/nixos-25.05";
 
     inputs.nixpkgs.follows = "nixpkgs";
@@ -165,7 +165,7 @@ and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 </details>
 
 ## Usage
-NixVim can be used in four ways: through the home-manager, nix-darwin, NixOS modules,
+Nixvim can be used in four ways: through the home-manager, nix-darwin, NixOS modules,
 and standalone through the `makeNixvim` function. To use the modules, just import the
 `nixvim.homeModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
 `nixvim.nixosModules.nixvim` modules, depending on which system
@@ -193,7 +193,7 @@ To get started with a standalone configuration, you can use the template by runn
 nix flake init --template github:nix-community/nixvim
 ```
 
-Alternatively, if you want a minimal flake to allow building a custom neovim you
+Alternatively, if you want a minimal flake to allow building a custom Neovim you
 can use the following:
 
 <details>
@@ -241,22 +241,22 @@ can use the following:
 ```
 </details>
 
-You can then run neovim using `nix run .# -- <file>`. This can be useful to test
+You can then run Neovim using `nix run .# -- <file>`. This can be useful to test
 config changes easily.
 
 ### Advanced Usage
 
-You may want more control over the nixvim modules, like:
+You may want more control over the Nixvim modules, like:
 
 - Splitting your configuration in multiple files
-- Adding custom nix modules to enhance nixvim
-- Change the nixpkgs used by nixvim
+- Adding custom nix modules to enhance Nixvim
+- Change the nixpkgs used by Nixvim
 
 In this case, you can use the `makeNixvimWithModule` function.
 
 It takes a set with the following keys:
-- `pkgs`: The nixpkgs to use (defaults to the nixpkgs pointed at by the nixvim flake)
-- `module`: The nix module definition used to extend nixvim.
+- `pkgs`: The nixpkgs to use (defaults to the nixpkgs pointed at by the Nixvim flake)
+- `module`: The nix module definition used to extend Nixvim.
   This is useful to pass additional module machinery like `options` or `imports`.
 - `extraSpecialArgs`: Extra arguments to pass to the modules when using functions.
   Can be `self` in a flake, for example.
@@ -265,7 +265,7 @@ For more detail, see the [Standalone Usage](https://nix-community.github.io/nixv
 
 ### With a `devShell`
 
-You can also use nixvim to define an instance which will only be available inside a Nix `devShell`:
+You can also use Nixvim to define an instance which will only be available inside a Nix `devShell`:
 
 <details>
   <summary>devShell configuration</summary>
@@ -292,7 +292,7 @@ If the option `enableMan` is set to `true` (by default it is), man pages will al
 be installed containing the same information, they can be viewed with `man nixvim`.
 
 ## Plugins
-After you have installed NixVim, you will no doubt want to enable some plugins.
+After you have installed Nixvim, you will no doubt want to enable some plugins.
 Plugins are based on a modules system, similarly to NixOS and Home Manager.
 
 So, to enable some supported plugin, all you have to do is enable its module:
@@ -305,7 +305,7 @@ So, to enable some supported plugin, all you have to do is enable its module:
 }
 ```
 
-Of course, if that was everything, there wouldn't be much point to NixVim, you'd
+Of course, if that was everything, there wouldn't be much point to Nixvim, you'd
 just use a regular plugin manager. All options for supported plugins are exposed
 as options of that module. For now, there is no documentation yet, but there are
 detailed explanations in the source code. Detailed documentation for every
@@ -354,14 +354,14 @@ If your colorscheme isn't provided as a module, install it using
 }
 ```
 
-All NixVim supported plugins will, by default, use the main colorscheme you
+All Nixvim supported plugins will, by default, use the main colorscheme you
 set, though this can be overridden on a per-plugin basis.
 
 ## Options
-NeoVim has a lot of configuration options. You can find a list of them by doing
-`:h option-list` from within NeoVim.
+Neovim has a lot of configuration options. You can find a list of them by doing
+`:h option-list` from within Neovim.
 
-All of these are configurable from within NixVim. All you have to do is set the
+All of these are configurable from within Nixvim. All you have to do is set the
 `opts` attribute:
 
 ```nix
@@ -381,7 +381,7 @@ Please note that to, for example, disable numbers you would not set
 `opts.nonumber` to true, you'd set `opts.number` to false.
 
 ## Key mappings
-It is fully possible to define key mappings from within NixVim. This is done
+It is fully possible to define key mappings from within Nixvim. This is done
 using the `keymaps` attribute:
 
 ```nix
@@ -436,7 +436,7 @@ Each keymap can specify the following settings in the `options` attrs.
 
 [Abbreviation]: https://neovim.io/doc/user/usr_24.html#_abbreviations
 
-| NixVim  | Default | VimScript                                         |
+| Nixvim  | Default | VimScript                                         |
 |---------|---------|---------------------------------------------------|
 | silent  | false   | `<silent>`                                        |
 | nowait  | false   | `<silent>`                                        |
@@ -460,7 +460,7 @@ leader key. This is easy with the `globals` attribute:
 ```
 
 ## Additional config
-Sometimes NixVim won't be able to provide for all your customization needs.
+Sometimes Nixvim won't be able to provide for all your customization needs.
 In these cases, the `extraConfigVim` and `extraConfigLua` options are
 provided:
 
@@ -468,14 +468,14 @@ provided:
 {
   programs.nixvim = {
     extraConfigLua = ''
-      -- Print a little welcome message when nvim is opened!
+      -- Print a little welcome message when Neovim is opened!
       print("Hello world!")
     '';
   };
 }
 ```
 
-If you feel like what you are doing manually should be supported in NixVim,
+If you feel like what you are doing manually should be supported in Nixvim,
 please open an issue.
 
 # Contributing
