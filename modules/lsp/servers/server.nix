@@ -54,6 +54,16 @@ in
       '';
     };
 
+    packageFallback = lib.mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        When enabled, the language server package will be added to the end of the `PATH` _(suffix)_ instead of the beginning _(prefix)_.
+
+        This can be useful if you want local versions of the language server (e.g. from a devshell) to override the nixvim version.
+      '';
+    };
+
     settings = lib.mkOption {
       type = with types; attrsOf anything;
       description = ''

@@ -138,9 +138,16 @@ in
         (builtins.catAttrs "warnings")
         builtins.concatLists
       ];
+
+      packages = lib.pipe enabledServers [
+        (builtins.filter (server: server ? package))
+        (builtins.groupBy (server: if server.packageFallback then "suffix" else "prefix"))
+        (builtins.mapAttrs (_: builtins.catAttrs "package"))
+      ];
     in
     {
-      extraPackages = builtins.catAttrs "package" enabledServers;
+      extraPackages = lib.mkIf (packages.prefix or [ ] != [ ]) packages.prefix;
+      extraPackagesAfter = lib.mkIf (packages.suffix or [ ] != [ ]) packages.suffix;
 
       lsp.luaConfig.content =
         let
