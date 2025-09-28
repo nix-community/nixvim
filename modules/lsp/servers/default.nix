@@ -10,6 +10,7 @@ let
   inherit (lib.nixvim) toLuaObject;
 
   cfg = config.lsp;
+  oldCfg = config.plugins.lsp;
 
   # Import `server.nix` and apply args
   # For convenience, we set a default here for args.pkgs
@@ -156,13 +157,37 @@ in
             let
               luaName = toLuaObject server.name;
               luaSettings = toLuaObject server.settings;
+              wrap = server.__settingsWrapper or lib.id;
             in
             [
-              (lib.mkIf (server.settings != { }) "vim.lsp.config(${luaName}, ${luaSettings})")
+              (lib.mkIf (server.settings != { }) "vim.lsp.config(${luaName}, ${wrap luaSettings})")
               (lib.mkIf (server.activate or false) "vim.lsp.enable(${luaName})")
             ];
         in
-        lib.mkMerge (builtins.concatMap mkServerConfig enabledServers);
+        lib.mkMerge (
+          # Implement the legacy settings wrapping and capabilities mutation when `plugins.lsp` is enabled
+          lib.optional oldCfg.enable ''
+            local __lspCapabilities = function()
+              local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+              ${oldCfg.capabilities}
+
+              return capabilities
+            end
+
+            local __setup = ${lib.foldr lib.id "{ capabilities = __lspCapabilities() }" oldCfg.setupWrappers}
+
+            local __wrapSettings = function(settings)
+              if settings == nil then
+                settings = __setup
+              else
+                settings = vim.tbl_extend("keep", settings, __setup)
+              end
+              return settings
+            end
+          ''
+          ++ builtins.concatMap mkServerConfig enabledServers
+        );
 
       # Propagate per-server warnings
       warnings = lib.mkIf (serverWarnings != [ ]) serverWarnings;

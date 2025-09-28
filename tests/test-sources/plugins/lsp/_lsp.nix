@@ -173,25 +173,13 @@
               "example"
             ];
           };
-          enabledServers = lib.mkAfter [
-            {
-              name = "second";
-              extraOptions.settings = lib.mkIf false {
-                should.be = "missing";
-              };
-            }
-            {
-              name = "third";
-              extraOptions.settings = lib.mkIf true {
-                should.be = "present";
-              };
-            }
-          ];
         };
       };
 
       assertions =
         let
+          enabledServers = builtins.filter (server: server.enable) (builtins.attrValues config.lsp.servers);
+
           toLua = lib.nixvim.lua.toLua' {
             removeNullAttrValues = true;
             removeEmptyAttrValues = true;
@@ -200,38 +188,34 @@
             multiline = true;
           };
 
-          print = lib.generators.toPretty {
-            multiline = true;
-          };
+          serverCount = builtins.length enabledServers;
+          expectedCount = 2;
 
-          serverCount = builtins.length config.plugins.lsp.enabledServers;
-          expectedCount = 3;
+          baseServer = builtins.elemAt enabledServers 0;
 
-          nilServer = builtins.head config.plugins.lsp.enabledServers;
-          nilSettings = toLua nilServer.extraOptions.settings;
+          nilServer = builtins.elemAt enabledServers 1;
+          nilSettings = toLua nilServer.settings.settings;
           expectedNilSettings = toLua {
             nil.formatting.command = [
               "real"
               "example"
             ];
           };
-
-          secondServer = builtins.elemAt config.plugins.lsp.enabledServers 1;
-          expectedSecondServer = {
-            name = "second";
-            extraOptions = { };
-          };
-
-          thirdServer = builtins.elemAt config.plugins.lsp.enabledServers 2;
-          expectedThirdServer = {
-            name = "third";
-            extraOptions.settings.should.be = "present";
-          };
         in
         [
           {
             assertion = serverCount == expectedCount;
             message = "Expected ${toString expectedCount} enabled LSP server!";
+          }
+          {
+            assertion = baseServer.name == "*";
+            message = ''
+              baseServer's `name` does not match expected value.
+
+              Expected: "*"
+
+              Actual: ${baseServer.name}
+            '';
           }
           {
             assertion = nilSettings == expectedNilSettings;
@@ -241,26 +225,6 @@
               Expected: ${expectedNilSettings}
 
               Actual: ${nilSettings}
-            '';
-          }
-          {
-            assertion = secondServer == expectedSecondServer;
-            message = ''
-              `secondServer` does not match expected value.
-
-              Expected: ${print expectedSecondServer}
-
-              Actual: ${print secondServer}
-            '';
-          }
-          {
-            assertion = secondServer == expectedSecondServer;
-            message = ''
-              `thirdServer` does not match expected value.
-
-              Expected: ${print expectedThirdServer}
-
-              Actual: ${print thirdServer}
             '';
           }
         ];
