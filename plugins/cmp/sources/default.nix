@@ -1,9 +1,4 @@
-{
-  lib,
-  helpers,
-  pkgs,
-  ...
-}@args:
+{ lib, pkgs, ... }:
 let
 
   # A list of most cmp source plugins, passed to mkCmpSourcePlugin.
@@ -183,7 +178,9 @@ let
     }
   ];
 
-  mkCmpSourcePlugin = import ./_mk-cmp-plugin.nix args;
+  mkCmpSourcePlugin = import ./_mk-cmp-plugin.nix {
+    inherit lib pkgs;
+  };
   pluginModules = builtins.map mkCmpSourcePlugin sources;
 in
 {

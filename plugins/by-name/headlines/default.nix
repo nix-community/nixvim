@@ -1,16 +1,10 @@
-{
-  lib,
-  helpers,
-  config,
-  ...
-}:
-with lib;
+{ lib, config, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "headlines";
   package = "headlines-nvim";
   description = "A plugin that adds horizontal highlights for text filetypes, like markdown, orgmode, and neorg.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsExample = {
     org.headline_highlights = false;

@@ -8,7 +8,6 @@
     {
       pkgs,
       config,
-      self',
       system,
       ...
     }:

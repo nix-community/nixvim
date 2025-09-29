@@ -1,9 +1,4 @@
-{
-  lib,
-  helpers,
-  pkgs,
-  ...
-}:
+{ lib, pkgs, ... }:
 with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "vimtex";

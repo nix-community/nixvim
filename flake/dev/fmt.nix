@@ -5,7 +5,7 @@
   ];
 
   perSystem =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       treefmt.config = {
         projectRootFile = "flake.nix";
@@ -15,6 +15,10 @@
           # keep-sorted start block=yes newline_separated=no
           isort.enable = true;
           keep-sorted.enable = true;
+          nixf-diagnose = {
+            enable = true;
+            priority = -1;
+          };
           nixfmt = {
             enable = true;
             package = pkgs.nixfmt-rfc-style;
@@ -30,6 +34,7 @@
           shfmt.enable = true;
           statix = {
             enable = true;
+            priority = -2;
             disabled-lints = [
               # We often use `nullable == true`
               "bool_comparison"
@@ -58,6 +63,14 @@
             "docs/gfm-alerts-to-admonitions/tests/**/*.yml"
           ];
           formatter.ruff-format.options = [ "--isolated" ];
+          formatter.nixf-diagnose.options = [
+            "--auto-fix"
+            "--ignore=sema-unused-def-lambda-witharg-formal"
+          ];
+          formatter.nixf-diagnose.excludes = [
+            # sema-unused-def-lambda-noarg-formal
+            "ci/rust-analyzer/default.nix"
+          ];
         };
       };
 

@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 let
   inherit (lib) mkRemovedOptionModule types;
   inherit (lib.nixvim) defaultNullOpts;

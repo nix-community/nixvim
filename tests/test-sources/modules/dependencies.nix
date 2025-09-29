@@ -27,12 +27,7 @@ in
     };
 
   all =
-    {
-      lib,
-      pkgs,
-      options,
-      ...
-    }:
+    { lib, options, ... }:
     let
       enableDep = depName: depOption: {
         enable = isDepEnabled depName depOption.package.default;

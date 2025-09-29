@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  options,
-  ...
-}:
+{ config, lib, ... }:
 with lib;
 let
   inherit (lib.nixvim)

@@ -3,7 +3,6 @@
   helpers,
   config,
   pkgs,
-  options,
   ...
 }:
 with lib;

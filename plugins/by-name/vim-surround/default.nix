@@ -1,8 +1,4 @@
-{
-  lib,
-  helpers,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "vim-surround";
   package = "vim-surround";

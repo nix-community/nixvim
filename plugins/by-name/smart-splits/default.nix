@@ -1,8 +1,4 @@
-{
-  lib,
-  helpers,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "smart-splits";
   package = "smart-splits-nvim";

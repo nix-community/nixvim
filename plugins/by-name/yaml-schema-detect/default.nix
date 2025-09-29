@@ -1,9 +1,4 @@
-{
-  lib,
-  config,
-  options,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "yaml-schema-detect";
   package = "yaml-schema-detect-nvim";

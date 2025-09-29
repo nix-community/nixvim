@@ -64,7 +64,7 @@ in
     };
 
   example-multiple-plugin =
-    { pkgs, lib, ... }:
+    { pkgs, ... }:
     {
       extraPlugins =
         with pkgs.vimPlugins;

@@ -1,9 +1,4 @@
-{
-  lib,
-  helpers,
-  config,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hunk";
   package = "hunk-nvim";
