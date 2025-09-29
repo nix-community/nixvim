@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "timerly";
   package = "timerly";

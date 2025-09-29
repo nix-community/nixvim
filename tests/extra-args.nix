@@ -12,7 +12,7 @@ let
     };
   generated = makeNixvimWithModule {
     module =
-      { regularArg, extraModule, ... }:
+      { extraModule, ... }:
       {
         _module.args = {
           regularArg = "regularValue";

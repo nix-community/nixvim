@@ -1,9 +1,4 @@
-{
-  lib,
-  options,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;

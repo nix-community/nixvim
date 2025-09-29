@@ -1,8 +1,4 @@
-{
-  helpers,
-  lib,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "idris2";
   package = "idris2-nvim";

@@ -4,8 +4,6 @@
   lib ? pkgs.lib,
   linkFarm,
   pkgs,
-  self,
-  system,
   pkgsForTest,
 }:
 let

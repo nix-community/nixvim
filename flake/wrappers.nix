@@ -5,7 +5,7 @@
 }:
 {
   perSystem =
-    { system, pkgs, ... }:
+    { system, ... }:
     {
       _module.args = {
         makeNixvimWithModule = import ../wrappers/standalone.nix {

@@ -1,9 +1,4 @@
-{
-  lib,
-  helpers,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 {
   options = {
     highlight = lib.mkOption {

@@ -1,8 +1,4 @@
-{
-  lib,
-  helpers,
-  ...
-}:
+{ lib, ... }:
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "lsp-lines";

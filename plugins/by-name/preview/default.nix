@@ -1,9 +1,4 @@
-{
-  lib,
-  helpers,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "preview";
   package = "Preview-nvim";
@@ -11,5 +6,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   hasSettings = false;
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 }

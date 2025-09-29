@@ -1,8 +1,4 @@
-{
-  lib,
-  helpers,
-  pkgs,
-}:
+{ lib, helpers }:
 with lib;
 {
   tools =
