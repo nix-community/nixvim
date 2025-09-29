@@ -104,16 +104,16 @@ in
         group = "nixvim_lsp_binds";
         callback = lib.nixvim.mkRaw ''
           function(args)
-            ${lib.concatMapStringsSep "\n" (
-              keymap:
-              # lua
-              ''
-                do
-                  local map = ${lib.nixvim.toLuaObject keymap}
-                  local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                  vim.keymap.set(map.mode, map.key, map.action, options)
-                end
-              '') cfg.keymaps}
+            local __keymaps = ${lib.nixvim.toLuaObject cfg.keymaps}
+
+            for _, keymap in ipairs(__keymaps) do
+              local options = vim.tbl_extend(
+                "keep",
+                keymap.options or {},
+                { buffer = args.buf }
+              )
+              vim.keymap.set(keymap.mode, keymap.key, keymap.action, options)
+            end
           end
         '';
         desc = "Load LSP keymaps";
