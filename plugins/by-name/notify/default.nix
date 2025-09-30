@@ -69,6 +69,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       "simple"
       "compact"
       "wrapped-compact"
+      "wrapped-default"
     ] "Function to render a notification buffer or a built-in renderer name.";
     minimum_width = defaultNullOpts.mkUnsignedInt 50 ''
       Minimum width for notification windows.
