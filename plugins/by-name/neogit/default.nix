@@ -4,12 +4,11 @@
   config,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neogit";
   description = "An interactive and powerful Git interface for Neovim, inspired by Magit.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO introduced 2024-02-29: remove 2024-04-29
   deprecateExtraOptions = true;
@@ -27,7 +26,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ++ (map
     (
       optionPath:
-      mkRemovedOptionModule
+      lib.mkRemovedOptionModule
         (
           [
             "plugins"
@@ -88,7 +87,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
     "git"
     {
       name = "which";
-      enable = hasInfix "which" (config.plugins.neogit.settings.commit_view.verify_commit.__raw or "");
+      enable = lib.hasInfix "which" (
+        config.plugins.neogit.settings.commit_view.verify_commit.__raw or ""
+      );
     }
   ];
 
