@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -10,8 +9,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-29: remove 2024-04-29
-  deprecateExtraOptions = true;
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
@@ -22,65 +19,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       plugin = "neogit";
       packageName = "which";
     })
-  ]
-  ++ (map
-    (
-      optionPath:
-      lib.mkRemovedOptionModule
-        (
-          [
-            "plugins"
-            "neogit"
-          ]
-          ++ optionPath
-        )
-        "This option has been removed upstream. Please refer to the plugin documentation to update your configuration."
-    )
-    [
-      [ "disableCommitConfirmation" ]
-      [ "disableBuiltinNotifications" ]
-      [ "useMagitKeybindings " ]
-      [ "commitPopup" ]
-      [
-        "sections"
-        "unmerged"
-      ]
-      [
-        "sections"
-        "unpulled"
-      ]
-    ]
-  );
-  optionsRenamedToSettings = [
-    "disableSigns"
-    "disableHint"
-    "disableContextHighlighting"
-    "autoRefresh"
-    "graphStyle"
-    "kind"
-    "signs"
-    "integrations"
-    [
-      "sections"
-      "untracked"
-    ]
-    [
-      "sections"
-      "unstaged"
-    ]
-    [
-      "sections"
-      "staged"
-    ]
-    [
-      "sections"
-      "stashes"
-    ]
-    [
-      "sections"
-      "recent"
-    ]
-    "mappings"
   ];
 
   dependencies = [
