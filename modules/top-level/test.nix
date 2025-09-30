@@ -178,6 +178,31 @@ in
       ];
     };
 
+    extraInputs = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      description = ''
+        A list of additional derivations to include in `nativeBuildInputs`.
+
+        Usually used to include additional tests in the build closure,
+        such as tests created with `runCommand` or `testers`.
+      '';
+      default = [ ];
+      example = lib.literalExpression ''
+        [
+          (pkgs.runCommand "foo" { } '''
+            touch $out
+          ''')
+          (pkgs.testers.testEqualContents {
+            assertion = "extraConfigLua has expected content";
+            actual = pkgs.writeText "actual.lua" config.extraConfigLua;
+            expected = pkgs.writeText "expected.lua" '''
+              -- Hello, world!
+            ''';
+          })
+        ]
+      '';
+    };
+
     namedExpectationPredicates = lib.mkOption {
       type =
         with lib.types;
@@ -295,9 +320,11 @@ in
         assert lib.assertMsg (cfg.runNvim -> cfg.buildNixvim) "`test.runNvim` requires `test.buildNixvim`.";
         cfg.runCommand cfg.name
           {
-            nativeBuildInputs = lib.optionals cfg.buildNixvim [
-              config.build.nvimPackage
-            ];
+            nativeBuildInputs =
+              cfg.extraInputs
+              ++ lib.optionals cfg.buildNixvim [
+                config.build.nvimPackage
+              ];
 
             inherit (failedExpectations) warnings assertions;
 
