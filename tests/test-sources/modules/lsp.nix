@@ -82,7 +82,35 @@
           actual = pkgs.writeText "actual.lua" (autoCmd.callback.__raw or "");
           expected = pkgs.writeText "expected.lua" ''
             function(args)
-              local __keymaps = { { action = vim.lsp.buf["definition"], key = "gd", lspBufAction = "definition", mode = "" }, { action = vim.lsp.buf["hover"], key = "K", lspBufAction = "hover", mode = "" }, { action = function() vim.diagnostic.jump({ count=-1, float=true }) end, key = "<leader>k", mode = "" }, { action = function() vim.diagnostic.jump({ count=1, float=true }) end, key = "<leader>j", mode = "" }, { action = "<CMD>LspStop<Enter>", key = "<leader>lx", mode = "" } }
+              local __keymaps = {
+                {
+                  action = vim.lsp.buf["definition"],
+                  key = "gd",
+                  lspBufAction = "definition",
+                  mode = ""
+                },
+                {
+                  action = vim.lsp.buf["hover"],
+                  key = "K",
+                  lspBufAction = "hover",
+                  mode = ""
+                },
+                {
+                  action = function() vim.diagnostic.jump({ count=-1, float=true }) end,
+                  key = "<leader>k",
+                  mode = ""
+                },
+                {
+                  action = function() vim.diagnostic.jump({ count=1, float=true }) end,
+                  key = "<leader>j",
+                  mode = ""
+                },
+                {
+                  action = "<CMD>LspStop<Enter>",
+                  key = "<leader>lx",
+                  mode = ""
+                }
+              }
 
               for _, keymap in ipairs(__keymaps) do
                 local options = vim.tbl_extend(
