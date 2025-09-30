@@ -5,6 +5,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
+  # NOTE: Should we upstream this?
+  dependencies = [ "opencode" ];
+
   description = ''
     OpenCode.nvim provides seamless integration with Claude Code for AI-assisted development.
 
