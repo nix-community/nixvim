@@ -105,10 +105,20 @@ in
         callback = lib.nixvim.mkRaw ''
           function(args)
             local __keymaps = ${
-              lib.nixvim.lua.toLua' {
-                multiline = true;
-                indent = "  ";
-              } cfg.keymaps
+              lib.pipe cfg.keymaps [
+                (map (keymap: {
+                  inherit (keymap)
+                    mode
+                    key
+                    action
+                    options
+                    ;
+                }))
+                (lib.nixvim.lua.toLua' {
+                  multiline = true;
+                  indent = "  ";
+                })
+              ]
             }
 
             for _, keymap in ipairs(__keymaps) do

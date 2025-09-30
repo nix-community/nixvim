@@ -86,13 +86,11 @@
                 {
                   action = vim.lsp.buf["definition"],
                   key = "gd",
-                  lspBufAction = "definition",
                   mode = ""
                 },
                 {
                   action = vim.lsp.buf["hover"],
                   key = "K",
-                  lspBufAction = "hover",
                   mode = ""
                 },
                 {
