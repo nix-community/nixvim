@@ -65,6 +65,10 @@ let
         ))
         (lib.filterAttrs (server: _: !(lib.elem server renamed)))
       ];
+
+      # TODO 2025-10-01
+      # Calls `require("lspconfig")` which is deprecated, producing a warning
+      plugins.idris2.enable = false;
     };
 
   result = nixvimConfiguration.extendModules {
