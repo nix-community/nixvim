@@ -116,6 +116,7 @@ in
         example = "skim";
       };
       gcc.default = "gcc";
+      gemini.default = "gemini-cli";
       gh.default = "gh";
       git = {
         default = "git";
@@ -135,6 +136,7 @@ in
         default = "nodejs";
         example = "nodejs_22";
       };
+      opencode.default = "opencode";
       plantuml.default = "plantuml";
       ripgrep.default = "ripgrep";
       rust-analyzer.default = "rust-analyzer";
