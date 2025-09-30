@@ -29,6 +29,21 @@
     };
   };
 
+  example = {
+    plugins.package-info = {
+      enable = true;
+
+      settings = {
+        icons.style = {
+          up_to_date = "|  ";
+          outdated = "|  ";
+        };
+        hide_up_to_date = true;
+        package_manager = "npm";
+      };
+    };
+  };
+
   with-telescope = {
     plugins = {
       telescope.enable = true;
