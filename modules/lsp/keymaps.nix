@@ -104,7 +104,12 @@ in
         group = "nixvim_lsp_binds";
         callback = lib.nixvim.mkRaw ''
           function(args)
-            local __keymaps = ${lib.nixvim.toLuaObject cfg.keymaps}
+            local __keymaps = ${
+              lib.nixvim.lua.toLua' {
+                multiline = true;
+                indent = "  ";
+              } cfg.keymaps
+            }
 
             for _, keymap in ipairs(__keymaps) do
               local options = vim.tbl_extend(
