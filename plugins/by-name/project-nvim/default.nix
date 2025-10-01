@@ -119,6 +119,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
     enableTelescope = lib.mkEnableOption "project-nvim telescope integration";
   };
 
+  # Ensure project-nvim is set up before telescope
+  # See https://github.com/DrKJeff16/project.nvim/issues/22
+  configLocation = lib.mkOrder 900 "extraConfigLua";
+
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.project-nvim" {
       when = cfg.enableTelescope && (!config.plugins.telescope.enable);
