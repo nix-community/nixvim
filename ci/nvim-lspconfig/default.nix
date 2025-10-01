@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   vimPlugins,
   neovimUtils,
   wrapNeovimUnstable,
@@ -31,6 +32,7 @@ runCommand "lspconfig-servers"
       pandoc
       python3
     ];
+    passthru.unsupported = callPackage ./unsupported.nix { };
   }
   ''
     export HOME=$(realpath .)
