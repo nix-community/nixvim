@@ -51,6 +51,7 @@ writeShellApplication {
 
     generate_json "${conform-formatters}" "conform-formatters"
     generate_json "${lspconfig-servers}" "lspconfig-servers"
+    generate_json "${lspconfig-servers.unsupported}" "unsupported-lspconfig-servers"
 
     if [ -n "$commit" ]; then
       cd "$generated_dir"

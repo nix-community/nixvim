@@ -212,7 +212,26 @@ in
   imports =
     let
       mkLsp = import ./_mk-lsp.nix;
-      lspModules = map mkLsp generatedServers;
+      mkUnsupportedLsp =
+        {
+          name,
+          serverName ? name,
+          ...
+        }:
+        lib.mkRemovedOptionModule [ "plugins" "lsp" "servers" name ] ''
+          nvim-lspconfig has switched from its own LSP configuration API to neovim's built-in LSP API.
+          '${serverName}' has not been updated to support neovim's built-in LSP API.
+          See https://github.com/neovim/nvim-lspconfig/issues/3705
+        '';
+      unsupported = lib.importJSON ../../../generated/unsupported-lspconfig-servers.json;
+      lspModules = map (
+        {
+          name,
+          serverName ? name,
+          ...
+        }@lsp:
+        (if lib.elem serverName unsupported then mkUnsupportedLsp else mkLsp) lsp
+      ) generatedServers;
       baseLspPath = [
         "plugins"
         "lsp"

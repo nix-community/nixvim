@@ -1,11 +1,14 @@
 {
+  lib,
   nixvimConfiguration,
   name ? "lsp-all-servers",
 }:
 let
   _file = ./lsp-servers.nix;
 
-  renamed = builtins.attrNames (import ../plugins/lsp/language-servers/_renamed.nix);
+  unsupported =
+    builtins.attrNames (import ../plugins/lsp/language-servers/_renamed.nix)
+    ++ lib.importJSON ../generated/unsupported-lspconfig-servers.json;
 
   enable-lsp-module = {
     inherit _file;
@@ -63,7 +66,7 @@ let
             package = null;
           }
         ))
-        (lib.filterAttrs (server: _: !(lib.elem server renamed)))
+        (lib.filterAttrs (server: _: !(lib.elem server unsupported)))
       ];
 
       # TODO 2025-10-01
