@@ -1,24 +1,30 @@
 {
   lib,
-  helpers,
   config,
-  pkgs,
+  options,
   ...
 }:
-with lib;
-{
-  options.plugins.rainbow-delimiters = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "rainbow-delimiters.nvim";
+let
+  opts = options.plugins.rainbow-delimiters;
+  inherit (builtins) any isNull;
+  inherit (lib) mapAttrs' nameValuePair isString;
+  inherit (lib.nixvim) mkRaw toLuaObject nestedLiteralLua;
+in
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "rainbow-delimiters";
+  package = "rainbow-delimiters-nvim";
+  description = "Rainbow delimiters for Neovim with Tree-sitter";
+  maintainers = [ ];
 
-    package = lib.mkPackageOption pkgs "rainbow-delimiters.nvim" {
-      default = [
-        "vimPlugins"
-        "rainbow-delimiters-nvim"
-      ];
-    };
+  # This plugin uses globals for configuration.
+  callSetup = false;
 
-    strategy = helpers.defaultNullOpts.mkAttrsOf' {
-      type = types.enum [
+  # TODO: introduced 2025-10-1: remove after 26.05
+  inherit (import ./deprecations.nix lib) deprecateExtraOptions optionsRenamedToSettings imports;
+
+  extraOptions = {
+    strategy = lib.nixvim.defaultNullOpts.mkAttrsOf' {
+      type = lib.types.enum [
         "global"
         "local"
         "noop"
@@ -29,12 +35,13 @@ with lib;
       description = ''
         Attrs mapping Tree-sitter language names to strategies.
         See `|rb-delimiters-strategy|` for more information about strategies.
+        This option adds definitions to `${opts.settings}.strategy` wrapped with required Lua code.
       '';
-      example = literalMD ''
+      example = lib.literalMD ''
         ```nix
         {
           # Use global strategy by default
-          default = "global";
+          "" = "global";
 
           # Use local for HTML
           html = "local";
@@ -56,102 +63,66 @@ with lib;
         ```
       '';
     };
-
-    query =
-      helpers.defaultNullOpts.mkAttrsOf types.str
-        {
-          default = "rainbow-delimiters";
-          lua = "rainbow-blocks";
-        }
-        ''
-          Attrs mapping Tree-sitter language names to queries.
-          See `|rb-delimiters-query|` for more information about queries.
-        '';
-
-    highlight =
-      helpers.defaultNullOpts.mkListOf types.str
-        [
-          "RainbowDelimiterRed"
-          "RainbowDelimiterYellow"
-          "RainbowDelimiterBlue"
-          "RainbowDelimiterOrange"
-          "RainbowDelimiterGreen"
-          "RainbowDelimiterViolet"
-          "RainbowDelimiterCyan"
-        ]
-        ''
-          List of names of the highlight groups to use for highlighting, for more information see
-          `|rb-delimiters-colors|`.
-        '';
-
-    whitelist = helpers.mkNullOrOption (with types; listOf str) ''
-      List of Tree-sitter languages for which to enable rainbow delimiters.
-      Rainbow delimiters will be disabled for all other languages.
-    '';
-
-    blacklist = helpers.mkNullOrOption (with types; listOf str) ''
-      List of Tree-sitter languages for which to disable rainbow delimiters.
-      Rainbow delimiters will be enabled for all other languages.
-    '';
-
-    log = {
-      file =
-        helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'"; }
-          ''
-            Path to the log file, default is `rainbow-delimiters.log` in your standard log path
-            (see `|standard-path|`).
-          '';
-
-      level = helpers.defaultNullOpts.mkLogLevel "warn" ''
-        Only messages equal to or above this value will be logged.
-        The default is to log warnings or above.
-        See `|log_levels|` for possible values.
-      '';
-    };
   };
 
-  config =
-    let
-      cfg = config.plugins.rainbow-delimiters;
-    in
-    mkIf cfg.enable {
-      warnings = lib.nixvim.mkWarnings "plugins.rainbow-delimiters" {
+  settingsExample = {
+    blacklist = [ "json" ];
+    strategy = {
+      "" = nestedLiteralLua "require 'rainbow-delimiters'.strategy['global']";
+      "nix" = nestedLiteralLua "require 'rainbow-delimiters'.strategy['local']";
+    };
+    highlight = [
+      "RainbowDelimiterViolet"
+      "RainbowDelimiterBlue"
+      "RainbowDelimiterGreen"
+    ];
+  };
+
+  extraConfig = cfg: {
+    warnings = lib.nixvim.mkWarnings "plugins.rainbow-delimiters" [
+      {
         when = !config.plugins.treesitter.enable;
         message = "This plugin needs treesitter to function as intended.";
-      };
-      assertions = lib.nixvim.mkAssertions "plugins.rainbow-delimiters" {
-        assertion = (cfg.whitelist == null) || (cfg.blacklist == null);
+      }
 
+      # TODO: introduced 2025-10-1: remove after 26.05
+      {
+        when = cfg.strategy ? default;
         message = ''
-          Both `rainbow-delimiters.whitelist` and `rainbow-delimiters.blacklist` should not be
-          set simultaneously.
-          Please remove one of them.
+          Setting `${opts.strategy}` keys to the string `"default"` is deprecated.
+          You can set them to an empty string `""` instead.
         '';
-      };
+      }
+      {
+        when = (cfg.query ? default) && (cfg.query.default != "_mkMergedOptionModule");
+        message = ''
+          Setting `${opts.query}` keys to the string `"default"` is deprecated.
+          You can set them to an empty string `""` instead.
+        '';
+      }
+    ];
 
-      extraPlugins = [ cfg.package ];
-
-      globals.rainbow_delimiters =
-        with cfg;
-        {
-          strategy = helpers.ifNonNull' strategy (
-            mapAttrs' (name: value: {
-              name = if name == "default" then "__emptyString" else name;
-              value =
-                if isString value then helpers.mkRaw "require 'rainbow-delimiters'.strategy['${value}']" else value;
-            }) strategy
-          );
-          query = helpers.ifNonNull' query (
-            mapAttrs' (name: value: {
-              name = if name == "default" then "__emptyString" else name;
-              inherit value;
-            }) query
-          );
-          inherit highlight whitelist blacklist;
-          log = with log; {
-            inherit file level;
-          };
-        }
-        // cfg.extraOptions;
+    assertions = lib.nixvim.mkAssertions "plugins.rainbow-delimiters" {
+      assertion = any isNull [
+        (cfg.settings.whitelist or null)
+        (cfg.settings.blacklist or null)
+      ];
+      message = ''
+        Both `${opts.settings}.whitelist` and `${opts.settings}.blacklist` should not be set simultaneously.
+        Please remove one of them.
+      '';
     };
+
+    globals.rainbow_delimiters = lib.mkMerge [
+      cfg.settings
+      (lib.mkIf (cfg.strategy != null) {
+        strategy = mapAttrs' (
+          n: v:
+          nameValuePair (if n == "default" then "" else n) (
+            if isString v then mkRaw "require('rainbow-delimiters').strategy[${toLuaObject v}]" else v
+          )
+        ) cfg.strategy;
+      })
+    ];
+  };
 }

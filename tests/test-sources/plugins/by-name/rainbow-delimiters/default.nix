@@ -11,58 +11,56 @@
       treesitter.enable = true;
       rainbow-delimiters = {
         enable = true;
-
-        strategy = {
-          default = "global";
-          html = "local";
-          latex.__raw = ''
-            function()
-              -- Disabled for very large files, global strategy for large files,
-              -- local strategy otherwise
-              if vim.fn.line('$') > 10000 then
-                  return nil
-              elseif vim.fn.line('$') > 1000 then
-                  return rainbow.strategy['global']
-              end
-              return rainbow.strategy['local']
-            end
-          '';
-        };
-        query = {
-          default = "rainbow-delimiters";
-          lua = "rainbow-blocks";
-        };
-        highlight = [
-          "RainbowDelimiterRed"
-          "RainbowDelimiterYellow"
-          "RainbowDelimiterBlue"
-          "RainbowDelimiterOrange"
-          "RainbowDelimiterGreen"
-          "RainbowDelimiterViolet"
-          "RainbowDelimiterCyan"
-        ];
-        blacklist = [
-          "c"
-          "cpp"
-        ];
-        log = {
-          file.__raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'";
-          level = "warn";
+        settings = {
+          settingsExample = {
+            blacklist = [ "json" ];
+            strategy = {
+              "".__raw = "require 'rainbow-delimiters'.strategy['global']";
+              "nix".__raw = "require 'rainbow-delimiters'.strategy['local']";
+            };
+            highlight = [
+              "RainbowDelimiterViolet"
+              "RainbowDelimiterBlue"
+              "RainbowDelimiterGreen"
+            ];
+          };
         };
       };
     };
   };
 
-  example-whitelist = {
+  defaults = {
     plugins = {
       treesitter.enable = true;
       rainbow-delimiters = {
         enable = true;
+        settings = {
+          query = {
+            "" = "rainbow-delimiters";
+            javascript = "rainbow-delimiters-react";
+          };
+          strategy = {
+            "".__raw = "require 'rainbow-delimiters'.strategy['global']";
+          };
+          priority = {
+            "".__raw =
+              "math.floor(((vim.hl or vim.highlight).priorities.semantic_tokens + (vim.hl or vim.highlight).priorities.treesitter) / 2)";
+          };
+          log = {
+            level.__raw = "vim.log.levels.WARN";
+            file.__raw = "vim.fn.stdpath('log') .. '/rainbow-delimiters.log'";
+          };
+          highlight = [
+            "RainbowDelimiterRed"
+            "RainbowDelimiterYellow"
+            "RainbowDelimiterBlue"
+            "RainbowDelimiterOrange"
+            "RainbowDelimiterGreen"
+            "RainbowDelimiterViolet"
+            "RainbowDelimiterCyan"
+          ];
 
-        whitelist = [
-          "c"
-          "cpp"
-        ];
+        };
       };
     };
   };
