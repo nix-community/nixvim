@@ -1,5 +1,9 @@
 {
   empty = {
+    # TODO 2025-10-01
+    # Calls `require("lspconfig")` which is deprecated, producing a warning
+    test.runNvim = false;
+
     plugins.lean.enable = true;
   };
 
@@ -21,6 +25,10 @@
   };
 
   default = {
+    # TODO 2025-10-01
+    # Calls `require("lspconfig")` which is deprecated, producing a warning
+    test.runNvim = false;
+
     plugins = {
       lsp.enable = true;
 
