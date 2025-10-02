@@ -78,6 +78,9 @@ let
     # https://github.com/NixOS/nixpkgs/pull/331373
     "dmd"
 
+    # 2025-10-02 zig-hook is marked as broken
+    "superhtml"
+
     # 2025-09-16 marked as broken
     # https://github.com/NixOS/nixpkgs/pull/440273/commits/e71ade9ba7c5feca1160acb68c643812e14e67f3
     "fpc"
