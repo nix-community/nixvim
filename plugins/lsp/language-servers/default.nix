@@ -7,6 +7,7 @@
 with lib;
 let
   renamedServers = import ./_renamed.nix;
+  unsupportedServers = lib.importJSON ../../../generated/unsupported-lspconfig-servers.json;
 
   lspExtraArgs = {
     dartls = {
@@ -192,15 +193,10 @@ let
 
   generatedServers = lib.pipe ../../../generated/lspconfig-servers.json [
     lib.importJSON
-    (lib.map (
+    (lib.mapAttrsToList (
+      name: description:
       {
-        name,
-        desc ? "${name} language server",
-        ...
-      }:
-      {
-        inherit name;
-        description = desc;
+        inherit name description;
       }
       // lib.optionalAttrs (lspPackages.packages ? ${name}) {
         package = lspPackages.packages.${name};
@@ -216,26 +212,7 @@ in
   imports =
     let
       mkLsp = import ./_mk-lsp.nix;
-      mkUnsupportedLsp =
-        {
-          name,
-          serverName ? name,
-          ...
-        }:
-        lib.mkRemovedOptionModule [ "plugins" "lsp" "servers" name ] ''
-          nvim-lspconfig has switched from its own LSP configuration API to neovim's built-in LSP API.
-          '${serverName}' has not been updated to support neovim's built-in LSP API.
-          See https://github.com/neovim/nvim-lspconfig/issues/3705
-        '';
-      unsupported = lib.importJSON ../../../generated/unsupported-lspconfig-servers.json;
-      lspModules = map (
-        {
-          name,
-          serverName ? name,
-          ...
-        }@lsp:
-        (if lib.elem serverName unsupported then mkUnsupportedLsp else mkLsp) lsp
-      ) generatedServers;
+      lspModules = map mkLsp generatedServers;
       baseLspPath = [
         "plugins"
         "lsp"
@@ -244,9 +221,18 @@ in
       renameModules = mapAttrsToList (
         old: new: lib.mkRenamedOptionModule (baseLspPath ++ [ old ]) (baseLspPath ++ [ new ])
       ) renamedServers;
+      unsupportedModules = map (
+        name:
+        lib.mkRemovedOptionModule [ "plugins" "lsp" "servers" name ] ''
+          nvim-lspconfig has switched from its own LSP configuration API to neovim's built-in LSP API.
+          '${name}' has not been updated to support neovim's built-in LSP API.
+          See https://github.com/neovim/nvim-lspconfig/issues/3705
+        ''
+      ) unsupportedServers;
     in
     lspModules
     ++ renameModules
+    ++ unsupportedModules
     ++ [
       ./ccls.nix
       ./hls.nix
