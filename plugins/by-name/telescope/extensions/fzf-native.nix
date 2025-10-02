@@ -8,14 +8,6 @@ mkExtension {
   extensionName = "fzf";
   package = "telescope-fzf-native-nvim";
 
-  # TODO: introduced 2024-03-24, remove on 2024-05-24
-  optionsRenamedToSettings = [
-    "fuzzy"
-    "overrideGenericSorter"
-    "overrideFileSorter"
-    "caseMode"
-  ];
-
   settingsOptions = {
     fuzzy = defaultNullOpts.mkBool true ''
       Whether to fuzzy search. False will do exact matching.
