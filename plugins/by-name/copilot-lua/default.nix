@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
@@ -170,6 +175,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Please disable one of them.
       '';
     };
+
+    extraPlugins = [
+      # Next edit suggestion support
+      pkgs.vimPlugins.copilot-lsp
+    ];
   };
 
   # TODO: introduced 2025-01-07: remove after 25.05
