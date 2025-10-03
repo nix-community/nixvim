@@ -7,7 +7,6 @@
     "antlersls"
     "ansiblels"
     "apex_ls"
-    "atopile"
     "autohotkey_lsp"
     "awk_ls"
     "azure_pipelines_ls"
@@ -28,10 +27,8 @@
     "circom-lsp"
     "clarinet"
     "cobol_ls"
-    "codebook"
     "coffeesense"
     "contextive"
-    "copilot"
     # coqPackages.coq-lsp is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "coq_lsp"
     "cspell_ls"
@@ -44,12 +41,10 @@
     "dcmls"
     "debputy"
     "djlsp"
-    "docker_language_server"
     "ds_pinyin_lsp"
     "dts_lsp"
     "ecsact"
     "ember"
-    "emmylua_ls"
     "esbonio"
     "expert"
     "facility_language_server"
@@ -124,7 +119,6 @@
     "puppet"
     "purescriptls"
     "pyre"
-    "pyrefly"
     "r_language_server"
     "racket_langserver"
     "raku_navigator"
@@ -135,7 +129,6 @@
     "robotframework_ls"
     "roc_ls"
     "rome"
-    "roslyn_ls"
     "rpmspec"
     "ruff_lsp" # deprecated and removed from nixpkgs
     "salt_ls"
@@ -155,23 +148,17 @@
     "sorbet"
     "spyglassmc_language_server"
     "sqlls"
-    "sqruff"
     "steep"
     "stimulus_ls"
-    "stylua"
     "stylua3p_ls"
     "svlangserver"
     "tabby_ml"
     "termux_language_server"
     "textlsp"
     "theme_check"
-    "tofu_ls"
-    "tombi"
-    "tsgo"
     "tsp_server"
     "turbo_ls"
     "turtle_ls"
-    "ty"
     # typst-lsp has been removed from nixpkgs as the project is archived
     "typst_lsp"
     "tvm_ffi_navigator"
@@ -186,13 +173,11 @@
     "visualforce_ls"
     # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "vscoqtop"
-    "vue_ls"
     "wasm_language_tools"
     "yang_lsp"
     "yls"
     "ziggy"
     "ziggy_schema"
-    "zuban"
   ];
 
   packages = {
@@ -204,6 +189,10 @@
     ast_grep = "ast-grep";
     astro = "astro-language-server";
     atlas = "atlas";
+    atopile = [
+      "python3Packages"
+      "atopile"
+    ];
     autotools_ls = "autotools-language-server";
     ballerina = "ballerina";
     basedpyright = "basedpyright";
@@ -218,6 +207,8 @@
     clangd = "clang-tools";
     clojure_lsp = "clojure-lsp";
     cmake = "cmake-language-server";
+    codebook = "codebook";
+    copilot = "copilot-language-server";
     crystalline = "crystalline";
     csharp_ls = "csharp-ls";
     cssls = "vscode-langservers-extracted";
@@ -233,6 +224,7 @@
       "digestif"
     ];
     docker_compose_language_service = "docker-compose-language-service";
+    docker_language_server = "docker-language-server";
     dockerls = "dockerfile-language-server";
     dolmenls = [
       "ocamlPackages"
@@ -249,6 +241,7 @@
     elp = "erlang-language-platform";
     emmet_language_server = "emmet-language-server";
     emmet_ls = "emmet-ls";
+    emmylua_ls = "emmylua-ls";
     erg_language_server = "erg";
     erlangls = "erlang-ls";
     eslint = "vscode-langservers-extracted";
@@ -347,6 +340,7 @@
       "python-lsp-server"
     ];
     pylyzer = "pylyzer";
+    pyrefly = "pyrefly";
     pyright = "pyright";
     qmlls = [
       "kdePackages"
@@ -358,6 +352,7 @@
     rescriptls = "rescript-language-server";
     # This is not entirely true, but the server is deprecated
     rls = "rustup";
+    roslyn_ls = "roslyn-ls";
     rubocop = "rubocop";
     ruby_lsp = "ruby-lsp";
     ruff = "ruff";
@@ -378,6 +373,7 @@
     sourcekit = "sourcekit-lsp";
     spectral = "spectral-language-server";
     sqls = "sqls";
+    sqruff = "sqruff";
     standardrb = [
       "rubyPackages"
       "standard"
@@ -386,6 +382,7 @@
     starpls = "starpls";
     statix = "statix";
     stylelint_lsp = "stylelint-lsp";
+    stylua = "stylua";
     superhtml = "superhtml";
     svelte = "svelte-language-server";
     svls = "svls";
@@ -413,9 +410,13 @@
     thriftls = "thrift-ls";
     tilt_ls = "tilt";
     tinymist = "tinymist";
+    tofu_ls = "tofu-ls";
+    tombi = "tombi";
     ts_ls = "typescript-language-server";
     ts_query_ls = "ts_query_ls";
+    tsgo = "typescript-go";
     ttags = "ttags";
+    ty = "ty";
     typeprof = "ruby";
     typos_lsp = "typos-lsp";
     uiua = "uiua";
@@ -430,10 +431,12 @@
     vls = "vlang";
     volar = "vue-language-server";
     vtsls = "vtsls";
+    vue_ls = "vue-language-server";
     wgsl_analyzer = "wgsl-analyzer";
     yamlls = "yaml-language-server"; # Not available in coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     zk = "zk";
     zls = "zls";
+    zuban = "zuban";
   };
 
   # Servers that can't/don't use the provided upstream command in Nix, or packages with no upstream commands
