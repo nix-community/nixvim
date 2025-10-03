@@ -13,6 +13,11 @@ let
   };
 
   disabledTests = [
+    # TODO: 2025-10-03
+    # Transient dependency `vmr` has a build failure
+    # https://github.com/NixOS/nixpkgs/issues/431811
+    "roslyn-ls"
+
     # 2025-07-25 python313Packages.lsp-tree-sitter is marked as broken
     "autotools-language-server"
 
