@@ -19,7 +19,14 @@ let
   # Create a submodule type from `server.nix`
   # Used as the type for both the freeform `lsp.servers.<name>`
   # and the explicitly declared `lsp.servers.*` options
-  mkServerType = args: types.submodule (mkServerModule args);
+  mkServerType =
+    args:
+    types.submoduleWith {
+      # Server modules have a `config` option, so we must use
+      # shorthandOnlyDefinesConfig to avoid confusing the module system.
+      shorthandOnlyDefinesConfig = true;
+      modules = [ (mkServerModule args) ];
+    };
 
   # Create a server option
   # Used below for the `lsp.servers.*` options
