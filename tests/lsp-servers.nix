@@ -58,11 +58,17 @@ let
       plugins.lsp.servers = lib.pipe options.plugins.lsp.servers [
         (lib.mapAttrs (
           server: opts:
+          let
+            # Some servers are defined using mkUnpackagedOption whose default will throw
+            pkg = builtins.tryEval opts.package.default;
+            hasPkg = opts ? package.default && pkg.success;
+            isUnfree = pkg.value.meta.unfree or false;
+            isDisabled = lib.elem server disabled;
+          in
           {
-            enable = !(lib.elem server disabled);
+            enable = !isDisabled;
           }
-          # Some servers are defined using mkUnpackagedOption whose default will throw
-          // lib.optionalAttrs (opts ? package && !(builtins.tryEval opts.package.default).success) {
+          // lib.optionalAttrs (hasPkg -> isUnfree) {
             package = null;
           }
         ))
