@@ -61,6 +61,10 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # Transient dependency `kicad-base` is marked broken
+    # https://github.com/NixOS/nixpkgs/pull/403987
+    "atopile"
+
     # xdotool is not available on darwin
     "fontpreview"
 
