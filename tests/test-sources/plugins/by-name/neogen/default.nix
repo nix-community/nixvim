@@ -7,8 +7,6 @@
     plugins.neogen = {
       enable = true;
 
-      enablePlaceholders = false;
-      inputAfterComment = false;
       keymaps = {
         generate = "<leader>a";
         generateClass = "<leader>b";
@@ -17,26 +15,31 @@
         generateType = "<leader>e";
       };
       keymapsSilent = true;
-      languages = {
-        csharp = {
-          template = {
-            annotation_convention = "...";
+
+      settings = {
+        enable_placeholders = false;
+        input_after_comment = false;
+        languages = {
+          csharp = {
+            template = {
+              annotation_convention = "...";
+            };
           };
         };
+        placeholder_hl = "None";
+        placeholders_text = {
+          attribute = "attribute";
+          class = "class";
+          description = "description";
+          kwargs = "kwargs";
+          parameter = "parameter";
+          throw = "throw";
+          tparam = "tparam";
+          type = "type";
+          varargs = "varargs";
+        };
+        snippet_engine = "vsnip";
       };
-      placeholderHighlight = "None";
-      placeholdersText = {
-        attribute = "attribute";
-        class = "class";
-        description = "description";
-        kwargs = "kwargs";
-        parameter = "parameter";
-        throw = "throw";
-        tparam = "tparam";
-        type = "type";
-        varargs = "varargs";
-      };
-      snippetEngine = "vsnip";
     };
   };
 }
