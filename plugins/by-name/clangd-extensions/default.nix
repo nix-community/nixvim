@@ -85,7 +85,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     lsp = {
       servers.clangd = {
-        settings = lib.mkIf cfg.enableOffsetEncodingWorkaround {
+        config = lib.mkIf cfg.enableOffsetEncodingWorkaround {
           capabilities = {
             offsetEncoding = [ "utf-16" ];
           };
