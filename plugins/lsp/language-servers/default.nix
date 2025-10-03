@@ -162,12 +162,16 @@ let
           example = false;
         };
       };
-      extraConfig = cfg: {
+      extraConfig = cfg: opts: {
+        assertions = lib.nixvim.mkAssertions "plugins.lsp.servers.volar" {
+          assertion = cfg.tslsIntegration -> (cfg.package != null);
+          message = "When `${opts.tslsIntegration}` is enabled, `${opts.package}` must not be null.";
+        };
         plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
           filetypes = [ "vue" ];
           extraOptions = {
             init_options = {
-              plugins = [
+              plugins = lib.mkIf (cfg.package != null) [
                 {
                   name = "@vue/typescript-plugin";
                   location = "${lib.getBin cfg.package}/lib/language-tools/packages/language-server";
