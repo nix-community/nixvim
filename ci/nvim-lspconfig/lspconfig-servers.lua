@@ -36,13 +36,8 @@ info = sorted_map_table(configs, function(server_name, server_info)
 	if server_info.document_config.docs ~= nil then
 		description = server_info.document_config.docs.description
 	end
-	local cmd = server_info.document_config.default_config.cmd
-	if type(cmd) == "function" then
-		cmd = "see source file"
-	end
 	return {
 		name = server_name,
-		cmd = cmd,
 		desc = description,
 	}
 end)
