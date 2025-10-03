@@ -103,7 +103,7 @@ in
       '';
       default = { };
       example = {
-        "*".settings = {
+        "*".config = {
           root_markers = [ ".git" ];
           capabilities.textDocument.semanticTokens = {
             multilineTokenSupport = true;
@@ -112,7 +112,7 @@ in
         lua_ls.enable = true;
         clangd = {
           enable = true;
-          settings = {
+          config = {
             cmd = [
               "clangd"
               "--background-index"
@@ -161,11 +161,11 @@ in
             server:
             let
               luaName = toLuaObject server.name;
-              luaSettings = toLuaObject server.settings;
-              wrap = server.__settingsWrapper or lib.id;
+              luaConfig = toLuaObject server.config;
+              wrap = server.__configWrapper or lib.id;
             in
             [
-              (lib.mkIf (server.settings != { }) "vim.lsp.config(${luaName}, ${wrap luaSettings})")
+              (lib.mkIf (server.config != { }) "vim.lsp.config(${luaName}, ${wrap luaConfig})")
               (lib.mkIf (server.activate or false) "vim.lsp.enable(${luaName})")
             ];
         in
@@ -182,13 +182,13 @@ in
 
             local __setup = ${lib.foldr lib.id "{ capabilities = __lspCapabilities() }" oldCfg.setupWrappers}
 
-            local __wrapSettings = function(settings)
-              if settings == nil then
-                settings = __setup
+            local __wrapConfig = function(cfg)
+              if cfg == nil then
+                cfg = __setup
               else
-                settings = vim.tbl_extend("keep", settings, __setup)
+                cfg = vim.tbl_extend("keep", cfg, __setup)
               end
-              return settings
+              return cfg
             end
           ''
           ++ builtins.concatMap mkServerConfig enabledServers
