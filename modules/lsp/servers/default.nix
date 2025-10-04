@@ -98,7 +98,7 @@ in
       '';
       default = { };
       example = {
-        "*".settings = {
+        "*".cfg = {
           root_markers = [ ".git" ];
           capabilities.textDocument.semanticTokens = {
             multilineTokenSupport = true;
@@ -107,7 +107,7 @@ in
         lua_ls.enable = true;
         clangd = {
           enable = true;
-          settings = {
+          cfg = {
             cmd = [
               "clangd"
               "--background-index"
@@ -156,16 +156,16 @@ in
             server:
             let
               luaName = toLuaObject server.name;
-              luaSettings = toLuaObject server.settings;
-              wrap = server.__settingsWrapper or lib.id;
+              luaOptions = toLuaObject server.cfg;
+              wrap = server.__configWrapper or lib.id;
             in
             [
-              (lib.mkIf (server.settings != { }) "vim.lsp.config(${luaName}, ${wrap luaSettings})")
+              (lib.mkIf (server.cfg != { }) "vim.lsp.config(${luaName}, ${wrap luaOptions})")
               (lib.mkIf (server.activate or false) "vim.lsp.enable(${luaName})")
             ];
         in
         lib.mkMerge (
-          # Implement the legacy settings wrapping and capabilities mutation when `plugins.lsp` is enabled
+          # Implement the legacy config wrapping and capabilities mutation when `plugins.lsp` is enabled
           lib.optional oldCfg.enable ''
             local __lspCapabilities = function()
               local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -177,13 +177,13 @@ in
 
             local __setup = ${lib.foldr lib.id "{ capabilities = __lspCapabilities() }" oldCfg.setupWrappers}
 
-            local __wrapSettings = function(settings)
-              if settings == nil then
-                settings = __setup
+            local __wrapConfig = function(cfg)
+              if cfg == nil then
+                cfg = __setup
               else
-                settings = vim.tbl_extend("keep", settings, __setup)
+                cfg = vim.tbl_extend("keep", cfg, __setup)
               end
-              return settings
+              return cfg
             end
           ''
           ++ builtins.concatMap mkServerConfig enabledServers

@@ -2,7 +2,7 @@
 {
   name ? "the language server",
   package ? null,
-  settings ? null,
+  cfg ? null,
   pkgs ? { },
 }@args:
 {
@@ -64,14 +64,14 @@ in
       '';
     };
 
-    settings = lib.mkOption {
+    cfg = lib.mkOption {
       type = with types; attrsOf anything;
       description = ''
-        Configurations for ${displayName}. ${settings.extraDescription or ""}
+        Configurations for ${displayName}. ${cfg.extraDescription or ""}
       '';
       default = { };
       example =
-        settings.example or {
+        cfg.example or {
           cmd = [
             "clangd"
             "--background-index"
