@@ -167,13 +167,13 @@ in
   example-keymap-string =
     { pkgs, ... }:
     {
-      extraPlugins = optionalPlugins [ pkgs.vimPlugins.neo-tree-nvim ];
+      extraPlugins = optionalPlugins [ pkgs.vimPlugins.nvim-tree-lua ];
 
       plugins.lz-n = {
         enable = true;
         plugins = [
           {
-            __unkeyed-1 = "neo-tree.nvim";
+            __unkeyed-1 = "nvim-tree.lua";
             enabled = ''
               function()
                 return true
@@ -182,7 +182,7 @@ in
             after = # lua
               ''
                 function()
-                  require("neo-tree").setup()
+                  require("nvim-tree").setup({})
                 end
               '';
           }
@@ -190,11 +190,11 @@ in
 
         keymaps = [
           {
-            action = "<CMD>Neotree toggle<CR>";
+            action = "<CMD>NvimTreeToggle<CR>";
             key = "<leader>ft";
             mode = "";
-            options.desc = "NeoTree toggle";
-            plugin = "neo-tree.nvim";
+            options.desc = "NvimTree toggle";
+            plugin = "nvim-tree.lua";
           }
         ];
       };
