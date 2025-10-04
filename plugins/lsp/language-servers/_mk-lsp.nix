@@ -196,7 +196,7 @@ in
     lsp.servers.${serverName} = _: {
       # Top-secret internal option that only exists when the server is enabled via the old API.
       # The new API checks if this attr exists and uses it to wrap the server's settings string.
-      options.__settingsWrapper = lib.mkOption {
+      options.__configWrapper = lib.mkOption {
         type = lib.types.functionTo lib.types.str;
         description = ''
           This internal option exists to preserve the old `plugins.lsp` behaviour.
@@ -217,9 +217,9 @@ in
           lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.package
         );
         packageFallback = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.packageFallback;
-        __settingsWrapper =
-          settings: "__wrapSettings(${lib.foldr lib.id settings config.plugins.lsp.setupWrappers})";
-        settings = {
+        __configWrapper =
+          luaCfg: "__wrapConfig(${lib.foldr lib.id luaCfg config.plugins.lsp.setupWrappers})";
+        config = {
           autostart = lib.mkIf (cfg.autostart != null) cfg.autostart;
           cmd = lib.mkIf (cfg.cmd != null) cfg.cmd;
           filetypes = lib.mkIf (cfg.filetypes != null) cfg.filetypes;

@@ -11,11 +11,12 @@
   };
 
   imports = [
-    # TODO: rename added 2025-04-30 (during the 25.05 cycle)
-    # The previous name `config` was introduced 2025-04-28 (during the 25.05 cycle)
-    # Because the previous name `config` never made it into a stable release,
-    # we could consider dropping this alias sooner than normal.
-    (lib.mkRenamedOptionModule [ "config" ] [ "settings" ])
+    # 2025-05-28: Introduced the option, named `config`
+    # 2025-04-30: Renamed `config` → `settings`
+    # 25.05 released 🚀
+    # 2025-10-03: Renamed `settings` → `config` 🙈
+    # See RFC: https://github.com/nix-community/nixvim/issues/3745
+    (lib.mkRenamedOptionModule [ "settings" ] [ "config" ])
   ];
 
 }

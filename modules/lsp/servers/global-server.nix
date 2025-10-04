@@ -23,7 +23,7 @@ in
       readOnly = true;
     };
 
-    settings = lib.mkOption {
+    config = lib.mkOption {
       type = with types; attrsOf anything;
       description = ''
         Default configuration shared by all servers.
