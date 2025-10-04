@@ -1,0 +1,62 @@
+{
+  # TODO: added 2025-10-04
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [
+    "providers"
+    "delay"
+    "modesDenylist"
+    "modesAllowlist"
+    "providersRegexSyntaxDenylist"
+    "providersRegexSyntaxAllowlist"
+    "underCursor"
+    "largeFileCutoff"
+    "minCountToHighlight"
+    "filetypesDenylist"
+    "filetypesAllowlist"
+    "filetypeOverrides"
+    [
+      "largeFileOverrides"
+      "providers"
+    ]
+    [
+      "largeFileOverrides"
+      "delay"
+    ]
+    [
+      "largeFileOverrides"
+      "modesDenylist"
+    ]
+    [
+      "largeFileOverrides"
+      "modesAllowlist"
+    ]
+    [
+      "largeFileOverrides"
+      "providersRegexSyntaxDenylist"
+    ]
+    [
+      "largeFileOverrides"
+      "providersRegexSyntaxAllowlist"
+    ]
+    [
+      "largeFileOverrides"
+      "underCursor"
+    ]
+    [
+      "largeFileOverrides"
+      "largeFileCutoff"
+    ]
+    [
+      "largeFileOverrides"
+      "minCountToHighlight"
+    ]
+    [
+      "largeFileOverrides"
+      "filetypesDenylist"
+    ]
+    [
+      "largeFileOverrides"
+      "filetypesAllowlist"
+    ]
+  ];
+}
