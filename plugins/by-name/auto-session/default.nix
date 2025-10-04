@@ -18,7 +18,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Enables/disables auto creating, saving and restoring.
     '';
 
-    root_dir = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/sessions/'"; } ''
+    root_dir = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath 'data' .. '/sessions/'") ''
       Root directory for session files.
       Can be either a string or lua code (using `{__raw = 'foo';}`).
     '';
@@ -89,7 +89,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
 
       session_control = {
-        control_dir = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data' .. '/auto_session/'"; } ''
+        control_dir = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath 'data' .. '/auto_session/'") ''
           Auto session control dir, for control files, like alternating between two sessions
           with session-lens.
         '';

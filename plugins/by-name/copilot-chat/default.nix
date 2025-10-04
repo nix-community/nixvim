@@ -89,7 +89,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Default context to use, `"buffers"`, `"buffer"` or `null` (can be specified manually in prompt via @).
         '';
 
-    history_path = defaultNullOpts.mkStr (lib.nixvim.mkRaw "vim.fn.stdpath('data') .. '/copilotchat_history'") ''
+    history_path = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/copilotchat_history'") ''
       Default path to stored history.
     '';
 

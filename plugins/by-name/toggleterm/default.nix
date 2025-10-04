@@ -141,7 +141,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Close the terminal window when the process exits.
     '';
 
-    shell = helpers.defaultNullOpts.mkStr { __raw = "vim.o.shell"; } ''
+    shell = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.o.shell") ''
       Change the default shell.
     '';
 

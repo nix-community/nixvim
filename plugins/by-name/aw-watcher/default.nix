@@ -12,12 +12,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     bucket = {
-      hostname = defaultNullOpts.mkStr { __raw = "vim.uv.os_gethostname()"; } ''
+      hostname = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.uv.os_gethostname()") ''
         The hostname to be presented to the ActivityWatch server.
         Defaults to the hostname of the computer.
       '';
 
-      name = defaultNullOpts.mkStr { __raw = "'aw-watcher-neovim_' .. bucket.hostname'"; } ''
+      name = defaultNullOpts.mkStr (lib.nixvim.literalLua "'aw-watcher-neovim_' .. bucket.hostname'") ''
         The name of the bucket in the ActivityWatch server.
       '';
     };

@@ -3,7 +3,12 @@
   ...
 }:
 let
-  inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStrLuaFnOr;
+  inherit (lib.nixvim)
+    defaultNullOpts
+    mkNullOrOption
+    mkNullOrStrLuaFnOr
+    literalLua
+    ;
   inherit (lib) types;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -23,9 +28,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ];
     in
     {
-      compile_path = defaultNullOpts.mkStr {
-        __raw = "vim.fn.stdpath 'cache' .. '/catppuccin'";
-      } "Set the compile cache directory.";
+      compile_path = defaultNullOpts.mkStr (literalLua "vim.fn.stdpath 'cache' .. '/catppuccin'") "Set the compile cache directory.";
 
       flavour = mkNullOrOption (types.enum (flavours ++ [ "auto" ])) ''
         Theme flavour.

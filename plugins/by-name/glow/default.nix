@@ -23,7 +23,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   settingsOptions = {
-    glow_path = defaultNullOpts.mkStr (lib.nixvim.mkRaw "vim.fn.exepath('glow')") ''
+    glow_path = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.exepath('glow')") ''
       Path to `glow` binary.
 
       If null or `""`, `glow` in your `$PATH` with be used if available.

@@ -53,7 +53,7 @@ mkVimPlugin {
       The highlight group to be used for highlighting cells.
     '';
 
-    save_path = helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('data') .. '/magma'"; } ''
+    save_path = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/magma'") ''
       Where to save/load with `:MagmaSave` and `:MagmaLoad` (with no parameters).
       The generated file is placed in this directory, with the filename itself being the
       buffer's name, with `%` replaced by `%%` and `/` replaced by `%`, and postfixed with the

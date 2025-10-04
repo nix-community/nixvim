@@ -15,12 +15,12 @@ mkExtension {
       Custom theme, will use your global theme by default.
     '';
 
-    path = defaultNullOpts.mkStr { __raw = "vim.loop.cwd()"; } ''
+    path = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.loop.cwd()") ''
       Directory to browse files from.
       `vim.fn.expanded` automatically.
     '';
 
-    cwd = defaultNullOpts.mkStr { __raw = "vim.loop.cwd()"; } ''
+    cwd = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.loop.cwd()") ''
       Directory to browse folders from.
       `vim.fn.expanded` automatically.
     '';
