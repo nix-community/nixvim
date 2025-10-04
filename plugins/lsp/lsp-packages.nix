@@ -190,10 +190,7 @@
     ast_grep = "ast-grep";
     astro = "astro-language-server";
     atlas = "atlas";
-    atopile = [
-      "python3Packages"
-      "atopile"
-    ];
+    atopile = "atopile";
     autotools_ls = "autotools-language-server";
     ballerina = "ballerina";
     basedpyright = "basedpyright";
