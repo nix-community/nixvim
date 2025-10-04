@@ -1,7 +1,14 @@
 {
   empty = {
     plugins.web-devicons.enable = true;
-    plugins.neo-tree.enable = true;
+    plugins.neo-tree = {
+      enable = true;
+
+      # Otherwise fail at opening the log file
+      # ERROR: [Neo-tree WARN] Could not open log file: /build/.local/share/nvim/neo-tree.nvim.log
+      # /build/.local/share/nvim/neo-tree.nvim.log: No such file or directory
+      logToFile = false;
+    };
   };
 
   defaults = {
@@ -443,7 +450,14 @@
   no-packages = {
     plugins = {
       web-devicons.enable = true;
-      neo-tree.enable = true;
+      neo-tree = {
+        enable = true;
+
+        # Otherwise fail at opening the log file
+        # ERROR: [Neo-tree WARN] Could not open log file: /build/.local/share/nvim/neo-tree.nvim.log
+        # /build/.local/share/nvim/neo-tree.nvim.log: No such file or directory
+        logToFile = false;
+      };
     };
 
     dependencies.git.enable = false;
@@ -452,7 +466,14 @@
   no-icons = {
     plugins = {
       web-devicons.enable = false;
-      neo-tree.enable = true;
+      neo-tree = {
+        enable = true;
+
+        # Otherwise fail at opening the log file
+        # ERROR: [Neo-tree WARN] Could not open log file: /build/.local/share/nvim/neo-tree.nvim.log
+        # /build/.local/share/nvim/neo-tree.nvim.log: No such file or directory
+        logToFile = false;
+      };
     };
   };
 }
