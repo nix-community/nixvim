@@ -45,6 +45,7 @@
     "dts_lsp"
     "ecsact"
     "ember"
+    "erlangls"
     "esbonio"
     "expert"
     "facility_language_server"
@@ -243,7 +244,6 @@
     emmet_ls = "emmet-ls";
     emmylua_ls = "emmylua-ls";
     erg_language_server = "erg";
-    erlangls = "erlang-ls";
     eslint = "vscode-langservers-extracted";
     fennel_ls = "fennel-ls";
     fish_lsp = "fish-lsp";
