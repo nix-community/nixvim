@@ -109,9 +109,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Whether to enable caching.
     '';
 
-    cache_dir = defaultNullOpts.mkStr {
-      __raw = "vim.fn.stdpath('cache') .. '/palette'";
-    } "Cache directory.";
+    cache_dir = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('cache') .. '/palette'") "Cache directory.";
   };
 
   settingsExample = { };

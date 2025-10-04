@@ -87,7 +87,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Encode URL before making request.
         '';
 
-        user_agent = defaultNullOpts.mkStr (lib.nixvim.mkRaw ''"rest.nvim v" .. require("rest-nvim.api").VERSION'') ''
+        user_agent = defaultNullOpts.mkStr (lib.nixvim.literalLua ''"rest.nvim v" .. require("rest-nvim.api").VERSION'') ''
           Set `User-Agent` header when it is empty.
         '';
 
@@ -135,7 +135,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Whether to enable cookies support or not.
       '';
 
-      path = defaultNullOpts.mkStr (lib.nixvim.mkRaw ''vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "rest-nvim.cookies")'') ''
+      path = defaultNullOpts.mkStr (lib.nixvim.literalLua ''vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "rest-nvim.cookies")'') ''
         Environment variables file pattern for `telescope.nvim`.
       '';
     };

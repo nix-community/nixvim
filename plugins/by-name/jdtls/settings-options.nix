@@ -20,11 +20,9 @@ in
     '';
   };
 
-  root_dir =
-    defaultNullOpts.mkStr { __raw = "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})"; }
-      ''
-        Function to identify the root directory from which to run the language server.
-      '';
+  root_dir = defaultNullOpts.mkStr (lib.nixvim.literalLua "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})") ''
+    Function to identify the root directory from which to run the language server.
+  '';
 
   settings = mkNullOrOption (with types; attrsOf anything) ''
     Here you can configure `eclipse.jdt.ls` specific settings.
