@@ -53,7 +53,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     enable_mouse_support = defaultNullOpts.mkBool false "Enables mouse support.";
 
     open_file_function = defaultNullOpts.mkLuaFn' {
-      pluginDefault.__raw = ''
+      pluginDefault = lib.nixvim.literalLua ''
         function(chosen_file)
           vim.cmd(string.format("edit %s", vim.fn.fnameescape(chosen_file)))
         end
@@ -99,7 +99,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     hooks = {
       yazi_opened = defaultNullOpts.mkLuaFn' {
-        pluginDefault.__raw = ''
+        pluginDefault = lib.nixvim.literalLua ''
           function(preselected_path, yazi_buffer_id, config)
           end
         '';
@@ -110,7 +110,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
 
       yazi_closed_successfully = defaultNullOpts.mkLuaFn' {
-        pluginDefault.__raw = ''
+        pluginDefault = lib.nixvim.literalLua ''
           function(chosen_file, config, state)
           end
         '';
@@ -118,7 +118,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
 
       yazi_opened_multiple_files = defaultNullOpts.mkLuaFn' {
-        pluginDefault.__raw = ''
+        pluginDefault = lib.nixvim.literalLua ''
           function(chosen_files)
             vim.cmd("args" .. table.concat(chosen_files, " "))
           end

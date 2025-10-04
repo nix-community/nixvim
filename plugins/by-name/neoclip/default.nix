@@ -42,12 +42,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
       [README](https://github.com/AckslD/nvim-neoclip.lua#custom-actions).
     '';
 
-    db_path =
-      helpers.defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('data') .. '/databases/neoclip.sqlite3'"; }
-        ''
-          The path to the sqlite database to store history if `enable_persistent_history=true`.
-          Defaults to `$XDG_DATA_HOME/nvim/databases/neoclip.sqlite3`.
-        '';
+    db_path = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/databases/neoclip.sqlite3'") ''
+      The path to the sqlite database to store history if `enable_persistent_history=true`.
+      Defaults to `$XDG_DATA_HOME/nvim/databases/neoclip.sqlite3`.
+    '';
 
     filter = helpers.defaultNullOpts.mkLuaFn null ''
       A function to filter what entries to store (default all are stored).

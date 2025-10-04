@@ -2,7 +2,7 @@
 with lib;
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts mkRaw;
+  inherit (lib.nixvim) defaultNullOpts;
 
   specExamples = [
     # Basic group with custom icon
@@ -85,7 +85,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ] "Preset style for WhichKey. Set to false to disable.";
 
     delay = defaultNullOpts.mkInt' {
-      pluginDefault.__raw = ''
+      pluginDefault = lib.nixvim.literalLua ''
         function(ctx)
           return ctx.plugin and 0 or 200
         end
@@ -94,7 +94,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     filter = defaultNullOpts.mkLuaFn' {
-      pluginDefault.__raw = ''
+      pluginDefault = lib.nixvim.literalLua ''
         function(mapping)
           return true
         end
@@ -126,7 +126,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ] "Manually setup triggers";
 
     defer = defaultNullOpts.mkLuaFn' {
-      pluginDefault.__raw = ''
+      pluginDefault = lib.nixvim.literalLua ''
         function(ctx)
           return ctx.mode == "V" or ctx.mode == "<C-V>
          end'';
@@ -230,11 +230,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
     expand = defaultNullOpts.mkInt 0 "Expand groups when <= n mappings.";
 
     replace = {
-      key = defaultNullOpts.mkListOf (types.either types.strLuaFn (with types; listOf str)) (mkRaw ''
-        function(key)
-          return require("which-key.view").format(key)
-        end
-      '') "Lua functions or list of strings to replace key left side key name with.";
+      key =
+        defaultNullOpts.mkListOf (types.either types.strLuaFn (with types; listOf str))
+          (lib.nixvim.literalLua ''
+            function(key)
+              return require("which-key.view").format(key)
+            end
+          '')
+          "Lua functions or list of strings to replace key left side key name with.";
       desc = defaultNullOpts.mkListOf (with types; listOf str) [
         [
           "<Plug>%(?(.*)%)?"

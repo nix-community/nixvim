@@ -13,7 +13,7 @@ mkExtension {
       If true, it removes stale entries count over than `db_validate_threshold`.
     '';
 
-    db_root = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath 'data'"; } ''
+    db_root = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath 'data'") ''
       Path to parent directory of custom database location.
       Defaults to `$XDG_DATA_HOME/nvim` if unset.
     '';

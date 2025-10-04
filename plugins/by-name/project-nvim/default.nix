@@ -70,9 +70,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           What scope to change the directory.
         '';
 
-    data_path = defaultNullOpts.mkStr {
-      __raw = "vim.fn.stdpath('data')";
-    } "Path where project.nvim will store the project history for use in telescope.";
+    data_path = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data')") "Path where project.nvim will store the project history for use in telescope.";
   };
 
   settingsExample = {

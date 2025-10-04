@@ -82,7 +82,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ] "Display modes used in `live_mode`.";
 
     display_options = {
-      terminal_scrollback = helpers.defaultNullOpts.mkUnsignedInt { __raw = "vim.o.scrollback"; } ''
+      terminal_scrollback = helpers.defaultNullOpts.mkUnsignedInt (lib.nixvim.literalLua "vim.o.scrollback") ''
         Change terminal display scrollback lines.
       '';
 
