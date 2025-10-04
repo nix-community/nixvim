@@ -119,7 +119,7 @@ let
     };
     ts_ls = {
       # NOTE: Provide the plugin default filetypes so that
-      # `plugins.lsp.servers.volar.tslsIntegration` doesn't wipe out the default filetypes
+      # `plugins.lsp.servers.volar.tslsIntegration` and `plugins.lsp.servers.vue_ls.tslsIntegration` don't wipe out the default filetypes
       extraConfig = {
         plugins.lsp.servers.ts_ls = {
           filetypes = [
@@ -135,6 +135,38 @@ let
     };
     tinymist = {
       settingsOptions = import ./tinymist-settings.nix { inherit lib; };
+    };
+    vue_ls = {
+      extraOptions = {
+        tslsIntegration = mkOption {
+          type = types.bool;
+          description = ''
+            Enable integration with TypeScript language server.
+          '';
+          default = true;
+          example = false;
+        };
+      };
+      extraConfig = cfg: opts: {
+        assertions = lib.nixvim.mkAssertions "plugins.lsp.servers.vue_ls" {
+          assertion = cfg.tslsIntegration -> (cfg.package != null);
+          message = "When `${opts.tslsIntegration}` is enabled, `${opts.package}` must not be null.";
+        };
+        plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
+          filetypes = [ "vue" ];
+          extraOptions = {
+            init_options = {
+              plugins = lib.mkIf (cfg.package != null) [
+                {
+                  name = "@vue/typescript-plugin";
+                  location = "${lib.getBin cfg.package}/lib/language-tools/packages/language-server";
+                  languages = [ "vue" ];
+                }
+              ];
+            };
+          };
+        };
+      };
     };
     vls = {
       extraOptions = {
