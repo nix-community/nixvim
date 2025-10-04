@@ -273,7 +273,7 @@ with lib;
       Disabling it may improve rust-analyzer's startup time.
     '';
 
-    logfile = helpers.defaultNullOpts.mkStr { __raw = "vim.fn.tempname() .. '-rust-analyzer.log'"; } ''
+    logfile = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.tempname() .. '-rust-analyzer.log'") ''
       The path to the rust-analyzer log file.
     '';
 

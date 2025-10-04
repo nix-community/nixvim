@@ -20,7 +20,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Whether to show notification when big file detected.
       '';
 
-      size = defaultNullOpts.mkNum { __raw = "1.5 * 1024 * 1024"; } ''
+      size = defaultNullOpts.mkNum (lib.nixvim.literalLua "1.5 * 1024 * 1024") ''
         The size at which a file is considered big.
       '';
 
