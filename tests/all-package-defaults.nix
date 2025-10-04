@@ -81,6 +81,7 @@ let
     "akku-scheme-langserver"
     "muon"
     "rubyfmt"
+    "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
     # As of 2024-07-31, dmd is broken on x86_64-darwin
@@ -126,14 +127,26 @@ let
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledTests);
   isAvailable = lib.meta.availableOn hostPlatform;
-in
-/*
-  Collect all derivation-type option defaults in the top-level option set.
 
-  NOTE: This doesn't currently recurse into submodule option sets.
-*/
+  # Collects all visible options, including sub options
+  collectAllOptions =
+    options:
+    lib.concatMap (
+      opt:
+      let
+        visible = opt.visible or true;
+        optVisible = if lib.isBool visible then visible else visible == "shallow";
+        subOptionsVisible = if lib.isBool visible then visible else visible == "transparent";
+        subOptionSet = opt.type.getSubOptions opt.loc;
+        subOptions = lib.optionals (subOptionSet != { }) (collectAllOptions subOptionSet);
+      in
+      lib.optional optVisible opt ++ lib.optionals subOptionsVisible subOptions
+    ) (lib.collect lib.isOption options);
+
+in
+# Collect all derivation-type option defaults in Nixvim
 lib.pipe nixvimConfig.options [
-  (lib.collect lib.isOption)
+  collectAllOptions
 
   (lib.catAttrs "default")
 
