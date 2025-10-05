@@ -1,0 +1,4 @@
+{
+  deprecateExtraOptions = true;
+  optionsRenamedToSettings = [ "languages" ];
+}
