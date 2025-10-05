@@ -142,6 +142,7 @@ in
       ripgrep.default = "ripgrep";
       roslyn_ls.default = "roslyn-ls";
       rust-analyzer.default = "rust-analyzer";
+      rzls.default = "rzls";
       sd.default = "sd";
       sed.default = "gnused";
       texpresso.default = "texpresso";
