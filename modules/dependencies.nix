@@ -140,6 +140,7 @@ in
       opencode.default = "opencode";
       plantuml.default = "plantuml";
       ripgrep.default = "ripgrep";
+      roslyn_ls.default = "roslyn-ls";
       rust-analyzer.default = "rust-analyzer";
       sd.default = "sd";
       sed.default = "gnused";

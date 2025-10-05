@@ -6,7 +6,12 @@
 let
   inherit (pkgs.stdenv) hostPlatform;
 
-  disabledDeps = [ ];
+  disabledDeps = [
+    # TODO: 2025-10-03
+    # Transient dependency `vmr` has a build failure
+    # https://github.com/NixOS/nixpkgs/issues/431811
+    "roslyn_ls"
+  ];
 
   isDepEnabled =
     name: package:
