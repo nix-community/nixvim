@@ -1,24 +1,22 @@
 {
   lib,
-  helpers,
   config,
-  pkgs,
+  options,
   ...
 }:
-with lib;
-{
-  options.plugins.ts-context-commentstring = lib.nixvim.plugins.neovim.extraOptionsOptions // {
-    enable = mkEnableOption "nvim-ts-context-commentstring";
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "ts-context-commentstring";
+  package = "nvim-ts-context-commentstring";
+  moduleName = "ts_context_commentstring";
+  description = "Treesitter plugin for setting the commentstring based on the cursor location in a file.";
+  maintainers = [ ];
 
-    package = lib.mkPackageOption pkgs "ts-context-commentstring" {
-      default = [
-        "vimPlugins"
-        "nvim-ts-context-commentstring"
-      ];
-    };
+  # TODO: introduced 2025-10-05: remove after 26.05
+  inherit (import ./deprecations.nix) deprecateExtraOptions optionsRenamedToSettings;
 
-    skipTsContextCommentStringModule = mkOption {
-      type = types.bool;
+  extraOptions = {
+    skipTsContextCommentStringModule = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to skip backwards compatibility routines and speed up loading.
@@ -26,40 +24,34 @@ with lib;
       example = false;
     };
 
-    disableAutoInitialization = helpers.defaultNullOpts.mkBool false ''
+    disableAutoInitialization = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to disable auto-initialization.
-    '';
-
-    languages = helpers.mkNullOrOption (with types; attrsOf (either str (attrsOf str))) ''
-      Allows you to add support for more languages.
-
-      See `:h ts-context-commentstring-commentstring-configuration` for more information.
     '';
   };
 
-  config =
-    let
-      cfg = config.plugins.ts-context-commentstring;
-    in
-    mkIf cfg.enable {
-      warnings = lib.nixvim.mkWarnings "plugins.ts-context-commentstring" {
-        when = !config.plugins.treesitter.enable;
-        message = "This plugin needs treesitter to function as intended.";
+  settingsExample = {
+    enable_autocmd = false;
+    languages = {
+      haskell = "-- %s";
+      nix = {
+        __default = "# %s";
+        __multiline = "/* %s */";
       };
-
-      extraPlugins = [ cfg.package ];
-
-      globals = with cfg; {
-        skip_ts_context_commentstring_module = skipTsContextCommentStringModule;
-        loaded_ts_context_commentstring = disableAutoInitialization;
-      };
-
-      extraConfigLua =
-        let
-          setupOptions = with cfg; { inherit languages; } // cfg.extraOptions;
-        in
-        ''
-          require('ts_context_commentstring').setup(${lib.nixvim.toLuaObject setupOptions})
-        '';
     };
+  };
+
+  extraConfig = cfg: {
+    warnings = lib.nixvim.mkWarnings "plugins.ts-context-commentstring" {
+      when = !config.plugins.treesitter.enable;
+      message = ''
+        This plugin needs Treesitter to function as intended.
+        Please, enable it by setting `${options.plugins.treesitter.enable}` to `true`.
+      '';
+    };
+
+    globals = {
+      skip_ts_context_commentstring_module = cfg.skipTsContextCommentStringModule;
+      loaded_ts_context_commentstring = cfg.disableAutoInitialization;
+    };
+  };
 }
