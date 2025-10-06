@@ -86,9 +86,10 @@
     source = "nixpkgs";
   };
   HeitorAugustoLN = {
-    email = "IAm.HeitorALN@proton.me";
+    email = "nixpkgs.woven713@passmail.net";
     github = "HeitorAugustoLN";
     githubId = 44377258;
+    matrix = "@heitoraugusto:matrix.org";
     name = "Heitor Augusto";
     source = "nixpkgs";
   };
@@ -340,6 +341,19 @@
     github = "nfelber";
     githubId = 46248772;
     name = "Nathan Felber";
+    source = "nixpkgs";
+  };
+  nim65s = {
+    email = "guilhem.saurel@laas.fr";
+    github = "nim65s";
+    githubId = 131929;
+    keys = [
+      {
+        fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28";
+      }
+    ];
+    matrix = "@gsaurel:laas.fr";
+    name = "Guilhem Saurel";
     source = "nixpkgs";
   };
   nwjsmith = {
