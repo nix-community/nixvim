@@ -1,10 +1,10 @@
 {
   empty = {
-    plugins.presence-nvim.enable = true;
+    plugins.presence.enable = true;
   };
 
   defaults = {
-    plugins.presence-nvim = {
+    plugins.presence = {
       enable = true;
       settings = {
         auto_update = true;
@@ -30,7 +30,7 @@
   };
 
   example = {
-    plugins.presence-nvim = {
+    plugins.presence = {
       enable = true;
       settings = {
         auto_update = false;

@@ -37,6 +37,7 @@ in
           "surround"
           "null-ls"
           "wilder-nvim"
+          "presence-nvim"
         ];
 
         pluginsWithLazyLoad = builtins.filter (
