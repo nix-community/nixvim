@@ -1,11 +1,6 @@
 { lib, ... }:
 let
   deprecated = {
-    # TODO: added 10-23-2024, move to removed after 24.11
-    "rust-tools" = ''
-      The `rust-tools` project has been abandoned.
-      It is recommended to use `rustaceanvim` instead.
-    '';
   };
   removed.plugins = {
     # Added 2023-08-29
@@ -21,6 +16,12 @@ let
     packer = ''
       The `packer` plugin manager has been unmaintained for several years.
       It is recommended to use `plugins.pckr` or `plugins.lazy` instead.
+    '';
+
+    # Added 2025-10-06
+    rust-tools = ''
+      The `rust-tools` project has been abandoned.
+      It is recommended to use `rustaceanvim` instead.
     '';
   };
   renamed.plugins = {
