@@ -31,6 +31,7 @@ in
         ignoredPackages = [
           # removed
           "packer"
+          "rust-tools"
           "treesitter-playground"
           # renamed
           "surround"
