@@ -26,6 +26,8 @@ let
   renamed.plugins = {
     # Added 2024-09-17
     surround = "vim-surround";
+    # Added 2025-10-06
+    presence-nvim = "presence";
   };
   # Added 2024-09-21; remove after 24.11
   # `iconsPackage` options were briefly available in the following plugins for ~3 weeks

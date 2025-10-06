@@ -3,9 +3,8 @@
   ...
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "presence-nvim";
+  name = "presence";
   package = "presence-nvim";
-  moduleName = "presence";
   description = "Discord Rich Presence for Neovim.";
 
   maintainers = [ lib.maintainers.khaneliman ];
