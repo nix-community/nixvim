@@ -90,5 +90,13 @@ in
 
   imports = [
     ./server-renames.nix
-  ];
+  ]
+  # We cannot use `config._module.args.name` in imports, since `config` causes inf-rec.
+  # Therefore we can only import custom modules when we have an externally supplied `name`.
+  ++ lib.optionals (args ? name) (
+    lib.filter lib.pathExists [
+      ./custom/${args.name}.nix
+      ./custom/${args.name}/default.nix
+    ]
+  );
 }
