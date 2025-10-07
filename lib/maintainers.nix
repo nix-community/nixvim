@@ -39,6 +39,12 @@
     name = "Daniel Laing";
     keys = [ { fingerprint = "0821 8B96 DC73 85E5 BB7C  A535 D264 3BD2 13BC 0FA8"; } ];
   };
+  Fovir = {
+    email = "fovir@disroot.org";
+    github = "Fovir-GitHub";
+    githubId = 175422207;
+    name = "Fovir";
+  };
   GGORG = {
     email = "GGORG0@protonmail.com";
     matrix = "@ggorg:matrix.org";
