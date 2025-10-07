@@ -31,8 +31,13 @@ let
         (opt: opt.type.getSubOptions opt.loc)
         # Get suboptions of `lsp.servers.<name>`
         (opts: opts.${name}.type.getSubOptions opts.${name}.loc)
-        # Get package option's homepage
-        (opts: opts.package.default.meta.homepage or null)
+        # Get the default package
+        (opts: opts.package.default or null)
+        # The default throws if mkPackageOption can't find the package
+        # E.g. mismatched nixpkgs revision
+        (package: (builtins.tryEval package).value)
+        # Get package's homepage
+        (package: package.meta.homepage or null)
       ];
 
       # If there's a known homepage for this language server,
