@@ -1,7 +1,7 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "blame-nvim";
-  moduleName = "blame";
+  name = "blame";
+  package = "blame-nvim";
   description = "fugitive.vim-style `git blame` visualizer for Neovim";
 
   maintainers = [ lib.maintainers.axka ];
