@@ -400,6 +400,8 @@ in
             Only a fallback, if you use nvim-web-devicons and configure default icons there
             then this will never be used.
           '';
+
+          useFilteredColors = helpers.defaultNullOpts.mkBool true "";
         };
 
         modified = {
@@ -1050,6 +1052,7 @@ in
               folder_empty = folderEmpty;
               folder_empty_open = folderEmptyOpen;
               inherit default highlight;
+              use_filtered_colors = useFilteredColors
             };
             inherit modified;
             name = with name; {
