@@ -63,6 +63,13 @@
     name = "Fran Cirka";
     source = "nixpkgs";
   };
+  Fovir-GitHub = {
+    email = "fovir@disroot.org";
+    github = "Fovir-GitHub";
+    githubId = 175422207;
+    name = "Fovir";
+    source = "nixpkgs";
+  };
   FredeHoey = {
     email = "frederikbraendstrup@gmail.com";
     github = "FredeHoey";
