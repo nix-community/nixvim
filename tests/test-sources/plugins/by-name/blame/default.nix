@@ -1,10 +1,10 @@
 {
   empty = {
-    plugins.blame-nvim.enable = true;
+    plugins.blame.enable = true;
   };
 
   defaults = {
-    plugins.blame-nvim = {
+    plugins.blame = {
       enable = true;
       settings = {
         date_format = "%d.%m.%Y";
@@ -37,7 +37,7 @@
   };
 
   example = {
-    plugins.blame-nvim = {
+    plugins.blame = {
       enable = true;
       settings = {
         date_format = "%Y-%m-%d";
