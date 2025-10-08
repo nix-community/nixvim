@@ -20,6 +20,8 @@ rec {
     commitmsgfmt = sType.broken;
     # 2025-09-17 build failure
     gci = sType.broken;
+    # 2025-10-08 build failure (haskellPackages.hindent)
+    hindent = sType.broken;
 
     format-queries = null; # Uses neovim itself
     init = null; # Internal thingamajig
@@ -98,7 +100,6 @@ rec {
     gofmt = go;
     goimports = gotools;
     hcl = hclfmt;
-    inherit (haskellPackages) hindent;
     html_beautify = nodePackages.js-beautify;
     inherit (rubyPackages) htmlbeautifier;
     hurlfmt = hurl;
