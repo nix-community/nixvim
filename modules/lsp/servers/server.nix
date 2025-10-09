@@ -3,12 +3,12 @@
   name ? "the language server",
   package ? null,
   config ? null,
-  pkgs ? { },
 }@args:
 {
   lib,
   name,
   config,
+  pkgs,
   ...
 }:
 let

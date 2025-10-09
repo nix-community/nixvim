@@ -12,10 +12,6 @@ let
   cfg = config.lsp;
   oldCfg = config.plugins.lsp;
 
-  # Import `server.nix` and apply args
-  # For convenience, we set a default here for args.pkgs
-  mkServerModule = args: lib.modules.importApply ./server.nix ({ inherit pkgs; } // args);
-
   # Create a submodule type from `server.nix`
   # Used as the type for both the freeform `lsp.servers.<name>`
   # and the explicitly declared `lsp.servers.*` options
@@ -25,7 +21,12 @@ let
       # Server modules have a `config` option, so we must use
       # shorthandOnlyDefinesConfig to avoid confusing the module system.
       shorthandOnlyDefinesConfig = true;
-      modules = [ (mkServerModule args) ];
+      modules = [
+        (lib.modules.importApply ./server.nix args)
+        {
+          _module.args.pkgs = pkgs;
+        }
+      ];
     };
 
   # Create a server option
