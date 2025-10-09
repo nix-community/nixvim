@@ -8,30 +8,8 @@
 with lib;
 let
   cfg = config.plugins.neo-tree;
-  basePluginPath = [
-    "plugins"
-    "neo-tree"
-  ];
 in
 {
-  imports = [
-    (mkRemovedOptionModule (
-      basePluginPath
-      ++ [
-        "sourceSelector"
-        "tabLabels"
-      ]
-    ) "Use `plugins.neo-tree.sourceSelector.sources` to achieve the same functionality.")
-    (mkRemovedOptionModule (
-      basePluginPath ++ [ "closeFloatsOnEscapeKey" ]
-    ) "This option has been removed from upstream.")
-
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "neo-tree";
-      packageName = "git";
-    })
-  ];
   options.plugins.neo-tree =
     let
       listOfRendererComponents = with types; listOf (either str attrs);
