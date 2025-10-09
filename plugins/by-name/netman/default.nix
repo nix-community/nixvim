@@ -21,6 +21,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       require("netman")
     '';
 
-    plugins.neo-tree.extraSources = lib.mkIf cfg.neoTreeIntegration [ "netman.ui.neo-tree" ];
+    plugins.neo-tree.settings.sources = lib.mkIf cfg.neoTreeIntegration [ "netman.ui.neo-tree" ];
   };
 }
