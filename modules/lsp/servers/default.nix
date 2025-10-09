@@ -153,9 +153,8 @@ in
       ];
 
       packages = lib.pipe enabledServers [
-        (builtins.filter (server: server ? package))
-        (builtins.groupBy (server: if server.packageFallback then "suffix" else "prefix"))
-        (builtins.mapAttrs (_: builtins.catAttrs "package"))
+        (builtins.catAttrs "packages")
+        (builtins.zipAttrsWith (_: builtins.concatLists))
       ];
     in
     {

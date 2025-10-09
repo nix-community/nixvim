@@ -64,6 +64,22 @@ in
       '';
     };
 
+    packages.prefix = lib.mkOption {
+      type = types.listOf types.package;
+      description = "Packages to prefix onto the PATH.";
+      default = [ ];
+      visible = false;
+      internal = true;
+    };
+
+    packages.suffix = lib.mkOption {
+      type = types.listOf types.package;
+      description = "Packages to suffix onto the PATH.";
+      default = [ ];
+      visible = false;
+      internal = true;
+    };
+
     config = lib.mkOption {
       type = with types; attrsOf anything;
       description = ''
@@ -85,6 +101,14 @@ in
             "cpp"
           ];
         };
+    };
+  };
+
+  config = {
+    packages = lib.mkIf (config.package != null) {
+      ${if config.packageFallback then "suffix" else "prefix"} = [
+        config.package
+      ];
     };
   };
 
