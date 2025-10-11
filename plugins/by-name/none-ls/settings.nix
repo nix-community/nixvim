@@ -103,7 +103,7 @@ in
       method, described in [BUILTIN_CONFIG](https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md).
   '';
 
-  fallback_severity = defaultNullOpts.mkUnsignedInt { __raw = "vim.diagnostic.severity.ERROR"; } ''
+  fallback_severity = defaultNullOpts.mkUnsignedInt (lib.nixvim.literalLua "vim.diagnostic.severity.ERROR") ''
     Defines the severity used when a diagnostic source does not explicitly define a severity.
     See `:help diagnostic-severity` for available values.
   '';
