@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   empty = {
     plugins.wtf.enable = true;
@@ -7,35 +8,39 @@
     plugins.wtf = {
       enable = true;
 
-      keymaps = {
-        ai.key = "gw";
-        search = {
-          mode = [
-            "n"
-            "x"
-          ];
-          options.desc = "Search diagnostic with Google";
+      settings = {
+        popup_type = "popup";
+        providers.openai = {
+          api_key = lib.nixvim.mkRaw "vim.env.OPENAI_API_KEY";
+          model_id = "gpt-3.5-turbo";
         };
+        language = "english";
+        search_engine = "phind";
+        winhighlight = "Normal:Normal,FloatBorder:FloatBorder";
       };
-      popupType = "popup";
-      openaiApiKey = null;
-      openaiModelId = "gpt-3.5-turbo";
-      language = "english";
-      additionalInstructions = "Hello world !";
-      searchEngine = "google";
-      hooks = {
-        requestStarted = ''
-          function()
-            vim.cmd("hi StatusLine ctermbg=NONE ctermfg=yellow")
-          end
-        '';
-        requestFinished = ''
-          vim.schedule_wrap(function()
-            vim.cmd("hi StatusLine ctermbg=NONE ctermfg=NONE")
-          end)
-        '';
+    };
+  };
+
+  defaults = {
+    plugins.wtf = {
+      enable = true;
+
+      settings = {
+        additional_instructions = null;
+        chat_dir = lib.nixvim.mkRaw "vim.fn.stdpath('data'):gsub('/$', \"\") .. '/wtf/chats'";
+        language = "english";
+        picker = "telescope";
+        popup_type = "horizontal";
+        provider = "openai";
+        search_engine = "google";
+        # Extracting the default value would be annoying
+        # providers = create_provider_defaults()
+        hooks = {
+          request_started = null;
+          request_finished = null;
+        };
+        winhighlight = "Normal:Normal,FloatBorder:FloatBorder";
       };
-      winhighlight = "Normal:Normal,FloatBorder:FloatBorder";
     };
   };
 }

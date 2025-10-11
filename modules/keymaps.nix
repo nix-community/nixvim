@@ -52,8 +52,6 @@
         keymapOptions = [
           options.keymaps
           options.keymapsOnEvents
-          options.plugins.wtf.keymaps.ai
-          options.plugins.wtf.keymaps.search
           # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
           # So we only need `lua` deprecation in lsp's `extra` option
           options.plugins.lsp.keymaps.extra
