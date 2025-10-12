@@ -26,6 +26,9 @@ let
 
     # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
     "luaformatter"
+
+    # 2025-10-12 dependency mbedtls is marked as insecure
+    "haxe"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
