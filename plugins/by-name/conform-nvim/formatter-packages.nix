@@ -22,6 +22,8 @@ rec {
     gci = sType.broken;
     # 2025-10-08 build failure (haskellPackages.hindent)
     hindent = sType.broken;
+    # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
+    lua-format = sType.broken;
 
     format-queries = null; # Uses neovim itself
     init = null; # Internal thingamajig
@@ -106,7 +108,6 @@ rec {
     js_beautify = nodePackages.js-beautify;
     jsonnetfmt = jsonnet;
     inherit (texlive.pkgs) latexindent;
-    lua-format = luaformatter;
     mago_format = mago;
     mago_lint = mago;
     markdownlint = markdownlint-cli;
