@@ -6,27 +6,29 @@
   builtin-theme = {
     plugins.startup = {
       enable = true;
-      theme = "dashboard";
+      settings = {
+        theme = "dashboard";
 
-      # Default options
-      options = {
-        mappingKeys = true;
-        cursorColumn = 0.5;
-        after = null;
-        emptyLinesBetweenMappings = true;
-        disableStatuslines = true;
-        paddings = [ ];
-      };
-      mappings = {
-        executeCommand = "<CR>";
-        openFile = "o";
-        openFileSplit = "<c-o>";
-        openSection = "<TAB>";
-        openHelp = "?";
-      };
-      colors = {
-        background = "#1f2227";
-        foldedSection = "#56b6c2";
+        # Default options
+        options = {
+          mapping_keys = true;
+          cursor_column = 0.5;
+          after = null;
+          empty_lines_between_mappings = true;
+          disable_statuslines = true;
+          paddings.__empty = { };
+        };
+        mappings = {
+          execute_command = "<CR>";
+          open_file = "o";
+          open_file_split = "<c-o>";
+          open_section = "<TAB>";
+          open_help = "?";
+        };
+        colors = {
+          background = "#1f2227";
+          folded_section = "#56b6c2";
+        };
       };
       userMappings = {
         "<leader>ff" = "<cmd>Telescope find_files<CR>";
@@ -40,34 +42,34 @@
     plugins.startup = {
       enable = true;
 
-      sections = {
+      settings = {
         header = {
           type = "text";
           align = "center";
-          foldSection = false;
+          fold_section = false;
           title = "Header";
           margin = 5;
           content.__raw = "require('startup.headers').hydra_header";
           highlight = "Statement";
-          defaultColor = "";
-          oldfilesAmount = 0;
+          default_color = "";
+          oldfiles_amount = 0;
         };
         header_2 = {
           type = "text";
-          oldfilesDirectory = false;
+          oldfiles_directory = false;
           align = "center";
-          foldSection = false;
+          fold_section = false;
           title = "Quote";
           margin = 5;
           content.__raw = "require('startup.functions').quote()";
           highlight = "Constant";
-          defaultColor = "";
-          oldfilesAmount = 0;
+          default_color = "";
+          oldfiles_amount = 0;
         };
         body = {
           type = "mapping";
           align = "center";
-          foldSection = true;
+          fold_section = true;
           title = "Basic Commands";
           margin = 5;
           content = [
@@ -103,32 +105,32 @@
             ]
           ];
           highlight = "String";
-          defaultColor = "";
-          oldfilesAmount = 0;
+          default_color = "";
+          oldfiles_amount = 0;
         };
         body_2 = {
           type = "oldfiles";
-          oldfilesDirectory = true;
+          oldfiles_directory = true;
           align = "center";
-          foldSection = true;
+          fold_section = true;
           title = "Oldfiles of Directory";
           margin = 5;
-          content = [ ];
+          content.__empty = { };
           highlight = "String";
-          defaultColor = "#FFFFFF";
-          oldfilesAmount = 5;
+          default_color = "#FFFFFF";
+          oldfiles_amount = 5;
         };
         footer = {
           type = "oldfiles";
-          oldfilesDirectory = false;
+          oldfiles_directory = false;
           align = "center";
-          foldSection = true;
+          fold_section = true;
           title = "Oldfiles";
           margin = 5;
           content = [ "startup.nvim" ];
           highlight = "TSString";
-          defaultColor = "#FFFFFF";
-          oldfilesAmount = 5;
+          default_color = "#FFFFFF";
+          oldfiles_amount = 5;
         };
         clock = {
           type = "text";
@@ -139,61 +141,61 @@
               return { clock, date }
             end
           '';
-          oldfilesDirectory = false;
+          oldfiles_directory = false;
           align = "center";
-          foldSection = false;
+          fold_section = false;
           title = "";
           margin = 5;
           highlight = "TSString";
-          defaultColor = "#FFFFFF";
-          oldfilesAmount = 10;
+          default_color = "#FFFFFF";
+          oldfiles_amount = 10;
         };
         footer_2 = {
           type = "text";
           content.__raw = "require('startup.functions').packer_plugins()";
-          oldfilesDirectory = false;
+          oldfiles_directory = false;
           align = "center";
-          foldSection = false;
+          fold_section = false;
           title = "";
           margin = 5;
           highlight = "TSString";
-          defaultColor = "#FFFFFF";
-          oldfilesAmount = 10;
+          default_color = "#FFFFFF";
+          oldfiles_amount = 10;
         };
-      };
-      options = {
-        after = ''
-          function()
-            require("startup.utils").oldfiles_mappings()
-          end
-        '';
-        mappingKeys = true;
-        cursorColumn = 0.5;
-        emptyLinesBetweenMappings = true;
-        disableStatuslines = true;
-        paddings = [
-          2
-          2
-          2
-          2
-          2
-          2
-          2
+        options = {
+          after = ''
+            function()
+              require("startup.utils").oldfiles_mappings()
+            end
+          '';
+          mapping_keys = true;
+          cursor_column = 0.5;
+          empty_lines_between_mappings = true;
+          disable_statuslines = true;
+          paddings = [
+            2
+            2
+            2
+            2
+            2
+            2
+            2
+          ];
+        };
+        colors = {
+          background = "#1f2227";
+          folded_section = "#56b6c2";
+        };
+        parts = [
+          "header"
+          "header_2"
+          "body"
+          "body_2"
+          "footer"
+          "clock"
+          "footer_2"
         ];
       };
-      colors = {
-        background = "#1f2227";
-        foldedSection = "#56b6c2";
-      };
-      parts = [
-        "header"
-        "header_2"
-        "body"
-        "body_2"
-        "footer"
-        "clock"
-        "footer_2"
-      ];
     };
   };
 }
