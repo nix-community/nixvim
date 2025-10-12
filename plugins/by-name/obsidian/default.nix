@@ -12,14 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  ## DEPRECATIONS
-  # Introduced 2024-03-12
-  inherit (import ./deprecations.nix { inherit lib; })
-    imports
-    deprecateExtraOptions
-    optionsRenamedToSettings
-    ;
-
   settingsOptions =
     let
       opts = import ./settings-options.nix { inherit lib; };
