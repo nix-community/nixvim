@@ -23,6 +23,9 @@ let
 
     # 2025-04-01 php-cs-fixer is marked as broken
     "php-cs-fixer"
+
+    # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
+    "luaformatter"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
