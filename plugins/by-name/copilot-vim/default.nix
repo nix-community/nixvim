@@ -24,8 +24,8 @@ lib.nixvim.plugins.mkVimPlugin {
   settingsOptions = {
     node_command = mkOption {
       type = with types; nullOr str;
-      default = lib.getExe pkgs.nodejs_20;
-      defaultText = lib.literalExpression "lib.getExe pkgs.nodejs_20";
+      default = lib.getExe pkgs.nodejs_22;
+      defaultText = lib.literalExpression "lib.getExe pkgs.nodejs_22";
       description = "Tell Copilot what `node` binary to use.";
     };
 
