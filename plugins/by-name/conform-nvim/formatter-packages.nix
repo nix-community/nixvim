@@ -14,6 +14,9 @@ rec {
     swift_format = if !stdenv.isDarwin then sType.darwinOnly else swift-format;
     swiftlint = if !stdenv.isDarwin then sType.darwinOnly else swiftlint;
 
+    # 2025-10-12 build failure on Darwin
+    smlfmt = if stdenv.isDarwin then sType.broken else smlfmt;
+
     # 2025-09-13 build failure
     inko = sType.broken;
     # 2025-09-13 build failure
