@@ -50,19 +50,6 @@ let
       '';
 in
 {
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "wilder-nvim"
-      ]
-      [
-        "plugins"
-        "wilder"
-      ]
-    )
-  ];
-
   options.plugins.wilder = lib.nixvim.plugins.neovim.extraOptionsOptions // {
     enable = mkEnableOption "wilder-nvim";
 
