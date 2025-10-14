@@ -52,6 +52,7 @@ rec {
     hledger-fmt = sType.unpackaged;
     imba_fmt = sType.unpackaged;
     janet-format = sType.unpackaged;
+    json_repair = sType.unpackaged;
     liquidsoap-prettier = sType.unpackaged;
     llf = sType.unpackaged;
     markdown-toc = sType.unpackaged;
