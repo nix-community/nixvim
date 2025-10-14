@@ -32,6 +32,7 @@ in
           # removed
           "packer"
           "rust-tools"
+          "nvim-osc52"
           "treesitter-playground"
           # renamed
           "surround"

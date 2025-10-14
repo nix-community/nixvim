@@ -23,6 +23,13 @@ let
       The `rust-tools` project has been abandoned.
       It is recommended to use `rustaceanvim` instead.
     '';
+
+    # Added 2025-10-14
+    nvim-osc52 = ''
+      The `nvim-osc52` plugin is obsolete.
+      As of Neovim 0.10, native support for OSC52 has been added.
+      See `:h clipboard-osc52` for more details: https://neovim.io/doc/user/provider.html#clipboard-osc52
+    '';
   };
   renamed.plugins = {
     # Added 2024-09-17
