@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   empty = {
     plugins.copilot-lua.enable = true;
@@ -44,12 +45,18 @@
         cli = {
           watch = true;
           win = {
+            config = lib.nixvim.mkRaw "function(terminal) end";
             wo = { };
             bo = { };
-            width = 80;
-            height = 20;
-            layout = "vertical";
-            position = "right";
+            layout = "right";
+            float = {
+              width = 0.9;
+              height = 0.9;
+            };
+            split = {
+              width = 80;
+              height = 20;
+            };
             keys = {
               stopinsert = [
                 "<esc><esc>"
