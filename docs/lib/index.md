@@ -10,8 +10,7 @@ If Nixvim is built using the standalone method, you can access our "helpers" as 
 }
 ```
 
-If Nixvim is being used as as a home-manager module, a nixos module, or as a darwin module,
-our "helpers" can be accessed via the `config.lib` option:
+If Nixvim is being used as as a home-manager module, a nixos module, or as a darwin module, our "helpers" can be accessed via the `config.lib` option:
 
 ```nix
 { config, ... }:
@@ -19,7 +18,46 @@ let
   helpers = config.lib.nixvim;
 in
 {
-  # Your config
+  programs.nixvim = {
+    # Your config
+    fooOption = helpers.mkRaw "print('hello')";
+  };
+}
+```
+
+The extended `lib` is also accessible in the `lib` module argument in the `programs.nixvim` submodule:
+```nix
+{
+  programs.nixvim =
+    { lib, ... }:
+    {
+      # You can use lib.nixvim in your config
+      fooOption = lib.nixvim.mkRaw "print('hello')";
+    };
+}
+```
+
+You can also import inside the submodule:
+
+<!-- This is also in /docs/user-guide/install.md -->
+
+```nix
+# home-config.nix
+{
+  # Imported modules are scoped within the `programs.nixvim` submodule
+  programs.nixvim.imports = [ ./nixvim.nix ];
+}
+```
+
+```nix
+# nixvim.nix
+{ lib, ... }:
+{
+  # You can use lib.nixvim in your config
+  fooOption = lib.nixvim.mkRaw "print('hello')";
+
+  # Configure NixVim without prefixing with `plugins.nixvim`
+  plugins.my-plugin.enable = true;
 }
 ```
 
@@ -28,8 +66,10 @@ Or you can access the extended `lib` used in standalone builds via the `nixvimLi
 ```nix
 { nixvimLib, ... }:
 {
-  # You can use nixvimLib.nixvim in your config
-  fooOption = nixvimLib.nixvim.mkRaw "print('hello')";
+  programs.nixvim = {
+    # You can use nixvimLib.nixvim in your config
+    fooOption = nixvimLib.nixvim.mkRaw "print('hello')";
+  };
 }
 ```
 
