@@ -67,6 +67,31 @@ The imports can be added as a `imports = [ <nixvim_import> ]` in a configuration
 You will then be able to enable nixvim through `programs.nixvim.enable = true`, and configure the
 options as `programs.nixvim.<path>.<to>.<option> = <value>`.
 
+> [!TIP]
+> Use `programs.nixvim.imports` to include modules configuring NixVim so you get NixVim's extended `lib` in the `lib` module argument and you don't have to prefix everything with `programs.nixvim`.
+>
+> <!-- This is also in /docs/lib/index.md -->
+>
+> ```nix
+> # home-config.nix
+> {
+>   # Imported modules are scoped within the `programs.nixvim` submodule
+>   programs.nixvim.imports = [ ./nixvim.nix ];
+> }
+> ```
+>
+> ```nix
+> # nixvim.nix
+> { lib, ... }:
+> {
+>   # You can use lib.nixvim in your config
+>   fooOption = lib.nixvim.mkRaw "print('hello')";
+>
+>   # Configure NixVim without prefixing with `plugins.nixvim`
+>   plugins.my-plugin.enable = true;
+> }
+> ```
+
 When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for home-manager, NixOS, and nix-darwin respectively.
 This is useful if you use nixvim both as part of an environment and standalone.
 
