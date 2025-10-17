@@ -10,6 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.onemoresuza ];
 
   settingsExample = {
-    home.__raw = ''vim.fn.expand("~/zettelkasten")'';
+    home = lib.nixvim.nestedLiteralLua ''vim.fn.expand("~/zettelkasten")'';
   };
 }
