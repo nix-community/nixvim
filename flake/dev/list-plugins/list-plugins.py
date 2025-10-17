@@ -71,11 +71,6 @@ KNOWN_PATHS: dict[
     ],
 ] = {
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/treesitter-textobjects/default.nix": (
-        State.OLD,
-        Kind.NEOVIM,
-        True,
-    ),
 }
 for telescope_extension_name, has_depr_warnings in {
     "advanced-git-search": False,
