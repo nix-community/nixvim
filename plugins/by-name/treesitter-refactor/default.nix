@@ -100,43 +100,6 @@ with lib;
       };
     };
 
-  imports = [
-    # Added 2024-02-07
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "treesitter-refactor"
-        "navigation"
-        "keymaps"
-        "listDefinitons"
-      ]
-      [
-        "plugins"
-        "treesitter-refactor"
-        "navigation"
-        "keymaps"
-        "listDefinitions"
-      ]
-    )
-    # Added 2024-02-07
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "treesitter-refactor"
-        "navigation"
-        "keymaps"
-        "listDefinitonsToc"
-      ]
-      [
-        "plugins"
-        "treesitter-refactor"
-        "navigation"
-        "keymaps"
-        "listDefinitionsToc"
-      ]
-    )
-  ];
-
   config =
     let
       cfg = config.plugins.treesitter-refactor;
