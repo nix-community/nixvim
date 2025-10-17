@@ -48,7 +48,7 @@ lib.nixvim.plugins.mkVimPlugin {
       set -g @plugin 'christoomey/vim-tmux-navigator'
     ```
 
-    If you're using nixos or home-manager to manager tmux, you can use the `programs.tmux.plugins` option for this:
+    If you're using NixOS or Home Manager to manager tmux, you can use the `programs.tmux.plugins` option for this:
 
     ```nix
       plugins.tmux.plugins = [
@@ -60,7 +60,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
     Alternatively, you can specify the keybinding in your tmux config.
 
-    If you're using nixos or home-manager to manager tmux, you can use the `programs.tmux.extraConfig` option for this.
+    If you're using NixOS or Home Manager to manager tmux, you can use the `programs.tmux.extraConfig` option for this.
 
     Example config from the [upstream docs]:
 

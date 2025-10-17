@@ -90,7 +90,7 @@ This usually means one of two things:
 When building nixvim using flakes and our ["standalone mode"][standalone], we usually recommend _not_ declaring a "follows" for `inputs.nixvim`.
 This is so that nixvim is built against the same nixpkgs revision we're using in our test suite.
 
-If you are building nixvim using the NixOS, home-manager, or nix-darwin modules then we advise that you keep your nixpkgs lock as close as possible to ours.
+If you are building nixvim using the NixOS, Home Manager, or nix-darwin modules then we advise that you keep your nixpkgs lock as close as possible to ours.
 
 > [!TIP]
 > Once [#1784](https://github.com/nix-community/nixvim/issues/1784) is implemented, there will be alternative ways to achieve this using the module system.

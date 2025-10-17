@@ -48,7 +48,7 @@ in
         evaluation of Nixpkgs, for example.
         Applications like this should set their default value using `lib.mkDefault`,
         so user-provided configuration can override it without using `lib`.
-        E.g. Nixvim's home-manager module can re-use the `pkgs` instance from the "host" modules.
+        E.g. Nixvim's Home Manager module can re-use the `pkgs` instance from the "host" modules.
 
         > [!CAUTION]
         > Changing this option can lead to issues that may be difficult to debug.

@@ -11,7 +11,7 @@ Failure to use the correct branch, or an old revision of nixpkgs will likely res
 
 NixVim can be used in four ways:
 - As a NixOS module
-- As a Home-Manager module
+- As a Home Manager module
 - As a nix-darwin module
 - As a standalone derivation
 
@@ -45,14 +45,14 @@ When using flakes you can simply add `nixvim` to the inputs:
 
 ## Usage
 
-NixVim can be used standalone or as a module for NixOS, home-manager, or nix-darwin.
+NixVim can be used standalone or as a module for NixOS, Home Manager, or nix-darwin.
 
 When used standalone, a custom NixVim derivation is produced that can be used like any other package.
 
 When used as a module, NixVim can be enabled though `programs.nixvim.enable`.
 
 
-### Usage as a module (NixOS, home-manager, nix-darwin)
+### Usage as a module (NixOS, Home Manager, nix-darwin)
 
 When using NixVim as a module you must import the NixVim module into your module system.
 The three imports are:
@@ -92,7 +92,7 @@ options as `programs.nixvim.<path>.<to>.<option> = <value>`.
 > }
 > ```
 
-When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for home-manager, NixOS, and nix-darwin respectively.
+When you use nixvim as a module, an additional module argument is passed on allowing you to peek through the configuration with `hmConfig`, `nixosConfig`, and `darwinConfig` for Home Manager, NixOS, and nix-darwin respectively.
 This is useful if you use nixvim both as part of an environment and standalone.
 
 For more platform-specific options and information, see [Nixvim Platforms](../platforms/index.md).

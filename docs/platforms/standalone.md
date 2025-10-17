@@ -9,7 +9,7 @@ There are **no** standalone-specific options available.
 
 ## Using in another configuration
 
-Here is an example on how to integrate into a NixOS or Home-manager configuration when using flakes.
+Here is an example on how to integrate into a NixOS or Home Manager configuration when using flakes.
 
 The example assumes your standalone config is the `default` package of a flake, and you've named the input "`nixvim-config`".
 ```nix
@@ -17,7 +17,7 @@ The example assumes your standalone config is the `default` package of a flake, 
 {
   # NixOS
   environment.systemPackages = [ inputs.nixvim-config.packages.${system}.default ];
-  # home-manager
+  # Home Manager
   home.packages = [ inputs.nixvim-config.packages.${system}.default ];
 }
 ```
@@ -53,7 +53,7 @@ This will generate a `init.lua` that will contain the comments from each stages:
 
 The `config` used to produce a standalone nixvim derivation can be accessed as an attribute on the derivation, similar to `<nixvim>.extend`.
 
-This may be useful if you want unrelated parts of your NixOS or home-manager configuration to use the same value as something in your nixvim configuration.
+This may be useful if you want unrelated parts of your NixOS, Home Manager or nix-darwin configuration to use the same value as something in your nixvim configuration.
 
 ## Accessing nixvim options
 
