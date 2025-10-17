@@ -72,7 +72,7 @@ in
         When enabled, the nixvim config will be passed to `nvim` using the `-u` option.
       '';
       defaultText = lib.literalMD ''
-        Configured by your installation method: `false` when using the home-manager module, `true` otherwise.
+        Configured by your installation method: `false` when using the Home Manager module, `true` otherwise.
       '';
     };
 
@@ -84,7 +84,7 @@ in
         If disabled, the XDG config dirs `nvim` and `nvim/after` will be removed from the runtimepath.
       '';
       defaultText = lib.literalMD ''
-        Configured by your installation method: `true` when using the home-manager module, `false` otherwise.
+        Configured by your installation method: `true` when using the Home Manager module, `false` otherwise.
       '';
     };
 

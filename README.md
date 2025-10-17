@@ -42,7 +42,7 @@ Check out [this list of real world Nixvim configs](https://nix-community.github.
 <!-- STOP DOCS -->
 
 ## How does it work?
-When you build the module (probably using home-manager), it will install all
+When you build the module (probably using Home Manager), it will install all
 your plugins and generate a lua config for Neovim with all the options
 specified. Because it uses lua, this ensures that your configuration will load
 as fast as possible.
@@ -100,7 +100,7 @@ For more detail, see the [Installation](https://nix-community.github.io/nixvim) 
 
 Nixvim now ships with `flake-compat`, which makes it usable from any system.
 
-To install it, edit your home-manager (or NixOS) configuration:
+To install it, edit your Home Manager, NixOS or nix-darwin configuration:
 
 ```nix
 { pkgs, lib, ... }:
@@ -113,7 +113,7 @@ let
 in
 {
   imports = [
-    # For home-manager
+    # For Home Manager
     nixvim.homeModules.nixvim
     # For NixOS
     nixvim.nixosModules.nixvim
@@ -159,13 +159,13 @@ flakes, just add the `nixvim` input:
 ```
 
 You can now access the module using `inputs.nixvim.homeModules.nixvim`,
-for a home-manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
+for a Home Manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
 and `inputs.nixvim.nixDarwinModules.nixvim` for nix-darwin.
 
 </details>
 
 ## Usage
-Nixvim can be used in four ways: through the home-manager, nix-darwin, NixOS modules,
+Nixvim can be used in four ways: through the Home Manager, nix-darwin, NixOS modules,
 and standalone through the `makeNixvim` function. To use the modules, just import the
 `nixvim.homeModules.nixvim`, `nixvim.nixDarwinModules.nixvim`, and
 `nixvim.nixosModules.nixvim` modules, depending on which system

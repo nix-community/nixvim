@@ -13,7 +13,7 @@ let
     homeManagerConfiguration
     ;
 
-  # This test module declares a nixvim option from a home-manager module
+  # This test module declares a nixvim option from a Home Manager module
   # The module system will attempt an option-type merge on the `programs.nixvim` option,
   # extending the submodule-type with an extra module declaring the nixvim option.
   test-module =
