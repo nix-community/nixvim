@@ -3,7 +3,7 @@
   ...
 }:
 let
-  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption literalLua;
   inherit (lib) types;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -34,7 +34,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     options = {
-      compile_path = defaultNullOpts.mkStr { __raw = "vim.fn.stdpath('cache') .. '/nightfox'"; } ''
+      compile_path = defaultNullOpts.mkStr (literalLua "vim.fn.stdpath('cache') .. '/nightfox'") ''
         The output directory path where the compiled results will be written to.
       '';
 

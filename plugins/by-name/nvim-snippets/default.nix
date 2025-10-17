@@ -41,7 +41,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     '';
 
     search_paths =
-      defaultNullOpts.mkListOf types.str [ { __raw = "vim.fn.stdpath('config') .. '/snippets'"; } ]
+      defaultNullOpts.mkListOf types.str
+        (lib.nixvim.literalLua "{ vim.fn.stdpath('config') .. '/snippets' }")
         ''
           Paths to search for snippets.
         '';
