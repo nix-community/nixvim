@@ -472,7 +472,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     opts = mkIf cfg.folding {
       foldmethod = mkDefault "expr";
-      foldexpr = mkDefault "nvim_treesitter#foldexpr()";
+      foldexpr = mkDefault "v:lua.vim.treesitter.foldexpr()";
     };
   };
 }
