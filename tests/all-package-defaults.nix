@@ -23,6 +23,12 @@ let
 
     # 2025-04-01 php-cs-fixer is marked as broken
     "php-cs-fixer"
+
+    # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
+    "luaformatter"
+
+    # 2025-10-12 dependency mbedtls is marked as insecure
+    "haxe"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
@@ -110,6 +116,7 @@ let
 
     # 2025-09-16 zig/zig-hook is marked as broken
     # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
+    "zf"
     "zls"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [

@@ -14,12 +14,19 @@ rec {
     swift_format = if !stdenv.isDarwin then sType.darwinOnly else swift-format;
     swiftlint = if !stdenv.isDarwin then sType.darwinOnly else swiftlint;
 
+    # 2025-10-12 build failure on Darwin
+    smlfmt = if stdenv.isDarwin then sType.broken else smlfmt;
+
     # 2025-09-13 build failure
     inko = sType.broken;
     # 2025-09-13 build failure
     commitmsgfmt = sType.broken;
     # 2025-09-17 build failure
     gci = sType.broken;
+    # 2025-10-08 build failure (haskellPackages.hindent)
+    hindent = sType.broken;
+    # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
+    lua-format = sType.broken;
 
     format-queries = null; # Uses neovim itself
     init = null; # Internal thingamajig
@@ -45,6 +52,7 @@ rec {
     hledger-fmt = sType.unpackaged;
     imba_fmt = sType.unpackaged;
     janet-format = sType.unpackaged;
+    json_repair = sType.unpackaged;
     liquidsoap-prettier = sType.unpackaged;
     llf = sType.unpackaged;
     markdown-toc = sType.unpackaged;
@@ -98,14 +106,12 @@ rec {
     gofmt = go;
     goimports = gotools;
     hcl = hclfmt;
-    inherit (haskellPackages) hindent;
     html_beautify = nodePackages.js-beautify;
     inherit (rubyPackages) htmlbeautifier;
     hurlfmt = hurl;
     js_beautify = nodePackages.js-beautify;
     jsonnetfmt = jsonnet;
     inherit (texlive.pkgs) latexindent;
-    lua-format = luaformatter;
     mago_format = mago;
     mago_lint = mago;
     markdownlint = markdownlint-cli;
