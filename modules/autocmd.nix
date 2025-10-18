@@ -1,13 +1,12 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
 {
   options = {
     autoGroups = lib.mkOption {
-      type = lib.types.attrsOf helpers.autocmd.autoGroupOption;
+      type = lib.types.attrsOf lib.nixvim.autocmd.autoGroupOption;
       default = { };
       description = "augroup definitions";
       example = {
@@ -18,7 +17,7 @@
     };
 
     autoCmd = lib.mkOption {
-      type = lib.types.listOf helpers.autocmd.autoCmdOption;
+      type = lib.types.listOf lib.nixvim.autocmd.autoCmdOption;
       default = [ ];
       description = "autocmd definitions";
       example = [
