@@ -1521,7 +1521,7 @@
     linter = {
       lang = "zig";
       possible = [
-        "ZLint"
+        "zlint"
         "alex"
         "codespell"
         "cspell"
