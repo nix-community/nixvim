@@ -70,11 +70,7 @@ KNOWN_PATHS: dict[
         bool,  # Has deprecation warnings
     ],
 ] = {
-    "plugins/by-name/chadtree/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/leap/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/lspkind/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/rainbow-delimiters/default.nix": (State.OLD, Kind.NEOVIM, False),
     "plugins/by-name/treesitter-refactor/default.nix": (State.OLD, Kind.MISC, True),
     "plugins/by-name/treesitter-textobjects/default.nix": (
         State.OLD,
