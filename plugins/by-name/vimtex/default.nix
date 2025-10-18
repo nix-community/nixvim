@@ -7,25 +7,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-20: remove 2024-04-20
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [ "viewMethod" ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "vimtex"
-      ];
-    in
-    [
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "installTexLive" ]
-      ) "If you don't want `texlive` to be installed, set `plugins.vimtex.texlivePackage` to `null`.")
-      (mkRenamedOptionModule (basePluginPath ++ [ "texLivePackage" ]) (
-        basePluginPath ++ [ "texlivePackage" ]
-      ))
-    ];
-
   settingsOptions = {
     view_method = mkOption {
       type = types.str;

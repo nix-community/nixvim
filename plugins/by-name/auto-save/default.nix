@@ -10,30 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.braindefender ];
 
-  # TODO: introduced 2024-06-21, remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    [
-      "executionMessage"
-      "message"
-    ]
-    [
-      "executionMessage"
-      "dim"
-    ]
-    [
-      "executionMessage"
-      "cleaningInterval"
-    ]
-    "triggerEvents"
-    "writeAllBuffers"
-    "debounceDelay"
-    {
-      old = "enableAutoSave";
-      new = "enabled";
-    }
-  ];
-
   imports = [
     (lib.mkRemovedOptionModule [ "plugins" "auto-save" "keymaps" ] ''
       Use the top-level `keymaps` option to create a keymap that runs :ASToggle
@@ -138,41 +114,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
     '';
     write_all_buffers = true;
     debounce_delay = 1000;
-  };
-  extraConfig = cfg: {
-    # TODO: introduced 2024-10-15: remove after 24.11
-    warnings =
-      let
-        definedOpts = lib.filter (opt: lib.hasAttrByPath (lib.toList opt) cfg.settings) [
-          [
-            "execution_message"
-            "enabled"
-          ]
-          [
-            "execution_message"
-            "message"
-          ]
-          [
-            "execution_message"
-            "dim"
-          ]
-          [
-            "execution_message"
-            "cleaning_interval"
-          ]
-          [
-            "trigger_events"
-            "cancel_defered_save"
-          ]
-        ];
-      in
-      lib.nixvim.mkWarnings "plugins.auto-save" {
-        when = definedOpts != [ ];
-        message = ''
-          The following settings options are no longer supported.
-          Check the plugin documentation for more details.:
-          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-        '';
-      };
   };
 }

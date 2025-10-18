@@ -13,24 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.refaelsh ];
 
-  # TODO: Added 2024-09-07; remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "enabled"
-    "hint"
-    "notification"
-    "hints"
-    "maxTime"
-    "maxCount"
-    "disableMouse"
-    "allowDifferentKey"
-    "resettingKeys"
-    "restrictedKeys"
-    "restrictionMode"
-    "disabledKeys"
-    "disabledFiletypes"
-  ];
-
   settingsOptions = {
     max_time = defaultNullOpts.mkUnsignedInt 1000 ''
       Maximum time (in milliseconds) to consider key presses as repeated.

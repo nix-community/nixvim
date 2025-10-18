@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;
+  inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -10,43 +10,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: Added 2024-09-05, remove after 24.11
-  optionsRenamedToSettings = [
-    "extensions"
-    "sections"
-    "inactiveSections"
-    "tabline"
-    "winbar"
-    "inactiveWinbar"
+  imports = [
+    # TODO: added 2025-04-06, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "lualine";
+      packageName = "git";
+    })
   ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "lualine"
-      ];
-      settingsPath = basePluginPath ++ [ "settings" ];
-      optionsPath = settingsPath ++ [ "options" ];
-      oldOptions = [
-        "theme"
-        "globalstatus"
-        "refresh"
-        "iconsEnabled"
-        "sectionSeparators"
-        "componentSeparators"
-        "disabledFiletypes"
-        "ignoreFocus"
-        "alwaysDivideMiddle"
-      ];
-    in
-    (mkSettingsRenamedOptionModules basePluginPath optionsPath oldOptions)
-    ++ [
-      # TODO: added 2025-04-06, remove after 25.05
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "lualine";
-        packageName = "git";
-      })
-    ];
 
   dependencies = [ "git" ];
 

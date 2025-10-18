@@ -3,10 +3,6 @@
   config,
   ...
 }:
-let
-  inherit (lib) flatten mapAttrsToList mkRemovedOptionModule;
-  inherit (lib.nixvim) mkDeprecatedSubOptionModule;
-in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "gitsigns";
   package = "gitsigns-nvim";
@@ -14,72 +10,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO: introduced 2024-03-12, remove on 2024-05-12
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = import ./renamed-options.nix;
-  imports =
-    let
-      basePluginPaths = [
-        "plugins"
-        "gitsigns"
-      ];
-      settingsPath = basePluginPaths ++ [ "settings" ];
-
-      highlights = {
-        add = "Add";
-        change = "Change";
-        delete = "Delete";
-        topdelete = "Topdelete";
-        changedelete = "Changedelete";
-        untracked = "Untracked";
-      };
-
-      subHighlights = {
-        hl = "";
-        linehl = "Ln";
-        numhl = "Nr";
-      };
-
-      highlightRemovals = flatten (
-        mapAttrsToList (
-          opt: hlg:
-          mapAttrsToList (subOpt: subHlg: {
-            optionPath = settingsPath ++ [
-              "signs"
-              opt
-              subOpt
-            ];
-            hlg = "GitSigns${hlg}${subHlg}";
-          }) subHighlights
-        ) highlights
-      );
-    in
-    (map (
-      { optionPath, hlg }:
-      mkDeprecatedSubOptionModule optionPath "Please define the `${hlg}` highlight group instead."
-    ) highlightRemovals)
-    ++ [
-      (mkRemovedOptionModule (
-        basePluginPaths
-        ++ [
-          "watchGitDir"
-          "interval"
-        ]
-      ) "The option has been removed from upstream.")
-      (mkDeprecatedSubOptionModule (
-        settingsPath
-        ++ [
-          "yadm"
-          "enable"
-        ]
-      ) "yadm support was removed upstream.")
-
-      # TODO: added 2025-04-06, remove after 25.05
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "gitsigns";
-        packageName = "git";
-      })
-    ];
+  imports = [
+    # TODO: added 2025-04-06, remove after 25.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "gitsigns";
+      packageName = "git";
+    })
+  ];
 
   dependencies = [ "git" ];
 

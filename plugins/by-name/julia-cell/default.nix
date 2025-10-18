@@ -43,13 +43,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-19: remove 2024-04-19
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "delimitCellsBy"
-    "tag"
-  ];
-
   settingsOptions = {
     delimit_cells_by =
       helpers.defaultNullOpts.mkEnumFirstDefault

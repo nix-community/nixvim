@@ -13,40 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: added 2024-10-05 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "openFoldHlTimeout"
-    "providerSelector"
-    "closeFoldKinds"
-    "foldVirtTextHandler"
-    "enableGetFoldVirtText"
-    [
-      "preview"
-      "winConfig"
-      "border"
-    ]
-    [
-      "preview"
-      "winConfig"
-      "winblend"
-    ]
-    [
-      "preview"
-      "winConfig"
-      "winhighlight"
-    ]
-    [
-      "preview"
-      "winConfig"
-      "maxheight"
-    ]
-    [
-      "preview"
-      "mappings"
-    ]
-  ];
-
   settingsOptions = {
     open_fold_hl_timeout = defaultNullOpts.mkUnsignedInt 400 ''
       Time in millisecond between the range to be highlgihted and to be cleared

@@ -58,13 +58,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
   '';
 
   imports = [
-    # Introduced on 2024 February 21
-    # TODO: remove ~June 2024
-    ./deprecations.nix
     ./auto-enable.nix
     ./sources
   ];
-  deprecateExtraOptions = true;
 
   inherit (cmpOptions) settingsOptions settingsExample;
   extraOptions = {

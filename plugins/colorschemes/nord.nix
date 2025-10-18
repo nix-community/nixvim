@@ -13,18 +13,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-20: remove 2024-04-20
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "contrast"
-    "borders"
-    "disableBackground"
-    "cursorlineTransparent"
-    "enableSidebarBackground"
-    "italic"
-    "uniformDiffBackground"
-  ];
-
   settingsOptions = {
     contrast = defaultNullOpts.mkBool false ''
       Make sidebars and popup menus like nvim-tree and telescope have a different background.

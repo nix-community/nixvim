@@ -14,16 +14,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-01: remove 2024-05-01
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "mode"
-    {
-      old = "leader";
-      new = "leader_key";
-    }
-  ];
-
   settingsOptions = {
     mode = defaultNullOpts.mkStr "a" ''
       Choose modes, in which Emmet mappings will be created.

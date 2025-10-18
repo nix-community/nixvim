@@ -12,31 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO: introduced 2024-07-23. Remove after 24.11 release.
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [ "timeout" ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "better-escape"
-      ];
-    in
-    [
-      (mkRemovedOptionModule (basePluginPath ++ [ "clearEmptyLines" ]) ''
-        This option has been removed upstream.
-        See the [upstream README](https://github.com/max397574/better-escape.nvim?tab=readme-ov-file#rewrite) for additional information.
-      '')
-      (mkRemovedOptionModule (basePluginPath ++ [ "keys" ]) ''
-        This option has been removed upstream.
-        See the [upstream README](https://github.com/max397574/better-escape.nvim?tab=readme-ov-file#rewrite) for additional information.
-      '')
-      (mkRemovedOptionModule (basePluginPath ++ [ "mapping" ]) ''
-        This option has been removed in favor of `plugins.better-escape.settings.mapping`.
-        See the [upstream README](https://github.com/max397574/better-escape.nvim?tab=readme-ov-file#rewrite) for additional information.
-      '')
-    ];
-
   settingsOptions = {
     timeout = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.timeoutlen" ''
       The time in which the keys must be hit in ms.

@@ -13,18 +13,6 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "imageProvider"
-    "automaticallyOpenOutput"
-    "wrapOutput"
-    "outputWindowBorders"
-    "cellHighlightGroup"
-    "savePath"
-    "showMimetypeDebug"
-  ];
-
   settingsOptions = {
     image_provider =
       helpers.defaultNullOpts.mkEnumFirstDefault

@@ -19,38 +19,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-15: remove 2024-05-15
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "compile"
-    "undercurl"
-    "commentStyle"
-    "functionStyle"
-    "keywordStyle"
-    "statementStyle"
-    "typeStyle"
-    "transparent"
-    "dimInactive"
-    "terminalColors"
-    [
-      "colors"
-      "palette"
-    ]
-    [
-      "colors"
-      "theme"
-    ]
-    "theme"
-    [
-      "background"
-      "dark"
-    ]
-    [
-      "background"
-      "light"
-    ]
-
-  ];
   imports = [
     (lib.mkRemovedOptionModule
       [

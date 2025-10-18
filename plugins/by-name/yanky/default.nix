@@ -2,7 +2,6 @@
   lib,
   config,
   helpers,
-  options,
   ...
 }:
 with lib;
@@ -12,113 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = "Improved Yank and Put functionalities for Neovim.";
 
   maintainers = [ maintainers.GaetanLepage ];
-
-  # TODO: introduced 2024-06-28. Remove after 24.11 release.
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    [
-      "ring"
-      "historyLength"
-    ]
-    [
-      "ring"
-      "storage"
-    ]
-    [
-      "ring"
-      "storagePath"
-    ]
-    [
-      "ring"
-      "syncWithNumberedRegisters"
-    ]
-    [
-      "ring"
-      "cancelEvent"
-    ]
-    [
-      "ring"
-      "ignoreRegisters"
-    ]
-    [
-      "ring"
-      "updateRegisterOnCycle"
-    ]
-    [
-      "picker"
-      "telescope"
-      "useDefaultMappings"
-    ]
-    [
-      "systemClipboard"
-      "syncWithRing"
-    ]
-    [
-      "highlight"
-      "onPut"
-    ]
-    [
-      "highlight"
-      "onYank"
-    ]
-    [
-      "highlight"
-      "timer"
-    ]
-    [
-      "preserveCursorPosition"
-      "enabled"
-    ]
-    [
-      "textobj"
-      "enabled"
-    ]
-  ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "yanky"
-      ];
-    in
-    [
-      (mkRemovedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "picker"
-            "select"
-            "action"
-          ]
-        )
-        ''
-          Please use `plugins.yanky.settings.picker.select.action` instead.
-          However, be careful as we do not perform any manipulation on the provided string.
-        ''
-      )
-      (mkRenamedOptionModule (
-        basePluginPath
-        ++ [
-          "picker"
-          "telescope"
-          "enable"
-        ]
-      ) (basePluginPath ++ [ "enableTelescope" ]))
-      (mkRemovedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "picker"
-            "telescope"
-            "mappings"
-          ]
-        )
-        ''
-          Please use `plugins.yanky.settings.picker.telescope.mappings` instead.
-          However, be careful as we do not perform any manipulation on the provided strings.
-        ''
-      )
-    ];
 
   settingsDescription = ''
     Options provided to the `require('yanky').setup` function.
@@ -347,18 +239,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
-    # TODO: Added 2024-09-14 remove after 24.11
-    plugins.sqlite-lua.enable = mkOverride 1490 true;
-    warnings = lib.nixvim.mkWarnings "plugins.yanky" {
-      when =
-        cfg.settings.ring.storage == "sqlite" && options.plugins.sqlite-lua.enable.highestPrio == 1490;
-
-      message = ''
-        `sqlite-lua` automatic installation is deprecated.
-        Please use `plugins.sqlite-lua.enable`.
-      '';
-    };
-
     assertions = lib.nixvim.mkAssertions "plugins.yanky" [
       {
         assertion = cfg.enableTelescope -> config.plugins.telescope.enable;

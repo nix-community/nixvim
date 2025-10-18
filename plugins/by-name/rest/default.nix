@@ -241,59 +241,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
     ];
 
-    # TODO: introduced 2024-09-23: remove after 24.11
-    warnings =
-      let
-        definedOpts = lib.filter (opt: lib.hasAttrByPath (lib.toList opt) cfg.settings) [
-          "client"
-          "env_file"
-          "env_pattern"
-          "env_edit_command"
-          "encode_url"
-          "keybinds"
-          "skip_ssl_verification"
-          [
-            "logs"
-            "level"
-          ]
-          [
-            "logs"
-            "save"
-          ]
-          [
-            "result"
-            "split"
-          ]
-          [
-            "result"
-            "behavior"
-          ]
-          [
-            "result"
-            "statistics"
-          ]
-          [
-            "result"
-            "decode_url"
-          ]
-          [
-            "result"
-            "formatters"
-          ]
-          [
-            "result"
-            "keybinds"
-          ]
-        ];
-      in
-      lib.nixvim.mkWarnings "plugins.rest" {
-        when = definedOpts != [ ];
-        message = ''
-          The following v2 settings options are no longer supported in v3:
-          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-        '';
-      };
-
     # TODO: There may be some interactions between this & telescope, maybe requiring #2292
     plugins.rest.luaConfig.post = lib.mkIf cfg.enableTelescope ''require("telescope").load_extension("rest")'';
 

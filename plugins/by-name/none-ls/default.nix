@@ -12,32 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.MattSturgeon ];
 
-  # TODO: introduced 2024-06-18, remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "border"
-    "cmd"
-    "debounce"
-    "debug"
-    "defaultTimeout"
-    "diagnosticConfig"
-    "diagnosticsFormat"
-    "fallbackSeverity"
-    "logLevel"
-    "notifyFormat"
-    "onAttach"
-    "onInit"
-    "onExit"
-    "rootDir"
-    "shouldAttach"
-    "tempDir"
-    "updateInInsert"
-    {
-      old = "sourcesItems";
-      new = "sources";
-    }
-  ];
-
   imports =
     let
       namespace = "plugins";

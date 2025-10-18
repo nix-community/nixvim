@@ -12,20 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-04-22: remove 2024-06-22
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "maxLines"
-    "minWindowHeight"
-    "lineNumbers"
-    "multilineThreshold"
-    "trimScope"
-    "mode"
-    "separator"
-    "zindex"
-    "onAttach"
-  ];
-
   settingsOptions = {
     enable = helpers.defaultNullOpts.mkBool true ''
       Enable this plugin (Can be enabled/disabled later via commands)

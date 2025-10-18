@@ -15,28 +15,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # https://github.com/quarto-dev/quarto-nvim/issues/187
   configLocation = lib.mkOrder 900 "extraConfigLua";
 
-  imports = [
-    # TODO: introduced 2024-06-29; remove after 24.11
-    (lib.mkRemovedOptionModule
-      [
-        "plugins"
-        "otter"
-        "addCmpSources"
-      ]
-      ''
-        You should use the "cmp-nvim-lsp" source instead.
-        To quote upstream's README:
-        > If you previously used the otter nvim-cmp source, you can remove it, as the completion results now come directly via the cmp-nvim-lsp source together with other language servers.
-      ''
-    )
-
-    # Register nvim-cmp association
-    # TODO: Otter is no longer a cmp-source
-    # Deprecated 2024-09-22; remove after 24.11
-    # Note: a warning is implemented in plugins/cmp/auto-enable.nix
-    { cmpSourcePlugins.otter = "otter"; }
-  ];
-
   settingsOptions = {
     lsp = {
       hover = {

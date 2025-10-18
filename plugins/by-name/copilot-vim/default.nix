@@ -13,14 +13,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "nodeCommand"
-    "filetypes"
-    "proxy"
-  ];
-
   settingsOptions = {
     node_command = mkOption {
       type = with types; nullOr str;

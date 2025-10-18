@@ -43,16 +43,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ```
   '';
 
-  # TODO: Added 2024-08-23, remove after 24.11
-  optionsRenamedToSettings = [
-    "colorscheme"
-    "componentFunction"
-    "component"
-    "active"
-    "inactive"
-    "modeMap"
-  ];
-
   settingsOptions = {
     colorscheme = defaultNullOpts.mkStr "default" ''
       The colorscheme to use for lightline.

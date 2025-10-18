@@ -12,44 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-04-15: remove 2024-06-15
-  optionsRenamedToSettings = [
-    "style"
-    "transparent"
-    "terminalColors"
-    [
-      "styles"
-      "comments"
-    ]
-    [
-      "styles"
-      "keywords"
-    ]
-    [
-      "styles"
-      "functions"
-    ]
-    [
-      "styles"
-      "variables"
-    ]
-    [
-      "styles"
-      "sidebars"
-    ]
-    [
-      "styles"
-      "floats"
-    ]
-    "sidebars"
-    "dayBrightness"
-    "hideInactiveStatusline"
-    "dimInactive"
-    "lualineBold"
-    "onColors"
-    "onHighlights"
-  ];
-
   settingsOptions = {
     style =
       defaultNullOpts.mkEnumFirstDefault

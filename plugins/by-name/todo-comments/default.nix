@@ -24,111 +24,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
   dependencies = [ "ripgrep" ];
 
   imports = [
-    # TODO: Added 2023-11-06, remove after 24.11
-    (mkRemovedOptionModule [
-      "plugins"
-      "todo-comments"
-      "keymapsSilent"
-    ] "Use `plugins.todo-comments.keymaps.<COMMAND>.options.silent`.")
-
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {
       plugin = "todo-comments";
       packageName = "ripgrep";
     })
-  ];
-
-  # TODO: Added 2024-08-16, remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "signs"
-    "signPriority"
-    "keywords"
-    [
-      "guiStyle"
-      "bg"
-    ]
-    [
-      "guiStyle"
-      "fg"
-    ]
-    "mergeKeywords"
-    [
-      "highlight"
-      "multiline"
-    ]
-    [
-      "highlight"
-      "multilinePattern"
-    ]
-    [
-      "highlight"
-      "multilineContext"
-    ]
-    [
-      "highlight"
-      "before"
-    ]
-    [
-      "highlight"
-      "keyword"
-    ]
-    [
-      "highlight"
-      "after"
-    ]
-    [
-      "highlight"
-      "pattern"
-    ]
-    [
-      "highlight"
-      "commentsOnly"
-    ]
-    [
-      "highlight"
-      "maxLineLen"
-    ]
-    [
-      "highlight"
-      "exclude"
-    ]
-    [
-      "colors"
-      "error"
-    ]
-    [
-      "colors"
-      "warning"
-    ]
-    [
-      "colors"
-      "info"
-    ]
-    [
-      "colors"
-      "hint"
-    ]
-    [
-      "colors"
-      "default"
-    ]
-    [
-      "colors"
-      "test"
-    ]
-    [
-      "search"
-      "command"
-    ]
-    [
-      "search"
-      "args"
-    ]
-    [
-      "search"
-      "pattern"
-    ]
   ];
 
   settingsOptions = {

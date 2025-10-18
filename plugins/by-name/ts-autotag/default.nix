@@ -13,29 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-06-17: remove 2024-08-17
-  deprecateExtraOptions = true;
-  imports =
-    map
-      (
-        optionName:
-        mkRemovedOptionModule
-          [
-            "plugins"
-            "ts-autotag"
-            optionName
-          ]
-          ''
-            The `ts-autotag` plugin is no longer configured using `nvim-treesitter.configs`.
-            Please, refer to upstream documentation:
-            https://github.com/windwp/nvim-ts-autotag#setup
-          ''
-      )
-      [
-        "filetypes"
-        "skipTags"
-      ];
-
   extraConfig = {
     warnings = lib.nixvim.mkWarnings "plugins.ts-autotag" {
       when = !config.plugins.treesitter.enable;

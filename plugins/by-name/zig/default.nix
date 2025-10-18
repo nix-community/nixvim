@@ -12,15 +12,6 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    {
-      old = "formatOnSave";
-      new = "fmt_autosave";
-    }
-  ];
-
   settingsOptions = {
     fmt_autosave = lib.nixvim.defaultNullOpts.mkFlagInt 1 ''
       This plugin enables automatic code formatting on save by default using zig fmt.

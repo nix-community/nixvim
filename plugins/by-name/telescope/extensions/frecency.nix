@@ -8,32 +8,6 @@ mkExtension {
   name = "frecency";
   package = "telescope-frecency-nvim";
 
-  # TODO: introduced 2024-03-24, remove on 2024-05-24
-  optionsRenamedToSettings = [
-    "dbRoot"
-    "defaultWorkspace"
-    "ignorePatterns"
-    "showScores"
-    "workspaces"
-  ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "telescope"
-        "extensions"
-        "frecency"
-      ];
-    in
-    [
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "showUnindexed" ]
-      ) "This option has been removed upstream.")
-      (mkRemovedOptionModule (
-        basePluginPath ++ [ "deviconsDisabled" ]
-      ) "This option has been removed upstream.")
-    ];
-
   settingsOptions = {
     auto_validate = defaultNullOpts.mkBool true ''
       If true, it removes stale entries count over than `db_validate_threshold`.

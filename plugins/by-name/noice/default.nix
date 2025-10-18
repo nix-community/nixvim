@@ -20,64 +20,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     >  vim, regex, lua, bash, markdown, markdown_inline
   '';
 
-  # TODO: added 2024-10-27 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings =
-    let
-      mkOptionPaths = map (lib.splitString ".");
-    in
-    mkOptionPaths [
-      "cmdline.enabled"
-      "cmdline.view"
-      "cmdline.opts"
-      "cmdline.format"
-      "messages.enabled"
-      "messages.view"
-      "messages.viewError"
-      "messages.viewWarn"
-      "messages.viewHistory"
-      "messages.viewSearch"
-      "popupmenu.enabled"
-      "popupmenu.backend"
-      "popupmenu.kindIcons"
-      "redirect"
-      "commands"
-      "notify.enabled"
-      "notify.view"
-      "lsp.progress.enabled"
-      "lsp.progress.format"
-      "lsp.progress.formatDone"
-      "lsp.progress.throttle"
-      "lsp.progress.view"
-      "lsp.override"
-      "lsp.hover.enabled"
-      "lsp.hover.view"
-      "lsp.hover.opts"
-      "lsp.signature.enabled"
-      "lsp.signature.autoOpen.enabled"
-      "lsp.signature.autoOpen.trigger"
-      "lsp.signature.autoOpen.luasnip"
-      "lsp.signature.autoOpen.throttle"
-      "lsp.signature.view"
-      "lsp.signature.opts"
-      "lsp.message.enabled"
-      "lsp.message.view"
-      "lsp.message.opts"
-      "lsp.documentation.view"
-      "lsp.documentation.opts"
-      "markdown.hover"
-      "markdown.highlights"
-      "health.checker"
-      "smartMove.enabled"
-      "smartMove.excludedFiletypes"
-      "presets"
-      "throttle"
-      "views"
-      "routes"
-      "status"
-      "format"
-    ];
-
   settingsOptions = {
     cmdline = {
       enabled = defaultNullOpts.mkBool true "Enables `Noice` cmdline UI.";

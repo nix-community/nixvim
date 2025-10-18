@@ -11,40 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO: introduced 2024-03-27, remove on 2024-05-27
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "disableInMacro"
-    "disableInVisualblock"
-    "disableInReplaceMode"
-    "ignoredNextChar"
-    "enableMoveright"
-    "enableCheckBracketLine"
-    "enableBracketInQuote"
-    "enableAbbr"
-    "breakUndo"
-    "checkTs"
-    "tsConfig"
-    "mapCr"
-    "mapBs"
-    "mapCH"
-    "mapCW"
-    {
-      old = "disabledFiletypes";
-      new = "disable_filetype";
-    }
-    {
-      old = "enableAfterQuote";
-      new = "enable_afterquote";
-    }
-  ];
-  imports = [
-    (mkRemovedOptionModule [ "plugins" "nvim-autopairs" "pairs" ] ''
-      This option was having no effect.
-      If you want to customize pairs, please use `luaConfig` to define them as described in the plugin documentation.
-    '')
-  ];
-
   settingsOptions = {
     disable_filetype = helpers.defaultNullOpts.mkListOf types.str [
       "TelescopePrompt"

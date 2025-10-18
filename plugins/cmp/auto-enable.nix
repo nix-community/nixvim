@@ -72,14 +72,6 @@ in
               - Dismiss this warning by explicitly setting `autoEnableSources` to `false`;
             '';
           }
-          # TODO: Added 2024-09-22; remove after 24.11
-          {
-            when = lib.elem "otter" enabledSources;
-            message = ''
-              "otter" is listed in `settings.sources`, however it is no longer a cmp source.
-              Instead, you should enable `plugins.otter` and use the "cmp-nvim-lsp" completion source.
-            '';
-          }
         ];
 
         # If the user has enabled the `foo` and `bar` sources, then `plugins` will look like:

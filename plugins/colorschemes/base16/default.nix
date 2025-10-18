@@ -19,24 +19,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     MattSturgeon
   ];
 
-  # TODO introduced 2024-03-12: remove after 24.11
-  imports =
-    let
-      basePluginPath = [
-        "colorschemes"
-        name
-      ];
-    in
-    [
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "customColorScheme" ]) (
-        basePluginPath ++ [ "colorscheme" ]
-      ))
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "useTruecolor" ]) [
-        "options"
-        "termguicolors"
-      ])
-    ];
-
   settingsExample = {
     telescope_borders = true;
     indentblankline = false;

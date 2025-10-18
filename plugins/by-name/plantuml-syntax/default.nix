@@ -12,12 +12,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "setMakeprg"
-    "executableScript"
-  ];
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {

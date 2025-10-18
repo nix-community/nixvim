@@ -13,23 +13,6 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "username"
-    "onlyCwd"
-    "cursorHlGroupUser1"
-    "cursorHlGroupUser2"
-    "cursorHlGroupUser3"
-    "cursorHlGroupUser4"
-    "cursorHlGroupDefault"
-    "nameHlGroupUser1"
-    "nameHlGroupUser2"
-    "nameHlGroupUser3"
-    "nameHlGroupUser4"
-    "nameHlGroupDefault"
-  ];
-
   settingsOptions = {
     username = helpers.mkNullOrStr ''
       Username.

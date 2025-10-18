@@ -9,45 +9,6 @@ mkExtension {
   name = "undo";
   package = "telescope-undo-nvim";
 
-  # TODO: introduced 2024-03-24, remove on 2024-05-24
-  optionsRenamedToSettings = [
-    "useDelta"
-    "useCustomCommand"
-    "sideBySide"
-    "diffContextLines"
-    "entryFormat"
-    "timeFormat"
-  ];
-  imports = [
-    (mkRemovedOptionModule
-      [
-        "plugins"
-        "telescope"
-        "extensions"
-        "undo"
-        "mappings"
-      ]
-      ''
-        Use `plugins.telescope.extension.undo.settings.mappings` instead but beware, you need to specify the full name of the callback:
-        Example:
-        ```
-          mappings = {
-            i = {
-              "<cr>" = "require('telescope-undo.actions').yank_additions";
-              "<s-cr>" = "require('telescope-undo.actions').yank_deletions";
-              "<c-cr>" = "require('telescope-undo.actions').restore";
-            };
-            n = {
-              "y" = "require('telescope-undo.actions').yank_additions";
-              "Y" = "require('telescope-undo.actions').yank_deletions";
-              "u" = "require('telescope-undo.actions').restore";
-            };
-          }
-        ```
-      ''
-    )
-  ];
-
   settingsOptions = {
     use_delta = defaultNullOpts.mkBool true ''
       When set to true, [delta](https://github.com/dandavison/delta) is used for fancy diffs in

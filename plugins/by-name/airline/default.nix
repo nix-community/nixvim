@@ -13,45 +13,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "sectionA"
-    "sectionB"
-    "sectionC"
-    "sectionX"
-    "sectionY"
-    "sectionZ"
-    "experimental"
-    "leftSep"
-    "rightSep"
-    "detectModified"
-    "detectPaste"
-    "detectCrypt"
-    "detectSpell"
-    "detectSpelllang"
-    "detectIminsert"
-    "inactiveCollapse"
-    "inactiveAltSep"
-    "theme"
-    "themePatchFunc"
-    "powerlineFonts"
-    "symbolsAscii"
-    "modeMap"
-    "excludeFilenames"
-    "excludeFiletypes"
-    "filetypeOverrides"
-    "excludePreview"
-    "disableStatusline"
-    "skipEmptySections"
-    "highlightingCache"
-    "focuslostInactive"
-    "statuslineOntop"
-    "stlPathStyle"
-    "sectionCOnlyFilename"
-    "symbols"
-  ];
-
   settingsOptions =
     (lib.listToAttrs (
       map

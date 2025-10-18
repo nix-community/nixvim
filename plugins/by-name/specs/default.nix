@@ -11,49 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO: introduced 2024-06-10, remove on 2024-08-10
-  optionsRenamedToSettings = [
-    "show_jumps"
-    "min_jump"
-    {
-      old = "delay";
-      new = [
-        "popup"
-        "delay_ms"
-      ];
-    }
-    {
-      old = "increment";
-      new = [
-        "popup"
-        "inc_ms"
-      ];
-    }
-    {
-      old = "blend";
-      new = [
-        "popup"
-        "blend"
-      ];
-    }
-    {
-      old = "width";
-      new = [
-        "popup"
-        "width"
-      ];
-    }
-  ];
-  imports =
-    lib.mapAttrsToList (old: message: mkRemovedOptionModule [ "plugins" "specs" old ] message)
-      {
-        color = "Please, use `settings.popup.winhl` directly.";
-        fader = "Please, use `settings.popup.fader` directly.";
-        resizer = "Please, use `settings.popup.resizer` directly.";
-        ignored_filetypes = "Please, use `settings.ignore_filetypes` instead.";
-        ignored_buffertypes = "Please, use `settings.ignore_buftypes` instead.";
-      };
-
   settingsOptions = {
     show_jumps = helpers.defaultNullOpts.mkBool true ''
       Whether to show an animation each time the cursor jumps.

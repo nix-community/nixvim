@@ -29,26 +29,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  # TODO: Introduced 12-03-2022, remove 12-05-2022
-  optionsRenamedToSettings = [
-    "xdg"
-    "autoStart"
-    {
-      old = "recommendedKeymaps";
-      new = [
-        "keymap"
-        "recommended"
-      ];
-    }
-    {
-      old = "alwaysComplete";
-      new = [
-        "completion"
-        "always"
-      ];
-    }
-  ];
-
   callSetup = false;
   settingsOptions = {
     auto_start = lib.nixvim.mkNullOrOption (

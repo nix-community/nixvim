@@ -9,44 +9,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: added 2024-09-03 remove after 24.11
-  optionsRenamedToSettings = [
-    "attachNavic"
-    "createAutocmd"
-    "includeBuftypes"
-    "excludeFiletypes"
-    [
-      "modifiers"
-      "dirname"
-    ]
-    [
-      "modifiers"
-      "basename"
-    ]
-    "showDirname"
-    "showBasename"
-    "showModified"
-    "modified"
-    "showNavic"
-    "leadCustomSection"
-    "customSection"
-    "theme"
-    "contextFollowIconColor"
-    [
-      "symbols"
-      "modified"
-    ]
-    [
-      "symbols"
-      "ellipsis"
-    ]
-    [
-      "symbols"
-      "separator"
-    ]
-    "kinds"
-  ];
-
   settingsOptions = {
     attach_navic = defaultNullOpts.mkBool true ''
       Whether to attach navic to language servers automatically.
