@@ -29,7 +29,7 @@ mkExtension {
     override_generic_sorter = false;
   };
 
-  extraConfig = cfg: {
+  extraConfig = {
     # fzy-native itself is in deps directory
     performance.combinePlugins.pathsToLink = [ "/deps/fzy-lua-native" ];
   };
