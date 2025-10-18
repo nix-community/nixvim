@@ -46,19 +46,6 @@ in
         pkg;
   };
 
-  # TODO: Added 2024-07-16; remove after 24.11
-  imports =
-    let
-      basePath = [
-        "plugins"
-        "none-ls"
-        "sources"
-        sourceType
-        sourceName
-      ];
-    in
-    [ (lib.mkRenamedOptionModule (basePath ++ [ "withArgs" ]) (basePath ++ [ "settings" ])) ];
-
   config = lib.mkIf (cfg.enable && cfg'.enable) {
     plugins.none-ls.settings.sources = lib.mkDefault [
       (

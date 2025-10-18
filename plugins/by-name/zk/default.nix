@@ -12,24 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO: introduced 2024-06-28. Remove after 24.11 release.
-  optionsRenamedToSettings = [
-    "picker"
-    [
-      "lsp"
-      "config"
-    ]
-    [
-      "lsp"
-      "autoAttach"
-      "enabled"
-    ]
-    [
-      "lsp"
-      "autoAttach"
-      "filetypes"
-    ]
-  ];
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {

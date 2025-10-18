@@ -14,29 +14,6 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-01: remove 2024-05-01
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "autoOpenOutput"
-    "copyOutput"
-    "enterOutputBehavior"
-    "imageProvider"
-    "outputCropBorder"
-    "outputShowMore"
-    "outputVirtLines"
-    "outputWinBorder"
-    "outputWinCoverGutter"
-    "outputWinHideOnLeave"
-    "outputWinMaxHeight"
-    "outputWinMaxWidth"
-    "outputWinStyle"
-    "savePath"
-    "useBorderHighlights"
-    "virtLinesOffBy1"
-    "wrapOutput"
-    "showMimetypeDebug"
-  ];
-
   settingsOptions = {
     auto_image_popup = helpers.defaultNullOpts.mkBool false ''
       When true, cells that produce an image output will open the image output automatically with

@@ -11,45 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-04-15: remove 2024-06-15
-  optionsRenamedToSettings = [
-    "groups"
-    "highlightGroups"
-    {
-      old = "style";
-      new = "dark_variant";
-    }
-    {
-      old = "dimInactive";
-      new = "dim_inactive_windows";
-    }
-    {
-      old = "transparentBackground";
-      new = [
-        "enable"
-        "transparency"
-      ];
-    }
-  ];
-  imports =
-    let
-      basePluginPath = [
-        "colorschemes"
-        "rose-pine"
-      ];
-    in
-    [
-      (lib.mkRemovedOptionModule (
-        basePluginPath ++ [ "disableItalics" ]
-      ) "Use `colorschemes.rose-pine.settings.enable.italics` instead.")
-      (lib.mkRemovedOptionModule (
-        basePluginPath ++ [ "boldVerticalSplit" ]
-      ) "Use `colorschemes.rose-pine.settings.highlight_groups` instead.")
-      (lib.mkRemovedOptionModule (
-        basePluginPath ++ [ "transparentFloat" ]
-      ) "Use `colorschemes.rose-pine.settings.highlight_groups.NormalFloat` instead.")
-    ];
-
   settingsOptions = {
     variant =
       lib.nixvim.mkNullOrOption

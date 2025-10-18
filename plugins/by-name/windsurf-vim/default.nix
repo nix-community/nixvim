@@ -41,7 +41,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO: introduced 2024-02-19: remove 2024-03-19
+  # TODO: introduced 2025-04-19
   inherit ((import ./deprecations.nix { inherit lib; })) imports;
 
   settingsOptions = {

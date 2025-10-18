@@ -12,15 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.MattSturgeon ];
 
-  # TODO: introduced 2024-05-24, remove on 2024-08-24
-  optionsRenamedToSettings = [
-    "promptFuncReturnType"
-    "promptFuncParamType"
-    "printVarStatements"
-    "printfStatements"
-    "extractVarStatements"
-  ];
-
   extraOptions = {
     enableTelescope = mkEnableOption "telescope integration";
   };

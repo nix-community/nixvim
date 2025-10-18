@@ -10,27 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: added 2024-09-03 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "icons"
-    [
-      "lsp"
-      "autoAttach"
-    ]
-    [
-      "lsp"
-      "preference"
-    ]
-    "highlight"
-    "separator"
-    "depthLimit"
-    "depthLimitIndicator"
-    "safeOutput"
-    "lazyUpdateContext"
-    "click"
-  ];
-
   settingsOptions = {
     icons = lib.mapAttrs (name: default: defaultNullOpts.mkStr default "icon for ${name}.") {
       File = "󰈙 ";

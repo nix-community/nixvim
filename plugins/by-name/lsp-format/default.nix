@@ -9,23 +9,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: added 10-22-2024 remove after 24.11
-  deprecateExtraOptions = true;
-  imports = [
-    (lib.mkRenamedOptionModule
-      [
-        "plugins"
-        "lsp-format"
-        "setup"
-      ]
-      [
-        "plugins"
-        "lsp-format"
-        "settings"
-      ]
-    )
-  ];
-
   description = ''
     A wrapper around Neovims native LSP formatting.
 

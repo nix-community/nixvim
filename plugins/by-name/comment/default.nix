@@ -12,34 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-24: remove 2024-05-24
-  imports =
-    let
-      oldPluginPath = [
-        "plugins"
-        "comment-nvim"
-      ];
-      newPluginPath = [
-        "plugins"
-        "comment"
-      ];
-      settingsPath = newPluginPath ++ [ "settings" ];
-
-      optionsRenamedToSettings = import ./renamed-options.nix;
-    in
-    [
-      (mkRenamedOptionModule (oldPluginPath ++ [ "enable" ]) (newPluginPath ++ [ "enable" ]))
-      (mkRenamedOptionModule (oldPluginPath ++ [ "package" ]) (newPluginPath ++ [ "package" ]))
-      (mkRemovedOptionModule (
-        oldPluginPath
-        ++ [
-          "mappings"
-          "extended"
-        ]
-      ) "This option has been removed upstream.")
-    ]
-    ++ (lib.nixvim.mkSettingsRenamedOptionModules oldPluginPath settingsPath optionsRenamedToSettings);
-
   settingsOptions = {
     padding = helpers.defaultNullOpts.mkBool true ''
       Add a space b/w comment and the line.

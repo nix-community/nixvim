@@ -13,37 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: added 2024-09-03 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "manualMode"
-    "detectionMethods"
-    "patterns"
-    "ignoreLsp"
-    "excludeDirs"
-    "showHidden"
-    "silentChdir"
-    "scopeChdir"
-    "dataPath"
-  ];
-  imports = [
-    # TODO: added 2024-03-13 remove after 24.11
-    (lib.mkRenamedOptionModule
-      [
-        "plugins"
-        "telescope"
-        "extensions"
-        "project-nvim"
-        "enable"
-      ]
-      [
-        "plugins"
-        "project-nvim"
-        "enableTelescope"
-      ]
-    )
-  ];
-
   settingsOptions = {
     manual_mode = defaultNullOpts.mkBool false ''
       Manual mode doesn't automatically change your root directory, so you have the option to

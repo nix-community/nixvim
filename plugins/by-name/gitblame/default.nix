@@ -13,18 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = with lib.maintainers; [ GaetanLepage ];
 
-  # TODO: introduce 2024-08-03. Remove after 24.11
-  optionsRenamedToSettings = [
-    "messageTemplate"
-    "dateFormat"
-    "messageWhenNotCommitted"
-    "highlightGroup"
-    "extmarkOptions"
-    "displayVirtualText"
-    "ignoredFiletypes"
-    "delay"
-    "virtualTextColumn"
-  ];
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {

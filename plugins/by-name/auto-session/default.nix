@@ -13,15 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO: added 204-10-05 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = import ./renamed-options.nix;
-  imports = [
-    (lib.mkRemovedOptionModule [ "plugins" "auto-session" "cwdChangeHandling" ] ''
-      Please switch to `cwd_change_handling` with just a boolean value.
-    '')
-  ];
-
   settingsOptions = {
     enabled = defaultNullOpts.mkBool true ''
       Enables/disables auto creating, saving and restoring.

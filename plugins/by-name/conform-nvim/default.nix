@@ -18,35 +18,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     saygo-png
   ];
 
-  # TODO: added 2024-08-23 remove after 24.11
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "formatters"
-    "formattersByFt"
-    "logLevel"
-    "notifyOnError"
-  ];
-  imports =
-    map
-      (
-        optionName:
-        lib.mkRemovedOptionModule
-          [
-            "plugins"
-            "conform-nvim"
-            optionName
-          ]
-          ''
-            Please use `plugins.conform-nvim.settings.${lib.nixvim.toSnakeCase optionName}` instead.
-
-            Note that nested options will now be snake_case, as well, to match upstream plugin configuration.
-          ''
-      )
-      [
-        "formatAfterSave"
-        "formatOnSave"
-      ];
-
   extraOptions = {
     autoInstall = {
       enable = lib.mkEnableOption ''

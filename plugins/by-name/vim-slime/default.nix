@@ -12,19 +12,6 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-02: remove 2024-05-02
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "target"
-    "vimterminalCmd"
-    "noMappings"
-    "pasteFile"
-    "preserveCurpos"
-    "defaultConfig"
-    "dontAskDefault"
-    "bracketedPaste"
-  ];
-
   settingsOptions = {
     target = helpers.defaultNullOpts.mkEnum [
       "dtach"

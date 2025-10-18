@@ -11,37 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-04-07: remove 2024-06-07
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "moveToDebugline"
-    "displayCounter"
-    "displaySnippet"
-    "ignoreTreesitter"
-    "printTag"
-  ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "debugprint"
-      ];
-    in
-    [
-      (mkRemovedOptionModule (basePluginPath ++ [ "createCommands" ]) ''
-        This option has been deprectaded upstream.
-        Learn more [here](https://github.com/andrewferrier/debugprint.nvim/blob/796d8d4528bc5882d287b26e69cc8d810a9147c8/doc/debugprint.nvim.txt#L203-L213).
-      '')
-      (mkRemovedOptionModule (basePluginPath ++ [ "createKeymaps" ]) ''
-        This option has been deprectaded upstream.
-        Learn more [here](https://github.com/andrewferrier/debugprint.nvim/blob/796d8d4528bc5882d287b26e69cc8d810a9147c8/doc/debugprint.nvim.txt#L203-L213).
-      '')
-      (mkRemovedOptionModule (basePluginPath ++ [ "filetypes" ]) ''
-        Please use `plugins.debugprint.settings.filetypes` instead.
-        The sub-module options for each filetype are `left`, `right`, `mid_var` and `right_var`.
-      '')
-    ];
-
   settingsOptions = {
     keymaps =
       helpers.defaultNullOpts.mkAttrsOf (with lib.types; attrsOf (either str rawLua))

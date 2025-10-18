@@ -189,6 +189,4 @@ lib.nixvim.plugins.mkVimPlugin {
     page_title = "「\$\{name}」";
     theme = "dark";
   };
-
-  inherit (import ./deprecations.nix) deprecateExtraConfig optionsRenamedToSettings;
 }

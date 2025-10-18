@@ -20,17 +20,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     config.plugins.lsp.package
   ];
 
-  # TODO introduced 2024-04-07: remove 2024-06-07
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "palettes"
-    "customPalettes"
-    "italics"
-    "transparentBackground"
-    "caching"
-    "cacheDir"
-  ];
-
   settingsOptions = {
     palettes = {
       main = defaultNullOpts.mkStr "dark" ''

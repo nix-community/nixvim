@@ -11,23 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.MattSturgeon ];
 
-  # TODO: Introduced 2024-06-25, remove after 24.11
-  imports = [
-    (mkRenamedOptionModule
-      [
-        "plugins"
-        "lsp-lines"
-        "currentLine"
-      ]
-      [
-        "diagnostic"
-        "settings"
-        "virtual_lines"
-        "only_current_line"
-      ]
-    )
-  ];
-
   extraConfig = {
     # Strongly recommended by the plugin, to avoid duplication.
     diagnostic.settings.virtual_text = mkDefault false;

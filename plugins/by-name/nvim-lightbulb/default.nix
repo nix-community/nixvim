@@ -10,26 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-15. Remove on 2024-03-15
-  imports =
-    map
-      (
-        optionName:
-        mkRemovedOptionModule [
-          "plugins"
-          "nvim-lightbulb"
-          optionName
-        ] "Please use `plugins.nvim-lightbulb.settings` instead."
-      )
-      [
-        "ignore"
-        "sign"
-        "float"
-        "virtualText"
-        "statusText"
-        "autocmd"
-      ];
-
   settingsOptions = {
     priority = helpers.defaultNullOpts.mkUnsignedInt 10 ''
       Priority of the lightbulb for all handlers except float.

@@ -13,107 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.loicreynier ];
 
-  # TODO introduced 2024-03-15: remove 2024-05-15
-  optionsRenamedToSettings = [
-    "autoClose"
-    "autoFold"
-    "autoOpen"
-    "autoJump"
-    "autoPreview"
-    "foldClosed"
-    "foldOpen"
-    "group"
-    "height"
-    "icons"
-    "indentLines"
-    "mode"
-    "padding"
-    "position"
-    "width"
-    "useDiagnosticSigns"
-
-    [
-      "actionKeys"
-      "cancel"
-    ]
-    [
-      "actionKeys"
-      "close"
-    ]
-    [
-      "actionKeys"
-      "closeFolds"
-    ]
-    [
-      "actionKeys"
-      "hover"
-    ]
-    [
-      "actionKeys"
-      "jump"
-    ]
-    [
-      "actionKeys"
-      "jumpClose"
-    ]
-    [
-      "actionKeys"
-      "next"
-    ]
-    [
-      "actionKeys"
-      "openFolds"
-    ]
-    [
-      "actionKeys"
-      "openSplit"
-    ]
-    [
-      "actionKeys"
-      "openTab"
-    ]
-    [
-      "actionKeys"
-      "openVsplit"
-    ]
-    [
-      "actionKeys"
-      "previous"
-    ]
-    [
-      "actionKeys"
-      "refresh"
-    ]
-    [
-      "actionKeys"
-      "toggleFold"
-    ]
-    [
-      "actionKeys"
-      "toggleMode"
-    ]
-    [
-      "actionKeys"
-      "togglePreview"
-    ]
-    [
-      "signs"
-      "error"
-    ]
-    [
-      "signs"
-      "hint"
-    ]
-    [
-      "signs"
-      "other"
-    ]
-    [
-      "signs"
-      "warning"
-    ]
-  ];
-
   settingsOptions = {
     auto_close = defaultNullOpts.mkBool false ''
       Automatically close the list when you have no diagnostics.
@@ -349,36 +248,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     } "Define custom icons.";
   };
 
-  extraConfig = cfg: {
-    # TODO: introduced 2024-10-12: remove after 24.11
-    warnings =
-      let
-        definedOpts = lib.filter (opt: lib.hasAttrByPath (lib.toList opt) cfg.settings) [
-          "action_keys"
-          "position"
-          "height"
-          "width"
-          "mode"
-          "fold_open"
-          "fold_close"
-          "group"
-          "padding"
-          "cycle_results"
-          "indent_lines"
-          "win_config"
-          "include_declaration"
-          "signs"
-          "use_diagnostic_signs"
-        ];
-      in
-      lib.nixvim.mkWarnings "plugins.trouble" {
-        when = definedOpts != [ ];
-        message = ''
-          The following v2 settings options are no longer supported in v3:
-          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-        '';
-      };
-
+  extraConfig = {
     # TODO: added 2024-09-20 remove after 24.11
     plugins.web-devicons = lib.mkIf (
       !(

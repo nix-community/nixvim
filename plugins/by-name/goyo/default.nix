@@ -13,17 +13,6 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-01: remove 2024-05-01
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "width"
-    "height"
-    {
-      old = "showLineNumbers";
-      new = "linenr";
-    }
-  ];
-
   settingsOptions = {
     width = helpers.mkNullOrOption types.ints.unsigned "width";
 

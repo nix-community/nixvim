@@ -8,12 +8,6 @@ mkExtension {
   extensionName = "fzy_native";
   package = "telescope-fzy-native-nvim";
 
-  # TODO: introduced 2024-03-24, remove on 2024-05-24
-  optionsRenamedToSettings = [
-    "overrideFileSorter"
-    "overrideGenericSorter"
-  ];
-
   settingsOptions = {
     override_file_sorter = defaultNullOpts.mkBool true ''
       Whether to override the file sorter.

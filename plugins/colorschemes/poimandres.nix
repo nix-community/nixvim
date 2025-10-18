@@ -12,19 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-04-15: remove 2024-06-15
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "boldVertSplit"
-    "darkVariant"
-    "disableBackground"
-    "disableFloatBackground"
-    "disableItalics"
-    "dimNcBackground"
-    "groups"
-    "highlightGroups"
-  ];
-
   settingsOptions = {
     bold_vert_split = defaultNullOpts.mkBool false ''
       Use bold vertical separators.

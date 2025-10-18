@@ -19,22 +19,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-03-24: remove 2024-05-24
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [ "defaults" ];
-
   imports = [
     ./extensions
-
-    # TODO introduced 2024-05-24: remove 2024-08-24
-    (mkRemovedOptionModule
-      [
-        "plugins"
-        "telescope"
-        "keymapsSilent"
-      ]
-      "This option no longer has any effect now that the `plugin.telescope.keymaps` implementation uses `<cmd>`."
-    )
 
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {

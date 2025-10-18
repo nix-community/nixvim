@@ -2,7 +2,7 @@
 with lib;
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts mkRaw toLuaObject;
+  inherit (lib.nixvim) defaultNullOpts mkRaw;
 
   specExamples = [
     # Basic group with custom icon
@@ -75,69 +75,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = "Neovim plugin for displaying keybindings in a popup window.";
 
   maintainers = [ lib.maintainers.khaneliman ];
-
-  # TODO: introduced 2024-08-05: remove after 24.11
-  optionsRenamedToSettings = import ./renamed-options.nix;
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "which-key"
-      ];
-    in
-    [
-      (lib.mkRemovedOptionModule (basePluginPath ++ [ "triggers" ]) ''
-        Please use `plugins.which-key.settings.triggers` instead.
-
-        See the plugin documentation for more details about the new option signature:
-        https://github.com/folke/which-key.nvim#-triggers
-      '')
-      (lib.mkRemovedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "window"
-            "padding"
-          ]
-        )
-        ''
-          Please use `plugins.which-key.settings.win.padding` instead.
-
-          See the plugin documentation for more details about the new option:
-          https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
-        ''
-      )
-      (lib.mkRemovedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "window"
-            "margin"
-          ]
-        )
-        ''
-          Please use `plugins.which-key.settings.layout` instead.
-
-          See the plugin documentation for more details about the new options:
-          https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
-        ''
-      )
-      (lib.mkRemovedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "window"
-            "position"
-          ]
-        )
-        ''
-          Please use `plugins.which-key.settings.layout`, `plugins.which-key.settings.win.title_pos`, or `plugins.which-key.settings.win.footer_pos` instead.
-
-          See the plugin documentation for more details about the new options:
-          https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
-        ''
-      )
-    ];
 
   settingsOptions = {
     preset = defaultNullOpts.mkEnumFirstDefault [
@@ -432,35 +369,4 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     expand = 1;
   };
-
-  # TODO: introduced 2024-07-29: remove after 24.11
-  extraOptions = {
-    registrations = mkOption {
-      type = with types; attrsOf anything;
-      description = ''
-        This option is deprecated, use `settings.spec` instead.
-
-        Note: the keymap format has changed in v3 of which-key.
-      '';
-      visible = false;
-    };
-  };
-
-  # TODO: introduced 2024-07-29: remove after 24.11
-  # NOTE: this may be upgraded to a mkRemoveOptionModule when which-key removes support
-  extraConfig =
-    cfg: opts:
-    lib.mkIf opts.registrations.isDefined {
-      warnings = lib.nixvim.mkWarnings "plugins.which-key" ''
-        The option definition `plugins.which-key.registrations' in ${showFiles opts.registrations.files} has been deprecated in which-key v3; please remove it.
-        You should use `plugins.which-key.settings.spec' instead.
-
-        Note: the spec format has changed in which-key v3
-        See: https://github.com/folke/which-key.nvim?tab=readme-ov-file#%EF%B8%8F-mappings
-      '';
-
-      plugins.which-key.luaConfig.content = lib.optionalString opts.registrations.isDefined ''
-        require("which-key").register(${toLuaObject cfg.registrations})
-      '';
-    };
 }

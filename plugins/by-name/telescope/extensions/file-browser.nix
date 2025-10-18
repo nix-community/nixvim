@@ -10,63 +10,6 @@ mkExtension {
   extensionName = "file_browser";
   package = "telescope-file-browser-nvim";
 
-  # TODO: introduced 2024-03-24, remove on 2024-05-24
-  optionsRenamedToSettings = [
-    "theme"
-    "path"
-    "cwd"
-    "cwdToPath"
-    "grouped"
-    # "files"  TODO this warning is causing an 'infinite recursion error'... No idea why
-    "addDirs"
-    "depth"
-    "autoDepth"
-    "selectBuffer"
-    "hidden"
-    "respectGitignore"
-    "browseFiles"
-    "browseFolders"
-    "hideParentDir"
-    "collapseDirs"
-    "quiet"
-    "dirIcon"
-    "dirIconHl"
-    "displayStat"
-    "hijackNetrw"
-    "useFd"
-    "gitStatus"
-    "promptPath"
-  ];
-  imports = [
-    (mkRemovedOptionModule
-      [
-        "plugins"
-        "telescope"
-        "extensions"
-        "file-browser"
-        "mappings"
-      ]
-      ''
-        Use `plugins.telescope.extension.file-browser.settings.mappings` instead but beware, you need to specify the full name of the callback:
-        Example:
-        ```
-          mappings = {
-            i = {
-              "<A-c>" = "require('telescope._extensions.file_browser.actions').create";
-              "<S-CR>" = "require('telescope._extensions.file_browser.actions').create_from_prompt";
-              "<A-r>" = "require('telescope._extensions.file_browser.actions').rename";
-            };
-            n = {
-              "c" = "require('telescope._extensions.file_browser.actions').create";
-              "r" = "require('telescope._extensions.file_browser.actions').rename";
-              "m" = "require('telescope._extensions.file_browser.actions').move";
-            };
-          }
-        ```
-      ''
-    )
-  ];
-
   settingsOptions = {
     theme = mkNullOrStr ''
       Custom theme, will use your global theme by default.

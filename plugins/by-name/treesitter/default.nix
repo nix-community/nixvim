@@ -174,56 +174,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO introduced 2024-07-06: remove after 24.11
-  optionsRenamedToSettings = [
-    "ensureInstalled"
-    "ignoreInstall"
-    "parserInstallDir"
-    [
-      "incrementalSelection"
-      "enable"
-    ]
-    [
-      "incrementalSelection"
-      "keymaps"
-      "initSelection"
-      "nodeDecremental"
-    ]
-    [
-      "incrementalSelection"
-      "keymaps"
-      "initSelection"
-      "nodeIncremental"
-    ]
-    [
-      "incrementalSelection"
-      "keymaps"
-      "initSelection"
-      "scopeIncremental"
-    ]
-    {
-      old = "customCaptures";
-      new = [
-        "highlight"
-        "custom_captures"
-      ];
-    }
-    {
-      old = "disabledLanguages";
-      new = [
-        "highlight"
-        "disable"
-      ];
-    }
-    {
-      old = "indent";
-      new = [
-        "indent"
-        "enable"
-      ];
-    }
-  ];
-
   imports =
     let
       basePluginPath = [

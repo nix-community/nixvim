@@ -13,29 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     MattSturgeon
   ];
 
-  # TODO: Added 2024-06-17; remove 2024-09-17
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "selectedInterpreters"
-    "replEnable"
-    "replDisable"
-    "interpreterOptions"
-    "display"
-    "liveDisplay"
-    [
-      "displayOptions"
-      "terminalWidth"
-    ]
-    [
-      "displayOptions"
-      "notificationTimeout"
-    ]
-    "showNoOutput"
-    "snipruncolors"
-    "liveModeToggle"
-    "borders"
-  ];
-
   # https://michaelb.github.io/sniprun/sources/README.html#configuration
   settingsOptions = {
     selected_interpreters = helpers.defaultNullOpts.mkListOf types.str [ ] ''

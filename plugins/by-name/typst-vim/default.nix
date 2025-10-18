@@ -11,14 +11,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-02-20: remove 2024-04-20
-  deprecateExtraConfig = true;
-  optionsRenamedToSettings = [
-    "cmd"
-    "pdfViewer"
-    "concealMath"
-    "autoCloseToc"
-  ];
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
     (lib.nixvim.mkRemovedPackageOptionModule {

@@ -12,12 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  # TODO:: introduced 10-22-2024: remove after 24.11
-  optionsRenamedToSettings = [
-    "onAttach"
-    "handlers"
-  ];
-
   settingsOptions = {
     on_attach = defaultNullOpts.mkLuaFn null "Function to call when tsserver attaches to a buffer.";
 
