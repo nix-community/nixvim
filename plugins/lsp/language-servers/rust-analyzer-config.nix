@@ -4,7 +4,7 @@ let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
 
-  rustAnalyzerOptions = import ../../../generated/rust-analyzer.nix;
+  rustAnalyzerOptions = lib.importJSON ../../../generated/rust-analyzer-options.json;
 
   mkRustAnalyzerType =
     { kind, ... }@typeInfo:

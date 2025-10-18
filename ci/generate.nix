@@ -33,25 +33,21 @@ writeShellApplication {
       shift
     done
 
-    generate_nix() {
-      echo "$2"
-      cp "$1" "$generated_dir/$2.nix"
-      nixfmt "$generated_dir/$2.nix"
-    }
-
     generate_json() {
-      echo "$2"
-      prettier --parser=json "$1" >"$generated_dir/$2.json"
+      # Get file part from filepath and remove hash prefix
+      output_name=$(basename "$1" | cut -d "-" -f "2-")
+      basename "$1" ".json"
+      prettier "$1" > "$generated_dir/$output_name"
     }
 
     mkdir -p "$generated_dir"
-    generate_nix "${rust-analyzer-options}" "rust-analyzer"
-    generate_nix "${efmls-configs-sources}" "efmls-configs"
-    generate_nix "${none-ls-builtins}" "none-ls"
 
-    generate_json "${conform-formatters}" "conform-formatters"
-    generate_json "${lspconfig-servers}" "lspconfig-servers"
-    generate_json "${lspconfig-servers.unsupported}" "unsupported-lspconfig-servers"
+    generate_json "${rust-analyzer-options}"
+    generate_json "${efmls-configs-sources}"
+    generate_json "${none-ls-builtins}"
+    generate_json "${conform-formatters}"
+    generate_json "${lspconfig-servers}"
+    generate_json "${lspconfig-servers.unsupported}"
 
     if [ -n "$commit" ]; then
       cd "$generated_dir"

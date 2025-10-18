@@ -1,10 +1,10 @@
 {
   lib,
+  writers,
   vimPlugins,
-  writeText,
 }:
 let
-  tools = lib.trivial.importJSON "${vimPlugins.efmls-configs-nvim.src}/doc/supported-list.json";
+  tools = lib.importJSON "${vimPlugins.efmls-configs-nvim.src}/doc/supported-list.json";
   languages = lib.attrNames tools;
 
   toLangTools' = lang: kind: lib.map (lib.getAttr "name") (tools.${lang}.${kind} or [ ]);
@@ -54,8 +54,4 @@ let
       };
     };
 in
-writeText "efmls-configs-sources.nix" (
-  "# WARNING: DO NOT EDIT\n"
-  + "# This file is generated with packages.<system>.efmls-configs-sources, which is run automatically by CI\n"
-  + (lib.generators.toPretty { } sources)
-)
+writers.writeJSON "efmls-configs-sources.json" sources
