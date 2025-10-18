@@ -5,7 +5,7 @@
   pandoc,
   jq,
 }:
-runCommand "lspconfig-servers"
+runCommand "lspconfig-servers.json"
   {
     lspconfig = vimPlugins.nvim-lspconfig;
     nativeBuildInputs = [

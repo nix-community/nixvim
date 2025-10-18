@@ -6,7 +6,7 @@
   ...
 }:
 let
-  tools = import ../../../generated/efmls-configs.nix;
+  tools = lib.importJSON ../../../generated/efmls-configs-sources.json;
   inherit (import ./packages.nix lib) packaged;
 in
 {

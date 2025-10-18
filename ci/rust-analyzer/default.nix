@@ -1,22 +1,22 @@
 #
-# This derivation creates a Nix file that describes the Nix module that needs to be instantiated
+# This derivation creates a JSON file that describes the Nix module that needs to be instantiated
 #
 # The create file is of the form:
 #
 # {
-#   "<rust-analyzer.option.name>" = {
-#      description = "<option description>";
-#      type = {
-#          kind = "<name of the type>";
-#          # Other values depending on the kind, like values for enum or subTypes for oneOf
-#      };
-#   };
+#   "<rust-analyzer.option.name>": {
+#     "description": "<option description>",
+#     "type": {
+#        "kind": "<name of the type>"
+#         <Other values depending on the kind, like values for enum or subTypes for oneOf>
+#      }
+#   }
 # }
 #
 {
   lib,
+  writers,
   rust-analyzer,
-  writeText,
   pandoc,
   runCommand,
 }:
@@ -227,8 +227,4 @@ let
     }
   ) rustAnalyzerProperties;
 in
-writeText "rust-analyzer-options.nix" (
-  "# WARNING: DO NOT EDIT\n"
-  + "# This file is generated with packages.<system>.rust-analyzer-options, which is run automatically by CI\n"
-  + (lib.generators.toPretty { } (lib.mergeAttrsList rustAnalyzerOptions))
-)
+writers.writeJSON "rust-analyzer-options.json" (lib.mergeAttrsList rustAnalyzerOptions)

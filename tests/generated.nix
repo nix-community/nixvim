@@ -71,8 +71,8 @@ let
 
         declared = noPackage ++ lib.attrsets.attrNames packaged;
 
-        generated = lib.pipe ../generated/none-ls.nix [
-          import
+        generated = lib.pipe ../generated/none-ls-sources.json [
+          lib.importJSON
           lib.attrsets.attrValues
           lib.lists.concatLists
           lib.lists.unique
@@ -91,8 +91,8 @@ let
 
         declared = unpackaged ++ lib.attrsets.attrNames packaged;
 
-        generated = lib.pipe ../generated/efmls-configs.nix [
-          import
+        generated = lib.pipe ../generated/efmls-configs-sources.json [
+          lib.importJSON
           lib.attrsets.attrValues
           (lib.map ({ linter, formatter }: linter.possible ++ formatter.possible))
           lib.lists.concatLists

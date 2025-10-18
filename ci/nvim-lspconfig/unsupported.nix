@@ -10,7 +10,7 @@
   I.e., files in the old `lua/lspconfig/configs/` directory, that aren't
   present in the new `lsp/` directory.
 */
-runCommand "unsupported-lspconfig-servers"
+runCommand "unsupported-lspconfig-servers.json"
   {
     nativeBuildInputs = [ jq ];
     lspconfig = vimPlugins.nvim-lspconfig;
