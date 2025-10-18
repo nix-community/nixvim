@@ -1,9 +1,24 @@
 {
   empty = {
     plugins = {
-      treesitter-refactor.enable = true;
-      # Also needs treesitter, to avoid warnings
       treesitter.enable = true;
+      treesitter-refactor.enable = true;
+    };
+  };
+
+  example = {
+    plugins = {
+      treesitter.enable = true;
+      treesitter-refactor = {
+        enable = true;
+
+        settings = {
+          smart_rename = {
+            enable = true;
+            keymaps.smart_rename = "grr";
+          };
+        };
+      };
     };
   };
 }
