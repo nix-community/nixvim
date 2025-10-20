@@ -217,6 +217,13 @@
     name = "Daniel Laing";
     source = "nixpkgs";
   };
+  ein-shved = {
+    email = "mestofel13@gmail.com";
+    github = "ein-shved";
+    githubId = 3513222;
+    name = "Yury Shvedov";
+    source = "nixpkgs";
+  };
   elythh = {
     email = "gwen@omg.lol";
     github = "elythh";
