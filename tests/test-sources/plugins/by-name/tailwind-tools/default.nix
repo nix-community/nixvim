@@ -1,6 +1,11 @@
 {
   empty = {
     plugins.tailwind-tools.enable = true;
+
+    test.warnings = expect: [
+      (expect "count" 1)
+      (expect "any" "Nixvim (plugins.tailwind-tools): The upstream GitHub project for tailwind-tools is archived,")
+    ];
   };
 
   defaults = {
@@ -41,6 +46,10 @@
         };
       };
     };
+
+    test.warnings = expect: [
+      (expect "count" 1)
+    ];
   };
 
   example = {
@@ -57,5 +66,9 @@
         };
       };
     };
+
+    test.warnings = expect: [
+      (expect "count" 1)
+    ];
   };
 }
