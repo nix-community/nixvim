@@ -71,7 +71,6 @@ KNOWN_PATHS: dict[
     ],
 ] = {
     "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
-    "plugins/by-name/treesitter-refactor/default.nix": (State.OLD, Kind.MISC, True),
     "plugins/by-name/treesitter-textobjects/default.nix": (
         State.OLD,
         Kind.NEOVIM,
