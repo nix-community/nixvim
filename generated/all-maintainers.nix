@@ -277,11 +277,16 @@
     source = "nixpkgs";
   };
   insipx = {
-    email = "github.tech@liquidthink.net";
+    email = "github@andrewplaza.dev";
     github = "insipx";
     githubId = 6452260;
+    keys = [
+      {
+        fingerprint = "843D 72A9 EB79 A869 2C58  5B3A E773 8A7A 0F5C DB89";
+      }
+    ];
     name = "Andrew Plaza";
-    source = "nixvim";
+    source = "nixpkgs";
   };
   jalil-salame = {
     email = "jalil.salame@gmail.com";
@@ -337,7 +342,7 @@
     source = "nixpkgs";
   };
   loicreynier = {
-    email = "loic@loicreynier.fr";
+    email = "contact@loicreynier.fr";
     github = "loicreynier";
     githubId = 88983487;
     name = "Loïc Reynier";
