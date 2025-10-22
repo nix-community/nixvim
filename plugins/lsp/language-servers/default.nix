@@ -9,6 +9,15 @@ let
   renamedServers = import ./_renamed.nix;
   unsupportedServers = lib.importJSON ../../../generated/unsupported-lspconfig-servers.json;
 
+  typescriptFiletypes = [
+    "javascript"
+    "javascriptreact"
+    "javascript.jsx"
+    "typescript"
+    "typescriptreact"
+    "typescript.tsx"
+  ];
+
   lspExtraArgs = {
     dartls = {
       settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
@@ -122,14 +131,7 @@ let
       # `plugins.lsp.servers.volar.tslsIntegration` and `plugins.lsp.servers.vue_ls.tslsIntegration` don't wipe out the default filetypes
       extraConfig = {
         plugins.lsp.servers.ts_ls = {
-          filetypes = [
-            "javascript"
-            "javascriptreact"
-            "javascript.jsx"
-            "typescript"
-            "typescriptreact"
-            "typescript.tsx"
-          ];
+          filetypes = typescriptFiletypes;
         };
       };
     };
@@ -146,27 +148,52 @@ let
           default = true;
           example = false;
         };
-      };
-      extraConfig = cfg: opts: {
-        assertions = lib.nixvim.mkAssertions "plugins.lsp.servers.vue_ls" {
-          assertion = cfg.tslsIntegration -> (cfg.package != null);
-          message = "When `${opts.tslsIntegration}` is enabled, `${opts.package}` must not be null.";
+        vtslsIntegration = mkOption {
+          type = types.bool;
+          description = ''
+            Enable integration with vtsls.
+          '';
+          default = true;
+          example = false;
         };
-        plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
-          filetypes = [ "vue" ];
-          extraOptions = {
-            init_options = {
-              plugins = lib.mkIf (cfg.package != null) [
-                {
-                  name = "@vue/typescript-plugin";
-                  location = "${lib.getBin cfg.package}/lib/language-tools/packages/language-server";
-                  languages = [ "vue" ];
-                }
+      };
+      extraConfig =
+        cfg: opts:
+        let
+          plugin = {
+            name = "@vue/typescript-plugin";
+            location = "${lib.getBin cfg.package}/lib/language-tools/packages/language-server";
+            languages = [ "vue" ];
+          };
+        in
+        {
+          assertions = lib.nixvim.mkAssertions "plugins.lsp.servers.vue_ls" {
+            assertion = (cfg.tslsIntegration or cfg.vtslsIntegration) -> (cfg.package != null);
+            message = "When `${opts.tslsIntegration}` or `${opts.vtslsIntegration}` is enabled, `${opts.package}` must not be null.";
+          };
+          plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
+            filetypes = [ "vue" ];
+            extraOptions = {
+              init_options = {
+                plugins = lib.mkIf (cfg.package != null) [ plugin ];
+              };
+            };
+          };
+          plugins.lsp.servers.vtsls = lib.mkIf (cfg.enable && cfg.vtslsIntegration) {
+            filetypes = typescriptFiletypes ++ [ "vue" ];
+            settings.vtsls.tsserver = {
+              globalPlugins = lib.mkIf (cfg.package != null) [
+                (
+                  plugin
+                  // {
+                    configNamespace = "typescript";
+                    enableForWorkspaceTypeScriptVersions = true;
+                  }
+                )
               ];
             };
           };
         };
-      };
     };
     vls = {
       extraOptions = {
