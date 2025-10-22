@@ -101,12 +101,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  extraConfig = cfg: {
-    warnings = lib.nixvim.mkWarnings "plugins.tailwind-tools" {
-      message = ''The upstream GitHub project for tailwind-tools is archived, and enabling this plugin triggers an lspconfig deprecation warning. Consider disabling it or switching to an alternative.'';
-    };
-  };
-
   settingsExample = {
     document_color = {
       conceal = {

@@ -1,6 +1,11 @@
 { lib, ... }:
 let
   deprecated = {
+    # Added 2025-10-22
+    tailwind-tools = ''
+      The upstream GitHub project for tailwind-tools is archived, and enabling this plugin triggers an lspconfig deprecation warning.
+      Consider disabling it or switching to an alternative.
+    '';
   };
   removed.plugins = {
     # Added 2023-08-29
