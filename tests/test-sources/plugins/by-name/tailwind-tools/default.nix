@@ -4,7 +4,8 @@
 
     test.warnings = expect: [
       (expect "count" 1)
-      (expect "any" "Nixvim (plugins.tailwind-tools): The upstream GitHub project for tailwind-tools is archived,")
+      (expect "any" "Nixvim (plugins.tailwind-tools): This plugin has been deprecated.")
+      (expect "any" "Consider disabling it or switching to an alternative.")
     ];
   };
 
