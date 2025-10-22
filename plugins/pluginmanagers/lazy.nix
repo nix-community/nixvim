@@ -8,30 +8,34 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "lazy-nvim";
   maintainers = [ ];
 
-  hasSettings = false;
-  callSetup = false;
-
   dependencies = [
     "git"
   ];
+
+  settingsExample = {
+    ui.border = "rounded";
+    checker.enabled = true;
+  };
+
+  # TODO: Added 2025-10-23, remove after 26.05
+  optionsRenamedToSettings =
+    map
+      (optName: [
+        "performance"
+        "rtp"
+        optName
+      ])
+      [
+        "reset"
+        "path"
+        "disabled_plugins"
+      ];
 
   extraOptions =
     let
       inherit (lib.nixvim) defaultNullOpts;
     in
     {
-      performance.rtp = {
-        reset = defaultNullOpts.mkBool true ''
-          reset the runtime path to $VIMRUNTIME and your config directory.
-        '';
-        paths = defaultNullOpts.mkListOf lib.types.str [ ] ''
-          add any custom paths here that you want to includes in the rtp
-        '';
-        disabled_plugins = defaultNullOpts.mkListOf lib.types.str [ ] ''
-          list any plugins you want to disable here
-        '';
-      };
-
       plugins =
         let
           inherit (lib) mkOption types;
@@ -140,7 +144,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
   extraConfig = cfg: {
-    plugins.lazy.luaConfig.content =
+    plugins.lazy.settings =
       let
         processPlugin =
           plugin:
@@ -213,18 +217,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         packedPlugins = if lib.length plugins == 1 then lib.head plugins else plugins;
       in
-      lib.mkIf (cfg.plugins != [ ]) ''
-        require('lazy').setup(
-          {
-            dev = {
-              path = "${lazyPath}",
-              patterns = {"."},
-              fallback = false
-            },
-            spec = ${lib.nixvim.toLuaObject packedPlugins},
-            performance = ${lib.nixvim.toLuaObject cfg.performance},
-          }
-        )
-      '';
+      lib.mkIf (cfg.plugins != [ ]) {
+        dev = {
+          path = lazyPath;
+          patterns = [ "." ];
+          fallback = false;
+        };
+        spec = packedPlugins;
+      };
   };
 }
