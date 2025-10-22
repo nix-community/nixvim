@@ -106,6 +106,7 @@
   "joker",
   "jq",
   "js_beautify",
+  "json_repair",
   "jsonnetfmt",
   "just",
   "kcl",
