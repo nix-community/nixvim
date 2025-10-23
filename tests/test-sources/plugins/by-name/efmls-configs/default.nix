@@ -134,9 +134,7 @@
   };
 
   no-packages = {
-    plugins.efmls-configs = {
-      enable = true;
-      efmLangServerPackage = null;
-    };
+    plugins.efmls-configs.enable = true;
+    dependencies.efm-langserver.enable = false;
   };
 }
