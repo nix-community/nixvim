@@ -20,10 +20,6 @@ in
       ];
     };
 
-    efmLangServerPackage = lib.mkPackageOption pkgs "efm-langserver" {
-      nullable = true;
-    };
-
     externallyManagedPackages = lib.mkOption {
       type = with lib.types; either (enum [ "all" ]) (listOf str);
       description = ''
@@ -199,11 +195,21 @@ in
         config.settings.languages = setupOptions;
       };
 
-      extraPackages = [ cfg.efmLangServerPackage ] ++ (map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
+      extraPackages = map (name: cfg.toolPackages.${name}) nixvimPkgs.right;
+      dependencies.efm-langserver.enable = lib.mkDefault true;
     };
 
-  imports = lib.singleton {
-    # Propagate setup warnings
-    inherit (config.plugins.efmls-configs.setup) warnings;
-  };
+  imports = [
+    {
+      # Propagate setup warnings
+      inherit (config.plugins.efmls-configs.setup) warnings;
+    }
+
+    # TODO: added 2025-10-23, remove after 26.05
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "efmls-configs";
+      oldPackageName = "efmLangServer";
+      packageName = "efm-langserver";
+    })
+  ];
 }

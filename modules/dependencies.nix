@@ -110,6 +110,7 @@ in
       curl.default = "curl";
       direnv.default = "direnv";
       distant.default = "distant";
+      efm-langserver.default = "efm-langserver";
       fish.default = "fish";
       flutter.default = "flutter";
       fzf = {
