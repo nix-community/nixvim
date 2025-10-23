@@ -194,9 +194,9 @@ in
         '';
       };
 
-      plugins.lsp.servers.efm = {
+      lsp.servers.efm = {
         enable = true;
-        extraOptions.settings.languages = setupOptions;
+        config.settings.languages = setupOptions;
       };
 
       extraPackages = [ cfg.efmLangServerPackage ] ++ (map (v: cfg.toolPackages.${v}) nixvimPkgs.right);
