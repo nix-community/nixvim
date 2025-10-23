@@ -69,9 +69,7 @@ KNOWN_PATHS: dict[
         Kind,  # Vim / Neovim / misc
         bool,  # Has deprecation warnings
     ],
-] = {
-    "plugins/by-name/coq-thirdparty/default.nix": (State.OLD, Kind.NEOVIM, False),
-}
+] = {}
 for telescope_extension_name, has_depr_warnings in {
     "advanced-git-search": False,
     "file-browser": True,

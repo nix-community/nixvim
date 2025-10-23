@@ -1,71 +1,33 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
-with lib;
-let
-  cfg = config.plugins.coq-thirdparty;
-in
-{
-  options.plugins.coq-thirdparty = {
-    enable = mkEnableOption "coq-thirdparty";
+{ lib, ... }:
+lib.nixvim.plugins.mkNeovimPlugin {
+  name = "coq-thirdparty";
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
-    package = lib.mkPackageOption pkgs "coq-thirdparty" {
-      default = [
-        "vimPlugins"
+  # The lua setup call is: `require('coq_3p')({...})`
+  moduleName = "coq_3p";
+  setup = "";
+
+  # TODO: Added 2025-10-24, remove after 26.05
+  imports =
+    let
+      basePluginPath = [
+        "plugins"
         "coq-thirdparty"
       ];
-    };
+    in
+    [
+      (lib.mkRenamedOptionModule (basePluginPath ++ [ "sources" ]) (basePluginPath ++ [ "settings" ]))
+    ];
 
-    sources = mkOption {
-      type = types.listOf (
-        types.submodule {
-          freeformType = types.attrs;
-
-          options = {
-            src = mkOption {
-              type = types.str;
-              description = "The name of the source";
-            };
-
-            short_name = mkOption {
-              type = types.nullOr types.str;
-              description = ''
-                A short name for the source.
-                If not specified, it is uppercase `src`.
-              '';
-              example = "nLUA";
-              default = null;
-            };
-          };
-        }
-      );
-      description = ''
-        List of sources.
-        Each source is a free-form type, so additional settings like `accept_key` may be specified even if they are not declared by nixvim.
-      '';
-      default = [ ];
-      example = [
-        {
-          src = "nvimlua";
-          short_name = "nLUA";
-        }
-        {
-          src = "vimtex";
-          short_name = "vTEX";
-        }
-        { src = "demo"; }
-      ];
-    };
-  };
-
-  config = mkIf cfg.enable {
-    extraPlugins = [ cfg.package ];
-
-    extraConfigLua = ''
-      require('coq_3p')(${lib.nixvim.toLuaObject cfg.sources})
-    '';
-  };
+  settingsExample = [
+    {
+      src = "nvimlua";
+      short_name = "nLUA";
+    }
+    {
+      src = "vimtex";
+      short_name = "vTEX";
+    }
+    { src = "demo"; }
+  ];
 }

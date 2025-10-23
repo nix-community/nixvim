@@ -1,5 +1,4 @@
 {
-  # Empty configuration
   empty = {
     plugins.coq-thirdparty.enable = true;
   };
@@ -8,7 +7,7 @@
     plugins.coq-thirdparty = {
       enable = true;
 
-      sources = [
+      settings = [
         {
           src = "nvimlua";
           short_name = "nLUA";
