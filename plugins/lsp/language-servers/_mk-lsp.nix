@@ -179,6 +179,12 @@ in
       settings = lib.nixvim.mkSettingsOption {
         description = "The settings for this LSP.";
         options = settingsOptions;
+
+        # Some servers declare settings sub-options without using `settingsOptions`.
+        # This leads the `settings` option to not be typed as a submodule.
+        # Hence, we force all `plugins.lsp.<name>.settings` options to be types as submodules.
+        # FIXME This is not ideal, but `plugins.lsp` will be dropped entirely in a few months.
+        submoduleType = true;
       };
 
       extraOptions = mkOption {

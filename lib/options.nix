@@ -329,14 +329,22 @@ rec {
       options ? { },
       description,
       example ? null,
+      # If no sub-options are explicitly declared, settings do not need to be a submodule.
+      submoduleType ? options != { },
     }:
     lib.mkOption {
       type =
-        with types;
-        submodule {
-          freeformType = attrsOf lib.nixvim.lua-types.anything;
-          inherit options;
-        };
+        let
+          anyLuaType = lib.nixvim.lua-types.anything;
+        in
+        if submoduleType then
+          types.submodule {
+            freeformType = types.attrsOf anyLuaType;
+            inherit options;
+          }
+        else
+          assert options == { };
+          anyLuaType;
       default = { };
       inherit description;
       example =
