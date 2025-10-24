@@ -18,16 +18,16 @@
     plugins.kiwi = {
       enable = true;
 
-      settings = {
-        __unkeyed-1 = {
+      settings = [
+        {
           name = "work";
           path = "work-wiki";
-        };
-        __unkeyed-2 = {
+        }
+        {
           name = "personal";
           path = "personal-wiki";
-        };
-      };
+        }
+      ];
     };
   };
 }
