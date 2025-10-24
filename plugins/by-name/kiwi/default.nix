@@ -5,14 +5,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  settingsExample = {
-    __unkeyed-1 = {
+  settingsExample = [
+    {
       name = "work";
       path = "work-wiki";
-    };
-    __unkeyed-2 = {
+    }
+    {
       name = "personal";
       path = "personal-wiki";
-    };
-  };
+    }
+  ];
 }
