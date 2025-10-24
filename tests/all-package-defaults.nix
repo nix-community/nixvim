@@ -40,6 +40,7 @@ let
 
     # luajitPackages.neotest is flaky: (temporarily?) disable tests that depend on it
     "compiler.nvim"
+    "hardhat.nvim"
     "neotest-bash"
     "neotest-ctest"
     "neotest-dart"
