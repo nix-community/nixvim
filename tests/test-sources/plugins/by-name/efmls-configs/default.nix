@@ -21,22 +21,7 @@
         "JSON"
       ];
 
-      brokenTools = [
-        # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
-        "lua_format"
-
-        # TODO Added 2025-04-01
-        # php-cs-fixer is marked as broken
-        "php_cs_fixer"
-
-        # TODO: Added 2025-04-19 broken dependency
-        "phan"
-        "php"
-        "phpcbf"
-        "phpcs"
-        "phpstan"
-        "psalm"
-      ];
+      brokenTools = [ ];
 
       # TODO: respect unpackaged from generated
       unpackaged = [

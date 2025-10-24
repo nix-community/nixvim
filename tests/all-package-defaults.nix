@@ -17,20 +17,6 @@ let
     # build failure (fixed in https://github.com/NixOS/nixpkgs/pull/455238)
     "yamlfix"
 
-    # TODO: 2025-10-03
-    # Transient dependency `vmr` has a build failure
-    # https://github.com/NixOS/nixpkgs/issues/431811
-    "roslyn-ls"
-
-    # 2025-07-25 python313Packages.lsp-tree-sitter is marked as broken
-    "autotools-language-server"
-
-    # 2025-04-01 php-cs-fixer is marked as broken
-    "php-cs-fixer"
-
-    # 2025-10-12 build failure (luaformatter depends on broken antlr-runtime-cpp)
-    "luaformatter"
-
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
   ]
@@ -90,15 +76,11 @@ let
     # 2025-09-27 build failure
     "open-policy-agent"
 
-    # 2025-09-26 build failure
-    "verilator"
-
     # 2025-09-08 build failure
     "mint"
 
     # Marked as broken
     "akku-scheme-langserver"
-    "muon"
     "rubyfmt"
     "wl-clipboard" # wayland
   ]
@@ -127,10 +109,6 @@ let
     # 2025-06-24 build failure
     "gleam"
 
-    # 2024-01-04 build failure
-    "texlive-combined-medium"
-    "texlive"
-
     # 2025-09-16 zig/zig-hook is marked as broken
     # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
     "zf"
@@ -150,10 +128,6 @@ let
     # 2025-09-08, build failure
     # https://github.com/NixOS/nixpkgs/pull/441058
     "verible"
-
-    # 2025-09-08 ttfautohint hangs forever
-    "texlive-combined-medium"
-    "texlive"
   ];
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledTests);
