@@ -334,7 +334,7 @@ rec {
       type =
         with types;
         submodule {
-          freeformType = attrsOf anything;
+          freeformType = attrsOf lib.nixvim.lua-types.anything;
           inherit options;
         };
       default = { };
