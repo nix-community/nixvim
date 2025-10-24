@@ -1,19 +1,12 @@
-{ pkgs, ... }:
-let
-  # TODO: Added 2025-06-24 texlive dependency broken
-  disableTexlivePackageOnDarwin = pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-    texlivePackage = null;
-  };
-in
 {
   empty = {
-    plugins.vimtex = disableTexlivePackageOnDarwin // {
+    plugins.vimtex = {
       enable = true;
     };
   };
 
   example = {
-    plugins.vimtex = disableTexlivePackageOnDarwin // {
+    plugins.vimtex = {
       enable = true;
 
       settings = {
@@ -70,7 +63,7 @@ in
   };
 
   no-packages = {
-    plugins.vimtex = disableTexlivePackageOnDarwin // {
+    plugins.vimtex = {
       enable = true;
       xdotoolPackage = null;
       zathuraPackage = null;
