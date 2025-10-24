@@ -72,6 +72,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2025-10-24 dependency wayland is not available on darwin
+    "qtdeclarative"
+
     # 2025-10-20 dependency rubyPackages.nokogiri build failure
     # gumbo.c:32:10: fatal error: 'nokogiri_gumbo.h' file not found
     "actionlint"
