@@ -17,6 +17,12 @@ rec {
     # 2025-10-12 build failure on Darwin
     smlfmt = if stdenv.isDarwin then sType.broken else smlfmt;
 
+    # 2025-10-24: build failure (fixed in https://github.com/NixOS/nixpkgs/pull/455238)
+    yamlfix = sType.broken;
+
+    # 2025-10-24: build failure (fixed in https://github.com/NixOS/nixpkgs/pull/455249)
+    ufmt = sType.broken;
+
     # 2025-09-13 build failure
     inko = sType.broken;
     # 2025-09-13 build failure
