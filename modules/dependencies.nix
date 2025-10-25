@@ -111,6 +111,7 @@ in
       direnv.default = "direnv";
       distant.default = "distant";
       efm-langserver.default = "efm-langserver";
+      fd.default = "fd";
       fish.default = "fish";
       flutter.default = "flutter";
       fzf = {
