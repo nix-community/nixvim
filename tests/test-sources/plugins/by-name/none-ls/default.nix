@@ -97,10 +97,6 @@
         sources =
           let
             disabled = [
-              # TODO Added 2025-10-24
-              # build failure (fixed in https://github.com/NixOS/nixpkgs/pull/455238)
-              "yamlfix"
-
               # TODO Added 2025-10-12
               # mbedtls is marked insecure
               "haxe_formatter"
