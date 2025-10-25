@@ -2,20 +2,19 @@
   lib,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "jupytext";
   package = "jupytext-nvim";
   description = "Jupyter notebooks on Neovim powered by Jupytext.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    style = helpers.defaultNullOpts.mkStr "hydrogen" ''
+    style = lib.nixvim.defaultNullOpts.mkStr "hydrogen" ''
       The jupytext style to use.
     '';
 
-    output_extension = helpers.defaultNullOpts.mkStr "auto" ''
+    output_extension = lib.nixvim.defaultNullOpts.mkStr "auto" ''
       By default, the extension of the plain text file is automatically selected by jupytext.
       This can be modified by changing the extension from auto to any other file extension supported
       by Jupytext.
@@ -25,11 +24,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Again, this is only really useful to users of Quarto.
     '';
 
-    force_ft = helpers.mkNullOrStr ''
+    force_ft = lib.nixvim.mkNullOrStr ''
       Default filetype. Don't change unless you know what you are doing.
     '';
 
-    custom_language_formatting = helpers.defaultNullOpts.mkAttrsOf types.anything { } ''
+    custom_language_formatting = lib.nixvim.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
       By default we use the auto mode of jupytext.
       This will create a script with the correct extension for each language.
       However, this can be overridden in a per language basis if you want to.
