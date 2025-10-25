@@ -13,10 +13,6 @@ let
   };
 
   disabledTests = [
-    # TODO 2025-10-24
-    # build failure (fixed in https://github.com/NixOS/nixpkgs/pull/455238)
-    "yamlfix"
-
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
   ]
