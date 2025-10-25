@@ -250,7 +250,7 @@ in
       # which is somewhat costly for Nixpkgs. With an explicit priority, we only
       # evaluate the wrapper to find out that the priority is lower, and then we
       # don't need to evaluate `finalPkgs`.
-      _module.args.pkgs = lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
+      _module.args.pkgs = lib.mkOverride lib.modules.defaultOverridePriority finalPkgs;
 
       assertions = [
         {
