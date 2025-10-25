@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   helpers,
   ...
 }:
@@ -62,22 +63,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
+  inherit (import ./deprecations.nix lib) imports;
+
   extraOptions = {
-    python3Dependencies = mkOption {
-      type = with types; functionTo (listOf package);
-      default =
-        p: with p; [
-          jupytext
-        ];
-      defaultText = literalExpression ''
-        p: with p; [
-          jupytext
-        ]
-      '';
-      description = "Python packages to add to the `PYTHONPATH` of neovim.";
+    jupytextPackage = lib.mkPackageOption pkgs "jupytext" {
+      nullable = true;
+      default = [
+        "python313Packages"
+        "jupytext"
+      ];
     };
   };
 
-  extraConfig = cfg: { extraPython3Packages = cfg.python3Dependencies; };
-
+  extraConfig = cfg: {
+    extraPackages = [ cfg.jupytextPackage ];
+  };
 }
