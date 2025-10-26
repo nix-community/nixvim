@@ -129,6 +129,10 @@ in
       godot.default = "godot_4";
       gzip.default = "gzip";
       imagemagick.default = "imagemagick";
+      jupytext.default = [
+        "python313Packages"
+        "jupytext"
+      ];
       lazygit.default = "lazygit";
       lean.default = "lean4";
       ledger.default = "ledger";
