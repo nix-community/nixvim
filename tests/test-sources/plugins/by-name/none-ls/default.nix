@@ -109,6 +109,9 @@
               #TODO Added 2025-04-01
               # php-cs-fixer is marked as broken
               "phpcsfixer"
+
+              # 2025-10-26 dependency mbedtls is marked as insecure
+              "haxe_formatter"
             ]
             ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
               # Not available on aarch64-linux
