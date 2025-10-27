@@ -254,7 +254,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         configuredFormatters = cfg.settings.formatters;
         inherit (cfg.autoInstall) overrides;
       };
-      names = collectFormatters (attrValues cfg.settings.formatters_by_ft);
+      names = collectFormatters (attrValues cfg.settings.formatters_by_ft or { });
       packageList = map getPackageByNameWith names;
       warns = (mkWarnsFromMaybePackageList opts) packageList;
     in
