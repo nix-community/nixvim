@@ -41,7 +41,7 @@
           ".mw" = "media";
         };
         folding = "";
-        filetypes = [ ];
+        filetypes.__empty = { };
         global_ext = 1;
         hl_cb_checked = 0;
         hl_headers = 0;

@@ -35,7 +35,7 @@
         pinned = false;
         warn_no_results = true;
         open_no_results = false;
-        win = { };
+        win.__empty = { };
         preview = {
           type = "main";
           scratch = true;

@@ -19,7 +19,7 @@
       enable = true;
 
       settings = {
-        filter = null;
+        filter.__raw = "nil";
         preview = true;
         default_register = "\"";
         content_spec_column = false;
@@ -30,20 +30,20 @@
               select = "<cr>";
               paste = "<c-l>";
               paste_behind = "<c-h>";
-              custom = { };
+              custom.__empty = { };
             };
             n = {
               select = "<cr>";
               paste = "p";
               paste_behind = "P";
-              custom = { };
+              custom.__empty = { };
             };
           };
           fzf = {
             select = "default";
             paste = "ctrl-l";
             paste_behind = "ctrl-h";
-            custom = { };
+            custom.__empty = { };
           };
         };
       };
@@ -60,9 +60,9 @@
         length_limit = 1048576;
         continuous_sync = false;
         db_path.__raw = "vim.fn.stdpath('data') .. '/databases/neoclip.sqlite3'";
-        filter = null;
+        filter.__raw = "nil";
         preview = true;
-        prompt = null;
+        prompt.__raw = "nil";
         default_register = "\"";
         default_register_macros = "q";
         enable_macro_history = true;
@@ -93,7 +93,7 @@
                 replay = "<c-q>";
                 delete = "<c-d>";
                 edit = "<c-e>";
-                custom = { };
+                custom.__empty = { };
               };
               n = {
                 select = "<cr>";
@@ -102,14 +102,14 @@
                 replay = "q";
                 delete = "d";
                 edit = "e";
-                custom = { };
+                custom.__empty = { };
               };
             };
             fzf = {
               select = "default";
               paste = "ctrl-p";
               paste_behind = "ctrl-k";
-              custom = { };
+              custom.__empty = { };
             };
           };
         };

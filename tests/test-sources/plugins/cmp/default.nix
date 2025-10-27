@@ -104,7 +104,7 @@
             "order"
           ];
         };
-        sources = [ ];
+        sources.__empty = { };
         experimental = {
           ghost_text = false;
         };

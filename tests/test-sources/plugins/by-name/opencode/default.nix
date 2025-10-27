@@ -7,7 +7,7 @@
     plugins.opencode = {
       enable = true;
       settings = {
-        port = null;
+        port.__raw = "nil";
         auto_reload = true;
         auto_register_cmp_sources = [
           "opencode"

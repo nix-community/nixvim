@@ -18,7 +18,7 @@
           border = "rounded";
           relative = "cursor";
           prefer_width = 40;
-          width = null;
+          width.__raw = "nil";
           max_width = [
             140
             0.9
@@ -46,7 +46,7 @@
             };
           };
           override = "function(conf) return conf end";
-          get_config = null;
+          get_config.__raw = "nil";
         };
         select = {
           enabled = true;
@@ -58,15 +58,15 @@
             "nui"
           ];
           trim_prompt = true;
-          telescope = null;
+          telescope.__raw = "nil";
           fzf.window = {
             width = 0.5;
             height = 0.4;
           };
-          fzf_lua = { };
+          fzf_lua.__empty = { };
           nui = {
             position = "50%";
-            size = null;
+            size.__raw = "nil";
             relative = "editor";
             border = {
               style = "rounded";
@@ -88,13 +88,13 @@
             border = "rounded";
             relative = "editor";
 
-            buf_options = { };
+            buf_options.__empty = { };
             win_options = {
               cursorline = true;
               cursorlineopt = "both";
             };
 
-            width = null;
+            width.__raw = "nil";
             max_width = [
               140
               0.8
@@ -103,7 +103,7 @@
               40
               0.2
             ];
-            height = null;
+            height.__raw = "nil";
             max_height = 0.9;
             min_height = [
               10
@@ -118,8 +118,8 @@
 
             override = "function(conf) return conf end";
           };
-          format_item_override = { };
-          get_config = null;
+          format_item_override.__empty = { };
+          get_config.__raw = "nil";
         };
       };
     };

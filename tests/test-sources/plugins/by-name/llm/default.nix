@@ -19,10 +19,10 @@
       enable = true;
 
       settings = {
-        api_token = null;
+        api_token.__raw = "nil";
         model = "bigcode/starcoder2-15b";
         backend = "huggingface";
-        url = null;
+        url.__raw = "nil";
         tokens_to_clear = [ "<|endoftext|>" ];
         request_body = {
           parameters = {
@@ -42,11 +42,11 @@
         dismiss_keymap = "<S-Tab>";
         tls_skip_verify_insecure = false;
         lsp = {
-          host = null;
-          port = null;
-          cmd_env = null;
+          host.__raw = "nil";
+          port.__raw = "nil";
+          cmd_env.__raw = "nil";
         };
-        tokenizer = null;
+        tokenizer.__raw = "nil";
         context_window = 1024;
         enable_suggestions_on_startup = true;
         enable_suggestions_on_files = "*";

@@ -26,7 +26,7 @@
       enable = true;
 
       settings = {
-        additional_instructions = null;
+        additional_instructions.__raw = "nil";
         chat_dir = lib.nixvim.mkRaw "vim.fn.stdpath('data'):gsub('/$', \"\") .. '/wtf/chats'";
         language = "english";
         picker = "telescope";
@@ -36,8 +36,8 @@
         # Extracting the default value would be annoying
         # providers = create_provider_defaults()
         hooks = {
-          request_started = null;
-          request_finished = null;
+          request_started.__raw = "nil";
+          request_finished.__raw = "nil";
         };
         winhighlight = "Normal:Normal,FloatBorder:FloatBorder";
       };

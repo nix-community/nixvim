@@ -13,11 +13,11 @@
         auto_open_html_in_browser = false;
         auto_open_output = true;
         cover_empty_lines = false;
-        cover_lines_starting_with = [ ];
+        cover_lines_starting_with.__empty = { };
         copy_output = false;
         enter_output_behavior = "open_then_enter";
         image_provider = "none";
-        open_cmd = null;
+        open_cmd.__raw = "nil";
         output_crop_border = true;
         output_show_more = false;
         output_virt_lines = false;

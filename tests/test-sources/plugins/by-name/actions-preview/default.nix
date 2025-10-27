@@ -16,7 +16,7 @@
           diff = {
             ctxlen = 3;
           };
-          highlight_command = [ ];
+          highlight_command.__empty = { };
           backend = [
             "telescope"
             "minipick"
@@ -35,7 +35,7 @@
           '';
           nui = {
             dir = "col";
-            keymap = null;
+            keymap.__raw = "nil";
             layout = {
               position = "50%";
               size = {

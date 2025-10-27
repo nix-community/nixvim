@@ -40,7 +40,7 @@
         term_colors = true;
         ending_tildes = false;
         cmp_itemkind_reverse = false;
-        toggle_style_key = null;
+        toggle_style_key.__raw = "nil";
         toggle_style_list = [
           "dark"
           "darker"
@@ -60,8 +60,8 @@
         lualine = {
           transparent = false;
         };
-        colors = { };
-        highlights = { };
+        colors.__empty = { };
+        highlights.__empty = { };
         diagnostics = {
           darker = true;
           undercurl = true;

@@ -16,8 +16,8 @@
       enable = true;
       settings = {
         filewatching = "auto";
-        choose_target = null;
-        ignore_target = null;
+        choose_target.__raw = "nil";
+        ignore_target.__raw = "nil";
         broad_search = false;
         lock_target = false;
         silent = false;

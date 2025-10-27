@@ -17,7 +17,7 @@
 
         settings = {
           auto_quoting = true;
-          mappings = { };
+          mappings.__empty = { };
         };
       };
     };

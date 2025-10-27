@@ -37,8 +37,8 @@
         };
         codeRunner = {
           enabled = false;
-          default_method = null;
-          ft_runners = { };
+          default_method.__raw = "nil";
+          ft_runners.__empty = { };
           never_run = [ "yaml" ];
         };
       };

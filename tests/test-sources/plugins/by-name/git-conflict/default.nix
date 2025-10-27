@@ -15,7 +15,7 @@
         highlights = {
           incoming = "DiffAdd";
           current = "DiffText";
-          ancestor = null;
+          ancestor.__raw = "nil";
         };
       };
     };

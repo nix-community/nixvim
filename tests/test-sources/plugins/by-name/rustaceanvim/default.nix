@@ -13,10 +13,10 @@
           executor = "termopen";
           test_executor = "background";
           crate_test_executor = "background";
-          cargo_override = null;
+          cargo_override.__raw = "nil";
           enable_nextest = true;
           enable_clippy = true;
-          on_initialized = null;
+          on_initialized.__raw = "nil";
           reload_workspace_from_cargo_toml = true;
           hover_actions = {
             replace_builtin_hover = true;
@@ -31,7 +31,7 @@
           };
           crate_graph = {
             backend = "x11";
-            output = null;
+            output.__raw = "nil";
             full = true;
             enabled_graphviz_backends = [
               "bmp"
@@ -89,7 +89,7 @@
               "xlib"
               "x11"
             ];
-            pipe = null;
+            pipe.__raw = "nil";
           };
           open_url = "require('rustaceanvim.os').open_url";
         };
@@ -109,7 +109,7 @@
               return vim.fn.executable(rs_bin) == 1
             end
           '';
-          on_attach = null;
+          on_attach.__raw = "nil";
           cmd = ''
             function()
               return { 'rust-analyzer', '--log-file', RustaceanConfig.server.logfile }
@@ -126,7 +126,7 @@
         };
         dap = {
           autoload_configurations = true;
-          adapter = null;
+          adapter.__raw = "nil";
         };
       };
     };

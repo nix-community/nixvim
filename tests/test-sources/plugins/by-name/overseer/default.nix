@@ -20,13 +20,13 @@
             40
             0.1
           ];
-          width = null;
+          width.__raw = "nil";
           max_height = [
             20
             0.1
           ];
           min_height = 8;
-          height = null;
+          height.__raw = "nil";
           separator = "────────────────────────────────────────";
           direction = "bottom";
           bindings = {
@@ -53,16 +53,16 @@
             "q" = "Close";
           };
         };
-        actions = { };
+        actions.__empty = { };
         form = {
           border = "rounded";
           zindex = 40;
           min_width = 80;
           max_width = 0.9;
-          width = null;
+          width.__raw = "nil";
           min_height = 10;
           max_height = 0.9;
-          height = null;
+          height.__raw = "nil";
           win_opts = {
             winblend = 0;
           };
@@ -105,10 +105,10 @@
           zindex = 40;
           min_width = 20;
           max_width = 0.5;
-          width = null;
+          width.__raw = "nil";
           min_height = 6;
           max_height = 0.9;
-          height = null;
+          height.__raw = "nil";
           win_opts = {
             winblend = 0;
           };
@@ -122,7 +122,7 @@
         };
         help_win = {
           border = "rounded";
-          win_opts = { };
+          win_opts.__empty = { };
         };
         component_aliases = {
           default = [
@@ -152,7 +152,7 @@
           };
           autostart_on_load = true;
         };
-        preload_components = [ ];
+        preload_components.__empty = { };
         default_template_prompt = "allow";
         template_timeout = 3000;
         template_cache_threshold = 100;

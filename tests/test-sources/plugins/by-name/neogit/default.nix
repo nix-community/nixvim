@@ -19,8 +19,8 @@
         disable_signs = false;
         prompt_force_push = true;
         graph_style = "ascii";
-        commit_date_format = null;
-        log_date_format = null;
+        commit_date_format.__raw = "nil";
+        log_date_format.__raw = "nil";
         process_spinner = false;
         filewatcher.enabled = true;
         telescope_sorter.__raw = ''
@@ -50,7 +50,7 @@
             tree = "";
           };
         };
-        highlight = { };
+        highlight.__empty = { };
         disable_insert_on_commit = "auto";
         use_per_project_settings = true;
         remember_settings = true;
@@ -132,11 +132,11 @@
           ];
         };
         integrations = {
-          telescope = null;
-          diffview = null;
-          fzf_lua = null;
-          mini_pick = null;
-          snacks = null;
+          telescope.__raw = "nil";
+          diffview.__raw = "nil";
+          fzf_lua.__raw = "nil";
+          mini_pick.__raw = "nil";
+          snacks.__raw = "nil";
         };
         sections = {
           sequencer = {
@@ -188,7 +188,7 @@
             hidden = false;
           };
         };
-        ignored_settings = [ ];
+        ignored_settings.__empty = { };
         mappings = {
           commit_editor = {
             q = "Close";

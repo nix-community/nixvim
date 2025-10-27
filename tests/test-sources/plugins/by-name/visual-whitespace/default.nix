@@ -32,8 +32,8 @@
           dos = "↙";
         };
         ignore = {
-          filetypes = { };
-          buftypes = { };
+          filetypes.__empty = { };
+          buftypes.__empty = { };
         };
       };
     };

@@ -30,8 +30,8 @@
         animation = true;
         auto_hide = -1;
         clickable = true;
-        exclude_ft = [ ];
-        exclude_name = [ ];
+        exclude_ft.__empty = { };
+        exclude_name.__empty = { };
         focus_on_close = "left";
         hide = {
           alternate = false;
@@ -94,10 +94,10 @@
             filename = false;
             separator.right = " ";
           };
-          alternate = { };
-          current = { };
-          inactive = { };
-          visible = { };
+          alternate.__empty = { };
+          current.__empty = { };
+          inactive.__empty = { };
+          visible.__empty = { };
           preset = "default";
         };
         insert_at_start = false;
@@ -107,9 +107,9 @@
         maximum_length = 30;
         minimum_length = 0;
         minimum_padding = 1;
-        no_name_title = null;
+        no_name_title.__raw = "nil";
         semantic_letters = true;
-        sidebar_filetypes = { };
+        sidebar_filetypes.__empty = { };
         tabpages = true;
       };
     };
@@ -219,7 +219,7 @@
           };
         };
         letters = "asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP";
-        no_name_title = null;
+        no_name_title.__raw = "nil";
       };
     };
   };

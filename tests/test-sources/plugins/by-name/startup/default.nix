@@ -13,7 +13,7 @@
         options = {
           mapping_keys = true;
           cursor_column = 0.5;
-          after = null;
+          after.__raw = "nil";
           empty_lines_between_mappings = true;
           disable_statuslines = true;
           paddings.__empty = { };

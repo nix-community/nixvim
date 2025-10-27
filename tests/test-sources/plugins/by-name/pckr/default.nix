@@ -9,7 +9,7 @@
 
       settings = {
         pack_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
-        max_jobs = null;
+        max_jobs.__raw = "nil";
         autoremove = false;
         autoinstall = true;
         git = {

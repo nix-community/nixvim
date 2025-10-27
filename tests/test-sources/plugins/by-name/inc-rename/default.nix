@@ -13,8 +13,8 @@
         preview_empty_name = false;
         show_message = true;
         save_in_cmdline_history = true;
-        input_buffer_type = null;
-        post_hook = null;
+        input_buffer_type.__raw = "nil";
+        post_hook.__raw = "nil";
       };
     };
   };

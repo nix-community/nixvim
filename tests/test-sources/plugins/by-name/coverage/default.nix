@@ -87,7 +87,7 @@
             coverage_file = "coverage/coverage.json";
           };
         };
-        lcov_file = null;
+        lcov_file.__raw = "nil";
       };
     };
   };

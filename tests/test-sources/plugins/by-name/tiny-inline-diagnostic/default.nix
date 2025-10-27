@@ -66,7 +66,7 @@
             enabled = false;
             after = 30;
           };
-          format = null;
+          format.__raw = "nil";
           virt_texts = {
             priority = 2048;
           };
@@ -76,9 +76,9 @@
             (lib.nixvim.mkRaw "vim.diagnostic.severity.INFO")
             (lib.nixvim.mkRaw "vim.diagnostic.severity.HINT")
           ];
-          overwrite_events = null;
+          overwrite_events.__raw = "nil";
         };
-        disabled_ft = [ ];
+        disabled_ft.__empty = { };
       };
     };
   };

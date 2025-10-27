@@ -42,7 +42,7 @@
           {
             __unkeyed = "type";
             highlight = "Foo";
-            icons = { };
+            icons.__empty = { };
           }
 
           {
@@ -167,13 +167,13 @@
             40
             0.4
           ];
-          width = null;
+          width.__raw = "nil";
           max_height = 0.9;
           min_height = [
             5
             0.1
           ];
-          height = null;
+          height.__raw = "nil";
           border = "rounded";
           win_options = {
             winblend = 0;
@@ -186,13 +186,13 @@
             40
             0.4
           ];
-          width = null;
+          width.__raw = "nil";
           max_height = 0.9;
           min_height = [
             5
             0.1
           ];
-          height = null;
+          height.__raw = "nil";
           border = "rounded";
           minimized_border = "none";
           win_options = {

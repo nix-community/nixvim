@@ -15,8 +15,8 @@ _: {
         string_style = "nocombine";
         function_style = "bold";
         variable_style = "NONE";
-        highlights = { };
-        color_overrides = { };
+        highlights.__empty = { };
+        color_overrides.__empty = { };
         use_original_palette = 0;
       };
     };

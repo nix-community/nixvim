@@ -28,7 +28,7 @@
         enable = true;
 
         settings = {
-          manager_path = null;
+          manager_path.__raw = "nil";
           bin_path.__raw = "vim.fn.stdpath('cache') .. '/codeium/bin'";
           config_path.__raw = "vim.fn.stdpath('cache') .. '/codeium/config.json'";
           language_server_download_url = "https://github.com";
@@ -38,10 +38,10 @@
             path = "/";
             portal_url = "codeium.com";
           };
-          enterprise_mode = null;
-          detect_proxy = null;
-          tools = { };
-          wrapper = null;
+          enterprise_mode.__raw = "nil";
+          detect_proxy.__raw = "nil";
+          tools.__empty = { };
+          wrapper.__raw = "nil";
           enable_chat = true;
           enable_local_search = true;
           enable_index_service = true;
@@ -50,13 +50,13 @@
           enable_cmp_source = true;
           virtual_text = {
             enabled = false;
-            filetypes = [ ];
+            filetypes.__empty = { };
             default_filetype_enabled = true;
             manual = false;
             idle_delay = 75;
             virtual_text_priority = 65535;
             map_keys = true;
-            accept_fallback = null;
+            accept_fallback.__raw = "nil";
             key_bindings = {
               accept = "<Tab>";
               accept_word = false;
@@ -68,7 +68,7 @@
           };
           workspace_root = {
             use_lsp = true;
-            find_root = null;
+            find_root.__raw = "nil";
             paths = [
               ".bzr"
               ".git"

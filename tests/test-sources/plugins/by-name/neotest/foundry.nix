@@ -10,8 +10,8 @@
 
           settings = {
             foundryCommand = "forge test";
-            foundryConfig = null;
-            env = { };
+            foundryConfig.__raw = "nil";
+            env.__empty = { };
             cwd.__raw = ''
               function ()
                 return lib.files.match_root_pattern("foundry.toml")

@@ -8,16 +8,16 @@
       enable = true;
 
       settings = {
-        buf_ignore = null;
+        buf_ignore.__raw = "nil";
         mode = [
           "n"
           "c"
         ];
-        hybrid_modes = null;
+        hybrid_modes.__raw = "nil";
         callback = {
-          on_enable = null;
-          on_disable = null;
-          on_mode_change = null;
+          on_enable.__raw = "nil";
+          on_disable.__raw = "nil";
+          on_mode_change.__raw = "nil";
         };
       };
     };

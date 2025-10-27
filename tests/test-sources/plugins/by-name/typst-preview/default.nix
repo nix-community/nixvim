@@ -9,11 +9,11 @@
 
       settings = {
         debug = false;
-        open_cmd = null;
+        open_cmd.__raw = "nil";
         port = 0;
         invert_colors = "never";
         follow_cursor = true;
-        extra_args = null;
+        extra_args.__raw = "nil";
         get_root.__raw = ''
           function(path_of_main_file)
             local root = os.getenv 'TYPST_ROOT'

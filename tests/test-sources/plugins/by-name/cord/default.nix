@@ -17,7 +17,7 @@
         editor = {
           client = "neovim";
           tooltip = "The Superior Text Editor";
-          icon = null;
+          icon.__raw = "nil";
         };
         display = {
           theme = "default";
@@ -38,12 +38,12 @@
           unidle_on_focus = true;
           smart_idle = true;
           details = "Idling";
-          state = null;
+          state.__raw = "nil";
           tooltip = "💤";
-          icon = null;
+          icon.__raw = "nil";
         };
         text = {
-          default = null;
+          default.__raw = "nil";
           workspace.__raw = "function(opts) return 'In ' .. opts.workspace end";
           viewing.__raw = "function(opts) return 'Viewing ' .. opts.filename end";
           editing.__raw = "function(opts) return 'Editing ' .. opts.filename end";
@@ -60,19 +60,19 @@
           terminal.__raw = "function(opts) return 'Running commands in ' .. opts.name end";
           dashboard = "Home";
         };
-        buttons = null;
-        assets = null;
-        variables = null;
+        buttons.__raw = "nil";
+        assets.__raw = "nil";
+        variables.__raw = "nil";
         hooks = {
-          ready = null;
-          shutdown = null;
-          pre_activity = null;
-          post_activity = null;
-          idle_enter = null;
-          idle_leave = null;
-          workspace_change = null;
+          ready.__raw = "nil";
+          shutdown.__raw = "nil";
+          pre_activity.__raw = "nil";
+          post_activity.__raw = "nil";
+          idle_enter.__raw = "nil";
+          idle_leave.__raw = "nil";
+          workspace_change.__raw = "nil";
         };
-        plugins = null;
+        plugins.__raw = "nil";
         advanced = {
           plugin = {
             autocmds = true;
@@ -81,8 +81,8 @@
           };
           server = {
             update = "fetch";
-            pipe_path = null;
-            executable_path = null;
+            pipe_path.__raw = "nil";
+            executable_path.__raw = "nil";
             timeout = 300000;
           };
           discord = {

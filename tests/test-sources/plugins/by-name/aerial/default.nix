@@ -20,16 +20,16 @@
             40
             0.2
           ];
-          width = null;
+          width.__raw = "nil";
           min_width = 10;
-          win_opts = { };
+          win_opts.__empty = { };
           default_direction = "prefer_right";
           placement = "window";
           resize_to_content = true;
           preserve_equality = false;
         };
         attach_mode = "window";
-        close_automatic_events = [ ];
+        close_automatic_events.__empty = { };
         keymaps = {
           "?" = "actions.show_help";
           "g?" = "actions.show_help";
@@ -82,11 +82,11 @@
         highlight_on_hover = false;
         highlight_on_jump = 300;
         autojump = false;
-        icons = [ ];
+        icons.__empty = { };
         ignore = {
           unlisted_buffers = false;
           diff_windows = true;
-          filetypes = [ ];
+          filetypes.__empty = { };
           buftypes = "special";
           wintypes = "special";
         };
@@ -126,7 +126,7 @@
           border = "rounded";
           relative = "cursor";
           max_height = 0.9;
-          height = null;
+          height.__raw = "nil";
           min_height = [
             8
             0.1
@@ -171,7 +171,7 @@
           diagnostics_trigger_update = false;
           update_when_errors = true;
           update_delay = 300;
-          priority = { };
+          priority.__empty = { };
         };
         treesitter = {
           update_delay = 300;

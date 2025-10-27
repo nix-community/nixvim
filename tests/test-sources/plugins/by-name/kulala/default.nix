@@ -53,7 +53,7 @@
               "--html"
               "-"
             ];
-            pathresolver = [ ];
+            pathresolver.__empty = { };
           };
         };
         show_icons = "on_request";
@@ -65,7 +65,7 @@
           };
           lualine = "🐼";
         };
-        additional_curl_options = { };
+        additional_curl_options.__empty = { };
         scratchpad_default_contents = [
           "@MY_TOKEN_NAME=my_token_value"
           ""
@@ -84,7 +84,7 @@
         vscode_rest_client_environmentvars = false;
         disable_script_print_output = false;
         environment_scope = "b";
-        certificates = { };
+        certificates.__empty = { };
       };
     };
   };

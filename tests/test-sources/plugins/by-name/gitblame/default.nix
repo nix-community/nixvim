@@ -13,11 +13,11 @@
         date_format = "%c";
         message_when_not_committed = "  Not Committed Yet";
         highlight_group = "Comment";
-        set_extmark_options = { };
+        set_extmark_options.__empty = { };
         display_virtual_text = true;
-        ignored_filetypes = [ ];
+        ignored_filetypes.__empty = { };
         delay = 250;
-        virtual_text_column = null;
+        virtual_text_column.__raw = "nil";
         use_blame_commit_file_urls = false;
         schedule_event = "CursorMoved";
         clear_event = "CursorMovedI";

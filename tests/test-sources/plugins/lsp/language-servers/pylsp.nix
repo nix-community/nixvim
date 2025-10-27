@@ -14,23 +14,23 @@
               enabled = true;
             };
             flake8 = {
-              config = null;
+              config.__raw = "nil";
               enabled = true;
-              exclude = [ ];
+              exclude.__empty = { };
               executable = "flake8";
-              filename = null;
-              hangClosing = null;
-              ignore = [ ];
-              maxComplexity = null;
-              maxLineLength = null;
-              indentSize = null;
-              perFileIgnores = [ ];
-              select = null;
+              filename.__raw = "nil";
+              hangClosing.__raw = "nil";
+              ignore.__empty = { };
+              maxComplexity.__raw = "nil";
+              maxLineLength.__raw = "nil";
+              indentSize.__raw = "nil";
+              perFileIgnores.__empty = { };
+              select.__raw = "nil";
             };
             jedi = {
               auto_import_modules = [ "numpy" ];
-              extra_paths = [ ];
-              environment = null;
+              extra_paths.__empty = { };
+              environment.__raw = "nil";
             };
             jedi_completion = {
               enabled = true;
@@ -73,25 +73,25 @@
             };
             preload = {
               enabled = true;
-              modules = [ ];
+              modules.__empty = { };
             };
             pycodestyle = {
               enabled = true;
-              exclude = [ ];
-              filename = [ ];
-              ropeFolder = null;
-              ignore = [ ];
+              exclude.__empty = { };
+              filename.__empty = { };
+              ropeFolder.__raw = "nil";
+              ignore.__empty = { };
               hangClosing = true;
               maxLineLength = 80;
               indentSize = 4;
             };
             pydocstyle = {
               enabled = false;
-              convention = null;
-              addIgnore = [ ];
-              addSelect = [ ];
-              ignore = [ ];
-              select = null;
+              convention.__raw = "nil";
+              addIgnore.__empty = { };
+              addSelect.__empty = { };
+              ignore.__empty = { };
+              select.__raw = "nil";
               match = "(?!test_).*\\.py";
               matchDir = "[^\\.].*";
             };
@@ -100,8 +100,8 @@
             };
             pylint = {
               enabled = true;
-              args = [ ];
-              executable = null;
+              args.__empty = { };
+              executable.__raw = "nil";
             };
             rope_autoimport = {
               enabled = true;
@@ -122,7 +122,7 @@
               strict = false;
               overrides = [ true ];
               dmypy_status_file = ".dmypy.json";
-              config_sub_paths = [ ];
+              config_sub_paths.__empty = { };
               report_progress = false;
             };
             black = {
@@ -164,8 +164,8 @@
             };
           };
           rope = {
-            extensionModules = null;
-            ropeFolder = null;
+            extensionModules.__raw = "nil";
+            ropeFolder.__raw = "nil";
           };
         };
       };

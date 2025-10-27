@@ -21,24 +21,24 @@
       enable = true;
 
       settings = {
-        border = null;
+        border.__raw = "nil";
         cmd = [ "nvim" ];
         debounce = 250;
         debug = false;
         default_timeout = 5000;
-        diagnostic_config = { };
+        diagnostic_config.__empty = { };
         diagnostics_format = "#{m}";
         fallback_severity.__raw = "vim.diagnostic.severity.ERROR";
         log_level = "warn";
         notify_format = "[null-ls] %s";
-        on_attach = null;
-        on_init = null;
-        on_exit = null;
+        on_attach.__raw = "nil";
+        on_init.__raw = "nil";
+        on_exit.__raw = "nil";
         root_dir = "require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git')";
-        root_dir_async = null;
-        should_attach = null;
-        sources = null;
-        temp_dir = null;
+        root_dir_async.__raw = "nil";
+        should_attach.__raw = "nil";
+        sources.__raw = "nil";
+        temp_dir.__raw = "nil";
         update_in_insert = false;
       };
     };

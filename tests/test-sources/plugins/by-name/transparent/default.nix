@@ -35,8 +35,8 @@
           "StatusLineNC"
           "EndOfBuffer"
         ];
-        extra_groups = [ ];
-        exclude_groups = [ ];
+        extra_groups.__empty = { };
+        exclude_groups.__empty = { };
       };
     };
   };

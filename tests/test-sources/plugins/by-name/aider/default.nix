@@ -29,7 +29,7 @@
         default_bindings = false;
         debug = true;
         vim = true;
-        ignore_buffers = [ ];
+        ignore_buffers.__empty = { };
         border = {
           style = [
             "╭"

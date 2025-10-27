@@ -44,8 +44,8 @@
           "Makefile"
           "package.json"
         ];
-        ignore_lsp = [ ];
-        exclude_dirs = [ ];
+        ignore_lsp.__empty = { };
+        exclude_dirs.__empty = { };
         show_hidden = false;
         silent_chdir = true;
         scope_chdir = "global";

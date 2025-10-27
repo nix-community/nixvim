@@ -16,8 +16,8 @@
           create_autocmd = false;
           create_cmp_source = true;
           friendly_snippets = false;
-          ignored_filetypes = null;
-          extended_filetypes = { };
+          ignored_filetypes.__raw = "nil";
+          extended_filetypes.__empty = { };
           global_snippets = [ "all" ];
           search_paths = [ { __raw = "vim.fn.stdpath('config') .. '/snippets'"; } ];
         };

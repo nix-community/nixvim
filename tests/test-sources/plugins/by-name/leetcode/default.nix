@@ -38,7 +38,7 @@
           non_standalone = false;
         };
         logging = true;
-        injector = { };
+        injector.__empty = { };
         cache = {
           update_interval = 60 * 60 * 24 * 7;
         };
@@ -67,7 +67,7 @@
           show_stats = true;
         };
         picker = {
-          provider = null;
+          provider.__raw = "nil";
         };
         hooks = {
           "enter" = { };
@@ -82,7 +82,7 @@
           focus_testcases = "H";
           focus_result = "L";
         };
-        theme = { };
+        theme.__empty = { };
         image_support = false;
       };
     };

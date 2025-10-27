@@ -249,7 +249,7 @@
           };
           oxi = {
             cmd = "oxi";
-            args = [ ];
+            args.__empty = { };
             options = {
               ignore-case = {
                 value = "i";
@@ -260,7 +260,7 @@
           };
           sd = {
             cmd = "sd";
-            options = { };
+            options.__empty = { };
           };
         };
         default = {
@@ -276,7 +276,7 @@
         is_open_target_win = true;
         is_insert_mode = false;
         is_block_ui_break = false;
-        open_template = { };
+        open_template.__empty = { };
       };
     };
   };

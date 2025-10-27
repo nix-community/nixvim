@@ -16,8 +16,8 @@
         styles = {
           comments.italic = true;
           keywords.italic = true;
-          functions = { };
-          variables = { };
+          functions.__empty = { };
+          variables.__empty = { };
         };
         on_colors = "function(colors) end";
         on_highlights = "function(highlights, colors) end";

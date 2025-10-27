@@ -27,11 +27,11 @@
             pitches_language = "default";
             hyphenation_language = "en_DEFAULT";
             output = "pdf";
-            backend = null;
+            backend.__raw = "nil";
             main_file = "main.ly";
             main_folder = "%:p:h";
-            include_dir = null;
-            pdf_viewer = null;
+            include_dir.__raw = "nil";
+            pdf_viewer.__raw = "nil";
             errors = {
               diagnostics = true;
               quickfix = "external";
@@ -49,13 +49,13 @@
             lilypond_syntax = "<F3>";
           };
           options = {
-            lilypond_book_flags = null;
+            lilypond_book_flags.__raw = "nil";
             clean_logs = false;
             main_file = "main.tex";
             main_folder = "%:p:h";
-            include_dir = null;
+            include_dir.__raw = "nil";
             lilypond_syntax_au = "BufEnter";
-            pdf_viewer = null;
+            pdf_viewer.__raw = "nil";
             errors = {
               diagnostics = true;
               quickfix = "external";
@@ -82,7 +82,7 @@
             main_file = "main.texi";
             main_folder = "%:p:h";
             lilypond_syntax_au = "BufEnter";
-            pdf_viewer = null;
+            pdf_viewer.__raw = "nil";
             errors = {
               diagnostics = true;
               quickfix = "external";
@@ -119,8 +119,8 @@
             border_style = "single";
             winhighlight = "Normal:Normal,FloatBorder:Normal,FloatTitle:Normal";
             midi_synth = "fluidsynth";
-            fluidsynth_flags = null;
-            timidity_flags = null;
+            fluidsynth_flags.__raw = "nil";
+            timidity_flags.__raw = "nil";
             audio_format = "mp3";
             mpv_flags = [
               "--msg-level=cplayer=no,ffmpeg=no,alsa=no"
