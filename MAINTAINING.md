@@ -4,7 +4,24 @@ This file is intended as a reference for Nixvim's core maintainers, although it 
 
 ## Deprecation
 
-The deprecation policy discussion is happening in [#3181](https://github.com/nix-community/nixvim/issues/3181).
+We aim to guarantee a seamless experience for stable channel users by providing rename aliases, removal notices, and other warnings and assertions.
+
+Deprecations should include a comment in the format of:
+```nix
+# TODO: Added YYYY-MM-DD, remove after <n+2>
+```
+
+where:
+
+- `n` is the current release; 25.05 at the time of writing
+- `n+1` is the next release; 25.11 at the time of writing
+- `n+2` is the release following `n+1`; 26.05 at the time of writing
+
+If a warning is created on release `n`, then:
+
+- We **should not** remove it before `n+1` is released unless there is a bug or it is plain wrong
+- We **may** remove it after `n+1` is released, but only if it causes undue friction
+- We **should** remove it once `n+2` is released, as routine cleanup
 
 ## Releasing
 
