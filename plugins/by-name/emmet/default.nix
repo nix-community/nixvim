@@ -4,7 +4,7 @@
 }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts mkNullOrOption;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrOption nestedLiteralLua;
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "emmet";
@@ -49,11 +49,11 @@ lib.nixvim.plugins.mkVimPlugin {
       html = {
         default_attributes = {
           option = {
-            value = null;
+            value = nestedLiteralLua "nil";
           };
           textarea = {
-            id = null;
-            name = null;
+            id = nestedLiteralLua "nil";
+            name = nestedLiteralLua "nil";
             cols = 10;
             rows = 10;
           };
