@@ -36,7 +36,7 @@
         };
         wrap = false;
         bib = {
-          default_path = null;
+          default_path.__raw = "nil";
           find_in_root = true;
         };
         silent = false;
@@ -44,7 +44,7 @@
           style = "markdown";
           conceal = false;
           context = 0;
-          implicit_extension = null;
+          implicit_extension.__raw = "nil";
           transform_explicit = false;
           transform_implicit = ''
             function(text)

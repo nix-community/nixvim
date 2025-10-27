@@ -8,11 +8,11 @@
       enable = true;
 
       settings = {
-        bin = null;
-        is_hledger = null;
+        bin.__raw = "nil";
+        is_hledger.__raw = "nil";
         extra_options = "";
-        accounts_cmd = null;
-        descriptions_cmd = null;
+        accounts_cmd.__raw = "nil";
+        descriptions_cmd.__raw = "nil";
         maxwidth = 0;
         fillstring = " ";
         detailed_first = 1;
@@ -28,8 +28,8 @@
         date_format = "%Y/%m/%d";
         main = "%";
         winpos = "B";
-        qf_register_format = null;
-        qf_reconcile_format = null;
+        qf_register_format.__raw = "nil";
+        qf_reconcile_format.__raw = "nil";
         use_location_list = 0;
         qf_vertical = 0;
         qf_size = 10;

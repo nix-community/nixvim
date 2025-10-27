@@ -8,16 +8,16 @@
     plugins.dbee = {
       enable = true;
       settings = {
-        default_connection = null;
+        default_connection.__raw = "nil";
         sources = [
           (lib.nixvim.mkRaw "require('dbee.sources').EnvSource:new('DBEE_CONNECTIONS')")
           (lib.nixvim.mkRaw "require('dbee.sources').FileSource:new(vim.fn.stdpath('state') .. '/dbee/persistence.json')")
         ];
-        extra_helpers = { };
-        float_options = { };
+        extra_helpers.__empty = { };
+        float_options.__empty = { };
         drawer = {
-          window_options = { };
-          buffer_options = { };
+          window_options.__empty = { };
+          buffer_options.__empty = { };
           disable_help = false;
           mappings = [
             {
@@ -176,8 +176,8 @@
           };
         };
         result = {
-          window_options = { };
-          buffer_options = { };
+          window_options.__empty = { };
+          buffer_options.__empty = { };
           page_size = 100;
           focus_result = true;
           progress = {
@@ -254,8 +254,8 @@
           ];
         };
         editor = {
-          window_options = { };
-          buffer_options = { };
+          window_options.__empty = { };
+          buffer_options.__empty = { };
           mappings = [
             {
               key = "BB";
@@ -270,8 +270,8 @@
           ];
         };
         call_log = {
-          window_options = { };
-          buffer_options = { };
+          window_options.__empty = { };
+          buffer_options.__empty = { };
           mappings = [
             {
               key = "<CR>";

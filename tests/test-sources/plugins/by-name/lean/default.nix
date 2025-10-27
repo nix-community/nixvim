@@ -35,14 +35,14 @@
       lean = {
         enable = true;
         settings = {
-          lsp = { };
+          lsp.__empty = { };
           ft = {
             default = "lean";
-            nomodifiable = null;
+            nomodifiable.__raw = "nil";
           };
           abbreviations = {
             enable = true;
-            extra = { };
+            extra.__empty = { };
             leader = "\\";
           };
           mappings = false;

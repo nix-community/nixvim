@@ -17,7 +17,7 @@
         hide_target_hack = true;
         max_kept_windows = 50;
         windows_zindex = 300;
-        filetypes_disabled = [ ];
+        filetypes_disabled.__empty = { };
         time_interval = 17;
         delay_animation_start = 5;
         stiffness = 0.6;
@@ -36,8 +36,8 @@
         minimum_volume_factor = 0.7;
         max_length = 25;
         logging_level.__raw = "vim.log.levels.INFO";
-        cursor_color = null;
-        normal_bg = null;
+        cursor_color.__raw = "nil";
+        normal_bg.__raw = "nil";
         transparent_bg_fallback_color = "303030";
         cterm_cursor_colors = [
           240

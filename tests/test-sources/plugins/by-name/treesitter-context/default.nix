@@ -20,9 +20,9 @@
           multiline_threshold = 20;
           trim_scope = "outer";
           mode = "cursor";
-          separator = null;
+          separator.__raw = "nil";
           zindex = 20;
-          on_attach = null;
+          on_attach = "nil";
         };
       };
     };

@@ -14,13 +14,13 @@
       settings = {
         # General options.
         logo = "auto";
-        logo_tooltip = null;
+        logo_tooltip.__raw = "nil";
         main_image = "language";
         client_id = "1157438221865717891";
-        log_level = null;
+        log_level.__raw = "nil";
         debounce_timeout = 10;
-        blacklist = [ ];
-        file_assets = null;
+        blacklist.__empty = { };
+        file_assets.__raw = "nil";
         show_time = true;
         global_timer = false;
 
@@ -50,11 +50,11 @@
         logo_tooltip = "Nixvim";
         main_image = "language";
         client_id = "1157438221865717891";
-        log_level = null;
+        log_level.__raw = "nil";
         debounce_timeout = 10;
         enable_line_number = false;
-        blacklist = [ ];
-        file_assets = null;
+        blacklist.__empty = { };
+        file_assets.__raw = "nil";
         show_time = true;
         global_timer = false;
 

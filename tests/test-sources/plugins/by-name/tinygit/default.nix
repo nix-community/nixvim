@@ -104,8 +104,8 @@
         };
         statusline = {
           blame = {
-            ignoreAuthors = [ ];
-            hideAuthorNames = [ ];
+            ignoreAuthors.__empty = { };
+            hideAuthorNames.__empty = { };
             maxMsgLen = 40;
             icon = "ﰖ";
           };

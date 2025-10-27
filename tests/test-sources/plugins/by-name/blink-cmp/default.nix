@@ -59,9 +59,9 @@
                 "("
                 ")"
               ];
-              override_brackets_for_filetypes = { };
-              force_allow_filetypes = [ ];
-              blocked_filetypes = [ ];
+              override_brackets_for_filetypes.__empty = { };
+              force_allow_filetypes.__empty = { };
+              blocked_filetypes.__empty = { };
               kind_resolution = {
                 enabled = true;
                 blocked_filetypes = [
@@ -112,7 +112,7 @@
               align_to = "label";
               padding = 1;
               gap = 1;
-              treesitter = { };
+              treesitter.__empty = { };
               columns = [
                 [ "kind_icon" ]
                 {
@@ -232,9 +232,9 @@
           prebuilt_binaries = {
             download = true;
             ignore_version_mismatch = false;
-            force_version = null;
-            force_system_triple = null;
-            extra_curl_args = [ ];
+            force_version.__raw = "nil";
+            force_system_triple.__raw = "nil";
+            extra_curl_args.__empty = { };
           };
         };
         sources = {
@@ -244,7 +244,7 @@
             "snippets"
             "buffer"
           ];
-          per_filetype = { };
+          per_filetype.__empty = { };
           cmdline.__raw = ''
             function()
               local type = vim.fn.getcmdtype()
@@ -310,8 +310,8 @@
           enabled = false;
           trigger = {
             enabled = true;
-            blocked_trigger_characters = [ ];
-            blocked_retrigger_characters = [ ];
+            blocked_trigger_characters.__empty = { };
+            blocked_retrigger_characters.__empty = { };
             show_on_insert_on_trigger_character = true;
           };
           window = {
@@ -387,6 +387,8 @@
               '';
             };
           };
+
+          # FIXME: This should be __empty but this config is out of date so it throws
           cmdline = [ ];
         };
         completion = {

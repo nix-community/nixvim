@@ -15,7 +15,7 @@
         enable = true;
 
         settings = {
-          theme = null;
+          theme.__raw = "nil";
           path.__raw = "vim.loop.cwd()";
           cwd.__raw = "vim.loop.cwd()";
           cwd_to_path = false;

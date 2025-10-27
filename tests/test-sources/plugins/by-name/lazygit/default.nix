@@ -23,7 +23,7 @@
         floating_window_use_plenary = 0;
         use_neovim_remote = 1;
         use_custom_config_file_path = 0;
-        config_file_path = [ ];
+        config_file_path.__empty = { };
       };
     };
   };

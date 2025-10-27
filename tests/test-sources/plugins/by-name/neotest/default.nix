@@ -53,14 +53,14 @@
         discovery = {
           enabled = true;
           concurrent = 0;
-          filter_dir = null;
+          filter_dir.__raw = "nil";
         };
         running = {
           concurrent = true;
         };
         default_strategy = "integrated";
         log_level = "warn";
-        consumers = { };
+        consumers.__empty = { };
         icons = {
           child_indent = "│";
           child_prefix = "├";
@@ -110,7 +110,7 @@
           border = "rounded";
           max_height = 0.6;
           max_width = 0.6;
-          options = { };
+          options.__empty = { };
         };
         strategies = {
           integrated = {
@@ -170,8 +170,8 @@
         };
         watch = {
           enabled = true;
-          symbol_queries = null;
-          filter_path = null;
+          symbol_queries.__raw = "nil";
+          filter_path.__raw = "nil";
         };
         diagnostic = {
           enabled = true;

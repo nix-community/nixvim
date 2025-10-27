@@ -22,7 +22,7 @@
             end
         '';
 
-        spec = [ ];
+        spec.__empty = { };
 
         notify = true;
 
@@ -70,8 +70,8 @@
           title = true;
           title_pos = "center";
           zindex = 1000;
-          bo = { };
-          wo = { };
+          bo.__empty = { };
+          wo.__empty = { };
         };
 
         layout = {
@@ -149,7 +149,7 @@
           group = "+";
           ellipsis = "…";
           mappings = true;
-          rules = [ ];
+          rules.__empty = { };
           colors = true;
           keys = {
             Up = " ";
@@ -187,8 +187,8 @@
         show_keys = true;
 
         disable = {
-          bt = [ ];
-          ft = [ ];
+          bt.__empty = { };
+          ft.__empty = { };
         };
 
         debug = false;

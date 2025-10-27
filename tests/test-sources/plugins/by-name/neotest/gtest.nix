@@ -33,7 +33,7 @@
             history_size = 3;
             parsing_throttle_ms = 10;
             mappings = {
-              configure = null;
+              configure.__raw = "nil";
             };
             summary_view = {
               header_length = 80;
@@ -45,7 +45,7 @@
                 bold = "\27[1m";
               };
             };
-            extra_args = [ ];
+            extra_args.__empty = { };
             filter_dir.__raw = ''
               function(name, rel_path, root)
               end

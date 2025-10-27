@@ -8,26 +8,26 @@
       enable = true;
 
       settings = {
-        left = [ ];
-        bottom = [ ];
-        right = [ ];
-        top = [ ];
+        left.__empty = { };
+        bottom.__empty = { };
+        right.__empty = { };
+        top.__empty = { };
         options = {
           left = {
             size = 30;
-            wo = null;
+            wo.__raw = "nil";
           };
           bottom = {
             size = 10;
-            wo = null;
+            wo.__raw = "nil";
           };
           right = {
             size = 30;
-            wo = null;
+            wo.__raw = "nil";
           };
           top = {
             size = 10;
-            wo = null;
+            wo.__raw = "nil";
           };
         };
         animate = {

@@ -25,7 +25,7 @@
           db_root.__raw = "vim.fn.stdpath 'data'";
           db_safe_mode = true;
           db_validate_threshold = 10;
-          default_workspace = null;
+          default_workspace.__raw = "nil";
           disable_devicons = false;
           hide_current_buffer = false;
           filter_delimiter = ":";
@@ -38,8 +38,8 @@
           show_filter_column = true;
           show_scores = false;
           show_unindexed = true;
-          workspace_scan_cmd = null;
-          workspaces = { };
+          workspace_scan_cmd.__raw = "nil";
+          workspaces.__empty = { };
         };
       };
     };

@@ -10,18 +10,18 @@
       settings = {
         preview = {
           enable = true;
-          buf_ignore = [ ];
+          buf_ignore.__empty = { };
           icon_provider = "internal";
-          filetypes = [ ];
-          hybrid_modes = [ ];
-          ignore_previews = [ ];
+          filetypes.__empty = { };
+          hybrid_modes.__empty = { };
+          ignore_previews.__empty = { };
           max_buf_lines = 1000;
-          modes = [ ];
+          modes.__empty = { };
           render_distance = [
             200
             200
           ];
-          splitview_winopts = { };
+          splitview_winopts.__empty = { };
         };
       };
     };

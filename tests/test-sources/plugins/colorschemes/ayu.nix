@@ -9,6 +9,8 @@
 
       settings = {
         mirage = false;
+
+        # FIXME: this can't be empty due to raw coercion
         overrides = { };
       };
     };

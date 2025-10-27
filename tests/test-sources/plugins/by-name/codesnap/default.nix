@@ -8,14 +8,14 @@
       enable = true;
 
       settings = {
-        save_path = null;
+        save_path.__raw = "nil";
         mac_window_bar = true;
         title = "CodeSnap.nvim";
         code_font_family = "CaskaydiaCove Nerd Font";
         watermark_font_family = "Pacifico";
         watermark = "CodeSnap.nvim";
         bg_theme = "default";
-        bg_color = null;
+        bg_color.__raw = "nil";
         breadcrumbs_separator = "/";
         has_breadcrumbs = false;
         has_line_number = false;

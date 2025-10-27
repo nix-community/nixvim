@@ -14,11 +14,11 @@
         cmake_generate_options = {
           "-DCMAKE_EXPORT_COMPILE_COMMANDS" = 1;
         };
-        cmake_build_options = { };
+        cmake_build_options.__empty = { };
         cmake_build_directory = "out/\${variant:buildType}";
         cmake_soft_link_compile_commands = true;
         cmake_compile_commands_from_lsp = false;
-        cmake_kits_path = null;
+        cmake_kits_path.__raw = "nil";
 
         cmake_variants_message = {
           short = {
@@ -41,7 +41,7 @@
 
         cmake_executor = {
           name = "quickfix";
-          opts = { };
+          opts.__empty = { };
           default_opts = {
             quickfix = {
               show = "always";
@@ -84,7 +84,7 @@
 
         cmake_runner = {
           name = "terminal";
-          opts = { };
+          opts.__empty = { };
           default_opts = {
             quickfix = {
               show = "always";

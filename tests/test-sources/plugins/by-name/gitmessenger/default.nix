@@ -16,11 +16,11 @@
         always_into_popup = false;
         extra_blame_args = "";
         preview_mods = "";
-        max_popup_height = null;
-        max_popup_width = null;
+        max_popup_height.__raw = "nil";
+        max_popup_width.__raw = "nil";
         date_format = "%c";
         conceal_word_diff_marker = true;
-        floating_win_opts = { };
+        floating_win_opts.__empty = { };
         popup_content_margins = true;
       };
     };

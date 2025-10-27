@@ -18,7 +18,7 @@
           sort = true;
           run_on_every_keystroke = true;
           snippet_placeholder = "..";
-          ignored_file_types = { };
+          ignored_file_types.__empty = { };
           min_percent = 0;
         };
       };

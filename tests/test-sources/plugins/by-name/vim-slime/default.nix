@@ -9,7 +9,7 @@
 
       settings = {
         target = "screen";
-        vimterminal_cmd = null;
+        vimterminal_cmd.__raw = "nil";
         no_mappings = 0;
         paste_file = "$HOME/.slime_paste";
         preserve_curpos = 1;

@@ -15,7 +15,7 @@
         notify = true;
         dot_repeat = true;
         on_error.__raw = "nil";
-        langs = { };
+        langs.__empty = { };
       };
     };
   };

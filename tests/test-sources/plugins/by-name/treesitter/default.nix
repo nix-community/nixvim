@@ -6,8 +6,8 @@
 
       settings = {
         auto_install = false;
-        ensure_installed = [ ];
-        ignore_install = [ ];
+        ensure_installed.__empty = { };
+        ignore_install.__empty = { };
         # NOTE: This is our default, not the plugin's
         parser_install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
 
@@ -16,8 +16,8 @@
         highlight = {
           additional_vim_regex_highlighting = false;
           enable = false;
-          custom_captures = { };
-          disable = null;
+          custom_captures.__empty = { };
+          disable.__raw = "nil";
         };
 
         incremental_selection = {

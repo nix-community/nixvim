@@ -11,13 +11,13 @@
         neovim_image_text = "The One True Text Editor";
         main_image = "neovim";
         client_id = "793271441293967371";
-        log_level = null;
+        log_level.__raw = "nil";
         debounce_timeout = 10;
         enable_line_number = false;
-        blacklist = [ ];
-        file_assets = null;
+        blacklist.__empty = { };
+        file_assets.__raw = "nil";
         show_time = true;
-        buttons = [ ];
+        buttons.__empty = { };
         editing_text = "Editing %s";
         file_explorer_text = "Browsing %s";
         git_commit_text = "Committing changes";

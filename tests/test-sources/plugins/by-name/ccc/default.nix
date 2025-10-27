@@ -33,8 +33,8 @@
         lsp = true;
         highlighter = {
           auto_enable = false;
-          filetypes = [ ];
-          excludes = [ ];
+          filetypes.__empty = { };
+          excludes.__empty = { };
           lsp = true;
           update_insert = true;
         };

@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        shell = null;
+        shell.__raw = "nil";
         title = "floaterm: $1/$2";
         wintype = "float";
         width = 0.6;

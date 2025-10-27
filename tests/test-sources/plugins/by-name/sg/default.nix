@@ -17,7 +17,7 @@
         enable_cody = false;
         accept_tos = false;
         chat = {
-          default_model = null;
+          default_model.__raw = "nil";
         };
         download_binaries = true;
         node_executable = "node";
@@ -30,7 +30,7 @@
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr })
           end
         '';
-        src_headers = null;
+        src_headers.__raw = "nil";
       };
     };
   };

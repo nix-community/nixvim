@@ -28,19 +28,22 @@
         styles = {
           comments = [ "italic" ];
           conditionals = [ "italic" ];
-          loops = [ ];
-          functions = [ ];
-          keywords = [ ];
-          strings = [ ];
-          variables = [ ];
-          numbers = [ ];
-          booleans = [ ];
-          properties = [ ];
-          types = [ ];
-          operators = [ ];
+          loops.__empty = { };
+          functions.__empty = { };
+          keywords.__empty = { };
+          strings.__empty = { };
+          variables.__empty = { };
+          numbers.__empty = { };
+          booleans.__empty = { };
+          properties.__empty = { };
+          types.__empty = { };
+          operators.__empty = { };
         };
-        color_overrides = { };
+        color_overrides.__empty = { };
+
+        # FIXME: this can't be __empty due to raw coercion
         custom_highlights = { };
+
         default_integrations = true;
         integrations = {
           alpha = true;
@@ -123,9 +126,9 @@
             mantle = "#242424";
             crust = "#474747";
           };
-          frappe = { };
-          macchiato = { };
-          mocha = { };
+          frappe.__empty = { };
+          macchiato.__empty = { };
+          mocha.__empty = { };
         };
         styles = {
           booleans = [

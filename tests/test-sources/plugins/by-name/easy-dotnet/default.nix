@@ -133,7 +133,7 @@
                 desc = "refresh testrunner";
               };
             };
-            additional_args = [ ];
+            additional_args.__empty = { };
           };
           csproj_mappings = true;
           fsproj_mappings = true;

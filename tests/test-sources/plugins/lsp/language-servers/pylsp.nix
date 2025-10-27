@@ -1,3 +1,5 @@
+# FIXME: This test uses a lot of "null" values that get ignored
+# this should use raw values instead but cannot be implemented due to raw coercions
 {
   example = {
     plugins.lsp = {

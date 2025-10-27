@@ -41,7 +41,7 @@
           };
         };
         cmd_prefix = "Prt";
-        curl_params = [ ];
+        curl_params.__empty = { };
         state_dir.__raw = "vim.fn.stdpath('data'):gsub('/$', '') .. '/parrot/persisted'";
         chat_dir.__raw = "vim.fn.stdpath('data'):gsub('/$', '') .. '/parrot/chats'";
         chat_user_prefix = "🗨:";

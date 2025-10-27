@@ -34,7 +34,7 @@
           send_to_quickfix_list = "<c-q>";
         };
 
-        set_keymappings_function = null;
+        set_keymappings_function.__raw = "nil";
 
         hooks = {
           yazi_opened.__raw = ''
@@ -55,7 +55,7 @@
         };
 
         highlight_groups = {
-          hovered_buffer = null;
+          hovered_buffer.__raw = "nil";
         };
 
         floating_window_scaling_factor = 0.9;

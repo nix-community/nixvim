@@ -27,7 +27,7 @@
             "table"
             "if_statement"
           ];
-          exclude = [ ];
+          exclude.__empty = { };
         };
       };
     };

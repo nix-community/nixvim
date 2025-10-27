@@ -20,11 +20,11 @@
         };
         debugger = {
           enabled = false;
-          exception_breakpoints = null;
+          exception_breakpoints.__raw = "nil";
           evaluate_to_string_in_debug_views = true;
-          register_configurations = null;
+          register_configurations.__raw = "nil";
         };
-        flutter_path = null;
+        flutter_path.__raw = "nil";
         flutter_lookup_cmd.__raw = ''
           (function()
             local exepath = vim.fn.exepath("flutter")
@@ -48,7 +48,7 @@
         };
         dev_log = {
           enabled = true;
-          filter = null;
+          filter.__raw = "nil";
           notify_errors = false;
           open_cmd.__raw = "('botright %dvnew'):format(math.max(vim.o.columns * 0.4, 50))";
           focus_on_open = true;
@@ -65,14 +65,14 @@
           color = {
             enabled = false;
             background = false;
-            background_color = null;
+            background_color.__raw = "nil";
             foreground = false;
             virtual_text = true;
             virtual_text_str = "■";
           };
-          on_attach = null;
-          capabilities = null;
-          settings = null;
+          on_attach.__raw = "nil";
+          capabilities.__raw = "nil";
+          settings.__raw = "nil";
         };
       };
     };

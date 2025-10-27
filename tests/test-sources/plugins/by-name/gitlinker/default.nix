@@ -30,7 +30,7 @@
 
       settings = {
         opts = {
-          remote = null;
+          remote.__raw = "nil";
           add_current_line_on_normal_mode = true;
           action_callback = lib.nixvim.mkRaw "require('gitlinker.actions').copy_to_clipboard";
           print_url = true;
