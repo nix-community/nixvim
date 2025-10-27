@@ -12,7 +12,7 @@
           backdrop = 0.95;
           width = 120;
           height = 1;
-          options = { };
+          options.__empty = { };
         };
         plugins = {
           options = {

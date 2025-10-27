@@ -48,29 +48,29 @@
         };
         indent = {
           char = "▎";
-          tab_char = null;
-          highlight = null;
+          tab_char.__raw = "nil";
+          highlight.__raw = "nil";
           smart_indent_cap = true;
           priority = 1;
         };
         whitespace = {
-          highlight = null;
+          highlight.__raw = "nil";
           remove_blankline_trail = true;
         };
         scope = {
           enabled = true;
-          char = null;
+          char.__raw = "nil";
           show_start = true;
           show_end = true;
           show_exact_scope = false;
           injected_languages = true;
-          highlight = null;
+          highlight.__raw = "nil";
           priority = 1024;
           include = {
-            node_type = { };
+            node_type.__empty = { };
           };
           exclude = {
-            language = [ ];
+            language.__empty = { };
             node_type = {
               "*" = [
                 "source_file"

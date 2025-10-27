@@ -60,9 +60,9 @@
         step_eof = true;
         respect_scrolloff = false;
         cursor_scrolls_alone = true;
-        easing_function = null;
-        pre_hook = null;
-        post_hook = null;
+        easing_function.__raw = "nil";
+        pre_hook.__raw = "nil";
+        post_hook.__raw = "nil";
         performance_mode = false;
       };
     };

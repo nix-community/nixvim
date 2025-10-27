@@ -26,7 +26,7 @@
         inlay_hints_background = "none";
         disable_terminal_colors = 0;
         lightline_disable_bold = 0;
-        colors_override = { };
+        colors_override.__raw = "nil";
 
         # This option is broken when set to 1, because the plugin tries to write its cache in /nix/store
         better_performance = 0;

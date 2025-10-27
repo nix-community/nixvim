@@ -74,7 +74,7 @@
           close_command = "bdelete! %d";
           left_mouse_command = "buffer %d";
           right_mouse_command = "bdelete! %d";
-          middle_mouse_command = null;
+          middle_mouse_command.__raw = "nil";
           indicator = {
             icon = "▎";
             style = "icon";
@@ -82,14 +82,14 @@
           left_trunc_marker = "";
           right_trunc_marker = "";
           separator_style = "thin";
-          name_formatter = null;
+          name_formatter.__raw = "nil";
           truncate_names = true;
           tab_size = 18;
           max_name_length = 18;
           color_icons = true;
           show_buffer_icons = true;
           show_buffer_close_icons = true;
-          get_element_icon = null;
+          get_element_icon.__raw = "nil";
           show_close_icon = true;
           show_tab_indicators = true;
           show_duplicate_prefix = true;
@@ -102,27 +102,27 @@
           max_prefix_length = 15;
           sort_by = "id";
           diagnostics = false;
-          diagnostics_indicator = null;
+          diagnostics_indicator.__raw = "nil";
           diagnostics_update_in_insert = true;
           diagnostics_update_on_event = true;
-          offsets = null;
+          offsets.__raw = "nil";
           groups = {
-            items = [ ];
+            items.__empty = { };
             options = {
               toggle_hidden_on_enter = true;
             };
           };
           hover = {
             enabled = false;
-            reveal = [ ];
+            reveal.__empty = { };
             delay = 200;
           };
           debug = {
             logging = false;
           };
-          custom_filter = null;
+          custom_filter.__raw = "nil";
         };
-        highlights = { };
+        highlights.__empty = { };
       };
     };
   };

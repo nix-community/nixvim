@@ -60,11 +60,11 @@
       enable = true;
       settings = {
         open_fold_hl_timeout = 400;
-        provider_selector = null;
+        provider_selector.__raw = "nil";
         close_fold_kinds_for_ft = {
-          default = { };
+          default.__empty = { };
         };
-        fold_virt_text_handler = null;
+        fold_virt_text_handler.__raw = "nil";
         enable_get_fold_virt_text = false;
         preview = {
           win_config = {

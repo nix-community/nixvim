@@ -65,7 +65,7 @@
             "<leader>l".__raw = ''require('glance').actions.enter_win("list")'';
           };
         };
-        hooks = { };
+        hooks.__empty = { };
         folds = {
           fold_closed = "";
           fold_open = "";

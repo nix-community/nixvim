@@ -44,7 +44,7 @@
               sign.enabled = false;
             };
           };
-          filetype = { };
+          filetype.__empty = { };
         };
         log_level = "error";
         padding.highlight = "Normal";

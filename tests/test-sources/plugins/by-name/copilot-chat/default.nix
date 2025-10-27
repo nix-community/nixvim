@@ -13,12 +13,12 @@
         system_prompt = "require('CopilotChat.config.prompts').COPILOT_INSTRUCTIONS";
         model = "gpt-4-o";
         agent = "none";
-        context = null;
-        sticky = null;
+        context.__raw = "nil";
+        sticky.__raw = "nil";
 
         temperature = 0.1;
         headless = false;
-        callback = null;
+        callback.__raw = "nil";
 
         selection.__raw = ''
           function(source)
@@ -33,10 +33,10 @@
           height = 0.5;
           relative = "editor";
           border = "single";
-          row = null;
-          col = null;
+          row.__raw = "nil";
+          col.__raw = "nil";
           title = "Copilot Chat";
-          footer = null;
+          footer.__raw = "nil";
           zindex = 1;
         };
 
@@ -50,7 +50,7 @@
 
         debug = false;
         log_level = "info";
-        proxy = null;
+        proxy.__raw = "nil";
         allow_insecure = false;
 
         chat_autocomplete = true;

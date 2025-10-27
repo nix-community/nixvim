@@ -9,7 +9,7 @@
         enable = true;
 
         settings = {
-          on_start = null;
+          on_start.__raw = "nil";
           on_finish.__raw = ''
             function()
               vim.notify "Time is up!"
@@ -19,7 +19,7 @@
             30
             10
           ];
-          mapping = null;
+          mapping.__raw = "nil";
           position = "top-left";
         };
       };

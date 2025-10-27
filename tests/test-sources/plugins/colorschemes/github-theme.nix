@@ -40,14 +40,14 @@
             floats = true;
             sidebars = {
               enable = true;
-              list = [ ];
+              list.__empty = { };
             };
           };
-          modules = [ ];
+          modules.__empty = { };
         };
-        palettes = [ ];
-        specs = [ ];
-        groups = [ ];
+        palettes.__empty = { };
+        specs.__empty = { };
+        groups.__empty = { };
       };
     };
   };

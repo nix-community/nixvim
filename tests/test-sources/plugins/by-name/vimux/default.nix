@@ -20,7 +20,7 @@
         ExpandCommand = 0;
         CloseOnExit = 0;
         CommandShell = 1;
-        RunnerQuery = { };
+        RunnerQuery.__empty = { };
         Debug = false;
       };
     };

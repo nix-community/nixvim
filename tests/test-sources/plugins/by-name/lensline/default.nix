@@ -43,8 +43,7 @@
           }
         ];
         limits = {
-          exclude = {
-          };
+          exclude.__empty = { };
           exclude_gitignored = true;
           max_lines = 1000;
           max_lenses = 70;

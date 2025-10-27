@@ -22,19 +22,22 @@
         case_setting = "";
         disable_syntax_in_imode = 0;
         recursive_operations_at_cursors = 1;
-        custom_remaps = { };
-        custom_noremaps = { };
-        custom_motions = { };
-        user_operators = [ ];
+        custom_remaps.__empty = { };
+        custom_noremaps.__empty = { };
+        custom_motions.__empty = { };
+        user_operators.__empty = { };
         use_first_cursor_in_line = 0;
         insert_special_keys = [ "c-v" ];
         single_mode_maps = 1;
         single_mode_auto_reset = 1;
         filesize_limit = 0;
         persistent_registers = 0;
-        reindent_filetypes = [ ];
-        plugins_compatibilty = { };
-        maps = { };
+        reindent_filetypes.__empty = { };
+        plugins_compatibilty.__empty = { };
+
+        # FIXME: This is not empty by default. it can't be or it throws
+        # maps.__empty = { };
+
         default_mappings = 1;
         mouse_mappings = 0;
         leader = "\\\\";

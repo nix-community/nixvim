@@ -14,13 +14,13 @@
         content_width = 60;
         height = "60%";
         show_patch = false;
-        libgit2_path = null;
+        libgit2_path.__raw = "nil";
         gpgme_path = "gpgme";
         external_diffview = false;
         blame_priority = 1;
         blame_info_width = 60;
         blame_info_height = 10;
-        colorscheme = null;
+        colorscheme.__raw = "nil";
       };
     };
   };

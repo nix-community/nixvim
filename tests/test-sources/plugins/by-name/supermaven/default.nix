@@ -16,10 +16,10 @@
           clear_suggestions = "<C-]>";
           accept_word = "<C-j>";
         };
-        ignore_filetypes = [ ];
+        ignore_filetypes.__empty = { };
         color = {
-          suggestion_color = null;
-          cterm = null;
+          suggestion_color.__raw = "nil";
+          cterm.__raw = "nil";
         };
         log_level = "info";
         disable_inline_completion = false;

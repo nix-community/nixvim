@@ -10,9 +10,9 @@
       disableNetrwGx = true;
 
       settings = {
-        open_browser_app = null;
-        open_browser_args = [ ];
-        handlers = { };
+        open_browser_app.__raw = "nil";
+        open_browser_args.__empty = { };
+        handlers.__empty = { };
         handler_options = {
           search_engine = "google";
           select_for_search = false;

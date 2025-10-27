@@ -56,7 +56,7 @@
             };
             telemetry = {
               enabled = true;
-              trackingUrl = null;
+              trackingUrl.__raw = "nil";
             };
           };
         };

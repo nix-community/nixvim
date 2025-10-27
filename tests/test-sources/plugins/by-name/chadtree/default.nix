@@ -52,8 +52,8 @@
               "thumbs.db"
               ".git"
             ];
-            name_glob = [ ];
-            path_glob = [ ];
+            name_glob.__empty = { };
+            path_glob.__empty = { };
           };
           view = {
             open_direction = "left";

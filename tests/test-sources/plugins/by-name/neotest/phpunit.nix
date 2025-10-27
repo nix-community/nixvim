@@ -26,7 +26,7 @@
             env = {
               XDEBUG_CONFIG = "idekey=neotest";
             };
-            dap = null;
+            dap.__raw = "nil";
           };
         };
       };

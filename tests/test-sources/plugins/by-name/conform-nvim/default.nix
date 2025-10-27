@@ -24,7 +24,7 @@
       enable = true;
 
       settings = {
-        formatters_by_ft = { };
+        formatters_by_ft.__empty = { };
         format_on_save = {
           lsp_format = "never";
           timeout_ms = 1000;
@@ -46,7 +46,7 @@
         log_level = "error";
         notify_on_error = true;
         notify_no_formatters = true;
-        formatters = { };
+        formatters.__empty = { };
       };
     };
   };

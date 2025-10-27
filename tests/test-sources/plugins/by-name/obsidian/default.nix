@@ -29,7 +29,7 @@
           # TODO 2025-07-25 explicitly disable legacy commands to suppress deprecation warning
           legacy_commands = false;
 
-          dir = null;
+          dir.__raw = "nil";
           workspaces = [
             {
               name = "work";
@@ -77,7 +77,7 @@
         enable = false;
 
         settings = {
-          dir = null;
+          dir.__raw = "nil";
           workspaces = [
             {
               name = "work";
@@ -94,7 +94,7 @@
             # subdir = "templates";
             date_format = "%Y-%m-%d";
             time_format = "%H:%M";
-            substitutions = { };
+            substitutions.__empty = { };
           };
           new_notes_location = "current_dir";
           note_id_func = ''

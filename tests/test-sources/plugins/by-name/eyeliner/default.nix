@@ -10,8 +10,8 @@
         highlight_on_key = false;
         dim = false;
         max_length = 9999;
-        disabled_filetypes = [ ];
-        disabled_buftypes = [ ];
+        disabled_filetypes.__empty = { };
+        disabled_buftypes.__empty = { };
         default_keymaps = true;
       };
     };

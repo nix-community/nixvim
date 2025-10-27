@@ -13,12 +13,12 @@
         auto_save = true;
         auto_restore = true;
         auto_create = true;
-        suppressed_dirs = null;
-        allowed_dirs = null;
+        suppressed_dirs.__raw = "nil";
+        allowed_dirs.__raw = "nil";
         auto_restore_last_session = false;
         use_git_branch = false;
         lazy_support = true;
-        bypass_save_filetypes = null;
+        bypass_save_filetypes.__raw = "nil";
         close_unsupported_windows = true;
         args_allow_single_directory = true;
         args_allow_files_auto_save = false;
@@ -27,7 +27,7 @@
         log_level = "error";
         session_lens = {
           load_on_setup = true;
-          theme_conf = { };
+          theme_conf.__empty = { };
           previewer = false;
           mappings = {
             delete_session = {

@@ -26,7 +26,7 @@
         inactive_collapse = 1;
         inactive_alt_sep = 1;
         theme = "dark";
-        theme_patch_func = null;
+        theme_patch_func.__raw = "nil";
         powerline_fonts = 0;
         symbols_ascii = 0;
         mode_map = {
@@ -47,8 +47,8 @@
           v = "V";
           V = "V";
         };
-        exclude_filenames = [ ];
-        exclude_filetypes = [ ];
+        exclude_filenames.__empty = { };
+        exclude_filetypes.__empty = { };
         filetype_overrides = {
           coc-explorer = [
             "CoC Explorer"

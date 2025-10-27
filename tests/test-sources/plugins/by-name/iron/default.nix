@@ -9,28 +9,28 @@
 
       settings = {
         scratch_repl = false;
-        repl_definition = { };
+        repl_definition.__empty = { };
         repl_open_cmd.__raw = ''
           require("iron.view").split.botright(40)
         '';
-        highlight = { };
+        highlight.__empty = { };
         highlight_last = "IronLastSent";
         ignore_blank_lines = true;
         should_map_plug = false;
         bufListed = false;
         keymaps = {
-          send_motion = null;
-          visual_send = null;
-          send_file = null;
-          send_paragraph = null;
-          send_until_cursor = null;
-          send_mark = null;
-          mark_motion = null;
-          remove_mark = null;
-          cr = null;
-          interrupt = null;
-          exit = null;
-          clear = null;
+          send_motion.__raw = "nil";
+          visual_send.__raw = "nil";
+          send_file.__raw = "nil";
+          send_paragraph.__raw = "nil";
+          send_until_cursor.__raw = "nil";
+          send_mark.__raw = "nil";
+          mark_motion.__raw = "nil";
+          remove_mark.__raw = "nil";
+          cr.__raw = "nil";
+          interrupt.__raw = "nil";
+          exit.__raw = "nil";
+          clear.__raw = "nil";
         };
       };
     };

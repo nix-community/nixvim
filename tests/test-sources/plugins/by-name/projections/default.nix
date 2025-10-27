@@ -9,14 +9,14 @@
 
       settings = {
         store_hooks = {
-          pre = null;
-          post = null;
+          pre.__raw = "nil";
+          post.__raw = "nil";
         };
         restore_hooks = {
-          pre = null;
-          post = null;
+          pre.__raw = "nil";
+          post.__raw = "nil";
         };
-        workspaces = [ ];
+        workspaces.__empty = { };
         patterns = [
           ".git"
           ".svn"

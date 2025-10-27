@@ -9,14 +9,14 @@
 
       settings = {
         show_hidden_files = false;
-        ignore = [ ];
+        ignore.__empty = { };
         devicons = {
           enable = false;
           highlight_dirname = false;
         };
         hide_cursor = false;
         on_init.__raw = "function() end";
-        mappings = { };
+        mappings.__empty = { };
         float = {
           winblend = 0;
           curdir_window = {
@@ -24,7 +24,7 @@
             highlight_dirname = false;
           };
         };
-        get_filters = null;
+        get_filters.__raw = "nil";
       };
     };
   };

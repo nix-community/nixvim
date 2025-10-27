@@ -28,7 +28,7 @@
           copilot = {
             endpoint = "https://api.githubcopilot.com";
             model = "gpt-4o-2024-05-13";
-            proxy = null;
+            proxy.__raw = "nil";
             allow_insecure = false;
             timeout = 30000;
             extra_request_body = {

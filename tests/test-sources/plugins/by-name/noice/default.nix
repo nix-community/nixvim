@@ -11,7 +11,7 @@
         cmdline = {
           enabled = true;
           view = "cmdline_popup";
-          opts = { };
+          opts.__empty = { };
           format = {
             cmdline = {
               pattern = "^:";
@@ -44,7 +44,7 @@
               pattern = "^:%s*he?l?p?%s+";
               icon = "";
             };
-            input = { };
+            input.__empty = { };
           };
         };
         messages = {
@@ -58,7 +58,7 @@
         popupmenu = {
           enabled = true;
           backend = "nui";
-          kind_icons = { };
+          kind_icons.__empty = { };
         };
         redirect = {
           view = "popup";
@@ -147,8 +147,8 @@
           };
           hover = {
             enabled = true;
-            view = null;
-            opts = { };
+            view.__raw = "nil";
+            opts.__empty = { };
           };
           signature = {
             enabled = true;
@@ -158,13 +158,13 @@
               luasnip = true;
               throttle = 50;
             };
-            view = null;
-            opts = { };
+            view.__raw = "nil";
+            opts.__empty = { };
           };
           message = {
             enabled = true;
             view = "notify";
-            opts = { };
+            opts.__empty = { };
           };
           documentation = {
             view = "hover";
@@ -213,10 +213,10 @@
           lsp_doc_border = false;
         };
         throttle = 1000 / 30;
-        views = { };
-        routes = [ ];
-        status = { };
-        format = { };
+        views.__empty = { };
+        routes.__empty = { };
+        status.__empty = { };
+        format.__empty = { };
       };
     };
   };

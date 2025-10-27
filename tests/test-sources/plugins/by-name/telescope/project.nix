@@ -19,7 +19,7 @@
         enable = true;
 
         settings = {
-          base_dirs = null;
+          base_dirs.__raw = "nil";
           cd_scope = [
             "tab"
             "window"

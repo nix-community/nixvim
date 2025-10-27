@@ -38,8 +38,8 @@
           register = false;
           nohlsearch = false;
           autojump = false;
-          inclusive = null;
-          offset = null;
+          inclusive.__raw = "nil";
+          offset.__raw = "nil";
         };
         label = {
           uppercase = true;
@@ -72,10 +72,10 @@
             label = "FlashLabel";
           };
         };
-        action = null;
+        action.__raw = "nil";
         pattern = "";
         continue = false;
-        config = null;
+        config.__raw = "nil";
         prompt = {
           enabled = true;
           prefix = [

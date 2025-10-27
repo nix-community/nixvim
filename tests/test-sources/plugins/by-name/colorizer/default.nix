@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        filetypes = { };
+        filetypes.__empty = { };
         user_default_options = {
           RGB = true;
           RRGGBB = true;
@@ -30,7 +30,7 @@
           virtualtext_mode = "foreground";
           always_update = false;
         };
-        buftypes = { };
+        buftypes.__empty = { };
         user_commands = true;
       };
     };

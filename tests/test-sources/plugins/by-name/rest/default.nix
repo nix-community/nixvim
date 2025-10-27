@@ -13,7 +13,7 @@
         enable = true;
 
         settings = {
-          custom_dynamic_variables = { };
+          custom_dynamic_variables.__empty = { };
           request = {
             skip_ssl_verification = false;
             hooks = {

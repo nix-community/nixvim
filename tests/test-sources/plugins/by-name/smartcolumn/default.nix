@@ -13,7 +13,7 @@
           "markdown"
         ];
         scope = "file";
-        custom_colorcolumn = { };
+        custom_colorcolumn.__empty = { };
       };
     };
   };

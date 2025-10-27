@@ -8,8 +8,8 @@
       enable = true;
 
       settings = {
-        ft_blocklist = [ ];
-        patterns = [ ];
+        ft_blocklist.__empty = { };
+        patterns.__empty = { };
         trim_on_write = true;
         trim_trailing = true;
         trim_last_line = true;

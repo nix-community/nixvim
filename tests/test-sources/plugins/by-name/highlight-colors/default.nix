@@ -18,13 +18,13 @@
         enable_short_hex = true;
         enable_tailwind = false;
         enable_ansi = false;
-        custom_colors = null;
+        custom_colors.__raw = "nil";
         virtual_symbol = "■";
         virtual_symbol_prefix = "";
         virtual_symbol_suffix = " ";
         virtual_symbol_position = "inline";
-        exclude_filetypes = { };
-        exclude_buftypes = { };
+        exclude_filetypes.__empty = { };
+        exclude_buftypes.__empty = { };
         exclude_buffer.__raw = "function(bufnr) end";
       };
     };

@@ -32,16 +32,18 @@
         };
         picker = {
           select = {
+            # FIXME: this can't be empty due to raw coercion
             action = null;
           };
           telescope = {
             use_default_mappings = true;
+            # FIXME: this can't be empty due to raw coercion
             mappings = null;
           };
         };
         system_clipboard = {
           sync_with_ring = true;
-          clipboard_register = null;
+          clipboard_register.__raw = "nil";
         };
         highlight = {
           on_put = true;
@@ -99,7 +101,7 @@
           };
           system_clipboard = {
             sync_with_ring = true;
-            clipboard_register = null;
+            clipboard_register.__raw = "nil";
           };
           highlight = {
             on_put = true;

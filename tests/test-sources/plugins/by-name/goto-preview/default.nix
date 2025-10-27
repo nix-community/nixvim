@@ -22,13 +22,13 @@
         ];
         default_mappings = false;
         debug = false;
-        opacity = null;
+        opacity.__raw = "nil";
         resizing_mappings = false;
-        post_open_hook = null;
-        post_close_hook = null;
+        post_open_hook.__raw = "nil";
+        post_close_hook.__raw = "nil";
         references = {
           provider = "telescope";
-          telescope = null;
+          telescope.__raw = "nil";
         };
         focus_on_open = true;
         dismiss_on_move = false;

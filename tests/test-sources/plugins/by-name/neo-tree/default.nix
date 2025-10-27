@@ -65,7 +65,7 @@
         popup_border_style = "NC";
         resize_timer_interval = 500;
         sort_case_insensitive = false;
-        sort_function = "nil";
+        sort_function.__raw = "nil";
         use_popups_for_input = true;
         use_default_mappings = true;
         source_selector = {
@@ -93,14 +93,14 @@
           content_layout = "start";
           tabs_layout = "equal";
           truncation_character = "…";
-          tabs_min_width = null;
-          tabs_max_width = null;
+          tabs_min_width.__raw = "nil";
+          tabs_max_width.__raw = "nil";
           padding = 0;
           separator = {
             left = "▏";
             right = "▕";
           };
-          separator_active = null;
+          separator_active.__raw = "nil";
           show_separator_on_edge = false;
           highlight_tab = "NeoTreeTabInactive";
           highlight_tab_active = "NeoTreeTabActive";
@@ -154,7 +154,7 @@
             indent_marker = "│";
             last_indent_marker = "└";
             highlight = "NeoTreeIndentMarker";
-            with_expanders = null;
+            with_expanders.__raw = "nil";
             expander_collapsed = "";
             expander_expanded = "";
             expander_highlight = "NeoTreeExpander";
@@ -276,7 +276,7 @@
             "bufnr"
           ];
         };
-        nesting_rules = { };
+        nesting_rules.__empty = { };
         window = {
           position = "left";
           width = 40;
@@ -380,10 +380,10 @@
               ".DS_Store"
               "thumbs.db"
             ];
-            hide_by_pattern = [ ];
-            always_show = [ ];
-            never_show = [ ];
-            never_show_by_pattern = [ ];
+            hide_by_pattern.__empty = { };
+            always_show.__empty = { };
+            never_show.__empty = { };
+            never_show_by_pattern.__empty = { };
           };
           find_by_full_path_words = false;
           find_command = "fd";

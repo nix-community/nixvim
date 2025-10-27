@@ -11,9 +11,9 @@
       enable = true;
 
       settings = {
-        api_key_cmd = null;
+        api_key_cmd.__raw = "nil";
         yank_register = "+";
-        extra_curl_params = [ ];
+        extra_curl_params.__empty = { };
         show_line_numbers = true;
         edit_with_instructions = {
           diff = false;
@@ -182,7 +182,7 @@
           n = 1;
         };
         use_openai_functions_for_edits = false;
-        actions_paths = [ ];
+        actions_paths.__empty = { };
         show_quickfixes_cmd = "Trouble quickfix";
         predefined_chat_gpt_prompts = "https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv";
         highlights = {

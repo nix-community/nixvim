@@ -10,8 +10,8 @@
       settings = {
         level = "info";
         timeout = 5000;
-        max_width = null;
-        max_height = null;
+        max_width.__raw = "nil";
+        max_height.__raw = "nil";
         stages = "fade_in_slide_out";
         background_colour = "NotifyBackground";
         icons = {
@@ -21,8 +21,8 @@
           debug = "";
           trace = "✎";
         };
-        on_open = null;
-        on_close = null;
+        on_open.__raw = "nil";
+        on_close.__raw = "nil";
         render = "default";
         minimum_width = 50;
         fps = 30;

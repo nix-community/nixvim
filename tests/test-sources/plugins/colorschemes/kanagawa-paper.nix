@@ -15,10 +15,10 @@
       settings = {
         cache = false;
         colors = {
-          palette = { };
+          palette.__empty = { };
           theme = {
-            ink = { };
-            canvas = { };
+            ink.__empty = { };
+            canvas.__empty = { };
           };
         };
         undercurl = true;

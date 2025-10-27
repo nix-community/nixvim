@@ -45,13 +45,13 @@
           internal = false;
           indent_heuristic = false;
           vertical = true;
-          linematch = null;
+          linematch.__raw = "nil";
           ignore_blank_lines = true;
           ignore_whitespace_change = true;
           ignore_whitespace = true;
           ignore_whitespace_change_at_eol = true;
         };
-        base = null;
+        base.__raw = "nil";
         count_chars = {
           "__unkeyed_1" = "1";
           "__unkeyed_2" = "2";

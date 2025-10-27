@@ -13,8 +13,8 @@
           docker_binary = "docker";
           search_style = "current_dir_only";
           dotfiles = {
-            path = null;
-            install_script = null;
+            path.__raw = "nil";
+            install_script.__raw = "nil";
           };
           gpg_agent_forwarding = false;
           container_list = "running_only";
@@ -57,26 +57,26 @@
               dirs = "*";
               compression = {
                 enabled = false;
-                additional_opts = { };
+                additional_opts.__empty = { };
               };
             };
             data = {
               base.__raw = ''vim.fn.stdpath("data")'';
-              dirs = { };
+              dirs.__empty = { };
               compression = {
                 enabled = true;
               };
             };
             cache = {
               base.__raw = ''vim.fn.stdpath("cache")'';
-              dirs = { };
+              dirs.__empty = { };
               compression = {
                 enabled = true;
               };
             };
             state = {
               base.__raw = ''vim.fn.stdpath("state")'';
-              dirs = { };
+              dirs.__empty = { };
               compression = {
                 enabled = true;
               };

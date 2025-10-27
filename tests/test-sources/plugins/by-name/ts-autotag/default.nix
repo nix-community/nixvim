@@ -37,7 +37,7 @@
             "hbs" = "glimmer";
             "rust" = "rust";
           };
-          per_filetype = { };
+          per_filetype.__empty = { };
         };
       };
     };

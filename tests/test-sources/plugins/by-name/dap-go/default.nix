@@ -21,7 +21,7 @@
           path = "dlv";
           initialize_timeout_sec = 20;
           port = "$\{port}";
-          args = [ ];
+          args.__empty = { };
           build_flags = "-tags=unit";
         };
       };

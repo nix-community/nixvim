@@ -20,7 +20,7 @@
               return client and client.name or nil
             end
           '';
-          ignore = [ ];
+          ignore.__empty = { };
           display = {
             render_limit = 16;
             done_ttl = 3;

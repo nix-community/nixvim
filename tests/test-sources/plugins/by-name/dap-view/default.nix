@@ -101,7 +101,7 @@
               '';
             };
           };
-          custom_sections = [ ];
+          custom_sections.__empty = { };
           controls = {
             enabled = false;
             position = "right";
@@ -115,7 +115,7 @@
               "terminate"
               "disconnect"
             ];
-            custom_buttons = [ ];
+            custom_buttons.__empty = { };
           };
         };
         windows = {
@@ -124,7 +124,7 @@
           terminal = {
             width = 0.5;
             position = "left";
-            hide = { };
+            hide.__empty = { };
             start_hidden = false;
           };
         };
@@ -144,7 +144,7 @@
           terminate = "";
         };
         help = {
-          border = null;
+          border.__raw = "nil";
         };
         switchbuf = "usetab";
         auto_toggle = false;

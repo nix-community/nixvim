@@ -28,7 +28,7 @@
         buffers = {
           setNames = false;
           colors = {
-            background = null;
+            background.__raw = "nil";
             blend = 0;
           };
           left = {

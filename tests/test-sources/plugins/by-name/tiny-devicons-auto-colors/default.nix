@@ -13,7 +13,7 @@
         enable = true;
 
         settings = {
-          colors = null;
+          colors.__raw = "nil";
           factors = {
             lightness = 1.75;
             chroma = 1;
@@ -29,7 +29,7 @@
             precision = 20;
             threshold = 23;
           };
-          ignore = [ ];
+          ignore.__empty = { };
           autoreload = false;
         };
       };

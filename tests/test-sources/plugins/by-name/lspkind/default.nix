@@ -23,7 +23,7 @@
       settings = {
         mode = "symbol_text";
         preset = "codicons";
-        symbol_map = null;
+        symbol_map.__raw = "nil";
       };
       cmp = {
         enable = false;

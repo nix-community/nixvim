@@ -23,10 +23,10 @@
             workspaceWord = true;
           };
           diagnostics = {
-            disable = [ ];
+            disable.__empty = { };
             disableScheme = [ "git" ];
             enable = true;
-            globals = [ ];
+            globals.__empty = { };
             groupFileStatus = {
               ambiguity = "Fallback";
               await = "Fallback";
@@ -169,18 +169,18 @@
               unused-local = "Hint";
               unused-vararg = "Hint";
             };
-            unusedLocalExclude = [ ];
+            unusedLocalExclude.__empty = { };
             workspaceDelay = 3000;
             workspaceEvent = "OnSave";
             workspaceRate = 100;
           };
           doc = {
-            packageName = [ ];
-            privateName = [ ];
-            protectedName = [ ];
+            packageName.__empty = { };
+            privateName.__empty = { };
+            protectedName.__empty = { };
           };
           format = {
-            defaultConfig = { };
+            defaultConfig.__empty = { };
             enable = true;
           };
           hint = {
@@ -202,7 +202,7 @@
             viewStringMax = 1000;
           };
           misc = {
-            parameters = [ ];
+            parameters.__empty = { };
             executablePath = "";
           };
           runtime = {
@@ -227,15 +227,15 @@
             };
             fileEncoding = "utf8";
             meta = "$\{version} $\{language} $\{encoding}";
-            nonstandardSymbol = [ ];
+            nonstandardSymbol.__empty = { };
             path = [
               "?.lua"
               "?/init.lua"
             ];
             pathStrict = false;
             plugin = "";
-            pluginArgs = [ ];
-            special = { };
+            pluginArgs.__empty = { };
+            special.__empty = { };
             unicodeName = false;
             version = "Lua 5.4";
           };
@@ -249,10 +249,10 @@
             enable = true;
           };
           spell = {
-            dict = [ ];
+            dict.__empty = { };
           };
           telemetry = {
-            enable = null;
+            enable.__raw = "nil";
           };
           type = {
             castNumberToInteger = false;
@@ -267,7 +267,7 @@
             checkThirdParty = true;
             ignoreDir = [ ".vscode" ];
             ignoreSubmodules = true;
-            library = [ ];
+            library.__empty = { };
             maxPreload = 5000;
             preloadFileSize = 500;
             supportScheme = [
@@ -276,7 +276,7 @@
               "git"
             ];
             useGitIgnore = true;
-            userThirdParty = [ ];
+            userThirdParty.__empty = { };
           };
         };
       };

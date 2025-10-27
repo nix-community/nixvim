@@ -10,7 +10,7 @@
       settings = {
         padding = true;
         sticky = true;
-        ignore = null;
+        ignore.__raw = "nil";
         toggler = {
           line = "gcc";
           block = "gbc";
@@ -28,8 +28,8 @@
           basic = true;
           extra = true;
         };
-        pre_hook = null;
-        post_hook = null;
+        pre_hook.__raw = "nil";
+        post_hook.__raw = "nil";
       };
     };
   };

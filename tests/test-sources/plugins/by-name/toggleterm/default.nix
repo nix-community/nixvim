@@ -87,15 +87,15 @@
 
       settings = {
         size = 12;
-        open_mapping = null;
-        on_create = null;
-        on_open = null;
-        on_close = null;
-        on_stdout = null;
-        on_stderr = null;
-        on_exit = null;
+        open_mapping.__raw = "nil";
+        on_create.__raw = "nil";
+        on_open.__raw = "nil";
+        on_close.__raw = "nil";
+        on_stdout.__raw = "nil";
+        on_stderr.__raw = "nil";
+        on_exit.__raw = "nil";
         hide_numbers = true;
-        shade_filetypes = [ ];
+        shade_filetypes.__empty = { };
         autochdir = false;
         highlights = {
           NormalFloat.link = "Normal";
@@ -118,13 +118,13 @@
         shell.__raw = "vim.o.shell";
         auto_scroll = true;
         float_opts = {
-          border = null;
-          width = null;
-          height = null;
-          row = null;
-          col = null;
+          border.__raw = "nil";
+          width.__raw = "nil";
+          height.__raw = "nil";
+          row.__raw = "nil";
+          col.__raw = "nil";
           winblend = 0;
-          zindex = null;
+          zindex.__raw = "nil";
           title_pos = "left";
         };
         winbar = {

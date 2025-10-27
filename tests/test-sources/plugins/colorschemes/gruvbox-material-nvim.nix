@@ -19,13 +19,13 @@
         };
         float = {
           force_background = false;
-          background_color = null;
+          background_color.__raw = "nil";
         };
         signs = {
           force_background = false;
-          background_color = null;
+          background_color.__raw = "nil";
         };
-        customize = null;
+        customize.__raw = "nil";
       };
     };
   };
@@ -48,7 +48,7 @@
         };
         signs = {
           force_background = false;
-          background_color = null;
+          background_color.__raw = "nil";
         };
         customize = lib.nixvim.mkRaw ''
           function(g, o)
