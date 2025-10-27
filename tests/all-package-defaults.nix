@@ -115,6 +115,10 @@ let
     # error: 'to_chars' is unavailable: introduced in macOS 13.3 unknown
     "mesonlsp"
 
+    # 2025-10-27: dependency cargo-nextest build failure
+    # https://github.com/NixOS/nixpkgs/pull/455250#issuecomment-3451295118
+    "air-formatter"
+
     # 2025-10-20: dependency mlton build failure
     "smlfmt"
 
