@@ -40,13 +40,13 @@
       "locked": {
         "lastModified": 1752326326,
         "narHash": "sha256-JtdaTv+1VIiZpLsULCSQte6Qg3ew5axbdpOYjo+8D2U=",
-        "owner": "edolstra",
+        "owner": "NixOS",
         "repo": "flake-compat",
         "rev": "b70558fcb45e248abd2a0add41cfb6464c94eb03",
         "type": "github"
       },
       "original": {
-        "owner": "edolstra",
+        "owner": "NixOS",
         "ref": "pull/75/merge",
         "repo": "flake-compat",
         "type": "github"
