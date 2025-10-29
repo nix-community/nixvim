@@ -52,7 +52,7 @@ mkExtension {
           epub-thumbnailer.default = "epub-thumbnailer";
           ffmpegthumbnailer.default = "ffmpegthumbnailer";
           fontpreview.default = "fontpreview";
-          poppler-utils.default = "poppler_utils";
+          poppler-utils.default = "poppler-utils";
         };
       }
     ];
