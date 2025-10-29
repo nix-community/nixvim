@@ -2,9 +2,6 @@
   lib,
   ...
 }:
-let
-  inherit (lib.nixvim) defaultNullOpts toLuaObject;
-in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "vscode";
   isColorscheme = true;
@@ -14,25 +11,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.loicreynier ];
 
-  settingsOptions = {
-    transparent = defaultNullOpts.mkBool false "Whether to enable transparent background";
-    italic_comments = defaultNullOpts.mkBool false "Whether to enable italic comments";
-    underline_links = defaultNullOpts.mkBool false "Whether to underline links";
-    disable_nvimtree_bg = defaultNullOpts.mkBool true "Whether to disable nvim-tree background";
-    color_overrides = defaultNullOpts.mkAttrsOf lib.types.str { } ''
-      A dictionary of color overrides.
-      See https://github.com/Mofiqul/vscode.nvim/blob/main/lua/vscode/colors.lua for color names.
-    '';
-    group_overrides = defaultNullOpts.mkAttrsOf lib.types.highlight { } ''
-      A dictionary of group names, each associated with a dictionary of parameters
-      (`bg`, `fg`, `sp` and `style`) and colors in hex.
-    '';
+  settingsExample = {
+    transparent = true;
+    italic_comments = true;
+    italic_inlayhints = true;
+    underline_links = true;
+    terminal_colors = true;
+    color_overrides = {
+      vscLineNumber = "#FFFFFF";
+    };
   };
 
   extraConfig = cfg: {
     colorschemes.vscode.luaConfig.content = ''
       local _vscode = require("vscode")
-      _vscode.setup(${toLuaObject cfg.settings})
+      _vscode.setup(${lib.nixvim.toLuaObject cfg.settings})
       _vscode.load()
     '';
   };
