@@ -19,8 +19,8 @@ let
     lhs_: rhs_:
     let
       optCall = maybeFn: x: if lib.isFunction maybeFn then maybeFn x else maybeFn;
-      lhs = optCall lhs_ { inherit pkgs; };
-      rhs = optCall rhs_ { inherit pkgs; };
+      lhs = optCall lhs_ { inherit lib pkgs; };
+      rhs = optCall rhs_ { inherit lib pkgs; };
     in
     lib.recursiveUpdate lhs rhs
     // lib.optionalAttrs (lhs ? allowUnfreePackages) {
