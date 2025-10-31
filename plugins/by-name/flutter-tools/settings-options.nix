@@ -212,20 +212,6 @@ in
         Whether to highlight the background.
       '';
 
-      background_color = defaultNullOpts.mkNullable' {
-        type = with types; either str (attrsOf ints.unsigned);
-        pluginDefault = null;
-        example = {
-          r = 19;
-          g = 17;
-          b = 24;
-        };
-        description = ''
-          Background color.
-          Required, when background is transparent.
-        '';
-      };
-
       foreground = defaultNullOpts.mkBool false ''
         Whether to highlight the foreground.
       '';
