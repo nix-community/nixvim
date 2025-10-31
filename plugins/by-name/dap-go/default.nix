@@ -33,7 +33,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         to start the process in a random available port.
       '';
 
-      args = lib.nixvim.mkNullOrOption (types.listOf types.str) "Additional args to pass to dlv.";
+      args = defaultNullOpts.mkListOf (types.listOf types.str) [ ] "Additional args to pass to dlv.";
 
       build_flags = defaultNullOpts.mkStr "" "Build flags to pass to dlv.";
     };
