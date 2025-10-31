@@ -87,24 +87,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Can also be a lua function: `function(buffer: string, repo_url: string|nil): table`
         '';
 
-    file_assets = helpers.mkNullOrOption (with types; attrsOf (listOf str)) ''
-      Custom file asset definitions keyed by file names and extensions.
-      List elements for each attribute (filetype):
-      `name`: The name of the asset shown as the title of the file in Discord.
-      `source`: The source of the asset, either an art asset key or the URL of an image asset.
-      Example:
-      ```nix
-        {
-          # Use art assets uploaded in Discord application for the configured client id
-          js = [ "JavaScript" "javascript" ];
-          ts = [ "TypeScript" "typescript" ];
-          # Use image URLs
-          rs = [ "Rust" "https://www.rust-lang.org/logos/rust-logo-512x512.png" ];
-          go = [ "Go" "https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Aqua.png" ];
-        };
-      ```
-    '';
-
     show_time = helpers.defaultNullOpts.mkBool true "Show the timer.";
 
     global_timer = helpers.defaultNullOpts.mkBool false "if set true, timer won't update when any event are triggered.";
