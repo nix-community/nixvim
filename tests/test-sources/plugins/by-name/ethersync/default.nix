@@ -1,5 +1,5 @@
 {
   empty = {
-    plugins.ethersync.enable = true;
+    plugins.teamtype.enable = true;
   };
 }
