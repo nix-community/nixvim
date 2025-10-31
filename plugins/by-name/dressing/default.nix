@@ -65,10 +65,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
         '';
 
-        width = defaultNullOpts.mkNullable intOrRatio null ''
-          Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
-        '';
-
         max_width =
           defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
             [
@@ -226,10 +222,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
             cursorlineopt = "both";
           } "An attribute set of window options.";
 
-          width = defaultNullOpts.mkNullable intOrRatio null ''
-            Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
-          '';
-
           max_width =
             defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio))
               [
@@ -255,10 +247,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 Can be a list of mixed types, e.g. `[40 0.2]` means "less than 40 columns or 20%
                 of total."
               '';
-
-          height = defaultNullOpts.mkNullable intOrRatio null ''
-            Can be an integer or a float between 0 and 1 (e.g. 0.4 for 40%).
-          '';
 
           max_height = defaultNullOpts.mkNullable (with types; either intOrRatio (listOf intOrRatio)) 0.9 ''
             Max height of window.
