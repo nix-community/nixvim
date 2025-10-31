@@ -1,70 +1,17 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "treesitter-context";
   package = "nvim-treesitter-context";
   description = "Show code context.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    enable = helpers.defaultNullOpts.mkBool true ''
-      Enable this plugin (Can be enabled/disabled later via commands)
-    '';
-
-    max_lines = helpers.defaultNullOpts.mkUnsignedInt 0 ''
-      How many lines the window should span. 0 means no limit.
-    '';
-
-    min_window_height = helpers.defaultNullOpts.mkUnsignedInt 0 ''
-      Minimum editor window height to enable context. 0 means no limit.
-    '';
-
-    line_numbers = helpers.defaultNullOpts.mkBool true ''
-      Whether to show line numbers.
-    '';
-
-    multiline_threshold = helpers.defaultNullOpts.mkUnsignedInt 20 ''
-      Maximum number of lines to collapse for a single context line.
-    '';
-
-    trim_scope =
-      helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "outer"
-          "inner"
-        ]
-        ''
-          Which context lines to discard if `max_lines` is exceeded.
-        '';
-
-    mode =
-      helpers.defaultNullOpts.mkEnumFirstDefault
-        [
-          "cursor"
-          "topline"
-        ]
-        ''
-          Line used to calculate context.
-        '';
-
-    separator = helpers.mkNullOrOption types.str ''
-      Separator between context and content.
-      Should be a single character string, like "-".
-      When separator is set, the context will only show up when there are at least 2 lines above
-      cursorline.
-    '';
-
-    zindex = helpers.defaultNullOpts.mkUnsignedInt 20 ''
-      The Z-index of the context window.
-    '';
-
-    on_attach = helpers.defaultNullOpts.mkLuaFn "nil" ''
+    on_attach = lib.nixvim.defaultNullOpts.mkLuaFn "nil" ''
       The implementation of a lua function which takes an integer `buf` as parameter and returns a
       boolean.
       Return `false` to disable attaching.
