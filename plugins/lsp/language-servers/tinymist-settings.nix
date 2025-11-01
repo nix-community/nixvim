@@ -2,7 +2,7 @@
 
 # https://github.com/Myriad-Dreamin/tinymist/blob/main/editors/neovim/Configuration.md
 let
-  inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrStr;
+  inherit (lib.nixvim) defaultNullOpts mkNullOrStr;
   inherit (lib) types;
 in
 {
@@ -104,7 +104,7 @@ in
   '';
 
   completion = {
-    triggerOnSnippetPlaceholders = mkNullOrOption types.bool ''
+    triggerOnSnippetPlaceholders = defaultNullOpts.mkBool false ''
       Whether to trigger completions on arguments (placeholders) of snippets.
 
       For example, `box` will be completed to `box(|)`, and server will request the editor (lsp
