@@ -8,10 +8,10 @@
       enable = true;
 
       settings = {
-        selected_interpreters = [ ];
-        repl_enable = [ ];
-        repl_disable = [ ];
-        interpreter_options = { };
+        selected_interpreters.__empty = { };
+        repl_enable.__empty = { };
+        repl_disable.__empty = { };
+        interpreter_options.__empty = { };
         display = [
           "Classic"
           "VirtualTextOk"

@@ -21,9 +21,9 @@
           settings = {
             browse_command = "GBrowse {commit_hash}";
             diff_plugin = "fugitive";
-            git_flags = [ ];
-            git_diff_flags = [ ];
-            git_log_flags = [ ];
+            git_flags.__empty = { };
+            git_diff_flags.__empty = { };
+            git_log_flags.__empty = { };
             show_builtin_git_pickers = false;
 
             entry_default_author_or_date = "author";

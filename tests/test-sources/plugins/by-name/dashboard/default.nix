@@ -22,7 +22,7 @@
           week_header = {
             enable = false;
             concat = "";
-            append = [ ];
+            append.__empty = { };
           };
           header = [
             ""
@@ -43,7 +43,7 @@
 
         preview = {
           command = "";
-          file_path = null;
+          file_path.__raw = "nil";
           file_height = 0;
           file_width = 0;
         };
@@ -85,7 +85,7 @@
             cwd_only = false;
           };
 
-          footer = [ ];
+          footer.__empty = { };
         };
       };
     };
@@ -111,7 +111,7 @@
               action = "";
             }
           ];
-          footer = [ ];
+          footer.__empty = { };
         };
       };
     };

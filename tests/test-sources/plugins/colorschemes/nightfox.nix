@@ -62,9 +62,9 @@
             };
           };
         };
-        palettes = { };
-        specs = { };
-        groups = { };
+        palettes.__empty = { };
+        specs.__empty = { };
+        groups.__empty = { };
       };
     };
   };

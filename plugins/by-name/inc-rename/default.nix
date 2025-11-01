@@ -1,6 +1,5 @@
 { lib, ... }:
 let
-  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -44,10 +43,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Whether to save the `IncRename` command in the commandline history. Set to
       false to prevent issues with navigating to older entries that may arise due to
       the behavior of command preview).
-    '';
-
-    input_buffer_type = defaultNullOpts.mkNullable (types.enum [ "dressing" ]) null ''
-      The type of the external input buffer to use.
     '';
 
     post_hook = defaultNullOpts.mkRaw null ''

@@ -9,7 +9,7 @@
 
       settings = {
         colorscheme = "default";
-        component_function = { };
+        component_function.__empty = { };
         component = {
           mode = ''%{lightline#mode()}'';
           absolutepath = "%F";
@@ -134,7 +134,7 @@
             ]
           ];
         };
-        inactive = null;
+        inactive.__raw = "nil";
         mode_map = {
           "n" = "N";
           "i" = "I";

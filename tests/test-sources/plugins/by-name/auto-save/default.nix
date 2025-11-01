@@ -42,7 +42,7 @@
           ];
           cancel_deferred_save = [ "InsertEnter" ];
         };
-        condition = null;
+        condition.__raw = "nil";
         write_all_buffers = false;
         noautocmd = false;
         lockmarks = false;

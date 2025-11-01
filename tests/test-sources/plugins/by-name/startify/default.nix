@@ -98,7 +98,7 @@
             "three lines"
           ]
         ];
-        custom_footer = null;
+        custom_footer.__raw = "nil";
         disable_at_vimenter = false;
         relative_path = false;
         use_env = false;

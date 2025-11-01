@@ -11,8 +11,8 @@
         setopt = true;
         thousands = false;
         relculright = false;
-        ft_ignore = null;
-        bt_ignore = null;
+        ft_ignore.__raw = "nil";
+        bt_ignore.__raw = "nil";
         segments = [
           {
             text = [ "%C" ];

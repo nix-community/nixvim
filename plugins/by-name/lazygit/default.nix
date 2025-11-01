@@ -4,7 +4,7 @@
 }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib.nixvim) defaultNullOpts nestedLiteral;
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "lazygit";
@@ -62,9 +62,6 @@ lib.nixvim.plugins.mkVimPlugin {
     use_custom_config_file_path = defaultNullOpts.mkFlagInt 0 ''
       Config file path is evaluated if this value is `1`.
     '';
-
-    config_file_path = defaultNullOpts.mkNullable (with types; either str (listOf str)) [
-    ] "Custom config file path or list of custom config file paths.";
   };
 
   settingsExample = {
@@ -83,6 +80,6 @@ lib.nixvim.plugins.mkVimPlugin {
     floating_window_use_plenary = 0;
     use_neovim_remote = 1;
     use_custom_config_file_path = 0;
-    config_file_path = [ ];
+    config_file_path = nestedLiteral "lib.nixvim.emptyTable";
   };
 }

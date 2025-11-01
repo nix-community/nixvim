@@ -21,8 +21,8 @@
               return os_name == 'windows' and 'distant.exe' or 'distant'
             end)()
           '';
-          log_file = null;
-          log_level = null;
+          log_file.__raw = "nil";
+          log_level.__raw = "nil";
         };
         keymap = {
           dir = {
@@ -63,8 +63,8 @@
         manager = {
           daemon = false;
           lazy = true;
-          log_file = null;
-          log_level = null;
+          log_file.__raw = "nil";
+          log_level.__raw = "nil";
           user = false;
         };
         network = {
@@ -73,15 +73,15 @@
             max = 15000;
             interval = 256;
           };
-          windows_pipe = null;
-          unix_socket = null;
+          windows_pipe.__raw = "nil";
+          unix_socket.__raw = "nil";
         };
         servers = {
           "*" = {
             connect.default = { };
-            cwd = null;
+            cwd.__raw = "nil";
             launch.default = { };
-            lsp = { };
+            lsp.__empty = { };
           };
         };
       };

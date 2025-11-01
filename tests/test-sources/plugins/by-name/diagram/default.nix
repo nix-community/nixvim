@@ -16,26 +16,26 @@
       settings = {
         renderer_options = {
           mermaid = {
-            background = null;
-            theme = null;
+            background.__raw = "nil";
+            theme.__raw = "nil";
             scale = 1;
-            width = null;
-            height = null;
+            width.__raw = "nil";
+            height.__raw = "nil";
           };
           plantuml = {
-            charset = null;
+            charset.__raw = "nil";
           };
           d2 = {
-            theme_id = null;
-            dark_theme_id = null;
-            scale = null;
-            layout = null;
-            sketch = null;
+            theme_id.__raw = "nil";
+            dark_theme_id.__raw = "nil";
+            scale.__raw = "nil";
+            layout.__raw = "nil";
+            sketch.__raw = "nil";
           };
           gnuplot = {
-            size = null;
-            font = null;
-            theme = null;
+            size.__raw = "nil";
+            font.__raw = "nil";
+            theme.__raw = "nil";
           };
         };
       };

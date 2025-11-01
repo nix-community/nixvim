@@ -19,7 +19,7 @@
         sort_by = "name";
         hijack_unnamed_buffer_when_opening = false;
         hijack_cursor = false;
-        root_dirs = [ ];
+        root_dirs.__empty = { };
         prefer_startup_root = false;
         sync_root_with_cwd = false;
         reload_on_bufenter = false;
@@ -31,11 +31,11 @@
         update_focused_file = {
           enable = false;
           update_root = false;
-          ignore_list = [ ];
+          ignore_list.__empty = { };
         };
         system_open = {
           cmd = "";
-          args = [ ];
+          args.__empty = { };
         };
         diagnostics = {
           enable = false;
@@ -68,7 +68,7 @@
         filesystem_watchers = {
           enable = true;
           debounce_delay = 50;
-          ignore_dirs = [ ];
+          ignore_dirs.__empty = { };
         };
         on_attach = "default";
         select_prompts = false;
@@ -168,8 +168,8 @@
           dotfiles = false;
           git_clean = false;
           no_buffer = false;
-          custom = [ ];
-          exclude = [ ];
+          custom.__empty = { };
+          exclude.__empty = { };
         };
         actions = {
           change_dir = {
@@ -179,7 +179,7 @@
           };
           expand_all = {
             max_folder_discovery = 300;
-            exclude = [ ];
+            exclude.__empty = { };
           };
           file_popup = {
             open_win_config = {
@@ -227,7 +227,7 @@
           sync = {
             open = false;
             close = false;
-            ignore = [ ];
+            ignore.__empty = { };
           };
         };
         notify = {

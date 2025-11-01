@@ -15,7 +15,7 @@
         settings = {
           select = {
             enable = true;
-            disable = [ ];
+            disable.__empty = { };
             lookahead = true;
             keymaps = {
               af = "@function.outer";
@@ -35,7 +35,7 @@
           };
           swap = {
             enable = true;
-            disable = [ ];
+            disable.__empty = { };
             swap_next = {
               "<leader>a" = "@parameter.inner";
             };
@@ -45,7 +45,7 @@
           };
           move = {
             enable = true;
-            disable = [ ];
+            disable.__empty = { };
             set_jumps = true;
             goto_next_start = {
               "]m" = "@function.outer";
@@ -77,7 +77,7 @@
               "<leader>df" = "@function.outer";
               "<leader>dF" = "@class.outer";
             };
-            floating_preview_opts = { };
+            floating_preview_opts.__empty = { };
           };
         };
       };

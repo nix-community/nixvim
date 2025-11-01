@@ -16,7 +16,7 @@
       settings = {
         server = {
           override = true;
-          settings = { };
+          settings.__empty = { };
           on_attach.__raw = "function(client, bufnr) end";
         };
         document_color = {
@@ -27,7 +27,7 @@
         };
         conceal = {
           enabled = false;
-          min_length = null;
+          min_length.__raw = "nil";
           symbol = "󱏿";
           highlight = {
             fg = "#38BDF8";
@@ -42,8 +42,8 @@
           };
         };
         extension = {
-          queries = [ ];
-          patterns = { };
+          queries.__empty = { };
+          patterns.__empty = { };
         };
       };
     };

@@ -13,8 +13,8 @@
         enable = true;
 
         settings = {
-          cell_markers = { };
-          activate_hydra_keys = null;
+          cell_markers.__empty = { };
+          activate_hydra_keys.__raw = "nil";
           show_hydra_hint = true;
           hydra_keys = {
             comment = "c";

@@ -29,7 +29,7 @@
           (lib.nixvim.mkRaw "require('venv-selector.hooks').dynamic_python_lsp_hook")
         ];
         options = {
-          on_venv_activate_callback = null;
+          on_venv_activate_callback.__raw = "nil";
           enable_default_searches = true;
           enable_cached_venvs = true;
           cached_venv_automatic_activation = true;
@@ -40,11 +40,11 @@
           debug = false;
           fd_binary_name = lib.nixvim.mkRaw "require('venv-selector.config').find_fd_command_name()";
           require_lsp_activation = true;
-          on_telescope_result_callback = null;
+          on_telescope_result_callback.__raw = "nil";
           picker_filter_type = "substring";
           selected_venv_marker_color = "#00FF00";
           selected_venv_marker_icon = "✔";
-          picker_icons = [ ];
+          picker_icons.__empty = { };
           picker_columns = [
             "marker"
             "search_icon"
@@ -53,8 +53,8 @@
           ];
           picker = "auto";
           statusline_func = {
-            nvchad = null;
-            lualine = null;
+            nvchad.__raw = "nil";
+            lualine.__raw = "nil";
           };
           picker_options = {
             snacks = {

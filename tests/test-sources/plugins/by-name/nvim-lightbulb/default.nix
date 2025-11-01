@@ -12,7 +12,7 @@
         hide_in_unfocused_buffer = true;
         link_highlights = true;
         validate_config = "auto";
-        action_kinds = null;
+        action_kinds.__raw = "nil";
         sign = {
           enabled = true;
           text = "💡";
@@ -29,7 +29,7 @@
           enabled = false;
           text = "💡";
           hl = "LightBulbFloatWin";
-          win_opts = { };
+          win_opts.__empty = { };
         };
         status_text = {
           enabled = false;
@@ -54,8 +54,8 @@
           ];
         };
         ignore = {
-          clients = [ ];
-          ft = [ ];
+          clients.__empty = { };
+          ft.__empty = { };
           actions_without_kind = false;
         };
       };

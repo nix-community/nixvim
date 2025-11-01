@@ -62,9 +62,9 @@
           hpp = false;
           cxx = false;
         };
-        printf_statements = { };
-        print_var_statements = { };
-        extract_var_statements = { };
+        printf_statements.__empty = { };
+        print_var_statements.__empty = { };
+        extract_var_statements.__empty = { };
         show_success_message = false;
       };
     };

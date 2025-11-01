@@ -14,7 +14,7 @@
       enable = true;
 
       settings = {
-        ensure_installed = [ ];
+        ensure_installed.__empty = { };
       };
     };
   };

@@ -39,7 +39,7 @@ in
         };
 
         flake8 = {
-          config = mkNullOrOption types.str ''
+          config = defaultNullOpts.mkStr null ''
             Path to the config file that will be the authoritative config source.
           '';
 

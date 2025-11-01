@@ -19,7 +19,7 @@
         integration = {
           lualine = {
             enabled = true;
-            mode_section = null;
+            mode_section.__raw = "nil";
             highlight = "bg";
           };
         };

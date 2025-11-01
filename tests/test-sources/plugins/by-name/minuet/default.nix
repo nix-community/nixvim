@@ -15,22 +15,22 @@
           enable_auto_complete = true;
         };
         lsp = {
-          enabled_ft = [ ];
-          disabled_ft = [ ];
-          enabled_auto_trigger_ft = [ ];
-          disabled_auto_trigger_ft = [ ];
+          enabled_ft.__empty = { };
+          disabled_ft.__empty = { };
+          enabled_auto_trigger_ft.__empty = { };
+          disabled_auto_trigger_ft.__empty = { };
           warn_on_blink_or_cmp = true;
         };
         virtualtext = {
-          auto_trigger_ft = [ ];
-          auto_trigger_ignore_ft = [ ];
+          auto_trigger_ft.__empty = { };
+          auto_trigger_ignore_ft.__empty = { };
           keymap = {
-            accept = null;
-            accept_line = null;
-            accept_n_lines = null;
-            next = null;
-            prev = null;
-            dismiss = null;
+            accept.__raw = "nil";
+            accept_line.__raw = "nil";
+            accept_n_lines.__raw = "nil";
+            next.__raw = "nil";
+            prev.__raw = "nil";
+            dismiss.__raw = "nil";
           };
           show_on_completion_menu = false;
         };
@@ -44,8 +44,8 @@
         add_single_line_entry = true;
         n_completions = 3;
         after_cursor_filter_length = 15;
-        proxy = null;
-        provider_options = { };
+        proxy.__raw = "nil";
+        provider_options.__empty = { };
         default_system = {
           template = "...";
           prompt = "...";
@@ -66,7 +66,7 @@
         default_chat_input = [ "..." ];
         default_few_shots_prefix_first = [ "..." ];
         default_chat_input_prefix_first = [ "..." ];
-        presets = [ ];
+        presets.__empty = { };
       };
     };
   };

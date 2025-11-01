@@ -47,8 +47,7 @@
         ncmode = "buffers";
         fadelevel = 0.4;
         basebg = "";
-        tint = {
-        };
+        tint.__empty = { };
         blocklist = {
           default = {
             highlights = {
@@ -82,7 +81,7 @@
             end
           '';
         };
-        link = [ ];
+        link.__empty = { };
         groupdiff = true;
         groupscrollbind = false;
         enablefocusfading = false;

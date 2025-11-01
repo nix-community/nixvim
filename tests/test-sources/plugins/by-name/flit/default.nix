@@ -16,7 +16,7 @@
         labeled_modes = "v";
         clever_repeat = true;
         multiline = true;
-        opts = { };
+        opts.__empty = { };
       };
     };
   };

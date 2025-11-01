@@ -7,8 +7,8 @@
     plugins.cutlass-nvim = {
       enable = true;
       settings = {
-        cut_key = "nil";
-        override_del = "nil";
+        cut_key.__raw = "nil";
+        override_del.__raw = "nil";
         exclude.__empty = { };
         registers = {
           select = "_";

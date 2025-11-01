@@ -33,7 +33,7 @@
           insert = true;
           extend = true;
           config = {
-            column_count = null;
+            column_count.__raw = "nil";
             max_hint_length = 25;
           };
         };
@@ -82,15 +82,15 @@
             };
           };
         };
-        insert_keys = null;
-        extend_keys = null;
+        insert_keys.__raw = "nil";
+        extend_keys.__raw = "nil";
         hint_config = {
           type = "window";
           position = "bottom";
           offset = 0;
           border = "none";
           show_name = true;
-          funcs = null;
+          funcs.__raw = "nil";
         };
         generate_hints = {
           normal = false;

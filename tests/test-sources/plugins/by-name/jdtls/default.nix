@@ -17,11 +17,11 @@
         root_dir.__raw = "require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})";
 
         settings = {
-          java = { };
+          java.__empty = { };
         };
 
         init_options = {
-          bundles = { };
+          bundles.__empty = { };
         };
       };
     };

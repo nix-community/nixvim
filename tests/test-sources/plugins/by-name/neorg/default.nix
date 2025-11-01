@@ -15,9 +15,9 @@
         enable = true;
 
         settings = {
-          hook = null;
+          hook.__raw = "nil";
           lazy_loading = false;
-          load = { };
+          load.__empty = { };
           logger = {
             plugin = "neorg";
             use_console = true;

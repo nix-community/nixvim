@@ -46,8 +46,8 @@
           watch = true;
           win = {
             config = lib.nixvim.mkRaw "function(terminal) end";
-            wo = { };
-            bo = { };
+            wo.__empty = { };
+            bo.__empty = { };
             layout = "right";
             float = {
               width = 0.9;
@@ -166,7 +166,7 @@
               row = false;
               col = false;
             };
-            position = { };
+            position.__empty = { };
           };
         };
         debug = false;

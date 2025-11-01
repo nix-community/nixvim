@@ -21,7 +21,7 @@
           };
           opts = {
             allow_insecure = false;
-            proxy = null;
+            proxy.__raw = "nil";
           };
         };
         strategies = {

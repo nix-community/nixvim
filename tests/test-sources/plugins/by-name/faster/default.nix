@@ -22,7 +22,7 @@
             ];
             filesize = 2;
             pattern = "*";
-            extra_patterns = [ ];
+            extra_patterns.__empty = { };
           };
           fastmacro = {
             on = true;

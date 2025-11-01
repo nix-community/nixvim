@@ -32,16 +32,16 @@
         };
         picker = {
           select = {
-            action = null;
+            action.__raw = "nil";
           };
           telescope = {
             use_default_mappings = true;
-            mappings = null;
+            mappings.__raw = "nil";
           };
         };
         system_clipboard = {
           sync_with_ring = true;
-          clipboard_register = null;
+          clipboard_register.__raw = "nil";
         };
         highlight = {
           on_put = true;
@@ -99,7 +99,7 @@
           };
           system_clipboard = {
             sync_with_ring = true;
-            clipboard_register = null;
+            clipboard_register.__raw = "nil";
           };
           highlight = {
             on_put = true;

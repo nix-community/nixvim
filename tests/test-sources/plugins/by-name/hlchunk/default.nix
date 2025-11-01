@@ -12,7 +12,7 @@
         let
           modDefaultConfig = {
             enable = false;
-            style = { };
+            style.__empty = { };
             notify = false;
             priority = 0;
             exclude_filetypes = {

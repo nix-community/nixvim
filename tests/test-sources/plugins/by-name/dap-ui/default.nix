@@ -23,7 +23,7 @@
             terminate = "";
           };
         };
-        element_mappings = { };
+        element_mappings.__empty = { };
         expand_lines = true;
         floating = {
           border = "single";

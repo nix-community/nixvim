@@ -46,7 +46,7 @@
             h6 = "blue2";
           };
         };
-        highlight_groups = { };
+        highlight_groups.__empty = { };
       };
     };
   };

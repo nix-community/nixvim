@@ -81,7 +81,7 @@
           pattern = ''.*<(KEYWORDS)\s*:'';
           comments_only = true;
           max_line_len = 400;
-          exclude = [ ];
+          exclude.__empty = { };
         };
 
         colors = {

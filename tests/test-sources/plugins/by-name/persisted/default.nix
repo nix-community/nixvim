@@ -19,8 +19,8 @@
         use_git_branch = false;
         autoload = false;
         on_autoload_no_session.__raw = "function() end";
-        allowed_dirs = [ ];
-        ignored_dirs = [ ];
+        allowed_dirs.__empty = { };
+        ignored_dirs.__empty = { };
         telescope = {
           mappings = {
             copy_session = "<C-c>";

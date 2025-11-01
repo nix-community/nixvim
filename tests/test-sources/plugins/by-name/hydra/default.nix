@@ -10,14 +10,14 @@
       settings = {
         debug = false;
         exit = false;
-        foreign_keys = null;
+        foreign_keys.__raw = "nil";
         color = "red";
-        buffer = null;
+        buffer.__raw = "nil";
         invoke_on_body = false;
-        desc = null;
-        on_enter = null;
-        on_exit = null;
-        on_key = null;
+        desc.__raw = "nil";
+        on_enter.__raw = "nil";
+        on_exit.__raw = "nil";
+        on_key.__raw = "nil";
         timeout = false;
         hint = {
           show_name = true;
@@ -42,7 +42,7 @@
           color = "red";
           buffer = true;
           invoke_on_body = false;
-          desc = null;
+          desc.__raw = "nil";
           on_enter = ''
             function()
               print('hello')

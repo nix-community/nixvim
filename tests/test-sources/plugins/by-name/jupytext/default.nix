@@ -10,8 +10,8 @@
       settings = {
         style = "hydrogen";
         output_extension = "auto";
-        force_ft = null;
-        custom_language_formatting = { };
+        force_ft.__raw = "nil";
+        custom_language_formatting.__empty = { };
       };
     };
   };
@@ -23,7 +23,7 @@
       settings = {
         style = "light";
         output_extension = "auto";
-        force_ft = null;
+        force_ft.__raw = "nil";
         custom_language_formatting.python = {
           extension = "md";
           style = "markdown";

@@ -50,7 +50,7 @@
           win_config = {
             position = "right";
             width = 20;
-            win_opts = { };
+            win_opts.__empty = { };
           };
         };
         file_history_panel = {
@@ -63,14 +63,14 @@
               multi_file.diff_merges = "first-parent";
             };
             hg = {
-              single_file = { };
-              multi_file = { };
+              single_file.__empty = { };
+              multi_file.__empty = { };
             };
           };
           win_config = {
             position = "top";
             height = 10;
-            win_opts = { };
+            win_opts.__empty = { };
           };
         };
 

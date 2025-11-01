@@ -18,8 +18,8 @@
         focus_blame = true;
         merge_consecutive = false;
         max_summary_width = 30;
-        colors = null; # won't output literal nil
-        blame_options = null; # won't output literal nil
+        colors.__raw = "nil";
+        blame_options.__raw = "nil";
         format_fn.__raw = "require('blame.formats.default_formats').commit_date_author_fn";
         commit_detail_view = "vsplit";
         mappings = {

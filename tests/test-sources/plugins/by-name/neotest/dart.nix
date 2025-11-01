@@ -11,7 +11,7 @@
           settings = {
             command = "flutter";
             use_lsp = true;
-            custom_test_method_names = [ ];
+            custom_test_method_names.__empty = { };
           };
         };
       };

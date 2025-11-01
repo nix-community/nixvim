@@ -17,11 +17,11 @@
           html = {
             default_attributes = {
               option = {
-                value = null;
+                value.__raw = "nil";
               };
               textarea = {
-                id = null;
-                name = null;
+                id.__raw = "nil";
+                name.__raw = "nil";
                 cols = 10;
                 rows = 10;
               };

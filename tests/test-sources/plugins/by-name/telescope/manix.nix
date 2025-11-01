@@ -15,7 +15,7 @@
         enable = true;
 
         settings = {
-          manix_args = [ ];
+          manix_args.__empty = { };
           cword = false;
         };
       };

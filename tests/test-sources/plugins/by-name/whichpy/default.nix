@@ -10,7 +10,7 @@
       settings = {
         cache_dir.__raw = "vim.fn.stdpath('cache') .. '/whichpy.nvim'";
         update_path_env = false;
-        after_handle_select = null;
+        after_handle_select.__raw = "nil";
         picker = {
           name = "builtin";
         };

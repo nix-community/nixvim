@@ -26,8 +26,8 @@
           html.enabled = false;
           css.enabled = false;
         };
-        max_width = null;
-        max_height = null;
+        max_width.__raw = "nil";
+        max_height.__raw = "nil";
         max_width_window_percentage = 100;
         max_height_window_percentage = 50;
         scale_factor = 1.0;
