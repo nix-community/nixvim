@@ -1,6 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "ethersync";
+  name = "teamtype";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
