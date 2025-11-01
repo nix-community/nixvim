@@ -37,7 +37,10 @@
         root_dir = "require('null-ls.utils').root_pattern('.null-ls-root', 'Makefile', '.git')";
         root_dir_async.__raw = "nil";
         should_attach.__raw = "nil";
-        sources.__raw = "nil";
+
+        # FIXME: This option can't take raw lua
+        sources = null;
+
         temp_dir.__raw = "nil";
         update_in_insert = false;
       };
