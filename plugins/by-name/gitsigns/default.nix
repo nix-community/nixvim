@@ -42,7 +42,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.gitsigns" {
-      when = (cfg.settings.trouble == true) && !config.plugins.trouble.enable;
+      when = ((cfg.settings.trouble or false) == true) && !config.plugins.trouble.enable;
 
       message = ''
         You have enabled `plugins.gitsigns.settings.trouble` but `plugins.trouble.enable` is `false`.
