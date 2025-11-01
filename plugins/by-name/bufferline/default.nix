@@ -1,6 +1,5 @@
 { lib, config, ... }:
 let
-  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -12,51 +11,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     options = {
-      mode =
-        defaultNullOpts.mkEnumFirstDefault
-          [
-            "buffers"
-            "tabs"
-          ]
-          ''
-            Mode - set to `tabs` to only show tabpages instead.
-          '';
-
-      themable = defaultNullOpts.mkBool true ''
-        Whether or not bufferline highlights can be overridden externally.
-      '';
-
-      numbers =
-        defaultNullOpts.mkEnumFirstDefault
-          [
-            "none"
-            "ordinal"
-            "buffer_id"
-            "both"
-          ]
-          ''
-            Customize the styling of numbers.
-
-            Can also be a lua function:
-            ```
-            function({ ordinal, id, lower, raise }): string
-            ```
-          '';
-
-      buffer_close_icon = defaultNullOpts.mkStr "" ''
-        The close icon for each buffer.
-      '';
-
-      modified_icon = defaultNullOpts.mkStr "●" ''
-        The icon indicating a buffer was modified.
-      '';
-
-      close_icon = defaultNullOpts.mkStr "" "The close icon.";
-
-      close_command = defaultNullOpts.mkStr "bdelete! %d" ''
-        Command or function run when closing a buffer.
-      '';
-
       custom_filter = defaultNullOpts.mkLuaFn null ''
         ```
         fun(buf: number, bufnums: number[]): boolean
@@ -65,83 +19,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
         NOTE: this will be called a lot so don't do any heavy processing here.
       '';
 
-      left_mouse_command = defaultNullOpts.mkStr "buffer %d" ''
-        Command or function run when clicking on a buffer.
-      '';
-
-      right_mouse_command = defaultNullOpts.mkStr "bdelete! %d" ''
-        Command or function run when right clicking on a buffer.
-      '';
-
-      middle_mouse_command = defaultNullOpts.mkStr null ''
-        Command or function run when middle clicking on a buffer.
-      '';
-
-      indicator = {
-        icon = defaultNullOpts.mkStr "▎" ''
-          Indicator icon.
-
-          This should be omitted if indicator style is not `icon`.
-        '';
-
-        style = defaultNullOpts.mkEnumFirstDefault [
-          "icon"
-          "underline"
-          "none"
-        ] "Indicator style.";
-      };
-
-      left_trunc_marker = defaultNullOpts.mkStr "" ''
-        Left truncation marker.
-      '';
-
-      right_trunc_marker = defaultNullOpts.mkStr "" ''
-        Right truncation marker.
-      '';
-
-      separator_style = defaultNullOpts.mkNullable (
-        with types;
-        oneOf [
-          (enum [
-            "slant"
-            "padded_slant"
-            "slope"
-            "padded_slope"
-            "thick"
-            "thin"
-          ])
-          (listOfLen str 2)
-          rawLua
-        ]
-      ) "thin" "Separator style.";
-
       name_formatter = defaultNullOpts.mkLuaFn null ''
         A lua function that can be used to modify the buffer's label.
         The argument 'buf' containing a name, path and bufnr is supplied.
-      '';
-
-      truncate_names = defaultNullOpts.mkBool true ''
-        Whether to truncate names.
-      '';
-
-      tab_size = defaultNullOpts.mkInt 18 ''
-        Size of the tabs.
-      '';
-
-      max_name_length = defaultNullOpts.mkInt 18 ''
-        Max length of a buffer name.
-      '';
-
-      color_icons = defaultNullOpts.mkBool true ''
-        Whether or not to add the filetype icon highlights.
-      '';
-
-      show_buffer_icons = defaultNullOpts.mkBool true ''
-        Show buffer icons.
-      '';
-
-      show_buffer_close_icons = defaultNullOpts.mkBool true ''
-        Show buffer close icons.
       '';
 
       get_element_icon = defaultNullOpts.mkLuaFn null ''
@@ -152,179 +32,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ```
       '';
 
-      show_close_icon = defaultNullOpts.mkBool true ''
-        Whether to show the close icon.
-      '';
-
-      show_tab_indicators = defaultNullOpts.mkBool true ''
-        Whether to show the tab indicators.
-      '';
-
-      show_duplicate_prefix = defaultNullOpts.mkBool true ''
-        Whether to show the prefix of duplicated files.
-      '';
-
-      duplicates_across_groups = defaultNullOpts.mkBool true ''
-        Whether to consider duplicate paths in different groups as duplicates.
-      '';
-
-      enforce_regular_tabs = defaultNullOpts.mkBool false ''
-        Whether to enforce regular tabs.
-      '';
-
-      always_show_bufferline = defaultNullOpts.mkBool true ''
-        Whether to always show the bufferline.
-      '';
-
-      auto_toggle_bufferline = defaultNullOpts.mkBool true ''
-        Whether to automatically toggle bufferline.
-      '';
-
-      persist_buffer_sort = defaultNullOpts.mkBool true ''
-        Whether to make the buffer sort persistent.
-      '';
-
-      move_wraps_at_ends = defaultNullOpts.mkBool true ''
-        Whether or not the move command "wraps" at the first or last position.
-      '';
-
-      max_prefix_length = defaultNullOpts.mkInt 15 ''
-        Maximum prefix length used when a buffer is de-duplicated.
-      '';
-
-      sort_by =
-        defaultNullOpts.mkNullableWithRaw
-          (types.enum [
-            "insert_after_current"
-            "insert_at_end"
-            "id"
-            "extension"
-            "relative_directory"
-            "directory"
-            "tabs"
-          ])
-          "id"
-          ''
-            How to sort the buffers.
-
-            Also accepts a function with a signature `function(buffer_a, buffer_b)` allowing you to compare with custom logic.
-          '';
-
-      diagnostics =
-        defaultNullOpts.mkEnumFirstDefault
-          [
-            false
-            "nvim_lsp"
-            "coc"
-          ]
-          ''
-            Diagnostics provider.
-
-            Set to `false` to disable.
-          '';
-
       diagnostics_indicator = defaultNullOpts.mkLuaFn null ''
         Either `null` or a function that returns the diagnostics indicator.
       '';
-
-      diagnostics_update_on_event = defaultNullOpts.mkBool true ''
-        Use nvim's diagnostic handler.
-      '';
-
-      offsets = defaultNullOpts.mkNullable (types.listOf types.attrs) null "offsets";
-
-      groups = {
-        items = defaultNullOpts.mkListOf types.attrs [ ] "List of groups.";
-
-        options = {
-          toggle_hidden_on_enter = defaultNullOpts.mkBool true ''
-            Re-open hidden groups on `BufEnter`.
-          '';
-        };
-      };
-
-      hover = {
-        enabled = defaultNullOpts.mkBool false "Whether to enable hover.";
-
-        reveal = defaultNullOpts.mkListOf types.str [ ] "Whether to reveal on hover.";
-
-        delay = defaultNullOpts.mkInt 200 "Delay to reveal on hover.";
-      };
-
-      debug = {
-        logging = defaultNullOpts.mkBool false "Whether to enable logging.";
-      };
     };
-
-    highlights =
-      let
-        highlightsOptions = [
-          "fill"
-          "background"
-          "tab"
-          "tab_selected"
-          "tab_separator"
-          "tab_separator_selected"
-          "tab_close"
-          "close_button"
-          "close_button_visible"
-          "close_button_selected"
-          "buffer_visible"
-          "buffer_selected"
-          "numbers"
-          "numbers_visible"
-          "numbers_selected"
-          "diagnostic"
-          "diagnostic_visible"
-          "diagnostic_selected"
-          "hint"
-          "hint_visible"
-          "hint_selected"
-          "hint_diagnostic"
-          "hint_diagnostic_visible"
-          "hint_diagnostic_selected"
-          "info"
-          "info_visible"
-          "info_selected"
-          "info_diagnostic"
-          "info_diagnostic_visible"
-          "info_diagnostic_selected"
-          "warning"
-          "warning_visible"
-          "warning_selected"
-          "warning_diagnostic"
-          "warning_diagnostic_visible"
-          "warning_diagnostic_selected"
-          "error"
-          "error_visible"
-          "error_selected"
-          "error_diagnostic"
-          "error_diagnostic_visible"
-          "error_diagnostic_selected"
-          "modified"
-          "modified_visible"
-          "modified_selected"
-          "duplicate"
-          "duplicate_visible"
-          "duplicate_selected"
-          "separator"
-          "separator_visible"
-          "separator_selected"
-          "indicator_visible"
-          "indicator_selected"
-          "pick"
-          "pick_visible"
-          "pick_selected"
-          "offset_separator"
-          "trunc_marker"
-        ];
-      in
-      lib.genAttrs highlightsOptions (
-        name:
-        defaultNullOpts.mkHighlight { } null ''
-          Highlight group definition for ${name}.
-        ''
-      );
   };
 
   settingsExample = {
@@ -429,9 +140,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             -- filter out based on arbitrary rules
             -- e.g. filter out vim wiki buffer from tabline in your work repo
             if vim.fn.getcwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
-                return true
-            end
-            -- filter out by it's index number in list (don't show first buffer)
+                return true end -- filter out by it's index number in list (don't show first buffer)
             if buf_numbers[1] ~= buf_number then
                 return true
             end
