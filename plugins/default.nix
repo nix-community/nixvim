@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/monokai-pro.nix
     ./colorschemes/moonfly.nix
     ./colorschemes/nightfox.nix
     ./colorschemes/nord.nix
