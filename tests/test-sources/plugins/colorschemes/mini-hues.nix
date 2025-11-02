@@ -1,6 +1,6 @@
 {
   defaults = {
-    plugins.mini-hues = {
+    colorschemes.mini-hues = {
       enable = true;
       settings = {
         background = "#351721";

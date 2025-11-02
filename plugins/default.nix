@@ -19,6 +19,7 @@
     ./colorschemes/kanagawa-paper.nix
     ./colorschemes/melange.nix
     ./colorschemes/mini-base16.nix
+    ./colorschemes/mini-hues.nix
     ./colorschemes/modus.nix
     ./colorschemes/monokai-pro.nix
     ./colorschemes/moonfly.nix
