@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
     ./colorschemes/oxocarbon.nix
