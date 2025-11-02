@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/mini-base16.nix
     ./colorschemes/mini-hues.nix
     ./colorschemes/modus.nix
     ./colorschemes/monokai-pro.nix
