@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/ayu.nix
     ./colorschemes/bamboo.nix
     ./colorschemes/base16
     ./colorschemes/catppuccin.nix
