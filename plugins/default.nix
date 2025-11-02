@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/oxocarbon.nix
     ./colorschemes/palette.nix
     ./colorschemes/poimandres.nix
     ./colorschemes/rose-pine.nix
