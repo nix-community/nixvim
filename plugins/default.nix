@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/dracula.nix
     ./colorschemes/everforest.nix
     ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
