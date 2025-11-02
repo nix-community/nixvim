@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/kanagawa.nix
     ./colorschemes/kanagawa-paper.nix
     ./colorschemes/melange.nix
     ./colorschemes/mini-base16.nix
