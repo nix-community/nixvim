@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/solarized-osaka.nix
     ./colorschemes/tokyonight.nix
     ./colorschemes/vscode.nix
 
