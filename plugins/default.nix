@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/cyberdream.nix
     ./colorschemes/dracula-nvim.nix
     ./colorschemes/dracula.nix
     ./colorschemes/everforest.nix
