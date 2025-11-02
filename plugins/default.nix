@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/base16
     ./colorschemes/catppuccin.nix
     ./colorschemes/cyberdream.nix
     ./colorschemes/dracula-nvim.nix
