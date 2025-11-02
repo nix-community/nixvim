@@ -5,7 +5,7 @@ import os
 import re
 from argparse import ArgumentParser
 
-# Template for default.nix
+# Template for default.nix (plugin)
 # TODO: conditionally include parts of the template based on args
 default_nix_template = """{{ lib, ... }}:
 lib.nixvim.plugins.mkNeovimPlugin {{
@@ -24,7 +24,28 @@ lib.nixvim.plugins.mkNeovimPlugin {{
 }}
 """
 
-# Template for test file
+# Template for default.nix (colorscheme)
+colorscheme_nix_template = """{{ lib, ... }}:
+lib.nixvim.plugins.mkNeovimPlugin {{
+  name = "{name}";
+  moduleName = "LUA_MODULE_NAME"; # TODO replace (or remove entirely if it is the same as `name`)
+  package = "{package}";
+
+  isColorscheme = true;
+  colorscheme = "COLORSCHEME_NAME"; # TODO replace (or set to null if it has multiple colorschemes or doesn't need to set colorscheme, or remove completely if same as name)
+
+  {maintainer_todo}maintainers = [ lib.maintainers.{maintainer} ];
+
+  # TODO provide an example for the `settings` option (or remove entirely if there is no useful example)
+  # NOTE you can use `lib.literalExpression` or `lib.literalMD` if needed
+  settingsExample = {{
+    foo = 42;
+    bar.__raw = "function() print('hello') end";
+  }};
+}}
+"""
+
+# Template for test file (plugin)
 test_nix_template = """{{
   empty = {{
     plugins.{name}.enable = true;
@@ -32,6 +53,27 @@ test_nix_template = """{{
 
   defaults = {{
     plugins.{name} = {{
+      enable = true;
+      settings = {{
+        foo = 42;
+        bar.__raw = "function() print('hello') end";
+      }};
+    }};
+  }};
+}}
+"""
+
+# Template for test file (colorscheme)
+colorscheme_test_nix_template = """{{
+  empty = {{
+    colorscheme = "COLORSCHEME_NAME"; # TODO replace (or remove completely if doesn't need to set colorscheme)
+    colorschemes.{name}.enable = true;
+  }};
+
+  defaults = {{
+    colorscheme = "COLORSCHEME_NAME"; # TODO replace (or remove completely if doesn't need to set colorscheme)
+
+    colorschemes.{name} = {{
       enable = true;
       settings = {{
         foo = 42;
@@ -163,15 +205,15 @@ def find_project_root(root_identifier):
 # TODO: support interactive unmanaged args
 def main():
     """
-    Main function to generate default.nix and test files for a new plugin.
+    Main function to generate default.nix and test files for a new plugin or colorscheme.
     """
     DEFAULT_MAINTAINER = "YOUR_NAME"
 
     parser = ArgumentParser(
-        description="Generate default.nix and test files for a new plugin"
+        description="Generate default.nix and test files for a new plugin or colorscheme"
     )
     parser.add_argument(
-        "originalName", type=str, help="Original name of the new plugin"
+        "originalName", type=str, help="Original name of the new plugin or colorscheme"
     )
     parser.add_argument(
         "--package",
@@ -185,6 +227,12 @@ def main():
         type=str,
         help="Maintainer name (from lib.maintainers)",
         default=DEFAULT_MAINTAINER,
+    )
+    parser.add_argument(
+        "--colorscheme",
+        "-c",
+        action="store_true",
+        help="Create a colorscheme instead of a plugin",
     )
     parser.add_argument(
         "--dry-run",
@@ -207,13 +255,21 @@ def main():
     root_identifier = "flake.nix"
     root_dir = find_project_root(root_identifier)
 
-    plugin_path = f"{root_dir}/plugins/by-name/{name}/default.nix"
-    test_path = f"{root_dir}/tests/test-sources/plugins/by-name/{name}/default.nix"
+    if args.colorscheme:
+        plugin_template = colorscheme_nix_template
+        test_template = colorscheme_test_nix_template
+        plugin_path = f"{root_dir}/colorschemes/{name}/default.nix"
+        test_path = f"{root_dir}/tests/test-sources/colorschemes/{name}/default.nix"
+    else:
+        plugin_template = default_nix_template
+        test_template = test_nix_template
+        plugin_path = f"{root_dir}/plugins/by-name/{name}/default.nix"
+        test_path = f"{root_dir}/tests/test-sources/plugins/by-name/{name}/default.nix"
 
     # Create files
     create_nix_file(
         plugin_path,
-        default_nix_template,
+        plugin_template,
         name,
         args.originalName,
         package,
@@ -223,7 +279,7 @@ def main():
     )
     create_test_file(
         test_path,
-        test_nix_template,
+        test_template,
         name,
         args.dry_run,
     )
