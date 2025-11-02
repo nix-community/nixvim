@@ -109,6 +109,9 @@ let
     # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
     "zf"
     "zls"
+
+    # luau-lsp is marked as broken on x86_64-darwin
+    "luau-lsp.nvim"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
     # 2025-10-20: build failure
