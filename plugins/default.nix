@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/nightfox.nix
     ./colorschemes/nord.nix
     ./colorschemes/one.nix
     ./colorschemes/onedark.nix
