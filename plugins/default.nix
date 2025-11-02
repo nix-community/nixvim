@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/everforest.nix
     ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/gruvbox-baby.nix
