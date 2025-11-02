@@ -2,6 +2,8 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "mini-hues";
   moduleName = "mini.hues";
+  isColorscheme = true;
+  colorscheme = null;
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
