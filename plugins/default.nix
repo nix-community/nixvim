@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/github-theme.nix
     ./colorschemes/gruvbox.nix
     ./colorschemes/gruvbox-baby.nix
     ./colorschemes/gruvbox-material.nix
