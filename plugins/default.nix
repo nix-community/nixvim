@@ -2,7 +2,6 @@
   imports = [
     ./cmp
 
-    ./colorschemes/poimandres.nix
     ./colorschemes/rose-pine.nix
     ./colorschemes/solarized-osaka.nix
     ./colorschemes/tokyonight.nix
