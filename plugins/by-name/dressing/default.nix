@@ -12,7 +12,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions =
     let
-      intOrRatio = with types; either ints.unsigned (numbers.between 0.0 1.0);
+      intOrRatio =
+        with types;
+        oneOf [
+          ints.unsigned
+          (numbers.between 0.0 1.0)
+          rawLua
+        ];
     in
     {
       input = {
