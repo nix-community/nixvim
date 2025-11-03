@@ -7,8 +7,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  settingsOptions = import ./settings-options.nix lib;
-
   settingsExample = {
     stiffness = 0.8;
     trailing_stiffness = 0.5;
