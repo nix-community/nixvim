@@ -4,7 +4,7 @@
 }:
 let
   inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts;
+  inherit (lib.nixvim) defaultNullOpts nestedLiteral;
 in
 lib.nixvim.plugins.mkVimPlugin {
   name = "lazygit";
@@ -89,6 +89,6 @@ lib.nixvim.plugins.mkVimPlugin {
     floating_window_use_plenary = 0;
     use_neovim_remote = 1;
     use_custom_config_file_path = 0;
-    config_file_path = [ ];
+    config_file_path = nestedLiteral "lib.nixvim.emptyTable";
   };
 }
