@@ -46,9 +46,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
       the behavior of command preview).
     '';
 
-    input_buffer_type = defaultNullOpts.mkNullable (types.enum [ "dressing" ]) null ''
-      The type of the external input buffer to use.
-    '';
+    input_buffer_type =
+      defaultNullOpts.mkNullable (with types; either (enum [ "dressing" ]) rawLua) null
+        ''
+          The type of the external input buffer to use.
+        '';
 
     post_hook = defaultNullOpts.mkRaw null ''
       Callback to run after renaming, receives the result table (from LSP

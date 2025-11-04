@@ -105,7 +105,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.notebook-navigator" [
       {
-        when = (cfg.settings.activate_hydra_keys != null) && (!config.plugins.hydra.enable);
+        when =
+          (
+            !(
+              cfg ? settings.activate_hydra_keys
+              && builtins.elem cfg.settings.activate_hydra_keys [
+                null
+                (lib.nixvim.mkRaw "nil")
+              ]
+            )
+          )
+          && (!config.plugins.hydra.enable);
         message = ''
           `settings.activate_hydra_keys` has been set to a non-`null` value but `plugins.hydra.enable` is `false`.
         '';
