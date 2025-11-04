@@ -1,9 +1,6 @@
 {
   empty = {
-    plugins.lspkind = {
-      enable = true;
-      cmp.enable = false;
-    };
+    plugins.lspkind.enable = true;
   };
 
   example = {
@@ -24,10 +21,6 @@
         mode = "symbol_text";
         preset = "codicons";
         symbol_map = null;
-      };
-      cmp = {
-        enable = false;
-        after = null;
       };
     };
   };

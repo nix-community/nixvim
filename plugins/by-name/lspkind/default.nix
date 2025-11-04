@@ -23,7 +23,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
     cmp = {
       enable = lib.mkOption {
         type = types.bool;
-        default = true;
+        default = config.plugins.cmp.enable;
+        defaultText = lib.literalExpression "config.plugins.cmp.enable";
         description = "Integrate with nvim-cmp";
       };
 
