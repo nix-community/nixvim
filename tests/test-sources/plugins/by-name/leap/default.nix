@@ -18,7 +18,6 @@
   example = {
     plugins.leap = {
       enable = true;
-      addDefaultMappings = true;
       settings = {
         max_phase_one_targets = 10;
         highlight_unlabeled_phase_one_targets = false;
