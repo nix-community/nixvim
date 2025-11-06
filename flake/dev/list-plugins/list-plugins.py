@@ -56,16 +56,9 @@ class Kind(Enum):
     MISC = 3
 
 
-class State(Enum):
-    UNKNOWN = "❔"
-    NEW = "✅"
-    OLD = "❌"
-
-
 KNOWN_PATHS: dict[
     str,
     tuple[
-        State,  # If the implem is "legacy" or up to date
         Kind,  # Vim / Neovim / misc
         bool,  # Has deprecation warnings
     ],
@@ -87,7 +80,6 @@ for telescope_extension_name, has_depr_warnings in {
     KNOWN_PATHS[
         f"plugins/by-name/telescope/extensions/{telescope_extension_name}.nix"
     ] = (
-        State.NEW,
         Kind.MISC,
         has_depr_warnings,
     )
@@ -107,12 +99,10 @@ DEPRECATION_REGEX: list[re.Pattern] = [
 @dataclass
 class Plugin:
     path: str
-    state: State
     kind: Kind
     dep_warnings: bool
 
     def __str__(self) -> str:
-        state_icon: str = self.state.value
         kind_icon: str
         match self.kind:
             case Kind.NEOVIM:
@@ -125,9 +115,7 @@ class Plugin:
                 assert False
         deprecation_icon: str = "⚠️ " if self.dep_warnings else "  "
 
-        return (
-            f"| {kind_icon}\033[0m  | {state_icon}  | {deprecation_icon} | {self.path}"
-        )
+        return f"| {kind_icon}\033[0m  | {deprecation_icon} | {self.path}"
 
     def print_markdown(self) -> None:
         print(f"- [ ] {self.path} ({self.kind.name.lower()})")
@@ -146,36 +134,26 @@ def parse_file(path: str) -> Optional[Plugin]:
         file_content = f.read()
 
     known_path: str
-    props: tuple[State, Kind, bool]
+    props: tuple[Kind, bool]
     for known_path, props in KNOWN_PATHS.items():
         if known_path in path:
             return Plugin(
                 path=path,
-                state=props[0],
-                kind=props[1],
-                dep_warnings=props[2],
+                kind=props[0],
+                dep_warnings=props[1],
             )
 
-    state: State = State.UNKNOWN
     kind: Kind
     if re.match(
         re.compile(r".*mkNeovimPlugin", re.DOTALL),
         file_content,
     ):
         kind = Kind.NEOVIM
-        state = State.NEW
-    elif re.match(
-        re.compile(r".*require.+setup", re.DOTALL),
-        file_content,
-    ):
-        kind = Kind.NEOVIM
-        state = State.OLD
     elif re.match(
         re.compile(r".*mkVimPlugin", re.DOTALL),
         file_content,
     ):
         kind = Kind.VIM
-        state = State.NEW
     else:
         raise ValueError(
             f"I was not able to categorize `{path}`. Consider adding it to `EXCLUDES` or `KNOWN_PATHS`."
@@ -183,7 +161,6 @@ def parse_file(path: str) -> Optional[Plugin]:
 
     return Plugin(
         path=path,
-        state=state,
         kind=kind,
         dep_warnings=has_deprecation_warnings(string=file_content),
     )
@@ -211,10 +188,8 @@ def main(args) -> None:
     for plugin_path in filtered_paths:
         plugin: Optional[Plugin] = parse_file(path=plugin_path)
         if plugin is not None:
-            if (
-                (args.kind is None or plugin.kind.name.lower() == args.kind)
-                and (args.state is None or plugin.state.name.lower() == args.state)
-                and (not args.deprecation_warnings or plugin.dep_warnings)
+            if (args.kind is None or plugin.kind.name.lower() == args.kind) and (
+                not args.deprecation_warnings or plugin.dep_warnings
             ):
                 if args.markdown:
                     plugin.print_markdown()
@@ -245,12 +220,6 @@ if __name__ == "__main__":
         "--kind",
         choices=[k.name.lower() for k in Kind],
         help="Filter plugins by kind (neovim, vim, misc)",
-    )
-    parser.add_argument(
-        "-s",
-        "--state",
-        choices=[s.name.lower() for s in State],
-        help="Filter plugins by state (new, old, unknown)",
     )
     parser.add_argument(
         "-d",
