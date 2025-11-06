@@ -47,7 +47,6 @@ let
         # DEPRECATED SERVERS
         # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
         "ruff_lsp"
-        "bufls"
         "typst_lsp"
       ];
     in
