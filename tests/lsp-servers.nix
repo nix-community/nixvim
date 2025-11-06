@@ -40,6 +40,10 @@ let
         # TODO: 2025-07-25 build failure
         "mint"
 
+        # TODO: 2025-11-06 build failure
+        # Fixed in https://github.com/NixOS/nixpkgs/pull/458418
+        "docker_language_server"
+
         # DEPRECATED SERVERS
         # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
         "ruff_lsp"
