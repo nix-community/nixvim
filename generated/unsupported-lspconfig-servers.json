@@ -1,6 +1,7 @@
 [
   "bitbake_ls",
   "bqnlsp",
+  "bufls",
   "cadence",
   "clarity_lsp",
   "codeqlls",

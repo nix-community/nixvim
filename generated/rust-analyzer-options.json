@@ -845,11 +845,16 @@
     }
   },
   "rust-analyzer.imports.granularity.group": {
-    "description": "How imports should be grouped into use statements.\n\nValues:\n- preserve: Do not change the granularity of any imports and preserve the original structure written by the developer.\n- crate: Merge imports from the same crate into a single use statement. Conversely, imports from different crates are split into separate statements.\n- module: Merge imports from the same module into a single use statement. Conversely, imports from different modules are split into separate statements.\n- item: Flatten imports so that each has its own use statement.\n- one: Merge all imports into a single use statement as long as they have the same visibility and attributes.\n",
+    "description": "How imports should be grouped into use statements.\n\nValues:\n- crate: Merge imports from the same crate into a single use statement. Conversely, imports from different crates are split into separate statements.\n- module: Merge imports from the same module into a single use statement. Conversely, imports from different modules are split into separate statements.\n- item: Flatten imports so that each has its own use statement.\n- one: Merge all imports into a single use statement as long as they have the same visibility and attributes.\n",
     "pluginDefault": "crate",
     "type": {
-      "kind": "enum",
-      "values": ["preserve", "crate", "module", "item", "one"]
+      "kind": "oneOf",
+      "subTypes": [
+        {
+          "kind": "enum",
+          "values": ["crate", "module", "item", "one"]
+        }
+      ]
     }
   },
   "rust-analyzer.imports.group.enable": {
@@ -956,6 +961,13 @@
       "values": ["always", "never", "fieldless"]
     }
   },
+  "rust-analyzer.inlayHints.expressionAdjustmentHints.disableReborrows": {
+    "description": "Disable reborrows in expression adjustments inlay hints.\n\nReborrows are a pair of a builtin deref then borrow, i.e. `&*`. They are inserted by the compiler but are mostly useless to the programmer.\n\nNote: if the deref is not builtin (an overloaded deref), or the borrow is `&raw const`/`&raw mut`, they are not removed.\n",
+    "pluginDefault": true,
+    "type": {
+      "kind": "boolean"
+    }
+  },
   "rust-analyzer.inlayHints.expressionAdjustmentHints.enable": {
     "description": "Show inlay hints for type adjustments.\n\nValues:\n- always: Always show all adjustment hints.\n- never: Never show adjustment hints.\n- reborrow: Only show auto borrow and dereference adjustment hints.\n",
     "pluginDefault": "never",
@@ -1030,7 +1042,7 @@
     }
   },
   "rust-analyzer.inlayHints.maxLength": {
-    "description": "Maximum length for inlay hints. Set to null to have an unlimited length.\n",
+    "description": "Maximum length for inlay hints. Set to null to have an unlimited length.\n\n**Note:** This is mostly a hint, and we don't guarantee to strictly follow the limit.\n",
     "pluginDefault": 25,
     "type": {
       "kind": "integer",
@@ -1321,7 +1333,7 @@
   },
   "rust-analyzer.runnables.extraTestBinaryArgs": {
     "description": "Additional arguments to be passed through Cargo to launched tests, benchmarks, or\ndoc-tests.\n\nUnless the launched target uses a\n[custom test harness](https://doc.rust-lang.org/cargo/reference/cargo-targets.html#the-harness-field),\nthey will end up being interpreted as options to\n[`rustc`’s built-in test harness (“libtest”)](https://doc.rust-lang.org/rustc/tests/index.html#cli-arguments).\n",
-    "pluginDefault": ["--show-output"],
+    "pluginDefault": ["--nocapture"],
     "type": {
       "item": {
         "kind": "string"
@@ -1359,6 +1371,13 @@
   "rust-analyzer.rustfmt.rangeFormatting.enable": {
     "description": "Enables the use of rustfmt's unstable range formatting command for the\n`textDocument/rangeFormatting` request. The rustfmt option is unstable and only\navailable on a nightly build.\n",
     "pluginDefault": false,
+    "type": {
+      "kind": "boolean"
+    }
+  },
+  "rust-analyzer.semanticHighlighting.comments.enable": {
+    "description": "Use semantic tokens for comments.\n\nIn some editors (e.g. vscode) semantic tokens override other highlighting grammars.\nBy disabling semantic tokens for comments, other grammars can be used to highlight\ntheir contents.\n",
+    "pluginDefault": true,
     "type": {
       "kind": "boolean"
     }
