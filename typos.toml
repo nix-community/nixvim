@@ -16,7 +16,6 @@ tro = "tro"                   # ./plugins/utils/spectre.nix
 protols = "protols"           # ./plugins/lsp/lsp-packages.nix
 compatibilty = "compatibilty" # ./plugins/by-name/visual-multi/default.nix
 Maco = "Maco"                 # ./plugins/by-name/femaco
-Typ = "Typ"                   # ./flake/dev/list-plugins/list-plugins.py
 
 [type.patch]
 extend-glob = ["*.patch"]
