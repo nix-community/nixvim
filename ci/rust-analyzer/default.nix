@@ -200,9 +200,10 @@ let
           let
             subEnums = lib.filter (lib.hasAttr "enum") anyOf;
             subEnum =
-              assert lib.assertMsg (
-                lib.length subEnums == 1
-              ) "anyOf types may currently only contain a single enum";
+              assert lib.assertMsg (lib.length subEnums == 1)
+                "anyOf types may currently only contain a single enum. Found ${
+                  lib.generators.toPretty { } subEnums
+                }";
               lib.head subEnums;
           in
           if subEnum ? enumDescriptions then
