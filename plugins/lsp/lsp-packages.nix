@@ -18,7 +18,6 @@
     "bright_script"
     "bsl_ls"
     "buddy_ls"
-    "bufls"
     "bzl"
     "c3_lsp"
     "cairo_ls"
