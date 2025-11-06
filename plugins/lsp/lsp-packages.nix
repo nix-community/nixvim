@@ -326,7 +326,7 @@
       "phan"
     ];
     phpactor = "phpactor";
-    postgres_lsp = "postgres-lsp";
+    postgres_lsp = "postgres-language-server";
     protols = "protols";
     psalm = [
       "phpPackages"
