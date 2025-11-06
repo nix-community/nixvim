@@ -182,9 +182,6 @@ cd nixvim
 
 # Either setup nix-direnv, or manually enter a devshell using:
 nix develop
-
-# List all created plugins with `mkVimPlugin`
-list-plugins -k vim
 ```
 
 #### Writing option examples

@@ -52,7 +52,6 @@
         # Propagate `packages` from the `dev` partition:
         inherit (config.partitions.dev.module.flake.packages.${system})
           generate-all-maintainers
-          list-plugins
           ;
       };
     };
