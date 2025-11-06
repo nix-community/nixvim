@@ -58,7 +58,9 @@ let
           }
         else if anyOf != null then
           let
-            possibleTypes = lib.filter (sub: !(sub.type == "null" && nullable)) anyOf;
+            possibleTypes = lib.filter (
+              sub: !(sub.type or null == "null" && nullable) && !(sub.deprecated or false)
+            ) anyOf;
           in
           {
             kind = "oneOf";
@@ -198,7 +200,7 @@ let
           enumDesc enum enumDescriptions
         else
           let
-            subEnums = lib.filter (lib.hasAttr "enum") anyOf;
+            subEnums = lib.filter (sub: sub ? enum && !(sub.deprecated or false)) anyOf;
             subEnum =
               assert lib.assertMsg (lib.length subEnums == 1)
                 "anyOf types may currently only contain a single enum. Found ${
