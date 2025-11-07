@@ -39,6 +39,7 @@ in
           "null-ls"
           "wilder-nvim"
           "presence-nvim"
+          "ethersync"
         ];
 
         pluginsWithLazyLoad = builtins.filter (
