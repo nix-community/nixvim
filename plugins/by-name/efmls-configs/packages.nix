@@ -32,6 +32,7 @@ in
     "sorbet"
     "swiftformat"
     "swiftlint"
+    "typstfmt"
     "xo"
   ];
 
@@ -93,7 +94,6 @@ in
       "statix"
       "stylua"
       "taplo"
-      "typstfmt"
       "typstyle"
       "uncrustify"
       "vale"

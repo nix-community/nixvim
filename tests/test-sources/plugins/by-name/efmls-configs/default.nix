@@ -52,6 +52,7 @@
         "sorbet"
         "swiftformat"
         "swiftlint"
+        "typstfmt"
         "xo"
       ];
 
