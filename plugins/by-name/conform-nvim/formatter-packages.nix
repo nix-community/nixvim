@@ -74,6 +74,7 @@ rec {
     standardjs = sType.unpackaged;
     tlint = sType.unpackaged;
     twig-cs-fixer = sType.unpackaged;
+    typstfmt = sType.unpackaged;
     vsg = sType.unpackaged;
     ziggy = sType.unpackaged;
     ziggy_schema = sType.unpackaged;
