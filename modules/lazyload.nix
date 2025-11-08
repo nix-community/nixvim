@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   ...
 }:
@@ -28,24 +29,17 @@ in
       ];
     warnings =
       let
-        ignoredPackages = [
-          # removed
-          "packer"
-          "rust-tools"
-          "nvim-osc52"
-          "treesitter-playground"
-          # renamed
-          "surround"
-          "null-ls"
-          "wilder-nvim"
-          "presence-nvim"
-          "ethersync"
-        ];
+        isVisible =
+          opt:
+          let
+            visible = opt.visible or true;
+          in
+          if lib.isBool visible then visible else visible == "shallow";
 
         pluginsWithLazyLoad = builtins.filter (
           x:
-          !(lib.elem x ignoredPackages)
-          && lib.hasAttr "lazyLoad" config.plugins.${x}
+          lib.isOption (options.plugins.${x}.lazyload or null)
+          && isVisible options.plugins.${x}.lazyload
           && config.plugins.${x}.lazyLoad.enable
         ) (builtins.attrNames config.plugins);
         count = builtins.length pluginsWithLazyLoad;
