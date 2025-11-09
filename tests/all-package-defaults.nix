@@ -15,10 +15,6 @@ let
   disabledTests = [
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
-
-    # 2025-11-06 build failure
-    # Fixed in https://github.com/NixOS/nixpkgs/pull/458418
-    "docker-language-server"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
