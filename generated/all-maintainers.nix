@@ -301,7 +301,7 @@
     source = "nixvim";
   };
   jolars = {
-    email = "jolars@posteo.com";
+    email = "johan@jolars.co";
     github = "jolars";
     githubId = 13087841;
     keys = [
