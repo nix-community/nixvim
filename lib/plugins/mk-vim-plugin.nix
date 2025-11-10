@@ -59,6 +59,7 @@ let
       options = lib.setAttrByPath loc (
         {
           enable = lib.mkEnableOption name;
+          lazyLoad = lib.nixvim.mkLazyLoadOption name;
           autoLoad = lib.nixvim.mkAutoLoadOption cfg name;
         }
         // settingsOption
@@ -66,19 +67,67 @@ let
       );
 
       config = lib.mkIf cfg.enable (
+        let
+          globalsConfig = lib.nixvim.applyPrefixToAttrs globalPrefix (cfg.settings or { });
+        in
         lib.mkMerge [
-          {
-            inherit extraPackages extraPlugins;
-            globals = lib.nixvim.applyPrefixToAttrs globalPrefix (cfg.settings or { });
-          }
+          { inherit extraPackages extraPlugins; }
+
+          (lib.mkIf cfg.lazyLoad.enable {
+            assertions = [
+              {
+                assertion = (isColorscheme && colorscheme != null) || cfg.lazyLoad.settings != { };
+                message = "You have enabled lazy loading for ${name} but have not provided any configuration.";
+              }
+            ];
+
+            plugins.lz-n = {
+              plugins = [
+                (
+                  {
+                    # The packpath name is always the derivation name
+                    __unkeyed-1 = lib.getName cfg.package;
+                    # Use provided before, otherwise fallback to normal function wrapped globals config
+                    before =
+                      let
+                        luaGlobals = lib.nixvim.toLuaObject globalsConfig;
+                        before = cfg.lazyLoad.settings.before or null;
+                        default = lib.mkIf (luaGlobals != "{ }") ''
+                          function()
+                            local globals = ${luaGlobals}
+
+                            for k,v in pairs(globals) do
+                              vim.g[k] = v
+                            end
+                          end
+                        '';
+                      in
+                      if (lib.isString before || lib.types.rawLua.check before) then before else default;
+                    colorscheme = lib.mkIf isColorscheme (cfg.lazyLoad.settings.colorscheme or colorscheme);
+                  }
+                  // lib.removeAttrs cfg.lazyLoad.settings [
+                    "before"
+                    "colorscheme"
+                  ]
+                )
+              ];
+            };
+          })
+
+          (lib.mkIf (!cfg.lazyLoad.enable) {
+            globals = globalsConfig;
+          })
+
           (lib.optionalAttrs (isColorscheme && colorscheme != null) {
             colorscheme = lib.mkDefault colorscheme;
           })
+
           (lib.optionalAttrs (args ? extraConfig) (
             lib.nixvim.plugins.utils.applyExtraConfig {
               inherit extraConfig cfg opts;
             }
           ))
+
           (lib.nixvim.plugins.utils.enableDependencies dependencies)
         ]
       );
