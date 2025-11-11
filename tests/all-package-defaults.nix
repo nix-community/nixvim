@@ -102,9 +102,6 @@ let
     # No hash for system
     "verible"
 
-    # 2025-06-24 build failure
-    "gleam"
-
     # 2025-09-16 zig/zig-hook is marked as broken
     # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
     "zf"
