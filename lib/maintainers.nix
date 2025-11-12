@@ -121,6 +121,12 @@
     name = "Jalil David Salamé Messina";
     keys = [ { fingerprint = "7D6B 4D8F EBC5 7CBC 09AC  331F DA33 17E7 5BE9 485C"; } ];
   };
+  phinze = {
+    email = "phinze@phinze.com";
+    github = "phinze";
+    githubId = 37534;
+    name = "Paul Hinze";
+  };
   psfloyd = {
     email = "peter.racoon@gmail.com";
     github = "psfloyd";
