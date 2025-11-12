@@ -129,6 +129,7 @@ rec {
     pyproject-fmt = python313Packages.pyproject-parser;
     inherit (python313Packages) python-ly;
     qmlformat = libsForQt5.qt5.qtdeclarative;
+    racketfmt = racket;
     inherit (python313Packages) reorder-python-imports;
     ruff_fix = ruff;
     ruff_format = ruff;
