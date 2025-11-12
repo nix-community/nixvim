@@ -26,7 +26,7 @@ rec {
     { configuredFormatters, overrides }:
     name:
     let
-      permittedNames = attrNames configuredFormatters;
+      permittedNames = lib.optionals (lib.isAttrs configuredFormatters) (attrNames configuredFormatters);
       isSType = x: elem x sTypeList;
       notFoundMsg = ''
         A package for the conform-nvim formatter '${name}' could not be found.
