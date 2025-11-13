@@ -37,6 +37,7 @@
         "gersemi"
         "gleam_format"
         "js_standard"
+        "jsonlint"
         "kdlfmt"
         "markuplint"
         "mix"

@@ -17,6 +17,7 @@ in
     "gersemi"
     "gleam_format"
     "js_standard"
+    "jsonlint"
     "kdlfmt"
     "markuplint"
     "mix"
@@ -111,7 +112,6 @@ in
       nodePackages = [
         "alex"
         "eslint_d"
-        "jsonlint"
         "prettier"
         "stylelint"
         "textlint"
