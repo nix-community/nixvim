@@ -171,7 +171,7 @@ let
             assertion = (cfg.tslsIntegration or cfg.vtslsIntegration) -> (cfg.package != null);
             message = "When `${opts.tslsIntegration}` or `${opts.vtslsIntegration}` is enabled, `${opts.package}` must not be null.";
           };
-          plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
+          plugins.lsp.servers.ts_ls = lib.mkIf cfg.tslsIntegration {
             filetypes = [ "vue" ];
             extraOptions = {
               init_options = {
@@ -179,7 +179,7 @@ let
               };
             };
           };
-          plugins.lsp.servers.vtsls = lib.mkIf (cfg.enable && cfg.vtslsIntegration) {
+          plugins.lsp.servers.vtsls = lib.mkIf cfg.vtslsIntegration {
             filetypes = typescriptFiletypes ++ [ "vue" ];
             settings.vtsls.tsserver = {
               globalPlugins = lib.mkIf (cfg.package != null) [
@@ -208,7 +208,7 @@ let
         };
       };
       extraConfig = cfg: {
-        filetype.extension = mkIf (cfg.enable && cfg.autoSetFiletype) { v = "vlang"; };
+        filetype.extension = mkIf cfg.autoSetFiletype { v = "vlang"; };
       };
     };
     volar = {
@@ -227,7 +227,7 @@ let
           assertion = cfg.tslsIntegration -> (cfg.package != null);
           message = "When `${opts.tslsIntegration}` is enabled, `${opts.package}` must not be null.";
         };
-        plugins.lsp.servers.ts_ls = lib.mkIf (cfg.enable && cfg.tslsIntegration) {
+        plugins.lsp.servers.ts_ls = lib.mkIf cfg.tslsIntegration {
           filetypes = [ "vue" ];
           extraOptions = {
             init_options = {
