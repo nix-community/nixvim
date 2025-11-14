@@ -10,7 +10,7 @@ let
     fzf_bin = helpers.mkNullOrStr ''
       The path to the `fzf` binary to use.
 
-      Example: `"skim"`
+      Example: `"sk"`
     '';
   };
   settingsExample = {
