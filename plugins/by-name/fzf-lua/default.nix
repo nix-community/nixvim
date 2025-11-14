@@ -108,6 +108,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: opts: {
+    dependencies.skim.enable = lib.mkIf (cfg.profile == "skim" || cfg.settings.fzf_bin == "sk") (
+      lib.mkDefault true
+    );
+
     # TODO: deprecated 2024-08-29 remove after 24.11
     warnings = lib.nixvim.mkWarnings "plugins.fzf-lua" {
       when = opts.iconsEnabled.isDefined;
