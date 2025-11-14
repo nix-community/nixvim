@@ -151,6 +151,7 @@ in
       rzls.default = "rzls";
       sd.default = "sd";
       sed.default = "gnused";
+      skim.default = "skim";
       texpresso.default = "texpresso";
       tinymist.default = "tinymist";
       tmux.default = "tmux";
