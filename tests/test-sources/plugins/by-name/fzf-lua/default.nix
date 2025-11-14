@@ -63,4 +63,11 @@
       enable = true;
     };
   };
+
+  skim-profile = {
+    plugins.fzf-lua = {
+      enable = true;
+      profile = "skim";
+    };
+  };
 }
