@@ -394,6 +394,13 @@
     name = "Coutinho de Souza";
     source = "nixpkgs";
   };
+  phinze = {
+    email = "phinze@phinze.com";
+    github = "phinze";
+    githubId = 37534;
+    name = "Paul Hinze";
+    source = "nixvim";
+  };
   polnio = {
     email = "polniolino@gmail.com";
     github = "polnio";
