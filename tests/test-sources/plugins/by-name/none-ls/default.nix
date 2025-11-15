@@ -106,6 +106,9 @@
         sources =
           let
             disabled = [
+              # 2025-11-15 build failure
+              "ansiblelint"
+
               #TODO Added 2025-04-01
               # php-cs-fixer is marked as broken
               "phpcsfixer"

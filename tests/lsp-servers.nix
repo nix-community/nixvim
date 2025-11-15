@@ -38,6 +38,9 @@ let
       inherit (pkgs.stdenv) hostPlatform;
 
       disabled = [
+        # 2025-11-15 build failure
+        "ansible-lint"
+
         # DEPRECATED SERVERS
         # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
         "ruff_lsp"
