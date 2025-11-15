@@ -12,7 +12,7 @@ let
     extraSpecialArgs.pkgs = pkgsForTest;
   };
 
-  disabledTests = [
+  disabledPackages = [
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
   ]
@@ -130,7 +130,7 @@ let
     "verible"
   ];
 
-  isEnabled = p: !(builtins.elem (lib.getName p) disabledTests);
+  isEnabled = p: !(builtins.elem (lib.getName p) disabledPackages);
   isAvailable = lib.meta.availableOn hostPlatform;
 
   # Collects all visible options, including sub options
