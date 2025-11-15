@@ -40,6 +40,10 @@ let
         # TODO: 2025-07-25 build failure
         "mint"
 
+        # TODO: 2025-11-15 swift build failure
+        # https://github.com/NixOS/nixpkgs/issues/461474
+        "sourcekit"
+
         # DEPRECATED SERVERS
         # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
         "ruff_lsp"

@@ -100,6 +100,11 @@
         sources =
           let
             disabled = [
+              # TODO Added 2025-11-15
+              # dependency swift is broken
+              # https://github.com/NixOS/nixpkgs/issues/461474
+              "swift_format"
+
               # TODO Added 2025-10-12
               # mbedtls is marked insecure
               "haxe_formatter"
