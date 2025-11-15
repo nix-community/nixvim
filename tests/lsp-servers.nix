@@ -1,5 +1,4 @@
 {
-  lib,
   nixvimConfiguration,
   stdenv,
   runCommandLocal,
