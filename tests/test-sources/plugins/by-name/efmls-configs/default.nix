@@ -23,6 +23,9 @@
       ];
 
       brokenTools = [
+        # 2025-11-15 build failure
+        "ansible_lint"
+
         #TODO Added 2025-04-01
         # php-cs-fixer is marked as broken
         "php_cs_fixer"
