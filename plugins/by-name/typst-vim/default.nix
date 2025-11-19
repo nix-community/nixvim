@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -29,14 +28,14 @@ lib.nixvim.plugins.mkVimPlugin {
         default = false;
       };
 
-      watch = helpers.mkNullOrOption types.str "Keymap to preview the document and recompile on change.";
+      watch = lib.nixvim.mkNullOrOption types.str "Keymap to preview the document and recompile on change.";
     };
   };
 
   extraConfig = cfg: {
     keymaps =
       with cfg.keymaps;
-      helpers.keymaps.mkKeymaps
+      lib.nixvim.keymaps.mkKeymaps
         {
           mode = "n";
           options.silent = silent;
@@ -51,21 +50,21 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   settingsOptions = {
-    cmd = helpers.defaultNullOpts.mkStr "typst" ''
+    cmd = lib.nixvim.defaultNullOpts.mkStr "typst" ''
       Specifies the location of the Typst executable.
     '';
 
-    pdf_viewer = helpers.mkNullOrOption types.str ''
+    pdf_viewer = lib.nixvim.mkNullOrOption types.str ''
       Specifies pdf viewer that `typst watch --open` will use.
     '';
 
-    conceal_math = helpers.defaultNullOpts.mkFlagInt 0 ''
+    conceal_math = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''
       Enable concealment for math symbols in math mode (i.e. replaces symbols with their actual
       unicode character).
       Warning: this can affect performance
     '';
 
-    auto_close_toc = helpers.defaultNullOpts.mkFlagInt 0 ''
+    auto_close_toc = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''
       Specifies whether TOC will be automatically closed after using it.
     '';
   };

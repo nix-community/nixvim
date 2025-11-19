@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 lib.nixvim.plugins.mkVimPlugin {
@@ -12,7 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
   settingsOptions = {
     mode =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      lib.nixvim.defaultNullOpts.mkEnumFirstDefault
         [
           "smart"
           "indent"
@@ -22,7 +21,7 @@ lib.nixvim.plugins.mkVimPlugin {
           The mode used to process buffer changes.
         '';
 
-    force_balance = helpers.defaultNullOpts.mkBool false ''
+    force_balance = lib.nixvim.defaultNullOpts.mkBool false ''
       In smart mode and indent mode, parinfer will sometimes leave unbalanced brackets around the
       cursor and fix them when the cursor moves away.
       When this option is set to `true`, the brackets will be fixed immediately (and fixed again

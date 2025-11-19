@@ -1,15 +1,10 @@
-{
-  lib,
-  helpers,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib) types;
 
   cfg = config.filetype;
 
-  filetypeDefinition = helpers.mkNullOrOption (
+  filetypeDefinition = lib.nixvim.mkNullOrOption (
     with types;
     attrsOf (oneOf [
       # Raw filetype
@@ -42,7 +37,7 @@ let
 in
 {
   options.filetype =
-    helpers.mkCompositeOption
+    lib.nixvim.mkCompositeOption
       ''
         Define additional filetypes. The values can either be a literal filetype or a function
         taking the filepath and the buffer number.

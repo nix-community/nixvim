@@ -1,8 +1,4 @@
-{
-  lib,
-  helpers,
-  ...
-}:
+{ lib, ... }:
 with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "arrow";
@@ -12,73 +8,73 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.hmajid2301 ];
 
   settingsOptions = {
-    show_icons = helpers.defaultNullOpts.mkBool false ''
+    show_icons = lib.nixvim.defaultNullOpts.mkBool false ''
       If true will show icons.
     '';
 
-    always_show_path = helpers.defaultNullOpts.mkBool false ''
+    always_show_path = lib.nixvim.defaultNullOpts.mkBool false ''
       If true will show path.
     '';
 
-    separate_by_branch = helpers.defaultNullOpts.mkBool false ''
+    separate_by_branch = lib.nixvim.defaultNullOpts.mkBool false ''
       If true will split bookmarks by git branch.
     '';
 
-    hide_handbook = helpers.defaultNullOpts.mkBool false ''
+    hide_handbook = lib.nixvim.defaultNullOpts.mkBool false ''
       If true to hide the shortcuts on menu.
     '';
 
-    save_path = helpers.defaultNullOpts.mkLuaFn ''
+    save_path = lib.nixvim.defaultNullOpts.mkLuaFn ''
       function()
         return vim.fn.stdpath("cache") .. "/arrow"
       end
     '' "Function used to determine where to save arrow data.";
 
     mapping = {
-      edit = helpers.defaultNullOpts.mkStr "e" ''
+      edit = lib.nixvim.defaultNullOpts.mkStr "e" ''
         Mapping to edit bookmarks.
       '';
 
-      delete_mode = helpers.defaultNullOpts.mkStr "d" ''
+      delete_mode = lib.nixvim.defaultNullOpts.mkStr "d" ''
         Mapping to go to delete mode, where you can remove bookmarks.
       '';
 
-      clear_all_items = helpers.defaultNullOpts.mkStr "C" ''
+      clear_all_items = lib.nixvim.defaultNullOpts.mkStr "C" ''
         Mapping to clear all bookmarks.
       '';
 
-      toggle = helpers.defaultNullOpts.mkStr "s" ''
+      toggle = lib.nixvim.defaultNullOpts.mkStr "s" ''
         Mapping to save if `separate_save_and_remove` is true.
       '';
 
-      open_vertical = helpers.defaultNullOpts.mkStr "v" ''
+      open_vertical = lib.nixvim.defaultNullOpts.mkStr "v" ''
         Mapping to open bookmarks in vertical split.
       '';
 
-      open_horizontal = helpers.defaultNullOpts.mkStr "-" ''
+      open_horizontal = lib.nixvim.defaultNullOpts.mkStr "-" ''
         Mapping to open bookmarks in horizontal split.
       '';
 
-      quit = helpers.defaultNullOpts.mkStr "q" ''
+      quit = lib.nixvim.defaultNullOpts.mkStr "q" ''
         Mapping to quit arrow.
       '';
 
-      remove = helpers.defaultNullOpts.mkStr "x" ''
+      remove = lib.nixvim.defaultNullOpts.mkStr "x" ''
         Mapping to remove bookmarks. Only used if `separate_save_and_remove` is true.
       '';
 
-      next_item = helpers.defaultNullOpts.mkStr "]" ''
+      next_item = lib.nixvim.defaultNullOpts.mkStr "]" ''
         Mapping to go to next bookmark.
       '';
 
-      prev_item = helpers.defaultNullOpts.mkStr "[" ''
+      prev_item = lib.nixvim.defaultNullOpts.mkStr "[" ''
         Mapping to go to previous bookmark.
       '';
     };
 
     custom_actions = {
       open =
-        helpers.defaultNullOpts.mkLuaFn
+        lib.nixvim.defaultNullOpts.mkLuaFn
           ''
             function(target_file_name, current_file_name) end
           ''
@@ -87,17 +83,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
             - `current_file_name`: filename from where this was called
           '';
 
-      split_vertical = helpers.defaultNullOpts.mkLuaFn ''
+      split_vertical = lib.nixvim.defaultNullOpts.mkLuaFn ''
         function(target_file_name, current_file_name) end
       '' "";
 
-      split_horizontal = helpers.defaultNullOpts.mkLuaFn ''
+      split_horizontal = lib.nixvim.defaultNullOpts.mkLuaFn ''
         function(target_file_name, current_file_name) end
       '' "";
     };
 
     window =
-      helpers.defaultNullOpts.mkAttrsOf types.anything
+      lib.nixvim.defaultNullOpts.mkAttrsOf types.anything
         {
           relative = "editor";
           width = "auto";
@@ -113,51 +109,51 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
 
     per_buffer_config = {
-      lines = helpers.defaultNullOpts.mkInt 4 ''
+      lines = lib.nixvim.defaultNullOpts.mkInt 4 ''
         Number of lines on preview.
       '';
 
-      sort_automatically = helpers.defaultNullOpts.mkBool true ''
+      sort_automatically = lib.nixvim.defaultNullOpts.mkBool true ''
         If true will sort buffer marks automatically.
       '';
 
       satellite = {
-        enable = helpers.defaultNullOpts.mkBool false ''
+        enable = lib.nixvim.defaultNullOpts.mkBool false ''
           If true will display arrow index in scrollbar at every update.
         '';
 
-        overlap = helpers.defaultNullOpts.mkBool false '''';
+        overlap = lib.nixvim.defaultNullOpts.mkBool false '''';
 
-        priority = helpers.defaultNullOpts.mkInt 1000 '''';
+        priority = lib.nixvim.defaultNullOpts.mkInt 1000 '''';
       };
 
-      zindex = helpers.defaultNullOpts.mkInt 50 ''
+      zindex = lib.nixvim.defaultNullOpts.mkInt 50 ''
         Z index of the buffer.
       '';
     };
 
-    separate_save_and_remove = helpers.defaultNullOpts.mkBool false ''
+    separate_save_and_remove = lib.nixvim.defaultNullOpts.mkBool false ''
       If true will remove the toggle and create the save/remove keymaps.
     '';
 
-    leader_key = helpers.defaultNullOpts.mkStr ";" ''
+    leader_key = lib.nixvim.defaultNullOpts.mkStr ";" ''
       The leader key to use for arrow. Will precede all mappings.
       Recommended to be a single character.
     '';
 
-    save_key = helpers.defaultNullOpts.mkStr "cwd" ''
+    save_key = lib.nixvim.defaultNullOpts.mkStr "cwd" ''
       What will be used as root to save the bookmarks. Can be also `git_root`.
     '';
 
-    global_bookmarks = helpers.defaultNullOpts.mkBool false ''
+    global_bookmarks = lib.nixvim.defaultNullOpts.mkBool false ''
       If true arrow will save files globally (ignores `separate_by_branch`).
     '';
 
-    index_keys = helpers.defaultNullOpts.mkStr "123456789zxcbnmZXVBNM,afghjklAFGHJKLwrtyuiopWRTYUIOP" ''
+    index_keys = lib.nixvim.defaultNullOpts.mkStr "123456789zxcbnmZXVBNM,afghjklAFGHJKLwrtyuiopWRTYUIOP" ''
       Keys mapped to bookmark index.
     '';
 
-    full_path_list = helpers.defaultNullOpts.mkListOf types.str [ "update_stuff" ] ''
+    full_path_list = lib.nixvim.defaultNullOpts.mkListOf types.str [ "update_stuff" ] ''
       Filenames on this list will ALWAYS show the file path too
     '';
   };

@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -11,19 +10,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.hmajid2301 ];
 
   settingsOptions = {
-    path = helpers.defaultNullOpts.mkStr "zellij" ''
+    path = lib.nixvim.defaultNullOpts.mkStr "zellij" ''
       Path to the zellij binary.
     '';
 
-    replaceVimWindowNavigationKeybinds = helpers.defaultNullOpts.mkBool false ''
+    replaceVimWindowNavigationKeybinds = lib.nixvim.defaultNullOpts.mkBool false ''
       Will set keybinds like `<C-w>h` to left.
     '';
 
-    vimTmuxNavigatorKeybinds = helpers.defaultNullOpts.mkBool false ''
+    vimTmuxNavigatorKeybinds = lib.nixvim.defaultNullOpts.mkBool false ''
       Will set keybinds like `<C-h>` to left.
     '';
 
-    debug = helpers.defaultNullOpts.mkBool false ''
+    debug = lib.nixvim.defaultNullOpts.mkBool false ''
       Will log things to `/tmp/zellij.nvim`.
     '';
   };

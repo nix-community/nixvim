@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -13,7 +12,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     keymaps =
-      helpers.defaultNullOpts.mkAttrsOf (with lib.types; attrsOf (either str rawLua))
+      lib.nixvim.defaultNullOpts.mkAttrsOf (with lib.types; attrsOf (either str rawLua))
         {
           normal = {
             plain_below = "g?p";
@@ -47,7 +46,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
 
     commands =
-      helpers.defaultNullOpts.mkAttrsOf types.str
+      lib.nixvim.defaultNullOpts.mkAttrsOf types.str
         {
           toggle_comment_debug_prints = "ToggleCommentDebugPrints";
           delete_debug_prints = "DeleteDebugPrints";
@@ -63,20 +62,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Setting any command to `nil` (warning: use `__raw`) will skip it.
         '';
 
-    move_to_debugline = helpers.defaultNullOpts.mkBool false ''
+    move_to_debugline = lib.nixvim.defaultNullOpts.mkBool false ''
       When adding a debug line, moves the cursor to that line.
     '';
 
-    display_counter = helpers.defaultNullOpts.mkBool true ''
+    display_counter = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to display/include the monotonically increasing counter in each debug message.
     '';
 
-    display_snippet = helpers.defaultNullOpts.mkBool true ''
+    display_snippet = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to include a snippet of the line above/below in plain debug lines.
     '';
 
     filetypes =
-      helpers.defaultNullOpts.mkNullable
+      lib.nixvim.defaultNullOpts.mkNullable
         (
           with types;
           attrsOf (submodule {
@@ -123,7 +122,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ```
         '';
 
-    print_tag = helpers.defaultNullOpts.mkStr "DEBUGPRINT" ''
+    print_tag = lib.nixvim.defaultNullOpts.mkStr "DEBUGPRINT" ''
       The string inserted into each print statement, which can be used to uniquely identify
       statements inserted by `debugprint`.
     '';

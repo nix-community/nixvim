@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ lib, ... }:
 {
   example = {
     keymaps = [
@@ -19,7 +19,7 @@
 
   mkKeymaps = {
     keymaps =
-      helpers.keymaps.mkKeymaps
+      lib.nixvim.keymaps.mkKeymaps
         {
           mode = "x";
           options.silent = true;
@@ -60,7 +60,7 @@
   mkKeymapsOnEvents = {
     keymapsOnEvents = {
       "InsertEnter" =
-        helpers.keymaps.mkKeymaps
+        lib.nixvim.keymaps.mkKeymaps
           {
             mode = "x";
             options.silent = true;

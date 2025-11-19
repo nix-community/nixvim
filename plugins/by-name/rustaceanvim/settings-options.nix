@@ -1,4 +1,4 @@
-{ lib, helpers }:
+{ lib }:
 with lib;
 {
   tools =
@@ -13,7 +13,7 @@ with lib;
       testExecutors = executors ++ [ "background" ];
       executorSubmodule = types.submodule {
         options = {
-          execute_command = helpers.mkNullOrLuaFn ''
+          execute_command = lib.nixvim.mkNullOrLuaFn ''
             ```lua
               fun(cmd:string,args:string[],cwd:string|nil,opts?:RustaceanExecutorOpts)
 
@@ -37,7 +37,7 @@ with lib;
     in
     {
       executor =
-        helpers.defaultNullOpts.mkNullable (with types; either (enum executors) executorSubmodule)
+        lib.nixvim.defaultNullOpts.mkNullable (with types; either (enum executors) executorSubmodule)
           "termopen"
           ''
             The executor to use for runnables/debuggables.
@@ -45,67 +45,67 @@ with lib;
           '';
 
       test_executor =
-        helpers.mkNullOrOption (with types; either (enum testExecutors) executorSubmodule)
+        lib.nixvim.mkNullOrOption (with types; either (enum testExecutors) executorSubmodule)
           ''
             The executor to use for runnables that are tests/testables
             Either a test executor alias or an attrs with the `execute_command` key.
           '';
 
       crate_test_executor =
-        helpers.mkNullOrOption (with types; either (enum testExecutors) executorSubmodule)
+        lib.nixvim.mkNullOrOption (with types; either (enum testExecutors) executorSubmodule)
           ''
             The executor to use for runnables that are crate test suites (`--all-targets`).
             Either a test executor alias or an attrs with the `execute_command` key.
           '';
 
-      cargo_override = helpers.mkNullOrStr ''
+      cargo_override = lib.nixvim.mkNullOrStr ''
         Set this to override the 'cargo' command for runnables, debuggables (etc., e.g. to `"cross"`).
         If set, this takes precedence over `enable_nextest`.
       '';
 
-      enable_nextest = helpers.defaultNullOpts.mkBool true ''
+      enable_nextest = lib.nixvim.defaultNullOpts.mkBool true ''
         Whether to enable nextest.
         If enabled, `cargo test` commands will be transformed to `cargo nextest run` commands.
         Defaults to `true` if cargo-nextest is detected.
         Ignored if `cargo_override` is set.
       '';
 
-      enable_clippy = helpers.defaultNullOpts.mkBool true ''
+      enable_clippy = lib.nixvim.defaultNullOpts.mkBool true ''
         Whether to enable clippy checks on save if a clippy installation is detected.
       '';
 
-      on_initialized = helpers.mkNullOrLuaFn ''
+      on_initialized = lib.nixvim.mkNullOrLuaFn ''
         `fun(health:RustAnalyzerInitializedStatus)`
         Function that is invoked when the LSP server has finished initializing.
       '';
 
-      reload_workspace_from_cargo_toml = helpers.defaultNullOpts.mkBool true ''
+      reload_workspace_from_cargo_toml = lib.nixvim.defaultNullOpts.mkBool true ''
         Automatically call `RustReloadWorkspace` when writing to a `Cargo.toml` file.
       '';
 
       hover_actions = {
-        replace_builtin_hover = helpers.defaultNullOpts.mkBool true ''
+        replace_builtin_hover = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether to replace Neovim's built-in `vim.lsp.buf.hover` with hover actions.
         '';
       };
 
       code_actions = {
-        group_icon = helpers.defaultNullOpts.mkStr " ▶" ''
+        group_icon = lib.nixvim.defaultNullOpts.mkStr " ▶" ''
           Text appended to a group action.
         '';
 
-        ui_select_fallback = helpers.defaultNullOpts.mkBool false ''
+        ui_select_fallback = lib.nixvim.defaultNullOpts.mkBool false ''
           Whether to fall back to `vim.ui.select` if there are no grouped code actions.
         '';
       };
 
       float_win_config = {
-        auto_focus = helpers.defaultNullOpts.mkBool false ''
+        auto_focus = lib.nixvim.defaultNullOpts.mkBool false ''
           Whether the window gets automatically focused.
         '';
 
         open_split =
-          helpers.defaultNullOpts.mkEnumFirstDefault
+          lib.nixvim.defaultNullOpts.mkEnumFirstDefault
             [
               "horizontal"
               "vertical"
@@ -116,23 +116,23 @@ with lib;
       };
 
       crate_graph = {
-        backend = helpers.defaultNullOpts.mkStr "x11" ''
+        backend = lib.nixvim.defaultNullOpts.mkStr "x11" ''
           Backend used for displaying the graph.
           See: https://graphviz.org/docs/outputs
         '';
 
-        output = helpers.mkNullOrStr ''
+        output = lib.nixvim.mkNullOrStr ''
           Where to store the output.
           No output if unset.
           Relative path from `cwd`.
         '';
 
-        full = helpers.defaultNullOpts.mkBool true ''
+        full = lib.nixvim.defaultNullOpts.mkBool true ''
           `true` for all crates.io and external crates, false only the local crates.
         '';
 
         enabled_graphviz_backends =
-          helpers.defaultNullOpts.mkListOf types.str
+          lib.nixvim.defaultNullOpts.mkListOf types.str
             [
               "bmp"
               "cgimage"
@@ -193,20 +193,20 @@ with lib;
               Override the enabled graphviz backends list, used for input validation and autocompletion.
             '';
 
-        pipe = helpers.mkNullOrStr ''
+        pipe = lib.nixvim.mkNullOrStr ''
           Override the pipe symbol in the shell command.
           Useful if using a shell that is not supported by this plugin.
         '';
       };
 
-      open_url = helpers.defaultNullOpts.mkLuaFn "require('rustaceanvim.os').open_url" ''
+      open_url = lib.nixvim.defaultNullOpts.mkLuaFn "require('rustaceanvim.os').open_url" ''
         If set, overrides how to open URLs.
         `fun(url:string):nil`
       '';
     };
 
   server = {
-    auto_attach = helpers.mkNullOrStrLuaFnOr types.bool ''
+    auto_attach = lib.nixvim.mkNullOrStrLuaFnOr types.bool ''
       Whether to automatically attach the LSP client.
       Defaults to `true` if the `rust-analyzer` executable is found.
 
@@ -230,9 +230,9 @@ with lib;
       ```
     '';
 
-    on_attach = helpers.defaultNullOpts.mkLuaFn null "Function to call when rustaceanvim attaches to a buffer.";
+    on_attach = lib.nixvim.defaultNullOpts.mkLuaFn null "Function to call when rustaceanvim attaches to a buffer.";
 
-    cmd = helpers.mkNullOrStrLuaFnOr (with types; listOf str) ''
+    cmd = lib.nixvim.mkNullOrStrLuaFnOr (with types; listOf str) ''
       Command and arguments for starting rust-analyzer.
 
       This can also be the definition of a function:
@@ -247,7 +247,7 @@ with lib;
     '';
 
     default_settings =
-      helpers.mkNullOrStrLuaFnOr
+      lib.nixvim.mkNullOrStrLuaFnOr
         (types.submodule {
           options.rust-analyzer = import ../../lsp/language-servers/rust-analyzer-config.nix lib;
           freeformType = with types; attrsOf anything;
@@ -268,23 +268,23 @@ with lib;
           ```
         '';
 
-    standalone = helpers.defaultNullOpts.mkBool true ''
+    standalone = lib.nixvim.defaultNullOpts.mkBool true ''
       Standalone file support (enabled by default).
       Disabling it may improve rust-analyzer's startup time.
     '';
 
-    logfile = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.tempname() .. '-rust-analyzer.log'") ''
+    logfile = lib.nixvim.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.tempname() .. '-rust-analyzer.log'") ''
       The path to the rust-analyzer log file.
     '';
 
-    load_vscode_settings = helpers.defaultNullOpts.mkBool false ''
+    load_vscode_settings = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to search (upward from the buffer) for rust-analyzer settings in `.vscode/settings` json.
       If found, loaded settings will override configured options.
     '';
   };
 
   dap = {
-    autoload_configurations = helpers.defaultNullOpts.mkBool true ''
+    autoload_configurations = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to autoload nvim-dap configurations when rust-analyzer has attached.
     '';
 
@@ -302,31 +302,31 @@ with lib;
               description = "The type for the debug adapter.";
             };
 
-            name = helpers.mkNullOrStr "The name of this adapter.";
+            name = lib.nixvim.mkNullOrStr "The name of this adapter.";
 
             # Executable
-            command = helpers.defaultNullOpts.mkStr "lldb-vscode" ''
+            command = lib.nixvim.defaultNullOpts.mkStr "lldb-vscode" ''
               The command to run for this adapter.
             '';
 
-            args = helpers.mkNullOrStr "Its arguments.";
+            args = lib.nixvim.mkNullOrStr "Its arguments.";
 
             # Server
-            host = helpers.mkNullOrStr "The host to connect to.";
+            host = lib.nixvim.mkNullOrStr "The host to connect to.";
 
-            port = helpers.mkNullOrStr "The port to connect to.";
+            port = lib.nixvim.mkNullOrStr "The port to connect to.";
 
             executable = {
-              command = helpers.mkNullOrStr "The command for the executable.";
+              command = lib.nixvim.mkNullOrStr "The command for the executable.";
 
-              args = helpers.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
+              args = lib.nixvim.mkNullOrOption (with lib.types; maybeRaw (listOf str)) ''
                 Its arguments.
               '';
             };
           };
         };
       in
-      helpers.mkNullOrStrLuaFnOr (with types; either (enum [ false ]) dapConfig) ''
+      lib.nixvim.mkNullOrStrLuaFnOr (with types; either (enum [ false ]) dapConfig) ''
         Defaults to creating the `rt_lldb` adapter, which is a `DapServerConfig` if `codelldb`
         is detected, and a `DapExecutableConfig` if `lldb` is detected.
         Set to `false` to disable.

@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -15,7 +14,7 @@ mkVimPlugin {
 
   settingsOptions = {
     image_provider =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      lib.nixvim.defaultNullOpts.mkEnumFirstDefault
         [
           "none"
           "ueberzug"
@@ -28,7 +27,7 @@ mkVimPlugin {
             - "kitty" -- use the Kitty protocol to display images.
         '';
 
-    automatically_open_output = helpers.defaultNullOpts.mkBool true ''
+    automatically_open_output = lib.nixvim.defaultNullOpts.mkBool true ''
       If this is true, then whenever you have an active cell its output window will be
       automatically shown.
 
@@ -40,27 +39,27 @@ mkVimPlugin {
       You can then open the output window at will using `:MagmaShowOutput`.
     '';
 
-    wrap_output = helpers.defaultNullOpts.mkBool true ''
+    wrap_output = lib.nixvim.defaultNullOpts.mkBool true ''
       If this is true, then text output in the output window will be wrapped (akin to `set wrap`).
     '';
 
-    output_window_borders = helpers.defaultNullOpts.mkBool true ''
+    output_window_borders = lib.nixvim.defaultNullOpts.mkBool true ''
       If this is true, then the output window will have rounded borders.
       If it is false, it will have no borders.
     '';
 
-    cell_highlight_group = helpers.defaultNullOpts.mkStr "CursorLine" ''
+    cell_highlight_group = lib.nixvim.defaultNullOpts.mkStr "CursorLine" ''
       The highlight group to be used for highlighting cells.
     '';
 
-    save_path = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/magma'") ''
+    save_path = lib.nixvim.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/magma'") ''
       Where to save/load with `:MagmaSave` and `:MagmaLoad` (with no parameters).
       The generated file is placed in this directory, with the filename itself being the
       buffer's name, with `%` replaced by `%%` and `/` replaced by `%`, and postfixed with the
       extension `.json`.
     '';
 
-    show_mimetype_debug = helpers.defaultNullOpts.mkBool false ''
+    show_mimetype_debug = lib.nixvim.defaultNullOpts.mkBool false ''
       If this is true, then before any non-iostream output chunk, Magma shows the mimetypes it
       received for it.
       This is meant for debugging and adding new mimetypes.

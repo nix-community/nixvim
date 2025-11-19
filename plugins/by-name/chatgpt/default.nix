@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -22,15 +21,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   ];
 
   settingsOptions = {
-    api_key_cmd = helpers.defaultNullOpts.mkStr null ''
+    api_key_cmd = lib.nixvim.defaultNullOpts.mkStr null ''
       The path and arguments to an executable that returns the API key via stdout.
     '';
 
-    yank_register = helpers.defaultNullOpts.mkStr "+" ''
+    yank_register = lib.nixvim.defaultNullOpts.mkStr "+" ''
       Which register to use for copying.
     '';
 
-    extra_curl_params = helpers.defaultNullOpts.mkListOf' {
+    extra_curl_params = lib.nixvim.defaultNullOpts.mkListOf' {
       type = types.str;
       pluginDefault = null;
       description = ''
@@ -43,7 +42,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       ];
     };
 
-    show_line_numbers = helpers.defaultNullOpts.mkBool true ''
+    show_line_numbers = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to show line numbers in the ChatGPT window.
     '';
   };

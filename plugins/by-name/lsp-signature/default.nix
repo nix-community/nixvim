@@ -1,4 +1,4 @@
-{ lib, helpers, ... }:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -89,7 +89,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Whether to enable virtual hint.
     '';
 
-    hint_prefix = helpers.defaultNullOpts.mkNullable' {
+    hint_prefix = lib.nixvim.defaultNullOpts.mkNullable' {
       type = lib.types.anything;
       pluginDefault = "🐼 ";
       description = ''

@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -26,9 +25,9 @@ lib.nixvim.plugins.mkVimPlugin {
                 example = "<leader>gi";
               };
 
-              mode = helpers.keymaps.mkModeOption "n";
+              mode = lib.nixvim.keymaps.mkModeOption "n";
 
-              options = helpers.keymaps.mapConfigOptions;
+              options = lib.nixvim.keymaps.mapConfigOptions;
             };
           })
         );

@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib.nixvim.plugins;
@@ -14,11 +13,11 @@ mkVimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    width = helpers.mkNullOrOption types.ints.unsigned "width";
+    width = lib.nixvim.mkNullOrOption types.ints.unsigned "width";
 
-    height = helpers.mkNullOrOption types.ints.unsigned "height";
+    height = lib.nixvim.mkNullOrOption types.ints.unsigned "height";
 
-    linenr = helpers.defaultNullOpts.mkFlagInt 0 ''
+    linenr = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''
       Show line numbers when in Goyo mode.
     '';
   };

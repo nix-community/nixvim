@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -23,15 +22,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsOptions =
     let
       opts = {
-        enable_close = helpers.defaultNullOpts.mkBool true ''
+        enable_close = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether or not to auto close tags.
         '';
 
-        enable_rename = helpers.defaultNullOpts.mkBool true ''
+        enable_rename = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether or not to auto rename paired tags.
         '';
 
-        enable_close_on_slash = helpers.defaultNullOpts.mkBool true ''
+        enable_close_on_slash = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether or not to auto close tags when a `/` is inserted.
         '';
       };
@@ -39,7 +38,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     {
       inherit opts;
 
-      aliases = helpers.defaultNullOpts.mkAttrsOf types.str {
+      aliases = lib.nixvim.defaultNullOpts.mkAttrsOf types.str {
         "astro" = "html";
         "eruby" = "html";
         "vue" = "html";
@@ -59,7 +58,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         "rust" = "rust";
       } "Filetype aliases.";
 
-      per_filetype = helpers.defaultNullOpts.mkAttrsOf (types.submodule {
+      per_filetype = lib.nixvim.defaultNullOpts.mkAttrsOf (types.submodule {
         freeformType = with types; attrsOf anything;
         options = opts;
       }) { } "Per filetype config overrides.";

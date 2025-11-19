@@ -1,14 +1,20 @@
 {
   lib,
-  helpers,
   config,
   options,
   ...
 }:
+let
+  inherit (lib.nixvim) toLuaObject;
+  inherit (lib.nixvim.keymaps)
+    removeDeprecatedMapAttrs
+    deprecatedMapOptionSubmodule
+    ;
+in
 {
   options = {
     keymaps = lib.mkOption {
-      type = lib.types.listOf helpers.keymaps.deprecatedMapOptionSubmodule;
+      type = lib.types.listOf deprecatedMapOptionSubmodule;
       default = [ ];
       description = "Nixvim keymaps.";
       example = [
@@ -21,7 +27,7 @@
     };
 
     keymapsOnEvents = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.listOf helpers.keymaps.deprecatedMapOptionSubmodule);
+      type = lib.types.attrsOf (lib.types.listOf deprecatedMapOptionSubmodule);
       default = { };
       example = {
         "InsertEnter" = [
@@ -69,7 +75,7 @@
           The `${lib.showOption opt.loc}' option is deprecated and will be removed in 24.11.
 
           You should use a "raw" `action` instead;
-          e.g. `action.__raw = "<lua code>"` or `action = helpers.mkRaw "<lua code>"`.
+          e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
 
           ${lib.options.showDefs opt.definitionsWithLocations}
         ''))
@@ -78,7 +84,7 @@
     extraConfigLua = lib.mkIf (config.keymaps != [ ]) ''
       -- Set up keybinds {{{
       do
-        local __nixvim_binds = ${lib.nixvim.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs config.keymaps)}
+        local __nixvim_binds = ${toLuaObject (map removeDeprecatedMapAttrs config.keymaps)}
         for i, map in ipairs(__nixvim_binds) do
           vim.keymap.set(map.mode, map.key, map.action, map.options)
         end
@@ -93,10 +99,10 @@
     autoCmd = lib.mapAttrsToList (event: mappings: {
       inherit event;
       group = "nixvim_binds_${event}";
-      callback = helpers.mkRaw ''
+      callback = lib.nixvim.mkRaw ''
         function(args)
           do
-            local __nixvim_binds = ${lib.nixvim.toLuaObject (map helpers.keymaps.removeDeprecatedMapAttrs mappings)}
+            local __nixvim_binds = ${toLuaObject (map removeDeprecatedMapAttrs mappings)}
 
             for i, map in ipairs(__nixvim_binds) do
               local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })

@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   pkgs,
   ...
 }:
@@ -53,7 +52,7 @@ lib.nixvim.plugins.mkVimPlugin {
     };
 
     filetypes =
-      helpers.defaultNullOpts.mkAttrsOf types.bool
+      lib.nixvim.defaultNullOpts.mkAttrsOf types.bool
         {
           help = false;
           gitcommit = false;
@@ -65,30 +64,30 @@ lib.nixvim.plugins.mkVimPlugin {
           This can be used to opt out of completions for certain filetypes.
         '';
 
-    manual = helpers.defaultNullOpts.mkBool false ''
+    manual = lib.nixvim.defaultNullOpts.mkBool false ''
       If true, codeium completions will never automatically trigger.
     '';
 
-    no_map_tab = helpers.defaultNullOpts.mkBool false ''
+    no_map_tab = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to disable the `<Tab>` keybinding.
     '';
 
-    idle_delay = helpers.defaultNullOpts.mkPositiveInt 75 ''
+    idle_delay = lib.nixvim.defaultNullOpts.mkPositiveInt 75 ''
       Delay in milliseconds before autocompletions are shown (limited by language server to a
       minimum of 75).
     '';
 
-    render = helpers.defaultNullOpts.mkBool true ''
+    render = lib.nixvim.defaultNullOpts.mkBool true ''
       A global boolean flag that controls whether codeium renders are enabled or disabled.
     '';
 
-    tab_fallback = helpers.mkNullOrOption types.str ''
+    tab_fallback = lib.nixvim.mkNullOrOption types.str ''
       The fallback key when there is no suggestion display in `codeium#Accept()`.
 
       Default: "\<C-N>" when a popup menu is visible, else "\t".
     '';
 
-    disable_bindings = helpers.defaultNullOpts.mkBool false ''
+    disable_bindings = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to disable default keybindings.
     '';
   };
@@ -96,7 +95,7 @@ lib.nixvim.plugins.mkVimPlugin {
   extraOptions = {
     keymaps = mapAttrs (
       optionName: v:
-      helpers.defaultNullOpts.mkStr v.default ''
+      lib.nixvim.defaultNullOpts.mkStr v.default ''
         ${v.description}
         Command: `${v.command}`
       ''
@@ -116,7 +115,7 @@ lib.nixvim.plugins.mkVimPlugin {
               let
                 inherit (keymapsDefinitions.${optionName}) command;
               in
-              helpers.mkRaw "function() ${command} end";
+              lib.nixvim.mkRaw "function() ${command} end";
           };
 
         keymapsList = flatten (mapAttrsToList processKeymap cfg.keymaps);
@@ -129,6 +128,6 @@ lib.nixvim.plugins.mkVimPlugin {
           };
         };
       in
-      helpers.keymaps.mkKeymaps defaults keymapsList;
+      lib.nixvim.keymaps.mkKeymaps defaults keymapsList;
   };
 }

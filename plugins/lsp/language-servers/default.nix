@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   pkgs,
   ...
 }:
@@ -11,7 +10,7 @@ let
 
   lspExtraArgs = {
     dartls = {
-      settingsOptions = import ./dartls-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./dartls-settings.nix { inherit lib; };
       settings = cfg: { dart = cfg; };
     };
     gopls = {
@@ -39,23 +38,23 @@ let
       settings = cfg: { json = cfg; };
     };
     jsonnet_ls = {
-      settingsOptions = import ./jsonnet-ls-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./jsonnet-ls-settings.nix { inherit lib; };
     };
     ltex = {
-      settingsOptions = import ./ltex-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./ltex-settings.nix { inherit lib; };
       settings = cfg: { ltex = cfg; };
     };
     lua_ls = {
-      settingsOptions = import ./lua-ls-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./lua-ls-settings.nix { inherit lib; };
       settings = cfg: { Lua = cfg; };
     };
     nil_ls = {
-      settingsOptions = import ./nil-ls-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./nil-ls-settings.nix { inherit lib; };
       settings = cfg: { nil = cfg; };
     };
     nixd = {
       settings = cfg: { nixd = cfg; };
-      settingsOptions = import ./nixd-settings.nix { inherit lib helpers; };
+      settingsOptions = import ./nixd-settings.nix { inherit lib; };
       extraConfig = cfg: {
         extraPackages = optional (cfg.settings.formatting.command == [ "nixpkgs-fmt" ]) pkgs.nixpkgs-fmt;
       };
@@ -63,12 +62,12 @@ let
     omnisharp = {
       settings = cfg: { omnisharp = cfg; };
       settingsOptions = {
-        enableEditorConfigSupport = helpers.defaultNullOpts.mkBool true ''
+        enableEditorConfigSupport = lib.nixvim.defaultNullOpts.mkBool true ''
           Enables support for reading code style, naming convention and analyzer settings from
           `.editorconfig`.
         '';
 
-        enableMsBuildLoadProjectsOnDemand = helpers.defaultNullOpts.mkBool false ''
+        enableMsBuildLoadProjectsOnDemand = lib.nixvim.defaultNullOpts.mkBool false ''
           If true, MSBuild project system will only load projects for files that were opened in the
           editor.
           This setting is useful for big C# codebases and allows for faster initialization of code
@@ -77,7 +76,7 @@ let
           incomplete reference lists for symbols.
         '';
 
-        enableRoslynAnalyzers = helpers.defaultNullOpts.mkBool false ''
+        enableRoslynAnalyzers = lib.nixvim.defaultNullOpts.mkBool false ''
           If true, MSBuild project system will only load projects for files that were opened in the
           editor.
           This setting is useful for big C# codebases and allows for faster initialization of code
@@ -86,12 +85,12 @@ let
           incomplete reference lists for symbols.
         '';
 
-        organizeImportsOnFormat = helpers.defaultNullOpts.mkBool false ''
+        organizeImportsOnFormat = lib.nixvim.defaultNullOpts.mkBool false ''
           Specifies whether 'using' directives should be grouped and sorted during document
           formatting.
         '';
 
-        enableImportCompletion = helpers.defaultNullOpts.mkBool false ''
+        enableImportCompletion = lib.nixvim.defaultNullOpts.mkBool false ''
           Enables support for showing unimported types and unimported extension methods in
           completion lists.
           When committed, the appropriate using directive will be added at the top of the current
@@ -100,12 +99,12 @@ let
           for the first few completion sessions after opening a solution.
         '';
 
-        sdkIncludePrereleases = helpers.defaultNullOpts.mkBool true ''
+        sdkIncludePrereleases = lib.nixvim.defaultNullOpts.mkBool true ''
           Specifies whether to include preview versions of the .NET SDK when determining which
           version to use for project loading.
         '';
 
-        analyzeOpenDocumentsOnly = helpers.defaultNullOpts.mkBool true ''
+        analyzeOpenDocumentsOnly = lib.nixvim.defaultNullOpts.mkBool true ''
           Only run analyzers against open files when 'enableRoslynAnalyzers' is true.
         '';
       };

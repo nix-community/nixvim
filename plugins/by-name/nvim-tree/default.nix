@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -145,7 +144,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       autoCmd =
         (lib.optional autoOpenEnabled {
           event = "VimEnter";
-          callback = helpers.mkRaw "open_nvim_tree";
+          callback = lib.nixvim.mkRaw "open_nvim_tree";
         })
         ++ (lib.optional cfg.autoClose {
           event = "BufEnter";

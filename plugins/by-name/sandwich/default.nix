@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -32,7 +31,7 @@ lib.nixvim.plugins.mkVimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    no_default_key_mappings = helpers.defaultNullOpts.mkFlagInt 0 ''
+    no_default_key_mappings = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''
       Whether to disable the default mappings.
     '';
   };

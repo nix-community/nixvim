@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -24,7 +23,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     picker =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      lib.nixvim.defaultNullOpts.mkEnumFirstDefault
         [
           "select"
           "fzf"
@@ -39,20 +38,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     lsp = {
       config =
-        helpers.defaultNullOpts.mkNullable
+        lib.nixvim.defaultNullOpts.mkNullable
           (types.submodule {
             freeformType = with types; attrsOf anything;
             options = {
-              cmd = helpers.defaultNullOpts.mkListOf types.str [
+              cmd = lib.nixvim.defaultNullOpts.mkListOf types.str [
                 "zk"
                 "lsp"
               ] "Command to start the language server.";
 
-              name = helpers.defaultNullOpts.mkStr "zk" ''
+              name = lib.nixvim.defaultNullOpts.mkStr "zk" ''
                 The name for this server.
               '';
 
-              on_attach = helpers.mkNullOrLuaFn ''
+              on_attach = lib.nixvim.mkNullOrLuaFn ''
                 Command to run when the client is attached.
               '';
             };
@@ -69,11 +68,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
           '';
 
       auto_attach = {
-        enabled = helpers.defaultNullOpts.mkBool true ''
+        enabled = lib.nixvim.defaultNullOpts.mkBool true ''
           Automatically attach buffers in a zk notebook.
         '';
 
-        filetypes = helpers.defaultNullOpts.mkListOf types.str [ "markdown" ] ''
+        filetypes = lib.nixvim.defaultNullOpts.mkListOf types.str [ "markdown" ] ''
           Filetypes for which zk should automatically attach.
         '';
       };

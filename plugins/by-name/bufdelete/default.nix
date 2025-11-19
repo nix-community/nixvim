@@ -1,5 +1,4 @@
 {
-  helpers,
   lib,
   ...
 }:
@@ -52,7 +51,7 @@ lib.nixvim.plugins.mkVimPlugin {
   '';
 
   settingsOptions = {
-    buf_filter = helpers.defaultNullOpts.mkLuaFn null ''
+    buf_filter = lib.nixvim.defaultNullOpts.mkLuaFn null ''
       Function that determines buffers that bufdelete.nvim can switch to,
       instead of the default behavior of switching to any buffer.
 

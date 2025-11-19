@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -69,33 +68,33 @@ lib.nixvim.plugins.mkNeovimPlugin {
           freeformType = with types; attrsOf anything;
 
           options = {
-            icon = helpers.defaultNullOpts.mkStr "" ''
+            icon = lib.nixvim.defaultNullOpts.mkStr "" ''
               The icon to display with this action.
             '';
 
-            icon_hl = helpers.defaultNullOpts.mkStr "DashboardIcon" ''
+            icon_hl = lib.nixvim.defaultNullOpts.mkStr "DashboardIcon" ''
               The highlight group for the icon.
             '';
 
-            desc = helpers.defaultNullOpts.mkStr "" ''
+            desc = lib.nixvim.defaultNullOpts.mkStr "" ''
               The action's description, shown next to the icon.
             '';
 
-            desc_hl = helpers.defaultNullOpts.mkStr "DashboardDesc" ''
+            desc_hl = lib.nixvim.defaultNullOpts.mkStr "DashboardDesc" ''
               The highlight group to use for the description.
             '';
 
-            key = helpers.defaultNullOpts.mkStr "" ''
+            key = lib.nixvim.defaultNullOpts.mkStr "" ''
               Shortcut key available in the dashboard buffer.
 
               **Note**: this will not create an actual keymap.
             '';
 
-            key_hl = helpers.defaultNullOpts.mkStr "DashboardKey" ''
+            key_hl = lib.nixvim.defaultNullOpts.mkStr "DashboardKey" ''
               The highlight group to use for the key.
             '';
 
-            action = helpers.defaultNullOpts.mkStr "" ''
+            action = lib.nixvim.defaultNullOpts.mkStr "" ''
               Action done when you press key. Can be a command or a function.
 
               To use a lua function, pass a raw type instead of a string, e.g:
@@ -116,7 +115,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     in
     {
       theme =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        lib.nixvim.defaultNullOpts.mkEnumFirstDefault
           [
             "hyper"
             "doom"
@@ -131,7 +130,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           '';
 
       shortcut_type =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        lib.nixvim.defaultNullOpts.mkEnumFirstDefault
           [
             "letter"
             "number"
@@ -140,13 +139,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
             The shortcut type.
           '';
 
-      change_to_vcs_root = helpers.defaultNullOpts.mkBool false ''
+      change_to_vcs_root = lib.nixvim.defaultNullOpts.mkBool false ''
         When opening a file in the "hyper" theme's "recent files" list (`mru`), vim will change to the root of vcs.
       '';
 
       config = {
         # TODO double check if this affects "doom" or not
-        disable_move = helpers.defaultNullOpts.mkBool false ''
+        disable_move = lib.nixvim.defaultNullOpts.mkBool false ''
           Disable movement keymaps in the dashboard buffer.
 
           Specifically, the following keymaps are disabled:
@@ -154,31 +153,31 @@ lib.nixvim.plugins.mkNeovimPlugin {
           `w`, `f`, `b`, `h`, `j`, `k`, `l`, `<Up>`, `<Down>`, `<Left>`, `<Right>`
         '';
 
-        packages.enable = helpers.defaultNullOpts.mkBool true ''
+        packages.enable = lib.nixvim.defaultNullOpts.mkBool true ''
           Show how many vim plugins are loaded.
 
           ${requiresTheme "hyper"}
         '';
 
         week_header = {
-          enable = helpers.defaultNullOpts.mkBool false ''
+          enable = lib.nixvim.defaultNullOpts.mkBool false ''
             Whether to use a header based on the current day of the week,
             instead of the default "DASHBOARD" header.
 
             A subheading showing the current time is also displayed.
           '';
 
-          concat = helpers.defaultNullOpts.mkStr "" ''
+          concat = lib.nixvim.defaultNullOpts.mkStr "" ''
             Additional text to append at the end of the time line.
           '';
 
-          append = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+          append = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
             Additional header lines to append after the the time line.
           '';
         };
 
         header =
-          helpers.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf (maybeRaw str)))
+          lib.nixvim.defaultNullOpts.mkNullableWithRaw (with types; either str (listOf (maybeRaw str)))
             [
               ""
               " ██████╗  █████╗ ███████╗██╗  ██╗██████╗  ██████╗  █████╗ ██████╗ ██████╗  "
@@ -193,12 +192,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
               The header text, displayed at the top of the buffer.
             '';
 
-        footer = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+        footer = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
           The footer text, displayed at the bottom of the buffer.
         '';
 
         # TODO: Once #1618 is fixed, we can switch to `defaultNullOpts.mkAttrs'`,
-        shortcut = helpers.mkNullOrOption' {
+        shortcut = lib.nixvim.mkNullOrOption' {
           description = ''
             Shortcut actions to be added to the "hyper" theme.
 
@@ -229,14 +228,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ];
 
           type = types.listOf (mkActionType {
-            group = helpers.defaultNullOpts.mkStr "" ''
+            group = lib.nixvim.defaultNullOpts.mkStr "" ''
               Highlight group used with the "hyper" theme,
             '';
           });
         };
 
         # TODO: Once #1618 is fixed, we can switch to `defaultNullOpts.mkAttrs'`,
-        center = helpers.mkNullOrOption' {
+        center = lib.nixvim.mkNullOrOption' {
           description = ''
             Actions to be added to the center section of the "doom" theme.
 
@@ -268,7 +267,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           type = types.listOf (mkActionType {
             # TODO if `key_format` is _also_ applicable to hyper theme,
             # move the option to `mkActionList`.
-            key_format = helpers.defaultNullOpts.mkStr "[%s]" ''
+            key_format = lib.nixvim.defaultNullOpts.mkStr "[%s]" ''
               Format string used when rendering the key.
               `%s` will be substituted with value of `key`.
             '';
@@ -276,96 +275,96 @@ lib.nixvim.plugins.mkNeovimPlugin {
         };
 
         project =
-          helpers.mkCompositeOption
+          lib.nixvim.mkCompositeOption
             ''
               Options relating to the "hyper" theme's recent projects list.
 
               ${requiresTheme "hyper"}
             ''
             {
-              enable = helpers.defaultNullOpts.mkBool true ''
+              enable = lib.nixvim.defaultNullOpts.mkBool true ''
                 Whether to display the recent projects list.
               '';
 
-              limit = helpers.defaultNullOpts.mkInt 8 ''
+              limit = lib.nixvim.defaultNullOpts.mkInt 8 ''
                 The maximum number of projects to list.
               '';
 
-              icon = helpers.defaultNullOpts.mkStr "󰏓 " ''
+              icon = lib.nixvim.defaultNullOpts.mkStr "󰏓 " ''
                 Icon used in the section header.
               '';
 
-              icon_hl = helpers.defaultNullOpts.mkStr "DashboardRecentProjectIcon" ''
+              icon_hl = lib.nixvim.defaultNullOpts.mkStr "DashboardRecentProjectIcon" ''
                 Highlight group used for the icon.
               '';
 
-              label = helpers.defaultNullOpts.mkStr " Recent Projects:" ''
+              label = lib.nixvim.defaultNullOpts.mkStr " Recent Projects:" ''
                 Text used in the section header.
               '';
 
-              action = helpers.defaultNullOpts.mkStr "Telescope find_files cwd=" ''
+              action = lib.nixvim.defaultNullOpts.mkStr "Telescope find_files cwd=" ''
                 When you press key or enter it will run this action
               '';
             };
 
         mru =
-          helpers.mkCompositeOption
+          lib.nixvim.mkCompositeOption
             ''
               Options relating to the "hyper" theme's recent files list.
 
               ${requiresTheme "hyper"}
             ''
             {
-              enable = helpers.defaultNullOpts.mkBool true ''
+              enable = lib.nixvim.defaultNullOpts.mkBool true ''
                 Whether to display the recent file list.
               '';
 
-              limit = helpers.defaultNullOpts.mkInt 10 ''
+              limit = lib.nixvim.defaultNullOpts.mkInt 10 ''
                 The maximum number of files to list.
               '';
 
-              icon = helpers.defaultNullOpts.mkStr " " ''
+              icon = lib.nixvim.defaultNullOpts.mkStr " " ''
                 Icon used in the section header.
               '';
 
-              icon_hl = helpers.defaultNullOpts.mkStr "DashboardMruIcon" ''
+              icon_hl = lib.nixvim.defaultNullOpts.mkStr "DashboardMruIcon" ''
                 Highlight group used for the icon.
               '';
 
-              label = helpers.defaultNullOpts.mkStr " Most Recent Files:" ''
+              label = lib.nixvim.defaultNullOpts.mkStr " Most Recent Files:" ''
                 Text used in the section header.
               '';
 
-              cwd_only = helpers.defaultNullOpts.mkBool false ''
+              cwd_only = lib.nixvim.defaultNullOpts.mkBool false ''
                 Whether to only include files from the current working directory.
               '';
             };
       };
 
       hide = {
-        statusline = helpers.defaultNullOpts.mkBool true ''
+        statusline = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether to hide the status line.
         '';
 
-        tabline = helpers.defaultNullOpts.mkBool true ''
+        tabline = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether to hide the status line.
         '';
       };
 
       preview = {
-        command = helpers.defaultNullOpts.mkStr "" ''
+        command = lib.nixvim.defaultNullOpts.mkStr "" ''
           Command to print file contents.
         '';
 
-        file_path = helpers.defaultNullOpts.mkStr null ''
+        file_path = lib.nixvim.defaultNullOpts.mkStr null ''
           Path to preview file.
         '';
 
-        file_height = helpers.defaultNullOpts.mkInt 0 ''
+        file_height = lib.nixvim.defaultNullOpts.mkInt 0 ''
           The height of the preview file.
         '';
 
-        file_width = helpers.defaultNullOpts.mkInt 0 ''
+        file_width = lib.nixvim.defaultNullOpts.mkInt 0 ''
           The width of the preview file.
         '';
       };

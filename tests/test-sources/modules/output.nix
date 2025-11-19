@@ -79,7 +79,7 @@
     };
 
   files-default-empty =
-    { config, helpers, ... }:
+    { config, lib, ... }:
     {
       files = {
         # lua type
@@ -90,11 +90,11 @@
 
       assertions = [
         {
-          assertion = !helpers.hasContent config.files."test.lua".content;
+          assertion = !lib.nixvim.hasContent config.files."test.lua".content;
           message = "Default content of test.lua file is expected to be empty.";
         }
         {
-          assertion = !helpers.hasContent config.files."test.vim".content;
+          assertion = !lib.nixvim.hasContent config.files."test.vim".content;
           message = "Default content of test.vim file is expected to be empty.";
         }
       ];

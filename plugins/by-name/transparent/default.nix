@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -13,7 +12,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     groups =
-      helpers.defaultNullOpts.mkListOf types.str
+      lib.nixvim.defaultNullOpts.mkListOf types.str
         [
           "Normal"
           "NormalNC"
@@ -45,11 +44,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
           The list of transparent groups.
         '';
 
-    extra_groups = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    extra_groups = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
       Additional groups that should be cleared.
     '';
 
-    exclude_groups = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    exclude_groups = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
       Groups that you don't want to clear.
     '';
   };

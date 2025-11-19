@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 let
@@ -45,7 +44,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
   settingsOptions = {
     delimit_cells_by =
-      helpers.defaultNullOpts.mkEnumFirstDefault
+      lib.nixvim.defaultNullOpts.mkEnumFirstDefault
         [
           "marks"
           "tags"
@@ -54,7 +53,7 @@ lib.nixvim.plugins.mkVimPlugin {
           Specifies if cells are delimited by 'marks' or 'tags'.
         '';
 
-    tag = helpers.defaultNullOpts.mkStr "##" "Specifies the tag format.";
+    tag = lib.nixvim.defaultNullOpts.mkStr "##" "Specifies the tag format.";
   };
 
   extraOptions = {
@@ -65,7 +64,9 @@ lib.nixvim.plugins.mkVimPlugin {
         default = false;
       };
     }
-    // (mapAttrs (name: value: helpers.mkNullOrOption types.str "Keymap for ${value.desc}.") mappings);
+    // (mapAttrs (
+      name: value: lib.nixvim.mkNullOrOption types.str "Keymap for ${value.desc}."
+    ) mappings);
   };
 
   extraConfig = cfg: {

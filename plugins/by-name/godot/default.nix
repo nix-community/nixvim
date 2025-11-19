@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -23,7 +22,7 @@ lib.nixvim.plugins.mkVimPlugin {
   ];
 
   settingsOptions = {
-    executable = helpers.defaultNullOpts.mkStr "godot" ''
+    executable = lib.nixvim.defaultNullOpts.mkStr "godot" ''
       Path to the `godot` executable.
     '';
   };

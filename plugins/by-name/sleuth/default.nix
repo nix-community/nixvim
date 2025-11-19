@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 lib.nixvim.plugins.mkVimPlugin {
@@ -12,7 +11,7 @@ lib.nixvim.plugins.mkVimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    heuristics = helpers.defaultNullOpts.mkFlagInt 1 ''
+    heuristics = lib.nixvim.defaultNullOpts.mkFlagInt 1 ''
       Whether to enable/disable heuristics by default.
 
       You can also disable heuristics for individual filetypes:
@@ -24,7 +23,7 @@ lib.nixvim.plugins.mkVimPlugin {
       ```
     '';
 
-    no_filetype_indent_on = helpers.defaultNullOpts.mkFlagInt 0 ''
+    no_filetype_indent_on = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''
       Sleuth forces `|:filetype-indent-on|` by default, which enables file-type specific indenting
       algorithms and is highly recommended.
     '';
