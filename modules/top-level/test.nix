@@ -331,9 +331,9 @@ in
             # Allow inspecting the test's module a little from the repl
             # e.g.
             # :lf .
-            # :p checks.x86_64-linux.test-1.passthru.entries.modules-autocmd.passthru.entries.example.passthru.config.extraConfigLua
+            # :p checks.x86_64-linux.tests.entries.modules-autocmd.entries.example.config.extraConfigLua
             #
-            # Yes, three levels of passthru is cursed.
+            # Yes, three levels of `entries` is cursed.
             passthru = {
               inherit config options;
             };
