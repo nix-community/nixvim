@@ -9,14 +9,10 @@
   # NOTE: `defaultSystem` is the only reason this function can't go in `<nixvim>.lib`
   system ? defaultSystem,
   extraSpecialArgs ? { },
-  _nixvimTests ? false,
   module,
 }:
 let
   # NOTE: we are importing this just for evalNixvim
-  helpers = self.lib.nixvim.override { inherit _nixvimTests; };
-  inherit (helpers.modules) evalNixvim;
-
   systemMod =
     if pkgs == null then
       {
@@ -33,7 +29,7 @@ let
     mod:
     let
       modules = lib.toList mod;
-      nixvimConfig = evalNixvim {
+      nixvimConfig = self.lib.evalNixvim {
         modules = modules ++ [
           systemMod
         ];

@@ -2,7 +2,6 @@
   lib,
   flake,
   _isExtended ? false,
-  _nixvimTests ? false,
 }:
 lib.makeExtensible (
   self:
@@ -25,7 +24,7 @@ lib.makeExtensible (
     modules = call ./modules.nix { inherit flake; };
     options = call ./options.nix { };
     plugins = call ./plugins { };
-    utils = call ./utils.nix { inherit _nixvimTests; } // call ./utils.internal.nix { };
+    utils = call ./utils.nix { } // call ./utils.internal.nix { };
 
     # Top-level helper aliases:
     # TODO: deprecate some aliases

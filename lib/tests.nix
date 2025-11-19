@@ -15,7 +15,6 @@ let
       ...
     }:
     let
-      # FIXME: this doesn't support helpers.enableExceptInTests, a context option would be better
       result = nvim.extend {
         config.test = {
           inherit name;
@@ -35,20 +34,13 @@ let
       extraSpecialArgs ? { },
     }:
     let
-      # NOTE: we are importing this just for evalNixvim
-      helpers = self.lib.nixvim.override {
-        # TODO: deprecate helpers.enableExceptInTests,
-        # add a context option e.g. `config.isTest`?
-        _nixvimTests = true;
-      };
-
       systemMod =
         if pkgs == null then
           { nixpkgs.hostPlatform = lib.mkDefault { inherit system; }; }
         else
           { nixpkgs.pkgs = lib.mkDefault pkgs; };
 
-      result = helpers.modules.evalNixvim {
+      result = self.lib.evalNixvim {
         modules = [
           module
           (lib.optionalAttrs (name != null) { test.name = name; })

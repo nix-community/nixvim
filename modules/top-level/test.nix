@@ -3,6 +3,8 @@
   config,
   options,
   lib,
+  helpers,
+  extendModules,
   ...
 }:
 let
@@ -263,9 +265,36 @@ in
 
   config =
     let
+      # Reevaluate the nixvim configuration in "test mode"
+      # This allows users to use `lib.nixvim.enableExceptInTests`
+      testConfiguration =
+        let
+          # TODO: replace and deprecate enableExceptInTests
+          # We shouldn't need to use another instance of `lib` when building a test drv
+          # Maybe add a context option e.g. `config.isTest`?
+          nixvimLibOverlay = final: prev: {
+            utils = prev.utils // {
+              enableExceptInTests = false;
+            };
+          };
+          extendedConfiguration = extendModules {
+            specialArgs = {
+              lib = lib.extend (
+                final: prev: {
+                  nixvim = prev.nixvim.extend nixvimLibOverlay;
+                }
+              );
+              helpers = helpers.extend nixvimLibOverlay;
+            };
+          };
+        in
+        if lib.nixvim.enableExceptInTests then extendedConfiguration else { inherit config options; };
+
       input = {
-        inherit (config) warnings;
-        assertions = builtins.concatMap (x: lib.optional (!x.assertion) x.message) config.assertions;
+        inherit (testConfiguration.config) warnings;
+        assertions = builtins.concatMap (
+          x: lib.optional (!x.assertion) x.message
+        ) testConfiguration.config.assertions;
       };
 
       expectationMessages =
@@ -323,7 +352,7 @@ in
             nativeBuildInputs =
               cfg.extraInputs
               ++ lib.optionals cfg.buildNixvim [
-                config.build.nvimPackage
+                testConfiguration.config.build.nvimPackage
               ];
 
             inherit (failedExpectations) warnings assertions;
@@ -335,7 +364,8 @@ in
             #
             # Yes, three levels of `entries` is cursed.
             passthru = {
-              inherit config options;
+              inherit (testConfiguration) config options;
+              configuration = testConfiguration;
             };
           }
           (

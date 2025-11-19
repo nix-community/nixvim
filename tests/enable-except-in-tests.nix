@@ -15,9 +15,8 @@ let
       {
         assertions = [
           {
-            # FIXME: should be false
-            assertion = lib.nixvim.enableExceptInTests;
-            message = "Expected lib.nixvim.enableExceptInTests to be true";
+            assertion = !lib.nixvim.enableExceptInTests;
+            message = "Expected lib.nixvim.enableExceptInTests to be false";
           }
           {
             # NOTE: evaluating `helpers` here prints an eval warning
