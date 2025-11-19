@@ -48,8 +48,12 @@ in
         # however see https://github.com/nix-community/nixvim/issues/2879
         inherit lib;
         modulesPath = ../modules;
-        # TODO: deprecate `helpers`
-        helpers = self;
+        # TODO: deprecated 2025-11-19
+        helpers = lib.warn ''
+          nixvim: the `helpers` module arg has been renamed to `lib.nixvim`.
+          Nixvim modules can access this via the `lib` module arg.
+          For wrapper modules (e.g. NixOS or Home Manager modules), see:
+          https://nix-community.github.io/nixvim/lib/nixvim/index.html#accessing-nixvims-functions'' self;
       }
       // extraSpecialArgs;
     };
