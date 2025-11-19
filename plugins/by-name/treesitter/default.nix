@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   options,
   ...
@@ -208,13 +207,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   }) buildGrammarDeps;
 
   settingsOptions = {
-    auto_install = helpers.defaultNullOpts.mkBool false ''
+    auto_install = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to automatically install missing parsers when entering a buffer.
     '';
 
     highlight = {
       additional_vim_regex_highlighting =
-        helpers.defaultNullOpts.mkNullableWithRaw (with lib.types; either bool (listOf (maybeRaw str)))
+        lib.nixvim.defaultNullOpts.mkNullableWithRaw (with lib.types; either bool (listOf (maybeRaw str)))
           false
           ''
             Setting this to true will run `syntax` and tree-sitter at the same time. \
@@ -225,22 +224,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
             Instead of true, it can also be a list of languages.
           '';
 
-      enable = helpers.defaultNullOpts.mkBool false ''
+      enable = lib.nixvim.defaultNullOpts.mkBool false ''
         Whether to enable treesitter highlighting.
       '';
 
-      disable = helpers.defaultNullOpts.mkStrLuaFnOr (with lib.types; listOf (maybeRaw str)) null ''
+      disable = lib.nixvim.defaultNullOpts.mkStrLuaFnOr (with lib.types; listOf (maybeRaw str)) null ''
         Can either be a list of the names of parsers you wish to disable or
         a lua function that returns a boolean indicating the parser should be disabled.
       '';
 
-      custom_captures = helpers.defaultNullOpts.mkAttrsOf types.str { } ''
+      custom_captures = lib.nixvim.defaultNullOpts.mkAttrsOf types.str { } ''
         Custom capture group highlighting.
       '';
     };
 
     incremental_selection = {
-      enable = helpers.defaultNullOpts.mkBool false ''
+      enable = lib.nixvim.defaultNullOpts.mkBool false ''
         Incremental selection based on the named nodes from the grammar.
       '';
 
@@ -248,7 +247,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         let
           mkKeymap =
             default:
-            helpers.defaultNullOpts.mkNullableWithRaw (
+            lib.nixvim.defaultNullOpts.mkNullableWithRaw (
               with types; either str bool
             ) default "Key shortcut or false to unset.";
         in
@@ -261,12 +260,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     indent = {
-      enable = helpers.defaultNullOpts.mkBool false ''
+      enable = lib.nixvim.defaultNullOpts.mkBool false ''
         Whether to enable treesitter indentation.
       '';
     };
 
-    ensure_installed = helpers.defaultNullOpts.mkNullable' {
+    ensure_installed = lib.nixvim.defaultNullOpts.mkNullable' {
       type =
         with lib.types;
         oneOf [
@@ -280,11 +279,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    ignore_install = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+    ignore_install = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
       List of parsers to ignore installing. Used when `ensure_installed` is set to `"all"`.
     '';
 
-    parser_install_dir = helpers.mkNullOrOption' {
+    parser_install_dir = lib.nixvim.mkNullOrOption' {
       type = with lib.types; maybeRaw str;
       # Backport the default from nvim-treesitter 1.0
       # The current default doesn't work on nix, as it is readonly
@@ -298,7 +297,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    sync_install = helpers.defaultNullOpts.mkBool false ''
+    sync_install = lib.nixvim.defaultNullOpts.mkBool false ''
       Install parsers synchronously (only applied to `ensure_installed`).
     '';
   };

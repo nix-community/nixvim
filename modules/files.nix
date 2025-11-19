@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   pkgs,
   config,
   ...
@@ -92,7 +91,7 @@ let
 
   # TODO: Added 2024-07-07, remove after 24.11
   # Before we had a fileType, we used types.str.
-  coercedFileType = helpers.transitionType lib.types.str (text: { inherit text; }) fileType;
+  coercedFileType = lib.nixvim.transitionType lib.types.str (text: { inherit text; }) fileType;
 in
 {
   options = {

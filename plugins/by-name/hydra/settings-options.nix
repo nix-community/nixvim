@@ -5,19 +5,19 @@
 # - for `plugins.hydra.hydras.[].config`
 #
 # -> https://github.com/nvimtools/hydra.nvim?tab=readme-ov-file#config
-{ helpers, lib, ... }:
+{ lib, ... }:
 with lib;
 {
-  debug = helpers.defaultNullOpts.mkBool false ''
+  debug = lib.nixvim.defaultNullOpts.mkBool false ''
     Whether to enable debug mode.
   '';
 
-  exit = helpers.defaultNullOpts.mkBool false ''
+  exit = lib.nixvim.defaultNullOpts.mkBool false ''
     Set the default exit value for each head in the hydra.
   '';
 
   foreign_keys =
-    helpers.defaultNullOpts.mkEnum
+    lib.nixvim.defaultNullOpts.mkEnum
       [
         "warn"
         "run"
@@ -30,38 +30,38 @@ with lib;
         - `"run"`: hydra stays active, runs the foreign key
       '';
 
-  color = helpers.defaultNullOpts.mkStr "red" ''
+  color = lib.nixvim.defaultNullOpts.mkStr "red" ''
     See `:h hydra-colors`.
     `"red" | "amaranth" | "teal" | "pink"`
   '';
 
-  buffer = helpers.defaultNullOpts.mkNullable (
+  buffer = lib.nixvim.defaultNullOpts.mkNullable (
     with types; either (enum [ true ]) ints.unsigned
   ) null "Define a hydra for the given buffer, pass `true` for current buf.";
 
-  invoke_on_body = helpers.defaultNullOpts.mkBool false ''
+  invoke_on_body = lib.nixvim.defaultNullOpts.mkBool false ''
     When true, summon the hydra after pressing only the `body` keys.
     Normally a head is required.
   '';
 
-  desc = helpers.defaultNullOpts.mkStr null ''
+  desc = lib.nixvim.defaultNullOpts.mkStr null ''
     Description used for the body keymap when `invoke_on_body` is true.
     When nil, "[Hydra] .. name" is used.
   '';
 
-  on_enter = helpers.mkNullOrLuaFn ''
+  on_enter = lib.nixvim.mkNullOrLuaFn ''
     Called when the hydra is activated.
   '';
 
-  on_exit = helpers.mkNullOrLuaFn ''
+  on_exit = lib.nixvim.mkNullOrLuaFn ''
     Called before the hydra is deactivated.
   '';
 
-  on_key = helpers.mkNullOrLuaFn ''
+  on_key = lib.nixvim.mkNullOrLuaFn ''
     Called after every hydra head.
   '';
 
-  timeout = helpers.defaultNullOpts.mkNullable (with types; either bool ints.unsigned) false ''
+  timeout = lib.nixvim.defaultNullOpts.mkNullable (with types; either bool ints.unsigned) false ''
     Timeout after which the hydra is automatically disabled.
     Calling any head will refresh the timeout
     - `true`: timeout set to value of `timeoutlen` (`:h timeoutlen`)
@@ -76,7 +76,7 @@ with lib;
         freeformType = with types; attrsOf anything;
         options = {
           type =
-            helpers.mkNullOrOption
+            lib.nixvim.mkNullOrOption
               (types.enum [
                 "window"
                 "cmdline"
@@ -93,7 +93,7 @@ with lib;
                 Defaults to "window" if `hint` is passed to the hydra otherwise defaults to "cmdline".
               '';
 
-          position = helpers.defaultNullOpts.mkEnum [
+          position = lib.nixvim.defaultNullOpts.mkEnum [
             "top-left"
             "top"
             "top-right"
@@ -105,23 +105,23 @@ with lib;
             "bottom-right"
           ] "bottom" "Set the position of the hint window.";
 
-          offset = helpers.defaultNullOpts.mkInt 0 ''
+          offset = lib.nixvim.defaultNullOpts.mkInt 0 ''
             Offset of the floating window from the nearest editor border.
           '';
 
-          float_opts = helpers.mkNullOrOption (with types; attrsOf anything) ''
+          float_opts = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
             Options passed to `nvim_open_win()`. See `:h nvim_open_win()`.
             Lets you set `border`, `header`, `footer`, etc.
 
             Note: `row`, `col`, `height`, `width`, `relative`, and `anchor` should not be overridden.
           '';
 
-          show_name = helpers.defaultNullOpts.mkBool true ''
+          show_name = lib.nixvim.defaultNullOpts.mkBool true ''
             Show the hydras name (or "HYDRA:" if not given a name), at the beginning of an
             auto-generated hint.
           '';
 
-          hide_on_load = helpers.defaultNullOpts.mkBool false ''
+          hide_on_load = lib.nixvim.defaultNullOpts.mkBool false ''
             If set to true, this will prevent the hydra's hint window from displaying immediately.
 
             Note: you can still show the window manually by calling `Hydra.hint:show()` and manually
@@ -160,7 +160,7 @@ with lib;
         };
       };
     in
-    helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) hintConfigType)
+    lib.nixvim.defaultNullOpts.mkNullable (with types; either (enum [ false ]) hintConfigType)
       {
         show_name = true;
         position = "bottom";

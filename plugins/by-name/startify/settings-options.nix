@@ -1,7 +1,7 @@
-{ lib, helpers }:
+{ lib }:
 with lib;
 {
-  session_dir = helpers.defaultNullOpts.mkStr "~/.vim/session" ''
+  session_dir = lib.nixvim.defaultNullOpts.mkStr "~/.vim/session" ''
     The directory to save/load sessions to/from.
   '';
 
@@ -18,12 +18,12 @@ with lib;
               example = "files";
             };
 
-            header = helpers.mkNullOrOption (with lib.types; listOf (maybeRaw str)) ''
+            header = lib.nixvim.mkNullOrOption (with lib.types; listOf (maybeRaw str)) ''
               The 'header' is a list of strings, whereas each string will be put on its own
               line in the header.
             '';
 
-            indices = helpers.mkNullOrOption (with lib.types; listOf (maybeRaw str)) ''
+            indices = lib.nixvim.mkNullOrOption (with lib.types; listOf (maybeRaw str)) ''
               The 'indices' is a list of strings, which act as indices for the current list.
               Opposed to the global `custom_indices`, this is limited to the current list.
             '';
@@ -64,7 +64,7 @@ with lib;
   };
 
   bookmarks =
-    helpers.defaultNullOpts.mkListOf
+    lib.nixvim.defaultNullOpts.mkListOf
       (
         with lib.types;
         oneOf [
@@ -81,7 +81,7 @@ with lib;
       '';
 
   commands =
-    helpers.defaultNullOpts.mkListOf
+    lib.nixvim.defaultNullOpts.mkListOf
       (
         with types;
         oneOf [
@@ -107,16 +107,16 @@ with lib;
         ```
       '';
 
-  files_number = helpers.defaultNullOpts.mkUnsignedInt 10 ''
+  files_number = lib.nixvim.defaultNullOpts.mkUnsignedInt 10 ''
     The number of files to list.
   '';
 
-  update_oldfiles = helpers.defaultNullOpts.mkBool false ''
+  update_oldfiles = lib.nixvim.defaultNullOpts.mkBool false ''
     Usually `|v:oldfiles|` only gets updated when Vim exits.
     Using this option updates it on-the-fly, so that `:Startify` is always up-to-date.
   '';
 
-  session_autoload = helpers.defaultNullOpts.mkBool false ''
+  session_autoload = lib.nixvim.defaultNullOpts.mkBool false ''
     If this option is enabled and you start Vim in a directory that contains a `Session.vim`,
     that session will be loaded automatically.
     Otherwise it will be shown as the top entry in the Startify buffer.
@@ -131,19 +131,19 @@ with lib;
     NOTE: This option is affected by `session_delete_buffers`.
   '';
 
-  session_before_save = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+  session_before_save = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
     This is a list of commands to be executed before saving a session.
 
     Example: `["silent! tabdo NERDTreeClose"]`
   '';
 
-  session_persistence = helpers.defaultNullOpts.mkBool false ''
+  session_persistence = lib.nixvim.defaultNullOpts.mkBool false ''
     Automatically update sessions in two cases:
     - Before leaving Vim
     - Before loading a new session via `:SLoad`
   '';
 
-  session_delete_buffers = helpers.defaultNullOpts.mkBool true ''
+  session_delete_buffers = lib.nixvim.defaultNullOpts.mkBool true ''
     Delete all buffers when loading or closing a session:
     - When using `|startify-:SLoad|`.
     - When using `|startify-:SClose|`.
@@ -153,7 +153,7 @@ with lib;
     NOTE: Buffers with unsaved changes are silently ignored.
   '';
 
-  change_to_dir = helpers.defaultNullOpts.mkBool true ''
+  change_to_dir = lib.nixvim.defaultNullOpts.mkBool true ''
     When opening a file or bookmark, change to its directory.
 
     You want to disable this, if you're using `|'autochdir'|` as well.
@@ -162,14 +162,14 @@ with lib;
     introduced.
   '';
 
-  change_to_vcs_root = helpers.defaultNullOpts.mkBool false ''
+  change_to_vcs_root = lib.nixvim.defaultNullOpts.mkBool false ''
     When opening a file or bookmark, seek and change to the root directory of the VCS (if there is
     one).
 
     At the moment only git, hg, bzr and svn are supported.
   '';
 
-  change_cmd = helpers.defaultNullOpts.mkStr "lcd" ''
+  change_cmd = lib.nixvim.defaultNullOpts.mkStr "lcd" ''
     The default command for switching directories.
 
     Valid values:
@@ -180,7 +180,7 @@ with lib;
     Affects `change_to_dir` and `change_to_vcs_root`.
   '';
 
-  skiplist = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+  skiplist = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
     A list of Vim regular expressions that is used to filter recently used files.
     See `|pattern.txt|` for what patterns can be used.
 
@@ -210,7 +210,7 @@ with lib;
     ```
   '';
 
-  fortune_use_unicode = helpers.defaultNullOpts.mkBool false ''
+  fortune_use_unicode = lib.nixvim.defaultNullOpts.mkBool false ''
     By default, the fortune header uses ASCII characters, because they work for everyone.
     If you set this option to `true` and your 'encoding' is "utf-8", Unicode box-drawing characters
     will be used instead.
@@ -222,22 +222,22 @@ with lib;
     For more information: http://unicode.org/reports/tr11
   '';
 
-  padding_left = helpers.defaultNullOpts.mkUnsignedInt 3 ''
+  padding_left = lib.nixvim.defaultNullOpts.mkUnsignedInt 3 ''
     The number of spaces used for left padding.
   '';
 
-  skiplist_server = helpers.defaultNullOpts.mkListOf (with lib.types; maybeRaw str) [ ] ''
+  skiplist_server = lib.nixvim.defaultNullOpts.mkListOf (with lib.types; maybeRaw str) [ ] ''
     Do not create the startify buffer, if this is a Vim server instance with a name contained in
     this list.
 
     Example: `["GVIM"]`
   '';
 
-  enable_special = helpers.defaultNullOpts.mkBool true ''
+  enable_special = lib.nixvim.defaultNullOpts.mkBool true ''
     Show `<empty buffer>` and `<quit>`.
   '';
 
-  enable_unsafe = helpers.defaultNullOpts.mkBool false ''
+  enable_unsafe = lib.nixvim.defaultNullOpts.mkBool false ''
     Enable the option only in case you think Vim starts too slowly (because of `:Startify`) or if
     you often edit files on remote filesystems.
 
@@ -254,7 +254,7 @@ with lib;
     - don't filter through the bookmark list
   '';
 
-  session_remove_lines = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+  session_remove_lines = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
     Lines matching any of the patterns in this list, will be removed from the session file.
 
     Example:
@@ -271,7 +271,7 @@ with lib;
     probably get problems when trying to load it.
   '';
 
-  session_savevars = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+  session_savevars = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
     Include a list of variables in here which you would like Startify to save into the session file
     in addition to what Vim normally saves into the session file.
 
@@ -285,7 +285,7 @@ with lib;
     ```
   '';
 
-  session_savecmds = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+  session_savecmds = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
     Include a list of cmdline commands which Vim will run upon loading the session.
 
     Example:
@@ -296,17 +296,17 @@ with lib;
     ```
   '';
 
-  session_number = helpers.defaultNullOpts.mkUnsignedInt 999 ''
+  session_number = lib.nixvim.defaultNullOpts.mkUnsignedInt 999 ''
     The maximum number of sessions to display.
     Makes the most sense together with `session_sort`.
   '';
 
-  session_sort = helpers.defaultNullOpts.mkBool false ''
+  session_sort = lib.nixvim.defaultNullOpts.mkBool false ''
     Sort sessions by modification time (when the session files were written) rather than
     alphabetically.
   '';
 
-  custom_indices = helpers.defaultNullOpts.mkListOf' {
+  custom_indices = lib.nixvim.defaultNullOpts.mkListOf' {
     type = types.str;
     pluginDefault = [ ];
     description = ''
@@ -324,7 +324,7 @@ with lib;
     ];
   };
 
-  custom_header = helpers.defaultNullOpts.mkListOf' {
+  custom_header = lib.nixvim.defaultNullOpts.mkListOf' {
     type = types.str;
     description = ''
       Define your own header.
@@ -343,7 +343,7 @@ with lib;
     ];
   };
 
-  custom_header_quotes = helpers.defaultNullOpts.mkListOf' {
+  custom_header_quotes = lib.nixvim.defaultNullOpts.mkListOf' {
     type = with types; listOf str;
     pluginDefault = [ ];
     description = ''
@@ -363,19 +363,19 @@ with lib;
     ];
   };
 
-  custom_footer = helpers.defaultNullOpts.mkListOf' {
+  custom_footer = lib.nixvim.defaultNullOpts.mkListOf' {
     type = types.str;
     description = ''
       Same as the custom header, but shown at the bottom of the startify buffer.
     '';
   };
 
-  disable_at_vimenter = helpers.defaultNullOpts.mkBool false ''
+  disable_at_vimenter = lib.nixvim.defaultNullOpts.mkBool false ''
     Don't run Startify at Vim startup.
     You can still call it anytime via `:Startify`.
   '';
 
-  relative_path = helpers.defaultNullOpts.mkBool false ''
+  relative_path = lib.nixvim.defaultNullOpts.mkBool false ''
     If the file is in or below the current working directory, use a relative path.
     Otherwise an absolute path is used.
     The latter prevents hard to grasp entries like `../../../../../foo`.
@@ -383,7 +383,7 @@ with lib;
     NOTE: This only applies to the "files" list, since the "dir" list is relative by nature.
   '';
 
-  use_env = helpers.defaultNullOpts.mkBool false ''
+  use_env = lib.nixvim.defaultNullOpts.mkBool false ''
     Show environment variables in path, if their name is shorter than their value.
     See `|startify-colors|` for highlighting them.
 

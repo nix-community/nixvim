@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -13,7 +12,7 @@ mkVimPlugin {
 
   maintainers = [ maintainers.GaetanLepage ];
 
-  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib; };
 
   # TODO
   settingsExample = {

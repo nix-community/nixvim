@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  helpers,
   ...
 }:
 let
@@ -236,8 +235,8 @@ in
         dontFixup = true;
       };
 
-      customRC = helpers.concatNonEmptyLines [
-        (helpers.wrapVimscriptForLua wrappedNeovim.initRc)
+      customRC = lib.nixvim.concatNonEmptyLines [
+        (lib.nixvim.wrapVimscriptForLua wrappedNeovim.initRc)
         config.content
       ];
 

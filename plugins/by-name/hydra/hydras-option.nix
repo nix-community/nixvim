@@ -1,23 +1,23 @@
-{ lib, helpers }:
+{ lib }:
 with lib;
 let
   hydraType = types.submodule {
     freeformType = with types; attrsOf anything;
     options = {
-      name = helpers.mkNullOrStr ''
+      name = lib.nixvim.mkNullOrStr ''
         Hydra's name.
         Only used in auto-generated hint.
       '';
 
-      mode = helpers.defaultNullOpts.mkNullable (
-        with lib.types; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
+      mode = lib.nixvim.defaultNullOpts.mkNullable (
+        with lib.types; either lib.nixvim.keymaps.modeEnum (listOf lib.nixvim.keymaps.modeEnum)
       ) "n" "Modes where the hydra exists, same as `vim.keymap.set()` accepts.";
 
-      body = helpers.mkNullOrStr ''
+      body = lib.nixvim.mkNullOrStr ''
         Key required to activate the hydra, when excluded, you can use `Hydra:activate()`.
       '';
 
-      hint = helpers.mkNullOrStr ''
+      hint = lib.nixvim.mkNullOrStr ''
         The hint for a hydra can let you know that it's active, and remind you of the
         hydra's heads.
         The string for the hint is passed directly to the hydra.
@@ -26,56 +26,56 @@ let
         for more information.
       '';
 
-      config = import ./settings-options.nix { inherit lib helpers; };
+      config = import ./settings-options.nix { inherit lib; };
 
       heads =
         let
           headsOptType = types.submodule {
             freeformType = with types; attrsOf anything;
             options = {
-              private = helpers.defaultNullOpts.mkBool false ''
+              private = lib.nixvim.defaultNullOpts.mkBool false ''
                 "When the hydra hides, this head does not stick out".
                 Private heads are unreachable outside of the hydra state.
               '';
 
-              exit = helpers.defaultNullOpts.mkBool false ''
+              exit = lib.nixvim.defaultNullOpts.mkBool false ''
                 When true, stops the hydra after executing this head.
                 NOTE:
                   - All exit heads are private
                   - If no exit head is specified, `esc` is set by default
               '';
 
-              exit_before = helpers.defaultNullOpts.mkBool false ''
+              exit_before = lib.nixvim.defaultNullOpts.mkBool false ''
                 Like `exit`, but stops the hydra BEFORE executing the command.
               '';
 
-              ok_key = helpers.defaultNullOpts.mkBool true ''
+              ok_key = lib.nixvim.defaultNullOpts.mkBool true ''
                 When set to `false`, `config.on_key` isn't run after this head.
               '';
 
-              desc = helpers.mkNullOrStr ''
+              desc = lib.nixvim.mkNullOrStr ''
                 Value shown in auto-generated hint.
                 When false, this key doesn't show up in the auto-generated hint.
               '';
 
-              expr = helpers.defaultNullOpts.mkBool false ''
+              expr = lib.nixvim.defaultNullOpts.mkBool false ''
                 Same as the builtin `expr` map option.
                 See `:h :map-expression`.
               '';
 
-              silent = helpers.defaultNullOpts.mkBool false ''
+              silent = lib.nixvim.defaultNullOpts.mkBool false ''
                 Same as the builtin `silent` map option.
                 See `:h :map-silent`.
               '';
 
-              nowait = helpers.defaultNullOpts.mkBool false ''
+              nowait = lib.nixvim.defaultNullOpts.mkBool false ''
                 For Pink Hydras only.
                 Allows binding a key which will immediately perform its action and not wait
                 `timeoutlen` for a possible continuation.
               '';
 
-              mode = helpers.mkNullOrOption (
-                with lib.types; either helpers.keymaps.modeEnum (listOf helpers.keymaps.modeEnum)
+              mode = lib.nixvim.mkNullOrOption (
+                with lib.types; either lib.nixvim.keymaps.modeEnum (listOf lib.nixvim.keymaps.modeEnum)
               ) "Override `mode` for this head.";
             };
           };
@@ -93,7 +93,7 @@ let
               )
             );
         in
-        helpers.mkNullOrOption (types.listOf headType) ''
+        lib.nixvim.mkNullOrOption (types.listOf headType) ''
           Each Hydra's head has the form:
           `[head rhs opts]
 

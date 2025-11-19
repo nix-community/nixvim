@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -30,7 +29,7 @@ lib.nixvim.plugins.mkVimPlugin {
               example = "!";
             };
 
-            mode = helpers.keymaps.mkModeOption "";
+            mode = lib.nixvim.keymaps.mkModeOption "";
 
             action = mkOption {
               type =
@@ -58,7 +57,7 @@ lib.nixvim.plugins.mkVimPlugin {
               example = "in_place";
             };
 
-            options = helpers.keymaps.mapConfigOptions;
+            options = lib.nixvim.keymaps.mapConfigOptions;
           };
         });
       default = [ ];
@@ -119,7 +118,7 @@ lib.nixvim.plugins.mkVimPlugin {
           isString keymap.action
         # One of the plugin builtin functions
         then
-          helpers.mkRaw "require('improved-search').${keymap.action}"
+          lib.nixvim.mkRaw "require('improved-search').${keymap.action}"
         # If the user specifies a raw action directly
         else
           keymap.action;

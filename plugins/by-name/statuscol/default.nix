@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -12,26 +11,26 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    setopt = helpers.defaultNullOpts.mkBool true ''
+    setopt = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to set the `statuscolumn` option, may be set to false for those who want to use the
       click handlers in their own `statuscolumn`: `_G.Sc[SFL]a()`.
       Although I recommend just using the segments field below to build your statuscolumn to
       benefit from the performance optimizations in this plugin.
     '';
 
-    thousands = helpers.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) false ''
+    thousands = lib.nixvim.defaultNullOpts.mkNullable (with types; either str (enum [ false ])) false ''
       `false` or line number thousands separator string ("." / ",").
     '';
 
-    relculright = helpers.defaultNullOpts.mkBool false ''
+    relculright = lib.nixvim.defaultNullOpts.mkBool false ''
       Whether to right-align the cursor line number with `relativenumber` set.
     '';
 
-    ft_ignore = helpers.defaultNullOpts.mkListOf types.str null ''
+    ft_ignore = lib.nixvim.defaultNullOpts.mkListOf types.str null ''
       Lua table with 'filetype' values for which `statuscolumn` will be unset.
     '';
 
-    bt_ignore = helpers.defaultNullOpts.mkListOf types.str null ''
+    bt_ignore = lib.nixvim.defaultNullOpts.mkListOf types.str null ''
       Lua table with 'buftype' values for which `statuscolumn` will be unset.
     '';
 
@@ -47,56 +46,56 @@ lib.nixvim.plugins.mkNeovimPlugin {
               example = [ "%C" ];
             };
 
-            click = helpers.mkNullOrStr ''
+            click = lib.nixvim.mkNullOrStr ''
               `%@` click function label, applies to each text element.
             '';
 
-            hl = helpers.mkNullOrStr ''
+            hl = lib.nixvim.mkNullOrStr ''
               `%#` highlight group label, applies to each text element.
             '';
 
-            condition = helpers.mkNullOrOption (
+            condition = lib.nixvim.mkNullOrOption (
               with lib.types; listOf (either bool rawLua)
             ) "Table of booleans or functions returning a boolean.";
 
             sign = {
-              name = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+              name = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
                 List of lua patterns to match the sign name against.
               '';
 
-              text = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+              text = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
                 List of lua patterns to match the extmark sign text against.
               '';
 
-              namespace = helpers.defaultNullOpts.mkListOf types.str [ ] ''
+              namespace = lib.nixvim.defaultNullOpts.mkListOf types.str [ ] ''
                 List of lua patterns to match the extmark sign namespace against.
               '';
 
-              maxwidth = helpers.defaultNullOpts.mkUnsignedInt 1 ''
+              maxwidth = lib.nixvim.defaultNullOpts.mkUnsignedInt 1 ''
                 Maximum number of signs that will be displayed in this segment
               '';
 
-              colwidth = helpers.defaultNullOpts.mkUnsignedInt 2 ''
+              colwidth = lib.nixvim.defaultNullOpts.mkUnsignedInt 2 ''
                 Maximum number of display cells per sign in this segment.
               '';
 
-              auto = helpers.defaultNullOpts.mkBool false ''
+              auto = lib.nixvim.defaultNullOpts.mkBool false ''
                 When true, the segment will not be drawn if no signs matching the pattern are
                 currently placed in the buffer.
               '';
 
-              fillchar = helpers.defaultNullOpts.mkStr " " ''
+              fillchar = lib.nixvim.defaultNullOpts.mkStr " " ''
                 Character used to fill a segment with less signs than maxwidth.
               '';
 
-              fillcharhl = helpers.mkNullOrStr ''
+              fillcharhl = lib.nixvim.mkNullOrStr ''
                 Highlight group used for fillchar (SignColumn/CursorLineSign if omitted).
               '';
             };
           };
         };
       in
-      helpers.defaultNullOpts.mkListOf segmentType [
+      lib.nixvim.defaultNullOpts.mkListOf segmentType [
         {
           text = [ "%C" ];
           click = "v:lua.ScFa";
@@ -118,7 +117,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         }
       ] "The statuscolumn can be customized through the `segments` option.";
 
-    clickmod = helpers.defaultNullOpts.mkStr "c" ''
+    clickmod = lib.nixvim.defaultNullOpts.mkStr "c" ''
       Modifier used for certain actions in the builtin clickhandlers:
       `a` for Alt, `c` for Ctrl and `m` for Meta.
     '';

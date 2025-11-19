@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -21,7 +20,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     })
   ];
 
-  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib; };
 
   settingsExample = {
     server = {

@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -28,7 +27,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         description = "Integrate with nvim-cmp";
       };
 
-      after = helpers.mkNullOrOption types.str "Function to run after calculating the formatting. function(entry, vim_item, kind)";
+      after = lib.nixvim.mkNullOrOption types.str "Function to run after calculating the formatting. function(entry, vim_item, kind)";
     };
   };
 

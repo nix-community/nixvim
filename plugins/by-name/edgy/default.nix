@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -23,43 +22,43 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsOptions =
     let
       viewOpts = {
-        ft = helpers.mkNullOrStr ''
+        ft = lib.nixvim.mkNullOrStr ''
           File type of the view.
         '';
 
-        filter = helpers.mkNullOrLuaFn ''
+        filter = lib.nixvim.mkNullOrLuaFn ''
           Optional function to filter buffers and windows.
 
           `fun(buf:buffer, win:window)`
         '';
 
-        title = helpers.mkNullOrStr ''
+        title = lib.nixvim.mkNullOrStr ''
           Optional title of the view.
           Defaults to the capitalized filetype.
         '';
 
-        size = helpers.mkNullOrOption types.ints.unsigned ''
+        size = lib.nixvim.mkNullOrOption types.ints.unsigned ''
           Size of the short edge of the edgebar.
           For edgebars, this is the minimum width.
           For panels, minimum height.
         '';
 
-        pinned = helpers.mkNullOrOption types.bool ''
+        pinned = lib.nixvim.mkNullOrOption types.bool ''
           If true, the view will always be shown in the edgebar even when it has no windows.
         '';
 
-        open = helpers.mkNullOrStr ''
+        open = lib.nixvim.mkNullOrStr ''
           Function or command to open a pinned view.
         '';
 
-        wo = helpers.mkNullOrOption (with types; attrsOf anything) ''
+        wo = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
           View-specific window options.
         '';
       };
 
       mkViewOptsOption =
         name:
-        helpers.defaultNullOpts.mkListOf (
+        lib.nixvim.defaultNullOpts.mkListOf (
           with types;
           either str (submodule {
             options = viewOpts;
@@ -75,13 +74,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
       options =
         mapAttrs
           (_: defaultSize: {
-            size = helpers.defaultNullOpts.mkUnsignedInt defaultSize ''
+            size = lib.nixvim.defaultNullOpts.mkUnsignedInt defaultSize ''
               Size of the short edge of the edgebar.
               For edgebars, this is the minimum width.
               For panels, minimum height.
             '';
 
-            wo = helpers.mkNullOrOption (with types; attrsOf anything) ''
+            wo = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
               View-specific window options.
             '';
           })
@@ -93,25 +92,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
           };
 
       animate = {
-        enabled = helpers.defaultNullOpts.mkBool true ''
+        enabled = lib.nixvim.defaultNullOpts.mkBool true ''
           Whether to enable animations.
         '';
 
-        fps = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+        fps = lib.nixvim.defaultNullOpts.mkUnsignedInt 100 ''
           Frames per second.
         '';
 
-        cps = helpers.defaultNullOpts.mkUnsignedInt 120 ''
+        cps = lib.nixvim.defaultNullOpts.mkUnsignedInt 120 ''
           Cells per second.
         '';
 
-        on_begin = helpers.defaultNullOpts.mkLuaFn ''
+        on_begin = lib.nixvim.defaultNullOpts.mkLuaFn ''
           function()
             vim.g.minianimate_disable = true
           end
         '' "Callback for the beginning of animations.";
 
-        on_end = helpers.defaultNullOpts.mkLuaFn ''
+        on_end = lib.nixvim.defaultNullOpts.mkLuaFn ''
           function()
             vim.g.minianimate_disable = false
           end
@@ -134,17 +133,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
               "⠏"
             ];
           in
-          helpers.mkNullOrOption' {
+          lib.nixvim.mkNullOrOption' {
             type =
               with lib.types;
               either strLua (submodule {
                 freeformType = attrsOf anything;
                 options = {
-                  frames = helpers.defaultNullOpts.mkListOf types.str defaultFrames ''
+                  frames = lib.nixvim.defaultNullOpts.mkListOf types.str defaultFrames ''
                     Frame characters.
                   '';
 
-                  interval = helpers.defaultNullOpts.mkUnsignedInt 80 ''
+                  interval = lib.nixvim.defaultNullOpts.mkUnsignedInt 80 ''
                     Interval time between two consecutive frames.
                   '';
                 };
@@ -159,16 +158,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
           };
       };
 
-      exit_when_last = helpers.defaultNullOpts.mkBool false ''
+      exit_when_last = lib.nixvim.defaultNullOpts.mkBool false ''
         Enable this to exit Neovim when only edgy windows are left.
       '';
 
-      close_when_all_hidden = helpers.defaultNullOpts.mkBool true ''
+      close_when_all_hidden = lib.nixvim.defaultNullOpts.mkBool true ''
         Close edgy when all windows are hidden instead of opening one of them.
         Disable to always keep at least one edgy split visible in each open section.
       '';
 
-      wo = helpers.defaultNullOpts.mkAttrsOf types.anything {
+      wo = lib.nixvim.defaultNullOpts.mkAttrsOf types.anything {
         winbar = true;
         winfixwidth = true;
         winfixheight = false;
@@ -179,7 +178,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
       # This option accepts an attrs or a lua string.
       # Hence, we convert the string to raw lua in `apply`.
-      keys = helpers.defaultNullOpts.mkAttrsOf' {
+      keys = lib.nixvim.defaultNullOpts.mkAttrsOf' {
         type = with lib.types; either strLuaFn (enum [ false ]);
         description = ''
           Buffer-local keymaps to be added to edgebar buffers.
@@ -255,11 +254,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
 
       icons = {
-        closed = helpers.defaultNullOpts.mkStr " " ''
+        closed = lib.nixvim.defaultNullOpts.mkStr " " ''
           Icon for closed edgebars.
         '';
 
-        open = helpers.defaultNullOpts.mkStr " " ''
+        open = lib.nixvim.defaultNullOpts.mkStr " " ''
           Icon for opened edgebars.
         '';
       };

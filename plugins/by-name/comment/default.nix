@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -13,63 +12,63 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    padding = helpers.defaultNullOpts.mkBool true ''
+    padding = lib.nixvim.defaultNullOpts.mkBool true ''
       Add a space b/w comment and the line.
     '';
 
-    sticky = helpers.defaultNullOpts.mkBool true ''
+    sticky = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether the cursor should stay at its position.
     '';
 
-    ignore = helpers.mkNullOrStr ''
+    ignore = lib.nixvim.mkNullOrStr ''
       Lines to be ignored while (un)comment.
     '';
 
     toggler = {
-      line = helpers.defaultNullOpts.mkStr "gcc" ''
+      line = lib.nixvim.defaultNullOpts.mkStr "gcc" ''
         Line-comment toggle keymap in NORMAL mode.
       '';
 
-      block = helpers.defaultNullOpts.mkStr "gbc" ''
+      block = lib.nixvim.defaultNullOpts.mkStr "gbc" ''
         Block-comment toggle keymap in NORMAL mode.
       '';
     };
 
     opleader = {
-      line = helpers.defaultNullOpts.mkStr "gc" ''
+      line = lib.nixvim.defaultNullOpts.mkStr "gc" ''
         Line-comment operator-pending keymap in NORMAL and VISUAL mode.
       '';
 
-      block = helpers.defaultNullOpts.mkStr "gb" ''
+      block = lib.nixvim.defaultNullOpts.mkStr "gb" ''
         Block-comment operator-pending keymap in NORMAL and VISUAL mode.
       '';
     };
 
     extra = {
-      above = helpers.defaultNullOpts.mkStr "gcO" ''
+      above = lib.nixvim.defaultNullOpts.mkStr "gcO" ''
         Add comment on the line above.
       '';
 
-      below = helpers.defaultNullOpts.mkStr "gco" ''
+      below = lib.nixvim.defaultNullOpts.mkStr "gco" ''
         Add comment on the line below.
       '';
 
-      eol = helpers.defaultNullOpts.mkStr "gcA" ''
+      eol = lib.nixvim.defaultNullOpts.mkStr "gcA" ''
         Add comment at the end of line.
       '';
     };
 
     mappings =
-      helpers.defaultNullOpts.mkNullable
+      lib.nixvim.defaultNullOpts.mkNullable
         (
           with types;
           either (enum [ false ]) (submodule {
             options = {
-              basic = helpers.defaultNullOpts.mkBool true ''
+              basic = lib.nixvim.defaultNullOpts.mkBool true ''
                 Enable operator-pending mappings (`gcc`, `gbc`, `gc[count]{motion}`, `gb[count]{motion}`).
               '';
 
-              extra = helpers.defaultNullOpts.mkBool true ''
+              extra = lib.nixvim.defaultNullOpts.mkBool true ''
                 Enable extra mappings (`gco`, `gcO`, `gcA`).
               '';
             };
@@ -84,11 +83,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
           NOTE: If given 'false', then the plugin won't create any mappings.
         '';
 
-    pre_hook = helpers.mkNullOrLuaFn ''
+    pre_hook = lib.nixvim.mkNullOrLuaFn ''
       Lua function called before (un)comment.
     '';
 
-    post_hook = helpers.mkNullOrLuaFn ''
+    post_hook = lib.nixvim.mkNullOrLuaFn ''
       Lua function called after (un)comment.
     '';
   };

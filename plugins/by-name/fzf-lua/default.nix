@@ -1,13 +1,12 @@
 {
   config,
   lib,
-  helpers,
   ...
 }:
 with lib;
 let
   settingsOptions = {
-    fzf_bin = helpers.mkNullOrStr ''
+    fzf_bin = lib.nixvim.mkNullOrStr ''
       The path to the `fzf` binary to use.
 
       Example: `"sk"`
@@ -55,7 +54,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       visible = false;
     };
 
-    profile = helpers.defaultNullOpts.mkEnumFirstDefault [
+    profile = lib.nixvim.defaultNullOpts.mkEnumFirstDefault [
       "default"
       "fzf-native"
       "fzf-tmux"
@@ -76,13 +75,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 description = "The `fzf-lua` action to run";
                 example = "git_files";
               };
-              settings = helpers.mkSettingsOption {
+              settings = lib.nixvim.mkSettingsOption {
                 options = settingsOptions;
                 description = "`fzf-lua` settings for this command.";
                 example = settingsExample;
               };
-              mode = helpers.keymaps.mkModeOption "n";
-              options = helpers.keymaps.mapConfigOptions;
+              mode = lib.nixvim.keymaps.mkModeOption "n";
+              options = lib.nixvim.keymaps.mapConfigOptions;
             };
           })
         );

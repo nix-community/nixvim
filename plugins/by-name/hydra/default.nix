@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -13,10 +12,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraOptions = {
     # A list of `Hydra` definitions
-    hydras = import ./hydras-option.nix { inherit lib helpers; };
+    hydras = import ./hydras-option.nix { inherit lib; };
   };
 
-  settingsOptions = import ./settings-options.nix { inherit lib helpers; };
+  settingsOptions = import ./settings-options.nix { inherit lib; };
 
   settingsExample = {
     exit = false;

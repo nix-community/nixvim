@@ -1,9 +1,4 @@
-{
-  lib,
-  config,
-  helpers,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib) types mkOption;
 
@@ -140,19 +135,19 @@ in
     content =
       if config.type == "lua" then
         # Lua
-        helpers.concatNonEmptyLines [
+        lib.nixvim.concatNonEmptyLines [
           config.extraConfigLuaPre
-          (helpers.wrapVimscriptForLua config.extraConfigVim)
+          (lib.nixvim.wrapVimscriptForLua config.extraConfigVim)
           config.extraConfigLua
           config.extraConfigLuaPost
         ]
       else
         # Vimscript
-        helpers.concatNonEmptyLines [
-          (helpers.wrapLuaForVimscript config.extraConfigLuaPre)
+        lib.nixvim.concatNonEmptyLines [
+          (lib.nixvim.wrapLuaForVimscript config.extraConfigLuaPre)
           config.extraConfigVim
-          (helpers.wrapLuaForVimscript (
-            helpers.concatNonEmptyLines [
+          (lib.nixvim.wrapLuaForVimscript (
+            lib.nixvim.concatNonEmptyLines [
               config.extraConfigLua
               config.extraConfigLuaPost
             ]

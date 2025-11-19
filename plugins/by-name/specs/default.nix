@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -12,50 +11,50 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    show_jumps = helpers.defaultNullOpts.mkBool true ''
+    show_jumps = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to show an animation each time the cursor jumps.
     '';
 
-    min_jump = helpers.defaultNullOpts.mkUnsignedInt 30 ''
+    min_jump = lib.nixvim.defaultNullOpts.mkUnsignedInt 30 ''
       Minimum jump distance to trigger the animation.
     '';
 
     popup = {
-      delay_ms = helpers.defaultNullOpts.mkUnsignedInt 10 ''
+      delay_ms = lib.nixvim.defaultNullOpts.mkUnsignedInt 10 ''
         Delay before popup displays.
       '';
 
-      inc_ms = helpers.defaultNullOpts.mkUnsignedInt 5 ''
+      inc_ms = lib.nixvim.defaultNullOpts.mkUnsignedInt 5 ''
         Time increments used for fade/resize effects.
       '';
 
-      blend = helpers.defaultNullOpts.mkUnsignedInt 10 ''
+      blend = lib.nixvim.defaultNullOpts.mkUnsignedInt 10 ''
         Starting blend, between 0 (opaque) and 100 (transparent), see `:h winblend`.
       '';
 
-      width = helpers.defaultNullOpts.mkUnsignedInt 20 ''
+      width = lib.nixvim.defaultNullOpts.mkUnsignedInt 20 ''
         Width of the popup.
       '';
 
-      winhl = helpers.defaultNullOpts.mkStr "PMenu" ''
+      winhl = lib.nixvim.defaultNullOpts.mkStr "PMenu" ''
         The name of the window highlight group of the popup.
       '';
 
-      fader = helpers.defaultNullOpts.mkLuaFn "require('specs').exp_fader" ''
+      fader = lib.nixvim.defaultNullOpts.mkLuaFn "require('specs').exp_fader" ''
         The fader function to use.
       '';
 
-      resizer = helpers.defaultNullOpts.mkLuaFn "require('specs').shrink_resizer" ''
+      resizer = lib.nixvim.defaultNullOpts.mkLuaFn "require('specs').shrink_resizer" ''
         The resizer function to use.
       '';
     };
 
-    ignore_filetypes = helpers.defaultNullOpts.mkAttrsOf types.bool { } ''
+    ignore_filetypes = lib.nixvim.defaultNullOpts.mkAttrsOf types.bool { } ''
       An attrs where keys are filetypes and values are a boolean stating whether animation should be
       enabled or not for this filetype.
     '';
 
-    ignore_buftypes = helpers.defaultNullOpts.mkAttrsOf types.bool { nofile = true; } ''
+    ignore_buftypes = lib.nixvim.defaultNullOpts.mkAttrsOf types.bool { nofile = true; } ''
       An attrs where keys are buftypes and values are a boolean stating whether animation should be
       enabled or not for this buftype.
     '';

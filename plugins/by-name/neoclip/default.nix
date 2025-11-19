@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  helpers,
   ...
 }:
 with lib;
@@ -13,21 +12,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    history = helpers.defaultNullOpts.mkUnsignedInt 1000 ''
+    history = lib.nixvim.defaultNullOpts.mkUnsignedInt 1000 ''
       The max number of entries to store.
     '';
 
-    enable_persistent_history = helpers.defaultNullOpts.mkBool false ''
+    enable_persistent_history = lib.nixvim.defaultNullOpts.mkBool false ''
       If set to `true` the history is stored on `VimLeavePre` using `sqlite.lua` and lazy loaded when
       querying.
     '';
 
-    length_limit = helpers.defaultNullOpts.mkUnsignedInt 1048576 ''
+    length_limit = lib.nixvim.defaultNullOpts.mkUnsignedInt 1048576 ''
       The max number of characters of an entry to be stored (default 1MiB).
       If the length of the yanked string is larger than the limit, it will not be stored.
     '';
 
-    continuous_sync = helpers.defaultNullOpts.mkBool false ''
+    continuous_sync = lib.nixvim.defaultNullOpts.mkBool false ''
       If set to `true`, the runtime history is synced with the persistent storage everytime it's
       changed or queried.
 
@@ -42,12 +41,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       [README](https://github.com/AckslD/nvim-neoclip.lua#custom-actions).
     '';
 
-    db_path = helpers.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/databases/neoclip.sqlite3'") ''
+    db_path = lib.nixvim.defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.stdpath('data') .. '/databases/neoclip.sqlite3'") ''
       The path to the sqlite database to store history if `enable_persistent_history=true`.
       Defaults to `$XDG_DATA_HOME/nvim/databases/neoclip.sqlite3`.
     '';
 
-    filter = helpers.defaultNullOpts.mkLuaFn null ''
+    filter = lib.nixvim.defaultNullOpts.mkLuaFn null ''
       A function to filter what entries to store (default all are stored).
       This function filter should return `true` (include the yanked entry) or `false` (don't include
       it) based on a table as the only argument, which has the following keys:
@@ -57,7 +56,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       - `buffer_name`: The name of the buffer where the yank happened.
     '';
 
-    preview = helpers.defaultNullOpts.mkBool true ''
+    preview = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to show a preview (default) of the current entry or not.
       Useful for for example multiline yanks.
       When yanking the filetype is recorded in order to enable correct syntax highlighting in the
@@ -67,32 +66,32 @@ lib.nixvim.plugins.mkNeovimPlugin {
       need to configure `telescope` with the `dynamic_preview_title = true` option.
     '';
 
-    prompt = helpers.defaultNullOpts.mkStr null ''
+    prompt = lib.nixvim.defaultNullOpts.mkStr null ''
       The prompt string used by the picker (`telescope`/`fzf-lua`).
     '';
 
     default_register =
-      helpers.defaultNullOpts.mkNullable (with lib.types; either str (listOf str)) "\""
+      lib.nixvim.defaultNullOpts.mkNullable (with lib.types; either str (listOf str)) "\""
         ''
           What register to use by default when not specified (e.g. `Telescope neoclip`).
           Can be a string such as `"\""` (single register) or a table of strings such as
           `["\"" "+" "*"]`.
         '';
 
-    default_register_macros = helpers.defaultNullOpts.mkStr "q" ''
+    default_register_macros = lib.nixvim.defaultNullOpts.mkStr "q" ''
       What register to use for macros by default when not specified (e.g. `Telescope macroscope`).
     '';
 
-    enable_macro_history = helpers.defaultNullOpts.mkBool true ''
+    enable_macro_history = lib.nixvim.defaultNullOpts.mkBool true ''
       If true (default) any recorded macro will be saved, see
       [macros](https://github.com/AckslD/nvim-neoclip.lua#macros).
     '';
 
-    content_spec_column = helpers.defaultNullOpts.mkBool false ''
+    content_spec_column = lib.nixvim.defaultNullOpts.mkBool false ''
       Can be set to `true` to use instead of the preview.
     '';
 
-    disable_keycodes_parsing = helpers.defaultNullOpts.mkBool false ''
+    disable_keycodes_parsing = lib.nixvim.defaultNullOpts.mkBool false ''
       If set to true, macroscope will display the internal byte representation, instead of a proper
       string that can be used in a map.
 
@@ -101,46 +100,46 @@ lib.nixvim.plugins.mkNeovimPlugin {
     '';
 
     on_select = {
-      move_to_front = helpers.defaultNullOpts.mkBool false ''
+      move_to_front = lib.nixvim.defaultNullOpts.mkBool false ''
         If the entry should be set to last in the list when pressing the key to select a yank.
       '';
 
-      close_telescope = helpers.defaultNullOpts.mkBool true ''
+      close_telescope = lib.nixvim.defaultNullOpts.mkBool true ''
         If telescope should close whenever an item is selected.
       '';
     };
 
     on_paste = {
-      set_reg = helpers.defaultNullOpts.mkBool false ''
+      set_reg = lib.nixvim.defaultNullOpts.mkBool false ''
         If the register should be populated when pressing the key to paste directly.
       '';
 
-      move_to_front = helpers.defaultNullOpts.mkBool false ''
+      move_to_front = lib.nixvim.defaultNullOpts.mkBool false ''
         If the entry should be set to last in the list when pressing the key to paste directly.
       '';
 
-      close_telescope = helpers.defaultNullOpts.mkBool true ''
+      close_telescope = lib.nixvim.defaultNullOpts.mkBool true ''
         If `telescope` should close whenever a yank is pasted.
       '';
     };
 
     on_replay = {
-      set_reg = helpers.defaultNullOpts.mkBool false ''
+      set_reg = lib.nixvim.defaultNullOpts.mkBool false ''
         If the register should be populated when pressing the key to replay a recorded macro.
       '';
 
-      move_to_front = helpers.defaultNullOpts.mkBool false ''
+      move_to_front = lib.nixvim.defaultNullOpts.mkBool false ''
         If the entry should be set to last in the list when pressing the key to replay a recorded
         macro.
       '';
 
-      close_telescope = helpers.defaultNullOpts.mkBool true ''
+      close_telescope = lib.nixvim.defaultNullOpts.mkBool true ''
         If telescope should close whenever a macro is replayed.
       '';
     };
 
     on_custom_action = {
-      close_telescope = helpers.defaultNullOpts.mkBool true ''
+      close_telescope = lib.nixvim.defaultNullOpts.mkBool true ''
         If telescope should close whenever a custom action is executed.
       '';
     };
@@ -149,7 +148,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       telescope =
         # Using `anything` here because of the annoying `custom` key (and also, a mapping can target several keys):
         # https://github.com/AckslD/nvim-neoclip.lua?tab=readme-ov-file#custom-actions
-        helpers.defaultNullOpts.mkAttrsOf (with types; attrsOf anything)
+        lib.nixvim.defaultNullOpts.mkAttrsOf (with types; attrsOf anything)
           {
             i = {
               select = "<cr>";
@@ -182,7 +181,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           '';
 
       fzf =
-        helpers.defaultNullOpts.mkAttrsOf types.anything
+        lib.nixvim.defaultNullOpts.mkAttrsOf types.anything
           {
             select = "default";
             paste = "ctrl-p";

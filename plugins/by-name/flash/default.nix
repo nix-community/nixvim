@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -41,7 +40,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             "cmp_menu"
             "noice"
             "flash_prompt"
-            (helpers.mkRaw ''
+            (lib.nixvim.mkRaw ''
               function(win)
                 -- exclude non-focusable windows
                 return not vim.api.nvim_win_get_config(win).focusable
@@ -127,27 +126,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
           defaults = recursiveUpdate configDefaults defaultOverrides;
         in
         {
-          labels = helpers.defaultNullOpts.mkStr defaults.labels ''
+          labels = lib.nixvim.defaultNullOpts.mkStr defaults.labels ''
             Labels appear next to the matches, allowing you to quickly jump to any location. Labels are
             guaranteed not to exist as a continuation of the search pattern.
           '';
 
           search = {
-            multi_window = helpers.defaultNullOpts.mkBool defaults.search.multi_window ''
+            multi_window = lib.nixvim.defaultNullOpts.mkBool defaults.search.multi_window ''
               Search/jump in all windows
             '';
 
-            forward = helpers.defaultNullOpts.mkBool defaults.search.forward ''
+            forward = lib.nixvim.defaultNullOpts.mkBool defaults.search.forward ''
               Search direction
             '';
 
-            wrap = helpers.defaultNullOpts.mkBool defaults.search.wrap ''
+            wrap = lib.nixvim.defaultNullOpts.mkBool defaults.search.wrap ''
               Continue searching after reaching the start/end of the file.
               When `false`, find only matches in the given direction
             '';
 
             mode =
-              helpers.defaultNullOpts.mkEnum
+              lib.nixvim.defaultNullOpts.mkEnum
                 [
                   "exact"
                   "search"
@@ -169,21 +168,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   ```
                 '';
 
-            incremental = helpers.defaultNullOpts.mkBool defaults.search.incremental ''
+            incremental = lib.nixvim.defaultNullOpts.mkBool defaults.search.incremental ''
               Behave like `incsearch`.
             '';
 
-            exclude = helpers.defaultNullOpts.mkListOf types.str defaults.search.exclude ''
+            exclude = lib.nixvim.defaultNullOpts.mkListOf types.str defaults.search.exclude ''
               Excluded filetypes and custom window filters.
             '';
 
-            trigger = helpers.defaultNullOpts.mkStr defaults.search.trigger ''
+            trigger = lib.nixvim.defaultNullOpts.mkStr defaults.search.trigger ''
               Optional trigger character that needs to be typed before a jump label can be used.
               It's NOT recommended to set this, unless you know what you're doing.
             '';
 
             max_length =
-              helpers.defaultNullOpts.mkNullable (with types; either (enum [ false ]) int)
+              lib.nixvim.defaultNullOpts.mkNullable (with types; either (enum [ false ]) int)
                 defaults.search.max_length
                 ''
                   Max pattern length. If the pattern length is equal to this labels will no longer be skipped.
@@ -192,12 +191,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
           };
 
           jump = {
-            jumplist = helpers.defaultNullOpts.mkBool defaults.jump.jumplist ''
+            jumplist = lib.nixvim.defaultNullOpts.mkBool defaults.jump.jumplist ''
               Save location in the jumplist.
             '';
 
             pos =
-              helpers.defaultNullOpts.mkEnum
+              lib.nixvim.defaultNullOpts.mkEnum
                 [
                   "start"
                   "end"
@@ -208,28 +207,28 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   Jump position
                 '';
 
-            history = helpers.defaultNullOpts.mkBool defaults.jump.history ''
+            history = lib.nixvim.defaultNullOpts.mkBool defaults.jump.history ''
               Add pattern to search history.
             '';
 
-            register = helpers.defaultNullOpts.mkBool defaults.jump.register ''
+            register = lib.nixvim.defaultNullOpts.mkBool defaults.jump.register ''
               Add pattern to search register.
             '';
 
-            nohlsearch = helpers.defaultNullOpts.mkBool defaults.jump.nohlsearch ''
+            nohlsearch = lib.nixvim.defaultNullOpts.mkBool defaults.jump.nohlsearch ''
               Clear highlight after jump
             '';
 
-            autojump = helpers.defaultNullOpts.mkBool defaults.jump.autojump ''
+            autojump = lib.nixvim.defaultNullOpts.mkBool defaults.jump.autojump ''
               Automatically jump when there is only one match
             '';
 
-            inclusive = helpers.defaultNullOpts.mkBool defaults.jump.inclusive ''
+            inclusive = lib.nixvim.defaultNullOpts.mkBool defaults.jump.inclusive ''
               You can force inclusive/exclusive jumps by setting the `inclusive` option. By default it
               will be automatically set based on the mode.
             '';
 
-            offset = helpers.defaultNullOpts.mkInt defaults.jump.offset ''
+            offset = lib.nixvim.defaultNullOpts.mkInt defaults.jump.offset ''
               jump position offset. Not used for range jumps.
                 0: default
                 1: when pos == "end" and pos < current position
@@ -237,35 +236,35 @@ lib.nixvim.plugins.mkNeovimPlugin {
           };
 
           label = {
-            uppercase = helpers.defaultNullOpts.mkBool defaults.label.uppercase ''
+            uppercase = lib.nixvim.defaultNullOpts.mkBool defaults.label.uppercase ''
               Allow uppercase labels.
             '';
 
-            exclude = helpers.defaultNullOpts.mkStr defaults.label.exclude ''
+            exclude = lib.nixvim.defaultNullOpts.mkStr defaults.label.exclude ''
               add any labels with the correct case here, that you want to exclude
             '';
 
-            current = helpers.defaultNullOpts.mkBool true ''
+            current = lib.nixvim.defaultNullOpts.mkBool true ''
               Add a label for the first match in the current window.
               You can always jump to the first match with `<CR>`
             '';
 
             after =
-              helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int))
+              lib.nixvim.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int))
                 defaults.label.after
                 ''
                   Show the label after the match
                 '';
 
             before =
-              helpers.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int))
+              lib.nixvim.defaultNullOpts.mkNullableWithRaw (with types; either bool (listOf int))
                 defaults.label.before
                 ''
                   Show the label before the match
                 '';
 
             style =
-              helpers.defaultNullOpts.mkEnum
+              lib.nixvim.defaultNullOpts.mkEnum
                 [
                   "eol"
                   "overlay"
@@ -278,7 +277,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 '';
 
             reuse =
-              helpers.defaultNullOpts.mkEnum
+              lib.nixvim.defaultNullOpts.mkEnum
                 [
                   "lowercase"
                   "all"
@@ -290,25 +289,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   when typing more characters. By default only lower-case labels are re-used.
                 '';
 
-            distance = helpers.defaultNullOpts.mkBool defaults.label.distance ''
+            distance = lib.nixvim.defaultNullOpts.mkBool defaults.label.distance ''
               for the current window, label targets closer to the cursor first
             '';
 
-            min_pattern_length = helpers.defaultNullOpts.mkInt defaults.label.min_pattern_length ''
+            min_pattern_length = lib.nixvim.defaultNullOpts.mkInt defaults.label.min_pattern_length ''
               minimum pattrn length to show labels
               Ignored for custom labelers.
             '';
 
             rainbow = {
-              enabled = helpers.defaultNullOpts.mkBool defaults.label.rainbow.enabled ''
+              enabled = lib.nixvim.defaultNullOpts.mkBool defaults.label.rainbow.enabled ''
                 Enable this to use rainbow colors to highlight labels
                 Can be useful for visualizing Treesitter ranges.
               '';
 
-              shade = helpers.defaultNullOpts.mkNullable (types.ints.between 1 9) defaults.label.rainbow.shade "";
+              shade =
+                lib.nixvim.defaultNullOpts.mkNullable (types.ints.between 1 9) defaults.label.rainbow.shade
+                  "";
             };
 
-            format = helpers.defaultNullOpts.mkLuaFn defaults.label.format ''
+            format = lib.nixvim.defaultNullOpts.mkLuaFn defaults.label.format ''
               With `format`, you can change how the label is rendered.
               Should return a list of `[text, highlight]` tuples.
 
@@ -322,19 +323,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
           };
 
           highlight = {
-            backdrop = helpers.defaultNullOpts.mkBool defaults.highlight.backdrop ''
+            backdrop = lib.nixvim.defaultNullOpts.mkBool defaults.highlight.backdrop ''
               Show a backdrop with hl FlashBackdrop.
             '';
 
-            matches = helpers.defaultNullOpts.mkBool defaults.highlight.matches ''
+            matches = lib.nixvim.defaultNullOpts.mkBool defaults.highlight.matches ''
               Highlight the search matches.
             '';
 
-            priority = helpers.defaultNullOpts.mkPositiveInt defaults.highlight.priority ''
+            priority = lib.nixvim.defaultNullOpts.mkPositiveInt defaults.highlight.priority ''
               Extmark priority.
             '';
 
-            groups = mapAttrs (name: helpers.defaultNullOpts.mkStr defaults.highlight.groups.${name}) {
+            groups = mapAttrs (name: lib.nixvim.defaultNullOpts.mkStr defaults.highlight.groups.${name}) {
               # opt = description
               match = "FlashMatch";
               current = "FlashCurrent";
@@ -343,47 +344,47 @@ lib.nixvim.plugins.mkNeovimPlugin {
             };
           };
 
-          action = helpers.defaultNullOpts.mkLuaFn defaults.action ''
+          action = lib.nixvim.defaultNullOpts.mkLuaFn defaults.action ''
             action to perform when picking a label.
             defaults to the jumping logic depending on the mode.
 
             @type fun(match:Flash.Match, state:Flash.State)
           '';
 
-          pattern = helpers.defaultNullOpts.mkStr defaults.pattern ''
+          pattern = lib.nixvim.defaultNullOpts.mkStr defaults.pattern ''
             Initial pattern to use when opening flash.
           '';
 
-          continue = helpers.defaultNullOpts.mkBool defaults.continue ''
+          continue = lib.nixvim.defaultNullOpts.mkBool defaults.continue ''
             When `true`, flash will try to continue the last search.
           '';
 
-          config = helpers.defaultNullOpts.mkLuaFn defaults.config ''
+          config = lib.nixvim.defaultNullOpts.mkLuaFn defaults.config ''
             Set config to a function to dynamically change the config.
 
             @type fun(opts:Flash.Config)
           '';
 
           prompt = {
-            enabled = helpers.defaultNullOpts.mkBool defaults.prompt.enabled ''
+            enabled = lib.nixvim.defaultNullOpts.mkBool defaults.prompt.enabled ''
               Options for the floating window that shows the prompt, for regular jumps.
             '';
 
             # Not sure what the type is...
             # Think it's listOf (maybeRaw (listOf (maybeRaw str)))?
-            prefix = helpers.defaultNullOpts.mkListOf types.anything defaults.prompt.prefix "";
+            prefix = lib.nixvim.defaultNullOpts.mkListOf types.anything defaults.prompt.prefix "";
 
-            win_config = helpers.defaultNullOpts.mkAttrsOf types.anything defaults.prompt.win_config ''
+            win_config = lib.nixvim.defaultNullOpts.mkAttrsOf types.anything defaults.prompt.win_config ''
               See `:h nvim_open_win` for more details.
             '';
           };
 
           remote_op = {
-            restore = helpers.defaultNullOpts.mkBool defaults.remote_op.restore ''
+            restore = lib.nixvim.defaultNullOpts.mkBool defaults.remote_op.restore ''
               Restore window views and cursor position after doing a remote operation.
             '';
 
-            motion = helpers.defaultNullOpts.mkBool defaults.remote_op.motion ''
+            motion = lib.nixvim.defaultNullOpts.mkBool defaults.remote_op.motion ''
               For `jump.pos = "range"`, this setting is ignored.
               - `true`: always enter a new motion when doing a remote operation
               - `false`: use the window's cursor position and jump target
@@ -401,7 +402,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ...
         }@args:
         # FIXME: use mkNullableWithRaw when #1618 is fixed
-        helpers.defaultNullOpts.mkNullable' (
+        lib.nixvim.defaultNullOpts.mkNullable' (
           (removeAttrs args [
             "options"
             "defaults"
@@ -441,7 +442,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             };
           };
           options = {
-            enabled = helpers.defaultNullOpts.mkBool defaults.enabled ''
+            enabled = lib.nixvim.defaultNullOpts.mkBool defaults.enabled ''
               When `true`, flash will be activated during regular search by default.
               You can always toggle when searching with `require("flash").toggle()`
             '';
@@ -477,7 +478,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             label = {
               exclude = "hjkliardc";
             };
-            keys = helpers.listToUnkeyedAttrs (lib.stringToCharacters "fFtT;,");
+            keys = lib.nixvim.listToUnkeyedAttrs (lib.stringToCharacters "fFtT;,");
             char_actions = ''
               function(motion)
                 return {
@@ -497,21 +498,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
             jump.register = false;
           };
           options = {
-            enabled = helpers.defaultNullOpts.mkBool defaults.enabled "";
+            enabled = lib.nixvim.defaultNullOpts.mkBool defaults.enabled "";
 
-            autohide = helpers.defaultNullOpts.mkBool defaults.autohide ''
+            autohide = lib.nixvim.defaultNullOpts.mkBool defaults.autohide ''
               Hide after jump when not using jump labels.
             '';
 
-            jump_labels = helpers.defaultNullOpts.mkBool defaults.jump_labels ''
+            jump_labels = lib.nixvim.defaultNullOpts.mkBool defaults.jump_labels ''
               Show jump labels.
             '';
 
-            multi_line = helpers.defaultNullOpts.mkBool defaults.multi_line ''
+            multi_line = lib.nixvim.defaultNullOpts.mkBool defaults.multi_line ''
               Set to `false` to use the current line only.
             '';
 
-            keys = helpers.defaultNullOpts.mkAttrsOf' {
+            keys = lib.nixvim.defaultNullOpts.mkAttrsOf' {
               type = types.str;
               pluginDefault = defaults.keys;
               description = ''
@@ -526,7 +527,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
               };
             };
 
-            char_actions = helpers.defaultNullOpts.mkLuaFn defaults.char_actions ''
+            char_actions = lib.nixvim.defaultNullOpts.mkLuaFn defaults.char_actions ''
               The direction for `prev` and `next` is determined by the motion.
               `left` and `right` are always left and right.
             '';

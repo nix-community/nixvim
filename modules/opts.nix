@@ -1,9 +1,4 @@
-{
-  lib,
-  helpers,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 let
   optionsAttrs = {
     opts = {
@@ -56,7 +51,7 @@ in
   config = {
     extraConfigLuaPre =
       let
-        content = helpers.concatNonEmptyLines (
+        content = lib.nixvim.concatNonEmptyLines (
           lib.mapAttrsToList (
             optionName:
             {

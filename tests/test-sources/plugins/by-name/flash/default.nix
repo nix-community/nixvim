@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ lib, ... }:
 {
   empty = {
     plugins.flash.enable = true;
@@ -21,7 +21,7 @@
             "cmp_menu"
             "noice"
             "flash_prompt"
-            (helpers.mkRaw ''
+            (lib.nixvim.mkRaw ''
               function(win)
                 -- exclude non-focusable windows
                 return not vim.api.nvim_win_get_config(win).focusable

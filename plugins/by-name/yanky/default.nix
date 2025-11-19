@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  helpers,
   ...
 }:
 with lib;
@@ -23,12 +22,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   '';
   settingsOptions = {
     ring = {
-      history_length = helpers.defaultNullOpts.mkUnsignedInt 100 ''
+      history_length = lib.nixvim.defaultNullOpts.mkUnsignedInt 100 ''
         Define the number of yanked items that will be saved and used for ring.
       '';
 
       storage =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        lib.nixvim.defaultNullOpts.mkEnumFirstDefault
           [
             "shada"
             "sqlite"
@@ -52,11 +51,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
             You can change the storage path using `ring.storagePath` option.
           '';
 
-      storage_path = helpers.defaultNullOpts.mkStr {
+      storage_path = lib.nixvim.defaultNullOpts.mkStr {
         __raw = "vim.fn.stdpath('data') .. '/databases/yanky.db'";
       } "Only for sqlite storage.";
 
-      sync_with_numbered_registers = helpers.defaultNullOpts.mkBool true ''
+      sync_with_numbered_registers = lib.nixvim.defaultNullOpts.mkBool true ''
         History can also be synchronized with numbered registers.
         Every time the yank history changes the numbered registers 1 - 9 will be updated to sync
         with the first 9 entries in the yank history.
@@ -64,7 +63,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
 
       cancel_event =
-        helpers.defaultNullOpts.mkEnumFirstDefault
+        lib.nixvim.defaultNullOpts.mkEnumFirstDefault
           [
             "update"
             "move"
@@ -75,12 +74,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
             cursor or content changed.
           '';
 
-      ignore_registers = helpers.defaultNullOpts.mkListOf types.str [ "_" ] ''
+      ignore_registers = lib.nixvim.defaultNullOpts.mkListOf types.str [ "_" ] ''
         Define registers to be ignored.
         By default the black hole register is ignored.
       '';
 
-      update_register_on_cycle = helpers.defaultNullOpts.mkBool false ''
+      update_register_on_cycle = lib.nixvim.defaultNullOpts.mkBool false ''
         If true, when you cycle through the ring, the contents of the register used to update will
         be updated with the last content cycled.
       '';
@@ -88,7 +87,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     picker = {
       select = {
-        action = helpers.defaultNullOpts.mkLuaFn' {
+        action = lib.nixvim.defaultNullOpts.mkLuaFn' {
           pluginDefault = null;
           description = ''
             This define the action that should be done when selecting an item in the
@@ -101,25 +100,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
 
       telescope = {
-        use_default_mappings = helpers.defaultNullOpts.mkBool true ''
+        use_default_mappings = lib.nixvim.defaultNullOpts.mkBool true ''
           This define or overrides the mappings available in Telescope.
 
           If you set this option to `true`, mappings will be merged with default mappings.
         '';
 
-        mappings = helpers.defaultNullOpts.mkAttrsOf' {
+        mappings = lib.nixvim.defaultNullOpts.mkAttrsOf' {
           type = with lib.types; either strLuaFn (attrsOf strLuaFn);
           apply =
             mappings:
-            helpers.ifNonNull' mappings (
+            lib.nixvim.ifNonNull' mappings (
               mapAttrs (
                 _: v:
                 if isString v then
                   # `mappings.default` is a lua function
-                  helpers.mkRaw v
+                  lib.nixvim.mkRaw v
                 else
                   # `mappings.<mode>` is an attrs of lua function
-                  mapAttrs (_: helpers.mkRaw) v
+                  mapAttrs (_: lib.nixvim.mkRaw) v
               ) mappings
             );
           pluginDefault = null;
@@ -149,7 +148,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     system_clipboard = {
-      sync_with_ring = helpers.defaultNullOpts.mkBool true ''
+      sync_with_ring = lib.nixvim.defaultNullOpts.mkBool true ''
         Yanky can automatically adds to ring history yanks that occurs outside of Neovim.
         This works regardless to your `&clipboard` setting.
 
@@ -166,35 +165,35 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Also note that the syncing happens when neovim gains focus.
       '';
 
-      clipboard_register = helpers.defaultNullOpts.mkStr null ''
+      clipboard_register = lib.nixvim.defaultNullOpts.mkStr null ''
         Choose the register that is synced with ring (from above).
         If `&clipboard` is empty then `*` is used.
       '';
     };
 
     highlight = {
-      on_put = helpers.defaultNullOpts.mkBool true ''
+      on_put = lib.nixvim.defaultNullOpts.mkBool true ''
         Define if highlight put text feature is enabled.
       '';
 
-      on_yank = helpers.defaultNullOpts.mkBool true ''
+      on_yank = lib.nixvim.defaultNullOpts.mkBool true ''
         Define if highlight yanked text feature is enabled.
       '';
 
-      timer = helpers.defaultNullOpts.mkUnsignedInt 500 ''
+      timer = lib.nixvim.defaultNullOpts.mkUnsignedInt 500 ''
         Define the duration of highlight.
       '';
     };
 
     preserve_cursor_position = {
-      enabled = helpers.defaultNullOpts.mkBool true ''
+      enabled = lib.nixvim.defaultNullOpts.mkBool true ''
         Whether cursor position should be preserved on yank.
         This works only if mappings has been defined.
       '';
     };
 
     textobj = {
-      enabled = helpers.defaultNullOpts.mkBool true ''
+      enabled = lib.nixvim.defaultNullOpts.mkBool true ''
         Yanky comes with a text object corresponding to last put text.
         To use it, you have to enable it and set a keymap.
       '';

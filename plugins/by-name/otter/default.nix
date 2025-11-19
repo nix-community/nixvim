@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   config,
   ...
 }:
@@ -18,7 +17,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsOptions = {
     lsp = {
       hover = {
-        border = helpers.defaultNullOpts.mkListOf lib.types.str [
+        border = lib.nixvim.defaultNullOpts.mkListOf lib.types.str [
           "╭"
           "─"
           "╮"
@@ -30,7 +29,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ] "";
       };
 
-      diagnostic_update_events = helpers.defaultNullOpts.mkListOf' {
+      diagnostic_update_events = lib.nixvim.defaultNullOpts.mkListOf' {
         type = lib.types.str;
         pluginDefault = [ "BufWritePost" ];
         description = ''
@@ -47,13 +46,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     buffers = {
-      set_filetype = helpers.defaultNullOpts.mkBool false ''
+      set_filetype = lib.nixvim.defaultNullOpts.mkBool false ''
         If set to true, the filetype of the otterbuffers will be set.
         Otherwise only the autocommand of lspconfig that attaches
         the language server will be executed without setting the filetype.
       '';
 
-      write_to_disk = helpers.defaultNullOpts.mkBool false ''
+      write_to_disk = lib.nixvim.defaultNullOpts.mkBool false ''
         Write `<path>.otter.<embedded language extension>` files
         to disk on save of main buffer.
         Useful for some linters that require actual files,
@@ -61,13 +60,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    strip_wrapping_quote_characters = helpers.defaultNullOpts.mkListOf lib.types.str [
+    strip_wrapping_quote_characters = lib.nixvim.defaultNullOpts.mkListOf lib.types.str [
       "'"
       "\""
       "\`"
     ] "";
 
-    handle_leading_whitespace = helpers.defaultNullOpts.mkBool false ''
+    handle_leading_whitespace = lib.nixvim.defaultNullOpts.mkBool false ''
       Otter may not work the way you expect when entire code blocks are indented (eg. in Org files).
       When true, otter handles these cases fully. This is a (minor) performance hit.
     '';

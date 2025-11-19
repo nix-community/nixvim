@@ -1,6 +1,5 @@
 {
   lib,
-  helpers,
   ...
 }:
 with lib;
@@ -13,16 +12,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ maintainers.GaetanLepage ];
 
   settingsOptions = {
-    timeout = helpers.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.timeoutlen" ''
+    timeout = lib.nixvim.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.timeoutlen" ''
       The time in which the keys must be hit in ms.
       Uses the value of `vim.o.timeoutlen` (`options.timeoutlen` in nixvim) by default.
     '';
 
-    default_mappings = helpers.defaultNullOpts.mkBool true ''
+    default_mappings = lib.nixvim.defaultNullOpts.mkBool true ''
       Whether to enable default key mappings.
     '';
 
-    mappings = helpers.defaultNullOpts.mkAttrsOf' {
+    mappings = lib.nixvim.defaultNullOpts.mkAttrsOf' {
       type = types.anything;
       pluginDefault = {
         i.j = {
