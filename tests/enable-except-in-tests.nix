@@ -20,6 +20,7 @@ let
             message = "Expected lib.nixvim.enableExceptInTests to be true";
           }
           {
+            # NOTE: evaluating `helpers` here prints an eval warning
             assertion = !helpers.enableExceptInTests;
             message = "Expected helpers.enableExceptInTests to be false";
           }
@@ -40,6 +41,7 @@ let
                 message = "Expected lib.nixvim.enableExceptInTests to be true";
               }
               {
+                # NOTE: evaluating `helpers` here prints an eval warning
                 assertion = helpers.enableExceptInTests;
                 message = "Expected helpers.enableExceptInTests to be true";
               }
