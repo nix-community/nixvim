@@ -9,10 +9,24 @@
 let
   fetchTests = callTest ./fetch-tests.nix { };
 
+  # Avoid `build.test` re-evaluating its nixvim configuration by providing a
+  # "test mode" lib from the start
+  testLib = lib.extend (
+    final: prev: {
+      nixvim = prev.nixvim.extend (
+        final: prev: {
+          utils = prev.utils // {
+            enableExceptInTests = false;
+          };
+        }
+      );
+    }
+  );
+
   moduleToTest =
     file: name: module:
     let
-      configuration = lib.nixvim.modules.evalNixvim {
+      configuration = testLib.nixvim.modules.evalNixvim {
         modules = [
           {
             test.name = lib.mkDefault name;

@@ -1,7 +1,4 @@
-{
-  lib,
-  _nixvimTests,
-}:
+{ lib }:
 rec {
   /**
     Transforms a list to an _"unkeyed"_ attribute set.
@@ -23,15 +20,14 @@ rec {
     builtins.listToAttrs (lib.lists.imap0 (idx: lib.nameValuePair "__unkeyed-${toString idx}") list);
 
   /**
-    Usually `true`, except when nixvim is being evaluated by
-    `mkTestDerivationFromNixvimModule`, where it is `false`.
+    Usually `true`, except within the `build.test` option, where it is `false`.
 
     This can be used to dynamically enable plugins that can't be run in the
     test environment.
   */
   # TODO: replace and deprecate
   # We shouldn't need to use another instance of `lib` when building a test drv
-  enableExceptInTests = !_nixvimTests;
+  enableExceptInTests = true;
 
   /**
     An empty lua table `{ }` that will be included in the final lua configuration.
