@@ -119,6 +119,12 @@ owner = "Tanish2002"
 repo = "neovim-config"
 
 [[config]]
+owner = "Theaninova"
+title = "Modular Presets"
+url = "https://github.com/Theaninova/TheaninovOS/tree/master/modules/home-manager/modules/nixvim"
+description = "Collection of mostly independent preset modules that make up my from-scratch Neovim setup. Drops into existing setups without breaking stuff because presets must be enabled individually."
+
+[[config]]
 owner = "traxys"
 title = "Nixfiles"
 url = "https://github.com/traxys/Nixfiles/tree/master/neovim"
