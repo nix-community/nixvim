@@ -1,14 +1,40 @@
 { flake }:
-final: prev: {
-  # Include our custom lib
+
+/**
+  Overlay function extending the Nixpkgs `lib` with Nixvim's additions.
+
+  This function is intended to be passed to `lib.extend`.
+
+  # Examples
+
+  Importing the file directly:
+  ```
+  lib.extend (import ./overlay.nix { flake = nixvim; })
+  ```
+
+  Using the overlay from flake outputs:
+  ```
+  lib.extend nixvim.lib.overlay
+  ```
+
+  # Inputs
+
+  `lib`
+  : The final lib instance; the fixpoint of all extensions, including this one.
+
+  `prevLib`
+  : The lib instance prior to applying this overlay.
+*/
+lib: prevLib: {
+  # Add Nixvim's section to the lib
   nixvim = flake.lib.nixvim.override {
-    lib = final;
+    inherit lib;
     _isExtended = true;
   };
 
-  # Merge in our maintainers
-  maintainers = prev.maintainers // import ./maintainers.nix;
+  # Extend the maintainers set with Nixvim-specific maintainers
+  maintainers = prevLib.maintainers // import ./maintainers.nix;
 
-  # Merge in our custom types
-  types = prev.types // import ./types.nix { lib = final; };
+  # Extend lib.types with Nixvim's custom types
+  types = prevLib.types // import ./types.nix { inherit lib; };
 }
