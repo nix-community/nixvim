@@ -13,7 +13,7 @@
 
   # Public `lib` flake output
   flake.lib = {
-    nixvim = lib.makeOverridable (import ../lib) {
+    nixvim = lib.makeOverridable (import ../lib/top-level.nix) {
       inherit lib;
       flake = self;
     };
