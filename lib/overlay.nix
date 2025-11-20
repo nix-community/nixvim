@@ -27,10 +27,7 @@
 */
 lib: prevLib: {
   # Add Nixvim's section to the lib
-  nixvim = flake.lib.nixvim.override {
-    inherit lib;
-    _isExtended = true;
-  };
+  nixvim = import ./top-level.nix { inherit flake lib; };
 
   # Extend the maintainers set with Nixvim-specific maintainers
   maintainers = prevLib.maintainers // import ./maintainers.nix;
