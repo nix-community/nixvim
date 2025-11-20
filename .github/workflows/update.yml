@@ -29,6 +29,10 @@ permissions:
   contents: write
   pull-requests: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   update:
     name: Update the flake inputs and generate options

@@ -9,6 +9,10 @@ permissions:
   contents: read
   actions: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   prepare:
     name: Compute list of branches

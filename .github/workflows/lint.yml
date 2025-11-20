@@ -9,6 +9,10 @@ on:
       - "LICENSE"
       - "flake.lock"
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   treefmt:
     runs-on: ubuntu-latest

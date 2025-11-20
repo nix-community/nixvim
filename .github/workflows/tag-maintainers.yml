@@ -14,6 +14,10 @@ permissions:
   contents: read # To checkout code
   pull-requests: write # To add/remove reviewers and comment
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   tag-maintainers:
     runs-on: ubuntu-latest
