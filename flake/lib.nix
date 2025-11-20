@@ -16,7 +16,7 @@
     nixvim = lib.makeOverridable ({ lib }: (lib.extend self.lib.overlay).nixvim) {
       inherit lib;
     };
-    overlay = lib.makeOverridable (import ../lib/overlay.nix) {
+    overlay = import ../lib/overlay.nix {
       flake = self;
     };
     # Top-top-level aliases
