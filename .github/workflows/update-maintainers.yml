@@ -17,6 +17,10 @@ on:
         default: false
         type: boolean
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   update-maintainers:
     runs-on: ubuntu-latest

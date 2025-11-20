@@ -12,6 +12,10 @@ concurrency:
   group: docs-website
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   prepare:
     name: Version info

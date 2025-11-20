@@ -8,6 +8,10 @@ on:
       - closed
       - labeled
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   backport:
     name: Backport Pull Request

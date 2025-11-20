@@ -9,6 +9,9 @@ on:
         description: "The existing reference to publish"
         type: "string"
         required: true
+defaults:
+  run:
+    shell: bash
 jobs:
   publish-flake:
     if: github.event_name != 'push' || github.repository == 'nix-community/nixvim'
