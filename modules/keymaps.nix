@@ -54,32 +54,42 @@ in
     # TODO remove entirely in 25.05?
     warnings =
       let
-        # All keymap options that have historically supported the `lua` sub-option
-        keymapOptions = [
-          options.keymaps
-          options.keymapsOnEvents
-          # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
-          # So we only need `lua` deprecation in lsp's `extra` option
-          options.plugins.lsp.keymaps.extra
-          # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
-          options.plugins.tmux-navigator.keymaps
-        ]
-        # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
-        ++ builtins.attrValues (builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]);
+        keymapsUsingLua =
+          lib.pipe
+            # All keymap options that have historically supported the `lua` sub-option
+            [
+              options.keymaps.valueMeta.list
+              (lib.concatMap (ev: ev.list) (lib.attrValues options.keymapsOnEvents.valueMeta.attrs))
+
+              # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
+              # So we only need `lua` deprecation in lsp's `extra` option
+              options.plugins.lsp.keymaps.extra.valueMeta.list
+
+              # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
+              options.plugins.tmux-navigator.keymaps.valueMeta.list
+
+              # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
+              # FIXME: types.nullOr doesn't propagate valueMeta as it doesn't implement v2 check+merge
+              (lib.mapAttrsToList (name: opt: opt.valueMeta) (
+                builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]
+              ))
+            ]
+            [
+              lib.concatLists
+              (lib.filter (meta: meta.configuration.options.lua.isDefined or false))
+              (map (meta: meta.configuration.options))
+            ];
       in
-      lib.pipe keymapOptions [
-        (map (opt: (opt.type.getSubOptions opt.loc).lua))
-        (lib.filter (opt: opt.isDefined))
-        (map (opt: ''
-          ${"\n"}
-          The `${lib.showOption opt.loc}' option is deprecated and will be removed in 24.11.
+      lib.optional (keymapsUsingLua != [ ]) ''
+        The `lua` keymap option is deprecated and will be removed in 26.05.
 
-          You should use a "raw" `action` instead;
-          e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
+        You should use a "raw" `action` instead;
+        e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
 
-          ${lib.options.showDefs opt.definitionsWithLocations}
-        ''))
-      ];
+        ${lib.concatMapStringsSep "\n" (
+          m: "- `${m.lua}' is defined in " + lib.options.showFiles m.lua.files
+        ) keymapsUsingLua}
+      '';
 
     extraConfigLua = lib.mkIf (config.keymaps != [ ]) ''
       -- Set up keybinds {{{
