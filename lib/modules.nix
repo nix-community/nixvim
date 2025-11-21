@@ -57,6 +57,47 @@ in
       }
       // extraSpecialArgs;
     };
+
+  /**
+    Build a Nixvim package.
+
+    # Inputs
+
+    `input`
+    : One of:
+      1. A Nixvim module or a list of modules.
+      2. A Nixvim configuration.
+      3. A Nixvim package.
+
+    # Output
+
+    An installable Nixvim package.
+  */
+  buildNixvim =
+    input:
+    if lib.isDerivation input then
+      lib.throwIfNot (input ? config.build.package)
+        "buildNixvim: received a derivation without the expected `config` attribute."
+        input.config.build.package
+    else if lib.isType "configuration" input then
+      lib.throwIfNot (input ? config.build.package)
+        "buildNixvim: received a configuration without the expected `build.package` option."
+        input.config.build.package
+    else
+      self.modules.buildNixvimWith {
+        modules = lib.toList input;
+      };
+
+  /**
+    Build a Nixvim package using the same interface as `evalNixvim`.
+
+    # Output
+
+    An installable Nixvim package.
+  */
+  buildNixvimWith = lib.mirrorFunctionArgs self.modules.evalNixvim (
+    args: (self.modules.evalNixvim args).config.build.package
+  );
 }
 // lib.mapAttrs (
   name: msg:
