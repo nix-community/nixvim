@@ -5,7 +5,6 @@ let
     defaultNullOpts
     keymaps
     mkNullOrOption
-    mkNullOrOption'
     mkNullOrStr
     ;
   keymapsActions = {
@@ -45,6 +44,22 @@ let
     orderByLanguage = "OrderByLanguage";
     orderByWindowNumber = "OrderByWindowNumber";
   };
+
+  # As of 2025-11-21, `either` supports `valueMeta`, while `nullOr` does not.
+  # The `lua` deprecation warning in `modules/keymaps.nix` requires `valueMeta`,
+  # so re-implement `nullOr` using `types.either` as a workaround.
+  #
+  # TODO: Remove with the warning, or once `nullOr` supports v2 check and merge.
+  v2NullOr =
+    type:
+    let
+      v1 = lib.types.nullOr type;
+      v2 = lib.types.either (lib.types.enum [ null ]) type;
+    in
+    v2
+    // {
+      inherit (v1) description descriptionClass getSubOptions;
+    };
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "barbar";
@@ -56,14 +71,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraOptions = {
     keymaps = mapAttrs (
       optionName: funcName:
-      mkNullOrOption' {
-        type = keymaps.mkMapOptionSubmodule {
-          defaults = {
-            mode = "n";
-            action = "<Cmd>Buffer${funcName}<CR>";
-          };
-          lua = true;
-        };
+      lib.mkOption {
+        type = v2NullOr (
+          keymaps.mkMapOptionSubmodule {
+            defaults = {
+              mode = "n";
+              action = "<Cmd>Buffer${funcName}<CR>";
+            };
+            lua = true;
+          }
+        );
+        default = null;
         apply = v: if v == null then null else keymaps.removeDeprecatedMapAttrs v;
         description = "Keymap for function Buffer${funcName}";
       }

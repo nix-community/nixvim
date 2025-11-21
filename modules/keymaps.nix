@@ -69,7 +69,6 @@ in
               options.plugins.tmux-navigator.keymaps.valueMeta.list
 
               # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
-              # FIXME: types.nullOr doesn't propagate valueMeta as it doesn't implement v2 check+merge
               (lib.mapAttrsToList (name: opt: opt.valueMeta) (
                 builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]
               ))

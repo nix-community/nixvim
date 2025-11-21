@@ -141,8 +141,7 @@
       (expect "any" "- `keymapsOnEvents.InsertEnter.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
       (expect "any" "- `plugins.lsp.keymaps.extra.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
       (expect "any" "- `plugins.tmux-navigator.keymaps.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
-      # FIXME: nullOr breaks our warning
-      # (expect "any" "- `plugins.barbar.keymaps.first.lua' is defined in `test-module'")
+      (expect "any" "- `plugins.barbar.keymaps.first.lua' is defined in `test-module'")
     ];
 
     test.runNvim = false;
