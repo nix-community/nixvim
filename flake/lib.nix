@@ -32,9 +32,6 @@
         check = pkgs.callPackage ../lib/tests.nix {
           inherit lib self system;
         };
-
-        # NOTE: no longer needs to be per-system
-        helpers = lib.warn "nixvim: `<nixvim>.lib.${system}.helpers` has been moved to `<nixvim>.lib.nixvim` and no longer depends on a specific system" self.lib.nixvim;
       }
     )
   );
