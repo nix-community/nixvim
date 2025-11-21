@@ -57,6 +57,31 @@ in
       }
       // extraSpecialArgs;
     };
+
+  /**
+    Build a Nixvim package.
+
+    This is a thin wrapper around `<nixvim-configuration>.config.build.package`.
+
+    # Inputs
+
+    `input`
+    : One of:
+      1. Arguments for `evalNixvim`.
+      2. A Nixvim configuration, as produced by `evalNixvim`.
+      3. A Nixvim package, as produced by `buildNixvim`.
+
+    # Output
+
+    An installable Nixvim package.
+  */
+  buildNixvim = lib.mirrorFunctionArgs self.modules.evalNixvim (
+    input:
+    let
+      configuration = if input ? config.build.package then input else self.modules.evalNixvim input;
+    in
+    configuration.config.build.package
+  );
 }
 // lib.mapAttrs (
   name: msg:
