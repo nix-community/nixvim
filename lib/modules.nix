@@ -14,6 +14,12 @@ let
     applyExtraConfig = "It has been moved to `lib.plugins.utils`";
     mkConfigAt = "It has been moved to `lib.plugins.utils`";
   };
+
+  wrapEvalNixvim =
+    pred: fn:
+    lib.mirrorFunctionArgs self.modules.evalNixvim (
+      input: fn (if pred input then input else self.modules.evalNixvim input)
+    );
 in
 {
   # Evaluate nixvim modules, checking warnings and assertions
@@ -75,12 +81,8 @@ in
 
     An installable Nixvim package.
   */
-  buildNixvim = lib.mirrorFunctionArgs self.modules.evalNixvim (
-    input:
-    let
-      configuration = if input ? config.build.package then input else self.modules.evalNixvim input;
-    in
-    configuration.config.build.package
+  buildNixvim = wrapEvalNixvim (input: input ? config.build.package) (
+    configuration: configuration.config.build.package
   );
 
   /**
@@ -100,12 +102,8 @@ in
 
     A buildable Nixvim test.
   */
-  testNixvim = lib.mirrorFunctionArgs self.modules.evalNixvim (
-    input:
-    let
-      configuration = if input ? config.build.package then input else self.modules.evalNixvim input;
-    in
-    configuration.config.build.test
+  testNixvim = wrapEvalNixvim (input: input ? config.build.test) (
+    configuration: configuration.config.build.test
   );
 }
 // lib.mapAttrs (
