@@ -82,6 +82,31 @@ in
     in
     configuration.config.build.package
   );
+
+  /**
+    Build a Nixvim test derivation.
+
+    This is a thin wrapper around `<nixvim-configuration>.config.build.test`.
+
+    # Inputs
+
+    `input`
+    : One of:
+      1. Arguments for `evalNixvim`.
+      2. A Nixvim configuration, as produced by `evalNixvim`.
+      3. A Nixvim package, as produced by `buildNixvim`.
+
+    # Output
+
+    A buildable Nixvim test.
+  */
+  testNixvim = lib.mirrorFunctionArgs self.modules.evalNixvim (
+    input:
+    let
+      configuration = if input ? config.build.package then input else self.modules.evalNixvim input;
+    in
+    configuration.config.build.test
+  );
 }
 // lib.mapAttrs (
   name: msg:

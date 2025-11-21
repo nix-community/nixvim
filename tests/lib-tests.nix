@@ -551,6 +551,11 @@ let
       expr = lib.functionArgs lib.nixvim.modules.buildNixvim;
       expected = lib.functionArgs lib.nixvim.modules.evalNixvim;
     };
+
+    testNixvim_hasExpectedArgs = {
+      expr = lib.functionArgs lib.nixvim.modules.testNixvim;
+      expected = lib.functionArgs lib.nixvim.modules.evalNixvim;
+    };
   };
 in
 if results == [ ] then
