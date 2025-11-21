@@ -96,6 +96,12 @@
     githubId = 1176328;
     name = "Alison Jenkins";
   };
+  arne-zillhardt = {
+    email = "arne@zillhardt.com";
+    github = "Arne-Zillhardt";
+    githubId = 94059017;
+    name = "Arne Zillhardt";
+  };
   b3nb5n = {
     email = "benbaldwin000@gmail.com";
     github = "b3nb5n";
