@@ -29,6 +29,13 @@
     name = "Aidan Welch";
     source = "nixvim";
   };
+  Arne-Zillhardt = {
+    email = "arne@zillhardt.com";
+    github = "Arne-Zillhardt";
+    githubId = 94059017;
+    name = "Arne Zillhardt";
+    source = "nixpkgs";
+  };
   Balssh = {
     email = "george.bals25@gmail.com";
     github = "Balssh";
