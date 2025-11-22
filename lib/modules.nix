@@ -14,6 +14,12 @@ let
     applyExtraConfig = "It has been moved to `lib.plugins.utils`";
     mkConfigAt = "It has been moved to `lib.plugins.utils`";
   };
+
+  wrapEvalNixvim =
+    pred: fn:
+    lib.mirrorFunctionArgs self.modules.evalNixvim (
+      input: fn (if pred input then input else self.modules.evalNixvim input)
+    );
 in
 {
   # Evaluate nixvim modules, checking warnings and assertions
@@ -57,6 +63,48 @@ in
       }
       // extraSpecialArgs;
     };
+
+  /**
+    Build a Nixvim package.
+
+    This is a thin wrapper around `<nixvim-configuration>.config.build.package`.
+
+    # Inputs
+
+    `input`
+    : One of:
+      1. Arguments for `evalNixvim`.
+      2. A Nixvim configuration, as produced by `evalNixvim`.
+      3. A Nixvim package, as produced by `buildNixvim`.
+
+    # Output
+
+    An installable Nixvim package.
+  */
+  buildNixvim = wrapEvalNixvim (input: input ? config.build.package) (
+    configuration: configuration.config.build.package
+  );
+
+  /**
+    Build a Nixvim test derivation.
+
+    This is a thin wrapper around `<nixvim-configuration>.config.build.test`.
+
+    # Inputs
+
+    `input`
+    : One of:
+      1. Arguments for `evalNixvim`.
+      2. A Nixvim configuration, as produced by `evalNixvim`.
+      3. A Nixvim package, as produced by `buildNixvim`.
+
+    # Output
+
+    A buildable Nixvim test.
+  */
+  testNixvim = wrapEvalNixvim (input: input ? config.build.test) (
+    configuration: configuration.config.build.test
+  );
 }
 // lib.mapAttrs (
   name: msg:
