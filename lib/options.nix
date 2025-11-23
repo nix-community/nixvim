@@ -352,7 +352,7 @@ rec {
           {
             foo_bar = 42;
             hostname = "localhost:8080";
-            callback.__raw = ''
+            callback = lib.nixvim.nestedLiteralLua ''
               function()
                 print('nixvim')
               end
