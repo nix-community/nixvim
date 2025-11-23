@@ -54,6 +54,15 @@ in
     # TODO remove entirely in 25.05?
     warnings =
       let
+        missingValueMeta = lib.filter (opt: !(opt ? valueMeta)) (
+          [
+            options.keymaps
+            options.keymapsOnEvents
+            options.plugins.lsp.keymaps.extra
+            options.plugins.tmux-navigator.keymaps
+          ]
+          ++ builtins.attrValues (builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ])
+        );
         keymapsUsingLua =
           lib.pipe
             # All keymap options that have historically supported the `lua` sub-option
@@ -79,16 +88,31 @@ in
               (map (meta: meta.configuration.options))
             ];
       in
-      lib.optional (keymapsUsingLua != [ ]) ''
-        The `lua` keymap option is deprecated and will be removed in 26.05.
+      if missingValueMeta != [ ] then
+        lib.singleton ''
+          Nixvim relies on `valueMeta` added by v2 checkAndMerge to warn about some deprecated options.
 
-        You should use a "raw" `action` instead;
-        e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
+          The following options were expected to have value metadata (`valueMeta`):
+          ${lib.concatMapStringsSep "\n" (opt: "- ${opt}") missingValueMeta}
 
-        ${lib.concatMapStringsSep "\n" (
-          m: "- `${m.lua}' is defined in " + lib.options.showFiles m.lua.files
-        ) keymapsUsingLua}
-      '';
+          This warning usually occurs when an outdated nixpkgs input or channel is evaluating Nivim's modules.
+          This can also occur when mixing a `main` branch Nixvim with a host system older than 25.11.
+          Try updating your channels or flake inputs. If that doesn't help, please open an issue:
+          https://github.com/nix-community/nixvim/issues/new?template=bug_report.yml
+        ''
+      else if keymapsUsingLua != [ ] then
+        lib.singleton ''
+          The `lua` keymap option is deprecated and will be removed in 26.05.
+
+          You should use a "raw" `action` instead;
+          e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
+
+          ${lib.concatMapStringsSep "\n" (
+            m: "- `${m.lua}' is defined in " + lib.options.showFiles m.lua.files
+          ) keymapsUsingLua}
+        ''
+      else
+        [ ];
 
     extraConfigLua = lib.mkIf (config.keymaps != [ ]) ''
       -- Set up keybinds {{{
