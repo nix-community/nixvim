@@ -16,6 +16,7 @@ in
 }
 // lib.optionalAttrs isLinux {
   nixos-module = (callTest ./nixos.nix { }).config.system.build.toplevel;
+  nixos-hm-module = (callTest ./nixos-hm.nix { }).config.system.build.toplevel;
 }
 // lib.optionalAttrs isDarwin {
   darwin-module = (callTest ./darwin.nix { }).system;
