@@ -8,13 +8,17 @@ let
 in
 {
   perSystem =
-    { system, ... }:
+    { config, system, ... }:
+    let
+      inherit (config.legacyPackages) makeNixvimWithModule;
+    in
     {
-      _module.args = {
+      legacyPackages = {
         makeNixvimWithModule = import ../wrappers/standalone.nix {
           inherit lib self;
           defaultSystem = system;
         };
+        makeNixvim = module: makeNixvimWithModule { inherit module; };
       };
     };
 

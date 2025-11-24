@@ -10,7 +10,6 @@
     ./flake-modules
     ./ci.nix
     ./lib.nix
-    ./legacy-packages.nix
     ./nixvim-configurations.nix
     ./overlays.nix
     ./packages.nix
