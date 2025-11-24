@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  helpers,
 }:
 let
   # Import a test file into the form { name = ""; file = ""; cases = {}; }
@@ -16,7 +15,7 @@ let
       cases =
         if builtins.isFunction fnOrAttrs then
           # Call the function
-          fnOrAttrs { inherit pkgs lib helpers; }
+          fnOrAttrs { inherit pkgs lib; }
         else
           fnOrAttrs;
     };
