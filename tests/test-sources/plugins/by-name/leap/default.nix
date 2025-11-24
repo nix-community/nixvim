@@ -1,7 +1,4 @@
-{
-  lib,
-  ...
-}:
+{ lib }:
 {
   empty = {
     plugins.leap.enable = true;

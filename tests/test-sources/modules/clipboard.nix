@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 {
   example-with-str = {
     clipboard = {

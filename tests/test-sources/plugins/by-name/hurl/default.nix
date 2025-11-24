@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 # TODO: remove once https://github.com/NixOS/nixpkgs/pull/418842 hits flake.lock
 pkgs.lib.optionalAttrs false {
   empty = {

@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs }:
 {
   empty = {
     plugins.gitgutter.enable = true;

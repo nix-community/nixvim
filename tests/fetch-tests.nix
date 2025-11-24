@@ -15,7 +15,11 @@ let
       cases =
         if builtins.isFunction fnOrAttrs then
           # Call the function
-          fnOrAttrs { inherit pkgs lib; }
+          fnOrAttrs (
+            builtins.intersectAttrs (builtins.functionArgs fnOrAttrs) {
+              inherit pkgs lib;
+            }
+          )
         else
           fnOrAttrs;
     };

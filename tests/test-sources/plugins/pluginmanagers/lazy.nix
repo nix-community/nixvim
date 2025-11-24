@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 {
   # Empty configuration
   empty = {

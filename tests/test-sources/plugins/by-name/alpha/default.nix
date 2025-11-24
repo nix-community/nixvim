@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   theme = {
     plugins.alpha = {

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   empty = {
     colorschemes.solarized-osaka.enable = true;
