@@ -97,13 +97,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   };
 
-  extraConfig = cfg: {
+  extraConfig = cfg: opts: {
     warnings = lib.nixvim.mkWarnings "plugins.zk" (
       mapAttrsToList
         (picker: pluginName: {
           when = (cfg.settings.picker == picker) && !config.plugins.${pluginName}.enable;
           message = ''
-            You have set `plugins.zk.settings.picker = "${picker}"` but `plugins.${pluginName}` is not enabled in your config.
+            You have defined `${opts.settings}.picker = "${picker}"` but `plugins.${pluginName}` is not enabled.
           '';
         })
         {
