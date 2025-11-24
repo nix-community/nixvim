@@ -38,12 +38,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
     }
   '';
 
-  extraConfig = cfg: {
+  extraConfig = cfg: opts: {
     warnings = lib.nixvim.mkWarnings "plugins.easy-dotnet" (
       lib.mapAttrsToList
         (pickerName: pluginName: {
-          when = (cfg.settings.picker or null == pickerName) && (!config.plugins.${pluginName}.enable);
-          message = "You have chosen to use '${pickerName}' as a picker but 'plugins.${pluginName}' is not enabled.";
+          when = (cfg.settings.picker or null == pickerName) && !config.plugins.${pluginName}.enable;
+          message = ''
+            You have defined `${opts.settings}.picker = "${pickerName}"` but `plugins.${pluginName}` is not enabled.
+          '';
         })
         {
           fzf = "fzf-lua";
