@@ -22,7 +22,7 @@ jobs:
       branches: ${{ steps.list-branches.outputs.result }}
     steps:
       - name: Checkout version-info
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           sparse-checkout: version-info.toml
           sparse-checkout-cone-mode: false
