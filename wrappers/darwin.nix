@@ -8,6 +8,9 @@ let
   inherit (lib)
     mkIf
     ;
+  inherit (lib.modules)
+    importApply
+    ;
   cfg = config.programs.nixvim;
   evalArgs = {
     extraSpecialArgs = {
@@ -21,7 +24,7 @@ in
 {
   _file = ./darwin.nix;
 
-  imports = [ (import ./_shared.nix { inherit self evalArgs; }) ];
+  imports = [ (importApply ./_shared.nix { inherit self evalArgs; }) ];
 
   config = mkIf cfg.enable {
     environment.systemPackages = [

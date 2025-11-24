@@ -3,6 +3,9 @@
   lib,
   ...
 }:
+let
+  inherit (lib.modules) importApply;
+in
 {
   perSystem =
     { system, ... }:
@@ -17,7 +20,7 @@
 
   flake = {
     nixosModules = {
-      nixvim = import ../wrappers/nixos.nix self;
+      nixvim = importApply ../wrappers/nixos.nix self;
       default = self.nixosModules.nixvim;
     };
     # Alias for backward compatibility
@@ -29,11 +32,11 @@
       in
       lib.warnIf cond msg self.homeModules;
     homeModules = {
-      nixvim = import ../wrappers/hm.nix self;
+      nixvim = importApply ../wrappers/hm.nix self;
       default = self.homeModules.nixvim;
     };
     nixDarwinModules = {
-      nixvim = import ../wrappers/darwin.nix self;
+      nixvim = importApply ../wrappers/darwin.nix self;
       default = self.nixDarwinModules.nixvim;
     };
   };
