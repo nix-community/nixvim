@@ -1,14 +1,10 @@
-{
-  self,
-  helpers,
-  ...
-}:
+{ self, ... }:
 {
   perSystem =
     { pkgs, ... }:
     let
       tests = pkgs.callPackage ../../tests {
-        inherit helpers self;
+        inherit self;
       };
     in
     {

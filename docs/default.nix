@@ -1,5 +1,4 @@
 {
-  helpers,
   system,
   nixvim,
   nixpkgs,
@@ -84,7 +83,7 @@ let
       ) opt.declarations;
     };
 
-  configuration = helpers.modules.evalNixvim {
+  configuration = nixvim.lib.evalNixvim {
     modules = [
       {
         isDocs = true;
