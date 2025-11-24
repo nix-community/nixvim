@@ -85,7 +85,7 @@ in
     ++ builtins.map (
       name:
       lib.mkRemovedOptionModule [ "plugins" name "iconsPackage" ] ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons` instead.
+        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons`, or `plugins.mini-icons` with `plugins.mini-icons.mockDevIcons` instead.
       ''
     ) iconsPackagePlugins
     ++ [
