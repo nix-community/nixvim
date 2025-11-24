@@ -5,6 +5,9 @@
 }:
 let
   inherit (lib.modules) importApply;
+  # Added 2025-05-25; warning shown since 2025-08-01 (25.11)
+  # NOTE: top-level binding of a fully resolved value, to avoid printing multiple times
+  homeManagerModulesWarning = lib.warn "nixvim: flake output `homeManagerModules` has been renamed to `homeModules`." null;
 in
 {
   perSystem =
@@ -28,13 +31,7 @@ in
       default = self.nixosModules.nixvim;
     };
     # Alias for backward compatibility
-    # Added 2025-05-25 in https://github.com/nix-community/nixvim/pull/3387
-    homeManagerModules =
-      let
-        cond = lib.trivial.oldestSupportedReleaseIsAtLeast 2505;
-        msg = "nixvim: flake output `homeManagerModules` has been renamed to `homeModules`.";
-      in
-      lib.warnIf cond msg self.homeModules;
+    homeManagerModules = lib.mapAttrs (_: lib.seq homeManagerModulesWarning) self.homeModules;
     homeModules = {
       nixvim = importApply ../wrappers/hm.nix self;
       default = self.homeModules.nixvim;
