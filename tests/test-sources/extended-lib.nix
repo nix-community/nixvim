@@ -16,9 +16,13 @@ let
     };
 in
 {
-  top-level = module;
+  top-level = {
+    test.buildNixvim = false;
+    imports = [ module ];
+  };
 
   files-module = {
+    test.buildNixvim = false;
     files."libtest.lua" = module;
   };
 }
