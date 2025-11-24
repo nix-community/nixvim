@@ -37,6 +37,9 @@ let
             imports = lib.toList module;
           }
         ];
+        extraSpecialArgs = {
+          helpers = throw "nixvim: `helpers` used internally.";
+        };
       };
     in
     configuration.config.build.test.overrideAttrs (old: {
