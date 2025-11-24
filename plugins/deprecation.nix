@@ -100,7 +100,8 @@ in
                 message = ''
                   This plugin was enabled automatically because the following plugins are enabled.
                   This behaviour is deprecated. Please explicitly define `plugins.web-devicons.enable` or alternatively
-                  enable `plugins.mini.enable` with `plugins.mini.modules.icons` and `plugins.mini.mockDevIcons`.
+                  enable `plugins.mini.enable` with `plugins.mini.modules.icons` and `plugins.mini.mockDevIcons`, or
+                  `plugins.mini-icons.enable` with `plugins.mini-icons.mockDevIcons`.
                   ${lib.concatMapStringsSep "\n" (name: "plugins.${name}") (
                     builtins.filter (name: config.plugins.${name}.enable) iconsPackagePlugins
                   )}
