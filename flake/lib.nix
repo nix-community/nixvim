@@ -6,11 +6,6 @@
   ...
 }:
 {
-  # Expose lib as a flake-parts module arg
-  _module.args = {
-    helpers = self.lib.nixvim;
-  };
-
   # Public `lib` flake output
   flake.lib = {
     nixvim = lib.makeOverridable ({ lib }: (lib.extend self.lib.overlay).nixvim) {

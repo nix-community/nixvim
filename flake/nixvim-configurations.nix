@@ -1,9 +1,9 @@
-{ helpers, ... }:
+{ self, ... }:
 {
   perSystem =
     { system, ... }:
     {
-      nixvimConfigurations.default = helpers.modules.evalNixvim {
+      nixvimConfigurations.default = self.lib.evalNixvim {
         inherit system;
       };
     };

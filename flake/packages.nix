@@ -1,9 +1,4 @@
-{
-  self,
-  inputs,
-  helpers,
-  ...
-}:
+{ self, inputs, ... }:
 {
   perSystem =
     {
@@ -18,7 +13,6 @@
 
       packages = import ../docs {
         nixvim = self;
-        inherit helpers;
         inherit system;
         inherit (inputs) nixpkgs;
         inherit (inputs') nuschtosSearch;
