@@ -75,7 +75,7 @@ jobs:
       # This ensures we get the latest scripts, even if the PR's base was outdated.
       - name: Checkout base branch
         id: checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           sparse-checkout: |
             flake/dev/diff-plugins.py
