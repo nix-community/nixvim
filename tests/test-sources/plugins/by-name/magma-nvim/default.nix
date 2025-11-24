@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 {
   empty = {
     # NOTE: 2024-10-10 when marked as linux specific platform

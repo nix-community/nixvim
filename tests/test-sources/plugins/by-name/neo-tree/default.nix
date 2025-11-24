@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   empty = {
     plugins.web-devicons.enable = true;

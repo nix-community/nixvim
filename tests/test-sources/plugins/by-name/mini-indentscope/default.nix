@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   empty = {
     plugins.mini-indentscope.enable = true;

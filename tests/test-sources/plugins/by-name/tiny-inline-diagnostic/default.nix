@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   empty = {
     plugins.tiny-inline-diagnostic.enable = true;

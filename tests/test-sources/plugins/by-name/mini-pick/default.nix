@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   empty = {
     plugins.mini-pick.enable = true;

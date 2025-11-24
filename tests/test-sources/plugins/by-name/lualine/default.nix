@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 {
   empty = {
     plugins.lualine.enable = true;

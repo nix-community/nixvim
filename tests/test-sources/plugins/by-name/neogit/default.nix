@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 {
   empty = {
     plugins.neogit.enable = true;

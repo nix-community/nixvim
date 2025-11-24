@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ lib, pkgs }:
 let
   inherit (pkgs.stdenv) hostPlatform;
 

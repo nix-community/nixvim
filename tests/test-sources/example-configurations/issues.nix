@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs }:
 {
   "40" = {
     plugins = {

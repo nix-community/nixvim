@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib }:
 {
   empty = {
     colorschemes.gruvbox-material-nvim.enable = true;
