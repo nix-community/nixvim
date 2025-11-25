@@ -58,6 +58,7 @@
     "gh_actions_ls"
     "ghdl_ls"
     "ginko_ls"
+    "gitlab_duo"
     "glasgow"
     "glint"
     "gnls"
@@ -153,6 +154,7 @@
     "stylua3p_ls"
     "svlangserver"
     "tabby_ml"
+    "tclsp"
     "termux_language_server"
     "textlsp"
     "theme_check"
@@ -278,7 +280,7 @@
     just = "just-lsp";
     koka = "koka";
     kotlin_language_server = "kotlin-language-server";
-    leanls = "lean4";
+    lean3ls = "lean4";
     lemminx = "lemminx";
     lsp_ai = "lsp-ai";
     ltex = "ltex-ls";
@@ -426,6 +428,10 @@
     vimls = "vim-language-server";
     vls = "vlang";
     volar = "vue-language-server";
+    vsrocq = [
+      "rocqPackages"
+      "vsrocq-language-server"
+    ];
     vtsls = "vtsls";
     vue_ls = "vue-language-server";
     wgsl_analyzer = "wgsl-analyzer";
