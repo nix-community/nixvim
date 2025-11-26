@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   ...
 }:
@@ -61,6 +62,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Position the virtual text at a fixed window column (starting from the first text column).
       See `:h nvim_buf_set_extmark()`.
     '';
+  };
+
+  extraConfig = {
+    assertions = lib.nixvim.mkAssertions "plugins.dap-virtual-text" {
+      assertion = config.plugins.dap.enable;
+      message = ''
+        You have to enable `plugins.dap` to use `plugins.dap-virtual-text`.
+      '';
+    };
   };
 
   # NOTE: Renames added in https://github.com/nix-community/nixvim/pull/2897 (2025-01-26)
