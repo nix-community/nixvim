@@ -8,26 +8,27 @@ let
   inherit (builtins)
     filter
     isString
+    isFunction
     isAttrs
     attrValues
     attrNames
     concatMap
     partition
     ;
-
-  inherit (import ./formatter-packages.nix { inherit pkgs lib; }) sType formatter-packages;
-  sTypeList = attrValues sType;
-  isSTypeAttrSet = x: lib.elem (x.mark or null) sTypeList;
+  inherit (import ./formatter-packages.nix { inherit pkgs lib; }) states formatter-packages;
 in
 rec {
-  cleanMaybePackageList = filter (x: !isSTypeAttrSet x);
-
-  getPackageByName =
+  getPackageOrStateByName =
     { configuredFormatters, overrides }:
     name:
     let
       permittedNames = lib.optionals (lib.isAttrs configuredFormatters) (attrNames configuredFormatters);
-      isSType = x: elem x sTypeList;
+      stateList = map (state: lib.fix (lib.toFunction state)) (attrValues states);
+      isState =
+        maybePackage:
+        lib.throwIf (isFunction maybePackage) "The '${name}' conform-nvim formatter package is a function" (
+          elem maybePackage stateList
+        );
       notFoundMsg = ''
         A package for the conform-nvim formatter '${name}' could not be found.
         It is not a user defined formatter. Is the formatter name correct?
@@ -36,15 +37,17 @@ rec {
         overrides.${name} or formatter-packages.${name} or pkgs.${name}
           or (throwIfNot (elem name permittedNames) notFoundMsg null);
     in
-    if isSType maybePackage then
+    if isState maybePackage then
       {
-        inherit name;
-        mark = maybePackage;
+        wrong = {
+          inherit name;
+          mark = maybePackage;
+        };
       }
     else
-      maybePackage;
+      { right = maybePackage; };
 
-  mkWarnsFromMaybePackageList =
+  mkWarnsFromStates =
     opts: list:
     let
       mkWarn =
@@ -61,7 +64,7 @@ rec {
           }
         ];
     in
-    concatMap mkWarn (filter isSTypeAttrSet list);
+    concatMap mkWarn list;
 
   collectFormatters =
     formatters:
