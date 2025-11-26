@@ -245,21 +245,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
     let
       inherit (cfg.autoInstall) enable enableWarnings;
       inherit (import ./auto-install.nix { inherit pkgs lib; })
-        getPackageByName
+        getPackageOrStateByName
         collectFormatters
-        cleanMaybePackageList
-        mkWarnsFromMaybePackageList
+        mkWarnsFromStates
         ;
-      getPackageByNameWith = getPackageByName {
+      getPackageOrStateByNameWith = getPackageOrStateByName {
         configuredFormatters = cfg.settings.formatters;
         inherit (cfg.autoInstall) overrides;
       };
-      names = collectFormatters (attrValues cfg.settings.formatters_by_ft or { });
-      packageList = map getPackageByNameWith names;
-      warns = (mkWarnsFromMaybePackageList opts) packageList;
+      formatterNames = collectFormatters (attrValues (cfg.settings.formatters_by_ft or { }));
+      packagesAndStates = lib.foldAttrs (item: acc: [ item ] ++ acc) [ ] (
+        map getPackageOrStateByNameWith formatterNames
+      );
     in
     {
-      warnings = lib.mkIf (enable && warns != [ ] && enableWarnings) warns;
-      extraPackages = lib.mkIf enable (cleanMaybePackageList packageList);
+      warnings = lib.mkIf (enable && enableWarnings) (mkWarnsFromStates opts packagesAndStates.wrong);
+      extraPackages = lib.mkIf enable packagesAndStates.right;
     };
 }
