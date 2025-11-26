@@ -15,8 +15,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.jalil-salame ];
 
-  extraConfig.plugins.nui.enable = lib.mkDefault true; # required dependency
-
   settingsExample = {
     keys.global.quit = [ "x" ];
 
