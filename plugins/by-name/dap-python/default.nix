@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -76,26 +77,29 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # Manually supplied to nvim-dap config module
   callSetup = false;
   extraConfig = cfg: {
-    plugins.dap = {
-      enable = true;
-
-      extensionConfigLua = ''
-        require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject cfg.settings})
-      ''
-      + (optionalString (cfg.testRunners != null) ''
-        table.insert(require("dap-python").test_runners,
-        ${toLuaObject (builtins.mapAttrs (_: lib.nixvim.mkRaw) cfg.testRunners)})
-      '')
-      + (optionalString (cfg.customConfigurations != null) ''
-        table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
-      '')
-      + (optionalString (cfg.resolvePython != null) ''
-        require("dap-python").resolve_python = ${toLuaObject cfg.resolvePython}
-      '')
-      + (optionalString (cfg.testRunner != null) ''
-        require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
-      '');
+    assertions = lib.nixvim.mkAssertions "plugins.dap-python" {
+      assertion = config.plugins.dap.enable;
+      message = ''
+        You have to enable `plugins.dap` to use `plugins.dap-python`.
+      '';
     };
+
+    plugins.dap.extensionConfigLua = ''
+      require("dap-python").setup("${cfg.adapterPythonPath}", ${toLuaObject cfg.settings})
+    ''
+    + (optionalString (cfg.testRunners != null) ''
+      table.insert(require("dap-python").test_runners,
+      ${toLuaObject (builtins.mapAttrs (_: lib.nixvim.mkRaw) cfg.testRunners)})
+    '')
+    + (optionalString (cfg.customConfigurations != null) ''
+      table.insert(require("dap").configurations.python, ${toLuaObject cfg.customConfigurations})
+    '')
+    + (optionalString (cfg.resolvePython != null) ''
+      require("dap-python").resolve_python = ${toLuaObject cfg.resolvePython}
+    '')
+    + (optionalString (cfg.testRunner != null) ''
+      require("dap-python").test_runner = ${toLuaObject cfg.testRunner};
+    '');
   };
 
   # NOTE: Renames added in https://github.com/nix-community/nixvim/pull/2897 (2025-01-26)
