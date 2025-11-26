@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.dap.enable = true;
     plugins.dap-lldb.enable = true;
   };
 
   defaults = {
+    plugins.dap.enable = true;
     plugins.dap-lldb = {
       enable = true;
 

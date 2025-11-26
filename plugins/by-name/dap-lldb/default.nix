@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-lldb";
   package = "nvim-dap-lldb";
@@ -165,5 +165,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ''
           Per programming language configuration.
         '';
+  };
+
+  extraConfig = {
+    assertions = lib.nixvim.mkAssertions "plugins.dap-lldb" {
+      assertion = config.plugins.dap.enable;
+      message = ''
+        You have to enable `plugins.dap` to use `plugins.dap-lldb`.
+      '';
+    };
   };
 }
