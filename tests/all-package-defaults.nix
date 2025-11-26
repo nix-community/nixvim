@@ -59,6 +59,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2025-11-26 build failure
+    "nvim-spectre"
+
     # 2025-11-16 dependencies pyarrow and kvazaar are broken
     "aider.nvim"
 
