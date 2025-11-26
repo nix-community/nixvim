@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.dap.enable = true;
     plugins.dap-view.enable = true;
   };
 
   defaults = {
+    plugins.dap.enable = true;
     plugins.dap-view = {
       enable = true;
 
@@ -154,6 +156,7 @@
   };
 
   example = {
+    plugins.dap.enable = true;
     plugins.dap-view = {
       enable = true;
 

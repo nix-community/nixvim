@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "dap-view";
   moduleName = "dap-view";
@@ -18,6 +18,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = {
+    assertions = lib.nixvim.mkAssertions "plugins.dap-view" {
+      assertion = config.plugins.dap.enable;
+      message = ''
+        You have to enable `plugins.dap` to use `plugins.dap-view`.
+      '';
+    };
+
     # Compatibility with lualine module.
     # Broken UI otherwise https://github.com/igorlfs/nvim-dap-view/issues/36
     plugins.lualine.settings.options.disabled_filetypes.winbar = [
