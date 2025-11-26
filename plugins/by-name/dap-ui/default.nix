@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   ...
 }:
@@ -191,6 +192,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
     select_window = defaultNullOpts.mkLuaFn null ''
       A function which returns a window to be used for opening buffers such as a stack frame location.
     '';
+  };
+
+  extraConfig = {
+    assertions = lib.nixvim.mkAssertions "plugins.dap-ui" {
+      assertion = config.plugins.dap.enable;
+      message = ''
+        You have to enable `plugins.dap` to use `plugins.dap-ui`.
+      '';
+    };
   };
 
   # NOTE: Renames added in https://github.com/nix-community/nixvim/pull/2897 (2025-01-26)
