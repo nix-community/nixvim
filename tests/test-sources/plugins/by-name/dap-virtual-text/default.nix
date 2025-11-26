@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.dap.enable = true;
     plugins.dap-virtual-text.enable = true;
   };
 
   default = {
+    plugins.dap.enable = true;
     plugins.dap-virtual-text = {
       enable = true;
 
