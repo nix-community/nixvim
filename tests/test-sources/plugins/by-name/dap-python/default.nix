@@ -1,9 +1,11 @@
 {
   empty = {
+    plugins.dap.enable = true;
     plugins.dap-python.enable = true;
   };
 
   example = {
+    plugins.dap.enable = true;
     plugins.dap-python = {
       enable = true;
 
@@ -34,6 +36,7 @@
   };
 
   default = {
+    plugins.dap.enable = true;
     plugins.dap-python = {
       enable = true;
 
