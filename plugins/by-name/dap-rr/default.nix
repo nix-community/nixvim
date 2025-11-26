@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 let
   inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
@@ -50,8 +50,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # Manually supplied to nvim-dap config module
   callSetup = false;
   extraConfig = cfg: {
+    assertions = lib.nixvim.mkAssertions "plugins.dap-rr" {
+      assertion = config.plugins.dap.enable;
+      message = ''
+        You have to enable `plugins.dap` to use `plugins.dap-rr`.
+      '';
+    };
+
     plugins.dap = {
-      enable = true;
       extensionConfigLua = ''
         require("nvim-dap-rr").setup(${lib.nixvim.toLuaObject cfg.settings})
       '';
