@@ -14,7 +14,11 @@
       lsp = {
         enable = true;
 
-        servers.leanls.enable = true;
+        # FIXME: 2025-11-26: Enabling `plugins.lsp.leanls` throws the following warning:
+        # The option definition `plugins.lsp.servers.leanls' in ... no longer has any effect; please remove it.
+        # nvim-lspconfig has switched from its own LSP configuration API to neovim's built-in LSP API.
+        # 'leanls' has not been updated to support neovim's built-in LSP API.
+        # servers.leanls.enable = true;
       };
 
       lean = {
