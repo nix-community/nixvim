@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  options,
   lib,
   ...
 }:
@@ -319,6 +320,9 @@ in
               printInitPackage
             ];
           meta.mainProgram = "nvim";
+          passthru = {
+            inherit config options;
+          };
         };
 
         printInitPackage = pkgs.writeShellApplication {
