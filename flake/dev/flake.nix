@@ -5,7 +5,7 @@
     # NOTE: Use a different name to the root flake's inputs.nixpkgs to avoid shadowing it.
     # NOTE: The only reason we specify a nixpkgs input at all here, is so the other inputs can follow it.
     # TODO: Once nix 2.26 is more prevalent, follow the root flake's inputs using a "path:../.." input.
-    dev-nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    dev-nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     # flake-compat is used by the root `default.nix` to allow non-flake users to import nixvim
     #
