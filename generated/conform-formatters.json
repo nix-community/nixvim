@@ -214,6 +214,7 @@
   "swiftlint",
   "syntax_tree",
   "taplo",
+  "tclfmt",
   "templ",
   "terraform_fmt",
   "terragrunt_hclfmt",
