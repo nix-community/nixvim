@@ -77,7 +77,7 @@ in
 
       # A directory with all the files in it
       # Implementation based on NixOS's /etc module
-      build.extraFiles = pkgs.runCommandLocal "nvim-config" { } ''
+      build.extraFiles = pkgs.runCommandLocal "nvim-config" { passthru.vimPlugin = true; } ''
         set -euo pipefail
 
         makeEntry() {
