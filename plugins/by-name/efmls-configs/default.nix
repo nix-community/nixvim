@@ -182,7 +182,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
           (
             builtins.removeAttrs cfg.setup [
               "all"
+              # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
               "warnings"
+              "HTML"
+              "JSON"
             ]
           )
         )
