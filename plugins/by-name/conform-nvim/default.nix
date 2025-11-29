@@ -259,7 +259,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
       );
     in
     {
-      warnings = lib.mkIf (enable && enableWarnings) (mkWarnsFromStates opts packagesAndStates.wrong);
-      extraPackages = lib.mkIf enable packagesAndStates.right;
+      warnings = lib.mkIf (enable && enableWarnings) (
+        mkWarnsFromStates opts (packagesAndStates.wrong or [ ])
+      );
+      extraPackages = lib.mkIf enable (packagesAndStates.right or [ ]);
     };
 }
