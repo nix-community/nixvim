@@ -96,12 +96,6 @@
     githubId = 50964650;
     name = "gwen";
   };
-  insipx = {
-    email = "github.tech@liquidthink.net";
-    github = "insipx";
-    githubId = 6452260;
-    name = "Andrew Plaza";
-  };
   jalil-salame = {
     email = "jalil.salame@gmail.com";
     github = "jalil-salame";
