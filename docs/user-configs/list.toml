@@ -76,6 +76,11 @@ repo = "khanelivim"
 description = "Constantly tweaked jack of all trades development focused configuration."
 
 [[config]]
+owner = "mathjiajia"
+repo = "nix-darwin"
+description = "A nixvim configuration, with nix-darwin and home-manager"
+
+[[config]]
 owner = "MikaelFangel"
 repo = "nixvim-config"
 description = "An easy-setup configuration for NixVim, focused on straightforward customization"
