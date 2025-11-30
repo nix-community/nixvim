@@ -26,86 +26,114 @@ writeShellApplication {
       shift
     done
 
-    update_args=( )
-    if [ -n "$commit" ]; then
-      update_args+=( "--commit-lock-file" )
-    fi
-
     # Ensure we run at the root of the flake
     cd "$(git rev-parse --show-toplevel)"
 
-    currentCommit() {
-      git show --no-patch --format=%h
-    }
+    workdir=$(mktemp -d -t update-XXXXXX)
+    trap 'rm -rf "$workdir"' EXIT
+    root_update="$workdir/root_update"
+    dev_update="$workdir/dev_update"
+    root_msg="$workdir/root_msg"
+    dev_msg="$workdir/dev_msg"
+    commit_msg="$workdir/commit_msg"
 
-    hasChanges() {
-      old="$1"
-      new="$2"
-      if [ -n "$commit" ]; then
-        [ "$old" != "$new" ]
-      elif git diff --quiet; then
-        return 1
-      else
-        return 0
-      fi
+    cleanUpdateOutput() {
+      awk --assign prefix="$PWD/" '
+        # Find the start of the update info block
+        /^warning: updating lock file "/ {
+          if (match($0, /"([^"]+)"/, m)) {
+            # Print the first line as `{path} updates:`
+            path = m[1]
+            sub("^" prefix, "", path)
+            print path " updates:"
+
+            # Mark that we have entered the update info block
+            printing=1
+          }
+          next
+        }
+
+        # Print while in the update info block
+        printing {
+          if ($0 == "") exit
+          print
+        }
+      ' "$1"
     }
 
     writeGitHubOutput() {
-      if [ -n "$use_github_output" ] && [ -n "$commit" ]; then
+      if [ -n "$use_github_output" ]; then
         {
           echo "$1<<EOF"
-          git show --no-patch --format=%b
+          cat "$2"
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
       fi
     }
 
     versionInfo() {
-      extra_args=( )
-      if [ "$1" = "--amend" ]; then
-        extra_args+=(
-          "--amend"
-          "--no-edit"
-        )
-      fi
-
+      echo "Updating version-info"
       "$(nix-build ./ci -A version-info --no-out-link)"/bin/version-info
-
-      if [ -n "$commit" ]; then
-        git add version-info.toml
-        git commit "''${extra_args[@]}"
-      fi
     }
 
     # Initialise version-info.toml
     if [ ! -f version-info.toml ]; then
       echo "Creating version-info file"
-      versionInfo -m "version-info: init"
+      versionInfo
+      if [ -n "$commit" ]; then
+        git add version-info.toml
+        git commit -m "version-info: init"
+      fi
     fi
 
+    # Commit message summary
+    {
+      # Avoid using impure global config from `nix config show commit-lock-file-summary`
+      nix-instantiate --raw --eval flake.nix --attr nixConfig.commit-lock-file-summary 2>/dev/null \
+      || echo -n "flake: Update"
+      printf '\n'
+    } >"$commit_msg"
+
     # Update the root lockfile
-    old=$(currentCommit)
     echo "Updating root lockfile"
-    nix flake update "''${update_args[@]}"
-    new=$(currentCommit)
-    if hasChanges "$old" "$new"; then
-      echo "Updating version-info"
-      versionInfo --amend
-      writeGitHubOutput root_lock_body
+    nix flake update 2> >(tee "$root_update" >&2)
+    cleanUpdateOutput "$root_update" > "$root_msg"
+    if [ -s "$root_msg" ]; then
+      {
+        printf '\n'
+        cat "$root_msg"
+      } >>"$commit_msg"
+      versionInfo
+      writeGitHubOutput root_lock_body "$root_msg"
     fi
 
     # Update the dev lockfile
     root_nixpkgs=$(nix eval --raw --file . 'inputs.nixpkgs.rev')
-    old=$(currentCommit)
     echo "Updating dev lockfile"
-    nix flake update "''${update_args[@]}" \
+    nix flake update \
         --override-input 'dev-nixpkgs' "github:NixOS/nixpkgs/$root_nixpkgs" \
-        --flake './flake/dev'
-    new=$(currentCommit)
-    if hasChanges "$old" "$new"; then
-      echo "Updating version-info"
-      versionInfo --amend
-      writeGitHubOutput dev_lock_body
+        --flake './flake/dev' \
+        2> >(tee "$dev_update" >&2)
+    cleanUpdateOutput "$dev_update" > "$dev_msg"
+    if [ -s "$dev_msg" ]; then
+      {
+        printf '\n'
+        cat "$dev_msg"
+      } >>"$commit_msg"
+      versionInfo
+      writeGitHubOutput dev_lock_body "$dev_msg"
+    fi
+
+    # Only commit if at least one file has changes
+    if git diff --quiet flake.lock flake/dev/flake.lock version-info.toml; then
+      echo "Nothing to commit"
+    elif [ -n "$commit" ]; then
+      echo "Committing"
+      git add flake.lock flake/dev/flake.lock version-info.toml
+      git commit --file "$commit_msg"
+    else
+      echo "Would commit as (skipping):"
+      cat "$commit_msg"
     fi
   '';
 }
