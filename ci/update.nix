@@ -69,8 +69,7 @@ writeShellApplication {
         )
       fi
 
-      nix-build ./ci -A version-info
-      ./result/bin/version-info
+      "$(nix-build ./ci -A version-info --no-out-link)"/bin/version-info
 
       if [ -n "$commit" ]; then
         git add version-info.toml
