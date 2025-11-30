@@ -31,6 +31,9 @@ writeShellApplication {
       update_args+=( "--commit-lock-file" )
     fi
 
+    # Ensure we run at the root of the flake
+    cd "$(git rev-parse --show-toplevel)"
+
     currentCommit() {
       git show --no-patch --format=%h
     }
