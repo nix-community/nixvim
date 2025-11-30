@@ -30,8 +30,8 @@ in
 
     waylandSupport = mkOption {
       type = types.bool;
-      default = pkgs.stdenv.hostPlatform.isLinux;
-      defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isLinux";
+      default = lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.wayland;
+      defaultText = lib.literalExpression "lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.wayland";
       description = "Enable additional wayland support, such as wl-clipboard for wayland clipboard syncing.";
     };
 
