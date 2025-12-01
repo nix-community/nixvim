@@ -120,6 +120,12 @@
     githubId = 50964650;
     name = "gwen";
   };
+  fwastring = {
+    email = "fredrik@wastring.com";
+    github = "fwastring";
+    githubId = 25203388;
+    name = "Fredrik Wastring";
+  };
   jalil-salame = {
     email = "jalil.salame@gmail.com";
     github = "jalil-salame";
