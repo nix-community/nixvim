@@ -27,7 +27,9 @@ lib.nixvim.plugins.mkVimPlugin {
       {
         when =
           config.performance.combinePlugins.enable
-          && !(builtins.elem "friendly-snippets" config.performance.combinePlugins.standalonePlugins)
+          && !(builtins.elem "friendly-snippets" (
+            map lib.getName config.performance.combinePlugins.standalonePlugins
+          ))
           && (enabledConsumers != [ ]);
         message = ''
           When using ${options.performance.combinePlugins.enable}, ${options.plugins.friendly-snippets.enable} and ${enabledConsumersPretty}:
