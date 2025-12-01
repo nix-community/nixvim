@@ -10,7 +10,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.fwastring ];
 
   settingsExample = {
-    on_substitute = lib.nixvim.mkRaw "nil";
+    on_substitute = lib.nixvim.nestedLiteralLua ''
+      function(params)
+        vim.notify("substituted using register " .. params.register)
+      end
+    '';
 
     yank_substituted_text = true;
     modifiers = [
