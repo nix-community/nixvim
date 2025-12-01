@@ -13,9 +13,9 @@ Deprecations should include a comment in the format of:
 
 where:
 
-- `n` is the current release; 25.05 at the time of writing
-- `n+1` is the next release; 25.11 at the time of writing
-- `n+2` is the release following `n+1`; 26.05 at the time of writing
+- `n` is the current release; 25.11 at the time of writing
+- `n+1` is the next release; 26.05 at the time of writing
+- `n+2` is the release following `n+1`; 26.11 at the time of writing
 
 If a warning is created on release `n`, then:
 
