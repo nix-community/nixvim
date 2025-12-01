@@ -18,6 +18,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
     hlsPackage = lib.mkPackageOption pkgs "haskell-language-server" {
       nullable = true;
     };
+    hlsPackageFallback = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        When enabled, hls will be added to the end of the `PATH` _(suffix)_ instead of the beginning _(prefix)_.
+
+        This can be useful if you want local versions of hls (e.g. from a devshell) to override the Nixvim version.
+      '';
+    };
   };
 
   settingsExample = {
@@ -43,7 +52,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     globals.haskell_tools = cfg.settings;
-    extraPackages = [ cfg.hlsPackage ];
+    extraPackages = lib.optionals (!cfg.hlsPackageFallback) [ cfg.hlsPackage ];
+    extraPackagesAfter = lib.optionals cfg.hlsPackageFallback [ cfg.hlsPackage ];
 
     plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "ht" ];
     assertions = lib.nixvim.mkAssertions "plugins.haskell-tools" {
