@@ -46,7 +46,7 @@
     plugins.substitute = {
       enable = true;
       settings = {
-        on_substitute = lib.nixvim.nestedLiteralLua ''
+        on_substitute = lib.nixvim.mkRaw ''
           function(params)
             vim.notify("substituted using register " .. params.register)
           end
