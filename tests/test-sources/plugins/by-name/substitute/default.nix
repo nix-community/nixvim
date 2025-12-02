@@ -1,4 +1,8 @@
 {
+  lib,
+  ...
+}:
+{
   empty = {
     plugins.substitute.enable = true;
   };
@@ -7,10 +11,11 @@
     plugins.substitute = {
       enable = true;
       settings = {
-        on_substitute.__raw = "nil";
+        on_substitute = lib.nixvim.mkRaw "nil";
         yank_substituted_text = false;
         preserve_cursor_position = false;
-        modifiers.__raw = "nil";
+        modifiers = lib.nixvim.mkRaw "nil";
+
         highlight_substituted_text = {
           enabled = true;
           timer = 500;
@@ -21,15 +26,15 @@
           confirm = false;
           complete_word = false;
           group_substituted_text = false;
-          subject.__raw = "nil";
-          range.__raw = "nil";
-          register.__raw = "nil";
+          subject = lib.nixvim.mkRaw "nil";
+          range = lib.nixvim.mkRaw "nil";
+          register = lib.nixvim.mkRaw "nil";
           suffix = "";
           auto_apply = false;
           cursor_position = "end";
         };
         exchange = {
-          motion.__raw = "nil";
+          motion = lib.nixvim.mkRaw "nil";
           use_esc_to_cancel = true;
           preserve_cursor_position = false;
         };
@@ -41,7 +46,7 @@
     plugins.substitute = {
       enable = true;
       settings = {
-        on_substitute.__raw = ''
+        on_substitute = lib.nixvim.nestedLiteralLua ''
           function(params)
             vim.notify("substituted using register " .. params.register)
           end
