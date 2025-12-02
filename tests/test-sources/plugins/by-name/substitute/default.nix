@@ -1,7 +1,4 @@
-{
-  lib,
-  ...
-}:
+{ lib }:
 {
   empty = {
     plugins.substitute.enable = true;
