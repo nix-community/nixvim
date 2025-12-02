@@ -123,6 +123,7 @@ in
     mago_lint = mago;
     markdownlint = markdownlint-cli;
     mix = beamMinimal28Packages.elixir;
+    mh_style = python3Packages.miss-hit;
     nginxfmt = nginx-config-formatter;
     nimpretty = nim;
     nixpkgs_fmt = nixpkgs-fmt;
