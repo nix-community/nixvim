@@ -7,8 +7,7 @@ title = "nixvim docs"
 
 [output.html]
 site-url = "@SITE_URL@"
-additional-js = ["theme/pagetoc.js"]
-additional-css = ["custom.css", "theme/pagetoc.css"]
+additional-css = ["custom.css"]
 git-repository-url = "https://github.com/nix-community/nixvim"
 
 # Redirect targets must be relative to their origin;
@@ -21,5 +20,3 @@ enable = true
 level = 0
 
 [preprocessor.alerts]
-
-[preprocessor.pagetoc]
