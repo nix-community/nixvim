@@ -24,5 +24,6 @@
     ./output.nix
     ./performance.nix
     ./plugins.nix
+    ./wrappers.nix
   ];
 }
