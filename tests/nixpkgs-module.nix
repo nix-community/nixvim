@@ -24,6 +24,7 @@ let
             runNvim = false;
             runCommand = runCommandLocal;
           };
+          version.enableNixpkgsReleaseCheck = false;
         }
         ../modules/misc
         ../modules/top-level/test.nix
