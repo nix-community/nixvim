@@ -8,16 +8,6 @@ Documentation is currently available for the following versions:
 
 @DOCS_VERSIONS@
 
-## Recent Breaking Changes
-
-> [!CAUTION]
-> By default, Nixvim now constructs its own instance of nixpkgs, using the revision from our flake.lock.
-> This change was largely motivated by: [How do I solve "`<name>` cannot be found in `pkgs`"](./user-guide/faq.html#how-do-i-solve-name-cannot-be-found-in-pkgs)
->
-> The old behaviour can be restored by enabling `nixpkgs.useGlobalPackages`.
->
-> If your flake modifies the `nixpkgs` through `follows` this can still cause issues by changing the expected `nixpkg` `nixvim` was tested & built against.
-
 @README@
 
 ## Welcome to the docs!
