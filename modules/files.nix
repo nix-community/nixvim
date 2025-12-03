@@ -88,15 +88,11 @@ let
     modules = [ fileTypeModule ];
     specialArgs.topConfig = config;
   };
-
-  # TODO: Added 2024-07-07, remove after 24.11
-  # Before we had a fileType, we used types.str.
-  coercedFileType = lib.nixvim.transitionType lib.types.str (text: { inherit text; }) fileType;
 in
 {
   options = {
     extraFiles = lib.mkOption {
-      type = lib.types.attrsOf coercedFileType;
+      type = lib.types.attrsOf fileType;
       description = "Extra files to add to the runtime path";
       default = { };
       example = lib.literalExpression ''
