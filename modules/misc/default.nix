@@ -4,5 +4,6 @@
     ./context.nix
     ./meta.nix
     ./nixvim-info.nix
+    ./version.nix
   ];
 }
