@@ -154,7 +154,6 @@
     "stylua3p_ls"
     "svlangserver"
     "tabby_ml"
-    "tclsp"
     "termux_language_server"
     "textlsp"
     "theme_check"
@@ -396,6 +395,7 @@
       "llvmPackages"
       "mlir"
     ];
+    tclsp = "tclint";
     teal_ls = [
       "luaPackages"
       "teal-language-server"
