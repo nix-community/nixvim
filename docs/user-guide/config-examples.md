@@ -8,7 +8,7 @@ Take a look at these configuration examples below.
 
 **Note:**\
 Most of those configurations are using a [standalone build](../platforms/standalone.html), however,
-all of the nixvim options are accessible no matter how you are using it (flake, NixOS/HM module, nix-darwin...).
+all of the Nixvim options are accessible no matter how you are using it (flake, NixOS/HM module, nix-darwin...).
 
 @USER_CONFIGS@
 

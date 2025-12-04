@@ -1,4 +1,4 @@
-# Structure for nixvim docs
+# Structure for Nixvim docs
 
 - [Home](./index.md)
 
@@ -27,4 +27,4 @@
 
 [Contributing](./CONTRIBUTING.md)
 [Maintaining](./MAINTAINING.md)
-[NixVim Options Search](./search/index.html)
+[Nixvim Options Search](./search/index.html)

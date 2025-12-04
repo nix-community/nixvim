@@ -6,7 +6,7 @@
     };
     new = {
       path = ../templates/experimental-flake-parts;
-      description = "An experimental flake template for configuring nixvim using evalNixvim and flake.parts";
+      description = "An experimental flake template for configuring Nixvim using evalNixvim and flake.parts";
     };
   };
 }

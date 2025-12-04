@@ -1,6 +1,6 @@
 # New Nixvim template
 
-This template gives you a good starting point for configuring nixvim as a standalone module configuration.
+This template gives you a good starting point for configuring Nixvim as a standalone module configuration.
 
 ## Configuring
 
@@ -17,7 +17,7 @@ nix run
 
 ## Configurations and packages
 
-Your nixvim configuration is created using `evalNixvim`.
+Your Nixvim configuration is created using `evalNixvim`.
 This is outputted as the `nixvimConfigurations.<system>.default` flake output.
 
 You can access your configuration's package outputs `<configuration>.config.build.package`.

@@ -68,7 +68,7 @@ in
       description = ''
         Whether the config will be included in the wrapper script.
 
-        When enabled, the nixvim config will be passed to `nvim` using the `-u` option.
+        When enabled, the Nixvim config will be passed to `nvim` using the `-u` option.
       '';
       defaultText = lib.literalMD ''
         Configured by your installation method: `false` when using the Home Manager module, `true` otherwise.

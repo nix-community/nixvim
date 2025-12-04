@@ -93,7 +93,7 @@ lib.mkOption {
     If `plugins.cmp.autoEnableSources` Nixivm will automatically enable the corresponding source
     plugins. This will work only when this option is set to a list.
     If you use a raw lua string, you will need to explicitly enable the relevant source plugins in
-    your nixvim configuration.
+    your Nixvim configuration.
   '';
   example = [
     { name = "nvim_lsp"; }

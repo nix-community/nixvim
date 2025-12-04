@@ -35,17 +35,17 @@
           [
             {
               name = "checks";
-              help = "Run all nixvim checks";
+              help = "Run all Nixvim checks";
               # TODO: run tests from the `ci` flake output too?
               command = ''
-                echo "=> Running all nixvim checks..."
+                echo "=> Running all Nixvim checks..."
 
                 ${nix} flake check "$@"
               '';
             }
             {
               name = "tests";
-              help = "Run nixvim tests";
+              help = "Run Nixvim tests";
               command =
                 let
                   launchTest = pkgs.writeShellApplication {
@@ -67,9 +67,9 @@
             }
             {
               name = "test-lib";
-              help = "Run nixvim library tests";
+              help = "Run Nixvim library tests";
               command = ''
-                echo "=> Running nixvim library tests for the '${system}' architecture..."
+                echo "=> Running Nixvim library tests for the '${system}' architecture..."
 
                 ${nix} build .#checks.${system}.lib-tests "$@"
               '';
@@ -81,9 +81,9 @@
             }
             {
               name = "docs";
-              help = "Build nixvim documentation";
+              help = "Build Nixvim documentation";
               command = ''
-                echo "=> Building nixvim documentation..."
+                echo "=> Building Nixvim documentation..."
 
                 ${nix} build .#docs "$@"
               '';
@@ -92,7 +92,7 @@
               name = "serve-docs";
               help = "Build and serve documentation locally";
               command = ''
-                echo -e "=> Building nixvim documentation...\n"
+                echo -e "=> Building Nixvim documentation...\n"
                 nix run .#docs
               '';
             }
@@ -104,7 +104,7 @@
             {
               name = "diff-plugins";
               command = ''${./diff-plugins.py} "$@"'';
-              help = "Compare available plugins with another nixvim commit";
+              help = "Compare available plugins with another Nixvim commit";
             }
           ];
       };

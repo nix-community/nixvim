@@ -1,4 +1,4 @@
-# NixVim - A Neovim configuration system for nix
+# Nixvim - A Neovim configuration system for nix
 
 ## Other versions of these docs
 

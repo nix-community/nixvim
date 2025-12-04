@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   programs.nixvim = {
-    # This just enables NixVim.
+    # This just enables Nixvim.
     # If all you have is this, then there will be little visible difference
     # when compared to just installing NeoVim.
     enable = true;
@@ -47,7 +47,7 @@
     # Or lua!
     extraConfigLua = builtins.readFile ./init.lua;
 
-    # One of the big advantages of NixVim is how it provides modules for
+    # One of the big advantages of Nixvim is how it provides modules for
     # popular vim plugins
     # Enabling a plugin this way skips all the boring configuration that
     # some plugins tend to require.

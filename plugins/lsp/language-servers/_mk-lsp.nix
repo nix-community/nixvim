@@ -92,7 +92,7 @@ in
         description = ''
           When enabled, the language server package will be added to the end of the `PATH` _(suffix)_ instead of the beginning _(prefix)_.
 
-          This can be useful if you want local versions of the language server (e.g. from a devshell) to override the nixvim version.
+          This can be useful if you want local versions of the language server (e.g. from a devshell) to override the Nixvim version.
         '';
         apply = v: if enabled then config.lsp.servers.${serverName}.packageFallback else v;
       };
