@@ -33,7 +33,7 @@ in
       type = with lib.types; attrsOf str;
       default = { };
       description = ''
-        Internal option used to associate nvim-cmp source names with nixvim plugin module names.
+        Internal option used to associate nvim-cmp source names with Nixvim plugin module names.
 
         Maps `<source-name> = <plugin-name>` where _plugin-name_ is the module name: `plugins.<plugin-name>.enable`.
       '';

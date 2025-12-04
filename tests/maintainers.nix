@@ -12,7 +12,7 @@ let
 in
 runCommandLocal "maintainers-test" { inherit count duplicates; } ''
   if [ $count -gt 0 ]; then
-    echo "$count nixvim maintainers are also nixpkgs maintainers:"
+    echo "$count Nixvim maintainers are also nixpkgs maintainers:"
     for name in $duplicates; do
       echo "- $name"
     done

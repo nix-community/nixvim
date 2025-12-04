@@ -24,7 +24,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins. This is the default behavior, but will work only when this option is set to a list.
 
     If you use a raw lua string or set `plugins.cmp.autoEnableSources` to `false`, you will need to explicitly enable the relevant source plugins in
-    your nixvim configuration.
+    your Nixvim configuration.
 
     #### With auto-enabled sources
     ```nix

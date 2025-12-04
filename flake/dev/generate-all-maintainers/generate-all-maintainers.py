@@ -42,7 +42,7 @@ def get_project_root() -> Path:
 
 
 class MetaMaintainerGenerator:
-    """Generates maintainers list using meta.maintainers from nixvim evaluation."""
+    """Generates maintainers list using meta.maintainers from Nixvim evaluation."""
 
     def __init__(self, nixvim_root: Path):
         self.nixvim_root = nixvim_root

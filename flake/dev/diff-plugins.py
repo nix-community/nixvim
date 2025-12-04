@@ -9,10 +9,10 @@ from argparse import ArgumentParser, ArgumentTypeError
 
 def main():
     """
-    Main function to compare nixvim plugins with another revision.
+    Main function to compare Nixvim plugins with another revision.
     """
 
-    parser = ArgumentParser(description="Compare nixvim plugins with another revision")
+    parser = ArgumentParser(description="Compare Nixvim plugins with another revision")
     parser.add_argument(
         "base_flakeref",
         metavar="before",

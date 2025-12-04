@@ -15,7 +15,7 @@ lib: {
         "coverage"
       ];
       message = ''
-        Use nixvim top-level `keyamps` option to manually declare your 'nvim-coverage' keymaps.
+        Use Nixvim top-level `keyamps` option to manually declare your 'nvim-coverage' keymaps.
       '';
     in
     [

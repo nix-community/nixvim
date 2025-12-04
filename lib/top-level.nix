@@ -9,7 +9,7 @@
   # Inputs
 
   `flake`
-  : The nixvim flake.
+  : The Nixvim flake.
 
   `lib`
   : The final extended lib.

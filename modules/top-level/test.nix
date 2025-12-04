@@ -102,7 +102,7 @@ in
 
     buildNixvim = lib.mkOption {
       type = lib.types.bool;
-      description = "Whether to build the nixvim config in the test.";
+      description = "Whether to build the Nixvim config in the test.";
       default = true;
     };
 

@@ -41,7 +41,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             - ImageMagick is required for Sixel encoding
 
           > [!Note]
-          > When choosing the `"ueberzug"` backend, nixvim will automatically add `ueberzugpp` as a dependency.
+          > When choosing the `"ueberzug"` backend, Nixvim will automatically add `ueberzugpp` as a dependency.
           > Set `ueberzugPackage = null` to disable this behavior.
         '';
 

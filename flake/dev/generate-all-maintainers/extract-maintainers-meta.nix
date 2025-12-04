@@ -43,7 +43,7 @@ let
           else if categorizedMaintainers.nixpkgs ? ${obj.github} then
             "nixpkgs"
           else
-            throw "${obj.github} is neither a nixvim or nixpkgs maintainer";
+            throw "${obj.github} is neither a Nixvim or nixpkgs maintainer";
       };
     }))
     lib.listToAttrs
