@@ -61,23 +61,23 @@ let
       '';
 
       annote_style = defaultNullOpts.mkStr "Question" ''
-        Default style used to highlight item annotes.
+        Default style used to highlight item annotates.
       '';
 
       debug_style = lib.nixvim.mkNullOrOption types.str ''
-        Style used to highlight debug item annotes.
+        Style used to highlight debug item annotates.
       '';
 
       info_style = lib.nixvim.mkNullOrOption types.str ''
-        Style used to highlight info item annotes.
+        Style used to highlight info item annotates.
       '';
 
       warn_style = lib.nixvim.mkNullOrOption types.str ''
-        Style used to highlight warn item annotes.
+        Style used to highlight warn item annotates.
       '';
 
       error_style = lib.nixvim.mkNullOrOption types.str ''
-        Style used to highlight error item annotes.
+        Style used to highlight error item annotates.
       '';
 
       debug_annote = lib.nixvim.mkNullOrOption types.str ''

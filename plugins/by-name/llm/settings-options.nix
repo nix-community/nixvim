@@ -10,7 +10,7 @@ let
 in
 {
   api_token = mkNullOrStr ''
-    Token for authentificating to the backend provider.
+    Token for authenticating to the backend provider.
 
     When `api_token` is set, it will be passed as a header: `Authorization: Bearer <api_token>`.
   '';
