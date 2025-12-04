@@ -80,7 +80,6 @@ in
     spotless_maven = states.unpackaged;
     standard-clj = states.unpackaged;
     standardjs = states.unpackaged;
-    tclfmt = states.unpackaged;
     tlint = states.unpackaged;
     twig-cs-fixer = states.unpackaged;
     typstfmt = states.unpackaged;
@@ -150,6 +149,7 @@ in
     standardrb = rubyPackages.standard;
     styler = R;
     inherit (rubyPackages) syntax_tree;
+    tclfmt = tclint;
     terraform_fmt = tenv;
     terragrunt_hclfmt = terragrunt;
     tofu_fmt = opentofu;
