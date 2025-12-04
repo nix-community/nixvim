@@ -14,7 +14,7 @@ in
 
   formatting = {
     Indent = defaultNullOpts.mkUnsignedInt 2 ''
-      The number of spaces for each level of indenation.
+      The number of spaces for each level of indentation.
     '';
 
     MaxBlankLines = defaultNullOpts.mkUnsignedInt 2 ''

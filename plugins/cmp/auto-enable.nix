@@ -65,7 +65,7 @@ in
             message = ''
               You have enabled `autoEnableSources` that tells Nixvim to automatically
               enable the source plugins with respect to the list of sources provided in `settings.sources`.
-              However, the latter is proveded as a raw lua string which is not parseable by Nixvim.
+              However, the latter is provided as a raw lua string which is not parseable by Nixvim.
 
               If you want to keep using raw lua for defining your sources:
               - Ensure you enable the relevant plugins manually in your configuration;

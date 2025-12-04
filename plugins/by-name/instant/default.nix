@@ -39,7 +39,7 @@ mkVimPlugin {
     '';
 
     cursor_hl_group_default = lib.nixvim.defaultNullOpts.mkStr "Cursor" ''
-      Cursor highlight group for any other userr.
+      Cursor highlight group for any other user.
     '';
 
     name_hl_group_user1 = lib.nixvim.defaultNullOpts.mkStr "CursorLineNr" ''

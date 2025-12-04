@@ -91,7 +91,7 @@ rec {
     };
 
     options.timeout = lib.nixvim.defaultNullOpts.mkInt 5000 ''
-      Max amount of time in ms to wait between spaning the executable and connecting to the pipe.
+      Max amount of time in ms to wait between spanning the executable and connecting to the pipe.
       This gives the executable time to create the pipe
     '';
   };

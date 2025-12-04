@@ -294,7 +294,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             '';
 
             min_pattern_length = lib.nixvim.defaultNullOpts.mkInt defaults.label.min_pattern_length ''
-              minimum pattrn length to show labels
+              minimum pattern length to show labels
               Ignored for custom labelers.
             '';
 
