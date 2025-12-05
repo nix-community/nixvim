@@ -129,41 +129,5 @@ lib.makeExtensible (
 
     inherit (self.lua) toLuaObject;
     mkLuaInline = self.lua.mkInline;
-
-    # TODO: Removed 2024-12-21
-    extendedLib = throw "`extendedLib` has been removed. Use `lib.extend <nixvim>.lib.overlay` instead.";
   }
-  //
-    # TODO: Removed 2024-09-27; remove after 24.11
-    lib.mapAttrs
-      (
-        old: new:
-        throw "The `${old}` alias has been removed. Use `${new}` on a lib with nixvim's extensions."
-      )
-      {
-        maintainers = "lib.maintainers";
-        nixvimTypes = "lib.types";
-      }
-  //
-    # TODO: neovim-plugin & vim-plugin aliases deprecated 2024-12-22; internal functions
-    lib.mapAttrs'
-      (scope: names: {
-        name = "${scope}-plugin";
-        value = lib.genAttrs names (
-          name:
-          lib.warn "`${scope}-plugin.${name}` has been moved to `plugins.${scope}.${name}`."
-            self.plugins.${scope}.${name}
-        );
-      })
-      {
-        neovim = [
-          "extraOptionsOptions"
-          "mkNeovimPlugin"
-        ];
-        vim = [
-          "mkSettingsOption"
-          "mkSettingsOptionDescription"
-          "mkVimPlugin"
-        ];
-      }
 )
