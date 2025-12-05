@@ -76,28 +76,92 @@ in
       );
 
       # A directory with all the files in it
-      # Implementation based on NixOS's /etc module
-      build.extraFiles = pkgs.runCommandLocal "nvim-config" { passthru.vimPlugin = true; } ''
-        set -euo pipefail
+      # Implementation inspired by NixOS's /etc module
+      build.extraFiles =
+        pkgs.runCommandLocal "nvim-config"
+          {
+            __structuredAttrs = true;
+            targets = lib.catAttrs "target" extraFiles;
+            sources = lib.catAttrs "finalSource" extraFiles;
+            passthru.vimPlugin = true;
+          }
+          ''
+            set -euo pipefail
 
-        makeEntry() {
-          src="$1"
-          target="$2"
-          mkdir -p "$out/$(dirname "$target")"
-          cp "$src" "$out/$target"
-        }
+            numTargets=''${#targets[@]}
 
-        mkdir -p "$out"
-        ${lib.concatMapStringsSep "\n" (
-          { target, finalSource, ... }:
-          lib.escapeShellArgs [
-            "makeEntry"
-            # Force local source paths to be added to the store
-            "${finalSource}"
-            target
-          ]
-        ) extraFiles}
-      '';
+            # Check if $1 is a prefix of $2
+            hasPrefix() {
+              case "$2" in
+                "$1"/*) return 0 ;;
+                *) return 1 ;;
+              esac
+            }
+
+            checkPrefix() {
+              if hasPrefix "$1" "$2"; then
+                echo "error: '$1' is a target, but another target conflicts: '$2'" >&2
+                exit 1
+              fi
+            }
+
+            # Fail if two targets conflict (duplicate or file/directory conflict)
+            checkConflict() {
+              local tgtA="$1"
+              local srcA="$2"
+              local tgtB="$3"
+              local srcB="$4"
+
+              # Exact duplicate with different content
+              if
+                [[ "$tgtA" == "$tgtB" ]] && [[ "$srcA" != "$srcB" ]] &&
+                ! diff -q "$srcA" "$srcB" >/dev/null
+              then
+                echo "error: target '$tgtA' defined twice with different sources:" >&2
+                echo "  $srcA" >&2
+                echo "  $srcB" >&2
+                exit 1
+              fi
+
+              # Directory prefix conflicts
+              checkPrefix "$tgtA" "$tgtB"
+              checkPrefix "$tgtB" "$tgtA"
+            }
+
+            # Install symlink to source
+            installTarget() {
+              local tgt="$1"
+              local src="$2"
+              local dest="$out/$tgt"
+              mkdir -p "$(dirname "$dest")"
+              if [[ -e "$dest" ]]; then
+                local existing=$(readlink "$dest" || echo "$dest")
+                if [[ "$existing" != "$src" ]] && ! diff -q "$existing" "$src" >/dev/null; then
+                  echo "error: duplicate target '$tgt' with conflicting content:" >&2
+                  echo "  $existing" >&2
+                  echo "  $src" >&2
+                  exit 1
+                fi
+                return
+              fi
+              ln -s "$src" "$dest"
+            }
+
+            # Validate all targets
+            for ((i=0; i<numTargets; i++)); do
+              for ((j=i+1; j<numTargets; j++)); do
+                checkConflict \
+                  "''${targets[i]}" "''${sources[i]}" \
+                  "''${targets[j]}" "''${sources[j]}"
+              done
+            done
+
+            # Install all targets
+            mkdir -p "$out"
+            for ((i=0; i<numTargets; i++)); do
+              installTarget "''${targets[i]}" "''${sources[i]}"
+            done
+          '';
 
       # Never combine user files with the rest of the plugins
       performance.combinePlugins.standalonePlugins = [ config.build.extraFiles ];
