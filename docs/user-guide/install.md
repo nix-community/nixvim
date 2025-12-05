@@ -35,13 +35,15 @@ When using flakes you can simply add `nixvim` to the inputs:
     inputs.nixvim = {
         url = "github:nix-community/nixvim";
         # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
-        inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # outputs...
 }
 
 ```
+We recommend against using `inputs.nixpkgs.follows = "nixpkgs";` on the `nixvim` input as we test Nixvim against our Nixpkgs revision.
+When you use `follows` you opt out of guarantees provided by these tests.
+If you choose to use it anyway, removing `follows` should be one of the first debugging steps when encountering issues.
 
 ## Usage
 
@@ -50,7 +52,6 @@ Nixvim can be used standalone or as a module for NixOS, Home Manager, or nix-dar
 When used standalone, a custom Nixvim derivation is produced that can be used like any other package.
 
 When used as a module, Nixvim can be enabled though `programs.nixvim.enable`.
-
 
 ### Usage as a module (NixOS, Home Manager, nix-darwin)
 
