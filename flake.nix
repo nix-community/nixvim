@@ -10,11 +10,6 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-
-    nuschtosSearch = {
-      url = "github:NuschtOS/search";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   nixConfig = {

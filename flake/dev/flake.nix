@@ -34,6 +34,11 @@
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
+    nuschtosSearch = {
+      url = "github:NuschtOS/search";
+      inputs.nixpkgs.follows = "dev-nixpkgs";
+    };
+
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "dev-nixpkgs";
