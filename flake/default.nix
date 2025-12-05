@@ -9,6 +9,7 @@
   imports = [
     ./flake-modules
     ./ci.nix
+    ./inputs.nix
     ./lib.nix
     ./nixvim-configurations.nix
     ./overlays.nix
