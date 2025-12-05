@@ -22,13 +22,21 @@ lib.makeExtensible (
   self:
   let
     # Used when importing parts of our lib
-    call = lib.callPackageWith {
+    autoArgs = {
       inherit
         call
         self
         lib
         ;
     };
+
+    call =
+      fnOrFile:
+      let
+        fn = if builtins.isPath fnOrFile then import fnOrFile else fnOrFile;
+        fnAutoArgs = builtins.intersectAttrs (builtins.functionArgs fn) autoArgs;
+      in
+      args: fn (fnAutoArgs // args);
   in
   {
     autocmd = call ./autocmd-helpers.nix { };
