@@ -152,6 +152,7 @@ in
       sd.default = "sd";
       sed.default = "gnused";
       skim.default = "skim";
+      television.default = "television";
       texpresso.default = "texpresso";
       tinymist.default = "tinymist";
       tmux.default = "tmux";
