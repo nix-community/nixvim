@@ -1,4 +1,7 @@
-self:
+{
+  self,
+  extendModules,
+}:
 {
   config,
   lib,
@@ -12,19 +15,22 @@ let
     importApply
     ;
   cfg = config.programs.nixvim;
-  evalArgs = {
-    extraSpecialArgs = {
-      darwinConfig = config;
-    };
-    modules = [
-      ./modules/darwin.nix
-    ];
-  };
 in
 {
   _file = ./darwin.nix;
 
-  imports = [ (importApply ./_shared.nix { inherit self evalArgs; }) ];
+  imports = [
+    (importApply ./_shared.nix {
+      inherit self;
+      inherit
+        (extendModules {
+          specialArgs.darwinConfig = config;
+          modules = [ ./modules/darwin.nix ];
+        })
+        extendModules
+        ;
+    })
+  ];
 
   config = mkIf cfg.enable {
     environment.systemPackages = [

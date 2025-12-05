@@ -1,8 +1,8 @@
 {
   # The nixvim flake
   self,
-  # Extra args for the `evalNixvim` call that produces the type for `programs.nixvim`
-  evalArgs ? { },
+  # Function used to evaluate the `programs.nixvim` configuration
+  extendModules,
   # Option path where extraFiles should go
   filesOpt ? null,
   # Filepath prefix to apply to extraFiles
@@ -45,14 +45,13 @@ let
       };
     };
 
-  nixvimConfiguration = config.lib.nixvim.modules.evalNixvim (
-    evalArgs
-    // {
-      modules = evalArgs.modules or [ ] ++ [
-        nixpkgsModule
-      ];
-    }
-  );
+  nixvimConfiguration = extendModules {
+    modules = [
+      nixpkgsModule
+      { disabledModules = [ "<internal:nixvim-nocheck-base-eval>" ]; }
+    ];
+  };
+
   extraFiles = lib.filter (file: file.enable) (lib.attrValues cfg.extraFiles);
 in
 {

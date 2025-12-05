@@ -1,4 +1,7 @@
-self:
+{
+  self,
+  extendModules,
+}:
 {
   config,
   lib,
@@ -9,21 +12,20 @@ let
     mkIf
     ;
   cfg = config.programs.nixvim;
-  evalArgs = {
-    extraSpecialArgs = {
-      nixosConfig = config;
-    };
-    modules = [
-      ./modules/nixos.nix
-    ];
-  };
 in
 {
   _file = ./nixos.nix;
 
   imports = [
     (import ./_shared.nix {
-      inherit self evalArgs;
+      inherit self;
+      inherit
+        (extendModules {
+          specialArgs.nixosConfig = config;
+          modules = [ ./modules/nixos.nix ];
+        })
+        extendModules
+        ;
       filesOpt = [
         "environment"
         "etc"
