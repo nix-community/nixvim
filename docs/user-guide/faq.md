@@ -83,17 +83,13 @@ When using Nixvim, it is possible to encounter errors about something not being 
  error: <name> cannot be found in pkgs
 ```
 
-This usually means one of two things:
+This usually means one of few things:
+- You are using `follows` on `inputs.nixvim` causing Nixvim to have an unexpected version of Nixpkgs.
 - The nixpkgs version is not in line with Nixvim (for example nixpkgs nixos-25.11 is used with Nixvim master)
 - The nixpkgs unstable version used with Nixvim is not recent enough.
 
-When building Nixvim using flakes and our ["standalone mode"][standalone], we usually recommend _not_ declaring a "follows" for `inputs.nixvim`.
+When building Nixvim using flakes, we usually recommend _not_ declaring a `follows` for `inputs.nixvim`.
 This is so that Nixvim is built against the same nixpkgs revision we're using in our test suite.
-
-If you are building Nixvim using the NixOS, Home Manager, or nix-darwin modules then we advise that you keep your nixpkgs lock as close as possible to ours.
-
-> [!TIP]
-> Once [#1784](https://github.com/nix-community/nixvim/issues/1784) is implemented, there will be alternative ways to achieve this using the module system.
 
 [standalone]: ../platforms/standalone.md
 
