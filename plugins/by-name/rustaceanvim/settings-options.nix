@@ -1,5 +1,7 @@
 { lib }:
-with lib;
+let
+  inherit (lib) types;
+in
 {
   tools =
     let
@@ -294,7 +296,7 @@ with lib;
           freeformType = with types; attrsOf anything;
           options = {
             # Common options
-            type = mkOption {
+            type = lib.mkOption {
               type = types.enum [
                 "executable"
                 "server"

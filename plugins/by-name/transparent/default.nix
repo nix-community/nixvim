@@ -1,14 +1,13 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "transparent";
   package = "transparent-nvim";
   description = "Remove all background colors to make Neovim transparent.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     groups =

@@ -4,8 +4,15 @@
   options,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    types
+    mkOption
+    literalExpression
+    optionalString
+    mkIf
+    mkDefault
+    ;
   buildGrammarDeps = [
     "gcc"
     "nodejs"
@@ -334,7 +341,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraOptions = {
-    folding = mkEnableOption "tree-sitter based folding";
+    folding = lib.mkEnableOption "tree-sitter based folding";
 
     grammarPackages = mkOption {
       type = with types; listOf package;
@@ -346,7 +353,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     # TODO: Implement rawLua support to be passed into extraConfigLua.
     languageRegister = mkOption {
-      type = with types; attrsOf (coercedTo str toList (listOf str));
+      type = with types; attrsOf (coercedTo str lib.toList (listOf str));
       default = { };
       example = {
         cpp = "onelab";

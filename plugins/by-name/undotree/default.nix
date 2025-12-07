@@ -1,11 +1,10 @@
 { lib, ... }:
-with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "undotree";
   globalPrefix = "undotree_";
   description = "The undo history visualizer for Vim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsExample = {
     WindowLayout = 4;

@@ -3,13 +3,15 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "zk";
   package = "zk-nvim";
   description = "Neovim extension for the [`zk`](https://github.com/zk-org/zk) plain text note-taking assistant.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
@@ -99,7 +101,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: opts: {
     warnings = lib.nixvim.mkWarnings "plugins.zk" (
-      mapAttrsToList
+      lib.mapAttrsToList
         (picker: pluginName: {
           when = (cfg.settings.picker == picker) && !config.plugins.${pluginName}.enable;
           message = ''

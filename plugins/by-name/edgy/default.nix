@@ -1,14 +1,13 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) mkDefault types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "edgy";
   package = "edgy-nvim";
   description = "A Neovim plugin to easily create and manage predefined window layouts.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraConfig = {
     # Those options are strongly recommended by the plugin author:
@@ -72,7 +71,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       top = mkViewOptsOption "top";
 
       options =
-        mapAttrs
+        lib.mapAttrs
           (_: defaultSize: {
             size = lib.nixvim.defaultNullOpts.mkUnsignedInt defaultSize ''
               Size of the short edge of the edgebar.

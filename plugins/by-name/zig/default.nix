@@ -1,16 +1,11 @@
-{
-  lib,
-  ...
-}:
-with lib;
-with lib.nixvim.plugins;
-mkVimPlugin {
+{ lib, ... }:
+lib.nixvim.plugins.mkVimPlugin {
   name = "zig";
   package = "zig-vim";
   globalPrefix = "zig_";
   description = "Vim plugin for the Zig programming language.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     fmt_autosave = lib.nixvim.defaultNullOpts.mkFlagInt 1 ''

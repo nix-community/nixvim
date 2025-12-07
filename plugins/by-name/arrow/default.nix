@@ -1,11 +1,10 @@
 { lib, ... }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "arrow";
   package = "arrow-nvim";
   description = "A Neovim plugin to bookmark and navigate through files.";
 
-  maintainers = [ maintainers.hmajid2301 ];
+  maintainers = [ lib.maintainers.hmajid2301 ];
 
   settingsOptions = {
     show_icons = lib.nixvim.defaultNullOpts.mkBool false ''
@@ -93,7 +92,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     window =
-      lib.nixvim.defaultNullOpts.mkAttrsOf types.anything
+      lib.nixvim.defaultNullOpts.mkAttrsOf lib.types.anything
         {
           relative = "editor";
           width = "auto";
@@ -153,7 +152,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Keys mapped to bookmark index.
     '';
 
-    full_path_list = lib.nixvim.defaultNullOpts.mkListOf types.str [ "update_stuff" ] ''
+    full_path_list = lib.nixvim.defaultNullOpts.mkListOf lib.types.str [ "update_stuff" ] ''
       Filenames on this list will ALWAYS show the file path too
     '';
   };

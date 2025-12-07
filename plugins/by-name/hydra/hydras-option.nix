@@ -1,6 +1,6 @@
 { lib }:
-with lib;
 let
+  inherit (lib) types;
   hydraType = types.submodule {
     freeformType = with types; attrsOf anything;
     options = {
@@ -109,7 +109,7 @@ let
     };
   };
 in
-mkOption {
+lib.mkOption {
   type = types.listOf hydraType;
   default = [ ];
   description = ''

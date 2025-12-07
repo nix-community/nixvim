@@ -1,14 +1,10 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "specs";
   package = "specs-nvim";
   description = "A fast and lightweight Neovim lua plugin to keep an eye on where your cursor has jumped.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     show_jumps = lib.nixvim.defaultNullOpts.mkBool true ''
@@ -49,12 +45,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    ignore_filetypes = lib.nixvim.defaultNullOpts.mkAttrsOf types.bool { } ''
+    ignore_filetypes = lib.nixvim.defaultNullOpts.mkAttrsOf lib.types.bool { } ''
       An attrs where keys are filetypes and values are a boolean stating whether animation should be
       enabled or not for this filetype.
     '';
 
-    ignore_buftypes = lib.nixvim.defaultNullOpts.mkAttrsOf types.bool { nofile = true; } ''
+    ignore_buftypes = lib.nixvim.defaultNullOpts.mkAttrsOf lib.types.bool { nofile = true; } ''
       An attrs where keys are buftypes and values are a boolean stating whether animation should be
       enabled or not for this buftype.
     '';

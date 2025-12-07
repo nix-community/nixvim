@@ -1,15 +1,14 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "better-escape";
   moduleName = "better_escape";
   package = "better-escape-nvim";
   description = "A Neovim plugin to quickly exit insert mode without losing your typed text.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     timeout = lib.nixvim.defaultNullOpts.mkStrLuaOr types.ints.unsigned "vim.o.timeoutlen" ''

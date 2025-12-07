@@ -1,13 +1,12 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) types literalExpression;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "sniprun";
   description = "A neovim plugin to run lines/blocs of code.";
 
-  maintainers = with maintainers; [
+  maintainers = with lib.maintainers; [
     traxys
     MattSturgeon
   ];
@@ -147,7 +146,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
         type = types.submodule {
           freeformType = types.attrsOf types.anything;
-          options = mapAttrs (optionName: colorOption) {
+          options = lib.mapAttrs (optionName: colorOption) {
             SniprunVirtualTextOk = {
               bg = "#66eeff";
               fg = "#000000";

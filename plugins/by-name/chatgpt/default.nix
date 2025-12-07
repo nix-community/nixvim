@@ -1,14 +1,10 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "chatgpt";
   package = "ChatGPT-nvim";
   description = "Effortless Natural Language Generation with OpenAI's ChatGPT API";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   dependencies = [ "curl" ];
 
@@ -30,7 +26,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     '';
 
     extra_curl_params = lib.nixvim.defaultNullOpts.mkListOf' {
-      type = types.str;
+      type = lib.types.str;
       pluginDefault = null;
       description = ''
         Custom cURL parameters can be passed using this option.

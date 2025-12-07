@@ -3,13 +3,15 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "twilight";
   package = "twilight-nvim";
   description = "Twilight is a Lua plugin for Neovim that dims inactive portions of the code you're editing using TreeSitter.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     dimming = {

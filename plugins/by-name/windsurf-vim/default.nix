@@ -3,8 +3,9 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib) types;
+
   keymapsDefinitions = {
     clear = {
       default = "<C-]>";
@@ -38,13 +39,13 @@ lib.nixvim.plugins.mkVimPlugin {
   globalPrefix = "codeium_";
   description = "Free, ultrafast Copilot alternative for Vim and Neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # TODO: introduced 2025-04-19
   inherit ((import ./deprecations.nix { inherit lib; })) imports;
 
   settingsOptions = {
-    bin = mkOption {
+    bin = lib.mkOption {
       type = with types; nullOr str;
       default = lib.getExe' pkgs.codeium "codeium_language_server";
       defaultText = lib.literalExpression ''lib.getExe' pkgs.codeium "codeium_language_server"'';
@@ -93,7 +94,7 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraOptions = {
-    keymaps = mapAttrs (
+    keymaps = lib.mapAttrs (
       optionName: v:
       lib.nixvim.defaultNullOpts.mkStr v.default ''
         ${v.description}
@@ -109,7 +110,7 @@ lib.nixvim.plugins.mkVimPlugin {
       let
         processKeymap =
           optionName: v:
-          optional (v != null) {
+          lib.optional (v != null) {
             key = v;
             action =
               let
@@ -118,7 +119,7 @@ lib.nixvim.plugins.mkVimPlugin {
               lib.nixvim.mkRaw "function() ${command} end";
           };
 
-        keymapsList = flatten (mapAttrsToList processKeymap cfg.keymaps);
+        keymapsList = lib.flatten (lib.mapAttrsToList processKeymap cfg.keymaps);
 
         defaults = {
           mode = "i";

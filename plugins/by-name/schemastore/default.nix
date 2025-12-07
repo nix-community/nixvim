@@ -3,13 +3,20 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib)
+    types
+    mkOption
+    mkIf
+    mkDefault
+    ;
+in
 lib.nixvim.plugins.mkVimPlugin {
   name = "schemastore";
   package = "SchemaStore-nvim";
   description = "A Neovim plugin that provides the SchemaStore catalog for use with jsonls and yamlls.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraOptions =
     let

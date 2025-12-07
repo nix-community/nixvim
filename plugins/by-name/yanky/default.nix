@@ -3,13 +3,12 @@
   config,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "yanky";
   package = "yanky-nvim";
   description = "Improved Yank and Put functionalities for Neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsDescription = ''
     Options provided to the `require('yanky').setup` function.
@@ -74,7 +73,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             cursor or content changed.
           '';
 
-      ignore_registers = lib.nixvim.defaultNullOpts.mkListOf types.str [ "_" ] ''
+      ignore_registers = lib.nixvim.defaultNullOpts.mkListOf lib.types.str [ "_" ] ''
         Define registers to be ignored.
         By default the black hole register is ignored.
       '';
@@ -111,14 +110,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
           apply =
             mappings:
             lib.nixvim.ifNonNull' mappings (
-              mapAttrs (
+              lib.mapAttrs (
                 _: v:
-                if isString v then
+                if lib.isString v then
                   # `mappings.default` is a lua function
                   lib.nixvim.mkRaw v
                 else
                   # `mappings.<mode>` is an attrs of lua function
-                  mapAttrs (_: lib.nixvim.mkRaw) v
+                  lib.mapAttrs (_: lib.nixvim.mkRaw) v
               ) mappings
             );
           pluginDefault = null;
@@ -233,7 +232,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraOptions = {
-    enableTelescope = mkEnableOption "the `yank_history` telescope picker.";
+    enableTelescope = lib.mkEnableOption "the `yank_history` telescope picker.";
   };
 
   callSetup = false;
@@ -257,12 +256,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins.yanky.luaConfig.content = ''
       do
         local utils = require('yanky.utils')
-        ${optionalString config.plugins.telescope.enable "local mapping = require('yanky.telescope.mapping')"}
+        ${lib.optionalString config.plugins.telescope.enable "local mapping = require('yanky.telescope.mapping')"}
 
         require('yanky').setup(${lib.nixvim.toLuaObject cfg.settings})
       end
     '';
 
-    plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "yank_history" ];
+    plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "yank_history" ];
   };
 }

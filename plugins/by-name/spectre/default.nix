@@ -3,13 +3,15 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib) mkOption types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "spectre";
   package = "nvim-spectre";
   description = "A search panel for neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
     # TODO: added 2025-04-07, remove after 25.05

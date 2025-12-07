@@ -3,13 +3,12 @@
   config,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "ltex-extra";
   package = "ltex_extra-nvim";
   description = "LTeX_extra is a companion plugin for LTeX language server.";
 
-  maintainers = [ maintainers.loicreynier ];
+  maintainers = [ lib.maintainers.loicreynier ];
 
   callSetup = false;
 
@@ -26,7 +25,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       Whether to load dictionaries on startup.
     '';
 
-    load_langs = lib.nixvim.defaultNullOpts.mkListOf types.str [ "en-US" ] ''
+    load_langs = lib.nixvim.defaultNullOpts.mkListOf lib.types.str [ "en-US" ] ''
       Languages for witch dicionnaries will be loaded.
       See `plugins.lsp.servers.ltex.languages` for possible values.
     '';

@@ -3,13 +3,15 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neoclip";
   package = "nvim-neoclip-lua";
   description = "Clipboard manager neovim plugin with telescope integration.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     history = lib.nixvim.defaultNullOpts.mkUnsignedInt 1000 ''

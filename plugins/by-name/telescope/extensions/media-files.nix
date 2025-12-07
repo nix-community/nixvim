@@ -1,8 +1,4 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts mkSettingsRenamedOptionModules;
   mkExtension = import ./_mk-extension.nix;
@@ -60,7 +56,7 @@ mkExtension {
   dependencies = [ "chafa" ];
 
   settingsOptions = {
-    filetypes = defaultNullOpts.mkListOf types.str [
+    filetypes = defaultNullOpts.mkListOf lib.types.str [
       "png"
       "jpg"
       "gif"

@@ -1,11 +1,10 @@
 { lib, ... }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "codesnap";
   package = "codesnap-nvim";
   description = "Snapshot plugin with rich features that can make pretty code snapshots.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsExample = {
     save_path = "~/Pictures/Screenshots/";

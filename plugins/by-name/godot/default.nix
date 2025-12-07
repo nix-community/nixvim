@@ -1,15 +1,11 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "godot";
   package = "vim-godot";
   globalPrefix = "godot_";
   description = "A Neovim plugin for Godot game engine integration.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   dependencies = [ "godot" ];
 

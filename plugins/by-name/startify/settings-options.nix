@@ -1,5 +1,7 @@
 { lib }:
-with lib;
+let
+  inherit (lib) mkOption types;
+in
 {
   session_dir = lib.nixvim.defaultNullOpts.mkStr "~/.vim/session" ''
     The directory to save/load sessions to/from.

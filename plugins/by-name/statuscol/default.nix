@@ -1,14 +1,13 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) types mkOption;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "statuscol";
   package = "statuscol-nvim";
   description = "Status column plugin that provides a configurable `statuscolumn` and click handlers.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     setopt = lib.nixvim.defaultNullOpts.mkBool true ''
