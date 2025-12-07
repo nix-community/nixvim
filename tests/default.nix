@@ -64,4 +64,4 @@ lib.optionalAttrs buildForThisSystem {
 // callTests ./platforms { }
 # Tests generated from ./test-sources
 # Grouped as a number of link-farms in the form { test-1, test-2, ... test-N }
-// callTests ./main.nix { }
+// lib.optionalAttrs buildForThisSystem (callTests ./main.nix { })
