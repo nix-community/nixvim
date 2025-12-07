@@ -17,7 +17,9 @@
     };
 
     git-hooks = {
-      url = "github:cachix/git-hooks.nix";
+      # Pin to commit before https://github.com/cachix/git-hooks.nix/pull/664
+      # rumdl not available in pkgs
+      url = "github:cachix/git-hooks.nix/50b9238891e388c9fdc6a5c49e49c42533a1b5ce";
       inputs.nixpkgs.follows = "dev-nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
     };
