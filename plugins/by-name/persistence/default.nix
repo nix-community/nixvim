@@ -9,31 +9,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.jolars ];
 
-  # TODO: introduced 2025-01-08: remove after 25.05
-  optionsRenamedToSettings = [
-    "dir"
-  ];
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "persistence"
-      ];
-    in
-    map
-      (
-        option:
-        lib.mkRemovedOptionModule (basePluginPath ++ [ option ]) ''
-          This option has been deprecated upstream. The plugin now provides
-          user events to hook into instead.
-        ''
-      )
-      [
-        "options"
-        "preSave"
-        "saveEmpty"
-      ];
-
   settingsOptions = {
     branch = defaultNullOpts.mkBool true ''
       Use git branch to save session.

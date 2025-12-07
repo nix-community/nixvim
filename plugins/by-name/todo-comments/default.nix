@@ -22,14 +22,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "ripgrep" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "todo-comments";
-      packageName = "ripgrep";
-    })
-  ];
-
   settingsOptions = {
     signs = defaultNullOpts.mkBool true "Show icons in the signs column.";
 

@@ -15,14 +15,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "gh" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "octo";
-      packageName = "gh";
-    })
-  ];
-
   settingsOptions = {
     use_local_fs = defaultNullOpts.mkBool false ''
       Use local files on right side of reviews.

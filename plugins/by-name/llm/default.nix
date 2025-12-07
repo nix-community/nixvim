@@ -12,15 +12,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "llm-ls" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "llm";
-      packageName = "llm-ls";
-      oldPackageName = "llmLs";
-    })
-  ];
-
   extraConfig = {
     # If not setting this option, llm.nvim will try to download the llm-ls binary from the internet.
     plugins.llm.settings.lsp.bin_path =

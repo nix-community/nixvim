@@ -12,14 +12,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "plantuml-syntax";
-      packageName = "plantuml";
-    })
-  ];
-
   dependencies = [ "plantuml" ];
 
   settingsOptions = {

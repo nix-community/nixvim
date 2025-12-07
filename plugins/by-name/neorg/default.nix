@@ -19,43 +19,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-12-12: remove after 25.05
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "lazyLoading"
-    [
-      "logger"
-      "plugin"
-    ]
-    [
-      "logger"
-      "useConsole"
-    ]
-    [
-      "logger"
-      "highlights"
-    ]
-    [
-      "logger"
-      "useFile"
-    ]
-    [
-      "logger"
-      "level"
-    ]
-    [
-      "logger"
-      "floatPrecision"
-    ]
-    {
-      old = "modules";
-      new = "load";
-    }
-  ];
-  imports = [
-    ./deprecations.nix
-  ];
-
   extraOptions = {
     telescopeIntegration = {
       enable = lib.mkEnableOption "`neorg-telescope` plugin for telescope integration.";

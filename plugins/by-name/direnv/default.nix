@@ -15,14 +15,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   dependencies = [ "direnv" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "direnv";
-      packageName = "direnv";
-    })
-  ];
-
   settingsOptions = {
     direnv_auto = defaultNullOpts.mkFlagInt 1 ''
       It will not execute `:DirenvExport` automatically if the value is `0`.

@@ -14,16 +14,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.jolars ];
 
-  # TODO: introduced 2025-01-08: remove after 25.05
-  optionsRenamedToSettings = [
-    "cmdName"
-    "hlGroup"
-    "previewEmptyName"
-    "showMessage"
-    "inputBufferType"
-    "postHook"
-  ];
-
   settingsOptions = {
     cmd_name = defaultNullOpts.mkStr "IncRename" "The name of the command.";
 

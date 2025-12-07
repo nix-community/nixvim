@@ -16,31 +16,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   dependencies = [ "git" ];
 
-  # TODO: Added 2024-12-16; remove after 25.05
-  optionsRenamedToSettings = [
-    "closeOnCursorMoved"
-    "includeDiff"
-    "gitCommand"
-    "noDefaultMappings"
-    "intoPopupAfterShow"
-    "alwaysIntoPopup"
-    "extraBlameArgs"
-    "previewMods"
-    "maxPopupHeight"
-    "maxPopupWidth"
-    "dateFormat"
-    "concealWordDiffMarker"
-    "floatingWinOps"
-    "popupContentMargins"
-  ];
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "gitmessenger";
-      packageName = "git";
-    })
-  ];
-
   settingsOptions = {
     close_on_cursor_moved = defaultNullOpts.mkBool true ''
       A popup window is no longer closed automatically when moving a cursor after the window is

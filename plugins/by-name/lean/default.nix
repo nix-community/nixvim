@@ -14,14 +14,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "lean" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "lean";
-      packageName = "lean";
-    })
-  ];
-
   settingsOptions = {
     stderr = {
       on_lines = defaultNullOpts.mkLuaFn "nil" ''
@@ -59,7 +51,4 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     };
   };
-
-  # TODO: Deprecated in 2025-01-31
-  inherit (import ./deprecations.nix) deprecateExtraOptions optionsRenamedToSettings;
 }

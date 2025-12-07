@@ -13,14 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = with lib.maintainers; [ GaetanLepage ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "gitblame";
-      packageName = "git";
-    })
-  ];
-
   dependencies = [ "git" ];
 
   settingsOptions = {

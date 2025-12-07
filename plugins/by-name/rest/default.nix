@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkRemovedOptionModule types;
+  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -10,51 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = "A very fast, powerful, extensible and asynchronous Neovim HTTP client.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
-
-  # TODO introduced 2024-04-07: remove 2024-06-07
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = import ./renamed-options.nix;
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "rest"
-      ];
-    in
-    [
-      (mkRemovedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "result"
-            "showStatistics"
-          ]
-        )
-        ''
-          Use `plugins.rest.settings.result.behavior.statistics.{enable,stats}` instead.
-          Refer to the documentation for more information.
-        ''
-      )
-
-      # TODO: added 2025-04-06: remove after 25.05
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "rest";
-        packageName = "curl";
-      })
-    ]
-    ++
-      map
-        (
-          option:
-          mkRemovedOptionModule (basePluginPath ++ [ option ]) ''
-            This option has been deprecated upstream.
-          ''
-        )
-        [
-          "jumpToRequest"
-          "yankDryRun"
-          "searchBack"
-        ];
 
   dependencies = [ "curl" ];
 

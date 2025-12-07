@@ -13,21 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "spectre";
-      packageName = "ripgrep";
-      oldPackageName = "find";
-    })
-    (lib.mkRemovedOptionModule [ "plugins" "spectre" "replacePackage" ] ''
-      If you have set `plugins.spectre.settings.default.find.cmd` to "sed" (or "sd" respectively), Nixvim will automatically enable `dependencies.sed.enable` (or `sd` respectively).
-
-      - If you want to disable automatic installation of the replace tool, set `dependencies.s[e]d.enable` to `false`.
-      - If you want to override which package is installed by Nixvim, set the `dependencies.s[e]d.package` option.
-    '')
-  ];
-
   dependencies =
     let
       defaults = config.plugins.spectre.settings.default;

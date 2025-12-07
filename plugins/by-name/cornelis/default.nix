@@ -14,14 +14,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   dependencies = [ "cornelis" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "cornelis";
-      packageName = "cornelis";
-    })
-  ];
-
   settingsOptions = {
     use_global_binary = defaultNullOpts.mkFlagInt 0 ''
       Whether to use global binary instead of stack.

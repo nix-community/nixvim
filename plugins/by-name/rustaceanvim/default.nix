@@ -10,14 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   dependencies = [ "rust-analyzer" ];
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "godot";
-      packageName = "rust-analyzer";
-      oldPackageName = "rustAnalyzer";
-    })
-  ];
 
   settingsOptions = import ./settings-options.nix { inherit lib; };
 

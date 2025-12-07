@@ -8,19 +8,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   imports = [
     { cmpSourcePlugins.crates = "crates"; }
-  ]
-  ++
-    # TODO introduced 2024-12-12: remove after 25.05
-    lib.nixvim.mkSettingsRenamedOptionModules [ "plugins" "crates-nvim" ]
-      [ "plugins" "crates" ]
-      [
-        "enable"
-        "package"
-        {
-          old = "extraOptions";
-          new = "settings";
-        }
-      ];
+  ];
 
   settingsOptions = { };
 

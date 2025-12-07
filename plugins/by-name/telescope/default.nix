@@ -21,12 +21,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   imports = [
     ./extensions
-
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "telescope";
-      packageName = "bat";
-    })
   ];
 
   dependencies = [ "bat" ];

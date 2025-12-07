@@ -10,12 +10,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO: Added 2025-04-07; remove after 25.05
-  inherit (import ./deprecations.nix lib)
-    imports
-    deprecateExtraOptions
-    ;
-
   extraOptions = {
     jdtLanguageServerPackage = lib.mkPackageOption pkgs "jdt-language-server" {
       nullable = true;

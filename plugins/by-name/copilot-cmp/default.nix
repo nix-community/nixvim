@@ -14,13 +14,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-12-19: remove after 25.05
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = [
-    "event"
-    "fixPairs"
-  ];
-
   settingsOptions = {
     event =
       defaultNullOpts.mkListOf types.str

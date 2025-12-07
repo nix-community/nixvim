@@ -158,15 +158,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  # TODO: introduced 2025-05-17: remove after 25.11
-  imports = [
-    (lib.mkRemovedOptionModule [
-      "plugins"
-      "copilot-lua"
-      "nodePackage"
-    ] "Use `dependencies.nodejs.package` instead to change the Node.js package.")
-  ];
-
   extraConfig = {
     assertions = lib.nixvim.mkAssertions "plugins.copilot-lua" {
       assertion = !config.plugins.copilot-vim.enable;
@@ -181,8 +172,4 @@ lib.nixvim.plugins.mkNeovimPlugin {
       pkgs.vimPlugins.copilot-lsp
     ];
   };
-
-  # TODO: introduced 2025-01-07: remove after 25.05
-  deprecateExtraOptions = true;
-  optionsRenamedToSettings = import ./renamed-options.nix;
 }
