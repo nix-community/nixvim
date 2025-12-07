@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "opencode";
   package = "opencode-nvim";
@@ -23,6 +23,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   hasLuaConfig = false;
   extraConfig = cfg: {
     globals.opencode_opts = cfg.settings;
+    extraPackages = [ pkgs.lsof ];
   };
 
   settingsExample = {
