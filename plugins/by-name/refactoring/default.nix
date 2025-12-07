@@ -3,16 +3,15 @@
   config,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "refactoring";
   package = "refactoring-nvim";
   description = "The Refactoring library based off the Refactoring book by Martin Fowler.";
 
-  maintainers = [ maintainers.MattSturgeon ];
+  maintainers = [ lib.maintainers.MattSturgeon ];
 
   extraOptions = {
-    enableTelescope = mkEnableOption "telescope integration";
+    enableTelescope = lib.mkEnableOption "telescope integration";
   };
 
   extraConfig = cfg: {
@@ -25,7 +24,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    plugins.telescope.enabledExtensions = mkIf cfg.enableTelescope [ "refactoring" ];
+    plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "refactoring" ];
   };
 
   settingsOptions = with lib.types; {

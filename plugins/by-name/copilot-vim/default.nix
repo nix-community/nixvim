@@ -3,14 +3,15 @@
   pkgs,
   ...
 }:
-with lib;
-with lib.nixvim.plugins;
+let
+  inherit (lib) mkOption types;
+in
 lib.nixvim.plugins.mkVimPlugin {
   name = "copilot-vim";
   globalPrefix = "copilot_";
   description = "Official Neovim plugin for GitHub Copilot.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     node_command = mkOption {

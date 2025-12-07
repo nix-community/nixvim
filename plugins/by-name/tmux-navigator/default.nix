@@ -2,13 +2,15 @@
   lib,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkVimPlugin {
   name = "tmux-navigator";
   package = "vim-tmux-navigator";
   globalPrefix = "tmux_navigator_";
 
-  maintainers = [ maintainers.MattSturgeon ];
+  maintainers = [ lib.maintainers.MattSturgeon ];
 
   description = ''
     Seamless navigation between tmux panes and vim splits.
@@ -161,7 +163,7 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraOptions = {
-    keymaps = mkOption {
+    keymaps = lib.mkOption {
       description = ''
         Keymaps for the `:TmuxNavigate*` commands.
 

@@ -3,12 +3,14 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "nvim-autopairs";
   description = "Insert and delete brackets, parens, quotes in pair automatically.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     disable_filetype = lib.nixvim.defaultNullOpts.mkListOf types.str [

@@ -1,14 +1,10 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "git-conflict";
   package = "git-conflict-nvim";
   description = "A plugin to visualise and resolve merge conflicts in neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   dependencies = [ "git" ];
 
@@ -22,7 +18,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions = {
     default_mappings =
-      lib.nixvim.defaultNullOpts.mkNullable (with types; either bool (attrsOf str)) true
+      lib.nixvim.defaultNullOpts.mkNullable (with lib.types; either bool (attrsOf str)) true
         ''
           This plugin offers default buffer local mappings inside conflicted files.
           This is primarily because applying these mappings only to relevant buffers is impossible

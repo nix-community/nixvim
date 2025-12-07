@@ -2,13 +2,12 @@
   lib,
   ...
 }:
-with lib;
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "zen-mode";
   package = "zen-mode-nvim";
   description = "Distraction-free coding for Neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   # Optionally, explicitly declare some options. You don't have to.
   settingsOptions = {
@@ -58,7 +57,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             - a function that returns the width or the height
           '';
 
-      options = lib.nixvim.defaultNullOpts.mkAttrsOf types.anything { } ''
+      options = lib.nixvim.defaultNullOpts.mkAttrsOf lib.types.anything { } ''
         By default, no options are changed for the Zen window.
         You can set any `vim.wo` option here.
 
@@ -78,7 +77,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
     plugins = {
       options =
-        lib.nixvim.defaultNullOpts.mkAttrsOf types.anything
+        lib.nixvim.defaultNullOpts.mkAttrsOf lib.types.anything
           {
             enabled = true;
             ruler = false;

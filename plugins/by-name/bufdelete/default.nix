@@ -1,14 +1,10 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "bufdelete";
   package = "bufdelete-nvim";
   globalPrefix = "bufdelete_";
 
-  maintainers = [ maintainers.MattSturgeon ];
+  maintainers = [ lib.maintainers.MattSturgeon ];
 
   description = ''
     Delete Neovim buffers without losing window layout.

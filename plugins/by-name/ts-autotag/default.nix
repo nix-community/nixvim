@@ -3,14 +3,16 @@
   config,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "ts-autotag";
   moduleName = "nvim-ts-autotag";
   package = "nvim-ts-autotag";
   description = "Use treesitter to auto close and auto rename a html tag.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraConfig = {
     warnings = lib.nixvim.mkWarnings "plugins.ts-autotag" {

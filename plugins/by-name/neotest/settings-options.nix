@@ -1,6 +1,6 @@
 { lib }:
-with lib;
 let
+  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts mkNullOrOption mkNullOrLuaFn;
 in
 {

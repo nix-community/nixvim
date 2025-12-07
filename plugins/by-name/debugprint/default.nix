@@ -1,14 +1,13 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) mkOption types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "debugprint";
   package = "debugprint-nvim";
   description = "A Neovim plugin for inserting debug print statements.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     keymaps =

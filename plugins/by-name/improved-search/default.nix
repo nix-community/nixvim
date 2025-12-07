@@ -1,16 +1,15 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 # This plugin is only configured through keymaps, so we use `mkVimPlugin` without the
 # `globalPrefix` argument to avoid the creation of the `settings` option.
+let
+  inherit (lib) mkOption;
+in
 lib.nixvim.plugins.mkVimPlugin {
   name = "improved-search";
   package = "improved-search-nvim";
   description = "It's a Neovim plugin that improves the search experience.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraOptions = {
     keymaps = mkOption {
@@ -115,7 +114,7 @@ lib.nixvim.plugins.mkVimPlugin {
       inherit (keymap) key options mode;
       action =
         if
-          isString keymap.action
+          lib.isString keymap.action
         # One of the plugin builtin functions
         then
           lib.nixvim.mkRaw "require('improved-search').${keymap.action}"

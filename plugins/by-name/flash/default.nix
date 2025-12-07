@@ -1,21 +1,20 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) recursiveUpdate;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "flash";
   package = "flash-nvim";
   description = "`flash.nvim` lets you navigate your code with search labels, enhanced character motions, and Treesitter integration.";
 
-  maintainers = with maintainers; [
+  maintainers = with lib.maintainers; [
     traxys
     MattSturgeon
   ];
 
   imports = [
     # TODO: check automatic search config still works
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "plugins"
       "flash"
       "search"
@@ -25,6 +24,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions =
     let
+      inherit (lib) types;
       # Default values used for the top-level settings options,
       # also used as secondary defaults for mode options.
       configDefaults = {
@@ -335,7 +335,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
               Extmark priority.
             '';
 
-            groups = mapAttrs (name: lib.nixvim.defaultNullOpts.mkStr defaults.highlight.groups.${name}) {
+            groups = lib.mapAttrs (name: lib.nixvim.defaultNullOpts.mkStr defaults.highlight.groups.${name}) {
               # opt = description
               match = "FlashMatch";
               current = "FlashCurrent";

@@ -2,13 +2,15 @@
   lib,
   ...
 }:
-with lib;
+let
+  inherit (lib) types;
+in
 lib.nixvim.plugins.mkVimPlugin {
   name = "typst-vim";
   globalPrefix = "typst_";
   description = "A Neovim plugin for Typst, a modern typesetting system.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
     # TODO: added 2025-04-07, remove after 25.05
@@ -22,7 +24,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
   extraOptions = {
     keymaps = {
-      silent = mkOption {
+      silent = lib.mkOption {
         type = types.bool;
         description = "Whether typst-vim keymaps should be silent.";
         default = false;
@@ -41,7 +43,7 @@ lib.nixvim.plugins.mkVimPlugin {
           options.silent = silent;
         }
         (
-          optional (watch != null) {
+          lib.optional (watch != null) {
             # mode = "n";
             key = watch;
             action = ":TypstWatch<CR>";

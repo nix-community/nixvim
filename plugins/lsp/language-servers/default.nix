@@ -3,10 +3,11 @@
   pkgs,
   ...
 }:
-with lib;
 let
   renamedServers = import ./_renamed.nix;
   unsupportedServers = lib.importJSON ../../../generated/unsupported-lspconfig-servers.json;
+
+  inherit (lib) mkOption types;
 
   lspExtraArgs = {
     dartls = {
@@ -56,7 +57,9 @@ let
       settings = cfg: { nixd = cfg; };
       settingsOptions = import ./nixd-settings.nix { inherit lib; };
       extraConfig = cfg: {
-        extraPackages = optional (cfg.settings.formatting.command == [ "nixpkgs-fmt" ]) pkgs.nixpkgs-fmt;
+        extraPackages = lib.optional (
+          cfg.settings.formatting.command == [ "nixpkgs-fmt" ]
+        ) pkgs.nixpkgs-fmt;
       };
     };
     omnisharp = {
@@ -180,7 +183,7 @@ let
         };
       };
       extraConfig = cfg: {
-        filetype.extension = mkIf (cfg.enable && cfg.autoSetFiletype) { v = "vlang"; };
+        filetype.extension = lib.mkIf (cfg.enable && cfg.autoSetFiletype) { v = "vlang"; };
       };
     };
     volar = {
@@ -249,7 +252,7 @@ in
         "lsp"
         "servers"
       ];
-      renameModules = mapAttrsToList (
+      renameModules = lib.mapAttrsToList (
         old: new: lib.mkRenamedOptionModule (baseLspPath ++ [ old ]) (baseLspPath ++ [ new ])
       ) renamedServers;
       unsupportedModules = map (

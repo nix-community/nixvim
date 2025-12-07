@@ -1,6 +1,6 @@
 { config, lib, ... }:
-with lib;
 let
+  inherit (lib) mkOption types;
   inherit (lib.nixvim)
     defaultNullOpts
     keymaps
@@ -66,12 +66,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "barbar-nvim";
   description = "A neovim tabline plugin.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraOptions = {
-    keymaps = mapAttrs (
+    keymaps = lib.mapAttrs (
       optionName: funcName:
-      lib.mkOption {
+      mkOption {
         type = v2NullOr (
           keymaps.mkMapOptionSubmodule {
             defaults = {
@@ -90,7 +90,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   extraConfig = cfg: {
     # TODO: added 2024-09-20 remove after 24.11
-    plugins.web-devicons = mkIf (
+    plugins.web-devicons = lib.mkIf (
       !(
         (
           config.plugins.mini.enable
@@ -99,11 +99,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
         )
         || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
       )
-    ) { enable = mkOverride 1490 true; };
+    ) { enable = lib.mkOverride 1490 true; };
 
-    keymaps = filter (keymap: keymap != null) (
+    keymaps = lib.filter (keymap: keymap != null) (
       # TODO: switch to `attrValues cfg.keymaps` when removing the deprecation warnings above:
-      attrValues (filterAttrs (n: v: n != "silent") cfg.keymaps)
+      lib.attrValues (lib.filterAttrs (n: v: n != "silent") cfg.keymaps)
     );
   };
 

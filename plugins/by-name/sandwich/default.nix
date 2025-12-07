@@ -1,8 +1,4 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "sandwich";
   package = "vim-sandwich";
@@ -28,7 +24,7 @@ lib.nixvim.plugins.mkVimPlugin {
     ```
   '';
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     no_default_key_mappings = lib.nixvim.defaultNullOpts.mkFlagInt 0 ''

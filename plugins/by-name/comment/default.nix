@@ -1,15 +1,11 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "comment";
   moduleName = "Comment";
   package = "comment-nvim";
   description = "Smart and powerful comment plugin for Neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     padding = lib.nixvim.defaultNullOpts.mkBool true ''
@@ -61,7 +57,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     mappings =
       lib.nixvim.defaultNullOpts.mkNullable
         (
-          with types;
+          with lib.types;
           either (enum [ false ]) (submodule {
             options = {
               basic = lib.nixvim.defaultNullOpts.mkBool true ''

@@ -1,14 +1,13 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
+let
+  inherit (lib) mkOption types;
+in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "qmk";
   package = "qmk-nvim";
   description = "Format qmk and zmk keymaps in Neovim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     name = mkOption {

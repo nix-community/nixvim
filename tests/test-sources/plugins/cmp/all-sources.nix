@@ -29,12 +29,11 @@
                 "codeium"
               ];
             in
-            with lib;
-            pipe config.cmpSourcePlugins [
+            lib.pipe config.cmpSourcePlugins [
               # All known source names
-              attrNames
+              lib.attrNames
               # Filter out disabled sources
-              (filter (name: !(elem name disabledSources)))
+              (lib.filter (name: !(lib.elem name disabledSources)))
               # Convert names to source attributes
               (map (name: {
                 inherit name;

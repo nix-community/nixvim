@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
   inherit (lib.nixvim) mkSettingsOption toLuaObject;
   supportedAdapters = import ./adapters-list.nix;
@@ -18,7 +17,7 @@ let
     }:
     {
       options.plugins.neotest.adapters.${name} = {
-        enable = mkEnableOption name;
+        enable = lib.mkEnableOption name;
 
         package = lib.mkPackageOption pkgs name {
           default = [
@@ -34,7 +33,7 @@ let
         let
           cfg = config.plugins.neotest.adapters.${name};
         in
-        mkIf cfg.enable {
+        lib.mkIf cfg.enable {
           extraPlugins = [ cfg.package ];
 
           assertions = lib.nixvim.mkAssertions "plugins.neotest.adapters.${name}" {
@@ -55,12 +54,14 @@ let
 
           plugins.neotest.settings.adapters =
             let
-              settingsString = optionalString (cfg.settings != { }) (settingsSuffix (toLuaObject cfg.settings));
+              settingsString = lib.optionalString (cfg.settings != { }) (
+                settingsSuffix (toLuaObject cfg.settings)
+              );
             in
             [ "require('neotest-${name}')${settingsString}" ];
         };
     };
 in
 {
-  imports = mapAttrsToList mkAdapter supportedAdapters;
+  imports = lib.mapAttrsToList mkAdapter supportedAdapters;
 }

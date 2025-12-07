@@ -6,7 +6,9 @@
 #
 # -> https://github.com/nvimtools/hydra.nvim?tab=readme-ov-file#config
 { lib, ... }:
-with lib;
+let
+  inherit (lib) types;
+in
 {
   debug = lib.nixvim.defaultNullOpts.mkBool false ''
     Whether to enable debug mode.
@@ -128,7 +130,7 @@ with lib;
             close it with `Hydra.hint:close()`.
           '';
 
-          funcs = mkOption {
+          funcs = lib.mkOption {
             type = with lib.types; attrsOf strLuaFn;
             description = ''
               Table from function names to function.

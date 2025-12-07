@@ -1,18 +1,14 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "neoscroll";
   package = "neoscroll-nvim";
   description = "Smooth scrolling neovim plugin.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     mappings =
-      lib.nixvim.defaultNullOpts.mkListOf types.str
+      lib.nixvim.defaultNullOpts.mkListOf lib.types.str
         [
           "<C-u>"
           "<C-d>"

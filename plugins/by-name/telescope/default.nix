@@ -3,8 +3,8 @@
   config,
   ...
 }:
-with lib;
 let
+  inherit (lib) types mkOption;
   inherit (lib.nixvim)
     keymaps
     mkNullOrOption
@@ -17,7 +17,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "telescope-nvim";
   description = "Find, Filter, Preview, Pick. All lua, all the time.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   imports = [
     ./extensions
@@ -62,7 +62,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       type = types.nullOr types.str;
       description = "The colorscheme to use for syntax highlighting";
       default = config.colorscheme;
-      defaultText = literalExpression "config.colorscheme";
+      defaultText = lib.literalExpression "config.colorscheme";
     };
 
     enabledExtensions = mkOption {
@@ -86,7 +86,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   callSetup = false;
   extraConfig = cfg: {
     # TODO: added 2024-09-20 remove after 24.11
-    plugins.web-devicons = mkIf (
+    plugins.web-devicons = lib.mkIf (
       !(
         (
           config.plugins.mini.enable
@@ -95,16 +95,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
         )
         || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
       )
-    ) { enable = mkOverride 1490 true; };
+    ) { enable = lib.mkOverride 1490 true; };
 
-    extraConfigVim = mkIf (cfg.highlightTheme != null) ''
+    extraConfigVim = lib.mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';
 
-    keymaps = mapAttrsToList (
+    keymaps = lib.mapAttrsToList (
       key: mapping:
       let
-        actionStr = if isString mapping then mapping else mapping.action;
+        actionStr = if lib.isString mapping then mapping else mapping.action;
       in
       {
         mode = mapping.mode or "n";

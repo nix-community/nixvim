@@ -1,8 +1,4 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 # We use `mkVimPlugin` to avoid having a `settings` option.
 # Indeed, this plugin is not configurable in the common sense (no `setup` function).
 lib.nixvim.plugins.mkVimPlugin {
@@ -10,12 +6,12 @@ lib.nixvim.plugins.mkVimPlugin {
   package = "gitignore-nvim";
   description = "A Neovim plugin for generating .gitignore files.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraOptions = {
-    keymap = mkOption {
+    keymap = lib.mkOption {
       type =
-        with types;
+        with lib.types;
         nullOr (
           either str (submodule {
             options = {
@@ -44,9 +40,9 @@ lib.nixvim.plugins.mkVimPlugin {
   };
 
   extraConfig = cfg: {
-    keymaps = optional (cfg.keymap != null) (
+    keymaps = lib.optional (cfg.keymap != null) (
       (
-        if isString cfg.keymap then
+        if lib.isString cfg.keymap then
           {
             mode = "n";
             key = cfg.keymap;

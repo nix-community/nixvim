@@ -1,14 +1,10 @@
-{
-  lib,
-  ...
-}:
-with lib;
+{ lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "hydra";
   package = "hydra-nvim";
   description = "Create custom submodes and menus, inspired by the Hydra Emacs package.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   extraOptions = {
     # A list of `Hydra` definitions

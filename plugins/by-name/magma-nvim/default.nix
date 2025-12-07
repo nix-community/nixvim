@@ -1,16 +1,11 @@
-{
-  lib,
-  ...
-}:
-with lib;
-with lib.nixvim.plugins;
-mkVimPlugin {
+{ lib, ... }:
+lib.nixvim.plugins.mkVimPlugin {
   name = "magma-nvim";
   package = "magma-nvim";
   globalPrefix = "magma_";
   description = "Interact with Jupyter from NeoVim.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
     image_provider =

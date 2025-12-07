@@ -3,8 +3,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) types mkOption;
   settingsOptions = {
     fzf_bin = lib.nixvim.mkNullOrStr ''
       The path to the `fzf` binary to use.
@@ -32,7 +32,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "fzf-lua";
   description = "`fzf` powered fuzzy finder for Neovim written in Lua.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   inherit settingsOptions settingsExample;
 
@@ -141,11 +141,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     plugins.fzf-lua.settings.__unkeyed_profile = cfg.profile;
 
-    keymaps = mapAttrsToList (
+    keymaps = lib.mapAttrsToList (
       key: mapping:
       let
         actionStr =
-          if isString mapping then
+          if lib.isString mapping then
             "${mapping}()"
           else
             "${mapping.action}(${lib.nixvim.toLuaObject mapping.settings})";

@@ -1,6 +1,6 @@
 { lib, ... }:
-with lib;
 let
+  inherit (lib) types;
   inherit (import ./_helpers.nix lib) mkMappingsOption;
   mkExtension = import ./_mk-extension.nix;
   inherit (lib.nixvim) defaultNullOpts mkNullOrStr;

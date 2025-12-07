@@ -1,15 +1,14 @@
 { lib, pkgs, ... }:
-with lib;
 lib.nixvim.plugins.mkVimPlugin {
   name = "vimtex";
   globalPrefix = "vimtex_";
   description = "A modern Vim and Neovim plugin for writing LaTeX documents.";
 
-  maintainers = [ maintainers.GaetanLepage ];
+  maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsOptions = {
-    view_method = mkOption {
-      type = types.str;
+    view_method = lib.mkOption {
+      type = lib.types.str;
       default = "general";
       example = "zathura";
       description = ''
@@ -64,7 +63,7 @@ lib.nixvim.plugins.mkVimPlugin {
     extraPackages =
       let
         # xdotool does not exist on darwin
-        xdotool = optional pkgs.stdenv.isLinux cfg.xdotoolPackage;
+        xdotool = lib.optional pkgs.stdenv.isLinux cfg.xdotoolPackage;
         viewerPackages =
           {
             general = xdotool;
