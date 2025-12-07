@@ -77,34 +77,19 @@ in
       test = {
         buildNixvim = false;
         warnings = expect: [
-          (expect "count" 2)
+          (expect "count" 1)
 
-          (expect "any" "The option `plugins.chatgpt.curlPackage' defined in `")
-          (expect "any" "has been replaced by `dependencies.curl.enable' and `dependencies.curl.package'.")
-
-          (expect "any" "The option `plugins.glow.glowPackage' defined in `")
+          (expect "any" "The option `plugins.efmls-configs.efmLangServerPackage' defined in `")
+          (expect "any" "has been replaced by `dependencies.efm-langserver.enable' and `dependencies.efm-langserver.package'.")
         ];
       };
 
-      plugins.chatgpt.curlPackage = null;
-      plugins.glow.glowPackage = pkgs.hello;
+      plugins.efmls-configs.efmLangServerPackage = null;
 
       assertions = [
         {
-          assertion = !lib.elem pkgs.curl config.extraPackages;
-          message = "Expected curl not to be installed.";
-        }
-        {
-          assertion = config.dependencies.glow.enable;
-          message = "Expected `dependencies.glow` to be enabled.";
-        }
-        {
-          assertion = lib.elem pkgs.hello config.extraPackages;
-          message = "Expected hello to be installed.";
-        }
-        {
-          assertion = !lib.elem pkgs.glow config.extraPackages;
-          message = "Expected glow not to be installed.";
+          assertion = !lib.elem pkgs.efm-langserver config.extraPackages;
+          message = "Expected efm-langserver not to be installed.";
         }
       ];
     };
