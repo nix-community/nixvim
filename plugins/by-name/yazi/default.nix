@@ -22,14 +22,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "yazi" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "yazi";
-      packageName = "yazi";
-    })
-  ];
-
   settingsOptions = {
     log_level = defaultNullOpts.mkLogLevel' {
       pluginDefault = "off";

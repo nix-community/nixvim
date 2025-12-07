@@ -14,43 +14,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO: Added 2024-12-16; remove after 25.05
-  optionsRenamedToSettings = [
-    "autoclose"
-    "autohide"
-    "autoinsert"
-    "borderchars"
-    "giteditor"
-    "height"
-    "opener"
-    "position"
-    "rootmarkers"
-    "shell"
-    "title"
-    "width"
-    "wintype"
-  ]
-  ++
-    map
-      (name: {
-        old = [
-          "keymaps"
-          name
-        ];
-        new = "keymap_${name}";
-      })
-      [
-        "first"
-        "hide"
-        "kill"
-        "last"
-        "new"
-        "next"
-        "prev"
-        "show"
-        "toggle"
-      ];
-
   settingsOptions = {
     shell = mkNullOrStr ''
       Which shell should floaterm use.

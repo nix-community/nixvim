@@ -9,14 +9,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   dependencies = [ "godot" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "godot";
-      packageName = "godot";
-    })
-  ];
-
   settingsOptions = {
     executable = lib.nixvim.defaultNullOpts.mkStr "godot" ''
       Path to the `godot` executable.

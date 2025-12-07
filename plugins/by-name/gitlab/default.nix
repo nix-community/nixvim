@@ -15,15 +15,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "nodejs" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "gitlab";
-      packageName = "nodejs";
-      oldPackageName = "node";
-    })
-  ];
-
   settingsOptions = {
     gitlab_url = defaultNullOpts.mkStr "https://gitlab.com" ''
       The GitLab instance url to use if not `https://gitlab.com`.

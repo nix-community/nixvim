@@ -15,34 +15,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO introduced 2024-12-16: remove after 25.05
-  optionsRenamedToSettings = import ./renamed-options.nix lib;
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "gitgutter"
-      ];
-    in
-    [
-      (lib.mkRemovedOptionModule (
-        basePluginPath ++ [ "grep" ]
-      ) "Please, use `plugins.gitgutter.grepPackage` and/or `plugins.gitgutter.settings.grep`.")
-      (lib.mkRemovedOptionModule (
-        basePluginPath
-        ++ [
-          "signs"
-          "modifiedAbove"
-        ]
-      ) "This option has been removed from upstream")
-
-      # TODO: added 2025-04-06, remove after 25.05
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "gitgutter";
-        packageName = "git";
-      })
-    ];
-
   dependencies = [ "git" ];
 
   extraOptions = {

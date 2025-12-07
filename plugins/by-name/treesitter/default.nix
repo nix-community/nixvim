@@ -180,34 +180,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "treesitter"
-      ];
-    in
-    [
-      (lib.mkRenamedOptionModule (basePluginPath ++ [ "moduleConfig" ]) (
-        basePluginPath ++ [ "settings" ]
-      ))
-
-      # TODO: added 2025-04-07, remove after 25.05
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "treesitter";
-        packageName = "gcc";
-      })
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "treesitter";
-        packageName = "nodejs";
-      })
-      (lib.nixvim.mkRemovedPackageOptionModule {
-        plugin = "treesitter";
-        packageName = "tree-sitter";
-        oldPackageName = "treesitter";
-      })
-    ];
-
   dependencies = lib.map (name: {
     inherit name;
     enable = !config.plugins.treesitter.nixGrammars;

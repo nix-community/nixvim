@@ -14,19 +14,6 @@ mkExtension {
 
   dependencies = [ "ripgrep" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = [
-        "telescope"
-        "extensions"
-        "live-grep-args"
-      ];
-      packageName = "ripgrep";
-      oldPackageName = "grep";
-    })
-  ];
-
   settingsOptions = {
     auto_quoting = defaultNullOpts.mkBool true ''
       Enable or disable auto quoting of searches.

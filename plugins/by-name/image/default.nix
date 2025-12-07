@@ -14,14 +14,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO: option deprecations added 2025-03-20. Remove after 25.05
-  # TODO: curlPackage and ueberzugPackage deprecations added 2025-04-06. Remove after 25.05
-  inherit (import ./deprecations.nix lib)
-    deprecateExtraOptions
-    optionsRenamedToSettings
-    imports
-    ;
-
   settingsOptions = {
     backend =
       defaultNullOpts.mkEnumFirstDefault

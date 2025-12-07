@@ -9,18 +9,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "neogit";
-      packageName = "git";
-    })
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "neogit";
-      packageName = "which";
-    })
-  ];
-
   dependencies = [
     "git"
     {

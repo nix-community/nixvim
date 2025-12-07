@@ -9,12 +9,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   # papis.nvim is an nvim-cmp source too
   imports = [
     { cmpSourcePlugins.papis = "papis"; }
-
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "yq";
-      packageName = "yq";
-    })
   ];
 
   dependencies = [ "yq" ];

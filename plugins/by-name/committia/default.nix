@@ -15,14 +15,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   dependencies = [ "git" ];
 
-  imports = [
-    # TODO: added 2025-04-06, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "committia";
-      packageName = "git";
-    })
-  ];
-
   settingsOptions = {
     open_only_vim_starting = defaultNullOpts.mkFlagInt 1 ''
       If `0`, committia.vim always attempts to open committia's buffer when `COMMIT_EDITMSG` buffer is opened.

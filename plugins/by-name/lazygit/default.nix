@@ -19,18 +19,6 @@ lib.nixvim.plugins.mkVimPlugin {
     "lazygit"
   ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "lazygit";
-      packageName = "git";
-    })
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "lazygit";
-      packageName = "lazygit";
-    })
-  ];
-
   settingsOptions = {
     floating_window_winblend = defaultNullOpts.mkNullable (types.ints.between 0 100) 0 ''
       Set the transparency of the floating window.

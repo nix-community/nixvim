@@ -14,14 +14,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "glow" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "glow";
-      packageName = "glow";
-    })
-  ];
-
   settingsOptions = {
     glow_path = defaultNullOpts.mkStr (lib.nixvim.literalLua "vim.fn.exepath('glow')") ''
       Path to `glow` binary.

@@ -19,9 +19,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO: Added 2024-12-17; remove after 25.05
-  optionsRenamedToSettings = import ./renamed-options.nix;
-
   settingsOptions = {
     fuzzy_finder = defaultNullOpts.mkStr "skim" ''
       Fuzzy finder to find documentation.

@@ -19,14 +19,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "distant" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "distant";
-      packageName = "distant";
-    })
-  ];
-
   settingsOptions = {
     buffer = {
       watch = {

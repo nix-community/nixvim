@@ -9,12 +9,4 @@ lib.nixvim.plugins.mkVimPlugin {
   maintainers = [ lib.maintainers.nickhu ];
 
   dependencies = [ "texpresso" ];
-
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "texpresso";
-      packageName = "texpresso";
-    })
-  ];
 }

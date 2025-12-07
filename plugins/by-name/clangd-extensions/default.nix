@@ -13,13 +13,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.jolars ];
 
-  # All of those warnings were introduced on 08/22/2023.
-  # TODO: Remove them in ~2 months (Oct. 2023).
-  imports = [ ./deprecations.nix ];
-
-  # TODO: introduced 2025-01-08: remove after 25.05
-  optionsRenamedToSettings = import ./renamed-options.nix;
-
   settingsOptions =
     let
       mkBorderOpt = defaultNullOpts.mkBorder "none" "clangd-extensions";

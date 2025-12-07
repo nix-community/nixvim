@@ -14,43 +14,6 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  # TODO: Added 2024-12-16; remove after 25.05
-  optionsRenamedToSettings = import ./renamed-options.nix;
-  imports =
-    let
-      basePluginPath = [
-        "plugins"
-        "vim-matchup"
-      ];
-    in
-    [
-      (lib.mkRenamedOptionModule
-        (
-          basePluginPath
-          ++ [
-            "matchParen"
-            "deffered"
-          ]
-        )
-        (
-          basePluginPath
-          ++ [
-            "settings"
-            "matchparen_deferred"
-          ]
-        )
-      )
-    ]
-    ++ (lib.nixvim.mkSettingsRenamedOptionModules (basePluginPath ++ [ "treesitterIntegration" ])
-      (basePluginPath ++ [ "treesitter" ])
-      [
-        "enable"
-        "disable"
-        "disableVirtualText"
-        "includeMatchWords"
-      ]
-    );
-
   extraOptions = {
     treesitter = lib.nixvim.mkSettingsOption {
       description = ''

@@ -14,14 +14,6 @@ lib.nixvim.plugins.neovim.mkNeovimPlugin {
 
   dependencies = [ "wezterm" ];
 
-  imports = [
-    # TODO: added 2025-04-07, remove after 25.05
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "wezterm";
-      packageName = "wezterm";
-    })
-  ];
-
   settingsOptions = {
     create_commands = defaultNullOpts.mkBool true ''
       Whether to create plugin commands.

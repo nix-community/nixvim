@@ -8,14 +8,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   dependencies = [ "curl" ];
 
-  # TODO: added 2025-04-06, remove after 25.05
-  imports = [
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "chatgpt";
-      packageName = "curl";
-    })
-  ];
-
   settingsOptions = {
     api_key_cmd = lib.nixvim.defaultNullOpts.mkStr null ''
       The path and arguments to an executable that returns the API key via stdout.
