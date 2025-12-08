@@ -17,10 +17,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     "opencode"
   ];
 
-  extraConfig = {
+  extraConfig = cfg: {
     assertions = lib.nixvim.mkAssertions "plugins.sidekick" {
-      assertion = config.plugins.copilot-lua.enable || config.lsp.servers.copilot.enable;
-      message = "sidekick requires either copilot-lua (${options.plugins.copilot-lua.enable}) or copilot LSP (${options.lsp.servers}.copilot.enable) to be enabled";
+      assertion =
+        (cfg.settings.opts.nes.enabled or true)
+        -> (config.plugins.copilot-lua.enable || config.lsp.servers.copilot.enable);
+      message = "sidekick requires either copilot-lua (${options.plugins.copilot-lua.enable}) or copilot LSP (${options.lsp.servers}.copilot.enable) to be enabled when NES is enabled";
     };
   };
 
