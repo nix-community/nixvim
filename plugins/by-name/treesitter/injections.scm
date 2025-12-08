@@ -1,103 +1,187 @@
 ;; extends
 
-(binding
-  attrpath: (attrpath
-    (identifier) @_path)
-  expression: [
-    (string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "lua")))
-    (indented_string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "lua")))
-  ]
-  (#any-of? @_path "__raw" "extraConfigLua" "extraConfigLuaPre" "extraConfigLuaPost"))
-
-(binding
-  attrpath: (attrpath
-    (identifier) @_path)
-  expression: (apply_expression
-    argument: [
-      (string_expression
-        ((string_fragment) @injection.content
-          (#set! injection.language "lua")))
-      (indented_string_expression
-        ((string_fragment) @injection.content
-          (#set! injection.language "lua")))
-    ])
-  (#any-of? @_path "__raw" "extraConfigLua" "extraConfigLuaPre" "extraConfigLuaPost"))
-
+;; =============================================================================
+;; Global mkRaw
+;; =============================================================================
 (apply_expression
   function: (_) @_func
   argument: [
-    (string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "lua")))
-    (indented_string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "lua")))
+    (string_expression (string_fragment) @injection.content)
+    (indented_string_expression (string_fragment) @injection.content)
   ]
-  (#match? @_func "(^|\\.)mkRaw$"))
+  (#match? @_func "(^|\\.)mkRaw$")
+  (#set! injection.language "lua"))
 
+;; =============================================================================
+;; LUA BINDINGS
+;; Matches: extraConfigLua, __raw, extraConfigLuaPre, extraConfigLuaPost
+;; =============================================================================
 (binding
-  attrpath: (attrpath
-    (identifier) @_path)
+  attrpath: (attrpath (identifier) @_path)
   expression: [
-    (string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "vim")))
-    (indented_string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "vim")))
-  ]
-  (#any-of? @_path "extraConfigVim" "extraConfigVimPre" "extraConfigVimPost"))
+    ; Direct string assignment
+    ; extraConfigLua = ''...''
+    (string_expression (string_fragment) @injection.content)
+    (indented_string_expression (string_fragment) @injection.content)
 
-(binding
-  attrpath: (attrpath
-    (identifier) @_path)
-  expression: (apply_expression
-    argument: [
-      (string_expression
-        ((string_fragment) @injection.content
-          (#set! injection.language "vim")))
-      (indented_string_expression
-        ((string_fragment) @injection.content
-          (#set! injection.language "vim")))
+    ; Function wrappers (handles 1-2 levels of nesting)
+    ; extraConfigLua = mkIf true "..."
+    ; extraConfigLua = mkIf true (mkOverride 10 "...")
+    (apply_expression argument: [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+      (parenthesized_expression (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ]))
     ])
-  (#any-of? @_path "extraConfigVim" "extraConfigVimPre" "extraConfigVimPost"))
+
+    ; Three-level nested wrappers
+    ; extraConfigLua = mkIf true (mkOverride 10 (mkDefault "..."))
+    (apply_expression argument: (parenthesized_expression (apply_expression argument:
+      (parenthesized_expression (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ])))))
+
+    ; Lists (with or without wrapped items)
+    ; extraConfigLua = mkMerge [ "..." "..." ]
+    ; extraConfigLua = mkMerge [ (mkIf true "...") "..." ]
+    (apply_expression argument: (list_expression [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+      (parenthesized_expression (apply_expression argument: [
+         (string_expression (string_fragment) @injection.content)
+         (indented_string_expression (string_fragment) @injection.content)
+      ]))
+    ]))
+    (list_expression [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+    ])
+  ]
+  (#any-of? @_path "__raw" "extraConfigLua" "extraConfigLuaPre" "extraConfigLuaPost")
+  (#set! injection.language "lua"))
+
+;; =============================================================================
+;; LUA CONFIG NESTED ATTRSET
+;; Handles: luaConfig = { pre = ... }
+;; =============================================================================
 
 (binding
-  attrpath: (attrpath
-    (identifier) @namespace
-    (identifier) @name)
-  expression: [
-    (string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "lua")))
-    (indented_string_expression
-      ((string_fragment) @injection.content
-        (#set! injection.language "lua")))
-  ]
-  (#eq? @namespace "luaConfig")
-  (#any-of? @name "pre" "post" "content"))
+  attrpath: (attrpath (identifier) @_path)
+  expression: (attrset_expression (binding_set (binding
+    attrpath: (attrpath (identifier) @_nested)
+    expression: [
+      ; Direct string assignment
+      ; luaConfig = { pre = ''...'' }
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
 
+      ; Function wrappers (handles 1-2 levels of nesting)
+      ; luaConfig = { pre = mkIf true "..." }
+      ; luaConfig = { pre = mkIf true (mkOverride 10 "...") }
+      (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+        (parenthesized_expression (apply_expression argument: [
+          (string_expression (string_fragment) @injection.content)
+          (indented_string_expression (string_fragment) @injection.content)
+        ]))
+      ])
+
+      ; Three-level nested wrappers
+      ; luaConfig = { pre = mkIf true (mkOverride 10 (mkDefault "...")) }
+      (apply_expression argument: (parenthesized_expression (apply_expression argument:
+        (parenthesized_expression (apply_expression argument: [
+          (string_expression (string_fragment) @injection.content)
+          (indented_string_expression (string_fragment) @injection.content)
+        ])))))
+    ]
+    (#any-of? @_nested "pre" "post" "content")
+  )))
+  (#eq? @_path "luaConfig")
+  (#set! injection.language "lua"))
+
+;; =============================================================================
+;; LUA CONFIG DOT NOTATION
+;; Handles: luaConfig.pre = ...
+;; =============================================================================
 (binding
-  attrpath: (attrpath
-    (identifier) @_path)
+  attrpath: (attrpath (identifier) @ns (identifier) @name)
   expression: [
-    (attrset_expression
-      (binding_set
-        (binding
-          attrpath: (attrpath
-            (identifier) @_nested_path)
-          expression: [
-            (string_expression
-              ((string_fragment) @injection.content
-                (#set! injection.language "lua")))
-            (indented_string_expression
-              ((string_fragment) @injection.content
-                (#set! injection.language "lua")))
-          ]
-          (#any-of? @_nested_path "pre" "post" "content"))))
+    ; Direct string assignment
+    ; luaConfig.pre = ''...''
+    (string_expression (string_fragment) @injection.content)
+    (indented_string_expression (string_fragment) @injection.content)
+
+    ; Function wrappers (handles 1-2 levels of nesting)
+    ; luaConfig.pre = mkIf true "..."
+    ; luaConfig.content = mkIf true (mkOverride 10 "...")
+    (apply_expression argument: [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+      (parenthesized_expression (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ]))
+    ])
+
+    ; Three-level nested wrappers
+    ; luaConfig.post = mkIf true (mkOverride 10 (mkDefault "..."))
+    (apply_expression argument: (parenthesized_expression (apply_expression argument:
+      (parenthesized_expression (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ])))))
   ]
-  (#eq? @_path "luaConfig"))
+  (#eq? @ns "luaConfig")
+  (#any-of? @name "pre" "post" "content")
+  (#set! injection.language "lua"))
+
+;; =============================================================================
+;; VIM BINDINGS
+;; Handles: extraConfigVim, extraConfigVimPre, extraConfigVimPost
+;; =============================================================================
+(binding
+  attrpath: (attrpath (identifier) @_path)
+  expression: [
+    ; Direct string assignment
+    ; extraConfigVim = ''...''
+    (string_expression (string_fragment) @injection.content)
+    (indented_string_expression (string_fragment) @injection.content)
+
+    ; Function wrappers (handles 1-2 levels of nesting)
+    ; extraConfigVim = mkIf true "..."
+    ; extraConfigVim = mkIf true (mkOverride 10 "...")
+    (apply_expression argument: [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+      (parenthesized_expression (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ]))
+    ])
+
+    ; Three-level nested wrappers
+    ; extraConfigVim = mkIf true (mkOverride 10 (mkDefault "..."))
+    (apply_expression argument: (parenthesized_expression (apply_expression argument:
+      (parenthesized_expression (apply_expression argument: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ])))))
+
+    ; Lists (with or without wrapped items)
+    ; extraConfigVim = mkMerge [ "..." "..." ]
+    ; extraConfigVim = mkMerge [ (mkIf true "...") "..." ]
+    (apply_expression argument: (list_expression [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+      (parenthesized_expression (apply_expression argument: [
+         (string_expression (string_fragment) @injection.content)
+         (indented_string_expression (string_fragment) @injection.content)
+      ]))
+    ]))
+  ]
+  (#any-of? @_path "extraConfigVim" "extraConfigVimPre" "extraConfigVimPost")
+  (#set! injection.language "vim"))
