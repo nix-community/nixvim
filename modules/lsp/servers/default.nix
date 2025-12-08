@@ -40,10 +40,10 @@ let
         # Get suboptions of `lsp.servers.<name>`
         (opts: opts.${name}.type.getSubOptions opts.${name}.loc)
         # Get the default package
-        (opts: opts.package.default or null)
-        # The default throws if mkPackageOption can't find the package
-        # E.g. mismatched nixpkgs revision
-        (package: (builtins.tryEval package).value)
+        #
+        # Use tryEval to catch throws when mkPackageOption can't find the package,
+        # e.g., due to a mismatched nixpkgs revision
+        (opts: (builtins.tryEval (opts.package.default or null)).value)
         # Get package's homepage
         (package: package.meta.homepage or null)
       ];
