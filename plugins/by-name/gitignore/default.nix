@@ -15,7 +15,7 @@ lib.nixvim.plugins.mkVimPlugin {
         nullOr (
           either str (submodule {
             options = {
-              key = mkOption {
+              key = lib.mkOption {
                 type = str;
                 description = "The key to map.";
                 example = "<leader>gi";
