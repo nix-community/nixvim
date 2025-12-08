@@ -11,7 +11,7 @@
       ((string_fragment) @injection.content
         (#set! injection.language "lua")))
   ]
-  (#match? @_path "(^(extraConfigLua(Pre|Post)?|__raw))$"))
+  (#any-of? @_path "__raw" "extraConfigLua" "extraConfigLuaPre" "extraConfigLuaPost"))
 
 (binding
   attrpath: (attrpath
@@ -25,7 +25,7 @@
         ((string_fragment) @injection.content
           (#set! injection.language "lua")))
     ])
-  (#match? @_path "(^(extraConfigLua(Pre|Post)?|__raw))$"))
+  (#any-of? @_path "__raw" "extraConfigLua" "extraConfigLuaPre" "extraConfigLuaPost"))
 
 (apply_expression
   function: (_) @_func
@@ -50,7 +50,7 @@
       ((string_fragment) @injection.content
         (#set! injection.language "vim")))
   ]
-  (#match? @_path "(^extraConfigVim(Pre|Post)?)$"))
+  (#any-of? @_path "extraConfigVim" "extraConfigVimPre" "extraConfigVimPost"))
 
 (binding
   attrpath: (attrpath
@@ -64,7 +64,7 @@
         ((string_fragment) @injection.content
           (#set! injection.language "vim")))
     ])
-  (#match? @_path "(^extraConfigVim(Pre|Post)?)$"))
+  (#any-of? @_path "extraConfigVim" "extraConfigVimPre" "extraConfigVimPost"))
 
 (binding
   attrpath: (attrpath
@@ -78,8 +78,8 @@
       ((string_fragment) @injection.content
         (#set! injection.language "lua")))
   ]
-  (#match? @namespace "^luaConfig$")
-  (#match? @name "^(pre|post|content)$"))
+  (#eq? @namespace "luaConfig")
+  (#any-of? @name "pre" "post" "content"))
 
 (binding
   attrpath: (attrpath
@@ -98,6 +98,6 @@
               ((string_fragment) @injection.content
                 (#set! injection.language "lua")))
           ]
-          (#match? @_nested_path "^(pre|post|content)$"))))
+          (#any-of? @_nested_path "pre" "post" "content"))))
   ]
-  (#match? @_path "^luaConfig$"))
+  (#eq? @_path "luaConfig"))
