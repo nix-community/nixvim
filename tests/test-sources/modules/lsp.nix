@@ -1,3 +1,4 @@
+{ pkgs }:
 {
   example = {
     lsp.servers = {
@@ -253,5 +254,52 @@
           '';
         }
       ];
+    };
+
+  # Regression test for mkServerOption:
+  # Ensures tryEval catches missing packages when evaluating the description.
+  # See https://github.com/nix-community/nixvim/issues/4033
+  missing-package =
+    { lib, options, ... }:
+    let
+      # `lsp.servers.lua_ls` option
+      serverOpt = lib.pipe options.lsp.servers [
+        (opt: opt.type.getSubOptions opt.loc)
+        (opts: opts.lua_ls)
+      ];
+
+      # `lsp.servers.lua_ls.package` option
+      packageOpt = (serverOpt.type.getSubOptions serverOpt.loc).package;
+
+      # The lua_ls package attr to remove from pkgs
+      packageName = lib.pipe ../../../plugins/lsp/lsp-packages.nix [
+        import
+        (lib.getAttr "packages")
+        (lib.getAttr "lua_ls")
+        lib.toList
+        lib.head
+      ];
+    in
+    {
+      # Remove lua_ls's package
+      _module.args.pkgs = lib.mkOverride 0 (lib.removeAttrs pkgs [ packageName ]);
+
+      assertions = [
+        {
+          # Expect the lua_ls description to evaluate without a link
+          assertion = serverOpt.description == "The lua_ls language server.\n";
+          message = ''
+            Wrong description for `${serverOpt}`. Found:
+            ${serverOpt.description}
+          '';
+        }
+        {
+          # Expect the package default to throw
+          assertion = !(builtins.tryEval packageOpt.default).success;
+          message = "Expected `${packageOpt}`'s default to throw.";
+        }
+      ];
+
+      test.buildNixvim = false;
     };
 }
