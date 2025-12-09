@@ -31,11 +31,21 @@ provider's loading mechanism.
 If you are just wanting to store potential configuration without enabling it,
 you can explicitly disable it setting `lazyLoad.enable = false`.
 
-By default, we route the generated setup code to your lazy loading provider, but
-it can be overridden by using the `lazyLoad.settings` option.
+By default, Nixvim routes the generated setup code (defined in
+`plugins.<name>.luaConfig.content`) to your lazy loading provider. For the
+`lz.n` backend, this means Nixvim will automatically generate an `after`
+function for you, that will be called when a trigger condition is met. You can
+override this default by defining `lazyLoad.settings.after` yourself.
 
-For `Lz.n`, the `lazyLoad.settings.after` option contains what it will call when
-a trigger condition is met.
+> [!NOTE]
+> This is an **override**: once you set `lazyLoad.settings.after`, Nixvim will
+> use your function instead of the auto-generated one, it will not "extend"
+> or "wrap" the default behavior.
+>
+> If you only need to run some extra Lua **after** the plugin (or colorscheme) has
+> been configured, you usually do **not** need to override `lazyLoad.settings.after`.
+> Instead, you can use the module's `luaConfig.post` hook, see the plugin's /
+> colorscheme's documentation for details
 
 ## Configuring Triggers
 
@@ -124,5 +134,31 @@ colorscheme = "catppuccin";
 colorschemes.catppuccin = {
   enable = true;
   lazyLoad.enable = true;
+};
+```
+
+To configure special integrations after `catppuccin` has been set up (while
+still letting Nixvim manage lazy loading and the default `after`):
+
+```nix
+colorscheme = "catppuccin";
+colorschemes.catppuccin = {
+  enable = true;
+  lazyLoad.enable = true;
+
+  # This code runs after catppuccin is setup,
+  # regardless of whether it was lazy-loaded or not.
+  luaConfig.post = ''
+    -- At this point catppuccin is configured, so we can safely
+    -- derive bufferline highlights or similar settings from it.
+    require('lz.n').trigger_load("bufferline.nvim")
+  '';
+};
+
+# Configure bufferline to load after catppuccin
+plugins.bufferline = {
+  enable = true;
+  settings.highlights.__raw = "require('catppuccin.special.bufferline').get_theme()";
+  lazyLoad.settings.lazy = true; # Lazy load manually
 };
 ```
