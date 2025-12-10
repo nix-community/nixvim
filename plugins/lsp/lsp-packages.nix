@@ -175,6 +175,7 @@
     # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "vscoqtop"
     "wasm_language_tools"
+    "wc_language_server"
     "yang_lsp"
     "yls"
     "ziggy"
@@ -353,6 +354,7 @@
     rubocop = "rubocop";
     ruby_lsp = "ruby-lsp";
     ruff = "ruff";
+    rumdl = "rumdl";
     rune_languageserver = "rune-languageserver";
     rust_analyzer = "rust-analyzer";
     scheme_langserver = [
