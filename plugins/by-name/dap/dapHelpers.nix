@@ -98,7 +98,11 @@ rec {
 
   mkAdapterOption =
     name: type:
-    mkNullOrOption (with types; attrsOf (either str type)) ''
+    let
+      # TODO: Added 2025-12-11 (26.05)
+      strToRawLua = lib.nixvim.deprecation.transitionType types.str lib.nixvim.mkRaw types.rawLua;
+    in
+    mkNullOrOption (with types; attrsOf (either strToRawLua type)) ''
       Debug adapters of `${name}` type.
       The adapters can also be set to a function which takes three arguments:
 
@@ -150,8 +154,8 @@ rec {
     type: adapters:
     lib.mapAttrs (
       _: adapter:
-      if builtins.isString adapter then
-        lib.nixvim.mkRaw adapter
+      if lib.types.isRawType adapter then
+        adapter
       else
         lib.filterAttrs (n: _: n != "enrichConfig") (
           adapter

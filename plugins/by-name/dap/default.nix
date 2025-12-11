@@ -22,10 +22,64 @@ lib.nixvim.plugins.mkNeovimPlugin {
   deprecateExtraOptions = true;
 
   extraOptions = {
-    adapters = lib.nixvim.mkCompositeOption "Dap adapters." {
-      executables = dapHelpers.mkAdapterOption "executable" dapHelpers.executableAdapterOption;
-      servers = dapHelpers.mkAdapterOption "server" dapHelpers.serverAdapterOption;
-      pipes = dapHelpers.mkAdapterOption "pipe" dapHelpers.pipeAdapterOption;
+    adapters = lib.nixvim.mkNullOrOption' {
+      type = types.submodule {
+        freeformType = types.attrsOf types.rawLua;
+        options = {
+          executables = dapHelpers.mkAdapterOption "executable" dapHelpers.executableAdapterOption;
+          servers = dapHelpers.mkAdapterOption "server" dapHelpers.serverAdapterOption;
+          pipes = dapHelpers.mkAdapterOption "pipe" dapHelpers.pipeAdapterOption;
+        };
+      };
+      description = ''
+        Debug Adapter Protocol adapters.
+
+        Adapters can be defined as dynamic functions or categorized structured configs.
+        See `Example` for usage patterns.
+      '';
+      example = lib.literalExpression ''
+        {
+          # Dynamic adapter using raw lua function
+          # Useful when adapter type is determined at runtime
+          python.__raw = '''
+            function(cb, config)
+              if config.request == 'attach' then
+                local port = (config.connect or config).port
+                local host = (config.connect or config).host or '127.0.0.1'
+                cb({
+                  type = 'server',
+                  port = assert(port, '`connect.port` is required for a godot `attach` configuration'),
+                  host = host,
+                  options = {
+                    source_filetype = 'gdscript',
+                  },
+                })
+              else
+                cb({
+                  type = 'executable',
+                  command = 'godot',
+                  args = { '--path', config.project_path or vim.fn.getcwd(), '--remote-debug', '127.0.0.1:6006' },
+                  options = {
+                    source_filetype = 'gdscript',
+                  },
+                })
+              end
+            end
+          ''';
+
+          # Categorized structured config for executable adapter
+          executables.python = {
+            command = "python";
+            args = [ "-m" "debugpy" ];
+          };
+
+          # Categorized structured config for server adapter
+          servers.netcoredbg = {
+            port = 4711;
+            executable.command = "netcoredbg";
+          };
+        }
+      '';
     };
 
     configurations =
@@ -64,16 +118,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
       options = {
         inherit (cfg) configurations;
 
-        adapters =
+        adapters = lib.mkMerge [
+          (lib.removeAttrs (cfg.adapters or { }) [
+            "executables"
+            "servers"
+            "pipes"
+          ])
           (lib.optionalAttrs (cfg.adapters.executables != null) (
             dapHelpers.processAdapters "executable" cfg.adapters.executables
           ))
-          // (lib.optionalAttrs (cfg.adapters.servers != null) (
+          (lib.optionalAttrs (cfg.adapters.servers != null) (
             dapHelpers.processAdapters "server" cfg.adapters.servers
           ))
-          // (lib.optionalAttrs (cfg.adapters.pipes != null) (
+          (lib.optionalAttrs (cfg.adapters.pipes != null) (
             dapHelpers.processAdapters "pipe" cfg.adapters.pipes
-          ));
+          ))
+        ];
 
         signs = with cfg.signs; {
           DapBreakpoint = dapBreakpoint;
