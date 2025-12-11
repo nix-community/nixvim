@@ -263,6 +263,13 @@
     name = "Gabriel Arazas";
     source = "nixpkgs";
   };
+  fwastring = {
+    email = "fredrik@wastring.com";
+    github = "fwastring";
+    githubId = 25203388;
+    name = "Fredrik Wastring";
+    source = "nixvim";
+  };
   getchoo = {
     email = "getchoo@tuta.io";
     github = "getchoo";
