@@ -183,32 +183,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
         map (
           tool: if lib.isString tool then lib.nixvim.mkRaw "require 'efmls-configs.${kind}.${tool}'" else tool
         ) (lib.toList opt);
-
-      setupOptions =
-        (lib.mapAttrs
-          (
-            _:
-            {
-              linter ? [ ],
-              formatter ? [ ],
-            }:
-            (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
-          )
-          (
-            builtins.removeAttrs cfg.languages [
-              "all"
-              # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
-              "warnings"
-              "HTML"
-              "JSON"
-            ]
-          )
-        )
-        // {
-          "=" =
-            (mkToolValue "linters" cfg.languages.all.linter)
-            ++ (mkToolValue "formatters" cfg.languages.all.formatter);
-        };
     in
     {
       # TODO: print the location of the offending options
@@ -223,7 +197,31 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
       lsp.servers.efm = {
         enable = true;
-        config.settings.languages = setupOptions;
+        config.settings.languages =
+          (lib.mapAttrs
+            (
+              _:
+              {
+                linter ? [ ],
+                formatter ? [ ],
+              }:
+              (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
+            )
+            (
+              builtins.removeAttrs cfg.languages [
+                "all"
+                # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
+                "warnings"
+                "HTML"
+                "JSON"
+              ]
+            )
+          )
+          // {
+            "=" =
+              (mkToolValue "linters" cfg.languages.all.linter)
+              ++ (mkToolValue "formatters" cfg.languages.all.formatter);
+          };
       };
 
       extraPackages = map (name: cfg.toolPackages.${name}) nixvimPkgs.right;
