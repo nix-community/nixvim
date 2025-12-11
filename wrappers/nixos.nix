@@ -42,6 +42,7 @@ in
     environment.variables = {
       VIM = mkIf (!cfg.wrapRc) "/etc/nvim";
       EDITOR = mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
+      VISUAL = mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
     };
 
     programs.neovim.defaultEditor = cfg.defaultEditor;
