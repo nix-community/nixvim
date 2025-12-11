@@ -8,14 +8,50 @@
       enable = true;
 
       adapters = {
+        python.__raw = ''
+          function(cb, config)
+            if config.request == 'attach' then
+              local port = (config.connect or config).port
+              local host = (config.connect or config).host or '127.0.0.1'
+              cb({
+                type = 'server',
+                port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+                host = host,
+                options = {
+                  source_filetype = 'python',
+                },
+              })
+            else
+              cb({
+                type = 'executable',
+                command = 'path/to/virtualenvs/debugpy/bin/python',
+                args = { '-m', 'debugpy.adapter' },
+                options = {
+                  source_filetype = 'python',
+                },
+              })
+            end
+          end
+        '';
+
         executables = {
-          python = {
+          pythonStructured = {
             command = ".virtualenvs/tools/bin/python";
             args = [
               "-m"
               "debugpy.adapter"
             ];
           };
+          lldb.__raw = ''
+            function(on_config, config)
+              local command = config.lldbCommand or "lldb-vscode"
+              on_config({
+                type = "executable",
+                command = command,
+                name = "lldb",
+              })
+            end
+          '';
         };
         servers = {
           java = ''
