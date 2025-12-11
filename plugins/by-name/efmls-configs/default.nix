@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  options,
   pkgs,
   ...
 }:
@@ -21,8 +22,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
       packageName = "efm-langserver";
     })
 
+    (
+      let
+        basePluginPath = [
+          "plugins"
+          "efmls-configs"
+        ];
+      in
+      lib.mkRenamedOptionModule (basePluginPath ++ [ "setup" ]) (basePluginPath ++ [ "languages" ])
+    )
+
     # Propagate setup warnings
-    { inherit (config.plugins.efmls-configs.setup) warnings; }
+    { inherit (config.plugins.efmls-configs.languages) warnings; }
   ];
 
   hasSettings = false;
@@ -77,7 +88,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           };
         }
       */
-      setup = lib.mkOption {
+      languages = lib.mkOption {
         type = lib.types.submodule {
           freeformType = lib.types.attrsOf lib.types.anything;
 
@@ -115,7 +126,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
               };
             };
         };
-        description = "Configuration for each filetype. Use `all` to match any filetype.";
+        description = ''
+          Configuration for each filetype. Use `all` to match any filetype.
+
+          This option is used to populate `${options.lsp.servers}.efm.config.settings.languages`.
+        '';
         default = { };
       };
     };
@@ -137,7 +152,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             (
               lib.attrValues (
                 # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
-                builtins.removeAttrs cfg.setup [
+                builtins.removeAttrs cfg.languages [
                   "warnings"
                   "HTML"
                   "JSON"
@@ -180,7 +195,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
           )
           (
-            builtins.removeAttrs cfg.setup [
+            builtins.removeAttrs cfg.languages [
               "all"
               # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
               "warnings"
@@ -191,7 +206,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
         )
         // {
           "=" =
-            (mkToolValue "linters" cfg.setup.all.linter) ++ (mkToolValue "formatters" cfg.setup.all.formatter);
+            (mkToolValue "linters" cfg.languages.all.linter)
+            ++ (mkToolValue "formatters" cfg.languages.all.formatter);
         };
     in
     {

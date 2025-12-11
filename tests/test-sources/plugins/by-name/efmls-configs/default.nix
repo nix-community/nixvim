@@ -6,12 +6,12 @@
   all =
     { options, ... }:
     let
-      inherit (options.plugins.efmls-configs) setup;
+      inherit (options.plugins.efmls-configs) languages;
 
       # toolOptions is an attrsets of the form:
       # { <lang> = { linter = tools; formatter = tools; }; }
       # Where tools is the option type representing the valid tools for this language
-      toolOptions = builtins.removeAttrs (setup.type.getSubOptions setup.loc) [
+      toolOptions = builtins.removeAttrs (languages.type.getSubOptions languages.loc) [
         "_freeformOptions"
         "_module"
 
@@ -81,7 +81,7 @@
         #          linter = [<all valid linters for lang>];
         #          formatter = [<all valid formatters for lang>];
         #       };}
-        setup = builtins.mapAttrs (_: builtins.mapAttrs (_: toolsFromOptions)) toolOptions;
+        languages = builtins.mapAttrs (_: builtins.mapAttrs (_: toolsFromOptions)) toolOptions;
       };
     };
 
@@ -97,7 +97,7 @@
     plugins.efmls-configs = {
       enable = true;
 
-      setup = {
+      languages = {
         # Setup for all languages
         all = {
           linter = "vale";
