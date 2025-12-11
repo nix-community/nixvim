@@ -38,7 +38,10 @@ in
       cfg.build.package
     ];
 
-    home.sessionVariables = mkIf cfg.defaultEditor { EDITOR = "nvim"; };
+    home.sessionVariables = mkIf cfg.defaultEditor {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
 
     programs = mkIf cfg.vimdiffAlias {
       bash.shellAliases.vimdiff = "nvim -d";
