@@ -237,6 +237,7 @@
       "elmPackages"
       "elm-language-server"
     ];
+    elixirls = "elixir-ls";
     elp = "erlang-language-platform";
     emmet_language_server = "emmet-language-server";
     emmet_ls = "emmet-ls";
@@ -314,6 +315,7 @@
       "ocaml-lsp"
     ];
     ols = "ols";
+    omnisharp = "omnisharp-roslyn";
     openscad_lsp = "openscad-lsp";
     oxlint = "oxlint";
     perlnavigator = "perlnavigator";
@@ -452,10 +454,6 @@
         "lsp"
       ];
     };
-    elixirls = {
-      package = "elixir-ls";
-      cmd = [ "elixir-ls" ];
-    };
     java_language_server = {
       package = "java-language-server";
       cmd = [ "java-language-server" ];
@@ -470,10 +468,6 @@
         "nextls"
         "--stdio"
       ];
-    };
-    omnisharp = {
-      package = "omnisharp-roslyn";
-      cmd = [ "OmniSharp" ];
     };
   };
 
