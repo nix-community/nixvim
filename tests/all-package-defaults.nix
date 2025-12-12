@@ -22,10 +22,6 @@ let
     "haxe"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-    # 2025-12-10: dependency bazel fails with:
-    # error: Please expand list of system with defaultLib for 'aarch64-linux'
-    "verible"
-
     # "tabnine"
     "cmp-tabnine"
 
