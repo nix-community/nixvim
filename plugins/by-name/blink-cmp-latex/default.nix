@@ -15,34 +15,38 @@ lib.nixvim.plugins.mkNeovimPlugin {
     For example:
 
     ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.providers = {
-        latex-symbols = {
-          module = "blink-cmp-latex";
-          name = "Latex";
-          opts = {
-            # set to true to insert the latex command instead of the symbol
-            insert_command = false
+    {
+      plugins.blink-cmp = {
+        enable = true;
+        settings.sources.providers = {
+          latex-symbols = {
+            module = "blink-cmp-latex";
+            name = "Latex";
+            opts = {
+              # set to true to insert the latex command instead of the symbol
+              insert_command = false
+            };
           };
         };
       };
-    };
+    }
     ```
 
     And then you can add it to blink-cmp's `sources.default` option:
 
     ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "latex-symbols"
-      ];
-    };
+    {
+      plugins.blink-cmp = {
+        enable = true;
+        settings.sources.default = [
+          "lsp"
+          "path"
+          "luasnip"
+          "buffer"
+          "latex-symbols"
+        ];
+      };
+    }
     ```
   '';
 

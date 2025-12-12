@@ -40,6 +40,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     If you'd like more control, you could instead specify which packages to install. For example:
 
     ```nix
+    {
       plugins.treesitter = {
         enable = true;
 
@@ -58,6 +59,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           yaml
         ];
       };
+    }
     ```
 
     ### Installing tree-sitter grammars from nvim-treesitter
@@ -69,6 +71,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     or use the `plugins.treesitter.settings.ensure_installed` option to specify grammars you want the plugin to fetch and install.
 
     ```nix
+    {
       plugins.treesitter = {
         enable = true;
 
@@ -84,6 +87,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ];
         };
       };
+    }
     ```
 
     NOTE: You can combine the functionality of `plugins.treesitter.nixGrammars` and `plugins.treesitter.settings.ensure_installed`.

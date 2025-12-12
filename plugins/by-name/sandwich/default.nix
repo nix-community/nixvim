@@ -13,6 +13,7 @@ lib.nixvim.plugins.mkVimPlugin {
     The `settings` option will not let you define the options starting with `sandwich#`.
     For those, you can directly use the `globals` option:
     ```nix
+    {
       globals."sandwich#magicchar#f#patterns" = [
         {
           header.__raw = "[[\<\%(\h\k*\.\)*\h\k*]]";
@@ -21,6 +22,7 @@ lib.nixvim.plugins.mkVimPlugin {
           footer = "";
         }
       ];
+    }
     ```
   '';
 

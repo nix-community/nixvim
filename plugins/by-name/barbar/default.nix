@@ -260,18 +260,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
           The keys will be automatically translated to raw lua:
           ```nix
-            {
-              "vim.diagnostic.severity.INFO".enabled = true;
-              "vim.diagnostic.severity.WARN".enabled = true;
-            }
+          {
+            "vim.diagnostic.severity.INFO".enabled = true;
+            "vim.diagnostic.severity.WARN".enabled = true;
+          }
           ```
           will result in the following lua:
           ```lua
-            {
-              -- Note the table keys are not string literals:
-              [vim.diagnostic.severity.INFO] = { ['enabled'] = true },
-              [vim.diagnostic.severity.WARN] = { ['enabled'] = true },
-            }
+          {
+            -- Note the table keys are not string literals:
+            [vim.diagnostic.severity.INFO] = { ['enabled'] = true },
+            [vim.diagnostic.severity.WARN] = { ['enabled'] = true },
+          }
           ```
         '';
       };

@@ -15,33 +15,37 @@ lib.nixvim.plugins.mkNeovimPlugin {
     For example:
 
     ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.providers = {
-        spell = {
-          module = "blink-cmp-spell";
-          name = "Spell";
-          score_offset = 100;
-          opts = {
+    {
+      plugins.blink-cmp = {
+        enable = true;
+        settings.sources.providers = {
+          spell = {
+            module = "blink-cmp-spell";
+            name = "Spell";
+            score_offset = 100;
+            opts = {
+            };
           };
         };
       };
-    };
+    }
     ```
 
     And then you can add it to blink-cmp's `sources.default` option:
 
     ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "spell"
-      ];
-    };
+    {
+      plugins.blink-cmp = {
+        enable = true;
+        settings.sources.default = [
+          "lsp"
+          "path"
+          "luasnip"
+          "buffer"
+          "spell"
+        ];
+      };
+    }
     ```
   '';
 

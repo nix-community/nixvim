@@ -39,28 +39,28 @@ in
 
       Default:
       ```nix
-        [
-          {
-            type = "files";
-            header = ["   MRU"];
-          }
-          {
-            type = "dir";
-            header = [{__raw = "'   MRU' .. vim.loop.cwd()";}];
-          }
-          {
-            type = "sessions";
-            header = ["   Sessions"];
-          }
-          {
-            type = "bookmarks";
-            header = ["   Bookmarks"];
-          }
-          {
-            type = "commands";
-            header = ["   Commands"];
-          }
-        ]
+      [
+        {
+          type = "files";
+          header = ["   MRU"];
+        }
+        {
+          type = "dir";
+          header = [{__raw = "'   MRU' .. vim.loop.cwd()";}];
+        }
+        {
+          type = "sessions";
+          header = ["   Sessions"];
+        }
+        {
+          type = "bookmarks";
+          header = ["   Bookmarks"];
+        }
+        {
+          type = "commands";
+          header = ["   Commands"];
+        }
+      ]
       ```
     '';
   };
@@ -100,12 +100,12 @@ in
 
         Example:
         ```nix
-          [
-            ":help reference"
-            ["Vim Reference" "h ref"]
-            {h = "h ref";}
-            {m = ["My magical function" "call Magic()"];}
-          ]
+        [
+          ":help reference"
+          ["Vim Reference" "h ref"]
+          {h = "h ref";}
+          {m = ["My magical function" "call Magic()"];}
+        ]
         ```
       '';
 
@@ -204,11 +204,11 @@ in
 
     Example:
     ```nix
-      [
-       "\.vimgolf"
-       "^/tmp"
-       "/project/.*/documentation"
-      ]
+    [
+      "\.vimgolf"
+      "^/tmp"
+      "/project/.*/documentation"
+    ]
     ```
   '';
 
@@ -261,7 +261,7 @@ in
 
     Example:
     ```nix
-      ["setlocal" "winheight"]
+    ["setlocal" "winheight"]
     ```
     Internally this simply does:
     - `:global/setlocal/delete`
@@ -279,11 +279,11 @@ in
 
     Example:
     ```nix
-      [
-       "g:startify_session_savevars"
-       "g:startify_session_savecmds"
-       "g:random_plugin_use_feature"
-      ]
+    [
+      "g:startify_session_savevars"
+      "g:startify_session_savecmds"
+      "g:random_plugin_use_feature"
+    ]
     ```
   '';
 
@@ -292,9 +292,9 @@ in
 
     Example:
     ```nix
-      [
-        "silent !pdfreader ~/latexproject/main.pdf &"
-      ]
+    [
+      "silent !pdfreader ~/latexproject/main.pdf &"
+    ]
     ```
   '';
 

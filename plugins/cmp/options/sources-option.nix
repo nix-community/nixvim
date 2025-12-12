@@ -41,6 +41,7 @@ let
         if you don't want to see `buffer` source items while `nvim-lsp` source is available:
 
         ```nix
+        {
           sources = [
             {
               name = "nvim_lsp";
@@ -51,6 +52,7 @@ let
               group_index = 2;
             }
           ];
+        }
         ```
       '';
 

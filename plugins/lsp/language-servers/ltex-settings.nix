@@ -108,7 +108,6 @@ in
     type = with types; listOf (maybeRaw str);
     pluginDefault = { };
     example = {
-
       "<LANGUAGE1>" = [
         "<WORD1>"
         "<WORD2>"
@@ -122,9 +121,9 @@ in
       Lists of additional words that should not be counted as spelling errors.
       This setting is language-specific, so use an attrs of the format
       ```nix
-        {
-          ...
-        };
+      {
+        ...
+      };
       ```
       where <LANGUAGE> denotes the language code in `settings.language`.
 
@@ -148,18 +147,18 @@ in
       Lists of rules that should be disabled (if enabled by default by LanguageTool).
       This setting is language-specific, so use an attrs of the format
       ```nix
-        {
-          "<LANGUAGE1>" = [
-            "<WORD1>"
-            "<WORD2>"
-            ...
-          ];
-          "<LANGUAGE2>" = [
-            "<WORD1>"
-            "<WORD2>"
-          ];
+      {
+        "<LANGUAGE1>" = [
+          "<WORD1>"
+          "<WORD2>"
           ...
-        };
+        ];
+        "<LANGUAGE2>" = [
+          "<WORD1>"
+          "<WORD2>"
+        ];
+        ...
+      };
       ```
       where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
       the LanguageTool rule.
@@ -184,18 +183,18 @@ in
       Lists of rules that should be enabled (if disabled by default by LanguageTool).
       This setting is language-specific, so use an attrs of the format
       ```nix
-        {
-          "<LANGUAGE1>" = [
-            "<WORD1>"
-            "<WORD2>"
-            ...
-          ];
-          "<LANGUAGE2>" = [
-            "<WORD1>"
-            "<WORD2>"
-          ];
+      {
+        "<LANGUAGE1>" = [
+          "<WORD1>"
+          "<WORD2>"
           ...
-        };
+        ];
+        "<LANGUAGE2>" = [
+          "<WORD1>"
+          "<WORD2>"
+        ];
+        ...
+      };
       ```
       where `<LANGUAGE>` denotes the language code in `settings.language` and `<RULE>` the ID of
       the LanguageTool rule.
@@ -217,18 +216,18 @@ in
       within a specific sentence).
       This setting is language-specific, so use an attrs of the format
       ```nix
-        {
-          "<LANGUAGE1>" = [
-            "<JSON1>"
-            "<JSON2>"
-            ...
-          ];
-          "<LANGUAGE2>" = [
-            "<JSON1>"
-            "<JSON2>"
-          ];
+      {
+        "<LANGUAGE1>" = [
+          "<JSON1>"
+          "<JSON2>"
           ...
-        };
+        ];
+        "<LANGUAGE2>" = [
+          "<JSON1>"
+          "<JSON2>"
+        ];
+        ...
+      };
       ```
       where `<LANGUAGE>` denotes the language code in `settings.language` and `<JSON>` is a JSON
       string containing information about the rule and sentence.
