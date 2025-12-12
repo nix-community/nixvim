@@ -22,22 +22,23 @@ Nixvim is also available for nix flakes, or directly through an import.
 For a direct import you can add Nixvim to your configuration as follows:
 ```nix
 let
-    nixvim = import (builtins.fetchGit {
-        url = "https://github.com/nix-community/nixvim";
-        # When using a different channel you can use `ref = "nixos-<version>"` to set it here
-    });
+  nixvim = import (builtins.fetchGit {
+    url = "https://github.com/nix-community/nixvim";
+    # When using a different channel you can use `ref = "nixos-<version>"` to set it here
+  });
 in
+# configurations...
 ```
 
 When using flakes you can simply add `nixvim` to the inputs:
 ```nix
 {
-    inputs.nixvim = {
-        url = "github:nix-community/nixvim";
-        # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
-    };
+  inputs.nixvim = {
+    url = "github:nix-community/nixvim";
+    # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
+  };
 
-    # outputs...
+  # outputs...
 }
 
 ```

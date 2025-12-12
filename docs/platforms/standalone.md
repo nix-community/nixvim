@@ -34,11 +34,11 @@ This function is recursive, meaning that it can be applied an arbitrary number o
 
 ```nix
 {makeNixvim}: let
-    first = makeNixvim { extraConfigLua = "-- first stage"; };
-    second = first.extend {extraConfigLua = "-- second stage";};
-    third = second.extend {extraConfigLua = "-- third stage";};
+  first = makeNixvim { extraConfigLua = "-- first stage"; };
+  second = first.extend {extraConfigLua = "-- second stage";};
+  third = second.extend {extraConfigLua = "-- third stage";};
 in
-    third
+third
 ```
 
 This will generate a `init.lua` that will contain the comments from each stages:
@@ -61,10 +61,10 @@ Given a Nixvim derivation it is possible to access the module options using `<de
 This can be useful to configure `nixd` for example:
 
 ```nix
-plugins.lsp.servers.nixd = {
+{
+  plugins.lsp.servers.nixd = {
     enable = true;
-    settings = {
-        options.nixvim.expr = ''(builtins.getFlake "/path/to/flake").packages.${system}.neovimNixvim.options'';
-    };
-};
+    settings.options.nixvim.expr = ''(builtins.getFlake "/path/to/flake").packages.${system}.neovimNixvim.options'';
+  };
+}
 ```

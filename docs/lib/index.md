@@ -26,6 +26,7 @@ in
 ```
 
 The extended `lib` is also accessible in the `lib` module argument in the `programs.nixvim` submodule:
+
 ```nix
 {
   programs.nixvim =
