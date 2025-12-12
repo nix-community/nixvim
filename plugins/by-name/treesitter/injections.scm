@@ -24,25 +24,22 @@
     (string_expression (string_fragment) @injection.content)
     (indented_string_expression (string_fragment) @injection.content)
 
-    ; Function wrappers (handles 1-2 levels of nesting)
+    ; Function wrappers (handles 1-3 levels of nesting)
     ; extraConfigLua = mkIf true "..."
     ; extraConfigLua = mkIf true (mkOverride 10 "...")
+    ; extraConfigLua = mkIf true (mkOverride 10 (mkDefault "..."))
     (apply_expression argument: [
       (string_expression (string_fragment) @injection.content)
       (indented_string_expression (string_fragment) @injection.content)
       (parenthesized_expression (apply_expression argument: [
         (string_expression (string_fragment) @injection.content)
         (indented_string_expression (string_fragment) @injection.content)
+        (parenthesized_expression (apply_expression argument: [
+          (string_expression (string_fragment) @injection.content)
+          (indented_string_expression (string_fragment) @injection.content)
+        ]))
       ]))
     ])
-
-    ; Three-level nested wrappers
-    ; extraConfigLua = mkIf true (mkOverride 10 (mkDefault "..."))
-    (apply_expression argument: (parenthesized_expression (apply_expression argument:
-      (parenthesized_expression (apply_expression argument: [
-        (string_expression (string_fragment) @injection.content)
-        (indented_string_expression (string_fragment) @injection.content)
-      ])))))
 
     ; Lists (with or without wrapped items)
     ; extraConfigLua = mkMerge [ "..." "..." ]
@@ -85,25 +82,22 @@
       (string_expression (string_fragment) @injection.content)
       (indented_string_expression (string_fragment) @injection.content)
 
-      ; Function wrappers (handles 1-2 levels of nesting)
+      ; Function wrappers (handles 1-3 levels of nesting)
       ; luaConfig = { pre = mkIf true "..." }
       ; luaConfig = { pre = mkIf true (mkOverride 10 "...") }
+      ; luaConfig = { pre = mkIf true (mkOverride 10 (mkDefault "...")) }
       (apply_expression argument: [
         (string_expression (string_fragment) @injection.content)
         (indented_string_expression (string_fragment) @injection.content)
         (parenthesized_expression (apply_expression argument: [
           (string_expression (string_fragment) @injection.content)
           (indented_string_expression (string_fragment) @injection.content)
+          (parenthesized_expression (apply_expression argument: [
+            (string_expression (string_fragment) @injection.content)
+            (indented_string_expression (string_fragment) @injection.content)
+          ]))
         ]))
       ])
-
-      ; Three-level nested wrappers
-      ; luaConfig = { pre = mkIf true (mkOverride 10 (mkDefault "...")) }
-      (apply_expression argument: (parenthesized_expression (apply_expression argument:
-        (parenthesized_expression (apply_expression argument: [
-          (string_expression (string_fragment) @injection.content)
-          (indented_string_expression (string_fragment) @injection.content)
-        ])))))
 
       ; Let expressions
       ; luaConfig = { pre = let x = ...; in ''...'' }
@@ -129,25 +123,22 @@
     (string_expression (string_fragment) @injection.content)
     (indented_string_expression (string_fragment) @injection.content)
 
-    ; Function wrappers (handles 1-2 levels of nesting)
+    ; Function wrappers (handles 1-3 levels of nesting)
     ; luaConfig.pre = mkIf true "..."
     ; luaConfig.content = mkIf true (mkOverride 10 "...")
+    ; luaConfig.post = mkIf true (mkOverride 10 (mkDefault "..."))
     (apply_expression argument: [
       (string_expression (string_fragment) @injection.content)
       (indented_string_expression (string_fragment) @injection.content)
       (parenthesized_expression (apply_expression argument: [
         (string_expression (string_fragment) @injection.content)
         (indented_string_expression (string_fragment) @injection.content)
+        (parenthesized_expression (apply_expression argument: [
+          (string_expression (string_fragment) @injection.content)
+          (indented_string_expression (string_fragment) @injection.content)
+        ]))
       ]))
     ])
-
-    ; Three-level nested wrappers
-    ; luaConfig.post = mkIf true (mkOverride 10 (mkDefault "..."))
-    (apply_expression argument: (parenthesized_expression (apply_expression argument:
-      (parenthesized_expression (apply_expression argument: [
-        (string_expression (string_fragment) @injection.content)
-        (indented_string_expression (string_fragment) @injection.content)
-      ])))))
 
     ; Let expressions
     ; luaConfig.pre = let x = ...; in ''...''
@@ -172,25 +163,22 @@
     (string_expression (string_fragment) @injection.content)
     (indented_string_expression (string_fragment) @injection.content)
 
-    ; Function wrappers (handles 1-2 levels of nesting)
+    ; Function wrappers (handles 1-3 levels of nesting)
     ; extraConfigVim = mkIf true "..."
     ; extraConfigVim = mkIf true (mkOverride 10 "...")
+    ; extraConfigVim = mkIf true (mkOverride 10 (mkDefault "..."))
     (apply_expression argument: [
       (string_expression (string_fragment) @injection.content)
       (indented_string_expression (string_fragment) @injection.content)
       (parenthesized_expression (apply_expression argument: [
         (string_expression (string_fragment) @injection.content)
         (indented_string_expression (string_fragment) @injection.content)
+        (parenthesized_expression (apply_expression argument: [
+          (string_expression (string_fragment) @injection.content)
+          (indented_string_expression (string_fragment) @injection.content)
+        ]))
       ]))
     ])
-
-    ; Three-level nested wrappers
-    ; extraConfigVim = mkIf true (mkOverride 10 (mkDefault "..."))
-    (apply_expression argument: (parenthesized_expression (apply_expression argument:
-      (parenthesized_expression (apply_expression argument: [
-        (string_expression (string_fragment) @injection.content)
-        (indented_string_expression (string_fragment) @injection.content)
-      ])))))
 
     ; Lists (with or without wrapped items)
     ; extraConfigVim = mkMerge [ "..." "..." ]
