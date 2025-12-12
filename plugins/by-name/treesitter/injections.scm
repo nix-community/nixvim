@@ -59,6 +59,13 @@
       (string_expression (string_fragment) @injection.content)
       (indented_string_expression (string_fragment) @injection.content)
     ])
+
+    ; Let expressions
+    ; extraConfigLua = let x = ...; in ''...''
+    (let_expression body: [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+    ])
   ]
   (#any-of? @_path "__raw" "extraConfigLua" "extraConfigLuaPre" "extraConfigLuaPost")
   (#set! injection.language "lua"))
@@ -97,6 +104,13 @@
           (string_expression (string_fragment) @injection.content)
           (indented_string_expression (string_fragment) @injection.content)
         ])))))
+
+      ; Let expressions
+      ; luaConfig = { pre = let x = ...; in ''...'' }
+      (let_expression body: [
+        (string_expression (string_fragment) @injection.content)
+        (indented_string_expression (string_fragment) @injection.content)
+      ])
     ]
     (#any-of? @_nested "pre" "post" "content")
   )))
@@ -134,6 +148,13 @@
         (string_expression (string_fragment) @injection.content)
         (indented_string_expression (string_fragment) @injection.content)
       ])))))
+
+    ; Let expressions
+    ; luaConfig.pre = let x = ...; in ''...''
+    (let_expression body: [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+    ])
   ]
   (#eq? @ns "luaConfig")
   (#any-of? @name "pre" "post" "content")
@@ -182,6 +203,13 @@
          (indented_string_expression (string_fragment) @injection.content)
       ]))
     ]))
+
+    ; Let expressions
+    ; extraConfigVim = let x = ...; in ''...''
+    (let_expression body: [
+      (string_expression (string_fragment) @injection.content)
+      (indented_string_expression (string_fragment) @injection.content)
+    ])
   ]
   (#any-of? @_path "extraConfigVim" "extraConfigVimPre" "extraConfigVimPost")
   (#set! injection.language "vim"))

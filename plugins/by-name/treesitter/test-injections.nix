@@ -228,4 +228,69 @@ in
       };
     };
   };
+
+  # ============================================================================
+  # SECTION 10: Let expressions
+  # ============================================================================
+  section10 = {
+    # Basic let expression with extraConfigLua
+    extraConfigLua =
+      let
+        configPath = "${pkgs.neovim}/share/nvim";
+      in
+      ''
+        local config_path = "${configPath}"
+        vim.opt.runtimepath:append(config_path)
+      '';
+
+    # Let expression with luaConfig nested attrset
+    luaConfig = {
+      pre =
+        let
+          pluginPath = "${pkgs.vimPlugins.telescope-nvim}";
+        in
+        ''
+          vim.g.telescope_path = "${pluginPath}"
+        '';
+    };
+
+    # Let expression with dot notation
+    luaConfig.post =
+      let
+        java-debug = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server";
+        java-test = "${pkgs.vscode-extensions.vscjava.vscode-java-test}/share/vscode/extensions/vscjava.vscode-java-test/server";
+      in
+      ''
+        local jdtls = require("jdtls")
+        local jdtls_dap = require("jdtls.dap")
+        local jdtls_setup = require("jdtls.setup")
+
+        _M.jdtls = {}
+        _M.jdtls.bundles = {}
+
+        local java_debug_bundle = vim.split(vim.fn.glob("${java-debug}" .. "/*.jar"), "\n")
+        local java_test_bundle = vim.split(vim.fn.glob("${java-test}" .. "/*.jar", true), "\n")
+
+        -- add jars to the bundle list if there are any
+        if java_debug_bundle[1] ~= "" then
+            vim.list_extend(_M.jdtls.bundles, java_debug_bundle)
+        end
+
+        if java_test_bundle[1] ~= "" then
+            vim.list_extend(_M.jdtls.bundles, java_test_bundle)
+        end
+      '';
+  };
+
+  # Let expression with vim config
+  section11 = {
+    extraConfigVim =
+      let
+        customPath = "/custom/vim/config";
+      in
+      ''
+        set runtimepath+=${customPath}
+        let g:custom_path = '${customPath}'
+      '';
+  };
 }
