@@ -19,6 +19,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 ```
 
 Import it into your Nixvim configuration and configure it:
+
 ```nix
 {
   # Remove this `programs.nixvim` wrapper for standalone configurations
@@ -36,7 +37,8 @@ Import it into your Nixvim configuration and configure it:
 This is straightforward too, you can add the following to `extraPlugins` for a plugin hosted on GitHub:
 
 ```nix
-extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
+{
+  extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
     name = "my-plugin";
     src = pkgs.fetchFromGitHub {
         owner = "<owner>";
@@ -44,7 +46,8 @@ extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
         rev = "<commit hash>";
         hash = "<nix NAR hash>";
     };
-})];
+  })];
+}
 ```
 
 The [nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#managing-plugins-with-vim-packages) has more information on this.
@@ -98,38 +101,42 @@ This is so that Nixvim is built against the same nixpkgs revision we're using in
 You could use the builtin [`map`] function (or similar) to do something like this:
 
 ```nix
-keymaps =
-  (builtins.map (key: {
-    inherit key;
-    action = "<some-action>";
-    options.desc = "My cool keymapping";
-  }) ["<key-1>" "<key-2>" "<key-3>"])
-  ++ [
-    # Other keymaps...
-  ];
+{
+  keymaps =
+    (builtins.map (key: {
+      inherit key;
+      action = "<some-action>";
+      options.desc = "My cool keymapping";
+    }) ["<key-1>" "<key-2>" "<key-3>"])
+    ++ [
+      # Other keymaps...
+    ];
+}
 ```
 
 This maps a list of keys into a list of similar [`keymaps`]. It is equivalent to:
 
 ```nix
-keymaps = [
-  {
-    key = "<key-1>";
-    action = "<some-action>";
-    options.desc = "My cool keymapping";
-  }
-  {
-    key = "<key-2>";
-    action = "<some-action>";
-    options.desc = "My cool keymapping";
-  }
-  {
-    key = "<key-3>";
-    action = "<some-action>";
-    options.desc = "My cool keymapping";
-  }
-  # Other keymaps...
-];
+{
+  keymaps = [
+    {
+      key = "<key-1>";
+      action = "<some-action>";
+      options.desc = "My cool keymapping";
+    }
+    {
+      key = "<key-2>";
+      action = "<some-action>";
+      options.desc = "My cool keymapping";
+    }
+    {
+      key = "<key-3>";
+      action = "<some-action>";
+      options.desc = "My cool keymapping";
+    }
+    # Other keymaps...
+  ];
+}
 ```
 
 [`map`]: https://nixos.org/manual/nix/stable/language/builtins#builtins-map

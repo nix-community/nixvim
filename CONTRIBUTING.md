@@ -198,11 +198,13 @@ For example this option will render something like:
 > **Example**: `"Hello, world!"`
 
 ```nix
-foo = lib.mkOption {
-  type = lib.types.nullOr lib.types.str;
-  description = "Some string";
-  default = null;
-  example = "Hello, world!";
+{
+  foo = lib.mkOption {
+    type = lib.types.nullOr lib.types.str;
+    description = "Some string";
+    default = null;
+    example = "Hello, world!";
+  };
 }
 ```
 
@@ -222,7 +224,7 @@ example = lib.literalExpression ''
   {
     foo = lib.nixvim.mkRaw "foo";
   }
-''
+'';
 ```
 
 Another example where `literalExpression` is beneficial is when your example includes multi-line strings.
@@ -238,13 +240,13 @@ example = lib.literalExpression ''
       several lines!
     ''';
   }
-''
+'';
 ```
 
 On very rare occasions, you may wish to include some non-code text within your example. This can be done by wrapping a markdown string with `lib.literalMD`.
 E.g:
 
-`````nix
+````nix
 example = lib.literalMD ''
   This will render as normal text.
 
@@ -253,8 +255,8 @@ example = lib.literalMD ''
   ```nix
   This will render as nix code.
   ```
-''
-`````
+'';
+````
 
 See also: [Writing NixOS Modules: Option Declarations](https://nixos.org/manual/nixos/unstable/#sec-option-declarations) (NixOS Manual).
 

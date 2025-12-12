@@ -55,35 +55,32 @@ is done through the `lazyLoad.settings` option.
 Load on command:
 
 ```nix
-plugins = {
-  grug-far = {
+{
+  plugins.grug-far = {
     enable = true;
-    lazyLoad = {
-      settings = {
-        cmd = "GrugFar";
-      };
-    };
+    lazyLoad.settings.cmd = "GrugFar";
   };
-};
+}
 ```
 
 Load on file type:
 
 ```nix
-plugins = {
-  glow = {
+{
+  plugins.glow = {
     enable = true;
     lazyLoad.settings.ft = "markdown";
   };
+}
 ```
 
 Different load conditions:
 
 ```nix
-plugins.toggleterm = {
-  enable = true;
-  lazyLoad = {
-    settings = {
+{
+  plugins.toggleterm = {
+    enable = true;
+    lazyLoad.settings = {
       cmd = "ToggleTerm";
       keys = [
         "<leader>tg"
@@ -91,36 +88,37 @@ plugins.toggleterm = {
       ];
     };
   };
-};
+}
 ```
 
 Load on keymap with dependency:
 
 ```nix
-    plugins.dap-ui = {
-      enable = true;
-
-      lazyLoad.settings = {
-        # We need to access nvim-dap in the after function.
-        before.__raw = ''
-          function()
-            require('lz.n').trigger_load('nvim-dap')
-          end
-        '';
-        keys = [
-          {
-            __unkeyed-1 = "<leader>du";
-            __unkeyed-2.__raw = ''
-              function()
-                require('dap.ext.vscode').load_launchjs(nil, {})
-                require("dapui").toggle()
-              end
-            '';
-            desc = "Toggle Debugger UI";
-          }
-        ];
-      };
+{
+  plugins.dap-ui = {
+    enable = true;
+    lazyLoad.settings = {
+      # We need to access nvim-dap in the after function.
+      before.__raw = ''
+        function()
+          require('lz.n').trigger_load('nvim-dap')
+        end
+      '';
+      keys = [
+        {
+          __unkeyed-1 = "<leader>du";
+          __unkeyed-2.__raw = ''
+            function()
+              require('dap.ext.vscode').load_launchjs(nil, {})
+              require("dapui").toggle()
+            end
+          '';
+          desc = "Toggle Debugger UI";
+        }
+      ];
     };
+  };
+}
 ```
 
 ### Colorschemes
@@ -130,35 +128,39 @@ set up the `colorscheme` trigger to the name of the `colorscheme` so that it is
 lazy loaded when the `colorscheme` is requested.
 
 ```nix
-colorscheme = "catppuccin";
-colorschemes.catppuccin = {
-  enable = true;
-  lazyLoad.enable = true;
-};
+{
+  colorscheme = "catppuccin";
+  colorschemes.catppuccin = {
+    enable = true;
+    lazyLoad.enable = true;
+  };
+}
 ```
 
 To configure special integrations after `catppuccin` has been set up (while
 still letting Nixvim manage lazy loading and the default `after`):
 
 ```nix
-colorscheme = "catppuccin";
-colorschemes.catppuccin = {
-  enable = true;
-  lazyLoad.enable = true;
-
-  # This code runs after catppuccin is setup,
-  # regardless of whether it was lazy-loaded or not.
-  luaConfig.post = ''
-    -- At this point catppuccin is configured, so we can safely
-    -- derive bufferline highlights or similar settings from it.
-    require('lz.n').trigger_load("bufferline.nvim")
-  '';
-};
-
-# Configure bufferline to load after catppuccin
-plugins.bufferline = {
-  enable = true;
-  settings.highlights.__raw = "require('catppuccin.special.bufferline').get_theme()";
-  lazyLoad.settings.lazy = true; # Lazy load manually
-};
+{
+  colorscheme = "catppuccin";
+  colorschemes.catppuccin = {
+    enable = true;
+    lazyLoad.enable = true;
+  
+    # This code runs after catppuccin is setup,
+    # regardless of whether it was lazy-loaded or not.
+    luaConfig.post = ''
+      -- At this point catppuccin is configured, so we can safely
+      -- derive bufferline highlights or similar settings from it.
+      require('lz.n').trigger_load("bufferline.nvim")
+    '';
+  };
+  
+  # Configure bufferline to load after catppuccin
+  plugins.bufferline = {
+    enable = true;
+    settings.highlights.__raw = "require('catppuccin.special.bufferline').get_theme()";
+    lazyLoad.settings.lazy = true; # Lazy load manually
+  };
+}
 ```
