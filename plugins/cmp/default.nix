@@ -28,32 +28,35 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     #### With auto-enabled sources
     ```nix
-    plugins.cmp = {
-      autoEnableSources = true;
-      settings.sources = [
-        { name = "nvim_lsp"; }
-        { name = "path"; }
-        { name = "buffer"; }
-      ];
-    };
-    ```
-
-    #### Without auto-enabled sources
-    ```nix
-    plugins = {
-      cmp = {
-        autoEnableSources = false;
+    {
+      plugins.cmp = {
+        autoEnableSources = true;
         settings.sources = [
           { name = "nvim_lsp"; }
           { name = "path"; }
           { name = "buffer"; }
         ];
       };
-      cmp-nvim-lsp.enable = true;
-      cmp-path.enable = true;
-      cmp-buffer.enable = true;
-    };
+    }
+    ```
 
+    #### Without auto-enabled sources
+    ```nix
+    {
+      plugins = {
+        cmp = {
+          autoEnableSources = false;
+          settings.sources = [
+            { name = "nvim_lsp"; }
+            { name = "path"; }
+            { name = "buffer"; }
+          ];
+        };
+        cmp-nvim-lsp.enable = true;
+        cmp-path.enable = true;
+        cmp-buffer.enable = true;
+      };
+    }
     ```
   '';
 

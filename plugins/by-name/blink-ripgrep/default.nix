@@ -44,16 +44,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
     And then you can add it to blink-cmp's `sources.default` option:
 
     ```nix
-    plugins.blink-cmp = {
-      enable = true;
-      settings.sources.default = [
-        "lsp"
-        "path"
-        "luasnip"
-        "buffer"
-        "ripgrep"
-      ];
-    };
+    {
+      plugins.blink-cmp = {
+        enable = true;
+        settings.sources.default = [
+          "lsp"
+          "path"
+          "luasnip"
+          "buffer"
+          "ripgrep"
+        ];
+      };
+    }
     ```
   '';
 

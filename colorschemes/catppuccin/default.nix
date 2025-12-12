@@ -176,17 +176,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         Example:
         ```nix
-          {
-            cmp = true;
-            gitsigns = true;
-            nvimtree = true;
-            treesitter = true;
-            notify = false;
-            mini = {
-              enabled = true;
-              indentscope_color = "";
-            };
-          }
+        {
+          cmp = true;
+          gitsigns = true;
+          nvimtree = true;
+          treesitter = true;
+          notify = false;
+          mini = {
+            enabled = true;
+            indentscope_color = "";
+          };
+        }
         ```
 
         Default: see plugin source.

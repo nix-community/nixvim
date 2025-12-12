@@ -302,12 +302,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         For example,
         ```nix
-          [ {} { paths = ./path/to/snippets; } ]
+        [ {} { paths = ./path/to/snippets; } ]
         ```
         will generate the following lua:
         ```lua
-          require("luasnip.loaders.from_vscode").lazy_load({})
-          require("luasnip.loaders.from_vscode").lazy_load({['paths'] = {'/nix/store/.../path/to/snippets'}})
+        require("luasnip.loaders.from_vscode").lazy_load({})
+        require("luasnip.loaders.from_vscode").lazy_load({['paths'] = {'/nix/store/.../path/to/snippets'}})
         ```
       '';
     };

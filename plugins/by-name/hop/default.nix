@@ -16,6 +16,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     Hop doesn’t set any keybindings; you will have to define them by yourself.
     If you want to create a key binding from within nixvim:
     ```nix
+    {
       keymaps = [
         {
           key = "f";
@@ -68,6 +69,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           options.remap = true;
         }
       ];
+    }
     ```
   '';
 

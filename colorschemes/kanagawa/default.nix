@@ -92,25 +92,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
             Example:
             ```nix
-              {
-                wave = {
-                  ui = {
-                      float = {
-                          bg = "none";
-                      };
+            {
+              wave = {
+                ui = {
+                    float = {
+                        bg = "none";
+                    };
+                };
+              };
+              dragon = {
+                  syn = {
+                      parameter = "yellow";
                   };
-                };
-                dragon = {
-                    syn = {
-                        parameter = "yellow";
-                    };
-                };
-                all = {
-                    ui = {
-                        bg_gutter = "none";
-                    };
-                };
-              }
+              };
+              all = {
+                  ui = {
+                      bg_gutter = "none";
+                  };
+              };
+            }
             ```
           '';
 
@@ -119,10 +119,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         Example:
         ```nix
-          {
-            sumiInk0 = "#000000";
-            fujiWhite = "#FFFFFF";
-          }
+        {
+          sumiInk0 = "#000000";
+          fujiWhite = "#FFFFFF";
+        }
         ```
       '';
     };

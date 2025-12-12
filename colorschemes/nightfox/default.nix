@@ -202,27 +202,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
           Example:
           ```nix
-            {
-              all = {
-                red = "#ff0000";
+          {
+            all = {
+              red = "#ff0000";
+            };
+            nightfox = {
+              red = "#c94f6d";
+            };
+            dayfox = {
+              blue = {
+                base = "#4d688e";
+                bright = "#4e75aa";
+                dim = "#485e7d";
               };
-              nightfox = {
-                red = "#c94f6d";
-              };
-              dayfox = {
-                blue = {
-                  base = "#4d688e";
-                  bright = "#4e75aa";
-                  dim = "#485e7d";
-                };
-              };
-              nordfox = {
-                bg1 = "#2e3440";
-                sel0 = "#3e4a5b";
-                sel1 = "#4f6074";
-                comment = "#60728a";
-              };
-            }
+            };
+            nordfox = {
+              bg1 = "#2e3440";
+              sel0 = "#3e4a5b";
+              sel1 = "#4f6074";
+              comment = "#60728a";
+            };
+          }
           ```
         '';
 
@@ -250,23 +250,23 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
           Example:
           ```nix
-            {
-              all = {
-                syntax = {
-                  keyword = "magenta";
-                  conditional = "magenta.bright";
-                  number = "orange.dim";
-                };
-                git = {
-                  changed = "#f4a261";
-                };
+          {
+            all = {
+              syntax = {
+                keyword = "magenta";
+                conditional = "magenta.bright";
+                number = "orange.dim";
               };
-              nightfox = {
-                syntax = {
-                  operator = "orange";
-                };
+              git = {
+                changed = "#f4a261";
               };
-            }
+            };
+            nightfox = {
+              syntax = {
+                operator = "orange";
+              };
+            };
+          }
           ```
         '';
 
@@ -293,16 +293,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
           Example:
           ```nix
-            {
-              all = {
-                Whitespace.link = "Comment";
-                IncSearch.bg = "palette.cyan";
-              },
-              nightfox.PmenuSel = {
-                bg = "#73daca";
-                fg = "bg0";
-              };
-            }
+          {
+            all = {
+              Whitespace.link = "Comment";
+              IncSearch.bg = "palette.cyan";
+            },
+            nightfox.PmenuSel = {
+              bg = "#73daca";
+              fg = "bg0";
+            };
+          }
           ```
         '';
   };

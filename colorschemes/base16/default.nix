@@ -130,7 +130,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
           for example, you could reuse some colors from the builtin colorschemes:
 
           ```nix
+          {
             base03.__raw = "base16.colorschemes['catppuccin'].base06";
+          }
           ```
 
           [plugin's source code]: https://github.com/RRethy/base16-nvim/blob/master/lua/colors/init.lua
