@@ -11,7 +11,6 @@ let
 
   lspExtraArgs = {
     dartls = {
-      settingsOptions = import ./dartls-settings.nix { inherit lib; };
       settings = cfg: { dart = cfg; };
     };
     gopls = {
