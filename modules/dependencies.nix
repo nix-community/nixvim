@@ -139,6 +139,7 @@ in
       ledger.default = "ledger";
       llm-ls.default = "llm-ls";
       manix.default = "manix";
+      nixpkgs-fmt.default = "nixpkgs-fmt";
       nodejs = {
         default = "nodejs";
         example = "nodejs_22";
