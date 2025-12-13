@@ -60,11 +60,11 @@ let
       default = { };
     };
 
-  # Combine `packages` and `customCmd` sets from `lsp-packages.nix`
+  # Combine `packages` and `customCmd` sets from `packages.nix`
   # We use this set to generate the package-option defaults
   serverPackages =
     let
-      inherit (import ../../../plugins/lsp/lsp-packages.nix)
+      inherit (import ./packages.nix)
         packages
         customCmd
         ;

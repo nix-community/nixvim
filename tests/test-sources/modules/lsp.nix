@@ -272,7 +272,7 @@
       packageOpt = (serverOpt.type.getSubOptions serverOpt.loc).package;
 
       # The lua_ls package attr to remove from pkgs
-      packageName = lib.pipe ../../../plugins/lsp/lsp-packages.nix [
+      packageName = lib.pipe ../../../modules/lsp/servers/packages.nix [
         import
         (lib.getAttr "packages")
         (lib.getAttr "lua_ls")

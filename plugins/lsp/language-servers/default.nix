@@ -212,7 +212,7 @@ let
     };
   };
 
-  lspPackages = import ../lsp-packages.nix;
+  lspPackages = import ../../../modules/lsp/servers/packages.nix;
 
   generatedServers = lib.pipe ../../../generated/lspconfig-servers.json [
     lib.importJSON
