@@ -124,9 +124,6 @@ let
         };
       };
     };
-    tinymist = {
-      settingsOptions = import ./tinymist-settings.nix { inherit lib; };
-    };
     vue_ls = {
       extraOptions = {
         tslsIntegration = mkOption {
