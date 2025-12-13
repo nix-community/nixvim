@@ -45,11 +45,11 @@ let
   errors = lib.concatStringsSep "\n" (
     checkDeclarations (
       let
-        inherit (import ../plugins/lsp/lsp-packages.nix) unpackaged packages customCmd;
+        inherit (import ../modules/lsp/servers/packages.nix) unpackaged packages customCmd;
       in
       {
         name = "lsp";
-        declarationFile = "plugins/lsp/lsp-packages.nix";
+        declarationFile = "modules/lsp/servers/packages.nix";
 
         packages = builtins.attrValues packages;
 
