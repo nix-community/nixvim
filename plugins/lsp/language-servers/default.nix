@@ -33,7 +33,6 @@ let
       settings = cfg: { Lua = cfg; };
     };
     nil_ls = {
-      settingsOptions = import ./nil-ls-settings.nix { inherit lib; };
       settings = cfg: { nil = cfg; };
     };
     nixd = {
