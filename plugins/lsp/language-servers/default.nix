@@ -26,9 +26,6 @@ let
     jsonls = {
       settings = cfg: { json = cfg; };
     };
-    jsonnet_ls = {
-      settingsOptions = import ./jsonnet-ls-settings.nix { inherit lib; };
-    };
     ltex = {
       settingsOptions = import ./ltex-settings.nix { inherit lib; };
       settings = cfg: { ltex = cfg; };
