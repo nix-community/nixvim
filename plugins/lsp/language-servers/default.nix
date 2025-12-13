@@ -27,7 +27,6 @@ let
       settings = cfg: { json = cfg; };
     };
     ltex = {
-      settingsOptions = import ./ltex-settings.nix { inherit lib; };
       settings = cfg: { ltex = cfg; };
     };
     lua_ls = {
