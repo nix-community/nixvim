@@ -30,7 +30,6 @@ let
       settings = cfg: { ltex = cfg; };
     };
     lua_ls = {
-      settingsOptions = import ./lua-ls-settings.nix { inherit lib; };
       settings = cfg: { Lua = cfg; };
     };
     nil_ls = {
