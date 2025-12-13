@@ -2,11 +2,11 @@
   "nodes": {
     "dev-nixpkgs": {
       "locked": {
-        "lastModified": 1764831616,
-        "narHash": "sha256-OtzF5wBvO0jgW1WW1rQU9cMGx7zuvkF7CAVJ1ypzkxA=",
+        "lastModified": 1765311797,
+        "narHash": "sha256-mSD5Ob7a+T2RNjvPvOA1dkJHGVrNVl8ZOrAwBjKBDQo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c97c47f2bac4fa59e2cbdeba289686ae615f8ed4",
+        "rev": "09eb77e94fa25202af8f3e81ddc7353d9970ac1b",
         "type": "github"
       },
       "original": {
@@ -38,11 +38,11 @@
     },
     "flake-compat": {
       "locked": {
-        "lastModified": 1764849477,
-        "narHash": "sha256-JbjxGEA9gVRZ47LylRFe7TLVjI2KaoW0cwflbQ2apBs=",
+        "lastModified": 1765186200,
+        "narHash": "sha256-QN1r/zNqvXHwWqlRAnRtFf4CQwIOJx58PtdExIzAw94=",
         "owner": "NixOS",
         "repo": "flake-compat",
-        "rev": "4dd386262c30922367e6b549c81e9cbdf8f3132f",
+        "rev": "63d095ca43128741b16fc354b1e918757e6b66e5",
         "type": "github"
       },
       "original": {
@@ -63,11 +63,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765016596,
-        "narHash": "sha256-rhSqPNxDVow7OQKi4qS5H8Au0P4S3AYbawBSmJNUtBQ=",
+        "lastModified": 1765464257,
+        "narHash": "sha256-dixPWKiHzh80PtD0aLuxYNQ0xP+843dfXG/yM3OzaYQ=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "548fc44fca28a5e81c5d6b846e555e6b9c2a5a3c",
+        "rev": "09e45f2598e1a8499c3594fe11ec2943f34fe509",
         "type": "github"
       },
       "original": {
@@ -104,11 +104,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1764866045,
-        "narHash": "sha256-0GsEtXV9OquDQ1VclQfP16cU5VZh7NEVIOjSH4UaJuM=",
+        "lastModified": 1765605144,
+        "narHash": "sha256-RM2xs+1HdHxesjOelxoA3eSvXShC8pmBvtyTke4Ango=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "f63d0fe9d81d36e5fc95497217a72e02b8b7bcab",
+        "rev": "90b62096f099b73043a747348c11dbfcfbdea949",
         "type": "github"
       },
       "original": {
@@ -125,11 +125,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1764161084,
-        "narHash": "sha256-HN84sByg9FhJnojkGGDSrcjcbeioFWoNXfuyYfJ1kBE=",
+        "lastModified": 1765066094,
+        "narHash": "sha256-0YSU35gfRFJzx/lTGgOt6ubP8K6LeW0vaywzNNqxkl4=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "e95de00a471d07435e0527ff4db092c84998698e",
+        "rev": "688427b1aab9afb478ca07989dc754fa543e03d5",
         "type": "github"
       },
       "original": {
