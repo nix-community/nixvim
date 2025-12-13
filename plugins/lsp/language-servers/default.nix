@@ -37,7 +37,6 @@ let
     };
     nixd = {
       settings = cfg: { nixd = cfg; };
-      settingsOptions = import ./nixd-settings.nix { inherit lib; };
       extraConfig = cfg: {
         extraPackages = lib.optional (
           cfg.settings.formatting.command == [ "nixpkgs-fmt" ]
