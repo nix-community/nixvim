@@ -9,25 +9,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.eveeifyeve ];
 
   settingsExample = {
-    usercmd = false;
     display = {
-      show_time = true;
-      swap_fields = false;
-      swap_icons = false;
+      theme = "atom";
+      flavor = "accent";
     };
-    ide = {
-      enable = true;
-      show_status = true;
-      timeout = 300000;
-      text = "Idle";
-      tooltip = "💤";
+    editor.tooltip = "Neovim";
+    timestamp.reset_on_idle = true;
+    idle = {
+      enabled = true;
+      timeout = 900000;
     };
-    text = {
-      viewing = "Viewing {}";
-      editing = "Editing {}";
-      file_browser = "Browsing files in {}";
-      vcs = "Committing changes in {}";
-      workspace = "In {}";
-    };
+    text.workspace = "";
   };
 }
