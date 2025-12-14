@@ -68,7 +68,6 @@
     {
       plugins.gitgutter = {
         enable = true;
-        grepPackage = pkgs.gnugrep;
       };
       assertions = [
         {
@@ -84,14 +83,16 @@
     {
       plugins.gitgutter = {
         enable = true;
-        grepPackage = null;
         settings = {
           git_executable = lib.getExe pkgs.git;
           grep = lib.getExe pkgs.gnugrep;
         };
       };
 
-      dependencies.git.enable = false;
+      dependencies = {
+        git.enable = false;
+        grep.enable = false;
+      };
 
       assertions = [
         {

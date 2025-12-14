@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 lib.nixvim.plugins.mkVimPlugin {
   name = "gitgutter";
   package = "vim-gitgutter";
@@ -11,7 +7,17 @@ lib.nixvim.plugins.mkVimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
-  dependencies = [ "git" ];
+  dependencies = [
+    "git"
+    "grep"
+  ];
+
+  imports = [
+    (lib.nixvim.mkRemovedPackageOptionModule {
+      plugin = "gitgutter";
+      packageName = "grep";
+    })
+  ];
 
   extraOptions = {
     recommendedSettings = lib.mkOption {
@@ -21,10 +27,6 @@ lib.nixvim.plugins.mkVimPlugin {
         Set recommended neovim option.
       '';
     };
-
-    grepPackage = lib.mkPackageOption pkgs "gnugrep" {
-      nullable = true;
-    };
   };
 
   extraConfig = cfg: {
@@ -32,10 +34,6 @@ lib.nixvim.plugins.mkVimPlugin {
       updatetime = 100;
       foldtext = "gitgutter#fold#foldtext";
     };
-
-    extraPackages = [
-      cfg.grepPackage
-    ];
   };
 
   settingsExample = {
