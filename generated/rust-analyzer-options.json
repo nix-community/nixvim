@@ -607,6 +607,13 @@
       "values": ["client", "server"]
     }
   },
+  "rust-analyzer.gotoImplementations.filterAdjacentDerives": {
+    "description": "If this is `true`, when \"Goto Implementations\" and in \"Implementations\" lens, are triggered on a `struct` or `enum` or `union`, we filter out trait implementations that originate from `derive`s above the type.\n",
+    "pluginDefault": false,
+    "type": {
+      "kind": "boolean"
+    }
+  },
   "rust-analyzer.highlightRelated.branchExitPoints.enable": {
     "description": "Highlight related return values while the cursor is on any `match`, `if`, or match arm\narrow (`=>`).\n",
     "pluginDefault": true,
@@ -845,16 +852,11 @@
     }
   },
   "rust-analyzer.imports.granularity.group": {
-    "description": "How imports should be grouped into use statements.\n\nValues:\n- crate: Merge imports from the same crate into a single use statement. Conversely, imports from different crates are split into separate statements.\n- module: Merge imports from the same module into a single use statement. Conversely, imports from different modules are split into separate statements.\n- item: Flatten imports so that each has its own use statement.\n- one: Merge all imports into a single use statement as long as they have the same visibility and attributes.\n",
+    "description": "How imports should be grouped into use statements.\n\nValues:\n- crate: Merge imports from the same crate into a single use statement. Conversely, imports from different crates are split into separate statements.\n- module: Merge imports from the same module into a single use statement. Conversely, imports from different modules are split into separate statements.\n- item: Flatten imports so that each has its own use statement.\n- one: Merge all imports into a single use statement as long as they have the same visibility and attributes.\n- preserve: Deprecated - unless `enforceGranularity` is `true`, the style of the current file is preferred over this setting. Behaves like `item`.\n",
     "pluginDefault": "crate",
     "type": {
-      "kind": "oneOf",
-      "subTypes": [
-        {
-          "kind": "enum",
-          "values": ["crate", "module", "item", "one"]
-        }
-      ]
+      "kind": "enum",
+      "values": ["crate", "module", "item", "one", "preserve"]
     }
   },
   "rust-analyzer.imports.group.enable": {
@@ -1026,6 +1028,13 @@
       "kind": "boolean"
     }
   },
+  "rust-analyzer.inlayHints.impliedDynTraitHints.enable": {
+    "description": "Show inlay hints for the implied `dyn` keyword in trait object types.\n",
+    "pluginDefault": true,
+    "type": {
+      "kind": "boolean"
+    }
+  },
   "rust-analyzer.inlayHints.lifetimeElisionHints.enable": {
     "description": "Show inlay type hints for elided lifetimes in function signatures.\n\nValues:\n- always: Always show lifetime elision hints.\n- never: Never show lifetime elision hints.\n- skip_trivial: Only show lifetime elision hints if a return type is involved.\n",
     "pluginDefault": "never",
@@ -1095,6 +1104,13 @@
   },
   "rust-analyzer.inlayHints.typeHints.hideClosureParameter": {
     "description": "Hide inlay parameter type hints for closures.\n",
+    "pluginDefault": false,
+    "type": {
+      "kind": "boolean"
+    }
+  },
+  "rust-analyzer.inlayHints.typeHints.hideInferredTypes": {
+    "description": "Hide inlay type hints for inferred types.\n",
     "pluginDefault": false,
     "type": {
       "kind": "boolean"
@@ -1300,6 +1316,13 @@
       "kind": "string"
     }
   },
+  "rust-analyzer.profiling.memoryProfile": {
+    "description": "The path where to save memory profiling output.\n\n**Note:** Memory profiling is not enabled by default in rust-analyzer builds, you need to build\nfrom source for it.\n",
+    "pluginDefault": null,
+    "type": {
+      "kind": "string"
+    }
+  },
   "rust-analyzer.references.excludeImports": {
     "description": "Exclude imports from find-all-references.\n",
     "pluginDefault": false,
@@ -1471,7 +1494,7 @@
     }
   },
   "rust-analyzer.workspace.discoverConfig": {
-    "description": "Enables automatic discovery of projects using\n\\[`DiscoverWorkspaceConfig::command`\\].\n\n\\[`DiscoverWorkspaceConfig`\\] also requires setting `progress_label` and\n`files_to_watch`. `progress_label` is used for the title in progress\nindicators, whereas `files_to_watch` is used to determine which build\nsystem-specific files should be watched in order to reload\nrust-analyzer.\n\nBelow is an example of a valid configuration:\n\n``` json\n\"rust-analyzer.workspace.discoverConfig\": {\n        \"command\": [\n                \"rust-project\",\n                \"develop-json\"\n        ],\n        \"progressLabel\": \"rust-analyzer\",\n        \"filesToWatch\": [\n                \"BUCK\"\n        ]\n}\n```\n\n**On `DiscoverWorkspaceConfig::command`**\n\n**Warning**: This format is provisional and subject to change.\n\n\\[`DiscoverWorkspaceConfig::command`\\] *must* return a JSON object\ncorresponding to `DiscoverProjectData::Finished`:\n\n``` norun\n#[derive(Debug, Clone, Deserialize, Serialize)]\n#[serde(tag = \"kind\")]\n#[serde(rename_all = \"snake_case\")]\nenum DiscoverProjectData {\n        Finished { buildfile: Utf8PathBuf, project: ProjectJsonData },\n        Error { error: String, source: Option<String> },\n        Progress { message: String },\n}\n```\n\nAs JSON, `DiscoverProjectData::Finished` is:\n\n``` json\n{\n        // the internally-tagged representation of the enum.\n        \"kind\": \"finished\",\n        // the file used by a non-Cargo build system to define\n        // a package or target.\n        \"buildfile\": \"rust-analyzer/BUILD\",\n        // the contents of a rust-project.json, elided for brevity\n        \"project\": {\n                \"sysroot\": \"foo\",\n                \"crates\": []\n        }\n}\n```\n\nIt is encouraged, but not required, to use the other variants on\n`DiscoverProjectData` to provide a more polished end-user experience.\n\n`DiscoverWorkspaceConfig::command` may *optionally* include an `{arg}`,\nwhich will be substituted with the JSON-serialized form of the following\nenum:\n\n``` norun\n#[derive(PartialEq, Clone, Debug, Serialize)]\n#[serde(rename_all = \"camelCase\")]\npub enum DiscoverArgument {\n     Path(AbsPathBuf),\n     Buildfile(AbsPathBuf),\n}\n```\n\nThe JSON representation of `DiscoverArgument::Path` is:\n\n``` json\n{\n        \"path\": \"src/main.rs\"\n}\n```\n\nSimilarly, the JSON representation of `DiscoverArgument::Buildfile` is:\n\n``` json\n{\n        \"buildfile\": \"BUILD\"\n}\n```\n\n`DiscoverArgument::Path` is used to find and generate a\n`rust-project.json`, and therefore, a workspace, whereas\n`DiscoverArgument::buildfile` is used to to update an existing\nworkspace. As a reference for implementors, buck2's `rust-project` will\nlikely be useful:\nhttps://github.com/facebook/buck2/tree/main/integrations/rust-project.\n\n",
+    "description": "Enables automatic discovery of projects using\n\\[`DiscoverWorkspaceConfig::command`\\].\n\n\\[`DiscoverWorkspaceConfig`\\] also requires setting `progress_label` and\n`files_to_watch`. `progress_label` is used for the title in progress\nindicators, whereas `files_to_watch` is used to determine which build\nsystem-specific files should be watched in order to reload\nrust-analyzer.\n\nBelow is an example of a valid configuration:\n\n``` json\n\"rust-analyzer.workspace.discoverConfig\": {\n        \"command\": [\n                \"rust-project\",\n                \"develop-json\"\n        ],\n        \"progressLabel\": \"rust-analyzer\",\n        \"filesToWatch\": [\n                \"BUCK\"\n        ]\n}\n```\n\n**On `DiscoverWorkspaceConfig::command`**\n\n**Warning**: This format is provisional and subject to change.\n\n\\[`DiscoverWorkspaceConfig::command`\\] *must* return a JSON object\ncorresponding to `DiscoverProjectData::Finished`:\n\n``` norun\n#[derive(Debug, Clone, Deserialize, Serialize)]\n#[serde(tag = \"kind\")]\n#[serde(rename_all = \"snake_case\")]\nenum DiscoverProjectData {\n        Finished { buildfile: Utf8PathBuf, project: ProjectJsonData },\n        Error { error: String, source: Option<String> },\n        Progress { message: String },\n}\n```\n\nAs JSON, `DiscoverProjectData::Finished` is:\n\n``` json\n{\n        // the internally-tagged representation of the enum.\n        \"kind\": \"finished\",\n        // the file used by a non-Cargo build system to define\n        // a package or target.\n        \"buildfile\": \"rust-analyzer/BUILD\",\n        // the contents of a rust-project.json, elided for brevity\n        \"project\": {\n                \"sysroot\": \"foo\",\n                \"crates\": []\n        }\n}\n```\n\nIt is encouraged, but not required, to use the other variants on\n`DiscoverProjectData` to provide a more polished end-user experience.\n\n`DiscoverWorkspaceConfig::command` may *optionally* include an `{arg}`,\nwhich will be substituted with the JSON-serialized form of the following\nenum:\n\n``` norun\n#[derive(PartialEq, Clone, Debug, Serialize)]\n#[serde(rename_all = \"camelCase\")]\npub enum DiscoverArgument {\n     Path(AbsPathBuf),\n     Buildfile(AbsPathBuf),\n}\n```\n\nThe JSON representation of `DiscoverArgument::Path` is:\n\n``` json\n{\n        \"path\": \"src/main.rs\"\n}\n```\n\nSimilarly, the JSON representation of `DiscoverArgument::Buildfile` is:\n\n``` json\n{\n        \"buildfile\": \"BUILD\"\n}\n```\n\n`DiscoverArgument::Path` is used to find and generate a\n`rust-project.json`, and therefore, a workspace, whereas\n`DiscoverArgument::buildfile` is used to to update an existing\nworkspace. As a reference for implementors, buck2's `rust-project` will\nlikely be useful:\n<https://github.com/facebook/buck2/tree/main/integrations/rust-project>.\n\n",
     "pluginDefault": null,
     "type": {
       "kind": "oneOf",
