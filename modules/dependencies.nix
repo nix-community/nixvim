@@ -128,6 +128,7 @@ in
       glow.default = "glow";
       go.default = "go";
       godot.default = "godot_4";
+      grep.default = "gnugrep";
       gzip.default = "gzip";
       imagemagick.default = "imagemagick";
       jupytext.default = [
