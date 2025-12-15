@@ -9,14 +9,13 @@ lib.nixvim.plugins.mkVimPlugin {
 
   dependencies = [
     "git"
-    "grep"
   ];
 
   imports = [
-    (lib.nixvim.mkRemovedPackageOptionModule {
-      plugin = "gitgutter";
-      packageName = "grep";
-    })
+    # Added 2025-12-15, remove after 26.05
+    (lib.mkRemovedOptionModule [ "plugins" "gitgutter" "grepPackage" ] ''
+      Gitgutter no longer requires grep.
+    '')
   ];
 
   extraOptions = {
