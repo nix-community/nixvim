@@ -36,10 +36,7 @@ in
       description = ''
         Whether to call `vim.lsp.enable()` for ${displayName}.
       '';
-      default = config.name != "*";
-      defaultText = lib.literalMD ''
-        `true`, unless the server's `name` is `*`
-      '';
+      default = true;
       example = false;
     };
 
