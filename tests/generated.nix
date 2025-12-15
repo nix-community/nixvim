@@ -45,7 +45,7 @@ let
   errors = lib.concatStringsSep "\n" (
     checkDeclarations (
       let
-        inherit (import ../modules/lsp/servers/packages.nix) unpackaged packages customCmd;
+        inherit (import ../modules/lsp/servers/packages.nix) unpackaged packages;
       in
       {
         name = "lsp";
@@ -53,7 +53,7 @@ let
 
         packages = builtins.attrValues packages;
 
-        declared = unpackaged ++ lib.attrsets.attrNames (packages // customCmd);
+        declared = unpackaged ++ lib.attrsets.attrNames packages;
 
         generated = builtins.attrNames (lib.importJSON ../generated/lspconfig-servers.json);
         unsupported = lib.importJSON ../generated/unsupported-lspconfig-servers.json;
