@@ -39,16 +39,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
     '';
 
     headers = {
-      user_header = defaultNullOpts.mkStr "## User " ''
+      user = defaultNullOpts.mkStr "## User " ''
         Header to use for user questions.
       '';
 
-      assistant_header = defaultNullOpts.mkStr "## Copilot " ''
+      assistant = defaultNullOpts.mkStr "## Copilot " ''
         Header to use for AI answers.
       '';
 
-      error_header = defaultNullOpts.mkStr "## Error " ''
-        Header to use for errors.
+      tool = defaultNullOpts.mkStr "## Error " ''
+        Header to use for tool
       '';
     };
 
@@ -304,9 +304,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsExample = {
     headers = {
-      user_header = "## User ";
-      assistant_header = "## Copilot ";
-      error_header = "## Error ";
+      user = "## User ";
+      assistant = "## Copilot ";
+      tool = "## Tool ";
     };
     prompts = {
       Explain = "Please explain how the following code works.";
