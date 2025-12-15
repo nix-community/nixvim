@@ -4,6 +4,10 @@
   package ? null,
   config ? null,
 }@args:
+let
+  displayName = name;
+  packageName = package.name or args.name or "language server";
+in
 {
   lib,
   name,
@@ -13,8 +17,6 @@
 }:
 let
   inherit (lib) types;
-  displayName = args.name or "the language server";
-  packageName = package.name or (lib.strings.removePrefix "the " displayName);
 in
 {
   options = {
