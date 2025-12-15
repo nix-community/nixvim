@@ -448,9 +448,4 @@
     zls = "zls";
     zuban = "zuban";
   };
-
-  # Servers that can't/don't use the provided upstream command in Nix, or packages with no upstream commands
-  customCmd = {
-  };
-
 }

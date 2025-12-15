@@ -224,9 +224,6 @@ let
       // lib.optionalAttrs (lspPackages.packages ? ${name}) {
         package = lspPackages.packages.${name};
       }
-      // lib.optionalAttrs (lspPackages.customCmd ? ${name}) {
-        inherit (lspPackages.customCmd.${name}) package cmd;
-      }
       // lspExtraArgs.${name} or { }
     ))
   ];
