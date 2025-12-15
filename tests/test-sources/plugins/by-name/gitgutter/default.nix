@@ -15,7 +15,6 @@
         diff_args = "";
         diff_relative_to = "index";
         diff_base = "";
-        grep = "grep";
         signs = true;
         highlight_lines = false;
         highlight_linenrs = false;
@@ -63,21 +62,6 @@
     };
   };
 
-  grep-command =
-    { config, ... }:
-    {
-      plugins.gitgutter = {
-        enable = true;
-      };
-      assertions = [
-        {
-          assertion =
-            config.extraPackages != [ ] && lib.any (x: x.pname or null == "gnugrep") config.extraPackages;
-          message = "gnugrep wasn't found when it was expected";
-        }
-      ];
-    };
-
   no-packages =
     { config, ... }:
     {
@@ -85,14 +69,10 @@
         enable = true;
         settings = {
           git_executable = lib.getExe pkgs.git;
-          grep = lib.getExe pkgs.gnugrep;
         };
       };
 
-      dependencies = {
-        git.enable = false;
-        grep.enable = false;
-      };
+      dependencies.git.enable = false;
 
       assertions = [
         {
