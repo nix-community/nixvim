@@ -38,17 +38,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
       GPT temperature.
     '';
 
-    question_header = defaultNullOpts.mkStr "## User " ''
-      Header to use for user questions.
-    '';
+    headers = {
+      user_header = defaultNullOpts.mkStr "## User " ''
+        Header to use for user questions.
+      '';
 
-    answer_header = defaultNullOpts.mkStr "## Copilot " ''
-      Header to use for AI answers.
-    '';
+      assistant_header = defaultNullOpts.mkStr "## Copilot " ''
+        Header to use for AI answers.
+      '';
 
-    error_header = defaultNullOpts.mkStr "## Error " ''
-      Header to use for errors.
-    '';
+      error_header = defaultNullOpts.mkStr "## Error " ''
+        Header to use for errors.
+      '';
+    };
 
     separator = defaultNullOpts.mkStr "───" ''
       Separator to use in chat.
@@ -301,9 +303,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   settingsExample = {
-    question_header = "## User ";
-    answer_header = "## Copilot ";
-    error_header = "## Error ";
+    headers = {
+      user_header = "## User ";
+      assistant_header = "## Copilot ";
+      error_header = "## Error ";
+    };
     prompts = {
       Explain = "Please explain how the following code works.";
       Review = "Please review the following code and provide suggestions for improvement.";
