@@ -246,6 +246,7 @@
     eslint = "vscode-langservers-extracted";
     fennel_ls = "fennel-ls";
     fish_lsp = "fish-lsp";
+    flow = "flow";
     fortls = "fortls";
     fsautocomplete = "fsautocomplete";
     fstar = "fstar";
@@ -270,6 +271,7 @@
       "idris2Packages"
       "idris2Lsp"
     ];
+    java_language_server = "java-language-server";
     jdtls = "jdt-language-server";
     jedi_language_server = [
       "python3Packages"
@@ -283,6 +285,7 @@
     kotlin_language_server = "kotlin-language-server";
     lean3ls = "lean4";
     lemminx = "lemminx";
+    lexical = "lexical";
     lsp_ai = "lsp-ai";
     ltex = "ltex-ls";
     lua_ls = "lua-language-server";
@@ -303,6 +306,7 @@
     ];
     muon = "muon";
     neocmake = "neocmakelsp";
+    nextls = "next-ls";
     nginx_language_server = "nginx-language-server";
     nickel_ls = "nls";
     nil_ls = "nil";
@@ -444,31 +448,4 @@
     zls = "zls";
     zuban = "zuban";
   };
-
-  # Servers that can't/don't use the provided upstream command in Nix, or packages with no upstream commands
-  customCmd = {
-    flow = {
-      package = "flow";
-      cmd = [
-        "flow"
-        "lsp"
-      ];
-    };
-    java_language_server = {
-      package = "java-language-server";
-      cmd = [ "java-language-server" ];
-    };
-    lexical = {
-      package = "lexical";
-      cmd = [ "lexical" ];
-    };
-    nextls = {
-      package = "next-ls";
-      cmd = [
-        "nextls"
-        "--stdio"
-      ];
-    };
-  };
-
 }

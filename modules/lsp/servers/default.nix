@@ -60,19 +60,10 @@ let
       default = { };
     };
 
-  # Combine `packages` and `customCmd` sets from `packages.nix`
-  # We use this set to generate the package-option defaults
-  serverPackages =
-    let
-      inherit (import ./packages.nix)
-        packages
-        customCmd
-        ;
-    in
-    builtins.mapAttrs (name: v: {
-      inherit name;
-      package = v.package or v;
-    }) (packages // customCmd);
+  # Read package-option defaults from `packages.nix`
+  serverPackages = builtins.mapAttrs (name: package: {
+    inherit name package;
+  }) (import ./packages.nix).packages;
 in
 {
   options.lsp = {
