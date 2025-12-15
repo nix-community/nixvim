@@ -21,23 +21,42 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "treesitter";
-  moduleName = "nvim-treesitter.configs";
+  moduleName = "nvim-treesitter";
   package = "nvim-treesitter";
 
   description = ''
-    Provides an interface to [tree-sitter]
+    Provides an interface to [tree-sitter] for Neovim.
 
     > [!NOTE]
-    > This plugin defaults to all functionality disabled.
-    >
-    > Please explicitly enable the features you would like to use in `plugins.treesitter.settings`.
-    > For example, to enable syntax highlighting use the `plugins.treesitter.settings.highlight.enable` option.
+    > This module targets the nvim-treesitter **main** branch (the current standard) and enables features via Neovim's native treesitter APIs.
+    > For backwards compatibility, if the legacy **master** branch is detected at runtime, your `settings` are forwarded to `require('nvim-treesitter.configs').setup()`.
 
-    ### Installing tree-sitter grammars from Nixpkgs
+    ## Quick Start
 
-    By default, **all** available grammars packaged in the `nvim-treesitter` package are installed.
+    ```nix
+    {
+      plugins.treesitter = {
+        enable = true;
+        folding = true;
+        highlight.enable = true;
+        indent.enable = true;
+      };
+    }
+    ```
 
-    If you'd like more control, you could instead specify which packages to install. For example:
+    Features are enabled via Neovim's native APIs:
+    - `folding` → Configures vim fold options to use `vim.treesitter.foldexpr()`
+    - `highlight.enable` → Calls `vim.treesitter.start()` on FileType events
+    - `indent.enable` → Sets `indentexpr` to use treesitter's indent function
+
+    ## Installing Grammar Parsers
+
+    ### Via Nix (Recommended)
+
+    By default, **all** available grammars are installed via Nix. This provides reproducible builds,
+    no runtime compilation, and offline availability.
+
+    Customize which parsers to install:
 
     ```nix
     {
@@ -62,46 +81,31 @@ lib.nixvim.plugins.mkNeovimPlugin {
     }
     ```
 
-    ### Installing tree-sitter grammars from nvim-treesitter
+    Verify installed parsers with `:checkhealth vim.treesitter`.
 
-    The default behavior is **not** to install any grammars through the plugin.
-    We usually recommend installing grammars through nixpkgs instead (see above).
+    ### Via Runtime Installation
 
-    If you'd like to install a grammar through nvim-treesitter, you can run `:TSInstall <grammar>` within vim
-    or use the `plugins.treesitter.settings.ensure_installed` option to specify grammars you want the plugin to fetch and install.
+    Parsers cannot be configured to auto-install. Instead:
+    - Use `:TSInstall <language>` to install parsers manually
+    - Use `:TSUninstall <language>` to remove parsers
+
+    Configure the parser installation directory if needed:
 
     ```nix
     {
-      plugins.treesitter = {
-        enable = true;
-
-        settings = {
-          # NOTE: You can set whether `nvim-treesitter` should automatically install the grammars.
-          auto_install = false;
-          ensure_installed = [
-            "git_config"
-            "git_rebase"
-            "gitattributes"
-            "gitcommit"
-            "gitignore"
-          ];
-        };
+      plugins.treesitter.settings = {
+        install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
       };
     }
     ```
 
-    NOTE: You can combine the functionality of `plugins.treesitter.nixGrammars` and `plugins.treesitter.settings.ensure_installed`.
-    This may be useful if a grammar isn't available from nixpkgs or you prefer to have specific grammars managed by nvim-treesitter.
+    ## Custom Grammars
 
-    ### Installing Your Own Grammars with Nixvim
-
-    The grammars you want will usually be included in `nixGrammars` by default.
-    But, in the rare case it isn't, you can build your own and use it with Nixvim like so:
+    Build and install your own grammar:
 
     ```nix
     { pkgs, ... }:
     let
-      # Example of building your own grammar
       treesitter-nu-grammar = pkgs.tree-sitter.buildGrammar {
         language = "nu";
         version = "0.0.0+rev=0bb9a60";
@@ -113,71 +117,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
         };
         meta.homepage = "https://github.com/nushell/tree-sitter-nu";
       };
-
-      # or you can yoink any grammars in tree-sitter.grammars.''${grammar-name}
-      # treesitter-nu-grammar = pkgs.tree-sitter-grammars.tree-sitter-nu;
     in
     {
-      programs.nixvim = {
-        plugins = {
-          treesitter = {
-            enable = true;
-            settings.indent.enable = true;
-            grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [
-              treesitter-nu-grammar
-            ];
-            luaConfig.post=
-            '''
-              do
-                local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-                -- change the following as needed
-                parser_config.nu = {
-                  install_info = {
-                    url = "''${treesitter-nu-grammar}", -- local path or git repo
-                    files = {"src/parser.c"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
-                    -- optional entries:
-                    --  branch = "main", -- default branch in case of git repo if different from master
-                    -- generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-                    -- requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-                  },
-                  filetype = "nu", -- if filetype does not match the parser name
-                }
-              end
-            ''';
-          };
-        };
+      programs.nixvim.plugins.treesitter = {
+        enable = true;
+        grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [ treesitter-nu-grammar ];
 
-        # Add as extra plugins so that their `queries/{language}/*.scm` get
-        # installed and can be picked up by `tree-sitter`
-        extraPlugins = [
-          treesitter-nu-grammar
-        ];
+        # Register the parser to filetype
+        languageRegister.nu = "nu";
       };
+
+      programs.nixvim.extraPlugins = [ treesitter-nu-grammar ];
     }
     ```
 
-    The queries for the grammar should be added to one of the runtime directories under `queries/{language}` but sometimes plugins do not conform to this structure.
+    Verify with `:checkhealth vim.treesitter`.
 
-    In such cases, you can override the source derivation (or the grammar derivation) to move the queries to the appropriate folder:
-
-    ```nix
-    (
-      (pkgs.fetchFromGitLab {
-        owner = "joncoole";
-        repo = "tree-sitter-nginx";
-        rev = "b4b61db443602b69410ab469c122c01b1e685aa0";
-        hash = "sha256-Sa7audtwH8EgrHJ5XIUKTdveZU2pDPoUq70InQ6qcKA=";
-      }).overrideAttrs
-      (drv: {
-        fixupPhase = '''
-          mkdir -p $out/queries/nginx
-          mv $out/queries/*.scm $out/queries/nginx/
-        ''';
-      })
-    )
-    ```
-
-    Verify if the queries were picked up by running `:TSModuleInfo`.
 
     [tree-sitter]: https://github.com/tree-sitter/tree-sitter
   '';
@@ -190,38 +145,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
   }) buildGrammarDeps;
 
   settingsExample = {
-    auto_install = false;
-    ensure_installed = "all";
-    ignore_install = [ "rust" ];
-    parser_install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
-    sync_install = false;
-
-    highlight = {
-      enable = true;
-
-      additional_vim_regex_highlighting = true;
-      disable = [ "rust" ];
-      custom_captures = { };
-    };
-
-    incremental_selection = {
-      enable = true;
-
-      keymaps = {
-        init_selection = false;
-        node_decremental = "grm";
-        node_incremental = "grn";
-        scope_incremental = "grc";
-      };
-    };
-
-    indent = {
-      enable = true;
-    };
+    install_dir = lib.nixvim.nestedLiteralLua "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";
   };
 
   extraOptions = {
     folding = lib.mkEnableOption "tree-sitter based folding";
+
+    highlight = {
+      enable = lib.mkEnableOption "tree-sitter based syntax highlighting";
+    };
+
+    indent = {
+      enable = lib.mkEnableOption "tree-sitter based indentation";
+    };
 
     grammarPackages = mkOption {
       type = with types; listOf package;
@@ -270,24 +206,77 @@ lib.nixvim.plugins.mkNeovimPlugin {
   callSetup = false;
 
   extraConfig = cfg: opt: {
+    # TODO: Added 2025-12-18 Runtime detection to support legacy api
+    # Should be removed after transition period
+    # Runtime API detection and conditional setup
     plugins.treesitter.luaConfig.content =
-      # NOTE: Upstream state that the parser MUST be at the beginning of runtimepath.
-      # Otherwise the parsers from Neovim takes precedent, which may be incompatible with some queries.
-      (optionalString (cfg.settings.parser_install_dir != null) ''
-        vim.opt.runtimepath:prepend(${lib.nixvim.toLuaObject cfg.settings.parser_install_dir})
-      '')
-      + ''
-        require('nvim-treesitter.configs').setup(${lib.nixvim.toLuaObject cfg.settings})
-      ''
-      + (optionalString (cfg.languageRegister != { }) ''
-        do
-          local __parserFiletypeMappings = ${lib.nixvim.toLuaObject cfg.languageRegister}
+      let
+        # TODO: Added 2025-12-18 Check both legacy and new api options
+        # Add warning after transition period
+        # Top-level options (cfg.highlight.enable, cfg.indent.enable) are for main branch
+        # For master branch compatibility, users should use settings.highlight.enable directly
+        highlightEnabled = cfg.highlight.enable || (cfg.settings.highlight.enable or false);
+        indentEnabled = cfg.indent.enable || (cfg.settings.indent.enable or false);
 
-          for parser_name, ft in pairs(__parserFiletypeMappings) do
-            require('vim.treesitter.language').register(parser_name, ft)
-          end
+        # TODO: Added 2025-12-18 Coerce string disable functions to rawLua
+        # Before it was dropped, the `highlight.disable` option did str→raw coercion
+        # Remove after transition period
+        legacySettings =
+          cfg.settings
+          // lib.optionalAttrs (lib.isString (cfg.settings.highlight.disable or null)) {
+            highlight = cfg.settings.highlight // {
+              disable.__raw = cfg.settings.highlight.disable;
+            };
+          };
+
+        # TODO: Added 2025-12-18 Configure install_dir for main branch
+        # Map parser_install_dir to install_dir if install_dir not already set
+        # Remove after transition period
+        mainBranchSettings =
+          lib.optionalAttrs (legacySettings ? parser_install_dir) {
+            install_dir = legacySettings.parser_install_dir;
+          }
+          // legacySettings;
+      in
+      ''
+        -- Create autogroup for treesitter autocmds
+        local augroup = vim.api.nvim_create_augroup('nixvim_treesitter', { clear = true })
+
+        -- Detect nvim-treesitter API
+        local has_configs_module = pcall(require, 'nvim-treesitter.configs')
+
+        if has_configs_module then
+          require('nvim-treesitter.configs').setup(${lib.nixvim.toLuaObject legacySettings})
+        else
+          ${optionalString (mainBranchSettings != { }) ''
+            require'nvim-treesitter'.setup(${lib.nixvim.toLuaObject mainBranchSettings})
+          ''}
+          ${optionalString (highlightEnabled || indentEnabled) ''
+            -- Enable features via autocommands for modern nvim-treesitter
+            vim.api.nvim_create_autocmd('FileType', {
+              group = augroup,
+              pattern = '*',
+              callback = function()
+                ${optionalString highlightEnabled ''
+                  pcall(vim.treesitter.start)
+                ''}${optionalString indentEnabled ''
+                  vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                ''}
+              end,
+            })
+          ''}
         end
-      '');
+        ${optionalString (cfg.languageRegister != { }) ''
+
+          do
+            local __parserFiletypeMappings = ${lib.nixvim.toLuaObject cfg.languageRegister}
+
+            for parser_name, ft in pairs(__parserFiletypeMappings) do
+              vim.treesitter.language.register(parser_name, ft)
+            end
+          end
+        ''}
+      '';
 
     extraFiles = mkIf cfg.nixvimInjections { "queries/nix/injections.scm".source = ./injections.scm; };
 
