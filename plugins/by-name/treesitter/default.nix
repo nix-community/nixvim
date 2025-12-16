@@ -11,7 +11,6 @@ let
     literalExpression
     optionalString
     mkIf
-    mkDefault
     ;
   buildGrammarDeps = [
     "gcc"
@@ -312,6 +311,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
       pkg: pkg.withPlugins (_: cfg.grammarPackages)
     );
 
+    # NOTE: This autoCmd is declared outside of Lua while the autogroup is created in luaConfig.content.
+    # This is fragile - if module generation order changes, the autocmd might be created before the
+    # autogroup exists (causing failure), or the autogroup's clear=true might clear this autocmd.
+    # The current order happens to work, but changes to nixvim's module system could break this.
+    autoCmd = lib.optional cfg.folding.enable {
+      event = "FileType";
+      group = "nixvim_treesitter";
+      pattern = "*";
+      callback.__raw = ''
+        function()
+          vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+          vim.wo[0][0].foldmethod = 'expr'
+        end
+      '';
+    };
+
     warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
       lib.map (packageName: {
         when = !cfg.nixGrammars && !config.dependencies.${packageName}.enable;
@@ -321,10 +336,5 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
       }) buildGrammarDeps
     );
-
-    opts = mkIf cfg.folding.enable {
-      foldmethod = mkDefault "expr";
-      foldexpr = mkDefault "v:lua.vim.treesitter.foldexpr()";
-    };
   };
 }
