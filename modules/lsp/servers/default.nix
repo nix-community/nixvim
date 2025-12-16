@@ -32,7 +32,7 @@ let
   # Create a server option
   # Used below for the `lsp.servers.*` options
   mkServerOption =
-    name: args:
+    { name, ... }@args:
     let
       homepage = lib.pipe options.lsp.servers [
         # Get suboptions of `lsp.servers`
@@ -59,11 +59,6 @@ let
       '';
       default = { };
     };
-
-  # Read package-option defaults from `packages.nix`
-  serverPackages = builtins.mapAttrs (name: package: {
-    inherit name package;
-  }) (import ./packages.nix).packages;
 in
 {
   options.lsp = {
@@ -73,7 +68,10 @@ in
           freeformType = types.attrsOf (mkServerType { });
         }
         {
-          options = builtins.mapAttrs mkServerOption serverPackages;
+          # Declare explicit options for each `packages.nix` entry with a known package
+          options = builtins.mapAttrs (
+            name: package: mkServerOption { inherit name package; }
+          ) (import ./packages.nix).packages;
         }
         {
           # `*` is effectively a meta server, where shared config & defaults can be set.
