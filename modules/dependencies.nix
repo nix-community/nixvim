@@ -10,7 +10,11 @@ let
   cfg = config.dependencies;
 
   mkDependencyOption = name: properties: {
-    enable = lib.mkEnableOption "Add ${name} to dependencies.";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to add ${name} to dependencies.";
+    };
 
     package =
       lib.mkPackageOption pkgs name properties
