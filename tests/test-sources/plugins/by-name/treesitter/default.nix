@@ -3,9 +3,9 @@
   default = {
     plugins.treesitter = {
       enable = true;
-      folding = true;
       highlight.enable = true;
       indent.enable = true;
+      folding.enable = true;
 
       settings = {
         install_dir.__raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'site')";

@@ -37,17 +37,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
     {
       plugins.treesitter = {
         enable = true;
-        folding = true;
         highlight.enable = true;
         indent.enable = true;
+        folding.enable = true;
       };
     }
     ```
 
     Features are enabled via Neovim's native APIs:
-    - `folding` → Configures vim fold options to use `vim.treesitter.foldexpr()`
     - `highlight.enable` → Calls `vim.treesitter.start()` on FileType events
     - `indent.enable` → Sets `indentexpr` to use treesitter's indent function
+    - `folding.enable` → Configures vim fold options to use `vim.treesitter.foldexpr()`
 
     ## Installing Grammar Parsers
 
@@ -149,7 +149,34 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraOptions = {
-    folding = lib.mkEnableOption "tree-sitter based folding";
+    folding = mkOption {
+      type =
+        let
+          foldingSubmodule = types.submodule {
+            options = {
+              enable = lib.mkEnableOption "tree-sitter based folding";
+            };
+          };
+        in
+        (types.either types.bool foldingSubmodule)
+        // {
+          inherit (foldingSubmodule) description getSubOptions;
+        };
+      visible = "transparent";
+      default = { };
+      description = "Tree-sitter based folding configuration.";
+      apply =
+        x:
+        if builtins.isBool x then
+          # TODO: Added 2025-12-18, remove after 26.11
+          lib.warn
+            "Passing a boolean to `${options.plugins.treesitter.folding}` is deprecated, use `${options.plugins.treesitter.folding}.enable`. Definitions: ${lib.options.showDefs options.plugins.treesitter.folding.definitionsWithLocations}"
+            {
+              enable = x;
+            }
+        else
+          x;
+    };
 
     highlight = {
       enable = lib.mkEnableOption "tree-sitter based syntax highlighting";
@@ -295,7 +322,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }) buildGrammarDeps
     );
 
-    opts = mkIf cfg.folding {
+    opts = mkIf cfg.folding.enable {
       foldmethod = mkDefault "expr";
       foldexpr = mkDefault "v:lua.vim.treesitter.foldexpr()";
     };
