@@ -217,11 +217,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
         view = defaultNullOpts.mkStr "mini" "Lsp progress view backend.";
       };
 
-      override = defaultNullOpts.mkAttrsOf types.bool {
-        "vim.lsp.util.convert_input_to_markdown_lines" = false;
-        "vim.lsp.util.stylize_markdown" = false;
-        "cmp.entry.get_documentation" = false;
-      } "Functions to override and use Noice.";
+      override =
+        defaultNullOpts.mkAttrsOf types.bool
+          {
+            "vim.lsp.util.convert_input_to_markdown_lines" = false;
+            "vim.lsp.util.stylize_markdown" = false;
+            "cmp.entry.get_documentation" = false;
+          }
+          "Functions to override and use Noice. Note: some of these (e.g. vim.lsp.util.stylize_markdown) are deprecated by Neovim; see :h deprecated.";
 
       hover = {
         enabled = defaultNullOpts.mkBool true "Enable hover UI.";
