@@ -65,6 +65,7 @@ in
     mojo_format = states.unpackaged;
     nomad_fmt = states.unpackaged;
     npm-groovy-lint = states.unpackaged;
+    oxfmt = states.unpackaged;
     packer_fmt = states.unpackaged;
     pangu = states.unpackaged;
     perlimports = states.unpackaged;
