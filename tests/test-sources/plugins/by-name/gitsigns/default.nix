@@ -29,7 +29,7 @@
               return false
             end
             -- Setup keymaps
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
+            vim.keymap.set('n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', { buffer = bufnr })
           end
         '';
         watch_gitdir = {
