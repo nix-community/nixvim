@@ -127,7 +127,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Ensure that the `name` field is not overridden as is is used for efficiency reasons in
           numerous checks to verify copilot is actually running.
 
-          See `:h vim.lsp.start_client` for list of options.
+          See `:h vim.lsp.start()` for list of options.
         '';
         example = {
           trace = "verbose";

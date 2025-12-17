@@ -58,7 +58,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             name = "zk";
           }
           ''
-            LSP configuration. See `:h vim.lsp.start_client()`.
+            LSP configuration. See `:h vim.lsp.start()`.
           '';
 
       auto_attach = {
