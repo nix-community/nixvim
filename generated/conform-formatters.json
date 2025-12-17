@@ -147,6 +147,8 @@
   "odinfmt",
   "opa_fmt",
   "ormolu",
+  "oxfmt",
+  "oxlint",
   "packer_fmt",
   "pangu",
   "perlimports",
