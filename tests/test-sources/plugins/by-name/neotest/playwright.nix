@@ -14,17 +14,17 @@
             preset = "none";
             get_playwright_binary.__raw = ''
               function()
-                return vim.loop.cwd() + "/node_modules/.bin/playwright"
+                return vim.uv.cwd() + "/node_modules/.bin/playwright"
               end
             '';
             get_playwright_config.__raw = ''
               function()
-                return vim.loop.cwd() + "/playwright.config.ts"
+                return vim.uv.cwd() + "/playwright.config.ts"
               end
             '';
             get_cwd.__raw = ''
               function()
-                return vim.loop.cwd()
+                return vim.uv.cwd()
               end
             '';
             env = { };

@@ -52,7 +52,7 @@
         should_save.__raw = ''
           function()
             -- Do not save session when the current cwd is git root
-            local uv = vim.loop
+            local uv = vim.uv
             local cwd = uv.cwd()
             local git_dir = uv.fs_stat(cwd .. "/.git")
             if git_dir == nil then

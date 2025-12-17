@@ -16,7 +16,7 @@
           }
           {
             type = "dir";
-            header = [ { __raw = "'   MRU' .. vim.loop.cwd()"; } ];
+            header = [ { __raw = "'   MRU' .. vim.uv.cwd()"; } ];
           }
           {
             type = "sessions";

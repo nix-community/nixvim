@@ -16,8 +16,8 @@
 
         settings = {
           theme.__raw = "nil";
-          path.__raw = "vim.loop.cwd()";
-          cwd.__raw = "vim.loop.cwd()";
+          path.__raw = "vim.uv.cwd()";
+          cwd.__raw = "vim.uv.cwd()";
           cwd_to_path = false;
           grouped = false;
           files = true;

@@ -14,7 +14,7 @@
           sync_on_ui_close = false;
           key.__raw = ''
             function()
-              return vim.loop.cwd()
+              return vim.uv.cwd()
             end
           '';
         };
