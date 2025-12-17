@@ -16,6 +16,7 @@
     "bicep" # Bicep.Cli is packaged, but not Bicep.LangServer
     "bqls"
     "bright_script"
+    "brioche"
     "bsl_ls"
     "buddy_ls"
     "bzl"
@@ -74,6 +75,7 @@
     "hlasm"
     "hoon_ls"
     "hydra_lsp"
+    "hylo_ls"
     "intelephense"
     "janet_lsp"
     "jinja_lsp"
