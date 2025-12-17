@@ -48,31 +48,35 @@ let
   removeWhitespace = builtins.replaceStrings [ " " ] [ "" ];
 
   getSubOptions =
-    opts: path:
-    lib.optionalAttrs (isDeeplyVisible opts) (removeUnwanted (opts.type.getSubOptions path));
+    opt:
+    let
+      visible = opt.visible or true;
+      visible' = if lib.isBool visible then visible else visible != "shallow";
+      subOpts = opt.type.getSubOptions opt.loc;
+    in
+    lib.optionalAttrs visible' (removeUnwanted subOpts);
 
-  isVisible = isVisibleWith true;
-  isDeeplyVisible = isVisibleWith false;
-
-  isVisibleWith =
-    shallow: opts:
+  isVisible =
     let
       test =
         opt:
         let
           internal = opt.internal or false;
           visible = opt.visible or true;
-          visible' = if visible == "shallow" then shallow else visible;
+          visible' = if lib.isBool visible then visible else visible != "transparent";
         in
         visible' && !internal;
     in
+    opts:
     if lib.isOption opts then
       test opts
     else if opts.isOption then
       test opts.index.options
     else
       let
-        filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisibleWith shallow v else true);
+        # FIXME: isVisible is not a perfect check;
+        # it will false-positive on `visible = "transparent"`
+        filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisible v else true);
         hasEmptyIndex = (filterFunc opts.index.options) == { };
         hasEmptyComponents = (filterFunc opts.components) == { };
       in
@@ -136,7 +140,7 @@ let
             wrapOptionDocPage (path ++ [ name ]) (go (path ++ [ name ]) opts) false
           else
             let
-              subOpts = getSubOptions opts (path ++ [ name ]);
+              subOpts = getSubOptions opts;
             in
             # If this node is an option with sub-options...
             # Pass wrapOptionDocPage a set containing it and its sub-options.
@@ -144,7 +148,7 @@ let
             if subOpts != { } then
               wrapOptionDocPage (path ++ [ name ]) (
                 (go (path ++ [ name ]) subOpts)
-                // {
+                // lib.optionalAttrs (isVisible opts) {
                   # This is necessary to include the option itself in the docs.
                   # For instance, this helps submodules like "autoCmd" to include their base declaration in the docs.
                   # Though there must be a better, less "hacky" solution than this.
