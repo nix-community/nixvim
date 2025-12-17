@@ -66,6 +66,10 @@ let
           visible' = if lib.isBool visible then visible else visible != "transparent";
         in
         visible' && !internal;
+
+      # FIXME: isVisible is not a perfect check;
+      # it will false-positive on `visible = "transparent"`
+      hasVisible = opts: lib.any (v: lib.isAttrs v -> isVisible v) (lib.attrValues opts);
     in
     opts:
     if lib.isOption opts then
@@ -73,14 +77,10 @@ let
     else if opts.isOption then
       test opts.index.options
     else
-      let
-        # FIXME: isVisible is not a perfect check;
-        # it will false-positive on `visible = "transparent"`
-        filterFunc = lib.filterAttrs (_: v: if lib.isAttrs v then isVisible v else true);
-        hasEmptyIndex = (filterFunc opts.index.options) == { };
-        hasEmptyComponents = (filterFunc opts.components) == { };
-      in
-      !hasEmptyIndex || !hasEmptyComponents;
+      lib.any hasVisible [
+        opts.index.options
+        opts.components
+      ];
 
   wrapOptionDocPage = path: opts: isOpt: rec {
     index = {
