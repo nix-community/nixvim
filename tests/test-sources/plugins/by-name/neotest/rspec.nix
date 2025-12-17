@@ -11,11 +11,11 @@
           settings = {
             rspec_cmd.__raw = ''
               function()
-                return vim.tbl_flatten({
+                return {
                   "bundle",
                   "exec",
                   "rspec",
-                })
+                }
               end
             '';
             root_files = [

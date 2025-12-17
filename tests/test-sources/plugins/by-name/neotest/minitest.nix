@@ -11,12 +11,12 @@
           settings = {
             test_cmd.__raw = ''
               function()
-                return vim.tbl_flatten({
+                return {
                   "bundle",
                   "exec",
                   "rails",
                   "test",
-                })
+                }
               end
             '';
           };

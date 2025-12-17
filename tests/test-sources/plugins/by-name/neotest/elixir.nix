@@ -18,7 +18,7 @@
             args = [ "--trace" ];
             post_process_command.__raw = ''
               function(cmd)
-                return vim.tbl_flatten({{"env", "FOO=bar"}, cmd})
+                return vim.iter({ { "env", "FOO=bar" }, cmd }):flatten():totable()
               end
             '';
             write_delay = 1000;
