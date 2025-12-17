@@ -292,7 +292,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             function()
                 local msg = ""
                 local buf_ft = vim.bo[0].filetype
-                local clients = vim.lsp.get_active_clients()
+                local clients = vim.lsp.get_clients({ bufnr = 0 })
                 if next(clients) == nil then
                     return msg
                 end
