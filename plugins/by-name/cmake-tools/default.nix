@@ -33,7 +33,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     '';
 
     cmake_build_directory = defaultNullOpts.mkStr "out/\${variant:buildType}" ''
-      This is used to specify generate directory for cmake, allows macro expansion, relative to vim.loop.cwd().
+      This is used to specify generate directory for cmake, allows macro expansion, relative to vim.uv.cwd().
     '';
 
     cmake_soft_link_compile_commands = defaultNullOpts.mkBool true ''
