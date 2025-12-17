@@ -291,7 +291,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           __unkeyed-1.__raw = ''
             function()
                 local msg = ""
-                local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+                local buf_ft = vim.bo[0].filetype
                 local clients = vim.lsp.get_active_clients()
                 if next(clients) == nil then
                     return msg
