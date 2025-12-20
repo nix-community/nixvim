@@ -120,7 +120,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     {
       programs.nixvim.plugins.treesitter = {
         enable = true;
-        grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars ++ [ treesitter-nu-grammar ];
+        grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars ++ [ treesitter-nu-grammar ];
 
         # Register the parser to filetype
         languageRegister.nu = "nu";
@@ -187,9 +187,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     grammarPackages = mkOption {
       type = with types; listOf package;
-      default = config.plugins.treesitter.package.passthru.allGrammars;
-      example = literalExpression "pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars";
-      defaultText = literalExpression "config.plugins.treesitter.package.passthru.allGrammars";
+      default = config.plugins.treesitter.package.allGrammars;
+      example = literalExpression "pkgs.vimPlugins.nvim-treesitter.allGrammars";
+      defaultText = literalExpression "config.plugins.treesitter.package.allGrammars";
       description = "Grammar packages to install";
     };
 
