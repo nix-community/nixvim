@@ -17,7 +17,6 @@ lib.fix (self: {
   # Derivations that build the generated files
   efmls-configs-sources = pkgs.callPackage ./efmls-configs.nix { };
   none-ls-builtins = pkgs.callPackage ./none-ls.nix { };
-  rust-analyzer-options = pkgs.callPackage ./rust-analyzer { };
   lspconfig-servers = pkgs.callPackage ./nvim-lspconfig { };
   conform-formatters = pkgs.callPackage ./conform-nvim.nix { };
   version-info = pkgs.callPackage ./version-info { };

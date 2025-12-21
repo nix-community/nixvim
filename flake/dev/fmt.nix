@@ -67,10 +67,6 @@
             "--auto-fix"
             "--ignore=sema-unused-def-lambda-witharg-formal"
           ];
-          formatter.nixf-diagnose.excludes = [
-            # sema-unused-def-lambda-noarg-formal
-            "ci/rust-analyzer/default.nix"
-          ];
         };
       };
 
