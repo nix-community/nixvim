@@ -248,26 +248,21 @@ in
       ```
     '';
 
-    default_settings =
-      lib.nixvim.mkNullOrStrLuaFnOr
-        (types.submodule {
-          freeformType = with types; attrsOf anything;
-        })
-        ''
-          Setting passed to rust-analyzer.
-          Defaults to a function that looks for a `rust-analyzer.json` file or returns an empty table.
-          See https://rust-analyzer.github.io/manual.html#configuration.
+    default_settings = lib.nixvim.mkNullOrStrLuaFnOr lib.nixvim.lua-types.anything ''
+      Setting passed to rust-analyzer.
+      Defaults to a function that looks for a `rust-analyzer.json` file or returns an empty table.
+      See https://rust-analyzer.github.io/manual.html#configuration.
 
-          This can also be the definition of a function:
-          `fun(project_root:string|nil, default_settings: table|nil):table`
+      This can also be the definition of a function:
+      `fun(project_root:string|nil, default_settings: table|nil):table`
 
-          Plugin default:
-          ```lua
-            function(project_root, default_settings)
-              return require('rustaceanvim.config.server').load_rust_analyzer_settings(project_root, { default_settings = default_settings })
-            end
-          ```
-        '';
+      Plugin default:
+      ```lua
+        function(project_root, default_settings)
+          return require('rustaceanvim.config.server').load_rust_analyzer_settings(project_root, { default_settings = default_settings })
+        end
+      ```
+    '';
 
     standalone = lib.nixvim.defaultNullOpts.mkBool true ''
       Standalone file support (enabled by default).
