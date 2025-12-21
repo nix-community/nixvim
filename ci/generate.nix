@@ -1,6 +1,5 @@
 {
   writeShellApplication,
-  rust-analyzer-options,
   efmls-configs-sources,
   none-ls-builtins,
   lspconfig-servers,
@@ -42,7 +41,6 @@ writeShellApplication {
 
     mkdir -p "$generated_dir"
 
-    generate_json "${rust-analyzer-options}"
     generate_json "${efmls-configs-sources}"
     generate_json "${none-ls-builtins}"
     generate_json "${conform-formatters}"

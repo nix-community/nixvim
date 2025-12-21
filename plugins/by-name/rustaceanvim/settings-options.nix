@@ -251,7 +251,6 @@ in
     default_settings =
       lib.nixvim.mkNullOrStrLuaFnOr
         (types.submodule {
-          options.rust-analyzer = import ../../lsp/language-servers/rust-analyzer-config.nix lib;
           freeformType = with types; attrsOf anything;
         })
         ''
