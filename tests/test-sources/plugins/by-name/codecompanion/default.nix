@@ -1,14 +1,9 @@
-# 2025-12-02: set runNvim to false as the following warning is shown unconditionally:
-# ERROR: [WARN] CodeCompanion.nvim will experience breaking changes soon. Pin to version v17.33.0 or earlier to avoid this.
-# See: https://github.com/olimorris/codecompanion.nvim/pull/2439
 {
   empty = {
-    test.runNvim = false;
     plugins.codecompanion.enable = true;
   };
 
   defaults = {
-    test.runNvim = false;
     plugins.codecompanion = {
       enable = true;
 
@@ -949,7 +944,6 @@
   };
 
   example = {
-    test.runNvim = false;
     plugins.codecompanion = {
       enable = true;
 
