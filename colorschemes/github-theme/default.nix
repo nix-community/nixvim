@@ -6,6 +6,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   name = "github-theme";
   package = "github-nvim-theme";
   isColorscheme = true;
+  colorscheme = "github_dark";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
