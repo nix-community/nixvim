@@ -118,7 +118,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       options = {
         inherit (cfg) configurations;
 
-        adapters = lib.mkMerge [
+        adapters = lib.lists.foldr (x: y: x // y) { } [
           (lib.removeAttrs (cfg.adapters or { }) [
             "executables"
             "servers"
