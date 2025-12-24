@@ -83,11 +83,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.otter" {
       when =
-        config.plugins.treesitter.enable -> config.plugins.treesitter.settings.highlight.enable == null;
+        let
+          inherit (config.plugins) treesitter;
+          highlightEnabled = treesitter.highlight.enable || (treesitter.settings.highlight.enable or false);
+        in
+        config.plugins.treesitter.enable -> highlightEnabled == null;
 
       message = ''
         You have enabled otter, but treesitter syntax highlighting is not enabled.
-        Otter functionality might not work as expected without it. Make sure `plugins.treesitter.settings.highlight.enable` and `plugins.treesitter.enable` are enabled.
+        Otter functionality might not work as expected without it. Make sure `plugins.treesitter.highlight.enable` and `plugins.treesitter.enable` are enabled.
       '';
     };
 
