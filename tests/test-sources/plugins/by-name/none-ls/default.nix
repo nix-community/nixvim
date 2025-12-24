@@ -100,6 +100,11 @@
         sources =
           let
             disabled = [
+              # TODO Added 2025-12-24: phpPackages.php-codesniffer is broken
+              # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
+              "phpcbf"
+              "phpcs"
+
               # TODO Added 2025-12-20 build failure
               # https://github.com/NixOS/nixpkgs/issues/472704
               "terragrunt_fmt"

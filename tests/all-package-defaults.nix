@@ -13,6 +13,10 @@ let
   };
 
   disabledPackages = [
+    # 2025-12-24: phpPackages.php-codesniffer is broken
+    # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
+    "php-codesniffer"
+
     # 2025-11-15 dependency swift is broken
     # https://github.com/NixOS/nixpkgs/issues/461474
     "sourcekit-lsp"

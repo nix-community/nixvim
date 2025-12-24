@@ -13,6 +13,10 @@ in
 {
   inherit states;
   formatter-packages = {
+    # 2025-12-24: phpPackages.php-codesniffer is broken
+    # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
+    phpcbf = states.broken php84Packages.php-codesniffer;
+
     # 2025-12-20 build failure
     # https://github.com/NixOS/nixpkgs/issues/472704
     terragrunt_hclfmt = states.broken terragrunt;
@@ -137,7 +141,6 @@ in
     perltidy = perl538Packages.PerlTidy;
     pg_format = pgformatter;
     php_cs_fixer = php83Packages.php-cs-fixer;
-    phpcbf = php84Packages.php-codesniffer;
     inherit (php84Packages) phpinsights;
     prolog = swi-prolog;
     pyproject-fmt = python313Packages.pyproject-parser;
