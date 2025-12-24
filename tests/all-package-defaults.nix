@@ -109,6 +109,11 @@ let
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # 2025-12-24: build failure
+    # I (@GaetanLepage) am able to build this package on my system, but it is not cached on
+    # hydra.nixos.org and builbot fails at building it
+    "trivy"
+
     # 2025-11-16 dependency libsigsegv is broken
     "texlive"
     "texlive-combined-medium"
