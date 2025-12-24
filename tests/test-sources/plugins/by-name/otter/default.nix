@@ -5,6 +5,16 @@
       # Avoid the warning
       treesitter = {
         enable = true;
+        highlight.enable = true;
+      };
+    };
+  };
+  emptyOldApi = {
+    plugins = {
+      otter.enable = true;
+      # Avoid the warning
+      treesitter = {
+        enable = true;
         settings.highlight.enable = true;
       };
     };
@@ -15,7 +25,7 @@
       # Avoid the warning
       treesitter = {
         enable = true;
-        settings.highlight.enable = true;
+        highlight.enable = true;
       };
 
       otter = {
