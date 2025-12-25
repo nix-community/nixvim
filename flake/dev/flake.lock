@@ -38,16 +38,15 @@
     },
     "flake-compat": {
       "locked": {
-        "lastModified": 1765186200,
+        "lastModified": 1766661267,
         "narHash": "sha256-QN1r/zNqvXHwWqlRAnRtFf4CQwIOJx58PtdExIzAw94=",
         "owner": "NixOS",
         "repo": "flake-compat",
-        "rev": "63d095ca43128741b16fc354b1e918757e6b66e5",
+        "rev": "f275e157c50c3a9a682b4c9b4aa4db7a4cd3b5f2",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "pull/75/merge",
         "repo": "flake-compat",
         "type": "github"
       }
