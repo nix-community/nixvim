@@ -73,6 +73,7 @@
     "hhvm"
     "hie"
     "hlasm"
+    "home_assistant"
     "hoon_ls"
     "hydra_lsp"
     "hylo_ls"
