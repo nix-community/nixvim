@@ -45,7 +45,7 @@ let
     configuration.config.build.test.overrideAttrs (old: {
       passthru =
         old.passthru or { }
-        // builtins.removeAttrs configuration [
+        // removeAttrs configuration [
           "_type"
           "type"
         ]
@@ -66,7 +66,7 @@ let
         config = import ../example.nix { inherit pkgs; };
       in
       {
-        main = builtins.removeAttrs config.programs.nixvim [
+        main = removeAttrs config.programs.nixvim [
           # This is not available to standalone modules, only HM & NixOS Modules
           "enable"
           # This is purely an example, it does not reflect a real usage

@@ -37,7 +37,7 @@ let
     # whether to nest into a sub-page, so that we can keep the original
     # _freeformOptions attr as intended.
     attrs._freeformOptions or { }
-    // builtins.removeAttrs attrs [
+    // removeAttrs attrs [
       "_module"
       "_freeformOptions"
       "warnings"
@@ -96,7 +96,7 @@ let
         let
           info = lib.attrByPath path { } nixvimInfo;
           maintainers = lib.unique (configuration.config.meta.maintainers.${info.file} or [ ]);
-          maintainersNames = builtins.map maintToMD maintainers;
+          maintainersNames = map maintToMD maintainers;
           maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
         in
         # Make sure this path has a valid info attrset
@@ -304,7 +304,7 @@ let
 
     # Attrset of { filePath = renderedDocs; }
     platformOptionsFiles = lib.listToAttrs (
-      builtins.map (
+      map (
         { path, file, ... }:
         {
           name = path;

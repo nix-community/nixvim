@@ -82,7 +82,7 @@ in
       acc: scope: renamed':
       acc ++ lib.mapAttrsToList (old: new: lib.mkRenamedOptionModule [ scope old ] [ scope new ]) renamed'
     ) [ ] renamed
-    ++ builtins.map (
+    ++ map (
       name:
       lib.mkRemovedOptionModule [ "plugins" name "iconsPackage" ] ''
         Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons`, or `plugins.mini-icons` with `plugins.mini-icons.mockDevIcons` instead.

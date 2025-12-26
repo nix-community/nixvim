@@ -6,7 +6,6 @@
 }:
 let
   opts = options.plugins.rainbow-delimiters;
-  inherit (builtins) any isNull;
   inherit (lib) mapAttrs' nameValuePair isString;
   inherit (lib.nixvim) mkRaw toLuaObject nestedLiteralLua;
 in
@@ -103,7 +102,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     ];
 
     assertions = lib.nixvim.mkAssertions "plugins.rainbow-delimiters" {
-      assertion = any isNull [
+      assertion = builtins.any isNull [
         (cfg.settings.whitelist or null)
         (cfg.settings.blacklist or null)
       ];

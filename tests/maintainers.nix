@@ -1,14 +1,12 @@
 {
-  lib,
   nixpkgsLib,
   runCommandLocal,
 }:
 let
-  inherit (lib) attrNames filter length;
   nixvimList = import ../lib/maintainers.nix;
   nixpkgsList = nixpkgsLib.maintainers;
-  duplicates = filter (name: nixpkgsList ? ${name}) (attrNames nixvimList);
-  count = length duplicates;
+  duplicates = builtins.filter (name: nixpkgsList ? ${name}) (builtins.attrNames nixvimList);
+  count = builtins.length duplicates;
 in
 runCommandLocal "maintainers-test" { inherit count duplicates; } ''
   if [ $count -gt 0 ]; then

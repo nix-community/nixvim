@@ -20,7 +20,7 @@ let
       {
         _module.args = lib.pipe options._module.args [
           lib.modules.mergeAttrDefinitionsWithPrio
-          (lib.flip builtins.removeAttrs [ "name" ])
+          (lib.flip removeAttrs [ "name" ])
           (lib.mapAttrs (_: { highestPrio, value }: lib.mkOverride highestPrio value))
         ];
       }

@@ -186,7 +186,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 (listOf strLua)
             )
           );
-        apply = builtins.map mapToRawLua;
+        apply = map mapToRawLua;
         default = [ ];
         example = [
           [

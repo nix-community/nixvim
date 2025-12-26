@@ -29,7 +29,7 @@ lib.fix (self: {
     defaultPlugin // (if p ? plugin then p else { plugin = p; });
 
   # Normalize a list of plugins
-  normalizePlugins = builtins.map self.normalizePlugin;
+  normalizePlugins = map self.normalizePlugin;
 
   getAndNormalizeDeps = p: self.normalizePlugins (p.plugin.dependencies or [ ]);
 
