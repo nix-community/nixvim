@@ -399,6 +399,7 @@
       "syntax_tree"
     ];
     systemd_ls = "systemd-language-server";
+    systemd_lsp = "systemd-lsp";
     tailwindcss = "tailwindcss-language-server";
     taplo = "taplo";
     tblgen_lsp_server = [
