@@ -140,7 +140,6 @@ rec {
   pluginLuaConfig = types.submodule (
     { config, ... }:
     let
-      inherit (builtins) toString;
       inherit (lib.nixvim.utils) mkBeforeSection mkAfterSection;
     in
     {

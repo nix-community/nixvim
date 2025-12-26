@@ -163,7 +163,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
               actionStr = action.action or action;
               mode = action.mode or "n";
               actionProps = lib.optionalAttrs (builtins.isAttrs action) (
-                builtins.removeAttrs action [
+                removeAttrs action [
                   "action"
                   "mode"
                 ]

@@ -174,7 +174,7 @@ let
   mkCmpSourcePlugin = import ./_mk-cmp-plugin.nix {
     inherit lib pkgs;
   };
-  pluginModules = builtins.map mkCmpSourcePlugin sources;
+  pluginModules = map mkCmpSourcePlugin sources;
 in
 {
   # For extra cmp plugins

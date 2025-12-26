@@ -25,10 +25,10 @@ let
     builtins.concatMap (
       node:
       let
-        children = builtins.removeAttrs node [ "_page" ];
+        children = removeAttrs node [ "_page" ];
       in
       lib.optional (node ? _page) node._page ++ lib.optionals (children != { }) (collectPages children)
-    ) (builtins.attrValues (builtins.removeAttrs pages [ "_category" ]));
+    ) (builtins.attrValues (removeAttrs pages [ "_category" ]));
 
   # Normalised page specs
   pageList = collectPages pages;

@@ -19,7 +19,7 @@ let
     |> builtins.attrValues
     |> builtins.filter (entry: entry.variant or null == "primary")
     |> builtins.filter (entry: builtins.elem entry.status supported)
-    |> builtins.map (entry: {
+    |> map (entry: {
       name = entry.channel |> builtins.match "nixos-(.+)" |> builtins.head;
       value = {
         inherit (entry) channel status;

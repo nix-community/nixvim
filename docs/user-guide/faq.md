@@ -103,7 +103,7 @@ You could use the builtin [`map`] function (or similar) to do something like thi
 ```nix
 {
   keymaps =
-    (builtins.map (key: {
+    (map (key: {
       inherit key;
       action = "<some-action>";
       options.desc = "My cool keymapping";

@@ -138,7 +138,7 @@ rec {
         message = "${prefix} ${lib.trim a.message}";
       };
     in
-    builtins.map processAssertion (lib.toList assertions);
+    map processAssertion (lib.toList assertions);
 
   /**
     Convert one or several conditional warnings to a final warning list.

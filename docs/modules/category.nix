@@ -12,7 +12,7 @@ let
     modules = [ ./page.nix ];
   };
 
-  pages = builtins.removeAttrs config (builtins.attrNames options);
+  pages = removeAttrs config (builtins.attrNames options);
 in
 {
   freeformType = lib.types.attrsOf pageType;

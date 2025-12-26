@@ -152,7 +152,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             (
               lib.attrValues (
                 # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
-                builtins.removeAttrs cfg.languages [
+                removeAttrs cfg.languages [
                   "warnings"
                   "HTML"
                   "JSON"
@@ -208,7 +208,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
               (mkToolValue "linters" linter) ++ (mkToolValue "formatters" formatter)
             )
             (
-              builtins.removeAttrs cfg.languages [
+              removeAttrs cfg.languages [
                 "all"
                 # Rename aliases added 2025-06-25 in https://github.com/nix-community/nixvim/pull/3503
                 "warnings"

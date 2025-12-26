@@ -19,9 +19,11 @@ lib.nixvim.plugins.mkVimPlugin {
           "plugins.blink-cmp.enable"
           "plugins.nvim-snippets.enable"
         ];
-        enabledConsumers = builtins.filter (path: lib.getAttrFromPath path config) snippetConsumers;
+        enabledConsumers = builtins.filter (
+          consumerPath: lib.getAttrFromPath consumerPath config
+        ) snippetConsumers;
         enabledConsumersPretty = lib.concatMapStringsSep ", " (
-          path: lib.getAttrFromPath path options
+          consumerPath: lib.getAttrFromPath consumerPath options
         ) enabledConsumers;
       in
       {

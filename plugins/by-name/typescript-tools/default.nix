@@ -223,7 +223,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           renamedSettings = lib.foldl' (
             acc: optPath:
             let
-              snakeCasePath = builtins.map lib.nixvim.toSnakeCase optPath;
+              snakeCasePath = map lib.nixvim.toSnakeCase optPath;
               optValue = lib.getAttrFromPath optPath cfg.settings;
             in
             lib.recursiveUpdate acc (lib.setAttrByPath snakeCasePath optValue)

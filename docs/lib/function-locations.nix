@@ -65,7 +65,7 @@ let
       value =
         let
           file = removeNixvimPrefix location.file;
-          line = builtins.toString location.line;
+          line = toString location.line;
           text = "${file}:${line}";
           target = "${urlPrefix}/${file}#L${line}";
         in
@@ -80,6 +80,6 @@ lib.pipe functionSet [
   # No need to include out-of-tree entries
   (builtins.filter (entry: lib.strings.hasPrefix rootPathString entry.location.file))
   # Convert entries to attrset
-  (builtins.map entryToNameValuePair)
+  (map entryToNameValuePair)
   builtins.listToAttrs
 ]

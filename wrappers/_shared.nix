@@ -19,8 +19,6 @@
 }:
 let
   inherit (lib)
-    listToAttrs
-    map
     mkIf
     mkMerge
     optionalAttrs
@@ -89,7 +87,7 @@ in
     (optionalAttrs (filesOpt != null) (
       mkIf (cfg.enable && !cfg.wrapRc) (
         setAttrByPath filesOpt (
-          listToAttrs (
+          builtins.listToAttrs (
             map (
               { target, finalSource, ... }:
               {
