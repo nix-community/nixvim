@@ -74,6 +74,7 @@ in
     nomad_fmt = states.unpackaged;
     npm-groovy-lint = states.unpackaged;
     packer_fmt = states.unpackaged;
+    palantir-java-format = states.unpackaged;
     pangu = states.unpackaged;
     perlimports = states.unpackaged;
     pint = states.unpackaged;
