@@ -138,7 +138,7 @@
         };
       in
       lib.pipe depsToEnable [
-        (builtins.map enableDepConditionally)
+        (map enableDepConditionally)
         lib.listToAttrs
       ];
   };

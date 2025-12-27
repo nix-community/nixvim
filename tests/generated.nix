@@ -29,7 +29,7 @@ let
     let
       missingFromPkgs = builtins.concatMap (
         loc: lib.optional (!lib.hasAttrByPath loc pkgs) (lib.concatStringsSep "." loc)
-      ) (builtins.map lib.toList packages);
+      ) (map lib.toList packages);
       undeclared = lib.filter (name: !(lib.elem name declared)) generated;
       uselesslyDeclared = lib.partition (name: lib.elem name unsupported) (
         lib.filter (name: !(lib.elem name generated)) declared

@@ -15,7 +15,7 @@
   ...
 }@args:
 lib.nixvim.plugins.mkVimPlugin (
-  builtins.removeAttrs args [
+  removeAttrs args [
     "pluginName"
     "sourceName"
   ]

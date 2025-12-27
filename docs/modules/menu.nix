@@ -9,7 +9,7 @@ let
     modules = [ ./category.nix ];
   };
 
-  categories = builtins.removeAttrs config (builtins.attrNames options);
+  categories = removeAttrs config (builtins.attrNames options);
 in
 {
   freeformType = lib.types.attrsOf categoryType;

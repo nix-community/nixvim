@@ -97,7 +97,7 @@ in
     extraPackages = lib.pipe cfg [
       builtins.attrValues
       (builtins.filter (p: p.enable))
-      (builtins.map (p: p.package))
+      (map (p: p.package))
     ];
 
     __depPackages = {

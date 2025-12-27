@@ -169,7 +169,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           in
           [ (mkEntryFromDrv plugin) ] ++ processDependencies;
 
-        processedPlugins = builtins.concatLists (builtins.map processPlugin cfg.plugins);
+        processedPlugins = builtins.concatLists (map processPlugin cfg.plugins);
         lazyPath = pkgs.linkFarm "lazy-plugins" processedPlugins;
 
         pluginToLua =

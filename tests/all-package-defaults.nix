@@ -22,10 +22,6 @@ let
     "sourcekit-lsp"
     "swift-format"
 
-    # 2025-12-20 build failure
-    # https://github.com/NixOS/nixpkgs/issues/472704
-    "terragrunt"
-
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
   ]

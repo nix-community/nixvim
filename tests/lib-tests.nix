@@ -564,7 +564,7 @@ else
   runCommandLocal "lib-tests-failure"
     {
       results = lib.concatStringsSep "\n" (
-        builtins.map (result: ''
+        map (result: ''
           ${result.name}:
             expected: ${lib.generators.toPretty { } result.expected}
             result: ${lib.generators.toPretty { } result.result}

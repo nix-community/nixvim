@@ -20,7 +20,7 @@ let
   nextPrefix = if showInMenu then loc else prefix;
   nextIndent = if showInMenu && nested then indent + "  " else indent;
 
-  children = builtins.removeAttrs page optionNames;
+  children = removeAttrs page optionNames;
   submenu = lib.pipe children [
     builtins.attrValues
     (map (

@@ -5,7 +5,7 @@
   drv, # The derivation under test
 }:
 let
-  toFile = name: v: if lib.isPath v then v else writeText name v;
+  mkFile = name: v: if lib.isPath v then v else writeText name v;
 
   overrideSrc =
     src:
@@ -21,8 +21,8 @@ let
     }:
     testers.testEqualContents {
       assertion = message;
-      actual = overrideSrc (toFile "${message}-input" input);
-      expected = toFile "${message}-expected" expected;
+      actual = overrideSrc (mkFile "${message}-input" input);
+      expected = mkFile "${message}-expected" expected;
     };
 in
 # TODO: introduce some negative cases for input that should fail

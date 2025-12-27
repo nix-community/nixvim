@@ -1,7 +1,6 @@
 { lib, config, ... }:
 let
   inherit (lib)
-    mapAttrs
     types
     ;
 in
@@ -39,7 +38,7 @@ in
 
     # Transpose per-system definitions to the top-level
     config.ci = {
-      buildbot = mapAttrs (_: sysCfg: sysCfg.ci.buildbot) config.allSystems;
+      buildbot = builtins.mapAttrs (_: sysCfg: sysCfg.ci.buildbot) config.allSystems;
     };
   };
 }

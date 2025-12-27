@@ -21,9 +21,9 @@ let
         };
 
       go =
-        path: name: opt:
+        optPath: name: opt:
         let
-          loc = path ++ lib.singleton name;
+          loc = optPath ++ lib.singleton name;
         in
         if lib.isOption opt then mkAlias loc opt else lib.mapAttrs (go loc) opt;
     in

@@ -65,7 +65,7 @@ rec {
   # to ensure `lua` isn't evaluated when (e.g.) generating lua code.
   # Failure to do so will result in "option used but not defined" errors!
   deprecatedMapOptionSubmodule = mkMapOptionSubmodule { lua = true; };
-  removeDeprecatedMapAttrs = v: builtins.removeAttrs v [ "lua" ];
+  removeDeprecatedMapAttrs = v: removeAttrs v [ "lua" ];
 
   mkModeOption =
     default:

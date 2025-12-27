@@ -105,11 +105,6 @@
               "phpcbf"
               "phpcs"
 
-              # TODO Added 2025-12-20 build failure
-              # https://github.com/NixOS/nixpkgs/issues/472704
-              "terragrunt_fmt"
-              "terragrunt_validate"
-
               # TODO Added 2025-11-15
               # dependency swift is broken
               # https://github.com/NixOS/nixpkgs/issues/461474

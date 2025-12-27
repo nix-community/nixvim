@@ -70,7 +70,7 @@ in
 
               # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
               (lib.mapAttrsToList (name: opt: opt.valueMeta) (
-                builtins.removeAttrs options.plugins.barbar.keymaps [ "silent" ]
+                removeAttrs options.plugins.barbar.keymaps [ "silent" ]
               ))
             ]
             [

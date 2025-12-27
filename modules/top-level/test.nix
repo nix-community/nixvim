@@ -301,8 +301,8 @@ in
         name:
         lib.pipe cfg.${name} [
           (builtins.filter (x: !x.predicate input.${name}))
-          (builtins.map (x: x.message))
-          (builtins.map (msg: if lib.isFunction msg then msg input.${name} else msg))
+          (map (x: x.message))
+          (map (msg: if lib.isFunction msg then msg input.${name} else msg))
           (
             x:
             if x == [ ] then

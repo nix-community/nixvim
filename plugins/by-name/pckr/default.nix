@@ -86,7 +86,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             if builtins.isString p then
               p
             else
-              builtins.removeAttrs p [
+              removeAttrs p [
                 "path"
                 "requires"
               ]

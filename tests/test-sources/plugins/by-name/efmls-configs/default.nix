@@ -11,7 +11,7 @@
       # toolOptions is an attrsets of the form:
       # { <lang> = { linter = tools; formatter = tools; }; }
       # Where tools is the option type representing the valid tools for this language
-      toolOptions = builtins.removeAttrs (languages.type.getSubOptions languages.loc) [
+      toolOptions = removeAttrs (languages.type.getSubOptions languages.loc) [
         "_freeformOptions"
         "_module"
 

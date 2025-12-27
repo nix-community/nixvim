@@ -6,7 +6,7 @@
   docsUrl ? "https://nix-community.github.io/nixvim/",
 }:
 src:
-runCommand (src.name or (builtins.baseNameOf src))
+runCommand (src.name or (baseNameOf src))
   {
     inherit src;
     bindings =
