@@ -17,10 +17,6 @@ in
     # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
     phpcbf = states.broken php84Packages.php-codesniffer;
 
-    # 2025-12-20 build failure
-    # https://github.com/NixOS/nixpkgs/issues/472704
-    terragrunt_hclfmt = states.broken terragrunt;
-
     # 2025-11-15 dependency swift is broken
     # https://github.com/NixOS/nixpkgs/issues/461474
     swift = states.broken swift;
@@ -159,6 +155,7 @@ in
     inherit (rubyPackages) syntax_tree;
     tclfmt = tclint;
     terraform_fmt = tenv;
+    terragrunt_hclfmt = terragrunt;
     tofu_fmt = opentofu;
     v = vlang;
     xmlformatter = xmlformat;
