@@ -1,8 +1,4 @@
 { lib, ... }:
-let
-  inherit (lib) types;
-  inherit (lib.nixvim) defaultNullOpts;
-in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "inc-rename";
   moduleName = "inc_rename";
@@ -14,47 +10,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.jolars ];
 
-  settingsOptions = {
-    cmd_name = defaultNullOpts.mkStr "IncRename" "The name of the command.";
-
-    hl_group = defaultNullOpts.mkStr "Substitute" ''
-      The highlight group used for highlighting the identifier's new name.
-    '';
-
-    preview_empty_name = defaultNullOpts.mkBool false ''
-      Whether an empty new name should be previewed; if false the command
-      preview will be cancelled instead.
-    '';
-
-    show_message = defaultNullOpts.mkBool true ''
-      Whether to display a `Renamed m instances in n files` message after a rename operation.
-    '';
-
-    save_in_cmdline_history = defaultNullOpts.mkBool true ''
-      Whether to save the `IncRename` command in the commandline history. Set to
-      false to prevent issues with navigating to older entries that may arise due to
-      the behavior of command preview).
-    '';
-
-    input_buffer_type =
-      defaultNullOpts.mkNullable (with types; either (enum [ "dressing" ]) rawLua) null
-        ''
-          The type of the external input buffer to use.
-        '';
-
-    post_hook = defaultNullOpts.mkRaw null ''
-      Callback to run after renaming, receives the result table (from LSP
-      handler) as an argument.
-    '';
-  };
-
   settingsExample = {
-    input_buffer_type = "dressing";
+    cmd_name = "IncRename";
+    hl_group = "Substitute";
+    input_buffer_type = "snacks";
     preview_empty_name = false;
-    show_message.__raw = ''
-      function(msg)
-        vim.notify(msg, vim.log.levels.INFO, { title = "Rename" })
-      end
-    '';
+    show_message = true;
   };
 }
