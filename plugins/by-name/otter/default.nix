@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  options,
   ...
 }:
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -89,10 +90,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
         in
         !(treesitter.enable && highlightEnabled);
 
-      message = ''
-        You have enabled otter, but treesitter syntax highlighting is not enabled.
-        Otter functionality might not work as expected without it. Make sure `plugins.treesitter.highlight.enable` and `plugins.treesitter.enable` are enabled.
-      '';
+      message =
+        let
+          inherit (options.plugins) treesitter;
+        in
+        ''
+          You have enabled otter, but treesitter syntax highlighting is not enabled.
+          Otter functionality might not work as expected without it. Make sure `${treesitter.highlight.enable}` and `${treesitter.enable}` are enabled.
+        '';
     };
 
     lsp.onAttach = lib.mkIf cfg.autoActivate ''

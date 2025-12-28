@@ -67,6 +67,7 @@
     test.warnings = expect: [
       (expect "count" 1)
       (expect "any" "You have enabled otter, but treesitter syntax highlighting is not enabled.")
+      (expect "any" "Make sure `plugins.treesitter.highlight.enable` and `plugins.treesitter.enable` are enabled.")
     ];
     plugins = {
       otter.enable = true;
@@ -79,6 +80,7 @@
     test.warnings = expect: [
       (expect "count" 1)
       (expect "any" "You have enabled otter, but treesitter syntax highlighting is not enabled.")
+      (expect "any" "Make sure `plugins.treesitter.highlight.enable` and `plugins.treesitter.enable` are enabled.")
     ];
     plugins = {
       otter.enable = true;
