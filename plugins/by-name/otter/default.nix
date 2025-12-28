@@ -87,7 +87,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           inherit (config.plugins) treesitter;
           highlightEnabled = treesitter.highlight.enable || (treesitter.settings.highlight.enable or false);
         in
-        config.plugins.treesitter.enable -> highlightEnabled == null;
+        !(treesitter.enable && highlightEnabled);
 
       message = ''
         You have enabled otter, but treesitter syntax highlighting is not enabled.
