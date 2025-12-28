@@ -61,4 +61,28 @@
       };
     };
   };
+
+  warning-no-highlight = {
+    test.runNvim = false;
+    test.warnings = expect: [
+      (expect "count" 1)
+      (expect "any" "You have enabled otter, but treesitter syntax highlighting is not enabled.")
+    ];
+    plugins = {
+      otter.enable = true;
+      treesitter.enable = true;
+    };
+  };
+
+  warning-no-treesitter = {
+    test.runNvim = false;
+    test.warnings = expect: [
+      (expect "count" 1)
+      (expect "any" "You have enabled otter, but treesitter syntax highlighting is not enabled.")
+    ];
+    plugins = {
+      otter.enable = true;
+      treesitter.highlight.enable = true;
+    };
+  };
 }
