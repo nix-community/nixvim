@@ -42,11 +42,5 @@ in
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
-
-    programs = mkIf cfg.vimdiffAlias {
-      bash.shellAliases.vimdiff = "nvim -d";
-      fish.shellAliases.vimdiff = "nvim -d";
-      zsh.shellAliases.vimdiff = "nvim -d";
-    };
   };
 }
