@@ -3,13 +3,16 @@
   config,
   lib,
   withSystem,
+  inputs,
   ...
 }:
 {
   # Public `lib` flake output
   flake.lib = {
     nixvim = lib.makeOverridable ({ lib }: (lib.extend self.lib.overlay).nixvim) {
-      inherit lib;
+      # NOTE: Use the lib from nixpkgs pin to prevent a dependency
+      # on pinning the flake-parts nixpkgs-lib to the nixpkgs pin
+      inherit (inputs.nixpkgs) lib;
     };
     overlay = import ../lib/overlay.nix {
       flake = self;
