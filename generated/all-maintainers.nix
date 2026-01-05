@@ -250,19 +250,6 @@
     name = "Jakob Beckmann";
     source = "nixpkgs";
   };
-  foo-dogsquared = {
-    email = "foodogsquared@foodogsquared.one";
-    github = "foo-dogsquared";
-    githubId = 34962634;
-    keys = [
-      {
-        fingerprint = "DDD7 D0BD 602E 564B AA04  FC35 1431 0D91 4115 2B92";
-      }
-    ];
-    matrix = "@foodogsquared:matrix.org";
-    name = "Gabriel Arazas";
-    source = "nixpkgs";
-  };
   fwastring = {
     email = "fredrik@wastring.com";
     github = "fwastring";
