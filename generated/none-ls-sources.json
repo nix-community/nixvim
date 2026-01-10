@@ -39,6 +39,7 @@
     "fish",
     "gccdiag",
     "gdlint",
+    "gitleaks",
     "gitlint",
     "glslc",
     "golangci_lint",
