@@ -134,7 +134,7 @@ in
     inherit (ocamlPackages) ocp-indent;
     odinfmt = ols;
     opa_fmt = open-policy-agent;
-    perltidy = perl538Packages.PerlTidy;
+    perltidy = perlPackages.PerlTidy;
     pg_format = pgformatter;
     php_cs_fixer = php83Packages.php-cs-fixer;
     inherit (php84Packages) phpinsights;
