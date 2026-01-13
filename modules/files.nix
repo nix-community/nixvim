@@ -68,11 +68,15 @@ let
           finalSource =
             # Byte compile lua files if performance.byteCompileLua option is enabled
             if byteCompileLua && lib.hasSuffix ".lua" config.target then
-              if lib.isDerivation config.source then
-                # Source is a derivation
+              # It is possible to remove this condition entirely and use only
+              # `builders.byteCompileLuaFile` for all files, but this way it's
+              # slightly faster, because `finalSource` is built directly from
+              # `text`, not from intermediate `source`
+              if lib.isDerivation config.source && !config.source ? outputHash then
+                # Source is a derivation (not fixed-output)
                 builders.byteCompileLuaDrv config.source
               else
-                # Source is a path or string
+                # Source is a path, string or fixed-output derivation
                 builders.byteCompileLuaFile derivationName config.source
             else
               config.source;

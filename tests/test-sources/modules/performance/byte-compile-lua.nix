@@ -123,6 +123,11 @@ in
         "plugin/extra_file_drv_string.lua".source = toString (
           writeLua "extra_file_drv_string.lua" "vim.g.extra_file_drv_string = true"
         );
+        # By fixed-output derivation
+        "plugin/extra_file_fixed_output.lua".source = pkgs.fetchurl {
+          url = "file://${./files/fixed_output.lua}";
+          hash = "sha256-MnPksxTLb5e47HOgtDUuxlEKJkP4av9zV/679MazN0E=";
+        };
         # Non-lua file
         "plugin/extra_file_non_lua.vim".text = "let g:extra_file_non_lua = 1";
         # Lua file with txt extension won't be byte compiled
@@ -174,6 +179,7 @@ in
             { "plugin/extra_file_path.lua", true, "extra_file_path" },
             { "plugin/extra_file_string.lua", true, "extra_file_string" },
             { "plugin/extra_file_drv_string.lua", true, "extra_file_drv_string" },
+            { "plugin/extra_file_fixed_output.lua", true, "extra_file_fixed_output" },
             -- other 'extraFiles'
             { "plugin/extra_file_non_lua.vim", false, "extra_file_non_lua" },
             -- lua 'files' are byte compiled
