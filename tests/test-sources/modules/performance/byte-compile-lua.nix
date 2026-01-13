@@ -128,8 +128,14 @@ in
           url = "file://${./files/fixed_output.lua}";
           hash = "sha256-MnPksxTLb5e47HOgtDUuxlEKJkP4av9zV/679MazN0E=";
         };
+        # Directory
+        "plugin/extra_file_dir".source = ./files/dir;
+        # Subdirectory
+        "plugin/extra_file_subdir".source = ./files/subdir;
         # Non-lua file
         "plugin/extra_file_non_lua.vim".text = "let g:extra_file_non_lua = 1";
+        # Directory with non-lua file
+        "plugin/extra_file_dir_non_lua".source = ./files/dir_non_lua;
         # Lua file with txt extension won't be byte compiled
         "text.txt".source = writeLua "text.txt" "vim.g.text = true";
       };
@@ -180,8 +186,11 @@ in
             { "plugin/extra_file_string.lua", true, "extra_file_string" },
             { "plugin/extra_file_drv_string.lua", true, "extra_file_drv_string" },
             { "plugin/extra_file_fixed_output.lua", true, "extra_file_fixed_output" },
+            { "plugin/extra_file_dir/dir.lua", true, "extra_file_dir" },
+            { "plugin/extra_file_subdir/sub/subdir.lua", true, "extra_file_subdir" },
             -- other 'extraFiles'
             { "plugin/extra_file_non_lua.vim", false, "extra_file_non_lua" },
+            { "plugin/extra_file_dir_non_lua/file.vim", false, "extra_file_dir_non_lua" },
             -- lua 'files' are byte compiled
             { "plugin/file.lua", true, "file_lua" },
             -- other 'files'
@@ -215,7 +224,10 @@ in
   disabled = {
     performance.byteCompileLua.enable = false;
 
-    extraFiles."plugin/test1.lua".text = "vim.opt.tabstop = 2";
+    extraFiles = {
+      "plugin/test1.lua".text = "vim.opt.tabstop = 2";
+      "plugin/dir".source = ./files/dir;
+    };
 
     files."plugin/test2.lua".opts.tabstop = 2;
 
@@ -232,6 +244,7 @@ in
       assert(not is_byte_compiled(init), "MYVIMRC is not expected to be byte compiled, but it is")
       -- extraFiles
       test_rtp_file("plugin/test1.lua", false)
+      test_rtp_file("plugin/dir/dir.lua", false)
       -- files
       test_rtp_file("plugin/test2.lua", false)
       -- Neovim runtime

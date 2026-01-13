@@ -67,17 +67,34 @@ let
           );
           finalSource =
             # Byte compile lua files if performance.byteCompileLua option is enabled
-            if byteCompileLua && lib.hasSuffix ".lua" config.target then
-              # It is possible to remove this condition entirely and use only
-              # `builders.byteCompileLuaFile` for all files, but this way it's
-              # slightly faster, because `finalSource` is built directly from
-              # `text`, not from intermediate `source`
-              if lib.isDerivation config.source && !config.source ? outputHash then
-                # Source is a derivation (not fixed-output)
-                builders.byteCompileLuaDrv config.source
+            if byteCompileLua then
+              if lib.hasSuffix ".lua" config.target then
+                # It is possible to remove this condition entirely and use only
+                # `builders.byteCompileLuaFile` for all files, but this way it's
+                # slightly faster, because `finalSource` is built directly from
+                # `text`, not from intermediate `source`
+                if lib.isDerivation config.source && !config.source ? outputHash then
+                  # Source is a derivation (not fixed-output)
+                  builders.byteCompileLuaDrv config.source
+                else
+                  # Source is a path, string or fixed-output derivation
+                  builders.byteCompileLuaFile derivationName config.source
+              else if
+                builtins.isPath config.source
+                && lib.filesystem.pathIsDirectory config.source
+                && builtins.any (lib.hasSuffix ".lua") (lib.filesystem.listFilesRecursive config.source)
+              then
+                # Source is a directory path with lua files
+                builders.byteCompileLuaDrv (
+                  pkgs.stdenvNoCC.mkDerivation {
+                    name = derivationName;
+                    src = config.source;
+                    phases = "unpackPhase installPhase fixupPhase";
+                    installPhase = "cp -R ./ $out";
+                  }
+                )
               else
-                # Source is a path, string or fixed-output derivation
-                builders.byteCompileLuaFile derivationName config.source
+                config.source
             else
               config.source;
         };
