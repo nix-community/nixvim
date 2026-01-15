@@ -196,21 +196,21 @@
         let
           assertPrefix = name: pkg: [
             {
-              assertion = lib.all (x: x == pkg) config.extraPackages;
+              assertion = lib.elem pkg config.extraPackages;
               message = "Expected `${name}` to be in extraPackages";
             }
             {
-              assertion = lib.any (x: x != pkg) config.extraPackagesAfter;
+              assertion = !(lib.elem pkg config.extraPackagesAfter);
               message = "Expected `${name}` not to be in extraPackagesAfter";
             }
           ];
           assertSuffix = name: pkg: [
             {
-              assertion = lib.all (x: x != pkg) config.extraPackages;
+              assertion = !(lib.elem pkg config.extraPackages);
               message = "Expected `${name}` not to be in extraPackages";
             }
             {
-              assertion = lib.any (x: x == pkg) config.extraPackagesAfter;
+              assertion = lib.elem pkg config.extraPackagesAfter;
               message = "Expected `${name}` to be in extraPackagesAfter";
             }
           ];
