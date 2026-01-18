@@ -228,7 +228,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             linterConfig' =
               if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
           in
-          "__lint.linters.${customLinter} = ${toLuaObject linterConfig'}"
+          ''__lint.linters["${customLinter}"] = ${toLuaObject linterConfig'}''
         ) cfg.customLinters
       )
     ))
@@ -241,7 +241,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
               propName: propValue:
               lib.optionalString (
                 propValue != null
-              ) "__lint.linters.${linter}.${propName} = ${toLuaObject propValue}"
+              ) ''__lint.linters["${linter}"].${propName} = ${toLuaObject propValue}''
             ) linterConfig
           ) cfg.linters
         )
