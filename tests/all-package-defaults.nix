@@ -20,6 +20,9 @@ let
 
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
+
+    # 2026-01-20 dependency dotnet-vmr is flaky (fails to build in CI)
+    "roslyn-ls"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
@@ -101,6 +104,9 @@ let
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # 2026-01-20 dependency thrift is broken
+    "nvim-dbee"
+
     # 2025-11-16 dependency libsigsegv is broken
     "texlive"
     "texlive-combined-medium"
@@ -138,6 +144,18 @@ let
     "luau-lsp.nvim"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+    # 2026-01-20 build failure
+    "Dafny"
+    "ansible-lint"
+    "csharpier"
+    "dotnet-runtime-wrapped"
+    "fantomas"
+    "fsautocomplete"
+    "marksman"
+    "omnisharp-roslyn"
+    "rzls"
+    "zf"
+
     # 2025-10-20: build failure
     # error: 'to_chars' is unavailable: introduced in macOS 13.3 unknown
     "mesonlsp"
