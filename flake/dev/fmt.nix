@@ -18,6 +18,14 @@
           nixf-diagnose = {
             enable = true;
             priority = -1;
+            ignore = [
+              "sema-primop-overridden"
+              "sema-unused-def-lambda-witharg-formal"
+            ];
+            excludes = [
+              # sema-unused-def-lambda-noarg-formal
+              "ci/rust-analyzer/default.nix"
+            ];
           };
           nixfmt = {
             enable = true;
@@ -63,11 +71,6 @@
             "docs/gfm-alerts-to-admonitions/tests/**/*.yml"
           ];
           formatter.ruff-format.options = [ "--isolated" ];
-          formatter.nixf-diagnose.options = [
-            "--auto-fix"
-            "--ignore=sema-unused-def-lambda-witharg-formal"
-            "--ignore=sema-primop-overridden"
-          ];
         };
       };
 
