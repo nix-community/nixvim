@@ -64,9 +64,7 @@ let
           in
           {
             kind = "oneOf";
-            subTypes = builtins.map (
-              t: mkRustAnalyzerOptionType nullable "${property_name}-sub" t
-            ) possibleTypes;
+            subTypes = map (t: mkRustAnalyzerOptionType nullable "${property_name}-sub" t) possibleTypes;
           }
         else
           (
@@ -87,7 +85,7 @@ let
                   inner
                 else
                   let
-                    innerTypes = builtins.map (
+                    innerTypes = map (
                       t: mkRustAnalyzerOptionType nullable "${property_name}-inner" (property // { type = t; })
                     ) type;
                   in
@@ -141,8 +139,6 @@ let
       minimum ? null,
       maximum ? null,
       items ? null,
-      # TODO: add this in the documentation ?
-      uniqueItems ? null,
       type ? null,
     }:
     let
@@ -161,9 +157,7 @@ let
       enumDesc =
         values: descriptions:
         let
-          valueDesc = builtins.map ({ fst, snd }: ''- ${fst}: ${snd}'') (
-            lib.lists.zipLists values descriptions
-          );
+          valueDesc = map ({ fst, snd }: "- ${fst}: ${snd}") (lib.lists.zipLists values descriptions);
         in
         ''
           ${filteredMarkdownDesc}
@@ -215,7 +209,7 @@ let
 
     };
 
-  rustAnalyzerOptions = builtins.map (
+  rustAnalyzerOptions = map (
     v:
     let
       props = lib.attrsToList v.properties;
