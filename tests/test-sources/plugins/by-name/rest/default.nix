@@ -18,7 +18,7 @@
             skip_ssl_verification = false;
             hooks = {
               encode_url = true;
-              user_agent.__raw = ''"rest.nvim v" .. require("rest-nvim.api").VERSION'';
+              user_agent.__raw = "'rest.nvim v' .. require('rest-nvim.api').VERSION";
               set_content_type = true;
             };
           };
@@ -49,7 +49,7 @@
           };
           cookies = {
             enable = true;
-            path.__raw = ''vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "rest-nvim.cookies")'';
+            path.__raw = "vim.fs.joinpath(vim.fn.stdpath('data') --[[@as string]], 'rest-nvim.cookies')";
           };
           env = {
             enable = true;
@@ -66,7 +66,7 @@
             enable = true;
             timeout = 750;
           };
-          _log_level.__raw = ''vim.log.levels.WARN'';
+          _log_level.__raw = "vim.log.levels.WARN";
         };
       };
     };

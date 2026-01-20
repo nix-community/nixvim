@@ -27,7 +27,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         cterm_color = defaultNullOpts.mkStr null "Cterm color of the icon.";
         name = defaultNullOpts.mkStr null "Name to replace with icon.";
       };
-    }) { } ''Custom overrides for icons.'';
+    }) { } "Custom overrides for icons.";
 
     defaultIcon = mkNullOrOption (lib.types.submodule {
       options = {
@@ -35,7 +35,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         color = defaultNullOpts.mkStr null "Color of the icon.";
         cterm_color = defaultNullOpts.mkStr null "Cterm color of the icon.";
       };
-    }) ''Set the default icon when none is found.'';
+    }) "Set the default icon when none is found.";
   };
 
   extraConfig = cfg: {
