@@ -190,3 +190,9 @@ owner = "literally-sai"
 title = "vermvim"
 description = "nixvim flake, with custom base16 loader"
 url = "https://github.com/literally-sai/vermvim"
+
+[[config]]
+owner = "carl0xs"
+title = "nixcfg"
+description = "Nix configuration setup, including nixvim"
+url = "https://github.com/carl0xs/nixcfg/blob/main/modules/workstation/neovim.nix"
