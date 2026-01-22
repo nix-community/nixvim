@@ -13,6 +13,12 @@ let
   };
 
   disabledPackages = [
+    # 2026-22-01 build failure
+    "shopify"
+
+    # 2026-22-01 build failure
+    "dmd"
+
     # 2025-12-24: phpPackages.php-codesniffer is broken
     # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
     "php-codesniffer"
@@ -105,6 +111,10 @@ let
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # 2026-01-23: dependency models-dev is broken
+    "opencode"
+    "opencode.nvim"
+
     # 2025-12-24: build failure
     # I (@GaetanLepage) am able to build this package on my system, but it is not cached on
     # hydra.nixos.org and builbot fails at building it
