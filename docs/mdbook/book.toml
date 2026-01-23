@@ -17,5 +17,3 @@ git-repository-url = "https://github.com/nix-community/nixvim"
 [output.html.fold]
 enable = true
 level = 0
-
-[preprocessor.alerts]
