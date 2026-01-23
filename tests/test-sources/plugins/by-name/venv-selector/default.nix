@@ -38,7 +38,6 @@
           notify_user_on_venv_activation = false;
           search_timeout = 5;
           debug = false;
-          fd_binary_name = lib.nixvim.mkRaw "require('venv-selector.config').find_fd_command_name()";
           require_lsp_activation = true;
           on_telescope_result_callback.__raw = "nil";
           picker_filter_type = "substring";
