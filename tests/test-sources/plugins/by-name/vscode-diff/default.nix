@@ -1,9 +1,15 @@
 {
   empty = {
+    # TODO: re-enable after next flake lock update (nixpkgs PR #482779)
+    # Plugin tries to download libgomp from GitHub during setup
+    test.runNvim = false;
     plugins.vscode-diff.enable = true;
   };
 
   defaults = {
+    # TODO: re-enable after next flake lock update (nixpkgs PR #482779)
+    # Plugin tries to download libgomp from GitHub during setup
+    test.runNvim = false;
     plugins.vscode-diff = {
       enable = true;
 
@@ -32,6 +38,9 @@
   };
 
   example = {
+    # TODO: re-enable after next flake lock update (nixpkgs PR #482779)
+    # Plugin tries to download libgomp from GitHub during setup
+    test.runNvim = false;
     plugins.vscode-diff = {
       enable = true;
 
