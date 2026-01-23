@@ -121,9 +121,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
           If true will display arrow index in scrollbar at every update.
         '';
 
-        overlap = lib.nixvim.defaultNullOpts.mkBool false '''';
+        overlap = lib.nixvim.defaultNullOpts.mkBool false "";
 
-        priority = lib.nixvim.defaultNullOpts.mkInt 1000 '''';
+        priority = lib.nixvim.defaultNullOpts.mkInt 1000 "";
       };
 
       zindex = lib.nixvim.defaultNullOpts.mkInt 50 ''
