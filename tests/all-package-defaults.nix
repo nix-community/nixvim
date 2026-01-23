@@ -153,6 +153,19 @@ let
     "zf"
     "zls"
 
+    # 2026-01-23: build failures on x86_64-darwin
+    "arrow-cpp"
+    "azurite"
+    "basedpyright"
+    "ccls"
+    "dbee-bin"
+    "gemini-cli"
+    "github-copilot-cli"
+    "nvim-dbee"
+    "odin"
+    "ols"
+    "thrift"
+
     # luau-lsp is marked as broken on x86_64-darwin
     "luau-lsp.nvim"
   ]
