@@ -10,6 +10,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  # TODO: upstream inclusion/patch
+  dependencies = [ "git" ];
+
   settingsExample = {
     workspaces = [
       {
