@@ -334,7 +334,6 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     pkgs.mdbook
-    pkgs.mdbook-alerts
   ];
 
   # Build a source from the fileset containing the following paths,
