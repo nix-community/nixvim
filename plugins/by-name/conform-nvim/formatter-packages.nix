@@ -36,6 +36,9 @@ in
     # 2025-10-08 build failure (haskellPackages.hindent)
     hindent = states.broken haskellPackages.hindent;
 
+    # TODO: 2026-01-23 docstrfmt test failure in nixpkgs
+    docstrfmt = states.broken python313Packages.docstrfmt;
+
     format-queries = null; # Uses neovim itself
     init = null; # Internal thingamajig
     injected = null; # Internal formatter
@@ -112,7 +115,8 @@ in
     fish_indent = fishMinimal;
     forge_fmt = foundry;
     format-dune-file = dune_3;
-    gdformat = gdtoolkit_4;
+    # TODO: 2026-01-23 gdscript-formatter hash mismatch in nixpkgs
+    gdformat = states.broken gdtoolkit_4;
     gofmt = go;
     goimports = gotools;
     hcl = hclfmt;
