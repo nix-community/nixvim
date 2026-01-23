@@ -55,6 +55,7 @@ in
       "fprettify"
       "gersemi"
       "gitlint"
+      "gitleaks"
       "gofumpt"
       "golines"
       "hadolint"
