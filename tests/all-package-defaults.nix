@@ -168,12 +168,18 @@ let
     # 2025-10-20: dependency mlton build failure
     "smlfmt"
 
+    # 2026-01-23: build failure on aarch64-darwin
+    "github-copilot-cli"
+
     # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
     "zig-zlint"
 
     # 2025-09-08, build failure
     # https://github.com/NixOS/nixpkgs/pull/441058
     "verible"
+
+    # 2025-09-16 zig/zig-hook is marked as broken on x86_64-darwin; also fails on aarch64-darwin
+    "zf"
   ];
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledPackages);
