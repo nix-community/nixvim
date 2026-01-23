@@ -63,6 +63,7 @@
     "glasgow"
     "glint"
     "gnls"
+    "gn_language_server"
     "gradle_ls"
     "grammarly"
     "graphql" # nodePackages.graphql-language-service-cli was removed in https://github.com/NixOS/nixpkgs/pull/382557
@@ -120,6 +121,7 @@
     "prolog_ls"
     "prosemd_lsp"
     "pug"
+    "pony_language_server"
     "puppet"
     "purescriptls"
     "pyre"
