@@ -6,7 +6,19 @@
 
   all-formatters =
     let
-      allFormatters = lib.importJSON ../../../../../generated/conform-formatters.json;
+      inherit
+        (import ../../../../../plugins/by-name/conform-nvim/formatter-packages.nix { inherit pkgs; })
+        formatter-packages
+        states
+        ;
+      stateList = map (state: lib.fix (lib.toFunction state)) (builtins.attrValues states);
+      allFormatters = builtins.filter (
+        name:
+        let
+          maybePackage = formatter-packages.${name} or null;
+        in
+        maybePackage != null && !builtins.elem maybePackage stateList
+      ) (lib.importJSON ../../../../../generated/conform-formatters.json);
     in
     {
       plugins.conform-nvim = {
