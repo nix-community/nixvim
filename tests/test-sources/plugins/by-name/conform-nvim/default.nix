@@ -83,7 +83,7 @@
         notify_no_formatters = false;
         formatters = {
           nixfmt = {
-            command = lib.getExe pkgs.nixfmt-rfc-style;
+            command = lib.getExe pkgs.nixfmt;
           };
           myFormatter = {
             command = "myCmd";
