@@ -25,42 +25,34 @@
             breakpoints = {
               keymap = "B";
               label = "Breakpoints [B]";
-              short_label = " [B]";
             };
             scopes = {
               keymap = "S";
               label = "Scopes [S]";
-              short_label = "󰂥 [S]";
             };
             exceptions = {
               keymap = "E";
               label = "Exceptions [E]";
-              short_label = "󰢃 [E]";
             };
             watches = {
               keymap = "W";
               label = "Watches [W]";
-              short_label = "󰛐 [W]";
             };
             threads = {
               keymap = "T";
               label = "Threads [T]";
-              short_label = "󱉯 [T]";
             };
             repl = {
               keymap = "R";
               label = "REPL [R]";
-              short_label = "󰯃 [R]";
             };
             sessions = {
               keymap = "K";
               label = "Sessions [K]";
-              short_label = " [K]";
             };
             console = {
               keymap = "C";
               label = "Console [C]";
-              short_label = "󰆍 [C]";
             };
           };
           custom_sections.__empty = { };
@@ -81,34 +73,60 @@
           };
         };
         windows = {
-          height = 0.25;
+          size = 0.25;
           position = "below";
           terminal = {
-            width = 0.5;
+            size = 0.5;
             position = "left";
             hide.__empty = { };
-            start_hidden = false;
           };
         };
         icons = {
-          disabled = "";
-          disconnect = "";
-          enabled = "";
+          disabled = "";
+          disconnect = "";
+          enabled = "";
           filter = "󰈲";
-          negate = " ";
-          pause = "";
-          play = "";
-          run_last = "";
-          step_back = "";
-          step_into = "";
-          step_out = "";
-          step_over = "";
-          terminate = "";
+          negate = " ";
+          pause = "";
+          play = "";
+          run_last = "";
+          step_back = "";
+          step_into = "";
+          step_out = "";
+          step_over = "";
+          terminate = "";
         };
         help = {
           border.__raw = "nil";
         };
-        switchbuf = "usetab";
+        render = {
+          sort_variables.__raw = "nil";
+          threads = {
+            format.__raw = ''
+              function(name, lnum, path)
+                return {
+                  { part = name, separator = " " },
+                  { part = path, hl = "FileName", separator = ":" },
+                  { part = lnum, hl = "LineNumber" },
+                }
+              end
+            '';
+            align = false;
+          };
+          breakpoints = {
+            format.__raw = ''
+              function(line, lnum, path)
+                return {
+                  { part = path, hl = "FileName" },
+                  { part = lnum, hl = "LineNumber" },
+                  { part = line, hl = true },
+                }
+              end
+            '';
+            align = false;
+          };
+        };
+        switchbuf = "usetab,uselast";
         auto_toggle = false;
         follow_tab = false;
       };
@@ -126,7 +144,6 @@
         };
         windows.terminal = {
           position = "right";
-          start_hidden = true;
         };
       };
     };
