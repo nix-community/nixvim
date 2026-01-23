@@ -83,7 +83,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           set_compressed = false;
         };
       };
-    } ''Table of client configurations.'';
+    } "Table of client configurations.";
 
     cookies = {
       enable = defaultNullOpts.mkBool true ''

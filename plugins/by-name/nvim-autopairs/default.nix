@@ -128,7 +128,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Whether the cursor should be placed before or after the substitution.
       '';
 
-      keys = lib.nixvim.defaultNullOpts.mkStr "qwertyuiopzxcvbnmasdfghjkl" '''';
+      keys = lib.nixvim.defaultNullOpts.mkStr "qwertyuiopzxcvbnmasdfghjkl" "";
 
       highlight = lib.nixvim.defaultNullOpts.mkStr "Search" ''
         Which highlight group to use for the match.

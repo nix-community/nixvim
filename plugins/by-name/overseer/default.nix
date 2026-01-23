@@ -77,7 +77,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             "q" = "Close";
           };
         }
-        ''The task list displays all tasks that have been created. It shows the task status, name, and a summary of the task output.'';
+        "The task list displays all tasks that have been created. It shows the task status, name, and a summary of the task output.";
 
     task_editor = {
       bindings =
