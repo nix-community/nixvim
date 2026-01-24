@@ -1,15 +1,9 @@
 {
   empty = {
-    # TODO: re-enable after next flake lock update (nixpkgs PR #482779)
-    # Plugin tries to download libgomp from GitHub during setup
-    test.runNvim = false;
     plugins.codediff.enable = true;
   };
 
   defaults = {
-    # TODO: re-enable after next flake lock update (nixpkgs PR #482779)
-    # Plugin tries to download libgomp from GitHub during setup
-    test.runNvim = false;
     plugins.codediff = {
       enable = true;
 
@@ -38,9 +32,6 @@
   };
 
   example = {
-    # TODO: re-enable after next flake lock update (nixpkgs PR #482779)
-    # Plugin tries to download libgomp from GitHub during setup
-    test.runNvim = false;
     plugins.codediff = {
       enable = true;
 
