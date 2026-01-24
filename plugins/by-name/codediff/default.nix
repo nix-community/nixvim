@@ -1,6 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "vscode-diff";
+  name = "codediff";
   package = "codediff-nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
