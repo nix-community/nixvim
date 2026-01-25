@@ -17,6 +17,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins.chadtree.luaConfig.content = ''
       vim.api.nvim_set_var("chadtree_settings", ${lib.nixvim.toLuaObject cfg.settings})
     '';
+
+    # Use XDG specifications for storing the CHADTree runtime and session files.
+    # If set to false, will store everything under repo location.
+    # Fixes https://github.com/nix-community/nixvim/issues/4154
+    plugins.chadtree.settings.xdg = lib.mkDefault true;
   };
 
   settingsExample = {
