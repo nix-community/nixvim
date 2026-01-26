@@ -31,10 +31,10 @@
       enable = true;
       settings = {
         manual_mode = false;
-        detection_methods = [
-          "lsp"
-          "pattern"
-        ];
+        lsp = {
+          enabled = true;
+          ignore.__empty = { };
+        };
         patterns = [
           ".git"
           "_darcs"
@@ -44,7 +44,6 @@
           "Makefile"
           "package.json"
         ];
-        ignore_lsp.__empty = { };
         exclude_dirs.__empty = { };
         show_hidden = false;
         silent_chdir = true;
