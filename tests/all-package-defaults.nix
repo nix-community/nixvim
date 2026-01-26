@@ -69,6 +69,17 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    "Dafny"
+    "csharpier"
+    "dotnet-runtime-wrapped"
+    "fsautocomplete"
+    "omnisharp-roslyn"
+    "roslyn-ls"
+    "rzls"
+
+    #
+    # "nimlsp"
+
     # 2025-11-26 build failure
     "nvim-spectre"
 
