@@ -13,10 +13,10 @@ let
   };
 
   disabledPackages = [
-    # 2026-22-01 build failure
+    # 2026-01-22 build failure
     "shopify"
 
-    # 2026-22-01 build failure
+    # 2026-01-22 build failure
     "dmd"
 
     # 2025-12-24: phpPackages.php-codesniffer is broken
