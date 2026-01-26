@@ -77,6 +77,7 @@ in
       "mypy"
       "nixfmt"
       "php"
+      "phpstan"
       "prettypst"
       "proselint"
       "protolint"
@@ -119,7 +120,6 @@ in
       ];
       phpPackages = [
         "phan"
-        "phpstan"
         "psalm"
       ];
       luaPackages = [
