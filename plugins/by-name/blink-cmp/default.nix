@@ -56,5 +56,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           -- Capabilities configuration for blink-cmp
           capabilities = require("blink-cmp").get_lsp_capabilities(capabilities)
         '';
+
+    # blink_cmp_fuzzy lib
+    performance.combinePlugins.pathsToLink = [ "/target/release" ];
   };
 }
