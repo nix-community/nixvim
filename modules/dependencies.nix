@@ -30,6 +30,16 @@ let
       // lib.optionalAttrs (literalExpressionType.check properties.example) {
         inherit (properties) example;
       };
+
+    packageFallback = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        When enabled, the ${name} package will be added to the end of the `PATH` _(suffix)_ instead of the beginning _(prefix)_.
+
+        This can be useful if you want local versions (e.g. from a devshell) to override the Nixvim version.
+      '';
+    };
   };
 
   # Motivation:
@@ -96,7 +106,13 @@ in
   config = {
     extraPackages = lib.pipe cfg [
       builtins.attrValues
-      (builtins.filter (p: p.enable))
+      (builtins.filter (p: p.enable && !p.packageFallback))
+      (map (p: p.package))
+    ];
+
+    extraPackagesAfter = lib.pipe cfg [
+      builtins.attrValues
+      (builtins.filter (p: p.enable && p.packageFallback))
       (map (p: p.package))
     ];
 
