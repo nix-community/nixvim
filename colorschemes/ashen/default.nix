@@ -16,26 +16,27 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
 
   settingsOptions = {
-    style = {
-      bold = defaultNullOpts.mkBool false;
-      italic = defaultNullOpts.mkBool false; 
-    };
-    
-    style_presets = {
-      bold_functions = defaultNullOpts.mkBool false;
-       italic_comments = defaultNullOpts.mkBool false;
-    };
-    
-    transparent = defaultNullOpts.mkBool false;
-    
-    force_hi_clear = defaultNullOpts.mkBool false;
-    
-    terminal = {
-      enabled = defaultNullOpts.mkBool true;
-    };
-
-    plugins = {
-      autoload = defaultNullOpts.mkBool true; 
-    };
+  style = {
+    bold = defaultNullOpts.mkBool false "";
+    italic = defaultNullOpts.mkBool false "";
   };
+
+  style_presets = {
+    bold_functions = defaultNullOpts.mkBool false "";
+    italic_comments = defaultNullOpts.mkBool false "";
+  };
+
+  transparent = defaultNullOpts.mkBool false "";
+
+  force_hi_clear = defaultNullOpts.mkBool false "";
+
+  terminal = {
+    enabled = defaultNullOpts.mkBool true "";
+  };
+
+  plugins = {
+    autoload = defaultNullOpts.mkBool true "";
+  };
+};
+
 }
