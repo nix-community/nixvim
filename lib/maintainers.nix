@@ -177,8 +177,8 @@
     email = "wokerNM@proton.me";
     github = "wokerNM";
     githubId = "215592475";
-    name = "wokerNM"
-};
+    name = "wokerNM";
+  };
   wvffle = {
     email = "nixvim@wvffle.net";
     github = "wvffle";
