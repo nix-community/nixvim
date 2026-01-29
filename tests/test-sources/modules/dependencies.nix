@@ -65,6 +65,56 @@ in
       ];
     };
 
+  package-fallback-false =
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      dependencies.git = {
+        enable = true;
+        packageFallback = false;
+      };
+
+      assertions = [
+        {
+          assertion = lib.elem pkgs.git config.extraPackages;
+          message = "Expected git to be in extraPackages.";
+        }
+        {
+          assertion = !lib.elem pkgs.git config.extraPackagesAfter;
+          message = "Expected git not to be in extraPackagesAfter.";
+        }
+      ];
+    };
+
+  package-fallback-true =
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      dependencies.git = {
+        enable = true;
+        packageFallback = true;
+      };
+
+      assertions = [
+        {
+          assertion = !lib.elem pkgs.git config.extraPackages;
+          message = "Expected git not to be in extraPackages.";
+        }
+        {
+          assertion = lib.elem pkgs.git config.extraPackagesAfter;
+          message = "Expected git to be in extraPackagesAfter.";
+        }
+      ];
+    };
+
   # Integration test for `lib.nixvim.deprecation.mkRemovedPackageOptionModule`
   removed-package-options =
     {
