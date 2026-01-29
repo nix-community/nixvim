@@ -22,20 +22,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
     
     style_presets = {
-      bold_functions = defaultNullOpts.mkBool = false;
-       italic_comments = defaultNullOpts.mkBool = false;
+      bold_functions = defaultNullOpts.mkBool false;
+       italic_comments = defaultNullOpts.mkBool false;
     };
     
-    transparent = defaultNullOpts.mkBool = false;
+    transparent = defaultNullOpts.mkBool false;
     
-    force_hi_clear = defaultNullOpts.mkBool = false;
+    force_hi_clear = defaultNullOpts.mkBool false;
     
     terminal = {
-      enabled = defaultNullOpts.mkBool = true;
+      enabled = defaultNullOpts.mkBool true;
     };
 
     plugins = {
-      autoload = defaultNullOpts.mkBool = true; 
+      autoload = defaultNullOpts.mkBool true; 
     };
   };
 }
