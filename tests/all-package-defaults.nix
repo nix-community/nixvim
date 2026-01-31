@@ -13,10 +13,10 @@ let
   };
 
   disabledPackages = [
-    # 2026-22-01 build failure
+    # 2026-01-22 build failure
     "shopify"
 
-    # 2026-22-01 build failure
+    # 2026-01-22 build failure
     "dmd"
 
     # 2025-12-24: phpPackages.php-codesniffer is broken
@@ -69,6 +69,18 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-02-01 dependency swift fails to build
+    "Dafny"
+    "csharpier"
+    "dotnet-runtime-wrapped"
+    "fsautocomplete"
+    "omnisharp-roslyn"
+    "roslyn-ls"
+    "rzls"
+
+    #
+    # "nimlsp"
+
     # 2025-11-26 build failure
     "nvim-spectre"
 
