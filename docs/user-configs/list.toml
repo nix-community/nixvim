@@ -196,3 +196,9 @@ owner = "carl0xs"
 title = "nixcfg"
 description = "Nix configuration setup, including nixvim"
 url = "https://github.com/carl0xs/nixcfg/blob/main/modules/workstation/neovim.nix"
+
+[[config]]
+owner = "ar-at-localhost"
+title = "np"
+description = "Nixvim setup, focused on Project Oriented Development"
+url = "https://github.com/ar-at-localhost/np"
