@@ -37,6 +37,9 @@ let
     let
 
       disabled = [
+        # 2026-02-02 build failure
+        "crystalline"
+
         # TODO: 2025-07-25 build failure
         "mint"
 
