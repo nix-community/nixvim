@@ -1,5 +1,8 @@
 {
   empty = {
+    # ERROR: (project.util.history.write_history): No data available to write!
+    test.runNvim = false;
+
     plugins.project-nvim = {
       enable = true;
 
@@ -9,6 +12,9 @@
   };
 
   telescopeEnabled = {
+    # ERROR: (project.util.history.write_history): No data available to write!
+    test.runNvim = false;
+
     plugins.telescope = {
       enable = true;
     };
@@ -23,8 +29,9 @@
   };
 
   defaults = {
-    # Attempts at writing to `datapath`:
-    # ERROR: Invalid `datapath`, reverting to default.
+    # E5113: Error while calling lua chunk:
+    # ...NeovimPackages/start/project.nvim/lua/project/config.lua:48:
+    # (project.util.history.open_history): History directory unavailable!
     test.runNvim = false;
 
     plugins.project-nvim = {
