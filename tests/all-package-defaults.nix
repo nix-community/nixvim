@@ -13,6 +13,9 @@ let
   };
 
   disabledPackages = [
+    # 2026-02-02 build failure
+    "crystalline"
+
     # 2026-01-22 build failure
     "shopify"
 
