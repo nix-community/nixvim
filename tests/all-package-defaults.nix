@@ -72,6 +72,10 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-02-04 dependency llvmPackages_22.llvm is broken
+    "ameba"
+    "crystal"
+
     # 2025-11-26 build failure
     "nvim-spectre"
 
@@ -114,6 +118,14 @@ let
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # 2026-02-05: build failure
+    "skim"
+
+    # 2026-02-05: dependency gdb is broken
+    "nimlangserver"
+    "nimlsp"
+    "x86_64-apple-darwin-nim-wrapper"
+
     # 2026-01-23: dependency models-dev is broken
     "opencode"
     "opencode.nvim"
@@ -173,6 +185,9 @@ let
     "luau-lsp.nvim"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+    # 2026-02-05: build failure
+    "marksman"
+
     # 2025-10-20: build failure
     # error: 'to_chars' is unavailable: introduced in macOS 13.3 unknown
     "mesonlsp"
