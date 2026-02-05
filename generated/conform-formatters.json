@@ -232,6 +232,7 @@
   "treefmt",
   "trim_newlines",
   "trim_whitespace",
+  "trunk",
   "twig-cs-fixer",
   "typespec",
   "typos",
