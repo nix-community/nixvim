@@ -64,7 +64,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     strip_wrapping_quote_characters = lib.nixvim.defaultNullOpts.mkListOf lib.types.str [
       "'"
       "\""
-      "\`"
+      "`"
     ] "";
 
     handle_leading_whitespace = lib.nixvim.defaultNullOpts.mkBool false ''

@@ -137,7 +137,7 @@ lib.nixvim.plugins.mkVimPlugin {
       Custom port to start server or empty for random.
     '';
 
-    page_title = defaultNullOpts.mkStr "「\$\{name}」" ''
+    page_title = defaultNullOpts.mkStr "「\${name}」" ''
       Preview page title.
       `$${name}` will be replaced with the file name.
     '';
@@ -186,7 +186,7 @@ lib.nixvim.plugins.mkVimPlugin {
     markdown_css = "/Users/username/markdown.css";
     highlight_css.__raw = "vim.fn.expand('~/highlight.css')";
     port = "8080";
-    page_title = "「\$\{name}」";
+    page_title = "「\${name}」";
     theme = "dark";
   };
 }
