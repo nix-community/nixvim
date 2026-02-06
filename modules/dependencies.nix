@@ -59,6 +59,17 @@ let
     merge = lib.options.mergeEqualOption;
     check = v: v ? _type && (v._type == "literalExpression" || v._type == "literalMD");
   };
+
+  enabledPackages = lib.pipe cfg [
+    builtins.attrValues
+    (lib.filter (p: p.enable))
+    (lib.partition (p: p.packageFallback))
+    (lib.mapAttrs (_: map (p: p.package)))
+    (parts: {
+      prefix = parts.wrong;
+      suffix = parts.right;
+    })
+  ];
 in
 {
   options = {
@@ -104,17 +115,8 @@ in
   };
 
   config = {
-    extraPackages = lib.pipe cfg [
-      builtins.attrValues
-      (builtins.filter (p: p.enable && !p.packageFallback))
-      (map (p: p.package))
-    ];
-
-    extraPackagesAfter = lib.pipe cfg [
-      builtins.attrValues
-      (builtins.filter (p: p.enable && p.packageFallback))
-      (map (p: p.package))
-    ];
+    extraPackages = enabledPackages.prefix;
+    extraPackagesAfter = enabledPackages.suffix;
 
     __depPackages = {
       bat.default = "bat";
