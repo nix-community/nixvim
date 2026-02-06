@@ -30,6 +30,16 @@ let
       // lib.optionalAttrs (literalExpressionType.check properties.example) {
         inherit (properties) example;
       };
+
+    packageFallback = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        When enabled, the ${name} package will be added to the end of the `PATH` _(suffix)_ instead of the beginning _(prefix)_.
+
+        This can be useful if you want local versions (e.g. from a devshell) to override the Nixvim version.
+      '';
+    };
   };
 
   # Motivation:
@@ -49,6 +59,17 @@ let
     merge = lib.options.mergeEqualOption;
     check = v: v ? _type && (v._type == "literalExpression" || v._type == "literalMD");
   };
+
+  enabledPackages = lib.pipe cfg [
+    builtins.attrValues
+    (lib.filter (p: p.enable))
+    (lib.partition (p: p.packageFallback))
+    (lib.mapAttrs (_: map (p: p.package)))
+    (parts: {
+      prefix = parts.wrong;
+      suffix = parts.right;
+    })
+  ];
 in
 {
   options = {
@@ -94,11 +115,8 @@ in
   };
 
   config = {
-    extraPackages = lib.pipe cfg [
-      builtins.attrValues
-      (builtins.filter (p: p.enable))
-      (map (p: p.package))
-    ];
+    extraPackages = enabledPackages.prefix;
+    extraPackagesAfter = enabledPackages.suffix;
 
     __depPackages = {
       bat.default = "bat";
