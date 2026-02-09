@@ -64,10 +64,11 @@
     };
   };
 
-  skim-profile = {
-    plugins.fzf-lua = {
-      enable = true;
-      profile = "skim";
-    };
-  };
+  # FIXME: Added 2026-02-08 skim dependency broken
+  # skim-profile = {
+  #   plugins.fzf-lua = {
+  #     enable = true;
+  #     profile = "skim";
+  #   };
+  # };
 }
