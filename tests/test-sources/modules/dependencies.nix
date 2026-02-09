@@ -7,12 +7,17 @@ let
     # Transient dependency `vmr` has a build failure
     # https://github.com/NixOS/nixpkgs/issues/431811
     "roslyn_ls"
+    "skim"
   ];
 
   isDepEnabled =
     name: package:
-    # Filter disabled dependencies
+    let
+      packageName = lib.getName package;
+    in
+    # Filter disabled dependencies by dependency key or package name
     (!lib.elem name disabledDeps)
+    && (!lib.elem packageName disabledDeps)
 
     # Disable if the package is not compatible with hostPlatform
     && lib.meta.availableOn hostPlatform package;
