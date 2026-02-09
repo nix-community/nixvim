@@ -146,7 +146,8 @@ in
     pyproject-fmt = python313Packages.pyproject-parser;
     inherit (python313Packages) python-ly;
     qmlformat = libsForQt5.qt5.qtdeclarative;
-    racketfmt = racket;
+    # TODO: added 2026-02-08 marked unsupported on darwin
+    racketfmt = if stdenv.hostPlatform.isLinux then racket else states.broken racket;
     inherit (python313Packages) reorder-python-imports;
     ruff_fix = ruff;
     ruff_format = ruff;
