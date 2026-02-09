@@ -326,6 +326,7 @@
     ols = "ols";
     omnisharp = "omnisharp-roslyn";
     openscad_lsp = "openscad-lsp";
+    oxfmt = "oxfmt";
     oxlint = "oxlint";
     perlnavigator = "perlnavigator";
     perlpls = [
