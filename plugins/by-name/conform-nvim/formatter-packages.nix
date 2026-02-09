@@ -137,7 +137,8 @@ in
     nixpkgs_fmt = nixpkgs-fmt;
     inherit (ocamlPackages) ocp-indent;
     odinfmt = ols;
-    opa_fmt = open-policy-agent;
+    # TODO: added 2026-02-08 broken on darwin
+    opa_fmt = if stdenv.isDarwin then states.broken open-policy-agent else open-policy-agent;
     perltidy = perlPackages.PerlTidy;
     pg_format = pgformatter;
     php_cs_fixer = php83Packages.php-cs-fixer;
