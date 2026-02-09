@@ -33,6 +33,9 @@ let
 
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
+
+    # 2026-02-05: build failure
+    "skim"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
@@ -118,9 +121,6 @@ let
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
-    # 2026-02-05: build failure
-    "skim"
-
     # 2026-02-05: dependency gdb is broken
     "nimlangserver"
     "nimlsp"
