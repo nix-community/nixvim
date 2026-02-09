@@ -91,8 +91,6 @@ in
     fish_indent = fishMinimal;
     forge_fmt = foundry;
     format-dune-file = dune_3;
-    # FIXME: 2025-09-17 build failure
-    gci = states.broken gci;
     gdformat = gdtoolkit_4;
     gofmt = go;
     goimports = gotools;
@@ -102,8 +100,6 @@ in
     html_beautify = nodePackages.js-beautify;
     inherit (rubyPackages) htmlbeautifier;
     hurlfmt = hurl;
-    # FIXME: 2025-09-13 build failure
-    inko = states.broken inko;
     js_beautify = nodePackages.js-beautify;
     jsonnetfmt = jsonnet;
     inherit (texlive.pkgs) latexindent;
@@ -122,9 +118,7 @@ in
     opa_fmt = if stdenv.isDarwin then states.broken open-policy-agent else open-policy-agent;
     perltidy = perlPackages.PerlTidy;
     pg_format = pgformatter;
-    # FIXME: 2025-12-24: phpPackages.php-codesniffer is broken
-    # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
-    phpcbf = states.broken php84Packages.php-codesniffer;
+    phpcbf = php84Packages.php-codesniffer;
     php_cs_fixer = php83Packages.php-cs-fixer;
     inherit (php84Packages) phpinsights;
     prolog = swi-prolog;
@@ -134,13 +128,10 @@ in
     # TODO: added 2026-02-08 marked unsupported on darwin
     racketfmt = if stdenv.hostPlatform.isLinux then racket else states.broken racket;
     inherit (python313Packages) reorder-python-imports;
-    # FIXME: 2025-11-25 build failure
-    roc = states.broken roc;
+    roc = if stdenv.isDarwin then states.broken roc else roc;
     ruff_fix = ruff;
     ruff_format = ruff;
     ruff_organize_imports = ruff;
-    # FIXME: 2025-10-12 build failure on Darwin
-    smlfmt = if stdenv.isDarwin then states.broken smlfmt else smlfmt;
     sql_formatter = sql-formatter;
     inherit (python313Packages) sqlfmt;
     squeeze_blanks = coreutils;
