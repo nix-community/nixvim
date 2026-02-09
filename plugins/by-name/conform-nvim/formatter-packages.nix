@@ -93,8 +93,7 @@ in
     format-dune-file = dune_3;
     # FIXME: 2025-09-17 build failure
     gci = states.broken gci;
-    # TODO: 2026-01-23 gdscript-formatter hash mismatch in nixpkgs
-    gdformat = states.broken gdtoolkit_4;
+    gdformat = gdtoolkit_4;
     gofmt = go;
     goimports = gotools;
     hcl = hclfmt;
