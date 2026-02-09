@@ -17,12 +17,10 @@ in
     # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
     phpcbf = states.broken php84Packages.php-codesniffer;
 
-    # 2025-11-15 dependency swift is broken
-    # https://github.com/NixOS/nixpkgs/issues/461474
-    swift = states.broken swift;
-    swift_format = states.broken swift-format;
-    swiftformat = states.broken swiftformat;
-    swiftlint = states.broken swiftlint;
+    swift = states.darwinOnly swift;
+    swiftformat = states.darwinOnly swiftformat;
+    swift_format = states.darwinOnly swift-format;
+    swiftlint = states.darwinOnly swiftlint;
 
     # 2025-10-12 build failure on Darwin
     smlfmt = if stdenv.isDarwin then states.broken smlfmt else smlfmt;
