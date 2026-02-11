@@ -78,133 +78,153 @@
           };
         };
         mappings = {
+          MkdnEnter = [
+            [
+              "n"
+              "v"
+              "i"
+            ]
+            "<CR>"
+          ];
+          MkdnTab = false;
+          MkdnSTab = false;
+          MkdnNextLink = [
+            "n"
+            "<Tab>"
+          ];
+          MkdnPrevLink = [
+            "n"
+            "<S-Tab>"
+          ];
+          MkdnNextHeading = [
+            "n"
+            "]]"
+          ];
+          MkdnPrevHeading = [
+            "n"
+            "[["
+          ];
+          MkdnGoBack = [
+            "n"
+            "<BS>"
+          ];
+          MkdnGoForward = [
+            "n"
+            "<Del>"
+          ];
+          MkdnFollowLink = false;
+          MkdnCreateLink = false;
+          MkdnCreateLinkFromClipboard = [
+            [
+              "n"
+              "v"
+            ]
+            "<leader>p"
+          ];
+          MkdnDestroyLink = [
+            "n"
+            "<M-CR>"
+          ];
+          MkdnMoveSource = [
+            "n"
+            "<F2>"
+          ];
+          MkdnYankAnchorLink = [
+            "n"
+            "ya"
+          ];
+          MkdnYankFileAnchorLink = [
+            "n"
+            "yfa"
+          ];
+          MkdnIncreaseHeading = [
+            "n"
+            "+"
+          ];
+          MkdnDecreaseHeading = [
+            "n"
+            "-"
+          ];
+          MkdnToggleToDo = [
+            [
+              "n"
+              "v"
+            ]
+            "<C-Space>"
+          ];
+          MkdnNewListItem = false;
+          MkdnNewListItemBelowInsert = [
+            "n"
+            "o"
+          ];
+          MkdnNewListItemAboveInsert = [
+            "n"
+            "O"
+          ];
+          MkdnExtendList = false;
+          MkdnUpdateNumbering = [
+            "n"
+            "<leader>nn"
+          ];
+          MkdnTableNextCell = [
+            "i"
+            "<Tab>"
+          ];
+          MkdnTablePrevCell = [
+            "i"
+            "<S-Tab>"
+          ];
+          MkdnTableNextRow = false;
+          MkdnTablePrevRow = [
+            "i"
+            "<M-CR>"
+          ];
+          MkdnTableNewRowBelow = [
+            "n"
+            "<leader>ir"
+          ];
+          MkdnTableNewRowAbove = [
+            "n"
+            "<leader>iR"
+          ];
+          MkdnTableNewColAfter = [
+            "n"
+            "<leader>ic"
+          ];
+          MkdnTableNewColBefore = [
+            "n"
+            "<leader>iC"
+          ];
+          MkdnFoldSection = [
+            "n"
+            "<leader>f"
+          ];
+          MkdnUnfoldSection = [
+            "n"
+            "<leader>F"
+          ];
+        };
+      };
+    };
+
+  };
+
+  mappings-deprecated = {
+    plugins.mkdnflow = {
+      enable = true;
+      settings = {
+        mappings = {
           MkdnEnter = {
             modes = [
               "n"
-              "v"
               "i"
             ];
             key = "<CR>";
           };
-          MkdnTab = false;
-          MkdnSTab = false;
-          MkdnNextLink = {
-            modes = "n";
-            key = "<Tab>";
-          };
-          MkdnPrevLink = {
-            modes = "n";
-            key = "<S-Tab>";
-          };
-          MkdnNextHeading = {
-            modes = "n";
-            key = "]]";
-          };
-          MkdnPrevHeading = {
-            modes = "n";
-            key = "[[";
-          };
-          MkdnGoBack = {
-            modes = "n";
-            key = "<BS>";
-          };
-          MkdnGoForward = {
-            modes = "n";
-            key = "<Del>";
-          };
-          MkdnFollowLink = false;
-          MkdnCreateLink = false;
-          MkdnCreateLinkFromClipboard = {
-            modes = [
-              "n"
-              "v"
-            ];
-            key = "<leader>p";
-          };
-          MkdnDestroyLink = {
-            modes = "n";
-            key = "<M-CR>";
-          };
-          MkdnMoveSource = {
-            modes = "n";
-            key = "<F2>";
-          };
-          MkdnYankAnchorLink = {
-            modes = "n";
-            key = "ya";
-          };
-          MkdnYankFileAnchorLink = {
-            modes = "n";
-            key = "yfa";
-          };
-          MkdnIncreaseHeading = {
-            modes = "n";
-            key = "+";
-          };
-          MkdnDecreaseHeading = {
-            modes = "n";
-            key = "-";
-          };
-          MkdnToggleToDo = {
-            modes = [
-              "n"
-              "v"
-            ];
-            key = "<C-Space>";
-          };
-          MkdnNewListItem = false;
-          MkdnNewListItemBelowInsert = {
-            modes = "n";
-            key = "o";
-          };
-          MkdnNewListItemAboveInsert = {
-            modes = "n";
-            key = "O";
-          };
-          MkdnExtendList = false;
-          MkdnUpdateNumbering = {
-            modes = "n";
-            key = "<leader>nn";
-          };
-          MkdnTableNextCell = {
-            modes = "i";
-            key = "<Tab>";
-          };
-          MkdnTablePrevCell = {
-            modes = "i";
-            key = "<S-Tab>";
-          };
-          MkdnTableNextRow = false;
-          MkdnTablePrevRow = {
-            modes = "i";
-            key = "<M-CR>";
-          };
-          MkdnTableNewRowBelow = {
-            modes = "n";
-            key = "<leader>ir";
-          };
-          MkdnTableNewRowAbove = {
-            modes = "n";
-            key = "<leader>iR";
-          };
-          MkdnTableNewColAfter = {
-            modes = "n";
-            key = "<leader>ic";
-          };
-          MkdnTableNewColBefore = {
-            modes = "n";
-            key = "<leader>iC";
-          };
-          MkdnFoldSection = {
-            modes = "n";
-            key = "<leader>f";
-          };
-          MkdnUnfoldSection = {
-            modes = "n";
-            key = "<leader>F";
-          };
         };
       };
     };
+
+    test.runNvim = false;
   };
 }
