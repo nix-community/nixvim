@@ -22,7 +22,6 @@
           yaml = false;
         };
         filetypes = {
-          md = true;
           rmd = true;
           markdown = true;
         };
@@ -61,10 +60,61 @@
             "-"
             "X"
           ];
-          update_parents = true;
-          not_started = " ";
-          in_progress = "-";
-          complete = "X";
+          statuses = [
+            {
+              name = "not_started";
+              marker = " ";
+              highlight = {
+                marker.link = "Conceal";
+                content.link = "Conceal";
+              };
+              sort = {
+                section = 2;
+                position = "top";
+              };
+              skip_on_toggle = false;
+            }
+            {
+              name = "in_progress";
+              marker = "-";
+              highlight = {
+                marker.link = "WarningMsg";
+                content.bold = true;
+              };
+              sort = {
+                section = 1;
+                position = "bottom";
+              };
+              skip_on_toggle = false;
+            }
+            {
+              name = "complete";
+              marker = [
+                "X"
+                "x"
+              ];
+              highlight = {
+                marker.link = "String";
+                content.link = "Conceal";
+              };
+              sort = {
+                section = 3;
+                position = "top";
+              };
+              skip_on_toggle = false;
+            }
+          ];
+          status_propagation = {
+            up = true;
+            down = true;
+          };
+          sort = {
+            on_status_change = false;
+            recursive = false;
+            cursor_behavior = {
+              track = true;
+            };
+          };
         };
         tables = {
           trim_whitespace = true;
