@@ -37,7 +37,7 @@ in
     You need to extend the `bundles` with paths to jar files if you want to use additional
     `eclipse.jdt.ls` plugins.
 
-    See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
+    See https://codeberg.org/mfussenegger/nvim-jdtls#java-debug-installation
 
     If you don't plan on using the debugger or other `eclipse.jdt.ls` plugins, ignore this option
   '';
