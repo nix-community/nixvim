@@ -6,7 +6,7 @@ with pkgs;
 let
   states = {
     broken = _package: "broken";
-    darwinOnly = _package: "Darwin only";
+    darwinOnly = p: if stdenv.hostPlatform.isDarwin then p else "Darwin only";
     unpackaged = "unpackaged";
   };
 in

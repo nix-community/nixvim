@@ -11,7 +11,12 @@
         formatter-packages
         states
         ;
-      stateList = map (state: lib.fix (lib.toFunction state)) (builtins.attrValues states);
+      stateList = lib.pipe states [
+        builtins.attrValues
+        (map lib.toFunction)
+        (map (fn: fn null))
+        (builtins.filter builtins.isString)
+      ];
       allFormatters = builtins.filter (
         name:
         let
