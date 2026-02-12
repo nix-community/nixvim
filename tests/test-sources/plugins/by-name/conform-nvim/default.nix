@@ -36,6 +36,43 @@
       };
     };
 
+  darwin-only-auto-install =
+    { config, ... }:
+    let
+      inherit (pkgs.stdenv) isDarwin;
+    in
+    {
+      plugins.conform-nvim = {
+        enable = true;
+        autoInstall.enable = true;
+        settings.formatters_by_ft."*" = [ "swift" ];
+      };
+
+      test = {
+        buildNixvim = false;
+        warnings =
+          expect:
+          if isDarwin then
+            [ (expect "count" 0) ]
+          else
+            [
+              (expect "count" 1)
+              (expect "any" "marked 'Darwin only'")
+            ];
+      };
+
+      assertions = [
+        {
+          assertion = isDarwin == lib.elem pkgs.swift config.extraPackages;
+          message =
+            if isDarwin then
+              "Expected `swift` to be in `extraPackages` on Darwin."
+            else
+              "Expected `swift` not to be in `extraPackages` on non-Darwin systems.";
+        }
+      ];
+    };
+
   default = {
     plugins.conform-nvim = {
       enable = true;
