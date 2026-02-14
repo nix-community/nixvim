@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -38,9 +37,9 @@ let
     nixd = {
       settings = cfg: { nixd = cfg; };
       extraConfig = cfg: {
-        extraPackages = lib.optional (
+        dependencies.nixpkgs-fmt.enable = lib.mkIf (
           (cfg.settings.formatting.command or null) == [ "nixpkgs-fmt" ]
-        ) pkgs.nixpkgs-fmt;
+        ) (lib.mkDefault true);
       };
     };
     omnisharp = {
