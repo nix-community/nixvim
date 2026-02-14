@@ -1,5 +1,93 @@
 { lib }:
 rec {
+  /**
+    Add sub-options to an option-type, used for documentation purposes only.
+
+    Evaluates sub-options similarly to `lib.types.submodule`, but only when using the docs-tooling `getSubOptions`.
+
+    The sub-options module eval is **not** used during normal module evaluation, e.g. when merging definitions.
+
+    # Inputs
+
+    `type`
+    : The option-type to extend.
+
+    `module`
+    : A module (or list of modules) declaring options to document.
+  */
+  addSubOptions =
+    type: module:
+    addSubOptionsWith {
+      inherit type;
+      modules = lib.toList module;
+    };
+
+  /**
+    Add sub-options to an option-type, used for documentation purposes only.
+
+    Evaluates sub-options similarly to `lib.types.submoduleWith`, but only when using the docs-tooling `getSubOptions`.
+
+    The sub-options module eval is **not** used during normal module evaluation, e.g. when merging definitions.
+
+    # Inputs
+
+    `settings`
+    : `type`
+      : The option-type to extend.
+
+      `modules`
+      : A list of modules declaring options to document.
+
+      `specialArgs`
+      : special arguments that need to be evaluated when resolving module structure (like in `imports`).
+        For everything else, there's `_module.args`.
+        Default `{ }`.
+
+      `class`
+      : A nominal type for modules.
+        When set and non-null, this adds a check to make sure that only compatible modules are imported.
+        Default `null`.
+  */
+  addSubOptionsWith =
+    {
+      type,
+      modules,
+      specialArgs ? { },
+      class ? null,
+    }:
+    let
+      baseEval = lib.evalModules {
+        inherit modules specialArgs class;
+      };
+    in
+    type
+    // {
+      getSubOptions =
+        loc:
+        let
+          typeSubOptions = lib.optionalAttrs (type ? getSubOptions) (type.getSubOptions loc);
+          docsEval = baseEval.extendModules {
+            prefix = loc;
+            modules = lib.singleton {
+              _file = "<built-in module for documentation generation>";
+
+              # NOTE: We could use `name = lib.last loc` here, but `types.submodule`
+              # only does that when actually merging definitions.
+              _module.args.name = lib.mkOptionDefault "‹name›";
+
+              # NOTE: We don't need to check modules when evaluating for docs.
+              # This is consistent with `types.submodule`'s noCheckForDocsModule.
+              _module.check = lib.mkForce false;
+            };
+          };
+        in
+        # FIXME: best practice would be separate attrs to avoid name conflicts:
+        # { base = typeSubOptions; extra = docsEval.options; }
+        # But our custom docs impl does not collect options correctly.
+        # TODO: fix our docs impl by using `optionAttrSetToDocList`
+        typeSubOptions // docsEval.options;
+    };
+
   # Whether a string contains something other than whitespaces
   hasContent = str: builtins.match "[[:space:]]*" str == null;
 
