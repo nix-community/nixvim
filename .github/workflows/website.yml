@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout version-info
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           sparse-checkout: version-info.toml
           sparse-checkout-cone-mode: false
@@ -95,7 +95,7 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ matrix.ref }}
 
