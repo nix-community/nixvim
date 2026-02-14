@@ -463,7 +463,7 @@ in
         json files).
       '';
 
-      name_regex = defaultNullOpts.mkStr "[=[[#~!@\*&.]*[[:keyword:]]\+!\?\(\(\(->\)\+\|-\+\|\.\+\|:\+\|\s\+\)\?[#~!@\*&.]*[[:keyword:]]\+!\?\)*]=]" ''
+      name_regex = defaultNullOpts.mkStr "[=[[#~!@\\*&.]*[[:keyword:]]\\+!\\?\\(\\(\\(->\\)\\+\\|-\\+\\|\\.\\+\\|:\\+\\|\\s\\+\\)\\?[#~!@\\*&.]*[[:keyword:]]\\+!\\?\\)*]=]" ''
         Vim regex used to extract a short name from the node text.
       '';
 
