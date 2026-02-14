@@ -29,6 +29,14 @@ in
       '';
     };
 
+    vimdiffAlias = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Create a `vimdiff` alias that runs `nvim -d`.
+      '';
+    };
+
     waylandSupport = mkOption {
       type = types.bool;
       default = lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.wayland;
@@ -170,6 +178,15 @@ in
         description = ''
           A tool to show the content of the generated `init.lua` file.
           Run using `${config.build.printInitPackage.meta.mainProgram}`.
+        '';
+        readOnly = true;
+        visible = false;
+      };
+
+      vimdiffPackage = mkOption {
+        type = types.package;
+        description = ''
+          A wrapper script that runs `nvim -d` as `vimdiff`.
         '';
         readOnly = true;
         visible = false;
@@ -318,6 +335,9 @@ in
             ]
             ++ lib.optionals config.enablePrintInit [
               printInitPackage
+            ]
+            ++ lib.optionals config.vimdiffAlias [
+              vimdiffPackage
             ];
           meta.mainProgram = "nvim";
           passthru = {
@@ -335,6 +355,10 @@ in
             bat --language=lua "$init"
           '';
         };
+
+        vimdiffPackage = pkgs.writeShellScriptBin "vimdiff" ''
+          exec "${config.build.nvimPackage}/bin/nvim" -d "$@"
+        '';
 
         manDocsPackage = config.flake.packages.${system}.man-docs;
       };
