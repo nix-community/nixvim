@@ -188,6 +188,7 @@
           hls = {
             enable = true;
             packageFallback = true;
+            installGhc = true;
           };
         };
       };
@@ -220,6 +221,7 @@
           assertPrefix "nil" nil_ls.package
           ++ assertSuffix "rust-analyzer" rust_analyzer.package
           ++ assertSuffix "haskell-language-server" hls.package
+          ++ assertSuffix "ghc" hls.ghcPackage
         );
     };
 
