@@ -266,6 +266,7 @@
     glslls = "glslls";
     golangci_lint_ls = "golangci-lint-langserver";
     gopls = "gopls";
+    graphql = "graphql-language-service-cli";
     harper_ls = "harper";
     helm_ls = "helm-ls";
     hls = "haskell-language-server";
