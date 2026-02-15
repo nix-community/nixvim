@@ -5,6 +5,7 @@ in
 {
   # efmls-configs tools that have no corresponding nixpkgs package
   unpackaged = [
+    "alex" # was removed from nixpkgs as it is unmaintained
     "blade_formatter"
     "cljstyle"
     "cspell"
@@ -112,7 +113,6 @@ in
         "vulture"
       ];
       nodePackages = [
-        "alex"
         "eslint_d"
         "prettier"
         "stylelint"
