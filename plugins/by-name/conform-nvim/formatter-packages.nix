@@ -7,6 +7,7 @@ let
   states = {
     broken = _package: "broken";
     darwinOnly = p: if stdenv.hostPlatform.isDarwin then p else "Darwin only";
+    linuxOnly = p: if stdenv.hostPlatform.isLinux then p else "Linux only";
     unpackaged = "unpackaged";
   };
 in
@@ -115,7 +116,7 @@ in
     inherit (ocamlPackages) ocp-indent;
     odinfmt = ols;
     # TODO: added 2026-02-08 broken on darwin
-    opa_fmt = if stdenv.isDarwin then states.broken open-policy-agent else open-policy-agent;
+    opa_fmt = states.linuxOnly open-policy-agent;
     perltidy = perlPackages.PerlTidy;
     pg_format = pgformatter;
     phpcbf = php84Packages.php-codesniffer;
@@ -126,9 +127,9 @@ in
     inherit (python313Packages) python-ly;
     qmlformat = libsForQt5.qt5.qtdeclarative;
     # TODO: added 2026-02-08 marked unsupported on darwin
-    racketfmt = if stdenv.hostPlatform.isLinux then racket else states.broken racket;
+    racketfmt = states.linuxOnly racket;
     inherit (python313Packages) reorder-python-imports;
-    roc = if stdenv.isDarwin then states.broken roc else roc;
+    roc = states.linuxOnly roc;
     ruff_fix = ruff;
     ruff_format = ruff;
     ruff_organize_imports = ruff;
