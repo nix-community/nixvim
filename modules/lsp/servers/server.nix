@@ -84,7 +84,7 @@ in
       description = ''
         Configurations for ${displayName}. ${args.config.extraDescription or ""}
       '';
-      default = { };
+      default = args.config.default or { };
       example =
         args.config.example or {
           cmd = [
