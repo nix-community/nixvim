@@ -4,7 +4,7 @@ lib.nixvim.plugins.mkVimPlugin {
   package = "vim-rhubarb";
   description = "Rhubarb is a GitHub extension for fugitive.vim.";
 
-  maintainers = [ lib.maintainers.santosh ];
+  maintainers = [ lib.maintainers.vimlinuz ];
 
   dependencies = [ "git" ];
 
