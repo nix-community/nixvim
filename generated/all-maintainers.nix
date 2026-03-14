@@ -423,9 +423,9 @@
     name = "Refael Sheinker";
     source = "nixvim";
   };
-  santoshxshrestha = {
-    email = "santoshxshrestha@gmail.com";
-    github = "santoshxshrestha";
+  vimlinuz = {
+    email = "vimlinuz@gmail.com";
+    github = "vimlinuz";
     githubId = 182977126;
     name = "Santosh Shrestha";
     source = "nixpkgs";
