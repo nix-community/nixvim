@@ -241,8 +241,17 @@ in
             dontFixup = true;
           };
 
+      nvimPackage = wrappedNeovim.override (prev: {
+        wrapperArgs =
+          (if lib.isString prev.wrapperArgs then prev.wrapperArgs else lib.escapeShellArgs prev.wrapperArgs)
+          + " "
+          + extraWrapperArgs;
+        wrapRc = false;
+      });
+
       customRC = lib.nixvim.concatNonEmptyLines [
         (lib.nixvim.wrapVimscriptForLua wrappedNeovim.initRc)
+        (nvimPackage.passthru.providerLuaRc or "")
         config.content
       ];
 
@@ -300,16 +309,8 @@ in
     in
     {
       build = {
-        inherit initFile initSource;
+        inherit initFile initSource nvimPackage;
         package = config.build.packageUnchecked;
-
-        nvimPackage = wrappedNeovim.override (prev: {
-          wrapperArgs =
-            (if lib.isString prev.wrapperArgs then prev.wrapperArgs else lib.escapeShellArgs prev.wrapperArgs)
-            + " "
-            + extraWrapperArgs;
-          wrapRc = false;
-        });
 
         packageUnchecked = pkgs.symlinkJoin {
           name = "nixvim";
