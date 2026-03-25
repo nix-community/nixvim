@@ -197,3 +197,8 @@ owner = "ar-at-localhost"
 title = "np"
 description = "Nixvim setup, focused on Project Oriented Development"
 url = "https://github.com/ar-at-localhost/np"
+
+[[config]]
+owner = "Myxogastria0808"
+repo = "nix-flakes-nixvim"
+description = "Standalone NixVim config for x86_64-linux featuring 25 language servers, Copilot, conform.nvim format-on-save, and a complete UI stack with noice.nvim and bufferline."
