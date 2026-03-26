@@ -14,19 +14,19 @@
         top.__empty = { };
         options = {
           left = {
-            size.height = 30;
+            size = 30;
             wo.__raw = "nil";
           };
           bottom = {
-            size.width = 10;
+            size = 10;
             wo.__raw = "nil";
           };
           right = {
-            size.height = 30;
+            size = 30;
             wo.__raw = "nil";
           };
           top = {
-            size.width = 10;
+            size = 10;
             wo.__raw = "nil";
           };
         };
