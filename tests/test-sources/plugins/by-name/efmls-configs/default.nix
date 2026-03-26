@@ -34,6 +34,7 @@
 
       # TODO: respect unpackaged from generated
       unpackaged = [
+        "alex"
         "blade_formatter"
         "cljstyle"
         "cspell"

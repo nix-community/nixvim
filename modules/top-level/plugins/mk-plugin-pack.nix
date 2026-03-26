@@ -32,6 +32,13 @@ let
       (builtins.concatMap (f: f ps))
     ];
 
+  requiredLuaModules = lib.pipe pluginsToCombine [
+    (builtins.catAttrs "plugin")
+    (builtins.catAttrs "requiredLuaModules")
+    builtins.concatLists
+    lib.unique
+  ];
+
   # propagatedBuildInputs contain lua dependencies
   propagatedBuildInputs = lib.pipe pluginsToCombine [
     (builtins.catAttrs "plugin")
@@ -62,7 +69,15 @@ let
       [
         buildEnv
         vimUtils.toVimPlugin
-        (drv: drv.overrideAttrs { inherit propagatedBuildInputs; })
+        (
+          drv:
+          drv.overrideAttrs {
+            inherit
+              propagatedBuildInputs
+              requiredLuaModules
+              ;
+          }
+        )
       ];
 
   # Combined plugin configs

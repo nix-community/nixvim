@@ -22,7 +22,6 @@
           yaml = false;
         };
         filetypes = {
-          md = true;
           rmd = true;
           markdown = true;
         };
@@ -45,8 +44,8 @@
           conceal = false;
           context = 0;
           implicit_extension.__raw = "nil";
-          transform_explicit = false;
-          transform_implicit = ''
+          transform_on_follow = false;
+          transform_on_create.__raw = ''
             function(text)
                 text = text:gsub(" ", "-")
                 text = text:lower()
@@ -56,15 +55,60 @@
           '';
         };
         to_do = {
-          symbols = [
-            " "
-            "-"
-            "X"
+          statuses = {
+            not_started = {
+              marker = " ";
+              highlight = {
+                marker.link = "Conceal";
+                content.link = "Conceal";
+              };
+              sort = {
+                section = 2;
+                position = "top";
+              };
+            };
+            in_progress = {
+              marker = "-";
+              highlight = {
+                marker.link = "WarningMsg";
+                content.bold = true;
+              };
+              sort = {
+                section = 1;
+                position = "bottom";
+              };
+            };
+            complete = {
+              marker = [
+                "X"
+                "x"
+              ];
+              highlight = {
+                marker.link = "String";
+                content.link = "Conceal";
+              };
+              sort = {
+                section = 3;
+                position = "top";
+              };
+            };
+          };
+          status_order = [
+            "not_started"
+            "in_progress"
+            "complete"
           ];
-          update_parents = true;
-          not_started = " ";
-          in_progress = "-";
-          complete = "X";
+          status_propagation = {
+            up = true;
+            down = true;
+          };
+          sort = {
+            on_status_change = false;
+            recursive = false;
+            cursor_behavior = {
+              track = true;
+            };
+          };
         };
         tables = {
           trim_whitespace = true;

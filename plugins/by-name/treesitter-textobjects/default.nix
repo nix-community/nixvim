@@ -4,18 +4,22 @@ lib.nixvim.plugins.mkNeovimPlugin {
   package = "nvim-treesitter-textobjects";
   maintainers = [ lib.maintainers.GaetanLepage ];
 
+  description = ''
+    Syntax-aware textobjects using tree-sitter.
+
+    > [!WARNING]
+    > Upstream refactored this plugin so textobject keymaps are no longer configured through
+    > `require("nvim-treesitter.configs").setup({ textobjects = ... })`.
+    > Define keymaps through Neovim's keymap API instead, for example with nixvim's top-level
+    > `keymaps` option and calls to `require("nvim-treesitter-textobjects.<module>")`.
+  '';
+
   # TODO: introduced 2025-10-17: remove after 26.05
   inherit (import ./deprecations.nix lib) deprecateExtraOptions optionsRenamedToSettings imports;
 
   settingsExample = {
     enable = true;
     lookahead = true;
-    keymaps = {
-      ab = "@block.outer";
-      ib = "@block.inner";
-      ac = "@call.outer";
-      ic = "@call.inner";
-    };
   };
 
   callSetup = false;

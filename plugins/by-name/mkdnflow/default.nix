@@ -59,10 +59,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
       conceal = true;
     };
     to_do = {
-      symbols = [
-        "✗"
-        "◐"
-        "✓"
+      statuses = {
+        not_started.marker = "✗";
+        in_progress.marker = "◐";
+        complete.marker = "✓";
+      };
+      status_order = [
+        "not_started"
+        "in_progress"
+        "complete"
       ];
     };
   };

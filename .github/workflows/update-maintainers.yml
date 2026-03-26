@@ -35,7 +35,7 @@ jobs:
       pr_branch: update/maintainers-${{ github.ref_name }}
     steps:
       - name: Create GitHub App token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         if: vars.CI_APP_ID
         id: app-token
         with:
@@ -60,7 +60,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token || github.token }}
 

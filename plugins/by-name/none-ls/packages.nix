@@ -5,6 +5,7 @@ in
 {
   # builtin sources that don't require a package
   noPackage = [
+    "alex" # was removed from nixpkgs as it is unmaintained
     "gitrebase"
     # TODO: Requires the go tree-sitter parser
     "gomodifytags"
@@ -70,6 +71,7 @@ in
       "mypy"
       "nixfmt"
       "pmd"
+      "prettier"
       "prettierd"
       "proselint"
       "protolint"
@@ -111,8 +113,6 @@ in
     # Scoped packages
     // scoped {
       nodePackages = [
-        "alex"
-        "prettier"
       ];
       phpPackages = [
         "phpmd"

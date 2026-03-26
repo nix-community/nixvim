@@ -27,7 +27,7 @@ jobs:
     steps:
       # Generate a GitHub App token if configured, so we can use custom `bot`.
       - name: Create GitHub App token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         if: vars.CI_APP_ID
         id: app-token
         with:
@@ -40,7 +40,7 @@ jobs:
       # Checkout the code from the base branch.
       # This is a security measure for `pull_request_target` to run trusted code.
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.base_ref }}
 

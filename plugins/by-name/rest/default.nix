@@ -8,6 +8,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
   moduleName = "rest-nvim";
   package = "rest-nvim";
   description = "A very fast, powerful, extensible and asynchronous Neovim HTTP client.";
+  # TODO: Remove this once the upstream package homepage metadata is fixed.
+  url = "https://github.com/rest-nvim/rest.nvim";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
 
