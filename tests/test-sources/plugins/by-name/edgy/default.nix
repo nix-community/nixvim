@@ -14,19 +14,19 @@
         top.__empty = { };
         options = {
           left = {
-            size = 30;
+            size.height = 30;
             wo.__raw = "nil";
           };
           bottom = {
-            size = 10;
+            size.width = 10;
             wo.__raw = "nil";
           };
           right = {
-            size = 30;
+            size.height = 30;
             wo.__raw = "nil";
           };
           top = {
-            size = 10;
+            size.width = 10;
             wo.__raw = "nil";
           };
         };
@@ -157,7 +157,7 @@
         bottom = [
           {
             ft = "toggleterm";
-            size = 30;
+            size.width = 30;
             filter = ''
               function(buf, win)
                 return vim.api.nvim_win_get_config(win).relative == ""
@@ -166,7 +166,7 @@
           }
           {
             ft = "help";
-            size = 20;
+            size.width = 20;
             filter = ''
               function(buf)
                 return vim.bo[buf].buftype == "help"
@@ -178,7 +178,7 @@
           {
             title = "nvimtree";
             ft = "NvimTree";
-            size = 30;
+            size.height = 30;
           }
           {
             ft = "Outline";
