@@ -23,9 +23,8 @@ Either command will start a HTTP server on port 8000 and open it in your browser
 
 ## Nixvim Architecture
 
-Nixvim is mainly built around `pkgs.neovimUtils.makeNeovimConfig`.
-This function takes a list of plugins (and a few other misc options), and generates a configuration for Neovim.
-This can then be passed to `pkgs.wrapNeovimUnstable` to generate a derivation that bundles the plugins, extra programs and the Lua configuration.
+Nixvim is mainly built around `pkgs.wrapNeovimUnstable`.
+This wrapper takes a list of plugins and related options, and generates a derivation that bundles the plugins, extra programs and the Lua configuration.
 
 All the options that Nixvim exposes end up in those three places. This is done in the `modules/output.nix` file.
 
