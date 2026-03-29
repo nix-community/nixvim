@@ -199,11 +199,18 @@ in
         else
           config.extraLuaPackages;
 
-      luaEnv = package.lua.withPackages extraLuaPackages;
+      vimPackageInfo = pkgs.neovimUtils.makeVimPackageInfo config.build.plugins;
+
+      luaPackagesForWrapper =
+        ps:
+        extraLuaPackages ps
+        ++ lib.optionals (vimPackageInfo ? luaDependencies) vimPackageInfo.luaDependencies;
+
+      luaEnv = package.lua.withPackages luaPackagesForWrapper;
 
       wrappedNeovim =
         (pkgs.wrapNeovimUnstable package {
-          inherit extraLuaPackages;
+          extraLuaPackages = luaPackagesForWrapper;
           inherit (config)
             extraPython3Packages
             viAlias
