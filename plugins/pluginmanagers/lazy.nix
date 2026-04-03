@@ -47,6 +47,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           pluginType =
             with types;
             either package (submodule {
+              freeformType = attrsOf anything;
+
               options = {
                 dir = mkNullOrOption str "A directory pointing to a local plugin";
 
@@ -177,7 +179,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           if lib.isDerivation plugin then
             { dir = "${lazyPath}/${lib.getName plugin}"; }
           else
-            {
+            plugin
+            // {
               "__unkeyed" = plugin.name;
 
               inherit (plugin)
